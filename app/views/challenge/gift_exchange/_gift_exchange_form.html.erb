@@ -1,6 +1,6 @@
-<h2><%= t('.gift_exchanges.setup', :default => "Setting Up The {{title}} Gift Exchange", :title => sanitize_title_for_display(@collection.title)) -%></h2>
+<h2><%= t('.gift_exchanges.setup', :default => "Setting Up The {{title}} Gift Exchange", :title => sanitize_title_for_display(@collection.title)) %></h2>
 
-<h3><%=h 'Suggestions' -%></h3>
+<h3><%=h 'Suggestions' %></h3>
 <ul>
   <li>The more options you allow here, the more complicated your signup form will be.</li>
   <li>If you can keep to one request and one offer, automated matching will be easier! Keep in mind a single request can include multiple fandoms. Unless you want to do fairly complicated requests, you probably don't need more than one request/offer.</li>
@@ -32,29 +32,29 @@
       If your collection is set to unrevealed/anonymous, you can set dates for those as well.
     </p>
     <dl>
-      <dt><%= f.label :signup_open, t('.gift_exchange.signup_open', :default => "Signup open?") -%></dt>
+      <dt><%= f.label :signup_open, t('.gift_exchange.signup_open', :default => "Signup open?") %></dt>
       <dd><%= f.check_box :signup_open %></dd>
       
       <dt><%= f.label :time_zone, t('.gift_exchange.time_zone', :default => "Time zone: ")%></dt>
       <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
         
       <dt><%= f.label :signups_open_at, t('.gift_exchange.signups_open_at', :default => "Signup opens: ")%></dt>
-      <dd><%= f.datetime_select :signups_open_at, :minute_step => 15, :start_year => (Time.now.year - 1) -%></dd>
+      <dd><%= f.datetime_select :signups_open_at, :minute_step => 15, :start_year => (Time.now.year - 1) %></dd>
 
       <dt><%= f.label :signups_close_at, t('.gift_exchange.signups_close_at', :default => "Signup closes: ")%></dt>
-      <dd><%= f.datetime_select :signups_close_at, :minute_step => 15, :start_year => (Time.now.year - 1) -%></dd>
+      <dd><%= f.datetime_select :signups_close_at, :minute_step => 15, :start_year => (Time.now.year - 1) %></dd>
 
       <dt><%= f.label :assignments_due_at, t('.gift_exchange.assignments_due_at', :default => "Assignments due: ")%></dt>
-      <dd><%= f.datetime_select :assignments_due_at, :minute_step => 15, :start_year => (Time.now.year - 1) -%></dd>
+      <dd><%= f.datetime_select :assignments_due_at, :minute_step => 15, :start_year => (Time.now.year - 1) %></dd>
 
       <% if @collection.unrevealed? %>
         <dt><%= f.label :works_reveal_at, t('.gift_exchange.works_reveal_at', :default => "Works revealed: ")%></dt>
-        <dd><%= f.datetime_select :works_reveal_at, :minute_step => 15, :start_year => (Time.now.year - 1) -%></dd>
+        <dd><%= f.datetime_select :works_reveal_at, :minute_step => 15, :start_year => (Time.now.year - 1) %></dd>
       <% end %>
 
       <% if @collection.anonymous? %>
         <dt><%= f.label :authors_reveal_at, t('.gift_exchange.authors_reveal_at', :default => "Authors revealed: ")%></dt>
-        <dd><%= f.datetime_select :authors_reveal_at , :minute_step => 15, :start_year => (Time.now.year - 1) -%></dd>
+        <dd><%= f.datetime_select :authors_reveal_at , :minute_step => 15, :start_year => (Time.now.year - 1) %></dd>
       <% end %>
     </dl>
   </fieldset>  
@@ -63,22 +63,22 @@
   	<legend>Requests and Offers</legend>
   	<h3>Requests and Offers</h3>
     <dl>
-      <dt><%= f.label :requests_num_required, t('.gift_exchanges.num_requests', :default => "Number of requests per signup: ") -%></dt>
-      <%= required_and_allowed(f, "requests") -%>
+      <dt><%= f.label :requests_num_required, t('.gift_exchanges.num_requests', :default => "Number of requests per signup: ") %></dt>
+      <%= required_and_allowed(f, "requests") %>
 
-      <dt><%= f.label :offers_num_required, t('.gift_exchanges.num_offers', :default => "Number of offers per signup: ") -%></dt>
-      <%= required_and_allowed(f, "offers") -%>
+      <dt><%= f.label :offers_num_required, t('.gift_exchanges.num_offers', :default => "Number of offers per signup: ") %></dt>
+      <%= required_and_allowed(f, "offers") %>
     </dl>
   </fieldset>
 
   <!-- restrictions for requests -->
-  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => false, :show_tag_options => false} -%>
+  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => false, :show_tag_options => false} %>
   
   <!-- restrictions for offers -->
-  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => true, :show_tag_options => true} -%>
+  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => true, :show_tag_options => true} %>
 
   <!-- matching settings -->
-  <%= render :partial => "potential_match_settings/potential_match_settings_form", :locals => {:challenge_form => f} -%>
+  <%= render :partial => "potential_match_settings/potential_match_settings_form", :locals => {:challenge_form => f} %>
 
   <fieldset class="preface profile">
     <legend>Signup Instructions</legend>
@@ -87,27 +87,27 @@
       Enter instructions to explain to your members how you want them to sign up, and change the labels for the fields
       you are using if appropriate.
     </p>
-    <p><%= limited_html_instructions -%></p>
+    <p><%= limited_html_instructions %></p>
     <dl>
       <dt><%= f.label :signup_instructions_general, t('.gift_exchange.signup_instructions_general', :default => "General Signup Instructions: ") %></dt>
       <dd>
         <%= f.text_area :signup_instructions_general, :rows => 6, :cols => 60 %>
-        <%= live_validation_for_field(:gift_exchange_signup_instructions_general, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
-        <%= generate_countdown_html("gift_exchange_signup_instructions_general", ArchiveConfig.INFO_MAX) -%>        
+        <%= live_validation_for_field(:gift_exchange_signup_instructions_general, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
+        <%= generate_countdown_html("gift_exchange_signup_instructions_general", ArchiveConfig.INFO_MAX) %>        
       </dd>
 
       <dt><%= f.label :signup_instructions_requests, t('.gift_exchange.signup_instructions_requests', :default => "Request Instructions: ") %></dt>
       <dd>
         <%= f.text_area :signup_instructions_requests, :rows => 6, :cols => 60 %>
-        <%= live_validation_for_field(:gift_exchange_signup_instructions_requests, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
-        <%= generate_countdown_html("gift_exchange_signup_instructions_requests", ArchiveConfig.INFO_MAX) -%>        
+        <%= live_validation_for_field(:gift_exchange_signup_instructions_requests, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
+        <%= generate_countdown_html("gift_exchange_signup_instructions_requests", ArchiveConfig.INFO_MAX) %>        
       </dd>
       
       <dt><%= f.label :signup_instructions_offers, t('.gift_exchange.signup_instructions_offers', :default => "Offer Instructions: ") %></dt>
       <dd>
         <%= f.text_area :signup_instructions_offers, :rows => 6, :cols => 60 %>
-        <%= live_validation_for_field(:gift_exchange_signup_instructions_offers, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) -%>
-        <%= generate_countdown_html("gift_exchange_signup_instructions_offers", ArchiveConfig.INFO_MAX) -%>        
+        <%= live_validation_for_field(:gift_exchange_signup_instructions_offers, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
+        <%= generate_countdown_html("gift_exchange_signup_instructions_offers", ArchiveConfig.INFO_MAX) %>        
       </dd>
 
       <dt><%= f.label :request_url_label, t('.gift_exchange.request_url_label', :default => "Label to use for Prompt URL in requests: ") %></dt>
@@ -126,7 +126,7 @@
   </fieldset>
 
   <fieldset>
-  	<legend><%h= 'Submit' -%></legend> 
+  	<legend><%h= 'Submit' %></legend> 
     <p class="submit">
       <%= f.submit 'Submit' %>
     </p>

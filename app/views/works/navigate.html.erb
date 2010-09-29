@@ -4,7 +4,7 @@
 </h3>
 
 <ol class="navigation" role="navigation">
-<%- for chapter in @chapters -%>
+<% for chapter in @chapters %>
   <li><%= link_to chapter.display_title, [chapter.work, chapter] %> (<%= chapter.published_at.to_date %>)</li>
-<%- end -%>
+<% end %>
 </ol>

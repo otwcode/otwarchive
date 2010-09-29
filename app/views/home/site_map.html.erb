@@ -14,14 +14,14 @@
 	
 <h3>About the Archive of Our Own</h3>
 	<ul>
-		<li><%= link_to t('.terms_of_service', :default => "Terms of Service"), tos_path -%></li>
-		<li><%= link_to t('.archive_faq', :default => "Archive FAQ"), archive_faqs_path -%></li>
-		<li><%= link_to t('.ao3_news', :default => "AO3 News"), admin_posts_path -%></li>
+		<li><%= link_to t('.terms_of_service', :default => "Terms of Service"), tos_path %></li>
+		<li><%= link_to t('.archive_faq', :default => "Archive FAQ"), archive_faqs_path %></li>
+		<li><%= link_to t('.ao3_news', :default => "AO3 News"), admin_posts_path %></li>
 		<li><%= link_to t('.known_issues', :default => "Known Issues"), known_issues_path %></li>
 		<li>The Archive of Our Own is a project of the <a href="http://transformativeworks.org"><acronym title="Organization for Transformative Works">OTW</acronym></a></li>
 	</ul>
 	
-<%- if logged_in? -%>
+<% if logged_in? %>
 <h3>Access your account</h3>
 	<ul>
 		<li><%= link_to t('.my_home', :default => "My Home"), user_path(current_user) %></li>
@@ -45,11 +45,11 @@
     <li><%= link_to t('.manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(current_user) %></li>
     <li><%= link_to t('.delete_account', :default => "Delete My Account"), @user, :confirm => t('.deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
 	</ul>
-<%- end -%>
+<% end %>
 	
 <h3>Contact Us</h3>
 	<ul>
-		<li><%= link_to t('.support_and_feedback', :default => "Support and Feedback"), new_feedback_report_path -%></li>
+		<li><%= link_to t('.support_and_feedback', :default => "Support and Feedback"), new_feedback_report_path %></li>
 		<li><%= link_to t('.report_abuse', :default => "Report Abuse"), new_abuse_report_path %></li>
 	</ul>
 </div>

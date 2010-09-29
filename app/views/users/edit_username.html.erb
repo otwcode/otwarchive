@@ -16,7 +16,7 @@
     <%= live_validation_for_field('user_login', 
 				      :exclusion => User.find(:all, :select => :login).map{|user| user.login}, 
 				      :failureMessage => t('.username_taken', :default => "username already taken"),
-				      :validMessage => t('.username_available', :default => "username available")) -%>
+				      :validMessage => t('.username_available', :default => "username available")) %>
   </dl>
   <p>Please also enter your password in order to change your username.</p>
   <dl id="passwd">

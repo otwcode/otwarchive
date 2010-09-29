@@ -1,8 +1,8 @@
-<%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :id => 'search', :method => :get do -%>
+<%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :id => 'search', :method => :get do %>
   <fieldset>
 	<legend>Search works</legend>
 	<p><%= text_field_tag "query[text]", nil, :class => 'text', :title => 'site search', :id => 'site_search' %>
   <%= submit_tag t('.forms.search', :default => 'Search'), :class => 'button', :name => nil %></p>
   </fieldset>
-  <!-- <p><strong>tip:</strong> <%= random_search_tip -%></p> -->
-<% end -%>
+  <!-- <p><strong>tip:</strong> <%= random_search_tip %></p> -->
+<% end %>

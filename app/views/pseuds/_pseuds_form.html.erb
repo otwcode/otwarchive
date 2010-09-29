@@ -4,19 +4,19 @@
 <dt>
 <%= f.label :name, 'Name' %></dt>
 <dd>
-<% if @pseud.name && @user.login == @pseud.name -%>
-  <strong class="warning"><%=h @pseud.name -%></strong> (<%=h "cannot change your fallback pseud" -%>)
-<% else -%>
+<% if @pseud.name && @user.login == @pseud.name %>
+  <strong class="warning"><%=h @pseud.name %></strong> (<%=h "cannot change your fallback pseud" %>)
+<% else %>
 <%= f.text_field :name %>
-<% end -%>
+<% end %>
 <%= f.check_box :is_default, {:disabled => (@pseud.name && @user.login == @pseud.name && @pseud.is_default?)} %> <%= f.label :is_default, 'Is default' %>
-<%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) if @pseud.name && @user.login != @pseud.name -%>
+<%= generate_countdown_html("pseud_name", Pseud::NAME_LENGTH_MAX) if @pseud.name && @user.login != @pseud.name %>
 </dd>
  <dt><%= f.label :description, 'Description' %></dt>
  <dd>
     <code>a href, em, strong, i, b</code><br />
-    <%= f.text_area :description, :rows => 4, :cols => 60 -%>
-    <%= generate_countdown_html("pseud_description", Pseud::DESCRIPTION_MAX) -%>
+    <%= f.text_area :description, :rows => 4, :cols => 60 %>
+    <%= generate_countdown_html("pseud_description", Pseud::DESCRIPTION_MAX) %>
  </dd>
  
  <dt>Icon</dt>
@@ -24,19 +24,19 @@
    <p class="icon">
      <%= standard_icon_display(@user, @pseud) %>
    </p>
-   <%- if @pseud.icon_file_name -%>
+   <% if @pseud.icon_file_name %>
      <%= f.check_box :delete_icon, {:checked => false} %>
      <%= f.label :delete_icon, 'Delete this icon and revert to archive default icon' %><br/>
-   <%- end -%>
+   <% end %>
    <%= f.label :icon, "Upload a new icon:" %>
    <%= f.file_field :icon %>
    <p>You may currently have one icon for each pseud. Icons may be in png, jpeg or gif format.</p>
  </dd>
  
- <dt><%= f.label :icon_alt_text, 'Icon alt text for screenreaders' %><%= link_to_help "icon-alt-text" -%></dt>
+ <dt><%= f.label :icon_alt_text, 'Icon alt text for screenreaders' %><%= link_to_help "icon-alt-text" %></dt>
  <dd>
     <%= f.text_field :icon_alt_text %>
-    <%= generate_countdown_html("pseud_icon_alt_text", ArchiveConfig.ICON_ALT_MAX) -%>
+    <%= generate_countdown_html("pseud_icon_alt_text", ArchiveConfig.ICON_ALT_MAX) %>
  </dd>
 
 </dd>

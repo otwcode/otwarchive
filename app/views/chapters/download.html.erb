@@ -1,12 +1,12 @@
 <!-- barebones style for ebook downloads, for separate-chapter style ebooks -->
 
 <!-- require absolute URLs -->
-<%- @downloading = true -%>
+<% @downloading = true %>
 
 <!--page description, messages-->
 <% if @work.unrevealed? %>
   <p class="message"><%= t('.works.unrevealed', :default => "This work is part of an ongoing challenge, {{challenge}}, and will be revealed soon!",
-    :challenge => @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) -%></p>
+    :challenge => @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) %></p>
 <% end %>
 <!--/descriptions-->
 
@@ -17,47 +17,47 @@
     <p class="landmark"><a name="top">&nbsp;</a></p>
   
     <p class="message">
-      Posted originally on the <a href="<%= ArchiveConfig.APP_URL -%>"><%= ArchiveConfig.APP_NAME -%></a> 
-      at <a href="<%= work_url(@work) -%>"><%= work_url(@work) -%></a>.
+      Posted originally on the <a href="<%= ArchiveConfig.APP_URL %>"><%= ArchiveConfig.APP_NAME %></a> 
+      at <a href="<%= work_url(@work) %>"><%= work_url(@work) %></a>.
     </p>
 
     <!--work description, metadata, notes and messages-->
-  	<%= render :partial => 'works/work_header' -%>
+  	<%= render :partial => 'works/work_header' %>
     <!--/descriptions-->
   <% end %>
 
   <!--main content-->
   <div id="chapters" class="user-generated-view" role="article">
-    <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter, :hide_work_info => true} -%>
+    <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter, :hide_work_info => true} %>
   </div>
   <!--/main-->
 
   <% if @chapter == @work.last_chapter %>    
     <!--work description, metadata, notes and messages-->
-      <%- unless @work.endnotes.blank? -%>
+      <% unless @work.endnotes.blank? %>
         <div class="preface" role="complementary">
           <div id="work_endnotes" class="footnotes">
             <h3><%=h t('.notes', :default => "Notes:") %></h3>
             <blockquote class="user-generated-view"><%=sanitize_and_format_for_display @work.endnotes %></blockquote>
           </div>
         </div>
-      <%- end -%>
+      <% end %>
     <!-- /descriptions-->
 
     <!--subnav-->
-    <%- unless @work.series.blank? -%>
+    <% unless @work.series.blank? %>
       <!--subnav, backwards and forwards, ideally incorporated with chapter control in top subnav-->
       <p class="series footnote">
         <%= show_series_data(@work) %>
       </p>
     <!--/subnav-->
-    <%- end -%>
+    <% end %>
 
-  	<%= render :partial => 'works/work_footer' -%>
+  	<%= render :partial => 'works/work_footer' %>
     <!--/subnav-->
 
-    <p class="message">Please <a href="<%= work_url(@work, :add_comment => true, :anchor => "comments") -%>">drop by the archive and comment</a> to let the author know if you enjoyed their work!</p>
+    <p class="message">Please <a href="<%= work_url(@work, :add_comment => true, :anchor => "comments") %>">drop by the archive and comment</a> to let the author know if you enjoyed their work!</p>
     <!-- END work -->
-  <% end -%>
+  <% end %>
 
 <% end %>

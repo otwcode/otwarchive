@@ -6,7 +6,7 @@
     <h4 title="title">
       <%= link_to sanitize_title_for_display(external_work.title, :tags => %w(em i b strong strike small)), external_work.url %>
       <%= t('.title_by_author', :default => 'by') %>
-      <%= byline(external_work) -%>
+      <%= byline(external_work) %>
     </h4>
 
     <h5 title="fandom">
@@ -14,40 +14,40 @@
       &nbsp;
     </h5>
 
-    <%= get_symbols_for(external_work) -%>
+    <%= get_symbols_for(external_work) %>
     <p class="datetime"><%= set_format_for_date(external_work.created_at) %></p>
   </div>
 
   <!--warnings again, cast, freeform tags-->
   <h6 class="landmark">Tags</h6>
   <ul class="tags">
-    <%= blurb_tag_block(external_work) -%>
+    <%= blurb_tag_block(external_work) %>
   </ul>
 
   <!--summary-->	
-  <%- unless external_work.summary.blank? -%>
+  <% unless external_work.summary.blank? %>
   <h6 class="landmark">Summary</h6>
   <blockquote class="user-generated-view summary" title="summary">
     <%= sanitize_strip_images_and_format_for_display external_work.summary %>
   </blockquote>
-  <%- end -%>
+  <% end %>
 
   <!--stats-->
   <dl class="stats" title="stats">
-    <%- if Bookmark.count_visible_bookmarks(external_work) > 0 -%>
+    <% if Bookmark.count_visible_bookmarks(external_work) > 0 %>
     <dt><%=h t('.external_work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
-    <dd><%= link_to_bookmarkable_bookmarks(external_work) -%></dd>
-    <%- end -%>
+    <dd><%= link_to_bookmarkable_bookmarks(external_work) %></dd>
+    <% end %>
 
     <dt><%=h t('.related_works_link', :default => 'Related Works') + ': '%></dt>
-    <dd><%= link_to external_work.related_works.count.to_s, external_work  -%></dd>
+    <dd><%= link_to external_work.related_works.count.to_s, external_work  %></dd>
   </dl>
 
-  <%- if logged_in_as_admin? -%>
+  <% if logged_in_as_admin? %>
   <h6 class="landmark">Author Actions</h6>
   <ul class="navigation" role="navigation">
-    <li><%= link_to t('.links.edit', :default => 'Edit'), edit_external_work_path(external_work) -%></li>
+    <li><%= link_to t('.links.edit', :default => 'Edit'), edit_external_work_path(external_work) %></li>
   </ul>
-  <%- end -%>
+  <% end %>
 
 </li>

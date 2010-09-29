@@ -6,4 +6,4 @@
 <td><%= t('.suspended', :default => "Suspended") if user.suspended %></td>
 <td><%= t('.banned', :default => "Banned") if user.banned %></td>
 <td><%= link_to t('.links.edit', :default => "Edit"), {:url => edit_admin_user_path(user), :method => :get}, :remote => true, :href => edit_admin_user_path(user) %>
-<td><%=h t('.links.delete', :default => "Delete") -%></td> 
+<td><%=h t('.links.delete', :default => "Delete") %></td> 

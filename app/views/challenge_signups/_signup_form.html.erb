@@ -22,22 +22,22 @@ So if anyone can think of a better design for this, that would be awesome
     <% end %>
     <dl>
      	<% if signup_form.object.new_record? && current_user.pseuds.size > 1 %>
-        <dt><%= signup_form.label :pseud_id, t("prompt.pseud", :default => "Select pseudonym: ") -%></dt>
+        <dt><%= signup_form.label :pseud_id, t("prompt.pseud", :default => "Select pseudonym: ") %></dt>
         <dd><%= signup_form.select :pseud_id, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud.id) %></dd>
-      <% else -%>
-        <p><%= signup_form.hidden_field :pseud_id, :value => (signup_form.object.new_record? ? current_user.default_pseud.id : signup_form.object.pseud.id) -%></p>
+      <% else %>
+        <p><%= signup_form.hidden_field :pseud_id, :value => (signup_form.object.new_record? ? current_user.default_pseud.id : signup_form.object.pseud.id) %></p>
       <% end %>  
     </dl>
   </fieldset>
 
   <% %w(requests offers).each do |prompt_type| %>
   <fieldset class="preface profile">
-  	<legend><%= prompt_type.capitalize -%></legend>
+  	<legend><%= prompt_type.capitalize %></legend>
   	<h3>
-  	  <%= prompt_type.capitalize -%> 
-  	  (<%= @challenge.send("#{prompt_type}_num_required") -%>
-  	  <% if @challenge.send("#{prompt_type}_num_required") != @challenge.send("#{prompt_type}_num_allowed") -%>
-  	    - <%= @challenge.send("#{prompt_type}_num_allowed") -%><% end -%>)
+  	  <%= prompt_type.capitalize %> 
+  	  (<%= @challenge.send("#{prompt_type}_num_required") %>
+  	  <% if @challenge.send("#{prompt_type}_num_required") != @challenge.send("#{prompt_type}_num_allowed") %>
+  	    - <%= @challenge.send("#{prompt_type}_num_allowed") %><% end %>)
   	</h3>
     <% if @challenge.send("signup_instructions_#{prompt_type}") %>
       <%= sanitize_and_format_for_display @challenge.send("signup_instructions_#{prompt_type}") %>
@@ -66,7 +66,7 @@ So if anyone can think of a better design for this, that would be awesome
   <% end # requests & offers section %>
 
   <fieldset>
-  	<legend><%h= 'Submit' -%></legend> 
+  	<legend><%h= 'Submit' %></legend> 
     <p class="submit">
       <%= signup_form.submit 'Submit' %>
     </p>

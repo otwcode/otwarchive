@@ -4,13 +4,13 @@
 
   <!--main content-->
   <!-- expects @works, @bookmarks -->
-    <%- unless @works.blank? -%>
+    <% unless @works.blank? %>
       <%= render :partial => 'works_module', :locals => {:collection => @collection, :works => @works} %>
-    <%- end -%>
+    <% end %>
 
-    <%- unless @bookmarks.blank? -%>
+    <% unless @bookmarks.blank? %>
       <%= render :partial => 'bookmarks_module', :locals => {:collection => @collection, :bookmarks => @bookmarks} %>
-    <%- end -%>
+    <% end %>
 
   <% if @works.blank? && @bookmarks.blank? %>
     <p class="alt message">There are no works or bookmarks in this collection yet.</p>

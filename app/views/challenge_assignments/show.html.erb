@@ -8,7 +8,7 @@
   <h3>
     <% if request %>
       <%=h t('.challenge_assignment.view', :default => "Assigned to {{requester}}: {{offerer}}", 
-        :requester => request.pseud.byline, :offerer => @challenge_assignment.offer_byline) -%>
+        :requester => request.pseud.byline, :offerer => @challenge_assignment.offer_byline) %>
     <% else %>
       No Assignment
     <% end %>

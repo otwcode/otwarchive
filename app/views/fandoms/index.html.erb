@@ -1,26 +1,26 @@
 <!--Descriptive page name, messages and instructions-->
-<%- if @collection -%>
-  <h2><%=sanitize_title_for_display t('.fandoms.in_collection', :default => "The {{count}} Fandoms in {{collection}}", :count => @fandoms.length, :collection => link_to(@collection.title, @collection)) -%></h2>
-<%- elsif @medium -%>  
+<% if @collection %>
+  <h2><%=sanitize_title_for_display t('.fandoms.in_collection', :default => "The {{count}} Fandoms in {{collection}}", :count => @fandoms.length, :collection => link_to(@collection.title, @collection)) %></h2>
+<% elsif @medium %>  
   <h2><%= link_to t('.fandoms', :default => 'Fandoms'), media_path %> > <%=h @medium.name %></h2>
-<%- else -%>
+<% else %>
   <h2><%= link_to t('.fandoms', :default => 'Fandoms'), media_path %></h2> 
-<%- end -%>  
+<% end %>  
 <!--/descriptions-->
-<%- unless @fandoms.blank? -%>
+<% unless @fandoms.blank? %>
 <!--main content-->
-  <%- @fandoms.in_groups_of((@fandoms.length/3.0).ceil, false) do |fandom_list| -%>  
+  <% @fandoms.in_groups_of((@fandoms.length/3.0).ceil, false) do |fandom_list| %>  
   <ul class="fandoms index">
-    <%- for fandom in fandom_list -%>
+    <% for fandom in fandom_list %>
     <li>
-      <%- if fandom.respond_to?(:count) -%>
+      <% if fandom.respond_to?(:count) %>
       <%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.count.to_s + ")") %>
-      <%- else -%>
+      <% else %>
       <%= link_to_tag_works_with_text(fandom, fandom.name) %>        
-      <%- end -%>    
+      <% end %>    
     </li>
-    <%- end -%>
+    <% end %>
   </ul>
-  <%- end -%>
+  <% end %>
  <!--/content--> 
-<%- end -%>
+<% end %>

@@ -8,78 +8,78 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| -%>
+<%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
 
 <fieldset>
   <legend>Tag info:</legend>
   <dl>
     <dt><%= f.label :name, 'Name' %></dt>
     <dd>
-      <%- if Tag::USER_DEFINED.include?(@tag.class.name) || (@tag[:type] == 'Media' && logged_in_as_admin?) -%>
+      <% if Tag::USER_DEFINED.include?(@tag.class.name) || (@tag[:type] == 'Media' && logged_in_as_admin?) %>
         <%= f.text_field :name, :size => @tag.name.length %>
-        <%- unless logged_in_as_admin? -%>
+        <% unless logged_in_as_admin? %>
         <p>Only changes to capitalization are permitted.</p>  
-        <%- end -%>
-      <%- else -%>
+        <% end %>
+      <% else %>
         <strong><%= @tag.name %></strong>
-      <%- end -%>
+      <% end %>
     </dd>
     
     <dt><%= 'Category' %></dt>
     <!-- FRONT-END: this is important info, so it would be good to have a way to make it stand out a little more . Attention SYSTEM MESSAGES wrangler-->       
     <dd><strong><%= @tag.type %></strong></dd>
     
-    <%- if @wranglers -%>
+    <% if @wranglers %>
     <dt><%= 'Wranglers' %></dt>
     <dd><%= wrangler_list(@wranglers) %></dd>
-    <%- end -%>
+    <% end %>
     
     <dt><%= f.label :canonical, 'Canonical' %></dt>
     <dd>
       <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
       <%= "This is the official name for the " + @tag.class.name %>
-      <%- if Tag::USER_DEFINED.include?(@tag.class.name) && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) -%>
-      <p><%= link_to 'Make tag non-canonical and unhook all associations', {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" -%></p>  
-      <%- end -%>
+      <% if Tag::USER_DEFINED.include?(@tag.class.name) && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) %>
+      <p><%= link_to 'Make tag non-canonical and unhook all associations', {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" %></p>  
+      <% end %>
     </dd>
     
-    <%- if @tag.is_a?(Rating)-%>
+    <% if @tag.is_a?(Rating)%>
     <dt><%= f.label :adult, 'Adult' %></dt>
     <dd><%= f.check_box("adult", :disabled => !logged_in_as_admin? )%>&nbsp;<%= 'This tag indicates adult content.'%></dd>
-    <%- end %>
+    <% end %>
     
-    <%- if Tag::USER_DEFINED.include?(@tag[:type]) -%> 
+    <% if Tag::USER_DEFINED.include?(@tag[:type]) %> 
     <dt><%= f.label :syn_string, 'Synonym of' %></dt>
     <dd>
-      <%= f.text_field :syn_string, :class => 'tags' %><%= autocomplete_text_field_with_type @tag, "tag_syn_string", :no_comma => true -%>
+      <%= f.text_field :syn_string, :class => 'tags' %><%= autocomplete_text_field_with_type @tag, "tag_syn_string", :no_comma => true %>
       <p>Choose an existing tag or add a new tag name here to create a new canonical and associate this tag with it.</p>
-      <%- if @tag.merger -%>
+      <% if @tag.merger %>
         <p>Edit <%= link_to_edit_tag(@tag.merger) %></p>
-      <%- elsif @tag.canonical? -%>
+      <% elsif @tag.canonical? %>
         <!-- FRONT-END: if we have some sort of ACHTUNG! class, this would be a good place for it. Attention SYSTEM MESSAGES wrangler-->      
         <p class="important warning">Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. <strong>(Be careful with this!)</strong></p>
-      <%- end -%>  
+      <% end %>  
     </dd>
-    <%- end -%>
+    <% end %>
   </dl>
 </fieldset>
     
-<%- if (Tag::USER_DEFINED + ['Media']).include?(@tag[:type]) -%>
+<% if (Tag::USER_DEFINED + ['Media']).include?(@tag[:type]) %>
 <fieldset>
   <legend>Parent tags:</legend>
   <dl>    
-    <%- @tag.parent_types.each do |tag_type| -%>
-      <%- if tag_type == 'Fandom' && !@suggested_fandoms.blank? -%>
+    <% @tag.parent_types.each do |tag_type| %>
+      <% if tag_type == 'Fandom' && !@suggested_fandoms.blank? %>
         <dt> Suggested Fandoms:</dt>
         <dd>
-        <%- @suggested_fandoms[0..19].in_groups(2, false) do |fandom_list| %>
+        <% @suggested_fandoms[0..19].in_groups(2, false) do |fandom_list| %>
           <ul class="tags">
-          <%- for tag in fandom_list -%>
+          <% for tag in fandom_list %>
             <li><%= link_to_edit_tag(tag) %></li>
           <% end %>
           </ul>
         <% end %>
-        <%- if @suggested_fandoms.length > 20 -%>
+        <% if @suggested_fandoms.length > 20 %>
           <p><%= link_to "See all (#{@suggested_fandoms.length})", {:controller => :tags, :action => :wrangle, :id => @tag, :show => :suggested_fandoms} %></p>   
         <% end %>
         </dd>
@@ -87,61 +87,61 @@
       <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
       <dd>
         <%= f.text_field tag_type.underscore + '_string', :class => 'tags' %>
-        <%= autocomplete_text_field_with_type @tag, "tag_#{tag_type.underscore}_string" -%><br />
-        <%- if @parents[tag_type] -%>
-          <%- @parents[tag_type].in_groups(2, false) do |tag_list| -%>
+        <%= autocomplete_text_field_with_type @tag, "tag_#{tag_type.underscore}_string" %><br />
+        <% if @parents[tag_type] %>
+          <% @parents[tag_type].in_groups(2, false) do |tag_list| %>
           <ul class="tags">
-          <%- for tag in tag_list -%>
+          <% for tag in tag_list %>
             <li>
               <%= link_to_edit_tag(tag) %>
               <span>
                 <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %> 
               </span>              
             </li>
-          <%- end -%>
+          <% end %>
           </ul>
-          <%- end -%>
-        <%- end -%>
+          <% end %>
+        <% end %>
       </dd> 
-    <%- end -%>  
+    <% end %>  
   </dl>
 </fieldset>
 
-  <%- if @tag.canonical? %>
+  <% if @tag.canonical? %>
   <fieldset>
     <legend>Child tags:</legend>
     <p><%= link_to 'wrangle all child tags', {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
     <dl>    
-      <%- @tag.child_types.each do |tag_type| -%>
+      <% @tag.child_types.each do |tag_type| %>
         <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
         <dd>
           <%= f.text_field tag_type.underscore + '_string', :class => 'tags' %>
-          <%= autocomplete_text_field_with_type @tag, "tag_#{tag_type.underscore}_string" -%><br />
-          <%- if @children[tag_type] -%>
-            <%- @children[tag_type][0..19].in_groups(2, false) do |tag_list| -%>
+          <%= autocomplete_text_field_with_type @tag, "tag_#{tag_type.underscore}_string" %><br />
+          <% if @children[tag_type] %>
+            <% @children[tag_type][0..19].in_groups(2, false) do |tag_list| %>
             <ul class="tags">
-            <%- for tag in tag_list -%>
+            <% for tag in tag_list %>
               <li>
                 <%= link_to_edit_tag(tag) %>
                 <span>
                   <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
                 </span>              
               </li>
-            <%- end -%>
+            <% end %>
             </ul>
-            <%- end -%>
-            <%- if @children[tag_type].length > 20 -%>
+            <% end %>
+            <% if @children[tag_type].length > 20 %>
             <p><%= link_to "See all (#{@tag.send(tag_type.underscore.pluralize).count})", {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %></p>   
-            <%- end -%>
-          <%- end -%>    
+            <% end %>
+          <% end %>    
         </dd> 
-      <%- end -%>  
+      <% end %>  
     </dl>
   </fieldset>
-  <%- end -%>
-  <%- elsif @tag.is_a?(Media) -%>
+  <% end %>
+  <% elsif @tag.is_a?(Media) %>
     <p><%= link_to 'See all fandoms', {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
-  <%- end -%>
+  <% end %>
 
   <fieldset>
   <legend>Submit</legend>
@@ -149,11 +149,11 @@
     <%= submit_tag "Save changes" %>
   </p>
   </fieldset>
-<%- end -%>
+<% end %>
 
-<%- if logged_in_as_admin? -%>
+<% if logged_in_as_admin? %>
   <p>Last updated by <%= @tag.last_wrangler.andand.login || '---' %> on <%= @tag.updated_at %></p>  
-<%- end -%>
+<% end %>
 <!--/content-->
 
 <!--subnav-->

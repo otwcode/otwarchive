@@ -3,9 +3,9 @@
 	<ul class="admin navigation" role="navigation">
 	<% if item.hidden_by_admin? %>
     <li><%= link_to t('.options_make_visible', :default => 'Make Visible'), {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'false'} %></li>
-  <%- else -%>
+  <% else %>
     <li><%= link_to t('.options_hide', :default => 'Hide'), {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'true'} %></li> 
-  <%- end -%>  
+  <% end %>  
   <li><%= link_to t('.options_delete', :default => 'Delete'), {:controller=>"admin/user_creations", :action=>"destroy", :id=>item, :creation_type => item.class}, :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
   </ul>
 <!-- END admin options -->

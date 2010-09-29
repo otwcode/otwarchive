@@ -3,31 +3,31 @@
 	
   <h3 class="landmark">Actions</h3>
 	<ul class="navigation" role="navigation">
-<%- if @work || @admin_post -%>
+<% if @work || @admin_post %>
     <li><%= link_to t('.top_link_text', :default => "&#8593; Top"), :anchor => "main" %></li>
-<%- end -%>
-<%- if @work && @previous_chapter -%>
+<% end %>
+<% if @work && @previous_chapter %>
     <li><%= link_to t('.previous_chapter', :default => "&#8592; Previous Chapter"), [@work, @previous_chapter] %></li>
-<%- end -%>
-<%- if @work && @next_chapter -%>
+<% end %>
+<% if @work && @next_chapter %>
     <li><%= link_to t('.next_chapter', :default => "Next Chapter &#8594;"), [@work, @next_chapter] %></li>
-<%- end -%>
-<%- if @admin_post -%>
+<% end %>
+<% if @admin_post %>
     <li><%= link_to t('.admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
-<%- end -%>
-<%- if @work && is_author_of?(@work) -%>
-    <li id="add_collection_link"><%= collection_link(@work) -%></li>
-<%- end -%>
-<%- if logged_in? && @work -%>
+<% end %>
+<% if @work && is_author_of?(@work) %>
+    <li id="add_collection_link"><%= collection_link(@work) %></li>
+<% end %>
+<% if logged_in? && @work %>
     <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>
-    <%- unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false -%>
+    <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
       <li><%= marktoread_link(@work) %></li>
-    <%- end -%>
-<%- end -%>
-<% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) -%>
-    <li id="show_comments_link"><%= show_hide_comments_link(commentable) -%></li>
-<%- end -%>
-    <li id="add_comment_link"><%= add_cancel_comment_link(commentable) -%></li>
+    <% end %>
+<% end %>
+<% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) %>
+    <li id="show_comments_link"><%= show_hide_comments_link(commentable) %></li>
+<% end %>
+    <li id="add_comment_link"><%= add_cancel_comment_link(commentable) %></li>
   </ul>
 
   <!-- if we have javascript, here is where the collection window will pop up -->
@@ -35,32 +35,32 @@
   <!-- if we have javascript, here is where the bookmark window will pop up -->
   <div style="position:relative;"><div id="dynamic-bookmark" class="wrapper" style="display:none;"></div></div>
 
-  <% if params[:show_comments] || params[:tag_id] || params[:add_comment] -%>
+  <% if params[:show_comments] || params[:tag_id] || params[:add_comment] %>
     <h3 class="landmark"><a name="comments">Comments</a></h3>
   <% end %>
   
-  <%= flash_div :comment_error, :comment_notice -%>
+  <%= flash_div :comment_error, :comment_notice %>
   <!-- If we have javascript, here is where the Add Comment window will appear. -->
   <!-- If not, and we have params telling us to comment on this object, we will manually display the comment window. --> 
-  <%- if params[:add_comment] -%>
+  <% if params[:add_comment] %>
     <div id="add_comment_placeholder">
       <div id="add_comment">
         <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => t('.forms.add_comment', :default => "Add Comment")}%> 		
       </div>
     </div>
-  <%- else -%>
+  <% else %>
     <div id="add_comment_placeholder" style="display:none;"></div>
-  <%- end -%>	
+  <% end %>	
 
   <!-- If we have javascript, here is where the comments will be spiffily inserted -->
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
-  <%- if params[:show_comments] || params[:tag_id] -%>
+  <% if params[:show_comments] || params[:tag_id] %>
 		<div id="comments_placeholder">
       <%= render :partial => 'comments/comment_thread', :locals => { :comments => commentable.comments, :depth => 0 }%></ol>
     </div>
-  <%- else -%>
+  <% else %>
     <div id="comments_placeholder" style="display: none;"></div>
-  <%- end -%>
+  <% end %>
 
 </div>
 <!-- END comments -->

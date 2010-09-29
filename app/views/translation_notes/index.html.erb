@@ -10,17 +10,17 @@
 <!--/subnav-->
 
 <!--main content-->
-<%- for translation_note in @translation_notes -%>
+<% for translation_note in @translation_notes %>
 <div class='note'>
   <p>
     <%=h translation_note.user.login %>, <%= l(translation_note.created_at) %>
-    <%- if current_user == translation_note.user -%>
+    <% if current_user == translation_note.user %>
       <span class='navigation'><%= link_to '(destroy)', translation_note, :confirm => 'Are you sure?', :method => :delete %></span>
-    <%- end -%>
+    <% end %>
   </p> 
   <div class='note-text'><%= sanitize_and_format_for_display translation_note.note %></div>
 </div>
-<%- end -%>
+<% end %>
 <!--/content-->
 <!--investigate-->
 

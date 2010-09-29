@@ -15,7 +15,7 @@ See the challenge_signup form for an example of how this is used.
     <% prompt_type = (form.object.class == Offer ? "offer" : (form.object.class == Request ? "request" : "prompt")) %>
     <% prompt_types = prompt_type.pluralize %>
     <% restriction = @challenge.send("#{prompt_type}_restriction") %>
-    <%= form.hidden_field :collection_id, :value => @collection.id -%>
+    <%= form.hidden_field :collection_id, :value => @collection.id %>
   </p>
   
   <dl>
@@ -37,14 +37,14 @@ See the challenge_signup form for an example of how this is used.
             <% if has_tags %>
               <!-- checkboxes -->
               <% tag_fieldname = "challenge_signup[#{prompt_types}_attributes][#{index}][tag_set_attributes][#{tag_type}_tagnames][]" %>
-              <% tag_field_id =  "challenge_signup_#{prompt_types}_attributes_#{index}_#{tag_type}" -%>
+              <% tag_field_id =  "challenge_signup_#{prompt_types}_attributes_#{index}_#{tag_type}" %>
               <% max_tagindex = 0 %>
-              <ul onclick="$('<%= tag_field_id -%>_hide').show(); $('<%= tag_field_id -%>_more').hide();">
+              <ul onclick="$('<%= tag_field_id %>_hide').show(); $('<%= tag_field_id %>_more').hide();">
                 <!-- FRONT END NOTE: generally we want checkbox after label but in this case makes form much more usable to keep clicking in same vertical line -->
                 <% taglist.each_with_index do |tag, tagindex| %>
                   <li>
                     <% tag_checkbox_id = "#{tag_field_id}_#{tag.id}" %>
-                    <%= check_box_tag tag_fieldname, tag.name, eval("form.object.#{tag_type}_taglist").include?(tag), {:id => tag_checkbox_id} -%>
+                    <%= check_box_tag tag_fieldname, tag.name, eval("form.object.#{tag_type}_taglist").include?(tag), {:id => tag_checkbox_id} %>
                     <%= label_tag tag_checkbox_id, tag.name %>
                   </li>
                   
@@ -52,12 +52,12 @@ See the challenge_signup form for an example of how this is used.
                   <% if tagindex == (Prompt::OPTIONS_TO_SHOW - 1) && taglist.size > (Prompt::OPTIONS_TO_SHOW * 2) %>
                     <!-- we add a blind-down area for more if we have a lot of checkboxes to show -->
                     </ul>
-                    <h5 id="<%= tag_field_id -%>_more" onclick="$('<%= tag_field_id -%>_hide').show(); this.hide()">
+                    <h5 id="<%= tag_field_id %>_more" onclick="$('<%= tag_field_id %>_hide').show(); this.hide()">
                       <%= t("prompts.show_more_#{tag_type}", 
                         :default => "{{tag_count}} more #{tag_type.pluralize} to choose from...",
-                        :tag_count => (taglist.size - Prompt::OPTIONS_TO_SHOW) ) -%>
+                        :tag_count => (taglist.size - Prompt::OPTIONS_TO_SHOW) ) %>
                     </h5>
-                    <div id="<%= tag_field_id -%>_hide" class="hideme">
+                    <div id="<%= tag_field_id %>_hide" class="hideme">
                     <ul>
                   <% end %>
                 <% end # of taglist.each loop %>
@@ -71,7 +71,7 @@ See the challenge_signup form for an example of how this is used.
                 <% end %>
 
               <!-- need to add hidden field to ensure this is passed if none of the boxes are checked -->
-              <%= hidden_field_tag tag_fieldname, " " -%>           
+              <%= hidden_field_tag tag_fieldname, " " %>           
             <% else %>
               <!-- using an autocomplete -->
               <% tag_fieldname = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>
@@ -85,14 +85,14 @@ See the challenge_signup form for an example of how this is used.
     
     <% if restriction.url_allowed %>
     <dt<%= restriction.url_required ? ' class="required"' : '' %>>
-      <%= form.label :url , (@challenge.send("#{prompt_type}_url_label") || t('.prompts.url', :default => "Prompt URL: ")) -%>
+      <%= form.label :url , (@challenge.send("#{prompt_type}_url_label") || t('.prompts.url', :default => "Prompt URL: ")) %>
     </dt>
     <dd><%= form.text_field :url, :size => 50 %></dd>
     <% end %>
 
     <% if restriction.description_allowed  %>
       <dt<%= restriction.description_required ? ' class="required"' : '' %>>
-        <%= form.label :description, (@challenge.send("#{prompt_type}_description_label") || t('.prompts.description', :default => "Description: ")) -%>
+        <%= form.label :description, (@challenge.send("#{prompt_type}_description_label") || t('.prompts.description', :default => "Description: ")) %>
       </dt>
       <dd><%= form.text_area :description, :rows => 6, :cols => 50 %></dd>
     <% end %>

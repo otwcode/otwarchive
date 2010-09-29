@@ -3,18 +3,18 @@
 <%= error_messages_for :skin %>
 
 <!--subnav-->
-<%= render :partial => "skin_top_navigation" -%>
+<%= render :partial => "skin_top_navigation" %>
 <!--/subnav-->
 
 <h3 class="landmark">Edit Archive Skin Form</h3>
-<%= form_for(@skin, :html => {:multipart => true}) do |f| -%>
+<%= form_for(@skin, :html => {:multipart => true}) do |f| %>
 
-  <%- if params[:wizard] -%>
+  <% if params[:wizard] %>
     <%= render :partial => 'wizard_form', :locals => {:f => f} %>
-  <%- else -%>
+  <% else %>
     <%= render :partial => 'form', :locals => {:f => f} %>
-  <%- end -%>
+  <% end %>
 
   <%= f.submit t('update_skin_button', :default => 'Update')  %>
 
-<% end -%>
+<% end %>

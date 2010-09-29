@@ -15,7 +15,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| -%>
+<%= form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| %>
 <h4>Privacy</h4>
   <ul>
   	<li>
@@ -62,25 +62,25 @@
     <li>
       <%= f.label :skin_id, t('skin', :default => "Site skin")%>: 
       <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
-      (<%= link_to t('.index', :default => 'Public skins'), skins_path -%>)
+      (<%= link_to t('.index', :default => 'Public skins'), skins_path %>)
     </li>
 
   </ul>
 <h4>Statistics</h4>
   <ul>
     <li>
-      <%= f.check_box :hide_all_hit_counts -%>
-      <%= f.label :hide_all_hit_counts, t('.preferences.hide_all_hit_counts', :default => "Don't show me any hit counts.") -%>
+      <%= f.check_box :hide_all_hit_counts %>
+      <%= f.label :hide_all_hit_counts, t('.preferences.hide_all_hit_counts', :default => "Don't show me any hit counts.") %>
     </li>
 
     <li>
-      <%= f.check_box :hide_private_hit_count -%>
-      <%= f.label :hide_private_hit_count, t('.preferences.hide_private_hit_count', :default => "Don't show me hits on my works.") -%>
+      <%= f.check_box :hide_private_hit_count %>
+      <%= f.label :hide_private_hit_count, t('.preferences.hide_private_hit_count', :default => "Don't show me hits on my works.") %>
     </li>
 
     <li>
-      <%= f.check_box :hide_public_hit_count -%>
-      <%= f.label :hide_public_hit_count, t('.preferences.hide_public_hit_count', :default => "Don't publicly display hits on my works.") -%>
+      <%= f.check_box :hide_public_hit_count %>
+      <%= f.label :hide_public_hit_count, t('.preferences.hide_public_hit_count', :default => "Don't publicly display hits on my works.") %>
     </li>
   </ul>
 <h4>Comments</h4>
@@ -108,8 +108,8 @@
 <h4>Collections, Challenges and Gifts</h4>
   <ul>
   	<li>
-  	  <%= f.check_box :automatically_approve_collections -%>
-  	  <%= f.label :pref, t('.preferences.automatically_approve_collections', :default => "Automatically approve when a moderator adds your work to a collection in the archive.") -%>
+  	  <%= f.check_box :automatically_approve_collections %>
+  	  <%= f.label :pref, t('.preferences.automatically_approve_collections', :default => "Automatically approve when a moderator adds your work to a collection in the archive.") %>
   	</li>
 
   	<li>
@@ -147,7 +147,7 @@
     <li>
       <%= f.label :work_title_format, t('.format_titles', :default => "Format the titles on your works and series")  %>:
 			<%= f.text_field :work_title_format %>
-			<%= link_to_help "work_title_format" -%>
+			<%= link_to_help "work_title_format" %>
     </li>
   </ul>
 
@@ -155,7 +155,7 @@
   	<p class="submit">
     	<%= f.submit t('.forms.update', :default => "Update") %>
   	</p>
-<%- end -%>
+<% end %>
 <hr class="clear" />
 <!--/content-->
 

@@ -18,7 +18,7 @@
 <!--/subnav-->
 		
 		<!--main content-->
-		<%= form_for @user do |f| -%>
+		<%= form_for @user do |f| %>
 		  <p><%= f.hidden_field :invitation_token, :value => params[:invitation_token] %></p>
 <fieldset><legend>User Details</legend>
 <!-- Create login -->
@@ -29,7 +29,7 @@
 				        <%= live_validation_for_field('user_login', 
 						:maximum_length => User::LOGIN_LENGTH_MAX, :minimum_length => User::LOGIN_LENGTH_MIN, 
 					  :failureMessage => 'You need a login name! (At least ' + User::LOGIN_LENGTH_MIN.to_s + ' letters long, please.)')
-				-%>
+				%>
 			</dd>
 			</dl>
     
@@ -37,33 +37,33 @@
 			<div id="switch_fields">
 				<dl>
 <!-- use_openid set by link_to_passwd and link_to_openid below; needed for non-JS users to distinguish between versions of the page -->
-					<%- if params[:use_openid] -%>
+					<% if params[:use_openid] %>
 					<%= render :partial => 'openid', :locals => {:f => f} %>
-					<%- else -%>
+					<% else %>
 					<%= render :partial => 'passwd', :locals => {:f => f} %>
-					<% end -%>
+					<% end %>
 			</dl>
 			</div>
 <!-- Link to toggle between password and OpenID. Ugly code! :( -->
 <!-- Two versions of the div tag here so the link to passwd is not shown when the page is first loaded; for non-JS users clicking the link sets use_openid to true, showing the div on reload; for JS users the display is toggled -->
 							<div id="link_to_openid"><p>
 				<!-- !params[:use_openid] ensures this is hidden on the openid version of the page for non-JS users -->
-								<%- if !params[:use_openid] -%>
-								<%- if ArchiveConfig.USE_OPENID -%>
+								<% if !params[:use_openid] %>
+								<% if ArchiveConfig.USE_OPENID %>
 									<%= image_tag("openid.png", :alt => 'OpenID logo') %>
 									<%= link_to_function("Sign up using OpenID", :href => url_for(:action => 'new', :use_openid => true), :class => 'footnote') do |page|
 										page.replace_html "switch_fields", :partial => 'openid', :locals => {:f => f}
 										page[:link_to_openid].hide
 										page[:link_to_passwd].show
 										end %>
-									<%- end -%>
-								<%- end -%></p></div>
+									<% end %>
+								<% end %></p></div>
 								
-								<%- if params[:use_openid] -%>
+								<% if params[:use_openid] %>
 			<div id="link_to_passwd">
-					<%- else -%>
+					<% else %>
 			<div id="link_to_passwd" style="display: none;">
-					<%- end -%>
+					<% end %>
 <!-- Moving the links into a helper didn't work as f wasn't being found :( -->
 					<%= link_to_function("Sign up using a password", :href => url_for(:action => 'new', :use_openid => false), :class => 'footnote') do |page|
 						page.replace_html "switch_fields", :partial => 'passwd', :locals => {:f => f}
@@ -78,7 +78,7 @@
 				<%= live_validation_for_field('user_email', 
 						:maximum_length => User::EMAIL_LENGTH_MAX, :minimum_length => User::EMAIL_LENGTH_MIN, 
 					  :failureMessage => 'You need to enter a valid email address!')
-				-%>
+				%>
 				</dd>
 				</dl>
 				</fieldset>
@@ -92,11 +92,11 @@
 					<%= f.label :age_over_13, "Yes, I am over 13." %>
 				</p>
 <!-- Terms of Service -->
-				<p><%=h "And - really important - we need you to agree to our" %> <%= link_to "Terms of Service", tos_path -%>:</p>
+				<p><%=h "And - really important - we need you to agree to our" %> <%= link_to "Terms of Service", tos_path %>:</p>
 					<div name="<%= tos_field_name %>"id="tos-partial"><%= render(:partial => 'home/tos') %></div>
 <!-- If this box is not checked, needs a modal dialog box: "You must agree to the Terms of Service in order to create an account.", with OK as the only choice. -->
 				<p>
-					<%= f.check_box :terms_of_service -%>
+					<%= f.check_box :terms_of_service %>
 					<%= f.label :terms_of_service, "Yes, I have read the Terms of Service and agree to them.",  :class => 'important' %>
 				</p>
 				</fieldset>
@@ -108,5 +108,5 @@
 					<%= submit_tag 'Create Account' %>
 				</p>
 				</fieldset>
-			<% end -%>
+			<% end %>
 <!--/content-->

@@ -21,12 +21,12 @@
 </p>
 
 <p>
-  These works were written under the email: <%= @external_author.email -%>
+  These works were written under the email: <%= @external_author.email %>
 </p>
 
 <ul>
   <% @claimed_works.each do |work| %>
-    <li><%= work.title -%><br />
-    <%= link_to work_url(work, :host => @host), work_url(work, :host => @host) -%></li>
+    <li><%= work.title %><br />
+    <%= link_to work_url(work, :host => @host), work_url(work, :host => @host) %></li>
   <% end %>
 </ul>

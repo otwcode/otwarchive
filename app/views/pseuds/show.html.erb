@@ -5,8 +5,8 @@
 
 <h3 class="landmark">Navigation</h3>
 <ul class="navigation" role="navigation">
-  <% if @user == current_user -%>
+  <% if @user == current_user %>
     <li><%= link_to t('.edit_link', :default => 'Edit'), [:edit, @user, @author] %></li>
-  <% end -%>
+  <% end %>
   <li><%= link_to t('.index_link', :default => 'Back To Pseuds'), user_pseuds_path(@user) %></li>
 </ul>

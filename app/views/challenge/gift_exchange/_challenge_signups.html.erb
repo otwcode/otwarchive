@@ -1,4 +1,4 @@
-<% @challenge ||= @collection.challenge -%>
+<% @challenge ||= @collection.challenge %>
 <% show_request_url = @challenge.request_restriction.url_allowed && !params[:hide_urls] %>
 <% show_offer_url = @challenge.offer_restriction.url_allowed && !params[:hide_urls] %>
 <% show_request_description = @challenge.request_restriction.description_allowed && !params[:hide_descriptions] %>
@@ -17,17 +17,17 @@
     <li><%= link_to t('.gift_exchange.download_excel', :default => "Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
     <% if show_offer_description || show_request_description %>
       <li><%= link_to t('.gift_exchange.hide_desc', :default => "Hide Descriptions"), 
-          collection_signups_path(@collection, :hide_descriptions => true, :hide_urls => params[:hide_urls]) -%></li>
+          collection_signups_path(@collection, :hide_descriptions => true, :hide_urls => params[:hide_urls]) %></li>
     <% elsif params[:hide_descriptions] %>
       <li><%= link_to t('.gift_exchange.show_desc', :default => "Show Descriptions"), 
-          collection_signups_path(@collection, :hide_descriptions => false, :hide_urls => params[:hide_urls]) -%></li>
+          collection_signups_path(@collection, :hide_descriptions => false, :hide_urls => params[:hide_urls]) %></li>
     <% end %>
     <% if show_offer_url|| show_request_url %>
       <li><%= link_to t('.gift_exchange.hide_url', :default => "Hide URLs"), 
-          collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => true) -%></li>
+          collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => true) %></li>
     <% elsif params[:hide_urls] %>
       <li><%= link_to t('.gift_exchange.show_desc', :default => "Show URLs"), 
-          collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => false) -%></li>
+          collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => false) %></li>
     <% end %>
   </ul>
 <% end %>
@@ -41,12 +41,12 @@
     <th rowspan=2>Pseud</th>
     <th rowspan=2>Email</th>
     <% @challenge.requests_num_allowed.times do |i| %>
-    <th colspan=<%= (num_request_tag_categories + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) -%>>
+    <th colspan=<%= (num_request_tag_categories + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) %>>
       <%= t("gift_exchange.request_number", :default => "Request {{num}}", :num => i+1) %>
     </th>
     <% end %>
     <% @challenge.offers_num_allowed.times do |i| %>
-    <th colspan=<%= (num_offer_tag_categories + (show_offer_description ? 1 : 0 ) + (show_offer_url ? 1 : 0)) -%>>
+    <th colspan=<%= (num_offer_tag_categories + (show_offer_description ? 1 : 0 ) + (show_offer_url ? 1 : 0)) %>>
       <%= t("gift_exchange.offer_number", :default => "Offer {{num}}", :num => i+1) %></th>
     <% end %>
   </tr>
@@ -56,7 +56,7 @@
     <% %w(request offer).each do |prompt_type| %>
       <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
         <% TagSet::TAG_TYPES.each do |type| %>
-          <% if eval("@show_#{prompt_type}_#{type}_tags") %><th><%= type.classify.pluralize -%></th><% end %>
+          <% if eval("@show_#{prompt_type}_#{type}_tags") %><th><%= type.classify.pluralize %></th><% end %>
         <% end %>
         <% if eval("show_#{prompt_type}_optional_tags") %><th>Optional Tags</th><% end %>
         <% if eval("show_#{prompt_type}_description") %><th>Description</th><% end %>
@@ -71,7 +71,7 @@
       <% unless @hide_navigation %>
         <!-- because rows can be unmanageably long, put nav at start -->
         <td class="navigation">
-          <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} -%>
+          <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
         </td>
       <% end %>
 
@@ -85,21 +85,21 @@
             <% if eval("@show_#{prompt_type}_#{type}_tags") %>
               <td>
                 <%= !prompt || !prompt.tag_set || prompt.tag_set.with_type(type).empty? ? "" : 
-                  "<ul>" + tag_link_list(prompt.tag_set.with_type(type)) + "</ul>" -%>
+                  "<ul>" + tag_link_list(prompt.tag_set.with_type(type)) + "</ul>" %>
               </td>
             <% end %>  
           <% end %>
           <% if eval("show_#{prompt_type}_optional_tags") %>
             <td>
               <%= !prompt || !prompt.optional_tag_set || prompt.optional_tag_set.tags.empty? ? "" : 
-                "<ul>" + tag_link_list(prompt.optional_tag_set.tags) + "</ul>" -%>
+                "<ul>" + tag_link_list(prompt.optional_tag_set.tags) + "</ul>" %>
             </td>
           <% end %>
           <% if eval("show_#{prompt_type}_description") %>
-            <td><%= !prompt || prompt.description.blank? ? "" : sanitize_and_format_for_display(prompt.description) -%></td>
+            <td><%= !prompt || prompt.description.blank? ? "" : sanitize_and_format_for_display(prompt.description) %></td>
           <% end %>
           <% if eval("show_#{prompt_type}_url") %>
-            <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) -%></td>
+            <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) %></td>
           <% end %>
         <% end %>
       <% end %>

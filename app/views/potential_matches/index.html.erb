@@ -1,4 +1,4 @@
-<h2>Matching for <%= sanitize_title_for_display(@collection.title) -%></h2>
+<h2>Matching for <%= sanitize_title_for_display(@collection.title) %></h2>
 <% if !@settings %>
   <p class="note">
     Your challenge doesn't currently have any match settings defined. To set them up, please
@@ -75,7 +75,7 @@
   <!-- list all the requesters with their potential matches -->
   <%= form_tag set_collection_assignments_path, :method => :put do %>
 
-    <%= render :partial => "match_navigation", :locals => {:top => true} -%>
+    <%= render :partial => "match_navigation", :locals => {:top => true} %>
     
     <div class="clear"></div>
 
@@ -95,7 +95,7 @@
         <thead>
           <tr>
             <th scope="col">Pseud</th>
-            <th scope="col" colspan=3>Pinch Recipient <%= link_to_help "challenge-pinch-recipient" -%></th>
+            <th scope="col" colspan=3>Pinch Recipient <%= link_to_help "challenge-pinch-recipient" %></th>
           </tr>
         </thead>
 
@@ -118,7 +118,7 @@
             <th scope="col">Pseud</th>
             <th scope="col">Giving Gift To</th>
             <th scope="col">Assigned Giver</th>
-            <th scope="col">Potential Givers <%= link_to_help "challenge-potential-giver" -%></th>
+            <th scope="col">Potential Givers <%= link_to_help "challenge-potential-giver" %></th>
             <th scope="col">Write-In Pinch Hitter <%= link_to_help "challenge-pinch-hitter" %></th>
           </tr>
         </thead>
@@ -143,7 +143,7 @@
           <th scope="col">Pseud</th>
           <th scope="col">Giving Gift To</th>
           <th scope="col">Assigned Giver</th>
-          <th scope="col">Potential Givers <%= link_to_help "challenge-potential-giver" -%></th>
+          <th scope="col">Potential Givers <%= link_to_help "challenge-potential-giver" %></th>
           <th scope="col">Write-In Pinch Hitter <%= link_to_help "challenge-pinch-hitter" %></th>
         </tr>
       </thead>
@@ -153,9 +153,9 @@
       <% end %>
     </table>
     
-    <%= will_paginate @assignments_with_request_and_offer -%>
+    <%= will_paginate @assignments_with_request_and_offer %>
 
-    <%= render :partial => "match_navigation", :locals => {:top => false} -%>
+    <%= render :partial => "match_navigation", :locals => {:top => false} %>
 
   <% end %>
   

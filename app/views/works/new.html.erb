@@ -1,19 +1,19 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 id='work-form-heading'><%=h t('.works.new', :default => 'Post New Work') -%></h2>
+<h2 id='work-form-heading'><%=h t('.works.new', :default => 'Post New Work') %></h2>
 
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
 <ul class="navigation">
-  <% if @unposted -%>
+  <% if @unposted %>
     <li id='restore-link'>
-      <%= link_to 'Restore From Last Unposted Draft?', url_for(:action => :new, :load_unposted => true) -%>
+      <%= link_to 'Restore From Last Unposted Draft?', url_for(:action => :new, :load_unposted => true) %>
     </li>
-  <%- end -%>
+  <% end %>
   <li id="upload-link">
     <%= link_to( t('.import', :default => 'Import From An Existing URL Instead?'),
       {:url => {:controller => :works, :action => :new, :import => true}},
-      :href => url_for(:controller => :works, :action => :new, :import => true)) -%>
+      :href => url_for(:controller => :works, :action => :new, :import => true)) %>
   </li>
 </ul>
 

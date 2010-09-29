@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h 'Archive Settings' -%></h2>
+<h2><%=h 'Archive Settings' %></h2>
 <!--/descriptions-->
 
 <!--main content-->
@@ -28,13 +28,13 @@
     <p class="submit"><%= f.submit 'Update' %></p>
 <% end %>
 <hr class="clear" />
-  <%- if @admin_setting.invite_from_queue_enabled? -%>
-  <p><%= @admin_setting.invite_from_queue_number -%> people are scheduled to be sent invitations on 
+  <% if @admin_setting.invite_from_queue_enabled? %>
+  <p><%= @admin_setting.invite_from_queue_number %> people are scheduled to be sent invitations on 
   <%= l(@admin_setting.invite_from_queue_at.to_date, :format => :long) %>.</p> 
   
   <p>(The automatic task that invites people from the queue only runs once a day. Don't be alarmed if the date you see is yesterday's. 
   Do be alarmed if the date you see is more than one day in the past and the queue is supposed to be active.)</p>
-  <%- end -%>
+  <% end %>
 
 <p>Last updated on <%= @admin_setting.updated_at %> by <%= @admin_setting.last_updated ? @admin_setting.last_updated.login : "---" %>.</p>
 <!--/content-->

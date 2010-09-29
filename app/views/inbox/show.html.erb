@@ -1,12 +1,12 @@
 <!--Descriptive page name, messages and instructions-->
 <h2><%=h t('.my_inbox', :default => 'My Inbox') %> (<%= t('.inbox_count', :default => "{{total}} comments, {{unread}} unread", :total => @inbox_total, :unread => @unread) %>)</h2>
 
-<%= flash_div :comment_error, :comment_notice -%>
+<%= flash_div :comment_error, :comment_notice %>
 <!--/descriptions-->
 
 <!--main content-->
-<%- unless @inbox_comments.blank? -%>  
-  <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
+<% unless @inbox_comments.blank? %>  
+  <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do %>
   <fieldset>
 	<legend>Mass Edit Options</legend>
 	<ul class="navigation">
@@ -28,24 +28,24 @@
 	<fieldset>
 	<legend>List of Comments</legend>
 	<ol class="comment index">
-    <%- for inbox_comment in @inbox_comments -%>
+    <% for inbox_comment in @inbox_comments %>
       <!-- START of single comment -->
       <li class="comment <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
         <h4><%= get_pseud_or_mailaddress(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
         <div class="icon">
-          <%- if !inbox_comment.feedback_comment.pseud.nil? -%>
+          <% if !inbox_comment.feedback_comment.pseud.nil? %>
             <%= standard_icon_display(inbox_comment.feedback_comment.pseud.user, inbox_comment.feedback_comment.pseud) %>
           <% else %>
             <span class="visitor icon"><!-- visitor icon holder --></span>
-          <%- end -%>
+          <% end %>
         </div>
         <blockquote class="user-generated-view"><%= sanitize_and_format_for_display inbox_comment.feedback_comment.content %></blockquote>
         <p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
         <h5 class="landmark">Comment Actions</h5>
         <ul class="navigation">
-          <%- unless inbox_comment.read? -%>
+          <% unless inbox_comment.read? %>
             <li><span class="unread">Unread</span></li>
-          <%- end -%>
+          <% end %>
           <li>
             <%= image_tag("replied_to.png", :size => "15x15", :alt => "Replied To") if inbox_comment.replied_to? %>
             <%= inbox_reply_link(inbox_comment.feedback_comment) %>
@@ -57,7 +57,7 @@
         </ul>
       </li>
       <!-- END of single comment -->
-    <%- end -%>
+    <% end %>
   </ol>
   </fieldset>
   <fieldset>
@@ -82,18 +82,18 @@
     </p>
   </fieldset>
     <!-- coming soon <%= submit_tag t('.mass_reply', :default => 'mass reply') %> -->
-  <%- end -%> <!-- end of inbox form -->
+  <% end %> <!-- end of inbox form -->
   
   <!-- we can't open comment forms inside the inbox form, which is why this is down here -->
   <div id="reply-to-comment" style="display:none;"></div> <!-- this div will contain the reply to comment form -->
-<%- end -%>
+<% end %>
 
 <!--/content-->
 
 <!--subnav-->
 <h3 class="landmark">Filter</h3>
-<%= form_tag(user_inbox_path(@user), :class => 'filters', :method => :get) do -%>
-  <%= field_set_tag do -%>
+<%= form_tag(user_inbox_path(@user), :class => 'filters', :method => :get) do %>
+  <%= field_set_tag do %>
     <dl class="filters">
       <dt><%= 'Filter by read' %></dt>
       <dd>
@@ -133,8 +133,8 @@
         <%= label_tag 'filters_date_asc', 'Oldest first' %>
       </dd>
     </dl>
-  <%- end -%>
+  <% end %>
   <p class="submit"><%= submit_tag t('.filter_inbox', :default => 'Filter Inbox') %></p>
-<%- end -%>
+<% end %>
 <!--/subnav-->
 

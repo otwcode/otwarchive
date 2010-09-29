@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= t('.gifts.gifts_in_collection', :default => "Gifts in {{collection}}", :collection => h(@collection.title)) -%></h2>
+<h2><%= t('.gifts.gifts_in_collection', :default => "Gifts in {{collection}}", :collection => h(@collection.title)) %></h2>
 <!--/descriptions-->
 
 <!--subnavigation, sorting and actions-->
-<%= render :partial => 'gifts/gift_search' -%>
+<%= render :partial => 'gifts/gift_search' %>
 <!--/subnav-->
 
 <!--main content-->
@@ -18,17 +18,17 @@
   </tr>
 	</thead>
   <tbody>
-<%- for gift in @gifts -%>
+<% for gift in @gifts %>
     <tr>
       <td>
         <%= link_to sanitize_title_for_display(gift.work.title, :tags => %w(em i b strong strike small)), 
                     collection_work_path(@collection, gift.work) %>
       </td>
       <td>
-        <%=h gift.recipient_name -%>
+        <%=h gift.recipient_name %>
       </td>
       <td>
-        <%=h gift.work.pseuds.collect {|p| "#{p.byline} (#{p.user.email})"}.join(", ") -%>
+        <%=h gift.work.pseuds.collect {|p| "#{p.byline} (#{p.user.email})"}.join(", ") %>
       </td>
       <td>
         <%= @has_received[gift.id] %>

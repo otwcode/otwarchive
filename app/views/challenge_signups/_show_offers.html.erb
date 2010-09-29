@@ -3,7 +3,7 @@
   <h3><%=h t('.signup.show.offer', :default => "Offer {{num}}", :num => index+1) %></h3>
   <div class="wrapper">
     <dl class="collection meta">
-      <%= offer.url.blank? ? "" : "<dt>URL:</dt><dd>" + link_to(offer.url, offer.url) + "</dd>" -%>
+      <%= offer.url.blank? ? "" : "<dt>URL:</dt><dd>" + link_to(offer.url, offer.url) + "</dd>" %>
       <%= offer.description.blank? ? "" : "<dt>Details:</dt><dd>" + sanitize_and_format_for_display(offer.description) + "</dd>" %>
       <% if offer.tag_set && !offer.tag_set.tags.empty? %>        
         <dt>Tags:</dt>
@@ -18,7 +18,7 @@
             </ul>
           <% end %>
         </dd>
-      <% end -%>
+      <% end %>
     </dl>
   </div>
 <% end %>

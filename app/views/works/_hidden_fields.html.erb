@@ -6,11 +6,11 @@
 <%= options_from_collection_for_select(@allpseuds, :id, :name, @selected_pseuds) %>
 </select>
 
-<%- unless @coauthors.blank? -%>
+<% unless @coauthors.blank? %>
 <select name="work[author_attributes][coauthors][]" multiple="multiple" style="display:none;">
 <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>
 </select>
-<%- end -%>
+<% end %>
 
 <%= form.hidden_field :rating_string, :value => "#{@work.rating_string}" %>
 <%= form.hidden_field :warning_string, :value => "#{@work.warning_string}" %>
@@ -31,7 +31,7 @@
   <%= c.hidden_field :content, :value => "#{@chapter.content}" %>
   <%= c.hidden_field :title, :value => "#{@chapter.title}" %>
   <%= c.hidden_field :published_at, :value => "#{@chapter.published_at}" %>
-<%- end -%>
+<% end %>
 <%= form.hidden_field :backdate, :value => "#{@work.backdate}" %>
 <%= form.hidden_field :expected_number_of_chapters, :value => "#{@work.expected_number_of_chapters}" %>
 <%= form.hidden_field :restricted, :value => "#{@work.restricted}" %>

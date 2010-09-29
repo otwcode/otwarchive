@@ -5,11 +5,11 @@
   <li><a href="?show=random"><%= t('.random', :default => 'Random')%></a></li>
 </ul>
 
-<%- if @tags -%>
+<% if @tags %>
 <h2 class="landmark"><% if params[:show] == "popular" %><%= t('.popular_tags', :default => 'Popular Tags')%><% else %><%= t('.random_tags', :default => 'Random Tags')%><% end %></h2>
 <ul>
 	<% tag_cloud @tags, %w(cloud1 cloud2 cloud3 cloud4 cloud5 cloud6 cloud7 cloud8) do |tag, css_class| %>
 	<li><%= link_to_tag_works_with_text(tag, tag.name, :class => css_class.dup) %></li>
   <% end %>
 </ul>
-<%- end -%>
+<% end %>

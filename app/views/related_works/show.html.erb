@@ -5,9 +5,9 @@
 <!--/subnav-->
 
 <!--main content-->
-<%- if @related_work.reciprocal? -%>
+<% if @related_work.reciprocal? %>
   <%= render :partial => 'remove', :locals => { :related_work => @related_work } %>
-<%- else -%>
+<% else %>
   <%= render :partial => 'approve', :locals => { :related_work => @related_work } %>
-<%- end -%> 
+<% end %> 
 <!--/subnav-->

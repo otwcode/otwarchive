@@ -1,29 +1,29 @@
 <!-- loginform floated right -->
-<%- if @restricted -%>
+<% if @restricted %>
   <h3><%= t('.sorry', :default => 'Sorry!') %></h3>
   <p>
     <%= t('.restricted1', :default => 'This story is only available to registered users of the Archive.') %> 
     <%= t('.restricted2', :default => 'If you already have an Archive of Our Own account, log in now.') %> 
-    <%- if ArchiveConfig.ACCOUNT_CREATION_ENABLED -%>
+    <% if ArchiveConfig.ACCOUNT_CREATION_ENABLED %>
 	    <%= t('.join_us', :default => "Or join us for free - it's easy.") %>
-	  <%- end -%>  
+	  <% end %>  
   </p>
-<%- else -%>
+<% else %>
   <h3><%= t('.login_now', :default => 'Log in') %></h3>
   <p>
     <strong><%= t('.reminder', :default => 'Reminder:') %></strong>
     <%= t('.beta_risks', :default => "This site is in early beta. Things may break or crash without notice. Please report any pesky bugs and ") %>
     <%= link_to t('.give_feedback', :default => 'give us your feedback'), feedbacks_path %><%= t('.exclamation', :default => '!') %>
   </p>
-<%- end -%>
+<% end %>
 
 <%= form_for @user_session do |form| %>
   <div id="loginform">
     <%= render :partial => "passwd", :locals => {:form => form} %>
   </div>
-<%- end -%><!-- END form -->
+<% end %><!-- END form -->
 
-<%- if ArchiveConfig.ACCOUNT_CREATION_ENABLED -%>
+<% if ArchiveConfig.ACCOUNT_CREATION_ENABLED %>
   <!-- Create account link -->
   <p><%= t('.new_tester', :default => 'New tester?') %> <%= link_to t('.signup', :default => 'Create an account now.'), new_user_path %></p>
-<%- end -%>
+<% end %>

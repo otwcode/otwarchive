@@ -3,23 +3,23 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<%= alpha_paginated_section @media_alphabet -%>
+<%= alpha_paginated_section @media_alphabet %>
 <!--/subnav-->
 
 <!--main content-->
 <ul class="media index">
-  <%- if @medium_name == Media.uncategorized.name -%>
-    <%- for fandom in @fandoms -%>
+  <% if @medium_name == Media.uncategorized.name %>
+    <% for fandom in @fandoms %>
       <li><%= link_to_tag_works_with_text(fandom, fandom.name) %></li>
-    <%- end -%>
-  <%- else -%>
-    <%- for fandom in @fandoms -%>
+    <% end %>
+  <% else %>
+    <% for fandom in @fandoms %>
       <li><%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.visible_synonyms_works_count.to_s + ")") %></li>
-    <%- end -%>
-  <%- end -%>
+    <% end %>
+  <% end %>
 </ul>
 <!--/content-->
 
 <!--subnav-->
-<%= alpha_paginated_section @media_alphabet -%>
+<%= alpha_paginated_section @media_alphabet %>
 <!--/subnav-->

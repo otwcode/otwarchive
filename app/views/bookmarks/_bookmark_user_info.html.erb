@@ -1,5 +1,5 @@
 <!-- This partial requires local variable 'bookmark' -->
-<li class="user<%- if is_author_of?(bookmark) -%> own<%- end -%>">
+<li class="user<% if is_author_of?(bookmark) %> own<% end %>">
 	<div class="header module">
 	<h5 class="byline">
     <%= t('.bookmarked_by', :default=>'Bookmarked by {{user}}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
@@ -8,28 +8,28 @@
 	<%= get_symbol_for_bookmark(bookmark) %>
 	</div>
 <!--tags-->
-    <%- unless bookmark.tag_string.blank? -%>
+    <% unless bookmark.tag_string.blank? %>
         <dl class="tags">
-          <dt><%=h t('.bookmark_tags', :default => "User's Tags:") -%></dt>
+          <dt><%=h t('.bookmark_tags', :default => "User's Tags:") %></dt>
           <dd>
             <ul class="tags">
-              <%- bookmark.tags.each do |tag| -%>
-                <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') -%><%- unless tag == bookmark.tags.last -%><%= "," -%><%- end -%></li>
-              <%- end -%>
+              <% bookmark.tags.each do |tag| %>
+                <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') %><% unless tag == bookmark.tags.last %><%= "," %><% end %></li>
+              <% end %>
             </ul>
           </dd>
         </dl>
-    <%- end -%>
+    <% end %>
 <!--summary-->    
-	<%- unless bookmark.notes.blank? -%>
+	<% unless bookmark.notes.blank? %>
     <blockquote class="user-generated-view summary" title="notes">
-		<%=sanitize_limit_and_format_for_display bookmark.notes -%>
+		<%=sanitize_limit_and_format_for_display bookmark.notes %>
 	  </blockquote>
-    <%- end -%>
+    <% end %>
 <!--actions-->
-  <%- if is_author_of?(bookmark) -%>
+  <% if is_author_of?(bookmark) %>
       <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
-  <%- elsif logged_in_as_admin? -%>
+  <% elsif logged_in_as_admin? %>
     <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark} %>
-  <%- end -%>
+  <% end %>
 </li>

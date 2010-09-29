@@ -7,16 +7,16 @@
 </div>
 <!--subnav-->
 <ul class="navigation" role="navigation">
-  <%- if @fandoms.empty? -%>
+  <% if @fandoms.empty? %>
   <li><%= link_to 'Your lack of fandoms makes the wrangulator sad', tag_wranglers_path %></li>
-  <%- else -%>
+  <% else %>
   <li><%= link_to 'Most recent works in your fandoms', works_path(:selected_tags => @fandoms.collect(&:id), :boolean_type => 'or') %></li>
-  <%- end -%>
+  <% end %>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
-<%- unless @fandoms.empty? -%>
+<% unless @fandoms.empty? %>
   <div class="wrangler user module">
 	<h3>Assigned Fandoms</h3>
   <p>Fandoms assigned to you via the <%= link_to 'tag wranglers page', tag_wranglers_path %>. The unwrangled count is the number of
@@ -27,7 +27,7 @@
     </tr><tr>
       <th>Characters</th><th>Relationships</th><th>Freeforms</th><th>Characters</th><th>Relationships</th><th>Freeforms</th>
     </tr>
-    <%- for fandom in @fandoms -%>
+    <% for fandom in @fandoms %>
     <tr>
       <td><%= link_to fandom.name, {:controller => :tags, :action => :wrangle, :id => fandom} %></td>
       <td><%= (tag_count = fandom.characters.unfilterable.size) > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :characters, :status => :unfilterable}) : " " %></td>
@@ -37,10 +37,10 @@
       <td><%= (tag_count = fandom.same_work_tags.unwrangled.by_type("Relationship").size)   > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :relationships, :status => :unwrangled}) : " " %></td>
       <td><%= (tag_count = fandom.same_work_tags.unwrangled.by_type("Freeform").size)  > 0 ? link_to(tag_count, {:controller => :tags, :action => :wrangle, :id => fandom, :show => :freeforms, :status => :unwrangled}) : " " %></td>
     </tr>
-    <%- end -%>
+    <% end %>
   </table>
 </div>
-<%- end -%>
+<% end %>
 
 
 <div class="wrangler user module">

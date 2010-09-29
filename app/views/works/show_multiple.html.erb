@@ -2,7 +2,7 @@
 
 <%= form_tag edit_multiple_user_works_path(@user),  :id => 'edit-multiple-works' do %>
 <table class="work index" summary="This page shows a list of your works. You can select a work, or many works, and then choose to edit, orphan, or delete them. You can post multiple drafts on this page too.">
-    <caption><%=h t('.works.editing multiple', :default => "Editing Multiple Works") -%></caption>
+    <caption><%=h t('.works.editing multiple', :default => "Editing Multiple Works") %></caption>
 	<thead>
       	<tr>
 		<td colspan="4"><%= render :partial => 'edit_multiple_controls' %></td>
@@ -15,23 +15,23 @@
 </tr>
     </thead>
     <tbody>
-    <%- for work in @works -%>
+    <% for work in @works %>
       <tr>
         <td><%= label_tag "work_ids[]", link_to(sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), work_path(work)) %></td>
         <td><%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %></td>
       <td><%= check_box_tag "work_ids[]", work.id %></td>
         <td class="navigation">
         <ul class="navigation">
-        <li><%= link_to t('.short_blurb.edit', :default => 'Edit'), edit_work_path(work) -%></li>
-        <li><%= link_to t('.short_blurb.orphan_work', :default => 'Orphan'), {:controller => 'orphans', :action => 'new', :work_id => work.id} -%></li>
+        <li><%= link_to t('.short_blurb.edit', :default => 'Edit'), edit_work_path(work) %></li>
+        <li><%= link_to t('.short_blurb.orphan_work', :default => 'Orphan'), {:controller => 'orphans', :action => 'new', :work_id => work.id} %></li>
         <li><%= link_to t('.short_blurb.delete_work', :default => 'Delete'), work, 
-                :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete -%></li>
-        <%- if !work.posted %>
-          <li><%= link_to t('.short_blurb.post', :default => 'Post'), post_draft_work_path(work), :method => :put -%></li>
-            <%- end -%>
+                :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+        <% if !work.posted %>
+          <li><%= link_to t('.short_blurb.post', :default => 'Post'), post_draft_work_path(work), :method => :put %></li>
+            <% end %>
         </ul></td>
       </tr>
-    <%- end -%>
+    <% end %>
 </tbody>
 <tfoot>
 	<tr>

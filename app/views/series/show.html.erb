@@ -1,28 +1,28 @@
 <!--Descriptive page name, messages and instructions-->
 <h2>
 	<%=h @series.title %>
-	<%- if @series.restricted %>
-		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%>
-	<%- end -%>
+	<% if @series.restricted %>
+		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
+	<% end %>
 </h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<%- if logged_in? -%>
+<% if logged_in? %>
 <h3 class="landmark">Actions</h3>
 <ul class="navigation" role="navigation">
   <li><%= bookmark_link(bookmarkable=@series, blurb=false) %></li>
-  <%- if is_author_of?(@series) -%>
+  <% if is_author_of?(@series) %>
     <li><%= link_to "Edit", edit_series_path(@series) %></li>
     <li><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
     <li><%= link_to "Reorder Series", manage_series_path(@series) %></li>
-    <li><%= link_to t('.orphan_series', :default => 'Orphan Series'), {:controller => 'orphans', :action => 'new', :series_id => @series.id} -%></li>    	
-    <%- unless (@series.pseuds - current_user.pseuds).empty? -%>
-      <li><%= link_to t('.remove_me_as_author', :default => 'Remove Me As Author'), edit_series_path(@series, :remove => 'me'), :confirm => series_removal_confirmation(@series, current_user) -%></li>
-    <%- end -%>
-  <%- end -%>
+    <li><%= link_to t('.orphan_series', :default => 'Orphan Series'), {:controller => 'orphans', :action => 'new', :series_id => @series.id} %></li>    	
+    <% unless (@series.pseuds - current_user.pseuds).empty? %>
+      <li><%= link_to t('.remove_me_as_author', :default => 'Remove Me As Author'), edit_series_path(@series, :remove => 'me'), :confirm => series_removal_confirmation(@series, current_user) %></li>
+    <% end %>
+  <% end %>
 </ul>
-<%- end -%>
+<% end %>
 <!--/subnav-->
 
 <!--main content-->
@@ -51,29 +51,29 @@
       <dd><%= byline(@series) %></dd>
     <% end %>
 
-  <%- unless @series.summary.blank? -%>
+  <% unless @series.summary.blank? %>
       <dt><%=h 'Description:' %></dt>
       <dd><blockquote class="user-generated-view"><%= sanitize_and_format_for_display @series.summary %></blockquote></dd>
-	<%- end -%>
-	<%- unless @series.notes.blank? -%>
+	<% end %>
+	<% unless @series.notes.blank? %>
       <dt><%=h 'Notes:' %></dt>
       <dd><blockquote class="user-generated-view"><%= sanitize_and_format_for_display @series.notes %></blockquote></dd>
-	<%- end -%>
+	<% end %>
 </dl>
 </div>
 <div id="dynamic-bookmark" style="display:none;">	
 </div>
 
-<%- if logged_in_as_admin? -%>
+<% if logged_in_as_admin? %>
 <!-- BEGIN admin options -->
 <%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
-<%- end -%>
+<% end %>
 
 <h3 class="landmark">List of Series</h3>
-<ul class="series work index<%- if is_author_of?(@series) -%> works-own<%- end -%>">
-  <%- for serial in @serial_works -%>
+<ul class="series work index<% if is_author_of?(@series) %> works-own<% end %>">
+  <% for serial in @serial_works %>
     <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>
-  <%- end -%>
+  <% end %>
 </ul>
 <!--/content-->
 

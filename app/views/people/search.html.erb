@@ -6,8 +6,8 @@
 
 <%= render :partial => 'people/search_form' %>
 
-<%- if @people -%>
-  <p><strong><%= @people.total_entries %> Found</strong><%= link_to_help "people-search-results-help" -%></p>
+<% if @people %>
+  <p><strong><%= @people.total_entries %> Found</strong><%= link_to_help "people-search-results-help" %></p>
   <h3 class="landmark">People List</h3>
   <ol class="pseud index">
     <% for person in @people %>
@@ -15,4 +15,4 @@
     <% end %>
   </ol>
   <%= will_paginate @tags %>
-<%- end -%>
+<% end %>

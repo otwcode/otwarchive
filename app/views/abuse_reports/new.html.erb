@@ -19,7 +19,7 @@
       <%= f.select("category", [ [AbuseReport::BUGS_COPPA_NAME, AbuseReport::BUGS_COPPA], [AbuseReport::BUGS_HARASSMENT_NAME, AbuseReport::BUGS_HARASSMENT], [AbuseReport::BUGS_NONFANWORK_NAME, AbuseReport::BUGS_NONFANWORK], 
       [AbuseReport::BUGS_RATING_NAME, AbuseReport::BUGS_RATING], [AbuseReport::BUGS_WARNING_NAME, AbuseReport::BUGS_WARNING], [AbuseReport::BUGS_NEXTKIN_NAME, AbuseReport::BUGS_NEXTKIN], [AbuseReport::BUGS_OPENDOORS_NAME, AbuseReport::BUGS_OPENDOORS],  
       [AbuseReport::BUGS_OUTING_NAME, AbuseReport::BUGS_OUTING], [AbuseReport::BUGS_PLAGIARISM_NAME, AbuseReport::BUGS_PLAGIARISM], [AbuseReport::BUGS_FAIRUSE_NAME, AbuseReport::BUGS_FAIRUSE], [AbuseReport::BUGS_SPAM_NAME, AbuseReport::BUGS_SPAM]],
-      :include_blank => true) -%> <%= link_to_help('abuse-report-help')%>
+      :include_blank => true) %> <%= link_to_help('abuse-report-help')%>
     </dd>
     
 	  <dt><%= f.label :comment, t('.describe_problem', :default => "Describe your concern (required):") %></dt>

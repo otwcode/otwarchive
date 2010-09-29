@@ -1,51 +1,51 @@
 <!--Descriptive page name, messages and instructions-->
 <h2>
-<%- if @locale -%>
+<% if @locale %>
   <%= t('.translators_for_locale', :default => 'Translators for {{current_locale}}', :current_locale => @locale.name) %>
-<%- else -%>  
+<% else %>  
   <%= t('.translators_header', :default => 'Translators') %>
-<%- end -%>
+<% end %>
 </h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<%- if current_user.is_a?(User) && current_user.is_translation_admin? -%>
+<% if current_user.is_a?(User) && current_user.is_translation_admin? %>
 <ul class="navigation">
 <li><%= link_to t('.link_to_new', :default => 'Add new translators'), 
         (@locale ? new_locale_translator_path(@locale) : new_translator_path) %></li>
 </ul>
-<%- end -%>
+<% end %>
 <!--/subnav-->
 
 <!--main content-->
 <table id="translators_table" summary="">
-  <caption><%=h t('.list', :default => "List of active translators") -%></caption>
+  <caption><%=h t('.list', :default => "List of active translators") %></caption>
   <thead>
 	<tr>
-  	<th scope="col"><%=h t('.name', :default => "Name") -%></th>
-  	<th scope="col"><%=h t('.email', :default => "Email") -%></th>
-  	<%- if @locale.blank? -%>
-  	<th scope="col"><%=h t('.current_locale', :default => "Locale") -%></th>
-  	<%- end -%>
+  	<th scope="col"><%=h t('.name', :default => "Name") %></th>
+  	<th scope="col"><%=h t('.email', :default => "Email") %></th>
+  	<% if @locale.blank? %>
+  	<th scope="col"><%=h t('.current_locale', :default => "Locale") %></th>
+  	<% end %>
   </tr>
  </thead>
 <tbody> 
-  <%- for translator in @translators -%>
-    <%- if @locale -%>
+  <% for translator in @translators %>
+    <% if @locale %>
     <tr>
       <td><%= link_to translator.login, locale_translator_path(@locale.iso, translator) %></td>
       <td><%= translator.email %></td>    
     </tr>
-    <%- else -%>
-      <%- for locale in translator.is_translator_for_what.compact -%>
+    <% else %>
+      <% for locale in translator.is_translator_for_what.compact %>
       <tr>
         <td><%= link_to translator.login, locale_translator_path(locale.iso, translator) %></td>
         <td><%= translator.email %></td>
         <td><%= link_to locale.name, locale_path(locale.iso) %></td>    
       </tr>
-      <%- end -%> 
-    <%- end -%>
-  <%- end -%>
+      <% end %> 
+    <% end %>
+  <% end %>
 </tbody>
 </table>
 <!--/content-->

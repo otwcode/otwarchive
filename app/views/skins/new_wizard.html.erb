@@ -5,14 +5,14 @@
 
 <%= error_messages_for :skin %>
 
-<%= render :partial => "skin_top_navigation" -%>
+<%= render :partial => "skin_top_navigation" %>
 
 <h3 class="landmark">New Archive Skin Wizard</h3>
 
-<%= form_for @skin do |f| -%>
+<%= form_for @skin do |f| %>
 
   <%= render :partial => 'wizard_form', :locals => {:f => f} %>
 
   <%= f.submit t('create_skin_button', :default => 'Create')  %>
 
-<% end -%>
+<% end %>

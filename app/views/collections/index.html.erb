@@ -3,7 +3,7 @@
 <h2><%=h t('.owned_collections', :default => "{{user_name}}'s Collections", :user_name => @user.login) %></h2>
 <% elsif @collection %>
 <h2><%=h t('.listing_sub_collections', :default => "Challenges/Subcollections in {{collection_name}}", :collection_name => @collection.title) %></h2>
-<% elsif @work -%>
+<% elsif @work %>
 <h2><%=h t('.listing_work_collections', :default => "Collections including {{work_name}}", :work_name => @work.title) %></h2>
 <% else %>
 <h2><%=h t('.listing_collections', :default => "Collections in the {{archive_name}}", :archive_name => ArchiveConfig.APP_NAME) %></h2>
@@ -18,11 +18,11 @@
 <!--/descriptions-->
 <!--Subnavigation, sorting and actions-->
 <div class="navigation module">
-<%- if logged_in? %>
+<% if logged_in? %>
 <h3 class="landmark">Navigation</h3>
 <ul class="navigation" role="navigation">
   <% if @user && @user == current_user %>
-    <li><%= link_to t('.collections.my_collection_items', :default => "Manage Collected Works"), user_collection_items_path(@user) -%></li>
+    <li><%= link_to t('.collections.my_collection_items', :default => "Manage Collected Works"), user_collection_items_path(@user) %></li>
   <% end %>
   <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
     <li><%= link_to t('.collections.new_collection', :default => "New Subcollection"), new_collection_collection_path(@collection) %></li>
@@ -30,22 +30,22 @@
 	  <li><%= link_to t('.collections.new_collection', :default => "New Collection"), new_collection_path %></li>
 	<% end %>
 </ul>
-<% end -%>
+<% end %>
 <!--pagination here-->
 
-<%- if @sort_and_filter -%> 
+<% if @sort_and_filter %> 
 <!--sorting subnav-->
   <ul class="sorting navigation" role="navigation">
-    <li><h4><%= t('.sort_by', :default => 'Sort By') -%></h4></li>
-    <li><%= sort_link t('.sort.title', :default => 'Title'), :title -%></li>
-    <li><%= sort_link t('.sort.date', :default => 'Date'), :created_at, {:sort_default => true, :desc_default => true} -%></li>
-    <li><%= sort_link t('.sort.size', :default => 'Size'), :count, {:desc_default => true} -%></li>
+    <li><h4><%= t('.sort_by', :default => 'Sort By') %></h4></li>
+    <li><%= sort_link t('.sort.title', :default => 'Title'), :title %></li>
+    <li><%= sort_link t('.sort.date', :default => 'Date'), :created_at, {:sort_default => true, :desc_default => true} %></li>
+    <li><%= sort_link t('.sort.size', :default => 'Size'), :count, {:desc_default => true} %></li>
   </ul>
 <!---/subnav-->
-<%- end -%>
+<% end %>
 </div>
 
-<%- unless @collections.blank? -%>
+<% unless @collections.blank? %>
   <%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
 
   <!--main content-->
@@ -55,15 +55,15 @@
     <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>
   <% end %>
   </ul>
-<%- end -%>
+<% end %>
 
-<%- if @sort_and_filter -%>
+<% if @sort_and_filter %>
 <!--filters subnav-->
 <%= render :partial => 'collections/filters' %>
 <!---/subnav-->
-<%- end -%> 
+<% end %> 
 <div class="clear"><!-- presentational--></div>
 
-<%- unless @collections.blank? -%>
+<% unless @collections.blank? %>
 <%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
-<%- end -%>
+<% end %>

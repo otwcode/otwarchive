@@ -1,12 +1,12 @@
-<p><%=h t('.intro', :default => "The following archive notice has been sent:") -%></p>
+<p><%=h t('.intro', :default => "The following archive notice has been sent:") %></p>
 
-<p><%=h t('.subject', :default => "Subject:") -%> <%= @subject -%></p>
-<p><%=h t('.to_users', :default => "To users:") -%> <%= @users -%></p>
+<p><%=h t('.subject', :default => "Subject:") %> <%= @subject %></p>
+<p><%=h t('.to_users', :default => "To users:") %> <%= @users %></p>
 
 <%= sanitize_and_format_for_display @message %>
 
-<p><%=h t('.sent_at', :default => "Sent at:") -%> <%= Time.now.strftime(common_timestring) -%></p>
-<p><%=h t('.sent_by', :default => "Sent by:") -%> <%= @admin -%></p>
+<p><%=h t('.sent_at', :default => "Sent at:") %> <%= Time.now.strftime(common_timestring) %></p>
+<p><%=h t('.sent_by', :default => "Sent by:") %> <%= @admin %></p>
 
 
 

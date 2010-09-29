@@ -1,8 +1,8 @@
 <h3 class="landmark">Navigation</h3>
 <ul class="navigation" role="navigation">
-  <%- if current_user.is_a?(User) -%>
+  <% if current_user.is_a?(User) %>
   <li><%= span_if_current('Wrangling Home', tag_wrangler_path(current_user)) %></li>
-  <%- end -%>
+  <% end %>
   <li><%= span_if_current('Mass Wrangling', tag_wranglings_path) %></li>
   <li><%= span_if_current('Wranglers', tag_wranglers_path) %></li>  
   <li><%= span_if_current('Discuss', discuss_tag_wranglings_path) %></li>		

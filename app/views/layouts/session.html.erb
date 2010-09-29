@@ -5,7 +5,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>
 			<%=h ArchiveConfig.APP_NAME  %>
-			<% unless ArchiveConfig.REVISION.blank? -%>(rev.
+			<% unless ArchiveConfig.REVISION.blank? %>(rev.
 			<%= ArchiveConfig.REVISION %>)
 			<% end %>&gt;&gt;
 			<%= controller.controller_name %>
@@ -15,12 +15,12 @@
 	</head>
 	<body onload="hideFormFields(); initSelect('languages_menu')">
     <!-- BEGIN main -->
-		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name -%> session">
+		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> session">
 			<%= flash_div :error, :warning, :notice %>
 			<h1 role="banner"><%= link_to ArchiveConfig.APP_NAME , :controller => 'home', :action => 'index' %></h1>
 			<h2 role="banner"><%=h t('.layout.session.project_of_otw', :default => "A project of the") %> <a href="http://transformativeworks.org"><%=h "Organization For Transformative Works" %></a></h2>
 			<p id="logo">
-				<%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) -%>
+				<%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) %>
 			</p>
 				<div id="signin" role="main">
 					<%= yield %>

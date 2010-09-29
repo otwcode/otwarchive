@@ -4,7 +4,7 @@
   (who previously hosted them with your permission on an archive that has been backed up here).
 </p>
 
-<% if logged_in? -%>
+<% if logged_in? %>
 
 <p class="message">
   <%= button_to t("claim.add_to_account", :default => "Add these stories to my currently-logged-in account"), complete_claim_url(:invitation_token => @invitation.token) %>
@@ -34,17 +34,17 @@
 </p>
 
 <%= form_for @external_author do |f| %>
-  <%= hidden_field_tag :invitation_token, @invitation.token -%>
+  <%= hidden_field_tag :invitation_token, @invitation.token %>
   <p>
     <%= radio_button_tag "imported_stories", "orphan" %>
     <%= label_tag "imported_stories_orphan", t('.claim.orphan_stories', :default => "Orphan my stories and take my contact information off them.")%>
   <!--investigate-->
-    <%= check_box_tag "remove_pseud" -%>
-    <%= label_tag "remove_pseud", t('.claim.orphan_remove_pseud', :default => "Also remove my name.") -%>
+    <%= check_box_tag "remove_pseud" %>
+    <%= label_tag "remove_pseud", t('.claim.orphan_remove_pseud', :default => "Also remove my name.") %>
   </p>
   <p>
     <%= radio_button_tag "imported_stories", "delete" %>
-    <%= label_tag "imported_stories_delete", t('.claim.delete_stories', :default => "Please remove my stories from the archive entirely.") -%>
+    <%= label_tag "imported_stories_delete", t('.claim.delete_stories', :default => "Please remove my stories from the archive entirely.") %>
   </p>
   <p>
     <%= f.check_box :do_not_email %>

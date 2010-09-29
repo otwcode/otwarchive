@@ -3,10 +3,10 @@
 
 <p class="notes">
   A skin lets you change the way the archive looks in your browser and customize your reading experience.
-  <%= link_to_help "skins-basics" -%>
+  <%= link_to_help "skins-basics" %>
 </p>
 
-<%= render :partial => "skin_top_navigation" -%>
+<%= render :partial => "skin_top_navigation" %>
 
 <h3 class="landmark">List of Skins</h3>
 
@@ -17,8 +17,8 @@
   </p>
 <% else %>
   <ul class="skins picture index">
-  <% for s in @skins -%>
-    <li class="skins <% if s.editable? %>own<%- end -%> picture blurb">
+  <% for s in @skins %>
+    <li class="skins <% if s.editable? %>own<% end %> picture blurb">
       <div class="header module">
         <h4 title="title">
           <%= link_to h(s.title), s %>
@@ -28,9 +28,9 @@
               <% if s.official? %> 
                 (Approved)
               <% elsif s.rejected? %>
-                (Declined: <%= link_to_help "skins-approval" -%> <%=h s.admin_note -%>) 
+                (Declined: <%= link_to_help "skins-approval" %> <%=h s.admin_note %>) 
               <% elsif s.public? %> 
-                (Not yet reviewed) <%= link_to_help "skins-approval" -%>
+                (Not yet reviewed) <%= link_to_help "skins-approval" %>
               <% end %>
             <% end %>
           </span>
@@ -45,9 +45,9 @@
         <%= sanitize_strip_images_and_format_for_display s.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : s.description %>
       </blockquote>
     
-      <%= render :partial => "skin_navigation", :locals => {:skin => s} -%>
+      <%= render :partial => "skin_navigation", :locals => {:skin => s} %>
 
     </li>
-  <% end -%>
+  <% end %>
   </ul>
 <% end %>

@@ -8,65 +8,65 @@
 
 <!--main content-->
 <h3 class="landmark">Listing by fandom</h3>
-<%= form_tag url_for(:controller => 'tag_wranglers', :action => "create") do -%>
+<%= form_tag url_for(:controller => 'tag_wranglers', :action => "create") do %>
   <p class="submit"><%= submit_tag 'Assign' %></p>
   
   <h3>Assign fandoms to yourself</h3>
   <div>
     <p><%= label_tag "tag_fandom_string", "Enter as many fandoms as you like, comma-separated." %></p>
     <%= text_area_tag "tag_fandom_string" %>
-    <%= autocomplete_text_field "tag_fandom_string" -%>
+    <%= autocomplete_text_field "tag_fandom_string" %>
   </div> 
   
   <ul class="index">
-  	<%- @assignments.group_by(&:name).each do |name, assignments| -%>
+  	<% @assignments.group_by(&:name).each do |name, assignments| %>
   	<li class="fandom tag blurb">
   	<h4><%= link_to name, {:controller => :tags, :action => :edit, :id => assignments.first} %></h4>
    	<ul class="wranglers">
-  	<%- assignments.collect(&:wrangler).compact.each do |wrangler| -%>
-        <li><%= link_to wrangler, tag_wrangler_path(:id => wrangler) -%> 
+  	<% assignments.collect(&:wrangler).compact.each do |wrangler| %>
+        <li><%= link_to wrangler, tag_wrangler_path(:id => wrangler) %> 
         <%= link_to '(remove)', tag_wrangler_path(:id => wrangler, :fandom_id => assignments.first.id), :method => :delete %></li>
-      <%- end -%>
+      <% end %>
       </ul>	 
         <div id="wranglers-for-<%= assignments.first.id %>">
           <p><%= select_tag "assignments[#{assignments.first.id}][]", options_for_select([''] + @wranglers.collect(&:login)) %>
           <%= link_to_function("add more") do |page| 
               page.insert_html(:bottom, "wranglers-for-#{assignments.first.id}", 
               '<p>' + select_tag("assignments[#{assignments.first.id}][]", options_for_select([''] + @wranglers.collect(&:login))) + '</p>')
-              end -%></p>  
+              end %></p>  
         </div>
   		</li>
-    <%- end -%>  
+    <% end %>  
   </ul>
   <%= hidden_field_tag :fandom_string, params[:fandom_string] %>
   <%= hidden_field_tag :media_id, params[:media_id] %>
   <%= hidden_field_tag :wrangler_id, params[:wrangler_id] %>
   <p class="submit"><%= submit_tag 'Assign' %></p>
-<%- end -%> 
+<% end %> 
 <!--/content-->
 
 <!--subnav-->
 <h3 class="landmark">Filters</h3>
-<%= form_tag tag_wranglers_path, :class => 'filters', :method => :get do -%>
+<%= form_tag tag_wranglers_path, :class => 'filters', :method => :get do %>
   <dl class="filters">
     <dt>Filter by Media</dt>
     <dd>
       <p>Show only:</p>
-      <%= select_tag :media_id, options_for_select([''] + Media.canonical.collect(&:name), params[:media_id]) -%>
+      <%= select_tag :media_id, options_for_select([''] + Media.canonical.collect(&:name), params[:media_id]) %>
     </dd>
   <dt>Filter by Wrangler</dt>
   <dd>
     <p>Show only:</p>
-    <%= select_tag :wrangler_id, options_for_select(['', 'No Wrangler'] + @wranglers.collect(&:login), params[:wrangler_id]) -%>
+    <%= select_tag :wrangler_id, options_for_select(['', 'No Wrangler'] + @wranglers.collect(&:login), params[:wrangler_id]) %>
   </dd>
   <dt>Filter by Fandom Name</dt>
   <dd>
     <p>Show only fandoms that start with:</p>
-    <%= text_field_tag :fandom_string, params[:fandom_string] -%>
+    <%= text_field_tag :fandom_string, params[:fandom_string] %>
   </dd>
 </dl>
-<p class="submit"><%= submit_tag 'Go' -%></p>  
-<%- end -%>
+<p class="submit"><%= submit_tag 'Go' %></p>  
+<% end %>
 <div class="clear"><!--presentational, phase me out--></div>
 <h3 class="landmark">Next Page</h3>
 <%= will_paginate(@assignments) %>

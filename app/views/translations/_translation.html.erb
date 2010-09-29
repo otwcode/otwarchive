@@ -1,35 +1,35 @@
 <div id="errors_for_<%= local_translation.id %>"></div>
 
-<%= remote_form_for(local_translation) do |f| -%>
+<%= remote_form_for(local_translation) do |f| %>
   <dl>     
     <dt><%= @main_locale.name %>: </dt>
     <dd><%=h translation.text %></dd>
 
     <dt><%= @locale.name %>: </dt>
     <dd>
-    <%- if current_user.respond_to?(:id) && (current_user.id == local_translation.translator_id || current_user.id == local_translation.beta_id) -%>
+    <% if current_user.respond_to?(:id) && (current_user.id == local_translation.translator_id || current_user.id == local_translation.beta_id) %>
       <%= f.text_area :text %>
-    <%- else -%>
+    <% else %>
       <%=h local_translation.text || "(not translated yet)" %>
-    <%- end -%>
+    <% end %>
     </dd>
 
     <dt><%= "Translator" %>: </dt>
     <dd>
-    <%- if logged_in_as_admin? || current_user.is_translation_admin? -%>
+    <% if logged_in_as_admin? || current_user.is_translation_admin? %>
       <%= f.collection_select :translator_id, @translators, :id, :login, :include_blank => true %>  
-    <%- else -%>
+    <% else %>
       <%= local_translation.translator ? local_translation.translator.login : "(no translator assigned)" %>
-    <%- end -%>
+    <% end %>
     </dd>
 
     <dt><%= "Beta" %>: </dt>
     <dd>
-    <%- if logged_in_as_admin? || current_user.is_translation_admin? -%>
+    <% if logged_in_as_admin? || current_user.is_translation_admin? %>
       <%= f.collection_select :beta_id, @translators, :id, :login, :include_blank => true %>  
-    <%- else -%>
+    <% else %>
       <%= local_translation.beta ? local_translation.beta.login : "(no beta assigned)" %>
-    <%- end -%>
+    <% end %>
     </dd>
     
     <dt><%= "Key" %>: </dt>
@@ -38,7 +38,7 @@
     <dt><%= "Status" %>: </dt>
     <dd><%= translation_status(translation, local_translation) %></dd>            
   </dl>
-  <%- if logged_in_as_admin? || current_user.id == local_translation.translator_id || current_user.id == local_translation.beta_id || current_user.is_translation_admin? -%>
+  <% if logged_in_as_admin? || current_user.id == local_translation.translator_id || current_user.id == local_translation.beta_id || current_user.is_translation_admin? %>
   <p class="submit"><%= f.submit %></p>
-  <%- end -%>
-<%- end -%>
+  <% end %>
+<% end %>

@@ -9,14 +9,14 @@
       <dt><%=h t('.collections.owners', :default => "Maintainers:") %></dt>
       <dd>
         <ul>
-          <%= (@collection.all_owners + @collection.all_moderators).map {|owner| "<li>#{link_to(owner.byline, owner.user)}</li>"}.join(', ') -%>
+          <%= (@collection.all_owners + @collection.all_moderators).map {|owner| "<li>#{link_to(owner.byline, owner.user)}</li>"}.join(', ') %>
         </ul>
-        <%- unless @collection.email.blank? -%>
+        <% unless @collection.email.blank? %>
           <h5>
             <%=h t('.collection.email', :default => "Contact: ") %>
             <%=h @collection.email %>
           </h5>
-        <% end -%>
+        <% end %>
       </dd>
 
       <% if @collection.challenge %>
@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<%- cache("#{@collection.collection_profile.cache_key}") do -%> 
+<% cache("#{@collection.collection_profile.cache_key}") do %> 
 
 <!--main content-->
 <hr class="clear"/><!-- FRONT END this is here temporarily until the right fix can be put in -->
@@ -37,38 +37,38 @@
   <div class="collection preface">
     <% if show_collection_section(@collection, "intro") %>
     <div id="intro" class="module">
-      <%= render :partial => 'navigation', :locals => {:section => 'intro'} -%>
+      <%= render :partial => 'navigation', :locals => {:section => 'intro'} %>
       <h3><%=h t('.intro', :default => "Intro:") %></h3>
       <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.intro.blank? ? @collection.parent.collection_profile.intro : @collection.collection_profile.intro) %></blockquote>
     </div>
-    <% end -%>
+    <% end %>
 
-    <%- if show_collection_section(@collection, "faq") -%>
+    <% if show_collection_section(@collection, "faq") %>
     <div id="faq" class="module">
-      <%= render :partial => 'navigation', :locals => {:section => 'faq'} -%>
+      <%= render :partial => 'navigation', :locals => {:section => 'faq'} %>
       <h3><%=h t('.faq', :default => "FAQ:") %></h3>
       <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.faq.blank? ? @collection.parent.collection_profile.faq : @collection.collection_profile.faq) %></blockquote>
     </div>
-    <%- end -%>
+    <% end %>
 
     <% if show_collection_section(@collection, "rules") %>
       <div id="rules" class="module">
-        <%= render :partial => 'navigation', :locals => {:section => 'rules'} -%>
+        <%= render :partial => 'navigation', :locals => {:section => 'rules'} %>
         <h3><%=h t('.rules', :default => "Rules:") %></h3>
         <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@collection.collection_profile.rules.blank? ? @collection.parent.collection_profile.rules : @collection.collection_profile.rules) %></blockquote>
       </div>
-    <%- end -%>
+    <% end %>
   </div>
-<%- end -%>
+<% end %>
 
-<%- end # of cached bottom -%>
+<% end # of cached bottom %>
   
-<%- if @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user) -%>
+<% if @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user) %>
   <h3 class="landmark">Actions</h3>
   <ul class="navigation" role="navigation">
 
   	<% if @collection.challenge # add maintainer-specific custom navigation for the challenge %>
-  	  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_navigation_maintainer" -%>
+  	  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_navigation_maintainer" %>
   	<% end %>
 
     <% if @collection.user_is_owner?(current_user) %>
@@ -84,6 +84,6 @@
       <% end %>
     <% end %>
   </ul>
-  <%- end -%>
+  <% end %>
   
 </div>

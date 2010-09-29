@@ -9,24 +9,24 @@
 </noscript>
 <!-- END BETA CAVEATS! --> 
 
-<%- unless logged_in? || logged_in_as_admin? -%>
+<% unless logged_in? || logged_in_as_admin? %>
   <div id="home-signin">
-  <%= render :partial => 'user_sessions/login' -%>
+  <%= render :partial => 'user_sessions/login' %>
   </div>
-<%- end -%>
+<% end %>
 
 <div id="home-header">
 	<div id="login-block">
-    <%- if logged_in? || logged_in_as_admin? -%>
-      <%= render :partial => 'user_sessions/greeting' -%>
-    <% end -%>
+    <% if logged_in? || logged_in_as_admin? %>
+      <%= render :partial => 'user_sessions/greeting' %>
+    <% end %>
     <%= render :partial => 'works/search_box' %>
   </div>
 
 <%= image_tag('logo-glitter-hat-noisemaker.gif', :alt => 'AO3 logo all dressed up for our first birthday!', :title => 'AO3 logo all dressed up for our first birthday!', :class => 'logo', :height=> '96', :width => '105') %>
   
 	<div class="titles">
-		<h1><%= ArchiveConfig.APP_NAME -%></h1>
+		<h1><%= ArchiveConfig.APP_NAME %></h1>
 
 		<h2><%= t('home.otw_link', :default => "A project of the") %> <%= link_to("Organization for Transformative Works", "http://transformativeworks.org") %></h2>
 	</div>
@@ -44,17 +44,17 @@
 <div class="bigwrapper">
 	 <%= flash_div :error, :warning, :notice %>
 	<div class="open-beta-box">
-  <%- if logged_in? || logged_in_as_admin? -%>
+  <% if logged_in? || logged_in_as_admin? %>
     <h2><%= t('.home.you_are_signed_in', :default => 'Welcome to open beta!') %></h2>
     <h1><%= link_to t('.invite_friends', :default => 'INVITE A FRIEND'), user_invitations_path(current_user) %></h1> 
-  <%- else -%>
+  <% else %>
     <h2>Be part of our open beta!</h2>
-    <%- if AdminSetting.invite_from_queue_enabled? -%>
+    <% if AdminSetting.invite_from_queue_enabled? %>
     <h1><%= link_to t('.home.request_invite', :default => 'SIGN UP NOW'), invite_requests_path %></h1>
-    <%- else -%>
+    <% else %>
     <h2><a href="session/new"><%= t('.layout.header.sign_in', :default => 'Log in') %></a></h2>
-    <%- end -%>
-  <%- end -%>
+    <% end %>
+  <% end %>
     <p><%= t('.home.about_us', :default => 'The Archive of Our Own is a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks,  such as fanfiction
 and fanart.
 ') %></p>
@@ -66,7 +66,7 @@ and fanart.
 	    <ul class="meters">
 		    <li>
 		      <span><%= link_to t('.home_fandoms', :default => 'fandoms'), media_path %></span>: 
-		      <span><%= @fandom_count -%></span><%= ' ' + t('.todate_count', :default => " to date") %>
+		      <span><%= @fandom_count %></span><%= ' ' + t('.todate_count', :default => " to date") %>
 		    </li>
 		    <li>
 		      <span><%= link_to t('.home_works', :default => 'works'), works_path %></span>: 
@@ -78,15 +78,15 @@ and fanart.
         </li>
 	    </ul>    
     </div>
-    <%- if @admin_post -%>
+    <% if @admin_post %>
       <div class="sidebar-box">
         <h3>News</h3>
         <p><%= link_to sanitize_title_for_display(@admin_post.title), @admin_post %></p>
-        <%- if @admin_post_show_more -%>
+        <% if @admin_post_show_more %>
         <p><%= link_to t('.page.more_news', :default => 'More news&#8230;'), admin_posts_path %></p>
-        <%- end -%>
+        <% end %>
       </div>
-    <%- end -%>
+    <% end %>
     <div class="sidebar-box">
       <h3>About</h3>
       <p>

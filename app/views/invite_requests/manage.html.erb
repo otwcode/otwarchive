@@ -16,13 +16,13 @@
 	<th scope="col">Email Address</th>
 	<th scope="col">Action</th>
 	</tr>
-<%- for request in @invite_requests -%>
+<% for request in @invite_requests %>
 <tr>
   <td><%=h request.position %></td>
   <td><%=h request.email %></td>
   <td><%= link_to t('.delete_link', :default => 'Delete'), request, :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></td>
 </tr>
-<%- end -%>
+<% end %>
 </table>
 <!--/content-->.
 .

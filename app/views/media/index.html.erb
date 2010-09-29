@@ -4,26 +4,26 @@
 
 <!--main content-->
 <ul class="fandom index">
-<%- for medium in @media -%>
+<% for medium in @media %>
   <li id="medium_<%= medium.id %>" class="category <%= cycle :odd, :even %>">
     <h3><%= link_to medium.name, medium_fandoms_path(medium) %></h3>
   
     <ol>
-    <%- for fandom in @fandom_listing[medium] -%>
+    <% for fandom in @fandom_listing[medium] %>
       <li>
-        <%- if fandom.respond_to?(:count) -%>
+        <% if fandom.respond_to?(:count) %>
         <%= link_to_tag_works_with_text(fandom, fandom.name + " (" + fandom.count.to_s + ")") %>
-        <%- else -%>
+        <% else %>
         <%= link_to_tag_works_with_text(fandom, fandom.name) %>        
-        <%- end -%>
+        <% end %>
       </li>
-    <%- end -%>
+    <% end %>
     </ol>
     
-    <%- unless @fandom_listing[medium].size < 5 -%>
+    <% unless @fandom_listing[medium].size < 5 %>
     <p><%= link_to t('.all', :default => "All {{media_type}}...", :media_type => medium.name), medium_fandoms_path(medium) %></p>
-    <%- end -%>
+    <% end %>
   </li>
-<%- end -%>
+<% end %>
 </ul>
 <!--/content-->

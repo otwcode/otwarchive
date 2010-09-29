@@ -1,22 +1,22 @@
 <h2>Your Assignment</h2>
 
 <p>
-  You have been assigned the following request in the <%= link_to(h(@collection.title), collection_url(@collection, :host => @host)) -%> challenge at the Archive of Our Own!
+  You have been assigned the following request in the <%= link_to(h(@collection.title), collection_url(@collection, :host => @host)) %> challenge at the Archive of Our Own!
 </p>
 
 <p>
-  This assignment is due at: <%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) -%>
+  This assignment is due at: <%= time_in_zone(@collection.challenge.assignments_due_at, (@collection.challenge.time_zone || Time.zone.name), @assigned_user) %>
 </p>
 
 <p>
   Recipient: <%= @request.nil? ? "None: contact a moderator for help!" : link_to(@request.pseud.byline, user_pseud_url(@request.pseud.user, @request.pseud, :host => @host)) %>
 </p>
 
-<%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => @request} -%>
+<%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => @request} %>
 
 <p>
   You can look up this assignment from your archive dashboard at: 
-  <%= user_assignments_url(@assigned_user, :host => @host) -%>
+  <%= user_assignments_url(@assigned_user, :host => @host) %>
 </p>
 
 <p>
@@ -29,4 +29,4 @@
   please let us know!
 </p>
   
-<p><%=h "Sent at:" -%> <%= Time.now.strftime(common_timestring) -%></p>
+<p><%=h "Sent at:" %> <%= Time.now.strftime(common_timestring) %></p>

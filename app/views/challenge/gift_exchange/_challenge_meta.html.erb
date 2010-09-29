@@ -1,20 +1,20 @@
 <!-- added to the meta section for the collection. please enclose elements in dt/dd. @collection is defined here but @challenge may not be.  -->
 
-<% zone = (@collection.challenge.time_zone || Time.zone.name) -%>
+<% zone = (@collection.challenge.time_zone || Time.zone.name) %>
 <% if @collection.challenge.signup_open %>
   <dt><%=h t('.gift_exchange.signup', :default => "Signup: ")%></dt>
-  <dd><%= link_to h(t('.gift_exchange.signup_is_open', :default => "CURRENTLY OPEN")), new_collection_signup_path(@collection) -%></dd>
+  <dd><%= link_to h(t('.gift_exchange.signup_is_open', :default => "CURRENTLY OPEN")), new_collection_signup_path(@collection) %></dd>
 
   <dt><%=h t('.gift_exchange.signups_close_at', :default => "Signup closes: ")%></dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) -%></dd>
+  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) %></dd>
 
 <% elsif Time.now < @collection.challenge.signups_open_at %>
 
   <dt><%=h t('.gift_exchange.signups_open_at', :default => "Signup opens: ")%></dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_open_at, zone) -%></dd>
+  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_open_at, zone) %></dd>
 
   <dt><%=h t('.gift_exchange.signups_close_at', :default => "Signup closes: ")%></dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) -%></dd>
+  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) %></dd>
 
 <% elsif Time.now < @collection.challenge.signups_close_at %>
   <dt><%=h t('.gift_exchange.signup', :default => "Signup: ")%></dt>
@@ -22,22 +22,22 @@
 <% end %>
 
 <dt><%=h t('.gift_exchange.assignments_due_at', :default => "Assignments due: ")%></dt>
-<dd class="datetime"><%= time_in_zone(@collection.challenge.assignments_due_at, zone) -%></dd>
+<dd class="datetime"><%= time_in_zone(@collection.challenge.assignments_due_at, zone) %></dd>
 
 <% if @collection.unrevealed? %>
   <dt><%=h t('.gift_exchange.works_reveal_at', :default => "Works revealed: ")%></dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.works_reveal_at, zone) -%></dd>
+  <dd class="datetime"><%= time_in_zone(@collection.challenge.works_reveal_at, zone) %></dd>
 <% end %>
 
 <% if @collection.anonymous? %>
   <dt><%=h t('.gift_exchange.authors_reveal_at', :default => "Authors revealed: ")%></dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.authors_reveal_at, zone) -%></dd>
+  <dd class="datetime"><%= time_in_zone(@collection.challenge.authors_reveal_at, zone) %></dd>
 <% end %>
 
 <dt><%=h t('.gift_exchange.signups', :default => "Signed up:") %></dt>
 <dd>
   <% num_to_show = 20 # arbitrary number for how many names to list %>
-  <%= signup_count = @collection.signups.count -%>
+  <%= signup_count = @collection.signups.count %>
   <ul>
     <% @collection.signups.collect(&:pseud).compact.each_with_index do |pseud, index| %>
       <% if index == num_to_show %>

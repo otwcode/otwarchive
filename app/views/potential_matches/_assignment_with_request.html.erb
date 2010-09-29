@@ -4,7 +4,7 @@
   <tr>
     <th scope="row">
       <%= mailto_link request_signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
-      <%= link_to assignment.request_byline, collection_signup_path(@collection, request_signup) -%>
+      <%= link_to assignment.request_byline, collection_signup_path(@collection, request_signup) %>
     </th>
 
     <td>
@@ -17,29 +17,29 @@
             "#{offer_assignment.pinch_request_signup.pseud.byline}* 
              (pinch recipient)" : 
              "<strong>None</strong>")}.join(", ") 
-      -%>
+      %>
     </td>
     <td>
       <% @pmatches = request_signup.request_potential_matches.sort.reverse %>
       <%= assignment_form.collection_select :offer_signup_id, @pmatches.collect(&:offer_signup), :id, :byline, 
-                                              :include_blank => "- None Assigned -" -%>
+                                              :include_blank => "- None Assigned -" %>
     </td>
     <td>
       <% if @pmatches.size > 0 %>
-        <h5 id="show_potentials_for_<%= request_signup.id -%>" 
-            onclick="$('potentials_for_<%= request_signup.id -%>').show(); $('hide_potentials_for_<%= request_signup.id -%>').show(); this.hide();">(Show <%= @pmatches.size -%>)</h5>
-        <div id="potentials_for_<%= request_signup.id -%>" class="hideme">
-          <%= @pmatches.map {|pm| link_to(pm.offer_signup.byline, collection_potential_match_path(@collection, pm))}.join(", ") -%>
+        <h5 id="show_potentials_for_<%= request_signup.id %>" 
+            onclick="$('potentials_for_<%= request_signup.id %>').show(); $('hide_potentials_for_<%= request_signup.id %>').show(); this.hide();">(Show <%= @pmatches.size %>)</h5>
+        <div id="potentials_for_<%= request_signup.id %>" class="hideme">
+          <%= @pmatches.map {|pm| link_to(pm.offer_signup.byline, collection_potential_match_path(@collection, pm))}.join(", ") %>
         </div>
-        <h5 style="display: none" id="hide_potentials_for_<%= request_signup.id -%>" 
-            onclick="$('potentials_for_<%= request_signup.id -%>').hide(); $('show_potentials_for_<%= request_signup.id -%>').show(); this.hide();">(Hide)</h5>
+        <h5 style="display: none" id="hide_potentials_for_<%= request_signup.id %>" 
+            onclick="$('potentials_for_<%= request_signup.id %>').hide(); $('show_potentials_for_<%= request_signup.id %>').show(); this.hide();">(Hide)</h5>
       <% else %>
         <strong>No potential matches.</strong>
       <% end %>
     </td>
     <td>
       <%= assignment_form.text_field :pinch_hitter_byline, :size => 20 %>
-      <%= autocomplete_text_field("challenge_assignments_#{assignment.id}_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true) -%>
+      <%= autocomplete_text_field("challenge_assignments_#{assignment.id}_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true) %>
     </td>
   </tr>
 <% end %>

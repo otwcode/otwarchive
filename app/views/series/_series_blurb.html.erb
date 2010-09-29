@@ -1,13 +1,13 @@
-<li class="series blurb  <%- if is_author_of?(series) -%>own<% end -%>" id="series_<%=h series.id %>_blurb" role="article">
+<li class="series blurb  <% if is_author_of?(series) %>own<% end %>" id="series_<%=h series.id %>_blurb" role="article">
 <!--title etc-->
 	<div class="header module">
 		<h4 title="Series Title">
 			<%= link_to sanitize_title_for_display(series.title), series %>
 			<%=h 'by' %>
-			<%= byline(series) -%>
-			<%- if series.restricted %>
-				<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") -%>
-			<%- end -%>
+			<%= byline(series) %>
+			<% if series.restricted %>
+				<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
+			<% end %>
 			<% if series.hidden_by_admin %>
 				<%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %>
 			<% end %>
@@ -15,7 +15,7 @@
 		<h5 title="fandoms">
       <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag(tag) }.join(', ') %>
     </h5>
-    <%= get_series_symbols_for(series) -%>
+    <%= get_series_symbols_for(series) %>
 		<p class="datetime"><%= set_format_for_date(series.revised_at) %></p>
 	</div>
 <!--tags-->
@@ -24,24 +24,24 @@
     </ul>
     
 <!--summary-->
-		<%- unless series.summary.blank? %>
+		<% unless series.summary.blank? %>
       <h6 class="landmark">Summary</h6>
         <blockquote class="user-generated-view summary" title="summary"><%= sanitize_strip_images_and_format_for_display series.summary %></blockquote>
-    <%- end -%>
+    <% end %>
 <!--stats-->
 			<dl class="stats" title="stats">
       <dt><%=h 'Words' + ': ' %></dt> 
         <dd><%= number_with_delimiter(series.visible_word_count) %></dd>
       <dt><%=h 'Works' + ': ' %></dt> 
         <dd><%=h series.visible_work_count %></dd>
-      <%- if (bookmark_count = series.bookmarks.public.count) > 0 -%>
+      <% if (bookmark_count = series.bookmarks.public.count) > 0 %>
       <dt><%=h t('.work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
-        <dd><%= link_to_bookmarkable_bookmarks(series, bookmark_count.to_s) -%></dd>
-      <%- end -%>
+        <dd><%= link_to_bookmarkable_bookmarks(series, bookmark_count.to_s) %></dd>
+      <% end %>
 			</dl>
 
 <!--actions-->
-    <%- if is_author_of?(series) -%>
-	    <p class="navigation"><%= link_to t('.links.edit', :default => 'Edit'), edit_series_path(series) -%></p>
-    <%- end -%>
+    <% if is_author_of?(series) %>
+	    <p class="navigation"><%= link_to t('.links.edit', :default => 'Edit'), edit_series_path(series) %></p>
+    <% end %>
 </li>

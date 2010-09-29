@@ -1,13 +1,13 @@
 <p>
-  Hello from the <%=h "#{ArchiveConfig.APP_NAME}" -%>!
+  Hello from the <%=h "#{ArchiveConfig.APP_NAME}" %>!
 </p>
 
 <p>
-  <%- if !@user_name.blank? -%>
+  <% if !@user_name.blank? %>
   <%=h @user_name %> has invited you to join our beta!
-  <%- else -%>
+  <% else %>
   You've been invited to join our beta!
-  <%- end -%>
+  <% end %>
 </p>
 
 <p>
@@ -29,5 +29,5 @@
 </p>
   
 <p>
-  For more information, please check out our FAQ at: <%= link_to(archive_faqs_url(:host => @host), archive_faqs_url(:host => @host)) -%>
+  For more information, please check out our FAQ at: <%= link_to(archive_faqs_url(:host => @host), archive_faqs_url(:host => @host)) %>
 </p>

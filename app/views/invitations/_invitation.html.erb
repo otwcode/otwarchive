@@ -10,21 +10,21 @@
   </tr>
   <tr>
     <th scope="row">Copy link</th>
-    <td><%- unless invitation.redeemed_at -%><%= link_to "copy and use", new_user_path(:invitation_token => invitation.token) %><%- end -%></td>
+    <td><% unless invitation.redeemed_at %><%= link_to "copy and use", new_user_path(:invitation_token => invitation.token) %><% end %></td>
   </tr>
   <tr>
     <th scope="row">Sent to</th>
-    <%- if invitation.redeemed_at -%>
+    <% if invitation.redeemed_at %>
     <td><%= invitation.invitee_email %></td>
-    <%- else -%>
+    <% else %>
     <td>
-      <%= form_for(invitation) do |f| -%>
+      <%= form_for(invitation) do |f| %>
         <p><label for="invitee_email">Enter an email address:</label> <%= f.text_field :invitee_email %></p>
         <p><%= hidden_field_tag :user_id, @user.andand.login %></p>
         <p class="submit"><%= f.submit %></p>
-      <%- end -%>
+      <% end %>
     </td>
-    <%- end -%>
+    <% end %>
   </tr>
   <tr>
     <th scope="row">Redeemed by</th>

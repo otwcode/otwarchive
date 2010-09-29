@@ -17,20 +17,20 @@ feedback is welcomed as well.") %></p>
 features planned. Please do use this form to let us know about your experience of
 using the site - good and bad.") %></p>
 
-<%= form_for(@feedback) do |f| -%>
+<%= form_for(@feedback) do |f| %>
 		<fieldset>
-				<legend><%= 'Describe Your Feedback' -%></legend>
+				<legend><%= 'Describe Your Feedback' %></legend>
 				<dl>
 					<dt><%= f.label :category, "Please select a category:"%></dt>
 					<dd>
 						<%= f.select("category", [ [Feedback::BUGS_BUG_NAME, Feedback::BUGS_BUG], [Feedback::BUGS_FEEDBACK_NAME, Feedback::BUGS_FEEDBACK],  
      [Feedback::BUGS_MISC_NAME, Feedback::BUGS_MISC], [Feedback::BUGS_ASSISTANCE_NAME, Feedback::BUGS_ASSISTANCE], [Feedback::BUGS_LANG_NAME, Feedback::BUGS_LANG], 
-     [Feedback::BUGS_TAGS_NAME, Feedback::BUGS_TAGS] ], :selected => Feedback::BUGS_MISC) -%>
+     [Feedback::BUGS_TAGS_NAME, Feedback::BUGS_TAGS] ], :selected => Feedback::BUGS_MISC) %>
 					</dd>
 					<dt><%= f.label :summary, "Brief summary (required):" %></dt>
 					<dd>
 						<%= f.text_field :summary, :size => 60 %>
-						<%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX) -%>
+						<%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX) %>
 						<p>
 							<%= live_validation_for_field('feedback_summary', :failureMessage => 'Please enter a brief summary of your message') %>
 						</p>
@@ -44,11 +44,11 @@ using the site - good and bad.") %></p>
 				</dl>
 			</fieldset>
 			<fieldset>
-				<legend><%= 'Send Feedback' -%></legend>
+				<legend><%= 'Send Feedback' %></legend>
 				<%= f.hidden_field :user_agent, :value => request.env["HTTP_USER_AGENT"] %>
 					<p class="submit"><%= f.submit t('.send', :default => "Send feedback") %></p>
 			</fieldset>
 
-<%- end -%>
+<% end %>
 
 

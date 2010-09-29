@@ -4,11 +4,11 @@
 
 <!--subnav actions-->
 <p>
-<%- if current_user.is_a?(User) && current_user.is_translation_admin? -%>
+<% if current_user.is_a?(User) && current_user.is_translation_admin? %>
   <%= link_to t('.link_to_new', :default => 'Add a new one'), new_locale_path %>
-<%- else -%>
+<% else %>
   <%= link_to t('.suggest_locale', :default => 'Suggest a new one!'), new_feedback_report_path %>
-<%- end -%>
+<% end %>
 </p>
 <!--/subnav-->
 
@@ -16,10 +16,10 @@
 <!--main content-->
 <h3 class="landmark">List of Locales and Number of Translators</h3>
 <dl id="locales_list">
-  <%- for locale in @locales -%>
+  <% for locale in @locales %>
     <dt><%= link_to locale.name, locale %></dt>
     <dd><%= link_to locale.has_translators.size, locale_translators_path(locale) %> <%= t('.translators_size', :default => 'Translators') %></dd>
-  <%- end -%>
+  <% end %>
 </dl>
 <!--/content-->
 

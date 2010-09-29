@@ -21,13 +21,13 @@
 
     <dl>
       <dt>
-        <%= match_settings_form.label(:num_required_prompts, t('.num_required_prompts', :default => "Requests: ")) -%>
+        <%= match_settings_form.label(:num_required_prompts, t('.num_required_prompts', :default => "Requests: ")) %>
       </dt>
-      <dd><%= match_settings_form.select(:num_required_prompts, PotentialMatchSettings::REQUIRED_MATCH_OPTIONS.select {|k,v| k != "0"}, :selected => potential_match_settings.num_required_prompts) -%></dd>
+      <dd><%= match_settings_form.select(:num_required_prompts, PotentialMatchSettings::REQUIRED_MATCH_OPTIONS.select {|k,v| k != "0"}, :selected => potential_match_settings.num_required_prompts) %></dd>
 
       <% %w(fandoms characters relationships freeforms categories ratings warnings).each do |type| %>
-        <dt><%= match_settings_form.label("num_required_#{type}", "#{type.capitalize}:") -%></dt>
-        <dd><%= match_settings_form.select("num_required_#{type}", PotentialMatchSettings::REQUIRED_MATCH_OPTIONS, :selected => potential_match_settings.send("num_required_#{type}")) -%></dd>
+        <dt><%= match_settings_form.label("num_required_#{type}", "#{type.capitalize}:") %></dt>
+        <dd><%= match_settings_form.select("num_required_#{type}", PotentialMatchSettings::REQUIRED_MATCH_OPTIONS, :selected => potential_match_settings.send("num_required_#{type}")) %></dd>
       <% end %>
 
       <dt>
@@ -43,4 +43,4 @@
 
   </fieldset>
 
-<% end -%>
+<% end %>

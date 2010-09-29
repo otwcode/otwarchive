@@ -1,36 +1,36 @@
 <!--page description, messages-->
 <% if @work.unrevealed? %>
 <p class="message"><%= t('.works.unrevealed', :default => "This work is part of an ongoing challenge, {{challenge}}, and will be revealed soon!",
-    :challenge => @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) -%></p>
+    :challenge => @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) %></p>
 <% end %>
 <!--/descriptions-->
 
 <!--subnav-->
-<%- if logged_in_as_admin? -%>
+<% if logged_in_as_admin? %>
 <%= render :partial => 'admin/admin_options', :locals => {:item => @work} %>
-<%- end -%>
+<% end %>
 <!--/subnav-->
 
 <% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
 <!-- BEGIN work --> 
 <div class="work"><p class="landmark"><a name="top">&nbsp;</a></p>
-  <%= render :partial => 'works/work_header' -%>
+  <%= render :partial => 'works/work_header' %>
 
   <div id="chapters">
-    <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } -%>
-    <%- if !@work.endnotes.blank? && @chapter == @work.last_chapter -%>
+    <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
+    <% if !@work.endnotes.blank? && @chapter == @work.last_chapter %>
       <div id="work_endnotes" class="chapter preface footnotes module" role="complementary">
           <h3><%=h "Notes:" %></h3>
           <blockquote class="user-generated-view"><%=sanitize_and_format_for_display @work.endnotes %></blockquote>
       </div>    
-    <%- end -%>
+    <% end %>
 	  <!-- Series links -->
-    <%- unless @preview_mode || @work.series.blank? || @chapter != @work.last_chapter-%>
-      <%= render :partial => 'works/series_links' -%>
-    <%- end -%>
+    <% unless @preview_mode || @work.series.blank? || @chapter != @work.last_chapter%>
+      <%= render :partial => 'works/series_links' %>
+    <% end %>
   </div>
 
-  <%= render :partial => 'works/work_footer' -%>
+  <%= render :partial => 'works/work_footer' %>
   
 </div>
 <!-- END work -->
@@ -38,4 +38,4 @@
 <!-- BEGIN comment section -->
 <%= render :partial => 'comments/commentable', :locals => {:commentable => @chapter} %>
 <!-- END comment section -->
-<%- end -%>
+<% end %>

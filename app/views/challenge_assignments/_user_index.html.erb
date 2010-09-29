@@ -13,17 +13,17 @@
     <% @request = assignment.request_signup || assignment.pinch_request_signup %>
     <% @challenge = assignment.collection.challenge %>
     <tr>
-      <% unless @collection %><td><%= link_to sanitize_title_for_display(assignment.collection.title), collection_url(assignment.collection) -%></td><% end %>
+      <% unless @collection %><td><%= link_to sanitize_title_for_display(assignment.collection.title), collection_url(assignment.collection) %></td><% end %>
       <td><%= @request ? link_to(@request.pseud.byline, collection_assignment_path(assignment.collection, assignment)) : "None" %></td>
       <% if @challenge.respond_to?("assignments_due_at") %>
-        <td><%= time_in_zone(@challenge.assignments_due_at, (@challenge.time_zone || Time.zone.name)) -%></td>
+        <td><%= time_in_zone(@challenge.assignments_due_at, (@challenge.time_zone || Time.zone.name)) %></td>
       <% else %>
         <td>None set</td>
       <% end %>
       <td>
         <% if assignment.creation %>
           <% if assignment.creation.is_a?(Work) %>
-            <%= link_to sanitize_title_for_display(assignment.creation.title), work_path(assignment.creation) -%>
+            <%= link_to sanitize_title_for_display(assignment.creation.title), work_path(assignment.creation) %>
           <% end %>
           <% if !assignment.fulfilled? %>
             <br/><strong>This work has not yet been approved by the challenge moderators.</strong>

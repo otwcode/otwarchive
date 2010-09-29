@@ -36,7 +36,7 @@
           <td>
             <%= sanitize_strip_images_and_format_for_display skin.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : skin.description %>
           </td>
-          <td><%= text_field_tag "skin_admin_note[#{skin.id}]", h(skin.admin_note) -%></td>
+          <td><%= text_field_tag "skin_admin_note[#{skin.id}]", h(skin.admin_note) %></td>
           <td>
             <%= check_box_tag "make_official[]", skin.id, false, :id => "make_official_#{skin.id}" %>
           </td>

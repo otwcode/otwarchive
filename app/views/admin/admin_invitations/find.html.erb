@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%h= 'Track invitations' -%></h2>
+<h2><%h= 'Track invitations' %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -18,14 +18,14 @@
   <p class="submit"><%= submit_tag "Go" %></p>
 <% end %>
 
-<%- if @user -%>
-<h3><%h= 'Invitations for' -%> <%= link_to @user.login, user_invitations_path(@user) -%></h3>
+<% if @user %>
+<h3><%h= 'Invitations for' %> <%= link_to @user.login, user_invitations_path(@user) %></h3>
 <%= render :partial => 'invitations/user_invitations', :locals => {:invitations => @invitations} %>
-<%- elsif @invitation -%>
+<% elsif @invitation %>
 <%= render :partial => 'invitations/invitation', :locals => {:invitation => @invitation} %>
-<%- elsif @invitations -%>
+<% elsif @invitations %>
 <%= render :partial => 'invitations/user_invitations', :locals => {:invitations => @invitations} %>
-<%- end -%>
+<% end %>
 <!--/content-->
 
 <!--subnav-->

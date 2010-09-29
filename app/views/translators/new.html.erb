@@ -6,7 +6,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_tag url_for({:controller => :translators, :action => 'create', :method => :post}) do -%>
+<%= form_tag url_for({:controller => :translators, :action => 'create', :method => :post}) do %>
 
 <table summary="">
 	<caption>Add new translators</caption>
@@ -17,7 +17,7 @@
   		</tr>
 	</thead>
 	<tbody>
-  <%- 5.times do |i| -%>
+  <% 5.times do |i| %>
     	<tr>
       		<td><%= text_field_tag "translators[#{i}][email]" %></td>
       		<td>
@@ -26,7 +26,7 @@
         		</select>
       		</td>
     	</tr>
-  <%- end -%>
+  <% end %>
 	</tbody>
 	<tfoot>
   		<tr>
@@ -36,7 +36,7 @@
 	<tfoot>
 </table>  
 
-<%- end -%>
+<% end %>
 <!--/content-->
 
 

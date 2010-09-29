@@ -11,20 +11,20 @@
 
 <!--main content-->
 <h3>Characters and Relationships</h3>
-<%- unless @characters.blank? -%>
+<% unless @characters.blank? %>
 <ul>
-  <%- for character in @characters -%>
+  <% for character in @characters %>
   <li>
     <%= link_to character.name, tag_works_path(character) %>
-    <%- unless character.relationships.empty? -%>
+    <% unless character.relationships.empty? %>
     <ul>
-      <%- for relationship in character.relationships -%>
+      <% for relationship in character.relationships %>
       <li><%= link_to relationship.name, tag_works_path(relationship) %></li>
-      <%- end -%>
+      <% end %>
     </ul>
-    <%- end -%>
+    <% end %>
   </li>
-  <%- end -%>
+  <% end %>
 </ul>
-<%- end -%>
+<% end %>
 <!--/content-->

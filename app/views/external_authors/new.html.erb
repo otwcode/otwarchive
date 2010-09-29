@@ -1,4 +1,4 @@
-<h2><%= t('.new_external_author', :default => 'New external author identity') -%></h2>
+<h2><%= t('.new_external_author', :default => 'New external author identity') %></h2>
 
 <%= form_for([@user, @external_author]) do |f| %>
   <%= f.error_messages %>
@@ -9,9 +9,9 @@
   </p>
   
   <div id="external_author_names">
-    <% f.fields_for :external_author_names do |name_form| -%>
+    <% f.fields_for :external_author_names do |name_form| %>
       <%= render :partial => 'external_author_name', :locals => {:form => name_form} %>
-    <% end -%>
+    <% end %>
   </div>
 
   <p><%= add_name_link(f) %></p>

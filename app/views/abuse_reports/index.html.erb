@@ -1,5 +1,5 @@
 <!--Descriptive page names, messages and instructions-->
-<h2><%=h t('.about', :default => "All Abuse Reports:") -%></h2>
+<h2><%=h t('.about', :default => "All Abuse Reports:") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -8,26 +8,26 @@
 <!--main content-->
 <div class="wrapper">
 <table id="abuse_reports_table" summary="">
-<caption><%=h t('.listing', :default => "Listing all the abuse reports made on the archive.") -%></caption>
+<caption><%=h t('.listing', :default => "Listing all the abuse reports made on the archive.") %></caption>
 <colgroup>
 <col class="name" />
 <col />
 </colgroup>
 <thead>
 	<tr>
-	<th scope="col"><%=h t('.id', :default => "ID") -%></th>
-	<th scope="col"><%=h t('.from', :default => "From") -%></th>
-	<th scope="col"><%=h t('.referring_to', :default => "Referring To") -%></th>
-	<th scope="col"><%=h t('.reported', :default => "Reported") -%></th>
-	<th scope="col"><%=h t('.show', :default => "Show") -%></th>
+	<th scope="col"><%=h t('.id', :default => "ID") %></th>
+	<th scope="col"><%=h t('.from', :default => "From") %></th>
+	<th scope="col"><%=h t('.referring_to', :default => "Referring To") %></th>
+	<th scope="col"><%=h t('.reported', :default => "Reported") %></th>
+	<th scope="col"><%=h t('.show', :default => "Show") %></th>
 </tr>
 </thead>
 <tbody>
-	<%- for abuse_report in @abuse_reports -%>
+	<% for abuse_report in @abuse_reports %>
 	<tr id="abuse_report_<%= abuse_report.id %>">
     <%= render :partial => 'abuse_report', :locals => {:abuse_report => abuse_report} %>
   </tr>
-  <%- end -%>
+  <% end %>
 </tbody>
 </table>
 </div>

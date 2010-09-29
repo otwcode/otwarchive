@@ -6,7 +6,7 @@
 <!--/descriptions-->
 
 <!--main content-->
-<%= form_for(@user) do |f| -%>
+<%= form_for(@user) do |f| %>
   <dl>
 	<dt><%= f.label :password, "New Password" %> <span><%=h '(Make it a' %> <a href="#" ><%=h 'strong' %></a> <%=h 'one!)' %></span></dt>	
   		<dd><%= f.password_field :password %></dd>
@@ -15,6 +15,6 @@
  </dl>
   <p class="submit"><%= submit_tag 'Change Password', :name => 'change_password' %></p> 
   
-<%- end -%>
+<% end %>
 
 <!--/subnav-->

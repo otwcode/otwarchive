@@ -1,14 +1,14 @@
 <div class="works module" id="collection-works">
   <h3>
-    <%- if collection.collection_preference.show_random || params[:show_random] -%>
+    <% if collection.collection_preference.show_random || params[:show_random] %>
     <%=h t('.collections.random_works', :default => "Random works") %>  
-    <%- else -%>  
+    <% else %>  
     <%=h t('.recent_works', :default => "Recent works") %>
-    <%- end -%>
+    <% end %>
   </h3>
   <ul class="index">
-    <%- for work in works -%>
+    <% for work in works %>
   	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
-      <%- end -%>
+      <% end %>
   </ul>
 </div>

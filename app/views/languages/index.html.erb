@@ -4,32 +4,32 @@
 
 <!--subnav, actions-->
 <p>
-<%- if current_user.is_a?(User) && current_user.is_translation_admin? -%>
+<% if current_user.is_a?(User) && current_user.is_translation_admin? %>
   <%= link_to t('.link_to_new', :default => 'Add a new one'), new_language_path %>
-<%- else -%>
+<% else %>
   <%= link_to t('.suggest_language', :default => 'Suggest a new one!'), new_feedback_report_path %>
-<%- end -%>
+<% end %>
 </p>
 <!--/subnav-->
 
 <!--main content-->
 <table id="languages_table">
- 	  <caption><%=h t('.list', :default => "List of all current languages in the archive and the number of works in each") -%></caption>
+ 	  <caption><%=h t('.list', :default => "List of all current languages in the archive and the number of works in each") %></caption>
  	  <tr>
- 	  	<th scope="col"><%=h t('.name', :default => "Name") -%></th>
- 	  	<th scope="col"><%=h t('.work_count', :default => "Works") -%></th>
+ 	  	<th scope="col"><%=h t('.name', :default => "Name") %></th>
+ 	  	<th scope="col"><%=h t('.work_count', :default => "Works") %></th>
  	  </tr>
-  <%- for language in @languages -%>
+  <% for language in @languages %>
   <tr>
-    <%- if language == Language.default -%>
+    <% if language == Language.default %>
     <td><%= language.name %></td>
     <td><%= link_to language.works.count, works_path %></td>
-    <%- else -%>
+    <% else %>
     <td><%= link_to language.name, language %></td>
     <td><%= link_to language.works.count, language_works_path(language) %></td>
-    <%- end -%>
+    <% end %>
   </tr>
-  <%- end -%>
+  <% end %>
 </table>
 <!--main content-->
 

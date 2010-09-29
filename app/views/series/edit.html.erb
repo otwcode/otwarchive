@@ -8,10 +8,10 @@
   <li><%= link_to t('.back_to_series', :default =>"Back To Series"), @series %></li>
   <li><%= link_to t('.delete_series', :default =>"Delete Series"), @series, :confirm => 'Are you sure?', :method => :delete %></li>
   <li><%= link_to t('.reorder_series', :default =>"Reorder Series"), manage_series_path(@series) %></li>
-  <li><%= link_to t('.orphan_series', :default => 'Orphan Series'), {:controller => 'orphans', :action => 'new', :series_id => @series.id} -%></li>    	
-  <%- unless (@series.pseuds - current_user.pseuds).empty? -%>
-    <li><%= link_to t('.remove_me_as_author', :default => 'Remove Me As Author'), edit_series_path(@series, :remove => 'me'), :confirm => series_removal_confirmation(@series, current_user) -%></li>
-  <%- end -%>
+  <li><%= link_to t('.orphan_series', :default => 'Orphan Series'), {:controller => 'orphans', :action => 'new', :series_id => @series.id} %></li>    	
+  <% unless (@series.pseuds - current_user.pseuds).empty? %>
+    <li><%= link_to t('.remove_me_as_author', :default => 'Remove Me As Author'), edit_series_path(@series, :remove => 'me'), :confirm => series_removal_confirmation(@series, current_user) %></li>
+  <% end %>
 </ul>
 <!--/subnav-->
 
@@ -25,26 +25,26 @@
     <dl>
       <dt><%= f.label :title, t('.series_title', :default =>"Series Title*"), :class => "required" %></dt>
       <dd><%= f.text_field :title%></dd>
-      <%= render :partial => 'pseuds/byline', :locals => {:form => f, :type => 'series'} -%>
+      <%= render :partial => 'pseuds/byline', :locals => {:form => f, :type => 'series'} %>
     </dl>
   </fieldset>
   <fieldset>
     <dl>      
       <dt><%= f.label :summary, t('.series_description', :default =>"Series Description") %><dt>
       <dd>
-        <%= allowed_html_instructions -%>
+        <%= allowed_html_instructions %>
         <%= f.text_area :summary %>
       </dd>
       <dd class="validation">
-        <%= generate_countdown_html("series_summary", ArchiveConfig.SUMMARY_MAX) -%>
+        <%= generate_countdown_html("series_summary", ArchiveConfig.SUMMARY_MAX) %>
       </dd>
       <dt><%= f.label :notes, t('.series_notes', :default =>"Series Notes") %><dt>
       <dd>
-        <%= allowed_html_instructions -%>
+        <%= allowed_html_instructions %>
         <%= f.text_area :notes %>
       </dd>
       <dd class="validation">
-        <%= generate_countdown_html("series_notes", ArchiveConfig.NOTES_MAX) -%>
+        <%= generate_countdown_html("series_notes", ArchiveConfig.NOTES_MAX) %>
       </dd>
       <dt><%= f.label :complete, t('.series_complete', :default =>"Is this series complete?") %><dt>
       <dd><%= f.check_box :complete %></dd>

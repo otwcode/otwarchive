@@ -1,4 +1,4 @@
-<!--Descriptive page name, messages and instructions--><h2><%=h t('.admin_invitations.inviteNew', :default => "Invite new users") -%></h2>
+<!--Descriptive page name, messages and instructions--><h2><%=h t('.admin_invitations.inviteNew', :default => "Invite new users") %></h2>
 <!--/descriptions-->
 <!--subnav-->
 <ul class="navigation" role="navigation">
@@ -25,7 +25,7 @@
 
 
   
-	<h3><%=h 'Give invite codes to current users' -%></h3>
+	<h3><%=h 'Give invite codes to current users' %></h3>
 	 <%= form_tag url_for(:controller => 'admin/admin_invitations', :action => 'grant_invites_to_users') do %>
     <dl>
       <dt><%= label_tag :number_of_invites, t('.number_of_invites', :default => 'Number of invites:') %></dt>
@@ -38,7 +38,7 @@
   <% end %>
 
  
-    <h3><%=h 'Track invitations' -%></h3>
+    <h3><%=h 'Track invitations' %></h3>
  <%= form_tag url_for(:controller => 'admin/admin_invitations', :action => 'find'), :method => :get do %>
 <dl>
       <dt><%= label_tag :user_name, t('.find_user_name', :default => 'Enter a user name:') %></dt>

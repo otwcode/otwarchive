@@ -4,12 +4,12 @@
 <%= stylesheet_link_tag 'site-chrome', :media => 'screen' %>
 <%= stylesheet_link_tag 'forms', :media => 'screen' %>
 <%= stylesheet_link_tag 'user-generated-views', :media => 'all' %>
-<%- if controller.controller_name == 'home' && controller.action_name == 'index' -%>
+<% if controller.controller_name == 'home' && controller.action_name == 'index' %>
   <%= stylesheet_link_tag 'home', :media => 'screen' %>
-<%- end -%>
-<%- if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' -%>
+<% end %>
+<% if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' %>
   <%= stylesheet_link_tag 'translations', :media => 'screen' %>
-<%- end -%>
+<% end %>
 <%= logged_in_as_admin? ? (stylesheet_link_tag 'admin', :media => 'screen') : "" %>
 
 <%= stylesheet_link_tag 'handheld', :media => 'handheld' %>
@@ -21,9 +21,9 @@
 <%= stylesheet_link_tag 'auto_complete', :media => 'screen' %>
 <%= stylesheet_link_tag 'visualize.jQuery', :media => 'screen' %>
 
-<%- unless Preference.light?(params[:style]) -%>
+<% unless Preference.light?(params[:style]) %>
   <%= stylesheet_link_tag 'ugv-style-creator', :media => 'all' %>
-<%- end -%>
+<% end %>
 
 <!-- browser-specific stylesheets -->
 <!--[if IE]>
@@ -58,16 +58,16 @@
 
 <%= iboxify_page %>
 
-<%- if current_user.is_a?(User) && current_user.try(:preference).try(:skin) -%>
-  <%- s = current_user.preference.skin -%>
+<% if current_user.is_a?(User) && current_user.try(:preference).try(:skin) %>
+  <% s = current_user.preference.skin %>
   <style type="text/css">
-    <%- if s.margin -%>#chapters {margin: auto <%= s.margin %>% 2.5em; padding: 0.5em <%= s.margin %>% 0;}<%- end -%>
-    <%- if s.background_color || s.foreground_color || s.font || s.base_em -%>
-    <%- bgcolor = s.background_color ? s.background_color : "#FFFEF9" -%>
+    <% if s.margin %>#chapters {margin: auto <%= s.margin %>% 2.5em; padding: 0.5em <%= s.margin %>% 0;}<% end %>
+    <% if s.background_color || s.foreground_color || s.font || s.base_em %>
+    <% bgcolor = s.background_color ? s.background_color : "#FFFEF9" %>
       body	{background: <%= bgcolor %>; 
         color: <%= s.foreground_color ? s.foreground_color : "#222" %>; 
         font: <%= s.base_em ? s.base_em : "100" %>%/1.125 <%= s.font ? s.font : "'Lucida Grande', Verdana, Helvetica, Arial, sans-serif" %>;}
-    <%- end -%>
+    <% end %>
     <%= current_user.preference.skin.css %>
   </style>
-<%- end -%>
+<% end %>

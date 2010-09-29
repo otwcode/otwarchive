@@ -1,40 +1,40 @@
 <!--Descriptive page name, messages and instructions-->
 <h2><%=h t('.preview_story', :default => "Preview Work") %></h2>
-<%= error_messages_for :work -%>
+<%= error_messages_for :work %>
 <!--/descriptions-->
 
 <!--main content-->
 <div id="previewpane">
   <div class="draft work">
-    <%= render :partial => 'works/work_header' -%>
+    <%= render :partial => 'works/work_header' %>
     <div id="chapters">
-    <% if @chapters -%>
-      <%- @chapters.each do |chapter| -%>
-        <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter} -%>
-      <%- end -%>
-    <%- else -%>
-        <div class="user-generated-view"><%= sanitize_and_format_for_display(@chapter.content) -%></div>
-    <%- end -%>
+    <% if @chapters %>
+      <% @chapters.each do |chapter| %>
+        <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter} %>
+      <% end %>
+    <% else %>
+        <div class="user-generated-view"><%= sanitize_and_format_for_display(@chapter.content) %></div>
+    <% end %>
     </div>
-    <%- unless @work.endnotes.blank? -%>
+    <% unless @work.endnotes.blank? %>
       <div class="preface notes">
           <h3><%=h t('.notes', :default => "Notes:") %></h3>
           <blockquote class="user-generated-view"><%=sanitize_and_format_for_display @work.endnotes %></blockquote>
        </div>
 
-    <%- end -%>
-  	<%= render :partial => 'works/work_footer' -%>
+    <% end %>
+  	<%= render :partial => 'works/work_footer' %>
   </div>
 </div>
 
 <div class="clear"></div>
 
-<%= form_for(@work) do |f| -%>
+<%= form_for(@work) do |f| %>
 
-  <%= render :partial => 'hidden_fields', :locals => {:form => f} -%>
+  <%= render :partial => 'hidden_fields', :locals => {:form => f} %>
 
   <fieldset>
-    <legend><%= t('.post_work', :default => 'Post Work') -%></legend>
+    <legend><%= t('.post_work', :default => 'Post Work') %></legend>
     <p class="submit">
   	<% if @work.posted? %>
   		<%= submit_tag t('.forms.update', :default => 'Update'), :name => 'update_button' %>

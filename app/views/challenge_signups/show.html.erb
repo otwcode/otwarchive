@@ -4,17 +4,17 @@
   <!--subnavigation, sorting and actions-->
   <!--/subnav-->
   <!--main content-->
-  <h3><%= t('.challenge_signups.view', :default => "Signup for {{person}}", :person => @challenge_signup.pseud.byline) -%></h3>
+  <h3><%= t('.challenge_signups.view', :default => "Signup for {{person}}", :person => @challenge_signup.pseud.byline) %></h3>
 
   <div class="collection preface">
-    <%= render :partial => "show_requests", :locals => {:challenge_signup => @challenge_signup} -%>
+    <%= render :partial => "show_requests", :locals => {:challenge_signup => @challenge_signup} %>
 
-    <%= render :partial => "show_offers", :locals => {:challenge_signup => @challenge_signup} -%>
+    <%= render :partial => "show_offers", :locals => {:challenge_signup => @challenge_signup} %>
   </div>
   <!--/content-->
 
   <!--subnav-->
-    <%= render :partial => "signup_controls", :locals => {:challenge_signup => @challenge_signup} -%>
+    <%= render :partial => "signup_controls", :locals => {:challenge_signup => @challenge_signup} %>
   <!--/subnav-->
 </div>
 

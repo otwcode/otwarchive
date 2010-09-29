@@ -1,9 +1,9 @@
 <h4>
-<%= @comment.comment_owner ? (link_to @comment.comment_owner_name, @comment_owner_link_or_name) : @comment_owner_link_or_name -%> 
+<%= @comment.comment_owner ? (link_to @comment.comment_owner_name, @comment_owner_link_or_name) : @comment_owner_link_or_name %> 
  <%= t('.user_mailer.edited_comment_top', :default => 'edited the following comment on') %> 
-<%= link_to @commentable.commentable_name, @commentable_link -%>:
+<%= link_to @commentable.commentable_name, @commentable_link %>:
 </h4>
 
 <p><%=sanitize_limit_and_format_for_display @comment.content %></p>
 
-<%= render :partial => 'comment_notification_footer' -%>
+<%= render :partial => 'comment_notification_footer' %>

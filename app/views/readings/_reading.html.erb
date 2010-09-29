@@ -1,21 +1,21 @@
 <div class="reading module">
 <% if reading.work.nil? %>
-  <h3><%= t('.deleted_work', :default => '(deleted work, last viewed {{date}})', :date => reading.updated_at) -%></h3>
+  <h3><%= t('.deleted_work', :default => '(deleted work, last viewed {{date}})', :date => reading.updated_at) %></h3>
 <% else %>
   <ul><%= render :partial => 'works/work_blurb', :locals => {:work => 
 reading.work} %></ul>
   <h3>
   <%= t('.last_read', :default => '<span>Last viewed:</span> {{date}}', :date => set_format_for_date(reading.updated_at)) %> 
-  <% if reading.major_version_read < reading.work.major_version -%>
+  <% if reading.major_version_read < reading.work.major_version %>
     <%= t('.new_version_available', :default => '(New version available.)') %>
-  <% elsif reading.minor_version_read != reading.work.minor_version -%>
+  <% elsif reading.minor_version_read != reading.work.minor_version %>
     <%= t('.minor_edits', :default => '(Minor edits made since then.)') %>
-  <% else -%>
+  <% else %>
     <%= t('.most_recent_version', :default => '(Most recent version.)') %>
-  <% end -%>
+  <% end %>
   <%= t('.view_count', :default => 'Number of times viewed: {{count}}', :count => reading.view_count) %>
-  <% if reading.toread? -%><%= t('to_read', :default => '(Flagged to read later.)') %><% end -%>
-  <% if reading.toskip? -%><%= t('to_skip', :default => '(Flagged to skip.)') %><% end -%>
+  <% if reading.toread? %><%= t('to_read', :default => '(Flagged to read later.)') %><% end %>
+  <% if reading.toskip? %><%= t('to_skip', :default => '(Flagged to skip.)') %><% end %>
   </h3>
 <% end %>
 <!-- actions -->

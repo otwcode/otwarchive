@@ -1,28 +1,28 @@
 <!-- expects the local variables comment, commentable, and button_name -->
 <% if !commentable && @commentable %>
-  <%- commentable = @commentable -%>
-<%- end -%>
+  <% commentable = @commentable %>
+<% end %>
 <div id="comment_form">
-	<%= form_for value_for_comment_form(commentable, comment) do |f| -%>
-	  <%- if controller.controller_name == "inbox" -%>
+	<%= form_for value_for_comment_form(commentable, comment) do |f| %>
+	  <% if controller.controller_name == "inbox" %>
 	  <h4>Reply to <%= get_pseud_or_mailaddress(commentable) %> on <%= commentable_description_link(commentable) %></h4>   
-	  <%- end -%>  
-	  <%- if commentable.is_a?(Tag) -%>
+	  <% end %>  
+	  <% if commentable.is_a?(Tag) %>
 	    <%= hidden_field_tag :tag_id, commentable.name %>
-	  <%- end -%>
+	  <% end %>
 		<dl>
-		<%- if logged_in? -%>
+		<% if logged_in? %>
 			<% if current_user.pseuds.count > 1 %>
           <dt><%= f.label :name, t('.form_name', :default => "Name: ") %></dt>
 			    <dd><%= select_tag "comment[pseud_id]", options_for_select(current_user.pseuds.map{|pseud| [pseud.name, pseud.id]}, comment.pseud ? comment.pseud.id : current_user.default_pseud.id) %></dd>
 	    <% else %>
           <dt>Name:</dt>
-			    <dd><%= current_user.default_pseud.name -%>
+			    <dd><%= current_user.default_pseud.name %>
           <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}" %></dd>
 	    <% end %>
-    <%- elsif logged_in_as_admin? -%>
+    <% elsif logged_in_as_admin? %>
           <dt>Name:</dt>
-          <dd><%= current_admin.login -%>
+          <dd><%= current_admin.login %>
               <%= f.hidden_field :name, :value => "#{current_admin.login}" %>
               <%= f.hidden_field :email, :value => "#{current_admin.email}" %>
           </dd>
@@ -30,17 +30,17 @@
       <dt class="landmark">Note:</dt>
     	<dd class="instructions"><%=t('.comment_requirements', :default => "All fields are required. Your email address will not be published.") %></dd>
     	<dt><%= f.label :name, t('.form_name', :default => "Name: ") %></dt>
-    	<dd><%= f.text_field :name, :value => session[:comment_name], :live => true -%></dd>
+    	<dd><%= f.text_field :name, :value => session[:comment_name], :live => true %></dd>
       <dt><%= f.label :email, t('.form_email', :default => "Email: ") %></dt>
-    	<dd><%= f.text_field :email, :value => session[:comment_email],  :live => true -%>
-	    <p><%= f.hidden_field :ip_address, :value => "#{request.remote_addr}" -%></p></dd>    
+    	<dd><%= f.text_field :email, :value => session[:comment_email],  :live => true %>
+	    <p><%= f.hidden_field :ip_address, :value => "#{request.remote_addr}" %></p></dd>    
 	  <% end %>
       <dt><%= f.label :content, t('.form_comment', :default => "Comment: ") %></dt>
       <dd class="module">
         <p class="instructions"><%= limited_html_instructions %></p>
         <p>
           <%= f.text_area :content %>
-          <%= generate_countdown_html("comment_content", ArchiveConfig.COMMENT_MAX) -%>
+          <%= generate_countdown_html("comment_content", ArchiveConfig.COMMENT_MAX) %>
           <%= live_validation_for_field("comment_content",
 				      :failureMessage => t('.comment_not_there', :default => 'Brevity is the soul of wit, but we need your comment to have text in it.'),
 				      :maximum_length => ArchiveConfig.COMMENT_MAX,
@@ -52,12 +52,12 @@
     </p>
 	  <p class="submit">
       <%= f.submit button_name %>
-	    <%- if controller.controller_name == 'inbox' -%>
+	    <% if controller.controller_name == 'inbox' %>
         <p id="close-popup" role="navigation" class="navigation"></p>
-      <%- else -%>
-        <%= cancel_comment_button(comment, commentable) -%>
-      <%- end -%>
+      <% else %>
+        <%= cancel_comment_button(comment, commentable) %>
+      <% end %>
 	  </p>
-  <% end -%>
+  <% end %>
 </div> 
 <div class="clear"></div>

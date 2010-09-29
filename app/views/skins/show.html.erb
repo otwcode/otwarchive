@@ -1,34 +1,34 @@
-<%= render :partial => "skin_top_navigation" -%>
+<%= render :partial => "skin_top_navigation" %>
 
 <div id="skin-page" class="profile module">
   
   <div class="header module">
     <h2>
       <%=  h(@skin.title) %>
-      <%= t('skin_author', :default => "skin by {{name}}", :name => skin_author_link(@skin)) -%>    
+      <%= t('skin_author', :default => "skin by {{name}}", :name => skin_author_link(@skin)) %>    
     </h2>
     <blockquote class="user-generated-view">
-      <%= sanitize_and_format_for_display @skin.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : @skin.description -%>
+      <%= sanitize_and_format_for_display @skin.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : @skin.description %>
     </blockquote>
-    <%= skin_preview_display(@skin) -%>
+    <%= skin_preview_display(@skin) %>
 
     <h3>CSS</h3>
     <blockquote><pre><%= h @skin.css %></pre></blockquote>
 
-    <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em -%>
+    <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em %>
       <h3>Wizard Settings</h3>
       <p class="notes">(can be overridden by custom CSS)</p>
   
       <dl>
-        <%- if @skin.margin -%><dt>Margin</dt><dd><%= h @skin.margin %><%- end  -%>
-        <%- unless @skin.font.blank? -%><dt>Font</dt><dd><%= h @skin.font %><%- end  -%>
-        <%- unless @skin.background_color.blank? -%><dt>Background color</dt><dd><%= h @skin.background_color %><%- end  -%>
-        <%- unless @skin.foreground_color.blank? -%><dt>Foreground color</dt><dd><%= h @skin.foreground_color %><%- end  -%>
-        <%- if @skin.base_em -%><dt>Relative font size</dt><dd><%= h @skin.base_em %><%- end  -%>
+        <% if @skin.margin %><dt>Margin</dt><dd><%= h @skin.margin %><% end  %>
+        <% unless @skin.font.blank? %><dt>Font</dt><dd><%= h @skin.font %><% end  %>
+        <% unless @skin.background_color.blank? %><dt>Background color</dt><dd><%= h @skin.background_color %><% end  %>
+        <% unless @skin.foreground_color.blank? %><dt>Foreground color</dt><dd><%= h @skin.foreground_color %><% end  %>
+        <% if @skin.base_em %><dt>Relative font size</dt><dd><%= h @skin.base_em %><% end  %>
       </dl>
     <% end %>
   </div>
 
-  <%= render :partial => "skin_navigation", :locals => {:skin => @skin} -%>
+  <%= render :partial => "skin_navigation", :locals => {:skin => @skin} %>
 
 </div>

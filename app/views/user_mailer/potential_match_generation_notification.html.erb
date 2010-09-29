@@ -1,13 +1,13 @@
-<p><%=h "Dear Collection Maintainers!" -%></p>
+<p><%=h "Dear Collection Maintainers!" %></p>
 
 <p>
   We have finished generating potential matches for your challenge collection, 
-  <%= link_to(sanitize_title_for_display(@collection.title), collection_url(@collection, :host => @host)) -%>.
+  <%= link_to(sanitize_title_for_display(@collection.title), collection_url(@collection, :host => @host)) %>.
 </p>
   
 <p>
   You can see the potential matches and set assignments at: 
-  <%= collection_potential_matches_url(@collection, :host => @host) -%>. 
+  <%= collection_potential_matches_url(@collection, :host => @host) %>. 
 </p>
 
-<p><%=h "Sent at:" -%> <%= Time.now.strftime(common_timestring) -%></p>
+<p><%=h "Sent at:" %> <%= Time.now.strftime(common_timestring) %></p>

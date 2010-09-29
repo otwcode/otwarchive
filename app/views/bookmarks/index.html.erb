@@ -1,15 +1,15 @@
 <!--descriptive page name and system messages, descriptions, and instructions.-->
-<%- if @most_recent_bookmarks -%>
+<% if @most_recent_bookmarks %>
   <h2>Recent Bookmarks</h2>
-<%- elsif @user -%>
-  <%- if params[:recs_only] %>
+<% elsif @user %>
+  <% if params[:recs_only] %>
     <h2><%=h t('.owned_bookmarks', :default => "{{user_name}}'s Recs", :user_name => @user.login) %></h2>
-  <%- else %>
+  <% else %>
     <h2><%=h t('.owned_bookmarks', :default => "{{user_name}}'s Bookmarks", :user_name => @user.login) %></h2>
-  <%- end -%>
-<%- else -%>
+  <% end %>
+<% else %>
   <h2><%=h t('.listing', :default => 'Listing bookmarks') %></h2>
-<%- end -%>
+<% end %>
 <!-- /descriptions-->
 
 <!--subnav-->
@@ -20,7 +20,7 @@
   <% end %>
   <li><%= toggle_recs_bookmarks %></li>
 <% if params[:tag_id] %>
-  <%= taggable_list(params[:tag_id], "bookmarks") -%>
+  <%= taggable_list(params[:tag_id], "bookmarks") %>
 <% end %>
 </ul>
 <!--/subnav-->

@@ -19,22 +19,22 @@
   			</tr>
 		</thead>
 		<tbody>
-  <%- for comment in @comments -%>
+  <% for comment in @comments %>
   	<tr>
     	<td><%= link_to_tag(comment.parent) %></td>
     	<td><%= link_to strip_tags(comment.content[0..50]) + '...', comment, :title => strip_tags(comment.content) %></td>
     	<td><%= comment.count_all_comments %></td>
     	<td>
-    	  <%- if comment.pseud -%>
+    	  <% if comment.pseud %>
     	  <%= link_to comment.pseud.name, [comment.pseud.user, comment.pseud] %>
-    	  <%- else -%>
+    	  <% else %>
     	  <%=h comment.name %>
-    	  <%- end -%>
+    	  <% end %>
     	</td>
     	<td><%= last_reply_by(comment) %></td>
     	<td><%= comment.updated_at %></td>
   	</tr>  
-  <%- end -%>
+  <% end %>
 	</tbody>
 </table>
 </div>
