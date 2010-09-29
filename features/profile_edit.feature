@@ -21,6 +21,9 @@ Feature: Edit profile
     And I should see "Would you like"
   When I follow "Profile"
   Then I should see "About editname"
+    And I should not see "Test title thingy"
+    And I should not see "Location"
+    And I should not see "This is some text about me"
   When I follow "Edit My Profile"
   Then I should see "Edit My Profile"
   When I fill in "Title" with "Test title thingy"
@@ -51,9 +54,10 @@ Feature: Edit profile
 
   Scenario: View and edit profile - email address and date of birth
 
-  Given the following activated user exists
+  Given the following activated users exist
     | login         | password   |
     | editname2     | password   |
+    | duplicate     | password   |
     And I am logged in as "editname2" with password "password"
   When I follow "editname2"
     And I follow "Profile"
@@ -84,6 +88,15 @@ Feature: Edit profile
     And I press "Update"
   Then I should see "Your profile has been successfully updated"
     And I should see "My birthday: 1980-03-02"
+  When I follow "Log out"
+    And I am logged in as "duplicate" with password "password"
+    And I follow "duplicate"
+    And I follow "Profile"
+    And I follow "Edit My Profile"
+    And I fill in "Change Email" with "valid2@archiveofourown.org"
+    And I press "Update"
+  Then I should see "Sorry, that email address is already being used"
+    And I should not see "Your profile has been successfully updated"
     
   Scenario: View and edit profile - change password
 
