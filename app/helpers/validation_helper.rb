@@ -54,7 +54,7 @@ module ValidationHelper
   #
   # Most basic usage: 
   #   <input type=text id="field_to_validate">
-  #   <%= live_validation_for_field("field_to_validate") -%>
+  #   <%= live_validation_for_field("field_to_validate") %>
   # This will make sure this field is present and use translated error messages. 
   # 
   # More custom usage (from work form): 
@@ -64,7 +64,7 @@ module ValidationHelper
   #        :tooLongMessage => 'We salute your ambition! But sadly the content must be less than %d letters long. (Maybe you want to create a multi-chaptered work?)'/ArchiveConfig.CONTENT_MAX,
   #        :tooShortMessage => 'Brevity is the soul of wit, but your content does have to be at least %d letters long.'/ArchiveConfig.CONTENT_MIN,
   #        :failureMessage => 'You did want to post a story here, right?')
-  #    -%>
+  #    %>
   # 
   # Add more default values here! There are many more live validation options, see the code in
   # the javascripts folder for details. 
