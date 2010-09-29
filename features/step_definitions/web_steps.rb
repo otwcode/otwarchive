@@ -114,14 +114,6 @@ Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   end
 end
 
-Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
-    if page.respond_to? :should
-      page.should have_content('<option selected="selected" value="' + text + '"')
-    else
-      assert page.has_content?('<option selected="selected" value="' + text + '"')
-    end
-end
-
 Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
   regexp = Regexp.new(regexp)
   with_scope(selector) do

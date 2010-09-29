@@ -24,7 +24,6 @@ gem 'fastthread'
 gem 'ruby-openid', :require => 'openid'
 gem 'chronic'
 gem 'will_paginate', '3.0.pre'
-gem 'shoulda', :require => 'shoulda/rails'
 gem 'andand'
 gem 'htmlentities'
 gem 'whenever', :require => false
@@ -54,3 +53,13 @@ group :development, :test do
   end
 end
 
+group :test do
+  gem 'shoulda'
+  gem 'factory_girl'
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'cucumber-rails'
+  gem 'cucumber'
+  gem 'rspec-rails'
+  gem 'launchy'    # So you can do Then show me the page
+end

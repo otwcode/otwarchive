@@ -91,3 +91,13 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be disabled$/ do 
     end
   end
 end
+
+Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
+    if page.respond_to? :should
+      page.should have_content('<option selected="selected" value="' + text + '"')
+    else
+      assert page.has_content?('<option selected="selected" value="' + text + '"')
+    end
+end
+
+
