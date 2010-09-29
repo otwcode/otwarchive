@@ -39,7 +39,10 @@ gem 'aws-s3', :require => 'aws/s3'
 gem 'mocha'
 gem 'css_parser'
 gem 'paperclip'
-gem 'tolk'
+gem 'tolk',
+  :git => 'git://github.com/10to1/tolk.git',
+  :branch => 'rails3',
+  :require => 'tolk'
 
 gem 'authlogic',
   :git     => 'git://github.com/odorcicd/authlogic.git',

@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/10to1/tolk.git
+  revision: 3dc56f82db77124c7a8c922049a2e6d960713b60
+  branch: rails3
+  specs:
+    tolk (1.0)
+      will_paginate (= 3.0.pre)
+      ya2yaml (~> 0.26)
+
+GIT
   remote: git://github.com/odorcicd/authlogic.git
   revision: a087ad0cba3c165ba22fcf176c28b6f7517931e8
   branch: rails3
@@ -165,9 +174,6 @@ GEM
       activerecord (>= 3.0.0.rc)
       riddle (>= 1.0.12)
     thor (0.14.2)
-    tolk (1.0)
-      will_paginate (= 3.0.pre)
-      ya2yaml (~> 0.26)
     treetop (1.4.8)
       polyglot (>= 0.3.1)
     trollop (1.16.2)
@@ -215,7 +221,7 @@ DEPENDENCIES
   ruby-openid
   shoulda
   thinking-sphinx (>= 2.0.0.rc1)
-  tolk
+  tolk!
   ts-delayed-delta
   whenever
   will_paginate (= 3.0.pre)
