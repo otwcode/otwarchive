@@ -5,7 +5,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<% form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get do -%>
+<%= form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get do -%>
     <p><%= t('.search_by', :default => 'Search for a user by username, pseud or email, or search by role') -%></p>
 <dl>
     <dt><%= label_tag "query", t("user_find_query", :default => "Name or email") -%></dt>

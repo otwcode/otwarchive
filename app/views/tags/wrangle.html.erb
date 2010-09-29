@@ -55,7 +55,7 @@
 <%- elsif @tags -%>
   <%= will_paginate @tags %>
 
-  <%- form_tag url_for(:controller => 'tags', :action => 'mass_update'), :method => :post, :id => 'wrangulator' do -%>
+  <%= form_tag url_for(:controller => 'tags', :action => 'mass_update'), :method => :post, :id => 'wrangulator' do -%>
     <p class="submit"><%= submit_tag "Wrangle" %></p>
     <% sort_url_options = {:show => params[:show], :status => params[:status], :sort_column => params[:sort_column]} %>
     <table>

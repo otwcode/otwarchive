@@ -1,5 +1,5 @@
 <div id="manage-archive-faqs">
-  <% form_tag url_for(:action => 'update_positions') do %>
+  <%= form_tag url_for(:action => 'update_positions') do %>
   <ul id="sortable_series_list">
     <% for archive_faq in @archive_faqs %>
       <li id="archive_faq_<%= archive_faq.id %>">

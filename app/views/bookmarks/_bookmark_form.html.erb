@@ -21,7 +21,7 @@
     <% end %>
 </p>
 <% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
-  <% fields_for 'bookmark[external]', bookmarkable do |ew| %>
+  <%= fields_for 'bookmark[external]', bookmarkable do |ew| %>
   <fieldset>
     <legend>Work Preface</legend>
   <dl>

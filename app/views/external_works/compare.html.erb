@@ -1,4 +1,4 @@
-<%- form_tag compare_external_works_path, :method => :get do -%>
+<%= form_tag compare_external_works_path, :method => :get do -%>
     <fieldset>
       <legend>Search for external works</legend>
       <p>
@@ -11,7 +11,7 @@
 <%- end -%>
 
 <%- unless @external_works.blank? -%>
-  <%- form_tag merge_external_works_path, :method => :post do -%>
+  <%= form_tag merge_external_works_path, :method => :post do -%>
   
   <ol class="work index">
   <%- for external_work in @external_works -%>

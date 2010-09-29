@@ -50,7 +50,7 @@
   <dl>
 	<dt><%= f.label :email, "Change Email" %></dt>
 		<dd><%= f.text_field :email %></dd>
-  <% fields_for :profile_attributes,  @user.profile do |p| %>
+  <%= fields_for :profile_attributes,  @user.profile do |p| %>
 	  <dt><%= p.label :title, "Title" %></dt>
     <dd>
       <%= p.text_field :title %>

@@ -21,7 +21,7 @@
       <span class="string translated"><%=h tr.text ? "(" + "Current translation".t + ": #{tr.text})" : "" -%></span>	  	
     </dt>
     <dd id="tr_<%= tr.id %>">        
-        <%- form_remote_tag :url => { :action => :set_translation_text, :id => tr.id },
+        <%= form_remote_tag :url => { :action => :set_translation_text, :id => tr.id },
 			:update => "show_#{tr.id}",
 			:loading => "tr_status('show_#{tr.id}')",
 			:complete => visual_effect(:highlight, "show_#{tr.id}") do %>

@@ -1,5 +1,5 @@
 <tr>
-<% form_tag add_collection_participants_path(@collection), :method => :get do %>
+<%= form_tag add_collection_participants_path(@collection), :method => :get do %>
 <td><%= label_tag(:participants_to_invite, t('.add_participants', :default => "Add new members: ")) -%>
 <%= text_field_tag :participants_to_invite, nil, :size => 60 %>
 <%= autocomplete_text_field("participants_to_invite") -%>

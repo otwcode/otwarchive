@@ -1,6 +1,6 @@
 <div id="errors_for_<%= local_translation.id %>"></div>
 
-<%- remote_form_for(local_translation) do |f| -%>
+<%= remote_form_for(local_translation) do |f| -%>
   <dl>     
     <dt><%= @main_locale.name %>: </dt>
     <dd><%=h translation.text %></dd>

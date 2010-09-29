@@ -16,7 +16,7 @@
     <%- unless @query[:language].blank? %><%= t('.language', :default => 'Language') %>: <%= @query[:language] %> <%- end %>
     </p>
 
-<%- form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do -%>
+<%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do -%>
 <fieldset>
 	<legend>Search works</legend>
   <%- unless @query %>

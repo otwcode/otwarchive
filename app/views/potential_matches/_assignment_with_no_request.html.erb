@@ -1,4 +1,4 @@
-<% fields_for "challenge_assignments[]", assignment do |assignment_form| %>
+<%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>
   <tr>
     <th scope="row">
       <%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" -%>

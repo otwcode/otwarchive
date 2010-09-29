@@ -130,7 +130,7 @@
       <!-- Toggles on with parent checkbox -->
       <dd id="parent-options">
         <dl>
-        <% fields_for "work[parent_attributes]" do |p| %>
+        <%= fields_for "work[parent_attributes]" do |p| %>
           <dt><%= p.label :url %></dt>
           <dd>
             <%= p.text_field :url, :value => work_parent_value(:url) %>
@@ -179,7 +179,7 @@
       <!-- Toggles on with series checkbox -->
       <dd id="series-options">
         <dl>
-        <% fields_for "work[series_attributes]" do |s| %>
+        <%= fields_for "work[series_attributes]" do |s| %>
           <dt><%= s.label 'id', 'Choose one of your existing series:' %></dt>
           <dd>
             <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>	  
@@ -203,7 +203,7 @@
         </dl>
       </dd>
     
-    <% fields_for "work[chapter_attributes]", @chapter do |c| %>
+    <%= fields_for "work[chapter_attributes]", @chapter do |c| %>
       <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
       <dt class="work-is_wip">

@@ -73,7 +73,7 @@
 <% else %>
 
   <!-- list all the requesters with their potential matches -->
-  <% form_tag set_collection_assignments_path, :method => :put do %>
+  <%= form_tag set_collection_assignments_path, :method => :put do %>
 
     <%= render :partial => "match_navigation", :locals => {:top => true} -%>
     

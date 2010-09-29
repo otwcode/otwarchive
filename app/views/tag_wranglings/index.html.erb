@@ -16,7 +16,7 @@ get started. (Note: to associate relationships with characters, first choose a f
 <%- if params[:show] == "character_relationships" -%>
   <div class="module">
 	<h3>First, choose a canonical fandom:</h3>
-  <%- form_tag url_for(:controller => 'tag_wranglings', :action => 'index'), :method => :get do -%>
+  <%= form_tag url_for(:controller => 'tag_wranglings', :action => 'index'), :method => :get do -%>
   <fieldset>
     <legend>Choose fandom</legend>
     <p><%= label_tag :fandom_string, t('.fandom', :default => 'Fandom:') %> <%= text_field_tag 'fandom_string', params[:fandom_string] %><%= autocomplete_text_field "fandom_string", :no_comma => true -%></p>
@@ -37,7 +37,7 @@ get started. (Note: to associate relationships with characters, first choose a f
   <%- end -%>
 <%- elsif @tags -%>
   <%= will_paginate @tags %>
-  <%- form_tag url_for(:controller => 'tag_wranglings', :action => 'wrangle'), :method => :post, :id => 'wrangulator' do -%>
+  <%= form_tag url_for(:controller => 'tag_wranglings', :action => 'wrangle'), :method => :post, :id => 'wrangulator' do -%>
   <div class="module">
   <fieldset>
   <legend>Assign and Mass Select</legend>

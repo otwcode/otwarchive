@@ -14,7 +14,7 @@
 
 <!--main content-->
 <h3><%= t('.abuse_admin', :default => 'Abuse Administration') -%></h3>
-<%- form_tag ('/admin/admin_users/update') do -%> 
+<%= form_tag ('/admin/admin_users/update') do -%> 
 <%= hidden_field_tag 'user_login', @user.login %>
 <fieldset>
 <p>

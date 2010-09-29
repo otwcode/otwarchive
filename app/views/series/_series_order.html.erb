@@ -1,5 +1,5 @@
 <div id="manage-series">
-  <% form_tag url_for(:action => 'update_positions') do %>
+  <%= form_tag url_for(:action => 'update_positions') do %>
   <ul id="sortable_series_list">
     <% @serial_works.each_with_index do |serial, i| %>
       <li id="serial_<%= serial.id %>">

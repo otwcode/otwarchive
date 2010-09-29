@@ -8,7 +8,7 @@
 
 <!--main content-->
 <h3 class="landmark">Listing by fandom</h3>
-<%- form_tag url_for(:controller => 'tag_wranglers', :action => "create") do -%>
+<%= form_tag url_for(:controller => 'tag_wranglers', :action => "create") do -%>
   <p class="submit"><%= submit_tag 'Assign' %></p>
   
   <h3>Assign fandoms to yourself</h3>
@@ -47,7 +47,7 @@
 
 <!--subnav-->
 <h3 class="landmark">Filters</h3>
-<%- form_tag tag_wranglers_path, :class => 'filters', :method => :get do -%>
+<%= form_tag tag_wranglers_path, :class => 'filters', :method => :get do -%>
   <dl class="filters">
     <dt>Filter by Media</dt>
     <dd>

@@ -6,7 +6,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<% form_tag url_for(:controller => 'admin/admin_invitations', :action => 'find'), :method => :get do %>
+<%= form_tag url_for(:controller => 'admin/admin_invitations', :action => 'find'), :method => :get do %>
   <dl>
     <dt><%= label_tag :user_name, t('.find_user_name', :default => 'Enter a user name:') %></dt>
     <dd><%= text_field_tag :user_name, params[:user_name]  %></dd>

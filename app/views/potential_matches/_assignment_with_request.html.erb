@@ -1,5 +1,5 @@
 <!-- expects local "assignment" -->
-<% fields_for "challenge_assignments[]", assignment do |assignment_form| %>
+<%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>
   <% request_signup = assignment.request_signup %>
   <tr>
     <th scope="row">

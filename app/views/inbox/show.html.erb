@@ -6,7 +6,7 @@
 
 <!--main content-->
 <%- unless @inbox_comments.blank? -%>  
-  <%- form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
+  <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do -%>
   <fieldset>
 	<legend>Mass Edit Options</legend>
 	<ul class="navigation">
@@ -92,8 +92,8 @@
 
 <!--subnav-->
 <h3 class="landmark">Filter</h3>
-<%- form_tag(user_inbox_path(@user), :class => 'filters', :method => :get) do -%>
-  <%- field_set_tag do -%>
+<%= form_tag(user_inbox_path(@user), :class => 'filters', :method => :get) do -%>
+  <%= field_set_tag do -%>
     <dl class="filters">
       <dt><%= 'Filter by read' %></dt>
       <dd>

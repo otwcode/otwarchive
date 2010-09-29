@@ -4,7 +4,7 @@
 		  
     <dt><%= f.label :password_confirmation, t('.confirm_new', :default =>"Confirm New Password") %></dt>
 	  <dd><%= f.password_field :password_confirmation %></dd>
-		<% fields_for :check do |check| %>
+		<%= fields_for :check do |check| %>
 			<dt><%= check.label :password_check, t('.enter_old',:default =>"Please enter your old password") %></dt>
 			<dd><%= check.password_field :password_check%></dd>
  		<% end %>

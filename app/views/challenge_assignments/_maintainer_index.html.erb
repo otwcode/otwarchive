@@ -63,7 +63,7 @@
 
 <h3>Assignments</h3>
 
-<% form_tag default_multiple_collection_assignments_path, :method => :put do %>
+<%= form_tag default_multiple_collection_assignments_path, :method => :put do %>
   <ul class="navigation">
     <li><%= submit_tag "Update Defaulters"%></li>
     <li>
@@ -117,7 +117,7 @@
         </td>
         <td>
           <% unless assignment.fulfilled? %>
-            <% fields_for "challenge_assignments[]", assignment do |assignment_form| %>
+            <%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>
               <%= assignment_form.check_box :defaulted %>
             <% end %>
           <% end %>

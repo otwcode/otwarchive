@@ -5,7 +5,7 @@
 
 <!--main content-->
 <%= flash_field(:login) -%>	
-<%- form_tag passwords_path do -%>
+<%= form_tag passwords_path do -%>
   <p>
   	<%= label_tag 'login', t('.email_or_name', :default => "Email address <strong>or</strong> user name:") -%>
   	<%= text_field_tag 'login', '' -%> <%= submit_tag t('.reset_password', :default => 'Reset password', :class => 'submit') %>
