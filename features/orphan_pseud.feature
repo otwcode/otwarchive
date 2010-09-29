@@ -3,6 +3,7 @@ Feature: Orphan pseud
   In order to have an archive full of works
   As an author
   I want to orphan all works under one pseud
+  # TODO: Expand this to cover a user who has more than one pseud, and check that works on the other pseud don't get orphaned
 
 Scenario: Orphan all works belonging to one pseud
   Given the following activated user exists
