@@ -7,7 +7,7 @@
 <p>Please use this feature with caution. We will not redirect your old username to your new one, so outside links to your user page, and all your existing pseud pages, will no longer work.</p>
 <p>If you don't want that, then please <%= link_to "create a new Pseud", new_user_pseud_path(@user) %> instead.</p>
 
-<% form_for(@user) do |f| %>  
+<%= form_for(@user) do |f| %>  
   <dl>
 	  <dt>Current Username</dt>
 		<dd><strong><%= @user.login %></strong></dd>

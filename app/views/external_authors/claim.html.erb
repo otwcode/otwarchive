@@ -33,7 +33,7 @@
   address in future.
 </p>
 
-<% form_for @external_author do |f| %>
+<%= form_for @external_author do |f| %>
   <%= hidden_field_tag :invitation_token, @invitation.token -%>
   <p>
     <%= radio_button_tag "imported_stories", "orphan" %>

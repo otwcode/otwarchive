@@ -9,7 +9,7 @@
   
 <!--main content-->
 	<h3>Send an invite code to the following email address</h3>
-	<% form_for :invitation, @invitation, :url => {:controller => 'admin/admin_invitations', :action => :create} do |f| %>
+	<%= form_for :invitation, @invitation, :url => {:controller => 'admin/admin_invitations', :action => :create} do |f| %>
     <p><%= f.label :invitee_email, t('.email address', :default => 'Email address') %> <%= f.text_field :invitee_email %> </p>
 	<p class="submit"><%= f.submit t('.submit_invite', :default => 'Invite user')  %></p>
   <% end %>

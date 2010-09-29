@@ -7,7 +7,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<% form_for(@locale) do |f| %>
+<%= form_for(@locale) do |f| %>
   <dl>
     <dt><%= f.label :language_id, t('.language', :default => "Language:") %></dt>
     <dd><%= f.select(:language_id, @languages.collect {|l| [ l.name, l.id ] }) %></dd>

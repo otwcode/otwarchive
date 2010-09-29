@@ -6,7 +6,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<% form_for(@abuse_report) do |f| %>
+<%= form_for(@abuse_report) do |f| %>
   <dl>
   	<dt><%= f.label :url, t('.link', :default => "Link to the page you are reporting (required):") %></dt>
   	<dd><%= f.text_field :url, :size => 60 %>

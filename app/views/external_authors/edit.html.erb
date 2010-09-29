@@ -1,6 +1,6 @@
 <h2><%= t('.edit_external_author', :default => 'Editing external author identity') -%></h2>
 
-<% form_for([@user, @external_author]) do |f| %>
+<%= form_for([@user, @external_author]) do |f| %>
   <%= f.error_messages %>
 
   <p>

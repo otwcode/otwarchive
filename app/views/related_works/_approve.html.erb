@@ -7,7 +7,7 @@
 
 <p><%= t('.express_approval', :default => 'Nothing will be linked directly from your works without your express approval.') %> <%= t('.can_undo', :default => 'You can come back to this page if you change your mind.') %></p> 
 
-<% form_for(related_work) do |f| %>
+<%= form_for(related_work) do |f| %>
   <p class="submit">
     <%= f.submit t('.link_me', :default => "Yes, link me!") %>
   </p>

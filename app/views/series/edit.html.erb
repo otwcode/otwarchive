@@ -18,7 +18,7 @@
 <!--main content-->
 
 <div id="work-form" class="work-form">
-<% form_for(@series) do |f| %>
+<%= form_for(@series) do |f| %>
   <%= f.error_messages %>
   <p class="notice required"><%=h t('.required', :default => '* Required information') %></p>
   <fieldset>

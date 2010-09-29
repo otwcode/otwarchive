@@ -18,7 +18,7 @@
 <!--/subnav-->
 		
 		<!--main content-->
-		<% form_for @user do |f| -%>
+		<%= form_for @user do |f| -%>
 		  <p><%= f.hidden_field :invitation_token, :value => params[:invitation_token] %></p>
 <fieldset><legend>User Details</legend>
 <!-- Create login -->

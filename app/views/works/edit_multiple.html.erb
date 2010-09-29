@@ -6,7 +6,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<% form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %>
+<%= form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %>
   <h3>Works Edited</h3>
   <p class="important message"><%=sanitize_title_for_display t('.all_stories', :default => "Note that your edits will be applied to <em>all</em> of these stories, <em>replacing</em> any existing values for these fields!") %></p>
 

@@ -36,7 +36,7 @@
           <td><%= assignment.offer_signup ? assignment.offer_signup.pseud.byline : (assignment.pinch_hitter ? assignment.pinch_hitter.byline : "") -%></td>
           <td>
             <% new_assignment = assignment.covered_at ? request.request_assignments.last : ChallengeAssignment.new %>
-            <% form_for [@collection, new_assignment], :url => collection_assignments_path(@collection) do |assignment_form| %>
+            <%= form_for [@collection, new_assignment], :url => collection_assignments_path(@collection) do |assignment_form| %>
               <%= hidden_field_tag :assignment_to_cover, assignment.id -%>
               <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
               <%= assignment_form.hidden_field :request_signup_id, :value => request.id %>
