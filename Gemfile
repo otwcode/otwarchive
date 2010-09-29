@@ -41,6 +41,11 @@ gem 'css_parser'
 gem 'paperclip'
 gem 'tolk'
 
+gem 'authlogic',
+  :git     => 'git://github.com/odorcicd/authlogic.git',
+  :branch  => 'rails3',
+  :require => 'authlogic'
+
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:

@@ -1,75 +1,8 @@
 PROFILER_SESSIONS_FILE = 'used_tags.txt'
 
 class ApplicationController < ActionController::Base
-  if ENV['RAILS_ENV'] == 'development' && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED
-    # Inline profiling options
-    def self.profiler_logging_path
-      current_dir = File.split(__FILE__)[0]
-      path = File.join(current_dir, '..', '..', 'tmp', 'performance')
-      return path
-    end
-
-    def self.process(request, response)
-      cookie_name = 'profile'
-      profile = false
-      if (cookies = request.headers['Cookie'])
-        cookie_prefix = cookie_name + '='
-        if cookies.include? cookie_prefix
-          profiler_session_id = cookies[cookies.index(cookie_prefix)+cookie_prefix.length...cookies.length]
-          profiler_session_id = profiler_session_id[0...profiler_session_id.index(';')||profiler_session_id.length] + "\n"
-	  # Create log directory, if missing.
-          unless File.directory? profiler_logging_path
-            Dir.mkdir profiler_logging_path
-          end
-          profiler_sessions_file_name = File.join(profiler_logging_path, PROFILER_SESSIONS_FILE)
-	  # Create the file for storing used session ids, if it doesn't exist.
-          File.new(profiler_sessions_file_name, 'wb').close unless File.exists? profiler_sessions_file_name
-	  # Then open it for reading.
-          profiler_sessions_file = File.new(profiler_sessions_file_name, 'rb')
-          used_ids_list = profiler_sessions_file.readlines()
-          unless profiler_session_id == 'No' or used_ids_list.include? profiler_session_id
-            profile = true
-	    # We've only got a read handle. Reopen the file for appending in binary mode.
-            profiler_sessions_file.reopen(profiler_sessions_file.path, 'ab')
-	    # Add the current session ID to the list of used IDs.
-            profiler_sessions_file.write(profiler_session_id)
-          end
-          profiler_sessions_file.close()
-        end
-      end
-      if profile
-      	begin
-      	  require 'ruby-prof'
-      	rescue LoadError
-      	  # We just continue quietly without profiling if ruby-prof is not
-      	  # available.
-      	  profile = false
-      	end
-      end
-      if profile
-      	querystring = request.query_string || ''
-      	pathinfo = request.path_info || ''
-        name = "#{Time.now} #{pathinfo} #{querystring.split('.')[0].gsub('/', '_')}.html"
-        start = Time.now
-	# We use this array to get data out of the profiler's closure.
-	# It only ever holds the one element
-        result = []
-        profiler_results = RubyProf.profile do
-          result.push super(request, response)
-        end
-        duration = Time.now - start
-        f = File.new(File.join(profiler_logging_path, name), 'wb')
-        RubyProf::GraphHtmlPrinter.new(profiler_results).print(f)
-        f.close()
-        return result[0]
-      else
-        super(request, response)
-      end
-    end
-  end
 
   helper :all # include all helpers, all the time
-  filter_parameter_logging :content, :password, :terms_of_service_non_production
 
   include ExceptionNotification::Notifiable
 
@@ -78,7 +11,74 @@ class ApplicationController < ActionController::Base
 
   # store previous page in session to make redirecting back possible
   before_filter :store_location
+  def store_location
+    session[:return_to] = request.request_uri
+  end
+  
+  # Authlogic login helpers
+  helper_method :current_user
+  helper_method :current_admin
+  helper_method :logged_in?
+  helper_method :logged_in_as_admin?
+  
+private
+  def current_user_session
+    return @current_user_session if defined?(@current_user_session)
+    @current_user_session = UserSession.find
+  end
+  
+  def current_user
+    @current_user = current_user_session && current_user_session.record
+  end
+  
+  def current_admin_session
+    return @current_admin_session if defined?(@current_admin_session)
+    @current_admin_session = AdminSession.find
+  end
+  
+  def current_admin
+    @current_admin = current_admin_session && current_admin_session.record
+  end
+  
+  def logged_in? 
+    current_user.nil? ? false : true
+  end
+  
+  def logged_in_as_admin?
+    current_admin.nil? ? false : true
+  end
+  
 
+public
+
+  # Filter method - keeps users out of admin areas
+  def admin_only
+    logged_in_as_admin? || admin_only_access_denied
+  end
+
+  def admin_only_access_denied
+    flash[:error] = "I'm sorry, only an admin can look at that area." 
+    redirect_to root_path
+    false
+  end
+
+  # Filter method - prevents users from logging in as admin
+  def user_logout_required
+    if logged_in?
+      flash[:notice] = 'Please log out of your user account first!'
+      redirect_to root_path
+    end
+  end
+  
+  # Prevents admin from logging in as users
+  def admin_logout_required
+    if logged_in_as_admin?
+      flash[:notice] = 'Please log out of your admin account first!'
+      redirect_to root_path
+    end
+  end
+  
+  
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
   before_filter :set_current_user

@@ -1,0 +1,8 @@
+<div id="signin">
+  <% @user_session = UserSession.new unless @user_session %>
+	<%= form_for @user_session do |form| -%>
+		<div id="small_login">
+      <%= render :partial => "user_sessions/passwd_small", :locals => {:form => form} %>
+		</div>
+	<% end -%>
+</div>

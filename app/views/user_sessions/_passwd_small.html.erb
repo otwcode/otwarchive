@@ -1,0 +1,14 @@
+<p>
+	<%= form.label :login, t('.user_name', :default => "User name:")  %>
+	<%= form.text_field :login, :class => 'text', :size => nil %>
+	<%= form.label :password, t('.password', :default => "Password:") %>
+	<%= form.password_field :password, :class => 'text', :size => nil %>
+</p>
+<p class="footnote">
+	<%= form.check_box :remember_me %>
+	<%= form.label :remember_me, t('.remember_me', :default => "Remember me")  %>
+  <%= link_to t('.forgot_password', :default => "forgot password?"), new_password_path %>
+</p>
+<p>
+  <%= form.submit t('.login', :default => "Log in"), :class => 'button' %>
+</p>

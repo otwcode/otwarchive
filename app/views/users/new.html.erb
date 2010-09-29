@@ -2,7 +2,16 @@
 		<h2><%=h "Create Account" %></h2>
 		<p class="message"><%=h "Please select a user name. You will be allowed to post works under multiple pseudonyms, but you will only have one user name, which is hard for us to change - choose wisely!" %>
 		<%= "User names will be displayed as entered. Please check you have entered your preferred spelling and capitalization before submitting this form." %></p>
-		<%= error_messages_for :user, :id => "errorExplanationNone", :header_tag => "p", :header_message => "Oops, there's some problems with the stuff you told us.", :message => nil  %>
+		<% if @user.errors.any? %>
+      <div id="errorExplanationNone">
+        <p><%= t("users.oops_errors", :default => "Oops, there's some problems with the stuff you told us.") %></p>
+        <ul>
+        <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
 		<!--/descriptions-->
 
 <!--subnav-->

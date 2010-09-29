@@ -30,8 +30,8 @@ module ApplicationHelper
   
   def span_if_current(link_to_default_text, path)
     translation_name = "layout.header." + link_to_default_text.gsub(/\s+/, "_")
-    link = link_to_unless_current(t(translation_name, :default => link_to_default_text), path)
-    current_page?(path) ? "<span class=\"current\">#{link}</span>" : link
+    link = link_to_unless_current(h(t(translation_name, :default => link_to_default_text)), path)
+    current_page?(path) ? "<span class=\"current\">#{link}</span>".html_safe : link
   end
   
   def allowed_html_instructions
@@ -131,15 +131,15 @@ module ApplicationHelper
   def flash_div *keys
     keys.collect { |key| 
       if flash[key] 
-        content_tag(:div, flash[key], :class => "flash #{key}") if flash[key] 
+        content_tag(:div, h(flash[key]), :class => "flash #{key}") if flash[key] 
       end
-    }.join
+    }.join.html_safe
   end
 
   # Gets an error for a given field if it exists. 
   def flash_field(fieldname)
     if flash[fieldname]
-      content_tag(:span, flash[fieldname], :class => "fielderror")
+      content_tag(:span, h(flash[fieldname]), :class => "fielderror").html_safe
     end
   end
   

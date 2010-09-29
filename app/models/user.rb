@@ -6,8 +6,11 @@ class User < ActiveRecord::Base
   # NO NO NO! BAD IDEA! AWOOOOGAH! attr_accessible should ONLY ever be used on NON-SECURE fields
   # attr_accessible :suspended, :banned, :translation_admin, :tag_wrangler, :archivist, :recently_reset
 
-  # Acts_as_authentable plugin
-  acts_as_authentable
+  # Authlogic gem
+  acts_as_authentic do |config|
+    config.transition_from_restful_authentication = true
+    config.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha1
+  end
 
   # Authorization plugin
   acts_as_authorized_user
@@ -138,6 +141,10 @@ class User < ActiveRecord::Base
 
   def to_param
     login
+  end
+  
+  def active?
+    !activated_at.nil?
   end
 
   def create_default_associateds

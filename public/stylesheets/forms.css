@@ -55,7 +55,7 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 
 /*SESSIONS (front front pages - login, create, etc)*/
 .session form {padding-top:1.5em;margin-bottom:1.5em; padding-bottom:1.5em; border-bottom:1px solid; }
-.session form p, .session input#login, .session input#password, .session input#openid_url {float:none; display:block !important;margin:0 0 0.875em 0; width:24em;}
+.session form p, .session input#user_session_login, .session input#user_session_password, .session input#openid_url {float:none; display:block !important;margin:0 0 0.875em 0; width:24em;}
 .session input#openid_url, .session form img {display:inline;}
 #main.session #signin form p.submit {margin:-2em auto 0 auto; width:6em; float:right;}
 #main.session #signin form p.openid {margin-top:2em }

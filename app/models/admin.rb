@@ -1,5 +1,9 @@
 class Admin < ActiveRecord::Base
-  acts_as_authentable(false)
+  # Authlogic gem
+  acts_as_authentic do |config|
+    config.transition_from_restful_authentication = true
+    config.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha1
+  end
   
   has_many :log_items
   has_many :invitations, :as => :creator

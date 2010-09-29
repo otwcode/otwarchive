@@ -7,7 +7,7 @@ class UserObserver < ActiveRecord::Observer
 
   def after_save(user)
     unless user == User.orphan_account
-      UserMailer.deliver_activation(user) if user.pending?
+      UserMailer.deliver_activation(user) if !user.active?
     end
   end
 
