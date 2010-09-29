@@ -12,7 +12,7 @@
     <% if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) %>
       <li>&#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path %></li>
     <% end %>
-    <% Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
+    <% if Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
       <li><%= link_to 'Devmode', devmode_path %></li>
     <% end %>
     <li>&#8212; <a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a> <%=h t('.layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
