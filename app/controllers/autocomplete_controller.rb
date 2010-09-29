@@ -3,7 +3,7 @@ class AutocompleteController < ApplicationController
 
   def render_output(result_strings, to_highlight="")
     @results = result_strings
-    render :inline  => @results.length > 0 ? "<ul><%= @results.map {|string| '<li>' + string + '</li>'} -%></ul>" : ""
+    render :inline  => @results.length > 0 ? "<ul><%= @results.map {|string| '<li>' + string + '</li>'} %></ul>" : ""
   end
 
   # works for finding items in any set

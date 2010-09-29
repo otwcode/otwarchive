@@ -11,9 +11,6 @@ class ChallengesController < ApplicationController
   # - a controller Challenge::WhatEverController -- Challenge::FlashficController which goes in controllers/challenge/flashfic_controller.rb
   # - a views subfolder called views/challenge/whatever -- eg, views/challenge/flashfic/, views/challenge/bigbang/ 
   #
-  # The method_missing in this controller catches all the action requests that come in to the challenges controller
-  # and redirects them automatically to the challenge implementation's controller 
-  #
   # Example:
   # script/generate challenge Flashfic creates:
   # - controllers/challenge/flashfics_controller.rb

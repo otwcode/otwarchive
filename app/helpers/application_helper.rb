@@ -125,7 +125,7 @@ module ApplicationHelper
   # The CSS classes are specified in archive_core.css.
   #
   # You can also have multiple possible flash alerts in a single location with:
-  #       <%= flash_div :error, :warning, :notice -%>
+  #       <%= flash_div :error, :warning, :notice %>
   # (These are the three varieties currently defined.) 
   #
   def flash_div *keys
