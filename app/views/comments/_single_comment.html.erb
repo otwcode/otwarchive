@@ -6,7 +6,7 @@
                :locals => {:comment => single_comment, :commentable => single_comment.commentable, :button_name => t('.forms.update', :default => 'Update')} %>	  
   <% else %>
     <% if single_comment.is_deleted %>
-      <p>(<%=sanitize_whitelist t('.single_comment_deleted_comment', :default => "previous comment by {{commenter}} deleted", :commenter => get_pseud_or_mailaddress(single_comment)) %>)</p>
+      <p>(<%=sanitize_whitelist t('.single_comment_deleted_comment', :default => "previous comment by %{commenter} deleted", :commenter => get_pseud_or_mailaddress(single_comment)) %>)</p>
     <% elsif single_comment.hidden_by_admin? && !logged_in_as_admin? %>
       <p class="message">(<%=h t('.single_comment_admin_review', :default => "This comment is under review by an admin and is currently unavailable.") %>)</p>
     <% else %>
@@ -20,11 +20,11 @@
       </div>
       <blockquote class="user-generated-view"><%=sanitize_limit_and_format_for_display single_comment.content %></blockquote>
       <p class="datetime">
-        <%=h t('.single_comment_posted', :default => "Posted {{date}}", :date => l(single_comment.created_at)) %>
+        <%=h t('.single_comment_posted', :default => "Posted %{date}", :date => l(single_comment.created_at)) %>
       </p>
       <% unless single_comment.edited_at.blank? %>
         <p class="datetime edited">
-          <%=h t('.single_comment_edited', :default => "Last Edited {{date}}", :date => l(single_comment.edited_at)) %>
+          <%=h t('.single_comment_edited', :default => "Last Edited %{date}", :date => l(single_comment.edited_at)) %>
         </p>
       <% end %>
       

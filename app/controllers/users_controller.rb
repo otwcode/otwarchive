@@ -92,7 +92,7 @@ class UsersController < ApplicationController
         @user.identity_url = OpenIdAuthentication.normalize_identifier(@user.identity_url)
       end
       if @user.save
-        flash[:notice] = t('development_activation', :default => "During testing you can activate via <a href='{{activation_url}}'>your activation url</a>.",
+        flash[:notice] = t('development_activation', :default => "During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                             :activation_url => activate_path(@user.activation_code)) if Rails.env.development?
         render :partial => "confirmation", :layout => "application"
       else

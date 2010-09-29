@@ -98,13 +98,13 @@ class CollectionItemsController < ApplicationController
     params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
       collection = Collection.find_by_name(collection_name)
       if !collection
-        errors << t('collection_items.not_found', :default => "We couldn't find a collection with the name {{name}}. Make sure you are using the one-word name, and not the title?", :name => collection_name)
+        errors << t('collection_items.not_found', :default => "We couldn't find a collection with the name %{name}. Make sure you are using the one-word name, and not the title?", :name => collection_name)
       elsif @item.collections.include?(collection)
-        errors << t('collection_items.already_there', :default => "This item has already been submitted to {{collection_title}}.", :collection_title => collection.title)
+        errors << t('collection_items.already_there', :default => "This item has already been submitted to %{collection_title}.", :collection_title => collection.title)
       elsif collection.closed?
-        errors << t('collection_items.closed', :default => "{{collection_title}} is closed to new submissions.", :collection_title => collection.title)
+        errors << t('collection_items.closed', :default => "%{collection_title} is closed to new submissions.", :collection_title => collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer(current_user)
-        errors << t('collection_items.not_author_or_maintainer', :default => "Not allowed: either you don't own this item or are not a moderator of {{collection_title}}", :collection_title => collection.title)
+        errors << t('collection_items.not_author_or_maintainer', :default => "Not allowed: either you don't own this item or are not a moderator of %{collection_title}", :collection_title => collection.title)
       elsif @item.add_to_collection!(collection)
         if @item.approved_collections.include?(collection)
           new_collections << collection
@@ -112,7 +112,7 @@ class CollectionItemsController < ApplicationController
           unapproved_collections << collection
         end
       else
-        errors << t('collection_items.something_else', :default => "Something went wrong trying to add collection {{name}}, sorry!", :name => collection_name)
+        errors << t('collection_items.something_else', :default => "Something went wrong trying to add collection %{name}, sorry!", :name => collection_name)
       end
     end
 
@@ -122,12 +122,12 @@ class CollectionItemsController < ApplicationController
     end
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
-      flash[:notice] = t('collection_items.created', :default => "Added to collection(s): {{collections}}.", 
+      flash[:notice] = t('collection_items.created', :default => "Added to collection(s): %{collections}.", 
                             :collections => new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
       flash[:notice] = "<br />" + t('collection_items.unapproved', 
-        :default => "Your addition will have to be approved before it appears in {{moderated}}.", 
+        :default => "Your addition will have to be approved before it appears in %{moderated}.", 
         :moderated => unapproved_collections.collect(&:title).join(", "))
     end
 
@@ -139,9 +139,9 @@ class CollectionItemsController < ApplicationController
     if params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
       @collection_item.user_approval_status = params[:collection_item][:user_approval_status]
       if @collection_item.save
-        flash[:notice] = t('collection_items.updated', :default => "Updated {{item}}.", :item => @collection_item.title)
+        flash[:notice] = t('collection_items.updated', :default => "Updated %{item}.", :item => @collection_item.title)
       else
-        flash[:error] = t('collection_items.update_failed', :default => "We couldn't update {{item}}: {{errors}}", :item => @collection_item.title, :errors => @collection_item.errors.each {|attrib, msg| msg}.join(", "))
+        flash[:error] = t('collection_items.update_failed', :default => "We couldn't update %{item}: %{errors}", :item => @collection_item.title, :errors => @collection_item.errors.each {|attrib, msg| msg}.join(", "))
       end
       redirect_to user_collection_items_path(@user) and return
     elsif @collection && @collection.user_is_maintainer?(current_user)
@@ -154,9 +154,9 @@ class CollectionItemsController < ApplicationController
         @collection_item.unrevealed = params[:collection_item][:unrevealed]
       end
       if @collection_item.save
-        flash[:notice] = t('collection_items.updated', :default => "Updated {{item}}.", :item => @collection_item.title)
+        flash[:notice] = t('collection_items.updated', :default => "Updated %{item}.", :item => @collection_item.title)
       else
-        flash[:error] = t('collection_items.update_failed', :default => "We couldn't update {{item}}: {{errors}}", :item => @collection_item.title, :errors => @collection_item.errors.each {|attrib, msg| msg}.join(", "))
+        flash[:error] = t('collection_items.update_failed', :default => "We couldn't update %{item}: %{errors}", :item => @collection_item.title, :errors => @collection_item.errors.each {|attrib, msg| msg}.join(", "))
       end
       redirect_to collection_items_path(@collection) and return
     else
@@ -169,7 +169,7 @@ class CollectionItemsController < ApplicationController
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
     @collection_item.destroy
-    flash[:notice] = t('collection_items.destroyed', :default => "Item completely removed from collection {{title}}.", :title => @collection.title)
+    flash[:notice] = t('collection_items.destroyed', :default => "Item completely removed from collection %{title}.", :title => @collection.title)
     if @user
       redirect_to user_collection_items_path(@user) and return
     elsif (@collection.user_is_maintainer?(current_user))

@@ -1,6 +1,6 @@
 <!--page description, messages-->
 <% if @work.unrevealed? %>
-<p class="message"><%= t('.works.unrevealed', :default => "This work is part of an ongoing challenge, {{challenge}}, and will be revealed soon!",
+<p class="message"><%= t('.works.unrevealed', :default => "This work is part of an ongoing challenge, %{challenge}, and will be revealed soon!",
     :challenge => @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) %></p>
 <% end %>
 <!--/descriptions-->

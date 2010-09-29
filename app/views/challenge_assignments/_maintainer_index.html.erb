@@ -106,7 +106,7 @@
           <% if assignment.creation %>
             <%= link_to "Gift posted on #{assignment.creation.published_at}.", assignment.creation %>
             <% if assignment.creation.respond_to?(:word_count) %>
-              <%= t("challenge_assignments.word_count", :default => "({{count}} words)", :count => assignment.creation.word_count) %>
+              <%= t("challenge_assignments.word_count", :default => "(%{count} words)", :count => assignment.creation.word_count) %>
             <% end %>
             <% if !assignment.fulfilled? %>
               <strong>Not yet approved</strong>

@@ -62,12 +62,12 @@ class CollectionParticipantsController < ApplicationController
       @participant = CollectionParticipant.new(:collection => @collection, :pseud => current_user.default_pseud, 
                         :participant_role => CollectionParticipant::NONE)
       @participant.save
-      flash[:notice] = t('applied_to_join_collection', :default => "You have applied to join {{collection}}.", :collection => @collection.title)
+      flash[:notice] = t('applied_to_join_collection', :default => "You have applied to join %{collection}.", :collection => @collection.title)
     else
       participants.each do |participant|
         if participant.is_invited?
           participant approve_membership!
-          flash[:notice] = t('collection_participants.accepted_invite', :default => "You are now a member of {{collection}}.", :collection => @collection.title)
+          flash[:notice] = t('collection_participants.accepted_invite', :default => "You are now a member of %{collection}.", :collection => @collection.title)
           redirect_to(request.env["HTTP_REFERER"] || root_path) and return
         end
       end
@@ -84,16 +84,16 @@ class CollectionParticipantsController < ApplicationController
   
   def update
     if @participant.update_attributes(params[:collection_participant])
-      flash[:notice] = t('collection_participants.update_success', :default => "Updated {{participant}}.", :participant => @participant.pseud.name)
+      flash[:notice] = t('collection_participants.update_success', :default => "Updated %{participant}.", :participant => @participant.pseud.name)
     else
-      flash[:error] = t('collection_participants.update_failure', :default => "Couldn't update {{participant}}.", :participant => @participant.pseud.name)
+      flash[:error] = t('collection_participants.update_failure', :default => "Couldn't update %{participant}.", :participant => @participant.pseud.name)
     end
     redirect_to collection_participants_path(@collection)
   end
   
   def destroy    
     @participant.destroy
-    flash[:notice] = t('collection_participants.destroy', :default => "Removed {{participant}} from collection.", :participant => @participant.pseud.name)
+    flash[:notice] = t('collection_participants.destroy', :default => "Removed %{participant} from collection.", :participant => @participant.pseud.name)
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 

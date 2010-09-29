@@ -20,9 +20,9 @@
 <!--navigation and actions-->
 	<ul class="navigation" role="navigation">
       <% if bookmark_count > 1 %>
-        <li><%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, t('.bookmarks_total_plural', :default=>'Bookmarked {{count}} times', :count=>bookmark_count)) %></li>
+        <li><%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, t('.bookmarks_total_plural', :default=>'Bookmarked %{count} times', :count=>bookmark_count)) %></li>
       <% else %>
-        <li><%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, t('.bookmarks_total_single', :default=>'Bookmarked {{count}} time', :count=>bookmark_count)) %></li>
+        <li><%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, t('.bookmarks_total_single', :default=>'Bookmarked %{count} time', :count=>bookmark_count)) %></li>
       <% end %>
     <% if logged_in? && !is_author_of?(bookmark) %>
        <li><%= bookmark_link(bookmark.bookmarkable, true)%></li>
@@ -51,7 +51,7 @@
 <!--time, bookmarker-->
   <p class="datetime"><%= set_format_for_date(bookmark.created_at) %></p>
   <h5 class="byline">
-    <%= t('.bookmarked_by', :default=>'Bookmarked by {{user}}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
+    <%= t('.bookmarked_by', :default=>'Bookmarked by %{user}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
   </h5>
    
 <!--tags-->

@@ -12,7 +12,7 @@ module CommentsHelper
     else
       title = link_to(commentable.commentable_name, commentable)
     end
-    sanitize_title_for_display t('comments_helper.viewing_comments_on', :default => 'Viewing Comments on {{title}}', :title => title)
+    sanitize_title_for_display t('comments_helper.viewing_comments_on', :default => 'Viewing Comments on %{title}', :title => title)
   end
   
   def last_reply_by(comment)
@@ -85,7 +85,7 @@ module CommentsHelper
       commentable_id = commentable.is_a?(Tag) ? :tag_id : "#{commentable.class.to_s.underscore}_id".to_sym
       commentable_value = commentable.is_a?(Tag) ? commentable.name : commentable.id
       link_to(
-          t('comments_helper.read_many', :default => "Read Comments ({{comment_count}})", :comment_count => commentable.count_visible_comments.to_s),
+          t('comments_helper.read_many', :default => "Read Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s),
           {:url => { :controller => :comments, :action => :show_comments, commentable_id => commentable_value}, :method => :get, :remote => true},
           {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} )
     end
@@ -94,7 +94,7 @@ module CommentsHelper
   def hide_comments_link(commentable)
     commentable_id = commentable.is_a?(Tag) ? :tag_id : "#{commentable.class.to_s.underscore}_id".to_sym
     commentable_value = commentable.is_a?(Tag) ? commentable.name : commentable.id
-    link_to(t('comments_helper.hide_comments', :default => "Hide Comments ({{comment_count}})", :comment_count => commentable.count_visible_comments.to_s), 
+    link_to(t('comments_helper.hide_comments', :default => "Hide Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s), 
       {:url => { :controller => :comments, :action => :hide_comments, commentable_id => commentable_value}, :method => :get, :remote => true },     
       {:href => fallback_url_for_top_level(commentable, {:show_comments => nil})} )
   end

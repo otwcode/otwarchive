@@ -66,11 +66,11 @@ class ChallengeSignup < ActiveRecord::Base
               :default => "You cannot submit any #{prompt_type.pluralize} for this challenge.")
           elsif required == allowed
             errors_to_add << t("challenge_signup.#{prompt_type}_mismatch", 
-              :default => "You must submit exactly {{required}} #{required > 1 ? prompt_type.pluralize : prompt_type} for this challenge. You currently have {{count}}.", 
+              :default => "You must submit exactly %{required} #{required > 1 ? prompt_type.pluralize : prompt_type} for this challenge. You currently have %{count}.", 
               :required => required, :count => count)
           else
             errors_to_add << t("challenge_signup.#{prompt_type}_range_mismatch", 
-              :default => "You must submit between {{required}} and {{allowed}} #{prompt_type.pluralize} to sign up for this challenge. You currently have {{count}}.",
+              :default => "You must submit between %{required} and %{allowed} #{prompt_type.pluralize} to sign up for this challenge. You currently have %{count}.",
               :required => required, :allowed => allowed, :count => count)
           end
         end

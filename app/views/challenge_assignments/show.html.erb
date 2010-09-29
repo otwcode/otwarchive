@@ -7,7 +7,7 @@
   <% request = (@challenge_assignment.request_signup || @challenge_assignment.pinch_request_signup) %>
   <h3>
     <% if request %>
-      <%=h t('.challenge_assignment.view', :default => "Assigned to {{requester}}: {{offerer}}", 
+      <%=h t('.challenge_assignment.view', :default => "Assigned to %{requester}: %{offerer}", 
         :requester => request.pseud.byline, :offerer => @challenge_assignment.offer_byline) %>
     <% else %>
       No Assignment
@@ -16,7 +16,7 @@
 
   <div class="collection preface">
     <% if request %>
-      <h3><%=h t("challenge_assignments.requests_for", :default => "Requests by {{requester}}", :requester => request.pseud.byline) %></h3>
+      <h3><%=h t("challenge_assignments.requests_for", :default => "Requests by %{requester}", :requester => request.pseud.byline) %></h3>
       <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => request} %>
     <% else %>
       <p class="note">No request!</p>
@@ -24,7 +24,7 @@
     <% end %>
     
     <% if @challenge_assignment.offer_signup %>
-      <h3><%=h t("challenge_assignments.offers_for", :default => "Offers from {{offerer}}", :offerer => @challenge_assignment.offer_byline) %></h3>
+      <h3><%=h t("challenge_assignments.offers_for", :default => "Offers from %{offerer}", :offerer => @challenge_assignment.offer_byline) %></h3>
       <%= render :partial => "challenge_signups/show_offers", :locals => {:challenge_signup => @challenge_assignment.offer_signup} %>
     <% elsif @challenge_assignment.pinch_hitter %>
       <p class="note">Pinch Hitter</p>

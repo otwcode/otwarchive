@@ -31,8 +31,8 @@
 				<ul class="navigation">
           <% if admin_post.count_visible_comments > 0 %>
           <li><%= link_to ( admin_post.count_visible_comments == 1 ? 
-                            t("comments.read_one", :default => "Read {{comment_count}} Comment", :comment_count => admin_post.count_visible_comments.to_s) : 
-                            t("comments.read_many", :default => "Read {{comment_count}} Comments", :comment_count => admin_post.count_visible_comments.to_s)),
+                            t("comments.read_one", :default => "Read %{comment_count} Comment", :comment_count => admin_post.count_visible_comments.to_s) : 
+                            t("comments.read_many", :default => "Read %{comment_count} Comments", :comment_count => admin_post.count_visible_comments.to_s)),
                           admin_post_path(:id => admin_post.id, :anchor => "comments", :show_comments => true) %></li> 
           <% end %>
           <li><%= link_to t('.admin_post_comments_add', :default => 'Add Comment'), admin_post_path(:id => admin_post.id, :anchor => "comments", :add_comment => true) %></li>

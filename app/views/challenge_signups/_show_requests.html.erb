@@ -1,6 +1,6 @@
 <!-- expects local variable "challenge_signup" -->
 <% challenge_signup.requests.each_with_index do |request, index| %>
-  <h3><%=h t('.signup.show.request', :default => "Request {{num}}", :num => index+1) %></h3>
+  <h3><%=h t('.signup.show.request', :default => "Request %{num}", :num => index+1) %></h3>
   <div class="wrapper">
     <dl class="collection meta">
       <%= request.url.blank? ? "" : "<dt>URL:</dt><dd>" + link_to(request.url, request.url) + "</dd>" %>

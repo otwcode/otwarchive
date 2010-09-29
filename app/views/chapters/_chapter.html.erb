@@ -45,12 +45,12 @@
     <h3><%=h t('.chapter_notes', :default => 'Notes:') %></h3>
     <% if chapter.notes.blank? %>
       <p>
-        <%= t('.link_to_c_endnotes', :default => "See the end of the chapter for {{notes_link}}.", :notes_link => (link_to t('.notes_link', :default => "notes"), :anchor => "chapter_#{chapter.position.to_s}_endnotes")) %>
+        <%= t('.link_to_c_endnotes', :default => "See the end of the chapter for %{notes_link}.", :notes_link => (link_to t('.notes_link', :default => "notes"), :anchor => "chapter_#{chapter.position.to_s}_endnotes")) %>
       </p>
     <% else %>
       <blockquote class="user-generated-view"><%=sanitize_and_format_for_display chapter.notes %></blockquote>
       <% unless chapter.endnotes.blank? %>
-        <p><%= t('.link_more_c_endnotes', :default => "See the end of the chapter for more {{notes_link}}.", :notes_link => (link_to t('.notes_link', :default => "notes"), :anchor => "chapter_#{chapter.position.to_s}_endnotes")) %>
+        <p><%= t('.link_more_c_endnotes', :default => "See the end of the chapter for more %{notes_link}.", :notes_link => (link_to t('.notes_link', :default => "notes"), :anchor => "chapter_#{chapter.position.to_s}_endnotes")) %>
         </p>
       <% end %>     
     <% end %> 

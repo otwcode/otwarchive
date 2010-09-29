@@ -10,22 +10,22 @@ class Chapter < ActiveRecord::Base
   acts_as_commentable
 
   validates_length_of :title, :allow_blank => true, :maximum => ArchiveConfig.TITLE_MAX, 
-    :too_long => t('title_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long => t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
     
   validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, 
-    :too_long => t('summary_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
   validates_length_of :notes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, 
-    :too_long => t('notes_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => t('notes_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
   validates_length_of :endnotes, :allow_blank => true, :maximum => ArchiveConfig.NOTES_MAX, 
-    :too_long => t('notes_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => t('notes_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
 
 
   validates_presence_of :content
   validates_length_of :content, :minimum => ArchiveConfig.CONTENT_MIN, 
-    :too_short => t('content_too_short', :default => "must be at least {{min}} characters long.", :min => ArchiveConfig.CONTENT_MIN)
+    :too_short => t('content_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.CONTENT_MIN)
 
   validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX, 
-    :too_long => t('content_too_long', :default => "cannot be more than {{max}} characters long.", :max => ArchiveConfig.CONTENT_MAX)
+    :too_long => t('content_too_long', :default => "cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
   
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
   # Can't write to chapter.pseuds until the chapter has an id
@@ -56,7 +56,7 @@ class Chapter < ActiveRecord::Base
   end
   
   def chapter_header
-    t('alt_title', :default => "Chapter {{position}}", :position => self.position)
+    t('alt_title', :default => "Chapter %{position}", :position => self.position)
   end
   
   def chapter_title

@@ -24,13 +24,13 @@ class Skin < ActiveRecord::Base
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true 
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true 
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
-    :too_long => t('icon_alt_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
+    :too_long => t('icon_alt_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
 
   validates_length_of :description, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => t("skin.description_too_long", :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => t("skin.description_too_long", :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
   validates_length_of :css, :allow_blank => true, :maximum => ArchiveConfig.CONTENT_MAX,
-    :too_long => t("skin.css_too_long", :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.CONTENT_MAX)
+    :too_long => t("skin.css_too_long", :default => "must be less than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
 
   validates_attachment_presence :icon, :if => :public?, :message => t('skin.preview_not_set', :default => "should be set for the skin to be public: please take a screencap of your skin in action.")
   

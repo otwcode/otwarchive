@@ -1,4 +1,4 @@
-<h2><%= t('.challenge_signups.enter', :default => "Sign Up For {{title}}", :title => @collection.title) %></h2>
+<h2><%= t('.challenge_signups.enter', :default => "Sign Up For %{title}", :title => @collection.title) %></h2>
 
 <!-- note for FRONT END
 The fields in the form frequently wrap around to a second line. 
@@ -57,7 +57,7 @@ So if anyone can think of a better design for this, that would be awesome
     <% if @challenge.send("#{prompt_type}_num_allowed") > @challenge.send("#{prompt_type}_num_required") %>
       <p class="navigation">
         <%= link_to_add_section(
-             t("challenge_signups.add_prompt", :default => "Add another {{type}}? (Up to {{allowed}} allowed.)", :type => prompt_type.singularize, :allowed => @challenge.send("#{prompt_type}_num_allowed")), 
+             t("challenge_signups.add_prompt", :default => "Add another %{type}? (Up to %{allowed} allowed.)", :type => prompt_type.singularize, :allowed => @challenge.send("#{prompt_type}_num_allowed")), 
              signup_form, prompt_type.to_sym, "prompts/prompt_form", {:is_offer => (prompt_type == "offers"), :required => false}) 
         %>
       </p>

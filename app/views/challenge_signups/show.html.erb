@@ -4,7 +4,7 @@
   <!--subnavigation, sorting and actions-->
   <!--/subnav-->
   <!--main content-->
-  <h3><%= t('.challenge_signups.view', :default => "Signup for {{person}}", :person => @challenge_signup.pseud.byline) %></h3>
+  <h3><%= t('.challenge_signups.view', :default => "Signup for %{person}", :person => @challenge_signup.pseud.byline) %></h3>
 
   <div class="collection preface">
     <%= render :partial => "show_requests", :locals => {:challenge_signup => @challenge_signup} %>

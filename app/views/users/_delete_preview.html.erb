@@ -31,11 +31,11 @@
 	<legend><%= t('.users.by_self', :default => "Works and Collections You Made By Yourself") %></legend>
 <p>
   <% unless @sole_authored_works.empty? %>
-    <%= t('.users.sole_authored_works', :default => "You have {{num_sole_authored}} work(s) under the following pseuds: {{pseuds}}.", :num_sole_authored => @sole_authored_works.size, :pseuds => print_pseuds(@user)) %>
+    <%= t('.users.sole_authored_works', :default => "You have %{num_sole_authored} work(s) under the following pseuds: %{pseuds}.", :num_sole_authored => @sole_authored_works.size, :pseuds => print_pseuds(@user)) %>
   <% end %>
   <% unless @sole_owned_collections.empty? %>
     <% unless @sole_authored_works.empty? %><br /><% end %>
-    <%= t('.users.sole_owned_collections', :default => "You have {{num_sole_collections}} collection(s) under the following pseuds: {{pseuds}}.", 
+    <%= t('.users.sole_owned_collections', :default => "You have %{num_sole_collections} collection(s) under the following pseuds: %{pseuds}.", 
             :num_sole_collections => @sole_owned_collections.size, 
             :pseuds => @sole_owned_collections.collect(&:all_owners).flatten.uniq.collect(&:name).join(", ")) %>
   <% end %>

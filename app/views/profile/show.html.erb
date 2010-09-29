@@ -2,8 +2,8 @@
   <%= render :partial => 'users/header', :locals => {:user => @user} %>
 
 <div class="user module">
-<h3><%=h t('.about', :default => "About {{name}}", :name => @user.login) %></h3>
-<p class="datetime"><%= t('.member_since', :default => "Member since: {{date}}", :date => l(@user.created_at.to_date)) %></p>
+<h3><%=h t('.about', :default => "About %{name}", :name => @user.login) %></h3>
+<p class="datetime"><%= t('.member_since', :default => "Member since: %{date}", :date => l(@user.created_at.to_date)) %></p>
 <h4><%=h @user.profile.title %></h4>
 <div class="wrapper">
   <dl class="user meta">

@@ -8,7 +8,7 @@
   <%= form.submit t('.forms.update', :default => "Update") %>
   <% end %>
   <%= button_to t('.participant_remove', :default => "Remove"), collection_participant_path(@collection, participant), 
-    :confirm => t('.participant_confirm_delete', :default => 'Are you certain you want to remove {{participant}}?', 
+    :confirm => t('.participant_confirm_delete', :default => 'Are you certain you want to remove %{participant}?', 
               :participant => participant.pseud.name), 
               :method => :delete %>
 </td>

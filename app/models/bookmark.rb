@@ -8,7 +8,7 @@ class Bookmark < ActiveRecord::Base
   has_many :collections, :through => :collection_items
 
   validates_length_of :notes, 
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
 
   default_scope :order => "bookmarks.id DESC" # id's stand in for creation date
   

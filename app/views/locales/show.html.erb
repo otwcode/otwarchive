@@ -5,7 +5,7 @@
 <!--subnav-->
 
 <ul>
-  <li><%= link_to t('.translator_count', :default => "{{count}} translators", :count => @locale.has_translators.size), locale_translators_path(@locale) %></li>
+  <li><%= link_to t('.translator_count', :default => "%{count} translators", :count => @locale.has_translators.size), locale_translators_path(@locale) %></li>
   <li><%= link_to t('.volunteer', :default => 'volunteer!'), new_feedback_report_path %></li>
 </ul>
 

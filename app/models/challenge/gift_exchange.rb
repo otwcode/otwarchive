@@ -17,7 +17,7 @@ class GiftExchange < ActiveRecord::Base
 
   validates_length_of :signup_instructions_general, :signup_instructions_requests, :signup_instructions_offers, { 
     :allow_blank => true,
-    :maximum => ArchiveConfig.INFO_MAX, :too_long => t('gift_exchange.instructions_too_long', :default => "must be less than {{max}} letters long.", :max => ArchiveConfig.INFO_MAX)
+    :maximum => ArchiveConfig.INFO_MAX, :too_long => t('gift_exchange.instructions_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.INFO_MAX)
   }
 
   %w(requests_num_required offers_num_required requests_num_allowed offers_num_allowed).each do |prompt_limit_field|

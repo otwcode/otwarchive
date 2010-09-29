@@ -1,6 +1,6 @@
 <h3><%= t('.remove_link', :default => 'Remove Link') %></h3>
 
-<p><%= t('.removal_description', :default => 'Would you like to remove the link from your work {{link_to_your_work}} to {{link_to_their_work}} by {{link_to_author}}?',  
+<p><%= t('.removal_description', :default => 'Would you like to remove the link from your work %{link_to_your_work} to %{link_to_their_work} by %{link_to_author}?',  
           :link_to_your_work => link_to(related_work.parent.title, related_work.parent),
           :link_to_their_work => link_to(related_work.work.title, related_work.work),
           :link_to_author => byline(related_work.work)) %></p>

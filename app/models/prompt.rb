@@ -60,15 +60,15 @@ class Prompt < ActiveRecord::Base
               "(#{tag_count}) -- " + taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
           if allowed == 0
             errors.add_to_base(t("tag_set.#{prompt_type}_#{tag_type}_not_allowed",
-              :default => "#{prompt_type} cannot include any #{tag_type} tags. You currently have {{taglist}}.",
+              :default => "#{prompt_type} cannot include any #{tag_type} tags. You currently have %{taglist}.",
               :taglist => taglist_string))
           elsif required == allowed
             errors.add_to_base(t("tag_set.#{prompt_type}_#{tag_type}_mismatch",
-              :default => "#{prompt_type} must have exactly {{required}} #{tag_type} tags. You currently have {{taglist}}.",
+              :default => "#{prompt_type} must have exactly %{required} #{tag_type} tags. You currently have %{taglist}.",
               :required => required, :taglist => taglist_string))
           else
             errors.add_to_base(t("tag_set.#{prompt_type}_#{tag_type}_range_mismatch",
-              :default => "#{prompt_type} must have between {{required}} and {{allowed}} #{tag_type} tags. You currently have {{taglist}}.",
+              :default => "#{prompt_type} must have between %{required} and %{allowed} #{tag_type} tags. You currently have %{taglist}.",
               :required => required, :allowed => allowed, :taglist => taglist_string))
           end
         end
@@ -87,7 +87,7 @@ class Prompt < ActiveRecord::Base
           taglist = tag_set ? (eval("tag_set.#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)) : []
           unless taglist.empty?
             errors.add_to_base(t("tag_set.specific_#{tag_type}_tags_not_allowed",
-              :default => "These tags are not allowed in this challenge: {{taglist}}",
+              :default => "These tags are not allowed in this challenge: %{taglist}",
               :taglist => taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
         end

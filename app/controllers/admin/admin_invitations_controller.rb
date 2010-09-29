@@ -15,7 +15,7 @@ class Admin::AdminInvitationsController < ApplicationController
       flash[:error] = t('no_email', :default => "Please enter an email address.")
       render :action => 'index'      
     elsif @invitation.save
-      flash[:notice] = t('sent', :default => "An invitation was sent to {{email_address}}", :email_address => @invitation.invitee_email)
+      flash[:notice] = t('sent', :default => "An invitation was sent to %{email_address}", :email_address => @invitation.invitee_email)
       redirect_to admin_invitations_url
     else
       render :action => 'index'
@@ -27,7 +27,7 @@ class Admin::AdminInvitationsController < ApplicationController
       request.invite_and_remove(current_admin)
     end
     InviteRequest.reset_order  
-    flash[:notice] = t('invited_from_queue', :default => "{{count}} people from the invite queue were invited.", :count => params[:invite_from_queue].to_i)
+    flash[:notice] = t('invited_from_queue', :default => "%{count} people from the invite queue were invited.", :count => params[:invite_from_queue].to_i)
     redirect_to admin_invitations_url
   end
   

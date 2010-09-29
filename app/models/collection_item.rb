@@ -35,7 +35,7 @@ class CollectionItem < ActiveRecord::Base
   validate :collection_is_open, :on => :create
   def collection_is_open
     if self.new_record? && self.collection && self.collection.closed?
-      errors.add_to_base t('collection_preferences.closed', :default => "Collection {{title}} is currently closed.", :title => self.collection.title) 
+      errors.add_to_base t('collection_preferences.closed', :default => "Collection %{title} is currently closed.", :title => self.collection.title) 
     end
   end
   

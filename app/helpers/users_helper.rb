@@ -55,18 +55,18 @@ module UsersHelper
   def print_bookmarks_link(user)
     total = logged_in_as_admin? ? @user.bookmarks.count : @user.bookmarks.visible.size
     if @user == current_user
-	  span_if_current t('users_helper.my_bookmarks', :default => "My Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
+	  span_if_current t('users_helper.my_bookmarks', :default => "My Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
 	else
-	  span_if_current t('users_helper.bookmarks', :default => "Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
+	  span_if_current t('users_helper.bookmarks', :default => "Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
 	end
   end
 	
   def print_pseud_bookmarks_link(pseud)
     total = logged_in_as_admin? ? pseud.bookmarks.count : pseud.bookmarks.visible.size
     if @user == current_user
-	  span_if_current t('users_helper.my_pseud_bookmarks', :default => "My Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
+	  span_if_current t('users_helper.my_pseud_bookmarks', :default => "My Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
 	else
-	  span_if_current t('users_helper.pseud_bookmarks', :default => "Bookmarks ({{bookmark_number}})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
+	  span_if_current t('users_helper.pseud_bookmarks', :default => "Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
 	end
   end
   
@@ -75,18 +75,18 @@ module UsersHelper
   def print_works_link(user)
     total = user.visible_work_count
     if @user == current_user
-	  span_if_current t('users_helper.my_works', :default => "My Works ({{works_number}})", :works_number => total.to_s), user_works_path(@user)
+	  span_if_current t('users_helper.my_works', :default => "My Works (%{works_number})", :works_number => total.to_s), user_works_path(@user)
 	else
-	  span_if_current t('users_helper.works', :default => "Works ({{works_number}})", :works_number => total.to_s), user_works_path(@user)
+	  span_if_current t('users_helper.works', :default => "Works (%{works_number})", :works_number => total.to_s), user_works_path(@user)
 	end
   end
   
   def print_pseud_works_link(pseud)
     total = pseud.visible_works_count
     if @user == current_user
-	  span_if_current t('users_helper.my_works', :default => "My Works ({{works_number}})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
+	  span_if_current t('users_helper.my_works', :default => "My Works (%{works_number})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
 	else
-	  span_if_current t('users_helper.works', :default => "Works ({{works_number}})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
+	  span_if_current t('users_helper.works', :default => "Works (%{works_number})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
 	end
   end
 
@@ -98,9 +98,9 @@ module UsersHelper
       total = Series.visible_logged_in.exclude_anonymous.for_pseuds(user.pseuds).length
     end
     if @user == current_user
-  	  span_if_current t('users_helper.my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
+  	  span_if_current t('users_helper.my_series', :default => "My Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
   	else
-  	  span_if_current t('users_helper.series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_series_index_path(@user)
+  	  span_if_current t('users_helper.series', :default => "Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
   	end
   end
   
@@ -111,9 +111,9 @@ module UsersHelper
       total = Series.visible_logged_in.exclude_anonymous.for_pseuds([pseud]).length
     end
   	if @user == current_user
-  	  span_if_current t('users_helper.my_series', :default => "My Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+  	  span_if_current t('users_helper.my_series', :default => "My Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
   	else
-  	  span_if_current t('users_helper.series', :default => "Series ({{series_number}})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+  	  span_if_current t('users_helper.series', :default => "Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
   	end
   end
 

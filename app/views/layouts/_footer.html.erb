@@ -17,7 +17,7 @@
     <% end %>
     <li>&#8212; <a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a> <%=h t('.layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
     <% unless ArchiveConfig.REVISION.blank? %>
-      <li>&#8212; <%= link_to t('.revision', :default => 'OTWArchive r{{rev_number}}', :rev_number => ArchiveConfig.REVISION), "http://code.google.com/p/otwarchive/source/browse/?r=#{ArchiveConfig.REVISION}#svn/trunk" %></li>
+      <li>&#8212; <%= link_to t('.revision', :default => 'OTWArchive r%{rev_number}', :rev_number => ArchiveConfig.REVISION), "http://code.google.com/p/otwarchive/source/browse/?r=#{ArchiveConfig.REVISION}#svn/trunk" %></li>
     <% end %>
   </ul>
 </div>

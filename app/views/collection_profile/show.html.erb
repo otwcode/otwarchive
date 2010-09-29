@@ -2,8 +2,8 @@
   <%= render :partial => 'collections/header', :locals => {:collection => @collection} %>
 
 <div class="collection module">
-  <h3><%=h t('.about', :default => "About {{name}}", :name => sanitize_title_for_display(@collection.title) +  ((@collection.title != @collection.name) ? " (#{@collection.name})" : "")) %></h3>
-  <p class="datetime"><%= t('.active_since', :default => "Active since: {{date}}", :date => l(@collection.created_at.to_date)) %></p>
+  <h3><%=h t('.about', :default => "About %{name}", :name => sanitize_title_for_display(@collection.title) +  ((@collection.title != @collection.name) ? " (#{@collection.name})" : "")) %></h3>
+  <p class="datetime"><%= t('.active_since', :default => "Active since: %{date}", :date => l(@collection.created_at.to_date)) %></p>
   <div class="wrapper">
     <dl class="collection meta">
       <dt><%=h t('.collections.owners', :default => "Maintainers:") %></dt>

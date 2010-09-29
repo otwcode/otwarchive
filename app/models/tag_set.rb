@@ -62,7 +62,7 @@ class TagSet < ActiveRecord::Base
     uncanonical_tags = self.taglist.reject {|tag| tag.canonical}
     unless uncanonical_tags.empty?
       errors.add(:tagnames, t('tag_set.must_be_canonical', 
-                :default => "^The following tags aren't canonical and can't be used: {{taglist}}", 
+                :default => "^The following tags aren't canonical and can't be used: %{taglist}", 
                 :taglist => uncanonical_tags.collect(&:name).join(", ") ))
     end
     
@@ -70,7 +70,7 @@ class TagSet < ActiveRecord::Base
       uncanonical_tags = eval("#{type}_taglist").reject {|tag| tag.canonical}
       unless uncanonical_tags.empty?
         errors.add("#{type}_tagnames", t("tag_set.#{type}_must_be_canonical", 
-                  :default => "^The following #{type} tags aren't canonical and can't be used: {{taglist}}", 
+                  :default => "^The following #{type} tags aren't canonical and can't be used: %{taglist}", 
                   :taglist => uncanonical_tags.collect(&:name).join(", ") ))
       end
     end

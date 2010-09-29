@@ -2,7 +2,7 @@
 <% @bookmark ||= Bookmark.new %>
 <div id="bookmark-form">
 <% if @bookmark.new_record? && bookmarkable.class != ExternalWork %>
-  <h4><%=h t('.bookmark_add_new', :default => 'Add a new bookmark for "{{title}}"', :title => bookmarkable.title) %></h4>
+  <h4><%=h t('.bookmark_add_new', :default => 'Add a new bookmark for "%{title}"', :title => bookmarkable.title) %></h4>
   <% elsif bookmarkable.class == ExternalWork && !@bookmark.new_record? %>
   <h4><%=h t('.bookmark_add_new_external', :default => 'Add a new bookmark for an external work') %></h4>
 <% end %>
@@ -53,7 +53,7 @@
   </fieldset>
   <fieldset>
     <legend>Work Tags</legend>
-    <p><%= t('.authors_tags', :default => "Author's Tags (comma separated, {{max}} characters per tag). Please note that only fandom is required.", :max => ArchiveConfig.TAG_MAX) %>
+    <p><%= t('.authors_tags', :default => "Author's Tags (comma separated, %{max} characters per tag). Please note that only fandom is required.", :max => ArchiveConfig.TAG_MAX) %>
     <%= link_to_help "tagging-help" %></p>
   <dl>
     <dt>
@@ -108,7 +108,7 @@
     <%= f.text_field :tag_string, :size => 80 %>
     <%= autocomplete_text_field "bookmark_tag_string" %>
     <p class="character_counter">
-      <%=h t("user_tags", :default => "Comma separated, {{max}} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
+      <%=h t("user_tags", :default => "Comma separated, %{max} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
     </p>
   </dd>
 </dl>

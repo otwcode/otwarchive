@@ -4,7 +4,7 @@
   <%= form_for(:collection_item, collection_item, :url => {:controller => "collection_items", :action => "update"}) do |form| %>
     <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
     <%= link_to(
-      collection_item.item_type == "Bookmark" ? t('.collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.title) : 
+      collection_item.item_type == "Bookmark" ? t('.collection_items.bookmark', :default => "Bookmark for %{title}", :title => collection_item.title) : 
       collection_item.title + (!collection_item.item.posted? ? t('.collection_items.draft', :default => "(draft)") : ""), collection_item.item) %>
 </th>
 <% unless @user %>
@@ -38,9 +38,9 @@
   <% end %> 
   <%= button_to t('.item_remove', :default => "Remove"), 
                 @user ? user_collection_item_path(@user, collection_item) : collection_item_path(collection_item.collection, collection_item), 
-                :confirm => t('.item_confirm_delete', :default => 'Are you certain you want to entirely remove {{item}} from the collection?', 
+                :confirm => t('.item_confirm_delete', :default => 'Are you certain you want to entirely remove %{item} from the collection?', 
                 :item => collection_item.item_type == "Bookmark" ? 
-                t('.collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.item.bookmarkable.title) : 
+                t('.collection_items.bookmark', :default => "Bookmark for %{title}", :title => collection_item.item.bookmarkable.title) : 
                 collection_item.item.title), 
                 :method => :delete %>
 </td>

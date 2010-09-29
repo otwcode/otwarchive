@@ -100,7 +100,7 @@ module TagsHelper
 
   # Link to show tags if they're currently hidden
   def show_hidden_tags_link(creation, tag_type)
-    text = t('tags_helper.show_tag_type', :default => "Show {{tag_type}}", :tag_type => (tag_type == 'freeforms' ? "additional tags" : tag_type))
+    text = t('tags_helper.show_tag_type', :default => "Show %{tag_type}", :tag_type => (tag_type == 'freeforms' ? "additional tags" : tag_type))
     url = {:controller => 'tags', :action => 'show_hidden', :creation_type => creation.class.to_s, :creation_id => creation.id, :tag_type => tag_type }
     link_to text, :url => url, :method => :get, :remote => true
   end

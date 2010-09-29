@@ -9,7 +9,7 @@
   <%= link_to t('.clear_history', :default => 'Clear Viewing History'), clear_user_readings_path(current_user), :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :post %>
   </li>
   <li>
-  <%= t('.readings_options', :default => "You can disable your viewing history in {{preferences_link}}", :preferences_link => (link_to t('.user_preferences', :default => "Preferences"), user_preferences_path(@user))) %>
+  <%= t('.readings_options', :default => "You can disable your viewing history in %{preferences_link}", :preferences_link => (link_to t('.user_preferences', :default => "Preferences"), user_preferences_path(@user))) %>
   </li>
 </ul>
 <% end %>

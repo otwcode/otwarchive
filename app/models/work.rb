@@ -91,26 +91,26 @@ class Work < ActiveRecord::Base
   validates_presence_of :title
   validates_length_of :title,
     :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> t('title_too_short', :default => "must be at least {{min}} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> t('title_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title,
     :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> t('title_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
 
   validates_length_of :summary,
     :allow_blank => true,
     :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => t('summary_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
   validates_length_of :notes,
     :allow_blank => true,
     :maximum => ArchiveConfig.NOTES_MAX,
-    :too_long => t('notes_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => t('notes_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
 
   validates_length_of :endnotes,
     :allow_blank => true,
     :maximum => ArchiveConfig.NOTES_MAX,
-    :too_long => t('notes_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => t('notes_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
 
   # Checks that work has at least one author
   def validate_authors
@@ -122,7 +122,7 @@ class Work < ActiveRecord::Base
         self.authors_to_sort_on = self.sorted_pseuds
       end
     elsif !self.invalid_pseuds.blank?
-      errors.add_to_base(t('invalid_pseuds', :default => "These pseuds are invalid: {{pseuds}}", :pseuds => self.invalid_pseuds.inspect))
+      errors.add_to_base(t('invalid_pseuds', :default => "These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
     else
       self.authors_to_sort_on = self.sorted_authors
     end
@@ -133,7 +133,7 @@ class Work < ActiveRecord::Base
     unless self.title.blank?
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
-        errors.add_to_base(t('leading_spaces', :default => "Title must be at least {{min}} characters long without leading spaces.", :min => ArchiveConfig.TITLE_MIN))
+        errors.add_to_base(t('leading_spaces', :default => "Title must be at least %{min} characters long without leading spaces.", :min => ArchiveConfig.TITLE_MIN))
         return false
       else
         self.title_to_sort_on = self.sorted_title

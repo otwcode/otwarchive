@@ -23,7 +23,7 @@
     </dd>
     
 	  <dt><%= f.label :comment, t('.describe_problem', :default => "Describe your concern (required):") %></dt>
-    <dd><%= t('.explain', :default => "Please include all relevant URLs and what about the content violates the Archive {{tos_link}}.", :tos_link => (link_to t('.tos_link', :default => "Terms of Service"), tos_path)) %></dd>
+    <dd><%= t('.explain', :default => "Please include all relevant URLs and what about the content violates the Archive %{tos_link}.", :tos_link => (link_to t('.tos_link', :default => "Terms of Service"), tos_path)) %></dd>
     <dd><%= f.text_area :comment, :cols => 60 %></dd>
     <%= live_validation_for_field('abuse_report_comment', :failureMessage => 'Please describe your concern') %>
     	

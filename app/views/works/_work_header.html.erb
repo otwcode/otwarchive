@@ -99,7 +99,7 @@
       <div class="notes module" role="complementary">
       <h3><%=h t('.work_header.notes', :default => "Notes:") %></h3>
         <% if !@work.recipients.blank? %>
-          <h4 class="inline"><%= t('.work_header.recipients', :default => "For {{recipients}}.", :recipients => recipients_link(@work)) %></h4>
+          <h4 class="inline"><%= t('.work_header.recipients', :default => "For %{recipients}.", :recipients => recipients_link(@work)) %></h4>
         <% end %>
     <% unless @work.parents.blank? %>
         <% for related_work in @work.parent_work_relationships %>
@@ -122,7 +122,7 @@
       <% for related_work in @work.approved_related_works %>
         <% if related_work.translation %>
           <h4>
-          <%=h t('.translation', :default => 'Translation into {{language}} available: ', :language => related_work.work.language.name) %>
+          <%=h t('.translation', :default => 'Translation into %{language} available: ', :language => related_work.work.language.name) %>
           <%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %>
           </h4>
         <% else %><% if @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? %>
@@ -132,12 +132,12 @@
     <% end %>
     <% unless @work.notes.blank? && @work.endnotes.blank? %>
     <% if @work.notes.blank? %>
-        <span class="endnotes-link"><%= t('.link_to_endnotes', :default => "See the end of the work for more {{notes_link}}.", :notes_link => (link_to t('.notes_link', :default => "notes"), linkpath)) %></span>
+        <span class="endnotes-link"><%= t('.link_to_endnotes', :default => "See the end of the work for more %{notes_link}.", :notes_link => (link_to t('.notes_link', :default => "notes"), linkpath)) %></span>
     <% else %>
         <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@work.notes) %></blockquote>
         <% unless @work.endnotes.blank? %>
           <span class="endnotes-link">
-          <%= t('.work_header.link_more_endnotes', :default => "See the end of the work for more {{notes_link}}.",
+          <%= t('.work_header.link_more_endnotes', :default => "See the end of the work for more %{notes_link}.",
                                     :notes_link => link_to( t('.notes_link', :default => 'notes'), linkpath)) %>
           </span>
         <% end %>

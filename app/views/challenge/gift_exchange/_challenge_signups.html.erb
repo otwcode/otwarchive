@@ -42,12 +42,12 @@
     <th rowspan=2>Email</th>
     <% @challenge.requests_num_allowed.times do |i| %>
     <th colspan=<%= (num_request_tag_categories + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) %>>
-      <%= t("gift_exchange.request_number", :default => "Request {{num}}", :num => i+1) %>
+      <%= t("gift_exchange.request_number", :default => "Request %{num}", :num => i+1) %>
     </th>
     <% end %>
     <% @challenge.offers_num_allowed.times do |i| %>
     <th colspan=<%= (num_offer_tag_categories + (show_offer_description ? 1 : 0 ) + (show_offer_url ? 1 : 0)) %>>
-      <%= t("gift_exchange.offer_number", :default => "Offer {{num}}", :num => i+1) %></th>
+      <%= t("gift_exchange.offer_number", :default => "Offer %{num}", :num => i+1) %></th>
     <% end %>
   </tr>
 

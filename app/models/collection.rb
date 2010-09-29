@@ -88,7 +88,7 @@ class Collection < ActiveRecord::Base
 
   def parent_exists
     unless parent_name.blank? || Collection.find_by_name(parent_name)
-      errors.add_to_base(t('collection.no_parent', :default => "We couldn't find a collection with name {{name}}.", :name => parent_name))
+      errors.add_to_base(t('collection.no_parent', :default => "We couldn't find a collection with name %{name}.", :name => parent_name))
     end
   end
 
@@ -96,7 +96,7 @@ class Collection < ActiveRecord::Base
     if parent && parent == self
       errors.add_to_base(t('collection.no_self_parenting', :default => "Collections are not self-parenting."))
     elsif parent && !parent.user_is_maintainer?(User.current_user)
-      errors.add_to_base(t('collections.not_allowed_subcollection', :default => "You don't have permission to work on a subcollection of {{name}}.", :name => parent.name))
+      errors.add_to_base(t('collections.not_allowed_subcollection', :default => "You don't have permission to work on a subcollection of %{name}.", :name => parent.name))
     end
   end
    
@@ -106,10 +106,10 @@ class Collection < ActiveRecord::Base
   validates_uniqueness_of :name, :case_sensitive => false, :message => t('collection.duplicate_name', :default => 'Sorry, that name is already taken. Try again, please!')
   validates_length_of :name,
     :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> t('title_too_short', :default => "must be at least {{min}} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> t('title_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
   validates_length_of :name,
     :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> t('title_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validates_format_of :name, 
     :message => t('collection.name_invalid', :default => 'must begin and end with a letter or number; it may also contain underscores but no other characters.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
@@ -120,15 +120,15 @@ class Collection < ActiveRecord::Base
   validates_presence_of :title, :message => t('collection.no_title', :default => "Please enter a title to be displayed for your collection.")
   validates_length_of :title,
     :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> t('title_too_short', :default => "must be at least {{min}} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> t('title_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
   validates_length_of :title,
     :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> t('title_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
 
   validates_length_of :description,
     :allow_blank => true,
     :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => t('summary_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
   validates_format_of :header_image_url, :allow_blank => true, :with => URI::regexp(%w(http https)), :message => t('collection.url_invalid', :default => "Not a valid URL.")
   validates_format_of :header_image_url, :allow_blank => true, :with => /\.(png|gif|jpg)$/, :message => t('collection.image_invalid', :default => "Only gif, jpg, png files allowed.")

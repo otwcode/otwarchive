@@ -15,7 +15,7 @@ class Comment < ActiveRecord::Base
   validates_presence_of :content
   validates_length_of :content, 
     :maximum => ArchiveConfig.COMMENT_MAX, 
-    :too_long => t('invalid_content_length', :default => "must be less than {{count}} letters long.", :count => ArchiveConfig.COMMENT_MAX)
+    :too_long => t('invalid_content_length', :default => "must be less than %{count} letters long.", :count => ArchiveConfig.COMMENT_MAX)
 
   def validate
     errors.add_to_base(t('invalid_spam', :default => "This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam

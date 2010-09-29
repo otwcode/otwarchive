@@ -626,10 +626,10 @@ public
 
     # make sure we're not importing too many at once
     if params[:import_multiple] == "works" && (!current_user.archivist && @urls.length > ArchiveConfig.IMPORT_MAX_WORKS || @urls.length > ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST)
-      flash.now[:error] = t('too_many_works', :default => "You cannot import more than {{max}} works at a time.", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
+      flash.now[:error] = t('too_many_works', :default => "You cannot import more than %{max} works at a time.", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
       render :new_import and return
     elsif params[:import_multiple] == "chapters" && @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
-      flash.now[:error] = t('too_many_chapters', :default => "You cannot import more than {{max}} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
+      flash.now[:error] = t('too_many_chapters', :default => "You cannot import more than %{max} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
       render :new_import and return
     end
 
@@ -674,7 +674,7 @@ public
         flash[:error] = t('timed_out', :default => "Sorry, but we timed out trying to get that URL. If the site seems to be down, you can try again later.")
         render :new_import and return
       rescue Exception => exception
-        flash[:error] = t('upload_failed', :default => "We couldn't successfully import that story, sorry: {{message}}", :message => exception.message)
+        flash[:error] = t('upload_failed', :default => "We couldn't successfully import that story, sorry: %{message}", :message => exception.message)
         render :new_import and return
       end
     end
@@ -772,11 +772,11 @@ public
     @works.each do |work|
       # actual stuff will happen here shortly
       unless work.update_attributes!(params[:work].reject {|key,value| value.blank?})
-        @errors << t('update_multiple.problem', :default => "The work {{title}} could not be edited: {{error}}", :title => work.title, :error => work.errors_on.to_s)
+        @errors << t('update_multiple.problem', :default => "The work %{title} could not be edited: %{error}", :title => work.title, :error => work.errors_on.to_s)
       end
     end
     unless @errors.empty?
-      flash[:error] = t('update_multiple.error_message', :default => "There were problems editing some works: {{errors}}", :errors => @errors.join(", "))
+      flash[:error] = t('update_multiple.error_message', :default => "There were problems editing some works: %{errors}", :errors => @errors.join(", "))
     end
     redirect_to show_multiple_user_works_path(@user)
   end

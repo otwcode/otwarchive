@@ -48,7 +48,7 @@ class ChaptersController < ApplicationController
       @commentable = @work
       @comments = @chapter.comments
       
-      @page_title = @work.unrevealed? ? t('works.mystery_chapter_title', :default => "Mystery Work - Chapter {{position}}", :position => @chapter.position.to_s) : 
+      @page_title = @work.unrevealed? ? t('works.mystery_chapter_title', :default => "Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) : 
         get_page_title(@work.fandoms.string, 
           @work.anonymous? ? t('chapters.anonymous', :default => "Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '), 
           @work.title + " - Chapter " + @chapter.position.to_s)

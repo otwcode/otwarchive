@@ -37,10 +37,10 @@
   
   <p>
     <%= radio_button_tag "import_multiple", "works", true %>
-    <%= label_tag "import_multiple_works", t('.import.works', :default => "Works (limit of {{max}})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
+    <%= label_tag "import_multiple_works", t('.import.works', :default => "Works (limit of %{max})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
     <br />
     <%= radio_button_tag "import_multiple", "chapters" %>
-    <%= label_tag "import_multiple_chapters", t('.import.chapters', :default => "Chapters in a single work (limit of {{max}})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) %>
+    <%= label_tag "import_multiple_chapters", t('.import.chapters', :default => "Chapters in a single work (limit of %{max})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) %>
   </p>
   
   <% if current_user.archivist %>

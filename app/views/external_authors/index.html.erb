@@ -1,5 +1,5 @@
 <% if @user && current_user == @user %>
-<h2><%= t('.external_authors_for', :default => "External author identities for {{user}}", :user => @user.login) %></h2>
+<h2><%= t('.external_authors_for', :default => "External author identities for %{user}", :user => @user.login) %></h2>
 
   <p>
     <%= t('.external_authors_explanation', 

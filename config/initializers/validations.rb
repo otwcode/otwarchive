@@ -22,7 +22,7 @@ https?:// # http:// or https://
   @@is_valid_url_format_msg = t('lib.invalid_url_error', :default => "does not appear to be a valid URL.")
   @@is_active_url_msg = t('lib.inactive_url_error', :default => "could not be reached. If the URL is correct and the site is currently down, please try again later.")
   @@is_active_url_timeout = 15 # seconds
-  @@is_canonical_tag_msg = t('initializers.canonical_tag_error', :default => "include the following noncanonical tags: {{value}}")
+  @@is_canonical_tag_msg = t('initializers.canonical_tag_error', :default => "include the following noncanonical tags: %{value}")
   
   # Here's where we define the added validations
   def self.validates_url_format_of(*attr_names)

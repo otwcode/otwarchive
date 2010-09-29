@@ -61,7 +61,7 @@ class Admin::AdminUsersController < ApplicationController
         flash[:notice] = t('successfully_updated', :default => 'User was successfully updated.')
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
-        flash[:error] = t('error_updating', :default => 'There was an error updating user {{name}}', :name => params[:user][:login])
+        flash[:error] = t('error_updating', :default => 'There was an error updating user %{name}', :name => params[:user][:login])
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       end
     elsif params[:admin_action]
@@ -198,7 +198,7 @@ class Admin::AdminUsersController < ApplicationController
     
     AdminMailer.deliver_archive_notification(current_admin.login, @users, @subject, @message)
     
-    flash[:notice] = t('sent', :default => "Notification sent to {{count}} user(s).", :count => @users.size)
+    flash[:notice] = t('sent', :default => "Notification sent to %{count} user(s).", :count => @users.size)
     redirect_to :action => :notify
   end
 

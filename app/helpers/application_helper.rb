@@ -89,7 +89,7 @@ module ApplicationHelper
         archivists[pseud].nil? ? 
           link_to(pseud.byline, [pseud.user, pseud], :class => "login author") : 
           archivists[pseud] + 
-            t('application_helper.byline.archived_by', :default => "[archived by {{archivist}}]", 
+            t('application_helper.byline.archived_by', :default => "[archived by %{archivist}]", 
               :archivist => link_to(pseud.byline, [pseud.user, pseud], :class => "login author"))
       }.join(', ')
     end
