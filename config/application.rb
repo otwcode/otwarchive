@@ -14,7 +14,7 @@ module Otwarchive
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
-    config.autoload_paths << File.join(config.root, "lib")
+    config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += %W(#{config.root}/app/sweepers)
     config.autoload_paths += %W(#{config.root}/app/challenge)
     
@@ -42,7 +42,7 @@ module Otwarchive
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password]
+    config.filter_parameters += [:content, :password, :terms_of_service_non_production]
     
     
     ### things I'm preserving here from our Rails 2 environment.rb that we might or might not need

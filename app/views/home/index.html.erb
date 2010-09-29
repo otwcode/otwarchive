@@ -11,14 +11,14 @@
 
 <%- unless logged_in? || logged_in_as_admin? -%>
   <div id="home-signin">
-  <%= render :partial => 'session/login' -%>
+  <%= render :partial => 'user_sessions/login' -%>
   </div>
 <%- end -%>
 
 <div id="home-header">
 	<div id="login-block">
     <%- if logged_in? || logged_in_as_admin? -%>
-      <%= render :partial => 'session/greeting' -%>
+      <%= render :partial => 'user_sessions/greeting' -%>
     <% end -%>
     <%= render :partial => 'works/search_box' %>
   </div>

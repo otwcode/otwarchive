@@ -52,13 +52,20 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
   
-  match '/admin/login' => 'admin/admin_session#new', :as => 'admin_login' 
-  match '/admin/logout' => 'admin/admin_session#destroy', :as => 'admin_logout'
+  resources :admin_sessions
+
+  match '/admin/login' => 'admin_sessions#new' 
+  match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
     resources :settings
     resources :approve_skins
-    resources :skins
+    resources :skins do
+      collection do
+        get :index_rejected
+        get :index_approved
+      end
+    end
     resources :user_creations do
       member do
         get :hide
@@ -77,7 +84,6 @@ Otwarchive::Application.routes.draw do
         get :find
       end
     end
-    resource :session, :controller => 'admin_session'
   end
   
   
@@ -308,10 +314,12 @@ Otwarchive::Application.routes.draw do
   
   #### SESSIONS ####
   
-  resource :session, :controller => 'session' 
-  match 'login' => 'session#new'
-  match 'logout' => 'session#destroy' 
-  match  '/opensession' => "session#create", :as => "open_id_complete", :requirements => { :method => :get }
+  # resource :session, :controller => 'session' 
+
+  resources :user_sessions
+  match 'login' => 'user_sessions#new'
+  match 'logout' => 'user_sessions#destroy' 
+  #match  '/opensession' => "session#create", :as => "open_id_complete", :requirements => { :method => :get }
     
   #### MISC ####
   

@@ -12,11 +12,11 @@
 	<% end %>
   <div id="login-block">
   <%- if logged_in? || logged_in_as_admin? -%>
-    <%= render :partial => 'session/greeting' -%>
+    <%= render :partial => 'user_sessions/greeting' -%>
   <% else -%>
     <ul id="greeting" class="logged-out">
       <li>
-		    <%= render :partial => 'session/login' -%>
+		    <%= render :partial => 'user_sessions/login' -%>
         <span><a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%=h t('.layout.header.sign_in', :default => 'Log in') %></a>
         <a id='signin_open' onclick='toggleLogin("signin")'><%=h t('.links.cancel', :default => 'Cancel') %></a></span>
 		  </li>
