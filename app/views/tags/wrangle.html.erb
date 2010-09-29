@@ -27,7 +27,7 @@
 
 <%- if params[:show] && params[:show] !~ /suggested/ -%>
   <h3>Add new <%= params[:show] %></h3>
-  <%- form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| -%>
+  <%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| -%>
     <%= f.text_area "#{params[:show].singularize}_string", :size => "100x5" %>
     <%= autocomplete_text_field_with_type @tag, "tag_#{params[:show].singularize}_string" -%>
     <%= hidden_field_tag :show, params[:show] %>

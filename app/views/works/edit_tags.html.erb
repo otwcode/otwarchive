@@ -5,7 +5,7 @@
 <!--/descriptions-->
 
 <div id="work-form" class="work-form">
-<%- form_for(@work, :html => {:name => "storyForm"}, :url => { :action => "update_tags" }) do |f| -%> 
+<%= form_for(@work, :html => {:name => "storyForm"}, :url => { :action => "update_tags" }) do |f| -%> 
 
 <!--main content-->					
 <%= render :partial => 'work_tags_form', :locals => {:include_blank => false} %>

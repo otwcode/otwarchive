@@ -2,7 +2,7 @@
 <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
 </div>
 
-<%- form_for([@work, @chapter]) do |f| -%>
+<%= form_for([@work, @chapter]) do |f| -%>
 
   <%= render :partial => 'hidden_fields', :locals => {:form => f} -%>
 

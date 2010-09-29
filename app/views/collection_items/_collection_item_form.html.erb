@@ -4,7 +4,7 @@
   <h3><% t('.collection_items.add_item_to_collection', :default => "Add {{title}} to collections", :title => item.title) %>
   </h3>
 
-<%- form_for([item, @collection_item], :url => {:controller => 'collection_items', :action => :create}) do |form| -%>
+<%= form_for([item, @collection_item], :url => {:controller => 'collection_items', :action => :create}) do |form| -%>
 	<p>
 	<%= label_tag :collection_names, t('.collection_names', :default => "Enter collection name(s): ") -%>
   <%= text_field_tag :collection_names, nil, :size => 40 -%>

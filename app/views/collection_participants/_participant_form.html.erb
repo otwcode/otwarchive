@@ -1,7 +1,7 @@
 <!-- note to FRONT END: this form is crap and is going to be tossed and redone! don't bother fixing for now. -NN -->
 <% if participant %>
 <tr id="participant_<%= participant.id %>">
-<%- form_for(:collection_participant, participant, :url => {:controller => "collection_participants", :action => "update"}) do |form| -%>
+<%= form_for(:collection_participant, participant, :url => {:controller => "collection_participants", :action => "update"}) do |form| -%>
 <th scope="row"><%= link_to participant.pseud.byline, user_path(participant.pseud.user) %><%= form.hidden_field :id %><%= form.hidden_field :collection_id %></th>
 <td><%= form.select(:participant_role, CollectionParticipant::PARTICIPANT_ROLE_OPTIONS) %></td>
 <td class="submit">

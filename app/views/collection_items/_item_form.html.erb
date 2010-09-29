@@ -1,7 +1,7 @@
 <% if collection_item %>
 <tr id="collection_item_<%= collection_item.id %>">
 <th scope="row">
-  <%- form_for(:collection_item, collection_item, :url => {:controller => "collection_items", :action => "update"}) do |form| -%>
+  <%= form_for(:collection_item, collection_item, :url => {:controller => "collection_items", :action => "update"}) do |form| -%>
     <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
     <%= link_to(
       collection_item.item_type == "Bookmark" ? t('.collection_items.bookmark', :default => "Bookmark for {{title}}", :title => collection_item.title) : 
