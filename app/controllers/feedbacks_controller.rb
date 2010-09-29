@@ -23,7 +23,7 @@ class FeedbacksController < ApplicationController
       if @feedback.save
         require 'rest_client'
         # Send bug to 16bugs
-        if ArchiveConfig.PERFORM_DELIVERIES == true && ENV['RAILS_ENV'] == 'production'
+        if ArchiveConfig.PERFORM_DELIVERIES == true && Rails.env.production?
           # For some reason it won't let me move use and password into the config :(
           site = RestClient::Resource.new(ArchiveConfig.BUGS_SITE, :user => 'otwadmin', :password => '11egbiaon6bockky1l5b5fkts6i1sbsshhsqywxb8t4bq9v918')
           site['/projects/4911/bugs'].post build_post_info(@feedback), :content_type => 'application/xml', :accept => 'application/xml'

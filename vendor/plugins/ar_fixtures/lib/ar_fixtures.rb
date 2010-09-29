@@ -10,7 +10,7 @@ class ActiveRecord::Base
       opts = {}
       opts[:limit] = limit if limit
       path ||= "db/#{table_name}.yml"
-      write_file(File.expand_path(path, RAILS_ROOT), self.find(:all, opts).to_yaml)
+      write_file(File.expand_path(path, Rails.root), self.find(:all, opts).to_yaml)
     end
   
     # Delete existing data in database and load fresh from file in db/table_name.yml
@@ -23,7 +23,7 @@ class ActiveRecord::Base
        connection.reset_pk_sequence!(table_name)
       end
 
-      records = YAML::load( File.open( File.expand_path(path, RAILS_ROOT) ) )
+      records = YAML::load( File.open( File.expand_path(path, Rails.root) ) )
       records.each do |record|
         record_copy = self.new(record.attributes)
         record_copy.id = record.id
@@ -50,7 +50,7 @@ class ActiveRecord::Base
       opts = {}
       opts[:limit] = limit if limit
 
-      write_file(File.expand_path("test/fixtures/#{table_name}.yml", RAILS_ROOT), 
+      write_file(File.expand_path("test/fixtures/#{table_name}.yml", Rails.root), 
           self.find(:all, opts).inject({}) { |hsh, record| 
               hsh.merge("#{table_name.singularize}_#{'%05i' % record.id rescue record.id}" => record.attributes) 
             }.to_yaml(:SortKeys => true))
@@ -67,7 +67,7 @@ class ActiveRecord::Base
         connection.select_all("SELECT * FROM #{join.options[:join_table]}").each_with_index { |record, i|
           hsh["join_#{'%05i' % i}"] = record
         }
-        write_file(File.expand_path("test/fixtures/#{join.options[:join_table]}.yml", RAILS_ROOT), hsh.to_yaml(:SortKeys => true))
+        write_file(File.expand_path("test/fixtures/#{join.options[:join_table]}.yml", Rails.root), hsh.to_yaml(:SortKeys => true))
       end
     end
     
@@ -88,7 +88,7 @@ class ActiveRecord::Base
           "record_1" => self.new.attributes,
           "record_2" => self.new.attributes
          }
-      write_file(File.expand_path("test/fixtures/#{table_name}.yml", RAILS_ROOT),
+      write_file(File.expand_path("test/fixtures/#{table_name}.yml", Rails.root),
         record.to_yaml)
     end
 

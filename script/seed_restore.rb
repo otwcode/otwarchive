@@ -9,7 +9,7 @@
 # rake Tag:reset_filter_counts
 # script/create_admin.rb
 
-backupdir = RAILS_ROOT + '/db/seed'
+backupdir = Rails.root + '/db/seed'
 FileUtils.mkdir_p(backupdir)
 FileUtils.chdir(backupdir)
 

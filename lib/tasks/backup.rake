@@ -7,7 +7,7 @@ end
 
 def setup
   @debug = ENV['DEBUG']
-  @config = YAML.load_file(config_file = RAILS_ROOT + '/config/backup.yml')
+  @config = YAML.load_file(config_file = Rails.root + '/config/backup.yml')
   y @config if @debug
   @database = @config["database"]
   unless @database
@@ -16,7 +16,7 @@ def setup
   end
   @mysql = @config["mysql"] || "mysql"
   @mysqldump = @config["mysqldump"] || "mysqldump"
-  @path = @config["path"] || RAILS_ROOT + '/db/backup/'
+  @path = @config["path"] || Rails.root + '/db/backup/'
   unless FileTest.exists?(@path)
     puts "#{@path} must exist and be 770 with group mysql"
     exit

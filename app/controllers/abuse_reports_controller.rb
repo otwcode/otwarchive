@@ -23,7 +23,7 @@ class AbuseReportsController < ApplicationController
       if @abuse_report.save
         require 'rest_client'
         # Send bug to 16bugs
-        if ArchiveConfig.PERFORM_DELIVERIES == true && ENV['RAILS_ENV'] == 'production'
+        if ArchiveConfig.PERFORM_DELIVERIES == true && Rails.env.production?
           site = RestClient::Resource.new(ArchiveConfig.BUGS_SITE, :user => 'otwadmin', :password => '11egbiaon6bockky1l5b5fkts6i1sbsshhsqywxb8t4bq9v918')
           site['/projects/4603/bugs'].post build_post_info(@abuse_report), :content_type => 'application/xml', :accept => 'application/xml'
         end

@@ -10,7 +10,7 @@ namespace :deploy do
 
   desc "Check environment"
   task(:check_environment) do
-    unless ENV['RAILS_ENV'] == 'production'
+    unless Rails.env.production?
       raise("Your environment is not set to production -- first do: export RAILS_ENV=production")
     end
   end

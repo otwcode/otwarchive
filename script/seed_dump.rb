@@ -191,7 +191,7 @@ def dump_user(user)
   end
 end
 
-backupdir = RAILS_ROOT + '/db/seed'
+backupdir = Rails.root + '/db/seed'
 FileUtils.mkdir_p(backupdir)
 FileUtils.chdir(backupdir)
 

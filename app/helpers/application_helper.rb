@@ -102,7 +102,7 @@ module ApplicationHelper
     #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
     #end
     
-    unless !help_file.blank? && File.exists?("#{RAILS_ROOT}/public/#{help_file}")
+    unless !help_file.blank? && File.exists?("#{Rails.root}/public/#{help_file}")
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
     

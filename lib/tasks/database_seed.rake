@@ -2,9 +2,9 @@
 # Usage: rake load_test_data
 namespace :db do
 
-  desc "Raise an error unless the RAILS_ENV is development"
+  desc "Raise an error unless the Rails.env is development"
   task :development_environment_only do
-    raise "ZOMG NOT IN PRODUCTION!" unless RAILS_ENV == 'development'
+    raise "ZOMG NOT IN PRODUCTION!" unless Rails.env.development?
   end
   
   desc "Reset and then seed the development database with test data from the fixtures"

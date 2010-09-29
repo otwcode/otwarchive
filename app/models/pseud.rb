@@ -2,10 +2,10 @@ class Pseud < ActiveRecord::Base
  
   has_attached_file :icon,
     :styles => { :standard => "100x100>" },
-    :path => ENV['RAILS_ENV'] == 'production' ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
-    :storage => ENV['RAILS_ENV'] == 'production' ? :s3 : :filesystem,
-    :s3_credentials => "#{RAILS_ROOT}/config/s3.yml",
-    :bucket => ENV['RAILS_ENV'] == 'production' ? YAML.load_file("#{RAILS_ROOT}/config/s3.yml")['bucket'] : "",
+    :path => Rails.env.production? ? ":attachment/:id/:style.:extension" : ":rails_root/public:url",
+    :storage => Rails.env.production? ? :s3 : :filesystem,
+    :s3_credentials => "#{Rails.root}/config/s3.yml",
+    :bucket => Rails.env.production? ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
     :default_url => "/images/user_icon.png"
    
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true 

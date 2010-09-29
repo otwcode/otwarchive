@@ -93,7 +93,7 @@ class UsersController < ApplicationController
       end
       if @user.save
         flash[:notice] = t('development_activation', :default => "During testing you can activate via <a href='{{activation_url}}'>your activation url</a>.",
-                            :activation_url => activate_path(@user.activation_code)) if ENV['RAILS_ENV'] == 'development'
+                            :activation_url => activate_path(@user.activation_code)) if Rails.env.development?
         render :partial => "confirmation", :layout => "application"
       else
         if params[:user] && params[:user][:identity_url]
@@ -289,9 +289,8 @@ class UsersController < ApplicationController
   
   def end_first_login
     @user.preference.update_attribute(:first_login, false)
-
-    respond_to do |format|
-      format.js
+    if !(request.xml_http_request?)
+      redirect_to @user
     end
   end
 

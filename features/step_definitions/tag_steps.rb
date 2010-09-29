@@ -1,6 +1,6 @@
 Given /^I have no tags$/ do
   Tag.delete_all
-  silence_warnings {load "#{RAILS_ROOT}/app/models/fandom.rb"}
+  silence_warnings {load "#{Rails.root}/app/models/fandom.rb"}
 end
 
 Given /^basic tags$/ do
