@@ -8,11 +8,11 @@ class Test::Unit::TestCase
   #
   # Example:
   #
-  #   should_have_named_scope :visible, :conditions => {:visible => true}
+  #   should_have_scope :visible, :conditions => {:visible => true}
   #
   # Passes for
   #
-  #   named_scope :visible, :conditions => {:visible => true}
+  #   scope :visible, :conditions => {:visible => true}
   #
   # Or for
   #
@@ -22,11 +22,11 @@ class Test::Unit::TestCase
   #
   # You can test lambdas or methods that return ActiveRecord#scoped calls:
   #
-  #   should_have_named_scope 'recent(5)', :limit => 5
-  #   should_have_named_scope 'recent(1)', :limit => 1
+  #   should_have_scope 'recent(5)', :limit => 5
+  #   should_have_scope 'recent(1)', :limit => 1
   #
   # Passes for
-  #   named_scope :recent, lambda {|c| {:limit => c}}
+  #   scope :recent, lambda {|c| {:limit => c}}
   #
   # Or for
   #
@@ -34,7 +34,7 @@ class Test::Unit::TestCase
   #     scoped(:limit => c)
   #   end
   #
-  def self.should_have_named_scope(scope_call, *args)
+  def self.should_have_scope(scope_call, *args)
     klass = described_type
     scope_opts = args.extract_options!
     scope_call = scope_call.to_s
