@@ -44,7 +44,8 @@ class Chapter < ActiveRecord::Base
   scope :posted, :conditions => {:posted => true}
   
   # There seem to be chapters without works in the tests, hence the if self.work_id
-  def after_validation
+  after_validation :fix_position
+  def fix_position
     self.insert_at(position) if self.position_changed? && self.work_id
   end
 

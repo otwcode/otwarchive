@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
   helper :application
   add_template_helper(TagsHelper)
   

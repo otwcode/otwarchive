@@ -6,7 +6,7 @@ Given /^I have an AdminSetting$/ do
       :invite_from_queue_frequency => ArchiveConfig.INVITE_FROM_QUEUE_FREQUENCY,
       :account_creation_enabled => ArchiveConfig.ACCOUNT_CREATION_ENABLED,
       :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED)
-    settings.save(false)
+    settings.save(:validate => false)
   end
 end
 

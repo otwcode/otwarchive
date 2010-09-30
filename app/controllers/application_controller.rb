@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   # store previous page in session to make redirecting back possible
   before_filter :store_location
   def store_location
-    session[:return_to] = request.request_uri
+    session[:return_to] = request.fullpath
   end
   
   # Authlogic login helpers

@@ -73,7 +73,8 @@ class Tag < ActiveRecord::Base
     :with => /\A[^,*<>^{}=`\\%]+\z/,
     :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\ %'
 
-  def validate
+  before_validation :check_synonym
+  def check_synonym
     if !self.new_record? && self.name_changed?
       unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase)
         self.errors.add(:name, "can only be changed by an admin.")        
@@ -92,7 +93,8 @@ class Tag < ActiveRecord::Base
     end    
   end
 
-  def before_validation
+  before_validation :squish_name
+  def squish_name
     self.name = name.squish if self.name
   end
   

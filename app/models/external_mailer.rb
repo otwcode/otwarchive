@@ -1,5 +1,5 @@
 class ExternalMailer < ActionMailer::Base
-  include ActionController::UrlWriter
+  include Rails.application.routes.url_helpers
   helper :application
 
   protected
