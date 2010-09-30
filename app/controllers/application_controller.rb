@@ -134,7 +134,7 @@ public
   protected
 
   def load_locales
-    @loaded_locales ||= Locale.all(:order => :iso)
+    @loaded_locales ||= Locale.all.order(:iso)
   end
 
   # Sets the locale
