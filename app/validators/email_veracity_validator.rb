@@ -17,7 +17,6 @@ class EmailVeracityValidator < ActiveModel::EachValidator
       
       # A valid domain must have dot_atom_text elements size > 1
       result &&= (treetop.domain.dot_atom_text.elements.size > 1)
-      result = true if options[:allow_blank] && value.blank?
     rescue Exception => e   
       result = false
     end
