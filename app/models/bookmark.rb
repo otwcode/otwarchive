@@ -10,6 +10,18 @@ class Bookmark < ActiveRecord::Base
   validates_length_of :notes, 
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
 
+  # Adds customized error messages for External Work fields
+  validate :check_external_work_fields, :on => :create
+  def check_external_work_fields
+    return false if self.bookmarkable_type.blank?
+    if self.bookmarkable.class == ExternalWork && (!self.bookmarkable.valid? || self.bookmarkable.fandoms.blank?)
+      if self.bookmarkable.fandoms.blank?
+        self.bookmarkable.errors.add_to_base("Fandom tag is required")
+      end
+      self.bookmarkable.errors.full_messages.each { |msg| errors.add_to_base(msg) }
+    end
+  end
+
   default_scope :order => "bookmarks.id DESC" # id's stand in for creation date
   
   scope :public, :conditions => {:private => false, :hidden_by_admin => false}
@@ -78,17 +90,6 @@ class Bookmark < ActiveRecord::Base
       !self.bookmarkable ? self.bookmarkable = ExternalWork.new(attributes) : self.bookmarkable.attributes = attributes
     end
   end  
-  
-  # Adds customized error messages for External Work fields
-  def validate_on_create
-    return false if self.bookmarkable_type.blank?
-    if self.bookmarkable.class == ExternalWork && (!self.bookmarkable.valid? || self.bookmarkable.fandoms.blank?)
-      if self.bookmarkable.fandoms.blank?
-        self.bookmarkable.errors.add_to_base("Fandom tag is required")
-      end
-      self.bookmarkable.errors.full_messages.each { |msg| errors.add_to_base(msg) }
-    end
-  end
   
   def tag_string
     tags.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)

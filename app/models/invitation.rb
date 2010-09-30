@@ -5,7 +5,13 @@ class Invitation < ActiveRecord::Base
   belongs_to :invitee, :polymorphic => true
   belongs_to :external_author
 
-  validate_on_create :recipient_is_not_registered
+  validate :recipient_is_not_registered, :on => :create
+  def recipient_is_not_registered
+    if self.invitee_email && User.find_by_email(self.invitee_email)
+      errors.add :invitee_email, t('already_registered', :default => 'is already being used by an account holder.') 
+      return false
+    end
+  end
   
   scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
   scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
@@ -47,13 +53,6 @@ class Invitation < ActiveRecord::Base
   
   private
   
-  def recipient_is_not_registered
-    if self.invitee_email && User.find_by_email(self.invitee_email)
-      errors.add :invitee_email, t('already_registered', :default => 'is already being used by an account holder.') 
-      return false
-    end
-  end
-
   def generate_token
     self.token = Digest::SHA1.hexdigest([Time.now, rand].join)
   end
