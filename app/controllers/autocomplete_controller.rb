@@ -14,7 +14,7 @@ class AutocompleteController < ApplicationController
   # works for any tag class where what you want to return are the names
   def tag_finder(tag_class, search_param)
     if search_param
-      tags = tag_class.canonical.order('taggings_count DESC').where("name LIKE ?", search_param + '%'], :limit => 10)
+      tags = tag_class.canonical.order('taggings_count DESC').where(["name LIKE ?", search_param + '%']).limit(10)
       extra_limit = 10 - tags.size + 5
       tags += tag_class.canonical.order('taggings_count DESC').where(["name LIKE ?", '%' + search_param + '%']).limit(extra_limit)
       render_output(tags.uniq.map(&:name))
