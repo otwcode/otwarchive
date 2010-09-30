@@ -10,15 +10,15 @@ class ExternalWorksController < ApplicationController
   def fetch
    if params[:external_work_url]
      url = ExternalWork.new.reformat_url(params[:external_work_url])
-     @external_work = ExternalWork.find(:first, :conditions => {:url => url})
+     @external_work = ExternalWork.first(:conditions => {:url => url})
    end  
   end
   
   def index
     if params[:show] == 'duplicates'
-      @external_works = ExternalWork.duplicate.find(:all, :order => "created_at DESC").paginate(:page => params[:page])      
+      @external_works = ExternalWork.duplicate.all(:order => "created_at DESC").paginate(:page => params[:page])      
     else
-      @external_works = ExternalWork.find(:all, :order => "created_at DESC").paginate(:page => params[:page])
+      @external_works = ExternalWork.all(:order => "created_at DESC").paginate(:page => params[:page])
     end
   end
   
@@ -44,7 +44,7 @@ class ExternalWorksController < ApplicationController
   
   def compare
     if params[:external_work_url]
-      @external_works = ExternalWork.find(:all, :conditions => ["url LIKE ?", params[:external_work_url] + "%"], :order => :url)
+      @external_works = ExternalWork.all(:conditions => ["url LIKE ?", params[:external_work_url] + "%"], :order => :url)
     end
   end
   
