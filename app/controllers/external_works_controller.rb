@@ -16,9 +16,9 @@ class ExternalWorksController < ApplicationController
   
   def index
     if params[:show] == 'duplicates'
-      @external_works = ExternalWork.duplicate.all.order("created_at DESC").paginate(:page => params[:page])      
+      @external_works = ExternalWork.duplicate.order("created_at DESC").paginate(:page => params[:page])      
     else
-      @external_works = ExternalWork.all.order("created_at DESC").paginate(:page => params[:page])
+      @external_works = ExternalWork.order("created_at DESC").paginate(:page => params[:page])
     end
   end
   
@@ -44,7 +44,7 @@ class ExternalWorksController < ApplicationController
   
   def compare
     if params[:external_work_url]
-      @external_works = ExternalWork.all.where(["url LIKE ?", params[:external_work_url] + "%"]).order(:url)
+      @external_works = ExternalWork.where(["url LIKE ?", params[:external_work_url] + "%"]).order(:url)
     end
   end
   

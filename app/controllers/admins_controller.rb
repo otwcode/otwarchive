@@ -4,7 +4,7 @@ class AdminsController < ApplicationController
   # GET /admins
   # GET /admins.xml
   def index
-    @admins = Admin.find(:all)
+    @admins = Admin.all
   end
 
   # GET /admins/1

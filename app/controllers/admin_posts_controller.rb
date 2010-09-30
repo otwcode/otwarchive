@@ -7,13 +7,13 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts
   # GET /admin_posts.xml
   def index
-    @admin_posts = AdminPost.find(:all, :order => 'updated_at DESC').paginate(:page => params[:page], :per_page => 8)
+    @admin_posts = AdminPost.order('updated_at DESC').paginate(:page => params[:page], :per_page => 8)
   end
   
   # GET /admin_posts/1
   # GET /admin_posts/1.xml
   def show
-    @admin_posts = AdminPost.find(:all, :order => 'updated_at DESC', :limit => 8)
+    @admin_posts = AdminPost.order('updated_at DESC').limit(8)
     @admin_post = AdminPost.find(params[:id])
     @commentable = @admin_post
     @comments = @admin_post.comments
