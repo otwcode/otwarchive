@@ -7,7 +7,7 @@ class ArchiveFaqsController < ApplicationController
   # GET /archive_faqs
   # GET /archive_faqs.xml
   def index
-    @archive_faqs = ArchiveFaq.find(:all, :order => 'position ASC')
+    @archive_faqs = ArchiveFaq.all(:order => 'position ASC')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -44,7 +44,7 @@ class ArchiveFaqsController < ApplicationController
   
   # GET /archive_faqs/manage
   def manage
-    @archive_faqs = ArchiveFaq.find(:all, :order => 'position ASC')    
+    @archive_faqs = ArchiveFaq.all(:order => 'position ASC')    
   end
 
   # POST /archive_faqs
