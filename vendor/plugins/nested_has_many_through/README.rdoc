@@ -1,4 +1,4 @@
-http://plugins.ardes.com > nested_has_many_through
+== NOTE: rails 2.3 users might want to try the experimental rails-2.3 branch
 
 = nested_has_many_through
 
@@ -47,6 +47,7 @@ Here's the original description:
 * mhoroschun
 * Ian White (http://github.com/ianwhite)
 * Claudio (http://github.com/masterkain)
+* releod (http://github.com/releod)
 
 Get in touch if you should be on this list
 
@@ -86,7 +87,10 @@ The first two has_manys of Author are plain vanilla, the last four are what this
 
 == What does it run on?
 
-Currently it's running on 2.0, 2.1, and 2.2 stable branches
+Currently the master branch is running on 2.1, and 2.2 stable branches
+
+Recent changes have made master incompatible with rails 2.0, if you want to use this
+with rails 2.0, then use the rails-2.0 branch.
 
 If you want to run the CI suite, then check out garlic_example.rb (The CI suite
 is being cooked with garlic - git://github.com/ianwhite/garlic)

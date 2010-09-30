@@ -16,8 +16,15 @@ module NestedHasManyThrough
     def self.included(base)
       base.class_eval do
         def construct_conditions
-          @nested_join_attributes ||= construct_nested_join_attributes
-          "#{@nested_join_attributes[:remote_key]} = #{@owner.quoted_id} #{@nested_join_attributes[:conditions]}"
+          @nested_join_attributes ||= construct_nested_join_attributes          
+          if @reflection.through_reflection && @reflection.through_reflection.macro == :belongs_to
+            "#{@nested_join_attributes[:remote_key]} = #{belongs_to_quoted_key} #{@nested_join_attributes[:conditions]}"
+ #"#{@nested_join_attributes[:remote_key]} = a #{@nested_join_attributes[:conditions]}"
+
+          else            
+            "#{@nested_join_attributes[:remote_key]} = #{@owner.quoted_id} #{@nested_join_attributes[:conditions]}"
+          end          
+          
         end
 
         def construct_joins(custom_joins = nil)
@@ -27,7 +34,7 @@ module NestedHasManyThrough
       end
     end
 
-  protected    
+    protected
     # Given any belongs_to or has_many (including has_many :through) association,
     # return the essential components of a join corresponding to that association, namely:
     #
@@ -40,9 +47,9 @@ module NestedHasManyThrough
     # * <tt>:conditions</tt>: any additional conditions (e.g. filtering by type for a polymorphic association,
     #    or a :conditions clause explicitly given in the association), including a leading AND
     def construct_nested_join_attributes( reflection = @reflection, 
-                                          association_class = reflection.klass,
-                                          table_ids = {association_class.table_name => 1})
-      if reflection.macro == :has_many && reflection.through_reflection
+        association_class = reflection.klass,
+        table_ids = {association_class.table_name => 1})
+      if (reflection.macro == :has_many || reflection.macro == :has_one) && reflection.through_reflection
         construct_has_many_through_attributes(reflection, table_ids)
       else
         construct_has_many_or_belongs_to_attributes(reflection, association_class, table_ids)
@@ -105,8 +112,8 @@ module NestedHasManyThrough
       end
       
       conditions = ''
-      # Add filter for single-table inheritance, if applicable.
-      conditions += " AND #{remote_table_alias}.#{association_class.inheritance_column} = #{association_class.quote_value(association_class.name.demodulize)}" unless association_class.descends_from_active_record?
+      # Add type_condition, if applicable
+      conditions += " AND #{association_class.send(:type_condition).to_sql}" if association_class.finder_needs_type_condition?
       # Add custom conditions
       conditions += " AND (#{interpolate_sql(association_class.send(:sanitize_sql, reflection.options[:conditions]))})" if reflection.options[:conditions]
       
@@ -133,5 +140,12 @@ module NestedHasManyThrough
         }
       end
     end
+
+    def belongs_to_quoted_key
+      attribute = @reflection.through_reflection.primary_key_name
+      col = @owner.column_for_attribute attribute
+      @owner.send(:quote_value, @owner.send(attribute), col)
+    end
+
   end
 end

@@ -1,3 +1,7 @@
+* belongs_to rel
+
+* review forks on github
+
 * get C2 up to 100%
   - spec a polymorphic relationship
   

@@ -36,11 +36,11 @@ describe 'Commenter use case (a1: p1>c1, a2: p2>c1, p3>c2, a3: p4>c3)' do
   describe "u1 comments on p2" do
     before do
       @u1 = User.create!
-      @comment = @p2.comments.create! :user => @u1
+      @co1 = @p2.comments.create! :user => @u1
     end
     
-    it "u1.comments should == [comment]" do
-      @u1.comments.should == [@comment]
+    it "u1.comments should == [co1]" do
+      @u1.comments.should == [@co1]
     end
     
     it "a1.commenters should be empty" do
@@ -103,6 +103,17 @@ describe 'Commenter use case (a1: p1>c1, a2: p2>c1, p3>c2, a3: p4>c3)' do
         it "u1.posts_of_interest.inflamatory should == [p2]" do
           @u1.posts_of_interest.inflamatory.should == [@p2]
         end
+      end
+    end
+
+    describe "comments through belongs_to relationship" do
+      it "co1.author == p2.author" do
+        @p2.reload        
+        @co1.author.should == @p2.author
+      end
+
+      it "col.user_categories == [u1.categories]" do
+        @co1.user_categories.should == @u1.categories_of_interest
       end
     end
   end
