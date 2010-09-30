@@ -9,7 +9,7 @@ class InvitationsController < ApplicationController
   end
 
   def index
-    @unsent_invitations = @user.invitations.unsent.find(:all, :limit => 5)
+    @unsent_invitations = @user.invitations.unsent.all(:limit => 5)
   end
   
   def manage
