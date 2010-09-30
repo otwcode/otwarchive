@@ -14,9 +14,9 @@ class AutocompleteController < ApplicationController
   # works for any tag class where what you want to return are the names
   def tag_finder(tag_class, search_param)
     if search_param
-      tags = tag_class.canonical.all(:order => ['taggings_count DESC'], :conditions => ["name LIKE ?", search_param + '%'], :limit => 10)
+      tags = tag_class.canonical.all.order('taggings_count DESC').where("name LIKE ?", search_param + '%'], :limit => 10)
       extra_limit = 10 - tags.size + 5
-      tags += tag_class.canonical.all(order => ['taggings_count DESC'], :conditions => ["name LIKE ?", '%' + search_param + '%'], :limit => extra_limit)
+      tags += tag_class.canonical.all.order('taggings_count DESC').where(["name LIKE ?", '%' + search_param + '%']).limit(extra_limit)
       render_output(tags.uniq.map(&:name))
     end
   end
@@ -26,10 +26,10 @@ class AutocompleteController < ApplicationController
     if search_param && search_param.match(/(\&|\/)/)
       tag_finder(Relationship, search_param)
     else
-      tags = Relationship.canonical.all(:order => ['taggings_count DESC'], 
-        :conditions => ["name LIKE ? OR name LIKE ? OR name LIKE ?", 
-            search_param + '%', '%/' + search_param + '%', '%& ' + search_param + '%'],
-            :limit => 15)
+      tags = Relationship.canonical.all.order('taggings_count DESC')
+        .where(["name LIKE ? OR name LIKE ? OR name LIKE ?", 
+                search_param + '%', '%/' + search_param + '%',
+                '%& ' + search_param + '%']).limit(15)
       render_output(tags.uniq.sort {|a,b| b.taggings_count <=> a.taggings_count}.map(&:name))
     end
   end
@@ -37,13 +37,15 @@ class AutocompleteController < ApplicationController
   # works for any tag class where what you want to return are the names
   def noncanonical_tag_finder(tag_class, search_param)
     if search_param
-      render_output(tag_class.all(:order => ['taggings_count DESC'], :conditions => ["canonical = 0 AND name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:name))
+      render_output(tag_class.all.order('taggings_count DESC')
+                      .where(["canonical = 0 AND name LIKE ?",
+                              '%' + search_param + '%']).limit(10).map(&:name))
     end
   end
 
   def pseud_finder(search_param)
     if search_param
-      render_output(Pseud.all(:order => :name, :conditions => ["name LIKE ?", '%' + search_param + '%'], :limit => 10).map(&:byline))
+      render_output(Pseud.all.order(:name).where(["name LIKE ?", '%' + search_param + '%']).limit(10).map(&:byline))
     end
   end
   
@@ -55,10 +57,9 @@ class AutocompleteController < ApplicationController
   def challenge_participants
     search_param = params[params[:fieldname]]
     collection_id = params[:collection_id]
-    render_output(Pseud.all(:limit => 10, :order => :name, 
-      :joins => "INNER JOIN challenge_signups ON challenge_signups.pseud_id = pseuds.id", 
-      :conditions => ["pseuds.name LIKE ? AND challenge_signups.collection_id = ?", 
-                      '%' + search_param + '%', collection_id]).map(&:byline))
+    render_output(Pseud.all.limit(10).order(:name).joins(:challenge_signups)
+                    .where(["pseuds.name LIKE ? AND challenge_signups.collection_id = ?", 
+                            '%' + search_param + '%', collection_id]).map(&:byline))
   end
 
   ###### all the field-specific methods go here 
@@ -127,7 +128,7 @@ class AutocompleteController < ApplicationController
 
   def collection_filters_title
     unless params[:collection_filters_title].blank?
-      render_output(Collection.all(:conditions => ["parent_id IS NULL AND title LIKE ?", '%' + params[:collection_filters_title] + '%'], :limit => 10, :order => :title).map(&:title))    
+      render_output(Collection.all.where(["parent_id IS NULL AND title LIKE ?", '%' + params[:collection_filters_title] + '%']).limit(10).order(:title).map(&:title))    
     end
   end
 
@@ -160,7 +161,7 @@ class AutocompleteController < ApplicationController
   
   def bookmark_external_url
     unless params[:bookmark_external_url].blank?
-      render_output(ExternalWork.all(:conditions => ["url LIKE ?", '%' + params[:bookmark_external_url] + '%'], :limit => 10, :order => :url).map(&:url))    
+      render_output(ExternalWork.all.where(["url LIKE ?", '%' + params[:bookmark_external_url] + '%']).limit(10).order(:url).map(&:url))    
     end    
   end
   
