@@ -1,9 +1,0 @@
-stout:
-  id: 1
-  name: stout
-  rating: 5
-  
-ipa:
-  id: 2
-  name: india pale ale
-  rating: 4

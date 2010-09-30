@@ -1,1 +1,0 @@
-require 'ar_fixtures'

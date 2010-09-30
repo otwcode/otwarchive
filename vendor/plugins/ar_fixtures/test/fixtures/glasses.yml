@@ -1,9 +1,0 @@
---- 
-- !ruby/object:Glass 
-  attributes: 
-    name: pilsner
-    id: "1"
-- !ruby/object:Glass 
-  attributes: 
-    name: snifter
-    id: "2"

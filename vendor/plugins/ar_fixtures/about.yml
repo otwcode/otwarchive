@@ -1,7 +1,0 @@
-author: topfunky
-summary: Use the existing data in your database to generate fixtures, fixture skeletons, and reference YAML files.
-homepage: http://nubyonrails.com
-plugin: http://topfunky.net/svn/plugins/ar_fixtures
-license: MIT
-version: 0.2
-rails_version: 1.0+

@@ -1,6 +1,6 @@
 namespace :livevalidation do
 
-  PLUGIN_ROOT = File.dirname(__FILE__) + '/../'
+  PLUGIN_ROOT = File.dirname(__FILE__) + '/../../'
 
   desc 'Installs required javascript and stylesheet files to the public/ directory.'
   task :install do

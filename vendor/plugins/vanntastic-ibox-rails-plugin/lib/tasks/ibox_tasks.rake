@@ -1,7 +1,7 @@
 require 'fileutils'
 
-IBOX_PATH = "#{RAILS_ROOT}/vendor/plugins/ibox"
-PUBLIC_PATH = "#{RAILS_ROOT}/public"
+IBOX_PATH = Rails.root.to_s + "/vendor/plugins/vanntastic-ibox-rails-plugin"
+PUBLIC_PATH = Rails.root.to_s + "/public"
 
 desc 'Copies all Ibox files to app directories'
 task :install_ibox do
