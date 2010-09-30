@@ -118,7 +118,7 @@ class User < ActiveRecord::Base
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
   #validates_uniqueness_of :login, :message => ('login_already_used', :default => 'must be unique')
 
-  validates_email_veracity_of :email,
+  validates :email, :email_veracity,
     :message => t('email_invalid', :default => 'does not seem to be a valid address.')
  # validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
   # validates_format_of :password, :with => /(?=.*\d)(?=.*([a-z]|[A-Z]))/, :message => 'must have at least one digit and one alphabet character.'

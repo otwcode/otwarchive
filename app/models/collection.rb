@@ -114,7 +114,7 @@ class Collection < ActiveRecord::Base
     :message => t('collection.name_invalid', :default => 'must begin and end with a letter or number; it may also contain underscores but no other characters.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
 
-  validates_email_veracity_of :email, 
+  validates :email, :email_veracity, 
     :message => t('email_invalid', :default => 'does not seem to be a valid address.')
 
   validates_presence_of :title, :message => t('collection.no_title', :default => "Please enter a title to be displayed for your collection.")

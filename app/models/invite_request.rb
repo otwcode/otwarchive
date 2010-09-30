@@ -2,8 +2,8 @@ class InviteRequest < ActiveRecord::Base
   acts_as_list
   validates_presence_of :email
   validates_uniqueness_of :email, :message => "is already part of our queue."
-  validates_email_veracity_of :email
-  
+  validates :email
+, :email_veracity  
   before_validation_on_create :compare_with_users
   
   # Realign positions if they're incorrect
