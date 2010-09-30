@@ -1,7 +1,7 @@
 require 'timeout'
 require 'uri'
 
-class UrlFormatValidator < ActiveModel::EachValidator
+class UrlActiveValidator < ActiveModel::EachValidator
 
   # Checks the status of the webpage at the given url
   # To speed things up we ONLY request the head and not the entire page.
