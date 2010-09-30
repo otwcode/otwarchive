@@ -1,3 +1,4 @@
+include UrlHelpers
 class ExternalWork < ActiveRecord::Base
   
   include Taggable
@@ -34,25 +35,19 @@ class ExternalWork < ActiveRecord::Base
   validates_length_of :summary, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX, 
     :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
       
-  validates_presence_of :url
-  
   validates_presence_of :author
   validates_length_of :author, :maximum => AUTHOR_LENGTH_MAX, 
     :too_long=> t('author_too_long', :default => "must be less than %{max} characters long.", :max => AUTHOR_LENGTH_MAX)
 
-  # From the custom validations in config/initializers/validations.rb
-  validates_url_format_of :url
-  validates_url_active_status_of :url
-
   before_validation :cleanup_url
-  
+  validates :url, :presence => true, :url_format => true, :url_active => true
   def cleanup_url
     self.url = reformat_url(self.url) if self.url
   end
     
   # Sets the dead? attribute to true if the link is no longer active
   def set_url_status
-    self.update_attribute(:dead, true) unless self.url_active?
+    self.update_attribute(:dead, true) unless url_active?(self.url)
   end
   
   

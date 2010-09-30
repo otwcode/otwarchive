@@ -16,17 +16,10 @@ class ExternalAuthor < ActiveRecord::Base
   
   has_one :invitation
 
-  validates_presence_of :email, :message => t('email_blank', :default => 'Please enter an email address')
-
   validates_uniqueness_of :email, :case_sensitive => false, :allow_blank => true,    
     :message => t('email_in_use', :default => 'Sorry, that email address is already being used.')
      
-  validates_length_of :email, :within => EMAIL_LENGTH_MIN..EMAIL_LENGTH_MAX, 
-    :too_short => t('email_too_short', :default => "Your email address is too short (minimum is {{min}} characters)", :min => EMAIL_LENGTH_MIN),
-    :too_long => t('email_too_long', :default => "Your email address is too long (maximum is {{max}} characters)", :max => EMAIL_LENGTH_MAX)
-
-  validates :email, :email_veracity => true, 
-      :message => t('email_invalid', :default => 'This does not seem to be a valid email address.')
+  validates :email, :email_veracity => true
 
   after_create :create_default_name
   

@@ -33,10 +33,7 @@ class Prompt < ActiveRecord::Base
     (restriction = get_prompt_restriction) && restriction.description_required
   end
 
-  # From the custom validations in config/initializers/validations.rb
-  validates_url_format_of :url, :allow_blank => true # we validate the presence above, conditionally
-  # we don't want to disallow temporarily inactive URLs
-  # validates_url_active_status_of :url, :allow_blank => true
+  validates :url, :url_format => {:allow_blank => true} # we validate the presence above, conditionally
 
   before_validation :cleanup_url
   def cleanup_url

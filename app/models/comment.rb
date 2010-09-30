@@ -6,11 +6,8 @@ class Comment < ActiveRecord::Base
   has_many :inbox_comments, :foreign_key => 'feedback_comment_id', :dependent => :destroy
   has_many :users, :through => :inbox_comments
  
-  validates_presence_of :name, :email, :unless => :pseud_id
-  validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, :on => :create, :unless => :pseud_id
-  validates :email, :email_veracity => true, 
-    :message => t('invalid_email', :default => 'does not seem to be valid.'), 
-    :timeout => 0.5
+  validates_presence_of :name, :unless => :pseud_id
+  validates :email, :email_veracity => {:on => :create, :unless => :pseud_id}
 
   validates_presence_of :content
   validates_length_of :content, 
