@@ -352,7 +352,7 @@ class User < ActiveRecord::Base
   def self.fetch_orphan_account
     orphan_account = User.find_or_create_by_login("orphan_account")
     if orphan_account.new_record?
-      orphan_account.password = orphan_account.generate_password(12)
+      orphan_account.password = SecureRandom.hex(12)
       orphan_account.save(false)
       orphan_account.activation_code = nil
       orphan_account.activated_at = Time.now
