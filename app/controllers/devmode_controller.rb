@@ -625,7 +625,7 @@ class DevmodeController < ApplicationController
 
         num_fandoms = fandoms_count.choice
 
-        if !fandom_list.empty?:
+        if !fandom_list.empty?
           fandoms = fandom_list
         else
           fandoms = []

@@ -62,12 +62,13 @@ group :development, :test do
 end
 
 group :test do
+  gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'cucumber-rails'
   gem 'cucumber'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '>=2.0.0.beta.5'
   gem 'launchy'    # So you can do Then show me the page
 end
