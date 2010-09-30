@@ -5,10 +5,10 @@ class Feedback < ActiveRecord::Base
   # class which holds the user's comments. 
   validates_presence_of :comment
   validates_presence_of :summary
-  validates :email, :email_veracity, :allow_blank => true, 
+  validates :email, :email_veracity => true, :allow_blank => true, 
     :message => t('invalid_email', :default => 'address appears to be invalid. Please use a different address or leave blank.') 
   validates_length_of :summary, :maximum => ArchiveConfig.FEEDBACK_SUMMARY_MAX,
-    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.FEEDBACK_SUMMARY_MAX)
+    :too_long => t('summary_too_long', :default => "must be less than {{max}} characters long.", :max => ArchiveConfig.FEEDBACK_SUMMARY_MAX)
 
 
 # Category ids for 16bugs

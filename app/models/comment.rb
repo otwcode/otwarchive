@@ -8,7 +8,7 @@ class Comment < ActiveRecord::Base
  
   validates_presence_of :name, :email, :unless => :pseud_id
   validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, :on => :create, :unless => :pseud_id
-  validates :email, :email_veracity, 
+  validates :email, :email_veracity => true, 
     :message => t('invalid_email', :default => 'does not seem to be valid.'), 
     :timeout => 0.5
 
