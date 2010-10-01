@@ -3,7 +3,7 @@
 </p>
 
 <p>
-  <%= @archivist ? @archivist : "An archivist" %> has backed up a fanfiction archive to the Archive of Our Own, and their 
+  <%= @archivist %> has backed up a fanfiction archive to the Archive of Our Own, and their 
   archive includes some of your works. This gets you an automatic invitation to our site (currently still in beta), if 
   you would like to join; if so, when you create your account using this invitation, you will 
   find all of your uploaded stories in your account.
@@ -32,7 +32,7 @@
 
 <p>
   <%=h "You can claim your account or remove your stories at the following address:" %>
-  <%= link_to(claim_url(:invitation_token => @invitation.token, :host => @host), claim_url(:invitation_token => @invitation.token, :host => @host)) %>
+  <%= link_to(claim_url(:invitation_token => @token), claim_url(:invitation_token => @token)) %>
 </p>  
 
 <p>

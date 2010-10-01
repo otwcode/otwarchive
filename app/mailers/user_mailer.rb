@@ -1,112 +1,132 @@
 class UserMailer < ActionMailer::Base
-  include Rails.application.routes.url_helpers
-  helper :application
-  add_template_helper(TagsHelper)
+
+  default :from => ArchiveConfig.RETURN_ADDRESS
   
   # Sends an invitation to join the archive
   def invitation(invitation)
-    subject       "[#{ArchiveConfig.APP_NAME}] Invitation"
-    recipients    invitation.invitee_email
-    from          ArchiveConfig.RETURN_ADDRESS
-    sent_on       Time.now
-    content_type  "text/html"
-    body          :invitation => invitation, :user_name => (invitation.creator.is_a?(User) ? invitation.creator.login : ''), :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+    @invitation = invitation
+    @user_name = (invitation.creator.is_a?(User) ? invitation.creator.login : '')
+    mail(
+      :to => invitation.invitee_email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Invitation"
+    )
   end
   
   # Sends an invitation to join the archive and claim stories that have been imported as part of a bulk import
   def invitation_to_claim(invitation, archivist)
-    subject       "[#{ArchiveConfig.APP_NAME}] Invitation To Claim Stories"
-    recipients    invitation.invitee_email
-    from          ArchiveConfig.RETURN_ADDRESS
-    sent_on       Time.now
-    content_type  "text/html"
-    body          :invitation => invitation, :external_author => invitation.external_author, :archivist => archivist, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+    @external_author = invitation.external_author
+    @archivist = archivist || "An archivist"
+    @token = invitation.token
+    mail(
+      :to => invitation.invitee_email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Invitation To Claim Stories"
+    )
   end
   
   # Notifies a writer that their imported works have been claimed
   def claim_notification(external_author, claimed_works)
-    subject       "[#{ArchiveConfig.APP_NAME}] Stories Uploaded"
-    recipients    external_author.user.email
-    from          ArchiveConfig.RETURN_ADDRESS
-    sent_on       Time.now
-    content_type  "text/html"
-    body          :external_author => external_author, :claimed_works => claimed_works, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+    @email = external_author.email
+    @claimed_works = claimed_works
+    mail(
+      :to => external_author.user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Stories Uploaded"
+    )
   end
 
   # Emails a recipient to say that a gift has been posted for them
   def recipient_notification(user, work, collection=nil)
-    setup_email(user)
-    subject       "[#{ArchiveConfig.APP_NAME}]#{collection ? '[' + collection.title + ']' : ''} A Gift Story For You #{collection ? 'From ' + collection.title : ''}"
-    sent_on       Time.now
-    from          ArchiveConfig.RETURN_ADDRESS
-    content_type  "text/html"
-    body          :work => work, :collection => collection, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+    @work = work
+    @collection = collection
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}]#{collection ? '[' + collection.title + ']' : ''} A Gift Story For You #{collection ? 'From ' + collection.title : ''}"
+    )
   end
 
   # Emails a user to say they have been given more invitations for their friends
   def invite_increase_notification(user, total)
-    setup_email(user)
-    @subject    += 'New Invitations'  
-    @body[:total] = total 
+    @user = @user
+    @total = total 
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] New Invitations"
+    )
   end
 
   # Sends an admin message to a user
   def archive_notification(admin, user, subject, message)
-    setup_email(user)
-    @subject = "[#{ArchiveConfig.APP_NAME}] Admin Message #{subject}"
-    @body[:message] = message
-    @body[:admin] = admin
+    @message = message
+    @admin = admin
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Admin Message #{subject}"
+    )
   end
   
   def collection_notification(collection, subject, message)
-    setup_email_without_name(collection.get_maintainers_email)
-    subject   "[#{ArchiveConfig.APP_NAME}][#{collection.title}] #{subject}"
-    body      :message => message, :collection => collection, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+    @message = message
+    @collection = collection
+    mail(
+      :to => collection.get_maintainers_email,
+      :subject => "[#{ArchiveConfig.APP_NAME}][#{collection.title}] #{subject}"
+    )
   end
 
   def potential_match_generation_notification(collection)
-    setup_email_without_name(collection.get_maintainers_email)
-    subject    "[#{ArchiveConfig.APP_NAME}][#{collection.title}] Potential Match Generation Complete"
-    body	     :collection => collection, :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+    @collection = collection
+    mail(
+      :to => collection.get_maintainers_email,
+      :subject => "[#{ArchiveConfig.APP_NAME}][#{collection.title}] Potential Match Generation Complete"
+    )
   end
 
   def challenge_assignment_notification(collection, assigned_user, assignment)
-    setup_email(assigned_user)
-    subject       "[#{ArchiveConfig.APP_NAME}][#{collection.title}] Your Assignment!"
-    sent_on       Time.now
-    from          ArchiveConfig.RETURN_ADDRESS
-    content_type  "text/html"
-    body          :collection => collection, :assigned_user => assigned_user, :request => (assignment.request_signup || assignment.pinch_request_signup), :host => ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
+    @collection = collection
+    @assigned_user = assigned_user
+    @request = (assignment.request_signup || assignment.pinch_request_signup)
+    mail(
+      :to => assigned_user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}][#{collection.title}] Your Assignment!"
+    )
   end
 
   # Asks a user to validate and activate their new account
   def signup_notification(user)
-    setup_email(user)
-    @subject    += 'Please activate your new account' 
-    @body[:url] += "/activate/#{user.activation_code}"  
+    @user = user
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Please activate your new account"
+    )
   end
    
   # Emails a user to confirm that their account is validated and activated
   def activation(user)
-    setup_email(user)
-    @subject += 'Your account has been activated.'
+    @user = user
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Your account has been activated."
+    )
   end 
   
   # Confirms to a user that their password was reset
   def reset_password(user)
-    setup_email(user)
-    @subject    += 'Password reset'
+    @user = user
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Password reset"
+    )
   end
    
   ### COMMENT NOTIFICATIONS ###
   
   # Sends email to an owner of the top-level commentable when a new comment is created
   def comment_notification(user, comment)
-    setup_email(user)
-    @body[:commentable] = comment.ultimate_parent     
-    @body[:comment] = comment
+    @comment = comment
     setup_comment_links(comment)
-    @subject += "New comment on " + comment.ultimate_parent.commentable_name
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] " + comment.ultimate_parent.commentable_name
+    )
   end
 
   # Sends email to an owner of the top-level commentable when a comment is edited
@@ -256,26 +276,13 @@ class UserMailer < ActionMailer::Base
     end
     
     def setup_comment_links(comment)
-      commentable = @body[:commentable]
-      @body[:comment_owner_link_or_name] = comment.comment_owner ? url_for(:host => @body[:host], :controller => :pseuds, :action => :show,
-                                                           :id => comment.comment_owner_name, :user_id => comment.comment_owner) : comment.comment_owner_name
-      if commentable.is_a?(Tag)
-        @body[:commentable_link] = url_for(:host => @body[:host], :controller => :tags, :action => :show, :id => commentable)
-        @body[:all_comments_link] = url_for(:host => @body[:host], :controller => :comments, :action => :index, 
-                                    :tag_id => commentable, :show_comments => true, :anchor => :comments)
-      else
-        @body[:commentable_link] = url_for(:host => @body[:host], :controller => commentable.class.to_s.underscore.pluralize, 
-                                  :action => :show, :id => commentable)
-        @body[:all_comments_link] = url_for(:host => @body[:host], :controller => commentable.class.to_s.underscore.pluralize, 
-                                  :action => :show, :id => commentable, 
-                                  :show_comments => true, :anchor => :comments)
-      end
-      @body[:reply_to_link] = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
+      @commentable = comment.ultimate_parent     
+      @reply_to_link = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
                                 :action => :show, :id => comment, 
                                 :add_comment_reply_id => comment.id, :show_comments => true, :anchor => "comment_#{comment.id}")
-      @body[:starting_thread_link] = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
+      @starting_thread_link = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
                                 :action => :show, :id => comment)
-      @body[:originating_thread_link] = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
+      @originating_thread_link = url_for(:host => @body[:host], :controller => comment.class.to_s.underscore.pluralize, 
                                 :action => :show, :id => comment.thread)
     end
     

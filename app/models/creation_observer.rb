@@ -9,7 +9,7 @@ class CreationObserver < ActiveRecord::Observer
       new_authors = (creation.authors - (creation.pseuds + User.current_user.pseuds)).uniq
       unless new_authors.blank?
         for pseud in new_authors
-          UserMailer.deliver_coauthor_notification(pseud.user, creation)
+          UserMailer.coauthor_notification(pseud.user, creation).deliver
         end
       end
     end
@@ -26,7 +26,7 @@ class CreationObserver < ActiveRecord::Observer
       if !new_work.recipients.blank? && !new_work.unrevealed?
         recipient_pseuds = Pseud.parse_bylines(new_work.recipients, :assume_matching_login => true)[:pseuds]
         recipient_pseuds.each do |pseud|
-          UserMailer.deliver_recipient_notification(pseud.user, new_work)
+          UserMailer.recipient_notification(pseud.user, new_work).deliver
         end
       end
       

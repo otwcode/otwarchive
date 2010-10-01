@@ -143,6 +143,10 @@ class User < ActiveRecord::Base
     !activated_at.nil?
   end
 
+  def activate
+    self.update_attribute(:activated_at, Time.now.utc)
+  end
+
   def create_default_associateds
     self.pseuds << Pseud.new(:name => self.login, :is_default => :true)
     self.profile = Profile.new
@@ -353,10 +357,10 @@ class User < ActiveRecord::Base
     orphan_account = User.find_or_create_by_login("orphan_account")
     if orphan_account.new_record?
       orphan_account.password = SecureRandom.hex(12)
-      orphan_account.save(false)
+      orphan_account.save(:validate => false)
       orphan_account.activation_code = nil
       orphan_account.activated_at = Time.now
-      orphan_account.save(false)
+      orphan_account.save(:validate => false)
     end
     orphan_account
   end

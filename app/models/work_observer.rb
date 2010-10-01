@@ -7,7 +7,7 @@ class WorkObserver < ActiveRecord::Observer
 	  #  unless users.blank?
 	  #    for user in users
 	  #      unless user.preference.edit_emails_off? || user == orphan_account
-	  #        UserMailer.deliver_edit_work_notification(user, work)
+	  #        UserMailer.edit_work_notification(user, work).deliver
 	  #      end
 	  #    end
 	  #  end 
@@ -21,7 +21,7 @@ class WorkObserver < ActiveRecord::Observer
 	    unless users.blank?
 	      for user in users
 					unless user == orphan_account
-						UserMailer.deliver_delete_work_notification(user, work)
+						UserMailer.delete_work_notification(user, work).deliver
 					end
 	      end
 	    end     

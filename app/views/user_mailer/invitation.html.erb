@@ -25,9 +25,9 @@
 
 <p>
   If you'd like to join us, please sign up at the following address:
-  <%= link_to(signup_url(:invitation_token => @invitation.token, :host => @host), signup_url(:invitation_token => @invitation.token, :host => @host)) %>
+  <%= link_to(signup_url(:invitation_token => @invitation.token), signup_url(:invitation_token => @invitation.token)) %>
 </p>
   
 <p>
-  For more information, please check out our FAQ at: <%= link_to(archive_faqs_url(:host => @host), archive_faqs_url(:host => @host)) %>
+  For more information, please check out our FAQ at: <%= link_to(archive_faqs_url, archive_faqs_url) %>
 </p>

@@ -1,5 +1,6 @@
 # Email settings
 ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.default_url_options[:host] = ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
 if ArchiveConfig.SMTP_AUTHENTICATION
   ActionMailer::Base.smtp_settings = {
     :address => ArchiveConfig.SMTP_SERVER,

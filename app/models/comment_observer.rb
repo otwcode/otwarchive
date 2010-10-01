@@ -13,7 +13,7 @@ class CommentObserver < ActiveRecord::Observer
       users << comment.comment_owner
     end
     if notify_user_by_email?(comment.comment_owner) && notify_user_of_own_comments?(comment.comment_owner)
-      UserMailer.deliver_comment_sent_notification(comment)
+      UserMailer.comment_sent_notification(comment).deliver
     end
     
     if comment.reply_comment?
@@ -24,7 +24,7 @@ class CommentObserver < ActiveRecord::Observer
       if (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) || 
           (parent_comment_owner && (parent_comment_owner != comment.comment_owner)) 
         if !parent_comment_owner || notify_user_by_email?(parent_comment_owner)
-          UserMailer.deliver_comment_reply_notification(parent_comment, comment)
+          UserMailer.comment_reply_notification(parent_comment, comment).deliver
         end
         if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
           add_feedback_to_inbox(parent_comment_owner, comment)
@@ -52,7 +52,7 @@ class CommentObserver < ActiveRecord::Observer
     users.each do |user|
       unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
         if notify_user_by_email?(user)
-          UserMailer.deliver_comment_notification(user, comment)
+          UserMailer.comment_notification(user, comment).deliver
         end
         if notify_user_by_inbox?(user)
           add_feedback_to_inbox(user, comment)
@@ -70,7 +70,7 @@ class CommentObserver < ActiveRecord::Observer
         users << comment.comment_owner
       end
       if notify_user_by_email?(comment.comment_owner) && notify_user_of_own_comments?(comment.comment_owner)
-        UserMailer.deliver_comment_sent_notification(comment)
+        UserMailer.comment_sent_notification(comment).deliver
       end
       
       if comment.reply_comment?
@@ -80,7 +80,7 @@ class CommentObserver < ActiveRecord::Observer
         if (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) || 
             (parent_comment_owner && (parent_comment_owner != comment.comment_owner)) 
           if !parent_comment_owner || notify_user_by_email?(parent_comment_owner)
-            UserMailer.deliver_edited_comment_reply_notification(parent_comment, comment)
+            UserMailer.edited_comment_reply_notification(parent_comment, comment).deliver
           end
           if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
             update_feedback_in_inbox(parent_comment_owner, comment)
@@ -108,7 +108,7 @@ class CommentObserver < ActiveRecord::Observer
       users.each do |user|
         unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
           if notify_user_by_email?(user)
-            UserMailer.deliver_edited_comment_notification(user, comment)
+            UserMailer.edited_comment_notification(user, comment).deliver
           end
           if notify_user_by_inbox?(user)
             update_feedback_in_inbox(user, comment)

@@ -1,7 +1,7 @@
 <h4>
 <%= @comment.comment_owner ? (link_to @comment.comment_owner_name, @comment_owner_link_or_name) : @comment_owner_link_or_name %>
  <%= t('.user_mailer.comment_reply', :default => 'replied to your comment on') %> 
-<%= link_to @commentable.commentable_name, @commentable_link %>.
+<%= link_to @commentable.commentable_name, @commentable %>.
 </h4>
 
 <p><%=h t('.user_mailer.comment_reply_youwrote', :default => "You wrote: ") %></p>

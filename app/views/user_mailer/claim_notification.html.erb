@@ -27,6 +27,6 @@
 <ul>
   <% @claimed_works.each do |work| %>
     <li><%= work.title %><br />
-    <%= link_to work_url(work, :host => @host), work_url(work, :host => @host) %></li>
+    <%= link_to work_url(work), work_url(work) %></li>
   <% end %>
 </ul>
