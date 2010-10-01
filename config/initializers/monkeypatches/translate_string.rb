@@ -10,7 +10,7 @@ module I18n
       if args.first.is_a?(String)
         options = args.last.is_a?(Hash) ? args.pop : {}
         default_string = args.shift
-        key = "#{self.class.name}_"
+        key = "#{self.class.name}."
         key += default_string[0..15].gsub(/[^a-zA-Z0-9]/, '')
 
         # add the default string as an option, and hand off to translate.
@@ -89,9 +89,9 @@ module ActionView
           default_string = args.shift
           key = ""
           if defined? controller
-            key = "#{controller.controller_name}_#{controller.action_name}_"
+            key = "#{controller.controller_name}.#{controller.action_name}."
           else
-            key = "#{self.class.name}_"
+            key = "#{self.class.name}."
           end
           key += default_string[0..15].gsub(/[^a-zA-Z0-9]/, '')
 
