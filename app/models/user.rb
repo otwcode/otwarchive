@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
+  has_and_belongs_to_many :roles
 
   # OpenID plugin
   attr_accessible :identity_url
@@ -237,46 +238,42 @@ class User < ActiveRecord::Base
   def translation_admin
     self.is_translation_admin?
   end
+  
+  def is_translation_admin?
+    has_role?(:translation_admin)
+  end
 
   # Set translator role for this user and log change
   def translation_admin=(should_be_translation_admin)
-    set_user_role('translation_admin', should_be_translation_admin == '1')
+    set_role('translation_admin', should_be_translation_admin == '1')
   end
 
   # Is this user an authorized tag wrangler?
   def tag_wrangler
     self.is_tag_wrangler?
   end
+  
+  def is_tag_wrangler?
+    has_role?(:tag_wrangler)
+  end
 
   # Set tag wrangler role for this user and log change
   def tag_wrangler=(should_be_tag_wrangler)
-    set_user_role('tag_wrangler', should_be_tag_wrangler == '1')
+    set_role('tag_wrangler', should_be_tag_wrangler == '1')
   end
 
   # Is this user an authorized archivist?
   def archivist
     self.is_archivist?
   end
+  
+  def is_archivist?
+    has_role?(:archivist)
+  end
 
   # Set archivist role for this user and log change
   def archivist=(should_be_archivist)
-    set_user_role('archivist', should_be_archivist == '1')
-  end
-
-  # Method for setting user roles, used by the various role setter methods
-  def set_user_role(role_name, should_have_role)
-    role = Role.find_or_create_by_name(role_name)
-    if should_have_role
-      unless self.roles.include?(role)
-        self.roles << role
-        self.create_log_item( options = {:action => ArchiveConfig.ACTION_ADD_ROLE, :role_id => role.id, :note => 'Change made by Admin'})
-      end
-    else
-      if self.roles.include?(role)
-        self.roles.delete(role)
-        self.create_log_item( options = {:action => ArchiveConfig.ACTION_REMOVE_ROLE, :role_id => role.id, :note => 'Change made by Admin'})
-      end
-    end
+    set_role('archivist', should_be_archivist == '1')
   end
 
   # Creates log item tracking changes to user

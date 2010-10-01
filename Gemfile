@@ -49,6 +49,9 @@ gem 'authlogic',
   :branch  => 'rails3',
   :require => 'authlogic'
 
+# A highly updated version of the authorization plugin
+gem 'permit_yo'
+
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
 # and rake tasks are available in development mode:
