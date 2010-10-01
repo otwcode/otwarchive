@@ -96,7 +96,7 @@ module ApplicationHelper
   end
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
-  def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>')
+  def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
     help_file = ""
     #if Locale.active && Locale.active.language
     #  help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{Locale.active.language.code}/#{help_entry}.html"
@@ -223,9 +223,9 @@ module ApplicationHelper
   end
   
   def autocomplete_text_field(fieldname, options={})
-    "\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
+    ("\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
     '<img src="/images/spinner.gif" alt="Working..." /></span>' +
-    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>" +
+    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>").html_safe +
     javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
                             '#{fieldname}_auto_complete', 
                             '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
@@ -243,9 +243,9 @@ module ApplicationHelper
   # Trying out a way of sending the tag type to the autocomplete
   # controller so that it can return the right class of results
   def autocomplete_text_field_with_type(object, fieldname, options={})
-    "\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
+    ("\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
     '<img src="/images/spinner.gif" alt="Working..." /></span>' +
-    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>" +
+    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>").html_safe +
     javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
                             '#{fieldname}_auto_complete', 
                             '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 

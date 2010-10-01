@@ -34,15 +34,15 @@ module ActionView
       end
       
       def initialize_validator(field_name)
-        "var #{field_name} = new LiveValidation('#{field_name}');"
+        "var #{field_name} = new LiveValidation('#{field_name}');".html_safe
       end
       
       def live_validation_code(field_name, type, configuration)
-        "#{field_name}.add(#{ActiveRecord::Validations::VALIDATION_METHODS[type]}" + ( configuration ? ", #{configuration.to_json}" : '') + ')'
+        ("#{field_name}.add(#{ActiveModel::Validations::VALIDATION_METHODS[type]}" + ( configuration ? ", #{configuration.to_json}" : '') + ')').html_safe
       end
       
       def script_tags(js_code = '')
-         ( js_code.blank? ? '' : "<script>#{js_code}</script>" )
+         ( js_code.blank? ? '' : "<script>#{js_code}</script>".html_safe )
       end
     end
   end

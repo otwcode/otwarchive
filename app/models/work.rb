@@ -91,26 +91,26 @@ class Work < ActiveRecord::Base
   validates_presence_of :title
   validates_length_of :title,
     :minimum => ArchiveConfig.TITLE_MIN,
-    :too_short=> t('title_too_short', :default => "must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title,
     :maximum => ArchiveConfig.TITLE_MAX,
-    :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
 
   validates_length_of :summary,
     :allow_blank => true,
     :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
   validates_length_of :notes,
     :allow_blank => true,
     :maximum => ArchiveConfig.NOTES_MAX,
-    :too_long => t('notes_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
 
   validates_length_of :endnotes,
     :allow_blank => true,
     :maximum => ArchiveConfig.NOTES_MAX,
-    :too_long => t('notes_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.NOTES_MAX)
 
   # Checks that work has at least one author
   def validate_authors
@@ -129,11 +129,13 @@ class Work < ActiveRecord::Base
   end
 
   # Makes sure the title has no leading spaces
+  validate :clean_and_validate_title
   def clean_and_validate_title
     unless self.title.blank?
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
-        errors.add_to_base(t('leading_spaces', :default => "Title must be at least %{min} characters long without leading spaces.", :min => ArchiveConfig.TITLE_MIN))
+        debugger
+        errors.add_to_base(ts("Title must be at least %{min} characters long without leading spaces.", :min => ArchiveConfig.TITLE_MIN))
         return false
       else
         self.title_to_sort_on = self.sorted_title
@@ -151,8 +153,7 @@ class Work < ActiveRecord::Base
   end
 
   # rephrases the "chapters is invalid" message
-  after_validation :rephrase_chapter_message
-  def rephrase_chapter_message
+  def after_validation
     if self.errors.on(:chapters)
       self.errors.add(:base, t('chapter_invalid', :default => "Please enter your story in the text field below."))
       self.errors.delete(:chapters)

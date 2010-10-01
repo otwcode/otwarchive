@@ -55,9 +55,37 @@ public
   def admin_only
     logged_in_as_admin? || admin_only_access_denied
   end
+  
+  # Filter method to prevent admin users from accessing certain actions
+  def users_only
+    logged_in? || access_denied
+  end
+
+  # Redirect as appropriate when an access request fails.
+  #
+  # The default action is to redirect to the login screen.
+  #
+  # Override this method in your controllers if you want to have special
+  # behavior in case the user is not authorized
+  # to access the requested action.  For example, a popup window might
+  # simply close itself.
+  def access_denied(options ={})
+    store_location
+    if logged_in?
+      destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
+      flash[:error] = "Sorry, you don't have permission to access the page you were trying to reach." 
+      redirect_to destination
+    else
+      destination = options[:redirect].blank? ? new_user_session_path : options[:redirect]
+      flash[:error] = "Sorry, you don't have permission to access the page you were trying to reach. Please log in." 
+      redirect_to destination            
+    end
+    false
+  end  
 
   def admin_only_access_denied
-    flash[:error] = "I'm sorry, only an admin can look at that area." 
+    debugger
+    flash[:error] = ts("I'm sorry, only an admin can look at that area.") 
     redirect_to root_path
     false
   end

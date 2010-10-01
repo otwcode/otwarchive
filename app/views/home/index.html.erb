@@ -2,7 +2,7 @@
 <noscript>
   <div id="javascript-warning">
     <p>
-      <%=h t('.js_disabled', :default => "While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled. 
+      <%= I18n.ts("While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled. 
       Please consider turning it on!") %>
     </p>
   </div> 
@@ -28,16 +28,16 @@
 	<div class="titles">
 		<h1><%= ArchiveConfig.APP_NAME %></h1>
 
-		<h2><%= t('home.otw_link', :default => "A project of the") %> <%= link_to("Organization for Transformative Works", "http://transformativeworks.org") %></h2>
+		<h2><%= ts("A project of the") %> <%= link_to("Organization for Transformative Works", "http://transformativeworks.org") %></h2>
 	</div>
 
 	<ul class="navigation">
-    	<li><%= link_to_unless_current t('.layout.header.fandoms', :default => "fandoms"), media_path %></li>
-		<li><%= link_to_unless_current t('.layout.header.works', :default => "works"), works_path %></li>
-    	<li><%= link_to_unless_current t('.layout.header.people', :default => "people"), people_path %></li>
-    	<li><%= link_to_unless_current t('.layout.header.recs', :default => "bookmarks"), bookmarks_path %></li>
-    	<li><%= link_to_unless_current t('.layout.header.tags', :default => "tags"), tags_path %></li>
-    	<li><%= link_to_unless_current t('.layout.header.communities', :default => "collections"), collections_path %></li>
+    	<li><%= link_to_unless_current ts("fandoms"), media_path %></li>
+		<li><%= link_to_unless_current ts("works"), works_path %></li>
+    	<li><%= link_to_unless_current ts("people"), people_path %></li>
+    	<li><%= link_to_unless_current ts("bookmarks"), bookmarks_path %></li>
+    	<li><%= link_to_unless_current ts("tags"), tags_path %></li>
+    	<li><%= link_to_unless_current ts("collections"), collections_path %></li>
 	</ul>
 	<div class="clear"></div>
 </div>
@@ -45,17 +45,17 @@
 	 <%= flash_div :error, :warning, :notice %>
 	<div class="open-beta-box">
   <% if logged_in? || logged_in_as_admin? %>
-    <h2><%= t('.home.you_are_signed_in', :default => 'Welcome to open beta!') %></h2>
-    <h1><%= link_to t('.invite_friends', :default => 'INVITE A FRIEND'), user_invitations_path(current_user) %></h1> 
+    <h2><%= ts('Welcome to open beta!') %></h2>
+    <h1><%= link_to ts('INVITE A FRIEND'), user_invitations_path(current_user) %></h1> 
   <% else %>
     <h2>Be part of our open beta!</h2>
     <% if AdminSetting.invite_from_queue_enabled? %>
-    <h1><%= link_to t('.home.request_invite', :default => 'SIGN UP NOW'), invite_requests_path %></h1>
+    <h1><%= link_to ts('SIGN UP NOW'), invite_requests_path %></h1>
     <% else %>
-    <h2><a href="session/new"><%= t('.layout.header.sign_in', :default => 'Log in') %></a></h2>
+    <h2><a href="session/new"><%= ts('Log in') %></a></h2>
     <% end %>
   <% end %>
-    <p><%= t('.home.about_us', :default => 'The Archive of Our Own is a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks,  such as fanfiction
+    <p><%= ts('The Archive of Our Own is a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks,  such as fanfiction
 and fanart.
 ') %></p>
   </div>
@@ -65,16 +65,16 @@ and fanart.
       <h3>Explore</h3>
 	    <ul class="meters">
 		    <li>
-		      <span><%= link_to t('.home_fandoms', :default => 'fandoms'), media_path %></span>: 
-		      <span><%= @fandom_count %></span><%= ' ' + t('.todate_count', :default => " to date") %>
+		      <span><%= link_to ts('fandoms'), media_path %></span>: 
+		      <span><%= @fandom_count %></span><%= ' ' + ts(" to date") %>
 		    </li>
 		    <li>
-		      <span><%= link_to t('.home_works', :default => 'works'), works_path %></span>: 
-		      <span><%= @work_count %></span><%= ' ' + t('.todate_count', :default => " to date") %>
+		      <span><%= link_to ts('works'), works_path %></span>: 
+		      <span><%= @work_count %></span><%= ' ' + ts(" to date") %>
 		    </li>
         <li>
-          <span><%= link_to t('.home_people', :default => 'people'), people_path %></span>: 
-          <span><%= @user_count %></span><%= ' ' + t('.todate_count', :default => " to date") %>
+          <span><%= link_to ts('people'), people_path %></span>: 
+          <span><%= @user_count %></span><%= ' ' + ts(" to date") %>
         </li>
 	    </ul>    
     </div>
@@ -83,14 +83,14 @@ and fanart.
         <h3>News</h3>
         <p><%= link_to sanitize_title_for_display(@admin_post.title), @admin_post %></p>
         <% if @admin_post_show_more %>
-        <p><%= link_to t('.page.more_news', :default => 'More news&#8230;'), admin_posts_path %></p>
+        <p><%= link_to ts('More news&#8230;'), admin_posts_path %></p>
         <% end %>
       </div>
     <% end %>
     <div class="sidebar-box">
       <h3>About</h3>
       <p>
-        <%= t('.home.about.content', :default => 'If you have questions or want to know more about the Archive check out the ') %>
+        <%= ts('If you have questions or want to know more about the Archive check out the ') %>
         <%= link_to 'Archive FAQ', archive_faqs_path %>.
       </p>    
     </div>    

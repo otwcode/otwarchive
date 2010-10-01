@@ -139,8 +139,23 @@ class User < ActiveRecord::Base
     login
   end
   
+
+  ### AUTHENTICATION AND PASSWORDS
   def active?
     !activated_at.nil?
+  end
+  
+  def generate_password(length=8)
+    chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789'
+    password = ''
+    length.downto(1) { |i| password << chars[rand(chars.length - 1)] }
+    password
+  end         
+  
+  def reset_user_password
+    self.password = self.generate_password 
+    self.password_confirmation = self.password
+    self.recently_reset = true
   end
 
   def activate
