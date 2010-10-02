@@ -99,6 +99,7 @@ Otwarchive::Application.routes.draw do
   
   resources :users do
     member do
+      get :after_reset
       get :edit_username
       post :end_first_login
     end
