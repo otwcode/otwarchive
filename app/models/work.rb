@@ -153,7 +153,8 @@ class Work < ActiveRecord::Base
   end
 
   # rephrases the "chapters is invalid" message
-  def after_validation
+  after_validation :check_for_invalid_chapters
+  def check_for_invalid_chapters
     if self.errors.on(:chapters)
       self.errors.add(:base, t('chapter_invalid', :default => "Please enter your story in the text field below."))
       self.errors.delete(:chapters)

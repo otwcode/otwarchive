@@ -9,6 +9,9 @@ module Otwarchive
     # Which flash key we stick error messages into
     config.permit_yo.require_user_flash = :error
     config.permit_yo.permission_denied_flash = :error
+
+    # Where users get redirected if they are not currently logged in
+    config.permit_yo.require_user_redirection = {:controller => :user_sessions, :action => :new}
   end
 end
 

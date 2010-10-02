@@ -9,12 +9,6 @@ class ApplicationController < ActionController::Base
   include SanitizeParams
   before_filter :sanitize_params
 
-  # store previous page in session to make redirecting back possible
-  before_filter :store_location
-  def store_location
-    session[:return_to] = request.fullpath
-  end
-  
   # Authlogic login helpers
   helper_method :current_user
   helper_method :current_admin
@@ -48,8 +42,19 @@ protected
     current_admin.nil? ? false : true
   end
   
-
 public
+
+  # store previous page in session to make redirecting back possible
+  def store_location
+    session[:return_to] = request.fullpath
+  end
+
+  # Redirect to the URI stored by the most recent store_location call or
+  # to the passed default.
+  def redirect_back_or_default(default = root_path)
+    session[:return_to] ? redirect_to(session[:return_to]) : redirect_to(default)
+    session[:return_to] = nil
+  end
 
   # Filter method - keeps users out of admin areas
   def admin_only
@@ -73,18 +78,17 @@ public
     store_location
     if logged_in?
       destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
-      flash[:error] = "Sorry, you don't have permission to access the page you were trying to reach." 
+      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach." 
       redirect_to destination
     else
       destination = options[:redirect].blank? ? new_user_session_path : options[:redirect]
-      flash[:error] = "Sorry, you don't have permission to access the page you were trying to reach. Please log in." 
+      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach. Please log in." 
       redirect_to destination            
     end
     false
   end  
 
   def admin_only_access_denied
-    debugger
     flash[:error] = ts("I'm sorry, only an admin can look at that area.") 
     redirect_to root_path
     false
