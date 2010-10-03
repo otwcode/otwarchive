@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class PeopleControllerTest < ActionController::TestCase
   context "on GET to :index" do

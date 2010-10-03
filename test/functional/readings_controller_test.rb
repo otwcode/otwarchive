@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class ReadingsControllerTest < ActionController::TestCase
   # TODO make tests for all routes

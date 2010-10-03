@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 # FIXME needs *lots* more test cases
 class WorksIndexControllerTest < ActionController::TestCase

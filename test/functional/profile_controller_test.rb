@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class ProfileControllerTest < ActionController::TestCase
   # not technically the profile controller, but split up here

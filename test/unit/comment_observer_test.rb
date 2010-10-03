@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class CommentObserverTest < ActiveSupport::TestCase
   context "A comment on a Work" do

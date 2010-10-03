@@ -17,7 +17,7 @@ rule "" do |t|
   if /test:(.*)(:([^.]+))?$/.match(t.name)
     arguments = t.name.split(":")[1..-1]
     file_name = arguments.first
-    test_name = arguments[1..-1] 
+    test_name = arguments[1] 
     
     if File.exist?("test/unit/#{file_name}_test.rb")
       run_file_name = "unit/#{file_name}_test.rb" 
@@ -27,6 +27,10 @@ rule "" do |t|
       run_file_name = "functional/#{file_name}_test.rb" 
     end
     
-    sh "ruby -Ilib:test test/#{run_file_name} -n /#{test_name}/" 
+    if test_name.blank?
+      sh "ruby -Itest test/#{run_file_name}" 
+    else
+      sh "ruby -Itest test/#{run_file_name} -n #{test_name}"
+    end
   end
 end

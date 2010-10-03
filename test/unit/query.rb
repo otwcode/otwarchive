@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class QueryTest < ActiveSupport::TestCase
   # compare times as strings because the actual times

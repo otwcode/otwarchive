@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 
 class HomeControllerTest < ActionController::TestCase
   context "a database with a restricted and an unrestricted work" do
