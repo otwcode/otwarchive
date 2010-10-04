@@ -226,7 +226,7 @@ class User < ActiveRecord::Base
 
   # Gets the number of works by this user that the current user can see
   def visible_work_count
-    Work.owned_by(self).visible(skip_ownership = true).count(:distinct => true, :select => 'works.id')
+    Work.owned_by(self).visible(skip_ownership = true).select("DISTINCT works.id").count
   end
 
   # Gets the user account for authored objects if orphaning is enabled

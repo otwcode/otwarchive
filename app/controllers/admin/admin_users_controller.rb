@@ -25,7 +25,7 @@ class Admin::AdminUsersController < ApplicationController
           conditions = ['roles.name = ?', params[:role]]
         end
       end
-      @users = User.select('DISTINCT users.*').joins(joins).where(conditions)
+      @users = User.find(:all, :select => 'DISTINCT users.*', :joins => joins, :conditions => conditions)
     end
   end
 
@@ -57,7 +57,7 @@ class Admin::AdminUsersController < ApplicationController
       @user.translation_admin = params[:user][:translation_admin] if params[:user][:translation_admin]
       @user.tag_wrangler = params[:user][:tag_wrangler] if params[:user][:tag_wrangler]
       @user.archivist = params[:user][:archivist] if params[:user][:archivist]
-      if @user.save(false)
+      if @user.save(:validate => false)
         flash[:notice] = t('successfully_updated', :default => 'User was successfully updated.')
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       else

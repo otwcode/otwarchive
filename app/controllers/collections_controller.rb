@@ -38,11 +38,11 @@ class CollectionsController < ApplicationController
     
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
-      @works = Work.in_collection(@collection).visible.random_order.limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
       visible_bookmarks = @collection.bookmarks.visible(:order => 'RAND()')
     else
       # show recent
-      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+      @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
       visible_bookmarks = @collection.bookmarks.visible(:order => 'bookmarks.created_at DESC')
     end
     # Having the number of items as a limit was finding the limited number of items, then visible ones within them

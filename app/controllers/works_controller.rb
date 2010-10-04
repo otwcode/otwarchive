@@ -201,6 +201,8 @@ class WorksController < ApplicationController
     else
       @chapters = @work.chapters
     end
+    
+    @work.increment_download_count
       
     respond_to do |format|
       format.html do
@@ -218,8 +220,6 @@ class WorksController < ApplicationController
       # pdf
       format.pdf {download_pdf}
     end
-    
-    @work.increment_download_count
   end
   
 protected

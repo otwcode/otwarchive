@@ -73,7 +73,7 @@ class CommentsController < ApplicationController
         @commentable = @commentable.ultimate_parent
       end
     else
-      @comments = Comment.top_level.not_deleted.limited(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select {|c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user)}
+      @comments = Comment.top_level.not_deleted.limit(ArchiveConfig.ITEMS_PER_PAGE).ordered_by_date.include_pseud.select {|c| c.ultimate_parent.respond_to?(:visible?) && c.ultimate_parent.visible?(current_user)}
     end
   end
   

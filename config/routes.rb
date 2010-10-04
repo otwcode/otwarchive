@@ -97,55 +97,37 @@ Otwarchive::Application.routes.draw do
   
   resources :passwords
   
+  # When adding new nested resources, please keep them in alphabetical order
   resources :users do
     member do
       get :after_reset
       get :edit_username
       post :end_first_login
     end
-    resources :pseuds do
-      resources :works
-      resources :series
-      resources :bookmarks
-    end
-    resources :external_authors do
-      resources :external_author_names
-    end
-    resources :preferences
-    resource :profile
-    resource :inbox do
+    resources :assignments, :controller => "challenge_assignments" do
       member do
-        get :reply
-        get :cancel_reply
+        get :default
       end
-    end 
+    end    
     resources :bookmarks
-    resources :related_works
-    resources :works do
-      collection do
-        get :drafts
-        get :show_multiple
-        post :edit_multiple
-        put :update_multiple
-      end
-    end
-    resources :series do
-      member do
-        get :manage
-      end
-      resources :serial_works
-    end
-    resources :readings do
-      collection do
-        post :clear
-      end
-    end
+    resources :collection_items, :only => [:index, :update, :destroy]
+    resources :collections, :only => [:index]
     resources :comments do
       member do
         put :approve
         put :reject
       end
     end
+    resources :external_authors do
+      resources :external_author_names
+    end
+    resources :gifts, :only => [:index]
+    resource :inbox do
+      member do
+        get :reply
+        get :cancel_reply
+      end
+    end 
     resources :invitations do
       member do 
         post :invite_friend
@@ -154,15 +136,35 @@ Otwarchive::Application.routes.draw do
         get :manage
       end
     end
-    resources :collection_items
-    resources :collections
-    resources :gifts
-    resources :signups, :controller => "challenge_signups"
-    resources :assignments, :controller => "challenge_assignments" do
-      member do
-        get :default
+    resources :preferences, :only => [:index, :update]
+    resource :profile, :only => [:show]
+    resources :pseuds do
+      resources :works
+      resources :series
+      resources :bookmarks
+    end
+    resources :readings do
+      collection do
+        post :clear
       end
-    end    
+    end
+    resources :related_works
+    resources :series do
+      member do
+        get :manage
+      end
+      resources :serial_works
+    end
+    resources :signups, :controller => "challenge_signups", :only => [:index]
+    resources :skins, :only => [:index]
+    resources :works do
+      collection do
+        get :drafts
+        get :show_multiple
+        post :edit_multiple
+        put :update_multiple
+      end
+    end
   end 
   
   

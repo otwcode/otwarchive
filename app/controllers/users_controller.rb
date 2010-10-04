@@ -44,8 +44,8 @@ class UsersController < ApplicationController
           render :action => "edit"
         end
       end
-      @fandoms = @user.filters.by_type("Fandom").by_name.find(:all, :select => "DISTINCT tags.*")
-      @works = Work.owned_by_conditions(@user).visible.ordered_by_date_desc.limited(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)      
+      @fandoms = @user.filters.by_type("Fandom").by_name
+      @works = Work.owned_by(@user).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)      
       if current_user == :false
         @series = Series.visible_to_public.exclude_anonymous.for_pseuds(@user.pseuds).find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
       else

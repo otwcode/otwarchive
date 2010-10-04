@@ -155,7 +155,7 @@ class Work < ActiveRecord::Base
   # rephrases the "chapters is invalid" message
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
-    if self.errors.on(:chapters)
+    if self.errors[:chapters].any?
       self.errors.add(:base, t('chapter_invalid', :default => "Please enter your story in the text field below."))
       self.errors.delete(:chapters)
     end
@@ -461,7 +461,7 @@ class Work < ActiveRecord::Base
 
   # Save chapter data when the work is updated
   def save_chapters
-    self.chapters.first.save(false)
+    self.chapters.first.save(:validate => false)
   end
 
   # If the work is posted, the first chapter should be posted too
@@ -469,7 +469,7 @@ class Work < ActiveRecord::Base
     if self.posted? && !self.first_chapter.posted?
        chapter = self.first_chapter
        chapter.posted = true
-       chapter.save(false)
+       chapter.save(:validate => false)
     end
   end
 
@@ -765,6 +765,9 @@ class Work < ActiveRecord::Base
 
   VISIBLE_TO_ADMIN_CONDITIONS = {:posted => true}
 
+
+
+
   #################################################################################
   #
   # In this section we define various named scopes that can be chained together
@@ -774,168 +777,105 @@ class Work < ActiveRecord::Base
 
   public
 
-  scope :ordered_by_author_desc, :order => "authors_to_sort_on DESC"
-  scope :ordered_by_author_asc, :order => "authors_to_sort_on ASC"
-  scope :ordered_by_title_desc, :order => "title_to_sort_on DESC"
-  scope :ordered_by_title_asc, :order => "title_to_sort_on ASC"
-  scope :ordered_by_word_count_desc, :order => "word_count DESC"
-  scope :ordered_by_word_count_asc, :order => "word_count ASC"
-  scope :ordered_by_hit_count_desc, :order => "hit_count DESC"
-  scope :ordered_by_hit_count_asc, :order => "hit_count ASC"
-  scope :ordered_by_date_desc, :order => "revised_at DESC"
-  scope :ordered_by_date_asc, :order => "revised_at ASC"
-  scope :random_order, :order => "RAND()"
+  scope :ordered_by_author_desc, order("authors_to_sort_on DESC")
+  scope :ordered_by_author_asc, order("authors_to_sort_on ASC")
+  scope :ordered_by_title_desc, order("title_to_sort_on DESC")
+  scope :ordered_by_title_asc, order("title_to_sort_on ASC")
+  scope :ordered_by_word_count_desc, order("word_count DESC")
+  scope :ordered_by_word_count_asc, order("word_count ASC")
+  scope :ordered_by_hit_count_desc, order("hit_count DESC")
+  scope :ordered_by_hit_count_asc, order("hit_count ASC")
+  scope :ordered_by_date_desc, order("revised_at DESC")
+  scope :ordered_by_date_asc, order("revised_at ASC")
+  scope :random_order, order("RAND()")
 
-  scope :limited, lambda {|limit|
-    {:limit => limit.kind_of?(Fixnum) ? limit : 5}
+  scope :recent, lambda { |*args| where("revised_at > ?", (args.first || 4.weeks.ago.to_date)) }
+  scope :within_date_range, lambda { |*args| where("revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)) }
+  scope :posted, where(:posted => true)
+  scope :unposted, where(:posted => false)
+  scope :restricted , where(:restricted => true)
+  scope :unrestricted, where(:restricted => false)
+  scope :hidden, where(:hidden_by_admin => true)
+  scope :unhidden, where(:hidden_by_admin => false)
+  scope :visible_to_all, posted.unrestricted.unhidden
+  scope :visible_to_user, posted.unhidden
+  scope :visible_to_admin, posted
+  scope :visible_to_owner, posted
+  scope :all_with_tags, includes(:tags)
+
+  # a complicated dynamic scope here: 
+  # if the user is an Admin, we use the "visible_to_admin" scope
+  # if the user is not a logged-in User, we use the "visible_to_all" scope
+  # otherwise, we use a join to get userids and then get all posted works that are either unhidden OR belong to this user.
+  # Note: in that last case we have to use select("DISTINCT works.") because of cases where the same user appears twice
+  # on a work.
+  scope :visible_to_user, lambda {|user|
+    user.is_a?(Admin) ? visible_to_admin : 
+      (!user.is_a?(User) ? visible_to_all :
+       select("DISTINCT works.*").posted.joins({:pseuds => :user}).where("works.hidden_by_admin = false OR users.id = ?", user.id))
   }
+    
+  # Use the current user to determine what works are visible
+  scope :visible, visible_to_user(User.current_user)
 
-  scope :recent, lambda { |*args| {:conditions => ["revised_at > ?", (args.first || 4.weeks.ago.to_date)]} }
-  scope :within_date_range, lambda { |*args| {:conditions => ["revised_at BETWEEN ? AND ?", (args.first || 4.weeks.ago), (args.last || Time.now)]} }
-  scope :posted, :conditions => {:posted => true}
-  scope :unposted, :conditions => {:posted => false}
-  scope :restricted , :conditions => {:restricted => true}
-  scope :unrestricted, :conditions => {:restricted => false}
-  scope :hidden, :conditions => {:hidden_by_admin => true}
-  scope :unhidden, :conditions => {:hidden_by_admin => false}
-  scope :visible_to_owner, :conditions => VISIBLE_TO_ADMIN_CONDITIONS
-  scope :visible_to_user, :conditions => VISIBLE_TO_USER_CONDITIONS
-  scope :visible_to_all, :conditions => VISIBLE_TO_ALL_CONDITIONS
-  scope :all_with_tags, :include => [:tags]
-
-
-  # These named scopes include the OWNERSHIP_JOIN so they can be chained
-  # with "visible" (visible must go first) without clobbering the combined
-  # joins.
-  scope :with_all_tags, lambda {|tags_to_find|
-    {
-      :select => "DISTINCT works.*",
-      :joins => :tags,
-      :conditions => ["tags.id in (?) OR tags.merger_id in (?)", tags_to_find.collect(&:id), tags_to_find.collect(&:id)],
-      :group => "works.id HAVING count(DISTINCT tags.id) = #{tags_to_find.size}"
-    }
-  }
-
-  scope :with_any_tags, lambda {|tags_to_find|
-    {
-      :select => "DISTINCT works.*",
-      :joins => :tags,
-      :conditions => ["tags.id in (?) OR tags.merger_id in (?)", tags_to_find.collect(&:id), tags_to_find.collect(&:id)],
-    }
-  }
-
+  # Note: this version would work only on canonical tags (filters) -- inconsistent
+  # scope :with_all_tag_ids, lambda {|tag_ids_to_find|
+  #   select("DISTINCT works.*").
+  #   joins(:filter_taggings).
+  #   where({:filter_taggings => {:filter_id => tag_ids_to_find}}).
+  #   group("works.id HAVING count(DISTINCT filter_taggings.filter_id) = #{tag_ids_to_find.size}")
+  # }
+  
   scope :with_all_tag_ids, lambda {|tag_ids_to_find|
-    {
-      :select => "DISTINCT works.*",
-      :joins => :filter_taggings,
-      :conditions => {:filter_taggings => {:filter_id => tag_ids_to_find}},
-      :group => "works.id HAVING count(DISTINCT filter_taggings.filter_id) = #{tag_ids_to_find.size}"
-    }
+    select("DISTINCT works.*").
+    joins(:tags).
+    where("tags.id in (?) OR tags.merger_id in (?)", tags_to_find.collect(&:id), tags_to_find.collect(&:id)).
+    group("works.id HAVING count(DISTINCT tags.id) = #{tag_ids_to_find.size}")
   }
 
   scope :with_any_tag_ids, lambda {|tag_ids_to_find|
-    {
-      :select => "DISTINCT works.*",
-      :joins => :tags,
-      :conditions => ["tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find],
-    }
+    select("DISTINCT works.*").
+    joins(:tags).
+    where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find)
   }
 
-  # Skip the ownership join if you're combining it with owned_by, or the two joins will conflict
-  scope :visible, lambda { |*skip_ownership|
-    {
-     :select => "DISTINCT works.*",
-     :joins => (skip_ownership.empty? ? OWNERSHIP_JOIN : '')
-    }.merge( (User.current_user && User.current_user.kind_of?(Admin)) ?
-      { :conditions => {:posted => true} } :
-      ( (User.current_user && User.current_user != :false) ?
-        {:conditions => ['works.posted = ? AND (works.hidden_by_admin = ? OR users.id = ?)', true, false, User.current_user.id] } :
-        {:conditions => VISIBLE_TO_ALL_CONDITIONS })
-      )
+  scope :with_all_tags, lambda {|tags_to_find| with_all_tag_ids(tags_to_find.collect(&:id))}
+  scope :with_any_tags, lambda {|tags_to_find| with_any_tag_ids(tags_to_find.collect(&:id))}
+
+  scope :ids_only, select("DISTINCT(works.id)")
+
+  scope :tags_with_count,
+    select("tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count").
+    joins(:tags).
+    group("tags.name").
+    order("tags.type, tags.name ASC")
+  
+  scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({:pseuds => :user}).where('users.id = ?', user.id)}
+  scope :written_by, lambda {|pseuds| written_by_id(pseuds.collect(&:id)) }
+  scope :written_by_id, lambda {|pseud_ids|
+    select("DISTINCT works.*").
+    joins(:pseuds).
+    where('pseuds.id IN (?)', pseud_ids).
+    group("works.id HAVING count(DISTINCT pseuds.id) = #{pseud_ids.size}")
   }
 
-  scope :ids_only, :select => "DISTINCT works.id"
-
-  scope :tags_with_count, lambda {|*args|
-    {
-      :select => "tags.type as tag_type, tags.id as tag_id, tags.name as tag_name, count(distinct works.id) as count",
-      :joins => :tags,
-      :group => "tags.name",
-      :order => "tags.type, tags.name ASC"
-    }.merge(args.first.size > 0 ? {:conditions => ["works.id in (?)", args.first]} : {})
-  }
-
-  scope :owned_by, lambda {|user|
-    {
-      :select => "DISTINCT works.*",
-      :joins => OWNERSHIP_JOIN,
-      :conditions => ['users.id = ?', user.id]
-    }
-  }
-
-  scope :owned_by_conditions, lambda {|user|
-    {
-      :joins => OWNERSHIP_JOIN,
-      :conditions => ['users.id = ?', user.id]
-    }
-  }
-
-  scope :written_by, lambda {|pseuds|
-    {
-      :select => "DISTINCT works.*",
-      :joins => "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
-                 INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id",
-      :conditions => ['pseuds.id IN (?)', pseuds.collect(&:id)],
-      :group => "works.id HAVING count(DISTINCT pseuds.id) = #{pseuds.size}"
-    }
-  }
-
-  scope :written_by_conditions, lambda {|pseuds|
-    {
-      :joins => OWNERSHIP_JOIN,
-      :conditions => ['pseuds.id IN (?)', pseuds.collect(&:id)],
-      :group => "works.id HAVING count(DISTINCT pseuds.id) = #{pseuds.size}"
-    }
-  }
-
-  scope :written_by_id_conditions, lambda {|pseud_ids|
-    {
-      :joins => OWNERSHIP_JOIN,
-      :conditions => ['pseuds.id IN (?)', pseud_ids],
-      :group => "works.id HAVING count(DISTINCT pseuds.id) = #{pseud_ids.size}"
-    }
-  }
-
-  scope :in_collection, lambda {|collection|
-    {
-      :select => "DISTINCT works.*",
-      :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')
-                 INNER JOIN collections ON collection_items.collection_id = collections.id",
-      :conditions => ['collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
-                   [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED]
-    }
-  }
-
-  scope :in_collection_conditions, lambda {|collection|
-    {
-      :joins => "INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')
-                 INNER JOIN collections ON collection_items.collection_id = collections.id",
-      :conditions => ['collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
-        [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED]
-    }
+  # Note: these scopes DO include the works in the children of the specified collection
+  scope :in_collection, lambda {|collection| 
+    select("DISTINCT works.*").
+    joins(:collection_items, :collections).
+    where('collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
+          [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
   }
 
   scope :for_recipient, lambda {|recipient|
-    {
-      :select => "DISTINCT works.*",
-      :joins => "INNER JOIN gifts ON (gifts.work_id = works.id)",
-      :conditions => ['gifts.recipient_name = ?', recipient]
-    }
+    select("DISTINCT works.*").
+    joins(:gifts).
+    where('gifts.recipient_name = ?', recipient)
   }
 
   # shouldn't really use a named scope for this, but I'm afraid to try
   # to change the way work filtering works
-  scope :by_language, lambda {|lang_id| {:conditions => ['language_id = ?', lang_id]}}
+  scope :by_language, lambda {|lang_id| where('language_id = ?', lang_id)}
 
   # returns an array, must come last
   # TODO: if you know how to turn this into a scope, please do!
@@ -953,9 +893,9 @@ class Work < ActiveRecord::Base
     tags = (options[:boolean_type] == 'or') ?
       '.with_any_tag_ids(options[:selected_tags])' :
       '.with_all_tag_ids(options[:selected_tags])'
-    written = '.written_by_id_conditions(options[:selected_pseuds])'
-    owned = '.owned_by_conditions(options[:user])'
-    collected = '.in_collection_conditions(options[:collection])'
+    written = '.written_by_id(options[:selected_pseuds])'
+    owned = '.owned_by(options[:user])'
+    collected = '.in_collection(options[:collection])'
     sort = '.ordered_by_' + options[:sort_column] + '_' + options[:sort_direction].downcase
     page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
     paginate = '.paginate(page_args)'
@@ -976,11 +916,11 @@ class Work < ActiveRecord::Base
 
     if !options[:user].nil? && !options[:selected_pseuds].empty? && !options[:selected_tags].empty?
       # We have an indiv. user, selected pseuds and selected tags
-      owned_works = Work.owned_by_conditions(options[:user])
+      owned_works = Work.owned_by(options[:user])
       command << written + tags
     elsif !options[:user].nil? && !options[:selected_pseuds].empty?
       # We have an indiv. user, selected pseuds but no selected tags
-      owned_works = Work.owned_by_conditions(options[:user])
+      owned_works = Work.owned_by(options[:user])
       command << written
     elsif !options[:user].nil? && !options[:selected_tags].empty?
       # filtered results on a user's works page

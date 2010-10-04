@@ -8,16 +8,10 @@
     <li><%= span_if_current t('.pseuds', :default =>"Pseuds (%{pseud_number})", :pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
   <% end %>
   <% if @user.pseuds.size > 1 %>
-    <li class="pseud"><a onclick="subnav_view.toggle()" title="Switch Pseuds">
-			<%= if current_page?(@user)
-
-			      t('.switch_pseuds', :default =>"Switch Pseuds")
-
-			      else
-
-			      @author ? @author.name + " &#8595;" :  @user.login + " &#8595;"
-
-			      end %></a>
+    <li class="pseud">
+      <a onclick="subnav_view.toggle()" title="Switch Pseuds">
+			  <%= current_page?(@user) ? ts("Switch Pseuds") : (@author ? @author.name + " &#8595;" :  @user.login + " &#8595;") %>
+			</a>
 			<ul id="subnav">
   				<%= print_pseud_selector(@user.pseuds) %>
  				<li><a onclick="subnav_view.toggle()" style='cursor: pointer;' title="Close Pseud Switcher">Close</a></li>
