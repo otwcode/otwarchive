@@ -25,7 +25,7 @@ class Admin::AdminUsersController < ApplicationController
           conditions = ['roles.name = ?', params[:role]]
         end
       end
-      @users = User.find(:all, :select => 'DISTINCT users.*', :joins => joins, :conditions => conditions)
+      @users = User.select('DISTINCT users.*').joins(joins).where(conditions)
     end
   end
 
