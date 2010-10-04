@@ -155,21 +155,13 @@ class Tag < ActiveRecord::Base
     }
   }
 
-  scope :by_type, lambda {|*types| {:conditions => (types.first.blank? ? {} : {:type => types.first})}}
-  scope :with_type, lambda {|type| {:conditions =>  {:type => type}}}
+  scope :by_type, lambda {|*types| where(types.first.blank? ? "" : {:type => types.first})}
+  scope :with_type, lambda {|type| where({:type => type}) }
 
   # enigel Feb 09
   scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
 
-  scope :visible_to_user, lambda { |user_id|
-    {
-      :select => "DISTINCT works.*",
-      :joins => "INNER JOIN creatorships ON (creatorships.creation_id = works.id AND creatorships.creation_type = 'Work')
-                 INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                 INNER JOIN users ON pseuds.user_id = users.id",
-      :conditions => ['works.posted = ? AND (works.hidden_by_admin = ? OR users.id = ?)', true, false, user_id]
-    }
-  }
+  scope :visible_to_user, lambda { |user_id| Work.visible_to_user(user_id) }
   
   scope :filters_with_count, lambda { |work_ids|
     {
