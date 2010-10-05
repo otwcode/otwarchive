@@ -122,7 +122,7 @@ Otwarchive::Application.routes.draw do
       resources :external_author_names
     end
     resources :gifts, :only => [:index]
-    resource :inbox do
+    resource :inbox, :controller => "inbox" do
       member do
         get :reply
         get :cancel_reply
