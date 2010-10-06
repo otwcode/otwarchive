@@ -829,7 +829,7 @@ class Work < ActiveRecord::Base
   scope :with_all_tag_ids, lambda {|tag_ids_to_find|
     select("DISTINCT works.*").
     joins(:tags).
-    where("tags.id in (?) OR tags.merger_id in (?)", tags_to_find.collect(&:id), tags_to_find.collect(&:id)).
+    where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find).
     group("works.id HAVING count(DISTINCT tags.id) = #{tag_ids_to_find.size}")
   }
 
