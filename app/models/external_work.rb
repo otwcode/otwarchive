@@ -56,25 +56,24 @@ class ExternalWork < ActiveRecord::Base
   ########################################################################
   # Adapted from work.rb
   
-  def self.visible(options = {})
-    current_user=User.current_user
-    with_scope :find => options do
-      find(:all).collect {|b| b if b.visible(current_user)}.compact
-    end
-  end
-  
-  def visible(current_user=User.current_user)
-    if current_user == :false || !current_user
-      return self unless self.hidden_by_admin
-    elsif !self.hidden_by_admin
-      return self      
-    elsif self.hidden_by_admin?
-      return self if current_user.kind_of?(Admin)
-    end
-  end
+  scope :visible_to_all, where(:hidden_by_admin => false)
+  scope :visible_to_registered_user, where(:hidden_by_admin => false)
+  scope :visible_to_admin, where("")
 
+  # a complicated dynamic scope here: 
+  # if the user is an Admin, we use the "visible_to_admin" scope
+  # if the user is not a logged-in User, we use the "visible_to_all" scope
+  # otherwise, we use a join to get userids and then get all posted works that are either unhidden OR belong to this user.
+  # Note: in that last case we have to use select("DISTINCT works.") because of cases where the same user appears twice
+  # on a work.
+  scope :visible_to_user, lambda {|user| user.is_a?(Admin) ? visible_to_admin : visible_to_all}
+    
+  # Use the current user to determine what external works are visible
+  scope :visible, visible_to_user(User.current_user)
+  
+  # Visible unless we're hidden by admin, in which case only an Admin can see.
   def visible?(user=User.current_user)
-    self.visible(user) == self
+    self.hidden_by_admin? ? user.kind_of?(Admin) : true
   end
    
   

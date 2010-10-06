@@ -105,9 +105,9 @@ class BookmarksController < ApplicationController
       else # main page
         @most_recent_bookmarks = true
         if params[:recs_only]
-          bookmarks_grouped = Bookmark.recs.recent.public.reject{|b| b.bookmarkable && !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
+          bookmarks_grouped = Bookmark.recs.recent.is_public.reject{|b| b.bookmarkable && !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
         else
-          bookmarks_grouped = Bookmark.recent.public.reject{|b| b.bookmarkable && !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
+          bookmarks_grouped = Bookmark.recent.is_public.reject{|b| b.bookmarkable && !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
         end
       end
       @bookmarks = []
@@ -117,7 +117,7 @@ class BookmarksController < ApplicationController
         else
            bookmarkables = bookmarks.map(&:bookmarkable).uniq.compact
            bookmarkables.each do |bookmarkable|
-             @bookmarks << bookmarkable.bookmarks.public.first
+             @bookmarks << bookmarkable.bookmarks.is_public.first
            end
         end
       end

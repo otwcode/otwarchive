@@ -93,9 +93,9 @@ module UsersHelper
   # Prints link to series page with user-appropriate number of series
   def print_series_link(user)
     if current_user == :false
-      total = Series.visible_to_public.exclude_anonymous.for_pseuds(user.pseuds).length
+      total = Series.visible_to_all.exclude_anonymous.for_pseuds(user.pseuds).length
     else
-      total = Series.visible_logged_in.exclude_anonymous.for_pseuds(user.pseuds).length
+      total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(user.pseuds).length
     end
     if @user == current_user
   	  span_if_current t('users_helper.my_series', :default => "My Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
@@ -106,9 +106,9 @@ module UsersHelper
   
   def print_pseud_series_link(pseud)
     if current_user == :false
-      total = Series.visible_to_public.exclude_anonymous.for_pseuds([pseud]).length
+      total = Series.visible_to_all.exclude_anonymous.for_pseuds([pseud]).length
     else
-      total = Series.visible_logged_in.exclude_anonymous.for_pseuds([pseud]).length
+      total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([pseud]).length
     end
   	if @user == current_user
   	  span_if_current t('users_helper.my_series', :default => "My Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)

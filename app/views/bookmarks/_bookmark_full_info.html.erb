@@ -1,7 +1,7 @@
 	<% if bookmark.bookmarkable.blank? %>
       <p class="message"><%= "This item has been deleted, sorry!" %></p>
     <% else %>
-    <% bookmark_count = bookmark.bookmarkable.bookmarks.public.count %>
+    <% bookmark_count = bookmark.bookmarkable.bookmarks.is_public.count %>
     <p class="symbols count" title="<%= bookmark_count %> Bookmarks">
       <%= get_symbol_for_bookmark(bookmark) %>
       <span><%=  (bookmark_count < 100) ? bookmark_count : '*' %></span>

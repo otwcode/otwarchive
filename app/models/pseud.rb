@@ -58,48 +58,39 @@ class Pseud < ActiveRecord::Base
   after_update :check_default_pseud
   
   scope :on_works, lambda {|owned_works|
-    {
-      :select => "DISTINCT pseuds.*",
-      :joins => :works,
-      :conditions => {:works => {:id => owned_works.collect(&:id)}},
-      :order => :name
-    }
+    select("DISTINCT pseuds.*").
+    joins(:works).
+    where(:works => {:id => owned_works.collect(&:id)}).
+    order(:name)
   }
   
-  scope :with_posted_works, {
-    :select => "pseuds.*, count(pseuds.id) AS work_count",
-    :joins => :works,
-    :conditions => {:works => {:posted => true, :hidden_by_admin => false}},
-    :group => 'pseuds.id',
-    :order => :name
-  }
+  scope :with_works,
+    select("pseuds.*, count(pseuds.id) AS work_count").
+    joins(:works).
+    group(:id).
+    order(:name)
   
-  scope :with_public_works, {
-    :select => "pseuds.*, count(pseuds.id) AS work_count",
-    :joins => :works,
-    :conditions => {:works => {:posted => true, :hidden_by_admin => false, :restricted => false}},
-    :group => 'pseuds.id',
-    :order => :name
-  }
+  scope :with_posted_works, with_works & Work.visible_to_registered_user
+  scope :with_public_works, with_works & Work.visible_to_all
 
-  scope :with_public_bookmarks, {
-    :select => "pseuds.*, count(pseuds.id) AS bookmark_count",
-    :joins => :bookmarks,
-    :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false}},
-    :group => 'pseuds.id',
-    :order => :name   
-  }
+  scope :with_bookmarks,
+    select("pseuds.*, count(pseuds.id) AS bookmark_count").
+    joins(:bookmarks).
+    group(:id).
+    order(:name)    
+
+  # :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false}},
+  scope :with_public_bookmarks, with_bookmarks & Bookmark.is_public
   
-  scope :with_public_recs, {
-    :select => "pseuds.*, count(pseuds.id) AS rec_count",
-    :joins => :bookmarks,
-    :conditions => {:bookmarks => {:private => false, :hidden_by_admin => false, :rec => true}},
-    :group => 'pseuds.id',
-    :order => :name   
-  }
+  scope :with_public_recs, 
+    select("pseuds.*, count(pseuds.id) AS rec_count").
+    joins(:bookmarks).
+    group(:id).
+    order(:name) & 
+    Bookmark.is_public.recs
   
-  scope :alphabetical, :order => :name
-  scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
+  scope :alphabetical, order(:name)
+  scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
   
 
   # Enigel Dec 12 08: added sort method
@@ -128,7 +119,7 @@ class Pseud < ActiveRecord::Base
 
   # Gets the number of recs by this user
   def visible_recs_count
-    self.recs.public.size
+    self.recs.is_public.size
   end
   
   scope :public_work_count_for, lambda {|pseud_ids|

@@ -10,7 +10,7 @@ module WorksHelper
     if work.count_visible_comments > 0
       list.concat([[t('works_helper.work_comments', :default => 'Comments') + ':', work.count_visible_comments.to_s]])
     end
-    if (bookmark_count = work.bookmarks.public.count) > 0
+    if (bookmark_count = work.bookmarks.is_public.count) > 0
       list.concat([[t('works_helper.work_bookmarks', :default => 'Bookmarks') + ':', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
     end
     list.concat([[t('works_helper.hits', :default => "Hits:"), work.hits]]) if show_hit_count?(work)

@@ -29,15 +29,15 @@ class SeriesController < ApplicationController
     end
     if pseuds        
       if current_user == :false
-        @series = Series.visible_to_public.exclude_anonymous.for_pseuds(pseuds).paginate(:page => params[:page])
+        @series = Series.visible_to_all.exclude_anonymous.for_pseuds(pseuds).paginate(:page => params[:page])
       else
-        @series = Series.visible_logged_in.exclude_anonymous.for_pseuds(pseuds).paginate(:page => params[:page])
+        @series = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(pseuds).paginate(:page => params[:page])
       end
     else
       if current_user == :false
-        @series = Series.visible_to_public.paginate(:page => params[:page])
+        @series = Series.visible_to_all.paginate(:page => params[:page])
       else
-        @series = Series.visible_logged_in.paginate(:page => params[:page])
+        @series = Series.visible_to_registered_user.paginate(:page => params[:page])
       end
     end
   end

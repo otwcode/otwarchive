@@ -21,24 +21,21 @@ class Gift < ActiveRecord::Base
     end
   end
 
-  scope :for_pseud, lambda {|pseud| {:conditions => ["pseud_id = ?", pseud.id]}}
-  
-  scope :for_user, lambda {|user| {:conditions => ["pseud_id IN (?)", user.pseuds.collect(&:id).flatten]}}
+  scope :for_pseud, lambda {|pseud| where("pseud_id = ?", pseud.id)}
+    
+  scope :for_user, lambda {|user| where("pseud_id IN (?)", user.pseuds.collect(&:id).flatten)}
 
-  scope :for_recipient_name, lambda {|name| {:conditions => ["recipient_name = ?", name]}}
+  scope :for_recipient_name, lambda {|name| where("recipient_name = ?", name)}
   
   scope :in_collection, lambda {|collection|
-    {
-      :select => "DISTINCT gifts.*",
-      :joins => "INNER JOIN works ON (gifts.work_id = works.id) 
-                 INNER JOIN collection_items ON (collection_items.item_id = works.id AND collection_items.item_type = 'Work')",
-      :conditions => ["collection_items.collection_id = ?", collection.id]
-    }
+    select("DISTINCT gifts.*").
+    joins({:work => :collection_items}).
+    where("collection_items.collection_id = ?", collection.id)
   }
   
   scope :name_only, :select => :recipient_name
   
-  scope :include_pseuds, :include => [{:work => :pseuds}]
+  scope :include_pseuds, includes(:work => [:pseuds])
 
   def recipient=(new_recipient_name)
     self.pseud = Pseud.parse_byline(new_recipient_name, :assume_matching_login => true).first

@@ -33,9 +33,9 @@ class PseudsController < ApplicationController
       @fandoms = @author.filters.by_type("Fandom").by_name.find(:all, :select => "DISTINCT tags.*")
       @works = Work.written_by([@author]).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
       if current_user == :false
-        @series = Series.visible_to_public.exclude_anonymous.for_pseuds([@author]).find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
+        @series = Series.visible_to_all.exclude_anonymous.for_pseuds([@author]).find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
       else
-        @series = Series.visible_logged_in.exclude_anonymous.for_pseuds([@author]).find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
+        @series = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([@author]).find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
       end
       visible_bookmarks = @author.bookmarks.visible(:order => 'bookmarks.created_at DESC')
       # Having the number of items as a limit was finding the limited number of items, then visible ones within them

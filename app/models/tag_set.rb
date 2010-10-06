@@ -77,13 +77,11 @@ class TagSet < ActiveRecord::Base
   end
   
   scope :matching, lambda {|tag_set_to_match|
-    {
-      :select => "DISTINCT tag_sets.*",
-      :joins => :tags,
-      :group => 'tag_sets.id',
-      :conditions => ["tag_sets.id != ? AND tags.id in (?)", tag_set_to_match.id, tag_set_to_match.tags],
-      :order => "count(tags.id) desc"
-    }
+    select("DISTINCT tag_sets.*").
+    joins(:tags).
+    group('tag_sets.id').
+    where("tag_sets.id != ? AND tags.id in (?)", tag_set_to_match.id, tag_set_to_match.tags).
+    order("count(tags.id) desc")
   }
   
   def +(other)

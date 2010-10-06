@@ -34,7 +34,7 @@
         <dd><%= number_with_delimiter(series.visible_word_count) %></dd>
       <dt><%=h 'Works' + ': ' %></dt> 
         <dd><%=h series.visible_work_count %></dd>
-      <% if (bookmark_count = series.bookmarks.public.count) > 0 %>
+      <% if (bookmark_count = series.bookmarks.is_public.count) > 0 %>
       <dt><%=h t('.work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
         <dd><%= link_to_bookmarkable_bookmarks(series, bookmark_count.to_s) %></dd>
       <% end %>

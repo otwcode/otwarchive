@@ -798,7 +798,7 @@ class Work < ActiveRecord::Base
   scope :hidden, where(:hidden_by_admin => true)
   scope :unhidden, where(:hidden_by_admin => false)
   scope :visible_to_all, posted.unrestricted.unhidden
-  scope :visible_to_user, posted.unhidden
+  scope :visible_to_registered_user, posted.unhidden
   scope :visible_to_admin, posted
   scope :visible_to_owner, posted
   scope :all_with_tags, includes(:tags)
