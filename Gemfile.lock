@@ -1,10 +1,10 @@
 GIT
   remote: git://github.com/10to1/tolk.git
-  revision: 3dc56f82db77124c7a8c922049a2e6d960713b60
+  revision: 25c88e179e1e05c916e38913a1e74bc3fa9963cc
   branch: rails3
   specs:
     tolk (1.0)
-      will_paginate (= 3.0.pre)
+      will_paginate (>= 3.0.pre)
       ya2yaml (~> 0.26)
 
 GIT
@@ -22,6 +22,13 @@ GIT
     paperclip (2.3.3)
       activerecord
       activesupport
+
+GIT
+  remote: http://github.com/mislav/will_paginate.git
+  revision: 36159385c8a5837fc63fe901ebe0a88205b5ce8d
+  branch: rails3
+  specs:
+    will_paginate (3.0.pre2)
 
 GEM
   remote: http://rubygems.org/
@@ -203,7 +210,6 @@ GEM
     whenever (0.5.3)
       aaronh-chronic (>= 0.3.9)
       activesupport (>= 2.3.4)
-    will_paginate (3.0.pre)
     xml-simple (1.0.12)
     ya2yaml (0.30)
     yard (0.6.1)
@@ -246,4 +252,4 @@ DEPENDENCIES
   tolk!
   ts-delayed-delta
   whenever
-  will_paginate (= 3.0.pre)
+  will_paginate!

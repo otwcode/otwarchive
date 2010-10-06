@@ -23,7 +23,13 @@ gem 'fastthread'
 # Here are all our application-specific gems
 gem 'ruby-openid', :require => 'openid'
 gem 'chronic'
-gem 'will_paginate', '3.0.pre'
+
+#gem 'will_paginate', '3.0.pre'
+gem 'will_paginate',
+  :git     => 'http://github.com/mislav/will_paginate.git',
+  :branch  => 'rails3',
+  :require => 'will_paginate'
+
 gem 'andand'
 gem 'htmlentities'
 gem 'whenever', :require => false
@@ -39,6 +45,7 @@ gem 'aws-s3', :require => 'aws/s3'
 gem 'mocha'
 gem 'css_parser'
 gem 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git', :require => 'paperclip'
+
 gem 'tolk',
   :git => 'git://github.com/10to1/tolk.git',
   :branch => 'rails3',
