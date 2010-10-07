@@ -3,7 +3,7 @@ class FandomsController < ApplicationController
 
   def index
     if @collection
-      @fandoms = Fandom.for_collections([@collection] + @collection.children)
+      @fandoms = Fandom.for_collections_with_count([@collection] + @collection.children)
     elsif params[:medium_id]
       if @medium = Media.find_by_name(params[:medium_id])
         if @medium == Media.uncategorized
