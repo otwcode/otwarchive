@@ -70,7 +70,7 @@ class ChallengeSignup < ActiveRecord::Base
       end
       unless errors_to_add.empty?
         # yuuuuuck :( but so much less ugly than define-method'ing these all
-        self.errors.add_to_base(errors_to_add.join("</li><li>"))
+        self.errors.add(:base, errors_to_add.join("</li><li>"))
       end
     end
   end

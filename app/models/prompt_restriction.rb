@@ -28,7 +28,7 @@ class PromptRestriction < ActiveRecord::Base
       end
     end
     unless error_types.empty?
-      errors.add_to_base(t('prompt_restriction.single_tag', 
+      errors.add(:base, t('prompt_restriction.single_tag', 
         :default => "You haven't given users a choice of %{error_types}. (If that is deliberate, just set the number of tags required and allowed for that type to 0 instead.)", 
         :error_types => error_types.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
     end

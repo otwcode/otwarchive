@@ -337,7 +337,7 @@ class User < ActiveRecord::Base
     return false unless self.profile
     unless self.profile.date_of_birth.blank?
       if self.profile.date_of_birth > 13.years.ago.to_date
-        errors.add_to_base("You must be over 13.")
+        errors.add(:base, "You must be over 13.")
         return false
       end
     end

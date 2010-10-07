@@ -17,7 +17,7 @@ class Gift < ActiveRecord::Base
   validate :has_name_or_pseud
   def has_name_or_pseud
     unless self.pseud || !self.recipient_name.blank?
-      errors.add_to_base("A gift must have a recipient specified.")
+      errors.add(:base, "A gift must have a recipient specified.")
     end
   end
 

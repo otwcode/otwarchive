@@ -1,6 +1,7 @@
 <div id="work-form">
 	<%= form_for(@admin_post) do |f| %>
-	<%= f.error_messages %>
+	<%= render "shared/error_messages", :target => @admin_post %>
+	
 	<input type="hidden" name="admin_post[admin_id]" value="<%= current_admin.id %>" />
 	<p class="notice required"><%=h '* Required information' %></p>
 	  <p>

@@ -68,7 +68,7 @@ class Invitation < ActiveRecord::Base
         end
         self.sent_at = Time.now
       rescue Exception => exception
-        errors.add_to_base("Notification email could not be sent: #{exception.message}")
+        errors.add(:base, "Notification email could not be sent: #{exception.message}")
       end
     end
   end

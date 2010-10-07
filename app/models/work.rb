@@ -116,13 +116,13 @@ class Work < ActiveRecord::Base
   def validate_authors
     if self.authors.blank?
       if self.pseuds.blank?
-        errors.add_to_base(t('must_have_author', :default => "Work must have at least one author."))
+        errors.add(:base, t('must_have_author', :default => "Work must have at least one author."))
         return false
       else
         self.authors_to_sort_on = self.sorted_pseuds
       end
     elsif !self.invalid_pseuds.blank?
-      errors.add_to_base(t('invalid_pseuds', :default => "These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
+      errors.add(:base, t('invalid_pseuds', :default => "These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
     else
       self.authors_to_sort_on = self.sorted_authors
     end
@@ -135,7 +135,7 @@ class Work < ActiveRecord::Base
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
         debugger
-        errors.add_to_base(ts("Title must be at least %{min} characters long without leading spaces.", :min => ArchiveConfig.TITLE_MIN))
+        errors.add(:base, ts("Title must be at least %{min} characters long without leading spaces.", :min => ArchiveConfig.TITLE_MIN))
         return false
       else
         self.title_to_sort_on = self.sorted_title
@@ -147,7 +147,7 @@ class Work < ActiveRecord::Base
     if !self.first_chapter.published_at
       self.first_chapter.published_at = Date.today
     elsif self.first_chapter.published_at > Date.today
-      errors.add_to_base(t('no_future_dating', :default => "Publication date can't be in the future."))
+      errors.add(:base, t('no_future_dating', :default => "Publication date can't be in the future."))
       return false
     end
   end
@@ -705,10 +705,10 @@ class Work < ActiveRecord::Base
           begin
             self.new_parent = {:parent => Work.find($1), :translation => attributes[:translation]}
           rescue
-            self.errors.add_to_base("The work you listed as an inspiration does not seem to exist.")
+            self.errors.add(:base, "The work you listed as an inspiration does not seem to exist.")
           end
         else
-          self.errors.add_to_base("Only a link to a work can be listed as an inspiration.")
+          self.errors.add(:base, "Only a link to a work can be listed as an inspiration.")
         end
       elsif attributes[:title].blank? || attributes[:author].blank?
         error_message = ""
@@ -718,7 +718,7 @@ class Work < ActiveRecord::Base
         if attributes[:author].blank?
           error_message << "A parent work outside the archive needs to have an author. "
         end
-        self.errors.add_to_base(error_message)
+        self.errors.add(:base, error_message)
       else
         translation = attributes.delete(:translation)
         ew = ExternalWork.find_by_url(attributes[:url])
@@ -729,7 +729,7 @@ class Work < ActiveRecord::Base
           if ew.save
             self.new_parent = {:parent => ew, :translation => translation}
           else
-            self.errors.add_to_base("Parent work info would not save.")
+            self.errors.add(:base, "Parent work info would not save.")
           end
         end
       end

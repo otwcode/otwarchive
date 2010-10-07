@@ -4,7 +4,7 @@
 
 <!--main content-->
 <%= form_for @admin_setting, :url => admin_setting_path(@admin_setting), :html => {:method => :put} do |f| %>
-  <%= f.error_messages %>
+  <%= render "shared/error_messages", :target => @admin_setting %>
   <dl>
     <dt><%= f.label :account_creation_enabled %></dt>
 	  <dd><%= f.check_box :account_creation_enabled %> </dd>

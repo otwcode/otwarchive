@@ -7,7 +7,7 @@
 <!--main content-->
 <h3 class="landmark">Add yourself to the list</h3>
 <%= form_for(@invite_request) do |f| %>
-  <%= f.error_messages %>
+  <%= render "shared/error_messages", :target => @invite_request %>
 
   <p>
     <%= f.label :email %>

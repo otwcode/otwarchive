@@ -1,6 +1,6 @@
 <div id="work-form">
 	<%= form_for(@archive_faq) do |f| %>
-	<%= f.error_messages %>
+	<%= render "shared/error_messages", :target => @archive_faq %>
 	
  <fieldset>
 	<legend>Title FAQ Subsection</legend>

@@ -18,7 +18,7 @@
 <h3 class="landmark">Gift Exchange Settings</h3>
 
 <%= form_for([@collection, @challenge], :url => collection_gift_exchange_path(@collection)) do |f| %>
-  <%= f.error_messages %>
+  <%= error_messages_for @challenge %>
   <fieldset class="preface profile">
     <legend>Schedule</legend>
     <h3>Schedule</h3>

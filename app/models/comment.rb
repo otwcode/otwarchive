@@ -14,8 +14,9 @@ class Comment < ActiveRecord::Base
     :maximum => ArchiveConfig.COMMENT_MAX, 
     :too_long => t('invalid_content_length', :default => "must be less than %{count} letters long.", :count => ArchiveConfig.COMMENT_MAX)
 
-  def validate
-    errors.add_to_base(t('invalid_spam', :default => "This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam
+  validate :check_for_spam
+  def check_for_spam
+    errors.add(:base, t('invalid_spam', :default => "This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam
   end
   
   scope :recent, lambda { |*args| {:conditions => ["created_at > ?", (args.first || 1.week.ago.to_date)]} }

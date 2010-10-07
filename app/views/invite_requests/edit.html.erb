@@ -11,14 +11,14 @@
 
 <!--main content-->
 <%= form_for(@invite_request) do |f| %>
-  <%= f.error_messages %>
-<dl>
-	<dt><%= f.label :email %></dt>
+  <%= render "shared/error_messages", :target => @invite_request %>
+  <dl>
+  	<dt><%= f.label :email %></dt>
     <dd><%= f.text_field :email %></dd>
     <dt><%= f.label :position %></dt>
     <dd><%= f.text_field :position %></dd>
-</dl>
-<p class="submit">
+  </dl>
+  <p class="submit">
     <%= f.submit 'Update' %>
   </p>
 <% end %>

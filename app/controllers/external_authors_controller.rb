@@ -27,7 +27,6 @@ class ExternalAuthorsController < ApplicationController
     flash[:notice] = "Coming soon!"
     redirect_to :action => :index
     # @external_author = ExternalAuthor.new
-    # @user = current_user
     # @external_author.external_author_names.build
   end
 

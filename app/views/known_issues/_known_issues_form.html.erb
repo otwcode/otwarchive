@@ -1,6 +1,7 @@
 <div id="work-form">
 	<%= form_for(@known_issue) do |f| %>
-	<%= f.error_messages %>
+  <%= render "shared/error_messages", :target => @known_issue %>
+
 	<fieldset>
 		<legend>Update Revision Number</legend>
 		    <p><%= f.label :title, t('.form_title', :default => "Beta Revision"), :class => "required" %>

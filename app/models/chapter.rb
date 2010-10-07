@@ -135,7 +135,7 @@ class Chapter < ActiveRecord::Base
     if !self.published_at
       self.published_at = Date.today
     elsif self.published_at > Date.today
-      errors.add_to_base(t('no_future_dating', :default => "Publication date can't be in the future."))
+      errors.add(:base, t('no_future_dating', :default => "Publication date can't be in the future."))
       return false
     end
   end  

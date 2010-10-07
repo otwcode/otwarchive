@@ -11,7 +11,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for :tag, @tag, :url => { :action => "create" }  do |f| %>
+<%= form_for @tag, :as => :tag, :url => { :action => "create" }  do |f| %>
   <dl>
     <dt><%= f.label :name, 'Name' %></dt>
     <dd><%= f.text_field :name, :size => ArchiveConfig.TAG_MAX %></dd>

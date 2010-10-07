@@ -8,7 +8,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
+<%= form_for @tag, :as => :tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
 
 <fieldset>
   <legend>Tag info:</legend>

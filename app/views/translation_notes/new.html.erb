@@ -7,7 +7,7 @@
 
 <!--main content-->
 <%= form_for(@translation_note) do |f| %>
-  <%= f.error_messages %>
+  <%= render "shared/error_messages", :target => @translation_note %>
 
   <p>
     <%= f.label :namespace %>

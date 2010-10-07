@@ -1,33 +1,6 @@
 <h2><%= t('.edit_external_author', :default => 'Editing external author identity') %></h2>
 
-<%= form_for([@user, @external_author]) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.label :email %>
-    <%= f.text_field :email %>
-  </p>
-  
-  <div id="external_author_names">
-    <% f.fields_for :external_author_names do |name_form| %>
-      <%= render :partial => 'external_author_name', :locals => {:form => name_form} %>
-    <% end %>
-  </div>
-
-  <p><%= add_name_link(f) %></p>
-  
-  <p>
-    <%= f.check_box :do_not_email %>
-    <%= f.label :do_not_email %>
-  </p>
-  <p>
-    <%= f.check_box :do_not_import %>
-    <%= f.label :do_not_import %>
-  </p>
-  <p>
-    <%= f.submit t('.update', :default => 'Update') %>
-  </p>
-<% end %>
+<%= render "external_author_form" %>
 
 <ul class="navigation">
 	<li><%= link_to t('.back', :default => 'Back'), user_external_authors_path(@user) %></li>

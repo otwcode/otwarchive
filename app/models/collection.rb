@@ -88,15 +88,15 @@ class Collection < ActiveRecord::Base
 
   def parent_exists
     unless parent_name.blank? || Collection.find_by_name(parent_name)
-      errors.add_to_base(t('collection.no_parent', :default => "We couldn't find a collection with name %{name}.", :name => parent_name))
+      errors.add(:base, t('collection.no_parent', :default => "We couldn't find a collection with name %{name}.", :name => parent_name))
     end
   end
 
   def parent_is_allowed
     if parent && parent == self
-      errors.add_to_base(t('collection.no_self_parenting', :default => "Collections are not self-parenting."))
+      errors.add(:base, t('collection.no_self_parenting', :default => "Collections are not self-parenting."))
     elsif parent && !parent.user_is_maintainer?(User.current_user)
-      errors.add_to_base(t('collections.not_allowed_subcollection', :default => "You don't have permission to work on a subcollection of %{name}.", :name => parent.name))
+      errors.add(:base, t('collections.not_allowed_subcollection', :default => "You don't have permission to work on a subcollection of %{name}.", :name => parent.name))
     end
   end
    

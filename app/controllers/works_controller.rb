@@ -455,9 +455,9 @@ public
           @work.check_for_invalid_tags
         end
         if @work.fandoms.blank?
-          @work.errors.add_to_base("Updating: Please add all required tags. Fandom is missing.")
+          @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
         elsif !@work.has_required_tags?
-          @work.errors.add_to_base("Updating: Please add all required tags.")
+          @work.errors.add(:base, "Updating: Please add all required tags.")
         end
         render :edit
       end
@@ -547,9 +547,9 @@ public
           @work.check_for_invalid_tags
         end
         if @work.fandoms.blank?
-          @work.errors.add_to_base("Updating: Please add all required tags. Fandom is missing.")
+          @work.errors.add(:base, "Updating: Please add all required tags. Fandom is missing.")
         elsif !@work.has_required_tags?
-          @work.errors.add_to_base("Updating: Please add all required tags.")
+          @work.errors.add(:base, "Updating: Please add all required tags.")
         end
         render :edit_tags
       end

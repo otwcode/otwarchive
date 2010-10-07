@@ -3,14 +3,15 @@ module ValidationHelper
   # Set a custom error-message handler that puts the errors on 
   # their respective fields instead of on the top of the page
   ActionView::Base.field_error_proc = Proc.new {|html_tag, instance|
-    # don't put errors on the labels, duh
-    if !html_tag.match(/label/)
-      %(<span class='error'>#{html_tag}</span>).html_safe
-    elsif instance.error_message.kind_of?(Array)
-      %(<span class='error'>#{html_tag} <ul class='error'><li>#{instance.error_message.join('</li><li>')}</li></ul></span>).html_safe
-    else
-      %(<span class='error'>#{html_tag} #{instance.error_message}</span>).html_safe
-    end
+    %(<span class='error'>#{html_tag}</span>).html_safe
+    # # don't put errors on the labels, duh
+    # if !html_tag.match(/label/)
+    #   %(<span class='error'>#{html_tag}</span>).html_safe
+    # elsif instance.error_message.kind_of?(Array)
+    #   %(<span class='error'>#{html_tag} <ul class='error'><li>#{instance.error_message.join('</li><li>')}</li></ul></span>).html_safe
+    # else
+    #   %(<span class='error'>#{html_tag} #{instance.error_message}</span>).html_safe
+    # end
   }
   
   # much simplified and html-safed version of error_messages_for

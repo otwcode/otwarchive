@@ -81,17 +81,17 @@ module Taggable
   end
 
   def validate_tags
-    errors.add_to_base("Work must have required tags.") unless self.has_required_tags?
+    errors.add(:base, "Work must have required tags.") unless self.has_required_tags?
     self.has_required_tags?
   end
 
   # Add an error message if the user tried to add invalid tags to the work
   def check_for_invalid_tags
     unless self.invalid_tags.blank?
-      errors.add_to_base("The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than #{ArchiveConfig.TAG_MAX} characters long and do not contain any invalid characters.")
+      errors.add(:base, "The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than #{ArchiveConfig.TAG_MAX} characters long and do not contain any invalid characters.")
       self.invalid_tags.each do |tag|
         tag.errors.each_full do |error|
-          errors.add_to_base(error)
+          errors.add(:base, error)
         end
       end
     end

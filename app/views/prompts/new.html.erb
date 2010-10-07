@@ -1,8 +1,8 @@
 <h1>New prompt</h1>
 
-<%= prompt_form.error_messages %>
-
 <%= form_for(@prompt) do |prompt_form| %>
+  <%= render "shared/error_messages", :target => @prompt %>
+
   <%= prompt_form.hidden_field :collection, @collection %>
   <%= render :partial => "prompts/prompt_form", :locals => {:form => prompt_form} %>
 

@@ -98,13 +98,13 @@ protected
         if declaration.downcase.gsub(/\s+/, '') != clean_declaration.downcase.gsub(/\s+/, '') 
           if clean_declaration.empty?
             if declaration !~ /^(\s*[-\w]+\s*:\s*[^:;]*(;|$)\s*)*$/ 
-              errors.add_to_base("The code for #{rs.selectors.join(',')} doesn't seem to be a valid CSS rule.")
+              errors.add(:base, "The code for #{rs.selectors.join(',')} doesn't seem to be a valid CSS rule.")
             else
               # the property is not allowed
-              errors.add_to_base("The declarations for #{rs.selectors.join(',')} cannot use the property <strong>#{property}</strong>")
+              errors.add(:base, "The declarations for #{rs.selectors.join(',')} cannot use the property <strong>#{property}</strong>")
             end
           else
-            errors.add_to_base("The #{property} property in #{rs.selectors.join(',')} cannot have the value <strong>#{value}</strong>")
+            errors.add(:base, "The #{property} property in #{rs.selectors.join(',')} cannot have the value <strong>#{value}</strong>")
           end
         else
           clean_rule += "  #{clean_declaration}\n"
