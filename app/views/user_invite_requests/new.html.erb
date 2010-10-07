@@ -4,7 +4,7 @@
 
 <!--main content-->
 <%= form_for(@user_invite_request) do |f| %>
-  <%= render "shared/error_messages", :target => @user_invite_request %>
+  <%= error_messages_for @user_invite_request %>
   <p>
     <%= f.label "How many invites are you requesting?" %> <%= f.text_field :quantity, :size => '2' %>
   </p>

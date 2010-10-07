@@ -19,7 +19,7 @@
 
 <div id="work-form" class="work-form">
 <%= form_for(@series) do |f| %>
-  <%= render "shared/error_messages", :target => @series %>
+  <%= error_messages_for @series %>
   <p class="notice required"><%=h t('.required', :default => '* Required information') %></p>
   <fieldset>
     <dl>

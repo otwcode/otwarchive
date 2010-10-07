@@ -8,7 +8,7 @@
 
 <!--main content-->
 <%= form_for(@invite_request) do |f| %>
-  <%= render "shared/error_messages", :target => @invite_request %>
+  <%= error_messages_for @invite_request %>
 
   <dl>
     <dt><%= f.label :email %></dt>

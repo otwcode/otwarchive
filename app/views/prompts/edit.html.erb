@@ -1,7 +1,7 @@
 <h1>Editing prompt</h1>
 
 <%= form_for(@prompt) do |f| %>
-  <%= render "shared/error_messages", :target => @prompt %>
+  <%= error_messages_for @prompt %>
 
   <p>
     <%= f.label :collection %><br />

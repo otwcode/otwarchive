@@ -7,7 +7,7 @@
 
 <!--main content-->
 <%= form_for(@series) do |f| %>
-  <%= render "shared/error_messages", :target => @series %>
+  <%= error_messages_for @series %>
   
   <p class="submit">
     <%= f.submit "Create" %>
