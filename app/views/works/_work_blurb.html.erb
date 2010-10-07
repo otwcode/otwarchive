@@ -40,7 +40,7 @@
 
   	  <h5 title="fandom">
         <% fandoms = tag_groups['Fandom'] %>
-        <%= fandoms.collect{|tag| link_to_tag(tag) }.join(', ') if fandoms %>
+        <%= fandoms.collect{|tag| link_to_tag(tag) }.join(', ').html_safe if fandoms %>
   		  &nbsp;
   	  </h5>
 

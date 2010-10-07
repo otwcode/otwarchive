@@ -87,11 +87,11 @@ module ApplicationHelper
     
       pseuds.collect { |pseud| 
         archivists[pseud].nil? ? 
-          link_to(pseud.byline, [pseud.user, pseud], :class => "login author") : 
+          link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author") : 
           archivists[pseud] + 
             t('application_helper.byline.archived_by', :default => "[archived by %{archivist}]", 
-              :archivist => link_to(pseud.byline, [pseud.user, pseud], :class => "login author"))
-      }.join(', ')
+              :archivist => link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author"))
+      }.join(', ').html_safe
     end
   end
 
@@ -106,7 +106,7 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
     
-    link_to_ibox link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question"
+    link_to_ibox(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question").html_safe
   end
   
   # Inserts the flash alert messages for flash[:key] wherever 

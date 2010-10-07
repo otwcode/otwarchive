@@ -217,7 +217,7 @@ module TagsHelper
         end
       end
     end
-    tag_block
+    tag_block.html_safe
   end
 
   def get_title_string(tags, category_name = "")
@@ -250,17 +250,15 @@ module TagsHelper
       mappings[:iswip] = {:class_name => 'external-work', :string =>  "External Work"}
     end
 
-    symbol_block = ""
-    symbol_block << "<ul class=\"required-tags\">\n" if not symbols_only
+    symbol_block = []
+    symbol_block << "<ul class=\"required-tags\">" if not symbols_only
     %w(rating category warning iswip).each do |w|
       css_class = mappings[w.to_sym][:class_name]
       title_string = mappings[w.to_sym][:string]
-      symbol_block << "<li>"
-      symbol_block << link_to_help('symbols-key', link = "<div class=\"#{css_class}\" title=\"#{title_string}\"><span>" + title_string + "</span></div>")
-      symbol_block << "</li>\n"
+      symbol_block << content_tag(:li, link_to_help('symbols-key', link = ("<span class=\"#{css_class}\" title=\"#{title_string}\"><span>" + title_string + "</span></span>").html_safe))
     end
-    symbol_block << "</ul>\n" if not symbols_only
-    return symbol_block
+    symbol_block << "</ul>" if not symbols_only
+    return symbol_block.join("\n").html_safe
   end
 
   def get_warnings_class(warning_tags)
