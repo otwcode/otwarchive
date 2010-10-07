@@ -213,8 +213,7 @@ class TagsController < ApplicationController
       @counts[tag_type] = @tag.send(tag_type).count
     end
     
-    # THIS NEEDS SOME SECURITY FOR params[:show]!!!!
-    unless params[:show].blank?
+    if %w(fandoms characters relationships freeforms sub_tags mergers).include?(params[:show])
       params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]
