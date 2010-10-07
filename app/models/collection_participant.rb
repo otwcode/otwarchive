@@ -23,22 +23,16 @@ class CollectionParticipant < ActiveRecord::Base
     :message => t('collection.item.invalid_type', :default => "That is not a valid participant role.")
 
   scope :for_user, lambda {|user|
-    {
-      :select => "DISTINCT collection_participants.*",
-      :joins => "INNER JOIN pseuds ON collection_participants.pseud_id = pseuds.id
-                        INNER JOIN users ON pseuds.user_id = users.id",
-      :conditions => ['users.id = ?', user.id]
-    }
+    select("DISTINCT collection_participants.*").
+    joins(:pseud => :user).
+    where('users.id = ?', user.id)
   }
 
   scope :in_collection, lambda {|collection|
-    {
-      :select => "DISTINCT collection_participants.*",
-      :joins => "INNER JOIN collections ON collection_participants.collection_id = collections.id",
-      :conditions => ['collections.id = ?', collection.id]
-    }
+    select("DISTINCT collection_participants.*").
+    joins(:collection).
+    where('collections.id = ?', collection.id)
   }
-
 
   def is_owner? ; self.participant_role == OWNER ; end
   def is_moderator? ; self.participant_role == MODERATOR ; end

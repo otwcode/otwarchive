@@ -8,6 +8,13 @@ GIT
       ya2yaml (~> 0.26)
 
 GIT
+  remote: git://github.com/mislav/will_paginate.git
+  revision: 36159385c8a5837fc63fe901ebe0a88205b5ce8d
+  branch: rails3
+  specs:
+    will_paginate (3.0.pre2)
+
+GIT
   remote: git://github.com/odorcicd/authlogic.git
   revision: a087ad0cba3c165ba22fcf176c28b6f7517931e8
   branch: rails3
@@ -22,13 +29,6 @@ GIT
     paperclip (2.3.3)
       activerecord
       activesupport
-
-GIT
-  remote: http://github.com/mislav/will_paginate.git
-  revision: 36159385c8a5837fc63fe901ebe0a88205b5ce8d
-  branch: rails3
-  specs:
-    will_paginate (3.0.pre2)
 
 GEM
   remote: http://rubygems.org/
@@ -100,6 +100,7 @@ GEM
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    escape_utils (0.1.8)
     factory_girl (1.3.2)
     fastthread (1.0.7)
     ffi (0.6.3)
@@ -230,6 +231,7 @@ DEPENDENCIES
   daemon-spawn
   database_cleaner
   delayed_job
+  escape_utils
   factory_girl
   fastthread
   htmlentities

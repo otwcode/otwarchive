@@ -11,54 +11,13 @@ class Fandom < Tag
   has_many :relationships, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Relationship'"
   has_many :freeforms, :through => :child_taggings, :source => :common_tag, :conditions => "type = 'Freeform'"
     
-  scope :by_media, lambda{|media| {:conditions => {:media_id => media.id}}}
-  scope :unwrangled, {:joins => "INNER JOIN `common_taggings` ON tags.id = common_taggings.common_tag_id", 
-    :conditions => ["common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'", Media.uncategorized.andand.id]}
+
+  scope :by_media, lambda {|media| where(:media_id => media.id)}
+
+  scope :unwrangled, 
+    joins(:common_taggings).
+    where("common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'", Media.uncategorized.andand.id)
     
-  COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id ) 
-                      INNER JOIN works ON ( filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work') 
-                      INNER JOIN collection_items ON ( works.id = collection_items.item_id AND collection_items.item_type = 'Work'
-                                                       AND collection_items.collection_approval_status = '#{CollectionItem::APPROVED}'
-                                                       AND collection_items.user_approval_status = '#{CollectionItem::APPROVED}' )"
-
-  scope :for_collection, lambda { |collection|
-    {:select =>  "tags.*, count(tags.id) as count", 
-    :joins => COLLECTION_JOIN,
-    :conditions => ["collection_items.collection_id = ? 
-                    AND works.posted = 1", collection.id], 
-    :group => 'tags.id', 
-    :order => 'name ASC'}    
-  }
-  
-  scope :for_collections, lambda { |collections|
-    {:select =>  "tags.*, count(tags.id) as count", 
-    :joins => COLLECTION_JOIN,
-    :conditions => ["collection_items.collection_id IN (?) 
-                    AND works.posted = 1", collections.collect(&:id)], 
-    :group => 'tags.id', 
-    :order => 'name ASC'}
-  }
-  
-  # when we don't need the counts, just a unique list
-  scope :for_collections_without_count, lambda { |collections|
-    {
-      :select => "DISTINCT tags.*",
-      :joins => COLLECTION_JOIN,
-      :conditions => ["collection_items.collection_id IN (?) 
-                      AND works.posted = 1", collections.collect(&:id)]
-    } 
-  }
-
-  # This one can be '.count'ed, the others can't!
-  scope :id_for_collections, lambda { |collections|
-    {
-      :select => "DISTINCT tags.id",
-      :joins => COLLECTION_JOIN,
-      :conditions => ["collection_items.collection_id IN (?) 
-                      AND works.posted = 1", collections.collect(&:id)]
-    } 
-  }
-  
   # An association callback to add the default media if all others have been removed
   def check_media(media)
     self.add_media_for_uncategorized

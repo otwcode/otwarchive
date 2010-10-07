@@ -31,7 +31,7 @@ class TranslationNotesController < ApplicationController
   # GET /translation_notes/new.xml
   def new
     @current_namespace = params[:namespace]
-    @namespaces = Translation.find(:all, :select => 'DISTINCT namespace', :order => :namespace).collect(&:namespace)
+    @namespaces = Translation.select('DISTINCT namespace').order(:namespace).collect(&:namespace)
     @translation_note = TranslationNote.new
   end
 

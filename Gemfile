@@ -26,7 +26,7 @@ gem 'chronic'
 
 #gem 'will_paginate', '3.0.pre'
 gem 'will_paginate',
-  :git     => 'http://github.com/mislav/will_paginate.git',
+  :git     => 'git://github.com/mislav/will_paginate.git',
   :branch  => 'rails3',
   :require => 'will_paginate'
 
@@ -58,6 +58,10 @@ gem 'authlogic',
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
+
+# fix for annoying UTF-8 error messages as per this:
+# http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
+gem "escape_utils"
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

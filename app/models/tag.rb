@@ -110,99 +110,109 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  scope :id_only, {:select => "tags.id"}
+  scope :id_only, select("tags.id")
 
-  scope :canonical, {:conditions => {:canonical => true}, :order => 'name ASC'}
-  scope :noncanonical, {:conditions => {:canonical => false}, :order => 'name ASC'}
-  scope :nonsynonymous, {:conditions => {:merger_id => nil, :canonical => false}, :order => 'name ASC'}
-  scope :unfilterable, {:conditions => {:merger_id => nil, :canonical => false}}
-  scope :unwrangled, {:joins => "LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id", 
-    :conditions => "common_taggings.id IS NULL"}
+  scope :canonical, where(:canonical => true).order('name ASC')
+  scope :noncanonical, where(:canonical => false).order('name ASC')
+  scope :nonsynonymous, noncanonical.where(:merger_id => nil)
+  scope :unfilterable, nonsynonymous
   
-  scope :related_tags, lambda {|tag| 
-    {
-      :joins => "INNER JOIN taggings ON (tags.id = taggings.tagger_id)
-                INNER JOIN works ON (taggings.taggable_id = works.id AND taggings.taggable_type = 'Work') 
-                INNER JOIN taggings taggings2 ON (works.id = taggings2.taggable_id AND taggings2.taggable_type = 'Work')",
-      :conditions => ["taggings2.tagger_id = ?", tag.id],
-      :group => "tags.id"
-    }
-  }
+  # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
+  # what we actually need are the empty rows in the results
+  scope :unwrangled, joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("common_taggings.id IS NULL")
+  scope :first_class, joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL")
   
+  # Complicated query alert!
+  # What we're doing here:
+  # - we get all the tags of any type used on works (the first two lines of the join)
+  # - we then chop that down to only the tags used on works that are tagged with our one given tag 
+  #   (the last line of the join, and the where clause)
   scope :related_tags_for_all, lambda {|tags|
-    {
-      :joins => "INNER JOIN taggings ON (tags.id = taggings.tagger_id)
-                INNER JOIN works ON (taggings.taggable_id = works.id AND taggings.taggable_type = 'Work') 
-                INNER JOIN taggings taggings2 ON (works.id = taggings2.taggable_id AND taggings2.taggable_type = 'Work')",
-      :conditions => ["taggings2.tagger_id IN (?)", tags.collect(&:id)],
-      :group => "tags.id"
-    }    
+    joins("INNER JOIN taggings ON (tags.id = taggings.tagger_id)
+           INNER JOIN works ON (taggings.taggable_id = works.id AND taggings.taggable_type = 'Work') 
+           INNER JOIN taggings taggings2 ON (works.id = taggings2.taggable_id AND taggings2.taggable_type = 'Work')").
+    where("taggings2.tagger_id IN (?)", tags.collect(&:id)).
+    group("tags.id")
   }
   
-  scope :visible, {:conditions => ['type in (?)', VISIBLE], :order => 'name ASC' }
-
-  scope :by_popularity, {:order => 'taggings_count DESC'}
-  scope :by_name, {:order => 'name ASC'}
-  scope :by_date, {:order => 'created_at DESC'}
-
-  scope :first_class, {:joins => "LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id", 
-    :conditions => "meta_taggings.id IS NULL"}
+  scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
+  
+  scope :by_popularity, order('taggings_count DESC')
+  scope :by_name, order('name ASC')
+  scope :by_date, order('created_at DESC')
+  scope :visible, where('type in (?)', VISIBLE).by_name
 
   scope :by_pseud, lambda {|pseud|
-    {
-      :joins => [{:works => :pseuds}],
-      :conditions => {:pseuds => {:id => pseud.id}}
-    }
+    joins(:works => :pseuds).
+    where(:pseuds => {:id => pseud.id})
   }
 
   scope :by_type, lambda {|*types| where(types.first.blank? ? "" : {:type => types.first})}
   scope :with_type, lambda {|type| where({:type => type}) }
 
-  # enigel Feb 09
-  scope :starting_with, lambda {|letter| {:conditions => ['SUBSTR(name,1,1) = ?', letter]}}
+  scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
 
-  scope :visible_to_user, lambda { |user_id| Work.visible_to_user(user_id) }
-  
   scope :filters_with_count, lambda { |work_ids|
-    {
-      :select => "tags.*, count(distinct works.id) as count",
-      :joins => :filtered_works,
-      :conditions => ['works.id IN (?)', work_ids],
-      :order => :name,
-      :group => :id
-    }     
+    select("tags.*, count(distinct works.id) as count").
+    joins(:filtered_works).
+    where("works.id IN (?)", work_ids).
+    order(:name).
+    group(:id)
   }
   
+  scope :visible_to_all_with_count,
+    joins(:filter_count).
+    select("tags.*, filter_counts.public_works_count as count").
+    where('filter_counts.public_works_count > 0')
+    
+  scope :visible_to_registered_user_with_count,
+    joins(:filter_count).
+    select("tags.*, filter_counts.unhidden_works_count as count").
+    where('filter_counts.unhidden_works_count > 0 AND tags.type = "Fandom" AND tags.canonical = 1')
+    
   scope :public_top, lambda { |tag_count|
-    {
-      :select => "tags.*, filter_counts.public_works_count as count",
-      :joins => :filter_count,
-      :order => 'filter_counts.public_works_count DESC',
-      :conditions => 'filter_counts.public_works_count > 0',
-      :limit => tag_count
-    }     
+    visible_to_all_with_count.
+    limit(tag_count).
+    order('filter_counts.public_works_count DESC')
   }
   
   scope :unhidden_top, lambda { |tag_count|
-    {
-      :select => "tags.*, filter_counts.unhidden_works_count as count",
-      :joins => :filter_count,
-      :order => 'filter_counts.unhidden_works_count DESC',
-      :conditions => 'filter_counts.unhidden_works_count > 0 AND tags.type = "Fandom" AND tags.canonical = 1',
-      :limit => tag_count
-    }     
+    visible_to_registered_user_with_count.
+    limit(tag_count).
+    order('filter_counts.unhidden_works_count DESC')
   }
   
-  scope :with_count, lambda {
-      ([Admin, User].include?(User.current_user.class)) ? 
-      { :select => "tags.*, filter_counts.unhidden_works_count as count", 
-        :joins => :filter_count, 
-        :conditions => 'filter_counts.unhidden_works_count > 0' } :
-      { :select => "tags.*, filter_counts.public_works_count as count", 
-        :joins => :filter_count,
-        :conditions => 'filter_counts.public_works_count > 0' }
-    }
-    
+  scope :with_count, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ? 
+      visible_to_registered_user_with_count : visible_to_all_with_count
+
+  # a complicated join -- we only want to get the tags on approved, posted works in the collection
+  COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id ) 
+                      INNER JOIN works ON ( filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work') 
+                      INNER JOIN collection_items ON ( works.id = collection_items.item_id AND collection_items.item_type = 'Work'
+                                                       AND works.posted = 1
+                                                       AND collection_items.collection_approval_status = '#{CollectionItem::APPROVED}'
+                                                       AND collection_items.user_approval_status = '#{CollectionItem::APPROVED}' ) " 
+
+  scope :for_collections, lambda {|collections|
+    joins(COLLECTION_JOIN).
+    where("collection_items.collection_id IN (?)", collections.collect(&:id))
+  }
+
+  scope :for_collection, lambda { |collection| for_collections([collection]) }
+  
+  scope :for_collections_with_count, lambda { |collections| 
+    for_collections(collections).
+    select("tags.*, count(tags.id) as count").
+    group(:id).
+    order(:name)
+  }
+  
+  scope :by_relationships, lambda {|relationships| 
+    select("DISTINCT tags.*").
+    joins(:children).
+    where('children_tags.id IN (?)', relationships.collect(&:id))
+  }
+      
   # Class methods
   
   # Used for associations, such as work.fandoms.string

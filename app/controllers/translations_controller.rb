@@ -46,9 +46,9 @@ class TranslationsController < ApplicationController
         conditions[:betaed] = false
       end      
     end
-    @translations = locale.translations.find(:all, :order => "namespace, id", :conditions => conditions).paginate(:page => params[:page])
+    @translations = locale.translations.order("namespace, id").where(conditions).paginate(:page => params[:page])
     @translators = @locale.has_translators
-    @namespaces = [''] + Translation.find(:all, :select => 'DISTINCT namespace', :order => :namespace).collect(&:namespace)
+    @namespaces = [''] + Translation.select('DISTINCT namespace').order(:namespace).collect(&:namespace)
     @status_list = ['', 'Not Translated', 'Translated', 'Betaed', 'Updated']
   end
 

@@ -11,7 +11,7 @@ class TagsController < ApplicationController
   # GET /tags.xml
   def index
     if @collection
-      @tags = Freeform.canonical.for_collections([@collection] + @collection.children)
+      @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
     else
       if params[:show] == "random"
         @tags = Freeform.for_tag_cloud_random
@@ -51,7 +51,7 @@ class TagsController < ApplicationController
         else
           @works = @tag.works.visible_to_all.paginate(:page => params[:page])
         end
-        @bookmarks = @tag.bookmarks.select{|b| b.visible}.paginate(:page => params[:page])
+        @bookmarks = @tag.bookmarks.visible.paginate(:page => params[:page])
       end
       # if regular user or anonymous (not logged in) visitor, AND the tag is wrangled, just give them the goodies
       if !(logged_in? && current_user.is_tag_wrangler? || logged_in_as_admin?)
@@ -212,6 +212,8 @@ class TagsController < ApplicationController
     @tag.child_types.map{|t| t.underscore.pluralize.to_sym}.each do |tag_type|      
       @counts[tag_type] = @tag.send(tag_type).count
     end
+    
+    # THIS NEEDS SOME SECURITY FOR params[:show]!!!!
     unless params[:show].blank?
       params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
@@ -219,10 +221,11 @@ class TagsController < ApplicationController
       if sort.include?('suggested')
         sort = sort + ", name ASC"
       end
+      # this makes sure params[:status] is safe
       if %w(unfilterable canonical noncanonical).include?(params[:status])          
-        @tags = @tag.send(params[:show]).send(params[:status]).find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.send(params[:show]).send(params[:status]).order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == "unwrangled"
-        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+        @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       else
         @tags = @tag.send(params[:show]).find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       end       

@@ -9,46 +9,38 @@ class ChallengeAssignment < ActiveRecord::Base
   belongs_to :pinch_request_signup, :class_name => "ChallengeSignup"
   belongs_to :creation, :polymorphic => true
 
-  scope :for_request_signup, lambda {|signup|
-    {:conditions => ['request_signup_id = ?', signup.id]}
-  }
+  scope :for_request_signup, lambda {|signup| where('request_signup_id = ?', signup.id)}
 
-  scope :for_offer_signup, lambda {|signup|
-    {:conditions => ['offer_signup_id = ?', signup.id]}
-  }
+  scope :for_offer_signup, lambda {|signup| where('offer_signup_id = ?', signup.id)}
 
   scope :by_offering_user, lambda {|user|
-    {
-      :select => "DISTINCT challenge_assignments.*",
-      :joins => "INNER JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
-                 INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id
-                 INNER JOIN users ON pseuds.user_id = users.id",
-      :conditions => ['users.id = ?', user.id]
-    }
-  }
+    select("DISTINCT challenge_assignments.*").
+    joins("INNER JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
+           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id
+           INNER JOIN users ON pseuds.user_id = users.id").
+     where('users.id = ?', user.id)
+   }
 
   scope :by_requesting_user, lambda {|user|
-    {
-      :select => "DISTINCT challenge_assignments.*",
-      :joins => "INNER JOIN challenge_signups ON challenge_assignments.request_signup_id = challenge_signups.id
-                 INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id
-                 INNER JOIN users ON pseuds.user_id = users.id",
-      :conditions => ['users.id = ?', user.id]
-    }
+    select("DISTINCT challenge_assignments.*").
+    joins("INNER JOIN challenge_signups ON challenge_assignments.request_signup_id = challenge_signups.id
+           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id
+           INNER JOIN users ON pseuds.user_id = users.id").
+    where('users.id = ?', user.id)
   }
 
-  scope :in_collection, lambda {|collection| {:conditions => ['challenge_assignments.collection_id = ?', collection.id] }}
+  scope :in_collection, lambda {|collection| where('challenge_assignments.collection_id = ?', collection.id) }
   
-  scope :defaulted, {:conditions => ["defaulted_at IS NOT NULL"]}
-  scope :open, {:conditions => ["defaulted_at IS NULL"]}
-  scope :uncovered, {:conditions => ["covered_at IS NULL"]}
-  scope :covered, {:conditions => ["covered_at IS NOT NULL"]}
+  scope :defaulted, where("defaulted_at IS NOT NULL")
+  scope :open, where("defaulted_at IS NULL")
+  scope :uncovered, where("covered_at IS NULL")
+  scope :covered, where("covered_at IS NOT NULL")
   
-  scope :with_offer, {:conditions => ["offer_signup_id IS NOT NULL"]}
-  scope :with_request, {:conditions => ["request_signup_id IS NOT NULL"]}
-  scope :with_no_request, {:conditions => ["request_signup_id IS NULL"]}
-  scope :with_no_offer, {:conditions => ["offer_signup_id IS NULL"]}
-  scope :unposted, {:conditions => ["challenge_assignments.creation_id IS NULL"]}  
+  scope :with_offer, where("offer_signup_id IS NOT NULL")
+  scope :with_request, where("request_signup_id IS NOT NULL")
+  scope :with_no_request, where("request_signup_id IS NULL")
+  scope :with_no_offer, where("offer_signup_id IS NULL")
+  scope :unposted, where("challenge_assignments.creation_id IS NULL")  
 
   REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_assignments.request_signup_id = challenge_signups.id 
                                                             OR challenge_assignments.pinch_request_signup_id = challenge_signups.id)
@@ -65,27 +57,19 @@ class ChallengeAssignment < ActiveRecord::Base
                                                                 collection_items.item_id = challenge_assignments.creation_id AND 
                                                                 collection_items.item_type = challenge_assignments.creation_type)"
 
-  scope :order_by_requesting_pseud, {
-    :joins => REQUESTING_PSEUD_JOIN, 
-    :order => "pseuds.name"
-  }
+  scope :order_by_requesting_pseud, joins(REQUESTING_PSEUD_JOIN).order("pseuds.name") 
   
-  scope :order_by_offering_pseud, {
-    :joins => OFFERING_PSEUD_JOIN,
-    :order => "pseuds.name"
-  }
+  scope :order_by_offering_pseud, joins(OFFERING_PSEUD_JOIN).order("pseuds.name")
 
-  scope :fulfilled, {
-    :joins => COLLECTION_ITEMS_JOIN,
-    :conditions => ['challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', 
-                    CollectionItem::APPROVED, CollectionItem::APPROVED]
-  }
+  scope :fulfilled, 
+    joins(COLLECTION_ITEMS_JOIN).
+    where('challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', 
+                    CollectionItem::APPROVED, CollectionItem::APPROVED)
   
   # has to be a left join to get works that don't have a collection item
-  scope :unfulfilled, {
-    :joins => COLLECTION_ITEMS_LEFT_JOIN,
-    :conditions => ['challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
-  }
+  scope :unfulfilled, 
+    joins(COLLECTION_ITEMS_LEFT_JOIN).
+    where('challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ?', CollectionItem::APPROVED, CollectionItem::APPROVED)
 
   before_destroy :clear_assignment
   def clear_assignment
@@ -102,7 +86,7 @@ class ChallengeAssignment < ActiveRecord::Base
   
   def get_collection_item
     return nil unless self.creation
-    CollectionItem.find(:first, :conditions => ["collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type])
+    CollectionItem.where("collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type).first
   end
   
   def fulfilled?

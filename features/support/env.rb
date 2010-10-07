@@ -23,12 +23,6 @@ require 'cucumber/rails/capybara_javascript_emulation' # Lets you click links wi
 # steps to use the XPath syntax.
 Capybara.default_selector = :css
 
-# Temporary while dealing with gems that aren't quite ready for Ruby 1.9.2/Rails 3 primetime yet
-# Stop endless errors like
-# ~/.rvm/gems/ruby-1.9.2-p0@global/gems/rack-1.2.1/lib/rack/utils.rb:16: 
-# warning: regexp match /.../n against to UTF-8 string
-$VERBOSE = nil
-
 # If you set this to false, any error raised from within your app will bubble 
 # up to your step definition and out to cucumber unless you catch it somewhere
 # on the way. You can make Rails rescue errors and render error pages on a

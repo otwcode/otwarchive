@@ -35,7 +35,7 @@ class Bookmark < ActiveRecord::Base
   scope :in_collection, lambda {|collection|
     select("DISTINCT bookmarks.*").
     joins(:collection_items).
-    where('collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', 
+    where('collection_items.collection_id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', 
             [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
   }
 
@@ -84,8 +84,7 @@ class Bookmark < ActiveRecord::Base
 
   # Use the current user to determine what works are visible
   scope :visible, visible_to_user(User.current_user)
-             
-  
+               
   def visible?(current_user=User.current_user)
     return true if current_user == self.pseud.user
     unless current_user == :false || !current_user

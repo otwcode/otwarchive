@@ -30,14 +30,14 @@ class PseudsController < ApplicationController
         flash[:error] = t('pseud_not_found', :default => "Sorry, could not find this pseud.")
         redirect_to :action => :index and return
       end
-      @fandoms = @author.filters.by_type("Fandom").by_name.find(:all, :select => "DISTINCT tags.*")
+      @fandoms = @author.filters.by_type("Fandom").by_name.select("DISTINCT tags.*")
       @works = Work.written_by([@author]).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
       if current_user == :false
-        @series = Series.visible_to_all.exclude_anonymous.for_pseuds([@author]).find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
+        @series = Series.visible_to_all.exclude_anonymous.for_pseuds([@author]).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
       else
-        @series = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([@author]).find(:all, :limit => ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
+        @series = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([@author]).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
       end
-      visible_bookmarks = @author.bookmarks.visible(:order => 'bookmarks.created_at DESC')
+      visible_bookmarks = @author.bookmarks.visible.order('bookmarks.created_at DESC')
       # Having the number of items as a limit was finding the limited number of items, then visible ones within them
       @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]     
     else
@@ -62,15 +62,16 @@ class PseudsController < ApplicationController
       split = byline.split('[', 2)
       pseud_name = split.first.strip
       user_login = split.last.chop
-      conditions = [ 'LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?','%' + user_login + '%',  '%' + pseud_name + '%' ]
+      @pseuds = where('LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?','%' + user_login + '%',  '%' + pseud_name + '%')
     else
-      conditions = [ 'LOWER(name) LIKE ?', '%' + byline + '%' ]
+      @pseuds = where('LOWER(name) LIKE ?', '%' + byline + '%')
     end
-    @pseuds = Pseud.find(:all, :include => :user, :conditions => conditions, :limit => 10)
+    # UGH MAGIC NUMBER WHY 10
+    @pseuds = @pseuds.includes(:user).limit(10)
     respond_to do |format|
-        format.html
-        format.js
-      end
+      format.html
+      format.js
+    end
   end
 
   # GET /pseuds/new
