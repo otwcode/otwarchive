@@ -4,7 +4,7 @@
   <h3 class="landmark">Actions</h3>
 	<ul class="navigation" role="navigation">
 <% if @work || @admin_post %>
-    <li><%= link_to t('.top_link_text', :default => "&#8593; Top"), :anchor => "main" %></li>
+    <li><%= link_to "&#8593; ".html_safe + t('.top_link_text', :default => "Top"), :anchor => "main" %></li>
 <% end %>
 <% if @work && @previous_chapter %>
     <li><%= link_to t('.previous_chapter', :default => "&#8592; Previous Chapter"), [@work, @previous_chapter] %></li>

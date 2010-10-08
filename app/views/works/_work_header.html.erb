@@ -12,10 +12,10 @@
   <% if @previous_chapter || @next_chapter %>
     <li><%= link_to "View Entire Work", work_path(@work, :view_full_work => 'true') %></li>
     <% if @previous_chapter %>
-    <li><%= link_to t('.previous_chapter', :default => "&#8592; Previous Chapter"), [@work, @previous_chapter] %></li>
+    <li>&#8592; <%= link_to t('.previous_chapter', :default => "Previous Chapter"), [@work, @previous_chapter] %></li>
     <% end %>
     <% if @next_chapter %>
-    <li><%= link_to t('.next_chapter', :default => "Next Chapter &#8594;"), [@work, @next_chapter] %></li>
+    <li><%= link_to t('.next_chapter', :default => "Next Chapter"), [@work, @next_chapter] %> &#8594;</li>
     <% end %>
     <li>
       <%= link_to 'Chapter Index', navigate_work_path(@work), :onclick => "$('chapter-index').toggle();return false" %>
@@ -51,7 +51,7 @@
   <% end %>
   
   <li>
-    <a onclick="subnav_view.toggle()" title="Download Options"><%= t('.download', :default =>"Download") + " &#8595;" %></a>
+    <a onclick="subnav_view.toggle()" title="Download Options"><%= t('.download', :default =>"Download") %> &#8595;</a>
     <ul id="subnav">
       <li><%= link_to(t('.mobi', :default => "Mobi"), download_work_path(@work, :format => :mobi)) %></li>
       <li><%= link_to(t('.epub', :default => "Epub"), download_work_path(@work, :format => :epub)) %></li>

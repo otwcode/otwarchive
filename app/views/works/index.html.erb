@@ -6,7 +6,7 @@
     :collection_title => link_to(sanitize_title_for_display(@collection.title), @collection)) %>
   <% elsif @collection %>
     <%= t('.works_in_collection', :default => "in %{collection_title}", 
-    :collection_title => link_to(sanitize_title_for_display(@collection.title), @collection)) %>
+    :collection_title => link_to(sanitize_title_for_display(@collection.title), @collection)).html_safe %>
   <% elsif @most_recent_works %>
     <%= t('.recently_updated', :default => "updated in the last month") %>
   <% elsif @user %>

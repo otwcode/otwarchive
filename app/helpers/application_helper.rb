@@ -170,7 +170,7 @@ module ApplicationHelper
       else
         direction = options[:desc_default] ? 'DESC' : 'ASC'
       end
-      link_to_unless condition, (direction == 'ASC' ? '&#8593;<span class="landmark">ascending</span>&#160;' : '&#8595;<span class="landmark">descending</span>&#160;') + title, 
+      link_to_unless condition, ((direction == 'ASC' ? '&#8593;<span class="landmark">ascending</span>&#160;' : '&#8595;<span class="landmark">descending</span>&#160;') + title).html_safe, 
           request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => css_class}
     else
       link_to_unless params[:sort_column].nil?, title, url_for(:overwrite_params => {:sort_column => nil, :sort_direction => nil})

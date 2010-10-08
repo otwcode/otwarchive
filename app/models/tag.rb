@@ -182,6 +182,14 @@ class Tag < ActiveRecord::Base
     order('filter_counts.unhidden_works_count DESC')
   }
   
+  scope :popular, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ? 
+      visible_to_registered_user_with_count.order('filter_counts.unhidden_works_count DESC') : 
+      visible_to_all_with_count.order('filter_counts.public_works_count DESC')
+      
+  scope :random, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ? 
+    visible_to_registered_user_with_count.order("RAND()") : 
+    visible_to_all_with_count.order("RAND()")
+  
   scope :with_count, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ? 
       visible_to_registered_user_with_count : visible_to_all_with_count
 
