@@ -35,7 +35,7 @@
   <div id="summary" class="summary module">
     <h3><%=h t('.chapter_summary', :default => 'Summary:') %></h3>
     <blockquote class="user-generated-view">
-	<%=sanitize_and_format_for_display chapter.summary %>
+	<%=raw sanitize_and_format_for_display chapter.summary %>
 	</blockquote>
   </div>
   <% end %>
@@ -48,7 +48,7 @@
         <%= t('.link_to_c_endnotes', :default => "See the end of the chapter for %{notes_link}.", :notes_link => (link_to t('.notes_link', :default => "notes"), :anchor => "chapter_#{chapter.position.to_s}_endnotes")) %>
       </p>
     <% else %>
-      <blockquote class="user-generated-view"><%=sanitize_and_format_for_display chapter.notes %></blockquote>
+      <blockquote class="user-generated-view"><%=raw sanitize_and_format_for_display chapter.notes %></blockquote>
       <% unless chapter.endnotes.blank? %>
         <p><%= t('.link_more_c_endnotes', :default => "See the end of the chapter for more %{notes_link}.", :notes_link => (link_to t('.notes_link', :default => "notes"), :anchor => "chapter_#{chapter.position.to_s}_endnotes")) %>
         </p>
@@ -64,14 +64,14 @@
   <% unless @downloading %>
 	  <h3 class="landmark">Chapter Text</h3>	
   <% end %>
-  <%=sanitize_and_format_for_display chapter.content %>
+  <%=raw sanitize_and_format_for_display chapter.content %>
 </div>
 <!--/main-->
 
 <% unless chapter.endnotes.blank? %>
   <div class="chapter preface footnote module" id="chapter_<%= chapter.position.to_s %>_endnotes">
    <h3><%=h t('.chapter_notes', :default => 'Notes:') %></h3>
-      <blockquote class="user-generated-view"><%=sanitize_and_format_for_display chapter.endnotes %></blockquote>
+      <blockquote class="user-generated-view"><%=raw sanitize_and_format_for_display chapter.endnotes %></blockquote>
   </div>
 <% end %>
   

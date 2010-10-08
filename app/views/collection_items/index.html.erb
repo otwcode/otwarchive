@@ -12,7 +12,7 @@
 
 <% else %>
 
-  <h2><%=sanitize_title_for_display t('.items.in_collection', :default => "Items in %{collection}", :collection => link_to(@collection.title, @collection)) %></h2>
+  <h2><%=raw sanitize_title_for_display t('.items.in_collection', :default => "Items in %{collection}", :collection => link_to(@collection.title, @collection)) %></h2>
 <!--/descriptions-->
 <!--subnav-->
 <!--/subnav-->

@@ -77,7 +77,7 @@
 	<h2 class="title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
     <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
-    <%=sanitize_title_for_display @work.title %>
+    <%=raw sanitize_title_for_display @work.title %>
 	</h2>
   <h3 class="byline">
    <%= byline(@work) %>
@@ -89,7 +89,7 @@
       <div class="summary module" role="complementary">
         <h3><%=h t('.work_header.summary', :default => "Summary:") %></h3>
         <% unless @work.summary.blank? %>
-          <blockquote class="user-generated-view"><%=sanitize_limit_and_format_for_display @work.summary %></blockquote>
+          <blockquote class="user-generated-view"><%=raw sanitize_limit_and_format_for_display @work.summary %></blockquote>
         <% end %>
       </div>
     <% end %>

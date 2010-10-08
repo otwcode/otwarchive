@@ -24,7 +24,7 @@
         </h4>
       </div>
       <div class="admin-content user-generated-view">
-		    <%=sanitize_and_format_for_display admin_post.content %>
+		    <%=raw sanitize_and_format_for_display admin_post.content %>
       </div>
 			<!-- BEGIN comment section -->
 				<h3 class="landmark">Comment</h3>

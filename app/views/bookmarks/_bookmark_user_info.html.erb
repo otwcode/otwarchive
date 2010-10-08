@@ -24,7 +24,7 @@
 <!--summary-->    
 	<% unless bookmark.notes.blank? %>
     <blockquote class="user-generated-view summary" title="notes">
-		<%=sanitize_limit_and_format_for_display bookmark.notes %>
+		<%=raw sanitize_limit_and_format_for_display bookmark.notes %>
 	  </blockquote>
     <% end %>
 <!--actions-->

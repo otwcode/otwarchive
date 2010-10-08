@@ -23,7 +23,7 @@
     <% if !@work.endnotes.blank? && @chapter == @work.last_chapter %>
       <div id="work_endnotes" class="chapter preface footnotes module" role="complementary">
           <h3><%=h "Notes:" %></h3>
-          <blockquote class="user-generated-view"><%=sanitize_and_format_for_display @work.endnotes %></blockquote>
+          <blockquote class="user-generated-view"><%=raw sanitize_and_format_for_display @work.endnotes %></blockquote>
       </div>    
     <% end %>
 	  <!-- Series links -->
