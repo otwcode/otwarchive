@@ -79,27 +79,15 @@ class Comment < ActiveRecord::Base
   end
   
   def comment_owner
-    if self.pseud.nil?
-      nil
-    else
-      return self.pseud.user
-    end
+    self.pseud.try(:user)
   end
   
   def comment_owner_name
-    if self.pseud.nil?
-      self.name
-    else
-      self.pseud.name
-    end
+    self.pseud.try(:name) || self.name
   end
   
   def comment_owner_email
-    if self.pseud.nil? 
-      self.email
-    else
-      self.pseud.user.email
-    end
+    comment_owner.try(:email) || self.email
   end
   
   # override this method from commentable_entity.rb
