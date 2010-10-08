@@ -12,7 +12,7 @@
 <div class="admin" role="article">
   <div class="admin-header">
     <h3>
-      <%= sanitize_title_for_display @archive_faq.title %>
+      <%=raw sanitize_title_for_display @archive_faq.title %>
     </h3>
     <% if logged_in_as_admin? %>
       <h4>

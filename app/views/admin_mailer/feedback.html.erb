@@ -4,8 +4,8 @@
 
 <p><%=h t('.feedback', :default => "Feedback:") %></p>
 
-<%= sanitize_and_format_for_display @summary %>
-<%= sanitize_and_format_for_display @comment %>
+<%=raw sanitize_and_format_for_display @summary %>
+<%=raw sanitize_and_format_for_display @comment %>
 
 <p><%=h t('.sent_at', :default => "Sent at:") %>&nbsp;<%= Time.now.strftime(common_timestring) %></p>
 

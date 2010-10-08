@@ -20,9 +20,9 @@
     	<li><%= link_to "Delete", known_issue, :confirm => 'Are you sure?', :method => :delete %></li>
   	</ul>
   	<div class="admin user-generated-view" role="article">
-    	<h3><%= sanitize_and_format_for_display known_issue.title %></h3>
+    	<h3><%=raw sanitize_and_format_for_display known_issue.title %></h3>
     	<h6>Updated at: <%=h known_issue.updated_at %></h6>
-    	<%= sanitize_and_format_for_display known_issue.content %>
+    	<%=raw sanitize_and_format_for_display known_issue.content %>
   	</div>
   </li>
 <% end %>

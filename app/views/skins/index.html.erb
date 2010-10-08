@@ -42,7 +42,7 @@
       <!--summary/descriptions-->
       <h6 class="landmark">Description</h6>
       <blockquote class="user-generated-view summary">
-        <%= sanitize_strip_images_and_format_for_display s.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : s.description %>
+        <%=raw sanitize_strip_images_and_format_for_display s.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : s.description %>
       </blockquote>
     
       <%= render :partial => "skin_navigation", :locals => {:skin => s} %>

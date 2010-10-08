@@ -15,7 +15,7 @@
   <% elsif (@user || @pseud) && work.anonymous? && !author_of_work && !(['gifts', 'readings'].include?(controller.controller_name)) %>
     <div class="header module mystery">
 	    <h4 title="title"><%= t('.works.anonymous', :default => "Mystery Work") %></h4>
-	    <h5><%= t('.works.part_of', :default => "Part of: %{collections}", :collections => work.collections.anonymous.map {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) %></h5>
+	    <h5><%= ts("Part of: ") + work.collections.anonymous.map {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ").html_safe %></h5>
   	</div>
 	  <h6 class="landmark">Summary</h6>
 	  <blockquote class="user-generated-view summary" title="summary">
@@ -60,7 +60,7 @@
   	<% unless work.summary.blank? %>
   		<h6 class="landmark">Summary</h6>
   		<blockquote class="user-generated-view summary" title="summary">
-  		  <%= sanitize_strip_images_and_format_for_display work.summary %>
+  		  <%=raw sanitize_strip_images_and_format_for_display work.summary %>
   		</blockquote>
   	<% end %>
 

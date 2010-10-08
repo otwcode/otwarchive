@@ -6,7 +6,8 @@ module TagsHelper
     if !tags.blank? && tags.respond_to?(:collect)
       last_tag = tags.pop
       tag_list = tags.collect{|tag| "<li>" + link_to_tag(tag) + ", </li>"}.join
-      tag_list + "<li>" + link_to_tag(last_tag) + "</li>"      
+      tag_list += content_tag(:li, link_to_tag(last_tag))
+      tag_list.html_safe     
     end
   end
 
@@ -228,62 +229,69 @@ module TagsHelper
     end
   end
   
+  # produce our spiffy pretty block of tag symbols 
   def get_symbols_for(item, tag_groups=nil, symbols_only = false)
+    symbol_block = []
+    symbol_block << "<ul class=\"required-tags\">" unless symbols_only
+    
+    # split up the item's tags into groups based on type
     tag_groups ||= item.tag_groups
-    mappings = {}
 
     warnings = tag_groups['Warning']
-    mappings[:warning] = {:class_name => get_warnings_class(warnings), :string =>  get_title_string(warnings)}
+    symbol_block << get_symbol_link(get_warnings_class(warnings), get_title_string(warnings))
    
     ratings = tag_groups['Rating']
-    rating = ratings.blank? ? nil : ratings.first
-    mappings[:rating] = {:class_name => get_ratings_class(rating), :string =>  get_title_string(ratings, "rating")}
+    symbol_block << get_symbol_link(get_ratings_class(ratings), get_title_string(ratings, "rating"))
     
     categories = tag_groups['Category']
-    mappings[:category] = {:class_name => get_category_class(categories), :string =>  get_title_string(categories, "category")}
+    symbol_block << get_symbol_link(get_category_class(categories), get_title_string(categories, "category"))
     
     if item.class == Work
-      iswip_string = item.is_wip ? "Work in Progress" : "Complete Work"
-      iswip_class = item.is_wip ? "complete-no iswip" : "complete-yes iswip"
-      mappings[:iswip] = {:class_name => iswip_class, :string =>  iswip_string}
+      if item.is_wip
+        symbol_block << get_symbol_link("Work in Progress", "complete-no iswip")
+      else
+        symbol_block << get_symbol_link("Complete Work", "complete-yes iswip")
+      end
+    elsif item.class == Series
+      if item.complete? 
+        symbol_block << get_symbol_link("Complete Series", "complete-yes iswip")
+      else
+        symbol_block << get_symbol_link("Series in Progress", "category-none iswip")
+      end
     elsif item.class == ExternalWork
-      mappings[:iswip] = {:class_name => 'external-work', :string =>  "External Work"}
+      symbol_block << get_symbol_link('external-work', "External Work")
     end
-
-    symbol_block = []
-    symbol_block << "<ul class=\"required-tags\">" if not symbols_only
-    %w(rating category warning iswip).each do |w|
-      css_class = mappings[w.to_sym][:class_name]
-      title_string = mappings[w.to_sym][:string]
-      symbol_block << content_tag(:li, link_to_help('symbols-key', link = ("<span class=\"#{css_class}\" title=\"#{title_string}\"><span>" + title_string + "</span></span>").html_safe))
-    end
-    symbol_block << "</ul>" if not symbols_only
+    
+    symbol_block << "</ul>" unless symbols_only
     return symbol_block.join("\n").html_safe
   end
-
-  def get_warnings_class(warning_tags)
-    return "warning-yes warnings" unless warning_tags
-    none = true
-    choosenotto = true
-    warning_tags.map(&:name).each do |name|
-      none = false if name != ArchiveConfig.WARNING_NONE_TAG_NAME
-      choosenotto = false if name !=ArchiveConfig.WARNING_DEFAULT_TAG_NAME
+  
+  def get_symbol_link(css_class, title_string)
+    content_tag(:li, link_to_help('symbols-key', link = ("<span class=\"#{css_class}\" title=\"#{title_string}\"><span class=\"text\">" + title_string + "</span></span>").html_safe))
+  end
+  
+  # return the right warnings class
+  def get_warnings_class(warning_tags = [])
+    if warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_NONE_TAG_NAME
+      # only one tag and it says "no warnings"
+      "warning-no warnings"
+    elsif warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME
+      # only one tag and it says choose not to warn
+      "warning-choosenotto warnings"
+    else
+      "warning-yes warnings"
     end
-    return "warning-no warnings" if none
-    return "warning-choosenotto warnings" if choosenotto
-    "warning-yes warnings"
   end
 
-  def get_ratings_class(rating_tag)
-    return "rating-notrated rating" unless rating_tag
-    case rating_tag.name
-    when ArchiveConfig.RATING_EXPLICIT_TAG_NAME
+  def get_ratings_class(rating_tags = [])
+    names = rating_tags.collect(&:name)
+    if names.include?(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
       "rating-explicit rating"
-    when ArchiveConfig.RATING_MATURE_TAG_NAME
+    elsif names.include?(ArchiveConfig.RATING_MATURE_TAG_NAME)
       "rating-mature rating"
-    when ArchiveConfig.RATING_TEEN_TAG_NAME
+    elsif names.include?(ArchiveConfig.RATING_TEEN_TAG_NAME)
       "rating-teen rating"
-    when ArchiveConfig.RATING_GENERAL_TAG_NAME
+    elsif names.include?(ArchiveConfig.RATING_GENERAL_TAG_NAME)
       "rating-general-audience rating"
     else
       "rating-notrated rating"

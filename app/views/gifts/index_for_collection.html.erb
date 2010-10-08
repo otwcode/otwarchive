@@ -25,10 +25,10 @@
                     collection_work_path(@collection, gift.work) %>
       </td>
       <td>
-        <%=h gift.recipient_name %>
+        <%= gift.recipient_name %>
       </td>
       <td>
-        <%=h gift.work.pseuds.collect {|p| "#{p.byline} (#{p.user.email})"}.join(", ") %>
+        <%= gift.work.pseuds.collect {|p| "#{p.byline} (#{p.user.email})"}.join(", ") %>
       </td>
       <td>
         <%= @has_received[gift.id] %>

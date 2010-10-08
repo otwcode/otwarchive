@@ -1,7 +1,9 @@
 <!--page description, messages-->
 <% if @work.unrevealed? %>
-<p class="message"><%= t('.works.unrevealed', :default => "This work is part of an ongoing challenge, %{challenge}, and will be revealed soon!",
-    :challenge => @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) %></p>
+  <p class="message">
+    <%= ts("This work is part of an ongoing challenge and will be revealed soon! You can find details here: ") + 
+        @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ").html_safe %>
+  </p>
 <% end %>
 <!--/descriptions-->
 
@@ -33,7 +35,7 @@
         <% end %>	
       <% end %>
     <% else %>
-      <%= sanitize_and_format_for_display(@chapter.content) %>
+      <%=raw sanitize_and_format_for_display(@chapter.content) %>
     <% end %>
 	</div>
 <!--/main-->

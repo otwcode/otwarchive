@@ -1,16 +1,17 @@
 <!-- This partial requires local variable 'bookmark' -->
 <li class="user<% if is_author_of?(bookmark) %> own<% end %>">
 	<div class="header module">
-	<h5 class="byline">
-    <%= t('.bookmarked_by', :default=>'Bookmarked by %{user}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
+  	<h5 class="byline">
+      <%= ts("Bookmarked by ") %>
+      <%= link_to(bookmark.pseud.byline, user_pseud_path(bookmark.pseud.user, bookmark.pseud)) %>
     </h5>
     <p class="datetime"><%= set_format_for_date(bookmark.created_at) %></p>
-	<%= get_symbol_for_bookmark(bookmark) %>
+  	<%= get_symbol_for_bookmark(bookmark) %>
 	</div>
 <!--tags-->
     <% unless bookmark.tag_string.blank? %>
         <dl class="tags">
-          <dt><%=h t('.bookmark_tags', :default => "User's Tags:") %></dt>
+          <dt><%= ts "Bookmarker's Tags:" %></dt>
           <dd>
             <ul class="tags">
               <% bookmark.tags.each do |tag| %>

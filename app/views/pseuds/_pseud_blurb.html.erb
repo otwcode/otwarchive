@@ -14,7 +14,7 @@
     </div>
     <% unless pseud.description.blank? %>
       <blockquote class="user-generated-view">
-	    <p><%= sanitize_description_for_display(pseud.description) %></p>
+	    <p><%=raw sanitize_description_for_display(pseud.description) %></p>
 	    </blockquote>
     <% end %>
     <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->

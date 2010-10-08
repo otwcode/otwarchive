@@ -18,7 +18,7 @@
       <span class='navigation'><%= link_to '(destroy)', translation_note, :confirm => 'Are you sure?', :method => :delete %></span>
     <% end %>
   </p> 
-  <div class='note-text'><%= sanitize_and_format_for_display translation_note.note %></div>
+  <div class='note-text'><%=raw sanitize_and_format_for_display translation_note.note %></div>
 </div>
 <% end %>
 <!--/content-->

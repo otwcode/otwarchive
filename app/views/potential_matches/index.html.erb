@@ -1,4 +1,4 @@
-<h2>Matching for <%= sanitize_title_for_display(@collection.title) %></h2>
+<h2>Matching for <%=raw sanitize_title_for_display(@collection.title) %></h2>
 <% if !@settings %>
   <p class="note">
     Your challenge doesn't currently have any match settings defined. To set them up, please

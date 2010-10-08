@@ -40,7 +40,7 @@ module CollectionsHelper
   
   def show_collections_data(work)
     collections = work.approved_collections
-    collections.collect {|coll| link_to coll.title, collection_path(coll)}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+    collections.collect {|coll| link_to coll.title, collection_path(coll)}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT).html_safe
   end
   
 

@@ -13,7 +13,7 @@
 <% unless bookmark.bookmarkable.summary.blank? %>
     <h6 class="landmark">Summary</h6>
 	<blockquote class="user-generated-view summary" title="summary">
-	<%= sanitize_strip_images_and_format_for_display bookmark.bookmarkable.summary %>
+	<%=raw sanitize_strip_images_and_format_for_display bookmark.bookmarkable.summary %>
 	</blockquote>
   <% end %>
 
@@ -51,13 +51,14 @@
 <!--time, bookmarker-->
   <p class="datetime"><%= set_format_for_date(bookmark.created_at) %></p>
   <h5 class="byline">
-    <%= t('.bookmarked_by', :default=>'Bookmarked by %{user}', :user=>link_to(bookmark.pseud.byline, [bookmark.pseud.user, bookmark.pseud])) %>
+    <%= ts("Bookmarked by ") %>
+    <%= link_to(bookmark.pseud.byline, user_pseud_path(bookmark.pseud.user, bookmark.pseud)) %>
   </h5>
    
 <!--tags-->
  <% unless bookmark.tag_string.blank? %>
       <dl class="tags">
-        <dt><%=h t('.bookmark_tags', :default => "User's Tags:") %></dt>
+        <dt><%= ts "Bookmarker's Tags:" %></dt>
         <dd>
           <ul>
             <% bookmark.tags.each do |tag| %>
@@ -72,7 +73,7 @@
   <% unless bookmark.notes.blank? %>
         <h6 class="landmark">Notes</h6>
 		<blockquote class="user-generated-view notes" title="notes">
-		<%=sanitize_limit_and_format_for_display bookmark.notes %>
+		<%=raw sanitize_limit_and_format_for_display bookmark.notes %>
 		</blockquote>
   <% end %>
 

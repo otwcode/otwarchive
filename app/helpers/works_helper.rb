@@ -20,8 +20,8 @@ module WorksHelper
       latest_date = (work.preview_mode && work.backdate) ? published_date : work.revised_at.to_date
       list.insert(1, [prefix, localize(latest_date)])
     end
-    
-    '<dl>' + list.map {|l| '<dt>' + l.first + '</dt><dd>' + l.last.to_s + '</dd>'}.to_s + '</dl>'
+    list = list.map {|list_item| content_tag(:dt, list_item.first) + content_tag(:dd, list_item.last.to_s)}.join.html_safe
+    content_tag(:dl, list.to_s).html_safe
   end
 
   def show_hit_count?(work)

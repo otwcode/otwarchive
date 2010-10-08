@@ -134,7 +134,7 @@
     <% if @work.notes.blank? %>
         <span class="endnotes-link"><%= t('.link_to_endnotes', :default => "See the end of the work for more %{notes_link}.", :notes_link => (link_to t('.notes_link', :default => "notes"), linkpath)) %></span>
     <% else %>
-        <blockquote class="user-generated-view"><%= sanitize_and_format_for_display(@work.notes) %></blockquote>
+        <blockquote class="user-generated-view"><%=raw sanitize_and_format_for_display(@work.notes) %></blockquote>
         <% unless @work.endnotes.blank? %>
           <span class="endnotes-link">
           <%= t('.work_header.link_more_endnotes', :default => "See the end of the work for more %{notes_link}.",

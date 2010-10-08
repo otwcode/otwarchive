@@ -17,11 +17,11 @@
   <h5 class="fandoms">
     <% author_fandoms = bookmark.bookmarkable.works.visible.collect(&:fandom_tags).flatten.compact.uniq
       unless author_fandoms.size <1 %>
-		    <%= author_fandoms.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ') %>
+		    <%= author_fandoms.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ').html_safe %>
 		  <% end %>
   </h5>
 	<% if not bookmark.bookmarkable.nil? %>
-	  <%= get_series_symbols_for(bookmark.bookmarkable) %>
+	  <%= get_symbols_for(bookmark.bookmarkable) %>
 	<% end %>
 </div>
 <!--tags-->

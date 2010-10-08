@@ -144,6 +144,9 @@ Otwarchive::Application.routes.draw do
       resources :bookmarks
     end
     resources :readings do
+      member do
+        get :marktoread
+      end
       collection do
         post :clear
       end
