@@ -132,7 +132,7 @@ module UsersHelper
     if visible_recs > 0
       items += (visible_recs == 1) ? link_to(visible_recs.to_s + " rec", user_pseud_bookmarks_path(pseud.user, pseud, :recs_only => true)) : link_to(visible_recs.to_s + " recs", user_pseud_bookmarks_path(pseud.user, pseud, :recs_only => true))
     end
-    return items
+    return items.html_safe
   end
   
 #  def print_pseud_drafts_link(pseud)

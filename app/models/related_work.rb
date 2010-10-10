@@ -8,7 +8,7 @@ class RelatedWork < ActiveRecord::Base
       orphan_account = User.orphan_account
       users.each do |user|
         unless user == orphan_account
-          UserMailer.deliver_related_work_notification(user, self)
+          UserMailer.related_work_notification(user, self).deliver
         end
       end
     end

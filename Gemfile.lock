@@ -8,8 +8,8 @@ GIT
       ya2yaml (~> 0.26)
 
 GIT
-  remote: git://github.com/mislav/will_paginate.git
-  revision: 36159385c8a5837fc63fe901ebe0a88205b5ce8d
+  remote: git://github.com/huerlisi/will_paginate.git
+  revision: ef54916d38bdecd1b5030a16cb620438c62b758d
   branch: rails3
   specs:
     will_paginate (3.0.pre2)

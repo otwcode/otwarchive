@@ -288,7 +288,7 @@ class Collection < ActiveRecord::Base
   
   def notify_maintainers(subject, message)
     # send maintainers a notice via email
-    UserMailer.deliver_collection_notification(self, subject, message)
+    UserMailer.collection_notification(self, subject, message).deliver
   end
   
   def reveal!

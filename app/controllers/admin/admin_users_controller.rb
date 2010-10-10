@@ -193,10 +193,10 @@ class Admin::AdminUsersController < ApplicationController
     end
     
     @users.each do |user|
-      UserMailer.deliver_archive_notification(current_admin.login, user, @subject, @message)
+      UserMailer.archive_notification(current_admin.login, user, @subject, @message).deliver
     end
     
-    AdminMailer.deliver_archive_notification(current_admin.login, @users, @subject, @message)
+    AdminMailer.archive_notification(current_admin.login, @users, @subject, @message).deliver
     
     flash[:notice] = t('sent', :default => "Notification sent to %{count} user(s).", :count => @users.size)
     redirect_to :action => :notify
@@ -217,7 +217,7 @@ class Admin::AdminUsersController < ApplicationController
   
   def send_activation
     @user = User.find_by_login(params[:id])
-    UserMailer.deliver_signup_notification(@user)
+    UserMailer.signup_notification(@user).deliver
     flash[:notice] = t('activation_sent', :default => "Activation email sent")
     redirect_to :action => :show
   end

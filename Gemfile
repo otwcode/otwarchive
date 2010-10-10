@@ -26,7 +26,7 @@ gem 'chronic'
 
 #gem 'will_paginate', '3.0.pre'
 gem 'will_paginate',
-  :git     => 'git://github.com/mislav/will_paginate.git',
+  :git     => 'git://github.com/huerlisi/will_paginate.git',
   :branch  => 'rails3',
   :require => 'will_paginate'
 

@@ -29,10 +29,10 @@ class FeedbacksController < ApplicationController
           site['/projects/4911/bugs'].post build_post_info(@feedback), :content_type => 'application/xml', :accept => 'application/xml'
         end
         # Email bug to feedback email address
-        AdminMailer.deliver_feedback(@feedback)
+        AdminMailer.feedback(@feedback).deliver
         # If user supplies email address, email them an auto-response
         if !@feedback.email.blank?
-          UserMailer.deliver_feedback(@feedback)
+          UserMailer.feedback(@feedback).deliver
         end
         flash[:notice] = t('successfully_sent', :default => 'Your message was sent to the archive team - thank you!')
         format.html { redirect_back_or_default(root_path) }

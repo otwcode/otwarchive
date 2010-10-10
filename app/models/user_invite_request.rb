@@ -23,7 +23,7 @@ class UserInviteRequest < ActiveRecord::Base
       self.quantity.times do 
         self.user.invitations.create
       end
-      UserMailer.deliver_invite_increase_notification(self.user, self.quantity)
+      UserMailer.invite_increase_notification(self.user, self.quantity).deliver
     end
   end
 end

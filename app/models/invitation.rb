@@ -28,7 +28,7 @@ class Invitation < ActiveRecord::Base
       total.times do 
         user.invitations.create
       end
-      UserMailer.deliver_invite_increase_notification(user, total)
+      UserMailer.invite_increase_notification(user, total).deliver
     end
     User.out_of_invites.update_all('out_of_invites = 0')
   end
@@ -40,7 +40,7 @@ class Invitation < ActiveRecord::Base
       total.times do 
         user.invitations.create
       end
-      UserMailer.deliver_invite_increase_notification(user, total)
+      UserMailer.invite_increase_notification(user, total).deliver
     end
     User.out_of_invites.update_all('out_of_invites = 0')
   end
@@ -62,9 +62,9 @@ class Invitation < ActiveRecord::Base
       begin
         if self.external_author
           archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
-          UserMailer.deliver_invitation_to_claim(self, archivist)
+          UserMailer.invitation_to_claim(self, archivist).deliver
         else
-          UserMailer.deliver_invitation(self)
+          UserMailer.invitation(self).deliver
         end
         self.sent_at = Time.now
       rescue Exception => exception

@@ -11,11 +11,11 @@
 <h3 class="landmark">Next Page Navigation</h3>
 <%= people_paginated_section(@what) %> 
 <div class="pagination">
-<% paginated_section @people, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
-<ul class="pseud index">
-  <% for person in @people %>
-    <%= render :partial => 'author_blurb', :locals => {:author => person} %>
-  <% end %>  
-</ul>
+<% paginated_section @people, {:previous_label => '&laquo; Previous'.html_safe, :next_label => 'Next &raquo;'.html_safe} do %>
+  <ul class="pseud index">
+    <% for person in @people %>
+      <%= render 'author_blurb', :author => person %>
+    <% end %>  
+  </ul>
 <% end %>
 </div>

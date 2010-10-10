@@ -157,7 +157,7 @@ class CollectionItem < ActiveRecord::Base
       recipient_pseuds = Pseud.parse_bylines(self.recipients, :assume_matching_login => true)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
-          UserMailer.deliver_recipient_notification(pseud.user, self.item, self.collection)
+          UserMailer.recipient_notification(pseud.user, self.item, self.collection).deliver
         end
       end
 

@@ -1,11 +1,12 @@
 class AdminMailer < ActionMailer::Base
-  
+
+  default :from => ArchiveConfig.RETURN_ADDRESS
+    
   def abuse_report(email,url,comment)
     @email = email
     @url = url
     @comment = comment
     mail(
-      :from => ArchiveConfig.RETURN_ADDRESS,
       :to => ArchiveConfig.ABUSE_ADDRESS,
       :subject  => "#{ArchiveConfig.APP_NAME}" + " - " + "Admin Abuse Report"
     )
@@ -31,7 +32,6 @@ class AdminMailer < ActionMailer::Base
       users.size.to_s + " users, including: " + users[0..20].map(&:login).join(", ")
     end
     mail(
-      :from => ArchiveConfig.RETURN_ADDRESS,
       :to => ArchiveConfig.WEBMASTER_ADDRESS,
       :subject  => "#{ArchiveConfig.APP_NAME}" + " - " + "Admin Archive Notification Sent"
     )

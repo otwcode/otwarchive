@@ -164,7 +164,7 @@ class ChallengeAssignment < ActiveRecord::Base
       save
       assigned_to = self.offer_signup ? self.offer_signup.pseud.user : (self.pinch_hitter ? self.pinch_hitter.user : nil)
       request = self.request_signup || self.pinch_request_signup
-      UserMailer.deliver_challenge_assignment_notification(collection, assigned_to, self) if assigned_to && request
+      UserMailer.challenge_assignment_notification(collection, assigned_to, self).deliver if assigned_to && request
     end
   end
 

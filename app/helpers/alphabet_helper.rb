@@ -40,6 +40,7 @@ module AlphabetHelper
     end
 
     block << "</div>"
+    block.html_safe
   end
   
   def people_paginated_section(type)
@@ -64,5 +65,6 @@ module AlphabetHelper
     end
     
     block << "</div>"
+    block.html_safe
   end
 end

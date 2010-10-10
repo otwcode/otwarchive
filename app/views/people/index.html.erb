@@ -8,7 +8,7 @@
   <!--main content-->
   <ul class="pseud index">
     <% @authors.each do |author| %>
-      <%= render :partial => 'author_blurb', :locals => {:author => author} %>
+      <%= render 'author_blurb', :author => author %>
     <% end %>  
   </ul>
   <% end %>

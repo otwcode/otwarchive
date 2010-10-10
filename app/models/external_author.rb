@@ -107,7 +107,7 @@ class ExternalAuthor < ActiveRecord::Base
   
   def notify_user_of_claim(claimed_works)
     # send announcement to user of the stories they have been given
-    UserMailer.deliver_claim_notification(self, claimed_works)
+    UserMailer.claim_notification(self, claimed_works).deliver
   end
   
   def find_or_invite(archivist = nil)
