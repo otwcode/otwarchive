@@ -137,7 +137,7 @@ Otwarchive::Application.routes.draw do
       end
     end
     resources :preferences, :only => [:index, :update]
-    resource :profile, :only => [:show]
+    resource :profile, :only => [:show], :controller => "profile"
     resources :pseuds do
       resources :works
       resources :series
