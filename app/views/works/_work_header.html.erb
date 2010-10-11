@@ -89,7 +89,7 @@
       <div class="summary module" role="complementary">
         <h3><%=h t('.work_header.summary', :default => "Summary:") %></h3>
         <% unless @work.summary.blank? %>
-          <blockquote class="user-generated-view"><%=raw sanitize_limit_and_format_for_display @work.summary %></blockquote>
+          <blockquote class="userstuff"><%=raw sanitize_limit_and_format_for_display @work.summary %></blockquote>
         <% end %>
       </div>
     <% end %>
@@ -134,7 +134,7 @@
     <% if @work.notes.blank? %>
         <span class="endnotes-link"><%= t('.link_to_endnotes', :default => "See the end of the work for more %{notes_link}.", :notes_link => (link_to t('.notes_link', :default => "notes"), linkpath)) %></span>
     <% else %>
-        <blockquote class="user-generated-view"><%=raw sanitize_and_format_for_display(@work.notes) %></blockquote>
+        <blockquote class="userstuff"><%=raw sanitize_and_format_for_display(@work.notes) %></blockquote>
         <% unless @work.endnotes.blank? %>
           <span class="endnotes-link">
           <%= t('.work_header.link_more_endnotes', :default => "See the end of the work for more %{notes_link}.",

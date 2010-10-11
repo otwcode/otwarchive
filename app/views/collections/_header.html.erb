@@ -3,7 +3,7 @@
 <div class="header module">
 	<h2><%= link_to_unless_current(sanitize_title_for_display(@collection.title), @collection) %></h2>
 	<p><%= image_tag(@collection.icon.url(:standard), :size => "100x100", :alt => "icon for #{@collection.name}", :class => "icon") %></p>
-	<blockquote class="user-generated-view"><%=raw sanitize_and_format_for_display @collection.description %></blockquote>
+	<blockquote class="userstuff"><%=raw sanitize_and_format_for_display @collection.description %></blockquote>
 <!--/descriptions-->
 
 <!--subnav-->

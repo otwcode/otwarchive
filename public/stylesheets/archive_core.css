@@ -2,7 +2,7 @@
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td	{ border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; list-style: none; margin: 0; padding: 0; }
 /************************************************end of uneditable rules */
 
-/* This sheet sets out the GLOBAL RULES that apply to all content. Brand font is declared in font.css. The site chrome is laid out in site-chrome.css. Forms are laid out in forms.css. User-generated content from textarea inputs are laid out in user-generated-views.css. A brief style guide follows:
+/* This sheet sets out the GLOBAL RULES that apply to all content. Brand font is declared in font.css. The site chrome is laid out in site-chrome.css. Forms are laid out in forms.css. User-generated content from textarea inputs are laid out in userstuff.css. A brief style guide follows:
 See internal wiki "Em scale" to grok the font sizing and measures. #main p set to 14px.
 Colours:
 red:	#900 (otw brand red)

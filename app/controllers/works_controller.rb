@@ -163,7 +163,7 @@ class WorksController < ApplicationController
     if params[:view_adult]
       session[:adult] = true
     elsif @work.adult? && !see_adult?
-      render :partial => "adult", :layout => "application" and return
+      render "_adult", :layout => "application" and return
     end
 
     # Users must explicitly okay viewing of entire work

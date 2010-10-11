@@ -1,4 +1,4 @@
-/*Forms are laid out in forms.css. User-generated content from textarea inputs are laid out in user-generated-views.
+/*Forms are laid out in forms.css. User-generated content from textarea inputs are laid out in userstuff.
 1. page regions, shown on every page
 2. general rules by content and structure type, shown on many pages
 3. individual page (children of #main) styling, shown on one page
@@ -218,7 +218,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .datetime .time, .datetime .timezone
 									{ font-size: 0.8575em; color:#900}
 
-/* PREFACE - title, notes, description, collections faq, rules; has a fair few id weights as it sometimes appears within a user-generated-view*/
+/* PREFACE - title, notes, description, collections faq, rules; has a fair few id weights as it sometimes appears within a userstuff*/
  .preface 						{ border-bottom: 3px double; margin: auto 3em 1.5em; padding: 0.5em 0.5em 0 }
  #main .preface .module			{ float:none; margin:0; padding:0;  width:auto }
  #main .preface h3				{ background: transparent; border-bottom: 1px solid; color: #333; font-size: 1.125em }				
@@ -235,7 +235,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  #main .profile p.alt			{ margin: 3em auto 3em 100px }
  .profile .header img 			{ left: 0; margin: 0 0 0.5625em; position: absolute; top: 0 }
  .profile .header h2 			{ font-size:2.25em; margin: 0.675em 0 0 100px; text-align: right; border-bottom:2px solid; }
- .profile .header .user-generated-view	
+ .profile .header .userstuff	
                                 { margin-left: 120px;}
  .profile .module h3			{ background: #222; color: #fffef9; margin:0; padding: 0.125em; border-bottom: 4px double #fffef9;}
  .profile .series 				{ clear:left; float:none;}
@@ -407,7 +407,7 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
                                 { font-size: 90%; margin: .5em 0em; }
  #dashboard.admin-posts a:hover { background: #333; color: #fff; }
  #main.admin_posts-index .wrapper, #main.admin_posts-show .admin-header, #main.archive_faqs-show .admin-header{clear:right;}
- #main.admin_posts-show .user-generated-view { margin-top: 2em; } /* hacky fix so the first header doesn't overlap the subnav */
+ #main.admin_posts-show .userstuff { margin-top: 2em; } /* hacky fix so the first header doesn't overlap the subnav */
  #main.admin_posts-show .admin-header h3, #main.admin_posts-index .admin-header h3, 
      #main.archive_faqs-show .admin-header h3, #main.archive_faqs-index .admin-header h3  
        { font-weight:500; padding: 0.125em; border-bottom:0.25em double #fffef9; color: #fffef9; background-color: #333; }

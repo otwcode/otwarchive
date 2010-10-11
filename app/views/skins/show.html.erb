@@ -7,7 +7,7 @@
       <%=  h(@skin.title) %>
       <%= t('skin_author', :default => "skin by %{name}", :name => skin_author_link(@skin)) %>    
     </h2>
-    <blockquote class="user-generated-view">
+    <blockquote class="userstuff">
       <%=raw sanitize_and_format_for_display @skin.description.blank? ? t("skins.no_description", :default => "(No Description Provided)") : @skin.description %>
     </blockquote>
     <%= skin_preview_display(@skin) %>

@@ -26,7 +26,7 @@ class ChaptersController < ApplicationController
     if params[:view_adult]
       session[:adult] = true
     elsif @work.adult? && !see_adult? 
-      render :partial => "works/adult", :layout => "application" and return
+      render "works/_adult", :layout => "application" and return
     end  
 
     if params[:selected_id]

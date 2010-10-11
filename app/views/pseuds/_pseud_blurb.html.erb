@@ -13,7 +13,7 @@
       <%= standard_icon_display(@user, pseud) %>
     </div>
     <% unless pseud.description.blank? %>
-      <blockquote class="user-generated-view">
+      <blockquote class="userstuff">
 	    <p><%=raw sanitize_description_for_display(pseud.description) %></p>
 	    </blockquote>
     <% end %>

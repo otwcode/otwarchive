@@ -27,7 +27,7 @@
   <% unless @user.profile.about_me.blank? %>
     <div class="user module">
       <h3><%=h t('.bio', :default => "Bio:") %></h3>
-      <blockquote class="user-generated-view"><%=raw sanitize_and_format_for_display @user.profile.about_me %></blockquote>
+      <blockquote class="userstuff"><%=raw sanitize_and_format_for_display @user.profile.about_me %></blockquote>
     </div>
   <% end %>
   

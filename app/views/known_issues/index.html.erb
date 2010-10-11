@@ -11,7 +11,7 @@
 <!--main content-->
 
 <% @known_issues.each do |known_issue| %>
-				<div class="admin user-generated-view" role="article"><h4>Updated <%=h known_issue.updated_at %></h4>
+				<div class="admin userstuff" role="article"><h4>Updated <%=h known_issue.updated_at %></h4>
 	    <%=raw sanitize_and_format_for_display known_issue.content %>
 	</div>
 <% end %>

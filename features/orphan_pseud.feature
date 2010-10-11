@@ -24,10 +24,10 @@ Scenario: Orphan all works belonging to one pseud
   Then I should see "Orphaning was successful."
   When I view the work "Shenanigans"
   Then I should see "orphan_account"
-    And I should not see "orphanpseud" within ".user-generated-view"
+    And I should not see "orphanpseud" within ".userstuff"
   When I view the work "Shenanigans 2"
   Then I should see "orphan_account"
-    And I should not see "orphanpseud" within ".user-generated-view"
+    And I should not see "orphanpseud" within ".userstuff"
 
     Scenario: Orphan all works belonging to one pseud, add a copy of the pseud to the orphan_account
       Given the following activated user exists
@@ -49,7 +49,7 @@ Scenario: Orphan all works belonging to one pseud
       Then I should see "Orphaning was successful."
       When I view the work "Shenanigans"
       Then I should see "orphanpseud (orphan_account)"
-        And I should not see "orphanpseud" within ".user-generated-view"
+        And I should not see "orphanpseud" within ".userstuff"
       When I view the work "Shenanigans 2"
       Then I should see "orphanpseud (orphan_account)"
-        And I should not see "orphanpseud" within ".user-generated-view"
+        And I should not see "orphanpseud" within ".userstuff"

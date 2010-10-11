@@ -98,7 +98,7 @@ createIbox = function(elem) {
 	strHTML +=  indicator_img_html;
 	strHTML +=  "</div>";
 	strHTML +=	"<div id=\"ibox_wrapper\" style=\"display:none\">";
-	strHTML +=	"<div id=\"ibox_content\" class=\"user-generated-view\"></div>";
+	strHTML +=	"<div id=\"ibox_content\" class=\"userstuff\"></div>";
 	strHTML +=	"<div id=\"ibox_footer_wrapper\"><div id=\"ibox_close\" style=\"float:right;\">";
 	strHTML +=	"<a id=\"ibox_close_a\" href=\"javascript:void(null);\" >CLOSE</a></div>";
 	strHTML +=  "<div id=\"ibox_footer\">&nbsp;</div></div></div></div>";

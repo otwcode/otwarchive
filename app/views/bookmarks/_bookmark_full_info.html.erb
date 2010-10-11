@@ -12,7 +12,7 @@
 <!--summary-->
 <% unless bookmark.bookmarkable.summary.blank? %>
     <h6 class="landmark">Summary</h6>
-	<blockquote class="user-generated-view summary" title="summary">
+	<blockquote class="userstuff summary" title="summary">
 	<%=raw sanitize_strip_images_and_format_for_display bookmark.bookmarkable.summary %>
 	</blockquote>
   <% end %>
@@ -72,7 +72,7 @@
 <!--notes-->
   <% unless bookmark.notes.blank? %>
         <h6 class="landmark">Notes</h6>
-		<blockquote class="user-generated-view notes" title="notes">
+		<blockquote class="userstuff notes" title="notes">
 		<%=raw sanitize_limit_and_format_for_display bookmark.notes %>
 		</blockquote>
   <% end %>

@@ -53,11 +53,11 @@
 
   <% unless @series.summary.blank? %>
       <dt><%=h 'Description:' %></dt>
-      <dd><blockquote class="user-generated-view"><%=raw sanitize_and_format_for_display @series.summary %></blockquote></dd>
+      <dd><blockquote class="userstuff"><%=raw sanitize_and_format_for_display @series.summary %></blockquote></dd>
 	<% end %>
 	<% unless @series.notes.blank? %>
       <dt><%=h 'Notes:' %></dt>
-      <dd><blockquote class="user-generated-view"><%=raw sanitize_and_format_for_display @series.notes %></blockquote></dd>
+      <dd><blockquote class="userstuff"><%=raw sanitize_and_format_for_display @series.notes %></blockquote></dd>
 	<% end %>
 </dl>
 </div>

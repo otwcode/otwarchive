@@ -18,7 +18,7 @@
           <span class="visitor icon"><!-- visitor icon holder --></span>
         <% end %>
       </div>
-      <blockquote class="user-generated-view"><%=raw sanitize_limit_and_format_for_display single_comment.content %></blockquote>
+      <blockquote class="userstuff"><%=raw sanitize_limit_and_format_for_display single_comment.content %></blockquote>
       <p class="datetime">
         <%=h t('.single_comment_posted', :default => "Posted %{date}", :date => l(single_comment.created_at)) %>
       </p>
