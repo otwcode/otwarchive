@@ -34,10 +34,10 @@ Feature: Invite requests
     # admin grants request
     When I follow "Log out"
     When I go to the admin_login page
-      And I fill in "admin_login" with "admin-sam"
-      And I fill in "admin_password" with "password"
+      And I fill in "admin_session_login" with "admin-sam"
+      And I fill in "admin_session_password" with "password"
       And I press "Log in as admin"
-    Then I should see "Logged in successfully"
+    Then I should see "Successfully logged in"
     When I follow "invitations"
       And I follow "Manage requests"
     Then I should see "user1"
@@ -49,7 +49,7 @@ Feature: Invite requests
     
     # user sees them
     When I follow "Log out"
-    Then I should see "You have been logged out"
+    Then I should see "Successfully logged out"
     When I am logged in as "user1" with password "password"
       And I go to user1's user page
       And I follow "Invitations"

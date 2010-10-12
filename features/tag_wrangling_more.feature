@@ -13,8 +13,8 @@ Feature: Tag wrangling more
       
     # making a user into a tag wrangler
     When I go to the admin_login page
-      And I fill in "admin_login" with "Zooey"
-      And I fill in "admin_password" with "secret"
+      And I fill in "admin_session_login" with "Zooey"
+      And I fill in "admin_session_password" with "secret"
       And I press "Log in as admin"
       And I fill in "query" with "dizmo"
       And I press "Find"

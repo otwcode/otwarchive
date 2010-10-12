@@ -19,10 +19,10 @@ Feature: Tag wrangling
     Then I should not see "Tag Wrangling"
     When I follow "Log out"
       And I go to the admin_login page
-      And I fill in "admin_login" with "Zooey"
-      And I fill in "admin_password" with "secret"
+      And I fill in "admin_session_login" with "Zooey"
+      And I fill in "admin_session_password" with "secret"
       And I press "Log in as admin"
-    Then I should see "Logged in successfully"
+    Then I should see "Successfully logged in"
     When I fill in "query" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"

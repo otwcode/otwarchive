@@ -14,8 +14,8 @@ Feature: Archivist bulk imports
     Then I should not see "Import works for others"
     When I follow "Log out"
       And I go to the admin_login page
-      And I fill in "admin_login" with "EYalkut"
-      And I fill in "admin_password" with "secret"
+      And I fill in "admin_session_login" with "EYalkut"
+      And I fill in "admin_session_password" with "secret"
       And I press "Log in as admin"
       And I fill in "query" with "elynross"
       And I press "Find"

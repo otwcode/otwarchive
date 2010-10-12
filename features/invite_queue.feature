@@ -13,16 +13,16 @@ Feature: Invite queue management
     
     # turn on queue
     When I go to the admin_login page
-      And I fill in "admin_login" with "admin-sam"
-      And I fill in "admin_password" with "password"
+      And I fill in "admin_session_login" with "admin-sam"
+      And I fill in "admin_session_password" with "password"
       And I press "Log in as admin"
-    Then I should see "Logged in successfully"
+    Then I should see "Successfully logged in"
     When I follow "settings"
       And I check "admin_setting_invite_from_queue_enabled"
       And I press "Update"
     Then I should see "Archive settings were successfully updated"
     When I follow "Log out"
-    Then I should see "You have been logged out"
+    Then I should see "Successfully logged out"
     
     # join the queue
     When I am on the homepage
@@ -51,10 +51,10 @@ Feature: Invite queue management
     
     # invite can be used
     When I go to the admin_login page
-      And I fill in "admin_login" with "admin-sam"
-      And I fill in "admin_password" with "password"
+      And I fill in "admin_session_login" with "admin-sam"
+      And I fill in "admin_session_password" with "password"
       And I press "Log in as admin"
-    Then I should see "Logged in successfully"
+    Then I should see "Successfully logged in"
     When I follow "invitations"
       And I fill in "invitee_email" with "test@archiveofourown.org"
       And I press "Go"
