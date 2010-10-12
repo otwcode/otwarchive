@@ -81,7 +81,7 @@ group :test do
   gem 'shoulda'
   gem 'factory_girl'
   gem 'capybara'
-  gem 'database_cleaner'
+  gem 'database_cleaner', '>=0.6.0.rc.3'
   gem 'cucumber-rails'
   gem 'cucumber', '>=0.9.1'
   gem 'launchy'    # So you can do Then show me the page

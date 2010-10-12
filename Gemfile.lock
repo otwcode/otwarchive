@@ -94,7 +94,7 @@ GEM
     culerity (0.2.12)
     daemon-spawn (0.4.0)
     daemons (1.0.10)
-    database_cleaner (0.5.2)
+    database_cleaner (0.6.0.rc.3)
     delayed_job (2.0.3)
       daemons
     diff-lcs (1.1.2)
@@ -229,7 +229,7 @@ DEPENDENCIES
   cucumber (>= 0.9.1)
   cucumber-rails
   daemon-spawn
-  database_cleaner
+  database_cleaner (>= 0.6.0.rc.3)
   delayed_job
   escape_utils
   factory_girl
