@@ -7,7 +7,7 @@ class PeopleController < ApplicationController
     unless @query.blank?
       begin
         page = params[:page] || 1
-        errors, @people = Pseud.search_with_sphinx(@query, page)
+        errors, @people = Query.search_with_sphinx(Pseud, @query, page)
         flash.now[:error] = errors.join(" ") unless errors.blank?
       rescue Riddle::ConnectionError
         flash.now[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")

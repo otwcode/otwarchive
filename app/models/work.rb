@@ -1022,29 +1022,7 @@ class Work < ActiveRecord::Base
   # settings and methods used with the ThinkingSphinx plugin
   # that connects us to the Sphinx search engine.
   #
-  # most of the logic is contained in module Query in lib/query.rb
-  #
   #############################################################################
-
-  def self.search_with_sphinx(query, page)
-    search_string, with_hash, query_errors = Query.split_query(query)
-    # set pagination and extend mode
-    options = {
-      :per_page => ArchiveConfig.ITEMS_PER_PAGE,
-      :max_matches => ArchiveConfig.SEARCH_RESULTS_MAX,
-      :page => page,
-      :match_mode => :extended
-      }
-    # attribute restrictions
-    if User.current_user.nil?
-      with_hash.update({:posted => true, :hidden_by_admin => false, :restricted => false})
-    else
-      with_hash.update({:posted => true, :hidden_by_admin => false})
-      ## TODO add personal filters here
-    end
-    options[:with] = with_hash
-    return query_errors, Work.search(search_string, options)
-  end
 
   # Index for Thinking Sphinx
   define_index do

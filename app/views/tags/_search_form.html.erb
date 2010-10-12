@@ -2,10 +2,10 @@
 <fieldset>
   <legend>Search tags</legend>
   <p>
-    <%= text_field_tag :name, params[:name], :id => 'tag_search'  %>
+    <%= text_field_tag "query[name]", @query[:name], :id => 'tag_search'  %>
     <%= link_to_help "tag-search-text-help" %>
-    <%= select_tag :type, options_for_select(%w(All Fandom Character Relationship Freeform), params[:type]) %>
-    <label for="canonical">canonical?</label>&nbsp;<%= check_box_tag :canonical, "true", params[:canonical] %>
+    <%= select_tag "query[type]", options_for_select(["", "Fandom", "Character", "Relationship", "Freeform"], @query[:type]) %>
+    <label for="canonical">canonical?</label>&nbsp;<%= check_box_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %>
     <%= link_to_help "tag-search-type-help" %>
   </p>
   <span class="submit"><%= submit_tag t('.tags.search', :default => 'Search tags'), :name => nil %></span>

@@ -7,7 +7,28 @@ module Query
   BOOKMARK_FIELDS = %w{tag indirect notes bookmarker}
   PEOPLE_FIELDS = %w{name icon_alt_text description}
   ALL_FIELDS = (WORK_FIELDS + BOOKMARK_FIELDS + PEOPLE_FIELDS).uniq
-  ALL_INDEXES = ALL_FIELDS + %w{words hits date rec}
+  ALL_INDEXES = ALL_FIELDS + %w{words hits date rec canonical}
+
+  # this does the actual search on the class given a standardized query hash
+  def Query.search_with_sphinx(klass, query, page)
+    search_string, with_hash, query_errors = Query.split_query(query)
+    # set pagination and extend mode
+    options = {
+      :per_page => ArchiveConfig.ITEMS_PER_PAGE,
+      :max_matches => ArchiveConfig.SEARCH_RESULTS_MAX,
+      :page => page,
+      :match_mode => :extended
+      }
+    # attribute restrictions
+    if User.current_user.nil?
+      with_hash.update({:posted => true, :hidden_by_admin => false, :restricted => false})
+    else
+      with_hash.update({:posted => true, :hidden_by_admin => false})
+      ## TODO add personal filters here
+    end
+    options[:with] = with_hash
+    return query_errors, klass.search(search_string, options)
+  end
   
   # this is used to take a full text query from the small search box
   # like "author: astolat words: > 1000" 
@@ -70,6 +91,7 @@ module Query
       end
     end
     with[:rec] = true if query[:rec]
+    with[:canonical] = true if query[:canonical]
     unless query[:date].blank?
       match = query[:date].match(/^([<>]*)\s*([\d -]+)\s*(year|week|month|day|hour)s?(\s*ago)?s*$/)
       if match

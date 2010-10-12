@@ -137,21 +137,6 @@ class Bookmark < ActiveRecord::Base
     return self.tags
   end 
 
-  def self.search_with_sphinx(query, page)
-    search_string, with_hash, query_errors = Query.split_query(query)
-    # set pagination and extend mode
-    options = {
-      :per_page => ArchiveConfig.ITEMS_PER_PAGE, 
-      :max_matches => ArchiveConfig.SEARCH_RESULTS_MAX, 
-      :page => page, 
-      :match_mode => :extended 
-      }
-    # attribute restrictions
-    with_hash.update({:private => false, :hidden_by_admin => false})
-    options[:with] = with_hash
-    return query_errors, Bookmark.search(search_string, options)
-  end
-
   # Index for Thinking Sphinx
   define_index do
 
@@ -162,7 +147,8 @@ class Bookmark < ActiveRecord::Base
     # associations
     indexes pseud(:name), :as => 'bookmarker'
     indexes tags(:name), :as => 'tag'
-    indexes bookmarkable.tags(:name), :as => 'indirect'
+# TODO polymorphic associations can’t currently be used in field or attribute definitions. This will be fixed at some point.
+#    indexes bookmarkable.tags(:name), :as => 'indirect'
         
     # attributes
     has rec, updated_at, bookmarkable_id

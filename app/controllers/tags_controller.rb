@@ -27,8 +27,23 @@ class TagsController < ApplicationController
   end
   
   def search
-    @tags = Tag.search_with_sphinx(params) unless params[:name].blank?
-  end  
+    @query = {}
+    if params[:query]
+      @query = Query.standardize(params[:query])
+      if @query == params[:query]
+        begin
+          page = params[:page] || 1
+          errors, @tags = Query.search_with_sphinx(Tag, @query, page)
+          flash.now[:error] = errors.join(" ") unless errors.blank?
+        rescue Riddle::ConnectionError
+          flash.now[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
+        end
+      else
+        params[:query] = @query
+        redirect_to url_for(params)
+      end
+    end
+  end
 
   # if user is Admin or Tag Wrangler, show them details about the tag
   # if user is not logged in or a regular user, show them

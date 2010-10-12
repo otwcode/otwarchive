@@ -624,14 +624,6 @@ class Tag < ActiveRecord::Base
     (work_bookmarks + ext_work_bookmarks + series_bookmarks)
   end
 
-  def self.search_with_sphinx(options)
-    search_options = {:per_page => ArchiveConfig.ITEMS_PER_PAGE, :max_matches => ArchiveConfig.SEARCH_RESULTS_MAX, :page =>(options[:page] || 1), :match_mode => :extended, :order => "type ASC, name ASC" }
-    query = "@name " + options[:name]
-    query = (query + " @type " + options[:type]) unless options[:type] == "All"
-    search_options[:with] = {:canonical => true} if options[:canonical]
-    Tag.search(query, search_options)
-  end
-
   # Index for Thinking Sphinx
   define_index do
 
