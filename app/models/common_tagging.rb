@@ -9,7 +9,7 @@ class CommonTagging < ActiveRecord::Base
   after_create :inherit_parents 
   
   def update_wrangler
-    unless User.current_user == :false
+    unless User.current_user.nil?
       common_tag.update_attributes(:last_wrangler => User.current_user)
     end
   end

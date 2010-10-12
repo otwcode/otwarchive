@@ -74,7 +74,7 @@ class Series < ActiveRecord::Base
   end
   
   def visible_work_count
-    if User.current_user == :false
+    if User.current_user.nil?
       self.works.posted.unrestricted.count      
     else
       self.works.posted.count
@@ -82,7 +82,7 @@ class Series < ActiveRecord::Base
   end
   
   def visible_word_count
-    if User.current_user == :false
+    if User.current_user.nil?
       works = self.works.posted.unrestricted.find(:all, :select => "works.word_count")
     else
       works = self.works.posted.find(:all, :select => "works.word_count")

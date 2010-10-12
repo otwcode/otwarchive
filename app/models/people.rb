@@ -30,7 +30,7 @@ class People
   end
 
   def authors
-    if User.current_user == :false
+    if User.current_user.nil?
       Pseud.with_public_works.find(:all, :include => :user, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")    
     else
       Pseud.with_posted_works.find(:all, :include => :user, :conditions => ["name LIKE ?", escaped + '%' ], :order => "name")

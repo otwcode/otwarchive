@@ -110,7 +110,7 @@ class Pseud < ActiveRecord::Base
 
   # Gets the number of works by this user that the current user can see
   def visible_works_count
-    if User.current_user == :false
+    if User.current_user.nil?
       self.works.posted.unhidden.unrestricted.count      
     else
       self.works.posted.unhidden.count
@@ -164,7 +164,7 @@ class Pseud < ActiveRecord::Base
     if pseuds.blank?
       {}
     else    
-      if User.current_user == :false
+      if User.current_user.nil?
         pseuds_with_counts = Pseud.public_work_count_for(pseuds.collect(&:id))
       else
         pseuds_with_counts = Pseud.posted_work_count_for(pseuds.collect(&:id))

@@ -1036,7 +1036,7 @@ class Work < ActiveRecord::Base
       :match_mode => :extended
       }
     # attribute restrictions
-    if User.current_user == :false
+    if User.current_user.nil?
       with_hash.update({:posted => true, :hidden_by_admin => false, :restricted => false})
     else
       with_hash.update({:posted => true, :hidden_by_admin => false})

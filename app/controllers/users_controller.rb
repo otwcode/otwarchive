@@ -46,7 +46,7 @@ class UsersController < ApplicationController
       end
       @fandoms = @user.filters.with_type("Fandom").by_name.uniq
       @works = Work.owned_by(@user).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)      
-      if current_user == :false
+      if current_user.nil?
         @series = Series.visible_to_all.exclude_anonymous.for_pseuds(@user.pseuds).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
       else
         @series = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(@user.pseuds).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])

@@ -32,7 +32,7 @@ class PseudsController < ApplicationController
       end
       @fandoms = @author.filters.by_type("Fandom").by_name.select("DISTINCT tags.*")
       @works = Work.written_by([@author]).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-      if current_user == :false
+      if current_user.nil?
         @series = Series.visible_to_all.exclude_anonymous.for_pseuds([@author]).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
       else
         @series = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([@author]).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])

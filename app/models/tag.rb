@@ -100,12 +100,12 @@ class Tag < ActiveRecord::Base
   
   before_save :set_last_wrangler
   def set_last_wrangler
-    unless User.current_user == :false
+    unless User.current_user.nil?
       self.last_wrangler = User.current_user
     end
   end
   def update_wrangler(tag)
-    unless User.current_user == :false
+    unless User.current_user.nil?
       self.update_attributes(:last_wrangler => User.current_user)
     end
   end
@@ -424,7 +424,7 @@ class Tag < ActiveRecord::Base
   # methods for counting visible
   
   def visible_works_count
-    User.current_user == :false ? self.works.posted.unhidden.unrestricted.count : self.works.posted.unhidden.count 
+    User.current_user.nil? ? self.works.posted.unhidden.unrestricted.count : self.works.posted.unhidden.count 
   end
 
   def visible_bookmarks_count

@@ -92,7 +92,7 @@ module UsersHelper
 
   # Prints link to series page with user-appropriate number of series
   def print_series_link(user)
-    if current_user == :false
+    if current_user.nil?
       total = Series.visible_to_all.exclude_anonymous.for_pseuds(user.pseuds).length
     else
       total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(user.pseuds).length
@@ -105,7 +105,7 @@ module UsersHelper
   end
   
   def print_pseud_series_link(pseud)
-    if current_user == :false
+    if current_user.nil?
       total = Series.visible_to_all.exclude_anonymous.for_pseuds([pseud]).length
     else
       total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([pseud]).length

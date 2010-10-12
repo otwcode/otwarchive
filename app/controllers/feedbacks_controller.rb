@@ -6,7 +6,7 @@ class FeedbacksController < ApplicationController
   def new
     @feedback = Feedback.new
     @page_title = "Support and Feedback"
-     unless User.current_user == :false
+     unless User.current_user.nil?
       @feedback.email = User.current_user.email
     else
       @feedback.email = ""

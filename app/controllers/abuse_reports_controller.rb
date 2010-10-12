@@ -8,7 +8,7 @@ class AbuseReportsController < ApplicationController
     @abuse_report = AbuseReport.new
     params[:url] ? @abuse_report.url = params[:url] : @abuse_report.url = request.env["HTTP_REFERER"]
     #@abuse_report.url = request.env["HTTP_REFERER"]
-    unless User.current_user == :false
+    unless User.current_user.nil?
       @abuse_report.email = User.current_user.email
     else
       @abuse_report.email = ""
