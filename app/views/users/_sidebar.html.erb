@@ -1,7 +1,7 @@
 <div id="dashboard" role="navigation">
 <ul role="navigation">
   <% if @user == current_user %>
-    <li><%= span_if_current t('.my_dashboard', :default =>"My Dashboard"), @user %></li>
+    <li><%= span_if_current t("My Dashboard"), @user %></li>
     <li><%= span_if_current t('.my_pseuds', :default =>"My Pseuds (%{my_pseud_number})", :my_pseud_number => @user.pseuds.count), user_pseuds_path(@user) %></li>
   <% else %>
     <li><%= span_if_current t('.dash', :default =>"Dashboard"), @user %></li>

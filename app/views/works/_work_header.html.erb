@@ -3,19 +3,19 @@
 <h3 class="landmark">Actions</h3>
 <ul class="navigation" role="navigation">
   <% if is_author_of?(@work) %>
-    <li><%= link_to t('.add_chapter', :default => "Add Chapter"), new_work_chapter_path(@work) %></li>
-    <li><%= link_to t('.edit', :default => "Edit"), edit_work_path(@work) %></li>
-    <li><%= link_to t('.edit_tags', :default => "Edit Tags"), edit_tags_work_path(@work) %></li>
-    <li><%= link_to t('.delete', :default => "Delete"), @work, :confirm => "Are you sure?", :method => :delete %></li>
+    <li><%= link_to ts("Add Chapter"), new_work_chapter_path(@work) %></li>
+    <li><%= link_to ts("Edit"), edit_work_path(@work) %></li>
+    <li><%= link_to ts("Edit Tags"), edit_tags_work_path(@work) %></li>
+    <li><%= link_to ts("Delete"), @work, :confirm => "Are you sure?", :method => :delete %></li>
   <% end %>
 
   <% if @previous_chapter || @next_chapter %>
     <li><%= link_to "View Entire Work", work_path(@work, :view_full_work => 'true') %></li>
     <% if @previous_chapter %>
-    <li>&#8592; <%= link_to t('.previous_chapter', :default => "Previous Chapter"), [@work, @previous_chapter] %></li>
+    <li><%= link_to '&#8592; '.html_safe + h(ts("Previous Chapter")), [@work, @previous_chapter] %></li>
     <% end %>
     <% if @next_chapter %>
-    <li><%= link_to t('.next_chapter', :default => "Next Chapter"), [@work, @next_chapter] %> &#8594;</li>
+    <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
     <% end %>
     <li>
       <%= link_to 'Chapter Index', navigate_work_path(@work), :onclick => "$('chapter-index').toggle();return false" %>
@@ -38,25 +38,25 @@
 
   <% if !Preference.light?(params[:style]) %>
     <li><% if params[:view_full_work] == 'true' %>
-      <%= link_to(t('.light_style', :default => 'Switch to light style'), url_for(:style => 'light', :view_full_work => 'true')) %>
+      <%= link_to(ts('Switch to light style'), url_for(:style => 'light', :view_full_work => 'true')) %>
       <% else %>
-      <%= link_to(t('.light_style', :default => 'Switch to light style'), url_for(:style => 'light')) %>
+      <%= link_to(ts('Switch to light style'), url_for(:style => 'light')) %>
     <% end %></li>
   <% elsif params[:style] != 'creator' %>
     <li><% if params[:view_full_work] == 'true' %>
-      <%= link_to(t('.creator_style', :default => "Switch to creator's style"), url_for(:style => 'creator', :view_full_work => 'true')) %>
+      <%= link_to(ts("Switch to creator's style"), url_for(:style => 'creator', :view_full_work => 'true')) %>
       <% else %>
-      <%= link_to(t('.creator_style', :default => "Switch to creator's style"), url_for(:style => 'creator')) %>
+      <%= link_to(ts("Switch to creator's style"), url_for(:style => 'creator')) %>
     <% end %></li>
   <% end %>
   
   <li>
-    <a onclick="subnav_view.toggle()" title="Download Options"><%= t('.download', :default =>"Download") %> &#8595;</a>
+    <a onclick="subnav_view.toggle()" title="Download Options"><%= ts("Download") %> &#8595;</a>
     <ul id="subnav">
-      <li><%= link_to(t('.mobi', :default => "Mobi"), download_work_path(@work, :format => :mobi)) %></li>
-      <li><%= link_to(t('.epub', :default => "Epub"), download_work_path(@work, :format => :epub)) %></li>
-      <li><%= link_to(t('.pdf', :default => "PDF"), download_work_path(@work, :format => :pdf)) %></li>
-      <li><%= link_to(t('.html', :default => "HTML"), download_work_path(@work, :format => :html)) %></li>
+      <li><%= link_to(ts("Mobi"), download_work_path(@work, :format => :mobi)) %></li>
+      <li><%= link_to(ts("Epub"), download_work_path(@work, :format => :epub)) %></li>
+      <li><%= link_to(ts("PDF"), download_work_path(@work, :format => :pdf)) %></li>
+      <li><%= link_to(ts("HTML"), download_work_path(@work, :format => :html)) %></li>
 			<li><a onclick="subnav_view.toggle()" style='cursor: pointer;' title="Close Download Options">Close</a></li>
     </ul>
   </li>
@@ -87,7 +87,7 @@
 
     <% unless @work.summary.blank? %>
       <div class="summary module" role="complementary">
-        <h3><%=h t('.work_header.summary', :default => "Summary:") %></h3>
+        <h3><%=h ts("Summary:") %></h3>
         <% unless @work.summary.blank? %>
           <blockquote class="userstuff"><%=raw sanitize_limit_and_format_for_display @work.summary %></blockquote>
         <% end %>
@@ -97,22 +97,22 @@
     <% unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? && @work.approved_children.blank? %>
       <% current_page?(:controller => 'chapters', :action => 'show') ? linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : (params[:view_full_work] == 'true' ? linkpath = work_path(@work, :view_full_work => 'true', :anchor => 'work_endnotes') : linkpath = work_path(@work, :anchor => 'work_endnotes')) %>
       <div class="notes module" role="complementary">
-      <h3><%=h t('.work_header.notes', :default => "Notes:") %></h3>
+      <h3><%=h ts("Notes:") %></h3>
         <% if !@work.recipients.blank? %>
-          <h4 class="inline"><%= t('.work_header.recipients', :default => "For %{recipients}.", :recipients => recipients_link(@work)) %></h4>
+          <h4 class="inline"><%= ts("For %{recipients}.", :recipients => recipients_link(@work)) %></h4>
         <% end %>
     <% unless @work.parents.blank? %>
         <% for related_work in @work.parent_work_relationships %>
           <% if related_work.parent %>
             <h4>
             <% if related_work.translation %>
-              <%= t('.translation_of', :default => 'A translation of') %>
+              <%= ts('A translation of') %>
             <% else %>
-              <%= t('.inspired_by', :default => 'Inspired by') %>
+              <%= ts('Inspired by') %>
             <% end %>
             <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>
             <% if is_author_of?(@work) && !@downloading %>
-              <%= link_to t('.remove_relationship', :default => '[Remove link]'), {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %>
+              <%= link_to ts('[Remove link]'), {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %>
             <% end %>
             </h4>
           <% end %>
@@ -122,23 +122,24 @@
       <% for related_work in @work.approved_related_works %>
         <% if related_work.translation %>
           <h4>
-          <%=h t('.translation', :default => 'Translation into %{language} available: ', :language => related_work.work.language.name) %>
+          <%=h ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
           <%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %>
           </h4>
         <% else %><% if @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? %>
-          <h4><%= t('.link_to_inspired_works', :default => "See the end of the work for other works inspired by this one.") %></h4>
+          <h4><%= ts("See the end of the work for other works inspired by this one.") %></h4>
         <% end %><% end %>
       <% end %>
     <% end %>
     <% unless @work.notes.blank? && @work.endnotes.blank? %>
     <% if @work.notes.blank? %>
-        <span class="endnotes-link"><%= t('.link_to_endnotes', :default => "See the end of the work for more %{notes_link}.", :notes_link => (link_to t('.notes_link', :default => "notes"), linkpath)) %></span>
+        <span class="endnotes-link">
+	<%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>
+        </span>
     <% else %>
         <blockquote class="userstuff"><%=raw sanitize_and_format_for_display(@work.notes) %></blockquote>
         <% unless @work.endnotes.blank? %>
           <span class="endnotes-link">
-          <%= t('.work_header.link_more_endnotes', :default => "See the end of the work for more %{notes_link}.",
-                                    :notes_link => link_to( t('.notes_link', :default => 'notes'), linkpath)) %>
+	  <%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>
           </span>
         <% end %>
     <% end %>

@@ -2,7 +2,7 @@
 <!--INVESTIGATE-->
 <%= form_for(@work) do |f| %> 
 
-  <p class="notice required"><%=h t('.required', :default => '* Required information') %></p>
+  <p class="notice required">* <%=h ts('Required information') %></p>
   <%= render :partial => 'work_tags_form', :locals => {:include_blank => false} %>
   <fieldset>
     <legend><%= 'Work Preface' %></legend>
