@@ -14,6 +14,8 @@
     <% unless @query[:hits].blank? %><%= t('.hits', :default => 'Hits') %>: <%= @query[:hits] %> <% end %>
     <% unless @query[:date].blank? %><%= t('.date_desc', :default => 'Date') %>: <%= @query[:date] %> <% end %>
     <% unless @query[:language].blank? %><%= t('.language', :default => 'Language') %>: <%= @query[:language] %> <% end %>
+    <% unless @query[:bookmarked].blank? %><%= t('.language', :default => 'Bookmarked') %><% end %>
+    <% unless @query[:recced].blank? %><%= t('.language', :default => 'Recced') %><% end %>
     </p>
 
 <%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do %>
@@ -32,6 +34,8 @@
   <%= hidden_field_tag "query[hits]", @query[:hits], :id => 'refine_hit_count' %>
   <%= hidden_field_tag "query[date]", @query[:date], :id => 'refine_revised_at' %>
   <%= hidden_field_tag "query[language]", @query[:language], :id => 'refine_language' %>
+  <%= hidden_field_tag "query[bookmarked]", @query[:bookmarked] %>
+  <%= hidden_field_tag "query[recced]", @query[:recced] %>
   
   <span class="submit">
     <%= submit_tag t('.forms.search', :default => 'Refine search'), :class => 'button', :name => nil %>

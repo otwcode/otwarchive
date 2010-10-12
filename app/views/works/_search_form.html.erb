@@ -53,6 +53,20 @@
     <%= select_tag "query[language]", "<option></option>" + options_from_collection_for_select(@languages, 'name', 'name', @query[:language].blank? ? @query[:language] : @query[:language].capitalize), :id => 'refine_language' %>
     <%= link_to_help "work-search-language-help" %>
   </dd>
+  <dt>
+    <label for="refine_bookmarked"><%= t('.bookmarked', :default => 'Bookmarked?') %></label>
+  </dt>
+  <dd>
+    <%= check_box_tag "query[bookmarked]", false, @query[:bookmarked], :id => 'refine_bookmarked' %>
+    <%= link_to_help "work-search-bookmark-help" %> 
+  </dd>
+  <dt>
+    <label for="refine_recced"><%= t('.recced', :default => 'Recced?') %></label>
+  </dt>
+  <dd>
+    <%= check_box_tag "query[recced]", false, @query[:recced], :id => 'refine_recced' %>
+    <%= link_to_help "work-search-bookmark-help" %> 
+  </dd>
   </dl>
   <p class="submit">
     <%= submit_tag t('.forms.search', :default => 'Search works'), :class => 'button', :name => nil %>

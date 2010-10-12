@@ -7,7 +7,7 @@ module Query
   BOOKMARK_FIELDS = %w{tag indirect notes bookmarker}
   PEOPLE_FIELDS = %w{name icon_alt_text description}
   ALL_FIELDS = (WORK_FIELDS + BOOKMARK_FIELDS + PEOPLE_FIELDS).uniq
-  ALL_INDEXES = ALL_FIELDS + %w{words hits date rec canonical}
+  ALL_INDEXES = ALL_FIELDS + %w{words hits date rec canonical recced bookmarked}
 
   # this does the actual search on the class given a standardized query hash
   def Query.search_with_sphinx(klass, query, page)
@@ -92,6 +92,8 @@ module Query
     end
     with[:rec] = true if query[:rec]
     with[:canonical] = true if query[:canonical]
+    with[:recced] = true if query[:recced]
+    with[:bookmarker] = Range.new(1,1000000) if query[:bookmarked]
     unless query[:date].blank?
       match = query[:date].match(/^([<>]*)\s*([\d -]+)\s*(year|week|month|day|hour)s?(\s*ago)?s*$/)
       if match

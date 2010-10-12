@@ -1042,6 +1042,8 @@ class Work < ActiveRecord::Base
     has hit_counter.hit_count, :as => 'hit_count'
     has word_count, revised_at
     has posted, restricted, hidden_by_admin
+    has bookmarks.rec, :as => 'recced'
+    has bookmarks.pseud_id, :as => 'bookmarker'
 
     # properties
     set_property :delta => :delayed
