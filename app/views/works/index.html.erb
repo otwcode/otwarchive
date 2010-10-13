@@ -2,22 +2,22 @@
 <!--NOTE FOR BACK END: set this in the controller and just send a @page_heading variable or something to the view-->
 <h2><%= search_header @works, @query, "Work" %>
   <% if @collection && @most_recent_works %>
-   <%= t('.updated_works_in_collection', :default => "in %{collection_title} updated in the last month", 
+   <%= ts("in %{collection_title} updated in the last month", 
     :collection_title => link_to(sanitize_title_for_display(@collection.title), @collection)) %>
   <% elsif @collection %>
-    <%= t('.works_in_collection', :default => "in %{collection_title}", 
+    <%= ts("in %{collection_title}", 
     :collection_title => link_to(sanitize_title_for_display(@collection.title), @collection)).html_safe %>
   <% elsif @most_recent_works %>
-    <%= t('.recently_updated', :default => "updated in the last month") %>
+    <%= ts("updated in the last month") %>
   <% elsif @user %>
-    <%= t('.owned_works', :default => "by %{user_name}", :user_name => @user.login) %>
+    <%= ts("by %{user_name}", :user_name => @user.login) %>
   <% elsif @tag %>
-    <%= t('.works_with_tag', :default => "in %{tag_name}", :tag_name => @tag.name) %>
+    <%= ts("in %{tag_name}", :tag_name => @tag.name) %>
 <% end %>
 </h2>
 
 <% if @too_many %>
-  <p><%= t('.search_too_broad', :default => "The Archive is currently unable to return more than %{search_max} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
+  <p><%= ts("The Archive is currently unable to return more than %{search_max} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
 <% end %>
 <!-- /end descriptions-->
 
@@ -33,7 +33,7 @@
 <ul class="user navigation" role="navigation">
   <% if @user && @user == current_user %>
     <li id="edit_multiple">
-      <%= link_to t('.edit_multiple_link', :default => 'Edit Multiple Works'), show_multiple_user_works_path(@user) %></li>
+      <%= link_to ts('Edit Multiple Works'), show_multiple_user_works_path(@user) %></li>
   <% end %>
   <% if params[:tag_id] %>
     <%= taggable_list(params[:tag_id], "works") %>
@@ -42,16 +42,16 @@
 <% end %>
 <!--sorting subnav-->
   <ul class="sorting navigation" role="navigation">
-    <li><h4><%= t('.sort_by', :default => 'Sort By') %></h4></li>
+    <li><h4><%= ts('Sort By') %></h4></li>
     <% unless @query.blank? %>
-      <li><%= sort_link t('.sort.relevance', :default => 'Relevance') %></li>
+      <li><%= sort_link ts('Relevance') %></li>
     <% end %>
-    <li><%= sort_link t('.sort.author', :default => 'Author'), :author %></li>
-    <li><%= sort_link t('.sort.title', :default => 'Title'), :title %></li>
-    <li><%= sort_link t('.sort.date', :default => 'Date'), :date, {:sort_default => @query.blank?, :desc_default => true} %></li>
-    <li><%= sort_link t('.sort.word_count', :default => 'Word Count'), :word_count, {:desc_default => true} %></li>
+    <li><%= sort_link ts('Author'), :author %></li>
+    <li><%= sort_link ts('Title'), :title %></li>
+    <li><%= sort_link ts('Date'), :date, {:sort_default => @query.blank?, :desc_default => true} %></li>
+    <li><%= sort_link ts('Word Count'), :word_count, {:desc_default => true} %></li>
     <% unless logged_in? && current_user.preference.try(:hide_all_hit_counts) %>
-      <li><%= sort_link t('.sort.hit_count', :default => 'Hits'), :hit_count, {:desc_default => true} %></li>
+      <li><%= sort_link ts('Hits'), :hit_count, {:desc_default => true} %></li>
     <% end %>
   </ul>
 </div>

@@ -84,9 +84,9 @@ module TagsHelper
     taggable_things = ["bookmarks", "works"]
     list = []
     taggable_things.each do |tt|
-      list << link_to(tt.titlecase, {:controller => tt, :action => :index, :tag_id => tag}) unless tt == controller_class
+      list << link_to(h(ts(tt.titlecase)), {:controller => tt, :action => :index, :tag_id => tag}) unless tt == controller_class
     end
-    list.map{|li| "<li>" + li + "</li>"}.to_s 
+    list.map{|li| "<li>" + li + "</li>"}.join.html_safe
   end
   
   # Determines whether or not to display warnings for a creation

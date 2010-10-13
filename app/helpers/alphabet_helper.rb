@@ -6,20 +6,20 @@ module AlphabetHelper
   
   def alpha_paginated_section(alphabet = People.all.map(&:char))
     return "" if alphabet.blank? 
-    block = '<div class="pagination">'
     active_letter = params[:letter] || alphabet[0]
     return "" if active_letter.nil? 
     active_letter_index = alphabet.index(active_letter.upcase) || 0
     previous_letter = alphabet[active_letter_index-1]
     next_letter = alphabet[active_letter_index+1]
 
+    block = '<div class="pagination">'
     # if there is no "previous" page, don't link
     unless active_letter_index == 0
       block << '<span class="prev_page">'
-      block << link_to_letter(previous_letter, '&laquo; ' + 'Previous')
+      block << link_to_letter(previous_letter, '&laquo; ' + h(ts('Previous')))
       block << '</span>'
     else
-      block << '<span class="disabled prev_page">&laquo; ' + 'Previous' + '</span>'
+      block << '<span class="disabled prev_page">&laquo; ' + h(ts('Previous')) + '</span>'
     end
 
     # Link all the letters
@@ -33,10 +33,10 @@ module AlphabetHelper
 
     unless active_letter_index == (alphabet.size-1)
       block << ' <span class="next_page">'
-      block << link_to_letter(next_letter, 'Next' + ' &raquo;')
+      block << link_to_letter(next_letter, h(ts('Next')) + ' &raquo;'.html_safe)
       block << '</span>'
     else
-      block << ' <span class="disabled prev_page">' + 'Next' + ' &raquo;' + '</span>'
+      block << ' <span class="disabled prev_page">' + h(ts('Next')) + ' &raquo;</span>'
     end
 
     block << "</div>"

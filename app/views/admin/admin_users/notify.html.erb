@@ -6,43 +6,43 @@
 <%= form_tag send_notification_admin_users_path, :method => :post do %>
 <fieldset>
 	<legend>Write Notification</legend>
-  	<h3><%= label_tag "subject", t('.subject', :default => "Subject") %></h3>
+  	<h3><%= label_tag "subject", ts("Subject") %></h3>
     <div><%= text_field_tag "subject" %></div>
-	<h3><%= label_tag "content", t('.message', :default => "Message") %></h3>
+	<h3><%= label_tag "content", ts("Message") %></h3>
     <div><%= text_area_tag "content" %></div>
 </fieldset>
 <fieldset>
 	<legend>Notify Groups</legend>
 	<dl>
-    <dt><%= label_tag "notify_all", t('.notify_all', :default => 'Notify All Users') %></dt>
+    <dt><%= label_tag "notify_all", ts('Notify All Users') %></dt>
     <dd><%= check_box_tag "notify_all[]", 0, nil, {:id => "notify_all"} %></dd>
     
     <% Role.all.collect(&:name).uniq.each do |role_name| %>
-      <dt><%= label_tag "notify_all_#{role_name}", t("notify_all_with_role", :default => "Notify All %{role_name}", :role_name => role_name.humanize.titlecase.pluralize) %></dt>
+      <dt><%= label_tag "notify_all_#{role_name}", ts("Notify All %{role_name}", :role_name => role_name.humanize.titlecase.pluralize) %></dt>
       <dd><%= check_box_tag "notify_all[]", role_name, nil, {:id => "notify_all_#{role_name}"} %></dd>
     <% end %>
 	</dl>
 </fieldset>
 <fieldset>
 	<legend>Send, Or Continue</legend>
-    <p class="submit"><%= submit_tag t('.submit', :default => "Send Notification") %></p>
+    <p class="submit"><%= submit_tag ts("Send Notification") %></p>
 </fieldset>
 <fieldset>
 	<legend>Notify Individuals</legend>
-    <h3><%= t('.select_users', :default => 'Or Select Users To Notify') %></h3>
+    <h3><%= ts('Or Select Users To Notify') %></h3>
 	<%= alpha_paginated_section %>
 	<div class="wrapper">
       <table id="admin_users_table">
-      <caption><%=h t('.select_users', :default => 'Select Users To Notify') %></caption>
+      <caption><%=h ts('Select Users To Notify') %></caption>
       <thead>
 		<tr>
-			<th scope="row"><%=h t('.select_all_none', :default => "All/None") %></th>
+			<th scope="row"><%=h ts("All/None") %></th>
 			<td>
 	          <input type="checkbox" id="select_all" onclick="selectAllCheckboxes('user_ids', <%= @all_users.size %>, this.checked);"></td>
 	</tr>
 	<tr>
-      	<th scope="col"><%=h t('.username', :default => "Username") %></th>
-      	<th scope="col"><%=h t('.select', :default => "Select") %></th>
+      	<th scope="col"><%=h ts("Username") %></th>
+      	<th scope="col"><%=h ts("Select") %></th>
       </tr>
 	</thead>
 	<tbody>
@@ -59,7 +59,7 @@
 </fieldset>
 <fieldset>
 	<legend>Send Notification</legend>
-  <p class="submit"><%= submit_tag t('.submit', :default => "Send Notification") %></p>
+  <p class="submit"><%= submit_tag ts("Send Notification") %></p>
 </fieldset>
 <% end %>
 <!--/content-->

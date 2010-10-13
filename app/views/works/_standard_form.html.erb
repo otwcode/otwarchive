@@ -8,7 +8,7 @@
     <legend><%= 'Work Preface' %></legend>
     <dl class="preface">
       <dt class="title">
-        <%= f.label :title, t('.add_title', :default => "Work Title*"), :class => "required" %>
+        <%= f.label :title, ts("Work Title*"), :class => "required" %>
   	    <%= link_to_help "story-title" %>
       </dt>
       <dd class="title">
@@ -25,7 +25,7 @@
   
 
       <dt class="summary">
-        <%= f.label :summary, t('.summary', :default =>"Summary (max %{max} characters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %>
+        <%= f.label :summary, ts("Summary (max %{max} characters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %>
       </dt>
       <dd class="summary">
         <%= f.text_area :summary, :rows => 4, :cols => 60, :class => "summary-field" %>

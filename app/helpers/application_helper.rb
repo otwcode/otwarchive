@@ -215,10 +215,10 @@ module ApplicationHelper
   end
   
   def generate_countdown_html(field_id, max) 
-    generated_html = "<p class=\"character_counter\">"
-    generated_html += "<span id=\"#{field_id}_counter\">?</span>"
-    generated_html += countdown_field(field_id, field_id + "_counter", max) + " " + t('application_helper.characters_left', :default => 'characters left')
-    generated_html += "</p>"
+    generated_html = "<p class=\"character_counter\">".html_safe
+    generated_html += "<span id=\"#{field_id}_counter\">?</span>".html_safe
+    generated_html += countdown_field(field_id, field_id + "_counter", max) + " ".html_safe + h(ts('characters left'))
+    generated_html += "</p>".html_safe
     return generated_html
   end
   

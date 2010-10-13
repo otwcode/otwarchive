@@ -1,13 +1,13 @@
 <% unless @filters.blank? && (@pseuds.size < 1 || (@user && @pseuds.size < 2)) %>
 <h3 class="landmark">Filters</h3>
 <%= form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'filters', :method => :get, :id => 'work_filters') do %>
-  <%= field_set_tag t('.filter_these', :default => 'Filter results:') + link_to_help("filters") do %>
+  <%= field_set_tag h(ts('Filter results:')) + link_to_help("filters") do %>
  		<dl class="filters" role="complementary navigation">
 			<% unless (@pseuds.size < 1 || (@user && @pseuds.size < 2 && !@author)) %>
         <dt onclick='toggleFilters("filter-pseuds")'>
           <span id="filter-pseuds_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" %></span>
           <span id="filter-pseuds_open"><%= image_tag 'arrow-down.gif', :alt => "" %></span>              
-          <%= t('.filter_pseuds', :default => 'Pseud') %>
+          <%= ts('Pseud') %>
         </dt>
         <dd id="filter-pseuds" class="tags">
           <ul>
@@ -70,7 +70,7 @@
   		<%= hidden_field_tag("language_id", params[:language_id]) if params[:language_id] %>
 		</p>
 		<div class="clear"><!--purely presentational for IE6; phase me out--></div>
-		<p class="submit"><%= submit_tag t('.filter_works', :default => 'Filter Works') %></p>
+		<p class="submit"><%= submit_tag ts('Filter Works') %></p>
   <% end %>
   <% end %>
 <% end %>
