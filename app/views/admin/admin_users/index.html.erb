@@ -11,7 +11,7 @@
     <dt><%= label_tag "query", t("user_find_query", :default => "Name or email") %></dt>
       <dd><%= text_field_tag "query", params[:query] %></dd>
     <dt><%= label_tag "role", t("user_find_role", :default => "Role") %></dt>
-      <dd><%= select_tag "role", "<option id='0' name='regular' value='0'>Regular User</option><option id='1' name='unvalidated' value='1'>Unvalidated</option>" + options_for_select(Role.all.collect(&:name).uniq.map{|role_name| [role_name.humanize.titlecase, role_name]}, params[:role] ? params[:role] : nil) %></dd>
+      <dd><%= select_tag "role", "<option id='0' name='regular' value='0'>Regular User</option><option id='1' name='unvalidated' value='1'>Unvalidated</option>".html_safe + options_for_select(Role.all.collect(&:name).uniq.map{|role_name| [role_name.humanize.titlecase, role_name]}, params[:role] ? params[:role] : nil) %></dd>
   </dl>
   <p class="submit"><%= submit_tag t("find_user_button", :default => "Find") %></p>
 <% end %>

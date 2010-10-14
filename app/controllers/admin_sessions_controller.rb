@@ -12,7 +12,9 @@ class AdminSessionsController < ApplicationController
       flash[:notice] = "Successfully logged in."  
       redirect_to admin_users_path  
     else  
-      render :action => 'new'  
+      flash[:error] = "Authentication failed."
+      # redirect instead of render because otherwise you get hints as to whether it was the name or password which failed
+      redirect_to :action => 'new'
     end
   end
   

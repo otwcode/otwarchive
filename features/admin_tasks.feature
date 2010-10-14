@@ -10,8 +10,8 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
       | login       | password      |
       | dizmo       | wrangulator   |
    When I go to the home page
-      And I fill in "login" with "Zooey"
-      And I fill in "password" with "secret"
+      And I fill in "user_session_login" with "Zooey"
+      And I fill in "user_session_password" with "secret"
       And I press "Log in"
     Then I should see "We couldn't find that name in our database."
     When I go to the archive_faqs page
