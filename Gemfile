@@ -44,7 +44,11 @@ gem 'aws-s3', :require => 'aws/s3'
 # gem 'fastercsv' -- will use this eventually for exporting to excel tsv format
 gem 'mocha'
 gem 'css_parser'
-gem 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git', :require => 'paperclip'
+
+gem 'paperclip', 
+  :git => 'git://github.com/thoughtbot/paperclip.git', 
+  :branch => 'master',
+  :require => 'paperclip'
 
 gem 'tolk',
   :git => 'git://github.com/10to1/tolk.git',
