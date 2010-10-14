@@ -1,4 +1,7 @@
 class Comment < ActiveRecord::Base
+
+  include HtmlFormatter
+
   belongs_to :pseud         
   belongs_to :commentable, :polymorphic => true
   belongs_to :parent, :polymorphic => true
@@ -136,5 +139,9 @@ class Comment < ActiveRecord::Base
   def mark_as_ham!
     update_attribute(:approved, true)
     #Akismetor.submit_ham(akismet_attributes)
+  end
+
+  def sanitized_content
+    sanitize_limit_and_format_for_display self.content
   end
 end

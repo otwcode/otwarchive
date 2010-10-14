@@ -117,62 +117,6 @@ class UserMailer < ActionMailer::Base
     )
   end
    
-  ### COMMENT NOTIFICATIONS ###
-  
-  # Sends email to an owner of the top-level commentable when a new comment is created
-  def comment_notification(user, comment)
-    setup_email_to_user(user)
-    setup_comment_links(comment)
-    mail(
-      :to => user.email,
-      :subject => @subject + "Comment on " + comment.ultimate_parent.commentable_name
-    )
-  end
-
-  # Sends email to an owner of the top-level commentable when a comment is edited
-  def edited_comment_notification(user, comment)
-    setup_email_to_user(user)
-    setup_comment_links(comment)
-    mail(
-      :to => user.email,
-      :subject => @subject + "Edited comment on " + comment.ultimate_parent.commentable_name
-    )
-  end
-
-  # Sends email to comment creator when a reply is posted to their comment
-  # This may be a non-user of the archive
-  def comment_reply_notification(old_comment, new_comment)
-    setup_comment_email(old_comment)
-    setup_comment_links(new_comment)
-    mail(
-      :to => user.email,
-      :subject => @subject + "Reply to your comment on " + old_comment.ultimate_parent.commentable_name
-    )
-  end
-   
-  # Sends email to comment creator when a reply to their comment is edited
-  # This may be a non-user of the archive
-  def edited_comment_reply_notification(old_comment, edited_comment)
-    setup_comment_email(old_comment)
-    setup_comment_links(edited_comment)
-    mail(
-      :to => user.email,
-      :subject => @subject + "Edited reply to your comment on " + old_comment.ultimate_parent.commentable_name     
-    )
-  end
-
-   # Sends email to the poster of a comment 
-  def comment_sent_notification(comment)
-    setup_comment_email(comment)
-    setup_comment_links(comment)
-    @subject + "Comment you sent on " + comment.ultimate_parent.commentable_name
-    @reply_to_link = nil # don't give reply link to your own comment
-    mail(
-      :to => user.email,
-      :subject => @subject + "Comment you sent on " + comment.ultimate_parent.commentable_name
-    )
-  end
-   
   ### WORKS NOTIFICATIONS ###
   
   # Sends email when a user is added as a co-author
@@ -299,21 +243,4 @@ class UserMailer < ActionMailer::Base
       @recipients = email     
     end
      
-    def setup_comment_email(comment)
-      @commentable = comment.ultimate_parent
-    end
-    
-    def setup_comment_links(comment)
-      @comment = comment
-      @commentable = comment.ultimate_parent     
-      @comment_owner_link_or_name = comment.comment_owner ? link_to(comment.comment_owner_name, user_url(comment.comment_owner)) : comment.comment_owner_name 
-      @reply_to_link = url_for(:host => @host, :controller => comment.class.to_s.underscore.pluralize, 
-                                :action => :show, :id => comment, 
-                                :add_comment_reply_id => comment.id, :show_comments => true, :anchor => "comment_#{comment.id}")
-      @starting_thread_link = url_for(:host => @host, :controller => comment.class.to_s.underscore.pluralize, 
-                                :action => :show, :id => comment)
-      @originating_thread_link = url_for(:host => @host, :controller => comment.class.to_s.underscore.pluralize, 
-                                :action => :show, :id => comment.thread)
-    end
-    
 end

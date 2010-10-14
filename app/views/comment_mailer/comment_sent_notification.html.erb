@@ -1,0 +1,8 @@
+<h4>
+<%= ts("You left the following comment on") %> 
+<%= link_to @comment.ultimate_parent.commentable_name, polymorphic_url(@comment.ultimate_parent, :only_path => false) %>:
+</h4>
+
+<p><%=raw @comment.sanitized_content %></p>
+
+<%= render :partial => 'comment_notification_footer' %>

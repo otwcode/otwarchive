@@ -86,12 +86,21 @@ class UsersController < ApplicationController
     if params[:cancel_create_account]
       redirect_to root_path
     else
-      @user = User.new(params[:user])
+      @user = User.new
+      @user.login = params[:user][:login]
+      @user.email = params[:user][:email]
+      @user.invitation_token = params[:user][:invitation_token]
+      @user.age_over_13 = params[:user][:age_over_13]
+      @user.terms_of_service = params[:user][:terms_of_service]
+      @user.password = params[:user][:password] if params[:user][:password]
+      @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation]
+      @user.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
       unless @user.identity_url.blank?
         # normalize OpenID url before validating
         @user.identity_url = OpenIdAuthentication.normalize_identifier(@user.identity_url)
       end
       if @user.save
+        UserMailer.signup_notification(@user).deliver
         flash[:notice] = t('development_activation', :default => "During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                             :activation_url => activate_path(@user.activation_code)) if Rails.env.development?
         render :partial => "confirmation", :layout => "application"
@@ -111,11 +120,13 @@ class UsersController < ApplicationController
     else
       @user = User.find_by_activation_code(params[:id])
       if @user
-        @user.activate
-        self.current_user = @user
+        if @user.active?
+          flash[:error] = t('activation_key_used', :default => "Your account has already been activated.")
+          redirect_to @user and return
+        end
+        @user.activate && UserMailer.activation(@user).deliver
+        flash[:notice] = t('signup_complete', :default => "Signup complete! Please log in.")
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
-        flash[:notice] = t('signup_complete', :default => "Signup complete! This is your public profile.")
-
         # assign over any external authors that belong to this user
         external_authors = []
         external_authors << ExternalAuthor.find_by_email(@user.email)
@@ -129,7 +140,7 @@ class UsersController < ApplicationController
           flash[:notice] += t('external_authors_claimed', 
             :default => " We found some stories already uploaded to the Archive of Our Own that we think belong to you! You can see them either in your works below or in your drafts folder.")
         end
-        redirect_to(@user)
+        redirect_to(login_path)
       else
         flash[:error] = t('activation_key_invalid', :default => "Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again.")
         redirect_to ''

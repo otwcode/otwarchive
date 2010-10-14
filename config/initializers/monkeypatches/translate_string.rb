@@ -89,7 +89,11 @@ module ActionView
           default_string = args.shift
           key = ""
           if defined? controller
-            key = "#{controller.controller_name}.#{controller.action_name}."
+            if defined? controller.controller_name
+              key = "#{controller.controller_name}.#{controller.action_name}."
+            else
+              key = "#{controller.class.name.underscore}."
+            end
           else
             key = "#{self.class.name}."
           end

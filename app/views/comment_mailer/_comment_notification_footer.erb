@@ -1,0 +1,15 @@
+<p><%= ts("Posted") %>: <%= @comment.created_at %>
+<% unless @comment.edited_at.blank? %>
+  <br /><= ts("Last edited") %>: <%= @comment.edited_at %>
+<% end %>
+</p>
+<p>
+<%= link_to ts("Read all comments on ") + @comment.ultimate_parent.commentable_name, polymorphic_url(@comment.ultimate_parent, :show_comments => true, :anchor => :comments, :only_path => false) %><br />
+<% unless @noreply %>
+  <%= link_to ts("Reply to this comment"), polymorphic_url(@comment.ultimate_parent, :add_comment_reply_id => @comment.id, :show_comments => true, :anchor => "comment_#{@comment.id}", :only_path => false) %><br />
+<% end %>
+<%= link_to ts("Go to the thread starting from this comment"), polymorphic_url(@comment.ultimate_parent, :anchor => "comment_#{@comment.id}", :only_path => false) %><br />
+<% unless @comment.id == @comment.thread %>
+  <%= link_to ts("Go to the thread to which this comment belongs"), polymorphic_url(@comment.ultimate_parent, :anchor => "comment_#{@comment.thread}", :only_path => false) %><br />
+<% end %>
+</p>
