@@ -690,7 +690,7 @@ class StoryParser
     end
 
     def clean_storytext(storytext)
-      storytext = storytext.toutf8 unless storytext.isutf8
+      storytext = storytext.encode("UTF-8") unless storytext.encoding.name == "UTF-8"
       return sanitize_whitelist(cleanup_and_format(storytext))
     end
 

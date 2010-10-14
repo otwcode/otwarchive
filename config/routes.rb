@@ -75,6 +75,7 @@ Otwarchive::Application.routes.draw do
       collection do
         get :notify
         post :send_notification
+        post :update_user
       end
     end
     resources :invitations, :controller => 'admin_invitations' do

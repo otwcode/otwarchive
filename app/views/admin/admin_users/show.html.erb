@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= t('.user_name', :default => 'User: ') %><%= @user.login %></h2>
+<h2><%= ts('User') %>: <%= @user.login %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -13,36 +13,36 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3><%= t('.abuse_admin', :default => 'Abuse Administration') %></h3>
-<%= form_tag ('/admin/admin_users/update') do %> 
+<h3><%= ts('Abuse Administration') %></h3>
+<%= form_tag :action=>"update_user", :controller=>"admin/admin_users" do %>
 <%= hidden_field_tag 'user_login', @user.login %>
 <fieldset>
 <p>
   <%= radio_button_tag 'admin_action', 'warn', checked = true %>
-  <%= label_tag 'admin_action_warn', t('.warn', :default => 'Record Warning') %>
+  <%= label_tag 'admin_action_warn', ts('Record Warning') %>
 </p>
 <p><% unless @user.suspended? %> 
     <%= radio_button_tag 'admin_action', 'suspend', false, :disabled => (@user.suspended? || @user.banned?) %>
-    <%= label_tag 'admin_action_suspend', t('.suspend', :default => "Suspend: enter a whole number of days") %>
+    <%= label_tag 'admin_action_suspend', ts("Suspend: enter a whole number of days") %>
     <%= text_field_tag 'suspend_days', '', {:class => "number-field", :size => 2, :disabled => @user.suspended?} %>
     <%= live_validation_for_field('suspend_days', :presence => false, :numericality => true)%> 
   <% else %>
     <%= radio_button_tag 'admin_action', 'unsuspend', false %>
-    <%= label_tag 'admin_action_unsuspend', t('.unsuspend', :default => "This user has been temporarily suspended. Lift suspension, effective immediately.") %>
+    <%= label_tag 'admin_action_unsuspend', ts("Lift temporary suspension, effective immediately.") %>
   <% end %>
 </p> 
 <p><% unless @user.banned? %> 
     <%= radio_button_tag 'admin_action', 'ban', false, :disabled => @user.banned? %>
-    <%= label_tag 'admin_action_ban', t('.ban', :default => "Suspend permanently (ban user)") %>
+    <%= label_tag 'admin_action_ban', ts("Suspend permanently (ban user)") %>
   <% else %>
     <%= radio_button_tag 'admin_action', 'unban', false %>
-    <%= label_tag 'admin_action_unban', t('.unban', :default => "This user has been suspended permanently. Lift suspension, effective immediately.") %>
+    <%= label_tag 'admin_action_unban', ts("Lift permanent suspension, effective immediately.") %>
   <% end %>
 </p>  
 </fieldset>
 <fieldset>
 <p>
-  <%= label_tag 'admin_note', t('.note', :default => 'Notes (required field)')%><br />
+  <%= label_tag 'admin_note', ts('Notes (required field)')%><br />
   <%= text_area_tag 'admin_note', nil, :size => "80x8"%>
   <%= live_validation_for_field('admin_note', 
 				      :maximum_length => ArchiveConfig.LOGNOTE_MAX, :minimum_length => ArchiveConfig.LOGNOTE_MIN, 
@@ -52,7 +52,7 @@
 </p>
 </fieldset>
 
-<p class="submit"><%= submit_tag t('.forms.update', :default => "Update") %></p>
+<p class="submit"><%= submit_tag ts("Update") %></p>
 <% end %>
 
 <%= render :partial => 'user_history', :locals => {:user => @user} %>

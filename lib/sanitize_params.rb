@@ -22,12 +22,14 @@ module SanitizeParams
   def fix_quotes(text)
     return "" if text.nil?
     text.gsub! "<3", "&#60;3"
-    text.gsub! "\342\200\230", "'"
-    text.gsub! "\342\200\231", "'"
+# FIXME - uncommented gets incompatible encoding regexp match error
+#    text.gsub! "\342\200\230", "'"
+#    text.gsub! "\342\200\231", "'"
+#    text.gsub! "\342\200\234", '"'
+#    text.gsub! "\342\200\235", '"'
+# these were commented out before
 #    text.gsub! "\221", "'"
 #    text.gsub! "\222", "'"
-    text.gsub! "\342\200\234", '"'
-    text.gsub! "\342\200\235", '"'
 #    text.gsub! "\223", '"'
 #    text.gsub! "\224", '"'
     return text

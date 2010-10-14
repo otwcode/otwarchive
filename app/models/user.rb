@@ -13,7 +13,8 @@ class User < ActiveRecord::Base
   PASSWORD_LENGTH_MIN = 6
   PASSWORD_LENGTH_MAX = 40
 
-  validates_length_of :password, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, 
+  # allow nil so can save existing users
+  validates_length_of :password, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, :allow_nil => true,
     :too_short => "Your password is too short (minimum is #{PASSWORD_LENGTH_MIN} characters)",
     :too_long => "Your password is too long (maximum is #{PASSWORD_LENGTH_MAX} characters)"
 

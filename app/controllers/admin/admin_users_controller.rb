@@ -48,9 +48,8 @@ class Admin::AdminUsersController < ApplicationController
     end
   end
 
-  # PUT admin/users/1
-  # PUT admin/users/1.xml
-  def update
+  # POST admin/users/update_user
+  def update_user
     if params[:user]
       @user = User.find_by_login(params[:user][:login]) 
       #:suspended, :banned, :translation_admin, :tag_wrangler, :archivist, :recently_reset 
@@ -58,26 +57,26 @@ class Admin::AdminUsersController < ApplicationController
       @user.tag_wrangler = params[:user][:tag_wrangler] if params[:user][:tag_wrangler]
       @user.archivist = params[:user][:archivist] if params[:user][:archivist]
       if @user.save(:validate => false)
-        flash[:notice] = t('successfully_updated', :default => 'User was successfully updated.')
+        flash[:notice] = ts('User was successfully updated.')
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
-        flash[:error] = t('error_updating', :default => 'There was an error updating user %{name}', :name => params[:user][:login])
+        flash[:error] = ts('There was an error updating user %{name}', :name => params[:user][:login])
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       end
     elsif params[:admin_action]
       @user = User.find_by_login(params[:user_login])
       @admin_note = params[:admin_note]
       if @admin_note.blank?
-        flash[:error] = t('note_required', :default => "You must include notes in order to perform this action")
+        flash[:error] = ts("You must include notes in order to perform this action")
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
         if params[:admin_action] == 'warn'
           @user.create_log_item( options = {:action => ArchiveConfig.ACTION_WARN, :note => @admin_note, :admin_id => current_admin.id})
-          flash[:notice] = t('success_warned', :default => "Warning was recorded") 
+          flash[:notice] = ts("Warning was recorded") 
           redirect_to(request.env["HTTP_REFERER"] || root_path)
         elsif params[:admin_action] == 'suspend'
           if params[:suspend_days].blank?
-            flash[:error] = t('error_date_required', :default => "Please enter the number of days for which the user should be suspended.")
+            flash[:error] = ts("Please enter the number of days for which the user should be suspended.")
             redirect_to(request.env["HTTP_REFERER"] || root_path)
           else
             @user.suspended = true
@@ -85,10 +84,10 @@ class Admin::AdminUsersController < ApplicationController
             @user.suspended_until = @suspension_days.days.from_now
             if @user.save && @user.suspended? && !@user.suspended_until.blank?
               @user.create_log_item( options = {:action => ArchiveConfig.ACTION_SUSPEND, :note => @admin_note, :admin_id => current_admin.id, :enddate => @user.suspended_until})
-              flash[:notice] = t('success_suspended', :default => "User has been temporarily suspended") 
+              flash[:notice] = ts("User has been temporarily suspended") 
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             else
-              flash[:error] = t('error_suspended', :default => "User could not be suspended") 
+              flash[:error] = ts("User could not be suspended") 
               redirect_to(request.env["HTTP_REFERER"] || root_path)
             end
           end

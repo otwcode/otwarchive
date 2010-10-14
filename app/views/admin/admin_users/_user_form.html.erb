@@ -1,11 +1,14 @@
 <!--titled instead of labelled as per WCAG 2.0. do not revert.-->
 
-<%= form_for user, :as=>:user, :url => {:controller => "admin/admin_users", :action => "update", :query => params[:query], :role => params[:role]} do |f| %> 
-<th scope="row"><%= link_to user.login, user_path(user) %><%= f.hidden_field :login %></th>
-<td><%= f.text_field :email, :title => t('.email', :default => "Email") %></td>
-<td><%= f.check_box :translation_admin, :title => t('.translation_admin', :default => "Translation Admin") %></td>
-<td><%= f.check_box :tag_wrangler, :title => t('.tag_wrangler', :default => "Tag Wrangler") %></td>
-<td><%= f.check_box :archivist, :title => t('.archivist', :default => "Archivist") %></td>
-<td><%= f.submit t('.forms.update', :default => "Update") %></td>
+<%= form_tag :action=>"update_user", :controller=>"admin/admin_users" do %> 
+<%= hidden_field_tag :query, params[:query] %>
+<%= hidden_field_tag :role, params[:role] %>
+<%= hidden_field_tag "user[login]", user.login %>
+<th scope="row"><%= link_to user.login, user_path(user) %></th>
+<td><%= text_field_tag "user[email]", user.email, :title => ts("Email") %></td>
+<td><%= check_box_tag "user[translation_admin]", 1, user.translation_admin, :title => ts("Translation Admin") %></td>
+<td><%= check_box_tag "user[tag_wrangler]", 1, user.tag_wrangler, :title => ts("Tag Wrangler") %></td>
+<td><%= check_box_tag "user[archivist]", 1, user.archivist, :title => ts("Archivist") %></td>
+<td><%= submit_tag t('.forms.update', :default => "Update") %></td>
 <td><%= link_to t('.forms.details', :default => 'Details'), admin_user_path(user)%></td>
 <% end %>
