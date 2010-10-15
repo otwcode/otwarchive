@@ -152,7 +152,7 @@
 <% end %>
 
 <% if logged_in_as_admin? %>
-  <p>Last updated by <%= @tag.last_wrangler.andand.login || '---' %> on <%= @tag.updated_at %></p>  
+  <p>Last updated by <%= @tag.last_wrangler.try(:login) || '---' %> on <%= @tag.updated_at %></p>  
 <% end %>
 <!--/content-->
 

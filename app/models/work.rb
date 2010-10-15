@@ -339,7 +339,7 @@ class Work < ActiveRecord::Base
 
     removed_recips = old_recipients_array - new_recipients_array
     removed_recips.each do |recipient|
-      gift_to_remove = gifts.select {|g| (g.pseud.andand.byline == recipient || g.recipient_name == recipient)}.first
+      gift_to_remove = gifts.select {|g| (g.pseud.try(:byline) == recipient || g.recipient_name == recipient)}.first
       gift_attributes_to_set << {:id => gift_to_remove.id, :_destroy => true} if gift_to_remove
     end
     self.gifts_attributes = gift_attributes_to_set

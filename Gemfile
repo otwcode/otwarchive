@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+gem 'bundler', '~>1.0.0' 
+
 gem 'rails', '3.0.0'
 
 # Bundle edge Rails instead:
@@ -30,7 +32,6 @@ gem 'will_paginate',
   :branch  => 'rails3',
   :require => 'will_paginate'
 
-gem 'andand'
 gem 'htmlentities'
 gem 'whenever', :require => false
 gem 'nokogiri'
