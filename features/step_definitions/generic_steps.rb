@@ -3,7 +3,7 @@ Given /^I wait (\d+) seconds?$/ do |number|
 end
 
 When 'the system processes jobs' do
-  Delayed::Job.work_off
+  Delayed::Worker.new.work_off
 end
 
 When 'I reload the page' do

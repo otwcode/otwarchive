@@ -2,7 +2,9 @@
 # See http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
 # and also http://github.com/brianmario/escape_utils
 require "escape_utils/html/rack"
-require "escape_utils/html/erb"
+
+# don't escape erb files - it creates hideous html and doesn't parse properly in URI during testing
+#require "escape_utils/html/erb"
 
 module Rack
   module Utils

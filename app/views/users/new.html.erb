@@ -19,7 +19,7 @@
 		
 		<!--main content-->
 		<%= form_for @user do |f| %>
-		  <p><%= f.hidden_field :invitation_token, :value => params[:invitation_token] %></p>
+		  <%= f.hidden_field :invitation_token, :value => @user.invitation_token %>
 <fieldset><legend>User Details</legend>
 <!-- Create login -->
 <!--POOR XHTML STRUCTURE. This page needs to be refactored so the fieldset User Details is ONE definition list without OpenId divs as child of dl (it may be child of dt or dd) -->
@@ -75,10 +75,6 @@
 				<dl>
 					<dt><%= f.label :email, "What email address would you like us to use? (This has to be valid - we'll be sending a confirmation email before you can activate your account.)" %></dt>
 				<dd><%= f.text_field :email %>
-				<%= live_validation_for_field('user_email', 
-						:maximum_length => User::EMAIL_LENGTH_MAX, :minimum_length => User::EMAIL_LENGTH_MIN, 
-					  :failureMessage => 'You need to enter a valid email address!')
-				%>
 				</dd>
 				</dl>
 				</fieldset>

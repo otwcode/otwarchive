@@ -103,7 +103,7 @@ class UsersController < ApplicationController
         UserMailer.signup_notification(@user).deliver
         flash[:notice] = t('development_activation', :default => "During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                             :activation_url => activate_path(@user.activation_code)) if Rails.env.development?
-        render :partial => "confirmation", :layout => "application"
+        render "confirmation"
       else
         if params[:user] && params[:user][:identity_url]
           params[:use_openid] = true

@@ -1,4 +1,4 @@
-<!--Descriptive page name, messages and instructions--><h2><%=h t('.admin_invitations.inviteNew', :default => "Invite new users") %></h2>
+<!--Descriptive page name, messages and instructions--><h2><%=h ts("Invite new users") %></h2>
 <!--/descriptions-->
 <!--subnav-->
 <ul class="navigation" role="navigation">
@@ -8,18 +8,21 @@
 <!--/subnav-->
   
 <!--main content-->
-	<h3>Send an invite code to the following email address</h3>
-	<%= form_for :invitation, @invitation, :url => {:controller => 'admin/admin_invitations', :action => :create} do |f| %>
-    <p><%= f.label :invitee_email, t('.email address', :default => 'Email address') %> <%= f.text_field :invitee_email %> </p>
-	<p class="submit"><%= f.submit t('.submit_invite', :default => 'Invite user')  %></p>
-  <% end %>
+<h3>Send an invite code to the following email address</h3>
+<%= form_tag :controller => 'admin/admin_invitations', :action => :create do %>
+  <p>
+    <%= label_tag "invitation[invitee_email]", ts('Email address') %>
+    <%= text_field_tag "invitation[invitee_email]", @invitation.try(:invitee_email) || "" %>
+  </p>
+  <p class="submit"><%= submit_tag ts('Invite user')  %></p>
+<% end %>
   
   
  	<h3>Send invite codes to people in our <%= link_to 'invitations queue', invite_requests_path %></h3>
  <p>There are currently <%= InviteRequest.count %> requests in the queue.)</p>
  <%= form_tag url_for(:controller => 'admin/admin_invitations', :action => 'invite_from_queue') do %>
-    <p><%= label_tag :invite_from_queue, t('.invite_from_queue', :default => 'Number of people to invite:') %> <%= text_field_tag :invite_from_queue  %> </p>
-	<p class="submit"><%= submit_tag t('.submit_queue', :default => 'Invite from queue')  %></p>
+    <p><%= label_tag :invite_from_queue, ts('Number of people to invite') %>: <%= text_field_tag :invite_from_queue  %> </p>
+	<p class="submit"><%= submit_tag ts('Invite from queue')  %></p>
   <% end %>
 
 
@@ -28,10 +31,10 @@
 	<h3><%=h 'Give invite codes to current users' %></h3>
 	 <%= form_tag url_for(:controller => 'admin/admin_invitations', :action => 'grant_invites_to_users') do %>
     <dl>
-      <dt><%= label_tag :number_of_invites, t('.number_of_invites', :default => 'Number of invites:') %></dt>
+      <dt><%= label_tag :number_of_invites, ts('Number of invites') %>:</dt>
       <dd><%= text_field_tag :number_of_invites %></dd>
 
-      <dt><%= label_tag :user_group, t('.user_group', :default => 'Users:') %></dt>
+      <dt><%= label_tag :user_group, ts('Users') %>:</dt>
       <dd><%= select_tag :user_group, "<option>All</option><option>With no unused invites</option>"  %></dd>
     </dl>
     <p class="submit"><%= submit_tag "Generate invites" %></p>
@@ -41,11 +44,11 @@
     <h3><%=h 'Track invitations' %></h3>
  <%= form_tag url_for(:controller => 'admin/admin_invitations', :action => 'find'), :method => :get do %>
 <dl>
-      <dt><%= label_tag :user_name, t('.find_user_name', :default => 'Enter a user name:') %></dt>
+      <dt><%= label_tag :user_name, ts('Enter a user name') %>:</dt>
       <dd><%= text_field_tag :user_name  %></dd>
-      <dt><%= label_tag :token, t('.find_token', :default => 'Enter an invite token:') %></dt>
+      <dt><%= label_tag :token, ts('Enter an invite token') %>:</dt>
       <dd><%= text_field_tag :token  %></dd>
-      <dt><%= label_tag :invitee_email, t('.find_email', :default => 'Enter all or part of an email address:') %></dt>
+      <dt><%= label_tag :invitee_email, ts('Enter all or part of an email address') %>:</dt>
       <dd><%= text_field_tag :invitee_email  %></dd>      
     </dl>
     <p class="submit"><%= submit_tag "Go" %></p>

@@ -46,7 +46,7 @@
 	<div class="open-beta-box">
   <% if logged_in? || logged_in_as_admin? %>
     <h2><%= ts('Welcome to open beta!') %></h2>
-    <h1><%= link_to ts('INVITE A FRIEND'), user_invitations_path(current_user) %></h1> 
+    <h1><%= link_to(ts('INVITE A FRIEND'), user_invitations_path(current_user)) if current_user  %></h1> 
   <% else %>
     <h2>Be part of our open beta!</h2>
     <% if AdminSetting.invite_from_queue_enabled? %>

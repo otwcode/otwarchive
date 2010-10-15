@@ -65,47 +65,45 @@ Feature: Invite queue management
     When I follow "Log out"
     
     # user uses email invite
-    Then 1 email should contain "[Example Archive] Invitation" in the subject
-    When I click the first link in the email
+    Then the email should contain "You've been invited to join our beta!"
     
     # user creates account, with error messages
-    When I fill in "user_login" with "user1"
+    When I click the first link in the email
+      And I fill in "user_login" with "user1"
+      And I fill in "user_password" with "pass"
       And I press "Create Account"
-    Then I should see "Password Please enter a password"
-      And I should see "Password Your password is too short (minimum is 6 characters)"
-      And I should see "Password confirmation Please enter your password again"
-    When I fill in "user_password" with "password1"
-      And I fill in "user_password_confirmation" with "password2"
-      And I press "Create Account"
-    Then I should see "Login Sorry, that name is already taken. Try again, please!"
-      And I should see "Terms of service Sorry, you need to accept the Terms of Service in order to sign up."
-      And I should see "Age over 13 Sorry, you have to be over 13!"
-      And I should see "Password Your passwords don't match; please re-enter!"
-      And I should not see "Email Please enter an email address"
-      And I should not see "Email Your email address is too short (minimum is 3 characters)"
+    Then I should see "Login has already been taken"
+      And I should see "Password is too short (minimum is 6 characters)"
+      And I should see "Password doesn't match confirmation"
+      And I should see "Sorry, you need to accept the Terms of Service in order to sign up."
+      And I should see "Sorry, you have to be over 13!"
+      And I should not see "Email address is too short"
     When I fill in "user_login" with "newuser"
+      And I fill in "user_password" with "password1"
       And I fill in "user_password_confirmation" with "password1"
       And I check "user_age_over_13"
       And I check "user_terms_of_service"
       And I fill in "user_email" with ""
       And I press "Create Account"
-    Then I should see "Email Please enter an email address"
-      And I should see "Email Your email address is too short (minimum is 3 characters)"
+    Then I should see "Email does not seem to be a valid address."
     When I fill in "user_email" with "fake@fake@fake"
       And I press "Create Account"
     Then I should see "Email does not seem to be a valid address."
     When I fill in "user_email" with "test@archiveofourown.org"
-      And I press "Create Account"
+      And all emails have been delivered
+    When I press "Create Account"
     Then I should see "Account Created!"
-      And the system processes jobs
-    # TODO: from here onwards fails, because the activation email doesn't deliver, for some reason
-#      And 1 email should be delivered
-#    Then show me the emails
-#      And 1 email should contain "[Example Archive] Please activate your new account" in the subject
-#    When I click the first link in the email
-#    Then show me the page
+    Then 1 email should be delivered
+      And the email should contain "Welcome to the Archive of Our Own, newuser!"
+      And the email should contain "Please activate your account"
     
     # user activates account
-#    Then 1 email should be delivered
-#    Then show me the emails
-#      And 1 email should contain "Your account has been activated" in the subject
+    When all emails have been delivered
+      And I click the first link in the email
+    Then 1 email should be delivered
+      And the email should contain "your account has been activated"
+      And I should see "Please log in"
+    When I fill in "user_session_login" with "newuser"
+      And I fill in "user_session_password" with "password1"
+      And I press "Log in"
+    Then I should see "Successfully logged in"

@@ -7,23 +7,17 @@ class User < ActiveRecord::Base
   LOGIN_LENGTH_MAX = 40
 
   validates_length_of :login, :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX, 
-    :too_short => "Your user name is too short (minimum is #{LOGIN_LENGTH_MIN} characters)",
-    :too_long => "Your user name is too long (maximum is #{LOGIN_LENGTH_MAX} characters)"
+    :too_short => "is too short (minimum is #{LOGIN_LENGTH_MIN} characters)",
+    :too_long => "is too long (maximum is #{LOGIN_LENGTH_MAX} characters)"
 
   PASSWORD_LENGTH_MIN = 6
   PASSWORD_LENGTH_MAX = 40
 
   # allow nil so can save existing users
   validates_length_of :password, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, :allow_nil => true,
-    :too_short => "Your password is too short (minimum is #{PASSWORD_LENGTH_MIN} characters)",
-    :too_long => "Your password is too long (maximum is #{PASSWORD_LENGTH_MAX} characters)"
+    :too_short => "is too short (minimum is #{PASSWORD_LENGTH_MIN} characters)",
+    :too_long => "is too long (maximum is #{PASSWORD_LENGTH_MAX} characters)"
 
-  EMAIL_LENGTH_MIN = 3
-  EMAIL_LENGTH_MAX = 100
-
-  validates_length_of :email, :within => EMAIL_LENGTH_MIN..EMAIL_LENGTH_MAX, 
-    :too_short => "Your email address is too short (minimum is #{EMAIL_LENGTH_MIN} characters)",
-    :too_long => "Your email address is too long (maximum is #{EMAIL_LENGTH_MAX} characters)"
 ####
 
 

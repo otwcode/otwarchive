@@ -34,10 +34,6 @@ Then(/^(\d)+ emails? should be delivered with #{capture_fields}$/) do |count, fi
   emails(fields).size.should == count.to_i
 end
 
-Then(/^(\d)+ emails? should contain "(.*)" in the subject$/) do |count, text|
-  emails("subject: \"#{text}\"").size.should == count.to_i
-end
-
 Then(/^#{capture_email} should be delivered to (.+)$/) do |email_ref, to|
   email(email_ref, "to: \"#{email_for(to)}\"").should_not be_nil
 end
@@ -52,10 +48,6 @@ end
 
 Then(/^#{capture_email} should contain "(.*)"$/) do |email_ref, text|
   email(email_ref).body.should =~ /#{text}/
-end
-
-Then(/^#{capture_email} should contain "(.*)" in the subject$/) do |email_ref, text|
-  email(email_ref).subject.should =~ /#{text}/
 end
 
 Then(/^#{capture_email} should not contain "(.*)"$/) do |email_ref, text|
