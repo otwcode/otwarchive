@@ -2,8 +2,6 @@ class KnownIssuesController < ApplicationController
   
   before_filter :admin_only, :except => [:index]
   
-  include HtmlFormatter
-  
   # GET /known_issues
   # GET /known_issues.xml
   def index

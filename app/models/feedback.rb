@@ -9,6 +9,15 @@ class Feedback < ActiveRecord::Base
   validates_length_of :summary, :maximum => ArchiveConfig.FEEDBACK_SUMMARY_MAX,
     :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.FEEDBACK_SUMMARY_MAX)
 
+  attr_protected :comment_sanitizer_version
+  attr_protected :summary_sanitizer_version
+  before_save :update_sanitizer_version
+  def update_sanitizer_version
+    comment_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+    summary_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+  end
+
+
 
 # Category ids for 16bugs
  BUGS_ASSISTANCE = 11483

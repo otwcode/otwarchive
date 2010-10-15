@@ -96,7 +96,7 @@
             </td>
           <% end %>
           <% if eval("show_#{prompt_type}_description") %>
-            <td><%= !prompt || prompt.description.blank? ? "" : sanitize_and_format_for_display(prompt.description) %></td>
+            <td><%= !prompt || prompt.description.blank? ? "" : sanitize_field(prompt, :description) %></td>
           <% end %>
           <% if eval("show_#{prompt_type}_url") %>
             <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) %></td>

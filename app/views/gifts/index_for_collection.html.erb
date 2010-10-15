@@ -21,7 +21,7 @@
 <% for gift in @gifts %>
     <tr>
       <td>
-        <%= link_to sanitize_title_for_display(gift.work.title, :tags => %w(em i b strong strike small)), 
+        <%= link_to gift.work.title, 
                     collection_work_path(@collection, gift.work) %>
       </td>
       <td>

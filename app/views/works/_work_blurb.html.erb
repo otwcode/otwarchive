@@ -27,7 +27,7 @@
     <div class="header module">
 
       <h4 title="title">
-  	    <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), @collection ? collection_work_path(@collection, work) : work %>
+  	    <%= link_to work.title, @collection ? collection_work_path(@collection, work) : work %>
    		  <%= t('.title_by_author', :default => 'by') %>
         
         <!-- do not cache -->
@@ -60,7 +60,7 @@
   	<% unless work.summary.blank? %>
   		<h6 class="landmark">Summary</h6>
   		<blockquote class="userstuff summary" title="summary">
-  		  <%=raw sanitize_strip_images_and_format_for_display work.summary %>
+  		  <%=raw strip_images(sanitize_field(work, :summary)) %>
   		</blockquote>
   	<% end %>
 

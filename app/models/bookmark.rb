@@ -7,6 +7,12 @@ class Bookmark < ActiveRecord::Base
   has_many :collection_items, :as => :item, :dependent => :destroy
   has_many :collections, :through => :collection_items
 
+  attr_protected :notes_sanitizer_version
+  before_save :update_sanitizer_version
+  def update_sanitizer_version
+    notes_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+  end
+
   validates_length_of :notes, 
     :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
 

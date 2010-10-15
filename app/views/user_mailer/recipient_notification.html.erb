@@ -7,12 +7,12 @@
   by <%=h @work.anonymous? ? "an anonymous giver" : @work.pseuds.collect(&:byline).join(", ") %>
 </p>
 
-<%=raw sanitize_and_format_for_display("Summary: (#{@work.fandom_string}) " + @work.summary) %>
+<%=raw sanitize_field("Summary: (#{@work, :fandom_string}) " + @work.summary) %>
 
 <p><%= work_url(@work, :host => @host) %></p>
 
 <% if @collection && !@collection.gift_notification.blank? %>
-  <%=raw sanitize_and_format_for_display(@collection.gift_notification) %>
+  <%=raw sanitize_field(@collection, :gift_notification) %>
 <% end %>
 
 <p>

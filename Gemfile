@@ -36,6 +36,7 @@ gem 'htmlentities'
 gem 'whenever', :require => false
 gem 'nokogiri'
 gem 'mechanize'
+gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
 gem 'delayed_job' 
 gem 'thinking-sphinx', '>=2.0.0.rc1', :require => 'thinking_sphinx'
@@ -46,7 +47,7 @@ gem 'aws-s3', :require => 'aws/s3'
 gem 'mocha'
 gem 'css_parser'
 
-gem 'paperclip', 
+gem 'paperclip',
   :git => 'git://github.com/thoughtbot/paperclip.git', 
   :branch => 'master',
   :require => 'paperclip'

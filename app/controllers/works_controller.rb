@@ -1,5 +1,4 @@
 class WorksController < ApplicationController
-  include HtmlFormatter
 
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection

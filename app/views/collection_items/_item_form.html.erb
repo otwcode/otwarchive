@@ -24,7 +24,7 @@
   <% end %>
 <% else %>
   <!-- user version -->
-  <td><%= link_to sanitize_title_for_display(collection_item.collection.title), collection_path(collection_item.collection) %></td>
+  <td><%= link_to collection_item.collection.title, collection_path(collection_item.collection) %></td>
   <td><%=h collection_item.collection.user_is_posting_participant?(@user) ? "Y" : "N" %>
   <td><%= form.select(:user_approval_status, CollectionItem::APPROVAL_OPTIONS) %><%= hidden_field_tag :user_id, @user.login %></td>
   <td><%= CollectionItem::LABEL[collection_item.collection_approval_status] %></td>

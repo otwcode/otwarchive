@@ -2,8 +2,6 @@ class ArchiveFaqsController < ApplicationController
   
   before_filter :admin_only, :except => [:index, :show]
   
-  include HtmlFormatter
-  
   # GET /archive_faqs
   # GET /archive_faqs.xml
   def index

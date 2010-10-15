@@ -2,7 +2,7 @@
 <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
 </div>
 
-<%= form_for [@work, @chapter], :as => :chapter, :url => {:action => :post} do |f| %>
+<%= form_for @chapter, :url => post_work_chapter_path(@work, @chapter) do |f| %>
   <%= render :partial => 'hidden_fields', :locals => {:form => f} %>
   <p class="submit">
     <%= submit_tag t('.forms.post', :default => 'Post'), :name => 'post_button' %>

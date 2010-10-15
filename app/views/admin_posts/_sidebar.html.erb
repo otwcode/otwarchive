@@ -2,7 +2,7 @@
 	<h3 class="landmark">Page Summary</h3>
 	<ul role="navigation">
 	  <% @admin_posts.each do |admin_post| %>
-  		<li><%= span_if_current sanitize_title_for_display(admin_post.title) + " (#{admin_post.count_visible_comments})", admin_post %></li>
+  		<li><%= span_if_current admin_post.title + " (#{admin_post.count_visible_comments})", admin_post %></li>
     <% end %>
 	</ul>
 </div>

@@ -13,13 +13,13 @@
         <%= render :partial => 'chapters/chapter', :locals => {:chapter => chapter} %>
       <% end %>
     <% else %>
-        <div class="userstuff"><%=raw sanitize_and_format_for_display(@chapter.content) %></div>
+        <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
     <% end %>
     </div>
     <% unless @work.endnotes.blank? %>
       <div class="preface notes">
           <h3><%=h t('.notes', :default => "Notes:") %></h3>
-          <blockquote class="userstuff"><%=raw sanitize_and_format_for_display @work.endnotes %></blockquote>
+          <blockquote class="userstuff"><%=raw sanitize_field(@work, :endnotes) %></blockquote>
        </div>
 
     <% end %>

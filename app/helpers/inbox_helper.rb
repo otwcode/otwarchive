@@ -11,7 +11,7 @@ module InboxHelper
     end
   end
   
-  # get_pseud_or_mailaddress can be found in comments_helper
+  # get_commenter_pseud_or_name can be found in comments_helper
   
   def inbox_reply_link(comment)
     if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH

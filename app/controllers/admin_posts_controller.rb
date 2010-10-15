@@ -2,8 +2,6 @@ class AdminPostsController < ApplicationController
   
   before_filter :admin_only, :except => [:index, :show]
   
-  include HtmlFormatter
-  
   # GET /admin_posts
   # GET /admin_posts.xml
   def index

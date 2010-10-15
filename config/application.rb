@@ -52,10 +52,6 @@ module Otwarchive
     # like if you have constraints or database-specific column types
     config.active_record.schema_format = :sql
 
-    # Override the sanitize defaults to allow some extra formatting attributes. 
-    #config.action_view.sanitized_allowed_attributes = 'align'
-    #config.action_view.sanitized_allowed_tags = 'u', 'strike', 's', 'center', 'dl', 'q', 'table', 'tr', 'td', 'th', 'tbody', 'thead', 'tfoot', 'col', 'colgroup', 'caption'
-    
     ### end of preservation section
     
   end

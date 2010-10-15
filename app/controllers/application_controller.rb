@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   include ExceptionNotification::Notifiable
 
-  include SanitizeParams
+  include HtmlCleaner
   before_filter :sanitize_params
 
   # Authlogic login helpers

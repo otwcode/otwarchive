@@ -179,6 +179,13 @@ class Work < ActiveRecord::Base
   before_update :validate_tags
 	after_update :adjust_series_restriction
 
+  before_save :update_sanitizer_version
+  def update_sanitizer_version
+    notes_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+    summary_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+    endnotes_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+  end
+
 
   def self.purge_old_drafts
     drafts = Work.find(:all, :conditions => ['works.posted = ? AND works.created_at < ?', false, 1.week.ago])

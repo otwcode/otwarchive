@@ -1,8 +1,11 @@
 <p><%=h "Dear Collection Maintainers!" %></p>
 
-<p><%= t('.user_mailer.collection_notice', :default => "You have received a message about your collection %{collection}: ", 
-        :collection => link_to(sanitize_title_for_display(@collection.title), collection_url(@collection, :host => @host))) %></p>
+<p>
+  <%= h(ts("You have received a message about your collection ")) +  
+      link_to(@collection.title, collection_url(@collection, :host => @host))
+      + h(ts(": ")) %>
+</p>
 
-<%=raw sanitize_and_format_for_display @message %>
+<%=raw @message %>
 
 <p><%=h "Sent at:" %> <%= Time.now.strftime(common_timestring) %></p>

@@ -12,7 +12,7 @@ module CommentsHelper
     else
       title = link_to(commentable.commentable_name, commentable)
     end
-    sanitize_title_for_display t('comments_helper.viewing_comments_on', :default => 'Viewing Comments on %{title}', :title => title)
+    h(ts('Viewing Comments on ')) + title
   end
   
   def last_reply_by(comment)
@@ -30,11 +30,11 @@ module CommentsHelper
     ultimate = comment.ultimate_parent
     case ultimate.class.to_s 
       when 'Work' then 
-        link_to sanitize(ultimate.title, :tags => %w(em i b strong strike small)), ultimate
+        link_to ultimate.title, ultimate
       when 'Pseud' then
-        link_to sanitize(ultimate.name), ultimate
+        link_to ultimate.name, ultimate
       when 'AdminPost' then 
-          link_to sanitize(ultimate.title, :tags => %w(em i b strong strike small)), ultimate
+          link_to ultimate.title, ultimate
       else
         if ultimate.is_a?(Tag)
           link_to_tag(ultimate)
@@ -44,8 +44,8 @@ module CommentsHelper
     end
   end
 
-  # return pseudname or email address for comment
-  def get_pseud_or_mailaddress(comment)
+  # return pseudname or name for comment
+  def get_commenter_pseud_or_name(comment)
     if comment.pseud_id
       if comment.pseud.nil?
         'Account Deleted'

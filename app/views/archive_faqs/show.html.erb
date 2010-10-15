@@ -12,7 +12,7 @@
 <div class="admin" role="article">
   <div class="admin-header">
     <h3>
-      <%=raw sanitize_title_for_display @archive_faq.title %>
+      <%= @archive_faq.title %>
     </h3>
     <% if logged_in_as_admin? %>
       <h4>
@@ -21,7 +21,7 @@
     <% end %>
   </div>
   <div class="admin-content userstuff">
-    <%=raw sanitize_and_format_for_display @archive_faq.content %>
+    <%=raw sanitize_field(@archive_faq, :content) %>
   </div>
 </div>
 <!--/content-->

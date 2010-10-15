@@ -2,7 +2,7 @@
   <li class="<% if collection.user_is_owner?(current_user) %>own<% end %> collection picture blurb">
  		<div class="header module">
 			<h4 title="name">
-			<%= link_to sanitize_title_for_display(collection.title, :tags => %w(em i b strong strike small)), collection_path(collection) %>
+			<%= link_to collection.title, collection_path(collection) %>
 				<span>(<%=h collection.name %>)</span>
 					<%= t('.collection_by_owner', :default => 'by') %>
 					<%= collection.all_owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ").html_safe %>
@@ -36,7 +36,7 @@
   <!--summary/descriptions-->
   <h6 class="landmark">Summary</h6>
   <blockquote class="userstuff summary">
-    <%=raw sanitize_strip_images_and_format_for_display collection.description %>
+    <%=raw strip_images(sanitize_field(collection, :description)) %>
   </blockquote>
 
   <p class="type">

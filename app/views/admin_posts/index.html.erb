@@ -14,17 +14,17 @@
  	<div class="admin module" role="article">
 			<div class="admin-header">
       <h3>
-				<%= link_to sanitize_title_for_display(admin_post.title), admin_post %>
+				<%= link_to admin_post.title, admin_post %>
 			</h3>
 				<h4>
-					Published: <%=h admin_post.created_at %>  
+					Published: <%= admin_post.created_at %>  
 						<% if logged_in_as_admin? %>
 					    <%= link_to t('.edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
 						<% end %>
         </h4>
       </div>
       <div class="admin-content userstuff">
-		    <%=raw sanitize_and_format_for_display admin_post.content %>
+		    <%=raw sanitize_field(admin_post, :content) %>
       </div>
 			<!-- BEGIN comment section -->
 				<h3 class="landmark">Comment</h3>

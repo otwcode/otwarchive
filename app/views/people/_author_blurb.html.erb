@@ -14,7 +14,7 @@
 	      </div>
       <% unless author.description.blank? %>
         <blockquote class="userstuff">
-		<p><%=raw sanitize_description_for_display(author.description) %></p>
+		<p><%=raw sanitize_field(author, :description) %></p>
 		</blockquote>
       <% end %>
       <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->

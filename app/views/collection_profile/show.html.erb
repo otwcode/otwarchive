@@ -2,7 +2,7 @@
   <%= render :partial => 'collections/header', :locals => {:collection => @collection} %>
 
 <div class="collection module">
-  <h3><%=h t('.about', :default => "About %{name}", :name => sanitize_title_for_display(@collection.title) +  ((@collection.title != @collection.name) ? " (#{@collection.name})" : "")) %></h3>
+  <h3><%=h t('.about', :default => "About %{name}", :name => @collection.title +  ((@collection.title != @collection.name) ? " (#{@collection.name})" : "")) %></h3>
   <p class="datetime"><%= t('.active_since', :default => "Active since: %{date}", :date => l(@collection.created_at.to_date)) %></p>
   <div class="wrapper">
     <dl class="collection meta">
@@ -39,7 +39,9 @@
     <div id="intro" class="module">
       <%= render :partial => 'navigation', :locals => {:section => 'intro'} %>
       <h3><%=h t('.intro', :default => "Intro:") %></h3>
-      <blockquote class="userstuff"><%=raw sanitize_and_format_for_display(@collection.collection_profile.intro.blank? ? @collection.parent.collection_profile.intro : @collection.collection_profile.intro) %></blockquote>
+      <blockquote class="userstuff">
+        <%=raw sanitize_field(@collection.collection_profile.intro.blank? ? @collection.parent.collection_profile : @collection.collection_profile, :intro) %>
+      </blockquote>
     </div>
     <% end %>
 
@@ -47,7 +49,9 @@
     <div id="faq" class="module">
       <%= render :partial => 'navigation', :locals => {:section => 'faq'} %>
       <h3><%=h t('.faq', :default => "FAQ:") %></h3>
-      <blockquote class="userstuff"><%=raw sanitize_and_format_for_display(@collection.collection_profile.faq.blank? ? @collection.parent.collection_profile.faq : @collection.collection_profile.faq) %></blockquote>
+      <blockquote class="userstuff">
+        <%=raw sanitize_field(@collection.collection_profile.faq.blank? ? @collection.parent.collection_profile : @collection.collection_profile, :faq) %>
+      </blockquote>
     </div>
     <% end %>
 
@@ -55,7 +59,9 @@
       <div id="rules" class="module">
         <%= render :partial => 'navigation', :locals => {:section => 'rules'} %>
         <h3><%=h t('.rules', :default => "Rules:") %></h3>
-        <blockquote class="userstuff"><%=raw sanitize_and_format_for_display(@collection.collection_profile.rules.blank? ? @collection.parent.collection_profile.rules : @collection.collection_profile.rules) %></blockquote>
+        <blockquote class="userstuff">
+          <%=raw sanitize_field(@collection.collection_profile.rules.blank? ? @collection.parent.collection_profile : @collection.collection_profile, :rules) %>
+        </blockquote>
       </div>
     <% end %>
   </div>

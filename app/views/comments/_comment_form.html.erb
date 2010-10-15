@@ -5,7 +5,7 @@
 <div id="comment_form">
 	<%= form_for value_for_comment_form(commentable, comment) do |f| %>
 	  <% if controller.controller_name == "inbox" %>
-	  <h4>Reply to <%= get_pseud_or_mailaddress(commentable) %> on <%= commentable_description_link(commentable) %></h4>   
+	  <h4>Reply to <%= get_commenter_pseud_or_name(commentable) %> on <%= commentable_description_link(commentable) %></h4>   
 	  <% end %>  
 	  <% if commentable.is_a?(Tag) %>
 	    <%= hidden_field_tag :tag_id, commentable.name %>

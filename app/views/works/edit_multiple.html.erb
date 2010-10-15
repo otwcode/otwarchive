@@ -8,7 +8,9 @@
 <!--main content-->
 <%= form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %>
   <h3>Works Edited</h3>
-  <p class="important message"><%=raw sanitize_title_for_display t('.all_stories', :default => "Note that your edits will be applied to <em>all</em> of these stories, <em>replacing</em> any existing values for these fields!") %></p>
+  <p class="important message">
+    <%= ts "Note that your edits will be applied to <em>all</em> of these stories, <em>replacing</em> any existing values for these fields!" %>
+  </p>
 
   <table summary="lists the works being mass-edited">
     <caption>Lists the works being mass-edited.</caption>
@@ -23,7 +25,7 @@
       <tr>
       	<th scope="row">
           <%= hidden_field_tag "work_ids[]", work.id%>
-          <%= link_to sanitize_title_for_display(work.title, :tags => %w(em i b strong strike small)), work %>
+          <%= link_to work.title, work %>
         </th>
         <td><%= work.fandoms.collect {|tag| link_to_tag(tag) }.join(', ') %></td>
         <td><%= %w(characters relationships freeforms categories ratings warnings).collect {|type| work.send("#{type}")}.flatten.collect {|tag| link_to_tag(tag) }.join(', ').html_safe %></td>

@@ -6,7 +6,7 @@ class StoryParser
   require 'nokogiri'
   require 'mechanize'
   require 'open-uri'
-  include HtmlFormatter
+  include HtmlCleaner
 
   META_PATTERNS = {:title => 'Title',
                    :notes => 'Note',
@@ -689,15 +689,16 @@ class StoryParser
       nil
     end
 
+    # We clean the text as if it had been submitted as the content of a chapter
     def clean_storytext(storytext)
       storytext = storytext.encode("UTF-8") unless storytext.encoding.name == "UTF-8"
-      return sanitize_whitelist(cleanup_and_format(storytext))
+      return sanitize_value("content", storytext)
     end
 
     # works conservatively -- doesn't split on
     # spaces and truncates instead.
     def clean_tags(tags)
-      tags = sanitize_fully(tags)
+      tags = Sanitize.clean(tags) # no html allowed in tags
       if tags.match(/,/)
         tagslist = tags.split(/,/)
       else

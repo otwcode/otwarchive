@@ -2,7 +2,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   
-  include HtmlFormatter
+  include HtmlCleaner
 
 	# Generates class names for the main div in the application layout
 	def classes_for_main

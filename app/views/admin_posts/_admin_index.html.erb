@@ -24,7 +24,7 @@
 	<tbody>	
   <% @admin_posts.each do |admin_post| %>
     <tr>
-      <td><%= link_to sanitize_title_for_display(admin_post.title), admin_post %></td>
+      <td><%= link_to admin_post.title, admin_post %></td>
       <td><%=h admin_post.created_at %></td>
       <td><%=h admin_post.updated_at %></td>
       <td><%= link_to "Show", admin_post %></td>

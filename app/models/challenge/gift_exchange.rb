@@ -1,6 +1,17 @@
 class GiftExchange < ActiveRecord::Base
   belongs_to :collection
   has_one :collection, :as => :challenge 
+
+  attr_protected :signup_instructions_general_sanitizer_version
+  attr_protected :signup_instructions_requests_sanitizer_version
+  attr_protected :signup_instructions_offers_sanitizer_version
+  before_save :update_sanitizer_version
+  def update_sanitizer_version
+    signup_instructions_general_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+    signup_instructions_requests_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+    signup_instructions_offers_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+  end
+
   
   # limits the kind of prompts users can submit 
   belongs_to :prompt_restriction, :class_name => "PromptRestriction", :dependent => :destroy  

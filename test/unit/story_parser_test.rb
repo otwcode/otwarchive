@@ -2,7 +2,7 @@ require 'test_helper'
 
 class StoryParserTest < ActiveSupport::TestCase
   
-  include HtmlFormatter
+  include HtmlCleaner
   
   def setup
     @working_stories = [      

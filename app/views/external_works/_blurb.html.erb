@@ -4,7 +4,7 @@
   <div class="header module">
 
     <h4 title="title">
-      <%= link_to sanitize_title_for_display(external_work.title, :tags => %w(em i b strong strike small)), external_work.url %>
+      <%= link_to external_work.title, external_work.url %>
       <%= t('.title_by_author', :default => 'by') %>
       <%= byline(external_work) %>
     </h4>
@@ -28,7 +28,7 @@
   <% unless external_work.summary.blank? %>
   <h6 class="landmark">Summary</h6>
   <blockquote class="userstuff summary" title="summary">
-    <%=raw sanitize_strip_images_and_format_for_display external_work.summary %>
+    <%=raw strip_images(sanitize_field(external_work, :summary)) %>
   </blockquote>
   <% end %>
 

@@ -77,7 +77,7 @@
 	<h2 class="title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
     <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
-    <%=raw sanitize_title_for_display @work.title %>
+    <%= @work.title %>
 	</h2>
   <h3 class="byline">
    <%= byline(@work) %>
@@ -89,7 +89,7 @@
       <div class="summary module" role="complementary">
         <h3><%=h ts("Summary:") %></h3>
         <% unless @work.summary.blank? %>
-          <blockquote class="userstuff"><%=raw sanitize_limit_and_format_for_display @work.summary %></blockquote>
+          <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
         <% end %>
       </div>
     <% end %>
@@ -136,7 +136,7 @@
 	<%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>
         </span>
     <% else %>
-        <blockquote class="userstuff"><%=raw sanitize_and_format_for_display(@work.notes) %></blockquote>
+        <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
         <% unless @work.endnotes.blank? %>
           <span class="endnotes-link">
 	  <%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>

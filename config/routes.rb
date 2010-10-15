@@ -190,6 +190,7 @@ Otwarchive::Application.routes.draw do
       get :marktoread
       get :download
     end
+    resources :bookmarks
     resources :chapters do
       collection do
         get :manage
@@ -201,17 +202,16 @@ Otwarchive::Application.routes.draw do
       end
       resources :comments
     end
+    resources :collections
+    resources :collection_items
     resources :comments do
       member do
         put :approve
         put :reject
       end
     end
-    resources :bookmarks
-    resources :collections
-    resources :collection_items
   end
-
+  
   resources :chapters do
     member do
       get :preview

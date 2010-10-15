@@ -1,6 +1,6 @@
 <% if @collection && @collection.challenge %>
   <!-- signups for a given challenge -->
-  <h2><%= t('.challenge_signups.signups_listing', :default => "Signups for %{collection}", :collection => sanitize_title_for_display(@collection.title)) %></h2>
+  <h2><%= t('.challenge_signups.signups_listing', :default => "Signups for %{collection}", :collection => @collection.title) %></h2>
 
   <!-- render differently based on the challenge -->
   <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_signups" %>
@@ -19,7 +19,7 @@
     <% @challenge_signups.each do |challenge_signup| %>
       <tr>
         <td><%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup) %></td>
-        <td><%= link_to sanitize_title_for_display(challenge_signup.collection.title), challenge_signup.collection %></td>
+        <td><%= link_to challenge_signup.collection.title, challenge_signup.collection %></td>
         <td class="navigation">
           <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
         </td>

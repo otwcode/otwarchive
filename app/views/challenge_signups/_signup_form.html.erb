@@ -18,7 +18,7 @@ So if anyone can think of a better design for this, that would be awesome
   	<legend>General Information</legend>
   	<h3>General Information</h3>
     <% if @challenge.signup_instructions_general %>
-      <%=raw sanitize_and_format_for_display @challenge.signup_instructions_general %>
+      <%=raw sanitize_field(@challenge, :signup_instructions_general) %>
     <% end %>
     <dl>
      	<% if signup_form.object.new_record? && current_user.pseuds.size > 1 %>
@@ -40,7 +40,7 @@ So if anyone can think of a better design for this, that would be awesome
   	    - <%= @challenge.send("#{prompt_type}_num_allowed") %><% end %>)
   	</h3>
     <% if @challenge.send("signup_instructions_#{prompt_type}") %>
-      <%=raw sanitize_and_format_for_display @challenge.send("signup_instructions_#{prompt_type}") %>
+      <%=raw sanitize_field(@challenge, "signup_instructions_#{prompt_type}".to_sym) %>
     <% end %>
     <% if @challenge_signup.send("#{prompt_type}").empty? %>
   	  <% 1.upto(@challenge.send("#{prompt_type}_num_required")) do %>

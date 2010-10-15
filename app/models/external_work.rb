@@ -2,6 +2,12 @@ include UrlHelpers
 class ExternalWork < ActiveRecord::Base
   
   include Taggable
+
+  attr_protected :summary_sanitizer_version
+  before_save :update_sanitizer_version
+  def update_sanitizer_version
+    summary_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+  end
   
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags

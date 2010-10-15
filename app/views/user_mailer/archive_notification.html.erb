@@ -1,6 +1,6 @@
 <h3><%=h "Dear Archive Users!" %></h3>
 
-<%=raw sanitize_and_format_for_display @message %>
+<%=raw @message %>
 
 <p><%=h "Sent at:" %> <%= Time.now.strftime(common_timestring) %></p>
 

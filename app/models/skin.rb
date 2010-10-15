@@ -1,4 +1,4 @@
-include SanitizeParams
+include HtmlCleaner
 
 class Skin < ActiveRecord::Base
   belongs_to :author, :class_name => 'User'
@@ -80,6 +80,14 @@ class Skin < ActiveRecord::Base
       self.css = clean_code.delete_if {|code_block| code_block.blank?}.join("\n")
     end
   end
+  
+  attr_protected :description_sanitizer_version
+  before_save :update_sanitizer_version
+  def update_sanitizer_version
+    description_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
+  end
+
+  
         
 protected
 
