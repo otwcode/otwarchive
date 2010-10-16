@@ -121,40 +121,39 @@ class UserMailer < ActionMailer::Base
   
   # Sends email when a user is added as a co-author
   def coauthor_notification(user, creation)
-    setup_email_to_user(user)
+    @user = user
     @creation = creation
     mail(
       :to => user.email,
-      :subject => @subject + "Co-Author Notification"
+      :subject => "[#{ArchiveConfig.APP_NAME}] Co-Author Notification"
     )
   end 
    
   # Sends emails to authors whose stories were listed as the inspiration of another work
   def related_work_notification(user, related_work)
-    setup_email_to_user(user)
+    @user = user
     @related_work = related_work
     @related_parent_link = url_for(:controller => :works, :action => :show, :id => @related_work.parent)
     @related_child_link = url_for(:controller => :works, :action => :show, :id => @related_work.work)
     mail(
       :to => user.email,
-      :subject => @subject + "Related work notification"
+      :subject => "[#{ArchiveConfig.APP_NAME}] Related work notification"
     )
   end
    
   # Sends email to coauthors when a work is edited
   def edit_work_notification(user, work)
-    setup_email_to_user(user)
+    @user = user
     @work = work
     mail(
       :to => user.email,
-      :subject => @subject + "Your story has been updated"
+      :subject => "[#{ArchiveConfig.APP_NAME}] Your story has been updated"
     )
   end
    
   # Sends email to authors when a creation is deleted
   def delete_work_notification(user, work)
-    setup_email_to_user(user)
-    @subject    += "Your story has been deleted"
+    @user = user
     @work = work
     work_copy = generate_attachment_content_from_work(work)
     filename = work.title.gsub(/[*:?<>|\/\\\"]/,'')
@@ -163,7 +162,7 @@ class UserMailer < ActionMailer::Base
 
     mail(
       :to => user.email,
-      :subject => @subject + "Your story has been deleted"
+      :subject => "[#{ArchiveConfig.APP_NAME}] Your story has been deleted"
     )
   end
   
@@ -174,18 +173,17 @@ class UserMailer < ActionMailer::Base
     @comment = feedback.comment
     mail(
       :to => user.email,
-      :subject => "#{ArchiveConfig.APP_NAME}: Support - " + feedback.summary
+      :subject => "#{ArchiveConfig.APP_NAME}: Support - #{feedback.summary}"
     )
   end  
 
   def abuse_report(report)
     setup_email_without_name(report.email)
-    @recipients = report.email
     @url = report.url
     @comment = report.comment
     mail(
-      :to => @recipients,
-      :subject => @subject + "Your abuse report"
+      :to => report.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Your abuse report"
     )
   end
 
@@ -212,23 +210,4 @@ class UserMailer < ActionMailer::Base
   
   protected
 
-    def setup_email_to_users(users)
-      @recipients = users.collect {|user| user.email}.join(', ')
-    end
-   
-    def setup_email_to_user(user)
-      @recipients  = "#{user.email}"
-      @user = user
-      @name = user.login
-    end
-     
-    def setup_email_to_nonuser(email, name)
-      @recipients = email
-      @name = name
-    end
-    
-    def setup_email_without_name(email)
-      @recipients = email     
-    end
-     
 end
