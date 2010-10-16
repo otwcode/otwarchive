@@ -28,6 +28,13 @@ class Collection < ActiveRecord::Base
   has_one :collection_preference, :dependent => :destroy
   accepts_nested_attributes_for :collection_preference
 
+  before_create :ensure_associated
+  def ensure_associated
+    self.collection_preference = CollectionPreference.new unless  self.collection_preference
+    self.collection_profile = CollectionProfile.new unless  self.collection_profile
+  end
+
+
   belongs_to :challenge, :dependent => :destroy, :polymorphic => true
   has_many :prompts, :dependent => :destroy
   

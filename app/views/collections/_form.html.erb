@@ -6,10 +6,10 @@
 		<dl>
 	   
 	 	<% if @collection.new_record? && current_user.pseuds.size > 1 %>
-      <dt><%= label_tag :owner_pseuds, t("collection_form.owners", :default => "Select owner pseudonym(s): ") %></dt>
-      <dd><%= select_tag :owner_pseuds, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %></dd>
+      <dt><%= label_tag "owner_pseuds[]", ts("Select owner pseudonym(s)") %>:</dt>
+      <dd><%= select_tag "owner_pseuds[]", options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %></dd>
     <% else %>
-      <p><%= hidden_field_tag :owner_pseuds, [current_user.default_pseud.id] %></p>
+      <p><%= hidden_field_tag "owner_pseuds[]", [current_user.default_pseud.id] %></p>
     <% end %>
   
     <dt><%= collection_form.label :icon %></dt>
@@ -17,31 +17,31 @@
 
   <% if @collection.children.empty? %>
 	<dt>
-    <%= collection_form.label :parent_name, t('.collections.parent_name', :default => "Parent collection (must be one you maintain): ") %></dt>
+    <%= collection_form.label :parent_name, ts("Parent collection (must be one you maintain)") %>:</dt>
     <dd>
       <%= collection_form.text_field :parent_name %>
       <%= autocomplete_text_field("collection_parent_name", :no_comma => true) %>      
     </dd>
   <% end %>
 
-    <dt><%= collection_form.label :name, t("collection_form.name", :default => "Collection Name* (letters, numbers, underscores):") %></dt>
+    <dt><%= collection_form.label :name, ts("Collection Name* (letters, numbers, underscores)") %>:</dt>
     <dd><%= collection_form.text_field :name %></dd>
 
 
   <dt>
-    <%= collection_form.label :title, t("collection_form.title", :default => "Display Title* (text only):") %></dt>
+    <%= collection_form.label :title, ts("Display Title* (text only)") %>:</dt>
    <dd> <%= collection_form.text_field :title %></dd>
 
   <dt>
-    <%= collection_form.label :email, t("collection_form.email", :default => "Email (optional, otherwise notices will go to owners):") %></dt>
+    <%= collection_form.label :email, ts("Email (optional, otherwise notices will go to owners)") %>:</dt>
     <dd><%= collection_form.text_field :email, :size => 40 %>
   </dd>
   <dt>
-    <%= collection_form.label :header_image_url, t("collection_form.header_image_url", :default => "URL for custom header image (jpg, gif, png): ") %></dt>
+    <%= collection_form.label :header_image_url, ts("URL for custom header image (jpg, gif, png)") %>:</dt>
    <dd><%= collection_form.text_field :header_image_url %>
   </dd>
   <dt>
-    <%= collection_form.label :description, t("collection_form.description", :default => "Brief Description: ") %></dt>
+    <%= collection_form.label :description, ts("Brief Description") %>:</dt>
     <dd>
 <%= collection_form.text_area :description, :rows => 4, :cols => 60, :class => "description-field" %>
     <%= live_validation_for_field('collection_description', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
@@ -54,27 +54,27 @@
 <fieldset>
 	<legend>Preferences</legend>
     <dl>
-	<dt><%= preference_form.label :moderated, t("collection_form.moderated", :default => "Is this collection moderated?") %> <%= link_to_help "moderated-collection" %></dt>
+	<dt><%= preference_form.label :moderated, ts("Is this collection moderated?") %> <%= link_to_help "moderated-collection" %></dt>
     <dd><%= preference_form.check_box :moderated %>
   </dd>
   <dt>
-    <%= preference_form.label :closed, t("collection_form.closed", :default => "Is this collection closed?") %></dt>
+    <%= preference_form.label :closed, ts("Is this collection closed?") %></dt>
     <dd><%= preference_form.check_box :closed %></dd>
   <dt>
-    <%= preference_form.label :unrevealed, t("collection_form.unrevealed", :default => "Is this collection currently unrevealed?") %></dt>
+    <%= preference_form.label :unrevealed, ts("Is this collection currently unrevealed?") %></dt>
    <dd><%= preference_form.check_box :unrevealed %>
   </dd>
   <dt>
-    <%= preference_form.label :anonymous, t("collection_form.anonymous", :default => "Is this collection currently anonymous?") %></dt>
+    <%= preference_form.label :anonymous, ts("Is this collection currently anonymous?") %></dt>
     <dd><%= preference_form.check_box :anonymous %>
   </dd>
   <dt>
-    <%= preference_form.label :show_random, t("collection_form.random", :default => "Would you like to show random stories on the front page instead of the most recent?") %>
+    <%= preference_form.label :show_random, ts("Would you like to show random stories on the front page instead of the most recent?") %>
   </dt>
   <dd>
     <%= preference_form.check_box :show_random %>
   </dd>  
-  <dt><%= label_tag :challenge_type, t("collection_form.challenge_type", :default => "If this collection is for a challenge, please choose the type: ") %></dt>
+  <dt><%= label_tag :challenge_type, ts("If this collection is for a challenge, please choose the type") %>:</dt>
     <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, @collection.challenge ? @collection.challenge.class.name : "") %></dd>
 </dl>
 </fieldset>
@@ -89,26 +89,26 @@
     inherited from the parent collection, so you don't need to repeat shared information.
     </p>
     <p><%= allowed_html_instructions %></p>
-    <h3><%= profile_form.label :intro, t("collection_form.intro", :default => "Introduction: ") %></h3>
+    <h3><%= profile_form.label :intro, ts("Introduction") %>:</h3>
   	<p>
       <%= profile_form.text_area :intro, :rows => 10, :cols => 80 %>
       <%= live_validation_for_field('collection_collection_profile_attributes_intro', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
       <%= generate_countdown_html("collection_collection_profile_attributes_intro", ArchiveConfig.INFO_MAX) %>
     </p>
 
-      <h3><%= profile_form.label :faq, t("collection_form.faq", :default => "FAQ: ") %></h3>
+      <h3><%= profile_form.label :faq, ts("FAQ") %>:</h3>
       <p><%= profile_form.text_area :faq, :rows => 10, :cols => 80 %>
       <%= live_validation_for_field('collection_collection_profile_attributes_faq', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
       <%= generate_countdown_html("collection_collection_profile_attributes_faq", ArchiveConfig.INFO_MAX) %>
     </p>
     <h3>
-      <%= profile_form.label :rules, t("collection_form.rules", :default => "Rules: ") %></h3>
+      <%= profile_form.label :rules, ts("Rules") %>:</h3>
       <p><%= profile_form.text_area :rules, :rows => 10, :cols => 80 %>
       <%= live_validation_for_field('collection_collection_profile_attributes_rules', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
       <%= generate_countdown_html("collection_collection_profile_attributes_rules", ArchiveConfig.INFO_MAX) %>
     </p>
 
-    <h3><%= profile_form.label :gift_notification, t("collection_form.gift_notification", :default => "Gift Notification Message: ") %></h3>
+    <h3><%= profile_form.label :gift_notification, ts("Gift Notification Message") %>:</h3>
     <p class="note">
       (This message will be appended to the story notifications sent out when you reveal the stories in a gift exchange. Plain text only.)
     </p>

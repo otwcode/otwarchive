@@ -138,7 +138,7 @@ class PseudsController < ApplicationController
      @pseud.replace_me_with_default
      flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
    else
-      render :partial => 'delete_preview', :layout => 'application' and return  
+      render 'delete_preview' and return  
    end
 
     redirect_to(user_pseuds_url(@user))

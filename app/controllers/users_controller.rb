@@ -224,7 +224,7 @@ class UsersController < ApplicationController
     elsif params[:coauthor].blank? && params[:sole_author].blank?
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
-      render :partial => 'delete_preview', :layout => 'application'
+      render 'delete_preview' and return
     elsif params[:coauthor] || params[:sole_author]
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
