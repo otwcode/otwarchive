@@ -17,7 +17,7 @@ Feature: Search Tags
       And I should see "Character: first last (0)" within ".canonical"
     When I am on the search tags page
       And I fill in "tag_search" with "first"
-      And I select "Fandom" from "type"
+      And I select "Fandom" from "query[type]"
       And I press "Search tags"
     Then I should see "1 Found"
       And I should see "Fandom: first fandom (0)"

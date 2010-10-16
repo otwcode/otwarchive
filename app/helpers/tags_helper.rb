@@ -43,28 +43,28 @@ module TagsHelper
     end
   end
 
-	def link_to_tag(tag, options = {})
+  def link_to_tag(tag, options = {})
     link_to_tag_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
-	end
+  end
 
-	def link_to_tag_with_text(tag, link_text, options = {})
+  def link_to_tag_with_text(tag, link_text, options = {})
     link_to_with_tag_class(@collection ? 
     {:controller => :tags, :action => :show, :id => tag, :collection_id => @collection} : 
     {:controller => :tags, :action => :show, :id => tag}, link_text, options)
-	end
+  end
 
   # edit_tag_path is behaving badly since around the Rails 2.2.2 upgrade
-	def link_to_edit_tag(tag, options = {})
+  def link_to_edit_tag(tag, options = {})
     link_to_with_tag_class({:controller => :tags, :action => :edit, :id => tag}, tag.name, options)
-	end
+  end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
     link_to_with_tag_class(@collection ? 
     {:controller => :works, :action => :index, :tag_id => tag, :collection_id => @collection} : 
     {:controller => :works, :action => :index, :tag_id => tag}, link_text, options)
-	end
+  end
 
-	# Adds the "tag" classname to links (for tag links)
+  # Adds the "tag" classname to links (for tag links)
   def link_to_with_tag_class(path, text, options)
     options[:class] ? options[:class] << " tag" : options[:class] = "tag"
     link_to text, path, options
@@ -138,8 +138,9 @@ module TagsHelper
   def tag_search_result(tag)
     if tag
       span = tag.canonical? ? "<span class='canonical'>" : "<span>"
-      span + tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
+      span += tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
     end
+    span.html_safe
   end
   
   def tag_comment_link(tag)
