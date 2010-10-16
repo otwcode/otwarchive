@@ -1,3 +1,4 @@
+<% @query = {} unless @query %>
 <%= form_tag url_for(:controller => 'tags', :action => 'search'), :class => 'search', :method => :get do %>
 <fieldset>
   <legend>Search tags</legend>
