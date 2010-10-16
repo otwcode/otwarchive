@@ -44,7 +44,7 @@
 <div class="bigwrapper">
 	 <%= flash_div :error, :warning, :notice %>
 	<div class="open-beta-box">
-  <% if logged_in? || logged_in_as_admin? %>
+  <% if logged_in? %>
     <h2><%= ts('Welcome to open beta!') %></h2>
     <h1><%= link_to ts('INVITE A FRIEND'), user_invitations_path(current_user) %></h1> 
   <% else %>

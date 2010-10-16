@@ -21,38 +21,31 @@ class PseudsController < ApplicationController
     end
   end
 
-  # GET /pseuds/1
-  # GET /pseuds/1.xml
+  # GET /users/:user_id/pseuds/:id
+  # very similar to show under users - if you change something here, you'll probably need to change it there too
   def show
-    if @user
-      @author = @user.pseuds.find_by_name(params[:id])
-      unless @author
-        flash[:error] = t('pseud_not_found', :default => "Sorry, could not find this pseud.")
-        redirect_to :action => :index and return
-      end
-      @fandoms = @author.filters.by_type("Fandom").by_name.select("DISTINCT tags.*")
-      @works = Work.written_by([@author]).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-      if current_user.nil?
-        @series = Series.visible_to_all.exclude_anonymous.for_pseuds([@author]).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
-      else
-        @series = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([@author]).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
-      end
-      visible_bookmarks = @author.bookmarks.visible.order('bookmarks.created_at DESC')
-      # Having the number of items as a limit was finding the limited number of items, then visible ones within them
-      @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]     
-    else
-      @pseuds = Pseud.find_all_by_name(params[:id])
-      if @pseuds.size == 0
-        flash[:error] = t('pseud_not_found', :default => "Sorry, could not find this pseud.")
-        redirect_to people_path and return
-      elsif @pseuds.size == 1
-        redirect_to [@pseuds[0].user, @pseuds[0]] and return
-      else
-        flash[:notice] = t('ambiguous_pseud', :default => "There's more than one user with this pseud.")
-        redirect_to people_path and return
-        # TODO: present the user with a drop-down with all authors who have that pseud
-      end
+    if @user.blank?
+      flash[:error] = ts("Sorry, could not find this user.")
+      redirect_to people_path and return
     end
+    @author = @user.pseuds.find_by_name(params[:id])
+    unless @author
+      flash[:error] = ts("Sorry, could not find this pseud.")
+      redirect_to people_path and return
+    end
+    if current_user.nil?
+      visible_works = @author.works.visible_to_all
+      visible_series = @author.series.visible_to_all
+      visible_bookmarks = @author.bookmarks.visible_to_all
+    else
+      visible_works = @author.works.visible_to_registered_user
+      visible_series = @author.series.visible_to_registered_user
+      visible_bookmarks = @author.bookmarks.visible_to_registered_user
+    end
+    @fandoms = visible_works.map(&:fandoms).flatten.inject(Hash.new(0)){|h,x| h[x]+=1;h}.sort{|a,b| b[1]<=>a[1]}
+    @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
   end
 
   # For use with work/chapter forms

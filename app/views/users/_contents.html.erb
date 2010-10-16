@@ -2,18 +2,23 @@
 <!-- expects @fandoms, @works, @series, @bookmarks -->
   <% unless @fandoms.blank? %>
   <div class="fandom module" id="user-fandoms">
-    <h3><%=h t('.user_fandoms', :default => "Fandoms") %></h3>
+    <h3><%=h ts("Fandoms") %></h3>
     <ul class="index">
-      <% @fandoms.each_with_index do |fandom, i| %>
+      <% @fandoms.each_with_index do |fandom_with_count, i| %>
+        <% fandom, count = fandom_with_count %>
         <% if !params[:expand_fandoms] && i > (ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD - 1) %>
-        <li class='hidden'>
+          <li class='hidden'>
         <% else %>
-        <li>
+          <li>
         <% end %>       
-          <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.id]} %>
+        <% if fandom.merger %>
+          <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.merger.id]} %> (<%=count%>)
+        <% else %>
+          <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.id]} %> (<%=count%>)
+        <% end %>
         </li>
-      <% end %>
-      <% if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
+     <% end %>
+     <% if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
         <li>
           <% if params[:expand_fandoms] %>
           <%= link_to "< Hide full list", [@user, @author], :id => "expandable-link" %>
@@ -28,7 +33,7 @@
               
   <% unless @works.blank? %>
   <div class="work module<% if current_user == @user %> works-own<% end %>" id="user-works">
-    <h3><%=h t('.recent_works', :default => "Recent works") %></h3>
+    <h3><%=h ts("Recent works") %></h3>
     <ul class="index">
       <% for work in @works %>
     	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
@@ -42,7 +47,7 @@
   
   <% unless @series.blank? %>
   <div class="series module<% if current_user == @user %> works-own<% end %>" id="user-series">
-    <h3><%=h t('.recent_series', :default => "Recent series") %></h3>
+    <h3><%=h ts("Recent series") %></h3>
     <ul class="index">
       <% for series in @series %>
         <%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
@@ -63,7 +68,7 @@
   
   <% unless @bookmarks.blank? %>
   <div class="bookmark module" id="user-bookmarks">
-    <h3><%=h t('.recent_bookmarks', :default => "Recent bookmarks") %></h3>
+    <h3><%=h ts("Recent bookmarks") %></h3>
     <ul class="index">
       <% for bookmark in @bookmarks %>
         <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
@@ -86,11 +91,11 @@
 <% if @works.blank? && @series.blank? && @bookmarks.blank? %>
   <% if current_user == @user %>
     <p class="alt message">
-      <%= t("users.nothing_posted", :default => "You don't have anything posted under this name yet. ") %>
-      <%= t("users.post_something_1", :default => "Would you like to ")%>
-      <%= link_to t("users.post_new_work", :default => "post a new work"), new_work_path %>
-      <%= t("users.post_something_2", :default => "or maybe")%>
-      <%= link_to t("users.post_new_bookmark", :default => "a new bookmark"), new_external_work_path %>?
+      <%= ts("You don't have anything posted under this name yet. ") %>
+      <%= ts("Would you like to ")%>
+      <%= link_to ts("post a new work"), new_work_path %>
+      <%= ts("or maybe")%>
+      <%= link_to ts("a new bookmark"), new_external_work_path %>?
     </p>
   <% else %>
     <p class="alt message">There are no works or bookmarks under this name yet.</p>

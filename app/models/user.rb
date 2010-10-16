@@ -186,7 +186,7 @@ class User < ActiveRecord::Base
   end
 
   def create_default_associateds
-    self.pseuds << Pseud.new(:name => self.login, :is_default => :true)
+    self.pseuds << Pseud.new(:name => self.login, :is_default => true)
     self.profile = Profile.new
     self.preference = Preference.new
   end

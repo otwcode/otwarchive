@@ -34,30 +34,32 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1
-  # GET /users/1.xml
+  # very similar to show under pseuds - if you change something here, you'll probably need to change it there too
   def show
-    if @user
-      if params[:open_id_complete] then
-        begin
-          open_id_authentication(params[:open_id_complete])
-        rescue
-          render :action => "edit"
-        end
-      end
-      @fandoms = @user.filters.with_type("Fandom").by_name.uniq
-      @works = Work.owned_by(@user).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)      
-      if current_user.nil?
-        @series = Series.visible_to_all.exclude_anonymous.for_pseuds(@user.pseuds).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
-      else
-        @series = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(@user.pseuds).limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD).paginate(:page => params[:page])
-      end
-      visible_bookmarks = @user.bookmarks.visible(:order => 'bookmarks.created_at DESC')
-      # Having the number of items as a limit was finding the limited number of items, then visible ones within them
-      @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
-    else
-      flash[:error] = t('not_found', :default => "Sorry, there's no user by that name.")
-      redirect_to '/'
+    if @user.blank?
+      flash[:error] = ts("Sorry, could not find this user.")
+      redirect_to people_path and return
     end
+    if params[:open_id_complete] then
+      begin
+        open_id_authentication(params[:open_id_complete])
+      rescue
+        render :action => "edit"
+      end
+    end
+    if current_user.nil?
+      visible_works = @user.works.visible_to_all
+      visible_series = @user.series.visible_to_all
+      visible_bookmarks = @user.bookmarks.visible_to_all
+    else
+      visible_works = @user.works.visible_to_registered_user
+      visible_series = @user.series.visible_to_registered_user
+      visible_bookmarks = @user.bookmarks.visible_to_registered_user
+    end
+    @fandoms = visible_works.map(&:fandoms).flatten.inject(Hash.new(0)){|h,x| h[x]+=1;h}.sort{|a,b| b[1]<=>a[1]}
+    @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+    @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
   end
 
   # GET /users/new
