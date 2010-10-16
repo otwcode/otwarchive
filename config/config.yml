@@ -183,6 +183,10 @@ SANITIZER_VERSION: 1
 FIELDS_ALLOWING_HTML: ["about_me", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes", 
   "rules", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
 
+FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
+
+FIELDS_ALLOWING_CSS: ["content"]
+
 # Allowed CSS
 #
 # *** IMPORTANT: if you edit these values please also update the css-help.html file in public/help ***

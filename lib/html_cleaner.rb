@@ -48,7 +48,6 @@ module HtmlCleaner
     #    text.gsub! "\224", '"'
     return text
   end
-
   
   def sanitize_value(field, value)
     value.strip!
@@ -59,10 +58,15 @@ module HtmlCleaner
     end
     if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
       # We're allowing users to use HTML in this field
+      transformers = []
+      if ArchiveConfig.FIELDS_ALLOWING_VIDEO_EMBEDS.include?(field.to_s)
+        transformers << Sanitize::Transformers::ALLOW_VIDEO_EMBEDS 
+      end
+      if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
+        transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
+      end   
       value = Sanitize.clean(add_paragraphs_to_text(fix_quotes(value)), 
-                             Sanitize::Config::ARCHIVE.merge(
-                                                  :transformers => [Sanitize::Transformers::ALLOW_USER_CLASSES, 
-                                                                    Sanitize::Transformers::ALLOW_YOUTUBE_EMBEDS]))
+                             Sanitize::Config::ARCHIVE.merge(:transformers => transformers))
     else
       # clean out all tags
       value = Sanitize.clean(value)
@@ -233,8 +237,5 @@ module HtmlCleaner
   def strip_attribute(value, attribname)
     value.gsub(/\s*#{attribname}=\".*?\"\s*/, "")
   end
-
-
-
   
 end
