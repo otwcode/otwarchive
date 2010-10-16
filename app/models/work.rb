@@ -48,6 +48,8 @@ class Work < ActiveRecord::Base
 
   has_many :filter_taggings, :as => :filterable, :dependent => :destroy
   has_many :filters, :through => :filter_taggings
+  has_many :direct_filter_taggings, :class_name => "FilterTagging", :as => :filterable, :conditions => "inherited = 0"
+  has_many :direct_filters, :source => :filter, :through => :direct_filter_taggings 
 
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'

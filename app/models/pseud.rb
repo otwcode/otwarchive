@@ -30,6 +30,7 @@ class Pseud < ActiveRecord::Base
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work'
   has_many :tags, :through => :works
   has_many :filters, :through => :works
+  has_many :direct_filters, :through => :works
   has_many :chapters, :through => :creatorships, :source => :creation, :source_type => 'Chapter'
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   has_many :collection_participants, :dependent => :destroy

@@ -105,6 +105,7 @@ class User < ActiveRecord::Base
   has_many :tags, :through => :works
   has_many :bookmark_tags, :through => :bookmarks, :source => :tags
   has_many :filters, :through => :works
+  has_many :direct_filters, :through => :works
 
   has_many :translations, :foreign_key => 'translator_id'
   has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id'

@@ -56,7 +56,7 @@ class UsersController < ApplicationController
       visible_series = @user.series.visible_to_registered_user
       visible_bookmarks = @user.bookmarks.visible_to_registered_user
     end
-    @fandoms = visible_works.map(&:fandoms).flatten.inject(Hash.new(0)){|h,x| h[x]+=1;h}.sort{|a,b| b[1]<=>a[1]}
+    @fandoms = @user.direct_filters.with_type("Fandom").by_name.uniq
     @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)

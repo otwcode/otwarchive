@@ -39,6 +39,11 @@ class Tag < ActiveRecord::Base
   has_many :filter_taggings, :foreign_key => 'filter_id', :dependent => :destroy
   has_many :filtered_works, :through => :filter_taggings, :source => :filterable, :source_type => 'Work'
   has_one :filter_count, :foreign_key => 'filter_id'
+  has_many :direct_filter_taggings, 
+              :class_name => "FilterTagging", 
+              :foreign_key => 'filter_id', 
+              :conditions => "inherited = 0"
+  has_many :direct_filtered_works, :through => :direct_filter_taggings, :source => :filterable, :source_type => 'Work'
 
   has_many :common_taggings, :foreign_key => 'common_tag_id', :dependent => :destroy
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
@@ -363,7 +368,11 @@ class Tag < ActiveRecord::Base
       Work.with_any_tags([self, filter_tag]).each do |work|
         work.filters << filter_tag unless work.filters.include?(filter_tag)
         unless filter_tag.meta_tags.empty?
-          filter_tag.meta_tags.each { |m| work.filters << m unless work.filters.include?(m) }
+          filter_tag.meta_tags.each do |m| 
+            unless work.filters.include?(m)
+              work.filter_taggings.create!(:inherited => true, :filter_id => m.id)
+            end
+          end
         end
       end
       filter.reset_filter_count

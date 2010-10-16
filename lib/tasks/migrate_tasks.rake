@@ -154,6 +154,20 @@ namespace :After do
   task(:rename_pairing => :environment) do
     Tag.update_all("type = 'Relationship'", "type = 'Pairing'")
   end
+  
+  desc "Set meta filter taggings to inherited"
+  task(:mark_meta_tags_inherited => :environment) do
+    MetaTagging.find_each do |meta_tagging|
+      m = meta_tagging.meta_tag
+      filters = [m] + m.mergers
+      m.filtered_works.each do |work|
+        if (work.tags & filters).empty?
+          ft = work.filter_taggings.where(:filter_id => m.id).first
+          ft.update_attribute(:inherited, true)
+        end
+      end      
+    end
+  end
 
 
 end # this is the end that you have to put new tasks above
@@ -164,5 +178,5 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:reading_count_setup', 'After:move_hit_counts']
-task :After => ['After:add_skins', 'After:rename_pairing']
+task :After => ['After:mark_meta_tags_inherited']
 
