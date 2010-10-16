@@ -42,7 +42,7 @@ class PseudsController < ApplicationController
       visible_series = @author.series.visible_to_registered_user
       visible_bookmarks = @author.bookmarks.visible_to_registered_user
     end
-    @fandoms = @author.direct_filters.with_type("Fandom").by_name.uniq
+    @fandoms = @author.direct_filters.with_type("Fandom").inject(Hash.new(0)){|h,x| h[x]+=1;h}.sort{|a,b| b[1]<=>a[1]}
     @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
