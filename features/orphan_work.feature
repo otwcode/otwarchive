@@ -5,9 +5,12 @@ Feature: Orphan work
   I want to orphan works
 
   Scenario: Orphan a single work, using the default orphan_account
-    Given I have loaded the fixtures
-      And I am logged in as "testuser" with password "testuser" 
-    When I view the work "First work"
+    Given the following activated user exists
+      | login         | password   |
+      | orphaneer     | password   |
+      And I am logged in as "orphaneer" with password "password"
+      And I post the work "Shenanigans"
+    When I view the work "Shenanigans"
     Then I should see "Edit"
     When I follow "Edit"
     Then I should see "Edit Work"
@@ -18,15 +21,13 @@ Feature: Orphan work
       And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
     When I follow "Works"
-    Then I should not see "First work"
-    When I view the work "First work"
+    Then I should not see "Shenanigans"
+    When I view the work "Shenanigans"
     Then I should see "orphan_account"
       And I should not see "Delete"
-
-  Scenario: Orphan a single work and add a copy of the pseud to the orphan_account
-    Given I have loaded the fixtures
-      And I am logged in as "testuser" with password "testuser" 
-    When I view the work "First work"
+  # Orphan a single work and add a copy of the pseud to the orphan_account
+    When I post the work "Shenanigans2"
+    When I view the work "Shenanigans2"
     Then I should see "Edit"
     When I follow "Edit" 
     Then I should see "Edit Work"
@@ -37,7 +38,7 @@ Feature: Orphan work
     And I press "Yes, I'm sure"
     Then I should see "Orphaning was successful."
     When I follow "Works"
-    Then I should not see "First work"
-    When I view the work "First work"
-    Then I should see "testuser (orphan_account)"
+    Then I should not see "Shenanigans2"
+    When I view the work "Shenanigans2"
+    Then I should see "orphaneer (orphan_account)"
       And I should not see "Delete"

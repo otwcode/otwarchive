@@ -272,7 +272,9 @@ module TagsHelper
   
   # return the right warnings class
   def get_warnings_class(warning_tags = [])
-    if warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_NONE_TAG_NAME
+    if warning_tags.blank? # for testing
+      "warning-choosenotto warnings"
+    elsif warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_NONE_TAG_NAME
       # only one tag and it says "no warnings"
       "warning-no warnings"
     elsif warning_tags.size == 1 && warning_tags.first.name == ArchiveConfig.WARNING_DEFAULT_TAG_NAME
@@ -284,17 +286,21 @@ module TagsHelper
   end
 
   def get_ratings_class(rating_tags = [])
-    names = rating_tags.collect(&:name)
-    if names.include?(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
-      "rating-explicit rating"
-    elsif names.include?(ArchiveConfig.RATING_MATURE_TAG_NAME)
-      "rating-mature rating"
-    elsif names.include?(ArchiveConfig.RATING_TEEN_TAG_NAME)
-      "rating-teen rating"
-    elsif names.include?(ArchiveConfig.RATING_GENERAL_TAG_NAME)
-      "rating-general-audience rating"
-    else
+    if rating_tags.blank? # for testing
       "rating-notrated rating"
+    else
+      names = rating_tags.collect(&:name)
+      if names.include?(ArchiveConfig.RATING_EXPLICIT_TAG_NAME)
+        "rating-explicit rating"
+      elsif names.include?(ArchiveConfig.RATING_MATURE_TAG_NAME)
+        "rating-mature rating"
+      elsif names.include?(ArchiveConfig.RATING_TEEN_TAG_NAME)
+        "rating-teen rating"
+      elsif names.include?(ArchiveConfig.RATING_GENERAL_TAG_NAME)
+        "rating-general-audience rating"
+      else
+        "rating-notrated rating"
+      end
     end
   end
 
