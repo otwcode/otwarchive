@@ -34,8 +34,8 @@ module HtmlCleaner
     return "" if text.nil?
     text.gsub! "<3", "&#60;3"
     # maybe these will work instead? D:
-    text.gsub! /[\u201C\u201D\u201E\u201F\u2033\u2036]/u, '"'
-    text.gsub! /[\u2018\u2019\u201A\u201B\u2032\u2035]/u, "'"
+    # text.gsub! /[\u201C\u201D\u201E\u201F\u2033\u2036]/u, '"'
+    # text.gsub! /[\u2018\u2019\u201A\u201B\u2032\u2035]/u, "'"
     # FIXME - uncommented gets incompatible encoding regexp match error
     #    text.gsub! "\342\200\230", "'"
     #    text.gsub! "\342\200\231", "'"

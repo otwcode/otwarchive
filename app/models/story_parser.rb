@@ -35,7 +35,7 @@ class StoryParser
   
   # places for which we have a custom parse_author_from_[source] method
   # which returns an external_author object including an email address
-  KNOWN_AUTHOR_PARSERS= %w(yuletide lj)
+  KNOWN_AUTHOR_PARSERS= %w(yuletide lj minotaur)
 
   # places for which we have a download_story_from_[source]
   # used to customize the downloading process
@@ -50,6 +50,7 @@ class StoryParser
   SOURCE_DW = 'dreamwidth\.org'
   SOURCE_YULETIDE = 'yuletidetreasure\.org'
   SOURCE_FFNET = 'fanfiction\.net'
+  SOURCE_MINOTAUR = '(bigguns|firstdown).slashdom.net'
 
   # time out if we can't download fast enough
   STORY_DOWNLOAD_TIMEOUT = 60
@@ -329,6 +330,36 @@ class StoryParser
     def parse_author_from_unknown(location)
       # for now, nothing
       return nil
+    end
+
+    # custom author parser for the whitfic and grahamslash archives we're rescuing
+    # known problem: this will only find the first author for a given story, not coauthors
+    def parse_author_from_minotaur(location)
+      # get the index page of the archive
+      # and the relative link for story we are downloading
+      if location =~ /firstdown/
+        author_index = download_text("http://firstdown.slashdom.net/authors.html")
+        storylink = location.gsub("http://firstdown.slashdom.net/", "")
+      elsif location =~ /bigguns/
+        author_index = download_text("http://bigguns.slashdom.net/stories/authors.html")
+        storylink = location.gsub("http://bigguns.slashdom.net/stories/", "")
+      end
+      doc = Nokogiri.parse(author_index)
+      
+      # find the author just before the story
+      doc.search("a").each do |node|
+        if node[:href] =~ /mailto:(.*)/
+          authornode = node
+        end
+        if node[:href] == storylink
+          # the last-found authornode is the right one
+          break
+        end
+      end
+      email = authornode[:href].gsub("mailto:", '')
+      name = authornode.inner_text
+      
+      return parse_author_common(email, name)
     end
 
     def parse_author_common(email, name)
