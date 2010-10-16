@@ -12,6 +12,15 @@ class GiftExchange < ActiveRecord::Base
     signup_instructions_offers_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
   end
 
+  #FIXME hack because time zones are being html encoded. couldn't figure out why.
+  before_save :fix_time_zone
+  def fix_time_zone
+    return true if self.time_zone.nil?
+    return true if ActiveSupport::TimeZone[self.time_zone]
+    try = self.time_zone.gsub('&amp;', '&')
+    self.time_zone = try if ActiveSupport::TimeZone[try]
+  end
+
   
   # limits the kind of prompts users can submit 
   belongs_to :prompt_restriction, :class_name => "PromptRestriction", :dependent => :destroy  

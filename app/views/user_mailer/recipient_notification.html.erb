@@ -1,15 +1,16 @@
 <p>
-  A gift story has been posted for you <%= @collection ? "in the #{h(@collection.title)} collection " : "" %>at the Archive of Our Own!
+<%= ts("A gift story has been posted for you " %>
+<%= @collection ? "in the {@collection.title} collection " : "" %>at the Archive of Our Own!
 </p>
 
 <p>
-  <%= link_to(h(@work.title), work_url(@work, :host => @host)) + " (#{@work.word_count} words)" %><br />
-  by <%=h @work.anonymous? ? "an anonymous giver" : @work.pseuds.collect(&:byline).join(", ") %>
+  <%= link_to @work.title, work_url(@work) %> <%= "{@work.word_count} words)" %><br />
+  by <%= @work.anonymous? ? "an anonymous giver" : @work.pseuds.collect(&:byline).join(", ") %>
 </p>
 
 <%=raw sanitize_field("Summary: (#{@work, :fandom_string}) " + @work.summary) %>
 
-<p><%= work_url(@work, :host => @host) %></p>
+<p><%= work_url(@work) %></p>
 
 <% if @collection && !@collection.gift_notification.blank? %>
   <%=raw sanitize_field(@collection, :gift_notification) %>

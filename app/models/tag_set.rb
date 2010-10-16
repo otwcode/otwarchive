@@ -32,7 +32,7 @@ class TagSet < ActiveRecord::Base
     attr_writer "#{type}_tagnames".to_sym
 
     define_method("#{type}_tagnames") do
-      eval("@#{type}_tagnames") || self.with_type(type.classify).collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT).sort
+      eval("@#{type}_tagnames") || self.with_type(type.classify).collect(&:name).sort.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
     end
     
     define_method("#{type}_taglist") do

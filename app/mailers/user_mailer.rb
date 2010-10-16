@@ -133,8 +133,8 @@ class UserMailer < ActionMailer::Base
   def related_work_notification(user, related_work)
     setup_email_to_user(user)
     @related_work = related_work
-    @related_parent_link = url_for(:host => @host, :controller => :works, :action => :show, :id => @related_work.parent)
-    @related_child_link = url_for(:host => @host, :controller => :works, :action => :show, :id => @related_work.work)
+    @related_parent_link = url_for(:controller => :works, :action => :show, :id => @related_work.parent)
+    @related_child_link = url_for(:controller => :works, :action => :show, :id => @related_work.work)
     mail(
       :to => user.email,
       :subject => @subject + "Related work notification"
@@ -212,34 +212,22 @@ class UserMailer < ActionMailer::Base
   
   protected
 
-    def setup_email_attributes
-      @subject     = "[#{ArchiveConfig.APP_NAME}] "
-      @sent_on     = Time.now
-      @url  = ArchiveConfig.APP_URL
-      @host = ArchiveConfig.APP_URL.gsub(/http:\/\//, '')
-      @content_type = "text/html"
-    end
-   
     def setup_email_to_users(users)
-      setup_email_attributes
       @recipients = users.collect {|user| user.email}.join(', ')
     end
    
     def setup_email_to_user(user)
-      setup_email_attributes
       @recipients  = "#{user.email}"
       @user = user
       @name = user.login
     end
      
     def setup_email_to_nonuser(email, name)
-      setup_email_attributes
       @recipients = email
       @name = name
     end
     
     def setup_email_without_name(email)
-      setup_email_attributes
       @recipients = email     
     end
      

@@ -21,7 +21,7 @@ See the challenge_signup form for an example of how this is used.
   <dl>
     <!-- tags section -->
     <% form.object.build_tag_set unless form.object.tag_set %>
-    <% form.fields_for :tag_set do |tag_set_form| %>
+    <%= form.fields_for :tag_set do |tag_set_form| %>
       <% TagSet::TAG_TYPES.each do |tag_type| %>
         <% num_allowed = eval("restriction.#{tag_type}_num_allowed") %>
         <% num_required = eval("restriction.#{tag_type}_num_required") %>
@@ -44,8 +44,9 @@ See the challenge_signup form for an example of how this is used.
                 <% taglist.each_with_index do |tag, tagindex| %>
                   <li>
                     <% tag_checkbox_id = "#{tag_field_id}_#{tag.id}" %>
-                    <%= check_box_tag tag_fieldname, tag.name, eval("form.object.#{tag_type}_taglist").include?(tag), {:id => tag_checkbox_id} %>
-                    <%= label_tag tag_checkbox_id, tag.name %>
+                    <!-- FIXME not saving entered checks through errors -->
+                    <%= check_box_tag tag_fieldname, tag.name, false, :id => tag_checkbox_id %>
+                    <%= label_tag tag_fieldname, tag.name, :id => tag_checkbox_id %>
                   </li>
                   
                   <% max_tagindex = tagindex %>
@@ -75,7 +76,8 @@ See the challenge_signup form for an example of how this is used.
             <% else %>
               <!-- using an autocomplete -->
               <% tag_fieldname = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>
-              <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50, :value => eval("form.object.#{tag_type}_tagnames") %>
+              <!-- FIXME not saving entered text through errors -->
+              <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
               <%= autocomplete_text_field tag_fieldname, :methodname => "canonical_#{tag_type}_finder" %>            
             <% end %>
           </dd>
@@ -99,7 +101,7 @@ See the challenge_signup form for an example of how this is used.
     
     <% if restriction.optional_tags_allowed %>
       <% form.object.build_optional_tag_set unless form.object.optional_tag_set %>
-      <% form.fields_for :optional_tag_set_attributes do |optional_tag_set_form| %>
+      <%= form.fields_for :optional_tag_set_attributes do |optional_tag_set_form| %>
         <dt>
           <%= optional_tag_set_form.label :tagnames, t("optional_tag_set.tagnames", :default => "Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
           <p class="note"><%= t('.prompts.comma_separated', :default => "(comma-separated)") %></p>

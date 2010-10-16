@@ -1,11 +1,11 @@
-<p><%=h "Dear Collection Maintainers!" %></p>
+<p><%= "Dear Collection Maintainers!" %></p>
 
 <p>
-  <%= h(ts("You have received a message about your collection ")) +  
-      link_to(@collection.title, collection_url(@collection, :host => @host))
-      + h(ts(": ")) %>
+  <%= ts("You have received a message about your collection ") +  
+      link_to(@collection.title, collection_url(@collection))
+      %>:
 </p>
 
 <%=raw @message %>
 
-<p><%=h "Sent at:" %> <%= Time.now.strftime(common_timestring) %></p>
+<p><%= "Sent at:" %> <%= Time.now.to_s(:time_for_mailers) %></p>

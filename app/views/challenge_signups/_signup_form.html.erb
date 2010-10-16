@@ -48,7 +48,7 @@ So if anyone can think of a better design for this, that would be awesome
       <% end %>
     <% end %>
     <% @challenge_signup.send("#{prompt_type}").each_with_index do |prompt, index| %>
-      <% signup_form.fields_for prompt_type.to_sym, prompt do |prompt_form| %>
+      <%= signup_form.fields_for prompt_type.to_sym, prompt do |prompt_form| %>
         <%= render :partial => "prompts/prompt_form", 
             :locals => {:form => prompt_form, :is_offer => (prompt_type == "offers"), :index => index, 
                         :required => (index < @challenge.send("#{prompt_type}_num_required"))} %>

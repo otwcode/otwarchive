@@ -7,7 +7,7 @@
   <% restriction = @challenge.request_restriction %>
 <% end %>
 
-<% challenge_form.fields_for(is_offer ? :offer_restriction : :request_restriction) do |prompt_restriction_form| %>
+<%= challenge_form.fields_for(is_offer ? :offer_restriction : :request_restriction) do |prompt_restriction_form| %>
 
   <fieldset class="preface profile">
 
@@ -49,7 +49,7 @@
 
       <dl>
         <% restriction.build_tag_set unless restriction.tag_set %>
-        <% prompt_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
+        <%= prompt_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
           <% TagSet::TAG_TYPES.each do |tag_type| %>
             <dt><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, "#{tag_type.classify}: " %> </dt>
             <dd>

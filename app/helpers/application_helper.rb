@@ -21,13 +21,6 @@ module ApplicationHelper
     link_to_function(name, remote_function(options), html_options)
   end
   
-  # just really common and hate trying to remember the damn formatting
-  # this returns: hour:minuteAM/PM Timezone Mon/Tue day# January/February 4-digit Year
-  # can be used with strftime or Localize
-  def common_timestring
-    "%I:%M%p %Z %a %d %B %Y"
-  end
-  
   def span_if_current(link_to_default_text, path)
     translation_name = "layout.header." + link_to_default_text.gsub(/\s+/, "_")
     link = link_to_unless_current(h(t(translation_name, :default => link_to_default_text)), path)
@@ -276,28 +269,25 @@ module ApplicationHelper
     link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")")
   end
   
-  def time_zone_abbr(zone)
-    ActiveSupport::TimeZone::ZONES.find{|z| z.name == zone}.tzinfo.current_period.abbreviation.to_s
-  end
-  
   def time_in_zone(time, zone, user=User.current_user)
-    time_in_zone = time.in_time_zone(zone).strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> 
-                                                     <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span> 
-                                                     <span class="time">%I:%M%p</span>') + 
-                                          " <abbr class=\"timezone\" title=\"#{zone}\">#{time_zone_abbr(zone)}</abbr> "
+    time_in_zone = time.in_time_zone(zone)
+    time_in_zone_string = time_in_zone.strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> 
+                                                 <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span> 
+                                                 <span class="time">%I:%M%p</span>').html_safe + 
+                                          " <abbr class=\"timezone\" title=\"#{zone}\">#{time_in_zone.zone}</abbr> ".html_safe
     
-    user_time = ""
+    user_time_string = "".html_safe
     if user.is_a?(User) && user.preference.time_zone
       if user.preference.time_zone != zone
-        user_time = "(" + time.in_time_zone(user.preference.time_zone).strftime('<span class="time">%I:%M%p</span>') +
-          " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{time_zone_abbr(user.preference.time_zone)}</abbr>)"
+        user_time = time.in_time_zone(user.preference.time_zone)
+        user_time_string = "(".html_safe + user_time.strftime('<span class="time">%I:%M%p</span>').html_safe +
+          " <abbr class=\"timezone\" title=\"#{user.preference.time_zone}\">#{user_time.zone}</abbr>)".html_safe
       elsif !user.preference.time_zone
-        user_time = link_to(h(t('application.set_time_zone', :default => "(set timezone)")), 
-                        (@host ? user_preferences_url(user, :host => @host) : user_preferences_path(user)))
+        user_time_string = link_to ts("(set timezone)"), user_preferences_path(user)
       end
     end
     
-    time_in_zone + user_time
+    time_in_zone_string + user_time_string
   end
   
   def mailto_link(user, options={})

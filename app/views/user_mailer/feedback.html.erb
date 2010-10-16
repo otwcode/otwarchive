@@ -11,6 +11,6 @@
 <p><%= ts("Love, the AO3 Support team") %></p>
 
 
-<p><%= ts("Sent at:") %>&nbsp;<%= Time.now.strftime(common_timestring) %></p>
+<p><%= ts("Sent at:") %>&nbsp;<%= Time.now.to_s(:time_for_mailers) %></p>
 
 

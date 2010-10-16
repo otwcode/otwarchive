@@ -10,7 +10,7 @@
 
   <fieldset>
     <legend>External Author Names</legend>
-    <% f.fields_for :external_author_names do |name_form| %>
+    <%= f.fields_for :external_author_names do |name_form| %>
       <%= render :partial => 'external_author_name', :locals => {:form => name_form} %>
     <% end %>
 

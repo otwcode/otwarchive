@@ -29,4 +29,4 @@
   please let us know!
 </p>
   
-<p><%=h "Sent at:" %> <%= Time.now.strftime(common_timestring) %></p>
+<p><%=h "Sent at:" %> <%= Time.now.to_s(:time_for_mailers) %></p>

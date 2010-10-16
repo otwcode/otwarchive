@@ -5,7 +5,7 @@
 
 <%=raw @message %>
 
-<p><%=h t('.sent_at', :default => "Sent at:") %> <%= Time.now.strftime(common_timestring) %></p>
+<p><%=h t('.sent_at', :default => "Sent at:") %> <%= Time.now.to_s(:time_for_mailers) %></p>
 <p><%=h t('.sent_by', :default => "Sent by:") %> <%= @admin %></p>
 
 

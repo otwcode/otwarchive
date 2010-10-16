@@ -50,7 +50,7 @@
 </dl>
 </fieldset>
   <% @collection.build_collection_preference unless @collection.collection_preference %>
-  <% collection_form.fields_for :collection_preference do |preference_form| %>
+  <%= collection_form.fields_for :collection_preference do |preference_form| %>
 <fieldset>
 	<legend>Preferences</legend>
     <dl>
@@ -81,7 +81,7 @@
   <% end %>
 
   <% @collection.build_collection_profile unless @collection.collection_profile %>
-  <% collection_form.fields_for :collection_profile do |profile_form| %>
+  <%= collection_form.fields_for :collection_profile do |profile_form| %>
   <fieldset class="preface profile">
 		<legend>Profile</legend>
 		<p class="note">
