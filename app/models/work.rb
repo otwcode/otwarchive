@@ -839,7 +839,8 @@ class Work < ActiveRecord::Base
     select("DISTINCT works.*").
     joins(:tags).
     where("tags.id in (?) OR tags.merger_id in (?)", tag_ids_to_find, tag_ids_to_find).
-    group("works.id HAVING count(DISTINCT tags.id) = #{tag_ids_to_find.size}")
+    group("works.id").
+    having("count(DISTINCT tags.id) = #{tag_ids_to_find.size}")
   }
 
   scope :with_any_tag_ids, lambda {|tag_ids_to_find|
@@ -865,7 +866,8 @@ class Work < ActiveRecord::Base
     select("DISTINCT works.*").
     joins(:pseuds).
     where('pseuds.id IN (?)', pseud_ids).
-    group("works.id HAVING count(DISTINCT pseuds.id) = #{pseud_ids.size}")
+    group("works.id").
+    having("count(DISTINCT pseuds.id) = #{pseud_ids.size}")
   }
 
   # Note: these scopes DO include the works in the children of the specified collection
