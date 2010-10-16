@@ -35,6 +35,11 @@ Dir.glob("*.yml").each do |file|
         new.update_attribute(:crypted_password, item["crypted_password"])
         new.update_attribute(:salt, item["salt"])
       end
+      # Users are missing their activated ats
+      if klass == User 
+        klass.before_update.clear
+        new.update_attribute(:activated_at, item["activated_at"])
+      end
     end
   end
 end

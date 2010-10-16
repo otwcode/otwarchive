@@ -9,9 +9,12 @@
 # RAILS_ENV=production script/seed_dump.rb
 
 # users who have webdavs or asked to be added
-SEEDS = ["Sidra", "astolat", "Enigel", "hope", "awils1", 
-         "Cesy", "elz", "justira", "lim", "melange", "eel",
-          "rklyne", "zelempa", "Zooey_Glass", "erda", "Anneli"] 
+SEEDS = [ "Anneli", "astolat", "awils1", "Cesy", 
+          "ealusaid", "eel", "elz", "erda", 
+          "Enigel", "hope", "justira", "lim", 
+          "melange", "rklyne", "Sidra", 
+          "zelempa", "Zooey_Glass", 
+] 
 ADD_EXTERNAL = true
 NTH = 50
 #### private bookmarks and unpublished works are not dumped by default
@@ -173,7 +176,12 @@ def write_model(thing)
   initial = klass.first.downcase
   print initial; STDOUT.flush
   attributes = thing.attributes
+  # redact email addresses
   attributes["email"] = "REDACTED@transformativeworks.org" if attributes["email"]
+  # remove pseud icons, because they just give broken links
+  attributes["icon_file_name"] = nil if attributes["icon_file_name"]
+  attributes["icon_content_type"] = nil if attributes["icon_content_type"]
+  attributes["icon_file_size"] = nil if attributes["icon_file_size"]
   # the following is to fix a bug in YAML slurp
   attributes["content"] = attributes["content"].strip if attributes["content"]
   File.open("#{klass.underscore}.yml", 'a') {|f| YAML.dump attributes, f }
