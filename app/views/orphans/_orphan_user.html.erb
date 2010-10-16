@@ -1,13 +1,15 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('.orphan_user_orphan_all', :default => 'Orphan All Works') %></h2>
+<h2><%=h ts('Orphan All Works') %></h2>
 
 <p>
-<%= t('.orphan_user_are_you_sure', :default => "Are you sure you want to <strong>permanently</strong> remove all 
-identifying information from all the works you've posted to the archive, along with their chapters, 
+<%= ts("Are you sure you want to") %>
+<strong><%= ts("permanently") %></strong>
+<%= ts("remove all identifying information from all the works you've posted to 
+the archive, along with their chapters, 
 associated series and any feedback replies you may have left?") %>
 </p>
 
 <%= form_tag orphans_path do %>
   <%= render :partial => 'orphans/choose_pseud' %>
-  <p class="submit"><%= submit_tag t('.orphan_user_yes', :default => "Yes, I'm sure") %></p>
+  <p class="submit"><%= submit_tag ts("Yes, I'm sure") %></p>
 <% end %>

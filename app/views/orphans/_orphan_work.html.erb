@@ -1,9 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= t('.orphan_work_orphan_story', :default => 'Orphan Work') %></h2>
+<h2><%= ts('Orphan Work') %></h2>
 
 <p>
-<%= t('.orphan_work_are_you_sure', :default => 'Are you sure you want to <strong>permanently</strong> remove all 
-identifying data from your work "%{title}", its chapters, associated series and any feedback replies you may have left on it?', 
+<%= ts('Are you sure you want to') %>
+<strong><%= ts("permanently")%></strong>
+<%= ts("remove all identifying data from your work "%{title}", its chapters, associated series and any feedback replies you may have left on it?", 
 :title => work.title) %>
 </p>
 <!--/descriptions-->
@@ -17,7 +18,7 @@ identifying data from your work "%{title}", its chapters, associated series and 
   <%= render :partial => 'orphans/choose_pseud' %>
   
   <p><%= hidden_field_tag 'work_id', work.id %></p>
-  <p class="submit"><%= submit_tag t('.orphan_work_yes', :default => "Yes, I'm sure") %></p>
+  <p class="submit"><%= submit_tag ts("Yes, I'm sure") %></p>
 <% end %>
 <!--/content-->
 
