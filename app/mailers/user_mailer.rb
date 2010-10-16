@@ -45,7 +45,7 @@ class UserMailer < ActionMailer::Base
 
   # Emails a user to say they have been given more invitations for their friends
   def invite_increase_notification(user, total)
-    @user = @user
+    @user = user
     @total = total 
     mail(
       :to => user.email,
