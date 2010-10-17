@@ -2,26 +2,12 @@
 <div class="chapter<%= ' draft' unless chapter.posted? %>" id="chapter-<%= chapter.position.to_s %>">
 <!-- chapter management -->  
   <% if is_author_of?(@work) && !@downloading %>
-	<h3 class="landmark">Chapter Management</h3>
-      <ul class="chapter navigation" role="navigation">
-        <% unless chapter.posted? %>
-          <li><%= link_to t('.chapter_post', :default => 'Post Chapter'), [:post, @work, chapter], :method => :post %></li>
-        <% end %>
-        <% if @preview_mode and @preview_mode == true %>
-          <li><%= link_to t('.chapter_revert', :default => 'Revert To Saved'), [:edit, @work, chapter] %></li>
-        <% else %>
-          <li><%= link_to t('.chapter_edit', :default => 'Edit Chapter'), [:edit, @work, chapter] %></li>
-        <% end %>
-        <% if @work.chapters.count > 1 %>
-          <li><%= link_to t('.chapter_delete', :default => 'Delete Chapter'), [@work, chapter], :confirm => 'Are you sure?', :method => :delete %></li>
-        <% end %>
-      </ul>
+    <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work, :preview_mode => @preview_mode} %>
   <% end %>
 
 <div class="chapter preface" role="complementary">
   <h3 class="title">
-    <%= link_to chapter.chapter_header, [chapter.work, chapter] %>
-    <% unless chapter.title.blank? %>: <%=h chapter.title %>
+    <%= link_to chapter.chapter_header, [chapter.work, chapter] %><% unless chapter.title.blank? %>: <%=h chapter.title %>
     <% end %>
   </h3>
 <!-- only display byline if different from the main byline -->

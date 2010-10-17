@@ -170,6 +170,7 @@ class WorksController < ApplicationController
       if params[:view_full_work] || (logged_in? && current_user.preference.try(:view_full_works))
         @chapters = @work.chapters_in_order
       else
+        flash.keep
         redirect_to [@work, @chapter] and return
       end
     end
@@ -506,9 +507,9 @@ public
       end
       if saved
         if params[:post_button]
-          flash[:notice] = t('successfully_posted', :default => 'Work was successfully posted.')
+          flash[:notice] = ts('Work was successfully posted.')
         elsif params[:update_button]
-          flash[:notice] = t('successfully_updated', :default => 'Work was successfully updated.')
+          flash[:notice] = ts('Work was successfully updated.')
         end
 
         #bleep += "  AFTER SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect

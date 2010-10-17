@@ -98,12 +98,12 @@
       <% current_page?(:controller => 'chapters', :action => 'show') ? linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : (params[:view_full_work] == 'true' ? linkpath = work_path(@work, :view_full_work => 'true', :anchor => 'work_endnotes') : linkpath = work_path(@work, :anchor => 'work_endnotes')) %>
       <div class="notes module" role="complementary">
       <h3><%=h ts("Notes:") %></h3>
-        <% if !@work.recipients.blank? %>
-          <h4 class="inline"><%= ts("For %{recipients}.", :recipients => recipients_link(@work)) %></h4>
+        <% unless @work.recipients.blank? %>
+          <h4 class="inline"><%= ts("For") %> <%= recipients_link(@work) %></h4>
         <% end %>
     <% unless @work.parents.blank? %>
         <% for related_work in @work.parent_work_relationships %>
-          <% if related_work.parent %>
+        <% if related_work.parent %>
             <h4>
             <% if related_work.translation %>
               <%= ts('A translation of') %>

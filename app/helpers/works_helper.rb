@@ -32,7 +32,8 @@ module WorksHelper
   end
 
   def recipients_link(work)
-    work.gifts.map {|gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(:recipient => gift.recipient_name))}.join(", ")
+    # join doesn't maintain html_safe, so mark the join safe
+    work.gifts.map {|gift| link_to(h(gift.recipient), gift.pseud ? user_gifts_path(gift.pseud.user) : gifts_path(:recipient => gift.recipient_name))}.join(", ").html_safe
   end
   
   # select the default warning if this is a new work

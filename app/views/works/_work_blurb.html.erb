@@ -5,21 +5,21 @@
 
   <% if !author_of_work && (work.unrevealed? || (work.anonymous? && !@over_anon_threshold && @search)) %>
     <div class="header module mystery">
-	    <h4 title="title"><%= t('.works.mystery', :default => "Mystery Work") %></h4>
-	    <h5><%= t('.works.part_of', :default => "Part of: %{collections}", :collections => work.collections.unrevealed.map {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) %></h5>
+	    <h4 title="title"><%= ts("Mystery Work") %></h4>
+	    <h5><%= ts("Part of: %{collections}", :collections => work.collections.unrevealed.map {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ")) %></h5>
 	  </div>
 	  <h6 class="landmark">Summary</h6>
 	  <blockquote class="userstuff summary" title="summary">
-		  <p><%= t('.works.will_be_revealed', :default => "This work is part of an ongoing challenge and will be revealed soon!") %></p>
+		  <p><%= ts("This work is part of an ongoing challenge and will be revealed soon!") %></p>
   	</blockquote>
   <% elsif (@user || @pseud) && work.anonymous? && !author_of_work && !(['gifts', 'readings'].include?(controller.controller_name)) %>
     <div class="header module mystery">
-	    <h4 title="title"><%= t('.works.anonymous', :default => "Mystery Work") %></h4>
+	    <h4 title="title"><%= ts("Mystery Work") %></h4>
 	    <h5><%= ts("Part of: ") + work.collections.anonymous.map {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ").html_safe %></h5>
   	</div>
 	  <h6 class="landmark">Summary</h6>
 	  <blockquote class="userstuff summary" title="summary">
-	    <%= t('.works.anonymous_reveal', :default => "This work is part of an ongoing anonymous challenge. You can read the stories in the challenge now, and the authors will be revealed soon.") %>
+	    <%= ts("This work is part of an ongoing anonymous challenge. You can read the stories in the challenge now, and the authors will be revealed soon.") %>
   	</blockquote>
   <% else %>
 
@@ -28,13 +28,15 @@
 
       <h4 title="title">
   	    <%= link_to work.title, @collection ? collection_work_path(@collection, work) : work %>
-   		  <%= t('.title_by_author', :default => 'by') %>
+   		  <%= ts('by') %>
         
         <!-- do not cache -->
         <%= byline(work) %>
 
-        <%= !work.recipients.blank? ? t('.works.for_recipients', :default => "for %{recipients}", :recipients => recipients_link(work)) : "" %>
-   		  <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
+        <% unless work.recipients.blank? %>
+          <%= ts("for") %> <%= recipients_link(work) %>
+        <% end %>
+        <% if work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
         <% if work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
       </h4>
 
@@ -66,29 +68,29 @@
 
     <!--stats-->
   	<dl class="stats" title="stats">
-  		<dt><%=h t('.words', :default => 'Words') + ': ' %></dt>
+  		<dt><%= ts('Words') %>:</dt>
   		<dd><%= number_with_delimiter(work.word_count) %></dd>
-  		<dt><%=h t('.work_chapters', :default => 'Chapters') + ': ' %></dt>
+  		<dt><%= ts('Chapters') %>:</dt>
   		<dd><%= work.chapter_total_display %></dd>
 	 
   	  <% unless work.approved_collections.empty? %>
-  			<dt><%=h t('.work_collections', :default => 'Collections') + ': ' %></dt>
+  			<dt><%= ts('Collections')  %>:</dt>
   			<dd><%= link_to work.approved_collections.length, work_collections_path(work) %></dd>
   		<% end %>
 		
   		<% if work.count_visible_comments > 0 %>
-  		  <dt><%=h t('.work_comments', :default => 'Comments') + ': '%></dt>
+  		  <dt><%= ts('Comments') %>:</dt>
   			<dd><%= link_to work.count_visible_comments, 
   			            @collection ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : 
   			                (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :show_comments => true, :view_full_work => 'true') : work_path(work, :anchor => "comments", :show_comments => true)) %></dd>
   		<% end %>
   		<% if (bookmark_count = work.bookmarks.is_public.count) > 0 %>
-  		  <dt><%=h t('.work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
+  		  <dt><%= ts('Bookmarks') %>:</dt>
   			<dd><%= link_to_bookmarkable_bookmarks(work, bookmark_count.to_s) %></dd>
   		<% end %>
 
     	<% if show_hit_count?(work) %>
-     		<dt><%=h t('.works.hit_count', :default => "Hits: ") %></dt>
+     		<dt><%= ts("Hits") %>:</dt>
      		<dd><%= work.hits %></dd>
      	<% end %>
 			
@@ -97,10 +99,10 @@
     <% if author_of_work %>
       <h6 class="landmark">Author Actions</h6>
   	  <ul class="navigation" role="navigation">
-  		  <li><%= link_to t('.links.edit', :default => 'Edit'), edit_work_path(work) %></li>
-  	    <li><%= link_to t('.edit_tags', :default => "Edit Tags"), edit_tags_work_path(work) %></li> 
+            <li><%= link_to ts('Edit'), edit_work_path(work) %></li>
+  	    <li><%= link_to ts("Edit Tags"), edit_tags_work_path(work) %></li> 
         <% if work.is_wip %>
-          <li><%= link_to t('.links.add_chapter', :default => 'Add Chapter'), new_work_chapter_path(work) %></li>
+          <li><%= link_to ts('Add Chapter'), new_work_chapter_path(work) %></li>
         <% end %>
       </ul>
     <% end %>
