@@ -1,4 +1,15 @@
 Otwarchive::Application.routes.draw do
+
+  # route globbing because tags can have "/" in them
+  match 'tags/search' => 'tags#search'
+  match 'tags/new' => 'tags#new'
+  match 'tags/*id/wrangle' => 'tags#wrangle'
+  match 'tags/*id/mass_update' => 'tags#mass_update'
+  match 'tags/*id/remove_association' => 'tags#remove_association'
+  match 'tags/*id/edit' => 'tags#edit'
+  match 'tags/*id' => 'tags#show', :via => [:get]
+  match 'tags/*id' => 'tags#update', :via => [:put]
+  match 'tags/*id' => 'tags#destroy', :via => [:delete]
   
   #### INVITATIONS ####
 
@@ -32,6 +43,7 @@ Otwarchive::Application.routes.draw do
   resources :tag_wranglers
   resources :tags do
     member do
+      # anything you add here will need a match under globbing at the top
       get :wrangle
       post :mass_update
       get :remove_association

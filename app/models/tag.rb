@@ -238,7 +238,7 @@ class Tag < ActiveRecord::Base
   def to_param
     # can't find a tag with a name that hasn't been saved yet
     saved_name = self.name_changed? ? self.name_was : self.name
-    saved_name.gsub('/', '%2F').gsub('&', '%26').gsub('.', '%2E').gsub('?', '%3F')
+    saved_name.gsub('&', '%26').gsub('.', '%2E').gsub('?', '%3F')
   end
   
   # Substitute characters that are particularly prone to cause trouble in urls

@@ -184,9 +184,13 @@ class TagsController < ApplicationController
 
   def update
     @tag = Tag.find_by_name(params[:id])
+    # update everything except for the synonym, 
+    # so that the associations are there to move when the synonym is created
+    syn_string = params[:tag].delete(:syn_string)
     @tag.attributes = params[:tag]
+    @tag.syn_string = syn_string if @tag.save
     if @tag.errors.empty? && @tag.save
-      flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
+      flash[:notice] = ts('Tag was updated.')
       if params[:commit] == "Wrangle"
         params[:page] = '1' if params[:page].blank?
         params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], "tag")
