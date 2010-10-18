@@ -36,7 +36,7 @@ Feature: Edit chapters
     And I fill in "content" with "entering chapter five out of order"
     And I press "Preview"
   Then I should see "This is a preview of what this chapter will look like"
-  When I press "Post"
+  When I follow "Post Chapter"
     Then I should see "2/100"
   When I follow "Add Chapter"
     And I fill in "chapter_position" with "3"
@@ -44,7 +44,7 @@ Feature: Edit chapters
     And I fill in "content" with "entering chapter three out of order"
     And I press "Preview"
   Then I should see "Chapter 3"
-  When I press "Post"
+  When I follow "Post Chapter"
   Then I should see "3/50"
   
   # add chapters in the wrong order
@@ -54,7 +54,7 @@ Feature: Edit chapters
     And I fill in "content" with "entering last chapter out of order"
     And I press "Preview"
   Then I should see "Chapter 17"
-  When I press "Post"
+  When I follow "Post Chapter"
     And I should see "4/17"
     
   # delete a chapter
@@ -70,7 +70,7 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "2"
     And I fill in "content" with "finally entering second chapter"
     And I press "Preview"
-  When I press "Post"
+  When I follow "Post Chapter"
     Then I should see "4/17"
   
   # edit an existing chapter
@@ -109,7 +109,6 @@ Feature: Edit chapters
     And I should see "Chapter 2"
     And I should see "Chapter 3"
     And I should see "Chapter 4"
-  When I am logged out
     
   # move chapters around using rearrange page
   When I am logged in as "epicauthor" with password "password"

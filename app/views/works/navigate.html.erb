@@ -1,6 +1,6 @@
 <h3>
-  <%=h t('.chapter_index', :default => "Chapter Index for") %> 
-  <%= t('.work_title_by_author', :default => "%{title} by %{author}", :title => link_to(@work.title, @work), :author => byline(@work)) %>
+  <%= ts("Chapter Index for") %> 
+  <%= link_to(@work.title, @work) %> <%= ts("by") %> <%= byline(@work) %>
 </h3>
 
 <ol class="navigation" role="navigation">
