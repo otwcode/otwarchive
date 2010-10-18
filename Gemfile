@@ -94,5 +94,6 @@ group :test do
 end
 
 group :production do
-  gem 'memcache'
+  gem "memcache-client"
 end
+

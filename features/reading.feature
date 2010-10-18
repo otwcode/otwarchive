@@ -126,7 +126,6 @@ Feature: Reading count
     And I go to the works page
     And I follow "some work"
     And I go to fandomer's reading page
-  Then show me the page
   Then I should see "some work"
     And I should see "Number of times viewed: 1"
   When I follow "Delete"

@@ -126,7 +126,7 @@ GEM
       treetop (>= 1.4.5)
     mechanize (1.0.0)
       nokogiri (>= 1.2.1)
-    memcache (1.2.13)
+    memcache-client (1.8.5)
     mime-types (1.16)
     mocha (0.9.8)
       rake
@@ -237,7 +237,7 @@ DEPENDENCIES
   htmlentities
   launchy
   mechanize
-  memcache
+  memcache-client
   mocha
   mongrel (= 1.2.0.pre2)
   mysql2
