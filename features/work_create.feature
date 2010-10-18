@@ -112,7 +112,9 @@ Feature: Create Works
     Then I should see "All Something Breaks Loose"
       And I should see "Fandom: Supernatural"
       And I should see "Rating: Not Rated"
-      And I should see "Archive Warning: No Archive Warnings Apply"
+      And I should see "No Archive Warnings Apply"
+      And issue "TODO: warning redesign" is fixed
+      #And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
       And I should see "Characters: Sam Winchester, Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
