@@ -41,6 +41,8 @@ class ExternalWork < ActiveRecord::Base
   validates_length_of :author, :maximum => AUTHOR_LENGTH_MAX, 
     :too_long=> t('author_too_long', :default => "must be less than %{max} characters long.", :max => AUTHOR_LENGTH_MAX)
 
+  validates_presence_of :fandoms
+
   before_validation :cleanup_url
   validates :url, :presence => true, :url_format => true, :url_active => true
   def cleanup_url

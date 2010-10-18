@@ -1,24 +1,33 @@
 <!--descriptive page name and system messages, descriptions, and instructions.-->
-<% if @most_recent_bookmarks %>
-  <h2>Recent Bookmarks</h2>
-<% elsif @user %>
-  <% if params[:recs_only] %>
-    <h2><%=h t('.owned_bookmarks', :default => "%{user_name}'s Recs", :user_name => @user.login) %></h2>
+<h2>
+  <% if @most_recent_bookmarks %>
+    <%= ts("Recent") %>
+  <% elsif @user %>
+    <%= @user.login %>'s
   <% else %>
-    <h2><%=h t('.owned_bookmarks', :default => "%{user_name}'s Bookmarks", :user_name => @user.login) %></h2>
-  <% end %>
-<% else %>
-  <h2><%=h t('.listing', :default => 'Listing bookmarks') %></h2>
+    <%= ts("Listing") %>
 <% end %>
+<% if params[:recs_only] %>
+  <%= ts("Recs") %>
+<% else %>
+  <%= ts("Bookmarks") %>
+<% end %>
+</h2>
 <!-- /descriptions-->
 
 <!--subnav-->
 <h3 class="landmark">Actions</h3>
 <ul class="navigation" role="navigation">
   <% if current_user.is_a?(User) %>
-    <li><%= link_to t('.add_new', :default => "Bookmark External Work"), new_external_work_path %></li>
+    <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
   <% end %>
-  <li><%= toggle_recs_bookmarks %></li>
+  <li>
+    <% if params[:recs_only] %>
+      <%= link_to ts("View All Bookmarks"), url_for(params.merge :recs_only => false) %>
+    <% else %>
+      <%= link_to ts("View Recs Only"), url_for(params.merge :recs_only => true) %>
+    <% end %>
+  </li>
 <% if params[:tag_id] %>
   <%= taggable_list(params[:tag_id], "bookmarks") %>
 <% end %>
@@ -35,5 +44,5 @@
 <div id="dynamic-bookmark" style="display:none;">	</div>
 
 <!--subnav-->
-	  <%= will_paginate @bookmarks, :prev_label =>  "&laquo; " + t('.pagination.previous', :default => "Previous"), :next_label => t('.pagination.next', :default => "Next") + " &raquo;" %>
+	  <%= will_paginate @bookmarks, :prev_label =>  "&laquo; " + ts("Previous"), :next_label => ts("Next") + " &raquo;" %>
 <!-- /subnav-->

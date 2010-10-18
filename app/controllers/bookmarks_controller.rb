@@ -49,6 +49,7 @@ class BookmarksController < ApplicationController
   # GET    /works/:work_id/bookmarks
   # GET    /external_works/:external_work_id/bookmarks
   # GET    /series/:series/bookmarks
+  # TODO needs a complete overhaul. using reject is a performance killer
   def index
     if @bookmarkable
       access_denied unless is_admin? || @bookmarkable.visible
@@ -75,9 +76,18 @@ class BookmarksController < ApplicationController
       end
       # Do not aggregate bookmarks on these pages
       if params[:recs_only]
-        @bookmarks = owner.bookmarks.recs.visible
+        @bookmarks = owner.bookmarks.recs
       else
-        @bookmarks = owner.bookmarks.visible
+        @bookmarks = owner.bookmarks
+      end
+      if @user == current_user
+        # can see all own bookmarks
+      elsif logged_in_as_admin?
+        @bookmarks = @bookmarks.visible_to_admin
+      elsif logged_in?
+        @bookmarks = @bookmarks.visible_to_registered_user
+      else
+        @bookmarks = @bookmarks.visible_to_all
       end
     else 
       # Aggregate on main bookmarks page and tags bookmarks page
@@ -87,21 +97,22 @@ class BookmarksController < ApplicationController
         end        
         bookmarks_on_synonyms = []
         if params[:recs_only]
-          bookmarks_primary = owner.bookmarks.recs.visible
+          bookmarks_primary = owner.bookmarks.recs
           owner.synonyms.each do |synonym|
-            bookmarks_on_synonyms << synonym.bookmarks.recs.visible 
+            bookmarks_on_synonyms << synonym.bookmarks.recs
             bookmarks_on_synonyms << synonym.indirect_bookmarks(true)
           end rescue NoMethodError
           bookmarks_indirect = owner.indirect_bookmarks(true)
         else
-          bookmarks_primary = owner.bookmarks.visible
+          bookmarks_primary = owner.bookmarks
           owner.synonyms.each do |synonym|
-            bookmarks_on_synonyms << synonym.bookmarks.visible 
+            bookmarks_on_synonyms << synonym.bookmarks
             bookmarks_on_synonyms << synonym.indirect_bookmarks
           end rescue NoMethodError
           bookmarks_indirect = owner.indirect_bookmarks
         end
-        bookmarks_grouped = (bookmarks_primary + bookmarks_on_synonyms + bookmarks_indirect).flatten.compact.reject{|b| b.bookmarkable && !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
+        bookmarks_grouped = (bookmarks_primary + bookmarks_on_synonyms + bookmarks_indirect).flatten.compact
+        bookmarks_grouped.reject{|b| !b.visible?(current_user) || (b.bookmarkable && !b.bookmarkable.visible?(current_user))}.group_by(&:bookmarkable)
       else # main page
         @most_recent_bookmarks = true
         if params[:recs_only]
@@ -152,13 +163,18 @@ class BookmarksController < ApplicationController
   # POST /bookmarks.xml
   def create
     @bookmark = Bookmark.new(params[:bookmark])
-    if @bookmark.save
-      flash[:notice] = t('successfully_created', :default => 'Bookmark was successfully created.')
-      redirect_to(@bookmark) 
-    else
-      @bookmarkable = @bookmark.bookmarkable || ExternalWork.new
-      render :action => "new" 
+    @bookmarkable = @bookmark.bookmarkable || Bookmark.new(params[:bookmark][:external])
+    if !@bookmarkable.new_record? || @bookmarkable.save
+      if @bookmark.save
+        flash[:notice] = ts('Bookmark was successfully created.')
+        redirect_to(@bookmark) and return
+      end
     end 
+    if @bookmarkable.fandoms.blank?
+       @bookmarkable.errors.add(:base, "Fandom tag is required")
+    end
+    @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
+    render :action => "new" and return
   end
 
   # PUT /bookmarks/1

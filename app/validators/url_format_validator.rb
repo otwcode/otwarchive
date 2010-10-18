@@ -1,21 +1,14 @@
 # Validate format of URLs
 class UrlFormatValidator < ActiveModel::EachValidator
-  @@ipv4_part = /\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]/ # 0-255
-  @@is_valid_url_format = %r{
-\A
-https?:// # http:// or https://
-([^\s:@]+:[^\s:@]*@)? # optional username:pw@
-( (xn--)?[^\W_]+([-.][^\W_]+)*\.[a-z]{2,6}\.? | # domain (including Punycode/IDN)...
-#{@@ipv4_part}(\.#{@@ipv4_part}){3} ) # or IPv4
-(:\d{1,5})? # optional port
-([/?]\S*)? # optional /whatever or ?whatever
-\Z
-}iux
-  
+
+  # will be validated with active it if works
+  # just do a fast and dirty check. 
   def validate_each(record,attribute,value)
-    invalid_url_format_msg = t('lib.invalid_url_error', :default => "does not appear to be a valid URL.")
-    unless (value.blank? && options[:allow_blank]) || value =~ @@is_valid_url_format
-      record.errors[attribute] << (options[:message] || invalid_url_format_message)
+    return true if (value.blank? && options[:allow_blank]) 
+    # http (optional s) :// domain . tld (optional port) / anything
+    regexp = /^https?:\/\/[_a-z\d\-]+\.[._a-z\d\-]+(:\d+)?\/.+/i
+    unless value.match regexp
+      record.errors[attribute] << (options[:message] || "does not appear to be a valid URL.")
     end
   end
 end

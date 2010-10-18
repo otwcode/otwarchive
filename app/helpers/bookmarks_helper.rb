@@ -86,12 +86,4 @@ module BookmarksHelper
     link_to_help('bookmark-symbols-key', link = image_tag( "#{img}.png", :alt => title_string, :title => title_string))
   end
   
-  def toggle_recs_bookmarks
-    if params[:recs_only]
-      link_to "View All Bookmarks", url_for(:overwrite_params => {:recs_only => false})        
-    else
-      link_to "View Recs Only", url_for(:overwrite_params => {:recs_only => true})
-    end
-  end
-  
 end

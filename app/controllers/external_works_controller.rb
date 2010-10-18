@@ -4,6 +4,8 @@ class ExternalWorksController < ApplicationController
   before_filter :check_user_status, :only => [:new]
   
   def new
+    @bookmarkable = ExternalWork.new
+    @bookmark = Bookmark.new
   end
   
   # Used with bookmark form to get an existing external work and return it via rjs
