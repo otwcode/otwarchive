@@ -268,7 +268,7 @@ class Collection < ActiveRecord::Base
   end
   
   def get_participants_for_user(user)
-    return [] if user == :false
+    return [] unless user
     CollectionParticipant.in_collection(self).for_user(user) 
   end
   
