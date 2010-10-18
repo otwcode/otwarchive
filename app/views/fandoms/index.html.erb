@@ -10,7 +10,7 @@
 <% unless @fandoms.blank? %>
 <!--main content-->
   <% @fandoms.in_groups_of((@fandoms.length/3.0).ceil, false) do |fandom_list| %>  
-  <ul class="fandoms index">
+  <ul class="fandom index">
     <% for fandom in fandom_list %>
     <li>
       <% if fandom.respond_to?(:count) %>

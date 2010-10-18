@@ -6,7 +6,11 @@
   </p>
   <ul>
     <% for work in @works %>
-    <li><%= link_to(work.title, work_path(work)) %></li>
+      <% if work.posted? %>
+        <li><%= link_to(work.title, work_path(work)) %></li>
+      <% else %>
+        <li><%= link_to(work.title, preview_work_path(work)) %> <%= ts("(Draft)")%></li>
+      <% end %>
     <% end %>
   </ul>
 

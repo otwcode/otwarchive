@@ -22,11 +22,6 @@ class Prompt < ActiveRecord::Base
 
   # VALIDATION
   attr_protected :description_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    description_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
-
 
   validates_presence_of :collection_id
 

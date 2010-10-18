@@ -90,7 +90,7 @@ module Taggable
     unless self.invalid_tags.blank?
       errors.add(:base, "The following tags are invalid: " + self.invalid_tags.collect(&:name).join(', ') + ". Please make sure that your tags are less than #{ArchiveConfig.TAG_MAX} characters long and do not contain any invalid characters.")
       self.invalid_tags.each do |tag|
-        tag.errors.each_full do |error|
+        tag.errors.to_a.each do |error|
           errors.add(:base, error)
         end
       end

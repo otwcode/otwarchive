@@ -4,8 +4,6 @@ gem 'bundler', '~>1.0.0'
 
 gem 'rails', '3.0.0'
 
-gem 'memcache'
-
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
@@ -93,4 +91,8 @@ group :test do
   gem 'cucumber-rails'
   gem 'cucumber', '>=0.9.1'
   gem 'launchy'    # So you can do Then show me the page
+end
+
+group :production do
+  gem 'memcache'
 end

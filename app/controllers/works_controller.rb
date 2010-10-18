@@ -7,6 +7,7 @@ class WorksController < ApplicationController
   before_filter :load_work, :only => [ :show, :download, :navigate, :edit, :update, :destroy, :preview, :edit_tags, :update_tags ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy, :preview ]
   before_filter :check_visibility, :only => [ :show, :download, :navigate ]
+  before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :download, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :download, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
 
@@ -600,17 +601,22 @@ public
   def destroy
     @work = Work.find(params[:id])
     begin
+      was_draft = !@work.posted?
+      title = @work.title
       @work.destroy
+      flash[:notice] = ts("Your work %{title} was deleted.", :title => title)
     rescue
-      flash[:error] = t('deletion_failed', :default => "We couldn't delete that right now, sorry! Please try again later.")
+      flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
-    redirect_to(user_works_url(current_user))
+    if was_draft
+      redirect_to drafts_user_works_path(current_user)
+    else
+      redirect_to user_works_path(current_user)
+    end
   end
 
   # POST /works/import
   def import
-    storyparser = StoryParser.new
-
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
     unless @urls.length > 0
@@ -635,90 +641,112 @@ public
 
     # otherwise let's build the options
     if params[:pseuds_to_apply]
-      @pseuds_to_apply = Pseud.find_by_name(params[:pseuds_to_apply])
+      pseuds_to_apply = Pseud.find_by_name(params[:pseuds_to_apply])
     end
-    options = {:pseuds => @pseuds_to_apply,
+    options = {:pseuds => pseuds_to_apply,
       :post_without_preview => params[:post_without_preview],
       :importing_for_others => params[:importing_for_others],
       :restricted => params[:restricted],
       :override_tags => params[:override_tags],
-      :fandom => params[:fandom],
-      :character => params[:character],
-      :rating => params[:rating],
-      :relationship => params[:relationship],
-      :category => params[:category],
-      :freeform => params[:freeform]
+      :fandom => params[:work][:fandom_string],
+      :warning => params[:work][:warning_strings],
+      :character => params[:work][:character_string],
+      :rating => params[:work][:rating_string],
+      :relationship => params[:work][:relationship_string],
+      :category => params[:work][:category_string],
+      :freeform => params[:work][:freeform_string]
     }
 
     # now let's do the import
-    @works = []
-    @failed_urls = []
-    @errors = []
-    if params[:import_multiple] == "works"
-      results = storyparser.import_from_urls(@urls, options)
-      @works = results[0]
-      @failed_urls = results[1]
-      @errors = results[2]
-    else # a single work with multiple chapters
-      begin
-        #debugger
-        @work = storyparser.download_and_parse_chapters_into_story(@urls, options)
-        if @work.save
-          @works << @work
-        else
-          @failed_urls << @urls.first
-          @errors << t('import.could_not_save', :default => "We couldn't save that chaptered work. Anything we managed to import is below.")
-          render :new_import and return
-        end
-      rescue Timeout::Error
-        flash[:error] = t('timed_out', :default => "Sorry, but we timed out trying to get that URL. If the site seems to be down, you can try again later.")
-        render :new_import and return
-      rescue Exception => exception
-        flash[:error] = t('upload_failed', :default => "We couldn't successfully import that story, sorry: %{message}", :message => exception.message)
-        render :new_import and return
-      end
+    if params[:import_multiple] == "works" && @urls.length > 1
+      import_multiple(@urls, options)
+    else # a single work possibly with multiple chapters
+      import_single(@urls, options)
     end
 
-    # if we are importing for others, we need to send invitations
+  end
+  
+protected
+
+  # import a single work (possibly with multiple chapters)
+  def import_single(urls, options)
+    # try the import
+    storyparser = StoryParser.new
+    begin
+      if urls.size == 1
+        @work = storyparser.download_and_parse_story(urls.first, options)
+      else
+        @work = storyparser.download_and_parse_chapters_into_story(urls, options)
+      end
+    rescue Timeout::Error
+      flash[:error] = ts("Sorry, but we timed out trying to get that URL. If the site seems to be down, you can try again later.")
+      render :new_import and return
+    rescue Exception => exception
+      flash[:error] = ts("We couldn't successfully import that story, sorry: %{message}", :message => exception.message)
+      render :new_import and return
+    end
+
+    unless @work && @work.save
+      flash[:error] = ts("We were only partially able to import this work and couldn't save it. Please review below!")
+      @chapter = @work.chapters.first
+      load_pseuds
+      @series = current_user.series.uniq
+      render :new and return
+    end
+
+    # Otherwise, we have a saved work, go us
+    send_external_invites([@work])
+    @chapter = @work.first_chapter if @work
+    if @work.posted
+      redirect_to work_path(@work) and return
+    else
+      redirect_to preview_work_path(@work) and return
+    end
+  end
+  
+  # import multiple works 
+  def import_multiple(urls, options)
+    # try a multiple import
+    storyparser = StoryParser.new
+    results = storyparser.import_from_urls(urls, options)
+    @works = results[0]
+    failed_urls = results[1]
+    errors = results[2]
+    
+    # collect the errors neatly, matching each error to the failed url
+    unless failed_urls.empty?
+      error_msgs = 0.upto(failed_urls.length).map {|index| "<dt>#{failed_urls[index]}</dt><dd>#{errors[index]}</dd>"}.join("\n")
+      flash[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
+    end
+
+    # if EVERYTHING failed, boo. :( Go back to the import form.
+    if @works.empty?
+      render :new_import and return
+    end
+    
+    # if we got here, we have at least some successfully imported works
+    flash[:notice] = ts("Importing completed successfully for the following works! (But please check the results over carefully!)")
+    send_external_invites(@works)
+    
+    # fall through to import template
+  end
+  
+  # if we are importing for others, we need to send invitations  
+  def send_external_invites(works)
     if params[:importing_for_others]
-      @external_authors = @works.collect(&:external_authors).flatten.uniq
+      @external_authors = works.collect(&:external_authors).flatten.uniq
       if !@external_authors.empty?
         @external_authors.each do |external_author|
           external_author.find_or_invite(current_user)
         end
-        flash[:notice] = t('import.for_others', :default => "We have notified the author(s) you imported stories for. You can also add them as co-authors manually.")
+        message = ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
+        flash[:notice] ? flash[:notice] += message : flash[:notice] = message
       end
-    end
-
-    # collect the errors
-    if !@failed_urls.empty?
-      flash[:error] = "<h3>Failed Imports</h3>\n<dl>"
-      0.upto(@failed_urls.length) do |index|
-        flash[:error] += "<dt>#{@failed_urls[index]}</dt>\n"
-        flash[:error] += "<dd>#{@errors[index]}</dd>"
-      end
-      flash[:error] += "</dl>"
-    else
-      flash[:notice] = t('successfully_uploaded', :default => "Importing completed successfully! (But please check the results over carefully!)")
-    end
-
-    if @urls.length == 1 || params[:import_multiple] == "chapters"
-      # importing a single work, let the user preview or view it
-      @work = @works.first
-      @chapter = @work.first_chapter if @work
-      if @work.nil?
-        redirect_to :action => :new and return
-      elsif !@work.valid?
-        load_pseuds
-        @series = current_user.series.uniq
-        render :edit and return
-      elsif @work.posted
-        redirect_to work_path(@work) and return
-      else
-        redirect_to preview_work_path(@work) and return
-      end
-    end
+    end    
   end
+  
+public
+  
 
   def post_draft
     @user = current_user
@@ -806,30 +834,6 @@ public
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   # and @tags[category]
   def set_instance_variables
-
-    # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
-    # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
-    sorry = "You haven't selected any pseuds for this work. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore."
-    if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
-      flash.now[:notice] = t('needs_author', :default => sorry)
-      params[:work][:author_attributes][:ids] = [current_user.default_pseud]
-    end
-    if params[:work] && !params[:work][:author_attributes]
-      flash.now[:notice] = t('needs_author', :default => sorry)
-      params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
-    end
-
-    # stuff new bylines into author attributes to be parsed by the work model
-    if params[:work] && params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != ""
-      params[:work][:author_attributes][:byline] = params[:pseud][:byline]
-      params[:pseud][:byline] = ""
-    end
-
-    # stuff co-authors into author attributes too so we won't lose them
-    if params[:work] && params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
-      params[:work][:author_attributes][:ids].concat(params[:work][:author_attributes][:coauthors]).uniq!
-    end
-
     begin
       if params[:id] # edit, update, preview, manage_chapters
         @work ||= Work.find(params[:id])
@@ -866,6 +870,32 @@ public
     end
   end
 
+  # set the author attributes
+  def set_author_attributes
+    # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
+    # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
+    sorry = "You haven't selected any pseuds for this work. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore."
+    if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
+      flash.now[:notice] = t('needs_author', :default => sorry)
+      params[:work][:author_attributes][:ids] = [current_user.default_pseud]
+    end
+    if params[:work] && !params[:work][:author_attributes]
+      flash.now[:notice] = t('needs_author', :default => sorry)
+      params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
+    end
+
+    # stuff new bylines into author attributes to be parsed by the work model
+    if params[:work] && params[:pseud] && params[:pseud][:byline] && params[:pseud][:byline] != ""
+      params[:work][:author_attributes][:byline] = params[:pseud][:byline]
+      params[:pseud][:byline] = ""
+    end
+
+    # stuff co-authors into author attributes too so we won't lose them
+    if params[:work] && params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
+      params[:work][:author_attributes][:ids].concat(params[:work][:author_attributes][:coauthors]).uniq!
+    end    
+  end
+
   # Sets values for @work and @tags[category]
   def set_instance_variables_tags
     begin
@@ -890,8 +920,7 @@ public
       flash[:notice] = t('not_updated', :default => "<p>The work was not updated.</p>")
       redirect_to user_works_path(current_user)
     else
-      flash[:notice] = t('not_posted', :default => "<p>This work was not posted.</p>
-      <p>It will be saved here in your drafts for one week, then cleaned up.</p>")
+      flash[:notice] = ts("The work was not posted. It will be saved here in your drafts for one week, then cleaned up.")
       redirect_to drafts_user_works_path(current_user)
     end
   end

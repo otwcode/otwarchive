@@ -29,10 +29,13 @@ module HtmlCleaner
     @full_sanitizer ||= HTML::FullSanitizer.new
   end
 
-  # replace evil msword curly quotes
-  def fix_quotes(text)
+  # yank out bad end-of-line characters and evil msword curly quotes
+  def fix_bad_characters(text)
     return "" if text.nil?
     text.gsub! "<3", "&#60;3"
+    text.gsub! /\r\n?/, "\n" # get rid of mac carriage returns
+    text.gsub! /\s+\n/, "\n" # trim any extra space at the end of lines
+    
     # maybe these will work instead? D:
     # text.gsub! /[\u201C\u201D\u201E\u201F\u2033\u2036]/u, '"'
     # text.gsub! /[\u2018\u2019\u201A\u201B\u2032\u2035]/u, "'"
@@ -65,11 +68,11 @@ module HtmlCleaner
       if ArchiveConfig.FIELDS_ALLOWING_CSS.include?(field.to_s)
         transformers << Sanitize::Transformers::ALLOW_USER_CLASSES
       end   
-      value = Sanitize.clean(add_paragraphs_to_text(fix_quotes(value)), 
+      value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(value)), 
                              Sanitize::Config::ARCHIVE.merge(:transformers => transformers))
     else
       # clean out all tags
-      value = Sanitize.clean(value)
+      value = Sanitize.clean(fix_bad_characters(value))
     end    
     value
   end

@@ -11,12 +11,6 @@ class Feedback < ActiveRecord::Base
 
   attr_protected :comment_sanitizer_version
   attr_protected :summary_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    comment_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-    summary_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
-
 
 
 # Category ids for 16bugs

@@ -14,7 +14,7 @@
     <%=h t('.bookmark_by', :default => 'by') %>
     <%= byline(bookmark.bookmarkable) %>
   </h4>
-  <h5 class="fandoms">
+  <h5 class="fandom">
     <% author_fandoms = bookmark.bookmarkable.works.visible.collect(&:fandom_tags).flatten.compact.uniq
       unless author_fandoms.size <1 %>
 		    <%= author_fandoms.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ').html_safe %>

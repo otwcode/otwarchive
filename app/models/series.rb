@@ -37,12 +37,6 @@ class Series < ActiveRecord::Base
 
   attr_protected :summary_sanitizer_version
   attr_protected :notes_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    summary_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-    notes_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
-
   
   scope :visible_to_registered_user, {:conditions => {:hidden_by_admin => false}, :order => 'updated_at DESC'}
   scope :visible_to_all, {:conditions => {:hidden_by_admin => false, :restricted => false}, :order => 'updated_at DESC'}

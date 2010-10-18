@@ -3,7 +3,7 @@
   <h2><%= authors_header @authors %> <%= "in" %> '<%= (params[:letter] && params[:letter].is_a?(String)) ? params[:letter] : @pseuds_alphabet[0] %>' <%= t('.people.collection', :default => "in %{collection}", :collection => @collection.title) %></h2>
   <h3 class="landmark">Next Page Navigation</h3>
   <%= alpha_paginated_section @pseuds_alphabet %>
-  <% paginated_section @authors, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+  <%= paginated_section @authors, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
   <!--/subnav-->
   <!--main content-->
   <ul class="pseud index">

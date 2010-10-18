@@ -98,7 +98,7 @@ Feature: Reading count
   Then I should see "Testy"
     And I should not see "Flagged to read later"
     
-  Scenario: You can't mark a story to read later if you're not logged in or not the author
+  Scenario: You can't mark a story to read later if you're not logged in or the author
   
   Given I am logged in as "writer" with password "something"
   When I post the work "Testy"
@@ -119,11 +119,14 @@ Feature: Reading count
     And I follow "Add Chapter"
     And I fill in "content" with "Second blah blah"
     And I press "Preview"
-    And I press "Post"
+    And I follow "Post Chapter"
   Then I should see "some work"
   When I am logged out
     And I am logged in as "fandomer" with password "password"
+    And I go to the works page
+    And I follow "some work"
     And I go to fandomer's reading page
+  Then show me the page
   Then I should see "some work"
     And I should see "Number of times viewed: 1"
   When I follow "Delete"

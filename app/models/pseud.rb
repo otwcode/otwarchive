@@ -1,11 +1,6 @@
 class Pseud < ActiveRecord::Base
 
   attr_protected :description_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    description_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
-
  
   has_attached_file :icon,
     :styles => { :standard => "100x100>" },

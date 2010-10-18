@@ -5,12 +5,6 @@ class GiftExchange < ActiveRecord::Base
   attr_protected :signup_instructions_general_sanitizer_version
   attr_protected :signup_instructions_requests_sanitizer_version
   attr_protected :signup_instructions_offers_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    signup_instructions_general_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-    signup_instructions_requests_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-    signup_instructions_offers_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
 
   #FIXME hack because time zones are being html encoded. couldn't figure out why.
   before_save :fix_time_zone

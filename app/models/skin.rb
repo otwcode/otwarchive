@@ -82,12 +82,6 @@ class Skin < ActiveRecord::Base
   end
   
   attr_protected :description_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    description_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
-
-  
         
 protected
 

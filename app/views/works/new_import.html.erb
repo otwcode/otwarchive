@@ -58,8 +58,24 @@
       <%= label_tag "post_without_preview", t('.import.without_preview', :default => "Post without previewing") %>
     <% end %>
   </p>
+
+  <p>
+    <%= check_box_tag "restricted" %>
+    <%= label_tag "restricted", ts("Lock all imported stories to registered users only.") %>
+  </p>
+
+  <p>
+    <%= check_box_tag "override_tags" %>
+    <%= label_tag "override_tags", ts("Set the tags below on all stories, overriding whatever the importer finds. 
+                  (Otherwise they will only be set if the importer cannot determine tags from the work.)") %>
+  </p>
+
+  <div id="work-form" class="work-form"><%= render :partial => 'work_tags_form', :locals => {:include_blank => true} %></div>
+
 </fieldset>
-  <fieldset>
+
+
+<fieldset>
 	<legend><%= "Submit" %></legend>
   <p class="submit">
   <%= submit_tag t('.import.import_story', :default => 'Import') %>

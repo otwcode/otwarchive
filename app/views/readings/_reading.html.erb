@@ -5,7 +5,7 @@
   <ul><%= render :partial => 'works/work_blurb', :locals => {:work => 
 reading.work} %></ul>
   <h3>
-  <%= t('.last_read', :default => '<span>Last viewed:</span> %{date}', :date => set_format_for_date(reading.updated_at)) %> 
+  <span><%= ts("Last viewed:") %></span> <%= set_format_for_date(reading.updated_at) %> 
   <% if reading.major_version_read < reading.work.major_version %>
     <%= t('.new_version_available', :default => '(New version available.)') %>
   <% elsif reading.minor_version_read != reading.work.minor_version %>

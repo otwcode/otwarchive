@@ -1,11 +1,6 @@
 class Collection < ActiveRecord::Base
 
   attr_protected :description_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    description_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
-
 
   has_attached_file :icon,
   :styles => { :standard => "100x100>" },
@@ -91,18 +86,18 @@ class Collection < ActiveRecord::Base
   def must_have_owners
     # we have to use collection participants because the association may not exist until after
     # the collection is saved
-    errors.add_to_base t('collection.no_owners', :default => "Collection has no valid owners.") if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select {|p| p.is_owner?}.empty? 
+    errors.add(:base, ts("Collection has no valid owners.")) if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select {|p| p.is_owner?}.empty? 
   end
   
   def collection_depth
     if (self.parent && self.parent.parent) || (self.parent && !self.children.empty?) || (!self.children.empty? && !self.children.collect(&:children).flatten.empty?)
-      errors.add_to_base t('collection.depth', :default => "You cannot nest collections more than one deep.")
+      errors.add(:base, ts("You cannot nest collections more than one deep."))
     end
   end
 
   def parent_exists
     unless parent_name.blank? || Collection.find_by_name(parent_name)
-      errors.add(:base, t('collection.no_parent', :default => "We couldn't find a collection with name %{name}.", :name => parent_name))
+      errors.add(:base, ts("We couldn't find a collection with name %{name}.", :name => parent_name))
     end
   end
 

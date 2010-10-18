@@ -104,6 +104,10 @@
         <% if work.is_wip %>
           <li><%= link_to ts('Add Chapter'), new_work_chapter_path(work) %></li>
         <% end %>
+        <% if !work.posted? %>
+          <li><%= link_to ts('Post Draft'), post_draft_work_path(work), :method => :put %></li>
+          <li><%= link_to ts("Delete Draft"), work, :confirm => "Are you sure?", :method => :delete %></li>
+        <% end %>
       </ul>
     <% end %>
 

@@ -4,10 +4,6 @@ class AbuseReport < ActiveRecord::Base
   validates :email, :email_veracity => {:allow_blank => true}
 
   attr_protected :comment_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    comment_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
   
   app_url_regex = Regexp.new('^' + ArchiveConfig.APP_URL, true)
   validates_format_of :url, :with => app_url_regex, :message => t('invalid_url', :default => 'does not appear to be on this site.')

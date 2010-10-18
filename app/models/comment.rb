@@ -3,10 +3,6 @@ class Comment < ActiveRecord::Base
   include HtmlCleaner
 
   attr_protected :content_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    content_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
 
   belongs_to :pseud         
   belongs_to :commentable, :polymorphic => true

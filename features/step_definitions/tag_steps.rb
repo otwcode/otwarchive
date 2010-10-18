@@ -5,7 +5,10 @@ end
 
 Given /^basic tags$/ do
   Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
+  Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
   Rating.find_or_create_by_name_and_canonical("Not Rated", true)
+  Rating.find_or_create_by_name_and_canonical("Explicit", true)
+  Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
 end
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|

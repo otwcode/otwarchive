@@ -70,7 +70,7 @@ class StoryParser
           works << work
         else
           failed_urls << url
-          errors << work.errors.map {|err| err[1]}.join(", ")
+          errors << work.errors.values.join(", ")
           work.delete if work
         end
       rescue Exception => exception
@@ -233,7 +233,7 @@ class StoryParser
       raise "Work could not be downloaded" if work.nil?
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
-  
+
       # set authors for the works
       pseuds = []
       pseuds << User.current_user.default_pseud unless options[:do_not_set_current_author] || User.current_user.nil?      
@@ -263,13 +263,13 @@ class StoryParser
       work.restricted = options[:restricted] || options[:importing_for_others]
   
       # set default values for required tags for any works that don't have them
-      work.fandom_string = (options[:fandom] || ArchiveConfig.FANDOM_NO_TAG_NAME) if (work.fandoms.empty? || options[:override_tags])
-      work.rating_string = (options[:rating] || ArchiveConfig.RATING_DEFAULT_TAG_NAME) if (work.ratings.empty? || options[:override_tags])
-      work.warning_strings = (options[:warning] || ArchiveConfig.WARNING_DEFAULT_TAG_NAME) if (work.warnings.empty? || options[:override_tags])
-      work.category_string = options[:category] if options[:category] && (work.categories.empty? || options[:override_tags])
-      work.character_string = options[:character] if options[:character] && (work.characters.empty? || options[:override_tags])
-      work.relationship_string = options[:relationship] if options[:relationship] && (work.relationships.empty? || options[:override_tags])
-      work.freeform_string = options[:freeform] if options[:freeform] && (work.freeforms.empty? || options[:override_tags])
+      work.fandom_string = (options[:fandom].blank? ? ArchiveConfig.FANDOM_NO_TAG_NAME : options[:fandom]) if (options[:override_tags] || work.fandoms.empty?)
+      work.rating_string = (options[:rating].blank? ? ArchiveConfig.RATING_DEFAULT_TAG_NAME : options[:rating]) if (options[:override_tags] || work.ratings.empty?)
+      work.warning_strings = (options[:warning].blank? ? ArchiveConfig.WARNING_DEFAULT_TAG_NAME : options[:warning]) if (options[:override_tags] || work.warnings.empty?)
+      work.category_string = options[:category] if !options[:category].blank? && (options[:override_tags] || work.categories.empty?)
+      work.character_string = options[:character] if !options[:character].blank? && (options[:override_tags] || work.characters.empty?)
+      work.relationship_string = options[:relationship] if !options[:relationship].blank? && (options[:override_tags] || work.relationships.empty?)
+      work.freeform_string = options[:freeform] if !options[:freeform].blank? && (options[:override_tags] || work.freeforms.empty?)
 
       # set default value for title
       work.title = "Untitled Imported Work" if work.title.blank?
@@ -388,7 +388,7 @@ class StoryParser
       else
         story = eval("download_from_#{source.downcase}(location)")
       end
-      story.blank? ? "" : fix_quotes(story)
+      story = fix_bad_characters(story)
     end
 
     # canonicalize the url for downloading from lj or clones
@@ -686,12 +686,13 @@ class StoryParser
     end
 
     def download_with_timeout(location)
+      story = ""
       Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
         begin
           response = Net::HTTP.get_response(URI.parse(location))
           case response
           when Net::HTTPSuccess
-            response.body
+            story = response.body
           else
            nil
           end
@@ -701,6 +702,10 @@ class StoryParser
           nil
         end
       }
+      if story.blank?
+        raise "We couldn't download anything from #{location}. Are you sure the URL is right?"
+      end
+      story
     end
 
     def get_last_modified(location)

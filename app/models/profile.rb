@@ -14,10 +14,5 @@ class Profile < ActiveRecord::Base
     :too_long => t('about_me_too_long', :default => "must be less than %{max} characters long.", :max => ABOUT_ME_MAX)
 
   attr_protected :about_me_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    about_me_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
-
 
 end

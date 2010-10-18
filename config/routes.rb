@@ -3,6 +3,8 @@ Otwarchive::Application.routes.draw do
   # route globbing because tags can have "/" in them
   match 'tags/search' => 'tags#search'
   match 'tags/new' => 'tags#new'
+  match 'tags/*tag_id/works' => 'works#index'
+  match 'tags/*tag_id/bookmarks' => 'bookmarks#index'
   match 'tags/*id/wrangle' => 'tags#wrangle'
   match 'tags/*id/mass_update' => 'tags#mass_update'
   match 'tags/*id/remove_association' => 'tags#remove_association'

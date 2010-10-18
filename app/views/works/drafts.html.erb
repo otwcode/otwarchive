@@ -5,7 +5,7 @@
 	<%=h t('.saved_one_week', :default => "Unposted drafts are only saved for a week from the day they were first created.") %>
 </p>
 
-<% paginated_section @works, {:prev_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+<%= paginated_section @works, {:prev_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
 
   <ul class="work index">
     <% for work in @works %>

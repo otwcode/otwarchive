@@ -2,10 +2,6 @@ class AdminPost < ActiveRecord::Base
   acts_as_commentable
 
   attr_protected :content_sanitizer_version
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    content_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
   
   validates_presence_of :title
   validates_length_of :title,

@@ -5,11 +5,6 @@ class CollectionProfile < ActiveRecord::Base
   attr_protected :faq_sanitizer_version
   attr_protected :rules_sanitizer_version
   before_save :update_sanitizer_version
-  def update_sanitizer_version
-    intro_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-    faq_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-    rules_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
   
   validates_length_of :intro, 
     :allow_blank => true,

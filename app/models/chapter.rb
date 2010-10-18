@@ -38,13 +38,11 @@ class Chapter < ActiveRecord::Base
   before_save :validate_authors, :strip_title #, :clean_emdashes
   before_save :set_word_count
   before_save :validate_published_at
-  before_save :update_sanitizer_version
-  def update_sanitizer_version
-    content_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-    notes_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-    summary_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-    endnotes_sanitizer_version = ArchiveConfig.SANITIZER_VERSION
-  end
+  
+  attr_protected :content_sanitizer_version
+  attr_protected :notes_sanitizer_version
+  attr_protected :summary_sanitizer_version
+  attr_protected :endnotes_sanitizer_version
   
 #  before_update :clean_emdashes
 

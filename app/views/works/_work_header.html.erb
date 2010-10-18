@@ -33,6 +33,9 @@
 
   <% if current_user.is_a?(User) %>
     <li><%= bookmark_link(@work) %></li>
+    <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
+      <li><%= marktoread_link(@work) %></li>
+    <% end %>
   <% end %>
     <li><%= link_to "Comments", (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
 
