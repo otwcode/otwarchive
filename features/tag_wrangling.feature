@@ -43,8 +43,8 @@ Feature: Tag wrangling
     Then I should see "Tag Wrangling Assignments"
       And I should not see "Stargate SG-1"
     When I follow "Mass Wrangling"
-    Then I should see "Fandoms by media (0)"
-    When I follow "Fandoms by media (0)"
+    Then I should see "Fandoms by media (1)"
+    When I follow "Fandoms by media (1)"
     Then I should see "Mass Wrangle New/Unwrangled Tags"
       And I should not see "Stargate SG-1"
     When I go to the new work page
@@ -63,10 +63,10 @@ Feature: Tag wrangling
     When I follow "Tag Wrangling"
     Then I should see "Wrangling Home"
       And I should see "Mass Wrangling"
-      And I should see "Fandoms by media (2)"
+      And I should see "Fandoms by media (3)"
       And I should see "Characters by fandom (2)"
       And I should see "Relationships by fandom (1)"
-    When I follow "Fandoms by media (2)"
+    When I follow "Fandoms by media (3)"
     Then I should see "Mass Wrangle New/Unwrangled Tags"
       And I should see "Stargate SG-1"
     When I view the work "Revenge of the Sith 2"
@@ -133,7 +133,7 @@ Feature: Tag wrangling
       And I follow "New Tag"
       And I fill in "Name" with "Stargate Atlantis"
       And I choose "Fandom"
-      And I press "Save changes"
+      And I press "Create Tag"
     Then I should see "Tag was successfully created"
     
     # creating a new canonical character
@@ -141,7 +141,7 @@ Feature: Tag wrangling
       And I fill in "Name" with "John Sheppard"
       And I choose "Character"
       And I check "Canonical"
-      And I press "Save changes"
+      And I press "Create Tag"
     Then I should see "Tag was successfully created"
     
     # trying to assign a non-canonical fandom to a character
@@ -165,7 +165,7 @@ Feature: Tag wrangling
       And I fill in "Name" with "Rodney McKay"
       And I choose "Character"
       And I check "Canonical"
-      And I press "Save changes"
+      And I press "Create Tag"
     Then I should see "Tag was successfully created"
     When I fill in "Fandoms" with "Stargate Atlantis"
       And I press "Save changes"
