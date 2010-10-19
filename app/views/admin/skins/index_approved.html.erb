@@ -9,7 +9,7 @@
 <!--main content-->
 <h3 class="landmark">Manage Skins</h3>
 
-<%= form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :post} do %>
+<%=  form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :put} do %>
 
   <!-- review of approved skins -->
   <fieldset>
@@ -28,7 +28,7 @@
           <td><%= link_to skin.title, skin_path(skin) %></td>
           <td><%= skin_author_link(skin) %></td>
           <td><%=h skin.admin_note %></td>
-          <td><%= check_box_tag "make_unofficial[]", skin.id, false, :id => "make_unofficial_#{skin.id}" %></td>
+          <td><%= check_box_tag "make_unofficial[]", skin.id, false, :id => "make_unofficial_#{skin.title.downcase.gsub(/ +/, '_')}" %></td>
         </tr>
       <% end %>
     </table>

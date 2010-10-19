@@ -4,8 +4,7 @@
   
   <div class="header module">
     <h2>
-      <%=  h(@skin.title) %>
-      <%= t('skin_author', :default => "skin by %{name}", :name => skin_author_link(@skin)) %>    
+      <%= @skin.title %> <%= ts("skin by") %> <%= skin_author_link(@skin) %>    
     </h2>
     <blockquote class="userstuff">
       <%= @skin.description.blank? ? ts("(No Description Provided)") : raw(sanitize_field(@skin, :description)) %>

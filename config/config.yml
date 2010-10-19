@@ -214,7 +214,7 @@ SUPPORTED_CSS_PROPERTIES: ["accelerator", "azimuth", "behavior", "bottom",
   "-use-link-source", "vertical-align", "visibility", "voice-family", "volume", "white-space", "widows", "width", "word-break", 
   "word-spacing", "word-wrap", "writing-mode", "z-index"]
   
-# mostly color and font names here 
+# mostly color names here 
 SUPPORTED_CSS_KEYWORDS: ["all", "url", "inline", "blink", "static", "absolute", "repeat", "no-repeat", "repeat-x", "repeat-y", "scroll", 
   "hidden", "normal", "overline", "ease-in", 
   "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond", 

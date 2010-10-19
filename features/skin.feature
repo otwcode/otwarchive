@@ -10,7 +10,7 @@ Feature: creating and editing skins
   Then I should see "code for body doesn't seem to be a valid CSS rule"
   When I fill in "CSS" with "body {behavior: url(xss.htc);}"
     And I press "Create"
-  Then I should see "The declarations for body cannot use the property"
+  Then I should see "The behavior property in body cannot have the value url(xss.htc)"
   When I fill in "CSS" with "body {@import 'http://ha.ckers.org/xss.css';}"
     And I press "Create"
   Then I should see "The code for body doesn't seem to be a valid CSS rule."
@@ -22,8 +22,7 @@ Feature: creating and editing skins
   Then I should see "The width property in div cannot have the value"
   When I fill in "CSS" with "div {background-image: url(&#1;javascript:alert('XSS'))}"
     And I press "Create"
-  Then I should see "background-image property in div cannot have the value"
-    And I should see "The declarations for div cannot use the property"
+  Then I should see "The code for div doesn't seem to be a valid CSS rule"
   When I fill in "CSS" with "div {xss:expr/*XSS*/ession(alert('XSS'))}"
     And I press "Create"
   Then I should see "Skin was created successfully"
@@ -65,7 +64,7 @@ Feature: creating and editing skins
   Then I should see "my blinking skin"
     And I should see "(No Description Provided)"
     And I should not see "(Approved)"
-    And I should not see "(Not yet approved)"
+    And I should not see "(Not yet reviewed)"
     And I should see "by skinner"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting { text-decoration: blink;}"
@@ -84,7 +83,7 @@ Feature: creating and editing skins
   Then I should not see "public blinking skin"
   When I follow "My Skins"
   Then I should see "public blinking skin"
-    And I should see "(Not yet approved)"
+    And I should see "(Not yet reviewed)"
     And I should not see "(Approved)"
   When I follow "skinner"
     And I follow "My Preferences"
@@ -103,13 +102,19 @@ Feature: creating and editing skins
     Then I should see "Sorry, you don't have permission"
   When I go to "public blinking skin" edit skin page
     Then I should see "Sorry, you don't have permission"
-  When I go to admin's approve_skins page
+  When I go to admin's skins page
     Then I should see "I'm sorry, only an admin can"
-  Given I am logged in as "someuser" with password "password"
-    And I go to "public blinking skin" skin page
+  Given the following activated user exists
+    | login    | password |
+    | someuser | password |
+  And I fill in "user_session_login" with "someuser"
+  And I fill in "user_session_password" with "password"
+  And I press "Log in"
     Then I should see "Sorry, you don't have permission"
+  When I go to "public blinking skin" skin page
+  Then I should see "Sorry, you don't have permission"
     And I should not see "Edit"
-  When I go to admin's approve_skins page
+  When I go to admin's skins page
     Then I should see "I'm sorry, only an admin can"
   Given I am logged out
     And I am logged in as an admin
@@ -117,18 +122,24 @@ Feature: creating and editing skins
   Then I should not see "Edit"
   When I go to "public blinking skin" edit skin page
   Then I should see "Please log out of your admin account first"
-  When I follow "skins"
+  When I go to admin's skins page
     Then I should see "public blinking skin" within "table#unapproved"
   When I check "public blinking skin"
-    And I press "Approve skins"
-  Then I should see "Skins were approved."
-    And I should see "public blinking skin" within "table#approved"
+    And I press "Update"
+  Then I should see "The following skins were approved: public blinking skin"
+  When I follow "Approved Skins"
+  Then I should see "public blinking skin" within "table#approved"
   Given I am logged out as an admin
-    And I am logged in as "skinner" with password "password"
-  When I am on my skin page
+    And I fill in "user_session_login" with "skinner"
+    And I fill in "user_session_password" with "password"
+    And I press "Log in"
+  Then I should see "Hi, skinner!"
+  When I go to "public blinking skin" edit skin page
+  Then I should see "This skin can't be edited anymore!"
+  When I follow "My Skins"
   Then I should see "(Approved)"
     And I should not see "Edit"
-  When I follow "skinner"
+  When I follow "my home"
     And I follow "My Preferences"
   Then "public blinking skin" should be selected within "preference_skin_id"
   Given I am logged out
@@ -142,16 +153,17 @@ Feature: creating and editing skins
   When I am logged out
     And I am logged in as an admin
   When I follow "skins"
-    And I check "public blinking skin"
-    And I press "Unapprove skins"
-  Then I should see "Skins were unapproved"
+    And I follow "Approved Skins"
+    And I check "make_unofficial_public_blinking_skin"
+    And I press "Update"
+  Then I should see "The following skins were unapproved and removed from preferences: public blinking skin"
     And I should see "public blinking skin" within "table#unapproved"
   Given I am logged out as an admin
     And I am logged in as "skinner" with password "password"
   Then I should not see "text-decoration: blink;" within "style"
-  When I am on my skin page
+  When I am on skinner's skin page
   Then I should not see "(Approved)"
-    And I should see "(Not yet approved)"
+    And I should see "(Not yet reviewed)"
     And I should see "Edit"
   When I follow "skinner"
     And I follow "My Preferences"
@@ -186,7 +198,7 @@ Feature: creating and editing skins
     And I fill in "Description" with "Layout skin"
     And I fill in "skin_margin" with "text"
     And I press "Create"
-  Then I should see "We couldn't save this skin"
+  Then I should see "We couldn't save this Skin"
     And I should see "Margin is not a number"
   When I fill in "skin_margin" with "5"
     And I press "Create"

@@ -33,9 +33,10 @@ Given /^I am logged in as an admin$/ do
   fill_in "Admin user name", :with => "testadmin"
   fill_in "Admin password", :with => "testadmin"
   click_button "Log in as admin"
+  Then "I should see \"Successfully logged in\""
 end
 
 Given /^I am logged out as an admin$/ do
   visit admin_logout_path
-  Then "I should see \"Log in\""
+  Then "I should see \"Successfully logged out\""
 end

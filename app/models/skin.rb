@@ -4,14 +4,6 @@ class Skin < ActiveRecord::Base
   belongs_to :author, :class_name => 'User'
   has_many :preferences
 
-  HUMANIZED_ATTRIBUTES = {
-    :icon_file_name => "Skin preview"
-  }
-
-  def self.human_attribute_name(attr)
-    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
-  
   has_attached_file :icon,
   :styles => { :standard => "100x100>" },
   :url => "/system/:class/:attachment/:id/:style/:basename.:extension", 
@@ -24,19 +16,24 @@ class Skin < ActiveRecord::Base
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true 
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true 
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
-    :too_long => t('icon_alt_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
 
   validates_length_of :description, :allow_blank => true, :maximum => ArchiveConfig.SUMMARY_MAX,
-    :too_long => t("skin.description_too_long", :default => "must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
   validates_length_of :css, :allow_blank => true, :maximum => ArchiveConfig.CONTENT_MAX,
-    :too_long => t("skin.css_too_long", :default => "must be less than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
 
-  validates_attachment_presence :icon, :if => :public?, :message => t('skin.preview_not_set', :default => "should be set for the skin to be public: please take a screencap of your skin in action.")
+  validate :valid_public_preview
+  def valid_public_preview
+    return true if (self.official? || !self.public? || self.icon_file_name)
+    errors.add(:base, ts("Skin preview should be set for the skin to be public: please take a screencap of your skin in action."))
+    return false
+  end
   
   attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size
 
-  validates_uniqueness_of :title, :message => t('skin_title_already_used', :default => 'must be unique')
+  validates_uniqueness_of :title, :message => ts('must be unique')
 
   validates_numericality_of :margin, :base_em, :allow_nil => true
   validate :valid_font
@@ -44,7 +41,7 @@ class Skin < ActiveRecord::Base
     return if self.font.blank?
     get_white_list_sanitizer
     self.font.split(',').each do |subfont|
-      if @white_list_sanitizer.sanitize_css_value(subfont).blank?
+      if @white_list_sanitizer.sanitize_css_font(subfont).blank?
         errors.add(:font, "cannot use #{subfont}.")
       end
     end

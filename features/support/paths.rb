@@ -51,8 +51,8 @@ module NavigationHelpers
       user_bookmarks_path(current_user)
     when /the import page/
       new_work_path(:import => 'true')
-    when /my skin page/
-      skins_path(:q => 'mine')
+    when /^(.*)'s skin page/
+      skins_path(:user_id => $1)
     when /^"(.*)" skin page/
       skin_path(Skin.find_by_title($1))
     when /^"(.*)" edit skin page/
