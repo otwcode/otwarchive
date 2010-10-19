@@ -91,7 +91,7 @@ When /^the draft "([^\"]*)"$/ do |title|
 end
 
 Then /^I should see Updated today$/ do
-  today = Date.today.to_s
+  today = Time.zone.today.to_s
   Given "I should see \"Updated:#{today}\""
 end
 

@@ -1,13 +1,12 @@
-# password: testuser
 testuser:
   login: testuser
+  email: test@example.com
   activated_at: 2009-12-12 21:08:07 +00:00
-  salt: 2aa64c10d3ea67188845a59d3d9d411d52301838
-  crypted_password: 9c0ee17fb87de657bed5f271beccfc45fd33b056
 testuser2:
   login: testuser2
+  email: test2@example.com
+  activated_at: 2009-12-12 21:08:07 +00:00
 sad_user_with_no_pseuds:
   login: sad_user_with_no_pseuds
+  email: test3@example.com
   activated_at: 2009-12-12 21:08:07 +00:00
-  salt: 2aa64c10d3ea67188845a59d3d9d411d52301838
-  crypted_password: 9c0ee17fb87de657bed5f271beccfc45fd33b056

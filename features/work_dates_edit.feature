@@ -7,7 +7,7 @@ Feature: Edit Works Dates
   Scenario: Editing dates on a work
 
     Given I have loaded the fixtures
-    Given I am logged in as "testuser" with password "testuser"
+      And I am logged in as "testuser" with password "testuser"
     When I am on testuser's works page
     Then I should not see "less than 1 minute ago"
       And I should see "29 Apr 2010"

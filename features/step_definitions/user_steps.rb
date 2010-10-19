@@ -22,6 +22,10 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   if user.blank?
     user = Factory.create(:user, {:login => login, :password => password})
     user.activate
+  else
+    user.password = password
+    user.password_confirmation = password
+    user.save
   end
   visit login_path
   fill_in "User name", :with => login
