@@ -38,7 +38,7 @@ Feature: Basic collection navigation
   Then I should see "Work for my collection by mod"
     And I should see "1 Work found in My Collection"
   When I follow "Bookmarks (0)"
-  Then I should see "Listing bookmarks"
+  Then I should see "Listing Bookmarks"
     And I should see "View Recs Only"
   When I follow "Random Items"
   Then I should see "Work for my collection by mod"

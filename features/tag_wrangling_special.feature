@@ -20,6 +20,6 @@ Scenario: Create a new tag that differs from an existing tag by accents or other
     And I fill in "Name" with "România"
     And I check "Canonical"
     And I choose "Freeform"
-    And I press "Save changes"
+    And I press "Create Tag"
   Then I should see "Tag was successfully created."
     But I should see "România - Freeform"
