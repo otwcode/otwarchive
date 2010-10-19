@@ -5,6 +5,8 @@ Otwarchive::Application.routes.draw do
   match 'tags/new' => 'tags#new'
   match 'tags/*tag_id/works' => 'works#index'
   match 'tags/*tag_id/bookmarks' => 'bookmarks#index'
+  match 'tags/*tag_id/comments' => 'comments#index'
+  match 'tags/*tag_id/comments/*id' => 'comments#show'
   match 'tags/*id/wrangle' => 'tags#wrangle'
   match 'tags/*id/mass_update' => 'tags#mass_update'
   match 'tags/*id/remove_association' => 'tags#remove_association'

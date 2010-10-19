@@ -19,7 +19,6 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     | login  | password    |
     | Enigel | wrangulate! |
     And basic tags
-    And a fandom exists with name: "No Fandom", canonical: true
     And a fandom exists with name: "Firefly", canonical: true
     And a freeform exists with name: "Non-canonical NoFandom", canonical: false
     And a freeform exists with name: "Non-canonical Fandomish", canonical: false
@@ -57,12 +56,12 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And I fill in "Name" with "5 Things"
     And I choose "Freeform"
     And I check "Canonical"
-    And I press "Save changes"
+    And I press "Create Tag"
     And I follow "New Tag"
     And I fill in "Name" with "N Things"
     And I choose "Freeform"
     And I check "Canonical"
-    And I press "Save changes"
+    And I press "Create Tag"
     And I follow "tags" within "ul.navigation"
   Then I should not see "Five Things"
     And I should not see "5 Things"
