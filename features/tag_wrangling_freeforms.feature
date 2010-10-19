@@ -8,7 +8,6 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     | login  | password    |
     | Enigel | wrangulate! |
     And basic tags
-    And a fandom exists with name: "No Fandom", canonical: true
     And I am logged in as "Enigel" with password "wrangulate!"
     And I follow "Tag Wrangling"
     
@@ -17,7 +16,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I fill in "Name" with "Alternate Universe Pirates"
     And I choose "Freeform"
     And I check "tag_canonical"
-    And I press "Save changes"
+    And I press "Create Tag"
   Then I should see "Tag was successfully created"
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should not be disabled
@@ -26,7 +25,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   When I follow "New Tag"
     And I fill in "Name" with "Pirates! in Spaaaaace! AU"
     And I choose "Freeform"
-    And I press "Save changes"
+    And I press "Create Tag"
   Then I should see "Tag was successfully created"
     And the "tag_canonical" checkbox should not be checked
     And the "tag_canonical" checkbox should not be disabled
@@ -90,7 +89,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I fill in "Name" with "Alternate Universe"
     And I check "tag_canonical"
     And I choose "Freeform"
-    And I press "Save changes"
+    And I press "Create Tag"
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "SubTags" with "Alternate Universe P"
   Then I should find "Alternate Universe Pirates" within ".auto_complete"
@@ -125,11 +124,11 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   When I follow "New Tag"
     And I fill in "Name" with "Drabble"
     And I choose "Freeform"
-    And I press "Save changes"
+    And I press "Create Tag"
     And I follow "New Tag"
     And I fill in "Name" with "100 words"
     And I choose "Freeform"
-    And I press "Save changes"
+    And I press "Create Tag"
     And I fill in "Synonym of" with "Drabble"
     And I press "Save changes"
   Then I should see "Drabble is not a canonical tag. Please make it canonical before adding synonyms to it."
