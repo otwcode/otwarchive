@@ -163,16 +163,15 @@ class BookmarksController < ApplicationController
   # POST /bookmarks.xml
   def create
     @bookmark = Bookmark.new(params[:bookmark])
-    @bookmarkable = @bookmark.bookmarkable || Bookmark.new(params[:bookmark][:external])
-    if !@bookmarkable.new_record? || @bookmarkable.save
-      if @bookmark.save
-        flash[:notice] = ts('Bookmark was successfully created.')
-        redirect_to(@bookmark) and return
-      end
-    end 
-    if @bookmarkable.fandoms.blank?
-       @bookmarkable.errors.add(:base, "Fandom tag is required")
+    @bookmarkable = @bookmark.bookmarkable 
+    if @bookmarkable.new_record? && @bookmarkable.fandoms.blank?
+       @bookmark.errors.add(:base, "Fandom tag is required")
+       render :new and return
     end
+    if @bookmarkable.save && @bookmark.save
+      flash[:notice] = ts('Bookmark was successfully created.')
+      redirect_to(@bookmark) and return
+    end 
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
     render :action => "new" and return
   end
