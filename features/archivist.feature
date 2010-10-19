@@ -36,11 +36,12 @@ Feature: Archivist bulk imports
         """
       And I check "Post without previewing"
       And I press "Import"
-    Then I should see "Importing completed successfully! (But please check the results over carefully!)"
+    Then I should see "Importing completed successfully for the following works! (But please check the results over carefully!)"
       And I should see "Imported Works"
       And I should see "We were able to successfully upload the following works."
       And I should see "Welcome"
       And I should see "OTW Meetup in London"
+      And I should see "That Shall Achieve The Sword"
     When issue "notifying authors for imports" is fixed
       # And I should see "We have notified the author(s) you imported stories for. You can also add them as co-authors manually."
     # Given the system processes jobs
