@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101015053927) do
+ActiveRecord::Schema.define(:version => 20101016131743) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -347,11 +347,12 @@ ActiveRecord::Schema.define(:version => 20101015053927) do
   add_index "filter_counts", ["filter_id"], :name => "index_filter_counts_on_filter_id"
 
   create_table "filter_taggings", :force => true do |t|
-    t.integer  "filter_id",       :limit => 8,   :null => false
-    t.integer  "filterable_id",   :limit => 8,   :null => false
+    t.integer  "filter_id",       :limit => 8,                      :null => false
+    t.integer  "filterable_id",   :limit => 8,                      :null => false
     t.string   "filterable_type", :limit => 100
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "inherited",                      :default => false, :null => false
   end
 
   add_index "filter_taggings", ["filter_id", "filterable_type"], :name => "index_filter_taggings_on_filter_id_and_filterable_type"
