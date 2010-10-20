@@ -28,7 +28,7 @@
       <% if pseud.is_default? %>
         <li>Default Pseud</li>
       <% elsif @user.login != pseud.name %>
-        <li><%= link_to "#{h(ts('Delete'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [@user, pseud], :confirm => ts('Are you sure?'), :method => :delete %></li>
+        <li><%= link_to "#{h(ts('Delete'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [@user, pseud], :confirm => ts('Are you sure?'), :id => "delete_#{pseud.name.underscore}", :method => :delete %></li>
       <% end %>
     </ul>
     <% end %>

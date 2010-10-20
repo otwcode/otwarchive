@@ -12,14 +12,14 @@ Feature: Delete pseud.
   When I am logged out
   And I am logged in as "testuser" with password "testuser"
     And I am on testuser's pseuds page
-  When I follow "Delete tester_pseud"
+  When I follow "delete_tester_pseud"
   Then I should see "Delete these bookmarks"
   When I choose "Delete these bookmarks"
     And I press "Submit"
   Then I should see "The pseud was successfully deleted."
   When I am on testuser's pseuds page
     Then I should not see "tester_pseud"
-    And I follow "Delete testy"
+    And I follow "delete_testy"
     And I choose "Transfer these bookmarks to the default pseud"
     And I press "Submit"
   Then I should see "The pseud was successfully deleted."
