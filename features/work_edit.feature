@@ -38,7 +38,7 @@ Feature: Edit Works
       And I press "Preview"
     Then I should see "preview of what this chapter"
       And I should see "second chapter content"
-    When I press "Post"
+    When I follow "Post Chapter"
     Then I should see "Chapter has been posted!"
       And I should see "first chapter content"
       And I should not see "second chapter content"
