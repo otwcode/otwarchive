@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h ts('Orphan All Works by %{name}', :name => pseud.name) %></h2>
+<h2><%= ts('Orphan All Works by') %> <%= pseud.name %></h2>
 
 <p>
-<%= ts("Are you sure you want to %>
-<strong><%= ts("permanently")</strong>
+<%= ts("Are you sure you want to") %>
+<strong><%= ts("permanently") %></strong>
 <%= ts("remove all identifying information from all the works you've posted to 
 the archive under this pseud, along with their chapters, 
 associated series and any feedback replies you may have left?") %>
