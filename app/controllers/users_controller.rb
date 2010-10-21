@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :after_reset, :end_first_login, :edit_username]
-  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :edit_username]
+  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :after_reset, :end_first_login, :change_username]
+  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :change_username]
   before_filter :check_account_creation_status, :only => [:new, :create]
 
   def load_user
@@ -78,7 +78,29 @@ class UsersController < ApplicationController
   def edit
   end
   
-  def edit_username
+  def change_username
+    if params[:new_login]
+      @new_login = params[:new_login]
+      session = UserSession.new(:login => @user.login, :password => params[:password])
+      if !session.valid?
+        flash[:error] = ts("Your password was incorrect")
+      else
+        user = User.find_by_login(@new_login)
+        if user && (user != @user)
+          flash[:error] = ts("User name already taken.")
+        else
+          @user.login = @new_login
+          if @user.save
+            flash[:notice] = ts("Your user name was changed")
+            redirect_to @user and return 
+          else
+            @user.errors.clear
+            @user.reload
+            flash[:error] = ts("User name must begin and end with a letter or number; it may also contain underscores but no other characters.")
+          end
+        end
+      end
+    end
   end
 
   # POST /users
@@ -166,7 +188,7 @@ class UsersController < ApplicationController
       if @user.recently_reset? && params[:change_password]
         successful_update
       elsif params[:user] && !params[:user][:password].blank? && !@user.authenticated?(params[:user][:password], @user.salt) && !@user.authenticated?(params[:check][:password_check], @user.salt)
-        flash[:error] = t('old_password_incorrect', :default => "Your old password was incorrect")
+        flash[:error] = ts("Your old password was incorrect")
         unsuccessful_update
       elsif params[:user] && params[:user][:identity_url] != @user.identity_url 
         if params[:user][:identity_url].blank?
@@ -182,19 +204,6 @@ class UsersController < ApplicationController
           params[:use_openid] = true
           flash[:error] = "Your OpenID failed to save. Please try again."
           render :edit
-        end
-      elsif params[:login]
-        if User.authenticate(params[:login], params[:password])
-          if @user.update_attribute(:login, params[:login])
-            flash[:notice] = t('edit_username_worked', :default => "Username successfully changed")
-            redirect_to(user_path(@user))
-          else
-            flash[:error] = t('edit_username_failed', :default => "Username change failed.")
-            redirect_to(url_for(:controller => :user, :action => :edit_username, :user => @user))
-          end
-        else
-          flash[:error] = t('password_incorrect', :default => "Your password was incorrect")
-          redirect_to(url_for(:controller => :user, :action => :edit_username, :user => @user))
         end
       else
         successful_update

@@ -118,7 +118,8 @@ Otwarchive::Application.routes.draw do
   resources :users do
     member do
       get :after_reset
-      get :edit_username
+      get :change_username
+      post :change_username
       post :end_first_login
     end
     resources :assignments, :controller => "challenge_assignments" do
