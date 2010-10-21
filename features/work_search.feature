@@ -43,6 +43,10 @@ Feature: Search Works
       And I press "Search works"
     Then I should see "1 Found"
     When I am on the homepage
+      And I fill in "site_search" with "hits: 0-10"
+      And I press "Search"
+    Then I should see "3 Found"
+    When I am on the homepage
       And I fill in "site_search" with "hits: >10"
       And I press "Search"
     Then I should see "2 Found"
@@ -50,6 +54,10 @@ Feature: Search Works
     Then I should be on the search page
     When I fill in "refine_hit_count" with "10000-20000"
       And I press "Search works"
+    Then I should see "1 Found"
+    When I am on the homepage
+      And I fill in "site_search" with "words: 50-150"
+      And I press "Search"
     Then I should see "1 Found"
     When I am on the homepage
       And I fill in "site_search" with "words: >100 language:english"
@@ -63,15 +71,24 @@ Feature: Search Works
     Then I should see "1 Found"
     When I follow "Advanced search"
     Then I should be on the search page
-    When I fill in "refine_word_count" with "<1000"
+    When issue "sanitize_params loses query <" is fixed
+#    When I fill in "refine_word_count" with "<1000"
+    When I fill in "refine_word_count" with "0-999"
       And I press "Search works"
     Then I should see "0 Found"
     When I am on the search page
-      And I fill in "refine_word_count" with "<10,000"
       And I fill in "refine_hit_count" with "> 1.000"
       And I press "Search works"
-    Then I should see "1 Found"
-      And I should see "First work"
+    Then I should see "First work"
+      And I should see "third work"
+      And I should see "2 Found"
+      And I should see "You searched for: Hits: > 1000"
+    When I fill in "refine_text" with "hits: >9,000"
+      And I press "Refine search"
+    Then I should see "You searched for: Hits: >9000"
+      And I should see "1 Found"
+      And I should not see "First work"
+      And I should see "third work"
    When I am on the homepage.
      And I fill in "site_search" with "testuser2"
      And I press "Search"

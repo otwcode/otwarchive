@@ -1,22 +1,24 @@
 <h2>Work Search: Beta</h2>
 
 <ul class="navigation" role="navigation"><li>
-  <%= link_to(t('.refine_search', :default => "Advanced search"), search_index_path(:query => @query)) %>
+  <%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %>
 </li></ul>
 
+<% unless @query.blank? %>
 <p>
-  <%= t('.you_searched_for', :default => 'You searched for:') %>
-    <% unless @query[:text].blank? %><%= t('.text', :default => 'Text') %>: <%= @query[:text] %> <% end %>
-    <% unless @query[:tag].blank? %><%= t('.tag', :default => 'Tag') %>: <%= @query[:tag] %> <% end %>
-    <% unless @query[:title].blank? %><%= t('.title', :default => 'Title') %>: <%=  @query[:title] %> <% end %>
-    <% unless @query[:author].blank? %><%= t('.author', :default => 'Author') %>: <%= @query[:author] %> <% end %>
-    <% unless @query[:words].blank? %><%= t('.words', :default => 'Words') %>: <%= @query[:words] %> <% end %>
-    <% unless @query[:hits].blank? %><%= t('.hits', :default => 'Hits') %>: <%= @query[:hits] %> <% end %>
-    <% unless @query[:date].blank? %><%= t('.date_desc', :default => 'Date') %>: <%= @query[:date] %> <% end %>
-    <% unless @query[:language].blank? %><%= t('.language', :default => 'Language') %>: <%= @query[:language] %> <% end %>
-    <% unless @query[:bookmarked].blank? %><%= t('.language', :default => 'Bookmarked') %><% end %>
-    <% unless @query[:recced].blank? %><%= t('.language', :default => 'Recced') %><% end %>
-    </p>
+  <%= ts('You searched for') %>:
+  <% unless @query[:text].blank? %><%= ts('Text') %>: <%= @query[:text] %> <% end %>
+  <% unless @query[:tag].blank? %><%= ts('Tag') %>: <%= @query[:tag] %> <% end %>
+  <% unless @query[:title].blank? %><%= ts('Title') %>: <%=  @query[:title] %> <% end %>
+  <% unless @query[:author].blank? %><%= ts('Author') %>: <%= @query[:author] %> <% end %>
+  <% unless @query[:words].blank? %><%= ts('Words') %>: <%= @query[:words] %> <% end %>
+  <% unless @query[:hits].blank? %><%= ts('Hits') %>: <%= @query[:hits] %> <% end %>
+  <% unless @query[:date].blank? %><%= ts('Date') %>: <%= @query[:date] %> <% end %>
+  <% unless @query[:language].blank? %><%= ts('Language') %>: <%= @query[:language] %> <% end %>
+  <% unless @query[:bookmarked].blank? %><%= ts('Bookmarked') %><% end %>
+  <% unless @query[:recced].blank? %><%= ts('Recced') %><% end %>
+<% end %>
+</p>
 
 <%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do %>
 <fieldset>
@@ -38,7 +40,11 @@
   <%= hidden_field_tag "query[recced]", @query[:recced] %>
   
   <span class="submit">
-    <%= submit_tag t('.forms.search', :default => 'Refine search'), :class => 'button', :name => nil %>
+<% if @query.blank? %>
+    <%= submit_tag ts('Search'), :class => 'button', :name => nil %>
+<% else %>
+    <%= submit_tag ts('Refine search'), :class => 'button', :name => nil %>
+<% end %>
   </span>
 </fieldset>
 <% end %>
@@ -58,6 +64,6 @@
   <div class="clear"><!-- presentational--></div>
   <%= will_paginate @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
 <% rescue Riddle::ConnectionError %>
-   <%= t('.errors.search_engine_down', :default => "The search engine seems to be down at the moment, try back later!")%>
+   <%= ts("The search engine seems to be down at the moment, try back later!")%>
   <% end %>
 <% end %>

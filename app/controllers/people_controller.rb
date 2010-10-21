@@ -3,8 +3,9 @@ class PeopleController < ApplicationController
   before_filter :load_collection
 
   def search
-    @query = params[:query] || {}
-    unless @query.blank?
+    @query = {}
+    if params[:query]
+      @query = Query.standardize(params[:query])
       begin
         page = params[:page] || 1
         errors, @people = Query.search_with_sphinx(Pseud, @query, page)
@@ -12,9 +13,9 @@ class PeopleController < ApplicationController
       rescue Riddle::ConnectionError
         flash.now[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
       end
+      @rec_counts = Pseud.rec_counts_for_pseuds(@people)
+      @work_counts = Pseud.work_counts_for_pseuds(@people)
     end
-    @rec_counts = Pseud.rec_counts_for_pseuds(@people)
-    @work_counts = Pseud.work_counts_for_pseuds(@people)
   end  
 
     

@@ -30,17 +30,16 @@ module Query
     return query_errors, klass.search(search_string, options)
   end
   
-  # this is used to take a full text query from the small search box
-  # like "author: astolat words: > 1000" 
-  # and turn it into a hash that can be put into separate boxes on the full search page
-  # a single multiple-field search operator can be made, but it will stay in the text field
+  # this is used to standardize a query, specifically, moving things
+  # like "author: astolat words: >1,000" to :author => {"astolat"}, :words => {"> 1000"}
   def Query.standardize(query)
+    Rails.logger.debug "original query: #{query.to_s}"
     query[:text] = "" unless query[:text]
     # change something: to @something so we know a section ends when the next section starts
     for string in ALL_INDEXES
       query[:text] = query[:text].sub(/#{string}:/i, "@#{string} ")
     end
-    # remove multiple-field search operator of the form
+    # remove a single multiple-field search operator of the form (i.e. leave it in :text)
     #   (field1,field2): search string
     match = query[:text].match(/\(\S+?\,\S+?\): ([^@]*)/)
     if match
@@ -59,9 +58,19 @@ module Query
       query[:text] = query[:text] + query.delete(:group)
     end
     query.each { |k, v| query[k] = v.strip }
+    query.delete_if { |k, v| v.blank? }
+    # in rails 3, a query with < or > will get encoded, unencode them again
+    # also, remove punctuation such as , and . (10.000 == 10,000 == 10000)
+    for string in %w{word hit bookmark date} do
+      sym = string.pluralize.to_sym unless string == "date"
+      sym = string.to_sym if string == "date"
+      query[sym] = query[sym].gsub("&gt;", ">").gsub("&lt;", "<").gsub(/[,.]/, "") if query[sym]
+    end
+    Rails.logger.info "Search for: #{query.to_s}"
+    return query
   end
   
-  # transform the full search page into
+  # transform the query into
   # a search string plus an attributes hash for sphinx
   def Query.split_query(query={})
     with = {}
@@ -81,8 +90,9 @@ module Query
     end
     text = (text + " @type " + query[:type]) unless query[:type].blank?
     for string in %w{word hit bookmark} do
-      unless query[string.pluralize.to_sym].blank?
-        match = query[string.pluralize.to_sym].match(/^([<>]*)\s*([\d,. -]+)\s*$/)
+      sym = string.pluralize.to_sym
+      unless query[sym].blank?
+        match = query[sym].match(/^([<>]*)\s*([\d,. -]+)\s*$/)
         if match
           with[(string + "_count").to_sym] = Query.numerical_range(match[1], match[2]) 
         else
@@ -103,6 +113,9 @@ module Query
       end
     end
     text = text.gsub(/AND/, "").gsub(/OR/, "|").gsub(/NOT\s+/, "-")
+    Rails.logger.debug "Search string: #{text}"
+    Rails.logger.debug "Search attribs: #{with}"
+    Rails.logger.debug "Search errors: #{errors}"
     return [text.strip, with, errors]
   end
   
@@ -110,9 +123,7 @@ module Query
   # operand can be "<", ">" or ""
   # string must be an integer unless operand is ""
   # in which case it can be two numbers connected by "-"
-  # punctuation such as , and . are ignored (10.000 == 10,000 == 10000)
   def self.numerical_range(operand, string)
-    string = string.gsub(/[,.]/, "")
     case operand
       when "<"
         Range.new(0, string.to_i - 1)

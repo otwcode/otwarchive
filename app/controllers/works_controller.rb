@@ -16,17 +16,12 @@ class WorksController < ApplicationController
     @query = {}
     if params[:query]
       @query = Query.standardize(params[:query])
-      if @query == params[:query]
-        begin
-          page = params[:page] || 1
-          errors, @works = Query.search_with_sphinx(Work, @query, page)
-          flash.now[:error] = errors.join(" ") unless errors.blank?
-        rescue Riddle::ConnectionError
-          flash.now[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
-        end
-      else
-        params[:query] = @query
-        redirect_to url_for(params)
+      begin
+        page = params[:page] || 1
+        errors, @works = Query.search_with_sphinx(Work, @query, page)
+        flash.now[:error] = errors.join(" ") unless errors.blank?
+      rescue Riddle::ConnectionError
+        flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
       end
     end
   end
