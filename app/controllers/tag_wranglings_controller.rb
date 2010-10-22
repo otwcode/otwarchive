@@ -1,10 +1,6 @@
 class TagWranglingsController < ApplicationController
   before_filter :check_user_status
-	before_filter :check_permission
-
-  def check_permission
-    logged_in_as_admin? || permit?("tag_wrangler") || access_denied
-  end
+	before_filter :check_permission_to_wrangle
 
   def index
     @counts = {}

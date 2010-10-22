@@ -247,6 +247,17 @@ public
       access_denied if (is_hidden && !can_view_hidden)
     end
   end
+  
+  # Make sure user is allowed to access tag wrangling pages
+  def check_permission_to_wrangle
+    @admin_settings ||= AdminSetting.first
+    if @admin_settings.tag_wrangling_off? && !logged_in_as_admin?
+      flash[:error] = "Wrangling is disabled at the moment. Please check back later."
+      redirect_to root_path
+    else
+      logged_in_as_admin? || permit?("tag_wrangler") || access_denied
+    end
+  end
 
   private
  # With thanks from here: http://blog.springenwerk.com/2008/05/set-date-attribute-from-dateselect.html

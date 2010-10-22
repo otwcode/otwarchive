@@ -1,11 +1,7 @@
 class TagsController < ApplicationController
   before_filter :load_collection
   before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :search ]
-  before_filter :check_permission, :except => [ :show, :index, :show_hidden, :search ]
-
-  def check_permission
-    logged_in_as_admin? || permit?("tag_wrangler") || access_denied
-  end
+  before_filter :check_permission_to_wrangle, :except => [ :show, :index, :show_hidden, :search ]
 
   # GET /tags
   # GET /tags.xml
