@@ -3,7 +3,13 @@ MAX_REPORTED_ERRORS = 1
 WORK_CREATOR_VERSION = 'VER 3;;'
 
 class DevmodeController < ApplicationController
-  before_filter :admin_only
+  before_filter :development_only
+  def development_only
+    unless Rails.env == "development"
+      flash[:error] = "For development only"
+      redirect_to root_path
+    end
+  end
 
   def index
     render 

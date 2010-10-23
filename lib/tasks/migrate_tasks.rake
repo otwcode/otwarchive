@@ -131,6 +131,19 @@ namespace :After do
 #    end
 #  end
 
+#  desc "Add skins"
+#  task(:add_skins => :environment) do
+#    default = Skin.create_default
+#    plain = Skin.import_plain_text
+#    Preference.update_all("skin_id = #{default.id}")
+#    Preference.update_all("skin_id = #{plain.id}", "plain_text_skin = 1")
+#  end
+
+#  desc "Rename Pairing tag type to Relationship"
+#  task(:rename_pairing => :environment) do
+#    Tag.update_all("type = 'Relationship'", "type = 'Pairing'")
+#  end
+
   #### Leave this one here
 
   desc "Update the translation file each time we deploy"
@@ -142,25 +155,13 @@ namespace :After do
 
   #### Add your new tasks here
 
-  desc "Add skins"
-  task(:add_skins => :environment) do
-    default = Skin.create_default
-    plain = Skin.import_plain_text
-    Preference.update_all("skin_id = #{default.id}")
-    Preference.update_all("skin_id = #{plain.id}", "plain_text_skin = 1")
-  end
-
-  desc "Rename Pairing tag type to Relationship"
-  task(:rename_pairing => :environment) do
-    Tag.update_all("type = 'Relationship'", "type = 'Pairing'")
-  end
-  
   desc "Set meta filter taggings to inherited"
   task(:mark_meta_tags_inherited => :environment) do
     MetaTagging.find_each do |meta_tagging|
       m = meta_tagging.meta_tag
       filters = [m] + m.mergers
       m.filtered_works.each do |work|
+        print "." if work.id.modulo(100) == 0; STDOUT.flush
         if (work.tags & filters).empty?
           ft = work.filter_taggings.where(:filter_id => m.id).first
           ft.update_attribute(:inherited, true)

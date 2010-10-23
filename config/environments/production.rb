@@ -56,10 +56,12 @@ Otwarchive::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  config.after_initialize do
-    ExceptionNotification::Notifier.exception_recipients = ArchiveConfig.ERROR_ADDRESS
-    ExceptionNotification::Notifier.sender_address = ArchiveConfig.RETURN_ADDRESS
-    ExceptionNotification::Notifier.email_prefix = ArchiveConfig.ERROR_PREFIX
-  end
+#  # run after initialization so have access to ArchiveConfig
+#  config.after_initialize do
+#    config.middleware.use ExceptionNotifier,
+#      :email_prefix => ArchiveConfig.ERROR_PREFIX,
+#      :sender_address => ArchiveConfig.RETURN_ADDRESS,
+#      :exception_recipients => ArchiveConfig.ERROR_ADDRESS
+#  end
 
 end

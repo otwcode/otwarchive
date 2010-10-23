@@ -1,6 +1,12 @@
-#!/usr/bin/env script/runner
-# usage:
-# RAILS_ENV=production script/ensure_required_tags.rb
+#!/usr/bin/env script/rails runner
+# shebang not current working
+# see
+# https://rails.lighthouseapp.com/projects/8994/tickets/4249-rails-runner-cant-be-used-in-shebang-lines
+
+# run instead as:
+# rails runner script/ensure_required_tags.rb
+# or 
+# rails runner -e production script/ensure_required_tags.rb
 
 Warning.create_canonical(ArchiveConfig.WARNING_DEFAULT_TAG_NAME)
 Warning.create_canonical(ArchiveConfig.WARNING_NONE_TAG_NAME)

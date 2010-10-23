@@ -4,8 +4,6 @@ class ApplicationController < ActionController::Base
 
   helper :all # include all helpers, all the time
 
-  include ExceptionNotification::Notifiable
-
   include HtmlCleaner
   before_filter :sanitize_params
 
@@ -269,21 +267,28 @@ public
 
   public
 
-  # with thanks to http://henrik.nyh.se/2008/07/rails-404
-  def render_optional_error_file(status_code)
-    case(status_code)
-      when :not_found then
-        render :template => "errors/404", :layout => 'application', :status => 404
-      when :forbidden then
-        render :template => "errors/403", :layout => 'application', :status => 403
-      when :unprocessable_entity then
-        render :template => "errors/422", :layout => 'application', :status => 422
-      when :internal_server_error then
-        render :template => "errors/500", :layout => 'application', :status => 500
-      else
-        super
-    end
-  end
+# No longer works in rails 3 as routing got moved to middleware
+# https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/4444
+# TODO find an alternative, see
+# http://accuser.cc/posts/1-rails-3-0-exception-handling
+# and
+# http://github.com/vidibus/vidibus-routing_error
+#  # with thanks to http://henrik.nyh.se/2008/07/rails-404
+#  def render_optional_error_file(status_code)
+#    case(status_code)
+#      when :not_found then
+#        render :template => "errors/404", :layout => 'application', :status => 404
+#      when :forbidden then
+#        render :template => "errors/403", :layout => 'application', :status => 403
+#      when :unprocessable_entity then
+#        render :template => "errors/422", :layout => 'application', :status => 422
+#      when :internal_server_error then
+#        render :template => "errors/500", :layout => 'application', :status => 500
+#        notify_about_exception(error)
+#      else
+#        super
+#    end
+#  end
 
   def valid_sort_column(param, model='work')
     allowed = []

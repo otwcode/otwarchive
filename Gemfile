@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'bundler', '~>1.0.0' 
 
-gem 'rails', '3.0.0'
+gem 'rails', '3.0.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -41,7 +41,10 @@ gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
 gem 'delayed_job' 
-gem 'thinking-sphinx', '>=2.0.0.rc1', :require => 'thinking_sphinx'
+gem 'thinking-sphinx',
+  :git     => 'git://github.com/freelancing-god/thinking-sphinx.git',
+  :branch  => 'rails3',
+  :require => 'thinking_sphinx'
 gem 'ts-delayed-delta', :require => 'thinking_sphinx/deltas/delayed_delta'
 gem 'daemon-spawn'
 gem 'aws-s3', :require => 'aws/s3'
@@ -88,7 +91,7 @@ group :test do
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
-  gem 'capybara'
+  gem 'capybara', '=0.3.9'
   gem 'database_cleaner', '>=0.6.0.rc.3'
   gem 'cucumber-rails'
   gem 'cucumber', '>=0.9.1'
@@ -97,5 +100,9 @@ end
 
 group :production do
   gem "memcache-client"
+  gem 'exception_notification',
+    :git     => 'git://github.com/rails/exception_notification.git',
+    :branch  => 'master',
+    :require => 'exception_notifier'
 end
 
