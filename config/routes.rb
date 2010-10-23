@@ -35,7 +35,11 @@ Otwarchive::Application.routes.draw do
   resources :media do
     resources :fandoms
   end
-  resources :fandoms
+  resources :fandoms do
+    collection do
+      get :unassigned
+    end
+  end
   resources :tag_wranglings do
     member do
       post :wrangle

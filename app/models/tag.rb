@@ -168,12 +168,12 @@ class Tag < ActiveRecord::Base
   scope :visible_to_all_with_count,
     joins(:filter_count).
     select("tags.*, filter_counts.public_works_count as count").
-    where('filter_counts.public_works_count > 0')
+    where('filter_counts.public_works_count > 0 AND tags.canonical = 1')
     
   scope :visible_to_registered_user_with_count,
     joins(:filter_count).
     select("tags.*, filter_counts.unhidden_works_count as count").
-    where('filter_counts.unhidden_works_count > 0 AND tags.type = "Fandom" AND tags.canonical = 1')
+    where('filter_counts.unhidden_works_count > 0 AND tags.canonical = 1')
     
   scope :public_top, lambda { |tag_count|
     visible_to_all_with_count.
