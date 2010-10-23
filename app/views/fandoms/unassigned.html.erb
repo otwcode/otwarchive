@@ -21,7 +21,7 @@
   <ul class="fandoms">
     <% for fandom in @fandoms %>
       <li>
-        <%= link_to fandom.name + " (#{fandom.count})", fandom %>
+        <%= link_to fandom.name + " (#{fandom.count})", {:controller => :tags, :action => :show, :id => fandom.to_param} %>
       </li>
     <% end %>
   </ul>
