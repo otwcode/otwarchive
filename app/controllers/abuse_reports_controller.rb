@@ -1,6 +1,7 @@
 class AbuseReportsController < ApplicationController
 
   before_filter :admin_only, :except => [:new, :create]
+  skip_before_filter :store_location
 
   # GET /abuse_reports/new
   # GET /abuse_reports/new.xml

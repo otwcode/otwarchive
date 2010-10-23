@@ -31,6 +31,12 @@ class User < ActiveRecord::Base
   acts_as_authentic do |config|
     config.transition_from_restful_authentication = true
     config.transition_from_crypto_providers = Authlogic::CryptoProviders::Sha1
+    config.validates_length_of_password_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
+    config.validates_length_of_password_confirmation_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
+  end
+  
+  def has_no_credentials?
+    self.crypted_password.blank? && self.identity_url.blank?
   end
 
   # Authorization plugin
@@ -46,9 +52,6 @@ class User < ActiveRecord::Base
   has_one :invitation, :as => :invitee
   has_many :user_invite_requests, :dependent => :destroy
 
-  #validates_presence_of :invitation_id, :message => 'is required', :unless => ArchiveConfig.ACCOUNT_CREATION_ENABLED
-  #validates_uniqueness_of :invitation_id, :allow_blank => true
-  #belongs_to :invitation
   attr_accessor :invitation_token
   attr_accessible :invitation_token
   after_create :mark_invitation_redeemed, :remove_from_queue
@@ -68,8 +71,6 @@ class User < ActiveRecord::Base
   has_many :skins, :foreign_key=> 'author_id', :dependent => :nullify
 
   before_create :create_default_associateds
-
-  before_update :validate_date_of_birth
 
   after_update :log_change_if_login_was_edited
 
@@ -352,18 +353,6 @@ class User < ActiveRecord::Base
       end
     end
     return @coauthored_works
-  end
-
-  # Checks date of birth when user updates profile
-  # Has to be called before_update (above) not before_save so new users can be created
-  def validate_date_of_birth
-    return false unless self.profile
-    unless self.profile.date_of_birth.blank?
-      if self.profile.date_of_birth > 13.years.ago.to_date
-        errors.add(:base, "You must be over 13.")
-        return false
-      end
-    end
   end
 
   ### BETA INVITATIONS ###

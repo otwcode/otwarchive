@@ -145,6 +145,9 @@ GEM
     rack (1.2.1)
     rack-mount (0.6.13)
       rack (>= 1.0.0)
+    rack-openid (1.2.0)
+      rack (>= 1.1.0)
+      ruby-openid (>= 2.1.8)
     rack-test (0.5.6)
       rack (>= 1.0)
     rails (3.0.0)
@@ -245,11 +248,11 @@ DEPENDENCIES
   paperclip!
   permit_yo
   pickle
+  rack-openid (>= 0.2.1)
   rails (= 3.0.0)
   rest-client
   rspec-rails (>= 2.0.0.beta.22)
   ruby-debug19
-  ruby-openid
   sanitize
   shoulda
   thinking-sphinx (>= 2.0.0.rc1)

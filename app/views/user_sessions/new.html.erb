@@ -1,29 +1,34 @@
 <!-- loginform floated right -->
-<% if @restricted %>
-  <h3><%= t('.sorry', :default => 'Sorry!') %></h3>
+<% if params[:restricted] %>
+  <h3><%= ts('Sorry!') %></h3>
   <p>
-    <%= t('.restricted1', :default => 'This story is only available to registered users of the Archive.') %> 
-    <%= t('.restricted2', :default => 'If you already have an Archive of Our Own account, log in now.') %> 
-    <% if ArchiveConfig.ACCOUNT_CREATION_ENABLED %>
-	    <%= t('.join_us', :default => "Or join us for free - it's easy.") %>
-	  <% end %>  
+    <%= ts('This story is only available to registered users of the Archive.') %>
+    <%= ts('If you already have an Archive of Our Own account, log in now.') %>
+    <% if AdminSetting.account_creation_enabled? %>
+      <%= link_to ts("Or join us for free - it's easy."), new_user_path %>
+    <% end %>
   </p>
 <% else %>
-  <h3><%= t('.login_now', :default => 'Log in') %></h3>
+  <h3><%= ts('Log in') %></h3>
   <p>
-    <strong><%= t('.reminder', :default => 'Reminder:') %></strong>
-    <%= t('.beta_risks', :default => "This site is in early beta. Things may break or crash without notice. Please report any pesky bugs and ") %>
-    <%= link_to t('.give_feedback', :default => 'give us your feedback'), feedbacks_path %><%= t('.exclamation', :default => '!') %>
+    <strong><%= ts('Reminder:') %></strong>
+    <%= ts("This site is in beta. Things may break or crash without notice.") %>
+    <%= ts("Please report any pesky bugs and") %>
+    <%= link_to ts('give us your feedback'), feedbacks_path %>!
   </p>
 <% end %>
 
-<%= form_for @user_session do |form| %>
-  <div id="loginform">
-    <%= render :partial => "passwd", :locals => {:form => form} %>
-  </div>
-<% end %><!-- END form -->
+<div id="loginform">
+  <%- if params[:use_openid] -%>
+    <%= render :partial => "user_sessions/openid" %>
+  <%- else -%>
+    <%= render :partial => "user_sessions/passwd" %>
+  <% end %>
+</div>
 
-<% if ArchiveConfig.ACCOUNT_CREATION_ENABLED %>
-  <!-- Create account link -->
-  <p><%= t('.new_tester', :default => 'New tester?') %> <%= link_to t('.signup', :default => 'Create an account now.'), new_user_path %></p>
-<% end %>
+<p>
+  <%= ts("Forgot your password or user name?") %> <%= link_to ts("Reset password"), new_password_path %>
+  <% if AdminSetting.account_creation_enabled? %>
+    <br \><%= ts("Don't have an account?") %> <%= link_to ts('Create an account now.'), new_user_path %>
+  <% end %>
+</p>

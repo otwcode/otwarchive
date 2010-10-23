@@ -1,18 +1,23 @@
-<p>
-	<%= form.label :login, t('.user_name', :default => "User name:")  %>
-	<%= form.text_field :login %>
-</p>
-<p>
-	<%= form.label :password, t('.password', :default => "Password:")  %>
-	<%= form.password_field :password %>
-</p>
-<p>
-  <%= form.check_box :remember_me %>
-  <%= form.label :remember_me, t('.remember_me', :default => "Remember me")  %>
-</p>
-<p class="submit">
-	<%= form.submit t('.login', :default => "Log in"), :class => 'submit' %>
-</p>
-<p class="footnote">
-	<%= link_to t('.forgot_password', :default => "forgot password?"), new_password_path %>
-</p>
+<% @user_session = UserSession.new unless @user_session %>
+<%= form_for @user_session do |f| %>
+  <p>
+    <%= link_to_remote ts('Log in using OpenID'), 
+           {:url => {:controller => :user_sessions, :action => 'openid'}},
+           :href => login_path(:use_openid => true) %>
+  </p>
+  <p>
+    <%= f.label :login, ts("User name:") %>
+    <%= f.text_field :login %>
+  </p>
+  <p>
+    <%= f.label :password, ts("Password:")  %>
+    <%= f.password_field :password %>
+  </p>
+  <p>
+    <%= f.check_box :remember_me %>
+    <%= f.label :remember_me, ts("Remember me")  %>
+  </p>
+  <p class="submit">
+    <%= f.submit ts("Log in"), :class => 'submit' %>
+  </p>
+<% end %>

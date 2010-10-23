@@ -23,7 +23,9 @@ gem 'fastthread'
 # gem 'capistrano'
 
 # Here are all our application-specific gems
-gem 'ruby-openid', :require => 'openid'
+gem 'rack-openid', '>=0.2.1', :require => 'rack/openid'
+
+
 gem 'chronic'
 
 #gem 'will_paginate', '3.0.pre'

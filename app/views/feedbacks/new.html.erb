@@ -1,54 +1,54 @@
 <%= error_messages_for :feedback %>
 
-<h2><%= t('.support_and_feedback', :default => 'Support and Feedback') %></h2>
+<h2><%= ts('Support and Feedback') %></h2>
 
-<h3><%= t('.contact_the_archive', :default => "We love to hear from our users! If you'd like to ask for help, make a suggestion, or
-give us feedback, please use this form.") %></h3>
+<h3><%= ts("We love to hear from our users! If you'd like to ask for help, make a suggestion, or give us feedback, please use this form.") %></h3>
 
-
-<p class="message"><%= t('.try_faq', :default => "If you're looking for help, you can find answers to many common questions in our %{faq_link}.", :faq_link => (link_to t('.faq_link', :default => "FAQ section"), archive_faqs_path))%> 
-<%= t('.try_known_issues', :default => "You may also like to check out our %{known_issues_link} to see if your problem is something we've already identified.", 
-:known_issues_link => (link_to t('.known_issues_link', :default => "Known Issues"), known_issues_path)) %></p>
-<p class="message"><%= t('.submit_request', :default => "If you can't find what you're looking for, please submit a support request here. If
+<p class="message"><%= ts("If you're looking for help, you can find answers to many common questions in our") %> <%= link_to ts("FAQ section"), archive_faqs_path%> 
+<%= ts("You may also like to check out our") %> <%= link_to ts("Known Issues"), known_issues_path %></p>
+<p class="message"><%= ts("If you can't find what you're looking for, please submit a support request here. If
 you'd like us to reply, make sure you include your email address, but anonymous
 feedback is welcomed as well.") %></p>
 
-<p class="message"><%= t('.still_beta', :default => "We're still in our beta phase, so there are lots of improvements and new
+<p class="message"><%= ts("We're still in our beta phase, so there are lots of improvements and new
 features planned. Please do use this form to let us know about your experience of
 using the site - good and bad.") %></p>
 
 <%= form_for(@feedback) do |f| %>
-		<fieldset>
-				<legend><%= 'Describe Your Feedback' %></legend>
-				<dl>
-					<dt><%= f.label :category, "Please select a category:"%></dt>
-					<dd>
-						<%= f.select("category", [ [Feedback::BUGS_BUG_NAME, Feedback::BUGS_BUG], [Feedback::BUGS_FEEDBACK_NAME, Feedback::BUGS_FEEDBACK],  
-     [Feedback::BUGS_MISC_NAME, Feedback::BUGS_MISC], [Feedback::BUGS_ASSISTANCE_NAME, Feedback::BUGS_ASSISTANCE], [Feedback::BUGS_LANG_NAME, Feedback::BUGS_LANG], 
-     [Feedback::BUGS_TAGS_NAME, Feedback::BUGS_TAGS] ], :selected => Feedback::BUGS_MISC) %>
-					</dd>
-					<dt><%= f.label :summary, "Brief summary (required):" %></dt>
-					<dd>
-						<%= f.text_field :summary, :size => 60 %>
-						<%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX) %>
-						<p>
-							<%= live_validation_for_field('feedback_summary', :failureMessage => 'Please enter a brief summary of your message') %>
-						</p>
-					</dd>
-					<dt><%= f.label :comment, "Your comment (required): " %></dt>
-					<dd><%= f.text_area :comment, :cols => 60 %>
-						<p><%= live_validation_for_field('feedback_comment', :failureMessage => 'Please enter your message') %></p>
-					</dd>
-					<dt><%= f.label :email, "Your email (optional):" %></dt>
-					<dd><%= f.text_field :email, :size => 60 %></dd>
-				</dl>
-			</fieldset>
-			<fieldset>
-				<legend><%= 'Send Feedback' %></legend>
-				<%= f.hidden_field :user_agent, :value => request.env["HTTP_USER_AGENT"] %>
-					<p class="submit"><%= f.submit t('.send', :default => "Send feedback") %></p>
-			</fieldset>
-
+  <fieldset>
+  <legend><%= ts('Describe Your Feedback') %></legend>
+  <dl>
+    <dt><%= f.label :category, ts("Please select a category") %>:</dt>
+    <dd>
+      <%= f.select("category", [ 
+            [Feedback::BUGS_BUG_NAME, Feedback::BUGS_BUG], 
+            [Feedback::BUGS_FEEDBACK_NAME, Feedback::BUGS_FEEDBACK],  
+            [Feedback::BUGS_MISC_NAME, Feedback::BUGS_MISC], 
+            [Feedback::BUGS_ASSISTANCE_NAME, Feedback::BUGS_ASSISTANCE], 
+            [Feedback::BUGS_LANG_NAME, Feedback::BUGS_LANG], 
+            [Feedback::BUGS_TAGS_NAME, Feedback::BUGS_TAGS] ], 
+         :selected => Feedback::BUGS_MISC) %>
+     </dd>
+     <dt><%= f.label :summary, "Brief summary (required):" %></dt>
+     <dd>
+       <%= f.text_field :summary, :size => 60 %>
+       <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX) %>
+       <p>
+       <%= live_validation_for_field('feedback_summary', :failureMessage => 'Please enter a brief summary of your message') %>
+       </p>
+     </dd>
+     <dt><%= f.label :comment, ts("Your comment (required)") %>:</dt>
+     <dd>
+       <%= f.text_area :comment, :cols => 60 %>
+       <p><%= live_validation_for_field('feedback_comment', :failureMessage => 'Please enter your message') %></p>
+     </dd>
+     <dt><%= f.label :email, ts("Your email (optional)") %>:</dt>
+     <dd><%= f.text_field :email, :size => 60 %></dd>
+   </dl>
+  </fieldset>
+  <fieldset>
+    <legend><%= ts('Send Feedback') %></legend>
+    <%= f.hidden_field :user_agent, :value => request.env["HTTP_USER_AGENT"] %>
+    <p class="submit"><%= f.submit ts("Send feedback") %></p>
+  </fieldset>
 <% end %>
-
-

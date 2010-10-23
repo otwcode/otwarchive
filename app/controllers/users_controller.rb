@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
+
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :after_reset, :end_first_login, :change_username]
-  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :change_username]
+  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid]
+  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid]
   before_filter :check_account_creation_status, :only => [:new, :create]
 
   def load_user
@@ -11,25 +12,30 @@ class UsersController < ApplicationController
 
   def check_account_creation_status
     if is_registered_user?
-      flash[:error] = t('already_logged_in', :default => "You are already logged in!")
-      redirect_to root_path
-      return
+      flash[:error] = ts("You are already logged in!")
+      redirect_to root_path and return
     end
-    token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
-    @invitation = Invitation.find_by_token(token)
-    #return true if AdminSetting.account_creation_enabled?   
-    if !@invitation
-      flash[:error] = t('creation_suspended', :default => "Account creation is suspended at the moment. Please check back with us later.")
-      redirect_to login_path
-      return
-    elsif @invitation.redeemed_at && @invitation.invitee
-      flash[:error] = t('invitation_used', :default => "This invitation has already been used to create an account, sorry!")
-      redirect_to login_path
-      return
+    token = params[:invitation_token] 
+Rails.logger.debug token
+    if token.blank?
+      if !AdminSetting.account_creation_enabled?
+        flash[:error] = ts("You need an invitation to sign up.")
+        redirect_to invite_requests_path and return
+      end
+    else
+      invitation = Invitation.find_by_token(token)
+      if !invitation
+        flash[:error] = ts("There was an error with your invitation token, please contact support")
+        redirect_to new_feedback_report_path and return
+      elsif invitation.redeemed_at && @invitation.invitee
+        flash[:error] = ts("This invitation has already been used to create an account, sorry!")
+        redirect_to root_path and return
+      end
     end
   end
 
   def index
+    flash.keep
     redirect_to :controller => :people, :action => :index
   end
 
@@ -39,13 +45,6 @@ class UsersController < ApplicationController
     if @user.blank?
       flash[:error] = ts("Sorry, could not find this user.")
       redirect_to people_path and return
-    end
-    if params[:open_id_complete] then
-      begin
-        open_id_authentication(params[:open_id_complete])
-      rescue
-        render :action => "edit"
-      end
     end
     if current_user.nil?
       visible_works = @user.works.visible_to_all
@@ -78,6 +77,42 @@ class UsersController < ApplicationController
   def edit
   end
   
+  def change_password
+    if params[:password]
+      unless @user.recently_reset? || reauthenticate 
+        render :change_password and return
+      end
+      @user.password = params[:password]
+      @user.password_confirmation = params[:password_confirmation]
+      @user.recently_reset = false
+      if @user.save
+        flash[:notice] = ts("Your password has been changed")
+        redirect_to user_profile_path(@user) and return
+      else
+        render :change_password and return
+      end
+    end
+  end
+
+  def change_openid
+    if params[:identity_url]
+      @openid_url = params[:identity_url]
+      @openid_url = "http://#{@openid_url}" unless @openid_url.match("http://")
+      @openid_url = OpenID.normalize_url(@openid_url)
+      unless reauthenticate
+        render :change_openid and return
+      end
+      @user.identity_url = @openid_url
+      @user.recently_reset = false
+      if @user.save
+        flash[:notice] = ts('Your OpenID URL has been successfully updated.')
+        redirect_to user_profile_path(@user) and return
+      else
+        render :change_password and return
+      end
+    end
+  end
+
   def change_username
     if params[:new_login]
       @new_login = params[:new_login]
@@ -113,25 +148,32 @@ class UsersController < ApplicationController
       @user = User.new
       @user.login = params[:user][:login]
       @user.email = params[:user][:email]
-      @user.invitation_token = params[:user][:invitation_token]
+      @user.invitation_token = params[:invitation_token]
       @user.age_over_13 = params[:user][:age_over_13]
       @user.terms_of_service = params[:user][:terms_of_service]
       @user.password = params[:user][:password] if params[:user][:password]
       @user.password_confirmation = params[:user][:password_confirmation] if params[:user][:password_confirmation]
       @user.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-      unless @user.identity_url.blank?
-        # normalize OpenID url before validating
-        @user.identity_url = OpenIdAuthentication.normalize_identifier(@user.identity_url)
+      openid_url = params[:user][:identity_url]
+      unless openid_url.blank?
+        # normalize OpenID url before saving
+        # TODO validate openid before creating account
+        openid_url = "http://#{openid_url}" unless openid_url.match("http://")
+        if User.find_by_identity_url(openid_url)
+          params[:use_openid] = true 
+          flash.now[:error] = "OpenID url is already being used"
+          render :action => "new" and return
+        else
+          @user.identity_url = OpenID.normalize_url(openid_url)
+        end
       end
       if @user.save
         UserMailer.signup_notification(@user).deliver
-        flash[:notice] = t('development_activation', :default => "During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
+        flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                             :activation_url => activate_path(@user.activation_code)) if Rails.env.development?
         render "confirmation"
       else
-        if params[:user] && params[:user][:identity_url]
-          params[:use_openid] = true
-        end
+        params[:use_openid] = true unless openid_url.blank?
         render :action => "new"
       end
     end
@@ -139,17 +181,17 @@ class UsersController < ApplicationController
 
   def activate
     if params[:id].blank?
-      flash[:error] = t('activation_key_missing', :default => "Your activation key is missing.")
+      flash[:error] = ts("Your activation key is missing.")
       redirect_to ''
     else
       @user = User.find_by_activation_code(params[:id])
       if @user
         if @user.active?
-          flash[:error] = t('activation_key_used', :default => "Your account has already been activated.")
+          flash[:error] = ts("Your account has already been activated.")
           redirect_to @user and return
         end
         @user.activate && UserMailer.activation(@user).deliver
-        flash[:notice] = t('signup_complete', :default => "Signup complete! Please log in.")
+        flash[:notice] = ts("Signup complete! Please log in.")
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
         # assign over any external authors that belong to this user
         external_authors = []
@@ -161,60 +203,44 @@ class UsersController < ApplicationController
           external_authors.each do |external_author|
             external_author.claim!(@user)
           end
-          flash[:notice] += t('external_authors_claimed', 
-            :default => " We found some stories already uploaded to the Archive of Our Own that we think belong to you! You can see them either in your works below or in your drafts folder.")
+          flash[:notice] += ts(" We found some stories already uploaded to the Archive of Our Own that we think belong to you! You can see them either in your works below or in your drafts folder.")
         end
-        redirect_to(login_path)
+        if @user.identity_url
+          redirect_to(login_path(:use_openid => true))
+        else
+          redirect_to(login_path)
+        end
       else
-        flash[:error] = t('activation_key_invalid', :default => "Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again.")
+        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again.")
         redirect_to ''
       end
     end
   end
 
-  def after_reset
-  end
-
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    begin
-      if @user.profile
-        @user.profile.update_attributes! params[:profile_attributes]
+    # have to reauthenticate to change email
+    if params[:new_email] != @user.email
+      @user.email = params[:new_email]
+      if !reauthenticate
+        render :edit and return
       else
-        @user.profile = Profile.new(params[:profile_attributes])
-        @user.profile.save!
-      end
-      if @user.recently_reset? && params[:change_password]
-        successful_update
-      elsif params[:user] && !params[:user][:password].blank? && !@user.authenticated?(params[:user][:password], @user.salt) && !@user.authenticated?(params[:check][:password_check], @user.salt)
-        flash[:error] = ts("Your old password was incorrect")
-        unsuccessful_update
-      elsif params[:user] && params[:user][:identity_url] != @user.identity_url 
-        if params[:user][:identity_url].blank?
-          successful_update
+        if @user.save
+          flash[:notice] = ts("Your profile has been successfully updated")
         else
-          open_id_authentication(params[:user][:identity_url])
+          render :edit and return
         end
-      elsif params['openid.mode']
-        if @user.update_attribute(:identity_url, params['openid.identity'])
-          flash[:notice] = t('profile_updated', :default => 'Your profile has been successfully updated.')
-          redirect_to(user_profile_path(@user))
-        else
-          params[:use_openid] = true
-          flash[:error] = "Your OpenID failed to save. Please try again."
-          render :edit
-        end
-      else
-        successful_update
       end
-    rescue
-      if params[:user] && params[:user][:identity_url]
-        params[:use_openid] = true
-      end
-      flash[:error] = t('update_failed', :default => "Your update failed; please try again.")
-      render :action => "edit"
     end
+    # change profile
+    @user.profile.update_attributes(params[:profile_attributes])
+    if @user.profile.save
+      flash[:notice] = ts("Your profile has been successfully updated")
+    else
+      render :edit and return
+    end
+    redirect_to user_profile_path(@user) and return
   end
 
   # DELETE /users/1
@@ -228,7 +254,7 @@ class UsersController < ApplicationController
         @user.wipeout_unposted_works
       end
       @user.destroy
-      flash[:notice] = t('successfully_deleted', :default => 'You have successfully deleted your account.')
+      flash[:notice] = ts('You have successfully deleted your account.')
      redirect_to(delete_confirmation_path)
     elsif params[:coauthor].blank? && params[:sole_author].blank?
       @sole_authored_works = @user.sole_authored_works
@@ -238,7 +264,7 @@ class UsersController < ApplicationController
       @sole_authored_works = @user.sole_authored_works
       @coauthored_works = @user.coauthored_works
       if params[:cancel_button]
-        flash[:notice] = t('deletion_canceled', :default => "Account deletion canceled.")
+        flash[:notice] = ts("Account deletion canceled.")
        redirect_to user_profile_path(@user)
       else
         # Orphans co-authored works, keeps the user's pseud on the orphan account
@@ -296,10 +322,10 @@ class UsersController < ApplicationController
             @user.wipeout_unposted_works
           end
           @user.destroy
-          flash[:notice] = t('successfully_deleted', :default => 'You have successfully deleted your account.')
+          flash[:notice] = ts('You have successfully deleted your account.')
           redirect_to(delete_confirmation_path)
         else
-          flash[:error] = t('deletion_failed', :default => "Sorry, something went wrong! Please try again.")
+          flash[:error] = ts("Sorry, something went wrong! Please try again.")
           redirect_to(@user)
         end
       end
@@ -316,28 +342,22 @@ class UsersController < ApplicationController
     end
   end
 
-  protected
-    def successful_update
-      @user.update_attributes!(params[:user])
-      @user.update_attribute(:recently_reset, false)
-      flash[:notice] = t('profile_updated', :default => 'Your profile has been successfully updated.')
-      redirect_to(user_profile_path(@user))
-    end
+  private
 
-    def unsuccessful_update
-       raise
-    end
-
-    def open_id_authentication(openid_url)
-      authenticate_with_open_id(openid_url) do |result, identity_url, registration|
-        if result.successful?
-          @user.update_attribute(:identity_url, identity_url)
-          flash[:notice] = t('profile_updated', :default => 'Your profile has been successfully updated.')
-          redirect_to(user_profile_path(@user))
+    def reauthenticate
+      if !params[:password_check].blank?
+        session = UserSession.new(:login => @user.login, :password => params[:password_check])
+        if session.valid?
+          return true
         else
-          flash[:error] = result.message
-          raise
+          flash.now[:error] = ts("Your old password was incorrect")
+          @wrong_password = true
+          return false
         end
+      else
+        flash.now[:error] = ts("You must authenticate again first")
+        @wrong_password = true
+        return false
       end
     end
 

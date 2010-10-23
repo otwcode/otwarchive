@@ -44,6 +44,8 @@ module Otwarchive
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
     
+    # configure middleware
+    config.middleware.use 'Rack::OpenID'
     
     ### things I'm preserving here from our Rails 2 environment.rb that we might or might not need
         

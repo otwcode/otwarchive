@@ -25,7 +25,7 @@ Scenario: Deleting users
   When I fill in "User name" with "downthemall"
     And I fill in "Password" with "password"
     And I press "Log in"
-  Then I should see "We couldn't find that name in our database. Please try again."
+  Then I should see "We couldn't find that user name in our database. Please try again."
   
   # delete a user and delete the works
   When I am logged in as "otheruser" with password "secret"
@@ -47,7 +47,7 @@ Scenario: Deleting users
   When I fill in "User name" with "otheruser"
     And I fill in "Password" with "password"
     And I press "Log in"
-  Then I should see "We couldn't find that name in our database. Please try again."
+  Then I should see "We couldn't find that user name in our database. Please try again"
   When I go to the works page
   Then I should not see "To be deleted"
   
@@ -72,7 +72,7 @@ Scenario: Deleting users
   When I fill in "User name" with "otheruser"
     And I fill in "Password" with "password"
     And I press "Log in"
-  Then I should see "We couldn't find that name in our database. Please try again."
+  Then I should see "We couldn't find that user name in our database. Please try again"
   When I go to the works page
   Then I should see "To be orphaned"
     And I should see "orphan_account"

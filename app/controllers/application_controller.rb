@@ -45,8 +45,10 @@ protected
 public
 
   # store previous page in session to make redirecting back possible
+  before_filter :store_location
   def store_location
     session[:return_to] = request.fullpath
+    Rails.logger.debug "Return to: #{session[:return_to]}"
   end
 
   # Redirect to the URI stored by the most recent store_location call or
@@ -238,7 +240,7 @@ public
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them
   def check_visibility
     if @check_visibility_of.respond_to?(:restricted) && @check_visibility_of.restricted && User.current_user.nil?
-      redirect_to new_session_path(:restricted => true)
+      redirect_to login_path(:restricted => true)
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
@@ -250,8 +252,7 @@ public
   
   # Make sure user is allowed to access tag wrangling pages
   def check_permission_to_wrangle
-    @admin_settings ||= AdminSetting.first
-    if @admin_settings.tag_wrangling_off? && !logged_in_as_admin?
+    if AdminSetting.tag_wrangling_off? && !logged_in_as_admin?
       flash[:error] = "Wrangling is disabled at the moment. Please check back later."
       redirect_to root_path
     else

@@ -13,8 +13,9 @@ Feature: User Authentication
       And I fill in "Password" with "test"
       And I press "Log in"
     Then I should see "The password you entered doesn't match our records"
-    When I follow "forgot password?"
-    Then I should see "Never fear - if you've forgotten your password, we can send you a link to reset it"
+    And I should see "Forgot your password or user name?"
+    When I follow "Reset password"
+    Then I should see "Please tell us the user name or email address you used when you signed up for your Archive account"
     When I fill in "login" with "sam"
       And I press "Reset password"
     Then 1 email should be delivered
@@ -29,7 +30,7 @@ Feature: User Authentication
       And I fill in "User name" with "sammy"
       And I fill in "Password" with "test"
       And I press "Log in"
-    Then I should see "We couldn't find that name in our database. Please try again."
+    Then I should see "We couldn't find that user name in our database. Please try again"
     
   Scenario: Wrong username
     Given I have no users

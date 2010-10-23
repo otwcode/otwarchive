@@ -1,1 +1,1 @@
-page.replace_html(:small_login, :partial => 'session/passwd_small')
+page.replace_html(:small_login, :partial => 'user_sessions/passwd_small')

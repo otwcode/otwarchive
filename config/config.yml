@@ -58,11 +58,12 @@ DELIMITER_FOR_INPUT: ','  # if you change this, you will need to change
 DELIMITER_FOR_OUTPUT: ', '
 
 # accounts and invitations
-ACCOUNT_CREATION_ENABLED: true
-INVITATION_LIMIT: 1
+# these can be overridden in the admin controller
 INVITE_FROM_QUEUE_ENABLED: true
 INVITE_FROM_QUEUE_NUMBER: 10
 INVITE_FROM_QUEUE_FREQUENCY: 7
+# this is whether or not people without invitations can create accounts
+ACCOUNT_CREATION_ENABLED: false
 DAYS_TO_PURGE_UNACTIVATED: 7
 
 # validation values -- max/min lengths

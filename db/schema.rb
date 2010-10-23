@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101016131743) do
+ActiveRecord::Schema.define(:version => 20101022002353) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20101016131743) do
     t.datetime "suspend_filter_counts_at"
     t.boolean  "enable_test_caching",                      :default => false
     t.integer  "cache_expiration",            :limit => 8, :default => 10
+    t.boolean  "tag_wrangling_off",                        :default => false,                 :null => false
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"

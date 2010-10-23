@@ -9,5 +9,4 @@ begin
     settings.save(:validate => false)
   end
 rescue
-  puts "no admin settings for you"
 end

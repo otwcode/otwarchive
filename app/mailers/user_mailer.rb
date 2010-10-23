@@ -168,11 +168,11 @@ class UserMailer < ActionMailer::Base
   
   # archive feedback
   def feedback(feedback)
-    setup_email_without_name(feedback.email)
+    return unless feedback.email
     @summary = feedback.summary
     @comment = feedback.comment
     mail(
-      :to => user.email,
+      :to => feedback.email,
       :subject => "#{ArchiveConfig.APP_NAME}: Support - #{feedback.summary}"
     )
   end  

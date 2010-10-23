@@ -1,15 +1,18 @@
 <!-- OpenID field -->
-	<p>
-		<%= label_tag 'openid_url', 'Log in with OpenID:' %>	<br />
-		<%= image_tag("openid.png", :alt => 'The option to trigger OpenID log in on or off, as appropriate. Represented by a stylised "O" crossding over with a sideways "I".', :class => 'openid') %> <%= text_field_tag "openid_url", '' %>
-	</p>
-	<p>
-		<%= check_box_tag('remember_me', '1', false) %>
-		<%= label_tag 'remember_me', 'Remember me' %>
-	</p>
-	<p class="submit">
-		<%= submit_tag 'Log in', :class => 'submit' %>
-	</p>
-	<p class="footnote openid">
-		<%= link_to_remote 'Return to standard log in' , {:url => {:action => 'passwd'}}, :href => url_for( :action => 'new', :use_openid => false ) %>
-	</p>
+<% @user_session = UserSession.new unless @user_session %>
+<%= form_for @user_session do %>
+  <p>
+    <%= link_to_remote ts('Log in using User Name and Password'),
+           {:url => {:controller => :user_sessions, :action => 'passwd'}},
+           :href => login_path %>
+  </p>
+  <p>
+    <%= hidden_field_tag 'use_openid', true %>
+    <%= label_tag 'openid_url', 'Log in with OpenID:' %><br />
+    <%= image_tag("openid.png", :alt => ts('The OpenID logo. Represented by a stylised "O" crossding over with a sideways "I".'), :class => 'openid') %> 
+    <%= text_field_tag "openid_url", @openid_url %>
+  </p>
+  <p class="submit">
+    <%= submit_tag 'Log in', :class => 'submit' %>
+  </p>
+<% end %>

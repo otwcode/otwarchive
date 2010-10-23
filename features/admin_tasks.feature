@@ -13,7 +13,7 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
       And I fill in "user_session_login" with "Zooey"
       And I fill in "user_session_password" with "secret"
       And I press "Log in"
-    Then I should see "We couldn't find that name in our database."
+    Then I should see "We couldn't find that user name in our database. Please try again"
     When I go to the archive_faqs page
     Then I should see "Some commonly asked questions about the Archive are answered here"
       And I should not see "Some text"

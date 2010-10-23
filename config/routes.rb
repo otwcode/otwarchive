@@ -121,7 +121,10 @@ Otwarchive::Application.routes.draw do
   # When adding new nested resources, please keep them in alphabetical order
   resources :users do
     member do
-      get :after_reset
+      get :change_openid
+      post :change_openid
+      get :change_password
+      post :change_password
       get :change_username
       post :change_username
       post :end_first_login
@@ -342,12 +345,9 @@ Otwarchive::Application.routes.draw do
   
   #### SESSIONS ####
   
-  # resource :session, :controller => 'session' 
-
   resources :user_sessions
   match 'login' => 'user_sessions#new'
   match 'logout' => 'user_sessions#destroy' 
-  #match  '/opensession' => "session#create", :as => "open_id_complete", :requirements => { :method => :get }
     
   #### MISC ####
   
@@ -397,8 +397,8 @@ Otwarchive::Application.routes.draw do
   resources :search, :only => :index
   
   match 'search' => 'search#index'
-  match 'support' => 'feedbacks#create', :as => 'feedbacks', :requirements => { :method => :post }
-  match 'support' => 'feedbacks#new', :as => 'new_feedback_report'
+  match 'support' => 'feedbacks#create', :as => 'feedbacks', :via => [:post]
+  match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
   match 'site_map' => 'home#site_map'

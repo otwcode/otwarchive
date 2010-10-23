@@ -1,89 +1,87 @@
 <!-- BEGIN BETA CAVEATS! -->
 <noscript>
-  <div id="javascript-warning">
-    <p>
-      <%= I18n.ts("While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled. 
-      Please consider turning it on!") %>
-    </p>
-  </div> 
+<div id="javascript-warning">
+  <p>
+    <%= I18n.ts("While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled. Please consider turning it on!") %>
+  </p>
+</div> 
 </noscript>
 <!-- END BETA CAVEATS! --> 
 
 <% unless logged_in? || logged_in_as_admin? %>
   <div id="home-signin">
-  <%= render :partial => 'user_sessions/login' %>
+    <%= render :partial => 'user_sessions/login' %>
   </div>
 <% end %>
 
 <div id="home-header">
-	<div id="login-block">
+  <div id="login-block">
     <% if logged_in? || logged_in_as_admin? %>
       <%= render :partial => 'user_sessions/greeting' %>
     <% end %>
     <%= render :partial => 'works/search_box' %>
   </div>
 
-<%= image_tag('logo-glitter-hat-noisemaker.gif', :alt => 'AO3 logo all dressed up for our first birthday!', :title => 'AO3 logo all dressed up for our first birthday!', :class => 'logo', :height=> '96', :width => '105') %>
+  <%= image_tag('logo-glitter-hat-noisemaker.gif', :alt => 'AO3 logo all dressed up for our first birthday!', :title => 'AO3 logo all dressed up for our first birthday!', :class => 'logo', :height=> '96', :width => '105') %>
   
-	<div class="titles">
-		<h1><%= ArchiveConfig.APP_NAME %></h1>
+  <div class="titles">
+    <h1><%= ArchiveConfig.APP_NAME %></h1>
+    <h2><%= ts("A project of the") %> <%= link_to("Organization for Transformative Works", "http://transformativeworks.org") %></h2>
+  </div>
 
-		<h2><%= ts("A project of the") %> <%= link_to("Organization for Transformative Works", "http://transformativeworks.org") %></h2>
-	</div>
-
-	<ul class="navigation">
-    	<li><%= link_to_unless_current ts("fandoms"), media_path %></li>
-		<li><%= link_to_unless_current ts("works"), works_path %></li>
-    	<li><%= link_to_unless_current ts("people"), people_path %></li>
-    	<li><%= link_to_unless_current ts("bookmarks"), bookmarks_path %></li>
-    	<li><%= link_to_unless_current ts("tags"), tags_path %></li>
-    	<li><%= link_to_unless_current ts("collections"), collections_path %></li>
-	</ul>
-	<div class="clear"></div>
+  <ul class="navigation">
+    <li><%= link_to_unless_current ts("fandoms"), media_path %></li>
+    <li><%= link_to_unless_current ts("works"), works_path %></li>
+    <li><%= link_to_unless_current ts("people"), people_path %></li>
+    <li><%= link_to_unless_current ts("bookmarks"), bookmarks_path %></li>
+    <li><%= link_to_unless_current ts("tags"), tags_path %></li>
+    <li><%= link_to_unless_current ts("collections"), collections_path %></li>
+  </ul>
+  <div class="clear"></div>
 </div>
 <div class="bigwrapper">
-	 <%= flash_div :error, :warning, :notice %>
-	<div class="open-beta-box">
-  <% if logged_in? %>
-    <h2><%= ts('Welcome to open beta!') %></h2>
-    <h1><%= link_to ts('INVITE A FRIEND'), user_invitations_path(current_user) %></h1> 
-  <% else %>
-    <h2>Be part of our open beta!</h2>
-    <% if AdminSetting.invite_from_queue_enabled? %>
-    <h1><%= link_to ts('SIGN UP NOW'), invite_requests_path %></h1>
+  <%= flash_div :error, :warning, :notice %>
+  <div class="open-beta-box">
+    <% if logged_in? %>
+      <h2><%= ts('Welcome to open beta!') %></h2>
+      <h1><%= link_to ts('INVITE A FRIEND'), user_invitations_path(current_user) %></h1> 
     <% else %>
-    <h2><a href="session/new"><%= ts('Log in') %></a></h2>
+      <% if AdminSetting.account_creation_enabled? %>
+        <h2><%= link_to ts('Log in'), login_path %> or <%= link_to ts("Create an Account"), new_user_path %> </h2>
+      <% elsif AdminSetting.invite_from_queue_enabled? %>
+        <h2>Be part of our open beta!</h2>
+        <h1><%= link_to ts('SIGN UP NOW'), invite_requests_path %></h1>
+      <% else %>
+        <h2><%= link_to ts('Log in'), login_path %></h2>
+      <% end %>
     <% end %>
-  <% end %>
-    <p><%= ts('The Archive of Our Own is a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks,  such as fanfiction
-and fanart.
-') %></p>
+    <p><%= ts('The Archive of Our Own is a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks,  such as fanfiction and fanart.') %></p>
   </div>
   
   <div class="sidebar">
     <div class="sidebar-box">
       <h3>Explore</h3>
-	    <ul class="meters">
-		    <li>
-		      <span><%= link_to ts('fandoms'), media_path %></span>: 
-		      <span><%= @fandom_count %></span><%= ' ' + ts(" to date") %>
-		    </li>
-		    <li>
-		      <span><%= link_to ts('works'), works_path %></span>: 
-		      <span><%= @work_count %></span><%= ' ' + ts(" to date") %>
-		    </li>
+      <ul class="meters">
+        <li>
+	  <span><%= link_to ts('fandoms'), media_path %></span>: 
+	  <span><%= @fandom_count %></span><%= ' ' + ts(" to date") %>
+	</li>
+	<li>
+	  <span><%= link_to ts('works'), works_path %></span>: 
+	  <span><%= @work_count %></span><%= ' ' + ts(" to date") %>
+	</li>
         <li>
           <span><%= link_to ts('people'), people_path %></span>: 
           <span><%= @user_count %></span><%= ' ' + ts(" to date") %>
         </li>
-	    </ul>    
+      </ul>    
     </div>
     <% if @admin_post %>
       <div class="sidebar-box">
         <h3>News</h3>
         <p><%= link_to @admin_post.title, @admin_post %></p>
         <% if @admin_post_show_more %>
-        <p><%= link_to ts('More news&#8230;'), admin_posts_path %></p>
+          <p><%= link_to ts('More news&#8230;'), admin_posts_path %></p>
         <% end %>
       </div>
     <% end %>
@@ -96,5 +94,3 @@ and fanart.
     </div>    
   </div>
 </div>
-
-<!--<h5 id="signup"></h5>-->

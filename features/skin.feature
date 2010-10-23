@@ -107,10 +107,11 @@ Feature: creating and editing skins
   Given the following activated user exists
     | login    | password |
     | someuser | password |
-  And I fill in "user_session_login" with "someuser"
-  And I fill in "user_session_password" with "password"
-  And I press "Log in"
-    Then I should see "Sorry, you don't have permission"
+    And I fill in "user_session_login" with "someuser"
+    And I fill in "user_session_password" with "password"
+    And I press "Log in"
+  When I go to admin's skins page
+  Then I should see "I'm sorry, only an admin can look at that area"
   When I go to "public blinking skin" skin page
   Then I should see "Sorry, you don't have permission"
     And I should not see "Edit"

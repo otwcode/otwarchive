@@ -6,14 +6,8 @@ class FeedbacksController < ApplicationController
   def new
     @feedback = Feedback.new
     @page_title = "Support and Feedback"
-     unless User.current_user.nil?
-      @feedback.email = User.current_user.email
-    else
-      @feedback.email = ""
-    end
-
-    respond_to do |format|
-      format.html # new.html.erb
+    if is_registered_user?
+      @feedback.email = current_user.email
     end
   end
 

@@ -21,7 +21,7 @@
     
     <% if current_user == pseud.user %>
       <ul class="navigation" role="navigation">
-      <li><%= link_to "#{h(ts('Edit'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [:edit, @user, pseud], :id => "edit_#{pseud.name.underscore}" %></li>
+      <li><%= link_to "#{h(ts('Edit'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [:edit, @user, pseud], :id => "edit_#{pseud.name.downcase.gsub(" ", "_")}" %></li>
       <% unless pseud.works.blank? %>
         <li><%= link_to "#{h(ts('Orphan Works'))} <span class=\"landmark\">by #{h pseud.name}</span>".html_safe, {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} %></li>
       <% end %>

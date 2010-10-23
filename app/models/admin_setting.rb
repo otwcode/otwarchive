@@ -33,6 +33,9 @@ class AdminSetting < ActiveRecord::Base
   def self.cache_expiration
     self.first ? self.first.cache_expiration : 10
   end  
+  def self.tag_wrangling_off?
+    self.first ? self.first.tag_wrangling_off? : false
+  end  
 
   def self.check_queue
     if self.invite_from_queue_enabled? && InviteRequest.count > 0
