@@ -40,13 +40,13 @@ gem 'nokogiri'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
-gem 'delayed_job' 
+gem 'delayed_job', '>=2.1.0.pre2'
 gem 'thinking-sphinx',
   :git     => 'git://github.com/freelancing-god/thinking-sphinx.git',
   :branch  => 'rails3',
   :require => 'thinking_sphinx'
 gem 'ts-delayed-delta', :require => 'thinking_sphinx/deltas/delayed_delta'
-gem 'daemon-spawn'
+#gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'aws-s3', :require => 'aws/s3'
 # gem 'fastercsv' -- will use this eventually for exporting to excel tsv format
 gem 'mocha'
