@@ -159,14 +159,33 @@ namespace :After do
   task(:mark_meta_tags_inherited => :environment) do
     MetaTagging.find_each do |meta_tagging|
       m = meta_tagging.meta_tag
+      print "m" ; STDOUT.flush
       filters = [m] + m.mergers
+      print "f" ; STDOUT.flush
       m.filtered_works.each do |work|
-        print "." if work.id.modulo(100) == 0; STDOUT.flush
+        print "w" ; STDOUT.flush
         if (work.tags & filters).empty?
+          print "t" ; STDOUT.flush
           ft = work.filter_taggings.where(:filter_id => m.id).first
           ft.update_attribute(:inherited, true)
         end
       end      
+      print "\n" ; STDOUT.flush
+    end
+  end
+
+
+  desc "fix old '- Pairing' names"
+  task(:update_pairing_names => :environment) do
+    tags = Relationship.where('name LIKE ?', "% - Pairing")
+    tags.each do |t|
+      oldname = t.name
+      newname = oldname.gsub(/ - Pairing$/, " - Relationship")
+      begin
+        t.update_attribute(:name, newname) 
+      rescue ActiveRecord::RecordNotUnique
+        puts "\"#{oldname}\" couldn't be renamed because \"#{newname}\" already exists"
+      end
     end
   end
 
@@ -179,5 +198,5 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:reading_count_setup', 'After:move_hit_counts']
-task :After => ['After:mark_meta_tags_inherited']
+task :After => ['After:update_pairing_names', 'After:mark_meta_tags_inherited']
 
