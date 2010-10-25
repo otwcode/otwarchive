@@ -1,26 +1,24 @@
-# This file is auto-generated from the current state of the database. Instead
-# of editing this file, please use the migrations feature of Active Record to
-# incrementally modify your database, and then regenerate this schema definition.
+# This file is auto-generated from the current state of the database. Instead of editing this file, 
+# please use the migrations feature of Active Record to incrementally modify your database, and
+# then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# Note that this schema.rb definition is the authoritative source for your database schema. If you need
+# to create the application database on another system, you should be using db:schema:load, not running
+# all the migrations from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101022002353) do
+ActiveRecord::Schema.define(:version => 20100907015632) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
-    t.string   "url",                                                   :null => false
-    t.text     "comment",                                               :null => false
+    t.string   "url",        :null => false
+    t.text     "comment",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "ip_address"
     t.string   "category"
-    t.integer  "comment_sanitizer_version", :limit => 2, :default => 0, :null => false
   end
 
   create_table "admin_posts", :force => true do |t|
@@ -29,7 +27,6 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.text     "content"
     t.datetime "updated_at"
     t.datetime "created_at"
-    t.integer  "content_sanitizer_version", :limit => 2, :default => 0, :null => false
   end
 
   create_table "admin_settings", :force => true do |t|
@@ -46,7 +43,6 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.datetime "suspend_filter_counts_at"
     t.boolean  "enable_test_caching",                      :default => false
     t.integer  "cache_expiration",            :limit => 8, :default => 10
-    t.boolean  "tag_wrangling_off",                        :default => false,                 :null => false
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"
@@ -58,7 +54,6 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.string   "login"
     t.string   "crypted_password"
     t.string   "salt"
-    t.string   "persistence_token", :null => false
   end
 
   create_table "archive_faqs", :force => true do |t|
@@ -67,23 +62,21 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.text     "content"
     t.datetime "updated_at"
     t.datetime "created_at"
-    t.integer  "position",                               :default => 1
-    t.integer  "content_sanitizer_version", :limit => 2, :default => 0, :null => false
+    t.integer  "position",   :default => 1
   end
 
   create_table "bookmarks", :force => true do |t|
-    t.datetime "created_at",                                               :null => false
-    t.string   "bookmarkable_type",       :limit => 15,                    :null => false
-    t.integer  "bookmarkable_id",                                          :null => false
+    t.datetime "created_at",                                         :null => false
+    t.string   "bookmarkable_type", :limit => 15,                    :null => false
+    t.integer  "bookmarkable_id",                                    :null => false
     t.integer  "user_id"
     t.text     "notes"
-    t.boolean  "private",                               :default => false
+    t.boolean  "private",                         :default => false
     t.datetime "updated_at"
-    t.boolean  "hidden_by_admin",                       :default => false, :null => false
-    t.integer  "pseud_id",                                                 :null => false
-    t.boolean  "rec",                                   :default => false, :null => false
-    t.boolean  "delta",                                 :default => true
-    t.integer  "notes_sanitizer_version", :limit => 2,  :default => 0,     :null => false
+    t.boolean  "hidden_by_admin",                 :default => false, :null => false
+    t.integer  "pseud_id",                                           :null => false
+    t.boolean  "rec",                             :default => false, :null => false
+    t.boolean  "delta",                           :default => true
   end
 
   add_index "bookmarks", ["bookmarkable_id", "bookmarkable_type", "pseud_id"], :name => "index_bookmarkable_pseud"
@@ -98,12 +91,12 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.string   "creation_type"
     t.integer  "offer_signup_id"
     t.integer  "request_signup_id"
+    t.integer  "pinch_hitter_id"
     t.datetime "sent_at"
     t.datetime "fulfilled_at"
     t.datetime "defaulted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "pinch_hitter_id"
     t.integer  "pinch_request_signup_id"
     t.datetime "covered_at"
   end
@@ -118,23 +111,19 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
   end
 
   create_table "chapters", :force => true do |t|
-    t.text     "content",                    :limit => 2147483647,                    :null => false
-    t.integer  "position",                                         :default => 1
+    t.text     "content",         :limit => 2147483647,                    :null => false
+    t.integer  "position",                              :default => 1
     t.integer  "work_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "posted",                                           :default => false, :null => false
+    t.boolean  "posted",                                :default => false, :null => false
     t.string   "title"
     t.text     "notes"
     t.text     "summary"
     t.integer  "word_count"
-    t.boolean  "hidden_by_admin",                                  :default => false, :null => false
+    t.boolean  "hidden_by_admin",                       :default => false, :null => false
     t.date     "published_at"
     t.text     "endnotes"
-    t.integer  "content_sanitizer_version",  :limit => 2,          :default => 0,     :null => false
-    t.integer  "notes_sanitizer_version",    :limit => 2,          :default => 0,     :null => false
-    t.integer  "summary_sanitizer_version",  :limit => 2,          :default => 0,     :null => false
-    t.integer  "endnotes_sanitizer_version", :limit => 2,          :default => 0,     :null => false
   end
 
   add_index "chapters", ["work_id"], :name => "index_chapters_on_work_id"
@@ -182,15 +171,12 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro",                   :limit => 2147483647
-    t.text     "faq",                     :limit => 2147483647
-    t.text     "rules",                   :limit => 2147483647
+    t.text     "intro",             :limit => 16777215
+    t.text     "faq",               :limit => 16777215
+    t.text     "rules",             :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "gift_notification"
-    t.integer  "intro_sanitizer_version", :limit => 2,          :default => 0, :null => false
-    t.integer  "faq_sanitizer_version",   :limit => 2,          :default => 0, :null => false
-    t.integer  "rules_sanitizer_version", :limit => 2,          :default => 0, :null => false
   end
 
   add_index "collection_profiles", ["collection_id"], :name => "index_collection_profiles_on_collection_id"
@@ -210,7 +196,6 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
-    t.integer  "description_sanitizer_version", :limit => 2, :default => 0, :null => false
   end
 
   add_index "collections", ["name"], :name => "index_collections_on_name"
@@ -218,11 +203,11 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
 
   create_table "comments", :force => true do |t|
     t.integer  "pseud_id"
-    t.text     "content",                                                   :null => false
+    t.text     "content",                             :null => false
     t.integer  "depth"
     t.integer  "threaded_left"
     t.integer  "threaded_right"
-    t.boolean  "is_deleted",                             :default => false, :null => false
+    t.boolean  "is_deleted",       :default => false, :null => false
     t.string   "name"
     t.string   "email"
     t.string   "ip_address"
@@ -232,12 +217,11 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.datetime "updated_at"
     t.integer  "thread"
     t.string   "user_agent"
-    t.boolean  "approved",                               :default => false, :null => false
-    t.boolean  "hidden_by_admin",                        :default => false, :null => false
+    t.boolean  "approved",         :default => false, :null => false
+    t.boolean  "hidden_by_admin",  :default => false, :null => false
     t.datetime "edited_at"
     t.integer  "parent_id"
     t.string   "parent_type"
-    t.integer  "content_sanitizer_version", :limit => 2, :default => 0,     :null => false
   end
 
   add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_commentable"
@@ -314,27 +298,24 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
   add_index "external_creatorships", ["external_author_name_id"], :name => "index_external_creatorships_on_external_author_name_id"
 
   create_table "external_works", :force => true do |t|
-    t.string   "url",                                                       :null => false
-    t.string   "author",                                                    :null => false
-    t.boolean  "dead",                                   :default => false, :null => false
+    t.string   "url",                                :null => false
+    t.string   "author",                             :null => false
+    t.boolean  "dead",            :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",                                                     :null => false
+    t.string   "title",                              :null => false
     t.text     "summary"
-    t.boolean  "hidden_by_admin",                        :default => false, :null => false
-    t.integer  "summary_sanitizer_version", :limit => 2, :default => 0,     :null => false
+    t.boolean  "hidden_by_admin", :default => false, :null => false
   end
 
   create_table "feedbacks", :force => true do |t|
-    t.text     "comment",                                               :null => false
+    t.text     "comment",    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email"
     t.string   "summary"
     t.string   "user_agent"
     t.string   "category"
-    t.integer  "comment_sanitizer_version", :limit => 2, :default => 0, :null => false
-    t.integer  "summary_sanitizer_version", :limit => 2, :default => 0, :null => false
   end
 
   create_table "filter_counts", :force => true do |t|
@@ -346,14 +327,15 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
   end
 
   add_index "filter_counts", ["filter_id"], :name => "index_filter_counts_on_filter_id"
+  add_index "filter_counts", ["public_works_count"], :name => "index_public_works_count"
+  add_index "filter_counts", ["unhidden_works_count"], :name => "index_unhidden_works_count"
 
   create_table "filter_taggings", :force => true do |t|
-    t.integer  "filter_id",       :limit => 8,                      :null => false
-    t.integer  "filterable_id",   :limit => 8,                      :null => false
+    t.integer  "filter_id",       :limit => 8,   :null => false
+    t.integer  "filterable_id",   :limit => 8,   :null => false
     t.string   "filterable_type", :limit => 100
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "inherited",                      :default => false, :null => false
   end
 
   add_index "filter_taggings", ["filter_id", "filterable_type"], :name => "index_filter_taggings_on_filter_id_and_filterable_type"
@@ -362,16 +344,16 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
   create_table "gift_exchanges", :force => true do |t|
     t.integer  "request_restriction_id"
     t.integer  "offer_restriction_id"
-    t.integer  "requests_num_required",                                       :default => 1,     :null => false
-    t.integer  "offers_num_required",                                         :default => 1,     :null => false
-    t.integer  "requests_num_allowed",                                        :default => 1,     :null => false
-    t.integer  "offers_num_allowed",                                          :default => 1,     :null => false
+    t.integer  "requests_num_required",        :default => 1,     :null => false
+    t.integer  "offers_num_required",          :default => 1,     :null => false
+    t.integer  "requests_num_allowed",         :default => 1,     :null => false
+    t.integer  "offers_num_allowed",           :default => 1,     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "signup_instructions_general"
     t.text     "signup_instructions_requests"
     t.text     "signup_instructions_offers"
-    t.boolean  "signup_open",                                                 :default => false, :null => false
+    t.boolean  "signup_open",                  :default => false, :null => false
     t.datetime "signups_open_at"
     t.datetime "signups_close_at"
     t.datetime "assignments_due_at"
@@ -385,9 +367,6 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.string   "time_zone"
     t.integer  "potential_match_settings_id"
     t.datetime "assignments_sent_at"
-    t.integer  "signup_instructions_general_sanitizer_version",  :limit => 2, :default => 0,     :null => false
-    t.integer  "signup_instructions_requests_sanitizer_version", :limit => 2, :default => 0,     :null => false
-    t.integer  "signup_instructions_offers_sanitizer_version",   :limit => 2, :default => 0,     :null => false
   end
 
   create_table "gifts", :force => true do |t|
@@ -458,7 +437,6 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.text     "content"
     t.datetime "updated_at"
     t.datetime "created_at"
-    t.integer  "content_sanitizer_version", :limit => 2, :default => 0, :null => false
   end
 
   create_table "languages", :force => true do |t|
@@ -482,15 +460,14 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
   add_index "locales", ["short"], :name => "index_locales_on_short"
 
   create_table "log_items", :force => true do |t|
-    t.integer  "user_id",                                            :null => false
+    t.integer  "user_id",                 :null => false
     t.integer  "admin_id"
     t.integer  "role_id"
-    t.integer  "action",                 :limit => 1
-    t.text     "note",                                               :null => false
+    t.integer  "action",     :limit => 1
+    t.text     "note",                    :null => false
     t.datetime "enddate"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "note_sanitizer_version", :limit => 2, :default => 0, :null => false
   end
 
   add_index "log_items", ["admin_id"], :name => "index_log_items_on_admin_id"
@@ -607,7 +584,6 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "title"
-    t.integer  "about_me_sanitizer_version", :limit => 2, :default => 0, :null => false
   end
 
   add_index "profiles", ["user_id"], :name => "index_profiles_on_user_id"
@@ -650,23 +626,21 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "type"
-    t.integer  "description_sanitizer_version", :limit => 2, :default => 0, :null => false
   end
 
   create_table "pseuds", :force => true do |t|
     t.integer  "user_id"
-    t.string   "name",                                                          :null => false
+    t.string   "name",                                 :null => false
     t.text     "description"
-    t.boolean  "is_default",                                 :default => false, :null => false
+    t.boolean  "is_default",        :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "icon_file_name"
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
-    t.string   "icon_alt_text",                              :default => ""
-    t.boolean  "delta",                                      :default => true
-    t.integer  "description_sanitizer_version", :limit => 2, :default => 0,     :null => false
+    t.string   "icon_alt_text",     :default => ""
+    t.boolean  "delta",             :default => true
   end
 
   add_index "pseuds", ["user_id", "name"], :name => "index_pseuds_on_user_id_and_name"
@@ -735,14 +709,12 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
   create_table "series", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",                                                     :null => false
+    t.string   "title",                              :null => false
     t.text     "summary"
     t.text     "notes"
-    t.boolean  "hidden_by_admin",                        :default => false, :null => false
-    t.boolean  "restricted",                             :default => true,  :null => false
-    t.boolean  "complete",                               :default => false, :null => false
-    t.integer  "summary_sanitizer_version", :limit => 2, :default => 0,     :null => false
-    t.integer  "notes_sanitizer_version",   :limit => 2, :default => 0,     :null => false
+    t.boolean  "hidden_by_admin", :default => false, :null => false
+    t.boolean  "restricted",      :default => true,  :null => false
+    t.boolean  "complete",        :default => false, :null => false
   end
 
   create_table "set_taggings", :force => true do |t|
@@ -756,15 +728,15 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.string   "title"
     t.integer  "author_id"
     t.text     "css"
-    t.boolean  "public",                                     :default => false
-    t.boolean  "official",                                   :default => false
+    t.boolean  "public",            :default => false
+    t.boolean  "official",          :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "icon_file_name"
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
-    t.string   "icon_alt_text",                              :default => ""
+    t.string   "icon_alt_text",     :default => ""
     t.integer  "margin"
     t.integer  "paragraph_gap"
     t.string   "font"
@@ -772,9 +744,8 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.string   "background_color"
     t.string   "foreground_color"
     t.text     "description"
-    t.boolean  "rejected",                                   :default => false, :null => false
+    t.boolean  "rejected",          :default => false, :null => false
     t.string   "admin_note"
-    t.integer  "description_sanitizer_version", :limit => 2, :default => 0,     :null => false
   end
 
   create_table "tag_sets", :force => true do |t|
@@ -808,9 +779,37 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.string   "last_wrangler_type"
   end
 
+  add_index "tags", ["canonical"], :name => "index_tags_on_canonical"
+  add_index "tags", ["created_at"], :name => "tag_created_at_index"
   add_index "tags", ["id", "type"], :name => "index_tags_on_id_and_type"
   add_index "tags", ["merger_id"], :name => "index_tags_on_merger_id"
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
+
+  create_table "tolk_locales", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tolk_locales", ["name"], :name => "index_tolk_locales_on_name", :unique => true
+
+  create_table "tolk_phrases", :force => true do |t|
+    t.text     "key"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tolk_translations", :force => true do |t|
+    t.integer  "phrase_id"
+    t.integer  "locale_id"
+    t.text     "text"
+    t.text     "previous_text"
+    t.boolean  "primary_updated", :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tolk_translations", ["phrase_id", "locale_id"], :name => "index_tolk_translations_on_phrase_id_and_locale_id", :unique => true
 
   create_table "translation_notes", :force => true do |t|
     t.text     "note"
@@ -819,7 +818,6 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
     t.integer  "locale_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "note_sanitizer_version", :limit => 2, :default => 0, :null => false
   end
 
   add_index "translation_notes", ["locale_id"], :name => "index_translation_notes_on_locale_id"
@@ -857,20 +855,21 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
   create_table "users", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "remember_token"
     t.string   "email"
+    t.datetime "remember_token_expires_at"
     t.string   "activation_code"
     t.string   "login"
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
-    t.string   "identity_url",      :limit => 191
-    t.boolean  "recently_reset",                   :default => false, :null => false
-    t.boolean  "suspended",                        :default => false, :null => false
-    t.boolean  "banned",                           :default => false, :null => false
+    t.string   "identity_url",              :limit => 191
+    t.boolean  "recently_reset",                           :default => false, :null => false
+    t.boolean  "suspended",                                :default => false, :null => false
+    t.boolean  "banned",                                   :default => false, :null => false
     t.integer  "invitation_id"
     t.datetime "suspended_until"
-    t.boolean  "out_of_invites",                   :default => true,  :null => false
-    t.string   "persistence_token",                                   :null => false
+    t.boolean  "out_of_invites",                           :default => true,  :null => false
   end
 
   add_index "users", ["activation_code"], :name => "index_users_on_activation_code"
@@ -879,32 +878,29 @@ ActiveRecord::Schema.define(:version => 20101022002353) do
   add_index "users", ["login"], :name => "index_users_on_login"
 
   create_table "works", :force => true do |t|
-    t.integer  "expected_number_of_chapters",              :default => 1
+    t.integer  "expected_number_of_chapters", :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "major_version",                            :default => 1
-    t.integer  "minor_version",                            :default => 0
-    t.boolean  "posted",                                   :default => false, :null => false
+    t.integer  "major_version",               :default => 1
+    t.integer  "minor_version",               :default => 0
+    t.boolean  "posted",                      :default => false, :null => false
     t.integer  "language_id"
-    t.boolean  "restricted",                               :default => false
-    t.string   "title",                                                       :null => false
+    t.boolean  "restricted",                  :default => false
+    t.string   "title",                                          :null => false
     t.text     "summary"
     t.text     "notes"
     t.integer  "word_count"
-    t.boolean  "hidden_by_admin",                          :default => false, :null => false
-    t.boolean  "delta",                                    :default => false
+    t.boolean  "hidden_by_admin",             :default => false, :null => false
+    t.boolean  "delta",                       :default => false
     t.datetime "revised_at"
     t.string   "authors_to_sort_on"
     t.string   "title_to_sort_on"
-    t.boolean  "backdate",                                 :default => false, :null => false
+    t.boolean  "backdate",                    :default => false, :null => false
     t.text     "endnotes"
     t.string   "imported_from_url"
-    t.integer  "hit_count_old",                            :default => 0,     :null => false
+    t.integer  "hit_count_old",               :default => 0,     :null => false
     t.string   "last_visitor_old"
-    t.boolean  "complete",                                 :default => false, :null => false
-    t.integer  "summary_sanitizer_version",   :limit => 2, :default => 0,     :null => false
-    t.integer  "notes_sanitizer_version",     :limit => 2, :default => 0,     :null => false
-    t.integer  "endnotes_sanitizer_version",  :limit => 2, :default => 0,     :null => false
+    t.boolean  "complete",                    :default => false, :null => false
   end
 
   add_index "works", ["imported_from_url"], :name => "index_works_on_imported_from_url"

@@ -1,13 +1,4 @@
 GIT
-  remote: git://github.com/10to1/tolk.git
-  revision: 25c88e179e1e05c916e38913a1e74bc3fa9963cc
-  branch: rails3
-  specs:
-    tolk (1.0)
-      will_paginate (>= 3.0.pre)
-      ya2yaml (~> 0.26)
-
-GIT
   remote: git://github.com/freelancing-god/thinking-sphinx.git
   revision: 108a1fce2623f392152aa1bc5e5866890556f31d
   branch: rails3
@@ -15,6 +6,15 @@ GIT
     thinking-sphinx (2.0.0.rc2)
       activerecord (>= 3.0.0)
       riddle (>= 1.0.12)
+
+GIT
+  remote: git://github.com/galfert/tolk.git
+  revision: 10349e8297b53d6578c106cad47b59aab5cd8e8c
+  branch: rails3
+  specs:
+    tolk (1.0)
+      will_paginate (~> 3.0.pre2)
+      ya2yaml (~> 0.26)
 
 GIT
   remote: git://github.com/huerlisi/will_paginate.git

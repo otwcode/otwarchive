@@ -58,7 +58,7 @@ gem 'paperclip',
   :require => 'paperclip'
 
 gem 'tolk',
-  :git => 'git://github.com/10to1/tolk.git',
+  :git => 'git://github.com/galfert/tolk.git',
   :branch => 'rails3',
   :require => 'tolk'
 
