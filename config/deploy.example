@@ -1,65 +1,79 @@
-set :user, "myname"
+# takes care of the bundle install tasks
+require 'bundler/capistrano'
+
+set :application, "otwarchive"
+set :repository,  "http://otwarchive.googlecode.com/svn/trunk/"
+set :scm, :subversion
+set :deploy_via, :remote_cache
+
+set :user, "www-data"
+set :auth_methods, "publickey"
+#ssh_options[:verbose] = :debug
+ssh_options[:auth_methods] = %w(publickey)
+ssh_options[:keys] = %w(/home/www-data/.ssh/id_rsa)
+
 set :rails_env, "production"
 
-set :deploy_via, :remote_cache
-set :host, "archiveofourown.org"
-set :auth_methods, "publickey"
-set :repository,  "http://otwarchive.googlecode.com/svn/trunk/"
+set :host, "localhost"
+
 set :deploy_to, "/var/www/otwarchive"
 set :use_sudo, false
 set :keep_releases, 4
 
-role :app, host
-role :web, host
-role :db, host, :primary => true
+role :web, host                    # where start, stop and restart run
+role :app, host                    # where code checkout runs
+role :db, host, :primary => true   # where rails migrations run
 
-before "deploy:setup", :local
-after "deploy:update_code", "local:update"
-
-
-after "deploy:symlink", "deploy:update_crontab"
-
-# note that environment should be set to production only if you want email-sending tasks to be run
 namespace :deploy do
+  # restart passenger by touching restart.txt
+  task :start do ; end
+  task :stop do ; end
+  task :restart, :roles => :app, :except => { :no_release => true } do
+    run "touch #{File.join(current_path,'tmp','restart.txt')}"
+  end
+
+  # set to production only if you want email-sending tasks to be run
   desc "Update the crontab file"
   task :update_crontab, :roles => :db do
-    run "cd #{current_path} && whenever --update-crontab #{application} --set environment=production"
+    run "cd #{release_path} && whenever --update-crontab #{application} --set environment=production"
   end
+
 end
 
 namespace :local do
   desc "Create placeholders for configuration files"
   task :default do
-    run "mkdir -p #{shared_path}/config" 
-    touch "#{shared_path}/config/database.yml" 
-    touch "#{shared_path}/config/local.yml" 
-    touch "#{shared_path}/config/s3.yml" 
-    touch "#{shared_path}/config/sphinx.yml" 
-    puts "#{shared_path}/config requires manual configuration"
+    run "mkdir -p #{shared_path}/config"
+    run "mkdir -p #{shared_path}/sphinx"
+    run "mkdir -p #{shared_path}/public"
+    touch "#{shared_path}/config/database.yml"
+    touch "#{shared_path}/config/local.yml"
+    touch "#{shared_path}/config/s3.yml"
+    touch "#{shared_path}/config/sphinx.yml"
+    puts "#{shared_path}/ requires manual configuration!!!"
   end
 
-  desc "Update version and link to current" 
+  desc "Update version and link to current"
   task :update do
-    run "ln -sf #{shared_path}/config/sphinx.yml #{release_path}/config/sphinx.yml" 
-    run "ln -sf #{shared_path}/config/s3.yml #{release_path}/config/s3.yml" 
-    run "ln -sf #{shared_path}/config/local.yml #{release_path}/config/local.yml" 
+    run "ln -sf #{shared_path}/config/sphinx.yml #{release_path}/config/sphinx.yml"
+    run "ln -sf #{shared_path}/config/local.yml #{release_path}/config/local.yml"
+    run "ln -sf #{shared_path}/config/s3.yml #{release_path}/config/s3.yml"
     run "sed -i '$d' #{shared_path}/config/local.yml"
     run "echo -n 'REVISION: ' >> #{shared_path}/config/local.yml"
     run "cat #{release_path}/REVISION >> #{shared_path}/config/local.yml"
-    run "ln -sf #{shared_path}/config/database.yml #{release_path}/config/database.yml" 
+    run "ln -sf #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    run "ln -sf #{shared_path}/config/production.sphinx.conf #{release_path}/config/production.sphinx.conf"
+    run "ln -sf #{shared_path}/sphinx #{release_path}/db/sphinx"
+    run "ln -sf #{shared_path}/public/robots.txt #{release_path}/public/robots.txt"
+    ### if you are using google webmaster tools
+    run "ln -sf #{shared_path}/public/googleXXXXX.html #{release_path}/public/googleXXXXX.html"
   end
 end
+
+before "deploy:setup", :local
+
+after "deploy:update_code", "local:update"
+after "deploy:symlink", "deploy:update_crontab"
 
 after "deploy", "deploy:cleanup"
 after "deploy:migrations", "deploy:cleanup"
-
-namespace :mod_rails do
-  desc "Restart the application altering tmp/restart.txt for mod_rails."
-  task :restart, :roles => :app do
-    run "touch  #{release_path}/tmp/restart.txt"
-  end
-end
- 
-namespace :deploy do
-  %w(start restart).each { |name| task name, :roles => :app do mod_rails.restart end }
-end

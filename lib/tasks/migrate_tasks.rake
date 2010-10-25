@@ -7,12 +7,14 @@ namespace :After do
   task(:turn_off_deltas => :environment) do
     puts "Disabling Thinking Sphinx updates while we migrate..."
     ThinkingSphinx.deltas_enabled=false
+    puts %x{script/delayed_job stop}
   end
 
   desc "Turn on thinking sphinx deltas"
   task(:turn_on_deltas => :environment) do
     ThinkingSphinx.deltas_enabled=true
     puts "Re-enabled Thinking Sphinx updates"
+    puts %x{script/delayed_job start}
   end
 
   # top_level_tasks isn't writable so we need to do this
@@ -159,7 +161,7 @@ namespace :After do
   task(:mark_meta_tags_inherited => :environment) do
     MetaTagging.find_each do |meta_tagging|
       m = meta_tagging.meta_tag
-      print "m" ; STDOUT.flush
+      print m.id ; STDOUT.flush
       filters = [m] + m.mergers
       print "f" ; STDOUT.flush
       m.filtered_works.each do |work|
