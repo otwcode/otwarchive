@@ -156,25 +156,29 @@ namespace :After do
 
 
   #### Add your new tasks here
-
+  
   desc "Set meta filter taggings to inherited"
   task(:mark_meta_tags_inherited => :environment) do
-    MetaTagging.find_each do |meta_tagging|
-      m = meta_tagging.meta_tag
-      print m.id ; STDOUT.flush
-      filters = [m] + m.mergers
-      print "f" ; STDOUT.flush
-      m.filtered_works.each do |work|
-        print "w" ; STDOUT.flush
-        if (work.tags & filters).empty?
-          print "t" ; STDOUT.flush
-          ft = work.filter_taggings.where(:filter_id => m.id).first
-          ft.update_attribute(:inherited, true)
-        end
-      end      
-      print "\n" ; STDOUT.flush
+    Tag.canonical.meta_tag.find_each do |meta_tag|
+      puts "Meta tag: #{meta_tag.id}"
+      meta_tag.filter_taggings.update_all("inherited = 1")
+      filter_ids = [meta_tag.id] + meta_tag.mergers.map{|m| m.id}
+      # filter taggings that originated with the meta tag or one of its mergers
+      # should not be marked inherited
+      fts = FilterTagging.joins("LEFT JOIN taggings ON 
+                                taggings.taggable_id = filter_taggings.filterable_id").
+                          where(["filter_taggings.filter_id = ? AND 
+                                taggings.taggable_type = 'Work' AND
+                                filter_taggings.filterable_type = 'Work' AND
+                                taggings.id IS NOT NULL AND
+                                taggings.tagger_id IN (?)", 
+                                meta_tag.id, filter_ids])
+      unless fts.blank?
+        FilterTagging.update_all("inherited = 0", ["id IN (?)", fts.map{|ft| ft.id}])
+      end
     end
   end
+  
 
 
   desc "fix old '- Pairing' names"

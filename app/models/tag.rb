@@ -127,6 +127,12 @@ class Tag < ActiveRecord::Base
   scope :unwrangled, joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("common_taggings.id IS NULL")
   scope :first_class, joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL")
   
+  # Tags that have sub tags
+  scope :meta_tag, joins(:sub_taggings).where("meta_taggings.id IS NOT NULL").group("tags.id")
+  # Tags that don't have sub tags
+  scope :non_meta_tag, joins(:sub_taggings).where("meta_taggings.id IS NULL").group("tags.id")
+  
+  
   # Complicated query alert!
   # What we're doing here:
   # - we get all the tags of any type used on works (the first two lines of the join)
