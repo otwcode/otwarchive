@@ -25,7 +25,7 @@
 			<% unless @filters.blank? %>
 			  <% Tag::FILTERS.each do |type| %>
 				  <% unless @filters[type].blank? %>
-          <dt onclick='toggleFilters("tag_category_<%= type %>");'>
+          <dt onclick='toggleFilters("tag_category_<%= type %>");' class="<%= type %>">
             <span id="tag_category_<%= type %>_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" %></span>
             <span id="tag_category_<%= type %>_open"><%= image_tag 'arrow-down.gif', :alt => ""%></span>              
             <%= type.constantize::NAME %> 

@@ -164,6 +164,10 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 # SANITIZER VERSION
 SANITIZER_VERSION: 1
 
+# These fields are query fields and are allowed to contain "less than" values 
+FIELDS_ALLOWING_LESS_THAN: ["words", "query"]
+
+
 # Only the following fields are allowed to have HTML. In all others,
 # all HTML tags will be stripped.
 #

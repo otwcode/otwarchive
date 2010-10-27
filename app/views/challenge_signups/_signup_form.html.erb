@@ -20,14 +20,14 @@ So if anyone can think of a better design for this, that would be awesome
     <% if @challenge.signup_instructions_general %>
       <%=raw sanitize_field(@challenge, :signup_instructions_general) %>
     <% end %>
-    <dl>
-     	<% if signup_form.object.new_record? && current_user.pseuds.size > 1 %>
+   	<% if signup_form.object.new_record? && current_user.pseuds.size > 1 %>
+      <dl>
         <dt><%= signup_form.label :pseud_id, t("prompt.pseud", :default => "Select pseudonym: ") %></dt>
         <dd><%= signup_form.select :pseud_id, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud.id) %></dd>
-      <% else %>
-        <p><%= signup_form.hidden_field :pseud_id, :value => (signup_form.object.new_record? ? current_user.default_pseud.id : signup_form.object.pseud.id) %></p>
-      <% end %>  
-    </dl>
+      </dl>
+    <% else %>
+      <p><%= signup_form.hidden_field :pseud_id, :value => (signup_form.object.new_record? ? current_user.default_pseud.id : signup_form.object.pseud.id) %></p>
+    <% end %>  
   </fieldset>
 
   <% %w(requests offers).each do |prompt_type| %>
@@ -54,14 +54,16 @@ So if anyone can think of a better design for this, that would be awesome
                         :required => (index < @challenge.send("#{prompt_type}_num_required"))} %>
       <% end %>
     <% end %>
+    
     <% if @challenge.send("#{prompt_type}_num_allowed") > @challenge.send("#{prompt_type}_num_required") %>
       <p class="navigation">
         <%= link_to_add_section(
-             t("challenge_signups.add_prompt", :default => "Add another %{type}? (Up to %{allowed} allowed.)", :type => prompt_type.singularize, :allowed => @challenge.send("#{prompt_type}_num_allowed")), 
+             ts("Add another %{type}? (Up to %{allowed} allowed.)", :type => prompt_type.singularize, :allowed => @challenge.send("#{prompt_type}_num_allowed")), 
              signup_form, prompt_type.to_sym, "prompts/prompt_form", {:is_offer => (prompt_type == "offers"), :required => false}) 
         %>
       </p>
     <% end %>
+
   </fieldset>
   <% end # requests & offers section %>
 

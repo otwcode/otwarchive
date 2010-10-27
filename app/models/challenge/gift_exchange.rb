@@ -54,6 +54,8 @@ class GiftExchange < ActiveRecord::Base
     if self.offer_restriction && self.offer_restriction.tag_set
       self.request_restriction.build_tag_set unless self.request_restriction.tag_set
       self.request_restriction.tag_set.tags = self.offer_restriction.tag_set.tags
+      self.request_restriction.tag_set.character_restrict_to_fandom = self.offer_restriction.tag_set.character_restrict_to_fandom
+      self.request_restriction.tag_set.relationship_restrict_to_fandom = self.offer_restriction.tag_set.relationship_restrict_to_fandom      
       self.request_restriction.tag_set.save
       self.request_restriction.save
     end

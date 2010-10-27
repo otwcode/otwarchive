@@ -38,7 +38,7 @@ module ValidationHelper
 
   # puts the standard wrapper around the code and declares the LiveValidation object
   def live_validation_wrapper(id, validation_code)
-    valid = "var #{live_validation_varname(id)} = new LiveValidation('#{id}', { wait: 500, onlyOnBlur: false });\n"
+    valid = "var #{live_validation_varname(id)} = new LiveValidation('#{id}', { wait: 500, onlyOnBlur: false });\n".html_safe
     valid += validation_code
     return javascript_tag valid
   end
@@ -47,7 +47,7 @@ module ValidationHelper
   # Options:
   # :presence => true/false -- ensure the field is not blank. (default TRUE)
   # :failureMessage => msg -- shown if field is blank (default "Must be present.")
-  # :validMessage => msg -- shown when field is ok (default empty)
+  # :validMessage => msg -- shown when field is ok (default has been set to empty in the actual livevalidation.js file)
   # :maximum_length => [max value] -- field must be no more than this many characters long 
   # :tooLongMessage => msg -- shown if too long
   # :minimum_length => [min value] -- field must be at least this many characters long 
@@ -116,7 +116,7 @@ module ValidationHelper
       validation_code += "\"validMessage\":\"#{options[:validMessage]}\"});\n"
     end
     
-    return live_validation_wrapper(id, validation_code)
+    return live_validation_wrapper(id, validation_code.html_safe)
   end
 
 end

@@ -31,8 +31,8 @@ class Skin < ActiveRecord::Base
     return false
   end
   
-  attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size
-
+  attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size, :description_sanitizer_version
+        
   validates_uniqueness_of :title, :message => ts('must be unique')
 
   validates_numericality_of :margin, :base_em, :allow_nil => true
@@ -78,8 +78,6 @@ class Skin < ActiveRecord::Base
     end
   end
   
-  attr_protected :description_sanitizer_version
-        
 protected
 
   # We parse and clean the CSS line by line in order to provide more helpful error messages.

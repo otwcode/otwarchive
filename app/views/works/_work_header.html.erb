@@ -41,17 +41,25 @@
 
   <% if !Preference.light?(params[:style]) %>
     <li><% if params[:view_full_work] == 'true' %>
-      <%= link_to(ts('Switch to light style'), url_for(:style => 'light', :view_full_work => 'true')) %>
+      <%= link_to(ts('Light Style'), url_for(:style => 'light', :view_full_work => 'true')) %>
       <% else %>
-      <%= link_to(ts('Switch to light style'), url_for(:style => 'light')) %>
+      <%= link_to(ts('Light Style'), url_for(:style => 'light')) %>
     <% end %></li>
   <% elsif params[:style] != 'creator' %>
     <li><% if params[:view_full_work] == 'true' %>
-      <%= link_to(ts("Switch to creator's style"), url_for(:style => 'creator', :view_full_work => 'true')) %>
+      <%= link_to(ts("Creator's Style"), url_for(:style => 'creator', :view_full_work => 'true')) %>
       <% else %>
-      <%= link_to(ts("Switch to creator's style"), url_for(:style => 'creator')) %>
+      <%= link_to(ts("Creator's Style"), url_for(:style => 'creator')) %>
     <% end %></li>
   <% end %>
+
+  <li>
+    <%= link_to_ibox ts("Share"), :for => "#share" %>
+    <div id="share" class="hideme">
+      <p><%= ts("Copy and paste to link back to this work: (CTRL/CMD-A will select all)") -%></p>
+      <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
+    </div>
+  </li>
   
   <li>
     <a onclick="subnav_view.toggle()" title="Download Options"><%= ts("Download") %> &#8595;</a>

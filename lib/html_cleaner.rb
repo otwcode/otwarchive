@@ -4,19 +4,20 @@ module HtmlCleaner
   # If we aren't sure that this field hasn't been sanitized since the last sanitizer version, 
   # we sanitize it before we allow it to pass through (and save it if possible).
   def sanitize_field(object, fieldname)
+    return "" if object.send(fieldname).nil?
     if object.respond_to?("#{fieldname}_sanitizer_version")
       if object.send("#{fieldname}_sanitizer_version") < ArchiveConfig.SANITIZER_VERSION
         # sanitize and save it
-        Rails.logger.info "Sanitizing and saving #{fieldname} on #{object.class.name} (id #{object.id})"
+        Rails.logger.debug "Sanitizing and saving #{fieldname} on #{object.class.name} (id #{object.id})"
         object.update_attribute(fieldname, sanitize_value(fieldname, object.send("#{fieldname}")))
         object.update_attribute("#{fieldname}_sanitizer_version", ArchiveConfig.SANITIZER_VERSION)
       end
       # return the field without sanitizing
-      Rails.logger.info "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
+      Rails.logger.debug "Already sanitized #{fieldname} on #{object.class.name} (id #{object.id})"
       object.send("#{fieldname}")
     else
       # no sanitizer version information, so re-sanitize 
-      Rails.logger.info "Sanitizing without saving #{fieldname} on #{object.class.name} (id #{object.id})"
+      Rails.logger.debug "Sanitizing without saving #{fieldname} on #{object.class.name} (id #{object.id})"
       sanitize_value(fieldname, object.send("#{fieldname}"))
     end
   end 
@@ -32,7 +33,7 @@ module HtmlCleaner
   # yank out bad end-of-line characters and evil msword curly quotes
   def fix_bad_characters(text)
     return "" if text.nil?
-    text.gsub! "<3", "&#60;3"
+    text.gsub! "<3", "&lt;3"
     text.gsub! /\r\n?/, "\n" # get rid of mac carriage returns
     text.gsub! /\s+\n/, "\n" # trim any extra space at the end of lines
     
@@ -53,11 +54,15 @@ module HtmlCleaner
   end
   
   def sanitize_value(field, value)
+    return "" if value.blank?
     value.strip!
     if field.to_s == 'title'
       # prevent invisible titles
       value.gsub!("<", "&lt;")
       value.gsub!(">", "&gt;")
+    end
+    if ArchiveConfig.FIELDS_ALLOWING_LESS_THAN.include?(field.to_s)
+      value.gsub!("<", "&lt;")
     end
     if ArchiveConfig.FIELDS_ALLOWING_HTML.include?(field.to_s)
       # We're allowing users to use HTML in this field
@@ -73,7 +78,10 @@ module HtmlCleaner
     else
       # clean out all tags
       value = Sanitize.clean(fix_bad_characters(value))
-    end    
+    end
+    # FIXME
+    # for now, just put ampersands back the way they were
+    value.gsub!(/&amp;/, '&')
     value
   end
 

@@ -33,21 +33,39 @@ class Challenge::GiftExchangeController < ChallengesController
   end
 
   def create
+    @tag_set_initialized = false
     @challenge = GiftExchange.new(params[:gift_exchange])
     if @challenge.save
       @collection.challenge = @challenge
       @collection.save
       flash[:notice] = 'Challenge was successfully created.'
-      redirect_to @collection
+      if @tag_set_initialized
+        # we initialized the tag set
+        flash[:notice] += ' Please look over the initial tag set.'
+        render :action => :edit
+      else
+        redirect_to @collection
+      end
     else
       render :action => :new
     end
   end
 
   def update
+    @tag_set_initialized = false
     if @challenge.update_attributes(params[:gift_exchange])
       flash[:notice] = 'Challenge was successfully updated.'
-      redirect_to @collection
+      
+      # expire the cache on the signup form
+      expire_fragment(:controller => 'challenge_signups', :action => 'new')
+      
+      if @initialized
+        # we were asked to initialize the tag set
+        flash[:notice] += ' Please look over the initial tag set.'
+        render :action => :edit
+      else
+        redirect_to @collection
+      end
     else
       render :action => :edit
     end

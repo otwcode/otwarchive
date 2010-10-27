@@ -87,7 +87,7 @@
       Enter instructions to explain to your members how you want them to sign up, and change the labels for the fields
       you are using if appropriate.
     </p>
-    <p><%= limited_html_instructions %></p>
+    <p><%= allowed_html_instructions %></p>
     <dl>
       <dt><%= f.label :signup_instructions_general, ts("General Signup Instructions") %>:</dt>
       <dd>
@@ -126,9 +126,9 @@
   </fieldset>
 
   <fieldset>
-  	<legend><%h= 'Submit' %></legend> 
+  	<legend><%= ts 'Submit' %></legend> 
     <p class="submit">
-      <%= f.submit 'Submit' %>
+      <%= f.submit ts('Submit') %>
     </p>
   </fieldset>
 

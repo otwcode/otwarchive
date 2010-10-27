@@ -1,5 +1,5 @@
 <!-- expects local variable "challenge_signup" -->
 <% challenge_signup.requests.each_with_index do |request, index| %>
-  <h3><%=h t('.signup.show.request', :default => "Request %{num}", :num => index+1) %></h3>
-  <%= render "show_prompt", :prompt => request %>
+  <h3><%= ts("Request %{num}", :num => index+1) %></h3>
+  <%= render "challenge_signups/show_prompt", :prompt => request %>
 <% end %>

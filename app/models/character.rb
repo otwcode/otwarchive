@@ -1,7 +1,7 @@
 class Character < Tag
 
   NAME = ArchiveConfig.CHARACTER_CATEGORY_NAME
-  
+
   # Types of tags to which a character tag can belong via common taggings or meta taggings
   def parent_types
     ['Fandom', 'MetaTag']

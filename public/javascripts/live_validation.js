@@ -92,7 +92,7 @@ LiveValidation.prototype = {
     this.form = this.element.form;
     // overwrite the options defaults with passed in ones
     this.options = Object.extend({
-      validMessage: 'Thankyou!',
+      validMessage: '',
       insertAfterWhatNode: this.element,
       onlyOnBlur: false,
       wait: 0,
@@ -229,6 +229,8 @@ LiveValidation.prototype = {
    * sets the focused flag to false when field loses focus 
    */
   doOnBlur: function(){
+    // AO3: get tinyMCE to save when field loses focus
+    if (typeof(tinyMCE)!="undefined") tinyMCE.triggerSave();
     this.focused = false;
     this.validate();
   },
@@ -307,7 +309,8 @@ LiveValidation.prototype = {
 			break;
     }
 	// select and checkbox elements values are handled differently
-    var value = (this.elementType == LiveValidation.SELECT) ? this.element.options[this.element.selectedIndex].value : this.element.value;     
+    var originalValue = (this.elementType == LiveValidation.SELECT) ? this.element.options[this.element.selectedIndex].value : this.element.value;     
+    var value = $j.trim(originalValue); // ignore leading/trailing whitespace 
     if(validationFunction == Validate.Acceptance){
       if(this.elementType != LiveValidation.CHECKBOX) throw new Error('LiveValidation::validateElement - Element to validate acceptance must be a checkbox!');
       value = this.element.checked;
@@ -520,12 +523,22 @@ LiveValidationForm.prototype = {
 	//(hence not using Event.observe, as inline events appear to be captured before prototype events)
 	this.oldOnSubmit = this.element.onsubmit || function(){};
 	this.element.onsubmit = function(e){
+	  if (typeof(tinyMCE)!="undefined") tinyMCE.triggerSave(this.fields);
 	  var ret = false;
-	  this.beforeValidation(),
-      this.valid = LiveValidation.massValidate(this.fields);
-      this.valid ? this.onValid() : this.onInvalid();
-      this.afterValidation();
-	  if(this.valid) ret = this.oldOnSubmit.call(this.element, e) !== false;
+	  
+      // don't freeze the form if the user has clicked on the 'cancel' button
+      // -elz, 3/2/09
+      var buttonClicked = document.activeElement || this.explicitOriginalTarget;
+      var eventElementName = Element.readAttribute(buttonClicked, 'name');
+      if (eventElementName == 'cancel_button') {
+          ret = true;          
+      } else {
+    	  this.beforeValidation(),
+          this.valid = LiveValidation.massValidate(this.fields);
+          this.valid ? this.onValid() : this.onInvalid();
+          this.afterValidation();
+    	  if(this.valid) ret = this.oldOnSubmit.call(this.element, e) !== false;          
+      }
 	  if(!ret) Event.stop(e);
     }.bindAsEventListener(this);
   },

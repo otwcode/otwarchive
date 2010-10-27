@@ -161,6 +161,11 @@ class Tag < ActiveRecord::Base
   scope :by_type, lambda {|*types| where(types.first.blank? ? "" : {:type => types.first})}
   scope :with_type, lambda {|type| where({:type => type}) }
 
+  # This will return all tags that have one of the given tags as a parent
+  scope :with_parents, lambda {|parents|
+    joins(:common_taggings).where("filterable_id in (?)", parents.collect(&:id).join(","))
+  }
+
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
 
   scope :filters_with_count, lambda { |work_ids|
@@ -233,6 +238,31 @@ class Tag < ActiveRecord::Base
   }
       
   # Class methods
+
+
+  # Get tags that are either above or below the average popularity 
+  def self.with_popularity_relative_to_average(options = {:factor => 1, :include_meta => false, :greater_than => false})
+    comparison = "<"
+    comparison = ">" if options[:greater_than]
+      
+    if options[:include_meta]
+      tags = select("tags.*, filter_counts.unhidden_works_count as count").
+                  joins(:filter_count).
+                  where(:canonical => true).
+                  where("filter_counts.unhidden_works_count #{comparison} (select avg(unhidden_works_count) from filter_counts) * ?", options[:factor]).
+                  order("count ASC")
+    else
+      meta_tag_ids = select("DISTINCT tags.id").joins(:sub_taggings).where(:canonical => true)
+      non_meta_ids = meta_tag_ids.empty? ? select("tags.id").where(:canonical => true) : select("tags.id").where(:canonical => true).where("id NOT IN (#{meta_tag_ids.collect(&:id).join(',')})")
+      tags = non_meta_ids.empty? ? [] : 
+                select("tags.*, filter_counts.unhidden_works_count as count").
+                  joins(:filter_count).
+                  where(:canonical => true).
+                  where("tags.id IN (#{non_meta_ids.collect(&:id).join(',')})").
+                  where("filter_counts.unhidden_works_count #{comparison} (select AVG(unhidden_works_count) from filter_counts where filter_id in (#{non_meta_ids.collect(&:id).join(',')})) * ?", options[:factor]).
+                  order("count ASC")
+    end
+  end
   
   # Used for associations, such as work.fandoms.string
   # Yields a comma-separated list of tag names

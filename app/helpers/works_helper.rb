@@ -98,4 +98,35 @@ module WorksHelper
       link_to "Mark to read later", marktoread_user_reading_path(current_user, reading, :work_id => work.id)
     end
   end
+  
+  # get a nicely formatted bit of text for pasting into other services
+  # title (# words) by authors
+  # Fandom:
+  # Rating: 
+  # Warnings:
+  # etc
+  def get_embed_link(work)
+    title_link = link_to(content_tag(:strong, work.title), work_url(work)) + " (#{work.word_count} #{ts('words')})"
+    profile_link = work.pseuds.map {|pseud| link_to(image_tag(root_url + "favicon.ico", :alt => "favicon") + " #{pseud.name}", user_profile_url(pseud.user))}.join(', ').html_safe
+    fandom_text = ts("Fandom: ") + work.fandoms.map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe
+    rating_text = ts("Rating: ") + work.ratings.map {|rating| rating.name}.join(', ')
+    category_text = ts("Category: ") + work.categories.map {|cat| cat.name}.join(', ')
+    warning_text = ts("Warning: ") + work.warnings.map {|warning| warning_display_name(warning.name)}.join(', ')
+    relationship_text = ts("Relationships: ") + work.relationships.map {|rel| rel.name}.join(', ')
+    char_text = ts("Characters: ") + work.characters.map {|char| char.name}.join(', ')
+    summary_text = work.summary.blank? ? "" : ts("Summary: ") + sanitize_field(work, :summary)
+    
+    # we deliberately don't html_safe this because we want it escaped
+    [title_link + ts(" by ") + profile_link, fandom_text, rating_text, warning_text, relationship_text, char_text, summary_text].join("\n")
+  end
+  
+  # convert a bookmark into a nicely formatted chunk of text
+  def get_bookmark_embed_link(bookmark)
+    if bookmark.bookmarkable.is_a?(Work)
+      work_embed = get_embed_link(bookmark.bookmarkable)
+      tags_text = ts("Bookmarker's Tags: ") + bookmark.tags.map {|tag| tag.name}.join(", ")
+      bookmark_text = bookmark.notes.blank? ? "" : content_tag(:strong, ts("Bookmarker's Notes: ")) + raw(sanitize_field(bookmark, :notes))
+      [work_embed, tags_text, bookmark_text].join("\n")
+    end
+  end
 end

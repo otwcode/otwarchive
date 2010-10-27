@@ -63,6 +63,7 @@ class PotentialMatchesController < ApplicationController
     if PotentialMatch.in_progress?(@collection)
       @in_progress = true
       @current_position = PotentialMatch.position(@collection)
+      @progress = PotentialMatch.progress(@collection)
     else
       # we have potential_matches and assignments      
       
@@ -116,6 +117,13 @@ class PotentialMatchesController < ApplicationController
   end
   
   def show
+  end
+
+  def generate_progress
+    if PotentialMatch.in_progress?(@collection)
+      @current_position = PotentialMatch.position(@collection)
+      @progress = PotentialMatch.progress(@collection)
+    end
   end
 
 end

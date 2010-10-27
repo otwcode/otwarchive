@@ -51,13 +51,17 @@ function remove_section(link, class_of_section_to_remove) {
     $(link).up("." + class_of_section_to_remove).hide();
 }
 
+// used with nested form fields for dynamically stuffing in an extra partial
+// see challenge signup form and prompt form for an example
 function add_section(link, nested_model_name, content) {
-    var new_id = new Date().getTime();
+    // get the right new_id which should be in a div with class "last_id" at the bottom of 
+    // the nearest section
+    var last_id = parseInt($(link).up().previous('.last_id').innerHTML);
+    var new_id = last_id + 1;
     var regexp = new RegExp("new_" + nested_model_name, "g");
     content = content.replace(regexp, new_id)
     $(link).up().insert({before: content});
 }
-
 
 // An attempt to replace the various work form toggle methods with a more generic one
 function toggleFormField(element_id) {

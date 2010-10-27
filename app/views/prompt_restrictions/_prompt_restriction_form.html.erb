@@ -25,6 +25,15 @@
     	  These settings determine what each separate request can contain, and in particular how many different tags of each kind.
     	  If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.
     	</p>
+    	<p class="note">
+    	  If you check "Allow Any?" then users will be able to select "Any" for that field, which means they will match no matter 
+    	  what the person offering has put into that field. Note: this option is generally safer for offers than requests!
+    	</p>
+    	<p class="note">
+    	  If you check "Must Be Unique?" then users will not be allowed to repeat the same value across prompts. That is, if 
+    	  you allow three prompts and specify that fandom must be unique, the user will have to specify completely different fandoms
+    	  for all three prompts -- no overlap allowed. Please explain this in your signup instructions!
+    	</p> 
     <% end %>
     <dl>
       <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true)) %>
@@ -36,28 +45,54 @@
       <legend>Tag Options</legend>
       <h3>Tag Options <%= link_to_help("prompt-restriction-tag-set") %></h3>
     	<p class="note">
-
     	  If you are running a challenge that is specifically for a given fandom or relationship or character, just leave that
     	  set of tag options set to no tags required or allowed -- don't put in that one tag as the only choice. Tag options should
     	  only be used where you want users to have a choice.
     	</p>
+    	
+    	<p class="note">
+    	  Initializing the tag list will give you a starting point if you want to restrict your challenge to
+    	  especially popular or especially rare fandoms or characters. The way this works is, we calculate the average number
+    	  of stories in fandoms, and then compare. You can tweak the results by multiplying the average -- eg, if you only want the
+    	  truly super-rare, drop the average way down. Keep in mind that the average is low to begin with!
+    	</p>
+    	
     	<p class="note">
     	  In a gift exchange, the same set of tag options is used for both requests and offers, since otherwise offers and
     	  requests can't match against each other. (People can choose different tags in their requests and offers, but they
     	  have to choose from the same set.)
     	</p>
-
+    	
       <dl>
         <% restriction.build_tag_set unless restriction.tag_set %>
         <%= prompt_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
           <% TagSet::TAG_TYPES.each do |tag_type| %>
             <dt><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, "#{tag_type.classify}: " %> </dt>
             <dd>
-              <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :rows => 2, :cols => 50,
-                    :value => (restriction.tag_set ? eval("restriction.tag_set.#{tag_type}_tagnames") : "") %>
+              <% tagnames = restriction.tag_set ? eval("restriction.tag_set.#{tag_type}_tagnames") : "" %>
+              <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :rows => (tagnames.size/3 > 10 ? 10 : (tagnames.size/3 < 2 ? 2 : tagnames.size/3)), :cols => 50,
+                    :value => (restriction.tag_set ? restriction.tag_set.send("#{tag_type}_tagnames") : "") %>
               <% tag_fieldname = "#{@challenge.class.name.tableize.singularize}_offer_restriction_attributes_tag_set_attributes_#{tag_type}_tagnames" %>
               <%= autocomplete_text_field(tag_fieldname, :methodname => "canonical_#{tag_type}_finder") %>
             </dd>
+
+            <% if TagSet::TAG_TYPES_INITIALIZABLE.include?(tag_type) %>
+            <dt><%= ts("Initialize tag list: ") %></dt>
+            <dd>
+              <%= tag_set_form.label "#{tag_type}_init_less_than_average", ts("Below the average: ") %>
+              <%= tag_set_form.check_box "#{tag_type}_init_less_than_average" %>
+              <%= tag_set_form.label "#{tag_type}_init_greater_than_average", ts("Above the average: ") %>
+              <%= tag_set_form.check_box "#{tag_type}_init_greater_than_average" %>
+              <%= tag_set_form.label "#{tag_type}_init_factor", ts("Multiply the average by: ") %>
+              <%= tag_set_form.select "#{tag_type}_init_factor", options_for_select(%w{ 0.1 0.25 0.5 0.75 1 5 10 15 20 }), :selected => "1" %>
+            </dd>
+            <% end %>
+
+            <% if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) %>
+              <dt><%= tag_set_form.label "#{tag_type}_restrict_to_fandom", ts("Restrict to fandom?") %></dt>
+              <dd><%= tag_set_form.check_box "#{tag_type}_restrict_to_fandom", :checked => restriction.tag_set.send("#{tag_type}_restrict_to_fandom") %></dd>
+            <% end %>
+            
           <% end %>
         <% end %>
       </dl>

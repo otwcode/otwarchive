@@ -6,6 +6,9 @@ class Prompt < ActiveRecord::Base
   # number of checkbox options to keep visible by default in form
   OPTIONS_TO_SHOW = 3
 
+  # maximum number of options to allow to be shown via checkboxes
+  MAX_OPTIONS_FOR_CHECKBOXES = 10
+
   belongs_to :collection
   belongs_to :pseud
   has_one :user, :through => :pseud
@@ -49,18 +52,29 @@ class Prompt < ActiveRecord::Base
     if restriction
       # make sure tagset has no more/less than the required/allowed number of tags of each type
       TagSet::TAG_TYPES.each do |tag_type|
+        # get the tags of this type the user has specified
+        taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") : []        
+        tag_count = taglist.count
+
+        # check if user has chosen the "Any" option
+        if self.send("any_#{tag_type}")
+          if tag_count > 0
+            errors.add(:base, ts("You have specified tags for %{tag_type} in your %{prompt_type} but also chose 'Any,' which will override them! Please only choose one or the other.", 
+                                :tag_type => tag_type, :prompt_type => prompt_type))
+          end
+          next
+        end
+
+        # otherwise let's make sure they offered the right number of tags
         required = eval("restriction.#{tag_type}_num_required")
         allowed = eval("restriction.#{tag_type}_num_allowed")
-        taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") : []
-        tag_count = taglist.count
         unless tag_count.between?(required, allowed)
           taglist_string = taglist.empty? ?
-              t('tag_set.taglist_none', :default => "none") :
+              ts("none") :
               "(#{tag_count}) -- " + taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
           if allowed == 0
-            errors.add(:base, t("tag_set.#{prompt_type}_#{tag_type}_not_allowed",
-              :default => "#{prompt_type} cannot include any #{tag_type} tags. You currently have %{taglist}.",
-              :taglist => taglist_string))
+            errors.add(:base, ts("#{prompt_type} cannot include any #{tag_type} tags. You currently have %{taglist}.",
+                                 :taglist => taglist_string))
           elsif required == allowed
             errors.add(:base, t("tag_set.#{prompt_type}_#{tag_type}_mismatch",
               :default => "#{prompt_type} must have exactly %{required} #{tag_type} tags. You currently have %{taglist}.",
@@ -93,7 +107,7 @@ class Prompt < ActiveRecord::Base
       end
     end
   end
-
+  
   # make sure we are not blank
   def blank?
     return false if (url || description)
@@ -114,20 +128,12 @@ class Prompt < ActiveRecord::Base
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,
   # so we just pass them through method_missing
-  def method_missing(method, *args, &block)
-    if tag_set.respond_to?(method)
-      tag_set.send(method, args, block)
-    else
-      super
-    end
+  def method_missing(method)
+    super || (tag_set && tag_set.respond_to?(method) ? tag_set.send(method) : super)
   end
 
   def respond_to?(method, include_private = false)
-    if tag_set.respond_to?(method)
-      true
-    else
-      super
-    end
+    super || tag_set.respond_to?(method, include_private)
   end
 
   # Returns PotentialPromptMatch object if matches, otherwise nil
@@ -141,19 +147,27 @@ class Prompt < ActiveRecord::Base
     full_offer_tag_set = other.optional_tag_set ? (other.tag_set + other.optional_tag_set) : other.tag_set
 
     TagSet::TAG_TYPES.each do |type|
-      required_count = settings.send("num_required_#{type.pluralize}")
-      if settings.send("include_optional_#{type.pluralize}")
-        match_count = full_request_tag_set.match_rank(full_offer_tag_set, type)
+      if self.send("any_#{type}") || other.send("any_#{type}")
+        match_count = ALL
       else
-        # we don't use optional tags to count towards required
-        match_count = self.tag_set.match_rank(other.tag_set, type)
-      end
-      return nil if required_count == ALL && match_count != ALL
-      return nil if match_count != ALL && match_count < required_count
+        required_count = settings.send("num_required_#{type.pluralize}")
+        if settings.send("include_optional_#{type.pluralize}")
+          match_count = full_request_tag_set.match_rank(full_offer_tag_set, type)
+        else
+          # we don't use optional tags to count towards required
+          match_count = self.tag_set.match_rank(other.tag_set, type)
+        end
+      
+        # if we have to match all and don't, not a match
+        return nil if required_count == ALL && match_count != ALL
 
-      # now get the match rank including optional tags if we didn't before
-      if !settings.send("include_optional_#{type.pluralize}")
-        match_count = full_request_tag_set.match_rank(full_offer_tag_set, type)
+        # we are a match only if we either match all or at least as many as required
+        return nil if match_count != ALL && match_count < required_count
+
+        # now get the match rank including optional tags if we didn't before
+        if !settings.send("include_optional_#{type.pluralize}")
+          match_count = full_request_tag_set.match_rank(full_offer_tag_set, type)
+        end
       end
 
       potential_prompt_match_attributes["num_#{type.pluralize}_matched"] = match_count

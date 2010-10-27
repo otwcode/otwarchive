@@ -84,6 +84,12 @@ class Sanitize
         then "ning"
       when /^http:\/\/(?:www\.)?dailymotion\.com\//
         then "dailymotion"
+      when /^http:\/\/(?:www\.)?viddler\.com\//
+        then "viddler"
+      when /^http:\/\/(?:www\.)?metacafe\.com\//
+        then "metacafe"
+      when /^http:\/\/(?:www\.)?4shared\.net\//
+          then "4shared"
       else
         nil
       end
@@ -116,7 +122,7 @@ class Sanitize
         Sanitize.clean_node!(node, {
           :elements   => ['embed', 'iframe'],
           :attributes => {
-            'embed'  => ['allowfullscreen', 'height', 'src', 'type', 'width'],
+            'embed'  => (['allowfullscreen', 'height', 'src', 'type', 'width'] + (source == "ning" ? ['wmode', 'flashvars'] : [])),
             'iframe'  => ['frameborder', 'height', 'src', 'title', 'class', 'type', 'width'],
           }          
         })
@@ -125,6 +131,9 @@ class Sanitize
           # disable script access and networking
           node['allowscriptaccess'] = 'never'
           node['allownetworking'] = 'internal'
+          unless source == "ning"
+            node['flashvars'] = ""
+          end
         end
         return {:whitelist_nodes => [node]}
       end

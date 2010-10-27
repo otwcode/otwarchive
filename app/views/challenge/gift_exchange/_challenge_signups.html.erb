@@ -42,12 +42,12 @@
     <th rowspan=2>Email</th>
     <% @challenge.requests_num_allowed.times do |i| %>
     <th colspan=<%= (num_request_tag_categories + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) %>>
-      <%= t("gift_exchange.request_number", :default => "Request %{num}", :num => i+1) %>
+      <%= ts("Request %{num}", :num => i+1) %>
     </th>
     <% end %>
     <% @challenge.offers_num_allowed.times do |i| %>
     <th colspan=<%= (num_offer_tag_categories + (show_offer_description ? 1 : 0 ) + (show_offer_url ? 1 : 0)) %>>
-      <%= t("gift_exchange.offer_number", :default => "Offer %{num}", :num => i+1) %></th>
+      <%= ts("Offer %{num}", :num => i+1) %></th>
     <% end %>
   </tr>
 
@@ -85,18 +85,19 @@
             <% if eval("@show_#{prompt_type}_#{type}_tags") %>
               <td>
                 <%= !prompt || !prompt.tag_set || prompt.tag_set.with_type(type).empty? ? "" : 
-                  "<ul>" + tag_link_list(prompt.tag_set.with_type(type)) + "</ul>" %>
+                  content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type))) %>
+                <%= prompt && prompt.send("any_#{type}") ? "Any" : "" %>
               </td>
             <% end %>  
           <% end %>
           <% if eval("show_#{prompt_type}_optional_tags") %>
             <td>
               <%= !prompt || !prompt.optional_tag_set || prompt.optional_tag_set.tags.empty? ? "" : 
-                "<ul>" + tag_link_list(prompt.optional_tag_set.tags) + "</ul>" %>
+                content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
             </td>
           <% end %>
           <% if eval("show_#{prompt_type}_description") %>
-            <td><%= !prompt || prompt.description.blank? ? "" : sanitize_field(prompt, :description) %></td>
+            <td><%= !prompt || prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) %></td>
           <% end %>
           <% if eval("show_#{prompt_type}_url") %>
             <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) %></td>

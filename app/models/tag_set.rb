@@ -4,6 +4,9 @@ class TagSet < ActiveRecord::Base
   ALL = -1
   
   TAG_TYPES = %w(fandom character relationship freeform category rating warning)
+  TAG_TYPES_INITIALIZABLE = %w(fandom character relationship freeform)
+  TAG_TYPES_RESTRICTED_TO_FANDOM = %w(character relationship)
+  TAGS_AS_CHECKBOXES = %w(category rating warning)
   
   has_many :set_taggings, :dependent => :destroy
   has_many :tags, :through => :set_taggings
@@ -15,7 +18,7 @@ class TagSet < ActiveRecord::Base
   # virtual attribute "tagnames" to use instead until after validation.
   attr_writer :tagnames
   def tagnames
-    @tagnames || tags.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT).sort
+    @tagnames || tags.select('tags.name').order('tags.name').collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
   end
   def taglist
     @tagnames ? tagnames_to_list(@tagnames) : tags
@@ -31,18 +34,46 @@ class TagSet < ActiveRecord::Base
   TAG_TYPES.each do |type|
     attr_writer "#{type}_tagnames".to_sym
 
+    attr_accessor "#{type}_init_less_than_average".to_sym 
+    attr_accessor "#{type}_init_greater_than_average".to_sym
+    attr_accessor "#{type}_init_factor".to_sym
+
     define_method("#{type}_tagnames") do
-      eval("@#{type}_tagnames") || self.with_type(type.classify).collect(&:name).sort.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
+      self.instance_variable_get("@#{type}_tagnames") || (self.new_record? ? self.tags.select {|t| t.type == type.classify}.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT) : 
+                                                                             self.tags.with_type(type.classify).select('tags.name').order('tags.name').collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
     end
     
     define_method("#{type}_taglist") do
-      eval("@#{type}_tagnames") ? tagnames_to_list(eval("@#{type}_tagnames"), "#{type}") : with_type(type)
+      self.instance_variable_get("@#{type}_tagnames") ? tagnames_to_list(self.instance_variable_get("@#{type}_tagnames"), "#{type}") : with_type(type)
+    end
+  end
+  
+  # If the user wants to initialize the tags, let them
+  before_validation :init_tags
+  def init_tags
+    tags_to_set = []
+    if self.fandom_init_less_than_average == "1" || self.fandom_init_greater_than_average == "1"
+      tags_to_set += Fandom.with_popularity_relative_to_average(:factor => self.fandom_init_factor.to_i, :greater_than => self.fandom_init_greater_than_average == "1")
+    end
+    if self.character_init_less_than_average == "1" || self.character_init_greater_than_average == "1"
+      tags_to_set += Character.with_popularity_relative_to_average(:factor => self.character_init_factor.to_i, :greater_than => self.character_init_greater_than_average == "1")
+    end
+    if self.relationship_init_less_than_average == "1" || self.relationship_init_greater_than_average == "1"
+      tags_to_set += Relationship.with_popularity_relative_to_average(:factor => self.relationship_init_factor.to_i, :greater_than => self.relationship_init_greater_than_average == "1")
+    end
+    if self.freeform_init_less_than_average == "1" || self.freeform_init_greater_than_average == "1"
+      tags_to_set += Freeform.with_popularity_relative_to_average(:factor => self.freeform_init_factor.to_i, :greater_than => self.freeform_init_greater_than_average == "1")
+    end
+    unless tags_to_set.empty?
+      self.tags = tags_to_set
+      @tag_set_initialized = true
     end
   end
 
   # this actually runs and saves the tags but only after validation
   after_save :assign_tags
   def assign_tags
+    return if @initialized
     if @tagnames
       self.tags = tagnames_to_list(@tagnames)
     end
@@ -109,15 +140,16 @@ class TagSet < ActiveRecord::Base
   end
   
   def match_rank(another, type=nil)
-    return 0 if tags.empty?
-    return 0 if type && tags_with_type(type).empty?
+    # if we don't have any tags of this type, anything matches us
+    return ALL if tags.empty?
+    return ALL if type && tags_with_type(type).empty?
     return ALL if is_subset_of?(another, type) 
     matching_tags(another, type).size
   end
   
   def exact_match?(another, type=nil)
     if type
-      self.tags_with_type(type) == another.tags_with_type(type)
+      self.tags_with_type(type).to_a == another.tags_with_type(type).to_a
     else
       self.tags == another.tags
     end
@@ -125,7 +157,7 @@ class TagSet < ActiveRecord::Base
     
   def no_match?(another, type=nil)
     if type
-      (self.tags_with_type(type) & another.tags_with_type(type)).empty? && !self.tags.empty?
+      (self.tags_with_type(type).to_a & another.tags_with_type(type).to_a).empty? && !self.tags.empty?
     else
       (self.tags & another.tags).empty? && !self.tags.empty?
     end
@@ -133,31 +165,38 @@ class TagSet < ActiveRecord::Base
   
   def partial_match?(another, type=nil)
     if type
-      !(self.tags_with_type(type) & another.tags_with_type(type)).empty?
+      !(self.tags_with_type(type).to_a & another.tags_with_type(type).to_a).empty?
     else
       !(self.tags & another.tags).empty?
     end
   end
   
+  # checks to see if this is a subset of another tagset
+  # note: we have to cast tags_with_type to an array because one of the tag sets may actually
+  # be an activequery object 
   def is_subset_of?(another, type=nil)
     if type
-      (self.tags_with_type(type) & another.tags_with_type(type)) == self.tags_with_type(type)
+      (self.tags_with_type(type).to_a & another.tags_with_type(type).to_a) == self.tags_with_type(type).to_a
     else
       (self.tags & another.tags) == self.tags
     end
   end
   
+  # checks to see if this is a superset of another tagset
+  # note: we have to cast tags_with_type to an array because one of the tag sets may actually
+  # be an activequery object 
   def is_superset_of?(another, type=nil)
     if type
-      (self.tags_with_type(type) & another.tags_with_type(type)) == another.tags_with_type(type)
+      (self.tags_with_type(type).to_a & another.tags_with_type(type).to_a) == another.tags_with_type(type).to_a
     else
       (self.tags & another.tags) == another.tags
     end
   end
-  
+
+  # returns matching tags
   def matching_tags(another, type=nil)
     if type
-      self.tags_with_type(type) & another.tags_with_type(type)
+      self.tags_with_type(type).to_a & another.tags_with_type(type).to_a
     else
       self.tags & another.tags
     end

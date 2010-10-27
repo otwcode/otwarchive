@@ -33,7 +33,7 @@ public
   end
   
   def self.set_up_generating(collection)
-    Rails.cache.write progress_key(collection), collection.signups.order_by_pseud.first.pseud.byline
+    Rails.cache.write progress_key(collection), collection.signups.order_by_pseud.pseud_only.first.pseud.byline
   end
   
   def self.cancel_generation(collection)
@@ -80,7 +80,17 @@ public
   def self.position(collection)
     Rails.cache.read(progress_key(collection))
   end
-
+  
+  def self.progress(collection)
+    # the index of our current signup person in the full index of signup participants
+    byline_list = Rails.cache.read("potential_match_pseud_list_for_#{collection.id}")
+    unless byline_list
+      byline_list = collection.signups.order_by_pseud.pseud_only.collect(&:byline)
+      Rails.cache.write("potential_match_pseud_list_for_#{collection.id}", byline_list)
+    end
+    progress = byline_list.index(Rails.cache.read(progress_key(collection)))/byline_list.size * 100
+  end
+  
   # sorting routine for potential matches
   include Comparable
   def <=>(other)

@@ -370,6 +370,8 @@ Ajax.Autocompleter = Class.create(Autocompleter.Base, {
     this.options.asynchronous  = true;
     this.options.onComplete    = this.onComplete.bind(this);
     this.options.defaultParams = this.options.parameters || null;
+    /* autoParams option added per http://dev.rubyonrails.org/ticket/5978 */
+    this.options.autoParams    = this.options.autoParams || null;
     this.url                   = url;
   },
 
@@ -383,7 +385,16 @@ Ajax.Autocompleter = Class.create(Autocompleter.Base, {
       this.options.callback(this.element, entry) : entry;
 
     if(this.options.defaultParams)
-      this.options.parameters += '&' + this.options.defaultParams;
+        this.options.parameters += '&' + this.options.defaultParams;
+
+    if(this.options.autoParams) {
+        autoParams = '';
+        this.options.autoParams.each(function(item) {
+        if((item = $(item)) && (serialized = Form.Element.serialize(item)))
+            autoParams += '&' + serialized;
+        });
+        this.options.parameters += autoParams;
+    }
 
     new Ajax.Request(this.url, this.options);
   },

@@ -3,7 +3,7 @@ class AutocompleteController < ApplicationController
 
   def render_output(result_strings, to_highlight="")
     @results = result_strings
-    render :inline  => @results.length > 0 ? "<ul><%= @results.map {|string| '<li>' + string + '</li>'} %></ul>" : ""
+    render :inline  => @results.length > 0 ? "<%= content_tag(:ul, @results.map {|string| content_tag(:li, string)}.join.html_safe) %>" : ""
   end
 
   # works for finding items in any set
@@ -14,24 +14,46 @@ class AutocompleteController < ApplicationController
   # works for any tag class where what you want to return are the names
   def tag_finder(tag_class, search_param)
     if search_param
-      tags = tag_class.canonical.order('taggings_count DESC').where(["name LIKE ?", search_param + '%']).limit(10)
-      extra_limit = 10 - tags.size + 5
-      tags += tag_class.canonical.order('taggings_count DESC').where(["name LIKE ?", '%' + search_param + '%']).limit(extra_limit)
+      tags = get_tags_for_finder(tag_class, search_param)
       render_output(tags.uniq.map(&:name))
     end
   end
   
+  def tag_finder_restricted_by_tag_set
+    search_param = params[params[:fieldname]]
+    tag_type = params[:tag_type]
+    tag_set = TagSet.find(params[:tag_set_id])
+    if tag_set.nil?
+      tag_finder(tag_type.classify, search_param)
+    else
+      tags = tag_set.tags.with_type(tag_type).order('taggings_count DESC').where("name LIKE ?", search_param + '%').limit(10)
+      extra_limit = 10 - tags.size + 5
+      tags += tag_set.tags.with_type(tag_type).order('taggings_count DESC').where("name LIKE ?", '%' + search_param + '%').limit(extra_limit)
+      render_output(tags.uniq.map(&:name))
+    end
+  end
+
   # handle relationships specially
   def relationship_finder(search_param)
     if search_param && search_param.match(/(\&|\/)/)
       tag_finder(Relationship, search_param)
     else
-      tags = Relationship.canonical.order('taggings_count DESC')
-        .where(["name LIKE ? OR name LIKE ? OR name LIKE ?", 
-                search_param + '%', '%/' + search_param + '%',
-                '%& ' + search_param + '%']).limit(15)
+      tags = get_tags_for_relationship_finder(search_param)
       render_output(tags.uniq.sort {|a,b| b.taggings_count <=> a.taggings_count}.map(&:name))
     end
+  end
+
+  def get_tags_for_finder(tag_class, search_param)
+    tags = tag_class.canonical.order('taggings_count DESC').where("name LIKE ?", search_param + '%').limit(10)
+    extra_limit = 10 - tags.size + 5
+    tags += tag_class.canonical.order('taggings_count DESC').where("name LIKE ?", '%' + search_param + '%').limit(extra_limit)
+  end
+
+  def get_tags_for_relationship_finder(search_param)
+    tags = Relationship.canonical.order('taggings_count DESC')
+                        .where("name LIKE ? OR name LIKE ? OR name LIKE ?", 
+                                search_param + '%', '%/' + search_param + '%',
+                                '%& ' + search_param + '%').limit(15)
   end
   
   # works for any tag class where what you want to return are the names
@@ -43,6 +65,83 @@ class AutocompleteController < ApplicationController
     end
   end
 
+protected
+
+  # somewhere in the params is a potentially deeply nested hash with the given fieldname
+  def get_fandoms_from_params(params, fieldname)
+    hash = params
+    nexthash = nil
+
+    while hash.is_a? Hash
+      hash.keys.each do |key|
+        if key == fieldname
+          # we've found the fandoms
+          fandom_names = hash[key]
+          if fandom_names.is_a? String
+            return [] if fandom_names.blank?
+            return fandom_names.split(',').delete_if {|fname| fname.blank?}.collect {|fname| Fandom.find_by_name(fname.strip)}
+          elsif fandom_names.is_a? Array
+            return fandom_names.collect {|fname| Fandom.find_by_name(fname)}
+          end
+        elsif hash[key].is_a? Hash
+          nexthash = hash[key]
+        end
+      end
+      hash = nexthash
+    end
+    
+    return []
+  end
+
+  
+public
+
+  # this finder only returns characters that are children of the given fandom
+  def character_finder_restricted_by_fandom
+    search_param = params[params[:fieldname]]
+    fandoms = get_fandoms_from_params(params, params[:fandom_fieldname])
+    message = ""
+    if fandoms.empty?
+      message = ts("- No fandoms selected! -")
+      tags = search_param.blank? ? [] : get_tags_for_finder(Character, search_param)
+    elsif search_param.blank?
+      tags = Character.with_parents(fandoms).canonical.order('taggings_count DESC').limit(10)
+    else
+      tags = Character.with_parents(fandoms).canonical.order('taggings_count DESC').where("tags.name LIKE ?", '%' + search_param + '%').limit(10)
+    end
+    if tags.empty?
+      message = ts("- No matching characters found in selected fandoms! -")
+      tags = get_tags_for_finder(Character, search_param)
+    end
+    results = message.blank? ? [] : [message]
+    results += tags.uniq.map(&:name)
+    render_output(results)
+  end
+
+  # this finder only returns relationships that are children of the given fandom
+  def relationship_finder_restricted_by_fandom
+    search_param = params[params[:fieldname]]
+    fandoms = get_fandoms_from_params(params, params[:fandom_fieldname])
+    message = ""
+    if fandoms.empty?
+      message = ts("- No fandoms selected! -")
+      tags = search_param.blank? ? [] : get_tags_for_relationship_finder(search_param)
+    elsif search_param.blank?
+      tags = Relationship.with_parents(fandoms).canonical.order('taggings_count DESC').limit(10)
+    else
+      tags = Relationship.with_parents(fandoms).canonical.order('taggings_count DESC').where("tags.name LIKE ? OR tags.name LIKE ? OR tags.name LIKE ?", 
+                                                                                      search_param + '%', '%/' + search_param + '%',
+                                                                                      '%& ' + search_param + '%').limit(10)
+    end
+    if tags.empty?
+      message = ts("- No matching tags found in selected fandoms! -")
+      tags = get_tags_for_relationship_finder(search_param)
+    end
+    results = message.blank? ? [] : [message]
+    results += tags.uniq.map(&:name)
+    render_output(results)
+  end
+  
   def pseud_finder(search_param)
     if search_param
       render_output(Pseud.order(:name).where(["name LIKE ?", '%' + search_param + '%']).limit(10).map(&:byline))

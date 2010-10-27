@@ -80,7 +80,7 @@ class Chapter < ActiveRecord::Base
  
   # make em-dashes into html code
 #  def clean_emdashes
-#    self.content.gsub!(/\xE2\x80\"/, '&mdash;')
+#    self.content.gsub!(/\xE2\x80\"/, '&#8212;')
 #  end 
   # check if this chapter is the only chapter of its work
   def is_only_chapter?

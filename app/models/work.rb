@@ -136,7 +136,6 @@ class Work < ActiveRecord::Base
     unless self.title.blank?
       self.title = self.title.strip
       if self.title.length < ArchiveConfig.TITLE_MIN
-        debugger
         errors.add(:base, ts("Title must be at least %{min} characters long without leading spaces.", :min => ArchiveConfig.TITLE_MIN))
         return false
       else

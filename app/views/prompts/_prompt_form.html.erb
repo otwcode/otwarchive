@@ -10,11 +10,21 @@ It expects the local variables:
 
 See the challenge_signup form for an example of how this is used. 
 -->
+
+<% prompt_type = (form.object.class == Offer ? "offer" : (form.object.class == Request ? "request" : "prompt")) %>
+<% prompt_types = prompt_type.pluralize %>
+<% restriction = @challenge.send("#{prompt_type}_restriction") %>
+
 <fieldset class="preface profile">
+  <% if index.is_a? String %>
+    <legend><%= "#{prompt_type.capitalize} #{index}" %></legend>
+    <h3><%= "#{prompt_type.capitalize} #{index}" %></h3>
+  <% else %>
+  	<legend><%= "#{prompt_type.capitalize} #{(index + 1)}" %></legend>
+    <h3><%= "#{prompt_type.capitalize} #{(index + 1)}" %></h3>
+  <% end %>
+
   <p>
-    <% prompt_type = (form.object.class == Offer ? "offer" : (form.object.class == Request ? "request" : "prompt")) %>
-    <% prompt_types = prompt_type.pluralize %>
-    <% restriction = @challenge.send("#{prompt_type}_restriction") %>
     <%= form.hidden_field :collection_id, :value => @collection.id %>
   </p>
   
@@ -25,60 +35,85 @@ See the challenge_signup form for an example of how this is used.
       <% TagSet::TAG_TYPES.each do |tag_type| %>
         <% num_allowed = eval("restriction.#{tag_type}_num_allowed") %>
         <% num_required = eval("restriction.#{tag_type}_num_required") %>
-        <% taglist = restriction.tags_of_type(tag_type.classify).sort  %>
-        <% has_tags = !taglist.empty? %>
+        <% @taglist ||= {} %>
+        <% @taglist["#{tag_type}-#{restriction.id}"] ||= restriction.tag_set.tags.with_type(tag_type.classify).order('tags.name') %>
+        <!-- do ratings, warnings, categories as taglists if not already specified -->
+        <% if @taglist["#{tag_type}-#{restriction.id}"].empty? && TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
+          <% @taglist["#{tag_type}-#{restriction.id}"] = tag_type.classify.constantize.canonical.order('tags.name') %>
+        <% end %>        
+        <% taglist_size = @taglist["#{tag_type}-#{restriction.id}"].size %>
     
         <% if num_allowed > 0 %>
-          <dt <%= num_required > 0 ? 'class="required"' : '' %>>
-              <%= tag_set_form.label tag_type.pluralize.to_sym, ((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize %>
-              <%= num_required == num_allowed ? " (#{num_required})" : " (#{num_required} - #{num_allowed})" %>:
+          <dt <%= num_required > 0 ? 'class="required"'.html_safe : '' %>>
+            <%= tag_set_form.label tag_type.pluralize.to_sym, ((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize, :class => tag_type %>
+            <%= num_required == num_allowed ? " (#{num_required})" : " (#{num_required} - #{num_allowed})" %>:
           </dt>
           <dd>
-            <% if has_tags %>
+            <% if taglist_size > 0 %>
               <!-- checkboxes -->
+
+              <!-- init the list of tag ids for autocompleting based on fandom -->
+              <% if tag_type == 'fandom' %><% @fandom_tag_ids = [] %><% end %>
+
               <% tag_fieldname = "challenge_signup[#{prompt_types}_attributes][#{index}][tag_set_attributes][#{tag_type}_tagnames][]" %>
               <% tag_field_id =  "challenge_signup_#{prompt_types}_attributes_#{index}_#{tag_type}" %>
-              <% max_tagindex = 0 %>
-              <ul onclick="$('<%= tag_field_id %>_hide').show(); $('<%= tag_field_id %>_more').hide();">
-                <!-- FRONT END NOTE: generally we want checkbox after label but in this case makes form much more usable to keep clicking in same vertical line -->
-                <% taglist.each_with_index do |tag, tagindex| %>
-                  <li>
-                    <% tag_checkbox_id = "#{tag_field_id}_#{tag.id}" %>
-                    <!-- FIXME not saving entered checks through errors -->
-                    <%= check_box_tag tag_fieldname, tag.name, false, :id => tag_checkbox_id %>
-                    <%= label_tag tag_fieldname, tag.name, :id => tag_checkbox_id %>
-                  </li>
-                  
-                  <% max_tagindex = tagindex %>
-                  <% if tagindex == (Prompt::OPTIONS_TO_SHOW - 1) && taglist.size > (Prompt::OPTIONS_TO_SHOW * 2) %>
-                    <!-- we add a blind-down area for more if we have a lot of checkboxes to show -->
-                    </ul>
-                    <h5 id="<%= tag_field_id %>_more" onclick="$('<%= tag_field_id %>_hide').show(); this.hide()">
-                      <%= t("prompts.show_more_#{tag_type}", 
-                        :default => "%{tag_count} more #{tag_type.pluralize} to choose from...",
-                        :tag_count => (taglist.size - Prompt::OPTIONS_TO_SHOW) ) %>
-                    </h5>
-                    <div id="<%= tag_field_id %>_hide" class="hideme">
-                    <ul>
+              <p>
+                <a class="toggle" id="<%= "#{prompt_type}_#{index}_#{tag_type}_options_show_top" %>" 
+                   onclick="$('<%= "#{prompt_type}_#{index}_#{tag_type}_options" %>').writeAttribute('class', 'options all'); 
+                            this.hide(); 
+                            $('<%= "#{prompt_type}_#{index}_#{tag_type}_options_hide_top" %>').show();">
+                  <%= ts "Show all %{taglist_size} options", :taglist_size => taglist_size %>
+                </a>
+                <a id="<%= "#{prompt_type}_#{index}_#{tag_type}_options_hide_top" %>" 
+                   class="toggle" style="display: none;" 
+                   onclick="$('<%= "#{prompt_type}_#{index}_#{tag_type}_options" %>').writeAttribute('class', 
+                                                                                        'options<%= taglist_size > (Prompt::OPTIONS_TO_SHOW * 3) ? ' many' : ''%>'); 
+                            this.hide();
+                            $('<%= "#{prompt_type}_#{index}_#{tag_type}_options_show_top" %>').show();">
+                  <%= ts "Collapse options" %>
+                </a>
+              </p>
+              <ul class="options<%= taglist_size > (Prompt::OPTIONS_TO_SHOW * 3) ? ' many' : ''%>" id="<%= "#{prompt_type}_#{index}_#{tag_type}_options" %>">
+                <% @taglist["#{tag_type}-#{restriction.id}"].each do |tag| %>
+                <li class="<%= cycle("odd", "even", :name => "tigerstriping") %>">
+                  <% tag_checkbox_id = "#{tag_field_id}_#{tag.id}" %>
+                  <% if tag_type == 'fandom' %>
+                    <% @fandom_tag_ids << tag_checkbox_id %>
                   <% end %>
-                <% end # of taglist.each loop %>
-                
-                <% if max_tagindex >= Prompt::OPTIONS_TO_SHOW && taglist.size > (Prompt::OPTIONS_TO_SHOW * 2) %>
-                  <!-- close the blind-down section we opened -->
-                  </ul>
-                  </div>
-                <% else %>
-                  </ul>
+                  <% label_tag tag_checkbox_id do %>
+                    <%= check_box_tag tag_fieldname, tag.name, tag_set_form.object.send("#{tag_type}_taglist").include?(tag), :id => tag_checkbox_id %>
+                    <%= tag.name %>
+                  <% end %>
+                </li>
                 <% end %>
-
+              </ul>
+              <% reset_cycle("tigerstriping") %>
               <!-- need to add hidden field to ensure this is passed if none of the boxes are checked -->
               <%= hidden_field_tag tag_fieldname, " " %>           
             <% else %>
               <!-- using an autocomplete -->
               <% tag_fieldname = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>
+              <% @fandom_tag_id = tag_fieldname if tag_type == 'fandom' %>
               <!-- FIXME not saving entered text through errors -->
               <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
-              <%= autocomplete_text_field tag_fieldname, :methodname => "canonical_#{tag_type}_finder" %>            
+              <% if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.tag_set.send("#{tag_type}_restrict_to_fandom") %>
+                <!-- we only want to offer users tags belonging to the fandoms they have chosen -->
+                <%= autocomplete_text_field tag_fieldname, :methodname => "#{tag_type}_finder_restricted_by_fandom", 
+                                                           :auto_params => (@fandom_tag_id ? [@fandom_tag_id] : @fandom_tag_ids),
+                                                           :extra_params => "fandom_fieldname=fandom_tagnames",
+                                                           :min_chars => '2' %>
+              <% else %>
+                <!-- autocomplete from canonical tags of this type -->
+                <%= autocomplete_text_field tag_fieldname, :methodname => "canonical_#{tag_type}_finder" %>
+              <% end %>
+            <% end %>
+            
+            <% if restriction.send("allow_any_#{tag_type}") %>
+              <p>
+                <%= form.label "any_#{tag_type}", ts("Any?") %> 
+                <%= form.check_box "any_#{tag_type}".to_sym %>
+                <%= link_to_help("challenge-any") %>
+              </p>
             <% end %>
           </dd>
         <% end %>
@@ -108,7 +143,7 @@ See the challenge_signup form for an example of how this is used.
         </dt>
         <dd>
           <% optional_tag_fieldname =  "challenge_signup_#{prompt_types}_attributes_#{index}_optional_tag_set_attributes_tagnames" %>
-          <%= optional_tag_set_form.text_area :tagnames, :rows => 2, :cols => 50, :value => form.object.optional_tag_set.tagnames %>
+          <%= optional_tag_set_form.text_area :tagnames, :rows => 5, :cols => 50, :value => form.object.optional_tag_set.tagnames %>
           <%= autocomplete_text_field(optional_tag_fieldname, :methodname => "canonical_tag_finder") %>
         </dd>
       <% end %>
@@ -120,4 +155,8 @@ See the challenge_signup form for an example of how this is used.
   <% end %>
 </fieldset>
 </div>
+
+<!-- this div is used to hold the last id for adding new prompts via javascript -->
+<div class="last_id" style="display:none;"><%= index.is_a?(String) ? index : index+1 %></div>
+
 <!-- end of nested prompt form -->

@@ -38,6 +38,8 @@ class ChallengeSignup < ActiveRecord::Base
   }
 
   scope :by_pseud, lambda {|pseud| where('pseud_id = ?', pseud.id) }
+
+  scope :pseud_only, select(:pseud_id)
    
   scope :order_by_pseud, joins(:pseud).order("pseuds.name")
 
@@ -70,10 +72,52 @@ class ChallengeSignup < ActiveRecord::Base
       end
       unless errors_to_add.empty?
         # yuuuuuck :( but so much less ugly than define-method'ing these all
-        self.errors.add(:base, errors_to_add.join("</li><li>"))
+        self.errors.add(:base, errors_to_add.join("</li><li>").html_safe)
       end
     end
   end
+
+  # make sure that tags are unique across each group of prompts
+  validate :unique_tags
+  def unique_tags
+    if (challenge = collection.challenge)
+      errors_to_add = []
+      %w(prompts offers requests).each do |prompt_type|
+        restriction = case prompt_type
+          when "prompts"
+          then challenge.prompt_restriction
+          when "offers"
+          then challenge.offer_restriction
+          when "requests"
+          then challenge.request_restriction
+        end
+        
+        if restriction
+          prompts = instance_variable_get("@#{prompt_type}") || self.send("#{prompt_type}")
+          TagSet::TAG_TYPES.each do |tag_type|
+            if restriction.send("require_unique_#{tag_type}")
+              tags = []
+              prompts.each do |prompt|
+                new_tags = prompt.tag_set.send("#{tag_type}_taglist")
+                unless (tags & new_tags).empty? 
+                  errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.", 
+                                      :prompt_type => prompt_type.singularize, :tag_type => tag_type)
+                  break
+                end
+                tags += new_tags
+              end
+            end
+          end
+        end
+      end
+
+      unless errors_to_add.empty?
+        # yuuuuuck :( but so much less ugly than define-method'ing these all
+        self.errors.add(:base, errors_to_add.join("</li><li>").html_safe)
+      end
+    end
+  end
+
 
   # define "offers_num_allowed" etc here 
   %w(offers requests).each do |prompt_type|

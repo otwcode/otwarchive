@@ -33,13 +33,7 @@ module ApplicationHelper
     "<br /><code>a, abbr, acronym, address, [alt], b, big, blockquote, br, caption, center, cite, [class], code, 
     col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
     ins, kbd, li, name, ol, p, pre, q, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td, 
-    tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>"
-  end
-  
-  def limited_html_instructions
-    h(t('application_helper.plain_text', :default =>"Plain text with limited html")) + 
-    link_to_help("html-help") + 
-    "<br /><code>a, [alt], b, big, blockquote, br, center, cite, code, del, em, [href], i, img, ins, p, pre, q, small, [src], strike, strong, sub, sup, u</code>"
+    tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>".html_safe
   end
   
   def allowed_css_instructions
@@ -224,12 +218,13 @@ module ApplicationHelper
                             '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
                             { 
                               indicator: 'indicator_#{fieldname}',
-                              minChars: 3,
+                              minChars: #{options[:min_chars] ? options[:min_chars] : '3'},
                               paramName: '#{fieldname}',
                               parameters: 'fieldname=#{fieldname}#{options[:extra_params] ? '&' + options[:extra_params] : ''}',
                               fullSearch: true,
                               tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}'
                               #{options[:no_comma] ? '' : ', afterUpdateElement: addCommaToField'}
+                              #{options[:auto_params] ? ", autoParams: #{options[:auto_params]}" : ''}
                             });")    
   end
   
@@ -261,7 +256,7 @@ module ApplicationHelper
       form.fields_for(nested_model_name, new_nested_model, :child_index => child_index) {|child_form|
         render(:partial => partial_to_render, :locals => {:form => child_form, :index => child_index}.merge(locals))
       }
-    link_to_function(linktext, h("add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")"))
+    link_to_function(linktext, "add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")")
   end
 
   def link_to_remove_section(linktext, form, class_of_section_to_remove="removeme")
@@ -291,9 +286,9 @@ module ApplicationHelper
   end
   
   def mailto_link(user, options={})
-    "<a href=\"mailto:#{user.email}?subject=[#{ArchiveConfig.APP_NAME}]#{options[:subject]}\" class=\"mailto\">
-      <img src=\"/images/envelope_icon.gif\" alt=\"#{user.login}'s email\">
-    </a>"
+    "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_NAME}]#{options[:subject]}\" class=\"mailto\">
+      <img src=\"/images/envelope_icon.gif\" alt=\"#{h(user.login)}'s email\">
+    </a>".html_safe
   end
   
 end # end of ApplicationHelper
