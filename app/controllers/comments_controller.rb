@@ -196,102 +196,117 @@ class CommentsController < ApplicationController
 
   def show_comments
     @comments = @commentable.comments
-    
-    # if non-ajax it could mean sudden javascript failure OR being redirected from login
-    # so we're being extra-nice and preserving any intention to comment along with the show comments option
-    if !(request.xml_http_request?)
-      options = {:show_comments => true}
-      options[:add_comment] = params[:add_comment] if params[:add_comment]
-      options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
-      redirect_to_all_comments(@commentable, options)
+    respond_to do |format|
+      format.html do
+        # if non-ajax it could mean sudden javascript failure OR being redirected from login
+        # so we're being extra-nice and preserving any intention to comment along with the show comments option
+        options = {:show_comments => true}
+        options[:add_comment] = params[:add_comment] if params[:add_comment]
+        options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
+        redirect_to_all_comments(@commentable, options)
+      end
+      format.js
     end
   end
 
   def hide_comments
-    if !(request.xml_http_request?)
-      options[:add_comment] = params[:add_comment] if params[:add_comment]
-      redirect_to_all_comments(@commentable)
+    respond_to do |format|
+      format.html do
+        options[:add_comment] = params[:add_comment] if params[:add_comment]
+        redirect_to_all_comments(@commentable)
+      end
+      format.js
     end        
   end
 
   def add_comment
     @comment = Comment.new
-    
-    # if non-ajax it could mean redirection from login, so we're being extra-nice (see above)
-    if !(request.xml_http_request?)
-      options = {:add_comment => true}
-      options[:show_comments] = params[:show_comments] if params[:show_comments]
-      redirect_to_all_comments(@commentable, options)
+    respond_to do |format|
+      format.html do
+        options = {:add_comment => true}
+        options[:show_comments] = params[:show_comments] if params[:show_comments]
+        redirect_to_all_comments(@commentable, options)
+      end
+      format.js
     end
   end
   
   def add_comment_reply
     @comment = Comment.new
-
-    if request.xml_http_request?
-      @commentable = Comment.find(params[:id])    
-    else
-      # again with the being pretty nice
-      options = {:show_comments => true}
-      options[:controller] = @commentable.class.to_s.underscore.pluralize
-      options[:anchor] = "comment#{params[:id]}"
-      if @thread_view
-        options[:id] = @thread_root
-        options[:add_comment_reply_id] = params[:id]
-        redirect_to_comment(@commentable, options)
-      else
-        options[:id] = @commentable.id # work, chapter or other stuff that is not a comment
-        options[:add_comment_reply_id] = params[:id]
-        redirect_to_all_comments(@commentable, options)
+    respond_to do |format|        
+      format.html do
+        # again with the being pretty nice
+        options = {:show_comments => true}
+        options[:controller] = @commentable.class.to_s.underscore.pluralize
+        options[:anchor] = "comment#{params[:id]}"
+        if @thread_view
+          options[:id] = @thread_root
+          options[:add_comment_reply_id] = params[:id]
+          redirect_to_comment(@commentable, options)
+        else
+          options[:id] = @commentable.id # work, chapter or other stuff that is not a comment
+          options[:add_comment_reply_id] = params[:id]
+          redirect_to_all_comments(@commentable, options)
+        end
       end
+      format.js { @commentable = Comment.find(params[:id]) }
     end
   end
   
   def cancel_comment
-    if !(request.xml_http_request?)
-      options = {}
-      options[:show_comments] = params[:show_comments] if params[:show_comments]
-      redirect_to_all_comments(@commentable, options)
+    respond_to do |format|
+      format.html do
+        options = {}
+        options[:show_comments] = params[:show_comments] if params[:show_comments]
+        redirect_to_all_comments(@commentable, options)
+      end
+      format.js
     end    
   end
 
   def cancel_comment_reply
-    if request.xml_http_request?
-      @commentable = Comment.find(params[:id])    
-    else
-      options = {}
-      options[:show_comments] = params[:show_comments] if params[:show_comments]
-      redirect_to_all_comments(@commentable, options)
+    respond_to do |format|         
+      format.html do
+        options = {}
+        options[:show_comments] = params[:show_comments] if params[:show_comments]
+        redirect_to_all_comments(@commentable, options)
+      end
+      format.js { @commentable = Comment.find(params[:id]) }
     end    
   end
   
   def cancel_comment_edit
     @comment = Comment.find(params[:id])
-    
-    if !(request.xml_http_request?)
-      redirect_to_comment(@comment)
+    respond_to do |format|
+      format.html { redirect_to_comment(@comment) }
+      format.js
     end
   end
   
   # ATTENTION: added load_commentable before this
   def delete_comment
-    if !(request.xml_http_request?)
-      options = {}
-      options[:show_comments] = params[:show_comments] if params[:show_comments]
-      options[:delete_comment_id] = params[:delete_comment_id] if params[:delete_comment_id]
-      redirect_to_comment(@comment, options) # TO DO: deleting without javascript doesn't work and it never has!
-    end    
+    respond_to do |format|
+      format.html do
+        options = {}
+        options[:show_comments] = params[:show_comments] if params[:show_comments]
+        options[:delete_comment_id] = params[:delete_comment_id] if params[:delete_comment_id]
+        redirect_to_comment(@comment, options) # TO DO: deleting without javascript doesn't work and it never has!
+      end    
+      format.js
+    end
   end
   
   # ATTENTION: added load_commentable before this
   def cancel_comment_delete
     @comment = Comment.find(params[:id])
-    
-    if !(request.xml_http_request?)
-      options = {}
-      options[:show_comments] = params[:show_comments] if params[:show_comments]
-      redirect_to_comment(@comment, options)
-    end    
+    respond_to do |format|
+      format.html do
+        options = {}
+        options[:show_comments] = params[:show_comments] if params[:show_comments]
+        redirect_to_comment(@comment, options)
+      end    
+      format.js
+    end
   end
 
   protected 

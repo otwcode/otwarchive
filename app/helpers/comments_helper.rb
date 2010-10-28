@@ -82,21 +82,34 @@ module CommentsHelper
   
   def show_comments_link(commentable)
     if commentable.count_visible_comments > 0
-      commentable_id = commentable.is_a?(Tag) ? :tag_id : "#{commentable.class.to_s.underscore}_id".to_sym
-      commentable_value = commentable.is_a?(Tag) ? commentable.name : commentable.id
+      commentable_id = commentable.is_a?(Tag) ? 
+                          :tag_id : 
+                          "#{commentable.class.to_s.underscore}_id".to_sym
+      commentable_value = commentable.is_a?(Tag) ? 
+                            commentable.name : 
+                            commentable.id
       link_to(
-          t('comments_helper.read_many', :default => "Read Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s),
-          {:url => { :controller => :comments, :action => :show_comments, commentable_id => commentable_value}, :method => :get, :remote => true},
-          {:href => fallback_url_for_top_level(commentable, {:show_comments => true})} )
+          ts("Read Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s),
+          url_for(:controller => :comments, 
+                  :action => :show_comments, 
+                  commentable_id => commentable_value), 
+          :remote => true)
     end
   end
     
   def hide_comments_link(commentable)
-    commentable_id = commentable.is_a?(Tag) ? :tag_id : "#{commentable.class.to_s.underscore}_id".to_sym
-    commentable_value = commentable.is_a?(Tag) ? commentable.name : commentable.id
-    link_to(t('comments_helper.hide_comments', :default => "Hide Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s), 
-      {:url => { :controller => :comments, :action => :hide_comments, commentable_id => commentable_value}, :method => :get, :remote => true },     
-      {:href => fallback_url_for_top_level(commentable, {:show_comments => nil})} )
+    commentable_id = commentable.is_a?(Tag) ? 
+                        :tag_id : 
+                        "#{commentable.class.to_s.underscore}_id".to_sym
+    commentable_value = commentable.is_a?(Tag) ? 
+                          commentable.name : 
+                          commentable.id
+    link_to(
+      ts("Hide Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s), 
+      url_for(:controller => :comments, 
+              :action => :hide_comments, 
+              commentable_id => commentable_value),
+      :remote => true)
   end
   
   # return the appropriate link to add or cancel adding a new comment (note: ONLY in _commentable.html.erb!)
@@ -110,21 +123,33 @@ module CommentsHelper
   
   # return html link to add new comment on a commentable object
   def add_comment_link(commentable)
-    commentable_id = commentable.is_a?(Tag) ? :tag_id : "#{commentable.class.to_s.underscore}_id".to_sym
-    commentable_value = commentable.is_a?(Tag) ? commentable.name : commentable.id
+    commentable_id = commentable.is_a?(Tag) ? 
+                        :tag_id : 
+                        "#{commentable.class.to_s.underscore}_id".to_sym
+    commentable_value = commentable.is_a?(Tag) ? 
+                          commentable.name : 
+                          commentable.id
     link_to(
       "Add Comment",
-        {:url => { :controller => :comments, :action => :add_comment, commentable_id => commentable_value}, :method => :get, :remote => true}, 
-        {:href => fallback_url_for_top_level(commentable, {:add_comment => true, :add_comment_reply_id => nil})} )
+      url_for(:controller => :comments, 
+              :action => :add_comment, 
+              commentable_id => commentable_value),
+      :remote => true) 
   end
       
   def cancel_comment_link(commentable)
-    commentable_id = commentable.is_a?(Tag) ? :tag_id : "#{commentable.class.to_s.underscore}_id".to_sym
-    commentable_value = commentable.is_a?(Tag) ? commentable.name : commentable.id
+    commentable_id = commentable.is_a?(Tag) ? 
+                        :tag_id : 
+                        "#{commentable.class.to_s.underscore}_id".to_sym
+    commentable_value = commentable.is_a?(Tag) ? 
+                          commentable.name : 
+                          commentable.id
     link_to(
       "Cancel Comment",
-        {:url => { :controller => :comments, :action => :cancel_comment, commentable_id => commentable_value}, :method => :get, :remote => true}, 
-        {:href => fallback_url_for_top_level(commentable, {:add_comment => nil})} )
+      url_for(:controller => :comments, 
+              :action => :cancel_comment, 
+              commentable_id => commentable_value),
+      :remote => true)
   end
       
   #### HELPERS FOR REPLYING TO COMMENTS #####
@@ -139,23 +164,38 @@ end
   
   # return link to add new reply to a comment
   def add_comment_reply_link(comment)
-    commentable_id = comment.ultimate_parent.is_a?(Tag) ? :tag_id : "#{comment.ultimate_parent.class.to_s.underscore}_id".to_sym
-    commentable_value = comment.ultimate_parent.is_a?(Tag) ? comment.ultimate_parent.name : comment.ultimate_parent.id
+    commentable_id = comment.ultimate_parent.is_a?(Tag) ? 
+                        :tag_id : 
+                        "#{comment.ultimate_parent.class.to_s.underscore}_id".to_sym
+    commentable_value = comment.ultimate_parent.is_a?(Tag) ? 
+                          comment.ultimate_parent.name : 
+                          comment.ultimate_parent.id
     link_to( 
       "Reply", 
-      {:url => {:controller => :comments, :action => :add_comment_reply, :id => comment.id, :comment_id => params[:comment_id], commentable_id => commentable_value}, :method => :get, :remote => true}, 
-      {:href => fallback_url_for_comment(comment, 
-                {:add_comment => nil, :edit_comment_id => nil, :delete_comment_id => nil, :add_comment_reply_id => comment.id})} )
+      url_for(:controller => :comments, 
+              :action => :add_comment_reply, 
+              :id => comment.id, 
+              :comment_id => params[:comment_id], 
+              commentable_id => commentable_value),
+      :remote => true)
   end  
   
   # return link to cancel new reply to a comment
   def cancel_comment_reply_link(comment)
-    commentable_id = comment.ultimate_parent.is_a?(Tag) ? :tag_id : "#{comment.ultimate_parent.class.to_s.underscore}_id".to_sym
-    commentable_value = comment.ultimate_parent.is_a?(Tag) ? comment.ultimate_parent.name : comment.ultimate_parent.id
+    commentable_id = comment.ultimate_parent.is_a?(Tag) ? 
+                        :tag_id : 
+                        "#{comment.ultimate_parent.class.to_s.underscore}_id".to_sym
+    commentable_value = comment.ultimate_parent.is_a?(Tag) ? 
+                          comment.ultimate_parent.name : 
+                          comment.ultimate_parent.id
     link_to( 
       "Cancel", 
-      {:url => {:controller => :comments, :action => :cancel_comment_reply, :id => comment.id, :comment_id => params[:comment_id], commentable_id => commentable_value}, :method => :get, :remote => true}, 
-      {:href => fallback_url_for_comment(comment, {:add_comment_reply_id => nil})} ) 
+      url_for(:controller => :comments, 
+              :action => :cancel_comment_reply, 
+              :id => comment.id, 
+              :comment_id => params[:comment_id], 
+              commentable_id => commentable_value), 
+      :remote => true)
   end  
 
   # TO DO: create fallbacks to support non-JavaScript requests!
@@ -165,36 +205,55 @@ end
     if comment.new_record?
       if commentable.class == comment.class
         # canceling a reply to a comment
-        commentable_id = commentable.ultimate_parent.is_a?(Tag) ? :tag_id : "#{commentable.ultimate_parent.class.to_s.underscore}_id".to_sym
-        commentable_value = commentable.ultimate_parent.is_a?(Tag) ? commentable.ultimate_parent.name : commentable.ultimate_parent.id
-        submit_to_remote( 
-          'cancel', "Cancel", 
-           :url => {:controller => :comments, :action => :cancel_comment_reply, :id => commentable.id, :comment_id => params[:comment_id], commentable_id => commentable_value}, :method => :get, 
-           :href => fallback_url_for_comment(commentable, {:add_comment_reply_id => nil}) )
-      else
+        commentable_id = commentable.ultimate_parent.is_a?(Tag) ? 
+                            :tag_id : 
+                            "#{commentable.ultimate_parent.class.to_s.underscore}_id".to_sym
+        commentable_value = commentable.ultimate_parent.is_a?(Tag) ? 
+                              commentable.ultimate_parent.name : 
+                              commentable.ultimate_parent.id
+        link_to( 
+          "Cancel", 
+          url_for(:controller => :comments, 
+                  :action => :cancel_comment_reply, 
+                  :id => commentable.id, 
+                  :comment_id => params[:comment_id], 
+                  commentable_id => commentable_value),
+          :remote => true) 
+       else
         # canceling a reply to a different commentable thingy
-        commentable_id = commentable.is_a?(Tag) ? :tag_id : "#{commentable.class.to_s.underscore}_id".to_sym
-        commentable_value = commentable.is_a?(Tag) ? commentable.name : commentable.id        
-        submit_to_remote(
-          'cancel', "Cancel", 
-          :url => { :controller => :comments, :action => :cancel_comment, commentable_id => commentable_value}, :method => :get, 
-          :href => fallback_url_for_top_level(commentable, {:add_comment => nil}) )
+        commentable_id = commentable.is_a?(Tag) ? 
+                            :tag_id : 
+                            "#{commentable.class.to_s.underscore}_id".to_sym
+        commentable_value = commentable.is_a?(Tag) ? 
+                              commentable.name : 
+                              commentable.id        
+        link_to(
+          "Cancel", 
+          url_for(:controller => :comments, 
+                  :action => :cancel_comment, 
+                  commentable_id => commentable_value),
+          :remote => true)
       end
     else
       # canceling an edit
-      submit_to_remote(
-        'cancel', "Cancel", 
-        :url => { :controller => :comments, :action => :cancel_comment_edit, :id => (comment.id), :comment_id => params[:comment_id]}, :method => :get, 
-        :href => fallback_url_for_comment(comment, {:edit_comment_id => nil}))
+      link_to(
+        "Cancel", 
+        url_for(:controller => :comments, 
+                :action => :cancel_comment_edit, 
+                :id => (comment.id), 
+                :comment_id => params[:comment_id]),
+        :remote => true)
     end
   end  
     
   # return html link to edit comment
   def edit_comment_link(comment)
-      link_to("Edit", 
-        {:url => {:controller => :comments, :action => :edit, :id => comment, :comment_id => params[:comment_id]}, :method => :get, :remote => true}, 
-        {:href => fallback_url_for_comment(comment, 
-                {:add_comment => nil, :add_comment_reply_id => nil, :delete_comment_id => nil, :edit_comment_id => comment.id})} ) 
+    link_to("Edit", 
+            url_for(:controller => :comments, 
+                    :action => :edit, 
+                    :id => comment, 
+                    :comment_id => params[:comment_id]),
+            :remote => true)
   end
   
   def do_cancel_delete_comment_link(comment)
@@ -209,23 +268,26 @@ end
   def delete_comment_link(comment)
     link_to( 
       "Delete", 
-      {:url => {:controller => :comments, :action => :delete_comment, :id => comment, :comment_id => params[:comment_id]}, :method => :get, :remote => true}, 
-      {:href => fallback_url_for_comment(comment, 
-                {:add_comment => nil, :add_comment_reply_id => nil, :edit_comment_id => nil, :delete_comment_id => comment.id})} )
+      url_for(:controller => :comments, 
+              :action => :delete_comment, 
+              :id => comment, 
+              :comment_id => params[:comment_id]), 
+      :remote => true)
   end
 
   # return link to cancel new reply to a comment
   def cancel_delete_comment_link(comment)
     link_to( 
       "Cancel", 
-      {:url => {:controller => :comments, :action => :cancel_comment_delete, :id => comment, :comment_id => params[:comment_id]}, :method => :get, :remote => true}, 
-      {:href => fallback_url_for_comment(comment, 
-                {:delete_comment_id => nil})} )
+      url_for(:controller => :comments, 
+              :action => :cancel_comment_delete, 
+              :id => comment, 
+              :comment_id => params[:comment_id]), 
+      :remote => true)
   end    
   
   # return html link to mark/unmark comment as spam
-  def tag_comment_as_spam_link(comment)
-    
+  def tag_comment_as_spam_link(comment)    
     if comment.approved
       link_to('Spam', reject_comment_path(comment), :method => :put)
     else
