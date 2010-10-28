@@ -8,7 +8,7 @@ class CollectionObserver < ActiveRecord::Observer
         if ArchiveConfig.NO_DELAYS
           new_collection.reveal!
         else
-          new_collection.send_later(:reveal!)
+          new_collection.delay.reveal!
         end
       end
       if old_collection.anonymous? && !new_collection.anonymous?
@@ -16,7 +16,7 @@ class CollectionObserver < ActiveRecord::Observer
         if ArchiveConfig.NO_DELAYS
           new_collection.reveal_authors!
         else
-          new_collection.send_later(:reveal_authors!)
+          new_collection.delay.reveal_authors!
         end
       end
     end

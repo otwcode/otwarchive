@@ -95,7 +95,7 @@ class PotentialMatchesController < ApplicationController
       if ArchiveConfig.NO_DELAYS
         PotentialMatch.generate!(@collection)
       else
-        PotentialMatch.send_later :generate!, @collection
+        PotentialMatch.delay.generate!(@collection)
       end
     end
 

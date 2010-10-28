@@ -2,6 +2,9 @@
 Feature: Collection
   I want to test Yuletide, because it has several specific settings that are different from an ordinary gift exchange
 
+  # uncomment this and the other 'javascript' lines below when testing on local
+  # in order to test javascript-based features
+  # @javascript
   Scenario: Create a Yuletide gift exchange, sign up for it, run matching, post, fulfil pinch hits
 
   Given the following activated users exist
@@ -21,6 +24,7 @@ Feature: Collection
     And a character exists with name: "John Sheppard", canonical: true
     And a character exists with name: "Teyla Emmagan", canonical: true
     And a character exists with name: "Obscure person", canonical: true
+    And a character exists with name: "Foo The Wonder Goat", canonical: true
     And I am logged in as "mod1" with password "something"
   Then I should see "Hi, mod1!"
     And I should see "Log out"
@@ -42,19 +46,35 @@ Feature: Collection
   When I fill in "General Signup Instructions" with "Here are some general tips"
     And I fill in "Request Instructions" with "Please request easy things"
     And I fill in "Offer Instructions" with "Please offer lots of stuff"
+    # for testing convenience while still exercising the options, we are going with
+    # 2-3 requests, 2-3 offers
+    # url allowed in request
+    # description not allowed in offer
+    # 1 fandom required in offer and request
+    # 0-2 characters allowed in request
+    # 2-3 characters required in offer
+    # unique fandoms required in offers and requests
+    # "any" option available in offers
+    # match on 1 fandom and 1 character
     And I check "gift_exchange_request_restriction_attributes_url_allowed"
     And I uncheck "gift_exchange_offer_restriction_attributes_description_allowed"
-    And I fill in "gift_exchange_requests_num_required" with "3"
-    And I fill in "gift_exchange_requests_num_allowed" with "4"
-    And I fill in "gift_exchange_offers_num_required" with "3"
-    And I fill in "gift_exchange_offers_num_allowed" with "4"
+    And I fill in "gift_exchange_requests_num_required" with "2"
+    And I fill in "gift_exchange_requests_num_allowed" with "3"
+    And I fill in "gift_exchange_offers_num_required" with "2"
+    And I fill in "gift_exchange_offers_num_allowed" with "3"
     And I fill in "gift_exchange_offer_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate SG-1, Stargate Atlantis, Tiny fandom, Care Bears, Yuletide Hippos RPF"
     And I fill in "gift_exchange_request_restriction_attributes_fandom_num_required" with "1"
     And I fill in "gift_exchange_request_restriction_attributes_fandom_num_allowed" with "1"
-    And I fill in "gift_exchange_request_restriction_attributes_character_num_allowed" with "4"
+    And I check "gift_exchange_request_restriction_attributes_require_unique_fandom"
+    And I fill in "gift_exchange_request_restriction_attributes_character_num_allowed" with "2"
     And I fill in "gift_exchange_offer_restriction_attributes_fandom_num_required" with "1"
     And I fill in "gift_exchange_offer_restriction_attributes_fandom_num_allowed" with "1"
-    And I fill in "gift_exchange_offer_restriction_attributes_character_num_allowed" with "4"
+    And I fill in "gift_exchange_offer_restriction_attributes_character_num_required" with "2"
+    And I fill in "gift_exchange_offer_restriction_attributes_character_num_allowed" with "3"
+    And I check "gift_exchange_offer_restriction_attributes_require_unique_fandom"
+    And I check "gift_exchange_offer_restriction_attributes_allow_any_character" 
+    And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_fandoms"
+    And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
     And I check "Signup open?"
     And I press "Submit"
   Then I should see "Challenge was successfully created"
@@ -79,35 +99,79 @@ Feature: Collection
     And I should see "It's a gift exchange-y thing" within "#faq"
     And I should see "Be even nicer to people" within "#rules"
   When I follow "Sign Up"
-  Then I should see "Requests (3 - 4)"
-    And I should see "Offers (3 - 4)"
+  Then I should see "Requests (2 - 3)"
+    And I should see "Request 1"
+    And I should see "Request 2"
+    And I should not see "Request 3"
+    And I should see "Add another request? (Up to 3 allowed.)"
+    And I should see "Offers (2 - 3)"
+    And I should see "Offer 1"
+    And I should see "Offer 2"
+    And I should not see "Offer 3"
+    And I should see "Add another offer? (Up to 3 allowed.)"
   # users need to see a list of possible fandoms, either here or elsewhere, when signing up
     And I should see "Stargate Atlantis"
     And I should see "Stargate SG-1"
     And I should see "Tiny fandom"
     And I should see "Care Bears"
     And I should see "Yuletide Hippos RPF"
+    And I should see "Show all 5 options"
+    And I should see "Fandom (1)"
+    And I should see "Characters (0 - 2)"
+    And I should see "Characters (2 - 3)"    
+    And I should see "Any?"
+    And I should see "Prompt URL:"
+    And I should see "Description:"
+  # we fill in 1 request with 1 fandom, 1 character; 1 offer with 1 fandom and 1 character 
   When I check "challenge_signup_requests_attributes_0_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
+    And I fill in "Prompt URL" with "http://user.dreamwidth.org/123.html"
     And I check "challenge_signup_offers_attributes_0_fandom_30"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person"
-    And I fill in "Description" with "This is my wordy request"
-    And issue "1825" is fixed
-    #  And I fill in "Prompt URL" with "http://user.dreamwidth.org/123.html"
-    And I fill in "Url" with "http://user.dreamwidth.org/123.html"
+    And I fill in "Description" with "This is my wordy offer"
     And I press "Submit"
-  Then I should see "We couldn't save this challenge signup, sorry!"
+  Then I should see "We couldn't save this ChallengeSignup, sorry!"
   # TODO: We should probably make these error message more friendly
+    # errors for the empty request
     And I should see "Request must have exactly 1 fandom tags. You currently have none."
+    # errors for the not-quite-filled offer
+    And I should see "Offer must have between 2 and 3 character tags. You currently have (1) -- Obscure person"
+    # errors for the empty offer
     And I should see "Offer must have exactly 1 fandom tags. You currently have none."
-  When I check "challenge_signup_requests_attributes_1_fandom_29"
+    And I should see "Offer must have between 2 and 3 character tags. You currently have none." 
+  # Over-fill the remaining missing fields and duplicate fandoms
+  When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Obscure person"
+    And I check "challenge_signup_requests_attributes_1_fandom_29"
+    And I check "challenge_signup_requests_attributes_1_fandom_28"
     And I fill in "challenge_signup_requests_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan"
-    And I check "challenge_signup_requests_attributes_2_fandom_28"
-    And I check "challenge_signup_offers_attributes_1_fandom_31"
-    And I check "challenge_signup_offers_attributes_2_fandom_28"
+    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard"
+    And I check "challenge_signup_offers_attributes_1_fandom_30"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
+    And I press "Submit"
+  Then I should see "We couldn't save this ChallengeSignup, sorry!"
+    And I should see "Request must have between 0 and 2 character tags. You currently have (3) -- John Sheppard, Teyla Emmagan, Obscure person."
+    And I should see "Request must have exactly 1 fandom tags. You currently have (2) -- Stargate SG-1, Tiny fandom."
+    And I should see "Offer must have between 2 and 3 character tags. You currently have (4) -- Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat."
+    And I should see "You have submitted more than one offer with the same fandom tags. This challenge requires them all to be unique."
+  # now fill in correctly
+  When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
+    And I uncheck "challenge_signup_requests_attributes_1_fandom_28"
+    And I uncheck "challenge_signup_offers_attributes_1_fandom_30"
+    And I check "challenge_signup_offers_attributes_1_fandom_28"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     And I press "Submit"
   Then I should see "Signup was successfully created"
-  
+    And I should see "Signup for myname1"
+    And I should see "Request 1"
+    And I should see "Request 2"
+    And I should not see "Request 3"
+    And I should see "Offer 1"
+    And I should see "Offer 2"
+    And I should not see "Offer 3"
+    And I should see "This is my wordy offer"
+    And I should see "Edit"
+    And I should see "Delete"
+    
   # another person signs up
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
@@ -118,17 +182,19 @@ Feature: Collection
   Then I should see "Signed up:" within ".collection.meta"
     And I should see "1" within ".collection.meta"
   When I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_28"
+  When I check "challenge_signup_requests_attributes_0_fandom_28"
     And I check "challenge_signup_requests_attributes_1_fandom_29"
-    And I check "challenge_signup_requests_attributes_2_fandom_31"
     And I check "challenge_signup_offers_attributes_0_fandom_27"
     And I check "challenge_signup_offers_attributes_1_fandom_31"
-    And I check "challenge_signup_offers_attributes_2_fandom_31"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person"
-    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
-    # And the indexes thing is fixed
-    # And I follow "Add another request? (Up to 4 allowed.)"
-    # And I check "challenge_signup_requests_attributes_3_fandom_30"
+    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Obscure person"    
+    # TRICKY note here! the index value for the javascript-added request 3 is actually 3; this is 
+    # a workaround because otherwise it would display a duplicate number
+    # These three commented out so it can run on the command-line
+    #And I follow "Add another request? (Up to 3 allowed.)"
+    #Then I should see "Request 3"
+    #And I check "challenge_signup_requests_attributes_3_fandom_30"
     And I press "Submit"
   Then I should see "Signup was successfully created"
   
@@ -140,14 +206,13 @@ Feature: Collection
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_28"
     And I check "challenge_signup_requests_attributes_1_fandom_29"
-    And I check "challenge_signup_requests_attributes_2_fandom_31"
     And I check "challenge_signup_offers_attributes_0_fandom_28"
     And I check "challenge_signup_offers_attributes_1_fandom_31"
-    And I check "challenge_signup_offers_attributes_2_fandom_30"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "Any"
-    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Teyla Emmagan"
+    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Teyla Emmagan, Obscure person"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, Obscure person"
     And I press "Submit"
-  Then I should see "We couldn't save this challenge signup, sorry!"
+  Then I should see "We couldn't save this ChallengeSignup, sorry!"
     And I should see "The following character tags aren't canonical and can't be used: Any"
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with ""
     And I press "Submit"
@@ -161,12 +226,11 @@ Feature: Collection
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
     And I check "challenge_signup_requests_attributes_1_fandom_29"
-    And I check "challenge_signup_requests_attributes_2_fandom_31"
+    And I fill in "challenge_signup_requests_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
     And I check "challenge_signup_offers_attributes_0_fandom_27"
+    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard"
     And I check "challenge_signup_offers_attributes_1_fandom_31"
-    And I check "challenge_signup_offers_attributes_2_fandom_31"
-    And I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
-    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard"
     And I press "Submit"
   Then I should see "Signup was successfully created"
   
@@ -211,7 +275,10 @@ Feature: Collection
   Then I should see "Main Assignments"
     And I should not see "Missing Recipients"
     And I should not see "Missing Givers"
-  
+    And I should see "Regenerate Assignments"
+    And I should see "Regenerate Potential Matches"
+    And I should see "Send Assignments"
+      
   # mod sends assignments out
   When all emails have been delivered
     And I follow "Send Assignments"
@@ -219,8 +286,15 @@ Feature: Collection
     And I should see "No defaulted assignments!"
     And I should see "Not yet posted"
     And I should not see "No recipient"
-    # TODO: fix this broken line
-    # And 4 emails should be delivered
+    And I should see "Purge Assignments"
+    And I should see "Default All Unposted"
+    And I should see "Show Covered Defaults"
+    Given the system processes jobs
+      And I wait 3 seconds
+    When I reload the page
+    Then I should not see "Assignments are now being sent out"
+      # 4 users and the mod should get emails :)
+      And 5 emails should be delivered
   
   # first user starts posting
   When I follow "Log out"
@@ -233,14 +307,16 @@ Feature: Collection
     And I should see "Yuletide" within "table"
     And I should see "Post To Fulfill"
   When I follow "Post To Fulfill"
-    And I fill in "work_title" with "Fulfilling Story"
-    And I fill in "content" with "This is an exciting story about Atlantis"
+  Then I should see "Post New Work"
+  When I fill in "Work Title" with "Fulfilling Story"
+    And I fill in "Fandoms" with "Stargate Atlantis"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
-    And I fill in "Fandom" with "Stargate SG-1"
-    And I press "Preview"
-  Then I should see "Preview"
-    And I should see "Draft was successfully created"
+    And I select "myname1" from "work_author_attributes_ids_"
+    And I fill in "content" with "This is an exciting story about Atlantis"
+  When I press "Preview"
+  Then show me the page
+  Then I should see "Preview Work"
     
   # someone looks while it's still a draft
   When I follow "Log out"

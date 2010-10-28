@@ -166,7 +166,7 @@ class ChallengeAssignmentsController < ApplicationController
     if ArchiveConfig.NO_DELAYS
       ChallengeAssignment.send_out!(@collection)
     else
-      ChallengeAssignment.send_later :send_out!, @collection
+      ChallengeAssignment.delay.send_out!(@collection)
     end
     flash[:notice] = "Assignments are now being sent out."
     redirect_to collection_assignments_path(@collection)

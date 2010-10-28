@@ -1,5 +1,8 @@
 class UserMailer < ActionMailer::Base
 
+  helper :application
+  helper :tags
+
   default :from => ArchiveConfig.RETURN_ADDRESS
   
   # Sends an invitation to join the archive
