@@ -173,7 +173,7 @@ module TagsHelper
       end
       meta_ul << "</ul>"
     end
-    meta_ul
+    meta_ul.html_safe
   end
   
   # Returns a nested list of sub tags 
