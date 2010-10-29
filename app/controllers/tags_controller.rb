@@ -91,19 +91,18 @@ class TagsController < ApplicationController
       end
       @display_category = @display_tags.first.class.name.downcase.pluralize
     end
-    if request.xml_http_request?
-      respond_to do |format|
-        format.js
+    respond_to do |format|
+      format.html do
+        # This is just a quick fix to avoid script barf if JavaScript is disabled
+        flash[:error] = t('need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
+        if request.env["HTTP_REFERER"]
+          redirect_to(request.env["HTTP_REFERER"] || root_path)
+        else
+          # else branch needed to deal with bots, which don't have a referer
+          redirect_to '/'
+        end
       end
-    else
-      # This is just a quick fix to avoid script barf if JavaScript is disabled
-      flash[:error] = t('need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
-      if request.env["HTTP_REFERER"]
-        redirect_to(request.env["HTTP_REFERER"] || root_path)
-      else
-        # else branch needed to deal with bots, which don't have a referer
-        redirect_to '/'
-      end
+      format.js
     end
   end
 
