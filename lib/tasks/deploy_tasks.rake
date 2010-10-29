@@ -55,10 +55,7 @@ You must have sudo power or this WILL NOT WORK"
   desc "Shutdown website"
   task(:shutdown_website => :get_server_name) do
 
-    ok_or_warn %q{sudo a2ensite maintenance} unless @server == "stage" 
-    ok_or_warn %q{sudo a2dissite otwarchive} 
-    ok_or_warn %q{sudo apache2ctl -t}
-    ok_or_warn %q{sudo apache2ctl graceful}
+    ok_or_warn %q{cp /var/www/otwarchive/shared/public/maintenance.html /var/www/otwarchive/current/public}
   end
 
   desc "Create backup of archive database"
@@ -131,10 +128,7 @@ You must have sudo power or this WILL NOT WORK"
 
   desc "Restart website"
   task(:restart_website => :get_server_name) do
-    ok_or_warn %q{sudo a2ensite otwarchive}
-    ok_or_warn %q{sudo a2dissite maintenance} unless @server == 'stage'
-    ok_or_warn %q{sudo apache2ctl -t}
-    ok_or_warn %q{sudo apache2ctl graceful}
+    ok_or_warn %q{rm /var/www/otwarchive/current/public/maintenance.html}
   end
 
   desc "Rebuild sphinx (slow)"
