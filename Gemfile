@@ -12,12 +12,7 @@ gem 'rails', '3.0.1'
 gem 'mysql2'
 
 # Use unicorn as the web server
-# gem 'unicorn'
-
-# Use mongrel
-gem 'mongrel', '1.2.0.pre2'
-gem 'cgi_multipart_eof_fix'
-gem 'fastthread'
+gem 'unicorn'
 
 # Deploy with Capistrano
 # gem 'capistrano'

@@ -2,7 +2,7 @@
 require 'bundler/capistrano'
 
 set :application, "otwarchive"
-set :repository,  "http://otwarchive.googlecode.com/svn/trunk/"
+set :repository,  "http://otwarchive.googlecode.com/svn/branches/deploy/"
 set :scm, :subversion
 set :deploy_via, :remote_cache
 
@@ -25,19 +25,12 @@ role :app, host                    # where code checkout runs
 role :db, host, :primary => true   # where rails migrations run
 
 namespace :deploy do
-  # restart passenger by touching restart.txt
   task :start do ; end
   task :stop do ; end
+  desc "Restart unicorn"
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "touch #{File.join(current_path,'tmp','restart.txt')}"
+    run "kill -USR2 `cat #{File.join(shared_path,'pids','unicorn.pid')}"
   end
-
-  # set to production only if you want email-sending tasks to be run
-  desc "Update the crontab file"
-  task :update_crontab, :roles => :db do
-    run "cd #{release_path} && whenever --update-crontab #{application} --set environment=production"
-  end
-
 end
 
 namespace :local do
@@ -50,6 +43,7 @@ namespace :local do
     touch "#{shared_path}/config/local.yml"
     touch "#{shared_path}/config/s3.yml"
     touch "#{shared_path}/config/sphinx.yml"
+    touch "#{shared_path}/config/unicorn.rb"
     puts "#{shared_path}/ requires manual configuration!!!"
   end
 
@@ -63,6 +57,7 @@ namespace :local do
     run "cat #{release_path}/REVISION >> #{shared_path}/config/local.yml"
     run "ln -sf #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     run "ln -sf #{shared_path}/config/production.sphinx.conf #{release_path}/config/production.sphinx.conf"
+    run "ln -sf #{shared_path}/config/unicorn.rb #{release_path}/config/unicorn.rb"
     run "ln -sf #{shared_path}/sphinx #{release_path}/db/sphinx"
     run "ln -sf #{shared_path}/public/robots.txt #{release_path}/public/robots.txt"
     ### if you are using google webmaster tools

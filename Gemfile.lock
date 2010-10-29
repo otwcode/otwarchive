@@ -93,7 +93,6 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       selenium-webdriver (>= 0.0.3)
-    cgi_multipart_eof_fix (2.5.0)
     childprocess (0.1.3)
       ffi (~> 0.6.3)
     chronic (0.3.0)
@@ -119,10 +118,8 @@ GEM
       abstract (>= 1.0.0)
     escape_utils (0.1.9)
     factory_girl (1.3.2)
-    fastthread (1.0.7)
     ffi (0.6.3)
       rake (>= 0.8.7)
-    gem_plugin (0.2.3)
     gherkin (2.2.9)
       json (~> 1.4.6)
       term-ansicolor (~> 1.0.5)
@@ -130,6 +127,7 @@ GEM
     i18n (0.4.1)
     json (1.4.6)
     json_pure (1.4.6)
+    kgio (1.3.1)
     launchy (0.3.7)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
@@ -145,9 +143,6 @@ GEM
     mime-types (1.16)
     mocha (0.9.9)
       rake
-    mongrel (1.2.0.pre2)
-      daemons (~> 1.0.10)
-      gem_plugin (~> 0.2.3)
     mysql2 (0.2.6)
     nokogiri (1.4.3.1)
     permit_yo (2.1.3)
@@ -222,6 +217,9 @@ GEM
       delayed_job (>= 1.8.4)
       thinking-sphinx (>= 1.3.6)
     tzinfo (0.3.23)
+    unicorn (2.0.0)
+      kgio (~> 1.3.1)
+      rack
     whenever (0.6.1)
       aaronh-chronic (>= 0.3.9)
       activesupport (>= 2.3.4)
@@ -237,7 +235,6 @@ DEPENDENCIES
   aws-s3
   bundler (~> 1.0.0)
   capybara (= 0.3.9)
-  cgi_multipart_eof_fix
   chronic
   css_parser
   cucumber (>= 0.9.1)
@@ -247,13 +244,11 @@ DEPENDENCIES
   escape_utils
   exception_notification!
   factory_girl
-  fastthread
   htmlentities
   launchy
   mechanize
   memcache-client
   mocha
-  mongrel (= 1.2.0.pre2)
   mysql2
   nokogiri
   paperclip!
@@ -269,5 +264,6 @@ DEPENDENCIES
   thinking-sphinx!
   tolk!
   ts-delayed-delta
+  unicorn
   whenever
   will_paginate!

@@ -93,7 +93,7 @@ You must have sudo power or this WILL NOT WORK"
   end
 
   desc "Deploy code through capistrano"
-  task(:deploy_code) do
+  task(:deploy_code => :get_server_name) do
     @new_rev = ask("Enter the revision number of the deploy branch (or hit return for the latest): ")
     if @new_rev.blank?
       @new_rev = %x{sudo su - www-data -c "svnversion"}.chomp
@@ -101,6 +101,14 @@ You must have sudo power or this WILL NOT WORK"
     end
     notice "Deploying to revision #{@new_rev}..."
     ok_or_warn %Q{sudo su - www-data -c "cap deploy -s revision=#{@new_rev}"}
+    case @server
+    when "stage"
+      notice "Updating crontab (without email)..."
+      ok_or_warn %q{sudo su - www-data -c "cd /var/www/otwarchive/current && whenever --update-crontab otwarchive"}
+    when "otw1"
+      notice "Updating crontab..."
+      ok_or_warn %q{sudo su - www-data -c "cd /var/www/otwarchive/current && whenever --update-crontab otwarchive -set environment=production"}
+     end
   end
 
   desc "Run migrations through capistrano"
