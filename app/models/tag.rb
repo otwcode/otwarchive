@@ -238,6 +238,23 @@ class Tag < ActiveRecord::Base
     joins(:children).
     where('children_tags.id IN (?)', relationships.collect(&:id))
   }
+  
+  scope :in_challenge, lambda {|collection|
+    joins("INNER JOIN set_taggings ON (tags.id = set_taggings.tag_id) 
+           INNER JOIN tag_sets ON (set_taggings.tag_set_id = tag_sets.id)
+           INNER JOIN prompts ON (prompts.tag_set_id = tag_sets.id OR prompts.optional_tag_set_id = tag_sets.id)
+           INNER JOIN challenge_signups ON (prompts.challenge_signup_id = challenge_signups.id)").
+    where("challenge_signups.collection_id = ?", collection.id)
+  }
+  
+  scope :requested_in_challenge, lambda {|collection|
+    in_challenge(collection).where("prompts.type = 'Request'")
+  }
+  
+  scope :offered_in_challenge, lambda {|collection|
+    in_challenge(collection).where("prompts.type = 'Offer'")
+  }
+
       
   # Class methods
 

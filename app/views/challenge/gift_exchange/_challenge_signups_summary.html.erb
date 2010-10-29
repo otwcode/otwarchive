@@ -1,0 +1,23 @@
+<!-- display a summary version of what users have requested and offered -->
+
+
+<!-- for each type of tag allowed in this challenge, show counts of requested and offered -->
+<% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
+  <% @requested = tag_type.classify.constantize.select("tags.id, tags.name, count(tags.id) as count").group('tags.id').requested_in_challenge(@collection) %>
+  <% if @requested.count.keys.size > 0 %>
+    <h3><%= ts("Requested %{tag_type}", :tag_type => tag_type.pluralize.capitalize) %> (<%= @requested.count.keys.size %>)</h3>
+
+    <ul>
+      <% @requested.order(:count).each do |requested_tag| %>
+        <% offered = tag_type.classify.constantize.offered_in_challenge(@collection).select("count(tags.id) as count").where("tags.id = ?", requested_tag.id).first %>
+        <li class="requested<%= offered.count > 0 ? '_and_offered' : '' %>"><%= requested_tag.name %> 
+          (<span class="requested"><%= requested_tag.count -%></span>,
+            <span class="offered"><%= offered.count -%></span>)
+        </li>
+      <% end %>
+    </ul> 
+    
+    <% break %> 
+  <% end %>
+  
+<% end %>

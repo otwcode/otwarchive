@@ -1,0 +1,8 @@
+<% if @collection && @collection.challenge %>
+  <!-- signups for a given challenge -->
+  <h2><%= ts("Signup Summary for %{collection}", :collection => @collection.title) %></h2>
+
+  <!-- render differently based on the challenge -->
+  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_signups_summary" %>
+  
+<% end %>

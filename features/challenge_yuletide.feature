@@ -4,7 +4,7 @@ Feature: Collection
 
   # uncomment this and the other 'javascript' lines below when testing on local
   # in order to test javascript-based features
-  # @javascript
+  #@javascript
   Scenario: Create a Yuletide gift exchange, sign up for it, run matching, post, fulfil pinch hits
 
   Given the following activated users exist
@@ -99,29 +99,32 @@ Feature: Collection
     And I should see "It's a gift exchange-y thing" within "#faq"
     And I should see "Be even nicer to people" within "#rules"
   When I follow "Sign Up"
-  Then I should see "Requests (2 - 3)"
+  Then I should see "General Information"
+    And I should see "Here are some general tips"
+    And I should see "Requests (2 - 3)"
+    And I should see "Please request easy things"
     And I should see "Request 1"
+    And I should see "Fandom (1):"
+    And I should see "Show all 5 options"
+    And I should see "Care Bears"
+    And I should see "Stargate Atlantis"
+    And I should see "Stargate SG-1"
+    And I should see "Tiny fandom"
+    And I should see "Yuletide Hippos RPF"
+    And I should see "Characters (0 - 2):"
+    And I should see "Prompt URL:"
+    And I should see "Description:"
     And I should see "Request 2"
     And I should not see "Request 3"
     And I should see "Add another request? (Up to 3 allowed.)"
     And I should see "Offers (2 - 3)"
+    And I should see "Please offer lots of stuff"
     And I should see "Offer 1"
+    And I should see "Characters (2 - 3)"    
+    And I should see "Any?"
     And I should see "Offer 2"
     And I should not see "Offer 3"
     And I should see "Add another offer? (Up to 3 allowed.)"
-  # users need to see a list of possible fandoms, either here or elsewhere, when signing up
-    And I should see "Stargate Atlantis"
-    And I should see "Stargate SG-1"
-    And I should see "Tiny fandom"
-    And I should see "Care Bears"
-    And I should see "Yuletide Hippos RPF"
-    And I should see "Show all 5 options"
-    And I should see "Fandom (1)"
-    And I should see "Characters (0 - 2)"
-    And I should see "Characters (2 - 3)"    
-    And I should see "Any?"
-    And I should see "Prompt URL:"
-    And I should see "Description:"
   # we fill in 1 request with 1 fandom, 1 character; 1 offer with 1 fandom and 1 character 
   When I check "challenge_signup_requests_attributes_0_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
@@ -234,10 +237,17 @@ Feature: Collection
     And I press "Submit"
   Then I should see "Signup was successfully created"
   
-  # ordinary users can't see signups
+  # ordinary users can't see signups but can see summary
   When I go to the collections page
     And I follow "Yuletide"
   Then I should not see "Signups"
+    And I should see "Signup Summary"
+  When I follow "Signup Summary"
+  Then show me the page
+  Then I should see "Fandom"
+    And I should see "Character"
+    And I should see "Stargate Atlantis"
+    And I should see "John Sheppard"
   
   # mod can view signups
   When I follow "Log out"
@@ -314,8 +324,8 @@ Feature: Collection
     And I check "No Archive Warnings Apply"
     And I select "myname1" from "work_author_attributes_ids_"
     And I fill in "content" with "This is an exciting story about Atlantis"
-  When I press "Preview"
   Then show me the page
+  When I press "Preview"
   Then I should see "Preview Work"
     
   # someone looks while it's still a draft

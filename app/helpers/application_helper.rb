@@ -293,4 +293,65 @@ module ApplicationHelper
     </a>".html_safe
   end
   
+  # toggle an options (scrollable checkboxes) section of a form to show all of the options
+  def options_toggle(options_id, options_size)
+    toggle_show = content_tag(:a, ts("Show all %{options_size} options", :options_size => options_size), 
+                              :class => "toggle", :id => "#{options_id}_show", 
+                              :onclick => "$('#{options_id}').writeAttribute('class', 'options all');
+                                           $('#{options_id}_hide').show();
+                                           this.hide();")
+
+    toggle_hide = content_tag(:a, ts("Collapse options"), :style => "display: none;",
+                              :class => "toggle", :id => "#{options_id}_hide", 
+                              :onclick => "$('#{options_id}').writeAttribute('class', 'options#{options_size > (ArchiveConfig.OPTIONS_TO_SHOW *   3) ? ' many' : ''}');
+                                           $('#{options_id}_show').show();
+                                           this.hide();")
+
+    toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide)
+  end
+
+  # create a scrollable checkboxes section for a form
+  # form: the form this is being created in
+  # fieldname: the fieldname for the field being filled in by the checkboxes -- eg "work[tagnames][]"
+  # id: the base id for the checkbox fields -- eg "work_tagnames"
+  # options: the array of options (which should be objects of some sort)
+  # options_checked_method: a method that can be run on the object of the form to get back a list 
+  #         of currently-set options
+  # option_name_method: a method that can be run on each individual option to get its pretty name for labelling
+  #
+  # See the prompt_form in challenge signups for example of usage
+  def options_section(form, fieldname, id, options, options_checked_method, option_name_method="name", option_value_method="id")
+    size = options.size
+    options_id = "#{id}_options"
+    
+    options_checkboxes = options.map do |option|
+      checkbox_id = "#{id}_#{option.id}"
+      checkbox_is_checked = form.object.send(options_checked_method).include?(option)
+      checkbox_name = option.send(option_name_method)
+      checkbox_value = option.send(option_value_method)
+      checkbox_and_label = label_tag checkbox_id do 
+        check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id) +
+        checkbox_name
+      end
+      content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
+    end.join("\n").html_safe
+
+    # reset the tiger striping
+    reset_cycle("tigerstriping")
+
+    # if there are only a few options, don't show the scrolling and the toggle
+    if size <= ArchiveConfig.OPTIONS_TO_SHOW
+      content_tag(:ul, options_checkboxes, :id => options_id) + hidden_field_tag(fieldname, " ")
+    else
+      # return the toggle, the options in a scrollable field, and a hidden field 
+      # to ensure the results are sent even if the user has unchecked all the options
+      options_toggle(options_id, size) + 
+        "\n".html_safe +
+        content_tag(:ul, options_checkboxes, :id => options_id, 
+                    :class => "options#{size > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''}") + 
+        "\n".html_safe +
+        hidden_field_tag(fieldname, " ")
+    end
+  end
+  
 end # end of ApplicationHelper

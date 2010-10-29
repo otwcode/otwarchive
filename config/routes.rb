@@ -271,7 +271,11 @@ Otwarchive::Application.routes.draw do
       end
     end
     resources :items, :controller => "collection_items"
-    resources :signups, :controller => "challenge_signups"
+    resources :signups, :controller => "challenge_signups" do
+      collection do
+        get :summary
+      end
+    end
     resources :assignments, :controller => "challenge_assignments" do
       collection do
         get :generate

@@ -1,3 +1,11 @@
+Then /^debug$/ do
+  debugger
+end
+
+Then /^show me the response$/ do
+  puts page.body
+end
+
 Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end

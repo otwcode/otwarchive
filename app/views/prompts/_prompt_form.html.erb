@@ -50,60 +50,37 @@ See the challenge_signup form for an example of how this is used.
           </dt>
           <dd>
             <% if taglist_size > 0 %>
-              <!-- checkboxes -->
+              <!-- there's a set list of options, so we're using checkboxes -->
 
-              <!-- init the list of tag ids for autocompleting based on fandom -->
-              <% if tag_type == 'fandom' %><% @fandom_tag_ids = [] %><% end %>
-
+              <!-- just to make the form cleaner, save the fieldname and id for this field in locals -->
               <% tag_fieldname = "challenge_signup[#{prompt_types}_attributes][#{index}][tag_set_attributes][#{tag_type}_tagnames][]" %>
               <% tag_field_id =  "challenge_signup_#{prompt_types}_attributes_#{index}_#{tag_type}" %>
-              <p>
-                <a class="toggle" id="<%= "#{prompt_type}_#{index}_#{tag_type}_options_show_top" %>" 
-                   onclick="$('<%= "#{prompt_type}_#{index}_#{tag_type}_options" %>').writeAttribute('class', 'options all'); 
-                            this.hide(); 
-                            $('<%= "#{prompt_type}_#{index}_#{tag_type}_options_hide_top" %>').show();">
-                  <%= ts "Show all %{taglist_size} options", :taglist_size => taglist_size %>
-                </a>
-                <a id="<%= "#{prompt_type}_#{index}_#{tag_type}_options_hide_top" %>" 
-                   class="toggle" style="display: none;" 
-                   onclick="$('<%= "#{prompt_type}_#{index}_#{tag_type}_options" %>').writeAttribute('class', 
-                                                                                        'options<%= taglist_size > (Prompt::OPTIONS_TO_SHOW * 3) ? ' many' : ''%>'); 
-                            this.hide();
-                            $('<%= "#{prompt_type}_#{index}_#{tag_type}_options_show_top" %>').show();">
-                  <%= ts "Collapse options" %>
-                </a>
-              </p>
-              <ul class="options<%= taglist_size > (Prompt::OPTIONS_TO_SHOW * 3) ? ' many' : ''%>" id="<%= "#{prompt_type}_#{index}_#{tag_type}_options" %>">
-                <% @taglist["#{tag_type}-#{restriction.id}"].each do |tag| %>
-                <li class="<%= cycle("odd", "even", :name => "tigerstriping") %>">
-                  <% tag_checkbox_id = "#{tag_field_id}_#{tag.id}" %>
-                  <% if tag_type == 'fandom' %>
-                    <% @fandom_tag_ids << tag_checkbox_id %>
-                  <% end %>
-                  <%= label_tag tag_checkbox_id do %>
-                    <%= check_box_tag tag_fieldname, tag.name, tag_set_form.object.send("#{tag_type}_taglist").include?(tag), :id => tag_checkbox_id %>
-                    <%= tag.name %>
-                  <% end %>
-                </li>
-                <% end %>
-              </ul>
-              <% reset_cycle("tigerstriping") %>
-              <!-- need to add hidden field to ensure this is passed if none of the boxes are checked -->
-              <%= hidden_field_tag tag_fieldname, " " %>           
+
+              <!-- set the list of fieldnames to pass for autocompleting based on fandom -->
+              <% if tag_type == 'fandom' %>
+                <% @fandom_tag_fieldnames = @taglist["#{tag_type}-#{restriction.id}"].map {|tag| "#{tag_field_id}_#{tag.id}"} %>
+              <% end %>
+
+              <!-- create a scrollable checkboxes section to wrap the tags, see application_helper -->
+              <%= options_section(tag_set_form, tag_fieldname, tag_field_id, @taglist["#{tag_type}-#{restriction.id}"], "#{tag_type}_taglist", "name", "name") %>
+
             <% else %>
-              <!-- using an autocomplete -->
-              <% tag_fieldname = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>
-              <% @fandom_tag_id = tag_fieldname if tag_type == 'fandom' %>
-              <!-- FIXME not saving entered text through errors -->
+              <!-- using a text field with autocomplete -->
               <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
+
+              <% tag_fieldname = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>              
+              <!-- set the fieldname to pass for autocompleting based on fandom -->
+              <% @fandom_tag_fieldname = tag_fieldname if tag_type == 'fandom' %>
+
+              <!-- add the autocomplete -->
               <% if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.tag_set.send("#{tag_type}_restrict_to_fandom") %>
                 <!-- we only want to offer users tags belonging to the fandoms they have chosen -->
                 <%= autocomplete_text_field tag_fieldname, :methodname => "#{tag_type}_finder_restricted_by_fandom", 
-                                                           :auto_params => (@fandom_tag_id ? [@fandom_tag_id] : @fandom_tag_ids),
+                                                           :auto_params => (@fandom_tag_fieldname ? [@fandom_tag_fieldname] : @fandom_tag_fieldnames),
                                                            :extra_params => "fandom_fieldname=fandom_tagnames",
                                                            :min_chars => '2' %>
               <% else %>
-                <!-- autocomplete from canonical tags of this type -->
+                <!-- autocomplete from all canonical tags of this type -->
                 <%= autocomplete_text_field tag_fieldname, :methodname => "canonical_#{tag_type}_finder" %>
               <% end %>
             <% end %>

@@ -346,6 +346,12 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
 /* Collections */
   .twobutton { width: 12em }
   
+/* CHALLENGES */
+  li.requested li { display: inline;}
+  span.requested  { color: red4;}
+  span.requested { color: palegreen4;}
+  span.requested_and_offered { color: goldenrod3;}
+  
 /* BOOKMARKS INDEX*/
  .bookmarks-index .user .module      { float: none; }
  

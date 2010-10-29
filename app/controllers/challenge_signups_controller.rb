@@ -98,6 +98,9 @@ class ChallengeSignupsController < ApplicationController
       format.xls {export_html}
     end    
   end
+  
+  def summary
+  end
 
   def show
   end
