@@ -12,16 +12,14 @@ gem 'rails', '3.0.1'
 gem 'mysql2'
 
 # Use unicorn as the web server
-gem 'unicorn'
+gem 'unicorn', :require => false
 
 # Deploy with Capistrano
-# gem 'capistrano'
+gem 'capistrano', :require => false
 
 # Here are all our application-specific gems
 gem 'rack-openid', '>=0.2.1', :require => 'rack/openid'
 
-
-gem 'chronic'
 
 #gem 'will_paginate', '3.0.pre'
 gem 'will_paginate',

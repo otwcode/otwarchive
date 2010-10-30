@@ -404,7 +404,7 @@ class StoryParser
             agent = Mechanize.new
             form = agent.get(url).forms.first
             page = agent.submit(form, form.buttons.first) # submits the adult concepts form
-            text = page.body
+            text = page.body.force_encoding(agent.page.encoding)
           rescue
             text = ""
           end

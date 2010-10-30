@@ -29,40 +29,35 @@ Don't go further with the deploy until you have fixed the problem!"
     end
   end
 
-  # set environment
-  desc "Get server name"
-  task(:get_server_name) do
-    unless @server
-      @server = %x{hostname -s}.chomp
-      notice "Running on server #{@server}.
-If you run into errors at any point do not proceed until they are resolved!!"
-    end
+  desc "Get servername"
+  task(:get_servername) do
+    @server ||= %x{hostname -s}.chomp
   end
 
   # sub tasks
   desc "Bring www-data home up to date"
-  task(:setup_environment) do
+  task(:setup_environment => :get_servername) do
     notice "Updating environment..."
     ok_or_warn %q{svn update} 
     ok_or_warn %q{bundle install --quiet}
   end
 
   desc "Run tests"
-  task(:run_tests) do
+  task(:run_tests => :get_servername) do
     notice "Running migrations on development database"
     ok_or_warn %q{rake db:migrate RAILS_ENV=development}
     ok_or_warn %q{rake db:test:clone_structure}
     notice "Running tests (will take a while!)"
-    ok_or_warn %q{rake cucumber} 
+    ok_or_warn %q{rake cucumber}
   end
 
   desc "Put into maintenance"
-  task(:put_into_maint => :get_server_name) do
+  task(:put_into_maint => :get_servername) do
     ok_or_warn %Q{cd #{CURRENT_DIR}/public && mv nomaintenance.html maintenance.html}
   end
 
   desc "Create backup of archive database"
-  task(:backup_db => :get_server_name) do
+  task(:backup_db => :get_servername) do
     if @server == "otw2"
       @db_backup_name ||= ask("Enter the release number to name the db backup -- no spaces! (eg 0.7.3): ")
       ok_or_warn %Q{mysqldump --all-databases --single-transaction --quick --master-data=1 > /backup/otwarchive/deploys/pre.#{@db_backup_name}}
@@ -72,29 +67,28 @@ If you run into errors at any point do not proceed until they are resolved!!"
   end
 
   desc "Reset db"
-  task(:reset_db => :get_server_name) do
+  task(:reset_db => :get_servername) do
     if @server != "stage"
       notice "You cannot reset the database through this script!"
       notice "Please contact Systems for help if you need to restore to an earlier point."
       warn
     else
-      @backup_file = ask("Enter the location of the backup file (possibly /backup/latest.dump): ")
-      @db_password = ask("Enter the database password: ")
+      @yes = ask("Are you sure? (It will take a very long time) (y/n): ").match(/[yY](es)?/) 
+      next unless @yes
+      notice "Resetting the database..."
+      ok_or_warn %Q{mysql -e "drop database otwarchive_production"}
+      ok_or_warn %Q{mysql -e "create database otwarchive_production"} 
+      ok_or_warn %Q{mysql otwarchive_production < /backup/latest.dump}
 
-      notice "Resetting the database. This will take a long time..."
-      ok_or_warn %Q{mysql -uotwarchive -p#{@db_password} -e "drop database otwarchive_production"}
-      ok_or_warn %Q{mysql -uotwarchive -p#{@db_password} -e "create database otwarchive_production"} 
-      ok_or_warn %Q{mysql -uotwarchive -p#{@db_password} otwarchive_production < #{@backup_file}}
-
-      notice "Enter the current revision number of the REAL archive"
+      notice "Enter the current revision number of the REAL archive below, don't hit return"
       Rake::Task['deploy:deploy_code'].invoke
     end
   end
 
   desc "Deploy code"
-  task(:deploy_code => :get_server_name) do
+  task(:deploy_code => :get_servername) do
     # svn checkout and symlink to current
-    @new_rev = ask("Enter the revision number (or hit return for the latest): ")
+    @new_rev = ask("Enter the revision number (hit return for the latest): ")
     if @new_rev.blank?
       @new_rev = %x{svnversion}.chomp
       @new_rev.gsub!(/M/, "")
@@ -102,29 +96,34 @@ If you run into errors at any point do not proceed until they are resolved!!"
     notice "Deploying to revision #{@new_rev}..."
     ok_or_warn %Q{cap deploy:update -s revision=#{@new_rev}}
 
-    notice "Removing old releases"
-    ok_or_warn %q{cap deploy:cleanup}
-    notice "Updating symlinks"
-    ok_or_warn %Q{cd #{SHARED_DIR}/config && for i in *; do cd ${CURRENT_DIR}/config && ln -s #{SHARED_DIR}/$i;done}
-    ok_or_warn %Q{cd #{SHARED_DIR}/public && for i in *; do cd ${CURRENT_DIR}/public && ln -s #{SHARED_DIR}/$i;done}
-    ok_or_warn %q{ln -s #{SHARED_DIR}/sphinx #{CURRENT_DIR}/db/sphinx}
+    # copying allows you to overwrite subversion versions
+    # but it means if you change something you have to change it in both places
+    notice "Copying local files"
+    ok_or_warn %Q{cd #{CURRENT_DIR}/config && cp #{SHARED_DIR}/config/* .}
+    ok_or_warn %Q{cd #{CURRENT_DIR}/public && cp #{SHARED_DIR}/public/* .}
+    ok_or_warn %Q{ln -s #{SHARED_DIR}/sphinx #{CURRENT_DIR}/db/sphinx}
     notice "Updating revision in local.yml"
     ok_or_warn %Q{sed -i '$d' #{CURRENT_DIR}/config/local.yml}
     ok_or_warn %Q{echo REVISION: #{@new_rev} >> #{CURRENT_DIR}/config/local.yml}
+
+    notice "Removing old releases"
+    ok_or_warn %q{cap deploy:cleanup}
+  end
  
-    # update whenever jobs
+  desc "Update Crontab"
+  task(:update_crontab => :get_servername) do
     case @server
     when "stage"
       notice "Updating crontab (no email sending jobs)..."
-      ok_or_warn %Q{cd #{CURRENT_DIR} && whenever --update-crontab otwarchive}
+      ok_or_warn %q{whenever --update-crontab otwarchive}
     when "otw1"
       notice "Updating crontab..."
-      ok_or_warn %Q{cd #{CURRENT_DIR} && whenever --update-crontab otwarchive -set environment=production}
+      ok_or_warn %q{whenever --update-crontab otwarchive -set environment=production}
     end
   end
 
   desc "Run migrations"
-  task(:run_migrations => :get_server_name) do
+  task(:run_migrations => :get_servername) do
     if @server == "otw1"
       notice "Oops. You can only run this command on otw2."
     else
@@ -138,36 +137,36 @@ If you run into errors at any point do not proceed until they are resolved!!"
   end
 
   desc "Run after tasks"
-  task(:run_after_tasks => :get_server_name) do
+  task(:run_after_tasks => :get_servername) do
     if @server == "otw1"
       notice "Oops. This should be run on otw2."
     else
-      ok_or_warn %Q{RAILS_ENV=production rake After}
+      ok_or_warn %q{rake After RAILS_ENV=production}
     end
   end
 
   desc "Restart unicorn"
-  task(:restart_unicorn => :get_server_name) do
+  task(:restart_unicorn => :get_servername) do
     ok_or_warn %Q{cd #{CURRENT_DIR} && kill -USR2 `cat tmp/pids/unicorn.pid`}
   end
 
   desc "Take out of maintenance"
-  task(:take_out_of_maint => :get_server_name) do
-    ok_or_warn %Q{cd #{CURRENT_DIR} && mv maintenance.html nomaintenance.html}
+  task(:take_out_of_maint => :get_servername) do
+    ok_or_warn %Q{cd #{CURRENT_DIR}/public && mv maintenance.html nomaintenance.html}
   end
 
   desc "Rebuild sphinx (slow)"
-  task(:rebuild_sphinx => :get_server_name) do
+  task(:rebuild_sphinx => :get_servername) do
     ok_or_warn %q{/usr/local/bin/ts_rebuild.sh} 
   end
 
   desc "Restart sphinx"
-  task(:restart_sphinx => :get_server_name) do
+  task(:restart_sphinx => :get_servername) do
     ok_or_warn %q{/usr/local/bin/ts_restart.sh} 
   end
 
   desc "Send email that deploy is complete"
-  task(:send_email) do
+  task(:send_email => :get_servername) do
     @new_rev ||= %x{svnversion}
     @new_rev.gsub!(/M/, "")
     recipients = ask("Enter the recipients (or hit return for the default): ")
@@ -178,13 +177,13 @@ If you run into errors at any point do not proceed until they are resolved!!"
 
   # deploy script
   desc "Interactive deploy"
-  task(:all_interactive => :get_server_name) do
-
+  task(:all_interactive => :get_servername) do
     if @server == "otw1"
       notice "Running on OTW1... (don't forget to run this in parallel on OTW2!)"
     elsif @server == "otw2"
       notice "Running on OTW2... (don't forget to run this in parallel OTW1!)"
     end
+    notice "If you run into errors at any point do not proceed until they are resolved!!"
 
     # check out current code into home
     @yes = ask("Set up environment? (y/n): ").match(/[yY](es)?/)
@@ -213,7 +212,7 @@ If you run into errors at any point do not proceed until they are resolved!!"
       @yes = ask("Backup db? (y/n): ").match(/[yY](es)?/)
       Rake::Task['deploy:backup_db'].invoke if @yes
     elsif @server == 'stage'
-      @yes = ask("Reset testarchive (will take a while)? (y/n): ").match(/[yY](es)?/)
+      @yes = ask("Reset testarchive? (y/n): ").match(/[yY](es)?/)
       Rake::Task['deploy:reset_db'].invoke if @yes
     else
       notice "Wait until the database has finished backing up on otw2"
@@ -222,6 +221,10 @@ If you run into errors at any point do not proceed until they are resolved!!"
     # deploy code
     @yes = ask("Deploy new code? (y/n): ").match(/[yY](es)?/)
     Rake::Task['deploy:deploy_code'].invoke if @yes
+
+    # update crontab (whenever)
+    @yes = ask("Update crontab? (y/n): ").match(/[yY](es)?/)
+    Rake::Task['deploy:update_crontab'].invoke if @yes
 
     # run migrations
     @yes = ask("Run migrations? (y/n): ").match(/[yY](es)?/)
@@ -251,7 +254,6 @@ If you run into errors at any point do not proceed until they are resolved!!"
 
     @yes = ask("Send email? (y/n): ").match(/[yY](es)?/)
     Rake::Task['deploy:send_email'].invoke if @yes
-
   end
 
 end
