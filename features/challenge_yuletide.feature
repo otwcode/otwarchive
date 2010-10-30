@@ -243,7 +243,6 @@ Feature: Collection
   Then I should not see "Signups"
     And I should see "Signup Summary"
   When I follow "Signup Summary"
-  Then show me the page
   Then I should see "Fandom"
     And I should see "Character"
     And I should see "Stargate Atlantis"
@@ -324,7 +323,6 @@ Feature: Collection
     And I check "No Archive Warnings Apply"
     And I select "myname1" from "work_author_attributes_ids_"
     And I fill in "content" with "This is an exciting story about Atlantis"
-  Then show me the page
   When I press "Preview"
   Then I should see "Preview Work"
     
