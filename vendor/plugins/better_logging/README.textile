@@ -1,0 +1,174 @@
+h1. "Better Logging" Rails plugin
+
+"http://github.com/pauldowman/better_logging":http://github.com/pauldowman/better_logging
+
+This is a Rails plugin that improves the log format, and adds an optional "Exception" parameter to the warn() and error() methods to print a stack trace automatically.
+
+h2. Improved log format
+
+It adds severity level (with colour, if colour is enabled), hostname and process ID to each log line, and it and adds warn() and exception() methods that take an exception as an argument and print the stack trace.
+
+For example, here's how the Rails log looks normally, without the better_logging plugin installed:
+
+<pre>
+Session ID: 7eeb00aa62b395698a28bf033e56b7c5
+Parameters: {"action"=>"show", "id"=>"1", "controller"=>"people"}
+User Load (0.4ms)   SELECT * FROM `users` WHERE (id = '1') LIMIT 1
+User Columns (2.1ms)   SHOW FIELDS FROM `users`
+Rendering template within layouts/application
+Rendering people/show
+Rendered layouts/_head (3.1ms)
+Rendered layouts/_navigation (2.2ms)
+Adding Cache-Control header
+Completed in 164ms (View: 116, DB: 21) | 200 OK [http://localhost/people/1]
+</pre>
+
+Here's how the same thing would look with the better_logging plugin installed in development mode. Note that the severity (INFO, WARN, ERROR, etc), is printed in colour (if colour is enabled for the log, which it is by default in development mode).
+
+<pre>
+INFO   Session ID: 7eeb00aa62b395698a28bf033e56b7c5
+INFO   Parameters: {"action"=>"show", "id"=>"1", "controller"=>"people"}
+DEBUG  User Load (0.4ms)   SELECT * FROM `users` WHERE (id = '1') LIMIT 1
+DEBUG  User Columns (2.1ms)   SHOW FIELDS FROM `users`
+INFO   Rendering template within layouts/application
+INFO   Rendering people/show
+DEBUG  Rendered layouts/_head (3.1ms)
+DEBUG  Rendered layouts/_navigation (2.2ms)
+INFO   Adding Cache-Control header
+INFO   Completed in 164ms (View: 116, DB: 21) | 200 OK [http://localhost/people/1]
+</pre>
+
+And here's how it would look with the better_logging plugin installed in production mode, on a host named "akash", with process id 27471:
+
+<pre>
+akash.27471   13:27:04  INFO   Session ID: 7eeb00aa62b395698a28bf033e56b7c5
+akash.27471   13:27:04  INFO   Parameters: {"action"=>"show", "id"=>"1", "controller"=>"people"}
+akash.27471   13:27:04  INFO   Rendering template within layouts/application
+akash.27471   13:27:04  INFO   Rendering people/show
+akash.27471   13:27:04  INFO   Adding Cache-Control header
+akash.27471   13:27:04  INFO   Completed in 164ms (View: 116, DB: 21) | 200 OK [http://localhost/people/1]
+</pre>
+
+
+And here's how it would look in production mode on a host with a long name. This host name is "myreallybigserver-7.mydomain.com".
+
+<pre>
+igserver-7.27471   13:27:04  INFO   Session ID: 7eeb00aa62b395698a28bf033e56b7c5
+igserver-7.27471   13:27:04  INFO   Parameters: {"action"=>"show", "id"=>"1", "controller"=>"people"}
+igserver-7.27471   13:27:04  INFO   Rendering template within layouts/application
+igserver-7.27471   13:27:04  INFO   Rendering people/show
+igserver-7.27471   13:27:04  INFO   Adding Cache-Control header
+igserver-7.27471   13:27:04  INFO   Completed in 164ms (View: 116, DB: 21) | 200 OK [http://localhost/people/1]
+</pre>
+
+Note that the hostname & process ID is added to the beginning of each line of a multi-line log statement. So even if you call logger.error() with a string that has newlines in it, the host & process ID will be added to each line, not only the first. 
+
+This is so that you can filter your log with a regular expression like /^igserver-7\.27471/ and not miss lines.
+
+
+h2. Improved warn() and error() methods
+
+The warn() and error() methods now allow an Exception object to be given as an optional second parameter. If the exception is given, then the stack trace will be automatically logged.
+
+For example: 
+
+<pre>
+  begin
+    # do something that raises an exception
+  rescue Exception => e
+    log.error "Oops", e
+  end
+</pre>
+
+The above code will log "Oops", and then log the stack trace. 
+
+
+h2. Why?
+
+h3. Adding severity
+
+All lines printed to the log have a "severity" level, this can be "DEBUG", "WARN", "ERROR", etc. Normally this isn't included in the log output, so it's impossible to search a log file for warnings or errors, or filter based on severity, and it's just a useful thing to see.
+
+h3. Adding hostname and process ID
+
+Normally, when not in development mode, a Rails app consists of more than one Rails process responding to requests at the same time. Those processes may be printing lines to the log at the same time, and it's hard to know which process printed a certain line.
+
+Also, it's common to have multiple servers working in parallel, and a user's session might involve requests to multiple servers. If the log files are combined it's useful to know which process on which server printed a given line.
+
+This makes it possible to filter a Rails log to show output from one process only, and to combine the log files from multiple servers.
+
+The hostname is truncated (by default to 10 characters but this is configurable). The end of the hostname is printed, rather than the beginning, because often the end of the hostname is more unique.
+
+h3. Adding a timestamp
+
+This should be pretty obvious, but the log file isn't too useful for debugging errors if you don't know what time anything happened. The first line printed by each Rails action does include a timestamp, but it's common to have other processes that aren't responding to web requests, and these are likely printing to your Rails log also (e.g. a background queue, etc).
+
+h3. Adding a custom string
+
+You can also add a custom string that will appear as the first column in the output, for example:
+
+<pre>
+my-custom-string  igserver-7.27471   13:27:04  INFO   Completed in 164ms (View: 116, DB: 21) | 200 OK [http://localhost/people/1]
+</pre>
+
+
+h2. Why not log to syslog?
+
+It's a single point of failure, and it will become a scalability bottleneck. There are good arguments for using a common syslog server, but I prefer to just log locally on each server and combine them via post-processing.
+
+
+h2. Installation
+
+h3. Rails 2.3.x
+
+@./script/plugin install git://github.com/pauldowman/better_logging.git@
+
+h3. Rails 3.0
+
+@rails plugin install git://github.com/pauldowman/better_logging.git@
+
+
+h2. Configuration
+
+By default it behaves differently in development mode, it doesn't log the time, process ID or hostname. If RAILS_ENV is not "development" those will be logged.
+
+There are some options that can be set, add these lines to an initializer:
+
+@PaulDowman::RailsPlugins::BetterLogging.verbose = false@
+* This suppresses printing of the hostname, process ID and timestamp. This defaults to false in development mode, true otherwise.
+
+@PaulDowman::RailsPlugins::BetterLogging.hostname_maxlen = 15@
+* This sets the maximum number of characters of the hostname that will be printed. The beginning of the hostname is truncated, rather than the end, because often the end of the hostname is more unique than the beginning. The default is 10.
+
+@PaulDowman::RailsPlugins::BetterLogging.custom = "my-custom-string"@
+* This sets a custom string that will be printed at the beginning of the output, if desired.
+
+
+h2. Viewing log files
+
+On OS X I like to use Console.app to view log files. It can load huge files easily and it can filter based on a regular expression (e.g. you can show only lines from one particular Rails process). On *NIX I just use "less".
+
+
+h2. Requirements
+
+This has only been tested with Rails 2.2 so far. It probably won't work with Rails 1.x. If you try it with another version, please let me know and I'll update this document (and try to fix the problem).
+
+
+h2. How does it work?
+
+It works by modifying ActiveSupport::BufferedLogger (the Rails logger class).
+
+
+h2. License
+
+This is distributed under a Creative Commons "Attribution-Share Alike" license. For details see:
+"http://creativecommons.org/licenses/by-sa/3.0/":http://creativecommons.org/licenses/by-sa/3.0/
+
+
+h2. Bugs?
+
+This was written by "Paul Dowman":http://pauldowman.com/.
+
+Please let me know if you find any bugs. File a "bug report":http://github.com/pauldowman/better_logging/issues or, if you don't have a GitHub account then "contact me directly":http://pauldowman.com/contact/.
+
+Or even better, send me a patch or GitHub pull request!
