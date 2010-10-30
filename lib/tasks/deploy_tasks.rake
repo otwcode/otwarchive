@@ -214,7 +214,7 @@ If you run into errors at any point do not proceed until they are resolved!!"
       Rake::Task['deploy:backup_db'].invoke if @yes
     elsif @server == 'stage'
       @yes = ask("Reset testarchive (will take a while)? (y/n): ").match(/[yY](es)?/)
-      Rake::Task['deploy:revert_db'].invoke if @yes
+      Rake::Task['deploy:reset_db'].invoke if @yes
     else
       notice "Wait until the database has finished backing up on otw2"
     end
