@@ -47,7 +47,7 @@ class CommentMailer < ActionMailer::Base
     @comment = comment
     @noreply = true # don't give reply link to your own comment
     mail(
-      :to => comment.email,
+      :to => comment.comment_owner_email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Comment you sent on " + @comment.ultimate_parent.commentable_name
     )
   end
