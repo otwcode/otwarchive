@@ -1,5 +1,7 @@
 class WorksController < ApplicationController
 
+  skip_before_filter :store_location, :only => [:download]
+
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
   before_filter :users_only, :only => [ :new, :create, :import, :import_multiple, :drafts, :preview, :show_multiple ]
@@ -174,18 +176,18 @@ class WorksController < ApplicationController
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
 
     @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") :
-      get_page_title(@work.fandoms.size > 3 ? t("works.multifandom", :default => "Multifandom") : @work.fandoms.string, 
-        @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), 
+      get_page_title(@work.fandoms.size > 3 ? t("works.multifandom", :default => "Multifandom") : @work.fandoms.string,
+        @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
     render :show
     @work.increment_hit_count(request.env['REMOTE_ADDR'])
     Reading.update_or_create(@work, current_user)
   end
-  
+
   def download
     @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") :
-      get_page_title(@work.fandoms.size > 3 ? t("works.multifandom", :default => "Multifandom") : @work.fandoms.string, 
-        @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '), 
+      get_page_title(@work.fandoms.size > 3 ? t("works.multifandom", :default => "Multifandom") : @work.fandoms.string,
+        @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title,
         :omit_archive_name => true, :truncate => true)
 
@@ -193,58 +195,53 @@ class WorksController < ApplicationController
 
     # we use entire work
     if @work.number_of_posted_chapters > 1
-      @chapters = @work.chapters_in_order 
+      @chapters = @work.chapters_in_order
     else
       @chapters = @work.chapters
     end
-    
+
     @work.increment_download_count
-      
+
     respond_to do |format|
-      format.html do
-        @template.template_format = :html
-        @html_content = render_to_string(:template => "works/download", :layout => "download")
-        send_data(@html_content, :filename => "#{@filename}.html")
-      end
-      
+      # send html
+      format.html {download_html}
+
       # mobipocket for kindle
       format.mobi {download_mobi}
-      
-      # epub for ibooks        
-      format.epub {download_epub}      
-      
+
+      # epub for ibooks
+      format.epub {download_epub}
+
       # pdf
       format.pdf {download_pdf}
     end
   end
-  
+
 protected
 
-  # returns the HTML file written
-  def write_html_content
-    @template.template_format = :html
-    @html_content = convert_urls_to_absolute(render_to_string(:template => "works/download", :layout => "download"))
-
-    @tempdir = "#{Rails.root}/tmp"
-  	File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
-    
-    "#{@tempdir}/#{@filename}.html"
-  end
-  
   def convert_urls_to_absolute(content)
     content.gsub(/a href=\"\//, "a href=\"#{ArchiveConfig.APP_URL}/")
   end
-  
+
+  def download_html
+    @html_content = convert_urls_to_absolute(render_to_string(:template => "works/download", :layout => "download"))
+    @tempdir = "#{Rails.root}/tmp"
+  File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
+    send_file("#{@tempdir}/#{@filename}.html", :type => "text/html", :stream => false, :filename => "#{@filename}.html")
+  end
+
   def download_pdf
-    html_file = write_html_content
-    %x{wkhtmltopdf #{html_file} #{@tempdir}/#{@filename}.pdf}
-    
+    @html_content = convert_urls_to_absolute(render_to_string(:template => "works/download.html", :layout => "download"))
+    @tempdir = "#{Rails.root}/tmp"
+    File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
+    %x{wkhtmltopdf #{@tempdir}/#{@filename}.html #{@tempdir}/#{@filename}.pdf}
+
     # clean up temp HTML file
-    File.delete(html_file)
-    
+    File.delete("#{@tempdir}/#{@filename}.html")
+
     # send the PDF
     send_file("#{@tempdir}/#{@filename}.pdf", :type => "application/pdf", :stream => false, :filename => "#{@filename}.pdf")
-    
+
     # clean up temp file
     File.delete("#{@tempdir}/#{@filename}.pdf")
   end
@@ -256,18 +253,17 @@ protected
     @chapters.each_with_index do |chapter, index|
       @chapter = chapter
       @page_title = @chapter.title.blank? ? "Chapter #{index + 1}" : @chapter.title
-      @template.template_format = :html
-      chapter_html_content = convert_urls_to_absolute(render_to_string(:template => "chapters/download", :layout => "barebones"))
-      
+      chapter_html_content = convert_urls_to_absolute(render_to_string(:template => "chapters/download.html", :layout => "barebones"))
+
       # write content to OEBPS/chapter[#].xhtml
       File.open("#{tempdir}/chapter#{index}.html", 'w') {|f| f.write(chapter_html_content)}
     end
 
     # converts the tempfile to mobi using MobiPerl
-    # note! can't have a linebreak in here 
+    # note! can't have a linebreak in here
     html_files = 0.upto(@chapters.size - 1).map {|i| "chapter#{i}.html"}.join(' ')
     %x{cd #{tempdir} ; html2mobi #{html_files} --mobifile "#{@filename}.mobi" --gentoc --title \"#{@work.title}\" --author \"#{@work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', ')}\"}
-    
+
     # clean up the temp HTML files
     @chapters.size.times {|i| File.delete("#{tempdir}/chapter#{i}.html")}
 
@@ -278,47 +274,46 @@ protected
     File.delete("#{tempdir}/#{@filename}.mobi")
     Dir.delete(tempdir)
   end
-  
-  # Manually building an epub file here 
+
+  # Manually building an epub file here
   # See http://www.jedisaber.com/eBooks/tutorial.asp for details
   def download_epub
     @uuid = @filename + "_" + ArchiveConfig.APP_NAME + "_#{Time.now.to_i}"
-    
+
     # create temp folder with filename
     tempdir = "#{Rails.root}/tmp/#{@filename}_epub"
     Dir.mkdir(tempdir) unless File.exists?(tempdir)
-    
-    # write "mimetype" file 
+
+    # write "mimetype" file
     File.open("#{tempdir}/mimetype", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/mimetype"))}
-    
+
     # create subdirs META-INF and OEBPS
     Dir.mkdir("#{tempdir}/META-INF") unless File.exists?("#{tempdir}/META-INF")
     Dir.mkdir("#{tempdir}/OEBPS") unless File.exists?("#{tempdir}/OEBPS")
     #Dir.mkdir("#{tempdir}/images") unless File.exists?("#{tempdir}/images")
     #Dir.mkdir("#{tempdir}/stylesheets") unless File.exists?("#{tempdir}/stylesheets")
-    
+
     # write the META-INF/container.xml file
     File.open("#{tempdir}/META-INF/container.xml", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/container.xml"))}
-    
+
     # write the OEBPS/toc.ncx file
     File.open("#{tempdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx"))}
 
     # write the OEBPS/content.opf file
     File.open("#{tempdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf"))}
-    
+
     # copy over the appropriate stylesheets
     # %w{font archive_core site-chrome}.each {|sheet| FileUtils.copy("#{Rails.root}/public/stylesheets/#{sheet}.css", "#{tempdir}/stylesheets")}
-      
-    @template.template_format = :html
+
     @chapters.each_with_index do |chapter, index|
       @chapter = chapter
-      chapter_html_content = convert_urls_to_absolute(render_to_string(:template => "chapters/download", :layout => "barebones"))
-      
+      chapter_html_content = convert_urls_to_absolute(render_to_string(:template => "chapters/download.html", :layout => "barebones"))
+
       # turn @html_content into xhtml
       ## NOT DONE YET
       # convert all ampersands to &amp;
       chapter_html_content.gsub!(/&\s/, '&amp; ')
-      
+
       # write content to OEBPS/chapter[#].xhtml
       File.open("#{tempdir}/OEBPS/chapter#{index}.xhtml", 'w') {|f| f.write(chapter_html_content)}
     end
@@ -326,10 +321,10 @@ protected
     # stuff contents of directory into a zip file named with .epub extension
     # note: we have to zip this up in this particular order because "mimetype" must be the first item in the zipfile
     %x{cd #{tempdir} ; zip #{@filename}.epub mimetype ; zip -r #{@filename}.epub META-INF OEBPS}
-    
+
     # send the file
     send_file("#{tempdir}/#{@filename}.epub", :type => "application/epub", :stream => false, :filename => "#{@filename}.epub")
-    
+
     # clean up temp files
     File.delete("#{tempdir}/#{@filename}.epub")
     @chapters.size.times do |index|
@@ -346,9 +341,9 @@ protected
     Dir.delete("#{tempdir}/META-INF")
     Dir.delete(tempdir)
   end
-  
+
 public
-  
+
   def navigate
     @chapters = @work.chapters_in_order(false)
   end
@@ -660,7 +655,7 @@ public
     end
 
   end
-  
+
 protected
 
   # import a single work (possibly with multiple chapters)
@@ -698,8 +693,8 @@ protected
       redirect_to preview_work_path(@work) and return
     end
   end
-  
-  # import multiple works 
+
+  # import multiple works
   def import_multiple(urls, options)
     # try a multiple import
     storyparser = StoryParser.new
@@ -707,7 +702,7 @@ protected
     @works = results[0]
     failed_urls = results[1]
     errors = results[2]
-    
+
     # collect the errors neatly, matching each error to the failed url
     unless failed_urls.empty?
       error_msgs = 0.upto(failed_urls.length).map {|index| "<dt>#{failed_urls[index]}</dt><dd>#{errors[index]}</dd>"}.join("\n")
@@ -718,15 +713,15 @@ protected
     if @works.empty?
       render :new_import and return
     end
-    
+
     # if we got here, we have at least some successfully imported works
     flash[:notice] = ts("Importing completed successfully for the following works! (But please check the results over carefully!)")
     send_external_invites(@works)
-    
+
     # fall through to import template
   end
-  
-  # if we are importing for others, we need to send invitations  
+
+  # if we are importing for others, we need to send invitations
   def send_external_invites(works)
     if params[:importing_for_others]
       @external_authors = works.collect(&:external_authors).flatten.uniq
@@ -737,11 +732,11 @@ protected
         message = ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
         flash[:notice] ? flash[:notice] += message : flash[:notice] = message
       end
-    end    
+    end
   end
-  
+
 public
-  
+
 
   def post_draft
     @user = current_user
@@ -888,7 +883,7 @@ public
     # stuff co-authors into author attributes too so we won't lose them
     if params[:work] && params[:work][:author_attributes] && params[:work][:author_attributes][:coauthors]
       params[:work][:author_attributes][:ids].concat(params[:work][:author_attributes][:coauthors]).uniq!
-    end    
+    end
   end
 
   # Sets values for @work and @tags[category]

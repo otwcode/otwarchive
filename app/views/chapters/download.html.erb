@@ -15,13 +15,13 @@
     </p>
 
     <!--work description, metadata, notes and messages-->
-  	<%= render :partial => 'works/work_header' %>
+  	<%= render :partial => 'works/work_header.html' %>
     <!--/descriptions-->
   <% end %>
 
   <!--main content-->
   <div id="chapters" class="userstuff" role="article">
-    <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter, :hide_work_info => true} %>
+    <%= render :partial => 'chapters/chapter.html', :locals => { :chapter => @chapter, :hide_work_info => true} %>
   </div>
   <!--/main-->
 
@@ -46,7 +46,7 @@
     <!--/subnav-->
     <% end %>
 
-  	<%= render :partial => 'works/work_footer' %>
+  	<%= render :partial => 'works/work_footer.html' %>
     <!--/subnav-->
 
     <p class="message">Please <a href="<%= work_url(@work, :add_comment => true, :anchor => "comments") %>">drop by the archive and comment</a> to let the author know if you enjoyed their work!</p>
