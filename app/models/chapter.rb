@@ -1,3 +1,5 @@
+# encoding=utf-8
+
 class Chapter < ActiveRecord::Base
   include HtmlCleaner
   
@@ -146,9 +148,20 @@ class Chapter < ActiveRecord::Base
     end
   end  
   
-  # Set the value of word_count to reflect the length of the chapter content
+  # Set the value of word_count to reflect the length of the text in the chapter content
   def set_word_count
-    self.word_count = Sanitize.clean(self.content).split.length
+    count = 0
+    body = Nokogiri::HTML(self.content).xpath('//body').first
+    body.traverse do |node|
+      # only count actual text
+      if node.is_a? Nokogiri::XML::Text
+        # scan by word boundaries after stripping hyphens and apostrophes
+        # so one-word and one's will be counted as one word, not two.
+        # -- is replaced by — (emdash) before strip so one--two will count as 2
+        count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "").scan(/[a-zA-Z0-9À-ÿ_]+/).size
+      end
+    end
+    self.word_count = count
   end
     
   # Return the name to link comments to for this object
