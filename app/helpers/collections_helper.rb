@@ -68,13 +68,4 @@ module CollectionsHelper
     end
   end
 
-
-  # for sorting requested tags in a challenge (to promote offering
-  # needed ones) -- expects @offered[a], @distance[tag.id]
-  def sort_by_distance(a, b)
-    @distance[a.id] == @distance[b.id] ? 
-      (@offered[a.id] == @offered[b.id] ? a.count <=> b.count : @offered[a.id] <=> @offered[b.id]) :
-      @distance[b.id] <=> @distance[a.id] 
-  end
-  
 end

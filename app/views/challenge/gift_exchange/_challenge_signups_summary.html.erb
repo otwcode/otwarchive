@@ -2,10 +2,10 @@
 
 <h3><%= ts("Requested %{tag_type}", :tag_type => @tag_type.pluralize.capitalize) %> (<%= @requested.count.keys.size %>)</h3>
 
-<p class="note">Format: Tag [<span class="requested"># requests</span>, <span class="offered"># offers</span>], sorted by need</p>
+<p class="note">Key: <span class=requested><%= @tag_type.capitalize %></span> [<span class="requested"># requests</span>, <span class="offered"># offers</span>], sorted by fewest offers</p>
 <ul>
-  <% @requested.sort {|a,b| sort_by_distance(a, b)}.each do |requested_tag| %>
-    <%= @past_first ? "&diams;".html_safe : (@past_first = true; "") %>
+  <!-- we sort by fewest # offers, and if equal offers then fewers # requests -->
+  <% @requested.sort {|a,b| @offered[a.id] == @offered[b.id] ? a.count <=> b.count : @offered[a.id] <=> @offered[b.id]}.each do |requested_tag| %>
     <li class="requested">
       <span class = "requested<%= @offered[requested_tag.id] > 0 ? ' offered' : '' %>">
       <%= requested_tag.name %></span>[<span class="requested"><%= requested_tag.count -%></span>,<span class="offered"><%= @offered[requested_tag.id] -%></span>]

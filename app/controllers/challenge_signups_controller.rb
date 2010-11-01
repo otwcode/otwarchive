@@ -100,18 +100,13 @@ class ChallengeSignupsController < ApplicationController
   end
   
   def summary
-    @offered, @distance = [], []
-    @max, @min = 0,10000
+    @offered = []
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| 
       @requested = tag_type.classify.constantize.select("tags.id, tags.name, count(tags.id) as count").group('tags.id').requested_in_challenge(@collection)
       if @requested.count.keys.size > 0
         # we have found the topmost tag type used in this challenge
         @requested.each do |requested_tag|
-          @max = requested_tag.count if requested_tag.count > @max
-          @min = requested_tag.count if requested_tag.count < @min
-          offered_count = tag_type.classify.constantize.offered_in_challenge(@collection).select("count(tags.id) as count").where("tags.id = ?", requested_tag.id).first.count 
-          @offered[requested_tag.id] = offered_count
-          @distance[requested_tag.id] = requested_tag.count - offered_count
+          @offered[requested_tag.id] = tag_type.classify.constantize.offered_in_challenge(@collection).select("count(tags.id) as count").where("tags.id = ?", requested_tag.id).first.count
         end
         @tag_type = tag_type
         break # done collecting tag info
