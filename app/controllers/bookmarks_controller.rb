@@ -1,9 +1,9 @@
 class BookmarksController < ApplicationController 
   before_filter :load_collection
-  before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent ]
+  before_filter :load_bookmarkable, :only => [ :index, :new, :create, :fetch_recent, :hide_recent ]
   before_filter :users_only, :only => [:new, :create, :edit, :update]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
-  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent ] 
+  before_filter :load_bookmark, :only => [ :show, :edit, :update, :destroy, :fetch_recent, :hide_recent ] 
   before_filter :check_visibility, :only => [ :show ]
   before_filter :check_ownership, :only => [ :edit, :update, :destroy ]
   
@@ -199,21 +199,21 @@ class BookmarksController < ApplicationController
 
   # Used on index page to show 4 most recent bookmarks (after bookmark being currently viewed) via RJS
   # Only main bookmarks page or tag bookmarks page
-  # No direct non-JS fallback, as we have the 'view all bookmarks' link which serves the same function
+  # non-JS fallback should be to the 'view all bookmarks' link which serves the same function
   def fetch_recent
-    if request.xml_http_request?
-      @bookmarkable = @bookmark.bookmarkable
-      @recent_bookmarks = @bookmarkable.bookmarks.visible(:order => "created_at DESC", :limit => 4, :offset => 1)
-        respond_to do |format|
-        format.js
-      end
-    else # redirect if not AJAX, e.g. if redirected from login form
-      if params[:tag_id]
-        redirect_to :action => 'index', :tag_id => params[:tag_id]
-      else
-        redirect_to bookmarks_path
+    @bookmarkable = @bookmark.bookmarkable
+    respond_to do |format|
+      format.js {
+        @recent_bookmarks = @bookmarkable.bookmarks.visible(:order => "created_at DESC", :limit => 4, :offset => 1)
+      }
+      format.html do
+        id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym
+        redirect_to url_for({:action => :index, id_symbol => @bookmarkable})
       end
     end
+  end
+  def hide_recent
+    @bookmarkable = @bookmark.bookmarkable
   end
 
 end

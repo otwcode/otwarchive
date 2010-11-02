@@ -20,9 +20,9 @@
 <!--navigation and actions-->
 	<ul class="navigation" role="navigation">
       <% if bookmark_count > 1 %>
-        <li><%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, t('.bookmarks_total_plural', :default=>'Bookmarked %{count} times', :count=>bookmark_count)) %></li>
+        <li><%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, ts('Bookmarked %{count} times', :count=>bookmark_count)) %></li>
       <% else %>
-        <li><%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, t('.bookmarks_total_single', :default=>'Bookmarked %{count} time', :count=>bookmark_count)) %></li>
+        <li><%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, ts('Bookmarked %{count} time', :count=>bookmark_count)) %></li>
       <% end %>
     <% if logged_in? && !is_author_of?(bookmark) %>
        <li><%= bookmark_link(bookmark.bookmarkable, true)%></li>
@@ -30,14 +30,9 @@
   <% if bookmark_count > 1 %>
     <% if params[:tag_id] || @most_recent_bookmarks %>
     <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>" style="display: none;">
-      <% if @most_recent_bookmarks %>
-        <%= link_to "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true} },
-      :method => :get, :remote => true %></li>
-      <% else %>
-      <% @tag = Tag.find_by_name(params[:tag_id]) %>
-      <%= link_to "View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id, :params => {:fetch => true, :tag_id => params[:tag_id]} },
-      :method => :get, :remote => true %></li>
-      <% end %>
+      <%= link_to "View most recent bookmarks", 
+          url_for({:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id }),
+         :remote => true %></li>
 <!--/actions-->
     <!-- SCRIPT hides recent link if no JS available-->
     <li><%= update_page_tag do |page| page.toggle "recent_link_#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" end %></li>
