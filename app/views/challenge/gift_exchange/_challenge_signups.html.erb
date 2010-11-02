@@ -5,12 +5,6 @@
 <% show_offer_description = @challenge.offer_restriction.description_allowed && !params[:hide_descriptions] %>
 <% show_request_optional_tags = @challenge.request_restriction.optional_tags_allowed && !params[:hide_tags] %>
 <% show_offer_optional_tags = @challenge.offer_restriction.optional_tags_allowed && !params[:hide_tags] %>
-<% TagSet::TAG_TYPES.each do |type| %>
-  <% eval("@show_request_#{type}_tags = (@challenge.request_restriction.#{type}_num_allowed > 0) && !params[:hide_tags]") %>
-  <% eval("@show_offer_#{type}_tags = (@challenge.offer_restriction.#{type}_num_allowed > 0) && !params[:hide_tags]") %>
-<% end %>
-<% num_request_tag_categories = TagSet::TAG_TYPES.collect {|type| eval("@show_request_#{type}_tags") ? 1 : 0 }.sum + (show_request_optional_tags ? 1 : 0) %>
-<% num_offer_tag_categories = TagSet::TAG_TYPES.collect {|type| eval("@show_offer_#{type}_tags") ? 1 : 0 }.sum + (show_offer_optional_tags ? 1 : 0) %>
 
 <% unless @hide_navigation %>
   <ul class="navigation">
@@ -41,12 +35,12 @@
     <th rowspan=2>Pseud</th>
     <th rowspan=2>Email</th>
     <% @challenge.requests_num_allowed.times do |i| %>
-    <th colspan=<%= (num_request_tag_categories + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) %>>
+    <th colspan=<%= (1 + (show_request_optional_tags ? 1 : 0) + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) %>>
       <%= ts("Request %{num}", :num => i+1) %>
     </th>
     <% end %>
     <% @challenge.offers_num_allowed.times do |i| %>
-    <th colspan=<%= (num_offer_tag_categories + (show_offer_description ? 1 : 0 ) + (show_offer_url ? 1 : 0)) %>>
+    <th colspan=<%= (1 + (show_offer_optional_tags ? 1 : 0) + (show_offer_description ? 1 : 0 ) + (show_offer_url ? 1 : 0)) %>>
       <%= ts("Offer %{num}", :num => i+1) %></th>
     <% end %>
   </tr>
@@ -55,9 +49,7 @@
   <tr>
     <% %w(request offer).each do |prompt_type| %>
       <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
-        <% TagSet::TAG_TYPES.each do |type| %>
-          <% if eval("@show_#{prompt_type}_#{type}_tags") %><th><%= type.classify.pluralize %></th><% end %>
-        <% end %>
+        <th>Tags</th>
         <% if eval("show_#{prompt_type}_optional_tags") %><th>Optional Tags</th><% end %>
         <% if eval("show_#{prompt_type}_description") %><th>Description</th><% end %>
         <% if eval("show_#{prompt_type}_url") %><th>URL</th><% end %>
@@ -81,19 +73,13 @@
       <% %w(request offer).each do |prompt_type| %>    
         <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
           <% prompt = eval("challenge_signup.#{prompt_type.pluralize}[i]") %>
-          <% TagSet::TAG_TYPES.each do |type| %>
-            <% if eval("@show_#{prompt_type}_#{type}_tags") %>
-              <td>
-                <%= !prompt || !prompt.tag_set || prompt.tag_set.with_type(type).empty? ? "" : 
-                  content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type))) %>
-                <%= prompt && prompt.send("any_#{type}") ? "Any" : "" %>
-              </td>
-            <% end %>  
-          <% end %>
-          <% if eval("show_#{prompt_type}_optional_tags") %>
+          <td>
+            <%= !prompt || !prompt.tag_set ? "" : content_tag(:ul, tag_link_list(prompt.tag_set.tags)) %>
+            <% TagSet::TAG_TYPES.each do |type| %><%= prompt && prompt.send("any_#{type}") ? ts("Any %{type} ", :type => type.capitalize) : "" %><% end %>
+          </td>
+          <% if eval("show_#{prompt_type}_optional_tags") && prompt && prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
             <td>
-              <%= !prompt || !prompt.optional_tag_set || prompt.optional_tag_set.tags.empty? ? "" : 
-                content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
+              <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
             </td>
           <% end %>
           <% if eval("show_#{prompt_type}_description") %>

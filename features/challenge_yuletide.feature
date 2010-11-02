@@ -244,9 +244,7 @@ Feature: Collection
     And I should see "Signup Summary"
   When I follow "Signup Summary"
   Then I should see "Fandom"
-    And I should see "Character"
     And I should see "Stargate Atlantis"
-    And I should see "John Sheppard"
   
   # mod can view signups
   When I follow "Log out"
@@ -309,6 +307,7 @@ Feature: Collection
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
     And I go to myname1's user page
+    #' stop annoying syntax highlighting after apostrophe
   Then I should see "My Assignments (1)"
   When I follow "My Assignments"
   Then I should see "Writing For" within "table"
@@ -330,6 +329,7 @@ Feature: Collection
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
     And I go to myname2's user page
+    #' stop annoying syntax highlighting after apostrophe
   Then I should see "My Gifts (0)"
     And I should not see "My Gifts (1)"
   When I follow "My Gifts"
@@ -353,6 +353,7 @@ Feature: Collection
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
     And I go to myname1's user page
+    #' stop annoying syntax highlighting after apostrophe
     And I follow "My Drafts"
   Then I should see "Fulfilling Story"
   When I follow "Edit"
@@ -369,17 +370,42 @@ Feature: Collection
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
     
-  # someone tries to view it: TODO
+  # someone tries to view it
+  When I follow "Log out"
+    And I go to myname1's user page
+    #' stop annoying syntax highlighting after apostrophe
+  Then I should see "Mystery Work"
+    And I should see "Yuletide"
+    And I should not see "Fulfilling Story"
+    
+  # user edits it to undo fulfilling the assignment
+  # When I am logged in as "myname1" with password "something"
+  #   And I go to myname1's user page
+  #   #' stop highlighting
+  # Then I should see "Fulfilling Story"
+  # When I follow "Edit"
+  # When I uncheck "Yuletide (myname3)"
+  #   And I fill in "work_collection_names" with ""
+  #   And I fill in "work_recipients" with ""
+  # When I press "Preview"
+  # Then show me the page
+  # Then I should see "Work was successfully updated"
+  
+  # post works for all the assignments: TODO
   
   # mod reveals challenge on Dec 25th
-  When I follow "Log out"
-    And I am logged in as "mod1" with password "something"
+  When I am logged in as "mod1" with password "something"
     And I go to the collections page
     And I follow "Yuletide"
     And I follow "Settings"
     And I uncheck "Is this collection currently unrevealed?"
     And I press "Submit"
   Then I should see "Collection was successfully updated"
+  Given the system processes jobs
+    And I wait 3 seconds
+  When I reload the page
+  # hm, not sure why 6 are being delivered :O INVESTIGATE TODO
+  Then 6 emails should be delivered
   
   # someone views their gift and it is anonymous: TODO
   

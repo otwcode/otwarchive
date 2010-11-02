@@ -94,11 +94,11 @@
       <% if !(@assignments = current_user.offer_assignments + current_user.pinch_hit_assignments).empty? || !@work.challenge_assignments.empty? %>
         <!-- if the user has open assignments? -->
         <dt class="collection">
-          <%= f.label :challenge_assignment_ids, t("work_form.assignments", :default => "Fulfill an Assignment: ") %> <%= link_to_help "add-work-to-assignment" %>
+          <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment: ") %> <%= link_to_help "add-work-to-assignment" %>
         </dt>
         <dd class="collection">
-          <%= f.collection_select :challenge_assignment_ids, (@assignments + @work.challenge_assignments).uniq, :id, :title, 
-            :include_blank => t("works.set_assignment", :default => "Is this to fulfill a challenge assignment?"), :multiple => true, :name => 'work[challenge_assignment_ids][]' %>
+          <%= options_section f, "work[challenge_assignment_ids][]", "work_challenge_assignment_ids", (@work.challenge_assignments + @assignments).uniq,
+                "challenge_assignments", "title", "id" %>
         </dd>
       <% end %>
       

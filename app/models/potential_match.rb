@@ -74,7 +74,14 @@ public
   end
 
   def self.in_progress?(collection)
-    !Rails.cache.read(progress_key(collection)).nil?
+    if Rails.cache.read(progress_key(collection))
+      if Rails.cache.read(interrupt_key(collection))
+        self.finish_generation(collection)
+        return false
+      end
+      return true
+    end
+    false
   end
 
   def self.position(collection)

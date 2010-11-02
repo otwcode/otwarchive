@@ -84,13 +84,13 @@ class PotentialMatchesController < ApplicationController
   # Generate potential matches
   def generate
     if PotentialMatch.in_progress?(@collection)
-      flash[:error] = t("potential_matches.generating_already", :default => "Potential matches are already being generated for this collection!")
+      flash[:error] = ts("Potential matches are already being generated for this collection!")
     else
       # delete all existing assignments and potential matches for this collection
       ChallengeAssignment.clear!(@collection)
       PotentialMatch.clear!(@collection)
       
-      flash[:notice] = t("potential_matches.generating_beginning", :default => "Beginning generation of potential matches. This may take some time, especially if your challenge is large.")
+      flash[:notice] = ts("Beginning generation of potential matches. This may take some time, especially if your challenge is large.")
       PotentialMatch.set_up_generating(@collection)
       if ArchiveConfig.NO_DELAYS
         PotentialMatch.generate!(@collection)
@@ -105,12 +105,12 @@ class PotentialMatchesController < ApplicationController
   
   def cancel_generate
     if !PotentialMatch.in_progress?(@collection)
-      flash[:error] = t("potential_matches.not_generating", :default => "Potential matches are not currently being generated for this challenge.")
+      flash[:error] = ts("Potential matches are not currently being generated for this challenge.")
     elsif PotentialMatch.canceled?(@collection)
-      flash[:error] = t("potential_matches.already_canceled", :default => "Potential match generation has already been canceled, please refresh again shortly.")
+      flash[:error] = ts("Potential match generation has already been canceled, please refresh again shortly.")
     else
       PotentialMatch.cancel_generation(@collection)
-      flash[:notice] = t("potential_matches.cancelled", :default => "Potential match generation cancellation requested. This may take a while, please refresh shortly.")
+      flash[:notice] = ts("Potential match generation cancellation requested. This may take a while, please refresh shortly.")
     end
     
     redirect_to collection_potential_matches_path(@collection)

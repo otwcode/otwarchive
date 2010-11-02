@@ -40,7 +40,6 @@ class Work < ActiveRecord::Base
     :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
   has_many :challenge_assignments, :as => :creation
-  accepts_nested_attributes_for :challenge_assignments
 
   has_many :collections, :through => :collection_items
   has_many :approved_collections, :through => :collection_items, :source => :collection,
@@ -274,31 +273,21 @@ class Work < ActiveRecord::Base
     # if this is fulfilling a challenge, add the collection and recipient
     challenge_assignments.each do |assignment|
       add_to_collection(assignment.collection)
-      self.gifts << Gift.new(:pseud => assignment.requesting_pseud) unless (recipients && recipients.include?(assignment.request_byline))
+      self.gifts << Gift.new(:pseud => assignment.requesting_pseud) unless (recipients && recipients.include?(assignment.requesting_pseud.byline))
     end
     save
   end
 
   def challenge_assignment_ids
     challenge_assignments.map(&:id)
-  end
+  end       
+
+  def challenge_assignment_ids=(ids)
+    self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.select {|assignment| assignment.offering_user == User.current_user}
+  end  
 
   def collection_names=(new_collection_names)
-    collection_attributes_to_set = []
-    new_collection_names_array = new_collection_names.split(',').map {|name| name.strip}.uniq.sort
-    old_collection_names_array = collection_items.collect(&:collection).collect(&:name)
-
-    added_collections = (new_collection_names_array - old_collection_names_array).map {|name| Collection.find_by_name(name)}.compact
-    added_collections.each do |collection|
-      collection_attributes_to_set << {:collection => collection}
-    end
-
-    removed_collections = (old_collection_names_array - new_collection_names_array).map {|name| Collection.find_by_name(name)}.compact
-    removed_collections.each do |collection|
-      collection_item = collection_items.find_by_collection_id(collection.id)
-      collection_attributes_to_set << {:id => collection_item.id, '_delete' => '1'} if collection_item
-    end
-    self.collection_items_attributes = collection_attributes_to_set
+    self.collections = new_collection_names.split(',').map {|name| name.blank? ? nil : Collection.find_by_name(name.strip)}.compact.uniq
   end
 
   def add_to_collection(collection)
@@ -324,29 +313,24 @@ class Work < ActiveRecord::Base
   end
 
   def collection_names
-    self.collection_items.delete_if {|ci| ci.marked_for_destruction?}.collect(&:collection).collect(&:name).join(",")
+    self.collections.collect(&:name).join(",")
   end
 
   def recipients=(recipient_names)
-    gift_attributes_to_set = []
-    new_recipients_array = recipient_names.split(',').map {|name| name.strip}.uniq.sort
-    old_recipients_array = gifts.collect(&:recipient)
-
-    new_recips = new_recipients_array - old_recipients_array
-    new_recips.each do |recipient_name|
-      gift_attributes_to_set << {:recipient => recipient_name}
+    new_gifts = []
+    recipient_names.split(',').each do |name| 
+      gift = Gift.for_name_or_byline(name.strip).first
+      if gift
+        new_gifts << gift
+      else
+        new_gifts << Gift.new(:recipient => name.strip)
+      end
     end
-
-    removed_recips = old_recipients_array - new_recipients_array
-    removed_recips.each do |recipient|
-      gift_to_remove = gifts.select {|g| (g.pseud.try(:byline) == recipient || g.recipient_name == recipient)}.first
-      gift_attributes_to_set << {:id => gift_to_remove.id, :_destroy => true} if gift_to_remove
-    end
-    self.gifts_attributes = gift_attributes_to_set
+    self.gifts = new_gifts
   end
 
   def recipients
-    self.gifts.delete_if {|gift| gift.marked_for_destruction?}.collect(&:recipient).join(",")
+    self.gifts.collect(&:recipient).join(",")
   end
 
   ########################################################################

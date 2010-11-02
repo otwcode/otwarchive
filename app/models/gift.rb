@@ -27,6 +27,10 @@ class Gift < ActiveRecord::Base
 
   scope :for_recipient_name, lambda {|name| where("recipient_name = ?", name)}
   
+  scope :for_name_or_byline, lambda {|name| where("recipient_name = ? OR pseud_id = ?", 
+                                                  name, 
+                                                  Pseud.parse_byline(name, :assume_matching_login => true).first)}
+  
   scope :in_collection, lambda {|collection|
     select("DISTINCT gifts.*").
     joins({:work => :collection_items}).
