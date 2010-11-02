@@ -170,7 +170,7 @@ Don't go further with the deploy until you have fixed the problem!"
     @new_rev ||= %x{svnversion}
     @new_rev.gsub!(/M/, "")
     recipients = ask("Enter the recipients (or hit return for the default): ")
-    recipients ||= "otw-coders@transformativeworks.org otw-testers@transformativeworks.org"
+    recipients = "otw-coders@transformativeworks.org otw-testers@transformativeworks.org" if recipients.blank?
     subject = (@server == 'stage') ? "testarchive deployed" : "beta archive deployed"
     ok_or_warn %Q{echo "testarchive deployed to #{@new_rev}" | mail -s "#{subject}" #{recipients}}
   end
