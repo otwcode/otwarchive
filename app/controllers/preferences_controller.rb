@@ -1,6 +1,8 @@
 class PreferencesController < ApplicationController
   before_filter :load_user
   before_filter :check_ownership
+  skip_before_filter :store_location
+
   
   # Ensure that the current user is authorized to view and change this information
   def load_user
@@ -21,10 +23,10 @@ class PreferencesController < ApplicationController
     @available_skins = (current_user.skins + Skin.public_skins).uniq
     
     if @user.preference.save
-      flash[:notice] = t('successfully_updated', :default => 'Your preferences were successfully updated.')
-      redirect_to(request.env["HTTP_REFERER"] || user_preferences_path(@user))
+      flash[:notice] = ts('Your preferences were successfully updated.')
+      redirect_back_or_default(user_preferences_path(@user))
     else
-      flash[:error] = t('failed_update', :default => 'Sorry, something went wrong. Please try that again.')
+      flash[:error] = ts('Sorry, something went wrong. Please try that again.')
       render :action => :index
     end
   end
