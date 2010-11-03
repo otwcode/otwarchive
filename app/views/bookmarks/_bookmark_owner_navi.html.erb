@@ -3,8 +3,8 @@
    <li><%= link_to t('.links.delete', :default => "Delete"), bookmark, :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
    <% if bookmark.bookmarkable.is_a?(Work) %>
    <li>
-     <%= link_to_ibox ts("Share"), :for => "#share" %>
-     <div id="share" class="hideme">
+     <%= link_to_ibox ts("Share"), :for => "#share_#{bookmark.id}" %>
+     <div id="share_<%= bookmark.id %>" class="hideme">
        <p><%= ts("Copy and paste to repost this bookmark elsewhere: (CTRL/CMD-A will select all)") -%></p>
        <p><textarea rows="4" cols="50"><%= get_bookmark_embed_link(bookmark) %></textarea></p>
      </div>

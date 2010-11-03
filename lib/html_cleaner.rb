@@ -34,8 +34,6 @@ module HtmlCleaner
   def fix_bad_characters(text)
     return "" if text.nil?
     text.gsub! "<3", "&lt;3"
-    text.gsub! /\r\n?/, "\n" # get rid of mac carriage returns
-    text.gsub! /\s+\n/, "\n" # trim any extra space at the end of lines
     
     # maybe these will work instead? D:
     # text.gsub! /[\u201C\u201D\u201E\u201F\u2033\u2036]/u, '"'
@@ -118,72 +116,54 @@ module HtmlCleaner
 
 
   # Simplified parser/formatter steps:
-  #
-  # 1. Insert <p> and <br/> tags based on a few rules:
-  #    a. If user has double <br/> tags, convert them to <p>
-  #    b. If user has put in her own paragraph breaks, do not add.
-  #    c. Otherwise: 
-  #       Convert 3+ blank lines into extra whitespace lines using &nbsp;
-  #       Convert double blank lines into <p> 
-  #
-  #    d. If user has put in her own <br/> tags, do not add.
-  #    e. Otherwise:
-  #       If we have <p> tags added, convert single linebreaks into <br/> tags.
-  #       If not, convert single linebreaks into <p> tags.
-  #
+  # 1. Convert newlines into paragraph/break tags based on some simple rules
   # 2. Parse document with Nokogiri and export xhtml to get pretty-printed and
   #    well-formed (not necessarily validating!) xhtml with all tags closed.
   #
   def add_paragraphs_to_text(text)
+    # convert carriage returns to newlines
+    source = text.gsub(/\r\n?/, "\n")
+
+    # get rid of spaces and newlines-before/after-paragraphs and linebreaks
+    source.gsub!(/\s*(<p[^>]*>)\s*/, '\1')
+    source.gsub!(/\s*(<\/p>)\s*/, '\1')
+    source.gsub!(/\s*(<br\s*?\/?>)\s*/, '<br />')    
+
+    # do we have a paragraph to start?
+    source = '<p>' + source unless source.match(/^<p/)
+    
+    # If we have three newlines, assume user wants a blank line
+    source.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
+
+    # Convert double newlines into single paragraph break
+    source.gsub!(/\n+\s*?\n+/, '</p><p>')
+
+    # Convert single newlines into br tags
+    source.gsub!(/\n/, '<br />')
     
     # convert double br tags into p tags
-    source = text.gsub(/<br\s*?\/?>\s*<br\s*?\/?>/, '<p>')
+    source.gsub!(/<br\s*?\/?>\s*<br\s*?\/?>/, '</p><p>')
 
-    # parse the text with Nokogiri
-    parsed = Nokogiri::HTML::DocumentFragment.parse(source)
-
-    # see if we have any paragraph tags
-    num_ptags = parsed.css('p').count
-
-    if num_ptags > 0
-      # Assume the user has put in her own desired paragraph breaks
-    else
-      # If we have three newlines, assume user wants a blank line
-      source.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
-      
-      # Convert double newlines into single paragraph break
-      source.gsub!(/\n+\s*?\n+/, '<p>')
-      parsed = Nokogiri::HTML::DocumentFragment.parse(source)
-    end
-
-    # check for paragraph and linebreak tags
-    num_ptags = parsed.css('p').count
-    num_brtags = parsed.css('br').count
-    if num_brtags > 0
-        # Assume user has put in her own desired linebreaks
-    elsif num_ptags > 0
-      # we've got paragraph breaks so treat linebreaks as breaks
-      # and convert them into br tags
-      source.gsub!(/\n/, '<br />')
-    else
-      # treat single linebreaks as paragraphs
-      source.gsub!(/\n/, '<p>')
-    end
-
-    # Reparse as an entire document
+    # Parse in Nokogiri
     parsed = Nokogiri::HTML.parse(source)
     parsed.encoding = 'UTF-8'
     
-    # add paragraphs where necessary
-    body = parsed.at_css('body')
-    add_paragraphs_to_nodes(body.children) unless body.nil?
-
-    # yank out empty paragraphs
-    clean_up_paragraphs(body.children) unless body.nil?
-
     # Get out the nice well-formed XHTML
-    body = parsed.css("body")
-    body.nil? ? "" : body.to_xhtml
+    source = parsed.css("body").to_xhtml
+    
+    # trash empty paragraphs and leading spaces
+    source.gsub!(/\s*<p[^>]*>\s*<\/p>\s*/, "")
+    source.gsub!(/^\s*/, '')
+    
+    # get rid of newlines-before/after-paragraphs inserted by to_xhtml
+    source.gsub!(/\s*(<p[^>]*>)\s*/, '\1')
+    source.gsub!(/\s*(<\/p>)\s*/, '\1')
+    
+    # trash the body tag
+    source.gsub!(/<\/?body>\s*/, '')
+    
+    # return the text
+    source
   end    
 
   INLINE_HTML_TAGS = %w(a abbr acronym b big br cite code del dfn em i img ins kbd q s samp small span strike strong sub sup tt u var)
