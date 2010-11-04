@@ -60,7 +60,7 @@ Feature: Edit preferences
   When I go to the works page
     And I follow "This has two chapters"
   Then I should not see "Secondy chapter"
-  
+
   Scenario: View and edit preferences - show/hide warnings and tags
 
   # set preference
@@ -89,7 +89,7 @@ Feature: Edit preferences
     And I follow "Bookmark"
     And I press "Create"
   Then I should see "Bookmark was successfully created"
-    
+
   # see everything on works index and show page
   When I go to the works page
   Then I should see "No Archive Warnings Apply"
@@ -107,7 +107,7 @@ Feature: Edit preferences
     And I should not see "Show warnings"
     And I should see "Scarier"
     And I should not see "Show additional tags"
-    
+
   # see everything on fandoms page, for both canonical and unwrangled fandoms, and bookmarks page and series page
   When I follow "fandoms"
   Then I should see "Stargate SG-1"
@@ -145,7 +145,7 @@ Feature: Edit preferences
     And I should see "Scary tag"
     And I should not see "Scarier"
     And I should not see "Show additional tags"
-    
+
   # change preference to hide warnings
   When I follow "mywarning2"
   Then I should see "My Dashboard"
@@ -154,7 +154,7 @@ Feature: Edit preferences
   When I check "Hide warnings"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
-  
+
   # hidden warnings on works index and show page, except for your own works
   When I go to the works page
   Then I should see "No Archive Warnings Apply"
@@ -173,7 +173,7 @@ Feature: Edit preferences
     And I should not see "Show warnings"
     And I should see "Scarier"
     And I should not see "Show additional tags"
-  
+
   # hidden warnings on fandoms page and bookmarks page, except for your own works, for both canonical and unwrangled fandoms
   When I follow "fandoms"
   Then I should see "Stargate SG-1"
@@ -181,7 +181,7 @@ Feature: Edit preferences
   Then I should see "This work has warnings and tags"
     And I should see "This also has warnings and tags"
     And I should see "No Archive Warnings Apply" within ".own .tags"
-    # TODO: Figure out how to make this work 
+    # TODO: Figure out how to make this work
     # And I should not see "No Archive Warnings Apply" within ".tags" that isn't .own
     And I should see "Show warnings"
     And I should see "Scary tag"
@@ -191,7 +191,7 @@ Feature: Edit preferences
     And I follow "Stargate SG-2"
   Then I should see "This work has warnings and tags"
     And I should see "This also has warnings and tags"
-  When issue "1904" is fixed
+  When "issue 1904" is fixed
     # And I should not see "No Archive Warnings Apply"
     # And I should see "Show warnings"
   Then I should see "Scary tag"
@@ -213,14 +213,14 @@ Feature: Edit preferences
     And I should see "Scary tag"
     And I should not see "Scarier"
     And I should not see "Show additional tags"
-    
+
   # change preference to hide freeforms
   When I follow "mywarning2"
     And I follow "My Preferences"
     And I check "Hide freeform tags"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
-  
+
   # hidden both on works index and show page, except for your own works
   When I go to the works page
   Then I should see "No Archive Warnings Apply"
@@ -239,7 +239,7 @@ Feature: Edit preferences
     And I should not see "Show warnings"
     And I should see "Scarier"
     And I should not see "Show additional tags"
-    
+
   # hidden both on fandoms page and bookmarks page, except for your own works, for both canonical and unwrangled fandoms
   When I follow "fandoms"
   Then I should see "Stargate SG-1"
@@ -258,7 +258,7 @@ Feature: Edit preferences
     And I follow "Stargate SG-2"
   Then I should see "This work has warnings and tags"
     And I should see "This also has warnings and tags"
-  When issue "1904" is fixed
+  When "issue 1904" is fixed
     # And I should not see "No Archive Warnings Apply" within ".tags"
     # And I should see "Show warnings"
   Then I should not see "Scary tag"
@@ -280,14 +280,14 @@ Feature: Edit preferences
     And I should not see "Scary tag"
     And I should not see "Scarier"
     And I should see "Show additional tags"
-    
+
   # change preference to show warnings, keep freeforms hidden
   When I follow "mywarning2"
     And I follow "My Preferences"
     And I uncheck "Hide warnings"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
-  
+
   # hidden only freeforms on works index and show page, except for your own works
   When I go to the works page
   Then I should see "No Archive Warnings Apply"
@@ -306,7 +306,7 @@ Feature: Edit preferences
     And I should not see "Show warnings"
     And I should see "Scarier"
     And I should not see "Show additional tags"
-    
+
   # hidden only freeforms on fandoms page and bookmarks page, except for your own works, for both canonical and unwrangled fandoms
   When I follow "fandoms"
   Then I should see "Stargate SG-1"
@@ -322,7 +322,7 @@ Feature: Edit preferences
     And I follow "Stargate SG-2"
   Then I should see "This work has warnings and tags"
     And I should see "This also has warnings and tags"
-  When issue "1904" is fixed
+  When "issue 1904" is fixed
     # And I should see "No Archive Warnings Apply" within ".tags"
     # And I should not see "Show warnings"
   Then I should not see "Scary tag"

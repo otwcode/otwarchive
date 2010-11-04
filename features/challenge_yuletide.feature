@@ -24,15 +24,15 @@ Feature: Collection
     And a character exists with name: "John Sheppard", canonical: true
     And I add the fandom "Stargate Atlantis" to the character "John Sheppard"
     And I add the fandom "Stargate SG-1" to the character "John Sheppard"
-    And I add the fandom "Tiny fandom" to the character "John Sheppard"    
+    And I add the fandom "Tiny fandom" to the character "John Sheppard"
     And a character exists with name: "Teyla Emmagan", canonical: true
     And I add the fandom "Stargate Atlantis" to the character "Teyla Emmagan"
     And I add the fandom "Stargate SG-1" to the character "Teyla Emmagan"
     And a character exists with name: "Foo The Wonder Goat", canonical: true
-    And I add the fandom "Tiny fandom" to the character "Foo The Wonder Goat"    
+    And I add the fandom "Tiny fandom" to the character "Foo The Wonder Goat"
     And I add the fandom "Stargate SG-1" to the character "Foo The Wonder Goat"
     And a character exists with name: "Obscure person", canonical: true
-    And I add the fandom "Tiny fandom" to the character "Obscure person"    
+    And I add the fandom "Tiny fandom" to the character "Obscure person"
     And I am logged in as "mod1" with password "something"
   Then I should see "Hi, mod1!"
     And I should see "Log out"
@@ -80,7 +80,7 @@ Feature: Collection
     And I fill in "gift_exchange_offer_restriction_attributes_character_num_required" with "2"
     And I fill in "gift_exchange_offer_restriction_attributes_character_num_allowed" with "3"
     And I check "gift_exchange_offer_restriction_attributes_require_unique_fandom"
-    And I check "gift_exchange_offer_restriction_attributes_allow_any_character" 
+    And I check "gift_exchange_offer_restriction_attributes_allow_any_character"
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_fandoms"
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
     And I check "gift_exchange_offer_restriction_attributes_tag_set_attributes_character_restrict_to_fandom"
@@ -129,12 +129,12 @@ Feature: Collection
     And I should see "Offers (2 - 3)"
     And I should see "Please offer lots of stuff"
     And I should see "Offer 1"
-    And I should see "Characters (2 - 3)"    
+    And I should see "Characters (2 - 3)"
     And I should see "Any?"
     And I should see "Offer 2"
     And I should not see "Offer 3"
     And I should see "Add another offer? (Up to 3 allowed.)"
-  # we fill in 1 request with 1 fandom, 1 character; 1 offer with 1 fandom and 1 character 
+  # we fill in 1 request with 1 fandom, 1 character; 1 offer with 1 fandom and 1 character
   When I check "challenge_signup_requests_attributes_0_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
     And I fill in "Prompt URL" with "http://user.dreamwidth.org/123.html"
@@ -151,7 +151,7 @@ Feature: Collection
     And I should see "Your Offer has some character tags that are not in the selected fandom(s)"
     # errors for the empty offer
     And I should see "Offer must have exactly 1 fandom tags. You currently have none."
-    And I should see "Offer must have between 2 and 3 character tags. You currently have none." 
+    And I should see "Offer must have between 2 and 3 character tags. You currently have none."
   # Over-fill the remaining missing fields and duplicate fandoms
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Obscure person"
     And I check "challenge_signup_requests_attributes_1_fandom_29"
@@ -190,7 +190,7 @@ Feature: Collection
     And I should not see "Offer 3"
     And I should see "Edit"
     And I should see "Delete"
-    
+
   # another person signs up
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
@@ -208,7 +208,7 @@ Feature: Collection
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
     And I check "challenge_signup_offers_attributes_1_fandom_31"
     And I check "challenge_signup_offers_attributes_1_any_character"
-    # TRICKY note here! the index value for the javascript-added request 3 is actually 3; this is 
+    # TRICKY note here! the index value for the javascript-added request 3 is actually 3; this is
     # a workaround because otherwise it would display a duplicate number
     # These three commented out so it can run on the command-line
     #And I follow "Add another request? (Up to 3 allowed.)"
@@ -216,7 +216,7 @@ Feature: Collection
     #And I check "challenge_signup_requests_attributes_3_fandom_30"
     And I press "Submit"
   Then I should see "Signup was successfully created"
-  
+
   # and a third person signs up
   When I follow "Log out"
     And I am logged in as "myname3" with password "something"
@@ -236,7 +236,7 @@ Feature: Collection
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with ""
     And I press "Submit"
   Then I should see "Signup was successfully created"
-  
+
   # fourth person signs up
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
@@ -252,7 +252,7 @@ Feature: Collection
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Foo The Wonder Goat, John Sheppard"
     And I press "Submit"
   Then I should see "Signup was successfully created"
-  
+
   # ordinary users can't see signups but can see summary
   When I go to the collections page
     And I follow "Yuletide"
@@ -261,7 +261,7 @@ Feature: Collection
   When I follow "Signup Summary"
   Then I should see "Fandom"
     And I should see "Stargate Atlantis"
-  
+
   # mod can view signups
   When I follow "Log out"
     And I am logged in as "mod1" with password "something"
@@ -277,7 +277,7 @@ Feature: Collection
     And I should see "http://user.dreamwidth.org/123.html"
   When I follow "Hide URLs"
   Then I should not see "http://user.dreamwidth.org/123.html"
-  
+
   # mod runs matching
   When I follow "Matching"
   Then I should see "You cannot generate matches while signup is still open."
@@ -301,7 +301,7 @@ Feature: Collection
     And I should see "Regenerate Assignments"
     And I should see "Regenerate Potential Matches"
     And I should see "Send Assignments"
-      
+
   # mod sends assignments out
   When all emails have been delivered
     And I follow "Send Assignments"
@@ -318,7 +318,7 @@ Feature: Collection
     Then I should not see "Assignments are now being sent out"
       # 4 users and the mod should get emails :)
       And 5 emails should be delivered
-  
+
   # first user starts posting
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
@@ -340,7 +340,7 @@ Feature: Collection
     And I fill in "content" with "This is an exciting story about Atlantis"
   When I press "Preview"
   Then I should see "Preview Work"
-    
+
   # someone looks while it's still a draft
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
@@ -364,7 +364,7 @@ Feature: Collection
   When I follow "Random Items"
   Then I should not see "Stargate"
     And I should not see "myname" within "#main"
-    
+
   # first user posts the work
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
@@ -385,7 +385,7 @@ Feature: Collection
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
-    
+
   # someone tries to view it
   When I follow "Log out"
     And I go to myname1's user page
@@ -393,7 +393,7 @@ Feature: Collection
   Then I should see "Mystery Work"
     And I should see "Yuletide"
     And I should not see "Fulfilling Story"
-    
+
   # user edits it to undo fulfilling the assignment
   # When I am logged in as "myname1" with password "something"
   #   And I go to myname1's user page
@@ -406,9 +406,9 @@ Feature: Collection
   # When I press "Preview"
   # Then show me the page
   # Then I should see "Work was successfully updated"
-  
+
   # post works for all the assignments: TODO
-  
+
   # mod reveals challenge on Dec 25th
   When I am logged in as "mod1" with password "something"
     And I go to the collections page
@@ -422,11 +422,11 @@ Feature: Collection
   When I reload the page
   # hm, not sure why 6 are being delivered :O INVESTIGATE TODO
   Then 6 emails should be delivered
-  
+
   # someone views their gift and it is anonymous: TODO
-  
+
   # mod reveals authors on Jan 1st
-  When issue "1847" is fixed
+  When "issue 1847" is fixed
   # When I follow "Log out"
   When I am on the collections page
     And I follow "Log out"
@@ -437,5 +437,5 @@ Feature: Collection
     And I uncheck "Is this collection currently anonymous?"
     And I press "Submit"
   Then I should see "Collection was successfully updated"
-  
+
   # someone can now see their writer: TODO

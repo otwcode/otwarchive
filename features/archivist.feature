@@ -42,7 +42,7 @@ Feature: Archivist bulk imports
       And I should see "Welcome"
       And I should see "OTW Meetup in London"
       And I should see "That Shall Achieve The Sword"
-    When issue "notifying authors for imports" is fixed
+    When "notifying authors for imports" is fixed
       # And I should see "We have notified the author(s) you imported stories for. You can also add them as co-authors manually."
     # Given the system processes jobs
     # Then show me the emails

@@ -9,14 +9,14 @@ Feature: Search Works
   Scenario: Search works
     Given I have loaded the fixtures
       And the work indexes are updated
-      
+
     # first check the errors for an invalid search
     When I am on the homepage
       And I fill in "site_search" with "Tag: harry potter Words: >1000 (Language: Deutsch | Tag: Deutsch)"
       And I press "Search"
     Then I should see "bad words format (ignored)"
       And I should see "0 Found"
-    
+
     # then do some valid searches
     When I am on the homepage
       And I fill in "site_search" with "(title,summary): second words: >100"
@@ -71,7 +71,7 @@ Feature: Search Works
     Then I should see "1 Found"
     When I follow "Advanced search"
     Then I should be on the search page
-    When issue "sanitize_params loses query <" is fixed
+    When "sanitize_params loses query <" is fixed
 #    When I fill in "refine_word_count" with "<1000"
     When I fill in "refine_word_count" with "0-999"
       And I press "Search works"

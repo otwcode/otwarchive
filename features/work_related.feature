@@ -3,7 +3,7 @@ Feature: Inspirations, remixes and translations
   In order to reflect the connections between some fanworks
   As a fan author, part of a fan community
   I want to be able to list related works
-  
+
 Scenario: Posting new works with related works, then editing
   Given the following activated users exist
     | login          | password   | email             |
@@ -17,9 +17,9 @@ Scenario: Posting new works with related works, then editing
     And I post the work "Worldbuilding"
     And I post the work "Worldbuilding Two"
     And I am logged out
-    
+
   # posting a remix / inspired-by work
-  
+
   When I am logged in as "remixer" with password "password"
     And I go to the new work page
     And I select "Not Rated" from "Rating"
@@ -34,9 +34,9 @@ Scenario: Posting new works with related works, then editing
   Then I should see "Work was successfully posted"
     And I should see "Inspired by Worldbuilding by inspiration"
     And 1 email should be delivered
-    
+
   # check that I see it under related works
-  
+
   When I go to remixer's user page
   Then I should see "My Related Works (1)"
   When I follow "My Related Works"
@@ -44,9 +44,9 @@ Scenario: Posting new works with related works, then editing
     And I should see "Worldbuilding by inspiration"
   When I am logged out
     And all emails have been delivered
-    
+
   # posting a translation
-  
+
   When I am logged in as "translator" with password "password"
     And I go to the new work page
     And I select "Not Rated" from "Rating"
@@ -63,25 +63,25 @@ Scenario: Posting new works with related works, then editing
   Then I should see "Work was successfully posted"
     And I should see "A translation of Followup by remixer"
     And 1 email should be delivered
-    
+
   # check that I see it under related works
-  
+
   When I go to translator's user page
   Then I should see "My Related Works (1)"
   When I follow "My Related Works"
   Then I should see "Works translator's works were inspired by"
     And I should see "Followup by remixer"
     And I should see "From English to Deutsch"
-    
+
   # check that unapproved rels do not appear on the original
-  
+
   When I view the work "Worldbuilding"
   Then I should not see "Followup"
   When I view the work "Followup"
   Then I should not see "Followup Translated"
-  
+
   # approve relationships and check they appear on the original, then remove and check
-  
+
   When I am logged out
     And I am logged in as "inspiration" with password "something"
     And I go to inspiration's user page
@@ -124,9 +124,9 @@ Scenario: Posting new works with related works, then editing
     And I should not see "Followup Translated by translator" within ".notes"
     And I should not see "Works inspired by this one:"
     And I should not see "Followup Translated by translator" within "li"
-    
+
   # editing existing work should also send email
-  
+
   When I edit the work "Followup"
     And all emails have been delivered
     And I list the work "Worldbuilding Two" as inspiration
@@ -135,9 +135,9 @@ Scenario: Posting new works with related works, then editing
   When I press "Update"
   Then I should see "Work was successfully updated"
     And I should see "Inspired by Worldbuilding Two by inspiration"
-    And issue "1509" is fixed
+    And "issue 1509" is fixed
     # And 1 email should be delivered
-    
+
 Scenario: Listing external works as inspirations
   Given basic tags
   When I am logged in as "remixer" with password "password"
@@ -164,7 +164,7 @@ Scenario: Listing external works as inspirations
   When I edit the work "Followup"
     And I check "parent-options-show"
     And I fill in "Url" with "testarchive.transformativeworks.org"
-    And issue "1806" is fixed
+    And "issue 1806" is fixed
     # And I press "Preview"
   # Then I should see "We couldn't save this work, sorry"
     # And I should see "A parent work outside the archive needs to have a title."

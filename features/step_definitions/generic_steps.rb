@@ -74,8 +74,8 @@ Then /^"([^"]*)" should be selected within "([^"]*)"$/ do |value, field|
   find_field(field).node.xpath(".//option[@selected = 'selected']").inner_html.should =~ /#{value}/
 end
 
-When /^issue "([^\"]*)" is fixed$/ do |issue_no|
-  print "DEFERRED (Issue #{issue_no})"
+When /^"([^\"]*)" is fixed$/ do |what|
+  puts "\nDEFERRED (#{what})"
 end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be disabled$/ do |label, selector|

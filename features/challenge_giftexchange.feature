@@ -24,7 +24,7 @@ Feature: Collection
     And I should see "Log out"
   When I go to mod1's preferences page
   Then I should see "Your time zone"
-    And issue "TODO: Checking an option is selected" is fixed
+    And "TODO: checking an option is selected" is fixed
     # And I should find "(GMT-05:00) Eastern Time (US & Canada)" selected within "preference_time_zone"
   When I select "(GMT-09:00) Alaska" from "preference_time_zone"
     And I press "Update"
@@ -44,7 +44,7 @@ Feature: Collection
     And I press "Submit"
   Then I should see "Collection was successfully created"
     And I should see "Setting Up The My Gift Exchanger Gift Exchange"
-    And issue "TODO: Checking an option is selected" is fixed
+    And "ditto" is fixed
     # And I should find "(GMT-09:00) Alaska" selected within "gift_exchange_time_zone"
     And I should see "(GMT-09:00) Alaska" within "#main"
   When I fill in "General Signup Instructions" with "Here are some general tips"
@@ -62,7 +62,7 @@ Feature: Collection
     And I fill in "gift_exchange_offer_restriction_attributes_freeform_num_allowed" with "2"
     And I check "Signup open?"
     And I press "Submit"
-    And issue "1859" is fixed
+    And "issue 1859" is fixed
   # Then I should see "If signup is open, signup closed date can't be in the past"
   # When I select "2012" from "gift_exchange_signups_open_at_1i"
   #   And I select "2012" from "gift_exchange_signups_close_at_1i"

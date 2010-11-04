@@ -24,7 +24,7 @@ Feature: Create Works
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "All Hell Breaks Loose"
-    
+
   Scenario: Creating a new minimally valid work when you have more than one pseud
     Given basic tags
       And I am logged in as "newbie" with password "password"
@@ -113,7 +113,7 @@ Feature: Create Works
       And I should see "Fandom: Supernatural"
       And I should see "Rating: Not Rated"
       And I should see "No Archive Warnings Apply"
-      And issue "TODO: warning redesign" is fixed
+      And "warning redesign" is fixed
       #And I should not see "Choose Not To Use Archive Warnings"
       And I should see "Category: F/M"
       And I should see "Characters: Sam Winchester, Dean Winchester"
@@ -171,11 +171,11 @@ Feature: Create Works
       And I press "Update"
     Then I should see "Work was successfully updated"
       And I should see "For giftee"
-      And issue "1807" is fixed
+      And "issue 1807" is fixed
       # And 1 email should be delivered to "giftee@example.org"
     When I go to giftee's user page
     Then I should see "Gifts (1)"
-    
+
   Scenario: Creating a new work with some maybe-invalid things
   # TODO: needs some more actually invalid things as well
     Given basic tags
