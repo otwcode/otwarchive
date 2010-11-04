@@ -33,6 +33,8 @@ module NavigationHelpers
       user_works_path(:user_id => $1)
     when /^the "(.*)" work page/
       work_path(Work.find_by_title($1))
+    when /^the work page with title (.*)/
+      work_path(Work.find_by_title($1))
     when /^(.*)'s bookmarks page$/i
       user_bookmarks_path(:user_id => $1)
     when /^(.*)'s pseuds page$/i

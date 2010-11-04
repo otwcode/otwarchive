@@ -7,6 +7,7 @@ module ActionView
       # added method to yank <p> and <br> tags and replace with newlines
       # this needs to reverse "add_paragraph_tags_to_text" from our html_cleaner library
       def strip_html_breaks(content)
+        return "" if content.blank?
         content.gsub(/\s*<br ?\/?>\s*/, "\n").
                 gsub(/\s*<p[^>]*>\s*&nbsp;\s*<\/p>\s*/, "\n\n\n").
                 gsub(/\s*<p[^>]*>(.*?)<\/p>\s*/m, "\n\n" + '\1').

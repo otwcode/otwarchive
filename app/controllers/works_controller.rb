@@ -1,3 +1,5 @@
+# encoding=utf-8
+
 class WorksController < ApplicationController
 
   skip_before_filter :store_location, :only => [:download]
@@ -175,9 +177,9 @@ class WorksController < ApplicationController
 
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
 
-    @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") :
-      get_page_title(@work.fandoms.size > 3 ? t("works.multifandom", :default => "Multifandom") : @work.fandoms.string,
-        @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
+    @page_title = @work.unrevealed? ? ts("Mystery Work") :
+      get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
+        @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
     render :show
     @work.increment_hit_count(request.env['REMOTE_ADDR'])
@@ -185,13 +187,13 @@ class WorksController < ApplicationController
   end
 
   def download
-    @page_title = @work.unrevealed? ? t('works.mystery_title', :default => "Mystery Work") :
-      get_page_title(@work.fandoms.size > 3 ? t("works.multifandom", :default => "Multifandom") : @work.fandoms.string,
-        @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
+    @page_title = @work.unrevealed? ? ts("Mystery Work") :
+      get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
+        @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title,
         :omit_archive_name => true, :truncate => true)
 
-    @filename = @page_title.gsub(/\s+/, '_').gsub(/[^\w_-]+/, '').gsub(/_-_/, '-').gsub(/__+/, '_')
+    @filename = @page_title.gsub(/\s+/, '_').gsub(/[^[a-zA-Z0-9À-ÿ_-]]+/, '').gsub(/_-_/, '-').gsub(/__+/, '_')
 
     # we use entire work
     if @work.number_of_posted_chapters > 1
@@ -233,8 +235,12 @@ protected
   def download_pdf
     @html_content = convert_urls_to_absolute(render_to_string(:template => "works/download.html", :layout => "download"))
     @tempdir = "#{Rails.root}/tmp"
+    # wkhtmltopdf borks on unicode filenames
+    @filename = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", @filename)
     File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
-    %x{wkhtmltopdf #{@tempdir}/#{@filename}.html #{@tempdir}/#{@filename}.pdf}
+    cmd = %Q{wkhtmltopdf --title #{@filename} #{@tempdir}/#{@filename}.html #{@tempdir}/#{@filename}.pdf}
+    Rails.logger.debug cmd
+    `#{cmd} 2> /dev/null`
 
     # clean up temp HTML file
     File.delete("#{@tempdir}/#{@filename}.html")
@@ -260,9 +266,18 @@ protected
     end
 
     # converts the tempfile to mobi using MobiPerl
-    # note! can't have a linebreak in here
+
+    # list of chapters
     html_files = 0.upto(@chapters.size - 1).map {|i| "chapter#{i}.html"}.join(' ')
-    %x{cd #{tempdir} ; html2mobi #{html_files} --mobifile "#{@filename}.mobi" --gentoc --title \"#{@work.title}\" --author \"#{@work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', ')}\"}
+    
+    title = %Q{#{@work.title.gsub(/"/, '\"')}}
+    
+    author = @work.anonymous? ? ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', ')
+    author = %Q{#{author}}
+
+    cmd = %Q{cd #{tempdir} ; html2mobi #{html_files} --mobifile "#{@filename}.mobi" --gentoc --title "#{title}" --author "#{author}"}
+    Rails.logger.debug cmd
+    `#{cmd} 2> /dev/null`
 
     # clean up the temp HTML files
     @chapters.size.times {|i| File.delete("#{tempdir}/chapter#{i}.html")}
@@ -378,12 +393,12 @@ public
     if params[:edit_button]
       render :new
     elsif params[:cancel_button]
-      flash[:notice] = t('posting_canceled', :default => "New work posting canceled.")
+      flash[:notice] = ts("New work posting canceled.")
       redirect_to current_user
     else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
       valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
       if valid && @work.save && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info
-        flash[:notice] = t('draft_created', :default => 'Draft was successfully created.')
+        flash[:notice] = ts('Draft was successfully created.')
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
         redirect_to preview_work_path(@work)
@@ -415,7 +430,7 @@ public
         redirect_to :controller => 'orphans', :action => 'new', :work_id => @work.id
       else
         @work.remove_author(current_user)
-        flash[:notice] = t('author_successfully_removed', :default => "You have been removed as an author from the work")
+        flash[:notice] = ts("You have been removed as an author from the work")
         redirect_to current_user
       end
     end
@@ -559,7 +574,7 @@ public
         @work.update_minor_version
       end
       if saved
-        flash[:notice] = t('successfully_updated', :default => 'Work was successfully updated.')
+        flash[:notice] = ts('Work was successfully updated.')
         redirect_to(@work)
       else
         if !@work.invalid_tags.blank?
@@ -611,22 +626,22 @@ public
     # check to make sure we have some urls to work with
     @urls = params[:urls].split
     unless @urls.length > 0
-      flash.now[:error] = t('enter_an_url', :default => "Did you want to enter a URL?")
+      flash.now[:error] = ts("Did you want to enter a URL?")
       render :new_import and return
     end
 
     # is this an archivist importing?
     if params[:importing_for_others] && !current_user.archivist
-      flash.now[:error] = t('import.only_archivist', :default => "You may not import stories by other users unless you are an approved archivist.")
+      flash.now[:error] = ts("You may not import stories by other users unless you are an approved archivist.")
       render :new_import and return
     end
 
     # make sure we're not importing too many at once
     if params[:import_multiple] == "works" && (!current_user.archivist && @urls.length > ArchiveConfig.IMPORT_MAX_WORKS || @urls.length > ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST)
-      flash.now[:error] = t('too_many_works', :default => "You cannot import more than %{max} works at a time.", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
+      flash.now[:error] = ts("You cannot import more than %{max} works at a time.", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS)
       render :new_import and return
     elsif params[:import_multiple] == "chapters" && @urls.length > ArchiveConfig.IMPORT_MAX_CHAPTERS
-      flash.now[:error] = t('too_many_chapters', :default => "You cannot import more than %{max} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
+      flash.now[:error] = ts("You cannot import more than %{max} chapters at a time.", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS)
       render :new_import and return
     end
 
@@ -743,23 +758,23 @@ public
     @user = current_user
     @work = Work.find(params[:id])
     unless @user.is_author_of?(@work)
-      flash[:error] = t('post_draft.not_your_work', :default => "You can only post your own works.")
+      flash[:error] = ts("You can only post your own works.")
       redirect_to current_user
     end
 
     if @work.posted
-      flash[:error] = t('post_draft.already_posted', :default => "That work is already posted. Do you want to edit it instead?")
+      flash[:error] = ts("That work is already posted. Do you want to edit it instead?")
       redirect_to edit_user_work_path(@user, @work)
     end
 
     @work.posted = true
     @work.update_minor_version
     unless @work.valid? && @work.save
-      flash[:error] = t('post_draft.problem', :default => "There were problems posting your work.")
+      flash[:error] = ts("There were problems posting your work.")
       redirect_to edit_user_work_path(@user, @work)
     end
 
-    flash[:notice] = t('post_draft.success', :default => "Your work was successfully posted.")
+    flash[:notice] = ts("Your work was successfully posted.")
     redirect_to @work
   end
 
@@ -791,11 +806,11 @@ public
     @works.each do |work|
       # actual stuff will happen here shortly
       unless work.update_attributes!(params[:work].reject {|key,value| value.blank?})
-        @errors << t('update_multiple.problem', :default => "The work %{title} could not be edited: %{error}", :title => work.title, :error => work.errors_on.to_s)
+        @errors << ts("The work %{title} could not be edited: %{error}", :title => work.title, :error => work.errors_on.to_s)
       end
     end
     unless @errors.empty?
-      flash[:error] = t('update_multiple.error_message', :default => "There were problems editing some works: %{errors}", :errors => @errors.join(", "))
+      flash[:error] = ts("There were problems editing some works: %{errors}", :errors => @errors.join(", "))
     end
     redirect_to show_multiple_user_works_path(@user)
   end
@@ -813,7 +828,7 @@ public
   def load_work
     @work = Work.find_by_id(params[:id])
     if @work.nil?
-      flash[:error] = t('work_not_found', :default => "Sorry, we couldn't find the work you were looking for.")
+      flash[:error] = ts("Sorry, we couldn't find the work you were looking for.")
       redirect_to root_path and return
     elsif @collection && !@work.collections.include?(@collection)
       redirect_to @work and return
@@ -865,13 +880,13 @@ public
   def set_author_attributes
     # if we don't have author_attributes[:ids], which shouldn't be allowed to happen
     # (this can happen if a user with multiple pseuds decides to unselect *all* of them)
-    sorry = "You haven't selected any pseuds for this work. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore."
+    sorry = ts("You haven't selected any pseuds for this work. Please use Remove Me As Author or consider orphaning your work instead if you do not wish to be associated with it anymore.")
     if params[:work] && params[:work][:author_attributes] && !params[:work][:author_attributes][:ids]
-      flash.now[:notice] = t('needs_author', :default => sorry)
+      flash.now[:notice] = sorry
       params[:work][:author_attributes][:ids] = [current_user.default_pseud]
     end
     if params[:work] && !params[:work][:author_attributes]
-      flash.now[:notice] = t('needs_author', :default => sorry)
+      flash.now[:notice] = sorry
       params[:work][:author_attributes] = {:ids => [current_user.default_pseud]}
     end
 
@@ -908,7 +923,7 @@ public
 
   def cancel_posting_and_redirect
     if @work and @work.posted
-      flash[:notice] = t('not_updated', :default => "<p>The work was not updated.</p>")
+      flash[:notice] = ts("The work was not updated.")
       redirect_to user_works_path(current_user)
     else
       flash[:notice] = ts("The work was not posted. It will be saved here in your drafts for one week, then cleaned up.")
