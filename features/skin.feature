@@ -1,7 +1,7 @@
 @skins
 Feature: creating and editing skins
 
-  Scenario: A user should not be able to put evil code into skins. 
+  Scenario: A user should not be able to put evil code into skins.
   Given I am logged in as "skinner" with password "password"
   When I am on skin's new page
     And I fill in "Title" with "Evil Skin"
@@ -55,6 +55,8 @@ Feature: creating and editing skins
   When I select "Plain Text" from "preference_skin_id"
     And I select "my blinking skin" from "preference_skin_id"
     And I press "Update"
+  Then I should see "Your preferences were successfully updated."
+  When I am on skinner's preferences page
   Then "my blinking skin" should be selected within "preference_skin_id"
     And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
@@ -179,7 +181,7 @@ Feature: creating and editing skins
   Then "Default" should be selected within "preference_skin_id"
   And I should not see "public blinking skin"
 
-  
+
   Scenario: Create skin using the wizard
 
   Given basic skins
@@ -214,11 +216,12 @@ Feature: creating and editing skins
     And I fill in "skin_base_em" with "120"
     And I press "Update"
   Then I should see "Skin updated"
-  When I follow "skinner"
-    And I follow "My Preferences"
+  When I am on skinner's preferences page
   Then "Default" should be selected within "preference_skin_id"
   When I select "Wide margins" from "preference_skin_id"
     And I press "Update"
-  Then "Wide margins" should be selected within "preference_skin_id"
+  Then I should see "Your preferences were successfully updated."
     And I should see "#chapters {margin: auto 4% 2.5em; padding: 0.5em 4% 0;}" within "style"
     And I should see "body {background: #ccccff; color: red; font: 120%/1.125 Garamond;}" within "style"
+  When I am on skinner's preferences page
+  Then "Wide margins" should be selected within "preference_skin_id"

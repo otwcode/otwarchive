@@ -1,4 +1,4 @@
 Given /^basic skins$/ do
-  Skin.create_default
-  Skin.import_plain_text
+  assert Skin.default
+  assert Skin.plain_text
 end
