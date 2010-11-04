@@ -17,19 +17,22 @@ module Query
       :per_page => ArchiveConfig.ITEMS_PER_PAGE,
       :max_matches => ArchiveConfig.SEARCH_RESULTS_MAX,
       :page => page,
-      :match_mode => :extended
+      :match_mode => :extended,
+      :hidden_by_admin => false
       }
     # attribute restrictions
-    if User.current_user.nil?
-      with_hash.update({:posted => true, :hidden_by_admin => false, :restricted => false})
-    else
-      with_hash.update({:posted => true, :hidden_by_admin => false})
-      ## TODO add personal filters here
+    if klass == Work
+      if User.current_user.nil?
+        with_hash.update({:posted => true, :restricted => false})
+      else
+        with_hash.update({:posted => true})
+        ## TODO add personal filters here
+      end
     end
     options[:with] = with_hash
     return query_errors, klass.search(search_string, options)
   end
-  
+
   # this is used to standardize a query, specifically, moving things
   # like "author: astolat words: >1,000" to :author => {"astolat"}, :words => {"> 1000"}
   def Query.standardize(query)
@@ -69,14 +72,14 @@ module Query
     Rails.logger.info "Search for: #{query.to_s}"
     return query
   end
-  
+
   # transform the query into
   # a search string plus an attributes hash for sphinx
   def Query.split_query(query={})
     with = {}
     errors = []
     text = query[:text] || ""
-    # transform 
+    # transform
     #   (field1,field2): search string
     # into sphinx's multiple-field search operator
     #   @(field1,field2) search string
@@ -94,7 +97,7 @@ module Query
       unless query[sym].blank?
         match = query[sym].match(/^([<>]*)\s*([\d,. -]+)\s*$/)
         if match
-          with[(string + "_count").to_sym] = Query.numerical_range(match[1], match[2]) 
+          with[(string + "_count").to_sym] = Query.numerical_range(match[1], match[2])
         else
           errors<<"bad #{string.pluralize} format (ignored)"
         end
@@ -118,7 +121,7 @@ module Query
     Rails.logger.debug "Search errors: #{errors}"
     return [text.strip, with, errors]
   end
-  
+
   # create numerical range from operand and string
   # operand can be "<", ">" or ""
   # string must be an integer unless operand is ""
@@ -138,7 +141,7 @@ module Query
         end
     end
   end
-  
+
   # create time range from operand, amount and period
   # period must be one known by time_from_string
   def self.time_range(operand, amount, period)
@@ -178,5 +181,5 @@ module Query
         raise "unknown period: " + period
     end
   end
-    
+
 end
