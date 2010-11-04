@@ -114,21 +114,19 @@ class CollectionParticipantsController < ApplicationController
     end
     
     if @participants_invited.empty? && @participants_added.empty?
-      flash[:error] = t('collection_participants.none_to_add', :default => "We couldn't find anyone new by that name to add.")
+      flash[:error] = ts("We couldn't find anyone new by that name to add.")
     else
       flash[:notice] = ""
     end
     
     unless @participants_invited.empty?
       @participants_invited = @participants_invited.sort_by {|participant| participant.pseud.name.downcase }
-      flash[:notice] += "<strong>" + t('collection_participants.invite', :default => "New members invited: ") + 
-        "</strong>" +  @participants_invited.collect(&:pseud).collect(&:byline).join(', ')
+      flash[:notice] += ts("New members invited: ") +  @participants_invited.collect(&:pseud).collect(&:byline).join(', ')
     end
 
     unless @participants_added.empty?
       @participants_added = @participants_added.sort_by {|participant| participant.pseud.name.downcase }
-      flash[:notice] += "<strong>" + t('collection_participants.add', :default => "Members added: ") + 
-        "</strong>" +  @participants_added.collect(&:pseud).collect(&:byline).join(', ')
+      flash[:notice] += ts("Members added: ") +  @participants_added.collect(&:pseud).collect(&:byline).join(', ')
     end
     
     redirect_to collection_participants_path(@collection)

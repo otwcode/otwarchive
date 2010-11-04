@@ -256,4 +256,9 @@ form.new_collection div, form.edit_collection div {display:block;}
 .toggle {float: right; font-size: 0.875em;}
 .options .odd { background:#f6f0f0;}
 
+/* tag set form */
+fieldset.tag_set  {border:1px solid #bbb; padding: 0.5em; margin: 0.5em auto;}
+fieldset.tag_set textarea {width: 90%;}
+fieldset.tag_set ul li {display:inline;}
+
 

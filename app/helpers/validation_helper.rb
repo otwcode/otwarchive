@@ -15,13 +15,14 @@ module ValidationHelper
   }
   
   # much simplified and html-safed version of error_messages_for
+  # error messages containing a "^" will have everything before the "^" wiped out
   def error_messages_for(object)
     if object.is_a? Symbol
       object = instance_variable_get("@#{object}")
     end
     
     if object && object.errors.any?
-      error_messages = object.errors.full_messages.map {|msg| content_tag(:li, msg.html_safe)}.join("\n").html_safe
+      error_messages = object.errors.full_messages.map {|msg| content_tag(:li, msg.gsub(/^(.+)\^/, '').html_safe)}.join("\n").html_safe
       message = '<div class="error" id="error">'.html_safe
       message += content_tag(:h2, h(t('validation.couldnt_save', :default => "We couldn't save this %{objectname}, sorry!", 
                           :objectname => object.class.name.to_s.gsub(/_/, ' ')))) 

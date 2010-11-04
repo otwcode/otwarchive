@@ -33,6 +33,9 @@
         <!-- do not cache -->
         <%= byline(work) %>
 
+<!-- caching -->
+<% cache("work-#{work.id}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
+
         <% unless work.recipients.blank? %>
           <%= ts("for") %> <%= recipients_link(work) %>
         <% end %>
@@ -72,6 +75,9 @@
   		<dd><%= number_with_delimiter(work.word_count) %></dd>
   		<dt><%= ts('Chapters') %>:</dt>
   		<dd><%= work.chapter_total_display %></dd>
+
+<% end %>
+<!-- end cached section -->
 	 
   	  <% unless work.approved_collections.empty? %>
   			<dt><%= ts('Collections')  %>:</dt>

@@ -22,9 +22,17 @@ Feature: Collection
     And I create the fandom "Yuletide Hippos RPF" with id 31
     And basic tags
     And a character exists with name: "John Sheppard", canonical: true
+    And I add the fandom "Stargate Atlantis" to the character "John Sheppard"
+    And I add the fandom "Stargate SG-1" to the character "John Sheppard"
+    And I add the fandom "Tiny fandom" to the character "John Sheppard"    
     And a character exists with name: "Teyla Emmagan", canonical: true
-    And a character exists with name: "Obscure person", canonical: true
+    And I add the fandom "Stargate Atlantis" to the character "Teyla Emmagan"
+    And I add the fandom "Stargate SG-1" to the character "Teyla Emmagan"
     And a character exists with name: "Foo The Wonder Goat", canonical: true
+    And I add the fandom "Tiny fandom" to the character "Foo The Wonder Goat"    
+    And I add the fandom "Stargate SG-1" to the character "Foo The Wonder Goat"
+    And a character exists with name: "Obscure person", canonical: true
+    And I add the fandom "Tiny fandom" to the character "Obscure person"    
     And I am logged in as "mod1" with password "something"
   Then I should see "Hi, mod1!"
     And I should see "Log out"
@@ -75,6 +83,7 @@ Feature: Collection
     And I check "gift_exchange_offer_restriction_attributes_allow_any_character" 
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_fandoms"
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
+    And I check "gift_exchange_offer_restriction_attributes_tag_set_attributes_character_restrict_to_fandom"
     And I check "Signup open?"
     And I press "Submit"
   Then I should see "Challenge was successfully created"
@@ -129,9 +138,9 @@ Feature: Collection
   When I check "challenge_signup_requests_attributes_0_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
     And I fill in "Prompt URL" with "http://user.dreamwidth.org/123.html"
+    And I fill in "Description" with "This is my wordy request"
     And I check "challenge_signup_offers_attributes_0_fandom_30"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person"
-    And I fill in "Description" with "This is my wordy offer"
     And I press "Submit"
   Then I should see "We couldn't save this ChallengeSignup, sorry!"
   # TODO: We should probably make these error message more friendly
@@ -139,6 +148,7 @@ Feature: Collection
     And I should see "Request must have exactly 1 fandom tags. You currently have none."
     # errors for the not-quite-filled offer
     And I should see "Offer must have between 2 and 3 character tags. You currently have (1) -- Obscure person"
+    And I should see "Your Offer has some character tags that are not in the selected fandom(s)"
     # errors for the empty offer
     And I should see "Offer must have exactly 1 fandom tags. You currently have none."
     And I should see "Offer must have between 2 and 3 character tags. You currently have none." 
@@ -153,12 +163,18 @@ Feature: Collection
     And I press "Submit"
   Then I should see "We couldn't save this ChallengeSignup, sorry!"
     And I should see "Request must have between 0 and 2 character tags. You currently have (3) -- John Sheppard, Teyla Emmagan, Obscure person."
+    And I should see "Your Request has some character tags that are not in the selected fandom(s), Stargate Atlantis: Obscure person"
     And I should see "Request must have exactly 1 fandom tags. You currently have (2) -- Stargate SG-1, Tiny fandom."
+    And I should see "Your Offer has some character tags that are not in the selected fandom(s), Care Bears: Obscure person, John Sheppard"
     And I should see "Offer must have between 2 and 3 character tags. You currently have (4) -- Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat."
+    And I should see "Your Offer has some character tags that are not in the selected fandom(s), Care Bears: Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     And I should see "You have submitted more than one offer with the same fandom tags. This challenge requires them all to be unique."
   # now fill in correctly
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
     And I uncheck "challenge_signup_requests_attributes_1_fandom_28"
+    And I fill in "challenge_signup_requests_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person"
+    And I uncheck "challenge_signup_offers_attributes_0_fandom_30"
+    And I check "challenge_signup_offers_attributes_0_fandom_29"
     And I uncheck "challenge_signup_offers_attributes_1_fandom_30"
     And I check "challenge_signup_offers_attributes_1_fandom_28"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
@@ -166,12 +182,12 @@ Feature: Collection
   Then I should see "Signup was successfully created"
     And I should see "Signup for myname1"
     And I should see "Request 1"
+    And I should see "This is my wordy request"
     And I should see "Request 2"
     And I should not see "Request 3"
     And I should see "Offer 1"
     And I should see "Offer 2"
     And I should not see "Offer 3"
-    And I should see "This is my wordy offer"
     And I should see "Edit"
     And I should see "Delete"
     
@@ -186,12 +202,12 @@ Feature: Collection
     And I should see "1" within ".collection.meta"
   When I follow "Sign Up"
   When I check "challenge_signup_requests_attributes_0_fandom_28"
+    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
     And I check "challenge_signup_requests_attributes_1_fandom_29"
     And I check "challenge_signup_offers_attributes_0_fandom_27"
-    And I check "challenge_signup_offers_attributes_1_fandom_31"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
-    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Obscure person"    
+    And I check "challenge_signup_offers_attributes_1_fandom_31"
+    And I check "challenge_signup_offers_attributes_1_any_character"
     # TRICKY note here! the index value for the javascript-added request 3 is actually 3; this is 
     # a workaround because otherwise it would display a duplicate number
     # These three commented out so it can run on the command-line
@@ -210,10 +226,10 @@ Feature: Collection
     And I check "challenge_signup_requests_attributes_0_fandom_28"
     And I check "challenge_signup_requests_attributes_1_fandom_29"
     And I check "challenge_signup_offers_attributes_0_fandom_28"
-    And I check "challenge_signup_offers_attributes_1_fandom_31"
+    And I check "challenge_signup_offers_attributes_1_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "Any"
-    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Teyla Emmagan, Obscure person"
-    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, Obscure person"
+    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
     And I press "Submit"
   Then I should see "We couldn't save this ChallengeSignup, sorry!"
     And I should see "The following character tags aren't canonical and can't be used: Any"
@@ -228,12 +244,12 @@ Feature: Collection
     And I follow "Yuletide"
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
-    And I check "challenge_signup_requests_attributes_1_fandom_29"
+    And I check "challenge_signup_requests_attributes_1_fandom_28"
     And I fill in "challenge_signup_requests_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
-    And I check "challenge_signup_offers_attributes_0_fandom_27"
+    And I check "challenge_signup_offers_attributes_0_fandom_29"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard"
-    And I check "challenge_signup_offers_attributes_1_fandom_31"
-    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard"
+    And I check "challenge_signup_offers_attributes_1_fandom_28"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Foo The Wonder Goat, John Sheppard"
     And I press "Submit"
   Then I should see "Signup was successfully created"
   

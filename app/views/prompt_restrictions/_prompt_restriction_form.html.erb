@@ -63,39 +63,50 @@
     	  have to choose from the same set.)
     	</p>
     	
-      <dl>
-        <% restriction.build_tag_set unless restriction.tag_set %>
-        <%= prompt_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
-          <% TagSet::TAG_TYPES.each do |tag_type| %>
-            <dt><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, "#{tag_type.classify}: " %> </dt>
-            <dd>
-              <% tagnames = restriction.tag_set ? eval("restriction.tag_set.#{tag_type}_tagnames") : "" %>
-              <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :rows => (tagnames.size/3 > 10 ? 10 : (tagnames.size/3 < 2 ? 2 : tagnames.size/3)), :cols => 50,
-                    :value => (restriction.tag_set ? restriction.tag_set.send("#{tag_type}_tagnames") : "") %>
+      <% restriction.build_tag_set unless restriction.tag_set %>
+      <%= prompt_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
+        <% TagSet::TAG_TYPES.each do |tag_type| %>
+          <fieldset class="tag_set">
+            <legend><%= ts("%{tag_type} Settings", :tag_type => tag_type.classify) %></legend>
+            <h4><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, "#{tag_type.classify}: " %></h4>
+            <p>
+              <% tagnames = restriction.tag_set ? restriction.tag_set.send("#{tag_type}_tagnames") : "" %>
+              <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :value => tagnames,
+                  :rows => (tagnames.size/3 > 10 ? 10 : (tagnames.size/3 < 2 ? 2 : tagnames.size/3)) %>
               <% tag_fieldname = "#{@challenge.class.name.tableize.singularize}_offer_restriction_attributes_tag_set_attributes_#{tag_type}_tagnames" %>
               <%= autocomplete_text_field(tag_fieldname, :methodname => "canonical_#{tag_type}_finder") %>
-            </dd>
+            </p>
 
             <% if TagSet::TAG_TYPES_INITIALIZABLE.include?(tag_type) %>
-            <dt><%= ts("Initialize tag list: ") %></dt>
-            <dd>
-              <%= tag_set_form.label "#{tag_type}_init_less_than_average", ts("Below the average: ") %>
-              <%= tag_set_form.check_box "#{tag_type}_init_less_than_average" %>
-              <%= tag_set_form.label "#{tag_type}_init_greater_than_average", ts("Above the average: ") %>
-              <%= tag_set_form.check_box "#{tag_type}_init_greater_than_average" %>
-              <%= tag_set_form.label "#{tag_type}_init_factor", ts("Multiply the average by: ") %>
-              <%= tag_set_form.select "#{tag_type}_init_factor", options_for_select(%w{ 0.1 0.25 0.5 0.75 1 5 10 15 20 }), :selected => "1" %>
-            </dd>
+              <h5><%= ts("Initialize tag list: ") %> <%= link_to_help "challenge-initialize-tags" %></h5>
+              <ul>
+                <li>
+                  <%= tag_set_form.label "#{tag_type}_init_less_than_average", ts("Below the average: ") %>
+                  <%= tag_set_form.check_box "#{tag_type}_init_less_than_average" %>
+                </li>
+                <li>
+                  <%= tag_set_form.label "#{tag_type}_init_greater_than_average", ts("Above the average: ") %>
+                  <%= tag_set_form.check_box "#{tag_type}_init_greater_than_average" %>
+                </li>
+                <li>
+                  <%= tag_set_form.label "#{tag_type}_init_factor", ts("Multiply the average by: ") %>
+                  <%= tag_set_form.select "#{tag_type}_init_factor", options_for_select(%w{ 0.1 0.25 0.5 0.75 1 5 10 15 20 }, "1") %>
+                </li>
+              </ul>
             <% end %>
 
             <% if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) %>
-              <dt><%= tag_set_form.label "#{tag_type}_restrict_to_fandom", ts("Restrict to fandom?") %></dt>
-              <dd><%= tag_set_form.check_box "#{tag_type}_restrict_to_fandom", :checked => restriction.tag_set.send("#{tag_type}_restrict_to_fandom") %></dd>
+              <ul>
+                <li>
+                  <%= tag_set_form.label "#{tag_type}_restrict_to_fandom", ts("Restrict to fandom?") %>
+                  <%= tag_set_form.check_box "#{tag_type}_restrict_to_fandom", :checked => restriction.tag_set.send("#{tag_type}_restrict_to_fandom") %>
+                </li>
+              </ul>
             <% end %>
-            
-          <% end %>
+          </fieldset>
         <% end %>
-      </dl>
+      <% end %>
+      
     </fieldset>
   <% end %>
 

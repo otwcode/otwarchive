@@ -59,7 +59,7 @@ class Prompt < ActiveRecord::Base
         # check if user has chosen the "Any" option
         if self.send("any_#{tag_type}")
           if tag_count > 0
-            errors.add(:base, ts("You have specified tags for %{tag_type} in your %{prompt_type} but also chose 'Any,' which will override them! Please only choose one or the other.", 
+            errors.add(:base, ts("^You have specified tags for %{tag_type} in your %{prompt_type} but also chose 'Any,' which will override them! Please only choose one or the other.", 
                                 :tag_type => tag_type, :prompt_type => prompt_type))
           end
           next
@@ -73,15 +73,13 @@ class Prompt < ActiveRecord::Base
               ts("none") :
               "(#{tag_count}) -- " + taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
           if allowed == 0
-            errors.add(:base, ts("#{prompt_type} cannot include any #{tag_type} tags. You currently have %{taglist}.",
+            errors.add(:base, ts("^#{prompt_type} cannot include any #{tag_type} tags. You currently have %{taglist}.",
                                  :taglist => taglist_string))
           elsif required == allowed
-            errors.add(:base, t("tag_set.#{prompt_type}_#{tag_type}_mismatch",
-              :default => "#{prompt_type} must have exactly %{required} #{tag_type} tags. You currently have %{taglist}.",
+            errors.add(:base, ts("^#{prompt_type} must have exactly %{required} #{tag_type} tags. You currently have %{taglist}.",
               :required => required, :taglist => taglist_string))
           else
-            errors.add(:base, t("tag_set.#{prompt_type}_#{tag_type}_range_mismatch",
-              :default => "#{prompt_type} must have between %{required} and %{allowed} #{tag_type} tags. You currently have %{taglist}.",
+            errors.add(:base, ts("^#{prompt_type} must have between %{required} and %{allowed} #{tag_type} tags. You currently have %{taglist}.",
               :required => required, :allowed => allowed, :taglist => taglist_string))
           end
         end
@@ -89,6 +87,8 @@ class Prompt < ActiveRecord::Base
     end
   end
 
+  # make sure that if there is a specified set of allowed tags, the user's choices
+  # are within that set 
   validate :allowed_tags
   def allowed_tags
     restriction = get_prompt_restriction
@@ -97,11 +97,33 @@ class Prompt < ActiveRecord::Base
         # if we have a specified set of tags of this type, make sure that all the
         # tags in the prompt are in the set.
         if restriction.has_tags_of_type?(tag_type)
-          taglist = tag_set ? (eval("tag_set.#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)) : []
+          taglist = tag_set ? (tag_set.send("#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)) : []
           unless taglist.empty?
-            errors.add(:base, t("tag_set.specific_#{tag_type}_tags_not_allowed",
-              :default => "These tags are not allowed in this challenge: %{taglist}",
+            errors.add(:base, ts("^These tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
+              :prompt_type => self.class.name,
               :taglist => taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
+          end
+        end
+      end
+    end
+  end
+  
+  # make sure that if any tags are restricted to fandom, the user's choices are
+  # actually in the fandom they have chosen.
+  validate :restricted_tags
+  def restricted_tags
+    restriction = get_prompt_restriction
+    if restriction && restriction.tag_set && tag_set
+      TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
+        if restriction.tag_set.send("#{tag_type}_restrict_to_fandom")
+          @self_fandom_taglist ||= tag_set.fandom_taglist
+          allowed_tags = tag_type.classify.constantize.with_parents(@self_fandom_taglist).canonical
+          taglist = tag_set.send("#{tag_type}_taglist") - allowed_tags
+          unless taglist.empty?
+            errors.add(:base, ts("^Your %{prompt_type} has some %{tag_type} tags that are not in the selected fandom(s), %{fandom}: %{taglist} (If this is an error, please let us know via the support form!)",
+                              :prompt_type => self.class.name,
+                              :tag_type => tag_type, :fandom => @self_fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
+                              :taglist => taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
         end
       end

@@ -49,31 +49,33 @@ class TagSet < ActiveRecord::Base
   end
   
   # If the user wants to initialize the tags, let them
-  before_validation :init_tags
+  after_save :init_tags
   def init_tags
+    return if @tag_set_initialized
     tags_to_set = []
-    if self.fandom_init_less_than_average == "1" || self.fandom_init_greater_than_average == "1"
-      tags_to_set += Fandom.with_popularity_relative_to_average(:factor => self.fandom_init_factor.to_i, :greater_than => self.fandom_init_greater_than_average == "1")
+    TAG_TYPES_INITIALIZABLE.each do |tag_type|
+      if self.send("#{tag_type}_init_less_than_average") == "1" || self.send("#{tag_type}_init_greater_than_average") == "1"
+        if ArchiveConfig.NO_DELAYS
+          initialize_tags(tag_type.classify.constantize, self.send("#{tag_type}_init_factor").to_f, (self.send("#{tag_type}_init_greater_than_average") == "1"))
+        else
+          delay(:attempts => 3).initialize_tags(tag_type.classify.constantize, self.send("#{tag_type}_init_factor").to_f, (self.send("#{tag_type}_init_greater_than_average") == "1"))
+        end
+      end
     end
-    if self.character_init_less_than_average == "1" || self.character_init_greater_than_average == "1"
-      tags_to_set += Character.with_popularity_relative_to_average(:factor => self.character_init_factor.to_i, :greater_than => self.character_init_greater_than_average == "1")
-    end
-    if self.relationship_init_less_than_average == "1" || self.relationship_init_greater_than_average == "1"
-      tags_to_set += Relationship.with_popularity_relative_to_average(:factor => self.relationship_init_factor.to_i, :greater_than => self.relationship_init_greater_than_average == "1")
-    end
-    if self.freeform_init_less_than_average == "1" || self.freeform_init_greater_than_average == "1"
-      tags_to_set += Freeform.with_popularity_relative_to_average(:factor => self.freeform_init_factor.to_i, :greater_than => self.freeform_init_greater_than_average == "1")
-    end
-    unless tags_to_set.empty?
-      self.tags = tags_to_set
-      @tag_set_initialized = true
-    end
+    @tag_set_initialized = true
   end
-
+  
+  # tag initialization needs to be able to run in the background
+  def initialize_tags(tag_type, factor, greater_than)
+    self.send("#{tag_type.name.underscore}_tagnames=", 
+              tag_type.with_popularity_relative_to_average(:factor => factor, :greater_than => greater_than, :names_only => true).
+                          collect(&:name))
+    save
+  end
+    
   # this actually runs and saves the tags but only after validation
   after_save :assign_tags
   def assign_tags
-    return if @initialized
     if @tagnames
       self.tags = tagnames_to_list(@tagnames)
     end

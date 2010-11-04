@@ -260,12 +260,12 @@ class Tag < ActiveRecord::Base
 
 
   # Get tags that are either above or below the average popularity 
-  def self.with_popularity_relative_to_average(options = {:factor => 1, :include_meta => false, :greater_than => false})
+  def self.with_popularity_relative_to_average(options = {:factor => 1, :include_meta => false, :greater_than => false, :names_only => false})
     comparison = "<"
     comparison = ">" if options[:greater_than]
       
     if options[:include_meta]
-      tags = select("tags.*, filter_counts.unhidden_works_count as count").
+      tags = select("#{options[:names_only] ? "tags.name" : "tags.*"}, filter_counts.unhidden_works_count as count").
                   joins(:filter_count).
                   where(:canonical => true).
                   where("filter_counts.unhidden_works_count #{comparison} (select avg(unhidden_works_count) from filter_counts) * ?", options[:factor]).
@@ -274,7 +274,7 @@ class Tag < ActiveRecord::Base
       meta_tag_ids = select("DISTINCT tags.id").joins(:sub_taggings).where(:canonical => true)
       non_meta_ids = meta_tag_ids.empty? ? select("tags.id").where(:canonical => true) : select("tags.id").where(:canonical => true).where("id NOT IN (#{meta_tag_ids.collect(&:id).join(',')})")
       tags = non_meta_ids.empty? ? [] : 
-                select("tags.*, filter_counts.unhidden_works_count as count").
+                select("#{options[:names_only] ? "tags.name" : "tags.*"}, filter_counts.unhidden_works_count as count").
                   joins(:filter_count).
                   where(:canonical => true).
                   where("tags.id IN (#{non_meta_ids.collect(&:id).join(',')})").

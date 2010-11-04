@@ -15,6 +15,8 @@ class WorksController < ApplicationController
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :download, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
 
+  cache_sweeper :work_sweeper
+
   def search
     @languages = Language.all(:order => :short)
     @query = {}

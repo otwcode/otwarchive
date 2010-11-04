@@ -42,8 +42,7 @@ Feature: Reading count
     When I check "Enable Viewing History"
       And I press "Update"
     Then I should see "Your preferences were successfully updated."
-    When I follow "My History"
-    Then I should see "Number of times viewed: 1"
+      And I should see "Number of times viewed: 1"
       And I should see "Last viewed: 25 May 2010"
     When I am on writer's works page
       And I follow "some work"

@@ -34,6 +34,9 @@ module HtmlCleaner
   def fix_bad_characters(text)
     return "" if text.nil?
     text.gsub! "<3", "&lt;3"
+
+    # convert carriage returns to newlines
+    text.gsub!(/\r\n?/, "\n")
     
     # maybe these will work instead? D:
     # text.gsub! /[\u201C\u201D\u201E\u201F\u2033\u2036]/u, '"'
@@ -121,13 +124,12 @@ module HtmlCleaner
   #    well-formed (not necessarily validating!) xhtml with all tags closed.
   #
   def add_paragraphs_to_text(text)
-    # convert carriage returns to newlines
-    source = text.gsub(/\r\n?/, "\n")
 
     # get rid of spaces and newlines-before/after-paragraphs and linebreaks
-    source.gsub!(/\s*(<p[^>]*>)\s*/, '\1')
-    source.gsub!(/\s*(<\/p>)\s*/, '\1')
-    source.gsub!(/\s*(<br\s*?\/?>)\s*/, '<br />')    
+    # this enables us to avoid converting newlines into paras/breaks where we already have them
+    source = text.gsub(/\s*(<p[^>]*>)\s*/, '\1')   # replace all whitespace before/after <p>
+    source.gsub!(/\s*(<\/p>)\s*/, '\1')            # replace all whitespace before/after </p>
+    source.gsub!(/\s*(<br\s*?\/?>)\s*/, '<br />')  # replace all whitespace before/after <br>  
 
     # do we have a paragraph to start?
     source = '<p>' + source unless source.match(/^<p/)
@@ -155,7 +157,9 @@ module HtmlCleaner
     source.gsub!(/\s*<p[^>]*>\s*<\/p>\s*/, "")
     source.gsub!(/^\s*/, '')
     
-    # get rid of newlines-before/after-paragraphs inserted by to_xhtml
+    # get rid of the newlines-before/after-paragraphs inserted by to_xhtml,
+    # so that when this is loaded up by strip_html_breaks in textarea fields,
+    # 
     source.gsub!(/\s*(<p[^>]*>)\s*/, '\1')
     source.gsub!(/\s*(<\/p>)\s*/, '\1')
     

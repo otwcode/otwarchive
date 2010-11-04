@@ -152,8 +152,8 @@ Feature: Sanitizing HTML
     And I fill in "content" with "<SCRIPT>alert(/XSS/.source)</SCRIPT>"
     And I press "Preview"
   Then I should see "Preview Work"
-    And I should not see "XSS"
-    And I should not find "XSS"
+    And I should see "CDATA"
+    And I should see "alert(/XSS/.source)"
   When I press "Edit"
     And I fill in "content" with `\";alert('XSS');//`
     And I press "Preview"
