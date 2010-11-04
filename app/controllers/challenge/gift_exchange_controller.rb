@@ -33,39 +33,35 @@ class Challenge::GiftExchangeController < ChallengesController
   end
 
   def create
-    @tag_set_initialized = false
     @challenge = GiftExchange.new(params[:gift_exchange])
     if @challenge.save
       @collection.challenge = @challenge
       @collection.save
-      flash[:notice] = 'Challenge was successfully created.'
-      if @tag_set_initialized
-        # we initialized the tag set
-        flash[:notice] += ' Please look over the initial tag set.'
-        render :action => :edit
-      else
-        redirect_to @collection
+      flash[:notice] = ts('Challenge was successfully created.')
+      
+      # see if we initialized the tag set
+      if initializing_tag_sets?
+        flash[:notice] += ts(' The tag list is being initialized. Please wait a short while and then check your challenge settings to customize the results.')
       end
+      redirect_to @collection
     else
       render :action => :new
     end
   end
 
   def update
-    @tag_set_initialized = false
     if @challenge.update_attributes(params[:gift_exchange])
-      flash[:notice] = 'Challenge was successfully updated.'
+      flash[:notice] = ts('Challenge was successfully updated.')
       
       # expire the cache on the signup form
       expire_fragment(:controller => 'challenge_signups', :action => 'new')
       
-      if @initialized
+      # see if we initialized the tag set
+      if initializing_tag_sets?
         # we were asked to initialize the tag set
-        flash[:notice] += ' Please look over the initial tag set.'
-        render :action => :edit
-      else
-        redirect_to @collection
+        flash[:notice] += ts(' The tag list is being initialized. Please wait a short while and then check your challenge settings to customize the results.')
       end
+      redirect_to @collection
     else
       render :action => :edit
     end
@@ -76,5 +72,15 @@ class Challenge::GiftExchangeController < ChallengesController
     flash[:notice] = 'Challenge settings were deleted.'
     redirect_to @collection
   end
+  
+  private
+  def initializing_tag_sets?
+    # uuughly :P but check params to see if we're initializing 
+    !params[:gift_exchange][:offer_restriction_attributes][:tag_set_attributes].keys.
+      select {|k| k=~ /init_(less|greater)/}.
+      select {|k| params[:gift_exchange][:offer_restriction_attributes][:tag_set_attributes][k] == "1"}.
+      empty?
+  end
+
 
 end
