@@ -8,5 +8,5 @@ begin
           :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED)
     settings.save(:validate => false)
   end
-rescue
+rescue ActiveRecord::ConnectionNotEstablished
 end

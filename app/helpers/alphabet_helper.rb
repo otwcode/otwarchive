@@ -1,13 +1,13 @@
 module AlphabetHelper
-  
+
   def link_to_letter(letter, text = "")
     link_to_unless_current(text.blank? ? letter : text, url_for(params.merge :letter => letter, :page => 1))
   end
-  
+
   def alpha_paginated_section(alphabet = People.all.map(&:char))
-    return "" if alphabet.blank? 
+    return "" if alphabet.blank?
     active_letter = params[:letter] || alphabet[0]
-    return "" if active_letter.nil? 
+    return "" if active_letter.nil?
     active_letter_index = alphabet.index(active_letter.upcase) || 0
     previous_letter = alphabet[active_letter_index-1]
     next_letter = alphabet[active_letter_index+1]
@@ -16,7 +16,7 @@ module AlphabetHelper
     # if there is no "previous" page, don't link
     unless active_letter_index == 0
       block << '<span class="prev_page">'
-      block << link_to_letter(previous_letter, '&laquo; ' + h(ts('Previous')))
+      block << link_to_letter(previous_letter, '&laquo; '.html_safe + h(ts('Previous')))
       block << '</span>'
     else
       block << '<span class="disabled prev_page">&laquo; ' + h(ts('Previous')) + '</span>'
@@ -42,7 +42,7 @@ module AlphabetHelper
     block << "</div>"
     block.html_safe
   end
-  
+
   def people_paginated_section(type)
     active_letter = params[:id].upcase
     block = '<div class="pagination">'
@@ -56,14 +56,14 @@ module AlphabetHelper
          ''
     end
     People.all.each do |character|
-      link = "<a href=\"/people/" + character.to_param + show + "\">" + character.char + "</a>" 
+      link = "<a href=\"/people/" + character.to_param + show + "\">" + character.char + "</a>"
       unless character.char == active_letter
         block << " " + link
       else
         block << ' <span class="current">' + link + '</span>'
       end
     end
-    
+
     block << "</div>"
     block.html_safe
   end

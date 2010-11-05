@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h 'Archive Settings' %></h2>
+<h2><%= ts('Archive Settings') %></h2>
 <!--/descriptions-->
 
 <!--main content-->
@@ -21,24 +21,24 @@
     <dt><%= f.label :days_to_purge_unactivated, "How much time (in days) do you have for activating your account before we purge it:" %> </dt>
     <dd><%= f.text_field :days_to_purge_unactivated, :size => "3" %></dd>
     <dt><%= f.label :suspend_filter_counts, "Suspend some filter tracking due to high posting volume" %></dt>
-	  <dd><%= f.check_box :suspend_filter_counts %> </dd>    
+    <dd><%= f.check_box :suspend_filter_counts %> </dd>
     <dt><%= f.label :tag_wrangling_off, "Turn off tag wrangling for non-admins" %></dt>
     <dd><%= f.check_box :tag_wrangling_off %></dd>
     <dt><%= f.label :enable_test_caching, "Turn on caching (currently experimental)" %></dt>
     <dd><%= f.check_box :enable_test_caching %> </dd>
     <dt><%= f.label :cache_expiration, "How often (in minutes) should we refresh caching:" %></dt>
     <dd><%= f.text_field :cache_expiration, :size => "3" %></dd>
-        
+
 </dl>
     <p><%= f.hidden_field :last_updated_by, :value => current_admin.id %></p>
     <p class="submit"><%= f.submit 'Update' %></p>
 <% end %>
 <hr class="clear" />
   <% if @admin_setting.invite_from_queue_enabled? %>
-  <p><%= @admin_setting.invite_from_queue_number %> people are scheduled to be sent invitations on 
-  <%= l(@admin_setting.invite_from_queue_at.to_date, :format => :long) %>.</p> 
-  
-  <p>(The automatic task that invites people from the queue only runs once a day. Don't be alarmed if the date you see is yesterday's. 
+  <p><%= @admin_setting.invite_from_queue_number %> people are scheduled to be sent invitations on
+  <%= l(@admin_setting.invite_from_queue_at.to_date, :format => :long) %>.</p>
+
+  <p>(The automatic task that invites people from the queue only runs once a day. Don't be alarmed if the date you see is yesterday's.
   Do be alarmed if the date you see is more than one day in the past and the queue is supposed to be active.)</p>
   <% end %>
 

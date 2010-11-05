@@ -1,15 +1,23 @@
 <%= render :partial => 'tags/search_form' %>
 
+<% unless @collection %>
 <ul role="navigation" class="navigation">
-  <li><a href="?show=popular"><%= t('.most_popular', :default => 'Most Popular')%></a></li>
-  <li><a href="?show=random"><%= t('.random', :default => 'Random')%></a></li>
+  <li><%= link_to_if params[:show], ts('Most Popular'), tags_path %></li>
+  <li><%= link_to ts('Random'), tags_path(:show => "random") %></li>
 </ul>
+<% end %>
 
 <% if @tags %>
-<h2 class="landmark"><% if params[:show] == "popular" %><%= t('.popular_tags', :default => 'Popular Tags')%><% else %><%= t('.random_tags', :default => 'Random Tags')%><% end %></h2>
+<h2 class="landmark">
+  <% if params[:show] == "popular" %>
+    <%= ts('Popular Tags')%>
+  <% else %>
+    <%= ts('Random Tags')%>
+  <% end %>
+</h2>
 <ul>
-	<% tag_cloud @tags, %w(cloud1 cloud2 cloud3 cloud4 cloud5 cloud6 cloud7 cloud8) do |tag, css_class| %>
-	<li><%= link_to_tag_works_with_text(tag, tag.name, :class => css_class.dup) %></li>
+  <% tag_cloud @tags, %w(cloud1 cloud2 cloud3 cloud4 cloud5 cloud6 cloud7 cloud8) do |tag, css_class| %>
+  <li><%= link_to_tag_works_with_text(tag, tag.name, :class => css_class.dup) %></li>
   <% end %>
 </ul>
 <% end %>

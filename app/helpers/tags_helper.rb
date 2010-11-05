@@ -1,5 +1,5 @@
 module TagsHelper
-  
+
   # Takes an array of tags and returns a marked-up, comma-separated list
   def tag_link_list(tags)
     tags = tags.uniq.compact
@@ -7,14 +7,14 @@ module TagsHelper
       last_tag = tags.pop
       tag_list = tags.collect{|tag| "<li>" + link_to_tag(tag) + ", </li>"}.join
       tag_list += content_tag(:li, link_to_tag(last_tag))
-      tag_list.html_safe     
+      tag_list.html_safe
     end
   end
 
   def description(tag)
     tag.name + " (" + tag.class.name + ")"
   end
-  
+
   # Adds the appropriate css classes for the tag index page
   def tag_cloud(tags, classes)
     max, min = 0, 0
@@ -34,7 +34,7 @@ module TagsHelper
   def tag_wrangler_footer
     render :partial => 'tag_wranglings/footer'
   end
-  
+
   def wrangler_list(wranglers)
     if wranglers.blank?
       link_to "Sign Up", tag_wranglers_path
@@ -48,8 +48,8 @@ module TagsHelper
   end
 
   def link_to_tag_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ? 
-    {:controller => :tags, :action => :show, :id => tag, :collection_id => @collection} : 
+    link_to_with_tag_class(@collection ?
+    {:controller => :tags, :action => :show, :id => tag, :collection_id => @collection} :
     {:controller => :tags, :action => :show, :id => tag}, link_text, options)
   end
 
@@ -59,8 +59,8 @@ module TagsHelper
   end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ? 
-    {:controller => :works, :action => :index, :tag_id => tag, :collection_id => @collection} : 
+    link_to_with_tag_class(@collection ?
+    {:controller => :works, :action => :index, :tag_id => tag, :collection_id => @collection} :
     {:controller => :works, :action => :index, :tag_id => tag}, link_text, options)
   end
 
@@ -69,17 +69,17 @@ module TagsHelper
     options[:class] ? options[:class] << " tag" : options[:class] = "tag"
     link_to text, path, options
   end
-  
+
   # Used on tag edit page
   def tag_category_name(tag_type)
     tag_type == "Merger" ? "Synonyms" : tag_type.pluralize
   end
-  
+
   # Should the current user be able to access tag wrangling pages?
   def can_wrangle?
     logged_in_as_admin? || (current_user.is_a?(User) && current_user.is_tag_wrangler?)
   end
-  
+
   def taggable_list(tag, controller_class)
     taggable_things = ["bookmarks", "works"]
     list = []
@@ -88,12 +88,12 @@ module TagsHelper
     end
     list.map{|li| "<li>" + li + "</li>"}.join.html_safe
   end
-  
+
   # Determines whether or not to display warnings for a creation
   def hide_warnings?(creation)
     current_user.is_a?(User) && current_user.preference && current_user.preference.hide_warnings? && !current_user.is_author_of?(creation)
   end
-  
+
   # Determines whether or not to display freeform tags for a creation
     def hide_freeform?(creation)
     current_user.is_a?(User) && current_user.preference && current_user.preference.hide_freeform? && !current_user.is_author_of?(creation)
@@ -105,13 +105,13 @@ module TagsHelper
     url = {:controller => 'tags', :action => 'show_hidden', :creation_type => creation.class.to_s, :creation_id => creation.id, :tag_type => tag_type }
     link_to text, url, :remote => true
   end
-  
+
   # Makes filters show warnings display name
   def label_for_filter(type, tag_info)
     name = (type == "Warning") ? warning_display_name(tag_info[:name]) : tag_info[:name]
     name + " (#{tag_info[:count]})"
-  end 
-  
+  end
+
   # Changes display name of warnings in works blurb
   def warning_display_name(name)
     case name
@@ -133,7 +133,7 @@ module TagsHelper
       return name
     end
   end
-  
+
   # Individual results for a tag search
   def tag_search_result(tag)
     if tag
@@ -142,7 +142,7 @@ module TagsHelper
     end
     span.html_safe
   end
-  
+
   def tag_comment_link(tag)
     count = tag.total_comments.count.to_s
     if count == "0"
@@ -152,14 +152,14 @@ module TagsHelper
     end
     link_text = count + " comments" + last_comment
     link_to link_text, {:controller => :comments, :action => :index, :tag_id => tag.name}
-  end 
-  
+  end
+
   def show_wrangling_dashboard
-    %w(tag_wranglings tag_wranglers).include?(controller.controller_name) || 
-    (can_wrangle? && controller.controller_name == 'tags') || 
+    %w(tag_wranglings tag_wranglers).include?(controller.controller_name) ||
+    (can_wrangle? && controller.controller_name == 'tags') ||
     (@tag && controller.controller_name == 'comments')
   end
-  
+
   # Returns a nested list of meta tags
   def meta_tag_tree(tag)
     meta_ul = ""
@@ -175,8 +175,8 @@ module TagsHelper
     end
     meta_ul.html_safe
   end
-  
-  # Returns a nested list of sub tags 
+
+  # Returns a nested list of sub tags
   def sub_tag_tree(tag)
     sub_ul = ""
     unless tag.direct_sub_tags.empty?
@@ -189,17 +189,17 @@ module TagsHelper
       end
       sub_ul << "</ul>"
     end
-    sub_ul
+    sub_ul.html_safe
   end
-  
-  
+
+
   def blurb_tag_block(item, tag_groups=nil)
     item_class = item.class.to_s.underscore
     tag_groups ||= item.tag_groups
     categories = ['Warning', 'Relationship', 'Character', 'Freeform']
     last_tag = categories.collect { |c| tag_groups[c] }.flatten.compact.last
-    tag_block = ""   
-    
+    tag_block = ""
+
     categories.each do |category|
       if tags = tag_groups[category]
         class_name = category.downcase.pluralize
@@ -215,7 +215,7 @@ module TagsHelper
           tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
         else
           link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
-          tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'        
+          tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'
         end
       end
     end
@@ -229,24 +229,24 @@ module TagsHelper
       category_name.blank? ? "" : "No" + " " + category_name
     end
   end
-  
-  # produce our spiffy pretty block of tag symbols 
+
+  # produce our spiffy pretty block of tag symbols
   def get_symbols_for(item, tag_groups=nil, symbols_only = false)
     symbol_block = []
     symbol_block << "<ul class=\"required-tags\">" unless symbols_only
-    
+
     # split up the item's tags into groups based on type
     tag_groups ||= item.tag_groups
 
     warnings = tag_groups['Warning']
     symbol_block << get_symbol_link(get_warnings_class(warnings), get_title_string(warnings))
-   
+
     ratings = tag_groups['Rating']
     symbol_block << get_symbol_link(get_ratings_class(ratings), get_title_string(ratings, "rating"))
-    
+
     categories = tag_groups['Category']
     symbol_block << get_symbol_link(get_category_class(categories), get_title_string(categories, "category"))
-    
+
     if item.class == Work
       if item.is_wip
         symbol_block << get_symbol_link("Work in Progress", "complete-no iswip")
@@ -254,7 +254,7 @@ module TagsHelper
         symbol_block << get_symbol_link("Complete Work", "complete-yes iswip")
       end
     elsif item.class == Series
-      if item.complete? 
+      if item.complete?
         symbol_block << get_symbol_link("Complete Series", "complete-yes iswip")
       else
         symbol_block << get_symbol_link("Series in Progress", "category-none iswip")
@@ -262,15 +262,15 @@ module TagsHelper
     elsif item.class == ExternalWork
       symbol_block << get_symbol_link('external-work', "External Work")
     end
-    
+
     symbol_block << "</ul>" unless symbols_only
     return symbol_block.join("\n").html_safe
   end
-  
+
   def get_symbol_link(css_class, title_string)
     content_tag(:li, link_to_help('symbols-key', link = ("<span class=\"#{css_class}\" title=\"#{title_string}\"><span class=\"text\">" + title_string + "</span></span>").html_safe))
   end
-  
+
   # return the right warnings class
   def get_warnings_class(warning_tags = [])
     if warning_tags.blank? # for testing

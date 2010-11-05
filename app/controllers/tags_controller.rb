@@ -9,10 +9,13 @@ class TagsController < ApplicationController
     if @collection
       @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
     else
+      no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
+      @tags = no_fandom.children.by_type("Freeform").canonical.first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)
+      # have to sort at the end instead of order('name ASC'), because random and popular both use order by
       if params[:show] == "random"
-        @tags = Freeform.for_tag_cloud_random
+        @tags = @tags.random.sort
       else
-        @tags = Freeform.for_tag_cloud_popular
+        @tags = @tags.popular.sort
       end
     end
 
@@ -21,7 +24,7 @@ class TagsController < ApplicationController
       format.js
     end
   end
-  
+
   def search
     @query = {}
     if params[:query]
@@ -158,7 +161,7 @@ class TagsController < ApplicationController
     @counts['Bookmarks'] = @tag.visible_bookmarks_count
     @counts['Private Bookmarks'] = @tag.bookmarks.not_public.count
     @counts['External Works'] = @tag.visible_external_works_count
-   
+
     @parents = @tag.parents.find(:all, :order => :name).group_by {|tag| tag[:type]}
     @parents['MetaTag'] = @tag.direct_meta_tags.by_name
     @children = @tag.children.find(:all, :order => :name).group_by {|tag| tag[:type]}
@@ -174,7 +177,7 @@ class TagsController < ApplicationController
 
   def update
     @tag = Tag.find_by_name(params[:id])
-    # update everything except for the synonym, 
+    # update everything except for the synonym,
     # so that the associations are there to move when the synonym is created
     syn_string = params[:tag].delete(:syn_string)
     @tag.attributes = params[:tag]
@@ -185,7 +188,7 @@ class TagsController < ApplicationController
         params[:page] = '1' if params[:page].blank?
         params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], "tag")
         params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
-        redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])        
+        redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])
       else
         redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
       end
@@ -198,30 +201,30 @@ class TagsController < ApplicationController
       render :edit
     end
   end
-  
+
   def remove_association
     @tag = Tag.find_by_name(params[:id])
     unless @tag
       raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
     end
-    if params[:to_remove]   
+    if params[:to_remove]
       tag_to_remove = Tag.find_by_name(params[:to_remove])
       @tag.remove_association(tag_to_remove)
     end
     flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
-    redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)    
+    redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
   end
-  
+
   def wrangle
     @tag = Tag.find_by_name(params[:id])
     unless @tag
       raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
-    end    
+    end
     @counts = {}
-    @tag.child_types.map{|t| t.underscore.pluralize.to_sym}.each do |tag_type|      
+    @tag.child_types.map{|t| t.underscore.pluralize.to_sym}.each do |tag_type|
       @counts[tag_type] = @tag.send(tag_type).count
     end
-    
+
     if %w(fandoms characters relationships freeforms sub_tags mergers).include?(params[:show])
       params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
@@ -230,16 +233,16 @@ class TagsController < ApplicationController
         sort = sort + ", name ASC"
       end
       # this makes sure params[:status] is safe
-      if %w(unfilterable canonical noncanonical).include?(params[:status])          
+      if %w(unfilterable canonical noncanonical).include?(params[:status])
         @tags = @tag.send(params[:show]).send(params[:status]).order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       elsif params[:status] == "unwrangled"
         @tags = @tag.same_work_tags.unwrangled.by_type(params[:show].singularize.camelize).order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
       else
         @tags = @tag.send(params[:show]).find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
-      end       
-    end    
+      end
+    end
   end
-  
+
   def mass_update
     params[:page] = '1' if params[:page].blank?
     params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
@@ -261,6 +264,6 @@ class TagsController < ApplicationController
         flash[:error] = "The following tags weren't saved: #{not_saved.collect(&:name).join(', ')}"
       end
     end
-    redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])            
-  end  
+    redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])
+  end
 end

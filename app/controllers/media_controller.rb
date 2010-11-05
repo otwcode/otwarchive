@@ -1,5 +1,6 @@
 class MediaController < ApplicationController
   before_filter :load_collection
+  skip_before_filter :store_location, :only => [:show]
 
   def index
     @media = Media.all - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
@@ -10,7 +11,7 @@ class MediaController < ApplicationController
       else
         @fandom_listing[medium] = (logged_in? || logged_in_as_admin?) ?
           # was losing the select trying to do this through the parents association
-          Fandom.unhidden_top(5).find(:all, :joins => :common_taggings, :conditions => {:canonical => true, :common_taggings => {:filterable_id => medium.id, :filterable_type => 'Tag'}}) : 
+          Fandom.unhidden_top(5).find(:all, :joins => :common_taggings, :conditions => {:canonical => true, :common_taggings => {:filterable_id => medium.id, :filterable_type => 'Tag'}}) :
           Fandom.public_top(5).find(:all, :joins => :common_taggings, :conditions => {:canonical => true, :common_taggings => {:filterable_id => medium.id, :filterable_type => 'Tag'}})
       end
     end

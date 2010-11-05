@@ -1,4 +1,3 @@
-<%= stylesheet_link_tag 'font', :media => 'screen' %>
 <%= stylesheet_link_tag 'archive_core', :media => 'all' %>
 <%= stylesheet_link_tag 'system-messages', :media => 'screen' %>
 <%= stylesheet_link_tag 'site-chrome', :media => 'screen' %>
@@ -10,7 +9,9 @@
 <% if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' %>
   <%= stylesheet_link_tag 'translations', :media => 'screen' %>
 <% end %>
-<%= logged_in_as_admin? ? (stylesheet_link_tag 'admin', :media => 'screen') : "" %>
+<% if logged_in_as_admin? %>
+  <%= stylesheet_link_tag 'admin', :media => 'screen' %>
+<% end %>
 
 <%= stylesheet_link_tag 'handheld', :media => 'handheld' %>
 <%= stylesheet_link_tag 'aural', :media => 'speech' %>
@@ -42,8 +43,6 @@
 <%= stylesheet_link_tag 'ie8_overrides', :media => 'all' %>
 <![endif]-->
 
-
-
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
 <%= yield :tinymce %>
 <%= javascript_include_tag 'jquery-1.3.2.min.js' %>
@@ -64,8 +63,8 @@
     <% if s.margin %>#chapters {margin: auto <%= s.margin %>% 2.5em; padding: 0.5em <%= s.margin %>% 0;}<% end %>
     <% if s.background_color || s.foreground_color || s.font || s.base_em %>
     <% bgcolor = s.background_color ? s.background_color : "#FFFEF9" %>
-      body	{background: <%= bgcolor %>; 
-        color: <%= s.foreground_color ? s.foreground_color : "#222" %>; 
+      body	{background: <%= bgcolor %>;
+        color: <%= s.foreground_color ? s.foreground_color : "#222" %>;
         font: <%= s.base_em ? s.base_em : "100" %>%/1.125 <%= s.font ? s.font : "'Lucida Grande', Verdana, Helvetica, Arial, sans-serif" %>;}
     <% end %>
     <%= current_user.preference.skin.css %>

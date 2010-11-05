@@ -7,19 +7,19 @@
 <% end %>
 
 <div id="header"<% if @collection %> class="collection"<% end %> role="banner">
-	<% if @collection %>
-	  <h1 class="collection"><%= link_to ArchiveConfig.APP_NAME, root_path %> (BETA)</h1>
-	<% end %>
+  <% if @collection %>
+    <h1 class="collection"><%= link_to ArchiveConfig.APP_NAME, root_path %> (BETA)</h1>
+  <% end %>
   <div id="login-block">
   <% if logged_in? || logged_in_as_admin? %>
     <%= render :partial => 'user_sessions/greeting' %>
   <% else %>
     <ul id="greeting" class="logged-out">
       <li>
-		    <%= render :partial => 'user_sessions/login' %>
+        <%= render :partial => 'user_sessions/login' %>
         <span><a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%=h t('.layout.header.sign_in', :default => 'Log in') %></a>
         <a id='signin_open' onclick='toggleLogin("signin")'><%=h t('.links.cancel', :default => 'Cancel') %></a></span>
-		  </li>
+      </li>
     </ul>
   <% end %>
   <%= render :partial => 'works/search_box' %>
@@ -43,7 +43,7 @@
     <li><%= span_if_current('tags', tags_path) %></li>
     <li><%= span_if_current('collections', collections_path) %></li>
   </ul>
-	
+
   <% if logged_in_as_admin? %>
     <%= render :partial => 'admin/header' %>
   <% end %>
