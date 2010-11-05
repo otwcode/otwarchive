@@ -5,7 +5,9 @@
            xmlns:opf="http://www.idpf.org/2007/opf">
     <dc:title><%= @work.title %></dc:title> 
     <dc:creator><%= @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', ') %></dc:creator>
-    <dc:language><%= @work.language.short %></dc:language> 
+    <% if @work.language %>
+      <dc:language><%= @work.language.short %></dc:language> 
+    <% end %>
     <dc:publisher><%= ArchiveConfig.APP_NAME %></dc:publisher> 
     <dc:identifier id="bookid">urn:uuid:<%= @uuid %></dc:identifier>
   </metadata>
