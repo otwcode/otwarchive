@@ -12,55 +12,69 @@ class ApplicationController < ActionController::Base
   helper_method :current_admin
   helper_method :logged_in?
   helper_method :logged_in_as_admin?
-  
+
 protected
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
     @current_user_session = UserSession.find
   end
-  
+
   def current_user
     @current_user = current_user_session && current_user_session.record
   end
-  
+
   def current_admin_session
     return @current_admin_session if defined?(@current_admin_session)
     @current_admin_session = AdminSession.find
   end
-  
+
   def current_admin
     @current_admin = current_admin_session && current_admin_session.record
   end
-  
-  def logged_in? 
+
+  def logged_in?
     current_user.nil? ? false : true
   end
-  
+
   def logged_in_as_admin?
     current_admin.nil? ? false : true
   end
-  
+
 public
 
   # store previous page in session to make redirecting back possible
+  # if already redirected once, don't redirect again.
   before_filter :store_location
   def store_location
-    session[:return_to] = request.fullpath
-    Rails.logger.debug "Return to: #{session[:return_to]}"
+    if session[:return_to] == "redirected"
+      Rails.logger.debug "Return to back would cause infinite loop"
+      session.delete(:return_to)
+    else
+      session[:return_to] = request.fullpath
+      Rails.logger.debug "Return to: #{session[:return_to]}"
+    end
   end
 
   # Redirect to the URI stored by the most recent store_location call or
   # to the passed default.
   def redirect_back_or_default(default = root_path)
-    session[:return_to] ? redirect_to(session[:return_to]) : redirect_to(default)
-    session[:return_to] = nil
+    back = session[:return_to]
+    session.delete(:return_to)
+    if back
+      Rails.logger.debug "Returning to #{back}"
+      session[:return_to] = "redirected"
+      redirect_to(back) and return
+    else
+      Rails.logger.debug "Returning to default (#{default})"
+      redirect_to(default) and return
+    end
   end
 
   # Filter method - keeps users out of admin areas
   def admin_only
     logged_in_as_admin? || admin_only_access_denied
   end
-  
+
   # Filter method to prevent admin users from accessing certain actions
   def users_only
     logged_in? || access_denied
@@ -78,18 +92,18 @@ public
     store_location
     if logged_in?
       destination = options[:redirect].blank? ? user_path(current_user) : options[:redirect]
-      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach." 
+      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach."
       redirect_to destination
     else
       destination = options[:redirect].blank? ? new_user_session_path : options[:redirect]
-      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach. Please log in." 
-      redirect_to destination            
+      flash[:error] = ts "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
+      redirect_to destination
     end
     false
-  end  
+  end
 
   def admin_only_access_denied
-    flash[:error] = ts("I'm sorry, only an admin can look at that area.") 
+    flash[:error] = ts("I'm sorry, only an admin can look at that area.")
     redirect_to root_path
     false
   end
@@ -101,7 +115,7 @@ public
       redirect_to root_path
     end
   end
-  
+
   # Prevents admin from logging in as users
   def admin_logout_required
     if logged_in_as_admin?
@@ -109,8 +123,8 @@ public
       redirect_to root_path
     end
   end
-  
-  
+
+
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
   before_filter :set_current_user
@@ -150,7 +164,7 @@ public
     else
       @page_title = title + " - " + author + " - " + fandom
     end
-    
+
     @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
     @page_title
   end
@@ -247,7 +261,7 @@ public
       access_denied if (is_hidden && !can_view_hidden)
     end
   end
-  
+
   # Make sure user is allowed to access tag wrangling pages
   def check_permission_to_wrangle
     if AdminSetting.tag_wrangling_off? && !logged_in_as_admin?

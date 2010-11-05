@@ -60,7 +60,7 @@
       <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
     </div>
   </li>
-  
+
   <li>
     <a onclick="subnav_view.toggle()" title="Download Options"><%= ts("Download") %> &#8595;</a>
     <ul id="subnav">
@@ -68,7 +68,7 @@
       <li><%= link_to(ts("Epub"), download_work_path(@work, :format => :epub)) %></li>
       <li><%= link_to(ts("PDF"), download_work_path(@work, :format => :pdf)) %></li>
       <li><%= link_to(ts("HTML"), download_work_path(@work, :format => :html)) %></li>
-			<li><a onclick="subnav_view.toggle()" style='cursor: pointer;' title="Close Download Options">Close</a></li>
+      <li><a onclick="subnav_view.toggle()" style='cursor: pointer;' title="Close Download Options">Close</a></li>
     </ul>
   </li>
 </ul>
@@ -85,11 +85,11 @@
 <% end %>
 
 <div class="preface">
-	<h2 class="title">
+  <h2 class="title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
     <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
     <%= @work.title %>
-	</h2>
+  </h2>
   <h3 class="byline">
    <%= byline(@work) %>
   </h3>
@@ -98,7 +98,7 @@
 
     <% unless @work.summary.blank? %>
       <div class="summary module" role="complementary">
-        <h3><%=h ts("Summary:") %></h3>
+        <h3><%= ts("Summary:") %></h3>
         <% unless @work.summary.blank? %>
           <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
         <% end %>
@@ -108,7 +108,7 @@
     <% unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? && @work.approved_children.blank? %>
       <% current_page?(:controller => 'chapters', :action => 'show') ? linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : (params[:view_full_work] == 'true' ? linkpath = work_path(@work, :view_full_work => 'true', :anchor => 'work_endnotes') : linkpath = work_path(@work, :anchor => 'work_endnotes')) %>
       <div class="notes module" role="complementary">
-      <h3><%=h ts("Notes:") %></h3>
+      <h3><%= ts("Notes:") %></h3>
         <% unless @work.recipients.blank? %>
           <h4 class="inline"><%= ts("For") %> <%= recipients_link(@work) %></h4>
         <% end %>
@@ -122,9 +122,6 @@
               <%= ts('Inspired by') %>
             <% end %>
             <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>
-            <% if is_author_of?(@work) && !@downloading %>
-              <%= link_to ts('[Remove link]'), {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %>
-            <% end %>
             </h4>
           <% end %>
         <% end %>
@@ -133,7 +130,7 @@
       <% for related_work in @work.approved_related_works %>
         <% if related_work.translation %>
           <h4>
-          <%=h ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
+          <%= ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
           <%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %>
           </h4>
         <% else %><% if @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? %>
@@ -144,13 +141,13 @@
     <% unless @work.notes.blank? && @work.endnotes.blank? %>
     <% if @work.notes.blank? %>
         <span class="endnotes-link">
-	<%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>
+  <%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>
         </span>
     <% else %>
         <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
         <% unless @work.endnotes.blank? %>
           <span class="endnotes-link">
-	  <%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>
+    <%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>
           </span>
         <% end %>
     <% end %>

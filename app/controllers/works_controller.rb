@@ -445,13 +445,12 @@ public
 
   # PUT /works/1
   def update
+    # Need to get @pseuds and @series values before rendering edit
+    load_pseuds
+    @series = current_user.series.uniq
     unless @work.errors.empty?
       render :edit and return
     end
-
-    # Need to update @pseuds and @selected_pseuds values so we don't lose new co-authors if the form needs to be rendered again
-    load_pseuds
-    @series = current_user.series.uniq
 
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
       @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)

@@ -1,21 +1,21 @@
 <!-- Co-Author stuff -->
 
 <dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' %>>
-  <%= label_tag "#{type}_author_attributes_ids_", t('.byline_select_author', :default => "Select author/pseudonym(s)") %>
+  <%= label_tag "#{type}_author_attributes_ids_", ts("Select author/pseudonym(s)") %>
 </dt>
 <dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' %>>
-  <%= select_tag "#{type}[author_attributes][ids][]", 
-      options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds), :multiple => true %>	 
+  <%= select_tag "#{type}[author_attributes][ids][]",
+      options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds), :multiple => true %>
 </dd>
 
 <% unless @coauthors.blank? %>
 <%= '<select name="' + h(type) + '[author_attributes][coauthors][]" multiple="multiple" style="display: none;">' %>
-  <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>  
+  <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>
 </select>
 <% end %>
 
 <% if @coauthors.size > 0 %>
-  <dt class="byline"><%= t('.current_coauthors', :default => "Current Co-authors:") %> </dt>
+  <dt class="byline"><%= ts("Current Co-authors:") %> </dt>
     <dd class="byline">
       <ul>
         <% for author in @coauthors %>
@@ -29,14 +29,14 @@
   <%= check_box_tag "co-authors-options-show", "1", nil, :onclick => "toggleFormField('co-authors-options');" %>
 </dt>
 <dd class="byline coauthors">
-  <%= label_tag "co-authors-options-show", t('.add_coauthors', :default => 'Add co-authors?') %>
-</dd>        
+  <%= label_tag "co-authors-options-show", ts('Add co-authors?') %>
+</dd>
 <dd id="co-authors-options">
   <dl class="coauthors">
-    <dt><%= label_tag :pseud_byline, t('.pseuds.enter_coauthors', :default => "Enter co-author name(s):") %></dt>
+    <dt><%= label_tag :pseud_byline, ts("Enter co-author name(s):") %></dt>
     <dd>
       <%= text_field :pseud, :byline, :size => 50 %>
       <%= autocomplete_text_field "pseud_byline" %>
     </dd>
-  </dl>            
+  </dl>
 </dd>

@@ -1,8 +1,6 @@
-<!--Descriptive page name, messages and instructions--
+<!--Descriptive page name, messages and instructions-->
 <% if @user %>
-<h2>Works related to those by <%= link_to @user.login, @user %></h2>
-<% else %>
-<h2>Related Works</h2>
+<h2><%= @user.login %>'s Related Works</h2>
 <% end %>
 <!--/descriptions-->
 
@@ -11,9 +9,9 @@
 
 <!--main content-->
 <% unless @related_works_as_parent.blank? %>
-  
+
   <h3>Works inspired by <%= @user.login %>'s works</h3>
-  
+
   <table id="inspiredbyme">
     <thead>
       <tr>
@@ -30,7 +28,7 @@
       <% if related_work.parent && related_work.work %>
       <tr>
         <% if related_work.work.unrevealed? %>
-          <td><%= "A work in an unrevealed challenge" %></td>  
+          <td><%= "A work in an unrevealed challenge" %></td>
         <% else %>
           <td><%= link_to related_work.parent.title, related_work.parent %></td>
           <td><%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %></td>
@@ -44,7 +42,7 @@
               <td><%= link_to "Remove", related_work %></td>
             <% else %>
               <td><%= link_to "Approve", related_work %></td>
-            <% end %>        
+            <% end %>
           <% end %>
         <% end %>
       </tr>
@@ -55,9 +53,9 @@
 <% end %>
 
 <% unless @related_works_as_child.blank? %>
-  
+
   <h3>Works <%= @user.login %>'s works were inspired by</h3>
-  
+
   <table id="myinspirations">
     <thead>
       <tr>
@@ -74,7 +72,7 @@
       <% if related_work.parent && related_work.work %>
       <tr>
         <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
-        <td><%= "A work in an unrevealed or anonymous challenge" %></td>  
+        <td><%= "A work in an unrevealed or anonymous challenge" %></td>
         <% else %>
           <td><%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %></td>
           <td><%= link_to related_work.work.title, related_work.work %></td>
@@ -84,7 +82,7 @@
             <% end %>
           </td>
           <% if current_user == @user %>
-          <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></td>
+          <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></td>
           <% end %>
         <% end %>
       </tr>

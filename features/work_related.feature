@@ -95,7 +95,12 @@ Scenario: Posting new works with related works, then editing
   Then I should see "Link was successfully approved"
     And I should see "Works inspired by this one:"
     And I should see "Followup by remixer"
-  When I follow "[Remove link]"
+  When I follow "my home"
+  Then I should see "My Related Works (1)"
+  When I follow "My Related Works"
+    And I follow "Remove"
+  Then I should see "Remove Link"
+  When I press "Remove link"
   Then I should see "Link was successfully removed"
     And I should not see "Followup by remixer"
   When I am logged out

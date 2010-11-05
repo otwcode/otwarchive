@@ -1,66 +1,77 @@
 class RelatedWorksController < ApplicationController
-  
-  before_filter :parent_author_only, :only => [ :show, :update ]
-  before_filter :child_author_only, :only => :destroy
-  
-  def parent_author_only
-    if params[:parent_id]
-      @related_work = RelatedWork.find(:first, :conditions => {:parent_id => params[:parent_id], :work_id => params[:work_id]})
-    else
-      @related_work = RelatedWork.find(params[:id])
-    end
-    unless logged_in? && !(current_user.pseuds & @related_work.parent.pseuds).empty? 
-      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
-      redirect_to(works_url)
-    end  
-  end
-  
-  def child_author_only
-    if params[:parent_id]
-      @related_work = RelatedWork.find(:first, :conditions => {:parent_id => params[:parent_id], :work_id => params[:work_id]})
-    else
-      @related_work = RelatedWork.find(params[:id])
-    end
-    unless logged_in? && !(current_user.pseuds & @related_work.work.pseuds).empty?
-      flash[:error] = t('errors.no_permission_to_edit', :default => "Sorry, but you don't have permission to make edits.")
-      redirect_to(works_url)
-    end  
-  end
+
+  before_filter :users_only, :except => [:index]
+  before_filter :get_instance_variables, :except => [:index]
 
   def index
-    if params[:user_id]
+    if params[:user_id].blank?
+      flash[:error] = ts("Whose related works were you looking for?")
+      redirect_back_or_default(people_path)
+    else
       @user = User.find_by_login(params[:user_id])
-    end
-    if @user
-      @related_works_as_parent = @user.related_works
-      @related_works_as_child = @user.parent_work_relationships
+      if @user.blank?
+        flash[:error] = ts("Sorry, we couldn't find that user")
+        redirect_back_or_default(root_path)
+      else
+        @related_works_as_parent = @user.related_works
+        @related_works_as_child = @user.parent_work_relationships
+      end
     end
   end
-  
+
   # GET /related_works/1
   # GET /related_works/1.xml
   def show
   end
 
-  # PUT /related_works/1
-  # PUT /related_works/1.xml
   def update
+    # updates are done by the owner of the parent, to aprove or remove links on the parent work.
+    unless @user
+      if current_user_owns?(@child)
+        flash[:error] = ts("Sorry, but you don't have permission to do that. Try removing the link from your own work.")
+        redirect_back_or_default(user_related_works_path(current_user))
+      else
+        flash[:error] = ts("Sorry, but you don't have permission to do that.")
+        redirect_back_or_default(root_path)
+      end
+    end
+    # the assumption here is that any update is a toggle from what was before
     @related_work.reciprocal = !@related_work.reciprocal?
     if @related_work.update_attribute(:reciprocal, @related_work.reciprocal)
-      notice = @related_work.reciprocal? ?  t('link_approved', :default => "Link was successfully approved") : 
-                                            t('link_removed', :default => "Link was successfully removed")
+      notice = @related_work.reciprocal? ?  ts("Link was successfully approved") :
+                                            ts("Link was successfully removed")
       flash[:notice] = notice
-      redirect_to(@related_work.parent) 
+      redirect_to(@related_work.parent)
     else
-      flash[:error] = t('failed_update', :default => 'Sorry, something went wrong. Please try again.')
+      flash[:error] = ts('Sorry, something went wrong.')
       redirect_to(@related_work)
     end
   end
 
-  # DELETE /related_works/1
-  # DELETE /related_works/1.xml
   def destroy
+    # destroys are done by the owner of the child, to remove links to the parent work which also removes the link back if it exists.
+    unless current_user_owns?(@child)
+      if @user
+        flash[:error] = ts("Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
+        redirect_back_or_default(user_related_works_path(current_user))
+      else
+        flash[:error] = ts("Sorry, but you don't have permission to do that.")
+        redirect_back_or_default(root_path)
+      end
+    end
     @related_work.destroy
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    redirect_back_or_default(user_related_works_path(current_user))
   end
+
+  private
+
+  def get_instance_variables
+    @related_work = RelatedWork.find(params[:id])
+    @child = @related_work.work
+    if @related_work.parent.is_a? (Work)
+      @owners = @related_work.parent.pseuds.map(&:user)
+      @user = current_user if @owners.include?(current_user)
+    end
+  end
+
 end
