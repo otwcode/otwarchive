@@ -68,8 +68,8 @@ class PotentialMatchesController < ApplicationController
       # we have potential_matches and assignments      
       
       # index the potential matches by request_signup
-      @assignments_with_no_offer = @collection.assignments.with_no_offer.sort
-      @assignments_with_no_request = @collection.assignments.with_no_request.sort
+      @assignments_with_no_offer = @collection.assignments.with_request.with_no_offer.sort
+      @assignments_with_no_request = @collection.assignments.with_offer.with_no_request.sort
 
       @assignments_with_no_potential_requests = @assignments_with_no_request.select {|assignment| assignment.offer_signup.offer_potential_matches.empty?}
       

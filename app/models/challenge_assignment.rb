@@ -106,6 +106,9 @@ class ChallengeAssignment < ActiveRecord::Base
   end
 
   include Comparable
+  # sort in order that puts assignments with no request ahead of assignments with no offer, 
+  # ahead of assignments with both request and offer, and within each group sorts by 
+  # request byline and then offer byline. 
   def <=>(other)
     return -1 if self.request_signup.nil? && other.request_signup
     return 1 if other.request_signup.nil? && self.request_signup
@@ -186,6 +189,7 @@ class ChallengeAssignment < ActiveRecord::Base
     @offer_match_buckets = {}
     @max_match_count = 0
     collection.signups.each do |signup|
+      next if signup.nil?
       request_match_count = signup.request_potential_matches.count
       @request_match_buckets[request_match_count] ||= []
       @request_match_buckets[request_match_count] << signup
