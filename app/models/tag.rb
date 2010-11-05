@@ -15,7 +15,7 @@ class Tag < ActiveRecord::Base
 
   # these are tags which have been created by users
   USER_DEFINED = ['Fandom', 'Relationship', 'Character', 'Freeform']
-  
+
   acts_as_commentable
   def commentable_name
     self.name
@@ -31,25 +31,25 @@ class Tag < ActiveRecord::Base
       end
     end
   end
-  
+
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
   belongs_to :merger, :class_name => 'Tag'
   belongs_to :fandom
   belongs_to :media
   belongs_to :last_wrangler, :polymorphic => true
-  
+
   has_many :filter_taggings, :foreign_key => 'filter_id', :dependent => :destroy
   has_many :filtered_works, :through => :filter_taggings, :source => :filterable, :source_type => 'Work'
   has_one :filter_count, :foreign_key => 'filter_id'
-  has_many :direct_filter_taggings, 
-              :class_name => "FilterTagging", 
-              :foreign_key => 'filter_id', 
+  has_many :direct_filter_taggings,
+              :class_name => "FilterTagging",
+              :foreign_key => 'filter_id',
               :conditions => "inherited = 0"
   has_many :direct_filtered_works, :through => :direct_filter_taggings, :source => :filterable, :source_type => 'Work'
 
   has_many :common_taggings, :foreign_key => 'common_tag_id', :dependent => :destroy
   has_many :child_taggings, :class_name => 'CommonTagging', :as => :filterable
-  has_many :children, :through => :child_taggings, :source => :common_tag 
+  has_many :children, :through => :child_taggings, :source => :common_tag
   has_many :parents, :through => :common_taggings, :source => :filterable, :source_type => 'Tag', :before_remove => :update_wrangler
 
   has_many :meta_taggings, :foreign_key => 'sub_tag_id', :dependent => :destroy
@@ -58,7 +58,7 @@ class Tag < ActiveRecord::Base
   has_many :sub_tags, :through => :sub_taggings, :source => :sub_tag, :before_remove => :remove_sub_filters
   has_many :direct_meta_tags, :through => :meta_taggings, :source => :meta_tag, :conditions => "meta_taggings.direct = 1"
   has_many :direct_sub_tags, :through => :sub_taggings, :source => :sub_tag, :conditions => "meta_taggings.direct = 1"
-  
+
   has_many :same_work_tags, :through => :works, :source => :tags, :uniq => true
   has_many :suggested_fandoms, :through => :works, :source => :fandoms, :uniq => true
 
@@ -84,27 +84,27 @@ class Tag < ActiveRecord::Base
   def check_synonym
     if !self.new_record? && self.name_changed?
       unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase)
-        self.errors.add(:name, "can only be changed by an admin.")        
+        self.errors.add(:name, "can only be changed by an admin.")
       end
     end
     if self.merger_id
       if self.canonical?
-        self.errors.add(:base, "A canonical can't be a synonym")       
-      end 
+        self.errors.add(:base, "A canonical can't be a synonym")
+      end
       if self.merger_id == self.id
         self.errors.add(:base, "A tag can't be a synonym of itself.")
       end
       unless self.merger.class == self.class
-        self.errors.add(:base, "A tag can only be a synonym of a tag in the same category as itself.")        
+        self.errors.add(:base, "A tag can only be a synonym of a tag in the same category as itself.")
       end
-    end    
+    end
   end
 
   before_validation :squish_name
   def squish_name
     self.name = name.squish if self.name
   end
-  
+
   before_save :set_last_wrangler
   def set_last_wrangler
     unless User.current_user.nil?
@@ -123,33 +123,33 @@ class Tag < ActiveRecord::Base
   scope :noncanonical, where(:canonical => false).order('name ASC')
   scope :nonsynonymous, noncanonical.where(:merger_id => nil)
   scope :unfilterable, nonsynonymous
-  
+
   # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
   # what we actually need are the empty rows in the results
   scope :unwrangled, joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("common_taggings.id IS NULL")
   scope :first_class, joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL")
-  
+
   # Tags that have sub tags
   scope :meta_tag, joins(:sub_taggings).where("meta_taggings.id IS NOT NULL").group("tags.id")
   # Tags that don't have sub tags
   scope :non_meta_tag, joins(:sub_taggings).where("meta_taggings.id IS NULL").group("tags.id")
-  
-  
+
+
   # Complicated query alert!
   # What we're doing here:
   # - we get all the tags of any type used on works (the first two lines of the join)
-  # - we then chop that down to only the tags used on works that are tagged with our one given tag 
+  # - we then chop that down to only the tags used on works that are tagged with our one given tag
   #   (the last line of the join, and the where clause)
   scope :related_tags_for_all, lambda {|tags|
     joins("INNER JOIN taggings ON (tags.id = taggings.tagger_id)
-           INNER JOIN works ON (taggings.taggable_id = works.id AND taggings.taggable_type = 'Work') 
+           INNER JOIN works ON (taggings.taggable_id = works.id AND taggings.taggable_type = 'Work')
            INNER JOIN taggings taggings2 ON (works.id = taggings2.taggable_id AND taggings2.taggable_type = 'Work')").
     where("taggings2.tagger_id IN (?)", tags.collect(&:id)).
     group("tags.id")
   }
-  
+
   scope :related_tags, lambda {|tag| related_tags_for_all([tag])}
-  
+
   scope :by_popularity, order('taggings_count DESC')
   scope :by_name, order('name ASC')
   scope :by_date, order('created_at DESC')
@@ -177,47 +177,47 @@ class Tag < ActiveRecord::Base
     order(:name).
     group(:id)
   }
-  
+
   scope :visible_to_all_with_count,
     joins(:filter_count).
     select("tags.*, filter_counts.public_works_count as count").
     where('filter_counts.public_works_count > 0 AND tags.canonical = 1')
-    
+
   scope :visible_to_registered_user_with_count,
     joins(:filter_count).
     select("tags.*, filter_counts.unhidden_works_count as count").
     where('filter_counts.unhidden_works_count > 0 AND tags.canonical = 1')
-    
+
   scope :public_top, lambda { |tag_count|
     visible_to_all_with_count.
     limit(tag_count).
     order('filter_counts.public_works_count DESC')
   }
-  
+
   scope :unhidden_top, lambda { |tag_count|
     visible_to_registered_user_with_count.
     limit(tag_count).
     order('filter_counts.unhidden_works_count DESC')
   }
-  
-  scope :popular, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ? 
-      visible_to_registered_user_with_count.order('filter_counts.unhidden_works_count DESC') : 
+
+  scope :popular, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
+      visible_to_registered_user_with_count.order('filter_counts.unhidden_works_count DESC') :
       visible_to_all_with_count.order('filter_counts.public_works_count DESC')
-      
-  scope :random, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ? 
-    visible_to_registered_user_with_count.order("RAND()") : 
+
+  scope :random, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
+    visible_to_registered_user_with_count.order("RAND()") :
     visible_to_all_with_count.order("RAND()")
-  
-  scope :with_count, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ? 
+
+  scope :with_count, (User.current_user.is_a?(Admin) || User.current_user.is_a?(User)) ?
       visible_to_registered_user_with_count : visible_to_all_with_count
 
   # a complicated join -- we only want to get the tags on approved, posted works in the collection
-  COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id ) 
-                      INNER JOIN works ON ( filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work') 
+  COLLECTION_JOIN =  "INNER JOIN filter_taggings ON ( tags.id = filter_taggings.filter_id )
+                      INNER JOIN works ON ( filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work')
                       INNER JOIN collection_items ON ( works.id = collection_items.item_id AND collection_items.item_type = 'Work'
                                                        AND works.posted = 1
                                                        AND collection_items.collection_approval_status = '#{CollectionItem::APPROVED}'
-                                                       AND collection_items.user_approval_status = '#{CollectionItem::APPROVED}' ) " 
+                                                       AND collection_items.user_approval_status = '#{CollectionItem::APPROVED}' ) "
 
   scope :for_collections, lambda {|collections|
     joins(COLLECTION_JOIN).
@@ -225,45 +225,45 @@ class Tag < ActiveRecord::Base
   }
 
   scope :for_collection, lambda { |collection| for_collections([collection]) }
-  
-  scope :for_collections_with_count, lambda { |collections| 
+
+  scope :for_collections_with_count, lambda { |collections|
     for_collections(collections).
     select("tags.*, count(tags.id) as count").
     group(:id).
     order(:name)
   }
-  
-  scope :by_relationships, lambda {|relationships| 
+
+  scope :by_relationships, lambda {|relationships|
     select("DISTINCT tags.*").
     joins(:children).
     where('children_tags.id IN (?)', relationships.collect(&:id))
   }
-  
+
   scope :in_challenge, lambda {|collection|
-    joins("INNER JOIN set_taggings ON (tags.id = set_taggings.tag_id) 
+    joins("INNER JOIN set_taggings ON (tags.id = set_taggings.tag_id)
            INNER JOIN tag_sets ON (set_taggings.tag_set_id = tag_sets.id)
            INNER JOIN prompts ON (prompts.tag_set_id = tag_sets.id OR prompts.optional_tag_set_id = tag_sets.id)
            INNER JOIN challenge_signups ON (prompts.challenge_signup_id = challenge_signups.id)").
     where("challenge_signups.collection_id = ?", collection.id)
   }
-  
+
   scope :requested_in_challenge, lambda {|collection|
     in_challenge(collection).where("prompts.type = 'Request'")
   }
-  
+
   scope :offered_in_challenge, lambda {|collection|
     in_challenge(collection).where("prompts.type = 'Offer'")
   }
 
-      
+
   # Class methods
 
 
-  # Get tags that are either above or below the average popularity 
+  # Get tags that are either above or below the average popularity
   def self.with_popularity_relative_to_average(options = {:factor => 1, :include_meta => false, :greater_than => false, :names_only => false})
     comparison = "<"
     comparison = ">" if options[:greater_than]
-      
+
     if options[:include_meta]
       tags = select("#{options[:names_only] ? "tags.name" : "tags.*"}, filter_counts.unhidden_works_count as count").
                   joins(:filter_count).
@@ -273,7 +273,7 @@ class Tag < ActiveRecord::Base
     else
       meta_tag_ids = select("DISTINCT tags.id").joins(:sub_taggings).where(:canonical => true)
       non_meta_ids = meta_tag_ids.empty? ? select("tags.id").where(:canonical => true) : select("tags.id").where(:canonical => true).where("id NOT IN (#{meta_tag_ids.collect(&:id).join(',')})")
-      tags = non_meta_ids.empty? ? [] : 
+      tags = non_meta_ids.empty? ? [] :
                 select("#{options[:names_only] ? "tags.name" : "tags.*"}, filter_counts.unhidden_works_count as count").
                   joins(:filter_count).
                   where(:canonical => true).
@@ -282,12 +282,12 @@ class Tag < ActiveRecord::Base
                   order("count ASC")
     end
   end
-  
+
   # Used for associations, such as work.fandoms.string
   # Yields a comma-separated list of tag names
   def self.string
     all.map{|tag| tag.name}.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)
-  end  
+  end
 
   # Use the tag name in urls and escape url-unfriendly characters
   def to_param
@@ -295,12 +295,12 @@ class Tag < ActiveRecord::Base
     saved_name = self.name_changed? ? self.name_was : self.name
     saved_name.gsub('/', '%2F').gsub('&', '%26').gsub('.', '%2E').gsub('?', '%3F')
   end
-  
+
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
     self.find(:first, :conditions => ['name = ?', string.gsub('%2F', '/').gsub('%26', '&').gsub('%2F', '/').gsub('%2E', '.').gsub('%3F', '?')]) if string
   end
-  
+
   # If a tag by this name exists in another class, add a suffix to disambiguate them
   def self.find_or_create_by_name(new_name)
     if new_name && new_name.is_a?(String)
@@ -324,7 +324,7 @@ class Tag < ActiveRecord::Base
     raise "how did this happen?" unless tag.canonical?
     return tag
   end
-  
+
   # Inherited tag classes can set this to indicate types of tags with which they may have a parent/child
   # relationship (ie. media: parent, fandom: child; fandom: parent, character: child)
   def parent_types
@@ -335,16 +335,16 @@ class Tag < ActiveRecord::Base
   end
 
   # Instance methods that are common to all subclasses (may be overridden in the subclass)
-  
+
   def unwrangled?
-    !self.canonical && !self.merger_id && self.mergers.empty?  
+    !self.canonical && !self.merger_id && self.mergers.empty?
   end
 
   # sort tags by name
   def <=>(another_tag)
     name.downcase <=> another_tag.name.downcase
   end
-  
+
   #### FILTERING ####
 
   # Add any filter taggings that should exist but don't
@@ -358,7 +358,7 @@ class Tag < ActiveRecord::Base
       end
     end
   end
-  
+
   # Add any filter taggings that should exist but don't
   def self.add_missing_filter_taggings
     i = Work.posted.count
@@ -375,8 +375,8 @@ class Tag < ActiveRecord::Base
       end
       i = i - 1
     end
-  end 
-  
+  end
+
   # The version of the tag that should be used for filtering, if any
   def filter
     self.canonical? ? self : ((self.merger && self.merger.canonical?) ? self.merger : nil)
@@ -384,7 +384,7 @@ class Tag < ActiveRecord::Base
 
   before_save :update_filters_for_canonical_change
   before_save :update_filters_for_merger_change
-  
+
   # If a tag was not canonical but is now, it needs new filter_taggings
   # If it was canonical but isn't anymore, we need to change or remove
   # the filter_taggings as appropriate
@@ -398,12 +398,12 @@ class Tag < ActiveRecord::Base
       else
         self.remove_filter_taggings
       end
-    end      
+    end
   end
-  
+
   # If a tag has a new merger, add to the filter_taggings for that merger
   # If a tag has a new merger but had an old merger, add new filter_taggings
-  # and get rid of the old filter_taggings as appropriate 
+  # and get rid of the old filter_taggings as appropriate
   def update_filters_for_merger_change
     if self.merger_id_changed?
       if self.merger && self.merger.canonical?
@@ -413,9 +413,9 @@ class Tag < ActiveRecord::Base
       if old_merger && old_merger.canonical?
         self.remove_filter_taggings(old_merger)
       end
-    end  
+    end
   end
-  
+
   # Add filter taggings for a given tag
   def add_filter_taggings
     filter_tag = self.filter
@@ -423,7 +423,7 @@ class Tag < ActiveRecord::Base
       Work.with_any_tags([self, filter_tag]).each do |work|
         work.filters << filter_tag unless work.filters.include?(filter_tag)
         unless filter_tag.meta_tags.empty?
-          filter_tag.meta_tags.each do |m| 
+          filter_tag.meta_tags.each do |m|
             unless work.filters.include?(m)
               work.filter_taggings.create!(:inherited => true, :filter_id => m.id)
             end
@@ -433,7 +433,7 @@ class Tag < ActiveRecord::Base
       filter.reset_filter_count
     end
   end
-  
+
   # Remove filter taggings for a given tag
   # If an old_filter value is given, remove filter_taggings from it with due regard
   # for potential duplication (ie, works tagged with more than one synonymous tag)
@@ -455,26 +455,26 @@ class Tag < ActiveRecord::Base
               end
             end
           end
-        end        
-      end      
-      old_filter.reset_filter_count      
+        end
+      end
+      old_filter.reset_filter_count
     else
       self.filter_taggings.destroy_all
       self.reset_filter_count
-    end   
+    end
   end
-  
+
   def reset_filter_count
     current_filter = self.filter
     # we only need to cache values for user-defined tags
     # because they're the only ones we access
     if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
-      attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count, 
+      attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
                     :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
       if current_filter.filter_count
         unless current_filter.filter_count.update_attributes(attributes)
           raise "Filter count error for #{current_filter.name}"
-        end        
+        end
       else
         unless current_filter.create_filter_count(attributes)
           raise "Filter count error for #{current_filter.name}"
@@ -482,17 +482,17 @@ class Tag < ActiveRecord::Base
       end
     end
   end
-  
+
   #### END FILTERING ####
 
   # methods for counting visible
-  
+
   def visible_works_count
-    User.current_user.nil? ? self.works.posted.unhidden.unrestricted.count : self.works.posted.unhidden.count 
+    User.current_user.nil? ? self.works.posted.unhidden.unrestricted.count : self.works.posted.unhidden.count
   end
 
   def visible_bookmarks_count
-    self.bookmarks.public.count
+    self.bookmarks.is_public.count
   end
 
   def visible_external_works_count
@@ -506,17 +506,17 @@ class Tag < ActiveRecord::Base
   def banned
     self.is_a?(Banned)
   end
-  
+
   def synonyms
     self.canonical? ? self.mergers : [self.merger] + self.merger.mergers - [self]
   end
-  
+
   # Add a common tagging association
   # Offloading most of the logic to the inherited tag models
   def add_association(tag)
-    self.parents << tag unless self.parents.include?(tag)    
+    self.parents << tag unless self.parents.include?(tag)
   end
-  
+
   # Determine how two tags are related and divorce them from each other
   def remove_association(tag)
     if tag.class == self.class
@@ -533,18 +533,18 @@ class Tag < ActiveRecord::Base
       elsif tag.parents.include?(self)
         tag.parents.delete(self)
       end
-    end    
+    end
   end
-  
-  # When a meta tagging relationship is removed, things filter-tagged with the meta tag 
-  # and the sub tag should have the meta filter-tagging removed unless it's directly tagged 
+
+  # When a meta tagging relationship is removed, things filter-tagged with the meta tag
+  # and the sub tag should have the meta filter-tagging removed unless it's directly tagged
   # with the meta tag or one of its synonyms or a different sub tag of the meta tag or one of its synonyms
-  def remove_meta_filters(meta_tag) 
-    # remove meta tag from this tag's sub tags 
+  def remove_meta_filters(meta_tag)
+    # remove meta tag from this tag's sub tags
     self.sub_tags.each {|sub| sub.meta_tags.delete(meta_tag) if sub.meta_tags.include?(meta_tag)}
     # remove inherited meta tags from this tag and all of its sub tags
     inherited_meta_tags = meta_tag.meta_tags
-    inherited_meta_tags.each do |tag| 
+    inherited_meta_tags.each do |tag|
       self.meta_tags.delete(tag) if self.meta_tags.include?(tag)
       self.sub_tags.each {|sub| sub.meta_tags.delete(tag) if sub.meta_tags.include?(tag)}
     end
@@ -561,11 +561,11 @@ class Tag < ActiveRecord::Base
       end
     end
   end
-  
+
   def remove_sub_filters(sub_tag)
     sub_tag.remove_meta_filters(self)
   end
-  
+
   # If we're making a tag non-canonical, we need to update its synonyms and children
   before_update :check_canonical
   def check_canonical
@@ -579,17 +579,17 @@ class Tag < ActiveRecord::Base
     end
     true
   end
-  
+
   attr_reader :media_string, :fandom_string, :character_string, :relationship_string, :freeform_string, :meta_tag_string, :sub_tag_string, :merger_string
-  
+
   def add_parent_string(tag_string)
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
       parent = Tag.find_by_name(name)
       self.add_association(parent) if parent && parent.canonical?
-    end   
+    end
   end
-  
+
   def fandom_string=(tag_string); self.add_parent_string(tag_string); end
   def media_string=(tag_string); self.add_parent_string(tag_string); end
   def character_string=(tag_string); self.add_parent_string(tag_string); end
@@ -607,7 +607,7 @@ class Tag < ActiveRecord::Base
       end
     end
   end
-  
+
   def sub_tag_string=(tag_string)
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
@@ -620,11 +620,11 @@ class Tag < ActiveRecord::Base
       end
     end
   end
-  
+
   def syn_string
     self.merger.name if self.merger
   end
-  
+
   def syn_string=(tag_string)
     if tag_string.blank?
       self.merger_id = nil
@@ -644,7 +644,7 @@ class Tag < ActiveRecord::Base
           end
         end
         if new_merger && self.errors.empty?
-          self.canonical = false      
+          self.canonical = false
           self.merger_id = new_merger.id
           ((self.parents + self.children) - (new_merger.parents + new_merger.children)).each { |tag| new_merger.add_association(tag) }
           if new_merger.is_a?(Fandom)
@@ -653,16 +653,16 @@ class Tag < ActiveRecord::Base
             (new_merger.parents.by_type("Fandom").canonical - self.fandoms).each {|fandom| self.add_association(fandom)}
           end
           self.meta_tags.each { |tag| new_merger.meta_tags << tag unless new_merger.meta_tags.include?(tag) }
-          self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }            
+          self.sub_tags.each { |tag| tag.meta_tags << new_merger unless tag.meta_tags.include?(new_merger) }
           self.mergers.each {|m| m.update_attributes(:merger_id => new_merger.id)}
           self.children = []
           self.meta_tags = []
-          self.sub_tags = []        
-        end    
+          self.sub_tags = []
+        end
       end
     end
   end
-  
+
   def merger_string=(tag_string)
     names = tag_string.split(',').map(&:squish)
     names.each do |name|
@@ -677,7 +677,7 @@ class Tag < ActiveRecord::Base
           self.parents.by_type("Fandom").canonical.each {|fandom| syn.add_association(fandom)}
         end
       end
-    end          
+    end
   end
 
   def indirect_bookmarks(rec=false)
