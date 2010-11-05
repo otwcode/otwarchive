@@ -238,7 +238,8 @@ protected
     @html_content = convert_urls_to_absolute(render_to_string(:template => "works/download.html", :layout => "download"))
     @tempdir = "#{Rails.root}/tmp"
     # wkhtmltopdf borks on unicode filenames
-    @filename = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", @filename)
+    @filename = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", @filename).gsub(/`/, "")
+    Rails.logger.debug @filename
     File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
     cmd = %Q{wkhtmltopdf --title #{@filename} #{@tempdir}/#{@filename}.html #{@tempdir}/#{@filename}.pdf}
     Rails.logger.debug cmd
@@ -271,9 +272,9 @@ protected
 
     # list of chapters
     html_files = 0.upto(@chapters.size - 1).map {|i| "chapter#{i}.html"}.join(' ')
-    
+
     title = %Q{#{@work.title.gsub(/"/, '\"')}}
-    
+
     author = @work.anonymous? ? ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', ')
     author = %Q{#{author}}
 
