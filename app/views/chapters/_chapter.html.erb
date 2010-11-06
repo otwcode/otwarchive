@@ -1,5 +1,6 @@
 <!-- This partial requires local variable 'chapter' -->
-<div class="chapter<%= ' draft' unless chapter.posted? %>" id="chapter-<%= chapter.position.to_s %>">
+<% chapter_id = "chapter-#{chapter.position.to_s}" %>
+<div class="chapter<%= ' draft' unless chapter.posted? %>" id="<%= chapter_id %>">
 <!-- chapter management -->  
   <% if is_author_of?(@work) && !@downloading %>
     <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work, :preview_mode => @preview_mode} %>
@@ -7,12 +8,11 @@
 
 <div class="chapter preface" role="complementary">
   <h3 class="title">
-    <%= link_to chapter.chapter_header, [chapter.work, chapter] %><% unless chapter.title.blank? %>: <%=h chapter.title %>
-    <% end %>
+    <% if current_page?(:controller => 'chapters', :action => 'show') %><%= link_to chapter.chapter_header, [chapter.work, chapter] %><% else %><%= chapter.chapter_header %><% end %><% unless chapter.title.blank? %>: <%= chapter.title %><% end %>
   </h3>
 <!-- only display byline if different from the main byline -->
-  <% if (chapter.pseuds != @work.pseuds) || @preview_mode %>
-    <h4 class="byline"><%=h t('.chapter_chapter_by', :default => 'Chapter by') %> <%= byline(chapter) %></h4>
+  <% if (!chapter.pseuds.blank? && (chapter.pseuds != @work.pseuds)) || @preview_mode %>
+    <h4 class="byline"><%= ts('Chapter by') %> <%= byline(chapter) %></h4>
   <% end %>
  
 <!-- we want to hide this information by default if javascript is available -->

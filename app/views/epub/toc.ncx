@@ -10,13 +10,25 @@
     <text><%= @work.title %></text>
   </docTitle>
   <navMap>
+    <navPoint id="header" playOrder="0">
+      <navLabel>
+        <text><%= @work.title %></text>
+      </navLabel>
+      <content src="header.xhtml"/>
+    </navPoint>
     <% @chapters.size.times do |index| %>
-      <navPoint id="chapter<%= index %>" playOrder="<%= index + 1 %>">
+      <navPoint id="chapter<%= index + 1 %>" playOrder="<%= index + 1 %>">
         <navLabel>
           <text><%= @chapters[index].title.blank? ? "Chapter #{index + 1}" : @chapters[index].title %></text>
         </navLabel>
-        <content src="chapter<%= index %>.xhtml"/>
+        <content src="chapter<%= index + 1%>.xhtml"/>
       </navPoint>
     <% end %>
+    <navPoint id="endnotes" playOrder="<%= @chapters.size + 1%>">
+      <navLabel>
+        <text>Endnotes</text>
+      </navLabel>
+      <content src="endnotes.xhtml"/>
+    </navPoint>
   </navMap>
 </ncx>

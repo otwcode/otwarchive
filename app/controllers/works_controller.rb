@@ -54,7 +54,7 @@ class WorksController < ApplicationController
       begin
         @selected_pseuds = Pseud.find(params[:selected_pseuds]).collect(&:id).uniq
       rescue
-        flash[:error] = t('pseuds_not_found', :default => "Sorry, we couldn't find one or more of the authors you selected. Please try again.")
+        flash[:error] = ts("Sorry, we couldn't find one or more of the authors you selected. Please try again.")
       end
     end
 
@@ -76,7 +76,7 @@ class WorksController < ApplicationController
         redirect_to url_for({:controller => :tags, :action => :show, :id => @tag}) and return unless @tag.canonical
         @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
       else
-        flash[:error] = t('tag_not_found', :default => "Sorry, there's no tag by that name in our system.")
+        flash[:error] = ts("Sorry, there's no tag by that name in our system.")
         redirect_to works_path
         return
       end
@@ -93,7 +93,7 @@ class WorksController < ApplicationController
           end
         end
       else
-        flash[:error] = t('user_not_found', :default => "Sorry, there's no user by that name in our system.")
+        flash[:error] = ts("Sorry, there's no user by that name in our system.")
         redirect_to works_path
         return
       end
@@ -129,7 +129,7 @@ class WorksController < ApplicationController
     if @works.empty? && !@selected_tags.empty?
       begin
         # build filters so we can go back
-        flash.now[:notice] = t('results_not_found', :default => "We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.")
+        flash.now[:notice] = ts("We couldn't find any results using all those filters, sorry! You can unselect some and filter again to get more matches.")
         @filters = Work.build_filters_from_tags(Tag.find(@selected_tags))
       rescue
         # do we need more than the regular flash notice?
@@ -139,12 +139,12 @@ class WorksController < ApplicationController
 
   def drafts
     unless params[:user_id]
-      flash[:error] = t('whose_drafts', :default => "Whose drafts did you want to look at?")
+      flash[:error] = ts("Whose drafts did you want to look at?")
       redirect_to :controller => :users, :action => :index
     else
       @user = User.find_by_login(params[:user_id])
       unless current_user == @user
-        flash[:error] = t('not_your_drafts', :default => "You can only see your own drafts, sorry!")
+        flash[:error] = ts("You can only see your own drafts, sorry!")
         redirect_to current_user
       else
         if params[:pseud_id]
@@ -189,59 +189,64 @@ class WorksController < ApplicationController
   end
 
   def download
-    @page_title = @work.unrevealed? ? ts("Mystery Work") :
-      get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
-        @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
-        @work.title,
-        :omit_archive_name => true, :truncate => true)
+    @downloading = true
+    @page_title = @work.unrevealed? ?
+        ts("Mystery Work") :
+        get_page_title(
+          @work.fandoms.size > 3 ?
+            ts("Multifandom") : @work.fandoms.string,
+          @work.anonymous? ?
+            ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
+          @work.title,
+          :omit_archive_name => true, :truncate => true)
 
-    @filename = @page_title.gsub(/\s+/, '_').gsub(/[^[a-zA-Z0-9À-ÿ_-]]+/, '').gsub(/_-_/, '-').gsub(/__+/, '_')
+    # unicode filenames are problematic
+    @filename = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", @page_title)
+    # as are most other special characters
+    @filename = @page_title.gsub(/[^[a-zA-Z0-9 _-]]+/, '')
+    Rails.logger.debug @filename
 
     # we use entire work
-    if @work.number_of_posted_chapters > 1
-      @chapters = @work.chapters_in_order
-    else
-      @chapters = @work.chapters
-    end
-
+    @chapters = @work.chapters_in_order
     @work.increment_download_count
 
+    # get series info for footer
+    if @work.series
+      @series = @work.series.select{|s| s.visible?(current_user)}
+    end
+
     respond_to do |format|
+      @tempdir = "#{Rails.root}/tmp"
+
+      # all in one file
       # send html
       format.html {download_html}
+      # pdf
+      format.pdf {download_pdf}
 
+      # chapter by chapter
       # mobipocket for kindle
       format.mobi {download_mobi}
-
       # epub for ibooks
       format.epub {download_epub}
 
-      # pdf
-      format.pdf {download_pdf}
     end
   end
 
 protected
 
-  def convert_urls_to_absolute(content)
-    content.gsub(/a href=\"\//, "a href=\"#{ArchiveConfig.APP_URL}/")
-  end
-
   def download_html
-    @html_content = convert_urls_to_absolute(render_to_string(:template => "works/download", :layout => "download"))
-    @tempdir = "#{Rails.root}/tmp"
-  File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
-    send_file("#{@tempdir}/#{@filename}.html", :type => "text/html", :stream => false, :filename => "#{@filename}.html")
+    @html_content = render_to_string(:template => "works/download", :layout => 'barebones')
+    File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
+    send_file("#{@tempdir}/#{@filename}.html", :type => "text/html", :filename => "#{@filename}.html")
+    # clean up HTML file
+    File.delete("#{@tempdir}/#{@filename}.html")
   end
 
   def download_pdf
-    @html_content = convert_urls_to_absolute(render_to_string(:template => "works/download.html", :layout => "download"))
-    @tempdir = "#{Rails.root}/tmp"
-    # wkhtmltopdf borks on unicode filenames
-    @filename = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", @filename).gsub(/`/, "")
-    Rails.logger.debug @filename
+    @html_content = render_to_string(:template => "works/download.html", :layout => 'barebones.html')
     File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
-    cmd = %Q{wkhtmltopdf --title #{@filename} #{@tempdir}/#{@filename}.html #{@tempdir}/#{@filename}.pdf}
+    cmd = %Q{wkhtmltopdf --encoding utf-8 --title "#{@filename}" "#{@tempdir}/#{@filename}.html" "#{@tempdir}/#{@filename}.pdf"}
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
 
@@ -249,7 +254,7 @@ protected
     File.delete("#{@tempdir}/#{@filename}.html")
 
     # send the PDF
-    send_file("#{@tempdir}/#{@filename}.pdf", :type => "application/pdf", :stream => false, :filename => "#{@filename}.pdf")
+    send_file("#{@tempdir}/#{@filename}.pdf", :type => "application/pdf", :filename => "#{@filename}.pdf")
 
     # clean up temp file
     File.delete("#{@tempdir}/#{@filename}.pdf")
@@ -259,44 +264,44 @@ protected
     tempdir = "#{Rails.root}/tmp/#{@filename}_mobi"
     Dir.mkdir(tempdir) unless File.exists?(tempdir)
 
+    header = render_to_string(:template => "works/download_header.html", :layout => 'barebones.html')
+    File.open("#{tempdir}/chapter0.html", 'w') {|f| f.write(header)}
+
     @chapters.each_with_index do |chapter, index|
       @chapter = chapter
       @page_title = @chapter.title.blank? ? "Chapter #{index + 1}" : @chapter.title
-      chapter_html_content = convert_urls_to_absolute(render_to_string(:template => "chapters/download.html", :layout => "barebones"))
-
-      # write content to OEBPS/chapter[#].xhtml
-      File.open("#{tempdir}/chapter#{index}.html", 'w') {|f| f.write(chapter_html_content)}
+      chapter_html_content = render_to_string(:template => "chapters/download.html", :layout => "barebones.html")
+      File.open("#{tempdir}/chapter#{index+1}.html", 'w') {|f| f.write(chapter_html_content)}
     end
+
+    @page_title = "Endnotes"
+    endnotes = render_to_string(:template => "works/download_endnotes.html", :layout => 'barebones.html')
+    File.open("#{tempdir}/endnotes.html", 'w') {|f| f.write(endnotes)}
 
     # converts the tempfile to mobi using MobiPerl
 
     # list of chapters
-    html_files = 0.upto(@chapters.size - 1).map {|i| "chapter#{i}.html"}.join(' ')
+    html_files = 0.upto(@chapters.size).map {|i| "chapter#{i}.html"}.join(' ') + " endnotes.html"
 
     title = %Q{#{@work.title.gsub(/"/, '\"')}}
 
     author = @work.anonymous? ? ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', ')
     author = %Q{#{author}}
 
-    cmd = %Q{cd #{tempdir} ; html2mobi #{html_files} --mobifile "#{@filename}.mobi" --gentoc --title "#{title}" --author "#{author}"}
+    cmd = %Q{cd "#{tempdir}" ; html2mobi #{html_files} --mobifile "#{@filename}.mobi" --gentoc --title "#{title}" --author "#{author}"}
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
 
-    # clean up the temp HTML files
-    @chapters.size.times {|i| File.delete("#{tempdir}/chapter#{i}.html")}
-
     # sends the new mobi file
-    send_file("#{tempdir}/#{@filename}.mobi", :type => "application/mobi", :stream => false, :filename => "#{@filename}.mobi")
+    send_file("#{tempdir}/#{@filename}.mobi", :type => "application/mobi", :filename => "#{@filename}.mobi")
 
-    # clean up mobi file and dir
-    File.delete("#{tempdir}/#{@filename}.mobi")
-    Dir.delete(tempdir)
+    # clean up temp files
+    FileUtils.rm_rf tempdir
   end
 
   # Manually building an epub file here
   # See http://www.jedisaber.com/eBooks/tutorial.asp for details
   def download_epub
-    @uuid = @filename + "_" + ArchiveConfig.APP_NAME + "_#{Time.now.to_i}"
 
     # create temp folder with filename
     tempdir = "#{Rails.root}/tmp/#{@filename}_epub"
@@ -320,44 +325,39 @@ protected
     # write the OEBPS/content.opf file
     File.open("#{tempdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf"))}
 
-    # copy over the appropriate stylesheets
-    # %w{font archive_core site-chrome}.each {|sheet| FileUtils.copy("#{Rails.root}/public/stylesheets/#{sheet}.css", "#{tempdir}/stylesheets")}
+    header = render_to_string(:template => "works/download_header.html", :layout => 'barebones.html')
+    doc = Nokogiri::HTML(header)
+    xhtml = doc.children.to_xhtml
+    File.open("#{tempdir}/OEBPS/header.xhtml", 'w') {|f| f.write(xhtml)}
 
     @chapters.each_with_index do |chapter, index|
+      Rails.logger.debug "ePub Chapter #{index + 1}"
       @chapter = chapter
-      chapter_html_content = convert_urls_to_absolute(render_to_string(:template => "chapters/download.html", :layout => "barebones"))
-
-      # turn @html_content into xhtml
-      ## NOT DONE YET
-      # convert all ampersands to &amp;
-      chapter_html_content.gsub!(/&\s/, '&amp; ')
-
+      chapter_html_content = render_to_string(:template => "chapters/download.html", :layout => "barebones.html")
+      # turn chapter_html_content into xhtml
+      doc = Nokogiri::HTML(chapter_html_content)
+      xhtml = doc.children.to_xhtml
       # write content to OEBPS/chapter[#].xhtml
-      File.open("#{tempdir}/OEBPS/chapter#{index}.xhtml", 'w') {|f| f.write(chapter_html_content)}
+      File.open("#{tempdir}/OEBPS/chapter#{index + 1}.xhtml", 'w') {|f| f.write(xhtml)}
     end
+
+    endnotes = render_to_string(:template => "works/download_endnotes.html", :layout => 'barebones.html')
+    doc = Nokogiri::HTML(endnotes)
+    xhtml = doc.children.to_xhtml
+    File.open("#{tempdir}/OEBPS/endnotes.xhtml", 'w') {|f| f.write(xhtml)}
+
 
     # stuff contents of directory into a zip file named with .epub extension
     # note: we have to zip this up in this particular order because "mimetype" must be the first item in the zipfile
-    %x{cd #{tempdir} ; zip #{@filename}.epub mimetype ; zip -r #{@filename}.epub META-INF OEBPS}
+    cmd = %Q{cd "#{tempdir}" ; zip "#{@filename}.epub" mimetype ; zip -r "#{@filename}.epub" META-INF OEBPS}
+    Rails.logger.debug cmd
+    `#{cmd} 2> /dev/null`
 
     # send the file
-    send_file("#{tempdir}/#{@filename}.epub", :type => "application/epub", :stream => false, :filename => "#{@filename}.epub")
+    send_file("#{tempdir}/#{@filename}.epub", :type => "application/epub", :filename => "#{@filename}.epub")
 
     # clean up temp files
-    File.delete("#{tempdir}/#{@filename}.epub")
-    @chapters.size.times do |index|
-      File.delete("#{tempdir}/OEBPS/chapter#{index}.xhtml")
-    end
-    # %w{font archive_core site-chrome}.each {|sheet| File.delete("#{tempdir}/stylesheets/#{sheet}.css")}
-    File.delete("#{tempdir}/OEBPS/toc.ncx")
-    File.delete("#{tempdir}/OEBPS/content.opf")
-    File.delete("#{tempdir}/META-INF/container.xml")
-    File.delete("#{tempdir}/mimetype")
-    #Dir.delete("#{tempdir}/stylesheets")
-    #Dir.delete("#{tempdir}/images")
-    Dir.delete("#{tempdir}/OEBPS")
-    Dir.delete("#{tempdir}/META-INF")
-    Dir.delete(tempdir)
+    FileUtils.rm_rf tempdir
   end
 
 public

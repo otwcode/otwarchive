@@ -106,7 +106,10 @@
     <% end %>
 
     <% unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? && @work.approved_children.blank? %>
-      <% current_page?(:controller => 'chapters', :action => 'show') ? linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : (params[:view_full_work] == 'true' ? linkpath = work_path(@work, :view_full_work => 'true', :anchor => 'work_endnotes') : linkpath = work_path(@work, :anchor => 'work_endnotes')) %>
+      <% current_page?(:controller => 'chapters', :action => 'show') ? 
+            linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : 
+            linkpath = "#work_endnotes"
+      %>
       <div class="notes module" role="complementary">
       <h3><%= ts("Notes:") %></h3>
         <% unless @work.recipients.blank? %>

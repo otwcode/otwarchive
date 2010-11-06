@@ -3,10 +3,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><%= @page_title %></title>
+    <style type="text/css">
+     .landmark, { display: none; }
+     #chapters  {font-family: serif; padding: 1em; }
+     .preface, .message { font-family: sans-serif; }
+     .preface .title { font-size: 1.5em; text-align: center; }
+     .preface h3 { font-size: 1.125em }
+     .preface .byline { text-align: center; }  
+     .endnotes-link { font-size: .8em }
+     </style>
   </head>
   <body>
 
-	  <%= yield  %>
-	  
-	</body>
+    <%= yield  %>
+    
+  </body>
 </html>

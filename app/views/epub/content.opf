@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package version="2.0" xmlns="http://www.idpf.org/2007/opf"
-       unique-identifier="BookId">
+       unique-identifier="etextno">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/"
            xmlns:opf="http://www.idpf.org/2007/opf">
     <dc:title><%= @work.title %></dc:title> 
@@ -9,17 +9,21 @@
       <dc:language><%= @work.language.short %></dc:language> 
     <% end %>
     <dc:publisher><%= ArchiveConfig.APP_NAME %></dc:publisher> 
-    <dc:identifier id="bookid">urn:uuid:<%= @uuid %></dc:identifier>
+    <dc:identifier opf:scheme="URI" id="etextno"><%= "#{ArchiveConfig.APP_URL}/works/#{@work.id}" %></dc:identifier>
   </metadata>
   <manifest>
     <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+    <item id="header" href="header.xhtml" media-type="application/xhtml+xml"/>
     <% @chapters.size.times do |index| %>
-      <item id="chapter<%= index %>" href="chapter<%= index %>.xhtml" media-type="application/xhtml+xml"/>
+      <item id="chapter<%= index +1 %>" href="chapter<%= index +1%>.xhtml" media-type="application/xhtml+xml"/>
     <% end %>
+    <item id="endnotes" href="endnotes.xhtml" media-type="application/xhtml+xml"/>
   </manifest>
   <spine toc="ncx">
+    <itemref idref="header"/>
     <% @chapters.size.times do |index| %>
-      <itemref idref="chapter<%= index %>"/>
+      <itemref idref="chapter<%= index +1 %>"/>
     <% end %>
+    <itemref idref="endnotes"/>
   </spine>
 </package>
