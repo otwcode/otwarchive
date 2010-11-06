@@ -216,6 +216,8 @@ public
   end
 
   def see_adult?
+    params[:anchor] = "comments" if (params[:show_comments] && params[:anchor].blank?)
+    Rails.logger.debug "Added anchor #{params[:anchor]}"
     return true if session[:adult] || logged_in_as_admin?
     return false unless current_user
     return true if current_user.is_author_of?(@work)
