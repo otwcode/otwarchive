@@ -1,4 +1,4 @@
-@users @wip
+@users
 Feature: User icons
 
   Scenario: Users should be able to upload icons
@@ -9,10 +9,9 @@ Feature: User icons
     And I follow "Edit"
   When I attach the file "test/fixtures/icon.gif" to "icon"
     And I press "Update"
-  # TODO: The rest of this test currently fails, and I can't figure out why  
-  # Then show me the page
-  # Then I should see "Icon uploaded"
-  #   And I should see the "alt" text "No alt text available"
-  # When I fill in "icon_alt" with "Some test description"
-  #   And I press "Update"
-  # Then I should see the "alt" text "Some test description"
+  Then I should see "Pseud was successfully updated"
+    And I should see the "alt" text ""
+  When I follow "Edit"
+    And I fill in "pseud_icon_alt_text" with "Some test description"
+    And I press "Update"
+  Then I should see the "alt" text "Some test description"
