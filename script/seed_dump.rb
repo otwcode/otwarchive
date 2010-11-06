@@ -16,7 +16,7 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 # users who have webdavs or asked to be added
 # or who have problematic works which need testing
 SEEDS = [ "Anneli", "astolat", "Atalan", "awils1", "aworldinside",
-          "Cesy", "ealusaid", "eel", "elz", "erda",
+          "Cesy", "Chandri", "ealusaid", "eel", "elz", "erda",
           "Enigel", "hope", "justira", "lim",
           "melange", "rklyne", "Rustler", "Sidra", "Stowaway",
           "zelempa", "Zooey_Glass", "zlabya",
@@ -154,6 +154,8 @@ def user_associations(users)
 
     TAGS << u.fandoms if u.tag_wrangler
 
+    x << u.skins
+
     u.readings.find_in_batches(:batch_size => NTH) do |readings|
       x << readings.last
       WORKS << readings.last.work if MULTI
@@ -219,6 +221,16 @@ def user_associations(users)
         if item.is_a?(Work)
           if item.posted? || !MULTI
             WORKS << item
+            x << item.related_works
+            item.related_works.each do |parent|
+              if parent.is_a? Work
+                WORKS << parent
+              else
+                x << parent
+              end
+            end
+            x << item.parent_work_relationships
+            item.children.each {|w| WORKS << w}
           end
         elsif item.is_a?(Chapter)
           # chapters get pulled in from works
@@ -253,6 +265,7 @@ def work_associations(items)
   x = []
   items.each do |work|
     print "."; STDOUT.flush
+    next unless work.posted? || !MULTI
     x << work.taggings
     TAGS << work.tags
     x << work.creatorships
@@ -345,8 +358,10 @@ if MULTI
   puts "Dumping roles"
   Role.find_each {|r| write_model(r)}
   puts ""
-  puts "Dumping all admins"
+  puts "Dumping all admins and admin settings"
   Admin.find_each {|a| write_model(a)}
+  write_model(AdminSetting.first)
+  Skin.where(:official => true).each{|s| write_model(s)}
   puts ""
   puts "Dumping all docs"
   AdminPost.find_each {|p| write_model(p)}
