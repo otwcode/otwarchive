@@ -72,8 +72,8 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #main .search {width:50%; margin: auto auto 0.5em auto; border:1px solid #ddd; padding:0.5em;}
 
 /*ADMIN */
-.admin_session-new dt { width:12em; padding-top:0.5em;}
-.admin_session-new form {width: 50%; margin:auto; padding:0.25em;}
+.admin_sessions-new dt { width:12em; padding-top:0.5em;}
+.admin_sessions-new form {width: 50%; margin:auto; padding:0.25em;}
 .admin_users-notify dd {width:40%;}
 .admin_users-notify input {width:100%;}
 .admin_users-notify textarea {height:20em; width:100%;}
