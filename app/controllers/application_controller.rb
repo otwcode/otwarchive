@@ -249,6 +249,10 @@ public
   def check_ownership
   	access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
   end
+  def check_ownership_or_admin
+     return true if logged_in_as_admin?
+     access_denied(:redirect => @check_ownership_of) unless current_user_owns?(@check_ownership_of)
+  end
 
   # Make sure the user is allowed to see a specific page
   # includes a special case for restricted works and series, since we want to encourage people to sign up to read them

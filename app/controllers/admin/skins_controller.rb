@@ -43,7 +43,6 @@ class Admin::SkinsController < ApplicationController
         skin.remove_me_from_preferences
         flash[:notice] += "#{skin.title} "
       end
-      flash[:notice] += '<br />'
     end
     
     # reject skins

@@ -133,9 +133,13 @@ public
   end
 
   def editable?
-    return false if self.official
-    return true if self.author == User.current_user
-    return false
+    if self.official && self.public
+      return true if User.current_user.is_a? Admin
+    elsif self.author == User.current_user
+      return true
+    else
+      return false
+    end
   end
 
   def byline

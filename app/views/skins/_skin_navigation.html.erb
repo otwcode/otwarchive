@@ -1,21 +1,23 @@
-<% if logged_in? && ( skin.id != current_user.preference.skin_id || skin.id != Skin.default.id ) || skin.editable? %>
+<% if logged_in? || skin.editable? %>
   <ul class="navigation" role="navigation">
     <li>
       <% if logged_in? %>
         <%= form_for(current_user.preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| %>
           <% if skin.id == current_user.preference.skin_id %>
             <%= f.hidden_field :skin_id, :value => Skin.default.id %>
-            <%= f.submit t('.formskin.stop_using', :default => "Stop Using") %>
+            <%= f.submit ts("Stop Using") %>
           <% else %>
             <%= f.hidden_field :skin_id, :value => skin.id %>
-            <%= f.submit t('.formskin.update', :default => "Use") %>
+            <%= f.submit ts("Use") %>
           <% end %>
         <% end %>
       <% end %>
     </li>
     <% if skin.editable? %>
-      <li><%= link_to t('.edit', :default => 'Edit'), edit_skin_url(skin) %></li>
-      <li><%= link_to t('.delete', :default => 'Delete'), skin, :confirm => t('.linkskin.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+      <li><%= link_to ts('Edit'), edit_skin_url(skin) %></li>
+      <% unless logged_in_as_admin? %>
+        <li><%= link_to ts('Delete'), skin, :confirm => ts('Are you sure?'), :method => :delete %></li>
+      <% end %>
     <% end %>
   </ul>
 <% end %>

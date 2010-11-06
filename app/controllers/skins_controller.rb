@@ -1,8 +1,9 @@
 class SkinsController < ApplicationController
 
-  before_filter :users_only, :except => [:index, :show]
+  before_filter :users_only, :only => [:new, :create, :destroy]
   before_filter :load_skin, :except => [:index, :new, :create]
-  before_filter :check_ownership, :only => [:edit, :update, :destroy]
+  before_filter :check_ownership_or_admin, :only => [:edit, :update]
+  before_filter :check_ownership, :only => [:destroy]
   before_filter :check_visibility, :only => [:show]
   before_filter :check_editability, :only => [:edit, :update, :destroy]
 
@@ -17,10 +18,10 @@ class SkinsController < ApplicationController
         redirect_to skins_path and return
       end
       @skins = @user.skins
-      @title = t('my_skins', :default => 'My Skins')
+      @title = ts('My Skins')
     else
       @skins = Skin.approved_skins
-      @title = t('public_skins', :default => 'Public Skins')
+      @title = ts('Public Skins')
     end
   end
 
@@ -77,7 +78,7 @@ class SkinsController < ApplicationController
 
   def check_editability
     unless @skin.editable?
-      flash[:error] = "This skin can't be edited anymore!"
+      flash[:error] = ts("Sorry, you don't have permission to edit this skin")
       redirect_to @skin and return 
     end
   end
@@ -87,7 +88,7 @@ class SkinsController < ApplicationController
     begin
       @skin.destroy
     rescue
-      flash[:error] = t('deletion_failed', :default => "We couldn't delete that right now, sorry! Please try again later.")
+      flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end
 
     if current_user && current_user.is_a?(User) && current_user.preference.skin_id == @skin.id

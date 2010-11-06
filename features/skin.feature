@@ -68,6 +68,9 @@ Feature: creating and editing skins
     And I should not see "(Approved)"
     And I should not see "(Not yet reviewed)"
     And I should see "by skinner"
+    And I should find "Stop Using"
+    But I should not find "Use"
+    And I should find "Delete"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting { text-decoration: blink;}"
     And I fill in "Title" with "public blinking skin"
@@ -122,9 +125,10 @@ Feature: creating and editing skins
   Given I am logged out
     And I am logged in as an admin
   When I go to "public blinking skin" skin page
-  Then I should not see "Edit"
+  Then I should not find "Edit"
+    And I should not find "Delete"
   When I go to "public blinking skin" edit skin page
-  Then I should see "Please log out of your admin account first"
+  Then I should see "Sorry, you don't have permission"
   When I go to admin's skins page
     Then I should see "public blinking skin" within "table#unapproved"
   When I check "public blinking skin"
@@ -132,16 +136,27 @@ Feature: creating and editing skins
   Then I should see "The following skins were approved: public blinking skin"
   When I follow "Approved Skins"
   Then I should see "public blinking skin" within "table#approved"
+  When I follow "public blinking skin" 
+  Then I should see "Edit"
+  But I should not find "Delete"
+  When I follow "Edit"
+    And I fill in "CSS" with "#greeting.logged-in { text-decoration: blink;}"
+    And I fill in "Description" with "Blinky love (admin modified)"
+    And I press "Update"
+  Then I should see "Skin updated"
   Given I am logged out as an admin
     And I fill in "user_session_login" with "skinner"
     And I fill in "user_session_password" with "password"
     And I press "Log in"
   Then I should see "Hi, skinner!"
   When I go to "public blinking skin" edit skin page
-  Then I should see "This skin can't be edited anymore!"
+  Then I should see "Sorry, you don't have permission"
   When I follow "My Skins"
   Then I should see "(Approved)"
     And I should not see "Edit"
+    And I should see "(admin modified)"
+    And I should see "#greeting.logged-in" within "style"
+    And I should see "text-decoration: blink;" within "style"
   When I follow "my home"
     And I follow "My Preferences"
   Then "public blinking skin" should be selected within "preference_skin_id"
