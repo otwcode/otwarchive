@@ -70,6 +70,11 @@
             <legend><%= ts("%{tag_type} Settings", :tag_type => tag_type.classify) %></legend>
             <h4><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, "#{tag_type.classify}: " %></h4>
             <p>
+              <!-- 
+                monstrous kludge required by ugly bug in nested_attributes_for, see
+                https://rails.lighthouseapp.com/projects/8994/tickets/2646-validations-not-called-when-model-updating-using-nested-attributes
+              -->
+              <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
               <% tagnames = restriction.tag_set ? restriction.tag_set.send("#{tag_type}_tagnames") : "" %>
               <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :value => tagnames,
                   :rows => (tagnames.size/3 > 10 ? 10 : (tagnames.size/3 < 2 ? 2 : tagnames.size/3)) %>

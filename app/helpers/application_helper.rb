@@ -218,7 +218,7 @@ module ApplicationHelper
     ("\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
     '<img src="/images/spinner.gif" alt="Working..." /></span>' +
     "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>").html_safe +
-    javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
+    javascript_tag("var autocomplete_for_#{fieldname} = new Ajax.Autocompleter('#{fieldname}', 
                             '#{fieldname}_auto_complete', 
                             '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
                             { 
