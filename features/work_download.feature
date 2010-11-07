@@ -23,7 +23,7 @@ Feature: Download a work
   When I follow "HTML"
   When I go to the work page with title "Has double quotes"
   When I follow "Epub"
-  
+
   When I go to the new work page
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with
@@ -74,3 +74,28 @@ Feature: Download a work
   When I follow "HTML"
   When I go to the work page with title "Hàs curly’d quotes"
   When I follow "Epub"
+
+  Scenario: disable guest download
+
+  Given /the following activated user exists
+    |login|password|
+    |user |secret  |
+  And I am logged in as "author" with password "writersrule"
+  And I post the work "NaNoWriMo"
+  And I am logged out
+  When I view the work "NaNoWriMo"
+  And I follow "HTML"
+  Then I should see "NaNoWriMo"
+  And I should not see "Comments"
+  When guest downloading is off
+  When I view the work "NaNoWriMo"
+  And I follow "HTML"
+  Then I should see "Due to current high load"
+  When I fill in "User" with "user"
+  And I fill in "Password" with "secret"
+  And I press "Log in"
+  Then I should see "NaNoWriMo"
+  And I should see "Comments"
+  When I follow "HTML"
+  Then I should see "NaNoWriMo"
+  And I should not see "Comments"

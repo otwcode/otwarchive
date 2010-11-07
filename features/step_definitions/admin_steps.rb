@@ -40,3 +40,8 @@ Given /^I am logged out as an admin$/ do
   visit admin_logout_path
   Then "I should see \"Successfully logged out\""
 end
+
+Given /^guest downloading is off$/ do
+  Given "I have an AdminSetting"
+  AdminSetting.first.update_attribute(:guest_downloading_off, true)
+end

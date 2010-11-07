@@ -3,6 +3,7 @@
 class WorksController < ApplicationController
 
   skip_before_filter :store_location, :only => [:download]
+  before_filter :guest_downloading_off, :only => [:download]
 
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
@@ -933,5 +934,10 @@ public
     end
   end
 
+  def guest_downloading_off
+    if !logged_in? && AdminSetting.guest_downloading_off?
+      redirect_to login_path(:high_load => true)
+    end
+  end
 
 end

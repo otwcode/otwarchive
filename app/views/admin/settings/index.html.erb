@@ -6,12 +6,11 @@
 <%= form_for @admin_setting, :url => admin_setting_path(@admin_setting), :html => {:method => :put} do |f| %>
   <%= error_messages_for @admin_setting %>
   <dl>
-    <dt><%= f.label :account_creation_enabled %>
-(Can people create accounts without an invitation?)
+    <dt><%= f.label :account_creation_enabled, "Account Creation Enabled (Can people create accounts without an invitation?)" %>
 </dt>
     <dd><%= f.check_box :account_creation_enabled %> </dd>
-    <dt><%= f.label :invite_from_queue_enabled %>
-(Can people add themselves to the queue and are invitations sent out automatically?)
+    <dt><%= f.label :invite_from_queue_enabled, "Invite from Queue Enabled
+(Can people add themselves to the queue and are invitations sent out automatically?)" %>
 </dt>
     <dd><%= f.check_box :invite_from_queue_enabled %></dd>
     <dt><%= f.label :invite_from_queue_number, "Number of people to invite from the queue at once:" %> </dt>
@@ -23,6 +22,7 @@
     <dt><%= f.label :suspend_filter_counts, "Suspend some filter tracking due to high posting volume" %></dt>
     <dd><%= f.check_box :suspend_filter_counts %> </dd>
     <dt><%= f.label :tag_wrangling_off, "Turn off tag wrangling for non-admins" %></dt>
+    <dt><%= f.label :guest_download_off, "Turn off downloading for guests" %></dt>
     <dd><%= f.check_box :tag_wrangling_off %></dd>
     <dt><%= f.label :enable_test_caching, "Turn on caching (currently experimental)" %></dt>
     <dd><%= f.check_box :enable_test_caching %> </dd>

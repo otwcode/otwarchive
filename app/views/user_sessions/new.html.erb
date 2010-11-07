@@ -8,6 +8,15 @@
       <%= link_to ts("Or join us for free - it's easy."), new_user_path %>
     <% end %>
   </p>
+<% elsif params[:high_load] %>
+  <h3><%= ts('We are very sorry.') %></h3>
+  <p>
+    <%= ts('Due to current high load, downloads are currently available to registered users of the Archive only.') %>
+    <%= ts('If you already have an Archive of Our Own account, log in now.') %>
+    <% if AdminSetting.account_creation_enabled? %>
+      <%= link_to ts("Or join us for free - it's easy."), new_user_path %>
+    <% end %>
+  </p>
 <% else %>
   <h3><%= ts('Log in') %></h3>
   <p>
