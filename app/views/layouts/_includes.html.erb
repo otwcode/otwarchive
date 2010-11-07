@@ -1,7 +1,11 @@
 <%= stylesheet_link_tag 'archive_core', :media => 'all' %>
-<%= stylesheet_link_tag 'system-messages', :media => 'screen' %>
-<%= stylesheet_link_tag 'site-chrome', :media => 'screen' %>
-<%= stylesheet_link_tag 'forms', :media => 'screen' %>
+<%= stylesheet_link_tag 'system-messages', 
+                        'site-chrome', 
+                        'forms', 
+                        'live_validation', 
+                        'auto_complete', 
+                        :cache => 'cached_for_screen',
+                        :media => 'screen' %>
 <%= stylesheet_link_tag 'userstuff', :media => 'all' %>
 <% if controller.controller_name == 'home' && controller.action_name == 'index' %>
   <%= stylesheet_link_tag 'home', :media => 'screen' %>
@@ -17,10 +21,8 @@
 <%= stylesheet_link_tag 'aural', :media => 'speech' %>
 <%= stylesheet_link_tag 'print', :media => 'print' %>
 <!--plugins-->
-<%= stylesheet_link_tag 'globalize', :media => 'screen' %>
-<%= stylesheet_link_tag 'live_validation', :media => 'screen' %>
-<%= stylesheet_link_tag 'auto_complete', :media => 'screen' %>
-<%= stylesheet_link_tag 'visualize.jQuery', :media => 'screen' %>
+<!-- stylesheet_link_tag 'globalize', :media => 'screen' -->
+<!-- stylesheet_link_tag 'visualize.jQuery', :media => 'screen' -->
 
 <% unless Preference.light?(params[:style]) %>
   <%= stylesheet_link_tag 'userstuff-style-creator', :media => 'all' %>
