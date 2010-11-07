@@ -28,8 +28,7 @@ class PromptRestriction < ActiveRecord::Base
       end
     end
     unless error_types.empty?
-      errors.add(:base, t('prompt_restriction.single_tag', 
-        :default => "You haven't given users a choice of %{error_types}. (If that is deliberate, just set the number of tags required and allowed for that type to 0 instead.)", 
+      errors.add(:base, ts("^You haven't given users a choice of %{error_types}. (If that is deliberate, just set the number of tags required and allowed for that type to 0 instead.)", 
         :error_types => error_types.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
     end
   end
@@ -47,6 +46,38 @@ class PromptRestriction < ActiveRecord::Base
         eval("self.#{tag_type}_num_allowed = required")
       end
     end
+  end
+
+  # If the user wants to initialize the tags, let them
+
+  TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
+    attr_accessor "#{tag_type}_init_less_than_average".to_sym 
+    attr_accessor "#{tag_type}_init_greater_than_average".to_sym
+    attr_accessor "#{tag_type}_init_factor".to_sym
+  end
+  
+  after_save :init_tags
+  def init_tags
+    return if @tag_set_initialized
+    @tag_set_initialized = true
+    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
+      if self.send("#{tag_type}_init_less_than_average") == "1" || self.send("#{tag_type}_init_greater_than_average") == "1"
+        if ArchiveConfig.NO_DELAYS
+          initialize_tags(tag_type.classify.constantize, self.send("#{tag_type}_init_factor").to_f, (self.send("#{tag_type}_init_greater_than_average") == "1"))
+        else
+          delay(:attempts => 3).initialize_tags(tag_type.classify.constantize, self.send("#{tag_type}_init_factor").to_f, (self.send("#{tag_type}_init_greater_than_average") == "1"))
+        end
+      end
+    end
+  end
+  
+  # tag initialization needs to be able to run in the background
+  def initialize_tags(tag_type, factor, greater_than)
+    self.tag_set ||= TagSet.new
+    self.tag_set.send("#{tag_type.name.underscore}_tagnames=", 
+              tag_type.with_popularity_relative_to_average(:factor => factor, :greater_than => greater_than, :names_only => true).
+                          collect(&:name))
+    self.tag_set.save
   end
   
   def has_tags_of_type?(type)

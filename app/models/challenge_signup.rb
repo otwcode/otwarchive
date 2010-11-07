@@ -96,15 +96,15 @@ class ChallengeSignup < ActiveRecord::Base
           prompts = instance_variable_get("@#{prompt_type}") || self.send("#{prompt_type}")
           TagSet::TAG_TYPES.each do |tag_type|
             if restriction.send("require_unique_#{tag_type}")
-              tags = []
+              all_tags_used = []
               prompts.each do |prompt|
                 new_tags = prompt.tag_set.send("#{tag_type}_taglist")
-                unless (tags & new_tags).empty? 
+                unless (all_tags_used & new_tags).empty? 
                   errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.", 
                                       :prompt_type => prompt_type.singularize, :tag_type => tag_type)
                   break
                 end
-                tags += new_tags
+                all_tags_used += new_tags
               end
             end
           end

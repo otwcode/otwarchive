@@ -83,7 +83,7 @@ Feature: Collection
     And I check "gift_exchange_offer_restriction_attributes_allow_any_character"
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_fandoms"
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
-    And I check "gift_exchange_offer_restriction_attributes_tag_set_attributes_character_restrict_to_fandom"
+    And I check "gift_exchange_offer_restriction_attributes_character_restrict_to_fandom"
     And I check "Signup open?"
     And I press "Submit"
   Then I should see "Challenge was successfully created"

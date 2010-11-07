@@ -97,11 +97,11 @@ class Prompt < ActiveRecord::Base
         # if we have a specified set of tags of this type, make sure that all the
         # tags in the prompt are in the set.
         if restriction.has_tags_of_type?(tag_type)
-          taglist = tag_set ? (tag_set.send("#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)) : []
-          unless taglist.empty?
+          disallowed_taglist = tag_set ? (eval("tag_set.#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)) : []
+          unless disallowed_taglist.empty?
             errors.add(:base, ts("^These tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
               :prompt_type => self.class.name,
-              :taglist => taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
+              :taglist => disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
         end
       end
@@ -113,17 +113,16 @@ class Prompt < ActiveRecord::Base
   validate :restricted_tags
   def restricted_tags
     restriction = get_prompt_restriction
-    if restriction && restriction.tag_set && tag_set
+    if restriction
       TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type|
-        if restriction.tag_set.send("#{tag_type}_restrict_to_fandom")
-          @self_fandom_taglist ||= tag_set.fandom_taglist
-          allowed_tags = tag_type.classify.constantize.with_parents(@self_fandom_taglist).canonical
-          taglist = tag_set.send("#{tag_type}_taglist") - allowed_tags
-          unless taglist.empty?
+        if restriction.send("#{tag_type}_restrict_to_fandom")
+          allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
+          disallowed_taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") - allowed_tags : []
+          unless disallowed_taglist.empty?
             errors.add(:base, ts("^Your %{prompt_type} has some %{tag_type} tags that are not in the selected fandom(s), %{fandom}: %{taglist} (If this is an error, please let us know via the support form!)",
                               :prompt_type => self.class.name,
-                              :tag_type => tag_type, :fandom => @self_fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
-                              :taglist => taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
+                              :tag_type => tag_type, :fandom => tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
+                              :taglist => disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
         end
       end

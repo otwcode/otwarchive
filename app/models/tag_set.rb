@@ -34,10 +34,6 @@ class TagSet < ActiveRecord::Base
   TAG_TYPES.each do |type|
     attr_writer "#{type}_tagnames".to_sym
 
-    attr_accessor "#{type}_init_less_than_average".to_sym 
-    attr_accessor "#{type}_init_greater_than_average".to_sym
-    attr_accessor "#{type}_init_factor".to_sym
-
     define_method("#{type}_tagnames") do
       self.instance_variable_get("@#{type}_tagnames") || (self.new_record? ? self.tags.select {|t| t.type == type.classify}.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT) : 
                                                                              self.tags.with_type(type.classify).select('tags.name').order('tags.name').collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
@@ -48,31 +44,6 @@ class TagSet < ActiveRecord::Base
     end
   end
   
-  # If the user wants to initialize the tags, let them
-  after_save :init_tags
-  def init_tags
-    return if @tag_set_initialized
-    tags_to_set = []
-    TAG_TYPES_INITIALIZABLE.each do |tag_type|
-      if self.send("#{tag_type}_init_less_than_average") == "1" || self.send("#{tag_type}_init_greater_than_average") == "1"
-        if ArchiveConfig.NO_DELAYS
-          initialize_tags(tag_type.classify.constantize, self.send("#{tag_type}_init_factor").to_f, (self.send("#{tag_type}_init_greater_than_average") == "1"))
-        else
-          delay(:attempts => 3).initialize_tags(tag_type.classify.constantize, self.send("#{tag_type}_init_factor").to_f, (self.send("#{tag_type}_init_greater_than_average") == "1"))
-        end
-      end
-    end
-    @tag_set_initialized = true
-  end
-  
-  # tag initialization needs to be able to run in the background
-  def initialize_tags(tag_type, factor, greater_than)
-    self.send("#{tag_type.name.underscore}_tagnames=", 
-              tag_type.with_popularity_relative_to_average(:factor => factor, :greater_than => greater_than, :names_only => true).
-                          collect(&:name))
-    save
-  end
-    
   # this actually runs and saves the tags but only after validation
   after_save :assign_tags
   def assign_tags
@@ -81,8 +52,8 @@ class TagSet < ActiveRecord::Base
     end
     
     TAG_TYPES.each do |type|
-      if eval("@#{type}_tagnames")
-        new_tags = eval("#{type}_taglist")
+      if self.instance_variable_get("@#{type}_tagnames")
+        new_tags = self.send("#{type}_taglist")
         old_tags = self.with_type(type.classify)
         tags_to_set = (self.tags - old_tags + new_tags).compact.uniq
         self.tags = tags_to_set
@@ -94,16 +65,14 @@ class TagSet < ActiveRecord::Base
   def all_tags_must_be_canonical
     uncanonical_tags = self.taglist.reject {|tag| tag.canonical}
     unless uncanonical_tags.empty?
-      errors.add(:tagnames, t('tag_set.must_be_canonical', 
-                :default => "^The following tags aren't canonical and can't be used: %{taglist}", 
+      errors.add(:tagnames, ts("^The following tags aren't canonical and can't be used: %{taglist}", 
                 :taglist => uncanonical_tags.collect(&:name).join(", ") ))
     end
     
     TAG_TYPES.each do |type|
       uncanonical_tags = eval("#{type}_taglist").reject {|tag| tag.canonical}
       unless uncanonical_tags.empty?
-        errors.add("#{type}_tagnames", t("tag_set.#{type}_must_be_canonical", 
-                  :default => "^The following #{type} tags aren't canonical and can't be used: %{taglist}", 
+        errors.add("#{type}_tagnames", ts("^The following #{type} tags aren't canonical and can't be used: %{taglist}", 
                   :taglist => uncanonical_tags.collect(&:name).join(", ") ))
       end
     end
