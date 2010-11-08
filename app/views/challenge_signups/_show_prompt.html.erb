@@ -1,14 +1,6 @@
 <!-- expects local value "prompt" -->
 <div class="wrapper">
   <dl class="collection meta">
-    <% unless prompt.url.blank? %>
-      <dt><%= ts("URL") %>:</dt>
-      <dd><%= link_to(prompt.url, prompt.url) %></dd>
-    <% end %>
-    <% unless prompt.description.blank? %> 
-      <dt><%= ts("Details") %>:</dt>
-      <dd><%= raw sanitize_field(prompt, :description) %></dd>
-    <% end %>
     <% if prompt.tag_set && !prompt.tag_set.tags.empty? %>
       <dt>Tags:</dt>
       <dd>
@@ -22,6 +14,14 @@
           </ul>
         <% end %>
       </dd>
+    <% end %>
+    <% unless prompt.url.blank? %>
+      <dt><%= ts("URL") %>:</dt>
+      <dd><%= link_to(prompt.url, prompt.url) %></dd>
+    <% end %>
+    <% unless prompt.description.blank? %> 
+      <dt><%= ts("Details") %>:</dt>
+      <dd><%= raw sanitize_field(prompt, :description) %></dd>
     <% end %>
   </dl>
 </div>

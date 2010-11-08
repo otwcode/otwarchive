@@ -30,8 +30,8 @@
     <% end %>
 
     <% if @collection.user_is_maintainer?(current_user) %>
-    	<li><%= link_to t('.collections.participants', :default => "Membership", :count => @collection.collection_participants.count), collection_participants_path(@collection) %></li>
-    	<li><%= link_to t('.collections.items', :default => "Manage Items", :count => @collection.collection_items.count), collection_items_path(@collection) %></li>
+    	<li><%= link_to ts("Membership"), collection_participants_path(@collection) %></li>
+    	<li><%= link_to ts("Manage Items"), collection_items_path(@collection) %></li>
     <% end %>
 
   </ul>

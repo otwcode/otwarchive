@@ -16,21 +16,21 @@ Feature: Collection
     | myname4        | something   |
     And I have no tags
     And I create the fandom "Stargate Atlantis" with id 27
-    And I create the fandom "Stargate SG-1" with id 28
+    And I create the fandom "Starsky & Hutch" with id 28
     And I create the fandom "Tiny fandom" with id 29
     And I create the fandom "Care Bears" with id 30
     And I create the fandom "Yuletide Hippos RPF" with id 31
     And basic tags
     And a character exists with name: "John Sheppard", canonical: true
     And I add the fandom "Stargate Atlantis" to the character "John Sheppard"
-    And I add the fandom "Stargate SG-1" to the character "John Sheppard"
+    And I add the fandom "Starsky & Hutch" to the character "John Sheppard"
     And I add the fandom "Tiny fandom" to the character "John Sheppard"
     And a character exists with name: "Teyla Emmagan", canonical: true
     And I add the fandom "Stargate Atlantis" to the character "Teyla Emmagan"
-    And I add the fandom "Stargate SG-1" to the character "Teyla Emmagan"
+    And I add the fandom "Starsky & Hutch" to the character "Teyla Emmagan"
     And a character exists with name: "Foo The Wonder Goat", canonical: true
     And I add the fandom "Tiny fandom" to the character "Foo The Wonder Goat"
-    And I add the fandom "Stargate SG-1" to the character "Foo The Wonder Goat"
+    And I add the fandom "Starsky & Hutch" to the character "Foo The Wonder Goat"
     And a character exists with name: "Obscure person", canonical: true
     And I add the fandom "Tiny fandom" to the character "Obscure person"
     And I am logged in as "mod1" with password "something"
@@ -70,7 +70,7 @@ Feature: Collection
     And I fill in "gift_exchange_requests_num_allowed" with "3"
     And I fill in "gift_exchange_offers_num_required" with "2"
     And I fill in "gift_exchange_offers_num_allowed" with "3"
-    And I fill in "gift_exchange_offer_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate SG-1, Stargate Atlantis, Tiny fandom, Care Bears, Yuletide Hippos RPF"
+    And I fill in "gift_exchange_offer_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Starsky & Hutch, Stargate Atlantis, Tiny fandom, Care Bears, Yuletide Hippos RPF"
     And I fill in "gift_exchange_request_restriction_attributes_fandom_num_required" with "1"
     And I fill in "gift_exchange_request_restriction_attributes_fandom_num_allowed" with "1"
     And I check "gift_exchange_request_restriction_attributes_require_unique_fandom"
@@ -117,7 +117,7 @@ Feature: Collection
     And I should see "Show all 5 options"
     And I should see "Care Bears"
     And I should see "Stargate Atlantis"
-    And I should see "Stargate SG-1"
+    And I should see "Starsky & Hutch"
     And I should see "Tiny fandom"
     And I should see "Yuletide Hippos RPF"
     And I should see "Characters (0 - 2):"
@@ -164,7 +164,7 @@ Feature: Collection
   Then I should see "We couldn't save this ChallengeSignup, sorry!"
     And I should see "Request must have between 0 and 2 character tags. You currently have (3) -- John Sheppard, Teyla Emmagan, Obscure person."
     And I should see "Your Request has some character tags that are not in the selected fandom(s), Stargate Atlantis: Obscure person"
-    And I should see "Request must have exactly 1 fandom tags. You currently have (2) -- Stargate SG-1, Tiny fandom."
+    And I should see "Request must have exactly 1 fandom tags. You currently have (2) -- Starsky & Hutch, Tiny fandom."
     And I should see "Your Offer has some character tags that are not in the selected fandom(s), Care Bears: Obscure person, John Sheppard"
     And I should see "Offer must have between 2 and 3 character tags. You currently have (4) -- Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat."
     And I should see "Your Offer has some character tags that are not in the selected fandom(s), Care Bears: Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
@@ -311,7 +311,7 @@ Feature: Collection
     And I should not see "No recipient"
     And I should see "Purge Assignments"
     And I should see "Default All Unposted"
-    And I should see "Show Covered Defaults"
+    And I should see "Show Assigned Pinch Hits"
     Given the system processes jobs
       And I wait 3 seconds
     When I reload the page

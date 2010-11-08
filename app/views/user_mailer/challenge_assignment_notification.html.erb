@@ -19,6 +19,10 @@
   <%= user_assignments_url(@assigned_user) %>
 </p>
 
+<% if @collection && !@collection.assignment_notification.blank? %>
+  <%= @collection.assignment_notification %>
+<% end %>
+
 <p>
   For more information about this challenge and contact information for the moderators, please see the collection profile at:
   <%= collection_profile_url(@collection) %> 

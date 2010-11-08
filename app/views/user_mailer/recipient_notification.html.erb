@@ -14,7 +14,7 @@
     </blockquote>
   <% end %>
   <% if @collection && !@collection.gift_notification.blank? %>
-    <%=raw sanitize_field(@collection, :gift_notification) %>
+    <%= @collection.gift_notification %>
   <% end %>
 </p>
 

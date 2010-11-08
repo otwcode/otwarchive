@@ -272,6 +272,10 @@ class Collection < ActiveRecord::Base
     CollectionParticipant.in_collection(self).for_user(user) 
   end
   
+  def assignment_notification
+    self.collection_profile.assignment_notification || (parent ? parent.collection_profile.assignment_notification : "")
+  end
+  
   def gift_notification
     self.collection_profile.gift_notification || (parent ? parent.collection_profile.gift_notification : "")
   end
