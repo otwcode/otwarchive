@@ -67,20 +67,11 @@ gem 'permit_yo'
 # http://openhood.com/rack/ruby/2010/07/15/rack-test-warning/
 gem "escape_utils"
 
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
-group :development, :test do
-  # enable debugging with "rails server -u" or "rails server --debugger"
-  if RUBY_VERSION >= '1.9'
-    gem 'ruby-debug19', :require => 'ruby-debug'
-  else
-    gem 'ruby-debug'
-  end
-  gem 'rspec-rails', '>=2.0.0.beta.22'  
-end
+# enable debugging with "rails server -u" or "rails server --debugger"
+gem 'ruby-debug19', :require => 'ruby-debug'
 
 group :test do
+  gem 'rspec-rails', '>=2.0.0.beta.22'  
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
