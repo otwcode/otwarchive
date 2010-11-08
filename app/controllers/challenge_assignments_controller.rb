@@ -214,7 +214,7 @@ class ChallengeAssignmentsController < ApplicationController
   
   def default_all
     # mark all unfulfilled assignments as defaulted
-    ChallengeAssignment.in_collection(@collection).unfulfilled.each do |unfulfilled_assignment|
+    ChallengeAssignment.in_collection(@collection).unfulfilled.readonly(false).each do |unfulfilled_assignment|
       unfulfilled_assignment.defaulted_at = Time.now
       unfulfilled_assignment.save
     end
