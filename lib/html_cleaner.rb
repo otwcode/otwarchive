@@ -107,7 +107,7 @@ module HtmlCleaner
   def walk_array(array)
     array.each_with_index do |el,i|
       if el.is_a? String
-        array[i] = Sanitize.clean(el)
+        array[i] = sanitize_value("", el)
       elsif el.is_a? Hash
         array[i] = walk_hash(el)
       elsif el.is_a? Array
