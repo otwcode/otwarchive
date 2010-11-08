@@ -7,7 +7,7 @@
   <h3 class="landmark">Tags List</h3>
   <ol class="tag index">
     <% for tag in @tags %>
-      <p><%= tag_search_result(tag) %></p>
+      <li><%= tag_search_result(tag) %></li>
     <% end %>
   </ol>
   <%= will_paginate @tags %>
