@@ -232,7 +232,9 @@ protected
     create_work_html
 
     # convert to PDF
-    cmd = %Q{cd "#{@work.workdir}"; wkhtmltopdf --encoding utf-8 --title "#{@work.title}" "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
+    # double quotes in title need to be escaped
+    title = @work.title.gsub(/"/, '\"')
+    cmd = %Q{cd "#{@work.workdir}"; wkhtmltopdf --encoding utf-8 --title "#{title}" "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
 
@@ -242,7 +244,9 @@ protected
 
   def download_mobi
      cmd_pre = %Q{cd "#{@work.workdir}"; html2mobi }
-     cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title "#{@work.title}" --author "#{@work.display_authors}" }
+     # double quotes in title need to be escaped
+     title = @work.title.gsub(/"/, '\"')
+     cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title "#{title}" --author "#{@work.display_authors}" }
 
     # if only one chapter can use same file as html and pdf versions
     if @chapters.size == 1
@@ -251,12 +255,12 @@ protected
       # except mobi requires latin1 encoding
       unless File.exists?("#{@work.workdir}/mobi.html")
         html = Iconv.conv("LATIN1//TRANSLIT//IGNORE", "UTF8",
-                 File.read("#{@work.workdir}/#{@work.download_title}.html"))
-        File.open("#{@work.workdir}/mobi_latin.html", 'w') {|f| f.write(html)}
+                 File.read("#{@work.workdir}/#{@work.download_title}.html")).force_encoding("ISO-8859-1")
+        File.open("#{@work.workdir}/mobi.html", 'w') {|f| f.write(html)}
       end
 
       # convert latin html to mobi
-      cmd = cmd_pre + "mobi_latin.html" + cmd_post
+      cmd = cmd_pre + "mobi.html" + cmd_post
     else
       # more than one chapter
       # create a table of contents out of separate chapter files

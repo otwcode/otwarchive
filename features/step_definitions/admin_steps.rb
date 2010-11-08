@@ -44,4 +44,5 @@ end
 Given /^guest downloading is off$/ do
   Given "I have an AdminSetting"
   AdminSetting.first.update_attribute(:guest_downloading_off, true)
+  assert AdminSetting.guest_downloading_off?
 end

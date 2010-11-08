@@ -89,18 +89,17 @@ Feature: Download a work
   And I should not see "Comments"
   When guest downloading is off
   When I view the work "NaNoWriMo"
-  And I follow "HTML"
+  And I follow "PDF"
   Then I should see "Due to current high load"
   When I fill in "User" with "user"
   And I fill in "Password" with "secret"
   And I press "Log in"
   Then I should see "NaNoWriMo"
   And I should see "Comments"
-  When I follow "HTML"
-  Then I should see "NaNoWriMo"
-  And I should not see "Comments"
+  When I follow "MOBI"
+  Then I should not see "Due to current high load"
 
- Scenario: download chaptered works doesn't bomb 
+ Scenario: download chaptered works doesn't bomb
   Given /the following activated user exists
     |login|password|
     |user |secret  |

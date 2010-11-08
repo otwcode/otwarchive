@@ -593,9 +593,8 @@ class Work < ActiveRecord::Base
   def download_title
     string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", self.title)
     string = string.gsub(/[^[\w _-]]+/, '')
-    string = string.gsub(/^(.{24}[\w.]*).*/) {$1}
-    string = ts("Work by") + download_authors if string.blank?
-    string
+    string = "Work by " + download_authors if string.blank?
+    string.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
 
   def hits
