@@ -20,6 +20,14 @@ When /^I edit the bookmark for "([^\"]*)"$/ do |work|
   click_link("Edit/Add Bookmark")
 end
 
+When /^I post the chaptered work "([^\"]*)"$/ do |title|
+  When "I post the work \"#{title}\""
+  When "I follow \"Add Chapter\""
+  fill_in("content", :with => "Another Chapter.")
+  click_button("Preview")
+  When "I follow \"Post Chapter\""
+end
+
 When /^I post the work "([^\"]*)"$/ do |title|
   work = Work.find_by_title(work)
   if work.blank?

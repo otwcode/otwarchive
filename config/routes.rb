@@ -1,5 +1,10 @@
 Otwarchive::Application.routes.draw do
 
+  #### DOWNLOADS ####
+
+  match 'downloads/:download_authors/:id/:download_title.:format' => 'works#download', :as => 'download'
+
+
   #### INVITATIONS ####
 
   resources :invitations  
@@ -197,7 +202,6 @@ Otwarchive::Application.routes.draw do
       get :preview_tags
       put :update_tags
       get :marktoread
-      get :download
     end
     resources :bookmarks
     resources :chapters do

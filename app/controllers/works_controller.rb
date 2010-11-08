@@ -189,177 +189,191 @@ class WorksController < ApplicationController
     Reading.update_or_create(@work, current_user)
   end
 
+  # once a format has been created, we want nginx to be able to serve
+  # it directly, without going through rails again (until the work changes).
+  # This means no processing per user. consider this the "published" version
+  # It can't contain unposted chapters, nor unrevealed authors, even
+  # if the author is the one requesting the download
+
+  # named route: download_path
+  # Note: only :id and :format need to be correct,
+  # the other two are derived and are there for nginx's benefit
+  # GET /downloads/:download_authors/:id/:download_title.:format
   def download
-    @downloading = true
-    @page_title = @work.unrevealed? ?
-        ts("Mystery Work") :
-        get_page_title(
-          @work.fandoms.size > 3 ?
-            ts("Multifandom") : @work.fandoms.string,
-          @work.anonymous? ?
-            ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
-          @work.title,
-          :omit_archive_name => true, :truncate => true)
 
-    # unicode filenames are problematic
-    @filename = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", @page_title)
-    # as are most other special characters
-    @filename = @page_title.gsub(/[^[a-zA-Z0-9 _-]]+/, '')
-    Rails.logger.debug @filename
-
-    # we use entire work
-    @chapters = @work.chapters_in_order
-    @work.increment_download_count
-
-    # get series info for footer
-    if @work.series
-      @series = @work.series.select{|s| s.visible?(current_user)}
+    if @work.unrevealed?
+      flash[:error] = ts("Sorry, you can't download an unrevealed work")
+      redirect_back_or_default works_path
     end
 
+    FileUtils.mkdir_p @work.workdir
+    @chapters = @work.chapters.order('position ASC').where(:posted => true)
+
     respond_to do |format|
-      @tempdir = "#{Rails.root}/tmp"
-
-      # all in one file
-      # send html
       format.html {download_html}
-      # pdf
       format.pdf {download_pdf}
-
-      # chapter by chapter
       # mobipocket for kindle
       format.mobi {download_mobi}
       # epub for ibooks
       format.epub {download_epub}
-
     end
   end
 
 protected
 
   def download_html
-    @html_content = render_to_string(:template => "works/download", :layout => 'barebones')
-    File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
-    send_file("#{@tempdir}/#{@filename}.html", :type => "text/html", :filename => "#{@filename}.html")
-    # clean up HTML file
-    File.delete("#{@tempdir}/#{@filename}.html")
+    create_work_html
+
+    # send as HTML
+    send_file("#{@work.workdir}/#{@work.download_title}.html", :type => "text/html")
   end
 
   def download_pdf
-    @html_content = render_to_string(:template => "works/download.html", :layout => 'barebones.html')
-    File.open("#{@tempdir}/#{@filename}.html", 'w') {|f| f.write(@html_content)}
-    cmd = %Q{wkhtmltopdf --encoding utf-8 --title "#{@filename}" "#{@tempdir}/#{@filename}.html" "#{@tempdir}/#{@filename}.pdf"}
+    create_work_html
+
+    # convert to PDF
+    cmd = %Q{cd "#{@work.workdir}"; wkhtmltopdf --encoding utf-8 --title "#{@work.title}" "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
 
-    # clean up temp HTML file
-    File.delete("#{@tempdir}/#{@filename}.html")
-
-    # send the PDF
-    send_file("#{@tempdir}/#{@filename}.pdf", :type => "application/pdf", :filename => "#{@filename}.pdf")
-
-    # clean up temp file
-    File.delete("#{@tempdir}/#{@filename}.pdf")
+    # send as PDF
+    send_file("#{@work.workdir}/#{@work.download_title}.pdf", :type => "application/pdf")
   end
 
   def download_mobi
-    tempdir = "#{Rails.root}/tmp/#{@filename}_mobi"
-    Dir.mkdir(tempdir) unless File.exists?(tempdir)
+     cmd_pre = %Q{cd "#{@work.workdir}"; html2mobi }
+     cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title "#{@work.title}" --author "#{@work.display_authors}" }
 
-    header = render_to_string(:template => "works/download_header.html", :layout => 'barebones.html')
-    File.open("#{tempdir}/chapter0.html", 'w') {|f| f.write(header)}
+    # if only one chapter can use same file as html and pdf versions
+    if @chapters.size == 1
+      create_work_html
 
-    @chapters.each_with_index do |chapter, index|
-      @chapter = chapter
-      @page_title = @chapter.title.blank? ? "Chapter #{index + 1}" : @chapter.title
-      chapter_html_content = render_to_string(:template => "chapters/download.html", :layout => "barebones.html")
-      File.open("#{tempdir}/chapter#{index+1}.html", 'w') {|f| f.write(chapter_html_content)}
+      # except mobi requires latin1 encoding
+      unless File.exists?("#{@work.workdir}/mobi.html")
+        html = Iconv.conv("LATIN1//TRANSLIT//IGNORE", "UTF8",
+                 File.read("#{@work.workdir}/#{@work.download_title}.html"))
+        File.open("#{@work.workdir}/mobi_latin.html", 'w') {|f| f.write(html)}
+      end
+
+      # convert latin html to mobi
+      cmd = cmd_pre + "mobi_latin.html" + cmd_post
+    else
+      # more than one chapter
+      # create a table of contents out of separate chapter files
+      mobi_files = create_mobi_html
+      cmd = cmd_pre + mobi_files + " --gentoc" + cmd_post
     end
-
-    @page_title = "Endnotes"
-    endnotes = render_to_string(:template => "works/download_endnotes.html", :layout => 'barebones.html')
-    File.open("#{tempdir}/endnotes.html", 'w') {|f| f.write(endnotes)}
-
-    # converts the tempfile to mobi using MobiPerl
-
-    # list of chapters
-    html_files = 0.upto(@chapters.size).map {|i| "chapter#{i}.html"}.join(' ') + " endnotes.html"
-
-    title = %Q{#{@work.title.gsub(/"/, '\"')}}
-
-    author = @work.anonymous? ? ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', ')
-    author = %Q{#{author}}
-
-    cmd = %Q{cd "#{tempdir}" ; html2mobi #{html_files} --mobifile "#{@filename}.mobi" --gentoc --title "#{title}" --author "#{author}"}
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
-
-    # sends the new mobi file
-    send_file("#{tempdir}/#{@filename}.mobi", :type => "application/mobi", :filename => "#{@filename}.mobi")
-
-    # clean up temp files
-    FileUtils.rm_rf tempdir
+    send_file("#{@work.workdir}/#{@work.download_title}.mobi", :type => "application/mobi")
   end
 
-  # Manually building an epub file here
-  # See http://www.jedisaber.com/eBooks/tutorial.asp for details
   def download_epub
-
-    # create temp folder with filename
-    tempdir = "#{Rails.root}/tmp/#{@filename}_epub"
-    Dir.mkdir(tempdir) unless File.exists?(tempdir)
-
-    # write "mimetype" file
-    File.open("#{tempdir}/mimetype", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/mimetype"))}
-
-    # create subdirs META-INF and OEBPS
-    Dir.mkdir("#{tempdir}/META-INF") unless File.exists?("#{tempdir}/META-INF")
-    Dir.mkdir("#{tempdir}/OEBPS") unless File.exists?("#{tempdir}/OEBPS")
-    #Dir.mkdir("#{tempdir}/images") unless File.exists?("#{tempdir}/images")
-    #Dir.mkdir("#{tempdir}/stylesheets") unless File.exists?("#{tempdir}/stylesheets")
-
-    # write the META-INF/container.xml file
-    File.open("#{tempdir}/META-INF/container.xml", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/container.xml"))}
-
-    # write the OEBPS/toc.ncx file
-    File.open("#{tempdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx"))}
-
-    # write the OEBPS/content.opf file
-    File.open("#{tempdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf"))}
-
-    header = render_to_string(:template => "works/download_header.html", :layout => 'barebones.html')
-    doc = Nokogiri::HTML(header)
-    xhtml = doc.children.to_xhtml
-    File.open("#{tempdir}/OEBPS/header.xhtml", 'w') {|f| f.write(xhtml)}
-
-    @chapters.each_with_index do |chapter, index|
-      Rails.logger.debug "ePub Chapter #{index + 1}"
-      @chapter = chapter
-      chapter_html_content = render_to_string(:template => "chapters/download.html", :layout => "barebones.html")
-      # turn chapter_html_content into xhtml
-      doc = Nokogiri::HTML(chapter_html_content)
-      xhtml = doc.children.to_xhtml
-      # write content to OEBPS/chapter[#].xhtml
-      File.open("#{tempdir}/OEBPS/chapter#{index + 1}.xhtml", 'w') {|f| f.write(xhtml)}
+    # if only one chapter can use same file as html and pdf versions
+    if @chapters.size == 1
+      create_epub_files("single")
+    else
+      create_epub_files
     end
 
-    endnotes = render_to_string(:template => "works/download_endnotes.html", :layout => 'barebones.html')
-    doc = Nokogiri::HTML(endnotes)
-    xhtml = doc.children.to_xhtml
-    File.open("#{tempdir}/OEBPS/endnotes.xhtml", 'w') {|f| f.write(xhtml)}
-
-
-    # stuff contents of directory into a zip file named with .epub extension
+    # stuff contents of epub directory into a zip file named with .epub extension
     # note: we have to zip this up in this particular order because "mimetype" must be the first item in the zipfile
-    cmd = %Q{cd "#{tempdir}" ; zip "#{@filename}.epub" mimetype ; zip -r "#{@filename}.epub" META-INF OEBPS}
+    cmd = %Q{cd "#{@work.workdir}"; zip "#{@work.download_title}.epub" epub/mimetype; zip -r "#{@work.download_title}.epub" epub/META-INF epub/OEBPS}
     Rails.logger.debug cmd
-    `#{cmd} 2> /dev/null`
+   `#{cmd} 2> /dev/null`
 
     # send the file
-    send_file("#{tempdir}/#{@filename}.epub", :type => "application/epub", :filename => "#{@filename}.epub")
-
-    # clean up temp files
-    FileUtils.rm_rf tempdir
+    send_file("#{@work.workdir}/#{@work.download_title}.epub", :type => "application/epub")
   end
+
+  def create_work_html
+    return if File.exists?("#{@work.workdir}/#{@work.download_title}.html")
+
+    # set up instance variables needed by template
+    @page_title = [@work.download_title, @work.download_authors, @work.download_fandoms].join(" - ")
+
+    # render template
+    html = render_to_string(:template => "works/download.html", :layout => 'barebones.html')
+
+    # write to file
+    File.open("#{@work.workdir}/#{@work.download_title}.html", 'w') {|f| f.write(html)}
+  end
+
+  def create_mobi_html
+    return if File.exists?("#{@work.workdir}/#{@work.download_title}.mobi")
+    workdir = "#{@work.workdir}/mobi"
+    FileUtils.mkdir_p workdir
+
+    # the preface contains meta tag information, the title/author, work summary and work notes
+    @page_title = ts("Preface")
+    render_mobi_html("_download_preface", "preface")
+
+    # each chapter may have its own byline, notes and endnotes
+    @chapters.each_with_index do |chapter, index|
+       @chapter = chapter
+       @page_title = chapter.chapter_title
+       render_mobi_html("_download_chapter", "chapter#{index+1}")
+    end
+
+    # the afterword contains the works end notes, any related works, and a link back to comment
+     @page_title = ts("Afterword")
+     render_mobi_html("_download_afterword", "afterword")
+
+    chapter_file_names = 1.upto(@chapters.size).map {|i| "mobi/chapter#{i}.html"}
+    ["mobi/preface.html", chapter_file_names.join(' '), "mobi/afterword.html"].join(' ')
+  end
+
+  def render_mobi_html(template, basename)
+    @mobi = true
+    html = render_to_string(:template => "works/#{template}.html", :layout => 'barebones.html')
+    html = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", html)
+    File.open("#{@work.workdir}/mobi/#{basename}.html", 'w') {|f| f.write(html)}
+  end
+
+  def create_epub_files(single = "")
+    return if File.exists?("#{@work.workdir}/#{@work.download_title}.epub")
+  # Manually building an epub file here
+  # See http://www.jedisaber.com/eBooks/tutorial.asp for details
+    workdir = "#{@work.workdir}/epub"
+    FileUtils.mkdir_p workdir
+
+    # copy mimetype and container files which don't need processing
+    FileUtils.cp("#{Rails.root}/app/views/epub/mimetype", workdir)
+    FileUtils.mkdir_p "#{workdir}/META-INF"
+    FileUtils.cp("#{Rails.root}/app/views/epub/container.xml", "#{workdir}/META-INF")
+
+    # write the OEBPS navigation files
+    FileUtils.mkdir_p "#{workdir}/OEBPS"
+    File.open("#{workdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx#{single}"))}
+    File.open("#{workdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf#{single}"))}
+
+    # write the OEBPS content files
+    if single == "single"
+      # can use work html, but needs translation into proper xhtml
+      create_work_html
+      render_xhtml(File.read("#{@work.workdir}/#{@work.download_title}.html"), "work")
+    else
+      preface = render_to_string(:template => "works/_download_preface.html", :layout => 'barebones.html')
+      render_xhtml(preface, "preface")
+
+      @chapters.each_with_index do |chapter, index|
+        @chapter = chapter
+        html = render_to_string(:template => "works/_download_chapter.html", :layout => "barebones.html")
+        render_xhtml(html, "chapter#{index + 1}")
+      end
+
+      afterword = render_to_string(:template => "works/_download_afterword.html", :layout => 'barebones.html')
+      render_xhtml(afterword, "afterword")
+    end
+  end
+
+  def render_xhtml(html, filename)
+    doc = Nokogiri::HTML.parse(html)
+    xhtml = doc.children.to_xhtml
+    File.open("#{@work.workdir}/epub/OEBPS/#{filename}.xhtml", 'w') {|f| f.write(xhtml)}
+  end
+
+
 
 public
 

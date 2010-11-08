@@ -101,7 +101,12 @@ Don't go further with the deploy until you have fixed the problem!"
     notice "Copying local files"
     ok_or_warn %Q{cd #{CURRENT_DIR}/config && cp #{SHARED_DIR}/config/* .}
     ok_or_warn %Q{cd #{CURRENT_DIR}/public && cp #{SHARED_DIR}/public/* .}
+
+    # directories that we want to keep through deploys
+    notice "Linking directories"
     ok_or_warn %Q{ln -s #{SHARED_DIR}/sphinx #{CURRENT_DIR}/db/sphinx}
+    ok_or_warn %Q{ln -s #{SHARED_DIR}/downloads #{CURRENT_DIR}/public/}
+
     notice "Updating revision in local.yml"
     ok_or_warn %Q{sed -i '$d' #{CURRENT_DIR}/config/local.yml}
     ok_or_warn %Q{echo REVISION: #{@new_rev} >> #{CURRENT_DIR}/config/local.yml}

@@ -129,4 +129,8 @@ module WorksHelper
       [work_embed, tags_text, bookmark_text].join("\n")
     end
   end
+
+  def download_url_for_work(work, format)
+    url_for ("/downloads/#{work.download_authors}/#{work.id}/#{work.download_title}.#{format}").gsub(' ', '%20')
+  end
 end

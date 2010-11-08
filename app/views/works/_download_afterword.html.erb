@@ -1,0 +1,19 @@
+<% unless @work.endnotes.blank? && @work.approved_children.blank? %>
+  <div class="meta">
+    <% unless @work.endnotes.blank? %>
+      <div id="endnotes">
+        <p><%= ts("End Notes") %></p>
+        <blockquote class="userstuff"><%=raw sanitize_field(@work, :endnotes) %></blockquote>
+      </div>
+    <% end %>
+
+    <% unless @work.approved_children.blank? %>
+      <dl>
+        <dt><%= ts('Works inspired by this one') %></dt>
+        <dd><%= @work.approved_related_works.reject{|rw| rw.translation}.map{|rw| "#{link_to rw.work.title, url_for(rw.work, :only_path => false)} #{ts('by')} #{byline(related_work.work)}"}.join(", ").html_safe %>
+      </dl>
+    <% end %>
+  </div>
+<% end %>
+
+<p class="message"><%= ts("Please") %> <%= link_to ts("drop by the archive and comment"), new_work_comment_path(@work, :only_path => false) %> <%= ts("to let the author know if you enjoyed their work!") %></p>

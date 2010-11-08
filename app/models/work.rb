@@ -177,7 +177,7 @@ class Work < ActiveRecord::Base
   # before_save :validate_tags # Enigel's feeble attempt
   before_save :check_for_invalid_tags
   before_update :validate_tags
-	after_update :adjust_series_restriction
+  after_update :adjust_series_restriction
 
   def self.purge_old_drafts
     drafts = Work.find(:all, :conditions => ['works.posted = ? AND works.created_at < ?', false, 1.week.ago])
@@ -559,11 +559,43 @@ class Work < ActiveRecord::Base
   end
 
   # save downloads
-  def increment_download_count
-    counter = self.hit_counter
-    unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
-      counter.download_count = counter.download_count + 1
-    end
+  # there's no point in this any more. it will never be more than 
+  # 4*number of revisions.. all other times will be served by nginx
+#  def increment_download_count
+#    counter = self.hit_counter
+#    unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
+#      counter.download_count = counter.download_count + 1
+#    end
+#  end
+
+  after_update :remove_outdated_downloads
+  def remove_outdated_downloads
+    FileUtils.rm_rf(self.workdir)
+  end
+  def workdir
+    "#{Rails.public_path}/downloads/#{self.download_authors}/#{self.id}"
+  end
+  def download_fandoms
+    string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
+    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
+    string.gsub(/[^[\w _-]]+/, '')
+  end
+  def display_authors
+    string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join(', ')
+  end
+  # need the next two to be filesystem safe and not overly long
+  def download_authors
+    string = self.anonymous? ? ts("Anonymous") : self.pseuds.sort.map(&:name).join('-')
+    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)
+    string = string.gsub(/[^[\w _-]]+/, '')
+    string.gsub(/^(.{24}[\w.]*).*/) {$1}
+  end
+  def download_title
+    string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", self.title)
+    string = string.gsub(/[^[\w _-]]+/, '')
+    string = string.gsub(/^(.{24}[\w.]*).*/) {$1}
+    string = ts("Work by") + download_authors if string.blank?
+    string
   end
 
   def hits

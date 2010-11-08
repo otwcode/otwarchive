@@ -1,4 +1,4 @@
-<% unless @preview_mode || @downloading %>
+<% unless @preview_mode %>
 <!-- BEGIN navigation -->
 <h3 class="landmark">Actions</h3>
 <ul class="navigation" role="navigation">
@@ -64,10 +64,10 @@
   <li>
     <a onclick="subnav_view.toggle()" title="Download Options"><%= ts("Download") %> &#8595;</a>
     <ul id="subnav">
-      <li><%= link_to(ts("Mobi"), download_work_path(@work, :format => :mobi)) %></li>
-      <li><%= link_to(ts("Epub"), download_work_path(@work, :format => :epub)) %></li>
-      <li><%= link_to(ts("PDF"), download_work_path(@work, :format => :pdf)) %></li>
-      <li><%= link_to(ts("HTML"), download_work_path(@work, :format => :html)) %></li>
+      <li><%= link_to ts("MOBI"), download_url_for_work(@work, "mobi") %></li>
+      <li><%= link_to ts("EPUB"), download_url_for_work(@work, "epub") %></li>
+      <li><%= link_to ts("PDF"), download_url_for_work(@work, "pdf") %></li>
+      <li><%= link_to ts("HTML"), download_url_for_work(@work, "html") %></li>
       <li><a onclick="subnav_view.toggle()" style='cursor: pointer;' title="Close Download Options">Close</a></li>
     </ul>
   </li>
@@ -77,7 +77,7 @@
 
 <% if @preview_mode %>
    <%= render :partial => 'works/meta', :locals => {:work => @work} %>
-<% elsif !@downloading %>
+<% else %>
   <% hide_show = "#{hide_warnings?(@work) ? "1" : "0"}-#{hide_freeform?(@work) ? "1" : "0"}" %>
   <% cache([@work, "meta", hide_show]) do %>
     <%= render :partial => 'works/meta', :locals => {:work => @work} %>

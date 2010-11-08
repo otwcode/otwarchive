@@ -1,0 +1,50 @@
+<p class="message"><%= ts("Posted originally on the") %> <%= link_to ArchiveConfig.APP_NAME, root_path(:only_path => false) %> <%= ts("at") %> <%= link_to work_url(@work), work_url(@work, :only_path => false) %>.</p>
+
+<div class="meta">
+  <dl class="tags">
+    <% Tag::VISIBLE.each do |type| %>
+      <% tags = @work.tag_groups[type] %>
+      <% unless tags.blank? || (type == "Warning" && hide_warnings?(@work)) || (type == "Freeform" && hide_freeform?(@work)) %>
+        <dt><%= type.constantize::NAME %>:</dt>
+        <dd><%= tags.map {|t| link_to(t.name, tag_path(t, :only_path => false))}.join(", ").html_safe %></dd>
+      <% end %>
+    <% end %>
+    <% unless @work.serial_works.blank? %>
+      <dt><%= ts("Series") %>:</dt>
+      <dd><%= @work.serial_works.map {|s| "#{ts('Part')} #{s.position} #{ts('of')} #{link_to s.series.title, series_path(s.series, :only_path => false)}"}.join(", ").html_safe %></dd>
+    <% end %>
+    <% unless @work.approved_collections.empty? %>
+      <dt><%= ts('Collections') %>:</dt>
+      <dd><%= @work.approved_collections.map {|c| link_to c.title, collection_path(c, :only_path => false)}.join(", ").html_safe %></dd>
+    <% end %>
+    <dt><%= ts("Stats") %>:</dt>
+    <dd>
+      <%= ts("Published") %>: <%= l(@work.first_chapter.published_at) %>
+      <% if @work.first_chapter.published_at < @work.revised_at.to_date %>
+        <%= @work.is_wip ? ts("Updated") : ts("Completed") %>: <%= l(@work.revised_at.to_date) %>
+      <% end %>
+      <% if @work.chaptered? %>
+        <%= ts("Chapters") %>: <%= @work.chapter_total_display %>
+      <% end %>
+      <%= ts("Words") %>: <%= @work.word_count %>
+    </dd>
+  </dl>
+  <h1><%= @work.title %></h1>
+  <div class="byline"><%= ts("by") %> <%= byline(@work) %></div>
+  <% unless @work.summary.blank? %>
+    <p><%= ts('Summary') %></p>
+    <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
+  <% end %>
+  
+  <% unless @work.notes.blank? && @work.endnotes.blank? %>
+    <p><%= ts('Notes') %></p>
+    <% unless @work.notes.blank? %>
+      <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
+    <% end %>
+    <% unless @work.endnotes.blank? %>
+      <div class="endnote-link">
+        <%= ts("See the end of the work for") %> <% unless @work.notes.blank? %><%= ts("more") %><% end %> <%= link_to ts("notes"), "#endnotes" %>
+      </div>
+    <% end %> 
+  <% end %>
+</div>

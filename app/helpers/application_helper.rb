@@ -76,15 +76,18 @@ module ApplicationHelper
     
       pseuds.collect { |pseud| 
         archivists[pseud].nil? ? 
-            link_to_unless_download(pseud) :
-            archivists[pseud] + ts("[archived by") + link_to_unless_download(pseud) + "]"
+            pseud_link(pseud) :
+            archivists[pseud] + ts("[archived by") + pseud_link(pseud) + "]"
       }.join(', ').html_safe
     end
   end
 
-  def link_to_unless_download(pseud)
-    return "by #{pseud.byline}" if @downloading
-    link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author")
+  def pseud_link(pseud)
+    if @downloading
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false))
+    else
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author")
+    end
   end
 
   # Currently, help files are static. We may eventually want to make these dynamic? 

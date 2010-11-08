@@ -4,7 +4,7 @@
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/"
            xmlns:opf="http://www.idpf.org/2007/opf">
     <dc:title><%= @work.title %></dc:title> 
-    <dc:creator><%= @work.anonymous? ?  t('works.anonymous', :default => "Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', ') %></dc:creator>
+    <dc:creator><%= @work.display_authors %></dc:creator>
     <% if @work.language %>
       <dc:language><%= @work.language.short %></dc:language> 
     <% end %>
@@ -13,17 +13,9 @@
   </metadata>
   <manifest>
     <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
-    <item id="preface" href="preface.xhtml" media-type="application/xhtml+xml"/>
-    <% @chapters.size.times do |index| %>
-      <item id="chapter<%= index +1 %>" href="chapter<%= index +1%>.xhtml" media-type="application/xhtml+xml"/>
-    <% end %>
-    <item id="afterword" href="afterword.xhtml" media-type="application/xhtml+xml"/>
+    <item id="work" href="work.xhtml" media-type="application/xhtml+xml"/>
   </manifest>
   <spine toc="ncx">
-    <itemref idref="preface"/>
-    <% @chapters.size.times do |index| %>
-      <itemref idref="chapter<%= index +1 %>"/>
-    <% end %>
-    <itemref idref="afterword"/>
+    <itemref idref="work"/>
   </spine>
 </package>

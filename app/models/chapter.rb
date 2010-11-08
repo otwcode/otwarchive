@@ -65,7 +65,7 @@ class Chapter < ActiveRecord::Base
   end
   
   def chapter_header
-    t('alt_title', :default => "Chapter %{position}", :position => self.position)
+    "#{ts("Chapter")} #{position}"
   end
   
   def chapter_title

@@ -3,7 +3,7 @@
 @works
 Feature: Download a work
 
-  Scenario: Download works with funky titles
+  Scenario: Download works with funky titles doesn't bomb
 
   Given basic tags
     And I am logged in as "myname" with password "something"
@@ -16,13 +16,13 @@ Feature: Download a work
     And I fill in "content" with "some random stuff"
   When I press "Preview"
     And I press "Post"
-  When I follow "Mobi"
+  When I follow "MOBI"
   When I go to the work page with title "Has double quotes"
   When I follow "PDF"
   When I go to the work page with title "Has double quotes"
   When I follow "HTML"
   When I go to the work page with title "Has double quotes"
-  When I follow "Epub"
+  When I follow "EPUB"
 
   When I go to the new work page
     And I fill in "Fandoms" with "No Fandom"
@@ -33,13 +33,13 @@ Feature: Download a work
     And I fill in "content" with "some random stuff"
   When I press "Preview"
     And I press "Post"
-  When I follow "Mobi"
+  When I follow "MOBI"
   When I go to the work page with title Первый_маг
   When I follow "PDF"
   When I go to the work page with title Первый_маг
   When I follow "HTML"
   When I go to the work page with title Первый_маг
-  When I follow "Epub"
+  When I follow "EPUB"
 
   When I go to the new work page
     And I fill in "Fandoms" with "No Fandom"
@@ -50,13 +50,13 @@ Feature: Download a work
     And I fill in "content" with "some random stuff"
   When I press "Preview"
     And I press "Post"
-  When I follow "Mobi"
+  When I follow "MOBI"
   When I go to the work page with title Has curly’d quotes
   When I follow "PDF"
   When I go to the work page with title Has curly’d quotes
   When I follow "HTML"
   When I go to the work page with title Has curly’d quotes
-  When I follow "Epub"
+  When I follow "EPUB"
 
   When I go to the new work page
     And I fill in "Fandoms" with "No Fandom"
@@ -67,13 +67,13 @@ Feature: Download a work
     And I fill in "content" with "some random stuff"
   When I press "Preview"
     And I press "Post"
-  When I follow "Mobi"
+  When I follow "MOBI"
   When I go to the work page with title "Hàs curly’d quotes"
   When I follow "PDF"
   When I go to the work page with title "Hàs curly’d quotes"
   When I follow "HTML"
   When I go to the work page with title "Hàs curly’d quotes"
-  When I follow "Epub"
+  When I follow "EPUB"
 
   Scenario: disable guest download
 
@@ -99,3 +99,22 @@ Feature: Download a work
   When I follow "HTML"
   Then I should see "NaNoWriMo"
   And I should not see "Comments"
+
+ Scenario: download chaptered works doesn't bomb 
+  Given /the following activated user exists
+    |login|password|
+    |user |secret  |
+  And I am logged in as "author" with password "writersrule"
+  And I post the chaptered work "Epic Novel"
+  And I am logged out
+  When I view the work "Epic Novel"
+  And I follow "HTML"
+  Then I should see "Epic Novel"
+    And I should see "Another Chapter"
+    And I should not see "Comments"
+  When I view the work "Epic Novel"
+  And I follow "PDF"
+  When I view the work "Epic Novel"
+  And I follow "MOBI"
+  When I view the work "Epic Novel"
+  And I follow "EPUB"
