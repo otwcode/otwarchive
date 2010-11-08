@@ -74,8 +74,9 @@ Feature: Collection
   When I follow "Profile"
   Then I should see "Signup: CURRENTLY OPEN" within ".collection.meta"
     And I should see "Signup closes:"
-    And I should see "EDT ("
-    And I should see "AKDT)"
+  ### TODO fix timezone dependency before next spring!
+    And I should see "EST ("
+    And I should see "AKST)"
   When I follow "Challenge Settings"
     And I select "(GMT-09:00) Alaska" from "gift_exchange_time_zone"
     # TODO: Raise an issue to rename this button to something more descriptive
@@ -83,8 +84,9 @@ Feature: Collection
   Then I should see "Challenge was successfully updated"
   When I follow "Profile"
   Then I should see "Signup: CURRENTLY OPEN"
-    And I should not see "EDT" within "#main"
-    And I should see "AKDT" within "#main"
+  ### TODO fix timezone dependency before next spring!
+    And I should not see "EST" within "#main"
+    And I should see "AKST" within "#main"
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
   When I go to the collections page
