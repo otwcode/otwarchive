@@ -48,7 +48,7 @@ class Work < ActiveRecord::Base
   has_many :filter_taggings, :as => :filterable, :dependent => :destroy
   has_many :filters, :through => :filter_taggings
   has_many :direct_filter_taggings, :class_name => "FilterTagging", :as => :filterable, :conditions => "inherited = 0"
-  has_many :direct_filters, :source => :filter, :through => :direct_filter_taggings 
+  has_many :direct_filters, :source => :filter, :through => :direct_filter_taggings
 
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
@@ -280,11 +280,11 @@ class Work < ActiveRecord::Base
 
   def challenge_assignment_ids
     challenge_assignments.map(&:id)
-  end       
+  end
 
   def challenge_assignment_ids=(ids)
     self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.select {|assignment| assignment.offering_user == User.current_user}
-  end  
+  end
 
   def collection_names=(new_collection_names)
     self.collections = new_collection_names.split(',').map {|name| name.blank? ? nil : Collection.find_by_name(name.strip)}.compact.uniq
@@ -318,7 +318,7 @@ class Work < ActiveRecord::Base
 
   def recipients=(recipient_names)
     new_gifts = []
-    recipient_names.split(',').each do |name| 
+    recipient_names.split(',').each do |name|
       gift = Gift.for_name_or_byline(name.strip).first
       if gift
         new_gifts << gift
@@ -559,7 +559,7 @@ class Work < ActiveRecord::Base
   end
 
   # save downloads
-  # there's no point in this any more. it will never be more than 
+  # there's no point in this any more. it will never be more than
   # 4*number of revisions.. all other times will be served by nginx
 #  def increment_download_count
 #    counter = self.hit_counter
@@ -570,9 +570,9 @@ class Work < ActiveRecord::Base
 
   after_update :remove_outdated_downloads
   def remove_outdated_downloads
-    FileUtils.rm_rf(self.workdir)
+    FileUtils.rm_rf(self.download_dir)
   end
-  def workdir
+  def download_dir
     "#{Rails.public_path}/downloads/#{self.download_authors}/#{self.id}"
   end
   def download_fandoms
@@ -595,6 +595,9 @@ class Work < ActiveRecord::Base
     string = string.gsub(/[^[\w _-]]+/, '')
     string = "Work by " + download_authors if string.blank?
     string.gsub(/^(.{24}[\w.]*).*/) {$1}
+  end
+  def download_basename
+    "#{self.download_dir}/#{self.download_title}"
   end
 
   def hits
@@ -819,18 +822,18 @@ class Work < ActiveRecord::Base
   scope :visible_to_owner, posted
   scope :all_with_tags, includes(:tags)
 
-  # a complicated dynamic scope here: 
+  # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
   # if the user is not a logged-in User, we use the "visible_to_all" scope
   # otherwise, we use a join to get userids and then get all posted works that are either unhidden OR belong to this user.
   # Note: in that last case we have to use select("DISTINCT works.") because of cases where the same user appears twice
   # on a work.
   scope :visible_to_user, lambda {|user|
-    user.is_a?(Admin) ? visible_to_admin : 
+    user.is_a?(Admin) ? visible_to_admin :
       (!user.is_a?(User) ? visible_to_all :
        select("DISTINCT works.*").posted.joins({:pseuds => :user}).where("works.hidden_by_admin = false OR users.id = ?", user.id))
   }
-    
+
   # Use the current user to determine what works are visible
   scope :visible, visible_to_user(User.current_user)
 
@@ -841,7 +844,7 @@ class Work < ActiveRecord::Base
   #   where({:filter_taggings => {:filter_id => tag_ids_to_find}}).
   #   group("works.id HAVING count(DISTINCT filter_taggings.filter_id) = #{tag_ids_to_find.size}")
   # }
-  
+
   scope :with_all_tag_ids, lambda {|tag_ids_to_find|
     select("DISTINCT works.*").
     joins(:tags).
@@ -866,7 +869,7 @@ class Work < ActiveRecord::Base
     joins(:tags).
     group("tags.name").
     order("tags.type, tags.name ASC")
-  
+
   scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({:pseuds => :user}).where('users.id = ?', user.id)}
   scope :written_by, lambda {|pseuds| written_by_id(pseuds.collect(&:id)) }
   scope :written_by_id, lambda {|pseud_ids|
@@ -878,7 +881,7 @@ class Work < ActiveRecord::Base
   }
 
   # Note: these scopes DO include the works in the children of the specified collection
-  scope :in_collection, lambda {|collection| 
+  scope :in_collection, lambda {|collection|
     select("DISTINCT works.*").
     joins(:collection_items, :collections).
     where('collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',

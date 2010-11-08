@@ -206,7 +206,7 @@ class WorksController < ApplicationController
       redirect_back_or_default works_path
     end
 
-    FileUtils.mkdir_p @work.workdir
+    FileUtils.mkdir_p @work.download_dir
     @chapters = @work.chapters.order('position ASC').where(:posted => true)
 
     respond_to do |format|
@@ -225,7 +225,7 @@ protected
     create_work_html
 
     # send as HTML
-    send_file("#{@work.workdir}/#{@work.download_title}.html", :type => "text/html")
+    send_file("#{@work.download_basename}.html", :type => "text/html")
   end
 
   def download_pdf
@@ -234,16 +234,16 @@ protected
     # convert to PDF
     # double quotes in title need to be escaped
     title = @work.title.gsub(/"/, '\"')
-    cmd = %Q{cd "#{@work.workdir}"; wkhtmltopdf --encoding utf-8 --title "#{title}" "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
+    cmd = %Q{cd "#{@work.download_dir}"; wkhtmltopdf --encoding utf-8 --title "#{title}" "#{@work.download_title}.html" "#{@work.download_title}.pdf"}
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
 
     # send as PDF
-    send_file("#{@work.workdir}/#{@work.download_title}.pdf", :type => "application/pdf")
+    send_file("#{@work.download_basename}.pdf", :type => "application/pdf")
   end
 
   def download_mobi
-     cmd_pre = %Q{cd "#{@work.workdir}"; html2mobi }
+     cmd_pre = %Q{cd "#{@work.download_dir}"; html2mobi }
      # double quotes in title need to be escaped
      title = @work.title.gsub(/"/, '\"')
      cmd_post = %Q{ --mobifile "#{@work.download_title}.mobi" --title "#{title}" --author "#{@work.display_authors}" }
@@ -253,10 +253,10 @@ protected
       create_work_html
 
       # except mobi requires latin1 encoding
-      unless File.exists?("#{@work.workdir}/mobi.html")
+      unless File.exists?("#{@work.download_dir}/mobi.html")
         html = Iconv.conv("LATIN1//TRANSLIT//IGNORE", "UTF8",
-                 File.read("#{@work.workdir}/#{@work.download_title}.html")).force_encoding("ISO-8859-1")
-        File.open("#{@work.workdir}/mobi.html", 'w') {|f| f.write(html)}
+                 File.read("#{@work.download_basename}.html")).force_encoding("ISO-8859-1")
+        File.open("#{@work.download_dir}/mobi.html", 'w') {|f| f.write(html)}
       end
 
       # convert latin html to mobi
@@ -269,7 +269,7 @@ protected
     end
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
-    send_file("#{@work.workdir}/#{@work.download_title}.mobi", :type => "application/mobi")
+    send_file("#{@work.download_basename}.mobi", :type => "application/mobi")
   end
 
   def download_epub
@@ -282,16 +282,16 @@ protected
 
     # stuff contents of epub directory into a zip file named with .epub extension
     # note: we have to zip this up in this particular order because "mimetype" must be the first item in the zipfile
-    cmd = %Q{cd "#{@work.workdir}"; zip "#{@work.download_title}.epub" epub/mimetype; zip -r "#{@work.download_title}.epub" epub/META-INF epub/OEBPS}
+    cmd = %Q{cd "#{@work.download_dir}/epub"; zip "#{@work.download_basename}.epub" mimetype; zip -r "#{@work.download_basename}.epub" META-INF OEBPS}
     Rails.logger.debug cmd
    `#{cmd} 2> /dev/null`
 
     # send the file
-    send_file("#{@work.workdir}/#{@work.download_title}.epub", :type => "application/epub")
+    send_file("#{@work.download_basename}.epub", :type => "application/epub")
   end
 
   def create_work_html
-    return if File.exists?("#{@work.workdir}/#{@work.download_title}.html")
+    return if File.exists?("#{@work.download_basename}.html")
 
     # set up instance variables needed by template
     @page_title = [@work.download_title, @work.download_authors, @work.download_fandoms].join(" - ")
@@ -300,13 +300,12 @@ protected
     html = render_to_string(:template => "works/download.html", :layout => 'barebones.html')
 
     # write to file
-    File.open("#{@work.workdir}/#{@work.download_title}.html", 'w') {|f| f.write(html)}
+    File.open("#{@work.download_basename}.html", 'w') {|f| f.write(html)}
   end
 
   def create_mobi_html
-    return if File.exists?("#{@work.workdir}/#{@work.download_title}.mobi")
-    workdir = "#{@work.workdir}/mobi"
-    FileUtils.mkdir_p workdir
+    return if File.exists?("#{@work.download_basename}.mobi")
+    FileUtils.mkdir_p "#{@work.download_dir}/mobi"
 
     # the preface contains meta tag information, the title/author, work summary and work notes
     @page_title = ts("Preface")
@@ -331,31 +330,31 @@ protected
     @mobi = true
     html = render_to_string(:template => "works/#{template}.html", :layout => 'barebones.html')
     html = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", html)
-    File.open("#{@work.workdir}/mobi/#{basename}.html", 'w') {|f| f.write(html)}
+    File.open("#{@work.download_dir}/mobi/#{basename}.html", 'w') {|f| f.write(html)}
   end
 
   def create_epub_files(single = "")
-    return if File.exists?("#{@work.workdir}/#{@work.download_title}.epub")
+    return if File.exists?("#{@work.download_basename}.epub")
   # Manually building an epub file here
   # See http://www.jedisaber.com/eBooks/tutorial.asp for details
-    workdir = "#{@work.workdir}/epub"
-    FileUtils.mkdir_p workdir
+    epubdir = "#{@work.download_dir}/epub"
+    FileUtils.mkdir_p epubdir
 
     # copy mimetype and container files which don't need processing
-    FileUtils.cp("#{Rails.root}/app/views/epub/mimetype", workdir)
-    FileUtils.mkdir_p "#{workdir}/META-INF"
-    FileUtils.cp("#{Rails.root}/app/views/epub/container.xml", "#{workdir}/META-INF")
+    FileUtils.cp("#{Rails.root}/app/views/epub/mimetype", epubdir)
+    FileUtils.mkdir_p "#{epubdir}/META-INF"
+    FileUtils.cp("#{Rails.root}/app/views/epub/container.xml", "#{epubdir}/META-INF")
 
     # write the OEBPS navigation files
-    FileUtils.mkdir_p "#{workdir}/OEBPS"
-    File.open("#{workdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx#{single}"))}
-    File.open("#{workdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf#{single}"))}
+    FileUtils.mkdir_p "#{epubdir}/OEBPS"
+    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx#{single}"))}
+    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf#{single}"))}
 
     # write the OEBPS content files
     if single == "single"
       # can use work html, but needs translation into proper xhtml
       create_work_html
-      render_xhtml(File.read("#{@work.workdir}/#{@work.download_title}.html"), "work")
+      render_xhtml(File.read("#{@work.download_basename}.html"), "work")
     else
       preface = render_to_string(:template => "works/_download_preface.html", :layout => 'barebones.html')
       render_xhtml(preface, "preface")
@@ -374,9 +373,8 @@ protected
   def render_xhtml(html, filename)
     doc = Nokogiri::HTML.parse(html)
     xhtml = doc.children.to_xhtml
-    File.open("#{@work.workdir}/epub/OEBPS/#{filename}.xhtml", 'w') {|f| f.write(xhtml)}
+    File.open("#{@work.download_dir}/epub/OEBPS/#{filename}.xhtml", 'w') {|f| f.write(xhtml)}
   end
-
 
 
 public
