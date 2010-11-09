@@ -44,25 +44,6 @@
     <fieldset class="preface profile">
       <legend>Tag Options</legend>
       <h3>Tag Options <%= link_to_help("prompt-restriction-tag-set") %></h3>
-    	<p class="note">
-    	  If you are running a challenge that is specifically for a given fandom or relationship or character, just leave that
-    	  set of tag options set to no tags required or allowed -- don't put in that one tag as the only choice. Tag options should
-    	  only be used where you want users to have a choice.
-    	</p>
-    	
-    	<p class="note">
-    	  Initializing the tag list will give you a starting point if you want to restrict your challenge to
-    	  especially popular or especially rare fandoms or characters. The way this works is, we calculate the average number
-    	  of stories in fandoms, and then compare. You can tweak the results by multiplying the average -- eg, if you only want the
-    	  truly super-rare, drop the average way down. Keep in mind that the average is low to begin with!
-    	</p>
-    	
-    	<p class="note">
-    	  In a gift exchange, the same set of tag options is used for both requests and offers, since otherwise offers and
-    	  requests can't match against each other. (People can choose different tags in their requests and offers, but they
-    	  have to choose from the same set.)
-    	</p>
-    	
       <% restriction.build_tag_set unless restriction.tag_set %>
       <%= prompt_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
         <% TagSet::TAG_TYPES.each do |tag_type| %>
