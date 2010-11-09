@@ -73,6 +73,7 @@ Don't go further with the deploy until you have fixed the problem!"
     if @server == "otw2"
       @db_backup_name ||= ask("Enter the release number to name the db backup -- no spaces! (eg 0.7.3): ")
       ok_or_warn %Q{mysqldump --all-databases --single-transaction --quick --master-data=1 > /backup/otwarchive/deploys/pre.#{@db_backup_name}}
+      @ran_backups = true
     else
       notice "Oops. You can only back up the database on otw2."
     end
@@ -153,17 +154,18 @@ Don't go further with the deploy until you have fixed the problem!"
     case @server
     when "otw1"
       notice "Oops. You can only run this command on otw2."
+      next
     when "otw2"
-      ynq("Did you back up the database?") 
-      if @yes
-        ok_or_warn %q{rake db:migrate RAILS_ENV=production}
-      else
-        ynq("Skipping migrations. Do you want to quit?")
-        exit if @yes
+      unless @ran_backups
+        ynq("Did you forget to back up the database?") 
+        if @yes
+          ynq("Skipping migrations. Do you want to quit?")
+          exit if @yes
+        end
       end
-    else
-      ok_or_warn %q{rake db:migrate RAILS_ENV=production} 
     end
+    notice "Migrating production database"
+    ok_or_warn %q{rake db:migrate RAILS_ENV=production}
   end
 
   desc "Run after tasks"
@@ -228,7 +230,7 @@ Don't go further with the deploy until you have fixed the problem!"
         notice "Don't run them on otw1"
       end
       Rake::Task['deploy:run_tests'].invoke
-      notice "You should now alert users on the status twitter that the archive is going down." unless @server == "stage"
+      notice "You should now alert users via twitter that the archive is going down." unless @server == "stage"
     else
       notice "Wait until the tests have finished running on the other server" unless @server == 'stage'
     end
@@ -285,7 +287,7 @@ Don't go further with the deploy until you have fixed the problem!"
     ynq("Send email?")
     Rake::Task['deploy:send_email'].invoke if @yes
 
-    notice "You should now alert users on the status twitter that the archive is going down." unless @server == "stage"
+    notice "You should now alert users via twitter that the archive is back up." if @server == "otw1"
 
     notice("Don't forget to update google code issues!")
 
