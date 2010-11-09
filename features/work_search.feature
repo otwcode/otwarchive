@@ -71,9 +71,7 @@ Feature: Search Works
     Then I should see "1 Found"
     When I follow "Advanced search"
     Then I should be on the search page
-    When "sanitize_params loses query <" is fixed
-#    When I fill in "refine_word_count" with "<1000"
-    When I fill in "refine_word_count" with "0-999"
+    When I fill in "refine_word_count" with "<1000"
       And I press "Search works"
     Then I should see "0 Found"
     When I am on the search page

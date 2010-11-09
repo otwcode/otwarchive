@@ -32,7 +32,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   fill_in "Password", :with => password
   check "Remember me"
   click_button "Log in"
-  Then "I should see \"Successfully logged in\""
+  assert UserSession.find
 end
 
 Given /^I am logged in as a random user$/ do
@@ -44,12 +44,12 @@ Given /^I am logged in as a random user$/ do
   fill_in "Password", :with => "password"
   check "Remember me"
   click_button "Log in"
-  Then "I should see \"Successfully logged in\""
+  assert UserSession.find
 end
 
 Given /^I am logged out$/ do
   visit logout_path
-  Then "I should see \"Successfully logged out\""
+  assert !UserSession.find
 end
 
 When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
