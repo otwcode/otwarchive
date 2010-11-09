@@ -144,7 +144,7 @@ public
   
   def pseud_finder(search_param)
     if search_param
-      render_output(Pseud.order(:name).where(["name LIKE ?", '%' + search_param + '%']).limit(10).map(&:byline))
+      render_output(Pseud.not_orphaned.order(:name).where(["name LIKE ?", '%' + search_param + '%']).limit(10).map(&:byline))
     end
   end
   

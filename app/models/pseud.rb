@@ -95,6 +95,8 @@ class Pseud < ActiveRecord::Base
   scope :alphabetical, order(:name)
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
   
+  scope :not_orphaned, where("user_id != ?", User.orphan_account)
+  
   # Enigel Dec 12 08: added sort method
   # sorting by pseud name or by login name in case of equality
   def <=>(other)
