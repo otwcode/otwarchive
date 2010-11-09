@@ -1,3 +1,4 @@
+# encoding: UTF-8
 namespace :yuletide do
 
   desc "Load nominated fandoms"
@@ -22,15 +23,6 @@ namespace :yuletide do
     puts "INELIGIBLE (OR NOT YET CREATED): "
     @ineligible_fandoms.sort.each {|f| puts f}
   end
-  
-  desc "Find missing nominated fandoms"
-  task(:find_missing_fandoms => :load_converted_fandoms) do
-    charlist = File.read("#{Rails.root}/tmp/yuletide_nominated_characters_for_wrangling.txt", :encoding => 'UTF-8')
-    fandomlists = charlist.split(/\n\n/)
-    @nominated_fandoms = fandomlists.map {|fl| fl.split(/\n/)[0].gsub(/^\[/,'').gsub(/\]$/,'').split(/\s*=>\s*/)[0]} 
-    @missing_fandoms = @converted_fandoms.keys.select {|fandom| !@nominated_fandoms.include?(fandom.to_s)}
-    puts "MISSING: " + @missing_fandoms.join("\n")
-  end
 
   desc "Load nominated characters"
   task(:load_nominated_characters => :environment) do 
@@ -43,108 +35,8 @@ namespace :yuletide do
       puts "NO CHARS FOR #{fandom_name}" if fandom_chars.empty?
       @fandom_characters[fandom_name] = fandom_chars.split(/\n/)
     end
-    # fandoms.each {|f| @fandom_characters[f.split(/\n/, 2)[0].gsub(/^\[/,'').gsub(/\]$/,'').to_sym] = f.split(/\n/, 2)[1].split(/\n/) }
-    # @fandom_characters.delete_if {|key, value| !@nominated_fandoms.include?(key.to_s)}
   end
   
-  desc "Load converted fandoms from file"
-  task(:load_converted_fandoms => :environment) do
-    @converted_fandoms = {}
-    File.read("#{Rails.root}/tmp/yuletide_nominated_fandoms_wrangled_utf8.txt", :encoding => 'UTF-8').split(/\r?\n/).each do |fandom|
-      #fandom.encode!("UTF-8")
-      original, converted, media = fandom.split(/\s*=>\s*/)
-      @converted_fandoms[original] = [converted, media]
-    end
-  end
-  
-  desc "Load converted characters from file"
-  task(:load_converted_characters => :load_converted_fandoms) do
-    @converted_chars = {}
-    File.read("#{Rails.root}/tmp/yuletide_nominated_characters_wrangled.txt", :encoding => 'UTF-16LE:UTF-8').split(/\r?\n/).each do |line|
-      line.encode!("UTF-8")
-      if line.match(/^\[(.*)\]/)
-        @nominated_fandom, @converted_fandom = $1.split(/\s*=>\s*/)
-        @converted_chars[@nominated_fandom] ||= {}
-        next
-      else
-        nominated_char, canonical_char, junk = line.split(/\s*=>\s*/)
-        @converted_chars[@nominated_fandom][nominated_char] = canonical_char.blank? ? nominated_char : canonical_char
-      end
-    end
-  end
-      
-  desc "Create tags for converted fandoms and characters"
-  task(:convert_nominations => :load_converted_fandoms) do
-    @converted_fandoms.each_key do |original|
-      converted, media = @converted_fandoms[original]
-      fandom_tag = Fandom.find_by_name(converted)
-      if fandom_tag && fandom_tag.canonical
-        puts "Canonical tag #{fandom_tag.name} exists for #{original}."
-      elsif fandom_tag
-        # ugh, not canonical
-        puts "Making existing tag #{fandom_tag.name} for #{original} canonical."
-        # fandom_tag.canonical = true
-        # fandom_tag.save!
-      elsif !converted.blank? && !media.blank?
-        puts "Creating tag #{converted} for #{original} in media #{media}."        
-        #fandom_tag = Fandom.find_or_create_by_name_and_canonical(converted, true)
-        #media_tag = Media.find_by_name_and_canonical(media, true)
-        #fandom_tag.add_association media_tag if fandom_tag && media_tag
-        #fandom_tag.save
-      else
-        puts "MISSING: tagname or media for #{original}: #{converted}, #{media}"
-        next
-      end
-      
-      # now we have fandom_tag
-      @converted_chars[original].each_pair do |original_char, converted_char|
-        char_tag = Character.find_by_name(converted_char)
-        if char_tag && char_tag.canonical
-          puts "Canonical tag #{char_tag.name} exists for #{original_char} in #{original}"
-        elsif char_tag
-          puts "Making existing #{char_tag.name} for #{original_char} in #{original} canonical"
-          #char_tag.canonical = true
-        else
-          puts "Creating tag #{converted_char} for #{original_char} in #{original}"
-          #char_tag = Character.find_or_create_by_name_and_canonical(converted_char, true)
-        end
-        puts "Wrangling tag #{char_tag.name} into #{fandom_tag.name}" if char_tag && fandom_tag
-        # char_tag.add_association fandom_tag if char_tag && fandom_tag
-        # char_tag.save
-      end
-    end
-  end
-  
-  desc "Find nominated characters" 
-  task(:find_nominated_characters => [:load_nominated_characters, :load_converted_fandoms]) do
-    @potential_char_tags = {}
-    @fandom_characters.keys.sort.each do |nominated_fandom|
-      converted, media = @converted_fandoms[nominated_fandom.to_s]
-      puts "\n[#{nominated_fandom} => #{converted}]"
-      @potential_char_tags[nominated_fandom] = {}
-      @fandom_characters[nominated_fandom].each do |charline|
-        nominated_char, canonical_char, fandom = charline.split(/\s*=>\s*/)
-        if !canonical_char.blank?
-          puts "#{nominated_char} => #{canonical_char}"
-        else 
-          search_name = nominated_char.upcase
-          # exact match?
-          tags = Character.find_by_sql("SELECT tags.* from tags where type='Character' AND UPPER(name) LIKE '#{search_name}'")
-          if tags.empty?
-            # trash short bits of names (eg "Jr" and middle initials and "III")
-            words = search_name.split.select {|w| w.length > 3}
-            if words.size >= 2
-              search_name = words.join(' % ')
-              tags = Character.find_by_sql("SELECT tags.* from tags where type='Character' AND UPPER(name) LIKE '#{search_name}'")
-            end
-          end
-          canonical_tags = tags.map {|t| t.canonical ? t : (t.merger ? t.merger : nil)}.compact
-          puts "#{nominated_char} => #{canonical_tags.collect(&:name).join(', ')}"
-        end
-      end
-    end
-  end
-
   desc "Find nominated fandoms in database"
   task(:find_nominated_fandoms => :load_nominated_fandoms) do
     @potential_tags = {}
@@ -249,6 +141,355 @@ namespace :yuletide do
     puts "No tags found for the following: \n#{@no_tags.join("\n")}"
     
   end
+
+  desc "Load converted fandoms from file"
+  task(:old_load_converted_fandoms => :environment) do
+    @converted_fandoms = {}
+    badchar = "�"
+    File.read("#{Rails.root}/tmp/yuletide_nominated_fandoms_wrangled.txt", :encoding => 'UTF-8').split(/\r?\n/).each do |fandom|
+      #fandom.encode!("UTF-8")
+      fandom.gsub!(badchar, '')
+      original, converted, media = fandom.split(/\s*=>\s*/)
+      @converted_fandoms[original.strip] = [(converted ? converted.strip : nil), (media ? media.strip : nil)]
+    end
+  end
   
+  desc "Print converted fandoms"
+  task(:print_converted_fandoms => :old_load_converted_fandoms) do
+    @converted_fandoms.each_pair do |original, conversion|
+      converted, media = conversion
+      puts "#{original} => #{converted} => #{media}"
+    end
+  end
+  
+  desc "Find nominated characters" 
+  task(:find_nominated_characters => [:load_nominated_characters, :load_converted_fandoms]) do
+    @potential_char_tags = {}
+    @fandom_characters.keys.sort.each do |nominated_fandom|
+      converted, media = @converted_fandoms[nominated_fandom.to_s]
+      puts "\n[#{nominated_fandom} => #{converted}]"
+      @potential_char_tags[nominated_fandom] = {}
+      @fandom_characters[nominated_fandom].each do |charline|
+        nominated_char, canonical_char, fandom = charline.split(/\s*=>\s*/)
+        if !canonical_char.blank?
+          puts "#{nominated_char} => #{canonical_char}"
+        else 
+          search_name = nominated_char.upcase
+          # exact match?
+          tags = Character.find_by_sql("SELECT tags.* from tags where type='Character' AND UPPER(name) LIKE '#{search_name}'")
+          if tags.empty?
+            # trash short bits of names (eg "Jr" and middle initials and "III")
+            words = search_name.split.select {|w| w.length > 3}
+            if words.size >= 2
+              search_name = words.join(' % ')
+              tags = Character.find_by_sql("SELECT tags.* from tags where type='Character' AND UPPER(name) LIKE '#{search_name}'")
+            end
+          end
+          canonical_tags = tags.map {|t| t.canonical ? t : (t.merger ? t.merger : nil)}.compact
+          puts "#{nominated_char} => #{canonical_tags.collect(&:name).join(', ')}"
+        end
+      end
+    end
+  end
+  
+  desc "Load converted characters from file"
+  task(:old_load_converted_characters => :old_load_converted_fandoms) do
+    @converted_chars = {}
+    @seen_fandoms = []
+    badchar = "�"
+    File.read("#{Rails.root}/tmp/yuletide_nominated_characters_wrangled.txt", :encoding => 'UTF-8').split(/\r?\n/).each do |line|
+      #line.encode!("UTF-8")
+      line.gsub!(badchar, '')
+      if line.blank?
+        next
+      elsif line.match(/^\[(.*)\]$/)
+        @nominated_fandom, @converted_fandom = $1.split(/\s*=>\s*/)
+        @nominated_fandom.strip!
+
+        # missing conversion eep
+        if @converted_fandom.blank?
+          puts "ERROR: no converted name for #{@nominated_fandom}"
+        else
+          @converted_fandom.strip!
+        end
+        
+        if @seen_fandoms.include?(@nominated_fandom)
+          puts "NOTE: already processed #{@nominated_fandom}"
+        else
+          @seen_fandoms << @nominated_fandom
+        end
+        @converted_chars[@nominated_fandom] ||= {}
+        next
+      else
+        nominated_char, canonical_char, junk = line.split(/\s*=>\s*/)
+        if @nominated_fandom.blank? || nominated_char.blank?
+          puts "ERROR: #{@nominated_fandom}, #{nominated_char}"
+          next
+        end
+        @converted_chars[@nominated_fandom][nominated_char] = canonical_char.blank? ? (nominated_char ? nominated_char.strip : nil) : canonical_char.strip
+      end
+    end
+  end
+
+  desc "Create tags for converted fandoms and characters"
+  task(:old_convert_nominations => :old_load_converted_characters) do
+    @missing = []
+    
+    # load up the converted fandoms and check if we have an existing canonical tag
+    @converted_fandoms.each_key do |original|
+      converted, media = @converted_fandoms[original]
+      if converted.length > 100
+        @missing << "Fandom tag too long: #{converted}"
+        next
+      end
+      
+      @fandom_tag = Fandom.find_by_name(converted)
+      if @fandom_tag && @fandom_tag.canonical
+        puts "Canonical fandom tag #{@fandom_tag.name} exists for #{original}."
+      elsif @fandom_tag
+        # ugh, not canonical -- synonym?
+        if @fandom_tag.merger
+          # synonym
+          puts "Fandom tag #{@fandom_tag.name} is synonym for #{@fandom_tag.merger.name}, using that instead"
+          @fandom_tag = @fandom_tag.merger
+        else
+          puts "Making existing fandom tag #{@fandom_tag.name} for #{original} canonical."
+          @fandom_tag.canonical = true
+          @fandom_tag.save!
+        end
+      elsif !converted.blank? && !media.blank?
+        @check_tag = Tag.find_by_name(converted)
+        if @check_tag
+          @missing << "Requested fandom tag #{converted} already exists and is of type #{@check_tag.type}"
+          next
+        else
+          puts "Creating fandom tag #{converted} for #{original} in media #{media}."        
+          @fandom_tag = Fandom.find_or_create_by_name_and_canonical(converted, true)
+          media_tag = Media.find_by_name_and_canonical(media, true)
+          @fandom_tag.create_filter_count
+          @fandom_tag.add_association media_tag if @fandom_tag && media_tag
+          @fandom_tag.save!
+        end
+      else
+        @missing << "No tagname or media for #{original}: #{converted}, #{media}"
+        next
+      end
+
+      # handle deleted fandoms that were wrangled by hand
+      if @converted_chars[original].nil?
+        @missing << "No characters for fandom #{original}: #{converted}, #{media}"
+        next
+      end
+      
+      # now we have @fandom_tag
+      @converted_chars[original].each_pair do |original_char, converted_char|
+        if converted_char.length > 100
+          @missing << "Character tag too long: #{converted_char}"
+          next
+        end
+        
+        @char_tag = Character.find_by_name(converted_char)
+        if @char_tag && @char_tag.canonical
+          puts "\tCanonical char tag #{@char_tag.name} exists for #{original_char}"
+        elsif @char_tag
+          puts "\tMaking existing char tag #{@char_tag.name} for #{original_char} canonical"
+          @char_tag.canonical = true
+        else
+          @check_tag = Tag.find_by_name(converted_char)
+          if @check_tag
+            @missing << "Requested character tag #{@check_tag.name} already exists and is of type #{@check_tag.type}"
+            next
+          else
+            puts "\tCreating char tag #{converted_char} for #{original_char}"
+            @char_tag = Character.find_or_create_by_name_and_canonical(converted_char, true)
+          end
+        end
+        
+        # now we have @char_tag, wrangle it into @fandom_tag
+        puts "\tWrangling char tag #{@char_tag.name} into #{@fandom_tag.name}" if @char_tag && @fandom_tag
+        @char_tag.add_association @fandom_tag if @char_tag && @fandom_tag
+        unless @char_tag.valid?
+          @missing << "Problem with character tag #{@char_tag.name} in #{@fandom_tag.name}: #{@char_tag.errors.to_s}"
+        else
+          @char_tag.save!
+        end
+      end
+    end
+    
+    puts "MISSING: " 
+    puts @missing.join("\n")
+  end
+
+
+  desc "Print eligible character list"
+  task(:print_eligible_fandom_list => [:old_load_converted_characters, :load_eligible_fandoms]) do
+    File.open("#{Rails.root}/tmp/yuletide_charlist_complete.txt", "w+:UTF-8") do |file|
+      @converted_fandoms.each_key do |original|
+        converted, media = @converted_fandoms[original]
+        if @eligible_fandoms.include?(converted)
+          fandom_tag = Fandom.find_by_name_and_canonical(converted, true)
+          if fandom_tag
+            media = fandom_tag.medias.first.name || ""
+            file.puts "[#{original} => #{converted} => #{media}]"
+            chars = Character.with_parents([fandom_tag]).canonical 
+            file.puts chars.map {|char| char.name}.join("\n")
+            file.puts ""
+          else
+            puts "WARNING: fandom #{converted} not found!"
+          end
+        end
+      end
+    end
+  end
+
+
+  # Having created the yuletide_charlist_complete file, from here on we want to use that
+  # as the source
+
+  
+  desc "Load converted fandoms and characters from complete file"
+  task(:load_converted_characters => :environment) do
+    @converted_fandoms = {}
+    @converted_chars = {}
+    File.read("#{Rails.root}/tmp/yuletide_charlist_complete.txt", :encoding => 'UTF-8').split(/\r?\n/).each do |line|
+      if line.blank?
+        next
+      elsif line.match(/^\[(.*)\]$/)
+        nominated_fandom, @converted_fandom, media = $1.split(/\s*=>\s*/)
+        if @converted_fandom.blank? 
+          puts "ERROR: no converted name for #{@nominated_fandom}"
+          next
+        else 
+          @converted_fandom.strip!
+        end
+        @converted_fandoms[@converted_fandom] = media ? media.strip : nil
+        @converted_chars[@converted_fandom] ||= {}
+        next
+      else
+        char = line.strip
+        if @converted_fandom.blank? || char.blank?
+          puts "ERROR: #{@converted_fandom}, #{char}"
+          next
+        end
+        @converted_chars[@converted_fandom][char] = char
+      end
+    end
+    
+    # now get rid of any that were marked
+    @converted_chars.keys.each do |fandom|
+      @converted_chars[fandom] = @converted_chars[fandom].
+          delete_if {|char_key, char| @converted_chars[fandom].has_key?("-#{char}")}
+    end 
+  end
+
+
+  desc "Create tags for converted fandoms and characters"
+  task(:convert_nominations => :load_converted_characters) do
+    @missing = []
+    
+    # load up the converted fandoms and check if we have an existing canonical tag
+    @converted_fandoms.each_pair do |fandom, media|
+      if fandom.length > 100
+        @missing << "Fandom tag too long: #{fandom}"
+        next
+      end
+      
+      # create the fandom
+      @fandom_tag = Fandom.find_by_name(fandom)
+      if @fandom_tag && @fandom_tag.canonical
+        puts "Canonical fandom tag #{@fandom_tag.name} exists for #{original}."
+      elsif @fandom_tag
+        # ugh, not canonical -- synonym?
+        if @fandom_tag.merger
+          # synonym
+          puts "Fandom tag #{@fandom_tag.name} is synonym for #{@fandom_tag.merger.name}, using that instead"
+          @fandom_tag = @fandom_tag.merger
+        else
+          puts "Making existing fandom tag #{@fandom_tag.name} for #{original} canonical."
+          @fandom_tag.canonical = true
+          @fandom_tag.create_filter_count
+          @fandom_tag.save!
+        end
+      elsif !fandom.blank? && !media.blank?
+        @check_tag = Tag.find_by_name(converted)
+        if @check_tag
+          @missing << "Requested fandom tag #{converted} already exists and is of type #{@check_tag.type}"
+          next
+        else
+          puts "Creating fandom tag #{fandom} in media #{media}."        
+          @fandom_tag = Fandom.find_or_create_by_name_and_canonical(fandom, true)
+          media_tag = Media.find_by_name_and_canonical(media, true)
+          @fandom_tag.create_filter_count
+          @fandom_tag.add_association media_tag if @fandom_tag && media_tag
+          @fandom_tag.save!
+        end
+      else
+        @missing << "No tagname or media for #{original}: #{converted}, #{media}"
+        next
+      end
+
+      # now we have @fandom_tag
+      @converted_chars[fandom].each_key do |char|
+        if char.length > 100
+          @missing << "Character tag too long: #{char}"
+          next
+        end
+        
+        if char.match(/^\-\s*(.*)$/)
+          # watch for characters to unwrangle (if they exist)
+          @char_tag = Character.find_by_name($1)
+          if @char_tag
+            # get it out of this fandom
+            @char_tag.remove_association(@fandom_tag)
+          end
+        else
+          # check to see if the char tag exists and if not, create it        
+          @char_tag = Character.find_by_name(char)
+          if @char_tag && @char_tag.canonical
+            puts "\tCanonical char tag #{@char_tag.name} exists"
+          elsif @char_tag
+            if @char_tag.merger
+              puts "Character tag #{@char_tag.name} is synonym for #{@char_tag.merger.name}, using that instead"
+              @char_tag = @char_tag.merger
+            else
+              puts "\tMaking existing char tag #{@char_tag.name} for #{original_char} canonical"
+              @char_tag.canonical = true
+            end
+          else
+            @check_tag = Tag.find_by_name(char)
+            if @check_tag
+              @missing << "Requested character tag #{@check_tag.name} already exists and is of type #{@check_tag.type}"
+              next
+            else
+              puts "\tCreating char tag #{char}"
+              @char_tag = Character.find_or_create_by_name_and_canonical(char, true)
+            end
+          end
+        
+          # now we have @char_tag, wrangle it into @fandom_tag
+          puts "\tWrangling char tag #{@char_tag.name} into #{@fandom_tag.name}" if @char_tag && @fandom_tag
+          @char_tag.add_association @fandom_tag if @char_tag && @fandom_tag
+        end
+        
+        # make sure we can save
+        unless @char_tag.valid?
+          @missing << "Problem with character tag #{@char_tag.name} in #{@fandom_tag.name}: #{@char_tag.errors.to_s}"
+        else
+          @char_tag.save!
+        end
+      end
+    end
+    
+    puts "MISSING: " 
+    puts @missing.join("\n")
+  end
+
+
+  desc "Find missing nominated fandoms"
+  task(:find_missing_fandoms => [:load_converted_characters, :load_nominated_fandoms]) do
+    @missing_fandoms = @nominated_fandoms.select {|fandom| !@converted_fandoms.keys.include?(fandom.to_s)}
+    puts "MISSING: " + @missing_fandoms.join("\n")
+  end
+
 end
 
