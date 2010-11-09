@@ -9,16 +9,20 @@ class CollectionsController < ApplicationController
   end
 
   def index
-    if params[:work_id]
-      @work = Work.find(params[:work_id])
+    if params[:work_id] && (@work = Work.find_by_id(params[:work_id]))
       @collections = @work.approved_collections.by_title.paginate(:page => params[:page])
-    elsif params[:collection_id]
-      @collection = Collection.find_by_name(params[:collection_id])
+    elsif params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
       @collections = @collection.children.by_title.paginate(:page => params[:page])
-    elsif params[:user_id]
-      @user = User.find_by_login(params[:user_id])
+    elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       @collections = @user.owned_collections.by_title.paginate(:page => params[:page])
     else
+      if params[:user_id]
+        flash[:error].now = ts("We couldn't find a user by that name, sorry.")
+      elsif params[:collection_id]
+        flash[:error].now = ts("We couldn't find a collection by that name.")
+      elsif params[:work_id]
+        flash[:error].now = ts("We couldn't find that work.")
+      end
       @sort_and_filter = true
       params[:collection_filters] ||= {}
       params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'collection')
