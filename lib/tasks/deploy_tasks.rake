@@ -10,6 +10,18 @@ namespace :deploy do
     STDIN.gets.chomp.strip
   end
 
+  def ynq(message)
+    answer = ask("#{message} (y/n/q): ")
+    case answer
+    when /[nN]/
+      @yes = false
+    when /[qQ]/
+      exit
+    else 
+      @yes = true
+    end
+  end
+
   def notice(message)
     puts "!!!"
     puts message
@@ -19,8 +31,8 @@ namespace :deploy do
   def warn
     notice "The last command failed.
 Don't go further with the deploy until you have fixed the problem!"
-    @no = ask("Do you want to quit? (y/n): ").match(/[nN]o?/)
-    exit unless @no 
+    ynq("Do you want to quit?")
+    exit if @yes
   end
 
   def ok_or_warn(command)
@@ -35,16 +47,16 @@ Don't go further with the deploy until you have fixed the problem!"
   end
 
   # sub tasks
-  desc "Bring www-data home up to date"
-  task(:setup_environment => :get_servername) do
-    notice "Updating environment..."
+  desc "Run svn update"
+  task(:svn_update) do
+    notice "Running svn update"
     ok_or_warn %q{svn update} 
     ok_or_warn %q{bundle install --quiet}
   end
 
   desc "Run tests"
-  task(:run_tests => :get_servername) do
-    notice "Running migrations on development database"
+  task(:run_tests) do
+    notice "Test setup"
     ok_or_warn %q{rake db:migrate RAILS_ENV=development}
     ok_or_warn %q{rake db:test:clone_structure}
     notice "Running tests (will take a while!)"
@@ -73,15 +85,22 @@ Don't go further with the deploy until you have fixed the problem!"
       notice "Please contact Systems for help if you need to restore to an earlier point."
       warn
     else
-      @yes = ask("Are you sure? (It will take a very long time) (y/n): ").match(/[yY](es)?/) 
+      ynq("Are you sure? (It will take a very long time)")
       next unless @yes
       notice "Resetting the database..."
       ok_or_warn %Q{mysql -e "drop database otwarchive_production"}
       ok_or_warn %Q{mysql -e "create database otwarchive_production"} 
       ok_or_warn %Q{mysql otwarchive_production < /backup/latest.dump}
 
-      notice "Enter the current revision number of the REAL archive below, don't hit return"
-      Rake::Task['deploy:deploy_code'].invoke
+      ynq("Do you want to reset the code as well?")
+      if @yes
+        notice "Enter the current revision number of the REAL archive below, don't hit return" 
+        Rake::Task['deploy:deploy_code'].invoke 
+        Rake::Task['deploy:take_out_of_maint'].invoke 
+        Rake::Task['deploy:restart_unicorn'].invoke
+        ynq("Stage has been reset to an exact duplicate. Do you want to quit now?")
+        exit if @yes
+      end
     end
   end
 
@@ -124,20 +143,26 @@ Don't go further with the deploy until you have fixed the problem!"
     when "otw1"
       notice "Updating crontab..."
       ok_or_warn %q{whenever --update-crontab otwarchive -set environment=production}
+    else
+      notice "Crontab not updated. (cronjobs don't run on otw2)"
     end
   end
 
   desc "Run migrations"
   task(:run_migrations => :get_servername) do
-    if @server == "otw1"
+    case @server
+    when "otw1"
       notice "Oops. You can only run this command on otw2."
-    else
-      if @server == 'stage'
-        @yes = true 
+    when "otw2"
+      ynq("Did you back up the database?") 
+      if @yes
+        ok_or_warn %q{rake db:migrate RAILS_ENV=production}
       else
-        @yes = ask("Did you back up the database? (y/n): ").match(/[yY](es)?/) if @server == "otw2" 
+        ynq("Skipping migrations. Do you want to quit?")
+        exit if @yes
       end
-      ok_or_warn %q{rake db:migrate RAILS_ENV=production} if @yes
+    else
+      ok_or_warn %q{rake db:migrate RAILS_ENV=production} 
     end
   end
 
@@ -191,11 +216,11 @@ Don't go further with the deploy until you have fixed the problem!"
     notice "If you run into errors at any point do not proceed until they are resolved!!"
 
     # check out current code into home
-    @yes = ask("Set up environment? (y/n): ").match(/[yY](es)?/)
-    Rake::Task['deploy:setup_environment'].invoke if @yes
+    ynq("Run svn update?")
+    Rake::Task['deploy:svn_update'].invoke if @yes
 
     # run tests
-    @yes = ask("Run tests here? (y/n): ").match(/[yY](es)?/)
+    ynq("Run tests here?")
     if @yes
       if @server == 'otw1'
         notice "Don't run them on otw2"
@@ -209,56 +234,69 @@ Don't go further with the deploy until you have fixed the problem!"
     end
 
     # put into maintenance
-    @yes = ask("Put the website into maintenance? (y/n): ").match(/[yY](es)?/)
+    ynq("Put the website into maintenance?")
     Rake::Task['deploy:put_into_maint'].invoke if @yes
 
     # backup or reset database
     if @server == "otw2"
-      @yes = ask("Backup db? (y/n): ").match(/[yY](es)?/)
+      ynq("Backup db?")
       Rake::Task['deploy:backup_db'].invoke if @yes
     elsif @server == 'stage'
-      @yes = ask("Reset testarchive? (y/n): ").match(/[yY](es)?/)
+      ynq("Reset testarchive?")
       Rake::Task['deploy:reset_db'].invoke if @yes
     else
       notice "Wait until the database has finished backing up on otw2"
     end
 
     # deploy code
-    @yes = ask("Deploy new code? (y/n): ").match(/[yY](es)?/)
+    ynq("Deploy new code and migrations?")
     Rake::Task['deploy:deploy_code'].invoke if @yes
-
-    # update crontab (whenever)
-    @yes = ask("Update crontab? (y/n): ").match(/[yY](es)?/)
-    Rake::Task['deploy:update_crontab'].invoke if @yes
-
-    # run migrations
-    @yes = ask("Run migrations? (y/n): ").match(/[yY](es)?/)
     Rake::Task['deploy:run_migrations'].invoke if @yes
 
-    @after = ask("Can the after tasks wait until the server is back up? (y/n): ").match(/[yY](es)?/)
-    Rake::Task['deploy:run_after_tasks'].invoke unless @after
+    ynq("Take out of maintenance at the recommended time? (if you answer no here, the server will be taken out of maintenance immediately)")
+    @restart_deferred = true if @yes
+    Rake::Task['deploy:take_out_of_maint'].invoke unless @yes
+    Rake::Task['deploy:restart_unicorn'].invoke unless @yes
 
-    @yes = ask("Restart unicorn? (y/n): ").match(/[yY](es)?/)
-    Rake::Task['deploy:restart_unicorn'].invoke if @yes
-
-    @yes = ask("Take out of maintenance? (y/n): ").match(/[yY](es)?/)
-    Rake::Task['deploy:take_out_of_maint'].invoke if @yes
-
-    @yes = ask("Run the after tasks? (y/n): ").match(/[yY](es)?/) if @after
+    ynq("Run the After tasks now?")
     Rake::Task['deploy:run_after_tasks'].invoke if @yes
+    @after_deferred = true unless @yes
 
     unless @server=='otw2'  # sphinx doesn't run on otw2
-       @yes = ask("Rebuild sphinx (only if indexes have changed in the models)? (y/n): ").match(/[yY](es)?/)
+       ynq("Rebuild sphinx (only if indexes have changed in the models)?")
        if @yes
          Rake::Task['deploy:rebuild_sphinx'].invoke
        else
-         @yes = ask("Restart sphinx? (y/n): ").match(/[yY](es)?/)
+         ynq("Restart sphinx?")
          Rake::Task['deploy:restart_sphinx'].invoke if @yes
        end
     end
 
-    @yes = ask("Send email? (y/n): ").match(/[yY](es)?/)
+    # update crontab (whenever)
+    ynq("Update crontab?")
+    Rake::Task['deploy:update_crontab'].invoke if @yes
+
+    if @restart_deferred
+      ynq("Take out of maintenance?")
+      Rake::Task['deploy:take_out_of_maint'].invoke if @yes
+      Rake::Task['deploy:restart_unicorn'].invoke if @yes
+    end
+
+    ynq("Send email?")
     Rake::Task['deploy:send_email'].invoke if @yes
+
+    notice "You should now alert users on the status twitter that the archive is going down." unless @server == "stage"
+
+    notice("Don't forget to update google code issues!")
+
+    if @after_deferred
+      ynq("Run the after tasks?")
+      Rake::Task['deploy:run_after_tasks'].invoke if @yes
+    end
+
   end
 
 end
+
+task :deploy => ['deploy:all_interactive']
+
