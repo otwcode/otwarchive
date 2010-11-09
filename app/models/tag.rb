@@ -293,12 +293,14 @@ class Tag < ActiveRecord::Base
   def to_param
     # can't find a tag with a name that hasn't been saved yet
     saved_name = self.name_changed? ? self.name_was : self.name
-    saved_name.gsub('/', '%2F').gsub('&', '%26').gsub('.', '%2E').gsub('?', '%3F')
+    saved_name.gsub('/', '*s*').gsub('&', '*a*').gsub('.', '*d*').gsub('?', '*q*').gsub('#', '*h*')
   end
 
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
-    self.find(:first, :conditions => ['name = ?', string.gsub('%2F', '/').gsub('%26', '&').gsub('%2F', '/').gsub('%2E', '.').gsub('%3F', '?')]) if string
+    return unless string.is_a? String
+    string = string.gsub('*s*', '/').gsub('*a*', '&').gsub('*d*', '.').gsub('*q*', '?').gsub('*h*', '#')
+    self.where('name = ?', string).first
   end
 
   # If a tag by this name exists in another class, add a suffix to disambiguate them
