@@ -5,7 +5,8 @@ Feature: Orphan work
   I want to orphan works
 
   Scenario: Orphan a single work, using the default orphan_account
-    Given the following activated user exists
+    Given I have an orphan account
+    And the following activated user exists
       | login         | password   |
       | orphaneer     | password   |
       And I am logged in as "orphaneer" with password "password"
@@ -29,7 +30,7 @@ Feature: Orphan work
     When I post the work "Shenanigans2"
     When I view the work "Shenanigans2"
     Then I should see "Edit"
-    When I follow "Edit" 
+    When I follow "Edit"
     Then I should see "Edit Work"
       And I should see "Orphan Work"
     When I follow "Orphan Work"

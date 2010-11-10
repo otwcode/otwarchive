@@ -2,6 +2,11 @@ Given /^I have no users$/ do
   User.delete_all
 end
 
+Given /I have an orphan account/ do
+  user = Factory.create(:user, :login => 'orphan_account')
+  user.activate
+end
+
 Given /the following activated users? exists?/ do |table|
   table.hashes.each do |hash|
     user = Factory.create(:user, hash)

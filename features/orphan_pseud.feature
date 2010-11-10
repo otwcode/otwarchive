@@ -6,7 +6,8 @@ Feature: Orphan pseud
   # TODO: Expand this to cover a user who has more than one pseud, and check that works on the other pseud don't get orphaned
 
 Scenario: Orphan all works belonging to one pseud
-  Given the following activated user exists
+  Given I have an orphan account
+  And the following activated user exists
     | login         | password   |
     | orphanpseud   | password   |
     And I am logged in as "orphanpseud" with password "password"
@@ -30,7 +31,8 @@ Scenario: Orphan all works belonging to one pseud
     And I should not see "orphanpseud" within ".userstuff"
 
     Scenario: Orphan all works belonging to one pseud, add a copy of the pseud to the orphan_account
-      Given the following activated user exists
+      Given I have an orphan account
+      And the following activated user exists
         | login         | password   |
         | orphanpseud   | password   |
         And I am logged in as "orphanpseud" with password "password"

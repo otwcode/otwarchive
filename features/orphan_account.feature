@@ -5,7 +5,8 @@ Feature: Orphan account
   I want to orphan all works in my account
 
 Scenario: Orphan all works belonging to a user
-  Given the following activated user exists
+  Given I have an orphan account
+  And the following activated user exists
     | login         | password   |
     | orphaneer     | password   |
     And I am logged in as "orphaneer" with password "password"
@@ -36,7 +37,8 @@ Scenario: Orphan all works belonging to a user
     And I should not see "orphaneer" within ".userstuff"
 
 Scenario: Orphan all works belonging to a user, add a copy of the pseud to the orphan_account
-Given the following activated user exists
+Given I have an orphan account
+  And the following activated user exists
   | login         | password   |
   | orphaneer     | password   |
   And I am logged in as "orphaneer" with password "password"

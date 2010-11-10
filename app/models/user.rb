@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   LOGIN_LENGTH_MIN = 3
   LOGIN_LENGTH_MAX = 40
 
-  validates_length_of :login, :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX, 
+  validates_length_of :login, :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX,
     :too_short => "is too short (minimum is #{LOGIN_LENGTH_MIN} characters)",
     :too_long => "is too long (maximum is #{LOGIN_LENGTH_MAX} characters)"
 
@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
     config.validates_length_of_password_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
     config.validates_length_of_password_confirmation_field_options = {:on => :update, :minimum => 6, :if => :has_no_credentials?}
   end
-  
+
   def has_no_credentials?
     self.crypted_password.blank? && self.identity_url.blank?
   end
@@ -162,22 +162,22 @@ class User < ActiveRecord::Base
   def to_param
     login
   end
-  
+
 
   ### AUTHENTICATION AND PASSWORDS
   def active?
     !activated_at.nil?
   end
-  
+
   def generate_password(length=8)
     chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789'
     password = ''
     length.downto(1) { |i| password << chars[rand(chars.length - 1)] }
     password
-  end         
-  
+  end
+
   def reset_user_password
-    self.password = self.generate_password 
+    self.password = self.generate_password
     self.password_confirmation = self.password
     self.recently_reset = true
   end
@@ -262,7 +262,7 @@ class User < ActiveRecord::Base
   def translation_admin
     self.is_translation_admin?
   end
-  
+
   def is_translation_admin?
     has_role?(:translation_admin)
   end
@@ -276,7 +276,7 @@ class User < ActiveRecord::Base
   def tag_wrangler
     self.is_tag_wrangler?
   end
-  
+
   def is_tag_wrangler?
     has_role?(:tag_wrangler)
   end
@@ -290,7 +290,7 @@ class User < ActiveRecord::Base
   def archivist
     self.is_archivist?
   end
-  
+
   def is_archivist?
     has_role?(:archivist)
   end
@@ -380,11 +380,7 @@ class User < ActiveRecord::Base
   def self.fetch_orphan_account
     orphan_account = User.find_or_create_by_login("orphan_account")
     if orphan_account.new_record?
-      orphan_account.password = SecureRandom.hex(12)
-      orphan_account.save(:validate => false)
-      orphan_account.activation_code = nil
-      orphan_account.activated_at = Time.now
-      orphan_account.save(:validate => false)
+      Rails.logger.fatal "You must have a User with the login 'orphan_account'. Please create one."
     end
     orphan_account
   end

@@ -77,7 +77,7 @@ Feature: Download a work
 
   Scenario: disable guest download
 
-  Given /the following activated user exists
+  Given the following activated user exists
     |login|password|
     |user |secret  |
   And I am logged in as "author" with password "writersrule"
