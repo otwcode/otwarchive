@@ -143,7 +143,7 @@ class Collection < ActiveRecord::Base
 
   scope :top_level, where(:parent_id => nil)
   scope :closed, joins(:collection_preference).where("collection_preferences.closed = ?", true)
-  scope :open, joins(:collection_preference).where("collection_preferences.closed = ?", false)
+  scope :not_closed, joins(:collection_preference).where("collection_preferences.closed = ?", false)
   scope :unrevealed, joins(:collection_preference).where("collection_preferences.unrevealed = ?", true)
   scope :anonymous, joins(:collection_preference).where("collection_preferences.anonymous = ?", true)
   scope :name_only, select(:name)

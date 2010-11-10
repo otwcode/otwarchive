@@ -32,7 +32,7 @@ class ChallengeAssignment < ActiveRecord::Base
   scope :in_collection, lambda {|collection| where('challenge_assignments.collection_id = ?', collection.id) }
   
   scope :defaulted, where("defaulted_at IS NOT NULL")
-  scope :open, where("defaulted_at IS NULL")
+  scope :undefaulted, where("defaulted_at IS NULL")
   scope :uncovered, where("covered_at IS NULL")
   scope :covered, where("covered_at IS NOT NULL")
   

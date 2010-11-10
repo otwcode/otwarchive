@@ -33,8 +33,6 @@ class CollectionsController < ApplicationController
   end
 
   def show
-    @collection = Collection.find_by_name(params[:id])
-    
     unless @collection
   	  flash[:error] = t('collection_not_found', :default => "Sorry, we couldn't find the collection you were looking for.")
       redirect_to collections_path and return
@@ -52,10 +50,6 @@ class CollectionsController < ApplicationController
     # Having the number of items as a limit was finding the limited number of items, then visible ones within them
     @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
 
-    respond_to do |format|
-      format.html
-      format.js
-    end
   end
 
   def new

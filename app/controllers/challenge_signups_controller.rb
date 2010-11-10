@@ -100,16 +100,21 @@ class ChallengeSignupsController < ApplicationController
   end
   
   def summary
-    @offered = []
-    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| 
-      @requested = tag_type.classify.constantize.select("tags.id, tags.name, count(tags.id) as count").group('tags.id').requested_in_challenge(@collection)
-      if @requested.count.keys.size > 0
-        # we have found the topmost tag type used in this challenge
-        @requested.each do |requested_tag|
-          @offered[requested_tag.id] = tag_type.classify.constantize.offered_in_challenge(@collection).select("count(tags.id) as count").where("tags.id = ?", requested_tag.id).first.count
+    @offered, @requested = [], []
+    @tag_type = ""
+    if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
+      flash.now[:notice] = ts("Summary does not appear until at least %{count} signups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
+    else
+      TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| 
+        @requested = tag_type.classify.constantize.select("tags.id, tags.name, count(tags.id) as count").group('tags.id').requested_in_challenge(@collection)
+        if @requested.count.keys.size > 0
+          # we have found the topmost tag type used in this challenge
+          @requested.each do |requested_tag|
+            @offered[requested_tag.id] = tag_type.classify.constantize.offered_in_challenge(@collection).select("count(tags.id) as count").where("tags.id = ?", requested_tag.id).first.count
+          end
+          @tag_type = tag_type
+          break # done collecting tag info
         end
-        @tag_type = tag_type
-        break # done collecting tag info
       end
     end
   end

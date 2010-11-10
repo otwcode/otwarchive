@@ -111,9 +111,9 @@ class ChallengeAssignmentsController < ApplicationController
     if params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
         if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
-          @challenge_assignments = @user.offer_assignments.in_collection(@collection).open + @user.pinch_hit_assignments.in_collection(@collection).open          
+          @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted          
         else
-          @challenge_assignments = @user.offer_assignments.open + @user.pinch_hit_assignments.open
+          @challenge_assignments = @user.offer_assignments.undefaulted + @user.pinch_hit_assignments.undefaulted
         end
       else
         flash[:error] = t('challenge_assignments.not_allowed_to_see_other', :default => "You aren't allowed to see that user's assignments.")
@@ -132,11 +132,11 @@ class ChallengeAssignmentsController < ApplicationController
         @defaulted_assignments = @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
       end
       
-      @open_assignments = @collection.assignments.open.order_by_offering_pseud.paginate :page => params[:page], :per_page => 20
+      @open_assignments = @collection.assignments.undefaulted.order_by_offering_pseud.paginate :page => params[:page], :per_page => 20
       
       if !@challenge.user_allowed_to_see_assignments?(current_user)
         @user = current_user
-        @challenge_assignments = @user.offer_assignments.in_collection(@collection).open + @user.pinch_hit_assignments.in_collection(@collection).open
+        @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted
       end
 
     end

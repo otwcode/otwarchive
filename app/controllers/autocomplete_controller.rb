@@ -149,7 +149,7 @@ public
   end
   
   def collection_finder(search_param)
-    render_output(Collection.open.with_name_like(search_param).name_only.map(&:name).sort)
+    render_output(Collection.not_closed.with_name_like(search_param).name_only.map(&:name).sort)
   end
 
   # find people signed up for a challenge
