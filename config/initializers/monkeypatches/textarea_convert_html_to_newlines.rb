@@ -6,12 +6,27 @@ module ActionView
 
       # added method to yank <p> and <br> tags and replace with newlines
       # this needs to reverse "add_paragraph_tags_to_text" from our html_cleaner library
-      def strip_html_breaks(content)
+      def strip_html_breaks(content, name="")
         return "" if content.blank?
-        content.gsub(/\s*<br ?\/?>\s*/, "\n").
-                gsub(/\s*<p[^>]*>\s*&nbsp;\s*<\/p>\s*/, "\n\n\n").
-                gsub(/\s*<p[^>]*>(.*?)<\/p>\s*/m, "\n\n" + '\1').
-                strip
+        if name =~ /content/
+          # might be using RTE, preserve all paragraphs as they are
+          content.gsub(/\s*<br ?\/?>\s*/, "<br />\n").
+                  gsub(/\s*<p[^>]*>\s*&nbsp;\s*<\/p>\s*/, "\n\n\n").
+                  gsub(/\s*(<p[^>]*>.*?<\/p>)\s*/m, "\n\n" + '\1').
+                  strip
+        else
+          # no RTE, so clean up paragraphs unless they have qualifiers
+          content = content.gsub(/\s*<br ?\/?>\s*/, "<br />\n").
+                            gsub(/\s*<p[^>]*>\s*&nbsp;\s*<\/p>\s*/, "\n\n\n")
+                  
+          if content.match(/\s*(<p[^>]+>)(.*?)(<\/p>)\s*/m)
+            content.gsub(/\s*(<p[^>]*>.*?<\/p>)\s*/m, "\n\n" + '\1').
+                    strip
+          else
+            content.gsub(/\s*<p[^>]*>(.*?)<\/p>\s*/m, "\n\n" + '\1').
+                    strip
+          end
+        end
       end      
 
       def text_area_tag_with_html_breaks(name, content = nil, options = {})
@@ -21,7 +36,7 @@ module ActionView
           options["cols"], options["rows"] = size.split("x") if size.respond_to?(:split)
         end
 
-        content = strip_html_breaks(content) # ADDED
+        content = strip_html_breaks(content, name) # ADDED
 
         escape = options.key?("escape") ? options.delete("escape") : true
         content = ERB::Util.html_escape(content) if escape
@@ -42,7 +57,7 @@ module ActionView
         end
 
         # modified
-        content = strip_html_breaks(options.delete('value') || value_before_type_cast(object))
+        content = strip_html_breaks(options.delete('value') || value_before_type_cast(object), options["name"])
         content_tag("textarea", ERB::Util.html_escape(content), options)
       end
       

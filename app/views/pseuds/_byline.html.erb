@@ -9,7 +9,7 @@
 </dd>
 
 <% unless @coauthors.blank? %>
-<%= '<select name="' + h(type) + '[author_attributes][coauthors][]" multiple="multiple" style="display: none;">' %>
+<%= ('<select name="' + h(type) + '[author_attributes][coauthors][]" multiple="multiple" style="display: none;">').html_safe %>
   <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>
 </select>
 <% end %>
