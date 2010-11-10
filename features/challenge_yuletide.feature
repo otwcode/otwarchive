@@ -253,13 +253,37 @@ Feature: Collection
     And I press "Submit"
   Then I should see "Signup was successfully created"
 
+  # ordinary users can't see signups until 5 people have signed up
+  When I go to the collections page
+    And I follow "Yuletide"
+  Then I should not see "Signups"
+    And I should see "Signup Summary"
+  When I follow "Signup Summary"
+  Then I should see "Summary does not appear until at least 5 signups have been made!"
+    And I should not see "Stargate Atlantis"
+
+  # fifth person signs up
+  When I follow "Log out"
+    And I am logged in as "myname5" with password "something"
+  When I go to the collections page
+    And I follow "Yuletide"
+    And I follow "Sign Up"
+    And I check "challenge_signup_requests_attributes_0_fandom_27"
+    And I check "challenge_signup_requests_attributes_1_fandom_28"
+    And I check "challenge_signup_offers_attributes_0_fandom_29"
+    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Foo The Wonder Goat, Obscure Person"
+    And I check "challenge_signup_offers_attributes_1_fandom_27"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
+    And I press "Submit"
+  Then I should see "Signup was successfully created"
+
   # ordinary users can't see signups but can see summary
   When I go to the collections page
     And I follow "Yuletide"
   Then I should not see "Signups"
     And I should see "Signup Summary"
   When I follow "Signup Summary"
-  Then I should see "Fandom"
+  Then I should see "Signup Summary for Yuletide"
     And I should see "Stargate Atlantis"
 
   # mod can view signups
@@ -272,6 +296,7 @@ Feature: Collection
     And I should see "myname3" within "#main"
     And I should see "myname2" within "#main"
     And I should see "myname1" within "#main"
+    And I should see "myname5" within "#main"
     And I should see "John Sheppard"
     And I should see "Obscure person"
     And I should see "http://user.dreamwidth.org/123.html"
@@ -316,8 +341,8 @@ Feature: Collection
       And I wait 3 seconds
     When I reload the page
     Then I should not see "Assignments are now being sent out"
-      # 4 users and the mod should get emails :)
-      And 5 emails should be delivered
+      # 5 users and the mod should get emails :)
+      And 6 emails should be delivered
 
   # first user starts posting
   When I follow "Log out"
@@ -420,8 +445,8 @@ Feature: Collection
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  # hm, not sure why 6 are being delivered :O INVESTIGATE TODO
-  Then 6 emails should be delivered
+  # hm, not sure why 7 are being delivered :O INVESTIGATE TODO
+  Then 7 emails should be delivered
 
   # someone views their gift and it is anonymous: TODO
 
