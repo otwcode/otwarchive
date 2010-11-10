@@ -42,7 +42,8 @@ Given /^I am logged out as an admin$/ do
 end
 
 Given /^guest downloading is off$/ do
-  Given "I have an AdminSetting"
-  AdminSetting.first.update_attribute(:guest_downloading_off, true)
-  assert AdminSetting.guest_downloading_off?
+  Given "I am logged in as an admin"
+  And "I follow \"settings\""
+  And "I check \"Turn off downloading for guests\""
+  And "I press \"Update\""
 end

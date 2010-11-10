@@ -88,6 +88,7 @@ Feature: Download a work
   Then I should see "NaNoWriMo"
   And I should not see "Comments"
   When guest downloading is off
+  And I am logged out as an admin
   When I view the work "NaNoWriMo"
   And I follow "PDF"
   Then I should see "Due to current high load"
