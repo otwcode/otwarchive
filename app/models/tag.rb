@@ -161,12 +161,6 @@ class Tag < ActiveRecord::Base
                                               else name
                                               end")
   
-  
-  # select("tags.*, CASE WHEN lower(substring_index(name, ' ', 1)) in ('a', 'an', 'the') 
-  #                                               THEN substring(name, INSTR(name, ' ') + 1
-  #                                               ELSE name
-  #                                          END AS namesort)").order('namesort ASC')
-
   scope :by_pseud, lambda {|pseud|
     joins(:works => :pseuds).
     where(:pseuds => {:id => pseud.id})
