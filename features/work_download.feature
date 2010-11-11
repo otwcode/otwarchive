@@ -118,3 +118,35 @@ Feature: Download a work
   And I follow "MOBI"
   When I view the work "Epic Novel"
   And I follow "EPUB"
+
+  Scenario: issue 1957
+
+  Given basic tags
+    And I am logged in as "myname" with password "something"
+
+  When I go to the new work page
+    And I fill in "Fandoms" with "No Fandom"
+    And I fill in "Work Title" with
+      """
+      ♥ and é Türkçe Karakterler başlıkta nasıl görünüyor
+      """
+    And I fill in "content" with "some random stuff"
+  When I press "Preview"
+    And I press "Post"
+  When I follow "MOBI"
+  When I go to the work page with title ♥ and é Türkçe Karakterler başlıkta nasıl görünüyor
+  When I follow "PDF"
+
+  When I go to the new work page
+    And I fill in "Fandoms" with "No Fandom"
+    And I fill in "Work Title" with
+      """
+      à ø something
+      """
+    And I fill in "content" with "some random stuff"
+  When I press "Preview"
+    And I press "Post"
+  When I follow "MOBI"
+  When I go to the work page with title à ø something
+  When I follow "PDF"
+

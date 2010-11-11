@@ -594,7 +594,7 @@ class Work < ActiveRecord::Base
     string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", self.title)
     string = string.gsub(/[^[\w _-]]+/, '')
     string = "Work by " + download_authors if string.blank?
-    string.gsub(/^(.{24}[\w.]*).*/) {$1}
+    string.squeeze.strip.gsub(/^(.{24}[\w.]*).*/) {$1}
   end
   def download_basename
     "#{self.download_dir}/#{self.download_title}"

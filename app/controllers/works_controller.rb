@@ -206,6 +206,7 @@ class WorksController < ApplicationController
       redirect_back_or_default works_path
     end
 
+    Rails.logger.debug "Work basename: #{@work.download_basename}"
     FileUtils.mkdir_p @work.download_dir
     @chapters = @work.chapters.order('position ASC').where(:posted => true)
 
@@ -239,6 +240,7 @@ protected
     `#{cmd} 2> /dev/null`
 
     # send as PDF
+    check_for_file("pdf")
     send_file("#{@work.download_basename}.pdf", :type => "application/pdf")
   end
 
@@ -269,6 +271,7 @@ protected
     end
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
+    check_for_file("mobi")
     send_file("#{@work.download_basename}.mobi", :type => "application/mobi")
   end
 
@@ -287,7 +290,15 @@ protected
    `#{cmd} 2> /dev/null`
 
     # send the file
+    check_for_file("epub")
     send_file("#{@work.download_basename}.epub", :type => "application/epub")
+  end
+
+  def check_for_file(format)
+    unless File.exists?("#{@work.download_basename}.#{format}")
+      flash[:error] = ts('We were not able to render this work. Please try another format')
+      redirect_back_or_default work_path(@work) and return
+    end
   end
 
   def create_work_html
