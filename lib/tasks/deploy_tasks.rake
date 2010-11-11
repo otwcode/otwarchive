@@ -253,16 +253,18 @@ Don't go further with the deploy until you have fixed the problem!"
     # deploy code
     ynq("Deploy new code and migrations?")
     Rake::Task['deploy:deploy_code'].invoke if @yes
-    Rake::Task['deploy:run_migrations'].invoke if @yes
+    Rake::Task['deploy:run_migrations'].invoke if (@yes && !@server == 'otw1')
 
     ynq("Take out of maintenance at the recommended time? (if you answer no here, the server will be taken out of maintenance immediately)")
     @restart_deferred = true if @yes
     Rake::Task['deploy:take_out_of_maint'].invoke unless @yes
     Rake::Task['deploy:restart_unicorn'].invoke unless @yes
 
-    ynq("Run the After tasks now?")
-    Rake::Task['deploy:run_after_tasks'].invoke if @yes
-    @after_deferred = true unless @yes
+    unless @server == 'otw1'
+      ynq("Run the After tasks now?")
+      Rake::Task['deploy:run_after_tasks'].invoke if @yes
+      @after_deferred = true unless @yes
+    end
 
     unless @server=='otw2'  # sphinx doesn't run on otw2
        ynq("Rebuild sphinx (only if indexes have changed in the models)?")
@@ -285,11 +287,11 @@ Don't go further with the deploy until you have fixed the problem!"
     end
 
     ynq("Send email?")
-    Rake::Task['deploy:send_email'].invoke if @yes
+    Rake::Task['deploy:send_email'].invoke if @yes unless @server == "otw2"
 
     notice "You should now alert users via twitter that the archive is back up." if @server == "otw1"
 
-    notice("Don't forget to update google code issues!")
+    notice("Don't forget to update google code issues!") unless @server == "otw2"
 
     if @after_deferred
       ynq("Run the after tasks?")
