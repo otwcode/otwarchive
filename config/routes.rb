@@ -111,6 +111,7 @@ Otwarchive::Application.routes.draw do
   # When adding new nested resources, please keep them in alphabetical order
   resources :users do
     member do
+      get :browse
       get :change_openid
       post :change_openid
       get :change_password

@@ -837,14 +837,21 @@ class Work < ActiveRecord::Base
   # Use the current user to determine what works are visible
   scope :visible, visible_to_user(User.current_user)
 
-  # Note: this version would work only on canonical tags (filters) -- inconsistent
-  # scope :with_all_tag_ids, lambda {|tag_ids_to_find|
-  #   select("DISTINCT works.*").
-  #   joins(:filter_taggings).
-  #   where({:filter_taggings => {:filter_id => tag_ids_to_find}}).
-  #   group("works.id HAVING count(DISTINCT filter_taggings.filter_id) = #{tag_ids_to_find.size}")
-  # }
+  # Note: this version will work only on canonical tags (filters) 
+  scope :with_all_filter_ids, lambda {|tag_ids_to_find|
+    select("DISTINCT works.*").
+    joins(:filter_taggings).
+    where({:filter_taggings => {:filter_id => tag_ids_to_find}}).
+    group("works.id").
+    having("count(DISTINCT filter_taggings.filter_id) = #{tag_ids_to_find.size}")
+  }
 
+  scope :with_any_filter_ids, lambda {|tag_ids_to_find|
+    select("DISTINCT works.*").
+    joins(:filter_taggings).
+    where({:filter_taggings => {:filter_id => tag_ids_to_find}})    
+  }
+  
   scope :with_all_tag_ids, lambda {|tag_ids_to_find|
     select("DISTINCT works.*").
     joins(:tags).
@@ -861,6 +868,8 @@ class Work < ActiveRecord::Base
 
   scope :with_all_tags, lambda {|tags_to_find| with_all_tag_ids(tags_to_find.collect(&:id))}
   scope :with_any_tags, lambda {|tags_to_find| with_any_tag_ids(tags_to_find.collect(&:id))}
+  scope :with_all_filters, lambda {|tags_to_find| with_all_filter_ids(tags_to_find.collect(&:id))}
+  scope :with_any_filters, lambda {|tags_to_find| with_any_filter_ids(tags_to_find.collect(&:id))}
 
   scope :ids_only, select("DISTINCT(works.id)")
 
@@ -912,8 +921,8 @@ class Work < ActiveRecord::Base
   def self.find_with_options(options = {})
     command = ''
     tags = (options[:boolean_type] == 'or') ?
-      '.with_any_tag_ids(options[:selected_tags])' :
-      '.with_all_tag_ids(options[:selected_tags])'
+      '.with_any_filter_ids(options[:selected_tags])' :
+      '.with_all_filter_ids(options[:selected_tags])'
     written = '.written_by_id(options[:selected_pseuds])'
     owned = '.owned_by(options[:user])'
     collected = '.in_collection(options[:collection])'

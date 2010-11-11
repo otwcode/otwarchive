@@ -95,6 +95,20 @@ class Pseud < ActiveRecord::Base
   scope :alphabetical, order(:name)
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
   
+  scope :coauthor_of, lambda {|pseuds|
+    select("pseuds.*").
+    joins("LEFT JOIN creatorships ON creatorships.pseud_id = pseuds.id 
+          LEFT JOIN creatorships c2 ON c2.creation_id = creatorships.creation_id").
+    where(["creatorships.creation_type = 'Work' AND 
+          c2.creation_type = 'Work' AND
+          c2.pseud_id IN (?) AND 
+          creatorships.pseud_id NOT IN (?)", 
+          pseuds.collect(&:id), 
+          pseuds.collect(&:id)]).
+    group("pseuds.id").
+    includes(:user)
+  }
+  
   scope :not_orphaned, where("user_id != ?", User.orphan_account)
   
   # Enigel Dec 12 08: added sort method

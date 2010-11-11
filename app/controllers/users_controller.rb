@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid]
+  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid, :browse]
   before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid]
   before_filter :check_account_creation_status, :only => [:new, :create]
 
@@ -340,6 +340,18 @@ Rails.logger.debug token
     if !(request.xml_http_request?)
       redirect_to @user
     end
+  end
+  
+  def browse
+    @co_authors = Pseud.order(:name).coauthor_of(@user.pseuds)
+    @tag_types = %w(Fandom Character Relationship Freeform)
+    @tags = @user.tags.with_scoped_count.includes(:merger)
+    if params[:sort] == "count"
+      @tags = @tags.order("count DESC")
+    else
+      @tags = @tags.order("name ASC")
+    end    
+    @tags = @tags.group_by{|t| t.type.to_s}    
   end
 
   private

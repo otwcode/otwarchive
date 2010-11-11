@@ -1,0 +1,71 @@
+<div id="user-page" class="profile">
+  <!--Descriptive page name, messages and instructions-->
+  <div class="header module">
+  	<h2><%= link_to_unless_current(@user.login, @user) %>
+  	</h2>
+  	<p><%= icon_display(@user) %></p>
+  <!--/descriptions-->
+
+  <!--subnav-->
+    <ul class="navigation" role="navigation">
+      <li><%= link_to "Sort by name", url_for(:sort => "name") %></li>
+      <li><%= link_to "Sort by count", url_for(:sort => "count") %></li>
+    </ul>
+  </div>
+  <!--/subnav-->
+  
+  <h1>Author Browsing (Alpha)</h1>
+
+  <!--main content-->
+
+  <% unless @co_authors.nil? || @co_authors.length == 0 %>
+  <div class="coauthor module" id="user-coauthors">
+    <h3><%=h ts("Co-Authors") %></h3>
+    <ul class="index">
+      <% for pseud in @co_authors %>
+        <li>
+          <%= link_to pseud.name, [pseud.user, pseud] %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+
+
+  <% for tag_type in @tag_types %>
+    <% unless @tags[tag_type].blank? %>
+    <div class="#{tag_type.downcase} module" id="user-#{tag_type.downcase.pluralize}">
+      <h3><%=h ts(tag_type.pluralize) %></h3>
+      <ul class="index">
+        <% @tags[tag_type].each_with_index do |tag, i| %>
+          <% if !params["expand_#{tag_type.downcase.pluralize}"] && 
+              i > (ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD - 1) %>
+            <li class='hidden'>
+          <% else %>
+            <li>
+          <% end %>       
+          <% if tag.merger %>
+            <%= link_to tag.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [tag.merger.id]} %> 
+(<%=tag.count%>)
+          <% else %>
+            <%= link_to tag.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [tag.id]} %> 
+(<%=tag.count%>)
+          <% end %>
+          </li>
+       <% end %>
+       <% if @tags[tag_type].length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
+          <li>
+            <% if params["expand_#{tag_type.downcase.pluralize}"] %>
+            <%= link_to "< Hide full list", [@user, @author], :id => "expandable-#{tag_type.downcase}-link" %>
+            <% else %>
+            <%= link_to "> Expand full list", url_for("expand_#{tag_type.downcase.pluralize}" => true), 
+                :id => "expandable-#{tag_type.downcase}-link" %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+  <% end %> 
+
+</div>
