@@ -249,15 +249,15 @@ module TagsHelper
 
     if item.class == Work
       if item.is_wip
-        symbol_block << get_symbol_link("Work in Progress", "complete-no iswip")
+        symbol_block << get_symbol_link( "complete-no iswip", "Work in Progress" )
       else
-        symbol_block << get_symbol_link("Complete Work", "complete-yes iswip")
+        symbol_block << get_symbol_link( "complete-yes iswip" , "Complete Work")
       end
     elsif item.class == Series
       if item.complete?
-        symbol_block << get_symbol_link("Complete Series", "complete-yes iswip")
+        symbol_block << get_symbol_link( "complete-yes iswip" , "Complete Series")
       else
-        symbol_block << get_symbol_link("Series in Progress", "category-none iswip")
+        symbol_block << get_symbol_link( "category-none iswip" , "Series in Progress")
       end
     elsif item.class == ExternalWork
       symbol_block << get_symbol_link('external-work', "External Work")
