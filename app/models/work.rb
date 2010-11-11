@@ -630,11 +630,15 @@ class Work < ActiveRecord::Base
   after_save :adjust_filter_counts
 
   # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
-  def add_filter_tagging(tag)
+  def add_filter_tagging(tag, meta=false)
     filter = tag.canonical? ? tag : tag.merger
     if filter && !self.filters.include?(filter)
-      self.filters << filter
-      filter.reset_filter_count unless AdminSetting.suspend_filter_counts?
+      if meta
+        self.filter_taggings.create(:filter_id => filter.id, :inherited => true)
+      else
+        self.filters << filter
+      end
+      filter.reset_filter_count unless AdminSetting.suspend_filter_counts?     
     end
   end
 
@@ -653,6 +657,9 @@ class Work < ActiveRecord::Base
           unless self.tags.include?(meta_tag) || !(self.tags & meta_tag.mergers).empty? || !(self.tags & sub_mergers).empty?
             self.filters.delete(meta_tag)
           end
+        elsif self.filters.include?(meta_tag)
+          ft = self.filter_taggings.where(["filter_id = ?", meta_tag.id])
+          ft.update_attribute(:inherited, true)
         end
       end
     end

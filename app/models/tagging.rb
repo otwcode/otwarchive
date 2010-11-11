@@ -11,7 +11,7 @@ class Tagging < ActiveRecord::Base
       self.taggable.add_filter_tagging(self.tagger)
       filter = self.tagger.filter
       unless filter.nil? || filter.meta_tags.empty?
-        filter.meta_tags.each { |m| self.taggable.add_filter_tagging(m) }
+        filter.meta_tags.each { |m| self.taggable.add_filter_tagging(m, true) }
       end
     end
     return true    
