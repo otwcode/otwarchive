@@ -238,11 +238,11 @@ module TagsHelper
     # split up the item's tags into groups based on type
     tag_groups ||= item.tag_groups
 
-    warnings = tag_groups['Warning']
-    symbol_block << get_symbol_link(get_warnings_class(warnings), get_title_string(warnings))
-
     ratings = tag_groups['Rating']
     symbol_block << get_symbol_link(get_ratings_class(ratings), get_title_string(ratings, "rating"))
+
+    warnings = tag_groups['Warning']
+    symbol_block << get_symbol_link(get_warnings_class(warnings), get_title_string(warnings))
 
     categories = tag_groups['Category']
     symbol_block << get_symbol_link(get_category_class(categories), get_title_string(categories, "category"))
