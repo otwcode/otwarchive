@@ -34,7 +34,7 @@
     <dt>Filter by Media</dt>
     <dd>
       <p>Show only:</p>
-      <%= select_tag :media_id, options_for_select([''] + Media.canonical.collect(&:name), params[:media_id]) %>
+      <%= select_tag :media_id, options_for_select([''] + Media.canonical.map{|m| m.name}, params[:media_id]) %>
     </dd>
   </dl>
   <p class="submit"><%= submit_tag 'Go' %></p>  

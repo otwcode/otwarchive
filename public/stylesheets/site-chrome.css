@@ -338,7 +338,8 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
   .fandoms-index ul.index       { float: left; width: 33% }
   .fandoms-index div.main-fandoms-listing 
 								{ clear: both }
-  .fandoms-unassigned ul.fandoms {float: left; width: 60%;}                
+  .fandoms-unassigned ul.fandoms {float: left; width: 60%;}
+  .fandoms-unassigned .filters #media_id {width: 100%;}                
 
 /* PEOPLE INDEX, PSEUDS-INDEX */
  .pseud .user h4,  .pseud .user h5, .pseud .user blockquote 
