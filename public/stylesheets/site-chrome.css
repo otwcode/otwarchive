@@ -162,7 +162,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .blurb .rating, .blurb .required-tags .warnings 
  								{ margin:0 0 3px }
 
- */icon image replacement*/
+ /*icon image replacement*/
   .blurb .rating-general-audience {background:url("/images/rating-general-audience-s.png");}
   .blurb .rating-explicit {background:url("/images/rating-explicit-s.png");}
   .blurb .rating-mature {background:url("/images/rating-mature-s.png");}
