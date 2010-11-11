@@ -155,6 +155,18 @@ class Tag < ActiveRecord::Base
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
 
+  scope :by_name_without_articles, order("case when lower(substring(name from 1 for 4)) = 'the ' then substring(name from 5)
+                                               when lower(substring(name from 1 for 2)) = 'a ' then substring(name from 3)
+                                               when lower(substring(name from 1 for 3)) = 'an ' then substring(name from 4)
+                                              else name
+                                              end")
+  
+  
+  # select("tags.*, CASE WHEN lower(substring_index(name, ' ', 1)) in ('a', 'an', 'the') 
+  #                                               THEN substring(name, INSTR(name, ' ') + 1
+  #                                               ELSE name
+  #                                          END AS namesort)").order('namesort ASC')
+
   scope :by_pseud, lambda {|pseud|
     joins(:works => :pseuds).
     where(:pseuds => {:id => pseud.id})

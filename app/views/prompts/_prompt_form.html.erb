@@ -36,10 +36,10 @@ See the challenge_signup form for an example of how this is used.
         <% num_allowed = eval("restriction.#{tag_type}_num_allowed") %>
         <% num_required = eval("restriction.#{tag_type}_num_required") %>
         <% @taglist ||= {} %>
-        <% @taglist["#{tag_type}-#{restriction.id}"] ||= restriction.tag_set.tags.with_type(tag_type.classify).order('tags.name') %>
+        <% @taglist["#{tag_type}-#{restriction.id}"] ||= restriction.tag_set.tags.with_type(tag_type.classify).by_name_without_articles %>
         <!-- do ratings, warnings, categories as taglists if not already specified -->
         <% if @taglist["#{tag_type}-#{restriction.id}"].empty? && TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
-          <% @taglist["#{tag_type}-#{restriction.id}"] = tag_type.classify.constantize.canonical.order('tags.name') %>
+          <% @taglist["#{tag_type}-#{restriction.id}"] = tag_type.classify.constantize.canonical.by_name_without_articles %>
         <% end %>        
         <% taglist_size = @taglist["#{tag_type}-#{restriction.id}"].size %>
     
