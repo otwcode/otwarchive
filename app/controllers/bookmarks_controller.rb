@@ -117,9 +117,9 @@ class BookmarksController < ApplicationController
       else # main page
         @most_recent_bookmarks = true
         if params[:recs_only]
-          bookmarks_grouped = Bookmark.recs.recent.visible.group_by(&:bookmarkable)
+          bookmarks_grouped = Bookmark.recs.recent.visible_to_user(current_user).group_by(&:bookmarkable)
         else
-          bookmarks_grouped = Bookmark.recent.visible.group_by(&:bookmarkable)
+          bookmarks_grouped = Bookmark.recent.visible_to_user(current_user).group_by(&:bookmarkable)
         end
       end
       @bookmarks = []

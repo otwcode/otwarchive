@@ -69,7 +69,7 @@ class Bookmark < ActiveRecord::Base
   scope :visible_to_user, lambda {|user|
    user.is_a?(Admin) ? visible_to_admin : 
      (!user.is_a?(User) ? visible_to_all :
-      select("DISTINCT bookmarks.*").visible_to_registered_user.joins({:pseud => :user}).where("bookmarks.hidden_by_admin = false OR users.id = ?", user.id))
+      select("DISTINCT bookmarks.*").visible_to_registered_user.joins({:pseud => :user}).where("bookmarks.hidden_by_admin = 0 OR users.id = ?", user.id))
   }
 
   # Use the current user to determine what works are visible
