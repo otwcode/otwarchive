@@ -81,7 +81,7 @@ class BookmarksController < ApplicationController
       else
         @bookmarks = owner.bookmarks
       end
-      if @user == current_user
+      if @user && @user == current_user
         # can see all own bookmarks
       elsif logged_in_as_admin?
         @bookmarks = @bookmarks.visible_to_admin
@@ -117,9 +117,9 @@ class BookmarksController < ApplicationController
       else # main page
         @most_recent_bookmarks = true
         if params[:recs_only]
-          bookmarks_grouped = Bookmark.recs.recent.is_public.reject{|b| b.bookmarkable && !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
+          bookmarks_grouped = Bookmark.recs.recent.visible.group_by(&:bookmarkable)
         else
-          bookmarks_grouped = Bookmark.recent.is_public.reject{|b| b.bookmarkable && !b.bookmarkable.visible?(current_user)}.group_by(&:bookmarkable)
+          bookmarks_grouped = Bookmark.recent.visible.group_by(&:bookmarkable)
         end
       end
       @bookmarks = []

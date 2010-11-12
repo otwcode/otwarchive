@@ -53,7 +53,7 @@ module UsersHelper
   # Prints link to bookmarks page with user-appropriate number of bookmarks
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user)
-    total = logged_in_as_admin? ? @user.bookmarks.count : @user.bookmarks.visible.size
+    total = (logged_in_as_admin? || current_user == user) ? @user.bookmarks.count : @user.bookmarks.visible.size
     if @user == current_user
 	  span_if_current t('users_helper.my_bookmarks', :default => "My Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
 	else
@@ -62,12 +62,12 @@ module UsersHelper
   end
 	
   def print_pseud_bookmarks_link(pseud)
-    total = logged_in_as_admin? ? pseud.bookmarks.count : pseud.bookmarks.visible.size
+    total = (logged_in_as_admin? || current_user == pseud.user) ? pseud.bookmarks.count : pseud.bookmarks.visible.count
     if @user == current_user
-	  span_if_current t('users_helper.my_pseud_bookmarks', :default => "My Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
-	else
-	  span_if_current t('users_helper.pseud_bookmarks', :default => "Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
-	end
+  	  span_if_current t('users_helper.my_pseud_bookmarks', :default => "My Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
+  	else
+  	  span_if_current t('users_helper.pseud_bookmarks', :default => "Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
+  	end
   end
   
   # Prints link to works page with user-appropriate number of works

@@ -262,7 +262,9 @@ public
     elsif @check_visibility_of.is_a? Skin
       access_denied unless logged_in_as_admin? || current_user_owns?(@check_visibility_of) || @check_visibility_of.official?
     else
-      is_hidden = @check_visibility_of.respond_to?(:visible) ? !@check_visibility_of.visible : @check_visibility_of.hidden_by_admin?
+      is_hidden = (@check_visibility_of.respond_to?(:visible) && !@check_visibility_of.visible) || 
+                  (@check_visibility_of.respond_to?(:visible?) && !@check_visibility_of.visible?) || 
+                  (@check_visibility_of.respond_to?(:hidden_by_admin?) && @check_visibility_of.hidden_by_admin?)
       can_view_hidden = logged_in_as_admin? || current_user_owns?(@check_visibility_of)
       access_denied if (is_hidden && !can_view_hidden)
     end

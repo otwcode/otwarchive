@@ -65,8 +65,15 @@ module BookmarksHelper
     if link_text.blank? 
       link_text = Bookmark.count_visible_bookmarks(bookmarkable, current_user)
     end
-    id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym    
-    link_to link_text, {:controller => :bookmarks, :action => :index, id_symbol => bookmarkable}
+    path = case bookmarkable.class.name
+           when "Work"
+             then work_bookmarks_path(bookmarkable)
+           when "ExternalWork"
+             then external_work_bookmarks_path(bookmarkable) 
+           when "Series"
+             then series_bookmarks_path(bookmarkable)
+           end
+    link_to link_text, path
   end
   
   def get_symbol_for_bookmark(bookmark)
