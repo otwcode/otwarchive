@@ -36,7 +36,7 @@
  #main 						{ margin: 1em auto; padding: 0 1em; position: relative }
  #main.sidebar 				{ margin: 1em auto 1em 12em }
  #main.error 				{ background: #fffef9 url(/images/sadface.png) top right no-repeat; border: 0; font-weight: 700; min-height: 365px }
- #main.maintenance   { background: #fffef9 url(/images/logo-ruby.png) top right no-repeat; border: 0; font-weight: 700; min-height: 344px; margin-right: 2em; }
+ #main.maintenance   		{ background: #fffef9 url(/images/logo-ruby.png) top right no-repeat; }
 
 /* FOOTER */
  #footer ul 				{ border-top: 1px solid #999; clear: both; color: #999; font-size: 0.75em; margin: 1.5em 0; padding: 1em; text-align: center }
