@@ -12,7 +12,7 @@
   <% @requested.sort {|a,b| @offered[a.id] == @offered[b.id] ? a.count <=> b.count : @offered[a.id] <=> @offered[b.id]}.each do |requested_tag| %>
     <li class="requested">
       <span class = "requested<%= @offered[requested_tag.id] > 0 ? ' offered' : '' %>">
-      <%= requested_tag.name %></span>[<span class="requested"><%= requested_tag.count -%></span>,<span class="offered"><%= @offered[requested_tag.id] -%></span>]
+      <%= requested_tag.name %></span>&nbsp;[<span class="requested"><%= requested_tag.count -%></span>,<span class="offered"><%= @offered[requested_tag.id] -%></span>]
     </li>
   <% end %>
 </ul> 

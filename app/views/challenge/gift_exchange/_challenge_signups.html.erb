@@ -74,12 +74,16 @@
         <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
           <% prompt = eval("challenge_signup.#{prompt_type.pluralize}[i]") %>
           <td>
-            <%= !prompt || !prompt.tag_set ? "" : content_tag(:ul, tag_link_list(prompt.tag_set.tags)) %>
-            <% TagSet::TAG_TYPES.each do |type| %><%= prompt && prompt.send("any_#{type}") ? ts("Any %{type} ", :type => type.capitalize) : "" %><% end %>
+            <% any_types = TagSet::TAG_TYPES.select {|type| prompt && prompt.send("any_#{type}")} %>
+            <%= !prompt || !prompt.tag_set ? "" : 
+                  content_tag(:ul, tag_link_list(prompt.tag_set.tags) + 
+                                    any_types.map {|type| content_tag(:li, h(ts("Any %{type}", :type => type.capitalize))) }.join("\n").html_safe) %>
           </td>
-          <% if eval("show_#{prompt_type}_optional_tags") && prompt && prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
+          <% if eval("show_#{prompt_type}_optional_tags") %>
             <td>
-              <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
+              <% if prompt && prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
+                <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
+              <% end %>
             </td>
           <% end %>
           <% if eval("show_#{prompt_type}_description") %>
