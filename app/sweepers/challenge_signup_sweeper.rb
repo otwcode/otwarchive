@@ -1,4 +1,4 @@
-class ChallengeSweeper < ActionController::Caching::Sweeper
+class ChallengeSignupSweeper < ActionController::Caching::Sweeper
   observe ChallengeSignup
   
   def after_create(signup)
@@ -15,7 +15,8 @@ class ChallengeSweeper < ActionController::Caching::Sweeper
   
   private
   def expire_cache_for(signup)
-    # expire the signup summary for this particular signup's collection
+    # expire the signup summary for this particular signup's collection and then
+    # populate it again using a delayed job
     expire_fragment("signup_summary_#{signup.collection.id}")
   end
 

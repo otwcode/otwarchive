@@ -12,6 +12,7 @@ class ChallengeSignupsController < ApplicationController
   before_filter :maintainer_or_signup_owner_only, :only => [:show]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
 
+  cache_sweeper :challenge_signup_sweeper
 
   def load_challenge
     @challenge = @collection.challenge
