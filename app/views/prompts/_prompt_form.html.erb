@@ -49,7 +49,7 @@ See the challenge_signup form for an example of how this is used.
             <%= num_required == num_allowed ? " (#{num_required})" : " (#{num_required} - #{num_allowed})" %>:
           </dt>
           <dd>
-            <% if taglist_size > 0 %>
+            <% if taglist_size > 0 && taglist_size <= ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
               <!-- there's a set list of options, so we're using checkboxes -->
 
               <!-- just to make the form cleaner, save the fieldname and id for this field in locals -->
@@ -71,7 +71,18 @@ See the challenge_signup form for an example of how this is used.
               <% @fandom_tag_fieldname = tag_fieldname if tag_type == 'fandom' %>
 
               <!-- add the autocomplete -->
-              <% if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom") %>
+              <% if taglist_size > ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
+                <!-- we have set options but too many for tickyboxes -->
+                <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
+                <%= autocomplete_text_field tag_fieldname, :methodname => "tag_finder_restricted_by_tag_set", 
+                                                           :extra_params => "tag_set_id=#{restriction.tag_set.id}&tag_type=#{tag_type}" %>
+                <p>      
+                  <%= link_to(ts("(See %{taglist_size} options)", :taglist_size => taglist_size), 
+                            tag_set_path(restriction.tag_set, :tag_type => tag_type), 
+                            :class => "toggle", :data_popup => true) %>
+                </p>
+
+              <% elsif TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom") %>
                 <!-- we want a field that will update when the user has chosen a fandom -->
                 <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50, :onclick => "autocomplete_for_#{tag_fieldname}.activate();" %>
                 <%= autocomplete_text_field tag_fieldname, :methodname => "#{tag_type}_finder_restricted_by_fandom", 

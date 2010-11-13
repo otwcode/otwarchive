@@ -173,6 +173,10 @@ class Tag < ActiveRecord::Base
   scope :with_parents, lambda {|parents|
     joins(:common_taggings).where("filterable_id in (?)", parents.collect(&:id).join(","))
   }
+  
+  scope :with_no_parents, 
+    joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
+    where("filterable_id IS NULL")
 
   scope :starting_with, lambda {|letter| where('SUBSTR(name,1,1) = ?', letter)}
 

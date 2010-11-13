@@ -257,6 +257,7 @@ Otwarchive::Application.routes.draw do
   resources :gifts
   resources :prompt_restrictions
   resources :prompts
+  resources :tag_sets, :only => [:show]
   resources :collections do
     resource  :profile, :controller => "collection_profile"
     resources :collections

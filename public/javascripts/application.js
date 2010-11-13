@@ -9,6 +9,7 @@ $j(document).ready(function() {
     // initSelect('languages_menu');
     hideExpandable();
     hideHideMe();
+    handlePopUps();
     $j('#expandable-link').click(function(){
           expandList();
           return false;
@@ -37,6 +38,14 @@ function hideExpandable() {
 function hideHideMe() {
     nodes = $$('.hideme');
     nodes.each( function(node) { node.hide(); });
+}
+
+function handlePopUps() {
+    document.on("click", "a[data_popup]", function(event, element) {
+      if (event.stopped) return;
+      window.open($(element).href);
+      event.stop();
+    });    
 }
 
 // used in autocompleters to automatically insert comma
