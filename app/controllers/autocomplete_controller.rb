@@ -79,9 +79,9 @@ protected
           fandom_names = hash[key]
           if fandom_names.is_a? String
             return [] if fandom_names.blank?
-            return fandom_names.split(',').delete_if {|fname| fname.blank?}.collect {|fname| Fandom.find_by_name(fname.strip)}
+            return fandom_names.split(',').delete_if {|fname| fname.blank?}.collect {|fname| Fandom.find_by_name(fname.strip)}.compact
           elsif fandom_names.is_a? Array
-            return fandom_names.collect {|fname| Fandom.find_by_name(fname)}
+            return fandom_names.collect {|fname| Fandom.find_by_name(fname.strip)}.compact
           end
         elsif hash[key].is_a? Hash
           nexthash = hash[key]
@@ -102,14 +102,14 @@ public
     fandoms = get_fandoms_from_params(params, params[:fandom_fieldname])
     message = ""
     if fandoms.empty?
-      message = ts("- No fandoms selected! -")
+      message = ts("- No valid fandoms selected! -")
       tags = search_param.blank? ? [] : get_tags_for_finder(Character, search_param)
     elsif search_param.blank?
       tags = Character.with_parents(fandoms).canonical.order('taggings_count DESC').limit(10)
     else
       tags = Character.with_parents(fandoms).canonical.order('taggings_count DESC').where("tags.name LIKE ?", '%' + search_param + '%').limit(10)
     end
-    if tags.empty?
+    if !fandoms.empty? && tags.empty?
       message = ts("- No matching characters found in selected fandoms! -")
       tags = get_tags_for_finder(Character, search_param)
     end
