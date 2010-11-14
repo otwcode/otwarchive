@@ -153,7 +153,7 @@ Scenario: Listing external works as inspirations
     And I fill in "Work Title" with "Followup"
     And I fill in "content" with "That could be an amusing crossover."
     And I check "parent-options-show"
-    And I fill in "Url" with "archiveofourown.org"
+    And I fill in "Url" with "google.com"
     And I press "Preview"
   Then I should see "We couldn't save this Work, sorry"
     And I should see "A parent work outside the archive needs to have a title."

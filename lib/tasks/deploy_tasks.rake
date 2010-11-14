@@ -17,7 +17,7 @@ namespace :deploy do
       @yes = false
     when /[qQ]/
       exit
-    else 
+    else
       @yes = true
     end
   end
@@ -50,7 +50,7 @@ Don't go further with the deploy until you have fixed the problem!"
   desc "Run svn update"
   task(:svn_update) do
     notice "Running svn update"
-    ok_or_warn %q{svn update} 
+    ok_or_warn %q{svn update}
     ok_or_warn %q{bundle install --quiet}
   end
 
@@ -90,14 +90,14 @@ Don't go further with the deploy until you have fixed the problem!"
       next unless @yes
       notice "Resetting the database..."
       ok_or_warn %Q{mysql -e "drop database otwarchive_production"}
-      ok_or_warn %Q{mysql -e "create database otwarchive_production"} 
+      ok_or_warn %Q{mysql -e "create database otwarchive_production"}
       ok_or_warn %Q{mysql otwarchive_production < /backup/latest.dump}
 
       ynq("Do you want to reset the code as well?")
       if @yes
-        notice "Enter the current revision number of the REAL archive below, don't hit return" 
-        Rake::Task['deploy:deploy_code'].invoke 
-        Rake::Task['deploy:take_out_of_maint'].invoke 
+        notice "Enter the current revision number of the REAL archive below, don't hit return"
+        Rake::Task['deploy:deploy_code'].invoke
+        Rake::Task['deploy:take_out_of_maint'].invoke
         Rake::Task['deploy:restart_unicorn'].invoke
         ynq("Stage has been reset to an exact duplicate. Do you want to quit now?")
         exit if @yes
@@ -134,7 +134,7 @@ Don't go further with the deploy until you have fixed the problem!"
     notice "Removing old releases"
     ok_or_warn %q{cap deploy:cleanup}
   end
- 
+
   desc "Update Crontab"
   task(:update_crontab => :get_servername) do
     case @server
@@ -157,7 +157,7 @@ Don't go further with the deploy until you have fixed the problem!"
       next
     when "otw2"
       unless @ran_backups
-        ynq("Did you forget to back up the database?") 
+        ynq("Did you forget to back up the database?")
         if @yes
           ynq("Skipping migrations. Do you want to quit?")
           exit if @yes
@@ -180,6 +180,7 @@ Don't go further with the deploy until you have fixed the problem!"
   desc "Restart unicorn"
   task(:restart_unicorn => :get_servername) do
     ok_or_warn %Q{cd #{CURRENT_DIR} && kill -USR2 `cat tmp/pids/unicorn.pid`}
+    ok_or_warn %Q{cd #{CURRENT_DIR} && kill -USR2 `cat tmp/pids/unicorn_slow.pid`}
   end
 
   desc "Take out of maintenance"
@@ -189,12 +190,12 @@ Don't go further with the deploy until you have fixed the problem!"
 
   desc "Rebuild sphinx (slow)"
   task(:rebuild_sphinx => :get_servername) do
-    ok_or_warn %q{/usr/local/bin/ts_rebuild.sh} 
+    ok_or_warn %q{/usr/local/bin/ts_rebuild.sh}
   end
 
   desc "Restart sphinx"
   task(:restart_sphinx => :get_servername) do
-    ok_or_warn %q{/usr/local/bin/ts_restart.sh} 
+    ok_or_warn %q{/usr/local/bin/ts_restart.sh}
   end
 
   desc "Send email that deploy is complete"
