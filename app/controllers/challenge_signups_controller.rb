@@ -74,6 +74,7 @@ class ChallengeSignupsController < ApplicationController
     if params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
         @challenge_signups = @user.challenge_signups
+        render :action => :index and return
       else
         flash[:error] = t('challenge_signups.not_allowed_to_see_other', :default => "You aren't allowed to see that user's signups.")
         redirect_to '/' and return
