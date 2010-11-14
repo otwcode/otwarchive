@@ -3,12 +3,12 @@
   <div class="flash notice" id="first-login-help-banner">
     <p>
       Hi! It looks like you've just logged into the archive for the first time. 
-      <%= link_to_ibox t("new-user-help", :default => "Learn some tips and tricks."), :for => first_login_help_path, :title => "First login help", :size => "600x400" %> 
+      <%= link_to_ibox ts("Learn some tips and tricks."), :for => first_login_help_path, :title => "First login help", :size => "600x400" %> 
       or
-      <%= link_to "Dismiss this message permanently.", end_first_login_user_path(current_user), :remote => true, :class => 'navigation' %>
+      <%= link_to "Dismiss this message permanently.", end_first_login_user_path(current_user), :method => :post, :remote => true, :class => 'navigation' %>
     </p>
     <p class="submit">
-      <%= link_to image_tag('close-flash.png'), nil, :onclick => "$('first-login-help-banner').hide()" %>
+      <%= link_to image_tag('close-flash.png'), nil, :onclick => "$('first-login-help-banner').hide()", :remote => true %>
     </p>
   </div>
 <% end %>
