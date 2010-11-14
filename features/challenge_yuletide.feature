@@ -299,9 +299,9 @@ Feature: Collection
     And I should see "myname5" within "#main"
     And I should see "John Sheppard"
     And I should see "Obscure person"
-    And I should see "http://user.dreamwidth.org/123.html"
-  When I follow "Hide URLs"
-  Then I should not see "http://user.dreamwidth.org/123.html"
+    And I should not see "http://user.dreamwidth.org/123.html"
+  When I follow "Show URLs"
+  Then I should see "http://user.dreamwidth.org/123.html"
 
   # mod runs matching
   When I follow "Matching"
