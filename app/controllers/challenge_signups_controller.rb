@@ -12,8 +12,6 @@ class ChallengeSignupsController < ApplicationController
   before_filter :maintainer_or_signup_owner_only, :only => [:show]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
 
-  cache_sweeper :challenge_signup_sweeper
-
   def load_challenge
     @challenge = @collection.challenge
     no_challenge and return unless @challenge
@@ -84,39 +82,39 @@ class ChallengeSignupsController < ApplicationController
       load_collection 
       load_challenge if @collection
       return false unless @challenge
-      
-      if @challenge.user_allowed_to_see_signups?(current_user)
-        @challenge_signups = @collection.signups
-      else
-        @challenge_signups = @collection.signups.by_user(current_user)
-      end
     end
-    
+      
     # using respond_to in order to provide Excel output
     # see below for export_excel method
     respond_to do |format|
-      format.html
-      format.xls {export_html}
+      format.html {
+          if @challenge.user_allowed_to_see_signups?(current_user)
+            @challenge_signups = @collection.signups.joins(:pseud).paginate(:page => params[:page], :per_page => 20, :order => "pseuds.name")
+          else
+            @challenge_signups = @collection.signups.by_user(current_user)
+          end
+      }
+      format.xls {
+        if @challenge.user_allowed_to_see_signups?(current_user)
+          params[:show_urls] = true
+          params[:show_descriptions] = true
+          @challenge_signups = @collection.signups
+          export_html
+        end
+      }
     end    
   end
   
   def summary
-    @offered, @requested = [], []
-    @tag_type = ""
+    @requested = []
     if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
       flash.now[:notice] = ts("Summary does not appear until at least %{count} signups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
     else
-      TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| 
-        @requested = tag_type.classify.constantize.select("tags.id, tags.name, count(tags.id) as count").group('tags.id').requested_in_challenge(@collection)
-        if @requested.count.keys.size > 0
-          # we have found the topmost tag type used in this challenge
-          @requested.each do |requested_tag|
-            @offered[requested_tag.id] = tag_type.classify.constantize.offered_in_challenge(@collection).select("count(tags.id) as count").where("tags.id = ?", requested_tag.id).first.count
-          end
-          @tag_type = tag_type
-          break # done collecting tag info
-        end
-      end
+      # figure out which is the topmost tag type in this challenge
+      @tag_type = @collection.challenge.topmost_tag_type
+      @requested = @tag_type.classify.constantize.select("tags.id, tags.name, count(tags.id) as count").
+                                                  group('tags.id').
+                                                  requested_in_challenge(@collection).paginate(:page => params[:page], :per_page => 20, :order => "name")
     end
   end
 
@@ -188,7 +186,7 @@ protected
     @page_title = "#{@collection.name} Signups at #{Time.now.strftime('%Y-%m-%d-%H%M')}"
     @hide_navigation = true
     filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.xls"
-    content = render("index", :layout => "barebones")
+    content = render_to_string(:template => "challenge_signups/index.html", :layout => 'barebones.html')
     send_data content, :filename => filename
   end
   

@@ -108,7 +108,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .inline                    { display:inline; margin-bottom: 0.5em}
 
 /* Requests and offers in challenges */
- li.requested { font-weight: bold; display: inline; padding-right: 1em;}
+ li.requested { font-weight: bold; }
  span.requested { color: #900; }
  span.offered { color: #008080; }
  span.offered.requested { color: #daa520; }

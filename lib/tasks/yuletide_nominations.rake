@@ -322,7 +322,7 @@ namespace :yuletide do
 
 
   desc "Print eligible character list"
-  task(:print_eligible_fandom_list => [:old_load_converted_characters, :load_eligible_fandoms]) do
+  task(:old_print_eligible_fandom_list => [:old_load_converted_characters, :load_eligible_fandoms]) do
     File.open("#{Rails.root}/tmp/yuletide_charlist_complete.txt", "w+:UTF-8") do |file|
       @converted_fandoms.each_key do |original|
         converted, media = @converted_fandoms[original]
@@ -344,7 +344,7 @@ namespace :yuletide do
 
 
   # Having created the yuletide_charlist_complete file, from here on we want to use that
-  # as the source
+  # as the source.
 
   
   desc "Load converted fandoms and characters from complete file"
@@ -382,10 +382,12 @@ namespace :yuletide do
     end 
   end
 
-
   desc "Create tags for converted fandoms and characters"
   task(:convert_nominations => :load_converted_characters) do
+    @dry_run = true
     @missing = []
+    
+    puts "DRY RUN" if @dry_run
     
     # load up the converted fandoms and check if we have an existing canonical tag
     @converted_fandoms.each_pair do |fandom, media|
@@ -397,7 +399,7 @@ namespace :yuletide do
       # create the fandom
       @fandom_tag = Fandom.find_by_name(fandom)
       if @fandom_tag && @fandom_tag.canonical
-        puts "Canonical fandom tag #{@fandom_tag.name} exists for #{original}."
+        puts "Canonical fandom tag #{@fandom_tag.name} exists."
       elsif @fandom_tag
         # ugh, not canonical -- synonym?
         if @fandom_tag.merger
@@ -405,26 +407,32 @@ namespace :yuletide do
           puts "Fandom tag #{@fandom_tag.name} is synonym for #{@fandom_tag.merger.name}, using that instead"
           @fandom_tag = @fandom_tag.merger
         else
-          puts "Making existing fandom tag #{@fandom_tag.name} for #{original} canonical."
-          @fandom_tag.canonical = true
-          @fandom_tag.create_filter_count
-          @fandom_tag.save!
+          puts "Making existing fandom tag #{@fandom_tag.name} canonical."
+          @fandom_tag.canonical = true unless @dry_run
+          @fandom_tag.create_filter_count unless @dry_run
+          @fandom_tag.save! unless @dry_run
         end
-      elsif !fandom.blank? && !media.blank?
-        @check_tag = Tag.find_by_name(converted)
+      elsif fandom.blank? || media.blank?
+        @missing << "Tagname or media missing for fandom: #{fandom}, #{media}"
+        next
+      else
+        # let's create the tag
+        @check_tag = Tag.find_by_name(fandom)
         if @check_tag
-          @missing << "Requested fandom tag #{converted} already exists and is of type #{@check_tag.type}"
+          @missing << "Requested fandom tag #{fandom} already exists and is of type #{@check_tag.type}"
           next
         else
           puts "Creating fandom tag #{fandom} in media #{media}."        
-          @fandom_tag = Fandom.find_or_create_by_name_and_canonical(fandom, true)
+          @fandom_tag = Fandom.find_or_create_by_name_and_canonical(fandom, true) unless @dry_run
           media_tag = Media.find_by_name_and_canonical(media, true)
-          @fandom_tag.create_filter_count
-          @fandom_tag.add_association media_tag if @fandom_tag && media_tag
-          @fandom_tag.save!
+          @fandom_tag.create_filter_count unless @dry_run
+          @fandom_tag.add_association media_tag if @fandom_tag && media_tag && !@dry_run
+          @fandom_tag.save! unless @dry_run
         end
-      else
-        @missing << "No tagname or media for #{original}: #{converted}, #{media}"
+      end
+
+      unless @fandom_tag || @dry_run
+        @missing << "Tag was not created for #{fandom}!"
         next
       end
 
@@ -438,9 +446,10 @@ namespace :yuletide do
         if char.match(/^\-\s*(.*)$/)
           # watch for characters to unwrangle (if they exist)
           @char_tag = Character.find_by_name($1)
-          if @char_tag
+          if @char_tag && @fandom_tag
             # get it out of this fandom
-            @char_tag.remove_association(@fandom_tag)
+            puts "\tUnwrangling #{@char_tag.name} from #{@fandom_tag.name}"
+            @char_tag.remove_association(@fandom_tag) unless @dry_run
           end
         else
           # check to see if the char tag exists and if not, create it        
@@ -449,33 +458,44 @@ namespace :yuletide do
             puts "\tCanonical char tag #{@char_tag.name} exists"
           elsif @char_tag
             if @char_tag.merger
-              puts "Character tag #{@char_tag.name} is synonym for #{@char_tag.merger.name}, using that instead"
+              puts "\tCharacter tag #{@char_tag.name} is synonym for #{@char_tag.merger.name}, using that instead"
               @char_tag = @char_tag.merger
             else
-              puts "\tMaking existing char tag #{@char_tag.name} for #{original_char} canonical"
-              @char_tag.canonical = true
+              puts "\tMaking existing char tag #{@char_tag.name} canonical"
+              @char_tag.canonical = true unless @dry_run
             end
+          elsif char.blank?
+            @missing << "Blank character found in #{fandom}."
+            next
           else
+            # create the character
             @check_tag = Tag.find_by_name(char)
             if @check_tag
               @missing << "Requested character tag #{@check_tag.name} already exists and is of type #{@check_tag.type}"
               next
             else
               puts "\tCreating char tag #{char}"
-              @char_tag = Character.find_or_create_by_name_and_canonical(char, true)
+              @char_tag = Character.find_or_create_by_name_and_canonical(char, true) unless @dry_run
             end
           end
         
           # now we have @char_tag, wrangle it into @fandom_tag
           puts "\tWrangling char tag #{@char_tag.name} into #{@fandom_tag.name}" if @char_tag && @fandom_tag
-          @char_tag.add_association @fandom_tag if @char_tag && @fandom_tag
+          @char_tag.add_association @fandom_tag if @char_tag && @fandom_tag && !@dry_run
         end
         
         # make sure we can save
+        unless @fandom_tag && @char_tag
+          unless @dry_run
+            @missing << "Either #{fandom} or #{char} tag was not created."
+          end
+          next
+        end
+
         unless @char_tag.valid?
           @missing << "Problem with character tag #{@char_tag.name} in #{@fandom_tag.name}: #{@char_tag.errors.to_s}"
         else
-          @char_tag.save!
+          @char_tag.save! unless @dry_run
         end
       end
     end
@@ -489,6 +509,39 @@ namespace :yuletide do
   task(:find_missing_fandoms => [:load_converted_characters, :load_nominated_fandoms]) do
     @missing_fandoms = @nominated_fandoms.select {|fandom| !@converted_fandoms.keys.include?(fandom.to_s)}
     puts "MISSING: " + @missing_fandoms.join("\n")
+  end
+  
+  desc "List fandoms for challenge"
+  task(:list_fandoms => :load_converted_characters) do
+    puts @converted_chars.keys.collect {|fandom| fandom}.join(", ")
+  end
+
+  desc "Print complete character list"
+  task(:print_eligible_fandom_list => [:load_converted_characters]) do
+    File.open("#{Rails.root}/tmp/yuletide_charlist_complete_new.txt", "w+:UTF-8") do |file|
+      @converted_fandoms.keys.sort.each do |fandom|
+        fandom_tag = Fandom.find_by_name_and_canonical(fandom, true)
+        if fandom_tag
+          media = fandom_tag.medias.first.name || ""
+          file.puts "[#{fandom} => #{fandom} => #{media}]"
+          chars = Character.with_parents([fandom_tag]).canonical 
+          file.puts chars.map {|char| char.name}.join("\n")
+          file.puts ""
+        else
+          puts "WARNING: fandom #{fandom} not found!"
+        end
+      end
+    end
+  end
+  
+  desc "Load fandoms into tagset"
+  task(:load_fandoms_into_tagset => :load_converted_characters) do
+    @challenge = Collection.find_by_name("yuletide2010").challenge
+    @converted_fandoms.each_pair do |fandom, media|
+      @challenge.offer_restriction.tag_set.tags << Fandom.find_by_name_and_canonical(fandom, true)
+    end
+    @challenge.offer_restriction.tag_set.save!
+    @challenge.save!
   end
 
 end

@@ -3,7 +3,7 @@
   <h2><%= t('.challenge_signups.signups_listing', :default => "Signups for %{collection}", :collection => @collection.title) %></h2>
 
   <!-- render differently based on the challenge -->
-  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_signups" %>
+  <%= render "challenge/#{challenge_class_name(@collection)}/challenge_signups.html" %>
   
 <% elsif @user %>
   <!-- view in user dashboard -->

@@ -1,18 +1,27 @@
 <!-- display a summary version of what users have requested and offered -->
-<h3><%= ts("Requested %{tag_type}", :tag_type => @tag_type.pluralize.capitalize) %> (<%= @requested.count.keys.size %>)</h3>
+<h3><%= ts("Requested %{tag_type}", :tag_type => @tag_type.pluralize.capitalize) %></h3>
 
 <p class="note">
   Key: <span class=requested><%= @tag_type.capitalize %></span> 
        [<span class="requested"># requests</span>, <span class="offered"># offers</span>], 
-       sorted by fewest offers
+       listed alphabetically
 </p>
 
 <ul>
   <!-- we sort by fewest # offers, and if equal offers then fewers # requests -->
-  <% @requested.sort {|a,b| @offered[a.id] == @offered[b.id] ? a.count <=> b.count : @offered[a.id] <=> @offered[b.id]}.each do |requested_tag| %>
+  <% @offered = {} %>
+  <% @requested.each do |requested_tag| %>
+    <% @offered[requested_tag.id] = @tag_type.classify.constantize.offered_in_challenge(@collection).
+                                              select("count(tags.id) as count").where("tags.id = ?", requested_tag.id).first.count %>
+  <% end %>
+
+  <% @requested.each do |requested_tag| %>
     <li class="requested">
       <span class = "requested<%= @offered[requested_tag.id] > 0 ? ' offered' : '' %>">
       <%= requested_tag.name %></span>&nbsp;[<span class="requested"><%= requested_tag.count -%></span>,<span class="offered"><%= @offered[requested_tag.id] -%></span>]
     </li>
   <% end %>
+
 </ul> 
+
+<%= will_paginate @requested %>

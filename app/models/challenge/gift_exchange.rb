@@ -60,6 +60,17 @@ class GiftExchange < ActiveRecord::Base
       self.request_restriction.save
     end
   end
+  
+  def topmost_tag_type
+    topmost_type = ""
+    TagSet::TAG_TYPES.each do |tag_type| 
+      if self.request_restriction.send("#{tag_type}_num_allowed") > 0 
+        topmost_type = tag_type
+        break
+      end
+    end
+    topmost_type
+  end
 
   def user_allowed_to_see_signups?(user)
     self.collection.user_is_maintainer?(user)
