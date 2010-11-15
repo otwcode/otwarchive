@@ -150,7 +150,7 @@ class ChallengeSignupsController < ApplicationController
     content = render_to_string :summary
     summary_dir = "#{Rails.public_path}/collections/#{collection.name}/signups"
     FileUtils.mkdir_p(summary_dir)
-    File.open("#{summary_dir}/display_summary.html", "w:UTF-8") {|f| f.write(content)}
+    File.open("#{summary_dir}/display_summary", "w:UTF-8") {|f| f.write(content)}
   end
   
   public
