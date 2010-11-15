@@ -280,6 +280,7 @@ Otwarchive::Application.routes.draw do
     resources :signups, :controller => "challenge_signups" do
       collection do
         get :summary
+        get :display_summary
       end
     end
     resources :assignments, :controller => "challenge_assignments" do

@@ -107,6 +107,8 @@ TAGS_IN_CLOUD: 200
 OPTIONS_TO_SHOW: 3
 MAX_OPTIONS_TO_SHOW: 500
 
+# how many signups in a challenge before we move to static summaries generated hourly
+MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 
 # maximum number of records retrieved by sphinx.
 # http://www.sphinxsearch.com/docs/current.html#conf-max-matches

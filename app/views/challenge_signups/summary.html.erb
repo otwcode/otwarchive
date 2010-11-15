@@ -7,5 +7,9 @@
     <!-- render differently based on the challenge -->
     <%= render "challenge/#{challenge_class_name(@collection)}/challenge_signups_summary" %>
   <% end %>
+  
+  <% unless @live %>
+    <p>Generated every hour. Last generated at: <%= time_in_zone(Time.now, (@collection.challenge.time_zone || Time.zone.name)) %></p>
+  <% end %>
 
 <% end %>

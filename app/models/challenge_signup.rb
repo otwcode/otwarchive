@@ -127,7 +127,7 @@ class ChallengeSignup < ActiveRecord::Base
       end
     end
   end
-  
+
   # sort alphabetically
   include Comparable
   def <=>(other)
