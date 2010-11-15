@@ -146,6 +146,43 @@ namespace :After do
 #    Tag.update_all("type = 'Relationship'", "type = 'Pairing'")
 #  end
 
+#  desc "Set meta filter taggings to inherited"
+#  task(:mark_meta_tags_inherited => :environment) do
+#    Tag.canonical.meta_tag.find_each do |meta_tag|
+#      puts "Meta tag: #{meta_tag.id}"
+#      meta_tag.filter_taggings.update_all("inherited = 1")
+#      filter_ids = [meta_tag.id] + meta_tag.mergers.map{|m| m.id}
+#      # filter taggings that originated with the meta tag or one of its mergers
+#      # should not be marked inherited
+#      fts = FilterTagging.joins("LEFT JOIN taggings ON 
+#                                taggings.taggable_id = filter_taggings.filterable_id").
+#                          where(["filter_taggings.filter_id = ? AND 
+#                                taggings.taggable_type = 'Work' AND
+#                                filter_taggings.filterable_type = 'Work' AND
+#                                taggings.id IS NOT NULL AND
+#                                taggings.tagger_id IN (?)", 
+#                                meta_tag.id, filter_ids])
+#      unless fts.blank?
+#        FilterTagging.update_all("inherited = 0", ["id IN (?)", fts.map{|ft| ft.id}])
+#      end
+#    end
+#  end
+
+#  desc "fix old '- Pairing' names"
+#  task(:update_pairing_names => :environment) do
+#    tags = Relationship.where('name LIKE ?', "% - Pairing")
+#    tags.each do |t|
+#      oldname = t.name
+#      newname = oldname.gsub(/ - Pairing$/, " - Relationship")
+#      begin
+#        t.update_attribute(:name, newname) 
+#      rescue ActiveRecord::RecordNotUnique
+#        puts "\"#{oldname}\" couldn't be renamed because \"#{newname}\" already exists"
+#      end
+#    end
+#  end
+
+
   #### Leave this one here
 
   desc "Update the translation file each time we deploy"
@@ -154,46 +191,10 @@ namespace :After do
     tg.generate_default_translation_file
   end
 
-
   #### Add your new tasks here
   
-  desc "Set meta filter taggings to inherited"
-  task(:mark_meta_tags_inherited => :environment) do
-    Tag.canonical.meta_tag.find_each do |meta_tag|
-      puts "Meta tag: #{meta_tag.id}"
-      meta_tag.filter_taggings.update_all("inherited = 1")
-      filter_ids = [meta_tag.id] + meta_tag.mergers.map{|m| m.id}
-      # filter taggings that originated with the meta tag or one of its mergers
-      # should not be marked inherited
-      fts = FilterTagging.joins("LEFT JOIN taggings ON 
-                                taggings.taggable_id = filter_taggings.filterable_id").
-                          where(["filter_taggings.filter_id = ? AND 
-                                taggings.taggable_type = 'Work' AND
-                                filter_taggings.filterable_type = 'Work' AND
-                                taggings.id IS NOT NULL AND
-                                taggings.tagger_id IN (?)", 
-                                meta_tag.id, filter_ids])
-      unless fts.blank?
-        FilterTagging.update_all("inherited = 0", ["id IN (?)", fts.map{|ft| ft.id}])
-      end
-    end
-  end
   
 
-
-  desc "fix old '- Pairing' names"
-  task(:update_pairing_names => :environment) do
-    tags = Relationship.where('name LIKE ?', "% - Pairing")
-    tags.each do |t|
-      oldname = t.name
-      newname = oldname.gsub(/ - Pairing$/, " - Relationship")
-      begin
-        t.update_attribute(:name, newname) 
-      rescue ActiveRecord::RecordNotUnique
-        puts "\"#{oldname}\" couldn't be renamed because \"#{newname}\" already exists"
-      end
-    end
-  end
 
 
 end # this is the end that you have to put new tasks above
@@ -203,6 +204,6 @@ end # this is the end that you have to put new tasks above
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-#task :After => ['After:reading_count_setup', 'After:move_hit_counts']
-task :After => ['After:update_pairing_names', 'After:mark_meta_tags_inherited']
+#task :After => ['After:update_pairing_names', 'After:mark_meta_tags_inherited']
+task :After => []
 

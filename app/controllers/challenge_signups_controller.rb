@@ -129,7 +129,8 @@ class ChallengeSignupsController < ApplicationController
   end
   
   def display_summary
-    # normally this will never get invoked and just go to the generated static page
+    # this will be served by nginx if
+    # the generated static page exists
   end
   
   private
