@@ -35,7 +35,7 @@
       <dd><%= text_field_tag :number_of_invites %></dd>
 
       <dt><%= label_tag :user_group, ts('Users') %>:</dt>
-      <dd><%= select_tag :user_group, "<option>All</option><option>With no unused invites</option>"  %></dd>
+      <dd><%= select_tag :user_group, "<option>All</option><option>With no unused invites</option>".html_safe  %></dd>
     </dl>
     <p class="submit"><%= submit_tag "Generate invites" %></p>
   <% end %>
