@@ -113,9 +113,9 @@ GEM
     cucumber-rails (0.3.2)
       cucumber (>= 0.8.0)
     culerity (0.2.12)
-    daemons (1.0.10)
+    daemons (1.1.0)
     database_cleaner (0.6.0.rc.3)
-    delayed_job (2.1.0.pre2)
+    delayed_job (2.1.1)
       activesupport (~> 3.0)
       daemons
     diff-lcs (1.1.2)
