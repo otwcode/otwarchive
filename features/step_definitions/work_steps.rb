@@ -86,7 +86,7 @@ When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")$/ do |title, fandom|
   click_button("Preview")
 end
 
-When /^the draft "([^\"]*)"$/ do |title|
+When /^I set up the draft "([^\"]*)"$/ do |title|
   Given "basic tags"
   visit new_work_url
   select("Not Rated", :from => "Rating")
@@ -95,6 +95,10 @@ When /^the draft "([^\"]*)"$/ do |title|
   fill_in("Work Title", :with => title)
   fill_in("Additional Tags", :with => "Scary tag")
   fill_in("content", :with => "That could be an amusing crossover.")
+end
+
+When /^the draft "([^\"]*)"$/ do |title|
+  Given "I set up the draft \"#{title}\""
   click_button("Preview")
 end
 
