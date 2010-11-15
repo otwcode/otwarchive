@@ -143,7 +143,7 @@ Don't go further with the deploy until you have fixed the problem!"
       ok_or_warn %q{whenever --update-crontab otwarchive}
     when "otw1"
       notice "Updating crontab..."
-      ok_or_warn %q{whenever --update-crontab otwarchive -set environment=production}
+      ok_or_warn %q{whenever --update-crontab otwarchive --set environment=production}
     else
       notice "Crontab not updated. (cronjobs don't run on otw2)"
     end
