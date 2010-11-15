@@ -226,6 +226,7 @@ module ApplicationHelper
                             '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
                             { 
                               indicator: 'indicator_#{fieldname}',
+                              frequency: #{options[:frequency] ? options[:frequency] : '0.4'},
                               minChars: #{options[:min_chars] ? options[:min_chars] : '3'},
                               paramName: '#{fieldname}',
                               parameters: 'fieldname=#{fieldname}#{options[:extra_params] ? '&' + options[:extra_params] : ''}',

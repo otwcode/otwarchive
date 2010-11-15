@@ -75,6 +75,7 @@ See the challenge_signup form for an example of how this is used.
                 <!-- we have set options but too many for tickyboxes -->
                 <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
                 <%= autocomplete_text_field tag_fieldname, :methodname => "tag_finder_restricted_by_tag_set", 
+                                                           :frequency => '1.0',
                                                            :extra_params => "tag_set_id=#{restriction.tag_set.id}&tag_type=#{tag_type}" %>
                 <p>      
                   <%= link_to(ts("(See %{taglist_size} options)", :taglist_size => taglist_size), 
@@ -88,12 +89,13 @@ See the challenge_signup form for an example of how this is used.
                 <%= autocomplete_text_field tag_fieldname, :methodname => "#{tag_type}_finder_restricted_by_fandom", 
                                                            :auto_params => (@fandom_tag_fieldname ? [@fandom_tag_fieldname] : @fandom_tag_fieldnames),
                                                            :extra_params => "fandom_fieldname=fandom_tagnames",
+                                                           :frequency => '1.0',
                                                            :min_chars => '2' %>
 
               <% else %>
                 <!-- autocomplete from all canonical tags of this type -->
                 <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
-                <%= autocomplete_text_field tag_fieldname, :methodname => "canonical_#{tag_type}_finder" %>
+                <%= autocomplete_text_field tag_fieldname, :methodname => "canonical_#{tag_type}_finder", :frequency => 1.0 %>
               <% end %>
             <% end %>
             
