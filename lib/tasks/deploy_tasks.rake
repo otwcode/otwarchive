@@ -254,7 +254,9 @@ Don't go further with the deploy until you have fixed the problem!"
     # deploy code
     ynq("Deploy new code and migrations?")
     Rake::Task['deploy:deploy_code'].invoke if @yes
-    Rake::Task['deploy:run_migrations'].invoke if (@yes && !@server == 'otw1')
+    unless @server == 'otw1'
+      Rake::Task['deploy:run_migrations'].invoke if @yes
+    end
 
     ynq("Take out of maintenance at the recommended time? (if you answer no here, the server will be taken out of maintenance immediately)")
     @restart_deferred = true if @yes
