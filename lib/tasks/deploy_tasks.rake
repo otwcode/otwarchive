@@ -181,6 +181,7 @@ Don't go further with the deploy until you have fixed the problem!"
   task(:restart_unicorn => :get_servername) do
     ok_or_warn %Q{cd #{CURRENT_DIR} && kill -USR2 `cat tmp/pids/unicorn.pid`}
     ok_or_warn %Q{cd #{CURRENT_DIR} && kill -USR2 `cat tmp/pids/unicorn_slow.pid`}
+    ok_or_warn %Q{cd #{CURRENT_DIR} && kill -USR2 `cat tmp/pids/unicorn_fast.pid`}
   end
 
   desc "Take out of maintenance"
