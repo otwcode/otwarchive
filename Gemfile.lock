@@ -113,9 +113,9 @@ GEM
     cucumber-rails (0.3.2)
       cucumber (>= 0.8.0)
     culerity (0.2.12)
-    daemons (1.1.0)
+    daemons (1.0.10)
     database_cleaner (0.6.0.rc.3)
-    delayed_job (2.1.1)
+    delayed_job (2.1.0.pre2)
       activesupport (~> 3.0)
       daemons
     diff-lcs (1.1.2)
@@ -250,8 +250,9 @@ DEPENDENCIES
   css_parser
   cucumber (>= 0.9.1)
   cucumber-rails
+  daemons (= 1.0.10)
   database_cleaner (>= 0.6.0.rc.3)
-  delayed_job (>= 2.1.0.pre2)
+  delayed_job (= 2.1.0.pre2)
   escape_utils
   exception_notification!
   factory_girl

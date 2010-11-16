@@ -33,7 +33,8 @@ gem 'nokogiri'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
-gem 'delayed_job', '>=2.1.0.pre2'
+gem 'delayed_job', '=2.1.0.pre2'
+gem 'daemons', '=1.0.10'
 gem 'thinking-sphinx',
   :git     => 'git://github.com/freelancing-god/thinking-sphinx.git',
   :branch  => 'rails3',
