@@ -111,51 +111,27 @@ class ChallengeSignupsController < ApplicationController
       flash.now[:notice] = ts("Summary does not appear until at least %{count} signups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
     elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
-      if @collection.challenge.signup_open? && (!@collection.signup_summary_generated_at || @collection.signup_summary_generated_at < 1.hour.ago)
-        @collection.update_attribute(:signup_summary_generated_at, Time.now)
+      if !File.exists?(ChallengeSignup.summary_file(@collection)) || 
+        (@collection.challenge.signup_open? && File.new(ChallengeSignup.summary_file(@collection)).mtime < 1.hour.ago)
+        # either the file is missing, or signup is open and it's more than an hour old
         # start a delayed job to generate the page
         if ArchiveConfig.NO_DELAYS
-          generate_summary(@collection)
+          ChallengeSignup.generate_summary(@collection)
         else
-          self.delay.generate_summary(@collection)
+          ChallengeSignup.delay.generate_summary(@collection)
         end
       end
       redirect_to display_summary_collection_signups_path(@collection)
     else
-      # do it on the fly
-      @live = true
-      generate_summary_tags(@collection)
+      # generate it on the fly
+      @tag_type, @summary_tags = ChallengeSignup.generate_summary_tags(@collection)
+      @generated_live = true
     end
   end
   
   def display_summary
-    # this will be served by nginx if
-    # the generated static page exists
   end
   
-  private
-  def generate_summary_tags(collection)
-    @tag_type = collection.challenge.topmost_tag_type
-    @summary_tags = @tag_type.classify.constantize.in_challenge(collection).
-                                                   select("tags.id, tags.name, 
-                                                           SUM(CASE WHEN prompts.type = 'Request' Then 1 Else 0 End) AS requests, 
-                                                           SUM(CASE WHEN prompts.type = 'Offer' Then 1 Else 0 End) AS offers").
-                                                   group('tags.id').
-                                                   having('requests > 0').
-                                                   order('offers, requests DESC')
-  end
-
-  # Write the summary to a file that will then be displayed
-  def generate_summary(collection)
-    generate_summary_tags(collection)
-    content = render_to_string :summary
-    summary_dir = "#{Rails.public_path}/collections/#{collection.name}/signups"
-    FileUtils.mkdir_p(summary_dir)
-    File.open("#{summary_dir}/display_summary", "w:UTF-8") {|f| f.write(content)}
-  end
-  
-  public
-
   def show
   end
 

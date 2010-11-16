@@ -1,15 +1,7 @@
 <% if @collection && @collection.challenge %>
-
-  <!-- signups for a given challenge -->
-  <h2><%= ts("Signup Summary for %{collection}", :collection => @collection.title) %></h2>
-
   <% if @tag_type %>
     <!-- render differently based on the challenge -->
-    <%= render "challenge/#{challenge_class_name(@collection)}/challenge_signups_summary" %>
-  <% end %>
-  
-  <% unless @live %>
-    <p>Generated every hour. Last generated at: <%= time_in_zone(Time.now, (@collection.challenge.time_zone || Time.zone.name)) %></p>
-  <% end %>
-
+    <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_signups_summary", 
+               :locals => {:challenge_collection => @collection, :tag_type => @tag_type, :summary_tags => @summary_tags, :generated_live => @generated_live} %>
+  <% end %>  
 <% end %>

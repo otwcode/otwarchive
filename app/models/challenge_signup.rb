@@ -128,6 +128,43 @@ class ChallengeSignup < ActiveRecord::Base
     end
   end
 
+  ### Code for generating signup summaries
+
+  def self.generate_summary_tags(collection)
+    tag_type = collection.challenge.topmost_tag_type
+    summary_tags = tag_type.classify.constantize.in_challenge(collection).
+                                                 select("tags.id, tags.name, 
+                                                         SUM(CASE WHEN prompts.type = 'Request' Then 1 Else 0 End) AS requests, 
+                                                         SUM(CASE WHEN prompts.type = 'Offer' Then 1 Else 0 End) AS offers").
+                                                 group('tags.id').
+                                                 having('requests > 0').
+                                                 order('offers, requests DESC')
+                                                   
+    return [tag_type, summary_tags]
+  end
+
+  # Write the summary to a file that will then be displayed
+  def self.generate_summary(collection)
+    tag_type, summary_tags = ChallengeSignup.generate_summary_tags(collection)
+    view = ActionView::Base.new(ActionController::Base.view_paths, {})
+    view.class_eval do
+      include ApplicationHelper
+    end
+    content = view.render(:partial => "challenge/#{collection.challenge.class.name.demodulize.tableize.singularize}/challenge_signups_summary",
+                          :locals => {:challenge_collection => collection, :tag_type => tag_type, :summary_tags => summary_tags, :generated_live => false})
+    summary_dir = ChallengeSignup.summary_dir
+    FileUtils.mkdir_p(summary_dir) unless File.directory?(summary_dir)
+    File.open(ChallengeSignup.summary_file(collection), "w:UTF-8") {|f| f.write(content)}
+  end
+  
+  def self.summary_dir 
+    "#{Rails.public_path}/challenge_signup_summaries"
+  end
+  
+  def self.summary_file(collection)
+    "#{ChallengeSignup.summary_dir}/#{collection.name}_summary_content.html"
+  end
+  
   # sort alphabetically
   include Comparable
   def <=>(other)
