@@ -1,5 +1,5 @@
 <% if File.exists?("#{ChallengeSignup.summary_file(@collection)}") %>
-  <%= File.read("#{ChallengeSignup.summary_file(@collection)}") %>
+  <%=raw File.read("#{ChallengeSignup.summary_file(@collection)}") %>
 <% else %>
   <h2><%= ts("Signup Summary for %{collection}", :collection => @collection.title) %></h2>
 
