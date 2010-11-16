@@ -185,7 +185,8 @@ class WorksController < ApplicationController
         @work.anonymous? ?  ts("Anonymous")  : @work.pseuds.sort.collect(&:byline).join(', '),
         @work.title)
     render :show
-    @work.increment_hit_count(request.env['REMOTE_ADDR'])
+    Rails.logger.debug "Work remote addr: #{request.remote_ip}"
+    @work.increment_hit_count(request.remote_ip)
     Reading.update_or_create(@work, current_user)
   end
 
