@@ -67,7 +67,7 @@ Feature: Private bookmarks
       And I should not see "Bookmarks: 1"
     When I view the work "Public Masterpiece"
     Then I should not see "Bookmarks:"
-      And I should not see "Bookmarks: 1"
+      And I should not see "Bookmarks:1"
       
     # Private bookmarks should not be visible to other users
     
@@ -94,3 +94,35 @@ Feature: Private bookmarks
     When I go to bookmarker's bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
+
+    # Private bookmarks should not be visible when logged out, even if there are other bookmarks on that work
+    When I am logged in as "otheruser" with password "password"
+      And I view the work "Public Masterpiece"
+      And I follow "Bookmark"
+      And I check "bookmark_rec"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created"
+    When I follow "Log out"
+      And I go to the bookmarks page
+    Then I should not see "Secret Masterpiece"
+      And I should see "Public Masterpiece"
+      And I should not see "bookmarker"
+      And I should see "otheruser"
+      And I should see "Bookmarked 1 time"
+      And I should not see "Bookmarked 2 times"
+    When I go to bookmarker's bookmarks page
+    Then I should not see "Secret Masterpiece"
+      And I should not see "Public Masterpiece"
+    When I go to the works page
+    Then I should not see "Secret Masterpiece"
+      And I should see "Public Masterpiece"
+      And I should not see "Bookmarks: 2"
+      And I should see "Bookmarks: 1"
+    When I view the work "Public Masterpiece"
+    Then I should not see "Bookmarks:2"
+      And I should see "Bookmarks:1"
+    When I follow "1"
+    Then I should see "Listing Bookmarks"
+      And I should see "Public Masterpiece"
+      And I should see "otheruser"
+      And I should not see "bookmarker"
