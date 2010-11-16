@@ -22,7 +22,7 @@
 # set your path in cron before the whenever section and use --update-crontab
 set :set_path_automatically, false
 
-set :cron_log, "/tmp/www-data.log"
+set :cron_log, "#{path}/log/whenever.log"
 
 case @environment
 when 'production'
