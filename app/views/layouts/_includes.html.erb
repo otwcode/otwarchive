@@ -46,7 +46,10 @@
 <![endif]-->
 
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
-<%= yield :tinymce %>
+<!-- check to see if this controller/action allow tinymce before we load the gigantor js; see application_helper -->
+<% if allow_tinymce?(controller) %>
+  <%= yield :tinymce %>
+<% end %>
 <%= javascript_include_tag 'jquery-1.3.2.min.js' %>
 <%= javascript_include_tag 'visualize.jQuery.js' %>
 <%= javascript_include_tag :defaults %>
@@ -55,7 +58,9 @@
 
 <%= csrf_meta_tag %>
 
-<%= yield :tinymce_init %>
+<% if allow_tinymce?(controller) %>
+  <%= yield :tinymce_init %>
+<% end %>
 
 <%= iboxify_page %>
 

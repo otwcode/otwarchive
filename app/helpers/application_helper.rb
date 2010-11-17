@@ -183,6 +183,12 @@ module ApplicationHelper
       javascript_include_tag "mce_editor"
     end
   end  
+  
+  # check for pages that allow tiny_mce before loading the massive javascript
+  def allow_tinymce?(controller)
+    %w(admin_posts archive_faqs known_issues chapters works).include?(controller.controller_name) &&
+      %w(new edit).include?(controller.action_name)
+  end
 
   def params_without(name)
     params.reject{|k,v| k == name}
