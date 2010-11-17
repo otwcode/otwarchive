@@ -23,3 +23,26 @@ Scenario: Create a new tag that differs from an existing tag by accents or other
     And I press "Create Tag"
   Then I should see "Tag was successfully created."
     But I should see "România - Freeform"
+
+  Scenario: Tags with non-standard characters in them - question mark and period
+  
+  Given basic tags
+    And the following activated tag wrangler exists
+      | login           | password   |
+      | workauthor      | password   |
+    And a character exists with name: "Evan ?", canonical: true
+    And a character exists with name: "James T. Kirk", canonical: true
+  When I am logged in as "workauthor" with password "password"
+  When I post the work "Epic sci-fi"
+    And I follow "Edit"
+    And I fill in "Characters" with "Evan ?, James T. Kirk"
+    And I press "Preview"
+    And I press "Update"
+  Then I should see "Work was successfully updated"
+  When I view the tag "Evan ?"
+    And I follow "filter works"
+  Then I should see "1 Work found in Evan ?"
+  When I view the tag "James T. Kirk"
+    And I follow "filter works"
+  Then I should see "1 Work found in James T. Kirk"
+  
