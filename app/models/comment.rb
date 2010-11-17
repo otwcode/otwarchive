@@ -21,7 +21,7 @@ class Comment < ActiveRecord::Base
 
   validate :check_for_spam
   def check_for_spam
-    errors.add(:base, t('invalid_spam', :default => "This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam
+    errors.add(:base, t('invalid_spam', :default => "This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
   end
   
   scope :recent, lambda { |*args| {:conditions => ["created_at > ?", (args.first || 1.week.ago.to_date)]} }
@@ -127,7 +127,7 @@ class Comment < ActiveRecord::Base
     self.children_count #FIXME
   end    
   
-  def check_for_spam
+  def check_for_spam?
     #don't check for spam if the comment is 'signed'
     self.approved = !self.pseud_id.nil? || !Akismetor.spam?(akismet_attributes)
   end
