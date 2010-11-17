@@ -112,24 +112,27 @@ class ChallengeSignupsController < ApplicationController
     elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
       if !File.exists?(ChallengeSignup.summary_file(@collection)) || 
-        (@collection.challenge.signup_open? && File.new(ChallengeSignup.summary_file(@collection)).mtime < 1.hour.ago)
-        # either the file is missing, or signup is open and it's more than an hour old
-        # start a delayed job to generate the page
+          (@collection.challenge.signup_open? && File.new(ChallengeSignup.summary_file(@collection)).mtime < 1.hour.ago)
+        # either the file is missing, or signup is open and the last regeneration was more than an hour ago.
+
+        # touch the file so we don't generate a second request
+        summary_dir = ChallengeSignup.summary_dir
+        FileUtils.mkdir_p(summary_dir) unless File.directory?(summary_dir)
+        FileUtils.touch(ChallengeSignup.summary_file(@collection))
+
+        # generate the page
         if ArchiveConfig.NO_DELAYS
           ChallengeSignup.generate_summary(@collection)
         else
+          # start a delayed job to generate the page
           ChallengeSignup.delay.generate_summary(@collection)
         end
       end
-      redirect_to display_summary_collection_signups_path(@collection)
     else
       # generate it on the fly
       @tag_type, @summary_tags = ChallengeSignup.generate_summary_tags(@collection)
       @generated_live = true
     end
-  end
-  
-  def display_summary
   end
   
   def show
