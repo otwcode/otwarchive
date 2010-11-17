@@ -1,51 +1,7 @@
+# Note: this file is now overwritten on deploy, so this is just for development/webdev usage, where we don't want any bots
+#
 # See http://www.robotstxt.org/wc/norobots.html for documentation on how to use the robots.txt file
 #
 # To ban all spiders from the entire site uncomment the next two lines:
-# User-Agent: *
-# Disallow: /
-
-User-agent:	*
-Disallow:	/cs/
-Disallow:	/de/
-Disallow:	/es/
-Disallow:	/fi/
-Disallow:	/fr/
-Disallow:	/id/
-Disallow:	/it/
-Disallow:	/ja/
-Disallow:	/nl/
-Disallow:	/pt/
-Disallow:	/ru/
-Disallow:	/zh/
-Disallow:	/en/
-Disallow:	/works? # cruel but efficient
-Disallow: /autocomplete/
-
-User-agent:	Googlebot
-Disallow:	/cs/
-Disallow:	/de/
-Disallow:	/es/
-Disallow:	/fi/
-Disallow:	/fr/
-Disallow:	/id/
-Disallow:	/it/
-Disallow:	/ja/
-Disallow:	/nl/
-Disallow:	/pt/
-Disallow:	/ru/
-Disallow:	/zh/
-Disallow:	/en/
-Disallow: /autocomplete/
-# Googlebot is smart and knows pattern matching
-Disallow: /works/*?
-Disallow:	/*?*query=
-Disallow:	/*?*sort_
-Disallow:	/*?*selected_tags
-Disallow:	/*?*selected_pseuds
-Disallow: /*?*use_openid
-Disallow: /*?*view_adult
-Disallow: /*?*tag_id
-Disallow: /*?*pseud_id
-Disallow: /*?*user_id
-Disallow: /*?*pseud=
-Disallow: /people?*show=
+User-Agent: *
+Disallow: /
