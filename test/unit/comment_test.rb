@@ -107,7 +107,7 @@ class CommentTest < ActiveSupport::TestCase
   def test_check_for_spam
     comment = new_comment(:pseud_id => create_pseud)
     assert !comment.approved
-    assert comment.check_for_spam  # should always return true
+    assert comment.check_for_spam?  # should always return true
     assert comment.approved
     # TODO - test for actual spam
   end
