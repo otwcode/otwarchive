@@ -284,7 +284,33 @@ Feature: Collection
     And I should see "Signup Summary"
   When I follow "Signup Summary"
   Then I should see "Signup Summary for Yuletide"
-    And I should see "Stargate Atlantis"
+    And I should see "Requested Fandoms"
+    And I should see "Starsky & Hutch [4, 3]"
+    And I should see "Stargate Atlantis [3, 3]"
+    And I should see "Tiny fandom [3, 3]"
+    
+  # signup summary changes when another person signs up
+  When I follow "Log out"
+    And I am logged in as "myname6" with password "something"
+  When I go to the collections page
+    And I follow "Yuletide"
+    And I follow "Sign Up"
+    And I check "challenge_signup_requests_attributes_0_fandom_27"
+    And I check "challenge_signup_requests_attributes_1_fandom_28"
+    And I check "challenge_signup_offers_attributes_0_fandom_29"
+    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Foo The Wonder Goat, Obscure Person"
+    And I check "challenge_signup_offers_attributes_1_fandom_27"
+    And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
+    And I press "Submit"
+  Then I should see "Signup was successfully created"
+  When I go to the collections page
+    And I follow "Yuletide"
+    And I follow "Signup Summary"
+  Then I should see "Signup Summary for Yuletide"
+    And I should see "Requested Fandoms"
+    And I should see "Starsky & Hutch [5, 3]"
+    And I should see "Stargate Atlantis [4, 4]"
+    And I should see "Tiny fandom [3, 4]"
 
   # mod can view signups
   When I follow "Log out"
@@ -297,6 +323,7 @@ Feature: Collection
     And I should see "myname2" within "#main"
     And I should see "myname1" within "#main"
     And I should see "myname5" within "#main"
+    And I should see "myname6" within "#main"
     And I should see "John Sheppard"
     And I should see "Obscure person"
     And I should not see "http://user.dreamwidth.org/123.html"
@@ -341,13 +368,14 @@ Feature: Collection
       And I wait 3 seconds
     When I reload the page
     Then I should not see "Assignments are now being sent out"
-      # 5 users and the mod should get emails :)
-      And 6 emails should be delivered
+      # 6 users and the mod should get emails :)
+      And 7 emails should be delivered
 
   # first user starts posting
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
     And I go to myname1's user page
+    And all emails have been delivered
     #' stop annoying syntax highlighting after apostrophe
   Then I should see "My Assignments (1)"
   When I follow "My Assignments"
@@ -365,6 +393,7 @@ Feature: Collection
     And I fill in "content" with "This is an exciting story about Atlantis"
   When I press "Preview"
   Then I should see "Preview Work"
+    And 0 emails should be delivered
 
   # someone looks while it's still a draft
   When I follow "Log out"
@@ -404,12 +433,15 @@ Feature: Collection
     And I should see "Fulfilling Story"
     And I should see "myname" within "#main"
     And I should see "Anonymous"
+    And 0 emails should be delivered
   When I press "Post"
   Then I should see "Work was successfully posted"
     And I should see "For myname"
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
+    # notification is still not sent, because it's unrevealed
+    And 0 emails should be delivered
 
   # someone tries to view it
   When I follow "Log out"
@@ -433,9 +465,39 @@ Feature: Collection
   # Then I should see "Work was successfully updated"
 
   # post works for all the assignments: TODO
+  When I am logged in as "myname2" with password "something"
+    And I go to myname2's user page
+    #' stop annoying syntax highlighting after apostrophe
+  Then I should see "My Assignments (1)"
+  When I follow "My Assignments"
+  Then I should see "Writing For" within "table"
+    And I should see "myname" within "table"
+    And I should see "Yuletide" within "table"
+    And I should see "Post To Fulfill"
+  When I follow "Post To Fulfill"
+  Then I should see "Post New Work"
+  When I fill in "Work Title" with "Fulfilling Story"
+    And I fill in "Fandoms" with "Stargate Atlantis"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "content" with "This is an exciting story about Atlantis"
+  When I press "Preview"
+  Then I should see "Preview Work"
+    And I should see "Fulfilling Story"
+    And I should see "myname" within "#main"
+    And I should see "Anonymous"
+  When I press "Post"
+  Then I should see "Work was successfully posted"
+    And I should see "For myname"
+    And I should see "Collections:"
+    And I should see "Yuletide" within ".meta"
+    And I should see "Anonymous"
+  When I follow "Log out"
+  Then I should see "Successfully logged out"
 
   # mod reveals challenge on Dec 25th
   When I am logged in as "mod1" with password "something"
+    And all emails have been delivered
     And I go to the collections page
     And I follow "Yuletide"
     And I follow "Settings"
@@ -445,8 +507,13 @@ Feature: Collection
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  # hm, not sure why 7 are being delivered :O INVESTIGATE TODO
-  Then 7 emails should be delivered
+  # 2 gift notification emails are delivered for the 2 stories that have been posted so far
+  Then 2 emails should be delivered
+    And the email should contain "A gift story has been posted for you"
+    # TODO: Check this capitalisation with someone, since it seems odd to me
+    And the email should contain "in the Yuletide collection at the Archive of Our Own"
+    And the email should contain "by an anonymous giver"
+    And the email should not contain "myname1"
 
   # someone views their gift and it is anonymous: TODO
 
