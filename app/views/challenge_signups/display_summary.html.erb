@@ -1,9 +1,0 @@
-<% if File.exists?("#{ChallengeSignup.summary_file(@collection)}") %>
-  <%=raw File.read("#{ChallengeSignup.summary_file(@collection)}") %>
-<% else %>
-  <h2><%= ts("Signup Summary for %{collection}", :collection => @collection.title) %></h2>
-
-  <p>
-    The summary for this challenge is currently being generated. Please try again in a few minutes.
-  </p>
-<% end %>
