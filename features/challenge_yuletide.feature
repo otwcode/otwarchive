@@ -450,6 +450,14 @@ Feature: Collection
   Then I should see "Mystery Work"
     And I should see "Yuletide"
     And I should not see "Fulfilling Story"
+    And "Issue 2202" is fixed
+    # And I should not see "Stargate Atlantis" within "#user-fandoms"
+    And I should see "Stargate Atlantis" within "#user-fandoms"
+    And I should not see "Stargate Atlantis" within "#user-works"
+  When I follow "Works (1)"
+  Then I should not see "Stargate Atlantis" within ".work.index"
+    And "Issue 2202" is fixed
+    And I should not see "Stargate Atlantis" within "#main"
 
   # user edits it to undo fulfilling the assignment
   # When I am logged in as "myname1" with password "something"
@@ -476,14 +484,14 @@ Feature: Collection
     And I should see "Post To Fulfill"
   When I follow "Post To Fulfill"
   Then I should see "Post New Work"
-  When I fill in "Work Title" with "Fulfilling Story"
+  When I fill in "Work Title" with "Fulfilled Story"
     And I fill in "Fandoms" with "Stargate Atlantis"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "content" with "This is an exciting story about Atlantis"
   When I press "Preview"
   Then I should see "Preview Work"
-    And I should see "Fulfilling Story"
+    And I should see "Fulfilled Story"
     And I should see "myname" within "#main"
     And I should see "Anonymous"
   When I press "Post"
@@ -497,6 +505,7 @@ Feature: Collection
 
   # mod reveals challenge on Dec 25th
   When I am logged in as "mod1" with password "something"
+    And 0 emails should be delivered
     And all emails have been delivered
     And I go to the collections page
     And I follow "Yuletide"
@@ -516,10 +525,25 @@ Feature: Collection
     And the email should not contain "myname1"
 
   # someone views their gift and it is anonymous: TODO
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+    And I follow "myname1"
+  Then I should see "Fulfilling Story"
+  When I follow "Fulfilling Story"
+  Then I should see "For myname"
+    And I should see "Collections:"
+    And I should see "Yuletide" within ".meta"
+    And I should see "Anonymous"
+  When I follow "myname1"
+  # Needs everyone to have fulfilled their assignments to be sure of finding a gift
+  #  And I follow "My Gifts (1)"
+  When I follow "Log out"
+  Then I should see "Successfully logged out"
 
   # mod reveals authors on Jan 1st
   When "issue 1847" is fixed
   # When I follow "Log out"
+  When I am logged in as "mod1" with password "something"
   When I am on the collections page
     And I follow "Log out"
     And I am logged in as "mod1" with password "something"
