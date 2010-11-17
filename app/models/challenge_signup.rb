@@ -46,6 +46,10 @@ class ChallengeSignup < ActiveRecord::Base
   scope :in_collection, lambda {|collection| where('challenge_signups.collection_id = ?', collection.id)}
 
   ### VALIDATION
+  
+  # only one signup per challenge!
+  validates_uniqueness_of :pseud_id, :scope => [:collection_id], :message => ts("^You seem to already have signed up for this challenge.")
+  
   # we validate number of prompts/requests/offers at the challenge
   validate :number_of_prompts
   def number_of_prompts
@@ -138,7 +142,7 @@ class ChallengeSignup < ActiveRecord::Base
                                                          SUM(CASE WHEN prompts.type = 'Offer' Then 1 Else 0 End) AS offers").
                                                  group('tags.id').
                                                  having('requests > 0').
-                                                 order('offers, requests DESC')
+                                                 order('offers, requests DESC, tags.name')
                                                    
     return [tag_type, summary_tags]
   end
