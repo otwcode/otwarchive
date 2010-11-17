@@ -59,4 +59,19 @@ Feature: Invite requests
     When all emails have been delivered
       And I fill in "Email address" with "test@archiveofourown.org"
       And I press "Send invite"
-    Then 1 email should be delivered
+    Then 1 email should be delivered to test@archiveofourown.org
+      And the email should contain "user1 has invited you to join our beta!"
+    When I follow "Log out"
+    Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
+    
+    # user uses invite
+    When I click the first link in the email
+      And I fill in "user_login" with "user2"
+      And I fill in "user_password" with "password1"
+      And I fill in "user_password_confirmation" with "password1"
+      And I check "user_age_over_13"
+      And I check "user_terms_of_service"
+      And I press "Create Account"
+    Then I should see "In just a few minutes, you should receive an email"
+      And I should see "You must verify your account within 14 days"
+      And I should see "If you don't hear from us within two hours"
