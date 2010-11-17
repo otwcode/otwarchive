@@ -476,25 +476,16 @@ Feature: Collection
   When I am logged in as "myname2" with password "something"
     And I go to myname2's user page
     #' stop annoying syntax highlighting after apostrophe
-  Then I should see "My Assignments (1)"
-  When I follow "My Assignments"
+    And I follow "My Assignments"
   Then I should see "Writing For" within "table"
-    And I should see "myname" within "table"
-    And I should see "Yuletide" within "table"
-    And I should see "Post To Fulfill"
   When I follow "Post To Fulfill"
-  Then I should see "Post New Work"
-  When I fill in "Work Title" with "Fulfilled Story"
+    And I fill in "Work Title" with "Fulfilled Story"
     And I fill in "Fandoms" with "Stargate Atlantis"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "content" with "This is an exciting story about Atlantis"
   When I press "Preview"
-  Then I should see "Preview Work"
-    And I should see "Fulfilled Story"
-    And I should see "myname" within "#main"
-    And I should see "Anonymous"
-  When I press "Post"
+    And I press "Post"
   Then I should see "Work was successfully posted"
     And I should see "For myname"
     And I should see "Collections:"
@@ -502,6 +493,71 @@ Feature: Collection
     And I should see "Anonymous"
   When I follow "Log out"
   Then I should see "Successfully logged out"
+  
+  When I am logged in as "myname3" with password "something"
+    And I go to myname3's user page
+    #' stop annoying syntax highlighting after apostrophe
+    And I follow "My Assignments"
+  Then I should see "Writing For" within "table"
+  When I follow "Post To Fulfill"
+    And I fill in "Work Title" with "Some Other Story"
+    And I fill in "Fandoms" with "Tiny Fandom"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "content" with "This is an exciting story about a tiny little group of people"
+  When I press "Preview"
+    And I press "Post"
+  Then I should see "Work was successfully posted"
+    And I should see "For myname"
+    And I should see "Collections:"
+    And I should see "Yuletide" within ".meta"
+    And I should see "Anonymous"
+  When I follow "Log out"
+  Then I should see "Successfully logged out"
+  
+  When I am logged in as "myname4" with password "something"
+    And I go to myname4's user page
+    #' stop annoying syntax highlighting after apostrophe
+    And I follow "My Assignments"
+  Then I should see "Writing For" within "table"
+  When I follow "Post To Fulfill"
+    And I fill in "Work Title" with "Fulfilled Story"
+    And I fill in "Fandoms" with "Starsky & Hutch, Tiny Fandom"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "content" with "I am not good at inventing stories"
+  When I press "Preview"
+    And I press "Post"
+  Then I should see "Work was successfully posted"
+    And I should see "For myname"
+    And I should see "Collections:"
+    And I should see "Yuletide" within ".meta"
+    And I should see "Anonymous"
+  When I follow "Log out"
+  Then I should see "Successfully logged out"
+  
+  When I am logged in as "myname5" with password "something"
+    And I go to myname5's user page
+    #' stop annoying syntax highlighting after apostrophe
+    And I follow "My Assignments"
+  Then I should see "Writing For" within "table"
+  When I follow "Post To Fulfill"
+    And I fill in "Work Title" with "Fulfilled Story"
+    And I fill in "Fandoms" with "Starsky & Hutch"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "content" with "Coding late at night is bad for the brain."
+  When I press "Preview"
+    And I press "Post"
+  Then I should see "Work was successfully posted"
+    And I should see "For myname"
+    And I should see "Collections:"
+    And I should see "Yuletide" within ".meta"
+    And I should see "Anonymous"
+  When I follow "Log out"
+  Then I should see "Successfully logged out"
+  
+  # TODO: Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
 
   # mod reveals challenge on Dec 25th
   When I am logged in as "mod1" with password "something"
@@ -516,8 +572,8 @@ Feature: Collection
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  # 2 gift notification emails are delivered for the 2 stories that have been posted so far
-  Then 2 emails should be delivered
+  # 5 gift notification emails are delivered for the 5 stories that have been posted so far
+  Then 5 emails should be delivered
     And the email should contain "A gift story has been posted for you"
     # TODO: Check this capitalisation with someone, since it seems odd to me
     And the email should contain "in the Yuletide collection at the Archive of Our Own"
