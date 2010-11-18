@@ -41,6 +41,15 @@ Given /^I am logged out as an admin$/ do
   Then "I should see \"Successfully logged out\""
 end
 
+Given /^basic languages$/ do
+  Language.default
+  Language.find_or_create_by_short_and_name("DE", "Deutsch")
+end
+
+Given /^advanced languages$/ do
+  Language.find_or_create_by_short_and_name("FR", "Francais")
+end
+
 Given /^guest downloading is off$/ do
   Given "I am logged in as an admin"
   And "I follow \"settings\""
