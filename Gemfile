@@ -28,7 +28,7 @@ gem 'will_paginate',
   :require => 'will_paginate'
 
 gem 'htmlentities'
-gem 'whenever', :require => false
+gem 'whenever', '~>0.6.2', :require => false
 gem 'nokogiri'
 gem 'mechanize'
 gem 'sanitize'
