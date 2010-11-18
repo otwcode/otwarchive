@@ -2,6 +2,7 @@ class UserMailer < ActionMailer::Base
 
   helper :application
   helper :tags
+  include HtmlCleaner
 
   default :from => ArchiveConfig.RETURN_ADDRESS
   
@@ -176,7 +177,7 @@ class UserMailer < ActionMailer::Base
     @comment = feedback.comment
     mail(
       :to => feedback.email,
-      :subject => "#{ArchiveConfig.APP_NAME}: Support - #{feedback.summary}"
+      :subject => "#{ArchiveConfig.APP_NAME}: Support - #{strip_html_breaks_simple(feedback.summary)}"
     )
   end  
 
