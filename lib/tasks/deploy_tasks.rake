@@ -121,6 +121,7 @@ Don't go further with the deploy until you have fixed the problem!"
     notice "Copying local files"
     ok_or_warn %Q{cd #{CURRENT_DIR}/config && cp #{SHARED_DIR}/config/* .}
     ok_or_warn %Q{cd #{CURRENT_DIR}/public && cp #{SHARED_DIR}/public/* .}
+    ok_or_warn %Q{cd #{CURRENT_DIR}/public && cp robots.public.txt robots.txt} if @server == 'otw1'
 
     # directories that we want to keep through deploys
     notice "Linking directories"
