@@ -383,7 +383,7 @@ protected
   end
 
   def render_xhtml(html, filename)
-    doc = Nokogiri::HTML.parse(html)
+    doc = Nokogiri::XML.parse(html)
     xhtml = doc.children.to_xhtml
     File.open("#{@work.download_dir}/epub/OEBPS/#{filename}.xhtml", 'w') {|f| f.write(xhtml)}
   end

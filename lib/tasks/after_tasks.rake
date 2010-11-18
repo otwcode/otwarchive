@@ -194,6 +194,17 @@ namespace :After do
   #### Add your new tasks here
   
   
+  desc "Clear out old epub files"
+  task(:remove_old_epubs => :environment) do
+    download_dir =  "#{Rails.public_path}/downloads/"
+    cmd = %Q{find #{download_dir} -depth -name epub -exec rm -rf {} \\;}
+    puts cmd
+    `#{cmd}`
+    cmd = %Q{find #{download_dir} -name "*.epub" -exec rm {} \\;}
+    puts cmd
+    `#{cmd}`
+  end
+
 
 
 
@@ -205,5 +216,5 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:update_pairing_names', 'After:mark_meta_tags_inherited']
-task :After => []
+task :After => ['After:remove_old_epubs']
 
