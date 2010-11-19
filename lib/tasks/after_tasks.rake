@@ -154,13 +154,13 @@ namespace :After do
 #      filter_ids = [meta_tag.id] + meta_tag.mergers.map{|m| m.id}
 #      # filter taggings that originated with the meta tag or one of its mergers
 #      # should not be marked inherited
-#      fts = FilterTagging.joins("LEFT JOIN taggings ON 
+#      fts = FilterTagging.joins("LEFT JOIN taggings ON
 #                                taggings.taggable_id = filter_taggings.filterable_id").
-#                          where(["filter_taggings.filter_id = ? AND 
+#                          where(["filter_taggings.filter_id = ? AND
 #                                taggings.taggable_type = 'Work' AND
 #                                filter_taggings.filterable_type = 'Work' AND
 #                                taggings.id IS NOT NULL AND
-#                                taggings.tagger_id IN (?)", 
+#                                taggings.tagger_id IN (?)",
 #                                meta_tag.id, filter_ids])
 #      unless fts.blank?
 #        FilterTagging.update_all("inherited = 0", ["id IN (?)", fts.map{|ft| ft.id}])
@@ -175,13 +175,24 @@ namespace :After do
 #      oldname = t.name
 #      newname = oldname.gsub(/ - Pairing$/, " - Relationship")
 #      begin
-#        t.update_attribute(:name, newname) 
+#        t.update_attribute(:name, newname)
 #      rescue ActiveRecord::RecordNotUnique
 #        puts "\"#{oldname}\" couldn't be renamed because \"#{newname}\" already exists"
 #      end
 #    end
 #  end
 
+
+#  desc "Clear out old epub files"
+#  task(:remove_old_epubs => :environment) do
+#    download_dir =  "#{Rails.public_path}/downloads/"
+#    cmd = %Q{find #{download_dir} -depth -name epub -exec rm -rf {} \\;}
+#    puts cmd
+#    `#{cmd}`
+#    cmd = %Q{find #{download_dir} -name "*.epub" -exec rm {} \\;}
+#    puts cmd
+#    `#{cmd}`
+#  end
 
   #### Leave this one here
 
@@ -192,18 +203,8 @@ namespace :After do
   end
 
   #### Add your new tasks here
-  
-  
-  desc "Clear out old epub files"
-  task(:remove_old_epubs => :environment) do
-    download_dir =  "#{Rails.public_path}/downloads/"
-    cmd = %Q{find #{download_dir} -depth -name epub -exec rm -rf {} \\;}
-    puts cmd
-    `#{cmd}`
-    cmd = %Q{find #{download_dir} -name "*.epub" -exec rm {} \\;}
-    puts cmd
-    `#{cmd}`
-  end
+
+
 
 
 
@@ -215,6 +216,5 @@ end # this is the end that you have to put new tasks above
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-#task :After => ['After:update_pairing_names', 'After:mark_meta_tags_inherited']
-task :After => ['After:remove_old_epubs']
-
+#task :After => ['After:remove_old_epubs']
+task :After => []
