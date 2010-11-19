@@ -22,9 +22,9 @@ class ChallengeSignupsController < ApplicationController
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
-  
+
   def check_signup_open
-    signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user)) 
+    signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user))
   end
 
   def signup_closed
@@ -36,7 +36,7 @@ class ChallengeSignupsController < ApplicationController
   def signup_owner_only
     not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (!@challenge.signup_open && @collection.user_is_owner?(current_user)))
   end
-  
+
   def maintainer_or_signup_owner_only
     not_allowed and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
   end
@@ -46,11 +46,11 @@ class ChallengeSignupsController < ApplicationController
     redirect_to @collection
     false
   end
-  
+
   def allowed_to_destroy
     @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed
   end
-  
+
   def not_allowed
     flash[:error] = t('challenge_signups.not_allowed', :default => "Sorry, you're not allowed to do that.")
     redirect_to collection_path(@collection) rescue redirect_to '/'
@@ -67,7 +67,7 @@ class ChallengeSignupsController < ApplicationController
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
-  
+
   #### ACTIONS
 
   def index
@@ -80,11 +80,11 @@ class ChallengeSignupsController < ApplicationController
         redirect_to '/' and return
       end
     else
-      load_collection 
+      load_collection
       load_challenge if @collection
       return false unless @challenge
     end
-      
+
     # using respond_to in order to provide Excel output
     # see below for export_excel method
     respond_to do |format|
@@ -103,16 +103,16 @@ class ChallengeSignupsController < ApplicationController
           export_html
         end
       }
-    end    
+    end
   end
-  
+
   def summary
     if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
       flash.now[:notice] = ts("Summary does not appear until at least %{count} signups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
     elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
-      if !File.exists?(ChallengeSignup.summary_file(@collection)) || 
-          (@collection.challenge.signup_open? && File.new(ChallengeSignup.summary_file(@collection)).mtime < 1.hour.ago)
+      if !File.exists?(ChallengeSignup.summary_file(@collection)) ||
+          (@collection.challenge.signup_open? && File.mtime(ChallengeSignup.summary_file(@collection)) < 1.hour.ago)
         # either the file is missing, or signup is open and the last regeneration was more than an hour ago.
 
         # touch the file so we don't generate a second request
@@ -134,7 +134,7 @@ class ChallengeSignupsController < ApplicationController
       @generated_live = true
     end
   end
-  
+
   def show
   end
 
@@ -175,7 +175,7 @@ class ChallengeSignupsController < ApplicationController
   def destroy
     unless @challenge.signup_open || @collection.user_is_maintainer?(current_user)
       flash[:error] = t('challenge_signups.cannot_delete', :default => "You cannot delete your signup after signups are closed. Please contact a moderator for help.")
-    else 
+    else
       @challenge_signup.destroy
       flash[:notice] = 'Challenge signup was deleted.'
     end
@@ -185,12 +185,12 @@ class ChallengeSignupsController < ApplicationController
       redirect_to @collection
     end
   end
-  
-  
+
+
 protected
   # eventually for exporting to excel tsv format
   # BOM = "\377\376" #Byte Order Mark
-  # 
+  #
   # def export_tsv(signups)
   #   filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.tsv"
   #   content = signups.collect {|signup| signup.to_tsv}.join("\n")
@@ -206,6 +206,6 @@ protected
     content = render_to_string(:template => "challenge_signups/index.html", :layout => 'barebones.html')
     send_data content, :filename => filename
   end
-  
-  
+
+
 end
