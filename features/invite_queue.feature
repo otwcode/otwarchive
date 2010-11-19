@@ -35,6 +35,14 @@ Feature: Invite queue management
     When I am on the homepage
       And I follow "SIGN UP NOW"
     Then I should see "Request an invite"
+    
+    # check your place in the queue - invalid address
+    When I fill in "email" with "testttt@archiveofourown.org"
+      And I press "Go"
+    Then I should see "Sorry, we couldn't find that address in our queue"
+      And I should not see "You are currently number"
+    
+    # check your place in the queue - correct address
     When I fill in "email" with "test@archiveofourown.org"
       And I press "Go"
     Then I should see "Invitation Status for test@archiveofourown.org"
