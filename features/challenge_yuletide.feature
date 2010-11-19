@@ -579,6 +579,11 @@ Feature: Collection
     And the email should contain "in the Yuletide collection at the Archive of Our Own"
     And the email should contain "by an anonymous giver"
     And the email should not contain "myname1"
+    And the email should not contain "myname2"
+    And the email should not contain "myname3"
+    And the email should not contain "myname4"
+    And the email should not contain "myname5"
+    And the email should not contain "myname6"
 
   # someone views their gift and it is anonymous: TODO
   When I follow "Log out"
