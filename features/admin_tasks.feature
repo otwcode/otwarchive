@@ -41,3 +41,93 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
     When I go to the archive_faqs page
       And I follow "New subsection"
     Then I should see "Some text, that is sufficiently long to pass validation" within ".userstuff"
+    
+    Scenario: Change some admin settings for performance
+    
+  Given I have no users
+      And the following admin exists
+      | login       | password |
+      | Zooey       | secret   |
+      And the following activated user exists
+      | login       | password      |
+      | dizmo       | wrangulator   |
+      
+  # post a work and download it as a guest
+  
+  When I am logged in as "dizmo" with password "wrangulator"
+    And I post the work "Storytime"
+    And I follow "Log out"
+    And I view the work "Storytime"
+  Then I should see "Download"
+  
+  # turn off guest downloading
+  
+  When I go to the admin_login page
+    And I fill in "admin_session_login" with "Zooey"
+    And I fill in "admin_session_password" with "secret"
+    And I press "Log in as admin"
+  Then I should see "Successfully logged in"
+  When I follow "settings"
+  Then I should see "Turn off downloading for guests"
+    And I should see "Turn off tag wrangling for non-admins"
+  When I check "Turn off downloading for guests"
+    And I press "Update"
+  Then I should see "Archive settings were successfully updated."
+  
+  # Check guest downloading is off
+  
+  When I follow "Log out"
+  Then I should see "Successfully logged out"
+  When I view the work "Storytime"
+  #Then show me the page
+    And I follow "MOBI"
+   # Then show me the page
+  Then I should see "Due to current high load"
+  
+  # TODO: Turn off tag wrangling
+  
+  Scenario: Send out an admin notice to all users
+  
+  Given I have no users
+    And the following admin exists
+      | login       | password |
+      | Zooey       | secret   |
+    And the following activated user exists
+      | login       | password             |
+      | enigel      | emailnotifications   |
+      | otherfan    | hatesnotifications   |
+    And all emails have been delivered
+  
+  # otherfan turns off notifications
+  
+  When I am logged in as "otherfan" with password "hatesnotifications"
+    And I follow "Profile"
+  Then I should see "Set My Preferences"
+  When I follow "Set My Preferences"
+  Then I should see "Update My Preferences"
+  When I check "Turn off admin notification emails"
+    And I press "Update"
+  Then I should see "Your preferences were successfully updated"
+  When I follow "Log out"
+  Then I should see "Successfully logged out"
+  
+  # admin sends out notice to all users
+  
+  When I go to the admin_login page
+    And I fill in "Admin user name" with "Zooey"
+    And I fill in "admin_session_password" with "secret"
+    And I press "Log in as admin"
+  Then I should see "Successfully logged in"
+  When I follow "notices"
+    And I fill in "Subject" with "Hey, we did stuff"
+    And I fill in "Message" with "And it was awesome"
+    And I check "Notify All Users"
+    And I press "Send Notification"
+    And the system processes jobs
+  # confirmation email to admin, and to one user
+  Then 2 emails should be delivered
+    And the email should not contain "otherfan"
+    And the email should contain "enigel"
+    And "Issue 2035" is fixed
+    # And the email should contain "Hey, we did stuff"
+    And the email should contain "And it was awesome"
