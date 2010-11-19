@@ -1,7 +1,31 @@
 # encoding utf-8
 
 @works
+
 Feature: Download a work
+
+  Scenario: Download an ordinary work
+  
+  Given basic tags
+    And I am logged in as "myname" with password "something"
+  When I go to the new work page
+    And I fill in "Fandoms" with "No Fandom"
+    And I fill in "Work Title" with "Tittle with doubble letters"
+    And I fill in "content" with "some random stuff"
+  When I press "Preview"
+    And I press "Post"
+  Then I should see the text with tags "Title%20with%20double%20leters.mobi"
+    And "Issue 2033" is fixed
+  # Then I should see the text with tags "Tittle%20with%20doubble%20letters.mobi"
+  When I follow "MOBI"
+    Then I should see "Tittle with doubble letters"
+    Then I should see the text with tags "Tittle with doubble letters"
+  When I go to the work page with title Tittle with doubble letters
+  When I follow "PDF"
+  When I go to the work page with title Tittle with doubble letters
+  When I follow "HTML"
+  When I go to the work page with title Tittle with doubble letters
+  When I follow "EPUB"
 
   Scenario: Download works with funky titles doesn't bomb
 
@@ -33,6 +57,8 @@ Feature: Download a work
     And I fill in "content" with "some random stuff"
   When I press "Preview"
     And I press "Post"
+  # TODO: Think about whether we can invent a better name than this
+  Then I should see the text with tags "_.mobi"
   When I follow "MOBI"
   When I go to the work page with title Первый_маг
   When I follow "PDF"
@@ -80,27 +106,28 @@ Feature: Download a work
   Given the following activated user exists
     |login|password|
     |user |secret  |
-  And I am logged in as "author" with password "writersrule"
-  And I post the work "NaNoWriMo"
-  And I am logged out
+    And I am logged in as "author" with password "writersrule"
+    And I post the work "NaNoWriMo"
+    And I am logged out
   When I view the work "NaNoWriMo"
-  And I follow "HTML"
+    And I follow "HTML"
   Then I should see "NaNoWriMo"
-  And I should not see "Comments"
+    And I should not see "Comments"
   When guest downloading is off
-  And I am logged out as an admin
+    And I am logged out as an admin
   When I view the work "NaNoWriMo"
-  And I follow "PDF"
+    And I follow "PDF"
   Then I should see "Due to current high load"
   When I fill in "User" with "user"
-  And I fill in "Password" with "secret"
-  And I press "Log in"
+    And I fill in "Password" with "secret"
+    And I press "Log in"
   Then I should see "NaNoWriMo"
-  And I should see "Comments"
+    And I should see "Comments"
   When I follow "MOBI"
   Then I should not see "Due to current high load"
 
  Scenario: download chaptered works doesn't bomb
+ 
   Given /the following activated user exists
     |login|password|
     |user |secret  |
