@@ -14,6 +14,7 @@ Feature: Collection
     | myname2        | something   |
     | myname3        | something   |
     | myname4        | something   |
+    | pinchhitter    | password    |
     And I have no tags
     And I create the fandom "Stargate Atlantis" with id 27
     And I create the fandom "Starsky & Hutch" with id 28
@@ -558,6 +559,21 @@ Feature: Collection
   Then I should see "Successfully logged out"
   
   # TODO: Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
+  When I am logged in as "mod1" with password "something"
+    And I go to the collections page
+    And I follow "Yuletide"
+    And I follow "Assignments"
+  Then I should see "No defaulted assignments!"
+    And I should see "Not yet posted"
+    And I should see "Gift posted on"
+  When I follow "Default All Unposted"
+  Then I should not see "No defaulted assignments!"
+    And I should not see "Not yet posted"
+    And I should see "All unfulfilled assignments marked as defaulting."
+  When I fill in "challenge_assignment_pinch_hitter_byline" with "pinchhitter"
+    # TODO: Figure out why this doesn't work
+    # And I press "Assign"
+  # Then show me the page
 
   # mod reveals challenge on Dec 25th
   When I am logged in as "mod1" with password "something"
