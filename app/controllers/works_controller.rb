@@ -482,7 +482,7 @@ public
     end
 
     if !@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?
-      @work.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
+      @work.valid? ? (render :_choose_coauthor) : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
       @preview_mode = true
       if @work.has_required_tags? && @work.invalid_tags.blank?
