@@ -147,8 +147,6 @@ Don't go further with the deploy until you have fixed the problem!"
     ok_or_warn %Q{sed -i '$d' #{CURRENT_DIR}/config/local.yml}
     ok_or_warn %Q{echo REVISION: #{@new_rev} >> #{CURRENT_DIR}/config/local.yml}
 
-    notice "Removing old releases"
-    ok_or_warn %q{cap deploy:cleanup}
   end
 
   desc "Update Crontab"
@@ -185,19 +183,19 @@ Don't go further with the deploy until you have fixed the problem!"
   end
 
   desc "Run after tasks"
-  task(:run_after_tasks => :get_servername) do
-    if @server == "otw1"
-      notice "Oops. This should be run on otw2."
-    else
-      ok_or_warn %q{rake After RAILS_ENV=production}
-    end
+  task(:run_after_tasks) do
+    ok_or_warn %q{rake After RAILS_ENV=production}
   end
+
+  desc "Clean up old releases"
+  task(:clean_releases) do
+    ok_or_warn %q{cap deploy:cleanup}
+  end
+
 
   desc "Restart unicorn"
   task(:restart_unicorn => :get_servername) do
-    ok_or_warn %Q{cd #{CURRENT_DIR} && kill -USR2 `cat tmp/pids/unicorn.pid`}
-    ok_or_warn %Q{cd #{CURRENT_DIR} && kill -USR2 `cat tmp/pids/unicorn_slow.pid`}
-    ok_or_warn %Q{cd #{CURRENT_DIR} && kill -USR2 `cat tmp/pids/unicorn_fast.pid`}
+    ok_or_warn %Q{kill -USR2 `cat #{SHARED_DIR}/pids/unicorn.pid`}
   end
 
   desc "Take out of maintenance"
@@ -269,22 +267,25 @@ Don't go further with the deploy until you have fixed the problem!"
     end
 
     # deploy code
-    ynq("Deploy new code and migrations?")
+    ynq("Deploy new code?")
     Rake::Task['deploy:deploy_code'].invoke if @yes
     unless @server == 'otw1'
+      ynq("Run migrations?")
       Rake::Task['deploy:run_migrations'].invoke if @yes
     end
 
-    ynq("Take out of maintenance at the recommended time? (if you answer no here, the server will be taken out of maintenance immediately)")
-    @restart_deferred = true if @yes
-    Rake::Task['deploy:take_out_of_maint'].invoke unless @yes
-    Rake::Task['deploy:restart_unicorn'].invoke unless @yes
-
-    unless @server == 'otw1'
-      ynq("Run the After tasks now?")
-      Rake::Task['deploy:run_after_tasks'].invoke if @yes
-      @after_deferred = true unless @yes
+    ynq("Take out of maintenance later? (if you answer no here, the server will be taken out of maintenance immediately)")
+    if @yes
+      @restart_deferred = true 
+    else
+      Rake::Task['deploy:take_out_of_maint'].invoke
+      ynq("Restart Unicorn?")
+      Rake::Task['deploy:restart_unicorn'].invoke if @yes
     end
+
+    ynq("Run the After tasks now?")
+    Rake::Task['deploy:run_after_tasks'].invoke if @yes
+    @after_deferred = true unless @yes
 
     unless @server=='otw2'  # sphinx doesn't run on otw2
        ynq("Rebuild sphinx (only if indexes have changed in the models)?")
@@ -302,8 +303,11 @@ Don't go further with the deploy until you have fixed the problem!"
 
     if @restart_deferred
       ynq("Take out of maintenance?")
-      Rake::Task['deploy:take_out_of_maint'].invoke if @yes
-      Rake::Task['deploy:restart_unicorn'].invoke if @yes
+      if @yes
+        Rake::Task['deploy:take_out_of_maint'].invoke
+        ynq("Restart Unicorn?")
+        Rake::Task['deploy:restart_unicorn'].invoke if @yes
+      end
     end
 
     ynq("Send email?")
@@ -317,6 +321,9 @@ Don't go further with the deploy until you have fixed the problem!"
       ynq("Run the after tasks?")
       Rake::Task['deploy:run_after_tasks'].invoke if @yes
     end
+
+    ynq("Clean up old releases?")
+    Rake::Task['deploy:clean_releases'].invoke if @yes
 
   end
 
