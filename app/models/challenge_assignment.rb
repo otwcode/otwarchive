@@ -235,7 +235,8 @@ class ChallengeAssignment < ActiveRecord::Base
       next if potential_match.offer_signup.assigned_as_offer
       
       # if there's a circular match let's save it as our last choice
-      if potential_match.offer_signup.assigned_as_request && !last_choice && collection.assignments.for_request_signup(potential_match.offer_signup).first.offer_signup == request_signup
+      if potential_match.offer_signup.assigned_as_request && !last_choice && 
+          collection.assignments.for_request_signup(potential_match.offer_signup).first.offer_signup == request_signup
         last_choice = potential_match
         next
       end
@@ -266,7 +267,8 @@ class ChallengeAssignment < ActiveRecord::Base
       next if potential_match.request_signup.assigned_as_request
 
       # if there's a circular match let's save it as our last choice
-      if potential_match.request_signup.assigned_as_offer && !last_choice && collection.assignments.for_offer_signup(potential_match.request_signup).first.request_signup == offer_signup
+      if potential_match.request_signup.assigned_as_offer && !last_choice && 
+          collection.assignments.for_offer_signup(potential_match.request_signup).first.request_signup == offer_signup
         last_choice = potential_match
         next
       end
@@ -286,7 +288,6 @@ class ChallengeAssignment < ActiveRecord::Base
     assignment.save!
     assignment
   end
-
   
   def self.do_assign_request!(assignment, potential_match)
     assignment.offer_signup = potential_match.offer_signup
@@ -294,18 +295,18 @@ class ChallengeAssignment < ActiveRecord::Base
     potential_match.offer_signup.save!
   end
 
-  
   def self.do_assign_offer!(assignment, potential_match)
     assignment.request_signup = potential_match.request_signup
     potential_match.request_signup.assigned_as_request = true
     potential_match.request_signup.save!
   end
 
-
-
-  # clear out all previous assignments
+  # clear out all previous assignments.
+  # note: this does NOT invoke callbacks because ChallengeAssignments don't have any dependent=>destroy 
+  # or associations
   def self.clear!(collection)
-    ChallengeAssignment.destroy_all(["collection_id = ?", collection.id])
+    ChallengeAssignment.delete_all(:collection_id => collection.id)
+    ChallengeSignup.update_all({:assigned_as_offer => false, :assigned_as_request => false}, {:collection_id => collection.id})
   end
 
   # create placeholders for any assignments left empty
