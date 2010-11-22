@@ -117,6 +117,9 @@ module HtmlCleaner
     array
   end
 
+  # tags that we need to reopen if users have them crossing paragraph breaks.
+  # bad users, no biscuit :(
+  HTML_TAGS_TO_REOPEN = %w(b big cite code del em i s small strike strong sub sup tt u)
 
   # Simplified parser/formatter steps:
   # 1. Convert newlines into paragraph/break tags based on some simple rules
@@ -145,6 +148,12 @@ module HtmlCleaner
     
     # convert double br tags into p tags
     source.gsub!(/<br\s*?\/?>\s*<br\s*?\/?>/, '</p><p>')
+    
+    # if we have closed inline tags that cross a <p> tag, reopen them 
+    # at the start of each paragraph before the end
+    HTML_TAGS_TO_REOPEN.each do |tag|      
+      source.gsub!(/(<#{tag}>)(.*?)(<\/#{tag}>)/) { $1 + reopen_tags($2, tag) + $3 }
+    end
 
     # Parse in Nokogiri
     parsed = Nokogiri::HTML.parse(source)
@@ -168,46 +177,11 @@ module HtmlCleaner
     
     # return the text
     source
+  end
+  
+  def reopen_tags(string, tag)
+    return string.gsub(/(<\/p><p.*?>)/, "</#{tag}>" + '\1' + "<#{tag}>")
   end    
-
-  INLINE_HTML_TAGS = %w(a abbr acronym b big br cite code del dfn em i img ins kbd q s samp small span strike strong sub sup tt u var)
-  BLOCK_HTML_TAGS = %w(div address blockquote center ul ol li dl dt dd table tbody tfoot thead td tr th)
-  NO_PARAGRAPHS_REQUIRED = %w(caption dt h1 h2 h3 h4 h5 h6 hr pre)
-  
-  # Ensure that all text that isn't a heading is contained in a paragraph
-  def add_paragraphs_to_nodes(nodes)
-    parent = nil
-    for node in nodes
-      if NO_PARAGRAPHS_REQUIRED.include?(node.node_name) || node.node_name == 'p'
-        parent = nil
-      else
-        if BLOCK_HTML_TAGS.include?(node.node_name)
-          parent = nil
-          add_paragraphs_to_nodes(node.children)
-        else
-          unless parent
-            node.after("<p></p>")
-            parent = node.next
-          end
-          node.unlink
-          parent.add_child(node)
-        end
-      end
-    end
-  end
-  
-  # Pop off empty paragraphs
-  def clean_up_paragraphs(nodes)
-    for node in nodes
-      if node.node_name == 'p'
-        child_types = node.children.collect(&:node_name).uniq - ["text", "br"]         
-        if child_types.blank? && node.content.blank?
-          node.remove
-        end
-      end
-    end
-  end
-
 
   ### STRIPPING FOR DISPLAY ONLY
   # Regexps for stripping particular tags and attributes for display.

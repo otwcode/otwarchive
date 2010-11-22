@@ -108,7 +108,18 @@ Feature: Parsing HTML
     It continues to</em> the next paragraph.
     """
     And I press "Preview"
-    And "issue 2015" is fixed
   Then I should see "Preview Work"
-    #And I should see the text with tags "<p>Here is an <em>em tag.</em></p><p><em>It continues to</em> the next paragraph.</p>" 
+    And I should see the text with tags "<p>Here is an <em>em tag.</em></p><p><em>It continues to</em> the next paragraph.</p>" 
+  When I press "Edit"
+    And I fill in "content" with
+    """
+    Here is <em>another</p><p align=center>that has formatting tags</em>
+    
+    but <em>in
+    
+    different</em> places and <em>some are closed</em>.
+    """
+    And I press "Preview"
+  Then I should see "Preview Work"
+    And I should see the text with tags "<p>Here is <em>another</em></p><p align=\"center\"><em>that has formatting tags</em></p><p>but <em>in</em></p><p><em>different</em> places and <em>some are closed</em>.</p>"
 
