@@ -14,9 +14,7 @@ Feature: Download a work
     And I fill in "content" with "some random stuff"
   When I press "Preview"
     And I press "Post"
-  Then I should see the text with tags "Title%20with%20double%20leters.mobi"
-    And "Issue 2033" is fixed
-  # Then I should see the text with tags "Tittle%20with%20doubble%20letters.mobi"
+  Then I should see the text with tags "Tittle%20with%20doubble%20letters.mobi"
   When I follow "MOBI"
     Then I should see "Tittle with doubble letters"
     Then I should see the text with tags "Tittle with doubble letters"
