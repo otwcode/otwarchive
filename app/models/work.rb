@@ -638,7 +638,7 @@ class Work < ActiveRecord::Base
       else
         self.filters << filter
       end
-      filter.reset_filter_count unless AdminSetting.suspend_filter_counts?     
+      filter.reset_filter_count unless AdminSetting.suspend_filter_counts?
     end
   end
 
@@ -844,7 +844,7 @@ class Work < ActiveRecord::Base
   # Use the current user to determine what works are visible
   scope :visible, visible_to_user(User.current_user)
 
-  # Note: this version will work only on canonical tags (filters) 
+  # Note: this version will work only on canonical tags (filters)
   scope :with_all_filter_ids, lambda {|tag_ids_to_find|
     select("DISTINCT works.*").
     joins(:filter_taggings).
@@ -856,9 +856,9 @@ class Work < ActiveRecord::Base
   scope :with_any_filter_ids, lambda {|tag_ids_to_find|
     select("DISTINCT works.*").
     joins(:filter_taggings).
-    where({:filter_taggings => {:filter_id => tag_ids_to_find}})    
+    where({:filter_taggings => {:filter_id => tag_ids_to_find}})
   }
-  
+
   scope :with_all_tag_ids, lambda {|tag_ids_to_find|
     select("DISTINCT works.*").
     joins(:tags).
@@ -887,8 +887,13 @@ class Work < ActiveRecord::Base
     order("tags.type, tags.name ASC")
 
   scope :owned_by, lambda {|user| select("DISTINCT works.*").joins({:pseuds => :user}).where('users.id = ?', user.id)}
-  scope :written_by, lambda {|pseuds| written_by_id(pseuds.collect(&:id)) }
   scope :written_by_id, lambda {|pseud_ids|
+    select("DISTINCT works.*").
+    joins(:pseuds).
+    where('pseuds.id IN (?)', pseud_ids).
+    group("works.id")
+  }
+  scope :written_by_id_having, lambda {|pseud_ids|
     select("DISTINCT works.*").
     joins(:pseuds).
     where('pseuds.id IN (?)', pseud_ids).
@@ -931,6 +936,7 @@ class Work < ActiveRecord::Base
       '.with_any_filter_ids(options[:selected_tags])' :
       '.with_all_filter_ids(options[:selected_tags])'
     written = '.written_by_id(options[:selected_pseuds])'
+    written_having = '.written_by_id_having(options[:selected_pseuds])'
     owned = '.owned_by(options[:user])'
     collected = '.in_collection(options[:collection])'
     sort = '.ordered_by_' + options[:sort_column] + '_' + options[:sort_direction].downcase
@@ -958,7 +964,7 @@ class Work < ActiveRecord::Base
     elsif !options[:user].nil? && !options[:selected_pseuds].empty?
       # We have an indiv. user, selected pseuds but no selected tags
       owned_works = Work.owned_by(options[:user])
-      command << written
+      command << written_having
     elsif !options[:user].nil? && !options[:selected_tags].empty?
       # filtered results on a user's works page
       # no pseuds but a specific user, and selected tags
