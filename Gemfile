@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'bundler', '~>1.0.0' 
+gem 'bundler', '~>1.0.0'
 
 gem 'rails', '3.0.3'
 
@@ -11,15 +11,8 @@ gem 'rails', '3.0.3'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
 
-# Use unicorn as the web server
-gem 'unicorn', :require => false
-
-# Deploy with Capistrano
-gem 'capistrano', :require => false
-
 # Here are all our application-specific gems
 gem 'rack-openid', '>=0.2.1', :require => 'rack/openid'
-
 
 #gem 'will_paginate', '3.0.pre'
 gem 'will_paginate',
@@ -47,7 +40,7 @@ gem 'mocha'
 gem 'css_parser'
 
 gem 'paperclip',
-  :git => 'git://github.com/thoughtbot/paperclip.git', 
+  :git => 'git://github.com/thoughtbot/paperclip.git',
   :branch => 'master',
   :require => 'paperclip'
 
@@ -72,7 +65,7 @@ gem "escape_utils"
 gem 'ruby-debug19', :require => 'ruby-debug'
 
 group :test do
-  gem 'rspec-rails', '>=2.0.0.beta.22'  
+  gem 'rspec-rails', '>=2.0.0.beta.22'
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
@@ -83,7 +76,12 @@ group :test do
   gem 'launchy'    # So you can do Then show me the page
 end
 
+# Deploy with Capistrano
+gem 'capistrano', :require => false
+
 group :production do
+  # Use unicorn as the web server
+  gem 'unicorn', :require => false
   gem "memcache-client"
   gem 'exception_notification',
     :git     => 'git://github.com/rails/exception_notification.git',

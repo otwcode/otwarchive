@@ -288,7 +288,7 @@ Don't go further with the deploy until you have fixed the problem!"
     @after_deferred = true unless @yes
 
     unless @server=='otw2'  # sphinx doesn't run on otw2
-       ynq("Rebuild sphinx (only if indexes have changed in the models)?")
+       ynq("Rebuild sphinx (if indexes have changed in the models or the database has been reset)?")
        if @yes
          Rake::Task['deploy:rebuild_sphinx'].invoke
        else
