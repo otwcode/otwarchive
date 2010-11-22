@@ -24,10 +24,9 @@ set :set_path_automatically, false
 
 set :cron_log, "#{path}/log/whenever.log"
 
-case @environment
-when 'production'
+if @email_jobs == 'on'
   # run email-sending tasks
-  
+
   # Check to see if the invite queue is enabled and invite users if appropriate
   every 1.day, :at => '1:21 am' do
     rake "invitations:check_queue"
@@ -58,4 +57,5 @@ end
 every 1.day, :at => '2:40 am' do
   rake "work:purge_old_drafts"
 end
+
 

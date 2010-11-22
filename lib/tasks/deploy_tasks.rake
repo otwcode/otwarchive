@@ -154,10 +154,10 @@ Don't go further with the deploy until you have fixed the problem!"
     case @server
     when "stage"
       notice "Updating crontab (no email sending jobs)..."
-      ok_or_warn %q{whenever --update-crontab otwarchive}
+      ok_or_warn %q{whenever --update-crontab otwarchive --set email_jobs=off}
     when "otw1"
       notice "Updating crontab..."
-      ok_or_warn %q{whenever --update-crontab otwarchive --set environment=production}
+      ok_or_warn %q{whenever --update-crontab otwarchive --set email_jobs=on}
     else
       notice "Crontab not updated. (cronjobs don't run on otw2)"
     end
@@ -276,7 +276,7 @@ Don't go further with the deploy until you have fixed the problem!"
 
     ynq("Take out of maintenance later? (if you answer no here, the server will be taken out of maintenance immediately)")
     if @yes
-      @restart_deferred = true 
+      @restart_deferred = true
     else
       Rake::Task['deploy:take_out_of_maint'].invoke
       ynq("Restart Unicorn?")
