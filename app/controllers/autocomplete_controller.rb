@@ -27,8 +27,7 @@ class AutocompleteController < ApplicationController
       tag_finder(tag_type.classify, search_param)
     else
       tags = tag_set.tags.with_type(tag_type).order('taggings_count DESC').where("name LIKE ?", search_param + '%').limit(10)
-      extra_limit = 10 - tags.size + 5
-      tags += tag_set.tags.with_type(tag_type).order('taggings_count DESC').where("name LIKE ?", '%' + search_param + '%').limit(extra_limit)
+      tags += tag_set.tags.with_type(tag_type).order('taggings_count DESC').where("name LIKE ?", '%' + search_param + '%').limit(7)
       render_output(tags.uniq.map(&:name))
     end
   end
@@ -45,8 +44,7 @@ class AutocompleteController < ApplicationController
 
   def get_tags_for_finder(tag_class, search_param)
     tags = tag_class.canonical.order('taggings_count DESC').where("name LIKE ?", search_param + '%').limit(10)
-    extra_limit = 10 - tags.size + 5
-    tags += tag_class.canonical.order('taggings_count DESC').where("name LIKE ?", '%' + search_param + '%').limit(extra_limit)
+    tags += tag_class.canonical.order('taggings_count DESC').where("name LIKE ?", '%' + search_param + '%').limit(7)
   end
 
   def get_tags_for_relationship_finder(search_param)
