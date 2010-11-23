@@ -6,7 +6,7 @@ class Sanitize
     ARCHIVE = {
       :elements => [
         'a', 'abbr', 'b', 'big', 'blockquote', 'br', 'caption', 'center', 'cite', 'code', 'col',
-        'colgroup', 'dd', 'div', 'dl', 'dt', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr',
+        'colgroup', 'dd', 'del', 'div', 'dl', 'dt', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr',
         'i', 'img', 'li', 'ol', 'p', 'pre', 'q', 's', 'small', 'span', 'strike', 'strong',
         'sub', 'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'tt', 'u',
         'ul'],
@@ -97,9 +97,9 @@ class Sanitize
       # if we don't know the source, sorry
       return nil if source.nil?           
 
-      # We're now certain that this is a YouTube embed, but we still need to run
+      # We're now certain that this is an embed from a trusted source, but we still need to run
       # it through a special Sanitize step to ensure that no unwanted elements or
-      # attributes that don't belong in a YouTube embed can sneak in.
+      # attributes that don't belong in a video embed can sneak in.
       if parent && parent.name.to_s.downcase == 'object'
         Sanitize.clean_node!(parent, {
           :elements   => ['embed', 'object', 'param'],
