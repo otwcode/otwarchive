@@ -33,24 +33,29 @@ module HtmlCleaner
   # yank out bad end-of-line characters and evil msword curly quotes
   def fix_bad_characters(text)
     return "" if text.nil?
+    
+    # get the text into UTF-8 and get rid of invalid characters
+    text = text.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "")
+    
     text.gsub! "<3", "&lt;3"
 
     # convert carriage returns to newlines
     text.gsub!(/\r\n?/, "\n")
     
-    # maybe these will work instead? D:
-    # text.gsub! /[\u201C\u201D\u201E\u201F\u2033\u2036]/u, '"'
-    # text.gsub! /[\u2018\u2019\u201A\u201B\u2032\u2035]/u, "'"
-    # FIXME - uncommented gets incompatible encoding regexp match error
-    #    text.gsub! "\342\200\230", "'"
-    #    text.gsub! "\342\200\231", "'"
-    #    text.gsub! "\342\200\234", '"'
-    #    text.gsub! "\342\200\235", '"'
-    # these were commented out before
-    #    text.gsub! "\221", "'"
-    #    text.gsub! "\222", "'"
-    #    text.gsub! "\223", '"'
-    #    text.gsub! "\224", '"'
+    # replace curlyquotes
+    # note: turns out not to be necessary?
+    # text.gsub! "\xE2\x80\x98", "'"
+    # text.gsub! "\xE2\x80\x99", "'"
+    # text.gsub! "\xE2\x80\x9C", '"'
+    # text.gsub! "\xE2\x80\x9D", '"'
+    
+    # argh, get rid of ____spacer____ inserts
+    text.gsub! "____spacer____", ""
+    
+    # trash a whole bunch of crappy non-printing format characters stuck 
+    # in most commonly by MS Word
+    text.gsub!(/\p{Cf}/u, '')
+
     return text
   end
   
@@ -154,6 +159,8 @@ module HtmlCleaner
     HTML_TAGS_TO_REOPEN.each do |tag|      
       source.gsub!(/(<#{tag}>)(.*?)(<\/#{tag}>)/) { $1 + reopen_tags($2, tag) + $3 }
     end
+    
+    # if we have 
 
     # Parse in Nokogiri
     parsed = Nokogiri::HTML.parse(source)
