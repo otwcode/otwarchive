@@ -15,14 +15,13 @@ class PseudsController < ApplicationController
     if @user
       @pseuds = @user.pseuds.find(:all)
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
-      @work_counts = Pseud.work_counts_for_pseuds(@pseuds)      
+      @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
     else
       redirect_to people_path
     end
   end
 
   # GET /users/:user_id/pseuds/:id
-  # very similar to show under users - if you change something here, you'll probably need to change it there too
   def show
     if @user.blank?
       flash[:error] = ts("Sorry, could not find this user.")
@@ -33,16 +32,33 @@ class PseudsController < ApplicationController
       flash[:error] = ts("Sorry, could not find this pseud.")
       redirect_to people_path and return
     end
+
+    # very similar to show under users - if you change something here, change it there too
     if current_user.nil?
+      # hahaha omg so ugly BUT IT WORKS :P
+      @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
+                   joins(:direct_filter_taggings).
+                   joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
+                   group("tags.id").order("work_count DESC") &
+                   Work.visible_to_all.revealed &
+                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @author.id)
       visible_works = @author.works.visible_to_all
       visible_series = @author.series.visible_to_all
       visible_bookmarks = @author.bookmarks.visible_to_all
     else
+      @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
+                   joins(:direct_filter_taggings).
+                   joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
+                   group("tags.id").order("work_count DESC") &
+                   Work.visible_to_registered_user.revealed &
+                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @author.id)
       visible_works = @author.works.visible_to_registered_user
       visible_series = @author.series.visible_to_registered_user
       visible_bookmarks = @author.bookmarks.visible_to_registered_user
     end
-    @fandoms = @author.direct_filters.with_type("Fandom").inject(Hash.new(0)){|h,x| h[x]+=1;h}.sort{|a,b| b[1]<=>a[1]}
+    @fandoms = @fandoms.all # force eager loading
     @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
@@ -138,7 +154,7 @@ class PseudsController < ApplicationController
      @pseud.replace_me_with_default
      flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
    else
-      render 'delete_preview' and return  
+      render 'delete_preview' and return
    end
 
     redirect_to(user_pseuds_url(@user))

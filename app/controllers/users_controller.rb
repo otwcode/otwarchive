@@ -15,7 +15,7 @@ class UsersController < ApplicationController
       flash[:error] = ts("You are already logged in!")
       redirect_to root_path and return
     end
-    token = params[:invitation_token] 
+    token = params[:invitation_token]
     if token.blank?
       if !AdminSetting.account_creation_enabled?
         flash[:error] = ts("You need an invitation to sign up.")
@@ -39,13 +39,13 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1
-  # very similar to show under pseuds - if you change something here, you'll probably need to change it there too
   def show
     if @user.blank?
       flash[:error] = ts("Sorry, could not find this user.")
       redirect_to people_path and return
     end
 
+    # very similar to show under pseuds - if you change something here, change it there too
     if current_user.nil?
       # hahaha omg so ugly BUT IT WORKS :P
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
@@ -72,7 +72,7 @@ class UsersController < ApplicationController
       visible_series = @user.series.visible_to_registered_user
       visible_bookmarks = @user.bookmarks.visible_to_registered_user
     end
-    
+
     @fandoms = @fandoms.all # force eager loading
     @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
@@ -94,10 +94,10 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
   end
-  
+
   def change_password
     if params[:password]
-      unless @user.recently_reset? || reauthenticate 
+      unless @user.recently_reset? || reauthenticate
         render :change_password and return
       end
       @user.password = params[:password]
@@ -145,7 +145,7 @@ class UsersController < ApplicationController
           @user.login = @new_login
           if @user.save
             flash[:notice] = ts("Your user name was changed")
-            redirect_to @user and return 
+            redirect_to @user and return
           else
             @user.errors.clear
             @user.reload
@@ -178,7 +178,7 @@ class UsersController < ApplicationController
         # TODO validate openid before creating account
         openid_url = "http://#{openid_url}" unless openid_url.match("http://")
         if User.find_by_identity_url(openid_url)
-          params[:use_openid] = true 
+          params[:use_openid] = true
           flash.now[:error] = "OpenID url is already being used"
           render :action => "new" and return
         else
@@ -352,14 +352,14 @@ class UsersController < ApplicationController
 
   def delete_confirmation
   end
-  
+
   def end_first_login
     @user.preference.update_attribute(:first_login, false)
     if !(request.xml_http_request?)
       redirect_to @user
     end
   end
-  
+
   def browse
     @co_authors = Pseud.order(:name).coauthor_of(@user.pseuds)
     @tag_types = %w(Fandom Character Relationship Freeform)
@@ -368,8 +368,8 @@ class UsersController < ApplicationController
       @tags = @tags.order("count DESC")
     else
       @tags = @tags.order("name ASC")
-    end    
-    @tags = @tags.group_by{|t| t.type.to_s}    
+    end
+    @tags = @tags.group_by{|t| t.type.to_s}
   end
 
   private
