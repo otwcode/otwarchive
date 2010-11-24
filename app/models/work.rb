@@ -803,6 +803,8 @@ class Work < ActiveRecord::Base
 
   public
 
+  scope :id_only, select("works.id")
+
   scope :ordered_by_author_desc, order("authors_to_sort_on DESC")
   scope :ordered_by_author_asc, order("authors_to_sort_on ASC")
   scope :ordered_by_title_desc, order("title_to_sort_on DESC")
@@ -828,6 +830,15 @@ class Work < ActiveRecord::Base
   scope :visible_to_admin, posted
   scope :visible_to_owner, posted
   scope :all_with_tags, includes(:tags)
+  
+  scope :unrevealed, joins(:approved_collection_items) & CollectionItem.unrevealed
+
+  # ugh, have to do a left join here
+  scope :revealed, joins("LEFT JOIN collection_items ON collection_items.item_id = works.id AND collection_items.item_type = 'Work'
+                          AND collection_items.user_approval_status = #{CollectionItem::APPROVED} 
+                          AND collection_items.collection_approval_status = #{CollectionItem::APPROVED}
+                          AND collection_items.unrevealed = 1").
+                   where("collection_items.id IS NULL") 
 
   # a complicated dynamic scope here:
   # if the user is an Admin, we use the "visible_to_admin" scope
