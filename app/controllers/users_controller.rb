@@ -16,7 +16,6 @@ class UsersController < ApplicationController
       redirect_to root_path and return
     end
     token = params[:invitation_token] 
-Rails.logger.debug token
     if token.blank?
       if !AdminSetting.account_creation_enabled?
         flash[:error] = ts("You need an invitation to sign up.")
@@ -46,16 +45,35 @@ Rails.logger.debug token
       flash[:error] = ts("Sorry, could not find this user.")
       redirect_to people_path and return
     end
+
     if current_user.nil?
+      # hahaha omg so ugly BUT IT WORKS :P
+      @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
+                   joins(:direct_filter_taggings).
+                   joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
+                   group("tags.id").order("work_count DESC") &
+                   Work.visible_to_all.revealed &
+                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+                               INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
       visible_works = @user.works.visible_to_all
       visible_series = @user.series.visible_to_all
       visible_bookmarks = @user.bookmarks.visible_to_all
     else
+      @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
+                   joins(:direct_filter_taggings).
+                   joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
+                   group("tags.id").order("work_count DESC") &
+                   Work.visible_to_registered_user.revealed &
+                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+                               INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
       visible_works = @user.works.visible_to_registered_user
       visible_series = @user.series.visible_to_registered_user
       visible_bookmarks = @user.bookmarks.visible_to_registered_user
     end
-    @fandoms = @user.direct_filters.with_type("Fandom").inject(Hash.new(0)){|h,x| h[x]+=1;h}.sort{|a,b| b[1]<=>a[1]}
+    
+    @fandoms = @fandoms.all # force eager loading
     @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)

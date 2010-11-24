@@ -1,20 +1,19 @@
 ﻿<!--main content-->
 <!-- expects @fandoms, @works, @series, @bookmarks -->
-  <% unless @fandoms.blank? %>
+  <% unless @fandoms.empty? %>
   <div class="fandom module" id="user-fandoms">
-    <h3><%=h ts("Fandoms") %></h3>
+    <h3><%= ts("Fandoms") %></h3>
     <ul class="index">
-      <% @fandoms.each_with_index do |fandom_with_count, i| %>
-        <% fandom, count = fandom_with_count %>
+      <% @fandoms.each_with_index do |fandom, i| %>
         <% if !params[:expand_fandoms] && i > (ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD - 1) %>
           <li class='hidden'>
         <% else %>
           <li>
         <% end %>       
         <% if fandom.merger %>
-          <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.merger.id]} %> (<%=count%>)
+          <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.merger.id]} %> (<%= fandom.work_count %>)
         <% else %>
-          <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.id]} %> (<%=count%>)
+          <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.id]} %> (<%= fandom.work_count %>)
         <% end %>
         </li>
      <% end %>
