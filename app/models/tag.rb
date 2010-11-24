@@ -160,7 +160,7 @@ class Tag < ActiveRecord::Base
                                                when lower(substring(name from 1 for 3)) = 'an ' then substring(name from 4)
                                               else name
                                               end")
-  
+
   scope :by_pseud, lambda {|pseud|
     joins(:works => :pseuds).
     where(:pseuds => {:id => pseud.id})
@@ -173,8 +173,8 @@ class Tag < ActiveRecord::Base
   scope :with_parents, lambda {|parents|
     joins(:common_taggings).where("filterable_id in (?)", parents.collect(&:id).join(","))
   }
-  
-  scope :with_no_parents, 
+
+  scope :with_no_parents,
     joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
     where("filterable_id IS NULL")
 
@@ -242,13 +242,13 @@ class Tag < ActiveRecord::Base
     group(:id).
     order(:name)
   }
-  
+
   scope :with_scoped_count, lambda {
     select("tags.*, count(tags.id) as count").
-    group(:id)  
+    group(:id)
   }
-  
-  scope :by_relationships, lambda {|relationships| 
+
+  scope :by_relationships, lambda {|relationships|
     select("DISTINCT tags.*").
     joins(:children).
     where('children_tags.id IN (?)', relationships.collect(&:id))
@@ -437,7 +437,7 @@ class Tag < ActiveRecord::Base
   def add_filter_taggings
     filter_tag = self.filter
     if filter_tag  && !filter_tag.new_record?
-      Work.with_any_filters([self, filter_tag]).each do |work|
+      Work.with_any_tags([self, filter_tag].uniq).each do |work|
         work.filters << filter_tag unless work.filters.include?(filter_tag)
         unless filter_tag.meta_tags.empty?
           filter_tag.meta_tags.each do |m|
