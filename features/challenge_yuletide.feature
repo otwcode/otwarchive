@@ -451,11 +451,9 @@ Feature: Collection
   Then I should see "Mystery Work"
     And I should see "Yuletide"
     And I should not see "Fulfilling Story"
-    And I should not see "Stargate Atlantis" within "#user-fandoms"
-    And I should not see "Stargate Atlantis" within "#user-works"
+    And I should not see "Stargate Atlantis"
   When I follow "Works (1)"
-  Then I should not see "Stargate Atlantis" within ".work.index"
-    And I should not see "Stargate Atlantis" within "#main"
+  Then I should not see "Stargate Atlantis"
 
   # user edits it to undo fulfilling the assignment
   # When I am logged in as "myname1" with password "something"
