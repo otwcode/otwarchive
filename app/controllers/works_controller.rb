@@ -397,6 +397,7 @@ public
 
   # GET /works/new
   def new
+    @hide_dashboard = true
     load_pseuds
     @series = current_user.series.uniq
     @unposted = current_user.unposted_work
@@ -453,6 +454,7 @@ public
 
   # GET /works/1/edit
   def edit
+    @hide_dashboard = true
     @chapters = @work.chapters_in_order(false) if @work.number_of_chapters > 1
     load_pseuds
     @series = current_user.series.uniq
