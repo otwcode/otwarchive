@@ -7,7 +7,7 @@ Feature: Import Works
   Scenario: You can't create a work unless you're logged in
   When I go to the import page
   Then I should see "Please log in"
-
+  
   Scenario: Creating a new minimally valid work
     Given basic tags
       And I am logged in as a random user
@@ -25,7 +25,7 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "Recent Entries"
-
+  
   Scenario: Creating a new work with tags
     Given basic tags
       And a category exists with name: "M/M", canonical: true
@@ -52,7 +52,7 @@ Feature: Import Works
       And I should see "kinkmeme"
     When I press "Post"
     Then I should see "Work was successfully posted."
-
+  
   Scenario: Importing multiple works with tags and backdating
     Given basic tags
       And I am logged in as a random user
@@ -97,10 +97,11 @@ Feature: Import Works
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page
+    #'
     Then I should see "OTW Meetup"
       And I should not see "Rambling musings"
       And I should not see "Search" within "#main"
-
+  
   Scenario: Creating a new work from an LJ story without backdating it
     Given basic tags
       And a category exists with name: "Gen", canonical: true
@@ -126,7 +127,7 @@ Feature: Import Works
       And I should see "OTW Meetup"
       And I should not see "Rambling musings"
       And I should not see "Profile" within "#main"
-
+  
   Scenario: Creating a new work from a Yuletide story
     Given basic tags
       And the following activated user exists
@@ -147,7 +148,17 @@ Feature: Import Works
 
 #  Scenario: Getting tags out of a story with tags in the text in the format category: tag (eg, Fandom: Supernatural)
   
-#  Scenario: Import a multi-chapter work from fanfiction.net
+  Scenario: Import a multi-chapter work from fanfiction.net
+    Given basic tags
+      And I am logged in as "newbie" with password "password"
+    When I go to the import page
+      And I fill in "urls" with "http://www.fanfiction.net/s/892322/1/Hitchhiker"
+    When I press "Import"
+    Then I should see "Preview Work"
+      And I should see "Hitchhiker" within "h2"
+      And I should see "Chapters"
+      And I should see "1/24"
+  
   
 #  Scenario: Import works for others and have them automatically notified
       
