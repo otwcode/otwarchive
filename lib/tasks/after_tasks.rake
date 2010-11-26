@@ -220,4 +220,4 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:remove_old_epubs']
-task :After => []
+task :After => ['After:update_filter_taggings']
