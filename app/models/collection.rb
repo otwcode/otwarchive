@@ -78,10 +78,13 @@ class Collection < ActiveRecord::Base
 
   CHALLENGE_TYPE_OPTIONS = [
                              ["", ""],
-                             [t('challenge_type.gift_exchange', :default => "Gift Exchange"), "GiftExchange"],
+                             [ts("Gift Exchange"), "GiftExchange"],
                            ]
 
-  validate :must_have_owners, :collection_depth, :parent_exists, :parent_is_allowed
+  validate :must_have_owners, :on => :save
+  validate :collection_depth, :on => :save
+  validate :parent_exists, :on => :save
+  validate :parent_is_allowed, :on => :save
 
   def must_have_owners
     # we have to use collection participants because the association may not exist until after
@@ -103,9 +106,9 @@ class Collection < ActiveRecord::Base
 
   def parent_is_allowed
     if parent && parent == self
-      errors.add(:base, t('collection.no_self_parenting', :default => "Collections are not self-parenting."))
+      errors.add(:base, ts("Collections are not self-parenting."))
     elsif parent && !parent.user_is_maintainer?(User.current_user)
-      errors.add(:base, t('collections.not_allowed_subcollection', :default => "You don't have permission to work on a subcollection of %{name}.", :name => parent.name))
+      errors.add(:base, ts("You don't have permission to work on a subcollection of %{name}.", :name => parent.name))
     end
   end
    
@@ -148,6 +151,9 @@ class Collection < ActiveRecord::Base
   scope :anonymous, joins(:collection_preference).where("collection_preferences.anonymous = ?", true)
   scope :name_only, select(:name)
   scope :by_title, order(:title)
+  
+  # we need to add other challenge types to this join in future 
+  scope :signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("signup_open = true").order("signups_close_at DESC")
   
   scope :with_name_like, lambda {|name|
     where("collections.name LIKE ?", '%' + name + '%').

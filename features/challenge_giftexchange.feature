@@ -26,6 +26,7 @@ Feature: Collection
   # set up the gift exchange
   
   When I go to mod1's preferences page
+  #'
   Then I should see "Your time zone"
     And "TODO: checking an option is selected" is fixed
     # And I should find "(GMT-05:00) Eastern Time (US & Canada)" selected within "preference_time_zone"
@@ -39,7 +40,7 @@ Feature: Collection
     And I fill in "Display Title" with "My Gift Exchanger"
     And I fill in "Collection Name" with "lotsofgifts"
     And I fill in "Introduction" with "Welcome to the exchange"
-    And I fill in "FAQ" with "<dl><dt>What is this thing?</dt><dd>It's a gift exchange-y thing</dd></dl>"
+    And I fill in "FAQ" with "<dl><dt>What is this thing?</dt><dd>It is a gift exchange-y thing</dd></dl>"
     And I fill in "Rules" with "Be even nicer to people"
     And I select "Gift Exchange" from "challenge_type"
     And I check "Is this collection currently unrevealed?"
@@ -105,7 +106,7 @@ Feature: Collection
     And I should see "Signup closes:"
     And I should see "2009" within ".collection.meta"
     And I should see "What is this thing?" within "#faq"
-    And I should see "It's a gift exchange-y thing" within "#faq"
+    And I should see "It is a gift exchange-y thing" within "#faq"
     And I should see "Be even nicer to people" within "#rules"
   When I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
