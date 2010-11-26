@@ -319,7 +319,7 @@ class Work < ActiveRecord::Base
   def recipients=(recipient_names)
     new_gifts = []
     recipient_names.split(',').each do |name|
-      gift = Gift.for_name_or_byline(name.strip).first
+      gift = self.gifts.for_name_or_byline(name.strip).first
       if gift
         new_gifts << gift
       else

@@ -401,10 +401,11 @@ public
     load_pseuds
     @series = current_user.series.uniq
     @unposted = current_user.unposted_work
+    # for clarity, add the collection and recipient
     if params[:assignment_id] && (@challenge_assignment = ChallengeAssignment.find(params[:assignment_id])) && @challenge_assignment.offering_user == current_user
       @work.challenge_assignments << @challenge_assignment
-      # @work.collections << @challenge_assignment.collection
-      # @work.recipients = @challenge_assignment.requesting_pseud.byline
+      @work.collections << @challenge_assignment.collection
+      @work.recipients = @challenge_assignment.requesting_pseud.byline
     else
       @work.collection_names = @collection.name if @collection
     end
