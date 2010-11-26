@@ -204,9 +204,12 @@ namespace :After do
 
   #### Add your new tasks here
 
-
-
-
+  desc "update filter taggings since nov 21"
+  task(:update_filter_taggings => :environment) do
+    Tag.where("updated_at > ?", "2010-11-21").where("canonical = 1 OR merger_id IS NOT NULL").where("taggings_count != 0").each do |tag|
+      tag.add_filter_taggings
+    end
+  end
 
 
 end # this is the end that you have to put new tasks above
