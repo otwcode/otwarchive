@@ -32,10 +32,8 @@
 	<% end %>
 </ul>
 <% end %>
-<!--pagination here-->
 
 <% if @sort_and_filter %> 
-<h3 class="landmark">Sorting Navigation</h3>
 <!--sorting subnav-->
   <ul class="sorting navigation" role="navigation">
     <li><h4><%= ts('Sort By') %></h4></li>
@@ -48,6 +46,7 @@
 </div>
 
 <% unless @collections.blank? %>
+  <!--pagination here-->
   <%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
 
   <!--main content-->
