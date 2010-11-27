@@ -1,3 +1,49 @@
+<h2>HTML on the Archive</h2>
+<p>
+  When you enter HTML into the archive, we do some cleanup on it to make sure that it is safe 
+  (so spammers and hackers cannot upload badness) and try and do some basic formatting both for 
+  your convenience and for accessibility reasons. Here are the formatting steps we take: 
+</p>
+
+<ul>
+  <li>If you leave a blank line between two paragraphs, we will put paragraph tags in for you around the two paragraphs.</li> 
+  <li>If you have a single carriage return between two lines of text, we will put in a break tag for you.</li> 
+  <li>If you have two break tags in a row (&lt;br /&gt;&lt;br /&gt;) with nothing between them, we will turn that into paragraph tags.</li>
+  <li>If you have two blank lines in a row between paragraphs, we will add extra whitespace in for you (with &lt;p&gt;&amp;nbsp;&lt;/p&gt;)</li> 
+  <li>If you have mis-nested tags like this: &lt;em&gt;&lt;strong&gt;<em><strong>text!</em></strong>&lt;/em&gt;&lt;/strong&gt; we will fix the mis-nesting 
+      (so it would become &lt;em&gt;&lt;strong&gt;<em><strong>text!</em></strong>&lt;/strong&gt;&lt;/em&gt;).</li>
+  <li>If you have forgotten to close a formatting tag, it will be closed at the end of the paragraph for you.</li>
+  <li>If you open a formatting tag in one paragraph and close it several paragraphs later, we will reopen/close it within each paragraph.</li>
+  <li>If you have put in some custom HTML (eg a list of items inside a &lt;ul&gt;) and you don't want break tags or paragraphs inserted,
+      just put it all on one line (sorry, this is the inconvenient tradeoff for automatically doing the paragraph/break tags).</li>
+  <li>If one bit of your text shows up larger than the rest, probably our formatter couldn't figure out to put paragraph tags around it. 
+      You can fix this by manually putting in the paragraph tags around that one bit.</li>
+</ul>
+
+<p class="note">
+  When you edit your HTML after you first put it in, you will see the results of our formatting work, so you can 
+  correct any mistakes our formatter might have made. Please note that the best way to get good results is to put
+  in good HTML -- that is how you can be sure your story will look right across various browsers,
+  screen readers, mobile devices, and downloads. 
+</p>
+
+<p class="note">
+  Good HTML means HTML that labels what the text is supposed to be -- so if you have
+  paragraphs, they should be inside paragraph tags, not just separated with break tags. If you have emphasized
+  text, it should be inside em tags. If you have a list of items, each item should be inside list tags. If you
+  <em>don't</em> have a list of items, you shouldn't have list tags. :)
+  (We are putting together a set of more detailed helpful references about this, but this is the basic idea.)
+</p>
+
+<p class="note">  
+  If you find yourself putting in HTML that doesn't mean the right thing, in order to get a particular visual effect, 
+  please resist!
+  We are working on bringing custom CSS to works very soon, and that will let you make them look 
+  just about any way you want them to (and will be easier if you are starting from good HTML).
+<p>
+
+<p>Some specific recommendations:</p>
+
 <dl id="help">
   <dt>For headings, use heading tags: <code>h1, h2, h3, h4, h5, h6</code></dt>
   <dd id="headings">
