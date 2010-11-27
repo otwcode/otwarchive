@@ -319,7 +319,7 @@ public
     elsif model.to_s.downcase == 'tag'
       allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count']
     elsif model.to_s.downcase == 'collection'
-      allowed = ['title', 'created_at', 'count']
+      allowed = ['collections.title', 'collections.created_at', 'count']
     end
     !param.blank? && allowed.include?(param.to_s.downcase)
   end

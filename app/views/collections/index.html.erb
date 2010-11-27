@@ -37,9 +37,9 @@
 <!--sorting subnav-->
   <ul class="sorting navigation" role="navigation">
     <li><h4><%= ts('Sort By') %></h4></li>
-    <li><%= sort_link ts('Title'), :title %></li>
-    <li><%= sort_link ts('Date'), :created_at, {:sort_default => true, :desc_default => true} %></li>
-    <li><%= sort_link ts('Size'), :count, {:desc_default => true} %></li>
+    <li><%= sort_link ts('Title'), "collections.title" %></li>
+    <li><%= sort_link ts('Date'), "collections.created_at", {:sort_default => true, :desc_default => true} %></li>
+    <li><%= sort_link ts('Size'), "count", {:desc_default => true} %></li>
   </ul>
 <!---/subnav-->
 <% end %>

@@ -27,7 +27,7 @@ class CollectionsController < ApplicationController
       end
       @sort_and_filter = true
       params[:collection_filters] ||= {}
-      params[:sort_column] = 'created_at' if !valid_sort_column(params[:sort_column], 'collection')
+      params[:sort_column] = "created_at" if !valid_sort_column(params[:sort_column], 'collection')
       params[:sort_direction] = 'DESC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction]      
       @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
