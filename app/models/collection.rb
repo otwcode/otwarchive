@@ -153,7 +153,7 @@ class Collection < ActiveRecord::Base
   scope :by_title, order(:title)
   
   # we need to add other challenge types to this join in future 
-  scope :signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("signup_open = true").order("signups_close_at DESC")
+  scope :signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1").order("gift_exchanges.signups_close_at DESC")
   
   scope :with_name_like, lambda {|name|
     where("collections.name LIKE ?", '%' + name + '%').
@@ -238,11 +238,15 @@ class Collection < ActiveRecord::Base
   end
   
   def all_fandoms
-    Fandom.for_collections([self] + self.children)
+    Fandom.for_collections([self] + self.children).select("DISTINCT tags.*")
   end
-    
+
   def all_fandoms_count
-    Fandom.for_collections([self] + self.children).count
+    # this is the only way to get this to be done with an actual efficient count query instead of 
+    # actually loading the tags and then counting, because count on AR queries isn't respecting 
+    # the selects :P 
+    # see: https://rails.lighthouseapp.com/projects/8994/tickets/1334-count-calculations-should-respect-scoped-selects
+    Fandom.select("count(distinct tags.id) as count").for_collections([self] + self.children).first.count
   end
   
   def maintainers
@@ -322,7 +326,7 @@ class Collection < ActiveRecord::Base
     select = "collections.*, count(collections.id) AS count"
     group = "collections.id"
     joins = "LEFT JOIN collection_items ci ON ci.collection_id = collections.id 
-    INNER JOIN collection_preferences ON collection_preferences.collection_id = collections.id"
+             INNER JOIN collection_preferences ON collection_preferences.collection_id = collections.id"
     conditions = ["parent_id IS NULL "]
     unless filters[:title].blank?
       conditions.first << "AND collections.title LIKE ? "
@@ -337,12 +341,12 @@ class Collection < ActiveRecord::Base
     if !filters[:fandom].blank?
       fandom = Fandom.find_by_name(filters[:fandom])
       if fandom
-        fandom.approved_collections.find(:all, :select => select, :group => group, :joins => joins, :conditions => conditions, :order => sort).paginate(:page => page)
+        fandom.approved_collections.select(select).group(group).joins(joins).where(conditions).order(sort).paginate(:page => page)
       else
         []
       end
     else
-      Collection.find(:all, :select => select, :group => group, :joins => joins, :conditions => conditions, :order => sort).paginate(:page => page)        
+      Collection.select(select).group(group).joins(joins).where(conditions).order(sort).paginate(:page => page)        
     end     
   end
     

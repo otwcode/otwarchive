@@ -1,0 +1,23 @@
+<h2>Open Challenges</h2>
+
+<h3 class="landmark">Navigation</h3>
+<ul class="navigation" role="navigation">
+  <li><%= link_to ts("See Top-Level Collections"), collections_path %></li>
+</ul>
+
+<% if @challenge_collections.blank? %>
+
+  <p class="note"><%= ts("There are no challenges currently open for signups in the archive.") %></p>
+
+<% else %>
+
+  <p class="note"><%= ts("The following challenges are currently open for signups! Those closing soonest are at the top.") %></p>
+
+  <!--main content-->
+  <h3 class="landmark">List of Collections</h3>
+  <ul class="collection picture index<% if @user && current_user == @user %> works-own<% end %>">
+  <% @challenge_collections.each do |collection| %>
+    <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>
+  <% end %>
+  </ul>
+<% end %>

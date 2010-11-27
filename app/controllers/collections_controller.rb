@@ -4,6 +4,8 @@ class CollectionsController < ApplicationController
   before_filter :load_collection_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :collection_owners_only, :only => [:edit, :update, :destroy]
   
+  cache_sweeper :collection_sweeper  
+  
   def load_collection_from_id
     @collection = Collection.find_by_name(params[:id])
   end
@@ -30,6 +32,12 @@ class CollectionsController < ApplicationController
       sort = params[:sort_column] + " " + params[:sort_direction]      
       @collections = Collection.sorted_and_filtered(sort, params[:collection_filters], params[:page])
     end
+  end
+  
+  # display challenges that are currently taking signups
+  def list_challenges
+    @hide_dashboard = true
+    @challenge_collections = Collection.signups_open.limit(25)
   end
 
   def show

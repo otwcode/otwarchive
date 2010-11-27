@@ -259,6 +259,9 @@ Otwarchive::Application.routes.draw do
   resources :prompts
   resources :tag_sets, :only => [:show]
   resources :collections do
+    collection do
+      get :list_challenges
+    end
     resource  :profile, :controller => "collection_profile"
     resources :collections
     resources :works

@@ -3,6 +3,8 @@ class CollectionItemsController < ApplicationController
   before_filter :load_item_and_collection, :only => [:update, :destroy]
   before_filter :load_collectible_item, :only => [ :new, :create ]
   before_filter :allowed_to_destroy, :only => [:destroy]
+  
+  cache_sweeper :collection_sweeper
 
   def not_allowed
     flash[:error] = t('collection_items.not_allowed', :default => "Sorry, you're not allowed to do that.")

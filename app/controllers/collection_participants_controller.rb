@@ -7,6 +7,7 @@ class CollectionParticipantsController < ApplicationController
   before_filter :collection_maintainers_only, :only => [:index, :add, :update]
   before_filter :users_only, :only => [:join]
 
+  cache_sweeper :collection_sweeper
 
   def owners_required
     flash[:error] = t('collection_participants.owners_required', :default => "You can't remove the only owner!")

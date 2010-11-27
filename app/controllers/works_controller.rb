@@ -17,6 +17,7 @@ class WorksController < ApplicationController
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
 
   cache_sweeper :work_sweeper
+  cache_sweeper :collection_sweeper 
 
   def search
     @languages = Language.all(:order => :short)
