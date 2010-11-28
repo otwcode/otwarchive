@@ -25,16 +25,7 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  # config.cache_store = :mem_cache_store
-  config.after_initialize do
-    case ArchiveConfig.PRODUCTION_CACHE
-      when "memory"
-        config.cache_store = :memory_store
-      when "memcache"
-        # Use the memcached store with default options (localhost, TCP port 11211)
-        config.cache_store = :mem_cache_store
-    end
-  end
+  config.cache_store = :mem_cache_store
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
