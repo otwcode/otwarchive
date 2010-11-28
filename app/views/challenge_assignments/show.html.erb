@@ -7,8 +7,10 @@
   <% request = (@challenge_assignment.request_signup || @challenge_assignment.pinch_request_signup) %>
   <h3>
     <% if request %>
-      <%=h t('.challenge_assignment.view', :default => "Assigned to %{requester}: %{offerer}", 
-        :requester => request.pseud.byline, :offerer => @challenge_assignment.offer_byline) %>
+      <%= ts("Assigned to %{requester}: %{offerer}", :requester => request.pseud.byline, :offerer => @challenge_assignment.offer_byline) %>
+      <% if @challenge_assignment.collection.challenge.user_allowed_to_see_assignments?(current_user) %>
+        <%= challenge_assignment_email(@challenge_assignment) %>
+      <% end %>
     <% else %>
       No Assignment
     <% end %>
