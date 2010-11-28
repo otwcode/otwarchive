@@ -147,19 +147,40 @@ class Collection < ActiveRecord::Base
   scope :top_level, where(:parent_id => nil)
   scope :closed, joins(:collection_preference).where("collection_preferences.closed = ?", true)
   scope :not_closed, joins(:collection_preference).where("collection_preferences.closed = ?", false)
+  scope :moderated, joins(:collection_preference).where("collection_preferences.moderated = ?", true)
+  scope :unmoderated, joins(:collection_preference).where("collection_preferences.moderated = ?", false)
   scope :unrevealed, joins(:collection_preference).where("collection_preferences.unrevealed = ?", true)
   scope :anonymous, joins(:collection_preference).where("collection_preferences.anonymous = ?", true)
   scope :name_only, select(:name)
   scope :by_title, order(:title)
   
   # we need to add other challenge types to this join in future 
-  scope :signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").where("gift_exchanges.signup_open = 1").order("gift_exchanges.signups_close_at DESC")
+  scope :signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").
+                       where("gift_exchanges.signup_open = 1 && gift_exchanges.signups_close_at > ?", Time.now).
+                       order("gift_exchanges.signups_close_at")
   
   scope :with_name_like, lambda {|name|
     where("collections.name LIKE ?", '%' + name + '%').
     limit(10)
   }
-
+  
+  scope :with_title_like, lambda {|title|
+    where("collections.title LIKE ?", '%' + title + '%')
+  }
+    
+  scope :with_count,
+    select("collections.*, count(collection_items.id) as count").
+    joins(:approved_collection_items).
+    group("collections.id")
+  
+  scope :with_children_count,
+    select("collections.*, count(distinct collection_items.id) as count").
+    joins("left join collections child_collections on child_collections.parent_id = collections.id
+           inner join collection_items on ( (collection_items.collection_id = child_collections.id OR collection_items.collection_id = collections.id)
+                                     AND collection_items.user_approval_status = 1 
+                                     AND collection_items.collection_approval_status = 1)").
+    group("collections.id")
+  
   def to_param
     name
   end
@@ -323,30 +344,23 @@ class Collection < ActiveRecord::Base
   end
   
   def self.sorted_and_filtered(sort, filters, page)
-    select = "collections.*, count(collections.id) AS count"
-    group = "collections.id"
-    joins = "LEFT JOIN collection_items ci ON ci.collection_id = collections.id 
-             INNER JOIN collection_preferences ON collection_preferences.collection_id = collections.id"
-    conditions = ["parent_id IS NULL "]
-    unless filters[:title].blank?
-      conditions.first << "AND collections.title LIKE ? "
-      conditions << ("%" + filters[:title] + "%")
-    end
-    %w(closed moderated).each do |attribute|
-      unless filters[attribute].blank?
-        value = (filters[attribute] == "true") ? 1 : 0
-        conditions.first << "AND collection_preferences.#{attribute} = #{value} "
-      end
-    end
+    # build up the query with scopes based on the options the user specifies
+    query = Collection.top_level    
+    query = query.with_title_like(filters[:title]) unless filters[:title].blank?
+    query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
+    query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?    
+    query = query.with_children_count if sort.match /count/    
+    query = query.order(sort)
+
     if !filters[:fandom].blank?
       fandom = Fandom.find_by_name(filters[:fandom])
       if fandom
-        fandom.approved_collections.select(select).group(group).joins(joins).where(conditions).order(sort).paginate(:page => page)
+        (fandom.approved_collections & query).paginate(:page => page)
       else
         []
       end
     else
-      Collection.select(select).group(group).joins(joins).where(conditions).order(sort).paginate(:page => page)        
+      query.paginate(:page => page)        
     end     
   end
     

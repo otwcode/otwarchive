@@ -30,11 +30,12 @@ module ApplicationHelper
   def allowed_html_instructions
     h(t('application_helper.plain_text', :default =>"Plain text with limited html")) + 
     link_to_help("html-help") + 
-    "<br /><code>a, abbr, acronym, address, [alt], b, big, blockquote, br, caption, center, cite, [class], code, 
-    col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
-    ins, kbd, li, name, ol, p, pre, q, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td, 
-    tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>".html_safe
+    "<br /><code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
+      col, colgroup, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
+      ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td, 
+      tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>".html_safe
   end
+  
   
   def allowed_css_instructions
     h(t('application_helper.allowed_css', :default =>"Limited CSS properties and values allowed")) + 
