@@ -78,7 +78,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 			{ float:right; }
 /* Note: this next navigation context doesn't really feel like it should be on "stuff I own" but more about "navigation on indiv blurb" */
 #main .work .own .navigation, #main .bookmark .own .navigation, #main .series .own .navigation, #main .works .own .navigation, #main .own.work .navigation, 
-#main .collection .own .navigation, #main.collections-list_challenges .blurb .navigation
+#main.collections-index .blurb .navigation, #main.collections-list_challenges .blurb .navigation
 			{ float:left; margin:-1.25em auto auto;}
 #main li.bookmark .own .navigation
 			{ float: left; margin:0.25em auto auto -0.25em;}
