@@ -220,7 +220,7 @@ public
   end
 
   def collection_parent_name
-    render_output(current_user.maintained_collections.top_level.with_name_like(params[:collection_parent_name]).name_only.map(&:name).sort)
+    render_output(current_user.maintained_collections.top_level.with_name_like(params[:collection_parent_name]).map(&:name).sort)
   end
 
   def collection_filters_title
