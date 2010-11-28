@@ -8,6 +8,8 @@ module TagsHelper
       tag_list = tags.collect{|tag| "<li>" + link_to_tag(tag) + ", </li>"}.join
       tag_list += content_tag(:li, link_to_tag(last_tag))
       tag_list.html_safe
+    else
+      ""
     end
   end
 
