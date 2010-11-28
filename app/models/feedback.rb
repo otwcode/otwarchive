@@ -7,10 +7,42 @@ class Feedback < ActiveRecord::Base
   validates_presence_of :summary
   validates :email, :email_veracity => {:allow_blank => true}
   validates_length_of :summary, :maximum => ArchiveConfig.FEEDBACK_SUMMARY_MAX,
-    :too_long => t('summary_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.FEEDBACK_SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.FEEDBACK_SUMMARY_MAX)
+
+  validate :check_for_spam
+  def check_for_spam
+    errors.add(:base, ts("^This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
+  end
+
+  attr_protected :approved
 
   attr_protected :comment_sanitizer_version
   attr_protected :summary_sanitizer_version
+
+  def akismet_attributes
+    {
+      :key => ArchiveConfig.AKISMET_KEY,
+      :blog => ArchiveConfig.AKISMET_NAME,
+      :user_ip => ip_address,
+      :user_agent => user_agent,
+      :comment_author_email => email,
+      :comment_content => comment
+    }
+  end
+
+  def check_for_spam?
+    self.approved = !Akismetor.spam?(akismet_attributes)
+  end
+  
+  def mark_as_spam!
+    update_attribute(:approved, false)
+    Akismetor.submit_spam(akismet_attributes)
+  end
+
+  def mark_as_ham!
+    update_attribute(:approved, true)
+    #Akismetor.submit_ham(akismet_attributes)
+  end
 
 
 # Category ids for 16bugs
