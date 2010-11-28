@@ -168,13 +168,8 @@ class Collection < ActiveRecord::Base
     where("collections.title LIKE ?", '%' + title + '%')
   }
     
-  scope :with_count,
-    select("collections.*, count(collection_items.id) as count").
-    joins(:approved_collection_items).
-    group("collections.id")
-  
-  scope :with_children_count,
-    select("collections.*, count(distinct collection_items.id) as count").
+  scope :with_item_count,
+    select("collections.*, count(distinct collection_items.id) as item_count").
     joins("left join collections child_collections on child_collections.parent_id = collections.id
            inner join collection_items on ( (collection_items.collection_id = child_collections.id OR collection_items.collection_id = collections.id)
                                      AND collection_items.user_approval_status = 1 
@@ -344,23 +339,29 @@ class Collection < ActiveRecord::Base
   end
   
   def self.sorted_and_filtered(sort, filters, page)
+    pagination_args = {:page => page}
+
     # build up the query with scopes based on the options the user specifies
     query = Collection.top_level    
     query = query.with_title_like(filters[:title]) unless filters[:title].blank?
     query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?    
-    query = query.with_children_count if sort.match /count/    
-    query = query.order(sort)
+    if sort.match /item_count/
+      query = query.with_item_count 
+      pagination_args.merge!({:order => sort})
+    else
+      query = query.order(sort)
+    end
 
     if !filters[:fandom].blank?
       fandom = Fandom.find_by_name(filters[:fandom])
       if fandom
-        (fandom.approved_collections & query).paginate(:page => page)
+        (fandom.approved_collections & query).paginate(pagination_args)
       else
         []
       end
     else
-      query.paginate(:page => page)        
+      query.paginate(pagination_args)        
     end     
   end
     
