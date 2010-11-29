@@ -1,5 +1,3 @@
-<% cache("collection-dashboard-top-#{@collection.id}") do %>
-
 <div id="dashboard" role="navigation">
   <ul role="navigation">
     <li><%= span_if_current ts("Dashboard"), @collection %></li>
@@ -17,13 +15,10 @@
       <li><%= span_if_current ts("Subcollections (%{count})", :count => @collection.children.count), collection_collections_path(@collection) %></li>
     <% end %>
     
-<% end %><!-- end cache of top -->
-
     <% if @collection.challenge %>
   	  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_sidebar" %>
   	<% end %>
 
-<% cache("collection-dashboard-bottom-#{@collection.id}") do %>
     <li><%= span_if_current ts("Fandoms (%{count})", :count => @collection.all_fandoms_count), collection_fandoms_path(@collection) %></li>
 
     <li><%= span_if_current ts("Works (%{count})", :count => @collection.all_approved_works_count), collection_works_path(@collection) %></li>
@@ -40,8 +35,6 @@
     </li>
     <li><%= span_if_current ts("People"), collection_people_path(@collection) %></li>
     <li><%= span_if_current ts("Tags"), collection_tags_path(@collection) %></li>
-
-<% end %><!-- end cache of bottom -->
   
     <% if @collection.user_is_owner?(current_user) %>
       <% if @collection.challenge %>
