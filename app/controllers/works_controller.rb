@@ -432,7 +432,7 @@ public
       redirect_to current_user
     else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
       valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
-      if valid && @work.save && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info
+      if valid && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info && @work.save
         flash[:notice] = ts('Draft was successfully created.')
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
@@ -508,9 +508,7 @@ public
     elsif params[:edit_button]
       render :edit
     else
-      saved = true
-
-      @chapter.save || saved = false
+      saved = @chapter.save
       @work.has_required_tags? || saved = false
       if saved
         # Setting the @work.revised_at datetime if appropriate
@@ -542,10 +540,9 @@ public
           end
         end
         @work.posted = true
-
-        saved = @work.save
-        @work.update_minor_version
+        @work.minor_version = @work.minor_version + 1
         @work.set_challenge_info
+        saved = @work.save
       end
       if saved
         if params[:post_button]
@@ -605,8 +602,9 @@ public
       (@work.has_required_tags? && @work.invalid_tags.blank?) || saved = false
       if saved
         @work.posted = true
+        @work.minor_version = @work.minor_version + 1
         saved = @work.save
-        @work.update_minor_version
+        # @work.update_minor_version
       end
       if saved
         flash[:notice] = ts('Work was successfully updated.')
@@ -801,9 +799,10 @@ public
       flash[:error] = ts("That work is already posted. Do you want to edit it instead?")
       redirect_to edit_user_work_path(@user, @work)
     end
-
+    
     @work.posted = true
-    @work.update_minor_version
+    @work.minor_version = @work.minor_version + 1
+    # @work.update_minor_version
     unless @work.valid? && @work.save
       flash[:error] = ts("There were problems posting your work.")
       redirect_to edit_user_work_path(@user, @work)
@@ -967,7 +966,7 @@ public
   end
 
   def guest_downloading_off
-    if !logged_in? && AdminSetting.guest_downloading_off?
+    if !logged_in? && @admin_settings.guest_downloading_off?
       redirect_to login_path(:high_load => true)
     end
   end

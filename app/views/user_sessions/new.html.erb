@@ -4,7 +4,7 @@
   <p>
     <%= ts('This story is only available to registered users of the Archive.') %>
     <%= ts('If you already have an Archive of Our Own account, log in now.') %>
-    <% if AdminSetting.account_creation_enabled? %>
+    <% if @admin_settings.account_creation_enabled? %>
       <%= link_to ts("Or join us for free - it's easy."), new_user_path %>
     <% end %>
   </p>
@@ -13,7 +13,7 @@
   <p>
     <%= ts('Due to current high load, downloads are currently available to registered users of the Archive only.') %>
     <%= ts('If you already have an Archive of Our Own account, log in now.') %>
-    <% if AdminSetting.account_creation_enabled? %>
+    <% if @admin_settings.account_creation_enabled? %>
       <%= link_to ts("Or join us for free - it's easy."), new_user_path %>
     <% end %>
   </p>
@@ -37,7 +37,7 @@
 
 <p>
   <%= ts("Forgot your password or user name?") %> <%= link_to ts("Reset password"), new_password_path %>
-  <% if AdminSetting.account_creation_enabled? %>
+  <% if @admin_settings.account_creation_enabled? %>
     <br \><%= ts("Don't have an account?") %> <%= link_to ts('Create an account now.'), new_user_path %>
   <% end %>
 </p>

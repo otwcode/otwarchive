@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   helper_method :logged_in_as_admin?
 
 protected
+
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
     @current_user_session = UserSession.find
@@ -41,6 +42,11 @@ protected
   end
 
 public
+
+  before_filter :fetch_admin_settings
+  def fetch_admin_settings    
+    @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+  end
 
   # store previous page in session to make redirecting back possible
   # if already redirected once, don't redirect again.
@@ -272,7 +278,7 @@ public
 
   # Make sure user is allowed to access tag wrangling pages
   def check_permission_to_wrangle
-    if AdminSetting.tag_wrangling_off? && !logged_in_as_admin?
+    if @admin_settings.tag_wrangling_off? && !logged_in_as_admin?
       flash[:error] = "Wrangling is disabled at the moment. Please check back later."
       redirect_to root_path
     else

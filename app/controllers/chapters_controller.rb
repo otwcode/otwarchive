@@ -95,13 +95,18 @@ class ChaptersController < ApplicationController
     elsif params[:cancel_button]
       redirect_back_or_default('/')    
     else  # :preview or :cancel_coauthor_button
-      if @chapter.save && @work.save
-        @work.update_major_version
+      @work.major_version = @work.major_version + 1
+      if @chapter.save
+        # @work.update_major_version
         if @chapter.published_at > @work.revised_at.to_date || @chapter.published_at == Date.today
           @work.set_revised_at(@chapter.published_at)
-        end  
-        flash[:notice] = t('preview', :default => "This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
-        redirect_to [:preview, @work, @chapter]
+        end
+        if @work.save
+          flash[:notice] = t('preview', :default => "This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
+          redirect_to [:preview, @work, @chapter]
+        else
+          render :new
+        end
       else
         render :new 
       end
@@ -127,8 +132,9 @@ class ChaptersController < ApplicationController
       render :edit
     else
       params[:chapter][:posted] = true if params[:post_button]
-      if @work.save && @chapter.save
-        @work.update_minor_version
+      @work.minor_version = @work.minor_version + 1
+      if @chapter.save
+        # @work.update_minor_version
         if defined?(@previous_published_at) && @previous_published_at != @chapter.published_at #if published_at has changed
           if @chapter.published_at == Date.today # if today, set revised_at to this date
             @work.set_revised_at(@chapter.published_at)
@@ -136,8 +142,12 @@ class ChaptersController < ApplicationController
             @work.set_revised_at
           end
         end
-        flash[:notice] = t('successfully_updated', :default => 'Chapter was successfully updated.')
-        redirect_to [@work, @chapter]
+        if @work.save
+          flash[:notice] = t('successfully_updated', :default => 'Chapter was successfully updated.')
+          redirect_to [@work, @chapter]
+        else
+          render :edit
+        end
       else
         render :edit
       end
@@ -192,8 +202,9 @@ class ChaptersController < ApplicationController
       redirect_to(edit_work_url(@work))
     else
       if @chapter.destroy
-        @work.update_minor_version
+        @work.minor_version = @work.minor_version + 1
         @work.set_revised_at
+        @work.save
         flash[:notice] = t('successfully_deleted', :default => "The chapter was successfully deleted.")
       else
         flash[:error] = t('delete_failed', :default => "Something went wrong. Please try again.")

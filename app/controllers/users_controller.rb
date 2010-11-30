@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     end
     token = params[:invitation_token]
     if token.blank?
-      if !AdminSetting.account_creation_enabled?
+      if !@admin_settings.account_creation_enabled?
         flash[:error] = ts("You need an invitation to sign up.")
         redirect_to invite_requests_path and return
       end

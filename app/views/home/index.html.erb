@@ -46,9 +46,9 @@
       <h2><%= ts('Welcome to open beta!') %></h2>
       <h1><%= link_to ts('INVITE A FRIEND'), user_invitations_path(current_user) %></h1> 
     <% else %>
-      <% if AdminSetting.account_creation_enabled? %>
+      <% if @admin_settings.account_creation_enabled? %>
         <h2><%= link_to ts('Log in'), login_path %> or <%= link_to ts("Create an Account"), new_user_path %> </h2>
-      <% elsif AdminSetting.invite_from_queue_enabled? %>
+      <% elsif @admin_settings.invite_from_queue_enabled? %>
         <h2>Be part of our open beta!</h2>
         <h1><%= link_to ts('SIGN UP NOW'), invite_requests_path %></h1>
       <% else %>

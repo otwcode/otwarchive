@@ -18,8 +18,7 @@ class CreationObserver < ActiveRecord::Observer
   
   def before_update(new_work)
     return unless new_work.class == Work && new_work.valid?
-    old_work = Work.find(new_work)
-    if !old_work.posted && new_work.posted
+    if new_work.posted_changed? && new_work.posted?
       # newly-posted
       
       # notify recipients that they have gotten a story!
@@ -57,10 +56,10 @@ class CreationObserver < ActiveRecord::Observer
         end
       end
     end
-    if creation.toremove
-      creation.pseuds.delete(creation.toremove)
+    unless creation.authors_to_remove.blank?
+      creation.pseuds.delete(creation.authors_to_remove)
       if creation.is_a?(Work)
-        creation.chapters.first.pseuds.delete(creation.toremove)
+        creation.chapters.first.pseuds.delete(creation.authors_to_remove)
       end
     end
   end

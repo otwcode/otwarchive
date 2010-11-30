@@ -33,7 +33,7 @@ class Series < ActiveRecord::Base
     :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
 
   attr_accessor :authors
-  attr_accessor :toremove
+  attr_accessor :authors_to_remove
 
   attr_protected :summary_sanitizer_version
   attr_protected :notes_sanitizer_version
@@ -126,20 +126,19 @@ class Series < ActiveRecord::Base
 
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
-    self.authors ||= []
-    wanted_ids = attributes[:ids]
-    wanted_ids.each { |id| self.authors << Pseud.find(id) }
+    selected_pseuds = Pseud.find(attributes[:ids])
+    (self.authors ||= []) << selected_pseuds
     # if current user has selected different pseuds
     current_user = User.current_user
     if current_user.is_a? User
-      self.toremove = current_user.pseuds - wanted_ids.collect {|id| Pseud.find(id)}
+      self.authors_to_remove = current_user.pseuds & (self.authors - selected_pseuds)
     end
-    attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
-    if attributes[:byline]
-      results = Pseud.parse_bylines(attributes[:byline])
+    self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
+    if !attributes[:byline].blank?
+      results = Pseud.parse_bylines(attributes[:byline], :keep_ambiguous => true)
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
-      self.ambiguous_pseuds = results[:ambiguous_pseuds] 
+      self.ambiguous_pseuds = results[:ambiguous_pseuds]
     end
     self.authors.flatten!
     self.authors.uniq!

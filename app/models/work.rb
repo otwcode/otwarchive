@@ -80,7 +80,7 @@ class Work < ActiveRecord::Base
   # Virtual attribute to use as a placeholder for pseuds before the work has been saved
   # Can't write to work.pseuds until the work has an id
   attr_accessor :authors
-  attr_accessor :toremove
+  attr_accessor :authors_to_remove
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
@@ -229,7 +229,7 @@ class Work < ActiveRecord::Base
     # if current user has selected different pseuds
     current_user = User.current_user
     if current_user.is_a? User
-      self.toremove = current_user.pseuds - selected_pseuds
+      self.authors_to_remove = current_user.pseuds & (self.authors - selected_pseuds)
     end
     self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
     if !attributes[:byline].blank?
@@ -275,7 +275,6 @@ class Work < ActiveRecord::Base
       add_to_collection(assignment.collection)
       self.gifts << Gift.new(:pseud => assignment.requesting_pseud) unless (recipients && recipients.include?(assignment.requesting_pseud.byline))
     end
-    save
   end
 
   def challenge_assignment_ids
@@ -380,7 +379,7 @@ class Work < ActiveRecord::Base
   def set_revised_at(date=nil)
     if date # if we pass a date, we want to set it to that (or current datetime if it's today)
       date == Date.today ? value = Time.now : value = date
-      self.update_attribute(:revised_at, value)
+      self.revised_at = value
     else # we want to find the most recent @chapter.published_at date
       recent_date = self.chapters.maximum('published_at')
       # if recent_date is today and revised_at is today, we don't want to update revised_at at all
@@ -389,9 +388,9 @@ class Work < ActiveRecord::Base
       if recent_date == Date.today && self.revised_at && self.revised_at.to_date == Date.today
         return self.revised_at
       elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today
-        self.update_attribute(:revised_at, Time.now)
+        self.revised_at = Time.now
       else
-        self.update_attribute(:revised_at, recent_date)
+        self.revised_at = recent_date
       end
     end
   end
@@ -495,7 +494,9 @@ class Work < ActiveRecord::Base
     # in order
     chapters = self.chapters.order('position ASC')
     # only posted chapters unless author
-    chapters = chapters.where(:posted => true) unless User.current_user && User.current_user.is_author_of?(self)
+    unless User.current_user && (User.current_user.is_a?(Admin) || User.current_user.is_author_of?(self))
+      chapters = chapters.where(:posted => true)
+    end 
     # when doing navigation pass false as contents are not needed
     chapters = chapters.select('published_at, id, work_id, title, position, posted') unless include_content
     chapters
@@ -631,6 +632,7 @@ class Work < ActiveRecord::Base
 
   # Creates a filter_tagging relationship between the work and the tag or its canonical synonym
   def add_filter_tagging(tag, meta=false)
+    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
     filter = tag.canonical? ? tag : tag.merger
     if filter && !self.filters.include?(filter)
       if meta
@@ -638,7 +640,7 @@ class Work < ActiveRecord::Base
       else
         self.filters << filter
       end
-      filter.reset_filter_count unless AdminSetting.suspend_filter_counts?
+      filter.reset_filter_count unless admin_settings.suspend_filter_counts?
     end
   end
 
@@ -667,8 +669,9 @@ class Work < ActiveRecord::Base
 
   # Determine if filter counts need to be reset after the work is saved
   def check_filter_counts
+    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
     self.should_reset_filters = (self.new_record? || self.visibility_changed?)
-    if AdminSetting.suspend_filter_counts? && !(self.restricted_changed? || self.hidden_by_admin_changed?)
+    if admin_settings.suspend_filter_counts? && !(self.restricted_changed? || self.hidden_by_admin_changed?)
       self.should_reset_filters = false
     end
     return true
@@ -847,9 +850,17 @@ class Work < ActiveRecord::Base
   # Note: in that last case we have to use select("DISTINCT works.") because of cases where the same user appears twice
   # on a work.
   scope :visible_to_user, lambda {|user|
-    user.is_a?(Admin) ? visible_to_admin :
-      (!user.is_a?(User) ? visible_to_all :
-       select("DISTINCT works.*").posted.joins({:pseuds => :user}).where("works.hidden_by_admin = false OR users.id = ?", user.id))
+    case user.class.to_s
+    when 'Admin'
+      visible_to_admin
+    when 'User'
+      select("DISTINCT works.*").
+      posted.
+      joins({:pseuds => :user}).
+      where("works.hidden_by_admin = false OR users.id = ?", user.id)
+    else
+      visible_to_all
+    end
   }
 
   # Use the current user to determine what works are visible

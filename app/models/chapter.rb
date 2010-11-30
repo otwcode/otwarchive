@@ -32,7 +32,7 @@ class Chapter < ActiveRecord::Base
   # Virtual attribute to use as a placeholder for pseuds before the chapter has been saved
   # Can't write to chapter.pseuds until the chapter has an id
   attr_accessor :authors
-  attr_accessor :toremove
+  attr_accessor :authors_to_remove
   attr_accessor :invalid_pseuds
   attr_accessor :ambiguous_pseuds
   attr_accessor :wip_length_placeholder
@@ -109,20 +109,19 @@ class Chapter < ActiveRecord::Base
 
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
-    self.authors ||= []
-    wanted_ids = attributes[:ids]
-    wanted_ids.each { |id| self.authors << Pseud.find(id) }
+    selected_pseuds = Pseud.find(attributes[:ids])
+    (self.authors ||= []) << selected_pseuds
     # if current user has selected different pseuds
-    current_user=User.current_user
+    current_user = User.current_user
     if current_user.is_a? User
-      self.toremove = current_user.pseuds - wanted_ids.collect {|id| Pseud.find(id)}
+      self.authors_to_remove = current_user.pseuds & (self.authors - selected_pseuds)
     end
-    attributes[:ambiguous_pseuds].each { |id| self.authors << Pseud.find(id) } if attributes[:ambiguous_pseuds]
-    if attributes[:byline]
-      results = Pseud.parse_bylines(attributes[:byline])
+    self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
+    if !attributes[:byline].blank?
+      results = Pseud.parse_bylines(attributes[:byline], :keep_ambiguous => true)
       self.authors << results[:pseuds]
       self.invalid_pseuds = results[:invalid_pseuds]
-      self.ambiguous_pseuds = results[:ambiguous_pseuds] 
+      self.ambiguous_pseuds = results[:ambiguous_pseuds]
     end
     self.authors.flatten!
     self.authors.uniq!
@@ -150,18 +149,20 @@ class Chapter < ActiveRecord::Base
   
   # Set the value of word_count to reflect the length of the text in the chapter content
   def set_word_count
-    count = 0
-    body = Nokogiri::HTML(self.content).xpath('//body').first
-    body.traverse do |node|
-      # only count actual text
-      if node.is_a? Nokogiri::XML::Text
-        # scan by word boundaries after stripping hyphens and apostrophes
-        # so one-word and one's will be counted as one word, not two.
-        # -- is replaced by — (emdash) before strip so one--two will count as 2
-        count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "").scan(/[a-zA-Z0-9À-ÿ_]+/).size
+    if self.content_changed?
+      count = 0
+      body = Nokogiri::HTML(self.content).xpath('//body').first
+      body.traverse do |node|
+        # only count actual text
+        if node.is_a? Nokogiri::XML::Text
+          # scan by word boundaries after stripping hyphens and apostrophes
+          # so one-word and one's will be counted as one word, not two.
+          # -- is replaced by — (emdash) before strip so one--two will count as 2
+          count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "").scan(/[a-zA-Z0-9À-ÿ_]+/).size
+        end
       end
+      self.word_count = count
     end
-    self.word_count = count
   end
     
   # Return the name to link comments to for this object
