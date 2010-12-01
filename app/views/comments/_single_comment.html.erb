@@ -20,11 +20,11 @@
       </div>
       <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>
       <p class="datetime">
-        <%=h t('.single_comment_posted', :default => "Posted %{date}", :date => l(single_comment.created_at)) %>
+        <%= ts("Posted") %> <%= time_in_zone(single_comment.created_at) %>
       </p>
       <% unless single_comment.edited_at.blank? %>
         <p class="datetime edited">
-          <%=h t('.single_comment_edited', :default => "Last Edited %{date}", :date => l(single_comment.edited_at)) %>
+          <%= ts("Last Edited") %> <%= time_in_zone(single_comment.edited_at) %>
         </p>
       <% end %>
       
@@ -34,7 +34,7 @@
         <% end %>
 		<ul class="navigation" role="navigation" id="navigation_for_comment_<%= single_comment.id %>">
         <li id="add_comment_reply_link_<%= single_comment.id %>"><%= add_cancel_comment_reply_link single_comment %></li>
-        <li><%= link_to t('.single_comment_thread_link', :default => "Thread"), single_comment %></li>
+        <li><%= link_to ts("Thread"), single_comment %></li>
         <% if is_author_of?(single_comment) && single_comment.count_all_comments == 0 %>
           <li id="edit_comment_link_<%= single_comment.id %>"><%= edit_comment_link single_comment %></li>
         <% end %>

@@ -153,9 +153,9 @@ class CommentsController < ApplicationController
         end
       else
         flash[:comment_error] = ts("There was a problem saving your comment:")
-        msg = @comment.errors.full_messages.map {|msg| "<li>#{msg}</li>"}.join
+        msg = @comment.errors.full_messages.map {|msg| "#{msg}"}.join
         unless msg.blank?
-          flash[:comment_error] += "<ul>#{msg}</ul>"
+          flash[:comment_error] += "#{msg}"
         end
         redirect_to_all_comments(@commentable) and return
       end

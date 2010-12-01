@@ -373,6 +373,8 @@ Otwarchive::Application.routes.draw do
     end
   end
   
+  resources :kudos, :only => [:create]      
+  
   resources :skins
   resources :known_issues
   resources :archive_faqs do

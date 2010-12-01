@@ -72,6 +72,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 
 
 /* Navigation in contexts - easier to have it all together */
+.navigation li form {display:inline;}
 #main li.blurb .navigation, #main td.submit input, #main.readings-index .module .navigation 						
 			{ float:left; font-size:0.8575em;}
 #main li.bookmark .navigation, #main li.fandom .navigation,  #main.pseuds-index li.blurb .navigation 
@@ -276,6 +277,10 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
 .thread .thread { margin: 0 0 0 3em;}
 .comment div.icon  
 				{ top:0.875em;}
+				
+/* KUDOS */
+div.kudos        {padding: 0.25em 0.25em; min-height: 50px; }
+.kudos img       {float: left; padding: 0.5em;}
 
 /* SERIES */
  p.series 						{ text-align:center; margin: 0 auto 2.5em auto}

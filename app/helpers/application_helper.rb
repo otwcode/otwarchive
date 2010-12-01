@@ -27,13 +27,13 @@ module ApplicationHelper
     current_page?(path) ? "<span class=\"current\">#{link}</span>".html_safe : link
   end
   
-  def allowed_html_instructions
+  def allowed_html_instructions(show_list = true)
     h(t('application_helper.plain_text', :default =>"Plain text with limited html")) + 
-    link_to_help("html-help") + 
+    link_to_help("html-help") + (show_list ? 
     "<br /><code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
       col, colgroup, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
       ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td, 
-      tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>".html_safe
+      tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>" : "").html_safe
   end
   
   
@@ -280,7 +280,8 @@ module ApplicationHelper
     link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")")
   end
   
-  def time_in_zone(time, zone, user=User.current_user)
+  def time_in_zone(time, zone=nil, user=User.current_user)
+    zone = ((user && user.is_a?(User) && user.preference.time_zone) ? user.preference.time_zone : Time.zone.name) unless zone
     time_in_zone = time.in_time_zone(zone)
     time_in_zone_string = time_in_zone.strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> 
                                                  <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span> 

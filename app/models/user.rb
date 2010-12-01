@@ -94,6 +94,7 @@ class User < ActiveRecord::Base
   has_many :bookmarks, :through => :pseuds
   has_many :bookmark_collection_items, :through => :bookmarks, :source => :collection_items
   has_many :comments, :through => :pseuds
+  has_many :kudos, :through => :pseuds
   has_many :creatorships, :through => :pseuds
   has_many :works, :through => :creatorships, :source => :creation, :source_type => 'Work', :uniq => true
   has_many :work_collection_items, :through => :works, :source => :collection_items, :uniq => true
@@ -121,6 +122,11 @@ class User < ActiveRecord::Base
 
   has_many :log_items, :dependent => :destroy
   validates_associated :log_items
+  
+  before_destroy :remove_pseud_from_kudos
+  def remove_pseud_from_kudos
+    Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{self.pseuds.collect(&:id).join(',')})")
+  end
 
   def read_inbox_comments
     inbox_comments.find(:all, :conditions => {:read => true})

@@ -18,6 +18,7 @@ class Pseud < ActiveRecord::Base
   DESCRIPTION_MAX = 500
   
   belongs_to :user
+  has_many :kudos
   has_many :bookmarks, :dependent => :destroy
   has_many :recs, :class_name => 'Bookmark', :conditions => {:rec => true}
   has_many :comments  
@@ -276,6 +277,7 @@ class Pseud < ActiveRecord::Base
   def replace_me_with_default
     self.creations.each {|creation| change_ownership(creation, self.user.default_pseud) }
     Comment.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.comments.blank?
+    Kudo.update_all("pseud_id = #{self.user.default_pseud.id}", "pseud_id = #{self.id}") unless self.kudos.blank?
     change_collections_membership
     change_gift_recipients
     change_challenge_participation

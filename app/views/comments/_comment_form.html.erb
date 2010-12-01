@@ -13,7 +13,7 @@
 		<dl>
 		<% if logged_in? %>
 			<% if current_user.pseuds.count > 1 %>
-          <dt><%= f.label :name, t('.form_name', :default => "Name: ") %></dt>
+          <dt><%= f.label :name, ts("Name: ") %></dt>
 			    <dd><%= select_tag "comment[pseud_id]", options_for_select(current_user.pseuds.map{|pseud| [pseud.name, pseud.id]}, comment.pseud ? comment.pseud.id : current_user.default_pseud.id) %></dd>
 	    <% else %>
           <dt>Name:</dt>
@@ -28,23 +28,23 @@
           </dd>
 	  <% else %>  
       <dt class="landmark">Note:</dt>
-    	<dd class="instructions"><%=t('.comment_requirements', :default => "All fields are required. Your email address will not be published.") %></dd>
-    	<dt><%= f.label :name, t('.form_name', :default => "Name: ") %></dt>
+    	<dd class="instructions"><%=ts("All fields are required. Your email address will not be published.") %></dd>
+    	<dt><%= f.label :name, ts("Name: ") %></dt>
     	<dd><%= f.text_field :name, :value => session[:comment_name], :live => true %></dd>
-      <dt><%= f.label :email, t('.form_email', :default => "Email: ") %></dt>
+      <dt><%= f.label :email, ts("Email: ") %></dt>
     	<dd><%= f.text_field :email, :value => session[:comment_email],  :live => true %>
 	    <p><%= f.hidden_field :ip_address, :value => "#{request.remote_addr}" %></p></dd>    
 	  <% end %>
-      <dt><%= f.label :content, t('.form_comment', :default => "Comment: ") %></dt>
+      <dt><%= f.label :content, ts("Comment: ") %></dt>
       <dd class="module">
-        <p class="instructions"><%= allowed_html_instructions %></p>
+        <p class="instructions"><%= allowed_html_instructions(show_list=false) %></p>
         <p>
           <%= f.text_area :content %>
           <%= generate_countdown_html("comment_content", ArchiveConfig.COMMENT_MAX) %>
           <%= live_validation_for_field("comment_content",
-				      :failureMessage => t('.comment_not_there', :default => 'Brevity is the soul of wit, but we need your comment to have text in it.'),
+				      :failureMessage => ts('Brevity is the soul of wit, but we need your comment to have text in it.'),
 				      :maximum_length => ArchiveConfig.COMMENT_MAX,
-				      :tooLongMessage => t('.comment_too_long', :default => "must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
+				      :tooLongMessage => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
         </p>
       </dd>
     </dl>

@@ -72,3 +72,10 @@ When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
   check "Is default"
   click_button "Create"
 end
+
+  
+Given /^"([^\"]*)" deletes their account/ do |username|
+  visit user_path(username)
+  Given %{I follow "Profile"}
+  Given %{I follow "Delete My Account"}
+end
