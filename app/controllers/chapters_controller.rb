@@ -7,6 +7,9 @@ class ChaptersController < ApplicationController
   before_filter :check_ownership, :only => [ :edit, :update, :manage, :destroy ]
   before_filter :check_visibility, :only => [ :show]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update]
+
+  cache_sweeper :chapter_sweeper
+  cache_sweeper :work_sweeper
     
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml

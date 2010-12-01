@@ -1,17 +1,16 @@
 <% if kudos.count > 0 || guest_kudos_count > 0 %>
-  <div class="kudos">
-    <%= image_tag("kudos.png", :alt => ts("The AO3 logo throwing appreciative hearts in the air.")) %>
-    <p>
-      <%= ts("Kudos were left by ") %>
-      <%= kudos.map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.to_sentence(:two_words_connector => ts(" and "), :last_word_connector => ts(", and ")).html_safe %><% if kudos.count > 0 && guest_kudos_count == 0 %><%= ts("!") %><% end %>
-      <% if kudos.count > 0 && guest_kudos_count > 0 %>
-        <%= ts(" as well as ") %>
-      <% end %>
-      <% if guest_kudos_count > 1 %>
-        <%= ts("%{count} guests!", :count => guest_kudos_count) %>
-      <% elsif guest_kudos_count == 1 %>
-        <%= ts("a guest!") %>
-      <% end %>
-    </p>
-  </div>
+  <p class="kudos">
+    <%= ts("Kudos were left by ") %>
+    <%= kudos.map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
+          to_sentence(:two_words_connector => ts(" and "), :last_word_connector => ts(", and ")).
+          html_safe %><% if kudos.count > 0 && guest_kudos_count == 0 %><%= ts("!") %><% end %>
+    <% if kudos.count > 0 && guest_kudos_count > 0 %>
+      <%= ts(" as well as ") %>
+    <% end %>
+    <% if guest_kudos_count > 1 %>
+      <%= ts("%{count} guests!", :count => guest_kudos_count) %>
+    <% elsif guest_kudos_count == 1 %>
+      <%= ts("a guest!") %>
+    <% end %>
+  </p>
 <% end %>

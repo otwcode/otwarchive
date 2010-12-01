@@ -4,19 +4,18 @@ module WorksHelper
   def work_meta_list(work, chapter=nil)
     # if we're previewing, grab the unsaved date, else take the saved first chapter date
     published_date = (chapter && work.preview_mode) ? chapter.published_at : work.first_chapter.published_at
-    list = [[t('works_helper.published', :default => "Published:"), localize(published_date)], [t('works_helper.words', :default => "Words:"), work.word_count], 
-            [t('works_helper.chapters', :default => "Chapters:"), work.chapter_total_display]]
+    list = [[ts("Published:"), localize(published_date)], 
+            [ts("Words:"), work.word_count], 
+            [ts("Chapters:"), work.chapter_total_display]]
 
-    if work.count_visible_comments > 0
-      list.concat([[t('works_helper.work_comments', :default => 'Comments') + ':', work.count_visible_comments.to_s]])
-    end
-    if (bookmark_count = work.bookmarks.is_public.count) > 0
-      list.concat([[t('works_helper.work_bookmarks', :default => 'Bookmarks') + ':', link_to(bookmark_count.to_s, work_bookmarks_path(work))]])
-    end
-    list.concat([[t('works_helper.hits', :default => "Hits:"), work.hits]]) if show_hit_count?(work)
+    
+    list.concat([[ts('Comments:'), work.count_visible_comments.to_s]]) if work.count_visible_comments > 0    
+    list.concat([[ts('Kudos:'), work.kudos.count.to_s]]) if work.kudos.count > 0    
+    list.concat([[ts('Bookmarks:'), link_to(bookmark_count.to_s, work_bookmarks_path(work))]]) if (bookmark_count = work.bookmarks.is_public.count) > 0
+    list.concat([[ts("Hits:"), work.hits]]) if show_hit_count?(work)
 
     if work.chaptered? && work.revised_at
-      prefix = work.is_wip ? "Updated:" : "Completed:"
+      prefix = work.is_wip ? ts("Updated: ") : ts("Completed: ")
       latest_date = (work.preview_mode && work.backdate) ? published_date : work.revised_at.to_date
       list.insert(1, [prefix, localize(latest_date)])
     end

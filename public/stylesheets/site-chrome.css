@@ -279,8 +279,7 @@ li.comment h4	{ font-size: 1.25em; margin-top:0; }
 				{ top:0.875em;}
 				
 /* KUDOS */
-div.kudos        {padding: 0.25em 0.25em; min-height: 50px; }
-.kudos img       {float: left; padding: 0.5em;}
+p.kudos        {padding: 0.25em 0.25em; min-height: 50px; background: url('/images/kudos.png') no-repeat; text-indent: 50px;}
 
 /* SERIES */
  p.series 						{ text-align:center; margin: 0 auto 2.5em auto}

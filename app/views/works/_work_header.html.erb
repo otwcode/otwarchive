@@ -75,14 +75,7 @@
 <!-- END navigation -->
 <% end %>
 
-<% if @preview_mode %>
-   <%= render :partial => 'works/meta', :locals => {:work => @work} %>
-<% else %>
-  <% hide_show = "#{hide_warnings?(@work) ? "1" : "0"}-#{hide_freeform?(@work) ? "1" : "0"}" %>
-  <% cache([@work, "meta", hide_show]) do %>
-    <%= render :partial => 'works/meta', :locals => {:work => @work} %>
-  <% end %>
-<% end %>
+<%= render :partial => 'works/meta', :locals => {:work => @work} %>
 
 <div class="preface">
   <h2 class="title">

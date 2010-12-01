@@ -3,6 +3,7 @@
   <% commentable = @commentable %>
 <% end %>
 <div id="comment_form">
+  <h3><%= ts("Add Comment") %></h3>
 	<%= form_for value_for_comment_form(commentable, comment) do |f| %>
 	  <% if controller.controller_name == "inbox" %>
 	  <h4>Reply to <%= get_commenter_pseud_or_name(commentable) %> on <%= commentable_description_link(commentable) %></h4>   

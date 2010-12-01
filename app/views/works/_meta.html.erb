@@ -1,3 +1,4 @@
+<% cache("work-meta-#{work.id}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
 <h3 class="landmark">Work Header</h3>
 
 <div class="wrapper">
@@ -30,7 +31,7 @@
 
     <% unless @work.series.blank? %>
       <dt class="series">
-        <%= t('.works.series', :default => "Series:") %>
+        <%= ts("Series:") %>
       </dt>
       <dd class="series">
         <%= show_series_data(@work) %>
@@ -39,7 +40,7 @@
 
     <% unless @work.approved_collections.empty? %>
       <dt class="collections">
-        <%= t('.work_collections', :default => 'Collections:') %>
+        <%= ts('Collections:') %>
       </dt>
       <dd class="collections">
         <%= show_collections_data(@work) %>
@@ -47,9 +48,11 @@
     <% end %>
 
     <dt class="stats">
-      <%= t("works.stats", :default => "Stats") %>:
+      <%= ts("Stats") %>:
     </dt>
     <dd class="stats">
+<% end %><!-- end of cache -->
+
       <%= work_meta_list(@work, @chapter) %>
     </dd>
   </dl>
