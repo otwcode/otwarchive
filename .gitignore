@@ -1,0 +1,49 @@
+
+# /
+/*.tmproj
+/sphinx
+/.DAV
+/rerun.txt
+/capybara-*.html
+/.dropbox
+/.dropbox.attr
+
+# /config/
+/config/database.yml
+/config/local.yml
+/config/backup.yml
+/config/*.sphinx.conf
+/config/s3.yml
+/config/sphinx.yml
+/config/unicorn.rb
+
+# /config/environments/
+/config/environments/development.rb
+
+# /db/
+/db/*.sqlite3
+/db/*.sql
+/db/backup
+/db/sphinx
+/db/seed
+
+# /log/
+/log/*
+
+# /public/
+/public/system
+/public/downloads
+
+# /public/images/
+/public/images/Thumbs.db
+
+# /tmp/
+/tmp/*
+
+# /vendor/
+/vendor/gems
+
+# /vendor/gems/
+/vendor/gems/*
+
+# /vendor/plugins/
