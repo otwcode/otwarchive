@@ -2,7 +2,7 @@ Otwarchive::Application.routes.draw do
 
   #### DOWNLOADS ####
 
-  match 'downloads/:download_authors/:id/:download_title.:format' => 'works#download', :as => 'download'
+  match 'downloads/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
 
 
   #### INVITATIONS ####
