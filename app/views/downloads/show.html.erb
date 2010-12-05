@@ -6,7 +6,7 @@
       <%= render :partial => 'download_chapter.html', :locals => {:chapter => chapter} %>
     <% end %>
   <% else %>
-    <%=raw sanitize_field(@chapter, :content) %>
+    <%=raw sanitize_field(@chapters.first, :content) %>
   <% end %>
 </div>
 

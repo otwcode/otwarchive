@@ -12,6 +12,7 @@ class Admin::SettingsController < ApplicationController
     @admin_setting = AdminSetting.first || AdminSetting.create(:last_updated_by => Admin.first)
 
     if @admin_setting.update_attributes(params[:admin_setting])
+      Rails.cache.delete("admin_settings")
       flash[:notice] = 'Archive settings were successfully updated.'
       redirect_to admin_settings_path
     else
