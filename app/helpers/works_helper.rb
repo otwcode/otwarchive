@@ -8,10 +8,13 @@ module WorksHelper
             [ts("Words:"), work.word_count], 
             [ts("Chapters:"), work.chapter_total_display]]
 
-    
-    list.concat([[ts('Comments:'), work.count_visible_comments.to_s]]) if work.count_visible_comments > 0    
+    if (comment_count = work.count_visible_comments) > 0
+      list.concat([[ts('Comments:'), work.count_visible_comments.to_s]])
+    end
     list.concat([[ts('Kudos:'), work.kudos.count.to_s]]) if work.kudos.count > 0    
-    list.concat([[ts('Bookmarks:'), link_to(bookmark_count.to_s, work_bookmarks_path(work))]]) if (bookmark_count = work.bookmarks.is_public.count) > 0
+    if (bookmark_count = work.bookmarks.is_public.count) > 0
+      list.concat([[ts('Bookmarks:'), link_to(bookmark_count.to_s, work_bookmarks_path(work))]]) 
+    end
     list.concat([[ts("Hits:"), work.hits]]) if show_hit_count?(work)
 
     if work.chaptered? && work.revised_at
