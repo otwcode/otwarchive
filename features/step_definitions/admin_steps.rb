@@ -56,3 +56,10 @@ Given /^guest downloading is off$/ do
   And "I check \"Turn off downloading for guests\""
   And "I press \"Update\""
 end
+
+Given /^guest downloading is on$/ do
+  Given "I am logged in as an admin"
+  And "I follow \"settings\""
+  And "I uncheck \"Turn off downloading for guests\""
+  And "I press \"Update\""
+end

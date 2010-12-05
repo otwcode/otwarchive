@@ -132,6 +132,8 @@ Feature: Download a work
   And I am logged in as "author" with password "writersrule"
   And I post the chaptered work "Epic Novel"
   And I am logged out
+  And guest downloading is on
+  And I am logged out as an admin
   When I view the work "Epic Novel"
   And I follow "HTML"
   Then I should see "Epic Novel"
