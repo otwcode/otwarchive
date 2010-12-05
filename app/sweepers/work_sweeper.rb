@@ -17,10 +17,12 @@ class WorkSweeper < ActionController::Caching::Sweeper
     work = record.work if record.is_a?(Chapter)
     
     # expire all the blurbs and meta sections for this work
-    %w(showwarn nowarn).each do |warning|
-      %w(showfreeform showfreeform).each do |freeform|
-        expire_fragment("work-#{work.id}-#{warning}-#{freeform}") 
-        expire_fragment("work-meta-#{work.id}-#{warning}-#{freeform}") 
+    if work
+      %w(showwarn nowarn).each do |warning|
+       %w(showfreeform showfreeform).each do |freeform|
+         expire_fragment("work-#{work.id}-#{warning}-#{freeform}") 
+         expire_fragment("work-meta-#{work.id}-#{warning}-#{freeform}") 
+        end
       end
     end
   end
