@@ -17,7 +17,6 @@ I'd like to comment on a tag
     When I view the tag "Stargate Atlantis"
     Then I should see "0 comments"
     When I follow "0 comments"
-      And I follow "Add Comment"
       And I fill in "Comment" with "Shouldn't this be a metatag with Stargate?"
       And I press "Add Comment"
     Then I should see "Comment created!"

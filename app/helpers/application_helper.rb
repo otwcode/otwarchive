@@ -28,7 +28,7 @@ module ApplicationHelper
   end
   
   def allowed_html_instructions(show_list = true)
-    h(t('application_helper.plain_text', :default =>"Plain text with limited html")) + 
+    h(ts("Plain text with limited html")) + 
     link_to_help("html-help") + (show_list ? 
     "<br /><code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
       col, colgroup, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
@@ -38,9 +38,18 @@ module ApplicationHelper
   
   
   def allowed_css_instructions
-    h(t('application_helper.allowed_css', :default =>"Limited CSS properties and values allowed")) + 
+    h(ts("Limited CSS properties and values allowed")) + 
     link_to_help("css-help")
   end
+  
+  # This helper needs to be used in forms that may appear multiple times in the same
+  # page (eg the comment form) since all the fields must have unique ids
+  # see http://stackoverflow.com/questions/2425690/multiple-remote-form-for-on-the-same-page-causes-duplicate-ids
+  def field_with_unique_id( form, field_type, object, field_name )
+      field_id = "#{object.class.name.downcase}_#{object.id.to_s}_#{field_name.to_s}"
+      form.send( field_type, field_name, :id => field_id )
+  end
+  
     
   # modified by Enigel Dec 13 08 to use pseud byline rather than just pseud name
   # in order to disambiguate in the case of identical pseuds

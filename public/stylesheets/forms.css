@@ -207,11 +207,11 @@ form.filters dt	{ background: #eee; font-weight: 600; text-transform: capitalize
 .filters dd label {font-size:0.8575em;}
 
 /*COMMENT */
-#comment_form .instructions {font-size: 0.8575em;}
-#comment_form dd.module {width:70%; margin-top:-0}
-textarea#comment_content {width:99%; height:12em;}
+p.comment_form.instructions, dd.comment_form.instructions {font-size: 0.8575em;}
+.comment_form dd.module {width:70%; margin-top:-0}
+textarea.comment_form {width:99%; height:12em;}
 #feedback li dl{ font-size:1.142857em; } 
-#new_comment {clear:right; margin-top:1.5em;}   
+.comment_form {clear:right; margin-top:1.5em;}   
 
 /*TAG WRANGLINGS*/
 form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margin-right:0.5625em;}

@@ -11,11 +11,11 @@ class Preference < ActiveRecord::Base
     self.skin = Skin.default
   end
 
-  def self.light?(param)
+  def self.disable_work_skin?(param)
      return false if param == 'creator'
-     return true if param == 'light'
+     return true if param == 'light' || param == 'disable'
      return false unless User.current_user.is_a? User
-     return User.current_user.try(:preference).try(:disable_ugs)
+     return User.current_user.try(:preference).try(:disable_work_skins)
   end
 
   #FIXME hack because time zones are being html encoded. couldn't figure out why.

@@ -3,7 +3,14 @@
   <legend>Archive Skin</legend>
   <h3>Archive Skin</h3>
 
-  <dl>
+  <dl>      
+    <dt><%= label_tag "skin_type", ts('Type') %> <%= link_to_help "skins-basics" %></dt>
+    <% if @skin.type %>
+      <dd><%= @skin.type == 'WorkSkin' ? ts("Work Skin") : ts("Site Skin") %></dd>
+    <% else %>      
+      <dd><%= select_tag "skin_type", options_for_select(Skin::TYPE_OPTIONS, params[:skin_type]) %></dd>
+    <% end %>
+    
     <dt><%= f.label :title, ts('Title') %></dt>
     <dd><%= f.text_field :title %></dd>
 

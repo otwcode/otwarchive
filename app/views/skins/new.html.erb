@@ -1,16 +1,16 @@
 
-<h2><%= t('new_skin', :default => 'Create New Archive Skin')  %></h2>
+<h2><%= ts('Create New Archive Skin')  %></h2>
 
 <%= error_messages_for :skin %>
 
 <%= render :partial => "skin_top_navigation" %>
 
-<h3 class="landmark">New Archive Skin Form</h3>
+<h3 class="landmark"><%= ts("New Archive Skin Form") %></h3>
 
 <%= form_for(@skin, :html => {:multipart => true}) do |f| %>
 
   <%= render :partial => 'form', :locals => {:f => f} %>
 
-  <%= f.submit t('create_skin_button', :default => 'Create')  %>
+  <%= f.submit ts('Create')  %>
 
 <% end %>

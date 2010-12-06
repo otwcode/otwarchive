@@ -1,4 +1,4 @@
-<h2><%= t('edit_skin', :default => 'Edit Archive Skin')  %></h2>
+<h2><%= ts('Edit Archive Skin')  %></h2>
 
 <%= error_messages_for :skin %>
 
@@ -6,7 +6,7 @@
 <%= render :partial => "skin_top_navigation" %>
 <!--/subnav-->
 
-<h3 class="landmark">Edit Archive Skin Form</h3>
+<h3 class="landmark"><%= ts("Edit Archive Skin Form") %></h3>
 <%= form_for(@skin, :html => {:multipart => true}) do |f| %>
 
   <% if params[:wizard] %>
@@ -15,6 +15,6 @@
     <%= render :partial => 'form', :locals => {:f => f} %>
   <% end %>
 
-  <%= f.submit t('update_skin_button', :default => 'Update')  %>
+  <%= f.submit ts('Update')  %>
 
 <% end %>

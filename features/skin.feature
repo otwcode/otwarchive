@@ -33,13 +33,17 @@ Feature: creating and editing skins
 
   Scenario: Only the user who creates a skin should be able to edit it
     and only if it's not official
+    #'
 
   Given basic skins
   When I am on the skins page
   Then I should see "Default by AO3"
     And I should see "Plain Text by AO3"
+  When I am on the work-skins page
+  Then I should see "Basic Formatting by AO3"
   Given I am logged in as "skinner" with password "password"
   When I am on skin's new page
+  #'
     And I fill in "Title" with "Default"
     And I fill in "CSS" with "#title { text-decoration: blink;}"
     And I press "Create"
@@ -57,6 +61,7 @@ Feature: creating and editing skins
     And I press "Update"
   Then I should see "Your preferences were successfully updated."
   When I am on skinner's preferences page
+  #'
   Then "my blinking skin" should be selected within "preference_skin_id"
     And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
@@ -116,11 +121,13 @@ Feature: creating and editing skins
     And I fill in "user_session_password" with "password"
     And I press "Log in"
   When I go to admin's skins page
+  #'
   Then I should see "I'm sorry, only an admin can look at that area"
   When I go to "public blinking skin" skin page
   Then I should see "Sorry, you don't have permission"
     And I should not see "Edit"
   When I go to admin's skins page
+  #'
     Then I should see "I'm sorry, only an admin can"
   Given I am logged out
     And I am logged in as an admin
@@ -130,6 +137,7 @@ Feature: creating and editing skins
   When I go to "public blinking skin" edit skin page
   Then I should see "Sorry, you don't have permission"
   When I go to admin's skins page
+  #'
     Then I should see "public blinking skin" within "table#unapproved"
   When I check "public blinking skin"
     And I press "Update"
@@ -180,6 +188,7 @@ Feature: creating and editing skins
     And I am logged in as "skinner" with password "password"
   Then I should not see "text-decoration: blink;" within "style"
   When I am on skinner's skin page
+  #'
   Then I should not see "(Approved)"
     And I should see "(Not yet reviewed)"
     And I should see "Edit"
@@ -205,6 +214,7 @@ Feature: creating and editing skins
     And I should see "Plain Text by AO3"
   Given I am logged in as "skinner" with password "password"
   When I am on skin's new page
+  #'
   Then I should see "CSS" within "dl"
   When I follow "Use Wizard Instead?"
   Then I should see "More options coming soon"
@@ -232,11 +242,45 @@ Feature: creating and editing skins
     And I press "Update"
   Then I should see "Skin updated"
   When I am on skinner's preferences page
+  #'
   Then "Default" should be selected within "preference_skin_id"
   When I select "Wide margins" from "preference_skin_id"
     And I press "Update"
   Then I should see "Your preferences were successfully updated."
     And I should see "#chapters {margin: auto 4% 2.5em; padding: 0.5em 4% 0;}" within "style"
-    And I should see "body {background: #ccccff; color: red; font: 120%/1.125 Garamond;}" within "style"
+    And I should see "background: #ccccff;" within "style"
+    And I should see "color: red;" within "style"
+    And I should see "font: 120%/1.125 Garamond;" within "style"
   When I am on skinner's preferences page
   Then "Wide margins" should be selected within "preference_skin_id"
+
+
+  Scenario: Create and use a work skin
+  
+  Given I am logged in as "skinner" with password "password"
+  When I am on skin's new page
+    #'
+    And I select "Work Skin" from "skin_type"
+    And I fill in "Title" with "Awesome Work Skin"
+    And I fill in "Description" with "Great work skin"
+    And I fill in "CSS" with "p {color: purple;}"
+    And I press "Create"
+  Then I should see "Skin was created successfully"
+    And I should see ".userstuff p"
+  When I go to the new work page
+  Then I should see "Awesome Work Skin"
+  When I set up the draft "Story With Awesome Skin"
+    And I select "Awesome Work Skin" from "work_work_skin_id"
+    And I press "Preview"
+  Then I should see "Preview Work"
+    And I should see "color: purple" within "style"
+  When I press "Post"
+  Then I should see "Story With Awesome Skin"
+    And I should see "color: purple" within "style"
+    And I should see "Hide Creator's Style"
+  When I follow "Hide Creator's Style"
+  Then I should see "Story With Awesome Skin"
+    And I should not see "color: purple" within "style"
+    And I should not see "Hide Creator's Style"
+    And I should see "Show Creator's Style"
+    

@@ -1,10 +1,10 @@
 <ul class="navigation" role="navigation">
-   <li><%= link_to t('.links.edit', :default => "Edit"), edit_bookmark_path(bookmark) %></li>
-   <li><%= link_to t('.links.delete', :default => "Delete"), bookmark, :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
+   <li><%= link_to ts("Edit"), edit_bookmark_path(bookmark) %></li>
+   <li><%= link_to ts("Delete"), bookmark, :confirm => ts('Are you sure?'), :method => :delete %></li>
    <% if bookmark.bookmarkable.is_a?(Work) %>
    <li>
      <%= link_to_ibox ts("Share"), :for => "#share_#{bookmark.id}" %>
-     <div id="share_<%= bookmark.id %>" class="hideme">
+     <div id="share_<%= bookmark.id %>" style="display: none;">
        <p><%= ts("Copy and paste to repost this bookmark elsewhere: (CTRL/CMD-A will select all)") -%></p>
        <p><textarea rows="4" cols="50"><%= get_bookmark_embed_link(bookmark) %></textarea></p>
      </div>

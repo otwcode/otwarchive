@@ -7,6 +7,8 @@ class SkinsController < ApplicationController
   before_filter :check_visibility, :only => [:show]
   before_filter :check_editability, :only => [:edit, :update, :destroy]
 
+  cache_sweeper :skin_sweeper
+
   def index
     if current_user && current_user.is_a?(User)
       @preference = current_user.preference
@@ -17,11 +19,21 @@ class SkinsController < ApplicationController
         flash[:error] = "You can only browse your own skins and approved public skins." 
         redirect_to skins_path and return
       end
-      @skins = @user.skins
-      @title = ts('My Skins')
+      if params[:work_skins]
+        @skins = @user.work_skins
+        @title = ts('My Work Skins')
+      else
+        @skins = @user.skins.site_skins
+        @title = ts('My Site Skins')
+      end
     else
-      @skins = Skin.approved_skins
-      @title = ts('Public Skins')
+      if params[:work_skins]
+        @skins = WorkSkin.approved_skins
+        @title = ts('Public Work Skins')
+      else
+        @skins = Skin.approved_skins.site_skins
+        @title = ts('Public Skins')
+      end
     end
   end
 
@@ -40,7 +52,7 @@ class SkinsController < ApplicationController
   end
 
   def create
-    @skin = Skin.new(params[:skin])
+    @skin = params[:skin_type] ? params[:skin_type].constantize.new(params[:skin]) : Skin.new(params[:skin])
     @skin.author = current_user
     if @skin.save
       redirect_to @skin

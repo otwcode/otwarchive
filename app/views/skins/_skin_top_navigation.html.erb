@@ -1,23 +1,24 @@
 <!--subnav-->
 <h3 class="landmark">Navigation</h3>
 <ul class="navigation" role="navigation">
-	<li><%= span_if_current t('.public', :default => 'Public Skins'), skins_path %></li>
+	<li><%= span_if_current ts('Public Skins'), skins_path %></li>
 	<% if logged_in? %>
-    <li><%= span_if_current t('.mine', :default => 'My Skins'), user_skins_path(current_user) %></li>
+    <li><%= span_if_current ts('My Skins'), user_skins_path(current_user) %></li>
     <% unless controller.action_name == "new" %>
-      <li><%= link_to t('.new', :default => 'Create New Skin'), new_skin_path %></li>
+      <li><%= link_to ts('Create New Skin'), new_skin_path %></li>
     <% end %>
+    
     <!-- wizard-to-custom-css switchers for new and edit -->
-    <% if controller.action_name == "new" ||  controller.action_name == "edit" %>
+    <% if controller.action_name == "new" ||  (controller.action_name == "edit" && !@skin.is_a?(WorkSkin)) %>
       <% if params[:wizard] %>
         <li id="form-link">
-           <%= link_to( t('.standard', :default => 'Write Custom CSS Instead?'),
+           <%= link_to( ts('Write Custom CSS Instead?'),
              {:url => {:controller => :skins, :action => controller.action_name, :wizard => false}},
              :href => url_for(:controller => :skins, :action => controller.action_name, :wizard => false)) %>
         </li>
       <% else %>
         <li id="wizard-link">
-          <%= link_to( t('.wizard', :default => 'Use Wizard Instead?'),
+          <%= link_to( ts('Use Wizard Instead?'),
             {:url => {:controller => :skins, :action => controller.action_name, :wizard => true}},
             :href => url_for(:controller => :skins, :action => controller.action_name, :wizard => true)) %>
         </li>

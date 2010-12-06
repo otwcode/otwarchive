@@ -28,11 +28,11 @@ Feature: Leave kudos
     And I press "Leave Kudos ♥"
   Then I should see "Kudos were left by myname2 as well as a guest!"
   When I press "Leave Kudos ♥"
-  Then I should see "Kudos were left by myname2 as well as 2 guests!"
+  Then I should see "You have already left kudos here. :)"
   When I am logged in as "myname3" with password "something"
     And I view the work "Awesome Story"
     And I press "Leave Kudos ♥"
-  Then I should see "Kudos were left by myname3 and myname2 as well as 2 guests!"
+  Then I should see "Kudos were left by myname3 and myname2 as well as a guest!"
   
   
   Scenario: deleting pseud and user after creating kudos should orphan them

@@ -24,10 +24,6 @@
 <!-- stylesheet_link_tag 'globalize', :media => 'screen' -->
 <!-- stylesheet_link_tag 'visualize.jQuery', :media => 'screen' -->
 
-<% unless Preference.light?(params[:style]) %>
-  <%= stylesheet_link_tag 'userstuff-style-creator', :media => 'all' %>
-<% end %>
-
 <!-- browser-specific stylesheets -->
 <!--[if IE]>
 <%= stylesheet_link_tag 'ie_overrides', :media => 'all' %>
@@ -64,16 +60,9 @@
 
 <%= iboxify_page %>
 
-<% if current_user.is_a?(User) && current_user.try(:preference).try(:skin) %>
-  <% s = current_user.preference.skin %>
-  <style type="text/css">
-    <% if s.margin %>#chapters {margin: auto <%= s.margin %>% 2.5em; padding: 0.5em <%= s.margin %>% 0;}<% end %>
-    <% if s.background_color || s.foreground_color || s.font || s.base_em %>
-    <% bgcolor = s.background_color ? s.background_color : "#FFFEF9" %>
-      body	{background: <%= bgcolor %>;
-        color: <%= s.foreground_color ? s.foreground_color : "#222" %>;
-        font: <%= s.base_em ? s.base_em : "100" %>%/1.125 <%= s.font ? s.font : "'Lucida Grande', Verdana, Helvetica, Arial, sans-serif" %>;}
-    <% end %>
-    <%= current_user.preference.skin.css %>
-  </style>
+<% if current_user.is_a?(User) && (skin = current_user.try(:preference).try(:skin)) %>
+  <% cache("#{skin.id}-site-skin") do %>
+    <%= render "skins/skin_style_block", :skin => skin %>
+  <% end %><!-- end site skin cache -->
 <% end %>
+

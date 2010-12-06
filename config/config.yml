@@ -215,20 +215,22 @@ SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "-moz
   "layout-grid", "list-style", "margin", 
   "-moz-border", "-moz-outline", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transition", "-moz-transition", "-webkit-transition"]
   
-SUPPORTED_CSS_PROPERTIES: ["accelerator", "azimuth", "behavior", "bottom", 
-  "caption-side", "clear", "clip", "color", "content", "counter-increment", "counter-reset", "cursor", "direction", "display", "elevation", 
-  "empty-cells", "filter", "float", "height", 
-  "ime-mode", "include-source", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "marker-offset", "marks", 
-  "max-height", "max-width", "min-height", "min-width", "-moz-opacity", "-moz-user-select", "orphans", "page", "pitch", "pitch-range", 
-  "play-during", "position", "quotes", "-replace", "richness", "right", "ruby-align", "ruby-overhang", "ruby-position", "size", "speak", 
-  "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "table-layout", "top", "transform", "-moz-transform", "-webkit-transform", 
-  "unicode-bidi", 
-  "-use-link-source", "vertical-align", "visibility", "voice-family", "volume", "white-space", "widows", "width", "word-break", 
+SUPPORTED_CSS_PROPERTIES: ["-moz-opacity", "-moz-transform", "-moz-user-select", "-replace", "-use-link-source", "-webkit-transform", 
+  "accelerator", "azimuth", "background-color", "behavior", "border-bottom-color", "border-collapse", "border-color", "border-left-color", 
+  "border-right-color", "border-top-color", "bottom", "caption-side", "clear", "clip", "color", "content", "counter-increment", "counter-reset", 
+  "cursor", "direction", "display", "elevation", "empty-cells", "filter", "float", "font", "font-family", "font-size", "font-style", "font-variant", 
+  "font-weight", "height", "ime-mode", "include-source", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "marker-offset", 
+  "marks", "max-height", "max-width", "min-height", "min-width", "orphans", "overflow", "page", "pause", "pause-after", "pause-before", "pitch", 
+  "pitch-range", "play-during", "position", "quotes", "richness", "right", "ruby-align", "ruby-overhang", "ruby-position", "size", "speak", 
+  "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "table-layout", "text-align", "text-decoration", "text-indent", 
+  "top", "transform", "unicode-bidi", "vertical-align", "visibility", "voice-family", "volume", "white-space", "widows", "width", "word-break", 
   "word-spacing", "word-wrap", "writing-mode", "z-index"]
   
 # mostly color names here 
-SUPPORTED_CSS_KEYWORDS: ["all", "url", "inline", "blink", "static", "absolute", "repeat", "no-repeat", "repeat-x", "repeat-y", "scroll", 
-  "hidden", "normal", "overline", "ease-in", 
+SUPPORTED_CSS_KEYWORDS: ["!important", "absolute", "all", "auto", "bigger", "blink", "block", "bold", "both", "bottom", "center", 
+  "collapse", "dashed", "dotted", "ease-in", "hidden", "inline", "italic", "justify", "left", "medium", "no-repeat", "none", "normal", 
+  "nowrap", "overline", "pointer", "repeat", "repeat-x", "repeat-y", "right", "scroll", "small-caps", "smaller", "solid", "static", "top", 
+  "transparent", "underline", "url",
   "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond", 
   "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", 
   "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", 

@@ -37,25 +37,24 @@
       <li><%= marktoread_link(@work) %></li>
     <% end %>
   <% end %>
-    <li><%= link_to "Comments", (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
+  <li><%= link_to "Comments", (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
 
-  <% if !Preference.light?(params[:style]) %>
-    <li><% if params[:view_full_work] == 'true' %>
-      <%= link_to(ts('Light Style'), url_for(:style => 'light', :view_full_work => 'true')) %>
+  <!-- allow user to disable style on work if it has been customized -->
+  <% if @work.work_skin %>
+    <li>
+      <% if Preference.disable_work_skin?(params[:style]) %>
+        <%= link_to(ts("Show Creator's Style"), 
+                    params[:view_full_work] == 'true' ? url_for(:style => 'creator', :view_full_work => 'true') : url_for(:style => 'creator')) %>
       <% else %>
-      <%= link_to(ts('Light Style'), url_for(:style => 'light')) %>
-    <% end %></li>
-  <% elsif params[:style] != 'creator' %>
-    <li><% if params[:view_full_work] == 'true' %>
-      <%= link_to(ts("Creator's Style"), url_for(:style => 'creator', :view_full_work => 'true')) %>
-      <% else %>
-      <%= link_to(ts("Creator's Style"), url_for(:style => 'creator')) %>
-    <% end %></li>
+        <%= link_to(ts("Hide Creator's Style"), 
+                    params[:view_full_work] == 'true' ? url_for(:style => 'disable', :view_full_work => 'true') : url_for(:style => 'disable')) %>
+      <% end %>    
+    </li>
   <% end %>
 
   <li>
     <%= link_to_ibox ts("Share"), :for => "#share" %>
-    <div id="share" class="hideme">
+    <div id="share" style="display: none;">
       <p><%= ts("Copy and paste to link back to this work: (CTRL/CMD-A will select all)") -%></p>
       <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
     </div>
@@ -76,6 +75,12 @@
 <% end %>
 
 <%= render :partial => 'works/meta', :locals => {:work => @work} %>
+
+<% if @work.work_skin && !Preference.disable_work_skin?(params[:style]) %>
+  <% cache("#{@work.work_skin.id}-work-skin") do %>
+    <%= render "skins/skin_style_block", :skin => @work.work_skin %>
+  <% end %><!-- end cache for work skin -->
+<% end %>
 
 <div class="preface">
   <h2 class="title">

@@ -139,8 +139,9 @@ module HtmlCleaner
     source.gsub!(/\s*(<\/p>)\s*/, '\1')            # replace all whitespace before/after </p>
     source.gsub!(/\s*(<br\s*?\/?>)\s*/, '<br />')  # replace all whitespace before/after <br>  
 
-    # do we have a paragraph to start?
+    # do we have a paragraph to start and end
     source = '<p>' + source unless source.match(/^<p/)
+    source = source + "</p>" unless source.match(/<\/p>$/)
     
     # If we have three newlines, assume user wants a blank line
     source.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
@@ -160,7 +161,11 @@ module HtmlCleaner
       source.gsub!(/(<#{tag}>)(.*?)(<\/#{tag}>)/) { $1 + reopen_tags($2, tag) + $3 }
     end
     
-    # if we have 
+    # reopen paragraph tags that cross a <div> tag
+    source.gsub!(/(<p[^>]*>)(.*?)(<\/p>)/) { $1 + reopen_tags($2, "p", "div") + $3 }
+    
+    # swap order of paragraphs around divs
+    source.gsub!(/(<p[^>]*>)(<div[^>]*>)/, '\2\1')
 
     # Parse in Nokogiri
     parsed = Nokogiri::HTML.parse(source)
@@ -186,8 +191,8 @@ module HtmlCleaner
     source
   end
   
-  def reopen_tags(string, tag)
-    return string.gsub(/(<\/p><p.*?>)/, "</#{tag}>" + '\1' + "<#{tag}>")
+  def reopen_tags(string, tag_to_reopen, outer_tag = "p")
+    return string.gsub(/(<\/#{outer_tag}><#{outer_tag}[^>]*?>)/, "</#{tag_to_reopen}>" + '\1' + "<#{tag_to_reopen}>")
   end    
 
   ### STRIPPING FOR DISPLAY ONLY

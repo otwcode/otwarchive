@@ -73,7 +73,14 @@ class Work < ActiveRecord::Base
   has_many :kudos, :through => :chapters
 
   belongs_to :language
-
+  belongs_to :work_skin
+  validate :work_skin_allowed, :on => :save
+  def work_skin_allowed
+    unless self.users.include?(self.work_skin.author) || (self.work_skin.public? && self.work_skin.official?)
+      errors.add(:base, ts("You do not have permission to use that custom work stylesheet."))
+    end
+  end
+  
   ########################################################################
   # VIRTUAL ATTRIBUTES
   ########################################################################

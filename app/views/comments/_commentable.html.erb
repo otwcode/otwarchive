@@ -45,7 +45,9 @@
 
   <%= flash_div :comment_error, :comment_notice %>
 
-  <%= render "kudos/kudos", :kudos => commentable.kudos.with_pseud.order("created_at DESC"), :guest_kudos_count => commentable.kudos.by_guest.count %>
+  <% if commentable.respond_to?(:kudos) %>
+    <%= render "kudos/kudos", :kudos => commentable.kudos.with_pseud.order("created_at DESC"), :guest_kudos_count => commentable.kudos.by_guest.count %>
+  <% end %>
 
   <div id="add_comment_placeholder">
     <div id="add_comment">

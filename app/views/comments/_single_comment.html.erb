@@ -29,10 +29,10 @@
       <% end %>
       
       <h5 class="landmark">Comment Actions</h5>
-		<% if logged_in_as_admin? %>
-		<%= render :partial => 'admin/admin_options', :locals => {:item => single_comment} %>
-        <% end %>
-		<ul class="navigation" role="navigation" id="navigation_for_comment_<%= single_comment.id %>">
+  		<% if logged_in_as_admin? %>
+  		  <%= render :partial => 'admin/admin_options', :locals => {:item => single_comment} %>
+      <% end %>
+  		<ul class="navigation" role="navigation" id="navigation_for_comment_<%= single_comment.id %>">
         <li id="add_comment_reply_link_<%= single_comment.id %>"><%= add_cancel_comment_reply_link single_comment %></li>
         <li><%= link_to ts("Thread"), single_comment %></li>
         <% if is_author_of?(single_comment) && single_comment.count_all_comments == 0 %>
@@ -41,10 +41,10 @@
         <% if single_comment.pseud.nil? and is_author_of?(single_comment.ultimate_parent) %>
           <li id="tag_comment_as_spam_link_<%= single_comment.id %>"><%= tag_comment_as_spam_link single_comment %></li>
         <% end %>
-		<% if is_author_of?(single_comment) || is_author_of?(single_comment.ultimate_parent) %>				
+		    <% if is_author_of?(single_comment) || is_author_of?(single_comment.ultimate_parent) %>				
           <li id="delete_comment_link_<%= single_comment.id %>"><%= do_cancel_delete_comment_link single_comment %></li>
-		 <% end %>
- 		</ul>
+		    <% end %>
+   		</ul>
 
       <!-- this is where the comment delete confirmation will be displayed if we have javascript -->
       <!-- if not, here is where we will render the delete-comment form -->

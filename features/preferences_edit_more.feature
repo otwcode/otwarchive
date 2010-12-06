@@ -35,58 +35,30 @@ Feature: Preferences
   Then I should see "This work potentially has adult content"
     And I should not see "Rating: Mature"
 
-  Scenario: hide user generated view css
+  Scenario: set preference to hide custom css on stories
   Given basic tags
+    And basic skins    
     And I am logged in as "tasteless" with password "something"
-  When I post the work "Big and Loud"
+  When I set up the draft "Big and Loud"
+    And I select "Basic Formatting" from "work_work_skin_id"
+    And I press "Preview"
+    And I press "Post"
     And I go to the "Big and Loud" work page
-  Then I should find "userstuff-style-creator.css"
-    And I should not see "Creator's Style"
-  When I follow "Light Style"
-  Then I should not find "userstuff-style-creator.css"
-    And I should see "Creator's Style"
+  Then I should find ".userstuff .font-murkyyellow" within "style"
+    And I should see "Hide Creator's Style"
   When I follow "tasteless"
     And I follow "My Preferences"
-  Then the "Disable User Generated Styles" checkbox should not be checked
-  When I check "Disable User Generated Styles"
+  Then the "Hide custom styles on works" checkbox should not be checked
+  When I check "Hide custom styles on works"
     And I press "Update"
   When I go to the "Big and Loud" work page
-  Then I should not find "userstuff-style-creator.css"
-    And I should not see "Light Style"
+  Then I should not find ".userstuff .font-murkyyellow" within "style"
+    And I should not see "Hide Creator's Style"
+    And I should see "Show Creator's Style"
   When I follow "Creator's Style"
-  Then I should find "userstuff-style-creator.css"
-    And I should see "Light Style"
+  Then I should find ".userstuff .font-murkyyellow" within "style"
+    And I should see "Hide Creator's Style"
   Given I am logged out
     And I am logged in as "tasteful" with password "something"
     And I go to the "Big and Loud" work page
-  Then I should find "userstuff-style-creator.css"
-    And I should not see "Creator's Style"
-  When I follow "Light Style"
-    Then I should not find "userstuff-style-creator.css"
-  When I follow "Creator's Style"
-    Then I should find "userstuff-style-creator.css"
-  When I follow "tasteful"
-    And I follow "My Preferences"
-  When I check "Disable User Generated Styles"
-    And I press "Update"
-  When I go to the "Big and Loud" work page
-  Then I should not find "userstuff-style-creator.css"
-    And I should not see "Light Style"
-  When I follow "Creator's Style"
-    Then I should find "userstuff-style-creator.css"
-  When I follow "Light Style"
-    Then I should not find "userstuff-style-creator.css"
-  When I follow "tasteful"
-    And I follow "My Preferences"
-  When I uncheck "Disable User Generated Styles"
-    And I press "Update"
-  When I go to the "Big and Loud" work page
-  Then I should find "userstuff-style-creator.css"
-  Given I am logged out
-    And I go to the "Big and Loud" work page
-  Then I should find "userstuff-style-creator.css"
-    And I should not see "Creator's Style"
-  When I follow "Light Style"
-    Then I should not find "userstuff-style-creator.css"
-  When I follow "Creator's Style"
-    Then I should find "userstuff-style-creator.css"
+

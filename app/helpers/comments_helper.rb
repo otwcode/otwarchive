@@ -160,7 +160,7 @@ module CommentsHelper
     else
       add_comment_reply_link(comment)
     end     
-end
+  end
   
   # return link to add new reply to a comment
   def add_comment_reply_link(comment)

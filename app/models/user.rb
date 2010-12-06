@@ -69,6 +69,7 @@ class User < ActiveRecord::Base
   validates_associated :preference
 
   has_many :skins, :foreign_key=> 'author_id', :dependent => :nullify
+  has_many :work_skins, :foreign_key=> 'author_id', :dependent => :nullify
 
   before_create :create_default_associateds
 

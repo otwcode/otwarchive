@@ -1,0 +1,19 @@
+<!-- expects local "skin" and is cached one level up -->
+<style type="text/css">
+  <% unless skin.is_a?(WorkSkin) %>
+    <% if skin.margin %>
+      #chapters {margin: auto <%= skin.margin %>% 2.5em; padding: 0.5em <%= skin.margin %>% 0;}
+    <% end %>
+  
+    <% if skin.background_color || skin.foreground_color || skin.font || skin.base_em %>
+      <% bgcolor = skin.background_color ? skin.background_color : "#FFFEF9" %>
+      body	{
+        background: <%= bgcolor %>;
+        color: <%= skin.foreground_color ? skin.foreground_color : "#222" %>;
+        font: <%= skin.base_em ? skin.base_em : "100" %>%/1.125 <%= skin.font ? skin.font : "'Lucida Grande', Verdana, Helvetica, Arial, sans-serif" %>;
+      }
+    <% end %>
+  <% end %>
+
+  <%= skin.css %>
+</style>  

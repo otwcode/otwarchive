@@ -3,28 +3,33 @@
 <p>For security reasons, you can only use a limited set of CSS properties and values on this archive.</p>
 
 <dl id="help">
-  <dt>Comments</dt>
-  <dd id="css_comments">
-    <p>You can use comments either before or after a complete block of CSS, but not in the middle. (PS: comments are awesome!)</p>
-    <p>This will work fine:<br />
-    <code>
-      /* here is a comment before my awesome code */<br />
-      body {background: #fff;}<br />
-      /* here is a comment after my  awesome code */
-    </code>
+  <dt>Font and Font Family</dt>
+  <dd id="css_fonts">
+    <p>
+      Unfortunately, you cannot use the font shorthand in your CSS. All font properties have to be specified separately, eg, 
+      <tt>font-size: 1.1em; font-weight: bold; font-family: Cambria, Constantia, Palatino, Georgia, serif;</tt>
     </p>
-    <p>This will not work:<br />
-      <code>
-        body {/* comment in the middle of my code */ background: #fff;}
-      </code>
+    <p>
+      In the font-family property, we allow you to specify any font with an alphanumeric name. 
+      You can (but don't have to) specify the name with single or double quotes
+      around it, just make sure the quotes match. (eg, 'Gill Sans' and "Gill Sans" are both fine; 'Gill Sans" won't work.)
+      Keep in mind that a font has to be installed on the user's operating system to work. It's a good idea when specifying fonts to use 
+      fallbacks in case your first-choice font isn't available. 
+      See <a href="http://www.fonttester.com/help/list_of_web_safe_fonts.html">a set of web-safe fonts with fallbacks</a>.
+    </p>
+    <p>
+      We CANNOT allow the font-face attribute. Sorry! If you have an uncommon font that you want to 
+      use in a skin you would like to share, we suggest adding a comment in your skin with a pointer to a place for users 
+      to download the font themselves, and using web-safe fonts as fallbacks.
     </p>
   </dd>
-  
+    
   <dt>Properties</dt>
   <dd id="css_properties">
-    We allow the following properties: <br />
+    We also allow the following properties: <br />
     <code>
-      accelerator, azimuth, background, behavior, border, bottom, box-shadow, caption-side, clear, clip, color, content, counter-increment, counter-reset, cue, cursor, direction, display, elevation, empty-cells, filter, float, font-family, font-size, font-size-adjust, font-stretch, font-style, font-variant, font-weight, height, ime-mode, include-source, layer-background, layout-flow, layout-grid, left, letter-spacing, line-break, line-height, list-style, margin, marker-offset, marks, max-height, max-width, min-height, min-width, orphans, outline, overflow, padding, page, page-break, pause, pitch, pitch-range, play-during, position, quotes, richness, right, ruby-align, ruby-overhang, ruby-position, scrollbar, size, speak, speak-header, speak-numeral, speak-punctuation, speech-rate, stress, table-layout, text, top, transform, unicode-bidi, vertical-align, visibility, voice-family, volume, white-space, widows, width, word-break, word-spacing, word-wrap, writing-mode, z-index, -moz-border, -moz-box-shadow, -moz-opacity, -moz-outline, -moz-transform, -moz-user-select, -replace, -use-link-source, -webkit-box-shadow, -webkit-transform
+accelerator, azimuth, background, background-color, behavior, border, border-bottom-color, border-collapse, border-color, border-left-color, border-right-color, border-top-color, bottom, box-shadow, caption-side, clear, clip, color, content, counter-increment, counter-reset, cue, cursor, direction, display, elevation, empty-cells, filter, float, font-family, font-size, font-style, font-variant, font-weight, height, ime-mode, include-source, layer-background, layout-flow, layout-grid, left, letter-spacing, line-break, line-height, list-style, margin, marker-offset, marks, max-height, max-width, min-height, min-width, orphans, outline, overflow, padding, page, page-break, pause, pause-after, pause-before, pitch, pitch-range, play-during, position, quotes, richness, right, ruby-align, ruby-overhang, ruby-position, scrollbar, size, speak, speak-header, speak-numeral, speak-punctuation, speech-rate, stress, table-layout, text, text-align, text-decoration, text-indent, top, transform, transition, unicode-bidi, vertical-align, visibility, voice-family, volume, white-space, widows, width, word-break, word-spacing, word-wrap, writing-mode, z-index,
+-moz-border, -moz-box-shadow, -moz-opacity, -moz-outline, -moz-transform, -moz-transition, -moz-user-select, -replace, -use-link-source, -webkit-box-shadow, -webkit-transform, -webkit-transition       
     </code>
   </dd>
 
@@ -38,7 +43,7 @@
   <dd id="css_keywords">
     We allow the following keywords: <br />
     <code>
-      absolute, all, auto, blink, block, bold, both, bottom, center, collapse, dashed, dotted, hidden, !important, inline, italic, left, medium, none, no-repeat, normal, nowrap, overline, pointer, repeat, right, scroll, solid, static, top, transparent, underline
+!important, absolute, all, auto, bigger, blink, block, bold, both, bottom, center, collapse, dashed, dotted, ease-in, hidden, inline, italic, justify, left, medium, no-repeat, none, normal, nowrap, overline, pointer, repeat, repeat-x, repeat-y, right, scroll, small-caps, smaller, solid, static, top, transparent, underline, url
     </code>
   </dd>
   
@@ -65,28 +70,29 @@
         
   </dd>
 
-  <dt>Font Families</dt>
-  <dd id="css_fonts">
-    <p>
-      Keep in mind that a font has to be installed on the user's operating system to work. It's a good idea when specifying fonts to use 
-      fallbacks in case your first-choice font isn't available. 
-      See <a href="http://www.fonttester.com/help/list_of_web_safe_fonts.html">the set of web-safe fonts with fallbacks</a>.
-    </p>
-    <p>
-      We allow you to specify any font with an alphanumeric name. You can (but don't have to) specify the name with single or double quotes
-      around it, just make sure the quotes match. (eg, 'Gill Sans' and "Gill Sans" are both fine; 'Gill Sans" won't work.)
-    </p>
-    <p>
-      We CANNOT allow the font-face attribute. Sorry! If you have an uncommon font that you want to 
-      use in a skin you would like to share,we suggest adding a comment in your skin with a pointer to a place for users 
-      to download the font themselves, and using web-safe fonts as fallbacks.
-    </p>
-  </dd>
-  
   <dt>Scale</dt>
   <dd id="css_scale">
     <p>
       You can specify scale (for the "transform" property) as <code>scale(numeric value)</code> where the numeric value can be 
       specified up to two decimal places. 
     </p>
+  </dd>
+  
+  <dt>Comments</dt>
+  <dd id="css_comments">
+    <p>You can use comments either before or after a complete block of CSS, but not in the middle. (PS: comments are awesome!)</p>
+    <p>This will work fine:<br />
+    <code>
+      /* here is a comment before my awesome code */<br />
+      body {background: #fff;}<br />
+      /* here is a comment after my  awesome code */
+    </code>
+    </p>
+    <p>This will not work:<br />
+      <code>
+        body {/* comment in the middle of my code */ background: #fff;}
+      </code>
+    </p>
+  </dd>
+    
 </dl>

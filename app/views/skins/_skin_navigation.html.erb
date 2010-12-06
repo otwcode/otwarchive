@@ -1,7 +1,7 @@
-<% if logged_in? || skin.editable? %>
+<% if (logged_in? && !skin.is_a?(WorkSkin)) || skin.editable? %>
   <ul class="navigation" role="navigation">
     <li>
-      <% if logged_in? %>
+      <% if logged_in? && !skin.is_a?(WorkSkin) %>
         <%= form_for(current_user.preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| %>
           <% if skin.id == current_user.preference.skin_id %>
             <%= f.hidden_field :skin_id, :value => Skin.default.id %>

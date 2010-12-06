@@ -19,6 +19,7 @@
     <table id="approved">
       <tr>
         <th>Skin</th>
+        <th>Type</th>
         <th>Creator</th>
         <th>Admin Note</th>
         <th>Unapprove</th>
@@ -26,6 +27,7 @@
       <% @approved_skins.each_with_index do |skin, i| %>
         <tr>
           <td><%= link_to skin.title, skin_path(skin) %></td>
+          <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
           <td><%=h skin.admin_note %></td>
           <td><%= check_box_tag "make_unofficial[]", skin.id, false, :id => "make_unofficial_#{skin.title.downcase.gsub(/ +/, '_')}" %></td>

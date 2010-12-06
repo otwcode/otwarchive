@@ -89,7 +89,7 @@
   </fieldset>
         
   <fieldset id="associations">
-    <legend><%=h 'Associations' %></legend>
+    <legend><%= ts('Associations') %></legend>
     <dl>
       <% if !(@assignments = current_user.offer_assignments + current_user.pinch_hit_assignments).empty? || !@work.challenge_assignments.empty? %>
         <!-- if the user has open assignments? -->
@@ -195,7 +195,7 @@
               <ul class="navigation">
                 <li><%= link_to serial.series.title, serial.series %></li> 
                 <li><%= link_to 'Remove', serial_work_path(serial), :method => :delete %></li>
-                <li><%= link_to 'Delete', serial.series, :confirm => 'Are you sure?', :method => :delete %></li>
+                <li><%= link_to 'Delete', serial.series, :confirm => ts('Are you sure?'), :method => :delete %></li>
               </ul>
             </dd>
           <% end %>
@@ -210,7 +210,7 @@
         <%= check_box_tag "chapters-options-show", "1", @work.chaptered?, :onclick => "toggleFormField('chapters-options');" %>
       </dt>
       <dd class="work-is_wip">
-        <%= label_tag "chapters-options-show", t('.multiple_chapters', :default =>"This work has multiple chapters") %>
+        <%= label_tag "chapters-options-show", ts("This work has multiple chapters") %>
       </dd>        
       <dd id="chapters-options">
         <dl>
@@ -226,7 +226,7 @@
         <%= check_box_tag "backdate-options-show", "1", check_backdate_box(@work, @chapter), :onclick => "toggleFormField('backdate-options');" %>
       </dt>
       <dd class="work-is-backdated">
-        <%= label_tag "backdate-options-show", t('.change_pub_date', :default => "Set a different publication date") %> <%= link_to_help "backdating-help" %>
+        <%= label_tag "backdate-options-show", ts("Set a different publication date") %> <%= link_to_help "backdating-help" %>
       </dd>
       <dd id="backdate-options" class="optionalField">
         <dl>
@@ -237,7 +237,7 @@
             <%= f.check_box :backdate %>
           </dt>
           <dd class="work-is-backdated">
-            <%= f.label :backdate, "Set this publication date for the entire work" %>
+            <%= f.label :backdate, ts("Set this publication date for the entire work") %>
           </dd>
         </dl>
       </dd>
@@ -247,11 +247,11 @@
         <%= f.check_box :restricted %>
       </dt>
       <dd class="work-restricted">
-        <%= f.label :restricted, t('.restricted_viewing', :default => "Only show your work to registered users") %> <%= link_to_help "registered-users" %>
+        <%= f.label :restricted, ts("Only show your work to registered users") %> <%= link_to_help "registered-users" %>
       </dd>
     
       <dt class="work-language">
-        <%= f.label :language_id, t('.choose_language', :default => "Choose a language") %><%= link_to_help "languages-help" %>
+        <%= f.label :language_id, ts("Choose a language") %><%= link_to_help "languages-help" %>
       </dt>
       <dd class="work-language">
         <select id="work_language_id" name="work[language_id]">
@@ -267,10 +267,16 @@
     <!-- Work text field (chapter_attributes_content) -->
     <fieldset class="work-text">
       <legend><%= 'Work Text' %></legend>
-      <p class="label"><%= label_tag 'content', t('.story_text', :default => "Work text"), :class => "required" %></p>
+      <p class="label"><%= f.label :work_skin_id, ts("Custom Stylesheet?") %> <%= link_to_help "work-skins" %></p>
+      <p>
+        <%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
+        (<%= link_to ts('Public work skins'), skins_path(:work_skins => true) %>)
+      </p>
+      
+      <p class="label"><%= label_tag 'content', ts("Work text"), :class => "required" %></p>
       <div id="toggleText">
       <p id="plainTextNotes" style="display: block"><%= allowed_html_instructions %></p>
-      <p id="richTextNotes" style="display: none"><%=h t('.rich_text_notes', :default => "Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>
+      <p id="richTextNotes" style="display: none"><%=h ts("Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>
       </div>
       <% use_tinymce %>
       <p class="rtf-html-switch">

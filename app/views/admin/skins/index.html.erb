@@ -19,6 +19,7 @@
     <table id="unapproved">
       <tr>
         <th>Skin</th>
+        <th>Type</th>
         <th>Creator</th>
         <th>Preview</th>
         <th>Description</th>
@@ -31,6 +32,7 @@
           <td>
             <%= label_tag "make_official_#{skin.id}", (link_to skin.title, skin_path(skin)) %>
           </td>
+          <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
           <td><%= skin_preview_display(skin) %></td>
           <td>

@@ -18,7 +18,7 @@ module WorksHelper
     list.concat([[ts("Hits:"), work.hits]]) if show_hit_count?(work)
 
     if work.chaptered? && work.revised_at
-      prefix = work.is_wip ? ts("Updated: ") : ts("Completed: ")
+      prefix = work.is_wip ? ts("Updated:") : ts("Completed:")
       latest_date = (work.preview_mode && work.backdate) ? published_date : work.revised_at.to_date
       list.insert(1, [prefix, localize(latest_date)])
     end
