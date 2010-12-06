@@ -16,6 +16,7 @@
 /config/s3.yml
 /config/sphinx.yml
 /config/unicorn.rb
+/config/newrelic.yml
 
 # /config/environments/
 /config/environments/development.rb
@@ -33,6 +34,7 @@
 # /public/
 /public/system
 /public/downloads
+/public/stylesheets/cached_for_screen.css
 
 # /public/images/
 /public/images/Thumbs.db

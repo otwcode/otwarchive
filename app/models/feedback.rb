@@ -2,7 +2,7 @@
 class Feedback < ActiveRecord::Base
   # note -- this has NOTHING to do with the Comment class!
   # This is just the name of the text field in the Feedback
-  # class which holds the user's comments. 
+  # class which holds the user's comments.
   validates_presence_of :comment
   validates_presence_of :summary
   validates :email, :email_veracity => {:allow_blank => true}
@@ -31,17 +31,20 @@ class Feedback < ActiveRecord::Base
   end
 
   def check_for_spam?
-    self.approved = !Akismetor.spam?(akismet_attributes)
+    # don't check for spam while running tests
+    self.approved = Rails.env.test? || !Akismetor.spam?(akismet_attributes)
   end
-  
+
   def mark_as_spam!
     update_attribute(:approved, false)
-    Akismetor.submit_spam(akismet_attributes)
+    # don't submit spam reports unless in production mode
+    Rails.env.production? && Akismetor.submit_spam(akismet_attributes)
   end
 
   def mark_as_ham!
     update_attribute(:approved, true)
-    #Akismetor.submit_ham(akismet_attributes)
+    # don't submit ham reports unless in production mode
+    Rails.env.production? && Akismetor.submit_ham(akismet_attributes)
   end
 
 
@@ -52,7 +55,7 @@ class Feedback < ActiveRecord::Base
  BUGS_LANG = 11910
  BUGS_MISC = 11481
  BUGS_TAGS = 11485
- 
+
 # Category names, used on form
  BUGS_ASSISTANCE_NAME = 'Help Using the Archive'
  BUGS_BUG_NAME = 'Bug Report'

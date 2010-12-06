@@ -104,25 +104,13 @@ class CommentTest < ActiveSupport::TestCase
   # Test before and after
   # before_create :check_for_spam
 
-  def test_check_for_spam
+  def test_spam_commands
     comment = new_comment(:pseud_id => create_pseud)
     assert !comment.approved
-    assert comment.check_for_spam?  # should always return true
+    assert comment.check_for_spam?  # will always return true in test
     assert comment.approved
-    # TODO - test for actual spam
-  end
-
-  # Test methods
-  # FIXME didn't create tests for akismet_attributes, because they could/should be private
-  def test_mark_as_spam
-    comment = create_comment
-    assert comment.mark_as_spam!
-    assert !comment.approved
-    # TODO - what happens if a signed comment is marked as spam? can it even be done?
-  end
-  def test_mark_as_ham
-    comment = create_comment
     comment.mark_as_spam!
+    assert !comment.approved
     comment.mark_as_ham!
     assert comment.approved
   end
