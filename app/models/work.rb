@@ -294,7 +294,19 @@ class Work < ActiveRecord::Base
   end
 
   def collection_names=(new_collection_names)
-    self.collections = new_collection_names.split(',').map {|name| name.blank? ? nil : Collection.find_by_name(name.strip)}.compact.uniq
+    self.collections = []
+
+    new_collection_names.split(',').each do |name|
+      next if name.blank?
+      collection = Collection.find_by_name(name.strip)
+      if collection.nil?
+        self.errors.add(:base, t('collection_invalid', :default => "We couldn't find a collection with the name ") + name.strip)
+        next
+      end
+      self.collections << collection
+    end
+
+    self.collections.uniq
   end
 
   def add_to_collection(collection)
