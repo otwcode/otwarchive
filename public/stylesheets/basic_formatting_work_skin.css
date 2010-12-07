@@ -1,55 +1,55 @@
 /* NOTE: all class names must start with a letter and can only
- * contain alphanumeric characters, dashes, and underscores.
+ * contain alphanumeric characters, dashes, and underscores. 
  */
 
-#work .indent { padding: 0 5em 0 5em; }
-#work .dropcap { font-family: Georgia, serif; font-size: 3em;}
-#work .flashback { font-style: italic; }
-#work .caps { font-variant: small-caps; }
-#work .spoiler { background:#333; color:#333; }
-#work .border {border:1px solid;}
+.userstuff .indent              { padding: 0 5em 0 5em; }
+.userstuff .dropcap				{ font-family: Georgia, serif; font-size: 3em;}
+.userstuff .flashback			{ font-style: italic; }
+.userstuff .caps				{ font-variant: small-caps; }
+.userstuff .spoiler { background:#333; color:#333; }
+.userstuff .border {border:1px solid;}
 
-#work .font-serif { font-family: Cambria, Constantia, Palatino, Georgia, serif; }
-#work .font-sansserif {font-family: 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;}
-#work .font-monospace {font-family: consolas, courier, monospace;}
-#work .font-big { font-size: 120%; }
-#work .font-small { font-size: 80%; }
+.userstuff .font-serif { font-family: Cambria, Constantia, Palatino, Georgia, serif; }
+.userstuff .font-sansserif {font-family: 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;}
+.userstuff .font-monospace {font-family:  consolas, courier, monospace;}
+.userstuff .font-big { font-size: 120%; }
+.userstuff .font-small { font-size: 80%; }
 
-#work .align-right { text-align: right; }
-#work .align-center { text-align: center; }
-#work .align-justify { text-align: justify; }
+.userstuff .align-right { text-align: right; }
+.userstuff .align-center { text-align: center; }
+.userstuff .align-justify { text-align: justify; }
 
-#work hr.third { width:33%; margin:auto;}
-#work hr.full { width:auto; margin:auto;}
+.userstuff hr.third { width:33%; margin:auto;}
+.userstuff hr.full { width:auto; margin:auto;}
 
 /* colours */
-#work .font-red { color: red; }
-#work .font-orange { color: orange; }
-#work .font-yellow { color: yellow; }
-#work .font-green { color: green; }
-#work .font-blue { color: blue; }
-#work .font-purple {color: purple; }
-#work .font-white { color: white; }
-#work .font-black { color: black; }
-#work .font-pink { color: pink; }
-#work .font-teal { color: #008282; }
-#work .font-redbrown { color: #a15000; }
-#work .font-cherryred { color: #e00707; }
-#work .font-brickred { color: #a10000; }
-#work .font-dimorange { color: #f2a400; }
-#work .font-murkyyellow { color: #a1a100; }
-#work .font-jade { color: #4ac925; }
-#work .font-dimgreen { color: #008141; }
-#work .font-leafgreen { color: #1f9400; }
-#work .font-darkolive { color: #416600; }
-#work .font-dimblue { color: #005682; }
-#work .font-midblue { color: #0715cd; }
-#work .font-mediumskyblue { color: #00d5f2; }
-#work .font-darknavy { color: #000056; }
-#work .font-lightpurple { color: #f141ef; }
-#work .font-midviolet { color: #b536da; }
-#work .font-verydarkpurple { color: #2b0057; }
-#work .font-darkplum { color: #6a006a; }
-#work .font-darkmaroon { color: #77003c; }
-#work .font-reallydarkgray { color: #626262; }
+.userstuff .font-red { color: red; }
+.userstuff .font-orange { color: orange; }
+.userstuff .font-yellow { color: yellow; }
+.userstuff .font-green { color: green; }
+.userstuff .font-blue { color: blue; }
+.userstuff .font-purple {color: purple; }
+.userstuff .font-white { color: white; }
+.userstuff .font-black { color: black; }
+.userstuff .font-pink { color: pink; }
+.userstuff .font-teal { color: #008282; }
+.userstuff .font-redbrown { color: #a15000; }
+.userstuff .font-cherryred { color: #e00707; }
+.userstuff .font-brickred { color: #a10000; }
+.userstuff .font-dimorange { color: #f2a400; }
+.userstuff .font-murkyyellow { color: #a1a100; }
+.userstuff .font-jade { color: #4ac925; }
+.userstuff .font-dimgreen { color: #008141; }
+.userstuff .font-leafgreen { color: #1f9400; }
+.userstuff .font-darkolive { color: #416600; }
+.userstuff .font-dimblue { color: #005682; }
+.userstuff .font-midblue { color: #0715cd; }
+.userstuff .font-mediumskyblue { color: #00d5f2; }
+.userstuff .font-darknavy { color: #000056; }
+.userstuff .font-lightpurple { color: #f141ef; }
+.userstuff .font-midviolet { color: #b536da; }
+.userstuff .font-verydarkpurple { color: #2b0057; }
+.userstuff .font-darkplum { color: #6a006a; }
+.userstuff .font-darkmaroon { color: #77003c; }
+.userstuff .font-reallydarkgray { color: #626262; }
 

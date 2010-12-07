@@ -2,8 +2,8 @@
 <li class="comment <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
   <% if params[:edit_comment_id] && params[:edit_comment_id] == single_comment.id.to_s && is_author_of?(single_comment) %>
     <!-- we're editing this comment -->
-    <%= render :partial => 'comments/comment_form',
-               :locals => {:comment => single_comment, :commentable => single_comment.commentable, :button_name => t('.forms.update', :default => 'Update')} %>
+    <%= render :partial => 'comments/comment_form', 
+               :locals => {:comment => single_comment, :commentable => single_comment.commentable, :button_name => t('.forms.update', :default => 'Update')} %>	  
   <% else %>
     <% if single_comment.is_deleted %>
       <p>(<%= h(ts("previous comment by ")) + get_commenter_pseud_or_name(single_comment) + h(ts(" deleted")) %>)</p>
@@ -18,7 +18,7 @@
           <span class="visitor icon"><!-- visitor icon holder --></span>
         <% end %>
       </div>
-      <blockquote><%=raw sanitize_field(single_comment, :content) %></blockquote>
+      <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>
       <p class="datetime">
         <%= ts("Posted") %> <%= time_in_zone(single_comment.created_at) %>
       </p>
@@ -27,12 +27,12 @@
           <%= ts("Last Edited") %> <%= time_in_zone(single_comment.edited_at) %>
         </p>
       <% end %>
-
+      
       <h5 class="landmark">Comment Actions</h5>
-      <% if logged_in_as_admin? %>
-        <%= render :partial => 'admin/admin_options', :locals => {:item => single_comment} %>
+  		<% if logged_in_as_admin? %>
+  		  <%= render :partial => 'admin/admin_options', :locals => {:item => single_comment} %>
       <% end %>
-      <ul class="navigation" role="navigation" id="navigation_for_comment_<%= single_comment.id %>">
+  		<ul class="navigation" role="navigation" id="navigation_for_comment_<%= single_comment.id %>">
         <li id="add_comment_reply_link_<%= single_comment.id %>"><%= add_cancel_comment_reply_link single_comment %></li>
         <li><%= link_to ts("Thread"), single_comment %></li>
         <% if is_author_of?(single_comment) && single_comment.count_all_comments == 0 %>
@@ -41,10 +41,10 @@
         <% if single_comment.pseud.nil? and is_author_of?(single_comment.ultimate_parent) %>
           <li id="tag_comment_as_spam_link_<%= single_comment.id %>"><%= tag_comment_as_spam_link single_comment %></li>
         <% end %>
-        <% if is_author_of?(single_comment) || is_author_of?(single_comment.ultimate_parent) %>
+		    <% if is_author_of?(single_comment) || is_author_of?(single_comment.ultimate_parent) %>				
           <li id="delete_comment_link_<%= single_comment.id %>"><%= do_cancel_delete_comment_link single_comment %></li>
-        <% end %>
-       </ul>
+		    <% end %>
+   		</ul>
 
       <!-- this is where the comment delete confirmation will be displayed if we have javascript -->
       <!-- if not, here is where we will render the delete-comment form -->
@@ -52,15 +52,15 @@
         <div id="delete_comment_placeholder_<%= single_comment.id %>">
           <%= render :partial => 'comments/confirm_delete', :locals => {:comment => single_comment} %>
       <% else %>
-        <div id="delete_comment_placeholder_<%= single_comment.id %>" style="display:none;">
+        <div id="delete_comment_placeholder_<%= single_comment.id %>" style="display:none;">      
       <% end %>
         </div>
 
-      <!-- This is where the reply-to box will be added when "Reply" is hit, if the user has javascript -->
+      <!-- This is where the reply-to box will be added when "Reply" is hit, if the user has javascript -->	
       <!-- if not, we will render the comment form if this is the comment we are replying to. -->
       <% if params[:add_comment_reply_id] && params[:add_comment_reply_id] == single_comment.id.to_s %>
         <div id="add_comment_reply_placeholder_<%= single_comment.id %>">
-          <%= render :partial => 'comments/comment_form',
+          <%= render :partial => 'comments/comment_form', 
                      :locals => {:comment => Comment.new, :commentable => single_comment, :button_name => t('.forms.add_comment', :default => "Add Comment")} %>
       <% else %>
         <div id="add_comment_reply_placeholder_<%= single_comment.id %>" style="display: none;">

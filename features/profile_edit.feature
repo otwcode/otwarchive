@@ -32,7 +32,7 @@ Feature: Edit profile
     And I press "Update"
   Then I should see "Your profile has been successfully updated"
     And I should see "Alpha Centauri" within ".wrapper"
-    And I should see "This is some text about me."
+    And I should see "This is some text about me." within ".userstuff"
   When I follow "Edit My Profile"
     And I fill in "Title" with "Alternative title thingy"
     And I fill in "Location" with "Beta Centauri"
@@ -41,7 +41,7 @@ Feature: Edit profile
   Then I should see "Your profile has been successfully updated"
     And I should see "Alternative title thingy"
     And I should see "Beta Centauri" within ".wrapper"
-    And I should see "This is some text about me and my colours."
+    And I should see "This is some text about me and my colours." within ".userstuff"
   When I follow "Edit My Profile"
     And I fill in "Title" with ""
     And I fill in "Location" with ""
@@ -108,7 +108,7 @@ Feature: Edit profile
     And I press "Update"
   Then I should see "Email has already been taken"
     And I should not see "Your profile has been successfully updated"
-
+    
   Scenario: View and edit profile - change password
 
   Given I am logged in as "editname2" with password "password"

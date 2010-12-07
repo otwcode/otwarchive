@@ -4,10 +4,10 @@ include CssParser
 
 module CssCleaner
 
-  # For use in ActiveRecord models
+  # For use in ActiveRecord models 
   # We parse and clean the CSS line by line in order to provide more helpful error messages.
-  # The prefix is used if you want to make sure a particular prefix appears on all the selectors in
-  # this block of css, eg "#work p" instead of just "p"
+  # The prefix is used if you want to make sure a particular prefix appears on all the selectors in 
+  # this block of css, eg ".userstuff p" instead of just "p"
   def clean_css_code(css_code, prefix = "")
     clean_css = ""
     parser = CssParser::Parser.new
@@ -43,9 +43,9 @@ module CssCleaner
     end
     return clean_css
   end
-
+  
   # A declaration must match the format:   property: value; (property: value; ... property: value;)
-  # All properties must appear in ArchiveConfig.SUPPORTED_CSS_PROPERTIES or ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES,
+  # All properties must appear in ArchiveConfig.SUPPORTED_CSS_PROPERTIES or ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES, 
   # or that property and its value will be omitted.
   # All values are sanitized. If any values in a declaration are invalid, the value will be blanked out and an
   #   empty property returned.
@@ -53,7 +53,7 @@ module CssCleaner
     declaration = declaration.to_s
 
     # basic check: make sure "declaration" has at least one valid css statement of the format property: value
-    if declaration !~ /^(\s*[-\w]+\s*:\s*([^:;]|https?:)*(;|$)\s*)*$/
+    if declaration !~ /^(\s*[-\w]+\s*:\s*([^:;]|https?:)*(;|$)\s*)*$/        
       return ''
     end
 
@@ -63,7 +63,7 @@ module CssCleaner
       if prop == "font-family"
         if !sanitize_css_font(val).blank?
           clean << "#{prop}: #{val};"
-        else
+        else 
           clean << "#{prop}: ;"
         end
       elsif ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.include?(prop) || ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.include?(prop.split(/\-([^-]*)$/).first)
@@ -75,11 +75,11 @@ module CssCleaner
             cleanval = []
             break
           else
-            cleanval << sanitize_css_value(keyword)
+            cleanval << sanitize_css_value(keyword) 
           end
         end
         clean << "#{prop}: #{cleanval.join(' ')};"
-      elsif ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(prop)
+      elsif ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(prop) 
         if !sanitize_css_value(val).blank?
           clean << "#{prop}: #{val};"
         else
@@ -90,14 +90,14 @@ module CssCleaner
     clean.join(' ')
   end
 
-  # all values must either appear in ArchiveConfig.SUPPORTED_CSS_KEYWORDS, be urls of the format url(http://url/) or be
+  # all values must either appear in ArchiveConfig.SUPPORTED_CSS_KEYWORDS, be urls of the format url(http://url/) or be 
   # rgb(), hex (#), or numeric values, or a comma-separated list of same
   def sanitize_css_value(value)
     value_stripped = value.downcase.gsub(/(!important)/, '').strip
-    if ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(value_stripped) ||
-      value_stripped.split(',').all? {|subval| ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(subval.strip)} ||
+    if ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(value_stripped) || 
+      value_stripped.split(',').all? {|subval| ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(subval.strip)} || 
       value_stripped =~ /^(#[0-9a-f]+|scale\(\d{0,2}\.?\d{0,2}\)|rgba?\(\d+%?,? ?\d*%?,? ?\d*%?,? ?\d{0,3}?\.?\d{0,3}?\)|\-?\d{0,3}\.?\d{0,3}(cm|em|ex|in|mm|pc|pt|px|s|%|,)?)$/
-      # return original value
+      # return original value 
       return value
     elsif value_stripped.match(/\burl\b/) && ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url")
       return sanitize_css_url(value)
@@ -114,7 +114,7 @@ module CssCleaner
     else
       return ""
     end
-  end
+  end 
 
   # URL values must be of the format:
   # url(url name)
@@ -133,5 +133,5 @@ module CssCleaner
       return ""
     end
   end
-
+  
 end

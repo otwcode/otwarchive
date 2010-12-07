@@ -43,12 +43,12 @@
   <% if @work.work_skin %>
     <li>
       <% if Preference.disable_work_skin?(params[:style]) %>
-        <%= link_to(ts("Show Creator's Style"),
+        <%= link_to(ts("Show Creator's Style"), 
                     params[:view_full_work] == 'true' ? url_for(:style => 'creator', :view_full_work => 'true') : url_for(:style => 'creator')) %>
       <% else %>
-        <%= link_to(ts("Hide Creator's Style"),
+        <%= link_to(ts("Hide Creator's Style"), 
                     params[:view_full_work] == 'true' ? url_for(:style => 'disable', :view_full_work => 'true') : url_for(:style => 'disable')) %>
-      <% end %>
+      <% end %>    
     </li>
   <% end %>
 
@@ -98,14 +98,14 @@
       <div class="summary module" role="complementary">
         <h3><%= ts("Summary:") %></h3>
         <% unless @work.summary.blank? %>
-          <blockquote><%=raw sanitize_field(@work, :summary) %></blockquote>
+          <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
         <% end %>
       </div>
     <% end %>
 
     <% unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? && @work.approved_children.blank? %>
-      <% current_page?(:controller => 'chapters', :action => 'show') ?
-            linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') :
+      <% current_page?(:controller => 'chapters', :action => 'show') ? 
+            linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : 
             linkpath = "#work_endnotes"
       %>
       <div class="notes module" role="complementary">
@@ -145,7 +145,7 @@
   <%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>
         </span>
     <% else %>
-        <blockquote><%=raw sanitize_field(@work, :notes) %></blockquote>
+        <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
         <% unless @work.endnotes.blank? %>
           <span class="endnotes-link">
     <%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>

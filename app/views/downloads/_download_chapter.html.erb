@@ -8,24 +8,24 @@
 
   <% unless @chapter.summary.blank? %>
     <p><%= ts('Chapter Summary') %></p>
-    <blockquote><%=raw sanitize_field(@chapter, :summary) %></blockquote>
+    <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :summary) %></blockquote>
   <% end %>
-
+  
   <% unless @chapter.notes.blank? && @chapter.endnotes.blank? %>
     <p><%= ts('Chapter Notes') %></p>
     <% unless @chapter.notes.blank? %>
-      <blockquote><%=raw sanitize_field(@chapter, :notes) %></blockquote>
+      <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :notes) %></blockquote>
     <% end %>
     <% unless @chapter.endnotes.blank? %>
       <div class="endnote-link">
         <%= ts("See the end of the chapter for") %> <% unless @chapter.notes.blank? %><%= ts("more") %><% end %> <%= link_to ts("notes"), "#endnotes#{@chapter.position}" %>
       </div>
-    <% end %>
+    <% end %> 
   <% end %>
 </div>
 
 <!--chapter content-->
-<div>
+<div class="userstuff">
   <%=raw sanitize_field(@chapter, :content) %>
 </div>
 <!--/chapter content-->
@@ -33,6 +33,6 @@
 <% unless @chapter.endnotes.blank? %>
   <div class="meta" id="endnotes<%= @chapter.position %>">
     <p><%= ts('Chapter End Notes') %></p>
-    <blockquote><%=raw sanitize_field(@chapter, :endnotes) %></blockquote>
+    <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :endnotes) %></blockquote>
   </div>
 <% end %>

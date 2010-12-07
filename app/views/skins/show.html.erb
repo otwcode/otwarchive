@@ -1,12 +1,12 @@
 <%= render :partial => "skin_top_navigation" %>
 
 <div id="skin-page" class="profile module">
-
+  
   <div class="header module">
     <h2>
-      <%= @skin.title %> <%= ts("skin by") %> <%= skin_author_link(@skin) %>
+      <%= @skin.title %> <%= ts("skin by") %> <%= skin_author_link(@skin) %>    
     </h2>
-    <blockquote>
+    <blockquote class="userstuff">
       <%= @skin.description.blank? ? ts("(No Description Provided)") : raw(sanitize_field(@skin, :description)) %>
     </blockquote>
     <%= skin_preview_display(@skin) %>
@@ -17,7 +17,7 @@
     <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em %>
       <h3>Wizard Settings</h3>
       <p class="notes">(can be overridden by custom CSS)</p>
-
+  
       <dl>
         <% if @skin.margin %><dt>Margin</dt><dd><%= @skin.margin %><% end  %>
         <% unless @skin.font.blank? %><dt>Font</dt><dd><%= @skin.font %><% end  %>

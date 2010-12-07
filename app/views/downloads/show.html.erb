@@ -1,6 +1,6 @@
 <%= render :partial => 'download_preface.html' %>
 
-<div id="chapters">
+<div id="chapters" class="userstuff">
   <% if @chapters.size > 1 %>
     <% for chapter in @chapters %>
       <%= render :partial => 'download_chapter.html', :locals => {:chapter => chapter} %>

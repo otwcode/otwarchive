@@ -1,6 +1,6 @@
 <li class="user blurb" role="article">
   <div class="module">
-    <h4><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) %>
+    <h4><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) %> 
       <% if (pseud.name != pseud.user_name || pseud.user.pseuds.size > 1) %>
         (<%= link_to(pseud.user_name, user_path(pseud.user)) %>)
       <% end %>
@@ -13,12 +13,12 @@
       <%= standard_icon_display(@user, pseud) %>
     </div>
     <% unless pseud.description.blank? %>
-      <blockquote>
+      <blockquote class="userstuff">
 	<%=raw sanitize_field(pseud, :description) %>
       </blockquote>
     <% end %>
     <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
-
+    
     <% if current_user == pseud.user %>
       <ul class="navigation" role="navigation">
       <li><%= link_to "#{h(ts('Edit'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [:edit, @user, pseud], :id => "edit_#{pseud.name.downcase.gsub(" ", "_")}" %></li>
@@ -32,6 +32,6 @@
       <% end %>
     </ul>
     <% end %>
-
-	</div>
+    
+	</div>  	
 </li>

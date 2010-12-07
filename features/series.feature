@@ -67,8 +67,8 @@ Feature: Edit Series
       And I fill in "Series Notes" with "I wrote this under the influence of coffee! And pink chocolate."
       And I press "Update"
     Then I should see "Series was successfully updated."
-      And I should see "This is a seriea about ponies. Of course" within "blockquote"
-      And I should see "I wrote this under the influence of coffee! And pink chocolate." within "blockquote"
+      And I should see "This is a seriea about ponies. Of course" within "blockquote.userstuff"
+      And I should see "I wrote this under the influence of coffee! And pink chocolate." within "blockquote.userstuff"
       And I should see "Complete: No"
     When I follow "Edit"
       And I check "series_complete"
@@ -86,7 +86,7 @@ Feature: Edit Series
       And I should see "Part 3 of the Many a Pony series" within "dd.series"
       And I should see "Part 1 of the Black Beauty series" within "p.series"
       And I should see "Part 3 of the Many a Pony series" within "p.series"
-
+    
   Scenario: Three ways to add a work to a series: a user with more than one pseud
     Given the following activated user exists
       | login         | password   |
@@ -160,8 +160,8 @@ Feature: Edit Series
       And I fill in "Series Notes" with "I wrote this under the influence of coffee! And pink chocolate."
       And I press "Update"
     Then I should see "Series was successfully updated."
-      And I should see "This is a series about ponies. Of course" within "blockquote"
-      And I should see "I wrote this under the influence of coffee! And pink chocolate." within "blockquote"
+      And I should see "This is a series about ponies. Of course" within "blockquote.userstuff"
+      And I should see "I wrote this under the influence of coffee! And pink chocolate." within "blockquote.userstuff"
       And I should see "Complete: No"
     When I follow "Edit"
       And I check "series_complete"
@@ -179,4 +179,4 @@ Feature: Edit Series
       And I should see "Part 3 of the Many a Pony series" within "dd.series"
       And I should see "Part 1 of the Black Beauty series" within "p.series"
       And I should see "Part 3 of the Many a Pony series" within "p.series"
-
+      

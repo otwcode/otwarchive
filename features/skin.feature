@@ -144,7 +144,7 @@ Feature: creating and editing skins
   Then I should see "The following skins were approved: public blinking skin"
   When I follow "Approved Skins"
   Then I should see "public blinking skin" within "table#approved"
-  When I follow "public blinking skin"
+  When I follow "public blinking skin" 
   Then I should see "Edit"
   But I should not find "Delete"
   When I follow "Edit"
@@ -256,7 +256,7 @@ Feature: creating and editing skins
 
 
   Scenario: Create and use a work skin
-
+  
   Given I am logged in as "skinner" with password "password"
   When I am on skin's new page
     #'
@@ -266,7 +266,7 @@ Feature: creating and editing skins
     And I fill in "CSS" with "p {color: purple;}"
     And I press "Create"
   Then I should see "Skin was created successfully"
-    And I should see "#work p"
+    And I should see ".userstuff p"
   When I go to the new work page
   Then I should see "Awesome Work Skin"
   When I set up the draft "Story With Awesome Skin"
@@ -283,4 +283,4 @@ Feature: creating and editing skins
     And I should not see "color: purple" within "style"
     And I should not see "Hide Creator's Style"
     And I should see "Show Creator's Style"
-
+    

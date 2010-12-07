@@ -5,7 +5,7 @@
 <!--/descriptions-->
 
 <!--main content-->
-<% unless @inbox_comments.blank? %>
+<% unless @inbox_comments.blank? %>  
   <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do %>
   <fieldset>
 	<legend>Mass Edit Options</legend>
@@ -19,7 +19,7 @@
     </li>
   </ul>
 	<p class="submit">
-      <%= "Mark checked as:" %>
+      <%= "Mark checked as:" %> 
       <%= submit_tag t('.read', :default => 'Read'), :name => 'read' %>
       <%= submit_tag t('.unread', :default => 'Unread'), :name => 'unread' %>
       <%= submit_tag t('.delete_from_inbox', :default => 'Delete From Inbox'), :name => 'delete' %>
@@ -39,7 +39,7 @@
             <span class="visitor icon"><!-- visitor icon holder --></span>
           <% end %>
         </div>
-        <blockquote><%=raw sanitize_field(inbox_comment.feedback_comment, :content) %></blockquote>
+        <blockquote class="userstuff"><%=raw sanitize_field(inbox_comment.feedback_comment, :content) %></blockquote>
         <p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
         <h5 class="landmark">Comment Actions</h5>
         <ul class="navigation">
@@ -75,7 +75,7 @@
       <%= hidden_field_tag("filters[read]", params[:filters][:read]) if params[:filters] %>
       <%= hidden_field_tag("filters[replied_to]", params[:filters][:replied_to]) if params[:filters] %>
       <%= hidden_field_tag("filters[date]", params[:filters][:date]) if params[:filters] %>
-      <%= "Mark checked as:" %>
+      <%= "Mark checked as:" %> 
       <%= submit_tag t('.read', :default => 'Read'), :name => 'read' %>
       <%= submit_tag t('.unread', :default => 'Unread'), :name => 'unread' %>
       <%= submit_tag t('.delete_from_inbox', :default => 'Delete From Inbox'), :name => 'delete' %>
@@ -83,7 +83,7 @@
   </fieldset>
     <!-- coming soon <%= submit_tag t('.mass_reply', :default => 'mass reply') %> -->
   <% end %> <!-- end of inbox form -->
-
+  
   <!-- we can't open comment forms inside the inbox form, which is why this is down here -->
   <div id="reply-to-comment" style="display:none;"></div> <!-- this div will contain the reply to comment form -->
 <% end %>

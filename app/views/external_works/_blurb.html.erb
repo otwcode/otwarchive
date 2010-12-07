@@ -24,10 +24,10 @@
     <%= blurb_tag_block(external_work) %>
   </ul>
 
-  <!--summary-->
+  <!--summary-->	
   <% unless external_work.summary.blank? %>
   <h6 class="landmark">Summary</h6>
-  <blockquote class="summary" title="summary">
+  <blockquote class="userstuff summary" title="summary">
     <%=raw strip_images(sanitize_field(external_work, :summary)) %>
   </blockquote>
   <% end %>
