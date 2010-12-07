@@ -15,7 +15,7 @@
     <% end %>
     <% if @user.preference.try(:date_of_birth_visible) %>
     <dt class="birthday"><%=h ts("My birthday:") %></dt>
-      <dd class="birthday"><%=l(@user.profile.date_of_birth) unless @user.profile.date_of_birth.blank? %></dd> 
+      <dd class="birthday"><%=l(@user.profile.date_of_birth) unless @user.profile.date_of_birth.blank? %></dd>
     <% end %>
     <% if @user.preference.try(:email_visible) %>
     <dt class="email"><%=h ts("My email address:") %></dt>
@@ -27,10 +27,10 @@
   <% unless @user.profile.about_me.blank? %>
     <div class="user module">
       <h3><%=h ts("Bio:") %></h3>
-      <blockquote class="userstuff"><%=raw sanitize_field(@user.profile, :about_me) %></blockquote>
+      <blockquote><%=raw sanitize_field(@user.profile, :about_me) %></blockquote>
     </div>
   <% end %>
-  
+
   <% if logged_in? && current_user == @user %>
   <h3 class="landmark">Actions</h3>
 <ul class="navigation" role="navigation">

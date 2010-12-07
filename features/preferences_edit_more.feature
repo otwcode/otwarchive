@@ -37,14 +37,14 @@ Feature: Preferences
 
   Scenario: set preference to hide custom css on stories
   Given basic tags
-    And basic skins    
+    And basic skins
     And I am logged in as "tasteless" with password "something"
   When I set up the draft "Big and Loud"
     And I select "Basic Formatting" from "work_work_skin_id"
     And I press "Preview"
     And I press "Post"
     And I go to the "Big and Loud" work page
-  Then I should find ".userstuff .font-murkyyellow" within "style"
+  Then I should find "#work .font-murkyyellow" within "style"
     And I should see "Hide Creator's Style"
   When I follow "tasteless"
     And I follow "My Preferences"
@@ -52,11 +52,11 @@ Feature: Preferences
   When I check "Hide custom styles on works"
     And I press "Update"
   When I go to the "Big and Loud" work page
-  Then I should not find ".userstuff .font-murkyyellow" within "style"
+  Then I should not find "#work .font-murkyyellow" within "style"
     And I should not see "Hide Creator's Style"
     And I should see "Show Creator's Style"
   When I follow "Creator's Style"
-  Then I should find ".userstuff .font-murkyyellow" within "style"
+  Then I should find "#work .font-murkyyellow" within "style"
     And I should see "Hide Creator's Style"
   Given I am logged out
     And I am logged in as "tasteful" with password "something"

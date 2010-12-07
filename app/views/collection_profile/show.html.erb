@@ -38,7 +38,7 @@
     <div id="intro" class="module">
       <%= render :partial => 'navigation', :locals => {:section => 'intro'} %>
       <h3><%= ts("Intro:") %></h3>
-      <blockquote class="userstuff">
+      <blockquote>
         <%=raw sanitize_field(@collection.collection_profile.intro.blank? ? @collection.parent.collection_profile : @collection.collection_profile, :intro) %>
       </blockquote>
     </div>
@@ -48,7 +48,7 @@
     <div id="faq" class="module">
       <%= render :partial => 'navigation', :locals => {:section => 'faq'} %>
       <h3><%= ts("FAQ:") %></h3>
-      <blockquote class="userstuff">
+      <blockquote>
         <%=raw sanitize_field(@collection.collection_profile.faq.blank? ? @collection.parent.collection_profile : @collection.collection_profile, :faq) %>
       </blockquote>
     </div>
@@ -58,7 +58,7 @@
       <div id="rules" class="module">
         <%= render :partial => 'navigation', :locals => {:section => 'rules'} %>
         <h3><%= ts("Rules:") %></h3>
-        <blockquote class="userstuff">
+        <blockquote>
           <%=raw sanitize_field(@collection.collection_profile.rules.blank? ? @collection.parent.collection_profile : @collection.collection_profile, :rules) %>
         </blockquote>
       </div>
@@ -82,7 +82,7 @@
         :confirm => ts('Are you certain you want to delete this collection? All collection settings will be lost. (Works will not be deleted.)'),
         :method => :delete %></li>
       <% if @collection.challenge %>
-        <li><%= link_to ts("Delete Challenge"), 
+        <li><%= link_to ts("Delete Challenge"),
                         eval("collection_#{challenge_class_name(@collection)}_path(@collection)"),
                         :confirm => ts('Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)'),
                         :method => :delete %></li>

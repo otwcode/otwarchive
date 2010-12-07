@@ -11,40 +11,40 @@
 <!--main content-->
 <% @admin_posts.each do |admin_post| %>
 
- 	<div class="admin module" role="article">
-			<div class="admin-header">
+   <div class="admin module" role="article">
+      <div class="admin-header">
       <h3>
-				<%= link_to admin_post.title, admin_post %>
-			</h3>
-				<h4>
-					Published: <%= admin_post.created_at %>  
-						<% if logged_in_as_admin? %>
-					    <%= link_to t('.edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
-						<% end %>
+        <%= link_to admin_post.title, admin_post %>
+      </h3>
+        <h4>
+          Published: <%= admin_post.created_at %>
+            <% if logged_in_as_admin? %>
+              <%= link_to t('.edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
+            <% end %>
         </h4>
       </div>
-      <div class="admin-content userstuff">
-		    <%=raw sanitize_field(admin_post, :content) %>
+      <div class="admin-content">
+        <%=raw sanitize_field(admin_post, :content) %>
       </div>
-			<!-- BEGIN comment section -->
-				<h3 class="landmark">Comment</h3>
-				<ul class="navigation">
+      <!-- BEGIN comment section -->
+        <h3 class="landmark">Comment</h3>
+        <ul class="navigation">
           <% if admin_post.count_visible_comments > 0 %>
-          <li><%= link_to ( admin_post.count_visible_comments == 1 ? 
-                            t("comments.read_one", :default => "Read %{comment_count} Comment", :comment_count => admin_post.count_visible_comments.to_s) : 
+          <li><%= link_to ( admin_post.count_visible_comments == 1 ?
+                            t("comments.read_one", :default => "Read %{comment_count} Comment", :comment_count => admin_post.count_visible_comments.to_s) :
                             t("comments.read_many", :default => "Read %{comment_count} Comments", :comment_count => admin_post.count_visible_comments.to_s)),
-                          admin_post_path(:id => admin_post.id, :anchor => "comments", :show_comments => true) %></li> 
+                          admin_post_path(:id => admin_post.id, :anchor => "comments", :show_comments => true) %></li>
           <% end %>
           <li><%= link_to t('.admin_post_comments_add', :default => 'Add Comment'), admin_post_path(:id => admin_post.id, :anchor => "comments", :add_comment => true) %></li>
-				</ul>	
-			<!-- END comment section -->
-	
-	</div>
+        </ul>
+      <!-- END comment section -->
+
+  </div>
 <% end %>
 <!--/content-->
 <hr class="clear" />
 
 <!--subnav-->
-	  <%= will_paginate @admin_posts %>
+    <%= will_paginate @admin_posts %>
 <!--/subnav-->
 <% end %>

@@ -1,7 +1,7 @@
 <!--page description, messages-->
 <% if @work.unrevealed? %>
   <p class="message">
-    <%= ts("This work is part of an ongoing challenge and will be revealed soon! You can find details here: ") %> 
+    <%= ts("This work is part of an ongoing challenge and will be revealed soon! You can find details here: ") %>
     <%= @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ").html_safe %>
   </p>
 <% end %>
@@ -14,7 +14,7 @@
 <!--/subnav-->
 
 <% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
-<!-- BEGIN work --> 
+<!-- BEGIN work -->
 <div class="work"><p class="landmark"><a name="top">&nbsp;</a></p>
   <%= render :partial => 'works/work_header' %>
 
@@ -23,8 +23,8 @@
     <% if !@work.endnotes.blank? && @chapter == @work.last_chapter %>
       <div id="work_endnotes" class="chapter preface footnotes module" role="complementary">
           <h3><%=h "Notes:" %></h3>
-          <blockquote class="userstuff"><%=raw sanitize_field(@work, :endnotes) %></blockquote>
-      </div>    
+          <blockquote><%=raw sanitize_field(@work, :endnotes) %></blockquote>
+      </div>
     <% end %>
 	  <!-- Series links -->
     <% unless @preview_mode || @work.series.blank? || @chapter != @work.last_chapter%>
@@ -33,7 +33,7 @@
   </div>
 
   <%= render :partial => 'works/work_footer' %>
-  
+
 </div>
 <!-- END work -->
 

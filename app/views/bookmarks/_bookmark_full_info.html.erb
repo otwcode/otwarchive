@@ -6,13 +6,13 @@
       <%= get_symbol_for_bookmark(bookmark) %>
       <span><%=  (bookmark_count < 100) ? bookmark_count : '*' %></span>
 	</p>
-    
-  <%= render :partial => "bookmarks/#{bookmark.bookmarkable.class.to_s.underscore}_bookmark", :locals => { :bookmark => bookmark } %>   
+
+  <%= render :partial => "bookmarks/#{bookmark.bookmarkable.class.to_s.underscore}_bookmark", :locals => { :bookmark => bookmark } %>
 
 <!--summary-->
 <% unless bookmark.bookmarkable.summary.blank? %>
     <h6 class="landmark">Summary</h6>
-	<blockquote class="userstuff summary" title="summary">
+	<blockquote class="summary" title="summary">
 	  <%=raw strip_images(sanitize_field(bookmark.bookmarkable, :summary)) %>
 	</blockquote>
   <% end %>
@@ -30,7 +30,7 @@
   <% if bookmark_count > 1 %>
     <% if params[:tag_id] || @most_recent_bookmarks %>
     <li id="recent_link_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>" style="display: none;">
-      <%= link_to "View most recent bookmarks", 
+      <%= link_to "View most recent bookmarks",
           url_for({:controller => 'bookmarks', :action => 'fetch_recent', :id => bookmark.id }),
          :remote => true %></li>
 <!--/actions-->
@@ -49,7 +49,7 @@
     <%= ts("Bookmarked by ") %>
     <%= link_to(bookmark.pseud.byline, user_pseud_path(bookmark.pseud.user, bookmark.pseud)) %>
   </h5>
-   
+
 <!--tags-->
  <% unless bookmark.tag_string.blank? %>
       <dl class="tags">
@@ -67,7 +67,7 @@
 <!--notes-->
   <% unless bookmark.notes.blank? %>
         <h6 class="landmark">Notes</h6>
-		<blockquote class="userstuff notes" title="notes">
+		<blockquote class="notes" title="notes">
 		  <%=raw sanitize_field(bookmark, :notes) %>
 		</blockquote>
   <% end %>

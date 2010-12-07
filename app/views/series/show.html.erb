@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
 <h2>
-	<%=h @series.title %>
-	<% if @series.restricted %>
-		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
-	<% end %>
+  <%=h @series.title %>
+  <% if @series.restricted %>
+    <%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
+  <% end %>
 </h2>
 <!--/descriptions-->
 
@@ -16,7 +16,7 @@
     <li><%= link_to "Edit", edit_series_path(@series) %></li>
     <li><%= link_to 'Delete Series', @series, :confirm => 'Are you sure?', :method => :delete %></li>
     <li><%= link_to "Reorder Series", manage_series_path(@series) %></li>
-    <li><%= link_to t('.orphan_series', :default => 'Orphan Series'), {:controller => 'orphans', :action => 'new', :series_id => @series.id} %></li>    	
+    <li><%= link_to t('.orphan_series', :default => 'Orphan Series'), {:controller => 'orphans', :action => 'new', :series_id => @series.id} %></li>
     <% unless (@series.pseuds - current_user.pseuds).empty? %>
       <li><%= link_to t('.remove_me_as_author', :default => 'Remove Me As Author'), edit_series_path(@series, :remove => 'me'), :confirm => series_removal_confirmation(@series, current_user) %></li>
     <% end %>
@@ -28,7 +28,7 @@
 <!--main content-->
 <h3 class="landmark">Series Metadata</h3>
 <div class="wrapper">
-	<dl class="series meta">
+  <dl class="series meta">
     <dt><%=h 'Series begun:' %></dt>
     <dd><%=h @series.published_at.to_date %></dd>
     <dt><%=h 'Series updated: ' %></dt>
@@ -53,15 +53,15 @@
 
   <% unless @series.summary.blank? %>
       <dt><%=h 'Description:' %></dt>
-      <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :summary) %></blockquote></dd>
-	<% end %>
-	<% unless @series.notes.blank? %>
+      <dd><blockquote><%=raw sanitize_field(@series, :summary) %></blockquote></dd>
+  <% end %>
+  <% unless @series.notes.blank? %>
       <dt><%=h 'Notes:' %></dt>
-      <dd><blockquote class="userstuff"><%=raw sanitize_field(@series, :notes) %></blockquote></dd>
-	<% end %>
+      <dd><blockquote><%=raw sanitize_field(@series, :notes) %></blockquote></dd>
+  <% end %>
 </dl>
 </div>
-<div id="dynamic-bookmark" style="display:none;">	
+<div id="dynamic-bookmark" style="display:none;">
 </div>
 
 <% if logged_in_as_admin? %>

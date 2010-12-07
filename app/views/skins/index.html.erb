@@ -13,7 +13,7 @@
 
 <p class="notes">
   <% if params[:work_skins] %>
-    A work skin lets you customize the way your stories look for other readers. 
+    A work skin lets you customize the way your stories look for other readers.
   <% else %>
     A site skin lets you change the way the archive looks in your browser and customize your reading experience.
   <% end %>
@@ -26,7 +26,7 @@
 
 <% if @skins.empty? %>
   <p>
-    No <%= params[:work_skins] ? "work" : "site" %> skins here yet! 
+    No <%= params[:work_skins] ? "work" : "site" %> skins here yet!
     <% if logged_in? %>Why not try and <%= link_to ts('make one'), new_skin_path(:skin_type => params[:work_skins] ? "WorkSkin" : "Skin") %>?<% end %>
   </p>
 <% else %>
@@ -39,11 +39,11 @@
           <span class="byline">
             by <%= skin.byline %>
             <% if @user %>
-              <% if skin.official? %> 
+              <% if skin.official? %>
                 (Approved)
               <% elsif skin.rejected? %>
-                (Declined: <%= link_to_help "skins-approval" %> <%= skin.admin_note %>) 
-              <% elsif skin.public? %> 
+                (Declined: <%= link_to_help "skins-approval" %> <%= skin.admin_note %>)
+              <% elsif skin.public? %>
                 (Not yet reviewed) <%= link_to_help "skins-approval" %>
               <% end %>
             <% end %>
@@ -52,13 +52,13 @@
 
         <div class="icon"><%= skin_preview_display(skin) %></div>
       </div>
-      
+
       <!--summary/descriptions-->
       <h6 class="landmark">Description</h6>
-      <blockquote class="userstuff summary">
+      <blockquote class="summary">
         <%=raw skin.description.blank? ? h(ts("(No Description Provided)")) : strip_images(sanitize_field(skin, :description)) %>
       </blockquote>
-    
+
       <%= render :partial => "skin_navigation", :locals => {:skin => skin} %>
 
     </li>

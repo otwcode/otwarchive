@@ -40,10 +40,10 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
     Then I should see "ArchiveFaq was successfully created"
     When I go to the archive_faqs page
       And I follow "New subsection"
-    Then I should see "Some text, that is sufficiently long to pass validation" within ".userstuff"
-    
+    Then I should see "Some text, that is sufficiently long to pass validation" within ".admin-content"
+
     Scenario: Change some admin settings for performance
-    
+
   Given I have no users
       And the following admin exists
       | login       | password |
@@ -51,17 +51,17 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
       And the following activated user exists
       | login       | password      |
       | dizmo       | wrangulator   |
-      
+
   # post a work and download it as a guest
-  
+
   When I am logged in as "dizmo" with password "wrangulator"
     And I post the work "Storytime"
     And I follow "Log out"
     And I view the work "Storytime"
   Then I should see "Download"
-  
+
   # turn off guest downloading
-  
+
   When I go to the admin_login page
     And I fill in "admin_session_login" with "Zooey"
     And I fill in "admin_session_password" with "secret"
@@ -73,9 +73,9 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
   When I check "Turn off downloading for guests"
     And I press "Update"
   Then I should see "Archive settings were successfully updated."
-  
+
   # Check guest downloading is off
-  
+
   When I follow "Log out"
   Then I should see "Successfully logged out"
   When I view the work "Storytime"
@@ -83,11 +83,11 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
     And I follow "MOBI"
    # Then show me the page
   Then I should see "Due to current high load"
-  
+
   # TODO: Turn off tag wrangling
-  
+
   Scenario: Send out an admin notice to all users
-  
+
   Given I have no users
     And the following admin exists
       | login       | password |
@@ -97,9 +97,9 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
       | enigel      | emailnotifications   |
       | otherfan    | hatesnotifications   |
     And all emails have been delivered
-  
+
   # otherfan turns off notifications
-  
+
   When I am logged in as "otherfan" with password "hatesnotifications"
     And I follow "Profile"
   Then I should see "Set My Preferences"
@@ -110,9 +110,9 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
   Then I should see "Your preferences were successfully updated"
   When I follow "Log out"
   Then I should see "Successfully logged out"
-  
+
   # admin sends out notice to all users
-  
+
   When I go to the admin_login page
     And I fill in "Admin user name" with "Zooey"
     And I fill in "admin_session_password" with "secret"

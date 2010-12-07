@@ -1,7 +1,7 @@
 <!-- This partial requires local variable 'chapter' -->
 <% chapter_id = "chapter-#{chapter.position.to_s}" %>
 <div class="chapter<%= ' draft' unless chapter.posted? %>" id="<%= chapter_id %>">
-<!-- chapter management -->  
+<!-- chapter management -->
   <% if is_author_of?(@work) && !@downloading %>
     <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work, :preview_mode => @preview_mode} %>
   <% end %>
@@ -17,17 +17,17 @@
     <% if (!chapter.pseuds.blank? && (chapter.pseuds != @work.pseuds)) || @preview_mode %>
       <h4 class="byline"><%= ts('Chapter by') %> <%= byline(chapter) %></h4>
     <% end %>
- 
+
     <% if (@work.number_of_posted_chapters > 1) || @work.chaptered? %>
       <% unless chapter.summary.blank? %>
         <div id="summary" class="summary module">
           <h3><%= ts('Summary:') %></h3>
-          <blockquote class="userstuff">
-      	    <%=raw sanitize_field(chapter, :summary) %>
-      	  </blockquote>
+          <blockquote>
+            <%=raw sanitize_field(chapter, :summary) %>
+          </blockquote>
         </div>
       <% end %>
-  
+
       <% unless chapter.notes.blank? && chapter.endnotes.blank? %>
       <div id="notes" class="notes module">
         <h3><%=h ts('Notes:') %></h3>
@@ -35,22 +35,22 @@
           <p><%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("notes")), :anchor => "chapter_#{chapter.position.to_s}_endnotes") %>.
           </p>
         <% else %>
-          <blockquote class="userstuff"><%=raw sanitize_field(chapter, :notes) %></blockquote>
+          <blockquote><%=raw sanitize_field(chapter, :notes) %></blockquote>
           <% unless chapter.endnotes.blank? %>
             <p>
               <%= ts("See the end of the chapter for more ") %> <%= link_to(h(ts("notes")), :anchor => "chapter_#{chapter.position.to_s}_endnotes") %>.
             </p>
-          <% end %>     
-        <% end %> 
+          <% end %>
+        <% end %>
       </div>
       <% end %>
-    <% end %> 
+    <% end %>
   </div>
 
   <!--main content-->
-  <div id="module" class="userstuff" role="article">
+  <div id="module" role="article">
     <% unless @downloading %>
-  	  <h3 class="landmark">Chapter Text</h3>	
+      <h3 class="landmark">Chapter Text</h3>
     <% end %>
     <%=raw sanitize_field(chapter, :content) %>
   </div>
@@ -59,10 +59,10 @@
   <% unless chapter.endnotes.blank? %>
     <div class="chapter preface footnote module" id="chapter_<%= chapter.position.to_s %>_endnotes">
      <h3><%=h ts('Notes:') %></h3>
-        <blockquote class="userstuff"><%=raw sanitize_field(chapter, :endnotes) %></blockquote>
+        <blockquote><%=raw sanitize_field(chapter, :endnotes) %></blockquote>
     </div>
   <% end %>
-  
+
 </div>
 
 <% end %><!-- end of cache -->

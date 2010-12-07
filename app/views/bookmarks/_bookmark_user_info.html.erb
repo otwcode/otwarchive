@@ -21,9 +21,9 @@
           </dd>
         </dl>
     <% end %>
-<!--summary-->    
+<!--summary-->
 	<% unless bookmark.notes.blank? %>
-    <blockquote class="userstuff summary" title="notes">
+    <blockquote class="summary" title="notes">
 		<%=raw sanitize_field(bookmark, :notes) %>
 	  </blockquote>
     <% end %>

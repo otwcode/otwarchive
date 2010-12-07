@@ -25,10 +25,10 @@ Scenario: Orphan all works belonging to one pseud
   Then I should see "Orphaning was successful."
   When I view the work "Shenanigans"
   Then I should see "orphan_account"
-    And I should not see "orphanpseud" within ".userstuff"
+    And I should not see "orphanpseud" within ".byline"
   When I view the work "Shenanigans 2"
   Then I should see "orphan_account"
-    And I should not see "orphanpseud" within ".userstuff"
+    And I should not see "orphanpseud" within ".byline"
 
     Scenario: Orphan all works belonging to one pseud, add a copy of the pseud to the orphan_account
       Given I have an orphan account
@@ -49,9 +49,12 @@ Scenario: Orphan all works belonging to one pseud
       When I choose "Make a copy of my pseud under the orphan account"
         And I press "Yes, I'm sure"
       Then I should see "Orphaning was successful."
+      When I am on orphanpseud's user page
+        Then I should not see "Shenanigans"
+      When I am logged out
+        And I am on orphan_account's pseuds page
+        And I follow "orphanpseud"
+      Then I should see "Shenanigans"
+        And I should see "Shenanigans 2"
       When I view the work "Shenanigans"
-      Then I should see "orphanpseud (orphan_account)"
-        And I should not see "orphanpseud" within ".userstuff"
-      When I view the work "Shenanigans 2"
-      Then I should see "orphanpseud (orphan_account)"
-        And I should not see "orphanpseud" within ".userstuff"
+      Then I should see "orphanpseud (orphan_account)" within ".byline"
