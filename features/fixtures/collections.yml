@@ -3,3 +3,8 @@ first:
   name: sometest
   description: This is a testy collection or something
 
+second:
+  title: Some Other Collection
+  name: othertest
+  description: This is another collection or something
+

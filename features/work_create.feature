@@ -58,6 +58,10 @@ Feature: Create Works
         | cosomeone      | something   | cosomeone@example.org |
         | giftee         | something   | giftee@example.org    |
         | recipient      | something   | recipient@example.org |
+      And the following collections exist
+        | name        | title        | 
+        | collection1 | Collection 1 |
+        | collection2 | Collection 2 |
       And I am logged in as "thorough" with password "something"
       And all emails have been delivered
     When I go to thorough's user page
@@ -98,6 +102,7 @@ Feature: Create Works
       And I select "Pseud2" from "work_author_attributes_ids_"
       And I select "Pseud3" from "work_author_attributes_ids_"
       And I fill in "pseud_byline" with "coauthor"
+      And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
     Then I should see "Preview Work"
     When I press "Post"
@@ -119,6 +124,7 @@ Feature: Create Works
       And I should see "Characters: Sam Winchester, Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
       And I should see "For Someone else, recipient"
+      And I should see "Collections: Collection 1, Collection 2"
       And I should see "Notes"
       And I should see "This is my beginning note"
       And I should see "See the end of the work for more notes"
@@ -219,6 +225,12 @@ Feature: Create Works
       And I press "Preview"
     Then I should see "Brevity is the soul of wit, but your content does have to be at least 10 characters long."
     When I fill in "content" with "Text and some longer text"
+      And I fill in "work_collection_names" with "collection1, collection2"
+      And I press "Preview"
+    Then I should see "We couldn't save this Work, sorry!"
+      And I should see "We couldn't find a collection with the name collection1"
+      And I should see "We couldn't find a collection with the name collection2"
+    When I fill in "work_collection_names" with ""
       And I press "Preview"
     Then I should see "Draft was successfully created"
       And I should see "Chapter"
