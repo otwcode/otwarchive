@@ -1,4 +1,12 @@
+<% if @work.work_skin && !Preference.disable_work_skin?(params[:style]) %>
+  <% cache("#{@work.work_skin.id}-work-skin") do %>
+    <%= render "skins/skin_style_block", :skin => @work.work_skin %>
+  <% end %><!-- end cache for work skin -->
+<% end %>
+
 <div id="chapters">
+<div id="workskin">
 <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
+</div>
 <%= render :partial => 'chapter_management', :locals => { :chapter => @chapter, :work => @work, :preview_mode => @preview_mode } %>
 </div>

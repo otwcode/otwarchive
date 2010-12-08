@@ -43,12 +43,12 @@
   <% if @work.work_skin %>
     <li>
       <% if Preference.disable_work_skin?(params[:style]) %>
-        <%= link_to(ts("Show Creator's Style"), 
+        <%= link_to(ts("Show Creator's Style"),
                     params[:view_full_work] == 'true' ? url_for(:style => 'creator', :view_full_work => 'true') : url_for(:style => 'creator')) %>
       <% else %>
-        <%= link_to(ts("Hide Creator's Style"), 
+        <%= link_to(ts("Hide Creator's Style"),
                     params[:view_full_work] == 'true' ? url_for(:style => 'disable', :view_full_work => 'true') : url_for(:style => 'disable')) %>
-      <% end %>    
+      <% end %>
     </li>
   <% end %>
 
@@ -82,6 +82,8 @@
   <% end %><!-- end cache for work skin -->
 <% end %>
 
+<!-- BEGIN work skin -->
+<div id="workskin">
 <div class="preface">
   <h2 class="title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
@@ -104,8 +106,8 @@
     <% end %>
 
     <% unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? && @work.approved_children.blank? %>
-      <% current_page?(:controller => 'chapters', :action => 'show') ? 
-            linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') : 
+      <% current_page?(:controller => 'chapters', :action => 'show') ?
+            linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') :
             linkpath = "#work_endnotes"
       %>
       <div class="notes module" role="complementary">

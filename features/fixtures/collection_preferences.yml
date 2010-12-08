@@ -3,4 +3,9 @@ first:
   closed: false
   moderated: false
 
+second:
+  collection: second
+  closed: false
+  moderated: false
+
 

@@ -1,11 +1,11 @@
 class WorkSkin < Skin
-  
+
   has_many :works
 
   # override parent's clean_css to append a prefix
   def clean_css
     return if self.css.blank?
-    prefix = ".userstuff"
+    prefix = "#workskin"
     scanner = StringScanner.new(self.css)
     if !scanner.exist?(/\/\*/)
       # no comments, clean the whole thing
@@ -20,7 +20,7 @@ class WorkSkin < Skin
       self.css = clean_code.delete_if {|code_block| code_block.blank?}.join("\n")
     end
   end
-  
+
   def self.model_name
     name = "skin"
     name.instance_eval do
@@ -35,7 +35,7 @@ class WorkSkin < Skin
   def self.basic_formatting
     Skin.find_by_title_and_official("Basic Formatting", true) || WorkSkin.import_basic_formatting
   end
-  
+
   def self.import_basic_formatting
     css = File.read(Rails.public_path + "/stylesheets/basic_formatting_work_skin.css")
     skin = WorkSkin.find_or_create_by_title_and_official(:title => "Basic Formatting", :css => css, :public => true, :official => true)
@@ -44,6 +44,6 @@ class WorkSkin < Skin
     skin.save!
     skin
   end
-  
-  
+
+
 end
