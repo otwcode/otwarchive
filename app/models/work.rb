@@ -300,7 +300,7 @@ class Work < ActiveRecord::Base
       next if name.blank?
       collection = Collection.find_by_name(name.strip)
       if collection.nil?
-        self.errors.add(:base, t('collection_invalid', :default => "We couldn't find a collection with the name ") + name.strip)
+        self.errors.add(:base, t('collection_invalid', :default => "We couldn't find a collection with the name %{name}. Make sure you are using the one-word name, and not the title?", :name => name.strip))
         next
       end
       self.collections << collection
