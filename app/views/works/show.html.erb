@@ -34,7 +34,7 @@
           <% end %>
         <% end %>
       <% else %>
-        <% cache("chapter-show-content-#{@chapter.id}") do %>
+        <% cache("#{@chapter.cache_key}-show-content") do %>
           <%=raw sanitize_field(@chapter, :content) %>
         <% end %><!-- end cache -->
       <% end %>

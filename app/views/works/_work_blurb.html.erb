@@ -34,7 +34,7 @@
         <%= byline(work) %>
 
 <!-- caching -->
-<% cache("work-#{work.id}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
+<% cache("#{work.cache_key}-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
 
         <% unless work.recipients.blank? %>
           <%= ts("for") %> <%= recipients_link(work) %>

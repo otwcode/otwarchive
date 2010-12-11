@@ -6,7 +6,7 @@
     <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work, :preview_mode => @preview_mode} %>
   <% end %>
 
-<% cache("chapter-show-#{chapter.id}") do %>
+<% cache("#{chapter.cache_key}-show") do %>
 
   <div class="chapter preface" role="complementary">
     <h3 class="title">
