@@ -25,6 +25,22 @@ Feature: Create Works
     When I go to the works page
     Then I should see "All Hell Breaks Loose"
 
+  Scenario: Creating a new minimally valid work and posting without preview
+    Given basic tags
+      And I am logged in as "newbie" with password "password"
+    When I go to the new work page
+    Then I should see "Post New Work"
+      And I select "Not Rated" from "Rating"
+      And I check "No Archive Warnings Apply"
+      And I fill in "Fandoms" with "Supernatural"
+      And I fill in "Work Title" with "All Hell Breaks Loose"
+      And I fill in "content" with "Bad things happen, etc."
+    When I press "Post without preview"
+    Then I should see "Work was successfully posted."
+    And I should see "Bad things happen, etc."
+    When I go to the works page
+    Then I should see "All Hell Breaks Loose"
+
   Scenario: Creating a new minimally valid work when you have more than one pseud
     Given basic tags
       And I am logged in as "newbie" with password "password"

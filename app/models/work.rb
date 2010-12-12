@@ -472,7 +472,7 @@ class Work < ActiveRecord::Base
     if self.posted? && !self.first_chapter.posted?
        chapter = self.first_chapter
        chapter.posted = true
-       chapter.save(:validate => false)
+       chapter.save(:validate => false) unless self.new_record?
     end
   end
 

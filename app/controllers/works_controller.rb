@@ -227,12 +227,20 @@ class WorksController < ApplicationController
       flash[:notice] = ts("New work posting canceled.")
       redirect_to current_user
     else # now also treating the cancel_coauthor_button case, bc it should function like a preview, really
-      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
+      unless params[:preview_button]
+        @work.posted = true
+        @chapter.posted = true
+      end
+      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)  
+      
       if valid && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info && @work.save
-        flash[:notice] = ts('Draft was successfully created.')
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
-        redirect_to preview_work_path(@work)
+        if params[:preview_button]
+          redirect_to preview_work_path(@work), :notice => ts('Draft was successfully created.')
+        else
+          redirect_to work_path(@work), :notice => ts('Work was successfully posted.')
+        end
       else
         if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
           render :partial => 'choose_coauthor', :layout => 'application'
