@@ -132,7 +132,7 @@ class ChallengeAssignment < ActiveRecord::Base
   end
   
   def requesting_pseud
-    request_signup ? request_signup.pseud : (request_pinch_signup ? request_pinch_signup.pseud : nil)
+    request_signup ? request_signup.pseud : (pinch_request_signup ? pinch_request_signup.pseud : nil)
   end
   
   def offer_byline
