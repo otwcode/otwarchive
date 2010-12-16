@@ -150,7 +150,7 @@ class Chapter < ActiveRecord::Base
   
   # Set the value of word_count to reflect the length of the text in the chapter content
   def set_word_count
-    if self.content_changed?
+    if self.new_record? || self.content_changed?
       count = 0
       body = Nokogiri::HTML(self.content).xpath('//body').first
       body.traverse do |node|
