@@ -201,6 +201,12 @@ namespace :After do
 #    end
 #  end
 
+#  desc "Create work skin"
+#  task(:add_skins => :environment) do
+#    default = WorkSkin.basic_formatting
+#    default ? puts("Basic work skin") : puts("Check work skin!")
+#  end
+
   #### Leave this one here
 
   desc "Update the translation file each time we deploy"
@@ -211,11 +217,6 @@ namespace :After do
 
   #### Add your new tasks here
 
-  desc "Create work skin"
-  task(:add_skins => :environment) do
-    default = WorkSkin.basic_formatting
-    default ? puts("Basic work skin") : puts("Check work skin!")
-  end
 
   desc "Fix default pseuds"
   task(:fix_default_pseuds => :environment) do
@@ -239,5 +240,4 @@ end # this is the end that you have to put new tasks above
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-#task :After => ['After:update_filter_taggings']
-task :After => ['After:add_skins', 'After:fix_default_pseuds']
+task :After => ['After:fix_default_pseuds']
