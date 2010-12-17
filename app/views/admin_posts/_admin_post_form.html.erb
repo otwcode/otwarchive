@@ -32,6 +32,23 @@
   		%>
     <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
 	</div>
+	<dl>
+	  <dt>
+	    <%= f.label :language_id, ts("Choose a language") %>
+	  </dt>
+	  <dd>
+            <select id="admin_post_language_id" name="admin_post[language_id]">
+              <%= options_from_collection_for_select(Language.all(:order => :short), :id, :name, @admin_post.language_id || Language.default.id) %>
+            </select>
+	  </dd>
+	  <dt>
+	    <%= f.label :translated_post_id, ts("Is this a translation of another post?") %>
+	  </dt>
+	  <dd>
+	    <%= f.collection_select(:translated_post_id, @translatable_posts, :id, :title, 
+{:prompt => true}) %>
+	  </dd>	  
+	</dl>
 </fieldset>
 <fieldset>
 <legend><%= t('.form_post', :default => 'Post') %></legend>

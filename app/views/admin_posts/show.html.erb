@@ -20,6 +20,21 @@
 				    <%= link_to t('.edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
 				<% end %>
       </h4>
+    <% if @admin_post.translated_post %>
+      <h4>Original: <%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></h4>
+    <% elsif !@admin_post.translations.empty? %>
+      <h4>Translations:</h4>
+      <dl>
+        <% for admin_post in @admin_post.translations %>
+          <dt>
+            <%= link_to admin_post.language.name, language_admin_posts_path(admin_post.language) %>
+          </dt>
+          <dd>
+            <%= link_to admin_post.title, admin_post %>
+          <dd>
+        <% end %>
+      </dl>
+    <% end %>
   </div>
   <div class="admin-content userstuff">
 	    <%=raw sanitize_field(@admin_post, :content) %>

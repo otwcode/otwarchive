@@ -5,6 +5,7 @@ class Language < ActiveRecord::Base
   
   has_many :works
   has_many :locales
+  has_many :admin_posts
   
   def to_param
     short

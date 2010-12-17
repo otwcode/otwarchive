@@ -24,7 +24,7 @@ class HomeController < ApplicationController
     @user_count = User.count
     @work_count = Work.visible.size
     @fandom_count = Fandom.canonical.count
-    @admin_post = AdminPost.find(:first, :order => "created_at DESC")
+    @admin_post = AdminPost.non_translated.order("created_at DESC").first
     @admin_post_show_more = AdminPost.count > 1
     render :action => "index", :layout => "home"
   end

@@ -315,6 +315,7 @@ Otwarchive::Application.routes.draw do
   # should stay below the main works mapping
   resources :languages do
     resources :works
+    resources :admin_posts
   end 
   resources :locales do
     collection do

@@ -3,21 +3,26 @@ class FandomsController < ApplicationController
 
   def index
     if @collection
-      @fandoms = Fandom.for_collections_with_count([@collection] + @collection.children)
+      @media = Media.canonical - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
+      if params[:medium_id]
+        @medium = Media.find_by_name(params[:medium_id])
+        @fandoms = @medium.fandoms.canonical
+      end
+      @fandoms = (@fandoms || Fandom).for_collections_with_count([@collection] + @collection.children)
     elsif params[:medium_id]
       if @medium = Media.find_by_name(params[:medium_id])
         if @medium == Media.uncategorized
           @fandoms = @medium.fandoms.by_name
         else
-          fandom_ids = @medium.fandoms.canonical.collect(&:id)
-          @fandoms = Fandom.by_name.with_count.where(:id => fandom_ids)
+          @fandoms = @medium.fandoms.canonical.with_count
         end      
       else
         raise ActiveRecord::RecordNotFound, "Couldn't find media category named '#{params[:medium_id]}'"
       end
     else
-      @fandoms = Fandom.canonical.by_name.with_count
+      redirect_to media_path(:notice => "Please choose a media category to start browsing fandoms.")
     end
+    @fandoms_by_letter = @fandoms.group_by {|f| f.name[0].upcase}
   end
   
   def show

@@ -1,5 +1,10 @@
 class AdminPost < ActiveRecord::Base
   acts_as_commentable
+  belongs_to :language
+  belongs_to :translated_post, :class_name => 'AdminPost'
+  has_many :translations, :class_name => 'AdminPost', :foreign_key => 
+'translated_post_id'
+
 
   attr_protected :content_sanitizer_version
   
@@ -18,6 +23,8 @@ class AdminPost < ActiveRecord::Base
 
   validates_length_of :content, :maximum => ArchiveConfig.CONTENT_MAX, 
     :too_long => t('content_too_long', :default => "cannot be more than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
+
+  scope :non_translated, where('translated_post_id IS NULL')
   
   # Return the name to link comments to for this object
   def commentable_name

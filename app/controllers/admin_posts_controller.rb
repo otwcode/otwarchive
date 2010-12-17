@@ -5,13 +5,19 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts
   # GET /admin_posts.xml
   def index
-    @admin_posts = AdminPost.order('created_at DESC').paginate(:page => params[:page], :per_page => 8)
+    if params[:language_id]
+      @language = Language.find_by_short(params[:language_id])
+      @admin_posts = @language.admin_posts
+    else
+      @admin_posts = AdminPost.non_translated
+    end
+    @admin_posts = @admin_posts.order('created_at DESC').paginate(:page => params[:page], :per_page => 8)
   end
   
   # GET /admin_posts/1
   # GET /admin_posts/1.xml
   def show
-    @admin_posts = AdminPost.order('created_at DESC').limit(8)
+    @admin_posts = AdminPost.non_translated.order('created_at DESC').limit(8)
     @admin_post = AdminPost.find(params[:id])
     @commentable = @admin_post
     @comments = @admin_post.comments
@@ -26,6 +32,7 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts/new.xml
   def new
     @admin_post = AdminPost.new
+    @translatable_posts = AdminPost.non_translated.order("created_at DESC").limit(10)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -36,6 +43,7 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts/1/edit
   def edit
     @admin_post = AdminPost.find(params[:id])
+    @translatable_posts = AdminPost.non_translated.order("created_at DESC").limit(10)
   end
 
   # POST /admin_posts

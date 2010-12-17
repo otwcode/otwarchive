@@ -342,10 +342,22 @@ p.kudos        {padding: 0.25em 0.25em; min-height: 50px; background: url('/imag
   #main.media-index li.category { margin: 1em 2em }   							
   .media-index li.odd           { float: left; width: 40% }
   .media-index li.even          { float: left; width: 40% }
-  .fandoms-index ul.index       { float: left; width: 33% }
-  .fandoms-index div.main-fandoms-listing 
-								{ clear: both }
-  .fandoms-unassigned ul.fandoms {float: left; width: 60%;}
+  .fandoms-index ul.index li    { float: left; width: 50% }
+  .fandoms-index div.main-fandoms-listing  {clear: both;}
+  .fandoms-index .filters     {float: left; width: 100%;}
+  .fandoms-index .alphabet li {display: inline;}
+  .fandoms-index li.letter    {float: left; width: 100%;}
+  .fandoms-index ul.letters   {float: left; width: 90%; margin: 2em; padding: 0 1em; border: 1px solid #eee;
+                              -moz-box-shadow: 3px 3px 4px #ccc; -webkit-box-shadow: 3px 3px 4px #ccc;
+                              box-shadow: 3px 3px 4px #ccc;
+                              /* For IE 8 */
+                              -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#cccccc')";
+                              /* For IE 5.5 - 7 */
+                              filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#cccccc');
+  }
+  .fandoms-index ul.letters.collection {margin-left: 0; width: 95%;}
+  .fandoms-index li.letter h3 {background: #eee; padding: .25em; width: auto;}  
+  .fandoms-unassigned ul.fandoms li {float: left; width: 40%;}
   .fandoms-unassigned .filters #media_id {width: 100%;}                
 
 /* PEOPLE INDEX, PSEUDS-INDEX */
