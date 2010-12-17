@@ -217,6 +217,20 @@ namespace :After do
     default ? puts("Basic work skin") : puts("Check work skin!")
   end
 
+  desc "Fix default pseuds"
+  task(:fix_default_pseuds => :environment) do
+    # for every user who doesn't have a pseud marked is_default
+    (User.all - (User.joins(:pseuds) & Pseud.where(:is_default => true))).each do |user|
+      if user.pseuds.first
+        # find the old default pseud and actually mark it default
+        user.pseuds.first.update_attribute(:is_default, true)
+      else
+        # create a new default pseud with the same name as the login
+        user.pseuds << Pseud.new(:name => user.login, :is_default => true)
+      end
+    end
+  end
+
 
 end # this is the end that you have to put new tasks above
 
@@ -226,4 +240,4 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:update_filter_taggings']
-task :After => ['After:add_skins']
+task :After => ['After:add_skins', 'After:fix_default_pseuds']

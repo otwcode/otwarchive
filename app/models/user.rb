@@ -123,7 +123,7 @@ class User < ActiveRecord::Base
 
   has_many :log_items, :dependent => :destroy
   validates_associated :log_items
-  
+
   before_destroy :remove_pseud_from_kudos
   def remove_pseud_from_kudos
     Kudo.update_all("pseud_id = NULL", "pseud_id IN (#{self.pseuds.collect(&:id).join(',')})")
@@ -230,14 +230,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  # checks if user already has a pseud called newname
-  def has_pseud?(newname)
-    return self.pseuds.collect(&:name).include?(newname)
-  end
-
   # Retrieve the current default pseud
   def default_pseud
-    pseuds.to_enum.find(&:is_default?) || pseuds.first
+    self.pseuds.where(:is_default => true).first
   end
 
   # Checks authorship of any sort of object
