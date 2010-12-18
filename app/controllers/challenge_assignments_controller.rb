@@ -214,10 +214,8 @@ class ChallengeAssignmentsController < ApplicationController
   
   def default_all
     # mark all unfulfilled assignments as defaulted
-    ChallengeAssignment.in_collection(@collection).unfulfilled.readonly(false).each do |unfulfilled_assignment|
-      unfulfilled_assignment.defaulted_at = Time.now
-      unfulfilled_assignment.save
-    end
+    unfulfilled_assignments = ChallengeAssignment.in_collection(@collection).unfulfilled.readonly(false)
+    unfulfilled_assignments.update_all :defaulted_at => Time.now
     flash[:notice] = "All unfulfilled assignments marked as defaulting."
     redirect_to collection_assignments_path(@collection)
   end
