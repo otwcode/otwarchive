@@ -342,8 +342,10 @@ p.kudos        {padding: 0.25em 0.25em; min-height: 50px; background: url('/imag
   #main.media-index li.category { margin: 1em 2em }   							
   .media-index li.odd           { float: left; width: 40% }
   .media-index li.even          { float: left; width: 40% }
-  .fandoms-index ul.index li    { float: left; width: 50% }
-  .fandoms-index div.main-fandoms-listing  {clear: both;}
+  .fandoms-index ul.index li    { float: left; width: 45% }
+  .fandoms-index ul.index li.odd          {clear: left;}
+  #main.fandoms-index ul.index li.even    {margin-left: 10%;}
+  .fandoms-index div.main-fandoms-listing {clear: both;}
   .fandoms-index .filters     {float: left; width: 100%;}
   .fandoms-index .alphabet li {display: inline;}
   .fandoms-index li.letter    {float: left; width: 100%;}
@@ -356,7 +358,8 @@ p.kudos        {padding: 0.25em 0.25em; min-height: 50px; background: url('/imag
                               filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#cccccc');
   }
   .fandoms-index ul.letters.collection {margin-left: 0; width: 95%;}
-  .fandoms-index li.letter h3 {background: #eee; padding: .25em; width: auto;}  
+  .fandoms-index li.letter h3 {background: #eee; padding: .25em; width: auto;}
+  .fandoms-index li.letter h3 .top {float: right; font-size: .9em;}
   .fandoms-unassigned ul.fandoms li {float: left; width: 40%;}
   .fandoms-unassigned .filters #media_id {width: 100%;}                
 

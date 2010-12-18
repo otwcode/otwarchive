@@ -33,7 +33,6 @@ Feature: Basic collection navigation
     And I should see "Sorry, there were no collections found."
   When I follow "Fandoms (1)"
   Then I should see "New Fandom (1)"
-    And I should see "The 1 Fandoms in My Collection"
   When I follow "Works (1)"
   Then I should see "Work for my collection by mod"
     And I should see "1 Work found in My Collection"
