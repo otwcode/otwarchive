@@ -1,5 +1,5 @@
 Feature: Leave kudos
-  In order to show appreciation 
+  In order to show appreciation
   As a reader
   I want to leave kudos
 
@@ -17,15 +17,23 @@ Feature: Leave kudos
   Scenario: post kudos
 
   When I am logged in as "myname2" with password "something"
+    And all emails have been delivered
     And I view the work "Awesome Story"
   Then I should not see "Kudos were left"
   When I press "Leave Kudos ♥"
   Then I should see "Kudos were left by myname2!"
+    And 1 email should be delivered to "myname1@foo.com"
+    And the email should contain "myname2"
+    And the email should contain "left a kudo"
+    And all emails have been delivered
   When I press "Leave Kudos ♥"
   Then I should see "You have already left kudos here. :)"
     And I should not see "Kudos were left by myname2 and myname2!"
   When I follow "Log out"
     And I press "Leave Kudos ♥"
+  Then 1 email should be delivered to "myname1@foo.com"
+    And the email should contain "a guest"
+    And the email should contain "left a kudo"
   Then I should see "Kudos were left by myname2 as well as a guest!"
   When I press "Leave Kudos ♥"
   Then I should see "You have already left kudos here. :)"
@@ -33,10 +41,10 @@ Feature: Leave kudos
     And I view the work "Awesome Story"
     And I press "Leave Kudos ♥"
   Then I should see "Kudos were left by myname3 and myname2 as well as a guest!"
-  
-  
+
+
   Scenario: deleting pseud and user after creating kudos should orphan them
-  
+
   When I am logged in as "myname3" with password "something"
     And "myname3" creates the default pseud "foobar"
     And I view the work "Awesome Story"
@@ -51,5 +59,5 @@ Feature: Leave kudos
   When "myname3" deletes their account
     And I view the work "Awesome Story"
   Then I should see "Kudos were left by a guest!"
-  
-  
+
+

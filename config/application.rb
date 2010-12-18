@@ -17,7 +17,7 @@ module Otwarchive
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += %W(#{config.root}/app/sweepers)
     config.autoload_paths += %W(#{config.root}/app/challenge)
-    
+
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
@@ -25,7 +25,7 @@ module Otwarchive
 
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
-    config.active_record.observers = :comment_observer, :work_observer, :creation_observer, :collection_observer
+    config.active_record.observers = :comment_observer, :work_observer, :creation_observer, :collection_observer, :kudo_observer
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
@@ -44,18 +44,18 @@ module Otwarchive
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:content, :password, :terms_of_service_non_production]
-    
+
     # configure middleware
-    
+
     ### things I'm preserving here from our Rails 2 environment.rb that we might or might not need
-        
+
     # Use SQL instead of Active Record's schema dumper when creating the test database.
     # This is necessary if your schema can't be completely dumped by the schema dumper,
     # like if you have constraints or database-specific column types
     config.active_record.schema_format = :sql
 
     ### end of preservation section
-    
+
   end
 end
 
