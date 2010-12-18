@@ -10,7 +10,11 @@
   <% if @chapters %>
     <li><%= t('.edit_chapter', :default => 'Edit Chapter:') %> 
       <% for chapter in @chapters %>
-        <%= link_to h(chapter.position), [:edit, @work, chapter] %>
+        <% if chapter.posted? %>
+          <%= link_to h(chapter.position), [:edit, @work, chapter] %>
+        <% else %>
+            <%= link_to h(chapter.position) + ts(" (Draft)"), [:edit, @work, chapter], :class => "draft-chapter"%>
+	<% end %>
       <% end %></li>
     <li><%= link_to t('.manage_chapters', :default => 'Manage Chapters'), manage_work_chapters_path(@work) %></li>
   <% end %>

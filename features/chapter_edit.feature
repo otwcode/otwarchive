@@ -4,7 +4,7 @@ Feature: Edit chapters
   As a humble user
   I want to add and remove chapters
 
-  Scenario: Add chapters to an existing work, delete chapters, edit chapters, post chapters in the wrong order, use rearrange page
+  Scenario: Add chapters to an existing work, delete chapters, edit chapters, post chapters in the wrong order, use rearrange page, create draft chapter
 
   Given the following activated user exists
     | login         | password   |
@@ -143,3 +143,30 @@ Feature: Edit chapters
     And I should see "entering chapter three out of order" within "#chapter-2"
     And I should see "Chapter 4"
     And I should see "last chapter" within "#chapter-1"
+
+  # create a draft chapter and post it
+  When I am logged in as "epicauthor" with password "password"
+    And I view the work "New Epic Work"
+    And I follow "Add Chapter"
+    And I fill in "Chapter title" with "My title"
+    And I fill in "content" with "some more epic context"
+    And I press "Preview"
+    And I view the work "New Epic Work"
+    And I follow "Edit"
+  Then I should see "5 (Draft)"
+  When I view the work "New Epic Work"
+    Then I should see "4/5"
+  When I select "5. My title" from "selected_id"
+    And I press "Go"
+    Then I should see "This chapter is a draft and hasn't been posted yet!"
+  When I follow "Post Chapter"
+    Then I should see "5/5"
+  When I follow "Edit"
+    Then I should not see "Draft"
+    And I should not see "draft"
+  When I view the work "New Epic Work"
+    And I select "5. My title" from "selected_id"
+    And I press "Go"
+    Then I should not see "Draft"
+    And I should not see "draft"
+

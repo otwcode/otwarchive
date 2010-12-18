@@ -479,3 +479,6 @@ p.kudos        {padding: 0.25em 0.25em; min-height: 50px; background: url('/imag
  #main.tags-search form, #main.tags-index form      {float: none;}
  
  #main .hidden  {display: none;}
+
+ /*#main ul.navigation .draft-chapter { background: #efd1d1 }*/
+ #main ul.navigation .draft-chapter { color: red; }
