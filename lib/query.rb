@@ -3,11 +3,10 @@
 module Query
 
   WORK_FIELDS = %w{author title language tag}
-  WORK_INDEXES = WORK_FIELDS + %w{words hits date}
   BOOKMARK_FIELDS = %w{tag indirect notes bookmarker}
   PEOPLE_FIELDS = %w{name icon_alt_text description}
   ALL_FIELDS = (WORK_FIELDS + BOOKMARK_FIELDS + PEOPLE_FIELDS).uniq
-  ALL_INDEXES = ALL_FIELDS + %w{words hits date rec canonical recced bookmarked}
+  ALL_INDEXES = ALL_FIELDS + %w{words hits kudos date rec canonical recced bookmarked}
 
   # this does the actual search on the class given a standardized query hash
   def Query.search_with_sphinx(klass, query, page)
@@ -64,7 +63,7 @@ module Query
     query.delete_if { |k, v| v.blank? }
     # in rails 3, a query with < or > will get encoded, unencode them again
     # also, remove punctuation such as , and . (10.000 == 10,000 == 10000)
-    for string in %w{word hit bookmark date} do
+    for string in %w{word hit kudo bookmark date} do
       sym = string.pluralize.to_sym unless string == "date"
       sym = string.to_sym if string == "date"
       query[sym] = query[sym].gsub("&gt;", ">").gsub("&lt;", "<").gsub(/[,.]/, "") if query[sym]
@@ -92,7 +91,7 @@ module Query
       text = (text + " @" + string + " " + query[string.to_sym]) unless query[string.to_sym].blank?
     end
     text = (text + " @type " + query[:type]) unless query[:type].blank?
-    for string in %w{word hit bookmark} do
+    for string in %w{word hit kudo bookmark} do
       sym = string.pluralize.to_sym
       unless query[sym].blank?
         match = query[sym].match(/^([<>]*)\s*([\d,. -]+)\s*$/)

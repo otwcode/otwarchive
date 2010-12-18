@@ -69,7 +69,7 @@ class Work < ActiveRecord::Base
     :before_remove => :remove_filter_tagging
 
   acts_as_commentable
-  has_many :total_comments, :class_name => 'Comment', :through => :chapters  
+  has_many :total_comments, :class_name => 'Comment', :through => :chapters
   has_many :kudos, :through => :chapters
 
   belongs_to :language
@@ -80,7 +80,7 @@ class Work < ActiveRecord::Base
       errors.add(:base, ts("You do not have permission to use that custom work stylesheet."))
     end
   end
-  
+
   ########################################################################
   # VIRTUAL ATTRIBUTES
   ########################################################################
@@ -516,7 +516,7 @@ class Work < ActiveRecord::Base
     # only posted chapters unless author
     unless User.current_user && (User.current_user.is_a?(Admin) || User.current_user.is_author_of?(self))
       chapters = chapters.where(:posted => true)
-    end 
+    end
     # when doing navigation pass false as contents are not needed
     chapters = chapters.select('published_at, id, work_id, title, position, posted') unless include_content
     chapters
@@ -1134,6 +1134,9 @@ class Work < ActiveRecord::Base
     has posted, restricted, hidden_by_admin
     has bookmarks.rec, :as => 'recced'
     has bookmarks.pseud_id, :as => 'bookmarker'
+
+    has kudos(:id), :as => :kudos_id
+    has "COUNT(DISTINCT kudos.id)", :as => :kudo_count, :type => :integer
 
     # properties
     set_property :delta => :delayed

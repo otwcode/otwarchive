@@ -97,3 +97,18 @@ Feature: Search Works
        And I fill in "refine_author" with "testuser"
        And I press "Search"
    Then I should see "5 Found"
+    When I am on the search page
+      And I fill in "Kudos" with ">0"
+      And I press "Search works"
+    Then I should see "You searched for: Kudos: >0"
+      And I should see "2 Found"
+    When I follow "Advanced search"
+      And I fill in "Kudos" with "5"
+      And I press "Search works"
+    Then I should see "You searched for: Kudos: 5"
+      And I should see "0 Found"
+    When I fill in "refine_text" with "kudos: 4"
+      And I press "Refine search"
+    Then I should see "You searched for: Kudos: 4"
+    Then I should see "1 Found"
+

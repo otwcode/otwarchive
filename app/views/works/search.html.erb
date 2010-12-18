@@ -13,6 +13,7 @@
   <% unless @query[:author].blank? %><%= ts('Author') %>: <%= @query[:author] %> <% end %>
   <% unless @query[:words].blank? %><%= ts('Words') %>: <%= @query[:words] %> <% end %>
   <% unless @query[:hits].blank? %><%= ts('Hits') %>: <%= @query[:hits] %> <% end %>
+  <% unless @query[:kudos].blank? %><%= ts('Kudos') %>: <%= @query[:kudos] %> <% end %>
   <% unless @query[:date].blank? %><%= ts('Date') %>: <%= @query[:date] %> <% end %>
   <% unless @query[:language].blank? %><%= ts('Language') %>: <%= @query[:language] %> <% end %>
   <% unless @query[:bookmarked].blank? %><%= ts('Bookmarked') %><% end %>
@@ -22,23 +23,24 @@
 
 <%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do %>
 <fieldset>
-	<legend>Search works</legend>
+  <legend>Search works</legend>
   <% unless @query %>
   <% @query ||= {} %>
   <% end %>
-	  <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
+    <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
     <%= link_to_help "work-search-text-help" %> (any field)
-  
-  <%= hidden_field_tag "query[tag]", @query[:tag], :id => 'refine_tag' %>
-  <%= hidden_field_tag "query[title]", @query[:title], :id => 'refine_title' %>
-  <%= hidden_field_tag "query[author]", @query[:author], :id => 'refine_author' %>
-  <%= hidden_field_tag "query[words]", @query[:words], :id => 'refine_word_count' %>
-  <%= hidden_field_tag "query[hits]", @query[:hits], :id => 'refine_hit_count' %>
-  <%= hidden_field_tag "query[date]", @query[:date], :id => 'refine_revised_at' %>
-  <%= hidden_field_tag "query[language]", @query[:language], :id => 'refine_language' %>
+
+  <%= hidden_field_tag "query[tag]", @query[:tag] %>
+  <%= hidden_field_tag "query[title]", @query[:title] %>
+  <%= hidden_field_tag "query[author]", @query[:author] %>
+  <%= hidden_field_tag "query[words]", @query[:words] %>
+  <%= hidden_field_tag "query[hits]", @query[:hits] %>
+  <%= hidden_field_tag "query[kudos]", @query[:kudos] %>
+  <%= hidden_field_tag "query[date]", @query[:date] %>
+  <%= hidden_field_tag "query[language]", @query[:language] %>
   <%= hidden_field_tag "query[bookmarked]", @query[:bookmarked] %>
   <%= hidden_field_tag "query[recced]", @query[:recced] %>
-  
+
   <span class="submit">
 <% if @query.blank? %>
     <%= submit_tag ts('Search'), :class => 'button', :name => nil %>
@@ -52,7 +54,7 @@
 <% if @works %>
 <% begin %>
   <p><strong><%= @works.total_entries %> Found</strong><%= link_to_help "work-search-results-help" %></p>
-  
+
   <h3 class="landmark">Works List</h3>
   <ol class="work index">
     <% @works.each do |work| %>
