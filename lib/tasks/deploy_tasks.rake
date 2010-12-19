@@ -283,18 +283,23 @@ Don't go further with the deploy until you have fixed the problem!"
       Rake::Task['deploy:restart_unicorn'].invoke if @yes
     end
 
-    ynq("Run the After tasks now?")
-    Rake::Task['deploy:run_after_tasks'].invoke if @yes
-    @after_deferred = true unless @yes
+    # don't run after tasks and sphinx on otw2
+    unless @server == "otw2"
+      ynq("Run the After tasks now?")
+      Rake::Task['deploy:run_after_tasks'].invoke if @yes
+      @after_deferred = true unless @yes
 
-    unless @server=='otw2'  # sphinx doesn't run on otw2
-       ynq("Rebuild sphinx (if indexes have changed in the models or the database has been reset)?")
-       if @yes
-         Rake::Task['deploy:rebuild_sphinx'].invoke
-       else
-         ynq("Restart sphinx?")
-         Rake::Task['deploy:restart_sphinx'].invoke if @yes
-       end
+      ynq("Rebuild sphinx now (if indexes have changed in the models or the database has been reset)?")
+      if @yes
+        Rake::Task['deploy:rebuild_sphinx'].invoke
+      else
+        ynq("Restart sphinx now?")
+        if @yes
+          Rake::Task['deploy:restart_sphinx'].invoke
+        else
+          @rebuild_deferred = true
+        end
+      end
     end
 
     # update crontab (whenever)
@@ -312,7 +317,7 @@ Don't go further with the deploy until you have fixed the problem!"
 
     @yes = false
     ynq("Send email?") unless @server == "otw2"
-    Rake::Task['deploy:send_email'].invoke if @yes 
+    Rake::Task['deploy:send_email'].invoke if @yes
 
     notice "You should now alert users via twitter that the archive is back up." if @server == "otw1"
 
@@ -323,14 +328,21 @@ Don't go further with the deploy until you have fixed the problem!"
       Rake::Task['deploy:run_after_tasks'].invoke if @yes
     end
 
+    if @rebuild_deferred
+       ynq("Rebuild sphinx?")
+       if @yes
+         Rake::Task['deploy:rebuild_sphinx'].invoke
+       end
+    end
+
     ynq("Clean up old releases?")
     Rake::Task['deploy:clean_releases'].invoke if @yes
 
   end
 
   # quick deploy script
-  desc "Quick deploy. 
-Used for a rolling deploy when there are only minimal code changes. 
+  desc "Quick deploy.
+Used for a rolling deploy when there are only minimal code changes.
 Doesn't run database backup or reset, migrations or after tasks"
   task(:quick => :get_servername) do
     if @server == "otw1"
@@ -339,15 +351,15 @@ Doesn't run database backup or reset, migrations or after tasks"
       notice "Running on OTW2... (don't forget to run this in parallel on OTW1!)"
     end
 
-    Rake::Task['deploy:svn_update'].invoke 
-    Rake::Task['deploy:deploy_code'].invoke 
+    Rake::Task['deploy:svn_update'].invoke
+    Rake::Task['deploy:deploy_code'].invoke
     Rake::Task['deploy:take_out_of_maint'].invoke
-    Rake::Task['deploy:restart_unicorn'].invoke 
+    Rake::Task['deploy:restart_unicorn'].invoke
     Rake::Task['deploy:update_crontab'].invoke
-    Rake::Task['deploy:restart_sphinx'].invoke 
-    Rake::Task['deploy:clean_releases'].invoke 
+    Rake::Task['deploy:restart_sphinx'].invoke
+    Rake::Task['deploy:clean_releases'].invoke
     ynq("Send email?")
-    Rake::Task['deploy:send_email'].invoke if @yes 
+    Rake::Task['deploy:send_email'].invoke if @yes
     notice("Don't forget to update google code issues!") unless @server == "otw2"
   end
 

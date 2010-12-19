@@ -238,7 +238,11 @@ namespace :After do
   task(:remove_owner_kudos => :environment) do
     puts "Removing owner kudos"
     Kudo.with_pseud.each do |kudo|
-      if kudo.commentable.pseuds.include?(kudo.pseud)
+      if kudo.commentable.blank?
+        puts "the following kudo has no commentable!"
+        p kudo
+      elsif kudo.commentable.pseuds.include?(kudo.pseud)
+        puts "the following kudo was destroyed"
         p kudo
         kudo.destroy
       end
