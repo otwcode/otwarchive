@@ -220,6 +220,7 @@ namespace :After do
 
   desc "Fix default pseuds"
   task(:fix_default_pseuds => :environment) do
+    puts "Fixing default pseuds"
     # for every user who doesn't have a pseud marked is_default
     (User.all - (User.joins(:pseuds) & Pseud.where(:is_default => true))).each do |user|
       if user.pseuds.first
@@ -228,6 +229,18 @@ namespace :After do
       else
         # create a new default pseud with the same name as the login
         user.pseuds << Pseud.new(:name => user.login, :is_default => true)
+        puts "created pseud for #{user.login}"
+      end
+    end
+  end
+
+  desc "Remove owner kudos"
+  task(:remove_owner_kudos => :environment) do
+    puts "Removing owner kudos"
+    Kudo.with_pseud.each do |kudo|
+      if kudo.commentable.pseuds.include?(kudo.pseud)
+        p kudo
+        kudo.destroy
       end
     end
   end
@@ -240,4 +253,4 @@ end # this is the end that you have to put new tasks above
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => ['After:fix_default_pseuds']
+task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']

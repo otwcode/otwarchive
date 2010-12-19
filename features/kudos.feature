@@ -41,6 +41,10 @@ Feature: Leave kudos
     And I view the work "Awesome Story"
     And I press "Leave Kudos ♥"
   Then I should see "Kudos were left by myname3 and myname2 as well as a guest!"
+  When I am logged in as "myname1" with password "something"
+    And I view the work "Awesome Story"
+    And I press "Leave Kudos ♥"
+  Then I should see "You can't leave kudos for yourself. :)"
 
 
   Scenario: deleting pseud and user after creating kudos should orphan them
