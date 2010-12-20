@@ -11,7 +11,7 @@
 SESSION_KEY: '_otwarchive_session'
 SESSION_SECRET: '898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672fb852380050e52c03a0401175d909c09dba48512a119d46b126a84c2dd05716eb5'
 
-# email addresses 
+# email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SUPPORT_ADDRESS: 'support@example.org'
 ABUSE_ADDRESS: 'abuse@example.org'
@@ -24,9 +24,9 @@ ERROR_PREFIX: "[ERROR] "
 # email delivery is turned off by default, even for production.
 # The log file will nonetheless show "Sent mail:"
 #
-# Note that this is independent from whether the scheduled email-sending 
-# tasks will be run -- to make changes to that, please see schedule.rb 
-# and your deploy file. 
+# Note that this is independent from whether the scheduled email-sending
+# tasks will be run -- to make changes to that, please see schedule.rb
+# and your deploy file.
 PERFORM_DELIVERIES: false
 
 # email server
@@ -38,7 +38,7 @@ SMTP_DOMAIN: localhost
 #SMTP_PASSWORD:
 #SMTP_AUTHENTICATION: # :plain, :login or :cram_md5
 
-# used to turn off delayed jobs locally for testing -- 
+# used to turn off delayed jobs locally for testing --
 # set to true in your local.yml
 NO_DELAYS: false
 
@@ -53,7 +53,7 @@ OTWALT_LOGO: 'OTW Logo:closing the circle of the copyright symbol, it symbolizes
 REVISION: ''
 
 # tag settings
-DELIMITER_FOR_INPUT: ','  # if you change this, you will need to change 
+DELIMITER_FOR_INPUT: ','  # if you change this, you will need to change
 # validates_format_of :name, in app/models/tag.rb
 DELIMITER_FOR_OUTPUT: ', '
 
@@ -79,7 +79,7 @@ LOGNOTE_MIN: 5
 LOGNOTE_MAX: 1250
 FEEDBACK_SUMMARY_MAX: 100
 INFO_MAX: 100000
-FAQ_MAX: 200000 
+FAQ_MAX: 200000
 ICON_ALT_MAX: 50
 
 # max number of tags of each type allowed in challenge prompts (requests/offers)
@@ -91,7 +91,7 @@ PROMPTS_MAX: 10
 
 
 # max number of works/chapters that can be imported
-IMPORT_MAX_WORKS: 25 
+IMPORT_MAX_WORKS: 25
 IMPORT_MAX_CHAPTERS: 200
 IMPORT_MAX_WORKS_BY_ARCHIVIST: 200
 
@@ -112,7 +112,7 @@ MAX_SIGNUPS_FOR_LIVE_SUMMARY: 20
 
 # maximum number of records retrieved by sphinx.
 # http://www.sphinxsearch.com/docs/current.html#conf-max-matches
-# edit max_matches in config/sphinx.yml to match 
+# edit max_matches in config/sphinx.yml to match
 # edit public/help/work-search-results-help.html to match
 SEARCH_RESULTS_MAX: 1000
 
@@ -171,19 +171,19 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 # SANITIZER VERSION
 SANITIZER_VERSION: 1
 
-# These fields are query fields and are allowed to contain "less than" values 
-FIELDS_ALLOWING_LESS_THAN: ["words", "query"]
+# These fields are query fields and are allowed to contain "less than" values
+FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits"]
 
 
 # Only the following fields are allowed to have HTML. In all others,
 # all HTML tags will be stripped.
 #
-# NOTE: the exact HTML tags and attributes and protocols allowed are defined in 
+# NOTE: the exact HTML tags and attributes and protocols allowed are defined in
 #   initializers/sanitizer_config.rb
 #
 # If you add a new field to this list, you need to:
 # - make sure that every model that contains the field also has a matching field "[fieldname]_sanitizer_version"
-#   Example: 
+#   Example:
 #     add_column :chapters, :content_sanitizer_version, :integer, :default => 0, :null => false, :limit => 2
 #
 # - make sure in the model that this field is NOT accessible (eg "attr_protected :content_sanitizer_version")
@@ -191,8 +191,8 @@ FIELDS_ALLOWING_LESS_THAN: ["words", "query"]
 # - when you load the field you should use sanitize_field(object, :fieldname)
 #
 # This will ensure that the field has been sanitized with the latest version of the sanitizer.
-# 
-FIELDS_ALLOWING_HTML: ["about_me", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes", 
+#
+FIELDS_ALLOWING_HTML: ["about_me", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes",
   "rules", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
 
 FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
@@ -202,48 +202,48 @@ FIELDS_ALLOWING_CSS: ["content"]
 # Allowed CSS
 #
 # *** IMPORTANT: if you edit these values please also update the css-help.html file in public/help ***
-# 
+#
 # the following properties and keywords will be ADDED to the default set allowed in user-submitted CSS code, along with:
 # - hex and rgb color values
 # - numeric values specified with percentages or cm|em|ex|in|mm|pc|pt|px|%
 # - image files specified with url(http://image.url/blahblah/whatever.(jpg|png|gif))
 #
-# Note: if you put in a shorthand property (eg "background") that automatically lets 
-# through all the sub-properties like background-color and background-image. 
+# Note: if you put in a shorthand property (eg "background") that automatically lets
+# through all the sub-properties like background-color and background-image.
 #
-SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "-moz-box-shadow", "-webkit-box-shadow", "cue", "font", "layer-background", 
-  "layout-grid", "list-style", "margin", 
+SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "-moz-box-shadow", "-webkit-box-shadow", "cue", "font", "layer-background",
+  "layout-grid", "list-style", "margin",
   "-moz-border", "-moz-outline", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transition", "-moz-transition", "-webkit-transition"]
-  
-SUPPORTED_CSS_PROPERTIES: ["-moz-opacity", "-moz-transform", "-moz-user-select", "-replace", "-use-link-source", "-webkit-transform", 
-  "accelerator", "azimuth", "background-color", "behavior", "border-bottom-color", "border-collapse", "border-color", "border-left-color", 
-  "border-right-color", "border-top-color", "bottom", "caption-side", "clear", "clip", "color", "content", "counter-increment", "counter-reset", 
-  "cursor", "direction", "display", "elevation", "empty-cells", "filter", "float", "font", "font-family", "font-size", "font-style", "font-variant", 
-  "font-weight", "height", "ime-mode", "include-source", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "marker-offset", 
-  "marks", "max-height", "max-width", "min-height", "min-width", "orphans", "overflow", "page", "pause", "pause-after", "pause-before", "pitch", 
-  "pitch-range", "play-during", "position", "quotes", "richness", "right", "ruby-align", "ruby-overhang", "ruby-position", "size", "speak", 
-  "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "table-layout", "text-align", "text-decoration", "text-indent", 
-  "top", "transform", "unicode-bidi", "vertical-align", "visibility", "voice-family", "volume", "white-space", "widows", "width", "word-break", 
+
+SUPPORTED_CSS_PROPERTIES: ["-moz-opacity", "-moz-transform", "-moz-user-select", "-replace", "-use-link-source", "-webkit-transform",
+  "accelerator", "azimuth", "background-color", "behavior", "border-bottom-color", "border-collapse", "border-color", "border-left-color",
+  "border-right-color", "border-top-color", "bottom", "caption-side", "clear", "clip", "color", "content", "counter-increment", "counter-reset",
+  "cursor", "direction", "display", "elevation", "empty-cells", "filter", "float", "font", "font-family", "font-size", "font-style", "font-variant",
+  "font-weight", "height", "ime-mode", "include-source", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "marker-offset",
+  "marks", "max-height", "max-width", "min-height", "min-width", "orphans", "overflow", "page", "pause", "pause-after", "pause-before", "pitch",
+  "pitch-range", "play-during", "position", "quotes", "richness", "right", "ruby-align", "ruby-overhang", "ruby-position", "size", "speak",
+  "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "table-layout", "text-align", "text-decoration", "text-indent",
+  "top", "transform", "unicode-bidi", "vertical-align", "visibility", "voice-family", "volume", "white-space", "widows", "width", "word-break",
   "word-spacing", "word-wrap", "writing-mode", "z-index"]
-  
-# mostly color names here 
-SUPPORTED_CSS_KEYWORDS: ["!important", "absolute", "all", "auto", "bigger", "blink", "block", "bold", "both", "bottom", "center", 
-  "collapse", "dashed", "dotted", "ease-in", "hidden", "inline", "italic", "justify", "left", "medium", "no-repeat", "none", "normal", 
-  "nowrap", "overline", "pointer", "repeat", "repeat-x", "repeat-y", "right", "scroll", "small-caps", "smaller", "solid", "static", "top", 
+
+# mostly color names here
+SUPPORTED_CSS_KEYWORDS: ["!important", "absolute", "all", "auto", "bigger", "blink", "block", "bold", "both", "bottom", "center",
+  "collapse", "dashed", "dotted", "ease-in", "hidden", "inline", "italic", "justify", "left", "medium", "no-repeat", "none", "normal",
+  "nowrap", "overline", "pointer", "repeat", "repeat-x", "repeat-y", "right", "scroll", "small-caps", "smaller", "solid", "static", "top",
   "transparent", "underline", "url",
-  "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond", 
-  "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", 
-  "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", 
-  "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkturquoise", "darkviolet", "deeppink", 
-  "deepskyblue", "dimgray", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", 
-  "goldenrod", "gray", "green", "greenyellow", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", 
-  "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgrey", "lightgreen", "lightpink", 
-  "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", 
-  "magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", 
-  "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", 
-  "oldlace", "olive", "olivedrab", "orange", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", 
-  "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", 
-  "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "snow", "springgreen", "steelblue", "tan", 
+  "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond",
+  "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson",
+  "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange",
+  "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkturquoise", "darkviolet", "deeppink",
+  "deepskyblue", "dimgray", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold",
+  "goldenrod", "gray", "green", "greenyellow", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush",
+  "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgrey", "lightgreen", "lightpink",
+  "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen",
+  "magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue",
+  "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy",
+  "oldlace", "olive", "olivedrab", "orange", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred",
+  "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon",
+  "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "snow", "springgreen", "steelblue", "tan",
   "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"]
 
 # if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this kind of
@@ -260,7 +260,7 @@ DEFENSIO_KEY: '521476c0edf3ac96eab7e297f6fb92c8'
 DEFENSIO_NAME: 'http://archiveofourown.org'
 
 # bug-reporting site for the archive -- we use 16bugs; if you use something else,
-# you will need to change feedbacks_controller.rb and abuse_reports_controller.rb 
+# you will need to change feedbacks_controller.rb and abuse_reports_controller.rb
 # to properly send to your own support tool.
 BUGS_SITE: 'url for your 16bugs site like https://otw.16bugs.com'
 BUGS_USER: 'admin username for your 16bugs site which should only be put into your local.yml on your production server'

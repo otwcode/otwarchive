@@ -111,4 +111,9 @@ Feature: Search Works
       And I press "Refine search"
     Then I should see "You searched for: Kudos: 4"
     Then I should see "1 Found"
+    When I follow "Advanced search"
+      And I fill in "Kudos" with "<2"
+      And I press "Search works"
+    Then I should see "You searched for: Kudos: <2"
+    Then I should see "4 Found"
 
