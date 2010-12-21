@@ -207,6 +207,38 @@ namespace :After do
 #    default ? puts("Basic work skin") : puts("Check work skin!")
 #  end
 
+#  desc "Fix default pseuds"
+#  task(:fix_default_pseuds => :environment) do
+#    puts "Fixing default pseuds"
+#    # for every user who doesn't have a pseud marked is_default
+#    (User.all - (User.joins(:pseuds) & Pseud.where(:is_default => true))).each do |user|
+#      if user.pseuds.first
+#        # find the old default pseud and actually mark it default
+#        user.pseuds.first.update_attribute(:is_default, true)
+#      else
+#        # create a new default pseud with the same name as the login
+#        user.pseuds << Pseud.new(:name => user.login, :is_default => true)
+#        puts "created pseud for #{user.login}"
+#      end
+#    end
+#  end
+#
+#  desc "Remove owner kudos"
+#  task(:remove_owner_kudos => :environment) do
+#    puts "Removing owner kudos"
+#    Kudo.with_pseud.each do |kudo|
+#      if kudo.commentable.blank?
+#        puts "the following kudo has no commentable!"
+#        p kudo
+#      elsif kudo.commentable.pseuds.include?(kudo.pseud)
+#        puts "the following kudo was destroyed"
+#        p kudo
+#        kudo.destroy
+#      end
+#    end
+#  end
+
+
   #### Leave this one here
 
   desc "Update the translation file each time we deploy"
@@ -218,38 +250,6 @@ namespace :After do
   #### Add your new tasks here
 
 
-  desc "Fix default pseuds"
-  task(:fix_default_pseuds => :environment) do
-    puts "Fixing default pseuds"
-    # for every user who doesn't have a pseud marked is_default
-    (User.all - (User.joins(:pseuds) & Pseud.where(:is_default => true))).each do |user|
-      if user.pseuds.first
-        # find the old default pseud and actually mark it default
-        user.pseuds.first.update_attribute(:is_default, true)
-      else
-        # create a new default pseud with the same name as the login
-        user.pseuds << Pseud.new(:name => user.login, :is_default => true)
-        puts "created pseud for #{user.login}"
-      end
-    end
-  end
-
-  desc "Remove owner kudos"
-  task(:remove_owner_kudos => :environment) do
-    puts "Removing owner kudos"
-    Kudo.with_pseud.each do |kudo|
-      if kudo.commentable.blank?
-        puts "the following kudo has no commentable!"
-        p kudo
-      elsif kudo.commentable.pseuds.include?(kudo.pseud)
-        puts "the following kudo was destroyed"
-        p kudo
-        kudo.destroy
-      end
-    end
-  end
-
-
 end # this is the end that you have to put new tasks above
 
 ##################
@@ -257,4 +257,5 @@ end # this is the end that you have to put new tasks above
 
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
-task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
+#task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
+task :After => []
