@@ -1126,7 +1126,9 @@ class Work < ActiveRecord::Base
     # field associations
     indexes tags(:name), :as => 'tag'
     indexes language(:name), :as => 'language'
-    indexes chapters.content, :as => 'content'
+
+#    forced to remove for performance reasons
+#    indexes chapters.content, :as => 'content'
 
     # attributes
     has hit_counter.hit_count, :as => 'hit_count'
@@ -1145,7 +1147,7 @@ class Work < ActiveRecord::Base
                                      :tag => 15, :filter => 15,
                                      :language => 10,
                                      :summary => 5, :notes => 5,
-                                     :content => 1}
+                                    }
   end
 
 end

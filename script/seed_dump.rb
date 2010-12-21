@@ -16,17 +16,17 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 # users who have webdavs or asked to be added
 # or who have problematic works which need testing
 SEEDS = [ "Anneli", "astolat", "Atalan", "awils1", "aworldinside",
-          "Cesy", "Chandri", "ealusaid", "eel", "elz", "erda",
-          "Enigel", "hope", "justira", "lim",
-          "melange", "rklyne", "Rustler", "Sidra", "Stowaway",
-          "zelempa", "Zooey_Glass", "zlabya",
+          "Cesy", "Celandine", "Chandri", "ealusaid", "eel", "elz",
+          "erda", "Enigel", "hope", "justira", "lim", "melange",
+          "mumble", "Rebecca", "rklyne", "Rustler", "Sidra", "Stowaway",
+          "tomatopudding", "zelempa", "Zooey_Glass", "zlabya",
 ]
 
 # Note: every NTH user (randomized) will have all their associated records dumped
 # many more than that users will be in the database, however because of associations
 # This number is also used to limit the number of readings, comments, and feedbacks
 # this number should increase as the archive grows to keep the decimated database a reasonable size
-NTH = 50
+NTH = 75
 
 # private bookmarks and unpublished works are not selected in a multi-user dump
 MULTI = true
@@ -34,9 +34,11 @@ MULTI = true
 
 ## to dump just one user uncomment the following and replace the user name
 ## (you can either comment out the previous ones, or just ignore the already initialized warning)
+
 #   SEEDS = [ "Sidra" ]
 #   NTH = 1
 #   MULTI = false
+
 ## this will select all their own works, comments, readings and bookmarks,
 ## but not the associated works
 
@@ -265,7 +267,7 @@ def work_associations(items)
   x = []
   items.each do |work|
     print "."; STDOUT.flush
-    next unless work.posted? || !MULTI
+    next unless (!work.unrevealed? && work.posted?) || !MULTI
     x << work.taggings
     TAGS << work.tags
     x << work.creatorships
@@ -273,6 +275,10 @@ def work_associations(items)
     x << work
     x << work.language
     x << work.hit_counter
+    x << work.gifts
+    PSEUDS << work.gifts.map(&:pseud)
+    x << work.kudos
+    PSEUDS << work.kudos.map(&:pseud)
     x << work.collection_items
     x << work.collections
     work.collections.each do |c|
@@ -288,6 +294,8 @@ def work_associations(items)
       PSEUDS << c.pseuds
       x << c.comments
       PSEUDS << c.comments.map(&:pseud)
+      x << c.kudos
+      PSEUDS << c.kudos.map(&:pseud)
     end
   end
   x.flatten.compact.uniq

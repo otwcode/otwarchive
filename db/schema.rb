@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101205015909) do
+ActiveRecord::Schema.define(:version => 20101219191929) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(:version => 20101205015909) do
     t.datetime "updated_at"
     t.datetime "created_at"
     t.integer  "content_sanitizer_version", :limit => 2, :default => 0, :null => false
+    t.integer  "translated_post_id"
+    t.integer  "language_id"
   end
 
   create_table "admin_settings", :force => true do |t|
@@ -477,6 +479,10 @@ ActiveRecord::Schema.define(:version => 20101205015909) do
     t.string   "ip_address"
   end
 
+  add_index "kudos", ["commentable_id", "commentable_type"], :name => "index_kudos_on_commentable_id_and_commentable_type"
+  add_index "kudos", ["ip_address"], :name => "index_kudos_on_ip_address"
+  add_index "kudos", ["pseud_id"], :name => "index_kudos_on_pseud_id"
+
   create_table "languages", :force => true do |t|
     t.string "short", :limit => 4
     t.string "name"
@@ -856,6 +862,7 @@ ActiveRecord::Schema.define(:version => 20101205015909) do
   add_index "tags", ["id", "type"], :name => "index_tags_on_id_and_type"
   add_index "tags", ["merger_id"], :name => "index_tags_on_merger_id"
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
+  add_index "tags", ["type"], :name => "index_tags_on_type"
 
   create_table "tolk_locales", :force => true do |t|
     t.string   "name"
@@ -979,6 +986,7 @@ ActiveRecord::Schema.define(:version => 20101205015909) do
     t.integer  "work_skin_id"
   end
 
+  add_index "works", ["delta"], :name => "index_works_on_delta"
   add_index "works", ["hidden_by_admin"], :name => "index_works_on_hidden_by_admin"
   add_index "works", ["imported_from_url"], :name => "index_works_on_imported_from_url"
   add_index "works", ["language_id"], :name => "index_works_on_language_id"
