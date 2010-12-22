@@ -1,0 +1,14 @@
+<h2>Welcome to Yuletide!</h2>
+
+<div><%=raw sanitize_field(@collection, :description) %></div>
+
+<ul role="navigation">
+  <li><%= link_to "Dashboard", @collection %></li>
+  <li><%= link_to "Profile", collection_profile_path(@collection) %></li>
+  <% if !@collection.collection_profile.faq.blank? %>
+    <li><%= link_to "FAQ", collection_profile_path(@collection, :anchor => "faq") %></li>
+  <% end %>
+  <% if !@collection.collection_profile.rules.blank? %>
+    <li><%= link_to "Rules", collection_profile_path(@collection, :anchor => "rules") %></li>
+  <% end %>
+</ul>
