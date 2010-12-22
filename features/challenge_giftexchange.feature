@@ -1,5 +1,5 @@
 @collections
-Feature: Collection
+Feature: Gift Exchange Challenge
   In order to have an archive full of collections
   As a humble user
   I want to create a collection and post to it
