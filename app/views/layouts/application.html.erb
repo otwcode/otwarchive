@@ -19,7 +19,6 @@
       <%= @page_title %>
     <% else %>
       <%=h ArchiveConfig.APP_NAME  %>
-      <% unless ArchiveConfig.REVISION.blank? %>(rev. <%= ArchiveConfig.REVISION %>)<% end %>
       &raquo;
       <%= controller.controller_name %>
       <%= controller.action_name %>
