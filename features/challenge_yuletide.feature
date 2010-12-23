@@ -16,6 +16,7 @@ Feature: Collection
     | myname4        | something   |
     | pinchhitter    | password    |
     And I have no tags
+    And I have no challenge assignments
     And I create the fandom "Stargate Atlantis" with id 27
     And I create the fandom "Starsky & Hutch" with id 28
     And I create the fandom "Tiny fandom" with id 29
@@ -468,7 +469,7 @@ Feature: Collection
   # Then show me the page
   # Then I should see "Work was successfully updated"
 
-  # post works for all the assignments: TODO
+  # post works for all the assignments
   When I am logged in as "myname2" with password "something"
     And I go to myname2's user page
     #' stop annoying syntax highlighting after apostrophe
@@ -532,6 +533,7 @@ Feature: Collection
   When I follow "Log out"
   Then I should see "Successfully logged out"
   
+  # user leaves it as a draft
   When I am logged in as "myname5" with password "something"
     And I go to myname5's user page
     #' stop annoying syntax highlighting after apostrophe
@@ -544,14 +546,13 @@ Feature: Collection
     And I check "No Archive Warnings Apply"
     And I fill in "content" with "Coding late at night is bad for the brain."
   When I press "Preview"
-    And I press "Post"
-  Then I should see "Work was successfully posted"
+  Then I should not see "Work was successfully posted"
     And I should see "For myname"
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
   When I follow "Log out"
-  Then I should see "Successfully logged out"
+  Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
   
   # TODO: Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
   When I am logged in as "mod1" with password "something"
@@ -560,6 +561,12 @@ Feature: Collection
     And I follow "Assignments"
   Then I should see "No defaulted assignments!"
     And I should see "Not yet posted"
+    # myname5 has not yet posted as it is still a draft
+    And "issue 2116" is fixed
+    # And I should see the text with tags "Not yet posted </td><td></td></tr><tr><td>myname6"
+    # myname6 has not yet posted
+    # TODO: Find a way to check this, or add a label to the line so we can check
+    # other people have posted
     And I should see "Gift posted on"
   When I follow "Default All Unposted"
   Then I should not see "No defaulted assignments!"
@@ -569,6 +576,30 @@ Feature: Collection
     # TODO: Figure out why this doesn't work
     # And I press "Assign"
   # Then show me the page
+  
+  # pinch hitter writes story
+  When I follow "Log out"
+    And I am logged in as "pinchhitter" with password "something"
+    And I go to pinchhitter's user page
+    And I follow "My Assignments"
+    # TODO: fix line just above
+  # Then I should see "Writing For" within "table"
+  # When I follow "Post To Fulfill"
+  #  And I fill in "Work Title" with "Fulfilled Story"
+  #  And I fill in "Fandoms" with "Starsky & Hutch"
+  #  And I select "Not Rated" from "Rating"
+  #  And I check "No Archive Warnings Apply"
+  #  And I fill in "content" with "Coding late at night is bad for the brain."
+ # When I press "Preview"
+ # And I press "Post"
+ # Then I should see "Work was successfully posted"
+  #  And I should see "For myname"
+  #  And I should see "Collections:"
+  #  And I should see "Yuletide" within ".meta"
+  #  And I should see "Anonymous"
+  When I follow "Log out"
+  Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
+  # Then I should see "Successfully logged out"
 
   # mod reveals challenge on Dec 25th
   When I am logged in as "mod1" with password "something"
@@ -583,7 +614,7 @@ Feature: Collection
   Given the system processes jobs
     And I wait 3 seconds
   When I reload the page
-  # 5 gift notification emails are delivered for the 5 stories that have been posted so far
+  # 5 gift notification emails are delivered for the 5 stories that have been posted so far (4 standard, 1 pinch-hit, 1 still a draft)
   Then 5 emails should be delivered
     And the email should contain "A gift story has been posted for you"
     # TODO: Check this capitalisation with someone, since it seems odd to me
@@ -596,19 +627,44 @@ Feature: Collection
     And the email should not contain "myname5"
     And the email should not contain "myname6"
 
-  # someone views their gift and it is anonymous: TODO
+  # someone views the story they wrote and it is anonymous
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
     And I follow "myname1"
   Then I should see "Fulfilling Story"
+    And I should see "Anonymous"
   When I follow "Fulfilling Story"
   Then I should see "For myname"
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
-  When I follow "myname1"
+    
+  # someone views their gift and it is anonymous
   # Needs everyone to have fulfilled their assignments to be sure of finding a gift
-  #  And I follow "My Gifts (1)"
+  When I follow "Log out"
+    And I am logged in as "myname2" with password "something"
+  When I follow "myname2"
+    And I follow "My Gifts"
+  Then I should see "Anonymous"
+    And I should not see "myname1"
+    And I should not see "myname3"
+    And I should not see "myname4"
+    And I should not see "myname5"
+    And I should not see "myname6"
+    And I should not see "pinchhitter"
+  When I follow "Fulfilling Story"
+  Then I should see the page title "Fulfilling Story - Anonymous - Stargate Atlantis [Example Archive]"
+  Then I should see "Anonymous"
+    # TODO: Fix the #share section then take off within ".byline" on these
+    And I should not see "myname1" within ".byline"
+    And I should not see "myname3" within ".byline"
+    And I should not see "myname4" within ".byline"
+    And I should not see "myname5" within ".byline"
+    And I should not see "myname6" within ".byline"
+    And I should not see "pinchhitter" within ".byline"
+    # TODO: Check downloads more thoroughly
+  # When I follow "MOBI"
+  # Then I should see "Anonymous"
   When I follow "Log out"
   Then I should see "Successfully logged out"
 
@@ -627,3 +683,12 @@ Feature: Collection
   Then I should see "Collection was successfully updated"
 
   # someone can now see their writer: TODO
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+    And I follow "myname1"
+  Then I should see "Fulfilling Story"
+  # TODO: Figure out why this isn't working
+  #  And I should not see "Anonymous"
+  #When I follow "Fulfilling Story"
+  #Then I should not see "Anonymous"
+  # And I should see "myname" within ".byline"
