@@ -655,12 +655,11 @@ Feature: Collection
   When I follow "Fulfilling Story"
   Then I should see the page title "Fulfilling Story - Anonymous - Stargate Atlantis [Example Archive]"
   Then I should see "Anonymous"
-    # TODO: Fix the #share section then take off within ".byline" on these
-    And I should not see "myname1" within ".byline"
-    And I should not see "myname3" within ".byline"
-    And I should not see "myname4" within ".byline"
-    And I should not see "myname5" within ".byline"
-    And I should not see "myname6" within ".byline"
+    And I should not see "myname1"
+    And I should not see "myname3"
+    And I should not see "myname4"
+    And I should not see "myname5"
+    And I should not see "myname6"
     And I should not see "pinchhitter" within ".byline"
     # TODO: Check downloads more thoroughly
   # When I follow "MOBI"
