@@ -113,8 +113,12 @@ module WorksHelper
   # etc
   def get_embed_link(work)
     title_link = link_to(content_tag(:strong, work.title), work_url(work)) + " (#{work.word_count} #{ts('words')})"
-    profile_link = work.pseuds.map {|pseud| link_to(image_tag(root_url + "favicon.ico", :alt => "favicon", :border => "0"), user_profile_url(pseud.user)) + 
+    if work.anonymous?
+      profile_link = ts("Anonymous")
+    else
+      profile_link = work.pseuds.map {|pseud| link_to(image_tag(root_url + "favicon.ico", :alt => "favicon", :border => "0"), user_profile_url(pseud.user)) + 
                                     link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe
+    end
                                     
     fandom_text = add_label_for_embed(ts("Fandom: "), work.fandoms.map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe)    
     rating_text = add_label_for_embed(ts("Rating: "), work.ratings.map {|rating| rating.name}.join(', '))
