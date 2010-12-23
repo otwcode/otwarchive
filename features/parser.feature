@@ -123,3 +123,12 @@ Feature: Parsing HTML
   Then I should see "Preview Work"
     And I should see the text with tags "<p>Here is <em>another</em></p><p align=\"center\"><em>that has formatting tags</em></p><p>but <em>in</em></p><p><em>different</em> places and <em>some are closed</em>.</p>"
 
+
+  Scenario: German quotation marks should be kept intact
+
+  When I am logged in as "newbie" with password "password"
+    And I set up the draft "My Awesome Story"
+    And I fill in "content" with "„Great words,“ he said. ‚Thinky thoughts,‘ she thought."
+    And I press "Preview"
+  Then I should see "Preview Work"
+    And I should see "„Great words,“ he said. ‚Thinky thoughts,‘ she thought."
