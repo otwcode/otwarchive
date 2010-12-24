@@ -24,7 +24,7 @@ Otwarchive::Application.routes.draw do
     end
   end
   match 'yuletide2010/work/:id' => 'yuletide2010#work', :as => 'yuletide2010_work'
-  match 'yuletide2010/restricted_work/:id' => 'yuletide2010#restricted_work', :as => 'yuletide_2010_restricted_work'
+  match 'yuletide2010/restricted_work/:id' => 'yuletide2010#restricted_work', :as => 'yuletide2010_restricted_work'
 
   #### INVITATIONS ####
 

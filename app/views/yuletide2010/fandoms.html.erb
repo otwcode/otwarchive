@@ -16,10 +16,10 @@
         <li><%= link_to letter, "#letter-#{letter}" %></li>
       <% end %>
     </ul>
-    <ul class="letters <%= 'collection' if @collection %>">
+    <ul class="letters shadowed <%= 'collection' if @collection %>">
       <% @fandoms_by_letter.each_pair do |letter, fandoms| %>
         <li id='letter-<%= letter %>' class='letter'>
-          <h3>
+          <h3 class="shadowed">
             <%= letter %>
             <span class="top"><%= link_to "top", "#main" %></span>
           </h3>

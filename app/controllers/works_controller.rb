@@ -15,6 +15,7 @@ class WorksController < ApplicationController
 
   cache_sweeper :work_sweeper
   cache_sweeper :collection_sweeper 
+  cache_sweeper :yuletide_sweeper
 
   def search
     @languages = Language.all(:order => :short)

@@ -68,14 +68,13 @@ li.blurb dd {margin: 0 2em 0 0;}
   float: left; 
   width: 90%; 
   margin: 2em; 
-  padding: 0 1em; 
+  padding: 0 1em;
+} 
+.shadowed {
   border: 1px solid #eee;
-  -moz-box-shadow: 3px 3px 4px #ccc; -webkit-box-shadow: 3px 3px 4px #ccc;
+  -moz-box-shadow: 3px 3px 4px #ccc;
+  -webkit-box-shadow: 3px 3px 4px #ccc;
   box-shadow: 3px 3px 4px #ccc;
-  /* For IE 8 */
-  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#cccccc')";
-  /* For IE 5.5 - 7 */
-  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#cccccc');
 }
 #main .fandoms-index ul.letters.collection {margin-left: 0; width: 95%;}
 #main .fandoms-index li.letter h3 {background: #eee; padding: .25em; width: auto;}

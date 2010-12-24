@@ -38,6 +38,9 @@ class Yuletide2010Controller < ApplicationController
 
   def work
     @work = Work.find(params[:id])
+    if @work.restricted?
+      access_denied and return
+    end
     @chapters = @work.chapters.posted
   end
 
