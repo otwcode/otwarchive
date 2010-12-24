@@ -58,4 +58,8 @@ every 1.day, :at => '2:40 am' do
   rake "work:purge_old_drafts"
 end
 
+# reindex searchd
+every :hour do
+  command "/usr/local/bin/indexer --config /var/www/otwarchive/current/config/production.sphinx.conf --all --rotate"
+end
 

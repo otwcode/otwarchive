@@ -714,7 +714,7 @@ class Tag < ActiveRecord::Base
     has canonical
 
     # properties
-    set_property :delta => :delayed
+#    set_property :delta => :delayed
   end
 
 end

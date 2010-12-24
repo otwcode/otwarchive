@@ -1141,7 +1141,7 @@ class Work < ActiveRecord::Base
     has "COUNT(DISTINCT kudos.id)", :as => :kudo_count, :type => :integer
 
     # properties
-    set_property :delta => :delayed
+#    set_property :delta => :delayed
     set_property :field_weights => {
                                      :title => 20, :author => 20,
                                      :tag => 15, :filter => 15,
