@@ -11,21 +11,25 @@ ul.dropdown_nav {
   float: left;
   list-style-type: none;
 }
+ul.dropdown_nav a {
+  display: block;
+  width: 15em;
+}
 ul.dropdown_nav li {
   float: left;
-  width: auto;
+  width: 15em;
   margin-right: 2em;
   font-weight: 400;
 }
 ul.dropdown_nav li ul {
-	position: absolute;
-	width: auto;
-	left: -999em;
-	list-style-type: none;
-	background: #fff;
-	padding: .5em;
-	border: 1px solid #ccc;
-	z-index: 99;
+  position: absolute;
+  width: 15em;
+  left: -999em;
+  list-style-type: none;
+  background: #fff;
+  padding: .5em;
+  border: 1px solid #ccc;
+  z-index: 99;
 }
 ul.dropdown_nav li ul li {
   width: 100%;
@@ -36,7 +40,7 @@ ul.dropdown_nav li ul li {
 #header ul.dropdown_nav li ul a {
   color: #000;
 }
-ul.dropdown_nav li:hover ul {
+ul.dropdown_nav li:hover ul, ul.dropdown_nav li.sfhover ul {
   left: auto;
 }
 

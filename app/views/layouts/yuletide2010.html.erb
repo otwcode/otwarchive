@@ -37,7 +37,7 @@
       <%= link_to "Archive of Our Own", root_path %> | 
       <%= link_to @collection.title, {:controller => 'yuletide2010', :action => 'index'} %>
     </h1>
-    <ul class="dropdown_nav">
+    <ul class="dropdown_nav" id="nav">
       <li>
         <a href="/yuletide2010/fandoms">Fandoms &raquo;</a>
         <ul>
@@ -55,7 +55,7 @@
         </ul>
       </li>
       <li>
-        <a href="/yuletide2010/restricted_works">Locked Works &raquo;</a>
+        <a href="/yuletide2010/restricted_works">Locked Works</a>
       </li>
     </ul>
   </div>
@@ -67,6 +67,23 @@
       <div class="clear"><!--presentational--></div>
     </div>
     <!-- END main -->
+
+    <script type="text/javascript" language="javascript">
+    //<![CDATA[ 
+    sfHover = function() {
+	var sfEls = document.getElementById("nav").getElementsByTagName("LI");
+	for (var i=0; i<sfEls.length; i++) {
+		sfEls[i].onmouseover=function() {
+			this.className+=" sfhover";
+		}
+		sfEls[i].onmouseout=function() {
+    			this.className=this.className.replace(new RegExp(" sfhover\\b"), "");
+    		}
+    	}
+    }
+    if (window.attachEvent) window.attachEvent("onload", sfHover);
+    //]]>
+    </script>
 
   </body>
 </html>
