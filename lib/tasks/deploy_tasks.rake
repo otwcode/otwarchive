@@ -360,13 +360,13 @@ Doesn't run database backup or reset, migrations or after tasks"
 
     Rake::Task['deploy:svn_update'].invoke
     Rake::Task['deploy:deploy_code'].invoke
-    Rake::Task['deploy:take_out_of_maint'].invoke
+    Rake::Task['deploy:take_out_of_maint'].invoke unless @server == "otw2"
     Rake::Task['deploy:restart_unicorn'].invoke
-    Rake::Task['deploy:update_crontab'].invoke
-    Rake::Task['deploy:restart_sphinx'].invoke
+    Rake::Task['deploy:update_crontab'].invoke unless @server == "otw2"
+    Rake::Task['deploy:restart_sphinx'].invoke unless @server == "otw2"
     Rake::Task['deploy:clean_releases'].invoke
-    Rake::Task['deploy:restart_dj'].invoke
-    ynq("Send email?")
+    Rake::Task['deploy:restart_dj'].invoke unless @server == "otw2"
+    ynq("Send email?") unless @server == "otw2"
     Rake::Task['deploy:send_email'].invoke if @yes
     notice("Don't forget to update google code issues!") unless @server == "otw2"
   end
