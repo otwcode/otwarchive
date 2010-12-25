@@ -213,6 +213,11 @@ Don't go further with the deploy until you have fixed the problem!"
     ok_or_warn %q{/usr/local/bin/ts_restart.sh}
   end
 
+  desc "Restart delayed jobs"
+  task(:restart_dj => :get_servername) do
+    ok_or_warn %q{/usr/local/bin/dj_restart.sh}
+  end
+
   desc "Send email that deploy is complete"
   task(:send_email => :get_servername) do
     @new_rev ||= %x{svnversion}
@@ -338,6 +343,8 @@ Don't go further with the deploy until you have fixed the problem!"
     ynq("Clean up old releases?")
     Rake::Task['deploy:clean_releases'].invoke if @yes
 
+    ynq("Restart delayed job?")
+    Rake::Task['deploy:restart_dj'].invoke if @yes
   end
 
   # quick deploy script
@@ -358,6 +365,7 @@ Doesn't run database backup or reset, migrations or after tasks"
     Rake::Task['deploy:update_crontab'].invoke
     Rake::Task['deploy:restart_sphinx'].invoke
     Rake::Task['deploy:clean_releases'].invoke
+    Rake::Task['deploy:restart_dj'].invoke
     ynq("Send email?")
     Rake::Task['deploy:send_email'].invoke if @yes
     notice("Don't forget to update google code issues!") unless @server == "otw2"
