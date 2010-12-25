@@ -293,20 +293,24 @@ class Work < ActiveRecord::Base
     self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.select {|assignment| assignment.offering_user == User.current_user}
   end
 
+  # Set a work's collections based on a list of collection names
+  # Don't delete all existing collections, or else works in closed collections
+  # can't be edited
   def collection_names=(new_collection_names)
-    self.collections = []
-
-    new_collection_names.split(',').each do |name|
-      next if name.blank?
-      collection = Collection.find_by_name(name.strip)
-      if collection.nil?
-        self.errors.add(:base, t('collection_invalid', :default => "We couldn't find a collection with the name %{name}. Make sure you are using the one-word name, and not the title?", :name => name.strip))
-        next
-      end
-      self.collections << collection
+    names = new_collection_names.split(',').map{ |name| name.strip }
+    to_add = Collection.where(:name => names)
+    (self.collections - to_add).each do |c|
+      self.collections.delete(c)
     end
-
-    self.collections.uniq
+    (to_add - self.collections).each do |c|
+      self.collections << c
+    end
+    (names - to_add.map{ |c| c.name }).each do |name|
+      unless name.blank?
+        self.errors.add(:base, t('collection_invalid', :default => "We couldn't find a collection with the name 
+%{name}. Make sure you are using the one-word name, and not the title?", :name => name.strip))
+      end
+    end
   end
 
   def add_to_collection(collection)
