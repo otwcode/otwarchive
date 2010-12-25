@@ -1,0 +1,7 @@
+<h2>Welcome to <%= @collection.title %>!</h2>
+
+<div><%=raw sanitize_field(@collection, :description) %></div>
+
+<ul role="navigation">
+  <li><%= link_to "Profile", collection_profile_path(@collection) %></li>
+</ul>

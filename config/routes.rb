@@ -6,6 +6,15 @@ Otwarchive::Application.routes.draw do
 
   #### YULETIDE 2010 ####
 
+  namespace 'static' do
+    resources :collections do
+      resources :media
+      resources :fandoms
+      resources :works
+      resources :restricted_works
+    end
+  end
+
   resources :yuletide2010 do
     collection do
       get :fandoms
