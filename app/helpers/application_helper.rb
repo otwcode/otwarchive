@@ -55,10 +55,10 @@ module ApplicationHelper
   # in order to disambiguate in the case of identical pseuds
   # and on Feb 24 09 to sort alphabetically for great justice
   # and show only the authors when in preview_mode, unless they're empty
-  def byline(creation)
+  def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
       anon_byline = h(ts("Anonymous"))
-      if logged_in_as_admin? || is_author_of?(creation)
+      if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
         end
       return anon_byline
