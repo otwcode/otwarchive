@@ -59,7 +59,7 @@ every 1.day, :at => '2:40 am' do
 end
 
 # reindex searchd
-every :hour do
+every 2.hours do
   command "/usr/local/bin/indexer --config /var/www/otwarchive/current/config/production.sphinx.conf --all --rotate"
 end
 
