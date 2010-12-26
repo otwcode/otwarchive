@@ -142,6 +142,7 @@ Don't go further with the deploy until you have fixed the problem!"
     ok_or_warn %Q{ln -s #{SHARED_DIR}/sphinx #{CURRENT_DIR}/db/sphinx}
     ok_or_warn %Q{ln -s #{SHARED_DIR}/downloads #{CURRENT_DIR}/public/}
     ok_or_warn %Q{ln -s #{SHARED_DIR}/challenge_signup_summaries #{CURRENT_DIR}/public/}
+    ok_or_warn %Q{ln -s #{SHARED_DIR}/static #{CURRENT_DIR}/public/}
 
     notice "Updating revision in local.yml"
     ok_or_warn %Q{sed -i '$d' #{CURRENT_DIR}/config/local.yml}
