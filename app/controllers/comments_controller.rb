@@ -135,10 +135,14 @@ class CommentsController < ApplicationController
           flash[:comment_notice] = ts('Comment created!')
           respond_to do |format|
             format.html do
-              if request.env['HTTP_REFERER'] =~ /inbox/
+              if request.referer.match(/inbox/)
                 redirect_to user_inbox_path(current_user)
-              elsif request.env['HTTP_REFERER'] =~ /new/
+              elsif request.referer.match(/new/)
                 # came here from the new comment page, probably via download link
+                # so go back to the comments page instead of reloading full work
+                redirect_to comment_path(@comment)
+              elsif request.referer.match(/static/)
+                # came here from a static page
                 # so go back to the comments page instead of reloading full work
                 redirect_to comment_path(@comment)
               else

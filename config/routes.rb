@@ -37,7 +37,7 @@ Otwarchive::Application.routes.draw do
 
   #### INVITATIONS ####
 
-  resources :invitations  
+  resources :invitations
   resources :user_invite_requests
   resources :invite_requests do
     collection do
@@ -45,13 +45,13 @@ Otwarchive::Application.routes.draw do
       post :reorder
     end
   end
-  
+
   match 'signup/:invitation_token' => 'users#new', :as => 'signup'
   match 'claim/:invitation_token' => 'external_authors#claim', :as => 'claim'
   match 'complete_claim/:invitation_token' => 'external_authors#complete_claim', :as => 'complete_claim'
-    
+
   #### TAGS ####
-  
+
   resources :media do
     resources :fandoms
   end
@@ -84,17 +84,17 @@ Otwarchive::Application.routes.draw do
     resources :bookmarks
     resources :comments
 	end
-    
-  
+
+
   #### ADMIN ####
   resources :admins
   resources :admin_posts do
     resources :comments
   end
-  
+
   resources :admin_sessions
 
-  match '/admin/login' => 'admin_sessions#new' 
+  match '/admin/login' => 'admin_sessions#new'
   match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
@@ -126,18 +126,18 @@ Otwarchive::Application.routes.draw do
       end
     end
   end
-  
-  
+
+
   #### USERS ####
-  
+
   resources :people do
     collection do
       get :search
     end
   end
-  
+
   resources :passwords
-  
+
   # When adding new nested resources, please keep them in alphabetical order
   resources :users do
     member do
@@ -154,7 +154,7 @@ Otwarchive::Application.routes.draw do
       member do
         get :default
       end
-    end    
+    end
     resources :bookmarks
     resources :collection_items, :only => [:index, :update, :destroy]
     resources :collections, :only => [:index]
@@ -173,9 +173,9 @@ Otwarchive::Application.routes.draw do
         get :reply
         get :cancel_reply
       end
-    end 
+    end
     resources :invitations do
-      member do 
+      member do
         post :invite_friend
       end
       collection do
@@ -214,11 +214,11 @@ Otwarchive::Application.routes.draw do
         put :update_multiple
       end
     end
-  end 
-  
-  
+  end
+
+
   #### WORKS ####
-  
+
   resources :works do
     collection do
       post :import
@@ -255,14 +255,14 @@ Otwarchive::Application.routes.draw do
       end
     end
   end
-  
+
   resources :chapters do
     member do
       get :preview
       post :post
     end
     resources :comments
-  end  
+  end
 
   resources :external_works do
     collection do
@@ -272,8 +272,8 @@ Otwarchive::Application.routes.draw do
     resources :bookmarks
     resources :related_works
   end
-  resources :related_works 
-  resources :serial_works 
+  resources :related_works
+  resources :serial_works
   resources :series do
     member do
       get :manage
@@ -281,9 +281,9 @@ Otwarchive::Application.routes.draw do
     end
     resources :bookmarks
   end
-  
+
   #### COLLECTIONS ####
-  
+
   resources :gifts
   resources :prompt_restrictions
   resources :prompts
@@ -328,7 +328,7 @@ Otwarchive::Application.routes.draw do
         get :undefault
         get :cover_default
         get :uncover_default
-      end 
+      end
     end
     resources :potential_matches do
       collection do
@@ -338,15 +338,15 @@ Otwarchive::Application.routes.draw do
     end
     # challenge types
     resource :gift_exchange, :controller => 'challenge/gift_exchange'
-  end 
-  
+  end
+
   #### I18N ####
-  
+
   # should stay below the main works mapping
   resources :languages do
     resources :works
     resources :admin_posts
-  end 
+  end
   resources :locales do
     collection do
       get :set
@@ -361,7 +361,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :translation_notes
   end
-  
+
   resources :translations do
     collection do
       post :assign
@@ -371,15 +371,15 @@ Otwarchive::Application.routes.draw do
     resources :translations
   end
   resources :translation_notes
-  
+
   #### SESSIONS ####
-  
+
   resources :user_sessions
   match 'login' => 'user_sessions#new'
-  match 'logout' => 'user_sessions#destroy' 
-    
+  match 'logout' => 'user_sessions#destroy'
+
   #### MISC ####
-  
+
   resources :comments do
     member do
       put :approve
@@ -403,9 +403,9 @@ Otwarchive::Application.routes.draw do
       get :search
     end
   end
-  
-  resources :kudos, :only => [:create]      
-  
+
+  resources :kudos, :only => [:create, :show]
+
   resources :skins
   resources :known_issues
   resources :archive_faqs do
@@ -414,9 +414,9 @@ Otwarchive::Application.routes.draw do
       post :reorder
     end
   end
-  
-  resources :redirects  
-  resources :abuse_reports 
+
+  resources :redirects
+  resources :abuse_reports
   resources :external_authors do
     resources :external_author_names
   end
@@ -426,7 +426,7 @@ Otwarchive::Application.routes.draw do
     end
   end
   resources :search, :only => :index
-  
+
   match 'search' => 'search#index'
   match 'support' => 'feedbacks#create', :as => 'feedbacks', :via => [:post]
   match 'support' => 'feedbacks#new', :as => 'new_feedback_report', :via => [:get]
@@ -437,7 +437,7 @@ Otwarchive::Application.routes.draw do
   match 'delete_confirmation' => 'users#delete_confirmation'
   match 'activate/:id' => 'users#activate', :as => 'activate'
   match 'devmode' => 'devmode#index'
-  
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
