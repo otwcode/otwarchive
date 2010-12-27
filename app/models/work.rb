@@ -688,7 +688,7 @@ class Work < ActiveRecord::Base
             self.filters.delete(meta_tag)
           end
         elsif self.filters.include?(meta_tag)
-          ft = self.filter_taggings.where(["filter_id = ?", meta_tag.id])
+          ft = self.filter_taggings.where(["filter_id = ?", meta_tag.id]).first
           ft.update_attribute(:inherited, true)
         end
       end
