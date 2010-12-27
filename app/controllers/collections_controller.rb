@@ -5,7 +5,7 @@ class CollectionsController < ApplicationController
   before_filter :collection_owners_only, :only => [:edit, :update, :destroy]
   
   cache_sweeper :collection_sweeper
-  cache_sweeper :yuletide_sweeper  
+  cache_sweeper :static_sweeper  
   
   def load_collection_from_id
     @collection = Collection.find_by_name(params[:id])
