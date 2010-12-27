@@ -8,7 +8,7 @@ class KudoMailer < ActionMailer::Base
     @commentable = kudo.commentable
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Kudo on " + kudo.commentable.commentable_name
+      :subject => "[#{ArchiveConfig.APP_NAME}] Kudos on " + kudo.commentable.commentable_name
     )
   end
 
