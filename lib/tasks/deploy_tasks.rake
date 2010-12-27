@@ -244,17 +244,10 @@ Don't go further with the deploy until you have fixed the problem!"
     Rake::Task['deploy:svn_update'].invoke if @yes
 
     # run tests
-    ynq("Run tests here?")
+    ynq("Run tests?") unless @server == "otw2"
     if @yes
-      if @server == 'otw1'
-        notice "Don't run them on otw2"
-      elsif @server == 'otw2'
-        notice "Don't run them on otw1"
-      end
       Rake::Task['deploy:run_tests'].invoke
       notice "You should now alert users via twitter that the archive is going down." unless @server == "stage"
-    else
-      notice "Wait until the tests have finished running on the other server" unless @server == 'stage'
     end
 
     # put into maintenance
@@ -350,7 +343,7 @@ Don't go further with the deploy until you have fixed the problem!"
 
   # quick deploy script
   desc "Quick deploy.
-Used for a rolling deploy when there are only minimal code changes.
+Used for a rolling deploy when there are no database and minimal code changes.
 Doesn't run database backup or reset, migrations or after tasks"
   task(:quick => :get_servername) do
     if @server == "otw1"
@@ -360,6 +353,11 @@ Doesn't run database backup or reset, migrations or after tasks"
     end
 
     Rake::Task['deploy:svn_update'].invoke
+
+    # run tests
+    ynq("Run tests?") unless @server == "otw2"
+    Rake::Task['deploy:run_tests'].invoke if @yes
+
     Rake::Task['deploy:deploy_code'].invoke
     Rake::Task['deploy:take_out_of_maint'].invoke unless @server == "otw2"
     Rake::Task['deploy:restart_unicorn'].invoke
@@ -367,8 +365,10 @@ Doesn't run database backup or reset, migrations or after tasks"
     Rake::Task['deploy:restart_sphinx'].invoke unless @server == "otw2"
     Rake::Task['deploy:clean_releases'].invoke
     Rake::Task['deploy:restart_dj'].invoke unless @server == "otw2"
+
     ynq("Send email?") unless @server == "otw2"
     Rake::Task['deploy:send_email'].invoke if @yes
+
     notice("Don't forget to update google code issues!") unless @server == "otw2"
   end
 
