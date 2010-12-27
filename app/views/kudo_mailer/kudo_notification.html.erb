@@ -3,8 +3,8 @@
   <%= link_to @pseud.name,
       user_pseud_url(@pseud.user, @pseud) %>
 <% else %>
-  <%= ts("a guest") %>
+  <%= ts("A guest") %>
 <% end %>
 <%= ts("left kudos on") %>
-<%= link_to @commentable.commentable_name, polymorphic_url(@commentable) %>:
+<%= link_to @commentable.commentable_name, polymorphic_url(@commentable) %>
 </p>
