@@ -1,0 +1,4 @@
+<h3><%= ts("Kudo on") %>  <%= link_to @kudo.commentable.work.title, @referrer %></h3>
+
+<%= render "kudos/kudos", :kudos => @kudo.commentable.kudos.with_pseud.order("created_at DESC"), :guest_kudos_count => @kudo.commentable.kudos.by_guest.count %>
+
