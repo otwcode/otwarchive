@@ -23,7 +23,7 @@ class StaticSweeper < ActionController::Caching::Sweeper
                   :id => record.to_param
       cache_dir = Rails.root.to_s + "/public/static/collections/" + record.name
       FileUtils.rm_r(Dir.glob(cache_dir+"/*")) rescue Errno::ENOENT
-      logger.info("#{record.name} static cache fully swept.")
+      Rails.logger.info("#{record.name} static cache fully swept.")
     end
   end
 
