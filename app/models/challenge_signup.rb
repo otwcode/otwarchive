@@ -1,14 +1,14 @@
 class ChallengeSignup < ActiveRecord::Base
   # -1 represents all matching
   ALL = -1
-  
+
   belongs_to :pseud
   belongs_to :collection
 
   has_many :prompts, :dependent => :destroy
   has_many :requests, :dependent => :destroy
   has_many :offers, :dependent => :destroy
-  
+
   has_many :offer_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'offer_signup_id', :dependent => :destroy
   has_many :request_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'request_signup_id', :dependent => :destroy
 
@@ -23,11 +23,11 @@ class ChallengeSignup < ActiveRecord::Base
   end
 
   # we reject prompts if they are empty except for associated references
-  accepts_nested_attributes_for :offers, :prompts, :requests, {:allow_destroy => true, 
-    :reject_if => proc { |attrs| 
-                          attrs[:url].blank? && attrs[:description].blank? && 
+  accepts_nested_attributes_for :offers, :prompts, :requests, {:allow_destroy => true,
+    :reject_if => proc { |attrs|
+                          attrs[:url].blank? && attrs[:description].blank? &&
                           (attrs[:tag_set_attributes].nil? || attrs[:tag_set_attributes].all? {|k,v| v.blank?}) &&
-                          (attrs[:optional_tag_set_attributes].nil? || attrs[:optional_tag_set_attributes].all? {|k,v| v.blank?})                          
+                          (attrs[:optional_tag_set_attributes].nil? || attrs[:optional_tag_set_attributes].all? {|k,v| v.blank?})
                         }
   }
 
@@ -40,16 +40,16 @@ class ChallengeSignup < ActiveRecord::Base
   scope :by_pseud, lambda {|pseud| where('pseud_id = ?', pseud.id) }
 
   scope :pseud_only, select(:pseud_id)
-   
+
   scope :order_by_pseud, joins(:pseud).order("pseuds.name")
 
   scope :in_collection, lambda {|collection| where('challenge_signups.collection_id = ?', collection.id)}
 
   ### VALIDATION
-  
+
   # only one signup per challenge!
   validates_uniqueness_of :pseud_id, :scope => [:collection_id], :message => ts("^You seem to already have signed up for this challenge.")
-  
+
   # we validate number of prompts/requests/offers at the challenge
   validate :number_of_prompts
   def number_of_prompts
@@ -61,14 +61,14 @@ class ChallengeSignup < ActiveRecord::Base
         count = eval("@#{prompt_type}") ? eval("@#{prompt_type}.size") : eval("#{prompt_type}.size")
         unless count.between?(required, allowed)
           if allowed == 0
-            errors_to_add << t("challenge_signup.#{prompt_type}_not_allowed", 
+            errors_to_add << t("challenge_signup.#{prompt_type}_not_allowed",
               :default => "You cannot submit any #{prompt_type.pluralize} for this challenge.")
           elsif required == allowed
-            errors_to_add << t("challenge_signup.#{prompt_type}_mismatch", 
-              :default => "You must submit exactly %{required} #{required > 1 ? prompt_type.pluralize : prompt_type} for this challenge. You currently have %{count}.", 
+            errors_to_add << t("challenge_signup.#{prompt_type}_mismatch",
+              :default => "You must submit exactly %{required} #{required > 1 ? prompt_type.pluralize : prompt_type} for this challenge. You currently have %{count}.",
               :required => required, :count => count)
           else
-            errors_to_add << t("challenge_signup.#{prompt_type}_range_mismatch", 
+            errors_to_add << t("challenge_signup.#{prompt_type}_range_mismatch",
               :default => "You must submit between %{required} and %{allowed} #{prompt_type.pluralize} to sign up for this challenge. You currently have %{count}.",
               :required => required, :allowed => allowed, :count => count)
           end
@@ -95,7 +95,7 @@ class ChallengeSignup < ActiveRecord::Base
           when "requests"
           then challenge.request_restriction
         end
-        
+
         if restriction
           prompts = instance_variable_get("@#{prompt_type}") || self.send("#{prompt_type}")
           TagSet::TAG_TYPES.each do |tag_type|
@@ -103,8 +103,8 @@ class ChallengeSignup < ActiveRecord::Base
               all_tags_used = []
               prompts.each do |prompt|
                 new_tags = prompt.tag_set.send("#{tag_type}_taglist")
-                unless (all_tags_used & new_tags).empty? 
-                  errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.", 
+                unless (all_tags_used & new_tags).empty?
+                  errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.",
                                       :prompt_type => prompt_type.singularize, :tag_type => tag_type)
                   break
                 end
@@ -123,7 +123,7 @@ class ChallengeSignup < ActiveRecord::Base
   end
 
 
-  # define "offers_num_allowed" etc here 
+  # define "offers_num_allowed" etc here
   %w(offers requests).each do |prompt_type|
     %w(required allowed).each do |permission|
       define_method("#{prompt_type}_num_#{permission}") do
@@ -137,13 +137,13 @@ class ChallengeSignup < ActiveRecord::Base
   def self.generate_summary_tags(collection)
     tag_type = collection.challenge.topmost_tag_type
     summary_tags = tag_type.classify.constantize.in_challenge(collection).
-                                                 select("tags.id, tags.name, 
-                                                         SUM(CASE WHEN prompts.type = 'Request' Then 1 Else 0 End) AS requests, 
+                                                 select("tags.id, tags.name,
+                                                         SUM(CASE WHEN prompts.type = 'Request' Then 1 Else 0 End) AS requests,
                                                          SUM(CASE WHEN prompts.type = 'Offer' Then 1 Else 0 End) AS offers").
                                                  group('tags.id').
                                                  having('requests > 0').
                                                  order('offers, requests DESC, tags.name')
-                                                   
+
     return [tag_type, summary_tags]
   end
 
@@ -160,15 +160,15 @@ class ChallengeSignup < ActiveRecord::Base
     FileUtils.mkdir_p(summary_dir) unless File.directory?(summary_dir)
     File.open(ChallengeSignup.summary_file(collection), "w:UTF-8") {|f| f.write(content)}
   end
-  
-  def self.summary_dir 
-    "#{Rails.public_path}/challenge_signup_summaries"
+
+  def self.summary_dir
+    "#{Rails.public_path}/static/challenge_signup_summaries"
   end
-  
+
   def self.summary_file(collection)
     "#{ChallengeSignup.summary_dir}/#{collection.name}_summary_content.html"
   end
-  
+
   # sort alphabetically
   include Comparable
   def <=>(other)
@@ -179,19 +179,19 @@ class ChallengeSignup < ActiveRecord::Base
     self.pseud.user
   end
 
-  def user_allowed_to_destroy?(current_user) 
+  def user_allowed_to_destroy?(current_user)
     (self.pseud.user == current_user) || self.collection.user_is_maintainer?(current_user)
   end
-  
+
   def user_allowed_to_see?(current_user)
     (self.pseud.user == current_user) || user_allowed_to_see_signups?(current_user)
   end
-  
+
   def user_allowed_to_see_signups?(user)
-    self.collection.user_is_maintainer?(user) || 
+    self.collection.user_is_maintainer?(user) ||
       (self.challenge.respond_to?("user_allowed_to_see_signups?") && self.challenge.user_allowed_to_see_signups?(user))
   end
-  
+
   def get_match_settings
     if collection && collection.challenge
       collection.challenge.potential_match_settings
@@ -199,7 +199,7 @@ class ChallengeSignup < ActiveRecord::Base
       nil
     end
   end
-  
+
   def byline
     pseud.byline
   end
@@ -231,5 +231,5 @@ class ChallengeSignup < ActiveRecord::Base
       nil
     end
   end
-  
+
 end
