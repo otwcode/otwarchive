@@ -60,6 +60,6 @@ end
 
 # reindex searchd
 every 2.hours do
-  command "/usr/local/bin/indexer --config /var/www/otwarchive/current/config/production.sphinx.conf --all --rotate"
+  command "/usr/bin/nice /usr/local/bin/indexer --config /var/www/otwarchive/current/config/production.sphinx.conf --all --rotate"
 end
 
