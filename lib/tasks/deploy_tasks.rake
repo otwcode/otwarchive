@@ -196,7 +196,7 @@ Don't go further with the deploy until you have fixed the problem!"
 
   desc "Restart unicorn"
   task(:restart_unicorn => :get_servername) do
-    ok_or_warn %Q{kill -USR2 `cat #{SHARED_DIR}/pids/unicorn.pid`}
+    ok_or_warn %q{/usr/local/bin/unicorns_reload.sh}
   end
 
   desc "Take out of maintenance"
@@ -226,7 +226,7 @@ Don't go further with the deploy until you have fixed the problem!"
     recipients = ask("Enter the recipients (or hit return for the default): ")
     recipients = "otw-coders@transformativeworks.org otw-testers@transformativeworks.org" if recipients.blank?
     subject = (@server == 'stage') ? "testarchive deployed" : "beta archive deployed"
-    ok_or_warn %Q{echo "testarchive deployed to #{@new_rev}" | mail -s "#{subject}" #{recipients}}
+    ok_or_warn %Q{echo "#{subject} to #{@new_rev}" | mail -s "#{subject}" #{recipients}}
   end
 
   # deploy script
