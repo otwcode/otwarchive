@@ -75,7 +75,7 @@ Feature: Create Works
         | giftee         | something   | giftee@example.org    |
         | recipient      | something   | recipient@example.org |
       And the following collections exist
-        | name        | title        | 
+        | name        | title        |
         | collection1 | Collection 1 |
         | collection2 | Collection 2 |
       And I am logged in as "thorough" with password "something"
@@ -251,3 +251,20 @@ Feature: Create Works
     Then I should see "Draft was successfully created"
       And I should see "Chapter"
       And I should see "1/?"
+
+  Scenario: test for integer title
+    Given basic tags
+      And I am logged in as "newbie" with password "password"
+    When I go to the new work page
+    Then I should see "Post New Work"
+      And I select "Not Rated" from "Rating"
+      And I check "No Archive Warnings Apply"
+      And I fill in "Fandoms" with "Supernatural"
+      And I fill in "Work Title" with "02138"
+      And I fill in "content" with "Bad things happen, etc."
+    When I press "Post without preview"
+    Then I should see "Work was successfully posted."
+    And I should see "Bad things happen, etc."
+    When I go to the works page
+    Then I should see "02138"
+

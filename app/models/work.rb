@@ -307,7 +307,7 @@ class Work < ActiveRecord::Base
     end
     (names - to_add.map{ |c| c.name }).each do |name|
       unless name.blank?
-        self.errors.add(:base, t('collection_invalid', :default => "We couldn't find a collection with the name 
+        self.errors.add(:base, t('collection_invalid', :default => "We couldn't find a collection with the name
 %{name}. Make sure you are using the one-word name, and not the title?", :name => name.strip))
       end
     end
@@ -1103,7 +1103,8 @@ class Work < ActiveRecord::Base
     sorted_title = self.title.downcase.gsub(/^["'\.\/]/, '')
     sorted_title = sorted_title.gsub(/^(an?) (.*)/, '\2, \1')
     sorted_title = sorted_title.gsub(/^the (.*)/, '\1, the')
-    sorted_title.gsub(/^(\d+)/) {|s| "%05d" % s}
+    sorted_title = sorted_title.rjust(5, "0") if sorted_title.match(/^\d/)
+    sorted_title
   end
 
   # sort works by title
