@@ -25,7 +25,7 @@
 	<thead>
 		<tr>
 			<td></td>
-			<%= @graph_dates.collect {|d| "<th>" + d.strftime('%m-%d-%y') + "</th>"} %>
+			<%= @graph_dates.collect {|d| "<th>" + d.strftime('%m-%d-%y') + "</th>"}.join.html_safe %>
 		</tr>
 	</thead>
 	<tbody>
