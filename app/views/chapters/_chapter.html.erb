@@ -32,13 +32,14 @@
       <div id="notes" class="notes module">
         <h3><%=h ts('Notes:') %></h3>
         <% if chapter.notes.blank? %>
-          <p><%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("notes")), :anchor => "chapter_#{chapter.position.to_s}_endnotes") %>.
+          <p>
+          (<%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("notes")), :anchor => "chapter_#{chapter.position.to_s}_endnotes") %>.)
           </p>
         <% else %>
           <blockquote class="userstuff"><%=raw sanitize_field(chapter, :notes) %></blockquote>
           <% unless chapter.endnotes.blank? %>
             <p>
-              <%= ts("See the end of the chapter for more ") %> <%= link_to(h(ts("notes")), :anchor => "chapter_#{chapter.position.to_s}_endnotes") %>.
+            (<%= ts("See the end of the chapter for ") %> <%= link_to(h(ts("more notes")), :anchor => "chapter_#{chapter.position.to_s}_endnotes") %>.)
             </p>
           <% end %>     
         <% end %> 

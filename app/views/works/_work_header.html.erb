@@ -113,7 +113,7 @@
       <div class="notes module" role="complementary">
       <h3><%= ts("Notes:") %></h3>
         <% unless @work.recipients.blank? %>
-          <h4 class="inline"><%= ts("For") %> <%= recipients_link(@work) %></h4>
+          <h4><%= ts("For") %> <%= recipients_link(@work) %>.</h4>
         <% end %>
     <% unless @work.parents.blank? %>
         <% for related_work in @work.parent_work_relationships %>
@@ -124,7 +124,7 @@
             <% else %>
               <%= ts('Inspired by') %>
             <% end %>
-            <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>
+            <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>.
             </h4>
           <% end %>
         <% end %>
@@ -143,15 +143,15 @@
     <% end %>
     <% unless @work.notes.blank? && @work.endnotes.blank? %>
     <% if @work.notes.blank? %>
-        <span class="endnotes-link">
-  <%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>
-        </span>
+        <p>
+        (<%= ts("See the end of the work for ") %> <%= link_to ts("notes"), linkpath %>.)
+        </p>
     <% else %>
         <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
         <% unless @work.endnotes.blank? %>
-          <span class="endnotes-link">
-    <%= ts("See the end of the work for more") %> <%= link_to ts("notes"), linkpath %>
-          </span>
+          <p>
+          (<%= ts("See the end of the work for ") %> <%= link_to ts("more notes"), linkpath %>.)
+          </p>
         <% end %>
     <% end %>
     <% end %>
