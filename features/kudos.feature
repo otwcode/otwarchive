@@ -19,7 +19,7 @@ Feature: Leave kudos
   When I am logged in as "myname2" with password "something"
     And all emails have been delivered
     And I view the work "Awesome Story"
-  Then I should not see "Kudos were left"
+  Then I should not see "left kudos!"
   When I press "Leave Kudos ♥"
   Then I should see "myname2 left kudos!"
     And 1 email should be delivered to "myname1@foo.com"
@@ -28,7 +28,7 @@ Feature: Leave kudos
     And all emails have been delivered
   When I press "Leave Kudos ♥"
   Then I should see "You have already left kudos here. :)"
-    And I should not see "Kudos were left by myname2 and myname2!"
+    And I should not see "myname2 and myname2 left kudos!"
   When I follow "Log out"
     And I press "Leave Kudos ♥"
   Then 1 email should be delivered to "myname1@foo.com"
