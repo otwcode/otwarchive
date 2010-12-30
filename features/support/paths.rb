@@ -62,7 +62,9 @@ module NavigationHelpers
     when /^"(.*)" edit skin page/
       edit_skin_path(Skin.find_by_title($1))
     when /^(.*) collection's page$/i
-      collection_path(:collection_id => $1)
+      collection_path(Collection.find_by_title($1))
+    when /^"(.*)" collection's static page$/i
+      static_collection_path(Collection.find_by_title($1))
 
     # Here is an example that pulls values out of the Regexp:
     #
