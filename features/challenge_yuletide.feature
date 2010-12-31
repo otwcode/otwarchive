@@ -681,13 +681,13 @@ Feature: Collection
     And I press "Submit"
   Then I should see "Collection was successfully updated"
 
-  # someone can now see their writer: TODO
+  # someone can now see their writer: will fail intermittently until pinch hitting is fixed above
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
+    And the system processes jobs
     And I follow "myname1"
   Then I should see "Fulfilling Story"
-  # TODO: Figure out why this isn't working
-  #  And I should not see "Anonymous"
-  #When I follow "Fulfilling Story"
-  #Then I should not see "Anonymous"
-  # And I should see "myname" within ".byline"
+    And I should not see "Anonymous"
+  When I follow "Fulfilling Story"
+  Then I should not see "Anonymous"
+   And I should see "myname" within ".byline"
