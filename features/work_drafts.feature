@@ -1,8 +1,9 @@
 @works
+@no-txn
 Feature: Work Drafts
 
   Scenario: Purging old drafts
-    And I am logged in as "drafter" with password "something"
+  Given I am logged in as "drafter" with password "something"
     When the work "old draft work" was created 8 days ago
     And the work "new draft work" was created 2 days ago
     When I am on drafter's works page
@@ -10,6 +11,14 @@ Feature: Work Drafts
     When the purge_old_drafts rake task is run
       And I reload the page
     Then I should see "My Drafts (1)"
+    
+  Scenario: Drafts cannot be found by search
+  Given I am logged in as "drafter" with password "something"
+    And the draft "draft to post" 
+  Given the work indexes are updated
+    When I fill in "site_search" with "draft"
+      And I press "Search"
+    Then I should see "0 Found"
 
   Scenario: Posting drafts from drafts page
     Given I am logged in as "drafter" with password "something"
