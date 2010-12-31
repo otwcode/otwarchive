@@ -55,8 +55,12 @@
   <li>
     <%= link_to_ibox ts("Share"), :for => "#share" %>
     <div id="share" style="display: none;">
-      <p><%= ts("Copy and paste to link back to this work: (CTRL/CMD-A will select all)") -%></p>
-      <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
+      <% if @work.users.all? {|u| u.preference.disable_share_links?} %>
+        <p><%= ts("The author of this work has chosen to disable share links.") %></p>
+      <% else %>
+        <p><%= ts("Copy and paste to link back to this work: (CTRL/CMD-A will select all)") -%></p>
+        <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
+      <% end %>
     </div>
   </li>
 
