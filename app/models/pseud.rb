@@ -45,19 +45,19 @@ class Pseud < ActiveRecord::Base
   validates_presence_of :name
   validates_length_of :name,
     :within => NAME_LENGTH_MIN..NAME_LENGTH_MAX,
-    :too_short => t('name_too_short', :default => "is too short (minimum is %{min} characters)", :min => NAME_LENGTH_MIN),
-    :too_long => t('name_too_long', :default => "is too long (maximum is %{max} characters)", :max => NAME_LENGTH_MAX)
+    :too_short => ts("is too short (minimum is %{min} characters)", :min => NAME_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max} characters)", :max => NAME_LENGTH_MAX)
   validates_uniqueness_of :name, :scope => :user_id, :case_sensitive => false
   validates_format_of :name,
-    :message => t('name_invalid_characters', :default => 'can contain letters, numbers, spaces, underscores, and dashes.'),
-    :with => /\A[\w -]*\Z/
+    :message => ts('can contain letters, numbers, spaces, underscores, and dashes.'),
+    :with => /\A[\p{Word} -]+\Z/u
   validates_format_of :name,
-    :message => t('name_no_letters_or_numbers', :default => 'must contain at least one letter or number.'),
-    :with => /[a-zA-Z0-9]/
+    :message => ts('must contain at least one letter or number.'),
+    :with => /\p{Alnum}/u
   validates_length_of :description, :allow_blank => true, :maximum => DESCRIPTION_MAX,
-    :too_long => t('description_too_long', :default => "must be less than %{max} characters long.", :max => DESCRIPTION_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => DESCRIPTION_MAX)
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
-    :too_long => t('icon_alt_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
 
   after_update :check_default_pseud
 
