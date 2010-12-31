@@ -1,7 +1,8 @@
 @admin
 Feature: Admin tasks
 
-Scenario: Log in as an admin and do admin-y things. Wrong password fails admin login, you can find users, post a new FAQ section.
+  Scenario: Log in as an admin and do admin-y things. Wrong password fails admin login, you can find users, post a new FAQ section.
+  
     Given I have no users
       And the following admin exists
       | login       | password |
@@ -9,14 +10,23 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
       And the following activated user exists
       | login       | password      |
       | dizmo       | wrangulator   |
-   When I go to the home page
+    
+    # admin cannot log in as an ordinary user - it is a different type of account
+    
+    When I go to the home page
       And I fill in "user_session_login" with "Zooey"
       And I fill in "user_session_password" with "secret"
       And I press "Log in"
     Then I should see "We couldn't find that user name in our database. Please try again"
+    
+    # FAQs have not yet been posted
+    
     When I go to the archive_faqs page
     Then I should see "Some commonly asked questions about the Archive are answered here"
       And I should not see "Some text"
+      
+    # Login as an admin
+    
     When I go to the admin_login page
       And I fill in "admin_session_login" with "dizmo"
       And I fill in "admin_session_password" with "wrangulator"
@@ -27,9 +37,17 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
       And I fill in "admin_session_password" with "secret"
       And I press "Log in as admin"
     Then I should see "Successfully logged in"
+    
+    # search for a user
+    
     When I fill in "query" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
+    
+    # TODO: change the status of a user, to and from tag wrangler, translator, etc.
+    
+    # add a new section to the FAQ
+    
     When I follow "admin posts"
       And I follow "Archive FAQ" within "#main"
       And I should not see "Some text"
@@ -42,15 +60,16 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
       And I follow "New subsection"
     Then I should see "Some text, that is sufficiently long to pass validation" within ".userstuff"
     
-    Scenario: Change some admin settings for performance
+  Scenario: Change some admin settings for performance - guest downloading and tag wrangling
     
   Given I have no users
-      And the following admin exists
+    And the following admin exists
       | login       | password |
       | Zooey       | secret   |
-      And the following activated user exists
+    And the following activated tag wrangler exists
       | login       | password      |
       | dizmo       | wrangulator   |
+    And a character exists with name: "Ianto Jones", canonical: true
       
   # post a work and download it as a guest
   
@@ -79,12 +98,29 @@ Scenario: Log in as an admin and do admin-y things. Wrong password fails admin l
   When I follow "Log out"
   Then I should see "Successfully logged out"
   When I view the work "Storytime"
-  #Then show me the page
     And I follow "MOBI"
-   # Then show me the page
   Then I should see "Due to current high load"
   
-  # TODO: Turn off tag wrangling
+  # Turn off tag wrangling
+  
+  When I go to the admin_login page
+    And I fill in "admin_session_login" with "Zooey"
+    And I fill in "admin_session_password" with "secret"
+    And I press "Log in as admin"
+  Then I should see "Successfully logged in"
+  When I follow "settings"
+    And I check "Turn off tag wrangling for non-admins"
+    And I press "Update"
+  Then I should see "Archive settings were successfully updated."
+  
+  # Check tag wrangling is off
+  
+  When I follow "Log out"
+  Then I should see "Successfully logged out"
+  When I am logged in as "dizmo" with password "wrangulator"
+    And I edit the tag "Ianto Jones"
+  Then I should see "Wrangling is disabled at the moment. Please check back later."
+    And I should not see "Synonym of"
   
   Scenario: Send out an admin notice to all users
   
