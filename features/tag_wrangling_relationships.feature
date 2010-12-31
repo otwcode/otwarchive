@@ -169,3 +169,47 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   When I fill in "Synonym of" with "Torchwood"
     And I press "Save changes"
   Then I should see "Torchwood is a fandom. Synonyms must belong to the same category."
+  
+  Scenario: Issue 962, non-canonical merger pairings
+  
+  Given the following activated tag wrangler exists
+    | login  | password    |
+    | Enigel | wrangulate! |
+    And basic tags
+    And a fandom exists with name: "Testing", canonical: true
+    And a relationship exists with name: "Testing McTestypants/Testing McTestySkirt", canonical: true
+    And a relationship exists with name: "Testypants/Testyskirt", canonical: false
+    And I am logged in as "Enigel" with password "wrangulate!"
+    And I follow "Tag Wrangling"
+    
+  When I edit the tag "Testing McTestypants/Testing McTestySkirt"
+    And I fill in "Fandoms" with "Testing"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+  
+  When I edit the tag "Testypants/Testyskirt"
+    And I fill in "Synonym of" with "Testing McTestypants/Testing McTestySkirt"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+  
+  When I edit the tag "Testing McTestypants/Testing McTestySkirt"
+    And I uncheck "tag_canonical"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+
+  When I post the work "Pants and skirts"
+    And I edit the work "Pants and skirts"
+    And I fill in "Relationships" with "Testypants/Testyskirt"
+    And I press "Preview"
+    And I press "Update"
+  Then I should see "Work was successfully updated"
+  
+  When I go to Enigel's works page
+  Then I should see "Testypants/Testyskirt"
+    And I should see "Testing McTestypants/Testing McTestySkirt"
+  When I view the tag "Testing"
+  Then I should see "Testing McTestypants/Testing McTestySkirt"
+    And I should see "Testypants/Testyskirt"
+  When I go to Enigel's user page
+  Then I should see "Testypants/Testyskirt"
+    And I should not see "Testing McTestypants/Testing McTestySkirt"
