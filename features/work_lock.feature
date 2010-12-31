@@ -1,4 +1,6 @@
 @works
+@no-txn
+
 Feature: Locking works to archive users only
   In order to keep my works under the radar
   As a registered archive user
@@ -16,18 +18,33 @@ Scenario: Posting locked work
       And I fill in "content" with "The story of how they met and how they got into trouble"
       And I check "work_restricted"
     When I press "Preview"
+    
+    # shows as restricted
     Then I should see the "title" text "Restricted" within "h2.title"
     When I press "Post"
     Then I should see the "alt" text "(Restricted)" within "h2.title"
     When I go to the works page
     Then I should see "Awesomeness" within "h4"
       And I should see the "alt" text "(Restricted)" within "h4"
+    Given the work indexes are updated
+    When I fill in "site_search" with "Awesomeness"
+      And I press "Search"
+    Then I should see "1 Found"
+      And I should see "fandomer" within "#main"
+      
+    # doesn't show when logged out
     When I am logged out
       And I go to the works page
     Then I should not see "Awesomeness"
       And I should not see the "alt" text "(Restricted)"
     When I am on fandomer's works page
     Then I should not see "Awesomeness"
+    When I fill in "site_search" with "Awesomeness"
+      And I press "Search"
+    Then I should see "0 Found"
+      And I should not see "fandomer"
+    
+    # shows again if you log in as another user
     When I am logged in as "testuser" with password "password"
       And I am on fandomer's works page
     Then I should see "Awesomeness"
