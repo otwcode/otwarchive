@@ -63,7 +63,7 @@ Feature: Edit profile
     And I follow "Profile"
     And I follow "Edit My Profile"
   Then I should see "Edit My Profile"
-  When I select "1997" from "profile_attributes[date_of_birth(1i)]"
+  When I select "1998" from "profile_attributes[date_of_birth(1i)]"
     And I select "December" from "profile_attributes[date_of_birth(2i)]"
     And I select "31" from "profile_attributes[date_of_birth(3i)]"
     And I press "Update"
@@ -109,7 +109,7 @@ Feature: Edit profile
     And I press "Update"
   Then I should see "Email has already been taken"
     And I should not see "Your profile has been successfully updated"
-    
+
   Scenario: View and edit profile - change password
 
   Given I am logged in as "editname2" with password "password"
