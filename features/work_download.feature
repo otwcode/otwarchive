@@ -108,7 +108,9 @@ Feature: Download a work
     And I post the work "NaNoWriMo"
     And I am logged out
   When I view the work "NaNoWriMo"
-    And I follow "HTML"
+  Then I should see "NaNoWriMo"
+    And I should see "author" within "#main"
+  When I follow "HTML"
   Then I should see "NaNoWriMo"
     And I should not see "Comments"
   When guest downloading is off

@@ -20,7 +20,9 @@ Feature: Pseud dashboard
     And a fandom exists with name: "Stargatte SG-oops", canonical: false
     And a fandom exists with name: "Stargate Franchise", canonical: true
     And I edit the tag "Stargate SG-1"
-    And I fill in "MetaTags" with "Stargate Franchise"
+  Then I should see "Edit Stargate SG-1 Tag"
+    And I should see "MetaTags"
+  When I fill in "MetaTags" with "Stargate Franchise"
     And I press "Save changes"
   Then I should see "Tag was updated"
   When I edit the tag "Stargatte SG-oops"
