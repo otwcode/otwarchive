@@ -1,6 +1,6 @@
 <p><%= ts("Posted") %>: <%= @comment.created_at %>
 <% unless @comment.edited_at.blank? %>
-  <br /><= ts("Last edited") %>: <%= @comment.edited_at %>
+  <br /><%= ts("Last edited") %>: <%= @comment.edited_at %>
 <% end %>
 </p>
 <p>
