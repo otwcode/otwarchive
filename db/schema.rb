@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101219191929) do
+ActiveRecord::Schema.define(:version => 20101231174606) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -185,15 +185,15 @@ ActiveRecord::Schema.define(:version => 20101219191929) do
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro",                   :limit => 16777215
-    t.text     "faq",                     :limit => 16777215
-    t.text     "rules",                   :limit => 16777215
+    t.text     "intro",                   :limit => 2147483647
+    t.text     "faq",                     :limit => 2147483647
+    t.text     "rules",                   :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "gift_notification"
-    t.integer  "intro_sanitizer_version", :limit => 2,        :default => 0, :null => false
-    t.integer  "faq_sanitizer_version",   :limit => 2,        :default => 0, :null => false
-    t.integer  "rules_sanitizer_version", :limit => 2,        :default => 0, :null => false
+    t.integer  "intro_sanitizer_version", :limit => 2,          :default => 0, :null => false
+    t.integer  "faq_sanitizer_version",   :limit => 2,          :default => 0, :null => false
+    t.integer  "rules_sanitizer_version", :limit => 2,          :default => 0, :null => false
     t.text     "assignment_notification"
   end
 
@@ -620,6 +620,8 @@ ActiveRecord::Schema.define(:version => 20101219191929) do
     t.boolean  "disable_work_skins",                :default => false,                     :null => false
     t.integer  "skin_id"
     t.boolean  "minimize_search_engines",           :default => false,                     :null => false
+    t.boolean  "kudos_emails_off",                  :default => false,                     :null => false
+    t.boolean  "disable_share_links",               :default => false,                     :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
