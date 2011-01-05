@@ -1,10 +1,10 @@
 GIT
   remote: git://github.com/ambtus/tolk.git
-  revision: fa8c40500fa79c3a28eebe2d1b087683ccb8b058
+  revision: 0cf6384dd811ed38e658db3c77d170a95d08e276
   branch: rails3
   specs:
     tolk (1.0)
-      will_paginate (= 3.0.pre2)
+      will_paginate (~> 3.0.pre2)
       ya2yaml (~> 0.26)
 
 GIT
@@ -18,10 +18,10 @@ GIT
 
 GIT
   remote: git://github.com/huerlisi/will_paginate.git
-  revision: ef54916d38bdecd1b5030a16cb620438c62b758d
+  revision: 05fbcb82299a449fc37fb9198346703740cb39cd
   branch: rails3
   specs:
-    will_paginate (3.0.pre2)
+    will_paginate (3.0.pre3)
 
 GIT
   remote: git://github.com/odorcicd/authlogic.git
