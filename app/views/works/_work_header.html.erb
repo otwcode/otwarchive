@@ -61,6 +61,12 @@
         <p><%= ts("The author of this work has chosen to disable share buttons.") %></p>
       <% else %>
         <!-- twitter, tumblr buttons go here -->
+        <p>
+          <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="AO3_Status" data-text="<%= @page_title.truncate(95) %>" data-url="<%= work_url(@work) %>">Tweet</a>
+          <% content_for :footer_js do %>
+          <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+          <% end %>
+        </p>
       <% end %>
     </div>
   </li>

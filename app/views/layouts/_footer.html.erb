@@ -2,6 +2,9 @@
 <div id="footer" role="contentinfo">
 	<h3 class="landmark">Footer</h3>
   <div id="globalize"><!-- locales_menu --></div>
+  
+  <%= yield :footer_js %>
+  
   <ul class="navigation" role="navigation">
     <li><%= link_to "Terms of Service", tos_path %></li>
     <li>&#8212; <%= link_to "Site Map", site_map_path %></li>
