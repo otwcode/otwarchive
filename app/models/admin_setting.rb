@@ -40,12 +40,13 @@ class AdminSetting < ActiveRecord::Base
     self.first ? self.first.guest_downloading_off? : false
   end
 
+  # run once a day from cron
   def self.check_queue
     if self.invite_from_queue_enabled? && InviteRequest.count > 0
-      unless Time.now < self.invite_from_queue_at
-        InviteRequest.invite
+      if Date.today >= self.invite_from_queue_at.to_date
         new_date = Time.now + self.invite_from_queue_frequency.days
         self.first.update_attribute(:invite_from_queue_at, new_date)
+        InviteRequest.invite
       end
     end
   end
