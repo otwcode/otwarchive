@@ -48,7 +48,8 @@
           <% end %>
           <li>
             <%= image_tag("replied_to.png", :size => "15x15", :alt => "Replied To") if inbox_comment.replied_to? %>
-            <%= inbox_reply_link(inbox_comment.feedback_comment) %>
+            <%= link_to "Reply", reply_user_inbox_path(current_user, :comment_id => 
+inbox_comment.feedback_comment), :remote => true %>
           </li>
           <li>
             <%= label_tag "inbox_comments_#{inbox_comment.id}", "Select" %>

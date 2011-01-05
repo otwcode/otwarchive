@@ -18,6 +18,12 @@ class InboxController < ApplicationController
   def reply
     @commentable = Comment.find(params[:comment_id]) 
     @comment = Comment.new
+    respond_to do |format|
+      format.html do
+        redirect_to comment_path(@commentable, :add_comment_reply_id => @commentable.id, :anchor => 'comment_' + @commentable.id.to_s)
+      end
+      format.js
+    end
   end
   
   def update
