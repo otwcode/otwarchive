@@ -1,4 +1,4 @@
-#!/usr/bin/env script/runner
+#!/usr/bin/env script/rails runner
 # usage:
 # RAILS_ENV=production script/create_admin.rb
 
