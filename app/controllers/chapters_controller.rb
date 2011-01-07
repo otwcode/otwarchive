@@ -55,6 +55,15 @@ class ChaptersController < ApplicationController
         get_page_title(@work.fandoms.string, 
           @work.anonymous? ? t('chapters.anonymous', :default => "Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '), 
           @work.title + " - Chapter " + @chapter.position.to_s)
+
+        if @work.unrevealed?                                               
+          @tweet_text = ts("Mystery Work")
+        else
+          @tweet_text = @work.title + " by " + 
+                        (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " + 
+                        (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
+          @tweet_text = @tweet_text.truncate(95)
+        end
           
       # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
       if chapter_position == 0
