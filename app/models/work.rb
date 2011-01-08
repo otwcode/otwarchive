@@ -473,10 +473,8 @@ class Work < ActiveRecord::Base
 
   # If the work is posted, the first chapter should be posted too
   def post_first_chapter
-    if self.posted? && !self.first_chapter.posted?
-       chapter = self.first_chapter
-       chapter.posted = true
-       chapter.save(:validate => false) unless self.new_record?
+    if self.posted_changed?
+      self.chapters.first.posted = self.posted
     end
   end
 
