@@ -243,6 +243,7 @@ Don't go further with the deploy until you have fixed the problem!"
     Rake::Task['deploy:svn_update'].invoke if @yes
 
     # run tests
+    @yes = false
     ynq("Run tests?") unless @server == "otw2"
     if @yes
       Rake::Task['deploy:run_tests'].invoke
@@ -301,7 +302,8 @@ Don't go further with the deploy until you have fixed the problem!"
     end
 
     # update crontab (whenever)
-    ynq("Update crontab?")
+    @yes = false
+    ynq("Update crontab?") unless @server == "otw2"
     Rake::Task['deploy:update_crontab'].invoke if @yes
 
     if @restart_deferred
@@ -336,7 +338,8 @@ Don't go further with the deploy until you have fixed the problem!"
     ynq("Clean up old releases?")
     Rake::Task['deploy:clean_releases'].invoke if @yes
 
-    ynq("Restart delayed job?")
+    @yes = false
+    ynq("Restart delayed job?") unless @server == "otw2"
     Rake::Task['deploy:restart_dj'].invoke if @yes
   end
 
