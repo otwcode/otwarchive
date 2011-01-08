@@ -142,7 +142,9 @@ class Bookmark < ActiveRecord::Base
 
     # attributes
     has rec, updated_at, bookmarkable_id
-    has private, hidden_by_admin
+
+    # Don't index private and hidden bookmarks
+    where "private = 0 AND hidden_by_admin = 0"
 
     # properties
 #    set_property :delta => :delayed
