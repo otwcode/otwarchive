@@ -248,6 +248,17 @@ namespace :After do
   end
 
   #### Add your new tasks here
+  
+  desc "Fix works without posted chapters"
+  task(:post_chapters => :environment) do
+    Chapter.joins(:work).
+            where("works.posted = 1 AND chapters.posted = 0 AND chapters.position = 1").
+            readonly(false).each do |c|
+      if c.work.chapters.posted.count == 0
+        c.update_attribute(:posted, true)
+      end
+    end
+  end
 
 
 end # this is the end that you have to put new tasks above
@@ -258,4 +269,4 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
-task :After => []
+task :After => ['After:post_chapters']
