@@ -70,7 +70,7 @@ class Work < ActiveRecord::Base
 
   acts_as_commentable
   has_many :total_comments, :class_name => 'Comment', :through => :chapters
-  has_many :kudos, :through => :chapters
+  has_many :kudos, :as => :commentable, :dependent => :destroy
 
   belongs_to :language
   belongs_to :work_skin

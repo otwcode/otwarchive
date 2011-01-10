@@ -9,7 +9,7 @@ class KudosController < ApplicationController
     end
 
     pseud = logged_in? ? current_user.default_pseud : nil
-    if @commentable.pseuds.include?(pseud)
+    if current_user && current_user.is_author_of?(@commentable)
       flash[:comment_error] = ts("You can't leave kudos for yourself. :)")
     else
       ip_address = logged_in? ? nil : request.remote_ip
@@ -32,7 +32,7 @@ class KudosController < ApplicationController
 
   def show
     @kudo = Kudo.find(params[:id])
-    @referrer = params[:url].blank? ? url_for(@kudo.commentable.work) : params[:url]
+    @referrer = params[:url].blank? ? url_for(@kudo.commentable) : params[:url]
   end
 
 end

@@ -15,12 +15,11 @@
     <% if @admin_post %>
         <li><%= link_to h(ts('Back to AO3 News Index')), admin_posts_path %></li>
     <% end %>
-    <% if commentable.class.name == 'Work' || commentable.class.name == 'Chapter' %>
+    <% if @work && !is_author_of?(@work) %>
       <li>
-        <% @kudo = Kudo.new %>
-        <%= form_for @kudo do |kudo_form| %>
-          <%= kudo_form.hidden_field :commentable_id, :value => commentable.id %>
-          <%= kudo_form.hidden_field :commentable_type, :value => commentable.class.name %>
+        <%= form_for Kudo.new do |kudo_form| %>
+          <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
+          <%= kudo_form.hidden_field :commentable_type, :value => 'Work' %>
           <%= kudo_form.submit ts("Leave Kudos ♥") %>
         <% end %>
       </li>
