@@ -501,7 +501,20 @@ class StoryParser
       # inside the body.
       body = @doc.css("body")
       content_divs = body.css("div")
-      storytext = !content_divs[0].nil? ? content_divs[0].inner_html : body.inner_html
+
+
+      unless content_divs[0].nil?
+        storytext = content_divs[0].inner_html
+        
+        # the LJ metadata (mood, location, current music, tags) is in the first
+        # table inside the div. No metadata means no table. Get rid of it:
+        tables = content_divs[0].css("table")
+        if !tables[0].nil? && tables[0].to_html.match(/(Current location:)|(Current mood:)|(Current music:)|(Entry tags:)/)
+          storytext.gsub! tables[0].to_html, ""
+        end
+      else
+        storytext = body.inner_html
+      end
 
       # cleanup the text
       # storytext.gsub!(/<br\s*\/?>/i, "\n") # replace the breaks with newlines
