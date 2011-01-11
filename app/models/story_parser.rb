@@ -31,7 +31,7 @@ class StoryParser
 
   # places for which we have a custom parse_story_from_[source] method
   # for getting information out of the downloaded text
-  KNOWN_STORY_PARSERS = %w(dw lj yuletide ffnet)
+  KNOWN_STORY_PARSERS = %w(deviantart dw lj yuletide ffnet)
 
   # places for which we have a custom parse_author_from_[source] method
   # which returns an external_author object including an email address
@@ -51,6 +51,7 @@ class StoryParser
   SOURCE_YULETIDE = 'yuletidetreasure\.org'
   SOURCE_FFNET = 'fanfiction\.net'
   SOURCE_MINOTAUR = '(bigguns|firstdown).slashdom.net'
+  SOURCE_DEVIANTART = 'deviantart\.com'
 
   # time out if we can't download fast enough
   STORY_DOWNLOAD_TIMEOUT = 60
@@ -570,6 +571,65 @@ class StoryParser
       return work_params
     end
 
+    def parse_story_from_deviantart(story)
+      work_params = {:chapter_attributes => {}}
+      storytext = ""
+      notes = ""
+      
+      body = @doc.css("body")
+
+      # Find the image (original size) if it's art
+      image_full = body.css("img#gmi-ResViewSizer_fullimg")
+      unless image_full[0].nil?
+        storytext = "<center><img src=\"#{image_full[0]["src"]}\"></center>"
+      end
+
+      # Find the fic text if it's fic
+      text_table = body.css("table.f td.f div.text")
+      unless text_table[0].nil?
+        storytext = text_table[0].inner_html
+      end
+      
+      # cleanup the text
+      storytext.gsub!(/<br\s*\/?>/i, "\n") # replace the breaks with newlines
+      storytext = clean_storytext(storytext)
+      work_params[:chapter_attributes][:content] = storytext
+        
+      # Find the notes
+      content_divs = body.css("div.text-ctrl div.text")
+      unless content_divs[0].nil?
+        notes = content_divs[0].inner_html
+      end
+        
+      # cleanup the notes
+      notes.gsub!(/<br\s*\/?>/i, "\n") # replace the breaks with newlines
+      notes = clean_storytext(notes)
+      work_params[:notes] = notes
+        
+      work_params.merge!(scan_text_for_meta(notes))
+
+      work_params[:title] = @doc.css("title").inner_html
+      work_params[:title].gsub! /on DeviantART$/, ""
+
+      body.css("div.gr-body div.gr div.hh h1 a").each do |node|
+        if node["class"] != "u"
+          work_params[:title] = node.inner_html
+        end
+      end
+
+      tags = []
+      @doc.css("td.dcats a.h").each { |node| tags << node.inner_html }
+      work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
+
+      details = @doc.css("div.details-section span[ts]")
+      unless details[0].nil?
+         work_params[:revised_at] = convert_revised_at(details[0].inner_text)
+      end
+
+      return work_params
+    end
+
+    
     # Parses a story from the Yuletide archive (an AutomatedArchive)
     def parse_story_from_yuletide(story)
       work_params = {:chapter_attributes => {}}
