@@ -573,10 +573,19 @@ class StoryParser
     # Parses a story from the Yuletide archive (an AutomatedArchive)
     def parse_story_from_yuletide(story)
       work_params = {:chapter_attributes => {}}
-      storytext = (@doc/"table[@class='form']/tr/td[2]").inner_html
-      if storytext.empty?
+      content_table = (@doc/"table[@class='form']/tr/td[2]")
+
+      unless content_table.nil?
+        # Try to remove the comment links at the bottom
+        centers = content_table.css("center")
+        if !centers[-1].nil? && centers[-1].to_html.match(/<!-- COMMENTLINK START -->/)
+          centers[-1].remove
+        end
+        storytext = content_table.inner_html
+      else
         storytext = (@doc/"body").inner_html
       end
+      
       storytext = clean_storytext(storytext)
 
       # fix the relative links
@@ -589,11 +598,12 @@ class StoryParser
 
       tags = ['yuletide']
 
-      if storytext.match(/Written for: (.*) in the (.*) challenge/i)
+      if storytext.match(/Written for: (.*) in the Yuletide (.*) challenge/i)
         recip = $1
-        challenge = $2
+        year = $2
         tags << "recipient:#{recip}"
-        tags << "challenge:#{challenge}"
+        tags << "challenge:Yuletide #{year}"
+        work_params[:revised_at] = convert_revised_at("#{year}-12-25")
       end
       if storytext.match(/<center>.*Fandom:.*Written for:.*by <a .*>(.*)<\/a><br>\n<p>(.*)<\/p><\/center>/ix)
         author = $1
