@@ -2,7 +2,7 @@
 require 'bundler/capistrano'
 
 set :application, "otwarchive"
-set :repository,  "http://otwarchive.googlecode.com/svn/trunk/"
+set :repository,  "http://otwarchive.googlecode.com/svn/branches/deploy/"
 set :scm, :subversion
 set :deploy_via, :remote_cache
 
