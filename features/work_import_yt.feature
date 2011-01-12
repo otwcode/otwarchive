@@ -6,7 +6,6 @@ Feature: Import Works from yuletidtreasure
   
   Scenario: Creating a new work from an yuletidetreasure story with automatic metadata
     Given basic tags
-      #And a fandom exists with name: "Lewis", canonical: true
       And the following activated user exists
         | login          | password    |
         | cosomeone      | something   |
@@ -21,7 +20,7 @@ Feature: Import Works from yuletidtreasure
       And I should see "challenge:Yuletide 2008" within "dd.freeform"
       And I should see "Published:2008-12-25"
       And I should see "Commonplaces" within "h2.title" 
-      And I should see "With many many thanks to Cesca for brainstorming and to Terri for literally last-minute beta!"
+      And I should see "With many many thanks to Cesca for brainstorming and to Terri for literally last-minute beta!" within "div.notes"
       And I should see "My life is spent in one long effort to escape from the commonplaces of existence."
       And I should see "I am ready to be incautious again."
       And I should not see the "alt" text "yuletide treasure"

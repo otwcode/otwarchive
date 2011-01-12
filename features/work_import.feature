@@ -83,37 +83,5 @@ Feature: Import Works
       And I should see "2010-01-11"
 
 
-  Scenario: Creating a new work from a Yuletide story
-    Given basic tags
-      And the following activated user exists
-        | login          | password    |
-        | cosomeone      | something   |
-      And I am logged in as a random user
-    When I go to the import page
-      And I fill in "urls" with "http://yuletidetreasure.org/archive/79/littlemiss.html"
-    When I press "Import"
-    Then I should see "Preview Work"
-      And I should see "Little Miss Curious"
-    When I press "Post"
-    Then I should see "Work was successfully posted."
-      And I should see "Little Miss Sunshine" within "dd"
-      And I should see "Yule Madness Treat, unbetaed." within "div"
-      And I should not see "Search Engine"
-      
-
-#  Scenario: Getting tags out of a story with tags in the text in the format category: tag (eg, Fandom: Supernatural)
-  
-  Scenario: Import a multi-chapter work from fanfiction.net
-    Given basic tags
-      And I am logged in as "newbie" with password "password"
-    When I go to the import page
-      And I fill in "urls" with "http://www.fanfiction.net/s/892322/1/Hitchhiker"
-    When I press "Import"
-    Then I should see "Preview Work"
-      And I should see "Hitchhiker" within "h2"
-      And I should see "Chapters"
-      And I should see "1/24"
-  
-
 #  Scenario: Import works for others and have them automatically notified
       
