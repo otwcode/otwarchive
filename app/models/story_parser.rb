@@ -722,6 +722,11 @@ class StoryParser
         work_params[:rating_string] = rating
       end
 
+      if story.match(/published:\s*(\d\d)-(\d\d)-(\d\d)/i)
+        date = convert_revised_at("#{$3}/#{$1}/#{$2}")
+        work_params[:revised_at] = date
+      end
+
       if story.match(/rated.*?<\/a> - .*? - (.*?)(\/(.*?))? -/i)
         tags << $1
         tags << $3 unless $1 == $3
