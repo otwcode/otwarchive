@@ -117,6 +117,10 @@ Then /^I should see the text with tags "(.*)"$/ do |text|
   page.body.should =~ /#{text}/m
 end
 
+Then /^I should see the text with tags '(.*)'$/ do |text|
+  page.body.should =~ /#{text}/m
+end
+
 Then /^I should see the page title "(.*)"$/ do |text|
   within('head title') do
     page.should have_content(text)
