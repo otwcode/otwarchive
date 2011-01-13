@@ -402,7 +402,11 @@ class StoryParser
         story = eval("download_from_#{source.downcase}(location)")
       end
 
-      story = fix_bad_characters(story)
+      #story = fix_bad_characters(story)
+      # ^ This eats ALL special characters. I don't think we need it at all
+      # so I'm taking it out. If we want it back, it should be the last
+      # thing we do with the parsed bits after Nokogiri has parsed the content
+      # and worked it's magic with encoding --rebecca
       return story
     end
 

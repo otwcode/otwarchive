@@ -69,7 +69,7 @@ Feature: Import Works
       And I fill in "Relationships" with "Adam/Kris"
       And I fill in "Characters" with "Adam, Kris"
     When I press "Import"
-      And I should see "Imported Works"
+    Then I should see "Imported Works"
       And I should see "We were able to successfully upload"
       And I should see "Huddling"
       And I should see "Stardust"
@@ -85,3 +85,25 @@ Feature: Import Works
 
 #  Scenario: Import works for others and have them automatically notified
       
+
+  Scenario: Import a work with special characters (UTF-8, autodetect from page encoding)
+    Given basic tags
+      And I am logged in as a random user
+    When I go to the import page
+      And I fill in "urls" with "http://www.rbreu.de/otwtest/utf8_specified.html"
+    When I press "Import"
+    Then I should see "Preview Work"
+      And show me the page
+      And I should see "Das Maß aller Dinge" within "h2.title"
+      And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
+
+  Scenario: Import a work with special characters (latin-1, autodetect from page encoding)
+    Given basic tags
+      And I am logged in as a random user
+    When I go to the import page
+      And I fill in "urls" with "http://www.rbreu.de/otwtest/latin1_specified.html"
+    When I press "Import"
+    Then I should see "Preview Work"
+      And I should see "Das Maß aller Dinge" within "h2.title"
+      And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
+
