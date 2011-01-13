@@ -533,7 +533,7 @@ protected
     rescue Timeout::Error
       flash[:error] = ts("Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.")
       render :new_import and return
-    rescue Exception => exception
+    rescue StoryParser::Error => exception
       flash[:error] = ts("We couldn't successfully import that story, sorry: %{message}", :message => exception.message)
       render :new_import and return
     end
@@ -560,15 +560,13 @@ protected
   def import_multiple(urls, options)
     # try a multiple import
     storyparser = StoryParser.new
-    results = storyparser.import_from_urls(urls, options)
-    @works = results[0]
-    failed_urls = results[1]
-    errors = results[2]
+    @works, failed_urls, errors, debug = storyparser.import_from_urls(urls, options)
 
     # collect the errors neatly, matching each error to the failed url
     unless failed_urls.empty?
       error_msgs = 0.upto(failed_urls.length).map {|index| "<dt>#{failed_urls[index]}</dt><dd>#{errors[index]}</dd>"}.join("\n")
       flash[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
+      logger.error(debug.join("\n"))
     end
 
     # if EVERYTHING failed, boo. :( Go back to the import form.

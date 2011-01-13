@@ -18,6 +18,13 @@ class StoryParser
                    :revised_at => 'Date|Posted|Posted on|Posted at'
                    }
 
+
+  # Use this for raising custom error messages
+  # (so that we can distinguish them from unexpected exceptions due to
+  # faulty code)
+  class Error < StandardError
+  end
+  
   # These attributes need to be moved from the work to the chapter
   # format: {:work_attribute_name => :chapter_attribute_name} (can be the same)
   CHAPTER_ATTRIBUTES_ONLY = {}
@@ -64,6 +71,7 @@ class StoryParser
     works = []
     failed_urls = []
     errors = []
+    debug = []
     urls.each do |url|
       begin
         work = download_and_parse_story(url, options)
@@ -74,13 +82,17 @@ class StoryParser
           errors << work.errors.values.join(", ")
           work.delete if work
         end
-      rescue Exception => exception
+      rescue Timeout::Error
         failed_urls << url
-        errors << exception.message
+        errors << "Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site."
+        work.delete if work        
+      rescue Error => exception
+        failed_urls << url
+        errors << "We couldn't successfully import that story, sorry: #{exception.message}"
         work.delete if work
       end
     end
-    return [works, failed_urls, errors]
+    return [works, failed_urls, errors, debug]
   end
 
 
@@ -220,7 +232,7 @@ class StoryParser
     def check_for_previous_import(location)
       work = Work.find_by_imported_from_url(location)
       if work
-        raise "A work has already been imported from #{location}."
+        raise Error, "A work has already been imported from #{location}."
       end
     end
 
@@ -231,7 +243,7 @@ class StoryParser
     end
 
     def set_work_attributes(work, location, options = {})
-      raise "Work could not be downloaded" if work.nil?
+      raise Error, "Work could not be downloaded" if work.nil?
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
 
@@ -241,7 +253,7 @@ class StoryParser
       pseuds << options[:archivist].default_pseud if options[:archivist]
       pseuds += options[:pseuds] if options[:pseuds]
       pseuds = pseuds.uniq
-      raise "A work must have at least one author specified" if pseuds.empty?
+      raise Error, "A work must have at least one author specified" if pseuds.empty?
       pseuds.each do |pseud|
         work.pseuds << pseud unless work.pseuds.include?(pseud)
         work.chapters.each {|chapter| chapter.pseuds << pseud unless chapter.pseuds.include?(pseud)}
@@ -253,7 +265,7 @@ class StoryParser
         if external_author_name
           if external_author_name.external_author.do_not_import
             # we're not allowed to import works from this address
-            raise "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
+            raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
           end
           external_creatorship = ExternalCreatorship.new(:external_author_name => external_author_name, :creation => work, :archivist => (options[:archivist] || User.current_user) )
           work.external_creatorships << external_creatorship
@@ -389,7 +401,9 @@ class StoryParser
       else
         story = eval("download_from_#{source.downcase}(location)")
       end
+
       story = fix_bad_characters(story)
+      return story
     end
 
     # canonicalize the url for downloading from lj or clones
@@ -416,8 +430,8 @@ class StoryParser
 
     # grab all the chapters of the story from ff.net
     def download_chaptered_from_ffnet(location)
-      raise "We cannot read #{location}. Are you trying to import from the story preview?" if location.match(/story_preview/)
-      raise "The url #{location} is locked." if location.match(/secure/)
+      raise Error, "We cannot read #{location}. Are you trying to import from the story preview?" if location.match(/story_preview/)
+      raise Error, "The url #{location} is locked." if location.match(/secure/)
       @chapter_contents = []
       if location.match(/^(.*fanfiction\.net\/s\/[0-9]+\/)([0-9]+)(\/.*)$/i)
         urlstart = $1
@@ -817,7 +831,7 @@ class StoryParser
         end
       }
       if story.blank?
-        raise "We couldn't download anything from #{location}. Are you sure the URL is right?"
+        raise Error, "We couldn't download anything from #{location}. Are you sure the URL is right?"
       end
       story
     end
