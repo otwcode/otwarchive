@@ -15,10 +15,10 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 
 # users who have webdavs or asked to be added
 # or who have problematic works which need testing
-SEEDS = [ "Anneli", "astolat", "Atalan", "awils1", "aworldinside",
+SEEDS = [ "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling"
           "Cesy", "cesytest", "Celandine", "Chandri", "ealusaid", "eel", 
           "elz", "erda", "Enigel", "hope", "justira", "lim", "melange",
-          "mumble", "Rebecca", "rklyne", "Rustler", "Sidra", "Stowaway",
+          "mumble", "Rebecca", "rklyne", "Rustler", "Sidra", "staranise", "Stowaway",
           "tomatopudding", "zelempa", "Zooey_Glass", "zlabya",
 ]
 
