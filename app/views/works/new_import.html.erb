@@ -22,10 +22,6 @@
   <strong><%= t('.import.please_note', :default => 'Please note!') %></strong> 
   <%= t('.import_problems', :default => 'We cannot always automatically import works.') %> If you have trouble, <%= link_to t('.let_us_know', :default => "please let us know"), new_feedback_report_path %> so we can improve this tool! If your text gets truncated at the point of an em dash or accented character, try replacing these characters with HTML entities, or cutting and pasting your story into the rich text editor on the standard form.</p>
 <p>You will be able to edit and complete the Archive standard header information after import is complete.</p>
-<p>
-  <%= t('.import.allowed_html', :default => 'Allowed HTML:') %><br />
-  <code>a, abbr, acronym, address, alt, b, big, blockquote, br, caption, center, cite, class, code, col, colgroup, datetime, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, height, hr, href, i, img, ins, kbd, li, name, ol, p, pre, q, samp, small, span, src, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, title, tr, tt, u, ul, var, width</code>
-</p>
   
 <%= form_tag url_for(:controller => :works, :action => :import) do %>
 <fieldset>
@@ -33,6 +29,12 @@
   <p>
     <%= label_tag "urls", t('.import.url', :default => 'URLs for existing work(s) or for the chapters of a single work, one URL per line. (Note: if you are importing a chaptered work from ff.net, you only need to enter the first chapter. However, currently you cannot turn multiple ff.net works into the chapters of a single work.)') %> <br />
     <%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
+  </p>
+
+  <p>
+    <%= label_tag "encoding", ts("Overwrite content encoding for all imported pages, e.g. UTF-8, ISO-8859-1. Leave blank to use automatic detection.") %> <br />
+    <%= text_field_tag "encoding" %>
+    <%= autocomplete_text_field "encoding", :no_comma => true %>
   </p>
   
   <p>

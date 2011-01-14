@@ -267,5 +267,10 @@ public
     set_finder(params[params[:fieldname]], HTML::WhiteListSanitizer.allowed_css_keywords)
   end
   
+  # encodings for importing
+  def encoding
+    set_finder(params[params[:fieldname]], Encoding.name_list)
+  end
+  
 end
 

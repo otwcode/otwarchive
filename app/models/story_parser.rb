@@ -71,7 +71,6 @@ class StoryParser
     works = []
     failed_urls = []
     errors = []
-    debug = []
     urls.each do |url|
       begin
         work = download_and_parse_story(url, options)
@@ -92,7 +91,7 @@ class StoryParser
         work.delete if work
       end
     end
-    return [works, failed_urls, errors, debug]
+    return [works, failed_urls, errors]
   end
 
 
@@ -175,7 +174,7 @@ class StoryParser
 
   # Parses the text of a story, optionally from a given location.
   def parse_story(story, location, options = {})
-    work_params = parse_common(story, location)
+    work_params = parse_common(story, location, options[:encoding])
 
     # move any attributes from work to chapter if necessary
     return set_work_attributes(Work.new(work_params), location, options)
@@ -183,7 +182,7 @@ class StoryParser
 
   # parses and adds a new chapter to the end of the work
   def parse_chapter_of_work(work, chapter_content, location, options = {})
-    tmp_work_params = parse_common(chapter_content, location)
+    tmp_work_params = parse_common(chapter_content, location, options[:encoding])
     chapter = get_chapter_from_work_params(tmp_work_params)
     work.chapters << set_chapter_attributes(work, chapter, location, options)
     return work
@@ -192,9 +191,9 @@ class StoryParser
   def parse_chapters_into_story(location, chapter_contents, options = {})
     work = nil
     chapter_contents.each do |content|
-      @doc = Nokogiri.parse(content)
+      # @doc = Nokogiri.parse(content, encoding=options[:encoding])
 
-      work_params = parse_common(content, location)
+      work_params = parse_common(content, location, options[:encoding])
       if work.nil?
         # create the new work
         work = Work.new(work_params)
@@ -470,9 +469,10 @@ class StoryParser
     # parse_common then calls sanitize_params (which would also be called on the standard work upload
     # form results) and returns the final sanitized hash.
     #
-    def parse_common(story, location = nil)
+    def parse_common(story, location = nil, encoding = nil)
       work_params = { :title => "UPLOADED WORK", :chapter_attributes => {:content => ""} }
-      @doc = Nokogiri::HTML.parse(story) rescue ""
+
+      @doc = Nokogiri::HTML.parse(story, nil, encoding) rescue ""
 
       if location && (source = get_source_if_known(KNOWN_STORY_PARSERS, location))
         params = eval("parse_story_from_#{source.downcase}(story)")

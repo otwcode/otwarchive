@@ -506,7 +506,8 @@ class WorksController < ApplicationController
       :rating => params[:work][:rating_string],
       :relationship => params[:work][:relationship_string],
       :category => params[:work][:category_string],
-      :freeform => params[:work][:freeform_string]
+      :freeform => params[:work][:freeform_string],
+      :encoding => params[:encoding]
     }
 
     # now let's do the import
@@ -560,13 +561,12 @@ protected
   def import_multiple(urls, options)
     # try a multiple import
     storyparser = StoryParser.new
-    @works, failed_urls, errors, debug = storyparser.import_from_urls(urls, options)
+    @works, failed_urls, errors = storyparser.import_from_urls(urls, options)
 
     # collect the errors neatly, matching each error to the failed url
     unless failed_urls.empty?
       error_msgs = 0.upto(failed_urls.length).map {|index| "<dt>#{failed_urls[index]}</dt><dd>#{errors[index]}</dd>"}.join("\n")
       flash[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
-      logger.error(debug.join("\n"))
     end
 
     # if EVERYTHING failed, boo. :( Go back to the import form.

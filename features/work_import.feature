@@ -93,7 +93,6 @@ Feature: Import Works
       And I fill in "urls" with "http://www.rbreu.de/otwtest/utf8_specified.html"
     When I press "Import"
     Then I should see "Preview Work"
-      And show me the page
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
@@ -102,6 +101,30 @@ Feature: Import Works
       And I am logged in as a random user
     When I go to the import page
       And I fill in "urls" with "http://www.rbreu.de/otwtest/latin1_specified.html"
+    When I press "Import"
+    Then I should see "Preview Work"
+      And I should see "Das Maß aller Dinge" within "h2.title"
+      And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
+
+
+  Scenario: Import a work with special characters (latin-1, must set manually)
+    Given basic tags
+      And I am logged in as a random user
+    When I go to the import page
+      And I fill in "urls" with "http://www.rbreu.de/otwtest/latin1_notspecified.html"
+      And I fill in "encoding" with "ISO-8859-1"
+    When I press "Import"
+    Then I should see "Preview Work"
+      And I should see "Das Maß aller Dinge" within "h2.title"
+      And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
+
+
+  Scenario: Import a work with special characters (utf-8, must overwrite wrong page encoding)
+    Given basic tags
+      And I am logged in as a random user
+    When I go to the import page
+      And I fill in "urls" with "http://www.rbreu.de/otwtest/utf8_notspecified.html"
+      And I fill in "encoding" with "UTF-8"
     When I press "Import"
     Then I should see "Preview Work"
       And I should see "Das Maß aller Dinge" within "h2.title"
