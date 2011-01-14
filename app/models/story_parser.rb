@@ -859,7 +859,7 @@ class StoryParser
 
     # We clean the text as if it had been submitted as the content of a chapter
     def clean_storytext(storytext)
-      storytext = storytext.encode("UTF-8") unless storytext.encoding.name == "UTF-8"
+        storytext = storytext.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "") unless storytext.encoding.name == "UTF-8"
       return sanitize_value("content", storytext)
     end
 
