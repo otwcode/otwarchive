@@ -108,7 +108,7 @@ public
       tags = Character.with_parents(fandoms).canonical.order('taggings_count DESC').where("tags.name LIKE ?", '%' + search_param + '%').limit(10)
     end
     if !fandoms.empty? && tags.empty?
-      message = ts("- No matching characters found in selected fandoms! -")
+      message = ts("- No matching characters found in selected fandoms! -") unless params[:no_alert]
       tags = get_tags_for_finder(Character, search_param)
     end
     results = message.blank? ? [] : [message]
@@ -122,7 +122,7 @@ public
     fandoms = get_fandoms_from_params(params, params[:fandom_fieldname])
     message = ""
     if fandoms.empty?
-      message = ts("- No fandoms selected! -")
+      message = ts("- No valid fandoms selected! -")
       tags = search_param.blank? ? [] : get_tags_for_relationship_finder(search_param)
     elsif search_param.blank?
       tags = Relationship.with_parents(fandoms).canonical.order('taggings_count DESC').limit(10)
@@ -131,8 +131,8 @@ public
                                                                                       search_param + '%', '%/' + search_param + '%',
                                                                                       '%& ' + search_param + '%').limit(10)
     end
-    if tags.empty?
-      message = ts("- No matching tags found in selected fandoms! -")
+    if !fandoms.empty? && tags.empty?
+      message = ts("- No matching relationships found in selected fandoms! -") unless params[:no_alert]
       tags = get_tags_for_relationship_finder(search_param)
     end
     results = message.blank? ? [] : [message]

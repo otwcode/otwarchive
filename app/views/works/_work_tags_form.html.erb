@@ -51,7 +51,7 @@
       <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, :id => "work_relationship" %>
       <%= autocomplete_text_field "work_relationship", :methodname => "relationship_finder_restricted_by_fandom", 
                                                        :auto_params => ["work_fandom"], 
-                                                       :extra_params => "fandom_fieldname=fandom_string" %>
+                                                       :extra_params => "fandom_fieldname=fandom_string&no_alert=true" %>
     </dd>
 
     <dt class="character">
@@ -61,7 +61,7 @@
       <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, :id => "work_character" %>
       <%= autocomplete_text_field "work_character", :methodname => "character_finder_restricted_by_fandom", 
                                                        :auto_params => ["work_fandom"], 
-                                                       :extra_params => "fandom_fieldname=fandom_string" %>
+                                                       :extra_params => "fandom_fieldname=fandom_string&no_alert=true" %>
     </dd>
 
     <dt class="freeform">
