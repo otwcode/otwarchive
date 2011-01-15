@@ -783,7 +783,7 @@ class StoryParser
     def scan_text_for_meta(text)
       # break up the text with some extra newlines to make matching more likely
       # and strip out some tags
-      text.gsub!(/<br/, "\n<br")
+      text = text.gsub(/<br/, "\n<br")
       text.gsub!(/<p/, "\n<p")
       text.gsub!(/<\/?span(.*?)?>/, '')
       text.gsub!(/<\/?div(.*?)?>/, '')
