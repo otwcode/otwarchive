@@ -112,11 +112,24 @@ Feature: Import Works
       And I am logged in as a random user
     When I go to the import page
       And I fill in "urls" with "http://www.rbreu.de/otwtest/latin1_notspecified.html"
-      And I fill in "encoding" with "ISO-8859-1"
+      And I fill in "encoding" with "iso-8859-1"
     When I press "Import"
     Then I should see "Preview Work"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
+
+
+  Scenario: Import a work with special characters (cp-1252, must set manually)
+    Given basic tags
+      And I am logged in as a random user
+    When I go to the import page
+      And I fill in "urls" with "http://rbreu.de/otwtest/cp1252.txt"
+      And I fill in "encoding" with "windows-1252"
+    When I press "Import"
+    Then I should see "Preview Work"
+      And I should see "‘He hadn’t known.’"
+      And I should see "So—what’s up?"
+      And I should see "“Something witty.”"
 
 
   Scenario: Import a work with special characters (utf-8, must overwrite wrong page encoding)
@@ -124,7 +137,7 @@ Feature: Import Works
       And I am logged in as a random user
     When I go to the import page
       And I fill in "urls" with "http://www.rbreu.de/otwtest/utf8_notspecified.html"
-      And I fill in "encoding" with "UTF-8"
+      And I fill in "encoding" with "utf-8"
     When I press "Import"
     Then I should see "Preview Work"
       And I should see "Das Maß aller Dinge" within "h2.title"
