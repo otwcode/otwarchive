@@ -1,4 +1,4 @@
-@users
+@users @tag_wrangling
 Feature: Tag wrangling
 
   Scenario: Log in as a tag wrangler and see wrangler pages.

@@ -1,4 +1,4 @@
-@no-txn @tags @users 
+@no-txn @tags @users @tag_wrangling
 
 Feature: Tag Wrangling - Characters
 

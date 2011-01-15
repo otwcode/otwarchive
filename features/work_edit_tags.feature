@@ -1,4 +1,4 @@
-@tags
+@tags @works
 Feature: Edit tags on a work
   In order to have an archive full of works
   As a humble user

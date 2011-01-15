@@ -1,4 +1,4 @@
-@tags @users
+@tags @users @tag_wrangling
 
 Feature: Tag Wrangling - Relationships
 

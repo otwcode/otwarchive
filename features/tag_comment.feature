@@ -1,4 +1,4 @@
-@tag
+@tags
 Feature: Comment on tag
 As a tag wrangler
 I'd like to comment on a tag

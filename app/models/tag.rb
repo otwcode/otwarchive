@@ -119,8 +119,8 @@ class Tag < ActiveRecord::Base
 
   scope :id_only, select("tags.id")
 
-  scope :canonical, where(:canonical => true).order('name ASC')
-  scope :noncanonical, where(:canonical => false).order('name ASC')
+  scope :canonical, where(:canonical => true)
+  scope :noncanonical, where(:canonical => false)
   scope :nonsynonymous, noncanonical.where(:merger_id => nil)
   scope :unfilterable, nonsynonymous
 

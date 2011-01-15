@@ -26,8 +26,8 @@ class AutocompleteController < ApplicationController
     if tag_set.nil?
       tag_finder(tag_type.classify, search_param)
     else
-      tags = tag_set.tags.with_type(tag_type).order('taggings_count DESC').where("name LIKE ?", search_param + '%').limit(10)
-      tags += tag_set.tags.with_type(tag_type).order('taggings_count DESC').where("name LIKE ?", '%' + search_param + '%').limit(7)
+      tags = tag_set.tags.with_type(tag_type).by_popularity.where("name LIKE ?", search_param + '%').limit(10)
+      tags += tag_set.tags.with_type(tag_type).by_popularity.where("name LIKE ?", '%' + search_param + '%').limit(7)
       render_output(tags.uniq.map(&:name))
     end
   end
@@ -43,12 +43,12 @@ class AutocompleteController < ApplicationController
   end
 
   def get_tags_for_finder(tag_class, search_param)
-    tags = tag_class.canonical.order('taggings_count DESC').where("name LIKE ?", search_param + '%').limit(10)
-    tags += tag_class.canonical.order('taggings_count DESC').where("name LIKE ?", '%' + search_param + '%').limit(7)
+    tags = tag_class.canonical.by_popularity.where("name LIKE ?", search_param + '%').limit(10)
+    tags += tag_class.canonical.by_popularity.where("name LIKE ?", '%' + search_param + '%').limit(7)
   end
 
   def get_tags_for_relationship_finder(search_param)
-    tags = Relationship.canonical.order('taggings_count DESC')
+    tags = Relationship.canonical.by_popularity
                         .where("name LIKE ? OR name LIKE ? OR name LIKE ?", 
                                 search_param + '%', '%/' + search_param + '%',
                                 '%& ' + search_param + '%').limit(15)
@@ -57,7 +57,7 @@ class AutocompleteController < ApplicationController
   # works for any tag class where what you want to return are the names
   def noncanonical_tag_finder(tag_class, search_param)
     if search_param
-      render_output(tag_class.order('taggings_count DESC')
+      render_output(tag_class.by_popularity
                       .where(["canonical = 0 AND name LIKE ?",
                               '%' + search_param + '%']).limit(10).map(&:name))
     end
@@ -103,9 +103,9 @@ public
       message = ts("- No valid fandoms selected! -")
       tags = search_param.blank? ? [] : get_tags_for_finder(Character, search_param)
     elsif search_param.blank?
-      tags = Character.with_parents(fandoms).canonical.order('taggings_count DESC').limit(10)
+      tags = Character.with_parents(fandoms).canonical.by_popularity.limit(10)
     else
-      tags = Character.with_parents(fandoms).canonical.order('taggings_count DESC').where("tags.name LIKE ?", '%' + search_param + '%').limit(10)
+      tags = Character.with_parents(fandoms).canonical.by_popularity.where("tags.name LIKE ?", '%' + search_param + '%').limit(10)
     end
     if !fandoms.empty? && tags.empty?
       message = ts("- No matching characters found in selected fandoms! -") unless params[:no_alert]
@@ -125,9 +125,9 @@ public
       message = ts("- No valid fandoms selected! -")
       tags = search_param.blank? ? [] : get_tags_for_relationship_finder(search_param)
     elsif search_param.blank?
-      tags = Relationship.with_parents(fandoms).canonical.order('taggings_count DESC').limit(10)
+      tags = Relationship.with_parents(fandoms).canonical.by_popularity.limit(10)
     else
-      tags = Relationship.with_parents(fandoms).canonical.order('taggings_count DESC').where("tags.name LIKE ? OR tags.name LIKE ? OR tags.name LIKE ?", 
+      tags = Relationship.with_parents(fandoms).canonical.by_popularity.where("tags.name LIKE ? OR tags.name LIKE ? OR tags.name LIKE ?", 
                                                                                       search_param + '%', '%/' + search_param + '%',
                                                                                       '%& ' + search_param + '%').limit(10)
     end

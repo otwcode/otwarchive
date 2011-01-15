@@ -1,4 +1,4 @@
-@works
+@works @tags
 Feature: Create Works
   In order to have an archive full of works
   As an author

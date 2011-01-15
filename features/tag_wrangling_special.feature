@@ -1,4 +1,4 @@
-@tags
+@tags @tag_wrangling
 Feature: Tag Wrangling - special cases
 
 Scenario: Create a new tag that differs from an existing tag by accents or other markers

@@ -1,4 +1,4 @@
-@works
+@works @tags
 Feature: Edit Works
   In order to have an archive full of works
   As an author

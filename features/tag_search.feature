@@ -1,4 +1,4 @@
-@no-txn
+@no-txn @tags @tag_wrangling @search
 Feature: Search Tags
   In order to figure out how to use cucumber with thinking sphinx
   As a humble coder

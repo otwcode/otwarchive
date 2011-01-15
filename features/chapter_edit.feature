@@ -1,4 +1,4 @@
-@work
+@works
 Feature: Edit chapters
   In order to have an work full of chapters
   As a humble user
