@@ -197,7 +197,7 @@ FIELDS_ALLOWING_HTML: ["about_me", "comment", "content", "description", "endnote
 
 FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
 
-FIELDS_ALLOWING_CSS: ["content"]
+FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes", "summary"]
 
 # Allowed CSS
 #
