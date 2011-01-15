@@ -269,7 +269,8 @@ public
   
   # encodings for importing
   def encoding
-    set_finder(params[params[:fieldname]], Encoding.name_list)
+    encodings = Encoding.name_list + Encoding.name_list.map {|e| e.downcase}
+    set_finder(params[params[:fieldname]], encodings)              
   end
   
 end

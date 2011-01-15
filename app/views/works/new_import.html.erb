@@ -20,21 +20,27 @@
 <div class="clear"<!--purely presentational, phase me out--></div>
 <p class="message">
   <strong><%= t('.import.please_note', :default => 'Please note!') %></strong> 
-  <%= t('.import_problems', :default => 'We cannot always automatically import works.') %> If you have trouble, <%= link_to t('.let_us_know', :default => "please let us know"), new_feedback_report_path %> so we can improve this tool! If your text gets truncated at the point of an em dash or accented character, try replacing these characters with HTML entities, or cutting and pasting your story into the rich text editor on the standard form.</p>
-<p>You will be able to edit and complete the Archive standard header information after import is complete.</p>
+  <%= t('.import_problems', :default => 'We cannot always automatically import works.') %> If you have trouble, <%= link_to t('.let_us_know', :default => "please let us know"), new_feedback_report_path %> so we can improve this tool!</p> 
+  
+  <ul>
+    <li>If your text gets truncated at the point of an em dash or accented character, you might have to manually set the encoding in the text field below.</li>
+    <li>If you are importing a chaptered work from ff.net, you only need to enter the URL of the first chapter. However, currently you cannot turn multiple ff.net works into the chapters of a single work.</li>
+    <li>Unless you check the override box, any information you enter under Work Tags will only be used if the importer cannot determine tags from the work itself.</li>
+    <li>You will be able to edit and complete the standard header information after the import has been completed.</li>
+  </ul>
   
 <%= form_tag url_for(:controller => :works, :action => :import) do %>
 <fieldset>
   <legend><%= "Works URLs" %></legend>
   <p>
-    <%= label_tag "urls", t('.import.url', :default => 'URLs for existing work(s) or for the chapters of a single work, one URL per line. (Note: if you are importing a chaptered work from ff.net, you only need to enter the first chapter. However, currently you cannot turn multiple ff.net works into the chapters of a single work.)') %> <br />
+    <%= label_tag "urls", t('.import.url', :default => 'URLs for existing work(s) or for the chapters of a single work, one URL per line:') %> <br />
     <%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
   </p>
-
+  
   <p>
-    <%= label_tag "encoding", ts("Overwrite content encoding for all imported pages, e.g. UTF-8, ISO-8859-1. Leave blank to use automatic detection.") %> <br />
-    <%= text_field_tag "encoding" %>
-    <%= autocomplete_text_field "encoding", :no_comma => true %>
+    <%= label_tag "encoding", ts("Set custom encoding to overwrite automatic detection: ") %> 
+    <%= text_field_tag "encoding" %> <%= link_to_help "encoding-help" %>
+    <%= autocomplete_text_field "encoding", :no_comma => true %> 
   </p>
   
   <p>
@@ -57,7 +63,7 @@
     <% if current_user.archivist %>
       <%= label_tag "post_without_preview", t('.import.without_preview_by_archivist', :default => "Post without previewing (STRONGLY recommended if importing for others!)") %>
     <% else %>
-      <%= label_tag "post_without_preview", t('.import.without_preview', :default => "Post without previewing") %>
+      <%= label_tag "post_without_preview", t('.import.without_preview', :default => "Post without previewing.") %>
     <% end %>
   </p>
 
@@ -68,8 +74,7 @@
 
   <p>
     <%= check_box_tag "override_tags" %>
-    <%= label_tag "override_tags", ts("Set the tags below on all stories, overriding whatever the importer finds. 
-                  (Otherwise they will only be set if the importer cannot determine tags from the work.)") %>
+    <%= label_tag "override_tags", ts("Set the tags below on all stories, overriding whatever the importer finds.") %>
   </p>
 
   <div id="work-form" class="work-form"><%= render :partial => 'work_tags_form', :locals => {:include_blank => true} %></div>
