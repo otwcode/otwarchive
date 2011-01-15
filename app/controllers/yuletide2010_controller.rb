@@ -25,7 +25,7 @@ class Yuletide2010Controller < ApplicationController
 
 
   def index
-    @media = Media.canonical - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
+    @media = Media.canonical.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
   end
 
   def show
@@ -109,7 +109,7 @@ class Yuletide2010Controller < ApplicationController
   end
 
   def fandoms_for_media
-    @media = Media.canonical - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
+    @media = Media.canonical.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
     @fandoms = @medium.fandoms.where(:canonical => true) if @medium
     @fandoms = (@fandoms || Fandom).where("filter_taggings.inherited = 0").
                 for_collections([@collection]).

@@ -15,7 +15,7 @@ class Static::BaseController < ApplicationController
   end
 
   def load_media
-    @media = Media.canonical - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
+    @media = Media.canonical.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
   end
 
 end

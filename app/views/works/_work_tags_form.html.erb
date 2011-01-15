@@ -15,7 +15,7 @@
     </dt>
     <dd class="warning required">
       <dl>
-        <% for tag in Warning.canonical %>
+        <% for tag in Warning.canonical.by_name %>
         <dt><%= check_box_tag "work[warning_strings][]", tag.name, include_blank ? false : check_warning(@work, tag), :id => "work_warning_strings_#{tag.id}" %></dt>
         <dd><%= label_tag "work_warning_strings_#{tag.id}", tag.name %></dd>
         <% end %>
@@ -36,7 +36,7 @@
     </dt>
     <dd class="category">
       <dl>
-        <% for tag in Category.canonical %>
+        <% for tag in Category.canonical.by_name %>
         <% cycle_class = cycle("odd", "even") %>
         <dt class="<%= cycle_class %>"><%= check_box_tag "work[category_string][]", tag.name, include_blank ? false : @work.category_strings.include?(tag.name), :id => "work_category_string_#{tag.id}" %></dt>
         <dd class="<%= cycle_class %>"><%= label_tag "work_category_string_#{tag.id}", tag.name %></dd>

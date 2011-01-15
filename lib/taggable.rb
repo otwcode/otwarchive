@@ -103,7 +103,7 @@ module Taggable
     characters = self.characters.by_name || []
     relationships = self.relationships.by_name || []
     return [] if relationships.empty? && characters.empty?
-    canonical_relationships = Relationship.canonical.find(:all, :conditions => {:id => relationships.collect(&:merger_id).compact.uniq})
+    canonical_relationships = Relationship.canonical.by_name.find(:all, :conditions => {:id => relationships.collect(&:merger_id).compact.uniq})
     all_relationships = (relationships + canonical_relationships).flatten.uniq.compact
 
     #relationship_characters = all_relationships.collect{|p| p.all_characters}.flatten.uniq.compact

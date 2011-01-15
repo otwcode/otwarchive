@@ -9,6 +9,6 @@ class Static::CollectionsController < ApplicationController
     elsif @collection.unrevealed?
       redirect_to root_path, :error => "Sorry, this collection isn't revealed yet."      
     end
-    @media = Media.canonical - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
+    @media = Media.canonical.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
   end
 end

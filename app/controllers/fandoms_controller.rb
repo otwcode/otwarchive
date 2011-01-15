@@ -3,7 +3,7 @@ class FandomsController < ApplicationController
 
   def index
     if @collection
-      @media = Media.canonical - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
+      @media = Media.canonical.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
       if params[:medium_id]
         @medium = Media.find_by_name(params[:medium_id])
         @fandoms = @medium.fandoms.canonical if @medium
@@ -29,7 +29,7 @@ class FandomsController < ApplicationController
   
   def show
     @fandom = Fandom.find_by_name(params[:id])
-    @characters = @fandom.characters.canonical
+    @characters = @fandom.characters.canonical.by_name
   end
   
   def unassigned

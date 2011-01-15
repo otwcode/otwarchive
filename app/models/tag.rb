@@ -171,7 +171,7 @@ class Tag < ActiveRecord::Base
 
   # This will return all tags that have one of the given tags as a parent
   scope :with_parents, lambda {|parents|
-    joins(:common_taggings).where("filterable_id in (?)", parents.collect(&:id).join(","))
+    joins(:common_taggings).where("filterable_id in (?)", parents.collect(&:id))
   }
 
   scope :with_no_parents,
