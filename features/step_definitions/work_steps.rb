@@ -29,7 +29,7 @@ When /^I post the chaptered work "([^\"]*)"$/ do |title|
 end
 
 When /^I post the work "([^\"]*)"$/ do |title|
-  work = Work.find_by_title(work)
+  work = Work.find_by_title(title)
   if work.blank?
     Given "the draft \"#{title}\""
     work = Work.find_by_title(title)
@@ -40,7 +40,7 @@ When /^I post the work "([^\"]*)"$/ do |title|
 end
 
 When /^I post the work "([^\"]*)" with fandom "([^\"]*)"$/ do |title, fandom|
-  work = Work.find_by_title(work)
+  work = Work.find_by_title(title)
   if work.blank?
     Given "the draft \"#{title}\" with fandom \"#{fandom}\""
     work = Work.find_by_title(title)
@@ -51,7 +51,7 @@ When /^I post the work "([^\"]*)" with fandom "([^\"]*)"$/ do |title, fandom|
 end
 
 When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)"$/ do |title, fandom, freeform|
-  work = Work.find_by_title(work)
+  work = Work.find_by_title(title)
   if work.blank?
     Given "the draft \"#{title}\" with fandom \"#{fandom}\" with freeform \"#{freeform}\""
     work = Work.find_by_title(title)
