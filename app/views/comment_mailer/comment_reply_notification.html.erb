@@ -5,7 +5,11 @@
   <%= @comment.comment_owner_name %>
 <% end %>
 <%= ts("replied to your comment on") %> 
-<%= link_to @comment.ultimate_parent.commentable_name, polymorphic_url(@comment.ultimate_parent, :only_path => false) %>
+<% if @comment.ultimate_parent.is_a?(Tag) %>
+  <%= link_to @comment.ultimate_parent.commentable_name, {:controller => :tags, :action => :show, :id => @comment.ultimate_parent.to_param} %>:
+<% else %>
+  <%= link_to @comment.ultimate_parent.commentable_name, polymorphic_url(@comment.ultimate_parent, :only_path => false) %>
+<% end %>
 </h4>
 
 <p><%= ts("You wrote") %>:</p>
