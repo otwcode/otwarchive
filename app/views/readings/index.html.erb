@@ -6,11 +6,18 @@
 <% if logged_in? && !current_user.readings.empty? %>
 <ul class="navigation" role="navigation">
   <li>
-  <%= link_to t('.clear_history', :default => 'Clear Viewing History'), clear_user_readings_path(current_user), :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :post %>
+    <% if params[:show] == 'to-read' %>
+      <%= link_to "Show full history", user_readings_path(@user) %>
+    <% else %>
+      <%= link_to "Show works you saved to read later", user_readings_path(@user, :show => 'to-read') %>
+    <% end %>
   </li>
   <li>
     <%= ts("You can disable your viewing history in") %>
     <%= link_to ts("Preferences"), user_preferences_path(@user) %>
+  </li>
+  <li>
+  <%= link_to t('.clear_history', :default => 'Clear Viewing History'), clear_user_readings_path(current_user), :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :post %>
   </li>
 </ul>
 <% end %>

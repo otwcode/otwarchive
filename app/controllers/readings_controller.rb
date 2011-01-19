@@ -10,7 +10,11 @@ class ReadingsController < ApplicationController
   end
   
   def index
-    @readings = @user.readings.paginate(:all, :order => "updated_at DESC", :page => params[:page])
+    @readings = @user.readings
+    if params[:show] == 'to-read'
+      @readings = @readings.where(:toread => true)
+    end
+    @readings = @readings.paginate(:all, :order => "updated_at DESC", :page => params[:page])
   end
 
   def destroy
