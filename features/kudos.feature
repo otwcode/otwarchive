@@ -43,8 +43,8 @@ Feature: Leave kudos
   Then I should see "myname3 and myname2 as well as a guest left kudos!"
   When I am logged in as "myname1" with password "something"
     And I view the work "Awesome Story"
-    And I press "Leave Kudos ♥"
-  Then I should see "You can't leave kudos for yourself. :)"
+    Then I should not see "Leave Kudos ♥"
+ # Then I should see "You can't leave kudos for yourself. :)"
 
 
   Scenario: deleting pseud and user after creating kudos should orphan them
