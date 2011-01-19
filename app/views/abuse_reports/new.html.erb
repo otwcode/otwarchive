@@ -10,7 +10,7 @@
   <dl>
   	<dt><%= f.label :url, t('.link', :default => "Link to the page you are reporting (required):") %></dt>
   	<dd><%= f.text_field :url, :size => 60 %>
-		  <p class="footnote"><%=h t('.pre_filled', :default => "If you came here from the abuse link at the bottom of the page, this will be filled in for you") %></p>
+		  <p class="footnote"><%=h t('.pre_filled', :default => "If you came here from the abuse link at the bottom of the page, this will be filled in for you.") %></p>
     </dd>
     <%= live_validation_for_field('abuse_report_url', :failureMessage => 'Please enter the link to the page you are reporting') %>
   	
@@ -23,8 +23,8 @@
     </dd>
     
 	  <dt><%= f.label :comment, t('.describe_problem', :default => "Describe your concern (required):") %></dt>
-    <dd><%= t('.explain', :default => "Please include all relevant URLs and what about the content violates the Archive %{tos_link}.", :tos_link => (link_to t('.tos_link', :default => "Terms of Service"), tos_path)) %></dd>
-    <dd><%= f.text_area :comment, :cols => 60 %></dd>
+    <dd><p><%= t('.explain', :default => "Please include all relevant URLs and what about the content violates the Archive %{tos_link}.", :tos_link => (link_to t('.tos_link', :default => "Terms of Service"), tos_path)).html_safe %></p>
+    <%= f.text_area :comment, :cols => 60 %></dd>
     <%= live_validation_for_field('abuse_report_comment', :failureMessage => 'Please describe your concern') %>
     	
 	  <dt><%= f.label :email, t('.your_email', :default => "Your email (optional):") %></dt>
