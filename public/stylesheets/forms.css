@@ -42,8 +42,9 @@ form select { vertical-align:text-top; font-size: 1em;}
 #inbox-form {width:72.5%;}
 
 /*DASHBOARD: REQUEST INVITES */
-#new_user_invite_request textarea {width:99%;}
 #invitations-index form {clear:right;}
+#new_user_invite_request p.submit {float:left;}
+
 /* SIGN IN BOX */
 #signin p { display:inline;}
 #signin p.footnote	{ font-size:85.7%;  padding:0.125em 0 0 .125em;}

@@ -6,11 +6,16 @@
 <%= form_for(@user_invite_request) do |f| %>
   <%= error_messages_for @user_invite_request %>
   <p>
-    <%= f.label "How many invites are you requesting?" %> <%= f.text_field :quantity, :size => '2' %>
+    <%= f.label "How many invites are you requesting?" %> 
+  </p>
+  <p>
+    <%= f.text_field :quantity, :size => '2' %>
   </p>
   <p>
     <%= f.label "Reason for your request:" %>
-    <%= f.text_area :reason, :size => '100x10' %>
+  </p>
+  <p>
+    <%= f.text_area :reason, :size => '50x5' %>
   </p>
   <p class="submit">
     <%= f.submit 'Create' %>
