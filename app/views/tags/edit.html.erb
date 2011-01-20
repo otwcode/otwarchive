@@ -31,7 +31,7 @@
 
     <% if @wranglers %>
     <dt><%= 'Wranglers' %></dt>
-    <dd><%= wrangler_list(@wranglers) %></dd>
+    <dd><%= wrangler_list(@wranglers, @tag) %></dd>
     <% end %>
 
     <dt><%= f.label :canonical, 'Canonical' %></dt>

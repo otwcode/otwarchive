@@ -37,9 +37,14 @@ module TagsHelper
     render :partial => 'tag_wranglings/footer'
   end
 
-  def wrangler_list(wranglers)
+  def wrangler_list(wranglers, tag)
     if wranglers.blank?
-      link_to "Sign Up", tag_wranglers_path
+      if @tag[:type] == 'Fandom'
+        sign_up_fandoms = tag.name
+      elsif Tag::USER_DEFINED.include?(@tag.class.name) && !tag.fandoms.blank?
+        sign_up_fandoms = tag.fandoms.collect(&:name).join(', ')
+      end
+      link_to "Sign Up", tag_wranglers_path(:sign_up_fandoms => sign_up_fandoms)
     else
       wranglers.collect(&:login).join(', ')
     end

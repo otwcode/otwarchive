@@ -14,7 +14,7 @@
   <h3>Assign fandoms to yourself</h3>
   <div>
     <p><%= label_tag "tag_fandom_string", "Enter as many fandoms as you like, comma-separated." %></p>
-    <%= text_area_tag "tag_fandom_string" %>
+    <%= text_area_tag "tag_fandom_string", params[:sign_up_fandoms] %>
     <%= autocomplete_text_field "tag_fandom_string" %>
   </div> 
   
