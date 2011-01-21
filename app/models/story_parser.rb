@@ -905,13 +905,13 @@ class StoryParser
     # using on this archive.
     def convert_rating(rating)
       rating = rating.downcase
-      if rating.match(/(nc-?1[78]|x|ma|explicit)/)
+      if rating.match(/^(nc-?1[78]|x|ma|explicit)/)
         ArchiveConfig.RATING_EXPLICIT_TAG_NAME
-      elsif rating.match(/(r|m|mature)/)
+      elsif rating.match(/^(r|m|mature)/)
         ArchiveConfig.RATING_MATURE_TAG_NAME
-      elsif rating.match(/(pg-?1[35]|t|teen)/)
+      elsif rating.match(/^(pg-?1[35]|t|teen)/)
         ArchiveConfig.RATING_TEEN_TAG_NAME
-      elsif rating.match(/(pg|g|k+|k|general audiences)/)
+      elsif rating.match(/^(pg|g|k+|k|general audiences)/)
         ArchiveConfig.RATING_GENERAL_TAG_NAME
       else
         ArchiveConfig.RATING_DEFAULT_TAG_NAME

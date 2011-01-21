@@ -100,3 +100,36 @@ Feature: Import Works from LJ
       And I should not see the "alt" text "Add to memories!"
       And I should not see the "alt" text "Next Entry"
   
+
+  Scenario: Creating a new work from an DW story that is posted to a community
+    Given basic tags
+      And the following activated user exists
+        | login          | password    |
+        | cosomeone      | something   |
+      And I am logged in as "cosomeone" with password "something"
+    When I go to the import page
+      And I fill in "urls" with "http://community.livejournal.com/rarelitslash/271960.html"
+    When I press "Import"
+    Then I should see "Preview Work"
+      And I should see "Poirot - Agatha Christie" within "dd.fandom"
+      And I should see "General Audiences" within "dd.rating"
+      And I should see "Published:2010-10-23"
+      And I should see "Mrs Stanwood's Birthday Party" within "h2.title" 
+      And I should not see "[Poirot]" within "h2.title" 
+      And I should see "Mrs Stanwood, famous medical researcher" within "div.summary"
+      And I should see "more to their friendship than he'd thought." within "div.summary"
+      And I should see "Thanks to Tevildo and phantomphan1990 for beta-reading!"
+      And I should find "stanwood_title_400.png" within "img[src]"
+      And I should see "Follow me to AO3"
+      And I should not see "rarelitslash"
+      And I should not see "rebecca2525"
+      And I should not see the "alt" text "Add to memories!"
+      And I should not see the "alt" text "Next Entry"
+      And I should not see "mood"
+      And I should not see "Entry tags"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+    When I am on cosomeone's user page 
+      #'
+      Then I should see "Mrs Stanwood's Birthday Party"
+
