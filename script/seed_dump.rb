@@ -18,7 +18,7 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 SEEDS = [ "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling"
           "Cesy", "cesytest", "Celandine", "Chandri", "ealusaid", "eel", 
           "elz", "erda", "Enigel", "hope", "justira", "lim", "melange",
-          "mumble", "Rebecca", "rklyne", "Rustler", "Sidra", "staranise", "Stowaway",
+          "mumble", "Rebecca", "rklyne", "Rustler", "Sidra", "staranise", "Stowaway", "testy",
           "tomatopudding", "zelempa", "Zooey_Glass", "zlabya",
 ]
 
