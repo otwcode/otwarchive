@@ -18,7 +18,7 @@
 <!--/descriptions-->
 
 <!--main content-->
-<% if @fandoms_by_letter %>
+<% if @fandoms_by_letter && !@fandoms_by_letter.empty? %>
   <ul class="alphabet">
     <% for letter in @fandoms_by_letter.keys %>
       <li><%= link_to letter, "#letter-#{letter}" %></li>
@@ -44,5 +44,8 @@
       </li>
     <% end %>
   </ul>
+<% else %>
+  <div class="clear">&nbsp;</div>
+  <h3><%= ts("No fandoms found") %></h3>
 <% end %>
 <!--/content-->
