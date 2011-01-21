@@ -264,7 +264,7 @@ namespace :After do
   task(:move_kudos_to_works => :environment) do
     Chapter.joins(:kudos).group("chapters.id").find_each do |chapter|
       puts chapter.id
-      chapter.kudos.update_all("commentable_id = #{chapter.work_id} AND commentable_type = 'Work'")
+      chapter.kudos.update_all("commentable_id = #{chapter.work_id}, commentable_type = 'Work'")
     end
   end
 
