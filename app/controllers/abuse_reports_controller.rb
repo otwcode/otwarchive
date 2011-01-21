@@ -49,7 +49,7 @@ class AbuseReportsController < ApplicationController
   end
 
   def index
-    @abuse_reports = AbuseReport.paginate(:page => params[:page])
+    @abuse_reports = AbuseReport.by_date.paginate(:page => params[:page])
   end
 
   def show

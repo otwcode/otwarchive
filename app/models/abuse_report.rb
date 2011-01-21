@@ -2,6 +2,8 @@ class AbuseReport < ActiveRecord::Base
   validates_presence_of :comment
   validates_presence_of :url
   validates :email, :email_veracity => {:allow_blank => true}
+  
+  scope :by_date, order("created_at DESC")
 
   attr_protected :comment_sanitizer_version
   
