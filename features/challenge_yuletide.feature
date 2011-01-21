@@ -691,3 +691,15 @@ Feature: Collection
   When I follow "Fulfilling Story"
   Then I should not see "Anonymous"
    And I should see "myname" within ".byline"
+
+  When I follow "Post New"
+  Then I should not see "Does this fulfill a challenge assignment"
+  When I follow "Log out"
+    And I am logged in as "pinchhitter" with password "something"
+    And I follow "Post New"
+  Then I should not see "Does this fulfill a challenge assignment"
+  When I follow "Log out"
+    And I am logged in as "myname6" with password "something"
+    And I follow "Post New"
+  Then I should not see "Does this fulfill a challenge assignment"
+    

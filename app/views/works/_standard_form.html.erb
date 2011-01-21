@@ -91,7 +91,7 @@
   <fieldset id="associations">
     <legend><%= ts('Associations') %></legend>
     <dl>
-      <% if !(@assignments = current_user.offer_assignments + current_user.pinch_hit_assignments).empty? || !@work.challenge_assignments.empty? %>
+      <% if !(@assignments = current_user.offer_assignments.undefaulted.unfulfilled + current_user.pinch_hit_assignments).empty? || !@work.challenge_assignments.empty? %>
         <!-- if the user has open assignments? -->
         <dt class="collection">
           <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment: ") %> <%= link_to_help "add-work-to-assignment" %>

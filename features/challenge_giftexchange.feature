@@ -1,8 +1,8 @@
 @collections
 Feature: Gift Exchange Challenge
-  In order to have an archive full of collections
+  In order to have more fics for my fandom
   As a humble user
-  I want to create a collection and post to it
+  I want to run a gift exchange
 
   Scenario: Create a gift exchange, sign up for it
 
