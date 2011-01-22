@@ -101,7 +101,7 @@ Feature: Import Works from LJ
       And I should not see the "alt" text "Next Entry"
   
 
-  Scenario: Creating a new work from an DW story that is posted to a community
+  Scenario: Creating a new work from an LJ story that is posted to a community
     Given basic tags
       And the following activated user exists
         | login          | password    |
