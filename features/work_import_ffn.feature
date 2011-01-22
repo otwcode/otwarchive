@@ -34,7 +34,7 @@ Feature: Import Works from fanfiction.net
       Then I should see "What More Than Usual Light?"
 
 
-  Scenario: Creating a new multichapter work from an FFN
+  Scenario: Creating a new multichapter work from an FFN story
     Given basic tags
       And the following activated user exists
         | login          | password    |
