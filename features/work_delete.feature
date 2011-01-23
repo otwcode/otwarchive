@@ -190,11 +190,19 @@ Feature: Delete Works
       And I press "Update"
     Then I should see "Work was successfully updated"
       And I should see "For giftee"
+    When I follow "Log out"
+      And I am logged in as "someone_else" with password "something"
+      And I view the work "All Something Breaks Loose"
+      And I press "Leave Kudos"
+      # TODO: Figure out why this isn't working
+    # Then I should see "someone_else left kudos!"
     When I follow "Bookmark"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
     When I go to the bookmarks page
     Then I should see "All Something Breaks Loose"
+    When I follow "Log out"
+      And I am logged in as "thorough" with password "something"
     When I go to giftee's user page
     Then I should see "Gifts (1)"
     When I follow "Gifts (1)"
