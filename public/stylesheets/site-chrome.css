@@ -375,6 +375,7 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
 /* Collections */
   .twobutton { width: 12em }
+  .fandoms-index h3.no_fandoms {float: left;}
 
 /* BOOKMARKS INDEX*/
  .bookmarks-index .user .module      { float: none; }
