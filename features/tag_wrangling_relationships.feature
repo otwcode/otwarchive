@@ -213,3 +213,60 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   When I go to Enigel's user page
   Then I should see "Testypants/Testyskirt"
     And I should not see "Testing McTestypants/Testing McTestySkirt"
+
+  Scenario: Issue 2150: creating a new merger to a non-can tag while adding characters which belong to a fandom
+  
+  Given the following activated tag wrangler exists
+    | login  | password    |
+    | Enigel | wrangulate! |
+    And basic tags
+    And a fandom exists with name: "Up with Testing", canonical: true
+    And a fandom exists with name: "Coding", canonical: true
+    And a character exists with name: "Testing McTestypants", canonical: true
+    And a character exists with name: "Testing McTestySkirt", canonical: true
+    And I am logged in as "Enigel" with password "wrangulate!"
+    And I follow "Post New"
+    And I fill in "Fandoms" with "Up with Testing"
+    And I fill in "Work Title" with "whatever"
+    And I fill in "Relationships" with "Testypants/Testyskirt"
+    And I press "Post without preview"
+    And I follow "Tag Wrangling"
+    
+  When I edit the tag "Coding"
+    And I fill in "MetaTags" with "Up with Testing"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+    And I should see "Up with Testing"
+    
+  When I edit the tag "Testing McTestypants"
+    And I fill in "Fandoms" with "Up with Testing, Coding"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+  
+  When I edit the tag "Testing McTestySkirt"
+    And I fill in "Fandoms" with "Up with Testing, Coding"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+  
+  When I edit the tag "Testypants/Testyskirt"
+    And I fill in "Synonym of" with "Testing McTestypants/Testing McTestySkirt"
+    And I fill in "Characters" with "Testing McTestypants, Testing McTestySkirt"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+    And I should see "Testing McTestypants" within "ul.tags"
+    And I should see "Testing McTestySkirt" within "ul.tags"
+    And I should see "Up with Testing" within "ul.tags"
+    And I should see "Coding" within "ul.tags"
+  When I follow "Testing McTestypants/Testing McTestySkirt"
+  Then I should see "Testing McTestypants" within "ul.tags"
+    And I should see "Testing McTestySkirt" within "ul.tags"
+    And I should see "Up with Testing" within "ul.tags"
+    And I should see "Coding" within "ul.tags"
+    And I should see "Testypants/Testyskirt"
+    And the "tag_canonical" checkbox should be checked
+    And the "tag_canonical" checkbox should be disabled
+  
+  When I edit the tag "Testing McTestypants/Testing McTestySkirt"
+    And I fill in "Synonym of" with "Dame Tester/Sir Tester"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
