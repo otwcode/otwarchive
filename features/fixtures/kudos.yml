@@ -1,10 +1,10 @@
 first:
-  commentable: chapter1 (Chapter)
+  commentable: first (Work)
 second:
-  commentable: chapter1 (Chapter)
+  commentable: first (Work)
 third:
-  commentable: chapter1 (Chapter)
+  commentable: first (Work)
 fourth:
-  commentable: chapter1 (Chapter)
+  commentable: first (Work)
 fifth:
-  commentable: chapter2 (Chapter)
+  commentable: second (Work)
