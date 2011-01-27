@@ -233,6 +233,7 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
 #bookmark-form p.character_counter {display:block; text-align:right}
 #bookmark-form p label {padding-right: 2em;}
 #bookmark-form input#tag_string, #bookmark-form textarea {width:99%;}
+#bookmark-form fieldset input {width:28em;}
 
 #dynamic-collection_item 		{ background: #fffef9; border: 2px solid; bottom: 2em; height: 8em; padding: 1em 2em; position:absolute; z-index: 42 }
 
