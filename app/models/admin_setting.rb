@@ -5,6 +5,7 @@ class AdminSetting < ActiveRecord::Base
 
   before_save :update_invite_date
   before_update :check_filter_status
+  after_save :expire_cached_settings
 
   def self.invite_from_queue_enabled?
     self.first ? self.first.invite_from_queue_enabled? : ArchiveConfig.INVITE_FROM_QUEUE_ENABLED
@@ -52,6 +53,10 @@ class AdminSetting < ActiveRecord::Base
   end
 
   private
+  
+  def expire_cached_settings
+    Rails.cache.delete("admin_settings")
+  end
 
   def check_filter_status
     if self.suspend_filter_counts_changed?
