@@ -193,9 +193,8 @@ Scenario: Post without preview
 Scenario: Series index for maaany series
   Given I am logged in as "whoever" with password "whatever"  
     And I add the work "grumble" to "31" series "penguins"
-    And "Issue 2073" is fixed
-# When I go to whoever's series page
-# Then I should see "penguins30"
-# When I follow "Next"
-# Then I should see "penguins0"
+  When I go to whoever's series page
+  Then I should see "penguins30"
+  When I follow "Next"
+  Then I should see "penguins0"
 
