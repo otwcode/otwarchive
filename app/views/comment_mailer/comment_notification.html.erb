@@ -6,7 +6,7 @@
 <% end %>
 <%= ts("left the following comment on") %> 
 <% if @comment.ultimate_parent.is_a?(Tag) %>
-  <%= link_to @comment.ultimate_parent.commentable_name, {:controller => :tags, :action => :show, :id => @comment.ultimate_parent.to_param} %>:
+  <%= link_to @comment.ultimate_parent.commentable_name, {:controller => :tags, :action => :show, :id => @comment.ultimate_parent, :only_path => false} %>:
 <% else %>
   <%= link_to @comment.ultimate_parent.commentable_name, polymorphic_url(@comment.ultimate_parent, :only_path => false) %>:
 <% end %>
