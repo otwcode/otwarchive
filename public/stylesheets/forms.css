@@ -193,8 +193,8 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #main.chapters-new #work-form p input {width:auto}
 #main.chapters-new.chapter_title input { width:80%; }
 #main.chapters-new dt, #main.chapters-new dd {clear:both; width:100%;}
-#main.chapters-new dd textarea {width:99%;margin:auto;}
-#main.chapters-new #chapter-ordering select, #main.chapters-edit #chapter-ordering select {width:auto; float:left;}
+#main.chapters-new dd textarea, #main.chapters-edit dd textarea, #main.chapters-update dd textarea {width:99%;margin:auto;}
+#main.chapters-new #chapter-ordering select, #main.chapters-edit #chapter-ordering select, #main.chapters-update #chapter-ordering select {width:auto; float:left;}
 
 /*FILTERS*/
 form.filters	{ margin: 0.5em auto; width:12.25em; max-width:20%; padding:0.75em 0.5625em; float:right; border: 2px solid #ddd; background: #eee;}
