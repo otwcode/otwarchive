@@ -157,13 +157,24 @@ class CollectionItem < ActiveRecord::Base
       recipient_pseuds = Pseud.parse_bylines(self.recipients, :assume_matching_login => true)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
-          UserMailer.recipient_notification(pseud.user, self.item, self.collection).deliver
+          # delay this so the email notifications don't bog us down 
+          if ArchiveConfig.NO_DELAYS
+            UserMailer.recipient_notification(pseud.user, self.item, self.collection).deliver
+          else
+            UserMailer.recipient_notification(pseud.user, self.item, self.collection).delay.deliver
+          end
         end
       end
 
       # also notify the owners of any parent/inspired-by works 
       if item_type == "Work" && !item.parent_work_relationships.empty?
-        item.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
+        item.parent_work_relationships.each do |relationship|
+          if ArchiveConfig.NO_DELAYS
+            relationship.notify_parent_owners
+          else
+            relationship.delay.notify_parent_owners
+          end
+        end
       end
 
       save
