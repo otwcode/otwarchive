@@ -30,7 +30,7 @@
     <li><%= span_if_current  ts("My Collections (%{my_collection_number})", :my_collection_number => @user.owned_collections.count), user_collections_path(@user) %> </li>
     <li><%= span_if_current ts("My Signups (%{my_signup_number})", :my_signup_number =>@user.challenge_signups.count), user_signups_path(@user) %> </li>
     <li><%= span_if_current ts("My Assignments (%{my_assignment_number})", :my_assignment_number => (@user.offer_assignments.undefaulted.count + @user.pinch_hit_assignments.undefaulted.count)), user_assignments_path(@user) %> </li>
-    <li><%= span_if_current ts("My Gifts (%{my_gift_number})", :my_gift_number => @user.gifts.select {|g| g.work.visible?}.count), user_gifts_path(@user) %></li> 
+    <li><%= print_gifts_link(@user) %></li> 
     <li><%= span_if_current ts("My Related Works (%{my_related_works_number})", :my_related_works_number => (@user.related_works.count + @user.parent_work_relationships.count)), user_related_works_path(@user) %></li> 
     <li><%= span_if_current ts("My Inbox (%{my_inbox_number})", :my_inbox_number => @user.unread_inbox_comments_count.to_s), user_inbox_path(@user) %></li>
       <% if @user.preference.try(:history_enabled?) %>
@@ -41,7 +41,7 @@
     <li><%= span_if_current ts("My Skins"), user_skins_path(@user) %></li>
   <% else %>
     <li><%= span_if_current ts("Collections (%{coll_number})", :coll_number => @user.owned_collections.count), user_collections_path(@user) %> </li>
-    <li><%= span_if_current ts("Gifts (%{gift_number})", :gift_number => @user.gifts.select {|g| g.work.visible?}.count), user_gifts_path(@user) %></li>
+    <li><%= print_gifts_link(@user) %></li>
   <% end %>
 </ul>
 </div>

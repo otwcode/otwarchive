@@ -98,9 +98,9 @@ module UsersHelper
       total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(user.pseuds).length
     end
     if @user == current_user
-  	  span_if_current t('users_helper.my_series', :default => "My Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
+  	  span_if_current ts("My Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
   	else
-  	  span_if_current t('users_helper.series', :default => "Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
+  	  span_if_current ts("Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
   	end
   end
   
@@ -111,10 +111,23 @@ module UsersHelper
       total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([pseud]).length
     end
   	if @user == current_user
-  	  span_if_current t('users_helper.my_series', :default => "My Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+  	  span_if_current ts("My Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
   	else
-  	  span_if_current t('users_helper.series', :default => "Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
+  	  span_if_current ts("Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
   	end
+  end
+  
+  def print_gifts_link(user)
+    if current_user.nil?
+      gift_number = user.gift_works.visible_to_all.count(:id, :distinct => true)
+    else
+      gift_number = user.gift_works.visible_to_registered_user.count(:id, :distinct => true)
+    end
+  	if user == current_user
+      span_if_current ts("My Gifts (%{gift_number})", :gift_number => gift_number.to_s), user_gifts_path(user)
+    else
+      span_if_current ts("Gifts (%{gift_number})", :gift_number => gift_number.to_s), user_gifts_path(user)
+    end
   end
 
   def print_drafts_link(user)

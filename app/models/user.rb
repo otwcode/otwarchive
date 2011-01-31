@@ -90,6 +90,7 @@ class User < ActiveRecord::Base
   has_many :offer_assignments, :through => :pseuds
   has_many :pinch_hit_assignments, :through => :pseuds
   has_many :gifts, :through => :pseuds
+  has_many :gift_works, :through => :pseuds, :uniq => true
 
   has_many :readings, :dependent => :destroy
   has_many :bookmarks, :through => :pseuds

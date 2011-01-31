@@ -860,6 +860,8 @@ class Work < ActiveRecord::Base
   scope :visible_to_owner, posted
   scope :all_with_tags, includes(:tags)
 
+  scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
+  
   scope :unrevealed, joins(:approved_collection_items) & CollectionItem.unrevealed
 
   # ugh, have to do a left join here

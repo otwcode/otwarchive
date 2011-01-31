@@ -6,18 +6,18 @@ class Gift < ActiveRecord::Base
   
   validates_length_of :recipient_name,
     :maximum => NAME_LENGTH_MAX,
-    :too_long => t('gift.recipient_name_too_long', :default => "must be less than %{max} characters long.", :max => NAME_LENGTH_MAX),
+    :too_long => ts("must be less than %{max} characters long.", :max => NAME_LENGTH_MAX),
     :allow_blank => true
 
   validates_format_of :recipient_name, 
-    :message => t('gift.name_no_letters_or_numbers', :default => 'must contain at least one letter or number.'),
+    :message => ts("must contain at least one letter or number."),
     :with => /[a-zA-Z0-9]/,
     :allow_blank => true
     
   validate :has_name_or_pseud
   def has_name_or_pseud
     unless self.pseud || !self.recipient_name.blank?
-      errors.add(:base, "A gift must have a recipient specified.")
+      errors.add(:base, ts("A gift must have a recipient specified."))
     end
   end
 

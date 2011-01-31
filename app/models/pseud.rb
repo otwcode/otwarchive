@@ -33,6 +33,7 @@ class Pseud < ActiveRecord::Base
   has_many :collections, :through => :collection_participants
   has_many :challenge_signups, :dependent => :destroy
   has_many :gifts
+  has_many :gift_works, :through => :gifts, :source => :work
 
   has_many :offer_assignments, :through => :challenge_signups, :conditions => ["challenge_assignments.sent_at IS NOT NULL"]
   has_many :pinch_hit_assignments, :class_name => "ChallengeAssignment", :foreign_key => "pinch_hitter_id",
