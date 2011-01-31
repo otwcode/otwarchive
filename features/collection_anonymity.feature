@@ -82,52 +82,47 @@ Feature: Collection
   When I follow "Settings"
     And I uncheck "Is this collection currently unrevealed?"
     And I press "Submit"
-  Then I should see "Collection was successfully updated"
-  
+  Then I should see "Collection was successfully updated"  
   # Works should no longer be hidden on the collection dashboard
-  When "Critical Issue 2181" is fixed
-    # And I should not see "Mystery Work"
-    # And I should see "New Snippet by myname1"
-    # And I should see "Old Snippet by myname1"
-    # And I should see "Another Snippet by myname1"
+    And I should not see "Mystery Work"
+    And I should see "New Snippet by myname1"
+    And I should see "Old Snippet by myname1"
+    And I should see "Another Snippet by myname1"
     
   # Works should no longer say that they'll be revealed soon
   When I view the work "New Snippet"
-    And "ditto" is fixed
-  # Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-     And I should see "This is a new snippet written for this hidden challenge"
-   When I view the work "Old Snippet"
-  # Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-     And I should see "That could be an amusing crossover"
-   When I view the work "Another Snippet"
-  # Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-     And I should see "This is another new snippet written for this hidden challenge"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
+    And I should see "This is a new snippet written for this hidden challenge"
+  When I view the work "Old Snippet"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
+    And I should see "That could be an amusing crossover"
+  When I view the work "Another Snippet"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
+    And I should see "This is another new snippet written for this hidden challenge"
     
   # visitor should see all these works too
   When I follow "Log out"
     And I view the work "New Snippet"
-    And "ditto" is fixed
-  # Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-  #   And I should see "This is a new snippet written for this hidden challenge"
-   When I view the work "Old Snippet"
-  # Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-  #   And I should see "That could be an amusing crossover"
-   When I view the work "Another Snippet"
-  # Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-  #   And I should see "This is another new snippet written for this hidden challenge"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
+    And I should see "This is a new snippet written for this hidden challenge"
+  When I view the work "Old Snippet"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
+    And I should see "That could be an amusing crossover"
+  When I view the work "Another Snippet"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
+    And I should see "This is another new snippet written for this hidden challenge"
   
   # A third logged in user, not the author and not the owner, should see them too
   When I am logged in as "myname3" with password "something"
     And I view the work "New Snippet"
-    And "ditto" is fixed
-  # Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-  #   And I should see "This is a new snippet written for this hidden challenge"
-   When I view the work "Old Snippet"
-  # Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-  #   And I should see "That could be an amusing crossover"
-   When I view the work "Another Snippet"
-  # Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
-  #   And I should see "This is another new snippet written for this hidden challenge"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
+    And I should see "This is a new snippet written for this hidden challenge"
+  When I view the work "Old Snippet"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
+    And I should see "That could be an amusing crossover"
+  When I view the work "Another Snippet"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
+    And I should see "This is another new snippet written for this hidden challenge"
   
   
   
@@ -212,33 +207,29 @@ Feature: Collection
   When I follow "Settings"
     And I uncheck "Is this collection currently anonymous?"
     And I press "Submit"
-  Then I should see "Collection was successfully updated"
-  
+  Then I should see "Collection was successfully updated"  
   # Authors should no longer be hidden on the collection dashboard
-  When "Critical Issue 2142" is fixed
-    # And I should not see "New Snippet by Anonymous"
-    # And I should see "New Snippet by myname1"
-    # And I should see "Old Snippet by myname1"
-    # And I should see "Another Snippet by myname1"
+    And I should not see "New Snippet by Anonymous"
+    And I should see "New Snippet by myname1"
+    And I should see "Old Snippet by myname1"
+    And I should see "Another Snippet by myname1"
     
   # Works should have their authors in the view too
   When I view the work "New Snippet"
-    And "ditto" is fixed
-  # Then I should see "myname1" within ".byline"
+  Then I should see "myname1" within ".byline"
   When I view the work "Old Snippet"
-  # Then I should see "myname1" within ".byline"
+  Then I should see "myname1" within ".byline"
   When I view the work "Another Snippet"
-  # Then I should see "myname1" within ".byline"
+  Then I should see "myname1" within ".byline"
     
   # visitor should see all these works too
   When I follow "Log out"
     And I view the work "New Snippet"
-    And "ditto" is fixed
-  # Then I should see "myname1" within ".byline"
+  Then I should see "myname1" within ".byline"
   When I view the work "Old Snippet"
-  # Then I should see "myname1" within ".byline"
+  Then I should see "myname1" within ".byline"
   When I view the work "Another Snippet"
-  # Then I should see "myname1" within ".byline"
+  Then I should see "myname1" within ".byline"
   
   
   
