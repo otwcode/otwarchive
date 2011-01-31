@@ -43,3 +43,25 @@ Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, ch
   char.add_association(fand)
 end
 
+Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
+  tw = User.find_by_login(user)
+  if tw.blank?
+    tw = Factory.create(:user, {:login => user, :password => password})
+    tw.activate
+    tw.tag_wrangler = '1'
+  else
+    tw.password = password
+    tw.password_confirmation = password
+    tw.save
+  end
+  visit login_path
+  fill_in "User name", :with => user
+  fill_in "Password", :with => password
+  check "Remember me"
+  click_button "Log in"
+  assert UserSession.find
+  fandom = Fandom.find_or_create_by_name_and_canonical(fandomname, true)
+  visit tag_wranglers_url
+  fill_in "tag_fandom_string", :with => fandomname
+  click_button "Assign"
+end

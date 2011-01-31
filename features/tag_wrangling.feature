@@ -189,3 +189,43 @@ Feature: Tag wrangling
       And I press "Save changes"
     Then I should see "Tag was updated"
       And I should see "Stargate Atlantis"
+
+  Scenario: Issue 1701: Sign up for a fandom from the edit fandom page, then from editing a child tag of a fandom
+    
+    Given the following activated tag wrangler exists
+      | login  | password    |
+      | Enigel | wrangulate |
+      And a fandom exists with name: "'Allo 'Allo", canonical: true
+      And a fandom exists with name: "From Eroica with Love", canonical: true
+      And a fandom exists with name: "Cabin Pressure", canonical: true
+      And a relationship exists with name: "Dorian/Martin", canonical: false
+    
+    # I want to sign up from the edit page of an unassigned fandom
+    When I am logged in as "Enigel" with password "wrangulate"
+      And I edit the tag "'Allo 'Allo"
+    Then I should see "Sign Up"
+    When I follow "Sign Up"
+    Then I should see "Assign fandoms to yourself"
+      And I should see "'Allo 'Allo" within "#tag_fandom_string"
+    When I press "Assign"
+    Then I should see "Wranglers were successfully assigned"
+    When I edit the tag "'Allo 'Allo"
+    Then I should not see "Sign Up"
+      And I should see "Enigel" within ".tag_edit"
+    
+    # I want to sign up from the edit page of a relationship that belongs to two unassigned fandoms
+    When I edit the tag "Dorian/Martin"
+    Then I should not see "Sign Up"
+    When I fill in "Fandoms" with "From Eroica with Love, Cabin Pressure"
+      And I press "Save changes"
+    Then I should see "Tag was updated"
+    When I follow "Sign Up"
+    Then I should see "Cabin Pressure, From Eroica with Love" within "#tag_fandom_string"
+    When I press "Assign"
+    Then I should see "Wranglers were successfully assigned"
+    When I edit the tag "From Eroica with Love"
+    Then I should not see "Sign Up"
+      And I should see "Enigel" within ".tag_edit"
+    When I edit the tag "Cabin Pressure"
+    Then I should not see "Sign Up"
+      And I should see "Enigel" within ".tag_edit"
