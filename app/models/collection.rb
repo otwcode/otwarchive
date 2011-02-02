@@ -331,11 +331,20 @@ class Collection < ActiveRecord::Base
   end
   
   def reveal!
-    approved_collection_items.each {|collection_item| collection_item.reveal!}
+    approved_collection_items.update_all("unrevealed = 0")
+    if ArchiveConfig.NO_DELAYS
+      self.notify_of_reveal
+    else
+      self.delay.notify_of_reveal
+    end
+  end
+
+  def notify_of_reveal
+    approved_collection_items.each {|collection_item| collection_item.notify_of_reveal}
   end
   
   def reveal_authors!
-    approved_collection_items.each {|collection_item| collection_item.reveal_author!}
+    approved_collection_items.update_all("anonymous = 0")
   end
   
   def self.sorted_and_filtered(sort, filters, page)

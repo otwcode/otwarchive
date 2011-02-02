@@ -150,40 +150,22 @@ class CollectionItem < ActiveRecord::Base
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end  
   
-  def reveal!
-    # if this item was previously unrevealed, reveal it now & notify the recipient if there was one
-    if self.unrevealed
-      self.unrevealed = false
+  def notify_of_reveal
+    unless self.unrevealed?
       recipient_pseuds = Pseud.parse_bylines(self.recipients, :assume_matching_login => true)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
-          # delay this so the email notifications don't bog us down 
-          if ArchiveConfig.NO_DELAYS
-            UserMailer.recipient_notification(pseud.user, self.item, self.collection).deliver
-          else
-            UserMailer.recipient_notification(pseud.user, self.item, self.collection).delay.deliver
-          end
+          UserMailer.recipient_notification(pseud.user, self.item, self.collection).deliver
         end
       end
 
       # also notify the owners of any parent/inspired-by works 
       if item_type == "Work" && !item.parent_work_relationships.empty?
         item.parent_work_relationships.each do |relationship|
-          if ArchiveConfig.NO_DELAYS
-            relationship.notify_parent_owners
-          else
-            relationship.delay.notify_parent_owners
-          end
+          relationship.notify_parent_owners
         end
       end
-
-      save
     end
   end
   
-  def reveal_author!
-    self.anonymous = false
-    save
-  end
-
 end
