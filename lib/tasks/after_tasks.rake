@@ -237,7 +237,7 @@ namespace :After do
 #      end
 #    end
 #  end
-# 
+#
 # desc "Fix works without posted chapters"
 # task(:post_chapters => :environment) do
 #   Chapter.joins(:work).
@@ -249,7 +249,14 @@ namespace :After do
 #   end
 # end
 
-
+#  desc "Move kudos to works instead of chapters"
+#  task(:move_kudos_to_works => :environment) do
+#    Chapter.joins(:kudos).group("chapters.id").find_each do |chapter|
+#      puts chapter.id
+#      chapter.kudos.update_all("commentable_id = #{chapter.work_id}, commentable_type = 'Work'")
+#    end
+#  end
+#
   #### Leave this one here
 
   desc "Update the translation file each time we deploy"
@@ -260,14 +267,6 @@ namespace :After do
 
   #### Add your new tasks here
 
-  desc "Move kudos to works instead of chapters"
-  task(:move_kudos_to_works => :environment) do
-    Chapter.joins(:kudos).group("chapters.id").find_each do |chapter|
-      puts chapter.id
-      chapter.kudos.update_all("commentable_id = #{chapter.work_id}, commentable_type = 'Work'")
-    end
-  end
-
 end # this is the end that you have to put new tasks above
 
 ##################
@@ -276,4 +275,4 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
-task :After => ['After:move_kudos_to_works']
+task :After => []
