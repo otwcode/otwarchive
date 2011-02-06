@@ -835,7 +835,7 @@ class StoryParser
         end
       }
       if story.blank?
-        raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete (for example, not missing 'http://' and try again."
+        raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete (for example, not missing 'http://') and try again."
       end
       story
     end
