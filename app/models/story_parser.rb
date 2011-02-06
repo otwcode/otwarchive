@@ -87,7 +87,7 @@ class StoryParser
         work.delete if work        
       rescue Error => exception
         failed_urls << url
-        errors << "We couldn't successfully import that story, sorry: #{exception.message}"
+        errors << "We couldn't successfully import that work, sorry: #{exception.message}"
         work.delete if work
       end
     end
@@ -835,7 +835,7 @@ class StoryParser
         end
       }
       if story.blank?
-        raise Error, "We couldn't download anything from #{location}. Are you sure the URL is right?"
+        raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete (for example, not missing 'http://' and try again."
       end
       story
     end
