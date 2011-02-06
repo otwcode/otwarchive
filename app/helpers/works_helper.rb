@@ -11,7 +11,11 @@ module WorksHelper
     if (comment_count = work.count_visible_comments) > 0
       list.concat([[ts('Comments:'), work.count_visible_comments.to_s]])
     end
-    list.concat([[ts('Kudos:'), work.kudos.count.to_s]]) if work.kudos.count > 0    
+
+    if work.kudos.count > 0
+      list.concat([[ts('Kudos:'), (work.kudos.by_guest.count(:ip_address, :distinct => true) + work.kudos.with_pseud.count(:pseud_id, :distinct => true)).to_s]])
+    end
+
     if (bookmark_count = work.bookmarks.is_public.count) > 0
       list.concat([[ts('Bookmarks:'), link_to(bookmark_count.to_s, work_bookmarks_path(work))]]) 
     end

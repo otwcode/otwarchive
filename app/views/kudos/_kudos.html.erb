@@ -1,9 +1,9 @@
-<% if kudos.count > 0 || guest_kudos_count > 0 %>
+<% if kudos.length > 0 || guest_kudos_count > 0 %>
   <p class="kudos">
     <%= kudos.map {|kudo| link_to kudo.pseud.byline, kudo.pseud.user}.
           to_sentence(:two_words_connector => ts(" and "), :last_word_connector => ts(" and ")).
           html_safe %>
-    <% if kudos.count > 0 && guest_kudos_count > 0 %>
+    <% if kudos.length > 0 && guest_kudos_count > 0 %>
       <%= ts(" as well as ") %>
     <% end %>
     <% if guest_kudos_count > 1 %>
