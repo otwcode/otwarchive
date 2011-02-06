@@ -44,9 +44,8 @@
 
   <%= flash_div :comment_error, :comment_notice %>
 
-  <% if @work %>
-    <%= render "kudos/kudos", :kudos => @work.kudos.with_pseud.group("pseud_id").order("created_at DESC"), :guest_kudos_count => 
-@work.kudos.by_guest.count(:ip_address, :distinct => true) %>
+  <% if @work && (@chapter.blank? || @chapter.posted?) %>
+    <%= render "kudos/kudos", :kudos => @work.kudos.with_pseud.group("pseud_id").order("created_at DESC"), :guest_kudos_count => @work.kudos.by_guest.count(:ip_address, :distinct => true) %>
   <% end %>
 
   <div id="add_comment_placeholder">

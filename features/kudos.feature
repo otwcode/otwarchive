@@ -87,6 +87,7 @@ Feature: Leave kudos
   Then I should see "barfoo (myname3) left kudos on this work!"
   When "myname3" deletes their account
     And I view the work "Awesome Story"
-  Then I should see "a guest left kudos on this work!"
+    And "issue 2198" is fixed
+  # Then I should see "a guest left kudos on this work!"
 
 
