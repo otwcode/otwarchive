@@ -21,6 +21,7 @@ fandom3:
 media1:
   name: TV Shows
   type: Media
+  canonical: true
 char1:
   name: Person A
   type: Character
@@ -29,3 +30,8 @@ char1a:
   name: Persone A
   type: Character
   taggings_count: 1
+ghostsoup:
+  id: 1234
+  name: Ghost Soup
+  type: Fandom
+  canonical: true
