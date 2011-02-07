@@ -116,7 +116,7 @@
       </div>
     <% end %>
 
-    <% unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? && @work.approved_children.blank? %>
+    <% unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? && @work.approved_children.blank? && @work.challenge_claims.blank? %>
       <% current_page?(:controller => 'chapters', :action => 'show') ?
             linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') :
             linkpath = "#work_endnotes"
@@ -139,6 +139,16 @@
             </h4>
           <% end %>
         <% end %>
+    <% end %>
+    <% unless @work.challenge_claims.blank? %>
+      <% @work.challenge_claims.each do |claim| %>
+        In response to prompt by:
+        <% if claim.request_prompt.anonymous? %>
+          (Anonymous)
+        <% else %>
+          <%= link_to(claim.request_signup.pseud.byline, collection_claim_path(claim.collection, claim)) %>
+        <% end %>
+      <% end %>
     <% end %>
     <% unless @work.approved_children.blank? %>
       <% for related_work in @work.approved_related_works %>
