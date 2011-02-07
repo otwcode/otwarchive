@@ -155,6 +155,11 @@ Otwarchive::Application.routes.draw do
         get :default
       end
     end
+    resources :claims, :controller => "challenge_claims" do
+      member do
+        get :default
+      end
+    end
     resources :bookmarks
     resources :collection_items, :only => [:index, :update, :destroy]
     resources :collections, :only => [:index]
@@ -330,6 +335,18 @@ Otwarchive::Application.routes.draw do
         get :uncover_default
       end
     end
+    resources :claims, :controller => "challenge_claims" do
+      collection do
+        put :set
+        get :purge
+        get :send_out
+        put :default_multiple
+        get :default_all
+      end
+      member do
+        get :undefault
+      end
+    end    
     resources :potential_matches do
       collection do
         get :generate
@@ -339,6 +356,7 @@ Otwarchive::Application.routes.draw do
     resources :requests, :controller => "challenge_requests"
     # challenge types
     resource :gift_exchange, :controller => 'challenge/gift_exchange'
+    resource :prompt_meme, :controller => 'challenge/prompt_meme'
   end
 
   #### I18N ####

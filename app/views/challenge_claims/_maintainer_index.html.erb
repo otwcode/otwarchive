@@ -1,0 +1,113 @@
+<h2>Claims for <%= @collection.title %></h2>
+
+<% TagSet::TAG_TYPES.each do |type| %>
+  <% eval("@show_request_#{type}_tags = (@challenge.request_restriction.#{type}_num_allowed > 0) && !params[:hide_tags]") %>
+<% end %>
+
+<h3>Unfulfilled Claims</h3>
+  
+  <table id="unfulfilled_claims">
+    <thead>
+      <tr>
+        <th>Pseud</th>
+        <th>Writing For</th>
+        <th>Prompt Info</th>
+      </tr>
+    </thead>
+
+    <% @unposted_claims.each do |claim| %>
+      <tr>
+        <td>
+          <% claimer = User.find_by_id(claim.claiming_user_id) %>
+          <% if @collection.anonymous? && !(current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) %>
+            Secret!
+          <% else %>
+            <%= claimer.default_pseud.name -%>
+          <% end %>
+        </td>
+        <td>
+          <% request = claim.request_signup %>
+          <% prompt_id = claim.request_prompt_id %>
+          <% prompt = Prompt.find_by_id(prompt_id) %>
+          <% if !prompt || prompt.anonymous? %>
+            (Anonymous)
+          <% else %>
+            <%= link_to request.pseud.byline, collection_claim_path(@collection, claim) -%>
+          <% end %>
+        </td>
+        <td>
+          <% TagSet::TAG_TYPES.each do |type| %>
+            <% if eval("@show_request_#{type}_tags") %>
+                <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
+                  <%= content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type))) %>
+                <% end %>
+            <% end %>  
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+
+  <%= will_paginate @unposted_claims -%>
+  
+  <h3>Fulfilled Claims</h3>
+
+  <table id="fulfilled_claims">
+    <thead>
+      <tr>
+        <th>Pseud</th>
+        <th>Writing For</th>
+        <th>Prompt Info</th>
+        <th>Work Info</th>
+      </tr>
+    </thead>
+
+    <% @posted_claims.each do |claim| %>
+      <tr>
+        <td>
+          <% claimer = User.find_by_id(claim.claiming_user_id) %>
+          <% if @collection.anonymous? && !(current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) %>
+            Secret!
+          <% else %>
+            <%= claimer.default_pseud.name -%>
+          <% end %>
+        </td>
+        <td>
+          <% request = claim.request_signup %>
+          <% prompt_id = claim.request_prompt_id %>
+          <% prompt = Prompt.find_by_id(prompt_id) %>
+          <% if !prompt || prompt.anonymous? %>
+            (Anonymous)
+          <% else %>
+            <%= link_to request.pseud.byline, collection_claim_path(@collection, claim) -%>
+          <% end %>
+        </td>
+        <td>
+          <% TagSet::TAG_TYPES.each do |type| %>
+            <% if eval("@show_request_#{type}_tags") %>
+                <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
+                  <%= content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type))) %>
+                <% end %>
+            <% end %>  
+          <% end %>
+        </td>
+        <td>
+          <% if claim.creation %>
+            <% if @collection.unrevealed? && !(current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) %>
+              Secret!
+            <% else %>
+              <%= link_to "Response posted on #{claim.creation.published_at}.", claim.creation %>
+              <% if !claim.fulfilled? %>
+                <strong>Not yet approved</strong>
+              <% end %>
+            <% end %>
+          <% else %>
+            Not yet posted
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+
+  <%= will_paginate @posted_claims -%>
+

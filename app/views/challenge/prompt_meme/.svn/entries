@@ -1,0 +1,85 @@
+10
+
+dir
+0
+https://otwarchive.googlecode.com/svn/trunk/app/views/challenge/prompt_meme
+https://otwarchive.googlecode.com/svn
+add
+
+edit.html.erb
+file
+
+
+
+add
+
+_challenge_main.html.erb
+file
+
+
+
+add
+
+_prompt_meme_form.html.erb
+file
+
+
+
+add
+
+_challenge_meta.html.erb
+file
+
+
+
+add
+
+_challenge_navigation_maintainer.html.erb
+file
+
+
+
+add
+
+manage.html.erb
+file
+
+
+
+add
+
+new.html.erb
+file
+
+
+
+add
+
+_challenge_signups.html.erb
+file
+
+
+
+add
+
+_challenge_sidebar.html.erb
+file
+
+
+
+add
+
+_challenge_navigation_user.html.erb
+file
+
+
+
+add
+
+show.html.erb
+file
+
+
+
+add
+

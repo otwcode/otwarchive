@@ -127,3 +127,6 @@ Then /^I should see the page title "(.*)"$/ do |text|
   end
 end
 
+Given /^I have no prompts$/ do
+  Prompt.delete_all
+end

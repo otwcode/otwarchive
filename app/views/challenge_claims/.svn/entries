@@ -1,0 +1,36 @@
+10
+
+dir
+0
+https://otwarchive.googlecode.com/svn/trunk/app/views/challenge_claims
+https://otwarchive.googlecode.com/svn
+add
+
+index.html.erb
+file
+
+
+
+add
+
+_maintainer_index.html.erb
+file
+
+
+
+add
+
+show.html.erb
+file
+
+
+
+add
+
+_user_index.html.erb
+file
+
+
+
+add
+

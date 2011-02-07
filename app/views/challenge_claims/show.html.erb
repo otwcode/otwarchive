@@ -1,0 +1,40 @@
+<div id="collection-page" class="profile">
+
+  <% request = @challenge_claim.request_signup %>
+  <h3>
+    <% if request %>
+      <%=h t('challenge_claim.view', :default => "Claimed by {{offerer}}: {{requester}}", 
+        :requester => request.pseud.byline, :offerer => @challenge_claim.collection.anonymous? ? "Anonymous" : @challenge_claim.offer_byline) -%>
+    <% else %>
+      No Assignment
+    <% end %>
+  </h3>
+
+  <div class="collection preface">
+    <% if request %>
+      <h3><%=h t("challenge_claims.requests_for", :default => "Request by {{requester}}", :requester => request.pseud.byline) %></h3>
+      <%= render :partial => "challenge_signups/show_prompt", :locals => {:prompt => @challenge_claim.request_prompt} %>
+    <% else %>
+      <p class="note">No request!</p>
+      <p class="note">Contact challenge moderators for help.</p>
+    <% end %>
+  </div>
+
+  <% if !@challenge_claim.fulfilled? %>
+    <p class="note">Not fulfilled yet!</p>
+  <% else %>
+    <% if @collection.unrevealed? && !(current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) %>
+      <p class="note">Mystery work</p>
+    <% else %>
+      <%= link_to "Response posted on #{@challenge_claim.creation.published_at}.", @challenge_claim.creation %>
+    <% end %>
+  <% end %>
+  
+  <% if !@challenge_claim.fulfilled? && @challenge_claim.offering_pseud.user == current_user %>
+    <ul class="navigation">
+      <li><%= link_to t('claim.post_new', :default => "Post To Fulfill"), new_collection_work_path(@challenge_claim.collection, :claim_id => @challenge_claim.id) %></li>
+    </ul>
+  <% end %>
+  
+</div>
+

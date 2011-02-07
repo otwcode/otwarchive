@@ -1,6 +1,9 @@
 <!-- expects local value "prompt" -->
 <div class="wrapper">
   <dl class="collection meta">
+  <% if prompt.anonymous? %>
+    <dt>Secret</dt><dd>This request is anonymous</dd>
+  <% else %>
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
     <% if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?) %>
       <dt>Tags:</dt>
@@ -27,5 +30,6 @@
       <dt><%= ts("Details") %>:</dt>
       <dd><%= raw sanitize_field(prompt, :description) %></dd>
     <% end %>
+  <% end %>
   </dl>
 </div>

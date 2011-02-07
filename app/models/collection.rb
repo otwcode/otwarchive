@@ -36,6 +36,7 @@ class Collection < ActiveRecord::Base
   has_many :signups, :class_name => "ChallengeSignup", :dependent => :destroy
   has_many :potential_matches, :dependent => :destroy
   has_many :assignments, :class_name => "ChallengeAssignment", :dependent => :destroy
+  has_many :claims, :class_name => "ChallengeClaim", :dependent => :destroy
   
   # We need to get rid of all of these if the challenge is destroyed
   after_save :clean_up_challenge
@@ -79,6 +80,7 @@ class Collection < ActiveRecord::Base
   CHALLENGE_TYPE_OPTIONS = [
                              ["", ""],
                              [ts("Gift Exchange"), "GiftExchange"],
+                             [t('challenge_type.prompt_meme', :default => "Prompt Meme"), "PromptMeme"],
                            ]
 
   validate :must_have_owners, :on => :save
@@ -313,6 +315,9 @@ class Collection < ActiveRecord::Base
   def challenge? ; !self.challenge.nil? ; end
   def gift_exchange? 
     self.collection_preference.gift_exchange 
+  end
+  def prompt_meme? 
+    self.collection_preference.prompt_meme 
   end
   
   def not_empty?

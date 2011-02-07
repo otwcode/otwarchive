@@ -101,7 +101,17 @@
                 "challenge_assignments", "title", "id" %>
         </dd>
       <% end %>
-
+      <% if !(@claims = current_user.request_claims.unfulfilled).empty? || !@work.challenge_claims.empty? %>
+        <!-- if the user has open claims? -->
+        <dt class="collection">
+          <%= f.label "challenge_claim_ids[]", ts("Fulfill a Claim: ") %> <%= link_to_help "add-work-to-assignment" %>
+        </dt>
+        <dd class="collection">
+          <%= options_section f, "work[challenge_claim_ids][]", "work_challenge_claim_ids", (@claims + @work.challenge_claims).uniq, 
+                "challenge_claims", "title", "id" %>
+        </dd>
+      <% end %>
+      
       <!-- Add collection -->
       <dt class="collection">
         <%= f.label :collection_names, t('.work_form.collection_names', :default => "Post to Collections/Challenges: ") %> <%= link_to_help "add-work-to-collection" %>

@@ -14,12 +14,15 @@ class ChallengeSignup < ActiveRecord::Base
 
   has_many :offer_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'offer_signup_id'
   has_many :request_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'request_signup_id'
+  
+  has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_signup_id'
 
-  before_destroy :clear_assignments
-  def clear_assignments
+  before_destroy :clear_assignments_and_claims
+  def clear_assignments_and_claims
     # remove this signup reference from any existing assignments
     offer_assignments.each {|assignment| assignment.offer_signup = nil; assignment.save}
     request_assignments.each {|assignment| assignment.request_signup = nil; assignment.save}
+    request_claims.each {|claim| claim.destroy}
   end
 
   # we reject prompts if they are empty except for associated references
@@ -86,12 +89,10 @@ class ChallengeSignup < ActiveRecord::Base
   def unique_tags
     if (challenge = collection.challenge)
       errors_to_add = []
-      %w(prompts offers requests).each do |prompt_type|
+      %w(prompts requests).each do |prompt_type|
         restriction = case prompt_type
           when "prompts"
           then challenge.prompt_restriction
-          when "offers"
-          then challenge.offer_restriction
           when "requests"
           then challenge.request_restriction
         end
@@ -114,6 +115,33 @@ class ChallengeSignup < ActiveRecord::Base
           end
         end
       end
+      if self.collection.challenge_type == "GiftExchange"
+      %w(offers).each do |prompt_type|
+        restriction = case prompt_type
+          when "offers"
+          then challenge.offer_restriction
+        end
+
+        if restriction
+          prompts = instance_variable_get("@#{prompt_type}") || self.send("#{prompt_type}")
+          TagSet::TAG_TYPES.each do |tag_type|
+            if restriction.send("require_unique_#{tag_type}")
+              all_tags_used = []
+              prompts.each do |prompt|
+                new_tags = prompt.tag_set.send("#{tag_type}_taglist")
+                unless (all_tags_used & new_tags).empty?
+                  errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.",
+                                      :prompt_type => prompt_type.singularize, :tag_type => tag_type)
+                  break
+                end
+                all_tags_used += new_tags
+              end
+            end
+          end
+        end
+      end
+      end
+      
 
       unless errors_to_add.empty?
         # yuuuuuck :( but so much less ugly than define-method'ing these all
@@ -189,6 +217,7 @@ class ChallengeSignup < ActiveRecord::Base
 
   def user_allowed_to_see_signups?(user)
     self.collection.user_is_maintainer?(user) ||
+    self.collection.challenge_type == "PromptMeme" || 
       (self.challenge.respond_to?("user_allowed_to_see_signups?") && self.challenge.user_allowed_to_see_signups?(user))
   end
 

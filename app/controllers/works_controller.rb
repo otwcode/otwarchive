@@ -215,6 +215,15 @@ class WorksController < ApplicationController
     else
       @work.collection_names = @collection.name if @collection
     end
+    if params[:claim_id] && (@challenge_claim = ChallengeClaim.find(params[:claim_id])) && User.find(@challenge_claim.claiming_user_id) == current_user
+      @work.challenge_claims << @challenge_claim
+      @work.collections << @challenge_claim.collection
+      unless Prompt.find(@challenge_claim.request_prompt_id).anonymous?
+        @work.recipients = @challenge_claim.requesting_pseud.byline
+      end
+    else
+      @work.collection_names = @collection.name if @collection
+    end
     if params[:import]
       render :new_import and return
     elsif params[:load_unposted]
