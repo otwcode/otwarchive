@@ -3,7 +3,7 @@ class MediaController < ApplicationController
   skip_before_filter :store_location, :only => [:show]
 
   def index
-    @media = Media.all - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
+    @media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
     @fandom_listing = {}
     @media.each do |medium|
       if medium == Media.uncategorized

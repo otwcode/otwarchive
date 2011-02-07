@@ -15,7 +15,7 @@ class FandomsController < ApplicationController
         if @medium == Media.uncategorized
           @fandoms = @medium.fandoms.by_name
         else
-          @fandoms = @medium.fandoms.canonical.with_count
+          @fandoms = @medium.fandoms.canonical.by_name.with_count
         end      
       else
         raise ActiveRecord::RecordNotFound, "Couldn't find media category named '#{params[:medium_id]}'"
