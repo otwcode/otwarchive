@@ -218,21 +218,30 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   
   Given the following activated tag wrangler exists
     | login  | password    |
-    | Enigel | wrangulate! |
+    | Enigel | wrangulate |
+    And the following activated user exists
+    | login  | password    |
+    | writer | password    |
     And basic tags
     And a fandom exists with name: "Up with Testing", canonical: true
     And a fandom exists with name: "Coding", canonical: true
     And a character exists with name: "Testing McTestypants", canonical: true
     And a character exists with name: "Testing McTestySkirt", canonical: true
-    And I am logged in as "Enigel" with password "wrangulate!"
+    
+  # create a relationship from posting a work as a regular user, just in case
+   Given I am logged in as "writer" with password "password"
     And I follow "Post New"
     And I fill in "Fandoms" with "Up with Testing"
     And I fill in "Work Title" with "whatever"
     And I fill in "Relationships" with "Testypants/Testyskirt"
-    And I press "Post without preview"
-    And I follow "Tag Wrangling"
-    
-  When I edit the tag "Coding"
+    And I fill in "content" with "a long story about nothing"
+    And I press "Preview"
+    And I press "Post"
+    And I follow "Log out"
+  
+  # wrangle the tags to be as close of those that have errored on beta and test
+  When I am logged in as "Enigel" with password "wrangulate"
+    And I edit the tag "Coding"
     And I fill in "MetaTags" with "Up with Testing"
     And I press "Save changes"
   Then I should see "Tag was updated"

@@ -48,12 +48,12 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   if tw.blank?
     tw = Factory.create(:user, {:login => user, :password => password})
     tw.activate
-    tw.tag_wrangler = '1'
   else
     tw.password = password
     tw.password_confirmation = password
     tw.save
   end
+  tw.tag_wrangler = '1'
   visit login_path
   fill_in "User name", :with => user
   fill_in "Password", :with => password
