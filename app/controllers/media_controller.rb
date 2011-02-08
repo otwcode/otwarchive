@@ -3,10 +3,11 @@ class MediaController < ApplicationController
   skip_before_filter :store_location, :only => [:show]
 
   def index
-    @media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
+    uncategorized = Media.uncategorized
+    @media = Media.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME), uncategorized] + [uncategorized]
     @fandom_listing = {}
     @media.each do |medium|
-      if medium == Media.uncategorized
+      if medium == uncategorized
         @fandom_listing[medium] = medium.children.by_type('Fandom').find(:all, :order => 'created_at DESC', :limit => 5)
       else
         @fandom_listing[medium] = (logged_in? || logged_in_as_admin?) ?
