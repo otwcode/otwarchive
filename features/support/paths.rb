@@ -61,7 +61,7 @@ module NavigationHelpers
       skin_path(Skin.find_by_title($1))
     when /^"(.*)" edit skin page/
       edit_skin_path(Skin.find_by_title($1))
-    when /^(.*) collection's page$/i
+    when /^"(.*)" collection's page$/i                      # e.g. when I go to "Collection name" collection's page
       collection_path(Collection.find_by_title($1))
     when /^"(.*)" collection's static page$/i
       static_collection_path(Collection.find_by_title($1))

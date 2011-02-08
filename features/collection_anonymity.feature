@@ -67,16 +67,34 @@ Feature: Collection
   Then I should see "New Snippet by myname1"
     And I should see "Old Snippet by myname1"
     And I should see "Another Snippet by myname1"
+    
+  # bookmark a hidden work
+  When I follow "Another Snippet"
+    And I follow "Bookmark"
+    And I fill in "bookmark_notes" with "I liked this story"
+    And I press "Create"
+  Then I should see "Bookmark was successfully created"
         
   When I follow "Log out"
+    And I go to "Hidden Treasury" collection's page
   Then I should see "Mystery Work"
     And I should see "Part of Hidden Treasury"
+  When I go to the bookmarks page
+  Then I should see "List of Bookmarks"
+    And "Issue 2208" is fixed
+    # And I should see "Mystery Work"
+    # And I should not see "Another Snippet"
+    And I should see "Another Snippet"
   
   When I am logged in as "myname2" with password "something"
     And I go to the collections page
     And I follow "Hidden Treasury"
   Then I should see "Mystery Work"
     And I should see "Part of Hidden Treasury"
+    And I should not see "Old Snippet"
+    And I should not see "Another Snippet"
+    And I should not see "New Snippet"
+    And I should not see "myname1"
   
   # Reveal the collection
   When I follow "Settings"
