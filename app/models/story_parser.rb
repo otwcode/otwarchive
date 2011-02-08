@@ -832,6 +832,8 @@ class StoryParser
           nil
         rescue SocketError
           nil
+        rescue EOFError
+          nil
         end
       }
       if story.blank?
