@@ -33,7 +33,7 @@ class WorksController < ApplicationController
   end
 
   # GET /works
-  def index
+  def index    
     # what we're getting for the view
     @works = []
     @filters = {}
@@ -72,6 +72,7 @@ class WorksController < ApplicationController
     unless params[:tag_id].blank?
       @tag = Tag.find_by_name(params[:tag_id])
       if @tag
+        @page_subtitle = @tag.name
         @tag = @tag.merger if @tag.merger
         redirect_to url_for({:controller => :tags, :action => :show, :id => @tag}) and return unless @tag.canonical
         @selected_tags << @tag.id.to_s unless @selected_tags.include?(@tag.id.to_s)
@@ -81,14 +82,20 @@ class WorksController < ApplicationController
         return
       end
     end
+    
+    if @collection
+      @page_subtitle = @collection.title
+    end
 
     # if we're browsing by a particular user get works by that user
     unless params[:user_id].blank?
       @user = User.find_by_login(params[:user_id])
       if @user
+        @page_subtitle = ts("by ") + @user.login
         unless params[:pseud_id].blank?
           @author = @user.pseuds.find_by_name(params[:pseud_id])
           if @author
+            @page_subtitle = ts("by ") + @author.byline
             @selected_pseuds << @author.id unless @selected_pseuds.include?(@author.id)
           end
         end

@@ -22,12 +22,13 @@ class PseudsController < ApplicationController
   end
 
   # GET /users/:user_id/pseuds/:id
-  def show
+  def show  
     if @user.blank?
       flash[:error] = ts("Sorry, could not find this user.")
       redirect_to people_path and return
     end
     @author = @user.pseuds.find_by_name(params[:id])
+    @page_subtitle = @author.name
     unless @author
       flash[:error] = ts("Sorry, could not find this pseud.")
       redirect_to people_path and return
