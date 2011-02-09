@@ -100,7 +100,7 @@ I'd like to comment on a tag'
       And 1 email should be delivered to "enigel@example.org"
       And the email should contain "really clever stuff"
       And the email should contain "Cesy"
-      And the email should contain "left the following comment on"
+      And the email should contain "left the following comment on the tag"
       
     # check that the links in the email go where they should; this is wonky and I don't know why
     When I follow "Go to the thread starting from this comment" in the email
