@@ -4,8 +4,8 @@ Feature: Tag Cloud
   In order to browse by the most used additional tags
   As an archive user or visitor
   I should be able to view some tags in a tag cloud
-  
-Scenario: tag cloud should only contain top-level canonical freeforms in "No Fandom" 
+
+Scenario: tag cloud should only contain top-level canonical freeforms in "No Fandom"
   I want to check that:
     non-canonical used freeforms do not show up in cloud, whether unwrangled, fandomish or no fandomish
     canonical freeforms within No Fandom but with no uses at all do not show
@@ -14,8 +14,9 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     canonical freeforms within No Fandom, with uses, show up TODO
     metatag freeforms with uses show up and their subtags do not anymore TODO
     metatag freeforms with no uses do not show and neither do their subtags (which I think is bad) TODO
-    
-  Given the following activated tag wrangler exists
+
+  Given tag wrangling is on
+    And the following activated tag wrangler exists
     | login  | password    |
     | Enigel | wrangulate! |
     And basic tags
@@ -26,9 +27,9 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And a freeform exists with name: "Canonical unused NoFandom", canonical: true
     And a freeform exists with name: "Canonical Fandomish", canonical: true
     And a freeform exists with name: "Canonical unwrangled", canonical: true
-   
+
   # post a work with some fun tags and some boring tags
-  
+
   When I am logged in as "author" with password "password"
     And I go to the new work page
     And I select "Not Rated" from "Rating"
@@ -40,14 +41,14 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And I press "Preview"
     And I press "Post"
   Then I should see "Work was successfully posted."
-  
+
   # test the tags with fun names
-  
+
   When I am logged out
     And I follow "tags" within "ul.navigation"
-  Then I should not see "100 words"  
-    And I should not see "five things"  
-  
+  Then I should not see "100 words"
+    And I should not see "five things"
+
   When I am logged in as "Enigel" with password "wrangulate!"
     And I edit the tag "five things"
     And I fill in "Fandoms" with "No Fandom"
@@ -73,9 +74,9 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And I press "Update"
     And I follow "tags" within "ul.navigation"
   Then I should not see "Five Things"
-  
+
   # set up boringly-named tags
-  
+
   When I edit the tag "Non-canonical NoFandom"
     And I fill in "Fandoms" with "No Fandom"
     And I press "Save changes"
@@ -89,9 +90,9 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And I fill in "Fandoms" with "Firefly"
     And I press "Save changes"
   Then I should see "Tag was updated"
-  
+
   # check the cloud for the boring tags
-  
+
   When I follow "tags" within "ul.navigation"
   Then I should not see "Non-canonical NoFandom"
     And I should not see "Non-canonical Fandomish"
@@ -99,3 +100,4 @@ Scenario: tag cloud should only contain top-level canonical freeforms in "No Fan
     And I should not see "Canonical unused NoFandom"
     And I should not see "Canonical Fandomish"
     And I should not see "Canonical unwrangled"
+
