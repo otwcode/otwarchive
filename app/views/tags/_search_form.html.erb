@@ -9,6 +9,6 @@
     <label for="canonical">canonical?</label>&nbsp;<%= check_box_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %>
     <%= link_to_help "tag-search-type-help" %>
   </p>
-  <span class="submit"><%= submit_tag t('.tags.search', :default => 'Search tags'), :name => nil %></span>
+  <span class="submit"><%= submit_tag ts("Search tags"), :name => nil %></span>
 </fieldset>
 <% end %>
