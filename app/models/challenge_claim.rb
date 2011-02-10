@@ -102,7 +102,7 @@ class ChallengeClaim < ActiveRecord::Base
     else
       title = "#{self.collection.title} (#{self.request_byline})"
     end
-    title += " - " + self.request_prompt.tag_list
+    title += " - " + self.request_prompt.tag_unlinked_list
     return title
   end
   

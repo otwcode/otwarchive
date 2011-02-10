@@ -237,14 +237,16 @@ class Prompt < ActiveRecord::Base
   
   # gets the list of tags for this prompt
   def tag_linked_list
+    list = ""
     TagSet::TAG_TYPES.each do |type|
       eval("@show_request_#{type}_tags = (self.collection.challenge.request_restriction.#{type}_num_allowed > 0)")
       if eval("@show_request_#{type}_tags") 
           if self && self.tag_set && !self.tag_set.with_type(type).empty?
-              title += " - " + tag_link_list(self.tag_set.with_type(type))
+              list += " - " + tag_link_list(self.tag_set.with_type(type))
           end
       end   
     end
+    return list
   end
   
   # Takes an array of tags and returns a comma-separated list, without the markup
@@ -262,14 +264,16 @@ class Prompt < ActiveRecord::Base
   
   # gets the list of tags for this prompt
   def tag_unlinked_list
+    list = ""
     TagSet::TAG_TYPES.each do |type|
       eval("@show_request_#{type}_tags = (self.collection.challenge.request_restriction.#{type}_num_allowed > 0)")
       if eval("@show_request_#{type}_tags") 
           if self && self.tag_set && !self.tag_set.with_type(type).empty?
-              title += " - " + tag_list(self.tag_set.with_type(type))
+              list += " - " + tag_list(self.tag_set.with_type(type))
           end
       end   
     end
+    return list
   end
 
 end
