@@ -42,6 +42,24 @@ namespace :deploy do
   task :restart, :roles => :app do
     run "/static/bin/unicorns_reload.sh"
   end
+
+  desc "rebuild sphinx - for when indexes change"
+  task :rebuild_sphinx, {:roles => :backend} do
+    run "ln -nfs #{deploy_to}/shared/sphinx #{release_path}/db/sphinx"
+    run "/static/bin/ts_rebuild.sh"
+  end
+  namespace :web do
+    desc "Present a maintenance page to visitors."
+    task :disable, :roles => :web do
+      run "mv #{deploy_to}/current/public/nomaintenance.html #{deploy_to}/current/public/maintenance.html 2>/dev/null || true"
+    end
+
+    desc "Makes the application web-accessible again."
+    task :enable, :roles => :web do
+      run "mv #{release_path}/public/maintenance.html #{release_path}/public/nomaintenance.html 2>/dev/null"
+      run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt}"
+    end
+  end
 end
 
 namespace :extras do
@@ -50,36 +68,29 @@ namespace :extras do
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
     run "ln -nfs -t #{release_path}/public/ /static/static"
   end
-  task :maintenance, :roles => :web do
-    run "mv #{deploy_to}/current/public/nomaintenance.html #{deploy_to}/current/public/maintenance.html 2>/dev/null || true"
-  end
-  task :nomaintenance, :roles => :web do
-    run "mv #{release_path}/public/maintenance.html #{release_path}/public/nomaintenance.html 2>/dev/null"
-    run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt}"
-  end
-  task :stylesheet, {:roles => :web} do
+
+
+  task :stylesheet, {:roles => [:web, :app]} do
     run "cd #{release_path}/public/stylesheets/; cat system-messages.css site-chrome.css forms.css live_validation.css auto_complete.css > cached_for_screen.css"
   end
+
   task :backup_db, {:roles => :backend} do
     run "mysql -e 'stop slave'"
     run "sudo cp -rp /var/lib/mysql /backup/otwarchive/deploys/`date +%F.%R`/"
     run "mysql -e 'start slave'"
   end
-  task :rebuild_sphinx, {:roles => :backend} do
-    run "ln -nfs #{deploy_to}/shared/sphinx #{release_path}/db/sphinx"
-    run "/static/bin/ts_rebuild.sh"
+
+  task :after, {:roles => :backend} do
+    run "cd #{deploy_to}/current && rake After RAILS_ENV=production"
   end
-  task :restart_sphinx, {:roles => :backend} do
-    run "ln -nfs #{deploy_to}/shared/sphinx #{release_path}/db/sphinx"
-    run "/static/bin/ts_restart.sh"
-  end
+
+  # add purge memcache here, if we think it's necessary
   task :backend, {:roles => :backend} do
     run "cd #{deploy_to}/current && whenever --update-crontab #{application}"
     run "/static/bin/dj_restart.sh"
+    run "ln -nfs #{deploy_to}/shared/sphinx #{release_path}/db/sphinx"
+    run "/static/bin/ts_restart.sh"
     run "echo 'archive deployed' | mail -s 'archive deployed' #{mail_to}"
-  end
-  task :after, {:roles => :backend} do
-    run "cd #{deploy_to}/current && rake After RAILS_ENV=production"
   end
 end
 
@@ -87,10 +98,8 @@ after "deploy:update_code", "extras:create_symlinks", "extras:stylesheet"
 
 before "deploy:migrate", "extras:backup_db"
 
-after "deploy:migrate", "extras:after", "extras:rebuild_sphinx"
+after "deploy:migrate", "extras:after"
 
-before "deploy:symlink", "extras:nomaintenance"
+before "deploy:symlink", "deploy:web:enable"
 
 after "deploy:restart", "extras:backend", "deploy:cleanup"
-
-after "deploy", "extras:restart_sphinx"
