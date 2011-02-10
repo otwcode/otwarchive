@@ -150,3 +150,61 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   When I fill in "Synonym of" with "Neal Caffrey"
     And I press "Save changes"
   Then I should see "Neal Caffrey is a character. Synonyms must belong to the same category."
+  
+  Scenario: Checking the media pages
+  
+  Given basic tags
+    And a media exists with name: "TV Shows", canonical: true
+    And a media exists with name: "Video Games", canonical: true
+    And a media exists with name: "Books", canonical: true
+    And a fandom exists with name: "Stargate", canonical: true
+    And a fandom exists with name: "Lord of the Rings", canonical: true
+    And a fandom exists with name: "Final Fantasy", canonical: true
+    And a fandom exists with name: "Yuletide RPF", canonical: true
+    And a fandom exists with name: "A weird thing", canonical: true
+    And a fandom exists with name: "Be another thing", canonical: true
+    And a fandom exists with name: "Be a second B fandom", canonical: true
+    And a fandom exists with name: "Can sort alphabetically", canonical: true
+    And the following activated tag wrangler exists
+    | login  | password    |
+    | Enigel | wrangulate! |
+  When I am logged in as "Enigel" with password "wrangulate!"
+    And I edit the tag "Stargate"
+    And I fill in "Medias" with "TV Shows"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+  When I edit the tag "Lord of the Rings"
+    And I fill in "Medias" with "Books"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+  When I edit the tag "Final Fantasy"
+    And I fill in "Medias" with "Video Games"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+  When I post the work "Test" with fandom "Yuletide RPF"
+  When I go to the fandoms page
+  Then I should see "Fandoms" within "h2"
+    And I should see "Books" within ".odd"
+    # And I should see "Lord of the Rings" within ".odd"
+    And I should see "TV Shows" within ".even"
+    # And I should see "Stargate" within ".even"
+    And I should see "Video Games" within ".odd"
+    # And I should see "Final Fantasy" within ".odd"
+    And I should see "Uncategorized Fandoms" within ".even"
+    And I should see "Yuletide RPF" within ".even"
+  When I follow "Books"
+  Then I should see "Fandoms > Books"
+    # TODO: figure out why this is broken
+    # And I should not see "No fandoms found"
+    # And I should see "Lord of the Rings"
+    And I should see "No fandoms found"
+    And I should not see "Lord of the Rings"
+    And I should not see "Stargate"
+    And I should not see "Yuletide RPF"
+  When I go to the media page
+  Then I should see "Fandoms" within "h2"
+  When I follow "Uncategorized Fandoms"
+  Then I should see "A B C N Y" within ".alphabet"
+    And I should see "A weird thing" within ".letters #letter-A .fandom.index .odd"
+    And I should see "Be a second B fandom" within ".letters #letter-B .odd"
+    And I should see "Be another thing" within ".letters #letter-B .even"

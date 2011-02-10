@@ -183,6 +183,6 @@ Scenario: Listing external works as inspirations
     And I should see "A translation of Worldbuilding by BNF"
     And I should see "Inspired by Worldbuilding Two by BNF"
 
-# TO DO after issue 1741 is resolved
+# TODO after issue 1741 is resolved
 # Scenario: Test that I can remove relationships that I initiated from my own works
 # especially during posting / editing / previewing a work
