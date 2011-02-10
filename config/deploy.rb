@@ -44,7 +44,6 @@ namespace :deploy do
 
   desc "rebuild sphinx - for when indexes change"
   task :rebuild_sphinx, {:roles => :backend} do
-    run "ln -nfs #{deploy_to}/shared/sphinx #{release_path}/db/sphinx"
     run "/static/bin/ts_rebuild.sh"
   end
 
@@ -68,6 +67,7 @@ namespace :extras do
     run "ln -nfs -t #{release_path}/config/ /static/config/*"
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
     run "ln -nfs -t #{release_path}/public/ /static/static"
+    run "ln -nfs #{deploy_to}/shared/sphinx #{release_path}/db/sphinx"
   end
 
 
