@@ -56,8 +56,15 @@
           <% if eval("@show_#{prompt_type}_#{type}_tags") %><th><%= type.classify.pluralize -%></th><% end %>
         <% end %>
         <% if eval("show_#{prompt_type}_optional_tags") %><th>Optional Tags</th><% end %>
-        <% if eval("show_#{prompt_type}_description") %><th>Description</th><% end %>
-        <% if eval("show_#{prompt_type}_url") %><th>URL</th><% end %>
+        <% if eval("show_#{prompt_type}_description") %><th>
+          <% desc_label = @challenge.send("#{prompt_type}_description_label") %>
+          <%= desc_label.blank? ? ts("Description: ") : desc_label %>
+          </th>
+        <% end %>
+        <% if eval("show_#{prompt_type}_url") %><th>
+          <% url_label = @challenge.send("#{prompt_type}_url_label") %>
+          <%= url_label.blank? ? ts("Prompt URL: ") : url_label %></th>
+        <% end %>
 
     <% end %>
   </tr>

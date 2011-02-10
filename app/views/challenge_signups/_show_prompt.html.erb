@@ -23,11 +23,11 @@
       </dd>
     <% end %>
     <% unless prompt.url.blank? %>
-      <dt><%= ts("URL") %>:</dt>
+      <dt><% url_label = prompt.collection.challenge.send("request_url_label") %><%= url_label.blank? ? ts("URL") : url_label %>:</dt>
       <dd><%= link_to(prompt.url, prompt.url) %></dd>
     <% end %>
     <% unless prompt.description.blank? %> 
-      <dt><%= ts("Details") %>:</dt>
+      <dt><% desc_label = prompt.collection.challenge.send("request_description_label") %><%= details_label.blank? ? ts("Details") : desc_label %>:</dt>
       <dd><%= raw sanitize_field(prompt, :description) %></dd>
     <% end %>
   <% end %>

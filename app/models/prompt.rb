@@ -22,6 +22,8 @@ class Prompt < ActiveRecord::Base
   belongs_to :optional_tag_set, :class_name => "TagSet", :dependent => :destroy
   accepts_nested_attributes_for :optional_tag_set
   has_many :optional_tags, :through => :optional_tag_set, :source => :tag
+  
+  has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_prompt_id'
 
   # VALIDATION
   attr_protected :description_sanitizer_version
