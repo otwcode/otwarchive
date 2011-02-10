@@ -8,8 +8,7 @@ set :branch, "deploy"
 set :user, "www-data"
 set :deploy_via, :remote_cache
 
-#set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativeworks.org"
-set :mail_to, "ambtus@gmail.com"
+set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativeworks.org"
 
 set :auth_methods, "publickey"
 #ssh_options[:verbose] = :debug
@@ -23,9 +22,9 @@ role :web, "otw2.ao3.org"
 # db primary is where the migrations are run.
 role :db, "otw3.ao3.org", :primary => true
 # the backend is the slave db, but it's also where memcache and thinking sphinx run
-#role :backend, "otw1.ao3.org"
-role :backend, "otw4.ao3.org"
+role :backend, "otw1.ao3.org"
 # no_release means don't install /var/www/otwarchive
+# the database has limited disk space and it doesn't really need it
 role :db, "otw5.ao3.org", :no_release => true
 
 set :deploy_to, "/var/www/otwarchive"
@@ -48,6 +47,8 @@ namespace :deploy do
     run "ln -nfs #{deploy_to}/shared/sphinx #{release_path}/db/sphinx"
     run "/static/bin/ts_rebuild.sh"
   end
+
+  # overwrite the default capistrano maintenace tasks
   namespace :web do
     desc "Present a maintenance page to visitors."
     task :disable, :roles => :web do
