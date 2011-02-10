@@ -5,7 +5,7 @@ Feature: Private bookmarks
   I want to bookmark some works privately
       
   Scenario: private bookmarks on public and restricted works
-# TO DO
+# TODO
 # check their visibility on a tag's bookmarks
 # private bookmarks should also not increase a bookmark's counter
 

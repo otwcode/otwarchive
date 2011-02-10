@@ -115,14 +115,14 @@ I'd like to comment on a tag'
       And I fill in "User name:" with "Cesy"
       And I fill in "Password:" with "wrangulator"
       And I press "Log in"
-    # TO DO: This goes to the dashboard instead of a redirect to the tag! Why, why? I mean, why? Why?
+    # TODO: This goes to the dashboard instead of a redirect to the tag! Why, why? I mean, why? Why?
     # Then I should see "Viewing Comments on Eroica"
       # And I should see "really clever stuff"
     When I follow "Reply to this comment" in the email
       And I fill in "User name:" with "Enigel"
       And I fill in "Password:" with "wrangulator"
       And I press "Log in"
-    # TO DO: This goes to the dashboard instead of a redirect to the tag!
+    # TODO: This goes to the dashboard instead of a redirect to the tag!
     # Then I should see "Viewing Comments on Eroica"
       # And I should see "really clever stuff"
     
