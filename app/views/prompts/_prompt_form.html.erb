@@ -151,7 +151,7 @@ See the challenge_signup form for an example of how this is used.
     
     <% if @collection.challenge_type == "PromptMeme"  %>
       <dt>
-        <%= form.label :anonymous, t('prompts.anonymous', :default => "Anonymous prompt: ") -%>
+        <%= form.label :anonymous, ts("Semi-anonymous prompt (note, this is not totally secure, and is still guessable in some places): ") -%>
       </dt>
       <dd><%= form.check_box :anonymous %></dd>
     <% end %>

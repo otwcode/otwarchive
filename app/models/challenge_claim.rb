@@ -98,10 +98,12 @@ class ChallengeClaim < ActiveRecord::Base
   
   def title
     if self.request_prompt.anonymous?
-      "#{self.collection.title} (Anonymous)"
+      title = "#{self.collection.title} (Anonymous)"
     else
-      "#{self.collection.title} (#{self.request_byline})"
+      title = "#{self.collection.title} (#{self.request_byline})"
     end
+    title += " - " + self.request_prompt.tag_list
+    return title
   end
   
   def offering_user
@@ -128,6 +130,5 @@ class ChallengeClaim < ActiveRecord::Base
   def self.clear!(collection)
     ChallengeAssignment.destroy_all(["collection_id = ?", collection.id])
   end
-
 
 end

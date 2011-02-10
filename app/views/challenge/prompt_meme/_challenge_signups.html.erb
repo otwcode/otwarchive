@@ -53,10 +53,10 @@
     <% %w(request).each do |prompt_type| %>
       
         <% TagSet::TAG_TYPES.each do |type| %>
-          <% if eval("@show_#{prompt_type}_#{type}_tags") %><th><%= type.classify.pluralize -%></th><% end %>
+          <% if eval("@show_request_#{type}_tags") %><th><%= type.classify.pluralize -%></th><% end %>
         <% end %>
-        <% if eval("show_#{prompt_type}_optional_tags") %><th>Optional Tags</th><% end %>
-        <% if eval("show_#{prompt_type}_description") %><th>
+        <% if eval("show_request_optional_tags") %><th>Optional Tags</th><% end %>
+        <% if eval("show_request_description") %><th>
           <% desc_label = @challenge.send("#{prompt_type}_description_label") %>
           <%= desc_label.blank? ? ts("Description: ") : desc_label %>
           </th>
@@ -96,7 +96,7 @@
       <% end %>
       <!-- show tags, description, url for all allowed requests and offers: using a lot of evals here to DRY up the code since it's so repetitive -->
           <% TagSet::TAG_TYPES.each do |type| %>
-            <% if eval("@show_#{prompt_type}_#{type}_tags") %>
+            <% if eval("@show_request_#{type}_tags") %>
               <td>
                 <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
                   <%= content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type))) %>
@@ -104,17 +104,17 @@
               </td>
             <% end %>  
           <% end %>
-          <% if eval("show_#{prompt_type}_optional_tags") %>
+          <% if eval("show_request_optional_tags") %>
             <td>
               <% if prompt && prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
                 <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
               <% end %>
             </td>
           <% end %>
-          <% if eval("show_#{prompt_type}_description") %>
+          <% if eval("show_request_description") %>
             <td><%= !prompt || prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) -%></td>
           <% end %>
-          <% if eval("show_#{prompt_type}_url") %>
+          <% if eval("show_request_url") %>
             <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) -%></td>
           <% end %>
           </tr>

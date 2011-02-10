@@ -27,7 +27,7 @@
       <dd><%= link_to(prompt.url, prompt.url) %></dd>
     <% end %>
     <% unless prompt.description.blank? %> 
-      <dt><% desc_label = prompt.collection.challenge.send("request_description_label") %><%= details_label.blank? ? ts("Details") : desc_label %>:</dt>
+      <dt><% desc_label = prompt.collection.challenge.send("request_description_label") %><%= desc_label.blank? ? ts("Details") : desc_label %>:</dt>
       <dd><%= raw sanitize_field(prompt, :description) %></dd>
     <% end %>
   <% end %>
