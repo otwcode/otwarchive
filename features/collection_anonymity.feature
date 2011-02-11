@@ -74,6 +74,13 @@ Feature: Collection
     And I fill in "bookmark_notes" with "I liked this story"
     And I press "Create"
   Then I should see "Bookmark was successfully created"
+  
+  # make it part of a series where the rest aren't secret
+  When I post the work "Part b"
+    And I edit the work "Part b"
+    And I check "series-options-show"
+    And I fill in "work_series_attributes_title" with "New series"
+    And I press "Post without preview"
         
   When I follow "Log out"
     And I go to "Hidden Treasury" collection's page
