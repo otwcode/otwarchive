@@ -184,7 +184,10 @@ Feature: Admin tasks
     And the following admin exists
       | login       | password |
       | Zooey       | secret   |
-    When I am logged in as "author" with password "password"
+      
+  # set up a work with a genuine comment
+  
+  When I am logged in as "author" with password "password"
     And I post the work "The One Where Neal is Awesome"
   When I am logged out
     And I am logged in as "commenter" with password "password" 
@@ -193,12 +196,43 @@ Feature: Admin tasks
     And I press "Add Comment" 
   Then I should see "Comment created!"
   When I am logged out
-  When I go to the admin_login page
-    And I fill in "Admin user name" with "Zooey"
-    And I fill in "admin_session_password" with "secret"
-    And I press "Log in as admin"
+  
+  # comment from registered user cannot be marked as spam.
+  # If registered user is spamming, this goes to Abuse team as ToS violation
+  When I am logged in as an admin
   Then I should see "Successfully logged in"
   When I view the work "The One Where Neal is Awesome"
-  # TODO: Figure out why this isn't there
-  # Then I should see "Mark as spam"
-  # When I follow "Mark as spam"
+    And I follow "Read Comments (1)"
+  Then I should not see "Mark as spam"
+  
+  # now make a spam comment
+  When I am logged out
+    And I view the work "The One Where Neal is Awesome"
+    And I fill in "Comment" with "Would you like a genuine rolex"
+    And I press "Add Comment"
+  Then I should see "Comment created!"
+  
+  # mark comment as spam
+  When I am logged in as an admin
+    And I view the work "The One Where Neal is Awesome"
+    And I follow "Read Comments (2)"
+  Then I should see "rolex"
+    And I should see "Spam"
+  When I follow "Spam"
+  Then I should not see "rolex"
+  When I follow "Hide Comments"
+  # TODO: Figure out if this is a defect or not, that it shows 2 instead of 1
+  # Then I should see "Read Comments (1)"
+  
+  # comment should no longer be there
+  When I follow "Read Comments"
+  Then I should not see "rolex"
+  When I am logged out as an admin
+    And I view the work "The One Where Neal is Awesome"
+    And I follow "Read Comments"
+  Then I should not see "rolex"
+  When I am logged in as "author" with password "password"
+    And I view the work "The One Where Neal is Awesome"
+    And I follow "Read Comments"
+    And "Issue n" is fixed
+  # Then I should not see "rolex"
