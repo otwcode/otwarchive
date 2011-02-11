@@ -234,5 +234,5 @@ Feature: Admin tasks
   When I am logged in as "author" with password "password"
     And I view the work "The One Where Neal is Awesome"
     And I follow "Read Comments"
-    And "Issue n" is fixed
+    And "Issue 2213" is fixed
   # Then I should not see "rolex"
