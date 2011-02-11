@@ -15,6 +15,7 @@ Feature: Prompt Meme Challenge
     | myname4        | something   |
     And I have no tags
     And I have no prompts
+    And basic tags
     And I create the fandom "Stargate Atlantis" with id 27
     And I create the fandom "Stargate SG-1" with id 28
     And a freeform exists with name: "Alternate Universe - Historical", canonical: true
@@ -64,7 +65,8 @@ Feature: Prompt Meme Challenge
     And I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"
     And I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "1"
     And I fill in "prompt_meme_request_restriction_attributes_freeform_num_allowed" with "2"
-    And I fill in "prompt_meme_requests_num_allowed" with "2"
+    And I fill in "prompt_meme_requests_num_allowed" with "3"
+    And I fill in "prompt_meme_requests_num_required" with "2"
     And I check "Signup open?"
     And I press "Submit"
     And "issue 1859" is fixed
@@ -114,11 +116,12 @@ Feature: Prompt Meme Challenge
   When I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
+    And I check "challenge_signup_requests_attributes_1_fandom_27"
     And I press "Submit"
   Then I should see "Signup was successfully created"
-    And I should see "Prompts (1)"
+    And I should see "Prompts (2)"
   
-  # someone else sign up, with 2 prompts this time
+  # someone else sign up, with 3 prompts this time once Javascript is working
   
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
@@ -126,17 +129,18 @@ Feature: Prompt Meme Challenge
     And I follow "Battle 12"
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_28"
-  Then I should see "Add another prompt? (Up to 2 allowed.)"
-    And I should not see "Request 2"
+  Then I should see "Add another prompt? (Up to 3 allowed.)"
+    And I should not see "Request 3"
   When I follow "add_section"
     And "Issue 2168" is fixed
-  #Then I should see "Request 2"
-  #When I check "challenge_signup_requests_attributes_1_fandom_27"
+  #Then I should see "Request 3"
+  #When I check "challenge_signup_requests_attributes_2_fandom_27"
+    And I check "challenge_signup_requests_attributes_1_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School, Something else weird"
-   # And I fill in "challenge_signup_requests_attributes_1_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"
+   # And I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"
     And I press "Submit"
   Then I should see "Signup was successfully created"
-    And I should see "Prompts (2)"
+    And I should see "Prompts (4)"
   
   # third person sign up
   
@@ -146,6 +150,8 @@ Feature: Prompt Meme Challenge
     And I follow "Battle 12"
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_28"
+    And I check "challenge_signup_requests_attributes_1_fandom_28"
+    And I check "challenge_signup_requests_attributes_1_anonymous"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"
     And I press "Submit"
   Then I should see "Signup was successfully created"
@@ -165,12 +171,29 @@ Feature: Prompt Meme Challenge
     And I follow "Battle 12"
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
+    And I check "challenge_signup_requests_attributes_1_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird, Alternate Universe - Historical"
     And I press "Submit"
   Then I should see "Signup was successfully created"
   When I go to the collections page
     And I follow "Battle 12"
   Then I should see "Prompts"
+  
+  # user claims a prompt
+  
+  When I follow "Log out"
+    And I am logged in as "myname4" with password "something"
+  When I go to the collections page
+    And I follow "Battle 12"
+    And I follow "Prompts"
+  Then I should see "Editing Options"
+    And I should see "Claim"
+    And I should see "Stargate Atlantis"
+  When I press "prompt_19"
+  Then I should see "New claim made."
+    And I should see "Claims for Battle 12"
+    And I should see "Post To Fulfill"
+    And I should see "Delete"
   
   # mod view signups
   
@@ -186,117 +209,138 @@ Feature: Prompt Meme Challenge
     And I should see "Something else weird"
     And I should see "Alternate Universe - Historical"
     And I should not see "Matching"
+    
+  # mod closes signups
+  
   When I follow "Challenge Settings"
     And I uncheck "Signup open?"
     And I press "Submit"
   Then I should see "Challenge was successfully updated"
   
-  # user claims a prompt
+  # collection is anonymous-writers but claims are shown for mod
+  
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should see "Unfulfilled Claims"
+    And I should see "Fulfilled Claims"
+    And I should see "myname4" within "#unfulfilled_claims"
+    And I should see "myname1" within "#unfulfilled_claims"
+    And I should not see "Secret!" within "#unfulfilled_claims"
+    And I should see "Stargate Atlantis" within "#main"
+    And I should see "Alternate Universe - Historical" within "#main"
+    
+  # claims are hidden for ordinary user
+  
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
-  When I go to the collections page
-    And I follow "Battle 12"
-    And I follow "Prompts"
-  Then I should see "Editing Options"
-    And I should see "Claim"
-    And I should see "Stargate Atlantis"
-  When I press "prompt_1"
-  Then I should see "New claim made."
-  
-  # collection is anonymous so prompts are hidden
-  
-    And I should not see "Unfulfilled Claims"
-    And I should not see "Fulfilled Claims"
-    And I should not see "myname4" within "#main"
-    And I should not see "myname1" within "#main"
-    And I should not see "Stargate Atlantis" within "#main"
-    And I should not see "Alternate Universe - Historical" within "#main"
+  Then I should see "Unfulfilled Claims"
+    And I should see "Fulfilled Claims"
+    And I should not see "myname4" within "#unfulfilled_claims"
+    And I should see "myname1" within "#unfulfilled_claims"
+    And I should see "Secret!" within "#unfulfilled_claims"
+    And I should see "Stargate Atlantis" within "#main"
+    And I should see "Alternate Universe - Historical" within "#main"
   
   # user posts a fic
+  
   When I go to myname4's user page
-  Then I should see "My Claims (0)" 
-  # TODO: fix this, it should be 1 claim
-  When I follow "My Claims (0)"
-  # TODO: fix the next few lines
-  # Then I should see "myname1" within "#claims_table"
-  # When I follow "Post to fulfill"
-  #  And I fill in "Work Title" with "Fulfilled Story"
-  #  And I fill in "Fandoms" with "Stargate Atlantis"
-  #  And I select "Not Rated" from "Rating"
-  #  And I check "No Archive Warnings Apply"
-  #  And I fill in "content" with "This is an exciting story about Atlantis"
-  #When I press "Preview"
-  #  And I press "Post"
-  #Then I should see "Work was successfully posted"
+  Then I should see "My Claims (1)" 
+  When I follow "My Claims (1)"
+  Then I should see "myname1" within "#claims_table"
+  When I follow "Post To Fulfill"
+    And I fill in "Work Title" with "Fulfilled Story"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "content" with "This is an exciting story about Atlantis"
+  When I press "Preview"
+    And I press "Post"
+  Then I should see "Work was successfully posted"
+    And I should see "Fandom:"
+    And I should see "Stargate Atlantis"
+    And I should see "Alternate Universe - Historical"
   
   # Claim is completed
-  #When I go to myname4's user page
-  #Then I should see "My Claims (0)"
-  #When I go to the collections page
-  #  And I follow "Battle 12"
-  #  And I follow "Claims"
-  #Then I should see "myname4" within "#fulfilled_claims"
-  #  And I should not see "myname4" within "#unfulfilled_claims"
-  #When I follow "Prompts"
-  #Then show me the page
+  When I go to myname4's user page
+  Then I should see "My Claims (0)"
+  When I go to the collections page
+    And I follow "Battle 12"
+    And I follow "Claims"
+  Then I should see "Secret!" within "#fulfilled_claims"
+    And I should not see "Secret!" within "#unfulfilled_claims"
+  When I follow "Prompts"
+  Then I should see "Also claimed by: (Anonymous)"
   
   # mod claims a prompt
   When I follow "Log out"
     And I am logged in as "mod1" with password "something"
-  When I go to the collections page
-    And I follow "Battle 12"
+  When I go to "Battle 12" collection's page
     And I follow "Prompts"
-  When I press "prompt_1"
+  When I press "prompt_20"
   Then I should see "New claim made."
   
   # mod can still see claims even though it's anonymous
     And I should see "Unfulfilled Claims"
     And I should see "mod" within "#unfulfilled_claims"
     And I should see "myname1" within "#unfulfilled_claims"
-    # TODO: fix this
-    #And I should see "Stargate Atlantis" within "#unfulfilled_claims"
-    # And I should see "Alternate Universe - Historical" within "#unfulfilled_claims"
+    And I should see "Stargate Atlantis" within "#unfulfilled_claims"
+    And I should not see "Alternate Universe - Historical" within "#unfulfilled_claims"
+    And I should see "Alternate Universe - Historical" within "#fulfilled_claims"
+    And I should see "myname4" within "#fulfilled_claims"
   
   # mod posts a fic
   When I go to mod1's user page
-  # TODO: figure out why this is 0 instead of 1 as it should be
-  Then I should see "My Claims (0)" 
+  Then I should see "My Claims (1)" 
   When I follow "My Claims"
   Then I should see "Your Claims"
     And I should not see "In Battle 12"
     And I should see "Writing For" within "#claims_table"
     # TODO: Figure out why all of this just broke
-    # And I should see "myname1" within "#claims_table"
-  #When I follow "Post to fulfill"
-  #  And I fill in "Work Title" with "Fulfilled Story"
-  #  And I fill in "Fandoms" with "Stargate Atlantis"
-  #  And I select "Not Rated" from "Rating"
-  #  And I check "No Archive Warnings Apply"
-  #  And I fill in "content" with "This is an exciting story about Atlantis"
-  #When I press "Preview"
-  #  And I press "Post"
-  #Then I should see "Work was successfully posted"
+    And I should see "myname1" within "#claims_table"
+  When I follow "Post To Fulfill"
+    And I fill in "Work Title" with "Fulfilled Story"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "content" with "This is an exciting story about Atlantis, but in the normal universe this time"
+  When I press "Preview"
+    And I press "Post"
+  Then I should see "Work was successfully posted"
   
   # fic shows what prompt it is fulfilling
   
   # mod's claim is completed
-  #When I go to mod1's user page
-  #Then I should see "My Claims (0)"
-  #When I go to the collections page
-  #  And I follow "Battle 12"
-  #  And I follow "Claims"
-  #Then I should see "mod1" within "#fulfilled_claims"
-  #  And I should not see "mod1" within "#unfulfilled_claims"
-  #When I follow "Prompts"
-  #Then show me the page
+  When I go to mod1's user page
+  Then I should see "My Claims (0)"
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should see "mod1" within "#fulfilled_claims"
+    And I should not see "mod1" within "#unfulfilled_claims"
+  
+  # mod can see claims
+  
+  When I follow "Prompts"
+  Then I should see "Also claimed by: myname4"
+    And I should see "Also claimed by: mod1"
+    And I should not see "Also claimed by: (Anonymous)"
+    
+  # users can't see claims
+  
+  When I follow "Log out"
+    And I am logged in as "myname4" with password "something"
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts"
+  Then I should not see "Also claimed by: myname4"
+    And I should not see "Also claimed by: mod1"
+    And I should see "Also claimed by: (Anonymous)"
   
   # check that claims are anon everywhere
   
   # check that completed ficlet is unrevealed
   
   # make challenge un-anon
-  When I go to the collections page
-    And I follow "Battle 12"
+  
+  When I follow "Log out"
+    And I am logged in as "mod1" with password "something"
+  When I go to "Battle 12" collection's page
     And I follow "Settings"
     And I uncheck "Is this collection currently anonymous?"
     And I press "Submit"
@@ -311,5 +355,5 @@ Feature: Prompt Meme Challenge
     And I go to the collections page
     And I follow "Battle 12"
     And I follow "Claims"
-  # Then I should see "mod1" within "#fulfilled_claims"
-    And I should see "myname4" within "#unfulfilled_claims"
+  Then I should see "mod1" within "#fulfilled_claims"
+    And I should see "myname4" within "#fulfilled_claims"
