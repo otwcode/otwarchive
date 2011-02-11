@@ -71,6 +71,7 @@ Given /^tag wrangling is off$/ do
   And "I press \"Update\""
   And "I am logged out as an admin"
 end
+
 Given /^tag wrangling is on$/ do
   Given "I am logged in as an admin"
   And "I follow \"settings\""

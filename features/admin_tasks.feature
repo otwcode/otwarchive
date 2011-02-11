@@ -121,6 +121,12 @@ Feature: Admin tasks
     And I edit the tag "Ianto Jones"
   Then I should see "Wrangling is disabled at the moment. Please check back later."
     And I should not see "Synonym of"
+    
+  # Set them back to normal
+  Given I am logged out
+  Given guest downloading is on
+  Given I am logged out as an admin
+  Given tag wrangling is on
   
   Scenario: Send out an admin notice to all users
   
@@ -167,3 +173,66 @@ Feature: Admin tasks
     And "Issue 2035" is fixed
     # And the email should contain "Hey, we did stuff"
     And the email should contain "And it was awesome"
+    
+  Scenario: Mark a comment as spam
+  
+  Given I have no works or comments
+    And the following activated users exist
+    | login         | password   |
+    | author        | password   |
+    | commenter     | password   |
+    And the following admin exists
+      | login       | password |
+      | Zooey       | secret   |
+      
+  # set up a work with a genuine comment
+  
+  When I am logged in as "author" with password "password"
+    And I post the work "The One Where Neal is Awesome"
+  When I am logged out
+    And I am logged in as "commenter" with password "password" 
+    And I view the work "The One Where Neal is Awesome"
+    And I fill in "Comment" with "I loved this!"
+    And I press "Add Comment" 
+  Then I should see "Comment created!"
+  When I am logged out
+  
+  # comment from registered user cannot be marked as spam.
+  # If registered user is spamming, this goes to Abuse team as ToS violation
+  When I am logged in as an admin
+  Then I should see "Successfully logged in"
+  When I view the work "The One Where Neal is Awesome"
+    And I follow "Read Comments (1)"
+  Then I should not see "Mark as spam"
+  
+  # now make a spam comment
+  When I am logged out
+    And I view the work "The One Where Neal is Awesome"
+    And I fill in "Comment" with "Would you like a genuine rolex"
+    And I press "Add Comment"
+  Then I should see "Comment created!"
+  
+  # mark comment as spam
+  When I am logged in as an admin
+    And I view the work "The One Where Neal is Awesome"
+    And I follow "Read Comments (2)"
+  Then I should see "rolex"
+    And I should see "Spam"
+  When I follow "Spam"
+  Then I should not see "rolex"
+  When I follow "Hide Comments"
+  # TODO: Figure out if this is a defect or not, that it shows 2 instead of 1
+  # Then I should see "Read Comments (1)"
+  
+  # comment should no longer be there
+  When I follow "Read Comments"
+  Then I should not see "rolex"
+  When I am logged out as an admin
+    And I view the work "The One Where Neal is Awesome"
+    And I follow "Read Comments"
+  Then I should not see "rolex"
+  When I am logged in as "author" with password "password"
+    And I view the work "The One Where Neal is Awesome"
+    And I follow "Read Comments"
+    And "Issue 2213" is fixed
+  # Then I should not see "rolex"
