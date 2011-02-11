@@ -11,7 +11,7 @@ class ChallengeClaim < ActiveRecord::Base
     {:conditions => ['request_signup_id = ?', signup.id]}
   }
 
-  scope :by_offering_user, lambda {|user|
+  scope :by_claiming_user, lambda {|user|
     {
       :select => "DISTINCT challenge_claims.*",
       :joins => "INNER JOIN users ON challenge_claims.claiming_user_id = users.id",
@@ -39,7 +39,7 @@ class ChallengeClaim < ActiveRecord::Base
   REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_claims.request_signup_id = challenge_signups.id)
                            INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id"
 
-  OFFERING_PSEUD_JOIN = "INNER JOIN users ON challenge_claims.claiming_user_id = users.id"
+  CLAIMING_PSEUD_JOIN = "INNER JOIN users ON challenge_claims.claiming_user_id = users.id"
 
   COLLECTION_ITEMS_JOIN = "INNER JOIN collection_items ON (collection_items.collection_id = challenge_claims.collection_id AND 
                                                            collection_items.item_id = challenge_claims.creation_id AND 
@@ -54,8 +54,8 @@ class ChallengeClaim < ActiveRecord::Base
     :order => "pseuds.name"
   }
   
-  scope :order_by_offering_pseud, {
-    :joins => OFFERING_PSEUD_JOIN,
+  scope :order_by_claiming_pseud, {
+    :joins => CLAIMING_PSEUD_JOIN,
     :order => "users.name"
   }
 
@@ -70,14 +70,6 @@ class ChallengeClaim < ActiveRecord::Base
     joins(COLLECTION_ITEMS_LEFT_JOIN).
     where('challenge_claims.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ?', 
                     CollectionItem::APPROVED, CollectionItem::APPROVED)
-
-  before_destroy :clear_claim
-  def clear_claim
-    if request_signup
-      request_signup.assigned_as_request = false
-      request_signup.save
-    end
-  end
   
   def get_collection_item
     return nil unless self.creation
@@ -106,11 +98,11 @@ class ChallengeClaim < ActiveRecord::Base
     return title
   end
   
-  def offering_user
+  def claiming_user
     User.find_by_id(claiming_user_id)
   end
   
-  def offering_pseud
+  def claiming_pseud
     User.find_by_id(claiming_user_id).default_pseud
   end
   
@@ -118,17 +110,16 @@ class ChallengeClaim < ActiveRecord::Base
     request_signup ? request_signup.pseud : nil
   end
   
-  def offer_byline
+  def claim_byline
     User.find_by_id(claiming_user_id).default_pseud.byline
   end
   
   def request_byline
     request_signup ? request_signup.pseud.byline : "- None -"
   end
-
-  # clear out all previous assignments
-  def self.clear!(collection)
-    ChallengeAssignment.destroy_all(["collection_id = ?", collection.id])
+  
+  def user_allowed_to_destroy?(current_user)
+    (self.claiming_user == current_user) || self.collection.user_is_maintainer?(current_user)
   end
 
 end

@@ -6,6 +6,8 @@ class ChallengeClaimsController < ApplicationController
   before_filter :load_claim_from_id, :only => [:show]
 
   before_filter :load_challenge, :except => [:index]
+  
+  before_filter :allowed_to_destroy, :only => [:destroy]
 
 
   # PERMISSIONS AND STATUS CHECKING
@@ -20,7 +22,7 @@ class ChallengeClaimsController < ApplicationController
   end
 
   def no_challenge
-    flash[:error] = t('challenge_claims.no_challenge', :default => "What challenge did you want to work with?")
+    flash[:error] = ts("What challenge did you want to work with?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -31,7 +33,7 @@ class ChallengeClaimsController < ApplicationController
   end
 
   def no_claim
-    flash[:error] = t('challenge_claims.no_claim', :default => "What claim did you want to work on?")
+    flash[:error] = ts("What claim did you want to work on?")
     if @collection
       redirect_to collection_path(@collection) rescue redirect_to '/'
     else
@@ -46,24 +48,24 @@ class ChallengeClaimsController < ApplicationController
   end
   
   def no_user
-    flash[:error] = t("challenge_claims.no_user", :default => "What user were you trying to work with?")
+    flash[:error] = ts("What user were you trying to work with?")
     redirect_to "/" and return
     false
   end
   
   def owner_only
     unless @user == @challenge_claim.claiming_user
-      flash[:error] = t("challenge_claims.not_owner", :default => "You aren't the claimer of that prompt.")
+      flash[:error] = ts("You aren't the claimer of that prompt.")
       redirect_to "/" and return false
     end
   end      
   
   def allowed_to_destroy
-    @challenge_claim.user_allowed_to_destroy?(current_user) || not_allowed
+    claim.user_allowed_to_destroy?(current_user) || not_allowed
   end
   
   def not_allowed
-    flash[:error] = t('challenge_claims.not_allowed', :default => "Sorry, you're not allowed to do that.")
+    flash[:error] = ts("Sorry, you're not allowed to do that.")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end

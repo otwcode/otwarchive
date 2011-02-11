@@ -12,7 +12,7 @@
 
   <div class="collection preface">
     <% if request %>
-      <h3><%=h t("challenge_claims.requests_for", :default => "Request by {{requester}}", :requester => request.pseud.byline) %></h3>
+      <h3><%=h ts("Request by {{requester}}", :requester => request.pseud.byline) %></h3>
       <%= render :partial => "challenge_signups/show_prompt", :locals => {:prompt => @challenge_claim.request_prompt} %>
     <% else %>
       <p class="note">No request!</p>
@@ -32,7 +32,8 @@
   
   <% if !@challenge_claim.fulfilled? && @challenge_claim.offering_pseud.user == current_user %>
     <ul class="navigation">
-      <li><%= link_to t('claim.post_new', :default => "Post To Fulfill"), new_collection_work_path(@challenge_claim.collection, :claim_id => @challenge_claim.id) %></li>
+      <li><%= link_to ts("Post To Fulfill"), new_collection_work_path(@challenge_claim.collection, :claim_id => @challenge_claim.id) %></li>
+      <li><%= link_to ts("Delete"), collection_claim_path(@challenge_claim.collection, @challenge_claim), :confirm => ts('Are you sure you want to delete this claim?'), :method => :delete %></li>
     </ul>
   <% end %>
   

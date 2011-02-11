@@ -339,12 +339,6 @@ Otwarchive::Application.routes.draw do
       collection do
         put :set
         get :purge
-        get :send_out
-        put :default_multiple
-        get :default_all
-      end
-      member do
-        get :undefault
       end
     end    
     resources :potential_matches do
