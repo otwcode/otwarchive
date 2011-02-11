@@ -121,6 +121,10 @@ Feature: Admin tasks
     And I edit the tag "Ianto Jones"
   Then I should see "Wrangling is disabled at the moment. Please check back later."
     And I should not see "Synonym of"
+    
+  # Set them back to normal
+  Given guest downloading is on
+  Given tag wrangling is on
   
   Scenario: Send out an admin notice to all users
   
@@ -167,3 +171,32 @@ Feature: Admin tasks
     And "Issue 2035" is fixed
     # And the email should contain "Hey, we did stuff"
     And the email should contain "And it was awesome"
+    
+  Scenario: Mark a comment as spam
+  
+  Given I have no works or comments
+    And the following activated users exist
+    | login         | password   |
+    | author        | password   |
+    | commenter     | password   |
+    And the following admin exists
+      | login       | password |
+      | Zooey       | secret   |
+    When I am logged in as "author" with password "password"
+    And I post the work "The One Where Neal is Awesome"
+  When I am logged out
+    And I am logged in as "commenter" with password "password" 
+    And I view the work "The One Where Neal is Awesome"
+    And I fill in "Comment" with "I loved this!"
+    And I press "Add Comment" 
+  Then I should see "Comment created!"
+  When I am logged out
+  When I go to the admin_login page
+    And I fill in "Admin user name" with "Zooey"
+    And I fill in "admin_session_password" with "secret"
+    And I press "Log in as admin"
+  Then I should see "Successfully logged in"
+  When I view the work "The One Where Neal is Awesome"
+  # TODO: Figure out why this isn't there
+  # Then I should see "Mark as spam"
+  # When I follow "Mark as spam"
