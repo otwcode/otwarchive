@@ -74,6 +74,10 @@ group :test do
   gem 'cucumber-rails'
   gem 'cucumber', '>=0.9.1'
   gem 'launchy'    # So you can do Then show me the page
+  # automatically record http requests and save them to make
+  # cuke fast
+  gem 'fakeweb'
+  gem 'vcr'
 end
 
 # Deploy with Capistrano

@@ -142,7 +142,7 @@ Scenario: Posting new works with related works, then editing
     And I should see "Inspired by Worldbuilding Two by inspiration"
     And "issue 1509" is fixed
     # And 1 email should be delivered
-
+@work_external_parent
 Scenario: Listing external works as inspirations
   Given basic tags
   When I am logged in as "remixer" with password "password"
@@ -186,3 +186,4 @@ Scenario: Listing external works as inspirations
 # TODO after issue 1741 is resolved
 # Scenario: Test that I can remove relationships that I initiated from my own works
 # especially during posting / editing / previewing a work
+
