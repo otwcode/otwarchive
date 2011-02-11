@@ -288,6 +288,7 @@ Feature: Prompt Meme Challenge
     And I should see "myname4" within "#fulfilled_claims"
   
   # mod posts a fic
+  
   When I go to mod1's user page
   Then I should see "My Claims (1)" 
   When I follow "My Claims"
@@ -297,7 +298,7 @@ Feature: Prompt Meme Challenge
     # TODO: Figure out why all of this just broke
     And I should see "myname1" within "#claims_table"
   When I follow "Post To Fulfill"
-    And I fill in "Work Title" with "Fulfilled Story"
+    And I fill in "Work Title" with "Fulfilled Story-thing"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "content" with "This is an exciting story about Atlantis, but in the normal universe this time"
@@ -307,7 +308,15 @@ Feature: Prompt Meme Challenge
   
   # fic shows what prompt it is fulfilling
   
+  When I view the work "Fulfilled Story-thing"
+  Then I should see "In response to prompt by: myname1"
+    And I should see "Fandom: Stargate Atlantis"
+    And I should see "Anonymous" within ".byline"
+    And I should see "For myname1"
+    And I should not see "Alternate Universe - Historical"
+  
   # mod's claim is completed
+  
   When I go to mod1's user page
   Then I should see "My Claims (0)"
   When I go to "Battle 12" collection's page
@@ -332,9 +341,9 @@ Feature: Prompt Meme Challenge
     And I should not see "Also claimed by: mod1"
     And I should see "Also claimed by: (Anonymous)"
   
-  # check that claims are anon everywhere
+  # TODO: check that claims are anon everywhere
   
-  # check that completed ficlet is unrevealed
+  # TODO: check that completed ficlet is unrevealed
   
   # make challenge un-anon
   
@@ -346,9 +355,9 @@ Feature: Prompt Meme Challenge
     And I press "Submit"
   Then I should see "Collection was successfully updated"
   
-  # user can now see claims
+  # TODO: user can now see claims
   
-  # check that anon prompts are still anon, on the prompts page and claims index and user claims index and claims show and fulfilling work
+  # TODO: check that anon prompts are still anon, on the prompts page and claims index and user claims index and claims show and fulfilling work
   
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
