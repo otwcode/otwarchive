@@ -123,7 +123,9 @@ Feature: Admin tasks
     And I should not see "Synonym of"
     
   # Set them back to normal
+  Given I am logged out
   Given guest downloading is on
+  Given I am logged out as an admin
   Given tag wrangling is on
   
   Scenario: Send out an admin notice to all users
