@@ -63,3 +63,19 @@ Given /^guest downloading is on$/ do
   And "I uncheck \"Turn off downloading for guests\""
   And "I press \"Update\""
 end
+
+Given /^tag wrangling is off$/ do
+  Given "I am logged in as an admin"
+  And "I follow \"settings\""
+  And "I check \"Turn off tag wrangling for non-admins\""
+  And "I press \"Update\""
+  And "I am logged out as an admin"
+end
+Given /^tag wrangling is on$/ do
+  Given "I am logged in as an admin"
+  And "I follow \"settings\""
+  And "I uncheck \"Turn off tag wrangling for non-admins\""
+  And "I press \"Update\""
+  And "I am logged out as an admin"
+end
+
