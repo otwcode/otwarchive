@@ -25,10 +25,10 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :mem_cache_store
+  config.cache_store = :mem_cache_store, 'mem.ao3.org'
   require 'memcache'
   require 'openid/store/memcache'
-  config.middleware.use 'Rack::OpenID', OpenID::Store::Memcache.new(MemCache.new("localhost"))
+  config.middleware.use 'Rack::OpenID', OpenID::Store::Memcache.new(MemCache.new("mem.ao3.org"))
 
 
   # Disable Rails's static asset server
@@ -58,5 +58,7 @@ Otwarchive::Application.configure do
 #      :sender_address => ArchiveConfig.RETURN_ADDRESS,
 #      :exception_recipients => ArchiveConfig.ERROR_ADDRESS
 #  end
+
+  ThinkingSphinx.remote_sphinx = true
 
 end
