@@ -70,7 +70,7 @@ When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
   fill_in("content", :with => "That could be an amusing crossover.")
 end  
 
-# The optional extras (fandom and freeform) in the When line don't seem to be working here - can anyone fix them?
+# TODO: The optional extras (fandom and freeform) in the When line don't seem to be working here - can anyone fix them?
 When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")$/ do |title, fandom, freeform|
   Given "basic tags"
   visit new_work_url

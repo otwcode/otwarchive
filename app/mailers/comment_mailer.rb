@@ -7,7 +7,7 @@ class CommentMailer < ActionMailer::Base
     @comment = comment
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Comment on " + comment.ultimate_parent.commentable_name
+      :subject => "[#{ArchiveConfig.APP_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + comment.ultimate_parent.commentable_name
     )
   end
 
@@ -16,7 +16,7 @@ class CommentMailer < ActionMailer::Base
     @comment = comment
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Edited comment on " + comment.ultimate_parent.commentable_name
+      :subject => "[#{ArchiveConfig.APP_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + comment.ultimate_parent.commentable_name
     )
   end
 
@@ -27,7 +27,7 @@ class CommentMailer < ActionMailer::Base
     @comment = comment
     mail(
       :to => your_comment.comment_owner_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Reply to your comment on " + @comment.ultimate_parent.commentable_name
+      :subject => "[#{ArchiveConfig.APP_NAME}] Reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
     )
   end
    
@@ -38,7 +38,7 @@ class CommentMailer < ActionMailer::Base
     @comment = edited_comment
     mail(
       :to => your_comment.comment_owner_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Edited reply to your comment on " + @comment.ultimate_parent.commentable_name
+      :subject => "[#{ArchiveConfig.APP_NAME}] Edited reply to your comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
     )
   end
 
@@ -48,7 +48,7 @@ class CommentMailer < ActionMailer::Base
     @noreply = true # don't give reply link to your own comment
     mail(
       :to => comment.comment_owner_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Comment you left on " + @comment.ultimate_parent.commentable_name
+      :subject => "[#{ArchiveConfig.APP_NAME}] Comment you left on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
     )
   end
    
