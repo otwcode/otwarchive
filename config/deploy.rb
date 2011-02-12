@@ -87,7 +87,7 @@ namespace :extras do
 
   # add purge memcache here, if we think it's necessary
   task :backend, {:roles => :backend} do
-    run "cd #{deploy_to}/current && whenever --update-crontab #{application}"
+    run "cd #{deploy_to}/current && whenever --update-crontab #{application}  --set email_jobs=on"
     run "/static/bin/dj_restart.sh"
     run "ln -nfs #{deploy_to}/shared/sphinx #{release_path}/db/sphinx"
     run "/static/bin/ts_restart.sh"
