@@ -194,13 +194,18 @@ Feature: Prompt Meme Challenge
     And I should see "Claims for Battle 12"
     And I should see "Post To Fulfill"
     And I should see "Delete"
+    
+  # View the claim
+  When I go to myname4's user page
+    And I follow "My Claims"
+    And I follow "myname1" within "#claims_table"
+  Then I should see "Claimed by Anonymous: myname1"
   
   # mod view signups
   
   When I follow "Log out"
     And I am logged in as "mod1" with password "something"
-    And I go to the collections page
-    And I follow "Battle 12"
+    And I go to "Battle 12" collection's page
     And I follow "Prompts"
   Then I should see "myname4" within "#main"
     And I should see "myname3" within "#main"

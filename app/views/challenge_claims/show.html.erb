@@ -3,8 +3,8 @@
   <% request = @challenge_claim.request_signup %>
   <h3>
     <% if request %>
-      <%=h t('challenge_claim.view', :default => "Claimed by {{offerer}}: {{requester}}", 
-        :requester => request.pseud.byline, :offerer => @challenge_claim.collection.anonymous? ? "Anonymous" : @challenge_claim.offer_byline) -%>
+      <%=h ts("Claimed by %{offerer}: %{requester}", 
+        :requester => request.pseud.byline, :offerer => @challenge_claim.collection.anonymous? ? "Anonymous" : @challenge_claim.claim_byline) -%>
     <% else %>
       No Assignment
     <% end %>
@@ -30,7 +30,7 @@
     <% end %>
   <% end %>
   
-  <% if !@challenge_claim.fulfilled? && @challenge_claim.offering_pseud.user == current_user %>
+  <% if !@challenge_claim.fulfilled? && @challenge_claim.claiming_pseud.user == current_user %>
     <ul class="navigation">
       <li><%= link_to ts("Post To Fulfill"), new_collection_work_path(@challenge_claim.collection, :claim_id => @challenge_claim.id) %></li>
       <li><%= link_to ts("Delete"), collection_claim_path(@challenge_claim.collection, @challenge_claim), :confirm => ts('Are you sure you want to delete this claim?'), :method => :delete %></li>
