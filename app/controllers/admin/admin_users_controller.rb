@@ -3,6 +3,7 @@ class Admin::AdminUsersController < ApplicationController
   before_filter :admin_only
 
   def index
+    @roles = Role.assignable
     if params[:role]
       if params[:role] == "0" && params[:query].blank?
         return flash[:error] = "Please enter a name or email address!"
@@ -50,19 +51,15 @@ class Admin::AdminUsersController < ApplicationController
 
   # POST admin/users/update_user
   def update_user
-    if params[:user]
-      @user = User.find_by_login(params[:user][:login]) 
-      #:suspended, :banned, :translation_admin, :tag_wrangler, :archivist, :recently_reset 
-      @user.translation_admin = params[:user][:translation_admin] if params[:user][:translation_admin]
-      @user.tag_wrangler = params[:user][:tag_wrangler] if params[:user][:tag_wrangler]
-      @user.archivist = params[:user][:archivist] if params[:user][:archivist]
-      if @user.save(:validate => false)
+    if params[:id]
+      @user = User.find_by_login(params[:id])
+      if @user.admin_update(params[:user])
         flash[:notice] = ts('User was successfully updated.')
         redirect_to(request.env["HTTP_REFERER"] || root_path)
       else
-        flash[:error] = ts('There was an error updating user %{name}', :name => params[:user][:login])
+        flash[:error] = ts('There was an error updating user %{name}', :name => params[:id])
         redirect_to(request.env["HTTP_REFERER"] || root_path)
-      end
+      end    
     elsif params[:admin_action]
       @user = User.find_by_login(params[:user_login])
       @admin_note = params[:admin_note]
