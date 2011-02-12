@@ -33,7 +33,7 @@ class WorksController < ApplicationController
   end
 
   # GET /works
-  def index    
+  def index
     # what we're getting for the view
     @works = []
     @filters = {}

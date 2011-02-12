@@ -16,13 +16,14 @@ class PseudsController < ApplicationController
       @pseuds = @user.pseuds.find(:all)
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
+      @page_subtitle = @user.login
     else
       redirect_to people_path
     end
   end
 
   # GET /users/:user_id/pseuds/:id
-  def show  
+  def show
     if @user.blank?
       flash[:error] = ts("Sorry, could not find this user.")
       redirect_to people_path and return

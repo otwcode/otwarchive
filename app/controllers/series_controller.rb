@@ -15,6 +15,7 @@ class SeriesController < ApplicationController
   def index
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
+      @page_subtitle = ts("by ") + @user.login
       unless @user
         raise ActiveRecord::RecordNotFound and return
       end
