@@ -84,8 +84,7 @@ class ChallengeClaim < ActiveRecord::Base
   def <=>(other)
     return -1 if self.request_signup.nil? && other.request_signup
     return 1 if other.request_signup.nil? && self.request_signup
-    cmp = self.request_byline.downcase <=> other.request_byline.downcase
-    return cmp if cmp != 0
+    return self.request_byline.downcase <=> other.request_byline.downcase
   end
   
   def title
