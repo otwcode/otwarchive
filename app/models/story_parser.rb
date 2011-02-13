@@ -651,17 +651,48 @@ class StoryParser
     # Parses a story from the Yuletide archive (an AutomatedArchive)
     def parse_story_from_yuletide(story)
       work_params = {:chapter_attributes => {}}
-      content_table = (@doc/"table[@class='form']/tr/td[2]")
+      tags = ['yuletide']
 
+      content_table = (@doc/"table[@class='form']/tr/td[2]")
+      
       unless content_table.nil?
-        # Try to remove the comment links at the bottom
         centers = content_table.css("center")
+
+        # Try to parse (and remove) the metadata
+        p = /Fandom:\s*?<a .*?>(.*?)<\/a>.*?Written for: (.*) in the Yuletide (.*) Challenge.*?by <a .*?>(.*?)<\/a>/im
+        
+        if !centers[0].nil? && centers[0].to_html.match(p)
+
+          fandom, recip, year, author = $1, $2, $3, $4
+
+          tags << "recipient:#{recip}"
+          tags << "challenge:Yuletide #{year}"
+          work_params[:revised_at] = convert_revised_at("#{year}-12-25")
+          work_params[:fandom_string] = fandom
+
+          unless centers[0].css("h2")[0].nil?
+            work_params[:title] = centers[0].css("h2")[0].inner_html
+          else
+            work_params[:title] = (@doc/"title").inner_html
+          end
+
+          unless centers[0].css("p")[0].nil?
+            work_params[:notes] = centers[0].css("p")[0].inner_html
+          end
+          
+          centers[0].remove
+        end
+        
+        # Try to remove the comment links at the bottom
         if !centers[-1].nil? && centers[-1].to_html.match(/<!-- COMMENTLINK START -->/)
           centers[-1].remove
         end
+        
         storytext = content_table.inner_html
+        
       else
         storytext = (@doc/"body").inner_html
+        work_params[:title] = (@doc/"title").inner_html
       end
       
       storytext = clean_storytext(storytext)
@@ -671,22 +702,6 @@ class StoryParser
 
       work_params.merge!(scan_text_for_meta(storytext))
       work_params[:chapter_attributes][:content] = storytext
-      work_params[:title] = (@doc/"title").inner_html
-      work_params[:notes] = (@doc/"table[@class='form']/tr/td[2]/center/p").inner_html
-
-      tags = ['yuletide']
-
-      if storytext.match(/Written for: (.*) in the Yuletide (.*) challenge/i)
-        recip = $1
-        year = $2
-        tags << "recipient:#{recip}"
-        tags << "challenge:Yuletide #{year}"
-        work_params[:revised_at] = convert_revised_at("#{year}-12-25")
-      end
-      if storytext.match(/<center>.*Fandom:.*Written for:.*by <a .*>(.*)<\/a><br>\n<p>(.*)<\/p><\/center>/ix)
-        author = $1
-        work_params[:notes] = $2
-      end
 
       # Here we're going to try and get the search results
       begin
