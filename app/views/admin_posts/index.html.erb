@@ -2,8 +2,18 @@
 <% if logged_in_as_admin? %>
   <%= render :partial => "admin_index" %>
 <% else %>
-  <h2><%= ts("AO3 News") %></h2>
-  <!--/descriptions-->
+<h2><%=h 'AO3 News' %></h2>
+<% if @tag %>
+<p>
+  <%= "Tagged: #{@tag.name}" %>
+  &nbsp;&nbsp;
+  <%= link_to "View All", admin_posts_path %>
+</p>
+<% end %>
+<% if @language %>
+<p><%= "Language: #{@language.name}" %></p>
+<% end %>
+<!--/descriptions-->
 
   <!--subnav-->
   <ul class="navigation" role="navigation">
@@ -29,17 +39,24 @@
       <div class="admin-content userstuff">
         <%=raw sanitize_field(admin_post, :content) %>
       </div>
+      <% if admin_post.tags.length > 0 %>
+      <ul class="tags">
+        <% for tag in admin_post.tags %>
+          <li><%= link_to tag.name, admin_posts_path(:tag => tag.id) %></li>
+        <% end %>
+      </ul>
+      <% end %>
       <!-- BEGIN comment section -->
-        <h3 class="landmark">Comment</h3>
-        <ul class="navigation">
-          <% if admin_post.count_visible_comments > 0 %>
-            <li><%= link_to ( admin_post.count_visible_comments == 1 ? 
-                              ts("Read %{comment_count} Comment", :comment_count => admin_post.count_visible_comments.to_s) : 
-                              ts("Read %{comment_count} Comments", :comment_count => admin_post.count_visible_comments.to_s)),
-                            admin_post_path(:id => admin_post.id, :anchor => "comments", :show_comments => true) %></li> 
-          <% end %>
-          <li><%= link_to ts("Add Comment"), admin_post_path(:id => admin_post.id, :anchor => "comments", :add_comment => true) %></li>
-        </ul>  
+      <h3 class="landmark">Comment</h3>
+      <ul class="navigation">
+        <% if admin_post.count_visible_comments > 0 %>
+          <li><%= link_to ( admin_post.count_visible_comments == 1 ? 
+                            ts("Read %{comment_count} Comment", :comment_count => admin_post.count_visible_comments.to_s) : 
+                            ts("Read %{comment_count} Comments", :comment_count => admin_post.count_visible_comments.to_s)),
+                          admin_post_path(:id => admin_post.id, :anchor => "comments", :show_comments => true) %></li> 
+        <% end %>
+        <li><%= link_to ts("Add Comment"), admin_post_path(:id => admin_post.id, :anchor => "comments", :add_comment => true) %></li>
+      </ul>  
       <!-- END comment section -->
     
     </div>

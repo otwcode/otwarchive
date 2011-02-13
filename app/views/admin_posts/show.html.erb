@@ -40,6 +40,13 @@
   <div class="admin-content userstuff">
       <%=raw sanitize_field(@admin_post, :content) %>
   </div>
+  <% if @admin_post.tags.length > 0 %>
+  <ul class="tags">
+    <% for tag in @admin_post.tags %>
+      <li><%= link_to tag.name, admin_posts_path(:tag => tag.id) %></li>
+    <% end %>
+  </ul>
+  <% end %>
 </div>
 <!--/content-->
 
