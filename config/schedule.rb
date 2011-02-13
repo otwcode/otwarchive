@@ -24,8 +24,8 @@ set :set_path_automatically, false
 
 set :cron_log, "#{path}/log/whenever.log"
 
-if @email_jobs == 'on'
-  # run email-sending tasks
+# tasks for deployed site only
+if @not_stage == 'true'
 
   # Check to see if the invite queue is enabled and invite users if appropriate
   every 1.day, :at => '6:21 am' do
@@ -35,6 +35,11 @@ if @email_jobs == 'on'
   # Resend signup emails
   every 1.day, :at => '6:41 am' do
     rake "admin:resend_signup_emails"
+  end
+
+  # reindex searchd
+  every 4.hours do
+    command "/static/bin/ts_reindex.sh"
   end
 end
 
@@ -63,8 +68,4 @@ every 1.day, :at => '7:40 am' do
   rake "work:purge_old_drafts"
 end
 
-# reindex searchd
-every 4.hours do
-  command "/static/bin/ts_reindex.sh"
-end
 
