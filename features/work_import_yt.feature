@@ -60,7 +60,6 @@ Feature: Import Works from yuletidtreasure
       And I should not see "Read posted comments."
       And I should not see "Fandom:" within "#chapters"
       And I should not see "Written for:" within "#chapters"
-      And I should not see "With many many thanks" within "#chapters"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page 
