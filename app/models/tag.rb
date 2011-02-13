@@ -14,7 +14,8 @@ class Tag < ActiveRecord::Base
   VISIBLE = TYPES - ['Media', 'Banned']
 
   # these are tags which have been created by users
-  USER_DEFINED = ['Fandom', 'Relationship', 'Character', 'Freeform']
+  # the order is important, and it is the order in which they appear in the tag wrangling interface
+  USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
   acts_as_commentable
   def commentable_name
