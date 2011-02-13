@@ -659,15 +659,22 @@ class StoryParser
         centers = content_table.css("center")
 
         # Try to parse (and remove) the metadata
-        p = /Fandom:\s*?<a .*?>(.*?)<\/a>.*?Written for: (.*) in the Yuletide (.*) Challenge.*?by <a .*?>(.*?)<\/a>/im
+        p = /Fandom:\s*?<a .*?>(.*?)<\/a>.*?Written for: (.*) in the (Yuletide|New Year Resolutions) (\d*) Challenge.*?by <a .*?>(.*?)<\/a>/im
         
         if !centers[0].nil? && centers[0].to_html.match(p)
 
-          fandom, recip, year, author = $1, $2, $3, $4
+          fandom, recip, challenge, year, author = $1, $2, $3, $4, $5
 
           tags << "recipient:#{recip}"
-          tags << "challenge:Yuletide #{year}"
-          work_params[:revised_at] = convert_revised_at("#{year}-12-25")
+
+          if challenge=="Yuletide"
+            tags << "challenge:Yuletide #{year}"
+            work_params[:revised_at] = convert_revised_at("#{year}-12-25")
+          else
+            tags << "challenge:NYR #{year}"
+            work_params[:revised_at] = convert_revised_at("#{year}-01-01")
+          end
+            
           work_params[:fandom_string] = fandom
 
           unless centers[0].css("h2")[0].nil?
