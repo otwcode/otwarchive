@@ -36,3 +36,34 @@ Feature: Import Works from yuletidtreasure
       #'
       Then I should see "Commonplaces"
 
+  Scenario: Creating a new work from an yuletidetreasure story which doesn't have notes
+    Given basic tags
+      And the following activated user exists
+        | login          | password    |
+        | cosomeone      | something   |
+      And I am logged in as "cosomeone" with password "something"
+    When I go to the import page
+      And I fill in "urls" with "http://yuletidetreasure.org/archive/12/quovadis.html"
+    When I press "Import"
+    Then I should see "Preview Work"
+      And I should see "Sherlock Holmes" within "dd.fandom"
+      And I should see "yuletide" within "dd.freeform"
+      And I should see "recipient:Rosemending" within "dd.freeform"
+      And I should see "challenge:Yuletide 2004" within "dd.freeform"
+      And I should see "Published:2004-12-25"
+      And I should see "Quo Vadis" within "h2.title" 
+      And I should see "Primum Non Nocere"
+      And I should see "Terra Incognita: An unknown land."
+      And I should not see the "alt" text "yuletide treasure"
+      And I should not see "Quicksearch"
+      And I should not see "Please post a comment on this story."
+      And I should not see "Read posted comments."
+      And I should not see "Fandom:" within "#chapters"
+      And I should not see "Written for:" within "#chapters"
+      And I should not see "With many many thanks" within "#chapters"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+    When I am on cosomeone's user page 
+      #'
+      Then I should see "Quo Vadis"
+
