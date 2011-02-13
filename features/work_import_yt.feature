@@ -84,7 +84,6 @@ Feature: Import Works from yuletidtreasure
       And I should see "challenge:NYR 2007" within "dd.freeform"
       And I should see "Published:2007-01-01"
       And I should see "The Best You Ever Had" within "h2.title" 
-      And I should see "With many many thanks to Merry, giddy, Ces and elyn for beta!" within "div.notes"
       And I should see "Eric knew it was his own damn fault"
       And I should see "He's going to kill you."
       And I should not see the "alt" text "yuletide treasure"
@@ -93,7 +92,6 @@ Feature: Import Works from yuletidtreasure
       And I should not see "Read posted comments."
       And I should not see "Fandom:" within "#chapters"
       And I should not see "Written for:" within "#chapters"
-      And I should not see "With many many thanks" within "#chapters"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I am on cosomeone's user page 
