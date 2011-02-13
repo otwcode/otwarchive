@@ -13,6 +13,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And the following activated tag wrangler exists
       | login       | password      |
       | Enigel      | wrangulator   |
+      And I have loaded the "roles" fixture
       
     # admin making a user into a tag wrangler
     When I go to the admin_login page
@@ -22,7 +23,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I fill in "query" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
-    When I check "user_tag_wrangler"
+    When I check "user_roles_1"
       And I press "Update"
     Then I should see "User was successfully updated"
     When I follow "Log out"
