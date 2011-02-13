@@ -15,6 +15,7 @@ Feature: Tag wrangling
       | login       | password      |
       | dizmo       | wrangulator   |
       And a media exists with name: "TV Shows", canonical: true
+      And I have loaded the "roles" fixture
     When I am logged in as "dizmo" with password "wrangulator"
     Then I should not see "Tag Wrangling"
     When I follow "Log out"
@@ -28,7 +29,7 @@ Feature: Tag wrangling
     Then I should see "dizmo" within "#admin_users_table"
     
     # admin making user tag wrangler
-    When I check "user_tag_wrangler"
+    When I check "user_roles_1"
       And I press "Update"
     Then I should see "User was successfully updated"
     When I follow "Log out"

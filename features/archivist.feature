@@ -9,6 +9,7 @@ Feature: Archivist bulk imports
       | login       | password      |
       | elynross    | Yulet1de      |
       And all emails have been delivered
+      And I have loaded the "roles" fixture
     When I am logged in as "elynross" with password "Yulet1de"
       And I follow "Import"
     Then I should not see "Import works for others"
@@ -20,7 +21,7 @@ Feature: Archivist bulk imports
       And I fill in "query" with "elynross"
       And I press "Find"
     Then I should see "elynross" within "#admin_users_table"
-    When I check "user_archivist"
+    When I check "user_roles_4"
       And I press "Update"
     Then I should see "User was successfully updated"
     When I follow "Log out"
