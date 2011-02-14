@@ -3,7 +3,7 @@
 
 class ChallengeSignupsController < ApplicationController
 
-  before_filter :users_only, :except => [:summary, :display_summary]
+  before_filter :users_only, :except => [:summary, :display_summary, :requests_summary]
   before_filter :load_collection, :except => [:index]
   before_filter :load_challenge, :except => [:index]
   before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy]
@@ -76,7 +76,7 @@ class ChallengeSignupsController < ApplicationController
         @challenge_signups = @user.challenge_signups
         render :action => :index and return
       else
-        flash[:error] = t('challenge_signups.not_allowed_to_see_other', :default => "You aren't allowed to see that user's signups.")
+        flash[:error] = ts("You aren't allowed to see that user's signups.")
         redirect_to '/' and return
       end
     else
@@ -134,13 +134,42 @@ class ChallengeSignupsController < ApplicationController
       @generated_live = true
     end
   end
+  
+  def requests_summary
+    if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
+      flash.now[:notice] = ts("Requests summary does not appear until at least %{count} signups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
+    elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
+      # too many signups in this collection to show the summary page "live"
+      if !File.exists?(ChallengeSignup.requests_summary_file(@collection)) ||
+          (@collection.challenge.signup_open? && File.mtime(ChallengeSignup.requests_summary_file(@collection)) < 1.hour.ago)
+        # either the file is missing, or signup is open and the last regeneration was more than an hour ago.
+
+        # touch the file so we don't generate a second request
+        requests_summary_dir = ChallengeSignup.requests_summary_dir
+        FileUtils.mkdir_p(requests_summary_dir) unless File.directory?(requests_summary_dir)
+        FileUtils.touch(ChallengeSignup.requests_summary_file(@collection))
+
+        # generate the page
+        if ArchiveConfig.NO_DELAYS
+          ChallengeSignup.generate_requests_summary(@collection)
+        else
+          # start a delayed job to generate the page
+          ChallengeSignup.delay.generate_requests_summary(@collection)
+        end
+      end
+    else
+      # generate it on the fly
+      @tag_type, @requests_summary_tags = ChallengeSignup.generate_requests_summary_tags(@collection)
+      @generated_live = true
+    end
+  end
 
   def show
   end
 
   def new
     if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
-      flash[:notice] = t('challenge_signups.already_signed_up', :default => "You are already signed up for this challenge. You can edit your signup below.")
+      flash[:notice] = ts("You are already signed up for this challenge. You can edit your signup below.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     else
       @challenge_signup = ChallengeSignup.new
