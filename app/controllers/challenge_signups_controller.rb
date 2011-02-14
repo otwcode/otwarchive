@@ -162,7 +162,7 @@ class ChallengeSignupsController < ApplicationController
       end
     else
       # generate it on the fly
-      @tag_type, @requests_summary_tags = ChallengeSignup.generate_requests_summary_tags(@collection)
+      @requests_summary_signups = ChallengeSignup.generate_requests_summary_signups(@collection)
       @generated_live = true
     end
   end

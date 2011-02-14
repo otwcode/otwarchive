@@ -171,28 +171,20 @@ class ChallengeSignup < ActiveRecord::Base
   
   ### Code for generating signup request summaries
 
-  def self.generate_requests_summary_tags(collection)
-    tag_type = collection.challenge.topmost_tag_type
-    requests_summary_tags = tag_type.classify.constantize.in_challenge(collection).
-                                                 select("tags.id, tags.name,
-                                                         SUM(CASE WHEN prompts.type = 'Request' Then 1 Else 0 End) AS requests,
-                                                         SUM(CASE WHEN prompts.type = 'Offer' Then 1 Else 0 End) AS offers").
-                                                 group('tags.id').
-                                                 having('requests > 0').
-                                                 order('offers, requests DESC, tags.name')
-
-    return [tag_type, requests_summary_tags]
+  def self.generate_requests_summary_signups(collection)
+    requests_summary_signups = collection.signups.find(:all)
+    return [requests_summary_signups]
   end
 
   # Write the summary to a file that will then be displayed
   def self.generate_requests_summary(collection)
-    tag_type, requests_summary_tags = ChallengeSignup.generate_requests_summary_tags(collection)
+    requests_summary_signups = ChallengeSignup.generate_requests_summary_signups(collection)
     view = ActionView::Base.new(ActionController::Base.view_paths, {})
     view.class_eval do
       include ApplicationHelper
     end
     content = view.render(:partial => "challenge/#{collection.challenge.class.name.demodulize.tableize.singularize}/challenge_requests_signups_summary",
-                          :locals => {:challenge_collection => collection, :tag_type => tag_type, :requests_summary_tags => requests_summary_tags, :generated_live => false})
+                          :locals => {:challenge_collection => collection, :requests_summary_signups => requests_summary_signups, :generated_live => false})
     requests_summary_dir = ChallengeSignup.requests_summary_dir
     FileUtils.mkdir_p(requests_summary_dir) unless File.directory?(requests_summary_dir)
     File.open(ChallengeSignup.requests_summary_file(collection), "w:UTF-8") {|f| f.write(content)}
