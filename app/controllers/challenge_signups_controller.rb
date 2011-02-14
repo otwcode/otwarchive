@@ -138,6 +138,9 @@ class ChallengeSignupsController < ApplicationController
   def requests_summary
     if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
       flash.now[:notice] = ts("Requests summary does not appear until at least %{count} signups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
+    elsif !@collection.challenge.user_allowed_to_see_requests_summary?(current_user)
+      flash.now[:notice] = ts("You are not allowed to view requests summary!")
+      redirect_to collection_path(@collection) rescue redirect_to '/' and return
     elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
       # too many signups in this collection to show the summary page "live"
       if !File.exists?(ChallengeSignup.requests_summary_file(@collection)) ||
