@@ -595,6 +595,7 @@ class StoryParser
       notes = ""
       
       body = @doc.css("body")
+      title = @doc.css("title").inner_html.gsub /on DeviantART$/, ""
 
       # Find the image (original size) if it's art
       image_full = body.css("img#gmi-ResViewSizer_fullimg")
@@ -603,9 +604,18 @@ class StoryParser
       end
 
       # Find the fic text if it's fic
-      text_table = body.css("table.f td.f div.text")
-      unless text_table[0].nil?
-        storytext = text_table[0].inner_html
+      text_table = body.css("table.f td.f div.text")[0]
+      unless text_table.nil?
+        # Try to remove the title:
+        unless text_table.css("h1")[0].nil? && text_table.css("h1")[0].match(title)
+          text_table.css("h1")[0].remove
+        end
+
+        # Try to remove the author:
+        unless text_table.css("small")[0].nil? && text_table.css("small")[0].match(/by ~.*?<a class="u" href=/m)
+          text_table.css("small")[0].remove
+        end
+        storytext = text_table.inner_html
       end
       
       # cleanup the text
@@ -625,9 +635,7 @@ class StoryParser
       work_params[:notes] = notes
         
       work_params.merge!(scan_text_for_meta(notes))
-
-      work_params[:title] = @doc.css("title").inner_html
-      work_params[:title].gsub! /on DeviantART$/, ""
+      work_params[:title] = title
 
       body.css("div.gr-body div.gr div.hh h1 a").each do |node|
         if node["class"] != "u"

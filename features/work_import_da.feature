@@ -33,4 +33,30 @@ Feature: Import Works from deviantart
        Then I should see "Flooded"
 
 
-# TODO: import fic from DA
+  Scenario: Creating a new fic from an deviantart
+    Given basic tags
+      And the following activated user exists
+        | login          | password    |
+        | cosomeone      | something   |
+      And I am logged in as "cosomeone" with password "something"
+    When I go to the import page
+      And I fill in "urls" with "http://cesy12.deviantart.com/art/AO3-testing-text-196158032"
+    When I press "Import"
+    Then I should see "Preview Work"
+       And I should see "Scraps" within "dd.freeform"
+       And I should see "Published:2011-02-04"
+       And I should see "AO3 testing text" within "h2.title" 
+       And I should see "This is the description of the story above." within "div.notes"
+       And I should see "This is a text, like a story or something."
+       And I should see "Complete with some paragraphs."
+       And I should not see "deviant"
+       And I should not see "cesy"
+       And I should not see "AO3 testing text" within "#chapters"
+       And I should not see "Visit the Artist"
+       And I should not see "Download File"
+     When I press "Post"
+     Then I should see "Work was successfully posted."
+     When I am on cosomeone's user page 
+       #'
+       Then I should see "AO3 testing text"
+
