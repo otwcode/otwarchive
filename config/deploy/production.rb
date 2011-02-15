@@ -1,16 +1,16 @@
-role :app, "otw3.ao3.org"
-role :app, "otw4.ao3.org" 
-role :web, "otw2.ao3.org"
-# db primary is where the migrations are run.
-role :db, "otw3.ao3.org", :primary => true
-# the backend is the slave db, but it's also where memcache and thinking sphinx run
-role :backend, "otw1.ao3.org"
-# no_release means don't install /var/www/otwarchive
-# the database has limited disk space and it doesn't really need it
-role :db, "otw5.ao3.org", :no_release => true
+# otw1 runs sphinx off a slave database
+server "otw1.ao3.org", :search
+# otw2 runs delayed jobs, and memcache. 
+# it also runs the database migrations and can be used to get a console
+server "otw2.ao3.org", :db, :backend
+# otw3 and otw4 are the main web/app combos
+server "otw3.ao3.org", :web, :app
+server "otw4.ao3.org", :web, :app
+# otw5 is the actual db server and doesn't need anything from capistrano
 
-after "deploy:update_code", "extras:create_symlinks_from_static"
+set :message, "archive deployed"
 
-before "deploy:migrate", "extras:backup_db"
+after "deploy:update_code", "production_only:update_public", "production_only:update_configs"
 
-after "deploy:restart", "extras:backend_beta"
+before "deploy:migrate", "production_only:backup_db"
+after "deploy:restart", "production_only:update_cron_email", "production_only:update_cron_reindex"
