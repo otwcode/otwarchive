@@ -28,7 +28,7 @@
     <%= span_if_current ts("Signup Summary"), summary_collection_signups_path(@collection) %>
   </li>
   <li>
-    <%= span_if_current ts("Requests Summary"), requests_summary_collection_signups_path(@collection) %>
+    <%= span_if_current ts("Requests Summary"), collection_requests_path(@collection) %>
   </li>
 
   <% if @collection.challenge.user_allowed_to_see_assignments?(current_user) %>
