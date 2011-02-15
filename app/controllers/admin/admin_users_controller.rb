@@ -155,26 +155,23 @@ class Admin::AdminUsersController < ApplicationController
     if !params[:notify_all].blank?
       if params[:notify_all].include?("0")
         # exclude users who've opted out of admin emails, if the message is one to all users
-        @users = User.all.select {|u| !u.preference.admin_emails_off?}
+        @users = User.joins(:preference).where("preferences.admin_emails_off = 0")
       else
         # do not exclude users if they are part of a targeted group, like translations, wranglers or individually selected users
-        @users = []
-        params[:notify_all].each do |role_name|
-          @users += User.all.select{|u| u.roles.collect(&:name).include?(role_name)}
-        end
-        @users = @users.uniq
+        # don't call .count on queries obtained with .group! you'll get a hash instead of an integer
+        @users = User.select("users.*").joins(:roles).where("roles.name IN (?)", params[:notify_all]).group("users.id")
       end
     elsif params[:user_ids]
       @users = User.find(params[:user_ids])
     end
         
-    if @users.blank?
-      flash[:error] = t('no_user', :default => "Who did you want to notify?")
+    if @users.nil? || @users.length == 0
+      flash[:error] = ts("Who did you want to notify?")
       redirect_to :action => :notify and return
     end
     
     unless params[:subject] && !params[:subject].blank?
-      flash[:error] = t('no_subject', :default => "Please enter a subject.")
+      flash[:error] = ts("Please enter a subject.")
       redirect_to :action => :notify and return
     else
       @subject = params[:subject]
@@ -182,19 +179,23 @@ class Admin::AdminUsersController < ApplicationController
     
     # We need to use content because otherwise html will be stripped
     unless params[:content] && !params[:content].blank?
-      flash[:error] = t('no_message', :default => "What message did you want to send?")
+      flash[:error] = ts("What message did you want to send?")
       redirect_to :action => :notify and return
     else
       @message = params[:content]
     end
     
     @users.each do |user|
-      UserMailer.archive_notification(current_admin.login, user, @subject, @message).deliver
+      if ArchiveConfig.NO_DELAYS
+        UserMailer.archive_notification(current_admin.login, user, @subject, @message).deliver
+      else
+        UserMailer.delay.archive_notification(current_admin.login, user, @subject, @message)
+      end
     end
     
     AdminMailer.archive_notification(current_admin.login, @users, @subject, @message).deliver
     
-    flash[:notice] = t('sent', :default => "Notification sent to %{count} user(s).", :count => @users.size)
+    flash[:notice] = ts("Notification sent to %{count} user(s).", :count => @users.size)
     redirect_to :action => :notify
   end
 
