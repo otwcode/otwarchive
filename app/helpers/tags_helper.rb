@@ -67,7 +67,7 @@ module TagsHelper
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
     link_to_with_tag_class(@collection ?
-    {:controller => :works, :action => :index, :tag_id => tag, :collection_id => @collection} :
+    {:controller => :works, :action => :index, :tag_id => tag, :collection_id => @collection, :only_path => false} :
     {:controller => :works, :action => :index, :tag_id => tag}, link_text, options)
   end
 
