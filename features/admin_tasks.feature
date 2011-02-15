@@ -148,9 +148,9 @@ Feature: Admin tasks
       | login       | password |
       | Zooey       | secret   |
     And the following activated user exists
-      | login       | password             |
-      | enigel      | emailnotifications   |
-      | otherfan    | hatesnotifications   |
+      | login       | password             | email   |
+      | enigel      | emailnotifications   | e@e.org |
+      | otherfan    | hatesnotifications   | o@e.org |
     And all emails have been delivered
   
   # otherfan turns off notifications
@@ -178,11 +178,13 @@ Feature: Admin tasks
     And I fill in "Message" with "And it was awesome"
     And I check "Notify All Users"
     And I press "Send Notification"
-    And the system processes jobs
-  # confirmation email to admin, and to one user
-  Then 2 emails should be delivered
+  Then 1 email should be delivered to webmaster@example.org
     And the email should not contain "otherfan"
     And the email should contain "enigel"
+  When the system processes jobs
+  # confirmation email to admin, and to one user
+  Then 1 email should be delivered to e@e.org
+    And the email should contain "Dear Archive Users"
     And "Issue 2035" is fixed
     # And the email should contain "Hey, we did stuff"
     And the email should contain "And it was awesome"
