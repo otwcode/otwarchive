@@ -45,6 +45,7 @@ NO_DELAYS: false
 # Branding
 APP_URL: 'http://www.example.org'
 APP_NAME: 'Example Archive'
+APP_HOST: 'archiveofourown.org'
 APP_SHORT_NAME: 'AO3'
 LOGO: 'logo.png'
 ALT_LOGO: 'AO3 logo - the letters A O 3 combined with arms raised in celebration, symbolizing the joy of fannish creation in the Archive'
