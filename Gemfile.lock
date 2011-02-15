@@ -91,6 +91,8 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.0.0)
+    capistrano-ext (1.2.1)
+      capistrano (>= 1.0.0)
     capybara (0.3.9)
       culerity (>= 0.2.4)
       mime-types (>= 1.16)
@@ -248,6 +250,7 @@ DEPENDENCIES
   aws-s3
   bundler (~> 1.0.0)
   capistrano
+  capistrano-ext
   capybara (= 0.3.9)
   css_parser
   cucumber (>= 0.9.1)

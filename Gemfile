@@ -78,6 +78,7 @@ end
 
 # Deploy with Capistrano
 gem 'capistrano', :require => false
+gem 'capistrano-ext', :require => false
 
 group :production do
   # Use unicorn as the web server
