@@ -134,38 +134,6 @@ class ChallengeSignupsController < ApplicationController
       @generated_live = true
     end
   end
-  
-  def requests_summary
-    if @collection.signups.count < (ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)
-      flash.now[:notice] = ts("Requests summary does not appear until at least %{count} signups have been made!", :count => ((ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT/2)))
-    elsif !@collection.challenge.user_allowed_to_see_requests_summary?(current_user)
-      flash.now[:notice] = ts("You are not allowed to view requests summary!")
-      redirect_to collection_path(@collection) rescue redirect_to '/' and return
-    elsif @collection.signups.count > ArchiveConfig.MAX_SIGNUPS_FOR_LIVE_SUMMARY
-      # too many signups in this collection to show the summary page "live"
-      if !File.exists?(ChallengeSignup.requests_summary_file(@collection)) ||
-          (@collection.challenge.signup_open? && File.mtime(ChallengeSignup.requests_summary_file(@collection)) < 1.hour.ago)
-        # either the file is missing, or signup is open and the last regeneration was more than an hour ago.
-
-        # touch the file so we don't generate a second request
-        requests_summary_dir = ChallengeSignup.requests_summary_dir
-        FileUtils.mkdir_p(requests_summary_dir) unless File.directory?(requests_summary_dir)
-        FileUtils.touch(ChallengeSignup.requests_summary_file(@collection))
-
-        # generate the page
-        if ArchiveConfig.NO_DELAYS
-          ChallengeSignup.generate_requests_summary(@collection)
-        else
-          # start a delayed job to generate the page
-          ChallengeSignup.delay.generate_requests_summary(@collection)
-        end
-      end
-    else
-      # generate it on the fly
-      @requests_summary_signups = ChallengeSignup.generate_requests_summary_signups(@collection)
-      @generated_live = true
-    end
-  end
 
   def show
   end

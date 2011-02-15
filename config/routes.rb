@@ -313,7 +313,6 @@ Otwarchive::Application.routes.draw do
     resources :signups, :controller => "challenge_signups" do
       collection do
         get :summary
-        get :requests_summary
       end
     end
     resources :assignments, :controller => "challenge_assignments" do
@@ -337,6 +336,7 @@ Otwarchive::Application.routes.draw do
         get :cancel_generate
       end
     end
+    resources :requests, :controller => "challenge_requests"
     # challenge types
     resource :gift_exchange, :controller => 'challenge/gift_exchange'
   end

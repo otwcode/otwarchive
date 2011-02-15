@@ -8,7 +8,7 @@
 <% elsif @user %>
   <!-- view in user dashboard -->
 
-  <h2><%= t('.challenge_signups.user_signups_listing', :default => "Challenge Signups for %{user}", :user => @user.login) %></h2>
+  <h2><%= ts("Challenge Signups for %{user}", :user => @user.login) %></h2>
 
   <table>
     <tr>

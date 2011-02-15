@@ -168,35 +168,6 @@ class ChallengeSignup < ActiveRecord::Base
   def self.summary_file(collection)
     "#{ChallengeSignup.summary_dir}/#{collection.name}_summary_content.html"
   end
-  
-  ### Code for generating signup request summaries
-
-  def self.generate_requests_summary_signups(collection)
-    requests_summary_signups = collection.signups.find(:all)
-    return [requests_summary_signups]
-  end
-
-  # Write the summary to a file that will then be displayed
-  def self.generate_requests_summary(collection)
-    requests_summary_signups = ChallengeSignup.generate_requests_summary_signups(collection)
-    view = ActionView::Base.new(ActionController::Base.view_paths, {})
-    view.class_eval do
-      include ApplicationHelper
-    end
-    content = view.render(:partial => "challenge/#{collection.challenge.class.name.demodulize.tableize.singularize}/challenge_requests_signups_summary",
-                          :locals => {:challenge_collection => collection, :requests_summary_signups => requests_summary_signups, :generated_live => false})
-    requests_summary_dir = ChallengeSignup.requests_summary_dir
-    FileUtils.mkdir_p(requests_summary_dir) unless File.directory?(requests_summary_dir)
-    File.open(ChallengeSignup.requests_summary_file(collection), "w:UTF-8") {|f| f.write(content)}
-  end
-
-  def self.requests_summary_dir
-    "#{Rails.public_path}/static/challenge_requests_signup_summaries"
-  end
-
-  def self.requests_summary_file(collection)
-    "#{ChallengeSignup.requests_summary_dir}/#{collection.name}_requests_summary_content.html"
-  end
 
   # sort alphabetically
   include Comparable
