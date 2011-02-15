@@ -92,7 +92,7 @@ namespace :production_only do
   task :update_configs, {:roles => :app} do
     run "ln -nfs -t #{release_path}/config/ /static/config/*"
   end
-  task :backup_db, {:roles => :sphinx} do
+  task :backup_db, {:roles => :search} do
     run "mysql -e 'stop slave'"
     run "sudo cp -rp /var/lib/mysql /backup/otwarchive/deploys/`date +%F.%R`/"
     run "mysql -e 'start slave'"
