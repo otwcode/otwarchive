@@ -30,8 +30,8 @@
         <% if related_work.work.unrevealed? %>
           <td><%= "A work in an unrevealed challenge" %></td>
         <% else %>
-          <td><%= link_to related_work.parent.title, related_work.parent %></td>
-          <td><%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %></td>
+          <td><%= link_to related_work.parent.title.html_safe, related_work.parent %></td>
+          <td><%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %></td>
           <td>
             <% if related_work.translation? %>
               From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>

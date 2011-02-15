@@ -1,6 +1,6 @@
 <h3>
   <%= ts("Chapter Index for") %> 
-  <%= link_to(@work.title, @work) %> <%= ts("by") %> <%= byline(@work) %>
+  <%= link_to(@work.title.html_safe, @work) %> <%= ts("by") %> <%= byline(@work) %>
 </h3>
 
 <ol class="navigation" role="navigation">

@@ -128,7 +128,7 @@ module WorksHelper
   # Warnings:
   # etc
   def get_embed_link(work)
-    title_link = link_to(content_tag(:strong, work.title), work_url(work)) + " (#{work.word_count} #{ts('words')})"
+    title_link = link_to(content_tag(:strong, work.title.html_safe), work_url(work)) + " (#{work.word_count} #{ts('words')})"
     if work.anonymous?
       profile_link = ts("Anonymous")
     else
