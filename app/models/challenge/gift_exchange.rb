@@ -75,6 +75,10 @@ class GiftExchange < ActiveRecord::Base
   def user_allowed_to_see_signups?(user)
     self.collection.user_is_maintainer?(user)
   end
+  
+  def user_allowed_to_see_requests_summary?(user)
+    self.collection.user_is_maintainer?(user) || self.requests_summary_visible?
+  end
 
   def user_allowed_to_see_assignments?(user)
     self.collection.user_is_maintainer?(user)

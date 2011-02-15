@@ -1,0 +1,13 @@
+<% if File.size?("#{ChallengeSignup.requests_summary_file(@collection)}") %>
+  <%=raw File.read("#{ChallengeSignup.requests_summary_file(@collection)}") %>
+<% elsif @generated_live %>
+  <!-- render differently based on the challenge -->
+  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_requests_signups_summary", 
+             :locals => {:challenge_collection => @collection, :tag_type => @tag_type, :requests_summary_tags => @requests_summary_tags, :generated_live => @generated_live} %>
+<% else %>
+  <h2><%= ts("Signup Summary for %{collection}", :collection => @collection.title) %></h2>
+
+  <p>
+    The requests summary for this challenge is currently being generated. Please try again in a few minutes.
+  </p>
+<% end %>
