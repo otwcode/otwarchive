@@ -10,7 +10,7 @@
       <li class="blurb">
         <div class="header module">
           <h4 title="title">
-      	    <%= link_to work.title, static_collection_work_path(@collection, work) %>
+      	    <%= link_to work.title.html_safe, static_collection_work_path(@collection, work) %>
        		  by <%= byline(work, :visibility => 'public') %>
             <% unless work.recipients.blank? %>
             for <%= recipients_link(work) %>
