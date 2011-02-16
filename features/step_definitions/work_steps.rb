@@ -79,7 +79,7 @@ When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
   fill_in("Work Title", :with => title)
   fill_in("Additional Tags", :with => "Scary tag")
   fill_in("content", :with => "That could be an amusing crossover.")
-end  
+end
 
 # TODO: The optional extras (fandom and freeform) in the When line don't seem to be working here - can anyone fix them?
 When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")$/ do |title, fandom, freeform|
@@ -165,7 +165,7 @@ end
 When /^I set the publication date to today$/ do
   today = Time.new
   month = today.strftime("%B")
-  
+
   check("backdate-options-show")
   select("#{today.day}", :from => "work[chapter_attributes][published_at(3i)]")
   select("#{month}", :from => "work[chapter_attributes][published_at(2i)]")
@@ -185,3 +185,41 @@ Given /^I view the chaptered work(?: with ([\d]+) comments?)? "([^"]*)"(?: in (f
   visit work_url(work)
   And %{I follow "View Entire Work"} if mode == "full"
 end
+###########################################################
+DEFAULT_WORK =
+  { :rating => "Not Rated",
+    :warning => "No Archive Warnings Apply",
+    :fandom => "Default Fandom",
+    :title => "Default Title",
+    :content => "Some content." }
+
+def work(attributes = {})
+  #This should be factoried at some point....
+  attributes = DEFAULT_WORK.merge(attributes)
+  visit new_work_url
+  select(attributes[:rating], :from => "Rating")
+  check(attributes[:warning])
+  fill_in("Fandoms", :with => attributes[:fandom])
+  fill_in("Work Title", :with => attributes[:title])
+  fill_in("content", :with => attributes[:content])
+  click_button("Preview")
+  click_button("Post")
+end
+### Given
+Given /^I have no works$/ do
+  user.works.find_each { |w| w.delete }
+end
+Given /^I have (\d+) work(?:s)?$/ do |count|
+  #basic_tags
+  count.to_i.times do |i|
+    work({:title => Faker::Lorem.words(3).join(" "), :content => Faker::Lorem.paragraphs(3).join})
+  end
+end
+### Then
+Then /^my work does not exist$/ do
+  user.works.count.should == 0
+end
+Then /^my work is orphaned$/ do
+  User.orphan_account.works.count.should == 1
+end
+

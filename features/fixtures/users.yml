@@ -1,15 +1,20 @@
+orphan_account:
+  login: orphan_account
+  email: orphan@example.com
+  activated_at: 2008-09-13 15:33:42
 testuser:
   id: 1
   login: testuser
-  email: test@example.com
+  email: testfix@example.com
   activated_at: 2009-12-12 21:08:07 +00:00
 testuser2:
   id: 2
   login: testuser2
-  email: test2@example.com
+  email: testfix2@example.com
   activated_at: 2009-12-12 21:08:07 +00:00
 sad_user_with_no_pseuds:
   id: 3
   login: sad_user_with_no_pseuds
-  email: test3@example.com
+  email: testfix3@example.com
   activated_at: 2009-12-12 21:08:07 +00:00
+

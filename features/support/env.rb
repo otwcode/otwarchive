@@ -59,5 +59,13 @@ Spork.each_run do
     rescue LoadError => ignore_if_database_cleaner_not_present
     end
   end
+  #Seed the DB
+  Fixtures.reset_cache
+  fixtures_folder = File.join(Rails.root.to_s, 'features', 'fixtures')
+  fixtures = Dir[File.join(fixtures_folder, '*.yml')].map {|f| File.basename(f, '.yml') }
+  #Fixtures.create_fixtures(fixtures_folder, fixtures) #---Lets not load them all just yet...
+  Fixtures.create_fixtures(fixtures_folder, "tags")
+  Fixtures.create_fixtures(fixtures_folder, "users")
+  Fixtures.create_fixtures(fixtures_folder, "pseuds")
 end
 
