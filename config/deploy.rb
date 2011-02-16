@@ -17,8 +17,7 @@ set :application, "otwarchive"
 set :deploy_to, "/var/www/otwarchive"
 set :keep_releases, 4
 
-#set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativeworks.org"
-set :mail_to, "sidra@ambt.us alice@alum.mit.edu"
+set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativeworks.org"
 
 
 # git settings
@@ -56,8 +55,9 @@ end
 
 # our tasks which are not environment specific
 namespace :extras do
-  task :git_in_home do
+  task :git_in_home, :roles => :backend do
     run "git pull origin deploy"
+    run "bundle install --quiet"
   end
   task :update_revision do
     run "/static/bin/fix_revision.sh"
@@ -66,7 +66,7 @@ namespace :extras do
     run "cd #{release_path}/public/stylesheets/; cat system-messages.css site-chrome.css forms.css live_validation.css auto_complete.css > cached_for_screen.css"
   end
   task :run_after_tasks, {:roles => :backend} do
-    run "rake After RAILS_ENV=production"
+    run "cd #{release_path}; rake After RAILS_ENV=production"
   end
   task :restart_delayed_jobs, {:roles => :backend} do
     run "/static/bin/dj_restart.sh"
@@ -74,8 +74,12 @@ namespace :extras do
   task :restart_sphinx, {:roles => :search} do
     run "/static/bin/ts_restart.sh"
   end
-  task :notify_testers do
-    system "echo ${message} | mail -s '${archive deployed}' #{mail_to}"
+  task :reindex_sphinx, {:roles => :search} do
+    run "/static/bin/ts_reindex.sh"
+  end
+  desc "rebuild sphinx (puts app into maintenance because sphinx is down)"
+  task :rebuild_sphinx, {:roles => :search} do
+    run "/static/bin/ts_rebuild.sh"
   end
   task :update_cron, {:roles => :backend} do
     run "whenever --update-crontab #{application}"
@@ -103,6 +107,9 @@ namespace :production_only do
   task :update_cron_reindex, {:roles => :search} do
     run "whenever --update-crontab search -f config/schedule_search.rb"
   end
+  task :notify_testers do
+    system "echo 'archive deployed' | mail -s 'archive deployed' #{mail_to}"
+  end
 end
 
 namespace :stage_only do
@@ -113,16 +120,20 @@ namespace :stage_only do
   task :update_configs, {:roles => :app} do
     run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
   end
-  task :reset_db, {:roles => :stage} do
+  task :reset_db, {:roles => :db} do
     run "mysql -e 'drop database otwarchive_production'"
     run "mysql -e 'create database otwarchive_production'"
     run "mysql otwarchive_production < /backup/latest.dump"
+  end
+  task :notify_testers do
+    system "echo 'testarchive deployed' | mail -s 'testarchive deployed' #{mail_to}"
   end
 end
 
 before "deploy:update_code", "extras:git_in_home"
 after "deploy:update_code", "extras:cache_stylesheet"
 
+before "deploy:migrate", "deploy:web:disable"
 after "deploy:migrate", "extras:run_after_tasks"
 
 before "deploy:symlink", "deploy:web:enable_new"
@@ -130,5 +141,7 @@ after "deploy:symlink", "extras:update_revision"
 
 after "deploy:restart", "extras:update_cron"
 after "deploy:restart", "extras:restart_delayed_jobs", "extras:restart_sphinx"
-after "deploy:restart", "deploy:cleanup", "extras:notify_testers"
+after "deploy:restart", "deploy:cleanup"
 
+before "extras:rebuild_sphinx", "deploy:web:disable"
+after "extras:rebuild_sphinx", "deploy:web:enable"
