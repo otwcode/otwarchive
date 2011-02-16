@@ -77,6 +77,7 @@ group :test do
   # cuke fast
   gem 'fakeweb'
   gem 'vcr'
+  gem 'spork', '~> 0.9.0.rc'
 end
 
 # Deploy with Capistrano
