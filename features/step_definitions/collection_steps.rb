@@ -9,7 +9,6 @@ end
 Given /^I have no challenge assignments$/ do
   Collection.delete_all
 end
-
 When /^I sign up for Battle 12$/ do
   When "I go to the collections page"
     And "I follow \"Battle 12\""
@@ -86,3 +85,21 @@ Then /^I should see Battle 12 descriptions$/ do
   Then "I should see \"It is a comment fic thing\" within \"#faq\""
   Then "I should see \"Be nicer to people\" within \"#rules\""
 end
+###########################################################
+def collection
+  visit new_collection_url
+  fill_in("collection_name", :with => "defaultcollection")
+  fill_in("collection_title", :with => "Default Collection")
+  click_button("Submit")
+end
+### Given
+Given /^I have (\d+) collection$/ do |count|
+  count.to_i.times do |i|
+    collection
+  end
+end
+### Then
+Then /^my collection is orphaned$/ do
+  User.orphan_account.collections.count.should == 1
+end
+

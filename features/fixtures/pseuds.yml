@@ -1,3 +1,7 @@
+orphan_account:
+  user: orphan_account
+  name: orphan_account
+  is_default: true
 testuser:
   id: 1
   name: testuser
@@ -29,3 +33,4 @@ sad_user_with_no_pseuds:
   name: sad_user_with_no_pseuds
   user_id: 3
   is_default: true
+

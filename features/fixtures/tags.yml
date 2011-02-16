@@ -1,12 +1,28 @@
-not:
+none_apply:
   id: 1
-  name: Not Rated
-  type: Rating
-none:
-  id: 2
-  name: No Warnings
+  name: No Archive Warnings Apply
   canonical: true
   type: Warning
+choose_none:
+  id: 2
+  name: Choose Not To Use Archive Warnings
+  canonical: true
+  type: Warning
+not_rated:
+  id: 11
+  name: Not Rated
+  canonical: true
+  type: Rating
+explicit:
+  id: 12
+  name: Explicit
+  canonical: true
+  type: Rating
+no_fandom:
+  id: 13
+  name: No Fandom
+  type: Fandom
+  canonical: true
 fandom1:
   id: 3
   name: first fandom
@@ -44,3 +60,4 @@ ghostsoup:
   name: Ghost Soup
   type: Fandom
   canonical: true
+

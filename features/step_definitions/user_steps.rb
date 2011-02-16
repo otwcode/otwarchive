@@ -90,3 +90,38 @@ end
 Given /^I am a visitor$/ do
   Given %{I am logged out}
 end
+###########################################################
+def user
+  @user ||= Factory.create(:user)
+  @user.activate
+  @user
+end
+def login (user)
+  visit login_path
+  fill_in "User name", :with => user.login
+  fill_in "Password", :with => user.password
+  click_button "Log in"
+end
+### Given
+Given /^I am logged in$/ do
+  login(user)
+end
+### When
+When /^I delete my account(?: and ([^"]*) my ([^"]*))?$/ do |method, items|
+  visit user_profile_path(user)
+  click_link "Delete My Account"
+  case method
+    when "delete"
+      choose "Delete completely"
+      click_button "Save"
+    when "orphan"
+      choose "Change my pseud to 'orphan' and attach to the orphan account"
+      click_button "Save"
+    end
+end
+### Then
+Then /^I cannot log in$/ do
+  login(user)
+  page.should have_content("We couldn't find that user")
+end
+
