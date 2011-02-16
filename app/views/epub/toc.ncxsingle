@@ -7,12 +7,12 @@
     <meta name="dtb:maxPageNumber" content="0"/>
   </head>
   <docTitle>
-    <text><%= @work.title %></text>
+    <text><%= @work.title.html_safe %></text>
   </docTitle>
   <navMap>
     <navPoint id="work" playOrder="1">
       <navLabel>
-        <text><%= @work.title %></text>
+        <text><%= @work.title.html_safe %></text>
       </navLabel>
       <content src="work.xhtml"/>
     </navPoint>

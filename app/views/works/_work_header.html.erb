@@ -99,7 +99,7 @@
   <h2 class="title">
     <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
     <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
-    <%= @work.title %>
+    <%= @work.title.html_safe %>
   </h2>
   <h3 class="byline">
    <%= byline(@work) %>
@@ -135,7 +135,7 @@
             <% else %>
               <%= ts('Inspired by') %>
             <% end %>
-            <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>.
+            <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
             </h4>
           <% end %>
         <% end %>
@@ -145,7 +145,7 @@
         <% if related_work.translation %>
           <h4>
           <%= ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
-          <%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %>
+          <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %>
           </h4>
         <% else %><% if @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? %>
           <h4><%= ts("See the end of the work for other works inspired by this one.") %></h4>

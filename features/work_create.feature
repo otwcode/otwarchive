@@ -254,17 +254,25 @@ Feature: Create Works
 
   Scenario: test for integer title
     Given basic tags
-      And I am logged in as "newbie" with password "password"
-    When I go to the new work page
-    Then I should see "Post New Work"
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
+    When I am logged in as "newbie" with password "password"
+      And I go to the new work page
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "02138"
       And I fill in "content" with "Bad things happen, etc."
     When I press "Post without preview"
     Then I should see "Work was successfully posted."
-    And I should see "Bad things happen, etc."
-    When I go to the works page
-    Then I should see "02138"
+      And I should see "Bad things happen, etc."
+      And I should see "02138" within "h2.title" 
+
+  Scenario: test for < and > in title
+    Given basic tags
+    When I am logged in as "newbie" with password "password"
+      And I go to the new work page
+      And I fill in "Fandoms" with "Supernatural"
+      And I fill in "Work Title" with "4 > 3 and 2 < 5"
+      And I fill in "content" with "Bad things happen, etc."
+    When I press "Post without preview"
+    Then I should see "Work was successfully posted."
+      And I should see "Bad things happen, etc."
+      And I should see "4 > 3 and 2 < 5" within "h2.title" 
 

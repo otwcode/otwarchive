@@ -39,7 +39,7 @@
   The works uploaded include: 
   <ul>
     <% @external_author.works.each do |work| %>
-      <li><%= work.title + (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %></li>
+      <li><%= work.title.html_safe %><%= (work.fandom_string.blank? ? "" : " (#{work.fandom_string})") %></li>
     <% end %>
   </ul>
 </p>

@@ -10,7 +10,7 @@
       <li class="blurb">
         <div class="header module">
           <h4 title="title">
-      	    <%= link_to work.title, {:controller => "yuletide2010", :action => :work, :id => "#{work.id}-#{work.title.parameterize}"} %>
+      	    <%= link_to work.title.html_safe, {:controller => "yuletide2010", :action => :work, :id => "#{work.id}-#{work.title.parameterize}"} %>
        		  by <%= byline(work) %>
             <% unless work.recipients.blank? %>
             for <%= recipients_link(work) %>
