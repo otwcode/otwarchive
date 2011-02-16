@@ -5,9 +5,9 @@ VCR.config do |c|
   c.stub_with                :fakeweb
   c.ignore_localhost         = true
   #use this after setup...
-  #c.default_cassette_options = { :record => :none }
+  c.default_cassette_options = { :record => :none }
   #use this for setup...
-  c.default_cassette_options = { :record => :new_episodes }
+  #c.default_cassette_options = { :record => :new_episodes }
 end
 
 VCR.cucumber_tags do |t|
