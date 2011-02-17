@@ -101,8 +101,8 @@ Given /^I am a visitor$/ do
   Given %{I am logged out}
 end
 ###########################################################
-def user
-  @user ||= Factory.create(:user)
+def user(attributes = {})
+  @user ||= Factory.create(:user, attributes)
   @user.activate
   @user
 end
@@ -115,6 +115,12 @@ end
 ### Given
 Given /^I am logged in$/ do
   login(user)
+end
+Given /^I am logged in with username "([^"]*)"$/ do |username|
+  login(user(:login => username))
+end
+Given /^A user "([^"]*)" exists$/ do |username|
+  Factory.create(:user, :login => username)
 end
 ### When
 When /^I delete my account(?: and ([^"]*) my ([^"]*))?$/ do |method, items|
@@ -129,9 +135,22 @@ When /^I delete my account(?: and ([^"]*) my ([^"]*))?$/ do |method, items|
       click_button "Save"
     end
 end
+When /^I change my username to "([^"]*)"(?: using password "([^"]*)")?$/ do |new_username, password|
+  password ||= user.password
+  visit change_username_user_path(user)
+  fill_in "New User Name", :with => new_username
+  fill_in "Re-enter Your Password", :with => password
+  click_button "Change"
+end
 ### Then
 Then /^I cannot log in$/ do
   login(user)
   page.should have_content("We couldn't find that user")
+end
+Then /^I should have username "([^"]*)"$/ do |username|
+  user.reload.login.should == username
+end
+Then /^I should not have username "([^"]*)"$/ do |username|
+  user.reload.login.should_not == username
 end
 
