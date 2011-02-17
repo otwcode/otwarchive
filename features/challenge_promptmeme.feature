@@ -1,10 +1,10 @@
 @collections
 Feature: Prompt Meme Challenge
-  In order to have an archive full of collections
+  In order to have an archive full of works
   As a humble user
-  I want to create a collection and post to it
+  I want to create a prompt meme and post to it
 
-  Scenario: Create a prompt meme, sign up for it
+  Scenario: Create a prompt meme, sign up for it, basic version
 
   Given the following activated users exist
     | login          | password    |
@@ -189,13 +189,14 @@ Feature: Prompt Meme Challenge
   Then I should see "Editing Options"
     And I should see "Claim"
     And I should see "Stargate Atlantis"
-  When I press "prompt_19"
+  When I press "prompt_33"
   Then I should see "New claim made."
     And I should see "Claims for Battle 12"
     And I should see "Post To Fulfill"
     And I should see "Delete"
     
   # View the claim
+
   When I go to myname4's user page
     And I follow "My Claims"
     And I follow "myname1" within "#claims_table"
@@ -265,6 +266,7 @@ Feature: Prompt Meme Challenge
     And I should see "Alternate Universe - Historical"
   
   # Claim is completed
+
   When I go to myname4's user page
   Then I should see "My Claims (0)"
   When I go to the collections page
@@ -276,14 +278,16 @@ Feature: Prompt Meme Challenge
   Then I should see "Also claimed by: (Anonymous)"
   
   # mod claims a prompt
+
   When I follow "Log out"
     And I am logged in as "mod1" with password "something"
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
-  When I press "prompt_20"
+  When I press "prompt_34"
   Then I should see "New claim made."
   
   # mod can still see claims even though it's anonymous
+
     And I should see "Unfulfilled Claims"
     And I should see "mod" within "#unfulfilled_claims"
     And I should see "myname1" within "#unfulfilled_claims"
@@ -300,7 +304,6 @@ Feature: Prompt Meme Challenge
   Then I should see "Your Claims"
     And I should not see "In Battle 12"
     And I should see "Writing For" within "#claims_table"
-    # TODO: Figure out why all of this just broke
     And I should see "myname1" within "#claims_table"
   When I follow "Post To Fulfill"
     And I fill in "Work Title" with "Fulfilled Story-thing"
@@ -311,13 +314,14 @@ Feature: Prompt Meme Challenge
     And I press "Post"
   Then I should see "Work was successfully posted"
   
-  # fic shows what prompt it is fulfilling
+  # fic shows what prompt it is fulfilling when mod views it
   
   When I view the work "Fulfilled Story-thing"
   Then I should see "In response to prompt by: myname1"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
     And I should see "For myname1"
+    And I should not see "mod1" within ".byline"
     And I should not see "Alternate Universe - Historical"
   
   # mod's claim is completed
@@ -348,7 +352,38 @@ Feature: Prompt Meme Challenge
   
   # TODO: check that claims are anon everywhere
   
-  # TODO: check that completed ficlet is unrevealed
+  # check that completed ficlet is unrevealed
+  
+  When I view the work "Fulfilled Story-thing"
+  Then I should not see "In response to prompt by: myname1"
+    And I should not see "Fandom: Stargate Atlantis"
+    And I should not see "Anonymous"
+    And I should not see "mod1"
+    And I should not see "For myname1"
+    And I should not see "Alternate Universe - Historical"
+    And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+  
+  # make challenge revealed but still anon
+  
+  When I follow "Log out"
+    And I am logged in as "mod1" with password "something"
+  When I go to "Battle 12" collection's page
+    And I follow "Settings"
+    And I uncheck "Is this collection currently unrevealed?"
+    And I press "Submit"
+  Then I should see "Collection was successfully updated"
+  
+  # check ficlet is visible but anon
+  
+  When I follow "Log out"
+    And I am logged in as "myname4" with password "something"
+  When I view the work "Fulfilled Story-thing"
+  Then I should see "In response to prompt by: myname1"
+    And I should see "Fandom: Stargate Atlantis"
+    And I should see "Anonymous" within ".byline"
+    And I should see "For myname1"
+    And I should not see "mod1" within ".byline"
+    And I should not see "Alternate Universe - Historical"
   
   # make challenge un-anon
   

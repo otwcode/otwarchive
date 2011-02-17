@@ -12,7 +12,7 @@
 
   <div class="collection preface">
     <% if request %>
-      <h3><%=h ts("Request by {{requester}}", :requester => request.pseud.byline) %></h3>
+      <h3><%=h ts("Request by %{requester}", :requester => request.pseud.byline) %></h3>
       <%= render :partial => "challenge_signups/show_prompt", :locals => {:prompt => @challenge_claim.request_prompt} %>
     <% else %>
       <p class="note">No request!</p>
