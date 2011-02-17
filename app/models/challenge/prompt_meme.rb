@@ -23,11 +23,11 @@ class PromptMeme < ActiveRecord::Base
 
   validates_length_of :signup_instructions_general, :signup_instructions_requests, { 
     :allow_blank => true,
-    :maximum => ArchiveConfig.INFO_MAX, :too_long => t('prompt_meme.instructions_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.INFO_MAX)
+    :maximum => ArchiveConfig.INFO_MAX, :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.INFO_MAX)
   }
 
   %w(requests_num_required requests_num_allowed).each do |prompt_limit_field|
-      validates_numericality_of prompt_limit_field, :only_integer => true, :less_than_or_equal_to => ArchiveConfig.PROMPTS_MAX, :greater_than_or_equal_to => 0
+      validates_numericality_of prompt_limit_field, :only_integer => true, :less_than_or_equal_to => ArchiveConfig.PROMPT_MEME_PROMPTS_MAX, :greater_than_or_equal_to => 0
   end
 
   before_validation :update_allowed_values
