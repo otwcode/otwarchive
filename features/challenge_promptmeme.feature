@@ -121,7 +121,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Signup was successfully created"
     And I should see "Prompts (2)"
   
-  # someone else sign up, with 3 prompts this time once Javascript is working
+  # someone else sign up, with 3 prompts this time once Javascript is working, and with anon prompts
   
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
@@ -136,13 +136,15 @@ Feature: Prompt Meme Challenge
   #Then I should see "Request 3"
   #When I check "challenge_signup_requests_attributes_2_fandom_27"
     And I check "challenge_signup_requests_attributes_1_fandom_27"
+    And I check "challenge_signup_requests_attributes_0_anonymous"
+    And I check "challenge_signup_requests_attributes_1_anonymous"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School, Something else weird"
    # And I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"
     And I press "Submit"
   Then I should see "Signup was successfully created"
     And I should see "Prompts (4)"
   
-  # third person sign up
+  # third person sign up, with an anon prompt
   
   When I follow "Log out"
     And I am logged in as "myname3" with password "something"
@@ -210,7 +212,8 @@ Feature: Prompt Meme Challenge
     And I follow "Prompts"
   Then I should see "myname4" within "#main"
     And I should see "myname3" within "#main"
-    And I should see "myname2" within "#main"
+    And I should not see "myname2" within "#main"
+    And I should see "(Anonymous)" within "#main"
     And I should see "myname1" within "#main"
     And I should see "Something else weird"
     And I should see "Alternate Universe - Historical"
@@ -339,9 +342,9 @@ Feature: Prompt Meme Challenge
   Then I should see "Also claimed by: myname4"
     And I should see "Also claimed by: mod1"
     And I should not see "Also claimed by: (Anonymous)"
-    
+
   # users can't see claims
-  
+
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
   When I go to "Battle 12" collection's page
@@ -350,10 +353,13 @@ Feature: Prompt Meme Challenge
     And I should not see "Also claimed by: mod1"
     And I should see "Also claimed by: (Anonymous)"
   
-  # TODO: check that claims are anon everywhere
-  
+  # check that claims can't be viewed
+
+  When I follow "myname1"
+  Then I should see "Sorry, you're not allowed to do that."
+
   # check that completed ficlet is unrevealed
-  
+
   When I view the work "Fulfilled Story-thing"
   Then I should not see "In response to prompt by: myname1"
     And I should not see "Fandom: Stargate Atlantis"
@@ -362,9 +368,9 @@ Feature: Prompt Meme Challenge
     And I should not see "For myname1"
     And I should not see "Alternate Universe - Historical"
     And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
-  
+
   # make challenge revealed but still anon
-  
+
   When I follow "Log out"
     And I am logged in as "mod1" with password "something"
   When I go to "Battle 12" collection's page
@@ -372,9 +378,9 @@ Feature: Prompt Meme Challenge
     And I uncheck "Is this collection currently unrevealed?"
     And I press "Submit"
   Then I should see "Collection was successfully updated"
-  
+
   # check ficlet is visible but anon
-  
+
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
   When I view the work "Fulfilled Story-thing"
@@ -384,9 +390,9 @@ Feature: Prompt Meme Challenge
     And I should see "For myname1"
     And I should not see "mod1" within ".byline"
     And I should not see "Alternate Universe - Historical"
-  
+
   # make challenge un-anon
-  
+
   When I follow "Log out"
     And I am logged in as "mod1" with password "something"
   When I go to "Battle 12" collection's page
@@ -394,10 +400,37 @@ Feature: Prompt Meme Challenge
     And I uncheck "Is this collection currently anonymous?"
     And I press "Submit"
   Then I should see "Collection was successfully updated"
+
+  # user can now see claims
+
+  When I follow "Log out"
+    And I am logged in as "myname4" with password "something"
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts"
+  Then I should see "Also claimed by: myname4"
+    And I should see "Also claimed by: mod1"
+    And I should not see "Also claimed by: (Anonymous)"
+    
+  # user claims an anon prompt
+
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts"
+  When I press "prompt_35"
+  Then I should see "New claim made."
+
+  # check that anon prompts are still anon on the claims index 
   
-  # TODO: user can now see claims
+    And I should not see "myname2"
+    And I should see "Claims (3)"
+    
+  # check that anon prompts are still anon on the prompts page
   
-  # TODO: check that anon prompts are still anon, on the prompts page and claims index and user claims index and claims show and fulfilling work
+  When I follow "Prompts"
+  Then I should not see "myname2" within "#main"
+  
+  # TODO: check that anon prompts are still anon on the user claims index and claims show and fulfilling work
+  
+  # check that claims show as fulfilled
   
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
