@@ -37,28 +37,19 @@ Feature: Create Works
     When I post my work
     Then my work should be posted
 
-  Scenario: Creating a new minimally valid work when you have more than one pseud
-    Given basic tags
-      And I am logged in as "newbie" with password "password"
-      And "newbie" creates the pseud "Pointless Pseud"
-      And I follow "Edit"
-      And I check "Is default"
-      And I press "Update"
-    Then I should see "Pseud was successfully updated."
-    When I go to the new work page
-    Then I should see "Post New Work"
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
-      And I select "Pointless Pseud" from "work_author_attributes_ids_"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
-      And I fill in "content" with "Bad things happen, etc."
-    When I press "Preview"
-    Then I should see "Preview Work"
-    When I press "Post"
-    Then I should see "Work was successfully posted."
-    When I go to the works page
-    Then I should see "All Hell Breaks Loose"
+  Scenario: Users can create a work with an alternate pseud
+    Given I am logged in
+      And I have pseud "alternate"
+    When I create a work with the following chararistics
+        | Rating   | Not Rated                 |
+        | Warnings | No Archive Warnings Apply |
+        | Fandom   | Supernatural              |
+        | Title    | All Hell Breaks Loose     |
+        | Pseud    | alternate                 |
+        | Content  | Bad things happen, etc.   |
+      And post my work
+    Then my work should be posted
+      And I should see "alternate"
 
   Scenario: Creating a new work with everything filled in, and we do mean everything
     Given basic tags
