@@ -73,4 +73,16 @@ def basic_tags
   Rating.find_or_create_by_name_and_canonical("Explicit", true)
   Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
 end
+### Given
+Given /^the following fandom tags exist$/ do |fandom_table|
+  fandom_table.hashes.each do |hash|
+    Factory.create(:fandom, :name => hash['name'], :canonical => hash['canonical'])
+  end
+end
+Given /^tag "([^"]*)" has metatag "([^"]*)"$/ do |fandom_tag, meta_tag|
+  Fandom.find_by_name(fandom_tag).direct_meta_tags << Fandom.find_by_name(meta_tag)
+end
+Given /^tag "([^"]*)" has synonym "([^"]*)"$/ do |tag, synonym_tag|
+  Tag.find_by_name(tag).mergers << Tag.find_by_name(synonym_tag)
+end
 

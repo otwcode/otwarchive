@@ -24,3 +24,8 @@ Factory.define :archive_faq do |f|
   f.sequence(:title) { |n| "The #{n} FAQ" }
   f.sequence(:content) { |n| "This is the #{n} FAQ" }
 end
+
+Factory.define :fandom do |f|
+  f.sequence(:name) { |n| "Test Fandom #{n}" }
+  f.canonical true
+end
