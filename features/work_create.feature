@@ -9,38 +9,33 @@ Feature: Create Works
     When I try to create a new work
     Then I cannot create a work
 
-  Scenario: Creating a new minimally valid work
-    Given basic tags
-      And I am logged in as "newbie" with password "password"
-    When I go to the new work page
-    Then I should see "Post New Work"
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
-      And I fill in "content" with "Bad things happen, etc."
-    When I press "Preview"
-    Then I should see "Preview Work"
-    When I press "Post"
-    Then I should see "Work was successfully posted."
-    When I go to the works page
-    Then I should see "All Hell Breaks Loose"
+  Scenario: Registered users may create works
+    Given I am logged in
+    When I create a work with the following chararistics
+        | Rating   | Not Rated                 |
+        | Warnings | No Archive Warnings Apply |
+        | Fandom   | Supernatural              |
+        | Title    | All Hell Breaks Loose     |
+        | Content  | Bad things happen, etc.   |
+      And post my work
+    Then my work should be posted
 
-  Scenario: Creating a new minimally valid work and posting without preview
-    Given basic tags
-      And I am logged in as "newbie" with password "password"
-    When I go to the new work page
-    Then I should see "Post New Work"
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
-      And I fill in "content" with "Bad things happen, etc."
-    When I press "Post without preview"
-    Then I should see "Work was successfully posted."
-    And I should see "Bad things happen, etc."
-    When I go to the works page
-    Then I should see "All Hell Breaks Loose"
+  Scenario: Users can preview their work
+    Given I am logged in
+    When I create a work with the following chararistics
+        | Rating   | Not Rated                 |
+        | Warnings | No Archive Warnings Apply |
+        | Fandom   | Supernatural              |
+        | Title    | All Hell Breaks Loose     |
+        | Content  | Bad things happen, etc.   |
+      And preview my work
+    Then I should see a preview
+
+  Scenario: Users can post their work from a preview
+    Given I am logged in
+    Given I am previewing a work
+    When I post my work
+    Then my work should be posted
 
   Scenario: Creating a new minimally valid work when you have more than one pseud
     Given basic tags
