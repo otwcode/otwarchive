@@ -218,9 +218,39 @@ Given /^I have a work with the following chararistics$/ do |table|
   characteristics = table.rows_hash
   work(:title => characteristics['Title'], :fandom => characteristics['Fandom'])
 end
+Given /^I am previewing a work$/ do
+  steps %Q{
+  When I create a work with the following chararistics
+    | Rating   | Not Rated                 |
+    | Warnings | No Archive Warnings Apply |
+    | Fandom   | Supernatural              |
+    | Title    | All Hell Breaks Loose     |
+    | Content  | Bad things happen, etc.   |
+    }
+  When %{preview my work}
+end
 ### When
 When /^I try to create a new work$/ do
   visit new_work_url
+end
+When /^I create a work with the following chararistics$/ do |table|
+  characteristics = table.rows_hash
+  visit new_work_url
+  select(characteristics['Rating'], :from => "Rating")
+  check(characteristics['Warnings'])
+  fill_in("Fandoms", :with => characteristics['Fandom'])
+  fill_in("Work Title", :with => characteristics['Title'])
+  fill_in("content", :with => characteristics['Content'])
+end
+When /^(?:I )?post my work$/ do
+  if page.has_content?("Post without preview")
+    click_button("Post without preview")
+  else
+    click_button("Post")
+  end
+end
+When /^preview my work$/ do
+  click_button("Preview")
 end
 ### Then
 Then /^my work does not exist$/ do
@@ -231,5 +261,11 @@ Then /^my work is orphaned$/ do
 end
 Then /^I cannot create a work$/ do
   page.should have_content("Please log in")
+end
+Then /^my work should be posted$/ do
+  page.should have_content("Work was successfully posted.")
+end
+Then /^I should see a preview$/ do
+  page.should have_content("Preview Work")
 end
 
