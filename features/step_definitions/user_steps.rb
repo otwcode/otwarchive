@@ -103,6 +103,9 @@ def login (user)
   click_button "Log in"
 end
 ### Given
+Given /^I am not logged in$/ do
+  visit logout_path
+end
 Given /^I am logged in$/ do
   login(user)
 end
