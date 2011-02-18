@@ -218,11 +218,18 @@ Given /^I have a work with the following chararistics$/ do |table|
   characteristics = table.rows_hash
   work(:title => characteristics['Title'], :fandom => characteristics['Fandom'])
 end
+### When
+When /^I try to create a new work$/ do
+  visit new_work_url
+end
 ### Then
 Then /^my work does not exist$/ do
   user.works.count.should == 0
 end
 Then /^my work is orphaned$/ do
   User.orphan_account.works.count.should == 1
+end
+Then /^I cannot create a work$/ do
+  page.should have_content("Please log in")
 end
 

@@ -4,9 +4,10 @@ Feature: Create Works
   As an author
   I want to create new works
 
-  Scenario: You can't create a work unless you're logged in
-  When I go to the new work page
-  Then I should see "Please log in"
+  Scenario: Only registered users can create works
+    Given I am not logged in
+    When I try to create a new work
+    Then I cannot create a work
 
   Scenario: Creating a new minimally valid work
     Given basic tags
