@@ -226,6 +226,7 @@ When /^I create a work with the following chararistics$/ do |table|
   check(characteristics['Warnings'])
   fill_in("Fandoms", :with => characteristics['Fandom'])
   fill_in("Work Title", :with => characteristics['Title'])
+  select(characteristics['Pseud'], :from => "Select author/pseudonym") if characteristics['Pseud']
   fill_in("content", :with => characteristics['Content'])
 end
 When /^(?:I )?post my work$/ do
