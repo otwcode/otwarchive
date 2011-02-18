@@ -132,6 +132,9 @@ When /^I change my username to "([^"]*)"(?: using password "([^"]*)")?$/ do |new
   fill_in "Re-enter Your Password", :with => password
   click_button "Change"
 end
+When /^I visit my dashboard$/ do
+  visit user_path(user)
+end
 ### Then
 Then /^I cannot log in$/ do
   login(user)
@@ -142,5 +145,25 @@ Then /^I should have username "([^"]*)"$/ do |username|
 end
 Then /^I should not have username "([^"]*)"$/ do |username|
   user.reload.login.should_not == username
+end
+Then /^I should not see any fandoms or works$/ do
+  page.should have_no_content("Fandoms")
+  page.should have_no_content("Recent works")
+end
+Then /^I should see my work "([^"]*)"(?: with fandom "([^"]*)")?$/ do |work, fandom|
+  with_scope('#user-works') do
+    page.should have_content(work)
+    page.should have_content(fandom) unless fandom.nil?
+  end
+end
+Then /^I should see the fandom "([^"]*)"$/ do |fandom|
+  with_scope('#user-fandoms') do
+    page.should have_content(fandom)
+  end
+end
+Then /^I should not see the fandom "([^"]*)"$/ do |fandom|
+  with_scope('#user-fandoms') do
+    page.should_not have_content(fandom)
+  end
 end
 

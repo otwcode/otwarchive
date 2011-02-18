@@ -196,10 +196,13 @@ Given /^I have no works$/ do
   user.works.find_each { |w| w.delete }
 end
 Given /^I have (\d+) work(?:s)?$/ do |count|
-  #basic_tags
   count.to_i.times do |i|
     work({:title => Faker::Lorem.words(3).join(" "), :content => Faker::Lorem.paragraphs(3).join})
   end
+end
+Given /^I have a work with the following chararistics$/ do |table|
+  characteristics = table.rows_hash
+  work(:title => characteristics['Title'], :fandom => characteristics['Fandom'])
 end
 ### Then
 Then /^my work does not exist$/ do

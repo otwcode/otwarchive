@@ -19,3 +19,8 @@ Factory.define :admin do |f|
   f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
 end
 
+Factory.define :fandom do |f|
+  f.sequence(:name) { |n| "Test Fandom #{n}" }
+  f.canonical true
+end
+
