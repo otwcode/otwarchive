@@ -3,7 +3,7 @@ Feature: Import Works from LJ
   In order to have an archive full of works
   As an author
   I want to create new works by importing them from LJ
-  
+  @import_lj
   Scenario: Creating a new work from an LJ story with automatic metadata
     Given basic tags
       And a fandom exists with name: "Lewis", canonical: true
@@ -19,8 +19,8 @@ Feature: Import Works from LJ
       And I should see "General Audiences" within "dd.rating"
       And I should see "Lewis/Hathaway" within "dd.relationship"
       And I should see "Published:2000-01-10"
-      And I should see "Importing Test" within "h2.title" 
-      And I should not see "[FIC]" within "h2.title" 
+      And I should see "Importing Test" within "h2.title"
+      And I should not see "[FIC]" within "h2.title"
       And I should see "Something I made for testing purposes." within "div.summary"
       And I should see "Yes, this is really only for testing. :)" within "div.notes"
       And I should see "My first paragraph."
@@ -33,14 +33,14 @@ Feature: Import Works from LJ
       And I should not see "Entry tags"
     When I press "Post"
     Then I should see "Work was successfully posted."
-    When I am on cosomeone's user page 
+    When I am on cosomeone's user page
       #'
       Then I should see "Importing Test"
-
+  @import_lj_tables
   Scenario: Creating a new work from an LJ story that has tables
   # This is to make sure that we don't accidentally strip other tables than
   # LJ metadata tables esp. when there's no LJ metadata table
-  
+
     Given basic tags
       And a fandom exists with name: "Lewis", canonical: true
       And the following activated user exists
@@ -55,8 +55,8 @@ Feature: Import Works from LJ
       And I should see "General Audiences" within "dd.rating"
       And I should see "Lewis/Hathaway" within "dd.relationship"
       And I should see "Published:2000-01-10"
-      And I should see "Importing Test" within "h2.title" 
-      And I should not see "[FIC]" within "h2.title" 
+      And I should see "Importing Test" within "h2.title"
+      And I should not see "[FIC]" within "h2.title"
       And I should see "Something I made for testing purposes." within "div.summary"
       And I should see "Yes, this is really only for testing. :)" within "div.notes"
       And I should see "My first paragraph."
@@ -69,11 +69,11 @@ Feature: Import Works from LJ
       And I should see "My tags"
     When I press "Post"
     Then I should see "Work was successfully posted."
-    When I am on cosomeone's user page 
+    When I am on cosomeone's user page
       #'
       Then I should see "Importing Test"
 
-  
+  @import_lj_no_backdate
   Scenario: Creating a new work from an LJ story without backdating it
     Given basic tags
       And a category exists with name: "Gen", canonical: true
@@ -96,11 +96,11 @@ Feature: Import Works from LJ
     Then I should see "Importing Test"
     When I press "Post"
     Then I should see "Work was successfully posted."
-      And I should see "Importing Test" within "h2.title" 
+      And I should see "Importing Test" within "h2.title"
       And I should not see the "alt" text "Add to memories!"
       And I should not see the "alt" text "Next Entry"
-  
 
+  @import_lj_comm
   Scenario: Creating a new work from an LJ story that is posted to a community
     Given basic tags
       And the following activated user exists
@@ -114,8 +114,8 @@ Feature: Import Works from LJ
       And I should see "Poirot - Agatha Christie" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
       And I should see "Published:2010-10-23"
-      And I should see "Mrs Stanwood's Birthday Party" within "h2.title" 
-      And I should not see "[Poirot]" within "h2.title" 
+      And I should see "Mrs Stanwood's Birthday Party" within "h2.title"
+      And I should not see "[Poirot]" within "h2.title"
       And I should see "Mrs Stanwood, famous medical researcher" within "div.summary"
       And I should see "more to their friendship than he'd thought." within "div.summary"
       And I should see "Thanks to Tevildo and phantomphan1990 for beta-reading!"
@@ -129,11 +129,11 @@ Feature: Import Works from LJ
       And I should not see "Entry tags"
     When I press "Post"
     Then I should see "Work was successfully posted."
-    When I am on cosomeone's user page 
+    When I am on cosomeone's user page
       #'
       Then I should see "Mrs Stanwood's Birthday Party"
 
-
+  @import_lj_multi_chapter
   Scenario: Creating a new multichapter work from an LJ story
     Given basic tags
       And the following activated user exists
@@ -141,7 +141,7 @@ Feature: Import Works from LJ
         | cosomeone      | something   |
       And I am logged in as "cosomeone" with password "something"
     When I go to the import page
-      And I fill in "urls" with 
+      And I fill in "urls" with
          """
          http://rebecca2525.livejournal.com/3562.html
          http://rebecca2525.livejournal.com/4024.html
@@ -151,8 +151,8 @@ Feature: Import Works from LJ
     Then I should see "Preview Work"
       And I should see "Lewis" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
-      And I should see "Importing Test" within "h2.title" 
-      And I should not see "[FIC]" within "h2.title" 
+      And I should see "Importing Test" within "h2.title"
+      And I should not see "[FIC]" within "h2.title"
       And I should see "Something I made for testing purposes." within "div.summary"
       And I should see "Yes, this is really only for testing. :)" within "div.notes"
       And I should see "My first paragraph."
@@ -163,13 +163,14 @@ Feature: Import Works from LJ
       And I should see "Published:2000-01-10"
       And I should see "Completed:2000-01-21"
       And I should see "My first paragraph."
-      And I should see "My second paragraph."    
+      And I should see "My second paragraph."
     When I follow "Next Chapter"
     Then I should see "The long awaited second part."
       And I should see "And another paragraph."
       And I should see "The plot thickens." within "div.summary"
       And I should see "MOAR TESTING! :)" within "div.notes"
-      And I should see "Importing Test Part 2" within "h3.title" 
-    When I am on cosomeone's user page 
+      And I should see "Importing Test Part 2" within "h3.title"
+    When I am on cosomeone's user page
       #'
       Then I should see "Importing Test"
+

@@ -3,7 +3,7 @@ Feature: Create bookmarks
   In order to have an archive full of bookmarks
   As a humble user
   I want to bookmark some works
-    
+
   Scenario: Create a bookmark
     Given the following activated users exist
       | login           | password   |
@@ -63,7 +63,7 @@ Feature: Create bookmarks
     Then I should not see "I liked this story"
     When I go to bookmarkuser1's user page
     Then I should not see "I liked this story"
-
+  @bookmark_fandom_error
   Scenario: Create a bookmark on an external work (fandom error)
     Given the following activated users exist
       | login           | password   |
@@ -82,7 +82,7 @@ Feature: Create bookmarks
     Then I should see "this work is not hosted on the Archive"
     When I go to bookmarkuser1's bookmarks page
     Then I should see "Stuck with You"
-
+  @bookmark_url_error
   Scenario: Create a bookmark on an external work (url error)
     Given the following activated users exist
       | login           | password   |
@@ -177,3 +177,4 @@ Feature: Create bookmarks
       And I should not see "Mystery"
       But I should see "Public Masterpiece"
       And I should see "Publicky"
+

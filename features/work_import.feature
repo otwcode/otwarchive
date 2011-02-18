@@ -3,11 +3,11 @@ Feature: Import Works
   In order to have an archive full of works
   As an author
   I want to create new works by importing them
-  
+
   Scenario: You can't create a work unless you're logged in
   When I go to the import page
   Then I should see "Please log in"
-  
+  @work_import_minimal_valid
   Scenario: Creating a new minimally valid work
     Given basic tags
       And I am logged in as a random user
@@ -25,7 +25,7 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "Recent Entries"
-  
+  @work_import_tags
   Scenario: Creating a new work with tags
     Given basic tags
       And a category exists with name: "M/M", canonical: true
@@ -52,13 +52,13 @@ Feature: Import Works
       And I should see "kinkmeme"
     When I press "Post"
     Then I should see "Work was successfully posted."
-  
+  @work_import_multi_tags_backdate
   Scenario: Importing multiple works with tags and backdating
     Given basic tags
       And I am logged in as a random user
     When I go to the import page
     Then I should see "Import New Work"
-      And I fill in "urls" with 
+      And I fill in "urls" with
         """
         http://www.intimations.org/fanfic/idol/Huddling.html
         http://www.intimations.org/fanfic/idol/Stardust.html
@@ -84,8 +84,8 @@ Feature: Import Works
 
 
 #  Scenario: Import works for others and have them automatically notified
-      
 
+  @work_import_special_characters_auto_utf
   Scenario: Import a work with special characters (UTF-8, autodetect from page encoding)
     Given basic tags
       And I am logged in as a random user
@@ -95,7 +95,7 @@ Feature: Import Works
     Then I should see "Preview Work"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
-
+  @work_import_special_characters_auto_latin
   Scenario: Import a work with special characters (latin-1, autodetect from page encoding)
     Given basic tags
       And I am logged in as a random user
@@ -106,7 +106,7 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
-
+  @work_import_special_characters_man_latin
   Scenario: Import a work with special characters (latin-1, must set manually)
     Given basic tags
       And I am logged in as a random user
@@ -118,7 +118,7 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
-
+  @work_import_special_characters_man_cp
   Scenario: Import a work with special characters (cp-1252, must set manually)
     Given basic tags
       And I am logged in as a random user
@@ -131,7 +131,7 @@ Feature: Import Works
       And I should see "So—what’s up?"
       And I should see "“Something witty.”"
 
-
+  @work_import_special_characters_man_utf
   Scenario: Import a work with special characters (utf-8, must overwrite wrong page encoding)
     Given basic tags
       And I am logged in as a random user

@@ -1,6 +1,6 @@
 @users @admin
 Feature: Archivist bulk imports
-
+  @archivist_import
   Scenario: Log in as an archivist and import a big archive.
     Given the following admin exists
       | login       | password |
@@ -49,3 +49,4 @@ Feature: Archivist bulk imports
     # Then show me the emails
     # Then 1 email should be delivered to "shalott@intimations.org"
     #   And 1 email should be delivered to "cesy@dreamwidth.org"
+
