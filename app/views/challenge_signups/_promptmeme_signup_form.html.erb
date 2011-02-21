@@ -28,7 +28,7 @@ So if anyone can think of a better design for this, that would be awesome
 <!--main content-->
 <% if params[:single_prompt] == "true" %>
 
-  <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection) : collection_signups_path(@collection))) do |signup_form| %>
+  <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection, :single_prompt => params[:single_prompt]) : collection_signups_path(@collection))) do |signup_form| %>
     <%= error_messages_for @challenge_signup %>
   
   <fieldset class="preface profile">
@@ -52,7 +52,7 @@ So if anyone can think of a better design for this, that would be awesome
     <% end %>
     <% last_request = @challenge_signup.requests.new %>
     <% index = @challenge_signup.requests.count %>
-      <%= signup_form.fields_for "requests".to_sym, last_request do |prompt_form| %>
+      <%= signup_form.fields_for("requests".to_sym, last_request, :child_index => index) do |prompt_form| %>
         <%= render :partial => "prompts/prompt_form", 
             :locals => {:form => prompt_form, :is_offer => false, :index => index,
                         :required => true} %>
@@ -60,7 +60,7 @@ So if anyone can think of a better design for this, that would be awesome
   </fieldset>
   
   <fieldset>
-  	<legend><%h= 'Submit' -%></legend> 
+  	<legend><%= 'Submit' -%></legend> 
     <p class="submit">
       <%= signup_form.submit 'Submit' %>
     </p>
@@ -125,7 +125,7 @@ So if anyone can think of a better design for this, that would be awesome
   <% end # requests section %>
 
   <fieldset>
-  	<legend><%h= 'Submit' -%></legend> 
+  	<legend><%= 'Submit' -%></legend> 
     <p class="submit">
       <%= signup_form.submit 'Submit' %>
     </p>
