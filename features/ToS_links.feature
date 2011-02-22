@@ -11,7 +11,9 @@ Feature: Links in ToS
 		
 		Then I should see "Terms of Service" within ".home-tos h2"
 			And I should see "While the Archive is in beta, it's important for users to be aware of what that means"
-			And the page URL should be "http://www.example.com/tos"
+			
+	       # all commented out lines concerning URLs lack a viable step definition
+		#And the page URL should be "http://www.example.com/tos"
 			
 			And I should see the text with tags '<a href="#general">General Principles</a>'
 			And I should see "General Principles" within ".toc"
@@ -34,11 +36,13 @@ Feature: Links in ToS
 		# check that target links exist
    
 			And I should see the text with tags '<a name="general" id="general">'
+			#And the page URL should be "http://www.example.com/tos#general"
 			And I should see the text with tags '<a name="age" id="age">'
 			And I should see the text with tags '<a name="privacy" id="privacy">'
 			And I should see the text with tags '<a name="content" id="content">'
 			And I should see the text with tags '<a name="assorted" id="assorted">'
 			And I should see the text with tags '<a name="IV.A.">'
+			# And the page URL should be "http://www.example.com/tos#IV.A."
 			And I should see the text with tags '<a name="IV.B.">'
 			And I should see the text with tags '<a name="IV.C.">'
 			And I should see the text with tags '<a name="IV.D.">'
@@ -60,10 +64,10 @@ Feature: Links in ToS
 	
 		When I follow "refer to the ToS FAQ" within ".home-tos .admin userstuff"
 		Then I should see "There are a number of wonderful specialized archives."
-			And the page URL should be "http://www.example.com/tos_faq#max_inclusiveness"
+		#And the page URL should be "http://www.example.com/tos_faq#max_inclusiveness"
 
 	
-		# Then show me the page
+
 			
 			
 
