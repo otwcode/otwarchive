@@ -12,17 +12,17 @@
   <ul class="navigation">
     <li><%= link_to t('.gift_exchange.download_excel', :default => "Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
     <% if show_offer_description || show_request_description %>
-      <li><%= link_to t('.gift_exchange.hide_desc', :default => "Hide Descriptions"), 
+      <li><%= link_to ts("Hide Descriptions"), 
           collection_signups_path(@collection, :show_descriptions => false, :show_urls => params[:show_urls]) %></li>
     <% elsif !params[:show_descriptions] %>
-      <li><%= link_to t('.gift_exchange.show_desc', :default => "Show Descriptions"), 
+      <li><%= link_to ts("Show Descriptions"), 
           collection_signups_path(@collection, :show_descriptions => true, :show_urls => params[:show_urls]) %></li>
     <% end %>
     <% if show_offer_url|| show_request_url %>
-      <li><%= link_to t('.gift_exchange.hide_url', :default => "Hide URLs"), 
+      <li><%= link_to ts("Hide URLs"), 
           collection_signups_path(@collection, :show_descriptions => params[:show_descriptions], :show_urls => false) %></li>
     <% elsif !params[:show_urls] %>
-      <li><%= link_to t('.gift_exchange.show_desc', :default => "Show URLs"), 
+      <li><%= link_to ts("Show URLs"), 
           collection_signups_path(@collection, :show_descriptions => params[:show_descriptions], :show_urls => true) %></li>
     <% end %>
   </ul>

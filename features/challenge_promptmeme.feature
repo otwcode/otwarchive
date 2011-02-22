@@ -179,8 +179,8 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
     And I follow "Battle 12"
     And I follow "Prompts"
-  Then I should see "Editing Options"
-    And I should see "Claim"
+  Then I should see "Claim" within "th"
+    And I should not see "Sign in to claim prompts"
     And I should see "Stargate Atlantis"
   When I press "prompt_33"
   Then I should see "New claim made."
@@ -269,7 +269,8 @@ Feature: Prompt Meme Challenge
   Then I should see "Secret!" within "#fulfilled_claims"
     And I should not see "Secret!" within "#unfulfilled_claims"
   When I follow "Prompts"
-  Then I should see "Also claimed by: (Anonymous)"
+    And I follow "Show Claims"
+  Then I should see "Claimed by: (Anonymous)"
   
   # mod claims a prompt
 
@@ -330,9 +331,10 @@ Feature: Prompt Meme Challenge
   # mod can see claims
   
   When I follow "Prompts"
-  Then I should see "Also claimed by: myname4"
-    And I should see "Also claimed by: mod1"
-    And I should not see "Also claimed by: (Anonymous)"
+    And I follow "Show Claims"
+  Then I should see "Claimed by: myname4"
+    And I should see "Claimed by: mod1"
+    And I should not see "Claimed by: (Anonymous)"
 
   # users can't see claims
 
@@ -340,9 +342,10 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4" with password "something"
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
-  Then I should not see "Also claimed by: myname4"
-    And I should not see "Also claimed by: mod1"
-    And I should see "Also claimed by: (Anonymous)"
+    And I follow "Show Claims"
+  Then I should not see "Claimed by: myname4"
+    And I should not see "Claimed by: mod1"
+    And I should see "Claimed by: (Anonymous)"
   
   # check that claims can't be viewed
 
@@ -398,9 +401,10 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4" with password "something"
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
-  Then I should see "Also claimed by: myname4"
-    And I should see "Also claimed by: mod1"
-    And I should not see "Also claimed by: (Anonymous)"
+    And I follow "Show Claims"
+  Then I should see "Claimed by: myname4"
+    And I should see "Claimed by: mod1"
+    And I should not see "Claimed by: (Anonymous)"
     
   # user claims an anon prompt
 
