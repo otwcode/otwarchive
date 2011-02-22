@@ -16,17 +16,17 @@
       <li><%= link_to t('gift_exchange.download_excel', :default => "Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
     <% end %>
     <% if show_request_description %>
-      <li><%= link_to t('gift_exchange.hide_desc', :default => "Hide Descriptions"), 
+      <li><%= link_to ts("Hide Descriptions"), 
           collection_signups_path(@collection, :hide_descriptions => true, :hide_urls => params[:hide_urls]) -%></li>
     <% elsif params[:hide_descriptions] %>
-      <li><%= link_to t('gift_exchange.show_desc', :default => "Show Descriptions"), 
+      <li><%= link_to ts("Show Descriptions"), 
           collection_signups_path(@collection, :hide_descriptions => false, :hide_urls => params[:hide_urls]) -%></li>
     <% end %>
     <% if show_request_url %>
-      <li><%= link_to t('gift_exchange.hide_url', :default => "Hide URLs"), 
+      <li><%= link_to ts("Hide URLs"), 
           collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => true) -%></li>
     <% elsif params[:hide_urls] %>
-      <li><%= link_to t('gift_exchange.show_desc', :default => "Show URLs"), 
+      <li><%= link_to ts("Show URLs"), 
           collection_signups_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => false) -%></li>
     <% end %>
   </ul>
@@ -37,7 +37,7 @@
   <!-- top header row showing requests numbered -->
   <tr>
     <% unless @hide_navigation %>
-      <th rowspan=2 abbr="options" scope="col"><%=h t('editing options', :default =>"Editing Options") %></th>
+      <th rowspan=2 abbr="options" scope="col"><%=h ts("Editing Options") %></th>
     <% end %>
     <th rowspan=2>Pseud</th>
     <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
@@ -45,30 +45,28 @@
     <% end %>
     
     <th colspan=<%= (num_request_tag_categories + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) -%>>
-      <%= t("gift_exchange.request", :default => "Requests") %>
+      <%= ts("Requests") %>
     </th>
     
   </tr>
 
   <!-- secondary header row showing the tags, description, url -->
   <tr>
-    <% %w(request).each do |prompt_type| %>
       
         <% TagSet::TAG_TYPES.each do |type| %>
           <% if eval("@show_request_#{type}_tags") %><th><%= type.classify.pluralize -%></th><% end %>
         <% end %>
         <% if eval("show_request_optional_tags") %><th>Optional Tags</th><% end %>
         <% if eval("show_request_description") %><th>
-          <% desc_label = @challenge.send("#{prompt_type}_description_label") %>
+          <% desc_label = @challenge.send("request_description_label") %>
           <%= desc_label.blank? ? ts("Description: ") : desc_label %>
           </th>
         <% end %>
-        <% if eval("show_#{prompt_type}_url") %><th>
-          <% url_label = @challenge.send("#{prompt_type}_url_label") %>
+        <% if eval("show_request_url") %><th>
+          <% url_label = @challenge.send("request_url_label") %>
           <%= url_label.blank? ? ts("Prompt URL: ") : url_label %></th>
         <% end %>
 
-    <% end %>
   </tr>
 
   <!-- body of table -->

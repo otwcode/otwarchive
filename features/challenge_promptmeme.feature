@@ -1,4 +1,4 @@
-@collections
+@collections @challenges
 Feature: Prompt Meme Challenge
   In order to have an archive full of works
   As a humble user
