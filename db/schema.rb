@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110130093604) do
+ActiveRecord::Schema.define(:version => 20110222093602) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -412,6 +412,7 @@ ActiveRecord::Schema.define(:version => 20110130093604) do
     t.integer  "signup_instructions_general_sanitizer_version",  :limit => 2, :default => 0,     :null => false
     t.integer  "signup_instructions_requests_sanitizer_version", :limit => 2, :default => 0,     :null => false
     t.integer  "signup_instructions_offers_sanitizer_version",   :limit => 2, :default => 0,     :null => false
+    t.boolean  "requests_summary_visible",                                    :default => false, :null => false
   end
 
   create_table "gifts", :force => true do |t|
@@ -674,6 +675,7 @@ ActiveRecord::Schema.define(:version => 20110130093604) do
     t.integer  "signup_instructions_requests_sanitizer_version", :limit => 2, :default => 0,     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "anonymous",                                                   :default => false, :null => false
   end
 
   create_table "prompt_restrictions", :force => true do |t|

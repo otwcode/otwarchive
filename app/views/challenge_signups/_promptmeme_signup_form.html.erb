@@ -12,7 +12,7 @@ So if anyone can think of a better design for this, that would be awesome
   <% if params[:single_prompt] == "true" %>
     <li>
     <%= link_to( ts('Edit existing prompts instead?'),
-      {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => true}},
+      {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => false}},
       :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => false)) %>
     </li>
   <% else %>
@@ -55,7 +55,7 @@ So if anyone can think of a better design for this, that would be awesome
       <%= signup_form.fields_for("requests".to_sym, last_request, :child_index => index) do |prompt_form| %>
         <%= render :partial => "prompts/prompt_form", 
             :locals => {:form => prompt_form, :is_offer => false, :index => index,
-                        :required => true} %>
+                        :required => true, :edit_record => false} %>
       <% end %>
   </fieldset>
   
@@ -110,14 +110,14 @@ So if anyone can think of a better design for this, that would be awesome
       <%= signup_form.fields_for prompt_type.to_sym, prompt do |prompt_form| %>
         <%= render :partial => "prompts/prompt_form", 
             :locals => {:form => prompt_form, :is_offer => false, :index => index, 
-                        :required => (index < @challenge.send("requests_num_required"))} %>
+                        :required => (index < @challenge.send("requests_num_required")), :edit_record => edit_record} %>
       <% end %>
     <% end %>
     <% if @challenge.send("requests_num_allowed") > @challenge.send("requests_num_required") %>
       <p class="navigation">
         <%= link_to_add_section(
              ts("Add another prompt? (Up to %{allowed} allowed.)", :allowed => @challenge.send("requests_num_allowed")), 
-             signup_form, prompt_type.to_sym, "prompts/prompt_form", {:is_offer => false, :required => false}) 
+             signup_form, prompt_type.to_sym, "prompts/prompt_form", {:is_offer => false, :required => false, :edit_record => false}) 
         %>
       </p>
     <% end %>
