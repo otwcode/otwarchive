@@ -127,11 +127,11 @@
 <%= f.check_box :rec %> <%= f.label :rec, ts("Rec?") %></p>
 <%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id if bookmarkable%>
 <%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s if bookmarkable %>
-<!-- BACK END
-please add option CANCEL
-if bookmarks form @ bookmarks/new then CANCEL routes BACK
-if bookmarks form @ dynamic_bookmark then CANCEL function is CLOSE
--->
-<p class="submit"><%= f.submit(button_name) %></p>
+<p class="submit">
+  <%= f.submit(button_name) %>
+  <% if dynamic %>
+    <a href="#" name="bookmark_cancel" id="bookmark_cancel"><%= ts("Cancel") %></a>
+  <% end %>
+</p>
 <% end %>
 </div>
