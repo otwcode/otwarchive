@@ -125,8 +125,7 @@ Feature: Prompt Meme Challenge
   
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
-  When I go to the collections page
-    And I follow "Battle 12"
+  When I go to "Battle 12" collection's page
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_28"
   Then I should see "Add another prompt? (Up to 3 allowed.)"
@@ -162,8 +161,7 @@ Feature: Prompt Meme Challenge
   
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
-  When I go to the collections page
-    And I follow "Battle 12"
+  When I go to "Battle 12" collection's page
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
     And I check "challenge_signup_requests_attributes_1_fandom_27"

@@ -20,3 +20,9 @@ When /^I sign up for Battle 12$/ do
     And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird\""
     And "I press \"Submit\""
 end
+
+When /^I add prompt (\d+)$/ do |number|
+  When "I follow \"Add another prompt\""
+    And "I check \"challenge_signup_requests_attributes_#{number}_fandom_27\""
+    And "I press \"Submit\""
+end

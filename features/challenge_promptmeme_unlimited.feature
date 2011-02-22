@@ -4,16 +4,18 @@ Feature: Prompt Meme Challenge
   As a humble user
   I want to create a prompt meme and post to it
 
-  Scenario: Create a prompt meme, sign up for it, basic version
+  Scenario: Create a prompt meme for a large challenge like bigger kink memes
 
   Given the following activated users exist
     | login          | password    |
     | mod1           | something   |
     | myname1        | something   |
+    | myname2        | something   |
     And I have no tags
     And I have no prompts
     And basic tags
     And I create the fandom "Stargate Atlantis" with id 27
+    And I create the fandom "Stargate SG-1" with id 28
     And a character exists with name: "John Sheppard", canonical: true
     And I am logged in as "mod1" with password "something"
   
@@ -30,7 +32,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Collection was successfully created"
     And I should see "Setting Up The Battle 12 Prompt Meme"
   When I fill in "General Signup Instructions" with "Here are some general tips"
-    And I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis"
+    And I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis, Stargate SG-1"
     And I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"
     And I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "1"
     And I fill in "prompt_meme_request_restriction_attributes_character_num_allowed" with "2"
@@ -45,7 +47,7 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
   Then I should see "Battle 12"
     
-  # sign up
+  # sign up as first user
   
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
@@ -120,16 +122,45 @@ Feature: Prompt Meme Challenge
   Then I should see "Signup was successfully updated"
   When I follow "Add another prompt"
   Then I should see "Request 10"
-  When I check "challenge_signup_requests_attributes_9_fandom_27"
+  When I check "challenge_signup_requests_attributes_9_fandom_28"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
   When I follow "Add another prompt"
   Then I should see "Request 11"
-  When I check "challenge_signup_requests_attributes_10_fandom_27"
+  When I check "challenge_signup_requests_attributes_10_fandom_28"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
   When I follow "Add another prompt"
   Then I should see "Request 12"
-  When I check "challenge_signup_requests_attributes_11_fandom_27"
+  When I check "challenge_signup_requests_attributes_11_fandom_28"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
+  
+  # second user creates another load of prompts
+  
+  When I follow "Log out"
+    And I am logged in as "myname2" with password "something"
+  When I go to "Battle 12" collection's page
+    And I follow "Sign Up"
+    And I check "challenge_signup_requests_attributes_0_fandom_27"
+  When I follow "Add another prompt"
+    And I check "challenge_signup_requests_attributes_1_fandom_27"
+    And I press "Submit"
+    And I add prompt 2
+    And I add prompt 3
+    And I add prompt 4
+    And I add prompt 5
+  Then I should see "Signup was successfully updated"
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts"
+    And I press "prompt_34"
+  Then I should see "New claim made."
+  
+  # filter by fandom
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts"
+  Then I should see "Stargate Atlantis" within "table"
+    And I should see "Stargate SG-1" within "table"
+  # When I filter to fandom "Stargate Atlantis"
+  # Then I should see "Stargate Atlantis" within "table"
+  #   And I should not see "Stargate SG-1" within "table"

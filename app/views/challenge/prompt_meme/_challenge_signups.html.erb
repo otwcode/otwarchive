@@ -74,9 +74,10 @@
   <!-- body of table -->
   <% @challenge_signups.each do |challenge_signup| %>
         <% %w(request).each do |prompt_type| %>    
-        <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
-        <% prompt = eval("challenge_signup.#{prompt_type.pluralize}[i]") %>
+        <% eval("@challenge.requests_num_allowed").times do |i| %>
+        <% prompt = eval("challenge_signup.requests[i]") %>
         <% unless !prompt %>
+    <% cache("collection-#{@collection.id}-signup-#{challenge_signup.id}") do %>
     <tr>
       <% unless @hide_navigation %>
         <!-- because rows can be unmanageably long, put nav at start -->
@@ -119,7 +120,8 @@
           <% if eval("show_request_url") %>
             <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) -%></td>
           <% end %>
-          </tr>
+    </tr>
+    <% end %><!-- end cache --> 
         <% end %>
         <% end %>
       <% end %>
