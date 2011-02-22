@@ -182,7 +182,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Claim" within "th"
     And I should not see "Sign in to claim prompts"
     And I should see "Stargate Atlantis"
-  When I press "prompt_33"
+  When I press "prompt_34"
   Then I should see "New claim made."
     And I should see "Claims for Battle 12"
     And I should see "Post To Fulfill"
@@ -280,7 +280,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "mod1" with password "something"
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
-  When I press "prompt_34"
+  When I press "prompt_35"
   Then I should see "New claim made."
   
   # mod can still see claims even though it's anonymous
@@ -421,7 +421,7 @@ Feature: Prompt Meme Challenge
 
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
-  When I press "prompt_35"
+  When I press "prompt_36"
   Then I should see "New claim made."
 
   # check that anon prompts are still anon on the claims index 
