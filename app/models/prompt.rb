@@ -275,5 +275,18 @@ class Prompt < ActiveRecord::Base
     end
     return list
   end
+  
+  # checks if a prompt has been filled in a prompt meme
+  def unfulfilled?
+    if self.request_claims.blank?
+      return true
+    else
+      self.request_claims.each do |claim| 
+        if claim.fulfilled? 
+          return false
+        end
+      end
+    end
+  end
 
 end

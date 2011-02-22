@@ -110,15 +110,9 @@ Feature: Prompt Meme Challenge
   When I check "challenge_signup_requests_attributes_6_fandom_27"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
-  When I follow "Add another prompt"
-  Then I should see "Request 8"
-  When I check "challenge_signup_requests_attributes_7_fandom_27"
-    And I press "Submit"
+  When I add prompt 7
   Then I should see "Signup was successfully updated"
-  When I follow "Add another prompt"
-  Then I should see "Request 9"
-  When I check "challenge_signup_requests_attributes_8_fandom_27"
-    And I press "Submit"
+  When I add prompt 8
   Then I should see "Signup was successfully updated"
   When I follow "Add another prompt"
   Then I should see "Request 10"
@@ -150,6 +144,19 @@ Feature: Prompt Meme Challenge
     And I add prompt 3
     And I add prompt 4
     And I add prompt 5
+    And I add prompt 6
+    And I add prompt 7
+    And I add prompt 8
+    And I add prompt 9
+    And I add prompt 10
+    And I add prompt 11
+    And I add prompt 12
+    And I add prompt 13
+    And I add prompt 14
+    And I add prompt 15
+    And I add prompt 16
+    And I add prompt 17
+    And I add prompt 18
   Then I should see "Signup was successfully updated"
   When I go to "Battle 12" collection's page
     And I follow "Prompts"

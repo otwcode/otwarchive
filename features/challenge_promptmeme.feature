@@ -270,7 +270,9 @@ Feature: Prompt Meme Challenge
     And I should not see "Secret!" within "#unfulfilled_claims"
   When I follow "Prompts"
     And I follow "Show Claims"
-  Then I should see "Claimed by: (Anonymous)"
+  Then I should not see "Claimed by: (Anonymous)"
+  When I follow "Show Filled"
+  Then I should see "Claimed by: (Anonymous) (Filled)"
   
   # mod claims a prompt
 
@@ -332,6 +334,10 @@ Feature: Prompt Meme Challenge
   
   When I follow "Prompts"
     And I follow "Show Claims"
+  Then I should not see "Claimed by: myname4"
+    And I should not see "Claimed by: mod1"
+    And I should not see "Claimed by: (Anonymous)"
+  When I follow "Show Filled"
   Then I should see "Claimed by: myname4"
     And I should see "Claimed by: mod1"
     And I should not see "Claimed by: (Anonymous)"
@@ -343,6 +349,7 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
     And I follow "Show Claims"
+    And I follow "Show Filled"
   Then I should not see "Claimed by: myname4"
     And I should not see "Claimed by: mod1"
     And I should see "Claimed by: (Anonymous)"
@@ -402,6 +409,10 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
     And I follow "Show Claims"
+  Then I should not see "Claimed by: myname4"
+    And I should not see "Claimed by: mod1"
+    And I should not see "Claimed by: (Anonymous)"
+  When I follow "Show Filled"
   Then I should see "Claimed by: myname4"
     And I should see "Claimed by: mod1"
     And I should not see "Claimed by: (Anonymous)"
