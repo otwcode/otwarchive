@@ -12,7 +12,7 @@ Feature: Links in ToS
 		Then I should see "Terms of Service" within ".home-tos h2"
 			And I should see "While the Archive is in beta, it's important for users to be aware of what that means"
 			
-	       # all commented out lines concerning URLs lack a viable step definition
+	  # all commented out lines concerning URLs lack a viable step definition
 		#And the page URL should be "http://www.example.com/tos"
 			
 			And I should see the text with tags '<a href="#general">General Principles</a>'
@@ -60,10 +60,8 @@ Feature: Links in ToS
 		# And the page URL should be "http://www.example.com/tos#privacy"
  
 		# check following a link to the ToS FAQ
-    # not sure how to test offsite links
 	
 		When I follow "refer to the ToS FAQ" 
-		Then I should not see "What We Believe"
-		And I should see "There are a number of wonderful specialized archives."
-		#And the page URL should be "http://www.example.com/tos_faq#max_inclusiveness"
-
+		 Then I should not see "What We Believe"
+		 And I should see "There are a number of wonderful specialized archives."
+		 #And the page URL should be "http://www.example.com/tos_faq#max_inclusiveness"
