@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts('Editing bookmark') %></h2>
+<h2><%= (ts("Editing bookmark for ") + link_to(@bookmarkable.title, @bookmarkable)).html_safe %></h2>
 
 <%= error_messages_for :bookmark %>
 <!--/descriptions-->
@@ -10,18 +10,11 @@
 <% if params[:existing] && @bookmark.bookmarkable %>
   	<li><%= link_to_user_bookmarkable_bookmarks(@bookmark.bookmarkable) %></li>
 <% end %>
-	<li><%= link_to ts('Show'), @bookmark %></li>
-	<li><%= link_to ts('Back'), bookmarks_path %></li>
+	<li><%= link_to ts("Show"), @bookmark %></li>
+	<li><%= link_to ts("Back to Bookmarks"), bookmarks_path %></li>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
 <%= render :partial => 'bookmark_form', :locals => {:button_name => ts('Update'), :action => 'update', :bookmark => @bookmark, :bookmarkable => @bookmarkable} %>
 <!--/content-->
-
-<!--subnav-->
-<ul class="navigation" role="navigation">
-<li><%= link_to ts('Show'), @bookmark %></li>
-<li><%= link_to ts('Back'), bookmarks_path %></li>
-</ul>
-<!--/subnav-->

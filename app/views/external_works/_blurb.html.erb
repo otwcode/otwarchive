@@ -5,12 +5,12 @@
 
     <h4 title="title">
       <%= link_to external_work.title, external_work.url %>
-      <%= t('.title_by_author', :default => 'by') %>
+      <%= ts("by") %>
       <%= byline(external_work) %>
     </h4>
 
     <h5 title="fandom">
-      <%= external_work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
+      <%= external_work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ').html_safe %>
       &nbsp;
     </h5>
 
@@ -35,18 +35,18 @@
   <!--stats-->
   <dl class="stats" title="stats">
     <% if Bookmark.count_visible_bookmarks(external_work) > 0 %>
-    <dt><%=h t('.external_work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
+    <dt><%= ts("Bookmarks") + ": " %></dt>
     <dd><%= link_to_bookmarkable_bookmarks(external_work) %></dd>
     <% end %>
 
-    <dt><%=h t('.related_works_link', :default => 'Related Works') + ': '%></dt>
+    <dt><%= ts("Related Works") + ": "%></dt>
     <dd><%= link_to external_work.related_works.count.to_s, external_work  %></dd>
   </dl>
 
   <% if logged_in_as_admin? %>
   <h6 class="landmark">Author Actions</h6>
   <ul class="navigation" role="navigation">
-    <li><%= link_to t('.links.edit', :default => 'Edit'), edit_external_work_path(external_work) %></li>
+    <li><%= link_to ts("Edit"), edit_external_work_path(external_work) %></li>
   </ul>
   <% end %>
 

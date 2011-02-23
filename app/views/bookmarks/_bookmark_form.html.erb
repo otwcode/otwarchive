@@ -1,9 +1,4 @@
 <div id="bookmark-form">
-<% if bookmark.new_record? && bookmarkable.class != ExternalWork %>
-  <h4><%= ts('Add a new bookmark for') %> <%= bookmarkable.title %></h4>
-<% elsif bookmarkable.class == ExternalWork && !bookmark.new_record? %>
-  <h4><%= ts('Add a new bookmark for an external work') %></h4>
-<% end %>
 
 <% if bookmarkable.class == ExternalWork %>
   <p>You can bookmark external works with the <a href="javascript:(function(){f='<%= ArchiveConfig.APP_URL%>/external_works/new?url_from_external='+encodeURIComponent(window.location.href)+'&title_from_external='+encodeURIComponent(document.title);a=function(){if(!window.open(f,'AO3ExtBk','location=yes,links=no,scrollbars=yes,toolbar=no,width=550,height=550'))location.href=f};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})()" title="Right-click and Bookmark This Link)">AO3 External Bookmarklet</a>. This is a simple bookmarklet that should work in any browser, if you have JavaScript enabled. Just right-click and select Bookmark This Link (or Bookmark Link).</p>
@@ -131,6 +126,8 @@
   <%= f.submit(button_name) %>
   <% if dynamic %>
     <a href="#" name="bookmark_cancel" id="bookmark_cancel"><%= ts("Cancel") %></a>
+  <% else %>
+    <%= link_to ts("Back to Bookmarks"), bookmarks_path %>
   <% end %>
 </p>
 <% end %>
