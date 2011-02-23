@@ -62,7 +62,7 @@ Feature: Links in ToS
 		# check following a link to the ToS FAQ
     # not sure how to test offsite links
 	
-		When I follow "refer to the ToS FAQ" within "admin userstuff"
+		When I follow "refer to the ToS FAQ" within "home-tos"
 		Then I should not see "What We Believe"
 		
 		#And I should see "There are a number of wonderful specialized archives."
