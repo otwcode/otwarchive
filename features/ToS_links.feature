@@ -60,8 +60,10 @@ Feature: Links in ToS
 		# And the page URL should be "http://www.example.com/tos#privacy"
  
 		# check following a link to the ToS FAQ
- 
+    # not sure how to test offsite links
 	
 		When I follow "refer to the ToS FAQ" within ".home-tos.admin.userstuff"
-		Then I should see "There are a number of wonderful specialized archives."
+		Then I should not see "What We Believe"
+		
+		#And I should see "There are a number of wonderful specialized archives."
 		#And the page URL should be "http://www.example.com/tos_faq#max_inclusiveness"
