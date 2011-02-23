@@ -64,6 +64,6 @@ Feature: Links in ToS
 	
 		When I follow "refer to the ToS FAQ" 
 		Then I should not see "What We Believe"
-		
-		#And I should see "There are a number of wonderful specialized archives."
+		And I should see "There are a number of wonderful specialized archives."
 		#And the page URL should be "http://www.example.com/tos_faq#max_inclusiveness"
+
