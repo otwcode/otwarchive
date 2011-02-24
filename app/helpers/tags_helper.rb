@@ -13,6 +13,18 @@ module TagsHelper
     end
   end
 
+  def tag_works_links_list(tags)
+    tags = tags.uniq.compact
+    if !tags.blank? && tags.respond_to?(:collect)
+      last_tag = tags.pop
+      tag_list = tags.collect{|tag| "<li>" + link_to_tag_works(tag) + ", </li>"}.join
+      tag_list += content_tag(:li, link_to_tag_works(last_tag))
+      tag_list.html_safe
+    else
+      ""
+    end
+  end
+  
   def description(tag)
     tag.name + " (" + tag.class.name + ")"
   end
@@ -54,6 +66,10 @@ module TagsHelper
     link_to_tag_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
   end
 
+  def link_to_tag_works(tag, options = {})
+    link_to_tag_works_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
+  end
+  
   def link_to_tag_with_text(tag, link_text, options = {})
     link_to_with_tag_class(@collection ?
     {:controller => :tags, :action => :show, :id => tag, :collection_id => @collection} :
@@ -66,8 +82,7 @@ module TagsHelper
   end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ?
-    {:controller => :works, :action => :index, :tag_id => tag, :collection_id => @collection, :only_path => false} :
+    link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) :
     {:controller => :works, :action => :index, :tag_id => tag}, link_text, options)
   end
 
