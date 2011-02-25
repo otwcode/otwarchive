@@ -127,7 +127,7 @@
   <% if dynamic %>
     <a href="#" name="bookmark_cancel" id="bookmark_cancel"><%= ts("Cancel") %></a>
   <% else %>
-    <%= link_to ts("Back to Bookmarks"), bookmarks_path %>
+    <%= link_to ts("Back to My Bookmarks"), user_bookmarks_path(current_user) %>
   <% end %>
 </p>
 <% end %>
