@@ -26,3 +26,18 @@ When /^I add prompt (\d+)$/ do |number|
     And "I check \"challenge_signup_requests_attributes_#{number}_fandom_27\""
     And "I press \"Submit\""
 end
+
+When /^I set up a basic promptmeme "([^\"]*)"$/ do |title|
+  visit new_collection_path
+  fill_in("collection_name", :with => "promptcollection")
+  fill_in("collection_title", :with => title)
+  select("Prompt Meme", :from => "challenge_type")
+  click_button("Submit")
+  check("prompt_meme_signup_open")
+  fill_in("prompt_meme_requests_num_allowed", :with => ArchiveConfig.PROMPT_MEME_PROMPTS_MAX)
+  fill_in("prompt_meme_requests_num_required", :with => 1)
+  fill_in("prompt_meme_request_restriction_attributes_fandom_num_required", :with => 1)
+  fill_in("prompt_meme_request_restriction_attributes_fandom_num_allowed", :with => 2)
+  click_button("Submit")
+  Then "I should see \"Challenge was successfully created\""
+end

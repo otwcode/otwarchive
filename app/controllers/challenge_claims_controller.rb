@@ -3,7 +3,7 @@ class ChallengeClaimsController < ApplicationController
   before_filter :users_only
   before_filter :load_collection, :except => [:index]
   before_filter :collection_owners_only, :except => [:index, :show, :create]
-  before_filter :load_claim_from_id, :only => [:show]
+  before_filter :load_claim_from_id, :only => [:show, :destroy]
 
   before_filter :load_challenge, :except => [:index]
   
@@ -61,7 +61,7 @@ class ChallengeClaimsController < ApplicationController
   end      
   
   def allowed_to_destroy
-    claim.user_allowed_to_destroy?(current_user) || not_allowed
+    @challenge_claim.user_allowed_to_destroy?(current_user) || not_allowed
   end
   
   def not_allowed
@@ -121,9 +121,8 @@ class ChallengeClaimsController < ApplicationController
   end
   
   def destroy
-    unless !allowed_to_destroy?
-      flash[:notice] = "One day you will be able to cancel a claim."
-    end
+    flash[:notice] = "One day you will be able to cancel a claim."
+    redirect_to collection_claims_path(@collection)
   end
   
 end

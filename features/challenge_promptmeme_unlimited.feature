@@ -160,7 +160,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Signup was successfully updated"
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
-    And I press "prompt_34"
+    And I press "Claim"
   Then I should see "New claim made."
   
   # filter by fandom
