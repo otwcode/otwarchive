@@ -1,0 +1,78 @@
+<!-- display a summary version of what users have requested and offered -->
+<!-- requires locals :challenge_collection :requests_summary_signups :generated_live -->
+<h2><%= ts("Requests Summary for %{challenge_collection}", :challenge_collection => challenge_collection.title) %></h2>
+
+<% @challenge ||= challenge_collection.challenge %>
+<% show_request_url = @challenge.request_restriction.url_allowed %>
+<% show_offer_url = @challenge.offer_restriction.url_allowed %>
+<% show_request_description = @challenge.request_restriction.description_allowed %>
+<% show_offer_description = @challenge.offer_restriction.description_allowed %>
+<% show_request_optional_tags = @challenge.request_restriction.optional_tags_allowed %>
+<% show_offer_optional_tags = @challenge.offer_restriction.optional_tags_allowed %>
+
+<% unless generated_live %>
+  <p>
+    <%= ts("Last generated at:") %> <%= time_in_zone(Time.now, (challenge_collection.challenge.time_zone || Time.zone.name)) %>
+    <%= ts("(Generated hourly on request while signups are open.)") %>
+  </p>
+<% end %>
+
+<table>
+  <!-- top header row showing requests and offers numbered -->
+  <tr>
+    <th rowspan=2>Pseud</th>
+    <% @challenge.requests_num_allowed.times do |i| %>
+    <th colspan=<%= (1 + (show_request_optional_tags ? 1 : 0) + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) %>>
+      <%= ts("Request %{num}", :num => i+1) %>
+    </th>
+    <% end %>
+    <% @challenge.offers_num_allowed.times do |i| %>
+    <th colspan=<%= (1 + (show_offer_optional_tags ? 1 : 0) + (show_offer_description ? 1 : 0 ) + (show_offer_url ? 1 : 0)) %>>
+      <%= ts("Offer %{num}", :num => i+1) %></th>
+    <% end %>
+  </tr>
+
+  <!-- secondary header row showing the tags, description, url -->
+  <tr>
+    <% %w(request offer).each do |prompt_type| %>
+      <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
+        <th>Tags</th>
+        <% if eval("show_#{prompt_type}_optional_tags") %><th>Optional Tags</th><% end %>
+        <% if eval("show_#{prompt_type}_description") %><th>Description</th><% end %>
+        <% if eval("show_#{prompt_type}_url") %><th>URL</th><% end %>
+      <% end %>
+    <% end %>
+  </tr>
+
+  <!-- body of table -->
+  <% @requests_summary_signups.flatten.each do |challenge_signup| %>
+    <tr>
+      <td><%= link_to challenge_signup.pseud.name, collection_signup_path(@collection, challenge_signup) %></td>
+      <!-- show tags, description, url for all allowed requests and offers: using a lot of evals here to DRY up the code since it's so repetitive -->
+      <% %w(request offer).each do |prompt_type| %>    
+        <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
+          <% prompt = eval("challenge_signup.#{prompt_type.pluralize}[i]") %>
+          <td>
+            <% any_types = TagSet::TAG_TYPES.select {|type| prompt && prompt.send("any_#{type}")} %>
+            <%= !prompt || !prompt.tag_set ? "" : 
+                  content_tag(:ul, tag_link_list(prompt.tag_set.tags) + 
+                                    any_types.map {|type| content_tag(:li, h(ts("Any %{type}", :type => type.capitalize))) }.join("\n").html_safe) %>
+          </td>
+          <% if eval("show_#{prompt_type}_optional_tags") %>
+            <td>
+              <% if prompt && prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
+                <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
+              <% end %>
+            </td>
+          <% end %>
+          <% if eval("show_#{prompt_type}_description") %>
+            <td><%= !prompt || prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) %></td>
+          <% end %>
+          <% if eval("show_#{prompt_type}_url") %>
+            <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) %></td>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

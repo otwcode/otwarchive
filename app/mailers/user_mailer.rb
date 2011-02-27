@@ -66,6 +66,13 @@ class UserMailer < ActionMailer::Base
       :subject => "[#{ArchiveConfig.APP_NAME}] Admin Message #{subject}"
     )
   end
+
+  # Sends an admin message to an array of users
+  def mass_archive_notification(admin, users, subject, message)
+    users.each do |user|
+      archive_notification(admin, user, subject, message)
+    end
+  end
   
   def collection_notification(collection, subject, message)
     @message = message

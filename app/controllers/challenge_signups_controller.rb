@@ -3,7 +3,7 @@
 
 class ChallengeSignupsController < ApplicationController
 
-  before_filter :users_only, :except => [:summary, :display_summary]
+  before_filter :users_only, :except => [:summary, :display_summary, :requests_summary]
   before_filter :load_collection, :except => [:index]
   before_filter :load_challenge, :except => [:index]
   before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy]
@@ -76,7 +76,7 @@ class ChallengeSignupsController < ApplicationController
         @challenge_signups = @user.challenge_signups
         render :action => :index and return
       else
-        flash[:error] = t('challenge_signups.not_allowed_to_see_other', :default => "You aren't allowed to see that user's signups.")
+        flash[:error] = ts("You aren't allowed to see that user's signups.")
         redirect_to '/' and return
       end
     else
@@ -140,7 +140,7 @@ class ChallengeSignupsController < ApplicationController
 
   def new
     if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
-      flash[:notice] = t('challenge_signups.already_signed_up', :default => "You are already signed up for this challenge. You can edit your signup below.")
+      flash[:notice] = ts("You are already signed up for this challenge. You can edit your signup below.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     else
       @challenge_signup = ChallengeSignup.new

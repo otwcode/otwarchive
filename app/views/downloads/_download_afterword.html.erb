@@ -12,7 +12,7 @@
         <dt><%= ts('Works inspired by this one') %></dt>
         <dd>
           <%= @work.approved_related_works.where(:translation => false).map{|rw| 
-"#{link_to(rw.work.title, work_url(rw.work))} #{ts('by')} #{byline(rw.work)}"}.join(", 
+"#{link_to(rw.work.title.html_safe, work_url(rw.work))} #{ts('by')} #{byline(rw.work)}"}.join(", 
 ").html_safe %>
         </dd>
       </dl>

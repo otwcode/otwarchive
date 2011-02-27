@@ -1,6 +1,6 @@
 <p>
-  Your work <cite><%= link_to(@related_work.parent.title, @related_parent_link) %></cite> 
-  was listed as the inspiration of <cite><%= link_to(@related_work.work.title, @related_child_link) %></cite> 
+  Your work <cite><%= link_to(@related_work.parent.title.html_safe, @related_parent_link) %></cite> 
+  was listed as the inspiration of <cite><%= link_to(@related_work.work.title.html_safe, @related_child_link) %></cite> 
   <% if @related_work.work.anonymous? %>  
     by an anonymous author
   <% else %>

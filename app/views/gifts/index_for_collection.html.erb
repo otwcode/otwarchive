@@ -21,7 +21,7 @@
 <% for gift in @gifts %>
     <tr>
       <td>
-        <%= link_to gift.work.title, 
+        <%= link_to gift.work.title.html_safe, 
                     collection_work_path(@collection, gift.work) %>
       </td>
       <td>

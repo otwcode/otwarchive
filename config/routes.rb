@@ -336,6 +336,7 @@ Otwarchive::Application.routes.draw do
         get :cancel_generate
       end
     end
+    resources :requests, :controller => "challenge_requests"
     # challenge types
     resource :gift_exchange, :controller => 'challenge/gift_exchange'
   end

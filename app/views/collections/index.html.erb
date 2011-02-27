@@ -4,7 +4,7 @@
 <% elsif @collection %>
 <h2><%=h t('.listing_sub_collections', :default => "Challenges/Subcollections in %{collection_name}", :collection_name => @collection.title) %></h2>
 <% elsif @work %>
-<h2><%=h t('.listing_work_collections', :default => "Collections including %{work_name}", :work_name => @work.title) %></h2>
+<h2><%=ts("Collections including ") + @work.title.html_safe %></h2>
 <% else %>
 <h2><%=h t('.listing_collections', :default => "Collections in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %></h2>
 <% end %>

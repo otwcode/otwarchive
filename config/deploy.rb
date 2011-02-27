@@ -1,36 +1,32 @@
 # takes care of the bundle install tasks
 require 'bundler/capistrano'
 
-set :application, "otwarchive"
-set :scm, :git
-set :repository,  "git://github.com/otwcode/otwarchive.git"
-set :branch, "deploy"
+# deploy to different environments
+set :default_stage, "staging"
+require 'capistrano/ext/multistage'
+
+# user settings
 set :user, "www-data"
-set :deploy_via, :remote_cache
-
-set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativeworks.org"
-
 set :auth_methods, "publickey"
 #ssh_options[:verbose] = :debug
 ssh_options[:auth_methods] = %w(publickey)
-
-set :rails_env, "production"
-
-role :app, "otw3.ao3.org"
-role :app, "otw4.ao3.org" 
-role :web, "otw2.ao3.org"
-# db primary is where the migrations are run.
-role :db, "otw3.ao3.org", :primary => true
-# the backend is the slave db, but it's also where memcache and thinking sphinx run
-role :backend, "otw1.ao3.org"
-# no_release means don't install /var/www/otwarchive
-# the database has limited disk space and it doesn't really need it
-role :db, "otw5.ao3.org", :no_release => true
-
-set :deploy_to, "/var/www/otwarchive"
 set :use_sudo, false
+
+# basic settings
+set :application, "otwarchive"
+set :deploy_to, "/var/www/otwarchive"
 set :keep_releases, 4
 
+set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativeworks.org"
+
+
+# git settings
+set :scm, :git
+set :repository,  "git://github.com/otwcode/otwarchive.git"
+set :branch, "deploy"
+set :deploy_via, :remote_cache
+
+# overwrite default capistrano deploy tasks
 namespace :deploy do
   task :start, :roles => :app do
     run "/static/bin/unicorns_start.sh"
@@ -41,66 +37,111 @@ namespace :deploy do
   task :restart, :roles => :app do
     run "/static/bin/unicorns_reload.sh"
   end
-
-  desc "rebuild sphinx - for when indexes change"
-  task :rebuild_sphinx, {:roles => :backend} do
-    run "/static/bin/ts_rebuild.sh"
-  end
-
-  # overwrite the default capistrano maintenace tasks
   namespace :web do
     desc "Present a maintenance page to visitors."
     task :disable, :roles => :web do
       run "mv #{deploy_to}/current/public/nomaintenance.html #{deploy_to}/current/public/maintenance.html 2>/dev/null || true"
     end
-
-    desc "Makes the application web-accessible again."
+    desc "Makes the current release web-accessible."
     task :enable, :roles => :web do
+      run "mv #{deploy_to}/current/public/maintenance.html #{deploy_to}/current/public/nomaintenance.html 2>/dev/null"
+    end
+    desc "Makes the new release web-accessible."
+    task :enable_new, :roles => :web do
       run "mv #{release_path}/public/maintenance.html #{release_path}/public/nomaintenance.html 2>/dev/null"
-      run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt}"
     end
   end
 end
 
+# our tasks which are not environment specific
 namespace :extras do
-  task :create_symlinks, {:except=>{:no_release=>true}} do
-    run "ln -nfs -t #{release_path}/config/ /static/config/*"
-    run "ln -nfs -t #{release_path}/public/ /static/downloads"
-    run "ln -nfs -t #{release_path}/public/ /static/static"
-    run "ln -nfs #{deploy_to}/shared/sphinx #{release_path}/db/sphinx"
+  task :git_in_home, :roles => :backend do
+    run "git pull origin deploy"
+    run "bundle install --quiet"
   end
-
-
-  task :stylesheet, {:roles => [:web, :app]} do
+  task :update_revision do
+    run "/static/bin/fix_revision.sh"
+  end
+  task :cache_stylesheet, {:roles => :web} do
     run "cd #{release_path}/public/stylesheets/; cat system-messages.css site-chrome.css forms.css live_validation.css auto_complete.css > cached_for_screen.css"
   end
+  task :run_after_tasks, {:roles => :backend} do
+    run "cd #{release_path}; rake After RAILS_ENV=production"
+  end
+  task :restart_delayed_jobs, {:roles => :backend} do
+    run "/static/bin/dj_restart.sh"
+  end
+  task :restart_sphinx, {:roles => :search} do
+    run "/static/bin/ts_restart.sh"
+  end
+  task :reindex_sphinx, {:roles => :search} do
+    run "/static/bin/ts_reindex.sh"
+  end
+  desc "rebuild sphinx (puts app into maintenance because sphinx is down)"
+  task :rebuild_sphinx, {:roles => :search} do
+    run "/static/bin/ts_rebuild.sh"
+  end
+  task :update_cron, {:roles => :backend} do
+    run "whenever --update-crontab #{application}"
+  end
+end
 
-  task :backup_db, {:roles => :backend} do
+# tasks for production environmen
+namespace :production_only do
+  task :update_public, {:roles => :web} do
+    run "ln -nfs -t #{release_path}/public/ /static/downloads"
+    run "ln -nfs -t #{release_path}/public/ /static/static"
+    run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt}"
+  end
+  task :update_configs, {:roles => :app} do
+    run "ln -nfs -t #{release_path}/config/ /static/config/*"
+  end
+  task :backup_db, {:roles => :search} do
     run "mysql -e 'stop slave'"
     run "sudo cp -rp /var/lib/mysql /backup/otwarchive/deploys/`date +%F.%R`/"
     run "mysql -e 'start slave'"
   end
-
-  task :after, {:roles => :backend} do
-    run "cd #{deploy_to}/current && rake After RAILS_ENV=production"
+  task :update_cron_email, {:roles => :backend} do
+    run "whenever --update-crontab production -f config/schedule_production.rb"
   end
-
-  # add purge memcache here, if we think it's necessary
-  task :backend, {:roles => :backend} do
-    run "cd #{deploy_to}/current && whenever --update-crontab #{application}"
-    run "/static/bin/dj_restart.sh"
-    run "ln -nfs #{deploy_to}/shared/sphinx #{release_path}/db/sphinx"
-    run "/static/bin/ts_restart.sh"
-    run "echo 'archive deployed' | mail -s 'archive deployed' #{mail_to}"
+  task :update_cron_reindex, {:roles => :search} do
+    run "whenever --update-crontab search -f config/schedule_search.rb"
+  end
+  task :notify_testers do
+    system "echo 'archive deployed' | mail -s 'archive deployed' #{mail_to}"
   end
 end
 
-after "deploy:update_code", "extras:create_symlinks", "extras:stylesheet"
+namespace :stage_only do
+  task :update_public, {:roles => :web} do
+    run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
+    run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/static"
+  end
+  task :update_configs, {:roles => :app} do
+    run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
+  end
+  task :reset_db, {:roles => :db} do
+    run "mysql -e 'drop database otwarchive_production'"
+    run "mysql -e 'create database otwarchive_production'"
+    run "mysql otwarchive_production < /backup/latest.dump"
+  end
+  task :notify_testers do
+    system "echo 'testarchive deployed' | mail -s 'testarchive deployed' #{mail_to}"
+  end
+end
 
-before "deploy:migrate", "extras:backup_db"
+before "deploy:update_code", "extras:git_in_home"
+after "deploy:update_code", "extras:cache_stylesheet"
 
-after "deploy:migrate", "extras:after"
+before "deploy:migrate", "deploy:web:disable"
+after "deploy:migrate", "extras:run_after_tasks"
 
-before "deploy:symlink", "deploy:web:enable"
+before "deploy:symlink", "deploy:web:enable_new"
+after "deploy:symlink", "extras:update_revision"
 
-after "deploy:restart", "extras:backend", "deploy:cleanup"
+after "deploy:restart", "extras:update_cron"
+after "deploy:restart", "extras:restart_delayed_jobs", "extras:restart_sphinx"
+after "deploy:restart", "deploy:cleanup"
+
+before "extras:rebuild_sphinx", "deploy:web:disable"
+after "extras:rebuild_sphinx", "deploy:web:enable"

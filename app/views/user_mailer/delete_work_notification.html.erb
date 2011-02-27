@@ -1,3 +1,3 @@
-<p><%=h "Your story" %> <cite><%=h @work.title %></cite> <%=h "was deleted at your request." %></p>
+<p><%=h "Your story" %> <cite><%=h @work.title.html_safe %></cite> <%=h "was deleted at your request." %></p>
 <p><%=h "If you have questions, please contact" %> <%= "Support (http://archiveofourown.org/support)" %>.</p>
 <p><%=h "Attached is a copy of your work for your reference." %></p>

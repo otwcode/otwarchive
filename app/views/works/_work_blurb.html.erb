@@ -27,7 +27,7 @@
     <div class="header module">
 
       <h4 title="title">
-  	    <%= link_to work.title, @collection ? collection_work_path(@collection, work) : work %>
+  	    <%= link_to work.title.html_safe, @collection ? collection_work_path(@collection, work) : work %>
    		  <%= ts('by') %>
         
         <!-- do not cache -->

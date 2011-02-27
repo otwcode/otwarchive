@@ -8,7 +8,7 @@
 
 <!--main content-->
 <p class="required"><%=h t('.required', :default => '* Required field') %></p>
-<h3><%=h @work.title %></h3>
+<h3><%=h @work.title.html_safe %></h3>
 
 <%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => t('.forms.create', :default => "Create") } %>
 <!--/content-->

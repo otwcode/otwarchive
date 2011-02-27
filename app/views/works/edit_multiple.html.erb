@@ -25,7 +25,7 @@
       <tr>
       	<th scope="row">
           <%= hidden_field_tag "work_ids[]", work.id%>
-          <%= link_to work.title, work %>
+          <%= link_to work.title.html_safe, work %>
         </th>
         <td><%= work.fandoms.collect {|tag| link_to_tag(tag) }.join(', ') %></td>
         <td><%= %w(characters relationships freeforms categories ratings warnings).collect {|type| work.send("#{type}")}.flatten.collect {|tag| link_to_tag(tag) }.join(', ').html_safe %></td>

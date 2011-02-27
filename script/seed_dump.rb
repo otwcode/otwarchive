@@ -17,9 +17,10 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 # or who have problematic works which need testing
 SEEDS = [ "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling"
           "Cesy", "cesytest", "Celandine", "Chandri", "ealusaid", "eel", 
-          "elz", "erda", "Enigel", "hope", "justira", "lim", "melange",
-          "mumble", "Rebecca", "rklyne", "Rustler", "Sidra", "staranise", "Stowaway", "testy",
-          "tomatopudding", "zelempa", "Zooey_Glass", "zlabya",
+          "elz", "erda", "Enigel", "hope", "Jaetion", "justira", "lim", 
+          "melange", "mumble", "Rebecca", "rklyne", "Rustler", "Sidra", 
+          "staranise", "Stowaway", "testy",
+          "tomatopudding", "zelempa", "zoemathemata", "Zooey_Glass", "zlabya",
 ]
 
 # Note: every NTH user (randomized) will have all their associated records dumped

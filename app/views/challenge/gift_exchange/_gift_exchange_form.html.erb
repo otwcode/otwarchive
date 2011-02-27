@@ -121,6 +121,9 @@
 
       <dt><%= f.label :offer_description_label, ts("Label to use for Description in offers") %>:</dt>
       <dd><%= f.text_field :offer_description_label %></dd>
+      
+      <dt><%= f.label :requests_summary_visible, ts("Publicly visible prompts list") %>:</dt>
+      <dd><%= f.check_box :requests_summary_visible %> <%= link_to_help "challenge-requests-summary" %></dd>
 
     </dl>
   </fieldset>

@@ -26,7 +26,7 @@ gem 'nokogiri'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
-gem 'delayed_job', '=2.1.0.pre2'
+gem 'delayed_job', '=2.1.1'
 gem 'daemons', '=1.0.10'
 gem 'thinking-sphinx',
   :git     => 'git://github.com/freelancing-god/thinking-sphinx.git',
@@ -74,10 +74,15 @@ group :test do
   gem 'cucumber-rails'
   gem 'cucumber', '>=0.9.1'
   gem 'launchy'    # So you can do Then show me the page
+  # automatically record http requests and save them to make
+  # cuke fast
+  gem 'fakeweb'
+  gem 'vcr'
 end
 
 # Deploy with Capistrano
 gem 'capistrano', :require => false
+gem 'capistrano-ext', :require => false
 
 group :production do
   # Use unicorn as the web server

@@ -595,6 +595,7 @@ class StoryParser
       notes = ""
       
       body = @doc.css("body")
+      title = @doc.css("title").inner_html.gsub /on DeviantART$/, ""
 
       # Find the image (original size) if it's art
       image_full = body.css("img#gmi-ResViewSizer_fullimg")
@@ -603,9 +604,18 @@ class StoryParser
       end
 
       # Find the fic text if it's fic
-      text_table = body.css("table.f td.f div.text")
-      unless text_table[0].nil?
-        storytext = text_table[0].inner_html
+      text_table = body.css("table.f td.f div.text")[0]
+      unless text_table.nil?
+        # Try to remove the title:
+        unless text_table.css("h1")[0].nil? && text_table.css("h1")[0].match(title)
+          text_table.css("h1")[0].remove
+        end
+
+        # Try to remove the author:
+        unless text_table.css("small")[0].nil? && text_table.css("small")[0].match(/by ~.*?<a class="u" href=/m)
+          text_table.css("small")[0].remove
+        end
+        storytext = text_table.inner_html
       end
       
       # cleanup the text
@@ -625,9 +635,7 @@ class StoryParser
       work_params[:notes] = notes
         
       work_params.merge!(scan_text_for_meta(notes))
-
-      work_params[:title] = @doc.css("title").inner_html
-      work_params[:title].gsub! /on DeviantART$/, ""
+      work_params[:title] = title
 
       body.css("div.gr-body div.gr div.hh h1 a").each do |node|
         if node["class"] != "u"
@@ -651,17 +659,55 @@ class StoryParser
     # Parses a story from the Yuletide archive (an AutomatedArchive)
     def parse_story_from_yuletide(story)
       work_params = {:chapter_attributes => {}}
-      content_table = (@doc/"table[@class='form']/tr/td[2]")
+      tags = ['yuletide']
 
+      content_table = (@doc/"table[@class='form']/tr/td[2]")
+      
       unless content_table.nil?
-        # Try to remove the comment links at the bottom
         centers = content_table.css("center")
+
+        # Try to parse (and remove) the metadata
+        p = /Fandom:\s*?<a .*?>(.*?)<\/a>.*?Written for: (.*) in the (Yuletide|New Year Resolutions) (\d*) Challenge.*?by <a .*?>(.*?)<\/a>/im
+        
+        if !centers[0].nil? && centers[0].to_html.match(p)
+
+          fandom, recip, challenge, year, author = $1, $2, $3, $4, $5
+
+          tags << "recipient:#{recip}"
+
+          if challenge=="Yuletide"
+            tags << "challenge:Yuletide #{year}"
+            work_params[:revised_at] = convert_revised_at("#{year}-12-25")
+          else
+            tags << "challenge:NYR #{year}"
+            work_params[:revised_at] = convert_revised_at("#{year}-01-01")
+          end
+            
+          work_params[:fandom_string] = fandom
+
+          unless centers[0].css("h2")[0].nil?
+            work_params[:title] = centers[0].css("h2")[0].inner_html
+          else
+            work_params[:title] = (@doc/"title").inner_html
+          end
+
+          unless centers[0].css("p")[0].nil?
+            work_params[:notes] = centers[0].css("p")[0].inner_html
+          end
+          
+          centers[0].remove
+        end
+        
+        # Try to remove the comment links at the bottom
         if !centers[-1].nil? && centers[-1].to_html.match(/<!-- COMMENTLINK START -->/)
           centers[-1].remove
         end
+        
         storytext = content_table.inner_html
+        
       else
         storytext = (@doc/"body").inner_html
+        work_params[:title] = (@doc/"title").inner_html
       end
       
       storytext = clean_storytext(storytext)
@@ -671,22 +717,6 @@ class StoryParser
 
       work_params.merge!(scan_text_for_meta(storytext))
       work_params[:chapter_attributes][:content] = storytext
-      work_params[:title] = (@doc/"title").inner_html
-      work_params[:notes] = (@doc/"table[@class='form']/tr/td[2]/center/p").inner_html
-
-      tags = ['yuletide']
-
-      if storytext.match(/Written for: (.*) in the Yuletide (.*) challenge/i)
-        recip = $1
-        year = $2
-        tags << "recipient:#{recip}"
-        tags << "challenge:Yuletide #{year}"
-        work_params[:revised_at] = convert_revised_at("#{year}-12-25")
-      end
-      if storytext.match(/<center>.*Fandom:.*Written for:.*by <a .*>(.*)<\/a><br>\n<p>(.*)<\/p><\/center>/ix)
-        author = $1
-        work_params[:notes] = $2
-      end
 
       # Here we're going to try and get the search results
       begin

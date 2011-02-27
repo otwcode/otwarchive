@@ -154,6 +154,7 @@ Scenario: fandoms wrangling - syns, mergers, autocompletes, metatags
   Scenario: Checking the media pages
   
   Given basic tags
+    And tag wrangling is on
     And a media exists with name: "TV Shows", canonical: true
     And a media exists with name: "Video Games", canonical: true
     And a media exists with name: "Books", canonical: true
