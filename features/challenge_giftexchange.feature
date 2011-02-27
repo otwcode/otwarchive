@@ -7,12 +7,12 @@ Feature: Gift Exchange Challenge
   Scenario: Create a gift exchange, sign up for it
 
   Given the following activated users exist
-    | login          | password    |
-    | mod1           | something   |
-    | myname1        | something   |
-    | myname2        | something   |
-    | myname3        | something   |
-    | myname4        | something   |
+    | login          | password    | email      |
+    | mod1           | something   | mod@e.org  |
+    | myname1        | something   | my1@e.org  |
+    | myname2        | something   | my2@e.org  |
+    | myname3        | something   | my3@e.org  |
+    | myname4        | something   | my4@e.org  |
     And I have no tags
     And I create the fandom "Stargate Atlantis" with id 27
     And I create the fandom "Stargate SG-1" with id 28
@@ -64,6 +64,7 @@ Feature: Gift Exchange Challenge
     And I fill in "gift_exchange_offer_restriction_attributes_fandom_num_required" with "1"
     And I fill in "gift_exchange_offer_restriction_attributes_fandom_num_allowed" with "1"
     And I fill in "gift_exchange_offer_restriction_attributes_freeform_num_allowed" with "2"
+    And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_fandoms"
     And I check "Signup open?"
     And I press "Submit"
     And "issue 1859" is fixed
@@ -198,5 +199,19 @@ Feature: Gift Exchange Challenge
     And I wait 3 seconds
   When I reload the page
   Then I should see "Main Assignments"
-  When I follow "Send Assignments"
+  When all emails have been delivered
+    And I follow "Send Assignments"
   Then I should see "Assignments are now being sent out"
+  Given the system processes jobs
+    And I wait 3 seconds
+  When I reload the page
+  Then I should not see "Assignments are now being sent out"
+  # 4 users and the mod should get emails :)
+    And 1 email should be delivered to "mod@e.org"
+    And 1 email should be delivered to "my1@e.org"
+    And 1 email should be delivered to "my2@e.org"
+    And 1 email should be delivered to "my3@e.org"
+    And 1 email should be delivered to "my4@e.org"
+    And the email should link to "My Gift Exchanger" collection's url
+      And the email should link to myname1's user url
+      And the email should link to the works tagged "Stargate Atlantis" in collection "My Gift Exchanger"
