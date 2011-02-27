@@ -30,6 +30,8 @@ Feature: Prompt Meme Challenge
     And I fill in "Display Title" with "Spring Kink"
     And I fill in "Collection Name" with "springkink"
     And I select "Prompt Meme" from "challenge_type"
+    And I check "Is this collection currently unrevealed?"
+    And I check "Is this collection currently anonymous?"
     And I press "Submit"
   Then I should see "Collection was successfully created"
     And I should see "Setting Up The Spring Kink Prompt Meme"
@@ -72,13 +74,40 @@ Feature: Prompt Meme Challenge
   When I press "Preview"
     And I press "Post"
   Then I should see "Work was successfully posted"
-  #  And I should see "Mystery work"
+    And I should see "This work is part of an ongoing challenge and will be revealed soon!"
     
   # writer 2 replies to prompt
+  When I am logged out
+    And I am logged in as "writer2" with password "something"
+    And I go to "Spring Kink" collection's page
+    And I follow "Prompts"
+    
+    # TODO: Figure out if this is the sensible workflow, or if there should be a way to make the prompt stay there for challenges like this.
+    And I follow "Show Filled"
+    And I press "Claim"
+  Then I should see "New claim made"
+  When I follow "Post To Fulfill"
+    And I fill in "Work Title" with "Response Story 2"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "content" with "This is an exciting story about Atlantis, and it is several more words long"
+  When I press "Preview"
+    And I press "Post"
+  Then I should see "Work was successfully posted"
   
   # responses are hidden, e.g. from prompter
+  When I am logged out
+    And I am logged in as "prompter1" with password "something"
+    And I go to "Spring Kink" collection's page
+    And I follow "Works"
+  Then I should not see "writer1"
+    And I should not see "Response Story"
+    Then show me the page
+    And I should see "Mystery Work"
     
   # mod checks that word count is at least 100 and only reveals the right ones
+  When I am logged out
+    And I am logged in as "mod1" with password "something"
   
   # prompter prompts for day 2
   
