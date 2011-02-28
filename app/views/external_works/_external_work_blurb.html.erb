@@ -3,7 +3,7 @@
   <!-- We don't yet have tags on external works, so can't show work icons -->
     <h4>
       <%= link_to bookmarkable.title, bookmarkable.url %>
-      <%=h t('.bookmark_by', :default => 'by') %>
+      <%= ts("by") %>
       <%= bookmarkable.author %>
     </h4>
     <% unless bookmarkable.tags.blank? %>
@@ -13,9 +13,9 @@
       <% end %>
       <% author_tags = bookmarkable.cast_tags
         unless author_tags.size < 1 %>
-          | <span class="bookmark-author-tags"><%= t('.bookmark_author_tags', :default => 'Tags') %>: <%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ').html_safe %></span>
+          | <span class="bookmark-author-tags"><%= ts("Tags") %>: <%= author_tags.collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ').html_safe %></span>
         <% end %>
-      <p style="margin-top: 0.5em"><%= t('.external_work_warning', :default => 'Please note: this work is not hosted on the Archive; the information here may be incomplete or inaccurate.') %></p>
+      <p style="margin-top: 0.5em"><%= ts("Please note: this work is not hosted on the Archive; the information here may be incomplete or inaccurate.") %></p>
     </h5>
     <%= get_symbols_for(bookmarkable) %>
     <% end %>  
@@ -32,7 +32,7 @@
 		<% if Bookmark.count_visible_bookmarks(bookmarkable) > 0 %>
 		  <li class="stats">
 		    <dl>
-          <dt><%=h t('.work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
+          <dt><%= ts("Bookmarks") + ": " %></dt>
 			    <dd><%= link_to_bookmarkable_bookmarks(bookmarkable) %></dd>
 		    </dl>
 	    </li>
