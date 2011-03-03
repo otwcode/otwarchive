@@ -10,7 +10,7 @@
   <% end %>
 
     <li>
-      <%= span_if_current ts("Prompts (%{count})", :count => @collection.prompts.count), collection_signups_path(@collection) %>
+      <%= span_if_current ts("Prompts (%{count})", :count => @collection.prompts.count), collection_requests_path(@collection) %>
     </li>
     <li>
       <%= span_if_current ts("Claims (%{count})", :count => @collection.claims.count), collection_claims_path(@collection) %>
