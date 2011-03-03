@@ -15,7 +15,7 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 
 # users who have webdavs or asked to be added
 # or who have problematic works which need testing
-SEEDS = [ "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling"
+SEEDS = [ "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling",
           "Cesy", "cesytest", "Celandine", "Chandri", "ealusaid", "eel", 
           "elz", "erda", "Enigel", "hope", "Jaetion", "justira", "lim", 
           "melange", "mumble", "Rebecca", "rklyne", "Rustler", "Sidra", 
@@ -97,15 +97,6 @@ def write_model(thing)
   initial = file.first
   print initial; STDOUT.flush
 
-  if thing.is_a? User
-    # you can't get at the user_role table directly, so add those separately
-    File.open("roles_users.sql", 'a') do |f|
-      thing.roles.each do |role|
-        f.write("INSERT INTO roles_users (user_id, role_id) VALUES(#{thing.id}, #{role.id});\n")
-      end
-    end
-  end
-
   # redact email addresses
   if thing.respond_to? :email
     if thing.respond_to? :login
@@ -150,9 +141,14 @@ def user_associations(users)
   x = []
   users.each do |u|
     puts " collecting #{u.login}'s records"
+
     ## PSEUDS will dump the actual user record and the user's preferences
     ## so they don't need to be dumped here.
     PSEUDS << u.pseuds
+
+    # the roles are all dumped separately, so just dump the association here
+    x << u.roles_users
+
     x << u.profile unless MULTI   # profile's may have sensitive information that isn't visible
 
     TAGS << u.fandoms if u.tag_wrangler
