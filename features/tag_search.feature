@@ -8,13 +8,15 @@ Feature: Search Tags
     Given I have no tags
       And a fandom exists with name: "first fandom"
       And a character exists with name: "first last", canonical: true
+      And a relationship exists with name: "first last/someone else"
       And the tag indexes are updated
     When I am on the search tags page
       And I fill in "tag_search" with "first"
       And I press "Search tags"
-    Then I should see "2 Found"
+    Then I should see "3 Found"
       And I should see "Fandom: first fandom (0)"
       And I should see "Character: first last (0)" within ".canonical"
+      And I should see "Relationship: first last/someone else (0)"
     When I am on the search tags page
       And I fill in "tag_search" with "first"
       And I select "Fandom" from "query[type]"
@@ -29,3 +31,9 @@ Feature: Search Tags
     Then I should see "1 Found"
       And I should see "first last (0)" within ".canonical"
       And I should not see "Fandom: first fandom (0)"
+    # test search with slash
+    When I am on the search tags page
+      And I fill in "tag_search" with "first last/someone else"
+      And I press "Search tags"
+    Then I should see "1 Found"
+      And I should see "first last/someone else (0)"
