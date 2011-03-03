@@ -53,46 +53,39 @@
   </ul>
 <% end %>
 
-<table>
-  <!-- top header row showing requests numbered -->
-  <tr>
-    <th rowspan=2>Pseud</th>
-    <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
-      <th rowspan=2>Email</th>
-    <% end %>
-    
-    <th colspan=<%= (num_request_tag_categories + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) -%>>
-      <%= ts("Requests") %>
-    </th>
-    
-    <th rowspan=2 abbr="options" scope="col"><%= ts("Claim") %></th>
-    
-    <% if params[:show_claims] == "true" %>
-      <th rowspan=2 abbr="options" scope="col"><%= ts("Claims and Fills") %></th>
-    <% end %>
-    
-  </tr>
+<%= will_paginate @challenge_signups %>
 
-  <!-- secondary header row showing the tags, description, url -->
-  <tr>
-      
+<table>
+  <!-- header row -->
+  <thead><tr>
+    <th scope="col">Pseud</th>
+    <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
+      <th scope="col">Email</th>
+    <% end %>
+    
         <% TagSet::TAG_TYPES.each do |type| %>
-          <% if eval("@show_request_#{type}_tags") %><th><%= type.classify.pluralize -%></th><% end %>
+          <% if eval("@show_request_#{type}_tags") %><th scope="col"><%= type.classify.pluralize -%></th><% end %>
         <% end %>
-        <% if eval("show_request_optional_tags") %><th>Optional Tags</th><% end %>
-        <% if eval("show_request_description") %><th>
+        <% if eval("show_request_optional_tags") %><th scope="col">Optional Tags</th><% end %>
+        <% if eval("show_request_description") %><th scope="col">
           <% desc_label = @challenge.send("request_description_label") %>
           <%= desc_label.blank? ? ts("Description: ") : desc_label %>
           </th>
         <% end %>
-        <% if eval("show_request_url") %><th>
+        <% if eval("show_request_url") %><th scope="col">
           <% url_label = @challenge.send("request_url_label") %>
           <%= url_label.blank? ? ts("Prompt URL: ") : url_label %></th>
         <% end %>
+    
+    <th abbr="options" scope="col"><%= ts("Claim") %></th>
+    
+    <% if params[:show_claims] == "true" %>
+      <th abbr="options" scope="col"><%= ts("Claims and Fills") %></th>
+    <% end %>
+    
+  </tr></thead>
 
-  </tr>
-
-  <!-- body of table -->
+  <!-- body of table --><tbody>
   <% @challenge_signups.each do |challenge_signup| %> 
     <% eval("@challenge.requests_num_allowed").times do |i| %>
     <% if params[:show_filled] == "true" || (eval("challenge_signup.requests[i]") && eval("challenge_signup.requests[i]").unfulfilled?) %>
@@ -163,4 +156,5 @@
         <% end %>
       <% end %>
   <% end %>
+  </tbody>
 </table>

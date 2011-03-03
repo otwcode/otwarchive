@@ -11,6 +11,7 @@ Feature: Prompt Meme Challenge
     | mod1           | something   |
     | myname1        | something   |
     | myname2        | something   |
+    | myname3        | something   |
     And I have no tags
     And I have no prompts
     And basic tags
@@ -157,11 +158,62 @@ Feature: Prompt Meme Challenge
     And I add prompt 16
     And I add prompt 17
     And I add prompt 18
+    And I add prompt 19
+    And I add prompt 20
+    And I add prompt 21
+    And I add prompt 22
+    And I add prompt 23
+    And I add prompt 24
+    And I add prompt 25
+    And I add prompt 26
+    And I add prompt 27
+    And I add prompt 28
+    And I add prompt 29
+    And I add prompt 30
+    And I add prompt 31
+    And I add prompt 32
+    And I add prompt 33
+    And I add prompt 34
   Then I should see "Signup was successfully updated"
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
     And I press "Claim"
   Then I should see "New claim made."
+  
+  # 3rd user creates some more prompts
+  
+  When I follow "Log out"
+    And I am logged in as "myname3" with password "something"
+  When I go to "Battle 12" collection's page
+    And I follow "Sign Up"
+    And I check "challenge_signup_requests_attributes_0_fandom_27"
+  When I follow "Add another prompt"
+    And I check "challenge_signup_requests_attributes_1_fandom_27"
+    And I press "Submit"
+    And I add prompt 2
+    And I add prompt 3
+    And I add prompt 4
+    And I add prompt 5
+    And I add prompt 6
+    And I add prompt 7
+    And I add prompt 8
+    And I add prompt 9
+    And I add prompt 10
+    And I add prompt 11
+    And I add prompt 12
+    And I add prompt 13
+    And I add prompt 14
+    And I add prompt 15
+    And I add prompt 16
+    And I add prompt 17
+    And I add prompt 18
+    And I add prompt 19
+    And I add prompt 20
+    And I add prompt 21
+    And I add prompt 22
+    And I add prompt 23
+    And I add prompt 24
+  Then I should see "Signup was successfully updated"
   
   # filter by fandom
   When I go to "Battle 12" collection's page
@@ -169,5 +221,6 @@ Feature: Prompt Meme Challenge
   Then I should see "Stargate Atlantis" within "table"
     And I should see "Stargate SG-1" within "table"
   # When I filter to fandom "Stargate Atlantis"
+  # When I sort by fandom
   # Then I should see "Stargate Atlantis" within "table"
   #   And I should not see "Stargate SG-1" within "table"
