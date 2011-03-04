@@ -1,7 +1,4 @@
-
-<h2><%= t('new_skin', :default => 'Create New Archive Skin')  %></h2>
-
-<p class="notes">More options coming soon!</p>
+<h2><%= ts('Create New Archive Skin')  %></h2>
 
 <%= error_messages_for :skin %>
 
@@ -13,6 +10,6 @@
 
   <%= render :partial => 'wizard_form', :locals => {:f => f} %>
 
-  <%= f.submit t('create_skin_button', :default => 'Create')  %>
+  <%= f.submit ts('Create')  %>
 
 <% end %>
