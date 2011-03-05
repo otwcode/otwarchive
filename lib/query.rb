@@ -114,7 +114,10 @@ module Query
         errors<<"bad date format (ignored)"
       end
     end
+    # replace AND/OR/NOT with sphinx symbols
     text = text.gsub(/AND/, "").gsub(/OR/, "|").gsub(/NOT\s+/, "-")
+    # escape slash from sphinx quorum operators
+    text = text.gsub('/', '\\/')
     Rails.logger.debug "Search string: #{text}"
     Rails.logger.debug "Search attribs: #{with}"
     Rails.logger.debug "Search errors: #{errors}"

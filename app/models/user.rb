@@ -42,7 +42,8 @@ class User < ActiveRecord::Base
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
-  has_and_belongs_to_many :roles
+  has_many :roles_users
+  has_many :roles, :through => :roles_users
 
   # OpenID plugin
   attr_accessible :identity_url
