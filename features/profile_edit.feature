@@ -132,6 +132,7 @@ Feature: Edit profile
     And I fill in "Old password" with "password"
     And I press "Change Password"
   Then I should see "Your password has been changed"
+		And 1 email should be delivered
   When I follow "Log out"
     And I fill in "User name" with "editname2"
     And I fill in "Password" with "password"
@@ -139,6 +140,18 @@ Feature: Edit profile
   Then I should see "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below."
   When I am logged in as "editname2" with password "newpass1"
   Then I should see "Hi, editname2"
+	
+	Scenario: View and edit profile - change email
+
+	Given I am logged in as "editname2" with password "password"
+  When I follow "editname2"
+    And I follow "Profile" within ".navigation"
+		And I follow "Edit My Profile"
+		And I fill in "Old password" with "password"  
+		And I fill in "Change Email" with "test@example.com" 
+		And I press "Update"
+		Then I should see "Your profile has been successfully updated"
+		And 1 email should be delivered to test@example.com
 
   Scenario: Manage pseuds - add, edit
 

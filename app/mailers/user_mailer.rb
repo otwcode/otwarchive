@@ -127,6 +127,15 @@ class UserMailer < ActionMailer::Base
       :subject => "[#{ArchiveConfig.APP_NAME}] Password reset"
     )
   end
+	
+	  # Confirms to a user that their email was changed
+  def change_email(user)
+    @user = user
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Email changed"
+    )
+  end
    
   ### WORKS NOTIFICATIONS ###
   

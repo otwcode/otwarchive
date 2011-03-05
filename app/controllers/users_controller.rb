@@ -105,6 +105,8 @@ class UsersController < ApplicationController
       @user.recently_reset = false
       if @user.save
         flash[:notice] = ts("Your password has been changed")
+				UserMailer.reset_password(@user).deliver
+        @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
         redirect_to user_profile_path(@user) and return
       else
         render :change_password and return
@@ -260,6 +262,7 @@ class UsersController < ApplicationController
       else
         if @user.save
           flash[:notice] = ts("Your profile has been successfully updated")
+					UserMailer.change_email(@user).deliver
         else
           render :edit and return
         end
