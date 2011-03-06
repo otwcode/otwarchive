@@ -217,7 +217,7 @@ Feature: creating and editing skins
   #'
   Then I should see "CSS" within "dl"
   When I follow "Use Wizard Instead?"
-  Then I should see "More options coming soon"
+  Then I should see "Archive Skin Wizard"
     And I should not see "CSS" within "dl"
   When I follow "Write Custom CSS Instead?"
   Then I should see "CSS" within "dl"
@@ -234,13 +234,17 @@ Feature: creating and editing skins
     And I should see "Margin5"
   When I follow "Edit"
     And I follow "Use Wizard Instead?"
-    And I fill in "skin_margin" with "4"
+    And I fill in "skin_margin" with "4.5"
     And I fill in "skin_font" with "Garamond"
     And I fill in "skin_background_color" with "#ccccff"
     And I fill in "skin_foreground_color" with "red"
     And I fill in "skin_base_em" with "120"
+    And I fill in "skin_paragraph_margin" with "5"
     And I press "Update"
+    # TODO: Think about whether rounding to 4 is actually the right behaviour or not
   Then I should see "Skin updated"
+    And I should see "4"
+    And I should not see "4.5"
   When I am on skinner's preferences page
   #'
   Then "Default" should be selected within "preference_skin_id"
@@ -251,6 +255,7 @@ Feature: creating and editing skins
     And I should see "background: #ccccff;" within "style"
     And I should see "color: red;" within "style"
     And I should see "font: 120%/1.125 Garamond;" within "style"
+    And I should see "#main .userstuff p {margin-bottom: 5.0em;}" within "style"
   When I am on skinner's preferences page
   Then "Wide margins" should be selected within "preference_skin_id"
 
