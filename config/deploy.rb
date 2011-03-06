@@ -1,9 +1,9 @@
 # takes care of the bundle install tasks
 require 'bundler/capistrano'
 
-# deploy to different environments
+# deploy to different environments with tags
 set :default_stage, "staging"
-require 'capistrano/ext/multistage'
+require 'capistrano/gitflow_version'
 
 # user settings
 set :user, "www-data"
@@ -23,7 +23,7 @@ set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativework
 # git settings
 set :scm, :git
 set :repository,  "git://github.com/otwcode/otwarchive.git"
-set :branch, "deploy"
+#set :branch, "deploy"
 set :deploy_via, :remote_cache
 
 # overwrite default capistrano deploy tasks
