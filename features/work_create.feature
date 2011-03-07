@@ -247,6 +247,10 @@ Feature: Create Works
       And I should see "We couldn't find a collection with the name collection1"
       And I should see "We couldn't find a collection with the name collection2"
     When I fill in "work_collection_names" with ""
+      And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
+      And I press "Preview"
+    Then I should see "try using less than 100 characters or using commas to separate your tags"
+    When I fill in "Additional Tags" with "this is a shorter tag"
       And I press "Preview"
     Then I should see "Draft was successfully created"
       And I should see "Chapter"
@@ -262,7 +266,7 @@ Feature: Create Works
     When I press "Post without preview"
     Then I should see "Work was successfully posted."
       And I should see "Bad things happen, etc."
-      And I should see "02138" within "h2.title" 
+      And I should see "02138" within "h2.title"
 
   Scenario: test for < and > in title
     Given basic tags
@@ -274,5 +278,5 @@ Feature: Create Works
     When I press "Post without preview"
     Then I should see "Work was successfully posted."
       And I should see "Bad things happen, etc."
-      And I should see "4 > 3 and 2 < 5" within "h2.title" 
+      And I should see "4 > 3 and 2 < 5" within "h2.title"
 
