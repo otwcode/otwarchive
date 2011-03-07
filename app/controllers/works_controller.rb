@@ -14,7 +14,7 @@ class WorksController < ApplicationController
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
 
   cache_sweeper :work_sweeper
-  cache_sweeper :collection_sweeper 
+  cache_sweeper :collection_sweeper
   cache_sweeper :static_sweeper
 
   def search
@@ -186,8 +186,8 @@ class WorksController < ApplicationController
       if @work.unrevealed?
         @tweet_text = ts("Mystery Work")
       else
-        @tweet_text = @work.title + " by " + 
-                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " + 
+        @tweet_text = @work.title + " by " +
+                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " +
                       (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
         @tweet_text = @tweet_text.truncate(95)
       end
@@ -240,8 +240,8 @@ class WorksController < ApplicationController
         @work.posted = true
         @chapter.posted = true
       end
-      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)  
-      
+      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
+
       if valid && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info && @work.save
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
@@ -610,7 +610,7 @@ public
       flash[:error] = ts("That work is already posted. Do you want to edit it instead?")
       redirect_to edit_user_work_path(@user, @work)
     end
-    
+
     @work.posted = true
     @work.minor_version = @work.minor_version + 1
     # @work.update_minor_version
@@ -685,39 +685,36 @@ public
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   # and @tags[category]
   def set_instance_variables
-    begin
-      if params[:id] # edit, update, preview, manage_chapters
-        @work ||= Work.find(params[:id])
-        @previous_published_at = @work.first_chapter.published_at
-        @previous_backdate_setting = @work.backdate
-        if params[:work]  # editing, save our changes
-          if params[:preview_button] || params[:cancel_button]
-            @work.preview_mode = true
-          else
-            @work.preview_mode = false
-          end
-          @work.attributes = params[:work]
-          @work.save_parents if @work.preview_mode
-        end
-      elsif params[:work] # create
-        @work = Work.new(params[:work])
-      else # new
-        if params[:load_unposted] && current_user.unposted_work
-          @work = current_user.unposted_work
+    if params[:id] # edit, update, preview, manage_chapters
+      @work ||= Work.find(params[:id])
+      @previous_published_at = @work.first_chapter.published_at
+      @previous_backdate_setting = @work.backdate
+      if params[:work]  # editing, save our changes
+        if params[:preview_button] || params[:cancel_button]
+          @work.preview_mode = true
         else
-          @work = Work.new
-          @work.chapters.build
+          @work.preview_mode = false
         end
+        @work.attributes = params[:work]
+        @work.save_parents if @work.preview_mode
       end
-
-      @serial_works = @work.serial_works
-
-      @chapter = @work.first_chapter
-      # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
-      if params[:work] && params[:work][:chapter_attributes]
-        @chapter.attributes = params[:work][:chapter_attributes]
+    elsif params[:work] # create
+      @work = Work.new(params[:work])
+    else # new
+      if params[:load_unposted] && current_user.unposted_work
+        @work = current_user.unposted_work
+      else
+        @work = Work.new
+        @work.chapters.build
       end
-    rescue
+    end
+
+    @serial_works = @work.serial_works
+
+    @chapter = @work.first_chapter
+    # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
+    if params[:work] && params[:work][:chapter_attributes]
+      @chapter.attributes = params[:work][:chapter_attributes]
     end
   end
 
