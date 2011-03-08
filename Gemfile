@@ -81,7 +81,7 @@ group :test do
 end
 
 # Deploy with Capistrano
-gem 'capistrano-gitflow_version', :require => false
+gem 'capistrano-gitflow_version', '>=0.0.3', :require => false
 
 group :production do
   # Use unicorn as the web server
