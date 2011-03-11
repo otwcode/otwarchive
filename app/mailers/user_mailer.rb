@@ -37,16 +37,6 @@ class UserMailer < ActionMailer::Base
     )
   end
 
-  # Emails a recipient to say that a gift has been posted for them
-  def recipient_notification(user, work, collection=nil)
-    @work = work
-    @collection = collection
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}]#{collection ? '[' + collection.title + ']' : ''} A Gift Story For You #{collection ? 'From ' + collection.title : ''}"
-    )
-  end
-
   # Emails a user to say they have been given more invitations for their friends
   def invite_increase_notification(user, total)
     @user = user
@@ -151,6 +141,26 @@ class UserMailer < ActionMailer::Base
       :subject => "[#{ArchiveConfig.APP_NAME}] Related work notification"
     )
   end
+
+  # Emails a recipient to say that a gift has been posted for them
+  def recipient_notification(user, work, collection=nil)
+    @work = work
+    @collection = collection
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}]#{collection ? '[' + collection.title + ']' : ''} A Gift Story For You #{collection ? 'From ' + collection.title : ''}"
+    )
+  end
+  
+  # Emails a prompter to say that a response has been posted to their prompt
+  def prompter_notification(user, work, collection=nil)
+    @work = work
+    @collection = collection
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}]#{collection ? '[' + collection.title + ']' : ''} A Response to your Prompt #{collection ? 'From ' + collection.title : ''}"
+    )
+  end
    
   # Sends email to coauthors when a work is edited
   def edit_work_notification(user, work)
@@ -176,6 +186,8 @@ class UserMailer < ActionMailer::Base
       :subject => "[#{ArchiveConfig.APP_NAME}] Your story has been deleted"
     )
   end
+  
+  ### OTHER NOTIFICATIONS ###
   
   # archive feedback
   def feedback(feedback)
