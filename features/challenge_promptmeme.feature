@@ -178,11 +178,11 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4" with password "something"
   When I go to the collections page
     And I follow "Battle 12"
-    And I follow "Prompts"
+    And I follow "Prompts (8)"
   Then I should see "Claim" within "th"
     And I should not see "Sign in to claim prompts"
     And I should see "Stargate Atlantis"
-  When I press "prompt_34"
+  When I press "Claim"
   Then I should see "New claim made."
     And I should see "Claims for Battle 12"
     And I should see "Post To Fulfill"
@@ -268,7 +268,7 @@ Feature: Prompt Meme Challenge
     And I follow "Claims"
   Then I should see "Secret!" within "#fulfilled_claims"
     And I should not see "Secret!" within "#unfulfilled_claims"
-  When I follow "Prompts"
+  When I follow "Prompts (8)"
     And I follow "Show Claims"
   Then I should not see "Claimed by: (Anonymous)"
   When I follow "Show Filled"
@@ -280,7 +280,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "mod1" with password "something"
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
-  When I press "prompt_35"
+  When I press "Claim"
   Then I should see "New claim made."
   
   # mod can still see claims even though it's anonymous
@@ -314,7 +314,7 @@ Feature: Prompt Meme Challenge
   # fic shows what prompt it is fulfilling when mod views it
   
   When I view the work "Fulfilled Story-thing"
-  Then I should see "In response to prompt by: myname1"
+  Then I should see "In response to a prompt by: myname1"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
     And I should see "For myname1"
@@ -347,7 +347,7 @@ Feature: Prompt Meme Challenge
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
   When I go to "Battle 12" collection's page
-    And I follow "Prompts"
+    And I follow "Prompts (8)"
     And I follow "Show Claims"
     And I follow "Show Filled"
   Then I should not see "Claimed by: myname4"
@@ -362,7 +362,7 @@ Feature: Prompt Meme Challenge
   # check that completed ficlet is unrevealed
 
   When I view the work "Fulfilled Story-thing"
-  Then I should not see "In response to prompt by: myname1"
+  Then I should not see "In response to a prompt by: myname1"
     And I should not see "Fandom: Stargate Atlantis"
     And I should not see "Anonymous"
     And I should not see "mod1"
@@ -385,7 +385,7 @@ Feature: Prompt Meme Challenge
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
   When I view the work "Fulfilled Story-thing"
-  Then I should see "In response to prompt by: myname1"
+  Then I should see "In response to a prompt by: myname1"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
     And I should see "For myname1"
@@ -407,7 +407,7 @@ Feature: Prompt Meme Challenge
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
   When I go to "Battle 12" collection's page
-    And I follow "Prompts"
+    And I follow "Prompts (8)"
     And I follow "Show Claims"
   Then I should not see "Claimed by: myname4"
     And I should not see "Claimed by: mod1"
@@ -420,8 +420,8 @@ Feature: Prompt Meme Challenge
   # user claims an anon prompt
 
   When I go to "Battle 12" collection's page
-    And I follow "Prompts"
-  When I press "prompt_36"
+    And I follow "Prompts (8)"
+  When I press "Claim"
   Then I should see "New claim made."
 
   # check that anon prompts are still anon on the claims index 

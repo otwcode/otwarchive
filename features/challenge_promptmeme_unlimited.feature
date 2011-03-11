@@ -15,8 +15,8 @@ Feature: Prompt Meme Challenge
     And I have no tags
     And I have no prompts
     And basic tags
-    And I create the fandom "Stargate Atlantis" with id 27
-    And I create the fandom "Stargate SG-1" with id 28
+    And I create the fandom "Stargate Atlantis" with id 54
+    And I create the fandom "Stargate SG-1" with id 55
     And a character exists with name: "John Sheppard", canonical: true
     And I am logged in as "mod1" with password "something"
   
@@ -55,14 +55,14 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
     And I follow "Battle 12"
     And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_27"
+    And I check "challenge_signup_requests_attributes_0_fandom_54"
   
   # check the autocomplete is working; the tag is not connected to the fandom, so remove it after that
   
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John"
   Then I should find "John Sheppard" within "div.auto_complete"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with ""
-    And I check "challenge_signup_requests_attributes_1_fandom_27"
+    And I check "challenge_signup_requests_attributes_1_fandom_54"
     And I press "Submit"
   Then I should see "Signup was successfully created"
     And I should see "Prompts (2)"
@@ -72,7 +72,7 @@ Feature: Prompt Meme Challenge
   When I follow "Add another prompt"
   Then I should see "Request 3"
     And I should see "Requests (2 - 50)"
-  When I check "challenge_signup_requests_attributes_2_fandom_27"
+  When I check "challenge_signup_requests_attributes_2_fandom_54"
   
   # check the autocomplete is working for the single prompt add form
   
@@ -90,7 +90,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Request must have exactly 1 fandom tags. You currently have none."
     And I should see "Request 4"
     But I should not see "Request 1"
-  When I check "challenge_signup_requests_attributes_3_fandom_27"
+  When I check "challenge_signup_requests_attributes_3_fandom_54"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
   
@@ -98,17 +98,17 @@ Feature: Prompt Meme Challenge
   
   When I follow "Add another prompt"
   Then I should see "Request 5"
-  When I check "challenge_signup_requests_attributes_4_fandom_27"
+  When I check "challenge_signup_requests_attributes_4_fandom_54"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
   When I follow "Add another prompt"
   Then I should see "Request 6"
-  When I check "challenge_signup_requests_attributes_5_fandom_27"
+  When I check "challenge_signup_requests_attributes_5_fandom_54"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
   When I follow "Add another prompt"
   Then I should see "Request 7"
-  When I check "challenge_signup_requests_attributes_6_fandom_27"
+  When I check "challenge_signup_requests_attributes_6_fandom_54"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
   When I add prompt 7
@@ -117,17 +117,17 @@ Feature: Prompt Meme Challenge
   Then I should see "Signup was successfully updated"
   When I follow "Add another prompt"
   Then I should see "Request 10"
-  When I check "challenge_signup_requests_attributes_9_fandom_28"
+  When I check "challenge_signup_requests_attributes_9_fandom_55"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
   When I follow "Add another prompt"
   Then I should see "Request 11"
-  When I check "challenge_signup_requests_attributes_10_fandom_28"
+  When I check "challenge_signup_requests_attributes_10_fandom_55"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
   When I follow "Add another prompt"
   Then I should see "Request 12"
-  When I check "challenge_signup_requests_attributes_11_fandom_28"
+  When I check "challenge_signup_requests_attributes_11_fandom_55"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
   
@@ -137,9 +137,9 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname2" with password "something"
   When I go to "Battle 12" collection's page
     And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_27"
+    And I check "challenge_signup_requests_attributes_0_fandom_54"
   When I follow "Add another prompt"
-    And I check "challenge_signup_requests_attributes_1_fandom_27"
+    And I check "challenge_signup_requests_attributes_1_fandom_54"
     And I press "Submit"
     And I add prompt 2
     And I add prompt 3
@@ -176,7 +176,7 @@ Feature: Prompt Meme Challenge
     And I add prompt 34
   Then I should see "Signup was successfully updated"
   When I go to "Battle 12" collection's page
-    And I follow "Prompts"
+    And I follow "Prompts ("
     And I press "Claim"
   Then I should see "New claim made."
   
@@ -186,9 +186,9 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname3" with password "something"
   When I go to "Battle 12" collection's page
     And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_27"
+    And I check "challenge_signup_requests_attributes_0_fandom_54"
   When I follow "Add another prompt"
-    And I check "challenge_signup_requests_attributes_1_fandom_27"
+    And I check "challenge_signup_requests_attributes_1_fandom_54"
     And I press "Submit"
     And I add prompt 2
     And I add prompt 3
@@ -217,7 +217,7 @@ Feature: Prompt Meme Challenge
   
   # filter by fandom
   When I go to "Battle 12" collection's page
-    And I follow "Prompts"
+    And I follow "Prompts ("
   Then I should see "Stargate Atlantis" within "table"
     And I should see "Stargate SG-1" within "table"
   # When I filter to fandom "Stargate Atlantis"

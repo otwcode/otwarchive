@@ -23,7 +23,7 @@ end
 
 When /^I add prompt (\d+)$/ do |number|
   When "I follow \"Add another prompt\""
-    And "I check \"challenge_signup_requests_attributes_#{number}_fandom_27\""
+    And "I check \"challenge_signup_requests_attributes_#{number}_fandom_54\""
     And "I press \"Submit\""
 end
 
