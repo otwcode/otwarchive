@@ -15,7 +15,7 @@ So if anyone can think of a better design for this, that would be awesome
       {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => false}},
       :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => false)) %>
     </li>
-  <% else %>
+  <% elsif controller.action_name == "edit" %>
     <li>
     <%= link_to( ts('Just add one new prompt instead?'),
       {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => true}},

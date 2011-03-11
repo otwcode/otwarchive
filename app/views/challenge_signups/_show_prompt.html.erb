@@ -1,9 +1,7 @@
-<!-- expects local value "prompt" -->
+<!-- expects local value "prompt" and optional "display_anon" -->
 <div class="wrapper">
   <dl class="collection meta">
-  <% if prompt.anonymous? %>
-    <dt>Secret</dt><dd>This request is anonymous</dd>
-  <% else %>
+  <% if (prompt.anonymous? && current_user && current_user == prompt.challenge_signup.pseud.user) || prompt.anonymous? == false || (display_anon && display_anon == true) %>
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
     <% if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?) %>
       <dt>Tags:</dt>
@@ -30,6 +28,11 @@
       <dt><% desc_label = prompt.collection.challenge.send("request_description_label") %><%= desc_label.blank? ? ts("Details") : desc_label %>:</dt>
       <dd><%= raw sanitize_field(prompt, :description) %></dd>
     <% end %>
+    <% if prompt.anonymous? %>
+      <dt>Anonymous request</dt>
+    <% end %>
+  <% else %>
+    <dt>Secret</dt><dd>This request is anonymous</dd>
   <% end %>
   </dl>
 </div>

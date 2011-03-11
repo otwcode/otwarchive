@@ -1,5 +1,9 @@
 <h3>Your Assignments<%= @collection ? " In #{link_to(@collection.title, @collection)}" : "" %></h3>
 
+<% unless @collection %>
+<p><%= ts('Looking for prompts you claimed in a prompt meme? Try') %><%= link_to user_claims_path(@user) %></p>
+<% end %>
+
 <table>
   <tr>
     <% unless @collection %><th>Challenge</th><% end %>

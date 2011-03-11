@@ -4,7 +4,7 @@
   <h3>
     <% if request %>
       <%=h ts("Claimed by %{offerer}: %{requester}", 
-        :requester => request.pseud.byline, :offerer => @challenge_claim.collection.anonymous? ? "Anonymous" : @challenge_claim.claim_byline) -%>
+        :requester => @challenge_claim.request_prompt.anonymous? ? "Anonymous" : request.pseud.byline, :offerer => @challenge_claim.collection.anonymous? ? "Anonymous" : @challenge_claim.claim_byline) -%>
     <% else %>
       No Assignment
     <% end %>
@@ -12,8 +12,8 @@
 
   <div class="collection preface">
     <% if request %>
-      <h3><%=h ts("Request by %{requester}", :requester => request.pseud.byline) %></h3>
-      <%= render :partial => "challenge_signups/show_prompt", :locals => {:prompt => @challenge_claim.request_prompt} %>
+      <h3><%=h ts("Request by %{requester}", :requester => @challenge_claim.request_prompt.anonymous? ? "Anonymous" : request.pseud.byline) %></h3>
+      <%= render :partial => "challenge_signups/show_prompt", :locals => {:prompt => @challenge_claim.request_prompt, :display_anon => true} %>
     <% else %>
       <p class="note">No request!</p>
       <p class="note">Contact challenge moderators for help.</p>
