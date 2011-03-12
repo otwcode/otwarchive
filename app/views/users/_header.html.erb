@@ -18,15 +18,14 @@
     <% end %>
     <% if @subscription && @subscription.new_record? %>
       <li>
-        <%= form_for @subscription do |f| %>
-          <%= f.hidden_field :user_id, :value => current_user.id %>
+        <%= form_for [current_user, @subscription] do |f| %>
           <%= f.hidden_field :subscribable_id, :value => @user.id %>
           <%= f.hidden_field :subscribable_type, :value => @user.class.to_s %>
           <%= f.submit "Subscribe" %>
         <% end %>
       </li>
     <% elsif @subscription %>
-      <%= link_to "Unsubscribe", @subscription, :method => :delete %>
+      <%= link_to "Unsubscribe", user_subscription_path(current_user, @subscription), :method => :delete %>
     <% end %>
     <% if @user == current_user  %>
       <li><%= span_if_current t('.invitations', :default =>"Invitations"), user_invitations_path(user) %></li>

@@ -1,46 +1,23 @@
 class SubscriptionsController < ApplicationController
+  before_filter :users_only
+  before_filter :load_user
+  before_filter :check_ownership
+
+  def load_user
+    @user = User.find_by_login(params[:user_id])
+    @check_ownership_of = @user  
+  end
+  
   # GET /subscriptions
   # GET /subscriptions.xml
-  def index
-    @subscriptions = Subscription.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @subscriptions }
-    end
-  end
-
-  # GET /subscriptions/1
-  # GET /subscriptions/1.xml
-  def show
-    @subscription = Subscription.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @subscription }
-    end
-  end
-
-  # GET /subscriptions/new
-  # GET /subscriptions/new.xml
-  def new
-    @subscription = Subscription.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @subscription }
-    end
-  end
-
-  # GET /subscriptions/1/edit
-  def edit
-    @subscription = Subscription.find(params[:id])
+  def index    
+    @subscriptions = @user.subscriptions.includes(:subscribable)
   end
 
   # POST /subscriptions
   # POST /subscriptions.xml
   def create
-    @subscription = Subscription.new(params[:subscription])
+    @subscription = @user.subscriptions.build(params[:subscription])
 
     respond_to do |format|
       if @subscription.save
@@ -48,22 +25,6 @@ class SubscriptionsController < ApplicationController
         If you'd like to stop receiving email updates, you can return to this page and click 'Unsubscribe'.") }
       else
         format.html { render :action => "new" }
-      end
-    end
-  end
-
-  # PUT /subscriptions/1
-  # PUT /subscriptions/1.xml
-  def update
-    @subscription = Subscription.find(params[:id])
-
-    respond_to do |format|
-      if @subscription.update_attributes(params[:subscription])
-        format.html { redirect_to(@subscription, :notice => 'Subscription was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @subscription.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -77,7 +38,6 @@ class SubscriptionsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(@subscribable, :notice => "You have successfully unsubscribed from #{@subscription.name}.") }
-      format.xml  { head :ok }
     end
   end
 end

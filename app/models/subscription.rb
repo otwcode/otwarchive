@@ -2,6 +2,8 @@ class Subscription < ActiveRecord::Base
   belongs_to :user
   belongs_to :subscribable, :polymorphic => true
   
+  validates_presence_of :user
+  
   # The name of the object to which the user is subscribed
   def name
     if subscribable.respond_to?(:login)
