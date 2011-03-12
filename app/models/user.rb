@@ -115,6 +115,19 @@ class User < ActiveRecord::Base
   has_many :translations, :foreign_key => 'translator_id'
   has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id'
   has_many :translation_notes
+  
+  has_many :subscriptions, :dependent => :destroy
+  has_many :followings, 
+            :class_name => 'Subscription', 
+            :as => :subscribable,
+            :dependent => :destroy
+  has_many :subscribed_users, 
+            :through => :subscriptions, 
+            :source => :subscribable, 
+            :source_type => 'User'
+  has_many :subscribers, 
+            :through => :followings,
+            :source => :user
 
   has_many :wrangling_assignments
   has_many :fandoms, :through => :wrangling_assignments

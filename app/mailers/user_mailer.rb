@@ -2,6 +2,7 @@ class UserMailer < ActionMailer::Base
 
   helper :application
   helper :tags
+  helper :works
   include HtmlCleaner
 
   default :from => ArchiveConfig.RETURN_ADDRESS
@@ -44,6 +45,15 @@ class UserMailer < ActionMailer::Base
     mail(
       :to => user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}]#{collection ? '[' + collection.title + ']' : ''} A Gift Story For You #{collection ? 'From ' + collection.title : ''}"
+    )
+  end
+  
+  def subscription_notification(user, subscription, creation)
+    @subscription = subscription
+    @creation = creation
+    mail(
+      :to => user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Subscription Notice for #{@subscription.name}"      
     )
   end
 

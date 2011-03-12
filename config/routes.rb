@@ -1,5 +1,7 @@
 Otwarchive::Application.routes.draw do
 
+  resources :subscriptions
+
   #### DOWNLOADS ####
 
   match 'downloads/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'

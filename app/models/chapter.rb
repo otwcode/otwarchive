@@ -52,10 +52,15 @@ class Chapter < ActiveRecord::Base
   scope :in_order, {:order => :position}
   scope :posted, :conditions => {:posted => true}
   
-  # There seem to be chapters without works in the tests, hence the if self.work_id
-  after_validation :fix_position
-  def fix_position
-    self.insert_at(position) if self.position_changed? && self.work_id
+  after_update :fix_positions
+  def fix_positions
+    if work
+      chapters = work.chapters.order("position ASC, updated_at DESC")
+      chapters.each_with_index do |chapter, i|
+        chapter.position = i + 1
+        chapter.save if chapter.position_changed?
+      end
+    end
   end
 
   # strip leading spaces from title
