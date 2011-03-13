@@ -25,7 +25,7 @@
         <% end %>
       </li>
     <% elsif @subscription %>
-      <%= link_to "Unsubscribe", user_subscription_path(current_user, @subscription), :method => :delete %>
+      <li><%= link_to "Unsubscribe", user_subscription_path(current_user, @subscription), :method => :delete %></li>
     <% end %>
     <% if @user == current_user  %>
       <li><%= span_if_current t('.invitations', :default =>"Invitations"), user_invitations_path(user) %></li>
