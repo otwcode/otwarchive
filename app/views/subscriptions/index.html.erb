@@ -1,0 +1,20 @@
+<h1>Listing subscriptions</h1>
+
+<table>
+  <tr>
+    <th>Subscribed To</th>
+    <th>Unsubscribe?</th>
+  </tr>
+
+<% @subscriptions.each do |subscription| %>
+  <tr>
+    <td>
+      <%= link_to(subscription.name, subscription.subscribable) %>
+    </td>
+    <td>
+      <%= link_to "Unsubscribe", user_subscription_path(current_user, subscription), 
+                  :confirm => 'Are you sure?', :method => :delete %>
+    </td>
+  </tr>
+<% end %>
+</table>
