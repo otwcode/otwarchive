@@ -53,12 +53,14 @@ class CreationObserver < ActiveRecord::Observer
   # notify people subscribed to this creation or its authors
   def notify_subscribers(creation)
     work = creation.respond_to?(:work) ? creation.work : creation
-    #Group subscriptions by user id so that you only get one notice per update
-    subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)", 
-                              work.pseuds.map{|a| a.user_id}]).
-                        group(:user_id)
-    subs.each do |subscription|
-      UserMailer.subscription_notification(subscription.user, subscription, creation).deliver
+    if work
+      #Group subscriptions by user id so that you only get one notice per update
+      subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)", 
+                                work.pseuds.map{|a| a.user_id}]).
+                          group(:user_id)
+      subs.each do |subscription|
+        UserMailer.subscription_notification(subscription.user, subscription, creation).deliver
+      end
     end
   end
   
