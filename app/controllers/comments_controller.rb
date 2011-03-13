@@ -194,6 +194,7 @@ class CommentsController < ApplicationController
       flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_comment(parent_comment)
     else
+      flash[:comment_notice] = ts("Comment deleted.")
       redirect_to_all_comments(parent, {:show_comments => true})
     end
   end
@@ -303,7 +304,6 @@ class CommentsController < ApplicationController
 
   # ATTENTION: added load_commentable before this
   def delete_comment
-    @comment.destroy_or_mark_deleted
     respond_to do |format|
       format.html do
         options = {}
