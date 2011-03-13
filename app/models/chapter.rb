@@ -7,7 +7,7 @@ class Chapter < ActiveRecord::Base
   has_many :pseuds, :through => :creatorships
 
   belongs_to :work
-  acts_as_list :scope => 'work_id = #{work_id}'
+  # acts_as_list :scope => 'work_id = #{work_id}'
 
   acts_as_commentable
   has_many :kudos, :as => :commentable
@@ -52,14 +52,27 @@ class Chapter < ActiveRecord::Base
   scope :in_order, {:order => :position}
   scope :posted, :conditions => {:posted => true}
   
-  after_update :fix_positions
+  after_save :fix_positions
   def fix_positions
-    if work
-      chapters = work.chapters.order("position ASC, updated_at DESC")
-      chapters.each_with_index do |chapter, i|
-        chapter.position = i + 1
-        chapter.save if chapter.position_changed?
+    if work 
+      self.position ||= 1
+      chapters = work.chapters.order(:position)
+      if chapters && chapters.length > 1
+        chapters = chapters - [self]
+        chapters.insert(self.position-1, self)
+        chapters.compact.each_with_index do |chapter, i|
+          chapter.position = i+1
+          Chapter.update_all("position = #{chapter.position}", "id = #{chapter.id}") if chapter.position_changed?
+        end
       end
+    end
+  end
+  
+  before_destroy :fix_positions_after_destroy
+  def fix_positions_after_destroy
+    if work && position
+      chapters = work.chapters.where(["position > ?", position])
+      chapters.each{|c| c.update_attribute(:position, c.position + 1)}
     end
   end
 
@@ -175,10 +188,10 @@ class Chapter < ActiveRecord::Base
   def commentable_name
     self.work.title
   end
-
-  private
-
-  def add_to_list_bottom    
-  end
+  
+   # private
+   # 
+   # def add_to_list_bottom    
+   # end
   
 end
