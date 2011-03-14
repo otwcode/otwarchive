@@ -7,6 +7,7 @@ It expects the local variables:
 "form" for the prompt form 
 "is_offer" depending on if this is a request or offer
 "index" representing which prompt this is, if there are multiple prompts being submitted
+"edit_record" showing if this is editing an existing prompt or adding a new one
 
 See the challenge_signup form for an example of how this is used. 
 -->
@@ -138,8 +139,8 @@ See the challenge_signup form for an example of how this is used.
       <% form.object.build_optional_tag_set unless form.object.optional_tag_set %>
       <%= form.fields_for :optional_tag_set_attributes do |optional_tag_set_form| %>
         <dt>
-          <%= optional_tag_set_form.label :tagnames, t("optional_tag_set.tagnames", :default => "Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
-          <p class="note"><%= t('.prompts.comma_separated', :default => "(comma-separated)") %></p>
+          <%= optional_tag_set_form.label :tagnames, ts("Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
+          <p class="note"><%= ts("(comma-separated)") %></p>
         </dt>
         <dd>
           <% optional_tag_fieldname =  "challenge_signup_#{prompt_types}_attributes_#{index}_optional_tag_set_attributes_tagnames" %>
@@ -148,10 +149,22 @@ See the challenge_signup form for an example of how this is used.
         </dd>
       <% end %>
     <% end %>
+    
+    <% if @collection.challenge_type == "PromptMeme"  %>
+      <dt>
+        <%= form.label :anonymous, ts("Semi-anonymous prompt (note, this is not totally secure, and is still guessable in some places): ") %>
+        <% if edit_record %>
+        <% anon = form.object.anonymous %>
+        <% else %>
+        <% anon = @challenge.anonymous %>
+        <% end %>
+      </dt>
+      <dd><%= form.check_box :anonymous, :checked => anon %></dd>
+    <% end %>
      
   </dl>
   <% unless required %>
-    <p class="navigation"><%= link_to_remove_section(t('.prompts.delete_prompt', :default => "Remove?"), form) %></p>
+    <p class="navigation"><%= link_to_remove_section(ts("Remove?"), form) %></p>
   <% end %>
 </fieldset>
 </div>

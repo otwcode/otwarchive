@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101231174606) do
+ActiveRecord::Schema.define(:version => 20110222093602) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -111,6 +111,20 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.datetime "covered_at"
   end
 
+  create_table "challenge_claims", :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "creation_id"
+    t.string   "creation_type"
+    t.integer  "request_signup_id"
+    t.integer  "request_prompt_id"
+    t.integer  "claiming_user_id"
+    t.datetime "sent_at"
+    t.datetime "fulfilled_at"
+    t.datetime "defaulted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "challenge_signups", :force => true do |t|
     t.integer  "collection_id"
     t.integer  "pseud_id"
@@ -179,6 +193,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.boolean  "anonymous",     :default => false, :null => false
     t.boolean  "gift_exchange", :default => false, :null => false
     t.boolean  "show_random",   :default => false, :null => false
+    t.boolean  "prompt_meme",   :default => false, :null => false
   end
 
   add_index "collection_preferences", ["collection_id"], :name => "index_collection_preferences_on_collection_id"
@@ -397,6 +412,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.integer  "signup_instructions_general_sanitizer_version",  :limit => 2, :default => 0,     :null => false
     t.integer  "signup_instructions_requests_sanitizer_version", :limit => 2, :default => 0,     :null => false
     t.integer  "signup_instructions_offers_sanitizer_version",   :limit => 2, :default => 0,     :null => false
+    t.boolean  "requests_summary_visible",                                    :default => false, :null => false
   end
 
   create_table "gifts", :force => true do |t|
@@ -639,6 +655,29 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
 
   add_index "profiles", ["user_id"], :name => "index_profiles_on_user_id"
 
+  create_table "prompt_memes", :force => true do |t|
+    t.integer  "prompt_restriction_id"
+    t.integer  "request_restriction_id"
+    t.integer  "requests_num_required",                                       :default => 1,     :null => false
+    t.integer  "requests_num_allowed",                                        :default => 1,     :null => false
+    t.boolean  "signup_open",                                                 :default => false, :null => false
+    t.datetime "signups_open_at"
+    t.datetime "signups_close_at"
+    t.datetime "assignments_due_at"
+    t.datetime "works_reveal_at"
+    t.datetime "authors_reveal_at"
+    t.text     "signup_instructions_general"
+    t.text     "signup_instructions_requests"
+    t.string   "request_url_label"
+    t.string   "request_description_label"
+    t.string   "time_zone"
+    t.integer  "signup_instructions_general_sanitizer_version",  :limit => 2, :default => 0,     :null => false
+    t.integer  "signup_instructions_requests_sanitizer_version", :limit => 2, :default => 0,     :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "anonymous",                                                   :default => false, :null => false
+  end
+
   create_table "prompt_restrictions", :force => true do |t|
     t.integer  "tag_set_id"
     t.boolean  "optional_tags_allowed",           :default => false, :null => false
@@ -701,6 +740,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.boolean  "any_category",                               :default => false, :null => false
     t.boolean  "any_warning",                                :default => false, :null => false
     t.boolean  "any_freeform",                               :default => false, :null => false
+    t.boolean  "anonymous",                                  :default => false, :null => false
   end
 
   create_table "pseuds", :force => true do |t|

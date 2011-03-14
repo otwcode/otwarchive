@@ -215,6 +215,18 @@ class WorksController < ApplicationController
     else
       @work.collection_names = @collection.name if @collection
     end
+    if params[:claim_id] && (@challenge_claim = ChallengeClaim.find(params[:claim_id])) && User.find(@challenge_claim.claiming_user_id) == current_user
+      @work.challenge_claims << @challenge_claim
+      @work.collections << @challenge_claim.collection
+      TagSet::TAG_TYPES.each do |type|
+        eval("@work.#{type.pluralize}") << @challenge_claim.request_prompt.tag_set.with_type(type)
+      end
+      unless Prompt.find(@challenge_claim.request_prompt_id).anonymous?
+        @work.recipients = @challenge_claim.requesting_pseud.byline
+      end
+    else
+      @work.collection_names = @collection.name if @collection
+    end
     if params[:import]
       render :new_import and return
     elsif params[:load_unposted]
@@ -770,6 +782,19 @@ public
     else
       flash[:notice] = ts("The work was not posted. It will be saved here in your drafts for one week, then cleaned up.")
       redirect_to drafts_user_works_path(current_user)
+    end
+  end
+  
+  # Takes an array of tags and returns a comma-separated list, without the markup
+  def tag_list(tags)
+    tags = tags.uniq.compact
+    if !tags.blank? && tags.respond_to?(:collect)
+      last_tag = tags.pop
+      tag_list = tags.collect{|tag|  tag.name + ", "}.join
+      tag_list += last_tag.name
+      tag_list.html_safe
+    else
+      ""
     end
   end
 

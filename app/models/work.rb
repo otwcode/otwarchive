@@ -40,6 +40,8 @@ class Work < ActiveRecord::Base
     :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
   has_many :challenge_assignments, :as => :creation
+  has_many :challenge_claims, :as => :creation
+  accepts_nested_attributes_for :challenge_claims
 
   has_many :collections, :through => :collection_items
   has_many :approved_collections, :through => :collection_items, :source => :collection,
@@ -283,10 +285,23 @@ class Work < ActiveRecord::Base
       add_to_collection(assignment.collection)
       self.gifts << Gift.new(:pseud => assignment.requesting_pseud) unless (recipients && recipients.include?(assignment.requesting_pseud.byline))
     end
-  end
+  end    
+
+  def set_challenge_claim_info
+    # if this is fulfilling a challenge claim, add the collection and recipient
+    challenge_claims.each do |assignment|
+      add_to_collection(claim.collection)
+      self.gifts << Gift.new(:pseud => claim.requesting_pseud) unless (recipients && recipients.include?(claim.request_byline))
+    end
+    save
+  end      
 
   def challenge_assignment_ids
     challenge_assignments.map(&:id)
+  end
+  
+  def challenge_claim_ids
+    challenge_claims.map(&:id)
   end
 
   def challenge_assignment_ids=(ids)

@@ -96,11 +96,20 @@ class ChallengeSignupsController < ApplicationController
           end
       }
       format.xls {
-        if @challenge.user_allowed_to_see_signups?(current_user)
+        if (@collection.challenge_type == "GiftExchange" && @challenge.user_allowed_to_see_signups?(current_user)) || 
+        (@collection.challenge_type == "PromptMeme" && (
+        @collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)
+        ))
           params[:show_urls] = true
           params[:show_descriptions] = true
+          params[:show_claims] = true
+          params[:show_filled] = true
+          params[:xls] = true
           @challenge_signups = @collection.signups
           export_html
+        else
+          flash[:error] = ts("You aren't allowed to see the Excel summary.")
+          redirect_to collection_path(@collection) rescue redirect_to '/' and return
         end
       }
     end
