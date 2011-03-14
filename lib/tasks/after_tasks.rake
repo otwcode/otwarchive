@@ -257,15 +257,13 @@ namespace :After do
 #    end
 #  end
 #
-  #### Leave this one here
-
-  desc "Update the translation file each time we deploy"
-  task(:update_translations => :environment) do
-    tg = TranslationGenerator.new
-    tg.generate_default_translation_file
-  end
 
   #### Add your new tasks here
+  
+  desc "Set restricted to false instead of null"
+  task(:fix_restricted => :environment) do
+    Work.where("restricted IS NULL").update_all(:restricted => false)
+  end
 
 end # this is the end that you have to put new tasks above
 
@@ -275,4 +273,4 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
-task :After => []
+task :After => ['After:fix_restricted']
