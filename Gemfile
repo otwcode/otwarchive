@@ -87,9 +87,6 @@ group :production do
   # Use unicorn as the web server
   gem 'unicorn', :require => false
   gem "memcache-client"
-  gem 'exception_notification',
-    :git     => 'git://github.com/rails/exception_notification.git',
-    :branch  => 'master',
-    :require => 'exception_notifier'
+  gem "hoptoad_notifier", "~> 2.3"
 end
 
