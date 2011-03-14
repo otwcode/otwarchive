@@ -35,6 +35,7 @@ class CreationObserver < ActiveRecord::Observer
       notify_recipients(creation)
       notify_parents(creation)
       notify_subscribers(creation)
+      notify_prompters(creation)
     elsif creation.is_a?(Chapter) && creation.position != 1
       notify_subscribers(creation)      
     end
@@ -47,16 +48,6 @@ class CreationObserver < ActiveRecord::Observer
       recipient_pseuds.each do |pseud|
         UserMailer.recipient_notification(pseud.user, work).deliver
       end
-    end
-    
-    # notify prompters of response to their prompt
-    if !new_work.challenge_claims.empty? && !new_work.unrevealed?
-      UserMailer.prompter_notification(pseud.user, new_work, new_work.collection).deliver
-    end
-      
-    # notify authors of related work
-    if !new_work.parent_work_relationships.empty? && !new_work.unrevealed?
-        new_work.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
     end
   end
   
@@ -71,6 +62,13 @@ class CreationObserver < ActiveRecord::Observer
       subs.each do |subscription|
         UserMailer.subscription_notification(subscription.user, subscription, creation).deliver
       end
+    end
+  end
+  
+  # notify prompters of response to their prompt
+  def notify_prompters(work)
+    if !work.challenge_claims.empty? && !work.unrevealed?
+      UserMailer.prompter_notification(pseud.user, work, work.collection).deliver
     end
   end
   
