@@ -22,6 +22,8 @@ class Prompt < ActiveRecord::Base
   belongs_to :optional_tag_set, :class_name => "TagSet", :dependent => :destroy
   accepts_nested_attributes_for :optional_tag_set
   has_many :optional_tags, :through => :optional_tag_set, :source => :tag
+  
+  has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_prompt_id'
 
   # VALIDATION
   attr_protected :description_sanitizer_version
@@ -220,5 +222,71 @@ class Prompt < ActiveRecord::Base
     end
   end
 
+  # Takes an array of tags and returns a marked-up, comma-separated list
+  def tag_link_list(tags)
+    tags = tags.uniq.compact
+    if !tags.blank? && tags.respond_to?(:collect)
+      last_tag = tags.pop
+      tag_list = tags.collect{|tag| "<li>" + link_to_tag(tag) + ", </li>"}.join
+      tag_list += content_tag(:li, link_to_tag(last_tag))
+      tag_list.html_safe
+    else
+      ""
+    end
+  end
+  
+  # gets the list of tags for this prompt
+  def tag_linked_list
+    list = ""
+    TagSet::TAG_TYPES.each do |type|
+      eval("@show_request_#{type}_tags = (self.collection.challenge.request_restriction.#{type}_num_allowed > 0)")
+      if eval("@show_request_#{type}_tags") 
+          if self && self.tag_set && !self.tag_set.with_type(type).empty?
+              list += " - " + tag_link_list(self.tag_set.with_type(type))
+          end
+      end   
+    end
+    return list
+  end
+  
+  # Takes an array of tags and returns a comma-separated list, without the markup
+  def tag_list(tags)
+    tags = tags.uniq.compact
+    if !tags.blank? && tags.respond_to?(:collect)
+      last_tag = tags.pop
+      tag_list = tags.collect{|tag|  tag.name + ", "}.join
+      tag_list += last_tag.name
+      tag_list.html_safe
+    else
+      ""
+    end
+  end
+  
+  # gets the list of tags for this prompt
+  def tag_unlinked_list
+    list = ""
+    TagSet::TAG_TYPES.each do |type|
+      eval("@show_request_#{type}_tags = (self.collection.challenge.request_restriction.#{type}_num_allowed > 0)")
+      if eval("@show_request_#{type}_tags") 
+          if self && self.tag_set && !self.tag_set.with_type(type).empty?
+              list += " - " + tag_list(self.tag_set.with_type(type))
+          end
+      end   
+    end
+    return list
+  end
+  
+  # checks if a prompt has been filled in a prompt meme
+  def unfulfilled?
+    if self.request_claims.blank?
+      return true
+    else
+      self.request_claims.each do |claim| 
+        if claim.fulfilled? 
+          return false
+        end
+      end
+    end
+  end
 
 end

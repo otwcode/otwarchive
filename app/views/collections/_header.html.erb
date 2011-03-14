@@ -10,7 +10,7 @@
   <ul class="navigation" role="navigation">
     <li><%= link_to_unless_current t('.profile', :default =>"Profile"), collection_profile_path(@collection) %></li>
 
-    <% if logged_in? && !@collection.closed? %>
+    <% if logged_in? && !@collection.closed? && @collection.challenge_type != "PromptMeme" %>
       <li><%= link_to t('.collections.post_new', :default => "Post To Collection"), new_collection_work_path(@collection) %></li>
     <% end %>
 

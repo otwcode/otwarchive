@@ -48,6 +48,16 @@ class CreationObserver < ActiveRecord::Observer
         UserMailer.recipient_notification(pseud.user, work).deliver
       end
     end
+    
+    # notify prompters of response to their prompt
+    if !new_work.challenge_claims.empty? && !new_work.unrevealed?
+      UserMailer.prompter_notification(pseud.user, new_work, new_work.collection).deliver
+    end
+      
+    # notify authors of related work
+    if !new_work.parent_work_relationships.empty? && !new_work.unrevealed?
+        new_work.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
+    end
   end
   
   # notify people subscribed to this creation or its authors
