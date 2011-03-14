@@ -206,6 +206,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :signups, :controller => "challenge_signups", :only => [:index]
     resources :skins, :only => [:index]
+    resources :subscriptions, :only => [:index, :create, :destroy]
     resources :works do
       collection do
         get :drafts
