@@ -53,7 +53,7 @@ class CreationObserver < ActiveRecord::Observer
   # notify people subscribed to this creation or its authors
   def notify_subscribers(creation)
     work = creation.respond_to?(:work) ? creation.work : creation
-    if work
+    if work && !work.unrevealed? && !work.anonymous?
       #Group subscriptions by user id so that you only get one notice per update
       subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)", 
                                 work.pseuds.map{|a| a.user_id}]).
