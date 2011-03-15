@@ -13,6 +13,8 @@ Feature: Collection
     | myname3        | something   |
     And basic tags
     And I am logged in as "myname2" with password "something"
+    And I go to myname1's user page
+    And I press "Subscribe"
   When I go to the collections page
   Then I should see "Collections in the "
     And I should not see "Hidden Treasury"
@@ -35,6 +37,8 @@ Feature: Collection
     And I should see "Old Snippet"
     
   # Post to collection without preview
+  # Also check that subscription notices don't go out
+  Given all emails have been delivered
   When I follow "Hidden Treasury"
     And I follow "Post To Collection"
     And I fill in "Fandoms" with "No Fandom"
@@ -46,6 +50,7 @@ Feature: Collection
     And I should see "myname1" within ".byline"
     And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
     And I should see "Collections: Hidden Treasury"
+    And 0 emails should be delivered
   
   # Post to collection with preview
   When I follow "Hidden Treasury"
@@ -62,6 +67,7 @@ Feature: Collection
     And I should see "myname1" within ".byline"
     And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
     And I should see "Collections: Hidden Treasury"
+    And 0 emails should be delivered
       
   When I follow "Hidden Treasury"
   Then I should see "New Snippet by myname1"
