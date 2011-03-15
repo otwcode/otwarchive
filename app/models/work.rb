@@ -516,15 +516,14 @@ class Work < ActiveRecord::Base
 
   # Get the total number of chapters for a work
   def number_of_chapters
-     Chapter.maximum(:position, :conditions => {:work_id => self.id}) || 0
+    self.chapters.count
   end
 
   # Get the total number of posted chapters for a work
   # Issue 1316: total number needs to reflect the actual number of chapters posted
   # rather than the total number of chapters indicated by user
   def number_of_posted_chapters
-    self.chapters.count(:conditions => {:work_id => self.id, :posted => true}) || 0
-     #Chapter.maximum(:position, :conditions => {:work_id => self.id, :posted => true}) || 0
+    self.chapters.posted.count
   end
 
   def chapters_in_order(include_content = true)
@@ -561,7 +560,7 @@ class Work < ActiveRecord::Base
 
   # Returns true if a work is not yet complete
   def is_wip
-    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_chapters
+    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_posted_chapters
   end
 
   # Returns true if a work is complete
