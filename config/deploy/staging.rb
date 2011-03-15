@@ -4,7 +4,7 @@ namespace :stage_only do
   task :git_in_home, :roles => [:backend, :search] do
     run "git pull origin deploy"
     run "bundle install --quiet"
-    run "ln -nfs -t #{release_path}/config/ config/*"
+    run "ln -nfs -t config/ #{deploy_to}/shared/config/*"
   end
   task :update_public, {:roles => :web} do
     run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
@@ -21,8 +21,8 @@ namespace :stage_only do
   end
 end
 
-before "deploy:update", "stage_only:git_in_home"
-after "deploy:update", "stage_only:update_public", "stage_only:update_configs"
+before "deploy:update_code", "stage_only:git_in_home"
+after "deploy:update_code", "stage_only:update_public", "stage_only:update_configs"
 
 before "deploy:migrate", "stage_only:reset_db"
 after "deploy:migrate", "extras:reindex_sphinx"

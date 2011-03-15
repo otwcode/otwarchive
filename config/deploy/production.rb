@@ -37,8 +37,8 @@ namespace :production_only do
   end
 end
 
-before "deploy:update", "production_only:git_in_home"
-after "deploy:update", "production_only:update_public", "production_only:update_configs"
+before "deploy:update_code", "production_only:git_in_home"
+after "deploy:update_code", "production_only:update_public", "production_only:update_configs"
 
 before "deploy:migrate", "production_only:backup_db"
 after "deploy:restart", "production_only:update_cron_email", "production_only:update_cron_reindex"
