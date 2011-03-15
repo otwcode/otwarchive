@@ -83,6 +83,58 @@ namespace :extras do
   end
 end
 
+# our tasks which are staging specific
+namespace :stage_only do
+  task :git_in_home, :roles => [:backend, :search] do
+    run "git pull origin deploy"
+    run "bundle install --quiet"
+    run "ln -nfs -t config/ #{deploy_to}/shared/config/*"
+  end
+  task :update_public, {:roles => :web} do
+    run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
+    run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/static"
+  end
+  task :update_configs, {:roles => :app} do
+    run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
+  end
+  task :reset_db, {:roles => :db} do
+    run "/static/bin/reset_database.sh"
+  end
+  task :notify_testers do
+    system "echo 'testarchive deployed' | mail -s 'testarchive deployed' #{mail_to}"
+  end
+end
+
+# our tasks which are production specific
+namespace :production_only do
+  task :git_in_home, :roles => [:backend, :search] do
+    run "git pull origin deploy"
+    run "bundle install --quiet"
+    run "ln -nfs -t #{release_path}/config/ /static/config/*"
+  end
+  task :update_public, {:roles => :web} do
+    run "ln -nfs -t #{release_path}/public/ /static/downloads"
+    run "ln -nfs -t #{release_path}/public/ /static/static"
+    run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt}"
+  end
+  task :update_configs, {:roles => :app} do
+    run "ln -nfs -t #{release_path}/config/ /static/config/*"
+  end
+  task :backup_db, {:roles => :search} do
+    run "/static/bin/backup_database.sh &"
+  end
+  task :update_cron_email, {:roles => :backend} do
+    run "whenever --update-crontab production -f config/schedule_production.rb"
+  end
+  task :update_cron_reindex, {:roles => :search} do
+    run "whenever --update-crontab search -f config/schedule_search.rb"
+  end
+  task :notify_testers do
+    system "echo 'archive deployed' | mail -s 'archive deployed' #{mail_to}"
+  end
+end
+
+# after and before task triggers
 after "deploy:update", "extras:cache_stylesheet"
 
 before "deploy:migrate", "deploy:web:disable"
