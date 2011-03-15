@@ -1,3 +1,6 @@
+require './config/boot'
+require 'hoptoad_notifier/capistrano'
+
 # takes care of the bundle install tasks
 require 'bundler/capistrano'
 
