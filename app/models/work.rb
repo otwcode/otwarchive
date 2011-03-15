@@ -516,7 +516,8 @@ class Work < ActiveRecord::Base
 
   # Get the total number of chapters for a work
   def number_of_chapters
-     Chapter.maximum(:position, :conditions => {:work_id => self.id}) || 0
+    self.chapters.count(:conditions => {:work_id => self.id}) || 0
+    #Chapter.maximum(:position, :conditions => {:work_id => self.id}) || 0
   end
 
   # Get the total number of posted chapters for a work
@@ -561,7 +562,7 @@ class Work < ActiveRecord::Base
 
   # Returns true if a work is not yet complete
   def is_wip
-    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_chapters
+    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_posted_chapters
   end
 
   # Returns true if a work is complete
