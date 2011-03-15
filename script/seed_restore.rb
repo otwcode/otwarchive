@@ -24,6 +24,9 @@ Dir.glob("*.sql").each do |file|
       ActiveRecord::Base.connection.execute(line.chomp)
     rescue ActiveRecord::RecordNotUnique
       # in case you dumped something twice
+    rescue Encoding::CompatibilityError
+      puts "The following line had an encoding error. Add manually."
+      puts line
     end
   end
 end
