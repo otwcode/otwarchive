@@ -288,5 +288,14 @@ class Prompt < ActiveRecord::Base
       end
     end
   end
+  
+  # return the first fandom if there is one
+  def first_fandom
+    if self && self.tag_set && !self.tag_set.with_type('fandom').empty?
+      return tag_list(self.tag_set.with_type('fandom'))
+    else
+      return ''
+    end
+  end
 
 end
