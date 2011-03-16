@@ -1,4 +1,5 @@
 first:
+  id: 1
   posted: true
   title: First work
   word_count: 100
@@ -7,6 +8,7 @@ first:
   authors_to_sort_on: testuser
   revised_at: 2010-04-30
 second:
+  id: 2
   posted: true
   title: second work
   word_count: 1000
@@ -15,6 +17,7 @@ second:
   authors_to_sort_on: testuser
   revised_at: 2004-04-30
 third:
+  id: 3
   posted: true
   title: third work
   word_count: 10000
@@ -24,6 +27,7 @@ third:
   revised_at: 2007-07-10
   summary: for the second time
 fourth:
+  id: 4
   posted: true
   title: fourth
   word_count: 10000
@@ -32,6 +36,7 @@ fourth:
   authors_to_sort_on: testuser2
   revised_at: 2010-04-30
 fifth:
+  id: 5
   posted: true
   title: fifth
   word_count: 1000
