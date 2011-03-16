@@ -80,7 +80,7 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
       And I press "Go"
     Then I should see "Ghost Soup"
       And I should not see "first fandom"
-    When I select "dizmo" from "assignments_1234_"
+    When I select "dizmo" from "assignments_10_"
       And I press "Assign"
     Then I should see "Wranglers were successfully assigned"
 
