@@ -85,19 +85,19 @@ end
 
 # our tasks which are staging specific
 namespace :stage_only do
-  task :git_in_home, :roles => [:backend, :search] do
+  task :git_in_home do
     run "git pull origin deploy"
     run "bundle install --quiet"
     run "ln -nfs -t config/ #{deploy_to}/shared/config/*"
   end
-  task :update_public, {:roles => :web} do
+  task :update_public do
     run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
     run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/static"
   end
-  task :update_configs, {:roles => :app} do
+  task :update_configs do
     run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
   end
-  task :reset_db, {:roles => :db} do
+  task :reset_db do
     run "/static/bin/reset_database.sh"
   end
   task :notify_testers do
@@ -112,12 +112,12 @@ namespace :production_only do
     run "bundle install --quiet"
     run "ln -nfs -t #{release_path}/config/ /static/config/*"
   end
-  task :update_public, {:roles => :web} do
+  task :update_public, :roles => [:web, :backend] do
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
     run "ln -nfs -t #{release_path}/public/ /static/static"
     run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt}"
   end
-  task :update_configs, {:roles => :app} do
+  task :update_configs, {:roles => :app, :backend} do
     run "ln -nfs -t #{release_path}/config/ /static/config/*"
   end
   task :backup_db, {:roles => :search} do
