@@ -39,6 +39,17 @@ When /^I post the work "([^\"]*)"$/ do |title|
   Then "I should see \"Work was successfully posted.\""
 end
 
+When /^I post the work "([^\"]*)" without preview$/ do |title|
+  work = Work.find_by_title(title)
+  if work.blank?
+    Given "basic tags"
+    visit new_work_url
+    Given "I fill in the basic work information for \"#{title}\""
+    click_button("Post without preview")
+    Then "I should see \"Work was successfully posted.\""
+  end
+end
+
 When /^I post the work "([^\"]*)" with fandom "([^\"]*)"$/ do |title, fandom|
   work = Work.find_by_title(title)
   if work.blank?

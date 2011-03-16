@@ -1,23 +1,9 @@
 class CreationObserver < ActiveRecord::Observer
   observe Chapter, Work, Series
-
-  def after_save(creation)
-    # Notify new co-authors that they've been added to a creation
-    this_creation = creation
-    creation = creation.class == Series ? creation : (creation.class == Chapter ? creation.work : creation)
-    if creation && !creation.authors.blank? && User.current_user.is_a?(User)
-      new_authors = (creation.authors - (creation.pseuds + User.current_user.pseuds)).uniq
-      unless new_authors.blank?
-        for pseud in new_authors
-          UserMailer.coauthor_notification(pseud.user, creation).deliver
-        end
-      end
-    end
-    save_creatorships(this_creation)
-  end
   
   # Send notifications when a creation is posted without preview
   def after_create(creation)
+    notify_co_authors(creation)
     return unless !creation.is_a?(Series) && creation.posted?
     if creation.is_a?(Work)
       notify_recipients(creation)
@@ -30,6 +16,7 @@ class CreationObserver < ActiveRecord::Observer
   
   # Send notifications when a creation is posted from a draft state
   def before_update(creation)
+    notify_co_authors(creation)
     return unless !creation.is_a?(Series) && creation.valid? && creation.posted_changed? && creation.posted?
     if creation.is_a?(Work)
       notify_recipients(creation)
@@ -39,6 +26,21 @@ class CreationObserver < ActiveRecord::Observer
     elsif creation.is_a?(Chapter) && creation.position != 1
       notify_subscribers(creation)      
     end
+  end
+  
+  # Notify new co-authors that they've been added to a creation
+  def notify_co_authors(creation)
+    this_creation = creation
+    creation = creation.work if creation.is_a?(Chapter)
+    if creation && !creation.authors.blank? && User.current_user.is_a?(User)
+      new_authors = (creation.authors - (creation.pseuds + User.current_user.pseuds)).uniq
+      unless new_authors.blank?
+        for pseud in new_authors
+          UserMailer.coauthor_notification(pseud.user, creation).deliver
+        end
+      end
+    end
+    save_creatorships(this_creation)
   end
   
   # notify recipients that they have gotten a story!
