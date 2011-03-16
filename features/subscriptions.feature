@@ -23,6 +23,9 @@ Feature: Subscriptions
   Then 1 email should be delivered to "myname2@foo.com"
     And the email should contain "myname1"
     And the email should contain "Awesome Story"
+  When all emails have been delivered
+    And I post the work "Yet Another Awesome Story" without preview
+  Then 1 email should be delivered to "myname2@foo.com"
   When I follow "Add Chapter"
     And I fill in "content" with "la la la la la la la la la la la"
     And all emails have been delivered
