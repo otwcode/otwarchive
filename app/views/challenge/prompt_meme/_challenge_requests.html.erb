@@ -1,14 +1,4 @@
 <h2><%= ts("Prompts for %{collection}", :collection => @collection.title) %></h2>
-
-<% @reqtemp = {} %>
-<% @requests.each_with_index do |req, index|
-  @reqt1 = req.first_fandom %>
-<% @reqtemp[:index] = @reqt1 %>
-<%  end %>
-<%= debug @reqtemp %>
-<% # @reqt2 = @requests + @reqtemp %>
-<%= # debug @reqt2 %>
-<%= debug @requests %>
   
 <% @challenge ||= @collection.challenge -%>
 <% show_request_url = @challenge.request_restriction.url_allowed && !params[:hide_urls] %>
