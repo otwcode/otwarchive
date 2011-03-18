@@ -1,4 +1,5 @@
 class UserMailer < ActionMailer::Base
+  include Resque::Mailer # see README in this directory
 
   helper :application
   helper :tags
@@ -6,63 +7,70 @@ class UserMailer < ActionMailer::Base
   include HtmlCleaner
 
   default :from => ArchiveConfig.RETURN_ADDRESS
-  
+
   # Sends an invitation to join the archive
+  # Must be sent synchronously as it is rescued
+  # TODO refactor to make it asynchronous
   def invitation(invitation)
     @invitation = invitation
-    @user_name = (invitation.creator.is_a?(User) ? invitation.creator.login : '')
+    @user_name = (@invitation.creator.is_a?(User) ? @invitation.creator.login : '')
     mail(
-      :to => invitation.invitee_email,
+      :to => @invitation.invitee_email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Invitation"
     )
   end
-  
+
   # Sends an invitation to join the archive and claim stories that have been imported as part of a bulk import
-  def invitation_to_claim(invitation, archivist)
+  # Must be sent synchronously as it is rescued
+  # TODO refactor to make it asynchronous
+  def invitation_to_claim(invitation, archivist_login)
     @external_author = invitation.external_author
-    @archivist = archivist || "An archivist"
+    @archivist = archivist_login || "An archivist"
     @token = invitation.token
     mail(
       :to => invitation.invitee_email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Invitation To Claim Stories"
     )
   end
-  
+
   # Notifies a writer that their imported works have been claimed
-  def claim_notification(external_author, claimed_works)
-    @email = external_author.email
-    @claimed_works = claimed_works
+  def claim_notification(external_author_id, claimed_work_ids)
+    external_author = ExternalAuthor.find(external_author_id)
+    @external_email = external_author.email
+    @claimed_works = Work.find(claimed_work_ids)
     mail(
       :to => external_author.user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Stories Uploaded"
     )
   end
-  
-  def subscription_notification(user, subscription, creation)
-    @subscription = subscription
-    @creation = creation
+
+  def subscription_notification(user_id, subscription_id, creation_id, creation_class_name)
+    user = User.find(user_id)
+    @subscription = Subscription.find(subscription_id)
+    @creation = creation_class_name.constantize.find(creation_id)
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Subscription Notice for #{@subscription.name}"      
+      :subject => "[#{ArchiveConfig.APP_NAME}] Subscription Notice for #{@subscription.name}"
     )
   end
 
   # Emails a user to say they have been given more invitations for their friends
-  def invite_increase_notification(user, total)
-    @user = user
-    @total = total 
+  def invite_increase_notification(user_id, total)
+    @user = User.find(user_id)
+    @total = total
     mail(
-      :to => user.email,
+      :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}] New Invitations"
     )
   end
 
   # Sends an admin message to a user
-  def archive_notification(admin, user, subject, message)
+  def archive_notification(admin_login, user_id, subject, message)
+    @user = User.find(user_id)
     @message = message
-    @admin = admin
+    @admin_login = admin_login
     mail(
-      :to => user.email,
+      :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Admin Message #{subject}"
     )
   end
@@ -73,106 +81,113 @@ class UserMailer < ActionMailer::Base
       archive_notification(admin, user, subject, message)
     end
   end
-  
-  def collection_notification(collection, subject, message)
+
+  def collection_notification(collection_id, subject, message)
     @message = message
-    @collection = collection
+    @collection = Collection.find(collection_id)
     mail(
-      :to => collection.get_maintainers_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}][#{collection.title}] #{subject}"
+      :to => @collection.get_maintainers_email,
+      :subject => "[#{ArchiveConfig.APP_NAME}][#{@collection.title}] #{subject}"
     )
   end
 
-  def potential_match_generation_notification(collection)
-    @collection = collection
+  def potential_match_generation_notification(collection_id)
+    @collection = Collection.find(collection_id)
     mail(
-      :to => collection.get_maintainers_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}][#{collection.title}] Potential Match Generation Complete"
+      :to => @collection.get_maintainers_email,
+      :subject => "[#{ArchiveConfig.APP_NAME}][#{@collection.title}] Potential Match Generation Complete"
     )
   end
 
-  def challenge_assignment_notification(collection, assigned_user, assignment)
-    @collection = collection
-    @assigned_user = assigned_user
+  def challenge_assignment_notification(collection_id, assigned_user_id, assignment_id)
+    @collection = Collection.find(collection_id)
+    @assigned_user = User.find(assigned_user_id)
+    assignment = ChallengeAssignment.find(assignment_id)
     @request = (assignment.request_signup || assignment.pinch_request_signup)
     mail(
-      :to => assigned_user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}][#{collection.title}] Your Assignment!"
+      :to => @assigned_user.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}][#{@collection.title}] Your Assignment!"
     )
   end
 
   # Asks a user to validate and activate their new account
-  def signup_notification(user)
-    @user = user
+  def signup_notification(user_id)
+    @user = User.find(user_id)
     mail(
-      :to => user.email,
+      :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Please activate your new account"
     )
   end
-   
+
   # Emails a user to confirm that their account is validated and activated
-  def activation(user)
-    @user = user
+  def activation(user_id)
+    @user = User.find(user_id)
     mail(
-      :to => user.email,
+      :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Your account has been activated."
     )
-  end 
-  
+  end
+
   # Confirms to a user that their password was reset
-  def reset_password(user)
-    @user = user
+  # NOTE: the password is not saved in the database, it's a virtual method in authlogic, so it must be passed
+  def reset_password(user_id, password)
+    @user = User.find(user_id)
+    @password = password
     mail(
-      :to => user.email,
+      :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Password reset"
     )
   end
-   
+
   ### WORKS NOTIFICATIONS ###
-  
+
   # Sends email when a user is added as a co-author
-  def coauthor_notification(user, creation)
-    @user = user
-    @creation = creation
+  def coauthor_notification(user_id, creation_id, creation_class_name)
+    @user = User.find(user_id)
+    @creation = creation_class_name.constantize.find(creation_id)
     mail(
-      :to => user.email,
+      :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Co-Author Notification"
     )
-  end 
-   
+  end
+
   # Sends emails to authors whose stories were listed as the inspiration of another work
-  def related_work_notification(user, related_work)
-    @user = user
-    @related_work = related_work
+  def related_work_notification(user_id, related_work_id)
+    @user = User.find(user_id)
+    @related_work = RelatedWork.find(related_work_id)
     @related_parent_link = url_for(:controller => :works, :action => :show, :id => @related_work.parent)
     @related_child_link = url_for(:controller => :works, :action => :show, :id => @related_work.work)
     mail(
-      :to => user.email,
+      :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Related work notification"
     )
   end
 
   # Emails a recipient to say that a gift has been posted for them
-  def recipient_notification(user, work, collection=nil)
-    @work = work
-    @collection = collection
+  def recipient_notification(user_id, work_id, collection_id=nil)
+    user = User.find(user_id)
+    @work = Work.find(work_id)
+    @collection = Collection.find(collection_id) if collection_id
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}]#{collection ? '[' + collection.title + ']' : ''} A Gift Story For You #{collection ? 'From ' + collection.title : ''}"
+      :subject => "[#{ArchiveConfig.APP_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Story For You #{@collection ? 'From ' + @collection.title : ''}"
     )
   end
-  
+
   # Emails a prompter to say that a response has been posted to their prompt
-  def prompter_notification(user, work, collection=nil)
-    @work = work
-    @collection = collection
+  def prompter_notification(user_id, work_id, collection_id=nil)
+    user = User.find(user_id)
+    @work = Work.find(work_id)
+    @collection = Collection.find(collection_id) if collection_id
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}]#{collection ? '[' + collection.title + ']' : ''} A Response to your Prompt #{collection ? 'From ' + collection.title : ''}"
+      :subject => "[#{ArchiveConfig.APP_NAME}] A Response to your Prompt"
     )
   end
-   
+
   # Sends email to coauthors when a work is edited
+  # NOTE: this must be sent synchronously! otherwise the new version will be sent.
+  # TODO refactor to make it asynchronous by passing the content in the method
   def edit_work_notification(user, work)
     @user = user
     @work = work
@@ -181,8 +196,10 @@ class UserMailer < ActionMailer::Base
       :subject => "[#{ArchiveConfig.APP_NAME}] Your story has been updated"
     )
   end
-   
+
   # Sends email to authors when a creation is deleted
+  # NOTE: this must be sent synchronously! otherwise the work will no longer be there to send
+  # TODO refactor to make it asynchronous by passing the content in the method
   def delete_work_notification(user, work)
     @user = user
     @work = work
@@ -196,11 +213,12 @@ class UserMailer < ActionMailer::Base
       :subject => "[#{ArchiveConfig.APP_NAME}] Your story has been deleted"
     )
   end
-  
+
   ### OTHER NOTIFICATIONS ###
-  
+
   # archive feedback
-  def feedback(feedback)
+  def feedback(feedback_id)
+    feedback = Feedback.find(feedback_id)
     return unless feedback.email
     @summary = feedback.summary
     @comment = feedback.comment
@@ -208,9 +226,10 @@ class UserMailer < ActionMailer::Base
       :to => feedback.email,
       :subject => "#{ArchiveConfig.APP_NAME}: Support - #{strip_html_breaks_simple(feedback.summary)}"
     )
-  end  
+  end
 
-  def abuse_report(report)
+  def abuse_report(report_id)
+    report = AbuseReport.find(report_id)
     setup_email_without_name(report.email)
     @url = report.url
     @comment = report.comment
@@ -240,7 +259,7 @@ class UserMailer < ActionMailer::Base
     end
     return attachment_string
   end
-  
+
   protected
 
 end

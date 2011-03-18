@@ -2,7 +2,7 @@
 Feature: Admin tasks
 
   Scenario: Log in as an admin and do admin-y things. Wrong password fails admin login, you can find users, post a new FAQ section.
-  
+
     Given I have no users
       And the following admin exists
       | login       | password |
@@ -11,23 +11,23 @@ Feature: Admin tasks
       | login       | password      |
       | dizmo       | wrangulator   |
       And I have loaded the "roles" fixture
-    
+
     # admin cannot log in as an ordinary user - it is a different type of account
-    
+
     When I go to the home page
       And I fill in "user_session_login" with "Zooey"
       And I fill in "user_session_password" with "secret"
       And I press "Log in"
     Then I should see "We couldn't find that user name in our database. Please try again"
-    
+
     # FAQs have not yet been posted
-    
+
     When I go to the archive_faqs page
     Then I should see "Some commonly asked questions about the Archive are answered here"
       And I should not see "Some text"
-      
+
     # Login as an admin
-    
+
     When I go to the admin_login page
       And I fill in "admin_session_login" with "dizmo"
       And I fill in "admin_session_password" with "wrangulator"
@@ -38,9 +38,9 @@ Feature: Admin tasks
       And I fill in "admin_session_password" with "secret"
       And I press "Log in as admin"
     Then I should see "Successfully logged in"
-    
+
     # search for a user
-    
+
     When I fill in "query" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
@@ -58,9 +58,9 @@ Feature: Admin tasks
       And I press "Update"
     Then I should see "User was successfully updated"
       And the "user_roles_1" checkbox should not be checked
-    
+
     # add a new section to the FAQ
-    
+
     When I follow "admin posts"
       And I follow "Archive FAQ" within "#main"
       And I should not see "Some text"
@@ -72,9 +72,9 @@ Feature: Admin tasks
     When I go to the archive_faqs page
       And I follow "New subsection"
     Then I should see "Some text, that is sufficiently long to pass validation" within ".userstuff"
-    
+
   Scenario: Change some admin settings for performance - guest downloading and tag wrangling
-    
+
   Given I have no users
     And the following admin exists
       | login       | password |
@@ -83,17 +83,17 @@ Feature: Admin tasks
       | login       | password      |
       | dizmo       | wrangulator   |
     And a character exists with name: "Ianto Jones", canonical: true
-      
+
   # post a work and download it as a guest
-  
+
   When I am logged in as "dizmo" with password "wrangulator"
     And I post the work "Storytime"
     And I follow "Log out"
     And I view the work "Storytime"
   Then I should see "Download"
-  
+
   # turn off guest downloading
-  
+
   When I go to the admin_login page
     And I fill in "admin_session_login" with "Zooey"
     And I fill in "admin_session_password" with "secret"
@@ -105,17 +105,17 @@ Feature: Admin tasks
   When I check "Turn off downloading for guests"
     And I press "Update"
   Then I should see "Archive settings were successfully updated."
-  
+
   # Check guest downloading is off
-  
+
   When I follow "Log out"
   Then I should see "Successfully logged out"
   When I view the work "Storytime"
     And I follow "MOBI"
   Then I should see "Due to current high load"
-  
+
   # Turn off tag wrangling
-  
+
   When I go to the admin_login page
     And I fill in "admin_session_login" with "Zooey"
     And I fill in "admin_session_password" with "secret"
@@ -125,24 +125,24 @@ Feature: Admin tasks
     And I check "Turn off tag wrangling for non-admins"
     And I press "Update"
   Then I should see "Archive settings were successfully updated."
-  
+
   # Check tag wrangling is off
-  
+
   When I follow "Log out"
   Then I should see "Successfully logged out"
   When I am logged in as "dizmo" with password "wrangulator"
     And I edit the tag "Ianto Jones"
   Then I should see "Wrangling is disabled at the moment. Please check back later."
     And I should not see "Synonym of"
-    
+
   # Set them back to normal
   Given I am logged out
   Given guest downloading is on
   Given I am logged out as an admin
   Given tag wrangling is on
-  
+
   Scenario: Send out an admin notice to all users
-  
+
   Given I have no users
     And the following admin exists
       | login       | password |
@@ -152,9 +152,9 @@ Feature: Admin tasks
       | enigel      | emailnotifications   | e@e.org |
       | otherfan    | hatesnotifications   | o@e.org |
     And all emails have been delivered
-  
+
   # otherfan turns off notifications
-  
+
   When I am logged in as "otherfan" with password "hatesnotifications"
     And I follow "Profile"
   Then I should see "Set My Preferences"
@@ -165,9 +165,9 @@ Feature: Admin tasks
   Then I should see "Your preferences were successfully updated"
   When I follow "Log out"
   Then I should see "Successfully logged out"
-  
+
   # admin sends out notice to all users
-  
+
   When I go to the admin_login page
     And I fill in "Admin user name" with "Zooey"
     And I fill in "admin_session_password" with "secret"
@@ -184,13 +184,13 @@ Feature: Admin tasks
   When the system processes jobs
   # confirmation email to admin, and to one user
   Then 1 email should be delivered to e@e.org
-    And the email should contain "Dear Archive Users"
+    And the email should contain "Dear enigel"
     And "Issue 2035" is fixed
     # And the email should contain "Hey, we did stuff"
     And the email should contain "And it was awesome"
-    
+
   Scenario: Mark a comment as spam
-  
+
   Given I have no works or comments
     And the following activated users exist
     | login         | password   |
@@ -199,19 +199,19 @@ Feature: Admin tasks
     And the following admin exists
       | login       | password |
       | Zooey       | secret   |
-      
+
   # set up a work with a genuine comment
-  
+
   When I am logged in as "author" with password "password"
     And I post the work "The One Where Neal is Awesome"
   When I am logged out
-    And I am logged in as "commenter" with password "password" 
+    And I am logged in as "commenter" with password "password"
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "I loved this!"
-    And I press "Add Comment" 
+    And I press "Add Comment"
   Then I should see "Comment created!"
   When I am logged out
-  
+
   # comment from registered user cannot be marked as spam.
   # If registered user is spamming, this goes to Abuse team as ToS violation
   When I am logged in as an admin
@@ -219,14 +219,14 @@ Feature: Admin tasks
   When I view the work "The One Where Neal is Awesome"
     And I follow "Read Comments (1)"
   Then I should not see "Mark as spam"
-  
+
   # now make a spam comment
   When I am logged out
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "Would you like a genuine rolex"
     And I press "Add Comment"
   Then I should see "Comment created!"
-  
+
   # mark comment as spam
   When I am logged in as an admin
     And I view the work "The One Where Neal is Awesome"
@@ -238,7 +238,7 @@ Feature: Admin tasks
   When I follow "Hide Comments"
   # TODO: Figure out if this is a defect or not, that it shows 2 instead of 1
   # Then I should see "Read Comments (1)"
-  
+
   # comment should no longer be there
   When I follow "Read Comments"
   Then I should not see "rolex"

@@ -79,8 +79,8 @@ class UsersController < ApplicationController
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
 
     if current_user.respond_to?(:subscriptions)
-      @subscription = current_user.subscriptions.where(:subscribable_id => @user.id, 
-                                                       :subscribable_type => 'User').first || 
+      @subscription = current_user.subscriptions.where(:subscribable_id => @user.id,
+                                                       :subscribable_type => 'User').first ||
                       current_user.subscriptions.build
     end
   end
@@ -206,7 +206,7 @@ class UsersController < ApplicationController
         end
       end
       if @user.save
-        UserMailer.signup_notification(@user).deliver
+        UserMailer.signup_notification(@user.id).deliver
         flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                             :activation_url => activate_path(@user.activation_code)) if Rails.env.development?
         render "confirmation"
@@ -228,7 +228,7 @@ class UsersController < ApplicationController
           flash[:error] = ts("Your account has already been activated.")
           redirect_to @user and return
         end
-        @user.activate && UserMailer.activation(@user).deliver
+        @user.activate && UserMailer.activation(@user.id).deliver
         flash[:notice] = ts("Signup complete! Please log in.")
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
         # assign over any external authors that belong to this user
