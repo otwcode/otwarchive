@@ -1,31 +1,38 @@
-<!-- expects local value "prompt" -->
+<!-- expects local value "prompt" and optional "display_anon" -->
 <div class="wrapper">
   <dl class="collection meta">
+  <% if (prompt.anonymous? && current_user && current_user == prompt.challenge_signup.pseud.user) || prompt.anonymous? == false || (display_anon && display_anon == true) %>
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
     <% if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?) %>
       <dt>Tags:</dt>
       <dd>
         <ul class="tags">
-          <%= prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags) + (any_types.empty? ? "" : ", ") : "" %>
+          <%= prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_works_links_list(prompt.tag_set.tags) + (any_types.empty? ? "" : ", ") : "" %>
           <% unless any_types.empty? %>
-            <%= any_types.map {|type| content_tag(:li, h(ts("Any %{type}", :type => type.capitalize))) }.join(", ").html_safe %>
+            <%= any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe %>
           <% end %>
         </ul>
         <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
           <p>Optional:</p>
           <ul class="tags">
-            <%= tag_link_list(prompt.optional_tag_set.tags) %>
+            <%= tag_works_links_list(prompt.optional_tag_set.tags) %>
           </ul>
         <% end %>
       </dd>
     <% end %>
     <% unless prompt.url.blank? %>
-      <dt><%= ts("URL") %>:</dt>
+      <dt><% url_label = prompt.collection.challenge.send("request_url_label") %><%= url_label.blank? ? ts("URL") : url_label %>:</dt>
       <dd><%= link_to(prompt.url, prompt.url) %></dd>
     <% end %>
     <% unless prompt.description.blank? %> 
-      <dt><%= ts("Details") %>:</dt>
+      <dt><% desc_label = prompt.collection.challenge.send("request_description_label") %><%= desc_label.blank? ? ts("Details") : desc_label %>:</dt>
       <dd><%= raw sanitize_field(prompt, :description) %></dd>
     <% end %>
+    <% if prompt.anonymous? %>
+      <dt>Anonymous request</dt>
+    <% end %>
+  <% else %>
+    <dt>Secret</dt><dd>This request is anonymous</dd>
+  <% end %>
   </dl>
 </div>

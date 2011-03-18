@@ -30,12 +30,14 @@ Feature: Create bookmarks
     When I follow "Revenge of the Sith"
     Then I should see "Bookmark"
     When I follow "Bookmark"
-    Then I should see "Add a new bookmark"
+    Then I should see "New bookmark for Revenge of the Sith"
+      And I should see "Back to My Bookmarks"
     When I fill in "bookmark_notes" with "I liked this story"
       And I fill in "bookmark_tag_string" with " This is a tag, and another tag,"
       And I check "bookmark_rec"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
+      And I should see "Back to Bookmarks"
     When I follow "Log out"
       And I am logged in as "bookmarkuser2" with password "password"
       And I go to the bookmarks page
@@ -49,7 +51,9 @@ Feature: Create bookmarks
       And I should not see "You don't have anything posted under this name yet"
       And I should see "Revenge of the Sith"
     When I edit the bookmark for "Revenge of the Sith"
-    Then I should see "Editing bookmark"
+    Then I should see "Editing bookmark for Revenge of the Sith"
+      And I should see "Show"
+      And I should see "Back to My Bookmarks"
     When I check "bookmark_private"
       And I press "Update"
     Then I should see "Bookmark was successfully updated"
@@ -57,12 +61,28 @@ Feature: Create bookmarks
     Then I should not see "I liked this story"
     When I go to bookmarkuser1's bookmarks page
     Then I should see "I liked this story"
+    
+    # adding a new bookmark for the same work, check that everything functions as it should
+    When I follow "Edit"
+      And I follow "Add a new bookmark for this item"
+      And I fill in "Your Notes" with "Did I mention I love this?"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And I should see "Bookmarked 1 time"
+    When I go to bookmarkuser2's works page
+    Then I should see "Bookmarks: 1"
+    When I view the work "Revenge of the Sith"
+      And I follow "Edit/Add Bookmark"
+    Then I should see "You have saved multiple bookmarks for this item"
+    
+    # privacy check for the private bookmark '
     When I follow "Log out"
       And I am logged in as "bookmarkuser2" with password "password"
       And I go to the bookmarks page
     Then I should not see "I liked this story"
     When I go to bookmarkuser1's user page
     Then I should not see "I liked this story"
+    
   @bookmark_fandom_error
   Scenario: Create a bookmark on an external work (fandom error)
     Given the following activated users exist
@@ -101,8 +121,25 @@ Feature: Create bookmarks
     Then I should see "this work is not hosted on the Archive"
     When I go to bookmarkuser1's bookmarks page
     Then I should see "Stuck with You"
-
-
+    
+    # edit external bookmark, add a new one for the same work '
+    When I follow "Edit"
+    Then I should see "Editing bookmark for Stuck with You"
+    When I fill in "Your Notes" with "I wish this author would join AO3"
+      And I fill in "Your Tags" with "WIP"
+      And I press "Update"
+    Then I should see "Bookmark was successfully updated"
+    When I follow "Edit"
+      And I follow "Add a new bookmark for this item"
+      And I fill in "Your Notes" with "Did I mention I love this?"
+      And I press "Create"
+    Then I should see "Bookmark was successfully created."
+      And I should see "Bookmarked 2 times"
+    When I follow "Edit"
+      And I follow "Stuck with You"
+    Then I should see "Stuck with You by Sidra"
+      And I should see "Bookmarks: 2"
+      
   Scenario: Create bookmarks and recs on restricted works, check how they behave from various access points
     Given the following activated users exist
       | login           | password   |

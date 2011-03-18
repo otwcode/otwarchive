@@ -158,6 +158,11 @@ class CollectionItem < ActiveRecord::Base
           UserMailer.recipient_notification(pseud.user, self.item, self.collection).deliver
         end
       end
+      
+      # also notify prompters of responses to their prompt
+      if item_type == "Work" && !item.challenge_claims.blank?
+        UserMailer.prompter_notification(pseud.user, self.item, self.collection).deliver
+      end
 
       # also notify the owners of any parent/inspired-by works 
       if item_type == "Work" && !item.parent_work_relationships.empty?

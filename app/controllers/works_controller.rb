@@ -14,7 +14,7 @@ class WorksController < ApplicationController
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
 
   cache_sweeper :work_sweeper
-  cache_sweeper :collection_sweeper 
+  cache_sweeper :collection_sweeper
   cache_sweeper :static_sweeper
 
   def search
@@ -186,8 +186,8 @@ class WorksController < ApplicationController
       if @work.unrevealed?
         @tweet_text = ts("Mystery Work")
       else
-        @tweet_text = @work.title + " by " + 
-                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " + 
+        @tweet_text = @work.title + " by " +
+                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " +
                       (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
         @tweet_text = @tweet_text.truncate(95)
       end
@@ -212,6 +212,18 @@ class WorksController < ApplicationController
       @work.challenge_assignments << @challenge_assignment
       @work.collections << @challenge_assignment.collection
       @work.recipients = @challenge_assignment.requesting_pseud.byline
+    else
+      @work.collection_names = @collection.name if @collection
+    end
+    if params[:claim_id] && (@challenge_claim = ChallengeClaim.find(params[:claim_id])) && User.find(@challenge_claim.claiming_user_id) == current_user
+      @work.challenge_claims << @challenge_claim
+      @work.collections << @challenge_claim.collection
+      TagSet::TAG_TYPES.each do |type|
+        eval("@work.#{type.pluralize}") << @challenge_claim.request_prompt.tag_set.with_type(type)
+      end
+      unless Prompt.find(@challenge_claim.request_prompt_id).anonymous?
+        @work.recipients = @challenge_claim.requesting_pseud.byline
+      end
     else
       @work.collection_names = @collection.name if @collection
     end
@@ -240,8 +252,8 @@ class WorksController < ApplicationController
         @work.posted = true
         @chapter.posted = true
       end
-      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)  
-      
+      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
+
       if valid && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info && @work.save
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
@@ -610,7 +622,7 @@ public
       flash[:error] = ts("That work is already posted. Do you want to edit it instead?")
       redirect_to edit_user_work_path(@user, @work)
     end
-    
+
     @work.posted = true
     @work.minor_version = @work.minor_version + 1
     # @work.update_minor_version
@@ -685,39 +697,36 @@ public
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   # and @tags[category]
   def set_instance_variables
-    begin
-      if params[:id] # edit, update, preview, manage_chapters
-        @work ||= Work.find(params[:id])
-        @previous_published_at = @work.first_chapter.published_at
-        @previous_backdate_setting = @work.backdate
-        if params[:work]  # editing, save our changes
-          if params[:preview_button] || params[:cancel_button]
-            @work.preview_mode = true
-          else
-            @work.preview_mode = false
-          end
-          @work.attributes = params[:work]
-          @work.save_parents if @work.preview_mode
-        end
-      elsif params[:work] # create
-        @work = Work.new(params[:work])
-      else # new
-        if params[:load_unposted] && current_user.unposted_work
-          @work = current_user.unposted_work
+    if params[:id] # edit, update, preview, manage_chapters
+      @work ||= Work.find(params[:id])
+      @previous_published_at = @work.first_chapter.published_at
+      @previous_backdate_setting = @work.backdate
+      if params[:work]  # editing, save our changes
+        if params[:preview_button] || params[:cancel_button]
+          @work.preview_mode = true
         else
-          @work = Work.new
-          @work.chapters.build
+          @work.preview_mode = false
         end
+        @work.attributes = params[:work]
+        @work.save_parents if @work.preview_mode
       end
-
-      @serial_works = @work.serial_works
-
-      @chapter = @work.first_chapter
-      # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
-      if params[:work] && params[:work][:chapter_attributes]
-        @chapter.attributes = params[:work][:chapter_attributes]
+    elsif params[:work] # create
+      @work = Work.new(params[:work])
+    else # new
+      if params[:load_unposted] && current_user.unposted_work
+        @work = current_user.unposted_work
+      else
+        @work = Work.new
+        @work.chapters.build
       end
-    rescue
+    end
+
+    @serial_works = @work.serial_works
+
+    @chapter = @work.first_chapter
+    # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
+    if params[:work] && params[:work][:chapter_attributes]
+      @chapter.attributes = params[:work][:chapter_attributes]
     end
   end
 
@@ -773,6 +782,19 @@ public
     else
       flash[:notice] = ts("The work was not posted. It will be saved here in your drafts for one week, then cleaned up.")
       redirect_to drafts_user_works_path(current_user)
+    end
+  end
+  
+  # Takes an array of tags and returns a comma-separated list, without the markup
+  def tag_list(tags)
+    tags = tags.uniq.compact
+    if !tags.blank? && tags.respond_to?(:collect)
+      last_tag = tags.pop
+      tag_list = tags.collect{|tag|  tag.name + ", "}.join
+      tag_list += last_tag.name
+      tag_list.html_safe
+    else
+      ""
     end
   end
 

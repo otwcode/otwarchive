@@ -11,10 +11,10 @@ end
 # has to be run after ArchiveConfig loaded
 # and only for production
 if Rails.env == 'production'
-  Otwarchive::Application.config.middleware.use ExceptionNotifier,
-      :email_prefix => ArchiveConfig.ERROR_PREFIX,
-      :sender_address => ArchiveConfig.RETURN_ADDRESS,
-      :exception_recipients => ArchiveConfig.ERROR_ADDRESS
+  HoptoadNotifier.configure do |config|
+    config.api_key = ArchiveConfig.HOPTOAD_KEY
+    config.params_filters << ["email", "crypted_password", "salt"]
+  end
 end
 
 

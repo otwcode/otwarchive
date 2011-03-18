@@ -40,6 +40,8 @@ class Work < ActiveRecord::Base
     :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
   has_many :challenge_assignments, :as => :creation
+  has_many :challenge_claims, :as => :creation
+  accepts_nested_attributes_for :challenge_claims
 
   has_many :collections, :through => :collection_items
   has_many :approved_collections, :through => :collection_items, :source => :collection,
@@ -283,10 +285,23 @@ class Work < ActiveRecord::Base
       add_to_collection(assignment.collection)
       self.gifts << Gift.new(:pseud => assignment.requesting_pseud) unless (recipients && recipients.include?(assignment.requesting_pseud.byline))
     end
-  end
+  end    
+
+  def set_challenge_claim_info
+    # if this is fulfilling a challenge claim, add the collection and recipient
+    challenge_claims.each do |assignment|
+      add_to_collection(claim.collection)
+      self.gifts << Gift.new(:pseud => claim.requesting_pseud) unless (recipients && recipients.include?(claim.request_byline))
+    end
+    save
+  end      
 
   def challenge_assignment_ids
     challenge_assignments.map(&:id)
+  end
+  
+  def challenge_claim_ids
+    challenge_claims.map(&:id)
   end
 
   def challenge_assignment_ids=(ids)
@@ -501,15 +516,14 @@ class Work < ActiveRecord::Base
 
   # Get the total number of chapters for a work
   def number_of_chapters
-     Chapter.maximum(:position, :conditions => {:work_id => self.id}) || 0
+    self.chapters.count
   end
 
   # Get the total number of posted chapters for a work
   # Issue 1316: total number needs to reflect the actual number of chapters posted
   # rather than the total number of chapters indicated by user
   def number_of_posted_chapters
-    self.chapters.count(:conditions => {:work_id => self.id, :posted => true}) || 0
-     #Chapter.maximum(:position, :conditions => {:work_id => self.id, :posted => true}) || 0
+    self.chapters.posted.count
   end
 
   def chapters_in_order(include_content = true)
@@ -546,7 +560,7 @@ class Work < ActiveRecord::Base
 
   # Returns true if a work is not yet complete
   def is_wip
-    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_chapters
+    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_posted_chapters
   end
 
   # Returns true if a work is complete

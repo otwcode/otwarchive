@@ -93,6 +93,9 @@ NAVIGATION, ACTIONS (BUTTONS)*/
       { border: 1px solid #000; padding: 0.25em }
  .current, .current a:visited
       { background: #111 !important; color: #fffef9 !important; /* cursor: default */ }
+/*Subscription form on user/pseud dashboard */
+.sidebar .navigation form {float:none;}
+
 
  /*Navigation in tables*/
 #main table ul.navigation, table span.navigation, table span.input  {margin:auto; border:none; background:transparent; padding:0; float:none; border-radius:0; -moz-border-radius:0; -webkit-border-radius:0}

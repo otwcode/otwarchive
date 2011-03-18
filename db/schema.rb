@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101231174606) do
+ActiveRecord::Schema.define(:version => 20110312174241) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.integer  "translated_post_id"
     t.integer  "language_id"
   end
+
+  add_index "admin_posts", ["translated_post_id"], :name => "index_admin_posts_on_post_id"
 
   create_table "admin_settings", :force => true do |t|
     t.boolean  "account_creation_enabled",                 :default => true,                  :null => false
@@ -111,6 +113,27 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.datetime "covered_at"
   end
 
+  add_index "challenge_assignments", ["creation_id"], :name => "assignments_on_creation_id"
+  add_index "challenge_assignments", ["creation_type"], :name => "assignments_on_creation_type"
+  add_index "challenge_assignments", ["defaulted_at"], :name => "assignments_on_defaulted_at"
+  add_index "challenge_assignments", ["offer_signup_id"], :name => "assignments_on_offer_signup_id"
+  add_index "challenge_assignments", ["pinch_hitter_id"], :name => "assignments_on_pinch_hitter_id"
+  add_index "challenge_assignments", ["sent_at"], :name => "assignments_on_offer_sent_at"
+
+  create_table "challenge_claims", :force => true do |t|
+    t.integer  "collection_id"
+    t.integer  "creation_id"
+    t.string   "creation_type"
+    t.integer  "request_signup_id"
+    t.integer  "request_prompt_id"
+    t.integer  "claiming_user_id"
+    t.datetime "sent_at"
+    t.datetime "fulfilled_at"
+    t.datetime "defaulted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "challenge_signups", :force => true do |t|
     t.integer  "collection_id"
     t.integer  "pseud_id"
@@ -119,6 +142,8 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.boolean  "assigned_as_request", :default => false
     t.boolean  "assigned_as_offer",   :default => false
   end
+
+  add_index "challenge_signups", ["pseud_id"], :name => "signups_on_pseud_id"
 
   create_table "chapters", :force => true do |t|
     t.text     "content",                    :limit => 2147483647,                    :null => false
@@ -155,8 +180,11 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.boolean  "unrevealed",                              :default => false,  :null => false
   end
 
+  add_index "collection_items", ["anonymous"], :name => "collection_items_anonymous"
   add_index "collection_items", ["collection_id", "item_id", "item_type"], :name => "by collection and item", :unique => true
   add_index "collection_items", ["collection_id", "user_approval_status", "collection_approval_status"], :name => "index_collection_items_approval_status"
+  add_index "collection_items", ["item_id"], :name => "collection_items_item_id"
+  add_index "collection_items", ["unrevealed"], :name => "collection_items_unrevealed"
 
   create_table "collection_participants", :force => true do |t|
     t.integer  "collection_id"
@@ -168,6 +196,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
 
   add_index "collection_participants", ["collection_id", "participant_role"], :name => "participants_by_collection_and_role"
   add_index "collection_participants", ["collection_id", "pseud_id"], :name => "by collection and pseud", :unique => true
+  add_index "collection_participants", ["pseud_id"], :name => "participants_pseud_id"
 
   create_table "collection_preferences", :force => true do |t|
     t.integer  "collection_id"
@@ -179,21 +208,22 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.boolean  "anonymous",     :default => false, :null => false
     t.boolean  "gift_exchange", :default => false, :null => false
     t.boolean  "show_random",   :default => false, :null => false
+    t.boolean  "prompt_meme",   :default => false, :null => false
   end
 
   add_index "collection_preferences", ["collection_id"], :name => "index_collection_preferences_on_collection_id"
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro",                   :limit => 2147483647
-    t.text     "faq",                     :limit => 2147483647
-    t.text     "rules",                   :limit => 2147483647
+    t.text     "intro",                   :limit => 16777215
+    t.text     "faq",                     :limit => 16777215
+    t.text     "rules",                   :limit => 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "gift_notification"
-    t.integer  "intro_sanitizer_version", :limit => 2,          :default => 0, :null => false
-    t.integer  "faq_sanitizer_version",   :limit => 2,          :default => 0, :null => false
-    t.integer  "rules_sanitizer_version", :limit => 2,          :default => 0, :null => false
+    t.integer  "intro_sanitizer_version", :limit => 2,        :default => 0, :null => false
+    t.integer  "faq_sanitizer_version",   :limit => 2,        :default => 0, :null => false
+    t.integer  "rules_sanitizer_version", :limit => 2,        :default => 0, :null => false
     t.text     "assignment_notification"
   end
 
@@ -247,6 +277,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
   add_index "comments", ["commentable_id", "commentable_type"], :name => "index_comments_commentable"
   add_index "comments", ["parent_id", "parent_type"], :name => "index_comments_parent"
   add_index "comments", ["pseud_id"], :name => "index_comments_on_pseud_id"
+  add_index "comments", ["thread"], :name => "comments_by_thread"
 
   create_table "common_taggings", :force => true do |t|
     t.integer  "common_tag_id",                  :null => false
@@ -283,6 +314,11 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "delayed_jobs", ["failed_at"], :name => "delayed_jobs_failed_at"
+  add_index "delayed_jobs", ["locked_at"], :name => "delayed_jobs_locked_at"
+  add_index "delayed_jobs", ["locked_by"], :name => "delayed_jobs_locked_by"
+  add_index "delayed_jobs", ["run_at"], :name => "delayed_jobs_run_at"
 
   create_table "external_author_names", :force => true do |t|
     t.integer  "external_author_id", :null => false
@@ -397,6 +433,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.integer  "signup_instructions_general_sanitizer_version",  :limit => 2, :default => 0,     :null => false
     t.integer  "signup_instructions_requests_sanitizer_version", :limit => 2, :default => 0,     :null => false
     t.integer  "signup_instructions_offers_sanitizer_version",   :limit => 2, :default => 0,     :null => false
+    t.boolean  "requests_summary_visible",                                    :default => false, :null => false
   end
 
   create_table "gifts", :force => true do |t|
@@ -407,6 +444,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.integer  "pseud_id"
   end
 
+  add_index "gifts", ["pseud_id"], :name => "index_gifts_on_pseud_id"
   add_index "gifts", ["recipient_name"], :name => "index_gifts_on_recipient_name"
   add_index "gifts", ["work_id"], :name => "index_gifts_on_work_id"
 
@@ -430,6 +468,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
 
   add_index "inbox_comments", ["feedback_comment_id"], :name => "index_inbox_comments_on_feedback_comment_id"
   add_index "inbox_comments", ["read", "user_id"], :name => "index_inbox_comments_on_read_and_user_id"
+  add_index "inbox_comments", ["user_id"], :name => "index_inbox_comments_on_user_id"
 
   create_table "invitations", :force => true do |t|
     t.integer  "creator_id"
@@ -639,6 +678,29 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
 
   add_index "profiles", ["user_id"], :name => "index_profiles_on_user_id"
 
+  create_table "prompt_memes", :force => true do |t|
+    t.integer  "prompt_restriction_id"
+    t.integer  "request_restriction_id"
+    t.integer  "requests_num_required",                                       :default => 1,     :null => false
+    t.integer  "requests_num_allowed",                                        :default => 1,     :null => false
+    t.boolean  "signup_open",                                                 :default => false, :null => false
+    t.datetime "signups_open_at"
+    t.datetime "signups_close_at"
+    t.datetime "assignments_due_at"
+    t.datetime "works_reveal_at"
+    t.datetime "authors_reveal_at"
+    t.text     "signup_instructions_general"
+    t.text     "signup_instructions_requests"
+    t.string   "request_url_label"
+    t.string   "request_description_label"
+    t.string   "time_zone"
+    t.integer  "signup_instructions_general_sanitizer_version",  :limit => 2, :default => 0,     :null => false
+    t.integer  "signup_instructions_requests_sanitizer_version", :limit => 2, :default => 0,     :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "anonymous",                                                   :default => false, :null => false
+  end
+
   create_table "prompt_restrictions", :force => true do |t|
     t.integer  "tag_set_id"
     t.boolean  "optional_tags_allowed",           :default => false, :null => false
@@ -701,6 +763,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.boolean  "any_category",                               :default => false, :null => false
     t.boolean  "any_warning",                                :default => false, :null => false
     t.boolean  "any_freeform",                               :default => false, :null => false
+    t.boolean  "anonymous",                                  :default => false, :null => false
   end
 
   create_table "pseuds", :force => true do |t|
@@ -719,6 +782,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.integer  "description_sanitizer_version", :limit => 2, :default => 0,     :null => false
   end
 
+  add_index "pseuds", ["name"], :name => "index_psueds_on_name"
   add_index "pseuds", ["user_id", "name"], :name => "index_pseuds_on_user_id_and_name"
 
   create_table "readings", :force => true do |t|
@@ -826,6 +890,19 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.string   "admin_note"
     t.integer  "description_sanitizer_version", :limit => 2, :default => 0,     :null => false
     t.string   "type"
+    t.float    "paragraph_margin"
+  end
+
+  add_index "skins", ["author_id"], :name => "index_skins_on_author_id"
+  add_index "skins", ["public", "official"], :name => "index_skins_on_public_and_official"
+  add_index "skins", ["type"], :name => "index_skins_on_type"
+
+  create_table "subscriptions", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "subscribable_id"
+    t.string   "subscribable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tag_sets", :force => true do |t|
@@ -966,7 +1043,7 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.integer  "minor_version",                            :default => 0
     t.boolean  "posted",                                   :default => false, :null => false
     t.integer  "language_id"
-    t.boolean  "restricted",                               :default => false
+    t.boolean  "restricted",                               :default => false, :null => false
     t.string   "title",                                                       :null => false
     t.text     "summary"
     t.text     "notes"
@@ -1000,5 +1077,8 @@ ActiveRecord::Schema.define(:version => 20101231174606) do
     t.integer "user_id"
     t.integer "fandom_id"
   end
+
+  add_index "wrangling_assignments", ["fandom_id"], :name => "wrangling_assignments_by_fandom_id"
+  add_index "wrangling_assignments", ["user_id"], :name => "wrangling_assignments_by_user_id"
 
 end

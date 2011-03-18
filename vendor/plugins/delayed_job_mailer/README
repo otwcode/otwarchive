@@ -1,0 +1,56 @@
+DelayedJobMailer
+==============
+
+This plugin provides a module which - when included into an ActionMailer subclass - pushes all emails that would 
+normally be delivered synchronously into a queue for asynchronous processing. For queuing it relies on the delayed_job 
+plugin ( http://github.com/tobi/delayed_job ).
+
+How it works
+============
+
+The plugin provides a module Delayed::Mailer. To make a mailer use a queue simply include it into the class like this:
+
+class MyMailer < ActionMailer::Base
+  include Delayed::Mailer
+end
+
+From now on all MyMailer.deliver_whatever_email calls create an entry delayed_job queue.
+If you still want to deliver mail sycnhronously add a bang to the method call: MyMailer.deliver_whatever_email!
+
+To set asynchronous mailing as project default, you need to create an initializer file as follows:
+
+# config/initializers/delayed_mailer.rb
+class ActionMailer::Base
+  include Delayed::Mailer
+end
+
+Installation
+============
+
+script/plugin install git://github.com/andersondias/delayed_job_mailer.git
+
+Configuration
+=============
+
+Delayed e-mails is an awesome thing in production environments, but for e-mail specs/tests in testing environments it can be a mess causing specs/tests to fail because the e-mail haven't been sent directly. Therefore you can configure what environments that should be excluded like so:
+
+# config/initializers/delayed_mailer.rb
+
+Delayed::Mailer.excluded_environments = [:test, :cucumber]  # etc.
+
+...
+
+Credits
+=======
+
+This plugin is a delayed job plugin based on langalex workling_mailer
+plugin that can be found at http://github.com/langalex/workling_mailer
+
+Contact
+=======
+
+Copyright (c) 2009 Anderson Dias, released under the MIT license
+
+Email: andersondaraujo[at]gmail.com
+Twitter: extendsmymind
+Blog: http://extendsmymind.wordpress.com

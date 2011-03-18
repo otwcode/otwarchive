@@ -52,7 +52,52 @@ Feature: Edit profile
     And I should not see "Beta Centauri" within ".wrapper"
     And I should not see "This is some text about me and my colours."
 
-  Scenario: View and edit profile - email address and date of birth
+  Scenario: View and edit profile - email address - changing and displaying, and can't be the same as another user's
+
+  Given the following activated users exist
+    | login         | password   |
+    | editname2     | password   |
+    | duplicate     | password   |
+    And I am logged in as "editname2" with password "password"
+    And all emails have been delivered
+  When I follow "editname2"
+    And I follow "Profile"
+    And I follow "Edit My Profile"
+  Then I should see "Edit My Profile"
+  When I fill in "Change Email" with "bob.bob.bob"
+    And I press "Update"
+  Then I should see "You must authenticate"
+    And 0 emails should be delivered
+  When I fill in "Old password" with "password"
+    And I press "Update"
+  Then I should see "Email does not seem to be a valid address"
+    And 0 emails should be delivered
+  When I fill in "Change Email" with "valid2@archiveofourown.org"
+    And I fill in "Old password" with "passw"
+    And I press "Update"
+  Then I should see "Your old password was incorrect"
+    And 0 emails should be delivered
+  When I fill in "Old password" with "password"
+    And I press "Update"
+  Then I should see "Your profile has been successfully updated"
+  When I follow "My Preferences"
+    And I check "Display Email Address"
+    And I press "Update"
+    And I follow "editname2"
+    And I follow "Profile"
+  Then I should see "My email address: valid2@archiveofourown.org"
+  When I follow "Log out"
+    And I am logged in as "duplicate" with password "password"
+    And I follow "duplicate"
+    And I follow "Profile"
+    And I follow "Edit My Profile"
+    And I fill in "Change Email" with "valid2@archiveofourown.org"
+    And I fill in "Old password" with "password"
+    And I press "Update"
+  Then I should see "Email has already been taken"
+    And I should not see "Your profile has been successfully updated"
+    
+  Scenario: View and edit profile - date of birth - changing and displaying
 
   Given the following activated users exist
     | login         | password   |
@@ -72,43 +117,17 @@ Feature: Edit profile
   When I select "1980" from "profile_attributes[date_of_birth(1i)]"
     And I press "Update"
   Then I should see "Your profile has been successfully updated"
-  When I follow "Edit My Profile"
-    And I fill in "Change Email" with "bob.bob.bob"
-    And I press "Update"
-  Then I should see "You must authenticate"
-    When I fill in "Old password" with "password"
-  And I press "Update"
-  Then I should see "Email does not seem to be a valid address"
-  When I fill in "Change Email" with "valid2@archiveofourown.org"
-    And I fill in "Old password" with "passw"
-    And I press "Update"
-  Then I should see "Your old password was incorrect"
-  When I fill in "Old password" with "password"
-    And I press "Update"
-  Then I should see "Your profile has been successfully updated"
   When I follow "My Preferences"
-    And I check "Display Email Address"
     And I check "Display Date of Birth"
     And I press "Update"
     And I follow "editname2"
     And I follow "Profile"
-  Then I should see "My email address: valid2@archiveofourown.org"
-    And I should see "My birthday: 1980-12-31"
+  Then I should see "My birthday: 1980-12-31"
   When I follow "Edit My Profile"
     And I select "March" from "profile_attributes[date_of_birth(2i)]"
     And I press "Update"
   Then I should see "Your profile has been successfully updated"
     And I should see "My birthday: 1980-03-31"
-  When I follow "Log out"
-    And I am logged in as "duplicate" with password "password"
-    And I follow "duplicate"
-    And I follow "Profile"
-    And I follow "Edit My Profile"
-    And I fill in "Change Email" with "valid2@archiveofourown.org"
-    And I fill in "Old password" with "password"
-    And I press "Update"
-  Then I should see "Email has already been taken"
-    And I should not see "Your profile has been successfully updated"
 
   Scenario: View and edit profile - change password
 

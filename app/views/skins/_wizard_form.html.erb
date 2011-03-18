@@ -4,24 +4,22 @@
   <p id="plainTextNotes" style="display: block"><%= allowed_css_instructions %></p>
 
   <dl>
-    <dt><%= f.label :title, t('skin_title', :default => 'Title') %></dt>
+    <dt><%= f.label :title, ts('Title') %></dt>
     <dd><%= f.text_field :title %></dd>
 
-    <dt><%= f.label :description, t('skin_description', :default => 'Description') %></dt>
+    <dt><%= f.label :description, ts('Description') %></dt>
     <dd><%= f.text_field :description %></dd>
 
     <dt>
-      <%= f.label :margin, t('skin_margin', :default => 'Margin width (as percentage of page size)') %>
-      <p><%= t('skin_margin_default', :default => 'default: 3') %></p>
+      <%= f.label :margin, ts('Margin width (%)') %>
     </dt>
-    <dd><%= f.text_field :margin %> %</dd>
-  
+    <dd><%= f.text_field :margin %> <%= link_to_help('skins-wizard-margin') %></dd>
+
     <dt>
-      <%= f.label :font, t('font', :default => "Font family (comma-separated)") %>
-      <p><%= t('skin_font_default', :default => 'default: "Lucida Grande",Verdana,Helvetica,Arial,sans-serif')%></p>
+      <%= f.label :font, ts("Font family") %>
     </dt>
     <dd>
-      <%= f.text_field :font %>
+      <%= f.text_field :font %> <%= link_to_help('skins-wizard-font') %>
     </dd>
   
     <dt>
@@ -43,10 +41,16 @@
     </dd>
   
     <dt>
-      <%= f.label :base_em, t('font_size_percentage', :default => 'Percent of base font size') %>
-      <p><%=t('font_size_percentage_default', :default => 'default: 100') %></p>
+      <%= f.label :base_em, ts('Percent of base font size') %>
+      <p><%=ts('default: 100') %></p>
     </dt>
     <dd><%= f.text_field :base_em %> %</dd>
+    
+    <dt>
+      <%= f.label :paragraph_margin, ts('Vertical gap between paragraphs') %>
+      <p><%=ts('default: 1.5') %></p>
+    </dt>
+    <dd><%= f.text_field :paragraph_margin %></dd>
     
     <%= hidden_field_tag "wizard", true %>
     

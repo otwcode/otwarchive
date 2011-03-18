@@ -1,3 +1,5 @@
+<h2><%= ts("Signups for %{collection}", :collection => @collection.title) %></h2>
+  
 <% @challenge ||= @collection.challenge %>
 <% show_request_url = @challenge.request_restriction.url_allowed && params[:show_urls] %>
 <% show_offer_url = @challenge.offer_restriction.url_allowed && params[:show_urls] %>
@@ -10,17 +12,17 @@
   <ul class="navigation">
     <li><%= link_to t('.gift_exchange.download_excel', :default => "Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
     <% if show_offer_description || show_request_description %>
-      <li><%= link_to t('.gift_exchange.hide_desc', :default => "Hide Descriptions"), 
+      <li><%= link_to ts("Hide Descriptions"), 
           collection_signups_path(@collection, :show_descriptions => false, :show_urls => params[:show_urls]) %></li>
     <% elsif !params[:show_descriptions] %>
-      <li><%= link_to t('.gift_exchange.show_desc', :default => "Show Descriptions"), 
+      <li><%= link_to ts("Show Descriptions"), 
           collection_signups_path(@collection, :show_descriptions => true, :show_urls => params[:show_urls]) %></li>
     <% end %>
     <% if show_offer_url|| show_request_url %>
-      <li><%= link_to t('.gift_exchange.hide_url', :default => "Hide URLs"), 
+      <li><%= link_to ts("Hide URLs"), 
           collection_signups_path(@collection, :show_descriptions => params[:show_descriptions], :show_urls => false) %></li>
     <% elsif !params[:show_urls] %>
-      <li><%= link_to t('.gift_exchange.show_desc', :default => "Show URLs"), 
+      <li><%= link_to ts("Show URLs"), 
           collection_signups_path(@collection, :show_descriptions => params[:show_descriptions], :show_urls => true) %></li>
     <% end %>
   </ul>
@@ -76,13 +78,13 @@
           <td>
             <% any_types = TagSet::TAG_TYPES.select {|type| prompt && prompt.send("any_#{type}")} %>
             <%= !prompt || !prompt.tag_set ? "" : 
-                  content_tag(:ul, tag_link_list(prompt.tag_set.tags) + 
+                  content_tag(:ul, tag_works_links_list(prompt.tag_set.tags) + 
                                     any_types.map {|type| content_tag(:li, h(ts("Any %{type}", :type => type.capitalize))) }.join("\n").html_safe) %>
           </td>
           <% if eval("show_#{prompt_type}_optional_tags") %>
             <td>
               <% if prompt && prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
-                <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
+                <%= content_tag(:ul, tag_works_links_list(prompt.optional_tag_set.tags)) %>
               <% end %>
             </td>
           <% end %>

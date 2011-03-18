@@ -14,7 +14,7 @@
     <h3>CSS</h3>
     <blockquote><pre><%= @skin.css %></pre></blockquote>
 
-    <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em %>
+    <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em || @skin.paragraph_margin %>
       <h3>Wizard Settings</h3>
       <p class="notes">(can be overridden by custom CSS)</p>
   
@@ -24,6 +24,7 @@
         <% unless @skin.background_color.blank? %><dt>Background color</dt><dd><%= @skin.background_color %><% end  %>
         <% unless @skin.foreground_color.blank? %><dt>Foreground color</dt><dd><%= @skin.foreground_color %><% end  %>
         <% if @skin.base_em %><dt>Relative font size</dt><dd><%= @skin.base_em %><% end  %>
+        <% if @skin.paragraph_margin %><dt>Paragraph margin</dt><dd><%= @skin.paragraph_margin %><% end  %>
       </dl>
     <% end %>
   </div>

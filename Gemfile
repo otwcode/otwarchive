@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'bundler', '~>1.0.0'
 
-gem 'rails', '3.0.3'
+gem 'rails', '3.0.4'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -81,16 +81,12 @@ group :test do
 end
 
 # Deploy with Capistrano
-gem 'capistrano', :require => false
-gem 'capistrano-ext', :require => false
+gem 'capistrano-gitflow_version', '>=0.0.3', :require => false
 
 group :production do
   # Use unicorn as the web server
   gem 'unicorn', :require => false
   gem "memcache-client"
-  gem 'exception_notification',
-    :git     => 'git://github.com/rails/exception_notification.git',
-    :branch  => 'master',
-    :require => 'exception_notifier'
+  gem "hoptoad_notifier", "~> 2.3"
 end
 

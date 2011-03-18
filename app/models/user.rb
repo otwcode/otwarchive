@@ -42,7 +42,8 @@ class User < ActiveRecord::Base
   # Authorization plugin
   acts_as_authorized_user
   acts_as_authorizable
-  has_and_belongs_to_many :roles
+  has_many :roles_users
+  has_many :roles, :through => :roles_users
 
   # OpenID plugin
   attr_accessible :identity_url
@@ -89,6 +90,7 @@ class User < ActiveRecord::Base
   has_many :challenge_signups, :through => :pseuds
   has_many :offer_assignments, :through => :pseuds
   has_many :pinch_hit_assignments, :through => :pseuds
+  has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'claiming_user_id'
   has_many :gifts, :through => :pseuds
   has_many :gift_works, :through => :pseuds, :uniq => true
 
@@ -114,6 +116,19 @@ class User < ActiveRecord::Base
   has_many :translations, :foreign_key => 'translator_id'
   has_many :translations_to_beta, :class_name => 'Translation', :foreign_key => 'beta_id'
   has_many :translation_notes
+  
+  has_many :subscriptions, :dependent => :destroy
+  has_many :followings, 
+            :class_name => 'Subscription', 
+            :as => :subscribable,
+            :dependent => :destroy
+  has_many :subscribed_users, 
+            :through => :subscriptions, 
+            :source => :subscribable, 
+            :source_type => 'User'
+  has_many :subscribers, 
+            :through => :followings,
+            :source => :user
 
   has_many :wrangling_assignments
   has_many :fandoms, :through => :wrangling_assignments

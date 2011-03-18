@@ -1,0 +1,158 @@
+<h2><%= ts("Prompts for %{collection}", :collection => @collection.title) %></h2>
+  
+<% @challenge ||= @collection.challenge -%>
+<% show_request_url = @challenge.request_restriction.url_allowed && !params[:hide_urls] %>
+<% show_request_description = @challenge.request_restriction.description_allowed && !params[:hide_descriptions] %>
+<% show_request_optional_tags = @challenge.request_restriction.optional_tags_allowed && !params[:hide_tags] %>
+<% TagSet::TAG_TYPES.each do |type| %>
+  <% eval("@show_request_#{type}_tags = (@challenge.request_restriction.#{type}_num_allowed > 0) && !params[:hide_tags]") %>
+<% end %>
+<% num_request_tag_categories = TagSet::TAG_TYPES.collect {|type| eval("@show_request_#{type}_tags") ? 1 : 0 }.sum + (show_request_optional_tags ? 1 : 0) %>
+
+<% if (current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) || show_request_description || params[:hide_descriptions] || show_request_url || params[:hide_urls] %>
+  <ul class="navigation">
+    <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
+      <li><%= link_to ts("Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
+    <% end %>
+    <% if show_request_description %>
+      <li><%= link_to ts("Hide Descriptions"), 
+          collection_requests_path(@collection, :hide_descriptions => true, :hide_urls => params[:hide_urls], 
+          :show_claims => params[:show_claims], :show_filled => params[:show_filled]) -%></li>
+    <% elsif params[:hide_descriptions] %>
+      <li><%= link_to ts("Show Descriptions"), 
+          collection_requests_path(@collection, :hide_descriptions => false, :hide_urls => params[:hide_urls], 
+          :show_claims => params[:show_claims], :show_filled => params[:show_filled]) -%></li>
+    <% end %>
+    <% if show_request_url %>
+      <li><%= link_to ts("Hide URLs"), 
+          collection_requests_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => true, 
+          :show_claims => params[:show_claims], :show_filled => params[:show_filled]) -%></li>
+    <% elsif params[:hide_urls] %>
+      <li><%= link_to ts("Show URLs"), 
+          collection_requests_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => false, 
+          :show_claims => params[:show_claims], :show_filled => params[:show_filled]) -%></li>
+    <% end %>
+    <% if params[:show_claims] %>
+      <li><%= link_to ts("Hide Claims"), 
+          collection_requests_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => params[:hide_urls], 
+          :show_claims => false, :show_filled => params[:show_filled]) -%></li>
+    <% else %>
+      <li><%= link_to ts("Show Claims"), 
+          collection_requests_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => params[:hide_urls], 
+          :show_claims => true, :show_filled => params[:show_filled]) -%></li>
+    <% end %>
+    <% if params[:show_filled] %>
+      <li><%= link_to ts("Hide Filled"), 
+          collection_requests_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => params[:hide_urls], 
+          :show_claims => params[:show_claims], :show_filled => false) -%></li>
+    <% else %>
+      <li><%= link_to ts("Show Filled"), 
+          collection_requests_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => params[:hide_urls], 
+          :show_claims => params[:show_claims], :show_filled => true) -%></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= will_paginate @requests %>
+
+<table>
+  <!-- header row -->
+  <thead><tr>
+    <th scope="col">Pseud</th>
+    <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
+      <th scope="col">Email</th>
+    <% end %>
+    
+        <% TagSet::TAG_TYPES.each do |type| %>
+          <% if eval("@show_request_#{type}_tags") %><th scope="col"><%= type.classify.pluralize -%></th><% end %>
+        <% end %>
+        <% if eval("show_request_optional_tags") %><th scope="col">Optional Tags</th><% end %>
+        <% if eval("show_request_description") %><th scope="col">
+          <% desc_label = @challenge.send("request_description_label") %>
+          <%= desc_label.blank? ? ts("Description: ") : desc_label %>
+          </th>
+        <% end %>
+        <% if eval("show_request_url") %><th scope="col">
+          <% url_label = @challenge.send("request_url_label") %>
+          <%= url_label.blank? ? ts("Prompt URL: ") : url_label %></th>
+        <% end %>
+    
+    <th abbr="options" scope="col"><%= ts("Claim") %></th>
+    
+    <% if params[:show_claims] == "true" %>
+      <th abbr="options" scope="col"><%= ts("Claims and Fills") %></th>
+    <% end %>
+    
+  </tr></thead>
+
+  <!-- body of table --><tbody>
+  <% @requests.each do |challenge_signup| %> 
+    <% if params[:show_filled] == "true" || challenge_signup.unfulfilled? %>
+        <% prompt = challenge_signup %>
+    <% end %>
+    <% unless !prompt %>
+    <tr>
+
+      <% cache("collection-#{@collection.id}-signup-#{challenge_signup.id}") do %>
+      
+      <td><% if !prompt || prompt.anonymous? %>
+        (Anonymous)</td>
+        <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
+          <td>&nbsp;</td>
+        <% end %>
+      <% else %>
+        <%= link_to prompt.challenge_signup.pseud.name, collection_signup_path(@collection, prompt.challenge_signup) %></td>
+        <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
+          <td><%= mailto_link prompt.challenge_signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></td>
+        <% end %>
+      <% end %>
+      <!-- show tags, description, url for all allowed requests and offers: using a lot of evals here to DRY up the code since it's so repetitive -->
+          <% TagSet::TAG_TYPES.each do |type| %>
+            <% if eval("@show_request_#{type}_tags") %>
+              <td>
+                <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
+                  <%= content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type))) %>
+                <% end %>
+              </td>
+            <% end %>  
+          <% end %>
+          <% if eval("show_request_optional_tags") %>
+            <td>
+              <% if prompt && prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
+                <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
+              <% end %>
+            </td>
+          <% end %>
+          <% if eval("show_request_description") %>
+            <td><%= !prompt || prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) -%></td>
+          <% end %>
+          <% if eval("show_request_url") %>
+            <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) -%></td>
+          <% end %>
+
+      <% end %><!-- end cache --> 
+      
+      <% # don't cache controls, as they're different for the mod %>
+        <td class="navigation">
+          <%= render :partial => "challenge_signups/signup_controls", :locals => {:challenge_signup => prompt.challenge_signup, :prompt_id => prompt.id} -%>
+        </td>
+      <% if params[:show_claims] == "true" %>
+        <td>
+        <% unless prompt.request_claims.blank? %>
+          Claimed by: <% prompt.request_claims.each do |claim| %>
+            <% if @collection.anonymous? && !(current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) %>
+              (Anonymous) <% if claim.fulfilled? %>(Filled)<% end %>
+            <% else %>
+              <%= link_to(claim.claim_byline, collection_claim_path(claim.collection, claim)) %>
+              <% if claim.fulfilled? %>(Filled)<% end %>
+            <% end %>
+        <% end %>
+        </td>
+      <% end %>
+      <% end %>
+      
+    </tr>
+    <% end %>
+  <% end %>
+  </tbody>
+</table>

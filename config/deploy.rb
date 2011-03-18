@@ -1,9 +1,12 @@
+require './config/boot'
+require 'hoptoad_notifier/capistrano'
+
 # takes care of the bundle install tasks
 require 'bundler/capistrano'
 
-# deploy to different environments
+# deploy to different environments with tags
 set :default_stage, "staging"
-require 'capistrano/ext/multistage'
+require 'capistrano/gitflow_version'
 
 # user settings
 set :user, "www-data"
@@ -19,11 +22,9 @@ set :keep_releases, 4
 
 set :mail_to, "otw-coders@transformativeworks.org otw-testers@transformativeworks.org"
 
-
 # git settings
 set :scm, :git
 set :repository,  "git://github.com/otwcode/otwarchive.git"
-set :branch, "deploy"
 set :deploy_via, :remote_cache
 
 # overwrite default capistrano deploy tasks
@@ -55,10 +56,6 @@ end
 
 # our tasks which are not environment specific
 namespace :extras do
-  task :git_in_home, :roles => :backend do
-    run "git pull origin deploy"
-    run "bundle install --quiet"
-  end
   task :update_revision do
     run "/static/bin/fix_revision.sh"
   end
@@ -77,7 +74,7 @@ namespace :extras do
   task :reindex_sphinx, {:roles => :search} do
     run "/static/bin/ts_reindex.sh"
   end
-  desc "rebuild sphinx (puts app into maintenance because sphinx is down)"
+  desc "rebuild sphinx"
   task :rebuild_sphinx, {:roles => :search} do
     run "/static/bin/ts_rebuild.sh"
   end
@@ -86,20 +83,45 @@ namespace :extras do
   end
 end
 
-# tasks for production environmen
+# our tasks which are staging specific
+namespace :stage_only do
+  task :git_in_home do
+    run "git pull origin deploy"
+    run "bundle install --quiet"
+    run "ln -nfs -t config/ #{deploy_to}/shared/config/*"
+  end
+  task :update_public do
+    run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
+    run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/static"
+  end
+  task :update_configs do
+    run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
+  end
+  task :reset_db do
+    run "/static/bin/reset_database.sh"
+  end
+  task :notify_testers do
+    system "echo 'testarchive deployed' | mail -s 'testarchive deployed' #{mail_to}"
+  end
+end
+
+# our tasks which are production specific
 namespace :production_only do
-  task :update_public, {:roles => :web} do
+  task :git_in_home, :roles => [:backend, :search] do
+    run "git pull origin deploy"
+    run "bundle install --quiet"
+    run "ln -nfs -t #{release_path}/config/ /static/config/*"
+  end
+  task :update_public, :roles => [:web, :backend] do
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
     run "ln -nfs -t #{release_path}/public/ /static/static"
     run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt}"
   end
-  task :update_configs, {:roles => :app} do
+  task :update_configs, {:roles => :app, :backend} do
     run "ln -nfs -t #{release_path}/config/ /static/config/*"
   end
   task :backup_db, {:roles => :search} do
-    run "mysql -e 'stop slave'"
-    run "sudo cp -rp /var/lib/mysql /backup/otwarchive/deploys/`date +%F.%R`/"
-    run "mysql -e 'start slave'"
+    run "/static/bin/backup_database.sh &"
   end
   task :update_cron_email, {:roles => :backend} do
     run "whenever --update-crontab production -f config/schedule_production.rb"
@@ -112,26 +134,8 @@ namespace :production_only do
   end
 end
 
-namespace :stage_only do
-  task :update_public, {:roles => :web} do
-    run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
-    run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/static"
-  end
-  task :update_configs, {:roles => :app} do
-    run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
-  end
-  task :reset_db, {:roles => :db} do
-    run "mysql -e 'drop database otwarchive_production'"
-    run "mysql -e 'create database otwarchive_production'"
-    run "mysql otwarchive_production < /backup/latest.dump"
-  end
-  task :notify_testers do
-    system "echo 'testarchive deployed' | mail -s 'testarchive deployed' #{mail_to}"
-  end
-end
-
-before "deploy:update_code", "extras:git_in_home"
-after "deploy:update_code", "extras:cache_stylesheet"
+# after and before task triggers
+after "deploy:update", "extras:cache_stylesheet"
 
 before "deploy:migrate", "deploy:web:disable"
 after "deploy:migrate", "extras:run_after_tasks"
@@ -140,8 +144,5 @@ before "deploy:symlink", "deploy:web:enable_new"
 after "deploy:symlink", "extras:update_revision"
 
 after "deploy:restart", "extras:update_cron"
-after "deploy:restart", "extras:restart_delayed_jobs", "extras:restart_sphinx"
+after "deploy:restart", "extras:restart_delayed_jobs"
 after "deploy:restart", "deploy:cleanup"
-
-before "extras:rebuild_sphinx", "deploy:web:disable"
-after "extras:rebuild_sphinx", "deploy:web:enable"

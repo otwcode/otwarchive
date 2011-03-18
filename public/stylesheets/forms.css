@@ -159,6 +159,8 @@ img#openid	{ margin-left:-20px; vertical-align:middle; }
 #work-form dl.notes dl dd.validation {margin-top:0;}
 #work-form .endnotes span.warning {position:absolute; top:0; left:10em;}
 
+#work-form #work_challenge_claim_ids_options {width: 60em;}
+
 #work-form #parent-options dl dt {width:9em;}
 #work-form #parent-options dl dd {left:10em;}
 #work-form dd ul.navigation {float:left;}

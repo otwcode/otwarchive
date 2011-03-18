@@ -272,7 +272,7 @@ class StoryParser
       end
 
       # lock to registered users if specified or importing for others
-      work.restricted = options[:restricted] || options[:importing_for_others]
+      work.restricted = options[:restricted] || options[:importing_for_others] || false
 
       # set default values for required tags for any works that don't have them
       work.fandom_string = (options[:fandom].blank? ? ArchiveConfig.FANDOM_NO_TAG_NAME : options[:fandom]) if (options[:override_tags] || work.fandoms.empty?)
