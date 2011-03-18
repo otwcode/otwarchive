@@ -38,10 +38,6 @@ SMTP_DOMAIN: localhost
 #SMTP_PASSWORD:
 #SMTP_AUTHENTICATION: # :plain, :login or :cram_md5
 
-# used to turn off delayed jobs locally for testing --
-# set to true in your local.yml
-NO_DELAYS: false
-
 # Branding
 APP_URL: 'http://www.example.org'
 APP_NAME: 'Example Archive'

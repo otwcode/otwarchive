@@ -92,11 +92,7 @@ class PotentialMatchesController < ApplicationController
       
       flash[:notice] = ts("Beginning generation of potential matches. This may take some time, especially if your challenge is large.")
       PotentialMatch.set_up_generating(@collection)
-      if ArchiveConfig.NO_DELAYS
-        PotentialMatch.generate!(@collection)
-      else
-        PotentialMatch.delay.generate!(@collection)
-      end
+      PotentialMatch.generate!(@collection)
     end
 
     # redirect to index

@@ -163,11 +163,7 @@ class ChallengeAssignmentsController < ApplicationController
     # purge the potential matches! we don't want bazillions of them in our db
     PotentialMatch.clear!(@collection)
     
-    if ArchiveConfig.NO_DELAYS
-      ChallengeAssignment.send_out!(@collection)
-    else
-      ChallengeAssignment.delay.send_out!(@collection)
-    end
+    ChallengeAssignment.send_out!(@collection)
     flash[:notice] = "Assignments are now being sent out."
     redirect_to collection_assignments_path(@collection)
   end

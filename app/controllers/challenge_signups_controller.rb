@@ -130,12 +130,7 @@ class ChallengeSignupsController < ApplicationController
         FileUtils.touch(ChallengeSignup.summary_file(@collection))
 
         # generate the page
-        if ArchiveConfig.NO_DELAYS
-          ChallengeSignup.generate_summary(@collection)
-        else
-          # start a delayed job to generate the page
-          ChallengeSignup.delay.generate_summary(@collection)
-        end
+        ChallengeSignup.generate_summary(@collection)
       end
     else
       # generate it on the fly
