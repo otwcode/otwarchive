@@ -14,7 +14,7 @@ class ChallengeSignup < ActiveRecord::Base
 
   has_many :offer_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'offer_signup_id'
   has_many :request_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'request_signup_id'
-  
+
   has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_signup_id'
 
   before_destroy :clear_assignments_and_claims
@@ -141,7 +141,7 @@ class ChallengeSignup < ActiveRecord::Base
         end
       end
       end
-      
+
 
       unless errors_to_add.empty?
         # yuuuuuck :( but so much less ugly than define-method'ing these all
@@ -176,7 +176,15 @@ class ChallengeSignup < ActiveRecord::Base
   end
 
   # Write the summary to a file that will then be displayed
+  # takes about 12 minutes for yuletide2010 on beta, about 25 minutes on stage
   def self.generate_summary(collection)
+    Resque.enqueue(ChallengeSignup, collection.id)
+  end
+  @queue = :collection
+  def self.perform(collection_id)
+    self.generate_summary_in_background(Collection.find(collection_id))
+  end
+  def self.generate_summary_in_background(collection)
     tag_type, summary_tags = ChallengeSignup.generate_summary_tags(collection)
     view = ActionView::Base.new(ActionController::Base.view_paths, {})
     view.class_eval do
@@ -217,7 +225,7 @@ class ChallengeSignup < ActiveRecord::Base
 
   def user_allowed_to_see_signups?(user)
     self.collection.user_is_maintainer?(user) ||
-    self.collection.challenge_type == "PromptMeme" || 
+    self.collection.challenge_type == "PromptMeme" ||
       (self.challenge.respond_to?("user_allowed_to_see_signups?") && self.challenge.user_allowed_to_see_signups?(user))
   end
 

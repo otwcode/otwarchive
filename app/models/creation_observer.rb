@@ -1,6 +1,6 @@
 class CreationObserver < ActiveRecord::Observer
   observe Chapter, Work, Series
-  
+
   # Send notifications when a creation is posted without preview
   def after_create(creation)
     notify_co_authors(creation)
@@ -13,7 +13,7 @@ class CreationObserver < ActiveRecord::Observer
       notify_subscribers(creation)
     end
   end
-  
+
   # Send notifications when a creation is posted from a draft state
   def before_update(creation)
     notify_co_authors(creation)
@@ -24,10 +24,10 @@ class CreationObserver < ActiveRecord::Observer
       notify_subscribers(creation)
       notify_prompters(creation)
     elsif creation.is_a?(Chapter) && creation.position != 1
-      notify_subscribers(creation)      
+      notify_subscribers(creation)
     end
   end
-  
+
   # Notify new co-authors that they've been added to a creation
   def notify_co_authors(creation)
     this_creation = creation
@@ -36,51 +36,51 @@ class CreationObserver < ActiveRecord::Observer
       new_authors = (creation.authors - (creation.pseuds + User.current_user.pseuds)).uniq
       unless new_authors.blank?
         for pseud in new_authors
-          UserMailer.coauthor_notification(pseud.user, creation).deliver
+          UserMailer.coauthor_notification(pseud.user.id, creation.id, creation.class.name).deliver
         end
       end
     end
     save_creatorships(this_creation)
   end
-  
+
   # notify recipients that they have gotten a story!
   def notify_recipients(work)
     if !work.recipients.blank? && !work.unrevealed?
       recipient_pseuds = Pseud.parse_bylines(work.recipients, :assume_matching_login => true)[:pseuds]
       recipient_pseuds.each do |pseud|
-        UserMailer.recipient_notification(pseud.user, work).deliver
+        UserMailer.recipient_notification(pseud.user.id, work.id).deliver
       end
     end
   end
-  
+
   # notify people subscribed to this creation or its authors
   def notify_subscribers(creation)
     work = creation.respond_to?(:work) ? creation.work : creation
     if work && !work.unrevealed? && !work.anonymous?
       #Group subscriptions by user id so that you only get one notice per update
-      subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)", 
+      subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)",
                                 work.pseuds.map{|a| a.user_id}]).
                           group(:user_id)
       subs.each do |subscription|
-        UserMailer.subscription_notification(subscription.user, subscription, creation).deliver
+        UserMailer.subscription_notification(subscription.user.id, subscription.id, creation.id, creation.class.name).deliver
       end
     end
   end
-  
+
   # notify prompters of response to their prompt
   def notify_prompters(work)
     if !work.challenge_claims.empty? && !work.unrevealed?
-      UserMailer.prompter_notification(pseud.user, work, work.collection).deliver
+      UserMailer.prompter_notification(pseud.user.id, work.id).deliver
     end
   end
-  
+
   # notify authors of related work
   def notify_parents(work)
     if !work.parent_work_relationships.empty? && !work.unrevealed?
       work.parent_work_relationships.each {|relationship| relationship.notify_parent_owners}
-    end    
+    end
   end
-  
+
   # Save creatorships after the creation is saved
   def save_creatorships(creation)
     if creation.nil?
@@ -96,7 +96,7 @@ class CreationObserver < ActiveRecord::Observer
           if creation.chapters.first
             creation.chapters.first.pseuds << pseud unless creation.chapters.first.pseuds.include?(pseud)
           end
-          creation.series.each { |series| series.pseuds << pseud unless series.pseuds.include?(pseud) }      
+          creation.series.each { |series| series.pseuds << pseud unless series.pseuds.include?(pseud) }
         end
       end
     end
@@ -107,5 +107,5 @@ class CreationObserver < ActiveRecord::Observer
       end
     end
   end
-  
+
 end
