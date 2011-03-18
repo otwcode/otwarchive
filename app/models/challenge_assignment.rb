@@ -1,5 +1,5 @@
 class ChallengeAssignment < ActiveRecord::Base
-  # We use "-1" to represent all the requested items matching 
+  # We use "-1" to represent all the requested items matching
   ALL = -1
 
   belongs_to :collection
@@ -30,44 +30,44 @@ class ChallengeAssignment < ActiveRecord::Base
   }
 
   scope :in_collection, lambda {|collection| where('challenge_assignments.collection_id = ?', collection.id) }
-  
+
   scope :defaulted, where("defaulted_at IS NOT NULL")
   scope :undefaulted, where("defaulted_at IS NULL")
   scope :uncovered, where("covered_at IS NULL")
   scope :covered, where("covered_at IS NOT NULL")
-  
+
   scope :with_offer, where("offer_signup_id IS NOT NULL")
   scope :with_request, where("request_signup_id IS NOT NULL")
   scope :with_no_request, where("request_signup_id IS NULL")
   scope :with_no_offer, where("offer_signup_id IS NULL")
-  scope :unposted, where("challenge_assignments.creation_id IS NULL")  
+  scope :unposted, where("challenge_assignments.creation_id IS NULL")
 
-  REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_assignments.request_signup_id = challenge_signups.id 
+  REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_assignments.request_signup_id = challenge_signups.id
                                                             OR challenge_assignments.pinch_request_signup_id = challenge_signups.id)
                            INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id"
 
-  OFFERING_PSEUD_JOIN = "INNER JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id 
+  OFFERING_PSEUD_JOIN = "INNER JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
                          INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id OR challenge_signups.pseud_id = pseuds.id)"
 
-  COLLECTION_ITEMS_JOIN = "INNER JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND 
-                                                           collection_items.item_id = challenge_assignments.creation_id AND 
+  COLLECTION_ITEMS_JOIN = "INNER JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND
+                                                           collection_items.item_id = challenge_assignments.creation_id AND
                                                            collection_items.item_type = challenge_assignments.creation_type)"
 
-  COLLECTION_ITEMS_LEFT_JOIN =  "LEFT JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND 
-                                                                collection_items.item_id = challenge_assignments.creation_id AND 
+  COLLECTION_ITEMS_LEFT_JOIN =  "LEFT JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND
+                                                                collection_items.item_id = challenge_assignments.creation_id AND
                                                                 collection_items.item_type = challenge_assignments.creation_type)"
 
-  scope :order_by_requesting_pseud, joins(REQUESTING_PSEUD_JOIN).order("pseuds.name") 
-  
+  scope :order_by_requesting_pseud, joins(REQUESTING_PSEUD_JOIN).order("pseuds.name")
+
   scope :order_by_offering_pseud, joins(OFFERING_PSEUD_JOIN).order("pseuds.name")
 
-  scope :fulfilled, 
+  scope :fulfilled,
     joins(COLLECTION_ITEMS_JOIN).
-    where('challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', 
+    where('challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
                     CollectionItem::APPROVED, CollectionItem::APPROVED)
-  
+
   # has to be a left join to get works that don't have a collection item
-  scope :unfulfilled, 
+  scope :unfulfilled,
     joins(COLLECTION_ITEMS_LEFT_JOIN).
     where('challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ?', CollectionItem::APPROVED, CollectionItem::APPROVED)
 
@@ -83,12 +83,12 @@ class ChallengeAssignment < ActiveRecord::Base
       request_signup.save
     end
   end
-  
+
   def get_collection_item
     return nil unless self.creation
     CollectionItem.where("collection_id = ? AND item_id = ? AND item_type = ?", self.collection_id, self.creation_id, self.creation_type).first
   end
-  
+
   def fulfilled?
     self.creation && (item = get_collection_item) && item.approved?
   end
@@ -100,15 +100,15 @@ class ChallengeAssignment < ActiveRecord::Base
       self.defaulted_at = nil
     end
   end
-      
+
   def defaulted
     !self.defaulted_at.nil?
   end
 
   include Comparable
-  # sort in order that puts assignments with no request ahead of assignments with no offer, 
-  # ahead of assignments with both request and offer, and within each group sorts by 
-  # request byline and then offer byline. 
+  # sort in order that puts assignments with no request ahead of assignments with no offer,
+  # ahead of assignments with both request and offer, and within each group sorts by
+  # request byline and then offer byline.
   def <=>(other)
     return -1 if self.request_signup.nil? && other.request_signup
     return 1 if other.request_signup.nil? && self.request_signup
@@ -118,27 +118,27 @@ class ChallengeAssignment < ActiveRecord::Base
     return cmp if cmp != 0
     self.offer_byline.downcase <=> other.offer_byline.downcase
   end
-  
+
   def title
     "#{self.collection.title} (#{self.request_byline})"
   end
-  
+
   def offering_user
     offering_pseud ? offering_pseud.user : nil
   end
-  
+
   def offering_pseud
     offer_signup ? offer_signup.pseud : pinch_hitter
   end
-  
+
   def requesting_pseud
     request_signup ? request_signup.pseud : (pinch_request_signup ? pinch_request_signup.pseud : nil)
   end
-  
+
   def offer_byline
     offer_signup ? offer_signup.pseud.byline : (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "- none -")
   end
-  
+
   def request_byline
     request_signup ? request_signup.pseud.byline : (pinch_request_signup ? (pinch_request_byline + "* (pinch recipient)") : "- None -")
   end
@@ -146,7 +146,7 @@ class ChallengeAssignment < ActiveRecord::Base
   def pinch_hitter_byline
     pinch_hitter ? pinch_hitter.byline : ""
   end
-  
+
   def pinch_hitter_byline=(byline)
     self.pinch_hitter = Pseud.by_byline(byline).first
   end
@@ -159,7 +159,7 @@ class ChallengeAssignment < ActiveRecord::Base
     pinch_pseud = Pseud.by_byline(byline).first
     self.pinch_request_signup = ChallengeSignup.in_collection(self.collection).by_pseud(pinch_pseud).first if pinch_pseud
   end
-  
+
   def send_out!
     # don't resend!
     unless self.sent_at
@@ -167,11 +167,11 @@ class ChallengeAssignment < ActiveRecord::Base
       save
       assigned_to = self.offer_signup ? self.offer_signup.pseud.user : (self.pinch_hitter ? self.pinch_hitter.user : nil)
       request = self.request_signup || self.pinch_request_signup
-      UserMailer.challenge_assignment_notification(collection, assigned_to, self).deliver if assigned_to && request
+      UserMailer.challenge_assignment_notification(collection.id, assigned_to.id, self.id).deliver if assigned_to && request
     end
   end
 
-  # send assignments out to all participants 
+  # send assignments out to all participants
   def self.send_out!(collection)
     collection.assignments.each do |assignment|
       assignment.send_out!
@@ -183,7 +183,7 @@ class ChallengeAssignment < ActiveRecord::Base
   # this requires potential matches to already be generated
   def self.generate!(collection)
     ChallengeAssignment.clear!(collection)
-    
+
     # we sort signups into buckets based on how many potential matches they have
     @request_match_buckets = {}
     @offer_match_buckets = {}
@@ -203,7 +203,7 @@ class ChallengeAssignment < ActiveRecord::Base
 
     # now that we have the buckets, we go through assigning people in order
     # of people with the fewest options first.
-    # if someone has no potential matches they still get an assignment, just with no 
+    # if someone has no potential matches they still get an assignment, just with no
     # match.
     0.upto(@max_match_count) do |count|
       if @request_match_buckets[count]
@@ -214,7 +214,7 @@ class ChallengeAssignment < ActiveRecord::Base
           ChallengeAssignment.assign_request!(collection, request_signup)
         end
       end
-        
+
       if @offer_match_buckets[count]
         @offer_match_buckets[count].sort_by {rand}.each do |offer_signup|
           offer_signup.reload
@@ -224,7 +224,7 @@ class ChallengeAssignment < ActiveRecord::Base
       end
     end
   end
-    
+
   # go through the request's potential matches in order from best to worst and try and assign
   def self.assign_request!(collection, request_signup)
     assignment = ChallengeAssignment.new(:collection => collection, :request_signup => request_signup)
@@ -233,9 +233,9 @@ class ChallengeAssignment < ActiveRecord::Base
     request_signup.request_potential_matches.sort.reverse.each do |potential_match|
       # skip if this signup has already been assigned as an offer
       next if potential_match.offer_signup.assigned_as_offer
-      
+
       # if there's a circular match let's save it as our last choice
-      if potential_match.offer_signup.assigned_as_request && !last_choice && 
+      if potential_match.offer_signup.assigned_as_request && !last_choice &&
           collection.assignments.for_request_signup(potential_match.offer_signup).first.offer_signup == request_signup
         last_choice = potential_match
         next
@@ -267,7 +267,7 @@ class ChallengeAssignment < ActiveRecord::Base
       next if potential_match.request_signup.assigned_as_request
 
       # if there's a circular match let's save it as our last choice
-      if potential_match.request_signup.assigned_as_offer && !last_choice && 
+      if potential_match.request_signup.assigned_as_offer && !last_choice &&
           collection.assignments.for_offer_signup(potential_match.request_signup).first.request_signup == offer_signup
         last_choice = potential_match
         next
@@ -284,11 +284,11 @@ class ChallengeAssignment < ActiveRecord::Base
 
     offer_signup.assigned_as_offer = true
     offer_signup.save!
-    
+
     assignment.save!
     assignment
   end
-  
+
   def self.do_assign_request!(assignment, potential_match)
     assignment.offer_signup = potential_match.offer_signup
     potential_match.offer_signup.assigned_as_offer = true
@@ -302,7 +302,7 @@ class ChallengeAssignment < ActiveRecord::Base
   end
 
   # clear out all previous assignments.
-  # note: this does NOT invoke callbacks because ChallengeAssignments don't have any dependent=>destroy 
+  # note: this does NOT invoke callbacks because ChallengeAssignments don't have any dependent=>destroy
   # or associations
   def self.clear!(collection)
     ChallengeAssignment.delete_all(:collection_id => collection.id)
@@ -310,7 +310,7 @@ class ChallengeAssignment < ActiveRecord::Base
   end
 
   # create placeholders for any assignments left empty
-  # (this is for after manual updates have left some users without an 
+  # (this is for after manual updates have left some users without an
   # assignment)
   def self.update_placeholder_assignments!(collection)
     collection.signups.each do |signup|

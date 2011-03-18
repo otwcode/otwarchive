@@ -26,13 +26,14 @@ gem 'nokogiri'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
-gem 'delayed_job', '=2.1.1'
-gem 'daemons', '=1.0.10'
+gem 'resque', '>=1.14.0'
+gem 'resque_mailer'
+# https://github.com/defunkt/resque/issues/221
+gem 'sinatra', '~> 1.1.3'
 gem 'thinking-sphinx',
   :git     => 'git://github.com/freelancing-god/thinking-sphinx.git',
   :branch  => 'rails3',
   :require => 'thinking_sphinx'
-gem 'ts-delayed-delta', :require => 'thinking_sphinx/deltas/delayed_delta'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'aws-s3', :require => 'aws/s3'
 # gem 'fastercsv' -- will use this eventually for exporting to excel tsv format

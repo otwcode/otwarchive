@@ -11,7 +11,8 @@ Given /^I wait (\d+) seconds?$/ do |number|
 end
 
 When 'the system processes jobs' do
-  Delayed::Worker.new.work_off
+  #resque runs inline during testing. see resque.rb in initializers/gem-plugin_config
+  #Delayed::Worker.new.work_off
 end
 
 When 'I reload the page' do
