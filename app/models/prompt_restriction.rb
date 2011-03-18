@@ -68,13 +68,20 @@ class PromptRestriction < ActiveRecord::Base
   end
 
   # tag initialization needs to be able to run in the background
-  # DELAY FIXME: set this up so it's delayed
   def initialize_tags(tag_type, factor, greater_than)
-    self.tag_set ||= TagSet.new
-    self.tag_set.send("#{tag_type.name.underscore}_tagnames=",
+    Resque.enqueue(PromptRestriction, self.id, tag_type, factor, greater_than)
+  end
+  @queue = :collection
+  def self.perform(prompt_restriction_id, tag_type, factor, greater_than)
+    self.initialize_tags_in_background(prompt_restriction_id, tag_type, factor, greater_than)
+  end
+  def self.initialize_tags_in_background(prompt_restriction_id, tag_type, factor, greater_than)
+    prompt_restriction = PromptRestriction.find(prompt_restriction_id)
+    prompt_restriction.tag_set ||= TagSet.new
+    prompt_restriction.tag_set.send("#{tag_type.name.underscore}_tagnames=",
               tag_type.with_popularity_relative_to_average(:factor => factor, :greater_than => greater_than, :names_only => true).
                           collect(&:name))
-    self.tag_set.save
+    prompt_restriction.tag_set.save
   end
 
   def has_tags_of_type?(type)

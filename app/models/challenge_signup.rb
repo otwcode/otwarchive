@@ -176,8 +176,15 @@ class ChallengeSignup < ActiveRecord::Base
   end
 
   # Write the summary to a file that will then be displayed
-  # DELAY FIXME: set this up so it's delayed
+  # takes about 12 minutes for yuletide2010 on beta, about 25 minutes on stage
   def self.generate_summary(collection)
+    Resque.enqueue(ChallengeSignup, collection.id)
+  end
+  @queue = :collection
+  def self.perform(collection_id)
+    self.generate_summary_in_background(Collection.find(collection_id))
+  end
+  def self.generate_summary_in_background(collection)
     tag_type, summary_tags = ChallengeSignup.generate_summary_tags(collection)
     view = ActionView::Base.new(ActionController::Base.view_paths, {})
     view.class_eval do

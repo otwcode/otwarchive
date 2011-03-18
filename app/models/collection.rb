@@ -337,8 +337,12 @@ class Collection < ActiveRecord::Base
 
   def reveal!
     approved_collection_items.update_all("unrevealed = 0")
-    # DELAY FIXME: set this up so it's delayed
-    approved_collection_items.each {|collection_item| collection_item.notify_of_reveal}
+    Resque.enqueue(Collection, self.id)
+  end
+  @queue = :collection
+  def self.perform(collection_id)
+    collection = self.find(collection_id)
+    collection.approved_collection_items.each {|collection_item| collection_item.notify_of_reveal}
   end
 
   def reveal_authors!

@@ -44,8 +44,15 @@ public
     !Rails.cache.read(interrupt_key(collection)).nil?
   end
 
-  # DELAY FIXME: set this up so it's delayed
+
   def self.generate!(collection)
+    Resque.enqueue(self, collection.id)
+  end
+  @queue = :collection
+  def self.perform(collection_id)
+     self.generate_in_background(Collection.find(collection_id))
+  end
+  def self.generate_in_background(collection)
     PotentialMatch.clear!(collection)
     collection.signups.order_by_pseud.each do |request_signup|
       break if Rails.cache.read(interrupt_key(collection))
