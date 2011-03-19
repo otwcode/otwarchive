@@ -183,6 +183,7 @@ Feature: Prompt Meme Challenge
     And I should not see "Sign in to claim prompts"
     And I should see "Stargate Atlantis"
   When I press "Claim"
+  # note, prompts are in reverse date order by default, so myname4 will have claimed their own prompt here
   Then I should see "New claim made."
     And I should see "Claims for Battle 12"
     And I should see "Post To Fulfill"
@@ -192,15 +193,15 @@ Feature: Prompt Meme Challenge
 
   When I go to myname4's user page
     And I follow "My Claims"
-    And I follow "myname1" within "#claims_table"
-  Then I should see "Claimed by Anonymous: myname1"
+    And I follow "myname4" within "#claims_table"
+  Then I should see "Claimed by Anonymous: myname4"
   
   # mod view signups
   
   When I follow "Log out"
     And I am logged in as "mod1" with password "something"
     And I go to "Battle 12" collection's page
-    And I follow "Prompts"
+    And I follow "Prompts (8)"
   Then I should see "myname4" within "#main"
     And I should see "myname3" within "#main"
     And I should not see "myname2" within "#main"
@@ -224,10 +225,8 @@ Feature: Prompt Meme Challenge
   Then I should see "Unfulfilled Claims"
     And I should see "Fulfilled Claims"
     And I should see "myname4" within "#unfulfilled_claims"
-    And I should see "myname1" within "#unfulfilled_claims"
     And I should not see "Secret!" within "#unfulfilled_claims"
     And I should see "Stargate Atlantis" within "#main"
-    And I should see "Alternate Universe - Historical" within "#main"
     
   # claims are hidden for ordinary user
   
@@ -235,18 +234,16 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname4" with password "something"
   Then I should see "Unfulfilled Claims"
     And I should see "Fulfilled Claims"
-    And I should not see "myname4" within "#unfulfilled_claims"
-    And I should see "myname1" within "#unfulfilled_claims"
+    And I should see "myname4" within "#unfulfilled_claims"
     And I should see "Secret!" within "#unfulfilled_claims"
     And I should see "Stargate Atlantis" within "#main"
-    And I should see "Alternate Universe - Historical" within "#main"
   
   # user posts a fic
   
   When I go to myname4's user page
   Then I should see "My Claims (1)" 
   When I follow "My Claims (1)"
-  Then I should see "myname1" within "#claims_table"
+  Then I should see "myname4" within "#claims_table"
   When I follow "Post To Fulfill"
     And I fill in "Work Title" with "Fulfilled Story"
     And I select "Not Rated" from "Rating"
@@ -257,7 +254,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Work was successfully posted"
     And I should see "Fandom:"
     And I should see "Stargate Atlantis"
-    And I should see "Alternate Universe - Historical"
+    And I should not see "Alternate Universe - Historical"
   
   # Claim is completed
 
@@ -287,10 +284,11 @@ Feature: Prompt Meme Challenge
 
     And I should see "Unfulfilled Claims"
     And I should see "mod" within "#unfulfilled_claims"
-    And I should see "myname1" within "#unfulfilled_claims"
+    And I should see "myname4" within "#unfulfilled_claims"
     And I should see "Stargate Atlantis" within "#unfulfilled_claims"
-    And I should not see "Alternate Universe - Historical" within "#unfulfilled_claims"
-    And I should see "Alternate Universe - Historical" within "#fulfilled_claims"
+    And I should see "Alternate Universe - Historical" within "#unfulfilled_claims"
+    And I should not see "Alternate Universe - Historical" within "#fulfilled_claims"
+    And I should see "Stargate Atlantis" within "#fulfilled_claims"
     And I should see "myname4" within "#fulfilled_claims"
   
   # mod posts a fic
@@ -301,12 +299,12 @@ Feature: Prompt Meme Challenge
   Then I should see "Your Claims"
     And I should not see "In Battle 12"
     And I should see "Writing For" within "#claims_table"
-    And I should see "myname1" within "#claims_table"
+    And I should see "myname4" within "#claims_table"
   When I follow "Post To Fulfill"
     And I fill in "Work Title" with "Fulfilled Story-thing"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
-    And I fill in "content" with "This is an exciting story about Atlantis, but in the normal universe this time"
+    And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
   When I press "Preview"
     And I press "Post"
   Then I should see "Work was successfully posted"
@@ -314,12 +312,12 @@ Feature: Prompt Meme Challenge
   # fic shows what prompt it is fulfilling when mod views it
   
   When I view the work "Fulfilled Story-thing"
-  Then I should see "In response to a prompt by: myname1"
+  Then I should see "In response to a prompt by: myname4"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
-    And I should see "For myname1"
+    And I should see "For myname4"
     And I should not see "mod1" within ".byline"
-    And I should not see "Alternate Universe - Historical"
+    And I should see "Alternate Universe - Historical"
   
   # mod's claim is completed
   
@@ -354,19 +352,16 @@ Feature: Prompt Meme Challenge
     And I should not see "Claimed by: mod1"
     And I should see "Claimed by: (Anonymous)"
   
-  # check that claims can't be viewed
-
-  When I follow "myname1"
-  Then I should see "Sorry, you're not allowed to do that."
+  # TODO: check that claims can't be viewed
 
   # check that completed ficlet is unrevealed
 
   When I view the work "Fulfilled Story-thing"
-  Then I should not see "In response to a prompt by: myname1"
+  Then I should not see "In response to a prompt by: myname4"
     And I should not see "Fandom: Stargate Atlantis"
     And I should not see "Anonymous"
     And I should not see "mod1"
-    And I should not see "For myname1"
+    And I should not see "For myname4"
     And I should not see "Alternate Universe - Historical"
     And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
 
@@ -385,12 +380,12 @@ Feature: Prompt Meme Challenge
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
   When I view the work "Fulfilled Story-thing"
-  Then I should see "In response to a prompt by: myname1"
+  Then I should see "In response to a prompt by: myname4"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
-    And I should see "For myname1"
+    And I should see "For myname4"
     And I should not see "mod1" within ".byline"
-    And I should not see "Alternate Universe - Historical"
+    And I should see "Alternate Universe - Historical"
 
   # make challenge un-anon
 
