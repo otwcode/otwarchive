@@ -50,6 +50,8 @@
           collection_requests_path(@collection, :hide_descriptions => params[:hide_descriptions], :hide_urls => params[:hide_urls], 
           :show_claims => params[:show_claims], :show_filled => true) -%></li>
     <% end %>
+    <li><%= sort_link ts('Sort by fandom'), :fandom %></li>
+    <li><%= sort_link ts('Sort by date'), :id, {:sort_default => true, :desc_default => true} %></li>
   </ul>
 <% end %>
 

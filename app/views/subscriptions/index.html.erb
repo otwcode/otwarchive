@@ -12,7 +12,7 @@
       <%= link_to(subscription.name, subscription.subscribable) %>
     </td>
     <td>
-      <%= link_to "Unsubscribe", user_subscription_path(current_user, subscription), 
+      <%= link_to "Unsubscribe from #{subscription.name}", user_subscription_path(current_user, subscription), 
                   :confirm => 'Are you sure?', :method => :delete %>
     </td>
   </tr>
