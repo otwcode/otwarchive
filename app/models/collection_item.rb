@@ -149,6 +149,14 @@ class CollectionItem < ActiveRecord::Base
     approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end
+  
+  # Reveal an individual collection item
+  # Can't use update_attribute because of potential validation issues
+  # with closed collections
+  def reveal!
+    collection.collection_items.update_all("unrevealed = 0", "id = #{self.id}")
+    notify_of_reveal
+  end
 
   def notify_of_reveal
     unless self.unrevealed?
