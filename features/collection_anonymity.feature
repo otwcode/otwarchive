@@ -306,3 +306,90 @@ Feature: Collection
   
   # Scenario: TODO Create a hidden and anonymous collection, add new and existing works to it, reveal works, then reveal authors
   # Isn't this partially covered by challenge_yuletide? Probably better to expand that.
+  
+  Scenario: Create a hidden collection, reveal works gradually by day, like purimgifts
+  
+  Given the following activated users exist
+    | login          | password    |
+    | myname1        | something   |
+    | myname2        | something   |
+    | myname3        | something   |
+    And basic tags
+    And I am logged in as "myname2" with password "something"
+    And I go to myname1's user page
+    And I press "Subscribe"
+  When I go to the collections page
+  Then I should see "Collections in the "
+    And I should not see "Hidden Treasury"
+  When I follow "New Collection"
+    And I fill in "Display Title" with "Hidden Treasury"
+    And I fill in "Collection Name" with "hidden_treasury"
+    And I check "Is this collection currently unrevealed?"
+    And I press "Submit"
+  Then I should see "Collection was successfully created"
+  
+  # post to collection for day 1
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+  Given all emails have been delivered
+  When I go to "Hidden Treasury" collection's page
+    And I follow "Post To Collection"
+    And I fill in "Fandoms" with "No Fandom"
+    And I fill in "Work Title" with "New Snippet"
+    And I fill in "content" with "This is a new snippet written for this hidden challenge"
+    And I fill in "Additional Tags" with "Purim Day 1"
+    And I press "Post without preview"
+  Then I should see "New Snippet"
+    And I should see "Work was successfully posted"
+    And I should see "myname1" within ".byline"
+    And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+    And I should see "Purim Day 1"
+    And I should see "Collections: Hidden Treasury"
+    And 0 emails should be delivered
+    
+  # post to collection for day 2
+  When I follow "Hidden Treasury"
+    And I follow "Post To Collection"
+    And I fill in "Fandoms" with "No Fandom"
+    And I fill in "Work Title" with "New Snippet 2"
+    And I fill in "content" with "This is a new snippet written for this hidden challenge"
+    And I fill in "Additional Tags" with "Purim Day 2"
+    And I press "Post without preview"
+  Then I should see "New Snippet"
+    And I should see "Work was successfully posted"
+    And I should see "myname1" within ".byline"
+    And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+    And I should see "Purim Day 2"
+    And I should see "Collections: Hidden Treasury"
+    And 0 emails should be delivered
+    
+  # fics are both hidden
+  When I follow "Log out"
+    And I am logged in as "myname3" with password "something"
+  When I view the work "New Snippet"
+  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+    And I should not see "Purim Day 1"
+  When I view the work "New Snippet 2"
+  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+    And I should not see "Purim Day 2"
+    
+  # mod views fics
+  When I follow "Log out"
+    And I am logged in as "myname2" with password "something"
+    And I go to "Hidden Treasury" collection's page
+    And I follow "Manage Items"
+  Then I should see "Items in Hidden Treasury"
+    And I should see "myname1"
+  # TODO: Uncomment from here on once bug 2241 is fixed
+  #When I check "collection_item_unrevealed"
+  #  And I press "Update"
+    
+  # first fic now visible, second still not
+  #When I follow "Log out"
+  #  And I am logged in as "myname3" with password "something"
+  #When I view the work "New Snippet"
+  #Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+  #  And I should see "Purim Day 1"
+  #When I view the work "New Snippet 2"
+  #Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+  #  And I should not see "Purim Day 2"
