@@ -117,7 +117,7 @@ namespace :production_only do
     run "ln -nfs -t #{release_path}/public/ /static/static"
     run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt}"
   end
-  task :update_configs, {:roles => :app, :backend} do
+  task :update_configs, :roles => [:app, :backend] do
     run "ln -nfs -t #{release_path}/config/ /static/config/*"
   end
   task :backup_db, {:roles => :search} do
