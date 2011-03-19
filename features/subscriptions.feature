@@ -15,8 +15,11 @@ Feature: Subscriptions
 
   When I am logged in as "myname2" with password "something"
     And I go to myname1's user page
+    # '
     And I press "Subscribe"
   Then I should see "You are now following myname1"
+  When I go to my subscriptions page
+  Then I should see "Unsubscribe from myname1"
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
     And I post the work "Awesome Story"
@@ -39,6 +42,7 @@ Feature: Subscriptions
 
   When I am logged in as "myname2" with password "something"
     And I go to myname1's user page
+    # '
     And I press "Subscribe"
     And I follow "Unsubscribe"
   Then I should see "successfully unsubscribed"
