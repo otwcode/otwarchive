@@ -290,7 +290,7 @@ Feature: Collection
     And I should see "Starsky & Hutch [4, 3]"
     And I should see "Stargate Atlantis [3, 3]"
     And I should see "Tiny fandom [3, 3]"
-    
+
   # signup summary changes when another person signs up
   When I follow "Log out"
     And I am logged in as "myname6" with password "something"
@@ -344,6 +344,7 @@ Feature: Collection
   Then I should see "Matching for Yuletide"
     And I should see "Generate Potential Matches"
     And I should see "You can shuffle these assignments around as much as you want."
+  When all emails have been delivered
   When I follow "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
   Given the system processes jobs
@@ -355,6 +356,19 @@ Feature: Collection
     And I should see "Regenerate Assignments"
     And I should see "Regenerate Potential Matches"
     And I should see "Send Assignments"
+    And 1 email should be delivered
+
+  # mod regenerates the assignments
+  When all emails have been delivered
+  When I follow "Regenerate Assignments"
+  Then I should see "Beginning regeneration of assignments. This may take some time, especially if your challenge is large."
+  Given the system processes jobs
+    And I wait 3 seconds
+  When I reload the page
+  Then I should see "Main Assignments"
+    And I should not see "Missing Recipients"
+    And I should not see "Missing Givers"
+    And 1 email should be delivered
 
   # mod sends assignments out
   When all emails have been delivered
@@ -490,7 +504,7 @@ Feature: Collection
     And I should see "Anonymous"
   When I follow "Log out"
   Then I should see "Successfully logged out"
-  
+
   When I am logged in as "myname3" with password "something"
     And I go to myname3's user page
     #' stop annoying syntax highlighting after apostrophe
@@ -511,7 +525,7 @@ Feature: Collection
     And I should see "Anonymous"
   When I follow "Log out"
   Then I should see "Successfully logged out"
-  
+
   When I am logged in as "myname4" with password "something"
     And I go to myname4's user page
     #' stop annoying syntax highlighting after apostrophe
@@ -532,7 +546,7 @@ Feature: Collection
     And I should see "Anonymous"
   When I follow "Log out"
   Then I should see "Successfully logged out"
-  
+
   # user leaves it as a draft
   When I am logged in as "myname5" with password "something"
     And I go to myname5's user page
@@ -553,7 +567,7 @@ Feature: Collection
     And I should see "Anonymous"
   When I follow "Log out"
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
-  
+
   # TODO: Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
   When I am logged in as "mod1" with password "something"
     And I go to the collections page
@@ -576,7 +590,7 @@ Feature: Collection
     # TODO: Figure out why this doesn't work
     # And I press "Assign"
   # Then show me the page
-  
+
   # pinch hitter writes story
   When I follow "Log out"
     And I am logged in as "pinchhitter" with password "something"
@@ -638,7 +652,7 @@ Feature: Collection
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
-    
+
   # someone views their gift and it is anonymous
   # Needs everyone to have fulfilled their assignments to be sure of finding a gift
   When I follow "Log out"
@@ -702,4 +716,4 @@ Feature: Collection
     And I am logged in as "myname6" with password "something"
     And I follow "Post New"
   Then I should not see "Does this fulfill a challenge assignment"
-    
+

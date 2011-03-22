@@ -171,17 +171,44 @@ class ChallengeAssignment < ActiveRecord::Base
     end
   end
 
+  @queue = :collection
+  # This will be called by a worker when a job needs to be processed
+  def self.perform(method, *args)
+    self.send(method, *args)
+  end
+
   # send assignments out to all participants
   def self.send_out!(collection)
+    Resque.enqueue(ChallengeAssignment, :delayed_send_out, collection.id)
+  end
+
+  def self.delayed_send_out(collection_id)
+    collection = Collection.find(collection_id)
+
+    # update the collection challenge with the time the assignments are sent
+    challenge = collection.challenge
+    challenge.assignments_sent_at = Time.now
+    challenge.save
+
+    # send out each assignment
     collection.assignments.each do |assignment|
       assignment.send_out!
     end
     collection.notify_maintainers("Assignments Sent", "All assignments have now been sent out.")
+
+    # purge the potential matches! we don't want bazillions of them in our db
+    PotentialMatch.clear!(collection)
   end
 
   # generate automatic match for a collection
   # this requires potential matches to already be generated
   def self.generate!(collection)
+    Resque.enqueue(ChallengeAssignment, :delayed_generate, collection.id)
+  end
+
+  def self.delayed_generate(collection_id)
+    collection = Collection.find(collection_id)
+
     ChallengeAssignment.clear!(collection)
 
     # we sort signups into buckets based on how many potential matches they have
@@ -223,6 +250,7 @@ class ChallengeAssignment < ActiveRecord::Base
         end
       end
     end
+    UserMailer.potential_match_generation_notification(collection.id).deliver
   end
 
   # go through the request's potential matches in order from best to worst and try and assign
