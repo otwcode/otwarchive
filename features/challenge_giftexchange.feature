@@ -22,9 +22,9 @@ Feature: Gift Exchange Challenge
     And I am logged in as "mod1" with password "something"
   Then I should see "Hi, mod1!"
     And I should see "Log out"
-    
+
   # set up the gift exchange
-  
+
   When I go to mod1's preferences page
   #'
   Then I should see "Your time zone"
@@ -93,9 +93,9 @@ Feature: Gift Exchange Challenge
   ### TODO fix timezone dependency before next spring!
   #  And I should not see "EST" within "#main"
   #  And I should see "AKST" within "#main"
-    
+
   # sign up
-  
+
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
   When I go to the collections page
@@ -117,9 +117,9 @@ Feature: Gift Exchange Challenge
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"
     And I press "Submit"
   Then I should see "Signup was successfully created"
-  
+
   # someone else sign up
-  
+
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
   When I go to the collections page
@@ -131,9 +131,9 @@ Feature: Gift Exchange Challenge
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"
     And I press "Submit"
   Then I should see "Signup was successfully created"
-  
+
   # third person sign up
-  
+
   When I follow "Log out"
     And I am logged in as "myname3" with password "something"
   When I go to the collections page
@@ -145,16 +145,16 @@ Feature: Gift Exchange Challenge
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"
     And I press "Submit"
   Then I should see "Signup was successfully created"
-  
+
   # check you can see signups in the dashboard
-  
+
   When I follow "myname3"
   Then I should see "My Signups (1)"
   When I follow "My Signups (1)"
   Then I should see "My Gift Exchanger"
-  
+
   # fourth person sign up
-  
+
   When I follow "Log out"
     And I am logged in as "myname4" with password "something"
   When I go to the collections page
@@ -169,9 +169,9 @@ Feature: Gift Exchange Challenge
   When I go to the collections page
     And I follow "My Gift Exchanger"
   Then I should not see "Signups"
-  
+
   # mod view signups
-  
+
   When I follow "Log out"
     And I am logged in as "mod1" with password "something"
     And I go to the collections page

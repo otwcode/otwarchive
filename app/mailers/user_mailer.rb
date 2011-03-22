@@ -105,7 +105,7 @@ class UserMailer < ActionMailer::Base
     @collection = Collection.find(collection_id)
     mail(
       :to => @collection.get_maintainers_email,
-      :subject => "[#{ArchiveConfig.APP_NAME}][#{@collection.title}] Potential Match Generation Complete"
+      :subject => "[#{ArchiveConfig.APP_NAME}][#{@collection.title}] Potential Assignment Generation Complete"
     )
   end
 
