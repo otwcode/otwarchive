@@ -1,4 +1,4 @@
-@collections @challenges
+@collections @challenges @wip
 Feature: Prompt Meme Challenge
   In order to have an archive full of works
   As a humble user
