@@ -41,3 +41,7 @@ When /^I set up a basic promptmeme "([^\"]*)"$/ do |title|
   click_button("Submit")
   Then "I should see \"Challenge was successfully created\""
 end
+
+When /^I sort by fandom$/ do
+  When "I follow \"Sort by fandom\""
+end

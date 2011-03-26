@@ -28,8 +28,6 @@ gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
-# https://github.com/defunkt/resque/issues/221
-gem 'sinatra', '~> 1.1.3'
 gem 'thinking-sphinx',
   :git     => 'git://github.com/freelancing-god/thinking-sphinx.git',
   :branch  => 'rails3',

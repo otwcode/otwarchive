@@ -149,6 +149,14 @@ class CollectionItem < ActiveRecord::Base
     approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end
+  
+  # Reveal an individual collection item
+  # Can't use update_attribute because of potential validation issues
+  # with closed collections
+  def reveal!
+    collection.collection_items.update_all("unrevealed = 0", "id = #{self.id}")
+    notify_of_reveal
+  end
 
   def notify_of_reveal
     unless self.unrevealed?
@@ -171,6 +179,21 @@ class CollectionItem < ActiveRecord::Base
           relationship.notify_parent_owners
         end
       end
+    end
+  end
+
+  # When the authors of anonymous works are revealed, notify users
+  # subscribed to those authors
+  def notify_of_author_reveal
+    unless self.anonymous?
+      if item_type == "Work"
+        subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)",
+                                  item.pseuds.map{|p| p.user_id}]).
+                            group(:user_id)
+        subs.each do |subscription|
+          UserMailer.subscription_notification(subscription.user_id, subscription.id, item.id, item.class.name).deliver
+        end
+      end      
     end
   end
 

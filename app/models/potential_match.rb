@@ -77,7 +77,6 @@ public
       PotentialMatch.clear!(collection)
     else
       ChallengeAssignment.generate!(collection)
-      UserMailer.potential_match_generation_notification(collection.id).deliver
     end
   end
 

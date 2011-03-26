@@ -334,19 +334,35 @@ class Collection < ActiveRecord::Base
     # send maintainers a notice via email
     UserMailer.collection_notification(self.id, subject, message).deliver
   end
+  
+  @queue = :collection
+  # This will be called by a worker when a job needs to be processed
+  def self.perform(id, method, *args)
+    find(id).send(method, *args)
+  end
 
+  # We can pass this any Collection instance method that we want to
+  # run later.
+  def async(method, *args)
+    Resque.enqueue(Collection, id, method, *args)
+  end
+  
   def reveal!
     approved_collection_items.update_all("unrevealed = 0")
-    Resque.enqueue(Collection, self.id)
-  end
-  @queue = :collection
-  def self.perform(collection_id)
-    collection = self.find(collection_id)
-    collection.approved_collection_items.each {|collection_item| collection_item.notify_of_reveal}
+    async(:send_reveal_notifications)
   end
 
   def reveal_authors!
     approved_collection_items.update_all("anonymous = 0")
+    async(:send_author_reveal_notifications)
+  end
+  
+  def send_reveal_notifications
+    approved_collection_items.each {|collection_item| collection_item.notify_of_reveal}
+  end
+  
+  def send_author_reveal_notifications
+    approved_collection_items.each {|collection_item| collection_item.notify_of_author_reveal}
   end
 
   def self.sorted_and_filtered(sort, filters, page)

@@ -1,11 +1,11 @@
 first:
-  user: testuser
+  user_id: 1
   disable_share_links: false
 
 second:
-  user: testuser2
+  user_id: 2
   disable_share_links: false
   
 third:
-  user: sad_user_with_no_pseuds
+  user_id: 3
   disable_share_links: false
