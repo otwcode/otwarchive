@@ -138,14 +138,13 @@ class UserMailer < ActionMailer::Base
     )
   end
 
-  # Confirms to a user that their password was reset
-  # NOTE: the password is not saved in the database, it's a virtual method in authlogic, so it must be passed
-  def reset_password(user_id, password)
+  # Sends a temporary password to the user
+  def reset_password(user_id)
     @user = User.find(user_id)
-    @password = password
+    @password = @user.activation_code
     mail(
       :to => @user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Password reset"
+      :subject => "[#{ArchiveConfig.APP_NAME}] Generated password"
     )
   end
 

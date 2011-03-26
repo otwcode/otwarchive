@@ -40,6 +40,13 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   assert UserSession.find
 end
 
+When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
+  # " '
+  user = User.find_by_login(login)
+  fill_in "Password", :with => user.activation_code
+end
+
+
 Given /^I am logged in as a random user$/ do
   name = "testuser#{User.count + 1}"
   user = Factory.create(:user, :login => name, :password => "password")
@@ -73,7 +80,7 @@ When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
   click_button "Create"
 end
 
-  
+
 Given /^"([^\"]*)" deletes their account/ do |username|
   visit user_path(username)
   Given %{I follow "Profile"}
