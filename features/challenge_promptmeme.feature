@@ -182,8 +182,7 @@ Feature: Prompt Meme Challenge
     And I follow "Sort by date"
   Then I should see "Something else weird"
   When I follow "Sort by fandom"
-  # TODO: Sorting issue
-  # Then I should see "Something else weird"
+  Then I should see "Something else weird"
   
   # user claims a prompt
   
