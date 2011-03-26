@@ -56,6 +56,9 @@ Feature: Prompt Meme Challenge
     And "TODO: checking an option is selected" is fixed
     # And I should find "(GMT-09:00) Alaska" selected within "prompt_meme_time_zone"
     And I should see "(GMT-09:00) Alaska" within "#main"
+    And I should not see "Offer Settings"
+    And I should see "Request Settings"
+    And I should not see "If you plan to use automated matching"
   When I fill in "General Signup Instructions" with "Here are some general tips"
     And I fill in "Signup Instructions" with "Please request easy things"
     And I select "2011" from "prompt_meme_signups_open_at_1i"
@@ -440,3 +443,35 @@ Feature: Prompt Meme Challenge
     And I follow "Claims"
   Then I should see "mod1" within "#fulfilled_claims"
     And I should see "myname4" within "#fulfilled_claims"
+    
+  # make another claim and then delete it
+  
+  When I follow "Log out"
+    And I am logged in as "myname2" with password "something"
+    And I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should not see "Delete"
+  When I follow "Prompts ("
+  Then I should see "Claim"
+  When I press "Claim"
+  Then I should see "Delete"
+  When I follow "Delete"
+  Then I should see "Your claim was deleted."
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should not see "Delete"
+  
+  # make another claim and then delete it from the user claims list
+  
+  When I follow "Prompts ("
+  Then I should see "Claim"
+  When I press "Claim"
+  Then I should see "Delete"
+  When I go to myname2's user page
+    And I follow "My Claims"
+  Then I should see "Delete"
+  When I follow "Delete"
+  Then I should see "Your claim was deleted."
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should not see "Delete"

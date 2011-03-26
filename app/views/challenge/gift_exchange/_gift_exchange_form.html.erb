@@ -72,10 +72,10 @@
   </fieldset>
 
   <!-- restrictions for requests -->
-  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => false, :show_tag_options => false} %>
+  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => false, :show_tag_options => false, :type => "gift_exchange"} %>
   
   <!-- restrictions for offers -->
-  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => true, :show_tag_options => true} %>
+  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => true, :show_tag_options => true, :type => "gift_exchange"} %>
 
   <!-- matching settings -->
   <%= render :partial => "potential_match_settings/potential_match_settings_form", :locals => {:challenge_form => f} %>
