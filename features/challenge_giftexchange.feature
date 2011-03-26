@@ -54,6 +54,7 @@ Feature: Gift Exchange Challenge
     And I should see "Offer Settings"
     And I should see "Request Settings"
     And I should see "If you plan to use automated matching"
+    And I should see "Allow Any"
   When I fill in "General Signup Instructions" with "Here are some general tips"
     And I fill in "Request Instructions" with "Please request easy things"
     And I fill in "Offer Instructions" with "Please offer lots of stuff"
