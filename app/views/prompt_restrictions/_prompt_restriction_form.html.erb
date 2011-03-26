@@ -25,10 +25,10 @@
     	  These settings determine what each separate request can contain, and in particular how many different tags of each kind.
     	  <% unless type == "prompt_meme" %>If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.<% end %>
     	</p>
-    	<p class="note">
+    	<% unless type == "prompt_meme" %><p class="note">
     	  If you check "Allow Any?" then users will be able to select "Any" for that field, which means they will match no matter 
     	  what the person offering has put into that field. Note: this option is generally safer for offers than requests!
-    	</p>
+    	</p><% end %>
     	<p class="note">
     	  If you check "Must Be Unique?" then users will not be allowed to repeat the same value across prompts. That is, if 
     	  you allow three prompts and specify that fandom must be unique, the user will have to specify completely different fandoms
@@ -36,7 +36,11 @@
     	</p> 
     <% end %>
     <dl>
-      <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true)) %>
+      <% if type == "gift_exchange" %>
+        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), true) %>
+      <% else %>
+        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), false) %>
+      <% end %>
     </dl>
   </fieldset>
 
