@@ -1,4 +1,4 @@
-<!-- prompt restriction_form partial, expects a local variable called "challenge_form" and @challenge, as well as boolean "is_offer"  -->
+<!-- prompt restriction_form partial, expects a local variable called "challenge_form" and @challenge and "type", as well as boolean "is_offer" and "show_tag_options"  -->
 <% if is_offer %>
   <% @challenge.build_offer_restriction unless @challenge.offer_restriction %>
   <% restriction = @challenge.offer_restriction %>
@@ -23,7 +23,7 @@
     	<h3>Request Settings</h3>
     	<p class="note">
     	  These settings determine what each separate request can contain, and in particular how many different tags of each kind.
-    	  If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.
+    	  <% unless type == "prompt_meme" %>If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.<% end %>
     	</p>
     	<p class="note">
     	  If you check "Allow Any?" then users will be able to select "Any" for that field, which means they will match no matter 

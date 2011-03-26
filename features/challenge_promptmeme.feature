@@ -56,6 +56,9 @@ Feature: Prompt Meme Challenge
     And "TODO: checking an option is selected" is fixed
     # And I should find "(GMT-09:00) Alaska" selected within "prompt_meme_time_zone"
     And I should see "(GMT-09:00) Alaska" within "#main"
+    And I should not see "Offer Settings"
+    And I should see "Request Settings"
+    And I should not see "If you plan to use automated matching"
   When I fill in "General Signup Instructions" with "Here are some general tips"
     And I fill in "Signup Instructions" with "Please request easy things"
     And I select "2011" from "prompt_meme_signups_open_at_1i"
