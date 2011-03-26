@@ -64,10 +64,10 @@
   	<h3>Requests and Offers</h3>
     <dl>
       <dt><%= f.label :requests_num_required, ts("Number of requests per signup") %>:</dt>
-      <%= required_and_allowed(f, "requests") %>
+      <%= required_and_allowed(f, "requests", false) %>
 
       <dt><%= f.label :offers_num_required, ts("Number of offers per signup") %>:</dt>
-      <%= required_and_allowed(f, "offers") %>
+      <%= required_and_allowed(f, "offers", false) %>
     </dl>
   </fieldset>
 

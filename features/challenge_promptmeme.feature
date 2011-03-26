@@ -59,6 +59,7 @@ Feature: Prompt Meme Challenge
     And I should not see "Offer Settings"
     And I should see "Request Settings"
     And I should not see "If you plan to use automated matching"
+    And I should not see "Allow Any"
   When I fill in "General Signup Instructions" with "Here are some general tips"
     And I fill in "Signup Instructions" with "Please request easy things"
     And I select "2011" from "prompt_meme_signups_open_at_1i"
@@ -174,6 +175,15 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
     And I follow "Battle 12"
   Then I should see "Prompts"
+  
+  # user views prompts and sorts them
+  
+  When I follow "Prompts ("
+    And I follow "Sort by date"
+  Then I should see "Something else weird"
+  When I follow "Sort by fandom"
+  # TODO: Sorting issue
+  # Then I should see "Something else weird"
   
   # user claims a prompt
   
