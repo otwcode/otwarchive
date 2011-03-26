@@ -91,8 +91,10 @@ class ChallengeSignupsController < ApplicationController
       format.html {
           if @challenge.user_allowed_to_see_signups?(current_user)
             @challenge_signups = @collection.signups.joins(:pseud).paginate(:page => params[:page], :per_page => 20, :order => "pseuds.name")
-          else
+          elsif !current_user.nil?
             @challenge_signups = @collection.signups.by_user(current_user)
+          else
+            not_allowed
           end
       }
       format.xls {
