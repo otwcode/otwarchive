@@ -440,3 +440,35 @@ Feature: Prompt Meme Challenge
     And I follow "Claims"
   Then I should see "mod1" within "#fulfilled_claims"
     And I should see "myname4" within "#fulfilled_claims"
+    
+  # make another claim and then delete it
+  
+  When I follow "Log out"
+    And I am logged in as "myname2" with password "something"
+    And I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should not see "Delete"
+  When I follow "Prompts ("
+  Then I should see "Claim"
+  When I press "Claim"
+  Then I should see "Delete"
+  When I follow "Delete"
+  Then I should see "Your claim was deleted."
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should not see "Delete"
+  
+  # make another claim and then delete it from the user claims list
+  
+  When I follow "Prompts ("
+  Then I should see "Claim"
+  When I press "Claim"
+  Then I should see "Delete"
+  When I go to myname2's user page
+    And I follow "My Claims"
+  Then I should see "Delete"
+  When I follow "Delete"
+  Then I should see "Your claim was deleted."
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should not see "Delete"
