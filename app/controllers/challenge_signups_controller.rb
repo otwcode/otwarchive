@@ -24,7 +24,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def check_signup_open
-    signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user))
+    signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user) || @collection.user_is_moderator?(current_user))
   end
 
   def signup_closed
