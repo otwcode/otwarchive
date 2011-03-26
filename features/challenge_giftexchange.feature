@@ -51,6 +51,9 @@ Feature: Gift Exchange Challenge
     And "ditto" is fixed
     # And I should find "(GMT-09:00) Alaska" selected within "gift_exchange_time_zone"
     And I should see "(GMT-09:00) Alaska" within "#main"
+    And I should see "Offer Settings"
+    And I should see "Request Settings"
+    And I should see "If you plan to use automated matching"
   When I fill in "General Signup Instructions" with "Here are some general tips"
     And I fill in "Request Instructions" with "Please request easy things"
     And I fill in "Offer Instructions" with "Please offer lots of stuff"

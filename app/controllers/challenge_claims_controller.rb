@@ -2,7 +2,7 @@ class ChallengeClaimsController < ApplicationController
 
   before_filter :users_only
   before_filter :load_collection, :except => [:index]
-  before_filter :collection_owners_only, :except => [:index, :show, :create]
+  before_filter :collection_owners_only, :except => [:index, :show, :create, :destroy]
   before_filter :load_claim_from_id, :only => [:show, :destroy]
 
   before_filter :load_challenge, :except => [:index]
@@ -121,7 +121,13 @@ class ChallengeClaimsController < ApplicationController
   end
   
   def destroy
-    flash[:notice] = "One day you will be able to cancel a claim."
+    @claim = ChallengeClaim.find(params[:id])
+    begin
+      @claim.destroy
+      flash[:notice] = ts("Your claim was deleted.")
+    rescue
+      flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
+    end
     redirect_to collection_claims_path(@collection)
   end
   
