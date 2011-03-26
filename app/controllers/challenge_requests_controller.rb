@@ -25,7 +25,7 @@ class ChallengeRequestsController < ApplicationController
       if @sort_column == "fandom"
         query = "SELECT prompts.*, GROUP_CONCAT(tags.name) FROM prompts INNER JOIN set_taggings ON prompts.tag_set_id = set_taggings.tag_set_id 
         INNER JOIN tags ON tags.id = set_taggings.tag_id 
-        WHERE prompts.type = 'Request' AND tags.type = 'fandom' AND prompts.collection_id = 602 GROUP BY prompts.id ORDER BY GROUP_CONCAT(tags.name) " + @sort_direction
+        WHERE prompts.type = 'Request' AND tags.type = 'fandom' AND prompts.collection_id = " + @collection.id.to_s + " GROUP BY prompts.id ORDER BY GROUP_CONCAT(tags.name) " + @sort_direction
         @requests = Prompt.find_by_sql query
       else
         @requests = @collection.prompts.where("type = 'Request'").order(@order)
