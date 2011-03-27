@@ -5,7 +5,7 @@ Feature: User Authentication
   Scenario: Forgot password
     Given I have no users
       And the following activated user exists
-      | login    | password | 
+      | login    | password |
       | sam      | secret   |
       And all emails have been delivered
     When I am on the home page
@@ -19,11 +19,56 @@ Feature: User Authentication
     When I fill in "login" with "sam"
       And I press "Reset password"
     Then 1 email should be delivered
-    
+
+    # old password should still work
+    When I am on the homepage
+    And I fill in "User name" with "sam"
+    And I fill in "Password" with "secret"
+    And I press "Log in"
+    Then I should see "Hi, sam!"
+
+    # password from email should also work
+    When I am logged out
+    And I fill in "User name" with "sam"
+    And I fill in "sam"'s temporary password
+    And I press "Log in"
+    Then I should see "Hi, sam!"
+    And I should see "Change My Password"
+
+    # and I should be able to change the password
+    When I fill in "New Password" with "newpass"
+    And I fill in "Confirm New Password" with "newpass"
+    And I press "Change Password"
+    Then I should see "Your password has been changed"
+
+    # old password should no longer work
+    When I am logged out
+    When I am on the homepage
+    And I fill in "User name" with "sam"
+    And I fill in "Password" with "secret"
+    And I press "Log in"
+    Then I should not see "Hi, sam!"
+
+    # generated password should no longer work
+    When I am logged out
+    When I am on the homepage
+    And I fill in "User name" with "sam"
+    And I fill in "sam"'s temporary password
+    And I press "Log in"
+    Then I should not see "Hi, sam!"
+
+    # new password should work
+    When I am logged out
+    When I am on the homepage
+    And I fill in "User name" with "sam"
+    And I fill in "Password" with "newpass"
+    And I press "Log in"
+    Then I should see "Hi, sam!"
+
   Scenario: Wrong username
     Given I have no users
       And the following activated user exists
-      | login    | password | 
+      | login    | password |
       | sam      | secret   |
       And all emails have been delivered
     When I am on the home page
@@ -31,11 +76,11 @@ Feature: User Authentication
       And I fill in "Password" with "test"
       And I press "Log in"
     Then I should see "We couldn't find that user name in our database. Please try again"
-    
+
   Scenario: Wrong username
     Given I have no users
       And the following activated user exists
-      | login    | password | 
+      | login    | password |
       | sam      | secret   |
       And all emails have been delivered
     When I am on the home page
@@ -55,7 +100,7 @@ Feature: User Authentication
   Scenario Outline: Show or hide preferences link
     Given I have no users
       And the following activated users exist
-      | login    | password | 
+      | login    | password |
       | sam      | secret   |
       | dean     | secret   |
     And I am logged in as "<login>" with password "secret"
