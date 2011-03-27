@@ -44,3 +44,8 @@ ghostsoup:
   name: Ghost Soup
   type: Fandom
   canonical: true
+filter:
+  id: 11
+  name: filter
+  type: Freeform
+  canonical: true
