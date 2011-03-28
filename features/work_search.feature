@@ -116,4 +116,7 @@ Feature: Search Works
       And I press "Search works"
     Then I should see "You searched for: Kudos: <2"
     Then I should see "4 Found"
-
+    When I am on the homepage
+      And I fill in "site_search" with "filter"
+      And I press "Search"
+    Then I should see "1 Found"
