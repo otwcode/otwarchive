@@ -124,7 +124,6 @@ class ChallengeAssignmentsController < ApplicationController
       return unless load_collection
       @challenge = @collection.challenge if @collection
       signup_open and return unless !@challenge.signup_open
-      assignments_not_sent and return unless @challenge.assignments_sent_at
 
       if params[:show_covered]
         @defaulted_assignments = @collection.assignments.defaulted.order_by_requesting_pseud
