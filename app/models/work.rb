@@ -1144,7 +1144,6 @@ class Work < ActiveRecord::Base
 
     # field associations
     indexes tags(:name), :as => 'tag'
-    indexes filters(:name), :as => 'filter'
     indexes language(:name), :as => 'language'
 
 #    forced to remove for performance reasons
