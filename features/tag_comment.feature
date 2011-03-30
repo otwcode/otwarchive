@@ -1,4 +1,4 @@
-@tags @tag_wrangling
+@tags @tag_wrangling @comments
 Feature: Comment on tag
 As a tag wrangler
 I'd like to comment on a tag'
