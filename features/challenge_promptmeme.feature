@@ -441,7 +441,17 @@ Feature: Prompt Meme Challenge
   When I follow "Prompts"
   Then I should not see "myname2" within "#main"
   
-  # TODO: check that anon prompts are still anon on the user claims index and claims show and fulfilling work
+  # check that anon prompts are still anon on the user claims index
+  When I go to myname4's user page
+    And I follow "My Claims"
+  Then I should not see "myname2"
+  
+  # check that anon prompts are still anon on the claims show
+  When I follow "Anonymous"
+  Then I should not see "myname2"
+    And I should see "Anonymous"
+  
+  # TODO: check that anon prompts are still anon on the fulfilling work
   
   # check that claims show as fulfilled
   
@@ -484,3 +494,16 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should not see "Delete"
+  
+  # make another claim and then fulfill from the post new form
+  When I follow "Prompts ("
+  Then I should see "Claim"
+  When I press "Claim"
+  Then I should see "New claim made"
+  #When I follow "Post new"
+  #Then show me the page
+  #When I fill in basic work info
+  #  And I select "blah" from "field"
+  #  And I press "Preview"
+  #Then show me the page
+  
