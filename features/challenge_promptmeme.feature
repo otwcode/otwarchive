@@ -101,7 +101,7 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
   Then I should see "Battle 12"
     
-  # sign up
+  # sign up, noting errors if you fail to fill in required fields
   
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
@@ -120,7 +120,10 @@ Feature: Prompt Meme Challenge
   When I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
-    And I check "challenge_signup_requests_attributes_1_fandom_27"
+    And I press "Submit"
+    And "Issue 2249" is fixed
+  Then I should see "Request must have exactly 1 fandom tags. You currently have none."
+  When I check "challenge_signup_requests_attributes_1_fandom_27"
     And I press "Submit"
   Then I should see "Signup was successfully created"
     And I should see "Prompts (2)"
@@ -500,10 +503,9 @@ Feature: Prompt Meme Challenge
   Then I should see "Claim"
   When I press "Claim"
   Then I should see "New claim made"
-  #When I follow "Post new"
-  #Then show me the page
-  #When I fill in basic work info
-  #  And I select "blah" from "field"
-  #  And I press "Preview"
-  #Then show me the page
-  
+  When I follow "Post New"
+  When I fill in the basic work information for "Existing work"
+    And I check "Battle 12 (Anonymous)"
+    And I press "Preview"
+  Then I should see "Draft was successfully created"
+    And I should see "In response to a prompt by: Anonymous"
