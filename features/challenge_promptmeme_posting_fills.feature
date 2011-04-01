@@ -1,4 +1,4 @@
-@collections @challenges
+@collections @challenges @wip
 Feature: Prompt Meme Challenge
   In order to participate without inhibitions
   As a humble user
