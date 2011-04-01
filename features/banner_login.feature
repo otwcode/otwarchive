@@ -32,7 +32,6 @@ Feature: First login help banner
     And I should see "Log out"
   When I am on newname2's user page
   Then I should see "It looks like you've just logged into the archive for the first time"
-  When I follow "Learn some tips and tricks."
   When I follow "Dismiss this message permanently"
   Then I should not see "It looks like you've just logged into the archive for the first time"
   When I am logged out

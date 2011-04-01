@@ -50,5 +50,19 @@
   <div class="clear"></div>
 </div>
 
+<% unless current_user && current_user.preference.banner_seen %>
+<% unless @admin_settings.banner_text.empty? || logged_in_as_admin? %>
+  <div class="flash notice" id="notice-banner">
+    <p>
+      <%= @admin_settings.banner_text %>
+      <%= link_to "Hide this banner", end_banner_user_path(current_user), :method => :post, :remote => true, :class => 'navigation' %>
+    </p>
+    <p class="submit">
+      <%= link_to image_tag('close-flash.png'), nil, :onclick => "$('notice-banner').hide()", :remote => true %>
+    </p>
+  </div>
+<% end %>
+<% end %>
+
 <!-- END header -->
 
