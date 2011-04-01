@@ -122,6 +122,7 @@ Feature: Prompt Meme Challenge
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
     And I press "Submit"
     And "Issue 2249" is fixed
+    Then show me the page
   Then I should see "Request must have exactly 1 fandom tags. You currently have none."
   When I check "challenge_signup_requests_attributes_1_fandom_27"
     And I press "Submit"

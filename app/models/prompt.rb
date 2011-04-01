@@ -78,8 +78,9 @@ class Prompt < ActiveRecord::Base
             errors.add(:base, ts("^#{prompt_type} cannot include any #{tag_type} tags. You currently have %{taglist}.",
                                  :taglist => taglist_string))
           elsif required == allowed
-            errors.add(:base, ts("^#{prompt_type} must have exactly %{required} #{tag_type} tags. You currently have %{taglist}.",
-              :required => required, :taglist => taglist_string))
+            @number = self.id
+            errors.add(:base, ts("^#{prompt_type} %{number} must have exactly %{required} #{tag_type} tags. You currently have %{taglist}.",
+              :required => required, :taglist => taglist_string, :number => @number))
           else
             errors.add(:base, ts("^#{prompt_type} must have between %{required} and %{allowed} #{tag_type} tags. You currently have %{taglist}.",
               :required => required, :allowed => allowed, :taglist => taglist_string))
