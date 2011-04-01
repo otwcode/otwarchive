@@ -131,3 +131,9 @@ Feature: Search Works
     Then I should see "You searched for: Kudos: <2"
     Then I should see "5 Found"
 
+    # Then search for non-wips
+    When I follow "Advanced search"
+      And I check "Complete"
+      And I press "Search works"
+    Then I should see "You searched for: Kudos: <2 Complete"
+    Then I should see "3 Found"

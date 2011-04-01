@@ -21,6 +21,7 @@ class WorksController < ApplicationController
   def search
     @languages = Language.all(:order => :short)
     @query = {}
+    # to understand this, the code you are looking for is in lib/query.rb
     if params[:query]
       @query = Query.standardize(params[:query])
       begin
