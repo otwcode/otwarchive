@@ -401,6 +401,9 @@ class StoryParser
         story = eval("download_from_#{source.downcase}(location)")
       end
 
+      # clean up any erroneously included string terminator (Issue 785)
+      story = story.gsub("\000", "")
+      
       #story = fix_bad_characters(story)
       # ^ This eats ALL special characters. I don't think we need it at all
       # so I'm taking it out. If we want it back, it should be the last
