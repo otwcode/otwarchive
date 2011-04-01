@@ -389,6 +389,9 @@ Feature: Prompt Meme Challenge
     And I uncheck "Is this collection currently unrevealed?"
     And I press "Submit"
   Then I should see "Collection was successfully updated"
+  # 2 stories are now revealed, so notify the prompters/recipients
+    And 2 emails should be delivered
+  
 
   # check ficlet is visible but anon
 
@@ -412,6 +415,8 @@ Feature: Prompt Meme Challenge
     And I uncheck "Is this collection currently anonymous?"
     And I press "Submit"
   Then I should see "Collection was successfully updated"
+  # TODO: Figure out if this is actually right, or if it's covered by the earlier 2 emails. Also, they shouldn't be anon any more
+  Then 2 emails should be delivered
 
   # user can now see claims
 
@@ -510,6 +515,8 @@ Feature: Prompt Meme Challenge
     And I press "Preview"
   Then I should see "Draft was successfully created"
     And I should see "In response to a prompt by: Anonymous"
+    # TODO: Figure out why there are still two emails
+    And 2 emails should be delivered
     # TODO: Figure this out
   #  And I should see "Collections:"
    # And I should see "Battle 12"
@@ -527,10 +534,24 @@ Feature: Prompt Meme Challenge
     And I should find "draft"
   When I go to myname2's user page
     And I follow "My Drafts"
+    And all emails have been delivered
   Then I should see "Existing work"
     And "Issue 2259" is fixed
-  # TODO  When I follow "Post Draft"
-  #Then show me the page
+    
+  # post the draft and it is then fulfilled
+  When I follow "Post Draft"
+  Then 1 email should be delivered
+  Then I should see "Your work was successfully posted"
+    And I should see "In response to a prompt by: Anonymous"
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should see "myname2" within "#fulfilled_claims"
+    And I should see "Response posted on"
+    # TODO: Figure this out
+  #  And I should not see "Not yet approved"
+  When I follow "Response posted on"
+  Then I should see "Existing work"
+    And I should not find "draft"
     
   # fulfill a claim from an existing work
   When I am logged out

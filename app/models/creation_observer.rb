@@ -70,7 +70,7 @@ class CreationObserver < ActiveRecord::Observer
   # notify prompters of response to their prompt
   def notify_prompters(work)
     if !work.challenge_claims.empty? && !work.unrevealed?
-      UserMailer.prompter_notification(pseud.user.id, work.id).deliver
+      UserMailer.prompter_notification(work.id).deliver
     end
   end
 
