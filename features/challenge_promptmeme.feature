@@ -397,6 +397,7 @@ Feature: Prompt Meme Challenge
   When I view the work "Fulfilled Story-thing"
   Then I should see "In response to a prompt by: myname4"
     And I should see "Fandom: Stargate Atlantis"
+    And I should see "Collections: Battle 12"
     And I should see "Anonymous" within ".byline"
     And I should see "For myname4"
     And I should not see "mod1" within ".byline"
@@ -509,3 +510,56 @@ Feature: Prompt Meme Challenge
     And I press "Preview"
   Then I should see "Draft was successfully created"
     And I should see "In response to a prompt by: Anonymous"
+    # TODO: Figure this out
+  #  And I should see "Collections:"
+   # And I should see "Battle 12"
+  When I view the work "Existing work"
+  Then I should find "draft"
+    
+  # work left in draft so claim is not yet totally fulfilled
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should see "myname2" within "#fulfilled_claims"
+    And I should see "Response posted on"
+    And I should see "Not yet approved"
+  When I follow "Response posted on"
+  Then I should see "Existing work"
+    And I should find "draft"
+  When I go to myname2's user page
+    And I follow "My Drafts"
+  Then I should see "Existing work"
+    And "Issue 2259" is fixed
+  # TODO  When I follow "Post Draft"
+  #Then show me the page
+    
+  # fulfill a claim from an existing work
+  When I am logged out
+    And I am logged in as "myname1" with password "something"
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts ("
+  Then I should see "Claim"
+  When I press "Claim"
+  Then I should see "New claim made"
+  When I post the work "Here's one I made earlier"
+    And I edit the work "Here's one I made earlier"
+    And I check "Battle 12 (Anonymous)"
+    And I press "Preview"
+  Then I should find "draft"
+    And I should see "In response to a prompt by: Anonymous"
+    # TODO: Figure this out
+  #  And I should see "Collections:"
+   # And I should see "Battle 12"
+  When I press "Update"
+  Then I should see "Work was successfully updated"
+    And I should not find "draft"
+    And I should see "In response to a prompt by: Anonymous"
+  #TODO: Figure this one out, too
+  #Then I should see "Collections:"
+  #  And I should see "Battle 12"
+    
+  # work not left in draft so claim is fulfilled
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should see "myname1" within "#fulfilled_claims"
+    And I should see "Response posted on"
+    And I should see "Not yet approved"
