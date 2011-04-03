@@ -24,3 +24,13 @@ Factory.define :fandom do |f|
   f.canonical true
 end
 
+Factory.define :character do |f|
+  f.sequence(:name) { |n| "Test Character #{n}" }
+  f.canonical true
+end
+
+Factory.define :relationship do |f|
+  f.sequence(:name) { |n| "Test Character#{n}/Another Test#{n}" }
+  f.canonical true
+end
+

@@ -85,4 +85,25 @@ end
 Given /^tag "([^"]*)" has synonym "([^"]*)"$/ do |tag, synonym_tag|
   Tag.find_by_name(tag).mergers << Tag.find_by_name(synonym_tag)
 end
-
+Given /^The following tags exist$/ do |tag_table|
+  tag_table.hashes.each do |hash|
+    Factory.create(hash['type'].to_sym, :name => hash['tag'])
+  end
+end
+### When
+When /^I search tags for "([^"]*)"$/ do |search_term|
+  visit '/tags/search'
+  fill_in 'tag_search', :with => search_term
+  click_button "Search tags"
+end
+### Then
+Then /^I can see (\d+) "([^"]*)" tags$/ do |count, searched|
+  count.to_i.times { page.should have_content(searched) }
+end
+Then /^I can see the following tags$/ do |tag_table|
+  tag_table.hashes.each do |hash|
+    within 'ol.tag' do
+      page.should have_content(hash['tag'])
+    end
+  end
+end

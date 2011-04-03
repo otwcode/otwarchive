@@ -1,9 +1,23 @@
 @no-txn @tags @tag_wrangling @search
 Feature: Search Tags
-  In order to figure out how to use cucumber with thinking sphinx
-  As a humble coder
-  I want to figure out how to test tag search
+  In order to find works in the archive
+  As a user
+  I want to search using tags
 
+  Scenario: Search should search multiple types of tags
+    Given The following tags exist
+      | type         | tag                                  |
+      | fandom       | searchable fandom                    |
+      | character    | searchable character                 |
+      | relationship | searchable character/other character |
+      And the tag indexes are updated
+    When I search tags for "searchable"
+    Then I can see the following tags
+      | type         | tag                                  |
+      | fandom       | searchable fandom                    |
+      | character    | searchable character                 |
+      | relationship | searchable character/other character |
+    
   Scenario: Search tags
     Given I have no tags
       And a fandom exists with name: "first fandom"

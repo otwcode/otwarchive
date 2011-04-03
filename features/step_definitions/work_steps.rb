@@ -180,6 +180,7 @@ DEFAULT_WORK =
     :content => "Some content." }
 
 def work(attributes = {})
+  basic_tags
   #This should be factoried at some point....
   attributes = DEFAULT_WORK.merge(attributes)
   visit new_work_url
@@ -220,6 +221,7 @@ When /^I try to create a new work$/ do
   visit new_work_url
 end
 When /^I create a work with the following chararistics$/ do |table|
+  basic_tags
   characteristics = table.rows_hash
   visit new_work_url
   select(characteristics['Rating'], :from => "Rating")
