@@ -118,4 +118,11 @@ Then /^I can see the fandom tag "([^"]*)"$/ do |tag_name|
     page.should have_content(tag_name)
   end
 end
+Then /^I cannot see the following tags$/ do |tag_table|
+  tag_table.hashes.each do |hash|
+    within 'ol.tag' do
+      page.should_not have_content(hash['tag'])
+    end
+  end
+end
 
