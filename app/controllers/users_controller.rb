@@ -282,15 +282,16 @@ class UsersController < ApplicationController
   def update
     # have to reauthenticate to change email
     if params[:new_email] != @user.email
-			UserMailer.change_email(@user, @old_email, @new_email).deliver
-			@old_email = @user.email 
-      @user.email = params[:new_email]
-			@new_email=params[:new_email]			
+	
       if !reauthenticate
         render :edit and return
       else
         if @user.save
           flash[:notice] = ts("Your profile has been successfully updated")
+					UserMailer.change_email(@user, @old_email, @new_email).deliver
+			    @old_email = @user.email 
+					@user.email = params[:new_email]
+					@new_email=params[:new_email]		
 					@user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
         else
           render :edit and return

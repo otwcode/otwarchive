@@ -1,5 +1,5 @@
 <%= @user.login %>, <%= ts('The email associated with your account has been changed to') %>
 
-<%= @user.params[:new_email]%>
+<%= @user.email%>
 
 <p><%= ts("If you did not request this change, please contact") %> <%= ArchiveConfig.SUPPORT_ADDRESS %></p>

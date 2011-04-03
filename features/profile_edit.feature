@@ -88,7 +88,7 @@ Feature: Edit profile
     And I press "Update"
     And I follow "editname2"
     And I follow "Profile"
-  Then I should see "My email address: valid2@archiveofourown.org
+  Then I should see "My email address: valid2@archiveofourown.org"
   When I follow "Log out"
     And I am logged in as "duplicate" with password "password"
     And I follow "duplicate"
@@ -155,7 +155,7 @@ Feature: Edit profile
     And I fill in "Old password" with "password"
     And I press "Change Password"
   Then I should see "Your password has been changed"
-		And 1 email should be delivered to foo5@archiveofourown.org
+		And 1 email should be delivered
   When I follow "Log out"
     And I fill in "User name" with "editname2"
     And I fill in "Password" with "password"
