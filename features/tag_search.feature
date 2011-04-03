@@ -24,6 +24,20 @@ Feature: Search Tags
     When I search for fandom tag "searchable fandom"
     Then I can see the fandom tag "searchable fandom"
 
+  Scenario: Search for fandom tag should not show other types of tags
+    Given The following tags exist
+      | type         | tag                                  |
+      | fandom       | searchable fandom                    |
+      | character    | searchable character                 |
+      | relationship | searchable character/other character |
+      And the tag indexes are updated
+    When I search for fandom tag "searchable fandom"
+    Then I can see the fandom tag "searchable fandom"
+      And I cannot see the following tags
+      | type         | tag                                  |
+      | character    | searchable character                 |
+      | relationship | searchable character/other character |
+
   Scenario: Search tags
     Given I have no tags
       And a fandom exists with name: "first fandom"
