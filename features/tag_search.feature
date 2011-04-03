@@ -18,6 +18,12 @@ Feature: Search Tags
       | character    | searchable character                 |
       | relationship | searchable character/other character |
     
+  Scenario: Search for fandom tag
+    Given The fandom tag "searchable fandom" exists
+      And the tag indexes are updated
+    When I search for fandom tag "searchable fandom"
+    Then I can see the fandom tag "searchable fandom"
+
   Scenario: Search tags
     Given I have no tags
       And a fandom exists with name: "first fandom"
