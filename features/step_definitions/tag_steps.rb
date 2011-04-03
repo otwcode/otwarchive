@@ -93,6 +93,9 @@ end
 Given /^The fandom tag "([^"]*)" exists$/ do |tag_name|
   Fandom.create(:name => tag_name)
 end
+Given /^The canonical character "([^"]*)" exists$/ do |character_tag|
+  Character.create(:name => character_tag, :canonical => true)
+end
 ### When
 When /^I search tags for "([^"]*)"$/ do |search_term|
   visit '/tags/search'
@@ -105,6 +108,13 @@ When /^I search for fandom tag "([^"]*)"$/ do |search_term|
   select 'Fandom', :from => 'query_type'
   click_button "Search tags"
 end
+When /^I search for canonical tag "([^"]*)"$/ do |search_term|
+  visit '/tags/search'
+  fill_in 'tag_search', :with => search_term
+  check 'canonical?'
+  click_button "Search tags"
+end
+ 
 ### Then
 Then /^I can see the following tags$/ do |tag_table|
   tag_table.hashes.each do |hash|
@@ -122,6 +132,13 @@ Then /^I cannot see the following tags$/ do |tag_table|
   tag_table.hashes.each do |hash|
     within 'ol.tag' do
       page.should_not have_content(hash['tag'])
+    end
+  end
+end
+Then /^I can see the canonical tag "([^"]*)"$/ do |tag_name|
+  within 'ol.tag' do
+    within '.canonical' do
+      page.should have_content(tag_name)
     end
   end
 end
