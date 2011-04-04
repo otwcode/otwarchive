@@ -1,7 +1,6 @@
 <fieldset class="preface profile">
   <legend>Archive Skin Wizard</legend>
   <h3>Archive Skin Wizard</h3>
-  <p id="plainTextNotes" style="display: block"><%= allowed_css_instructions %></p>
 
   <dl>
     <dt><%= f.label :title, ts('Title') %></dt>
@@ -41,10 +40,10 @@
     </dd>
   
     <dt>
-      <%= f.label :base_em, ts('Percent of base font size') %>
+      <%= f.label :base_em, ts('Percent of base font size (%)') %>
       <p><%=ts('default: 100') %></p>
     </dt>
-    <dd><%= f.text_field :base_em %> %</dd>
+    <dd><%= f.text_field :base_em %></dd>
     
     <dt>
       <%= f.label :paragraph_margin, ts('Vertical gap between paragraphs') %>
