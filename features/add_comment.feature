@@ -1,3 +1,4 @@
+@comments
 Feature: Comment on work 
   In order to give feedback
   As a reader
@@ -73,3 +74,32 @@ Scenario: When logged in I can comment on a work, comment threading, comment edi
     And I should see "This should be nested" within ".thread .thread .thread .odd"
     And I should not see "This should be nested" within ".thread .thread .thread .thread"
     And I should see "I loved this" within ".odd"
+
+  Scenario: Try to post an invalid comment '
+    Given the following activated users exist
+      | login        | password   |
+      | author       | password   |
+      | commenter    | password   |
+    When I am logged in as "author" with password "password"
+      And I post the work "Generic Work"
+      And I am logged out
+    When I am logged in as "commenter" with password "password"
+      And I view the work "Generic Work"
+      And I compose an invalid comment
+      And I press "Add Comment"
+    Then I should see "must be less than"
+      And I should see "Sed mollis sapien ac massa pulvinar facilisis"
+    When I fill in "Comment" with "This is a valid comment"
+      And I press "Add Comment"
+      And I follow "Reply" within ".thread .odd"
+      And I compose an invalid comment within ".thread .odd"
+      And I press "Add Comment" within ".thread .odd"
+    Then I should see "must be less than"
+      And I should see "Sed mollis sapien ac massa pulvinar facilisis"
+    When I fill in "Comment" with "This is a valid reply comment"
+      And I press "Add Comment"
+      And I follow "Edit"
+      And I compose an invalid comment
+      And I press "Update"
+    Then I should see "must be less than"
+      And I should see "Sed mollis sapien ac massa pulvinar facilisis"
