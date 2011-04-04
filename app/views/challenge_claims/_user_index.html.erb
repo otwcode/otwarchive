@@ -20,7 +20,7 @@
       <td><% if @request && !prompt.anonymous? %>
       <%= link_to(@request.pseud.byline, collection_claim_path(claim.collection, claim)) %>
       <% elsif prompt.anonymous? %>
-      Anonymous
+      <%= link_to(ts("Anonymous"), collection_claim_path(claim.collection, claim)) %>
       <% else %>
       None
       <% end %>

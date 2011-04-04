@@ -101,7 +101,7 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
   Then I should see "Battle 12"
     
-  # sign up
+  # sign up, noting errors if you fail to fill in required fields
   
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
@@ -120,7 +120,10 @@ Feature: Prompt Meme Challenge
   When I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
-    And I check "challenge_signup_requests_attributes_1_fandom_27"
+    And I press "Submit"
+    And "Issue 2249" is fixed
+  Then I should see "Request must have exactly 1 fandom tags. You currently have none."
+  When I check "challenge_signup_requests_attributes_1_fandom_27"
     And I press "Submit"
   Then I should see "Signup was successfully created"
     And I should see "Prompts (2)"
@@ -386,6 +389,9 @@ Feature: Prompt Meme Challenge
     And I uncheck "Is this collection currently unrevealed?"
     And I press "Submit"
   Then I should see "Collection was successfully updated"
+  # 2 stories are now revealed, so notify the prompters/recipients
+    And 2 emails should be delivered
+  
 
   # check ficlet is visible but anon
 
@@ -394,6 +400,7 @@ Feature: Prompt Meme Challenge
   When I view the work "Fulfilled Story-thing"
   Then I should see "In response to a prompt by: myname4"
     And I should see "Fandom: Stargate Atlantis"
+    And I should see "Collections: Battle 12"
     And I should see "Anonymous" within ".byline"
     And I should see "For myname4"
     And I should not see "mod1" within ".byline"
@@ -408,6 +415,8 @@ Feature: Prompt Meme Challenge
     And I uncheck "Is this collection currently anonymous?"
     And I press "Submit"
   Then I should see "Collection was successfully updated"
+  # TODO: Figure out if this is actually right, or if it's covered by the earlier 2 emails. Also, they shouldn't be anon any more
+  Then 2 emails should be delivered
 
   # user can now see claims
 
@@ -441,7 +450,17 @@ Feature: Prompt Meme Challenge
   When I follow "Prompts"
   Then I should not see "myname2" within "#main"
   
-  # TODO: check that anon prompts are still anon on the user claims index and claims show and fulfilling work
+  # check that anon prompts are still anon on the user claims index
+  When I go to myname4's user page
+    And I follow "My Claims"
+  Then I should not see "myname2"
+  
+  # check that anon prompts are still anon on the claims show
+  When I follow "Anonymous"
+  Then I should not see "myname2"
+    And I should see "Anonymous"
+  
+  # TODO: check that anon prompts are still anon on the fulfilling work
   
   # check that claims show as fulfilled
   
@@ -484,3 +503,84 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should not see "Delete"
+  
+  # make another claim and then fulfill from the post new form
+  When I follow "Prompts ("
+  Then I should see "Claim"
+  When I press "Claim"
+  Then I should see "New claim made"
+  When I follow "Post New"
+  When I fill in the basic work information for "Existing work"
+    And I check "Battle 12 (Anonymous)"
+    And I press "Preview"
+  Then I should see "Draft was successfully created"
+    And I should see "In response to a prompt by: Anonymous"
+    # TODO: Figure out why there are still two emails
+    And 2 emails should be delivered
+    # TODO: Figure this out
+  #  And I should see "Collections:"
+   # And I should see "Battle 12"
+  When I view the work "Existing work"
+  Then I should find "draft"
+    
+  # work left in draft so claim is not yet totally fulfilled
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should see "myname2" within "#fulfilled_claims"
+    And I should see "Response posted on"
+    And I should see "Not yet approved"
+  When I follow "Response posted on"
+  Then I should see "Existing work"
+    And I should find "draft"
+  When I go to myname2's user page
+    And I follow "My Drafts"
+    And all emails have been delivered
+  Then I should see "Existing work"
+    And "Issue 2259" is fixed
+    
+  # post the draft and it is then fulfilled
+  When I follow "Post Draft"
+  Then 1 email should be delivered
+  Then I should see "Your work was successfully posted"
+    And I should see "In response to a prompt by: Anonymous"
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should see "myname2" within "#fulfilled_claims"
+    And I should see "Response posted on"
+    # TODO: Figure this out
+  #  And I should not see "Not yet approved"
+  When I follow "Response posted on"
+  Then I should see "Existing work"
+    And I should not find "draft"
+    
+  # fulfill a claim from an existing work
+  When I am logged out
+    And I am logged in as "myname1" with password "something"
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts ("
+  Then I should see "Claim"
+  When I press "Claim"
+  Then I should see "New claim made"
+  When I post the work "Here's one I made earlier"
+    And I edit the work "Here's one I made earlier"
+    And I check "Battle 12 (Anonymous)"
+    And I press "Preview"
+  Then I should find "draft"
+    And I should see "In response to a prompt by: Anonymous"
+    # TODO: Figure this out
+  #  And I should see "Collections:"
+   # And I should see "Battle 12"
+  When I press "Update"
+  Then I should see "Work was successfully updated"
+    And I should not find "draft"
+    And I should see "In response to a prompt by: Anonymous"
+  #TODO: Figure this one out, too
+  #Then I should see "Collections:"
+  #  And I should see "Battle 12"
+    
+  # work not left in draft so claim is fulfilled
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should see "myname1" within "#fulfilled_claims"
+    And I should see "Response posted on"
+    And I should see "Not yet approved"

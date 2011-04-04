@@ -184,14 +184,16 @@ class UserMailer < ActionMailer::Base
   end
 
   # Emails a prompter to say that a response has been posted to their prompt
-  def prompter_notification(user_id, work_id, collection_id=nil)
-    user = User.find(user_id)
+  def prompter_notification(work_id, collection_id=nil)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] A Response to your Prompt"
-    )
+    @work.challenge_claims.each do |claim|
+      user = User.find(claim.request_signup.pseud.user.id)
+      mail(
+        :to => user.email,
+        :subject => "[#{ArchiveConfig.APP_NAME}] A Response to your Prompt"
+      )
+    end
   end
 
   # Sends email to coauthors when a work is edited
