@@ -161,8 +161,8 @@ module TagsHelper
     if tag
       span = tag.canonical? ? "<span class='canonical'>" : "<span>"
       span += tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
+      span.html_safe
     end
-    span.html_safe
   end
 
   def tag_comment_link(tag)
