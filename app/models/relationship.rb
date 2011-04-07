@@ -2,7 +2,7 @@ class Relationship < Tag
 
   NAME = ArchiveConfig.RELATIONSHIP_CATEGORY_NAME
   
-  # Types of tags to which a character tag can belong via common taggings or meta taggings
+  # Types of tags to which a relationship tag can belong via common taggings or meta taggings
   def parent_types
     ['Fandom', 'Character', 'MetaTag']
   end

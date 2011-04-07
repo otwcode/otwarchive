@@ -532,9 +532,17 @@ class Tag < ActiveRecord::Base
   # Add a common tagging association
   # Offloading most of the logic to the inherited tag models
   def add_association(tag)
-    self.parents << tag unless self.parents.include?(tag)
+    self.parents << tag unless self.has_parent?(tag)
   end
 
+  def has_parent?(tag)
+    self.common_taggings.where(:filterable_id => tag.id).count > 0
+  end
+  
+  def has_child?(tag)
+    self.child_taggings.where(:common_tag_id => tag.id).count > 0
+  end
+  
   # Determine how two tags are related and divorce them from each other
   def remove_association(tag)
     if tag.class == self.class
