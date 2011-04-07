@@ -41,17 +41,7 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
   Then I should see "Collections in the "
     And I should not see "Battle 12"
-  When I follow "New Collection"
-    And I fill in "Display Title" with "Battle 12"
-    And I fill in "Collection Name" with "lotsofprompts"
-    And I fill in "Introduction" with "Welcome to the meme"
-    And I fill in "FAQ" with "<dl><dt>What is this thing?</dt><dd>It is a comment fic thing</dd></dl>"
-    And I fill in "Rules" with "Be nicer to people"
-    And I select "Prompt Meme" from "challenge_type"
-    And I check "Is this collection currently unrevealed?"
-    And I check "Is this collection currently anonymous?"
-    And I press "Submit"
-  Then I should see "Collection was successfully created"
+  When I set up Battle 12 promptmeme
     And I should see "Setting Up The Battle 12 Prompt Meme"
     And "TODO: checking an option is selected" is fixed
     # And I should find "(GMT-09:00) Alaska" selected within "prompt_meme_time_zone"
@@ -110,19 +100,12 @@ Feature: Prompt Meme Challenge
   When I follow "Battle 12"
   Then I should see "Sign Up"
   When I follow "Profile"
-  Then I should see "Welcome to the meme" within "#intro"
-    And I should see "Signup: CURRENTLY OPEN"
-    And I should see "Signup closes:"
-    And I should see "2011" within ".collection.meta"
-    And I should see "What is this thing?" within "#faq"
-    And I should see "It is a comment fic thing" within "#faq"
-    And I should see "Be nicer to people" within "#rules"
+  Then I should see Battle 12 descriptions
   When I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
     And I press "Submit"
     And "Issue 2249" is fixed
-    Then show me the page
   Then I should see "Request must have exactly 1 fandom tags. You currently have none."
   When I check "challenge_signup_requests_attributes_1_fandom_27"
     And I press "Submit"

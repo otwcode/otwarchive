@@ -26,15 +26,8 @@ Feature: Prompt Meme Challenge
   # set up the challenge
   
   When I go to the collections page
-  When I follow "New Collection"
-    And I fill in "Display Title" with "Spring Kink"
-    And I fill in "Collection Name" with "springkink"
-    And I select "Prompt Meme" from "challenge_type"
-    And I check "Is this collection currently unrevealed?"
-    And I check "Is this collection currently anonymous?"
-    And I press "Submit"
-  Then I should see "Collection was successfully created"
-    And I should see "Setting Up The Spring Kink Prompt Meme"
+  When I set up an anon promptmeme "Spring Kink"
+    And I follow "Challenge Settings"
   When I fill in "General Signup Instructions" with "Here are some general tips"
     And I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis, Stargate SG-1"
     And I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"
@@ -42,9 +35,8 @@ Feature: Prompt Meme Challenge
     And I check "prompt_meme_anonymous"
     And I fill in "prompt_meme_requests_num_allowed" with "1"
     And I fill in "prompt_meme_requests_num_required" with "1"
-    And I check "Signup open?"
     And I press "Submit"
-  Then I should see "Challenge was successfully created"
+  Then I should see "Challenge was successfully updated"
     
   # sign up as first prompter
   

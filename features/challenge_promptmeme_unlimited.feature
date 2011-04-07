@@ -25,12 +25,8 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
   Then I should see "Collections in the "
     And I should not see "Battle 12"
-  When I follow "New Collection"
-    And I fill in "Display Title" with "Battle 12"
-    And I fill in "Collection Name" with "lotsofprompts"
-    And I select "Prompt Meme" from "challenge_type"
-    And I press "Submit"
-  Then I should see "Collection was successfully created"
+  When I set up a basic promptmeme "Battle 12"
+    And I follow "Challenge Settings"
     And I should see "Setting Up The Battle 12 Prompt Meme"
   When I fill in "General Signup Instructions" with "Here are some general tips"
     And I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis, Stargate SG-1"
@@ -42,7 +38,7 @@ Feature: Prompt Meme Challenge
     And I fill in "prompt_meme_requests_num_required" with "2"
     And I check "Signup open?"
     And I press "Submit"
-  Then I should see "Challenge was successfully created"
+  Then I should see "Challenge was successfully updated"
   When I follow "Profile"
   Then I should see "Signup: CURRENTLY OPEN"
   When I go to the collections page

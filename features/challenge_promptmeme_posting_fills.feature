@@ -40,6 +40,7 @@ Feature: Prompt Meme Challenge
   Given all emails have been delivered
     And I press "Post without preview"
   Then I should see "Kinky Story"
-# TODO: email the anonymous prompter that they've received a fill!
-#    And 1 email should be sent to "my1@e.org"
+  # TODO: Figure out why this isn't working
+  # email the anonymous prompter that they've received a fill!
+   # And 1 email should be delivered to "my1@e.org"
 # TODO: when work_anonymous is implemented, test that the prompt filler can be anon too
