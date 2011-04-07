@@ -25,30 +25,29 @@
 
 <thead>
 	<tr>
-  <th scope="col"><%= link_to(t('.ci_index.item', :default => "Item"), controller.request.request_uri.split('?').first + "?sort=item") %></th>
+  <th scope="col"><%= link_to(ts("Item"), controller.request.fullpath.split('?').first + "?sort=item") %></th>
 <% if @user %>  
-  <th scope="col"><%= link_to(t('.ci_index.collection', :default => "Collection"), controller.request.request_uri.split('?').first + "?sort=collection") %></th>
+  <th scope="col"><%= link_to(ts("Collection"), controller.request.fullpath.split('?').first + "?sort=collection") %></th>
 <% else %>
-  <th scope="col"><%= link_to(t('.ci_index.creator', :default => "Creator"), controller.request.request_uri.split('?').first + "?sort=creator") %></th>
+  <th scope="col"><%= link_to(ts("Creator"), controller.request.fullpath.split('?').first + "?sort=creator") %></th>
 <% end %>
-  <th scope="col"><%= link_to(t('.ci_index.member', :default => "Member?"), controller.request.request_uri.split('?').first + "?sort=member") %></th>  
-  <th scope="col"><%= link_to(t('.ci_index.approved_by_user', :default => "Creator-Approved"), controller.request.request_uri.split('?').first + "?sort=user_approval") %></th>
-  <th scope="col"><%= link_to(t('.ci_index.approved_by_collection', :default => "Collection-Approved"), 
-                                                                      controller.request.request_uri.split('?').first + "?sort=collection_approval") %></th>
+  <th scope="col"><%= link_to(ts("Member?"), controller.request.fullpath.split('?').first + "?sort=member") %></th>  
+  <th scope="col"><%= link_to(ts("Creator-Approved"), controller.request.fullpath.split('?').first + "?sort=user_approval") %></th>
+  <th scope="col"><%= link_to(ts("Collection-Approved"), controller.request.fullpath.split('?').first + "?sort=collection_approval") %></th>
   <% if !@user && @collection.gift_exchange? %>
-    <th scope="col"><%= link_to(t('.ci_index.recipient', :default => "Recipient"), controller.request.request_uri.split('?').first + "?sort=recipient") %></th>
+    <th scope="col"><%= link_to(ts("Recipient"), controller.request.fullpath.split('?').first + "?sort=recipient") %></th>
   <% end %>
 
   <% if !@user && @collection.unrevealed? %>
-    <th scope="col"><%= link_to(t('.ci_index.unrevealed', :default => "Unrevealed"), controller.request.request_uri.split('?').first + "?sort=unrevealed") %></th>
+    <th scope="col"><%= link_to(ts("Unrevealed"), controller.request.fullpath.split('?').first + "?sort=unrevealed") %></th>
   <% end %>
     
   <% if !@user && @collection.anonymous? %>
-    <th scope="col"><%= link_to(t('.ci_index.anonymous', :default => "Anonymous"), controller.request.request_uri.split('?').first + "?sort=anonymous") %></th>
+    <th scope="col"><%= link_to(ts("Anonymous"), controller.request.fullpath.split('?').first + "?sort=anonymous") %></th>
   <% end %>
 
-  <th scope="col"><%= link_to(t('.ci_index.word_count', :default => "Word Count"), controller.request.request_uri.split('?').first + "?sort=word_count") %></th>  
-  <th scope="col"><%= link_to(t('.ci_index.date', :default => "Date Last Updated"), controller.request.request_uri.split('?').first + "?sort=date") %></th>  
+  <th scope="col"><%= link_to(ts("Word Count"), controller.request.fullpath.split('?').first + "?sort=word_count") %></th>  
+  <th scope="col"><%= link_to(ts("Date Last Updated"), controller.request.fullpath.split('?').first + "?sort=date") %></th>  
   
   <th scope="col" class="twobutton"><%=h t('.ci_index.manage', :default => "Manage") %></th>
 </tr>

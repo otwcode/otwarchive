@@ -1,7 +1,7 @@
 <% if collection_item %>
 <tr id="collection_item_<%= collection_item.id %>">
 <th scope="row">
-  <%= form_for(:collection_item, collection_item, :url => {:controller => "collection_items", :action => "update"}) do |form| %>
+  <%= form_for(collection_item, :as => :collection_item, :url => {:controller => "collection_items", :action => "update"}) do |form| %>
     <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
     <%= link_to(
       collection_item.item_type == "Bookmark" ? t('.collection_items.bookmark', :default => "Bookmark for %{title}", :title => collection_item.title) : 
@@ -17,7 +17,7 @@
     <td><%= collection_item.recipients %></td>
   <% end %>
   <% if @collection.unrevealed? %>
-    <td><%= form.check_box :unrevealed %></td>
+    <td><%= form.check_box :unrevealed, :id => "unreveal_" + collection_item.id.to_s %></td>
   <% end %>
   <% if @collection.anonymous? %>
     <td><%= form.check_box :anonymous %></td>
@@ -34,7 +34,7 @@
 <td><%= collection_item.item_date.to_date %></td>
 
 <td class="submit button">
-  <%= form.submit t('.forms.update', :default => "Update") %>
+  <%= form.submit ts("Update"), :id => "submit_" + collection_item.id.to_s %>
   <% end %> 
   <%= button_to t('.item_remove', :default => "Remove"), 
                 @user ? user_collection_item_path(@user, collection_item) : collection_item_path(collection_item.collection, collection_item), 
