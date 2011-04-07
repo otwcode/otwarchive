@@ -39,5 +39,25 @@ class AdminMailer < ActionMailer::Base
       :subject  => "#{ArchiveConfig.APP_NAME}" + " - " + "Admin Archive Notification Sent"
     )
   end
+  
+  # Sends email to an admin when a new comment is created on an admin post
+  def comment_notification(admin_id, comment_id)
+    admin = Admin.find(admin_id)
+    @comment = Comment.find(comment_id)
+    mail(
+      :to => admin.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
+    )
+  end
+
+  # Sends email to an admin when a comment on an admin post is edited
+  def edited_comment_notification(admin_id, comment_id)
+    admin = Admin.find(admin_id)
+    @comment = Comment.find(comment_id)
+    mail(
+      :to => admin.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Edited comment on " + (@comment.ultimate_parent.is_a?(Tag) ? "the tag " : "") + @comment.ultimate_parent.commentable_name
+    )
+  end
 
 end

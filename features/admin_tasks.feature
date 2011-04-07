@@ -251,3 +251,52 @@ Feature: Admin tasks
     And I follow "Read Comments"
     And "Issue 2213" is fixed
   # Then I should not see "rolex"
+
+  Scenario: make an admin post and receive comment notifications for comments posted to it
+  
+  # admin makes post
+  Given I am logged in as an admin
+    And I make an admin post
+    
+  # regular user replies to admin post
+  When I am logged out as an admin
+    And I am logged in as a random user
+    And I go to the admin-posts page
+  Given all emails have been delivered    
+  When I follow "Add Comment"
+    And I fill in "Comment" with "Excellent, my dear!"
+    And I press "Add Comment"
+  Then 1 email should be delivered to "testadmin@example.org"
+
+  # admin replies to comment of regular user
+  Given I am logged out
+    And I am logged in as an admin
+    And I go to the admin-posts page
+    And I follow "Default Admin Post"
+  Given all emails have been delivered    
+  When I follow "Read Comments (1)"
+    And I follow "Reply"
+    And I fill in "Comment" with "Thank you very much!" within ".odd"
+    And I press "Add Comment" within ".odd"
+  Then I should see "Comment created"
+  # admin gets notified of their own comment, this is not a bug unless:
+  # TODO: comments should be able to belong to an admin officially, otherwise someone can spoof being an admin by using the admin name and email
+    And 1 email should be delivered to "testadmin@example.org"
+  
+  # regular user replies to comment of admin
+  Given I am logged out as an admin
+    And I am logged in as a random user
+    And I go to the admin-posts page
+  Given all emails have been delivered    
+  When I follow "Read 2 Comments"
+    And I follow "Reply" within ".even"
+    And I fill in "Comment" with "Oh, don't grow too big a head, you." within ".even"
+    And I press "Add Comment" within ".even"
+  # admin gets the user's reply twice, this is not a bug unless TODO above is fixed
+  Then 2 emails should be delivered to "testadmin@example.org"
+  
+  # regular user edits their comment
+  Given all emails have been delivered    
+  When I follow "Edit"
+    And I press "Update"
+  Then 2 emails should be delivered to "testadmin@example.org"
