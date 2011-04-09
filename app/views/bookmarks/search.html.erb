@@ -1,7 +1,7 @@
 <h2>Bookmark Search: Beta</h2>
 
 <ul class="navigation" role="navigation"><li>
-  <%= link_to(t('.refine_search', :default => "Advanced search"), search_index_path(:query => @query)) %>
+  <%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %>
 </li></ul>
 
 <%= render :partial => 'bookmarks/search_form' %>
@@ -11,7 +11,9 @@
   <h3 class="landmark">Bookmarks List</h3>
   <ol class="bookmark index">
     <% for bookmark in @bookmarks %>
-      <%= render :partial => 'bookmark', :locals => {:bookmark => bookmark} %>
+      <% unless bookmark.nil? %>
+        <%= render :partial => 'bookmark', :locals => {:bookmark => bookmark} %>
+      <% end %>
     <% end %>
   </ol>
   <%= will_paginate @bookmarks %>
