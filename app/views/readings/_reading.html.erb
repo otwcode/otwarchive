@@ -1,6 +1,6 @@
 <div class="reading module">
 <% if reading.work.nil? %>
-  <h3><%= t('.deleted_work', :default => '(deleted work, last viewed %{date})', :date => reading.updated_at) %></h3>
+  <h3><%= t('.deleted_work', :default => '(deleted work, last viewed %{date})', :date => set_format_for_date(reading.updated_at)) %></h3>
 <% else %>
   <ul><%= render :partial => 'works/work_blurb', :locals => {:work => 
 reading.work} %></ul>
