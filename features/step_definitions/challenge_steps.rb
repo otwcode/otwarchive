@@ -4,6 +4,26 @@ Given /^I have no challenge assignments$/ do
   Collection.delete_all
 end
 
+Given /^I have standard challenge users$/ do
+# figure out how to set up users here later - need mod1 and myname1 to 4, all password something
+  When %{I am logged in as "mod1" with password "something"}
+    And "I am logged out"
+  When %{I am logged in as "myname1" with password "something"}
+    And "I am logged out"
+    
+end
+
+Given /^I have standard challenge tags setup$/ do
+  Given "I have no tags"
+    And "I have no prompts"
+    And "basic tags"
+    And %{I create the fandom "Stargate Atlantis" with id 27}
+    And %{I create the fandom "Stargate SG-1" with id 28}
+    And %{a freeform exists with name: "Alternate Universe - Historical", canonical: true}
+    And %{a freeform exists with name: "Alternate Universe - High School", canonical: true}
+    And %{a freeform exists with name: "Something else weird", canonical: true}
+end
+
 ### WHEN
 
 When /^I sign up for Battle 12$/ do
@@ -69,6 +89,29 @@ When /^I set up Battle 12 promptmeme$/ do
   Then "I should see \"Collection was successfully created\""
 end
 
+When /^I fill in some more Battle 12 options$/ do
+  When %{I fill in "General Signup Instructions" with "Here are some general tips"}
+    And %{I fill in "Signup Instructions" with "Please request easy things"}
+    And %{I select "2011" from "prompt_meme_signups_open_at_1i"}
+    And %{I select "2011" from "prompt_meme_signups_close_at_1i"}
+    And %{I select "(GMT-05:00) Eastern Time (US & Canada)" from "prompt_meme_time_zone"}
+    And %{I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate SG-1, Stargate Atlantis"}
+    And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"}
+    And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "1"}
+    And %{I fill in "prompt_meme_request_restriction_attributes_freeform_num_allowed" with "2"}
+    And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
+    And %{I fill in "prompt_meme_requests_num_required" with "2"}
+    And %{I check "Signup open?"}
+    And %{I press "Submit"}
+end
+
+When /^I change the challenge timezone to Alaska$/ do
+  When %{I follow "Challenge Settings"}
+    And %{I select "(GMT-09:00) Alaska" from "prompt_meme_time_zone"}
+    And %{I press "Submit"}
+    Then %{I should see "Challenge was successfully updated"}
+end
+
 ### THEN
 
 Then /^I should see Battle 12 descriptions$/ do
@@ -79,4 +122,37 @@ Then /^I should see Battle 12 descriptions$/ do
   Then "I should see \"What is this thing?\" within \"#faq\""
   Then "I should see \"It is a comment fic thing\" within \"#faq\""
   Then "I should see \"Be nicer to people\" within \"#rules\""
+end
+
+Then /^I should see prompt meme options$/ do
+  Then %{I should not see "Offer Settings"}
+    And %{I should see "Request Settings"}
+    And %{I should not see "If you plan to use automated matching"}
+    And %{I should not see "Allow Any"}
+end
+
+Then /^I should see gift exchange options$/ do
+  Then %{I should see "Offer Settings"}
+    And %{I should not see "Request Settings"}
+    And %{I should see "If you plan to use automated matching"}
+    And %{I should see "Allow Any"}
+end
+
+Then /^signup should be open$/ do
+  When %{I follow "Profile"}
+  Then %{I should see "Signup: CURRENTLY OPEN" within ".collection.meta"}
+    And %{I should see "Signup closes:"}
+end
+
+Then /^I should see both timezones$/ do
+  When %{I follow "Profile"}
+  And %{I should see "EST ("}
+  And %{I should see "AKST)"}
+end
+
+Then /^I should see just one timezone$/ do
+  When %{I follow "Profile"}
+  Then %{I should see "Signup: CURRENTLY OPEN"}
+  And %{I should not see "EST" within "#main"}
+  And %{I should see "AKST" within "#main"}
 end

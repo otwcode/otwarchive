@@ -1,5 +1,15 @@
 ### GIVEN
 
+Given /^mod1 lives in Alaska$/ do
+  When %{I am logged in as "mod1" with password "something"}
+  
+  When %{I go to mod1's preferences page}
+  #'
+  When %{I select "(GMT-09:00) Alaska" from "preference_time_zone"}
+    And %{I press "Update"}
+  Then %{I should see "Your preferences were successfully updated."}
+end
+
 ### WHEN
 
 When /^I create the collection "([^\"]*)"$/ do |title|
@@ -15,3 +25,9 @@ When /^I sort by fandom$/ do
 end
 
 ### THEN
+
+Then /^Battle 12 should not exist$/ do
+  When "I go to the collections page"
+  Then %{I should see "Collections in the "}
+    And %{I should not see "Battle 12"}
+end
