@@ -86,3 +86,7 @@ Given /^"([^\"]*)" deletes their account/ do |username|
   Given %{I follow "Profile"}
   Given %{I follow "Delete My Account"}
 end
+
+Given /^I am a visitor$/ do
+  Given %{I am logged out}
+end
