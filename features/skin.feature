@@ -1,6 +1,11 @@
 @skins
 Feature: creating and editing skins
 
+  Scenario: A logged-out user should not be able to create skins.
+  When I am on skin's new page
+    Then I should see "Sorry, you don't have permission"
+
+
   Scenario: A user should not be able to put evil code into skins.
   Given I am logged in as "skinner" with password "password"
   When I am on skin's new page
@@ -31,179 +36,222 @@ Feature: creating and editing skins
     And I should not see "xss:"
     And I should not see "alert"
 
-  Scenario: Only the user who creates a skin should be able to edit it
-    and only if it's not official
-    #'
 
+  Scenario: A user's initial skin should be set to default
   Given basic skins
-  When I am on the skins page
-  Then I should see "Default by AO3"
-    And I should see "Plain Text by AO3"
-  When I am on the work-skins page
-  Then I should see "Basic Formatting by AO3"
-  Given I am logged in as "skinner" with password "password"
+    And I am logged in as "skinner" with password "password"
+  When I follow "skinner"
+    And I follow "Preferences"
+  Then "Default" should be selected within "preference_skin_id"
+
+
+  Scenario: A user should be able to choose a different public skin in their preferences
+  Given basic skins
+    And I am logged in as "skinner" with password "password"
+  When I follow "skinner"
+    And I follow "Preferences"
+    And I select "Plain Text" from "preference_skin_id"
+    And I press "Update"
+  Then I should see "Your preferences were successfully updated."
+  When I am on skinner's preferences page
+  Then "Plain Text" should be selected within "preference_skin_id"
+    And I should see "font-family: serif !important;" within "style"
+
+  Scenario: A user should be able to create a skin with CSS
+  Given basic skins
+    And I am logged in as "skinner" with password "password"
   When I am on skin's new page
-  #'
-    And I fill in "Title" with "Default"
+    And I fill in "Title" with "my blinking skin"
     And I fill in "CSS" with "#title { text-decoration: blink;}"
-    And I press "Create"
-  Then I should see "must be unique"
-  When I fill in "Title" with "my blinking skin"
     And I press "Create"
   Then I should see "Skin was created successfully"
     And I should see "my blinking skin skin by skinner"
     And I should see "text-decoration: blink;"
-  When I follow "skinner"
-    And I follow "Preferences"
-  Then "Default" should be selected within "preference_skin_id"
-  When I select "Plain Text" from "preference_skin_id"
+    And I should see "(No Description Provided)"
+    And I should see "by skinner"
+    But I should find "Use"
+    And I should find "Delete"
+    And I should find "Edit"
+    And I should not find "Stop Using"
+    And I should not see "(Approved)"
+    And I should not see "(Not yet reviewed)"
+
+
+  Scenario: A user should be able to select one of their own non-public skins to use in their preferences
+  Given I am logged in as "skinner" with password "password"
+    And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
+  When I am on skinner's preferences page
     And I select "my blinking skin" from "preference_skin_id"
     And I press "Update"
   Then I should see "Your preferences were successfully updated."
-  When I am on skinner's preferences page
-  #'
-  Then "my blinking skin" should be selected within "preference_skin_id"
     And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
-  When I am on the skins page
-  Then I should not see "my blinking skin"
+
+
+  Scenario: A user should be able to select one of their own non-public skins to use in their My Skins page
+  Given I am logged in as "skinner" with password "password"
+    And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
   When I follow "My Skins"
   Then I should see "my blinking skin"
-    And I should see "(No Description Provided)"
-    And I should not see "(Approved)"
-    And I should not see "(Not yet reviewed)"
-    And I should see "by skinner"
-    And I should find "Stop Using"
-    But I should not find "Use"
-    And I should find "Delete"
+    And I should find "Use"
+  When I press "Use"
+  Then I should see "#title {" within "style"
+    And I should see "text-decoration: blink;" within "style"
+    
+    
+  Scenario: Skin titles should be unique
+  Given I am logged in as "skinner" with password "password"
+  When I am on skin's new page
+    And I fill in "Title" with "Default"
+    And I press "Create"
+  Then I should see "must be unique"
+
+
+  Scenario: Only public skins should be on the main skins page
+  Given basic skins
+    And I am logged in as "skinner" with password "password"
+    And I create the skin "my skin"
+  When I am on the skins page
+  Then I should not see "my skin"
+    And I should see "Default"
+    And I should see "Plain Text"
+    
+  
+  Scenario: The user who creates a skin should be able to edit it
+  Given I am logged in as "skinner" with password "password"
+    And I create the skin "my skin"
+    And I follow "My Skins"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting { text-decoration: blink;}"
-    And I fill in "Title" with "public blinking skin"
+    And I press "Update"
+  Then I should see "Skin updated"  
+  
+  
+  Scenario: Public skins should require a preview image
+  Given I am logged in as "skinner" with password "password"
+    And I am on skin's new page
+  When I fill in "Title" with "public skin"
+    And I fill in "CSS" with "#title { text-decoration: blink;}"
     And I fill in "Description" with "Blinky love"
     And I check "skin_public"
-    And I press "Update"
+    And I press "Create"
   Then I should see "Skin preview should be set for the skin to be public"
   When I attach the file "test/fixtures/skin_test_preview.png" to "skin_icon"
-    And I press "Update"
-  Then I should see "Skin updated"
-    And I should not see "#title"
-    And I should not see "my blinking"
-    And I should see "Blinky love"
+    And I press "Create"
+  Then I should see "Skin was created successfully"
+
+
+  Scenario: Newly created public skins should not appear on the main skins page until approved and should be
+    marked as not-yet-approved
+  Given the unapproved public skin "public skin"
   When I am on the skins page
-  Then I should not see "public blinking skin"
+    Then I should not see "public skin"
   When I follow "My Skins"
-  Then I should see "public blinking skin"
+  Then I should see "public skin"
     And I should see "(Not yet reviewed)"
     And I should not see "(Approved)"
-  When I follow "skinner"
-    And I follow "My Preferences"
-  Then "public blinking skin" should be selected within "preference_skin_id"
-    And I should see "text-decoration: blink;" within "style"
-    And I should see "#greeting" within "style"
-  Given I am logged out
-  And I am on the skins page
-  Then I should not see "public blinking skin"
-    And I should not see "My Skins"
-    And I should not see "Create New Skin"
-    And I should not see "Change Your Skin"
-  When I go to "public blinking skin" skin page
+    
+    
+  Scenario: Public skins should not be viewable by users until approved
+  Given the unapproved public skin "public skin"
+    And I am logged out
+  When I go to "public skin" skin page
     Then I should see "Sorry, you don't have permission"
-  When I am on skin's new page
-    Then I should see "Sorry, you don't have permission"
-  When I go to "public blinking skin" edit skin page
+  When I go to "public skin" edit skin page
     Then I should see "Sorry, you don't have permission"
   When I go to admin's skins page
     Then I should see "I'm sorry, only an admin can"
-  Given the following activated user exists
-    | login    | password |
-    | someuser | password |
-    And I fill in "user_session_login" with "someuser"
-    And I fill in "user_session_password" with "password"
-    And I press "Log in"
+
+
+  Scenario: Users should not be able to see the admin skins page
+  Given I am logged in as "skinner" with password "password"
   When I go to admin's skins page
-  #'
   Then I should see "I'm sorry, only an admin can look at that area"
-  When I go to "public blinking skin" skin page
-  Then I should see "Sorry, you don't have permission"
-    And I should not see "Edit"
-  When I go to admin's skins page
-  #'
-    Then I should see "I'm sorry, only an admin can"
-  Given I am logged out
+
+  
+  Scenario: Admins should be able to see public skins in the admin skins page
+  Given the unapproved public skin "public skin"
     And I am logged in as an admin
-  When I go to "public blinking skin" skin page
+  When I go to admin's skins page  
+  Then I should see "public skin" within "table#unapproved"
+  
+  Scenario: Admins should not be able to edit unapproved skins
+  Given the unapproved public skin "public skin"
+    And I am logged in as an admin
+  When I go to "public skin" skin page
   Then I should not find "Edit"
     And I should not find "Delete"
-  When I go to "public blinking skin" edit skin page
+  When I go to "public skin" edit skin page
   Then I should see "Sorry, you don't have permission"
-  When I go to admin's skins page
-  #'
-    Then I should see "public blinking skin" within "table#unapproved"
-  When I check "public blinking skin"
+    
+    
+  Scenario: Admins should be able to approve public skins
+  Given the unapproved public skin "public skin"
+    And I am logged in as an admin
+  When I go to admin's skins page  
+    And I check "public skin"
     And I press "Update"
-  Then I should see "The following skins were approved: public blinking skin"
+  Then I should see "The following skins were approved: public skin"
   When I follow "Approved Skins"
-  Then I should see "public blinking skin" within "table#approved"
-  When I follow "public blinking skin"
-  Then I should see "Edit"
-  But I should not find "Delete"
+  Then I should see "public skin" within "table#approved"
+
+
+  Scenario: Admins should be able to edit but not delete public approved skins
+  Given the approved public skin "public skin"
+    And I am logged in as an admin
+  When I go to "public skin" skin page
+    Then I should see "Edit"
+    But I should not find "Delete"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting.logged-in { text-decoration: blink;}"
     And I fill in "Description" with "Blinky love (admin modified)"
     And I press "Update"
   Then I should see "Skin updated"
-  Given I am logged out as an admin
-    And I fill in "user_session_login" with "skinner"
-    And I fill in "user_session_password" with "password"
-    And I press "Log in"
+    And I should see "(admin modified)"
+    And I should see "#greeting.logged-in" within "style"
+    And I should see "text-decoration: blink;" within "style"
+
+
+  Scenario: Users should not be able to edit their public approved skins
+  Given I am logged in as "skinner" with password "password"
+    And the unapproved public skin "public skin"
+    And I am logged in as an admin
+    And I approve the skin "public skin"
+    And I am logged in as "skinner" with password "password"
   Then I should see "Hi, skinner!"
-  When I go to "public blinking skin" edit skin page
+  When I go to "public skin" edit skin page
   Then I should see "Sorry, you don't have permission"
   When I follow "My Skins"
   Then I should see "(Approved)"
     And I should not see "Edit"
-    And I should see "(admin modified)"
-    And I should see "#greeting.logged-in" within "style"
-    And I should see "text-decoration: blink;" within "style"
-  When I follow "my home"
-    And I follow "My Preferences"
-  Then "public blinking skin" should be selected within "preference_skin_id"
-  Given I am logged out
-    And I am logged in as "someuser" with password "password"
-  When I am on the skins page
-    And I follow "someuser"
-    And I follow "My Preferences"
-    And I select "public blinking skin" from "preference_skin_id"
+    
+  Scenario: Users should be able to use public approved skins created by others
+  Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+    And I am logged in as "skinuser" with password "password"
+    And I am on skinuser's preferences page
+    And I select "public skin" from "preference_skin_id"
     And I press "Update"
-  Then I should see "text-decoration: blink;" within "style"
-  When I am logged out
+  Then I should see "Your preferences were successfully updated."
+    And "public skin" should be selected within "preference_skin_id"
+    And I should see "#title {" within "style"
+    And I should see "text-decoration: blink;" within "style"
+    
+  Scenario: Admins should be able to unapprove public skins, which should also remove them from preferences
+  Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
+    And I am logged in as "skinuser" with password "password"
+    And I am using the skin "public skin"
     And I am logged in as an admin
   When I follow "skins"
     And I follow "Approved Skins"
-    And I check "make_unofficial_public_blinking_skin"
+    And I check "make_unofficial_public_skin"
     And I press "Update"
-  Then I should see "The following skins were unapproved and removed from preferences: public blinking skin"
-    And I should see "public blinking skin" within "table#unapproved"
-  Given I am logged out as an admin
-    And I am logged in as "skinner" with password "password"
-  Then I should not see "text-decoration: blink;" within "style"
-  When I am on skinner's skin page
-  #'
-  Then I should not see "(Approved)"
-    And I should see "(Not yet reviewed)"
-    And I should see "Edit"
-  When I follow "skinner"
-    And I follow "My Preferences"
+  Then I should see "The following skins were unapproved and removed from preferences: public skin"
+    And I should see "public skin" within "table#unapproved"
+  Given I am logged in as "skinuser" with password "password"
+    And I am on skinuser's preferences page
   Then "Default" should be selected within "preference_skin_id"
-  Given I am logged out
-    And I am logged in as "someuser" with password "password"
-  Then I should not see "text-decoration: blink;" within "style"
-  When I am on the skins page
-  Then I should not see "public blinking skin"
-  When I follow "someuser"
-    And I follow "My Preferences"
-  Then "Default" should be selected within "preference_skin_id"
-  And I should not see "public blinking skin"
+    And I should not see "#title {" within "style"
+    And I should not see "text-decoration: blink;" within "style"
 
 
   Scenario: Create skin using the wizard
@@ -264,7 +312,6 @@ Feature: creating and editing skins
 
   Given I am logged in as "skinner" with password "password"
   When I am on skin's new page
-    #'
     And I select "Work Skin" from "skin_type"
     And I fill in "Title" with "Awesome Work Skin"
     And I fill in "Description" with "Great work skin"
