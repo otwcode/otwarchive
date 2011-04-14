@@ -38,7 +38,7 @@ if @not_stage == 'true'
   end
 
   # reindex searchd
-  every 4.hours do
+  every 6.hours do
     command "/static/bin/ts_reindex.sh"
   end
 end
