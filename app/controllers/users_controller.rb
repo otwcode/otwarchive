@@ -26,7 +26,7 @@ class UsersController < ApplicationController
       if !invitation
         flash[:error] = ts("There was an error with your invitation token, please contact support")
         redirect_to new_feedback_report_path and return
-      elsif invitation.redeemed_at && @invitation.invitee
+      elsif invitation.redeemed_at && invitation.invitee
         flash[:error] = ts("This invitation has already been used to create an account, sorry!")
         redirect_to root_path and return
       end
