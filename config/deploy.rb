@@ -38,6 +38,10 @@ namespace :deploy do
   task :restart, :roles => :app do
     run "/static/bin/unicorns_reload.sh"
   end
+  desc "Restart unicorns after gemfile changes."
+  task :hard_restart, :roles => :app do
+    run "/static/bin/unicorns_restart.sh"
+  end
   namespace :web do
     desc "Present a maintenance page to visitors."
     task :disable, :roles => :web do
@@ -56,11 +60,11 @@ end
 
 # our tasks which are not environment specific
 namespace :extras do
-  task :update_revision do
+  task :update_revision, {:roles => :backend} do
     run "/static/bin/fix_revision.sh"
   end
   task :cache_stylesheet, {:roles => :web} do
-    run "cd #{release_path}/public/stylesheets/; cat system-messages.css site-chrome.css forms.css live_validation.css auto_complete.css > cached_for_screen.css"
+    run "cd #{deploy_to}/current/public/stylesheets/; cat system-messages.css site-chrome.css forms.css live_validation.css auto_complete.css > cached_for_screen.css"
   end
   task :run_after_tasks, {:roles => :backend} do
     run "cd #{release_path}; rake After RAILS_ENV=production"
@@ -88,7 +92,8 @@ namespace :stage_only do
   task :git_in_home do
     run "git pull origin deploy"
     run "bundle install --quiet"
-    run "ln -nfs -t config/ #{deploy_to}/shared/config/*"
+#    don't update config files in home. they may have been customized
+#    run "ln -nfs -t config/ #{deploy_to}/shared/config/*"
   end
   task :update_public do
     run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
@@ -110,7 +115,8 @@ namespace :production_only do
   task :git_in_home, :roles => [:backend, :search] do
     run "git pull origin deploy"
     run "bundle install --quiet"
-    run "ln -nfs -t #{release_path}/config/ /static/config/*"
+#    don't update config files in home. they may have been customized
+#    run "ln -nfs -t config/ /static/config/*"
   end
   task :update_public, :roles => [:web, :backend] do
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
@@ -135,13 +141,13 @@ namespace :production_only do
 end
 
 # after and before task triggers
-after "deploy:update", "extras:cache_stylesheet"
 
 before "deploy:migrate", "deploy:web:disable"
 after "deploy:migrate", "extras:run_after_tasks"
 
 before "deploy:symlink", "deploy:web:enable_new"
 after "deploy:symlink", "extras:update_revision"
+after "deploy:symlink", "extras:cache_stylesheet"
 
 after "deploy:restart", "extras:update_cron"
 after "deploy:restart", "extras:restart_delayed_jobs"
