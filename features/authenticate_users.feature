@@ -65,6 +65,36 @@ Feature: User Authentication
     And I press "Log in"
     Then I should see "Hi, sam!"
 
+  Scenario: invalid user
+    Given I have loaded the "users" fixture
+    When I am on the home page
+    And I follow "forgot password?"
+    When I fill in "login" with "testuser"
+      And I press "Reset password"
+    Then I should see "Check your email"
+      And 1 email should be delivered
+
+    # password from email should work
+    When I fill in "User name" with "testuser"
+    And I fill in "testuser"'s temporary password
+    And I press "Log in"
+    Then I should see "Hi, testuser!"
+    And I should see "Change My Password"
+
+    # and I should be able to change the password
+    When I fill in "New Password" with "newpas"
+    And I fill in "Confirm New Password" with "newpas"
+    And I press "Change Password"
+    Then I should see "Your password has been changed"
+
+    # new password should work
+    When I am logged out
+    When I am on the homepage
+    And I fill in "User name" with "testuser"
+    And I fill in "Password" with "newpas"
+    And I press "Log in"
+    Then I should see "Hi, testuser!"
+
   Scenario: Wrong username
     Given I have no users
       And the following activated user exists
