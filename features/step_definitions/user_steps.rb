@@ -23,6 +23,7 @@ Given /the following activated tag wranglers? exists?/ do |table|
 end
 
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
+  Given "I am logged out"
   user = User.find_by_login(login)
   if user.blank?
     user = Factory.create(:user, {:login => login, :password => password})

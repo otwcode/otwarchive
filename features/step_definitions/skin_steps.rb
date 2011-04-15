@@ -9,6 +9,7 @@ Given /^I set up the skin "([^"]*)" with css "([^"]*)"$/ do |arg1, arg2|
   visit new_skin_url
   fill_in("Title", :with => arg1)
   fill_in("CSS", :with => arg2)
+  fill_in("Description", :with => "Random description")
 end
 
 Given /^I set up the skin "([^"]*)"$/ do |arg1|
@@ -27,6 +28,7 @@ end
 Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |arg1, arg2|
   Given "I am logged in as \"skinner\" with password \"password\""
   Given "I set up the skin \"#{arg1}\" with css \"#{arg2}\""
+  Given "I attach the file \"test/fixtures/skin_test_preview.png\" to \"skin_icon\""
   check("skin_public")
   click_button("Create")
 end

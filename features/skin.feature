@@ -143,7 +143,8 @@ Feature: creating and editing skins
 
   Scenario: Newly created public skins should not appear on the main skins page until approved and should be
     marked as not-yet-approved
-  Given the unapproved public skin "public skin"
+  Given I am logged in as "skinner" with password "password"
+    And the unapproved public skin "public skin"
   When I am on the skins page
     Then I should not see "public skin"
   When I follow "My Skins"
@@ -200,7 +201,8 @@ Feature: creating and editing skins
   Given the approved public skin "public skin"
     And I am logged in as an admin
   When I go to "public skin" skin page
-    Then I should see "Edit"
+  Then show me the response
+  Then I should see "Edit"
     But I should not find "Delete"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting.logged-in { text-decoration: blink;}"
@@ -213,10 +215,7 @@ Feature: creating and editing skins
 
 
   Scenario: Users should not be able to edit their public approved skins
-  Given I am logged in as "skinner" with password "password"
-    And the unapproved public skin "public skin"
-    And I am logged in as an admin
-    And I approve the skin "public skin"
+  Given the approved public skin "public skin"
     And I am logged in as "skinner" with password "password"
   Then I should see "Hi, skinner!"
   When I go to "public skin" edit skin page
@@ -224,6 +223,7 @@ Feature: creating and editing skins
   When I follow "My Skins"
   Then I should see "(Approved)"
     And I should not see "Edit"
+
     
   Scenario: Users should be able to use public approved skins created by others
   Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
