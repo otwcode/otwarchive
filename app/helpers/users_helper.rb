@@ -189,6 +189,10 @@ module UsersHelper
       t('users_helper.log_warn', :default => 'Warned')
     elsif action == ArchiveConfig.ACTION_RENAME
       t('users_helper.log_rename', :default => 'Username Changed')
+		elsif action == ArchiveConfig.ACTION_PASSWORD_RESET
+      t('users_helper.log_password_change', :default => 'Password Changed')
+		elsif action == ArchiveConfig.ACTION_NEW_EMAIL
+      t('users_helper.log_email_change', :default => 'Email Changed')
     end
   end
   

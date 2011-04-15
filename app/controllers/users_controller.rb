@@ -111,13 +111,16 @@ class UsersController < ApplicationController
       @user.recently_reset = false
       if @user.save
         flash[:notice] = ts("Your password has been changed")
+				UserMailer.reset_password(@user).deliver
+        @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
         redirect_to user_profile_path(@user) and return
       else
         render :change_password and return
       end
     end
   end
-
+	
+	
   def change_openid
     if params[:identity_url]
       @openid_url = params[:identity_url]
@@ -258,27 +261,33 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    # have to reauthenticate to change email
-    if params[:new_email] != @user.email
-      @user.email = params[:new_email]
-      if !reauthenticate
+    if params[:new_email] == @user.email
+			#change profile
+			@user.profile.update_attributes(params[:profile_attributes])
+			if @user.profile.save 
+			  flash[:notice] = ts("Your profile has been successfully updated")
+			else
+				render :edit and return
+			end
+			redirect_to user_profile_path(@user) and return
+		else
+			#have to reuthenticate to change email
+			if !reauthenticate
         render :edit and return
       else
+				@old_email = @user.email	
+				@user.email = params[:new_email]
+				@new_email = params[:new_email]
         if @user.save
-          flash[:notice] = ts("Your profile has been successfully updated")
+					flash[:notice] = ts("Your email has been successfully updated")
+					UserMailer.change_email(@user.id, @old_email, @new_email).deliver
+			    @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
         else
           render :edit and return
         end
-      end
-    end
-    # change profile
-    @user.profile.update_attributes(params[:profile_attributes])
-    if @user.profile.save
-      flash[:notice] = ts("Your profile has been successfully updated")
-    else
-      render :edit and return
-    end
-    redirect_to user_profile_path(@user) and return
+				redirect_to user_profile_path(@user) and return
+			end
+		end
   end
 
   # DELETE /users/1
@@ -410,5 +419,5 @@ class UsersController < ApplicationController
         return false
       end
     end
+	end
 
-end
