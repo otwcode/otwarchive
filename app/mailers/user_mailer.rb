@@ -149,12 +149,12 @@ class UserMailer < ActionMailer::Base
   end
 	
 	  # Confirms to a user that their email was changed
-  def change_email(user, old_email, new_email)
-    @user = user
+  def change_email(user_id, old_email, new_email)
+    @user = User.find(user_id)
 		@old_email= old_email
 		@new_email= new_email
     mail(
-      :to => user.email,
+      :to => @old_email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Email changed"
     )
   end

@@ -54,40 +54,46 @@ Feature: Edit profile
     And I should not see "Beta Centauri" within ".wrapper"
     And I should not see "This is some text about me and my colours."
 		And 0 emails should be delivered
-
-  Scenario: View and edit profile - email address - changing and displaying, and can't be the same as another user's
+		
+Scenario: View and edit profile - email address - changing and displaying, and can't be the same as another user's
 	
   Given the following activated users exist
-    | login         | password   |
-    | editname2     | password   |
-    | duplicate     | password   |
+    | login         | password   | email        |
+    | editname2     | password   | bar@ao3.org  |
+    | duplicate     | password   | foo@ao3.org  |
     And I am logged in as "editname2" with password "password"
     And all emails have been delivered
   When I follow "editname2"
     And I follow "Profile"
     And I follow "Edit My Profile"
   Then I should see "Edit My Profile"
-	When I fill in "Change Email" with "bob.bob.bob"
+	When I fill in "Change Email" with "blah"
     And I press "Update"
   Then I should see "You must authenticate"
 	   And 0 emails should be delivered
-    When I fill in "Old password" with "password"
-  And I press "Update"
+		 And I should not see "successfully updated"
+  When I fill in "Old password" with "password"
+	  And I fill in "Change Email" with "bob.bob.bob"
+    And I press "Update"
   Then I should see "Email does not seem to be a valid address"
 		And 0 emails should be delivered
+		And I should not see "successfully updated"
   When I fill in "Change Email" with "valid2@archiveofourown.org"
     And I fill in "Old password" with "passw"
     And I press "Update"
   Then I should see "Your old password was incorrect"
-    And 0 emails should be delivered
+	  And 0 emails should be delivered
+		And I should not see "successfully updated"
   When I fill in "Old password" with "password"
+		And I fill in "Change Email" with "valid2@archiveofourown.org"
     And I press "Update"
-  Then I should see "Your profile has been successfully updated"
+  Then I should see "Your email has been successfully updated"
+    And 1 email should be delivered to "bar@ao3.org"
   When I follow "My Preferences"
     And I check "Display Email Address"
     And I press "Update"
     And I follow "editname2"
-    And I follow "Profile"
+		And I follow "Profile"
   Then I should see "My email address: valid2@archiveofourown.org"
   When I follow "Log out"
     And I am logged in as "duplicate" with password "password"
@@ -97,10 +103,10 @@ Feature: Edit profile
     And I fill in "Change Email" with "valid2@archiveofourown.org"
     And I fill in "Old password" with "password"
     And I press "Update"
-  Then I should see "Email has already been taken"
-    And I should not see "Your profile has been successfully updated"
-  
-  Scenario: View and edit profile - date of birth - changing and displaying
+	Then I should see "Email has already been taken"
+		And I should not see "Your profile has been successfully updated"
+		
+	Scenario: View and edit profile - date of birth - changing and displaying
 
   Given the following activated users exist
     | login         | password   |
@@ -163,7 +169,7 @@ Feature: Edit profile
   Then I should see "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below."
   When I am logged in as "editname2" with password "newpass1"
   Then I should see "Hi, editname2"
-		
+	
 	Scenario: Manage pseuds - add, edit
 
   Given the following activated user exists
