@@ -58,25 +58,45 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
   Then I should see "Battle 12"
   
-  Scenario: Sign up for a prompt meme and all the rest of the unrefactored stuff
+  Scenario: User can see a prompt meme
 
+  Given I am logged in as "mod1" with password "something"
+    And I have standard challenge tags setup
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+  When I go to the collections page
+  Then I should see "Battle 12"
+  
+  Scenario: User can see profile descriptions
+  
   Given I have standard challenge users
     And I have standard challenge tags setup
   # set up the challenge
     And I am logged in as "mod1" with password "something"
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+  When I go to "Battle 12" collection's page
+  When I follow "Profile"
+  Then I should see Battle 12 descriptions
+  
+  Scenario: Sign up for a prompt meme and miss out some fields
+
+  Given I have standard challenge users
+    And I have standard challenge tags setup
+    And I am logged in as "mod1" with password "something"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
     
-  # sign up, noting errors if you fail to fill in required fields
+  # sign up, with errors if you fail to fill in required fields
   
   When I follow "Log out"
     And I am logged in as "myname1"
-  When I go to the collections page
-  Then I should see "Battle 12"
-  When I follow "Battle 12"
+  When I go to "Battle 12" collection's page
   Then I should see "Sign Up"
-  When I follow "Profile"
-  Then I should see Battle 12 descriptions
   When I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
@@ -86,9 +106,15 @@ Feature: Prompt Meme Challenge
   When I check "challenge_signup_requests_attributes_1_fandom_27"
     And I press "Submit"
   Then I should see "Signup was successfully created"
-    And I should see "Prompts (2)"
   
-  # someone else sign up, with 3 prompts this time once Javascript is working, and with anon prompts
+  Scenario: Sign up without Javascript
+  
+  Given I have standard challenge users
+    And I have standard challenge tags setup
+  # set up the challenge
+    And I am logged in as "mod1" with password "something"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
   
   When I follow "Log out"
     And I am logged in as "myname2"
@@ -100,12 +126,40 @@ Feature: Prompt Meme Challenge
   When I follow "add_section"
     And "Issue 2168" is fixed
   #Then I should see "Request 3"
-  #When I check "challenge_signup_requests_attributes_2_fandom_27"
+    
+  Scenario: All the rest of the unrefactored stuff
+
+  Given I have standard challenge users
+    And I have standard challenge tags setup
+  # set up the challenge
+    And I am logged in as "mod1" with password "something"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+    
+  # sign up
+  
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+  When I go to "Battle 12" collection's page
+  When I follow "Sign Up"
+    And I check "challenge_signup_requests_attributes_0_fandom_27"
+    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
+    And I check "challenge_signup_requests_attributes_1_fandom_27"
+    And I press "Submit"
+  Then I should see "Signup was successfully created"
+    And I should see "Prompts (2)"
+  
+  # someone else sign up, with anon prompts
+  
+  When I follow "Log out"
+    And I am logged in as "myname2" with password "something"
+  When I go to "Battle 12" collection's page
+    And I follow "Sign Up"
+    And I check "challenge_signup_requests_attributes_0_fandom_28"
     And I check "challenge_signup_requests_attributes_1_fandom_27"
     And I check "challenge_signup_requests_attributes_0_anonymous"
     And I check "challenge_signup_requests_attributes_1_anonymous"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School, Something else weird"
-   # And I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"
     And I press "Submit"
   Then I should see "Signup was successfully created"
     And I should see "Prompts (4)"
