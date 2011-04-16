@@ -41,6 +41,10 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   assert UserSession.find
 end
 
+Given /^I am logged in as "([^\"]*)"$/ do |login|
+  Given "I am logged in as \"#{login}\" with password \"password\""
+end
+
 When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
   # " '
   user = User.find_by_login(login)
@@ -49,6 +53,7 @@ end
 
 
 Given /^I am logged in as a random user$/ do
+  Given "I am logged out"
   name = "testuser#{User.count + 1}"
   user = Factory.create(:user, :login => name, :password => "password")
   user.activate
@@ -63,6 +68,8 @@ end
 Given /^I am logged out$/ do
   visit logout_path
   assert !UserSession.find
+  visit admin_logout_path
+  assert !AdminSession.find
 end
 
 When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|

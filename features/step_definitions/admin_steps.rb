@@ -39,7 +39,7 @@ end
 
 Given /^I am logged out as an admin$/ do
   visit admin_logout_path
-  Then "I should see \"Successfully logged out\""
+  assert !AdminSession.find
 end
 
 Given /^basic languages$/ do
