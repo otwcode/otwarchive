@@ -1,3 +1,5 @@
+DEFAULT_PASSWORD = "password"
+
 Given /^I have no users$/ do
   User.delete_all
 end
@@ -42,7 +44,7 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
 end
 
 Given /^I am logged in as "([^\"]*)"$/ do |login|
-  Given "I am logged in as \"#{login}\" with password \"password\""
+  Given "I am logged in as \"#{login}\" with password \"#{DEFAULT_PASSWORD}\""
 end
 
 When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
@@ -55,11 +57,11 @@ end
 Given /^I am logged in as a random user$/ do
   Given "I am logged out"
   name = "testuser#{User.count + 1}"
-  user = Factory.create(:user, :login => name, :password => "password")
+  user = Factory.create(:user, :login => name, :password => DEFAULT_PASSWORD)
   user.activate
   visit login_path
   fill_in "User name", :with => name
-  fill_in "Password", :with => "password"
+  fill_in "Password", :with => DEFAULT_PASSWORD
   check "Remember me"
   click_button "Log in"
   assert UserSession.find
