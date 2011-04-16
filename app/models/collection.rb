@@ -80,7 +80,7 @@ class Collection < ActiveRecord::Base
   CHALLENGE_TYPE_OPTIONS = [
                              ["", ""],
                              [ts("Gift Exchange"), "GiftExchange"],
-                             # [ts("Prompt Meme"), "PromptMeme"],
+                             [ts("Prompt Meme"), "PromptMeme"],
                            ]
 
   validate :must_have_owners, :on => :save
