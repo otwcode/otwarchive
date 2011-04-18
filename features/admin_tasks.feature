@@ -156,6 +156,7 @@ Feature: Admin tasks
   # otherfan turns off notifications
 
   When I am logged in as "otherfan" with password "hatesnotifications"
+    And I am on my user page
     And I follow "Profile"
   Then I should see "Set My Preferences"
   When I follow "Set My Preferences"
@@ -220,15 +221,9 @@ Feature: Admin tasks
     And I follow "Read Comments (1)"
   Then I should not see "Mark as spam"
 
-  # now make a spam comment
-  When I am logged out
-    And I view the work "The One Where Neal is Awesome"
-    And I fill in "Comment" with "Would you like a genuine rolex"
-    And I press "Add Comment"
-  Then I should see "Comment created!"
-
-  # mark comment as spam
-  When I am logged in as an admin
+  # now mark a comment as spam
+  When I post the comment "Would you like a genuine rolex" on the work "The One Where Neal is Awesome" as a guest
+    And I am logged in as an admin
     And I view the work "The One Where Neal is Awesome"
     And I follow "Read Comments (2)"
   Then I should see "rolex"

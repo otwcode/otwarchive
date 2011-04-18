@@ -97,26 +97,26 @@ Scenario: Autocompletes for all other stuff: co-authors, recipients, collections
         | giftee         | something   |
         | recipient      | something   |
       And I am logged in as "coauthor" with password "something"
+      And I am on my user page
       And I follow "Profile"
       And I follow "Manage My Pseuds"
       And I follow "New Pseud"
       And I fill in "Name" with "Pseud2"
       And I press "Create"
     Then I should see "Pseud was successfully created."
-    When I am logged out
-      And I am logged in as "cosomeone" with password "something"
+    When I am logged in as "cosomeone" with password "something"
       And I go to the new work page
       And I check "co-authors-options-show"
       And I fill in "pseud_byline" with "co"
     Then I should find "coauthor" within "div.auto_complete"
-      And I should find "Psued2" within ".auto_complete"
+      And I should find "Pseud2" within ".auto_complete"
       But I should not find "cosomeone" within ".auto_complete"
     When I am logged out
       And I am logged in as "coauthor" with password "something"
       And I go to the new work page
       And I check "co-authors-options-show"
       And I fill in "pseud_byline" with "co"
-    Then I should find "Psued2" within ".auto_complete"
+    Then I should find "Pseud2" within ".auto_complete"
       And I should find "cosomeone" within ".auto_complete"
     
     When I fill in "work_recipients" with "Gif"
