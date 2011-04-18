@@ -27,6 +27,8 @@ module NavigationHelpers
 
     # Add more mappings here.
 
+    when /^the login page$/i
+      new_user_session_path
     when /^(.*)'s user page$/i
       user_path(:id => $1)
     when /^(.*)'s user url$/i
