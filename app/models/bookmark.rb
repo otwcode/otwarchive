@@ -117,11 +117,13 @@ class Bookmark < ActiveRecord::Base
     self.tags = []
     tag_string.split(ArchiveConfig.DELIMITER_FOR_INPUT).each do |string|
       string.squish!
-      tag = Tag.find_by_name(string)
-      if tag
-        self.tags << tag
-      else
-        self.tags << Freeform.create(:name => string)
+      if !string.blank?
+        tag = Tag.find_by_name(string)
+        if tag
+          self.tags << tag
+        else
+          self.tags << Freeform.create(:name => string) 
+        end
       end
     end
     return self.tags

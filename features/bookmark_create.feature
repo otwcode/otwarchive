@@ -215,3 +215,11 @@ Feature: Create bookmarks
       But I should see "Public Masterpiece"
       And I should see "Publicky"
 
+Scenario: extra commas in bookmark form (Issue 2284)
+
+  Given I am logged in as "bookmarkuser" with password "password"
+    And I post the work "Some Work"
+  When I follow "Bookmark"
+    And I fill in "Your Tags" with "Good tag, ,, also good tag, "
+    And I press "Create"
+  Then I should see "created"
