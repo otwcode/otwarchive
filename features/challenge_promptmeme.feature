@@ -126,6 +126,25 @@ Feature: Prompt Meme Challenge
   When I follow "add_section"
     And "Issue 2168" is fixed
   #Then I should see "Request 3"
+  
+  Scenario: View signups in the dashboard
+  
+  Given I have standard challenge users
+    And I have standard challenge tags setup
+    And I am logged in as "mod1" with password "something"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+  When I sign up for Battle 12 with combination A
+  Then I should see "Signup was successfully created"
+    And I should see "Prompts (2)"
+    
+  When I follow "myname1"
+  Then I should see "My Signups (1)"
+  When I follow "My Signups (1)"
+  Then I should see "Battle 12"
     
   Scenario: All the rest of the unrefactored stuff
 
@@ -136,47 +155,28 @@ Feature: Prompt Meme Challenge
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
     
-  # sign up
+  # sign up with no anon prompts
   
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
-  When I go to "Battle 12" collection's page
-  When I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_27"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
-    And I check "challenge_signup_requests_attributes_1_fandom_27"
-    And I press "Submit"
+  When I sign up for Battle 12 with combination A
   Then I should see "Signup was successfully created"
     And I should see "Prompts (2)"
   
-  # someone else sign up, with anon prompts
+  # someone else sign up, with both anon prompts
   
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
-  When I go to "Battle 12" collection's page
-    And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_28"
-    And I check "challenge_signup_requests_attributes_1_fandom_27"
-    And I check "challenge_signup_requests_attributes_0_anonymous"
-    And I check "challenge_signup_requests_attributes_1_anonymous"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School, Something else weird"
-    And I press "Submit"
+  When I sign up for Battle 12 with combination B
   Then I should see "Signup was successfully created"
     And I should see "Prompts (4)"
   
-  # third person sign up, with an anon prompt
+  # third person sign up, with one anon prompt
   
   When I follow "Log out"
     And I am logged in as "myname3"
   When I sign up for Battle 12
   Then I should see "Signup was successfully created"
-  
-  # check you can see signups in the dashboard
-  
-  When I follow "myname3"
-  Then I should see "My Signups (1)"
-  When I follow "My Signups (1)"
-  Then I should see "Battle 12"
   
   # fourth person sign up
   
