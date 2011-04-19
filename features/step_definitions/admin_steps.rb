@@ -25,6 +25,7 @@ Given /the following admins? exists?/ do |table|
 end
 
 Given /^I am logged in as an admin$/ do
+  Given "I am logged out"
   admin = Admin.find_by_login("testadmin")
   if admin.blank?
     admin = Factory.create(:admin, :login => "testadmin", :password => "testadmin", :email => "testadmin@example.org")
@@ -38,7 +39,7 @@ end
 
 Given /^I am logged out as an admin$/ do
   visit admin_logout_path
-  Then "I should see \"Successfully logged out\""
+  assert !AdminSession.find
 end
 
 Given /^basic languages$/ do

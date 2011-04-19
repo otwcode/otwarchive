@@ -52,11 +52,11 @@ module NavigationHelpers
     when /^the subscriptions page for "(.*)"$/i
       user_subscriptions_path(:user_id => $1)
     when /my user page/
-      user_path(current_user)
+      user_path(User.current_user)
     when /my preferences page/
-      user_preferences_path(current_user)
+      user_preferences_path(User.current_user)
     when /my bookmarks page/
-      user_bookmarks_path(current_user)
+      user_bookmarks_path(User.current_user)
     when /my subscriptions page/
       user_subscriptions_path(User.current_user)      
     when /the import page/

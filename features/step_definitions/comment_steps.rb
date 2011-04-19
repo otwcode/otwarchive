@@ -23,3 +23,22 @@ Nunc eget dolor ut nisi laoreet scelerisque. Vestibulum condimentum dignissim le
 Morbi vitae lacus vitae magna volutpat pharetra rhoncus eget nisi. Proin vehicula, felis nec tempor eleifend, dolor ipsum volutpat dolor, et eleifend nibh libero ac turpis. Donec odio est, sodales nec consectetur vehicula, adipiscing sit amet magna. Suspendisse dapibus tincidunt velit sit amet mollis. Curabitur eget blandit li./)
   end
 end
+
+When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
+  work = Work.find_by_title!(work)
+  visit work_url(work)
+  fill_in("Comment", :with => comment_text)
+end
+
+When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
+  Given "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
+  press("Add Comment")
+end
+
+When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest$/ do |comment_text, work|
+  Given "I am logged out"
+  Given "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
+  fill_in("Name", :with => "guest")
+  fill_in("Email", :with => "guest@foo.com")
+  click_button "Add Comment"
+end

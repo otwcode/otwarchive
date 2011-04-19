@@ -5,19 +5,14 @@ Feature: Prompt Meme Challenge
   I want to prompt, post and receive fills anonymously
 
   Scenario: Prompt anonymously and be notified of the fills without the writer knowing who I am
-  Given the following activated users exist
-    | login          | password    | email      |
-    | mod1           | something   | mod@e.org  |
-    | myname1        | something   | my1@e.org  |
-    | myname2        | something   | my2@e.org  |
-    And I have no tags
+  Given I have no tags
     And I have no prompts
     And basic tags
     And a fandom exists with name: "GhostSoup", canonical: true
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
     And I set up a basic promptmeme "The Kissing Game"
     And I follow "Log out"
-  When I am logged in as "myname1" with password "something"
+  When I am logged in as "myname1"
     And I go to "The Kissing Game" collection's page
     # And the apostrophe stops getting in the way of highlighting in notepad++ '
     And I follow "Sign Up"
@@ -26,7 +21,8 @@ Feature: Prompt Meme Challenge
     And I press "Submit"
   Then I should see "Signup was successfully created"
   When I follow "Log out"
-    And I am logged in as "myname2" with password "something"
+    And I am logged in as "myname2"
+    And I go to "The Kissing Game" collection's page
     And I follow "Prompts (1)"
     And I press "Claim"
   Then I should see "New claim made"
