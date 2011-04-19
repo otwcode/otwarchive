@@ -329,9 +329,9 @@ Feature: creating and editing skins
     And I should not see "Hide Creator's Style"
     And I should see "Show Creator's Style"
 
-  Scenario: Log out from my skins page (Issue 2271)
-  
-  Given I am logged in as "skinner" with password "password"
+  Scenario: Log out from my skins page (Issue 2271)  
+  Given I am logged in as "skinner"
+    And I am on my user page
   When I follow "My Skins"
     And I follow "Log out"
   Then I should be on the login page

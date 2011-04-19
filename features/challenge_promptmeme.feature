@@ -6,14 +6,7 @@ Feature: Prompt Meme Challenge
 
   Scenario: Create a prompt meme, sign up for it, basic version
 
-  Given the following activated users exist
-    | login          | password    |
-    | mod1           | something   |
-    | myname1        | something   |
-    | myname2        | something   |
-    | myname3        | something   |
-    | myname4        | something   |
-    And I have no tags
+  Given I have no tags
     And I have no prompts
     And basic tags
     And I create the fandom "Stargate Atlantis" with id 27
@@ -21,14 +14,13 @@ Feature: Prompt Meme Challenge
     And a freeform exists with name: "Alternate Universe - Historical", canonical: true
     And a freeform exists with name: "Alternate Universe - High School", canonical: true
     And a freeform exists with name: "Something else weird", canonical: true
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
   Then I should see "Hi, mod1!"
     And I should see "Log out"
     
   # set up mod's preferences
   
-  When I go to mod1's preferences page
-  #'
+  When I am on my preferences page
   Then I should see "Your time zone"
     And "TODO: checking an option is selected" is fixed
     # And I should find "(GMT-05:00) Eastern Time (US & Canada)" selected within "preference_time_zone"
@@ -94,7 +86,7 @@ Feature: Prompt Meme Challenge
   # sign up, noting errors if you fail to fill in required fields
   
   When I follow "Log out"
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
   When I go to the collections page
   Then I should see "Battle 12"
   When I follow "Battle 12"
@@ -115,7 +107,7 @@ Feature: Prompt Meme Challenge
   # someone else sign up, with 3 prompts this time once Javascript is working, and with anon prompts
   
   When I follow "Log out"
-    And I am logged in as "myname2" with password "something"
+    And I am logged in as "myname2"
   When I go to "Battle 12" collection's page
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_28"
@@ -137,7 +129,7 @@ Feature: Prompt Meme Challenge
   # third person sign up, with an anon prompt
   
   When I follow "Log out"
-    And I am logged in as "myname3" with password "something"
+    And I am logged in as "myname3"
   When I sign up for Battle 12
   Then I should see "Signup was successfully created"
   
@@ -151,7 +143,7 @@ Feature: Prompt Meme Challenge
   # fourth person sign up
   
   When I follow "Log out"
-    And I am logged in as "myname4" with password "something"
+    And I am logged in as "myname4"
   When I go to "Battle 12" collection's page
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
@@ -174,7 +166,7 @@ Feature: Prompt Meme Challenge
   # user claims a prompt
   
   When I follow "Log out"
-    And I am logged in as "myname4" with password "something"
+    And I am logged in as "myname4"
   When I go to the collections page
     And I follow "Battle 12"
     And I follow "Prompts (8)"
@@ -190,7 +182,7 @@ Feature: Prompt Meme Challenge
     
   # View the claim
 
-  When I go to myname4's user page
+  When I am on my user page
     And I follow "My Claims"
     And I follow "myname4" within "#claims_table"
   Then I should see "Claimed by Anonymous: myname4"
@@ -198,7 +190,7 @@ Feature: Prompt Meme Challenge
   # mod view signups
   
   When I follow "Log out"
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
     And I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
   Then I should see "myname4" within "#main"
@@ -230,7 +222,9 @@ Feature: Prompt Meme Challenge
   # claims are hidden for ordinary user
   
   When I follow "Log out"
-    And I am logged in as "myname4" with password "something"
+    And I am logged in as "myname4"
+    And I go to "Battle 12" collection's page
+    And I follow "Claims"
   Then I should see "Unfulfilled Claims"
     And I should see "Fulfilled Claims"
     And I should see "myname4" within "#unfulfilled_claims"
@@ -239,7 +233,7 @@ Feature: Prompt Meme Challenge
   
   # user posts a fic
   
-  When I go to myname4's user page
+  When I am on my user page
   Then I should see "My Claims (1)" 
   When I follow "My Claims (1)"
   Then I should see "myname4" within "#claims_table"
@@ -257,7 +251,7 @@ Feature: Prompt Meme Challenge
   
   # Claim is completed
 
-  When I go to myname4's user page
+  When I am on my user page
   Then I should see "My Claims (0)"
   When I go to the collections page
     And I follow "Battle 12"
@@ -273,7 +267,7 @@ Feature: Prompt Meme Challenge
   # mod claims a prompt
 
   When I follow "Log out"
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
   When I press "Claim"
@@ -292,7 +286,7 @@ Feature: Prompt Meme Challenge
   
   # mod posts a fic
   
-  When I go to mod1's user page
+  When I am on my user page
   Then I should see "My Claims (1)" 
   When I follow "My Claims"
   Then I should see "Your Claims"
@@ -320,7 +314,7 @@ Feature: Prompt Meme Challenge
   
   # mod's claim is completed
   
-  When I go to mod1's user page
+  When I am on my user page
   Then I should see "My Claims (0)"
   When I go to "Battle 12" collection's page
     And I follow "Claims"
@@ -342,7 +336,7 @@ Feature: Prompt Meme Challenge
   # users can't see claims
 
   When I follow "Log out"
-    And I am logged in as "myname4" with password "something"
+    And I am logged in as "myname4"
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
     And I follow "Show Claims"
@@ -367,7 +361,7 @@ Feature: Prompt Meme Challenge
   # make challenge revealed but still anon
 
   When I follow "Log out"
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
   When I go to "Battle 12" collection's page
     And I follow "Settings"
     And I uncheck "Is this collection currently unrevealed?"
@@ -380,7 +374,7 @@ Feature: Prompt Meme Challenge
   # check ficlet is visible but anon
 
   When I follow "Log out"
-    And I am logged in as "myname4" with password "something"
+    And I am logged in as "myname4"
   When I view the work "Fulfilled Story-thing"
   Then I should see "In response to a prompt by: myname4"
     And I should see "Fandom: Stargate Atlantis"
@@ -393,7 +387,7 @@ Feature: Prompt Meme Challenge
   # make challenge un-anon
 
   When I follow "Log out"
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
   When I go to "Battle 12" collection's page
     And I follow "Settings"
     And I uncheck "Is this collection currently anonymous?"
@@ -405,7 +399,7 @@ Feature: Prompt Meme Challenge
   # user can now see claims
 
   When I follow "Log out"
-    And I am logged in as "myname4" with password "something"
+    And I am logged in as "myname4"
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
     And I follow "Show Claims"
@@ -435,7 +429,7 @@ Feature: Prompt Meme Challenge
   Then I should not see "myname2" within "#main"
   
   # check that anon prompts are still anon on the user claims index
-  When I go to myname4's user page
+  When I am on my user page
     And I follow "My Claims"
   Then I should not see "myname2"
   
@@ -449,7 +443,7 @@ Feature: Prompt Meme Challenge
   # check that claims show as fulfilled
   
   When I follow "Log out"
-    And I am logged in as "myname4" with password "something"
+    And I am logged in as "myname4"
     And I go to the collections page
     And I follow "Battle 12"
     And I follow "Claims"
@@ -459,7 +453,7 @@ Feature: Prompt Meme Challenge
   # make another claim and then delete it
   
   When I follow "Log out"
-    And I am logged in as "myname2" with password "something"
+    And I am logged in as "myname2"
     And I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should not see "Delete"
@@ -479,7 +473,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Claim"
   When I press "Claim"
   Then I should see "Delete"
-  When I go to myname2's user page
+  When I am on my user page
     And I follow "My Claims"
   Then I should see "Delete"
   When I follow "Delete"
@@ -516,7 +510,7 @@ Feature: Prompt Meme Challenge
   When I follow "Response posted on"
   Then I should see "Existing work"
     And I should find "draft"
-  When I go to myname2's user page
+  When I am on my user page
     And I follow "My Drafts"
     And all emails have been delivered
   Then I should see "Existing work"
@@ -539,7 +533,7 @@ Feature: Prompt Meme Challenge
     
   # fulfill a claim from an existing work
   When I am logged out
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
     And I go to "Battle 12" collection's page
     And I follow "Prompts ("
   Then I should see "Claim"
