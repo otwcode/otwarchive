@@ -53,9 +53,8 @@ module CssCleaner
   end
   
   def sanitize_css_property(property)
-    if ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.include?(property) || 
-      ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.include?(property.split(/\-([^-]*)$/).first) ||
-      ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property)
+    if ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property) ||
+      property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
         return property
     end
     return ""
@@ -72,50 +71,20 @@ module CssCleaner
     property.downcase!
     if property == "font-family"
       if !sanitize_css_font(value).blank?
+        # preserve the original capitalization
         clean = value
       end
-    elsif ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.include?(property) || ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.include?(property.split(/\-([^-]*)$/).first)
-      # Shorthand rule -- might have multiple space-separated and/or comma-separated values  
-      cleanval = []
-      rgba_value = ""
-      value.split(", ").join(",").split(",").each do |value_section|        
-        # Rejoin rgba values before checking
-        if rgba_value.blank? && value_section.match(/rgba?\(/)
-          rgba_value = value_section
-          next
-        elsif !rgba_value.blank?
-          rgba_value += "," + value_section
-          if rgba_value.match(/rgba?\(.*\)/)
-            # we've completed the rgba value, go ahead and sanitize it
-            value_section = rgba_value
-            rgba_value = ""
-          else
-            next
-          end
-        end
-        
-        clean_section = []
-        value_section.split.each do |keyword|
-          if sanitize_css_value(keyword).blank?
-            # bad value somewhere, break
-            clean_section = []
-            break
-          else
-            clean_section << sanitize_css_value(keyword) 
-          end
-        end
-        if clean_section.empty?
-          cleanval = []
-          break
-        else
-          cleanval << clean_section.join(' ')
-        end
+    elsif property == "content"
+      clean = sanitize_css_content(value)
+    elsif property.match(/#{ArchiveConfig.SUPPORTED_CSS_SHORTHAND_PROPERTIES.join('|')}/)
+      if value.match(/#{ArchiveConfig.SUPPORTED_CSS_FUNCTIONS.join('|')}/)
+        clean = sanitize_css_function(value)
+      else
+        clean = sanitize_css_shorthand_value(value)
       end
-      clean = cleanval.join(', ')
     elsif ArchiveConfig.SUPPORTED_CSS_PROPERTIES.include?(property)
       if property == "content"
         # sanitize content here
-        clean = sanitize_css_content(value)
       else 
         clean = sanitize_css_value(value)
       end
@@ -123,35 +92,99 @@ module CssCleaner
     clean.strip
   end
 
+
+  # sanitize a CSS function, eg, gradient
+  # background:-moz-linear-gradient(bottom, rgba(120,120,120,1) 5%, rgba(94,94,94,1) 50%, rgba(108,108,108,1) 55%, rgba(137,137,137,1) 100%) ;
+  def sanitize_css_function(value)
+    if value.match(/^([a-z\-]+)\((.*)\)/)
+      function = $1
+      cleaned_interior = sanitize_css_shorthand_value($2)
+      if function.match(/#{ArchiveConfig.SUPPORTED_CSS_FUNCTIONS.join('|')}/) && !cleaned_interior.blank?
+        return "#{function}(#{cleaned_interior});"
+      end
+    end
+    return ""
+  end
+
+
+  # Shorthand rule -- might have multiple space-separated and/or comma-separated values 
+  # AND might have rgba values in there also, aagh
+  def sanitize_css_shorthand_value(value)
+    cleanval = []
+    rgba_value = ""
+    # get rid of spaces after commas
+    value.split(", ").join(",").split(",").each do |value_section|        
+      # Rejoin rgba values before checking
+      if rgba_value.blank? && value_section.match(/rgba?\(/)
+        rgba_value = value_section
+        next
+      elsif !rgba_value.blank?
+        rgba_value += "," + value_section
+        if rgba_value.match(/rgba?\(.*\)/)
+          # we've completed the rgba value, go ahead and sanitize it
+          value_section = rgba_value
+          rgba_value = ""
+        else
+          next
+        end
+      end
+      
+      clean_section = []
+      value_section.split.each do |keyword|
+        if sanitize_css_value(keyword).blank?
+          # bad value somewhere, break
+          clean_section = []
+          break
+        else
+          clean_section << sanitize_css_value(keyword) 
+        end
+      end
+      if clean_section.empty?
+        cleanval = []
+        break
+      else
+        cleanval << clean_section.join(' ')
+      end
+    end
+    cleanval.join(', ')
+  end
+
+
+  # all values must either appear in ArchiveConfig.SUPPORTED_CSS_KEYWORDS, be urls of the format url(http://url/) or be 
+  # rgba(), hex (#), or numeric values, or a comma-separated list of same
+  def sanitize_css_value(value)
+    value_stripped = value.downcase.gsub(/(!important)/, '').strip
+
+    # handle urls if we want to support them
+    if value_stripped.match(/\burl\b/)
+      if ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url")
+        return sanitize_css_url(value)
+      else
+        return ""
+      end
+    end
+
+    # If it's an ordinary alphabetic string, it's fine
+    return value if value_stripped.split(',').all? {|subval| subval.strip =~ /^[a-z\-]+$/}
+
+    # If it's explicitly in our keywords it's fine
+    return value if value_stripped.split(',').all? {|subval| ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(subval.strip)}
+
+    # if it's an rgb, hex, scale, percentage, or numeric value it's fine
+    return value if value_stripped =~ /^(#[0-9a-f]+|scale\(\d{0,2}\.?\d{0,2}\)|rgba?\(\d+%?,? ?\d*%?,? ?\d*%?,? ?\d{0,3}?\.?\d{0,3}?\)|\-?\d{0,3}\.?\d{0,3}(cm|em|ex|in|mm|pc|pt|px|s|%|,)?)$/
+
+    return ""
+  end
+
+
   def sanitize_css_content(value)
-    # For now we only allow a quoted string
+    # For now we only allow a single completely quoted string
     return value if value =~ /^\'([^\']*)\'$/      
     return value if value =~ /^\"([^\"]*)\"$/
     
     return ""
   end
 
-
-  # all values must either appear in ArchiveConfig.SUPPORTED_CSS_KEYWORDS, be urls of the format url(http://url/) or be 
-  # rgb(), hex (#), or numeric values, or a comma-separated list of same
-  def sanitize_css_value(value)
-    value_stripped = value.downcase.gsub(/(!important)/, '').strip
-
-    # If it's explicitly in our keywords it's fine
-    return value if value_stripped.split(',').all? {|subval| ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(subval.strip)}
-
-    # If it's an ordinary alphabetic string, it's fine
-    return value if value_stripped.split(',').all? {|subval| subval.strip =~ /^[a-z\-]+$/}
-
-    # if it's an rgb, hex, scale, percentage, or numeric value it's fine
-    return value if value_stripped =~ /^(#[0-9a-f]+|scale\(\d{0,2}\.?\d{0,2}\)|rgba?\(\d+%?,? ?\d*%?,? ?\d*%?,? ?\d{0,3}?\.?\d{0,3}?\)|\-?\d{0,3}\.?\d{0,3}(cm|em|ex|in|mm|pc|pt|px|s|%|,)?)$/
-
-    if value_stripped.match(/\burl\b/) && ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?("url")
-      return sanitize_css_url(value)
-    end
-
-    return ""
-  end
 
   # Font family names may be alphanumeric values with dashes
   def sanitize_css_font(value)

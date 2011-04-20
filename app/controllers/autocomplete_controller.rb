@@ -262,11 +262,6 @@ public
     end    
   end
   
-  # css finders for skins
-  def css_keyword
-    set_finder(params[params[:fieldname]], HTML::WhiteListSanitizer.allowed_css_keywords)
-  end
-  
   # encodings for importing
   def encoding
     encodings = Encoding.name_list + Encoding.name_list.map {|e| e.downcase}

@@ -107,6 +107,52 @@ Feature: creating and editing skins
     And I should see "content: '||'"
     And I should see "content: 'Freeform: '"
 
+
+  Scenario: The sanitizer should allow through properties that are variations on the ones in the shorthand config list
+  Given I am logged in as "skinner"
+  When I create the skin "valid skin" with css
+      """  
+      #main ul.sorting {
+      background: rgba(120,120,120,1) 5%;
+      -moz-border-radius:0.15em !important; 
+      border-color:rgba(86,86,86,0.75) !important; 
+      box-shadow:0 2px 5px rgba(0,0,0,0.5);
+      float:none !important; 
+      text-align:center; 
+      }
+      #main ul.sorting a {
+      border-color:rgba(86,86,86,1) !important; 
+      color:rgba(231,231,231,1); 
+      text-shadow:-1px -1px 0 rgba(0,0,0,0.75)
+      }
+      ul.sorting  a:hover {
+      background: rgba(71,71,71,1) 5% !important; 
+      color:rgba(254,254,254,1);
+      }
+      #main .navigation ul.sorting a:visited{
+      color:rgba(254,254,254,1)
+      }
+      """
+    Then I should see "Skin was created successfully"
+      And I should see "rgba(254,254,254,1)"
+      And I should see "-moz-border-radius"
+
+
+  Scenario: The sanitizer should allow through gradients
+  Given I am logged in as "skinner"
+  When I create the skin "valid skin" with css
+      """  
+      #main ul.sorting {
+      background:-moz-linear-gradient(bottom, rgba(120,120,120,1) 5%, rgba(94,94,94,1) 50%, rgba(108,108,108,1) 55%, rgba(137,137,137,1) 100%) ;
+      }
+      ul.sorting  a:hover {
+      background:-webkit-linear-gradient(bottom, rgba(71,71,71,1) 5%, rgba(59,59,59,1) 50%, rgba(74,74,74,1) 55%, rgba(91,91,91,1) 100%) !important; 
+      }
+      """
+  Then I should see "Skin was created successfully"
+    And I should see "-moz-linear-gradient"
+    And I should see "-webkit-linear-gradient"
+
   # model for creating new "should allow" tests
   # Scenario: The sanitizer should allow through 
   # Given I am logged in as "skinner"
@@ -166,6 +212,12 @@ Feature: creating and editing skins
   When I fill in "CSS" with "div {background-image: url(&#1;javascript:alert('XSS'))}"
     And I press "Create"
   Then I should see "The background-image property in div cannot have the value url(javascript:alert('XSS'))"
+  When I fill in "CSS" with "div {background: -webkit-linear-gradient(url(xss.htc))}"
+    And I press "Create"
+  Then I should see "The background property in div cannot have the value -webkit-linear-gradient(url(xss.htc))"
+  When I fill in "CSS" with "div {background: -webkit-linear-gradient(url('xss.htc'))}"
+    And I press "Create"
+  Then I should see "The background property in div cannot have the value -webkit-linear-gradient(url('xss.htc'))"
 
   Scenario: If a user tries to get around our rules with quotes we should strip out evil code
   Given I am logged in as "skinner"
