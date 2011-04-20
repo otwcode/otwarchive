@@ -20,13 +20,9 @@
 .picture .blurb .header h4, .picture .blurb .header h5, .picture .blurb .header ul { margin: auto 6em auto 120px; }
 
 /*css3 non-critical perks*/
-/* the "content" property is not currently supported but will be made available soon.
-
  .blurb ul.required-tags:before { content: "(";}
  .blurb ul.required-tags:after 	{ content: ")";}
  .blurb ul.required-tags div:after
 								{ content: ",";}
  .blurb ul.required-tags div.warnings:after, .blurb ul.required-tags li:last-child div:after
 								{ content: "";}
-								
-*/

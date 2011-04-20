@@ -6,19 +6,29 @@ Given /^basic skins$/ do
   assert WorkSkin.basic_formatting
 end
 
-
-Given /^I set up the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
+Given /^I set up the skin "([^"]*)"$/ do |skin_name|
   visit new_skin_url
   fill_in("Title", :with => skin_name)
-  fill_in("CSS", :with => css)
   fill_in("Description", :with => "Random description")
+  fill_in("CSS", :with => DEFAULT_CSS)
 end
 
-Given /^I set up the skin "([^"]*)"$/ do |skin_name|
-  Given "I set up the skin \"#{skin_name}\" with css #{DEFAULT_CSS}"
+Given /^I set up the skin "([^"]*)" with css$/ do |skin_name, css|
+  Given "I set up the skin \"#{skin_name}\""
+  fill_in("CSS", :with => css)
+end
+
+Given /^I set up the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
+  Given "I set up the skin \"#{skin_name}\""
+  fill_in("CSS", :with => css)
 end
 
 Given /^I create the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
+  Given "I set up the skin \"#{skin_name}\" with css \"#{css}\""
+  click_button("Create")
+end
+
+Given /^I create the skin "([^"]*)" with css$/ do |skin_name, css|
   Given "I set up the skin \"#{skin_name}\" with css \"#{css}\""
   click_button("Create")
 end

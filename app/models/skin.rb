@@ -76,7 +76,7 @@ class Skin < ActiveRecord::Base
     else
       clean_code = []
       while (scanner.exist?(/\/\*/))
-        clean_code << (clean = clean_css_code(scanner.scan_until(/\/\*/)))
+        clean_code << (clean = clean_css_code(scanner.scan_until(/\/\*/).chomp('/*')))
         clean_code << '/*' + scanner.scan_until(/\*\//) if scanner.exist?(/\*\//)
       end
       clean_code << (clean = clean_css_code(scanner.rest))
