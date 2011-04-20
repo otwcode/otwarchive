@@ -195,7 +195,6 @@ Scenario: Series index for maaany series
     And I add the work "grumble" to "31" series "penguins"
   When I go to whoever's series page
   Then I should see "penguins30"
-  When I wait 2 seconds
-    And I follow "Next"
+  When I follow "Next"
   Then I should see "penguins0"
 
