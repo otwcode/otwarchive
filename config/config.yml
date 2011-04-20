@@ -206,49 +206,47 @@ FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 # - numeric values specified with percentages or cm|em|ex|in|mm|pc|pt|px|%
 # - image files specified with url(http://image.url/blahblah/whatever.(jpg|png|gif))
 #
-# Note: if you put in a shorthand property (eg "background") that automatically lets
-# through all the sub-properties like background-color and background-image.
-#
-SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "-moz-box-shadow", "-webkit-box-shadow", "cue", "font", "layer-background",
-  "layout-grid", "list-style", "margin",
-  "-moz-border", "-moz-outline", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transition", "-moz-transition", "-webkit-transition"]
 
-SUPPORTED_CSS_PROPERTIES: ["-moz-opacity", "-moz-transform", "-moz-user-select", "-replace", "-use-link-source", "-webkit-transform",
-  "accelerator", "azimuth", "background-color", "behavior", "border-bottom-color", "border-collapse", "border-color", "border-left-color",
-  "border-right-color", "border-top-color", "bottom", "caption-side", "clear", "clip", "color", "content", "counter-increment", "counter-reset",
-  "cursor", "direction", "display", "elevation", "empty-cells", "filter", "float", "font", "font-family", "font-size", "font-style", "font-variant",
-  "font-weight", "height", "ime-mode", "include-source", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "marker-offset",
-  "marks", "max-height", "max-width", "min-height", "min-width", "orphans", "overflow", "page", "pause", "pause-after", "pause-before", "pitch",
-  "pitch-range", "play-during", "position", "quotes", "richness", "right", "ruby-align", "ruby-overhang", "ruby-position", "size", "speak",
-  "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "table-layout", "text-align", "text-decoration", "text-indent",
-  "top", "transform", "unicode-bidi", "vertical-align", "visibility", "voice-family", "volume", "white-space", "widows", "width", "word-break",
-  "word-spacing", "word-wrap", "writing-mode", "z-index"]
+# We use this list for properties which can take shorthand values and also have subproperties or variants 
+# (ie, because "border" is in here, we allow through: border-right, border-bottom-left-radius, -moz-border-foo, etc)
+# It is slightly less secure so do NOT put any property in here if you aren't sure all variations on it are okay!
+SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "column", "cue", "font", "layer-background",
+  "layout-grid", "list-style", "margin", "marker",
+  "opacity", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transform", "transition"]
 
-# mostly color names here
-SUPPORTED_CSS_KEYWORDS: ["!important", "absolute", "all", "auto", "bigger", "blink", "block", "bold", "both", "bottom", "center",
-  "collapse", "dashed", "dotted", "ease-in", "hidden", "inline", "italic", "justify", "left", "medium", "no-repeat", "none", "normal",
-  "nowrap", "overline", "pointer", "repeat", "repeat-x", "repeat-y", "right", "scroll", "small-caps", "smaller", "solid", "static", "top",
-  "transparent", "underline", "url",
-  "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond",
-  "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson",
-  "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange",
-  "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkturquoise", "darkviolet", "deeppink",
-  "deepskyblue", "dimgray", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold",
-  "goldenrod", "gray", "green", "greenyellow", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush",
-  "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgrey", "lightgreen", "lightpink",
-  "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen",
-  "magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue",
-  "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy",
-  "oldlace", "olive", "olivedrab", "orange", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred",
-  "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon",
-  "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "snow", "springgreen", "steelblue", "tan",
-  "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"]
+SUPPORTED_CSS_PROPERTIES: ["-moz-user-select", "-replace", "-use-link-source", 
+  "accelerator", "alignment-adjust", "alignment-baseline", "appearance", "azimuth", 
+  "baseline-shift", "behavior", "binding", "bookmark-label", "bookmark-level", "bookmark-target", "bottom", "box-align", "box-direction", 
+  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile", 
+  "content", "counter-increment", "counter-reset", "crop", "cue", "cue-after", "cue-before", 
+  "cursor", "direction", "display", "dominant-baseline", "drop-initial-after-adjust", "drop-initial-after-align", "drop-initial-before-adjust", 
+  "drop-initial-before-align", "drop-initial-size", "drop-initial-value", "elevation", "empty-cells", "filter", "fit", "fit-position", "float", 
+  "float-offset", "font", "font-effect", "font-emphasize", "font-emphasize-position", "font-emphasize-style", "font-family", "font-size", "font-size-adjust", 
+  "font-smooth", "font-stretch", "font-style", "font-variant", "font-weight", "grid-columns", "grid-rows", "hanging-punctuation", "height", "hyphenate-after", 
+  "hyphenate-before", "hyphenate-character", "hyphenate-lines", "hyphenate-resource", "hyphens", "icon", "image-orientation", "image-resolution", "ime-mode", 
+  "include-source", "inline-box-align", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "line-stacking", "line-stacking-ruby", 
+  "line-stacking-shift", "line-stacking-strategy", "mark", "mark-after", "mark-before", "marks", "marquee-direction", "marquee-play-count", 
+  "marquee-speed", "marquee-style", "max-height", "max-width", "min-height", "min-width", "move-to", "nav-down", "nav-index", "nav-left", "nav-right", 
+  "nav-up", "opacity", "orphans", "page", 
+  "page-policy", "phonemes", "pitch", "pitch-range", "play-during", "position", "presentation-level", "punctuation-trim", 
+  "quotes", "rendering-intent", "resize", "rest", "rest-after", "rest-before", "richness", "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang", 
+  "ruby-position", "ruby-span", "size", "speak", "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set", "tab-side", 
+  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", 
+  "vertical-align", "visibility", "voice-balance", "voice-duration", "voice-family", "voice-pitch", "voice-pitch-range", "voice-rate", "voice-stress", 
+  "voice-volume", "volume", "white-space", "white-space-collapse", "widows", "width", "word-break", "word-spacing", "word-wrap", "writing-mode", "z-index"]
+
+# we allow through any string that is just a-z plus dashes (no spaces), so the only keywords you need to specify would
+# be ones that have something else or url, if you want to allow url values
+SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 
 # if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this kind of
 # resource will be allowed
 SUPPORTED_EXTERNAL_URLS: ["jpg", "png", "gif"]
 
-
+# We use this list to specify types of functions that we accept (like gradient).
+# Like the shorthand properties, this allows through all variations on the name (eg -moz-linear-gradient)
+# Note: even though url() is actually a function, because we want special handling for it we do NOT include it here!
+SUPPORTED_CSS_FUNCTIONS: ["gradient"]
 
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'
