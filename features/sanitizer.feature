@@ -12,6 +12,7 @@ Feature: Sanitizing HTML
     And I fill in "Fandoms" with "Supernatural"
     And I fill in "Work Title" with "All Hell Breaks Loose"
     And I fill in "content" with `'';!--"<XSS>=&{()}`
+  #" comment here just to fix syntax highlighting from the unbalanced quotes
   When I press "Preview"
   Then I should see "Preview Work"
     And I should not see "XSS"
@@ -43,9 +44,8 @@ Feature: Sanitizing HTML
     And I fill in "content" with '<IMG """><SCRIPT>alert("XSS")</SCRIPT>">'
     And I press "Preview"
   Then I should see "Preview Work"
-    When "TODO: check if this is a real bug" is fixed
-#    And I should see "CDATA"
-#    And I should see "<"
+    And I should see "CDATA"
+    And I should see "<"
     And I should not find "SCRIPT"
   When I press "Edit"
     And I fill in "content" with "<IMG SRC=javascript:alert(String.fromCharCode(88,83,83))>"
@@ -154,8 +154,7 @@ Feature: Sanitizing HTML
     And I fill in "content" with "<SCRIPT>alert(/XSS/.source)</SCRIPT>"
     And I press "Preview"
   Then I should see "Preview Work"
-  When "ditto" is fixed
-    # And I should see "CDATA"
+    And I should see "CDATA"
     And I should not find "SCRIPT"
     And I should see "alert(/XSS/.source)"
   When I press "Edit"
@@ -169,9 +168,6 @@ Feature: Sanitizing HTML
     And I fill in "content" with '</TITLE><SCRIPT>alert("XSS");</SCRIPT>'
     And I press "Preview"
   Then I should see "Preview Work"
-  When "ditto" is fixed
-    # And I should not see "XSS"
-    # And I should not find "XSS"
     And I should not find "SCRIPT"
   When I press "Edit"
     And I fill in "content" with `<INPUT TYPE="IMAGE" SRC="javascript:alert('XSS');">`
@@ -233,8 +229,6 @@ Feature: Sanitizing HTML
   Then I should see "Preview Work"
     And I should not see "XSS"
     And I should not find "XSS"
-    When "ditto" is fixed
-    # And I should not see "xss"
     And I should not find "xss"
     And I should not find "STYLE>@import"
   When I press "Edit"
