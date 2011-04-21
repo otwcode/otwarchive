@@ -3,59 +3,14 @@ Feature: Prompt Meme Challenge
   In order to have an archive full of works
   As a humble user
   I want to create a prompt meme and post to it
-
-  Scenario: Create a prompt meme, sign up for it, basic version
-
-  Given I have no tags
-    And I have no prompts
-    And basic tags
-    And I create the fandom "Stargate Atlantis" with id 27
-    And I create the fandom "Stargate SG-1" with id 28
-    And a freeform exists with name: "Alternate Universe - Historical", canonical: true
-    And a freeform exists with name: "Alternate Universe - High School", canonical: true
-    And a freeform exists with name: "Something else weird", canonical: true
-    And I am logged in as "mod1"
-  Then I should see "Hi, mod1!"
-    And I should see "Log out"
-    
-  # set up mod's preferences
   
-  When I am on my preferences page
-  Then I should see "Your time zone"
-    And "TODO: checking an option is selected" is fixed
-    # And I should find "(GMT-05:00) Eastern Time (US & Canada)" selected within "preference_time_zone"
-  When I select "(GMT-09:00) Alaska" from "preference_time_zone"
-    And I press "Update"
-  Then I should see "Your preferences were successfully updated."
+  Scenario: Issue 1859
   
-  # set up the challenge
-  
-  When I go to the collections page
-  Then I should see "Collections in the "
-    And I should not see "Battle 12"
+  Given I am logged in as "mod1"
+    And I have standard challenge tags setup
   When I set up Battle 12 promptmeme
-    And I should see "Setting Up The Battle 12 Prompt Meme"
-    And "TODO: checking an option is selected" is fixed
-    # And I should find "(GMT-09:00) Alaska" selected within "prompt_meme_time_zone"
-    And I should see "(GMT-09:00) Alaska" within "#main"
-    And I should not see "Offer Settings"
-    And I should see "Request Settings"
-    And I should not see "If you plan to use automated matching"
-    And I should not see "Allow Any"
-  When I fill in "General Signup Instructions" with "Here are some general tips"
-    And I fill in "Signup Instructions" with "Please request easy things"
-    And I select "2011" from "prompt_meme_signups_open_at_1i"
-    And I select "2011" from "prompt_meme_signups_close_at_1i"
-    And I select "(GMT-05:00) Eastern Time (US & Canada)" from "prompt_meme_time_zone"
-    And I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate SG-1, Stargate Atlantis"
-    And I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"
-    And I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "1"
-    And I fill in "prompt_meme_request_restriction_attributes_freeform_num_allowed" with "2"
-    And I fill in "prompt_meme_requests_num_allowed" with "3"
-    And I fill in "prompt_meme_requests_num_required" with "2"
-    And I check "Signup open?"
-    And I press "Submit"
-    And "issue 1859" is fixed
+  When I fill in some more Battle 12 options
+  And "issue 1859" is fixed
   # Then I should see "If signup is open, signup closed date can't be in the past"
   # When I select "2012" from "prompt_meme_signups_open_at_1i"
   #   And I select "2012" from "prompt_meme_signups_close_at_1i"
@@ -64,35 +19,84 @@ Feature: Prompt Meme Challenge
   # When I select "2011" from "prompt_meme_signups_open_at_1i"
   #   And I press "Submit"
   Then I should see "Challenge was successfully created"
-  When I follow "Profile"
-  Then I should see "Signup: CURRENTLY OPEN" within ".collection.meta"
-    And I should see "Signup closes:"
+  
+  Scenario: Timezone defect
+  
+  Given I am logged in as "mod1"
+    And I have standard challenge tags setup
+    
+  # set up mod's preferences
+  Given mod1 lives in Alaska
+  
+  When I set up Battle 12 promptmeme
+    And "TODO: checking an option is selected" is fixed
+    # And I should find "(GMT-09:00) Alaska" selected within "prompt_meme_time_zone"
+    And I should see "(GMT-09:00) Alaska" within "#main"
+  Then I should see prompt meme options
+  When I fill in some more Battle 12 options
+  Then I should see "Challenge was successfully created"
   ### TODO fix timezone dependency before next spring! Or not.
-  #  And I should see "EST ("
-  #  And I should see "AKST)"
-  When I follow "Challenge Settings"
-    And I select "(GMT-09:00) Alaska" from "prompt_meme_time_zone"
-    # TODO: Raise an issue to rename this button to something more descriptive
-    And I press "Submit"
-  Then I should see "Challenge was successfully updated"
-  When I follow "Profile"
-  Then I should see "Signup: CURRENTLY OPEN"
-  ### TODO fix timezone dependency before next spring!
-  #  And I should not see "EST" within "#main"
-  #  And I should see "AKST" within "#main"
+  #  Then I should see the timezone problem
+  When I change the challenge timezone to Alaska
+  # Then I should see just one timezone
+
+  Scenario: Create a prompt meme
+
+  Given I am logged in as "mod1"
+    And I have standard challenge tags setup
+  
+  # Confirm it's not there already, left over from another test
+  Then Battle 12 should not exist
+  
+  # set up the challenge
+  When I set up Battle 12 promptmeme
+  Then I should see "Setting Up The Battle 12 Prompt Meme"
+  Then I should see prompt meme options
+  When I fill in some more Battle 12 options
+  Then I should see "Challenge was successfully created"
+  Then signup should be open
   When I go to the collections page
   Then I should see "Battle 12"
+  
+  Scenario: User can see a prompt meme
+
+  Given I am logged in as "mod1" with password "something"
+    And I have standard challenge tags setup
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+  When I go to the collections page
+  Then I should see "Battle 12"
+  
+  Scenario: User can see profile descriptions
+  
+  Given I have standard challenge users
+    And I have standard challenge tags setup
+  # set up the challenge
+    And I am logged in as "mod1" with password "something"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+  When I go to "Battle 12" collection's page
+  When I follow "Profile"
+  Then I should see Battle 12 descriptions
+  
+  Scenario: Sign up for a prompt meme and miss out some fields
+
+  Given I have standard challenge users
+    And I have standard challenge tags setup
+    And I am logged in as "mod1" with password "something"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
     
-  # sign up, noting errors if you fail to fill in required fields
+  # sign up, with errors if you fail to fill in required fields
   
   When I follow "Log out"
     And I am logged in as "myname1"
-  When I go to the collections page
-  Then I should see "Battle 12"
-  When I follow "Battle 12"
+  When I go to "Battle 12" collection's page
   Then I should see "Sign Up"
-  When I follow "Profile"
-  Then I should see Battle 12 descriptions
   When I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_27"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
@@ -102,9 +106,15 @@ Feature: Prompt Meme Challenge
   When I check "challenge_signup_requests_attributes_1_fandom_27"
     And I press "Submit"
   Then I should see "Signup was successfully created"
-    And I should see "Prompts (2)"
   
-  # someone else sign up, with 3 prompts this time once Javascript is working, and with anon prompts
+  Scenario: Sign up without Javascript
+  
+  Given I have standard challenge users
+    And I have standard challenge tags setup
+  # set up the challenge
+    And I am logged in as "mod1" with password "something"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
   
   When I follow "Log out"
     And I am logged in as "myname2"
@@ -116,29 +126,57 @@ Feature: Prompt Meme Challenge
   When I follow "add_section"
     And "Issue 2168" is fixed
   #Then I should see "Request 3"
-  #When I check "challenge_signup_requests_attributes_2_fandom_27"
-    And I check "challenge_signup_requests_attributes_1_fandom_27"
-    And I check "challenge_signup_requests_attributes_0_anonymous"
-    And I check "challenge_signup_requests_attributes_1_anonymous"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School, Something else weird"
-   # And I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"
-    And I press "Submit"
+  
+  Scenario: View signups in the dashboard
+  
+  Given I have standard challenge users
+    And I have standard challenge tags setup
+    And I am logged in as "mod1" with password "something"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+  When I sign up for Battle 12 with combination A
+  Then I should see "Signup was successfully created"
+    And I should see "Prompts (2)"
+    
+  When I follow "myname1"
+  Then I should see "My Signups (1)"
+  When I follow "My Signups (1)"
+  Then I should see "Battle 12"
+    
+  Scenario: All the rest of the unrefactored stuff
+
+  Given I have standard challenge users
+    And I have standard challenge tags setup
+  # set up the challenge
+    And I am logged in as "mod1" with password "something"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+    
+  # sign up with no anon prompts
+  
+  When I follow "Log out"
+    And I am logged in as "myname1" with password "something"
+  When I sign up for Battle 12 with combination A
+  Then I should see "Signup was successfully created"
+    And I should see "Prompts (2)"
+  
+  # someone else sign up, with both anon prompts
+  
+  When I follow "Log out"
+    And I am logged in as "myname2" with password "something"
+  When I sign up for Battle 12 with combination B
   Then I should see "Signup was successfully created"
     And I should see "Prompts (4)"
   
-  # third person sign up, with an anon prompt
+  # third person sign up, with one anon prompt
   
   When I follow "Log out"
     And I am logged in as "myname3"
   When I sign up for Battle 12
   Then I should see "Signup was successfully created"
-  
-  # check you can see signups in the dashboard
-  
-  When I follow "myname3"
-  Then I should see "My Signups (1)"
-  When I follow "My Signups (1)"
-  Then I should see "Battle 12"
   
   # fourth person sign up
   
