@@ -5,12 +5,17 @@ Given /^I have no challenge assignments$/ do
 end
 
 Given /^I have standard challenge users$/ do
-# figure out how to set up users here later - need mod1 and myname1 to 4, all password something
-  When %{I am logged in as "mod1" with password "something"}
+# figure out how to set up users here later - need mod1 and myname1 to 4
+  When %{I am logged in as "mod1"}
     And "I am logged out"
-  When %{I am logged in as "myname1" with password "something"}
+  When %{I am logged in as "myname1"}
     And "I am logged out"
-    
+  When %{I am logged in as "myname2"}
+    And "I am logged out"
+  When %{I am logged in as "myname3"}
+    And "I am logged out"
+  When %{I am logged in as "myname4"}
+    And "I am logged out"
 end
 
 Given /^I have standard challenge tags setup$/ do

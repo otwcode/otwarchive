@@ -60,33 +60,31 @@ Feature: Prompt Meme Challenge
   
   Scenario: User can see a prompt meme
 
-  Given I am logged in as "mod1" with password "something"
+  Given I am logged in as "mod1"
     And I have standard challenge tags setup
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
   When I follow "Log out"
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
   When I go to the collections page
   Then I should see "Battle 12"
   
   Scenario: User can see profile descriptions
   
-  Given I have standard challenge users
-    And I have standard challenge tags setup
+  Given I have standard challenge tags setup
   # set up the challenge
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
   When I follow "Log out"
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
   When I go to "Battle 12" collection's page
   When I follow "Profile"
   Then I should see Battle 12 descriptions
   
   Scenario: Sign up for a prompt meme and miss out some fields
 
-  Given I have standard challenge users
-    And I have standard challenge tags setup
+  Given I have standard challenge tags setup
     And I am logged in as "mod1" with password "something"
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
@@ -109,10 +107,9 @@ Feature: Prompt Meme Challenge
   
   Scenario: Sign up without Javascript
   
-  Given I have standard challenge users
-    And I have standard challenge tags setup
+  Given I have standard challenge tags setup
   # set up the challenge
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
   
@@ -129,14 +126,13 @@ Feature: Prompt Meme Challenge
   
   Scenario: View signups in the dashboard
   
-  Given I have standard challenge users
-    And I have standard challenge tags setup
-    And I am logged in as "mod1" with password "something"
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
   
   When I follow "Log out"
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   Then I should see "Signup was successfully created"
     And I should see "Prompts (2)"
@@ -151,14 +147,14 @@ Feature: Prompt Meme Challenge
   Given I have standard challenge users
     And I have standard challenge tags setup
   # set up the challenge
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
     
   # sign up with no anon prompts
   
   When I follow "Log out"
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   Then I should see "Signup was successfully created"
     And I should see "Prompts (2)"
