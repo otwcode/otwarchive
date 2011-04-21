@@ -141,90 +141,91 @@ Feature: Prompt Meme Challenge
   Then I should see "My Signups (1)"
   When I follow "My Signups (1)"
   Then I should see "Battle 12"
+  
+  Scenario: Sort prompts by date
+  
+  Given I have standard challenge users
+    And I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  And I am logged in as "myname2"
+  When I sign up for Battle 12 with combination B
+  When I go to "Battle 12" collection's page
+  When I follow "Prompts ("
+    And I follow "Sort by date"
+  Then I should see "Something else weird"
+  
+  Scenario: Sort prompts by fandom
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  And I am logged in as "myname2"
+  When I sign up for Battle 12 with combination B
+  When I go to "Battle 12" collection's page
+  When I follow "Prompts ("
+    And I follow "Sort by fandom"
+  Then I should see "Something else weird"
+  
+  Scenario: Claim a prompt and view claims on main page and user page
+  
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+  And I am logged in as "myname4"
+  And I claim a prompt from Battle 12
+  Then I should see a prompt is claimed
     
   Scenario: All the rest of the unrefactored stuff
 
   Given I have standard challenge users
     And I have standard challenge tags setup
-  # set up the challenge
     And I am logged in as "mod1"
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
     
   # sign up with no anon prompts
   
-  When I follow "Log out"
-    And I am logged in as "myname1"
+  When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   Then I should see "Signup was successfully created"
     And I should see "Prompts (2)"
   
   # someone else sign up, with both anon prompts
   
-  When I follow "Log out"
-    And I am logged in as "myname2" with password "something"
+  When I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
   Then I should see "Signup was successfully created"
     And I should see "Prompts (4)"
   
   # third person sign up, with one anon prompt
   
-  When I follow "Log out"
-    And I am logged in as "myname3"
+  When I am logged in as "myname3"
   When I sign up for Battle 12
   Then I should see "Signup was successfully created"
   
   # fourth person sign up
   
-  When I follow "Log out"
-    And I am logged in as "myname4"
-  When I go to "Battle 12" collection's page
-    And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_27"
-    And I check "challenge_signup_requests_attributes_1_fandom_27"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird, Alternate Universe - Historical"
-    And I press "Submit"
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination C
   Then I should see "Signup was successfully created"
-  When I go to the collections page
-    And I follow "Battle 12"
-  Then I should see "Prompts"
-  
-  # user views prompts and sorts them
-  
-  When I follow "Prompts ("
-    And I follow "Sort by date"
-  Then I should see "Something else weird"
-  When I follow "Sort by fandom"
-  Then I should see "Something else weird"
   
   # user claims a prompt
   
-  When I follow "Log out"
-    And I am logged in as "myname4"
-  When I go to the collections page
-    And I follow "Battle 12"
-    And I follow "Prompts (8)"
-  Then I should see "Claim" within "th"
-    And I should not see "Sign in to claim prompts"
-    And I should see "Stargate Atlantis"
-  When I press "Claim"
-  # note, prompts are in reverse date order by default, so myname4 will have claimed their own prompt here
-  Then I should see "New claim made."
-    And I should see "Claims for Battle 12"
-    And I should see "Post To Fulfill"
-    And I should see "Delete"
-    
-  # View the claim
-
-  When I am on my user page
-    And I follow "My Claims"
-    And I follow "myname4" within "#claims_table"
-  Then I should see "Claimed by Anonymous: myname4"
+  When I am logged in as "myname4"
+  When I claim a prompt from Battle 12
   
   # mod view signups
   
-  When I follow "Log out"
-    And I am logged in as "mod1"
+  When I am logged in as "mod1"
     And I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
   Then I should see "myname4" within "#main"
@@ -238,10 +239,7 @@ Feature: Prompt Meme Challenge
     
   # mod closes signups
   
-  When I follow "Challenge Settings"
-    And I uncheck "Signup open?"
-    And I press "Submit"
-  Then I should see "Challenge was successfully updated"
+  When I close signups for "Battle 12"
   
   # collection is anonymous-writers but claims are shown for mod
   
@@ -287,8 +285,7 @@ Feature: Prompt Meme Challenge
 
   When I am on my user page
   Then I should see "My Claims (0)"
-  When I go to the collections page
-    And I follow "Battle 12"
+  When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should see "Secret!" within "#fulfilled_claims"
     And I should not see "Secret!" within "#unfulfilled_claims"
@@ -300,8 +297,7 @@ Feature: Prompt Meme Challenge
   
   # mod claims a prompt
 
-  When I follow "Log out"
-    And I am logged in as "mod1"
+  When I am logged in as "mod1"
   When I go to "Battle 12" collection's page
     And I follow "Prompts"
   When I press "Claim"
@@ -394,8 +390,7 @@ Feature: Prompt Meme Challenge
 
   # make challenge revealed but still anon
 
-  When I follow "Log out"
-    And I am logged in as "mod1"
+  When I am logged in as "mod1"
   When I go to "Battle 12" collection's page
     And I follow "Settings"
     And I uncheck "Is this collection currently unrevealed?"
@@ -407,8 +402,7 @@ Feature: Prompt Meme Challenge
 
   # check ficlet is visible but anon
 
-  When I follow "Log out"
-    And I am logged in as "myname4"
+  When I am logged in as "myname4"
   When I view the work "Fulfilled Story-thing"
   Then I should see "In response to a prompt by: myname4"
     And I should see "Fandom: Stargate Atlantis"
@@ -420,8 +414,7 @@ Feature: Prompt Meme Challenge
 
   # make challenge un-anon
 
-  When I follow "Log out"
-    And I am logged in as "mod1"
+  When I am logged in as "mod1"
   When I go to "Battle 12" collection's page
     And I follow "Settings"
     And I uncheck "Is this collection currently anonymous?"
@@ -432,8 +425,7 @@ Feature: Prompt Meme Challenge
 
   # user can now see claims
 
-  When I follow "Log out"
-    And I am logged in as "myname4"
+  When I am logged in as "myname4"
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
     And I follow "Show Claims"

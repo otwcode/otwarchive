@@ -64,6 +64,16 @@ When /^I sign up for Battle 12 with combination B$/ do
     And "I press \"Submit\""
 end
 
+When /^I sign up for Battle 12 with combination C$/ do
+  When "I go to the collections page"
+    And "I follow \"Battle 12\""
+    And "I follow \"Sign Up\""
+    And "I check \"challenge_signup_requests_attributes_0_fandom_27\""
+    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
+    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird, Alternate Universe - Historical\""
+    And "I press \"Submit\""
+end
+
 When /^I add prompt (\d+)$/ do |number|
   When "I follow \"Add another prompt\""
     And "I check \"challenge_signup_requests_attributes_#{number}_fandom_54\""
@@ -139,6 +149,23 @@ When /^I change the challenge timezone to Alaska$/ do
     Then %{I should see "Challenge was successfully updated"}
 end
 
+When /^I claim a prompt from Battle 12$/ do
+  When %{I go to "Battle 12" collection's page}
+  #'
+    And %{I follow "Prompts ("}
+  Then %{I should see "Claim" within "th"}
+    And %{I should not see "Sign in to claim prompts"}
+  When %{I press "Claim"}
+end
+
+When /^I close signups for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Challenge Settings"}
+    And %{I uncheck "Signup open?"}
+    And %{I press "Submit"}
+  Then %{I should see "Challenge was successfully updated"}
+end
+
 ### THEN
 
 Then /^I should see Battle 12 descriptions$/ do
@@ -182,4 +209,19 @@ Then /^I should see just one timezone$/ do
   Then %{I should see "Signup: CURRENTLY OPEN"}
   And %{I should not see "EST" within "#main"}
   And %{I should see "AKST" within "#main"}
+end
+
+Then /^I should see a prompt is claimed$/ do
+  # note, prompts are in reverse date order by default
+  Then %{I should see "New claim made."}
+    And %{I should see "Claims for Battle 12"}
+    And %{I should see "Post To Fulfill"}
+    And %{I should see "Delete"}
+    
+  # View the claim
+  When "I am on my user page"
+    And %{I follow "My Claims"}
+    Then %{I should see "Post To Fulfill"}
+    And %{I follow "Anonymous" within "#claims_table"}
+  Then %{I should see "Claimed by Anonymous: Anonymous"}
 end
