@@ -149,9 +149,8 @@ When /^I change the challenge timezone to Alaska$/ do
     Then %{I should see "Challenge was successfully updated"}
 end
 
-When /^I claim a prompt from Battle 12$/ do
-  When %{I go to "Battle 12" collection's page}
-  #'
+When /^I claim a prompt from "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
     And %{I follow "Prompts ("}
   Then %{I should see "Claim" within "th"}
     And %{I should not see "Sign in to claim prompts"}
@@ -159,6 +158,7 @@ When /^I claim a prompt from Battle 12$/ do
 end
 
 When /^I close signups for "([^\"]*)"$/ do |title|
+  When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Challenge Settings"}
     And %{I uncheck "Signup open?"}
@@ -224,4 +224,35 @@ Then /^I should see a prompt is claimed$/ do
     Then %{I should see "Post To Fulfill"}
     And %{I follow "Anonymous" within "#claims_table"}
   Then %{I should see "Claimed by Anonymous: Anonymous"}
+end
+
+Then /^I should see correct signups for Battle 12$/ do
+  Then %{I should see "myname4" within "#main"}
+    And %{I should see "myname3" within "#main"}
+    And %{I should not see "myname2" within "#main"}
+    And %{I should see "(Anonymous)" within "#main"}
+    And %{I should see "myname1" within "#main"}
+    And %{I should see "Something else weird"}
+    And %{I should see "Alternate Universe - Historical"}
+    And %{I should not see "Matching"}
+end
+
+Then /^claims are hidden$/ do
+  When %{I go to "Battle 12" collection's page}
+    And %{I follow "Claims"}
+  Then %{I should see "Unfulfilled Claims"}
+    And %{I should see "Fulfilled Claims"}
+    And %{I should see "myname" within "#unfulfilled_claims"}
+    And %{I should see "Secret!" within "#unfulfilled_claims"}
+    And %{I should see "Stargate Atlantis" within "#main"}
+end
+
+Then /^claims are shown$/ do
+  When %{I go to "Battle 12" collection's page}
+    And %{I follow "Claims"}
+    And %{I should see "Unfulfilled Claims"}
+    And %{I should see "Fulfilled Claims"}
+    And %{I should see "myname4" within "#unfulfilled_claims"}
+    And %{I should not see "Secret!" within "#unfulfilled_claims"}
+    And %{I should see "Stargate Atlantis" within "#main"}
 end

@@ -181,13 +181,65 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination B
   And I am logged in as "myname4"
-  And I claim a prompt from Battle 12
+  And I claim a prompt from "Battle 12"
   Then I should see a prompt is claimed
+  
+  Scenario: Mod can view signups
+  
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I am logged in as "myname1"
+  # no anon
+  When I sign up for Battle 12 with combination A 
+  When I am logged in as "myname2"
+  # both anon
+  When I sign up for Battle 12 with combination B
+  When I am logged in as "myname3"
+  # one anon
+  When I sign up for Battle 12
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination C
+  
+  When I am logged in as "mod1"
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts (8)"
+  Then I should see correct signups for Battle 12
+  
+  Scenario: Sign up with both prompts anon
+  
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+  Then I should see "Signup was successfully created"
+  
+  Scenario: Sign up with neither prompt anon
+  
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  Then I should see "Signup was successfully created"
+  
+  Scenario: Sign up with one anon prompt and one not
+  
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination C
+  Then I should see "Signup was successfully created"
     
   Scenario: All the rest of the unrefactored stuff
 
-  Given I have standard challenge users
-    And I have standard challenge tags setup
+  Given I have standard challenge tags setup
     And I am logged in as "mod1"
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
@@ -221,47 +273,20 @@ Feature: Prompt Meme Challenge
   # user claims a prompt
   
   When I am logged in as "myname4"
-  When I claim a prompt from Battle 12
-  
-  # mod view signups
-  
-  When I am logged in as "mod1"
-    And I go to "Battle 12" collection's page
-    And I follow "Prompts (8)"
-  Then I should see "myname4" within "#main"
-    And I should see "myname3" within "#main"
-    And I should not see "myname2" within "#main"
-    And I should see "(Anonymous)" within "#main"
-    And I should see "myname1" within "#main"
-    And I should see "Something else weird"
-    And I should see "Alternate Universe - Historical"
-    And I should not see "Matching"
+  When I claim a prompt from "Battle 12"
     
   # mod closes signups
-  
   When I close signups for "Battle 12"
   
   # collection is anonymous-writers but claims are shown for mod
   
-  When I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should see "Unfulfilled Claims"
-    And I should see "Fulfilled Claims"
-    And I should see "myname4" within "#unfulfilled_claims"
-    And I should not see "Secret!" within "#unfulfilled_claims"
-    And I should see "Stargate Atlantis" within "#main"
+  Then claims are shown
     
   # claims are hidden for ordinary user
   
   When I follow "Log out"
     And I am logged in as "myname4"
-    And I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should see "Unfulfilled Claims"
-    And I should see "Fulfilled Claims"
-    And I should see "myname4" within "#unfulfilled_claims"
-    And I should see "Secret!" within "#unfulfilled_claims"
-    And I should see "Stargate Atlantis" within "#main"
+  Then claims are hidden
   
   # user posts a fic
   
@@ -298,9 +323,7 @@ Feature: Prompt Meme Challenge
   # mod claims a prompt
 
   When I am logged in as "mod1"
-  When I go to "Battle 12" collection's page
-    And I follow "Prompts"
-  When I press "Claim"
+  When I claim a prompt from "Battle 12"
   Then I should see "New claim made."
   
   # mod can still see claims even though it's anonymous
