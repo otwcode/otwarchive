@@ -222,6 +222,7 @@ Then /^I should see a prompt is claimed$/ do
   When "I am on my user page"
     And %{I follow "My Claims"}
     Then %{I should see "Post To Fulfill"}
+    Then %{I should not see "myname" within "#claims_table"}
     And %{I follow "Anonymous" within "#claims_table"}
   Then %{I should see "Claimed by Anonymous: Anonymous"}
 end
