@@ -244,6 +244,31 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
   Then I should see "Signup was successfully created"
+  
+  Scenario: User can fulfill a claim
+  
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up Battle 12 promptmeme
+  When I fill in some more Battle 12 options
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+  And I am logged in as "myname4"
+  And I claim a prompt from "Battle 12"
+  
+  When I am on my user page
+  When I follow "My Claims (1)"
+  When I follow "Post To Fulfill"
+    And I fill in "Work Title" with "Fulfilled Story"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "content" with "This is an exciting story about Atlantis"
+  When I press "Preview"
+    And I press "Post"
+  Then I should see "Work was successfully posted"
+    And I should see "Fandom:"
+    And I should see "Stargate Atlantis"
+    And I should not see "Alternate Universe - Historical"
     
   Scenario: All the rest of the unrefactored stuff
 
@@ -300,10 +325,8 @@ Feature: Prompt Meme Challenge
   
   # user posts a fic
   
-  When I am on my user page
-  Then I should see "My Claims (1)" 
+  When I am on my user page 
   When I follow "My Claims (1)"
-  Then I should see "myname4" within "#claims_table"
   When I follow "Post To Fulfill"
     And I fill in "Work Title" with "Fulfilled Story"
     And I select "Not Rated" from "Rating"
@@ -311,10 +334,6 @@ Feature: Prompt Meme Challenge
     And I fill in "content" with "This is an exciting story about Atlantis"
   When I press "Preview"
     And I press "Post"
-  Then I should see "Work was successfully posted"
-    And I should see "Fandom:"
-    And I should see "Stargate Atlantis"
-    And I should not see "Alternate Universe - Historical"
   
   # Claim is completed
 
