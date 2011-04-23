@@ -5,12 +5,17 @@ Given /^I have no challenge assignments$/ do
 end
 
 Given /^I have standard challenge users$/ do
-# figure out how to set up users here later - need mod1 and myname1 to 4, all password something
-  When %{I am logged in as "mod1" with password "something"}
+# figure out how to set up users here later - need mod1 and myname1 to 4
+  When %{I am logged in as "mod1"}
     And "I am logged out"
-  When %{I am logged in as "myname1" with password "something"}
+  When %{I am logged in as "myname1"}
     And "I am logged out"
-    
+  When %{I am logged in as "myname2"}
+    And "I am logged out"
+  When %{I am logged in as "myname3"}
+    And "I am logged out"
+  When %{I am logged in as "myname4"}
+    And "I am logged out"
 end
 
 Given /^I have standard challenge tags setup$/ do
@@ -56,6 +61,16 @@ When /^I sign up for Battle 12 with combination B$/ do
     And "I check \"challenge_signup_requests_attributes_0_anonymous\""
     And "I check \"challenge_signup_requests_attributes_1_anonymous\""
     And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Alternate Universe - High School, Something else weird\""
+    And "I press \"Submit\""
+end
+
+When /^I sign up for Battle 12 with combination C$/ do
+  When "I go to the collections page"
+    And "I follow \"Battle 12\""
+    And "I follow \"Sign Up\""
+    And "I check \"challenge_signup_requests_attributes_0_fandom_27\""
+    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
+    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird, Alternate Universe - Historical\""
     And "I press \"Submit\""
 end
 
@@ -134,6 +149,23 @@ When /^I change the challenge timezone to Alaska$/ do
     Then %{I should see "Challenge was successfully updated"}
 end
 
+When /^I claim a prompt from "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+    And %{I follow "Prompts ("}
+  Then %{I should see "Claim" within "th"}
+    And %{I should not see "Sign in to claim prompts"}
+  When %{I press "Claim"}
+end
+
+When /^I close signups for "([^\"]*)"$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Challenge Settings"}
+    And %{I uncheck "Signup open?"}
+    And %{I press "Submit"}
+  Then %{I should see "Challenge was successfully updated"}
+end
+
 ### THEN
 
 Then /^I should see Battle 12 descriptions$/ do
@@ -177,4 +209,50 @@ Then /^I should see just one timezone$/ do
   Then %{I should see "Signup: CURRENTLY OPEN"}
   And %{I should not see "EST" within "#main"}
   And %{I should see "AKST" within "#main"}
+end
+
+Then /^I should see a prompt is claimed$/ do
+  # note, prompts are in reverse date order by default
+  Then %{I should see "New claim made."}
+    And %{I should see "Claims for Battle 12"}
+    And %{I should see "Post To Fulfill"}
+    And %{I should see "Delete"}
+    
+  # View the claim
+  When "I am on my user page"
+    And %{I follow "My Claims"}
+    Then %{I should see "Post To Fulfill"}
+    And %{I follow "Anonymous" within "#claims_table"}
+  Then %{I should see "Claimed by Anonymous: Anonymous"}
+end
+
+Then /^I should see correct signups for Battle 12$/ do
+  Then %{I should see "myname4" within "#main"}
+    And %{I should see "myname3" within "#main"}
+    And %{I should not see "myname2" within "#main"}
+    And %{I should see "(Anonymous)" within "#main"}
+    And %{I should see "myname1" within "#main"}
+    And %{I should see "Something else weird"}
+    And %{I should see "Alternate Universe - Historical"}
+    And %{I should not see "Matching"}
+end
+
+Then /^claims are hidden$/ do
+  When %{I go to "Battle 12" collection's page}
+    And %{I follow "Claims"}
+  Then %{I should see "Unfulfilled Claims"}
+    And %{I should see "Fulfilled Claims"}
+    And %{I should see "myname" within "#unfulfilled_claims"}
+    And %{I should see "Secret!" within "#unfulfilled_claims"}
+    And %{I should see "Stargate Atlantis" within "#main"}
+end
+
+Then /^claims are shown$/ do
+  When %{I go to "Battle 12" collection's page}
+    And %{I follow "Claims"}
+    And %{I should see "Unfulfilled Claims"}
+    And %{I should see "Fulfilled Claims"}
+    And %{I should see "myname4" within "#unfulfilled_claims"}
+    And %{I should not see "Secret!" within "#unfulfilled_claims"}
+    And %{I should see "Stargate Atlantis" within "#main"}
 end
