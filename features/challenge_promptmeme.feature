@@ -8,6 +8,7 @@ Feature: Prompt Meme Challenge
   
   Given I am logged in as "mod1"
     And I have standard challenge tags setup
+    And I have no prompts
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
   And "issue 1859" is fixed
@@ -24,6 +25,7 @@ Feature: Prompt Meme Challenge
   
   Given I am logged in as "mod1"
     And I have standard challenge tags setup
+    And I have no prompts
     
   # set up mod's preferences
   Given mod1 lives in Alaska
@@ -44,7 +46,8 @@ Feature: Prompt Meme Challenge
 
   Given I am logged in as "mod1"
     And I have standard challenge tags setup
-  
+    And I have no prompts
+    
   # Confirm it's not there already, left over from another test
   Then Battle 12 should not exist
   
@@ -62,6 +65,8 @@ Feature: Prompt Meme Challenge
 
   Given I am logged in as "mod1"
     And I have standard challenge tags setup
+    And I have no prompts
+    
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
   When I follow "Log out"
@@ -72,6 +77,7 @@ Feature: Prompt Meme Challenge
   Scenario: User can see profile descriptions
   
   Given I have standard challenge tags setup
+    And I have no prompts
   # set up the challenge
     And I am logged in as "mod1"
   When I set up Battle 12 promptmeme
@@ -85,7 +91,8 @@ Feature: Prompt Meme Challenge
   Scenario: Sign up for a prompt meme and miss out some fields
 
   Given I have standard challenge tags setup
-    And I am logged in as "mod1" with password "something"
+    And I have no prompts
+    And I am logged in as "mod1"
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
     
@@ -108,6 +115,7 @@ Feature: Prompt Meme Challenge
   Scenario: Sign up without Javascript
   
   Given I have standard challenge tags setup
+    And I have no prompts
   # set up the challenge
     And I am logged in as "mod1"
   When I set up Battle 12 promptmeme
@@ -125,9 +133,9 @@ Feature: Prompt Meme Challenge
   #Then I should see "Request 3"
   
   Scenario: View signups in the dashboard
-  
   Given I have standard challenge tags setup
-    And I am logged in as "mod1"
+    And I have no prompts
+    And I am logged in as "mod1" 
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options
   
@@ -240,6 +248,8 @@ Feature: Prompt Meme Challenge
   Scenario: All the rest of the unrefactored stuff
 
   Given I have standard challenge tags setup
+    And I have no prompts
+  # set up the challenge
     And I am logged in as "mod1"
   When I set up Battle 12 promptmeme
   When I fill in some more Battle 12 options

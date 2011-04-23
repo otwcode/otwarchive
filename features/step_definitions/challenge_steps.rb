@@ -20,7 +20,6 @@ end
 
 Given /^I have standard challenge tags setup$/ do
   Given "I have no tags"
-    And "I have no prompts"
     And "basic tags"
     And %{I create the fandom "Stargate Atlantis" with id 27}
     And %{I create the fandom "Stargate SG-1" with id 28}
@@ -28,6 +27,35 @@ Given /^I have standard challenge tags setup$/ do
     And %{a freeform exists with name: "Alternate Universe - High School", canonical: true}
     And %{a freeform exists with name: "Something else weird", canonical: true}
 end
+
+Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|
+  Given "I have standard challenge tags setup"
+    And %{I set up the collection "#{challengename}"}
+    And %{I select "Gift Exchange" from "challenge_type"}
+  click_button("Submit")
+end
+    
+Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
+  Given %{I have set up the gift exchange "#{challengename}"}
+    select("2011", :from => "gift_exchange_signups_open_at_1i")
+    select("2011", :from => "gift_exchange_signups_close_at_1i")
+    select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
+    fill_in("gift_exchange_offer_restriction_attributes_tag_set_attributes_fandom_tagnames", :with => "Stargate SG-1, Stargate Atlantis")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", :with => "1")
+    fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", :with => "2")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", :with => "1")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", :with => "1")
+    fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", :with => "2")
+    select("1", :from => "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
+    click_button("Submit")
+end
+
+Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
+  Given %{I am on "#{challengename}" gift exchange edit page}
+  check "Signup open?"
+  click_button "Submit"
+end  
 
 ### WHEN
 

@@ -8,7 +8,11 @@ module EmailHelpers
   
     when /^#{capture_model}$/
       model($1).email
-  
+
+    when /^"([^@]*)"$/
+      user = User.find_by_login($1)
+      user.email 
+
     when /^"(.*)"$/
       $1
   
