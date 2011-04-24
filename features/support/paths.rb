@@ -73,8 +73,14 @@ module NavigationHelpers
       collection_path(Collection.find_by_title($1))
     when /^"(.*)" collection's url$/i                      # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by_title($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
+    when /^"(.*)" gift exchange edit page$/i
+      edit_collection_gift_exchange_path(Collection.find_by_title($1))
     when /^"(.*)" collection's static page$/i
       static_collection_path(Collection.find_by_title($1))
+    when /^the works tagged "(.*)"$/i
+      tag_works_path(Tag.find_by_name($1))
+    when /^the url for works tagged "(.*)"$/i
+      tag_works_url(Tag.find_by_name($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
     when /^the works tagged "(.*)" in collection "(.*)"$/i
       collection_tag_works_path(Collection.find_by_title($2), Tag.find_by_name($1))
     when /^the url for works tagged "(.*)" in collection "(.*)"$/i

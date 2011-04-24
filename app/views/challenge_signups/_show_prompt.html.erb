@@ -7,7 +7,7 @@
       <dt>Tags:</dt>
       <dd>
         <ul class="tags">
-          <%= prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_works_links_list(prompt.tag_set.tags) + (any_types.empty? ? "" : ", ") : "" %>
+          <%= prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : "" %>
           <% unless any_types.empty? %>
             <%= any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe %>
           <% end %>
@@ -15,7 +15,7 @@
         <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
           <p>Optional:</p>
           <ul class="tags">
-            <%= tag_works_links_list(prompt.optional_tag_set.tags) %>
+            <%= tag_link_list(prompt.optional_tag_set.tags, link_to_works=true) %>
           </ul>
         <% end %>
       </dd>

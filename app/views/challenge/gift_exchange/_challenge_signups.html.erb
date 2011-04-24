@@ -78,13 +78,13 @@
           <td>
             <% any_types = TagSet::TAG_TYPES.select {|type| prompt && prompt.send("any_#{type}")} %>
             <%= !prompt || !prompt.tag_set ? "" : 
-                  content_tag(:ul, tag_works_links_list(prompt.tag_set.tags) + 
+                  content_tag(:ul, tag_link_list(prompt.tag_set.tags, link_to_works=true) + 
                                     any_types.map {|type| content_tag(:li, h(ts("Any %{type}", :type => type.capitalize))) }.join("\n").html_safe) %>
           </td>
           <% if eval("show_#{prompt_type}_optional_tags") %>
             <td>
               <% if prompt && prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
-                <%= content_tag(:ul, tag_works_links_list(prompt.optional_tag_set.tags)) %>
+                <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags, link_to_works=true)) %>
               <% end %>
             </td>
           <% end %>
