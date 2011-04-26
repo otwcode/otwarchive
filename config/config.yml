@@ -246,7 +246,7 @@ SUPPORTED_EXTERNAL_URLS: ["jpg", "png", "gif"]
 # We use this list to specify types of functions that we accept (like gradient).
 # Like the shorthand properties, this allows through all variations on the name (eg -moz-linear-gradient)
 # Note: even though url() is actually a function, because we want special handling for it we do NOT include it here!
-SUPPORTED_CSS_FUNCTIONS: ["gradient"]
+SUPPORTED_CSS_FUNCTIONS: ["gradient", "skew", "scale", "rotate", "translate", "matrix"]
 
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'
