@@ -31,8 +31,8 @@ end
 
 ### THEN
 
-Then /^Battle 12 should not exist$/ do
+Then /^Battle 12 collection exists$/ do
   When "I go to the collections page"
   Then %{I should see "Collections in the "}
-    And %{I should not see "Battle 12"}
+    And %{I should see "Battle 12"}
 end
