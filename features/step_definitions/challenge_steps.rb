@@ -213,6 +213,36 @@ When /^I close signups for "([^\"]*)"$/ do |title|
   Then %{I should see "Challenge was successfully updated"}
 end
 
+When /^I sign up for "([^\"]*)" with combination A$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_27"}
+    And %{I check "challenge_signup_offers_attributes_0_fandom_28"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"}
+    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"}
+    And %{I press "Submit"}
+end
+
+When /^I sign up for "([^\"]*)" with combination B$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_28"}
+    And %{I check "challenge_signup_offers_attributes_0_fandom_27"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School, Something else weird"}
+    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"}
+    And %{I press "Submit"}
+end
+
+When /^I sign up for "([^\"]*)" with combination C$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_28"}
+    And %{I check "challenge_signup_offers_attributes_0_fandom_28"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"}
+    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"}
+    And %{I press "Submit"}
+end
+
 ### THEN
 
 Then /^I should see Battle 12 descriptions$/ do
