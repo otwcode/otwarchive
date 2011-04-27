@@ -57,6 +57,20 @@ Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengenam
   click_button "Submit"
 end  
 
+Given /^I have Battle 12 prompt meme set up$/ do
+  Given %{I am logged in as "mod1"}
+    And "I have standard challenge tags setup"
+  When "I set up Battle 12 promptmeme collection"
+end
+
+Given /^I have Battle 12 prompt meme fully set up$/ do
+  Given %{I am logged in as "mod1"}
+    And "I have standard challenge tags setup"
+  When "I set up Battle 12 promptmeme collection"
+  When "I fill in Battle 12 challenge options"
+  When %{I follow "Log out"}
+end
+
 ### WHEN
 
 When /^I sign up for Battle 12$/ do
@@ -140,7 +154,7 @@ When /^I set up an anon promptmeme "([^\"]*)"$/ do |title|
   Then "I should see \"Challenge was successfully created\""
 end
 
-When /^I set up Battle 12 promptmeme$/ do
+When /^I set up Battle 12 promptmeme collection$/ do
   visit new_collection_path
   fill_in("collection_name", :with => "lotsofprompts")
   fill_in("collection_title", :with => "Battle 12")
@@ -154,7 +168,12 @@ When /^I set up Battle 12 promptmeme$/ do
   Then "I should see \"Collection was successfully created\""
 end
 
-When /^I fill in some more Battle 12 options$/ do
+When /^I create Battle 12 promptmeme$/ do
+  When "I set up Battle 12 promptmeme collection"
+  When "I fill in Battle 12 challenge options"
+end
+
+When /^I fill in Battle 12 challenge options$/ do
   When %{I fill in "General Signup Instructions" with "Here are some general tips"}
     And %{I fill in "Signup Instructions" with "Please request easy things"}
     And %{I select "2011" from "prompt_meme_signups_open_at_1i"}
@@ -192,6 +211,36 @@ When /^I close signups for "([^\"]*)"$/ do |title|
     And %{I uncheck "Signup open?"}
     And %{I press "Submit"}
   Then %{I should see "Challenge was successfully updated"}
+end
+
+When /^I sign up for "([^\"]*)" with combination A$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_27"}
+    And %{I check "challenge_signup_offers_attributes_0_fandom_28"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"}
+    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"}
+    And %{I press "Submit"}
+end
+
+When /^I sign up for "([^\"]*)" with combination B$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_28"}
+    And %{I check "challenge_signup_offers_attributes_0_fandom_27"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School, Something else weird"}
+    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"}
+    And %{I press "Submit"}
+end
+
+When /^I sign up for "([^\"]*)" with combination C$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_28"}
+    And %{I check "challenge_signup_offers_attributes_0_fandom_28"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"}
+    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"}
+    And %{I press "Submit"}
 end
 
 ### THEN
@@ -250,6 +299,7 @@ Then /^I should see a prompt is claimed$/ do
   When "I am on my user page"
     And %{I follow "My Claims"}
     Then %{I should see "Post To Fulfill"}
+    Then %{I should not see "myname" within "#claims_table"}
     And %{I follow "Anonymous" within "#claims_table"}
   Then %{I should see "Claimed by Anonymous: Anonymous"}
 end
@@ -283,4 +333,10 @@ Then /^claims are shown$/ do
     And %{I should see "myname4" within "#unfulfilled_claims"}
     And %{I should not see "Secret!" within "#unfulfilled_claims"}
     And %{I should see "Stargate Atlantis" within "#main"}
+end
+
+Then /^Battle 12 prompt meme should be correctly created$/ do
+  Then %{I should see "Challenge was successfully created"}
+  Then "signup should be open"
+  Then "Battle 12 collection exists"
 end

@@ -4,85 +4,31 @@ Feature: Prompt Meme Challenge
   As a humble user
   I want to create a prompt meme and post to it
   
-  Scenario: Issue 1859
+  Scenario: Creating a prompt meme has different instructions from a gift exchange
   
   Given I am logged in as "mod1"
     And I have standard challenge tags setup
-    And I have no prompts
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
-  And "issue 1859" is fixed
-  # Then I should see "If signup is open, signup closed date can't be in the past"
-  # When I select "2012" from "prompt_meme_signups_open_at_1i"
-  #   And I select "2012" from "prompt_meme_signups_close_at_1i"
-  #   And I press "Submit"
-  # Then I should see "If signup is open, signup opening date can't be in the future"
-  # When I select "2011" from "prompt_meme_signups_open_at_1i"
-  #   And I press "Submit"
-  Then I should see "Challenge was successfully created"
-  
-  Scenario: Timezone defect
-  
-  Given I am logged in as "mod1"
-    And I have standard challenge tags setup
-    And I have no prompts
-    
-  # set up mod's preferences
-  Given mod1 lives in Alaska
-  
-  When I set up Battle 12 promptmeme
-    And "TODO: checking an option is selected" is fixed
-    # And I should find "(GMT-09:00) Alaska" selected within "prompt_meme_time_zone"
-    And I should see "(GMT-09:00) Alaska" within "#main"
+  When I set up Battle 12 promptmeme collection
+  Then I should see "Setting Up The Battle 12 Prompt Meme"
   Then I should see prompt meme options
-  When I fill in some more Battle 12 options
-  Then I should see "Challenge was successfully created"
-  ### TODO fix timezone dependency before next spring! Or not.
-  #  Then I should see the timezone problem
-  When I change the challenge timezone to Alaska
-  # Then I should see just one timezone
 
   Scenario: Create a prompt meme
 
   Given I am logged in as "mod1"
     And I have standard challenge tags setup
-    And I have no prompts
-    
-  # Confirm it's not there already, left over from another test
-  Then Battle 12 should not exist
-  
-  # set up the challenge
-  When I set up Battle 12 promptmeme
-  Then I should see "Setting Up The Battle 12 Prompt Meme"
-  Then I should see prompt meme options
-  When I fill in some more Battle 12 options
-  Then I should see "Challenge was successfully created"
-  Then signup should be open
-  When I go to the collections page
-  Then I should see "Battle 12"
+  When I create Battle 12 promptmeme
+  Then Battle 12 prompt meme should be correctly created
   
   Scenario: User can see a prompt meme
 
-  Given I am logged in as "mod1"
-    And I have standard challenge tags setup
-    And I have no prompts
-    
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
-  When I follow "Log out"
+  Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I go to the collections page
   Then I should see "Battle 12"
   
   Scenario: User can see profile descriptions
   
-  Given I have standard challenge tags setup
-    And I have no prompts
-  # set up the challenge
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
-  When I follow "Log out"
+  Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I go to "Battle 12" collection's page
   When I follow "Profile"
@@ -90,15 +36,10 @@ Feature: Prompt Meme Challenge
   
   Scenario: Sign up for a prompt meme and miss out some fields
 
-  Given I have standard challenge tags setup
-    And I have no prompts
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
+  Given I have Battle 12 prompt meme fully set up
     
   # sign up, with errors if you fail to fill in required fields
   
-  When I follow "Log out"
     And I am logged in as "myname1"
   When I go to "Battle 12" collection's page
   Then I should see "Sign Up"
@@ -114,14 +55,7 @@ Feature: Prompt Meme Challenge
   
   Scenario: Sign up without Javascript
   
-  Given I have standard challenge tags setup
-    And I have no prompts
-  # set up the challenge
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
-  
-  When I follow "Log out"
+  Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname2"
   When I go to "Battle 12" collection's page
     And I follow "Sign Up"
@@ -133,13 +67,8 @@ Feature: Prompt Meme Challenge
   #Then I should see "Request 3"
   
   Scenario: View signups in the dashboard
-  Given I have standard challenge tags setup
-    And I have no prompts
-    And I am logged in as "mod1" 
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
   
-  When I follow "Log out"
+  Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   Then I should see "Signup was successfully created"
@@ -152,11 +81,7 @@ Feature: Prompt Meme Challenge
   
   Scenario: Sort prompts by date
   
-  Given I have standard challenge users
-    And I have standard challenge tags setup
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
+  Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   And I am logged in as "myname2"
@@ -167,10 +92,8 @@ Feature: Prompt Meme Challenge
   Then I should see "Something else weird"
   
   Scenario: Sort prompts by fandom
-  Given I have standard challenge tags setup
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
+  
+  Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   And I am logged in as "myname2"
@@ -182,10 +105,7 @@ Feature: Prompt Meme Challenge
   
   Scenario: Claim a prompt and view claims on main page and user page
   
-  Given I have standard challenge tags setup
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
+  Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination B
   And I am logged in as "myname4"
@@ -194,10 +114,7 @@ Feature: Prompt Meme Challenge
   
   Scenario: Mod can view signups
   
-  Given I have standard challenge tags setup
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
+  Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   # no anon
   When I sign up for Battle 12 with combination A 
@@ -217,42 +134,50 @@ Feature: Prompt Meme Challenge
   
   Scenario: Sign up with both prompts anon
   
-  Given I have standard challenge tags setup
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
+  Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination B
   Then I should see "Signup was successfully created"
   
   Scenario: Sign up with neither prompt anon
   
-  Given I have standard challenge tags setup
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
+  Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   Then I should see "Signup was successfully created"
   
   Scenario: Sign up with one anon prompt and one not
   
-  Given I have standard challenge tags setup
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
+  Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
   Then I should see "Signup was successfully created"
+  
+  Scenario: User can fulfill a claim
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+  And I am logged in as "myname4"
+  And I claim a prompt from "Battle 12"
+  
+  When I am on my user page
+  When I follow "My Claims (1)"
+  When I follow "Post To Fulfill"
+    And I fill in "Work Title" with "Fulfilled Story"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "content" with "This is an exciting story about Atlantis"
+  When I press "Preview"
+    And I press "Post"
+  Then I should see "Work was successfully posted"
+    And I should see "Fandom:"
+    And I should see "Stargate Atlantis"
+    And I should not see "Alternate Universe - Historical"
     
   Scenario: All the rest of the unrefactored stuff
 
-  Given I have standard challenge tags setup
-    And I have no prompts
-  # set up the challenge
-    And I am logged in as "mod1"
-  When I set up Battle 12 promptmeme
-  When I fill in some more Battle 12 options
+  Given I have Battle 12 prompt meme fully set up
     
   # sign up with no anon prompts
   
@@ -300,10 +225,8 @@ Feature: Prompt Meme Challenge
   
   # user posts a fic
   
-  When I am on my user page
-  Then I should see "My Claims (1)" 
+  When I am on my user page 
   When I follow "My Claims (1)"
-  Then I should see "myname4" within "#claims_table"
   When I follow "Post To Fulfill"
     And I fill in "Work Title" with "Fulfilled Story"
     And I select "Not Rated" from "Rating"
@@ -311,10 +234,6 @@ Feature: Prompt Meme Challenge
     And I fill in "content" with "This is an exciting story about Atlantis"
   When I press "Preview"
     And I press "Post"
-  Then I should see "Work was successfully posted"
-    And I should see "Fandom:"
-    And I should see "Stargate Atlantis"
-    And I should not see "Alternate Universe - Historical"
   
   # Claim is completed
 
