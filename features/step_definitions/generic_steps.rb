@@ -1,3 +1,7 @@
+When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
+  unselect(item, :from => selector)
+end
+
 Then /^debug$/ do
   debugger
 end
