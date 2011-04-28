@@ -59,3 +59,11 @@ Feature: Edit Works
       And I press "Preview"
     And I follow "Revert To Saved"
       Then I should see "second chapter content"
+    # Test changing pseuds on a work
+    When I go to testuser's works page
+      And I follow "Edit"
+      And I select "testy" from "work_author_attributes_ids_"
+      And I unselect "testuser" from "work_author_attributes_ids_"
+      And I press "Post without preview"
+    Then I should see "testy"
+      And I should not see "testuser,"

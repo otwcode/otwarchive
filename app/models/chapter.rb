@@ -133,7 +133,7 @@ class Chapter < ActiveRecord::Base
     # if current user has selected different pseuds
     current_user = User.current_user
     if current_user.is_a? User
-      self.authors_to_remove = current_user.pseuds & (self.authors - selected_pseuds)
+      self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
     end
     self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
     if !attributes[:byline].blank?
