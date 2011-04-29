@@ -1,5 +1,5 @@
 When /^I view my profile$/ do
-  click_link("editname")
+	click_link("testuser1")
   Then %{I should see "My Dashboard"}
 	click_link("Profile")
 end
