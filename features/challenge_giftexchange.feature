@@ -19,18 +19,6 @@ Feature: Gift Exchange Challenge
     And I should see "If you plan to use automated matching"
     And I should see "Allow Any"
 
-    # When I go to my preferences page
-    # Then I should see "Your time zone"
-    #   And "TODO: checking an option is selected" is fixed
-    #   # And I should find "(GMT-05:00) Eastern Time (US & Canada)" selected within "preference_time_zone"
-    # When I select "(GMT-09:00) Alaska" from "preference_time_zone"
-    #   And I press "Update"
-    # Then I should see "Your preferences were successfully updated."
-    # And "ditto" is fixed
-    # # And I should find "(GMT-09:00) Alaska" selected within "gift_exchange_time_zone"
-    # And I should see "(GMT-09:00) Alaska" within "#main"
-
-
   Scenario: Enter settings for a gift exchange
   Given I am logged in as "mod1"
     And I have set up the gift exchange "My Gift Exchange"
@@ -52,16 +40,6 @@ Feature: Gift Exchange Challenge
   Then I should see "Challenge was successfully created"
   When I follow "Profile"
   Then I should see "2011" within ".collection.meta"
-  
-
-  #  And "issue 1859" is fixed
-  # Then I should see "If signup is open, signup closed date can't be in the past"
-  # When I select "2012" from "gift_exchange_signups_open_at_1i"
-  #   And I select "2012" from "gift_exchange_signups_close_at_1i"
-  #   And I press "Submit"
-  # Then I should see "If signup is open, signup opening date can't be in the future"
-  # When I select "2011" from "gift_exchange_signups_open_at_1i"
-  #   And I press "Submit"
 
   Scenario: Open signup in a gift exchange
   Given I am logged in as "mod1"
@@ -96,40 +74,21 @@ Feature: Gift Exchange Challenge
   When I follow "Profile"
   Then I should see "Signup: CURRENTLY OPEN"
     And I should see "Signup closes:"
-  When I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_27"
-    And I check "challenge_signup_offers_attributes_0_fandom_28"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
-    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"
-    And I press "Submit"
+  When I sign up for "Awesome Gift Exchange" with combination A
   Then I should see "Signup was successfully created"
 
   # someone else sign up
 
   When I follow "Log out"
     And I am logged in as "myname2"
-  When I go to the collections page
-    And I follow "Awesome Gift Exchange"
-    And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_28"
-    And I check "challenge_signup_offers_attributes_0_fandom_27"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School, Something else weird"
-    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"
-    And I press "Submit"
+  When I sign up for "Awesome Gift Exchange" with combination B
   Then I should see "Signup was successfully created"
 
   # third person sign up
 
   When I follow "Log out"
     And I am logged in as "myname3"
-  When I go to the collections page
-    And I follow "Awesome Gift Exchange"
-    And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_28"
-    And I check "challenge_signup_offers_attributes_0_fandom_28"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"
-    And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"
-    And I press "Submit"
+  When I sign up for "Awesome Gift Exchange" with combination C
   Then I should see "Signup was successfully created"
 
   # check you can see signups in the dashboard
@@ -195,6 +154,9 @@ Feature: Gift Exchange Challenge
   Then I should not see "Assignments are now being sent out"
   # 4 users and the mod should get emails :)
     And 1 email should be delivered to "mod1"
+    And the email should contain "You have received a message about your collection"
+  When I click the first link in the email
+  Then I should see "Sorry, we couldn't find the collection you were looking for"
     And 1 email should be delivered to "myname1"
     And 1 email should be delivered to "myname2"
     And 1 email should be delivered to "myname3"
