@@ -170,8 +170,8 @@ module CssCleaner
     # If it's explicitly in our keywords it's fine
     return value if value_stripped.split(',').all? {|subval| ArchiveConfig.SUPPORTED_CSS_KEYWORDS.include?(subval.strip)}
 
-    # if it's an rgb, hex, scale, percentage, or numeric value it's fine
-    return value if value_stripped =~ /^(#[0-9a-f]+|scale\(\d{0,2}\.?\d{0,2}\)|rgba?\(\d+%?,? ?\d*%?,? ?\d*%?,? ?\d{0,3}?\.?\d{0,3}?\)|\-?\d{0,3}\.?\d{0,3}(cm|em|ex|in|mm|pc|pt|px|s|%|,)?)$/
+    # if it's an rgba, hex, percentage, or numeric value it's fine
+    return value if value_stripped =~ /^(#[0-9a-f]+|rgba?\(\d+%?,? ?\d*%?,? ?\d*%?,? ?\d{0,3}?\.?\d{0,3}?\)|\-?\d{0,3}\.?\d{0,3}(deg|cm|em|ex|in|mm|pc|pt|px|s|%|,)?)$/
 
     return ""
   end
