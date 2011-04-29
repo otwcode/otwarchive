@@ -1,11 +1,43 @@
-When /^I am editing my profile$/ do
-  Then %{I follow "Profile"}
+When /^I view my profile$/ do
+  click_link("editname")
+  Then %{I should see "My Dashboard"}
+	click_link("Profile")
+end
+
+
+When /^I edit my profile$/ do
+  click_link("Profile")
 		And %{I should see "About editname"}
     And %{I should not see "Test title thingy"}
     And %{I should not see "Location"}
     And %{I should not see "This is some text about me"}
-	Then %{I follow "Edit My Profile"}
+		click_link("Edit My Profile")
 		And %{I should see "Edit My Profile"}
+end
+
+
+When /^I fill in my profile$/ do
+	fill_in("Title", :with => "Test title thingy")
+  fill_in("Location", :with => "Alpha Centauri")
+  fill_in("About Me", :with => "This is some text about me.")  
+  click_button("Update")
+end
+
+
+  
+When /^I change the details in my profile$/ do
+  fill_in("Title", :with => "Alternative title thingy")
+  fill_in("Location", :with => "Beta Centauri")
+  fill_in("About Me", :with => "This is some different text about me.") 
+  click_button("Update")
+end
+
+
+When /^I remove details from my profile$/ do
+  fill_in("Title", :with => "")
+  fill_in("Location", :with => "")
+	fill_in("About Me", :with => "")
+  click_button("Update")
 end
 
 
@@ -24,19 +56,20 @@ end
 
 
 When /^I enter a duplicate email$/ do
-  Then %{I follow "Profile"}
-  And %{I follow "Edit My Profile"}
+  click_link("Profile")
+  click_link("Edit My Profile")
   And %{I fill in "Change Email" with "valid2@archiveofourown.org"}
   And %{I fill in "Old password" with "password"}
   And %{I press "Update"}
-	Then %{I should not see "Your profile has been successfully updated"}
 end
 
 
-When /^I check my date of birth$/ do
+When /^I change my preferences to display my date of birth$/ do
+ click_link("My Preferences")
+	And %{I check "Display Date of Birth"}
   And %{I press "Update"}
-  And %{I follow "editname"}
-  And %{I follow "Profile"}
+  click_link("editname")
+  click_link("Profile")
 end
 
 
@@ -53,7 +86,7 @@ end
 
 
 When /^I change my password$/ do
-  Then %{I fill in "New Password" with "newpass1"}
+  fill_in("New Password", :with => "newpass1")
   And %{I fill in "Confirm New Password" with "newpass1"}
   And %{I fill in "Old password" with "password"}
   And %{I press "Change Password"}
@@ -61,7 +94,7 @@ end
 
 
 When /^I make a new pseud$/ do
- Then %{I follow "New Pseud"}
+ click_link("New Pseud")
    And %{I should see "New pseud"}
   Then %{I fill in "Name" with "My new name"}
     And %{I fill in "Description" with "I wanted to add another name"}
