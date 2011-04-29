@@ -6,9 +6,9 @@ Feature: Edit profile
 
 Scenario: View profile 
 
-  Given I am logged in as "editname" with password "password"
+  Given I am logged in as a random user
 	When I view my profile
-	Then I should see "About editname"
+	Then I should see "About testuser1"
 
 Scenario: Edit profile - add details  
 
@@ -17,7 +17,7 @@ Scenario: Edit profile - add details
 	When I fill in my profile
   Then I should see "Your profile has been successfully updated"
     And I should see "Alpha Centauri" within ".wrapper"
-    And I should see "This is some text about me." within ".userstuff"
+    And I should see "This is some text about me." within ".userstuff" 
 		And 0 emails should be delivered
 		
 Scenario: Edit profile - change details 
