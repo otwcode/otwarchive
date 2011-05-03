@@ -25,7 +25,7 @@ When /^I post the chaptered work "([^\"]*)"$/ do |title|
   When "I follow \"Add Chapter\""
   fill_in("content", :with => "Another Chapter.")
   click_button("Preview")
-  When "I follow \"Post Chapter\""
+  When "I press \"Post Chapter\""
 end
 
 When /^I post the work "([^\"]*)"$/ do |title|
