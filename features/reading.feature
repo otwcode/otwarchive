@@ -118,7 +118,7 @@ Feature: Reading count
     And I follow "Add Chapter"
     And I fill in "content" with "Second blah blah"
     And I press "Preview"
-    And I follow "Post Chapter"
+    And I press "Post Chapter"
   Then I should see "some work"
   When I am logged out
     And I am logged in as "fandomer" with password "password"
