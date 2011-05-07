@@ -380,9 +380,12 @@ Feature: Collection
     And I follow "Manage Items"
   Then I should see "Items in Hidden Treasury"
     And I should see "myname1"
-  # TODO: Uncomment from here on once bug 2241 is fixed
-  #When I check "collection_item_unrevealed"
-  #  And I press "Update"
+  # TODO: Fix a way of referring to these buttons
+  #When I check "unreveal_15261"
+  #  And I press "submit_15261"
+  #  Then show me the page
+  When "Issue 2241" is fixed
+  # Then 1 email should be delivered
     
   # first fic now visible, second still not
   #When I follow "Log out"

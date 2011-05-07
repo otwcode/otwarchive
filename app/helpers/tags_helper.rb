@@ -1,24 +1,12 @@
 module TagsHelper
 
-  # Takes an array of tags and returns a marked-up, comma-separated list
-  def tag_link_list(tags)
+  # Takes an array of tags and returns a marked-up, comma-separated list of links to them
+  def tag_link_list(tags, link_to_works=false)
     tags = tags.uniq.compact
     if !tags.blank? && tags.respond_to?(:collect)
       last_tag = tags.pop
-      tag_list = tags.collect{|tag| "<li>" + link_to_tag(tag) + ", </li>"}.join
-      tag_list += content_tag(:li, link_to_tag(last_tag))
-      tag_list.html_safe
-    else
-      ""
-    end
-  end
-
-  def tag_works_links_list(tags)
-    tags = tags.uniq.compact
-    if !tags.blank? && tags.respond_to?(:collect)
-      last_tag = tags.pop
-      tag_list = tags.collect{|tag| "<li>" + link_to_tag_works(tag) + ", </li>"}.join
-      tag_list += content_tag(:li, link_to_tag_works(last_tag))
+      tag_list = tags.collect{|tag| "<li>" + (link_to_works ? link_to_tag_works(tag) : link_to_tag(tag)) + ", </li>"}.join
+      tag_list += content_tag(:li, (link_to_works ? link_to_tag_works(last_tag) : link_to_tag(last_tag)))
       tag_list.html_safe
     else
       ""
@@ -71,19 +59,15 @@ module TagsHelper
   end
   
   def link_to_tag_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ?
-    {:controller => :tags, :action => :show, :id => tag, :collection_id => @collection} :
-    {:controller => :tags, :action => :show, :id => tag}, link_text, options)
+    link_to_with_tag_class(@collection ? collection_tag_url(@collection, tag) : tag_url(tag), link_text, options)
   end
 
-  # edit_tag_path is behaving badly since around the Rails 2.2.2 upgrade
   def link_to_edit_tag(tag, options = {})
-    link_to_with_tag_class({:controller => :tags, :action => :edit, :id => tag}, tag.name, options)
+    link_to_with_tag_class(edit_tag_path(tag), tag.name, options)
   end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) :
-    {:controller => :works, :action => :index, :tag_id => tag}, link_text, options)
+    link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) : tag_works_url(tag), link_text, options)
   end
 
   # Adds the "tag" classname to links (for tag links)
@@ -161,8 +145,8 @@ module TagsHelper
     if tag
       span = tag.canonical? ? "<span class='canonical'>" : "<span>"
       span += tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
+      span.html_safe
     end
-    span.html_safe
   end
 
   def tag_comment_link(tag)

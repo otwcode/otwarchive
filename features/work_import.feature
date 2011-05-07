@@ -143,3 +143,12 @@ Feature: Import Works
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
+  @work_import_nul_character
+  Scenario: Import a work with the illegal 00 character (string terminator)
+    Given basic tags
+      And I am logged in as a random user
+    When I go to the import page
+      And I fill in "urls" with "http://www.the-archive.net/viewstory.php?sid=1910"
+    When I press "Import"
+    Then I should see "Preview Work"
+      And I should see "When I get out of here"

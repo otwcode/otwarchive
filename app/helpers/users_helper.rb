@@ -33,7 +33,7 @@ module UsersHelper
   
   def standard_icon_display(user, pseud=nil)
     pseud ||= user.default_pseud
-    image_tag(standard_icon(user, pseud), :alt => (pseud.icon_file_name ? pseud.icon_alt_text : "Archive of Our Own default icon: the AO3 logo in grey, on a white background"), :class => "icon")
+    image_tag(standard_icon(user, pseud), :alt => (pseud.try(:icon_file_name) ? pseud.icon_alt_text : "Archive of Our Own default icon: the AO3 logo in grey, on a white background"), :class => "icon")
   end
   
   def icon_display(user, pseud=nil)
@@ -189,6 +189,10 @@ module UsersHelper
       t('users_helper.log_warn', :default => 'Warned')
     elsif action == ArchiveConfig.ACTION_RENAME
       t('users_helper.log_rename', :default => 'Username Changed')
+		elsif action == ArchiveConfig.ACTION_PASSWORD_RESET
+      t('users_helper.log_password_change', :default => 'Password Changed')
+		elsif action == ArchiveConfig.ACTION_NEW_EMAIL
+      t('users_helper.log_email_change', :default => 'Email Changed')
     end
   end
   

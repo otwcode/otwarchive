@@ -161,6 +161,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
                  { position:static; display: inline; height: 25px; width: 25px; border:none; }
  .blurb ul.required-tags li  span.text { display:none }
  .blurb ul.required-tags li span{ display:block; background-repeat:no-repeat; height: 25px; width: 25px; }
+ .blurb ul.recent-bookmarks li { display: block; }
  .blurb .category, .blurb .iswip, .blurb .external-work
                  { position: absolute; left: 28px; }
  .blurb .category         { top: 0; }

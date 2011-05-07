@@ -25,9 +25,10 @@ Given /the following admins? exists?/ do |table|
 end
 
 Given /^I am logged in as an admin$/ do
+  Given "I am logged out"
   admin = Admin.find_by_login("testadmin")
   if admin.blank?
-    admin = Factory.create(:admin, :login => "testadmin", :password => "testadmin")
+    admin = Factory.create(:admin, :login => "testadmin", :password => "testadmin", :email => "testadmin@example.org")
   end
   visit admin_login_path
   fill_in "Admin user name", :with => "testadmin"
@@ -38,7 +39,7 @@ end
 
 Given /^I am logged out as an admin$/ do
   visit admin_logout_path
-  Then "I should see \"Successfully logged out\""
+  assert !AdminSession.find
 end
 
 Given /^basic languages$/ do
@@ -80,3 +81,10 @@ Given /^tag wrangling is on$/ do
   And "I am logged out as an admin"
 end
 
+When /^I make an admin post$/ do
+  visit new_admin_post_path
+  fill_in("Title", :with => "Default Admin Post")
+  fill_in("content", :with => "Content of the admin post.")
+  click_button("Post")
+  Then %{I should see "AdminPost was successfully created."}
+end

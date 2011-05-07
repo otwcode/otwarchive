@@ -21,11 +21,6 @@
       <%= f.label :css, ts('CSS') %> 
       <%= link_to_help "skins-creating" %>
       <p id="plainTextNotes" style="display: block"><%= allowed_css_instructions %></p>
-      <p class="notes">
-        <%= label_tag :css_keyword_autofinder, ts("Allowed Value Autocomplete")%>:
-        <%= text_field_tag :css_keyword_autofinder %>
-        <%= autocomplete_text_field("css_keyword_autofinder", :methodname => "css_keyword") %>
-      </p>
     </dt>
     <dd><%= f.text_area :css, :cols => 70 %></dd>
 

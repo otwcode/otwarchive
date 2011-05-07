@@ -27,6 +27,8 @@ module NavigationHelpers
 
     # Add more mappings here.
 
+    when /^the login page$/i
+      new_user_session_path
     when /^(.*)'s user page$/i
       user_path(:id => $1)
     when /^(.*)'s user url$/i
@@ -50,11 +52,11 @@ module NavigationHelpers
     when /^the subscriptions page for "(.*)"$/i
       user_subscriptions_path(:user_id => $1)
     when /my user page/
-      user_path(current_user)
+      user_path(User.current_user)
     when /my preferences page/
-      user_preferences_path(current_user)
+      user_preferences_path(User.current_user)
     when /my bookmarks page/
-      user_bookmarks_path(current_user)
+      user_bookmarks_path(User.current_user)
     when /my subscriptions page/
       user_subscriptions_path(User.current_user)      
     when /the import page/
@@ -71,12 +73,20 @@ module NavigationHelpers
       collection_path(Collection.find_by_title($1))
     when /^"(.*)" collection's url$/i                      # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by_title($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
+    when /^"(.*)" gift exchange edit page$/i
+      edit_collection_gift_exchange_path(Collection.find_by_title($1))
     when /^"(.*)" collection's static page$/i
       static_collection_path(Collection.find_by_title($1))
+    when /^the works tagged "(.*)"$/i
+      tag_works_path(Tag.find_by_name($1))
+    when /^the url for works tagged "(.*)"$/i
+      tag_works_url(Tag.find_by_name($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
     when /^the works tagged "(.*)" in collection "(.*)"$/i
       collection_tag_works_path(Collection.find_by_title($2), Tag.find_by_name($1))
     when /^the url for works tagged "(.*)" in collection "(.*)"$/i
       collection_tag_works_url(Collection.find_by_title($2), Tag.find_by_name($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
+    when /^the admin-posts page$/i
+      admin_posts_path
       
     # Here is an example that pulls values out of the Regexp:
     #

@@ -161,7 +161,7 @@ class CommentsController < ApplicationController
         unless msg.blank?
           flash[:comment_error] += "#{msg}"
         end
-        redirect_to_all_comments(@commentable) and return
+        render :action => "new"
       end
     end
   end

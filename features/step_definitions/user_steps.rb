@@ -1,3 +1,5 @@
+DEFAULT_PASSWORD = "password"
+
 Given /^I have no users$/ do
   User.delete_all
 end
@@ -23,6 +25,7 @@ Given /the following activated tag wranglers? exists?/ do |table|
 end
 
 Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
+  Given "I am logged out"
   user = User.find_by_login(login)
   if user.blank?
     user = Factory.create(:user, {:login => login, :password => password})
@@ -40,6 +43,10 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
   assert UserSession.find
 end
 
+Given /^I am logged in as "([^\"]*)"$/ do |login|
+  Given "I am logged in as \"#{login}\" with password \"#{DEFAULT_PASSWORD}\""
+end
+
 When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
   # " '
   user = User.find_by_login(login)
@@ -48,12 +55,13 @@ end
 
 
 Given /^I am logged in as a random user$/ do
+  Given "I am logged out"
   name = "testuser#{User.count + 1}"
-  user = Factory.create(:user, :login => name, :password => "password")
+  user = Factory.create(:user, :login => name, :password => DEFAULT_PASSWORD)
   user.activate
   visit login_path
   fill_in "User name", :with => name
-  fill_in "Password", :with => "password"
+  fill_in "Password", :with => DEFAULT_PASSWORD
   check "Remember me"
   click_button "Log in"
   assert UserSession.find
@@ -62,6 +70,8 @@ end
 Given /^I am logged out$/ do
   visit logout_path
   assert !UserSession.find
+  visit admin_logout_path
+  assert !AdminSession.find
 end
 
 When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
@@ -85,4 +95,8 @@ Given /^"([^\"]*)" deletes their account/ do |username|
   visit user_path(username)
   Given %{I follow "Profile"}
   Given %{I follow "Delete My Account"}
+end
+
+Given /^I am a visitor$/ do
+  Given %{I am logged out}
 end

@@ -1,4 +1,4 @@
-@works
+@works @search
 @no-txn
 Feature: Work Drafts
 

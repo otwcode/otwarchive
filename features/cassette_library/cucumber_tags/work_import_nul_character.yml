@@ -1,0 +1,38 @@
+--- 
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :get
+    uri: http://www.the-archive.net:80/viewstory.php?sid=1910
+    body: 
+    headers: 
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: OK
+    headers: 
+      date: 
+      - Mon, 28 Mar 2011 23:09:18 GMT
+      server: 
+      - Apache/2.0.63 (Unix) mod_ssl/2.0.63 OpenSSL/0.9.8e-fips-rhel5 mod_auth_passthrough/2.1 mod_bwlimited/1.4 FrontPage/5.0.2.2635
+      x-powered-by: 
+      - PHP/5.2.9
+      cache-control: 
+      - no-cache, must-revalidate, max_age=0, post-check=0, pre-check=0
+      pragma: 
+      - no-cache
+      expires: 
+      - "0"
+      set-cookie: 
+      - PHPSESSID=b034cdf4bd9a694f3fced0a678395b5c; path=/
+      transfer-encoding: 
+      - chunked
+      content-type: 
+      - text/html
+    body: "<html>\n\
+      <head>\n\n<title>I'm Batman</title>\n\
+      </head>\n\n\
+      <body vlink='#545454'>\0\n\
+      <p>When I get out of here</p>\n\n\
+      </body>\n\
+      </html>\n"
+    http_version: "1.1"

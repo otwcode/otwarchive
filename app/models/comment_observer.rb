@@ -7,6 +7,7 @@ class CommentObserver < ActiveRecord::Observer
     # eventually we will set the locale to the user's stored language of choice
     #Locale.set ArchiveConfig.SUPPORTED_LOCALES[ArchiveConfig.DEFAULT_LOCALE]
     users = []
+    admins = []
 
     # notify the commenter
     if comment.comment_owner && notify_user_of_own_comments?(comment.comment_owner)
@@ -20,7 +21,7 @@ class CommentObserver < ActiveRecord::Observer
       # send notification to the owner of the original comment if not
       # the commenter
       parent_comment = comment.commentable
-      parent_comment_owner = parent_comment.comment_owner # will be nil if not a user
+      parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
       if (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) ||
           (parent_comment_owner && (parent_comment_owner != comment.comment_owner))
         if !parent_comment_owner || notify_user_by_email?(parent_comment_owner)
@@ -42,13 +43,17 @@ class CommentObserver < ActiveRecord::Observer
       end
     end
 
-    # send notification to the owner(s) of the ultimate parent
-    if users.empty?
-      users = comment.ultimate_parent.commentable_owners
+    # send notification to the owner(s) of the ultimate parent, who can be users or admins
+    if comment.ultimate_parent.is_a?(AdminPost)
+      admins = comment.ultimate_parent.commentable_owners
     else
-      users = comment.ultimate_parent.commentable_owners - users
+      if users.empty?
+        users = comment.ultimate_parent.commentable_owners
+      else
+        users = comment.ultimate_parent.commentable_owners - users
+      end
     end
-
+    
     users.each do |user|
       unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
         if notify_user_by_email?(user)
@@ -59,11 +64,20 @@ class CommentObserver < ActiveRecord::Observer
         end
       end
     end
+      
+    admins.each do |admin|
+      # TODO: comments should be able to belong to an admin officially
+      # right now comment.comment_owner is nil for an admin, and going by email is not reliable
+      # unless admin == comment.comment_owner
+        AdminMailer.comment_notification(admin.id, comment.id).deliver
+      # end
+    end
   end
 
   def after_update(comment)
     if comment.edited_at_changed?
       users = []
+      admins = []
 
       # notify the commenter
       if comment.comment_owner && notify_user_of_own_comments?(comment.comment_owner)
@@ -98,11 +112,15 @@ class CommentObserver < ActiveRecord::Observer
         end
       end
 
-      # send notification to the owner(s) of the ultimate parent
-      if users.empty?
-        users = comment.ultimate_parent.commentable_owners
+      # send notification to the owner(s) of the ultimate parent, who can be users or admins
+      if comment.ultimate_parent.is_a?(AdminPost)
+        admins = comment.ultimate_parent.commentable_owners
       else
-        users = comment.ultimate_parent.commentable_owners - users
+        if users.empty?
+          users = comment.ultimate_parent.commentable_owners
+        else
+          users = comment.ultimate_parent.commentable_owners - users
+        end
       end
 
       users.each do |user|
@@ -115,6 +133,13 @@ class CommentObserver < ActiveRecord::Observer
           end
         end
       end
+      
+      admins.each do |admin|
+        # TODO: comments should be able to belong to an admin officially
+        # unless admin == comment.comment_owner
+        AdminMailer.edited_comment_notification(admin.id, comment.id).deliver
+      end
+      
     end
   end
 

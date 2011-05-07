@@ -147,7 +147,18 @@ class UserMailer < ActionMailer::Base
       :subject => "[#{ArchiveConfig.APP_NAME}] Generated password"
     )
   end
-
+	
+	  # Confirms to a user that their email was changed
+  def change_email(user_id, old_email, new_email)
+    @user = User.find(user_id)
+		@old_email= old_email
+		@new_email= new_email
+    mail(
+      :to => @old_email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Email changed"
+    )
+  end
+   
   ### WORKS NOTIFICATIONS ###
 
   # Sends email when a user is added as a co-author
@@ -184,14 +195,16 @@ class UserMailer < ActionMailer::Base
   end
 
   # Emails a prompter to say that a response has been posted to their prompt
-  def prompter_notification(user_id, work_id, collection_id=nil)
-    user = User.find(user_id)
+  def prompter_notification(work_id, collection_id=nil)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
-    mail(
-      :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] A Response to your Prompt"
-    )
+    @work.challenge_claims.each do |claim|
+      user = User.find(claim.request_signup.pseud.user.id)
+      mail(
+        :to => user.email,
+        :subject => "[#{ArchiveConfig.APP_NAME}] A Response to your Prompt"
+      )
+    end
   end
 
   # Sends email to coauthors when a work is edited
