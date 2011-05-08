@@ -88,3 +88,23 @@ When /^I make an admin post$/ do
   click_button("Post")
   Then %{I should see "AdminPost was successfully created."}
 end
+
+When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
+  n ||= 1
+  visit new_archive_faq_path
+  fill_in("content", :with => "Number #{n} posted FAQ, this is.")
+  fill_in("title", :with => "Number #{n} FAQ")
+  click_button("Post")
+end
+
+When /^there are (\d+) Archive FAQs$/ do |n|
+  (1..n.to_i).each do |i|
+    When %{I make a #{i} FAQ post}
+  end
+end
+
+When /^(\d+) Archive FAQs? exists?$/ do |n|
+  (1..n.to_i).each do |i|
+    Factory.create(:archive_faq)
+  end
+end
