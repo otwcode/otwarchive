@@ -1,4 +1,4 @@
-@faqs
+@admin @faqs
 Feature: Rearrange Archive FAQs
   In order to manage the Archive FAQs
   As an admin
