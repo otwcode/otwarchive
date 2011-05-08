@@ -1,4 +1,4 @@
-@works
+@works @comments
 
 Feature: View a work with various options
 
