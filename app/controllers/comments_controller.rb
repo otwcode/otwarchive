@@ -211,8 +211,6 @@ class CommentsController < ApplicationController
    redirect_to_all_comments(@comment.ultimate_parent, {:show_comments => true})
   end
 
-## Enigel Feb 09: added redirects for non-ajaxy requests to prevent script barf
-
   def show_comments
     @comments = @commentable.comments
     respond_to do |format|
@@ -222,6 +220,7 @@ class CommentsController < ApplicationController
         options = {:show_comments => true}
         options[:add_comment] = params[:add_comment] if params[:add_comment]
         options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
+        options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
         redirect_to_all_comments(@commentable, options)
       end
       format.js
@@ -254,7 +253,6 @@ class CommentsController < ApplicationController
     @comment = Comment.new
     respond_to do |format|
       format.html do
-        # again with the being pretty nice
         options = {:show_comments => true}
         options[:controller] = @commentable.class.to_s.underscore.pluralize
         options[:anchor] = "comment#{params[:id]}"
@@ -302,7 +300,6 @@ class CommentsController < ApplicationController
     end
   end
 
-  # ATTENTION: added load_commentable before this
   def delete_comment
     respond_to do |format|
       format.html do
@@ -315,7 +312,6 @@ class CommentsController < ApplicationController
     end
   end
 
-  # ATTENTION: added load_commentable before this
   def cancel_comment_delete
     @comment = Comment.find(params[:id])
     respond_to do |format|
@@ -374,6 +370,7 @@ class CommentsController < ApplicationController
       :add_comment => options[:add_comment],
       :add_comment_reply_id => options[:add_comment_reply_id],
       :delete_comment_id => options[:delete_comment_id],
+      :view_full_work => options[:view_full_work],
       :anchor => options[:anchor]
     end
   end
