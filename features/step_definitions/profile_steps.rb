@@ -1,22 +1,11 @@
-When /^I view my profile$/ do
-	click_link("testuser1")
-  Then %{I should see "My Dashboard"}
-	click_link("Profile")
-end
-
-
-When /^I edit my profile$/ do
+Given /^I want to edit my profile$/ do
   click_link("Profile")
-		And %{I should see "About editname"}
-    And %{I should not see "Test title thingy"}
-    And %{I should not see "Location"}
-    And %{I should not see "This is some text about me"}
-		click_link("Edit My Profile")
-		And %{I should see "Edit My Profile"}
+	click_link("Edit My Profile")
+	And %{I should see "Edit My Profile"}
 end
 
 
-When /^I fill in my profile$/ do
+When /^I fill in the details of my profile$/ do
 	fill_in("Title", :with => "Test title thingy")
   fill_in("Location", :with => "Alpha Centauri")
   fill_in("About Me", :with => "This is some text about me.")  
@@ -24,7 +13,6 @@ When /^I fill in my profile$/ do
 end
 
 
-  
 When /^I change the details in my profile$/ do
   fill_in("Title", :with => "Alternative title thingy")
   fill_in("Location", :with => "Beta Centauri")
@@ -41,55 +29,100 @@ When /^I remove details from my profile$/ do
 end
 
 
+When /^I enter an incorrect password$/ do
+  fill_in("Old password", :with => "passw")
+  click_button("Update")
+end
+
+
 When /^I change my email$/ do
-  Then %{I fill in "Old password" with "password"}
-		And %{I fill in "Change Email" with "valid2@archiveofourown.org"}
-    And %{I press "Update"}
+  fill_in("Old password", :with => "password")
+	fill_in("Change Email", :with => "valid2@archiveofourown.org")
+	click_button("Update")
+end
+
+
+When /^I view my profile$/ do
+	click_link("testuser1")
+  Then %{I should see "My Dashboard"}
+	click_link("Profile")
 end
 
 		
 When /^I enter an invalid email$/ do
-	Then %{I fill in "Old password" with "password"}
-		And %{I fill in "Change Email" with "bob.bob.bob"}
-		And %{I press "Update"}
+	fill_in("Old password", :with => "password")
+	fill_in("Change Email", :with => "bob.bob.bob")	
+	click_button("Update")
 end
 
 
 When /^I enter a duplicate email$/ do
-  click_link("Profile")
-  click_link("Edit My Profile")
-  And %{I fill in "Change Email" with "valid2@archiveofourown.org"}
-  And %{I fill in "Old password" with "password"}
-  And %{I press "Update"}
+  user = Factory.create(:user, :login => "testuser2", :password => "password", :email => "foo@ao3.org")
+  user.activate
+  fill_in("Change Email", :with => "foo@ao3.org")
+  fill_in("Old password", :with => "password") 
+  click_button("Update")
 end
 
+
+When /^I enter a birthdate that shows I am under age$/ do
+   select("1998", :from => "profile_attributes[date_of_birth(1i)]")
+	 select("December", :from => "profile_attributes[date_of_birth(2i)]")
+	 select("31", :from => "profile_attributes[date_of_birth(3i)]")
+   click_button("Update")
+end
+	
 
 When /^I change my preferences to display my date of birth$/ do
  click_link("My Preferences")
-	And %{I check "Display Date of Birth"}
-  And %{I press "Update"}
-  click_link("editname")
-  click_link("Profile")
+ check ("Display Date of Birth")
+ click_button("Update")
+ click_link("testuser1")
+ click_link("Profile")
 end
 
 
-When /^I change my date of birth$/ do
-	And %{I select "1998" from "profile_attributes[date_of_birth(1i)]"}
-  And %{I select "December" from "profile_attributes[date_of_birth(2i)]"}
-  And %{I select "31" from "profile_attributes[date_of_birth(3i)]"}
-  And %{I press "Update"}
-  Then %{I should not see "Your profile has been successfully updated"}
-  And %{I should see "You must be over 13"}
-  When %{I select "1980" from "profile_attributes[date_of_birth(1i)]"}
-    And %{I press "Update"}
+When /^I change my preferences to display my email address$/ do
+ click_link("My Preferences")
+ check ("Display Email Address")
+ click_button("Update")
+ click_link("testuser1")
+ click_link("Profile")
+end
+
+
+When /^I fill in my date of birth$/ do
+   select("1980", :from => "profile_attributes[date_of_birth(1i)]")
+	 select("November", :from => "profile_attributes[date_of_birth(2i)]")
+	 select("30", :from => "profile_attributes[date_of_birth(3i)]")
+   click_button("Update")
+end
+
+
+When /^I make a mistake typing my old password$/ do
+  click_link("Change My Password")
+  fill_in("New Password", :with => "newpass1")
+  fill_in("Confirm New Password", :with => "newpass1")
+  fill_in("Old password", :with => "wrong")
+  click_button("Change Password")
+end
+
+
+When /^I make a typing mistake confirming my new password$/ do
+	click_link("Change My Password")
+	fill_in("New Password", :with => "newpass1")
+  fill_in("Confirm New Password", :with => "newpass2")
+  fill_in("Old password", :with => "password")
+  click_button("Change Password")
 end
 
 
 When /^I change my password$/ do
+	click_link("Change My Password")
   fill_in("New Password", :with => "newpass1")
-  And %{I fill in "Confirm New Password" with "newpass1"}
-  And %{I fill in "Old password" with "password"}
-  And %{I press "Change Password"}
+  fill_in("Confirm New Password", :with => "newpass1")
+  fill_in("Old password", :with => "password")
+  click_button("Change Password")
 end
 
 

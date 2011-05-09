@@ -56,7 +56,7 @@ end
 
 Given /^I am logged in as a random user$/ do
   Given "I am logged out"
-  name = "testuser#{User.count + 1}"
+  name = "testuser#{User.count + 1}
   user = Factory.create(:user, :login => name, :password => DEFAULT_PASSWORD)
   user.activate
   visit login_path
