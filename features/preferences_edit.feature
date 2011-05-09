@@ -20,7 +20,7 @@ Feature: Edit preferences
   And I follow "Add Chapter"
     And I fill in "content" with "Secondy chapter"
     And I press "Preview"
-    And I follow "Post Chapter"
+    And I press "Post Chapter"
   Then I should not see "Secondy chapter"
   When I follow "editname"
   Then I should see "My Dashboard"

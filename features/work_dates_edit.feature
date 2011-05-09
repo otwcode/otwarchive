@@ -37,7 +37,7 @@ Feature: Edit Works Dates
       And I fill in "content" with "this is my second chapter"
       And I press "Preview"
     Then I should see "This is a preview of what this chapter will look like"
-    When I follow "Post Chapter"
+    When I press "Post Chapter"
     Then I should see "Chapter has been posted"
       And I should see "Published:2010-04-30"
       And I should see Updated today
