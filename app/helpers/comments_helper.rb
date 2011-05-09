@@ -92,7 +92,8 @@ module CommentsHelper
           ts("Read Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s),
           url_for(:controller => :comments, 
                   :action => :show_comments, 
-                  commentable_id => commentable_value), 
+                  commentable_id => commentable_value,
+                  :view_full_work => params[:view_full_work]), 
           :remote => true)
     end
   end

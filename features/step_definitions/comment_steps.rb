@@ -32,7 +32,7 @@ end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
   Given "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
-  press("Add Comment")
+  click_button("Add Comment")
 end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest$/ do |comment_text, work|

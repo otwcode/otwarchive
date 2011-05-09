@@ -171,3 +171,17 @@ When /^I set the publication date to today$/ do
   select("#{month}", :from => "work[chapter_attributes][published_at(2i)]")
   select("#{today.year}", :from => "work[chapter_attributes][published_at(1i)]")
 end
+
+Given /^I view the chaptered work(?: with ([\d]+) comments?)? "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |n_comments, title, mode|
+  Given %{I am logged in as a random user}
+  And %{I post the chaptered work "#{title}"}
+  work = Work.find_by_title!(title)
+  visit work_url(work)
+  n_comments ||= 0
+  n_comments.to_i.times do |i|
+    Given %{I post the comment "Bla bla" on the work "#{title}"}
+  end
+  And %{I am logged out}
+  visit work_url(work)
+  And %{I follow "View Entire Work"} if mode == "full"
+end
