@@ -84,4 +84,3 @@ Scenario: Manage pseuds - add, edit
     And I should see "I wanted to add another fancy name"
     And I should not see "My new name (editpseuds)"
     And I should not see "I wanted to add another name"
-		
