@@ -89,3 +89,4 @@ Scenario: Edit profile - change password - mistake in typing new password confir
 	When I change my password
   Then I should see "Your password has been changed"
 		And 1 email should be delivered
+		

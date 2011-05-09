@@ -124,12 +124,3 @@ When /^I change my password$/ do
   fill_in("Old password", :with => "password")
   click_button("Change Password")
 end
-
-
-When /^I make a new pseud$/ do
- click_link("New Pseud")
-   And %{I should see "New pseud"}
-  Then %{I fill in "Name" with "My new name"}
-    And %{I fill in "Description" with "I wanted to add another name"}
-    And %{I press "Create"}
-end
