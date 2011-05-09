@@ -18,3 +18,9 @@ Factory.define :admin do |f|
   f.password_confirmation { |u| u.password }  
   f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }  
 end
+
+Factory.define :archive_faq do |f|
+  f.sequence(:id) { |n| n }
+  f.sequence(:title) { |n| "The #{n} FAQ" }
+  f.sequence(:content) { |n| "This is the #{n} FAQ" }
+end

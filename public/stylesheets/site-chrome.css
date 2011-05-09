@@ -467,6 +467,9 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
  #main.chapters-manage li.chapter-position-list        { clear: both; padding: 1em;}
  #main.chapters-manage li.chapter-position-list:hover  { background: #eee; border: 1px solid black; cursor: move;}
+ .ui-sortable>li { clear: both;}
+ .ui-sortable>li { border: 1px solid transparent;}
+ .ui-sortable>li:hover { background: #eee; border: 1px solid black; cursor: move;}
  #main.chapters-manage ul.navigation                   { display: inline; float: none; width: auto; }
 
  #main.works-navigate ol, #main.works-navigate ol li   { display: block; }
