@@ -243,6 +243,30 @@ When /^I sign up for "([^\"]*)" with combination C$/ do |title|
     And %{I press "Submit"}
 end
 
+When /^I sign up for "([^\"]*)" with missing prompts$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_27"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"}
+    And %{I press "Submit"}
+end
+
+When /^I fill in the missing prompt$/ do
+  When %{I check "challenge_signup_requests_attributes_1_fandom_27"}
+    And %{I press "Submit"}
+end
+
+When /^I start to sign up for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_28"}
+end
+
+When /^I view prompts for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Prompts ("}
+end
+
 ### THEN
 
 Then /^I should see Battle 12 descriptions$/ do

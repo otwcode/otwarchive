@@ -34,47 +34,31 @@ Feature: Prompt Meme Challenge
   When I follow "Profile"
   Then I should see Battle 12 descriptions
   
+  Scenario: Sign up for a prompt meme
+  
+  Given I have Battle 12 prompt meme fully set up
+  And I am logged in as "myname1"
+  When I go to "Battle 12" collection's page
+  Then I should see "Sign Up"
+  When I sign up for Battle 12 with combination A
+  Then I should see "Signup was successfully created"
+    And I should see "Prompts (2)"
+  
   Scenario: Sign up for a prompt meme and miss out some fields
 
   Given I have Battle 12 prompt meme fully set up
-    
-  # sign up, with errors if you fail to fill in required fields
-  
     And I am logged in as "myname1"
-  When I go to "Battle 12" collection's page
-  Then I should see "Sign Up"
-  When I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_27"
-    And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"
-    And I press "Submit"
-    And "Issue 2249" is fixed
+  When I sign up for "Battle 12" with missing prompts
   Then I should see "Request must have exactly 1 fandom tags. You currently have none."
-  When I check "challenge_signup_requests_attributes_1_fandom_27"
-    And I press "Submit"
+  When I fill in the missing prompt
   Then I should see "Signup was successfully created"
-  
-  Scenario: Sign up without Javascript
-  
-  Given I have Battle 12 prompt meme fully set up
-    And I am logged in as "myname2"
-  When I go to "Battle 12" collection's page
-    And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_28"
-  Then I should see "Add another prompt? (Up to 3 allowed.)"
-    And I should not see "Request 3"
-  When I follow "add_section"
-    And "Issue 2168" is fixed
-  #Then I should see "Request 3"
   
   Scenario: View signups in the dashboard
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  Then I should see "Signup was successfully created"
-    And I should see "Prompts (2)"
-    
-  When I follow "myname1"
+  When I am on my user page
   Then I should see "My Signups (1)"
   When I follow "My Signups (1)"
   Then I should see "Battle 12"
@@ -86,8 +70,7 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   And I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
-  When I go to "Battle 12" collection's page
-  When I follow "Prompts ("
+  When I view prompts for "Battle 12"
     And I follow "Sort by date"
   Then I should see "Something else weird"
   
@@ -98,8 +81,7 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   And I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
-  When I go to "Battle 12" collection's page
-  When I follow "Prompts ("
+  When I view prompts for "Battle 12"
     And I follow "Sort by fandom"
   Then I should see "Something else weird"
   
