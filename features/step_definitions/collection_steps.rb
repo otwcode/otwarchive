@@ -11,7 +11,6 @@ Given /^mod1 lives in Alaska$/ do
 end
 
 ### WHEN
-
 When /^I set up the collection "([^\"]*)"$/ do |title|
   visit new_collection_url
   fill_in("collection_name", :with => "testcollection")
@@ -36,3 +35,21 @@ Then /^Battle 12 collection exists$/ do
   Then %{I should see "Collections in the "}
     And %{I should see "Battle 12"}
 end
+###########################################################
+def collection
+  visit new_collection_url
+  fill_in("collection_name", :with => "defaultcollection")
+  fill_in("collection_title", :with => "Default Collection")
+  click_button("Submit")
+end
+### Given
+Given /^I have (\d+) collection$/ do |count|
+  count.to_i.times do |i|
+    collection
+  end
+end
+### Then
+Then /^my collection is orphaned$/ do
+  User.orphan_account.collections.count.should == 1
+end
+

@@ -100,3 +100,83 @@ end
 Given /^I am a visitor$/ do
   Given %{I am logged out}
 end
+###########################################################
+def user(attributes = {})
+  @user ||= Factory.create(:user, attributes)
+  @user.activate
+  @user
+end
+def login (user)
+  visit login_path
+  fill_in "User name", :with => user.login
+  fill_in "Password", :with => user.password
+  click_button "Log in"
+end
+### Given
+Given /^I am not logged in$/ do
+  visit logout_path
+end
+Given /^I am logged in$/ do
+  login(user)
+end
+Given /^I am logged in with username "([^"]*)"$/ do |username|
+  login(user(:login => username))
+end
+Given /^A user "([^"]*)" exists$/ do |username|
+  Factory.create(:user, :login => username)
+end
+### When
+When /^I delete my account(?: and ([^"]*) my ([^"]*))?$/ do |method, items|
+  visit user_profile_path(user)
+  click_link "Delete My Account"
+  case method
+    when "delete"
+      choose "Delete completely"
+      click_button "Save"
+    when "orphan"
+      choose "Change my pseud to 'orphan' and attach to the orphan account"
+      click_button "Save"
+    end
+end
+When /^I change my username to "([^"]*)"(?: using password "([^"]*)")?$/ do |new_username, password|
+  password ||= user.password
+  visit change_username_user_path(user)
+  fill_in "New User Name", :with => new_username
+  fill_in "Re-enter Your Password", :with => password
+  click_button "Change"
+end
+When /^I visit my dashboard$/ do
+  visit user_path(user)
+end
+### Then
+Then /^I cannot log in$/ do
+  login(user)
+  page.should have_content("We couldn't find that user")
+end
+Then /^I should have username "([^"]*)"$/ do |username|
+  user.reload.login.should == username
+end
+Then /^I should not have username "([^"]*)"$/ do |username|
+  user.reload.login.should_not == username
+end
+Then /^I should not see any fandoms or works$/ do
+  page.should have_no_content("Fandoms")
+  page.should have_no_content("Recent works")
+end
+Then /^I should see my work "([^"]*)"(?: with fandom "([^"]*)")?$/ do |work, fandom|
+  with_scope('#user-works') do
+    page.should have_content(work)
+    page.should have_content(fandom) unless fandom.nil?
+  end
+end
+Then /^I should see the fandom "([^"]*)"$/ do |fandom|
+  with_scope('#user-fandoms') do
+    page.should have_content(fandom)
+  end
+end
+Then /^I should not see the fandom "([^"]*)"$/ do |fandom|
+  with_scope('#user-fandoms') do
+    page.should_not have_content(fandom)
+  end
+end
+

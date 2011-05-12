@@ -44,3 +44,8 @@ ghostsoup:
   name: Ghost Soup
   type: Fandom
   canonical: true
+noapply:
+  id: 11
+  name: No Archive Warnings Apply
+  canonical: true
+  type: Warning

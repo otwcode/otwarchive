@@ -79,7 +79,7 @@ When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
   fill_in("Work Title", :with => title)
   fill_in("Additional Tags", :with => "Scary tag")
   fill_in("content", :with => "That could be an amusing crossover.")
-end  
+end
 
 # TODO: The optional extras (fandom and freeform) in the When line don't seem to be working here - can anyone fix them?
 When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")$/ do |title, fandom, freeform|
@@ -165,7 +165,7 @@ end
 When /^I set the publication date to today$/ do
   today = Time.new
   month = today.strftime("%B")
-  
+
   check("backdate-options-show")
   select("#{today.day}", :from => "work[chapter_attributes][published_at(3i)]")
   select("#{month}", :from => "work[chapter_attributes][published_at(2i)]")
@@ -185,3 +185,90 @@ Given /^I view the chaptered work(?: with ([\d]+) comments?)? "([^"]*)"(?: in (f
   visit work_url(work)
   And %{I follow "View Entire Work"} if mode == "full"
 end
+###########################################################
+DEFAULT_WORK =
+  { :rating => "Not Rated",
+    :warning => "No Archive Warnings Apply",
+    :fandom => "Default Fandom",
+    :title => "Default Title",
+    :content => "Some content." }
+
+def work(attributes = {})
+  basic_tags
+  #This should be factoried at some point....
+  attributes = DEFAULT_WORK.merge(attributes)
+  visit new_work_url
+  select(attributes[:rating], :from => "Rating")
+  check(attributes[:warning])
+  fill_in("Fandoms", :with => attributes[:fandom])
+  fill_in("Work Title", :with => attributes[:title])
+  fill_in("content", :with => attributes[:content])
+  click_button("Preview")
+  click_button("Post")
+end
+### Given
+Given /^I have no works$/ do
+  user.works.find_each { |w| w.delete }
+end
+Given /^I have (\d+) work(?:s)?$/ do |count|
+  count.to_i.times do |i|
+    work({:title => Faker::Lorem.words(3).join(" "), :content => Faker::Lorem.paragraphs(3).join})
+  end
+end
+Given /^I have a work with the following chararistics$/ do |table|
+  characteristics = table.rows_hash
+  work(:title => characteristics['Title'], :fandom => characteristics['Fandom'])
+end
+Given /^I am previewing a work$/ do
+  steps %Q{
+  When I create a work with the following chararistics
+    | Rating   | Not Rated                 |
+    | Warnings | No Archive Warnings Apply |
+    | Fandom   | Supernatural              |
+    | Title    | All Hell Breaks Loose     |
+    | Content  | Bad things happen, etc.   |
+    }
+  When %{preview my work}
+end
+### When
+When /^I try to create a new work$/ do
+  visit new_work_url
+end
+When /^I create a work with the following chararistics$/ do |table|
+  basic_tags
+  characteristics = table.rows_hash
+  visit new_work_url
+  select(characteristics['Rating'], :from => "Rating")
+  check(characteristics['Warnings'])
+  fill_in("Fandoms", :with => characteristics['Fandom'])
+  fill_in("Work Title", :with => characteristics['Title'])
+  select(characteristics['Pseud'], :from => "Select author/pseudonym") if characteristics['Pseud']
+  fill_in("content", :with => characteristics['Content'])
+end
+When /^(?:I )?post my work$/ do
+  if page.has_content?("Post without preview")
+    click_button("Post without preview")
+  else
+    click_button("Post")
+  end
+end
+When /^preview my work$/ do
+  click_button("Preview")
+end
+### Then
+Then /^my work does not exist$/ do
+  user.works.count.should == 0
+end
+Then /^my work is orphaned$/ do
+  User.orphan_account.works.count.should == 1
+end
+Then /^I cannot create a work$/ do
+  page.should have_content("Please log in")
+end
+Then /^my work should be posted$/ do
+  page.should have_content("Work was successfully posted.")
+end
+Then /^I should see a preview$/ do
+  page.should have_content("Preview Work")
+end
+

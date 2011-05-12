@@ -65,3 +65,81 @@ Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^
   fill_in "tag_fandom_string", :with => fandomname
   click_button "Assign"
 end
+###########################################################
+def basic_tags
+  Warning.find_or_create_by_name_and_canonical("No Archive Warnings Apply", true)
+  Warning.find_or_create_by_name_and_canonical("Choose Not To Use Archive Warnings", true)
+  Rating.find_or_create_by_name_and_canonical("Not Rated", true)
+  Rating.find_or_create_by_name_and_canonical("Explicit", true)
+  Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
+end
+### Given
+Given /^the following fandom tags exist$/ do |fandom_table|
+  fandom_table.hashes.each do |hash|
+    Factory.create(:fandom, :name => hash['name'], :canonical => hash['canonical'])
+  end
+end
+Given /^tag "([^"]*)" has metatag "([^"]*)"$/ do |fandom_tag, meta_tag|
+  Fandom.find_by_name(fandom_tag).direct_meta_tags << Fandom.find_by_name(meta_tag)
+end
+Given /^tag "([^"]*)" has synonym "([^"]*)"$/ do |tag, synonym_tag|
+  Tag.find_by_name(tag).mergers << Tag.find_by_name(synonym_tag)
+end
+Given /^The following tags exist$/ do |tag_table|
+  tag_table.hashes.each do |hash|
+    Factory.create(hash['type'].to_sym, :name => hash['tag'])
+  end
+end
+Given /^The fandom tag "([^"]*)" exists$/ do |tag_name|
+  Fandom.create(:name => tag_name)
+end
+Given /^The canonical character "([^"]*)" exists$/ do |character_tag|
+  Character.create(:name => character_tag, :canonical => true)
+end
+### When
+When /^I search tags for "([^"]*)"$/ do |search_term|
+  visit '/tags/search'
+  fill_in 'tag_search', :with => search_term
+  click_button "Search tags"
+end
+When /^I search for fandom tag "([^"]*)"$/ do |search_term|
+  visit '/tags/search'
+  fill_in 'tag_search', :with => search_term
+  select 'Fandom', :from => 'query_type'
+  click_button "Search tags"
+end
+When /^I search for canonical tag "([^"]*)"$/ do |search_term|
+  visit '/tags/search'
+  fill_in 'tag_search', :with => search_term
+  check 'canonical?'
+  click_button "Search tags"
+end
+ 
+### Then
+Then /^I can see the following tags$/ do |tag_table|
+  tag_table.hashes.each do |hash|
+    within 'ol.tag' do
+      page.should have_content(hash['tag'])
+    end
+  end
+end
+Then /^I can see the fandom tag "([^"]*)"$/ do |tag_name|
+  within 'ol.tag' do
+    page.should have_content(tag_name)
+  end
+end
+Then /^I cannot see the following tags$/ do |tag_table|
+  tag_table.hashes.each do |hash|
+    within 'ol.tag' do
+      page.should_not have_content(hash['tag'])
+    end
+  end
+end
+Then /^I can see the canonical tag "([^"]*)"$/ do |tag_name|
+  within 'ol.tag' do
+    within '.canonical' do
+      page.should have_content(tag_name)
+    end
+  end
+end
+
