@@ -11,6 +11,9 @@ class TagSet < ActiveRecord::Base
   has_many :set_taggings, :dependent => :destroy
   has_many :tags, :through => :set_taggings
 
+  has_many :moderators, :through => :tag_set_ownerships, :source => :pseud
+  has_many :owners, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', true]
+
   has_one :prompt
 
   # how this works: we don't want to set the actual "tags" variable initially because that will
@@ -61,23 +64,6 @@ class TagSet < ActiveRecord::Base
     end
   end
 
-  validate :all_tags_must_be_canonical  
-  def all_tags_must_be_canonical
-    uncanonical_tags = self.taglist.reject {|tag| tag.canonical}
-    unless uncanonical_tags.empty?
-      errors.add(:tagnames, ts("^The following tags aren't canonical and can't be used: %{taglist}", 
-                :taglist => uncanonical_tags.collect(&:name).join(", ") ))
-    end
-    
-    TAG_TYPES.each do |type|
-      uncanonical_tags = eval("#{type}_taglist").reject {|tag| tag.canonical}
-      unless uncanonical_tags.empty?
-        errors.add("#{type}_tagnames", ts("^The following #{type} tags aren't canonical and can't be used: %{taglist}", 
-                  :taglist => uncanonical_tags.collect(&:name).join(", ") ))
-      end
-    end
-  end
-  
   scope :matching, lambda {|tag_set_to_match|
     select("DISTINCT tag_sets.*").
     joins(:tags).

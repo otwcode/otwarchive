@@ -1,0 +1,72 @@
+<h2>Tag Set Editing</h2>
+
+<h3><%= ts("Notes") %></h3>
+<p class="notes">
+	You can use tag sets when running a challenge, and eventually even when browsing. 
+	Visible tag sets can be viewed and used by others. Tag sets that are open to nominations
+	can take nominations from the public. 
+</p>
+
+<!-- /descriptions-->
+
+<!--main content-->
+<h3 class="landmark">Tag Set Settings</h3>
+
+<%= form_for(@tag_set) do |tag_set_form| %>
+  <%= error_messages_for @tag_set %>
+
+  <fieldset class="preface profile">
+		<legend>Management</legend>
+		<h3>Management</h3>
+		<p class="notes">
+			To add or remove an owner or moderator, enter their name. If they are currently on the list they will be removed; if not, they will be added.
+		</p>
+		<h4>Current Owners</h4>
+		<p><%= @tag_set.owners.map {|mod| mod.name}.sort.join(', ') =%></p>
+		<p><%= label_tag :owner_changes, ts("Add/Remove Owners: ") %></p>
+		<p>
+			<%= text_field_tag :owner_changes, nil, :size => 60 %>
+			<%= autocomplete_text_field("owner_changes") %>
+		</p>
+
+		<h4>Current Moderators</h4>
+		<p><%= @tag_set.moderators.map {|mod| mod.name}.sort.join(', ') =%></p>
+		<p><%= label_tag :moderator_changes, ts("Add/Remove Moderators: ") %></p>
+		<p>
+			<%= text_field_tag :moderator_changes, nil, :size => 60 %>
+			<%= autocomplete_text_field("moderator_changes") %>
+		</p>
+	</fieldset>
+
+	<fieldset class="preface profile">
+    <legend>Description</legend>
+    <h3>Description</h3>
+		<dl>
+			<dt><%= tag_set_form.label :title, ts("Title* (text only)") %></dt>
+			<dd><%= tag_set_form.text_field :title %></dd>
+			
+			<dt><%= tag_set_form.label :description, ts("Brief Description") %></dt>
+			<dd><%= tag_set_form.text_field :description %></dd>
+
+			<dt><%= tag_set_form.label :visible, ts("Visible to the public?") %></dt>
+			<dd><%= tag_set_form.check_box :visible %></dd>
+
+			<dt><%= tag_set_form.label :nominated, ts("Open to nominations?") %></dt>
+			<dd><%= tag_set_form.check_box :nominated %></dd>
+		</dl>
+	</fieldset>
+
+  <% TagSet::TAG_TYPES.each do |tag_type| %>
+    <fieldset class="tag_set">
+      <legend><%= ts("%{tag_type} Settings", :tag_type => tag_type.classify) %></legend>
+      <h4><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, "#{tag_type.classify}: " %></h4>
+      <p>
+        <% tagnames = restriction.tag_set ? restriction.tag_set.send("#{tag_type}_tagnames") : "" %>
+        <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :value => tagnames,
+            :rows => (tagnames.size/3 > 10 ? 10 : (tagnames.size/3 < 2 ? 2 : tagnames.size/3)) %>
+        <% tag_fieldname = "#{@challenge.class.name.tableize.singularize}_offer_restriction_attributes_tag_set_attributes_#{tag_type}_tagnames" %>
+        <%= autocomplete_text_field(tag_fieldname, :methodname => "canonical_#{tag_type}_finder") %>
+      </p>
+    </fieldset>
+  <% end %>
+<% end %>

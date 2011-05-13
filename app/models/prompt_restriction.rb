@@ -1,6 +1,5 @@
 class PromptRestriction < ActiveRecord::Base
-  belongs_to :tag_set, :dependent => :destroy
-  accepts_nested_attributes_for :tag_set, :reject_if => proc { |attrs| attrs.all? { |k, v| v.blank? } }
+  belongs_to :tag_set
 
   # note: there is no has_one/has_many association here because this class may or may not
   # be used by many different challenge classes. For convenience, if you use this class in
@@ -16,21 +15,6 @@ class PromptRestriction < ActiveRecord::Base
     fandom_num_allowed category_num_allowed rating_num_allowed character_num_allowed
     relationship_num_allowed freeform_num_allowed warning_num_allowed).each do |tag_limit_field|
       validates_numericality_of tag_limit_field, :only_integer => true, :less_than_or_equal_to => ArchiveConfig.PROMPT_TAGS_MAX, :greater_than_or_equal_to => 0
-  end
-
-  # check that we don't have a single tag of any kind in the tag set
-  validate :no_single_specified_tags
-  def no_single_specified_tags
-    error_types = []
-    TagSet::TAG_TYPES.each do |tag_type|
-      if tags_of_type(tag_type).count == 1
-        error_types << tag_type
-      end
-    end
-    unless error_types.empty?
-      errors.add(:base, ts("^You haven't given users a choice of %{error_types}. (If that is deliberate, just set the number of tags required and allowed for that type to 0 instead.)",
-        :error_types => error_types.join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
-    end
   end
 
   before_validation :update_allowed_values

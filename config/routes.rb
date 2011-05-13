@@ -65,6 +65,12 @@ Otwarchive::Application.routes.draw do
     resources :comments
 	end
 
+  resources :tag_sets, :controller => 'owned_tag_sets' do 
+    member do
+      get :nominate
+      get :review
+    end
+  end
 
   #### ADMIN ####
   resources :admins
@@ -273,6 +279,7 @@ Otwarchive::Application.routes.draw do
   resources :gifts
   resources :prompt_restrictions
   resources :tag_sets, :only => [:show]
+  resources :prompts
   resources :collections do
     collection do
       get :list_challenges
