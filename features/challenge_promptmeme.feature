@@ -97,18 +97,7 @@ Feature: Prompt Meme Challenge
   Scenario: Mod can view signups
   
   Given I have Battle 12 prompt meme fully set up
-  When I am logged in as "myname1"
-  # no anon
-  When I sign up for Battle 12 with combination A 
-  When I am logged in as "myname2"
-  # both anon
-  When I sign up for Battle 12 with combination B
-  When I am logged in as "myname3"
-  # one anon
-  When I sign up for Battle 12
-  When I am logged in as "myname4"
-  When I sign up for Battle 12 with combination C
-  
+  Given everyone has signed up  
   When I am logged in as "mod1"
     And I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
@@ -142,94 +131,76 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination B
   And I am logged in as "myname4"
   And I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  Then my claim should be fulfilled
   
-  When I am on my user page
-  When I follow "My Claims (1)"
-  When I follow "Post To Fulfill"
-    And I fill in "Work Title" with "Fulfilled Story"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "This is an exciting story about Atlantis"
-  When I press "Preview"
-    And I press "Post"
-  Then I should see "Work was successfully posted"
-    And I should see "Fandom:"
-    And I should see "Stargate Atlantis"
-    And I should not see "Alternate Universe - Historical"
-    
-  Scenario: All the rest of the unrefactored stuff
-
+  Scenario: Claims count should be correct
+  
   Given I have Battle 12 prompt meme fully set up
-    
-  # sign up with no anon prompts
-  
   When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination A
-  Then I should see "Signup was successfully created"
-    And I should see "Prompts (2)"
-  
-  # someone else sign up, with both anon prompts
-  
-  When I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
-  Then I should see "Signup was successfully created"
-    And I should see "Prompts (4)"
-  
-  # third person sign up, with one anon prompt
-  
-  When I am logged in as "myname3"
-  When I sign up for Battle 12
-  Then I should see "Signup was successfully created"
-  
-  # fourth person sign up
-  
-  When I am logged in as "myname4"
-  When I sign up for Battle 12 with combination C
-  Then I should see "Signup was successfully created"
-  
-  # user claims a prompt
-  
-  When I am logged in as "myname4"
-  When I claim a prompt from "Battle 12"
-    
-  # mod closes signups
-  When I close signups for "Battle 12"
-  
-  # collection is anonymous-writers but claims are shown for mod
-  
-  Then claims are shown
-    
-  # claims are hidden for ordinary user
-  
-  When I follow "Log out"
-    And I am logged in as "myname4"
-  Then claims are hidden
-  
-  # user posts a fic
-  
-  When I am on my user page 
-  When I follow "My Claims (1)"
-  When I follow "Post To Fulfill"
-    And I fill in "Work Title" with "Fulfilled Story"
-    And I select "Not Rated" from "Rating"
-    And I check "No Archive Warnings Apply"
-    And I fill in "content" with "This is an exciting story about Atlantis"
-  When I press "Preview"
-    And I press "Post"
-  
-  # Claim is completed
-
+  And I am logged in as "myname4"
+  And I claim a prompt from "Battle 12"
+  When I fulfill my claim
   When I am on my user page
   Then I should see "My Claims (0)"
+  
+  Scenario: Claim shows as fulfilled to another user
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+  And I am logged in as "myname4"
+  And I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I am logged in as "myname1"
   When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should see "Secret!" within "#fulfilled_claims"
     And I should not see "Secret!" within "#unfulfilled_claims"
-  When I follow "Prompts (8)"
+  When I follow "Prompts ("
     And I follow "Show Claims"
   Then I should not see "Claimed by: (Anonymous)"
   When I follow "Show Filled"
   Then I should see "Claimed by: (Anonymous) (Filled)"
+    
+  Scenario: Prompts are counted up correctly
+  
+  Given I have Battle 12 prompt meme fully set up
+  
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  Then I should see "Prompts (2)"
+  When I am logged in as "myname2"
+  When I sign up for Battle 12 with combination B
+  Then I should see "Prompts (4)"
+  
+  Scenario: Claims are shown to mod
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  Then claims are shown
+  
+  Scenario: Claims are hidden from ordinary user
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  Then claims are hidden
+    
+  Scenario: All the rest of the unrefactored stuff
+
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
   
   # mod claims a prompt
 

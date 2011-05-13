@@ -71,6 +71,20 @@ Given /^I have Battle 12 prompt meme fully set up$/ do
   When %{I follow "Log out"}
 end
 
+Given /^everyone has signed up$/ do
+  When %{I am logged in as "myname1"}
+  # no anon
+  When %{I sign up for Battle 12 with combination A}
+  When %{I am logged in as "myname2"}
+  # both anon
+  When %{I sign up for Battle 12 with combination B}
+  When %{I am logged in as "myname3"}
+  # one anon
+  When %{I sign up for Battle 12}
+  When %{I am logged in as "myname4"}
+  When %{I sign up for Battle 12 with combination C}
+end
+
 ### WHEN
 
 When /^I sign up for Battle 12$/ do
@@ -267,6 +281,18 @@ When /^I view prompts for "([^\"]*)"$/ do |title|
   When %{I follow "Prompts ("}
 end
 
+When /^I fulfill my claim$/ do
+  When %{I am on my user page}
+  When %{I follow "My Claims (1)"}
+  When %{I follow "Post To Fulfill"}
+    And %{I fill in "Work Title" with "Fulfilled Story"}
+    And %{I select "Not Rated" from "Rating"}
+    And %{I check "No Archive Warnings Apply"}
+    And %{I fill in "content" with "This is an exciting story about Atlantis"}
+  When %{I press "Preview"}
+    And %{I press "Post"}
+end
+
 ### THEN
 
 Then /^I should see Battle 12 descriptions$/ do
@@ -363,4 +389,11 @@ Then /^Battle 12 prompt meme should be correctly created$/ do
   Then %{I should see "Challenge was successfully created"}
   Then "signup should be open"
   Then "Battle 12 collection exists"
+end
+
+Then /^my claim should be fulfilled$/ do
+  Then %{I should see "Work was successfully posted"}
+    And %{I should see "Fandom:"}
+    And %{I should see "Stargate Atlantis"}
+    And %{I should not see "Alternate Universe - Historical"}
 end
