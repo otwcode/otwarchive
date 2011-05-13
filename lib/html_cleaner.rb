@@ -60,6 +60,9 @@ module HtmlCleaner
   end
   
   def sanitize_value(field, value)
+    if ArchiveConfig.NONZERO_INTEGER_PARAMETERS.has_key?(field.to_s)
+      return (value.to_i > 0) ? value.to_i : ArchiveConfig.NONZERO_INTEGER_PARAMETERS[field.to_s]
+    end
     return "" if value.blank?
     value.strip!
     if field.to_s == 'title'
