@@ -51,9 +51,9 @@ class ChaptersController < ApplicationController
       @commentable = @work
       @comments = @chapter.comments
       
-      @page_title = @work.unrevealed? ? t('works.mystery_chapter_title', :default => "Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) : 
+      @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) : 
         get_page_title(@work.fandoms.string, 
-          @work.anonymous? ? t('chapters.anonymous', :default => "Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '), 
+          @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '), 
           @work.title + " - Chapter " + @chapter.position.to_s)
 
         if @work.unrevealed?                                               
@@ -89,7 +89,7 @@ class ChaptersController < ApplicationController
     if params["remove"] == "me"
       @chapter.pseuds = @chapter.pseuds - current_user.pseuds
       @chapter.save
-      flash[:notice] = t('removed_as_author', :default => "You have been removed as an author from the chapter")
+      flash[:notice] = ts("You have been removed as an author from the chapter")
      redirect_to @work
     end
   end
@@ -114,7 +114,7 @@ class ChaptersController < ApplicationController
           @work.set_revised_at(@chapter.published_at)
         end
         if @work.save
-          flash[:notice] = t('preview', :default => "This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
+          flash[:notice] = ts("This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
           redirect_to [:preview, @work, @chapter]
         else
           render :new
@@ -135,7 +135,7 @@ class ChaptersController < ApplicationController
     if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
       @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
-      @preview_mode = true # Enigel Jan 31
+      @preview_mode = true
       render :preview_edit
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
@@ -155,7 +155,7 @@ class ChaptersController < ApplicationController
           end
         end
         if @work.save
-          flash[:notice] = t('successfully_updated', :default => 'Chapter was successfully updated.')
+          flash[:notice] = ts('Chapter was successfully updated.')
           redirect_to [@work, @chapter]
         else
           render :edit
@@ -200,7 +200,7 @@ class ChaptersController < ApplicationController
         if !@work.posted
           @work.update_attribute(:posted, true)
         end
-        flash[:notice] = t('successfully_posted', :default => 'Chapter has been posted!')
+        flash[:notice] = ts('Chapter has been posted!')
        redirect_to(@work)
       else
         render :preview
@@ -213,16 +213,16 @@ class ChaptersController < ApplicationController
   def destroy
     @chapter = @work.chapters.find(params[:id])
     if @chapter.is_only_chapter?
-      flash[:error] = t('deleting_only_chapter', :default => "You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
+      flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
       redirect_to(edit_work_url(@work))
     else
       if @chapter.destroy
         @work.minor_version = @work.minor_version + 1
         @work.set_revised_at
         @work.save
-        flash[:notice] = t('successfully_deleted', :default => "The chapter was successfully deleted.")
+        flash[:notice] = ts("The chapter was successfully deleted.")
       else
-        flash[:error] = t('delete_failed', :default => "Something went wrong. Please try again.")
+        flash[:error] = ts("Something went wrong. Please try again.")
       end
       redirect_to :controller => 'works', :action => 'show', :id => @work
     end
