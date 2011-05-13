@@ -129,7 +129,13 @@ public
       redirect_to root_path
     end
   end
-
+  
+  # Hide admin banner via cookies
+  def hide_banner
+    if params[:hide_banner]
+      session[:hide_banner] = true
+    end
+  end
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
