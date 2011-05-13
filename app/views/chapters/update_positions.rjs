@@ -1,3 +1,0 @@
-for chapter in @chapters
-  page.replace_html "position-for-#{chapter.id}", chapter.position
-end

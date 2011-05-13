@@ -9,6 +9,7 @@ $j(document).ready(function() {
     // initSelect('languages_menu');
     hideExpandable();
     hideHideMe();
+    showShowMe();
     handlePopUps();
     $j('#expandable-link').click(function(){
           expandList();
@@ -36,8 +37,13 @@ function hideExpandable() {
 }
 
 function hideHideMe() {
-    nodes = $$('.hideme');
-    nodes.each( function(node) { node.hide(); });
+    nodes = $j('.hideme');
+    nodes.each(function(index, node) { $j(node).hide(); });
+}
+
+function showShowMe() {
+    nodes = $j('.showme');
+    nodes.each(function(index, node) { $j(node).show(); });
 }
 
 function handlePopUps() {

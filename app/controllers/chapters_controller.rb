@@ -170,13 +170,16 @@ class ChaptersController < ApplicationController
     if params[:chapters]
       @work = Work.find(params[:work_id])
       @work.reorder(params[:chapters]) 
-      flash[:notice] = t('order_updated', :default => 'Chapter orders have been successfully updated.')
-      redirect_to(@work)
-    else 
-      params[:sortable_chapter_list].each_with_index do |id, position|
+      flash[:notice] = ts("Chapter orders have been successfully updated.")
+    elsif params[:chapter]
+      params[:chapter].each_with_index do |id, position|
         Chapter.update(id, :position => position + 1)
         (@chapters ||= []) << Chapter.find(id)
       end
+    end
+    respond_to do |format|
+      format.html { redirect_to(@work) and return }
+      format.js { render :nothing => true }
     end
   end 
   
