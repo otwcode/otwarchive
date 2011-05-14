@@ -169,6 +169,11 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 # SANITIZER VERSION
 SANITIZER_VERSION: 1
 
+# parameters that must be natural integers and their default values
+NONZERO_INTEGER_PARAMETERS:
+  page: 1
+  per_page: 25
+
 # These fields are query fields and are allowed to contain "less than" values
 FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits"]
 
