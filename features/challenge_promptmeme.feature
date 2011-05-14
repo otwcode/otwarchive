@@ -191,6 +191,29 @@ Feature: Prompt Meme Challenge
   When I close signups for "Battle 12"
   When I am logged in as "myname4"
   Then claims are hidden
+  
+  Scenario: User cannot delete someone else's claim
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up
+  When I claim a prompt from "Battle 12"
+  When I am logged in as "myname1"
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should not see "Delete"
+  
+  Scenario: User can delete their own claim
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up
+  When I claim a prompt from "Battle 12"
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  When I follow "Delete"
+  Then I should see "Your claim was deleted."
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should not see "Delete"
     
   Scenario: All the rest of the unrefactored stuff
 
@@ -381,23 +404,6 @@ Feature: Prompt Meme Challenge
   Then I should see "mod1" within "#fulfilled_claims"
     And I should see "myname4" within "#fulfilled_claims"
     
-  # make another claim and then delete it
-  
-  When I follow "Log out"
-    And I am logged in as "myname2"
-    And I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should not see "Delete"
-  When I follow "Prompts ("
-  Then I should see "Claim"
-  When I press "Claim"
-  Then I should see "Delete"
-  When I follow "Delete"
-  Then I should see "Your claim was deleted."
-  When I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should not see "Delete"
-  
   # make another claim and then delete it from the user claims list
   
   When I follow "Prompts ("

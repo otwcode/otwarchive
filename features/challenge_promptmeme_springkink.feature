@@ -15,8 +15,6 @@ Feature: Prompt Meme Challenge
     | writer2        | something   |
     | writer3        | something   |
     | writer4        | something   |
-    And I have no tags
-    And I have no prompts
     And basic tags
     And I create the fandom "Stargate Atlantis" with id 37
     And I create the fandom "Stargate SG-1" with id 38
