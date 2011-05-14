@@ -1,6 +1,7 @@
 class KudoMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
 
+  layout 'mailer'
   default :from => ArchiveConfig.RETURN_ADDRESS
 
   def kudo_notification(user_id, kudo_id)
