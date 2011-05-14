@@ -185,3 +185,13 @@ Given /^I view the chaptered work(?: with ([\d]+) comments?)? "([^"]*)"(?: in (f
   visit work_url(work)
   And %{I follow "View Entire Work"} if mode == "full"
 end
+
+When /^I browse the "([^"]+)" works$/ do |tagname|
+  tag = Tag.find_by_name(tagname)
+  visit tag_works_path(tag)
+end
+
+When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
+  tag = Tag.find_by_name(tagname)
+  visit tag_works_path(tag, :page => "")
+end
