@@ -131,6 +131,7 @@ public
   end
   
   # Hide admin banner via cookies
+  before_filter :hide_banner
   def hide_banner
     if params[:hide_banner]
       session[:hide_banner] = true

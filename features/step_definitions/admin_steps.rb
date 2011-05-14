@@ -117,9 +117,14 @@ end
 
 ### THEN
 
-Then /^the banner notice should be set to "Custom notice"$/ do
+Then /^the banner notice for a logged-in user should be set to "Custom notice"$/ do
   When %{I am logged in as "newname"}
-  When %{I am on my user page}
+  When %{I am on the works page}
   Then %{I should see "Custom notice words"}
->>>>>>> Issue 2239 banner notice tests
+end
+
+Then /^the banner notice for a logged-out user should be set to "Custom notice"$/ do
+  When %{I am logged out}
+  When %{I am on the works page}
+  Then %{I should see "Custom notice words"}
 end
