@@ -20,7 +20,6 @@ class Admin::SettingsController < ApplicationController
     if @admin_setting.update_attributes(params[:admin_setting])
       Rails.cache.delete("admin_settings")
       flash[:notice] = 'Archive settings were successfully updated.'
-      
       redirect_to admin_settings_path
     else
       render :action => "index"
