@@ -1,3 +1,0 @@
-for serial in @serial_works
-  page.replace_html "position-for-#{serial.id}", serial.position
-end
