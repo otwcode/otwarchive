@@ -248,6 +248,15 @@ Feature: Prompt Meme Challenge
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     And I should see "Stargate Atlantis"
     
+  Scenario: User claims two prompts in one challenge and fulfills one of them
+  # TODO
+  
+  Scenario: User claims two prompts in one challenge and fufills both of them at once
+  # TODO
+  
+  Scenario: User claims two prompts in different challenges and fulfills both of them at once
+  # TODO
+    
   Scenario: All the rest of the unrefactored stuff
 
   Given I have Battle 12 prompt meme fully set up
