@@ -202,7 +202,7 @@ Feature: Prompt Meme Challenge
     And I follow "Claims"
   Then I should not see "Delete"
   
-  Scenario: User can delete their own claim
+  Scenario: User can delete their own claim from the collection claims list
   
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up
@@ -214,6 +214,39 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should not see "Delete"
+  
+  Scenario: User can delete their own claim from the user claims list
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up
+  When I claim a prompt from "Battle 12"
+  When I am on my user page
+    And I follow "My Claims"
+  Then I should see "Delete"
+  When I follow "Delete"
+  Then I should see "Your claim was deleted."
+  When I go to "Battle 12" collection's page
+    And I follow "Claims"
+  Then I should not see "Delete"
+  
+  Scenario: Prompt is deleted after response has been posted
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+  And I am logged in as "myname4"
+  And I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I am logged in as "myname1"
+    And I delete my signup for "Battle 12"
+  Then I should see "Challenge signup was deleted."
+  When I view the work "Fulfilled Story"
+  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+    And I should not see "Stargate Atlantis"
+  When I am logged in as "myname4"
+    And I view the work "Fulfilled Story"
+  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+    And I should see "Stargate Atlantis"
     
   Scenario: All the rest of the unrefactored stuff
 
@@ -403,21 +436,6 @@ Feature: Prompt Meme Challenge
     And I follow "Claims"
   Then I should see "mod1" within "#fulfilled_claims"
     And I should see "myname4" within "#fulfilled_claims"
-    
-  # make another claim and then delete it from the user claims list
-  
-  When I follow "Prompts ("
-  Then I should see "Claim"
-  When I press "Claim"
-  Then I should see "Delete"
-  When I am on my user page
-    And I follow "My Claims"
-  Then I should see "Delete"
-  When I follow "Delete"
-  Then I should see "Your claim was deleted."
-  When I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should not see "Delete"
   
   # make another claim and then fulfill from the post new form
   When I follow "Prompts ("
@@ -441,7 +459,7 @@ Feature: Prompt Meme Challenge
   # work left in draft so claim is not yet totally fulfilled
   When I go to "Battle 12" collection's page
     And I follow "Claims"
-  Then I should see "myname2" within "#fulfilled_claims"
+  Then I should see "myname4" within "#fulfilled_claims"
     And I should see "Response posted on"
     And I should see "Not yet approved"
   When I follow "Response posted on"
@@ -460,7 +478,7 @@ Feature: Prompt Meme Challenge
     And I should see "In response to a prompt by: Anonymous"
   When I go to "Battle 12" collection's page
     And I follow "Claims"
-  Then I should see "myname2" within "#fulfilled_claims"
+  Then I should see "myname4" within "#fulfilled_claims"
     And I should see "Response posted on"
     # TODO: Figure this out
   #  And I should not see "Not yet approved"
@@ -469,8 +487,7 @@ Feature: Prompt Meme Challenge
     And I should not find "draft"
     
   # fulfill a claim from an existing work
-  When I am logged out
-    And I am logged in as "myname1"
+  When I am logged in as "myname1"
     And I go to "Battle 12" collection's page
     And I follow "Prompts ("
   Then I should see "Claim"

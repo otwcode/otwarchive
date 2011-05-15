@@ -136,7 +136,7 @@ When /^I add prompt (\d+)$/ do |number|
     And "I press \"Submit\""
 end
 
-When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"$/ do |title, type|
+When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"$/ do |type, title|
   visit new_collection_path
   fill_in("collection_name", :with => "promptcollection")
   fill_in("collection_title", :with => title)
@@ -278,6 +278,13 @@ When /^I fulfill my claim$/ do
     And %{I fill in "content" with "This is an exciting story about Atlantis"}
   When %{I press "Preview"}
     And %{I press "Post"}
+end
+
+When /^I delete my signup for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Your Prompts"}
+  When %{I follow "Delete"}
+  Then %{I should see "Challenge signup was deleted."}
 end
 
 ### THEN
