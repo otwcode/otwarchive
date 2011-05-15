@@ -1,0 +1,53 @@
+<!--Descriptive page name and system messages, descriptions, and instructions.-->
+<% if @user %>
+  <h2><%= ts("%{user_name}'s Tag Sets", :user_name => @user.login) %></h2>
+<% else %>
+  <h2><%= ts("Tag Sets in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %></h2>
+<% end %>
+
+<% if @tag_sets.empty? %>
+  <%= ts("Sorry, there were no tag sets found.") %>
+<% else %>
+  <h2><%= search_header @tag_sets, @query, "Tag Set" %> </h2>
+<% end %>
+
+<!--/descriptions-->
+<!--Subnavigation, sorting and actions-->
+<div class="navigation module">
+  <% if logged_in? %>
+    <h3 class="landmark">Navigation</h3>
+    <ul class="navigation" role="navigation">
+    	<li><%= link_to ts("New Tag Set"), new_tag_set_path %></li>
+    </ul>
+  <% end %>
+
+  <% if @sort_and_filter %> 
+  <!--sorting subnav-->
+    <ul class="sorting navigation" role="navigation">
+      <li><h4><%= ts('Sort By') %></h4></li>
+      <li><%= sort_link ts('Title'), "tag_sets.title" %></li>
+      <li><%= sort_link ts('Date'), "tag_sets.created_at", {:sort_default => true, :desc_default => true} %></li>
+      <li><%= sort_link ts('Kudos'), "kudos", {:desc_default => true} %></li>
+    </ul>
+  <!---/subnav-->
+  <% end %>
+</div>
+
+
+<% unless @tag_sets.empty? %>
+  <%= will_paginate @tag_sets, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+
+  <!--main content-->
+  <h3 class="landmark">Tag Sets List</h3>
+  <h3>Tag Sets</h3>
+
+  <ul class="tag_set index">
+    <% @tag_sets.each do |tag_set| %>
+      <%= render :partial => 'tag_set_blurb', :locals => {:tag_set => tag_set} %>
+    <% end %>
+  </ul>
+
+  <div class="clear"><!-- presentational--></div>
+
+  <%= will_paginate @tag_sets, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+<% end %>

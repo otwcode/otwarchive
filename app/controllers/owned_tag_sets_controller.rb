@@ -52,11 +52,11 @@ class OwnedTagSetsController < ApplicationController
   end
 
   def new
-    @tag_set = TagSet.new
+    @tag_set = OwnedTagSet.new
   end
 
   def create
-    @tag_set = TagSet.new(params[:tag_set])
+    @tag_set = OwnedTagSet.new(params[:tag_set])
     @tag_set.owners << current_user
     if @tag_set.save
       flash[:notice] = ts('Tag set was successfully created.')

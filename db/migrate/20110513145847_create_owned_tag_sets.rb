@@ -21,5 +21,6 @@ class CreateOwnedTagSets < ActiveRecord::Migration
 
   def self.down
     drop_table :tag_set_ownerships
+    drop_table :owned_tag_sets    
   end
 end

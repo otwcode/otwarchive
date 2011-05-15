@@ -10,6 +10,9 @@ class OwnedTagSet < ActiveRecord::Base
   
   belongs_to :tag_set
 
+  has_many :moderators, :through => :tag_set_ownerships, :source => :pseud
+  has_many :owners, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', true]
+
   validates_presence_of :title, :message => ts("Please enter a title for your tag set.")
   validates_uniqueness_of :title, :case_sensitive => false, :message => ts('Sorry, that name is already taken. Try again, please!')
   validates_length_of :title,

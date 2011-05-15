@@ -11,9 +11,6 @@ class TagSet < ActiveRecord::Base
   has_many :set_taggings, :dependent => :destroy
   has_many :tags, :through => :set_taggings
 
-  has_many :moderators, :through => :tag_set_ownerships, :source => :pseud
-  has_many :owners, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', true]
-
   has_one :prompt
 
   # how this works: we don't want to set the actual "tags" variable initially because that will
