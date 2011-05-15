@@ -136,9 +136,14 @@ When /^I add prompt (\d+)$/ do |number|
     And "I press \"Submit\""
 end
 
-When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"$/ do |type, title|
+When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/ do |type, title, name|
+  When %{I am logged in as "mod1"}
   visit new_collection_path
-  fill_in("collection_name", :with => "promptcollection")
+  if name.nil?
+    fill_in("collection_name", :with => "promptcollection")
+  else
+    fill_in("collection_name", :with => name)
+  end
   fill_in("collection_title", :with => title)
   if type == "anon"
     check("Is this collection currently unrevealed?")
@@ -146,6 +151,7 @@ When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"$/ do |type, title|
   end
   select("Prompt Meme", :from => "challenge_type")
   click_button("Submit")
+  Then "I should see \"Collection was successfully created\""
   check("prompt_meme_signup_open")
   fill_in("prompt_meme_requests_num_allowed", :with => ArchiveConfig.PROMPT_MEME_PROMPTS_MAX)
   fill_in("prompt_meme_requests_num_required", :with => 1)
@@ -205,6 +211,15 @@ When /^I claim a prompt from "([^\"]*)"$/ do |title|
   When %{I press "Claim"}
 end
 
+When /^I open signups for "([^\"]*)"$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Challenge Settings"}
+    And %{I check "Signup open?"}
+    And %{I press "Submit"}
+  Then %{I should see "Challenge was successfully updated"}
+end
+
 When /^I close signups for "([^\"]*)"$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
@@ -212,6 +227,24 @@ When /^I close signups for "([^\"]*)"$/ do |title|
     And %{I uncheck "Signup open?"}
     And %{I press "Submit"}
   Then %{I should see "Challenge was successfully updated"}
+end
+
+When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When "I follow \"Sign Up\""
+    And "I check \"challenge_signup_requests_attributes_0_fandom_28\""
+    And "I check \"challenge_signup_requests_attributes_1_fandom_28\""
+    And "I check \"challenge_signup_requests_attributes_1_anonymous\""
+    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird\""
+    And "I press \"Submit\""
+end
+
+When /^I sign up for "([^\"]*)" many-fandom prompt meme$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When "I follow \"Sign Up\""
+    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames\" with \"Stargate Atlantis\""
+    And "I check \"challenge_signup_requests_attributes_0_anonymous\""
+    And "I press \"Submit\""
 end
 
 When /^I sign up for "([^\"]*)" with combination A$/ do |title|
@@ -390,4 +423,21 @@ Then /^my claim should be fulfilled$/ do
     And %{I should see "Fandom:"}
     And %{I should see "Stargate Atlantis"}
     And %{I should not see "Alternate Universe - Historical"}
+end
+
+Then /^14 should be the last signup in the table$/ do
+  Then %{I should see the text with tags "14</a></td>
+        <td class=\"navigation\">
+          <!-- requires 'challenge_signup' local -->
+  <ul class=\"navigation\" role=\"navigation\">
+    <!-- The edit and delete links shouldn't show on the index for a prompt meme -->
+  </ul>
+
+        </td>
+      </tr>
+  </table>"}
+end
+
+Then /^12 should be the last signup in the table$/ do
+  Then "I should see the text with tags \"12</a></td> <td class=\"navigation\"> <!-- requires 'challenge_signup' local --> <ul class=\"navigation\" role=\"navigation\"> <!-- The edit and delete links shouldn't show on the index for a prompt meme --> </ul> </td> </tr> </table>\""
 end
