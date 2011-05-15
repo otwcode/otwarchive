@@ -49,7 +49,7 @@ end
 
 Given /^I am logged in as a random user$/ do
   name = "testuser#{User.count + 1}"
-  user = Factory.create(:user, :login => name, :password => "password", :email => "bar@ao3.org")
+  user = Factory.create(:user, :login => name, :password => "password")
   user.activate
   visit login_path
   fill_in "User name", :with => name
