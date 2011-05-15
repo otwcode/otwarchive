@@ -43,7 +43,7 @@ end
 
 
 When /^I view my profile$/ do
-	click_link("testuser1")
+	click_link("editname")
   Then %{I should see "My Dashboard"}
 	click_link("Profile")
 end
@@ -77,7 +77,7 @@ When /^I change my preferences to display my date of birth$/ do
  click_link("My Preferences")
  check ("Display Date of Birth")
  click_button("Update")
- click_link("testuser1")
+ click_link("editname")
  click_link("Profile")
 end
 
@@ -86,7 +86,7 @@ When /^I change my preferences to display my email address$/ do
  click_link("My Preferences")
  check ("Display Email Address")
  click_button("Update")
- click_link("testuser1")
+ click_link("editname")
  click_link("Profile")
 end
 

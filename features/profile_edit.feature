@@ -5,8 +5,12 @@ Feature: Edit profile
   I want to fill out and edit my profile
 
 Background: 
-	Given I am logged in as a random user
-  Given I want to edit my profile
+  Given the following activated user exists
+	| login    | password   | email  	   |
+	| editname | password   | bar@ao3.org  |
+	
+  And I am logged in as "editname" with password "password"
+  And I want to edit my profile
 
 
 Scenario: Edit profile - add details  
