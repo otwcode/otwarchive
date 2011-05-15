@@ -33,6 +33,7 @@ class Pseud < ActiveRecord::Base
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   has_many :collection_participants, :dependent => :destroy
   has_many :collections, :through => :collection_participants
+  has_many :tag_set_ownerships, :dependent => :destroy
   has_many :tag_sets, :through => :tag_set_ownerships
   has_many :challenge_signups, :dependent => :destroy
   has_many :gifts

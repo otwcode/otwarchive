@@ -9,7 +9,9 @@ class OwnedTagSet < ActiveRecord::Base
   # -- NN May 2011 
   
   belongs_to :tag_set
+  accepts_nested_attributes_for :tag_set  
 
+  has_many :tag_set_ownerships, :dependent => :destroy
   has_many :moderators, :through => :tag_set_ownerships, :source => :pseud
   has_many :owners, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', true]
 
