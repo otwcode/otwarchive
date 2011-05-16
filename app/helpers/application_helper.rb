@@ -378,7 +378,7 @@ module ApplicationHelper
     
     options_checkboxes = options.map do |option|
       checkbox_id = "#{id}_#{option.id}"
-      checkbox_is_checked = form.object.send(options_checked_method).include?(option)
+      checkbox_is_checked = options_checked_method ? form.object.send(options_checked_method).include?(option) : false
       checkbox_name = option.send(option_name_method)
       checkbox_value = option.send(option_value_method)
       checkbox_and_label = label_tag checkbox_id do 

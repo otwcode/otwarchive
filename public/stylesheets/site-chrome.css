@@ -85,7 +85,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
       { float:right; }
 /* Note: this next navigation context doesn't really feel like it should be on "stuff I own" but more about "navigation on indiv blurb" */
 #main .work .own .navigation, #main .bookmark .own .navigation, #main .series .own .navigation, #main .works .own .navigation, #main .own.work .navigation,
-#main.collections-index .blurb .navigation, #main.collections-list_challenges .blurb .navigation
+#main.collections-index .blurb .navigation, #main.collections-list_challenges .blurb .navigation, #main .tag_set .blurb .navigation
       { float:left; margin:-1.25em auto auto;}
 #main li.bookmark .own .navigation
       { float: left; margin:0.25em auto auto -0.25em;}
@@ -161,6 +161,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  #main .blurb .header img       { position: relative; margin: 0; }
  .blurb .header h5, .blurb .header ul
                  { font-size: 1em; margin: 0.375em 6em 0 65px }
+ .tag_set .blurb .header h4, .tag_set .blurb .header ul { margin-left: 0;}
  .blurb h4 a:link,.blurb h4 img { color: #900; vertical-align: bottom }
  .blurb ul.required-tags     { position: absolute; top: 0; width:60px; margin:0;}
  .blurb ul.required-tags li, #main .blurb ul.required-tags li img, .blurb ul.required-tags li a
@@ -195,7 +196,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
   .blurb .warning-no {background:url("/images/warning-no-s.png");}
   .blurb .warning-choosenotto {background:url("/images/warning-choosenotto-s.png");}
   .blurb .external-work {background:url("/images/external-work-s.png");}
- */end icon image replacement */
+ /*end icon image replacement */
 
  .blurb .relationships       { background: #eee; }
  .blurb blockquote, .blurb ul.wranglers, .blurb form

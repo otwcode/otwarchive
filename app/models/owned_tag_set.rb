@@ -11,6 +11,8 @@ class OwnedTagSet < ActiveRecord::Base
   belongs_to :tag_set
   accepts_nested_attributes_for :tag_set  
 
+  attr_protected :featured
+
   has_many :tag_set_ownerships, :dependent => :destroy
   has_many :moderators, :through => :tag_set_ownerships, :source => :pseud
   has_many :owners, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', true]
@@ -29,6 +31,18 @@ class OwnedTagSet < ActiveRecord::Base
     :maximum => ArchiveConfig.SUMMARY_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
 
+  def user_is_owner?(user)
+    !(owners & user.pseuds).empty?
+  end
+  
+  def user_is_moderator?(user)
+    !(moderators & user.pseuds).empty?
+  end
+  
+  def add_owner(pseud)
+    owner_attributes << {:pseud => pseud, :owner => true}
+    tag_set_ownerships.build(owner_attributes)
+  end    
   
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,

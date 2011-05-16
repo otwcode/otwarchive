@@ -42,6 +42,16 @@ class TagSet < ActiveRecord::Base
     define_method("#{type}_taglist") do
       self.instance_variable_get("@#{type}_tagnames") ? tagnames_to_list(self.instance_variable_get("@#{type}_tagnames"), "#{type}") : with_type(type)
     end
+    
+    attr_writer "#{type}_tagnames_to_add".to_sym
+    define_method("#{type}_tagnames_to_add") do |tagnames_to_add|
+      self.tags = self.tags + tagnames_to_list(tagnames_to_add, "#{type}")
+    end
+
+    define_method("#{type}_tags_to_remove") do |tags_to_remove|
+      self.tags = self.tags - tags_to_remove
+    end
+    
   end
   
   # this actually runs and saves the tags but only after validation

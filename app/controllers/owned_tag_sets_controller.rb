@@ -45,9 +45,9 @@ class OwnedTagSetsController < ApplicationController
       
     if params[:tag_type] && TagSet::TAG_TYPES.include?(params[:tag_type])
       @tag_type = params[:tag_type]
-      @tags = @tag_set.with_type(@tag_type)
+      @tags = @tag_set.tag_set.with_type(@tag_type)
     else
-      @tags = @tag_set.tags
+      @tags = @tag_set.tag_set.tags
     end
   end
 
@@ -56,22 +56,22 @@ class OwnedTagSetsController < ApplicationController
   end
 
   def create
-    @tag_set = OwnedTagSet.new(params[:tag_set])
-    @tag_set.owners << current_user
+    @tag_set = OwnedTagSet.new(params[:owned_tag_set])
+    @tag_set.add_owner(current_user.default_pseud)
     if @tag_set.save
       flash[:notice] = ts('Tag set was successfully created.')
-      redirect_to(@tag_set) and return
+      redirect_to tag_set_path(@tag_set) and return
     end 
     render :action => "new" and return
   end
 
-  def edit    
+  def edit
   end
   
   def update
-    if @tag_set.update_attributes(params[:tag_set])
+    if @tag_set.update_attributes(params[:owned_tag_set])
       flash[:notice] = ts("Tag set was successfully updated.")
-      redirect_to @tag_set
+      redirect_to tag_set_path(@tag_set)
     else
       render :action => :edit
     end
