@@ -143,7 +143,7 @@
     <% unless @work.challenge_claims.blank? %>
       <% @work.challenge_claims.each do |claim| %>
         <p>In response to a prompt by:
-        <% if claim.request_prompt.anonymous? %>
+        <% if claim.request_prompt.nil? || claim.request_prompt.anonymous? %>
           <%= link_to(ts("Anonymous"), collection_claim_path(claim.collection, claim)) %>
         <% else %>
           <%= link_to(claim.request_signup.pseud.byline, collection_claim_path(claim.collection, claim)) %>
