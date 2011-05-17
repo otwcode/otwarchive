@@ -32,6 +32,15 @@ Feature: Gift Exchange Challenge
   When I follow "Profile"
   Then I should see "Signup: CURRENTLY OPEN" within ".collection.meta"
     And I should see "Signup closes:"
+    
+  Scenario: Gift exchange appears in list of open challenges
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "My Gift Exchange"
+    And I am on "My Gift Exchange" gift exchange edit page
+  When I check "Signup open?"
+    And I press "Submit"
+  When I view open challenges
+  Then I should see "My Gift Exchange"  
 
   Scenario: Change timezone for a gift exchange
   Given I am logged in as "mod1"

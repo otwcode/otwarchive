@@ -39,7 +39,7 @@ end
 Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
   Given %{I have set up the gift exchange "#{challengename}"}
   When "I fill in gift exchange challenge options"
-    click_button("Submit")
+  click_button("Submit")
 end
 
 Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
@@ -106,6 +106,11 @@ Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
 end
 
 ### WHEN
+
+When /^I view open challenges$/ do
+  When "I go to the collections page"
+  When %{I follow "See Open Challenges"}
+end
 
 When /^I sign up for Battle 12$/ do
   When "I go to the collections page"
@@ -203,8 +208,8 @@ end
 When /^I fill in Battle 12 challenge options$/ do
   When %{I fill in "General Signup Instructions" with "Here are some general tips"}
     And %{I fill in "Signup Instructions" with "Please request easy things"}
-    And %{I select "2011" from "prompt_meme_signups_open_at_1i"}
-    And %{I select "2011" from "prompt_meme_signups_close_at_1i"}
+    And %{I select "2010" from "prompt_meme_signups_open_at_1i"}
+    And %{I select "2016" from "prompt_meme_signups_close_at_1i"}
     And %{I select "(GMT-05:00) Eastern Time (US & Canada)" from "prompt_meme_time_zone"}
     And %{I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate SG-1, Stargate Atlantis"}
     And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"}
@@ -217,8 +222,8 @@ When /^I fill in Battle 12 challenge options$/ do
 end
 
 When /^I fill in gift exchange challenge options$/ do
-    select("2011", :from => "gift_exchange_signups_open_at_1i")
-    select("2011", :from => "gift_exchange_signups_close_at_1i")
+    select("2010", :from => "gift_exchange_signups_open_at_1i")
+    select("2013", :from => "gift_exchange_signups_close_at_1i")
     select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
     fill_in("gift_exchange_offer_restriction_attributes_tag_set_attributes_fandom_tagnames", :with => "Stargate SG-1, Stargate Atlantis")
     fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
