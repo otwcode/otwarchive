@@ -234,8 +234,8 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination B
-  And I am logged in as "myname4"
-  And I claim a prompt from "Battle 12"
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am logged in as "myname1"
     And I delete my signup for "Battle 12"
@@ -248,8 +248,30 @@ Feature: Prompt Meme Challenge
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     And I should see "Stargate Atlantis"
     
+  Scenario: User can't claim the same prompt twice
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+    And I view prompts for "Battle 12"
+  Then I should see "Already claimed by you"
+    
   Scenario: User claims two prompts in one challenge and fulfills one of them
-  # TODO
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname2"
+  When I sign up for Battle 12 with combination B
+  When I am logged in as "myname1"
+    And I claim a prompt from "Battle 12"
+    And I claim a prompt from "Battle 12"
+    And I view prompts for "Battle 12"
+  When I fulfill my claim
+  When I view the work "Fulfilled Story"
+  Then I should see "Stargate Atlantis"
+    And I should not see "Stargate SG-1"
+  When I follow "Anonymous" within "p"
+  Then I should see "Stargate Atlantis"
+    And I should not see "Stargate SG-1"
   
   Scenario: User claims two prompts in one challenge and fufills both of them at once
   # TODO
@@ -270,6 +292,16 @@ Feature: Prompt Meme Challenge
     And I follow "My Signups"
   # Then 14 should be the last signup in the table
   # Then show me the page
+
+  Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme then changes their mind and fulfills the gift exchange instead
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up
+  Given I have created the gift exchange "My Gift Exchange"
+  Given I have opened signup for the gift exchange "My Gift Exchange"
+  When I am logged in as "prolificwriter"
+    And I claim a prompt from "Battle 12"
+  # TODO
     
   Scenario: All the rest of the unrefactored stuff
 

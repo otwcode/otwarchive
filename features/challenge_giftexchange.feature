@@ -42,8 +42,7 @@ Feature: Gift Exchange Challenge
   Then I should see "2011" within ".collection.meta"
 
   Scenario: Open signup in a gift exchange
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "My Gift Exchange"
+  Given I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
   When I check "Signup open?"
     And I press "Submit"

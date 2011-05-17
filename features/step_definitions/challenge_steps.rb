@@ -30,6 +30,7 @@ end
 
 Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|
   Given "I have standard challenge tags setup"
+    And %{I am logged in as "mod1"}
     And %{I set up the collection "#{challengename}"}
     And %{I select "Gift Exchange" from "challenge_type"}
   click_button("Submit")
@@ -303,7 +304,7 @@ end
 
 When /^I fulfill my claim$/ do
   When %{I am on my user page}
-  When %{I follow "My Claims (1)"}
+  When %{I follow "My Claims ("}
   When %{I follow "Post To Fulfill"}
     And %{I fill in "Work Title" with "Fulfilled Story"}
     And %{I select "Not Rated" from "Rating"}
