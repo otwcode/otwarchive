@@ -104,4 +104,32 @@ class UserSessionsController < ApplicationController
     redirect_back_or_default root_url
   end
 
+  def openid_small
+    respond_to do |format|
+      format.html { redirect_to login_path(:use_openid => true) }
+      format.js 
+    end
+  end
+
+  def passwd_small
+    respond_to do |format|
+      format.html { redirect_to login_path }
+      format.js
+    end
+  end
+
+  def openid
+    respond_to do |format|
+      format.html { redirect_to login_path(:use_openid => true) }
+      format.js 
+    end
+  end
+
+  def passwd
+    respond_to do |format|
+      format.html { redirect_to login_path }
+      format.js
+    end
+  end
+
 end

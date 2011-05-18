@@ -375,7 +375,14 @@ Otwarchive::Application.routes.draw do
 
   #### SESSIONS ####
 
-  resources :user_sessions
+  resources :user_sessions do
+    collection do
+      get :openid_small
+      get :passwd_small
+      get :openid
+      get :passwd
+    end
+  end
   match 'login' => 'user_sessions#new'
   match 'logout' => 'user_sessions#destroy'
 

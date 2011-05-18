@@ -4,6 +4,16 @@
 //things to do when the page loads
 $j(document).ready(function() {
     // visualizeTables();
+    $j('#signin_open').click(function() {
+          $j('#signin').toggle();
+          $j('#signin_closed').toggle();
+          $j('#signin_open').toggle();
+      });
+    $j('#signin_closed').click(function() {
+          $j('#signin').toggle();
+          $j('#signin_open').toggle();
+          $j('#signin_closed').toggle();
+      });
     if ($j('#work-form')) { hideFormFields(); };     
     if ($j('form.filters')) { hideFilters(); };
     // initSelect('languages_menu');
