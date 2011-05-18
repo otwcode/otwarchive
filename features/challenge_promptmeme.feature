@@ -296,14 +296,17 @@ Feature: Prompt Meme Challenge
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme then changes their mind and fulfills the gift exchange instead
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up for Battle 12
+    And everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
-  Given I have opened signup for the gift exchange "My Gift Exchange"
-  When I am logged in as "prolificwriter"
+    And I have opened signup for the gift exchange "My Gift Exchange"
+    And everyone has signed up for the gift exchange "My Gift Exchange"
+    And I have generated matches for "My Gift Exchange"
+    And I have sent assignments for "My Gift Exchange"
+  When I am logged in as "myname3"
     And I claim a prompt from "Battle 12"
   When I start to fulfill my claim
   Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be checked
-  Then show me the page
+    And the "My Gift Exchange (myname2)" checkbox should not be checked
     
   Scenario: All the rest of the unrefactored stuff
 

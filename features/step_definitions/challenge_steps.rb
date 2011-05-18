@@ -88,13 +88,21 @@ Given /^everyone has signed up for the gift exchange "([^\"]*)"$/ do |challengen
 end
 
 Given /^I have generated matches for "([^\"]*)"$/ do |challengename|
-  When %{I close signups for "Awesome Gift Exchange"}
+  When %{I close signups for "#{challengename}"}
   When %{I follow "Matching"}
   When %{I follow "Generate Potential Matches"}
   Given %{the system processes jobs}
     And %{I wait 3 seconds}
   When %{I reload the page}
   When %{all emails have been delivered}
+end
+
+Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
+  When %{I follow "Send Assignments"}
+  Given %{the system processes jobs}
+    And %{I wait 3 seconds}
+  When %{I reload the page}
+  Then %{I should not see "Assignments are now being sent out"}
 end
 
 ### WHEN
