@@ -18,7 +18,7 @@
     <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
     <% end %>
     <li>
-      <%= link_to 'Chapter Index', navigate_work_path(@work), :onclick => "$('chapter-index').toggle();return false" %>
+      <%= link_to 'Chapter Index', navigate_work_path(@work), :remote => true, :id => "chapter_index_toggle" %>
       <div id="chapter-index" style="display:none">
         <h4><%= link_to 'View full-page index', navigate_work_path(@work) %></h4>
         <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
@@ -72,13 +72,13 @@
   </li>
 
   <li>
-    <a onclick="subnav_view.toggle()" title="Download Options"><%= ts("Download") %> &#8595;</a>
-    <ul id="subnav">
+    <a title="Download Options" class="subnav_toggle"><%= ts("Download") %> &#8595;</a>
+    <ul id="subnav" class="hideme">
       <li><%= link_to ts("MOBI"), download_url_for_work(@work, "mobi") %></li>
       <li><%= link_to ts("EPUB"), download_url_for_work(@work, "epub") %></li>
       <li><%= link_to ts("PDF"), download_url_for_work(@work, "pdf") %></li>
       <li><%= link_to ts("HTML"), download_url_for_work(@work, "html") %></li>
-      <li><a onclick="subnav_view.toggle()" style='cursor: pointer;' title="Close Download Options">Close</a></li>
+      <li><a class="subnav_toggle" style="cursor: pointer;" title="Close Download Options">Close</a></li>
     </ul>
   </li>
 </ul>

@@ -21,10 +21,14 @@ $j(document).ready(function() {
     hideHideMe();
     showShowMe();
     handlePopUps();
+    $j('.subnav_toggle').click(function(){
+          $j('#subnav').toggle();
+      });
     $j('#expandable-link').click(function(){
           expandList();
           return false;
       });
+    $j('#chapter_index_toggle').click(function() { $j('#chapter-index').toggle(); });
 });
 
 function visualizeTables() {
