@@ -14,7 +14,7 @@ class OwnedTagSet < ActiveRecord::Base
   attr_protected :featured
 
   has_many :tag_set_ownerships, :dependent => :destroy
-  has_many :moderators, :through => :tag_set_ownerships, :source => :pseud
+  has_many :moderators, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', false]
   has_many :owners, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', true]
 
   validates_presence_of :title, :message => ts("Please enter a title for your tag set.")
@@ -36,12 +36,11 @@ class OwnedTagSet < ActiveRecord::Base
   end
   
   def user_is_moderator?(user)
-    !(moderators & user.pseuds).empty?
+    user_is_owner?(user) || !(moderators & user.pseuds).empty?
   end
   
   def add_owner(pseud)
-    owner_attributes << {:pseud => pseud, :owner => true}
-    tag_set_ownerships.build(owner_attributes)
+    tag_set_ownerships.build({:pseud => pseud, :owner => true})
   end    
   
   # We want to have all the matching methods defined on

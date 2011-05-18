@@ -2,7 +2,15 @@
   <% if @tag_set.user_is_moderator?(current_user) %>
     <h3 class="landmark">Navigation</h3>
     <ul class="navigation" role="navigation">
+      <% if @tag_set.nominated %>
+    	  <li><%= link_to ts("Review"), review_tag_set_path(@tag_set) %></li>
+    	<% end %>
     	<li><%= link_to ts("Edit"), edit_tag_set_path(@tag_set) %></li>
+    	<% if @tag_set.user_is_owner?(current_user) %>
+        <li><%= link_to ts("Delete"), tag_set_path(@tag_set),
+          :confirm => ts('Are you certain you want to delete this tag set? All challenges using this set will have to update their settings.'),
+          :method => :delete %></li>
+      <% end %>
     </ul>
   <% end %>  
 </div>

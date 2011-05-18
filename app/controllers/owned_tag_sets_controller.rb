@@ -16,19 +16,15 @@ class OwnedTagSetsController < ApplicationController
   end
   
   def moderators_only
-    is_tag_set_mod?(@tag_set, current_user) || access_denied
+    @tag_set.user_is_moderator?(current_user) || access_denied
   end
   
   def owners_only
-    !(@tag_set.owners & current_user.pseuds).empty? || access_denied
+    @tag_set.user_is_owner?(current_user) || access_denied
   end
 
   def nominated_only
     @tag_set.nominated || access_denied
-  end
-
-  def is_tag_set_mod?(owned_tag_set, user)
-    !(owned_tag_set.moderators & current_user.pseuds).empty?
   end
 
   ### ACTIONS

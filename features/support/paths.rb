@@ -27,6 +27,8 @@ module NavigationHelpers
 
     # Add more mappings here.
 
+    when /^the tagsets page$/i
+      tag_sets_path
     when /^the login page$/i
       new_user_session_path
     when /^(.*)'s user page$/i
