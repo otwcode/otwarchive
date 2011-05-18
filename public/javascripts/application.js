@@ -29,6 +29,12 @@ $j(document).ready(function() {
           return false;
       });
     $j('#chapter_index_toggle').click(function() { $j('#chapter-index').toggle(); });
+    $j(".toggle_filters").click(function(){
+          target_id = "#" + $j(this).attr("id").replace("toggle_", "");
+          $j(target_id).toggle();
+          $j(target_id + "_open").toggle();
+          $j(target_id + "_closed").toggle();
+    });
 });
 
 function visualizeTables() {
