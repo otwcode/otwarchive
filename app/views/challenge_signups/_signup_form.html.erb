@@ -1,4 +1,4 @@
-<h2><%= t('.challenge_signups.enter', :default => "Sign Up For %{title}", :title => @collection.title) %></h2>
+<h2><%= ts("Sign Up For %{title}", :title => @collection.title) %></h2>
 
 <!-- note for FRONT END
 The fields in the form frequently wrap around to a second line. 
@@ -68,7 +68,7 @@ So if anyone can think of a better design for this, that would be awesome
   <% end # requests & offers section %>
 
   <fieldset>
-  	<legend><%h= 'Submit' %></legend> 
+  	<legend><%= 'Submit' %></legend> 
     <p class="submit">
       <%= signup_form.submit 'Submit' %>
     </p>
