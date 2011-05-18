@@ -386,8 +386,9 @@ class UsersController < ApplicationController
 
   def end_first_login
     @user.preference.update_attribute(:first_login, false)
-    if !(request.xml_http_request?)
-      redirect_to @user
+    respond_to do |format|
+      format.html { redirect_to @user and return }
+      format.js
     end
   end
   
