@@ -34,7 +34,7 @@ class OwnedTagSetsController < ApplicationController
   end
   
   def show
-    unless @tag_set.visible || is_tag_set_mod?(@tag_set, current_user)
+    unless @tag_set.visible || @tag_set.user_is_moderator?(current_user)
       flash[:error] = ts("That tag set is not available for public viewing.")
       redirect_to tag_sets_path and return
     end

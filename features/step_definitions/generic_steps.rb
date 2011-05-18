@@ -45,6 +45,10 @@ When /^I fill in "([^\"]*)" with '([^\']*)'$/ do |field, value|
   fill_in(field, :with => value)
 end
 
+Then /^I should see a confirmation message$/ do
+  page.find('was created successfully')
+end
+
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
   with_scope(selector) do
     page.find(text)
