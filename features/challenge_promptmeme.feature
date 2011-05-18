@@ -97,7 +97,7 @@ Feature: Prompt Meme Challenge
   Scenario: Mod can view signups
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up  
+  Given everyone has signed up for Battle 12
   When I am logged in as "mod1"
     And I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
@@ -178,7 +178,7 @@ Feature: Prompt Meme Challenge
   Scenario: Claims are shown to mod
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I close signups for "Battle 12"
   Then claims are shown
@@ -186,7 +186,7 @@ Feature: Prompt Meme Challenge
   Scenario: Claims are hidden from ordinary user
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I close signups for "Battle 12"
   When I am logged in as "myname4"
@@ -195,7 +195,7 @@ Feature: Prompt Meme Challenge
   Scenario: User cannot delete someone else's claim
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I am logged in as "myname1"
   When I go to "Battle 12" collection's page
@@ -205,7 +205,7 @@ Feature: Prompt Meme Challenge
   Scenario: User can delete their own claim from the collection claims list
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I go to "Battle 12" collection's page
     And I follow "Claims"
@@ -218,7 +218,7 @@ Feature: Prompt Meme Challenge
   Scenario: User can delete their own claim from the user claims list
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I am on my user page
     And I follow "My Claims"
@@ -296,17 +296,19 @@ Feature: Prompt Meme Challenge
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme then changes their mind and fulfills the gift exchange instead
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
   Given I have opened signup for the gift exchange "My Gift Exchange"
   When I am logged in as "prolificwriter"
     And I claim a prompt from "Battle 12"
-  # TODO
+  When I start to fulfill my claim
+  Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be checked
+  Then show me the page
     
   Scenario: All the rest of the unrefactored stuff
 
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I am logged in as "myname4"
   When I claim a prompt from "Battle 12"
   When I close signups for "Battle 12"
