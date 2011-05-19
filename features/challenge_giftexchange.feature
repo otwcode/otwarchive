@@ -67,7 +67,7 @@ Feature: Gift Exchange Challenge
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
-  When I go to "My Gift Exchanger" collection's page
+  When I go to "Awesome Gift Exchange" collection's page
     And I follow "Membership"
     And I fill in "Add new members" with "comod"
     And I press "Submit"
