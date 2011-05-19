@@ -50,7 +50,7 @@
   <div class="clear"></div>
 </div>
 
-<% unless current_user && current_user.preference.banner_seen %>
+<% unless current_user && current_user.try(:preference).try(:banner_seen) %>
 <% unless @admin_settings.banner_text.empty? || logged_in_as_admin? %>
 <% unless current_user.nil? && session[:hide_banner] %>
   <div class="flash notice" id="notice-banner">
