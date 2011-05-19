@@ -176,7 +176,7 @@ class ChaptersController < ApplicationController
     if params[:chapters]
       @work = Work.find(params[:work_id])
       @work.reorder(params[:chapters]) 
-      flash[:notice] = ts("Chapter orders have been successfully updated.")
+      flash[:notice] = ts("Chapter order has been successfully updated.")
     elsif params[:chapter]
       params[:chapter].each_with_index do |id, position|
         Chapter.update(id, :position => position + 1)
