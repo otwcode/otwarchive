@@ -3,12 +3,12 @@
   <% if params[:edit_comment_id] && params[:edit_comment_id] == single_comment.id.to_s && is_author_of?(single_comment) %>
     <!-- we're editing this comment -->
     <%= render :partial => 'comments/comment_form', 
-               :locals => {:comment => single_comment, :commentable => single_comment.commentable, :button_name => t('.forms.update', :default => 'Update')} %>	  
+               :locals => {:comment => single_comment, :commentable => single_comment.commentable, :button_name => ts("Update")} %>	  
   <% else %>
     <% if single_comment.is_deleted %>
-      <p>(<%= h(ts("previous comment by ")) + get_commenter_pseud_or_name(single_comment) + h(ts(" deleted")) %>)</p>
+      <p>(<%= (ts("previous comment by ")) + get_commenter_pseud_or_name(single_comment) + (ts(" deleted")) %>)</p>
     <% elsif single_comment.hidden_by_admin? && !logged_in_as_admin? %>
-      <p class="message">(<%=h t('.single_comment_admin_review', :default => "This comment is under review by an admin and is currently unavailable.") %>)</p>
+      <p class="message">(<%= ts("This comment is under review by an admin and is currently unavailable.") %>)</p>
     <% else %>
       <h4><%= get_commenter_pseud_or_name(single_comment) %></h4>
       <div class="icon">
@@ -58,7 +58,7 @@
       <% if params[:add_comment_reply_id] && params[:add_comment_reply_id] == single_comment.id.to_s %>
         <div id="add_comment_reply_placeholder_<%= single_comment.id %>">
           <%= render :partial => 'comments/comment_form', 
-                     :locals => {:comment => Comment.new, :commentable => single_comment, :button_name => t('.forms.add_comment', :default => "Add Comment")} %>
+                     :locals => {:comment => Comment.new, :commentable => single_comment, :button_name => ts("Add Comment")} %>
       <% else %>
         <div id="add_comment_reply_placeholder_<%= single_comment.id %>" style="display: none;">
       <% end %>

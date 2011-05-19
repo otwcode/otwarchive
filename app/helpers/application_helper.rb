@@ -228,11 +228,11 @@ module ApplicationHelper
     out += observe_field(field_id, options.merge(:function => function))
     return out
   end
-  
+
   def generate_countdown_html(field_id, max) 
     generated_html = "<p class=\"character_counter\">".html_safe
-    generated_html += "<span id=\"#{field_id}_counter\">?</span>".html_safe
-    generated_html += countdown_field(field_id, field_id + "_counter", max) + " ".html_safe + h(ts('characters left'))
+    generated_html += ("<span id=\"#{field_id}_counter\" maxlength=\"" + max.to_s + "\">" + max.to_s + "</span>").html_safe
+    generated_html += " ".html_safe + (ts('characters left'))
     generated_html += "</p>".html_safe
     return generated_html
   end

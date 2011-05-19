@@ -35,7 +35,7 @@ class CommentsController < ApplicationController
   # Comments cannot be edited after they've been replied to
   def check_permission_to_edit
     unless @comment && @comment.count_all_comments == 0
-      flash[:error] = t('edits_disabled', :default => 'Comments with replies cannot be edited')
+      flash[:error] = ts('Comments with replies cannot be edited')
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
   end
@@ -109,7 +109,6 @@ class CommentsController < ApplicationController
 
   # GET /comments/1/edit
   def edit
-    #@commentable = @comment.commentable # trust me, it's better commented
   end
 
   # POST /comments
@@ -305,7 +304,7 @@ class CommentsController < ApplicationController
       format.html do
         options = {}
         options[:show_comments] = params[:show_comments] if params[:show_comments]
-        options[:delete_comment_id] = params[:delete_comment_id] if params[:delete_comment_id]
+        options[:delete_comment_id] = params[:id] if params[:id]
         redirect_to_comment(@comment, options) # TO DO: deleting without javascript doesn't work and it never has!
       end
       format.js

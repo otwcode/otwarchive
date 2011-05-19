@@ -1,0 +1,3 @@
+$j("#navigation_for_comment_<%= "#{@comment.id}" %>").hide();
+$j("#delete_comment_placeholder_<%= "#{@comment.id}" %>").html("<%= escape_javascript(render :partial => "comments/confirm_delete", :locals => {:comment => @comment}) %>");
+$j("#delete_comment_placeholder_<%= "#{@comment.id}" %>").slideDown();

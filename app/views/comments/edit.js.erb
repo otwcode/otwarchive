@@ -1,0 +1,5 @@
+<% comment_field_id = "#comment_#{@comment.id}" %>
+$j("<%= comment_field_id %>").slideUp();
+$j("<%= comment_field_id %>").html("<%= escape_javascript(render :partial => "comments/comment_form", 
+                  :locals => {:comment => @comment, :commentable => @comment.commentable, :button_name => ts("Update")}) %>");
+$j("<%= comment_field_id %>").slideDown();

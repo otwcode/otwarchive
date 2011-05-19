@@ -1,0 +1,5 @@
+<% comment_field_id = "#comment_#{@comment.id}" %>
+$j("<%= comment_field_id %>").slideUp();
+$j("<%= comment_field_id %>").replaceWith("<%= escape_javascript(render :partial => "comments/single_comment", 
+                  :locals => {:single_comment => @comment, :commentable => @comment.commentable}) %>");
+$j("<%= comment_field_id %>").slideDown();
