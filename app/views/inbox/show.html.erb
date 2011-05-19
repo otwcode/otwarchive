@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('.my_inbox', :default => 'My Inbox') %> (<%= t('.inbox_count', :default => "%{total} comments, %{unread} unread", :total => @inbox_total, :unread => @unread) %>)</h2>
+<h2><%= ts("My Inbox") %> (<%= ts("%{total} comments, %{unread} unread", :total => @inbox_total, :unread => @unread) %>)</h2>
 
 <%= flash_div :comment_error, :comment_notice %>
 <!--/descriptions-->
@@ -8,26 +8,26 @@
 <% unless @inbox_comments.blank? %>  
   <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do %>
   <fieldset>
-	<legend>Mass Edit Options</legend>
-	<ul class="navigation">
+  <legend>Mass Edit Options</legend>
+  <ul class="navigation">
     <li>Select: </li>
     <li>
-      <a onclick="$('inbox-form').getInputs('checkbox', 'inbox_comments[]').each(function(box){box.checked = 1})">all</a>
+      <a class="checkall">all</a>
     </li>
     <li>
-      <a onclick="$('inbox-form').getInputs('checkbox', 'inbox_comments[]').each(function(box){box.checked = 0})">none</a>
+      <a class="checknone">none</a>
     </li>
   </ul>
-	<p class="submit">
+  <p class="submit">
       <%= "Mark checked as:" %> 
-      <%= submit_tag t('.read', :default => 'Read'), :name => 'read' %>
-      <%= submit_tag t('.unread', :default => 'Unread'), :name => 'unread' %>
-      <%= submit_tag t('.delete_from_inbox', :default => 'Delete From Inbox'), :name => 'delete' %>
+      <%= submit_tag ts("Read"), :name => 'read' %>
+      <%= submit_tag ts("Unread"), :name => 'unread' %>
+      <%= submit_tag ts("Delete From Inbox"), :name => 'delete' %>
   </p>
-	</fieldset>
-	<fieldset>
-	<legend>List of Comments</legend>
-	<ol class="comment index">
+  </fieldset>
+  <fieldset>
+  <legend>List of Comments</legend>
+  <ol class="comment index">
     <% for inbox_comment in @inbox_comments %>
       <!-- START of single comment -->
       <li class="comment <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
@@ -62,14 +62,14 @@ inbox_comment.feedback_comment), :remote => true %>
   </ol>
   </fieldset>
   <fieldset>
-	<legend>Mass Edit Options Again</legend>
-	<ul class="navigation">
+  <legend>Mass Edit Options Again</legend>
+  <ul class="navigation">
     <li>Select: </li>
     <li>
-      <a onclick="$('inbox-form').getInputs('checkbox', 'inbox_comments[]').each(function(box){box.checked = 1})">all</a>
+      <a class="checkall">all</a>
     </li>
     <li>
-      <a onclick="$('inbox-form').getInputs('checkbox', 'inbox_comments[]').each(function(box){box.checked = 0})">none</a>
+      <a class="checknone">none</a>
     </li>
   </ul>
     <p class="submit">
@@ -77,9 +77,9 @@ inbox_comment.feedback_comment), :remote => true %>
       <%= hidden_field_tag("filters[replied_to]", params[:filters][:replied_to]) if params[:filters] %>
       <%= hidden_field_tag("filters[date]", params[:filters][:date]) if params[:filters] %>
       <%= "Mark checked as:" %> 
-      <%= submit_tag t('.read', :default => 'Read'), :name => 'read' %>
-      <%= submit_tag t('.unread', :default => 'Unread'), :name => 'unread' %>
-      <%= submit_tag t('.delete_from_inbox', :default => 'Delete From Inbox'), :name => 'delete' %>
+      <%= submit_tag ts("Read"), :name => 'read' %>
+      <%= submit_tag ts("Unread"), :name => 'unread' %>
+      <%= submit_tag ts("Delete From Inbox"), :name => 'delete' %>
     </p>
   </fieldset>
     <!-- coming soon <%= submit_tag t('.mass_reply', :default => 'mass reply') %> -->
@@ -135,7 +135,23 @@ inbox_comment.feedback_comment), :remote => true %>
       </dd>
     </dl>
   <% end %>
-  <p class="submit"><%= submit_tag t('.filter_inbox', :default => 'Filter Inbox') %></p>
+  <p class="submit"><%= submit_tag ts("Filter Inbox") %></p>
 <% end %>
 <!--/subnav-->
 
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j(document).ready(function(){
+      $j(".checkall").click(function(){
+        $j("#inbox-form").find(":checkbox[name='inbox_comments[]']").each(function(index, ticky) {
+            $j(ticky).attr("checked", true);
+          });
+      });
+      $j(".checknone").click(function(){
+        $j("#inbox-form").find(":checkbox[name='inbox_comments[]']").each(function(index, ticky) {
+            $j(ticky).attr("checked", false);
+          });
+      });
+    })
+  <% end %>
+<% end %>
