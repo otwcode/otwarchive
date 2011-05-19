@@ -109,6 +109,10 @@ class CommentsController < ApplicationController
 
   # GET /comments/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /comments
@@ -173,6 +177,7 @@ class CommentsController < ApplicationController
       flash[:comment_notice] = ts('Comment was successfully updated.')
       respond_to do |format|
         format.html { redirect_to_comment(@comment) }
+        format.js # updating the comment in place
       end
     else
       render :action => "edit"
@@ -254,7 +259,7 @@ class CommentsController < ApplicationController
       format.html do
         options = {:show_comments => true}
         options[:controller] = @commentable.class.to_s.underscore.pluralize
-        options[:anchor] = "comment#{params[:id]}"
+        options[:anchor] = "comment_#{params[:id]}"
         if @thread_view
           options[:id] = @thread_root
           options[:add_comment_reply_id] = params[:id]

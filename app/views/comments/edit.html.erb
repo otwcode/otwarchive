@@ -8,12 +8,14 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= render :partial => 'comments/comment_form', :locals => {:comment => @comment, :commentable => @comment.commentable, :button_name => ts("Update")}%>
+<li class="comment <%= cycle :odd, :even %>" id="comment_<%= @comment.id %>" role="article">
+  <%= render :partial => 'comments/comment_form', :locals => {:comment => @comment, :commentable => @comment.commentable, :button_name => ts("Update")}%>
+</li>
 <!--/content-->
 
 <!--subnav-->
 <ul class="navigation" role="navigation">
-	<li><%= link_to ts("Show"), @comment %></li>
-	<li><%= link_to ts("Back"), @comment.commentable %></li>
+  <li><%= link_to ts("Show"), @comment %></li>
+  <li><%= link_to ts("Back"), @comment.commentable %></li>
 </ul>
 <!--/subnav-->
