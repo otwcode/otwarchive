@@ -312,6 +312,23 @@ class Tag < ActiveRecord::Base
     saved_name.gsub('/', '*s*').gsub('&', '*a*').gsub('.', '*d*').gsub('?', '*q*').gsub('#', '*h*')
   end
 
+  # add this tag to the redis db for autocomplete lookups
+  def add_to_autocomplete
+    score = filter_count.public_works_count
+    name.three_letter_sections.each do |section|
+      key = "autocomplete_tag_#{type.downcase}_#{section}"
+      # score is the number of uses of the tag on public works
+      $redis.zadd(key, score, name)
+    end
+  end
+  
+  def remove_from_autocomplete
+    name.three_letter_sections.each do |section|
+      key = "autocomplete_tag_#{type.downcase}_#{section}"
+      $redis.zrem(key, name)
+    end
+  end    
+
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
     return unless string.is_a? String

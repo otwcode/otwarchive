@@ -1,3 +1,5 @@
+require 'radix'
+
 class Pseud < ActiveRecord::Base
 
   attr_protected :description_sanitizer_version
@@ -111,7 +113,9 @@ class Pseud < ActiveRecord::Base
     includes(:user)
   }
 
-  scope :not_orphaned, where("user_id != ?", User.orphan_account)
+  def self.not_orphaned
+    where("user_id != ?", User.orphan_account)
+  end
 
   # Enigel Dec 12 08: added sort method
   # sorting by pseud name or by login name in case of equality
@@ -270,6 +274,22 @@ class Pseud < ActiveRecord::Base
     end
     {:pseuds => valid_pseuds, :ambiguous_pseuds => ambiguous_pseuds, :invalid_pseuds => failures}
   end
+  
+  def add_to_autocomplete
+    # score is the alphabetical value padded out with spaces to max length
+    score = name.downcase.ljust(Pseud::NAME_LENGTH_MAX).b(62).to_i
+    name.three_letter_sections.each do |section|
+      key = "autocomplete_pseud_#{section}"
+      $redis.zadd(key, score, byline)
+    end
+  end
+  
+  def remove_from_autocomplete
+    name.three_letter_sections.each do |section|
+      key = "autocomplete_pseud_#{section}"
+      $redis.zrem(key, byline)
+    end
+  end  
 
   def creations
     self.works + self.chapters + self.series

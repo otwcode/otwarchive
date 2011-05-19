@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  cache_sweeper :pseud_sweeper
 
   before_filter :check_user_status, :only => [:edit, :update]
   before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid, :browse]

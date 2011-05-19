@@ -1,5 +1,9 @@
 class AutocompleteController < ApplicationController
   skip_before_filter :store_location
+  skip_before_filter :set_current_user
+  skip_before_filter :fetch_admin_settings
+  skip_before_filter :set_redirects
+  skip_before_filter :sanitize_params # can we dare!
 
   def render_output(result_strings, to_highlight="")
     @results = result_strings
@@ -19,32 +23,44 @@ class AutocompleteController < ApplicationController
       render_output(redis_tag_lookup(search_param, tag_class.to_s.downcase))
     end
   end
-  
-  
+    
+  def redis_sort_results(search_param, pre_results)
+    # bump up the results that actually start with the search param
+    results = []
+    pre_results.each_with_index do |string, index|
+      if string.match(/^#{search_param}/i)
+        results << string
+        pre_results.delete_at(index)
+      end
+    end
+    results += pre_results
+    
+    # limit to 15
+    results[0..15]
+  end
+
   def redis_tag_lookup(search_param, tag_type = "fandom", tag_set_id = nil)
     redis_key = "autocomplete_tag_#{tag_type}_#{search_param}_#{tag_set_id}"
     unless $redis.exists(redis_key)
       # create an intersection of all the stored sets of tags 
-      sets = search_param.downcase.three_letter_sections.map {|section| "autocomplete_tag_#{tag_type}_#{section}"}
+      sets = search_param.three_letter_sections.map {|section| "autocomplete_tag_#{tag_type}_#{section}"}
       sets.unshift "autocomplete_tagset_#{tag_set_id}" if tag_set_id
-      $redis.zinterstore(redis_key, sets, :aggregate => :min)
+      $redis.zinterstore(redis_key, sets, :aggregate => :max)
     end
     
     # now we get out 20 of the tags sorted by popularity
-    pre_results = $redis.zrevrange(redis_key, 0, 20)
-    
-    # pick out the ones that start with the search param and bump them up
-    results = []
-    pre_results.each_with_index do |string, index|
-      if string.match(/^#{search_param}/)
-        results << string
-        pre_results.delete_at(index)
-      end
-      results += pre_results
-    end
-    results
+    redis_sort_results(search_param, $redis.zrevrange(redis_key, 0, 20))
   end
-  
+
+  def redis_pseud_lookup(search_param)
+    redis_key = "autocomplete_pseud_#{search_param}"
+    unless $redis.exists(redis_key)
+      sets = search_param.three_letter_sections.map {|section| "autocomplete_pseud_#{section}"}
+      $redis.zinterstore(redis_key, sets, :aggregate => :max)
+    end
+    
+    redis_sort_results(search_param, $redis.zrange(redis_key, 0, -1))
+  end
   
   def tag_finder_restricted_by_tag_set
     search_param = params[params[:fieldname]]
@@ -170,8 +186,8 @@ public
   end
   
   def pseud_finder(search_param)
-    if search_param
-      render_output(Pseud.not_orphaned.order(:name).where(["name LIKE ?", '%' + search_param + '%']).limit(10).map(&:byline))
+    if search_param      
+      render_output(redis_pseud_lookup(search_param))
     end
   end
   
