@@ -14,22 +14,51 @@ class AutocompleteController < ApplicationController
   # works for any tag class where what you want to return are the names
   def tag_finder(tag_class, search_param)
     if search_param
-      tags = get_tags_for_finder(tag_class, search_param)
-      render_output(tags.uniq.map(&:name))
+      # tags = get_tags_for_finder(tag_class, search_param)
+      # render_output(tags.uniq.map(&:name))
+      render_output(redis_tag_lookup(search_param, tag_class.to_s.downcase))
     end
   end
+  
+  
+  def redis_tag_lookup(search_param, tag_type = "fandom", tag_set_id = nil)
+    redis_key = "autocomplete_tag_#{tag_type}_#{search_param}_#{tag_set_id}"
+    unless $redis.exists(redis_key)
+      # create an intersection of all the stored sets of tags 
+      sets = search_param.downcase.three_letter_sections.map {|section| "autocomplete_tag_#{tag_type}_#{section}"}
+      sets.unshift "autocomplete_tagset_#{tag_set_id}" if tag_set_id
+      $redis.zinterstore(redis_key, sets, :aggregate => :min)
+    end
+    
+    # now we get out 20 of the tags sorted by popularity
+    pre_results = $redis.zrevrange(redis_key, 0, 20)
+    
+    # pick out the ones that start with the search param and bump them up
+    results = []
+    pre_results.each_with_index do |string, index|
+      if string.match(/^#{search_param}/)
+        results << string
+        pre_results.delete_at(index)
+      end
+      results += pre_results
+    end
+    results
+  end
+  
   
   def tag_finder_restricted_by_tag_set
     search_param = params[params[:fieldname]]
     tag_type = params[:tag_type]
-    tag_set = TagSet.find(params[:tag_set_id])
-    if tag_set.nil?
-      tag_finder(tag_type.classify, search_param)
-    else
-      tags = tag_set.tags.with_type(tag_type).by_popularity.where("name LIKE ?", search_param + '%').limit(10)
-      tags += tag_set.tags.with_type(tag_type).by_popularity.where("name LIKE ?", '%' + search_param + '%').limit(7)
-      render_output(tags.uniq.map(&:name))
-    end
+    tag_set_id = params[:tag_set_id]
+    render_output(redis_tag_lookup(search_param, tag_type, tag_set_id))    
+    # tag_set = TagSet.find(params[:tag_set_id])
+    # if tag_set.nil?
+    #   tag_finder(tag_type.classify, search_param)
+    # else
+    #   tags = tag_set.tags.with_type(tag_type).by_popularity.where("name LIKE ?", search_param + '%').limit(10)
+    #   tags += tag_set.tags.with_type(tag_type).by_popularity.where("name LIKE ?", '%' + search_param + '%').limit(7)
+    #   render_output(tags.uniq.map(&:name))
+    # end
   end
 
   # handle relationships specially
