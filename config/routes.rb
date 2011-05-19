@@ -149,6 +149,7 @@ Otwarchive::Application.routes.draw do
       get :change_username
       post :change_username
       post :end_first_login
+      post :end_banner
     end
     resources :assignments, :controller => "challenge_assignments" do
       member do

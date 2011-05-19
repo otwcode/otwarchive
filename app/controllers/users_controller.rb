@@ -388,6 +388,13 @@ class UsersController < ApplicationController
       redirect_to @user
     end
   end
+  
+  def end_banner
+    current_user.preference.update_attribute(:banner_seen, true)
+    if !(request.xml_http_request?)
+      redirect_to @user rescue redirect_to '/'
+    end
+  end
 
   def browse
     @co_authors = Pseud.order(:name).coauthor_of(@user.pseuds)
