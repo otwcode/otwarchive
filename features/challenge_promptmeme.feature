@@ -293,7 +293,7 @@ Feature: Prompt Meme Challenge
   # Then 14 should be the last signup in the table
   # Then show me the page
 
-  Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme then changes their mind and fulfills the gift exchange instead
+  Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and sees the right boxes ticked
   
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
@@ -307,6 +307,23 @@ Feature: Prompt Meme Challenge
   When I start to fulfill my claim
   Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be checked
     And the "My Gift Exchange (myname2)" checkbox should not be checked
+  
+  Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and then changes their mind and fulfills the gift exchange instead
+  Given I have Battle 12 prompt meme fully set up
+    And everyone has signed up for Battle 12
+  Given I have created the gift exchange "My Gift Exchange"
+    And I have opened signup for the gift exchange "My Gift Exchange"
+    And everyone has signed up for the gift exchange "My Gift Exchange"
+    And I have generated matches for "My Gift Exchange"
+    And I have sent assignments for "My Gift Exchange"
+  When I am logged in as "myname3"
+    And I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+  When I check "My Gift Exchange (myname2)"
+    And I uncheck "Battle 12 (myname4) -  - Stargate Atlantis"
+    And I press "Post without preview"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
+    And I should see "Battle 12"
     
   Scenario: All the rest of the unrefactored stuff
 
