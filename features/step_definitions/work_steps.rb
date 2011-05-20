@@ -39,6 +39,17 @@ When /^I post the work "([^\"]*)"$/ do |title|
   Then "I should see \"Work was successfully posted.\""
 end
 
+When /^I post the work "([^\"]*)" in the collection "([^\"]*)"$/ do |title, collection|
+  work = Work.find_by_title(title)
+  if work.blank?
+    Given "the draft \"#{title}\" in collection \"#{collection}\""
+    work = Work.find_by_title(title)
+  end
+  visit preview_work_url(work)
+  click_button("Post")
+  Then "I should see \"Work was successfully posted.\""
+end
+
 When /^I post the work "([^\"]*)" without preview$/ do |title|
   work = Work.find_by_title(title)
   if work.blank?
@@ -97,6 +108,16 @@ When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")$/ do |title, fandom|
   Given "I fill in the basic work information for \"#{title}\""
   fill_in("Fandoms", :with => fandom.nil? ? "Stargate SG-1" : fandom)
   click_button("Preview")
+end
+
+When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
+  Given "basic tags"
+  visit new_work_url
+  Given "I fill in the basic work information for \"#{title}\""
+  fill_in("Fandoms", :with => "Naruto")
+  fill_in("Collections", :with => collection)
+  click_button("Preview")
+  Then "show me the page"
 end
 
 When /^I set up the draft "([^\"]*)"$/ do |title|

@@ -280,8 +280,25 @@ Feature: Prompt Meme Challenge
     And I press "Post without preview"
   Then I should see "Battle 12"
   When I follow "Anonymous"
+  Then show me the page
   Then I should see "Response posted on"
     And I should not see "Not fulfilled yet"
+    
+  Scenario: User edits existing work in another collection to fulfill claim
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I have a collection "Othercoll"
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+    And I post the work "Existing Story" in the collection "Othercoll"
+    And I edit the work "Existing Story"
+    And I check "Battle 12 (Anonymous) -  - Stargate Atlantis"
+    And I press "Post without preview"
+  Then show me the page
+  Then I should see "Battle 12"
+    And I should see "Othercoll"
     
   Scenario: User claims two prompts in one challenge and fulfills one of them
   Given I have Battle 12 prompt meme fully set up

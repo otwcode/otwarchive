@@ -364,6 +364,20 @@ class WorksController < ApplicationController
             @work.set_revised_at
           end
         end
+        if !@work.challenge_claims.empty?
+          @included = 0
+          @work.challenge_claims.each do |claim|
+            @work.collections.each do |collection|
+              if collection == claim.collection
+                @included = 1
+              end
+            end
+            if @included == 0
+              @work.collections << claim.collection
+            end
+            @included = 0
+          end
+        end
         @work.posted = true
         @work.minor_version = @work.minor_version + 1
         @work.set_challenge_info

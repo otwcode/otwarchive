@@ -10,6 +10,12 @@ Given /^mod1 lives in Alaska$/ do
   Then %{I should see "Your preferences were successfully updated."}
 end
 
+Given /^I have a collection "([^\"]*)"$/ do |title|
+  When %{I am logged in as "moderator"}
+  When "I create the collection \"#{title}\""
+  When "I am logged out"
+end
+
 ### WHEN
 
 When /^I set up the collection "([^\"]*)"$/ do |title|
