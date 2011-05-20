@@ -1,6 +1,7 @@
 Given /^I want to edit my profile$/ do
+  click_link("editname")
   click_link("Profile")
-	click_link("Edit My Profile")
+  click_link("Edit My Profile")
 	And %{I should see "Edit My Profile"}
 end
 
