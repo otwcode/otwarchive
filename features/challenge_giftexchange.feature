@@ -61,8 +61,23 @@ Feature: Gift Exchange Challenge
   Then I should see "Challenge was successfully updated"
   When I follow "Profile"
   Then I should find "Alaska"
+  
+  Scenario: Add a co-mod
+  
+  Given the following activated users exist
+    | login   |
+    | comod   |
+    And I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+  When I go to "Awesome Gift Exchange" collection's page
+    And I follow "Membership"
+    And I fill in "Add new members" with "comod"
+    And I press "Submit"
+  Then I should see "New members invited: comod"
 
   Scenario: Sign up for a gift exchange
+  
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
