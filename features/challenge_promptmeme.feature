@@ -266,6 +266,22 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
     And I view prompts for "Battle 12"
   Then I should see "Already claimed by you"
+
+  Scenario: User edits existing work to fulfill claim
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+    And I post the work "Existing Story"
+    And I edit the work "Existing Story"
+    And I check "Battle 12 (Anonymous) -  - Stargate Atlantis"
+    And I press "Post without preview"
+  Then I should see "Battle 12"
+  When I follow "Anonymous"
+  Then I should see "Response posted on"
+    And I should not see "Not fulfilled yet"
     
   Scenario: User claims two prompts in one challenge and fulfills one of them
   Given I have Battle 12 prompt meme fully set up
