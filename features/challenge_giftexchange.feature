@@ -64,7 +64,10 @@ Feature: Gift Exchange Challenge
   
   Scenario: Add a co-mod
   
-  Given I am logged in as "mod1"
+  Given the following activated users exist
+    | login   |
+    | comod   |
+    And I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
   When I go to "Awesome Gift Exchange" collection's page
