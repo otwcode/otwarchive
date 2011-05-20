@@ -248,6 +248,29 @@ Feature: Prompt Meme Challenge
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     And I should see "Stargate Atlantis"
     
+  Scenario: User claims two prompts in one challenge and fulfills one of them
+  # TODO
+  
+  Scenario: User claims two prompts in one challenge and fufills both of them at once
+  # TODO
+  
+  Scenario: User claims two prompts in different challenges and fulfills both of them at once
+  # TODO
+  
+  Scenario: Sign up for several challenges and see My Signups are sorted
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I set up a basic promptmeme "Battle 13"
+  When I set up an anon promptmeme "Battle 14" with name "anonmeme"
+  When I am logged in as "prolific_writer"
+  When I sign up for "Battle 12" fixed-fandom prompt meme
+  When I sign up for "Battle 13" many-fandom prompt meme
+  When I sign up for "Battle 14" many-fandom prompt meme
+  When I am on my user page
+    And I follow "My Signups"
+  # Then 14 should be the last signup in the table
+  # Then show me the page
+    
   Scenario: All the rest of the unrefactored stuff
 
   Given I have Battle 12 prompt meme fully set up
