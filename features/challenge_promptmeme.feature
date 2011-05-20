@@ -307,6 +307,17 @@ Feature: Prompt Meme Challenge
   When I start to fulfill my claim
   Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be checked
     And the "My Gift Exchange (myname2)" checkbox should not be checked
+    And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be disabled
+    And the "My Gift Exchange (myname2)" checkbox should be disabled
+    
+  Scenario: User posts to fulfill direct from Post New
+  Given I have Battle 12 prompt meme fully set up
+    And everyone has signed up for Battle 12
+  When I am logged in as "myname3"
+    And I claim a prompt from "Battle 12"
+    And I follow "Post New"
+  Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be checked
+    And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and then changes their mind and fulfills the gift exchange instead
   Given I have Battle 12 prompt meme fully set up

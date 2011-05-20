@@ -63,7 +63,7 @@ See the challenge_signup form for an example of how this is used.
               <% end %>
 
               <!-- create a scrollable checkboxes section to wrap the tags, see application_helper -->
-              <%= options_section(tag_set_form, tag_fieldname, tag_field_id, @taglist["#{tag_type}-#{restriction.id}"], "#{tag_type}_taglist", "name", "name") %>
+              <%= options_section(tag_set_form, tag_fieldname, tag_field_id, @taglist["#{tag_type}-#{restriction.id}"], "#{tag_type}_taglist", "name", "name", "false") %>
 
             <% else %>
               <% tag_fieldname = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>              
