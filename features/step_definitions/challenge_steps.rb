@@ -71,6 +71,20 @@ Given /^I have Battle 12 prompt meme fully set up$/ do
   When %{I follow "Log out"}
 end
 
+Given /^everyone has signed up$/ do
+  When %{I am logged in as "myname1"}
+  # no anon
+  When %{I sign up for Battle 12 with combination A}
+  When %{I am logged in as "myname2"}
+  # both anon
+  When %{I sign up for Battle 12 with combination B}
+  When %{I am logged in as "myname3"}
+  # one anon
+  When %{I sign up for Battle 12}
+  When %{I am logged in as "myname4"}
+  When %{I sign up for Battle 12 with combination C}
+end
+
 ### WHEN
 
 When /^I sign up for Battle 12$/ do
@@ -122,27 +136,14 @@ When /^I add prompt (\d+)$/ do |number|
     And "I press \"Submit\""
 end
 
-When /^I set up a basic promptmeme "([^\"]*)"$/ do |title|
+When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"$/ do |type, title|
   visit new_collection_path
   fill_in("collection_name", :with => "promptcollection")
   fill_in("collection_title", :with => title)
-  select("Prompt Meme", :from => "challenge_type")
-  click_button("Submit")
-  check("prompt_meme_signup_open")
-  fill_in("prompt_meme_requests_num_allowed", :with => ArchiveConfig.PROMPT_MEME_PROMPTS_MAX)
-  fill_in("prompt_meme_requests_num_required", :with => 1)
-  fill_in("prompt_meme_request_restriction_attributes_fandom_num_required", :with => 1)
-  fill_in("prompt_meme_request_restriction_attributes_fandom_num_allowed", :with => 2)
-  click_button("Submit")
-  Then "I should see \"Challenge was successfully created\""
-end
-
-When /^I set up an anon promptmeme "([^\"]*)"$/ do |title|
-  visit new_collection_path
-  fill_in("collection_name", :with => "promptcollection")
-  fill_in("collection_title", :with => title)
-  check("Is this collection currently unrevealed?")
-  check("Is this collection currently anonymous?")
+  if type == "anon"
+    check("Is this collection currently unrevealed?")
+    check("Is this collection currently anonymous?")
+  end
   select("Prompt Meme", :from => "challenge_type")
   click_button("Submit")
   check("prompt_meme_signup_open")
@@ -243,6 +244,49 @@ When /^I sign up for "([^\"]*)" with combination C$/ do |title|
     And %{I press "Submit"}
 end
 
+When /^I sign up for "([^\"]*)" with missing prompts$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_27"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"}
+    And %{I press "Submit"}
+end
+
+When /^I fill in the missing prompt$/ do
+  When %{I check "challenge_signup_requests_attributes_1_fandom_27"}
+    And %{I press "Submit"}
+end
+
+When /^I start to sign up for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_28"}
+end
+
+When /^I view prompts for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Prompts ("}
+end
+
+When /^I fulfill my claim$/ do
+  When %{I am on my user page}
+  When %{I follow "My Claims (1)"}
+  When %{I follow "Post To Fulfill"}
+    And %{I fill in "Work Title" with "Fulfilled Story"}
+    And %{I select "Not Rated" from "Rating"}
+    And %{I check "No Archive Warnings Apply"}
+    And %{I fill in "content" with "This is an exciting story about Atlantis"}
+  When %{I press "Preview"}
+    And %{I press "Post"}
+end
+
+When /^I delete my signup for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Your Prompts"}
+  When %{I follow "Delete"}
+  Then %{I should see "Challenge signup was deleted."}
+end
+
 ### THEN
 
 Then /^I should see Battle 12 descriptions$/ do
@@ -339,4 +383,11 @@ Then /^Battle 12 prompt meme should be correctly created$/ do
   Then %{I should see "Challenge was successfully created"}
   Then "signup should be open"
   Then "Battle 12 collection exists"
+end
+
+Then /^my claim should be fulfilled$/ do
+  Then %{I should see "Work was successfully posted"}
+    And %{I should see "Fandom:"}
+    And %{I should see "Stargate Atlantis"}
+    And %{I should not see "Alternate Universe - Historical"}
 end
