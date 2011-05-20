@@ -1,5 +1,14 @@
 <h2>Claims for <%= @collection.title %></h2>
 
+<div class="navigation module">
+<% if logged_in? %>
+<h3 class="landmark">Navigation</h3>
+<ul class="navigation" role="navigation">
+    <li><%= link_to ts("My Claims"), user_claims_path(current_user) %></li>
+</ul>
+<% end %>
+</div>
+
 <% TagSet::TAG_TYPES.each do |type| %>
   <% eval("@show_request_#{type}_tags = (@challenge.request_restriction.#{type}_num_allowed > 0) && !params[:hide_tags]") %>
 <% end %>
