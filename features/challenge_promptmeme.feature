@@ -304,22 +304,6 @@ Feature: Prompt Meme Challenge
   Then I should see "Battle 12"
     And I should see "Othercoll"
     
-  Scenario: User edits existing work in another collection to fulfill claim
-  
-  Given I have Battle 12 prompt meme fully set up
-    And I have a collection "Othercoll"
-  When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination B
-    And I am logged in as "myname4"
-    And I claim a prompt from "Battle 12"
-    And I post the work "Existing Story" in the collection "Othercoll"
-    And I edit the work "Existing Story"
-    And I check "Battle 12 (Anonymous) -  - Stargate Atlantis"
-    And I press "Post without preview"
-  Then show me the page
-  Then I should see "Battle 12"
-    And I should see "Othercoll"
-    
   Scenario: User claims two prompts in one challenge and fulfills one of them
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
@@ -348,7 +332,6 @@ Feature: Prompt Meme Challenge
   
   Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
-  
 
   Scenario: Sign up for several challenges and see My Signups are sorted
   
@@ -419,7 +402,6 @@ Feature: Prompt Meme Challenge
 ##As a user I now can't access "My Signups" and "My Claims" (500)
 ##The story fulfilling a prompt, remains accessible and in the collection, it retains the "In response to a prompt by: testy" line. Clicking on "testy" in that line sends me to the collection dashboard showing the "What challenge did you want to work with?" error message.
 ##Completely deleting the collection, removed the collection and the prompt line from the story. As a user I can now again access "MY Signups" and "My Claims".
-
     
   Scenario: All the rest of the unrefactored stuff
 

@@ -115,7 +115,7 @@ When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
   visit new_work_url
   Given "I fill in the basic work information for \"#{title}\""
   fill_in("Fandoms", :with => "Naruto")
-  fill_in("Collections", :with => collection)
+  fill_in("Collections", :with => "testcollection")
   click_button("Preview")
 end
 
