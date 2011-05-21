@@ -8,7 +8,7 @@ namespace :autocomplete do
   end
   
   desc "Reload tags and pseuds into Redis autocomplete"
-  task(:reload_autocomplete_data => [:reload_autocomplete_tag_data, :reload_autocomplete_pseud_data, :reload_autocomplete_tagset_data]) do
+  task(:reload_autocomplete_data => [:reload_autocomplete_tag_data, :reload_autocomplete_pseud_data, :reload_autocomplete_collection_data, :reload_autocomplete_tagset_data]) do
     puts "Reloaded tag and pseud data"
   end
   
@@ -27,6 +27,12 @@ namespace :autocomplete do
   desc "Clear pseud data"
   task(:clear_autocomplete_pseud_data => :environment) do
     keys = $redis.keys("autocomplete_pseud_*")
+    $redis.del(*keys)
+  end
+  
+  desc "Clear collection data"
+  task(:clear_autocomplete_collection_data => :environment) do
+    keys = $redis.keys("autocomplete_collection_*")
     $redis.del(*keys)
   end
   
@@ -51,6 +57,14 @@ namespace :autocomplete do
       pseud.add_to_autocomplete
     end    
   end
+
+  desc "Reload collection data into Redis for autocomplete"
+  task(:reload_autocomplete_collection_data => :environment) do
+    Collection.all.each do |pseud|
+      collection.add_to_autocomplete
+    end
+  end
+
 
   desc "Reload tagsets into Redis"
   task(:reload_autocomplete_tagset_data => :environment) do

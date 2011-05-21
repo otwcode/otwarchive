@@ -26,10 +26,9 @@
       <label for="work_fandom"><%= Fandom::NAME.pluralize %>*</label>
     </dt>
     <dd class="fandom required">
-      <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, :id => "work_fandom" %>
-      <%= autocomplete_text_field("work_fandom") %>
+      <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, 
+          :id => "work_fandom", :class => 'autocomplete', :autocomplete_method => '/autocomplete/work_fandom' %>
     </dd>
-  	<dd class="fandom delay_notice"><%=h t('.first_for_fandom', :default => "If this is the first work for a fandom, it may not show up in the fandoms page for a day or two") %></dd>
 
     <dt class="category">
       <label><%= Category::NAME %></label>

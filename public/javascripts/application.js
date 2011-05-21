@@ -30,6 +30,20 @@ function ShowExpandable() {
   if (collapsible != null) collapsible.style.display = 'none';
 }
 
+// Autocomplete
+jQuery(function($){
+  $('.autocomplete').each(function(){
+    var self = $(this);
+    self.tokenInput(self.attr('autocomplete_method'), {
+        searchingText: "Searching...",
+        noResultsText: "No results",
+        minChars: 3,
+        queryParam: "term",
+        preventDuplicates: true
+    });
+  });
+});
+
 // Hides expandable fields if Javascript is enabled
 function hideExpandable() {
   var expandable = document.getElementById('expandable');

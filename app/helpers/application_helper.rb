@@ -256,6 +256,54 @@ module ApplicationHelper
                               #{options[:auto_params] ? ", autoParams: #{options[:auto_params]}" : ''}
                             });")    
   end
+  # 
+  # def autocomplete_text_field(fieldname, options={})
+  #   (%Q{\n<span id="indicator_#{fieldname}" style="display:none">} +
+  #    %Q{<img src="/images/spinner.gif" alt="Working..." /></span>} +
+  #   
+  #   %Q{\n<div class="auto_complete" id="#{fieldname}_auto_complete"></div>}).html_safe +
+  #   
+  #   content_for(:footer_js){
+  #     javascript_tag(
+  #     %Q{function split(val) { return val.split(/#{ArchiveConfig.DELIMITER_FOR_INPUT}+\\s*/); }\n} +
+  # 
+  #     %Q|$j('##{fieldname}').autocomplete({ 
+  #           appendTo: '##{fieldname}_auto_complete', 
+  #       //the actual fandom_string is missing! who should be sending it?
+  #           source: function(request, response) {
+  #                     autoparams = '';| +
+  #         ( options[:auto_params] ? %Q|autoparams = "&#{options[:auto_params][0]}=" + $j('##{options[:auto_params][0]}').val();| : %Q|| ) +
+  #      %Q|$j.getJSON("/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}?fieldname=#{fieldname}#{options[:extra_params] ? '&' + options[:extra_params] : ''}" + autoparams,
+  #                     { term: extractLast(request.term) },
+  #                     response)
+  #                 },
+  #           search: function() {
+  #               // custom minLength
+  #               var term = extractLast( this.value );
+  #               if ( term.length < #{options[:min_chars] ? options[:min_chars] : '3'} ) {
+  #                 return false;
+  #               }
+  #               $j('#indicator_#{fieldname}').show();
+  #             },
+  #           open: function() {
+  #               $j('#indicator_#{fieldname}').hide();
+  #           },
+  #           delay: #{options[:frequency] ? options[:frequency] : '0.4'},
+  #           minLength: #{options[:min_chars] ? options[:min_chars] : '3'},
+  #           select: function(event, ui) {
+  #               var terms = split(this.value);
+  #               // remove the current input
+  #               terms.pop();
+  #               // add the selected item
+  #               terms.push(ui.item.value);
+  #               // add placeholder to get the comma-and-space at the end, unless no_comma is set
+  #               #{options[:no_comma] ? '' : 'terms.push("");'}
+  #               this.value = terms.join('#{ArchiveConfig.DELIMITER_FOR_OUTPUT}');
+  #               return false;
+  #           }
+  #   });|
+  #   )}
+  # end
   
   # Trying out a way of sending the tag type to the autocomplete
   # controller so that it can return the right class of results

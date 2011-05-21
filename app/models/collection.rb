@@ -1,3 +1,4 @@
+require 'radix'
 class Collection < ActiveRecord::Base
 
   attr_protected :description_sanitizer_version
@@ -197,17 +198,26 @@ class Collection < ActiveRecord::Base
     end
   end
 
-  # # check to see if this user has received an item in this collection
-  # def user_has_received_item(user)
-  #   @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), :assume_matching_login => true)[:pseuds]
-  #   !(@received_pseuds & user.pseuds).empty?
-  # end
-  #
-  # # check to see if this pseud has received an item in this collection
-  # def pseud_has_received_item(pseud)
-  #   @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), :assume_matching_login => true)[:pseuds]
-  #   !(@received_pseuds & [pseud]).empty?
-  # end
+  
+  def add_to_autocomplete
+    # score is the alphabetical value padded out with spaces to max length
+    score = fullname.downcase.ljust(ArchiveConfig.TITLE_MAX).b(62).to_i
+    fullname.three_letter_sections.each do |section|
+      key = "autocomplete_collection_#{closed ? "closed" : "open"}_#{section}"
+      $redis.zadd(key, score, fullname)
+    end
+  end
+  
+  def remove_from_autocomplete
+    fullname.three_letter_sections.each do |section|
+      key = "autocomplete_collection_#{closed ? "closed" : "open"}_#{section}"
+      $redis.zrem(key, fullname)
+    end
+  end  
+  
+  def fullname
+    "#{title} (#{name})"
+  end
 
   def parent_name=(name)
     @parent_name = name

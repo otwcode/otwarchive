@@ -1,65 +1,41 @@
 class AutocompleteController < ApplicationController
+  respond_to :json
+  
   skip_before_filter :store_location
   skip_before_filter :set_current_user
   skip_before_filter :fetch_admin_settings
   skip_before_filter :set_redirects
   skip_before_filter :sanitize_params # can we dare!
 
-  def render_output(result_strings, to_highlight="")
-    @results = result_strings
-    render :inline  => @results.length > 0 ? "<%= content_tag(:ul, @results.map {|string| content_tag(:li, string)}.join.html_safe) %>" : ""
+
+  # ACTIONS GO HERE
+  
+  def pseud
+    render_output(redis_pseud_lookup(params[:term]))
+  end
+  
+  def fandom
+    tag_finder("fandom", params[:term])
+  end
+  
+  def character
+    tag_finder("character", params[:term])
+  end
+  
+  def relationship
+    tag_finder("relationship", params[:term])
+  end
+  
+  def freeform
+    tag_finder("freeform", params[:term])
+  end
+  
+  def collection
+    render_output(redis_collection_lookup(params[:term], only_open=false))
   end
 
-  # works for finding items in any set
-  def set_finder(search_param, set)
-    render_output(set.grep(/#{search_param}/).to_a.sort) unless search_param.blank?
-  end
-
-  # works for any tag class where what you want to return are the names
-  def tag_finder(tag_class, search_param)
-    if search_param
-      # tags = get_tags_for_finder(tag_class, search_param)
-      # render_output(tags.uniq.map(&:name))
-      render_output(redis_tag_lookup(search_param, tag_class.to_s.downcase))
-    end
-  end
-    
-  def redis_sort_results(search_param, pre_results)
-    # bump up the results that actually start with the search param
-    results = []
-    pre_results.each_with_index do |string, index|
-      if string.match(/^#{search_param}/i)
-        results << string
-        pre_results.delete_at(index)
-      end
-    end
-    results += pre_results
-    
-    # limit to 15
-    results[0..15]
-  end
-
-  def redis_tag_lookup(search_param, tag_type = "fandom", tag_set_id = nil)
-    redis_key = "autocomplete_tag_#{tag_type}_#{search_param}_#{tag_set_id}"
-    unless $redis.exists(redis_key)
-      # create an intersection of all the stored sets of tags 
-      sets = search_param.three_letter_sections.map {|section| "autocomplete_tag_#{tag_type}_#{section}"}
-      sets.unshift "autocomplete_tagset_#{tag_set_id}" if tag_set_id
-      $redis.zinterstore(redis_key, sets, :aggregate => :max)
-    end
-    
-    # now we get out 20 of the tags sorted by popularity
-    redis_sort_results(search_param, $redis.zrevrange(redis_key, 0, 20))
-  end
-
-  def redis_pseud_lookup(search_param)
-    redis_key = "autocomplete_pseud_#{search_param}"
-    unless $redis.exists(redis_key)
-      sets = search_param.three_letter_sections.map {|section| "autocomplete_pseud_#{section}"}
-      $redis.zinterstore(redis_key, sets, :aggregate => :max)
-    end
-    
-    redis_sort_results(search_param, $redis.zrange(redis_key, 0, -1))
+  def collection_open
+    render_output(redis_collection_lookup(params[:term]))
   end
   
   def tag_finder_restricted_by_tag_set
@@ -87,18 +63,6 @@ class AutocompleteController < ApplicationController
     end
   end
 
-  def get_tags_for_finder(tag_class, search_param)
-    tags = tag_class.canonical.by_popularity.where("name LIKE ?", search_param + '%').limit(10)
-    tags += tag_class.canonical.by_popularity.where("name LIKE ?", '%' + search_param + '%').limit(7)
-  end
-
-  def get_tags_for_relationship_finder(search_param)
-    tags = Relationship.canonical.by_popularity
-                        .where("name LIKE ? OR name LIKE ? OR name LIKE ?", 
-                                search_param + '%', '%/' + search_param + '%',
-                                '%& ' + search_param + '%').limit(15)
-  end
-  
   # works for any tag class where what you want to return are the names
   def noncanonical_tag_finder(tag_class, search_param)
     if search_param
@@ -108,7 +72,85 @@ class AutocompleteController < ApplicationController
     end
   end
 
-protected
+  
+private
+
+  # works for any tag class where what you want to return are the names
+  def tag_finder(tag_class, search_param)
+    if search_param
+      # tags = get_tags_for_finder(tag_class, search_param)
+      # render_output(tags.uniq.map(&:name))
+      render_output(redis_tag_lookup(search_param, tag_class))
+    end
+  end
+
+  def render_output(result_strings, to_highlight="")
+    respond_with(result_strings.map {|str| {:id => str, :name => str}})
+    # @results = result_strings
+    # render :inline  => @results.length > 0 ? "<%= content_tag(:ul, @results.map {|string| content_tag(:li, string)}.join.html_safe) %>" : ""
+  end
+
+  def redis_sort_results(search_param, pre_results)
+    # bump up the results that actually start with the search param
+    results = []
+    pre_results.each_with_index do |string, index|
+      if string.match(/^#{search_param}/i)
+        results << string
+        pre_results.delete_at(index)
+      end
+    end
+    results += pre_results
+    
+    # limit to 15
+    results[0..15]
+  end
+
+  def redis_tag_lookup(search_param, tag_type = "fandom", tag_set_id = nil)
+    redis_key = "autocomplete_tag_#{tag_type}_#{search_param}"
+    redis_key += "_#{tag_set_id}" if tag_set_id
+    unless $redis.exists(redis_key)
+      # create an intersection of all the stored sets of tags 
+      sets = search_param.three_letter_sections.map {|section| "autocomplete_tag_#{tag_type}_#{section}"}
+      sets.unshift "autocomplete_tagset_#{tag_set_id}" if tag_set_id
+      $redis.zinterstore(redis_key, sets, :aggregate => :max)
+      $redis.expire(redis_key, 60*ArchiveConfig.TAG_AUTOCOMPLETE_EXPIRATION_TIME) if sets.length > 1
+    end
+    
+    # now we get out 20 of the tags sorted by popularity
+    redis_sort_results(search_param, $redis.zrevrange(redis_key, 0, 20))
+  end
+
+  def redis_pseud_lookup(search_param)
+    redis_key = "autocomplete_pseud_#{search_param}"
+    sets = search_param.three_letter_sections.map {|section| "autocomplete_pseud_#{section}"}
+    $redis.zinterstore(redis_key, sets, :aggregate => :max)
+    redis_sort_results(search_param, $redis.zrange(redis_key, 0, -1))
+  end
+
+  def redis_collection_lookup(search_param, only_open=true)
+    redis_key = "autocomplete_collection_open_#{search_param}"
+    sets = search_param.three_letter_sections.map {|section| "autocomplete_collection_open_#{section}"}
+    $redis.zinterstore(redis_key, sets, :aggregate => :max)
+    
+    if only_open
+      redis_sort_results(search_param, $redis.zrange(redis_key, 0, -1))
+    else
+      redis_key2 = "autocomplete_collection_closed_#{search_param}"
+      sets = search_param.three_letter_sections.map {|section| "autocomplete_collection_closed_#{section}"}
+      $redis.zinterstore(redis_key2, sets, :aggregate => :max)
+      redis_combined_key = "autocomplete_collection_all_#{search_param}"
+      $redis.zunionstore(redis_combined_key, 2, redis_key, redis_key2)
+      redis_sort_results(search_param, $redis.zrange(redis_combined_key, 0, -1))
+    end
+  end
+
+  def get_tags_for_relationship_finder(search_param)
+    tags = Relationship.canonical.by_popularity
+                        .where("name LIKE ? OR name LIKE ? OR name LIKE ?", 
+                                search_param + '%', '%/' + search_param + '%',
+                                '%& ' + search_param + '%').limit(15)
+  end
+
 
   # somewhere in the params is a potentially deeply nested hash with the given fieldname
   def get_fandoms_from_params(params, fieldname)
@@ -141,7 +183,7 @@ public
 
   # this finder only returns characters that are children of the given fandom
   def character_finder_restricted_by_fandom
-    search_param = params[params[:fieldname]]
+    search_param = params[:term]
     fandoms = get_fandoms_from_params(params, params[:fandom_fieldname])
     message = ""
     if fandoms.empty?
@@ -163,7 +205,7 @@ public
 
   # this finder only returns relationships that are children of the given fandom
   def relationship_finder_restricted_by_fandom
-    search_param = params[params[:fieldname]]
+    search_param = params[:term]
     fandoms = get_fandoms_from_params(params, params[:fandom_fieldname])
     message = ""
     if fandoms.empty?
@@ -185,19 +227,9 @@ public
     render_output(results)
   end
   
-  def pseud_finder(search_param)
-    if search_param      
-      render_output(redis_pseud_lookup(search_param))
-    end
-  end
-  
-  def collection_finder(search_param)
-    render_output(Collection.not_closed.with_name_like(search_param).name_only.map(&:name).sort)
-  end
-
   # find people signed up for a challenge
   def challenge_participants
-    search_param = params[params[:fieldname]]
+    search_param = params[:term]
     collection_id = params[:collection_id]
     render_output(Pseud.limit(10).order(:name).joins(:challenge_signups)
                     .where(["pseuds.name LIKE ? AND challenge_signups.collection_id = ?", 
@@ -210,7 +242,7 @@ public
   # %w list
   %w(work_recipients participants_to_invite pseud_byline).each do |field|
     define_method("#{field}") do
-      pseud_finder(params[params[:fieldname]])
+      pseud_finder(params[:term])
     end
   end
   
@@ -218,49 +250,49 @@ public
   # the different tag types
   %w(rating category warning).each do |tag_type| 
     define_method("canonical_#{tag_type}_finder") do
-      tag_finder("#{tag_type}".classify.constantize, params[params[:fieldname]])
+      tag_finder("#{tag_type}".classify.constantize, params[:term])
     end
   end 
 
   # generic canonical tag finders
   %w(canonical_tag_finder tag_string bookmark_tag_string).each do |field|
     define_method("#{field}") do
-      tag_finder(Tag, params[params[:fieldname]])
+      tag_finder(Tag, params[:term])
     end
   end
 
   # fandom finders
-  %w(canonical_fandom_finder fandom_string work_fandom tag_fandom_string collection_filters_fandom bookmark_external_fandom_string ).each do |field|
+  %w(canonical_fandom_finder work_fandom fandom_string tag_fandom_string collection_filters_fandom bookmark_external_fandom_string ).each do |field|
     define_method("#{field}") do
-      tag_finder(Fandom, params[params[:fieldname]])
+      tag_finder(Fandom, params[:term])
     end
   end
 
   # relationship finders
   %w(canonical_relationship_finder work_relationship tag_relationship_string bookmark_external_relationship_string).each do |field|
     define_method("#{field}") do
-      relationship_finder(params[params[:fieldname]]) 
+      relationship_finder(params[:term]) 
     end
   end
 
   # character finders
   %w(canonical_character_finder character_string work_character tag_character_string bookmark_external_character_string).each do |field|
     define_method("#{field}") do
-      tag_finder(Character, params[params[:fieldname]])
+      tag_finder(Character, params[:term])
     end
   end
 
   # freeform finders
   %w(canonical_freeform_finder work_freeform tag_freeform_string).each do |field|
     define_method("#{field}") do
-      tag_finder(Freeform, params[params[:fieldname]])
+      tag_finder(Freeform, params[:term])
     end
   end  
   
   # collection name finders
   %w(collection_names work_collection_names).each do |field|
     define_method("#{field}") do
-      collection_finder(params[params[:fieldname]])
+      collection_finder(params[:term])
     end
   end
 
@@ -310,7 +342,7 @@ public
   # encodings for importing
   def encoding
     encodings = Encoding.name_list + Encoding.name_list.map {|e| e.downcase}
-    set_finder(params[params[:fieldname]], encodings)              
+    set_finder(params[:term], encodings)              
   end
   
 end
