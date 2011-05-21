@@ -34,12 +34,12 @@ class AutocompleteController < ApplicationController
     render_output(redis_collection_lookup(params[:term], only_open=false))
   end
 
-  def collection_open
+  def open_collection
     render_output(redis_collection_lookup(params[:term]))
   end
   
-  def tag_finder_restricted_by_tag_set
-    search_param = params[params[:fieldname]]
+  def tag_restricted_by_tag_set
+    search_param = params[:term]
     tag_type = params[:tag_type]
     tag_set_id = params[:tag_set_id]
     render_output(redis_tag_lookup(search_param, tag_type, tag_set_id))    

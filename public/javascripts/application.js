@@ -31,6 +31,14 @@ function ShowExpandable() {
 }
 
 // Autocomplete
+// set class to "autocomplete"
+// set attribute "autocomplete_method" to the action in autocomplete_controller you want to use
+// you can pass extra parameters at the end of the method with ?param=value&param=value
+// set attribute "autocomplete_live_params" to the ids of any attributes whose values should be read
+//  as: param=attribute_id&param=attribute_id
+// example: 
+// <input type="text" class="autocomplete" autocomplete_method="/autocomplete/relationship?tag_set_id=#{tag_set.id}" 
+//        autocomplete_live_params="fandom=work_fandom_field&character=work_character_field" 
 jQuery(function($){
   $('.autocomplete').each(function(){
     var self = $(this);
@@ -39,10 +47,12 @@ jQuery(function($){
         noResultsText: "No results",
         minChars: 3,
         queryParam: "term",
-        preventDuplicates: true
+        preventDuplicates: true,
+        liveParams: self.attr('autocomplete_live_params')
     });
   });
 });
+
 
 // Hides expandable fields if Javascript is enabled
 function hideExpandable() {

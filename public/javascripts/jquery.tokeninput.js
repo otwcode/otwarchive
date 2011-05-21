@@ -625,7 +625,7 @@ $.TokenList = function (input, url_or_data, settings) {
             }
         }
     }
-
+    
     // Do the actual search
     function run_search(query) {
         var cached_results = cache.get(query);
@@ -648,6 +648,16 @@ $.TokenList = function (input, url_or_data, settings) {
                     });
                 } else {
                     ajax_params.url = settings.url;
+                }
+
+                // Get live params
+                if(settings.liveParams) {
+                    var live_param_fields = settings.liveParams.split("&")
+                    $.each(live_param_fields, function (index, value) {
+                        var kv = value.split("=");
+                        var id_to_get = "#" + kv[1];
+                        ajax_params.data[kv[0]] = $(id_to_get).val();
+                    });
                 }
 
                 // Prepare the request

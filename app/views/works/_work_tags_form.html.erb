@@ -57,10 +57,9 @@
       <label for="work_character"><%= Character::NAME.pluralize %></label>
     </dt>
     <dd class="character">
-      <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, :id => "work_character" %>
-      <%= autocomplete_text_field "work_character", :methodname => "character_finder_restricted_by_fandom", 
-                                                       :auto_params => ["work_fandom"], 
-                                                       :extra_params => "fandom_fieldname=fandom_string&no_alert=true" %>
+      <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, 
+      :id => "work_character", :class => 'autocomplete', :autocomplete_method => '/autocomplete/character?extra=foo',
+      :autocomplete_live_params => 'fandom=work_fandom&foobar=work_rating_string' %>
     </dd>
 
     <dt class="freeform">
