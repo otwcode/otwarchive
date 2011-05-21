@@ -60,7 +60,7 @@ namespace :autocomplete do
 
   desc "Reload collection data into Redis for autocomplete"
   task(:reload_autocomplete_collection_data => :environment) do
-    Collection.all.each do |pseud|
+    Collection.all.each do |collection|
       collection.add_to_autocomplete
     end
   end
@@ -68,7 +68,7 @@ namespace :autocomplete do
 
   desc "Reload tagsets into Redis"
   task(:reload_autocomplete_tagset_data => :environment) do
-    TagSet.each do |tag_set|
+    TagSet.all.each do |tag_set|
       key = "autocomplete_tagset_#{tag_set.id}"
       tag_set.tags.each do |tag|
         $redis.zadd(key, 0, tag.name)

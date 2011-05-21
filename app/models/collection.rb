@@ -203,14 +203,14 @@ class Collection < ActiveRecord::Base
     # score is the alphabetical value padded out with spaces to max length
     score = fullname.downcase.ljust(ArchiveConfig.TITLE_MAX).b(62).to_i
     fullname.three_letter_sections.each do |section|
-      key = "autocomplete_collection_#{closed ? "closed" : "open"}_#{section}"
+      key = "autocomplete_collection_#{closed? ? "closed" : "open"}_#{section}"
       $redis.zadd(key, score, fullname)
     end
   end
   
   def remove_from_autocomplete
     fullname.three_letter_sections.each do |section|
-      key = "autocomplete_collection_#{closed ? "closed" : "open"}_#{section}"
+      key = "autocomplete_collection_#{closed? ? "closed" : "open"}_#{section}"
       $redis.zrem(key, fullname)
     end
   end  
