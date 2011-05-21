@@ -40,6 +40,14 @@ When /^I sort by fandom$/ do
   When "I follow \"Sort by fandom\""
 end
 
+When /^I reveal works for "([^\"]*)"$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Settings"}
+  uncheck "Is this collection currently unrevealed?"
+  click_button "Submit"
+end
+
 ### THEN
 
 Then /^Battle 12 collection exists$/ do

@@ -280,9 +280,12 @@ Feature: Prompt Meme Challenge
     And I press "Post without preview"
   Then I should see "Battle 12"
   When I follow "Anonymous"
-  Then show me the page
-  Then I should see "Response posted on"
+  Then I should see "Mystery work"
     And I should not see "Not fulfilled yet"
+  When I reveal works for "Battle 12"
+  When I view the work "Existing Story"
+    And I follow "Anonymous"
+  Then I should see "Response posted on"
     
   Scenario: User edits existing work in another collection to fulfill claim
   
@@ -296,7 +299,6 @@ Feature: Prompt Meme Challenge
     And I edit the work "Existing Story"
     And I check "Battle 12 (Anonymous) -  - Stargate Atlantis"
     And I press "Post without preview"
-  Then show me the page
   Then I should see "Battle 12"
     And I should see "Othercoll"
     
@@ -329,6 +331,7 @@ Feature: Prompt Meme Challenge
   Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
   
+
   Scenario: Sign up for several challenges and see My Signups are sorted
   
   Given I have Battle 12 prompt meme fully set up
@@ -385,6 +388,20 @@ Feature: Prompt Meme Challenge
     And I press "Post without preview"
   Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
     And I should see "Battle 12"
+
+  #As a maintainer I can delete whole signups
+##Its prompts disappear from the collection
+##As a prompter the signup disappears from my dashboard
+
+#As a maintainer I can delete signups after a story has been posted for them
+##The story stays part of the collection, is accessible and no longer has the "In response to a prompt by: testy" line.
+##As the story author I can edit the story normally.
+
+#As maintainer I deleted a challenge which had already two claimed and one fulfilled prompts
+##As a user I now can't access "My Signups" and "My Claims" (500)
+##The story fulfilling a prompt, remains accessible and in the collection, it retains the "In response to a prompt by: testy" line. Clicking on "testy" in that line sends me to the collection dashboard showing the "What challenge did you want to work with?" error message.
+##Completely deleting the collection, removed the collection and the prompt line from the story. As a user I can now again access "MY Signups" and "My Claims".
+
     
   Scenario: All the rest of the unrefactored stuff
 
