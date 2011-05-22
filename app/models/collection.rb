@@ -317,10 +317,14 @@ class Collection < ActiveRecord::Base
   def anonymous? ; self.collection_preference.anonymous ; end
   def challenge? ; !self.challenge.nil? ; end
   def gift_exchange?
-    self.collection_preference.gift_exchange
+    if self.challenge_type == "GiftExchange"
+      return true
+    end
   end
   def prompt_meme?
-    self.collection_preference.prompt_meme
+    if self.challenge_type == "PromptMeme"
+      return true
+    end
   end
 
   def not_empty?
