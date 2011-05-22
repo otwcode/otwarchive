@@ -89,6 +89,8 @@ module NavigationHelpers
       admin_posts_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
+    when/^the support page$/i
+      new_feedback_report_path
       
     # Here is an example that pulls values out of the Regexp:
     #
