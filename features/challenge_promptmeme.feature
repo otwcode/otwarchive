@@ -136,6 +136,26 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination C
   Then I should see "Signup was successfully created"
   
+  Scenario: Mod deletes a signup that doesn't fit the challenge rules
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I am logged in as "mod1"
+  When I delete the signup by "myname1"
+  Then I should see "Challenge signup was deleted."
+    And "myname1" should be emailed
+  
+  Scenario: Mod deletes a prompt that doesn't fit the challenge rules
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination C
+  When I am logged in as "mod1"
+  When I delete the prompt by "myname1"
+  Then I should see "Prompt was successfully deleted"
+    And "myname1" should be emailed
+  
   Scenario: User can fulfill a claim
   
   Given I have Battle 12 prompt meme fully set up

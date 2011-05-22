@@ -180,10 +180,10 @@ class ChallengeSignupsController < ApplicationController
 
   def destroy
     unless @challenge.signup_open || @collection.user_is_maintainer?(current_user)
-      flash[:error] = t('challenge_signups.cannot_delete', :default => "You cannot delete your signup after signups are closed. Please contact a moderator for help.")
+      flash[:error] = ts("You cannot delete your signup after signups are closed. Please contact a moderator for help.")
     else
       @challenge_signup.destroy
-      flash[:notice] = 'Challenge signup was deleted.'
+      flash[:notice] = ts("Challenge signup was deleted.")
     end
     if @collection.user_is_maintainer?(current_user)
       redirect_to collection_signups_path(@collection)
