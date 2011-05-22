@@ -305,7 +305,7 @@ class UserMailer < ActionMailer::Base
       if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
         attachment_string += "Tags: "
         attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
-        unless any_types.empty? 
+        unless any_types.empty?
           attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe
         end
         if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
@@ -315,7 +315,7 @@ class UserMailer < ActionMailer::Base
         attachment_string += "<br />\n"
       end
       unless prompt.url.blank?
-        url_label = prompt.collection.challenge.send("request_url_label") 
+        url_label = prompt.collection.challenge.send("request_url_label")
         attachment_string += url_label.blank? ? "URL" : url_label
         attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
       end
@@ -334,7 +334,7 @@ class UserMailer < ActionMailer::Base
       if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?)
         attachment_string += "Tags: "
         attachment_string += prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : ""
-        unless any_types.empty? 
+        unless any_types.empty?
           attachment_string += any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe
         end
         if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty?
@@ -344,7 +344,7 @@ class UserMailer < ActionMailer::Base
         attachment_string += "<br />\n"
       end
       unless prompt.url.blank?
-        url_label = prompt.collection.challenge.send("request_url_label") 
+        url_label = prompt.collection.challenge.send("request_url_label")
         attachment_string += url_label.blank? ? "URL" : url_label
         attachment_string += ": " + link_to(prompt.url, prompt.url) + "<br />\n"
       end
