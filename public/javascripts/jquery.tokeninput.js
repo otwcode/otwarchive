@@ -25,6 +25,9 @@ var DEFAULT_SETTINGS = {
     tokenDelimiter: ",",
     preventDuplicates: false,
     prePopulate: null,
+    processPrePopulate: false,
+    makeSortable: false,
+    escapeHTML: true,
     animateDropdown: true,
     onResult: null,
     onAdd: null,
@@ -42,7 +45,9 @@ var DEFAULT_CLASSES = {
     dropdownItem: "even",
     dropdownItem2: "odd",
     selectedDropdownItem: "selected",
-    inputToken: "input"
+    inputToken: "input",
+    insertBefore: "selected",
+    insertAfter: "selected"
 };
 
 // Input box position "enum"
@@ -89,7 +94,7 @@ $.TokenList = function (input, url_or_data, settings) {
     //
 
     // Configure the data source
-    if($.type(url_or_data) === "string") {
+    if(typeof(url_or_data) === "string") {
         // Set the url to query against
         settings.url = url_or_data;
 
@@ -101,7 +106,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 settings.crossDomain = (location.href.split(/\/+/g)[1] !== settings.url.split(/\/+/g)[1]);
             }
         }
-    } else if($.type(url_or_data) === "array") {
+    } else if(typeof(url_or_data) === "object") {
         // Set the local data to search through
         settings.local_data = url_or_data;
     }
@@ -249,6 +254,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Keep a reference to the selected token and dropdown item
     var selected_token = null;
+    var selected_token_index = 0;
     var selected_dropdown_item = null;
 
     // The list to store the token items in
@@ -308,10 +314,22 @@ $.TokenList = function (input, url_or_data, settings) {
     //         letterSpacing: input_box.css("letterSpacing"),
     //         whiteSpace: "nowrap"
     //     });
+        
+    // True during dragging process    
+    var dragging = false;
+    
+    // the dragged Token
+    var dragToken;
+    
+    // the destination Token
+    var dragDestination;
 
     // Pre-populate list if items exist
     hidden_input.val("");
-    li_data = settings.prePopulate || hidden_input.data("pre");
+    var li_data = settings.prePopulate || hidden_input.data("pre");
+    if(settings.processPrePopulate && $.isFunction(settings.onResult)) {
+        li_data = settings.onResult.call(hidden_input, li_data);
+    }    
     if(li_data && li_data.length) {
         $.each(li_data, function (index, value) {
             insert_token(value.id, value.name);
@@ -323,6 +341,7 @@ $.TokenList = function (input, url_or_data, settings) {
     //
     // Private functions
     //
+    
 
     // function resize_input() {
     //     if(input_val === (input_val = input_box.val())) {return;}
@@ -345,6 +364,10 @@ $.TokenList = function (input, url_or_data, settings) {
         var this_token = $("<li>"+ escapeHTML(value) +" </li>")
           .addClass(settings.classes.token)
           .insertBefore(input_token);
+          
+          if(settings.makeSortable) {
+            addDragFunctionality(this_token);
+          };
 
         // The 'delete token' button
         $("<span>" + settings.deleteText + "</span>")
@@ -360,18 +383,23 @@ $.TokenList = function (input, url_or_data, settings) {
         $.data(this_token.get(0), "tokeninput", token_data);
 
         // Save this token for duplicate checking
-        saved_tokens.push(token_data);
+        saved_tokens = saved_tokens.slice(0,selected_token_index).concat([token_data]).concat(saved_tokens.slice(selected_token_index));
+        selected_token_index++;
 
         // Update the hidden input
         var token_ids = $.map(saved_tokens, function (el) {
             return el.id;
         });
+        
+        
         hidden_input.val(token_ids.join(settings.tokenDelimiter));
 
         token_count += 1;
 
         return this_token;
     }
+    
+    
 
     // Add a token to the token list based on user input
     function add_token (item) {
@@ -423,12 +451,96 @@ $.TokenList = function (input, url_or_data, settings) {
 
         // Execute the onAdd callback if defined
         if($.isFunction(callback)) {
-            callback(li_data);
+            callback.call(hidden_input,li_data);
         }
     }
+    
+    
+    //
+    //  Drag and Drop  Functionality
+    //
+    function addDragFunctionality(token) {
+      token.bind('mousedown',function(){ 
+        var token = $(this)
+        dragToken = token;
+        token.addClass(settings.classes.selectedToken);
+        dragging= true;
+        $(document).one('mouseup',function(){
+          token.removeClass(settings.classes.selectedToken);
+          dragging=false;
+          move_token(token, dragDestination);
+          reindex_results();
+        });
+        return false;
+      })
+      .bind('mouseover',function(){
+        if(!dragging) return;
+        dragDestination = $(this);        
+        if(is_after(dragToken, dragDestination)) {
+          dragDestination.addClass(settings.classes.insertAfter);
+        } else {
+          dragDestination.addClass(settings.classes.insertBefore);
+        };
+      }).bind('mouseout', function(){
+        if(!dragging) return;
+        $(this).removeClass(settings.classes.insertBefore);
+        $(this).removeClass(settings.classes.insertAfter);
+      }).bind('mouseup', function(){
+        $(this).removeClass(settings.classes.insertBefore);
+        $(this).removeClass(settings.classes.insertAfter);
+      });
+    }
+    
+    
+    function move_token(token, destinationToken) {
+      if(token.get(0) == destinationToken.get(0)) return;
+
+      if(is_after(token, destinationToken)) {
+        token.insertAfter(destinationToken);
+      } else {
+        token.insertBefore(destinationToken);
+      }
+       
+      
+    }
+    
+    function is_after(first, last) {
+      index_tokens();
+      first = $.data(first.get(0), "tokeninput")
+      last = $.data(last.get(0), "tokeninput")
+      return last.index > first.index 
+    }
+    
+    
+    function index_tokens() {
+      var i = 0;
+      token_list.find('li').each(function(){
+        var data = $.data(this, "tokeninput");
+        if(data){ data.index = i; }
+        i++;
+      });
+    }
+    
+    function reindex_results() {
+      var ids = [], tokens = [];
+      token_list.find('li').each(function(){
+        var data = $.data(this, "tokeninput");
+        if(data){  
+           ids.push(data.id); 
+           tokens.push(data);
+        };
+      });
+      saved_tokens = tokens;
+      hidden_input.val(ids.join(settings.tokenDelimiter));
+    }
+    
+    
+    // end Drag and Drop Functionality
+    
+    
 
     // Select a token in the token list
-    function select_token (token) {
+    function select_token(token) {
         token.addClass(settings.classes.selectedToken);
         selected_token = token.get(0);
 
@@ -446,10 +558,13 @@ $.TokenList = function (input, url_or_data, settings) {
 
         if(position === POSITION.BEFORE) {
             input_token.insertBefore(token);
+            selected_token_index--;
         } else if(position === POSITION.AFTER) {
             input_token.insertAfter(token);
+            selected_token_index++;
         } else {
             input_token.appendTo(token_list);
+            selected_token_index = token_count;
         }
 
         // Show the input box and give it focus again
@@ -477,6 +592,9 @@ $.TokenList = function (input, url_or_data, settings) {
         var token_data = $.data(token.get(0), "tokeninput");
         var callback = settings.onDelete;
 
+        var index = token.prevAll().length;
+        if(index > selected_token_index) index--;
+
         // Delete the token
         token.remove();
         selected_token = null;
@@ -485,9 +603,8 @@ $.TokenList = function (input, url_or_data, settings) {
         input_box.focus();
 
         // Remove this token from the saved list
-        saved_tokens = $.grep(saved_tokens, function (val) {
-            return (val.id !== token_data.id);
-        });
+        saved_tokens = saved_tokens.slice(0,index).concat(saved_tokens.slice(index+1));
+        if(index < selected_token_index) selected_token_index--;
 
         // Update the hidden input
         var token_ids = $.map(saved_tokens, function (el) {
@@ -506,7 +623,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
         // Execute the onDelete callback if defined
         if($.isFunction(callback)) {
-            callback(token_data);
+            callback.call(hidden_input,token_data);
         }
     }
 
@@ -562,7 +679,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 .hide();
 
             $.each(results, function(index, value) {
-                var this_li = $("<li>" + highlight_term(value.name, query) + "</li>")
+                var this_li = $("<li>" + highlight_term(escapeHTML(value.name), query) + "</li>")
                                   .appendTo(dropdown_ul);
 
                 if(index % 2) {
@@ -610,6 +727,13 @@ $.TokenList = function (input, url_or_data, settings) {
         item.removeClass(settings.classes.selectedDropdownItem);
         selected_dropdown_item = null;
     }
+    
+    
+    function escapeHTML(text) {
+      if(!settings.escapeHTML) return text;
+      return $("<p></p>").text(text).html();
+    }
+    
 
     // Do a search and show the "searching" dropdown if the input is longer
     // than settings.minChars
@@ -633,7 +757,7 @@ $.TokenList = function (input, url_or_data, settings) {
             }
         }
     }
-    
+
     // Do the actual search
     function run_search(query) {
         var cached_results = cache.get(query);
@@ -679,7 +803,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 // Attach the success callback
                 ajax_params.success = function(results) {
                   if($.isFunction(settings.onResult)) {
-                      results = settings.onResult.call(this, results);
+                      results = settings.onResult.call(hidden_input, results);
                   }
                   cache.add(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
 
@@ -697,6 +821,10 @@ $.TokenList = function (input, url_or_data, settings) {
                     return row.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
                 });
 
+                if($.isFunction(settings.onResult)) {
+                    results = settings.onResult.call(hidden_input, results);
+                }
+                cache.add(query, results);
                 populate_dropdown(query, results);
             }
         }
