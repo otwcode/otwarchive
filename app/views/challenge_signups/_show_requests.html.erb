@@ -3,10 +3,10 @@
   <h3 class="clear-right"><%= ts("Request %{num}", :num => index+1) %></h3>
   <%= render :partial => "challenge_signups/show_prompt", :locals => {:prompt => request, :display_anon => false} %>
   
-  <%= form_for([@collection, @challenge_signup], :url => (collection_signup_path(@collection))) do |signup_form| %>
-  <%= error_messages_for @challenge_signup %>
-  <%= signup_form.fields_for :request, request do |prompt_form| %>
-  <p class="navigation">(Remove individual prompt not available yet)<% # link_to_remove_section(ts("Remove?"), prompt_form) %></p>
-  <% end %>
-  <% end %>
+  <%= # form_for([@collection, @challenge_signup], :url => (collection_signup_path(@collection))) do |signup_form| %>
+  <%= # error_messages_for @challenge_signup %>
+  <%= # signup_form.fields_for :request, request do |prompt_form| %>
+  <% # p class="navigation" %><% # link_to_remove_section(ts("Remove?"), prompt_form) %>
+  <% # end %>
+  <% # end %>
 <% end %>
