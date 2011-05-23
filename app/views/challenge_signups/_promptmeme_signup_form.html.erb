@@ -27,6 +27,13 @@
 <!--/subnav-->
 
 <!--main content-->
+
+<ul>
+  <% @challenge_signup.send("requests").each_with_index do |prompt, index| %>
+    <li><%= link_to(ts("Request %{num}", :num => index), edit_prompt_path(prompt)) %></li>
+  <% end %>
+</ul>
+
 <% if params[:single_prompt] == "true" %>
 
   <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection, :single_prompt => params[:single_prompt]) : collection_signups_path(@collection))) do |signup_form| %>

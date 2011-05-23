@@ -1,5 +1,5 @@
 <!-- expects local variable "challenge_signup" -->
 <% challenge_signup.requests.each_with_index do |request, index| %>
-  <h3 class="clear-right"><%= ts("Request %{num}", :num => index+1) %></h3>
+  <h3 class="clear-right"><%= link_to(ts("Request %{num}", :num => index+1), edit_collection_prompt_path(challenge_signup.collection, request)) %></h3>
   <%= render :partial => "challenge_signups/show_prompt", :locals => {:prompt => request, :display_anon => false} %>
 <% end %>

@@ -126,55 +126,6 @@ When /^I view open challenges$/ do
   When %{I follow "See Open Challenges"}
 end
 
-When /^I sign up for Battle 12$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_anonymous\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird\""
-    And "I press \"Submit\""
-end
-
-When /^I sign up for Battle 12 with combination A$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_27\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Alternate Universe - Historical\""
-    And "I press \"Submit\""
-end
-
-When /^I sign up for Battle 12 with combination B$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
-    And "I check \"challenge_signup_requests_attributes_0_anonymous\""
-    And "I check \"challenge_signup_requests_attributes_1_anonymous\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Alternate Universe - High School, Something else weird\""
-    And "I press \"Submit\""
-end
-
-When /^I sign up for Battle 12 with combination C$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_27\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird, Alternate Universe - Historical\""
-    And "I press \"Submit\""
-end
-
-When /^I add prompt (\d+)$/ do |number|
-  When "I follow \"Add another prompt\""
-    And "I check \"challenge_signup_requests_attributes_#{number}_fandom_54\""
-    And "I press \"Submit\""
-end
-
 When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/ do |type, title, name|
   When %{I am logged in as "mod1"}
   visit new_collection_path
@@ -256,14 +207,6 @@ When /^I change the challenge timezone to Alaska$/ do
     Then %{I should see "Challenge was successfully updated"}
 end
 
-When /^I claim a prompt from "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
-    And %{I follow "Prompts ("}
-  Then %{I should see "Claim" within "th"}
-    And %{I should not see "Sign in to claim prompts"}
-  When %{I press "Claim"}
-end
-
 When /^I open signups for "([^\"]*)"$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
@@ -273,13 +216,53 @@ When /^I open signups for "([^\"]*)"$/ do |title|
   Then %{I should see "Challenge was successfully updated"}
 end
 
-When /^I close signups for "([^\"]*)"$/ do |title|
-  When %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Challenge Settings"}
-    And %{I uncheck "Signup open?"}
-    And %{I press "Submit"}
-  Then %{I should see "Challenge was successfully updated"}
+When /^I sign up for Battle 12$/ do
+  When "I go to the collections page"
+    And "I follow \"Battle 12\""
+    And "I follow \"Sign Up\""
+    And "I check \"challenge_signup_requests_attributes_0_fandom_28\""
+    And "I check \"challenge_signup_requests_attributes_1_fandom_28\""
+    And "I check \"challenge_signup_requests_attributes_1_anonymous\""
+    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird\""
+    And "I press \"Submit\""
+end
+
+When /^I sign up for Battle 12 with combination A$/ do
+  When "I go to the collections page"
+    And "I follow \"Battle 12\""
+    And "I follow \"Sign Up\""
+    And "I check \"challenge_signup_requests_attributes_0_fandom_27\""
+    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
+    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Alternate Universe - Historical\""
+    And "I press \"Submit\""
+end
+
+When /^I sign up for Battle 12 with combination B$/ do
+  When "I go to the collections page"
+    And "I follow \"Battle 12\""
+    And "I follow \"Sign Up\""
+    And "I check \"challenge_signup_requests_attributes_0_fandom_28\""
+    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
+    And "I check \"challenge_signup_requests_attributes_0_anonymous\""
+    And "I check \"challenge_signup_requests_attributes_1_anonymous\""
+    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Alternate Universe - High School, Something else weird\""
+    And "I press \"Submit\""
+end
+
+When /^I sign up for Battle 12 with combination C$/ do
+  When "I go to the collections page"
+    And "I follow \"Battle 12\""
+    And "I follow \"Sign Up\""
+    And "I check \"challenge_signup_requests_attributes_0_fandom_27\""
+    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
+    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird, Alternate Universe - Historical\""
+    And "I press \"Submit\""
+end
+
+When /^I add prompt (\d+)$/ do |number|
+  When "I follow \"Add another prompt\""
+    And "I check \"challenge_signup_requests_attributes_#{number}_fandom_54\""
+    And "I press \"Submit\""
 end
 
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
@@ -359,9 +342,9 @@ When /^I start to sign up for "([^\"]*)"$/ do |title|
     And %{I check "challenge_signup_requests_attributes_0_fandom_28"}
 end
 
-When /^I view prompts for "([^\"]*)"$/ do |title|
+When /^I view my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Prompts ("}
+  When %{I follow "Your Prompts"}
 end
 
 When /^I start to fulfill my claim$/ do
@@ -378,6 +361,33 @@ When /^I fulfill my claim$/ do
   When %{I start to fulfill my claim}
   When %{I press "Preview"}
     And %{I press "Post"}
+end
+
+When /^I edit my signup for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Edit Signup"}
+end
+
+When /^I claim a prompt from "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+    And %{I follow "Prompts ("}
+  Then %{I should see "Claim" within "th"}
+    And %{I should not see "Sign in to claim prompts"}
+  When %{I press "Claim"}
+end
+
+When /^I close signups for "([^\"]*)"$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Challenge Settings"}
+    And %{I uncheck "Signup open?"}
+    And %{I press "Submit"}
+  Then %{I should see "Challenge was successfully updated"}
+end
+
+When /^I view prompts for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Prompts ("}
 end
 
 When /^I start to fulfill my assignment$/ do
