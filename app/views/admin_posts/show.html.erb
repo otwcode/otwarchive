@@ -1,24 +1,25 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h 'AO3 News' %></h2>
+<h2><%= 'AO3 News' %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <ul class="navigation" role="navigation">
-	<li><%= link_to t('.admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
+  <li><%= link_to ts("Back to AO3 News Index"), admin_posts_path %></li>
+  <li><%= link_to_rss admin_posts_path(:rss) %></li>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
 <div class="admin" role="article">
-	<div class="admin-header">
-		<h3>
-			<%= @admin_post.title %>
-		</h3>
-			<h4>
-				Published: <%= @admin_post.created_at %>  
+  <div class="admin-header">
+    <h3>
+      <%= @admin_post.title %>
+    </h3>
+      <h4>
+        Published: <%= @admin_post.created_at %>  
         <% if logged_in_as_admin? %>
-				    <%= link_to t('.edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
-				<% end %>
+            <%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), :class => 'navigation' %>
+        <% end %>
       </h4>
     <% if @admin_post.translated_post %>
       <h4>Original: <%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></h4>
@@ -37,7 +38,7 @@
     <% end %>
   </div>
   <div class="admin-content userstuff">
-	    <%=raw sanitize_field(@admin_post, :content) %>
+      <%=raw sanitize_field(@admin_post, :content) %>
   </div>
 </div>
 <!--/content-->

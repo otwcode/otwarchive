@@ -27,6 +27,10 @@ module ApplicationHelper
     current_page?(path) ? "<span class=\"current\">#{link}</span>".html_safe : link
   end
   
+  def link_to_rss(link_to_feed)
+    link_to (ts("Subscribe with RSS ") + image_tag("feed-icon-14x14.png", :size => "14x14", :alt => "")).html_safe , link_to_feed, :class => "rsslink"
+  end
+  
   def allowed_html_instructions(show_list = true)
     h(ts("Plain text with limited html")) + 
     link_to_help("html-help") + (show_list ? 
