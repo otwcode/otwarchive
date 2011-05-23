@@ -33,16 +33,16 @@ var DEFAULT_SETTINGS = {
 
 // Default classes to use when theming
 var DEFAULT_CLASSES = {
-    tokenList: "token-input-list",
-    token: "token-input-token",
-    tokenDelete: "token-input-delete-token",
-    selectedToken: "token-input-selected-token",
-    highlightedToken: "token-input-highlighted-token",
-    dropdown: "token-input-dropdown",
-    dropdownItem: "token-input-dropdown-item",
-    dropdownItem2: "token-input-dropdown-item2",
-    selectedDropdownItem: "token-input-selected-dropdown-item",
-    inputToken: "token-input-input-token"
+    tokenList: "autocomplete",
+    token: "added tag",
+    tokenDelete: "delete",
+    selectedToken: "selected added tag",
+    highlightedToken: "higlighted",
+    dropdown: "autocomplete dropdown",
+    dropdownItem: "even",
+    dropdownItem2: "odd",
+    selectedDropdownItem: "selected",
+    inputToken: "input"
 };
 
 // Input box position "enum"
@@ -217,6 +217,9 @@ $.TokenList = function (input, url_or_data, settings) {
                   if(selected_dropdown_item) {
                     add_token($(selected_dropdown_item));
                     return false;
+                  } else if(input_box.val()) {
+                    add_token(input_box.val());
+                    return false;
                   }
                   break;
 
@@ -339,7 +342,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Inner function to a token to the list
     function insert_token(id, value) {
-        var this_token = $("<li><p>"+ value +"</p> </li>")
+        var this_token = $("<li>"+ escapeHTML(value) +" </li>")
           .addClass(settings.classes.token)
           .insertBefore(input_token);
 
@@ -372,7 +375,12 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Add a token to the token list based on user input
     function add_token (item) {
-        var li_data = $.data(item.get(0), "tokeninput");
+        var li_data;
+        if ($.type(item) === "string"){
+            li_data = {id: item, name: item};
+        } else {
+            li_data = $.data(item.get(0), "tokeninput");            
+        }
         var callback = settings.onAdd;
 
         // See if the token already exists and select it if we don't want duplicates
@@ -521,14 +529,14 @@ $.TokenList = function (input, url_or_data, settings) {
 
     function show_dropdown_searching () {
         if(settings.searchingText) {
-            dropdown.html("<p>"+settings.searchingText+"</p>");
+            dropdown.html("<p class='notice'>"+settings.searchingText+"</p>");
             show_dropdown();
         }
     }
 
     function show_dropdown_hint () {
         if(settings.hintText) {
-            dropdown.html("<p>"+settings.hintText+"</p>");
+            dropdown.html("<p class='notice'>"+settings.hintText+"</p>");
             show_dropdown();
         }
     }
