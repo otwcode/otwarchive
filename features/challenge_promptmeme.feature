@@ -97,7 +97,7 @@ Feature: Prompt Meme Challenge
   Scenario: Mod can view signups
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up  
+  Given everyone has signed up for Battle 12
   When I am logged in as "mod1"
     And I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
@@ -178,7 +178,7 @@ Feature: Prompt Meme Challenge
   Scenario: Claims are shown to mod
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I close signups for "Battle 12"
   Then claims are shown
@@ -186,7 +186,7 @@ Feature: Prompt Meme Challenge
   Scenario: Claims are hidden from ordinary user
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I close signups for "Battle 12"
   When I am logged in as "myname4"
@@ -195,7 +195,7 @@ Feature: Prompt Meme Challenge
   Scenario: User cannot delete someone else's claim
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I am logged in as "myname1"
   When I go to "Battle 12" collection's page
@@ -205,7 +205,7 @@ Feature: Prompt Meme Challenge
   Scenario: User can delete their own claim from the collection claims list
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I go to "Battle 12" collection's page
     And I follow "Claims"
@@ -218,7 +218,7 @@ Feature: Prompt Meme Challenge
   Scenario: User can delete their own claim from the user claims list
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I am on my user page
     And I follow "My Claims"
@@ -234,8 +234,8 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination B
-  And I am logged in as "myname4"
-  And I claim a prompt from "Battle 12"
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am logged in as "myname1"
     And I delete my signup for "Battle 12"
@@ -248,8 +248,30 @@ Feature: Prompt Meme Challenge
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     And I should see "Stargate Atlantis"
     
+  Scenario: User can't claim the same prompt twice
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+    And I view prompts for "Battle 12"
+  Then I should see "Already claimed by you"
+    
   Scenario: User claims two prompts in one challenge and fulfills one of them
-  # TODO
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname2"
+  When I sign up for Battle 12 with combination B
+  When I am logged in as "myname1"
+    And I claim a prompt from "Battle 12"
+    And I claim a prompt from "Battle 12"
+    And I view prompts for "Battle 12"
+  When I fulfill my claim
+  When I view the work "Fulfilled Story"
+  Then I should see "Stargate Atlantis"
+    And I should not see "Stargate SG-1"
+  When I follow "Anonymous" within "p"
+  Then I should see "Stargate Atlantis"
+    And I should not see "Stargate SG-1"
   
   Scenario: User claims two prompts in one challenge and fufills both of them at once
   # TODO
@@ -270,11 +292,43 @@ Feature: Prompt Meme Challenge
     And I follow "My Signups"
   # Then 14 should be the last signup in the table
   # Then show me the page
+
+  Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and sees the right boxes ticked
+  
+  Given I have Battle 12 prompt meme fully set up
+    And everyone has signed up for Battle 12
+  Given I have created the gift exchange "My Gift Exchange"
+    And I have opened signup for the gift exchange "My Gift Exchange"
+    And everyone has signed up for the gift exchange "My Gift Exchange"
+    And I have generated matches for "My Gift Exchange"
+    And I have sent assignments for "My Gift Exchange"
+  When I am logged in as "myname3"
+    And I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+  Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be checked
+    And the "My Gift Exchange (myname2)" checkbox should not be checked
+  
+  Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and then changes their mind and fulfills the gift exchange instead
+  Given I have Battle 12 prompt meme fully set up
+    And everyone has signed up for Battle 12
+  Given I have created the gift exchange "My Gift Exchange"
+    And I have opened signup for the gift exchange "My Gift Exchange"
+    And everyone has signed up for the gift exchange "My Gift Exchange"
+    And I have generated matches for "My Gift Exchange"
+    And I have sent assignments for "My Gift Exchange"
+  When I am logged in as "myname3"
+    And I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+  When I check "My Gift Exchange (myname2)"
+    And I uncheck "Battle 12 (myname4) -  - Stargate Atlantis"
+    And I press "Post without preview"
+  Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
+    And I should see "Battle 12"
     
   Scenario: All the rest of the unrefactored stuff
 
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up
+  Given everyone has signed up for Battle 12
   When I am logged in as "myname4"
   When I claim a prompt from "Battle 12"
   When I close signups for "Battle 12"

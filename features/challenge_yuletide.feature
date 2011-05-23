@@ -35,9 +35,7 @@ Feature: Collection
     And I add the fandom "Starsky & Hutch" to the character "Foo The Wonder Goat"
     And a character exists with name: "Obscure person", canonical: true
     And I add the fandom "Tiny fandom" to the character "Obscure person"
-    And I am logged in as "mod1" with password "something"
-  Then I should see "Hi, mod1!"
-    And I should see "Log out"
+    And I am logged in as "mod1"
   When I go to the collections page
   Then I should see "Collections in the "
     And I should not see "Yuletide"

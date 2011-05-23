@@ -30,6 +30,7 @@ end
 
 Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|
   Given "I have standard challenge tags setup"
+    And %{I am logged in as "mod1"}
     And %{I set up the collection "#{challengename}"}
     And %{I select "Gift Exchange" from "challenge_type"}
   click_button("Submit")
@@ -37,17 +38,7 @@ end
     
 Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
   Given %{I have set up the gift exchange "#{challengename}"}
-    select("2011", :from => "gift_exchange_signups_open_at_1i")
-    select("2011", :from => "gift_exchange_signups_close_at_1i")
-    select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
-    fill_in("gift_exchange_offer_restriction_attributes_tag_set_attributes_fandom_tagnames", :with => "Stargate SG-1, Stargate Atlantis")
-    fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
-    fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", :with => "1")
-    fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", :with => "2")
-    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", :with => "1")
-    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", :with => "1")
-    fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", :with => "2")
-    select("1", :from => "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
+  When "I fill in gift exchange challenge options"
     click_button("Submit")
 end
 
@@ -71,7 +62,7 @@ Given /^I have Battle 12 prompt meme fully set up$/ do
   When %{I follow "Log out"}
 end
 
-Given /^everyone has signed up$/ do
+Given /^everyone has signed up for Battle 12$/ do
   When %{I am logged in as "myname1"}
   # no anon
   When %{I sign up for Battle 12 with combination A}
@@ -83,6 +74,35 @@ Given /^everyone has signed up$/ do
   When %{I sign up for Battle 12}
   When %{I am logged in as "myname4"}
   When %{I sign up for Battle 12 with combination C}
+end
+
+Given /^everyone has signed up for the gift exchange "([^\"]*)"$/ do |challengename|
+  When %{I am logged in as "myname1"}
+  When %{I sign up for "#{challengename}" with combination A}
+  When %{I am logged in as "myname2"}
+  When %{I sign up for "#{challengename}" with combination B}
+  When %{I am logged in as "myname3"}
+  When %{I sign up for "#{challengename}" with combination C}
+  When %{I am logged in as "myname4"}
+  When %{I sign up for "#{challengename}" with combination D}
+end
+
+Given /^I have generated matches for "([^\"]*)"$/ do |challengename|
+  When %{I close signups for "#{challengename}"}
+  When %{I follow "Matching"}
+  When %{I follow "Generate Potential Matches"}
+  Given %{the system processes jobs}
+    And %{I wait 3 seconds}
+  When %{I reload the page}
+  When %{all emails have been delivered}
+end
+
+Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
+  When %{I follow "Send Assignments"}
+  Given %{the system processes jobs}
+    And %{I wait 3 seconds}
+  When %{I reload the page}
+  Then %{I should not see "Assignments are now being sent out"}
 end
 
 ### WHEN
@@ -196,6 +216,20 @@ When /^I fill in Battle 12 challenge options$/ do
     And %{I press "Submit"}
 end
 
+When /^I fill in gift exchange challenge options$/ do
+    select("2011", :from => "gift_exchange_signups_open_at_1i")
+    select("2011", :from => "gift_exchange_signups_close_at_1i")
+    select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
+    fill_in("gift_exchange_offer_restriction_attributes_tag_set_attributes_fandom_tagnames", :with => "Stargate SG-1, Stargate Atlantis")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", :with => "1")
+    fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", :with => "2")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", :with => "1")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", :with => "1")
+    fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", :with => "2")
+    select("1", :from => "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
+end
+
 When /^I change the challenge timezone to Alaska$/ do
   When %{I follow "Challenge Settings"}
     And %{I select "(GMT-09:00) Alaska" from "prompt_meme_time_zone"}
@@ -277,6 +311,16 @@ When /^I sign up for "([^\"]*)" with combination C$/ do |title|
     And %{I press "Submit"}
 end
 
+When /^I sign up for "([^\"]*)" with combination D$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I check "challenge_signup_requests_attributes_0_fandom_27"}
+    And %{I check "challenge_signup_offers_attributes_0_fandom_27"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
+    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
+    And %{I press "Submit"}
+end
+
 When /^I sign up for "([^\"]*)" with missing prompts$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
@@ -301,14 +345,18 @@ When /^I view prompts for "([^\"]*)"$/ do |title|
   When %{I follow "Prompts ("}
 end
 
-When /^I fulfill my claim$/ do
+When /^I start to fulfill my claim$/ do
   When %{I am on my user page}
-  When %{I follow "My Claims (1)"}
+  When %{I follow "My Claims ("}
   When %{I follow "Post To Fulfill"}
     And %{I fill in "Work Title" with "Fulfilled Story"}
     And %{I select "Not Rated" from "Rating"}
     And %{I check "No Archive Warnings Apply"}
     And %{I fill in "content" with "This is an exciting story about Atlantis"}
+end
+
+When /^I fulfill my claim$/ do
+  When %{I start to fulfill my claim}
   When %{I press "Preview"}
     And %{I press "Post"}
 end
@@ -341,7 +389,7 @@ end
 
 Then /^I should see gift exchange options$/ do
   Then %{I should see "Offer Settings"}
-    And %{I should not see "Request Settings"}
+    And %{I should see "Request Settings"}
     And %{I should see "If you plan to use automated matching"}
     And %{I should see "Allow Any"}
 end

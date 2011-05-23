@@ -40,6 +40,17 @@
     <% end %>
     <% if current_user && challenge_signup.collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
     <% # hides this on a user's 'your signups' page and on a signup show page, since we only want it on the challenge index %>
+      <% @claimed = 0
+         challenge_signup.request_claims.each do |claim|
+            if claim.claiming_user == current_user && claim.request_prompt_id == prompt_id
+              @claimed = 1
+            end
+        end %>
+      <% if @claimed == 1 %>
+      <li>
+        <%= ts("Already claimed by you") %>
+      </li>
+      <% else %>
       <li>
         <% new_claim = ChallengeClaim.new %>
           <%= form_for [@collection, new_claim], :url => collection_claims_path(@collection) do |claim_form| %>
@@ -50,6 +61,7 @@
               <%= submit_tag "Claim", :id => "prompt_" + prompt_id.to_s %>
           <% end %>
       </li>
+      <% end %>
     <% elsif challenge_signup.collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
       <li><%= ts("Sign in to claim prompts") %></li>
     <% end %>
