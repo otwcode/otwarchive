@@ -244,7 +244,6 @@ $.TokenList = function (input, url_or_data, settings) {
     // Keep a reference to the original input box
     var hidden_input = $(input)
                            .hide()
-                           .val("")
                            .focus(function () {
                                input_box.focus();
                            })
@@ -325,19 +324,29 @@ $.TokenList = function (input, url_or_data, settings) {
     var dragDestination;
 
     // Pre-populate list if items exist
-    hidden_input.val("");
-    var li_data = settings.prePopulate || hidden_input.data("pre");
+    var li_data = settings.prePopulate || $(input).val()
     if(settings.processPrePopulate && $.isFunction(settings.onResult)) {
         li_data = settings.onResult.call(hidden_input, li_data);
     }    
     if(li_data && li_data.length) {
-        $.each(li_data, function (index, value) {
-            insert_token(value.id, value.name);
-        });
+        if(typeof(li_data) === "string") {
+            $.each(li_data.split(settings.tokenDelimiter), function (index, value) {
+                insert_token(value, value);
+            });
+        } else {
+            $.each(li_data, function (index, value) {
+                insert_token(value.id, value.name);
+            });            
+        }
     }
-
-
-
+    $(input).val("");
+    hidden_input.val("");
+    input_box.val("");
+    // Check the token limit
+    if(settings.tokenLimit !== null && token_count >= settings.tokenLimit) {
+        input_box.hide();
+    }
+    
     //
     // Private functions
     //
@@ -436,8 +445,8 @@ $.TokenList = function (input, url_or_data, settings) {
 
         // Check the token limit
         if(settings.tokenLimit !== null && token_count >= settings.tokenLimit) {
-            input_box.hide();
             hide_dropdown();
+            input_box.hide();
             return;
         } else {
             input_box.focus();
