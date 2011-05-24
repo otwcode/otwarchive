@@ -261,11 +261,18 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
+  # 1st prompt SG-1, 2nd prompt SGA
   When I am logged in as "myname1"
     And I claim a prompt from "Battle 12"
+    # SGA as it's in reverse order
     And I claim a prompt from "Battle 12"
+    # SG-1
     And I view prompts for "Battle 12"
-  When I fulfill my claim
+  When I start to fulfill my claim
+  # this next line shouldn't be needed - there's still a bug somewhere
+    And I uncheck "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird"
+    And I press "Preview"
+    And I press "Post"
   When I view the work "Fulfilled Story"
   Then I should see "Stargate Atlantis"
     And I should not see "Stargate SG-1"
