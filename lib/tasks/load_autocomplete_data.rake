@@ -1,3 +1,5 @@
+require 'radix'
+
 namespace :autocomplete do
   
   desc "Clear autocomplete data"
@@ -9,15 +11,15 @@ namespace :autocomplete do
   
   desc "Reload tags and pseuds into Redis autocomplete"
   task(:reload_autocomplete_data => [:reload_autocomplete_tag_data, :reload_autocomplete_pseud_data, :reload_autocomplete_collection_data, :reload_autocomplete_tagset_data]) do
-    puts "Reloaded tag and pseud data"
+    puts "Reloaded autocomplete data"
   end
   
   desc "Clear tag data"
   task(:clear_autocomplete_tag_data => :environment) do
-    keys = $redis.keys("autocomplete_tag_*")
+    keys = $redis.keys("autocomplete_tag_*") + $redis.keys("autocomplete_fandom_*")
     $redis.del(*keys)
   end
-  
+
   desc "Clear tagset data"
   task(:clear_autocomplete_tagset_data => :environment) do
     keys = $redis.keys("autocomplete_tagset_*")
@@ -38,30 +40,24 @@ namespace :autocomplete do
   
   desc "Reload tag data into Redis for autocomplete"
   task(:reload_autocomplete_tag_data => :environment) do
-    # load up canonical user-defined tags
-    Tag::USER_DEFINED.each do |type|
-      type.classify.constantize.visible_to_all_with_count.each do |tag|
-        score = tag.count
-        tag.name.three_letter_sections.each do |section|
-          key = "autocomplete_tag_#{type.downcase}_#{section}"
-          # score is the number of uses of the tag on public works
-          $redis.zadd(key, score, tag.name)
-        end
+    Tag::VISIBLE.each do |type|
+      type.classify.constantize.visible_to_all_with_count.includes(:parents).each do |tag|
+        tag.add_to_redis(tag.count)
       end
     end    
   end
   
   desc "Reload pseud data into Redis for autocomplete"
   task(:reload_autocomplete_pseud_data => :environment) do
-    Pseud.not_orphaned.each do |pseud|
-      pseud.add_to_autocomplete
+    Pseud.not_orphaned.includes(:user).each do |pseud|
+      pseud.add_to_redis
     end    
   end
 
   desc "Reload collection data into Redis for autocomplete"
   task(:reload_autocomplete_collection_data => :environment) do
-    Collection.all.each do |collection|
-      collection.add_to_autocomplete
+    Collection.with_item_count.includes(:collection_preference).each do |collection|
+      collection.add_to_redis(collection.item_count)
     end
   end
 

@@ -313,21 +313,77 @@ class Tag < ActiveRecord::Base
   end
 
   # add this tag to the redis db for autocomplete lookups
-  def add_to_autocomplete
-    score = filter_count.public_works_count
+  def add_to_redis(score = nil)
+    # score is the number of uses of the tag on public works
+    score = filter_count.public_works_count unless score
     name.three_letter_sections.each do |section|
-      key = "autocomplete_tag_#{type.downcase}_#{section}"
-      # score is the number of uses of the tag on public works
-      $redis.zadd(key, score, name)
+      $redis.zadd("autocomplete_tag_#{type.downcase}_#{section}", score, name)
     end
+    
+    if self.is_a?(Character) || self.is_a?(Relationship)
+      parents.each do |parent|
+        if parent.is_a?(Fandom)
+          $redis.zadd("autocomplete_fandom_#{parent.name}_#{type.downcase}", score, name)
+        end
+      end
+    end      
   end
   
-  def remove_from_autocomplete
+  def remove_from_redis
     name.three_letter_sections.each do |section|
-      key = "autocomplete_tag_#{type.downcase}_#{section}"
-      $redis.zrem(key, name)
+      $redis.zrem("autocomplete_tag_#{type.downcase}_#{section}", name)
+    end
+    if self.is_a?(Character) || self.is_a?(Relationship)
+      parents.each do |parent|
+        if parent.is_a?(Fandom)
+          $redis.zrem("autocomplete_fandom_#{parent.name}_#{type_downcase}", name)
+        end
+      end
     end
   end    
+
+  # we get the results by splitting the search param into three-letter sections,
+  # then getting the intersection of those sets out of the redis tag cache
+  # can take multiple tag types as "character+relationship" or "all"
+  def self.redis_lookup(search_param, tag_type = "all", tag_set_id = nil)
+    tag_types = tag_type.split("+")
+    results = []
+    tag_types.each do |type|
+      redis_key = "autocomplete_tag_#{type}_#{search_param}"
+      redis_key += "_#{tag_set_id}" if tag_set_id
+
+      unless $redis.exists(redis_key)
+        # create an intersection of all the stored sets of tags 
+        sets = search_param.three_letter_sections.map {|section| "autocomplete_tag_#{type}_#{section}"}
+        sets.unshift "autocomplete_tagset_#{tag_set_id}" if tag_set_id
+        $redis.zinterstore(redis_key, sets, :aggregate => :max)
+        $redis.expire(redis_key, 60*ArchiveConfig.AUTOCOMPLETE_EXPIRATION_TIME)
+      end
+    
+      # now we get out 20 of the tags sorted by popularity
+      results += $redis.zrevrange(redis_key, 0, 20)
+    end
+    results
+  end
+  
+  # look up tags that have been wrangled into a given fandom
+  def self.redis_fandom_lookup(search_param, tag_type, fandom, fallback=true)
+    # fandom sets are too small to bother breaking up
+    # we're just getting ALL the tags in the set(s) for the fandom(s) and then manually matching
+    results = []
+    fandom.split(',').each do |single_fandom|
+      results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(/#{search_param}/i)}
+    end
+    if fallback && results.empty?
+      # do a standard tag lookup instead
+      redis_tag_lookup(search_param, tag_type)
+    else
+      results
+    end
+  end
+
+
+
 
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)

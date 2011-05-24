@@ -43,14 +43,29 @@ jQuery(function($){
   $('.autocomplete').each(function(){
     var self = $(this);
     self.tokenInput(self.attr('autocomplete_method'), {
-        searchingText: "Searching...",
-        noResultsText: "No results",
-        minChars: 3,
+        searchingText: self.attr('autocomplete_searching_text'),
+        hintText: self.attr('autocomplete_hint_text'),
+        noResultsText: self.attr('autocomplete_no_results_text'),
+        minChars: self.attr('autocomplete_min_chars'),
         queryParam: "term",
         preventDuplicates: true,
-        liveParams: self.attr('autocomplete_live_params')
+        tokenLimit: self.attr('autocomplete_token_limit'),
+        liveParams: self.attr('autocomplete_live_params'),
+        makeSortable: self.attr('autocomplete_sortable')
     });
   });
+});
+
+// Single-value autocomplete
+jQuery(function($){
+    $('.single_autocomplete').each(function(){
+        var self = $(this);
+        self.autocomplete({
+            source: self.attr('autocomplete_method'),
+            minLength: self.attr('autocomplete_min_chars'),
+            autoFocus: true // to keep behavior similar to main autocomplete
+        });
+    });
 });
 
 

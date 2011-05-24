@@ -1,4 +1,3 @@
-require 'radix'
 class Collection < ActiveRecord::Base
 
   attr_protected :description_sanitizer_version
@@ -198,22 +197,42 @@ class Collection < ActiveRecord::Base
     end
   end
 
-  
-  def add_to_autocomplete
-    # score is the alphabetical value padded out with spaces to max length
-    score = fullname.downcase.ljust(ArchiveConfig.TITLE_MAX).b(62).to_i
+  def add_to_redis(score = nil)
+    # score is the item count 
+    score = (all_approved_works_count + all_approved_bookmarks_count) unless score
     fullname.three_letter_sections.each do |section|
-      key = "autocomplete_collection_#{closed? ? "closed" : "open"}_#{section}"
-      $redis.zadd(key, score, fullname)
+      $redis.zadd("autocomplete_collection_#{closed? ? 'closed' : 'open'}_#{section}", score, redis_value)
+      $redis.zadd("autocomplete_collection_all_#{section}", score, redis_value)
     end
   end
   
-  def remove_from_autocomplete
+  def remove_from_redis
     fullname.three_letter_sections.each do |section|
-      key = "autocomplete_collection_#{closed? ? "closed" : "open"}_#{section}"
-      $redis.zrem(key, fullname)
+      $redis.zrem("autocomplete_collection_#{closed? ? 'closed' : 'open'}_#{section}", redis_value)
+      $redis.zrem("autocomplete_collection_all_#{section}", redis_value)
     end
-  end  
+  end
+  
+  # class method to get classnames out of redis, sorted by popularity
+  # include options: "open", "closed", "all"
+  def self.redis_lookup(search_param, include="open")
+    redis_key = "autocomplete_collection_#{include}_#{search_param}"
+    if search_param.length > 3
+      sets = search_param.three_letter_sections.map {|section| "autocomplete_collection_#{include}_#{section}"}
+      $redis.zinterstore(redis_key, sets, :aggregate => :max)
+      $redis.expire(redis_key, 60*ArchiveConfig.AUTOCOMPLETE_EXPIRATION_TIME)
+    end
+    $redis.zrevrange(redis_key, 0, -1)
+  end
+  
+  # prefix the name with id for later use
+  def redis_value
+    "#{id}-#{fullname}"
+  end
+  
+  def self.parse_redis_value(value)
+    (id, fullname) = value.split("-", 2)
+  end
   
   def fullname
     "#{title} (#{name})"
@@ -387,8 +406,14 @@ class Collection < ActiveRecord::Base
 
     # build up the query with scopes based on the options the user specifies
     query = Collection.top_level
-    query = query.with_title_like(filters[:title]) unless filters[:title].blank?
-    query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
+    
+    if !filters[:title].blank?
+      # we get the matching collections out of redis and use their ids
+      ids = Collection.redis_lookup(filters[:title], filters[:closed].blank? ? "all" : (filters[:closed] ? "closed" : "open")).map {|result| result.split("_")[0]}
+      query = query.where("collections.id in (?)", ids)
+    else
+      query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
+    end
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?
     if sort.match /item_count/
       query = query.with_item_count

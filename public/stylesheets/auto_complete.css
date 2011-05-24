@@ -1,238 +1,32 @@
-.auto_complete ul {	
-	background: #fffef9;
-	border: 1px solid #777;
-	width:100%;
+.autocomplete ul, ul.ui-autocomplete {	
+	background: #fff;
+	background: rgba(255,255,255,0.9);
+	border: 1px solid #eee;
 	padding: 0.125em; 
-	position: absolute;
-	overflow:auto;
-	z-index: 50;
+	line-height: 1.286;
+	box-shadow: 1px 3px 5px rgba(0,0,0,0.5)
 	}
-div.auto_complete ul li {
-	display: block !important;
+.autocomplete input, .autocomplete ul li, .ui-autocomplete ul li {
+	display: block;
 	padding: 0.125em;
-}
-div.auto_complete ul li.selected {
-	background: #900;
-	color: #fffef9;
-}
-div.auto_complete ul strong.highlight {
-	color: #777;
-}
-
-
-.token-input-dropdown {background:#fff; background:rgba(255,255,255,0.9); border:1px solid #eee; line-height:1.286; box-shadow:1px 3px 5px rgba(0,0,0,0.5)}
-.token-input-dropdown li {padding:0.15em ;}
-.token-input-dropdown li:hover, li.token-input-selected-dropdown-item, .token-input-highlighted-token li, 
-  .token-input-selected-token li {background:url(/images/header-red.png) top left #900; color:#fff}
-
-.token-input-token p {display: inline;}
-span.token-input-delete-token {margin-right: 1em;}
-.token-input-input-token input {display: block;}
-ul.token-input-list {width: 48.15em;}
-
-
-/* EXAMPLE OF AUTOCOMPLETE STYLING */
-/* Example tokeninput style #2: Mac Style */
-/*fieldset.token-input {
-  position: relative;
-  padding: 0;
-  margin: 5px 0;
-  background: #fff;
-  width: 400px;
-  border: 1px solid #A4BDEC;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
+	}
+.autocomplete ul li:hover, li.selected, .ui-autocomplete ul li a:hover {
+	background: url(/images/header-red.png) top left #900; 
+	color: #fff;
+	}
+.required .autocomplete .added, .autocomplete .added,.autocomplete span.delete {
+	background:#eee;
+	color:#222; 
+	padding:0.15em;
+	margin-right: 1em;
+	opacity:0.9;
+	box-shadow:1px 1px 2px rgba(0,0,0,0.5);
+	}
+.autocomplete span.delete {
+	color:#900; 
+	font-weight:900;
+	-moz-border-radius:0.875em;
+	border-radius:0.875em;
 }
 
-fieldset.token-input.token-input-dropdown {
-  border-radius: 10px 10px 0 0;
-  -moz-border-radius: 10px 10px 0 0;
-  -webkit-border-radius: 10px 10px 0 0;
-  box-shadow: 0 5px 20px 0 rgba(0,0,0,0.25);
-  -moz-box-shadow: 0 5px 20px 0 rgba(0,0,0,0.25);
-  -webkit-box-shadow: 0 5px 20px 0 rgba(0,0,0,0.25);
-}
 
-ul.token-input-list {
-    overflow: hidden; 
-    height: auto !important; 
-    height: 1%;
-    cursor: text;
-    font-size: 12px;
-    font-family: Verdana;
-    min-height: 1px;
-    z-index: 999;
-    margin: 0;
-    padding: 3px;
-    background: transparent;
-}
-
-ul.token-input-list.error {
-  border: 1px solid #C52020;
-}
-
-ul.token-input-list li {
-    list-style-type: none;
-}
-
-li.token-input-token p {
-    display: inline;
-    padding: 0;
-    margin: 0;
-}
-
-li.token-input-token span {
-    color: #a6b3cf;
-    margin-left: 5px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-li.token-input-token {
-    font-family: "Lucida Grande", Arial, serif;
-    font-size: 9pt;
-    line-height: 12pt;
-    overflow: hidden; 
-    height: 16px; 
-    margin: 3px;
-    padding: 0 10px;   
-    background: none; 
-    background-color: #dee7f8;
-    color: #000;
-    cursor: default;
-    border: 1px solid #a4bdec;
-    border-radius: 15px;
-    -moz-border-radius: 15px;
-    -webkit-border-radius: 15px;
-    float: left;
-}
-
-li.token-input-highlighted-token {
-    background-color: #bbcef1;
-    border: 1px solid #598bec;
-    color: #000;
-}
-
-li.token-input-selected-token {
-    background-color: #598bec;
-    border: 1px solid transparent;
-    color: #fff;
-}
-
-li.token-input-highlighted-token span.token-input-delete-token {
-    color: #000;
-}
-
-li.token-input-selected-token span.token-input-delete-token {
-    color: #fff;
-}
-
-li.token-input-input-token {
-    border: none;
-    background: transparent;
-    float: left;
-    padding: 0;
-    margin: 0;
-}
-
-li.token-input-input-token input {
-  border: 0;
-  width: 100px;
-  padding: 3px;
-  background-color: transparent;
-  margin: 0;
-}
-
-div.token-input-dropdown {
-    position: absolute;
-    border: 1px solid #A4BDEC;
-    border-top: none;
-    left: -1px;
-    right: -1px;
-    background-color: #fff;
-    overflow: hidden;
-    cursor: default;
-    font-size: 10pt;
-    font-family: "Lucida Grande", Arial, serif;
-    padding: 5px;
-    border-radius: 0 0 10px 10px;
-    -moz-border-radius: 0 0 10px 10px;
-    -webkit-border-radius: 0 0 10px 10px;
-    box-shadow: 0 5px 20px 0 rgba(0,0,0,0.25);
-    -moz-box-shadow: 0 5px 20px 0 rgba(0,0,0,0.25);
-    -webkit-box-shadow: 0 5px 20px 0 rgba(0,0,0,0.25);
-    clip:rect(0px, 1000px, 1000px, -10px);
-}
-
-div.token-input-dropdown p {
-    font-size: 8pt;
-    margin: 0;
-    padding: 0 5px;
-    font-style: italic;
-    color: #aaa;
-}
-
-div.token-input-dropdown h3.token-input-dropdown-category {
-  font-family: "Lucida Grande", Arial, serif;
-  font-size: 10pt;
-  font-weight: bold;
-  border: none;
-  padding: 0 5px;
-  margin: 0;
-}
-
-div.token-input-dropdown ul {
-    margin: 0;
-    padding: 0;
-}
-
-div.token-input-dropdown ul li {
-    list-style-type: none;
-    cursor: pointer;
-    background: none;
-    background-color: #fff;
-    margin: 0;
-    padding: 0 0 0 25px;
-}
-
-div.token-input-dropdown ul li.token-input-dropdown-item {
-    background-color: #fff;
-}
-
-div.token-input-dropdown ul li.token-input-dropdown-item.odd {
-    background-color: #ECF4F9;
-    border-radius: 15px;
-    -moz-border-radius: 15px;
-    -webkit-border-radius: 15px;
-}
-
-div.token-input-dropdown ul li.token-input-dropdown-item span.token-input-dropdown-item-description {
-    float: right;
-    font-size: 8pt;
-    font-style: italic;
-    padding: 0 10px 0 0;
-    color: #999;
-}
-
-div.token-input-dropdown ul li strong {
-    font-weight: bold;
-    text-decoration: underline;
-    font-style: none;
-}
-
-div.token-input-dropdown ul li.token-input-selected-dropdown-item,
-div.token-input-dropdown ul li.token-input-selected-dropdown-item.odd {
-    background-color: #598bec;
-    color: #fff;
-    border-radius: 15px;
-    -moz-border-radius: 15px;
-    -webkit-border-radius: 15px;
-}
-
-div.token-input-dropdown ul li.token-input-selected-dropdown-item span.token-input-dropdown-item-description,
-div.token-input-dropdown ul li.token-input-selected-dropdown-item.odd span.token-input-dropdown-item-description {
-    color: #fff;
-}
-
-*/

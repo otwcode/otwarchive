@@ -237,6 +237,20 @@ module ApplicationHelper
     return generated_html
   end
   
+  # returns the default autocomplete attributes, all of which can be overridden
+  # note: we do this and put the message defaults here so we can use translation on them
+  def autocomplete_options(method, options={})
+    {      
+      :class => "autocomplete",
+      :autocomplete_method => "/autocomplete/#{method}",
+      :autocomplete_hint_text => ts("Start typing for suggestions!"),
+      :autocomplete_no_results_text => ts("(No suggestions found)"),
+      :autocomplete_min_chars => 3,
+      :autocomplete_searching_text => ts("Searching..."),
+      :autocomplete_sortable => true
+    }.merge(options)
+  end
+  
   def autocomplete_text_field(fieldname, options={})
     ("\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
     '<img src="/images/spinner.gif" alt="Working..." /></span>' +
