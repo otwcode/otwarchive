@@ -307,6 +307,10 @@ class Work < ActiveRecord::Base
   def challenge_assignment_ids=(ids)
     self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.select {|assignment| assignment.offering_user == User.current_user}
   end
+  
+  def challenge_claim_ids=(ids)
+    self.challenge_claims = ids.map {|id| id.blank? ? nil : ChallengeClaim.find(id)}.compact.select {|claim| claim.claiming_user == User.current_user}
+  end
 
   # Set a work's collections based on a list of collection names
   # Don't delete all existing collections, or else works in closed collections

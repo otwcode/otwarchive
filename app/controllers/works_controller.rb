@@ -207,6 +207,8 @@ class WorksController < ApplicationController
     load_pseuds
     @series = current_user.series.uniq
     @unposted = current_user.unposted_work
+    @assignments = current_user.offer_assignments.undefaulted.unfulfilled + current_user.pinch_hit_assignments
+    @claims = current_user.request_claims.unfulfilled
     # for clarity, add the collection and recipient
     if params[:assignment_id] && (@challenge_assignment = ChallengeAssignment.find(params[:assignment_id])) && @challenge_assignment.offering_user == current_user
       @work.challenge_assignments << @challenge_assignment
