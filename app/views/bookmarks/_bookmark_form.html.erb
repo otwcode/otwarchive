@@ -21,11 +21,10 @@
     <dt><%= ew.label :url, ts("URL") %>:</dt>
     <dd>
       <% if !params[:url_from_external].blank? %>
-        <%= ew.text_field :url, :value => params[:url_from_external] %>
+        <%= ew.text_field :url, autocomplete_options('bookmark_external_url', :autocomplete_token_limit => 1, :value => params[:url_from_external]) %>
       <% else %>
-        <%= ew.text_field :url %>
+        <%= ew.text_field :url, autocomplete_options('bookmark_external_url', :autocomplete_token_limit => 1) %>
       <% end %>
-	    <%= autocomplete_text_field "bookmark_external_url", :no_comma => true %>
 	    <%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'}, :with => 'external_url', :on => 'blur' %>
 	    <%= hidden_field 'fetched', :value => '' %>
     </dd>
@@ -61,8 +60,7 @@
       <%= ew.label :fandom_string, Fandom::NAME.pluralize %>
     </dt>
     <dd>
-      <%= ew.text_field :fandom_string %>
-      <%= autocomplete_text_field "bookmark_external_fandom_string" %>
+      <%= ew.text_field :fandom_string, autocomplete_options('fandom') %>
     </dd>
     <dt class="rating">
       <%= ew.label :rating_string, Rating::NAME %><%= link_to_help "rating-help" %>
@@ -80,15 +78,13 @@
       <%= ew.label :relationship_string, Relationship::NAME.pluralize %>
     </dt>
     <dd>
-      <%= ew.text_field :relationship_string %>
-      <%= autocomplete_text_field "bookmark_external_relationship_string" %>
+      <%= ew.text_field :relationship_string, autocomplete_options('relationship_in_fandom', :autocomplete_live_params => 'fandom=bookmark_external_fandom_string') %>
     </dd>
     <dt>
       <%= ew.label :character_string, Character::NAME.pluralize %>
     </dt>
     <dd>
-      <%= ew.text_field :character_string %>
-      <%= autocomplete_text_field "bookmark_external_character_string" %>
+      <%= ew.text_field :character_string, autocomplete_options('character_in_fandom', :autocomplete_live_params => 'fandom=bookmark_external_fandom_string') %>
     </dd>
   </dl>
   </fieldset>
@@ -107,8 +103,7 @@
 	<dt><%= f.label :tag_string, ts("Your Tags") %></dt>
 	<dd>
 	  <% dynamic ||= false %>
-    <%= f.text_field :tag_string, :size => (dynamic ? 60 : 80) %>
-    <%= autocomplete_text_field "bookmark_tag_string" %>
+    <%= f.text_field :tag_string, autocomplete_options('tag?type=all', :size => (dynamic ? 60 : 80)) %>
     <p class="character_counter">
       <%= ts("Comma separated, %{max} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
     </p>

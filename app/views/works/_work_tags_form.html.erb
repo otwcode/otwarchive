@@ -27,7 +27,8 @@
     </dt>
     <dd class="fandom required">
       <%= text_field_tag "work[fandom_string]", include_blank ? "" : @work.fandom_string, 
-          :id => "work_fandom", :class => 'autocomplete', :autocomplete_method => '/autocomplete/fandom' %>
+                         autocomplete_options('fandom', 
+                          :id => "work_fandom") %>
     </dd>
 
     <dt class="category">
@@ -47,10 +48,10 @@
       <label for="work_relationship"><%= Relationship::NAME.pluralize %></label>
     </dt>
     <dd class="relationship">
-      <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, :id => "work_relationship" %>
-      <%= autocomplete_text_field "work_relationship", :methodname => "relationship_finder_restricted_by_fandom", 
-                                                       :auto_params => ["work_fandom"], 
-                                                       :extra_params => "fandom_fieldname=fandom_string&no_alert=true" %>
+      <%= text_field_tag "work[relationship_string]", include_blank ? "" : @work.relationship_string, 
+                         autocomplete_options("relationship_in_fandom",
+                           :id => "work_relationship", 
+                           :autocomplete_live_params => 'fandom=work_fandom') %>
     </dd>
 
     <dt class="character">
@@ -58,16 +59,15 @@
     </dt>
     <dd class="character">
       <%= text_field_tag "work[character_string]", include_blank ? "" : @work.character_string, 
-      :id => "work_character", :class => 'autocomplete', :autocomplete_method => '/autocomplete/character?extra=foo',
-      :autocomplete_live_params => 'fandom=work_fandom&foobar=work_rating_string' %>
+                        autocomplete_options('character_in_fandom', 
+                          :id => "work_character", :autocomplete_live_params => 'fandom=work_fandom') %>
     </dd>
 
     <dt class="freeform">
       <label for="work_freeform"><%= Freeform::NAME %></label>
     </dt>
     <dd class="freeform">
-      <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, :id => "work_freeform" %>
-      <%= autocomplete_text_field("work_freeform") %>
+      <%= text_field_tag "work[freeform_string]", include_blank ? "" : @work.freeform_string, autocomplete_options('freeform', :id => "work_freeform") %>
     </dd>
 
   </dl>
