@@ -315,7 +315,7 @@ class Tag < ActiveRecord::Base
   # add this tag to the redis db for autocomplete lookups
   def add_to_redis(score = nil)
     # score is the number of uses of the tag on public works
-    score = filter_count.public_works_count unless score
+    score = taggings_count unless score
     name.three_letter_sections.each do |section|
       $redis.zadd("autocomplete_tag_#{type.downcase}_#{section}", score, name)
     end
@@ -371,12 +371,17 @@ class Tag < ActiveRecord::Base
     # fandom sets are too small to bother breaking up
     # we're just getting ALL the tags in the set(s) for the fandom(s) and then manually matching
     results = []
-    fandom.split(',').each do |single_fandom|
-      results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(/#{search_param}/i)}
+    fandoms = fandom.is_a?(Array) ? fandom : fandom.split(',')
+    fandoms.each do |single_fandom|
+      if search_param.blank?
+        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
+      else
+        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(/#{search_param}/i)}
+      end
     end
-    if fallback && results.empty?
+    if fallback && results.empty? && search_param.length >= 3
       # do a standard tag lookup instead
-      redis_tag_lookup(search_param, tag_type)
+      Tag.redis_lookup(search_param, tag_type)
     else
       results
     end

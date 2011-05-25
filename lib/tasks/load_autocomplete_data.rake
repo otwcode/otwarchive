@@ -40,9 +40,11 @@ namespace :autocomplete do
   
   desc "Reload tag data into Redis for autocomplete"
   task(:reload_autocomplete_tag_data => :environment) do
-    Tag::VISIBLE.each do |type|
-      type.classify.constantize.visible_to_all_with_count.includes(:parents).each do |tag|
-        tag.add_to_redis(tag.count)
+    (Tag::TYPES - ['Banned']).each do |type|
+      query = type.constantize.canonical
+      query = query.includes(:parents) if type == "Character" || type == "Relationship"
+      query.each do |tag|
+        tag.add_to_redis
       end
     end    
   end
