@@ -7,8 +7,10 @@
 	box-shadow: 1px 3px 5px rgba(0,0,0,0.5)
 	}
 .autocomplete input, .autocomplete ul li, .ui-autocomplete ul li {
+	width:95%;
 	display: block;
 	padding: 0.125em;
+	margin: 0.25em auto auto;
 	}
 .autocomplete ul li:hover, li.selected, .ui-autocomplete ul li a:hover {
 	background: url(/images/header-red.png) top left #900; 
@@ -28,5 +30,8 @@
 	-moz-border-radius:0.875em;
 	border-radius:0.875em;
 }
+.autocomplete .notice {
+	font-size:0.875em;
+	}
 
 

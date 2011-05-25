@@ -51,7 +51,8 @@ jQuery(function($){
         preventDuplicates: true,
         tokenLimit: self.attr('autocomplete_token_limit'),
         liveParams: self.attr('autocomplete_live_params'),
-        makeSortable: self.attr('autocomplete_sortable')
+        makeSortable: self.attr('autocomplete_sortable'),
+		noCache: self.attr('autocomplete_no_cache')
     });
   });
 });

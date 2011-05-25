@@ -7,6 +7,14 @@ class AutocompleteController < ApplicationController
   skip_before_filter :set_redirects
   skip_before_filter :sanitize_params # can we dare!
 
+  before_filter :require_term, :except => [:tag_in_fandom, :relationship_in_fandom, :character_in_fandom]
+  
+  def require_term
+    if params[:term].blank?
+      flash[:error] = ts("What were you trying to autocomplete?")
+      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+    end
+  end
 
   # ACTIONS GO HERE
   
@@ -52,12 +60,39 @@ class AutocompleteController < ApplicationController
     render_redis_output(redis_fandom_tag_lookup(params[:term], params[:type], params[:fandom], params[:fallback] || true)) 
   end
   # duplicates of tag_in_fandom
-  def character_in_fandom; render_redis_output(redis_fandom_tag_lookup(params[:term], "character", params[:fandom], params[:fallback] || true)); end
-  def relationship_in_fandom; render_redis_output(redis_fandom_tag_lookup(params[:term], "relationship", params[:fandom], params[:fallback] || true)); end
-  
+  def character_in_fandom; render_redis_output(params[:term], Tag.redis_fandom_lookup(params[:term], "character", params[:fandom], params[:fallback] || true)); end
+  def relationship_in_fandom; render_redis_output(params[:term], Tag.redis_fandom_lookup(params[:term], "relationship", params[:fandom], params[:fallback] || true)); end
   
 
-  # find people signed up for a challenge
+  # noncanonical tags still use db
+  def noncanonical_tag
+    search_param = params[:term]
+    tag_class = params[:type].classify.constantize
+    render_output(tag_class.by_popularity
+                      .where(["canonical = 0 AND name LIKE ?",
+                              '%' + search_param + '%']).limit(10).map(&:name))
+  end
+
+  
+  # more-specific autocompletes should be added below here when they can't be avoided
+  
+  # For creating collections, autocomplete the name of a parent collection owned by the user only
+  def collection_parent_name
+    render_output(current_user.maintained_collections.top_level.with_name_like(params[:term]).map(&:name).sort)
+  end
+
+  # for looking up existing urls for external works to avoid duplication 
+  def external_work
+    render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).map(&:url))    
+  end
+  
+  # encodings for importing
+  def encoding
+    encodings = Encoding.name_list.select {|e| e.match(/#{params[:term]}/i)}
+    render_output(encodings)
+  end
+
+  # people signed up for a challenge
   def challenge_participants
     search_param = params[:term]
     collection_id = params[:collection_id]
@@ -66,42 +101,6 @@ class AutocompleteController < ApplicationController
                             '%' + search_param + '%', collection_id]).map(&:byline))
   end
 
-  # works for any tag class where what you want to return are the names
-  def noncanonical_tag_finder(tag_class, search_param)
-    if search_param
-      render_output(tag_class.by_popularity
-                      .where(["canonical = 0 AND name LIKE ?",
-                              '%' + search_param + '%']).limit(10).map(&:name))
-    end
-  end
-
-  def collection_parent_name
-    render_output(current_user.maintained_collections.top_level.with_name_like(params[:collection_parent_name]).map(&:name).sort)
-  end
-
-  def collection_filters_title
-    unless params[:collection_filters_title].blank?
-      render_output(Collection.where(["parent_id IS NULL AND title LIKE ?", '%' + params[:collection_filters_title] + '%']).limit(10).order(:title).map(&:title))    
-    end
-  end
-
-  def external_work_url
-    unless params[:external_work_url].blank?
-      render_output(ExternalWork.where(["url LIKE ?", '%' + params[:external_work_url] + '%']).limit(10).order(:url).map(&:url))    
-    end    
-  end
-  
-  def bookmark_external_url
-    unless params[:bookmark_external_url].blank?
-      render_output(ExternalWork.where(["url LIKE ?", '%' + params[:bookmark_external_url] + '%']).limit(10).order(:url).map(&:url))    
-    end    
-  end
-  
-  # encodings for importing
-  def encoding
-    encodings = Encoding.name_list + Encoding.name_list.map {|e| e.downcase}
-    set_finder(params[:term], encodings)              
-  end
   
   
 private
@@ -112,7 +111,7 @@ private
 
   def render_output(result_strings)
     if result_strings.first.is_a?(String)
-      respond_with(result_strings.map {|str| {:id => str, :name => str, :label => str, :value => str}})
+      respond_with(result_strings.map {|str| {:id => str, :name => str}})
     else
       respond_with(result_strings)
     end
@@ -134,31 +133,5 @@ private
     results[0..limit]
   end
 
-  
-public
-  
-  ###### all the field-specific methods go here 
-  
-  # tag wrangling finders
-  def tag_syn_string
-    tag_finder(params[:type].constantize, params[:tag_syn_string])
-  end
-
-  def tag_merger_string
-    noncanonical_tag_finder(params[:type].constantize, params[:tag_merger_string])
-  end
-  
-  def tag_media_string
-    tag_finder(Media, params[:tag_media_string])
-  end 
-  
-  def tag_meta_tag_string
-    tag_finder(params[:type].constantize, params[:tag_meta_tag_string])
-  end
-  
-  def tag_sub_tag_string
-    tag_finder(params[:type].constantize, params[:tag_sub_tag_string])
-  end
-  
 end
 

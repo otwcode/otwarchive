@@ -31,7 +31,8 @@ var DEFAULT_SETTINGS = {
     animateDropdown: true,
     onResult: null,
     onAdd: null,
-    onDelete: null
+    onDelete: null,
+	noCache: false,
 };
 
 // Default classes to use when theming
@@ -769,8 +770,10 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Do the actual search
     function run_search(query) {
-        var cached_results = cache.get(query);
-        if(cached_results) {
+		if(!settings.noCache) {
+        	var cached_results = cache.get(query);			
+		}
+        if(!settings.noCache && cached_results) {
             populate_dropdown(query, cached_results);
         } else {
             // Are we doing an ajax search or local data search?
@@ -797,7 +800,14 @@ $.TokenList = function (input, url_or_data, settings) {
                     $.each(live_param_fields, function (index, value) {
                         var kv = value.split("=");
                         var id_to_get = "#" + kv[1];
-                        ajax_params.data[kv[0]] = $(id_to_get).val();
+                        var serialized_contents = $(id_to_get).serialize();
+                        if(serialized_contents){
+                            ajax_params.data[kv[0]] = [];
+                            var serialized_elements = serialized_contents.split("&");                            
+                            serialized_elements.each(function(serialized_element){
+                               ajax_params.data[kv[0]].push(serialized_element.split("=")[1]);
+                            });
+                        }
                     });
                 }
 
