@@ -21,9 +21,9 @@
     <dt><%= ew.label :url, ts("URL") %>:</dt>
     <dd>
       <% if !params[:url_from_external].blank? %>
-        <%= ew.text_field :url, autocomplete_options('bookmark_external_url', :autocomplete_token_limit => 1, :value => params[:url_from_external]) %>
+        <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1, :value => params[:url_from_external]) %>
       <% else %>
-        <%= ew.text_field :url, autocomplete_options('bookmark_external_url', :autocomplete_token_limit => 1) %>
+        <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1) %>
       <% end %>
 	    <%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'}, :with => 'external_url', :on => 'blur' %>
 	    <%= hidden_field 'fetched', :value => '' %>
