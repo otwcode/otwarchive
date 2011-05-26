@@ -18,6 +18,11 @@ When /^I set up the collection "([^\"]*)"$/ do |title|
   fill_in("collection_title", :with => title)
 end
 
+When /^I set up the collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
+  visit new_collection_url
+  fill_in("collection_name", :with => name)
+  fill_in("collection_title", :with => title)
+end
 
 When /^I create the collection "([^\"]*)"$/ do |title|
   When %{I set up the collection "#{title}"}
