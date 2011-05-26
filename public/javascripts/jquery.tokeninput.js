@@ -32,7 +32,7 @@ var DEFAULT_SETTINGS = {
     onResult: null,
     onAdd: null,
     onDelete: null,
-	noCache: false,
+  noCache: false,
 };
 
 // Default classes to use when theming
@@ -41,7 +41,7 @@ var DEFAULT_CLASSES = {
     token: "added tag",
     tokenDelete: "delete",
     selectedToken: "selected added tag",
-    highlightedToken: "higlighted",
+    highlightedToken: "highlighted",
     dropdown: "autocomplete dropdown",
     dropdownItem: "even",
     dropdownItem2: "odd",
@@ -770,9 +770,9 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Do the actual search
     function run_search(query) {
-		if(!settings.noCache) {
-        	var cached_results = cache.get(query);			
-		}
+    if(!settings.noCache) {
+          var cached_results = cache.get(query);      
+    }
         if(!settings.noCache && cached_results) {
             populate_dropdown(query, cached_results);
         } else {
@@ -824,7 +824,9 @@ $.TokenList = function (input, url_or_data, settings) {
                   if($.isFunction(settings.onResult)) {
                       results = settings.onResult.call(hidden_input, results);
                   }
-                  cache.add(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
+		          if(!settings.noCache) {
+		              cache.add(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
+		          }
 
                   // only populate the dropdown if the results are associated with the active search query
                   if(input_box.val().toLowerCase() === query) {

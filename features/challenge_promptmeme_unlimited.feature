@@ -28,7 +28,7 @@ Feature: Prompt Meme Challenge
     And I follow "Sign Up"
     And I check "challenge_signup_requests_attributes_0_fandom_54"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John"
-  Then I should find "John Sheppard" within "div.auto_complete"
+  Then I should find "John Sheppard" within ".autocomplete"
   
   # check the autocomplete is working for the single prompt add form
   
@@ -38,7 +38,7 @@ Feature: Prompt Meme Challenge
   When I follow "Add another prompt"
   When I check "challenge_signup_requests_attributes_2_fandom_54"
     And I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_character_tagnames" with "John"
-  Then I should find "John Sheppard" within "div.auto_complete"
+  Then I should find "John Sheppard" within ".autocomplete"
 
   Scenario: Create a prompt meme for a large challenge like bigger kink memes
 
