@@ -25,6 +25,7 @@
         <% unless @skin.foreground_color.blank? %><dt>Foreground color</dt><dd><%= @skin.foreground_color %><% end  %>
         <% if @skin.base_em %><dt>Relative font size</dt><dd><%= @skin.base_em %><% end  %>
         <% if @skin.paragraph_margin %><dt>Paragraph margin</dt><dd><%= @skin.paragraph_margin %><% end  %>
+        <% unless @skin.headercolor.blank? %><dt>Header color</dt><dd><%= @skin.headercolor %><% end  %>
       </dl>
     <% end %>
   </div>

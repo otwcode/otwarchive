@@ -9,20 +9,14 @@
     <dt><%= f.label :description, ts('Description') %></dt>
     <dd><%= f.text_field :description %></dd>
 
-    <dt>
-      <%= f.label :margin, ts('Margin width (%)') %>
-    </dt>
+    <dt><%= f.label :margin, ts('Margin width (%)') %></dt>
     <dd><%= f.text_field :margin %> <%= link_to_help('skins-wizard-margin') %></dd>
 
-    <dt>
-      <%= f.label :font, ts("Font family") %>
-    </dt>
-    <dd>
-      <%= f.text_field :font %> <%= link_to_help('skins-wizard-font') %>
-    </dd>
+    <dt><%= f.label :font, ts("Font family") %></dt>
+    <dd><%= f.text_field :font %> <%= link_to_help('skins-wizard-font') %></dd>
   
     <dt>
-      <%= f.label :background_color, t('background_color', :default => 'Background color (name or hex code)') %>
+      <%= f.label :background_color, ts('Background color (name or hex code)') %>
       <p><%= t('background_color_default', :default => 'default: #FFFEF9') %></p>
     </dt>
     <dd>
@@ -32,7 +26,7 @@
   
     <dt>
       <%= f.label :foreground_color, t('foreground_color', :default => 'Foreground color (name or hex code)') %>
-      <p><%=t('foreground_color_default', :default => 'default: #222222') %></p>
+      <p><%=ts('default: #222222') %></p>
     </dt>
     <dd>
       <%= f.text_field :foreground_color %>
@@ -50,6 +44,9 @@
       <p><%=ts('default: 1.5') %></p>
     </dt>
     <dd><%= f.text_field :paragraph_margin %></dd>
+    
+    <dt><%= f.label :headercolor, ts('Header color') %></dt>
+    <dd><%= f.text_field :headercolor %></dd>
     
     <%= hidden_field_tag "wizard", true %>
     
