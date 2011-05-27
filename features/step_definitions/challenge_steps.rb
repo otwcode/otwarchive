@@ -35,9 +35,23 @@ Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|
     And %{I select "Gift Exchange" from "challenge_type"}
   click_button("Submit")
 end
+
+Given /^I have set up the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
+  Given "I have standard challenge tags setup"
+    And %{I am logged in as "mod1"}
+    And %{I set up the collection "#{challengename}" with name "#{name}"}
+    And %{I select "Gift Exchange" from "challenge_type"}
+  click_button("Submit")
+end
     
 Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
   Given %{I have set up the gift exchange "#{challengename}"}
+  When "I fill in gift exchange challenge options"
+    click_button("Submit")
+end
+
+Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
+  Given %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   When "I fill in gift exchange challenge options"
     click_button("Submit")
 end
@@ -366,6 +380,22 @@ When /^I delete my signup for "([^\"]*)"$/ do |title|
   When %{I follow "Your Prompts"}
   When %{I follow "Delete"}
   Then %{I should see "Challenge signup was deleted."}
+end
+
+When /^I start to fulfill my assignment$/ do
+  When %{I am on my user page}
+  When %{I follow "My Assignments ("}
+  When %{I follow "Post To Fulfill"}
+    And %{I fill in "Work Title" with "Fulfilled Story"}
+    And %{I select "Not Rated" from "Rating"}
+    And %{I check "No Archive Warnings Apply"}
+    And %{I fill in "content" with "This is a really cool story about Final Fantasy X"}
+end
+
+When /^I fulfill my assignment$/ do
+  When %{I start to fulfill my assignment}
+  When %{I press "Preview"}
+    And %{I press "Post"}
 end
 
 ### THEN

@@ -165,3 +165,22 @@ Feature: Gift Exchange Challenge
     And the email should link to "Awesome Gift Exchange" collection's url
       And the email should link to myname1's user url
       And the email should link to the works tagged "Stargate Atlantis"
+      
+  Scenario: User signs up for two gift exchanges at once
+  
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+    And I have generated matches for "Awesome Gift Exchange"
+    And I have sent assignments for "Awesome Gift Exchange"
+  Given I have created the gift exchange "Second Challenge" with name "testcoll2"
+    And I have opened signup for the gift exchange "Second Challenge"
+    And everyone has signed up for the gift exchange "Second Challenge"
+    And I have generated matches for "Second Challenge"
+    And I have sent assignments for "Second Challenge"
+  When I am logged in as "myname1"
+    And I start to fulfill my assignment
+    # This is in fact a bug - only one of them should be checked
+  Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
+    And the "Second Challenge (myname3)" checkbox should be checked
