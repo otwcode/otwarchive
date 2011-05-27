@@ -10,6 +10,12 @@ Given /^mod1 lives in Alaska$/ do
   Then %{I should see "Your preferences were successfully updated."}
 end
 
+Given /^I have a collection "([^\"]*)"$/ do |title|
+  When %{I am logged in as "moderator"}
+  When "I create the collection \"#{title}\""
+  When "I am logged out"
+end
+
 ### WHEN
 
 When /^I set up the collection "([^\"]*)"$/ do |title|
@@ -32,6 +38,14 @@ end
 
 When /^I sort by fandom$/ do
   When "I follow \"Sort by fandom\""
+end
+
+When /^I reveal works for "([^\"]*)"$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Settings"}
+  uncheck "Is this collection currently unrevealed?"
+  click_button "Submit"
 end
 
 ### THEN
