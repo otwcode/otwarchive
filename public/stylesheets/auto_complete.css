@@ -12,7 +12,7 @@
 	padding: 0.125em;
 	margin: 0.25em auto auto;
 	}
-.autocomplete ul li:hover, li.selected, li.highlighted {
+.autocomplete ul li:hover, li.selected {
 	background: url(/images/header-red.png) top left #900; 
 	color: #fff;
 	}

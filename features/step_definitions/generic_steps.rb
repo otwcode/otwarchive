@@ -117,6 +117,10 @@ Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
     end
 end
 
+When /^I submit$/ do
+  %{When I press "Submit"}
+end
+
 # we want greedy matching for this one so we can handle tags that have attributes in them
 Then /^I should see the text with tags "(.*)"$/ do |text|
   page.body.should =~ /#{text}/m

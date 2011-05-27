@@ -38,6 +38,7 @@ var DEFAULT_SETTINGS = {
 // Default classes to use when theming
 var DEFAULT_CLASSES = {
     tokenList: "autocomplete",
+	sortable: "sortable",
     token: "added tag",
     tokenDelete: "delete",
     selectedToken: "selected added tag",
@@ -152,6 +153,8 @@ $.TokenList = function (input, url_or_data, settings) {
         })
         .blur(function () {
             hide_dropdown();
+            li_data = input_box.val();
+            populate_from_value();
         })
         //.bind("keyup keydown blur update", resize_input)
         .keydown(function (event) {
@@ -288,6 +291,10 @@ $.TokenList = function (input, url_or_data, settings) {
         })
         .insertBefore(hidden_input);
 
+	if(settings.makeSortable) {
+		token_list.addClass(settings.classes.sortable);
+	}
+
     // The token holding the input box
     var input_token = $("<li />")
         .addClass(settings.classes.inputToken)
@@ -315,38 +322,32 @@ $.TokenList = function (input, url_or_data, settings) {
     //         whiteSpace: "nowrap"
     //     });
         
-    // True during dragging process    
-    var dragging = false;
-    
-    // the dragged Token
-    var dragToken;
-    
-    // the destination Token
-    var dragDestination;
-
-    // Pre-populate list if items exist
-    var li_data = settings.prePopulate || $(input).val()
+    // Save data to pre-populate list with
+    var li_data = $(input).val() || settings.prePopulate
     if(settings.processPrePopulate && $.isFunction(settings.onResult)) {
         li_data = settings.onResult.call(hidden_input, li_data);
     }    
+
+	// clear the input
+    $(input).val("");
+    hidden_input.val("");
+    input_box.val("");
+
+	// pre-populate the list
     if(li_data && li_data.length) {
         if(typeof(li_data) === "string") {
-            $.each(li_data.split(settings.tokenDelimiter), function (index, value) {
-                insert_token(value, value);
-            });
+			insert_token(li_data, li_data);
         } else {
             $.each(li_data, function (index, value) {
                 insert_token(value.id, value.name);
             });            
         }
     }
-    $(input).val("");
-    hidden_input.val("");
-    input_box.val("");
+
     // Check the token limit
     if(settings.tokenLimit !== null && token_count >= settings.tokenLimit) {
         input_box.hide();
-    }
+    }        
     
     //
     // Private functions
@@ -371,12 +372,21 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Inner function to a token to the list
     function insert_token(id, value) {
+        if(value.indexOf(settings.tokenDelimiter) >= 0){
+            $.each(value.split(settings.tokenDelimiter), function (index, subvalue) {
+                insert_token(subvalue, subvalue);
+            });
+            return;
+        }     
+        
         var this_token = $("<li>"+ escapeHTML(value) +" </li>")
           .addClass(settings.classes.token)
           .insertBefore(input_token);
           
           if(settings.makeSortable) {
-            addDragFunctionality(this_token);
+			// use the jqueryUI Sortable method
+			// this_token.sortable();
+			// this_token.addClass("ui-state-default");
           };
 
         // The 'delete token' button
@@ -464,90 +474,7 @@ $.TokenList = function (input, url_or_data, settings) {
             callback.call(hidden_input,li_data);
         }
     }
-    
-    
-    //
-    //  Drag and Drop  Functionality
-    //
-    function addDragFunctionality(token) {
-      token.bind('mousedown',function(){ 
-        var token = $(this)
-        dragToken = token;
-        token.addClass(settings.classes.selectedToken);
-        dragging= true;
-        $(document).one('mouseup',function(){
-          token.removeClass(settings.classes.selectedToken);
-          dragging=false;
-          move_token(token, dragDestination);
-          reindex_results();
-        });
-        return false;
-      })
-      .bind('mouseover',function(){
-        if(!dragging) return;
-        dragDestination = $(this);        
-        if(is_after(dragToken, dragDestination)) {
-          dragDestination.addClass(settings.classes.insertAfter);
-        } else {
-          dragDestination.addClass(settings.classes.insertBefore);
-        };
-      }).bind('mouseout', function(){
-        if(!dragging) return;
-        $(this).removeClass(settings.classes.insertBefore);
-        $(this).removeClass(settings.classes.insertAfter);
-      }).bind('mouseup', function(){
-        $(this).removeClass(settings.classes.insertBefore);
-        $(this).removeClass(settings.classes.insertAfter);
-      });
-    }
-    
-    
-    function move_token(token, destinationToken) {
-      if(token.get(0) == destinationToken.get(0)) return;
-
-      if(is_after(token, destinationToken)) {
-        token.insertAfter(destinationToken);
-      } else {
-        token.insertBefore(destinationToken);
-      }
-       
-      
-    }
-    
-    function is_after(first, last) {
-      index_tokens();
-      first = $.data(first.get(0), "tokeninput")
-      last = $.data(last.get(0), "tokeninput")
-      return last.index > first.index 
-    }
-    
-    
-    function index_tokens() {
-      var i = 0;
-      token_list.find('li').each(function(){
-        var data = $.data(this, "tokeninput");
-        if(data){ data.index = i; }
-        i++;
-      });
-    }
-    
-    function reindex_results() {
-      var ids = [], tokens = [];
-      token_list.find('li').each(function(){
-        var data = $.data(this, "tokeninput");
-        if(data){  
-           ids.push(data.id); 
-           tokens.push(data);
-        };
-      });
-      saved_tokens = tokens;
-      hidden_input.val(ids.join(settings.tokenDelimiter));
-    }
-    
-    
-    // end Drag and Drop Functionality
-    
-    
+        
 
     // Select a token in the token list
     function select_token(token) {

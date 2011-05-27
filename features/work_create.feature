@@ -258,16 +258,18 @@ Feature: Create Works
       And I should see "Chapter"
       And I should see "1/?"
 
-  Scenario: test for integer title
+  Scenario: test for integer title and multiple fandoms
     Given basic tags
-    When I am logged in as "newbie" with password "password"
+      And I am logged in
       And I go to the new work page
-      And I fill in "Fandoms" with "Supernatural"
+      And I fill in "Fandoms" with "Supernatural, Smallville"
       And I fill in "Work Title" with "02138"
       And I fill in "content" with "Bad things happen, etc."
     When I press "Post without preview"
     Then I should see "Work was successfully posted."
       And I should see "Bad things happen, etc."
+      And I should see "Supernatural"
+      And I should see "Smallville"
       And I should see "02138" within "h2.title"
 
   Scenario: test for < and > in title

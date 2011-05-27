@@ -191,3 +191,25 @@ Then /^the collection item autocomplete field should list matching collections$/
   And %{I should see "really great" in the autocomplete}
   And %{I should not see "awesome" in the autocomplete}
 end
+
+Given /^a gift exchange for testing autocomplete$/ do
+	Given %{I have created the gift exchange "autocomplete"}
+end
+
+When /^I edit the gift exchange for testing autocomplete$/ do
+  visit(edit_collection_gift_exchange_path(Collection.find_by_name("autocomplete")))
+end
+
+When /^I submit values in the tag autocomplete fields$/ do
+  fill_in("Fandoms", :with => "Supernatural, Smallville")
+  fill_in("Characters", :with => "Clark Kent, Lex Luthor, Dean Winchester")
+  When %{I submit}
+end
+
+Then /^the tag autocomplete fields should have the entered values$/ do 
+  Then %{I should see "Supernatural" in the autocomplete}
+    And %{I should see "Smallville" in the autocomplete}
+    And %{I should see "Clark Kent" in the autocomplete}
+    And %{I should see "Lex Luthor" in the autocomplete}
+    And %{I should see "Dean Winchester" in the autocomplete}
+end

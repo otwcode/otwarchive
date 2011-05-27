@@ -34,6 +34,7 @@ Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|
   click_button("Submit")
 end
 
+<<<<<<< HEAD
 Given /^I have set up the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   Given "I have standard challenge tags setup"
     And %{I am logged in as "mod1"}
@@ -42,6 +43,22 @@ Given /^I have set up the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |ch
   click_button("Submit")
 end
     
+=======
+When /^I fill in gift exchange challenge options$/ do
+    select("2011", :from => "gift_exchange_signups_open_at_1i")
+    select("2011", :from => "gift_exchange_signups_close_at_1i")
+    select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
+    fill_in("Fandoms", :with => "Stargate SG-1, Stargate Atlantis")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
+    fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", :with => "1")
+    fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", :with => "2")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_required", :with => "1")
+    fill_in("gift_exchange_offer_restriction_attributes_fandom_num_allowed", :with => "1")
+    fill_in("gift_exchange_offer_restriction_attributes_freeform_num_allowed", :with => "2")
+    select("1", :from => "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
+end
+
+>>>>>>> Got autocomplete working in gift exchange settings and fixed a few other bugs; removed the bad drag-and-drop functionality.
 Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
   Given %{I have set up the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
@@ -49,8 +66,15 @@ end
 Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   Given %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   When "I fill in gift exchange challenge options"
+<<<<<<< HEAD
     click_button("Submit")
   Then %{I should see "Challenge was successfully created"} 
+=======
+  click_button("Submit")
+  Then %{I should see "Challenge was successfully created"}  
+  When %{I follow "Challenge Settings"}
+  Then %{I should see "Stargate" in the autocomplete}
+>>>>>>> Got autocomplete working in gift exchange settings and fixed a few other bugs; removed the bad drag-and-drop functionality.
 end
 
 Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
@@ -194,6 +218,7 @@ When /^I fill in prompt meme challenge options$/ do
     And %{I check "Signup open?"}
 end
 
+<<<<<<< HEAD
 When /^I fill in gift exchange challenge options$/ do
     select("2010", :from => "gift_exchange_signups_open_at_1i")
     select("2013", :from => "gift_exchange_signups_close_at_1i")
@@ -208,6 +233,8 @@ When /^I fill in gift exchange challenge options$/ do
     select("1", :from => "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
 end
 
+=======
+>>>>>>> Got autocomplete working in gift exchange settings and fixed a few other bugs; removed the bad drag-and-drop functionality.
 When /^I change the challenge timezone to Alaska$/ do
   When %{I follow "Challenge Settings"}
     And %{I select "(GMT-09:00) Alaska" from "prompt_meme_time_zone"}
