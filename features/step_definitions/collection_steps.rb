@@ -54,4 +54,12 @@ Then /^Battle 12 collection exists$/ do
   When "I go to the collections page"
   Then %{I should see "Collections in the "}
     And %{I should see "Battle 12"}
+    And %{I should see "(Open, Unmoderated, Unrevealed, Anonymous, Prompt Meme Challenge)"}
+end
+
+Then /^My Gift Exchange collection exists$/ do
+  When "I go to the collections page"
+  Then %{I should see "Collections in the "}
+    And %{I should see "My Gift Exchange"}
+    And %{I should see "(Open, Unmoderated, Gift Exchange Challenge)"}
 end

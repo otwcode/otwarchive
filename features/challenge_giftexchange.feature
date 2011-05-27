@@ -10,18 +10,14 @@ Feature: Gift Exchange Challenge
   When I set up the collection "My Gift Exchange" 
     And I select "Gift Exchange" from "challenge_type"
     And I press "Submit"
-  Then I should see "Collection was successfully created"
-    And I should see "Setting Up The My Gift Exchange Gift Exchange"
-    And I should see gift exchange options
+  Then My Gift Exchange gift exchange should be correctly created
 
   Scenario: Enter settings for a gift exchange
   Given I am logged in as "mod1"
     And I have set up the gift exchange "My Gift Exchange"
   When I fill in gift exchange challenge options
     And I press "Submit"
-  Then I should see "Challenge was successfully created"
-  When I follow "Profile"
-  Then I should see "2011" within ".collection.meta"
+  Then My Gift Exchange gift exchange should be fully created
 
   Scenario: Open signup in a gift exchange
   Given I have created the gift exchange "My Gift Exchange"

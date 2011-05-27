@@ -501,6 +501,22 @@ Then /^Battle 12 prompt meme should be correctly created$/ do
   Then "Battle 12 collection exists"
 end
 
+Then /^My Gift Exchange gift exchange should be correctly created$/ do
+  Then %{I should see "Collection was successfully created"}
+  Then %{I should see "Setting Up The My Gift Exchange Gift Exchange"}
+  Then %{I should see "Offer Settings"}
+  Then %{I should see "Request Settings"}
+  Then %{I should see "If you plan to use automated matching"} 
+  Then %{I should see "Allow Any"}
+end
+
+Then /^My Gift Exchange gift exchange should be fully created$/ do
+  Then %{I should see "Challenge was successfully created"}
+  When %{I follow "Profile"}
+  Then %{I should see "2011" within ".collection.meta"}
+  Then "My Gift Exchange collection exists"
+end
+
 Then /^my claim should be fulfilled$/ do
   Then %{I should see "Work was successfully posted"}
     And %{I should see "Fandom:"}
