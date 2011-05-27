@@ -348,7 +348,7 @@ module ApplicationHelper
   # option_name_method: a method that can be run on each individual option to get its pretty name for labelling
   #
   # See the prompt_form in challenge signups for example of usage
-  def options_section(form, fieldname, id, options, options_checked_method, option_name_method="name", option_value_method="id")
+  def options_section(form, fieldname, id, options, options_checked_method, option_name_method="name", option_value_method="id", option_disabled)
     size = options.size
     options_id = "#{id}_options"
     
@@ -358,8 +358,11 @@ module ApplicationHelper
       checkbox_name = option.send(option_name_method)
       checkbox_value = option.send(option_value_method)
       checkbox_and_label = label_tag checkbox_id do 
-        check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id) +
-        checkbox_name
+        if option_disabled == "false"
+          check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id) + checkbox_name
+        else
+          check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id, :disabled => "true") + checkbox_name
+        end
       end
       content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
     end.join("\n").html_safe
