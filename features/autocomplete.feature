@@ -2,12 +2,13 @@ Feature: Display autocomplete for tags
   In order to facilitate posting
   I should be getting autocompletes for my tags
 
-Scenario: Only matching canonical tags should appear in autocomplete
+Scenario: Only matching canonical tags should appear in autocomplete, and searching for the same data twice should produce same results
 	Given I am logged in
 		And a set of tags for testing autocomplete
    	And I go to the new work page
   Then the tag autocomplete fields should list only matching canonical tags
-
+	Then the tag autocomplete fields should list only matching canonical tags
+  
 Scenario: For fandom-specific autocomplete, if a fandom is entered then only characters/relationships within the fandom should appear in autocomplete
 	Given I am logged in
 		And a set of tags for testing autocomplete
@@ -38,10 +39,3 @@ Scenario: Pseud and collection autocompletes should work
   Then the coauthor autocomplete field should list matching users
     And the gift recipient autocomplete field should list matching users
     And the collection item autocomplete field should list matching collections
-
-Scenario: Searching for the same data should produce the same results
-  Given I am logged in
-    And a set of tags for testing autocomplete
-    And I go to the new work page
-  Then the tag autocomplete fields should list only matching canonical tags
-  Then the tag autocomplete fields should list only matching canonical tags

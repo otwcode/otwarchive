@@ -67,6 +67,10 @@ When /^I specify a fandom and enter text in the relationship autocomplete field$
     And %{I enter text in the "Relationships" autocomplete field}
 end
 
+When /^I specify two fandoms and enter text in the character autocomplete field$/ do
+  When %{I fill in "Fandoms" with "Supernatural, Battlestar Galactica"}
+    And %{I enter text in the "Characters" autocomplete field}
+end
 
 ## Here's where we create the steps defining which tags should appear/not appear 
 ## based on the set of tags and the data entered
@@ -100,6 +104,12 @@ end
 Then /^I should only see matching canonical character tags in the specified fandom in the autocomplete$/ do
   Then %{I should see "Ellen Harvelle" in the autocomplete}
   	And %{I should not see "Ellen Tigh" in the autocomplete}
+  	And %{I should not see "Ellen Somebody" in the autocomplete}
+end
+
+Then /^I should see matching canonical character tags from both fandoms in the autocomplete$/ do
+  Then %{I should see "Ellen Harvelle" in the autocomplete}
+  	And %{I should see "Ellen Tigh" in the autocomplete}
   	And %{I should not see "Ellen Somebody" in the autocomplete}
 end
 
@@ -138,6 +148,8 @@ Then /^the fandom-specific tag autocomplete fields should list only fandom-speci
 	Then %{I should only see matching canonical character tags in the specified fandom in the autocomplete}
 	When %{I specify a fandom and enter text in the relationship autocomplete field}
 	Then %{I should only see matching canonical relationship tags in the specified fandom in the autocomplete}
+	When %{I specify two fandoms and enter text in the character autocomplete field}
+	Then %{I should see matching canonical character tags from both fandoms in the autocomplete}
 end
 
 Then /^the external url autocomplete field should list the urls of existing external works$/ do

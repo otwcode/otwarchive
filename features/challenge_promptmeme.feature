@@ -385,6 +385,7 @@ Feature: Prompt Meme Challenge
     And I press "Preview"
     And I press "Post"
   When I view the work "Fulfilled Story"
+  Then show me the response
   Then I should see "Stargate Atlantis"
     And I should not see "Stargate SG-1"
   When I follow "Anonymous" within "p"

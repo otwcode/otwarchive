@@ -37,13 +37,4 @@ Feature: Search Tags
       And I press "Search tags"
     Then I should see "1 Found"
       And I should see "first last/someone else (0)"
-
-  Scenario: Search for and visit problematic tags
-    Given a canonical fandom "Die Drei ???"
-    When I am on the search tags page
-      And I fill in "tag_search" with "Die"
-      And I press "Search tags"
-    Then I should see "1 Found"
-      And I should see "Die Drei"
-    When I go to the works tagged "Die Drei ???"
-      Then I should see "Die Drei"
+		

@@ -58,6 +58,14 @@ When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
   fill_in "Password", :with => user.activation_code
 end
 
+Given /^I am logged in as a tag wrangler$/ do
+  Given "I am logged out"
+  username = "wrangler#{User.count + 1}"
+  Given %{I am logged in as "#{username}"}
+  user = User.find_by_login(username)
+  user.tag_wrangler = '1'
+end
+
 
 Given /^I am logged in as a random user$/ do
   Given "I am logged out"

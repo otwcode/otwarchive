@@ -5,7 +5,7 @@ Given /^I have no challenge assignments$/ do
 end
 
 Given /^I have standard challenge users$/ do
-  Given %{the users "mod1, myname1, myname2, myname3, myname4"}
+  Given %{the users "mod1, myname1, myname2, myname3, myname4"}  
 end
 
 Given /^I have standard challenge tags setup$/ do
@@ -43,15 +43,14 @@ Given /^I have set up the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |ch
 end
     
 Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
-  Given %{I have set up the gift exchange "#{challengename}"}
-  When "I fill in gift exchange challenge options"
-  click_button("Submit")
+  Given %{I have set up the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
 Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   Given %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   When "I fill in gift exchange challenge options"
     click_button("Submit")
+  Then %{I should see "Challenge was successfully created"} 
 end
 
 Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
