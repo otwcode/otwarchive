@@ -26,6 +26,16 @@ Feature: Prompt Meme Challenge
   When I go to the collections page
   Then I should see "Battle 12"
   
+  Scenario: Prompt meme is in list of open challenges
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  #When I go to "Battle 12" collection's page
+  #  And I follow "Profile"
+  #Then show me the page
+  When I view open challenges
+  Then I should see "Battle 12"
+  
   Scenario: User can see profile descriptions
   
   Given I have Battle 12 prompt meme fully set up
