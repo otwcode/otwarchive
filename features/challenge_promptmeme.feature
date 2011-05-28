@@ -72,8 +72,8 @@ Feature: Prompt Meme Challenge
   Then I should see "My Signups (1)"
   When I follow "My Signups (1)"
   Then I should see "Battle 12"
-    And I should see "Edit"
-    And I should see "Delete"
+  #  And I should see "Edit"
+  #  And I should see "Delete"
   
   Scenario: Sort prompts by date
   
@@ -144,7 +144,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
   When I delete the signup by "myname1"
   Then I should see "Challenge signup was deleted."
-    And "myname1" should be emailed
+  #  And "myname1" should be emailed
   
   Scenario: Mod deletes a prompt that doesn't fit the challenge rules
   # This needs javascript refactoring first, and to make a non-js version of editing individual prompts within signups

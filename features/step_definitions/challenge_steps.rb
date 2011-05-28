@@ -394,6 +394,7 @@ When /^I fulfill my assignment$/ do
   When %{I start to fulfill my assignment}
   When %{I press "Preview"}
     And %{I press "Post"}
+end
 
 When /^I delete my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
