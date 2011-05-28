@@ -3,11 +3,16 @@ When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
 end
 
 Then /^debug$/ do
-  debugger
+  breakpoint
+  0
 end
 
 Then /^show me the response$/ do
   puts page.body
+end
+
+Then /^show me the main content$/ do
+  puts "\n" + find("#main").node.inner_html
 end
 
 Given /^I wait (\d+) seconds?$/ do |number|

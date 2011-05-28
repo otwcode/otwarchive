@@ -20,7 +20,14 @@ Then /^I should see "([^\"]+)" in the autocomplete$/ do |string|
 end
 
 Then /^I should not see "([^\"]+)" in the autocomplete$/ do |string|
-  Then %{I should not find "#{string}" within ".autocomplete"}
+  Then %{I should not find "#{string.gsub(/\'/, '\'')}" within ".autocomplete"}
+end
+
+# this is needed for values like 'Allo 'Allo that can't be handled right 
+# by Nokogiri in the typical find
+# note: this might only work for the first autocomplete in a page D:
+Then /^the autocomplete value should be set to "([^"]*)"$/ do |string|
+  string == page.find("input.autocomplete").node['value']
 end
 
 # Define all values to be entered here depending on the fieldname

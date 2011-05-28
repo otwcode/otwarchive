@@ -1,6 +1,5 @@
 <fieldset class="preface profile">
-  <legend>Archive Skin Wizard</legend>
-  <h3>Archive Skin Wizard</h3>
+  <h3><%= ts("Archive Skin Wizard") %></h3>
 
   <dl>
     <dt><%= f.label :title, ts('Title') %></dt>
@@ -21,7 +20,6 @@
     </dt>
     <dd>
       <%= f.text_field :background_color %>
-      <%= autocomplete_text_field("skin_background_color", :methodname => "css_keyword", :no_comma => true) %>
     </dd>
   
     <dt>
@@ -30,7 +28,6 @@
     </dt>
     <dd>
       <%= f.text_field :foreground_color %>
-      <%= autocomplete_text_field("skin_foreground_color", :methodname => "css_keyword", :no_comma => true) %>
     </dd>
   
     <dt>

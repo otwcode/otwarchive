@@ -11,16 +11,16 @@ Feature: Prompt Meme Challenge
   When I set up Battle 12 promptmeme collection
   Then I should see "Setting Up The Battle 12 Prompt Meme"
   Then I should see prompt meme options
-
+  
   Scenario: Create a prompt meme
-
+  
   Given I am logged in as "mod1"
     And I have standard challenge tags setup
   When I create Battle 12 promptmeme
   Then Battle 12 prompt meme should be correctly created
   
   Scenario: User can see a prompt meme
-
+  
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I go to the collections page
@@ -55,7 +55,7 @@ Feature: Prompt Meme Challenge
     And I should see "Prompts (2)"
   
   Scenario: Sign up for a prompt meme and miss out some fields
-
+  
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for "Battle 12" with missing prompts
@@ -410,7 +410,7 @@ Feature: Prompt Meme Challenge
     And I follow "My Signups"
   # Then 14 should be the last signup in the table
   # Then show me the page
-
+  
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and sees the right boxes ticked
   
   Given I have Battle 12 prompt meme fully set up
@@ -468,7 +468,7 @@ Feature: Prompt Meme Challenge
 ##Completely deleting the collection, removed the collection and the prompt line from the story. As a user I can now again access "MY Signups" and "My Claims".
     
   Scenario: All the rest of the unrefactored stuff
-
+  
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
   When I am logged in as "myname4"
@@ -478,13 +478,13 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   
   # mod claims a prompt
-
+  
   When I am logged in as "mod1"
   When I claim a prompt from "Battle 12"
   Then I should see "New claim made."
   
   # mod can still see claims even though it's anonymous
-
+  
     And I should see "Unfulfilled Claims"
     And I should see "mod" within "#unfulfilled_claims"
     And I should see "myname4" within "#unfulfilled_claims"
@@ -542,9 +542,9 @@ Feature: Prompt Meme Challenge
   Then I should see "Claimed by: myname4"
     And I should see "Claimed by: mod1"
     And I should not see "Claimed by: (Anonymous)"
-
+  
   # users can't see claims
-
+  
   When I follow "Log out"
     And I am logged in as "myname4"
   When I go to "Battle 12" collection's page
@@ -556,9 +556,9 @@ Feature: Prompt Meme Challenge
     And I should see "Claimed by: (Anonymous)"
   
   # TODO: check that claims can't be viewed
-
+  
   # check that completed ficlet is unrevealed
-
+  
   When I view the work "Fulfilled Story-thing"
   Then I should not see "In response to a prompt by: myname4"
     And I should not see "Fandom: Stargate Atlantis"
@@ -567,9 +567,9 @@ Feature: Prompt Meme Challenge
     And I should not see "For myname4"
     And I should not see "Alternate Universe - Historical"
     And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
-
+  
   # make challenge revealed but still anon
-
+  
   When I am logged in as "mod1"
   When I go to "Battle 12" collection's page
     And I follow "Settings"
@@ -579,9 +579,9 @@ Feature: Prompt Meme Challenge
   # 2 stories are now revealed, so notify the prompters/recipients
     And 2 emails should be delivered
   
-
+  
   # check ficlet is visible but anon
-
+  
   When I am logged in as "myname4"
   When I view the work "Fulfilled Story-thing"
   Then I should see "In response to a prompt by: myname4"
@@ -591,9 +591,9 @@ Feature: Prompt Meme Challenge
     And I should see "For myname4"
     And I should not see "mod1" within ".byline"
     And I should see "Alternate Universe - Historical"
-
+  
   # make challenge un-anon
-
+  
   When I am logged in as "mod1"
   When I go to "Battle 12" collection's page
     And I follow "Settings"
@@ -602,9 +602,9 @@ Feature: Prompt Meme Challenge
   Then I should see "Collection was successfully updated"
   # TODO: Figure out if this is actually right, or if it's covered by the earlier 2 emails. Also, they shouldn't be anon any more
   Then 2 emails should be delivered
-
+  
   # user can now see claims
-
+  
   When I am logged in as "myname4"
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
@@ -618,12 +618,12 @@ Feature: Prompt Meme Challenge
     And I should not see "Claimed by: (Anonymous)"
     
   # user claims an anon prompt
-
+  
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
   When I press "Claim"
   Then I should see "New claim made."
-
+  
   # check that anon prompts are still anon on the claims index 
   
     And I should not see "myname2"

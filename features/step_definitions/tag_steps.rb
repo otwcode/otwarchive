@@ -67,6 +67,18 @@ Given /^a noncanonical (\w+) "([^\"]*)"$/ do |tag_type, tagname|
   t.save
 end
 
+Given /^I am logged in as a tag wrangler$/ do
+  Given "I am logged out"
+  username = "wrangler"
+  Given %{I am logged in as "#{username}"}
+  user = User.find_by_login(username)
+  user.tag_wrangler = '1'
+end
+
+Then /^I should see the tag wrangler listed as an editor of the tag$/ do
+  Then %{I should see "wrangler" within ".tag_edit"}
+end
+  
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
   tw = User.find_by_login(user)
   if tw.blank?
