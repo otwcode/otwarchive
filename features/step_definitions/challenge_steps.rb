@@ -563,3 +563,25 @@ end
 Then /^12 should be the last signup in the table$/ do
   Then "I should see the text with tags \"12</a></td> <td class=\"navigation\"> <!-- requires 'challenge_signup' local --> <ul class=\"navigation\" role=\"navigation\"> <!-- The edit and delete links shouldn't show on the index for a prompt meme --> </ul> </td> </tr> </table>\""
 end
+
+Then /^I should see the whole signup$/ do
+  page.should have_content("Request 1")
+  page.should have_content("Request 2")
+end
+
+Then /^I should just see request 1$/ do
+  page.should have_content("Prompt by myname1")
+  page.should have_content("Edit whole signup")
+  page.should have_content("Edit this prompt")
+  page.should have_content("Stargate Atlantis")
+  page.should have_content("Alternate Universe - Historical")
+  page.should have_no_content("Request 2")
+end
+
+Then /^I should see single prompt editing$/ do
+  page.should have_content("Submit a Prompt For Battle 12")
+  page.should have_content("Edit whole signup instead")
+  page.should have_content("Freeforms")
+  Then %{the "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" field should contain "Alternate Universe - Historical"}
+  page.should have_no_content("Just add one new prompt instead")
+end

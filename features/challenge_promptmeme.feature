@@ -81,12 +81,9 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I view my signup for "Battle 12"
-  Then I should see "Request 1"
-    And I should see "Request 2"
-  Then show me the page
+  Then I should see the whole signup
   When I follow "Request 1"
-  Then I should see "Request 1"
-    And I should not see "Request 2"
+  Then I should just see request 1
   
   Scenario: Edit individual prompt via signup show
   
@@ -95,8 +92,8 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   When I view my signup for "Battle 12"
   When I follow "Request 1"
-  When I follow "Edit"
-  Then show me the page
+  When I follow "Edit this prompt"
+  Then I should see single prompt editing
   
   Scenario: Edit individual prompt via signup edit
   
@@ -105,7 +102,8 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   When I edit my signup for "Battle 12"
   When I follow "Request 1"
-  Then show me the page
+  Then I should not see "Request 2"
+    And I should see "Edit whole signup instead"
   
   Scenario: Add one new prompt to existing signup
   
