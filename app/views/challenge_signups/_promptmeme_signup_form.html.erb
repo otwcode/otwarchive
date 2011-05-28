@@ -1,13 +1,13 @@
 <h2><%= ts("Submit a Prompt For %{title}", :title => @collection.title) %></h2>
 
-<!-- note for FRONT END
-The fields in the form frequently wrap around to a second line. 
-So if anyone can think of a better design for this, that would be awesome
--->
+<% # note for FRONT END
+  # The fields in the form frequently wrap around to a second line.
+  # So if anyone can think of a better design for this, that would be awesome %>
 
 <!-- descriptions-->
 <!-- /descriptions-->
 <!--subnavigation, sorting and actions-->
+<% unless params[:single_prompt] == "true" || controller.action_name == "edit" %>
 <ul class="navigation">
   <% if params[:single_prompt] == "true" %>
     <li>
@@ -23,6 +23,7 @@ So if anyone can think of a better design for this, that would be awesome
     </li>
   <% end %>
 </ul>
+<% end %>
 <!--/subnav-->
 
 <!--main content-->

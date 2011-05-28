@@ -20,7 +20,7 @@ Feature: Delete Works
     When I follow "All Hell Breaks Loose"
       And I follow "Delete"
     Then I should see "Your work All Hell Breaks Loose was deleted."
-      And 1 email should be delivered
+      And "newbie" should be emailed
       # TODO: Figure out why these steps aren't working even though the feature is fine
       # And the email should contain "All Hell Breaks Loose"
       #And the email should contain "Your story All Hell Breaks Loose was deleted at your request."

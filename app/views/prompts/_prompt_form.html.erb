@@ -1,16 +1,14 @@
 <!-- prompt form -->
 <div class="removeme">
-<!-- 
-CODE NOTES: 
-This is meant to be used as a nested form inside other forms, so that multiple prompts can be submitted within a single form. 
-It expects the local variables: 
-"form" for the prompt form 
-"is_offer" depending on if this is a request or offer
-"index" representing which prompt this is, if there are multiple prompts being submitted
-"edit_record" showing if this is editing an existing prompt or adding a new one
+<% # CODE NOTES: 
+  # This is meant to be used as a nested form inside other forms, so that multiple prompts can be submitted within a single form. 
+  # It expects the local variables: 
+  # "form" for the prompt form 
+  # "is_offer" depending on if this is a request or offer
+  # "index" representing which prompt this is, if there are multiple prompts being submitted
+  # "edit_record" showing if this is editing an existing prompt or adding a new one
 
-See the challenge_signup form for an example of how this is used. 
--->
+  # See the challenge_signup form for an example of how this is used. %>
 
 <% prompt_type = (form.object.class == Offer ? "offer" : (form.object.class == Request ? "request" : "prompt")) %>
 <% prompt_types = prompt_type.pluralize %>

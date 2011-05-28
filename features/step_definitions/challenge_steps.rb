@@ -380,13 +380,6 @@ When /^I fulfill my claim$/ do
     And %{I press "Post"}
 end
 
-When /^I delete my signup for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Your Prompts"}
-  When %{I follow "Delete"}
-  Then %{I should see "Challenge signup was deleted."}
-end
-
 When /^I start to fulfill my assignment$/ do
   When %{I am on my user page}
   When %{I follow "My Assignments ("}
@@ -401,6 +394,24 @@ When /^I fulfill my assignment$/ do
   When %{I start to fulfill my assignment}
   When %{I press "Preview"}
     And %{I press "Post"}
+
+When /^I delete my signup for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Your Prompts"}
+  When %{I follow "Delete"}
+  Then %{I should see "Challenge signup was deleted."}
+end
+
+When /^I delete the signup by "([^\"]*)"$/ do |participant|
+  visit collection_path(Collection.find_by_title("Battle 12"))
+  When %{I follow "Prompts ("}
+  When %{I follow "Delete"}
+end
+
+When /^I delete the prompt by "([^\"]*)"$/ do |participant|
+  visit collection_path(Collection.find_by_title("Battle 12"))
+  When %{I follow "Prompts ("}
+  When %{I follow "Remove prompt"}
 end
 
 ### THEN
