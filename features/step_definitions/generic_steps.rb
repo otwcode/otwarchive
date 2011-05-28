@@ -122,6 +122,23 @@ Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
     end
 end
 
+
+When /^I check the (\d+)(st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |number, junk, value|
+  check(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(number.to_i-1)].node['id'])
+end
+
+When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |number, junk, value|
+  When %{I check the #{number}#{junk} checkbox with the value "#{value}"}
+end
+
+When /^I check the (\d+)(st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do |number, junk, id_string|
+  check(page.all("input[type='checkbox']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(number.to_i-1)].node['id'])
+end
+
+When /^I fill in the (\d+)(st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |number, junk, id_string, value|
+  fill_in(page.all("input[type='text']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(number.to_i-1)].node['id'], :with => value)
+end
+
 When /^I submit$/ do
   %{When I press "Submit"}
 end

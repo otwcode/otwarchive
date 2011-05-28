@@ -21,11 +21,7 @@ Given /^I have standard challenge tags setup$/ do
 end
 
 Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|
-  Given "I have standard challenge tags setup"
-    And %{I am logged in as "mod1"}
-    And %{I set up the collection "#{challengename}"}
-    And %{I select "Gift Exchange" from "challenge_type"}
-  click_button("Submit")
+  Given %{I have set up the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
 Given /^I have set up the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
@@ -35,9 +31,9 @@ Given /^I have set up the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |ch
     And %{I select "Gift Exchange" from "challenge_type"}
   click_button("Submit")
 end
-    
+
 Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
-  Given %{I have set up the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
+  Given %{I have created the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
 Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
@@ -73,12 +69,15 @@ Given /^everyone has signed up for Battle 12$/ do
   When %{I am logged in as "myname1"}
   # no anon
   When %{I sign up for Battle 12 with combination A}
+
   When %{I am logged in as "myname2"}
   # both anon
   When %{I sign up for Battle 12 with combination B}
+
   When %{I am logged in as "myname3"}
   # one anon
   When %{I sign up for Battle 12}
+
   When %{I am logged in as "myname4"}
   When %{I sign up for Battle 12 with combination C}
 end
@@ -360,8 +359,8 @@ end
 When /^I sign up for "([^\"]*)" with combination C$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
-    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
-    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    And %{I check the 1st checkbox with the value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with the value "Stargate SG-1"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
     And %{I fill in the 2nd field with id matching "freeform_tagnames" with "Something else weird"}
     And %{I press "Submit"}
