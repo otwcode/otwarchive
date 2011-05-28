@@ -3,53 +3,37 @@
 <% # note for FRONT END
   # The fields in the form frequently wrap around to a second line.
   # So if anyone can think of a better design for this, that would be awesome %>
+<% # needs @collection, @challenge_signup, edit_record, @prompt %>
 
 <!-- descriptions-->
 <!-- /descriptions-->
 <!--subnavigation, sorting and actions-->
-<ul class="navigation">
+<ul class="navigation" role="navigation">
     <li>
-    <%= link_to( ts('Edit existing prompts instead?'),
-      {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => false}},
-      :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => false)) %>
+    <%= link_to( ts('Edit whole signup instead?'),
+      {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => false, :id => @challenge_signup.id}},
+      :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => false, :id => @challenge_signup.id)) %>
     </li>
-  <% if controller.action_name == "edit" %>
-    <li>
-    <%= link_to( ts('Just add one new prompt instead?'),
-      {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => true}},
-      :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => true)) %>
-    </li>
-  <% end %>
+    <li><%= link_to 'Back to collection', @collection %></li>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
 
-  <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection, :single_prompt => "true") : collection_signups_path(@collection))) do |signup_form| %>
+  <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection, @challenge_signup, :single_prompt => "true") : collection_signups_path(@collection, @challenge_signup))) do |signup_form| %>
     <%= error_messages_for @challenge_signup %>
   
   <fieldset class="preface profile">
-  	<legend>General Information</legend>
-  	<h3>General Information</h3>
-    <% if @challenge.signup_instructions_general %>
-      <%=raw sanitize_field(@challenge, :signup_instructions_general) %>
-    <% end %>
-  </fieldset>
-  
-  <fieldset class="preface profile">
-  	<legend><%= ts("Requests") %></legend>
-  	<h3>
-  	  <%= ts("Requests") %> 
-  	  (<%= @challenge.send("requests_num_required") -%>
-  	  <% if @challenge.send("requests_num_required") != @challenge.send("requests_num_allowed") -%>
-  	    - <%= @challenge.send("requests_num_allowed") -%><% end -%>)
-  	</h3>
     <% if @challenge.send("signup_instructions_requests") %>
       <%=raw sanitize_field(@challenge, "signup_instructions_requests".to_sym) %>
     <% end %>
-    <% last_request = @challenge_signup.requests.new %>
+    <% if edit_record %>
+      <% prompttodo = @prompt %>
+    <% else %>
+      <% prompttodo = @challenge_signup.requests.new %>
+    <% end %>
     <% index = @challenge_signup.requests.count %>
-      <%= signup_form.fields_for("requests".to_sym, last_request, :child_index => index) do |prompt_form| %>
+      <%= signup_form.fields_for("requests".to_sym, prompttodo, :child_index => index) do |prompt_form| %>
         <%= render :partial => "prompts/prompt_form", 
             :locals => {:form => prompt_form, :is_offer => false, :index => index,
                         :required => true, :edit_record => false} %>
@@ -66,9 +50,3 @@
   <% end %>
 
 <!--/content-->
-
-<!--subnav-->
-<ul class="navigation" role="navigation">
-<li><%= link_to 'Back', @collection %></li>
-</ul>
-<!--/subnav-->

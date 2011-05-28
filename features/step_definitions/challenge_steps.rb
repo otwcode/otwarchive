@@ -26,6 +26,7 @@ Given /^I have standard challenge tags setup$/ do
     And %{a freeform exists with name: "Alternate Universe - Historical", canonical: true}
     And %{a freeform exists with name: "Alternate Universe - High School", canonical: true}
     And %{a freeform exists with name: "Something else weird", canonical: true}
+    And %{a freeform exists with name: "My extra tag", canonical: true}
 end
 
 Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|

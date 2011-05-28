@@ -7,12 +7,12 @@
   <h3><%= ts("Prompt for %{person}", :person => @challenge_signup.pseud.byline) %></h3>
 
   <div class="collection preface">
-    <%= render :partial => "show_prompt", :locals => {:challenge_signup => @challenge_signup, :prompt => @prompt, :display_anon => "false"} %>
+    <%= render :partial => "challenge_signups/show_prompt", :locals => {:challenge_signup => @challenge_signup, :prompt => @prompt, :display_anon => "false"} %>
   </div>
   <!--/content-->
 
   <!--subnav-->
-    <%= render :partial => "signup_controls", :locals => {:challenge_signup => @challenge_signup} %>
+    <%= render :partial => "prompt_controls", :locals => {:challenge_signup => @challenge_signup, :prompt => @prompt} %>
   <!--/subnav-->
 </div>
 

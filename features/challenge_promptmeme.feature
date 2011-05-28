@@ -112,7 +112,13 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  Then show me the page
+    And I follow "Add another prompt"
+    And I check "Stargate Atlantis"
+    And I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" with "My extra tag"
+    And I press "Submit"
+  Then I should see "Signup was successfully updated"
+    And I should see "Request 3"
+    And I should see "My extra tag"
   
   Scenario: Sort prompts by date
   
