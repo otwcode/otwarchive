@@ -29,6 +29,13 @@ Given /^I have standard challenge tags setup$/ do
     And %{a freeform exists with name: "My extra tag", canonical: true}
 end
 
+Given /^I have alternative challenge tags setup$/ do
+  Given "basic tags"
+    And %{I create the fandom "Stargate Atlantis" with id 54}
+    And %{I create the fandom "Stargate SG-1" with id 55}
+    And %{a character exists with name: "John Sheppard", canonical: true}
+end
+
 Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|
   Given "I have standard challenge tags setup"
     And %{I am logged in as "mod1"}
@@ -172,19 +179,30 @@ When /^I create Battle 12 promptmeme$/ do
 end
 
 When /^I fill in Battle 12 challenge options$/ do
-  When %{I fill in "General Signup Instructions" with "Here are some general tips"}
+  When "I fill in prompt meme challenge options"
     And %{I fill in "Signup Instructions" with "Please request easy things"}
     And %{I select "2010" from "prompt_meme_signups_open_at_1i"}
     And %{I select "2016" from "prompt_meme_signups_close_at_1i"}
     And %{I select "(GMT-05:00) Eastern Time (US & Canada)" from "prompt_meme_time_zone"}
+    And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
+    And %{I press "Submit"}
+end
+
+When /^I fill in unlimited prompt challenge options$/ do
+  When "I fill in prompt meme challenge options"
+    And %{I check "prompt_meme_request_restriction_attributes_character_restrict_to_fandom"}
+    And %{I fill in "prompt_meme_requests_num_allowed" with "50"}
+    And %{I press "Submit"}
+end
+
+When /^I fill in prompt meme challenge options$/ do
+  When %{I fill in "General Signup Instructions" with "Here are some general tips"}
     And %{I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate SG-1, Stargate Atlantis"}
     And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"}
     And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "1"}
     And %{I fill in "prompt_meme_request_restriction_attributes_freeform_num_allowed" with "2"}
-    And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
     And %{I fill in "prompt_meme_requests_num_required" with "2"}
     And %{I check "Signup open?"}
-    And %{I press "Submit"}
 end
 
 When /^I fill in gift exchange challenge options$/ do

@@ -177,7 +177,7 @@ class PromptsController < ApplicationController
 
   def update
     if @challenge_signup.update_attributes(params[:challenge_signup])
-      flash[:notice] = 'Signup was successfully updated.'
+      flash[:notice] = 'Prompt was successfully updated.'
       redirect_to collection_signup_path(@collection, @challenge_signup)
     else
       render :action => :edit
