@@ -89,6 +89,28 @@ Feature: Collection
     And I press "Preview"
   Then I should see "Preview Work"
     And I should see "My SubCollection" within ".collections"
-    
 
+  Scenario: clicking the help popup for moderated collection
+    
+  Given the following activated users exist
+    | login          | password    |
+    | myname1        | something   |
+    | myname2        | something   |
+    And I am logged in as "myname1" with password "something"
+  When I go to the collections page
+  When I follow "New Collection"
+    And I follow "Moderated collection"
+  Then I should see "By default, collections are not moderated"
+
+  Scenario: clicking the help popup for collection name
+
+  Given the following activated users exist
+    | login          | password    |
+    | myname1        | something   |
+    | myname2        | something   |
+    And I am logged in as "myname1" with password "something"
+  When I go to the collections page
+  When I follow "New Collection"
+    And I follow "Collection name"
+  Then I should see "The name of the collection can be"
   
