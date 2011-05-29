@@ -24,7 +24,7 @@
     </dd>
   <% end %>
 
-    <dt><%= collection_form.label :name, ts("Collection Name* (letters, numbers, underscores)") %>:</dt>
+    <dt><%= collection_form.label :name, ts("Collection Name* (letters, numbers, underscores)") %>:<%= link_to_help "collection-name" %></dt>
     <dd><%= collection_form.text_field :name %></dd>
 
 
