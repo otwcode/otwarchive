@@ -152,7 +152,7 @@ Feature: Prompt Meme Challenge
   Scenario: Mod can view signups
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up for Battle 12
+    And everyone has signed up for Battle 12
   When I am logged in as "mod1"
     And I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
@@ -332,7 +332,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
     And I view prompts for "Battle 12"
   Then I should see "Already claimed by you"
-
+  
   Scenario: User edits existing work to fulfill claim
   
   Given I have Battle 12 prompt meme fully set up
@@ -396,7 +396,7 @@ Feature: Prompt Meme Challenge
   
   Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
-
+  
   Scenario: Sign up for several challenges and see My Signups are sorted
   
   Given I have Battle 12 prompt meme fully set up
@@ -413,13 +413,13 @@ Feature: Prompt Meme Challenge
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and sees the right boxes ticked
   
-  Given I have Battle 12 prompt meme fully set up
-    And everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
     And I have opened signup for the gift exchange "My Gift Exchange"
     And everyone has signed up for the gift exchange "My Gift Exchange"
     And I have generated matches for "My Gift Exchange"
     And I have sent assignments for "My Gift Exchange"
+  Given I have Battle 12 prompt meme fully set up
+    And everyone has signed up for Battle 12
   When I am logged in as "myname3"
     And I claim a prompt from "Battle 12"
   When I start to fulfill my claim

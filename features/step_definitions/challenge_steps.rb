@@ -66,18 +66,19 @@ Given /^I have Battle 12 prompt meme fully set up$/ do
 end
 
 Given /^everyone has signed up for Battle 12$/ do
-  When %{I am logged in as "myname1"}
   # no anon
+  When %{I am logged in as "myname1"}
   When %{I sign up for Battle 12 with combination A}
 
-  When %{I am logged in as "myname2"}
   # both anon
+  When %{I am logged in as "myname2"}
   When %{I sign up for Battle 12 with combination B}
 
-  When %{I am logged in as "myname3"}
   # one anon
+  When %{I am logged in as "myname3"}
   When %{I sign up for Battle 12}
 
+  # no anon
   When %{I am logged in as "myname4"}
   When %{I sign up for Battle 12 with combination C}
 end
@@ -157,6 +158,9 @@ When /^I sign up for Battle 12 with combination C$/ do
     And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
     click_button "Submit"
+  Then %{I should see "Signup was successfully created"}
+    And %{I should see "Stargate Atlantis"}
+    And %{I should see "Something else weird"}
 end
 
 When /^I add prompt (\d+)$/ do |number|
@@ -540,11 +544,13 @@ Then /^I should see a prompt is claimed$/ do
 end
 
 Then /^I should see correct signups for Battle 12$/ do
-  Then %{I should see "myname4" within "#main"}
-    And %{I should see "myname3" within "#main"}
-    And %{I should not see "myname2" within "#main"}
-    And %{I should see "(Anonymous)" within "#main"}
-    And %{I should see "myname1" within "#main"}
+  Then %{I should see "myname4" within "td"}
+    And %{I should see "myname3" within "td"}
+    And %{I should not see "myname2" within "td"}
+    And %{I should see "(Anonymous)" within "td"}
+    And %{I should see "myname1" within "td"}
+    And %{I should see "Stargate Atlantis"}
+    And %{I should see "Stargate SG-1"}
     And %{I should see "Something else weird"}
     And %{I should see "Alternate Universe - Historical"}
     And %{I should not see "Matching"}
