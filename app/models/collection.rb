@@ -196,6 +196,30 @@ class Collection < ActiveRecord::Base
       end
     end
   end
+  
+  def fullname
+    "#{title} #{name}"
+  end
+
+  def redis_value
+    "#{id}:#{name}:#{title}"
+  end
+  
+  def self.parse_redis_value(redis_value)
+    redis_value.split(':')
+  end
+  
+  def self.id_from_redis(redis_value)
+    redis_value.split(':')[0]
+  end
+  
+  def self.name_from_redis(redis_value)
+    redis_value.split(':')[1]
+  end
+  
+  def self.title_from_redis(redis_value)
+    redis_value.split(':')[2]
+  end
 
   def add_to_redis(score = nil)
     # score is the item count 
@@ -225,19 +249,6 @@ class Collection < ActiveRecord::Base
     $redis.zrevrange(redis_key, 0, -1)
   end
   
-  # prefix the name with id for later use
-  def redis_value
-    "#{id}-#{fullname}"
-  end
-  
-  def self.parse_redis_value(value)
-    (id, fullname) = value.split("-", 2)
-  end
-  
-  def fullname
-    "#{title} (#{name})"
-  end
-
   def parent_name=(name)
     @parent_name = name
     self.parent = Collection.find_by_name(name)
@@ -409,7 +420,7 @@ class Collection < ActiveRecord::Base
     
     if !filters[:title].blank?
       # we get the matching collections out of redis and use their ids
-      ids = Collection.redis_lookup(filters[:title], filters[:closed].blank? ? "all" : (filters[:closed] ? "closed" : "open")).map {|result| result.split("_")[0]}
+      ids = Collection.redis_lookup(filters[:title], filters[:closed].blank? ? "all" : (filters[:closed] ? "closed" : "open")).map {|result| Collection.id_from_redis(result)}
       query = query.where("collections.id in (?)", ids)
     else
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?

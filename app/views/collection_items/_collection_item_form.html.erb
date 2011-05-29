@@ -7,7 +7,7 @@
 <%= form_for([item, @collection_item], :url => {:controller => 'collection_items', :action => :create}) do |form| %>
 	<p>
 	<%= label_tag :collection_names, ts("Enter collection name(s): ") %>
-  <%= text_field_tag :collection_names, nil, autocomplete_options("open_collection", :size => 40) %>
+  <%= text_field_tag :collection_names, nil, autocomplete_options("open_collection_names", :size => 40) %>
   </p>
 <p class="submit"><%= form.submit(ts("Add")) %></p>
 <% end %>

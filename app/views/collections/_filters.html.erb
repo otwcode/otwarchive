@@ -2,9 +2,9 @@
 <%= form_tag collections_url, :method => :get, :class => 'filters' do %>
   <%= field_set_tag t('.filter_these', :default => 'Filter collections:') do %>
  		<dl class="filters" role="complementary navigation">
-      <dt><%= label_tag 'collection_filters_title', "Filter by title" %></dt>
+      <dt><%= label_tag 'collection_filters_title', "Filter by title or name" %></dt>
       <dd>
-        <%= text_field_tag 'collection_filters[title]', params[:collection_filters][:title], autocomplete_options("collection", :autocomplete_token_limit => 1) %>
+        <%= text_field_tag 'collection_filters[title]', params[:collection_filters][:title], autocomplete_options("collection_fullname", :autocomplete_token_limit => 1) %>
       </dd>
       <dt><%= label_tag 'collection_filters_fandom', "Filter by fandom" %></dt>
       <dd>

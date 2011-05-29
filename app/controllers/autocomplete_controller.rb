@@ -25,22 +25,20 @@ class AutocompleteController < ApplicationController
   
   
   # look up collections ranked by number of items they contain
-  def collection
-    # collections are stored as id-fullname
-    results = Collection.redis_lookup(params[:term], include="all").map {|result| result.split("-",2)[1]}
+
+  def collection_fullname
+    results = Collection.redis_lookup(params[:term], include="all").map do |result| 
+      Collection.title_from_redis(result) + " " + Collection.name_from_redis(result)
+    end
     render_redis_output(params[:term], results)
   end
 
-  def open_collection
-    results = Collection.redis_lookup(params[:term], include="open").map {|result| result.split("-",2)[1]}
-    render_redis_output(params[:term], results)
-  end
+  # return collection names
   
-  def closed_collection
-    results = Collection.redis_lookup(params[:term], include="closed").map {|result| result.split("-",2)[1]}
+  def open_collection_names
+    results = Collection.redis_lookup(params[:term], include="open").map {|result| Collection.name_from_redis(result)}
     render_redis_output(params[:term], results)
   end
-
   
   # look up tags ranked by order of their popularity
   def tag

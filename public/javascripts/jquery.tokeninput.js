@@ -154,7 +154,8 @@ $.TokenList = function (input, url_or_data, settings) {
         .blur(function () {
             hide_dropdown();
             if($(this).val()) {
-                add_token($(this).val());                
+                add_token($(this).val());
+                $(this).val("");
             }
         })
         //.bind("keyup keydown blur update", resize_input)
@@ -430,6 +431,10 @@ $.TokenList = function (input, url_or_data, settings) {
         } else {
             li_data = $.data(item.get(0), "tokeninput");            
         }
+
+        // Clear input box
+        input_box.val("");
+
         var callback = settings.onAdd;
 
         // See if the token already exists and select it if we don't want duplicates
@@ -463,9 +468,6 @@ $.TokenList = function (input, url_or_data, settings) {
         } else {
             input_box.focus();
         }
-
-        // Clear input box
-        input_box.val("");
 
         // Don't show the help dropdown, they've got the idea
         hide_dropdown();
