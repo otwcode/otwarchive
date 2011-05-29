@@ -75,6 +75,49 @@ Feature: Prompt Meme Challenge
   #  And I should see "Edit"
   #  And I should see "Delete"
   
+  Scenario: View individual prompt
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I view my signup for "Battle 12"
+  Then I should see the whole signup
+  When I follow "Request 1"
+  Then I should just see request 1
+  
+  Scenario: Edit individual prompt via signup show
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I view my signup for "Battle 12"
+  When I follow "Request 1"
+  When I follow "Edit this prompt"
+  Then I should see single prompt editing
+  
+  Scenario: Edit individual prompt via signup edit
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I edit my signup for "Battle 12"
+  When I follow "Request 1"
+  Then I should not see "Request 2"
+    And I should see "Edit whole signup instead"
+  
+  Scenario: Add one new prompt to existing signup
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+    And I follow "Add another prompt"
+    And I check "Stargate Atlantis"
+    And I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" with "My extra tag"
+    And I press "Submit"
+  Then I should see "Signup was successfully updated"
+    And I should see "Request 3"
+    And I should see "My extra tag"
+  
   Scenario: Sort prompts by date
   
   Given I have Battle 12 prompt meme fully set up

@@ -293,7 +293,6 @@ Otwarchive::Application.routes.draw do
 
   resources :gifts
   resources :prompt_restrictions
-  resources :prompts
   resources :tag_sets, :only => [:show]
   resources :collections do
     collection do
@@ -307,6 +306,11 @@ Otwarchive::Application.routes.draw do
     resources :media
     resources :fandoms
     resources :people
+    resources :prompts, :controller => "prompts" do
+      collection do
+        get :summary
+      end
+    end
     resources :tags do
       resources :works
     end

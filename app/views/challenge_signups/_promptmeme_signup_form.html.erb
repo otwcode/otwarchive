@@ -27,18 +27,29 @@
 <!--/subnav-->
 
 <!--main content-->
+
+<ul>
+  <% @challenge_signup.send("requests").each_with_index do |prompt, index| %>
+    <% if edit_record == true && index < @challenge_signup.requests.count %>
+      <li><%= link_to(ts("Request %{num}", :num => index+1), edit_collection_prompt_path(@challenge_signup.collection, prompt)) %></li>
+    <% else %>
+      <li><%= ts("Request %{num}", :num => index+1) %></li>
+    <% end %>
+  <% end %>
+</ul>
+
 <% if params[:single_prompt] == "true" %>
 
   <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection, :single_prompt => params[:single_prompt]) : collection_signups_path(@collection))) do |signup_form| %>
     <%= error_messages_for @challenge_signup %>
   
-  <fieldset class="preface profile">
-  	<legend>General Information</legend>
-  	<h3>General Information</h3>
-    <% if @challenge.signup_instructions_general %>
+  <% if @challenge.signup_instructions_general %>
+    <fieldset class="preface profile">
+      <legend>General Information</legend>
+      <h3>General Information</h3>
       <%=raw sanitize_field(@challenge, :signup_instructions_general) %>
-    <% end %>
-  </fieldset>
+    </fieldset>
+  <% end %>
   
   <fieldset class="preface profile">
   	<legend><%= ts("Requests") %></legend>

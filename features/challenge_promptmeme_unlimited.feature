@@ -6,10 +6,7 @@ Feature: Prompt Meme Challenge
   
   Scenario: Check the autocomplete is working
   
-  Given basic tags
-    And I create the fandom "Stargate Atlantis" with id 54
-    And I create the fandom "Stargate SG-1" with id 55
-    And a character exists with name: "John Sheppard", canonical: true
+  Given I have alternative challenge tags setup
     And I am logged in as "mod1"
   When I set up a basic promptmeme "Battle 12"
     And I follow "Challenge Settings"
@@ -45,10 +42,7 @@ Feature: Prompt Meme Challenge
 
   Scenario: Create a prompt meme for a large challenge like bigger kink memes
 
-  Given basic tags
-    And I create the fandom "Stargate Atlantis" with id 54
-    And I create the fandom "Stargate SG-1" with id 55
-    And a character exists with name: "John Sheppard", canonical: true
+  Given I have alternative challenge tags setup
     And I am logged in as "mod1"
   
   # set up the challenge
@@ -56,16 +50,7 @@ Feature: Prompt Meme Challenge
   When I set up a basic promptmeme "Battle 12"
     And I follow "Challenge Settings"
     And I should see "Setting Up The Battle 12 Prompt Meme"
-  When I fill in "General Signup Instructions" with "Here are some general tips"
-    And I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis, Stargate SG-1"
-    And I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"
-    And I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "1"
-    And I fill in "prompt_meme_request_restriction_attributes_character_num_allowed" with "2"
-    And I check "prompt_meme_request_restriction_attributes_character_restrict_to_fandom"
-    And I fill in "prompt_meme_requests_num_allowed" with "50"
-    And I fill in "prompt_meme_requests_num_required" with "2"
-    And I check "Signup open?"
-    And I press "Submit"
+  When I fill in unlimited prompt challenge options
   Then I should see "Challenge was successfully updated"
   When I follow "Profile"
   Then I should see "Signup: CURRENTLY OPEN"
@@ -97,7 +82,7 @@ Feature: Prompt Meme Challenge
   When I press "Submit"
   Then I should see "Request must have exactly 1 fandom tags. You currently have none."
     And I should see "Request 4"
-    But I should not see "Request 1"
+    But I should not see "Request 1" within "form"
   When I check "challenge_signup_requests_attributes_3_fandom_54"
     And I press "Submit"
   Then I should see "Signup was successfully updated"
