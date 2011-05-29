@@ -30,7 +30,7 @@
 
 <ul>
   <% @challenge_signup.send("requests").each_with_index do |prompt, index| %>
-    <% if edit_record == "true" && index < @challenge_signup.requests.count %>
+    <% if edit_record == true && index < @challenge_signup.requests.count %>
       <li><%= link_to(ts("Request %{num}", :num => index+1), edit_collection_prompt_path(@challenge_signup.collection, prompt)) %></li>
     <% else %>
       <li><%= ts("Request %{num}", :num => index+1) %></li>
