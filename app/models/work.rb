@@ -417,7 +417,7 @@ class Work < ActiveRecord::Base
 
   def set_revised_at(date=nil)
     if date # if we pass a date, we want to set it to that (or current datetime if it's today)
-      date == Date.today ? value = Time.now : value = date
+      date == Date.today ? value = Time.now : value = DateTime::jd(date.jd, 12, 0, 0)
       self.revised_at = value
     else # we want to find the most recent @chapter.published_at date
       recent_date = self.chapters.maximum('published_at')
@@ -429,7 +429,7 @@ class Work < ActiveRecord::Base
       elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today
         self.revised_at = Time.now
       else
-        self.revised_at = recent_date
+        self.revised_at = DateTime::jd(recent_date.jd, 12, 0, 0)
       end
     end
   end
