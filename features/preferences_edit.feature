@@ -217,7 +217,7 @@ Feature: Edit preferences
   # change preference to hide freeforms
   When I follow "mywarning2"
     And I follow "My Preferences"
-    And I check "Hide freeform tags"
+    And I check "Hide additional tags"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
 
