@@ -16,6 +16,9 @@
     <% if skin.paragraph_margin %>
       #main .userstuff p {margin-bottom: <%= skin.paragraph_margin %>em;}
     <% end %>
+    <% if skin.headercolor %>
+      #header {background-image: none; background-color: <%= skin.headercolor %>;}
+    <% end %>
   <% end %>
 
   <%= skin.css %>

@@ -11,11 +11,7 @@ Feature: creating and editing skins
   Scenario: A user should be able to choose a different public skin in their preferences
   Given basic skins
     And I am logged in as "skinner"
-  When I follow "skinner"
-    And I follow "Preferences"
-    And I select "Plain Text" from "preference_skin_id"
-    And I press "Update"
-  Then I should see "Your preferences were successfully updated."
+  When I change my skin to "Plain Text"
   When I am on skinner's preferences page
   Then "Plain Text" should be selected within "preference_skin_id"
     And I should see "font-family: serif !important;" within "style"
@@ -511,3 +507,8 @@ Feature: creating and editing skins
   When I follow "My Skins"
     And I follow "Log out"
   Then I should be on the login page
+  
+  Scenario: Change the header color
+  Given I am logged in as "skinner"
+  When I create a skin to change the header color
+  Then I should see a different header color
