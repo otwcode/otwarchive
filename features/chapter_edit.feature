@@ -169,3 +169,21 @@ Feature: Edit chapters
     Then I should not see "Draft"
     And I should not see "draft"
 
+  Scenario: view chapter title info pop up
+    
+  Given the following activated user exists
+    | login         | password   |
+    | epicauthor    | password   |
+    And basic tags
+  When I am logged in as "epicauthor"
+    And I go to epicauthor's user page
+    And I follow "Post New"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandoms" with "New Fandom"
+    And I fill in "Work Title" with "New Epic Work"
+    And I fill in "Work text" with "Well, maybe not so epic."
+    And I press "Post"
+    And I follow "Add Chapter"
+    And I follow "Chapter title"
+  Then I should see "You can add a chapter title"
