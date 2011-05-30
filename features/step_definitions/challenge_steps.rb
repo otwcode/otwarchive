@@ -313,12 +313,6 @@ When /^I sign up for Battle 12 with combination C$/ do
     And "I press \"Submit\""
 end
 
-When /^I add prompt (\d+)$/ do |number|
-  When "I follow \"Add another prompt\""
-    And "I check \"challenge_signup_requests_attributes_#{number}_fandom_54\""
-    And "I press \"Submit\""
-end
-
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
