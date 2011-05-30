@@ -177,7 +177,7 @@ class Chapter < ActiveRecord::Base
           # scan by word boundaries after stripping hyphens and apostrophes
           # so one-word and one's will be counted as one word, not two.
           # -- is replaced by — (emdash) before strip so one--two will count as 2
-          count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "").scan(/[a-zA-Z0-9À-ÿ_]+/).size
+          count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "").scan(/[[:word:]]+/).size
         end
       end
       self.word_count = count
