@@ -124,20 +124,19 @@ end
 
 
 When /^I check the (\d+)(st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, junk, value|
-  page.all("input[value='#{value}']")[index.to_i-1].check
-  # check(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(number.to_i-1)].node['id'])
+  check(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(index.to_i-1)].node['id'])
 end
 
-When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |number, junk, value|
-  When %{I check the #{number}#{junk} checkbox with the value "#{value}"}
+When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |index, junk, value|
+  When %{I check the #{index}#{junk} checkbox with the value "#{value}"}
 end
 
-When /^I check the (\d+)(st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do |number, junk, id_string|
-  check(page.all("input[type='checkbox']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(number.to_i-1)].node['id'])
+When /^I check the (\d+)(st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do |index, junk, id_string|
+  check(page.all("input[type='checkbox']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(index.to_i-1)].node['id'])
 end
 
-When /^I fill in the (\d+)(st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |number, junk, id_string, value|
-  fill_in(page.all("input[type='text']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(number.to_i-1)].node['id'], :with => value)
+When /^I fill in the (\d+)(st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, junk, id_string, value|
+  fill_in(page.all("input[type='text']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(index.to_i-1)].node['id'], :with => value)
 end
 
 When /^I submit$/ do
