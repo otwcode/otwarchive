@@ -123,8 +123,9 @@ Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
 end
 
 
-When /^I check the (\d+)(st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |number, junk, value|
-  check(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(number.to_i-1)].node['id'])
+When /^I check the (\d+)(st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, junk, value|
+  page.all("input[value='#{value}']")[index.to_i-1].check
+  # check(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(number.to_i-1)].node['id'])
 end
 
 When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |number, junk, value|

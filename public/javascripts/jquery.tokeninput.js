@@ -451,7 +451,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
             if(found_existing_token) {
                 select_token(found_existing_token);
-                input_token.insertAfter(found_existing_token);
+                //input_token.insertAfter(found_existing_token);
                 input_box.focus();
                 return;
             }
@@ -478,6 +478,14 @@ $.TokenList = function (input, url_or_data, settings) {
         }
     }
         
+
+    // Edit a token in the token list
+    function edit_token(token) {
+        hide_dropdown();
+        var token_data = $.data(token.get(0), "tokeninput");
+        delete_token(token);
+        input_box.val(token_data.id);
+    }
 
     // Select a token in the token list
     function select_token(token) {
@@ -514,8 +522,13 @@ $.TokenList = function (input, url_or_data, settings) {
     // Toggle selection of a token in the token list
     function toggle_select_token(token) {
         var previous_selected_token = selected_token;
-
+        
         if(selected_token) {
+            if(selected_token === token.get(0)) {
+                // second click -- edit
+                edit_token(token);
+                return;
+            }            
             deselect_token($(selected_token), POSITION.END);
         }
 

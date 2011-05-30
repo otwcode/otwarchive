@@ -275,31 +275,18 @@ class Pseud < ActiveRecord::Base
     {:pseuds => valid_pseuds, :ambiguous_pseuds => ambiguous_pseuds, :invalid_pseuds => failures}
   end
   
-  def add_to_redis(score = nil)
-    # score is the alphabetical value padded out with spaces to max length
-    score = name.downcase.ljust(Pseud::NAME_LENGTH_MAX).b(62).to_i unless score
-    name.three_letter_sections.each do |section|
-      key = "autocomplete_pseud_#{section}"
-      $redis.zadd(key, score, byline)
-    end
+  ## AUTOCOMPLETE
+  # set up autocomplete and override some methods
+  include AutocompleteSource
+  def redis_prefixes
+    [ "autocomplete_pseud" ]
   end
-  
-  def remove_from_redis
-    name.three_letter_sections.each do |section|
-      key = "autocomplete_pseud_#{section}"
-      $redis.zrem(key, byline)
-    end
-  end  
 
-  def self.redis_lookup(search_param)
-    redis_key = "autocomplete_pseud_#{search_param}"
-    if search_param.length > 3
-      sets = search_param.three_letter_sections.map {|section| "autocomplete_pseud_#{section}"}
-      $redis.zinterstore(redis_key, sets, :aggregate => :max)
-      $redis.expire(redis_key, 60*ArchiveConfig.AUTOCOMPLETE_EXPIRATION_TIME)
-    end
-    $redis.zrange(redis_key, 0, -1)
+  def redis_value
+    "#{id}#{REDIS_DELIMITER}#{byline}"
   end
+
+  ## END AUTOCOMPLETE
 
   def creations
     self.works + self.chapters + self.series

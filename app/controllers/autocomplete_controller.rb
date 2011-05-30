@@ -16,53 +16,38 @@ class AutocompleteController < ApplicationController
     end
   end
 
-  # ACTIONS GO HERE
+  #########################################
+  ############# LOOKUP ACTIONS GO HERE
   
-  # look up pseuds ranked alphabetically
+  # PSEUDS
   def pseud
     render_redis_output(params[:term], Pseud.redis_lookup(params[:term]))
   end
   
-  
-  # look up collections ranked by number of items they contain
-
-  def collection_fullname
-    results = Collection.redis_lookup(params[:term], include="all").map do |result| 
-      Collection.title_from_redis(result) + " " + Collection.name_from_redis(result)
-    end
-    render_redis_output(params[:term], results)
-  end
-
-  # return collection names
-  
-  def open_collection_names
-    results = Collection.redis_lookup(params[:term], include="open").map {|result| Collection.name_from_redis(result)}
-    render_redis_output(params[:term], results)
-  end
-  
-  # look up tags ranked by order of their popularity
+  ## TAGS  
   def tag
-    render_redis_output(params[:term], Tag.redis_lookup(params[:term], params[:type]))
+    render_redis_output(params[:term], Tag.redis_lookup(params[:term], "autocomplete_tag_#{params[:type]}"))
   end
   # these are all duplicates of "tag" but make our calls to autocomplete more readable
-  def fandom; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "fandom")); end
-  def character; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "character")); end
-  def relationship; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "relationship")); end
-  def freeform; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "freeform")); end
+  def fandom; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "autocomplete_tag_fandom")); end
+  def character; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "autocomplete_tag_character")); end
+  def relationship; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "autocomplete_tag_relationship")); end
+  def freeform; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "autocomplete_tag_freeform")); end
 
+
+  ## TAGS IN SET
   def tag_in_set
-    render_redis_output(redis_tag_lookup(params[:term], params[:type], params[:tag_set_id])) 
+    render_redis_output(redis_tag_lookup(params[:term], "autocomplete_tag_#{params[:type]}", :extra_sets => ["autocomplete_tagset_#{params[:tag_set_id]}"])) 
   end
   
+  ## TAGS IN FANDOMS
   def tag_in_fandom
     render_redis_output(redis_fandom_tag_lookup(params[:term], params[:type], params[:fandom], params[:fallback] || true)) 
   end
-  # duplicates of tag_in_fandom
   def character_in_fandom; render_redis_output(params[:term], Tag.redis_fandom_lookup(params[:term], "character", params[:fandom], params[:fallback] || true)); end
   def relationship_in_fandom; render_redis_output(params[:term], Tag.redis_fandom_lookup(params[:term], "relationship", params[:fandom], params[:fallback] || true)); end
   
-
-  # noncanonical tags still use db
+  ## NONCANONICAL TAGS
   def noncanonical_tag
     search_param = params[:term]
     tag_class = params[:type].classify.constantize
@@ -73,6 +58,26 @@ class AutocompleteController < ApplicationController
 
   
   # more-specific autocompletes should be added below here when they can't be avoided
+
+  
+  # look up collections ranked by number of items they contain
+
+  def collection_fullname
+    results = Collection.redis_lookup(params[:term], "autocomplete_collection_all").map {|result| Collection.fullname_from_redis(result)}
+    render_redis_output(params[:term], results)
+  end
+
+  # return collection names
+  
+  def open_collection_names
+    results = sort_redis_results(params[:term], Collection.redis_lookup(params[:term], "autocomplete_collection_open").map {|result| Collection.fullname_from_redis(result)})
+    # in this case we want different ids from names so we can display the title but only put in the name
+    results = results.map do |str| 
+      (name, title) = str.split(Collection::REDIS_DELIMITER, 2)
+      {:id => name, :name => str}
+    end
+    respond_with(results)
+  end
   
   # For creating collections, autocomplete the name of a parent collection owned by the user only
   def collection_parent_name

@@ -176,7 +176,7 @@ class Collection < ActiveRecord::Base
   scope :with_item_count,
     select("collections.*, count(distinct collection_items.id) as item_count").
     joins("left join collections child_collections on child_collections.parent_id = collections.id
-           inner join collection_items on ( (collection_items.collection_id = child_collections.id OR collection_items.collection_id = collections.id)
+           left join collection_items on ( (collection_items.collection_id = child_collections.id OR collection_items.collection_id = collections.id)
                                      AND collection_items.user_approval_status = 1
                                      AND collection_items.collection_approval_status = 1)").
     group("collections.id")
@@ -197,57 +197,23 @@ class Collection < ActiveRecord::Base
     end
   end
   
-  def fullname
-    "#{title} #{name}"
+  ## AUTOCOMPLETE
+  # set up autocomplete and override some methods
+  include AutocompleteSource
+  def redis_search_string
+    "#{name} #{title}"
   end
 
-  def redis_value
-    "#{id}:#{name}:#{title}"
-  end
-  
-  def self.parse_redis_value(redis_value)
-    redis_value.split(':')
-  end
-  
-  def self.id_from_redis(redis_value)
-    redis_value.split(':')[0]
-  end
-  
-  def self.name_from_redis(redis_value)
-    redis_value.split(':')[1]
-  end
-  
-  def self.title_from_redis(redis_value)
-    redis_value.split(':')[2]
+  def redis_prefixes
+    [ "autocomplete_collection_all",
+      "autocomplete_collection_#{closed? ? 'closed' : 'open'}" ]
   end
 
-  def add_to_redis(score = nil)
-    # score is the item count 
-    score = (all_approved_works_count + all_approved_bookmarks_count) unless score
-    fullname.three_letter_sections.each do |section|
-      $redis.zadd("autocomplete_collection_#{closed? ? 'closed' : 'open'}_#{section}", score, redis_value)
-      $redis.zadd("autocomplete_collection_all_#{section}", score, redis_value)
-    end
+  def redis_score
+    all_approved_works_count + all_approved_bookmarks_count
   end
-  
-  def remove_from_redis
-    fullname.three_letter_sections.each do |section|
-      $redis.zrem("autocomplete_collection_#{closed? ? 'closed' : 'open'}_#{section}", redis_value)
-      $redis.zrem("autocomplete_collection_all_#{section}", redis_value)
-    end
-  end
-  
-  # class method to get classnames out of redis, sorted by popularity
-  # include options: "open", "closed", "all"
-  def self.redis_lookup(search_param, include="open")
-    redis_key = "autocomplete_collection_#{include}_#{search_param}"
-    if search_param.length > 3
-      sets = search_param.three_letter_sections.map {|section| "autocomplete_collection_#{include}_#{section}"}
-      $redis.zinterstore(redis_key, sets, :aggregate => :max)
-      $redis.expire(redis_key, 60*ArchiveConfig.AUTOCOMPLETE_EXPIRATION_TIME)
-    end
-    $redis.zrevrange(redis_key, 0, -1)
-  end
+  ## END AUTOCOMPLETE
+
   
   def parent_name=(name)
     @parent_name = name
@@ -420,7 +386,9 @@ class Collection < ActiveRecord::Base
     
     if !filters[:title].blank?
       # we get the matching collections out of redis and use their ids
-      ids = Collection.redis_lookup(filters[:title], filters[:closed].blank? ? "all" : (filters[:closed] ? "closed" : "open")).map {|result| Collection.id_from_redis(result)}
+      ids = Collection.redis_lookup(filters[:title], 
+                filters[:closed].blank? ? "autocomplete_collection_all" : (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open")
+             ).map {|result| Collection.id_from_redis(result)}
       query = query.where("collections.id in (?)", ids)
     else
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
