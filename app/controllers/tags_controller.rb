@@ -1,7 +1,9 @@
 class TagsController < ApplicationController
   before_filter :load_collection
-  before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :search ]
-  before_filter :check_permission_to_wrangle, :except => [ :show, :index, :show_hidden, :search ]
+  before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :search, :feed ]
+  before_filter :check_permission_to_wrangle, :except => [ :show, :index, :show_hidden, :search, :feed ]
+
+  caches_page :feed
 
   # GET /tags
   # GET /tags.xml
@@ -74,6 +76,28 @@ class TagsController < ApplicationController
     else
       flash[:error] = t('not_found', :default => "Tag not found")
       redirect_to '/'
+    end
+  end
+
+  def feed
+    @tag = Tag.find(params[:id])
+    if !@tag.canonical? && @tag.merger
+      @tag = @tag.merger
+    end
+    # Temp for testing
+    if @tag.name == "F/F"
+      if @tag.canonical?
+        @works = @tag.filtered_works.visible_to_all.order("created_at DESC").limit(25)
+      else
+        @works = @tag.works.visible_to_all.order("created_at DESC").limit(25)
+      end
+    else
+      redirect_to tag_works_path(:tag_id => @tag.to_param)
+    end
+
+    respond_to do |format|
+      format.html
+      format.atom
     end
   end
 
