@@ -137,6 +137,11 @@ class Collection < ActiveRecord::Base
   validates_length_of :title,
     :maximum => ArchiveConfig.TITLE_MAX,
     :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+  validate :no_reserved_strings
+  def no_reserved_strings
+    errors.add(:title, ts("^Sorry, we've had to reserve the ',,' string for behind-the-scenes usage!")) if
+      title.match(/\,\,/)
+  end
 
   validates_length_of :description,
     :allow_blank => true,
@@ -200,16 +205,16 @@ class Collection < ActiveRecord::Base
   ## AUTOCOMPLETE
   # set up autocomplete and override some methods
   include AutocompleteSource
-  def redis_search_string
+  def autocomplete_search_string
     "#{name} #{title}"
   end
 
-  def redis_prefixes
+  def autocomplete_prefixes
     [ "autocomplete_collection_all",
       "autocomplete_collection_#{closed? ? 'closed' : 'open'}" ]
   end
 
-  def redis_score
+  def autocomplete_score
     all_approved_works_count + all_approved_bookmarks_count
   end
   ## END AUTOCOMPLETE
@@ -385,10 +390,10 @@ class Collection < ActiveRecord::Base
     query = Collection.top_level
     
     if !filters[:title].blank?
-      # we get the matching collections out of redis and use their ids
-      ids = Collection.redis_lookup(filters[:title], 
+      # we get the matching collections out of autocomplete and use their ids
+      ids = Collection.autocomplete_lookup(filters[:title], 
                 filters[:closed].blank? ? "autocomplete_collection_all" : (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open")
-             ).map {|result| Collection.id_from_redis(result)}
+             ).map {|result| Collection.id_from_autocomplete(result)}
       query = query.where("collections.id in (?)", ids)
     else
       query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?

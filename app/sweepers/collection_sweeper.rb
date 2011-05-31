@@ -2,18 +2,18 @@ class CollectionSweeper < ActionController::Caching::Sweeper
   observe Collection, CollectionItem, CollectionParticipant, CollectionProfile, Work
   
   def after_create(record)
-    record.add_to_redis if record.is_a?(Collection)
+    record.add_to_autocomplete if record.is_a?(Collection)
   end
 
   def before_update(record)
     if record.is_a?(Collection) && record.changed.include?(:name)
-      record.remove_from_redis
+      record.remove_from_autocomplete
     end
   end
 
   def after_update(record)
     if record.is_a?(Collection) && record.changed.include?(:name)
-      record.add_to_redis
+      record.add_to_autocomplete
     end
   end
 
@@ -22,7 +22,7 @@ class CollectionSweeper < ActionController::Caching::Sweeper
   end
 
   def before_destroy(record)
-    record.remove_from_redis if record.is_a?(Collection)
+    record.remove_from_autocomplete if record.is_a?(Collection)
   end
   
   def after_destroy(record)

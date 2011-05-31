@@ -278,12 +278,12 @@ class Pseud < ActiveRecord::Base
   ## AUTOCOMPLETE
   # set up autocomplete and override some methods
   include AutocompleteSource
-  def redis_prefixes
+  def autocomplete_prefixes
     [ "autocomplete_pseud" ]
   end
 
-  def redis_value
-    "#{id}#{REDIS_DELIMITER}#{byline}"
+  def autocomplete_value
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
   end
 
   ## END AUTOCOMPLETE

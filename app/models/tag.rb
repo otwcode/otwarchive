@@ -315,23 +315,41 @@ class Tag < ActiveRecord::Base
   ## AUTOCOMPLETE
   # set up autocomplete and override some methods
   include AutocompleteSource
-  def redis_prefixes
+  def autocomplete_prefixes
     prefixes = [ "autocomplete_tag_#{type.downcase}", "autocomplete_tag_all" ]
-    if self.is_a?(Character) || self.is_a?(Relationship)
-      parents.each do |parent|
-        prefixes << "autocomplete_fandom_#{parent.name}_#{type.downcase}" if parent.is_a?(Fandom)
-      end
-    end
     prefixes
   end
+  
+  def add_to_autocomplete(score = nil)
+    score ||= autocomplete_score
+    if self.is_a?(Character) || self.is_a?(Relationship)
+      parents.each do |parent|
+        $redis.zadd("autocomplete_fandom_#{parent.name}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+      end
+    end
+    super
+  end
 
-  def redis_score
+  def remove_from_autocomplete
+    super
+    if self.is_a?(Character) || self.is_a?(Relationship)
+      parents.each do |parent|
+        $redis.zrem("autocomplete_fandom_#{parent.name}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+      end
+    end
+  end
+    
+  def self.parse_autocomplete_value(current_autocomplete_value)
+    current_autocomplete_value.split(AUTOCOMPLETE_DELIMITER, 2)
+  end
+  
+
+  def autocomplete_score
     taggings_count
   end
-  ## END AUTOCOMPLETE
   
   # look up tags that have been wrangled into a given fandom
-  def self.redis_fandom_lookup(search_param, tag_type, fandom, fallback=true)
+  def self.autocomplete_fandom_lookup(search_param, tag_type, fandom, fallback=true)
     # fandom sets are too small to bother breaking up
     # we're just getting ALL the tags in the set(s) for the fandom(s) and then manually matching
     results = []
@@ -345,12 +363,13 @@ class Tag < ActiveRecord::Base
     end
     if fallback && results.empty? && search_param.length >= 3
       # do a standard tag lookup instead
-      Tag.redis_lookup(search_param, "autocomplete_tag_#{tag_type}")
+      Tag.autocomplete_lookup(search_param, "autocomplete_tag_#{tag_type}")
     else
       results
     end
   end
 
+  ## END AUTOCOMPLETE
 
 
 

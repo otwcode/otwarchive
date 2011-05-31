@@ -8,7 +8,6 @@
 	}
 .autocomplete input, .autocomplete ul li {
 	width:95%;
-	display: block;
 	padding: 0.125em;
 	margin: 0.25em auto auto;
 	}

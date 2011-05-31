@@ -21,31 +21,31 @@ class AutocompleteController < ApplicationController
   
   # PSEUDS
   def pseud
-    render_redis_output(params[:term], Pseud.redis_lookup(params[:term]))
+    render_output(params[:term], Pseud.autocomplete_lookup(params[:term]))
   end
   
   ## TAGS  
   def tag
-    render_redis_output(params[:term], Tag.redis_lookup(params[:term], "autocomplete_tag_#{params[:type]}"))
+    render_output(tag_output(params[:term], params[:type]))
   end
   # these are all duplicates of "tag" but make our calls to autocomplete more readable
-  def fandom; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "autocomplete_tag_fandom")); end
-  def character; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "autocomplete_tag_character")); end
-  def relationship; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "autocomplete_tag_relationship")); end
-  def freeform; render_redis_output(params[:term], Tag.redis_lookup(params[:term], "autocomplete_tag_freeform")); end
+  def fandom; render_output(tag_output(params[:term], "fandom")); end
+  def character; render_output(tag_output(params[:term], "character")); end
+  def relationship; render_output(tag_output(params[:term], "relationship")); end
+  def freeform; render_output(tag_output(params[:term], "freeform")); end
 
 
   ## TAGS IN SET
   def tag_in_set
-    render_redis_output(redis_tag_lookup(params[:term], "autocomplete_tag_#{params[:type]}", :extra_sets => ["autocomplete_tagset_#{params[:tag_set_id]}"])) 
+    render_output(autocomplete_tag_lookup(params[:term], "autocomplete_tag_#{params[:type]}", :constraint_sets => ["autocomplete_tagset_#{params[:tag_set_id]}"])) 
   end
   
   ## TAGS IN FANDOMS
   def tag_in_fandom
-    render_redis_output(redis_fandom_tag_lookup(params[:term], params[:type], params[:fandom], params[:fallback] || true)) 
+    render_output(autocomplete_fandom_tag_lookup(params[:term], params[:type], params[:fandom], params[:fallback] || true)) 
   end
-  def character_in_fandom; render_redis_output(params[:term], Tag.redis_fandom_lookup(params[:term], "character", params[:fandom], params[:fallback] || true)); end
-  def relationship_in_fandom; render_redis_output(params[:term], Tag.redis_fandom_lookup(params[:term], "relationship", params[:fandom], params[:fallback] || true)); end
+  def character_in_fandom; render_output(params[:term], Tag.autocomplete_fandom_lookup(params[:term], "character", params[:fandom], params[:fallback] || true)); end
+  def relationship_in_fandom; render_output(params[:term], Tag.autocomplete_fandom_lookup(params[:term], "relationship", params[:fandom], params[:fallback] || true)); end
   
   ## NONCANONICAL TAGS
   def noncanonical_tag
@@ -63,14 +63,14 @@ class AutocompleteController < ApplicationController
   # look up collections ranked by number of items they contain
 
   def collection_fullname
-    results = Collection.redis_lookup(params[:term], "autocomplete_collection_all").map {|result| Collection.fullname_from_redis(result)}
-    render_redis_output(params[:term], results)
+    results = Collection.autocomplete_lookup(params[:term], "autocomplete_collection_all").map {|result| Collection.fullname_from_autocomplete(result)}
+    render_output(params[:term], results)
   end
 
   # return collection names
   
   def open_collection_names
-    results = sort_redis_results(params[:term], Collection.redis_lookup(params[:term], "autocomplete_collection_open").map {|result| Collection.fullname_from_redis(result)})
+    results = sort_autocomplete_results(params[:term], Collection.autocomplete_lookup(params[:term], "autocomplete_collection_open").map {|result| Collection.fullname_from_autocomplete(result)})
     # in this case we want different ids from names so we can display the title but only put in the name
     results = results.map do |str| 
       (name, title) = str.split(Collection::REDIS_DELIMITER, 2)
@@ -108,10 +108,6 @@ class AutocompleteController < ApplicationController
   
 private
 
-  def render_redis_output(search_param, results)
-    render_output(sort_redis_results(search_param, results))
-  end
-
   def render_output(result_strings)
     if result_strings.first.is_a?(String)
       respond_with(result_strings.map {|str| {:id => str, :name => str}})
@@ -119,22 +115,9 @@ private
       respond_with(result_strings)
     end
   end
-
-  def sort_redis_results(search_param, pre_results, limit=15)
-    # bump up the results that start with the search param (or have the search param right after a / or & for relationships)
-    results = []
-    pre_results.each_with_index do |string, index|
-      if string.match(/^#{search_param}/i) || string.match(/(\/|\&)\s*#{search_param}/i)
-        results << string
-        pre_results.delete_at(index)
-      end
-    end
-    results += pre_results
-    
-    # limit to 15
-    Rails.logger.info "param #{search_param}, results: #{results.join(", ")}"
-    results[0..limit]
+  
+  def tag_output(search_param, tag_type)
+    Tag.autocomplete_lookup(search_param, "autocomplete_tag_#{tag_type}").map {|r| Tag.name_from_autocomplete(r)}
   end
-
 end
 
