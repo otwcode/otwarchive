@@ -163,7 +163,7 @@ Feature: Import Works from DW
     Then I should see "Work was successfully posted."
       And I should see "Chapters:2/2"
       And I should see "Published:2000-01-10"
-      And I should see "Completed:2000-01-21"
+      And I should see "Completed:2000-01-22"
       And I should see "My first paragraph."
       And I should see "My second paragraph."
     When I follow "Next Chapter"
