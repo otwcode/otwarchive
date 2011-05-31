@@ -46,15 +46,21 @@ Scenario: check that unapproved rels do not appear on the original
   When I view the work "Worldbuilding"
   Then I should not see "Translated"
 
+Scenario: See approved and unapproved relationships on the related works page as an author
+
+  Given I have related works setup
+  When I post a translation
+    And I post a related work
+  When I approve a related work
+    Then show me the page
+
 Scenario: approve remix and check they appear on the original, then remove and check
 
   Given I have related works setup
   When I post a related work
-  When I am logged out
-    And I am logged in as "inspiration" with password "something"
-    And I go to inspiration's user page
-  Then I should see "My Related Works (1)"
-  When I follow "My Related Works"
+  When I am logged in as "inspiration"
+    And I am on my user page
+  When I follow "My Related Works (1)"
   Then I should see "Works inspired by inspiration's works"
     And I should see "Followup by remixer"
   When I follow "Approve"

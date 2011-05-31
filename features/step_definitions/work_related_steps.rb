@@ -43,6 +43,15 @@ When /^I post a translation$/ do
   When %{I press "Post"}
 end
 
+When /^I approve a related work$/ do
+  When %{I am logged in as "inspiration"}
+    And "I am on my user page"
+  When %{I follow "My Related Works"}
+  When %{I follow "Approve"}
+  When %{I press "Yes, link me!"}
+  Then %{I should see "Link was successfully approved"}
+end
+
 ### THEN
 
 Then /^a related work should be seen$/ do
