@@ -270,49 +270,6 @@ When /^I open signups for "([^\"]*)"$/ do |title|
   Then %{I should see "Challenge was successfully updated"}
 end
 
-When /^I sign up for Battle 12$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_anonymous\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird\""
-    And "I press \"Submit\""
-end
-
-When /^I sign up for Battle 12 with combination A$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_27\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Alternate Universe - Historical\""
-    And "I press \"Submit\""
-end
-
-When /^I sign up for Battle 12 with combination B$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
-    And "I check \"challenge_signup_requests_attributes_0_anonymous\""
-    And "I check \"challenge_signup_requests_attributes_1_anonymous\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Alternate Universe - High School, Something else weird\""
-    And "I press \"Submit\""
-end
-
-When /^I sign up for Battle 12 with combination C$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_27\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird, Alternate Universe - Historical\""
-    And "I press \"Submit\""
-end
-
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
