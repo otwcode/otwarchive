@@ -35,7 +35,7 @@ form.new_collection p, form.new_user p {font-size:1em;}
 .heading h3, .heading h4 {font-weight:bold; line-height:1.125;}
 
 /*hasLayout */
-.index, .profile, .module, a, li a, form dd, .bigwrapper, .bookmark li, #feedback, .series, #header #signin, .blurb .tags li, #comment_form code {zoom:1;}
+.index, .profile, .module, a, li a, form dd, .bigwrapper, .bookmark li, #feedback, .series, #header #signin, .blurb .tags li, #comment_form code, .autocomplete li.added  {zoom:1;}
 
 /*and zoom resets */
 .stats a, .preface a, .meta .series {zoom:normal;}

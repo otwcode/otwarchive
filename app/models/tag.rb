@@ -324,7 +324,7 @@ class Tag < ActiveRecord::Base
     score ||= autocomplete_score
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zadd("autocomplete_fandom_#{parent.name}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+        $redis.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
       end
     end
     super
@@ -334,7 +334,7 @@ class Tag < ActiveRecord::Base
     super
     if self.is_a?(Character) || self.is_a?(Relationship)
       parents.each do |parent|
-        $redis.zrem("autocomplete_fandom_#{parent.name}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
       end
     end
   end
@@ -355,6 +355,7 @@ class Tag < ActiveRecord::Base
     results = []
     fandoms = fandom.is_a?(Array) ? fandom : fandom.split(',')
     fandoms.each do |single_fandom|
+      single_fandom.downcase!
       if search_param.blank?
         results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else

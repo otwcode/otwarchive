@@ -37,15 +37,15 @@ class AutocompleteController < ApplicationController
 
   ## TAGS IN SET
   def tag_in_set
-    render_output(autocomplete_tag_lookup(params[:term], "autocomplete_tag_#{params[:type]}", :constraint_sets => ["autocomplete_tagset_#{params[:tag_set_id]}"])) 
+    render_output(Tag.autocomplete_lookup(params[:term], "autocomplete_tag_#{params[:type]}", :constraint_sets => ["autocomplete_tagset_#{params[:tag_set_id]}"]).map {|r| Tag.name_from_autocomplete(r)})
   end
   
   ## TAGS IN FANDOMS
   def tag_in_fandom
-    render_output(autocomplete_fandom_tag_lookup(params[:term], params[:type], params[:fandom], params[:fallback] || true)) 
+    render_output(tag_in_fandom_output(params[:term], params[:type], params[:fandom], params[:fallback] || true)) 
   end
-  def character_in_fandom; render_output(params[:term], Tag.autocomplete_fandom_lookup(params[:term], "character", params[:fandom], params[:fallback] || true)); end
-  def relationship_in_fandom; render_output(params[:term], Tag.autocomplete_fandom_lookup(params[:term], "relationship", params[:fandom], params[:fallback] || true)); end
+  def character_in_fandom; render_output(tag_in_fandom_output(params[:term], "character", params[:fandom], params[:fallback] || true)); end
+  def relationship_in_fandom; render_output(tag_in_fandom_output(params[:term], "relationship", params[:fandom], params[:fallback] || true)); end
   
   ## NONCANONICAL TAGS
   def noncanonical_tag
@@ -70,11 +70,9 @@ class AutocompleteController < ApplicationController
   # return collection names
   
   def open_collection_names
-    results = sort_autocomplete_results(params[:term], Collection.autocomplete_lookup(params[:term], "autocomplete_collection_open").map {|result| Collection.fullname_from_autocomplete(result)})
     # in this case we want different ids from names so we can display the title but only put in the name
-    results = results.map do |str| 
-      (name, title) = str.split(Collection::REDIS_DELIMITER, 2)
-      {:id => name, :name => str}
+    results = Collection.autocomplete_lookup(params[:term], "autocomplete_collection_open").map do |str| 
+      {:id => Collection.name_from_autocomplete(str), :name => Collection.title_from_autocomplete(str)}
     end
     respond_with(results)
   end
@@ -118,6 +116,10 @@ private
   
   def tag_output(search_param, tag_type)
     Tag.autocomplete_lookup(search_param, "autocomplete_tag_#{tag_type}").map {|r| Tag.name_from_autocomplete(r)}
+  end
+  
+  def tag_in_fandom_output(search_param, tag_type, fandom, fallback = true)
+    Tag.autocomplete_fandom_lookup(search_param, tag_type, fandom, fallback).map {|r| Tag.name_from_autocomplete(r)}
   end
 end
 

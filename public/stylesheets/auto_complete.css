@@ -6,11 +6,14 @@
 	line-height: 1.286;
 	box-shadow: 1px 3px 5px rgba(0,0,0,0.5)
 	}
-.autocomplete input, .autocomplete ul li {
-	width:95%;
+.autocomplete ul li {
 	padding: 0.125em;
 	margin: 0.25em auto auto;
 	}
+.autocomplete input {
+	display: block;
+	margin: 0.25em 0 0;
+}
 .autocomplete ul li:hover, li.selected {
 	background: url(/images/header-red.png) top left #900; 
 	color: #fff;
@@ -18,7 +21,16 @@
 .required .autocomplete {
 	color:#222;
 	}
-/*note: plan to develop and generalise this to all buttons*/
+.autocomplete .notice {
+		font-size:0.875em;
+		}
+
+.autocomplete li.added {
+	  display: inline-block;
+	  white-space: nowrap;
+	}
+
+	/*note: plan to develop and generalise this to all buttons*/
 .autocomplete span.delete {
 			background:#eee;
 			background:-moz-linear-gradient(bottom, rgba(0,0,0,0.5) 5%, rgba(0,0,0,0.35) 10%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.95) 99%);
@@ -32,12 +44,6 @@
 			-moz-border-radius:0.875em;
 			border-radius:0.875em;
 }
-.autocomplete .notice {
-	font-size:0.875em;
-	}
 
-.autocomplete .added {
-  display: inline;
-}
 
 

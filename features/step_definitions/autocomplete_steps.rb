@@ -66,12 +66,12 @@ end
 
 When /^I specify a fandom and enter text in the character autocomplete field$/ do
   When %{I fill in "Fandoms" with "Supernatural"}
-    And %{I enter text in the "Characters" autocomplete field}
+    And %{I enter text in the character autocomplete field}
 end
 
 When /^I specify a fandom and enter text in the relationship autocomplete field$/ do
   When %{I fill in "Fandoms" with "Supernatural"}
-    And %{I enter text in the "Relationships" autocomplete field}
+    And %{I enter text in the relationship autocomplete field}
 end
 
 When /^I specify two fandoms and enter text in the character autocomplete field$/ do

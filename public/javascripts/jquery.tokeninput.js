@@ -618,7 +618,6 @@ $.TokenList = function (input, url_or_data, settings) {
             newvalue = newvalue.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + termbit + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<b>$1</b>");
         });
         return newvalue;
-        // return value.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + term + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<b>$1</b>");
     }
 
     // Populate the results dropdown with some results

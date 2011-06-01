@@ -89,6 +89,7 @@ module AutocompleteSource
       
       # get all the complete words that could be part of the user's desired result
       word_pieces.each do |word_piece|
+        # O(log N) where N is number of possible prefixes
         completions += autocomplete_word_completions(word_piece, autocomplete_prefix)
       end
       completions.uniq!
@@ -97,7 +98,8 @@ module AutocompleteSource
       # along with their scores and add up the scores
       scored_results = {}
       count = {}
-      completions.each do |word|        
+      completions.each do |word|
+        # O(logN + M) where M is number of items returned -- we could speed up even more by putting in a limit 
         phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores)
         while phrases_with_scores.length > 0 do 
           phrase = phrases_with_scores.shift
@@ -105,6 +107,7 @@ module AutocompleteSource
           
           if options[:constraint_sets]
             # phrases must be in these sets or else no go
+            # O(logN) complexity
             next unless options[:constraint_sets].all {|set| $redis.zrank(set, phrase)}
           end
           if scored_results[phrase]
@@ -117,6 +120,7 @@ module AutocompleteSource
         end
       end
 
+      # final sort is O(NlogN) but N is only the number of results which should be small
       keys = scored_results.keys.sort do |k1, k2| 
         count[k1] > count[k2] ? -1 : (count[k2] > count[k1] ? 1 :
           scored_results[options[:sort] == "down" ? k2 : k1].to_i <=> scored_results[options[:sort] == "down" ? k1 : k2].to_i)
@@ -169,16 +173,19 @@ module AutocompleteSource
       prefixes
     end
       
+    # overall time complexity: O(log N)
     def autocomplete_word_completions(word_piece, autocomplete_prefix)
       get_exact = is_complete_word?(word_piece)
 
       # the rank of the word piece tells us where to start looking 
       # in the completion set for possible completions
+      # O(logN) N = number of things in the completion set (ie all the possible prefixes for all the words)
       start_position = $redis.zrank(autocomplete_completion_key(autocomplete_prefix), word_piece)
       return [] unless start_position
       
       results = []
       # start from that position and go for the specified range length
+      # O(logN + M) M is the range length, so reduces to logN
       $redis.zrange(autocomplete_completion_key(autocomplete_prefix), start_position, start_position + AUTOCOMPLETE_RANGE_LENGTH - 1).each do |entry|
         minlen = [entry.length, word_piece.length].min
         # if the entry stops matching the prefix then we've passed out of
