@@ -14,9 +14,10 @@ class Fandom < Tag
 
   scope :by_media, lambda {|media| where(:media_id => media.id)}
 
-  scope :unwrangled, 
+  def self.unwrangled
     joins(:common_taggings).
     where("common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'", Media.uncategorized.try(:id))
+  end
     
   # An association callback to add the default media if all others have been removed
   def check_media(media)

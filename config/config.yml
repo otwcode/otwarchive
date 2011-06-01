@@ -288,6 +288,9 @@ USE_DELTA_INDEXING: false
 #PRODUCTION_CACHE: "memory"
 PRODUCTION_CACHE: "memcache"
 
+# how long we cache search results in minutes
+AUTOCOMPLETE_EXPIRATION_TIME: 10
+
 # Turn this off in local.yml to keep the development footer/profiling code from running
 DEVELOPMENT_PROFILING_ENABLED: true
 

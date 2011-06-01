@@ -1,15 +1,14 @@
 <% item ||= @item %>
 <% @collection_item ||= CollectionItem.new %>
 <div id="collection-form">
-  <h3><% t('.collection_items.add_item_to_collection', :default => "Add %{title} to collections", :title => item.title) %>
+  <h3><% ts("Add %{title} to collections", :title => item.title) %>
   </h3>
 
 <%= form_for([item, @collection_item], :url => {:controller => 'collection_items', :action => :create}) do |form| %>
 	<p>
-	<%= label_tag :collection_names, t('.collection_names', :default => "Enter collection name(s): ") %>
-  <%= text_field_tag :collection_names, nil, :size => 40 %>
-    <%= autocomplete_text_field "collection_names" %>
+	<%= label_tag :collection_names, ts("Enter collection name(s): ") %>
+  <%= text_field_tag :collection_names, nil, autocomplete_options("open_collection_names", :size => 40) %>
   </p>
-<p class="submit"><%= form.submit(t('.collection_items.add', :default => "Add")) %></p>
+<p class="submit"><%= form.submit(ts("Add")) %></p>
 <% end %>
 </div>

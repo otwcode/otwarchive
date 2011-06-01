@@ -1,3 +1,4 @@
+DEFAULT_USER = "testuser"
 DEFAULT_PASSWORD = "password"
 
 Given /^I have no users$/ do
@@ -44,7 +45,11 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
 end
 
 Given /^I am logged in as "([^\"]*)"$/ do |login|
-  Given "I am logged in as \"#{login}\" with password \"#{DEFAULT_PASSWORD}\""
+  Given %{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"}
+end
+
+Given /^I am logged in$/ do
+  Given %{I am logged in as "#{DEFAULT_USER}"}
 end
 
 When /^I fill in "([^\"]*)"'s temporary password$/ do |login|

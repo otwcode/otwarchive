@@ -19,7 +19,7 @@
     <dd class="byline">
       <ul>
         <% for author in @coauthors %>
-          <li><%=h author.byline %></li>
+          <li><%= author.byline %></li>
         <% end %>
       </ul>
     </dd>
@@ -35,8 +35,7 @@
   <dl class="coauthors">
     <dt><%= label_tag :pseud_byline, ts("Enter co-author name(s):") %></dt>
     <dd>
-      <%= text_field :pseud, :byline, :size => 50 %>
-      <%= autocomplete_text_field "pseud_byline" %>
+      <%= text_field :pseud, :byline, autocomplete_options("pseud", :size => 50) %>
     </dd>
   </dl>
 </dd>

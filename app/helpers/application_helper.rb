@@ -237,46 +237,19 @@ module ApplicationHelper
     return generated_html
   end
   
-  def autocomplete_text_field(fieldname, options={})
-    ("\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
-    '<img src="/images/spinner.gif" alt="Working..." /></span>' +
-    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>").html_safe +
-    javascript_tag("var autocomplete_for_#{fieldname} = new Ajax.Autocompleter('#{fieldname}', 
-                            '#{fieldname}_auto_complete', 
-                            '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
-                            { 
-                              indicator: 'indicator_#{fieldname}',
-                              frequency: #{options[:frequency] ? options[:frequency] : '0.4'},
-                              minChars: #{options[:min_chars] ? options[:min_chars] : '3'},
-                              paramName: '#{fieldname}',
-                              parameters: 'fieldname=#{fieldname}#{options[:extra_params] ? '&' + options[:extra_params] : ''}',
-                              fullSearch: true,
-                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}'
-                              #{options[:no_comma] ? '' : ', afterUpdateElement: addCommaToField'}
-                              #{options[:auto_params] ? ", autoParams: #{options[:auto_params]}" : ''}
-                            });")    
+  # returns the default autocomplete attributes, all of which can be overridden
+  # note: we do this and put the message defaults here so we can use translation on them
+  def autocomplete_options(method, options={})
+    {      
+      :class => "autocomplete",
+      :autocomplete_method => "/autocomplete/#{method}",
+      :autocomplete_hint_text => ts("Start typing for suggestions!"),
+      :autocomplete_no_results_text => ts("(No suggestions found)"),
+      :autocomplete_min_chars => 1,
+      :autocomplete_searching_text => ts("Searching...")
+    }.merge(options)
   end
-  
-  # Trying out a way of sending the tag type to the autocomplete
-  # controller so that it can return the right class of results
-  def autocomplete_text_field_with_type(object, fieldname, options={})
-    ("\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
-    '<img src="/images/spinner.gif" alt="Working..." /></span>' +
-    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>").html_safe +
-    javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
-                            '#{fieldname}_auto_complete', 
-                            '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
-                            { 
-                              indicator: 'indicator_#{fieldname}',
-                              minChars: 2,
-                              paramName: '#{fieldname}',
-                              parameters: 'fieldname=#{fieldname}&type=#{object.type}',
-                              fullSearch: true,
-                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}'
-                              #{options[:no_comma] ? '' : ', afterUpdateElement: addCommaToField'}
-                            });")    
-  end
-  
+    
   # see http://asciicasts.com/episodes/197-nested-model-form-part-2
   def link_to_add_section(linktext, form, nested_model_name, partial_to_render, locals = {})
     new_nested_model = form.object.class.reflect_on_association(nested_model_name).klass.new

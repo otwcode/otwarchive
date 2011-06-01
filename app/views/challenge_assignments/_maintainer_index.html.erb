@@ -40,8 +40,7 @@
               <%= hidden_field_tag :assignment_to_cover, assignment.id %>
               <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
               <%= assignment_form.hidden_field :request_signup_id, :value => request.id %>
-              <%= assignment_form.text_field :pinch_hitter_byline %>
-              <%= autocomplete_text_field "challenge_assignment_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true %>
+              <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", :autocomplete_token_limit => 1) %>
           </td>
           <td>
               <ul class="navigation">

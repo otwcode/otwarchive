@@ -312,6 +312,69 @@ class Tag < ActiveRecord::Base
     saved_name.gsub('/', '*s*').gsub('&', '*a*').gsub('.', '*d*').gsub('?', '*q*').gsub('#', '*h*')
   end
 
+  ## AUTOCOMPLETE
+  # set up autocomplete and override some methods
+  include AutocompleteSource
+  def autocomplete_prefixes
+    prefixes = [ "autocomplete_tag_#{type.downcase}", "autocomplete_tag_all" ]
+    prefixes
+  end
+  
+  def add_to_autocomplete(score = nil)
+    score ||= autocomplete_score
+    if self.is_a?(Character) || self.is_a?(Relationship)
+      parents.each do |parent|
+        $redis.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+      end
+    end
+    super
+  end
+
+  def remove_from_autocomplete
+    super
+    if self.is_a?(Character) || self.is_a?(Relationship)
+      parents.each do |parent|
+        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+      end
+    end
+  end
+    
+  def self.parse_autocomplete_value(current_autocomplete_value)
+    current_autocomplete_value.split(AUTOCOMPLETE_DELIMITER, 2)
+  end
+  
+
+  def autocomplete_score
+    taggings_count
+  end
+  
+  # look up tags that have been wrangled into a given fandom
+  def self.autocomplete_fandom_lookup(search_param, tag_type, fandom, fallback=true)
+    # fandom sets are too small to bother breaking up
+    # we're just getting ALL the tags in the set(s) for the fandom(s) and then manually matching
+    results = []
+    fandoms = fandom.is_a?(Array) ? fandom : fandom.split(',')
+    fandoms.each do |single_fandom|
+      single_fandom.downcase!
+      if search_param.blank?
+        # just return ALL the characters
+        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
+      else
+        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(/#{search_param}/i)}
+      end
+    end
+    if fallback && results.empty? && search_param.length >= 3
+      # do a standard tag lookup instead
+      Tag.autocomplete_lookup(search_param, "autocomplete_tag_#{tag_type}")
+    else
+      results
+    end
+  end
+
+  ## END AUTOCOMPLETE
+
+
+
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
     return unless string.is_a? String

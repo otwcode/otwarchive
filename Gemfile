@@ -63,6 +63,9 @@ gem "escape_utils"
 # enable debugging with "rails server -u" or "rails server --debugger"
 gem 'ruby-debug19', :require => 'ruby-debug'
 
+# for converting strings into numeric values eg for sorting autocomplete
+gem 'radix'
+
 group :test do
   gem 'rspec-rails', '>=2.0.0'
   gem 'pickle'

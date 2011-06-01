@@ -58,7 +58,7 @@ Feature: Tag wrangling
       And I fill in "content" with "That could be an amusing crossover."
       And I press "Preview"
       And I press "Post"
-		Then I should see "Work was successfully posted."
+      Then I should see "Work was successfully posted."
     
     # mass wrangling
     When I follow "Tag Wrangling"
@@ -184,7 +184,7 @@ Feature: Tag wrangling
       And I press "Save changes"
       And I follow "Rodney McKay/John Sheppard"
     Then I should see "Stargate Atlantis"
-
+  
     # assigning characters to a canonical relationship
     When I fill in "Characters" with "Rodney McKay, John Sheppard"
       And I press "Save changes"
@@ -193,26 +193,23 @@ Feature: Tag wrangling
 
   Scenario: Issue 1701: Sign up for a fandom from the edit fandom page, then from editing a child tag of a fandom
     
-    Given the following activated tag wrangler exists
-      | login  | password    |
-      | Enigel | wrangulate |
-      And a fandom exists with name: "'Allo 'Allo", canonical: true
-      And a fandom exists with name: "From Eroica with Love", canonical: true
-      And a fandom exists with name: "Cabin Pressure", canonical: true
-      And a relationship exists with name: "Dorian/Martin", canonical: false
+    Given a canonical fandom "'Allo 'Allo"
+      And a canonical fandom "From Eroica with Love"
+      And a canonical fandom "Cabin Pressure"
+      And a noncanonical relationship "Dorian/Martin"
     
     # I want to sign up from the edit page of an unassigned fandom
-    When I am logged in as "Enigel" with password "wrangulate"
+    When I am logged in as a tag wrangler
       And I edit the tag "'Allo 'Allo"
     Then I should see "Sign Up"
     When I follow "Sign Up"
     Then I should see "Assign fandoms to yourself"
-      And I should see "'Allo 'Allo" within "#tag_fandom_string"
+      And the autocomplete value should be set to "'Allo 'Allo"
     When I press "Assign"
     Then I should see "Wranglers were successfully assigned"
     When I edit the tag "'Allo 'Allo"
     Then I should not see "Sign Up"
-      And I should see "Enigel" within ".tag_edit"
+      And I should see the tag wrangler listed as an editor of the tag
     
     # I want to sign up from the edit page of a relationship that belongs to two unassigned fandoms
     When I edit the tag "Dorian/Martin"
@@ -221,12 +218,13 @@ Feature: Tag wrangling
       And I press "Save changes"
     Then I should see "Tag was updated"
     When I follow "Sign Up"
-    Then I should see "Cabin Pressure, From Eroica with Love" within "#tag_fandom_string"
+    Then I should see "Cabin Pressure" in the autocomplete
+      And I should see "From Eroica with Love" in the autocomplete
     When I press "Assign"
     Then I should see "Wranglers were successfully assigned"
     When I edit the tag "From Eroica with Love"
     Then I should not see "Sign Up"
-      And I should see "Enigel" within ".tag_edit"
+      And I should see the tag wrangler listed as an editor of the tag
     When I edit the tag "Cabin Pressure"
     Then I should not see "Sign Up"
-      And I should see "Enigel" within ".tag_edit"
+      And I should see the tag wrangler listed as an editor of the tag

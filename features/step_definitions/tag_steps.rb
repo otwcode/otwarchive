@@ -1,6 +1,6 @@
 Given /^I have no tags$/ do
-  Tag.delete_all
-  silence_warnings {load "#{Rails.root}/app/models/fandom.rb"}
+  # Tag.delete_all if Tag.count > 1
+  # silence_warnings {load "#{Rails.root}/app/models/fandom.rb"}
 end
 
 Given /^basic tags$/ do
@@ -43,6 +43,42 @@ Given /^I add the fandom "([^\"]*)" to the character "([^\"]*)"$/ do |fandom, ch
   char.add_association(fand)
 end
 
+Given /^a canonical character "([^\"]*)" in fandom "([^\"]*)"$/ do |character, fandom|
+  char = Character.find_or_create_by_name_and_canonical(character)
+  fand = Fandom.find_or_create_by_name_and_canonical(fandom)
+  char.add_association(fand)
+end
+
+Given /^a canonical relationship "([^\"]*)" in fandom "([^\"]*)"$/ do |relationship, fandom|
+  rel = Relationship.find_or_create_by_name_and_canonical(relationship)
+  fand = Fandom.find_or_create_by_name_and_canonical(fandom)
+  rel.add_association(fand)
+end
+
+Given /^a canonical (\w+) "([^\"]*)"$/ do |tag_type, tagname|
+  t = tag_type.classify.constantize.find_or_create_by_name(tagname)
+  t.canonical = true
+  t.save
+end
+
+Given /^a noncanonical (\w+) "([^\"]*)"$/ do |tag_type, tagname|
+  t = tag_type.classify.constantize.find_or_create_by_name(tagname)
+  t.canonical = false
+  t.save
+end
+
+Given /^I am logged in as a tag wrangler$/ do
+  Given "I am logged out"
+  username = "wrangler"
+  Given %{I am logged in as "#{username}"}
+  user = User.find_by_login(username)
+  user.tag_wrangler = '1'
+end
+
+Then /^I should see the tag wrangler listed as an editor of the tag$/ do
+  Then %{I should see "wrangler" within ".tag_edit"}
+end
+  
 Given /^the tag wrangler "([^\"]*)" with password "([^\"]*)" is wrangler of "([^\"]*)"$/ do |user, password, fandomname|
   tw = User.find_by_login(user)
   if tw.blank?

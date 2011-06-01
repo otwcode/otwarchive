@@ -53,7 +53,7 @@
         <% TagSet::TAG_TYPES.each do |tag_type| %>
           <fieldset class="tag_set">
             <legend><%= ts("%{tag_type} Settings", :tag_type => tag_type.classify) %></legend>
-            <h4><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, "#{tag_type.classify}: " %></h4>
+            <h4><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, "#{tag_type.classify.pluralize}" %></h4>
             <p>
               <!-- 
                 monstrous kludge required by ugly bug in nested_attributes_for, see
@@ -61,10 +61,7 @@
               -->
               <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
               <% tagnames = restriction.tag_set ? restriction.tag_set.send("#{tag_type}_tagnames") : "" %>
-              <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :value => tagnames,
-                  :rows => (tagnames.size/3 > 10 ? 10 : (tagnames.size/3 < 2 ? 2 : tagnames.size/3)) %>
-              <% tag_fieldname = "#{@challenge.class.name.tableize.singularize}_offer_restriction_attributes_tag_set_attributes_#{tag_type}_tagnames" %>
-              <%= autocomplete_text_field(tag_fieldname, :methodname => "canonical_#{tag_type}_finder") %>
+              <%= tag_set_form.text_field "#{tag_type}_tagnames".to_sym, autocomplete_options(tag_type, :value => tagnames) %>
             </p>
 
             <% if TagSet::TAG_TYPES_INITIALIZABLE.include?(tag_type) %>

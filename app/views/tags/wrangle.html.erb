@@ -28,8 +28,7 @@
 <% if params[:show] && params[:show] !~ /suggested/ %>
   <h3>Add new <%= params[:show] %></h3>
   <%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
-    <%= f.text_area "#{params[:show].singularize}_string", :size => "100x5" %>
-    <%= autocomplete_text_field_with_type @tag, "tag_#{params[:show].singularize}_string" %>
+    <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{@tag.type.downcase}") %>
     <%= hidden_field_tag :show, params[:show] %>
     <%= hidden_field_tag :sort_column, params[:sort_column] %>
     <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
