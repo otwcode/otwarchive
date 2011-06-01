@@ -81,6 +81,12 @@ When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
   click_button "Create"
 end
 
+Given /^"([^\"]*)" has the pseud "([^\"]*)"$/ do |username, pseud|
+  When %{I am logged in as "#{username}"}
+  When %{"#{username}" creates the pseud "#{pseud}"}
+  When "I am logged out"
+end
+
 When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
   visit user_pseuds_path(username)
   click_link("New Pseud")
