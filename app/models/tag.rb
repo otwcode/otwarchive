@@ -357,6 +357,7 @@ class Tag < ActiveRecord::Base
     fandoms.each do |single_fandom|
       single_fandom.downcase!
       if search_param.blank?
+        # just return ALL the characters
         results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else
         results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(/#{search_param}/i)}

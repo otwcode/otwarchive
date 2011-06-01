@@ -2,6 +2,7 @@ module AutocompleteSource
   AUTOCOMPLETE_DELIMITER = ": "
   AUTOCOMPLETE_COMPLETION_KEY = "completion"
   AUTOCOMPLETE_SCORE_KEY = "score"
+  AUTOCOMPLETE_CACHE_KEY = "cache"
   AUTOCOMPLETE_RANGE_LENGTH = 50 # not random
   AUTOCOMPLETE_BOOST = 1000 # amt by which we boost results that have all the words
   
@@ -79,6 +80,10 @@ module AutocompleteSource
     end
   
     def autocomplete_lookup(search_param, autocomplete_prefix, options = {:sort => "down"})
+      if $redis.exists(autocomplete_cache_key(autocomplete_prefix, search_param))
+        return $redis.zrange(autocomplete_cache_key(autocomplete_prefix, search_param), 0, -1)
+      end
+      
       completions = []
       
       # we assume that if the user is typing in a phrase, any words they have
@@ -120,13 +125,21 @@ module AutocompleteSource
         end
       end
 
-      # final sort is O(NlogN) but N is only the number of results which should be small
-      keys = scored_results.keys.sort do |k1, k2| 
+      # final sort is O(NlogN) but N is only the number of complete phrase results which should be relatively small
+      results = scored_results.keys.sort do |k1, k2| 
         count[k1] > count[k2] ? -1 : (count[k2] > count[k1] ? 1 :
           scored_results[options[:sort] == "down" ? k2 : k1].to_i <=> scored_results[options[:sort] == "down" ? k1 : k2].to_i)
       end
       limit = options[:limit] || 15
-      keys[0..limit]
+      
+      if search_param.length <= 2
+        # cache the result for really quick response when only 1-2 letters entered
+        # adds only a little bit to memory and saves doing a lot of processing of many phrases
+        results[0..limit].each_with_index {|res, index| $redis.zadd(autocomplete_cache_key(autocomplete_prefix, search_param), index, res)}
+        # expire every 24 hours so new entries get added if appropriate
+        $redis.expire(autocomplete_cache_key(autocomplete_prefix, search_param), 24*60*60)
+      end      
+      results[0..limit]
     end
     
     def is_complete_word?(word_piece)
@@ -143,6 +156,10 @@ module AutocompleteSource
     
     def autocomplete_completion_key(autocomplete_prefix)
       autocomplete_prefix + "_" + AUTOCOMPLETE_COMPLETION_KEY
+    end
+    
+    def autocomplete_cache_key(autocomplete_prefix, search_param)
+      autocomplete_prefix + "_" + AUTOCOMPLETE_CACHE_KEY + "_" + search_param
     end
       
     def autocomplete_phrase_split(string)

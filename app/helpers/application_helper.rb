@@ -245,7 +245,7 @@ module ApplicationHelper
       :autocomplete_method => "/autocomplete/#{method}",
       :autocomplete_hint_text => ts("Start typing for suggestions!"),
       :autocomplete_no_results_text => ts("(No suggestions found)"),
-      :autocomplete_min_chars => 3,
+      :autocomplete_min_chars => 1,
       :autocomplete_searching_text => ts("Searching...")
     }.merge(options)
   end
