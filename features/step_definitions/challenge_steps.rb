@@ -73,6 +73,14 @@ Given /^I have Battle 12 prompt meme fully set up$/ do
   When %{I follow "Log out"}
 end
 
+Given /^I have no-column prompt meme fully set up$/ do
+  Given %{I am logged in as "mod1"}
+    And "I have standard challenge tags setup"
+  When "I set up Battle 12 promptmeme collection"
+  When "I fill in no-column challenge options"
+  When %{I follow "Log out"}
+end
+
 Given /^everyone has signed up for Battle 12$/ do
   # no anon
   When %{I am logged in as "myname1"}
@@ -183,6 +191,12 @@ When /^I fill in unlimited prompt challenge options$/ do
     And %{I press "Submit"}
 end
 
+When /^I fill in no-column challenge options$/ do
+  When %{I fill in "prompt_meme_requests_num_required" with "1"}
+    And %{I check "Signup open?"}
+    And %{I press "Submit"}
+end
+
 When /^I fill in prompt meme challenge options$/ do
   When %{I fill in "General Signup Instructions" with "Here are some general tips"}
     And %{I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate SG-1, Stargate Atlantis"}
@@ -230,7 +244,7 @@ end
 
 When /^I start signing up for Battle 12$/ do
   visit collection_path(Collection.find_by_title("Battle 12"))
-    And %{I follow "Sign Up"}
+  When %{I follow "Sign Up"}
 end
 
 When /^I sign up for Battle 12$/ do
@@ -276,6 +290,14 @@ When /^I sign up for Battle 12 with combination D$/ do
     And %{I check the 1st checkbox with the value "Stargate Atlantis"}
     And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
     click_button "Submit"
+end
+
+When /^I sign up for Battle 12 with combination E$/ do
+  When "I go to the collections page"
+    And "I follow \"Battle 12\""
+    And "I follow \"Sign Up\""
+    And %{I fill in "Description:" with "Weird description"}
+    And "I press \"Submit\""
 end
 
 When /^I add prompt (\d+)$/ do |number|
@@ -384,6 +406,11 @@ end
 When /^I view my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Your Prompts"}
+end
+
+When /^I view claims for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Claims ("}
 end
 
 When /^I start to fulfill my claim$/ do
