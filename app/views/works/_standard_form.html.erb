@@ -114,19 +114,17 @@
       
       <!-- Add collection -->
       <dt class="collection">
-        <%= f.label :collection_names, t('.work_form.collection_names', :default => "Post to Collections/Challenges: ") %> <%= link_to_help "add-work-to-collection" %>
+        <%= f.label :collection_names, ts("Post to Collections/Challenges: ") %> <%= link_to_help "add-work-to-collection" %>
       </dt>
       <dd class="collection">
-        <%= f.text_field :collection_names %>
-        <%= autocomplete_text_field("work_collection_names") %>
+        <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>
       </dd>
 
       <dt class="recipient">
-        <%= f.label :recipients, t('.recipients', :default => "Recipient(s): (if this work is a gift)") %> <%= link_to_help "recipients" %>
+        <%= f.label :recipients, ts("Recipient(s): (if this work is a gift)") %> <%= link_to_help "recipients" %>
       </dt>
       <dd class="recipient">
-        <%= f.text_field :recipients %>
-        <%= autocomplete_text_field("work_recipients") %>
+        <%= f.text_field :recipients, autocomplete_options("pseud") %>
       </dd>
 
       <!-- Inspiration / remix -->
@@ -134,7 +132,7 @@
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :onclick => "toggleFormField('parent-options');" %>
       </dt>
       <dd class="work-parent">
-        <%= label_tag 'parent-options-show', t('.related_work', :default => "This work is a remix, a translation, or was inspired by another work") %>
+        <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, or was inspired by another work") %>
       </dd>
 
       <!-- Toggles on with parent checkbox -->

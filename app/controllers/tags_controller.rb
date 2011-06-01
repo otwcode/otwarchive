@@ -3,6 +3,8 @@ class TagsController < ApplicationController
   before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :search ]
   before_filter :check_permission_to_wrangle, :except => [ :show, :index, :show_hidden, :search ]
 
+  cache_sweeper :tag_sweeper
+
   # GET /tags
   # GET /tags.xml
   def index

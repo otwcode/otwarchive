@@ -5,43 +5,23 @@ Given /^I have no challenge assignments$/ do
 end
 
 Given /^I have standard challenge users$/ do
-# figure out how to set up users here later - need mod1 and myname1 to 4
-  When %{I am logged in as "mod1"}
-    And "I am logged out"
-  When %{I am logged in as "myname1"}
-    And "I am logged out"
-  When %{I am logged in as "myname2"}
-    And "I am logged out"
-  When %{I am logged in as "myname3"}
-    And "I am logged out"
-  When %{I am logged in as "myname4"}
-    And "I am logged out"
+  Given %{the users "mod1, myname1, myname2, myname3, myname4"}  
 end
 
 Given /^I have standard challenge tags setup$/ do
   Given "I have no tags"
     And "basic tags"
-    And %{I create the fandom "Stargate Atlantis" with id 27}
-    And %{I create the fandom "Stargate SG-1" with id 28}
-    And %{a freeform exists with name: "Alternate Universe - Historical", canonical: true}
-    And %{a freeform exists with name: "Alternate Universe - High School", canonical: true}
-    And %{a freeform exists with name: "Something else weird", canonical: true}
-    And %{a freeform exists with name: "My extra tag", canonical: true}
-end
-
-Given /^I have alternative challenge tags setup$/ do
-  Given "basic tags"
-    And %{I create the fandom "Stargate Atlantis" with id 54}
-    And %{I create the fandom "Stargate SG-1" with id 55}
-    And %{a character exists with name: "John Sheppard", canonical: true}
+    And %{a canonical fandom "Stargate Atlantis"}
+    And %{a canonical fandom "Stargate SG-1"}
+    And %{a canonical character "John Sheppard"}
+    And %{a canonical freeform "Alternate Universe - Historical"}
+    And %{a canonical freeform "Alternate Universe - High School"}
+    And %{a canonical freeform "Something else weird"}
+    And %{a canonical freeform "My extra tag"}
 end
 
 Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|
-  Given "I have standard challenge tags setup"
-    And %{I am logged in as "mod1"}
-    And %{I set up the collection "#{challengename}"}
-    And %{I select "Gift Exchange" from "challenge_type"}
-  click_button("Submit")
+  Given %{I have set up the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
 Given /^I have set up the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
@@ -51,17 +31,18 @@ Given /^I have set up the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |ch
     And %{I select "Gift Exchange" from "challenge_type"}
   click_button("Submit")
 end
-    
+
 Given /^I have created the gift exchange "([^\"]*)"$/ do |challengename|
-  Given %{I have set up the gift exchange "#{challengename}"}
-  When "I fill in gift exchange challenge options"
-  click_button("Submit")
+  Given %{I have created the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
 
 Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   Given %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   When "I fill in gift exchange challenge options"
     click_button("Submit")
+  Then %{I should see "Challenge was successfully created"}  
+  When %{I follow "Challenge Settings"}
+  Then %{I should see "Stargate" in the autocomplete}
 end
 
 Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
@@ -85,15 +66,19 @@ Given /^I have Battle 12 prompt meme fully set up$/ do
 end
 
 Given /^everyone has signed up for Battle 12$/ do
-  When %{I am logged in as "myname1"}
   # no anon
+  When %{I am logged in as "myname1"}
   When %{I sign up for Battle 12 with combination A}
-  When %{I am logged in as "myname2"}
+
   # both anon
+  When %{I am logged in as "myname2"}
   When %{I sign up for Battle 12 with combination B}
-  When %{I am logged in as "myname3"}
+
   # one anon
+  When %{I am logged in as "myname3"}
   When %{I sign up for Battle 12}
+
+  # no anon
   When %{I am logged in as "myname4"}
   When %{I sign up for Battle 12 with combination C}
 end
@@ -132,6 +117,56 @@ end
 When /^I view open challenges$/ do
   When "I go to the collections page"
   When %{I follow "See Open Challenges"}
+end
+
+When /^I start signing up for Battle 12$/ do
+  When "I go to the collections page"
+    And %{I follow "Battle 12"}
+    And %{I follow "Sign Up"}
+end
+
+When /^I sign up for Battle 12$/ do
+  When %{I start signing up for Battle 12}
+    And %{I check the 1st checkbox with the value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with the value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with id matching "anonymous"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
+    click_button "Submit"
+end
+
+When /^I sign up for Battle 12 with combination A$/ do
+  When %{I start signing up for Battle 12}
+    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
+    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - Historical"}
+    click_button "Submit"
+end
+
+When /^I sign up for Battle 12 with combination B$/ do
+  When %{I start signing up for Battle 12}
+    And %{I check the 1st checkbox with the value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    And %{I check the 1st checkbox with id matching "anonymous"}
+    And %{I check the 2nd checkbox with id matching "anonymous"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - High School, Something else weird"}
+    click_button "Submit"
+end
+
+When /^I sign up for Battle 12 with combination C$/ do
+  When %{I start signing up for Battle 12}
+    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
+    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
+    click_button "Submit"
+  Then %{I should see "Signup was successfully created"}
+    And %{I should see "Stargate Atlantis"}
+    And %{I should see "Something else weird"}
+end
+
+When /^I add prompt (\d+)$/ do |number|
+  When %{I follow "Add another prompt"}
+    And %{I check the #{number}th checkbox with the value "Stargate Atlantis"}
+    And %{I press "Submit"}
 end
 
 When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/ do |type, title, name|
@@ -209,7 +244,7 @@ When /^I fill in gift exchange challenge options$/ do
     select("2010", :from => "gift_exchange_signups_open_at_1i")
     select("2013", :from => "gift_exchange_signups_close_at_1i")
     select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
-    fill_in("gift_exchange_offer_restriction_attributes_tag_set_attributes_fandom_tagnames", :with => "Stargate SG-1, Stargate Atlantis")
+    fill_in("Fandoms", :with => "Stargate SG-1, Stargate Atlantis")
     fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
     fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", :with => "1")
     fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", :with => "2")
@@ -235,130 +270,84 @@ When /^I open signups for "([^\"]*)"$/ do |title|
   Then %{I should see "Challenge was successfully updated"}
 end
 
-When /^I sign up for Battle 12$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_anonymous\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird\""
-    And "I press \"Submit\""
-end
-
-When /^I sign up for Battle 12 with combination A$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_27\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Alternate Universe - Historical\""
-    And "I press \"Submit\""
-end
-
-When /^I sign up for Battle 12 with combination B$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
-    And "I check \"challenge_signup_requests_attributes_0_anonymous\""
-    And "I check \"challenge_signup_requests_attributes_1_anonymous\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Alternate Universe - High School, Something else weird\""
-    And "I press \"Submit\""
-end
-
-When /^I sign up for Battle 12 with combination C$/ do
-  When "I go to the collections page"
-    And "I follow \"Battle 12\""
-    And "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_27\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_27\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird, Alternate Universe - Historical\""
-    And "I press \"Submit\""
-end
-
-When /^I add prompt (\d+)$/ do |number|
-  When "I follow \"Add another prompt\""
-    And "I check \"challenge_signup_requests_attributes_#{number}_fandom_54\""
-    And "I press \"Submit\""
-end
-
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
   visit collection_path(Collection.find_by_title(title))
-  When "I follow \"Sign Up\""
-    And "I check \"challenge_signup_requests_attributes_0_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_fandom_28\""
-    And "I check \"challenge_signup_requests_attributes_1_anonymous\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames\" with \"Something else weird\""
-    And "I press \"Submit\""
+  When %{I follow "Sign Up"}
+    And %{I check the 1st checkbox with value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with id matching "anonymous"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
+    click_button "Submit"
+
 end
 
 When /^I sign up for "([^\"]*)" many-fandom prompt meme$/ do |title|
   visit collection_path(Collection.find_by_title(title))
-  When "I follow \"Sign Up\""
-    And "I fill in \"challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames\" with \"Stargate Atlantis\""
-    And "I check \"challenge_signup_requests_attributes_0_anonymous\""
-    And "I press \"Submit\""
+  When %{I follow "Sign Up"}
+    And %{I fill in the 1st field with id matching "fandom_tagnames" with "Stargate Atlantis"}
+    And %{I check the 1st checkbox with id matching "anonymous"}
+    click_button "Submit"
+
 end
 
 When /^I sign up for "([^\"]*)" with combination A$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
-    And %{I check "challenge_signup_requests_attributes_0_fandom_27"}
-    And %{I check "challenge_signup_offers_attributes_0_fandom_28"}
-    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - Historical"}
-    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"}
-    And %{I press "Submit"}
+    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
+    And %{I check the 2nd checkbox with value "Stargate SG-1"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - Historical"}
+    And %{I fill in the 2nd field with id matching "freeform_tagnames" with "Alternate Universe - High School"}
+    click_button "Submit"
+
 end
 
 When /^I sign up for "([^\"]*)" with combination B$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
-    And %{I check "challenge_signup_requests_attributes_0_fandom_28"}
-    And %{I check "challenge_signup_offers_attributes_0_fandom_27"}
-    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School, Something else weird"}
-    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Alternate Universe - High School"}
+    And %{I check the 1st checkbox with value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - High School, Something else weird"}
+    And %{I fill in the 2nd field with id matching "freeform_tagnames" with "Alternate Universe - High School"}
     And %{I press "Submit"}
 end
 
 When /^I sign up for "([^\"]*)" with combination C$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
-    And %{I check "challenge_signup_requests_attributes_0_fandom_28"}
-    And %{I check "challenge_signup_offers_attributes_0_fandom_28"}
-    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"}
-    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"}
+    And %{I check the 1st checkbox with the value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with the value "Stargate SG-1"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
+    And %{I fill in the 2nd field with id matching "freeform_tagnames" with "Something else weird"}
     And %{I press "Submit"}
 end
 
 When /^I sign up for "([^\"]*)" with combination D$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
-    And %{I check "challenge_signup_requests_attributes_0_fandom_27"}
-    And %{I check "challenge_signup_offers_attributes_0_fandom_27"}
-    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
-    And %{I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
+    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
+    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
+    And %{I fill in the 2nd field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
     And %{I press "Submit"}
 end
 
 When /^I sign up for "([^\"]*)" with missing prompts$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
-    And %{I check "challenge_signup_requests_attributes_0_fandom_27"}
-    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_freeform_tagnames" with "Something else weird"}
+    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
     And %{I press "Submit"}
 end
 
 When /^I fill in the missing prompt$/ do
-  When %{I check "challenge_signup_requests_attributes_1_fandom_27"}
+  When %{I check the 2nd checkbox with the value "Stargate Atlantis"}
     And %{I press "Submit"}
 end
 
 When /^I start to sign up for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
-    And %{I check "challenge_signup_requests_attributes_0_fandom_28"}
+    And %{I check the 1st checkbox with value "Stargate SG-1"}
 end
 
 When /^I view my signup for "([^\"]*)"$/ do |title|
@@ -447,13 +436,13 @@ end
 ### THEN
 
 Then /^I should see Battle 12 descriptions$/ do
-  Then "I should see \"Welcome to the meme\" within \"#intro\""
-  Then "I should see \"Signup: CURRENTLY OPEN\""
-  Then "I should see \"Signup closes:\""
-  Then "I should see \"2011\" within \".collection.meta\""
-  Then "I should see \"What is this thing?\" within \"#faq\""
-  Then "I should see \"It is a comment fic thing\" within \"#faq\""
-  Then "I should see \"Be nicer to people\" within \"#rules\""
+  Then %{I should see "Welcome to the meme" within "#intro"}
+  Then %{I should see "Signup: CURRENTLY OPEN"}
+  Then %{I should see "Signup closes:"}
+  Then %{I should see "2011" within ".collection.meta"}
+  Then %{I should see "What is this thing?" within "#faq"}
+  Then %{I should see "It is a comment fic thing" within "#faq"}
+  Then %{I should see "Be nicer to people" within "#rules"}
 end
 
 Then /^I should see prompt meme options$/ do
@@ -506,11 +495,13 @@ Then /^I should see a prompt is claimed$/ do
 end
 
 Then /^I should see correct signups for Battle 12$/ do
-  Then %{I should see "myname4" within "#main"}
-    And %{I should see "myname3" within "#main"}
-    And %{I should not see "myname2" within "#main"}
-    And %{I should see "(Anonymous)" within "#main"}
-    And %{I should see "myname1" within "#main"}
+  Then %{I should see "myname4" within "td"}
+    And %{I should see "myname3" within "td"}
+    And %{I should not see "myname2" within "td"}
+    And %{I should see "(Anonymous)" within "td"}
+    And %{I should see "myname1" within "td"}
+    And %{I should see "Stargate Atlantis"}
+    And %{I should see "Stargate SG-1"}
     And %{I should see "Something else weird"}
     And %{I should see "Alternate Universe - Historical"}
     And %{I should not see "Matching"}

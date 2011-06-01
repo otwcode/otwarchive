@@ -1,4 +1,5 @@
 class PseudsController < ApplicationController
+  cache_sweeper :pseud_sweeper
 
   before_filter :load_user
   before_filter :check_ownership, :only => [:create, :edit, :destroy, :new, :update]

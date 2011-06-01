@@ -1,8 +1,8 @@
 @no-txn @tags @tag_wrangling @search
 Feature: Search Tags
-  In order to figure out how to use cucumber with thinking sphinx
-  As a humble coder
-  I want to figure out how to test tag search
+  In order to find tags
+  As a user
+  I want to use tag search
 
   Scenario: Search tags
     Given I have no tags
@@ -37,3 +37,4 @@ Feature: Search Tags
       And I press "Search tags"
     Then I should see "1 Found"
       And I should see "first last/someone else (0)"
+		
