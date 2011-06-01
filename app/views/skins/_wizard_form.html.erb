@@ -1,4 +1,5 @@
 <fieldset class="preface profile">
+  <legend>Skin Wizard</legend>
   <h3><%= ts("Archive Skin Wizard") %></h3>
 
   <dl>
@@ -44,6 +45,9 @@
     
     <dt><%= f.label :headercolor, ts('Header color') %></dt>
     <dd><%= f.text_field :headercolor %></dd>
+    
+    <dt><%= f.label :accent_color, ts('Accent color') %></dt>
+    <dd><%= f.text_field :accent_color %></dd>
     
     <%= hidden_field_tag "wizard", true %>
     

@@ -512,3 +512,8 @@ Feature: creating and editing skins
   Given I am logged in as "skinner"
   When I create a skin to change the header color
   Then I should see a different header color
+  
+  Scenario: Change the accent color
+  Given I am logged in as "skinner"
+  When I create a skin to change the accent color
+  Then I should see a different accent color on the dashboard and work meta
