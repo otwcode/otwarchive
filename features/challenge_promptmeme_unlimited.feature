@@ -6,7 +6,7 @@ Feature: Prompt Meme Challenge
   
   Scenario: Check the autocomplete is working
   
-  Given I have alternative challenge tags setup
+  Given I have standard challenge tags setup
     And I am logged in as "mod1"
   When I set up a basic promptmeme "Battle 12"
     And I follow "Challenge Settings"
@@ -42,7 +42,7 @@ Feature: Prompt Meme Challenge
 
   Scenario: Create a prompt meme for a large challenge like bigger kink memes
 
-  Given I have alternative challenge tags setup
+  Given I have standard challenge tags setup
     And I am logged in as "mod1"
   
   # set up the challenge
