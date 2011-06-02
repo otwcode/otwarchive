@@ -305,7 +305,7 @@ Feature: Prompt Meme Challenge
     And I follow "Claims"
   Then I should not see "Delete"
   
-  Scenario: Prompt is deleted after response has been posted
+  Scenario: Prompt can be deleted after response has been posted
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -325,6 +325,7 @@ Feature: Prompt Meme Challenge
     And I should see "Stargate Atlantis"
     
   Scenario: User can't claim the same prompt twice
+  
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination B
@@ -369,6 +370,7 @@ Feature: Prompt Meme Challenge
     And I should see "Othercoll"
     
   Scenario: User claims two prompts in one challenge and fulfills one of them
+  
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
@@ -429,6 +431,7 @@ Feature: Prompt Meme Challenge
     And the "My Gift Exchange (myname2)" checkbox should be disabled
     
   Scenario: User posts to fulfill direct from Post New
+  
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
   When I am logged in as "myname3"
@@ -466,7 +469,37 @@ Feature: Prompt Meme Challenge
 ##As a user I now can't access "My Signups" and "My Claims" (500)
 ##The story fulfilling a prompt, remains accessible and in the collection, it retains the "In response to a prompt by: testy" line. Clicking on "testy" in that line sends me to the collection dashboard showing the "What challenge did you want to work with?" error message.
 ##Completely deleting the collection, removed the collection and the prompt line from the story. As a user I can now again access "MY Signups" and "My Claims".
-    
+  
+  Scenario: Mod can claim a prompt like an ordinary user
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "mod1"
+  When I claim a prompt from "Battle 12"
+  Then I should see "New claim made."
+  
+  Scenario: Mod can still see anonymous claims after signup is closed
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I am logged in as "mod1"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "mod1"
+  When I am on "Battle 12" collection's page
+    And I follow "Claims ("
+  Then I should see "Unfulfilled Claims"
+    And I should see "mod" within "#unfulfilled_claims"
+    And I should see "myname4" within "#unfulfilled_claims"
+    And I should see "Stargate Atlantis" within "#unfulfilled_claims"
+    And I should see "Alternate Universe - Historical" within "#unfulfilled_claims"
+    And I should not see "Alternate Universe - Historical" within "#fulfilled_claims"
+    And I should see "Stargate Atlantis" within "#fulfilled_claims"
+    And I should see "myname4" within "#fulfilled_claims"
+  
   Scenario: All the rest of the unrefactored stuff
   
   Given I have Battle 12 prompt meme fully set up
@@ -477,22 +510,8 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname4"
   When I fulfill my claim
   
-  # mod claims a prompt
-  
   When I am logged in as "mod1"
   When I claim a prompt from "Battle 12"
-  Then I should see "New claim made."
-  
-  # mod can still see claims even though it's anonymous
-  
-    And I should see "Unfulfilled Claims"
-    And I should see "mod" within "#unfulfilled_claims"
-    And I should see "myname4" within "#unfulfilled_claims"
-    And I should see "Stargate Atlantis" within "#unfulfilled_claims"
-    And I should see "Alternate Universe - Historical" within "#unfulfilled_claims"
-    And I should not see "Alternate Universe - Historical" within "#fulfilled_claims"
-    And I should see "Stargate Atlantis" within "#fulfilled_claims"
-    And I should see "myname4" within "#fulfilled_claims"
   
   # mod posts a fic
   
