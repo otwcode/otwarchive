@@ -20,6 +20,14 @@ Given /^I have standard challenge tags setup$/ do
     And %{a canonical freeform "My extra tag"}
 end
 
+Given /^I have Yuletide challenge tags setup$/ do
+  Given "I have standard challenge tags setup"
+    And %{a canonical fandom "Starsky & Hutch"}
+    And %{a canonical fandom "Tiny fandom"}
+    And %{a canonical fandom "Care Bears"}
+    And %{a canonical fandom "Yuletide Hippos RPF"}
+end
+
 Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|
   Given %{I have set up the gift exchange "#{challengename}" with name "#{challengename.gsub(/[^\w]/, '_')}"}
 end
@@ -113,61 +121,6 @@ Given /^I have sent assignments for "([^\"]*)"$/ do |challengename|
 end
 
 ### WHEN
-
-When /^I view open challenges$/ do
-  When "I go to the collections page"
-  When %{I follow "See Open Challenges"}
-end
-
-When /^I start signing up for Battle 12$/ do
-  When "I go to the collections page"
-    And %{I follow "Battle 12"}
-    And %{I follow "Sign Up"}
-end
-
-When /^I sign up for Battle 12$/ do
-  When %{I start signing up for Battle 12}
-    And %{I check the 1st checkbox with the value "Stargate SG-1"}
-    And %{I check the 2nd checkbox with the value "Stargate SG-1"}
-    And %{I check the 2nd checkbox with id matching "anonymous"}
-    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
-    click_button "Submit"
-end
-
-When /^I sign up for Battle 12 with combination A$/ do
-  When %{I start signing up for Battle 12}
-    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
-    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
-    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - Historical"}
-    click_button "Submit"
-end
-
-When /^I sign up for Battle 12 with combination B$/ do
-  When %{I start signing up for Battle 12}
-    And %{I check the 1st checkbox with the value "Stargate SG-1"}
-    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
-    And %{I check the 1st checkbox with id matching "anonymous"}
-    And %{I check the 2nd checkbox with id matching "anonymous"}
-    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - High School, Something else weird"}
-    click_button "Submit"
-end
-
-When /^I sign up for Battle 12 with combination C$/ do
-  When %{I start signing up for Battle 12}
-    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
-    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
-    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
-    click_button "Submit"
-  Then %{I should see "Signup was successfully created"}
-    And %{I should see "Stargate Atlantis"}
-    And %{I should see "Something else weird"}
-end
-
-When /^I add prompt (\d+)$/ do |number|
-  When %{I follow "Add another prompt"}
-    And %{I check the #{number}th checkbox with the value "Stargate Atlantis"}
-    And %{I press "Submit"}
-end
 
 When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/ do |type, title, name|
   When %{I am logged in as "mod1"}
@@ -268,6 +221,84 @@ When /^I open signups for "([^\"]*)"$/ do |title|
     And %{I check "Signup open?"}
     And %{I press "Submit"}
   Then %{I should see "Challenge was successfully updated"}
+end
+
+When /^I view open challenges$/ do
+  When "I go to the collections page"
+  When %{I follow "See Open Challenges"}
+end
+
+When /^I start signing up for Battle 12$/ do
+  visit collection_path(Collection.find_by_title("Battle 12"))
+    And %{I follow "Sign Up"}
+end
+
+When /^I sign up for Battle 12$/ do
+  When %{I start signing up for Battle 12}
+    And %{I check the 1st checkbox with the value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with the value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with id matching "anonymous"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
+    click_button "Submit"
+end
+
+When /^I sign up for Battle 12 with combination A$/ do
+  When %{I start signing up for Battle 12}
+    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
+    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - Historical"}
+    click_button "Submit"
+end
+
+When /^I sign up for Battle 12 with combination B$/ do
+  When %{I start signing up for Battle 12}
+    And %{I check the 1st checkbox with the value "Stargate SG-1"}
+    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    And %{I check the 1st checkbox with id matching "anonymous"}
+    And %{I check the 2nd checkbox with id matching "anonymous"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - High School, Something else weird"}
+    click_button "Submit"
+end
+
+When /^I sign up for Battle 12 with combination C$/ do
+  When %{I start signing up for Battle 12}
+    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
+    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
+    click_button "Submit"
+  Then %{I should see "Signup was successfully created"}
+    And %{I should see "Stargate Atlantis"}
+    And %{I should see "Something else weird"}
+end
+
+When /^I sign up for Battle 12 with combination D$/ do
+  When %{I start signing up for Battle 12}
+    And %{I check the 1st checkbox with the value "Stargate Atlantis"}
+    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    click_button "Submit"
+end
+
+When /^I add prompt (\d+)$/ do |number|
+  When %{I follow "Add another prompt"}
+  Then %{I should see "Request #{number}"}
+  When %{I check the 1st checkbox with the value "Stargate Atlantis"}
+    And %{I press "Submit"}
+end
+
+When /^I add (\d+) prompts starting from (\d+)$/ do |number_of_prompts, start|
+  @index = start
+  while @index < number_of_prompts
+    When "I add prompt #{@index}"
+    @index = @index + 1
+  end
+end
+
+When /^I add (\d+) prompts$/ do |number_of_prompts|
+  @index = 2
+  while @index < number_of_prompts
+    When "I add prompt #{@index}"
+    @index = @index + 1
+  end
 end
 
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
@@ -430,6 +461,7 @@ end
 When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
+  Then "show me the page"
   When %{I follow "Remove prompt"}
 end
 
