@@ -9,6 +9,8 @@ Given /^basic tags$/ do
   Rating.find_or_create_by_name_and_canonical("Not Rated", true)
   Rating.find_or_create_by_name_and_canonical("Explicit", true)
   Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
+  Category.find_or_create_by_name_and_canonical("Other", true)
+  Category.find_or_create_by_name_and_canonical("F/F", true)
 end
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
