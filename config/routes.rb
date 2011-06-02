@@ -71,7 +71,7 @@ Otwarchive::Application.routes.draw do
   resources :tag_wranglers
   resources :tags do
     member do
-      # anything you add here will need a match under globbing at the top
+      get :feed
       get :wrangle
       post :mass_update
       get :remove_association

@@ -21,6 +21,20 @@ module SeriesHelper
     serial = SerialWork.where(:work_id => work.id, :series_id => series.id).first
     ("Part #{serial.position} of " + link_to(series.title, series)).html_safe
   end
+
+  def series_list_for_feeds(work)
+    series = work.series
+    if series.empty?
+      return "None"
+    else
+      list = []
+      for s in series
+        list << "Part #{s.serial_works.where(:work_id => work.id).select(:position).first.position} of 
+#{link_to(s.title, s)}"
+      end
+      return list.join(', ')
+    end
+  end
     
   # Generates confirmation message for 'remove me as author'
   def series_removal_confirmation(series, user)
