@@ -179,6 +179,29 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination C
   Then I should see "Signup was successfully created"
   
+  Scenario: User has more than one pseud on signup form
+  
+  Given "myname1" has the pseud "othername"
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I start to sign up for "Battle 12"
+  Then I should see "Select pseudonym"
+  
+  Scenario: User changes pseud on a challenge signup
+  
+  Given "myname1" has the pseud "othername"
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  Then I should see "Signup was successfully created"
+    And I should see "Signup for myname1"
+  When I edit my signup for "Battle 12"
+  Then I should see "Select pseudonym"
+  When I select "othername" from "Select pseudonym"
+    And I press "Submit"
+  Then I should see "Signup was successfully updated"
+  Then I should see "Signup for othername (myname1)"
+  
   Scenario: Mod deletes a signup that doesn't fit the challenge rules
   
   Given I have Battle 12 prompt meme fully set up
@@ -190,7 +213,6 @@ Feature: Prompt Meme Challenge
   #  And "myname1" should be emailed
   
   Scenario: Mod deletes a prompt that doesn't fit the challenge rules
-  # This needs javascript refactoring first, and to make a non-js version of editing individual prompts within signups
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"

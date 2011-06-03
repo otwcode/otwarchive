@@ -189,3 +189,26 @@ Feature: Gift Exchange Challenge
     # This is in fact a bug - only one of them should be checked
   Then the "Awesome Gift Exchange (myname3)" checkbox should be checked
     And the "Second Challenge (myname3)" checkbox should be checked
+  
+  Scenario: User has more than one pseud on signup form
+  
+  Given "myname1" has the pseud "othername"
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Sensitive Gift Exchange"
+    And I have opened signup for the gift exchange "Sensitive Gift Exchange"
+  When I am logged in as "myname1"
+  When I start to sign up for "Sensitive Gift Exchange" gift exchange
+  Then I should see "Select pseudonym"
+  
+  Scenario: User tries to change pseud on a challenge signup and should not be able to, as it would break matching
+  
+  Given "myname1" has the pseud "othername"
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Sensitive Gift Exchange"
+    And I have opened signup for the gift exchange "Sensitive Gift Exchange"
+  When I am logged in as "myname1"
+  When I sign up for "Sensitive Gift Exchange" with combination A
+  Then I should see "Signup was successfully created"
+    And I should see "Signup for myname1"
+  When I edit my signup for "Sensitive Gift Exchange"
+  Then I should not see "Select pseudonym"
