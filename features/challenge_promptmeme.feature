@@ -151,7 +151,7 @@ Feature: Prompt Meme Challenge
   
   Given I have no-column prompt meme fully set up
   When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination D
+  When I sign up for Battle 12 with combination E
   When I claim a prompt from "Battle 12"
   When I view claims for "Battle 12"
   Then I should see "Weird description"
@@ -160,7 +160,7 @@ Feature: Prompt Meme Challenge
   
   Given I have no-column prompt meme fully set up
   When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination D
+  When I sign up for Battle 12 with combination E
   When I view prompts for "Battle 12"
   Then I should not see "Sort by fandom"
   
