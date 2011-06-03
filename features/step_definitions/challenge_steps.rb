@@ -381,6 +381,11 @@ When /^I start to sign up for "([^\"]*)"$/ do |title|
     And %{I check the 1st checkbox with value "Stargate SG-1"}
 end
 
+When /^I start to sign up for "([^\"]*)" gift exchange$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+end
+
 When /^I view my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Your Prompts"}
