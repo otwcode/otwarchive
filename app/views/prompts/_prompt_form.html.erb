@@ -36,7 +36,7 @@
         <% num_required = eval("restriction.#{tag_type}_num_required") %>
         <% @taglist ||= {} %>
         <% @taglist["#{tag_type}-#{restriction.id}"] ||= restriction.tag_set.tags.with_type(tag_type.classify).by_name_without_articles %>
-        <!-- do ratings, warnings, categories as taglists if not already specified -->
+        <% # do ratings, warnings, categories as taglists if not already specified %>
         <% if @taglist["#{tag_type}-#{restriction.id}"].empty? && TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
           <% @taglist["#{tag_type}-#{restriction.id}"] = tag_type.classify.constantize.canonical.by_name_without_articles %>
         <% end %>        

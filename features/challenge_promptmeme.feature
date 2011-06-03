@@ -140,6 +140,30 @@ Feature: Prompt Meme Challenge
     And I follow "Sort by fandom"
   Then I should see "Something else weird"
   
+  Scenario: Sign up for a prompt meme with no tags
+  
+  Given I have no-column prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination E
+  Then I should see "Signup was successfully created"
+  
+  Scenario: If there are no fandoms, prompt info on claims should show description or URL
+  
+  Given I have no-column prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination E
+  When I claim a prompt from "Battle 12"
+  When I view claims for "Battle 12"
+  Then I should see "Weird description"
+  
+  Scenario: Sort by fandom shouldn't show when there aren't any fandoms
+  
+  Given I have no-column prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination E
+  When I view prompts for "Battle 12"
+  Then I should not see "Sort by fandom"
+  
   Scenario: Claim a prompt and view claims on main page and user page
   
   Given I have Battle 12 prompt meme fully set up
@@ -296,8 +320,7 @@ Feature: Prompt Meme Challenge
   Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I am logged in as "myname1"
-  When I go to "Battle 12" collection's page
-    And I follow "Claims"
+  When I view claims for "Battle 12"
   Then I should not see "Delete"
   
   Scenario: User can delete their own claim from the collection claims list
@@ -305,8 +328,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
-  When I go to "Battle 12" collection's page
-    And I follow "Claims"
+  When I view claims for "Battle 12"
   When I follow "Delete"
   Then I should see "Your claim was deleted."
   When I go to "Battle 12" collection's page

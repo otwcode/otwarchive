@@ -9,8 +9,12 @@
 <% end %>
 </div>
 
+<% @tagcount = "false" %>
 <% TagSet::TAG_TYPES.each do |type| %>
   <% eval("@show_request_#{type}_tags = (@challenge.request_restriction.#{type}_num_allowed > 0) && !params[:hide_tags]") %>
+  <% if eval("@show_request_#{type}_tags") %>
+    <% @tagcount = "true" %>
+  <% end %>
 <% end %>
 
 <h3>Unfulfilled Claims</h3>
@@ -46,6 +50,7 @@
           <% end %>
         </td>
         <td>
+        <% if @tagcount == "true" %>
           <% TagSet::TAG_TYPES.each do |type| %>
             <% if eval("@show_request_#{type}_tags") %>
                 <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
@@ -53,6 +58,9 @@
                 <% end %>
             <% end %>  
           <% end %>
+        <% else %>
+          <%= prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) %> <%= prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) %>
+        <% end %>
         </td>
         <td><% if claim.claiming_pseud.user == current_user %>
           <%= link_to ts("Post To Fulfill"), new_collection_work_path(@collection, :claim_id => claim.id) %>
@@ -97,6 +105,7 @@
           <% end %>
         </td>
         <td>
+        <% if @tagcount == "true" %>
           <% TagSet::TAG_TYPES.each do |type| %>
             <% if eval("@show_request_#{type}_tags") %>
                 <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
@@ -104,6 +113,9 @@
                 <% end %>
             <% end %>  
           <% end %>
+        <% else %>
+          <%= prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) %> <%= prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) %>
+        <% end %>
         </td>
         <td>
           <% if claim.creation %>
