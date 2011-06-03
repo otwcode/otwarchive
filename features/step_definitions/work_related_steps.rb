@@ -52,6 +52,11 @@ When /^I approve a related work$/ do
   Then %{I should see "Link was successfully approved"}
 end
 
+When /^I view my related works$/ do
+  When "I go to my user page"
+    And %{I follow "My Related Works"}
+end
+
 ### THEN
 
 Then /^a related work should be seen$/ do

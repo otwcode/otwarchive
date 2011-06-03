@@ -52,15 +52,16 @@ Scenario: See approved and unapproved relationships on the related works page as
   When I post a translation
     And I post a related work
   When I approve a related work
-    Then show me the page
+  When I view my related works
+  Then I should see "remixer Approve"
+    And I should see "Deutsch Remove"
 
 Scenario: approve remix and check they appear on the original, then remove and check
 
   Given I have related works setup
   When I post a related work
   When I am logged in as "inspiration"
-    And I am on my user page
-  When I follow "My Related Works (1)"
+    And I view my related works
   Then I should see "Works inspired by inspiration's works"
     And I should see "Followup by remixer"
   When I follow "Approve"
@@ -71,7 +72,7 @@ Scenario: approve remix and check they appear on the original, then remove and c
     And I should see "Followup by remixer"
   When I follow "my home"
   Then I should see "My Related Works (1)"
-  When I follow "My Related Works"
+  When I view my related works
     And I follow "Remove"
   Then I should see "Remove Link"
   When I press "Remove link"
