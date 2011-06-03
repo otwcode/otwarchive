@@ -53,7 +53,7 @@ end
 When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)" with category "([^\"]*)"$/ do |title, fandom, freeform, category|
   work = Work.find_by_title(title)
   if work.blank?
-    Given %{the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}"}
+    Given %{the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}"}
     work = Work.find_by_title(title)
   end
   visit preview_work_url(work)

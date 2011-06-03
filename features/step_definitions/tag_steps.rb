@@ -11,6 +11,9 @@ Given /^basic tags$/ do
   Fandom.find_or_create_by_name_and_canonical("No Fandom", true)
   Category.find_or_create_by_name_and_canonical("Other", true)
   Category.find_or_create_by_name_and_canonical("F/F", true)
+  Category.find_or_create_by_name_and_canonical("Multi", true)
+  Category.find_or_create_by_name_and_canonical("M/F", true)
+  Category.find_or_create_by_name_and_canonical("M/M", true)
 end
 
 When /^I edit the tag "([^\"]*)"$/ do |tag|
