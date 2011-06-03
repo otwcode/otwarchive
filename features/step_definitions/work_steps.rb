@@ -99,7 +99,17 @@ When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
-  select(category.nil? ? DEFAULT_CATEGORY : category, :from => "Category")
+  check(category.nil? ? DEFAULT_CATEGORY : category)
+  fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
+  fill_in("Additional Tags", :with => freeform.nil? ? DEFAULT_FREEFORM : freeform)
+  click_button("Preview")
+end
+
+When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")$/ do |title, fandom, freeform|
+  Given "basic tags"
+  visit new_work_url
+  Given %{I fill in the basic work information for "#{title}"}
+  check(DEFAULT_CATEGORY)
   fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
   fill_in("Additional Tags", :with => freeform.nil? ? DEFAULT_FREEFORM : freeform)
   click_button("Preview")
@@ -109,7 +119,7 @@ When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")$/ do |title, fandom|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
-  select(category.nil? ? DEFAULT_CATEGORY : category, :from => "Category")
+  check(category.nil? ? DEFAULT_CATEGORY : category)
   fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
   click_button("Preview")
 end
@@ -119,7 +129,7 @@ When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
   visit new_work_url
   Given "I fill in the basic work information for \"#{title}\""
   fill_in("Fandoms", :with => "Naruto")
-  select(category.nil? ? DEFAULT_CATEGORY : category, :from => "Category")
+  check(category.nil? ? DEFAULT_CATEGORY : category)
   collection = Collection.find_by_title(collection)
   fill_in("Collections", :with => collection.name)
   click_button("Preview")
@@ -129,7 +139,7 @@ When /^I set up the draft "([^\"]*)"$/ do |title|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
-  select(category.nil? ? DEFAULT_CATEGORY : category, :from => "Category")
+  check(category.nil? ? DEFAULT_CATEGORY : category)
 end
 
 When /^the draft "([^\"]*)"$/ do |title|
