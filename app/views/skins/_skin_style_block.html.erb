@@ -19,6 +19,9 @@
     <% if skin.headercolor %>
       #header {background-image: none; background-color: <%= skin.headercolor %>;}
     <% end %>
+    <% if skin.accent_color %>
+      #dashboard ul, #main dl.meta {background-color: <%= skin.accent_color %>;}
+    <% end %>
   <% end %>
 
   <%= skin.css %>
