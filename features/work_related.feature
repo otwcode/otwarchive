@@ -4,13 +4,13 @@ Feature: Inspirations, remixes and translations
   As a fan author, part of a fan community
   I want to be able to list related works
 
-Scenario: Posting a remix / inspired-by work, then editing
+Scenario: Posting a remix / inspired-by work should email the original author
   Given I have related works setup
   When I post a related work
   Then a related work should be seen
     And the original author should be emailed
-    
-Scenario: check that I see a remix under related works
+
+Scenario: check that remixer can see a remix under related works
 
   Given I have related works setup
   When I post a related work
@@ -19,8 +19,17 @@ Scenario: check that I see a remix under related works
   When I follow "My Related Works"
   Then I should see "Works remixer's works were inspired by"
     And I should see "Worldbuilding by inspiration"
+    
+Scenario: Author can see a remix under related works
 
-Scenario: posting a translation
+  Given I have related works setup
+  When I post a related work
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should see "Works inspired by inspiration's works"
+    And I should see "Followup by remixer"
+
+Scenario: Can post a translation and it emails the original author
 
   Given I have related works setup
   When I post a translation
@@ -28,23 +37,55 @@ Scenario: posting a translation
     And I should see "A translation of Worldbuilding by inspiration"
     And 1 email should be delivered
 
-Scenario: check that I see a translation under related works
+Scenario: Translator sees a translation under related works
 
   Given I have related works setup
   When I post a translation
-  When I go to translator's user page
+  When I go to my user page
   Then I should see "My Related Works (1)"
   When I follow "My Related Works"
   Then I should see "Works translator has translated"
     And I should see "Worldbuilding by inspiration"
     And I should see "From English to Deutsch"
 
-Scenario: check that unapproved rels do not appear on the original
+Scenario: Unapproved rels do not appear on the original
 
   Given I have related works setup
   When I post a translation
   When I view the work "Worldbuilding"
   Then I should not see "Translated"
+  
+Scenario: Can approve a relationship
+
+  Given I have related works setup
+  When I post a related work
+  When I am logged in as "inspiration"
+    And I view my related works
+  When I follow "Approve"
+  Then I should see "Approve Link"
+  When I press "Yes, link me!"
+  Then I should see "Link was successfully approved"
+    And I should see "Works inspired by this one:"
+    And I should see "Followup by remixer"
+
+  Scenario: Can approve a translation
+
+  Given I have related works setup
+  When I post a translation
+  When I approve a related work
+  Then I should see "Link was successfully approved"
+    And I should see "Translation into Deutsch available:" within ".notes"
+    And I should see "Worldbuilding Translated by translator" within ".notes"
+    And I should see "Works inspired by this one:"
+    And I should see "Worldbuilding Translated by translator" within "li"
+
+Scenario: Approved work appears
+
+  Given I have related works setup
+  When I post a translation
+  When I approve a related work
+  When I view the work "Worldbuilding"
+  Then I should see "Translated"
 
 Scenario: See approved and unapproved relationships on the related works page as an author
 
@@ -55,51 +96,34 @@ Scenario: See approved and unapproved relationships on the related works page as
   When I view my related works
   Then I should see "Worldbuilding Approve"
     And I should see "Deutsch Remove"
-
-Scenario: approve remix and check they appear on the original, then remove and check
+    
+Scenario: Cannot see someone else's related works page
 
   Given I have related works setup
   When I post a related work
   When I am logged in as "inspiration"
-    And I view my related works
-  Then I should see "Works inspired by inspiration's works"
-    And I should see "Followup by remixer"
-  When I follow "Approve"
-  Then I should see "Approve Link"
-  When I press "Yes, link me!"
-  Then I should see "Link was successfully approved"
-    And I should see "Works inspired by this one:"
-    And I should see "Followup by remixer"
-  When I follow "my home"
-  Then I should see "My Related Works (1)"
+  When I go to remixer's user page
+  Then I should not see "Related Works"
+
+Scenario: Remove a previously approved relationship
+
+  Given I have related works setup
+  When I post a related work
+  When I approve a related work
   When I view my related works
     And I follow "Remove"
   Then I should see "Remove Link"
   When I press "Remove link"
   Then I should see "Link was successfully removed"
     And I should not see "Followup by remixer"
-  
-Scenario: approve translation and check they appear on the original, then remove and check
+    
+Scenario: Remove a previously approved translation
 
   Given I have related works setup
-  When I post a translation
-  When I am logged in as "inspiration"
-    And I go to my user page
-  Then I should see "My Related Works (1)"
-  When I follow "My Related Works"
-  Then I should see "Translations of inspiration's works"
-    And I should see "Worldbuilding Translated by translator"
-    And I should see "From English to Deutsch"
-  When I follow "Approve" within "#translationsofme"
-    And I press "Yes, link me!"
-  Then I should see "Link was successfully approved"
-    And I should see "Translation into Deutsch available:" within ".notes"
-    And I should see "Worldbuilding Translated by translator" within ".notes"
-    And I should see "Works inspired by this one:"
-    And I should see "Worldbuilding Translated by translator" within "li"
-  When I go to my user page
-    And I follow "My Related Works"
-    And I follow "Remove" within "#translationsofme"
+    And a translation has been posted
+  When I approve a related work
+  When I view my related works
+    And I follow "Remove" within "#inspiredbyme"
   Then I should see "Remove Link"
   When I press "Remove link"
   Then I should see "Link was successfully removed"
@@ -120,7 +144,43 @@ Scenario: editing existing work should also send email
     And I should see "Inspired by Worldbuilding Two by inspiration"
     And "issue 1509" is fixed
     # And 1 email should be delivered
+
+Scenario: Remixer receives comments on remix, author doesn't
+
+  Given I have related works setup
+  When I post a related work
+  When I am logged in as "commenter"
+  When I post the comment "Blah" on the work "Followup"
+  Then "remixer" should be emailed
+    And "inspiration" should not be emailed
     
+Scenario: Translator receives comments on translation, author doesn't
+
+  Given I have related works setup
+    And a translation has been posted
+  When I am logged in as "commenter"
+  When I post the comment "Blah" on the work "Worldbuilding Translated"
+  Then "translator" should be emailed
+    And "inspiration" should not be emailed
+
+Scenario: Author chooses to receive comments on translation
+
+  Given I have related works setup
+    And a translation has been posted
+  When I am logged in as "inspiration"
+    And I approve a related work
+    And I set my preferences to receive comments on translated works
+
+Scenario: Author doesn't receive comments if they haven't approved the translation
+
+  Given I have related works setup
+    And a translation has been posted
+  When I am logged in as "inspiration"
+    And I set my preferences to receive comments on translated works
+  When I am logged in as "commenter"
+  When I post the comment "Blah" on the work "Worldbuilding Translated"
+  Then "inspiration" should not be emailed
+
 @work_external_parent
 Scenario: Listing external works as inspirations
 
