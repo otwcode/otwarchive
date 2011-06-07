@@ -116,7 +116,7 @@ class ChallengeAssignmentsController < ApplicationController
           @challenge_assignments = @user.offer_assignments.undefaulted + @user.pinch_hit_assignments.undefaulted
         end
       else
-        flash[:error] = t('challenge_assignments.not_allowed_to_see_other', :default => "You aren't allowed to see that user's assignments.")
+        flash[:error] = ts("You aren't allowed to see that user's assignments.")
         redirect_to '/' and return
       end
     else

@@ -418,6 +418,16 @@ When /^I view claims for "([^\"]*)"$/ do |title|
   When %{I follow "Claims ("}
 end
 
+When /^I start to fulfill my claim with "([^\"]*)"$/ do |title|
+  When %{I am on my user page}
+  When %{I follow "My Claims ("}
+  When %{I follow "Post To Fulfill"}
+    And %{I fill in "Work Title" with "#{title}"}
+    And %{I select "Not Rated" from "Rating"}
+    And %{I check "No Archive Warnings Apply"}
+    And %{I fill in "content" with "This is an exciting story about Atlantis"}
+end
+
 When /^I start to fulfill my claim$/ do
   When %{I am on my user page}
   When %{I follow "My Claims ("}
@@ -429,7 +439,13 @@ When /^I start to fulfill my claim$/ do
 end
 
 When /^I fulfill my claim$/ do
-  When %{I start to fulfill my claim}
+  When %{I start to fulfill my claim with "Fulfilled Story"}
+  When %{I press "Preview"}
+    And %{I press "Post"}
+end
+
+When /^I fulfill my claim again$/ do
+  When %{I start to fulfill my claim with "Second Story"}
   When %{I press "Preview"}
     And %{I press "Post"}
 end
@@ -468,6 +484,7 @@ When /^I start to fulfill my assignment$/ do
     And %{I fill in "Work Title" with "Fulfilled Story"}
     And %{I select "Not Rated" from "Rating"}
     And %{I check "No Archive Warnings Apply"}
+    And %{I fill in "Fandom" with "Final Fantasy X"}
     And %{I fill in "content" with "This is a really cool story about Final Fantasy X"}
 end
 
@@ -475,6 +492,7 @@ When /^I fulfill my assignment$/ do
   When %{I start to fulfill my assignment}
   When %{I press "Preview"}
     And %{I press "Post"}
+  Then %{I should see "Work was successfully posted"}
 end
 
 When /^I delete my signup for "([^\"]*)"$/ do |title|

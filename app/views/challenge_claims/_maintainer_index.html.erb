@@ -62,10 +62,14 @@
           <%= prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) %> <%= prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) %>
         <% end %>
         </td>
-        <td><% if claim.claiming_pseud.user == current_user %>
-          <%= link_to ts("Post To Fulfill"), new_collection_work_path(@collection, :claim_id => claim.id) %>
-          <%= link_to ts("Delete"), collection_claim_path(@collection, claim), :confirm => ts('Are you sure you want to delete this claim?'), :method => :delete %>
-        <% end %></td>
+        <td>
+          <% if claim.claiming_pseud.user == current_user %>
+            <%= link_to ts("Post To Fulfill"), new_collection_work_path(@collection, :claim_id => claim.id) %>
+          <% end %>
+          <% if claim.claiming_pseud.user == current_user || @collection.user_is_maintainer?(current_user) %>
+            <%= link_to ts("Delete"), collection_claim_path(@collection, claim), :confirm => ts('Are you sure you want to delete this claim?'), :method => :delete %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>

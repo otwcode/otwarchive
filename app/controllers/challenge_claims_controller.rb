@@ -79,10 +79,10 @@ class ChallengeClaimsController < ApplicationController
         if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
           @challenge_claims = @user.request_claims.in_collection(@collection).unposted         
         else
-          @challenge_claims = @user.request_claims.unposted
+          @challenge_claims = @user.request_claims.order_by_date
         end
       else
-        flash[:error] = t('challenge_claims.not_allowed_to_see_other', :default => "You aren't allowed to see that user's claims.")
+        flash[:error] = ts("You aren't allowed to see that user's claims.")
         redirect_to '/' and return
       end
     else
@@ -122,9 +122,17 @@ class ChallengeClaimsController < ApplicationController
   
   def destroy
     @claim = ChallengeClaim.find(params[:id])
+    
     begin
+      if @claim.claiming_user == current_user
+        @usernotmod = "true"
+      end
       @claim.destroy
-      flash[:notice] = ts("Your claim was deleted.")
+      if @usernotmod == "true"
+        flash[:notice] = ts("Your claim was deleted.")
+      else
+        flash[:notice] = ts("The claim was deleted.")
+      end
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end

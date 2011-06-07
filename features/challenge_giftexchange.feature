@@ -212,3 +212,32 @@ Feature: Gift Exchange Challenge
     And I should see "Signup for myname1"
   When I edit my signup for "Sensitive Gift Exchange"
   Then I should not see "Select pseudonym"
+  
+  Scenario: User can see their assignment
+  
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+    And I have generated matches for "Awesome Gift Exchange"
+    And I have sent assignments for "Awesome Gift Exchange"
+  When I am logged in as "myname1"
+    And I go to my user page
+    And I follow "My Assignments"
+  Then I should see "Awesome Gift Exchange"
+  
+  Scenario: User fulfills their assignment and it shows on their assigments page as fulfilled
+  
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "Awesome Gift Exchange"
+    And I have opened signup for the gift exchange "Awesome Gift Exchange"
+    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
+    And I have generated matches for "Awesome Gift Exchange"
+    And I have sent assignments for "Awesome Gift Exchange"
+  When I am logged in as "myname1"
+    And I fulfill my assignment
+  When I go to my user page
+    And I follow "My Assignments"
+  Then I should see "Awesome Gift Exchange"
+    And I should not see "Not yet posted"
+    And I should see "Fulfilled Story"
