@@ -37,7 +37,7 @@ Feature: Edit chapters
     And I fill in "content" with "original chapter two"
     And I press "Preview"
   Then I should see "This is a preview of what this chapter will look like"
-  When I follow "Post Chapter"
+  When I press "Post Chapter"
     Then I should see "2/100"
     And I should see "Words:8"
   When I follow "Add Chapter"
@@ -46,7 +46,7 @@ Feature: Edit chapters
     And I fill in "content" with "entering chapter three"
     And I press "Preview"
   Then I should see "Chapter 3"
-  When I follow "Post Chapter"
+  When I press "Post Chapter"
   Then I should see "3/50"
     And I should see "Words:11"
   
@@ -57,7 +57,7 @@ Feature: Edit chapters
     And I fill in "content" with "entering fourth chapter out of order"
     And I press "Preview"
   Then I should see "Chapter 4"
-  When I follow "Post Chapter"
+  When I press "Post Chapter"
     And I should see "4/17"
     And I should see "Words:17"
     
@@ -75,7 +75,7 @@ Feature: Edit chapters
     And I fill in "chapter_position" with "2"
     And I fill in "content" with "entering second chapter out of order"
     And I press "Preview"
-  When I follow "Post Chapter"
+  When I press "Post Chapter"
   Then I should see "4/17"
     And I should see "Words:20"
   
@@ -158,7 +158,7 @@ Feature: Edit chapters
   When I select "5. My title" from "selected_id"
     And I press "Go"
     Then I should see "This chapter is a draft and hasn't been posted yet!"
-  When I follow "Post Chapter"
+  When I press "Post Chapter"
     Then I should see "5/5"
   When I follow "Edit"
     Then I should not see "Draft"
@@ -169,3 +169,21 @@ Feature: Edit chapters
     Then I should not see "Draft"
     And I should not see "draft"
 
+  Scenario: view chapter title info pop up
+    
+  Given the following activated user exists
+    | login         | password   |
+    | epicauthor    | password   |
+    And basic tags
+  When I am logged in as "epicauthor"
+    And I go to epicauthor's user page
+    And I follow "Post New"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandoms" with "New Fandom"
+    And I fill in "Work Title" with "New Epic Work"
+    And I fill in "Work text" with "Well, maybe not so epic."
+    And I press "Post"
+    And I follow "Add Chapter"
+    And I follow "Chapter title"
+  Then I should see "You can add a chapter title"

@@ -9,6 +9,7 @@ $j(document).ready(function() {
     // initSelect('languages_menu');
     hideExpandable();
     hideHideMe();
+    showShowMe();
     handlePopUps();
     $j('#expandable-link').click(function(){
           expandList();
@@ -29,6 +30,46 @@ function ShowExpandable() {
   if (collapsible != null) collapsible.style.display = 'none';
 }
 
+// Autocomplete
+// set class to "autocomplete"
+// set attribute "autocomplete_method" to the action in autocomplete_controller you want to use
+// you can pass extra parameters at the end of the method with ?param=value&param=value
+// set attribute "autocomplete_live_params" to the ids of any attributes whose values should be read
+//  as: param=attribute_id&param=attribute_id
+// example: 
+// <input type="text" class="autocomplete" autocomplete_method="/autocomplete/relationship?tag_set_id=#{tag_set.id}" 
+//        autocomplete_live_params="fandom=work_fandom_field&character=work_character_field" 
+jQuery(function($){
+  $('.autocomplete').each(function(){
+    var self = $(this);
+    self.tokenInput(self.attr('autocomplete_method'), {
+        searchingText: self.attr('autocomplete_searching_text'),
+        hintText: self.attr('autocomplete_hint_text'),
+        noResultsText: self.attr('autocomplete_no_results_text'),
+        minChars: self.attr('autocomplete_min_chars'),
+        queryParam: "term",
+        preventDuplicates: true,
+        tokenLimit: self.attr('autocomplete_token_limit'),
+        liveParams: self.attr('autocomplete_live_params'),
+        makeSortable: self.attr('autocomplete_sortable'),
+		noCache: self.attr('autocomplete_no_cache')
+    });
+  });
+});
+
+// Single-value autocomplete
+jQuery(function($){
+    $('.single_autocomplete').each(function(){
+        var self = $(this);
+        self.autocomplete({
+            source: self.attr('autocomplete_method'),
+            minLength: self.attr('autocomplete_min_chars'),
+            autoFocus: true // to keep behavior similar to main autocomplete
+        });
+    });
+});
+
+
 // Hides expandable fields if Javascript is enabled
 function hideExpandable() {
   var expandable = document.getElementById('expandable');
@@ -36,8 +77,13 @@ function hideExpandable() {
 }
 
 function hideHideMe() {
-    nodes = $$('.hideme');
-    nodes.each( function(node) { node.hide(); });
+    nodes = $j('.hideme');
+    nodes.each(function(index, node) { $j(node).hide(); });
+}
+
+function showShowMe() {
+    nodes = $j('.showme');
+    nodes.each(function(index, node) { $j(node).show(); });
 }
 
 function handlePopUps() {

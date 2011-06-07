@@ -71,7 +71,7 @@ Otwarchive::Application.routes.draw do
   resources :tag_wranglers
   resources :tags do
     member do
-      # anything you add here will need a match under globbing at the top
+      get :feed
       get :wrangle
       post :mass_update
       get :remove_association
@@ -149,6 +149,7 @@ Otwarchive::Application.routes.draw do
       get :change_username
       post :change_username
       post :end_first_login
+      post :end_banner
     end
     resources :assignments, :controller => "challenge_assignments" do
       member do
@@ -292,7 +293,6 @@ Otwarchive::Application.routes.draw do
 
   resources :gifts
   resources :prompt_restrictions
-  resources :prompts
   resources :tag_sets, :only => [:show]
   resources :collections do
     collection do
@@ -306,6 +306,11 @@ Otwarchive::Application.routes.draw do
     resources :media
     resources :fandoms
     resources :people
+    resources :prompts, :controller => "prompts" do
+      collection do
+        get :summary
+      end
+    end
     resources :tags do
       resources :works
     end

@@ -34,7 +34,7 @@ Feature: Subscriptions
     And all emails have been delivered
     And I press "Preview"
   Then 0 emails should be delivered
-  When I follow "Post Chapter"
+  When I press "Post Chapter"
   Then 1 email should be delivered to "myname2@foo.com"
     And the email should contain "posted a new chapter"
 

@@ -1,8 +1,8 @@
-<!-- added automatically to the collection sidebar for challenges. 
-      all items should be enclosed in <li> </li> and linked with span_if_current! 
-      @collection is defined, @challenge may not be. -->
+<% # added automatically to the collection sidebar for challenges. 
+    #  all items should be enclosed in <li> </li> and linked with span_if_current! 
+    #  @collection is defined, @challenge may not be. %>
 <% if logged_in? %>
-  <!-- signup form or link -->
+  <% # signup form or link %>
   <% if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first) %>
     <li><%= span_if_current ts("Your Prompts"), collection_signup_path(@collection, @challenge_signup) %></li>
   <% elsif @collection.challenge.user_allowed_to_sign_up?(current_user) || !@collection.moderated? || @collection.user_is_posting_participant?(current_user) %>

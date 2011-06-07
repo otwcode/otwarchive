@@ -169,6 +169,11 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 # SANITIZER VERSION
 SANITIZER_VERSION: 1
 
+# parameters that must be natural integers and their default values
+NONZERO_INTEGER_PARAMETERS:
+  page: 1
+  per_page: 25
+
 # These fields are query fields and are allowed to contain "less than" values
 FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits"]
 
@@ -243,11 +248,6 @@ SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 # resource will be allowed
 SUPPORTED_EXTERNAL_URLS: ["jpg", "png", "gif"]
 
-# We use this list to specify types of functions that we accept (like gradient).
-# Like the shorthand properties, this allows through all variations on the name (eg -moz-linear-gradient)
-# Note: even though url() is actually a function, because we want special handling for it we do NOT include it here!
-SUPPORTED_CSS_FUNCTIONS: ["gradient", "skew", "scale", "rotate", "translate", "matrix"]
-
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'
 AKISMET_NAME: 'http://transformativeworks.org'
@@ -287,6 +287,9 @@ USE_DELTA_INDEXING: false
 # production caching
 #PRODUCTION_CACHE: "memory"
 PRODUCTION_CACHE: "memcache"
+
+# how long we cache search results in minutes
+AUTOCOMPLETE_EXPIRATION_TIME: 10
 
 # Turn this off in local.yml to keep the development footer/profiling code from running
 DEVELOPMENT_PROFILING_ENABLED: true

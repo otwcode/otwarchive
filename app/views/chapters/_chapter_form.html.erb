@@ -6,7 +6,7 @@
 	<dl>
 		<dt><%= f.label :title, t('.form_title', :default => 'Chapter title') %></dt>
 		<dd><p><%= f.text_field :title, :class => "storyinputfield", :live => true %>
-    <%= link_to_help "story-title" %></p>
+    <%= link_to_help "chapter-title" %></p>
     <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
     </dd>
 	

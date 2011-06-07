@@ -1,0 +1,5 @@
+<%- if @collection.challenge_type == "PromptMeme" %>
+  <%= render :partial => "promptmeme_prompt_form", :locals => {:edit_record => false} %>
+<%- else %>
+  <%= render :partial => "giftexchange_prompt_form", :locals => {:edit_record => false} %>
+<%- end %>

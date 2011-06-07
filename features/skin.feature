@@ -11,11 +11,7 @@ Feature: creating and editing skins
   Scenario: A user should be able to choose a different public skin in their preferences
   Given basic skins
     And I am logged in as "skinner"
-  When I follow "skinner"
-    And I follow "Preferences"
-    And I select "Plain Text" from "preference_skin_id"
-    And I press "Update"
-  Then I should see "Your preferences were successfully updated."
+  When I change my skin to "Plain Text"
   When I am on skinner's preferences page
   Then "Plain Text" should be selected within "preference_skin_id"
     And I should see "font-family: serif !important;" within "style"
@@ -45,16 +41,27 @@ Feature: creating and editing skins
 
   ########################################################
   ##### Here we check for things that should be allowed by the sanitizer
-
-  Scenario: The sanitizer should allow through valid CSS values
+  
+  Scenario: The sanitizer should allow through basic CSS including font-family
   Given I am logged in as "skinner"
   When I create the skin "valid skin" with css
       """  
-      li {box-shadow: inset 0 0px 20px 1px #fff, 0px 1px 0 rgba(140,120,50,0.75), 0 6px 0px #1f3053, 0 8px 4px 1px #111}
+      body { background-color: #ffffff;}
+      h1 { font-family: 'Fertigo Pro', Verdana, serif; }
       """
   Then I should see "Skin was created successfully"
-    And I should see "box-shadow"
-    And I should see "inset 0 0px 20px 1px #fff, 0px 1px 0 rgba(140,120,50,0.75), 0 6px 0px #1f3053, 0 8px 4px 1px #111"
+    And I should see "background-color: #ffffff;"
+    And I should see "font-family: 'Fertigo Pro', Verdana, serif"
+
+  Scenario: The sanitizer should allow through valid CSS shorthand values
+  Given I am logged in as "skinner"
+  When I create the skin "valid skin" with css
+      """  
+      body {background:#ffffff url('http://mywebsite.com/img_tree.png') no-repeat right top;}
+      """
+  Then I should see "Skin was created successfully"
+    And I should see "url('http://mywebsite.com/img_tree.png')"
+    And I should see "no-repeat"
 
   Scenario: The sanitizer should allow comments on their own lines
   Given I am logged in as "skinner"
@@ -73,15 +80,17 @@ Feature: creating and editing skins
     And I should see "color: green"
     And I should see "color: blue"
 
-  Scenario: The sanitizer should allow through CSS3 properties
+  Scenario: The sanitizer should allow through CSS3 properties like border-bottom-right-radius and box-shadow
   Given I am logged in as "skinner"
   When I create the skin "CSS3 skin" with css
       """  
       .profile .module h3, .media-index li.category h3 { border-left: 4px double #111 !important; border-bottom-right-radius: 0 !important; }
-
+      li {box-shadow: inset 0 0px 20px 1px #fff, 0px 1px 0 rgba(140,120,50,0.75), 0 6px 0px #1f3053, 0 8px 4px 1px #111}
       """
   Then I should see "Skin was created successfully"
     And I should see "border-bottom-right-radius: 0 !important"
+    And I should see "box-shadow"
+    And I should see "inset 0 0px 20px 1px #fff, 0px 1px 0 rgba(140,120,50,0.75), 0 6px 0px #1f3053, 0 8px 4px 1px #111"
 
   Scenario: The sanitizer should allow through alphabetic strings as keyword values even if they are not explicitly listed
   Given I am logged in as "skinner"
@@ -102,10 +111,12 @@ Feature: creating and editing skins
       """  
       li.characters + li.freeforms:before {content: '||'}
       li.relationships + li.freeforms:before { content: 'Freeform: '; }
+      li:before {content: url('http://foo.com/bullet.jpg')}
       """
   Then I should see "Skin was created successfully"
     And I should see "content: '||'"
     And I should see "content: 'Freeform: '"
+    And I should see "content: url('http://foo.com/bullet.jpg')"
 
 
   Scenario: The sanitizer should allow through properties that are variations on the ones in the shorthand config list
@@ -113,24 +124,24 @@ Feature: creating and editing skins
   When I create the skin "valid skin" with css
       """  
       #main ul.sorting {
-      background: rgba(120,120,120,1) 5%;
-      -moz-border-radius:0.15em !important; 
-      border-color:rgba(86,86,86,0.75) !important; 
-      box-shadow:0 2px 5px rgba(0,0,0,0.5);
-      float:none !important; 
-      text-align:center; 
+        background: rgba(120,120,120,1) 5%;
+        -moz-border-radius:0.15em !important; 
+        border-color:rgba(86,86,86,0.75) !important; 
+        box-shadow:0 2px 5px rgba(0,0,0,0.5);
+        float:none !important; 
+        text-align:center; 
       }
       #main ul.sorting a {
-      border-color:rgba(86,86,86,1) !important; 
-      color:rgba(231,231,231,1); 
-      text-shadow:-1px -1px 0 rgba(0,0,0,0.75)
+        border-color:rgba(86,86,86,1) !important; 
+        color:rgba(231,231,231,1); 
+        text-shadow:-1px -1px 0 rgba(0,0,0,0.75)
       }
       ul.sorting  a:hover {
-      background: rgba(71,71,71,1) 5% !important; 
-      color:rgba(254,254,254,1);
+        background: rgba(71,71,71,1) 5% !important; 
+        color:rgba(254,254,254,1);
       }
       #main .navigation ul.sorting a:visited{
-      color:rgba(254,254,254,1)
+        color:rgba(254,254,254,1)
       }
       """
     Then I should see "Skin was created successfully"
@@ -138,7 +149,7 @@ Feature: creating and editing skins
       And I should see "-moz-border-radius"
 
 
-  Scenario: The sanitizer should allow through gradients
+  Scenario: The sanitizer should allow through gradients, scale, skew, translate, rotate
   Given I am logged in as "skinner"
   When I create the skin "valid skin" with css
       """  
@@ -148,10 +159,25 @@ Feature: creating and editing skins
       ul.sorting  a:hover {
       background:-webkit-linear-gradient(bottom, rgba(71,71,71,1) 5%, rgba(59,59,59,1) 50%, rgba(74,74,74,1) 55%, rgba(91,91,91,1) 100%) !important; 
       }
+      #main li.blurb:nth-child(2n), #main.works-show .meta, .thread .thread li.comment:nth-child(3n+1) {-moz-transform: rotate(-0.5deg);}
+      #main .foo {-moz-transform:rotate(120deg); -moz-transform:skewx(25deg) translatex(150px);}
+      #menu {
+      	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(82,82,82)), color-stop(1, rgb(125,124,125)));
+                  	-webkit-box-shadow:#000 0 1px 2px;
+                  	-webkit-border-radius:2px;
+                  	-webkit-transition:text-shadow .7s ease-out, background .7s ease-out;
+                  	-webkit-transform: scale(2.1) rotate(-90deg)
+      }
       """
   Then I should see "Skin was created successfully"
     And I should see "-moz-linear-gradient"
     And I should see "-webkit-linear-gradient"
+    And I should see "rotate(-0.5deg)"
+    And I should see "skewx(25deg)"
+    And I should see "translatex(150px)"
+    And I should see "-webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(82,82,82)), color-stop(1, rgb(125,124,125)));"
+    And I should see "scale"
+    And I should see "rotate"    
 
   # model for creating new "should allow" tests
   # Scenario: The sanitizer should allow through 
@@ -197,9 +223,12 @@ Feature: creating and editing skins
   When I fill in "CSS" with "body {border: src('http://foo.com/')}"
   Then I should see "We couldn't find any valid CSS rules in that code."
 
-  Scenario: A user should not be able to use various dangerous values like evil urls
+  Scenario: A user should not be able to use various dangerous values like urls in properties where they are not allowed and evil urls
   Given I am logged in as "skinner"
     And I set up the skin "Evil Skin"
+  When I fill in "CSS" with "body {font: url(http://foo.com/bar.png)}"
+    And I press "Create"
+  Then I should see "The font property in body cannot have the value url(http://foo.com/bar.png)"
   When I fill in "CSS" with "body {behavior: url(xss.htc);}"
     And I press "Create"
   Then I should see "The behavior property in body cannot have the value url(xss.htc)"
@@ -218,6 +247,16 @@ Feature: creating and editing skins
   When I fill in "CSS" with "div {background: -webkit-linear-gradient(url('xss.htc'))}"
     And I press "Create"
   Then I should see "The background property in div cannot have the value -webkit-linear-gradient(url('xss.htc'))"
+  
+  Scenario: A user should only be able to use urls for valid image types and from valid top-level domains
+  Given I am logged in as "skinner"
+    And I set up the skin "Evil Skin"
+  When I fill in "CSS" with "body {background: url(http://foo.com/bar.dsf)}"
+    And I press "Create"
+  Then I should see "The background property in body cannot have the value url(http://foo.com/bar.dsf)"
+  When I fill in "CSS" with "body {background: url(http://foo.htc/bar.png)}"
+    And I press "Create"
+  Then I should see "The background property in body cannot have the value url(http://foo.htc/bar.png)"
 
   Scenario: If a user tries to get around our rules with quotes we should strip out evil code
   Given I am logged in as "skinner"
@@ -468,3 +507,13 @@ Feature: creating and editing skins
   When I follow "My Skins"
     And I follow "Log out"
   Then I should be on the login page
+  
+  Scenario: Change the header color
+  Given I am logged in as "skinner"
+  When I create a skin to change the header color
+  Then I should see a different header color
+  
+  Scenario: Change the accent color
+  Given I am logged in as "skinner"
+  When I create a skin to change the accent color
+  Then I should see a different accent color on the dashboard and work meta

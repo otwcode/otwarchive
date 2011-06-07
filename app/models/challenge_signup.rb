@@ -45,6 +45,8 @@ class ChallengeSignup < ActiveRecord::Base
   scope :pseud_only, select(:pseud_id)
 
   scope :order_by_pseud, joins(:pseud).order("pseuds.name")
+  
+  scope :order_by_date, order("updated_at DESC")
 
   scope :in_collection, lambda {|collection| where('challenge_signups.collection_id = ?', collection.id)}
 

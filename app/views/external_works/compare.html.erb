@@ -3,9 +3,8 @@
       <legend>Search for external works</legend>
       <p>
         <%= label_tag :external_work_url %>: 
-        <%= text_field_tag :external_work_url, params[:external_work_url] %>
-        <%= autocomplete_text_field "external_work_url", :no_comma => true %>
-        <%= submit_tag t('.forms.search', :default => 'Search') %>
+        <%= text_field_tag :external_work_url, params[:external_work_url], autocomplete_options("external_work", :autocomplete_token_limit => 1) %>
+        <%= submit_tag ts('Search') %>
       </p>
   </fieldset>
 <% end %>

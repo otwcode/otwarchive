@@ -19,12 +19,11 @@
 	<dt>
     <%= collection_form.label :parent_name, ts("Parent collection (must be one you maintain)") %>:</dt>
     <dd>
-      <%= collection_form.text_field :parent_name %>
-      <%= autocomplete_text_field("collection_parent_name", :no_comma => true) %>      
+      <%= collection_form.text_field :parent_name, autocomplete_options("collection_parent_name", :autocomplete_token_limit => 1) %>
     </dd>
   <% end %>
 
-    <dt><%= collection_form.label :name, ts("Collection Name* (letters, numbers, underscores)") %>:</dt>
+    <dt><%= collection_form.label :name, ts("Collection Name* (letters, numbers, underscores)") %>:<%= link_to_help "collection-name" %></dt>
     <dd><%= collection_form.text_field :name %></dd>
 
 

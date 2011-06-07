@@ -1,3 +1,4 @@
+DEFAULT_USER = "testuser"
 DEFAULT_PASSWORD = "password"
 
 Given /^I have no users$/ do
@@ -44,7 +45,11 @@ Given /^I am logged in as "([^\"]*)" with password "([^\"]*)"$/ do |login, passw
 end
 
 Given /^I am logged in as "([^\"]*)"$/ do |login|
-  Given "I am logged in as \"#{login}\" with password \"#{DEFAULT_PASSWORD}\""
+  Given %{I am logged in as "#{login}" with password "#{DEFAULT_PASSWORD}"}
+end
+
+Given /^I am logged in$/ do
+  Given %{I am logged in as "#{DEFAULT_USER}"}
 end
 
 When /^I fill in "([^\"]*)"'s temporary password$/ do |login|
@@ -79,6 +84,12 @@ When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
   click_link("New Pseud")
   fill_in "Name", :with => newpseud
   click_button "Create"
+end
+
+Given /^"([^\"]*)" has the pseud "([^\"]*)"$/ do |username, pseud|
+  When %{I am logged in as "#{username}"}
+  When %{"#{username}" creates the pseud "#{pseud}"}
+  When "I am logged out"
 end
 
 When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|

@@ -23,7 +23,7 @@ module WorksHelper
 
     if work.chaptered? && work.revised_at
       prefix = work.is_wip ? ts("Updated:") : ts("Completed:")
-      latest_date = (work.preview_mode && work.backdate) ? published_date : work.revised_at.to_date
+      latest_date = (work.preview_mode && work.backdate) ? published_date : date_in_user_time_zone(work.revised_at).to_date
       list.insert(1, [prefix, localize(latest_date)])
     end
     list = list.map {|list_item| content_tag(:dt, list_item.first) + content_tag(:dd, list_item.last.to_s)}.join.html_safe

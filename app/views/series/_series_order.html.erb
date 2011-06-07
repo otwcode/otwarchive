@@ -2,7 +2,7 @@
   <%= form_tag url_for(:action => 'update_positions') do %>
   <ul id="sortable_series_list">
     <% @serial_works.each_with_index do |serial, i| %>
-      <li id="serial_<%= serial.id %>">
+      <li id="serial_<%= serial.id %>" class="serial-position-list">
         <%= text_field_tag 'serial_works[]', nil, :size => 3, :maxlength => 3, :class => 'serial-position-field', :id => "serial_#{i}" %>
         <span id='position-for-<%= serial.id %>'><%= serial.position %></span>.
         <h3><%=serial.work.title.html_safe + (serial.work.posted? ? "" : " (DRAFT)") %></h3>
@@ -13,4 +13,21 @@
   <% end %>
 </div>
 
-<%= sortable_element('sortable_series_list', :url => {:action => :update_positions}) %>
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+     $j("#sortable_series_list").sortable({
+            delay: 300,
+            update: function(event, ui) {
+                $j(".serial-position-list").each(function(index, li){
+                    var serialId = $j(li).attr("id").replace("serial_","");
+                    $j("#position-for-"+serialId).html(index+1);
+                  });
+                $j.ajax({
+                  type: 'post',
+                  data: $j("#sortable_series_list").sortable("serialize"),
+                  dataType: 'script',
+                  url: "<%= url_for(:action => :update_positions) %>"})
+              }
+      })
+  <% end %>
+<% end %>

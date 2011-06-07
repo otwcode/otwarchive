@@ -3,11 +3,16 @@ When /^(?:|I )unselect "([^"]+)" from "([^"]+)"$/ do |item, selector|
 end
 
 Then /^debug$/ do
-  debugger
+  breakpoint
+  0
 end
 
 Then /^show me the response$/ do
   puts page.body
+end
+
+Then /^show me the main content$/ do
+  puts "\n" + find("#main").node.inner_html
 end
 
 Given /^I wait (\d+) seconds?$/ do |number|
@@ -115,6 +120,31 @@ Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
     else
       assert page.has_content?('<option selected="selected" value="' + text + '"')
     end
+end
+
+
+When /^I check the (\d+)(st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, junk, value|
+  check(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(index.to_i-1)].node['id'])
+end
+
+When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |index, junk, value|
+  When %{I check the #{index}#{junk} checkbox with the value "#{value}"}
+end
+
+When /^I uncheck the (\d+)(st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, junk, value|
+  uncheck(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(index.to_i-1)].node['id'])
+end
+
+When /^I check the (\d+)(st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do |index, junk, id_string|
+  check(page.all("input[type='checkbox']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(index.to_i-1)].node['id'])
+end
+
+When /^I fill in the (\d+)(st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, junk, id_string, value|
+  fill_in(page.all("input[type='text']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(index.to_i-1)].node['id'], :with => value)
+end
+
+When /^I submit$/ do
+  %{When I press "Submit"}
 end
 
 # we want greedy matching for this one so we can handle tags that have attributes in them

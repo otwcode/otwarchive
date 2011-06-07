@@ -1,4 +1,6 @@
 class TagWranglingsController < ApplicationController
+  cache_sweeper :tag_sweeper 
+  
   before_filter :check_user_status
 	before_filter :check_permission_to_wrangle
 

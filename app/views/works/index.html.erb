@@ -16,6 +16,10 @@
 <% end %>
 </h2>
 
+<% if @tag && @tag.name == "F/F" %>
+<p><%= link_to "Subscribe to the RSS Feed", feed_tag_path(:id => @tag.id, :format => :atom) %></p>
+<% end %>
+
 <% if @too_many %>
   <p><%= t('.search_too_broad', :default => "The Archive is currently unable to return more than %{search_max} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
 <% end %>

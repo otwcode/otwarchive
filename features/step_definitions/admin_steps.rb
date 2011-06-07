@@ -1,3 +1,5 @@
+### GIVEN
+
 Given /^I have an AdminSetting$/ do
   unless AdminSetting.first
     settings = AdminSetting.new(
@@ -8,14 +10,6 @@ Given /^I have an AdminSetting$/ do
       :days_to_purge_unactivated => ArchiveConfig.DAYS_TO_PURGE_UNACTIVATED)
     settings.save(:validate => false)
   end
-end
-
-When /^the invite_from_queue_at is yesterday$/ do
-  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
-end
-
-When /^the check_queue rake task is run$/ do
-  AdminSetting.check_queue
 end
 
 Given /the following admins? exists?/ do |table|
@@ -81,10 +75,62 @@ Given /^tag wrangling is on$/ do
   And "I am logged out as an admin"
 end
 
+### WHEN
+
 When /^I make an admin post$/ do
   visit new_admin_post_path
   fill_in("Title", :with => "Default Admin Post")
   fill_in("content", :with => "Content of the admin post.")
   click_button("Post")
   Then %{I should see "AdminPost was successfully created."}
+end
+
+When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
+  n ||= 1
+  visit new_archive_faq_path
+  fill_in("content", :with => "Number #{n} posted FAQ, this is.")
+  fill_in("title", :with => "Number #{n} FAQ")
+  click_button("Post")
+end
+
+When /^there are (\d+) Archive FAQs$/ do |n|
+  (1..n.to_i).each do |i|
+    When %{I make a #{i} FAQ post}
+  end
+end
+
+When /^(\d+) Archive FAQs? exists?$/ do |n|	
+  (1..n.to_i).each do |i|
+    Factory.create(:archive_faq)
+  end
+end
+
+When /^the invite_from_queue_at is yesterday$/ do
+  AdminSetting.first.update_attribute(:invite_from_queue_at, Time.now - 1.day)
+end
+
+When /^the check_queue rake task is run$/ do
+  AdminSetting.check_queue
+end
+
+When /^an admin sets a custom banner notice$/ do
+  Given %{I am logged in as an admin}
+  When %{I follow "settings"}
+  When %{I fill in "Banner notice" with "Custom notice words"}
+    And %{I press "Update"}
+  Then %{I should see "Archive settings were successfully updated."}
+end
+
+### THEN
+
+Then /^the banner notice for a logged-in user should be set to "Custom notice"$/ do
+  When %{I am logged in as "newname"}
+  When %{I am on the works page}
+  Then %{I should see "Custom notice words"}
+end
+
+Then /^the banner notice for a logged-out user should be set to "Custom notice"$/ do
+  When %{I am logged out}
+  When %{I am on the works page}
+  Then %{I should see "Custom notice words"}
 end

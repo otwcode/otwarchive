@@ -137,6 +137,11 @@ class Collection < ActiveRecord::Base
   validates_length_of :title,
     :maximum => ArchiveConfig.TITLE_MAX,
     :too_long=> t('title_too_long', :default => "must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+  validate :no_reserved_strings
+  def no_reserved_strings
+    errors.add(:title, ts("^Sorry, we've had to reserve the ',,' string for behind-the-scenes usage!")) if
+      title.match(/\,\,/)
+  end
 
   validates_length_of :description,
     :allow_blank => true,
@@ -157,9 +162,12 @@ class Collection < ActiveRecord::Base
   scope :by_title, order(:title)
 
   # we need to add other challenge types to this join in future
-  scope :signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").
+  scope :ge_signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").
                        where("gift_exchanges.signup_open = 1 && gift_exchanges.signups_close_at > ?", Time.now).
                        order("gift_exchanges.signups_close_at")
+  scope :pm_signups_open, joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").
+                       where("prompt_memes.signup_open = 1 && prompt_memes.signups_close_at > ?", Time.now).
+                       order("prompt_memes.signups_close_at")
 
   scope :with_name_like, lambda {|name|
     where("collections.name LIKE ?", '%' + name + '%').
@@ -173,7 +181,7 @@ class Collection < ActiveRecord::Base
   scope :with_item_count,
     select("collections.*, count(distinct collection_items.id) as item_count").
     joins("left join collections child_collections on child_collections.parent_id = collections.id
-           inner join collection_items on ( (collection_items.collection_id = child_collections.id OR collection_items.collection_id = collections.id)
+           left join collection_items on ( (collection_items.collection_id = child_collections.id OR collection_items.collection_id = collections.id)
                                      AND collection_items.user_approval_status = 1
                                      AND collection_items.collection_approval_status = 1)").
     group("collections.id")
@@ -193,19 +201,25 @@ class Collection < ActiveRecord::Base
       end
     end
   end
+  
+  ## AUTOCOMPLETE
+  # set up autocomplete and override some methods
+  include AutocompleteSource
+  def autocomplete_search_string
+    "#{name} #{title}"
+  end
 
-  # # check to see if this user has received an item in this collection
-  # def user_has_received_item(user)
-  #   @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), :assume_matching_login => true)[:pseuds]
-  #   !(@received_pseuds & user.pseuds).empty?
-  # end
-  #
-  # # check to see if this pseud has received an item in this collection
-  # def pseud_has_received_item(pseud)
-  #   @received_pseuds ||= Pseud.parse_bylines(approved_collection_items.collect(&:recipients).join(","), :assume_matching_login => true)[:pseuds]
-  #   !(@received_pseuds & [pseud]).empty?
-  # end
+  def autocomplete_prefixes
+    [ "autocomplete_collection_all",
+      "autocomplete_collection_#{closed? ? 'closed' : 'open'}" ]
+  end
 
+  def autocomplete_score
+    all_approved_works_count + all_approved_bookmarks_count
+  end
+  ## END AUTOCOMPLETE
+
+  
   def parent_name=(name)
     @parent_name = name
     self.parent = Collection.find_by_name(name)
@@ -314,10 +328,14 @@ class Collection < ActiveRecord::Base
   def anonymous? ; self.collection_preference.anonymous ; end
   def challenge? ; !self.challenge.nil? ; end
   def gift_exchange?
-    self.collection_preference.gift_exchange
+    if self.challenge_type == "GiftExchange"
+      return true
+    end
   end
   def prompt_meme?
-    self.collection_preference.prompt_meme
+    if self.challenge_type == "PromptMeme"
+      return true
+    end
   end
 
   def not_empty?
@@ -370,8 +388,16 @@ class Collection < ActiveRecord::Base
 
     # build up the query with scopes based on the options the user specifies
     query = Collection.top_level
-    query = query.with_title_like(filters[:title]) unless filters[:title].blank?
-    query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
+    
+    if !filters[:title].blank?
+      # we get the matching collections out of autocomplete and use their ids
+      ids = Collection.autocomplete_lookup(filters[:title], 
+                filters[:closed].blank? ? "autocomplete_collection_all" : (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open")
+             ).map {|result| Collection.id_from_autocomplete(result)}
+      query = query.where("collections.id in (?)", ids)
+    else
+      query = (filters[:closed] == "true" ? query.closed : query.not_closed) if !filters[:closed].blank?
+    end
     query = (filters[:moderated] == "true" ? query.moderated : query.unmoderated) if !filters[:moderated].blank?
     if sort.match /item_count/
       query = query.with_item_count

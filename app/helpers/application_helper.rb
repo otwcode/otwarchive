@@ -27,6 +27,10 @@ module ApplicationHelper
     current_page?(path) ? "<span class=\"current\">#{link}</span>".html_safe : link
   end
   
+  def link_to_rss(link_to_feed)
+    link_to (ts("Subscribe with RSS ") + image_tag("feed-icon-14x14.png", :size => "14x14", :alt => "")).html_safe , link_to_feed, :class => "rsslink"
+  end
+  
   def allowed_html_instructions(show_list = true)
     h(ts("Plain text with limited html")) + 
     link_to_help("html-help") + (show_list ? 
@@ -233,46 +237,19 @@ module ApplicationHelper
     return generated_html
   end
   
-  def autocomplete_text_field(fieldname, options={})
-    ("\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
-    '<img src="/images/spinner.gif" alt="Working..." /></span>' +
-    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>").html_safe +
-    javascript_tag("var autocomplete_for_#{fieldname} = new Ajax.Autocompleter('#{fieldname}', 
-                            '#{fieldname}_auto_complete', 
-                            '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
-                            { 
-                              indicator: 'indicator_#{fieldname}',
-                              frequency: #{options[:frequency] ? options[:frequency] : '0.4'},
-                              minChars: #{options[:min_chars] ? options[:min_chars] : '3'},
-                              paramName: '#{fieldname}',
-                              parameters: 'fieldname=#{fieldname}#{options[:extra_params] ? '&' + options[:extra_params] : ''}',
-                              fullSearch: true,
-                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}'
-                              #{options[:no_comma] ? '' : ', afterUpdateElement: addCommaToField'}
-                              #{options[:auto_params] ? ", autoParams: #{options[:auto_params]}" : ''}
-                            });")    
+  # returns the default autocomplete attributes, all of which can be overridden
+  # note: we do this and put the message defaults here so we can use translation on them
+  def autocomplete_options(method, options={})
+    {      
+      :class => "autocomplete",
+      :autocomplete_method => "/autocomplete/#{method}",
+      :autocomplete_hint_text => ts("Start typing for suggestions!"),
+      :autocomplete_no_results_text => ts("(No suggestions found)"),
+      :autocomplete_min_chars => 1,
+      :autocomplete_searching_text => ts("Searching...")
+    }.merge(options)
   end
-  
-  # Trying out a way of sending the tag type to the autocomplete
-  # controller so that it can return the right class of results
-  def autocomplete_text_field_with_type(object, fieldname, options={})
-    ("\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
-    '<img src="/images/spinner.gif" alt="Working..." /></span>' +
-    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>").html_safe +
-    javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
-                            '#{fieldname}_auto_complete', 
-                            '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
-                            { 
-                              indicator: 'indicator_#{fieldname}',
-                              minChars: 2,
-                              paramName: '#{fieldname}',
-                              parameters: 'fieldname=#{fieldname}&type=#{object.type}',
-                              fullSearch: true,
-                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}'
-                              #{options[:no_comma] ? '' : ', afterUpdateElement: addCommaToField'}
-                            });")    
-  end
-  
+    
   # see http://asciicasts.com/episodes/197-nested-model-form-part-2
   def link_to_add_section(linktext, form, nested_model_name, partial_to_render, locals = {})
     new_nested_model = form.object.class.reflect_on_association(nested_model_name).klass.new
@@ -344,7 +321,7 @@ module ApplicationHelper
   # option_name_method: a method that can be run on each individual option to get its pretty name for labelling
   #
   # See the prompt_form in challenge signups for example of usage
-  def options_section(form, fieldname, id, options, options_checked_method, option_name_method="name", option_value_method="id")
+  def options_section(form, fieldname, id, options, options_checked_method, option_name_method="name", option_value_method="id", option_disabled)
     size = options.size
     options_id = "#{id}_options"
     
@@ -354,8 +331,11 @@ module ApplicationHelper
       checkbox_name = option.send(option_name_method)
       checkbox_value = option.send(option_value_method)
       checkbox_and_label = label_tag checkbox_id do 
-        check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id) +
-        checkbox_name
+        if option_disabled == "false"
+          check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id) + checkbox_name
+        else
+          check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id, :disabled => "true") + checkbox_name
+        end
       end
       content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
     end.join("\n").html_safe

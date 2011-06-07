@@ -159,7 +159,7 @@ Feature: Create Works
       And I press "Preview"
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Let's write another story"
-    When I follow "Post Chapter"
+    When I press "Post Chapter"
     Then I should see "All Something Breaks Loose"
       And I should see "Chapter 1"
       And I should see "Bad things happen, etc."
@@ -179,7 +179,7 @@ Feature: Create Works
       And I should see "These pseuds are invalid: Does_not_exist"
     When all emails have been delivered
       And I fill in "pseud_byline" with "cosomeone"
-    Then I should find "cosomeone" within ".auto_complete"
+    Then I should find "cosomeone" within ".autocomplete"
     When I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
@@ -258,16 +258,18 @@ Feature: Create Works
       And I should see "Chapter"
       And I should see "1/?"
 
-  Scenario: test for integer title
+  Scenario: test for integer title and multiple fandoms
     Given basic tags
-    When I am logged in as "newbie" with password "password"
+      And I am logged in
       And I go to the new work page
-      And I fill in "Fandoms" with "Supernatural"
+      And I fill in "Fandoms" with "Supernatural, Smallville"
       And I fill in "Work Title" with "02138"
       And I fill in "content" with "Bad things happen, etc."
     When I press "Post without preview"
     Then I should see "Work was successfully posted."
       And I should see "Bad things happen, etc."
+      And I should see "Supernatural"
+      And I should see "Smallville"
       And I should see "02138" within "h2.title"
 
   Scenario: test for < and > in title

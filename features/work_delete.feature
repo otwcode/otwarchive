@@ -20,7 +20,7 @@ Feature: Delete Works
     When I follow "All Hell Breaks Loose"
       And I follow "Delete"
     Then I should see "Your work All Hell Breaks Loose was deleted."
-      And 1 email should be delivered
+      And "newbie" should be emailed
       # TODO: Figure out why these steps aren't working even though the feature is fine
       # And the email should contain "All Hell Breaks Loose"
       #And the email should contain "Your story All Hell Breaks Loose was deleted at your request."
@@ -154,7 +154,7 @@ Feature: Delete Works
       And I press "Preview"
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Let's write another story"
-    When I follow "Post Chapter"
+    When I press "Post Chapter"
     Then I should see "All Something Breaks Loose"
       And I should see "Chapter 1"
       And I should see "Bad things happen, etc."
@@ -174,7 +174,7 @@ Feature: Delete Works
       And I should see "These pseuds are invalid: Does_not_exist"
     When all emails have been delivered
       And I fill in "pseud_byline" with "cosomeone"
-    Then I should find "cosomeone" within ".auto_complete"
+    Then I should find "cosomeone" within ".autocomplete"
     When I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"

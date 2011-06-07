@@ -137,12 +137,13 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  p.icon, div.icon      { height: 100px; width: 100px; overflow: hidden; position:absolute; left: 0.25em;}
 
 /* META*/
- #main dl.meta         { background: #fffef9; border: 2px solid; clear: right; margin: 0 auto; padding: 0.5em; position: relative }
- .meta dt, .meta dt.warning  { font-size: 0.875em; font-weight: 100; width: 10.5em }
- #main .meta dd        { margin: -1.3em 0 .7em 13em;  }
- #main .meta .stats dl dd  { margin: 0 0.5em 0 }
- .meta dd ul li       { display: inline; margin: auto;}
- .meta dd blockquote    { margin: -1em 0 0 0 !important;}
+ #main dl.meta 				{ background: #fffef9; border: 2px solid; clear: right; margin: 0 auto; padding: 0.5em; position: relative }
+ .meta dt, .meta dt.warning	{ font-size: 0.875em; font-weight: 100; width: 10.5em }
+ #main .meta dd				{ margin: -1.3em 0 .7em 13em;  }
+ #main .meta .stats dl dd,  #main .meta .stats dl dt	{ margin: 0 0.5em 0; width:auto; float:left}
+ .meta dd ul li 			{ display: inline; margin: auto;}
+ .meta dd blockquote		{ margin: -1em 0 0 0 !important;}
+
 
  /* BLURB*/
  /* the blurb class is used on index pages where we create individual blurbs for each item */
@@ -465,8 +466,11 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
  .home-tos_faq #contents h2   { text-align: center }
  .home-tos_faq #contents ul li   { border-bottom: 1px solid #ddd; list-style-type: upper-roman}
 
- #main.chapters-manage li.chapter-position-list        { clear: both; padding: 1em;}
- #main.chapters-manage li.chapter-position-list:hover  { background: #eee; border: 1px solid black; cursor: move;}
+ #main.chapters-manage li.chapter-position-list        { padding: 0.5em;}
+ .ui-sortable>li { clear: both;}
+ .ui-sortable>li { border: 1px solid transparent;}
+ .ui-sortable>li:hover { background: #eee; border: 1px solid black; cursor: move;}
+ .ui-sortable>li.chapter-position-list { padding: 1em;}
  #main.chapters-manage ul.navigation                   { display: inline; float: none; width: auto; }
 
  #main.works-navigate ol, #main.works-navigate ol li   { display: block; }

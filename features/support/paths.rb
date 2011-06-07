@@ -87,6 +87,10 @@ module NavigationHelpers
       collection_tag_works_url(Collection.find_by_title($2), Tag.find_by_name($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
     when /^the admin-posts page$/i
       admin_posts_path
+    when /^the FAQ reorder page$/i
+      manage_archive_faqs_path
+    when/^the support page$/i
+      new_feedback_report_path
       
     # Here is an example that pulls values out of the Regexp:
     #

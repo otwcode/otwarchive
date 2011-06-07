@@ -20,7 +20,7 @@ Feature: Edit preferences
   And I follow "Add Chapter"
     And I fill in "content" with "Secondy chapter"
     And I press "Preview"
-    And I follow "Post Chapter"
+    And I press "Post Chapter"
   Then I should not see "Secondy chapter"
   When I follow "editname"
   Then I should see "My Dashboard"
@@ -217,7 +217,7 @@ Feature: Edit preferences
   # change preference to hide freeforms
   When I follow "mywarning2"
     And I follow "My Preferences"
-    And I check "Hide freeform tags"
+    And I check "Hide additional tags"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
 

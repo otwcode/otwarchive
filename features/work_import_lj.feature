@@ -132,6 +132,19 @@ Feature: Import Works from LJ
     When I am on cosomeone's user page
       #'
       Then I should see "Mrs Stanwood's Birthday Party"
+      
+  @import_lj_underscores
+  Scenario: Importing from a journal with underscores in the name
+    Given basic tags
+      And the following activated user exists
+        | login          | password    |
+        | cosomeone      | something   |
+      And I am logged in as "cosomeone" with password "something"
+    When I go to the import page
+      And I fill in "urls" with "http://zooey_glass04.livejournal.com/99054.html"
+    When I press "Import"
+    # Then show me the page
+    Then I should see "Preview Work"  
 
   @import_lj_multi_chapter
   Scenario: Creating a new multichapter work from an LJ story
@@ -161,7 +174,7 @@ Feature: Import Works from LJ
     Then I should see "Work was successfully posted."
       And I should see "Chapters:2/2"
       And I should see "Published:2000-01-10"
-      And I should see "Completed:2000-01-21"
+      And I should see "Completed:2000-01-22"
       And I should see "My first paragraph."
       And I should see "My second paragraph."
     When I follow "Next Chapter"

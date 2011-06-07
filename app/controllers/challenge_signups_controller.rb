@@ -24,7 +24,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def check_signup_open
-    signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user))
+    signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user) || @collection.user_is_moderator?(current_user))
   end
 
   def signup_closed
@@ -73,7 +73,7 @@ class ChallengeSignupsController < ApplicationController
   def index
     if params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
-        @challenge_signups = @user.challenge_signups
+        @challenge_signups = @user.challenge_signups.order_by_date
         render :action => :index and return
       else
         flash[:error] = ts("You aren't allowed to see that user's signups.")
@@ -180,10 +180,10 @@ class ChallengeSignupsController < ApplicationController
 
   def destroy
     unless @challenge.signup_open || @collection.user_is_maintainer?(current_user)
-      flash[:error] = t('challenge_signups.cannot_delete', :default => "You cannot delete your signup after signups are closed. Please contact a moderator for help.")
+      flash[:error] = ts("You cannot delete your signup after signups are closed. Please contact a moderator for help.")
     else
       @challenge_signup.destroy
-      flash[:notice] = 'Challenge signup was deleted.'
+      flash[:notice] = ts("Challenge signup was deleted.")
     end
     if @collection.user_is_maintainer?(current_user)
       redirect_to collection_signups_path(@collection)

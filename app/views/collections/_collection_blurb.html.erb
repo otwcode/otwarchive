@@ -32,7 +32,7 @@
     </blockquote>
 
     <p class="type">
-    (<%= collection.closed? ? t('.collections_index.is_closed', :default => "Closed") : t('.collections_index.open', :default => "Open") %>, <%= collection.moderated? ? t('.collections_index.is_moderated', :default => "Moderated") : t('.collections_index.unmoderated', :default => "Unmoderated") %><%= collection.unrevealed? ? t('.collections_index.is_unrevealed', :default => ", Unrevealed") : "" %><%= collection.anonymous? ? t('.collections_index.is_anonymous', :default => ", Anonymous") : "" %><%= collection.challenge ? t('.collections_index.is_challenge', :default => ", Challenge") : "" %>)
+    (<%= collection.closed? ? ts("Closed") : ts("Open") %>, <%= collection.moderated? ? ts("Moderated") : ts("Unmoderated") %><%= collection.unrevealed? ? ts(", Unrevealed") : "" %><%= collection.anonymous? ? ts(", Anonymous") : "" %><%= collection.gift_exchange? ? ts(", Gift Exchange Challenge") : "" %><%= collection.prompt_meme? ? ts(", Prompt Meme Challenge") : "" %>)
     </p>
     
 	  <!--stats-->

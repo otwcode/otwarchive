@@ -6,7 +6,9 @@ class FeedbacksController < ApplicationController
   def new
     @feedback = Feedback.new
     @page_title = "Support and Feedback"
-    if is_registered_user?
+    if logged_in_as_admin?
+      @feedback.email = current_admin.email
+    elsif is_registered_user?
       @feedback.email = current_user.email
     end
   end

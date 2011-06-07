@@ -1,16 +1,14 @@
 <!-- prompt form -->
 <div class="removeme">
-<!-- 
-CODE NOTES: 
-This is meant to be used as a nested form inside other forms, so that multiple prompts can be submitted within a single form. 
-It expects the local variables: 
-"form" for the prompt form 
-"is_offer" depending on if this is a request or offer
-"index" representing which prompt this is, if there are multiple prompts being submitted
-"edit_record" showing if this is editing an existing prompt or adding a new one
+<% # CODE NOTES: 
+  # This is meant to be used as a nested form inside other forms, so that multiple prompts can be submitted within a single form. 
+  # It expects the local variables: 
+  # "form" for the prompt form 
+  # "is_offer" depending on if this is a request or offer
+  # "index" representing which prompt this is, if there are multiple prompts being submitted
+  # "edit_record" showing if this is editing an existing prompt or adding a new one
 
-See the challenge_signup form for an example of how this is used. 
--->
+  # See the challenge_signup form for an example of how this is used. %>
 
 <% prompt_type = (form.object.class == Offer ? "offer" : (form.object.class == Request ? "request" : "prompt")) %>
 <% prompt_types = prompt_type.pluralize %>
@@ -38,7 +36,7 @@ See the challenge_signup form for an example of how this is used.
         <% num_required = eval("restriction.#{tag_type}_num_required") %>
         <% @taglist ||= {} %>
         <% @taglist["#{tag_type}-#{restriction.id}"] ||= restriction.tag_set.tags.with_type(tag_type.classify).by_name_without_articles %>
-        <!-- do ratings, warnings, categories as taglists if not already specified -->
+        <% # do ratings, warnings, categories as taglists if not already specified %>
         <% if @taglist["#{tag_type}-#{restriction.id}"].empty? && TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
           <% @taglist["#{tag_type}-#{restriction.id}"] = tag_type.classify.constantize.canonical.by_name_without_articles %>
         <% end %>        
@@ -58,26 +56,21 @@ See the challenge_signup form for an example of how this is used.
               <% tag_field_id =  "challenge_signup_#{prompt_types}_attributes_#{index}_#{tag_type}" %>
 
               <!-- set the list of fieldnames to pass for autocompleting based on fandom -->
-              <% if tag_type == 'fandom' %>
-                <% @fandom_tag_fieldnames = @taglist["#{tag_type}-#{restriction.id}"].map {|tag| "#{tag_field_id}_#{tag.id}"} %>
-              <% end %>
+              <% @fandom_tag_id = tag_field_id + "_options :checked" if tag_type == 'fandom' %>
 
               <!-- create a scrollable checkboxes section to wrap the tags, see application_helper -->
-              <%= options_section(tag_set_form, tag_fieldname, tag_field_id, @taglist["#{tag_type}-#{restriction.id}"], "#{tag_type}_taglist", "name", "name") %>
+              <%= options_section(tag_set_form, tag_fieldname, tag_field_id, @taglist["#{tag_type}-#{restriction.id}"], "#{tag_type}_taglist", "name", "name", "false") %>
 
             <% else %>
-              <% tag_fieldname = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>              
+              <% tag_field_id = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>              
 
               <!-- save the fieldname to pass for autocompleting based on fandom -->
-              <% @fandom_tag_fieldname = tag_fieldname if tag_type == 'fandom' %>
+              <% @fandom_tag_id = tag_field_id if tag_type == 'fandom' %>
 
               <!-- add the autocomplete -->
               <% if taglist_size > ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
                 <!-- we have set options but too many for tickyboxes -->
-                <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
-                <%= autocomplete_text_field tag_fieldname, :methodname => "tag_finder_restricted_by_tag_set", 
-                                                           :frequency => '1.0',
-                                                           :extra_params => "tag_set_id=#{restriction.tag_set.id}&tag_type=#{tag_type}" %>
+                <%= tag_set_form.text_field "#{tag_type}_tagnames", autocomplete_options("tag_in_set?type=#{tag_type}&tag_set_id=#{restriction.tag_set.id}", :autocomplete_token_limit => num_allowed, :size => 50) %>
                 <p>      
                   <%= link_to(ts("(See %{taglist_size} options)", :taglist_size => taglist_size), 
                             tag_set_path(restriction.tag_set, :tag_type => tag_type), 
@@ -86,17 +79,13 @@ See the challenge_signup form for an example of how this is used.
 
               <% elsif TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom") %>
                 <!-- we want a field that will update when the user has chosen a fandom -->
-                <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50, :onclick => "autocomplete_for_#{tag_fieldname}.activate();" %>
-                <%= autocomplete_text_field tag_fieldname, :methodname => "#{tag_type}_finder_restricted_by_fandom", 
-                                                           :auto_params => (@fandom_tag_fieldname ? [@fandom_tag_fieldname] : @fandom_tag_fieldnames),
-                                                           :extra_params => "fandom_fieldname=fandom_tagnames",
-                                                           :frequency => '1.0',
-                                                           :min_chars => '2' %>
-
+                <%= tag_set_form.text_field "#{tag_type}_tagnames", autocomplete_options("#{tag_type}_in_fandom", :autocomplete_min_chars => '0', :size => 50,
+																																												:autocomplete_token_limit => num_allowed,
+																																												:autocomplete_no_cache => true,
+																																												:autocomplete_live_params => "fandom=#{@fandom_tag_id}") %>
               <% else %>
                 <!-- autocomplete from all canonical tags of this type -->
-                <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
-                <%= autocomplete_text_field tag_fieldname, :methodname => "canonical_#{tag_type}_finder", :frequency => 1.0 %>
+                <%= tag_set_form.text_field "#{tag_type}_tagnames", autocomplete_options(tag_type, :autocomplete_token_limit => num_allowed, :size => 50) %>
               <% end %>
             <% end %>
             
@@ -140,12 +129,9 @@ See the challenge_signup form for an example of how this is used.
       <%= form.fields_for :optional_tag_set_attributes do |optional_tag_set_form| %>
         <dt>
           <%= optional_tag_set_form.label :tagnames, ts("Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
-          <p class="note"><%= ts("(comma-separated)") %></p>
         </dt>
         <dd>
-          <% optional_tag_fieldname =  "challenge_signup_#{prompt_types}_attributes_#{index}_optional_tag_set_attributes_tagnames" %>
-          <%= optional_tag_set_form.text_area :tagnames, :rows => 5, :cols => 50, :value => form.object.optional_tag_set.tagnames %>
-          <%= autocomplete_text_field(optional_tag_fieldname, :methodname => "canonical_tag_finder") %>
+          <%= optional_tag_set_form.text_field :tagnames, autocomplete_options("tag") %>
         </dd>
       <% end %>
     <% end %>

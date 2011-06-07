@@ -39,6 +39,7 @@ h6						{ font-size: 0.75em; line-height: 1.5; margin: 1.5em 0; }
 
 hr						{ margin: 0.75em auto; border:0; border-bottom: 3px double; }
 .clear					{ clear: both; height: 0; border: 0; margin:0; background:transparent; color:#fffef9;}
+.clear-right       { clear: right; }
 
 blockquote, pre			{ font: 100 1em/1.125 'Lucida Grande', Verdana, Helvetica, Tahoma, Arial, sans-serif;  margin: 1.5em; }
 kbd, tt, code, var		{ font: normal 0.75em consolas, courier, monospace; margin: auto; padding: 0.25em; }

@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  cache_sweeper :pseud_sweeper
 
   before_filter :check_user_status, :only => [:edit, :update]
   before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid, :browse]
@@ -386,6 +387,13 @@ class UsersController < ApplicationController
     @user.preference.update_attribute(:first_login, false)
     if !(request.xml_http_request?)
       redirect_to @user
+    end
+  end
+  
+  def end_banner
+    current_user.preference.update_attribute(:banner_seen, true)
+    if !(request.xml_http_request?)
+      redirect_to @user rescue redirect_to '/'
     end
   end
 

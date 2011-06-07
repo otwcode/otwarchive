@@ -15,15 +15,8 @@ Feature: Collection
     | myname3        | something   |
     | myname4        | something   |
     | pinchhitter    | password    |
-    And I have no tags
+    And I have Yuletide challenge tags setup
     And I have no challenge assignments
-    And I create the fandom "Stargate Atlantis" with id 27
-    And I create the fandom "Starsky & Hutch" with id 28
-    And I create the fandom "Tiny fandom" with id 29
-    And I create the fandom "Care Bears" with id 30
-    And I create the fandom "Yuletide Hippos RPF" with id 31
-    And basic tags
-    And a character exists with name: "John Sheppard", canonical: true
     And I add the fandom "Stargate Atlantis" to the character "John Sheppard"
     And I add the fandom "Starsky & Hutch" to the character "John Sheppard"
     And I add the fandom "Tiny fandom" to the character "John Sheppard"
@@ -35,9 +28,7 @@ Feature: Collection
     And I add the fandom "Starsky & Hutch" to the character "Foo The Wonder Goat"
     And a character exists with name: "Obscure person", canonical: true
     And I add the fandom "Tiny fandom" to the character "Obscure person"
-    And I am logged in as "mod1" with password "something"
-  Then I should see "Hi, mod1!"
-    And I should see "Log out"
+    And I am logged in as "mod1"
   When I go to the collections page
   Then I should see "Collections in the "
     And I should not see "Yuletide"
@@ -137,11 +128,11 @@ Feature: Collection
     And I should not see "Offer 3"
     And I should see "Add another offer? (Up to 3 allowed.)"
   # we fill in 1 request with 1 fandom, 1 character; 1 offer with 1 fandom and 1 character
-  When I check "challenge_signup_requests_attributes_0_fandom_27"
+  When I check the 1st checkbox with the value "Stargate Atlantis"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
     And I fill in "Prompt URL" with "http://user.dreamwidth.org/123.html"
     And I fill in "Description" with "This is my wordy request"
-    And I check "challenge_signup_offers_attributes_0_fandom_30"
+    And I check the 3rd checkbox with the value "Care Bears"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person"
     And I press "Submit"
   Then I should see "We couldn't save this ChallengeSignup, sorry!"
@@ -156,11 +147,11 @@ Feature: Collection
     And I should see "Offer must have between 2 and 3 character tags. You currently have none."
   # Over-fill the remaining missing fields and duplicate fandoms
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Obscure person"
-    And I check "challenge_signup_requests_attributes_1_fandom_29"
-    And I check "challenge_signup_requests_attributes_1_fandom_28"
+    And I check the 2nd checkbox with the value "Tiny fandom"
+    And I check the 2nd checkbox with the value "Starsky & Hutch"
     And I fill in "challenge_signup_requests_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard"
-    And I check "challenge_signup_offers_attributes_1_fandom_30"
+    And I check the 4th checkbox with the value "Care Bears"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     And I press "Submit"
   Then I should see "We couldn't save this ChallengeSignup, sorry!"
@@ -173,12 +164,12 @@ Feature: Collection
     And I should see "You have submitted more than one offer with the same fandom tags. This challenge requires them all to be unique."
   # now fill in correctly
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
-    And I uncheck "challenge_signup_requests_attributes_1_fandom_28"
+    And I uncheck the 2nd checkbox with the value "Starsky & Hutch"
     And I fill in "challenge_signup_requests_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person"
-    And I uncheck "challenge_signup_offers_attributes_0_fandom_30"
-    And I check "challenge_signup_offers_attributes_0_fandom_29"
-    And I uncheck "challenge_signup_offers_attributes_1_fandom_30"
-    And I check "challenge_signup_offers_attributes_1_fandom_28"
+    And I uncheck the 3rd checkbox with the value "Care Bears"
+    And I check the 3rd checkbox with the value "Tiny fandom"
+    And I uncheck the 4th checkbox with the value "Care Bears"
+    And I check the 4th checkbox with the value "Starsky & Hutch"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     And I press "Submit"
   Then I should see "Signup was successfully created"
@@ -203,12 +194,12 @@ Feature: Collection
   Then I should see "Signed up:" within ".collection.meta"
     And I should see "1" within ".collection.meta"
   When I follow "Sign Up"
-  When I check "challenge_signup_requests_attributes_0_fandom_28"
+  When I check the 1st checkbox with the value "Starsky & Hutch"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
-    And I check "challenge_signup_requests_attributes_1_fandom_29"
-    And I check "challenge_signup_offers_attributes_0_fandom_27"
+    And I check the 2nd checkbox with the value "Tiny fandom"
+    And I check the 3rd checkbox with the value "Stargate Atlantis"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
-    And I check "challenge_signup_offers_attributes_1_fandom_31"
+    And I check the 4th checkbox with the value "Yuletide Hippos RPF"
     And I check "challenge_signup_offers_attributes_1_any_character"
     # TRICKY note here! the index value for the javascript-added request 3 is actually 3; this is
     # a workaround because otherwise it would display a duplicate number
@@ -225,10 +216,10 @@ Feature: Collection
   When I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_28"
-    And I check "challenge_signup_requests_attributes_1_fandom_29"
-    And I check "challenge_signup_offers_attributes_0_fandom_28"
-    And I check "challenge_signup_offers_attributes_1_fandom_27"
+    And I check the 1st checkbox with value "Starsky & Hutch"
+    And I check the 2nd checkbox with value "Tiny fandom"
+    And I check the 3rd checkbox with value "Starsky & Hutch"
+    And I check the 4th checkbox with value "Stargate Atlantis"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "Any"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
@@ -245,12 +236,12 @@ Feature: Collection
   When I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_27"
-    And I check "challenge_signup_requests_attributes_1_fandom_28"
+    And I check the 1st checkbox with value "Stargate Atlantis"
+    And I check the 2nd checkbox with value "Starsky & Hutch"
     And I fill in "challenge_signup_requests_attributes_1_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
-    And I check "challenge_signup_offers_attributes_0_fandom_29"
+    And I check the 3rd checkbox with value "Tiny fandom"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard"
-    And I check "challenge_signup_offers_attributes_1_fandom_28"
+    And I check the 4th checkbox with value "Starsky & Hutch"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Foo The Wonder Goat, John Sheppard"
     And I press "Submit"
   Then I should see "Signup was successfully created"
@@ -270,11 +261,11 @@ Feature: Collection
   When I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_27"
-    And I check "challenge_signup_requests_attributes_1_fandom_28"
-    And I check "challenge_signup_offers_attributes_0_fandom_29"
+    And I check the 1st checkbox with value "Stargate Atlantis"
+    And I check the 2nd checkbox with value "Starsky & Hutch"
+    And I check the 3rd checkbox with value "Tiny fandom"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Foo The Wonder Goat, Obscure Person"
-    And I check "challenge_signup_offers_attributes_1_fandom_27"
+    And I check the 4th checkbox with value "Stargate Atlantis"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
     And I press "Submit"
   Then I should see "Signup was successfully created"
@@ -297,11 +288,11 @@ Feature: Collection
   When I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
-    And I check "challenge_signup_requests_attributes_0_fandom_27"
-    And I check "challenge_signup_requests_attributes_1_fandom_28"
-    And I check "challenge_signup_offers_attributes_0_fandom_29"
+    And I check the 1st checkbox with value "Stargate Atlantis"
+    And I check the 2nd checkbox with value "Starsky & Hutch"
+    And I check the 3rd checkbox with value "Tiny fandom"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Foo The Wonder Goat, Obscure Person"
-    And I check "challenge_signup_offers_attributes_1_fandom_27"
+    And I check the 4th checkbox with value "Stargate Atlantis"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
     And I press "Submit"
   Then I should see "Signup was successfully created"
