@@ -58,6 +58,10 @@ class ChallengeClaim < ActiveRecord::Base
     :joins => CLAIMING_PSEUD_JOIN,
     :order => "users.name"
   }
+  
+  scope :order_by_date, {
+    :order => "created_at DESC"
+  }
 
   scope :fulfilled, {
     :joins => COLLECTION_ITEMS_JOIN,
