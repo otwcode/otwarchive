@@ -21,7 +21,7 @@ class AutocompleteController < ApplicationController
   
   # PSEUDS
   def pseud
-    render_output(params[:term], Pseud.autocomplete_lookup(params[:term]))
+    render_output(Pseud.autocomplete_lookup(params[:term], "autocomplete_pseud").map {|res| Pseud.fullname_from_autocomplete(res)})
   end
   
   ## TAGS  
@@ -63,8 +63,8 @@ class AutocompleteController < ApplicationController
   # look up collections ranked by number of items they contain
 
   def collection_fullname
-    results = Collection.autocomplete_lookup(params[:term], "autocomplete_collection_all").map {|result| Collection.fullname_from_autocomplete(result)}
-    render_output(params[:term], results)
+    results = Collection.autocomplete_lookup(params[:term], "autocomplete_collection_all").map {|res| Collection.fullname_from_autocomplete(res)}
+    render_output(results)
   end
 
   # return collection names

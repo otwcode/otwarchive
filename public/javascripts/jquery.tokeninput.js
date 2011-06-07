@@ -747,13 +747,9 @@ $.TokenList = function (input, url_or_data, settings) {
                     $.each(live_param_fields, function (index, value) {
                         var kv = value.split("=");
                         var id_to_get = "#" + kv[1];
-                        var serialized_contents = $(id_to_get).serialize();
-                        if(serialized_contents){
-                            ajax_params.data[kv[0]] = [];
-                            var serialized_elements = serialized_contents.split("&");                            
-                            serialized_elements.each(function(serialized_element){
-                               ajax_params.data[kv[0]].push(serialized_element.split("=")[1]);
-                            });
+                        var id_contents = $(id_to_get).val();
+                        if(id_contents) {
+                            ajax_params.data[kv[0]] = id_contents;
                         }
                     });
                 }
