@@ -22,6 +22,7 @@ Feature: Download a work
   When I follow "PDF"
   When I go to the work page with title Tittle with doubble letters
   When I follow "HTML"
+    Then I should see "Tittle with doubble letters"
   When I go to the work page with title Tittle with doubble letters
   When I follow "EPUB"
 
