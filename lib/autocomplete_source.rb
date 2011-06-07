@@ -165,13 +165,9 @@ module AutocompleteSource
     def autocomplete_phrase_split(string)
         # split into words
         string.downcase.split(/\b/).
+          reject {|s| s == AUTOCOMPLETE_WORD_TERMINATOR || s == AUTOCOMPLETE_DELIMITER}.
           reject {|s| s.blank?}. # get rid of spaces between words 
           reject {|s| s.length == 1 && s.match(/^[[:punct:]]$/)} # get rid of single-character punctuation
-
-        # if we start with a nonword prefix (eg +Anima) add on the first word part for indexing 
-        # if string.match /^([^[[:word:]]]+)([^\s]+)/
-        #   words << $2.downcase
-        # end
     end
     
     def autocomplete_pieces(string)
