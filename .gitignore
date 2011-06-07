@@ -18,6 +18,8 @@ REVISION
 /config/sphinx.yml
 /config/unicorn.rb
 /config/newrelic.yml
+/config/redis.yml
+/config/redis-cucumber.conf
 
 # /config/environments/
 /config/environments/development.rb
