@@ -851,7 +851,7 @@ class StoryParser
       return meta
     end
 
-    def download_with_timeout(location)
+    def download_with_timeout(location, limit = 10)
       story = ""
       Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
         begin
@@ -859,6 +859,12 @@ class StoryParser
           case response
           when Net::HTTPSuccess
             story = response.body
+          when Net::HTTPRedirection
+            if limit > 0
+              story = download_with_timeout(response['location'], limit - 1) 
+            else
+              nil
+            end
           else
            nil
           end

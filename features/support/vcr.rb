@@ -40,7 +40,7 @@ VCR.cucumber_tags do |t|
   t.tags '@import_lj'
   t.tags '@import_lj_tables'
   t.tags '@import_lj_no_backdate'
-  t.tags '@import_lj_comm'
+  t.tags '@import_lj_comm', :record => :all
   t.tags '@import_lj_multi_chapter'
   t.tags '@import_lj_underscores'
 
