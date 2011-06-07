@@ -7,42 +7,88 @@
     headers: 
   response: !ruby/struct:VCR::Response 
     status: !ruby/struct:VCR::ResponseStatus 
+      code: 302
+      message: Found
+    headers: 
+      server: 
+      - GoatProxy 1.0
+      date: 
+      - Tue, 07 Jun 2011 00:06:16 GMT
+      content-type: 
+      - text/html; charset=iso-8859-1
+      x-aws-id: 
+      - ws02
+      location: 
+      - http://rarelitslash.livejournal.com/271960.html?format=light
+      content-length: 
+      - "244"
+      x-varnish: 
+      - 710319564 710037723
+      age: 
+      - "1670"
+      x-debug: 
+      - USen (null) (null)
+      x-vws-id: 
+      - bil1-varn14
+      x-gateway: 
+      - bil1-swlb03
+    body: |
+      <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <html><head>
+      <title>302 Found</title>
+      </head><body>
+      <h1>Found</h1>
+      <p>The document has moved <a href="http://rarelitslash.livejournal.com/271960.html?format=light">here</a>.</p>
+      </body></html>
+
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :get
+    uri: http://rarelitslash.livejournal.com:80/271960.html?format=light
+    body: 
+    headers: 
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
       code: 200
       message: OK
     headers: 
-      date: 
-      - Fri, 11 Feb 2011 18:57:13 GMT
       server: 
-      - Apache/2.2.3 (CentOS)
-      x-aws-id: 
-      - ws11
-      set-cookie: 
-      - ljuniq=yhTshYC0XQlMccb:1297450633:pgstats0:m0; expires=Tuesday, 12-Apr-2011 18:57:13 GMT; domain=.livejournal.com; path=/
-      cache-control: 
-      - private, proxy-revalidate
-      etag: 
-      - "\"f4b881329afb82a7d2282f02c19bfea0\""
-      content-length: 
-      - "17956"
-      keep-alive: 
-      - timeout=30, max=100
-      connection: 
-      - keep-alive
+      - GoatProxy 1.0
+      date: 
+      - Tue, 07 Jun 2011 00:06:16 GMT
       content-type: 
       - text/html; charset=utf-8
+      x-aws-id: 
+      - ws02
+      etag: 
+      - "\"9b8293131251c71860893ef9e53b311c\""
       content-language: 
       - en
+      content-length: 
+      - "19503"
+      x-varnish: 
+      - "850840097"
+      age: 
+      - "0"
+      x-debug: 
+      - USen (null) (null)
+      x-vws-id: 
+      - bil1-varn19
+      x-gateway: 
+      - bil1-swlb03
     body: "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n\
       \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\
       <html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n    \n    <head>\n\
-      \t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=EmulateIE7; IE=EmulateIE9\" />\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <title>Adult Content Notice</title>\n    <link rel=\"home\" title=\"Home\" href=\"http://www.livejournal.com/\" />\n    <link rel=\"contents\" title=\"Site Map\" href=\"http://www.livejournal.com/site/\" />\n    <link rel=\"help\" title=\"Technical Support\" href=\"http://www.livejournal.com/support/\" />\n    <link rel=\"apple-touch-icon\" href=\"http://l-stat.livejournal.com/img/apple-touch-icon.png\" />\n    \n    \n        \n\n    <script>\n    \n    </script>\n     \n    \n        <script type=\"text/javascript\">\n            Site = window.Site || {};\n\n            (function(){\n                var p = {\"media_embed_enabled\":1,\"inbox_update_poll\":0,\"remoteUser\":null,\"remoteJournalBase\":null,\"has_remote\":0,\"statprefix\":\"http://l-stat.livejournal.com\",\"currentEntryRecommendations\":0,\"server_time\":1297450633,\"ctx_popup\":1,\"remote_is_suspended\":0,\"imgprefix\":\"http://l-stat.livejournal.com/img\",\"esn_async\":1,\"remote_can_track_threads\":null,\"currentJournal\":\"rarelitslash\",\"currentEntry\":\"\",\"siteroot\":\"http://www.livejournal.com\",\"currentJournalBase\":\"http://community.livejournal.com/rarelitslash\"}, i;\n                for (i in p) Site[i] = p[i];\n            })();\n       </script>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??lj_base.css,esn.css,contextualhover.css,lj_base-app.css,ad_base.css,horizon/screen.css,horizon/layout.css,widget.css,statistics/un_stats.css,horizon/un_rblocks.css,horizon/loggedout.css,reskining/2011/january/header.css?v=1297449018\" />\n\
-      <!--[if IE]><link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??ie.css?v=1297449018\" /><![endif]-->\n\
-      <!--[if lt IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??lj_base-ie.css,horizon/ie.css?v=1277844792\" /><![endif]-->\n\
-      <script type=\"text/javascript\" src=\"http://l-stat.livejournal.com/js/??jquery.js,jquery_fn.js,basic.js,livejournal.js,esn.js,ippu.js,lj_ippu.js,ljwidget.js,ljwidget_ippu.js,journal.js,hourglass.js,contextualhover.js,livejournal-local.js,thread_expander.js,thread_expander.ex.js,quickreply.js,md5.js?v=1296605167\"></script>\n\
-      <script type=\"text/javascript\" src=\"http://l-stat.livejournal.com/js/??horizon.js?v=1276636761\"></script>\n\n    <link rel=\"openid2.provider\" href=\"http://www.livejournal.com/openid/server.bml\" />\n\
+      \t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=EmulateIE7; IE=EmulateIE9\" />\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <title>Adult Content Notice</title>\n    <link rel=\"home\" title=\"Home\" href=\"http://www.livejournal.com/\" />\n    <link rel=\"contents\" title=\"Site Map\" href=\"http://www.livejournal.com/site/\" />\n    <link rel=\"help\" title=\"Technical Support\" href=\"http://www.livejournal.com/support/\" />\n    <link rel=\"apple-touch-icon\" href=\"http://l-stat.livejournal.com/img/apple-touch-icon.png\" />\n    \n\n    \n    \n        \n\n    <script>\n    \n    </script>\n     \n    \n            <script type=\"text/javascript\">\n                Site = window.Site || {};\n                Site.ml_text = {};\n                (function(){\n                    var p = {\"remote_is_maintainer\":0,\"remoteUser\":null,\"remoteJournalBase\":null,\"statprefix\":\"http://l-stat.livejournal.com\",\"ctx_popup\":1,\"siteroot\":\"http://www.livejournal.com\",\"media_embed_enabled\":1,\"inbox_update_poll\":0,\"has_remote\":0,\"currentEntryRecommendations\":0,\"server_time\":1307405176,\"remote_is_suspended\":0,\"imgprefix\":\"http://l-stat.livejournal.com/img\",\"esn_async\":1,\"remote_can_track_threads\":null,\"currentJournal\":\"rarelitslash\",\"currentEntry\":\"\",\"currentJournalBase\":\"http://rarelitslash.livejournal.com\"}, i;\n                    for (i in p) Site[i] = p[i];\n                })();\n           </script>\n        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??lj_base.css,esn.css,contextualhover.css,lj_base-app.css,ad_base.css,horizon/screen.css,horizon/layout.css,widget.css,statistics/un_stats.css,horizon/un_rblocks.css,horizon/loggedout.css,reskining/2011/june/noncyr/header.css?v=1307036727\" />\n\
+      <!--[if IE]><link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??ie.css?v=1307036717\" /><![endif]-->\n\
+      <!--[if lt IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??lj_base-ie.css,horizon/ie.css?v=1283369670\" /><![endif]-->\n\
+      <script type=\"text/javascript\" src=\"http://l-stat.livejournal.com/js/??jquery.js,jquery_fn.js,basic.js,livejournal.js,esn.js,ippu.js,lj_ippu.js,ljwidget.js,ljwidget_ippu.js,journal.js,hourglass.js,livejournal-local.js,thread_expander.js,thread_expander.ex.js,quickreply.js,md5.js?v=1305152005\"></script>\n\
+      <script type=\"text/javascript\" src=\"http://l-stat.livejournal.com/js/??jquery/jquery.ui.core.min.js,jquery/jquery.ui.widget.min.js,jquery/jquery.lj.bubble.js,contextualhover.js,horizon.js?v=1305232065\"></script>\n\
+      <script type=\"text/javascript\" src=\"http://userapi.com/js/api/openapi.js?31\"></script><script type=\"text/javascript\">VK.init({apiId: 2244371, onlyWidgets: true});</script>\n    <link rel=\"openid2.provider\" href=\"http://www.livejournal.com/openid/server.bml\" />\n\
       <link rel=\"openid.server\" href=\"http://www.livejournal.com/openid/server.bml\" />\n\
-      <meta http-equiv=\"X-XRDS-Location\" content=\"http://community.livejournal.com/rarelitslash/data/yadis\" />\n\n\n    \n\n  </head>\n\n\n    <body class='logged-out' >\n    <div id=\"big-content-wrapper\">\n\
-      \t\n    <div id=\"content\">\n    \n    <div id=\"content-inner\">\n      \n      \n\n      \n      \n\n      \n\n      \n      <h1 class='logged-out'></h1>\n\n      <div id='content-wrapper' class='' style='margin-right: ; height: 1%'>\n        \n\n        \n\n        <!-- Content -->\n        \n        <table cellpadding=\"8\" cellspacing=\"0\" border=\"1\" style=\"background-color: #FFFFD4; border: 1px solid black;\">\n            <tr>\n                <td align=\"center\"><h1>18</h1></td>\n                <td align=\"center\"><h1>Adult Content Notice</h1></td>\n            </tr>\n            <tr>\n                <td colspan=\"2\">\n    The content that you are about to view <strong>may contain material only suitable for adults</strong>. To continue, you must confirm that you are at least 18 years of age. \n                </td>\n            </tr>\n        </table>\n\n        <br />\n\n        <center>\n            <form method=\"POST\" action=\"http://www.livejournal.com/misc/adult_explicit.bml\">\n                <input type='hidden' name=\"ret\" value=\"http://community.livejournal.com/rarelitslash/271960.html?format=light\" />\n    <input type='submit' name=\"adult_check\" value=\"Yes, I am at least 18 years old.\" /> <a href='http://www.livejournal.com/site/search.bml'>No, return me to Explore LJ.</a></form></center>\n\n        <div class='clear'></div>\n      \n      </div>\n\n      \n\n    </div>\n    </div>\n    <div class=\"push\"></div>\n    </div>\n    <!-- End \\#content -->\n\n    \n        <div id=\"footer\">\n            <div id=\"footer-links\">\n                <table><tr>\n                    <td>\n                        <h3>About</h3>\n                        <ul id=\"footer-links-col1\">\n                            <li><a href=\"http://www.livejournal.com/contact/\">Contact</a></li>\n                            <li><a href=\"http://livejournalinc.com/sales.php\">Advertise</a></li>\n                            <li><a href=\"http://www.livejournalinc.com/jobs/\">Jobs</a></li>\n                            <li><a href=\"http://www.livejournal.com/news.bml\">Site News</a></li>\n                            <li><a href=\"http://www.livejournalinc.com/\">More...</a></li>\n                        </ul>\n                    </td>\n                    <td>\n                        <h3>Help</h3>\n                        <ul id=\"footer-links-col2\">\n                            <li><a href=\"http://www.livejournal.com/support/\">Support</a> /\n                            <a href=\"http://www.livejournal.com/support/faq.bml\">FAQs</a></li>\n                            <li><a href=\"http://www.livejournal.com/site/safetytips.bml\">Safety Tips</a></li>\n                        </ul>\n                        <h3>Get Involved</h3>\n                        <ul>\n                            <li><a href=\"http://www.livejournal.com/support/faqbrowse.bml?faqid=57\">Volunteer</a></li>\n                            <li><a href=\"http://community.livejournal.com/lj_dev/\">Developers</a></li>\n                        </ul>\n                    </td>\n                    <td>\n                        <h3>Legal</h3>\n                        <ul id=\"footer-links-col3\">\n                            <li><a href=\"http://www.livejournal.com/legal/tos.bml\">Terms of Service</a></li>\n                            <li><a href=\"http://www.livejournal.com/legal/privacy.bml\">Privacy Policy</a></li>\n                            <li><a href=\"http://www.livejournal.com/legal/dmca.bml\">Copyright</a></li>\n                            <li><a href=\"http://www.livejournal.com/abuse/policy.bml\">Abuse Policy</a></li>\n                        </ul>\n                      \t<h3>LJ Labs</h3>\n                        <ul class=\"footer-links-col\" id=\"footer-links-col5\">\n                            <li><a href=\"http://aqua.livejournal.ru/\">LJ Aqua</a></li>\n                            <li><a href=\"http://www.livejournal.com/labs.bml\">More...</a></li>\n                        </ul>\n                    </td>\n                    <td>\n                        <h3>Store</h3>\n                        <ul id=\"footer-links-col4\">\n                            <li><a href=\"http://www.livejournal.com/manage/account/\">Upgrade Account</a></li>\n                            <li><a href=\"http://www.livejournal.com/shop/vgift.bml\">Virtual Gifts</a></li>\n                            <li><a href=\"https://www.zazzle.com/livejournal*\">Merchandise</a></li>\n                            <li><a href=\"http://www.livejournal.com/shop/\">More...</a></li>\n                        </ul>\n                    </td>\n                     <td class=\"last\">\n                        <ul id=\"footer-links-col6\">\n                            <li>Change language:</li>\n                            <li><select name=\"lang\" id=\"footer_lang_list\">\n\
+      <meta http-equiv=\"X-XRDS-Location\" content=\"http://rarelitslash.livejournal.com/data/yadis\" />\n\n\n    \n\n  </head>\n\n\n    <body class='logged-out ' >\n    <div id=\"fb-root\"></div><script src=\"http://connect.facebook.net/en_US/all.js#appId=214181831945836&amp;xfbml=1\"></script><script type=\"text/javascript\" src=\"http://apis.google.com/js/plusone.js\">{lang: 'en'}</script>\n    \n    <div id=\"big-content-wrapper\">\n\
+      \t\n    <div id=\"content\">\n    \n    <div id=\"content-inner\">\n      \n      \n\n      \n      \n\n      \n\n      \n      <h1 class='logged-out'></h1>\n\n      <div id='content-wrapper' class='' style='margin-right: ; height: 1%'>\n        \n\n        \n\n        <!-- Content -->\n        \n        <table cellpadding=\"8\" cellspacing=\"0\" border=\"1\" style=\"background-color: #FFFFD4; border: 1px solid black;\">\n            <tr>\n                <td align=\"center\"><h1>18</h1></td>\n                <td align=\"center\"><h1>Adult Content Notice</h1></td>\n            </tr>\n            <tr>\n                <td colspan=\"2\">\n    The content that you are about to view <strong>may contain material only suitable for adults</strong>. To continue, you must confirm that you are at least 18 years of age. \n                </td>\n            </tr>\n        </table>\n\n        <br />\n\n        <center>\n            <form method=\"POST\" action=\"http://www.livejournal.com/misc/adult_explicit.bml\">\n                <input type='hidden' name=\"ret\" value=\"http://rarelitslash.livejournal.com/271960.html?format=light\" />\n    <input type='submit' name=\"adult_check\" value=\"Yes, I am at least 18 years old.\" /> <a href='http://www.livejournal.com/site/search.bml'>No, return me to Explore LJ.</a></form></center>\n\n        <div class='clear'></div>\n      \n      </div>\n\n      \n\n    </div>\n    </div>\n    <div class=\"push\"></div>\n    </div>\n    <!-- End \\#content -->\n\n    \n        <div id=\"footer\">\n            <div id=\"footer-links\">\n                <table><tr>\n                    <td>\n                        <h3>About</h3>\n                        <ul id=\"footer-links-col1\">\n                            <li><a href=\"http://www.livejournal.com/contact/\">Contact</a></li>\n                            <li><a href=\"http://livejournalinc.com/sales.php\">Advertise</a></li>\n                            <li><a href=\"http://www.livejournalinc.com/jobs/\">Jobs</a></li>\n                            <li><a href=\"http://www.livejournal.com/news.bml\">Site News</a></li>\n                            <li><a href=\"http://www.livejournalinc.com/\">More...</a></li>\n                        </ul>\n                    </td>\n                    <td>\n                        <h3>Help</h3>\n                        <ul id=\"footer-links-col2\">\n                            <li><a href=\"http://www.livejournal.com/support/\">Support</a> /\n                            <a href=\"http://www.livejournal.com/support/faq.bml\">FAQs</a></li>\n                            <li><a href=\"http://www.livejournal.com/site/safetytips.bml\">Safety Tips</a></li>\n                        </ul>\n                        <h3>Get Involved</h3>\n                        <ul>\n                            <li><a href=\"http://www.livejournal.com/support/faqbrowse.bml?faqid=57\">Volunteer</a></li>\n                            <li><a href=\"http://lj-dev.livejournal.com/\">Developers</a></li>\n                        </ul>\n                    </td>\n                    <td>\n                        <h3>Legal</h3>\n                        <ul id=\"footer-links-col3\">\n                            <li><a href=\"http://www.livejournal.com/legal/tos.bml\">Terms of Service</a></li>\n                            <li><a href=\"http://www.livejournal.com/legal/privacy.bml\">Privacy Policy</a></li>\n                            <li><a href=\"http://www.livejournal.com/legal/dmca.bml\">Copyright</a></li>\n                            <li><a href=\"http://www.livejournal.com/abuse/policy.bml\">Abuse Policy</a></li>\n                        </ul>\n                      \t<h3>LJ Labs</h3>\n                        <ul class=\"footer-links-col\" id=\"footer-links-col5\">\n                            <li><a href=\"http://aqua.livejournal.ru/\">LJ Aqua</a></li>\n                            <li><a href=\"http://www.livejournal.com/labs.bml\">More...</a></li>\n                        </ul>\n                    </td>\n                    <td>\n                        <h3>Store</h3>\n                        <ul id=\"footer-links-col4\">\n                            <li><a href=\"http://www.livejournal.com/manage/account/\">Upgrade Account</a></li>\n                            <li><a href=\"http://www.livejournal.com/shop/vgift.bml\">Virtual Gifts</a></li>\n                            <li><a href=\"https://www.zazzle.com/livejournal*\">Merchandise</a></li>\n                            <li><a href=\"http://www.livejournal.com/shop/\">More...</a></li>\n                        </ul>\n                    </td>\n                     <td class=\"last\">\n                        <ul id=\"footer-links-col6\">\n                            <li>Change language:</li>\n                            <li><select name=\"lang\" id=\"footer_lang_list\">\n\
       <option value=\"en_LJ\" selected='selected'>English</option>\n\
       <option value=\"en_GB\">English (UK)</option>\n\
       <option value=\"de\">Deutsch</option>\n\
@@ -76,7 +122,7 @@
       <option value=\"lt\">Lietuvi\xC5\xB3</option>\n\
       <option value=\"nn\">Norsk nynorsk</option>\n\
       </select></li>\n                        </ul>\n\
-      \t\t\t\t\t\t<dl class=\"current-version\"><dt><a href=\"http://lj-releases.livejournal.com\">Current version</a>:</dt><dd>v.75.3</dd></dl>\n                    </td>\n                </tr><tr>\n                    <td colspan=\"5\">\n                        <p class=\"more_lj\"><a href=\"http://www.livejournal.com/site/\">&raquo; View Full Sitemap</a></p>\n                    </td>\n                </tr></table>\n            </div>\n            <div id=\"footer-copyright\">Copyright &copy; 1999 LiveJournal, Inc.  All rights reserved.</div>\n        </div>\n        <!-- end footer -->\n    \n\n\n    <div id=\"navigation\">\n    <div id='Userpic'></div><!-- end #Userpic -->\n      <div id=\"NavigationWelcomeLogo\">\n      \n\n      </div>\n      <!-- End Navigation and Welcome -->\n\n            <div id='NavBar'>\n      <ul id='NavMenu'>\n      <li class='NavMenuItem' id='NavMenuItem1'><a href='http://www.livejournal.com/' id='horizon-menu-home'>Home</a></li>\n\
+      \t\t\t\t\t\t<dl class=\"current-version\"><dt><a href=\"http://lj-releases.livejournal.com\">Current version</a>:</dt><dd>v.79.4</dd></dl>\n                    </td>\n                </tr><tr>\n                    <td colspan=\"5\">\n                        <p class=\"more_lj\"><a href=\"http://www.livejournal.com/site/\">&raquo; View Full Sitemap</a></p>\n                    </td>\n                </tr></table>\n            </div>\n            <div id=\"footer-copyright\">Copyright &copy; 1999 LiveJournal, Inc.  All rights reserved.</div>\n        </div>\n        <!-- end footer -->\n    \n\n\n    <div id=\"navigation\">\n    <div id='Userpic'></div><!-- end #Userpic -->\n      <div id=\"NavigationWelcomeLogo\">\n      \n\n      </div>\n      <!-- End Navigation and Welcome -->\n\n            <div id='NavBar'>\n      <ul id='NavMenu'>\n      <li class='NavMenuItem' id='NavMenuItem1'><a href='http://www.livejournal.com/' id='horizon-menu-home'>Home</a></li>\n\
       <li class='NavMenuItem' id='NavMenuItem2'><a href='http://www.livejournal.com/create.bml' id='horizon-menu-home'>Create an account</a></li>\n\
       <li class='NavMenuItem' id='NavMenuItem3'><a href='http://www.livejournal.com/search/' id='horizon-menu-explore'>Explore</a><ul class='NavMenuSubNav' id='NavMenu3'>\n\
       <li class='NavMenuSubNavBack'><iframe src='about:blank' frameborder='0' class='NavMenuSubNavBack'></iframe></li><li class=''><a href='http://www.livejournal.com/interests.bml'>Search by Interest</a></li>\n\
@@ -98,11 +144,11 @@
       <li class=''><a href='http://www.livejournal.com/chat/'>LJ Talk</a></li>\n\
       <li class=''><a href='http://www.livejournal.com/download/'>Downloads</a></li>\n\
       <li class=''><a href='http://www.livejournal.com/classifieds'>Classifieds</a></li>\n\
-      <li class=''><a href='http://www.livejournal.com/games/'>Games</a></li>\n\
       </ul>\n\
-      </li>\n\n        <li id=\"NavMenuSearch\">\n          <form action=\"http://www.livejournal.com/search/\" method=\"get\">\n          \n            <input type=\"text\" value=\"Find\" size=\"12\" name=\"q\" id='SearchText' onfocus=\"if(this.value=='Find')this.value='';\" onblur=\"if(this.value=='')this.value='Find';\" />\n          \n                <select name=\"area\">\n                    <option value='default'>All</option>\n                    <option value='posts'>Entries</option>\n                    <option value='comments'>Comments</option>\n                    <option value='journals'>Journals</option>\n                    <option value='faq'>FAQ</option>\n                </select>\n            \n            <input type=\"submit\" value=\"Search\" />\n          </form>\n        </li>\n      </ul>\n      </div>\n      <!-- End navbar -->\n\n\n      \n\n    </div>\n    <!-- End #navigation -->\n    <dl class=\"b-reskining-about\"><dt></dt><dd>Image by <span class='ljuser ljuser-name_spikaleido' lj:user='spikaleido' style='white-space:nowrap'><a href='http://spikaleido.livejournal.com/profile'><img src='http://l-stat.livejournal.com/img/userinfo.gif?v=1' alt='[info]' width='17' height='17' style='vertical-align: bottom; border: 0; padding-right: 1px;'/></a><a href='http://spikaleido.livejournal.com/'><b>spikaleido</b></a></span>. Join the contest in <span class='ljuser ljuser-name_remixed' lj:user='remixed' style='white-space:nowrap'><a href='http://community.livejournal.com/remixed/profile'><img src='http://l-stat.livejournal.com/img/community.gif?v=1' alt='[info]' width='16' height='16' style='vertical-align: bottom; border: 0; padding-right: 1px;'/></a><a href='http://community.livejournal.com/remixed/'><b>remixed</b></a></span>! </dd></dl>\n\n    <!-- Login -->\n            <div class=\"lj_loginform\" id=\"Login\">\n          <form style='margin: 0; padding: 0;' method=\"post\" action=\"https://www.livejournal.com/login.bml?ret=1\" id=\"login\" class=\"lj_login_form\">\n            <input type='hidden' name=\"returnto\" />\n            <input type='hidden' name='mode' value='login' />\n            \n            <table cellspacing=\"2\" cellpadding=\"0\">\n              <tr>\n                <th class=\"desc\"><label for='login_user'>Username:</label></th>\n                <td><input type=\"text\" name=\"user\" size=\"24\" id='login_user' tabindex=\"1\" /></td>\n                <td rowspan=\"3\" style=\"padding-left: 10px; vertical-align: top;\">\n                  <a href=\"http://www.livejournal.com/create.bml\">Create an Account</a><br />\n                  <a href=\"http://www.livejournal.com/lostinfo.bml\">Forgot your login or password?</a><br/>\n                  <a href=\"http://www.livejournal.com/identity/login.bml?type=openid\" title=\"Log in with OpenID\" class=\"i-auth\"><img src=\"http://l-stat.livejournal.com/img/icons/openid-16.gif\" width=\"16\" height=\"16\" alt=\"Log in with OpenID\" /></a> <a href=\"http://www.livejournal.com/identity/login.bml?type=facebook\" title=\"Login with Facebook\" class=\"i-auth\"><img src=\"http://l-stat.livejournal.com/img/icons/facebook-16.gif\" width=\"16\" height=\"16\" alt=\"Login with Facebook\" /></a> <a href=\"http://www.livejournal.com/identity/login.bml?type=twitter\" title=\"Login with Twitter\" class=\"i-auth\"><img src=\"http://l-stat.livejournal.com/img/icons/twitter-16.gif\" width=\"16\" height=\"16\" alt=\"Login with Twitter\" /></a><br />\n                </td>\n              </tr>\n              <tr>\n                <th class=\"desc\"><label for='login_password'>Password:</label></th>\n                <td style='white-space: nowrap;'><input type=\"password\" name=\"password\" size=\"15\" class=\"lj_login_password\" tabindex=\"2\" />\n                <input type='submit' value=\"Log in\" tabindex='3' />\n                </td>\n              </tr>\n              <tr>\n                <td></td>\n                <td><label><input type=\"checkbox\" name=\"remember_me\" value=\"1\" tabindex=\"4\"  /> Remember Me</label></td>\n              </tr>\n              <tr>\n                <td></td>\n                <td colspan=\"2\" style='font-size: .8em; white-space: nowrap'>\n                    <a href=\"http://www.livejournal.com/manage/settings/?cat=display\">English &bull; Espa\xC3\xB1ol &bull; Deutsch &bull; \xD0\xA0\xD1\x83\xD1\x81\xD1\x81\xD0\xBA\xD0\xB8\xD0\xB9&hellip;</a>\n                </td>\n              </tr>\n            </table>\n          </form>\n        </div>\n\n    <!-- End Login -->\n\n    <!-- Logo -->\n    <div id=\"Logo\">\n    <a href='http://www.livejournal.com' style='border: 0'><img src='http://l-stat.livejournal.com/horizon/logo.png' style='width: 83px; height: 86px' alt='' class='transparentpng' />\n\
+      </li>\n\
+      <li class='NavMenuItem' id='NavMenuItem6'><a href='http://www.livejournal.com/games/' id='games-menu'>Games</a></li>\n\n        <li id=\"NavMenuSearch\">\n          <form action=\"http://www.livejournal.com/search/\" method=\"get\">\n          \n            <input type=\"text\" value=\"Find\" size=\"12\" name=\"q\" id='SearchText' onfocus=\"if(this.value=='Find')this.value='';\" onblur=\"if(this.value=='')this.value='Find';\" />\n          \n                <select name=\"area\">\n                    <option value='default'>All</option>\n                    <option value='posts'>Entries</option>\n                    <option value='comments'>Comments</option>\n                    <option value='journals'>Journals</option>\n                    <option value='faq'>FAQ</option>\n                </select>\n            \n            <input type=\"submit\" value=\"Search\" />\n          </form>\n        </li>\n      </ul>\n      </div>\n      <!-- End navbar -->\n\n\n      \n\n    </div>\n    <!-- End #navigation -->\n    <dl class=\"b-reskining-about\"><dt></dt><dd>Image by <span class='ljuser ljuser-name_idkmybfflucifer' lj:user='idkmybfflucifer' style='white-space:nowrap'><a href='http://idkmybfflucifer.livejournal.com/profile'><img src='http://l-stat.livejournal.com/img/userinfo.gif?v=3' alt='[info]' width='17' height='17' style='vertical-align: bottom; border: 0; padding-right: 1px;'/></a><a href='http://idkmybfflucifer.livejournal.com/'><b>idkmybfflucifer</b></a></span>. Join the <a href=\"http://community.livejournal.com/remixed/tag/header%20design%20contest\">contest</a> in <span class='ljuser ljuser-name_remixed' lj:user='remixed' style='white-space:nowrap'><a href='http://remixed.livejournal.com/profile'><img src='http://l-stat.livejournal.com/img/community.gif?v=3' alt='[info]' width='16' height='16' style='vertical-align: bottom; border: 0; padding-right: 1px;'/></a><a href='http://remixed.livejournal.com/'><b>remixed</b></a></span>!</dd></dl>\n\n    <!-- Login -->\n            <div class=\"lj_loginform\" id=\"Login\">\n          <form style='margin: 0; padding: 0;' method=\"post\" action=\"https://www.livejournal.com/login.bml?ret=1\" id=\"login\" class=\"lj_login_form\">\n            <input type='hidden' name=\"returnto\" />\n            <input type='hidden' name='mode' value='login' />\n            \n            <table cellspacing=\"2\" cellpadding=\"0\">\n              <tr>\n                <th class=\"desc\"><label for='login_user'>Username:</label></th>\n                <td><input type=\"text\" name=\"user\" size=\"24\" id='login_user' tabindex=\"1\" /></td>\n                <td rowspan=\"3\" style=\"padding-left: 10px; vertical-align: top;\">\n                  <a href=\"http://www.livejournal.com/create.bml\">Create an Account</a><br />\n                  <a href=\"http://www.livejournal.com/lostinfo.bml\">Forgot your login or password?</a><br/>\n                  <a href=\"http://www.livejournal.com/identity/login.bml?type=facebook\" title=\"Facebook\" class=\"i-auth\"><img src=\"http://l-stat.livejournal.com/img/icons/facebook-16.gif?v=1\" width=\"16\" height=\"16\" alt=\"Facebook\" /></a> <a href=\"http://www.livejournal.com/identity/login.bml?type=twitter\" title=\"Twitter\" class=\"i-auth\"><img src=\"http://l-stat.livejournal.com/img/icons/twitter-16.gif?v=2\" width=\"16\" height=\"16\" alt=\"Twitter\" /></a> <a href=\"#login-more\" class=\"i-auth i-loginpopup-show\"><img src=\"http://l-stat.livejournal.com/img/icons/showmore.gif?v=1\" width=\"16\" height=\"16\" alt=\"More login options\" /></a> <div class=\"b-loginpopup\" id=\"login-more\"><ul class=\"b-loginpopup-items\"><li class=\"b-loginpopup-item\"><a href=\"http://www.livejournal.com/identity/login.bml?type=openid\" title=\"OpenID\"><img src=\"http://l-stat.livejournal.com/img/icons/openid-16.gif?v=1\" width=\"16\" height=\"16\" alt=\"OpenID\" />OpenID</a></li><li class=\"b-loginpopup-item\"><a href=\"http://www.livejournal.com/identity/login.bml?type=mailru\" title=\"Mail.Ru\"><img src=\"http://l-stat.livejournal.com/img/icons/mailru-16.gif?v=3\" width=\"16\" height=\"16\" alt=\"Mail.Ru\" />Mail.Ru</a></li><li class=\"b-loginpopup-item\"><a href=\"http://www.livejournal.com/identity/login.bml?type=vkontakte\" title=\"Vkontakte\"><img src=\"http://l-stat.livejournal.com/img/icons/vkontakte-16.gif?v=1\" width=\"16\" height=\"16\" alt=\"Vkontakte\" />Vkontakte</a></li></ul></div><script type=\"text/javascript\">jQuery('div.b-loginpopup').bubble({ target: jQuery('a.i-loginpopup-show img'), closeControl: false, showOn: 'click' });</script>\n                </td>\n              </tr>\n              <tr>\n                <th class=\"desc\"><label for='login_password'>Password:</label></th>\n                <td style='white-space: nowrap;'><input type=\"password\" name=\"password\" size=\"15\" class=\"lj_login_password\" tabindex=\"2\" />\n                <input type='submit' value=\"Log in\" tabindex='3' />\n                </td>\n              </tr>\n              <tr>\n                <td></td>\n                <td><label><input type=\"checkbox\" name=\"remember_me\" value=\"1\" tabindex=\"4\"  /> Remember Me</label></td>\n              </tr>\n              <tr>\n                <td></td>\n                <td colspan=\"2\" style='font-size: .8em; white-space: nowrap'>\n                    <a href=\"http://www.livejournal.com/manage/settings/?cat=display\">English &bull; Espa\xC3\xB1ol &bull; Deutsch &bull; \xD0\xA0\xD1\x83\xD1\x81\xD1\x81\xD0\xBA\xD0\xB8\xD0\xB9&hellip;</a>\n                </td>\n              </tr>\n            </table>\n          </form>\n        </div>\n\n    <!-- End Login -->\n\n    <!-- Logo -->\n    <div id=\"Logo\">\n    <a href='http://www.livejournal.com' style='border: 0'><img src='http://l-stat.livejournal.com/horizon/logo.png' style='width: 83px; height: 86px' alt='' class='transparentpng' />\n\
       </a><div id='SiteName'><a href='http://www.livejournal.com' style='border: 0'><img src='http://l-stat.livejournal.com/horizon/livejournal.png' style='width: 189px; height: 27px' alt='' class='transparentpng' />\n\
-      </a></div>\n    </div>\n    <!-- End Logo -->\n\n\n    <!-- Extra block to read style from and call to initialize Horizon which reads style -->\n    <div id='Alpha' style='display: none !important'>&nbsp;</div>\n    <!--[if lt IE 7]><script>Horizon.scheme_init();</script><![endif]-->\n\n    <div id='hello-world' style='text-align: left; font-size:0; line-height:0; height:0; overflow:hidden;'><script src=\"http://l-stat.livejournal.com/js/pagestats/sa1102.js\" type=\"text/javascript\"></script>\n\
+      </a></div>\n    </div>\n    <!-- End Logo -->\n\n\n    <!-- Extra block to read style from and call to initialize Horizon which reads style -->\n    <div id='Alpha' style='display: none !important'>&nbsp;</div>\n    <!--[if lt IE 7]><script>Horizon.scheme_init();</script><![endif]-->\n\n    <div id='hello-world' style='text-align: left; font-size:0; line-height:0; height:0; overflow:hidden;'><script src=\"http://cdn.media6degrees.com/static/lj6387.js\" type=\"text/javascript\"></script>\n\
       <script type=\"text/javascript\"> var DR_id = 1111; </script>\n\
       <script src=\"http://l-stat.livejournal.com/js/pagestats/DR_v4u3.js?v=1\" type=\"text/javascript\"></script>\n    <!-- Begin comScore Tag -->\n\
       <script>\n    document.write(unescape(\"%3Cscript src='\" + (document.location.protocol == \"https:\" ? \"https://sb\" : \"http://b\") + \".scorecardresearch.com/beacon.js' %3E%3C/script%3E\"));\n\
@@ -114,7 +160,7 @@
       <!-- End comScore Tag -->\n\
       </div>\n\n    \n    \n  </body>\n\
       </html>\n\n"
-    http_version: "1.0"
+    http_version: "1.1"
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :get
@@ -137,149 +183,176 @@
       - ISO-8859-1,utf-8;q=0.7,*;q=0.7
   response: !ruby/struct:VCR::Response 
     status: !ruby/struct:VCR::ResponseStatus 
+      code: 302
+      message: Found
+    headers: 
+      server: 
+      - GoatProxy 1.0
+      date: 
+      - Tue, 07 Jun 2011 00:06:16 GMT
+      content-type: 
+      - text/html; charset=iso-8859-1
+      x-aws-id: 
+      - ws02
+      location: 
+      - http://rarelitslash.livejournal.com/271960.html?format=light
+      content-length: 
+      - "244"
+      x-varnish: 
+      - 710319660 710037723
+      age: 
+      - "1670"
+      x-debug: 
+      - USen gzip (null)
+      x-vws-id: 
+      - bil1-varn14
+      x-gateway: 
+      - bil1-swlb03
+    body: |
+      <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+      <html><head>
+      <title>302 Found</title>
+      </head><body>
+      <h1>Found</h1>
+      <p>The document has moved <a href="http://rarelitslash.livejournal.com/271960.html?format=light">here</a>.</p>
+      </body></html>
+
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :get
+    uri: http://rarelitslash.livejournal.com:80/271960.html?format=light
+    body: 
+    headers: 
+      user-agent: 
+      - WWW-Mechanize/1.0.0 (http://rubyforge.org/projects/mechanize/)
+      connection: 
+      - keep-alive
+      keep-alive: 
+      - "300"
+      accept-encoding: 
+      - gzip,identity
+      accept-language: 
+      - en-us,en;q=0.5
+      host: 
+      - rarelitslash.livejournal.com
+      accept-charset: 
+      - ISO-8859-1,utf-8;q=0.7,*;q=0.7
+      referer: 
+      - http://community.livejournal.com/rarelitslash/271960.html?format=light
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
       code: 200
       message: OK
     headers: 
-      date: 
-      - Fri, 11 Feb 2011 18:57:13 GMT
       server: 
-      - Apache/2.2.3 (CentOS)
-      x-aws-id: 
-      - cws10
-      set-cookie: 
-      - ljuniq=4qc6zMhOB0ITtgS:1297450633:pgstats0:m0; expires=Tuesday, 12-Apr-2011 18:57:13 GMT; domain=.livejournal.com; path=/
-      cache-control: 
-      - private, proxy-revalidate
-      etag: 
-      - "\"f4b881329afb82a7d2282f02c19bfea0\""
-      content-encoding: 
-      - gzip
-      vary: 
-      - Accept-Encoding
-      content-length: 
-      - "4986"
-      keep-alive: 
-      - timeout=30, max=100
-      connection: 
-      - keep-alive
+      - GoatProxy 1.0
+      date: 
+      - Tue, 07 Jun 2011 00:06:16 GMT
       content-type: 
       - text/html; charset=utf-8
+      x-aws-id: 
+      - ws02
+      etag: 
+      - "\"9b8293131251c71860893ef9e53b311c\""
       content-language: 
       - en
-    body: !binary |
-      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
-
-    http_version: "1.0"
+      content-length: 
+      - "19503"
+      x-varnish: 
+      - 850840144 850840097
+      age: 
+      - "0"
+      x-debug: 
+      - USen gzip (null)
+      x-vws-id: 
+      - bil1-varn19
+      x-gateway: 
+      - bil1-swlb03
+    body: "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n\
+      \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\
+      <html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n    \n    <head>\n\
+      \t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=EmulateIE7; IE=EmulateIE9\" />\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <title>Adult Content Notice</title>\n    <link rel=\"home\" title=\"Home\" href=\"http://www.livejournal.com/\" />\n    <link rel=\"contents\" title=\"Site Map\" href=\"http://www.livejournal.com/site/\" />\n    <link rel=\"help\" title=\"Technical Support\" href=\"http://www.livejournal.com/support/\" />\n    <link rel=\"apple-touch-icon\" href=\"http://l-stat.livejournal.com/img/apple-touch-icon.png\" />\n    \n\n    \n    \n        \n\n    <script>\n    \n    </script>\n     \n    \n            <script type=\"text/javascript\">\n                Site = window.Site || {};\n                Site.ml_text = {};\n                (function(){\n                    var p = {\"remote_is_maintainer\":0,\"remoteUser\":null,\"remoteJournalBase\":null,\"statprefix\":\"http://l-stat.livejournal.com\",\"ctx_popup\":1,\"siteroot\":\"http://www.livejournal.com\",\"media_embed_enabled\":1,\"inbox_update_poll\":0,\"has_remote\":0,\"currentEntryRecommendations\":0,\"server_time\":1307405176,\"remote_is_suspended\":0,\"imgprefix\":\"http://l-stat.livejournal.com/img\",\"esn_async\":1,\"remote_can_track_threads\":null,\"currentJournal\":\"rarelitslash\",\"currentEntry\":\"\",\"currentJournalBase\":\"http://rarelitslash.livejournal.com\"}, i;\n                    for (i in p) Site[i] = p[i];\n                })();\n           </script>\n        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??lj_base.css,esn.css,contextualhover.css,lj_base-app.css,ad_base.css,horizon/screen.css,horizon/layout.css,widget.css,statistics/un_stats.css,horizon/un_rblocks.css,horizon/loggedout.css,reskining/2011/june/noncyr/header.css?v=1307036727\" />\n\
+      <!--[if IE]><link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??ie.css?v=1307036717\" /><![endif]-->\n\
+      <!--[if lt IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??lj_base-ie.css,horizon/ie.css?v=1283369670\" /><![endif]-->\n\
+      <script type=\"text/javascript\" src=\"http://l-stat.livejournal.com/js/??jquery.js,jquery_fn.js,basic.js,livejournal.js,esn.js,ippu.js,lj_ippu.js,ljwidget.js,ljwidget_ippu.js,journal.js,hourglass.js,livejournal-local.js,thread_expander.js,thread_expander.ex.js,quickreply.js,md5.js?v=1305152005\"></script>\n\
+      <script type=\"text/javascript\" src=\"http://l-stat.livejournal.com/js/??jquery/jquery.ui.core.min.js,jquery/jquery.ui.widget.min.js,jquery/jquery.lj.bubble.js,contextualhover.js,horizon.js?v=1305232065\"></script>\n\
+      <script type=\"text/javascript\" src=\"http://userapi.com/js/api/openapi.js?31\"></script><script type=\"text/javascript\">VK.init({apiId: 2244371, onlyWidgets: true});</script>\n    <link rel=\"openid2.provider\" href=\"http://www.livejournal.com/openid/server.bml\" />\n\
+      <link rel=\"openid.server\" href=\"http://www.livejournal.com/openid/server.bml\" />\n\
+      <meta http-equiv=\"X-XRDS-Location\" content=\"http://rarelitslash.livejournal.com/data/yadis\" />\n\n\n    \n\n  </head>\n\n\n    <body class='logged-out ' >\n    <div id=\"fb-root\"></div><script src=\"http://connect.facebook.net/en_US/all.js#appId=214181831945836&amp;xfbml=1\"></script><script type=\"text/javascript\" src=\"http://apis.google.com/js/plusone.js\">{lang: 'en'}</script>\n    \n    <div id=\"big-content-wrapper\">\n\
+      \t\n    <div id=\"content\">\n    \n    <div id=\"content-inner\">\n      \n      \n\n      \n      \n\n      \n\n      \n      <h1 class='logged-out'></h1>\n\n      <div id='content-wrapper' class='' style='margin-right: ; height: 1%'>\n        \n\n        \n\n        <!-- Content -->\n        \n        <table cellpadding=\"8\" cellspacing=\"0\" border=\"1\" style=\"background-color: #FFFFD4; border: 1px solid black;\">\n            <tr>\n                <td align=\"center\"><h1>18</h1></td>\n                <td align=\"center\"><h1>Adult Content Notice</h1></td>\n            </tr>\n            <tr>\n                <td colspan=\"2\">\n    The content that you are about to view <strong>may contain material only suitable for adults</strong>. To continue, you must confirm that you are at least 18 years of age. \n                </td>\n            </tr>\n        </table>\n\n        <br />\n\n        <center>\n            <form method=\"POST\" action=\"http://www.livejournal.com/misc/adult_explicit.bml\">\n                <input type='hidden' name=\"ret\" value=\"http://rarelitslash.livejournal.com/271960.html?format=light\" />\n    <input type='submit' name=\"adult_check\" value=\"Yes, I am at least 18 years old.\" /> <a href='http://www.livejournal.com/site/search.bml'>No, return me to Explore LJ.</a></form></center>\n\n        <div class='clear'></div>\n      \n      </div>\n\n      \n\n    </div>\n    </div>\n    <div class=\"push\"></div>\n    </div>\n    <!-- End \\#content -->\n\n    \n        <div id=\"footer\">\n            <div id=\"footer-links\">\n                <table><tr>\n                    <td>\n                        <h3>About</h3>\n                        <ul id=\"footer-links-col1\">\n                            <li><a href=\"http://www.livejournal.com/contact/\">Contact</a></li>\n                            <li><a href=\"http://livejournalinc.com/sales.php\">Advertise</a></li>\n                            <li><a href=\"http://www.livejournalinc.com/jobs/\">Jobs</a></li>\n                            <li><a href=\"http://www.livejournal.com/news.bml\">Site News</a></li>\n                            <li><a href=\"http://www.livejournalinc.com/\">More...</a></li>\n                        </ul>\n                    </td>\n                    <td>\n                        <h3>Help</h3>\n                        <ul id=\"footer-links-col2\">\n                            <li><a href=\"http://www.livejournal.com/support/\">Support</a> /\n                            <a href=\"http://www.livejournal.com/support/faq.bml\">FAQs</a></li>\n                            <li><a href=\"http://www.livejournal.com/site/safetytips.bml\">Safety Tips</a></li>\n                        </ul>\n                        <h3>Get Involved</h3>\n                        <ul>\n                            <li><a href=\"http://www.livejournal.com/support/faqbrowse.bml?faqid=57\">Volunteer</a></li>\n                            <li><a href=\"http://lj-dev.livejournal.com/\">Developers</a></li>\n                        </ul>\n                    </td>\n                    <td>\n                        <h3>Legal</h3>\n                        <ul id=\"footer-links-col3\">\n                            <li><a href=\"http://www.livejournal.com/legal/tos.bml\">Terms of Service</a></li>\n                            <li><a href=\"http://www.livejournal.com/legal/privacy.bml\">Privacy Policy</a></li>\n                            <li><a href=\"http://www.livejournal.com/legal/dmca.bml\">Copyright</a></li>\n                            <li><a href=\"http://www.livejournal.com/abuse/policy.bml\">Abuse Policy</a></li>\n                        </ul>\n                      \t<h3>LJ Labs</h3>\n                        <ul class=\"footer-links-col\" id=\"footer-links-col5\">\n                            <li><a href=\"http://aqua.livejournal.ru/\">LJ Aqua</a></li>\n                            <li><a href=\"http://www.livejournal.com/labs.bml\">More...</a></li>\n                        </ul>\n                    </td>\n                    <td>\n                        <h3>Store</h3>\n                        <ul id=\"footer-links-col4\">\n                            <li><a href=\"http://www.livejournal.com/manage/account/\">Upgrade Account</a></li>\n                            <li><a href=\"http://www.livejournal.com/shop/vgift.bml\">Virtual Gifts</a></li>\n                            <li><a href=\"https://www.zazzle.com/livejournal*\">Merchandise</a></li>\n                            <li><a href=\"http://www.livejournal.com/shop/\">More...</a></li>\n                        </ul>\n                    </td>\n                     <td class=\"last\">\n                        <ul id=\"footer-links-col6\">\n                            <li>Change language:</li>\n                            <li><select name=\"lang\" id=\"footer_lang_list\">\n\
+      <option value=\"en_LJ\" selected='selected'>English</option>\n\
+      <option value=\"en_GB\">English (UK)</option>\n\
+      <option value=\"de\">Deutsch</option>\n\
+      <option value=\"da\">Dansk</option>\n\
+      <option value=\"es\">espa\xC3\xB1ol</option>\n\
+      <option value=\"fr\">Fran\xC3\xA7ais</option>\n\
+      <option value=\"it\">Italiano</option>\n\
+      <option value=\"ru\">\xD0\xA0\xD1\x83\xD1\x81\xD1\x81\xD0\xBA\xD0\xB8\xD0\xB9</option>\n\
+      <option value=\"uk\">\xD0\xA3\xD0\xBA\xD1\x80\xD0\xB0\xD1\x97\xD0\xBD\xD1\x81\xD1\x8C\xD0\xBA\xD0\xB0</option>\n\
+      <option value=\"be\">\xD0\x91\xD0\xB5\xD0\xBB\xD0\xB0\xD1\x80\xD1\x83\xD1\x81\xD0\xBA\xD0\xB0\xD1\x8F</option>\n\
+      <option value=\"ja\">\xE6\x97\xA5\xE6\x9C\xAC\xE8\xAA\x9E</option>\n\
+      <option value=\"pt\">Portugu\xC3\xAAs</option>\n\
+      <option value=\"eo\">Esperanto</option>\n\
+      <option value=\"he\">\xD7\xA2\xD7\x91\xD7\xA8\xD7\x99\xD7\xAA</option>\n\
+      <option value=\"nl\">Nederlands</option>\n\
+      <option value=\"hu\">Magyar</option>\n\
+      <option value=\"ga\">Gaeilge</option>\n\
+      <option value=\"is\">\xC3\xADslenska</option>\n\
+      <option value=\"fi\">suomi</option>\n\
+      <option value=\"gr\">\xCE\x95\xCE\xBB\xCE\xBB\xCE\xB7\xCE\xBD\xCE\xB9\xCE\xBA\xCE\xAC</option>\n\
+      <option value=\"nb\">Norsk bokm\xC3\xA5l</option>\n\
+      <option value=\"sv\">Svenska</option>\n\
+      <option value=\"pl\">polski</option>\n\
+      <option value=\"zh\">\xE7\xAE\x80\xE4\xBD\x93\xE4\xB8\xAD\xE6\x96\x87</option>\n\
+      <option value=\"lv\">Latvie\xC5\xA1u</option>\n\
+      <option value=\"tr\">T\xC3\xBCrk\xC3\xA7e</option>\n\
+      <option value=\"ms\">Bahasa Melayu</option>\n\
+      <option value=\"hi\">\xE0\xA4\xB9\xE0\xA4\xBF\xE0\xA4\xA8\xE0\xA5\x8D\xE0\xA4\xA6\xE0\xA5\x80</option>\n\
+      <option value=\"pt_BR\">Portugu\xC3\xAAs Brasileiro</option>\n\
+      <option value=\"zh_TR\">\xE7\xB9\x81\xE9\xAB\x94\xE4\xB8\xAD\xE6\x96\x87</option>\n\
+      <option value=\"lt\">Lietuvi\xC5\xB3</option>\n\
+      <option value=\"nn\">Norsk nynorsk</option>\n\
+      </select></li>\n                        </ul>\n\
+      \t\t\t\t\t\t<dl class=\"current-version\"><dt><a href=\"http://lj-releases.livejournal.com\">Current version</a>:</dt><dd>v.79.4</dd></dl>\n                    </td>\n                </tr><tr>\n                    <td colspan=\"5\">\n                        <p class=\"more_lj\"><a href=\"http://www.livejournal.com/site/\">&raquo; View Full Sitemap</a></p>\n                    </td>\n                </tr></table>\n            </div>\n            <div id=\"footer-copyright\">Copyright &copy; 1999 LiveJournal, Inc.  All rights reserved.</div>\n        </div>\n        <!-- end footer -->\n    \n\n\n    <div id=\"navigation\">\n    <div id='Userpic'></div><!-- end #Userpic -->\n      <div id=\"NavigationWelcomeLogo\">\n      \n\n      </div>\n      <!-- End Navigation and Welcome -->\n\n            <div id='NavBar'>\n      <ul id='NavMenu'>\n      <li class='NavMenuItem' id='NavMenuItem1'><a href='http://www.livejournal.com/' id='horizon-menu-home'>Home</a></li>\n\
+      <li class='NavMenuItem' id='NavMenuItem2'><a href='http://www.livejournal.com/create.bml' id='horizon-menu-home'>Create an account</a></li>\n\
+      <li class='NavMenuItem' id='NavMenuItem3'><a href='http://www.livejournal.com/search/' id='horizon-menu-explore'>Explore</a><ul class='NavMenuSubNav' id='NavMenu3'>\n\
+      <li class='NavMenuSubNavBack'><iframe src='about:blank' frameborder='0' class='NavMenuSubNavBack'></iframe></li><li class=''><a href='http://www.livejournal.com/interests.bml'>Search by Interest</a></li>\n\
+      <li class=''><a href='http://www.livejournal.com/schools/'>Search by School</a></li>\n\
+      <li class=''><a href='http://www.livejournal.com/browse/'>Community Directory</a></li>\n\
+      <li class=''><a href='http://www.livejournal.com/syn/'>Feeds</a></li>\n\
+      <li class=''><a href='http://www.livejournal.com/misc/qotdarchive.bml'>Question of the Day</a></li>\n\
+      <li class=''><a href='http://www.livejournal.com/radio/'>FRNK Radio</a></li>\n\
+      </ul>\n\
+      </li>\n\
+      <li class='NavMenuItem' id='NavMenuItem4'><a href='http://www.livejournal.com/shop/' id='horizon-menu-shop'>Shop</a><ul class='NavMenuSubNav' id='NavMenu4'>\n\
+      <li class='NavMenuSubNavBack'><iframe src='about:blank' frameborder='0' class='NavMenuSubNavBack'></iframe></li><li class=''><a href='http://www.livejournal.com/shop/paidaccount.bml?form=3'>Gift Paid Account</a></li>\n\
+      <li class=''><a href='http://www.livejournal.com/shop/vgift.bml'>Virtual Gifts</a></li>\n\
+      <li class=''><a href='http://www.zazzle.com/livejournal'>Merchandise</a></li>\n\
+      </ul>\n\
+      </li>\n\
+      <li class='NavMenuItem' id='NavMenuItem5'><a href='http://www.livejournal.com/extra/' id='horizon-menu-apps'>LJ Extras</a><ul class='NavMenuSubNav' id='NavMenu5'>\n\
+      <li class='NavMenuSubNavBack'><iframe src='about:blank' frameborder='0' class='NavMenuSubNavBack'></iframe></li><li class=''><a href='http://www.livejournal.com/devices'>Mobile</a></li>\n\
+      <li class=''><a href='http://www.livejournal.com/chat/'>LJ Talk</a></li>\n\
+      <li class=''><a href='http://www.livejournal.com/download/'>Downloads</a></li>\n\
+      <li class=''><a href='http://www.livejournal.com/classifieds'>Classifieds</a></li>\n\
+      </ul>\n\
+      </li>\n\
+      <li class='NavMenuItem' id='NavMenuItem6'><a href='http://www.livejournal.com/games/' id='games-menu'>Games</a></li>\n\n        <li id=\"NavMenuSearch\">\n          <form action=\"http://www.livejournal.com/search/\" method=\"get\">\n          \n            <input type=\"text\" value=\"Find\" size=\"12\" name=\"q\" id='SearchText' onfocus=\"if(this.value=='Find')this.value='';\" onblur=\"if(this.value=='')this.value='Find';\" />\n          \n                <select name=\"area\">\n                    <option value='default'>All</option>\n                    <option value='posts'>Entries</option>\n                    <option value='comments'>Comments</option>\n                    <option value='journals'>Journals</option>\n                    <option value='faq'>FAQ</option>\n                </select>\n            \n            <input type=\"submit\" value=\"Search\" />\n          </form>\n        </li>\n      </ul>\n      </div>\n      <!-- End navbar -->\n\n\n      \n\n    </div>\n    <!-- End #navigation -->\n    <dl class=\"b-reskining-about\"><dt></dt><dd>Image by <span class='ljuser ljuser-name_idkmybfflucifer' lj:user='idkmybfflucifer' style='white-space:nowrap'><a href='http://idkmybfflucifer.livejournal.com/profile'><img src='http://l-stat.livejournal.com/img/userinfo.gif?v=3' alt='[info]' width='17' height='17' style='vertical-align: bottom; border: 0; padding-right: 1px;'/></a><a href='http://idkmybfflucifer.livejournal.com/'><b>idkmybfflucifer</b></a></span>. Join the <a href=\"http://community.livejournal.com/remixed/tag/header%20design%20contest\">contest</a> in <span class='ljuser ljuser-name_remixed' lj:user='remixed' style='white-space:nowrap'><a href='http://remixed.livejournal.com/profile'><img src='http://l-stat.livejournal.com/img/community.gif?v=3' alt='[info]' width='16' height='16' style='vertical-align: bottom; border: 0; padding-right: 1px;'/></a><a href='http://remixed.livejournal.com/'><b>remixed</b></a></span>!</dd></dl>\n\n    <!-- Login -->\n            <div class=\"lj_loginform\" id=\"Login\">\n          <form style='margin: 0; padding: 0;' method=\"post\" action=\"https://www.livejournal.com/login.bml?ret=1\" id=\"login\" class=\"lj_login_form\">\n            <input type='hidden' name=\"returnto\" />\n            <input type='hidden' name='mode' value='login' />\n            \n            <table cellspacing=\"2\" cellpadding=\"0\">\n              <tr>\n                <th class=\"desc\"><label for='login_user'>Username:</label></th>\n                <td><input type=\"text\" name=\"user\" size=\"24\" id='login_user' tabindex=\"1\" /></td>\n                <td rowspan=\"3\" style=\"padding-left: 10px; vertical-align: top;\">\n                  <a href=\"http://www.livejournal.com/create.bml\">Create an Account</a><br />\n                  <a href=\"http://www.livejournal.com/lostinfo.bml\">Forgot your login or password?</a><br/>\n                  <a href=\"http://www.livejournal.com/identity/login.bml?type=facebook\" title=\"Facebook\" class=\"i-auth\"><img src=\"http://l-stat.livejournal.com/img/icons/facebook-16.gif?v=1\" width=\"16\" height=\"16\" alt=\"Facebook\" /></a> <a href=\"http://www.livejournal.com/identity/login.bml?type=twitter\" title=\"Twitter\" class=\"i-auth\"><img src=\"http://l-stat.livejournal.com/img/icons/twitter-16.gif?v=2\" width=\"16\" height=\"16\" alt=\"Twitter\" /></a> <a href=\"#login-more\" class=\"i-auth i-loginpopup-show\"><img src=\"http://l-stat.livejournal.com/img/icons/showmore.gif?v=1\" width=\"16\" height=\"16\" alt=\"More login options\" /></a> <div class=\"b-loginpopup\" id=\"login-more\"><ul class=\"b-loginpopup-items\"><li class=\"b-loginpopup-item\"><a href=\"http://www.livejournal.com/identity/login.bml?type=openid\" title=\"OpenID\"><img src=\"http://l-stat.livejournal.com/img/icons/openid-16.gif?v=1\" width=\"16\" height=\"16\" alt=\"OpenID\" />OpenID</a></li><li class=\"b-loginpopup-item\"><a href=\"http://www.livejournal.com/identity/login.bml?type=mailru\" title=\"Mail.Ru\"><img src=\"http://l-stat.livejournal.com/img/icons/mailru-16.gif?v=3\" width=\"16\" height=\"16\" alt=\"Mail.Ru\" />Mail.Ru</a></li><li class=\"b-loginpopup-item\"><a href=\"http://www.livejournal.com/identity/login.bml?type=vkontakte\" title=\"Vkontakte\"><img src=\"http://l-stat.livejournal.com/img/icons/vkontakte-16.gif?v=1\" width=\"16\" height=\"16\" alt=\"Vkontakte\" />Vkontakte</a></li></ul></div><script type=\"text/javascript\">jQuery('div.b-loginpopup').bubble({ target: jQuery('a.i-loginpopup-show img'), closeControl: false, showOn: 'click' });</script>\n                </td>\n              </tr>\n              <tr>\n                <th class=\"desc\"><label for='login_password'>Password:</label></th>\n                <td style='white-space: nowrap;'><input type=\"password\" name=\"password\" size=\"15\" class=\"lj_login_password\" tabindex=\"2\" />\n                <input type='submit' value=\"Log in\" tabindex='3' />\n                </td>\n              </tr>\n              <tr>\n                <td></td>\n                <td><label><input type=\"checkbox\" name=\"remember_me\" value=\"1\" tabindex=\"4\"  /> Remember Me</label></td>\n              </tr>\n              <tr>\n                <td></td>\n                <td colspan=\"2\" style='font-size: .8em; white-space: nowrap'>\n                    <a href=\"http://www.livejournal.com/manage/settings/?cat=display\">English &bull; Espa\xC3\xB1ol &bull; Deutsch &bull; \xD0\xA0\xD1\x83\xD1\x81\xD1\x81\xD0\xBA\xD0\xB8\xD0\xB9&hellip;</a>\n                </td>\n              </tr>\n            </table>\n          </form>\n        </div>\n\n    <!-- End Login -->\n\n    <!-- Logo -->\n    <div id=\"Logo\">\n    <a href='http://www.livejournal.com' style='border: 0'><img src='http://l-stat.livejournal.com/horizon/logo.png' style='width: 83px; height: 86px' alt='' class='transparentpng' />\n\
+      </a><div id='SiteName'><a href='http://www.livejournal.com' style='border: 0'><img src='http://l-stat.livejournal.com/horizon/livejournal.png' style='width: 189px; height: 27px' alt='' class='transparentpng' />\n\
+      </a></div>\n    </div>\n    <!-- End Logo -->\n\n\n    <!-- Extra block to read style from and call to initialize Horizon which reads style -->\n    <div id='Alpha' style='display: none !important'>&nbsp;</div>\n    <!--[if lt IE 7]><script>Horizon.scheme_init();</script><![endif]-->\n\n    <div id='hello-world' style='text-align: left; font-size:0; line-height:0; height:0; overflow:hidden;'><script src=\"http://cdn.media6degrees.com/static/lj6387.js\" type=\"text/javascript\"></script>\n\
+      <script type=\"text/javascript\"> var DR_id = 1111; </script>\n\
+      <script src=\"http://l-stat.livejournal.com/js/pagestats/DR_v4u3.js?v=1\" type=\"text/javascript\"></script>\n    <!-- Begin comScore Tag -->\n\
+      <script>\n    document.write(unescape(\"%3Cscript src='\" + (document.location.protocol == \"https:\" ? \"https://sb\" : \"http://b\") + \".scorecardresearch.com/beacon.js' %3E%3C/script%3E\"));\n\
+      </script>\n\n\
+      <script>\n  COMSCORE.beacon({\n    c1:2,\n    c2:7602110,\n    c3:\"\",\n    c4:\"\",\n    c5:\"\",\n    c6:\"\",\n    c15:\"\"\n  });\n\
+      </script>\n\
+      <noscript>\n  <img src=\"http://b.scorecardresearch.com/p?c1=2&c2=7602110&c3=&c4=&c5=&c6=&c15=&cj=1\" />\n\
+      </noscript>\n\
+      <!-- End comScore Tag -->\n\
+      </div>\n\n    \n    \n  </body>\n\
+      </html>\n\n"
+    http_version: "1.1"
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :post
@@ -300,52 +373,54 @@
       - www.livejournal.com
       accept-charset: 
       - ISO-8859-1,utf-8;q=0.7,*;q=0.7
-      cookie: 
-      - ljuniq=4qc6zMhOB0ITtgS:1297450633:pgstats0:m0
       referer: 
-      - http://community.livejournal.com/rarelitslash/271960.html?format=light
+      - http://rarelitslash.livejournal.com/271960.html?format=light
       content-type: 
       - application/x-www-form-urlencoded
       content-length: 
-      - "135"
+      - "123"
   response: !ruby/struct:VCR::Response 
     status: !ruby/struct:VCR::ResponseStatus 
       code: 302
       message: Found
     headers: 
-      date: 
-      - Fri, 11 Feb 2011 18:57:14 GMT
       server: 
-      - Apache/2.2.3 (CentOS)
+      - GoatProxy 1.0
+      date: 
+      - Tue, 07 Jun 2011 00:06:17 GMT
+      content-type: 
+      - text/html; charset=iso-8859-1
       x-aws-id: 
-      - cws10
+      - osws10
       set-cookie: 
       - adult_explicit=1; path=/; domain=.livejournal.com
       - adult_explicit=1; path=/; domain=.livejournal.com
       location: 
-      - http://community.livejournal.com/rarelitslash/271960.html?format=light
+      - http://rarelitslash.livejournal.com/271960.html?format=light
       content-length: 
-      - "254"
-      keep-alive: 
-      - timeout=30, max=100
-      connection: 
-      - keep-alive
-      content-type: 
-      - text/html; charset=iso-8859-1
+      - "244"
+      x-varnish: 
+      - "1489277204"
+      age: 
+      - "0"
+      x-vws-id: 
+      - bil1-varn04
+      x-gateway: 
+      - bil1-swlb03
     body: |
       <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
       <html><head>
       <title>302 Found</title>
       </head><body>
       <h1>Found</h1>
-      <p>The document has moved <a href="http://community.livejournal.com/rarelitslash/271960.html?format=light">here</a>.</p>
+      <p>The document has moved <a href="http://rarelitslash.livejournal.com/271960.html?format=light">here</a>.</p>
       </body></html>
 
-    http_version: "1.0"
+    http_version: "1.1"
 - !ruby/struct:VCR::HTTPInteraction 
   request: !ruby/struct:VCR::Request 
     method: :get
-    uri: http://community.livejournal.com:80/rarelitslash/271960.html?format=light
+    uri: http://rarelitslash.livejournal.com:80/271960.html?format=light
     body: 
     headers: 
       user-agent: 
@@ -359,11 +434,11 @@
       accept-language: 
       - en-us,en;q=0.5
       host: 
-      - community.livejournal.com
+      - rarelitslash.livejournal.com
       accept-charset: 
       - ISO-8859-1,utf-8;q=0.7,*;q=0.7
       cookie: 
-      - ljuniq=4qc6zMhOB0ITtgS:1297450633:pgstats0:m0; adult_explicit=1
+      - adult_explicit=1
       referer: 
       - http://www.livejournal.com/misc/adult_explicit.bml
   response: !ruby/struct:VCR::Response 
@@ -371,137 +446,155 @@
       code: 200
       message: OK
     headers: 
-      date: 
-      - Fri, 11 Feb 2011 18:57:14 GMT
       server: 
-      - Apache/2.2.3 (CentOS)
+      - GoatProxy 1.0
+      date: 
+      - Tue, 07 Jun 2011 00:06:17 GMT
+      content-type: 
+      - text/html; charset=utf-8
       x-aws-id: 
-      - cws08
-      cache-control: 
-      - private, proxy-revalidate
+      - ws29
       etag: 
-      - "\"a678d6e3a9545123327149216f10f34a\""
+      - "\"0dc420975d3682445a944ea3f0f33e0f\""
       content-encoding: 
       - gzip
       vary: 
       - Accept-Encoding
-      content-length: 
-      - "4806"
-      keep-alive: 
-      - timeout=30, max=100
-      connection: 
-      - keep-alive
-      content-type: 
-      - text/html; charset=utf-8
       content-language: 
       - en
+      content-length: 
+      - "5429"
+      x-varnish: 
+      - "850840201"
+      age: 
+      - "0"
+      x-debug: 
+      - USen gzip adult_explicit=1;
+      x-vws-id: 
+      - bil1-varn19
+      x-gateway: 
+      - bil1-swlb03
     body: !binary |
-      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
+      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
+      UeLEiGldmLkNxBMlkDRjDdpyqPpfDCwPSJRGAAA=
 
-    http_version: "1.0"
+    http_version: "1.1"
