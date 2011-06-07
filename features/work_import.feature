@@ -112,7 +112,7 @@ Feature: Import Works
       And I am logged in as a random user
     When I go to the import page
       And I fill in "urls" with "http://www.rbreu.de/otwtest/latin1_notspecified.html"
-      And I fill in "encoding" with "iso-8859-1"
+      And I select "ISO-8859-1" from "encoding"
     When I press "Import"
     Then I should see "Preview Work"
       And I should see "Das Maß aller Dinge" within "h2.title"
@@ -124,7 +124,7 @@ Feature: Import Works
       And I am logged in as a random user
     When I go to the import page
       And I fill in "urls" with "http://rbreu.de/otwtest/cp1252.txt"
-      And I fill in "encoding" with "windows-1252"
+      And I select "Windows-1252" from "encoding"
     When I press "Import"
     Then I should see "Preview Work"
       And I should see "‘He hadn’t known.’"
@@ -137,7 +137,7 @@ Feature: Import Works
       And I am logged in as a random user
     When I go to the import page
       And I fill in "urls" with "http://www.rbreu.de/otwtest/utf8_notspecified.html"
-      And I fill in "encoding" with "utf-8"
+      And I select "UTF-8" from "encoding"
     When I press "Import"
     Then I should see "Preview Work"
       And I should see "Das Maß aller Dinge" within "h2.title"
