@@ -6,10 +6,15 @@ namespace :autocomplete do
     $redis.del(*keys)
     puts "Cleared all autocomplete data"
   end
+
+  desc "Load data into Redis for autocomplete"
+  task(:load_data => [:load_tag_data, :load_pseud_data, :load_collection_data, :load_tagset_data]) do
+    puts "Loaded all autocomplete data"
+  end
   
-  desc "Reload tags and pseuds into Redis autocomplete"
-  task(:reload_data => [:reload_tag_data, :reload_pseud_data, :reload_collection_data, :reload_tagset_data]) do
-    puts "Reloaded autocomplete data"
+  desc "Clear and reload data into Redis for autocomplete"
+  task(:reload_data => [:clear_data, :load_data]) do
+    puts "Finished reloading"
   end
   
   desc "Clear tag data"
@@ -36,8 +41,8 @@ namespace :autocomplete do
     $redis.del(*keys)
   end
   
-  desc "Reload tag data into Redis for autocomplete"
-  task(:reload_tag_data => :environment) do
+  desc "Load tag data into Redis for autocomplete"
+  task(:load_tag_data => :environment) do
     (Tag::TYPES - ['Banned']).each do |type|
       query = type.constantize.canonical
       query = query.includes(:parents) if type == "Character" || type == "Relationship"
@@ -47,29 +52,52 @@ namespace :autocomplete do
     end    
   end
   
-  desc "Reload pseud data into Redis for autocomplete"
-  task(:reload_pseud_data => :environment) do
+  desc "Load pseud data into Redis for autocomplete"
+  task(:load_pseud_data => :environment) do
     Pseud.not_orphaned.includes(:user).each do |pseud|
       pseud.add_to_autocomplete
     end    
   end
 
-  desc "Reload collection data into Redis for autocomplete"
-  task(:reload_collection_data => :environment) do
+  desc "Load collection data into Redis for autocomplete"
+  task(:load_collection_data => :environment) do
     Collection.with_item_count.includes(:collection_preference).each do |collection|
       collection.add_to_autocomplete(collection.item_count)
     end
   end
 
 
-  desc "Reload tagsets into Redis"
-  task(:reload_tagset_data => :environment) do
-    TagSet.all.each do |tag_set|
+  desc "Load tagsets into Redis"
+  task(:load_tagset_data => :environment) do
+    # we only load tagsets used in challenge settings, not ones used in
+    # individual signups
+    PromptRestriction.all.each do |restriction|
+      tag_set = restriction.tag_set
       key = "autocomplete_tagset_#{tag_set.id}"
       tag_set.tags.each do |tag|
         $redis.zadd(key, 0, tag.name)
       end
     end
+  end
+
+  desc "Clear and reload tag data into Redis for autocomplete"
+  task(:reload_tag_data => [:clear_tag_data, :load_tag_data]) do
+    puts "Finished reloading tags"
+  end
+
+  desc "Clear and reload pseud data into Redis for autocomplete"
+  task(:reload_pseud_data => [:clear_pseud_data, :load_pseud_data]) do
+    puts "Finished reloading pseuds"
+  end
+
+  desc "Clear and reload collection data into Redis for autocomplete"
+  task(:reload_collection_data => [:clear_collection_data, :load_collection_data]) do
+    puts "Finished reloading collections"
+  end
+
+  desc "Clear and reload tagset data into Redis for autocomplete"
+  task(:reload_tagset_data => [:clear_tagset_data, :load_tagset_data]) do
+    puts "Finished reloading tagsets"
   end
 
 end

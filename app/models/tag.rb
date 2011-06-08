@@ -354,16 +354,17 @@ class Tag < ActiveRecord::Base
     # we're just getting ALL the tags in the set(s) for the fandom(s) and then manually matching
     results = []
     fandoms = fandom.is_a?(Array) ? fandom : (fandom.blank? ? [] : fandom.split(','))
+    search_regex = Regexp.new(Regexp.escape(search_param), Regexp::IGNORECASE)
     fandoms.each do |single_fandom|
       single_fandom.downcase!
       if search_param.blank?
         # just return ALL the characters
         results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else
-        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(/#{search_param}/i)}
+        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
       end
     end
-    if fallback && results.empty? && search_param.length >= 3
+    if fallback && results.empty? && search_param.length > 0
       # do a standard tag lookup instead
       Tag.autocomplete_lookup(search_param, "autocomplete_tag_#{tag_type}")
     else
