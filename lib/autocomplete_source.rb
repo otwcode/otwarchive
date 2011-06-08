@@ -164,10 +164,7 @@ module AutocompleteSource
       
     def autocomplete_phrase_split(string)
         # split into words
-        string.downcase.split(/\b/).
-          reject {|s| s == AUTOCOMPLETE_WORD_TERMINATOR || s == AUTOCOMPLETE_DELIMITER}.
-          reject {|s| s.blank?}. # get rid of spaces between words 
-          reject {|s| s.length == 1 && s.match(/^[[:punct:]]$/)} # get rid of single-character punctuation
+        string.downcase.split(/(?:\s+|\&|\/)/) # split on spaces, slash, ampersand
     end
     
     def autocomplete_pieces(string)
