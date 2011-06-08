@@ -15,7 +15,7 @@ var DEFAULT_SETTINGS = {
     noResultsText: "No results",
     searchingText: "Searching...",
     deleteText: "&times;",
-    searchDelay: 300,
+    searchDelay: 500,
     minChars: 1,
     tokenLimit: null,
     jsonContainer: null,
