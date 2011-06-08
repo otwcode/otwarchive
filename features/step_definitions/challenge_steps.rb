@@ -197,6 +197,12 @@ When /^I fill in no-column challenge options$/ do
     And %{I press "Submit"}
 end
 
+When /^I fill in multi-prompt challenge options$/ do
+  When "I fill in prompt meme challenge options"
+    And %{I fill in "prompt_meme_requests_num_allowed" with "4"}
+    And %{I press "Submit"}
+end
+
 When /^I fill in prompt meme challenge options$/ do
   When %{I fill in "General Signup Instructions" with "Here are some general tips"}
     And %{I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate SG-1, Stargate Atlantis"}
