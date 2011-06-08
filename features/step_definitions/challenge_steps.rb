@@ -325,8 +325,16 @@ When /^I add (\d+) prompts starting from (\d+)$/ do |number_of_prompts, start|
 end
 
 When /^I add 34 prompts$/ do
-  @index = 2
-  while @index < 34
+  @index = 3
+  while @index < 35
+    When "I add prompt #{@index}"
+    @index = @index + 1
+  end
+end
+
+When /^I add 24 prompts$/ do
+  @index = 3
+  while @index < 25
     When "I add prompt #{@index}"
     @index = @index + 1
   end
