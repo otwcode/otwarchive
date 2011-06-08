@@ -305,6 +305,15 @@ When /^I add prompt (\d+)$/ do |number|
   Then %{I should see "Request #{number}"}
   When %{I check the 1st checkbox with the value "Stargate Atlantis"}
     And %{I press "Submit"}
+  Then %{I should see "Signup was successfully updated"}
+end
+
+When /^I add prompt (\d+) with SG-1$/ do |number|
+  When %{I follow "Add another prompt"}
+  Then %{I should see "Request #{number}"}
+  When %{I check the 1st checkbox with the value "Stargate SG-1"}
+    And %{I press "Submit"}
+  Then %{I should see "Signup was successfully updated"}
 end
 
 When /^I add (\d+) prompts starting from (\d+)$/ do |number_of_prompts, start|
@@ -315,9 +324,9 @@ When /^I add (\d+) prompts starting from (\d+)$/ do |number_of_prompts, start|
   end
 end
 
-When /^I add (\d+) prompts$/ do |number_of_prompts|
+When /^I add 34 prompts$/ do
   @index = 2
-  while @index < number_of_prompts
+  while @index < 34
     When "I add prompt #{@index}"
     @index = @index + 1
   end
