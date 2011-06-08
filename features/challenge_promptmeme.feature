@@ -129,7 +129,7 @@ Feature: Prompt Meme Challenge
     And I follow "Sort by date"
   Then I should see "Something else weird"
   
-  Scenario: Sort prompts by fandom
+  Scenario: Sort prompts by fandom doesn't give error page
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
