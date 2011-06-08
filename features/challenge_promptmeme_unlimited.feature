@@ -69,14 +69,8 @@ Feature: Prompt Meme Challenge
   
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
-  When I go to "Battle 12" collection's page
-    And I follow "Sign Up"
-    When I check the 1st checkbox with the value "Stargate Atlantis"
-  When I follow "Add another prompt"
-    And I check the 2nd checkbox with the value "Stargate Atlantis"
-    And I press "Submit"
-  Then I should see "Signup was successfully created"
-  When I add 34 prompts
+  When I sign up for Battle 12 with combination D
+    And I add 34 prompts
   Then I should see "Signup was successfully updated"
   When I go to "Battle 12" collection's page
     And I follow "Prompts ("
@@ -87,35 +81,8 @@ Feature: Prompt Meme Challenge
   
   When I follow "Log out"
     And I am logged in as "myname3" with password "something"
-  When I go to "Battle 12" collection's page
-    And I follow "Sign Up"
-    And I check the 1st checkbox with the value "Stargate Atlantis"
-  When I follow "Add another prompt"
-    And I check the 2nd checkbox with the value "Stargate Atlantis"
-    And I press "Submit"
-    And I add prompt 2
-    And I add prompt 3
-    And I add prompt 4
-    And I add prompt 5
-    And I add prompt 6
-    And I add prompt 7
-    And I add prompt 8
-    And I add prompt 9
-    And I add prompt 10
-    And I add prompt 11
-    And I add prompt 12
-    And I add prompt 13
-    And I add prompt 14
-    And I add prompt 15
-    And I add prompt 16
-    And I add prompt 17
-    And I add prompt 18
-    And I add prompt 19
-    And I add prompt 20
-    And I add prompt 21
-    And I add prompt 22
-    And I add prompt 23
-    And I add prompt 24
+  When I sign up for Battle 12 with combination D
+    And I add 24 prompts
     And I add prompt 25 with SG-1
   Then I should see "Signup was successfully updated"
   
@@ -130,5 +97,3 @@ Feature: Prompt Meme Challenge
   When I sort by fandom
   Then I should see "Stargate Atlantis" within "table"
     And I should see "Stargate SG-1" within "table"
-    
-      # When I filter to fandom "Stargate Atlantis"
