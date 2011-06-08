@@ -645,9 +645,9 @@ $.TokenList = function (input, url_or_data, settings) {
                     this_li.addClass(settings.classes.dropdownItem2);
                 }
 
-                if(index === 0) {
-                    select_dropdown_item(this_li);
-                }
+                // if(index === 0) {
+                //     select_dropdown_item(this_li);
+                // }
 
                 $.data(this_li.get(0), "tokeninput", {"id": value.id, "name": value.name});
             });
