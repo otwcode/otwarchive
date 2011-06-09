@@ -195,6 +195,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .blurb .relationships       { background: #eee; }
  .blurb blockquote, .blurb ul.wranglers, .blurb form
                  { clear: none; margin: 0.5625em auto; text-align: justify }
+ .blurb ul.series				{ font-size: 0.9em; padding: .5em 0; }
  .blurb dl.stats         { background: #eee; font-size: 0.8575em; text-align: right; padding: 0 0.3em 0.3em; margin-top: 0.1em; }
  .blurb.own dl.stats         { padding-left: 11em; }
  .own dl.stats          { background: #fffef9; padding-bottom: 0.10em}
