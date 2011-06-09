@@ -259,6 +259,17 @@ Feature: Prompt Meme Challenge
   #Then I should see "Prompt was successfully deleted"
   #  And "myname1" should be emailed
   
+  Scenario: Fulfilling a claim ticks the right boxes automatically
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+  Then the "Battle 12" checkbox should be checked
+    And the "Battle 12" checkbox should be disabled
+  
   Scenario: User can fulfill a claim
   
   Given I have Battle 12 prompt meme fully set up
