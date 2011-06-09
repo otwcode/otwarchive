@@ -39,3 +39,13 @@ Scenario: logged out user hides banner
   When I am on the works page
   When I follow "Hide this banner"
   Then I should not see "Custom notice words"
+  
+Scenario: User can turn off banner in preferences if they don't have Javascript
+
+  When an admin sets a custom banner notice
+  When I am logged in as "newname"
+    And I go to my preferences page
+  Then I should see "Turn off the general banner notice"
+  When I check "Turn off the general banner notice"
+    And I press "Update"
+  Then I should not see "Custom notice words"
