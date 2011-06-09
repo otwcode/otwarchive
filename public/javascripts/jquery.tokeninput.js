@@ -662,6 +662,7 @@ $.TokenList = function (input, url_or_data, settings) {
         } else {
             if(settings.noResultsText) {
                 dropdown.html("<p>"+settings.noResultsText+"</p>");
+                dropdown.html("<p class='notice'>"+settings.noResultsText+"</p>");
                 show_dropdown();
             }
         }
