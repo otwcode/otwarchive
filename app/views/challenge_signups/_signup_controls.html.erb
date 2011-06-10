@@ -14,8 +14,8 @@
         <% end %>
       </li>
     <% end %>
-    <!-- The add new prompt link should show up only for the user who actually signed up while signups are open and only on a signup show page, and only for a prompt meme -->
-    <% if (challenge_signup.collection.challenge.signup_open && challenge_signup.pseud.user == current_user && controller.action_name == "show" && challenge_signup.collection.challenge_type == "PromptMeme")  %>
+    <% # The add new prompt link should show up only for the user who actually signed up while signups are open and only on a signup show page, and only for a prompt meme %>
+    <% if (challenge_signup.collection.challenge.signup_open && challenge_signup.pseud.user == current_user && controller.action_name == "show" && challenge_signup.collection.challenge_type == "PromptMeme" && challenge_signup.requests.count < challenge_signup.collection.challenge.requests_num_allowed)  %>
       <li>
         <%= link_to( ts('Add another prompt'), {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => true, :id => challenge_signup.id}},
       :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => true, :id => challenge_signup.id)) %>
