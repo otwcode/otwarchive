@@ -160,6 +160,11 @@
     	<%= f.check_box :first_login %>
     	<%= f.label :first_login, ts("Turn on the first login help banner")  %>
     </li>
+    
+    <li>
+    	<%= f.check_box :banner_seen %>
+    	<%= f.label :banner_seen, ts("Turn off the general banner notice")  %>
+    </li>
 
     <li>
       <%= f.label :work_title_format, ts("Format the titles on your works and series")  %>:
