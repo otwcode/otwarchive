@@ -15,7 +15,7 @@ var DEFAULT_SETTINGS = {
     noResultsText: "No results",
     searchingText: "Searching...",
     deleteText: "&times;",
-    searchDelay: 300,
+    searchDelay: 500,
     minChars: 1,
     tokenLimit: null,
     jsonContainer: null,
@@ -645,9 +645,9 @@ $.TokenList = function (input, url_or_data, settings) {
                     this_li.addClass(settings.classes.dropdownItem2);
                 }
 
-                if(index === 0) {
-                    select_dropdown_item(this_li);
-                }
+                // if(index === 0) {
+                //     select_dropdown_item(this_li);
+                // }
 
                 $.data(this_li.get(0), "tokeninput", {"id": value.id, "name": value.name});
             });
@@ -662,6 +662,7 @@ $.TokenList = function (input, url_or_data, settings) {
         } else {
             if(settings.noResultsText) {
                 dropdown.html("<p>"+settings.noResultsText+"</p>");
+                dropdown.html("<p class='notice'>"+settings.noResultsText+"</p>");
                 show_dropdown();
             }
         }
