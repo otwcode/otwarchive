@@ -90,7 +90,7 @@ module AutocompleteSource
       # entered are the exact word they want, so we only get the prefixes for
       # the very last word they have entered so far
       word_pieces = autocomplete_phrase_split(search_param).map {|w| w + AUTOCOMPLETE_WORD_TERMINATOR}
-      word_pieces.last.gsub!(/#{Tag::AUTOCOMPLETE_WORD_TERMINATOR}$/, '')
+      word_pieces.last.gsub!(/#{Tag::AUTOCOMPLETE_WORD_TERMINATOR}$/, '') if word_pieces.length > 0
       
       # get all the complete words that could be part of the user's desired result
       word_pieces.each do |word_piece|
@@ -164,10 +164,7 @@ module AutocompleteSource
       
     def autocomplete_phrase_split(string)
         # split into words
-        string.downcase.split(/\b/).
-          reject {|s| s == AUTOCOMPLETE_WORD_TERMINATOR || s == AUTOCOMPLETE_DELIMITER}.
-          reject {|s| s.blank?}. # get rid of spaces between words 
-          reject {|s| s.length == 1 && s.match(/^[[:punct:]]$/)} # get rid of single-character punctuation
+        string.downcase.split(/(?:\s+|\&|\/)/) # split on spaces, slash, ampersand
     end
     
     def autocomplete_pieces(string)
