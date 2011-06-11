@@ -15,26 +15,6 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :yuletide2010 do
-    collection do
-      get :fandoms
-      get :anime_fandoms
-      get :book_fandoms
-      get :comic_fandoms
-      get :movie_fandoms
-      get :music_fandoms
-      get :other_fandoms
-      get :rpf_fandoms
-      get :theater_fandoms
-      get :tv_fandoms
-      get :video_game_fandoms
-      get :madness
-      get :restricted_works
-    end
-  end
-  match 'yuletide2010/work/:id' => 'yuletide2010#work', :as => 'yuletide2010_work'
-  match 'yuletide2010/restricted_work/:id' => 'yuletide2010#restricted_work', :as => 'yuletide2010_restricted_work'
-
   #### INVITATIONS ####
 
   resources :invitations

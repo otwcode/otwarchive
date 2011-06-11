@@ -520,12 +520,12 @@ class StoryParser
     def parse_story_from_lj(story)
       work_params = {:chapter_attributes => {}}
 
-      # in LJ "light" format, the story contents are in the first div
+      # in LJ "light" format, the story contents are in the second div
       # inside the body.
       body = @doc.css("body")
       content_divs = body.css("div")
 
-      unless content_divs[0].nil?
+      unless content_divs[1].nil?
         # the LJ metadata (mood, location, current music, tags) is in the first
         # table inside the div. No metadata means no table. Get rid of it:
         tables = content_divs[1].css("table")
