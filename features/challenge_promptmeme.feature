@@ -72,8 +72,8 @@ Feature: Prompt Meme Challenge
   Then I should see "My Signups (1)"
   When I follow "My Signups (1)"
   Then I should see "Battle 12"
-  #  And I should see "Edit"
-  #  And I should see "Delete"
+    And I should see "Edit"
+    And I should see "Delete"
   
   Scenario: View individual prompt
   

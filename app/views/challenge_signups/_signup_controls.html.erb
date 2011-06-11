@@ -1,9 +1,9 @@
 <% # requires 'challenge_signup' local %>
 <% if challenge_signup.collection.challenge.signup_open || (!challenge_signup.collection.challenge.signup_open && challenge_signup.collection.user_is_owner?(current_user)) || challenge_signup.collection.challenge_type == "PromptMeme" %>
   <ul class="navigation" role="navigation">
-    <% # The edit and delete links shouldn't show on the index for a prompt meme unless you are owner %>
-    <% unless (controller.action_name == "index" && challenge_signup.collection.challenge_type == "PromptMeme" && (current_user.nil? || (current_user && !challenge_signup.collection.user_is_owner?(current_user)))) %>
-    <!-- The edit link should show up only for the user who actually signed up while signups are open or for the owner once signups are closed -->
+    <% # The edit and delete links shouldn't show on the challenge index for a prompt meme unless you are owner, but should show on user index %>
+    <% unless (controller.action_name == "index" && @user.nil? && challenge_signup.collection.challenge_type == "PromptMeme" && (current_user.nil? || (current_user && !challenge_signup.collection.user_is_owner?(current_user)))) %>
+    <% # The edit link should show up only for the user who actually signed up while signups are open or for the owner once signups are closed %>
     <% if (challenge_signup.collection.challenge.signup_open && challenge_signup.pseud.user == current_user) || (!challenge_signup.collection.challenge.signup_open && challenge_signup.collection.user_is_owner?(current_user)) %>
       <li>
         <% unless challenge_signup.collection.potential_matches.count == 0 %>
@@ -21,7 +21,7 @@
       :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => true, :id => challenge_signup.id)) %>
       </li>
     <% end %>
-    <!-- The delete link should show up only for the user who actually signed up while signups are open or for the owner -->
+    <% # The delete link should show up only for the user who actually signed up while signups are open or for the owner %>
     <% if (challenge_signup.collection.challenge.signup_open && challenge_signup.pseud.user == current_user) || (challenge_signup.collection.user_is_owner?(current_user))  %>
     <li>
       <% unless challenge_signup.collection.potential_matches.count == 0 %>
