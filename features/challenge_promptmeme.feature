@@ -129,7 +129,7 @@ Feature: Prompt Meme Challenge
     And I follow "Sort by date"
   Then I should see "Something else weird"
   
-  Scenario: Sort prompts by fandom
+  Scenario: Sort prompts by fandom doesn't give error page
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -225,6 +225,19 @@ Feature: Prompt Meme Challenge
     And I press "Submit"
   Then I should see "Signup was successfully updated"
   Then I should see "Signup for othername (myname1)"
+  
+  Scenario: Add more requests button disappears correctly
+  
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up a basic promptmeme "Battle 12"
+    And I follow "Challenge Settings"
+  When I fill in multi-prompt challenge options
+  When I sign up for Battle 12 with combination D
+    And I add prompt 3
+  Then I should see "Add another prompt"
+  When I add prompt 4
+  Then I should not see "Add another prompt"
   
   Scenario: Mod deletes a signup that doesn't fit the challenge rules
   
