@@ -259,7 +259,18 @@ Feature: Prompt Meme Challenge
   #Then I should see "Prompt was successfully deleted"
   #  And "myname1" should be emailed
   
-  Scenario: User can fulfill a claim and it shows correctly on my claims
+  Scenario: Fulfilling a claim ticks the right boxes automatically
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+  Then the "Battle 12" checkbox should be checked
+    And the "Battle 12" checkbox should not be disabled
+  
+  Scenario: User can fulfill a claim
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -268,6 +279,24 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
   Then my claim should be fulfilled
+  
+  Scenario: User can fulfill a claim to their own prompt
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+    And I sign up for Battle 12 with combination B
+    And I claim a prompt from "Battle 12"
+    And I fulfill my claim
+  Then my claim should be fulfilled
+  
+  Scenario: Fulfilled claim shows correctly on my claims
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I fulfill my claim
   When I am on my user page
     And I follow "My Claims"
   Then I should see "Fulfilled Story"
@@ -535,8 +564,8 @@ Feature: Prompt Meme Challenge
   When I start to fulfill my claim
   Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be checked
     And the "My Gift Exchange (myname2)" checkbox should not be checked
-    And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be disabled
-    And the "My Gift Exchange (myname2)" checkbox should be disabled
+    And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
+    And the "My Gift Exchange (myname2)" checkbox should not be disabled
     
   Scenario: User posts to fulfill direct from Post New
   
