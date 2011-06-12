@@ -98,7 +98,7 @@
         </dt>
         <dd class="collection">
           <%= options_section f, "work[challenge_assignment_ids][]", "work_challenge_assignment_ids", (@work.challenge_assignments + @assignments).uniq,
-                "challenge_assignments", "title", "id", params[:claim_id].nil? ? "false" : "true" %>
+                "challenge_assignments", "title", "id", "false" %>
         </dd>
       <% end %>
       <% if !(@claims = current_user.request_claims.unfulfilled).empty? || !@work.challenge_claims.empty? %>

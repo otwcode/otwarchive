@@ -268,7 +268,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I start to fulfill my claim
   Then the "Battle 12" checkbox should be checked
-    And the "Battle 12" checkbox should be disabled
+    And the "Battle 12" checkbox should not be disabled
   
   Scenario: User can fulfill a claim
   
@@ -564,8 +564,8 @@ Feature: Prompt Meme Challenge
   When I start to fulfill my claim
   Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be checked
     And the "My Gift Exchange (myname2)" checkbox should not be checked
-    And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be disabled
-    And the "My Gift Exchange (myname2)" checkbox should be disabled
+    And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
+    And the "My Gift Exchange (myname2)" checkbox should not be disabled
     
   Scenario: User posts to fulfill direct from Post New
   
