@@ -107,8 +107,8 @@
           <%= f.label "challenge_claim_ids[]", ts("Fulfill a Claim: ") %> <%= link_to_help "add-work-to-assignment" %>
         </dt>
         <dd class="collection">
-          <%= options_section(f, "work[challenge_claim_ids][]", "work_challenge_claim_ids", (@work.challenge_claims + @claims).uniq,
-                "challenge_claims", "title", "id", params[:claim_id].nil? ? "false" : "true") %>
+          <%= options_section f, "work[challenge_claim_ids][]", "work_challenge_claim_ids", (@work.challenge_claims + @claims).uniq,
+                "challenge_claims", "title", "id", "false" %>
         </dd>
       <% end %>
       
