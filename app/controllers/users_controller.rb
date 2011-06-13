@@ -2,8 +2,8 @@ class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid, :browse]
-  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid]
+  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_openid, :browse]
+  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_openid]
   before_filter :check_account_creation_status, :only => [:new, :create]
 
   def load_user
@@ -391,10 +391,8 @@ class UsersController < ApplicationController
   end
   
   def end_banner
-    current_user.preference.update_attribute(:banner_seen, true)
-    if !(request.xml_http_request?)
-      redirect_to @user rescue redirect_to '/'
-    end
+    @user.preference.update_attribute(:banner_seen, true)
+    redirect_to user_path(@user) rescue redirect_to '/'
   end
 
   def browse
