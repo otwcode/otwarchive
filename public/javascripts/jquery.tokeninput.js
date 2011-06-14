@@ -189,7 +189,9 @@ $.TokenList = function (input, url_or_data, settings) {
                     } else {
                         var dropdown_item = null;
 
-                        if(event.keyCode === KEY.DOWN || event.keyCode === KEY.RIGHT) {
+                        if (!selected_dropdown_item) {
+                            dropdown_item = first_dropdown_item;
+                        } else if(event.keyCode === KEY.DOWN || event.keyCode === KEY.RIGHT) {
                             dropdown_item = $(selected_dropdown_item).next();
                         } else {
                             dropdown_item = $(selected_dropdown_item).prev();
@@ -261,6 +263,7 @@ $.TokenList = function (input, url_or_data, settings) {
     var selected_token = null;
     var selected_token_index = 0;
     var selected_dropdown_item = null;
+    var first_dropdown_item = null;
 
     // The list to store the token items in
     var token_list = $("<ul />")
@@ -645,9 +648,9 @@ $.TokenList = function (input, url_or_data, settings) {
                     this_li.addClass(settings.classes.dropdownItem2);
                 }
 
-                // if(index === 0) {
-                //     select_dropdown_item(this_li);
-                // }
+                if(index === 0) {
+                     first_dropdown_item = this_li;
+                }
 
                 $.data(this_li.get(0), "tokeninput", {"id": value.id, "name": value.name});
             });
