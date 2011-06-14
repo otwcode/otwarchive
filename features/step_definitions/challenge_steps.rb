@@ -659,6 +659,7 @@ Then /^my claim should be fulfilled$/ do
     And %{I should see "Fandom:"}
     And %{I should see "Stargate Atlantis"}
     And %{I should not see "Alternate Universe - Historical"}
+    And %{I should see "In response to a prompt by:"}
 end
 
 Then /^14 should be the last signup in the table$/ do
