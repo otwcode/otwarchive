@@ -65,12 +65,12 @@
     <% elsif challenge_signup.collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
       <li><%= ts("Sign in to claim prompts") %></li>
     <% end %>
-    <% if current_user && challenge_signup.collection.challenge_type == "PromptMeme" && !@user && ((challenge_signup.collection.challenge.signup_open && challenge_signup.pseud.user == current_user) || (challenge_signup.collection.user_is_owner?(current_user))) %>
+    <% if current_user && challenge_signup.collection.challenge_type == "PromptMeme" && !@user && controller.action_name == "index" && ((challenge_signup.collection.challenge.signup_open && challenge_signup.pseud.user == current_user) || (challenge_signup.collection.user_is_owner?(current_user))) %>
     <% # for prompt memes, either signup owner or collection owner can delete prompts %>
       <li>
         <%= link_to ts("Remove prompt"), 
-          edit_collection_signup_path(challenge_signup.collection, challenge_signup), 
-          :confirm => ts("Are you sure? All information in this prompt will be lost.") %>
+          collection_prompt_path(challenge_signup.collection, Prompt.find_by_id(prompt_id)), 
+          :confirm => ts("Are you sure? All information will be lost."), :method => :delete %>
       </li>
     <% end %>
   </ul>

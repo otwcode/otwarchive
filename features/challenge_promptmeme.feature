@@ -278,9 +278,17 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
   When I am logged in as "mod1"
-  #When I delete the prompt by "myname1"
-  #Then I should see "Prompt was successfully deleted"
+  When I delete the prompt by "myname1"
+  Then I should see "Prompt was deleted"
   #  And "myname1" should be emailed
+
+  Scenario: User deletes one prompt
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination C
+  When I delete the prompt by "myname1"
+  Then I should see "Prompt was deleted"
   
   Scenario: Fulfilling a claim ticks the right boxes automatically
   
