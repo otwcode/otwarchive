@@ -9,7 +9,8 @@ Scenario: Posting a remix / inspired-by work, then editing
   When I post a related work
   Then a related work should be seen
     And the original author should be emailed
-
+  Then show me the emails
+    
 Scenario: check that I see a remix under related works
 
   Given I have related works setup
@@ -35,7 +36,7 @@ Scenario: check that I see a translation under related works
   When I go to translator's user page
   Then I should see "My Related Works (1)"
   When I follow "My Related Works"
-  Then I should see "Works translator's works were inspired by"
+  Then I should see "Works translator has translated"
     And I should see "Worldbuilding by inspiration"
     And I should see "From English to Deutsch"
 
@@ -53,7 +54,7 @@ Scenario: See approved and unapproved relationships on the related works page as
     And I post a related work
   When I approve a related work
   When I view my related works
-  Then I should see "remixer Approve"
+  Then I should see "Worldbuilding Approve"
     And I should see "Deutsch Remove"
 
 Scenario: approve remix and check they appear on the original, then remove and check
@@ -78,7 +79,7 @@ Scenario: approve remix and check they appear on the original, then remove and c
   When I press "Remove link"
   Then I should see "Link was successfully removed"
     And I should not see "Followup by remixer"
-    
+  
 Scenario: approve translation and check they appear on the original, then remove and check
 
   Given I have related works setup
@@ -87,10 +88,10 @@ Scenario: approve translation and check they appear on the original, then remove
     And I go to my user page
   Then I should see "My Related Works (1)"
   When I follow "My Related Works"
-  Then I should see "Works inspired by inspiration's works"
+  Then I should see "Translations of inspiration's works"
     And I should see "Worldbuilding Translated by translator"
     And I should see "From English to Deutsch"
-  When I follow "Approve" within "#inspiredbyme"
+  When I follow "Approve" within "#translationsofme"
     And I press "Yes, link me!"
   Then I should see "Link was successfully approved"
     And I should see "Translation into Deutsch available:" within ".notes"
@@ -99,7 +100,7 @@ Scenario: approve translation and check they appear on the original, then remove
     And I should see "Worldbuilding Translated by translator" within "li"
   When I go to my user page
     And I follow "My Related Works"
-    And I follow "Remove" within "#inspiredbyme"
+    And I follow "Remove" within "#translationsofme"
   Then I should see "Remove Link"
   When I press "Remove link"
   Then I should see "Link was successfully removed"
@@ -166,4 +167,4 @@ Scenario: Listing external works as inspirations
 # TODO after issue 1741 is resolved
 # Scenario: Test that I can remove relationships that I initiated from my own works
 # especially during posting / editing / previewing a work
-
+# especially from the related_works page, which works but redirects to a non-existant page right now
