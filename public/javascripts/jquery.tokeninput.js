@@ -594,9 +594,9 @@ $.TokenList = function (input, url_or_data, settings) {
             .css({
                 position: "absolute",
                 top: $(token_list).offset().top + $(token_list).outerHeight(),
-                left: $(token_list).offset().left,
-                zindex: 999
+                left: $(token_list).offset().left
             })
+            .css('z-index', 999)
             .show();
     }
 
@@ -618,6 +618,7 @@ $.TokenList = function (input, url_or_data, settings) {
     function highlight_term(value, term) {
         var newvalue = value;
         $.each(term.split(' '), function(index, termbit) {
+            termbit = termbit.replace(/([.?*+^$[\]\\(){}-])/g, "\\$1");            
             newvalue = newvalue.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + termbit + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<b>$1</b>");
         });
         return newvalue;
