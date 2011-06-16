@@ -9,7 +9,6 @@ Scenario: Posting a remix / inspired-by work, then editing
   When I post a related work
   Then a related work should be seen
     And the original author should be emailed
-  Then show me the emails
     
 Scenario: check that I see a remix under related works
 
