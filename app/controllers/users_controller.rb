@@ -55,8 +55,8 @@ class UsersController < ApplicationController
                    group("tags.id").order("work_count DESC") &
                    Work.visible_to_all.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                               INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+		INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+		INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
       visible_works = @user.works.visible_to_all
       visible_series = @user.series.visible_to_all
       visible_bookmarks = @user.bookmarks.visible_to_all
@@ -67,8 +67,8 @@ class UsersController < ApplicationController
                    group("tags.id").order("work_count DESC") &
                    Work.visible_to_registered_user.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                               INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+		INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+		INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
       visible_works = @user.works.visible_to_registered_user
       visible_series = @user.series.visible_to_registered_user
       visible_bookmarks = @user.bookmarks.visible_to_registered_user
@@ -112,7 +112,7 @@ class UsersController < ApplicationController
       @user.recently_reset = false
       if @user.save
         flash[:notice] = ts("Your password has been changed")
-				UserMailer.reset_password(@user).deliver
+		UserMailer.reset_password(@user).deliver
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
         redirect_to user_profile_path(@user) and return
       else
@@ -120,8 +120,8 @@ class UsersController < ApplicationController
       end
     end
   end
-	
-	
+
+
   def change_openid
     if params[:identity_url]
       @openid_url = params[:identity_url]
@@ -263,34 +263,34 @@ class UsersController < ApplicationController
   # PUT /users/1.xml
   def update
     @user.profile.update_attributes(params[:profile_attributes])
-	  if @user.profile.save 
-		flash[:notice] = ts("Your profile has been successfully updated")
-		render :edit and return
-	  else
-		render :edit and return
-	  end
+	if @user.profile.save
+	  flash[:notice] = ts("Your profile has been successfully updated")
+	  render :edit and return
+	else
+	  render :edit and return
+	end
   end
   
   def change_email
     if params[:new_email].blank?
-	  render :change_email and return
-	else
-	  if !reauthenticate
-		render :change_email and return
-	  else
-		@old_email = @user.email	
+      render :change_email and return
+    else
+      if !reauthenticate
+        render :change_email and return
+      else
+		@old_email = @user.email
 		@user.email = params[:new_email]
 		@new_email = params[:new_email]
-		  if @user.save 
-			flash[:notice] = ts("Your email has been successfully updated")
-			UserMailer.change_email(@user.id, @old_email, @new_email).deliver
-			@user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
-		  else
-			render :change_email and return
-		  end
+		if @user.save
+		  flash[:notice] = ts("Your email has been successfully updated")
+		  UserMailer.change_email(@user.id, @old_email, @new_email).deliver
+		  @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
+		else
+		  render :change_email and return
+		end
 	  end
-	end
-	  render :change_email and return
+    end
+	render :change_email and return
   end
 
   # DELETE /users/1
@@ -422,8 +422,8 @@ class UsersController < ApplicationController
 		else
 		  flash.now[:error] = ts("Your old password was incorrect")
 		end
-		  @wrong_password = true
-		  return false
+		@wrong_password = true
+		return false
        end
     else
 	  if params[:new_email]
@@ -431,8 +431,8 @@ class UsersController < ApplicationController
 	  else
 		flash.now[:error] = ts("You must enter your old password")
 	  end
-        @wrong_password = true
-        return false
+      @wrong_password = true
+      return false
     end
   end
 end
