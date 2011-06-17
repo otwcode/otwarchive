@@ -15,10 +15,10 @@
     <thead>
       <tr>
         <th>Translation</th>
-        <th>Original</th>
-        <th>Language</th>
+        <th class="translationwidth">Original</th>
+        <th class="translationwidth">Language</th>
         <% if current_user == @user %>
-        <th>Approve/remove link</th>
+        <th class="translationwidth">Approve/remove link</th>
         <% end %>
       </tr>
     </thead>
@@ -57,10 +57,10 @@
       <tr>
       <tr>
         <th>Original</th>
-        <th>Translation</th>
-        <th>Language</th>
+        <th class="translationwidth">Translation</th>
+        <th class="translationwidth">Language</th>
         <% if current_user == @user %>
-        <th>Remove connection</th>
+        <th class="translationwidth">Remove connection</th>
         <% end %>
       </tr>
     </thead>
@@ -94,9 +94,9 @@
     <thead>
       <tr>
         <th>Remix/Inspired Work</th>
-        <th>Original</th>
+        <th class="wide">Original</th>
         <% if current_user == @user %>
-        <th>Approve/remove link</th>
+        <th class="narrow">Approve/remove link</th>
         <% end %>
       </tr>
     </thead>
@@ -131,9 +131,9 @@
     <thead> 
       <tr>
         <th>Original</th>
-        <th>Remix/Inspired Work</th>
+        <th class="wide">Remix/Inspired Work</th>
         <% if current_user == @user %>
-        <th>Remove connection</th>
+        <th class="narrow">Remove connection</th>
         <% end %>
       </tr>
     </thead>
