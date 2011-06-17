@@ -78,57 +78,84 @@ module AutocompleteSource
     def title_from_autocomplete(current_autocomplete_value)
       parse_autocomplete_value(current_autocomplete_value)[2]
     end
-  
+
     def autocomplete_lookup(search_param, autocomplete_prefix, options = {:sort => "down"})
       if $redis.exists(autocomplete_cache_key(autocomplete_prefix, search_param))
         return $redis.zrange(autocomplete_cache_key(autocomplete_prefix, search_param), 0, -1)
       end
       
-      completions = []
-      
       # we assume that if the user is typing in a phrase, any words they have
       # entered are the exact word they want, so we only get the prefixes for
       # the very last word they have entered so far
-      word_pieces = autocomplete_phrase_split(search_param).map {|w| w + AUTOCOMPLETE_WORD_TERMINATOR}
-      word_pieces.last.gsub!(/#{Tag::AUTOCOMPLETE_WORD_TERMINATOR}$/, '') if word_pieces.length > 0
-      
-      # get all the complete words that could be part of the user's desired result
-      word_pieces.each do |word_piece|
-        # O(log N) where N is number of possible prefixes
-        completions += autocomplete_word_completions(word_piece, autocomplete_prefix)
-      end
-      completions.uniq!
+      search_pieces = autocomplete_phrase_split(search_param).map {|w| w + AUTOCOMPLETE_WORD_TERMINATOR}
       
       # for each complete word, we look up the phrases in that word's set
       # along with their scores and add up the scores
       scored_results = {}
       count = {}
-      completions.each do |word|
-        # O(logN + M) where M is number of items returned -- we could speed up even more by putting in a limit 
-        phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores)
-        while phrases_with_scores.length > 0 do 
-          phrase = phrases_with_scores.shift
-          score = phrases_with_scores.shift
+      exact = {}
+      search_regex = Regexp.new(Regexp.escape(search_param), Regexp::IGNORECASE)
+
+      search_pieces.each_with_index do |search_piece, index|
+        lastpiece = false
+        if index == search_pieces.size - 1
+          lastpiece = true
+          search_piece.gsub!(/#{Tag::AUTOCOMPLETE_WORD_TERMINATOR}$/, '')
           
-          if options[:constraint_sets]
-            # phrases must be in these sets or else no go
-            # O(logN) complexity
-            next unless options[:constraint_sets].all {|set| $redis.zrank(set, phrase)}
-          end
-          if scored_results[phrase]
-            scored_results[phrase] += score.to_i
-            count[phrase] += 1
+          break if search_pieces.size > 1 && search_piece.length == 1
+        end
+
+        # Get all the complete words which could match this search term
+        completions = autocomplete_word_completions(search_piece, autocomplete_prefix)
+        
+        completions.each do |word|
+          # O(logN + M) where M is number of items returned -- we could speed up even more by putting in a limit 
+          phrases_with_scores = []
+          if lastpiece && search_piece.length < 3
+            # use a limit
+            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores, :limit => 50)
           else
-            scored_results[phrase] = score.to_i
-            count[phrase] = 1
+            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores)
+          end
+          
+          while phrases_with_scores.length > 0 do 
+            phrase = phrases_with_scores.shift
+            score = phrases_with_scores.shift
+          
+            if options[:constraint_sets]
+              # phrases must be in these sets or else no go
+              # O(logN) complexity
+              next unless options[:constraint_sets].all {|set| $redis.zrank(set, phrase)}
+            end
+          
+            if count[phrase]
+              # if we've already seen this phrase, increase the score
+              scored_results[phrase] += score.to_i
+              count[phrase] += 1
+            else
+              # initialize the score and check if it exactly matches our regexp
+              scored_results[phrase] = score.to_i
+              if lastpiece
+                # don't count if it only matches the last search piece
+                count[phrase] = 0
+              else
+                count[phrase] = 1
+              end
+              if phrase.match(search_regex)
+                exact[phrase] = true
+              else
+                exact[phrase] = false
+              end                
+            end
           end
         end
       end
 
       # final sort is O(NlogN) but N is only the number of complete phrase results which should be relatively small
       results = scored_results.keys.sort do |k1, k2| 
-        count[k1] > count[k2] ? -1 : (count[k2] > count[k1] ? 1 :
-          scored_results[options[:sort] == "down" ? k2 : k1].to_i <=> scored_results[options[:sort] == "down" ? k1 : k2].to_i)
+        exact[k1] && !exact[k2] ? -1 : (exact[k2] && !exact[k1] ? 1 :
+          count[k1] > count[k2] ? -1 : (count[k2] > count[k1] ? 1 :
+            scored_results[options[:sort] == "down" ? k2 : k1].to_i <=> scored_results[options[:sort] == "down" ? k1 : k2].to_i))
       end
       limit = options[:limit] || 15
       
