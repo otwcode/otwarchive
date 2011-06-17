@@ -17,7 +17,7 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 # or who have problematic works which need testing
 SEEDS = [ "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling",
           "Cesy", "cesytest", "Celandine", "Chandri", "ealusaid", "eel", 
-          "elz", "erda", "Enigel", "hope", "Jaetion", "justira", "jetta_e_rus", "lim", 
+          "elz", "erda", "Enigel", "hope", "Jaetion", "justira", "jetta_e_rus", "lim", "Lisztful",
           "melange", "mumble", "Rebecca", "rklyne", "Rustler", "Sidra", 
           "staranise", "Stowaway", "testy", "Tel", "tomatopudding", "zelempa", "zoemathemata", "Zooey_Glass", "zlabya",
 ]
