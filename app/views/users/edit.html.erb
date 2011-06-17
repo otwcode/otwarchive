@@ -5,15 +5,18 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="edit-navigation" role="navigation">
   <li><%= link_to ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
-  <li><%= link_to ts("Change My User Name"), change_username_user_path(@user) %></li>
+  <li><%= link_to ts("Change User Name"), change_username_user_path(@user) %></li>
   <li>
   <% if @user.crypted_password %>
-    <%= link_to ts("Change My Password"), change_password_user_path(@user) %>
+    <%= link_to ts("Change Password"), change_password_user_path(@user) %>
   <% else %>
     <%= link_to ts("Add a Password"), change_password_user_path(@user) %>
   <% end %>
+  </li>
+  <li>
+  <%= link_to ts("Change Email"), change_email_user_path(@user) %>
   </li>
   <% if ArchiveConfig.USE_OPENID %>	
     <li>
@@ -30,16 +33,7 @@
 <!--main content-->
 <%= form_for(@user) do |f| %>  
   <dl>
-    <dt><%= label_tag :password_check, ts("Old password") %></dt>
-    <dd><%= password_field_tag :password_check%></dd>
 
-    <% if ArchiveConfig.USE_OPENID && @user.identity_url %>	
-      <dt><%= label_tag :identity_url_check, ts("OR Current OpenID URL") %></dt>
-      <dd><%= text_field_tag :identity_url_check, "", :size => 50 %></strong></dd>
-    <% end %>
-
-    <dt><%= label_tag :new_email, "Change Email" %></dt>
-    <dd><%= text_field_tag :new_email, @user.email %></dd>
   <%= fields_for :profile_attributes,  @user.profile do |p| %>
      <dt><%= p.label :title, "Title" %></dt>
      <dd>
@@ -67,11 +61,11 @@
       </dd>
     </dl>
   <% end %>
-	
+
 	
   <p class="submit">
     <%= f.submit "Update" %>
   </p>
-<% end %>
 <hr class="clear" />
 <!--/content-->
+<% end %>

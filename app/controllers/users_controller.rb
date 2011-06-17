@@ -2,8 +2,8 @@ class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_openid, :browse]
-  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_openid]
+  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_email, :change_openid, :browse]
+  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_email, :change_openid]
   before_filter :check_account_creation_status, :only => [:new, :create]
 
   def load_user
@@ -262,33 +262,35 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    if params[:new_email] == @user.email
-			#change profile
-			@user.profile.update_attributes(params[:profile_attributes])
-			if @user.profile.save 
-			  flash[:notice] = ts("Your profile has been successfully updated")
-			else
-				render :edit and return
-			end
-			redirect_to user_profile_path(@user) and return
-		else
-			#have to reuthenticate to change email
-			if !reauthenticate
-        render :edit and return
-      else
-				@old_email = @user.email	
-				@user.email = params[:new_email]
-				@new_email = params[:new_email]
-        if @user.save
-					flash[:notice] = ts("Your email has been successfully updated")
-					UserMailer.change_email(@user.id, @old_email, @new_email).deliver
-			    @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
-        else
-          render :edit and return
-        end
-				redirect_to user_profile_path(@user) and return
-			end
-		end
+    @user.profile.update_attributes(params[:profile_attributes])
+	  if @user.profile.save 
+		flash[:notice] = ts("Your profile has been successfully updated")
+		render :edit and return
+	  else
+		render :edit and return
+	  end
+  end
+  
+  def change_email
+    if params[:new_email].blank?
+	  render :change_email and return
+	else
+	  if !reauthenticate
+		render :change_email and return
+	  else
+		@old_email = @user.email	
+		@user.email = params[:new_email]
+		@new_email = params[:new_email]
+		  if @user.save 
+			flash[:notice] = ts("Your email has been successfully updated")
+			UserMailer.change_email(@user.id, @old_email, @new_email).deliver
+			@user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
+		  else
+			render :change_email and return
+		  end
+	  end
+	end
+	  render :change_email and return
   end
 
   # DELETE /users/1
@@ -409,21 +411,28 @@ class UsersController < ApplicationController
 
   private
 
-    def reauthenticate
-      if !params[:password_check].blank?
-        session = UserSession.new(:login => @user.login, :password => params[:password_check])
-        if session.valid?
-          return true
-        else
-          flash.now[:error] = ts("Your old password was incorrect")
-          @wrong_password = true
-          return false
-        end
+  def reauthenticate
+    if !params[:password_check].blank?
+      session = UserSession.new(:login => @user.login, :password => params[:password_check])
+      if session.valid?
+        return true
       else
-        flash.now[:error] = ts("You must authenticate again first")
+		if params[:new_email]
+		  flash.now[:error] = ts("Your password was incorrect")
+		else
+		  flash.now[:error] = ts("Your old password was incorrect")
+		end
+		  @wrong_password = true
+		  return false
+       end
+    else
+	  if params[:new_email]
+		flash.now[:error] = ts("You must enter your password")
+	  else
+		flash.now[:error] = ts("You must enter your old password")
+	  end
         @wrong_password = true
         return false
-      end
     end
-	end
-
+  end
+end
