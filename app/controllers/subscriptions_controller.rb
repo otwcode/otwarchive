@@ -21,7 +21,7 @@ class SubscriptionsController < ApplicationController
 
     respond_to do |format|
       if @subscription.save
-        format.html { redirect_to(@subscription.subscribable, :notice => "You are now following #{@subscription.name}. 
+        format.html { redirect_to(:back, :notice => "You are now following #{@subscription.name}. 
         If you'd like to stop receiving email updates, you can return to this page and click 'Unsubscribe'.") }
       else
         format.html { render :action => "new" }
@@ -37,7 +37,7 @@ class SubscriptionsController < ApplicationController
     @subscription.destroy
 
     respond_to do |format|
-      format.html { redirect_to(@subscribable, :notice => "You have successfully unsubscribed from #{@subscription.name}.") }
+      format.html { redirect_to(:back, :notice => "You have successfully unsubscribed from #{@subscription.name}.") }
     end
   end
 end
