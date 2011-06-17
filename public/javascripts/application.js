@@ -292,11 +292,9 @@ function generateCharacterCounters() {
     });
 }
 
-}
-
 
 //generic show hide toggler
-
+/*
 function ViewToggle(el_selector, show_link_selector, hide_link_selector, effect_duration, start_shown) {
   this.el = el_selector
   this.show_el = show_link_selector
@@ -346,3 +344,4 @@ ViewToggle.prototype = {
 // commented out for now as it is inadvertently disabling sessions view login login_view = new ViewToggle('signin', 'signin_closed', 'signin_open')
 subnav_view = new ViewToggle('subnav');
 flash_view = new ViewToggle('flash');
+*/
