@@ -414,7 +414,7 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
 /* TAGS EDIT, front end coder please modularise the tooltip navigation rules*/
  .tags-edit dd                  { width: 70%;}
- .tags-edit dd input.tags       { width: 100%; }
+ .tags-edit dd ul li input       { width: 100%; }
  #main.tags-edit ul.tags        { float: left; margin-right: 2em;}
  #main.tags-edit ul.tags, #main.tags-edit ul.tags li
                                 { display: block; }
