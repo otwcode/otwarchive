@@ -392,7 +392,7 @@ class UsersController < ApplicationController
   
   def end_banner
     @user.preference.update_attribute(:banner_seen, true)
-    redirect_to user_path(@user) rescue redirect_to '/'
+    redirect_to user_path(current_user) rescue redirect_to '/'
   end
 
   def browse
