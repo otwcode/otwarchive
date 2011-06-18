@@ -91,6 +91,10 @@ class Sanitize
         then "metacafe"
       when /^http:\/\/(?:www\.)?4shared\.net\//
           then "4shared"
+      when /^http:\/\/(?:www\.)?vidders\.net\//
+        then "vidders"
+      when /^http:\/\/(?:www\.)?criticalcommons\.org\//
+          then "criticalcommons"
       else
         nil
       end
