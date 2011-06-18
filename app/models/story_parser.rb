@@ -417,6 +417,7 @@ class StoryParser
       url = location
       url.gsub!(/\#(.*)$/, "") # strip off any anchor information
       url.gsub!(/\?(.*)$/, "") # strip off any existing params at the end
+      url.gsub!('_', '-') # convert underscores in usernames to hyphens
       url += "?format=light" # go to light format
       text = download_with_timeout(url)
       if text.match(/adult_check/)
@@ -519,19 +520,19 @@ class StoryParser
     def parse_story_from_lj(story)
       work_params = {:chapter_attributes => {}}
 
-      # in LJ "light" format, the story contents are in the first div
+      # in LJ "light" format, the story contents are in the second div
       # inside the body.
       body = @doc.css("body")
       content_divs = body.css("div")
 
-      unless content_divs[0].nil?
+      unless content_divs[1].nil?
         # the LJ metadata (mood, location, current music, tags) is in the first
         # table inside the div. No metadata means no table. Get rid of it:
-        tables = content_divs[0].css("table")
+        tables = content_divs[1].css("table")
         if !tables[0].nil? && tables[0].to_html.match(/(Current location:)|(Current mood:)|(Current music:)|(Entry tags:)/)
           tables[0].remove
         end
-        storytext = content_divs[0].inner_html
+        storytext = content_divs[1].inner_html
       else
         storytext = body.inner_html
       end
@@ -850,7 +851,7 @@ class StoryParser
       return meta
     end
 
-    def download_with_timeout(location)
+    def download_with_timeout(location, limit = 10)
       story = ""
       Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
         begin
@@ -858,6 +859,12 @@ class StoryParser
           case response
           when Net::HTTPSuccess
             story = response.body
+          when Net::HTTPRedirection
+            if limit > 0
+              story = download_with_timeout(response['location'], limit - 1) 
+            else
+              nil
+            end
           else
            nil
           end

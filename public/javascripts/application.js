@@ -40,7 +40,7 @@ function ShowExpandable() {
 // <input type="text" class="autocomplete" autocomplete_method="/autocomplete/relationship?tag_set_id=#{tag_set.id}" 
 //        autocomplete_live_params="fandom=work_fandom_field&character=work_character_field" 
 jQuery(function($){
-  $('.autocomplete').each(function(){
+  $('input.autocomplete').livequery(function(){
     var self = $(this);
     self.tokenInput(self.attr('autocomplete_method'), {
         searchingText: self.attr('autocomplete_searching_text'),
@@ -59,7 +59,7 @@ jQuery(function($){
 
 // Single-value autocomplete
 jQuery(function($){
-    $('.single_autocomplete').each(function(){
+    $('.single_autocomplete').livequery(function(){
         var self = $(this);
         self.autocomplete({
             source: self.attr('autocomplete_method'),

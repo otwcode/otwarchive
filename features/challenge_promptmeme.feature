@@ -72,8 +72,8 @@ Feature: Prompt Meme Challenge
   Then I should see "My Signups (1)"
   When I follow "My Signups (1)"
   Then I should see "Battle 12"
-  #  And I should see "Edit"
-  #  And I should see "Delete"
+    And I should see "Edit"
+    And I should see "Delete"
   
   Scenario: View individual prompt
   
@@ -129,7 +129,7 @@ Feature: Prompt Meme Challenge
     And I follow "Sort by date"
   Then I should see "Something else weird"
   
-  Scenario: Sort prompts by fandom
+  Scenario: Sort prompts by fandom doesn't give error page
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -226,6 +226,42 @@ Feature: Prompt Meme Challenge
   Then I should see "Signup was successfully updated"
   Then I should see "Signup for othername (myname1)"
   
+  Scenario: Add more requests button disappears correctly from signup show page
+  
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up a basic promptmeme "Battle 12"
+    And I follow "Challenge Settings"
+  When I fill in multi-prompt challenge options
+  When I sign up for Battle 12 with combination D
+    And I add prompt 3
+  Then I should see "Add another prompt"
+  When I add prompt 4
+  Then I should not see "Add another prompt"
+  
+  Scenario: Add more requests button disappears correctly from signup show page
+  
+  Given I have standard challenge tags setup
+    And I am logged in as "mod1"
+  When I set up a basic promptmeme "Battle 12"
+    And I follow "Challenge Settings"
+  When I fill in multi-prompt challenge options
+  When I sign up for Battle 12 with combination D
+    And I add prompt 3
+  Then I should see "Add another prompt"
+  When I add prompt 4
+    And I follow "Request 4"
+  Then I should not see "Add another prompt"
+  
+  Scenario: Remove prompt button shouldn't show on My Signups
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I am on my user page
+  When I follow "My Signups"
+  Then I should not see "Remove prompt"
+  
   Scenario: Mod deletes a signup that doesn't fit the challenge rules
   
   Given I have Battle 12 prompt meme fully set up
@@ -242,27 +278,68 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
   When I am logged in as "mod1"
-  #When I delete the prompt by "myname1"
-  #Then I should see "Prompt was successfully deleted"
+  When I delete the prompt by "myname1"
+  Then I should see "Prompt was deleted"
   #  And "myname1" should be emailed
+
+  Scenario: User deletes one prompt
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination C
+  When I delete the prompt by "myname1"
+  Then I should see "Prompt was deleted"
+  
+  Scenario: Fulfilling a claim ticks the right boxes automatically
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+  Then the "Battle 12" checkbox should be checked
+    And the "Battle 12" checkbox should not be disabled
   
   Scenario: User can fulfill a claim
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination B
-  And I am logged in as "myname4"
-  And I claim a prompt from "Battle 12"
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
   When I fulfill my claim
   Then my claim should be fulfilled
+  
+  Scenario: User can fulfill a claim to their own prompt
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+    And I sign up for Battle 12 with combination B
+    And I claim a prompt from "Battle 12"
+    And I fulfill my claim
+  Then my claim should be fulfilled
+  
+  Scenario: Fulfilled claim shows correctly on my claims
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I am on my user page
+    And I follow "My Claims"
+  Then I should see "Fulfilled Story"
+    And I should not see "Not yet posted"
   
   Scenario: Claims count should be correct
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination B
-  And I am logged in as "myname4"
-  And I claim a prompt from "Battle 12"
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am on my user page
   Then I should see "My Claims (0)"
@@ -272,8 +349,8 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination B
-  And I am logged in as "myname4"
-  And I claim a prompt from "Battle 12"
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am logged in as "myname1"
   When I go to "Battle 12" collection's page
@@ -289,7 +366,6 @@ Feature: Prompt Meme Challenge
   Scenario: Prompts are counted up correctly
   
   Given I have Battle 12 prompt meme fully set up
-  
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   Then I should see "Prompts (2)"
@@ -349,6 +425,17 @@ Feature: Prompt Meme Challenge
     And I follow "Claims"
   Then I should not see "Delete"
   
+  Scenario: Mod or owner can delete a claim from the user claims list
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I claim a prompt from "Battle 12"
+  When I am logged in as "mod1"
+    And I view claims for "Battle 12"
+  Then I should see "Delete"
+  When I follow "Delete"
+  Then I should see "The claim was deleted."
+  
   Scenario: Prompt can be deleted after response has been posted
   
   Given I have Battle 12 prompt meme fully set up
@@ -377,6 +464,20 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
     And I view prompts for "Battle 12"
   Then I should see "Already claimed by you"
+  
+  Scenario: User can fulfill the same claim twice
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I fulfill my claim again
+  Then I should see "Work was successfully posted"
+    And I should see "Second Story"
+    And I should see "In response to a prompt by: Anonymous"
+    And I should see "Collections: Battle 12"
   
   Scenario: User edits existing work to fulfill claim
   
@@ -425,20 +526,43 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
     # SG-1
     And I view prompts for "Battle 12"
+  # SG-1 as claims are in reverse date order
   When I start to fulfill my claim
+  Then the "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird" checkbox should be checked
   # this next line shouldn't be needed - there's still a bug somewhere
-    And I uncheck "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird"
+  When I uncheck "Battle 12 (Anonymous) -  - Stargate Atlantis"
+  Then the "Battle 12 (Anonymous) -  - Stargate Atlantis" checkbox should not be checked
     And I press "Preview"
     And I press "Post"
   When I view the work "Fulfilled Story"
-  Then I should see "Stargate Atlantis"
-    And I should not see "Stargate SG-1"
+  Then I should not see "Stargate Atlantis"
+    And I should see "Stargate SG-1"
+    And I should see "Something else weird"
   When I follow "Anonymous" within "p"
-  Then I should see "Stargate Atlantis"
-    And I should not see "Stargate SG-1"
+  Then I should not see "Stargate Atlantis"
+    And I should see "Stargate SG-1"
   
   Scenario: User claims two prompts in one challenge and fufills both of them at once
-  # TODO
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname2"
+  When I sign up for Battle 12 with combination B
+  # 1st prompt SG-1, 2nd prompt SGA
+  When I am logged in as "myname1"
+    And I claim a prompt from "Battle 12"
+    # SGA as it's in reverse order
+    And I claim a prompt from "Battle 12"
+    # SG-1
+    And I view prompts for "Battle 12"
+  When I start to fulfill my claim
+    And I check "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird"
+    And I press "Preview"
+    And I press "Post"
+  When I view the work "Fulfilled Story"
+  # TODO: fix the broken bit
+  #Then I should see "Stargate Atlantis"
+  #  And I should see "Stargate SG-1"
+  #Then show me the page
   
   Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
@@ -471,8 +595,8 @@ Feature: Prompt Meme Challenge
   When I start to fulfill my claim
   Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be checked
     And the "My Gift Exchange (myname2)" checkbox should not be checked
-    And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be disabled
-    And the "My Gift Exchange (myname2)" checkbox should be disabled
+    And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
+    And the "My Gift Exchange (myname2)" checkbox should not be disabled
     
   Scenario: User posts to fulfill direct from Post New
   
@@ -485,6 +609,7 @@ Feature: Prompt Meme Challenge
     And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and then changes their mind and fulfills the gift exchange instead
+  
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
@@ -501,13 +626,20 @@ Feature: Prompt Meme Challenge
   Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
     And I should see "Battle 12"
 
-  #As a maintainer I can delete whole signups
-##Its prompts disappear from the collection
-##As a prompter the signup disappears from my dashboard
+  Scenario: As a maintainer I can delete whole signups
+  # TODO
+  
+  Scenario: When maintainer deletes signup, its prompts disappear from the collection
+  # TODO
 
-#As a maintainer I can delete signups after a story has been posted for them
-##The story stays part of the collection, is accessible and no longer has the "In response to a prompt by: testy" line.
-##As the story author I can edit the story normally.
+  Scenario: When maintainer deletes signup, as a prompter the signup disappears from my dashboard
+  # TODO
+
+  Scenario: When maintainer deletes signup, The story stays part of the collection, and no longer has the "In response to a prompt by:" line
+  # TODO
+
+  Scenario: When maintainer deletes signup, As the story author I can edit the story normally
+  # TODO
 
 #As maintainer I deleted a challenge which had already two claimed and one fulfilled prompts
 ##As a user I now can't access "My Signups" and "My Claims" (500)

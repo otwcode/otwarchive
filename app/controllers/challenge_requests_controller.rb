@@ -4,6 +4,10 @@ class ChallengeRequestsController < ApplicationController
   before_filter :check_visibility
 
   def check_visibility
+    unless @collection
+      flash.now[:notice] = ts("Collection could not be found")
+      redirect_to '/' and return
+    end
     unless @collection.challenge_type == "PromptMeme" || (@collection.challenge_type == "GiftExchange" && @collection.challenge.user_allowed_to_see_requests_summary?(current_user))
       flash.now[:notice] = ts("You are not allowed to view requests summary!")
       redirect_to collection_path(@collection) and return
