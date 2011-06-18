@@ -8,7 +8,7 @@ Scenario: Banner is blank until admin sets it
   When I am logged in as "newname"
   Then I should not see "Hide this banner"
 
-Scenario: Admin can change banner
+Scenario: Admin can set banner
 
   When an admin sets a custom banner notice
     And I am logged in as "ordinaryuser"
@@ -28,6 +28,7 @@ Scenario: User can turn off banner using X button
   When I am logged in as "newname"
   When I am on my user page
   When I follow "Close-flash" within "#notice-banner .submit"
+  #Cucumber apparently doesn't like Javascript
   #Then I should not see "Custom notice words"
 
 Scenario: Banner stays off when logging out and in again
@@ -59,6 +60,7 @@ Scenario: logged out user hides banner using X
   When I am logged out
   When I am on the works page
   When I follow "Close-flash" within "#notice-banner .submit"
+  #Cucumber apparently doesn't like Javascript
   #Then I should not see "Custom notice words"
   
 Scenario: User can turn off banner in preferences if they don't have Javascript
@@ -70,3 +72,17 @@ Scenario: User can turn off banner in preferences if they don't have Javascript
   When I check "Turn off the general banner notice"
     And I press "Update"
   Then I should not see "Custom notice words"
+  
+Scenario: Admin changes banner and new text shows
+
+  When an admin sets a custom banner notice
+  When an admin sets a different banner notice
+  Then the banner notice for a logged-in user should be set to "Other words"
+  
+Scenario: If user has turned off banner and admin changes words, it comes back
+
+  When an admin sets a custom banner notice
+  When I turn off the banner
+  When an admin sets a different banner notice
+  #Resque does not appear to be working
+  #Then the banner notice for a logged-in user should be set to "Other words"

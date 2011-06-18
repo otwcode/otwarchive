@@ -6,6 +6,22 @@ end
 
 ### WHEN
 
+When /^an admin sets a custom banner notice$/ do
+  Given %{I am logged in as an admin}
+  When %{I follow "settings"}
+  When %{I fill in "Banner notice" with "Custom notice words"}
+    And %{I press "Update"}
+  Then %{I should see "Archive settings were successfully updated."}
+end
+
+When /^an admin sets a different banner notice$/ do
+  Given %{I am logged in as an admin}
+  When %{I follow "settings"}
+  When %{I fill in "Banner notice" with "Other words"}
+    And %{I press "Update"}
+  Then %{I should see "Archive settings were successfully updated."}
+end
+
 When /^I turn off the banner$/ do
   Given %{I am logged in as "newname"}
   When %{I am on my user page}
@@ -13,6 +29,18 @@ When /^I turn off the banner$/ do
 end
 
 ### THEN
+
+Then /^the banner notice for a logged-in user should be set to "([^\"]*)"$/ do |words|
+  When %{I am logged in as "newname"}
+  When %{I am on the works page}
+  Then %{I should see "#{words}"}
+end
+
+Then /^the banner notice for a logged-out user should be set to "([^\"]*)"$/ do |words|
+  When %{I am logged out}
+  When %{I am on the works page}
+  Then %{I should see "#{words}"}
+end
 
 Then /^I should see the first login banner$/ do
   Then %{I should see "It looks like you've just logged into the archive for the first time"}

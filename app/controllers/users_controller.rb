@@ -392,7 +392,7 @@ class UsersController < ApplicationController
   
   def end_banner
     @user.preference.update_attribute(:banner_seen, true)
-    redirect_to user_path(current_user) rescue redirect_to '/'
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
   def browse
