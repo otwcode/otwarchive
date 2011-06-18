@@ -9,13 +9,13 @@
     <dl class="preface">
       <dt class="title">
         <%= f.label :title, ts("Work Title*"), :class => "required" %>
-  	    <%= link_to_help "story-title" %>
+        <%= link_to_help "story-title" %>
       </dt>
       <dd class="title">
         <%= f.text_field :title, :class => "storyinputfield observe_textlength" %>
         <%= live_validation_for_field('work_title',
-  			      :maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN,
-  			      :failureMessage => 'We need a title! (At least ' + ArchiveConfig.TITLE_MIN.to_s + ' characters long, please.)')
+              :maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN,
+              :failureMessage => 'We need a title! (At least ' + ArchiveConfig.TITLE_MIN.to_s + ' characters long, please.)')
         %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
@@ -199,7 +199,7 @@
           </dd>
           <dt><%= s.label :title, "Or create and use a new one:" %></dt>
           <dd><%= s.text_field :title, :class => "storyinputfield" %></dd>
-    	  <% end %>
+        <% end %>
 
         <% unless @serial_works.blank? %>
           <dt><%= 'Current Series' %></dt>
@@ -212,7 +212,7 @@
               </ul>
             </dd>
           <% end %>
-    	  <% end %>
+        <% end %>
         </dl>
       </dd>
 

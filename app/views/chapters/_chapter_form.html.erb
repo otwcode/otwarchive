@@ -5,7 +5,7 @@
   <legend><%= ts("Naming, Ordering and Date") %></legend>
   <dl>
     <dt><%= f.label :title, ts("Chapter title") %></dt>
-    <dd><p><%= f.text_field :title, :class => "storyinputfield", :live => true %>
+    <dd><p><%= f.text_field :title, :class => "storyinputfield observe_textlength", :live => true %>
     <%= link_to_help "chapter-title" %></p>
     <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
     </dd>
