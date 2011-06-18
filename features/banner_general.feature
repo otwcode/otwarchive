@@ -27,7 +27,7 @@ Scenario: User can turn off banner using X button
   When an admin sets a custom banner notice
   When I am logged in as "newname"
   When I am on my user page
-  When I follow "Close-flash" within ".submit"
+  When I follow "Close-flash" within "#notice-banner .submit"
   #Then I should not see "Custom notice words"
 
 Scenario: Banner stays off when logging out and in again
