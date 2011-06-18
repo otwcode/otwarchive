@@ -59,7 +59,7 @@ Feature: First login help banner
   When I follow "Close-flash" within ".submit"
   #Then I should not see the first login banner
   
-  Scenario: Banner comes back if turne off using X
+  Scenario: Banner comes back if turned off using X
   
   Given I am logged in as "newname2"
   When I am on newname2's user page

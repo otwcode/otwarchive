@@ -45,13 +45,21 @@ Scenario: logged out user can also see banner
   When an admin sets a custom banner notice
   Then the banner notice for a logged-out user should be set to "Custom notice"
   
-Scenario: logged out user hides banner
+Scenario: logged out user hides banner using words
 
   When an admin sets a custom banner notice
   When I am logged out
   When I am on the works page
   When I follow "Hide this banner"
   Then I should not see "Custom notice words"
+  
+Scenario: logged out user hides banner using X
+
+  When an admin sets a custom banner notice
+  When I am logged out
+  When I am on the works page
+  When I follow "Close-flash" within "#notice-banner .submit"
+  #Then I should not see "Custom notice words"
   
 Scenario: User can turn off banner in preferences if they don't have Javascript
 
