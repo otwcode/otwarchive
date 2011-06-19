@@ -9,6 +9,7 @@ class CreationObserver < ActiveRecord::Observer
       notify_recipients(creation)
       notify_parents(creation)
       notify_subscribers(creation)
+      notify_prompters(creation)
     elsif creation.is_a?(Chapter) && creation.position != 1
       notify_subscribers(creation)
     end

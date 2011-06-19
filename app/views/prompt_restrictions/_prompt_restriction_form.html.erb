@@ -47,7 +47,11 @@
   <% if show_tag_options %>
     <fieldset class="preface profile">
       <legend>Tag Options</legend>
-      <h3>Tag Options <%= link_to_help("prompt-restriction-tag-set") %></h3>
+      <% if type == "gift_exchange" %>
+        <h3>Tag Options <%= link_to_help("prompt-restriction-tag-set") %></h3>
+      <% else %>
+        <h3>Tag Options <%= link_to_help("prompt-restriction-tag-set-promptmeme") %></h3>
+      <% end %>
       <% restriction.build_tag_set unless restriction.tag_set %>
       <%= prompt_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
         <% TagSet::TAG_TYPES.each do |tag_type| %>
