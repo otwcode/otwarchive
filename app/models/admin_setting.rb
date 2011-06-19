@@ -51,6 +51,21 @@ class AdminSetting < ActiveRecord::Base
       end
     end
   end
+  
+  @queue = :admin
+  # This will be called by a worker when a job needs to be processed
+  def self.perform(method, *args)
+    self.send(method, *args)
+  end
+  
+  # update admin banner setting for all users when banner notice is changed
+  def self.banner_on!
+    Resque.enqueue(AdminSetting, :delayed_banner_on)
+  end
+  
+  def self.delayed_banner_on
+    Preference.update_all("banner_seen = false")
+  end
 
   private
   

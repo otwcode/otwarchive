@@ -56,13 +56,13 @@
   <div class="flash notice" id="notice-banner">
     <p>
       <%= @admin_settings.banner_text %>
+    </p>
+    <p class="submit">
       <% if current_user.nil? %>
         <%= link_to "Hide this banner", url_for(params.merge :hide_banner => true, :anchor => params[:anchor]), :class => 'navigation' %>
       <% else %>
         <%= link_to "Hide this banner", end_banner_user_path(current_user), :method => :post, :remote => true, :class => 'navigation' %>
       <% end %>
-    </p>
-    <p class="submit">
       <%= link_to image_tag('close-flash.png'), nil, :onclick => "$('notice-banner').hide()", :remote => true %>
     </p>
   </div>
