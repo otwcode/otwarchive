@@ -13,8 +13,10 @@ class RelatedWorksController < ApplicationController
         flash[:error] = ts("Sorry, we couldn't find that user")
         redirect_back_or_default(root_path)
       else
-        @related_works_as_parent = @user.related_works
-        @related_works_as_child = @user.parent_work_relationships
+        @translations_of_user = @user.related_works.find(:all, :conditions => {:translation => true})
+        @remixes_of_user = @user.related_works.find(:all, :conditions => {:translation => false})
+        @translations_by_user = @user.parent_work_relationships.find(:all, :conditions => {:translation => true})
+        @remixes_by_user = @user.parent_work_relationships.find(:all, :conditions => {:translation => false})
       end
     end
   end
