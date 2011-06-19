@@ -193,6 +193,9 @@ end
 
 When /^I fill in no-column challenge options$/ do
   When %{I fill in "prompt_meme_requests_num_required" with "1"}
+    And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "0"}
+    And %{I fill in "prompt_meme_request_restriction_attributes_character_num_allowed" with "0"}
+    And %{I fill in "prompt_meme_request_restriction_attributes_relationship_num_allowed" with "0"}
     And %{I check "Signup open?"}
     And %{I press "Submit"}
 end
