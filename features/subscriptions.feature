@@ -51,4 +51,15 @@ Feature: Subscriptions
     And I post the work "Awesome Story 2: The Sequel"
   Then 0 emails should be delivered
     
-   
+  Scenario: subscribe button on profile page
+  
+  When I am logged in as "myname2" with password "something"
+    And I go to myname1's profile page
+    And I press "Subscribe"
+  Then I should see "You are now following myname1"
+    And I should see "About myname1"
+    And I should not see "Fandoms"
+  When I follow "Unsubscribe"
+  Then I should see "successfully unsubscribed"
+    And I should see "About myname1"
+    And I should not see "Fandoms"
