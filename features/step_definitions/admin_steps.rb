@@ -113,24 +113,4 @@ When /^the check_queue rake task is run$/ do
   AdminSetting.check_queue
 end
 
-When /^an admin sets a custom banner notice$/ do
-  Given %{I am logged in as an admin}
-  When %{I follow "settings"}
-  When %{I fill in "Banner notice" with "Custom notice words"}
-    And %{I press "Update"}
-  Then %{I should see "Archive settings were successfully updated."}
-end
-
 ### THEN
-
-Then /^the banner notice for a logged-in user should be set to "Custom notice"$/ do
-  When %{I am logged in as "newname"}
-  When %{I am on the works page}
-  Then %{I should see "Custom notice words"}
-end
-
-Then /^the banner notice for a logged-out user should be set to "Custom notice"$/ do
-  When %{I am logged out}
-  When %{I am on the works page}
-  Then %{I should see "Custom notice words"}
-end

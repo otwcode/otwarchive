@@ -39,6 +39,27 @@
   </ul>
   <div class="clear"></div>
 </div>
+
+<% unless current_user && current_user.try(:preference).try(:banner_seen) %>
+<% unless @admin_settings.banner_text.empty? || logged_in_as_admin? %>
+<% unless current_user.nil? && session[:hide_banner] %>
+  <div class="flash notice" id="notice-banner">
+    <p>
+      <%= @admin_settings.banner_text %>
+    </p>
+    <p class="submit">
+      <% if current_user.nil? %>
+        <%= link_to "Hide this banner", url_for(params.merge :hide_banner => true, :anchor => params[:anchor]), :class => 'navigation' %>
+      <% else %>
+        <%= link_to "Hide this banner", end_banner_user_path(current_user), :method => :post, :remote => true, :class => 'navigation' %>
+      <% end %>
+      <%= link_to image_tag('close-flash.png'), nil, :onclick => "$('notice-banner').hide()", :remote => true %>
+    </p>
+  </div>
+<% end %>
+<% end %>
+<% end %>
+
 <div class="bigwrapper">
   <%= flash_div :error, :warning, :notice %>
   <div class="open-beta-box">
