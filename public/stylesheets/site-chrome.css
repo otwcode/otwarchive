@@ -96,8 +96,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 /*Subscription form on user/pseud dashboard */
 .sidebar .navigation form {float:none;}
 
-
- /*Navigation in tables*/
+/*Navigation in tables*/
 #main table ul.navigation, table span.navigation, table span.input  {margin:auto; border:none; background:transparent; padding:0; float:none; border-radius:0; -moz-border-radius:0; -webkit-border-radius:0}
 #main table .navigation li a, #main td.submit input{ border:none; float:none}
 #main table td.navigation, td.submit {border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x;}
@@ -119,7 +118,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  span.requested { color: #900; }
  span.offered { color: #008080; }
  span.offered.requested { color: #daa520; }
-
+ 
 /*TAGS */
  #main ul.tags li      { display:inline;}
 
@@ -327,6 +326,14 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
  .works-own .own                { background: transparent; }
  .works-own .own dl.stats { background: #eee; }
 
+/* USER RELATED WORKS */
+#translationsofme th.translationwidth {width: 25%} 
+#mytranslations th.translationwidth {width: 25%}
+#inspiredbyme th.wide {width: 35%}
+#inspiredbyme th.narrow {width: 25%}
+#myinspirations th.wide {width: 35%}
+#myinspirations th.narrow {width: 25%}
+ 
 /* WORKS INDEX */
  .works-index .index                { width: 75% }
  .works-index #search_main               { float: left;}

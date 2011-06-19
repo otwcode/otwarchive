@@ -8,34 +8,31 @@
 <!--/subnav-->
 
 <!--main content-->
-<% unless @related_works_as_parent.blank? %>
-
-  <h3>Works inspired by <%= @user.login %>'s works</h3>
-
-  <table id="inspiredbyme">
+<% unless @translations_of_user.blank? %>  
+  <h3>Translations of <%= @user.login %>'s works</h3>
+  
+  <table id="translationsofme">
     <thead>
       <tr>
-        <th>Original</th>
-        <th>Remix/Translation/Inspired Work</th>
-        <th>Translation?</th>
+        <th>Translation</th>
+        <th class="translationwidth">Original</th>
+        <th class="translationwidth">Language</th>
         <% if current_user == @user %>
-        <th>Approve/remove link</th>
+        <th class="translationwidth">Approve/remove link</th>
         <% end %>
       </tr>
     </thead>
     <tbody>
-    <% @related_works_as_parent.each do |related_work| %>
+    <% @translations_of_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
       <tr>
         <% if related_work.work.unrevealed? %>
           <td><%= "A work in an unrevealed challenge" %></td>
         <% else %>
-          <td><%= link_to related_work.parent.title.html_safe, related_work.parent %></td>
           <td><%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %></td>
+          <td><%= link_to related_work.parent.title.html_safe, related_work.parent %></td>
           <td>
-            <% if related_work.translation? %>
               From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
-            <% end %>
           </td>
           <% if current_user == @user %>
             <% if related_work.reciprocal? %>
@@ -50,25 +47,25 @@
     <% end %>
     </tbody>
   </table>
-<% end %>
-
-<% unless @related_works_as_child.blank? %>
-
-  <h3>Works <%= @user.login %>'s works were inspired by</h3>
-
-  <table id="myinspirations">
+<% end %>  
+ 
+<% unless @translations_by_user.blank? %>  
+  <h3>Works <%= @user.login %> has translated</h3>
+  
+  <table id="mytranslations">
     <thead>
       <tr>
+      <tr>
         <th>Original</th>
-        <th>Remix/Translation/Inspired Work</th>
-        <th>Translation?</th>
+        <th class="translationwidth">Translation</th>
+        <th class="translationwidth">Language</th>
         <% if current_user == @user %>
-        <th>Remove connection</th>
+        <th class="translationwidth">Remove connection</th>
         <% end %>
       </tr>
     </thead>
     <tbody>
-    <% @related_works_as_child.each do |related_work| %>
+    <% @translations_by_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
       <tr>
         <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
@@ -77,12 +74,47 @@
           <td><%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %></td>
           <td><%= link_to related_work.work.title, related_work.work %></td>
           <td>
-            <% if related_work.translation? %>
-              From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
-            <% end %>
+            From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
           </td>
           <% if current_user == @user %>
           <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></td>
+          <% end %>
+        <% end %>
+      </tr>    
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>
+ 
+<% unless @remixes_of_user.blank? %>
+  <h3>Works inspired by <%= @user.login %>'s works</h3>
+
+  <table id="inspiredbyme">
+    <thead>
+      <tr>
+        <th>Remix/Inspired Work</th>
+        <th class="wide">Original</th>
+        <% if current_user == @user %>
+        <th class="narrow">Approve/remove link</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+    <% @remixes_of_user.each do |related_work| %>
+      <% if related_work.parent && related_work.work %>
+      <tr>
+        <% if related_work.work.unrevealed? %>
+          <td><%= "A work in an unrevealed challenge" %></td>
+        <% else %>
+          <td><%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %></td>
+          <td><%= link_to related_work.parent.title.html_safe, related_work.parent %></td>
+          <% if current_user == @user %>
+            <% if related_work.reciprocal? %>
+              <td><%= link_to "Remove", related_work %></td>
+            <% else %>
+              <td><%= link_to "Approve", related_work %></td>
+            <% end %>
           <% end %>
         <% end %>
       </tr>
@@ -90,6 +122,41 @@
     <% end %>
     </tbody>
   </table>
+<% end %>  
+  
+<% unless @remixes_by_user.blank? %>
+  <h3>Works <%= @user.login %>'s works were inspired by</h3>
+  
+  <table id="myinspirations">
+    <thead> 
+      <tr>
+        <th>Original</th>
+        <th class="wide">Remix/Inspired Work</th>
+        <% if current_user == @user %>
+        <th class="narrow">Remove connection</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+    <% @remixes_by_user.each do |related_work| %>
+      <% unless related_work.translation? %>
+        <% if related_work.parent && related_work.work %>
+        <tr>
+          <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
+          <td><%= "A work in an unrevealed or anonymous challenge" %></td>
+          <% else %>
+            <td><%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %></td>
+            <td><%= link_to related_work.work.title, related_work.work %></td>
+            <% if current_user == @user %>
+            <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></td>
+            <% end %>
+          <% end %>
+        </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
 <% end %>
-
+  
 <!--/main content-->
