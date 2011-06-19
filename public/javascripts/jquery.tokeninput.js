@@ -231,7 +231,10 @@ $.TokenList = function (input, url_or_data, settings) {
                     add_token($(selected_dropdown_item));
                     return false;
                   } else if(input_box.val()) {
-                    add_token(input_box.val());
+                    // split contents and add them
+                    $.each(input_box.val().split(settings.tokenDelimiter), function(index, item) {
+                      add_token(item);
+                    });
                     return false;
                   }
                   break;
@@ -752,7 +755,8 @@ $.TokenList = function (input, url_or_data, settings) {
                     $.each(live_param_fields, function (index, value) {
                         var kv = value.split("=");
                         var id_to_get = "#" + kv[1];
-                        var id_contents = $(id_to_get).val();
+						// this will work on both checkboxes and on text fields
+                        var id_contents = $(id_to_get).map(function(i,n){return $(n).val();}).get();
                         if(id_contents) {
                             ajax_params.data[kv[0]] = id_contents;
                         }
