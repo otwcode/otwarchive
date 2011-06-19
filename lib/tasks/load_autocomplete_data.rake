@@ -1,12 +1,10 @@
 namespace :autocomplete do
   
-  # we need to delete the keys in batches to avoid stack level too deep error
-  KEYSLICE_SIZE = 10000
   
   desc "Clear autocomplete data"
   task(:clear_data => :environment) do
     keys = $redis.keys("autocomplete_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}
+    $redis.client.call keys.unshift(:del)
     puts "Cleared all autocomplete data"
   end
 
@@ -23,25 +21,25 @@ namespace :autocomplete do
   desc "Clear tag data"
   task(:clear_tag_data => :environment) do
     keys = $redis.keys("autocomplete_tag_*") + $redis.keys("autocomplete_fandom_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}
+    $redis.client.call keys.unshift(:del)
   end
 
   desc "Clear tagset data"
   task(:clear_tagset_data => :environment) do
     keys = $redis.keys("autocomplete_tagset_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}
+    $redis.client.call keys.unshift(:del)
   end
 
   desc "Clear pseud data"
   task(:clear_pseud_data => :environment) do
     keys = $redis.keys("autocomplete_pseud_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}
+    $redis.client.call keys.unshift(:del)
   end
   
   desc "Clear collection data"
   task(:clear_collection_data => :environment) do
     keys = $redis.keys("autocomplete_collection_*")
-    keys.each_slice(KEYSLICE_SIZE) {|keyslice| $redis.del(*keyslice)}
+    $redis.client.call keys.unshift(:del)
   end
   
   desc "Load tag data into Redis for autocomplete"
