@@ -746,7 +746,14 @@ class StoryParser
     # Parses a story from fanfiction.net
     def parse_story_from_ffnet(story)
       work_params = {:chapter_attributes => {}}
-      storytext = clean_storytext((@doc/"#storytext").inner_html)
+      # storytext = clean_storytext((@doc/"#storytext").inner_html)
+      storytext = (@doc/"#storytext")
+      #remove share area
+      divs = storytext.css("div div.a2a_kit")
+      if !divs[0].nil?
+        divs[0].remove
+      end
+      storytext = clean_storytext(storytext.inner_html)
 
       work_params[:notes] = ((@doc/"#storytext")/"p").first.try(:inner_html)
 
