@@ -353,7 +353,7 @@ class Tag < ActiveRecord::Base
     # fandom sets are too small to bother breaking up
     # we're just getting ALL the tags in the set(s) for the fandom(s) and then manually matching
     results = []
-    fandoms = fandom.is_a?(Array) ? fandom : (fandom.blank? ? [] : fandom.split(','))
+    fandoms = fandom.is_a?(Array) ? fandom.map {|f| f.split(',').map {|w| w.strip}}.flatten : (fandom.blank? ? [] : fandom.split(','))
     search_regex = Regexp.new(Regexp.escape(search_param), Regexp::IGNORECASE)
     fandoms.each do |single_fandom|
       single_fandom.downcase!

@@ -113,7 +113,7 @@ module AutocompleteSource
           phrases_with_scores = []
           if lastpiece && search_piece.length < 3
             # use a limit
-            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores, :limit => 50)
+            phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores, :limit, 0, 50)
           else
             phrases_with_scores = $redis.zrevrangebyscore(autocomplete_score_key(autocomplete_prefix, word), 'inf', 0, :withscores)
           end
