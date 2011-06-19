@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110312174241) do
+ActiveRecord::Schema.define(:version => 20110619091342) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(:version => 20110312174241) do
     t.integer  "cache_expiration",            :limit => 8, :default => 10
     t.boolean  "tag_wrangling_off",                        :default => false,                 :null => false
     t.boolean  "guest_downloading_off",                    :default => false,                 :null => false
+    t.string   "banner_text",                              :default => ""
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"
@@ -215,15 +216,15 @@ ActiveRecord::Schema.define(:version => 20110312174241) do
 
   create_table "collection_profiles", :force => true do |t|
     t.integer  "collection_id"
-    t.text     "intro",                   :limit => 16777215
-    t.text     "faq",                     :limit => 16777215
-    t.text     "rules",                   :limit => 16777215
+    t.text     "intro",                   :limit => 2147483647
+    t.text     "faq",                     :limit => 2147483647
+    t.text     "rules",                   :limit => 2147483647
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "gift_notification"
-    t.integer  "intro_sanitizer_version", :limit => 2,        :default => 0, :null => false
-    t.integer  "faq_sanitizer_version",   :limit => 2,        :default => 0, :null => false
-    t.integer  "rules_sanitizer_version", :limit => 2,        :default => 0, :null => false
+    t.integer  "intro_sanitizer_version", :limit => 2,          :default => 0, :null => false
+    t.integer  "faq_sanitizer_version",   :limit => 2,          :default => 0, :null => false
+    t.integer  "rules_sanitizer_version", :limit => 2,          :default => 0, :null => false
     t.text     "assignment_notification"
   end
 
@@ -661,6 +662,7 @@ ActiveRecord::Schema.define(:version => 20110312174241) do
     t.boolean  "minimize_search_engines",           :default => false,                     :null => false
     t.boolean  "kudos_emails_off",                  :default => false,                     :null => false
     t.boolean  "disable_share_links",               :default => false,                     :null => false
+    t.boolean  "banner_seen",                       :default => false,                     :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
@@ -682,8 +684,8 @@ ActiveRecord::Schema.define(:version => 20110312174241) do
     t.integer  "prompt_restriction_id"
     t.integer  "request_restriction_id"
     t.integer  "requests_num_required",                                       :default => 1,     :null => false
-    t.integer  "requests_num_allowed",                                        :default => 1,     :null => false
-    t.boolean  "signup_open",                                                 :default => false, :null => false
+    t.integer  "requests_num_allowed",                                        :default => 5,     :null => false
+    t.boolean  "signup_open",                                                 :default => true,  :null => false
     t.datetime "signups_open_at"
     t.datetime "signups_close_at"
     t.datetime "assignments_due_at"
@@ -713,11 +715,11 @@ ActiveRecord::Schema.define(:version => 20110312174241) do
     t.integer  "relationship_num_required",       :default => 0,     :null => false
     t.integer  "freeform_num_required",           :default => 0,     :null => false
     t.integer  "warning_num_required",            :default => 0,     :null => false
-    t.integer  "fandom_num_allowed",              :default => 0,     :null => false
+    t.integer  "fandom_num_allowed",              :default => 1,     :null => false
     t.integer  "category_num_allowed",            :default => 0,     :null => false
     t.integer  "rating_num_allowed",              :default => 0,     :null => false
-    t.integer  "character_num_allowed",           :default => 0,     :null => false
-    t.integer  "relationship_num_allowed",        :default => 0,     :null => false
+    t.integer  "character_num_allowed",           :default => 1,     :null => false
+    t.integer  "relationship_num_allowed",        :default => 1,     :null => false
     t.integer  "freeform_num_allowed",            :default => 0,     :null => false
     t.integer  "warning_num_allowed",             :default => 0,     :null => false
     t.datetime "created_at"
@@ -891,6 +893,8 @@ ActiveRecord::Schema.define(:version => 20110312174241) do
     t.integer  "description_sanitizer_version", :limit => 2, :default => 0,     :null => false
     t.string   "type"
     t.float    "paragraph_margin"
+    t.string   "headercolor"
+    t.string   "accent_color"
   end
 
   add_index "skins", ["author_id"], :name => "index_skins_on_author_id"
