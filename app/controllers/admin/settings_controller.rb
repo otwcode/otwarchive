@@ -12,9 +12,8 @@ class Admin::SettingsController < ApplicationController
     @admin_setting = AdminSetting.first || AdminSetting.create(:last_updated_by => Admin.first)
     
     if params[:banner_text] != @admin_setting.banner_text
-      User.find(:all).each do |user|
-        user.try(:preference).banner_seen = false
-      end
+      AdminSetting.banner_on!
+      flash[:notice] = ts("Setting banner back on for all users. This may take some time")
     end
     
     if @admin_setting.update_attributes(params[:admin_setting])
