@@ -51,6 +51,8 @@ module NavigationHelpers
       user_preferences_path(:user_id => $1)
     when /^the subscriptions page for "(.*)"$/i
       user_subscriptions_path(:user_id => $1)
+    when /^(.*)'s profile page$/i
+      user_profile_path(:user_id => $1)
     when /my user page/
       user_path(User.current_user)
     when /my preferences page/
@@ -59,6 +61,8 @@ module NavigationHelpers
       user_bookmarks_path(User.current_user)
     when /my subscriptions page/
       user_subscriptions_path(User.current_user)      
+    when /my profile page/
+      user_profile_path(User.current_user)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/
