@@ -64,9 +64,7 @@ class AdminSetting < ActiveRecord::Base
   end
   
   def self.delayed_banner_on
-    User.find(:all).each do |user|
-      user.try(:preference).banner_seen = false
-    end
+    Preference.update_all("banner_seen = false")
   end
 
   private

@@ -84,5 +84,4 @@ Scenario: If user has turned off banner and admin changes words, it comes back
   When an admin sets a custom banner notice
   When I turn off the banner
   When an admin sets a different banner notice
-  #Resque does not appear to be working
-  #Then the banner notice for a logged-in user should be set to "Other words"
+  Then the banner notice for a logged-in user should be set to "Other words"
