@@ -21,7 +21,8 @@ class FeedSweeper < ActionController::Caching::Sweeper
     for tag in tags
       expire_page :controller => 'tags',
                   :action => 'feed',
-                  :id => tag.id
+                  :id => tag.id,
+                  :format => 'atom'
     end
   end
 
