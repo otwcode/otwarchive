@@ -4,31 +4,34 @@ Feature: Comment on work
   As a reader
   I'd like to comment on a work
 
-Scenario: When logged in I can comment on a work, comment threading, comment editing
+Scenario: When logged in I can comment on a work
   Given I have no works or comments
   When I am logged in as "author"
     And I post the work "The One Where Neal is Awesome"
-  When I am logged out
-    And I am logged in as "commenter"
+  When I am logged in as "commenter"
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "I loved this!"
     And I press "Add Comment" 
   Then I should see "Comment created!" 
     And I should see "I loved this!" within ".odd"
+    
+Scenario: Comment threading, comment editing
+  When I am logged in as "author"
+    And I post the work "The One Where Neal is Awesome"
+  When I am logged in as "commenter"
+    And I post the comment "I loved this!" on the work "The One Where Neal is Awesome"
   When I follow "Reply"
     And I fill in "Comment" with "I wanted to say more." within ".odd"
     And I press "Add Comment" within ".odd"
   Then I should see "Comment created!"
     And I should see "I wanted to say more." within ".even"
-  When I follow "Log out" 	
-    And I am logged in as "commenter2"
+  When I am logged in as "commenter2"
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "I loved it, too."
     And I press "Add Comment"
   Then I should see "Comment created!"
     And I should see "I loved it, too."
-  When I follow "Log out" 	
-    And I am logged in as "author"
+  When I am logged in as "author"
     And I view the work "The One Where Neal is Awesome"
     And I follow "Read Comments (3)"
     And I follow "Reply" within ".even"
@@ -36,8 +39,7 @@ Scenario: When logged in I can comment on a work, comment threading, comment edi
     And I press "Add Comment" within ".even"
   Then I should see "Comment created!"
     And I should see "Thank you." within ".odd"
-  When I am logged out
-    And I am logged in as "commenter"
+  When I am logged in as "commenter"
     And I view the work "The One Where Neal is Awesome"
     And I follow "Read Comments (4)"
     And I follow "Reply" within ".thread .thread .odd"

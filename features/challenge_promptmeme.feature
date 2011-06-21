@@ -543,7 +543,6 @@ Feature: Prompt Meme Challenge
     And I should see "Stargate SG-1"
   
   Scenario: User claims two prompts in one challenge and fufills both of them at once
-  
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
@@ -609,7 +608,7 @@ Feature: Prompt Meme Challenge
     And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and then changes their mind and fulfills the gift exchange instead
-  
+
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
@@ -676,21 +675,12 @@ Feature: Prompt Meme Challenge
     And I should see "Stargate Atlantis" within "#fulfilled_claims"
     And I should see "myname4" within "#fulfilled_claims"
   
-  Scenario: All the rest of the unrefactored stuff
+  Scenario: Mod can post a fic
   
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
-  When I am logged in as "myname4"
-  When I claim a prompt from "Battle 12"
-  When I close signups for "Battle 12"
-  When I am logged in as "myname4"
-  When I fulfill my claim
-  
   When I am logged in as "mod1"
   When I claim a prompt from "Battle 12"
-  
-  # mod posts a fic
-  
   When I am on my user page
   Then I should see "My Claims (1)" 
   When I follow "My Claims"
@@ -707,8 +697,17 @@ Feature: Prompt Meme Challenge
     And I press "Post"
   Then I should see "Work was successfully posted"
   
-  # fic shows what prompt it is fulfilling when mod views it
+  Scenario: Fic shows what prompt it is fulfilling when mod views it
   
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "mod1"
+  When I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+    And I fill in "Work Title" with "Fulfilled Story-thing"
+    And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
+  When I press "Preview"
+    And I press "Post"
   When I view the work "Fulfilled Story-thing"
   Then I should see "In response to a prompt by: myname4"
     And I should see "Fandom: Stargate Atlantis"
@@ -717,14 +716,41 @@ Feature: Prompt Meme Challenge
     And I should not see "mod1" within ".byline"
     And I should see "Alternate Universe - Historical"
   
-  # mod's claim is completed
+  Scenario: Mod can complete a claim
   
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "mod1"
+  When I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+    And I fill in "Work Title" with "Fulfilled Story-thing"
+    And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
+  When I press "Preview"
+    And I press "Post"
   When I am on my user page
   Then I should see "My Claims (0)"
   When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should see "mod1" within "#fulfilled_claims"
     And I should not see "mod1" within "#unfulfilled_claims"
+  
+  Scenario: All the rest of the unrefactored stuff
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  
+  When I am logged in as "mod1"
+  When I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+    And I fill in "Work Title" with "Fulfilled Story-thing"
+    And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
+  When I press "Preview"
+    And I press "Post"
   
   # mod can see claims
   
@@ -773,7 +799,6 @@ Feature: Prompt Meme Challenge
   Then I should see "Collection was successfully updated"
   # 2 stories are now revealed, so notify the prompters/recipients
     And 2 emails should be delivered
-  
   
   # check ficlet is visible but anon
   

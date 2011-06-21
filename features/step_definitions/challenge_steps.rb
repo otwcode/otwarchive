@@ -468,12 +468,14 @@ When /^I fulfill my claim$/ do
   When %{I start to fulfill my claim with "Fulfilled Story"}
   When %{I press "Preview"}
     And %{I press "Post"}
+  Then %{I should see "Work was successfully posted"}
 end
 
 When /^I fulfill my claim again$/ do
   When %{I start to fulfill my claim with "Second Story"}
   When %{I press "Preview"}
     And %{I press "Post"}
+  Then %{I should see "Work was successfully posted"}
 end
 
 When /^I edit my signup for "([^\"]*)"$/ do |title|
