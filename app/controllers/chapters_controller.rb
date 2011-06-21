@@ -107,13 +107,22 @@ class ChaptersController < ApplicationController
     elsif params[:cancel_button]
       redirect_back_or_default('/')    
     else  # :preview or :cancel_coauthor_button
-      @work.major_version = @work.major_version + 1
+       @work.major_version = @work.major_version + 1
       if @chapter.save
         # @work.update_major_version
         if @chapter.published_at > @work.revised_at.to_date || @chapter.published_at == Date.today
           @work.set_revised_at(@chapter.published_at)
         end
-        if @work.save
+        if params[:post_without_preview_button]
+          @chapter.posted = true
+            if @chapter.save
+              if !@work.posted
+                @work.update_attribute(:posted, true)
+              end
+              flash[:notice] = ts('Chapter has been posted!')
+            redirect_to [@work, @chapter]
+            end
+        elsif @work.save
           flash[:notice] = ts("This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
           redirect_to [:preview, @work, @chapter]
         else
