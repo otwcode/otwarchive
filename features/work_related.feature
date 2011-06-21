@@ -149,6 +149,7 @@ Scenario: Remixer receives comments on remix, author doesn't
 
   Given I have related works setup
   When I post a related work
+    And all emails have been delivered
   When I am logged in as "commenter"
   When I post the comment "Blah" on the work "Followup"
   Then "remixer" should be emailed
@@ -158,6 +159,7 @@ Scenario: Translator receives comments on translation, author doesn't
 
   Given I have related works setup
     And a translation has been posted
+    And all emails have been delivered
   When I am logged in as "commenter"
   When I post the comment "Blah" on the work "Worldbuilding Translated"
   Then "translator" should be emailed
@@ -165,21 +167,37 @@ Scenario: Translator receives comments on translation, author doesn't
 
 Scenario: Author chooses to receive comments on translation
 
-  Given I have related works setup
-    And a translation has been posted
-  When I am logged in as "inspiration"
-    And I approve a related work
-    And I set my preferences to receive comments on translated works
+  #Given I have related works setup
+  #  And a translation has been posted
+  #  And all emails have been delivered
+  #When I am logged in as "inspiration"
+  #  And I approve a related work
+  #  And I set my preferences to receive comments on translated works
+  #When I am logged in as "commenter"
+  #  And I post the comment "Blah" on the work "Worldbuilding Translated"
+  #Then "translator" should be emailed
+  #  And "inspiration" should be emailed
 
 Scenario: Author doesn't receive comments if they haven't approved the translation
 
-  Given I have related works setup
-    And a translation has been posted
-  When I am logged in as "inspiration"
-    And I set my preferences to receive comments on translated works
-  When I am logged in as "commenter"
-  When I post the comment "Blah" on the work "Worldbuilding Translated"
-  Then "inspiration" should not be emailed
+  #Given I have related works setup
+  #  And a translation has been posted
+  #  And all emails have been delivered
+  #When I am logged in as "inspiration"
+  #  And I set my preferences to receive comments on translated works
+  #When I am logged in as "commenter"
+  #When I post the comment "Blah" on the work "Worldbuilding Translated"
+  #Then "inspiration" should not be emailed
+  
+Scenario: Can post a translation of a mystery work
+
+Scenario: Posting a translation of a mystery work should not allow you to see the work
+
+Scenario: Can post a translation of an anonymous work
+
+Scenario: Posting a translation of an anonymous work should not allow you to see the author
+
+Scenario: Translate your own work
 
 @work_external_parent
 Scenario: Listing external works as inspirations
