@@ -839,6 +839,20 @@ Feature: Prompt Meme Challenge
     And I should see "For myname4"
     And I should not see "mod1" within ".byline"
     And I should see "Alternate Universe - Historical"
+    
+  Scenario: Authors can be revealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
+  Then I should see "Collection was successfully updated"
   
   Scenario: All the rest of the unrefactored stuff
   
@@ -854,14 +868,10 @@ Feature: Prompt Meme Challenge
   
   # make challenge un-anon
   
-  When I am logged in as "mod1"
-  When I go to "Battle 12" collection's page
-    And I follow "Settings"
-    And I uncheck "Is this collection currently anonymous?"
-    And I press "Submit"
+  Given all emails have been delivered
+  When I reveal the authors of the "Battle 12" challenge
   Then I should see "Collection was successfully updated"
-  # TODO: Figure out if this is actually right, or if it's covered by the earlier 2 emails. Also, they shouldn't be anon any more
-  Then 2 emails should be delivered
+  Then 0 emails should be delivered
   
   # user can now see claims
   
@@ -927,8 +937,7 @@ Feature: Prompt Meme Challenge
     And I press "Preview"
   Then I should see "Draft was successfully created"
     And I should see "In response to a prompt by: Anonymous"
-    # TODO: Figure out why there are still two emails
-    And 2 emails should be delivered
+    And 0 emails should be delivered
     # TODO: Figure this out
   #  And I should see "Collections:"
    # And I should see "Battle 12"
