@@ -532,8 +532,11 @@ Feature: Prompt Meme Challenge
   # this next line shouldn't be needed - there's still a bug somewhere
   When I uncheck "Battle 12 (Anonymous) -  - Stargate Atlantis"
   Then the "Battle 12 (Anonymous) -  - Stargate Atlantis" checkbox should not be checked
-    And I press "Preview"
-    And I press "Post"
+  When I press "Preview"
+  Then I should not see "Stargate Atlantis"
+    And I should see "Stargate SG-1"
+    And I should see "Something else weird"
+  When I press "Post"
   When I view the work "Fulfilled Story"
   Then I should not see "Stargate Atlantis"
     And I should see "Stargate SG-1"
@@ -714,7 +717,6 @@ Feature: Prompt Meme Challenge
     And I should see "Anonymous" within ".byline"
     And I should see "For myname4"
     And I should not see "mod1" within ".byline"
-    And I should see "Alternate Universe - Historical"
   
   Scenario: Mod can complete a claim
   
@@ -754,6 +756,7 @@ Feature: Prompt Meme Challenge
   
   # mod can see claims
   
+  When I am on "Battle 12" collection's page
   When I follow "Prompts"
     And I follow "Show Claims"
   Then I should not see "Claimed by: myname4"
