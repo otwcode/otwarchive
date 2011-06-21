@@ -390,6 +390,46 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname4"
   Then claims are hidden
   
+  Scenario: Fulfilled claims are shown to mod
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I am on "Battle 12" collection's page
+  When I follow "Prompts"
+    And I follow "Show Claims"
+  Then I should not see "Claimed by: myname4"
+    And I should not see "Claimed by: mod1"
+    And I should not see "Claimed by: (Anonymous)"
+  When I follow "Show Filled"
+  Then I should see "Claimed by: myname4"
+    And I should see "Claimed by: mod1"
+    And I should not see "Claimed by: (Anonymous)"
+  
+  Scenario: Fulfilled claims are hidden from user
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I am logged in as "myname4"
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts (8)"
+    And I follow "Show Claims"
+    And I follow "Show Filled"
+  Then I should not see "Claimed by: myname4"
+    And I should not see "Claimed by: mod1"
+    And I should see "Claimed by: (Anonymous)"
+  
   Scenario: User cannot delete someone else's claim
   
   Given I have Battle 12 prompt meme fully set up
@@ -546,6 +586,7 @@ Feature: Prompt Meme Challenge
     And I should see "Stargate SG-1"
   
   Scenario: User claims two prompts in one challenge and fufills both of them at once
+  
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
@@ -735,6 +776,9 @@ Feature: Prompt Meme Challenge
     And I follow "Claims"
   Then I should see "mod1" within "#fulfilled_claims"
     And I should not see "mod1" within "#unfulfilled_claims"
+    
+  Scenario: check that claims can't be viewed
+  # TODO: Find a way to construct the link to a claim show page for someone who shouldn't be able to see it
   
   Scenario: All the rest of the unrefactored stuff
   
@@ -745,42 +789,10 @@ Feature: Prompt Meme Challenge
   When I close signups for "Battle 12"
   When I am logged in as "myname4"
   When I fulfill my claim
+  When mod fulfills claim
   
-  When I am logged in as "mod1"
-  When I claim a prompt from "Battle 12"
-  When I start to fulfill my claim
-    And I fill in "Work Title" with "Fulfilled Story-thing"
-    And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
-  When I press "Preview"
-    And I press "Post"
   
-  # mod can see claims
-  
-  When I am on "Battle 12" collection's page
-  When I follow "Prompts"
-    And I follow "Show Claims"
-  Then I should not see "Claimed by: myname4"
-    And I should not see "Claimed by: mod1"
-    And I should not see "Claimed by: (Anonymous)"
-  When I follow "Show Filled"
-  Then I should see "Claimed by: myname4"
-    And I should see "Claimed by: mod1"
-    And I should not see "Claimed by: (Anonymous)"
-  
-  # users can't see claims
-  
-  When I follow "Log out"
-    And I am logged in as "myname4"
-  When I go to "Battle 12" collection's page
-    And I follow "Prompts (8)"
-    And I follow "Show Claims"
-    And I follow "Show Filled"
-  Then I should not see "Claimed by: myname4"
-    And I should not see "Claimed by: mod1"
-    And I should see "Claimed by: (Anonymous)"
-  
-  # TODO: check that claims can't be viewed
-  
+  When I am logged in as "myname4"
   # check that completed ficlet is unrevealed
   
   When I view the work "Fulfilled Story-thing"

@@ -478,6 +478,16 @@ When /^I fulfill my claim again$/ do
   Then %{I should see "Work was successfully posted"}
 end
 
+When /^mod fulfills claim$/ do
+  When %{I am logged in as "mod1"}
+  When %{I claim a prompt from "Battle 12"}
+  When %{I start to fulfill my claim}
+    And %{I fill in "Work Title" with "Fulfilled Story-thing"}
+    And %{I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"}
+  When %{I press "Preview"}
+    And %{I press "Post"}
+end
+
 When /^I edit my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Edit Signup"}
