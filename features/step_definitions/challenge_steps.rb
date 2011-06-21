@@ -552,6 +552,14 @@ When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   When %{I follow "Remove prompt"}
 end
 
+When /^I reveal the "([^\"]*)" challenge$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+    And %{I follow "Settings"}
+    And %{I uncheck "Is this collection currently unrevealed?"}
+    And %{I press "Submit"}
+end
+
 ### THEN
 
 Then /^I should see Battle 12 descriptions$/ do

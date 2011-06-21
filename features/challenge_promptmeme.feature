@@ -780,6 +780,66 @@ Feature: Prompt Meme Challenge
   Scenario: check that claims can't be viewed
   # TODO: Find a way to construct the link to a claim show page for someone who shouldn't be able to see it
   
+  Scenario: check that completed ficlet is unrevealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When mod fulfills claim
+  When I am logged in as "myname4"
+  When I view the work "Fulfilled Story-thing"
+  Then I should not see "In response to a prompt by: myname4"
+    And I should not see "Fandom: Stargate Atlantis"
+    And I should not see "Anonymous"
+    And I should not see "mod1"
+    And I should not see "For myname4"
+    And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+    
+  Scenario: Mod can reveal challenge
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I close signups for "Battle 12"
+  When I go to "Battle 12" collection's page
+    And I follow "Settings"
+    And I uncheck "Is this collection currently unrevealed?"
+    And I press "Submit"
+  Then I should see "Collection was successfully updated"
+  
+  Scenario: Revealing challenge sends out emails
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  Then I should see "Collection was successfully updated"
+  # 2 stories are now revealed, so notify the prompters/recipients
+    And 2 emails should be delivered
+    
+  Scenario: Story is anon when challenge is revealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  When I am logged in as "myname4"
+  When I view the work "Fulfilled Story-thing"
+  Then I should see "In response to a prompt by: myname4"
+    And I should see "Fandom: Stargate Atlantis"
+    And I should see "Collections: Battle 12"
+    And I should see "Anonymous" within ".byline"
+    And I should see "For myname4"
+    And I should not see "mod1" within ".byline"
+    And I should see "Alternate Universe - Historical"
+  
   Scenario: All the rest of the unrefactored stuff
   
   Given I have Battle 12 prompt meme fully set up
@@ -790,42 +850,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname4"
   When I fulfill my claim
   When mod fulfills claim
-  
-  
-  When I am logged in as "myname4"
-  # check that completed ficlet is unrevealed
-  
-  When I view the work "Fulfilled Story-thing"
-  Then I should not see "In response to a prompt by: myname4"
-    And I should not see "Fandom: Stargate Atlantis"
-    And I should not see "Anonymous"
-    And I should not see "mod1"
-    And I should not see "For myname4"
-    And I should not see "Alternate Universe - Historical"
-    And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
-  
-  # make challenge revealed but still anon
-  
-  When I am logged in as "mod1"
-  When I go to "Battle 12" collection's page
-    And I follow "Settings"
-    And I uncheck "Is this collection currently unrevealed?"
-    And I press "Submit"
-  Then I should see "Collection was successfully updated"
-  # 2 stories are now revealed, so notify the prompters/recipients
-    And 2 emails should be delivered
-  
-  # check ficlet is visible but anon
-  
-  When I am logged in as "myname4"
-  When I view the work "Fulfilled Story-thing"
-  Then I should see "In response to a prompt by: myname4"
-    And I should see "Fandom: Stargate Atlantis"
-    And I should see "Collections: Battle 12"
-    And I should see "Anonymous" within ".byline"
-    And I should see "For myname4"
-    And I should not see "mod1" within ".byline"
-    And I should see "Alternate Universe - Historical"
+  When I reveal the "Battle 12" challenge
   
   # make challenge un-anon
   
