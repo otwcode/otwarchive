@@ -302,3 +302,23 @@ Feature: Create Works
     When I go to the works page
     Then I should see "All Hell Breaks Loose"
     And sphinx is started again
+
+    Scenario: posting a chapter without preview
+    Given basic tags
+      And I am logged in as "newbie" with password "password"
+    When I go to the new work page
+    Then I should see "Post New Work"
+      And I select "Not Rated" from "Rating"
+      And I check "No Archive Warnings Apply"
+      And I fill in "Fandoms" with "Supernatural"
+      And I fill in "Work Title" with "All Hell Breaks Loose"
+      And I fill in "content" with "Bad things happen, etc."  
+      And I press "Post without preview"
+    Then I should see "Work was successfully posted"
+    When I follow "Add Chapter"
+      And I fill in "title" with "This is my second chapter"
+      And I fill in "content" with "Let's write another story"
+      And I press "Post without preview"
+    Then I should see "Chapter 2: This is my second chapter"
+      And I should see "Chapter has been posted!"
+      And I should not see "This is a preview"
