@@ -36,6 +36,41 @@ Feature: Subscriptions
 
   Scenario: Mystery work is not shown in feed
   
+  Given basic tags
+    And I am logged in as "myname2"
+  Given I have a hidden collection "Hidden Treasury" with name "hidden_treasury"
+  When I am logged in as "myname1"
+    And I post the work "Old Snippet"
+    And I edit the work "Old Snippet"
+    And I fill in "Post to Collections/Challenges: " with "hidden_treasury"
+    And I check "F/F"
+    And I press "Post without preview"
+  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
+  When I am logged in as "author"
+    And I post a work with category "F/F"
+  When I view the "F/F" works index
+  When I follow "Subscribe to the RSS Feed"
+  Then I should not see "Old Snippet"
+    And I should not see "myname1"
+    And I should see "author"
+  
   Scenario: Author of anonymous work is not shown in feed
     
-   
+  Given basic tags
+    And I am logged in as "myname2"
+  Given I have an anonymous collection "Hidden Treasury" with name "hidden_treasury"
+  When I am logged in as "myname1"
+    And I post the work "Old Snippet"
+    And I edit the work "Old Snippet"
+    And I fill in "Post to Collections/Challenges: " with "hidden_treasury"
+    And I check "F/F"
+    And I press "Post without preview"
+  Then I should see "Anonymous"
+    And I should see "Collections: Hidden Treasury"
+  When I am logged in as "author"
+    And I post a work with category "F/F"
+  When I view the "F/F" works index
+  When I follow "Subscribe to the RSS Feed"
+  Then I should see "Old Snippet"
+    And I should not see "myname1"
+    And I should see "author"
