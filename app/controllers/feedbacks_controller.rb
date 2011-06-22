@@ -5,7 +5,6 @@ class FeedbacksController < ApplicationController
   # GET /feedbacks/new.xml
   def new
     @feedback = Feedback.new
-    @page_title = "Support and Feedback"
     if is_registered_user?
       @feedback.email = current_user.email
     end

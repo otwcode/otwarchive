@@ -223,6 +223,7 @@ class WorksController < ApplicationController
       @work.collection_names = @collection.name if @collection
     end
     if params[:import]
+      @page_subtitle = ts("import")
       render :new_import and return
     elsif params[:load_unposted]
       @work = @unposted

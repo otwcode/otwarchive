@@ -66,6 +66,7 @@ class BookmarksController < ApplicationController
     elsif params[:tag_id]
       owner ||= Tag.find_by_name(params[:tag_id])
     elsif @collection
+      @page_subtitle = @collection.title
       owner ||= @collection
     else
       owner ||= @bookmarkable
