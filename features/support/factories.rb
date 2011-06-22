@@ -25,6 +25,7 @@ Factory.define :archive_faq do |f|
 end
 
 Factory.define :tag do |f|
+  f.sequence(:id) { |n| n }
   f.canonical true
   f.sequence(:name) { |n| "The #{n} Tag" }
 end
@@ -48,7 +49,6 @@ Factory.define :freeform do |f|
   f.canonical true
   f.sequence(:name) { |n| "Freeform #{n}" }
 end
-
 
 
 Factory.define :chapter do |f|
