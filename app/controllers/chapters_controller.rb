@@ -116,10 +116,7 @@ class ChaptersController < ApplicationController
         if params[:post_without_preview_button]
           @chapter.posted = true
             if @chapter.save
-              if !@work.posted
-                @work.update_attribute(:posted, true)
-              end
-              flash[:notice] = ts('Chapter has been posted!')
+              post_chapter
             redirect_to [@work, @chapter]
             end
         elsif @work.save
@@ -206,11 +203,8 @@ class ChaptersController < ApplicationController
     else
       @chapter.posted = true
       if @chapter.save
-        if !@work.posted
-          @work.update_attribute(:posted, true)
-        end
-        flash[:notice] = ts('Chapter has been posted!')
-       redirect_to(@work)
+        post_chapter
+        redirect_to(@work)
       else
         render :preview
       end
@@ -287,4 +281,10 @@ class ChaptersController < ApplicationController
     
   end
   
+  def post_chapter
+    if !@work.posted
+      @work.update_attribute(:posted, true)
+    end
+    flash[:notice] = ts('Chapter has been posted!')
+  end
 end
