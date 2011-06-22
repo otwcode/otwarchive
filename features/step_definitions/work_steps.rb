@@ -129,7 +129,7 @@ When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
   visit new_work_url
   Given "I fill in the basic work information for \"#{title}\""
   fill_in("Fandoms", :with => "Naruto")
-  check(category.nil? ? DEFAULT_CATEGORY : category)
+  check(DEFAULT_CATEGORY)
   collection = Collection.find_by_title(collection)
   fill_in("Collections", :with => collection.name)
   click_button("Preview")
@@ -139,7 +139,7 @@ When /^I set up the draft "([^\"]*)"$/ do |title|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
-  check(category.nil? ? DEFAULT_CATEGORY : category)
+  check(DEFAULT_CATEGORY)
 end
 
 When /^the draft "([^\"]*)"$/ do |title|
