@@ -290,6 +290,18 @@ Feature: Prompt Meme Challenge
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted"
   
+  Scenario: Claim an anon prompt
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination B
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts ("
+  When I press "Claim"
+  Then I should see "New claim made."
+    And I should see "(Anonymous)"
+    And I should not see "myname" within "#main"
+  
   Scenario: Fulfilling a claim ticks the right boxes automatically
   
   Given I have Battle 12 prompt meme fully set up
@@ -894,6 +906,71 @@ Feature: Prompt Meme Challenge
     And I should see "Claimed by: mod1"
     And I should not see "Claimed by: (Anonymous)"
   
+  Scenario: Anon prompts stay anon on claims index even if challenge is revealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination B
+  When I close signups for "Battle 12"
+  When I am logged in as "myname2"
+  When I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
+  When I view claims for "Battle 12"
+  Then I should see "(Anonymous)"
+    And I should not see "myname4"
+  
+  Scenario: Check that anon prompts are still anon on the prompts page after challenge is revealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination B
+  When I close signups for "Battle 12"
+  When I am logged in as "myname2"
+  When I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
+  When I view prompts for "Battle 12"
+  Then I should see "(Anonymous)"
+    And I should not see "myname4"
+  
+  Scenario: Check that anon prompts are still anon on user claims index after challenge is revealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination B
+  When I close signups for "Battle 12"
+  When I am logged in as "myname2"
+  When I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
+  When I am logged in as "myname2"
+  When I am on my user page
+    And I follow "My Claims"
+  Then I should not see "myname4"
+    And I should see "Anonymous"
+    
+  Scenario: Check that anon prompts are still anon on claims show after challenge is revealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination B
+  When I close signups for "Battle 12"
+  When I am logged in as "myname2"
+  When I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
+  When I am logged in as "myname2"
+  When I am on my user page
+    And I follow "My Claims"
+    And I follow "Anonymous"
+  Then I should not see "myname4"
+    And I should see "Anonymous"
+  
   Scenario: All the rest of the unrefactored stuff
   
   Given I have Battle 12 prompt meme fully set up
@@ -907,33 +984,10 @@ Feature: Prompt Meme Challenge
   When I reveal the "Battle 12" challenge
   Given all emails have been delivered
   When I reveal the authors of the "Battle 12" challenge
-    
-  # user claims an anon prompt
-  
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
   When I press "Claim"
   Then I should see "New claim made."
-  
-  # check that anon prompts are still anon on the claims index 
-  
-    And I should not see "myname2"
-    And I should see "Claims (3)"
-    
-  # check that anon prompts are still anon on the prompts page
-  
-  When I follow "Prompts"
-  Then I should not see "myname2" within "#main"
-  
-  # check that anon prompts are still anon on the user claims index
-  When I am on my user page
-    And I follow "My Claims"
-  Then I should not see "myname2"
-  
-  # check that anon prompts are still anon on the claims show
-  When I follow "Anonymous"
-  Then I should not see "myname2"
-    And I should see "Anonymous"
   
   # TODO: check that anon prompts are still anon on the fulfilling work
   
