@@ -16,6 +16,24 @@ Given /^I have a collection "([^\"]*)"$/ do |title|
   When "I am logged out"
 end
 
+Given /^I have a hidden collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
+  When %{I am logged in as "moderator"}
+  When %{I set up the collection "#{title}" with name "#{name}"}
+  When %{I check "Is this collection currently unrevealed?"}
+  click_button("Submit")
+  Then %{I should see "Collection was successfully created."}
+  When "I am logged out"
+end
+
+Given /^I have an anonymous collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
+  When %{I am logged in as "moderator"}
+  When %{I set up the collection "#{title}" with name "#{name}"}
+  When %{I check "Is this collection currently anonymous?"}
+  click_button("Submit")
+  Then %{I should see "Collection was successfully created."}
+  When "I am logged out"
+end
+
 ### WHEN
 
 When /^I set up the collection "([^\"]*)"$/ do |title|
