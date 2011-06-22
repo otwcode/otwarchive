@@ -286,7 +286,7 @@ DEPENDENCIES
   resque (>= 1.14.0)
   resque_mailer
   rest-client
-  rspec-rails (>= 2.0.0)
+  rspec-rails (>= 2.5.0)
   ruby-debug19
   sanitize
   shoulda

@@ -24,3 +24,10 @@ Factory.define :archive_faq do |f|
   f.sequence(:title) { |n| "The #{n} FAQ" }
   f.sequence(:content) { |n| "This is the #{n} FAQ" }
 end
+
+Factory.define :tag do |f|
+  f.sequence(:id) { |n| n }
+  f.canonical true
+  f.sequence(:name) { |n| "The #{n} Tag" }
+  f.type "fandom"
+end
