@@ -854,7 +854,7 @@ Feature: Prompt Meme Challenge
   When I reveal the authors of the "Battle 12" challenge
   Then I should see "Collection was successfully updated"
   
-  Scenario: All the rest of the unrefactored stuff
+  Scenario: Revealing authors doesn't send emails
   
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
@@ -865,16 +865,23 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   When mod fulfills claim
   When I reveal the "Battle 12" challenge
-  
-  # make challenge un-anon
-  
   Given all emails have been delivered
   When I reveal the authors of the "Battle 12" challenge
   Then I should see "Collection was successfully updated"
   Then 0 emails should be delivered
   
-  # user can now see claims
+  Scenario: When challenge is revealed-authors, user can see claims
   
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
   When I am logged in as "myname4"
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
@@ -886,6 +893,20 @@ Feature: Prompt Meme Challenge
   Then I should see "Claimed by: myname4"
     And I should see "Claimed by: mod1"
     And I should not see "Claimed by: (Anonymous)"
+  
+  Scenario: All the rest of the unrefactored stuff
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  Given all emails have been delivered
+  When I reveal the authors of the "Battle 12" challenge
     
   # user claims an anon prompt
   
