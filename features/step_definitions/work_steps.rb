@@ -4,6 +4,7 @@ DEFAULT_RATING = "Not Rated"
 DEFAULT_WARNING = "No Archive Warnings Apply"
 DEFAULT_FREEFORM = "Scary tag"
 DEFAULT_CONTENT = "That could be an amusing crossover."
+DEFAULT_CATEGORY = "Other"
 
 Given /^I have no works or comments$/ do
   Work.delete_all
@@ -49,10 +50,10 @@ When /^I post the work "([^\"]*)" without preview$/ do |title|
   end
 end
 
-When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)"$/ do |title, fandom, freeform|
+When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)" with category "([^\"]*)"$/ do |title, fandom, freeform, category|
   work = Work.find_by_title(title)
   if work.blank?
-    Given %{the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}"}
+    Given %{the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}"}
     work = Work.find_by_title(title)
   end
   visit preview_work_url(work)
@@ -61,11 +62,23 @@ When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)
 end
 
 When /^I post the work "([^\"]*)"$/ do |title|
-  When %{I post the work "#{title}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}"}
+  When %{I post the work "#{title}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}" with category "#{DEFAULT_CATEGORY}"}
 end
 
 When /^I post the work "([^\"]*)" with fandom "([^\"]*)"$/ do |title, fandom|
-  When %{I post the work "#{title}" with fandom "#{fandom}" with freeform "#{DEFAULT_FREEFORM}"}
+  When %{I post the work "#{title}" with fandom "#{fandom}" with freeform "#{DEFAULT_FREEFORM}" with category "#{DEFAULT_CATEGORY}"}
+end
+
+When /^I post the work "([^\"]*)" with category "([^\"]*)"$/ do |title, category|
+  When %{I post the work "#{title}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}" with category "#{category}"}
+end
+
+When /^I post a work with category "([^\"]*)"$/ do |category|
+  When %{I post the work "#{DEFAULT_TITLE}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}" with category "#{category}"}
+end
+
+When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)"$/ do |title, fandom, freeform|
+  When %{I post the work "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{DEFAULT_CATEGORY}"}
 end
 
 When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
@@ -82,10 +95,21 @@ When /^I fill in basic work tags$/ do
 end
 
 # TODO: The optional extras (fandom and freeform) in the When line don't seem to be working here - can anyone fix them?
+When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")(?: with category "([^\"]*)")$/ do |title, fandom, freeform, category|
+  Given "basic tags"
+  visit new_work_url
+  Given %{I fill in the basic work information for "#{title}"}
+  check(category.nil? ? DEFAULT_CATEGORY : category)
+  fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
+  fill_in("Additional Tags", :with => freeform.nil? ? DEFAULT_FREEFORM : freeform)
+  click_button("Preview")
+end
+
 When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")$/ do |title, fandom, freeform|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
+  check(DEFAULT_CATEGORY)
   fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
   fill_in("Additional Tags", :with => freeform.nil? ? DEFAULT_FREEFORM : freeform)
   click_button("Preview")
@@ -95,6 +119,7 @@ When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")$/ do |title, fandom|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
+  check(category.nil? ? DEFAULT_CATEGORY : category)
   fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
   click_button("Preview")
 end
@@ -104,6 +129,7 @@ When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
   visit new_work_url
   Given "I fill in the basic work information for \"#{title}\""
   fill_in("Fandoms", :with => "Naruto")
+  check(DEFAULT_CATEGORY)
   collection = Collection.find_by_title(collection)
   fill_in("Collections", :with => collection.name)
   click_button("Preview")
@@ -113,6 +139,7 @@ When /^I set up the draft "([^\"]*)"$/ do |title|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
+  check(DEFAULT_CATEGORY)
 end
 
 When /^the draft "([^\"]*)"$/ do |title|

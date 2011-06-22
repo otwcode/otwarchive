@@ -7,6 +7,7 @@ Feature: Import Works
   Scenario: You can't create a work unless you're logged in
   When I go to the import page
   Then I should see "Please log in"
+
   @work_import_minimal_valid
   Scenario: Creating a new minimally valid work
     Given basic tags
@@ -25,10 +26,10 @@ Feature: Import Works
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "Recent Entries"
+
   @work_import_tags
   Scenario: Creating a new work with tags
     Given basic tags
-      And a category exists with name: "M/M", canonical: true
       And I am logged in as a random user
     When I go to the import page
     Then I should see "Import New Work"
@@ -52,6 +53,7 @@ Feature: Import Works
       And I should see "kinkmeme"
     When I press "Post"
     Then I should see "Work was successfully posted."
+
   @work_import_multi_tags_backdate
   Scenario: Importing multiple works with tags and backdating
     Given basic tags
