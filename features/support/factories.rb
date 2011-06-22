@@ -58,7 +58,8 @@ FactoryGirl.define do
   end
 
   factory :tag do |f|
-    f.canonical true
+    f.sequence(:id) { |n| n }
+	f.canonical true
     f.sequence(:name) { |n| "The #{n} Tag" }
   end
 

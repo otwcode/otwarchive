@@ -189,5 +189,9 @@ describe Work do
       expect(Work.find_by_url('http://lj-site.com/thing1?style=other')).to eq(work)
       work.destroy
     end
+    
+    it "should not save work without warning" do
+    end
+
   end
 end
