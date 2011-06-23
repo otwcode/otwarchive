@@ -265,6 +265,7 @@ Feature: Admin tasks
     And I fill in "Comment" with "Excellent, my dear!"
     And I press "Add Comment"
   Then 1 email should be delivered to "testadmin@example.org"
+    And the email should contain "Excellent"
 
   # admin replies to comment of regular user
   Given I am logged out
