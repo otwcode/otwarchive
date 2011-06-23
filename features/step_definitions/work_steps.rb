@@ -6,10 +6,33 @@ DEFAULT_FREEFORM = "Scary tag"
 DEFAULT_CONTENT = "That could be an amusing crossover."
 DEFAULT_CATEGORY = "Other"
 
+### GIVEN
+
 Given /^I have no works or comments$/ do
   Work.delete_all
   Comment.delete_all
 end
+
+Given /^I view the chaptered work(?: with ([\d]+) comments?)? "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |n_comments, title, mode|
+  Given %{I am logged in as a random user}
+  And %{I post the chaptered work "#{title}"}
+  work = Work.find_by_title!(title)
+  visit work_url(work)
+  n_comments ||= 0
+  n_comments.to_i.times do |i|
+    Given %{I post the comment "Bla bla" on the work "#{title}"}
+  end
+  And %{I am logged out}
+  visit work_url(work)
+  And %{I follow "View Entire Work"} if mode == "full"
+end
+
+Given /^I have a work "([^\"]*)"$/ do |work|
+  When "I am logged in as a random user"
+  When %{I post the work "#{work}"}
+end
+
+### WHEN
 
 When /^I view the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
@@ -147,16 +170,6 @@ When /^the draft "([^\"]*)"$/ do |title|
   click_button("Preview")
 end
 
-Then /^I should see Updated today$/ do
-  today = Time.zone.today.to_s
-  Given "I should see \"Updated:#{today}\""
-end
-
-Then /^I should not see Updated today$/ do
-  today = Date.today.to_s
-  Given "I should not see \"Updated:#{today}\""
-end
-
 When /^the purge_old_drafts rake task is run$/ do
   Work.purge_old_drafts
 end
@@ -204,20 +217,6 @@ When /^I set the publication date to today$/ do
   select("#{today.year}", :from => "work[chapter_attributes][published_at(1i)]")
 end
 
-Given /^I view the chaptered work(?: with ([\d]+) comments?)? "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |n_comments, title, mode|
-  Given %{I am logged in as a random user}
-  And %{I post the chaptered work "#{title}"}
-  work = Work.find_by_title!(title)
-  visit work_url(work)
-  n_comments ||= 0
-  n_comments.to_i.times do |i|
-    Given %{I post the comment "Bla bla" on the work "#{title}"}
-  end
-  And %{I am logged out}
-  visit work_url(work)
-  And %{I follow "View Entire Work"} if mode == "full"
-end
-
 When /^I browse the "([^"]+)" works$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag)
@@ -226,4 +225,16 @@ end
 When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag, :page => "")
+end
+
+### THEN
+
+Then /^I should see Updated today$/ do
+  today = Time.zone.today.to_s
+  Given "I should see \"Updated:#{today}\""
+end
+
+Then /^I should not see Updated today$/ do
+  today = Date.today.to_s
+  Given "I should not see \"Updated:#{today}\""
 end
