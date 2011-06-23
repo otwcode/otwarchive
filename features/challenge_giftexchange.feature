@@ -161,8 +161,6 @@ Feature: Gift Exchange Challenge
   # 4 users and the mod should get emails :)
     And 1 email should be delivered to "mod1"
     And the email should contain "You have received a message about your collection"
-  When I click the first link in the email
-  Then I should see "Sorry, we couldn't find the collection you were looking for"
     And 1 email should be delivered to "myname1"
     And 1 email should be delivered to "myname2"
     And 1 email should be delivered to "myname3"
