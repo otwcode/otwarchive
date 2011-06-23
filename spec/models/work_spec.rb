@@ -21,8 +21,11 @@ describe Work do
   it "should not save work without title" do
     @work.title = nil
     @work.save.should == false
+    @work.errors[:title].should_not be_empty
+
     @work.title = ""
     @work.save.should == false
+    @work.errors[:title].should_not be_empty
   end
   
 end
