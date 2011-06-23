@@ -4,10 +4,10 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="edit-navigation" role="navigation">
+<ul class="navigation" role="navigation">
   <li><%= link_to ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
   <li><%= link_to ts("Change User Name"), change_username_user_path(@user) %></li>
-  <li> <%= link_to ts("Change Password"), change_password_user_path(@user) %></li>
+  <li><%= link_to ts("Change Password"), change_password_user_path(@user) %></li>
   <% if ArchiveConfig.USE_OPENID %>
     <% if @user.identity_url %>
       <li><%= link_to ts("Change My OpenID"), change_openid_user_path(@user) %></li>
@@ -15,7 +15,7 @@
       <li><%= link_to ts("Add An OpenID"), change_openid_user_path(@user) %></li>
     <% end %>
   <% end %>
-</ul> <br /><br /><br />
+</ul> 
 <!--/subnav-->
 
 <!--main content-->
