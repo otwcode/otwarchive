@@ -23,6 +23,7 @@
 	
   <!-- BEGIN main -->
 	  <div class="home" id="home">
+      <%= flash_div :error, :warning, :notice %>
 	    <%= yield  %>
 	  </div>
 	<!-- END main -->
