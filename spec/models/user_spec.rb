@@ -14,9 +14,14 @@ describe User do
     end
     
     it "should save a minimalistic user" do
-      @user.save
       @user.save.should == true
-  end
+    end
+    
+    it "should encrypt password" do
+      @user.save
+      @user.crypted_password.should_not be_empty
+      @user.crypted_password.should_not == @user.password
+    end
     
     it "should not save user with too short login" do
       @user.login = "a"
@@ -24,6 +29,13 @@ describe User do
       @user.errors[:login].should_not be_empty
     end
     
+    it "should not save user with too long login" do
+      @user.login = "a" * 60
+      @user.save.should == false
+      @user.errors[:login].should_not be_empty
+    end
+    
   end
+
 
 end
