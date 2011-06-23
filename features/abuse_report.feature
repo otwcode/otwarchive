@@ -87,3 +87,24 @@ Feature: Filing an abuse report
   Then 1 email should be delivered
   Then I should see "Sorry, we can only send you a copy of your abuse report if you enter a valid email address"
     And I should see "Your abuse report was sent to the Abuse team."
+    
+  Scenario: File an anon request but accidentally tick the box to have a copy emailed, then try to send it again (issue 820)
+  
+  When I am logged in as "otheruser"
+    And I am on the home page
+    And I follow "Report Abuse"
+  When I select "Inappropriate content rating" from "Please select your concern"
+    And I fill in "Describe your concern" with "This is wrong"
+    And I fill in "Link to the page you are reporting" with "http://www.example.org/"
+    And I fill in "Your email" with ""
+    And I check "Email me a copy of my message (optional)"
+    And I press "Submit"
+  When I select "Inappropriate content rating" from "Please select your concern"
+    And I fill in "Describe your concern" with "This is wrong"
+    And I fill in "Link to the page you are reporting" with "http://www.example.org/"
+    And I fill in "Your email" with "valid@archiveofourown.org"
+    And I check "Email me a copy of my message (optional)"
+    # TODO: Fix Issue 820
+   # And I press "Submit"
+  #Then 1 email should be delivered
+  #Then I should see "Your abuse report was sent to the Abuse team."
