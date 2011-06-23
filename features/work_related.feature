@@ -123,7 +123,7 @@ Scenario: Remove a previously approved translation
     And a translation has been posted
   When I approve a related work
   When I view my related works
-    And I follow "Remove" within "#inspiredbyme"
+    And I follow "Remove" within "#translationsofme"
   Then I should see "Remove Link"
   When I press "Remove link"
   Then I should see "Link was successfully removed"
