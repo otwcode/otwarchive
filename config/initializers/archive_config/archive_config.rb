@@ -15,7 +15,11 @@ if Rails.env == 'production'
     config.api_key = ArchiveConfig.HOPTOAD_KEY
     config.params_filters << ["email", "crypted_password", "salt"]
   end
+  PiwikAnalytics::Config.id_site = 1
+  PiwikAnalytics::Config.url = ArchiveConfig.PIWIK_URL
+  PiwikAnalytics::Config.use_async = true
 end
+
 
 
 ### more items here preserved from Rails 2 environment.rb that might not belong here
