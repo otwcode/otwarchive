@@ -74,7 +74,7 @@ module PiwikAnalytics
     cattr_accessor :formats
 
     def self.enabled?(format)
-      raise PiwikAnalytics::PiwikAnalsyticsConfigurationError if id_site.blank? || url.blank?
+      #raise PiwikAnalytics::PiwikAnalyticsConfigurationError if id_site.blank? || url.blank?
       environments.include?(Rails.env) && formats.include?(format.to_sym)
     end
   end
