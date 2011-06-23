@@ -29,5 +29,11 @@ Factory.define :tag do |f|
   f.sequence(:id) { |n| n }
   f.canonical true
   f.sequence(:name) { |n| "The #{n} Tag" }
-  f.type "fandom"
 end
+
+Factory.define :fandom do |f|
+  f.sequence(:id) { |n| n }
+  f.canonical true
+  f.sequence(:name) { |n| "The #{n} Fandom" }
+end
+

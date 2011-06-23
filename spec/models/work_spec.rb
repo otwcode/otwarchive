@@ -3,19 +3,26 @@ require 'spec_helper'
 describe Work do
 
   before(:each) do
-      @fandom1 = Factory.create(:tag)
+    @author = Factory.create(:user)
+    @fandom1 = Factory.create(:fandom)
+    @chapter1 = Chapter.create(:content => "Awesome content")
+
+    @work = Work.new(:title => "Title")
+    @work.fandoms << @fandom1
+    @work.authors = [@author.pseuds.first]
+    @work.chapters << @chapter1
+    
   end
 
-  it "should create a new work" do
-    work = Work.create(:title => "Title",
-                                               :author => "Pseud", 
-                                               :content => "Some story text that is more than 10 characters",
-                                               :fandom => "The 1 Tag",
-                                               :warning => "No Archive Warnings Apply")
-    work.title.should == "Title"
-    work.author.should == "Pseud"
-    work.content.should == "Some story text that is more than 10 characters"
-    work.warning.should == "No Archive Warnings Apply"
+  it "should save minimalistic work" do
+    @work.save.should == true
   end
 
+  it "should not save work without title" do
+    @work.title = nil
+    @work.save.should == false
+    @work.title = ""
+    @work.save.should == false
+  end
+  
 end
