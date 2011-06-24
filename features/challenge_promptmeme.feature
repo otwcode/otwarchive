@@ -333,7 +333,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Fulfilled Story"
     And I should not see "Not yet posted"
   
-  Scenario: Claims count should be correct
+  Scenario: Claims count should be correct, shows fulfilled claims as well
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -342,7 +342,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am on my user page
-  Then I should see "My Claims (0)"
+  Then I should see "My Claims (1)"
   
   Scenario: Claim shows as fulfilled to another user
   
@@ -717,10 +717,10 @@ Feature: Prompt Meme Challenge
     And I should not see "mod1" within ".byline"
     And I should see "Alternate Universe - Historical"
   
-  # mod's claim is completed
+  # mod's claim is completed, still shows in my claims
   
   When I am on my user page
-  Then I should see "My Claims (0)"
+  Then I should see "My Claims (1)"
   When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should see "mod1" within "#fulfilled_claims"
