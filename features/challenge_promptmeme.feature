@@ -681,8 +681,15 @@ Feature: Prompt Meme Challenge
   Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
     And I should see "Battle 12"
 
-  Scenario: As a maintainer I can delete whole signups
-  # TODO
+  Scenario: As a co-moderator I can delete whole signups
+
+  Given I have Battle 12 prompt meme fully set up
+  Given I have added a co-moderator "mod2" to collection "Battle 12"
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I am logged in as "mod2"
+  When I delete the signup by "myname1"
+  Then I should see "Challenge signup was deleted."
   
   Scenario: When maintainer deletes signup, its prompts disappear from the collection
   # TODO
@@ -695,11 +702,18 @@ Feature: Prompt Meme Challenge
 
   Scenario: When maintainer deletes signup, As the story author I can edit the story normally
   # TODO
-
-#As maintainer I deleted a challenge which had already two claimed and one fulfilled prompts
-##As a user I now can't access "My Signups" and "My Claims" (500)
-##The story fulfilling a prompt, remains accessible and in the collection, it retains the "In response to a prompt by: testy" line. Clicking on "testy" in that line sends me to the collection dashboard showing the "What challenge did you want to work with?" error message.
-##Completely deleting the collection, removed the collection and the prompt line from the story. As a user I can now again access "MY Signups" and "My Claims".
+  
+  Scenario: Delete a challenge, user can still access my signups page
+  # TODO
+  
+  Scenario: Delete a challenge, user can still access my claims page
+  # TODO
+  
+  Scenario: Delete a challenge, responses no longer show prompt line
+  # TODO
+  
+  Scenario: Delete a collection, user can still access story
+  # TODO
   
   Scenario: Mod can claim a prompt like an ordinary user
   
@@ -970,6 +984,9 @@ Feature: Prompt Meme Challenge
     And I follow "Anonymous"
   Then I should not see "myname4"
     And I should see "Anonymous"
+    
+  Scenario: check that anon prompts are still anon on the fulfilling work
+  # TODO
   
   Scenario: All the rest of the unrefactored stuff
   
@@ -988,9 +1005,7 @@ Feature: Prompt Meme Challenge
     And I follow "Prompts (8)"
   When I press "Claim"
   Then I should see "New claim made."
-  
-  # TODO: check that anon prompts are still anon on the fulfilling work
-  
+
   # check that claims show as fulfilled
   
   When I follow "Log out"
