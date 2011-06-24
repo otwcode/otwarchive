@@ -190,6 +190,14 @@ Scenario: Post without preview
     And "Issue 2169" is fixed
 # Then I should not see the "title" text "Restricted" within "h2"
 
+Scenario: View user's series index
+
+  Given I am logged in as "whoever" with password "whatever"
+    And I add the work "grumble" to series "polarbears"
+  When I go to whoever's series page
+  Then I should see "whoever's Series"
+    And I should see "polarbears"
+
 Scenario: Series index for maaany series
   Given I am logged in as "whoever" with password "whatever"  
     And I add the work "grumble" to "31" series "penguins"
