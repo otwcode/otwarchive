@@ -22,8 +22,6 @@
       </li>
     <% end %>
     <% # The delete link should show up only for the user who actually signed up while signups are open or for the owner or mod %>
-    Blah
-    <%= debug challenge_signup.collection.user_is_maintainer?(current_user) %>
     <% if (challenge_signup.collection.challenge.signup_open && challenge_signup.pseud.user == current_user) || (challenge_signup.collection.user_is_maintainer?(current_user))  %>
     <li>
       <% unless challenge_signup.collection.potential_matches.count == 0 %>
