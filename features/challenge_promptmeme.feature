@@ -290,6 +290,18 @@ Feature: Prompt Meme Challenge
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted"
   
+  Scenario: Claim an anon prompt
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination B
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts ("
+  When I press "Claim"
+  Then I should see "New claim made."
+    And I should see "(Anonymous)"
+    And I should not see "myname" within "#main"
+  
   Scenario: Fulfilling a claim ticks the right boxes automatically
   
   Given I have Battle 12 prompt meme fully set up
@@ -389,6 +401,46 @@ Feature: Prompt Meme Challenge
   When I close signups for "Battle 12"
   When I am logged in as "myname4"
   Then claims are hidden
+  
+  Scenario: Fulfilled claims are shown to mod
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I am on "Battle 12" collection's page
+  When I follow "Prompts"
+    And I follow "Show Claims"
+  Then I should not see "Claimed by: myname4"
+    And I should not see "Claimed by: mod1"
+    And I should not see "Claimed by: (Anonymous)"
+  When I follow "Show Filled"
+  Then I should see "Claimed by: myname4"
+    And I should see "Claimed by: mod1"
+    And I should not see "Claimed by: (Anonymous)"
+  
+  Scenario: Fulfilled claims are hidden from user
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I am logged in as "myname4"
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts (8)"
+    And I follow "Show Claims"
+    And I follow "Show Filled"
+  Then I should not see "Claimed by: myname4"
+    And I should not see "Claimed by: mod1"
+    And I should see "Claimed by: (Anonymous)"
   
   Scenario: User cannot delete someone else's claim
   
@@ -532,8 +584,11 @@ Feature: Prompt Meme Challenge
   # this next line shouldn't be needed - there's still a bug somewhere
   When I uncheck "Battle 12 (Anonymous) -  - Stargate Atlantis"
   Then the "Battle 12 (Anonymous) -  - Stargate Atlantis" checkbox should not be checked
-    And I press "Preview"
-    And I press "Post"
+  When I press "Preview"
+  Then I should not see "Stargate Atlantis"
+    And I should see "Stargate SG-1"
+    And I should see "Something else weird"
+  When I press "Post"
   When I view the work "Fulfilled Story"
   Then I should not see "Stargate Atlantis"
     And I should see "Stargate SG-1"
@@ -609,7 +664,7 @@ Feature: Prompt Meme Challenge
     And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and then changes their mind and fulfills the gift exchange instead
-  
+
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
@@ -626,8 +681,15 @@ Feature: Prompt Meme Challenge
   Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
     And I should see "Battle 12"
 
-  Scenario: As a maintainer I can delete whole signups
-  # TODO
+  Scenario: As a co-moderator I can delete whole signups
+
+  Given I have Battle 12 prompt meme fully set up
+  Given I have added a co-moderator "mod2" to collection "Battle 12"
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I am logged in as "mod2"
+  When I delete the signup by "myname1"
+  Then I should see "Challenge signup was deleted."
   
   Scenario: When maintainer deletes signup, its prompts disappear from the collection
   # TODO
@@ -640,11 +702,18 @@ Feature: Prompt Meme Challenge
 
   Scenario: When maintainer deletes signup, As the story author I can edit the story normally
   # TODO
-
-#As maintainer I deleted a challenge which had already two claimed and one fulfilled prompts
-##As a user I now can't access "My Signups" and "My Claims" (500)
-##The story fulfilling a prompt, remains accessible and in the collection, it retains the "In response to a prompt by: testy" line. Clicking on "testy" in that line sends me to the collection dashboard showing the "What challenge did you want to work with?" error message.
-##Completely deleting the collection, removed the collection and the prompt line from the story. As a user I can now again access "MY Signups" and "My Claims".
+  
+  Scenario: Delete a challenge, user can still access my signups page
+  # TODO
+  
+  Scenario: Delete a challenge, user can still access my claims page
+  # TODO
+  
+  Scenario: Delete a challenge, responses no longer show prompt line
+  # TODO
+  
+  Scenario: Delete a collection, user can still access story
+  # TODO
   
   Scenario: Mod can claim a prompt like an ordinary user
   
@@ -676,21 +745,12 @@ Feature: Prompt Meme Challenge
     And I should see "Stargate Atlantis" within "#fulfilled_claims"
     And I should see "myname4" within "#fulfilled_claims"
   
-  Scenario: All the rest of the unrefactored stuff
+  Scenario: Mod can post a fic
   
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
-  When I am logged in as "myname4"
-  When I claim a prompt from "Battle 12"
-  When I close signups for "Battle 12"
-  When I am logged in as "myname4"
-  When I fulfill my claim
-  
   When I am logged in as "mod1"
   When I claim a prompt from "Battle 12"
-  
-  # mod posts a fic
-  
   When I am on my user page
   Then I should see "My Claims (1)" 
   When I follow "My Claims"
@@ -707,76 +767,95 @@ Feature: Prompt Meme Challenge
     And I press "Post"
   Then I should see "Work was successfully posted"
   
-  # fic shows what prompt it is fulfilling when mod views it
+  Scenario: Fic shows what prompt it is fulfilling when mod views it
   
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "mod1"
+  When I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+    And I fill in "Work Title" with "Fulfilled Story-thing"
+    And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
+  When I press "Preview"
+    And I press "Post"
   When I view the work "Fulfilled Story-thing"
   Then I should see "In response to a prompt by: myname4"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
     And I should see "For myname4"
     And I should not see "mod1" within ".byline"
-    And I should see "Alternate Universe - Historical"
   
-  # mod's claim is completed, still shows in my claims
+  Scenario: Mod can complete a claim
   
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "mod1"
+  When I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
+    And I fill in "Work Title" with "Fulfilled Story-thing"
+    And I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"
+  When I press "Preview"
+    And I press "Post"
   When I am on my user page
   Then I should see "My Claims (1)"
   When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should see "mod1" within "#fulfilled_claims"
     And I should not see "mod1" within "#unfulfilled_claims"
+    
+  Scenario: check that claims can't be viewed
+  # TODO: Find a way to construct the link to a claim show page for someone who shouldn't be able to see it
   
-  # mod can see claims
+  Scenario: check that completed ficlet is unrevealed
   
-  When I follow "Prompts"
-    And I follow "Show Claims"
-  Then I should not see "Claimed by: myname4"
-    And I should not see "Claimed by: mod1"
-    And I should not see "Claimed by: (Anonymous)"
-  When I follow "Show Filled"
-  Then I should see "Claimed by: myname4"
-    And I should see "Claimed by: mod1"
-    And I should not see "Claimed by: (Anonymous)"
-  
-  # users can't see claims
-  
-  When I follow "Log out"
-    And I am logged in as "myname4"
-  When I go to "Battle 12" collection's page
-    And I follow "Prompts (8)"
-    And I follow "Show Claims"
-    And I follow "Show Filled"
-  Then I should not see "Claimed by: myname4"
-    And I should not see "Claimed by: mod1"
-    And I should see "Claimed by: (Anonymous)"
-  
-  # TODO: check that claims can't be viewed
-  
-  # check that completed ficlet is unrevealed
-  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When mod fulfills claim
+  When I am logged in as "myname4"
   When I view the work "Fulfilled Story-thing"
   Then I should not see "In response to a prompt by: myname4"
     And I should not see "Fandom: Stargate Atlantis"
     And I should not see "Anonymous"
     And I should not see "mod1"
     And I should not see "For myname4"
-    And I should not see "Alternate Universe - Historical"
     And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+    
+  Scenario: Mod can reveal challenge
   
-  # make challenge revealed but still anon
-  
-  When I am logged in as "mod1"
+  Given I have Battle 12 prompt meme fully set up
+  When I close signups for "Battle 12"
   When I go to "Battle 12" collection's page
     And I follow "Settings"
     And I uncheck "Is this collection currently unrevealed?"
     And I press "Submit"
   Then I should see "Collection was successfully updated"
+  
+  Scenario: Revealing challenge sends out emails
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  Then I should see "Collection was successfully updated"
   # 2 stories are now revealed, so notify the prompters/recipients
     And 2 emails should be delivered
+    
+  Scenario: Story is anon when challenge is revealed
   
-  
-  # check ficlet is visible but anon
-  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
   When I am logged in as "myname4"
   When I view the work "Fulfilled Story-thing"
   Then I should see "In response to a prompt by: myname4"
@@ -786,20 +865,49 @@ Feature: Prompt Meme Challenge
     And I should see "For myname4"
     And I should not see "mod1" within ".byline"
     And I should see "Alternate Universe - Historical"
+    
+  Scenario: Authors can be revealed
   
-  # make challenge un-anon
-  
-  When I am logged in as "mod1"
-  When I go to "Battle 12" collection's page
-    And I follow "Settings"
-    And I uncheck "Is this collection currently anonymous?"
-    And I press "Submit"
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
   Then I should see "Collection was successfully updated"
-  # TODO: Figure out if this is actually right, or if it's covered by the earlier 2 emails. Also, they shouldn't be anon any more
-  Then 2 emails should be delivered
   
-  # user can now see claims
+  Scenario: Revealing authors doesn't send emails
   
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  Given all emails have been delivered
+  When I reveal the authors of the "Battle 12" challenge
+  Then I should see "Collection was successfully updated"
+  Then 0 emails should be delivered
+  
+  Scenario: When challenge is revealed-authors, user can see claims
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
   When I am logged in as "myname4"
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
@@ -811,36 +919,93 @@ Feature: Prompt Meme Challenge
   Then I should see "Claimed by: myname4"
     And I should see "Claimed by: mod1"
     And I should not see "Claimed by: (Anonymous)"
-    
-  # user claims an anon prompt
   
+  Scenario: Anon prompts stay anon on claims index even if challenge is revealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination B
+  When I close signups for "Battle 12"
+  When I am logged in as "myname2"
+  When I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
+  When I view claims for "Battle 12"
+  Then I should see "(Anonymous)"
+    And I should not see "myname4"
+  
+  Scenario: Check that anon prompts are still anon on the prompts page after challenge is revealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination B
+  When I close signups for "Battle 12"
+  When I am logged in as "myname2"
+  When I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
+  When I view prompts for "Battle 12"
+  Then I should see "(Anonymous)"
+    And I should not see "myname4"
+  
+  Scenario: Check that anon prompts are still anon on user claims index after challenge is revealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination B
+  When I close signups for "Battle 12"
+  When I am logged in as "myname2"
+  When I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
+  When I am logged in as "myname2"
+  When I am on my user page
+    And I follow "My Claims"
+  Then I should not see "myname4"
+    And I should see "Anonymous"
+    
+  Scenario: Check that anon prompts are still anon on claims show after challenge is revealed
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname4"
+  When I sign up for Battle 12 with combination B
+  When I close signups for "Battle 12"
+  When I am logged in as "myname2"
+  When I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
+  When I am logged in as "myname2"
+  When I am on my user page
+    And I follow "My Claims"
+    And I follow "Anonymous"
+  Then I should not see "myname4"
+    And I should see "Anonymous"
+    
+  Scenario: check that anon prompts are still anon on the fulfilling work
+  # TODO
+  
+  Scenario: All the rest of the unrefactored stuff
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  Given all emails have been delivered
+  When I reveal the authors of the "Battle 12" challenge
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
   When I press "Claim"
   Then I should see "New claim made."
-  
-  # check that anon prompts are still anon on the claims index 
-  
-    And I should not see "myname2"
-    And I should see "Claims (3)"
-    
-  # check that anon prompts are still anon on the prompts page
-  
-  When I follow "Prompts"
-  Then I should not see "myname2" within "#main"
-  
-  # check that anon prompts are still anon on the user claims index
-  When I am on my user page
-    And I follow "My Claims"
-  Then I should not see "myname2"
-  
-  # check that anon prompts are still anon on the claims show
-  When I follow "Anonymous"
-  Then I should not see "myname2"
-    And I should see "Anonymous"
-  
-  # TODO: check that anon prompts are still anon on the fulfilling work
-  
+
   # check that claims show as fulfilled
   
   When I follow "Log out"
@@ -862,8 +1027,7 @@ Feature: Prompt Meme Challenge
     And I press "Preview"
   Then I should see "Draft was successfully created"
     And I should see "In response to a prompt by: Anonymous"
-    # TODO: Figure out why there are still two emails
-    And 2 emails should be delivered
+    And 0 emails should be delivered
     # TODO: Figure this out
   #  And I should see "Collections:"
    # And I should see "Battle 12"
