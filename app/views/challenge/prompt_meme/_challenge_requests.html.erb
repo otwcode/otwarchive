@@ -92,14 +92,14 @@
   </tr></thead>
 
   <!-- body of table --><tbody>
-  <% @requests.each do |challenge_signup| %> 
-    <% if params[:show_filled] == "true" || challenge_signup.unfulfilled? %>
-        <% prompt = challenge_signup %>
+  <% @requests.each do |promptall| %>
+    <% if params[:show_filled] == "true" || promptall.unfulfilled? %>
+        <% prompt = promptall %>
     <% end %>
     <% unless !prompt %>
     <tr>
 
-      <% cache("collection-#{@collection.id}-signup-#{challenge_signup.id}") do %>
+      <% cache("collection-#{@collection.id}-prompt-#{prompt.id}") do %>
       
       <td><% if !prompt || prompt.anonymous? %>
         (Anonymous)</td>
