@@ -34,6 +34,18 @@ Given /^I have an anonymous collection "([^\"]*)" with name "([^\"]*)"$/ do |tit
   When "I am logged out"
 end
 
+Given /^I have added a co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
+  Given %{I am logged in as "#{name}"}
+  Given %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+  click_link("Membership")
+  When %{I fill in "Add new members" with "#{name}"}
+  click_button("Submit")
+  When %{I select "Moderator" from "#{name}_role"}
+  click_button("#{name}_submit")
+  Then %{I should see "Updated #{name}"}
+end
+
 ### WHEN
 
 When /^I set up the collection "([^\"]*)"$/ do |title|

@@ -69,7 +69,7 @@ Feature: Search Works
     When I fill in "refine_word_count" with ""
       And I fill in "refine_revised_at" with "> 2 years ago"
       And I press "Search works"
-    # It's now more than 2 years since 2009 - should the fixtures be updated?
+    # TODO: It's now more than 2 years since 2009 - should the fixtures be updated?
     Then I should see "2 Found"
     When I follow "Advanced search"
     Then I should be on the search page

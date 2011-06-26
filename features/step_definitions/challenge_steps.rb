@@ -468,10 +468,22 @@ When /^I fulfill my claim$/ do
   When %{I start to fulfill my claim with "Fulfilled Story"}
   When %{I press "Preview"}
     And %{I press "Post"}
+  Then %{I should see "Work was successfully posted"}
 end
 
 When /^I fulfill my claim again$/ do
   When %{I start to fulfill my claim with "Second Story"}
+  When %{I press "Preview"}
+    And %{I press "Post"}
+  Then %{I should see "Work was successfully posted"}
+end
+
+When /^mod fulfills claim$/ do
+  When %{I am logged in as "mod1"}
+  When %{I claim a prompt from "Battle 12"}
+  When %{I start to fulfill my claim}
+    And %{I fill in "Work Title" with "Fulfilled Story-thing"}
+    And %{I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"}
   When %{I press "Preview"}
     And %{I press "Post"}
 end
@@ -538,6 +550,22 @@ When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
   When %{I follow "Remove prompt"}
+end
+
+When /^I reveal the "([^\"]*)" challenge$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+    And %{I follow "Settings"}
+    And %{I uncheck "Is this collection currently unrevealed?"}
+    And %{I press "Submit"}
+end
+
+When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+    And %{I follow "Settings"}
+    And %{I uncheck "Is this collection currently anonymous?"}
+    And %{I press "Submit"}
 end
 
 ### THEN

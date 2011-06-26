@@ -3,9 +3,9 @@
 <tr id="participant_<%= participant.id %>">
 <%= form_for(participant, :as => :collection_participant, :url => {:controller => "collection_participants", :action => "update"}) do |form| %>
 <th scope="row"><%= link_to participant.pseud.byline, user_path(participant.pseud.user) %><%= form.hidden_field :id %><%= form.hidden_field :collection_id %></th>
-<td><%= form.select(:participant_role, CollectionParticipant::PARTICIPANT_ROLE_OPTIONS) %></td>
+<td><%= form.select(:participant_role, CollectionParticipant::PARTICIPANT_ROLE_OPTIONS, {}, :id => participant.pseud.user.login + "_role") %></td>
 <td class="submit">
-  <%= form.submit ts("Update") %>
+  <%= form.submit ts("Update"), :id => participant.pseud.user.login + "_submit" %>
   <% end %>
   <%= button_to ts("Remove"), collection_participant_path(@collection, participant), 
     :confirm => ts('Are you certain you want to remove %{participant}?', 
