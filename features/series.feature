@@ -200,7 +200,7 @@ Scenario: View user's series index
 
 Scenario: Series index for maaany series
   Given I am logged in as "whoever" with password "whatever"  
-    And I add the work "grumble" to "31" series "penguins"
+    And I add the work "grumble" to "32" series "penguins"
   When I go to whoever's series page
   Then I should see "penguins30"
   When I follow "Next"
