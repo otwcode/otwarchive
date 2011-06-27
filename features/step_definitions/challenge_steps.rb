@@ -557,7 +557,7 @@ When /^I reveal the "([^\"]*)" challenge$/ do |title|
   visit collection_path(Collection.find_by_title(title))
     And %{I follow "Settings"}
     And %{I uncheck "Is this collection currently unrevealed?"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
@@ -565,7 +565,7 @@ When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
   visit collection_path(Collection.find_by_title(title))
     And %{I follow "Settings"}
     And %{I uncheck "Is this collection currently anonymous?"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 ### THEN
