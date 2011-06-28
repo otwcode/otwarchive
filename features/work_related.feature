@@ -2,7 +2,8 @@
 Feature: Inspirations, remixes and translations
   In order to reflect the connections between some fanworks
   As a fan author, part of a fan community
-  I want to be able to list related works
+  I want to be able to list relat
+  ed works
 
 Scenario: Posting a remix / inspired-by work should email the original author
   Given I have related works setup
@@ -199,6 +200,8 @@ Scenario: Posting a translation of an anonymous work should not allow you to see
 
 Scenario: Translate your own work
 
+Scenario: Draft works should not show up on related works
+
 @work_external_parent
 Scenario: Listing external works as inspirations
 
@@ -241,6 +244,31 @@ Scenario: Listing external works as inspirations
     And I should see "A translation of Worldbuilding by BNF"
     And I should see "Inspired by Worldbuilding Two by BNF"
 
+Scenario: External work language    
+
+  Given basic tags
+  Given basic languages
+  When I am logged in as "remixer" with password "password"
+    And I go to the new work page
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandoms" with "Stargate"
+    And I fill in "Work Title" with "Followup 4"
+    And I fill in "content" with "That could be an amusing crossover."
+    And I check "parent-options-show"
+    And I fill in "Url" with "www.google.com"
+    And I fill in "Title" with "German Worldbuilding"
+    And I fill in "Author" with "BNF"
+    And I check "This is a translation"    
+    And I press "Preview" 
+  Then I should see "Draft was successfully created"
+  When I press "Post without preview"
+  Then I should see "Work was successfully posted"
+    And I should see "A translation of German Worldbuilding by BNF"
+  When I view my related works
+  Then I should see "From Deutsch to English"
+    And I should not see "From N/A to English"
+    
 # TODO after issue 1741 is resolved
 # Scenario: Test that I can remove relationships that I initiated from my own works
 # especially during posting / editing / previewing a work
