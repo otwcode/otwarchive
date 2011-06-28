@@ -112,7 +112,7 @@ Feature: Collection
   # Reveal the collection
   When I follow "Settings"
     And I uncheck "Is this collection currently unrevealed?"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Collection was successfully updated"  
   # Works should no longer be hidden on the collection dashboard
     And I should not see "Mystery Work"
@@ -273,7 +273,7 @@ Feature: Collection
   When I go to "Anonymous Hugs" collection's page
     And I follow "Settings"
     And I uncheck "Is this collection currently anonymous?"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Collection was successfully updated"  
   # Authors should no longer be hidden on the collection dashboard
     And I should not see "New Snippet by Anonymous"

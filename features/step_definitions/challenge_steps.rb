@@ -47,7 +47,7 @@ end
 Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   Given %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   When "I fill in gift exchange challenge options"
-    click_button("Submit")
+    click_button("Update")
   Then %{I should see "Challenge was successfully created"}  
   When %{I follow "Challenge Settings"}
   Then %{I should see "Stargate" in the autocomplete}
@@ -56,7 +56,7 @@ end
 Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
   Given %{I am on "#{challengename}" gift exchange edit page}
   check "Signup open?"
-  click_button "Submit"
+  click_button "Update"
 end  
 
 Given /^I have Battle 12 prompt meme set up$/ do
@@ -151,7 +151,7 @@ When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/
   fill_in("prompt_meme_requests_num_required", :with => 1)
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_required", :with => 1)
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_allowed", :with => 2)
-  click_button("Submit")
+  click_button("Update")
   Then "I should see \"Challenge was successfully created\""
 end
 
@@ -181,14 +181,14 @@ When /^I fill in Battle 12 challenge options$/ do
     And %{I select "2016" from "prompt_meme_signups_close_at_1i"}
     And %{I select "(GMT-05:00) Eastern Time (US & Canada)" from "prompt_meme_time_zone"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I fill in unlimited prompt challenge options$/ do
   When "I fill in prompt meme challenge options"
     And %{I check "prompt_meme_request_restriction_attributes_character_restrict_to_fandom"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "50"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I fill in no-column challenge options$/ do
@@ -197,13 +197,13 @@ When /^I fill in no-column challenge options$/ do
     And %{I fill in "prompt_meme_request_restriction_attributes_character_num_allowed" with "0"}
     And %{I fill in "prompt_meme_request_restriction_attributes_relationship_num_allowed" with "0"}
     And %{I check "Signup open?"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I fill in multi-prompt challenge options$/ do
   When "I fill in prompt meme challenge options"
     And %{I fill in "prompt_meme_requests_num_allowed" with "4"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I fill in prompt meme challenge options$/ do
@@ -506,7 +506,7 @@ When /^I close signups for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Challenge Settings"}
     And %{I uncheck "Signup open?"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
   Then %{I should see "Challenge was successfully updated"}
 end
 
@@ -557,7 +557,7 @@ When /^I reveal the "([^\"]*)" challenge$/ do |title|
   visit collection_path(Collection.find_by_title(title))
     And %{I follow "Settings"}
     And %{I uncheck "Is this collection currently unrevealed?"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
@@ -565,7 +565,7 @@ When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
   visit collection_path(Collection.find_by_title(title))
     And %{I follow "Settings"}
     And %{I uncheck "Is this collection currently anonymous?"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 ### THEN
@@ -730,3 +730,4 @@ Then /^I should see single prompt editing$/ do
   Then %{the "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" field should contain "Alternate Universe - Historical"}
   page.should have_no_content("Just add one new prompt instead")
 end
+

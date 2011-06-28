@@ -105,10 +105,17 @@
   </fieldset>
 
   <fieldset>
-  	<legend><%= ts 'Submit' %></legend> 
-    <p class="submit">
-      <%= f.submit ts('Submit') %>
-    </p>
+    <% if @collection.name.blank? %>
+      <legend><%= ts('Submit') %></legend> 
+   <p class="submit">
+    <%= f.submit ts('Submit') %>
+   </p>
+    <% else %>
+    	<legend><%= ts('Update') %></legend> 
+  <p class="submit">
+    <%= f.submit ts('Update') %>
+  </p>
+<% end %>
   </fieldset>
 
 <% end %>

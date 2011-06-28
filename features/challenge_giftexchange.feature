@@ -16,14 +16,14 @@ Feature: Gift Exchange Challenge
   Given I am logged in as "mod1"
     And I have set up the gift exchange "My Gift Exchange"
   When I fill in gift exchange challenge options
-    And I press "Submit"
+    And I press "Update"
   Then My Gift Exchange gift exchange should be fully created
 
   Scenario: Open signup in a gift exchange
   Given I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
   When I check "Signup open?"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Challenge was successfully updated"
   When I follow "Profile"
   Then I should see "Signup: CURRENTLY OPEN" within ".collection.meta"
@@ -34,7 +34,7 @@ Feature: Gift Exchange Challenge
     And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
   When I check "Signup open?"
-    And I press "Submit"
+    And I press "Update"
   When I view open challenges
   Then I should see "My Gift Exchange"  
 
@@ -43,7 +43,7 @@ Feature: Gift Exchange Challenge
     And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
   When I select "(GMT-09:00) Alaska" from "gift_exchange_time_zone"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Challenge was successfully updated"
   When I follow "Profile"
   Then I should find "Alaska"

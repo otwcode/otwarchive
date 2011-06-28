@@ -75,7 +75,7 @@ When /^I reveal works for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Settings"}
   uncheck "Is this collection currently unrevealed?"
-  click_button "Submit"
+  click_button "Update"
 end
 
 ### THEN
@@ -93,3 +93,4 @@ Then /^My Gift Exchange collection exists$/ do
     And %{I should see "My Gift Exchange"}
     And %{I should see "(Open, Unmoderated, Gift Exchange Challenge)"}
 end
+
