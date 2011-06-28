@@ -104,8 +104,8 @@ Feature: Prompt Meme Challenge
   When I follow "Request 1"
   Then I should not see "Request 2"
     And I should see "Edit whole signup instead"
-  
-  Scenario: Add one new prompt to existing signup
+
+ Scenario: Add one new prompt to existing signup
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
@@ -827,7 +827,7 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
     And I follow "Settings"
     And I uncheck "Is this collection currently unrevealed?"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Collection was successfully updated"
   
   Scenario: Revealing challenge sends out emails

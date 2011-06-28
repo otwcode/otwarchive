@@ -33,7 +33,7 @@ Feature: Prompt Meme Challenge
     And I check "prompt_meme_anonymous"
     And I fill in "prompt_meme_requests_num_allowed" with "1"
     And I fill in "prompt_meme_requests_num_required" with "1"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Challenge was successfully updated"
     
   # sign up as first prompter
