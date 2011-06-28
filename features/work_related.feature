@@ -244,6 +244,7 @@ Scenario: Listing external works as inspirations
     And I should see "A translation of Worldbuilding by BNF"
     And I should see "Inspired by Worldbuilding Two by BNF"
 
+@work_external_language
 Scenario: External work language    
 
   Given basic tags
@@ -259,10 +260,11 @@ Scenario: External work language
     And I fill in "Url" with "www.google.com"
     And I fill in "Title" with "German Worldbuilding"
     And I fill in "Author" with "BNF"
+    And I select "Deutsch" from "Language"
     And I check "This is a translation"    
-    And I press "Preview" 
+    And I press "Preview"
   Then I should see "Draft was successfully created"
-  When I press "Post without preview"
+  When I press "Post"
   Then I should see "Work was successfully posted"
     And I should see "A translation of German Worldbuilding by BNF"
   When I view my related works
