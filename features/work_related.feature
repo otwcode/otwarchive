@@ -2,8 +2,7 @@
 Feature: Inspirations, remixes and translations
   In order to reflect the connections between some fanworks
   As a fan author, part of a fan community
-  I want to be able to list relat
-  ed works
+  I want to be able to list related works
 
 Scenario: Posting a remix / inspired-by work should email the original author
   Given I have related works setup
