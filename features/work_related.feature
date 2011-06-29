@@ -242,7 +242,9 @@ Scenario: Listing external works as inspirations
   Then I should see "Work was successfully updated"
     And I should see "A translation of Worldbuilding by BNF"
     And I should see "Inspired by Worldbuilding Two by BNF"
-
+  When I view my related works
+  Then I should see "From N/A to English"
+    
 @work_external_language
 Scenario: External work language    
 
