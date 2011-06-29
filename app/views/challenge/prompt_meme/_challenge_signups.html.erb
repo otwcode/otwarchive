@@ -75,15 +75,15 @@
         <% if eval("show_request_optional_tags") %><th scope="col">Optional Tags</th><% end %>
         <% if eval("show_request_description") %><th scope="col">
           <% desc_label = @challenge.send("request_description_label") %>
-          <%= desc_label.blank? ? ts("Description: ") : desc_label %>
+          <%= desc_label.blank? ? ts("Description") : desc_label %>
           </th>
         <% end %>
         <% if eval("show_request_url") %><th scope="col">
           <% url_label = @challenge.send("request_url_label") %>
-          <%= url_label.blank? ? ts("Prompt URL: ") : url_label %></th>
+          <%= url_label.blank? ? ts("Prompt URL") : url_label %></th>
         <% end %>
     
-    <th abbr="options" scope="col"><%= ts("Claim") %></th>
+    <% unless params[:xls] == true %><th abbr="options" scope="col"><%= ts("Claim") %></th><% end %>
     
     <% if params[:show_claims] == "true" %>
       <th abbr="options" scope="col"><%= ts("Claims and Fills") %></th>
@@ -100,7 +100,7 @@
     <% unless !prompt %>
     <tr>
 
-      <% cache("collection-#{@collection.id}-signup-#{challenge_signup.id}") do %>
+      <% cache("collection-#{@collection.id}-prompt-#{prompt.id}") do %>
       
       <td><% if !prompt || prompt.anonymous? %>
         (Anonymous)</td>
