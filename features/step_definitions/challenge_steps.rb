@@ -724,7 +724,7 @@ Then /^I should just see request 1$/ do
 end
 
 Then /^I should see single prompt editing$/ do
-  page.should have_content("Submit a Prompt For Battle 12")
+  page.should have_content("Submit a Prompt for Battle 12")
   page.should have_content("Edit whole signup instead")
   page.should have_content("Freeforms")
   Then %{the "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" field should contain "Alternate Universe - Historical"}
