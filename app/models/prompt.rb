@@ -25,6 +25,12 @@ class Prompt < ActiveRecord::Base
   
   has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_prompt_id'
 
+  before_destroy :clear_claims
+  def clear_claims
+    # remove this prompt reference from any existing assignments
+    request_claims.each {|claim| claim.destroy}
+  end
+
   # VALIDATION
   attr_protected :description_sanitizer_version
 

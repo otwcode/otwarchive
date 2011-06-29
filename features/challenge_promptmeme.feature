@@ -490,7 +490,7 @@ Feature: Prompt Meme Challenge
   When I follow "Delete"
   Then I should see "The claim was deleted."
   
-  Scenario: Prompt can be deleted after response has been posted
+  Scenario: Signup can be deleted after response has been posted
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -508,7 +508,26 @@ Feature: Prompt Meme Challenge
     And I view the work "Fulfilled Story"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     And I should see "Stargate Atlantis"
-    
+  
+  Scenario: Prompt can be removed after response has been posted
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I am logged in as "myname1"
+    And I delete my prompt in "Battle 12"
+  Then I should see "Prompt was deleted."
+  When I view the work "Fulfilled Story"
+  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+    And I should not see "Stargate Atlantis"
+  When I am logged in as "myname4"
+    And I view the work "Fulfilled Story"
+  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+    And I should see "Stargate Atlantis"
+  
   Scenario: User can't claim the same prompt twice
   
   Given I have Battle 12 prompt meme fully set up
@@ -717,6 +736,34 @@ Feature: Prompt Meme Challenge
   Scenario: Delete a collection, user can still access story
   # TODO
   
+  Scenario: Delete a signup, claims should also be deleted
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I am logged in as "myname1"
+    And I delete my signup for "Battle 12"
+  Then I should see "Challenge signup was deleted."
+  When I am logged in as "myname4"
+    And I go to my claims page
+  Then I should see "My Claims (0)"
+  
+  Scenario: Delete a prompt, claims should also be deleted
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I am logged in as "myname1"
+    And I delete my prompt in "Battle 12"
+  Then I should see "Prompt was deleted."
+  When I am logged in as "myname4"
+    And I go to my claims page
+  Then I should see "My Claims (0)"
+  
   Scenario: Mod can claim a prompt like an ordinary user
   
   Given I have Battle 12 prompt meme fully set up
@@ -805,7 +852,7 @@ Feature: Prompt Meme Challenge
   Then I should see "mod1" within "#fulfilled_claims"
     And I should not see "mod1" within "#unfulfilled_claims"
     
-  Scenario: check that claims can't be viewed
+  Scenario: check that claims can't be viewed even after challenge is revealed
   # TODO: Find a way to construct the link to a claim show page for someone who shouldn't be able to see it
   
   Scenario: check that completed ficlet is unrevealed
