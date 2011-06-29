@@ -849,7 +849,6 @@ Feature: Prompt Meme Challenge
   Then I should see "In response to a prompt by: myname4"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
-    And I should see "For myname4"
     And I should not see "mod1" within ".byline"
   
   Scenario: Mod can complete a claim
@@ -884,7 +883,6 @@ Feature: Prompt Meme Challenge
     And I should not see "Fandom: Stargate Atlantis"
     And I should not see "Anonymous"
     And I should not see "mod1"
-    And I should not see "For myname4"
     And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     
   Scenario: Mod can reveal challenge
@@ -909,7 +907,7 @@ Feature: Prompt Meme Challenge
   When mod fulfills claim
   When I reveal the "Battle 12" challenge
   Then I should see "Collection was successfully updated"
-  # 2 stories are now revealed, so notify the prompters/recipients
+  # 2 stories are now revealed, so notify the prompters
     And 2 emails should be delivered
     
   Scenario: Story is anon when challenge is revealed
@@ -929,7 +927,6 @@ Feature: Prompt Meme Challenge
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Collections: Battle 12"
     And I should see "Anonymous" within ".byline"
-    And I should see "For myname4"
     And I should not see "mod1" within ".byline"
     And I should see "Alternate Universe - Historical"
     

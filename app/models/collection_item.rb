@@ -169,8 +169,7 @@ class CollectionItem < ActiveRecord::Base
 
       # also notify prompters of responses to their prompt
       if item_type == "Work" && !item.challenge_claims.blank?
-        # FIXME - I don't know how this ever worked since pseud isn't available here
-        #UserMailer.prompter_notification(pseud.user.id, self.item.id, self.collection.id).deliver
+        UserMailer.prompter_notification(self.item.id, self.collection.id).deliver
       end
 
       # also notify the owners of any parent/inspired-by works
