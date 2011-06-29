@@ -713,10 +713,28 @@ Feature: Prompt Meme Challenge
   Then I should see "Challenge signup was deleted."
   
   Scenario: When maintainer deletes signup, its prompts disappear from the collection
-  # TODO
+
+  Given I have Battle 12 prompt meme fully set up
+  Given I have added a co-moderator "mod2" to collection "Battle 12"
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I am logged in as "mod2"
+  When I delete the signup by "myname1"
+  When I view prompts for "Battle 12"
+  Then I should not see "myname1"
 
   Scenario: When maintainer deletes signup, as a prompter the signup disappears from my dashboard
-  # TODO
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given I have added a co-moderator "mod2" to collection "Battle 12"
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I am logged in as "mod2"
+  When I delete the signup by "myname1"
+  When I am logged in as "myname1"
+  When I go to my signups page
+  Then I should see "My Signups (0)"
+    And I should not see "Battle 12"
 
   Scenario: When maintainer deletes signup, The story stays part of the collection, and no longer has the "In response to a prompt by:" line
   # TODO

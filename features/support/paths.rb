@@ -65,6 +65,8 @@ module NavigationHelpers
       user_profile_path(User.current_user)
     when /my claims page/
       user_claims_path(User.current_user)
+    when /my signups page/
+      user_signups_path(User.current_user)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/
