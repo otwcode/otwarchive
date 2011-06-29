@@ -191,7 +191,9 @@ class PromptsController < ApplicationController
       @prompt.destroy
       flash[:notice] = ts("Prompt was deleted.")
     end
-    if @collection.user_is_maintainer?(current_user)
+    if @collection.user_is_maintainer?(current_user) && @collection.challenge_type == "PromptMeme"
+      redirect_to collection_requests_path(@collection)
+    elsif @collection.user_is_maintainer?(current_user)
       redirect_to collection_signups_path(@collection)
     else
       redirect_to @collection

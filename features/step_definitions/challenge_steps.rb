@@ -540,6 +540,12 @@ When /^I delete my signup for "([^\"]*)"$/ do |title|
   Then %{I should see "Challenge signup was deleted."}
 end
 
+When /^I delete my prompt in "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Prompts ("}
+  When %{I follow "Remove prompt"}
+end
+
 When /^I delete the signup by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
