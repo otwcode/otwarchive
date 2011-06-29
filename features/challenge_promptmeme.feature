@@ -280,6 +280,8 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted"
+    And I should see "Prompts for Battle 12"
+    And I should not see "Signups for Battle 12"
   #  And "myname1" should be emailed
 
   Scenario: User deletes one prompt

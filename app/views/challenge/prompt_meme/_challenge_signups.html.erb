@@ -1,4 +1,4 @@
-<h2><%= ts("Prompts for %{collection}", :collection => @collection.title) %></h2>
+<h2><%= ts("Signups for %{collection}", :collection => @collection.title) %></h2>
   
 <% @challenge ||= @collection.challenge -%>
 <% show_request_url = @challenge.request_restriction.url_allowed && !params[:hide_urls] %>
