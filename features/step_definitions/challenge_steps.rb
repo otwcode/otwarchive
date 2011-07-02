@@ -81,6 +81,14 @@ Given /^I have no-column prompt meme fully set up$/ do
   When %{I follow "Log out"}
 end
 
+Given /^I have single-prompt prompt meme fully set up$/ do
+  Given %{I am logged in as "mod1"}
+    And "I have standard challenge tags setup"
+  When "I set up Battle 12 promptmeme collection"
+  When "I fill in single-prompt challenge options"
+  When %{I follow "Log out"}
+end
+
 Given /^everyone has signed up for Battle 12$/ do
   # no anon
   When %{I am logged in as "myname1"}
@@ -196,6 +204,12 @@ When /^I fill in no-column challenge options$/ do
     And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "0"}
     And %{I fill in "prompt_meme_request_restriction_attributes_character_num_allowed" with "0"}
     And %{I fill in "prompt_meme_request_restriction_attributes_relationship_num_allowed" with "0"}
+    And %{I check "Signup open?"}
+    And %{I press "Submit"}
+end
+
+When /^I fill in single-prompt challenge options$/ do
+  When %{I fill in "prompt_meme_requests_num_required" with "1"}
     And %{I check "Signup open?"}
     And %{I press "Submit"}
 end
@@ -366,7 +380,6 @@ When /^I sign up for "([^\"]*)" many-fandom prompt meme$/ do |title|
     And %{I fill in the 1st field with id matching "fandom_tagnames" with "Stargate Atlantis"}
     And %{I check the 1st checkbox with id matching "anonymous"}
     click_button "Submit"
-
 end
 
 When /^I sign up for "([^\"]*)" with combination A$/ do |title|
@@ -407,6 +420,20 @@ When /^I sign up for "([^\"]*)" with combination D$/ do |title|
     And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
     And %{I fill in the 2nd field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
+    And %{I press "Submit"}
+end
+
+When /^I sign up for "([^\"]*)" with combination SGA$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis"}
+    And %{I press "Submit"}
+end
+
+When /^I sign up for "([^\"]*)" with combination SG-1$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate SG-1"}
     And %{I press "Submit"}
 end
 
@@ -499,6 +526,11 @@ When /^I claim a prompt from "([^\"]*)"$/ do |title|
   Then %{I should see "Claim" within "th"}
     And %{I should not see "Sign in to claim prompts"}
   When %{I press "Claim"}
+end
+
+When /^I claim two prompts from "([^\"]*)"$/ do |title|
+  When %{I claim a prompt from "#{title}"}
+  When %{I claim a prompt from "#{title}"}
 end
 
 When /^I close signups for "([^\"]*)"$/ do |title|

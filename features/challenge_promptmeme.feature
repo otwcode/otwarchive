@@ -30,11 +30,16 @@ Feature: Prompt Meme Challenge
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
-  #When I go to "Battle 12" collection's page
-  #  And I follow "Profile"
-  #Then show me the page
   When I view open challenges
   Then I should see "Battle 12"
+  
+  Scenario: Signup being open is shown on profile
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I go to "Battle 12" collection's page
+    And I follow "Profile"
+  Then I should see "Signup: CURRENTLY OPEN"
   
   Scenario: User can see profile descriptions
   
@@ -587,18 +592,69 @@ Feature: Prompt Meme Challenge
   Then I should see "Battle 12"
     And I should see "Othercoll"
     
+  Scenario: Claim two prompts by the same person in one challenge
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname2"
+  When I sign up for Battle 12 with combination B
+  # 1st prompt SG-1, 2nd prompt SGA, both anon
+  When I am logged in as "myname1"
+    And I claim two prompts from "Battle 12"
+    And I view prompts for "Battle 12"
+  # all prompts have been claimed - check it worked
+  Then I should not see "Claim" within "tbody"
+  # SG-1 as claims are in reverse date order
+  When I start to fulfill my claim
+  Then I should find a checkbox "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird"
+    And I should find a checkbox "Battle 12 (Anonymous) -  - Stargate Atlantis"
+  Then the "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird" checkbox should be checked
+  Then the "Battle 12 (Anonymous) -  - Stargate Atlantis" checkbox should not be checked
+  
+  Scenario: Claim two prompts by different people in one challenge
+  
+  Given I have single-prompt prompt meme fully set up
+  When I am logged in as "sgafan"
+    And I sign up for "Battle 12" with combination SGA
+  When I am logged in as "sg1fan"
+    And I sign up for "Battle 12" with combination SG-1
+  When I am logged in as "writer"
+    And I claim two prompts from "Battle 12"
+  When I start to fulfill my claim
+  Then I should find a checkbox "Battle 12 (sg1fan) -  - Stargate SG-1"
+    And I should find a checkbox "Battle 12 (sgafan) -  - Stargate Atlantis"
+  Then the "Battle 12 (sgafan) -  - Stargate Atlantis" checkbox should be checked
+  Then the "Battle 12 (sg1fan) -  - Stargate SG-1" checkbox should not be checked
+  
+  Scenario: Claim two prompts by the same person in one challenge, one is anon
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname2"
+  When I sign up for Battle 12
+  # 1st prompt "something else weird", 2nd prompt anon
+  When I am logged in as "myname1"
+    And I claim two prompts from "Battle 12"
+    And I view prompts for "Battle 12"
+  # all prompts have been claimed - check it worked
+  Then I should not see "Claim" within "tbody"
+  # anon as claims are in reverse date order
+  When I start to fulfill my claim
+  Then I should find a checkbox "Battle 12 (Anonymous) -  - Stargate SG-1"
+    And I should find a checkbox "Battle 12 (myname2) -  - Stargate SG-1 - Something else weird"
+  Then the "Battle 12 (Anonymous) -  - Stargate SG-1" checkbox should be checked
+  # Always checked according to one test
+  Then the "Battle 12 (myname2) -  - Stargate SG-1 - Something else weird" checkbox should not be checked
+  
   Scenario: User claims two prompts in one challenge and fulfills one of them
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
-  # 1st prompt SG-1, 2nd prompt SGA
+  # 1st prompt SG-1, 2nd prompt SGA, both anon
   When I am logged in as "myname1"
     And I claim a prompt from "Battle 12"
     # SGA as it's in reverse order
     And I claim a prompt from "Battle 12"
     # SG-1
-    And I view prompts for "Battle 12"
   # SG-1 as claims are in reverse date order
   When I start to fulfill my claim
   Then the "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird" checkbox should be checked
@@ -638,7 +694,7 @@ Feature: Prompt Meme Challenge
   # TODO: fix the broken bit
   #Then I should see "Stargate Atlantis"
   #  And I should see "Stargate SG-1"
-  #Then show me the page
+  #Then show me the main content
   
   Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
