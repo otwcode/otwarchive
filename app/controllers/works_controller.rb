@@ -222,9 +222,6 @@ class WorksController < ApplicationController
       TagSet::TAG_TYPES.each do |type|
         eval("@work.#{type.pluralize}") << @challenge_claim.request_prompt.tag_set.with_type(type)
       end
-      unless Prompt.find(@challenge_claim.request_prompt_id).anonymous?
-        @work.recipients = @challenge_claim.requesting_pseud.byline
-      end
     else
       @work.collection_names = @collection.name if @collection
     end
