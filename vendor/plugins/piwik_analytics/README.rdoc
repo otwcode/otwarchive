@@ -1,0 +1,28 @@
+= PiwikAnalytics
+
+ This plugin enables support for Piwik in your Rails application. By default
+it will output the synchronous piwik tracking code for every page automatically
+(given that it is configured correctly). Configuring this plugin is easy:
+
+    PiwikAnalytics::Config.id_site = <Site ID>
+    PiwikAnalytics::Config.url = <Piwik-URL>
+
+Where the <Site ID> the ID of your website inside Piwik. You can look it up
+under Settings -> Websites. <Piwik-URL> must be replaced by the URL to your
+Piwik installation.
+
+If you want PiwikAnalytics to use the asynchronous tracking code which was
+introduced in Piwik 1.1 you can add the folliwing line:
+
+    PiwikAnalytics::Config.use_async = true
+
+If you want to disable the tracking code for particular controllers simply add
+the following line to those controllers:
+
+    skip_after_filter :add_piwik_analytics_tracking
+
+Enjoy :)
+
+
+= Licence
+Copyright(c) 2010-2011 Fabian Becker, released under MIT licence.

@@ -4,11 +4,35 @@ DEFAULT_RATING = "Not Rated"
 DEFAULT_WARNING = "No Archive Warnings Apply"
 DEFAULT_FREEFORM = "Scary tag"
 DEFAULT_CONTENT = "That could be an amusing crossover."
+DEFAULT_CATEGORY = "Other"
+
+### GIVEN
 
 Given /^I have no works or comments$/ do
   Work.delete_all
   Comment.delete_all
 end
+
+Given /^I view the chaptered work(?: with ([\d]+) comments?)? "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |n_comments, title, mode|
+  Given %{I am logged in as a random user}
+  And %{I post the chaptered work "#{title}"}
+  work = Work.find_by_title!(title)
+  visit work_url(work)
+  n_comments ||= 0
+  n_comments.to_i.times do |i|
+    Given %{I post the comment "Bla bla" on the work "#{title}"}
+  end
+  And %{I am logged out}
+  visit work_url(work)
+  And %{I follow "View Entire Work"} if mode == "full"
+end
+
+Given /^I have a work "([^\"]*)"$/ do |work|
+  When "I am logged in as a random user"
+  When %{I post the work "#{work}"}
+end
+
+### WHEN
 
 When /^I view the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
@@ -49,10 +73,10 @@ When /^I post the work "([^\"]*)" without preview$/ do |title|
   end
 end
 
-When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)"$/ do |title, fandom, freeform|
+When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)" with category "([^\"]*)"$/ do |title, fandom, freeform, category|
   work = Work.find_by_title(title)
   if work.blank?
-    Given %{the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}"}
+    Given %{the draft "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{category}"}
     work = Work.find_by_title(title)
   end
   visit preview_work_url(work)
@@ -61,11 +85,23 @@ When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)
 end
 
 When /^I post the work "([^\"]*)"$/ do |title|
-  When %{I post the work "#{title}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}"}
+  When %{I post the work "#{title}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}" with category "#{DEFAULT_CATEGORY}"}
 end
 
 When /^I post the work "([^\"]*)" with fandom "([^\"]*)"$/ do |title, fandom|
-  When %{I post the work "#{title}" with fandom "#{fandom}" with freeform "#{DEFAULT_FREEFORM}"}
+  When %{I post the work "#{title}" with fandom "#{fandom}" with freeform "#{DEFAULT_FREEFORM}" with category "#{DEFAULT_CATEGORY}"}
+end
+
+When /^I post the work "([^\"]*)" with category "([^\"]*)"$/ do |title, category|
+  When %{I post the work "#{title}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}" with category "#{category}"}
+end
+
+When /^I post a work with category "([^\"]*)"$/ do |category|
+  When %{I post the work "#{DEFAULT_TITLE}" with fandom "#{DEFAULT_FANDOM}" with freeform "#{DEFAULT_FREEFORM}" with category "#{category}"}
+end
+
+When /^I post the work "([^\"]*)" with fandom "([^\"]*)" with freeform "([^\"]*)"$/ do |title, fandom, freeform|
+  When %{I post the work "#{title}" with fandom "#{fandom}" with freeform "#{freeform}" with category "#{DEFAULT_CATEGORY}"}
 end
 
 When /^I fill in the basic work information for "([^\"]*)"$/ do |title|
@@ -82,10 +118,21 @@ When /^I fill in basic work tags$/ do
 end
 
 # TODO: The optional extras (fandom and freeform) in the When line don't seem to be working here - can anyone fix them?
+When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")(?: with category "([^\"]*)")$/ do |title, fandom, freeform, category|
+  Given "basic tags"
+  visit new_work_url
+  Given %{I fill in the basic work information for "#{title}"}
+  check(category.nil? ? DEFAULT_CATEGORY : category)
+  fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
+  fill_in("Additional Tags", :with => freeform.nil? ? DEFAULT_FREEFORM : freeform)
+  click_button("Preview")
+end
+
 When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")$/ do |title, fandom, freeform|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
+  check(DEFAULT_CATEGORY)
   fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
   fill_in("Additional Tags", :with => freeform.nil? ? DEFAULT_FREEFORM : freeform)
   click_button("Preview")
@@ -95,6 +142,7 @@ When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")$/ do |title, fandom|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
+  check(category.nil? ? DEFAULT_CATEGORY : category)
   fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
   click_button("Preview")
 end
@@ -104,6 +152,7 @@ When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
   visit new_work_url
   Given "I fill in the basic work information for \"#{title}\""
   fill_in("Fandoms", :with => "Naruto")
+  check(DEFAULT_CATEGORY)
   collection = Collection.find_by_title(collection)
   fill_in("Collections", :with => collection.name)
   click_button("Preview")
@@ -113,21 +162,12 @@ When /^I set up the draft "([^\"]*)"$/ do |title|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
+  check(DEFAULT_CATEGORY)
 end
 
 When /^the draft "([^\"]*)"$/ do |title|
   Given %{I set up the draft "#{title}"}
   click_button("Preview")
-end
-
-Then /^I should see Updated today$/ do
-  today = Time.zone.today.to_s
-  Given "I should see \"Updated:#{today}\""
-end
-
-Then /^I should not see Updated today$/ do
-  today = Date.today.to_s
-  Given "I should not see \"Updated:#{today}\""
 end
 
 When /^the purge_old_drafts rake task is run$/ do
@@ -177,20 +217,6 @@ When /^I set the publication date to today$/ do
   select("#{today.year}", :from => "work[chapter_attributes][published_at(1i)]")
 end
 
-Given /^I view the chaptered work(?: with ([\d]+) comments?)? "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |n_comments, title, mode|
-  Given %{I am logged in as a random user}
-  And %{I post the chaptered work "#{title}"}
-  work = Work.find_by_title!(title)
-  visit work_url(work)
-  n_comments ||= 0
-  n_comments.to_i.times do |i|
-    Given %{I post the comment "Bla bla" on the work "#{title}"}
-  end
-  And %{I am logged out}
-  visit work_url(work)
-  And %{I follow "View Entire Work"} if mode == "full"
-end
-
 When /^I browse the "([^"]+)" works$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag)
@@ -199,4 +225,16 @@ end
 When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   tag = Tag.find_by_name(tagname)
   visit tag_works_path(tag, :page => "")
+end
+
+### THEN
+
+Then /^I should see Updated today$/ do
+  today = Time.zone.today.to_s
+  Given "I should see \"Updated:#{today}\""
+end
+
+Then /^I should not see Updated today$/ do
+  today = Date.today.to_s
+  Given "I should not see \"Updated:#{today}\""
 end
