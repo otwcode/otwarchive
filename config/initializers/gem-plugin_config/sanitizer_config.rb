@@ -92,15 +92,19 @@ class Sanitize
       when /^http:\/\/(?:www\.)?4shared\.net\//
           then "4shared"
       when /^http:\/\/(?:www\.)?vidders\.net\//
-        then "vidders"
+        then "vidders.net"
       when /^http:\/\/(?:www\.)?criticalcommons\.org\//
-          then "criticalcommons"
+        then "criticalcommons"
+      when /^http:\/\/(?:www\.)?google\.com\//
+        then "google"
       else
         nil
       end
       
       # if we don't know the source, sorry
       return nil if source.nil?           
+
+      allow_flashvars = ["ning", "vidders.net", "google", "criticalcommons"]
 
       # We're now certain that this is an embed from a trusted source, but we still need to run
       # it through a special Sanitize step to ensure that no unwanted elements or
@@ -127,7 +131,7 @@ class Sanitize
         Sanitize.clean_node!(node, {
           :elements   => ['embed', 'iframe'],
           :attributes => {
-            'embed'  => (['allowfullscreen', 'height', 'src', 'type', 'width'] + (source == "ning" ? ['wmode', 'flashvars'] : [])),
+            'embed'  => (['allowfullscreen', 'height', 'src', 'type', 'width'] + (allow_flashvars.include?(source) ? ['wmode', 'flashvars'] : [])),
             'iframe'  => ['frameborder', 'height', 'src', 'title', 'class', 'type', 'width'],
           }          
         })
@@ -136,7 +140,7 @@ class Sanitize
           # disable script access and networking
           node['allowscriptaccess'] = 'never'
           node['allownetworking'] = 'internal'
-          unless source == "ning"
+          unless allow_flashvars.include?(source)
             node['flashvars'] = ""
           end
         end
