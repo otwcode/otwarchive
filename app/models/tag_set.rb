@@ -43,25 +43,18 @@ class TagSet < ActiveRecord::Base
       self.instance_variable_get("@#{type}_tagnames") ? tagnames_to_list(self.instance_variable_get("@#{type}_tagnames"), "#{type}") : with_type(type)
     end
     
-    unless type == "fandom"
-      attr_writer "#{type}_tagnames_to_add".to_sym
-      define_method("#{type}_tagnames_to_add") do |tagnames_to_add|
-        self.tags = self.tags + tagnames_to_list(tagnames_to_add, "#{type}")
-      end
+    attr_writer "#{type}_tagnames_to_add".to_sym
+    define_method("#{type}_tagnames_to_add") do 
+      self.instance_variable_get("@#{type}_tagnames_to_add") || ""
     end
 
-    define_method("#{type}_tags_to_remove") do |tags_to_remove|
-      self.tags = self.tags - tags_to_remove
+    attr_writer "#{type}_tags_to_remove".to_sym
+    define_method("#{type}_tags_to_remove") do 
+      self.instance_variable_get("@#{type}_tags_to_remove") || ""
     end
-    
+
   end
 
-  attr_writer :fandom_tagnames_to_add
-  def fandom_tagnames_to_add(tagnames_to_add)
-    debugger
-    self.tags = self.tags + tagnames_to_list(tagnames_to_add, "fandom")
-  end
-  
   # this actually runs and saves the tags but only after validation
   after_save :assign_tags
   def assign_tags
@@ -73,10 +66,22 @@ class TagSet < ActiveRecord::Base
       if self.instance_variable_get("@#{type}_tagnames")
         new_tags = self.send("#{type}_taglist")
         old_tags = self.with_type(type.classify)
-        tags_to_set = (self.tags - old_tags + new_tags).compact.uniq
-        self.tags = tags_to_set
+        tags_to_add = new_tags - old_tags
+        tags_to_remove = old_tags - new_tags
+        self.tags -= tags_to_remove
+        self.tags += tags_to_add
+      else
+        if !self.instance_variable_get("@#{type}_tagnames_to_add").blank?
+          self.tags += tagnames_to_list(self.instance_variable_get("@#{type}_tagnames_to_add"), type)
+        end
+        if !self.instance_variable_get("@#{type}_tags_to_remove").blank?
+          tagclass = type.classify.constantize
+          self.tags -= (self.instance_variable_get("@#{type}_tags_to_remove").map {|tag_id| tag_id.blank? ? nil : tagclass.find(tag_id)}.compact)
+        end
       end
     end
+    
+    
   end
 
   scope :matching, lambda {|tag_set_to_match|

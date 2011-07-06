@@ -1,6 +1,6 @@
 <h3><%= ts("Notes") %></h3>
 <ul class="notes">
-	<li>You can use tag sets when running a challenge, and eventually even when browsing.</li>
+	<li>You can use tag sets when running a challenge (and eventually will be able to use them for browsing).</li>
 	<li>Visible tag sets can be viewed and used by others.</li> 
 	<li>Tag sets that are open to nominations can take nominations from the public.</li> 
 </p>
@@ -9,34 +9,31 @@
 
 <!--main content-->
 <h3 class="landmark">Tag Set Settings</h3>
-
-<%= form_for(@tag_set, :url => tag_sets_path) do |tag_set_form| %>
+<%= form_for(@tag_set, :url => (@tag_set.new_record? ? tag_sets_path : tag_set_path(@tag_set)), :html => {:method => (@tag_set.new_record? ? :post : :put)}) do |tag_set_form| %>
   <%= error_messages_for @tag_set %>
 
-  <% if @tag_set && !@tag_set.moderators.empty? %>
-    <fieldset class="preface profile">
-  		<legend>Management</legend>
-  		<h3>Management</h3>
-  		<p class="notes">
-  			To add or remove an owner or moderator, enter their name. If they are currently on the list they will be removed; if not, they will be added.
-  		</p>
-  		<h4>Current Owners</h4>
-  		<p><%= @tag_set.owners.map {|mod| mod.name}.sort.join(', ') =%></p>
-  		<p><%= label_tag :owner_changes, ts("Add/Remove Owners: ") %></p>
-  		<p>
-  			<%= text_field_tag :owner_changes, nil, :size => 60 %>
-  			<%= autocomplete_text_field("owner_changes", :methodname => "pseud_finder") %>
-  		</p>
+  <fieldset class="preface profile">
+		<legend>Management</legend>
+		<h3>Management</h3>
+		<p class="notes">
+			To add or remove an owner or moderator, enter their name. If they are currently on the list they will be removed; if not, they will be added.
+		</p>
+		<h4>Current Owners</h4>
+		<p><%= @tag_set.owners.map {|mod| mod.name}.sort.join(', ') =%></p>
+		<p><%= label_tag :owner_changes, ts("Add/Remove Owners: ") %></p>
+		<p>
+			<%= text_field_tag :owner_changes, nil, :size => 60 %>
+			<%= autocomplete_text_field("owner_changes", :methodname => "pseud_finder") %>
+		</p>
 
-  		<h4>Current Moderators</h4>
-  		<p><%= @tag_set.moderators.map {|mod| mod.name}.sort.join(', ') =%></p>
-  		<p><%= label_tag :moderator_changes, ts("Add/Remove Moderators: ") %></p>
-  		<p>
-  			<%= text_field_tag :moderator_changes, nil, :size => 60 %>
-  			<%= autocomplete_text_field("moderator_changes", :methodname => "pseud_finder") %>
-  		</p>
-  	</fieldset>
-  <% end %>
+		<h4>Current Moderators</h4>
+		<p><%= @tag_set.moderators.empty? ? ts("None") : @tag_set.moderators.map {|mod| mod.name}.sort.join(', ') =%></p>
+		<p><%= label_tag :moderator_changes, ts("Add/Remove Moderators: ") %></p>
+		<p>
+			<%= text_field_tag :moderator_changes, nil, :size => 60 %>
+			<%= autocomplete_text_field("moderator_changes", :methodname => "pseud_finder") %>
+		</p>
+	</fieldset>
 
 	<fieldset class="preface profile">
     <legend>Description</legend>
@@ -70,15 +67,14 @@
             <!-- create a scrollable checkboxes section to wrap the tags, see application_helper -->
             <h5><%= internal_tag_set_form.label "#{tag_type}_tags_to_remove".to_sym, "Currently in set (check to remove): " %></h4>
             <%= options_section(internal_tag_set_form, 
-                                "owned_tag_set[tag_set_attributes][#{tag_type}_tags_to_remove]", 
+                                "owned_tag_set[tag_set_attributes][#{tag_type}_tags_to_remove][]", 
                                 "owned_tag_set_tag_set_attributes_#{tag_type}_tags_to_remove", 
                                 @tag_set.tag_set.send("#{tag_type}_taglist"), 
                                 nil, "name", "id") %>
           <% end %>
           <h5><%= internal_tag_set_form.label "#{tag_type}_tagnames_to_add".to_sym, "#{tag_type.classify.pluralize} to add: " %></h5>
           <p>
-            <%= internal_tag_set_form.text_area "#{tag_type}_tagnames_to_add".to_sym, :value => "", :rows => 3 %>
-            <%= autocomplete_text_field("owned_tag_set_tag_set_attributes_#{tag_type}_tagnames_to_add", :methodname => "canonical_#{tag_type}_finder") %>
+            <%= internal_tag_set_form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options("tag?type=all") %>
           </p>
         </fieldset>
       <% end %>

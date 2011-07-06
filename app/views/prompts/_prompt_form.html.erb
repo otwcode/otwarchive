@@ -59,7 +59,7 @@
               <% @fandom_tag_id = tag_field_id + "_options :checked" if tag_type == 'fandom' %>
 
               <!-- create a scrollable checkboxes section to wrap the tags, see application_helper -->
-              <%= options_section(tag_set_form, tag_fieldname, tag_field_id, @taglist["#{tag_type}-#{restriction.id}"], "#{tag_type}_taglist", "name", "name", "false") %>
+              <%= options_section(tag_set_form, tag_fieldname, tag_field_id, @taglist["#{tag_type}-#{restriction.id}"], "#{tag_type}_taglist", "name", "name") %>
 
             <% else %>
               <% tag_field_id = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>              
