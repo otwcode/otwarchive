@@ -38,7 +38,7 @@ class StoryParser
 
   # places for which we have a custom parse_story_from_[source] method
   # for getting information out of the downloaded text
-  KNOWN_STORY_PARSERS = %w(deviantart dw lj yuletide ffnet)
+  KNOWN_STORY_PARSERS = %w(deviantart dw lj yuletide ffnet lotrfanfiction twilightarchives)
 
   # places for which we have a custom parse_author_from_[source] method
   # which returns an external_author object including an email address
@@ -50,7 +50,7 @@ class StoryParser
 
   # places for which we have a download_chaptered_from
   # to get a set of chapters all together
-  CHAPTERED_STORY_LOCATIONS = %w(ffnet)
+  CHAPTERED_STORY_LOCATIONS = %w(ffnet efiction)
 
   # regular expressions to match against the URLS
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
@@ -59,6 +59,9 @@ class StoryParser
   SOURCE_FFNET = 'fanfiction\.net'
   SOURCE_MINOTAUR = '(bigguns|firstdown).slashdom.net'
   SOURCE_DEVIANTART = 'deviantart\.com'
+  SOURCE_LOTRFANFICTION = 'lotrfanfiction\.com'
+  SOURCE_TWILIGHTARCHIVES = 'twilightarchives\.com'
+  SOURCE_EFICTION = 'viewstory\.php'
 
   # time out if we can't download fast enough
   STORY_DOWNLOAD_TIMEOUT = 60
@@ -387,7 +390,8 @@ class StoryParser
 
     def get_chapter_from_work_params(work_params)
       @chapter = Chapter.new(work_params[:chapter_attributes])
-      chapter_params = work_params.delete_if {|name, param| !@chapter.attribute_names.include?(name.to_s)}
+      # don't override specific chapter params (eg title) with work params  
+      chapter_params = work_params.delete_if {|name, param| !@chapter.attribute_names.include?(name.to_s) || !@chapter.send(name.to_s).blank?}
       @chapter.update_attributes(chapter_params)
       return @chapter
     end
@@ -458,6 +462,31 @@ class StoryParser
       end
       return @chapter_contents
     end
+
+
+    # grab all the chapters of a story from an efiction-based site
+    def download_chaptered_from_efiction(location)
+      @chapter_contents = []
+      if location.match(/^(.*)\/.*viewstory\.php.*sid=(\d+)($|&)/i)
+        site = $1
+        storyid = $2        
+        chapnum = 1
+        Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
+          loop do
+            url = "#{site}/viewstory.php?action=printable&sid=#{storyid}&chapter=#{chapnum}"
+            body = download_with_timeout(url)
+            if body.nil? || chapnum > MAX_CHAPTER_COUNT || body.match(/<div class='chaptertitle'> by <\/div>/) || body.match(/Access denied./) || body.match(/Chapter : /)
+              break
+            end
+            
+            @chapter_contents << body
+            chapnum = chapnum + 1
+          end
+        }
+      end
+      return @chapter_contents
+    end
+
 
     # This is the heavy lifter, invoked by all the story and chapter parsers.
     # It takes a single string containing the raw contents of a story, parses it with
@@ -763,17 +792,12 @@ class StoryParser
 
       tags = []
       pagetitle = (@doc/"title").inner_html
-      if pagetitle && pagetitle.match(/(.*), an? (.*) fanfic - FanFiction\.Net/)
+      if pagetitle && pagetitle.match(/(.*), an? (.*) fanfic/)
         work_params[:fandom_string] = $2
         work_params[:title] = $1
         if work_params[:title].match(/^(.*) Chapter ([0-9]+): (.*)$/)
-          if ($2 == "1")
-            # first chapter
-            work_params[:title] = $1
-            work_params[:chapter_attributes][:title] = $3
-          else
-            work_params[:title] = $3
-          end
+          work_params[:title] = $1
+          work_params[:chapter_attributes][:title] = $3
         end
       end
       if story.match(/rated:\s*<a.*?>\s*(.*?)<\/a>/i)
@@ -797,12 +821,100 @@ class StoryParser
       return work_params
     end
 
+    def parse_story_from_lotrfanfiction(story)
+      work_params = parse_story_from_modified_efiction(story, "lotrfanfiction")
+      work_params[:fandom_string] = "Lord of the Rings"
+      return work_params      
+    end
+    
+    def parse_story_from_twilightarchives(story)
+      work_params = parse_story_from_modified_efiction(story, "twilightarchives")
+      work_params[:fandom_string] = "Twilight"      
+      return work_params      
+    end
+    
+    def parse_story_from_modified_efiction(story, site = "")
+      work_params = {:chapter_attributes => {}}
+      storytext = @doc.css("div.chapter").inner_html
+      storytext = clean_storytext(storytext)
+      work_params[:chapter_attributes][:content] = storytext
+      
+      work_params[:title] = @doc.css("html body div#pagetitle a").first.inner_text.strip
+      work_params[:chapter_attributes][:title] = @doc.css(".chaptertitle").inner_text.gsub(/ by .*$/, '').strip
+      
+      # harvest data
+      info = @doc.css(".infobox .content").inner_html
+
+      if info.match(/Summary:.*?>(.*?)<br>/)
+        work_params[:summary] = clean_storytext($1)
+      end
+      
+      
+
+      infotext = @doc.css(".infobox .content").inner_text      
+
+      # Turn categories, genres, warnings into freeform tags
+      tags = []
+      if infotext.match(/Categories: (.*) Characters:/)
+        tags += $1.split(',').map {|c| c.strip}.uniq unless $1 == "None"
+      end
+      if infotext.match(/Genres: (.*)Warnings/)
+        tags += $1.split(',').map {|c| c.strip}.uniq unless $1 == "None"
+      end
+      if infotext.match(/Warnings: (.*)Challenges/)
+        tags += $1.split(',').map {|c| c.strip}.uniq unless $1 == "None"
+      end
+      work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
+
+      # use last updated date as revised_at date
+      if site == "lotrfanfiction" && infotext.match(/Updated: (\d\d)\/(\d\d)\/(\d\d)/)
+        # need yy/mm/dd to convert
+        work_params[:revised_at] = convert_revised_at("#{$3}/#{$2}/#{$1}") 
+      elsif site == "twilightarchives" && infotext.match(/Updated: (.*)$/)
+        work_params[:revised_at] = convert_revised_at($1)
+      end
+      
+
+      # get characters
+      if infotext.match(/Characters: (.*)Genres:/)
+        work_params[:character_string] = $1.split(',').map {|c| c.strip}.uniq.join(',') unless $1 == "None"
+      end
+
+      # save the readcount
+      readcount = 0
+      if infotext.match(/Read: (\d+)/)
+        readcount = $1
+      end
+      work_params[:notes] = (readcount == 0 ? "" : "<p>This work was imported from another site, where it had been read #{readcount} times.</p>")
+
+      # story notes, chapter notes, end notes
+      @doc.css(".notes").each do |note|
+        if note.inner_html.match(/Story Notes/)
+          work_params[:notes] += note.css('.noteinfo').inner_html
+        elsif note.inner_html.match(/Chapter Notes/)
+          work_params[:chapter_attributes][:notes] = note.css('.noteinfo').inner_html
+        elsif note.inner_html.match(/Chapter End Notes/)
+          work_params[:chapter_attributes][:endnotes] = note.css('.noteinfo').inner_html
+        elsif note.inner_html.match(/End Notes/)
+          work_params[:endnotes] = note.css('.noteinfo').inner_html
+        end
+      end
+      
+      if infotext.match(/Completed: No/)
+        work_params[:complete] = false
+      else
+        work_params[:complete] = true
+      end
+
+      return work_params
+    end
+    
 
     # Move and/or copy any meta attributes that need to be on the chapter rather
     # than on the work itself
     def shift_chapter_attributes(work_params)
       CHAPTER_ATTRIBUTES_ONLY.each_pair do |work_attrib, chapter_attrib|
-        if work_params[work_attrib]
+        if work_params[work_attrib] && !work_params[:chapter_attributes][chapter_attrib]
           work_params[:chapter_attributes][chapter_attrib] = work_params[work_attrib]
           work_params.delete(work_attrib)
         end
@@ -810,7 +922,7 @@ class StoryParser
 
       # copy any attributes from work to chapter as necessary
       CHAPTER_ATTRIBUTES_ALSO.each_pair do |work_attrib, chapter_attrib|
-        if work_params[work_attrib]
+        if work_params[work_attrib] && !work_params[:chapter_attributes][chapter_attrib]
           work_params[:chapter_attributes][chapter_attrib] = work_params[work_attrib]
         end
       end
@@ -848,6 +960,8 @@ class StoryParser
             value = $2
           end
           value = clean_tags(value) if is_tag[metaname]
+          value = clean_close_html_tags(value)
+          value.strip! # lose leading/trailing whitespace
           begin
             value = eval("convert_#{metaname.to_s.downcase}(value)")
           rescue NameError
@@ -904,6 +1018,11 @@ class StoryParser
         end
       end
       nil
+    end
+
+    def clean_close_html_tags(value)
+      # if there are any closing html tags at the start of the value let's ditch them
+      value.gsub(/^(\s*<\/[^>]+>)+/, '')
     end
 
     # We clean the text as if it had been submitted as the content of a chapter
