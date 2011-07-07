@@ -280,6 +280,8 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted"
+    And I should see "Prompts for Battle 12"
+    And I should not see "Signups for Battle 12"
   #  And "myname1" should be emailed
 
   Scenario: User deletes one prompt
@@ -488,7 +490,7 @@ Feature: Prompt Meme Challenge
   When I follow "Delete"
   Then I should see "The claim was deleted."
   
-  Scenario: Prompt can be deleted after response has been posted
+  Scenario: Signup can be deleted after response has been posted
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -506,7 +508,26 @@ Feature: Prompt Meme Challenge
     And I view the work "Fulfilled Story"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     And I should see "Stargate Atlantis"
-    
+  
+  Scenario: Prompt can be removed after response has been posted
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I fulfill my claim
+  When I am logged in as "myname1"
+    And I delete my prompt in "Battle 12"
+  Then I should see "Prompt was deleted."
+  When I view the work "Fulfilled Story"
+  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+    And I should not see "Stargate Atlantis"
+  When I am logged in as "myname4"
+    And I view the work "Fulfilled Story"
+  Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
+    And I should see "Stargate Atlantis"
+  
   Scenario: User can't claim the same prompt twice
   
   Given I have Battle 12 prompt meme fully set up
@@ -692,10 +713,28 @@ Feature: Prompt Meme Challenge
   Then I should see "Challenge signup was deleted."
   
   Scenario: When maintainer deletes signup, its prompts disappear from the collection
-  # TODO
+
+  Given I have Battle 12 prompt meme fully set up
+  Given I have added a co-moderator "mod2" to collection "Battle 12"
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I am logged in as "mod2"
+  When I delete the signup by "myname1"
+  When I view prompts for "Battle 12"
+  Then I should not see "myname1"
 
   Scenario: When maintainer deletes signup, as a prompter the signup disappears from my dashboard
-  # TODO
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given I have added a co-moderator "mod2" to collection "Battle 12"
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I am logged in as "mod2"
+  When I delete the signup by "myname1"
+  When I am logged in as "myname1"
+  When I go to my signups page
+  Then I should see "My Signups (0)"
+    And I should not see "Battle 12"
 
   Scenario: When maintainer deletes signup, The story stays part of the collection, and no longer has the "In response to a prompt by:" line
   # TODO
@@ -714,6 +753,34 @@ Feature: Prompt Meme Challenge
   
   Scenario: Delete a collection, user can still access story
   # TODO
+  
+  Scenario: Delete a signup, claims should also be deleted
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I am logged in as "myname1"
+    And I delete my signup for "Battle 12"
+  Then I should see "Challenge signup was deleted."
+  When I am logged in as "myname4"
+    And I go to my claims page
+  Then I should see "My Claims (0)"
+  
+  Scenario: Delete a prompt, claims should also be deleted
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination B
+    And I am logged in as "myname4"
+    And I claim a prompt from "Battle 12"
+  When I am logged in as "myname1"
+    And I delete my prompt in "Battle 12"
+  Then I should see "Prompt was deleted."
+  When I am logged in as "myname4"
+    And I go to my claims page
+  Then I should see "My Claims (0)"
   
   Scenario: Mod can claim a prompt like an ordinary user
   
@@ -782,7 +849,6 @@ Feature: Prompt Meme Challenge
   Then I should see "In response to a prompt by: myname4"
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Anonymous" within ".byline"
-    And I should see "For myname4"
     And I should not see "mod1" within ".byline"
   
   Scenario: Mod can complete a claim
@@ -803,7 +869,7 @@ Feature: Prompt Meme Challenge
   Then I should see "mod1" within "#fulfilled_claims"
     And I should not see "mod1" within "#unfulfilled_claims"
     
-  Scenario: check that claims can't be viewed
+  Scenario: check that claims can't be viewed even after challenge is revealed
   # TODO: Find a way to construct the link to a claim show page for someone who shouldn't be able to see it
   
   Scenario: check that completed ficlet is unrevealed
@@ -817,7 +883,6 @@ Feature: Prompt Meme Challenge
     And I should not see "Fandom: Stargate Atlantis"
     And I should not see "Anonymous"
     And I should not see "mod1"
-    And I should not see "For myname4"
     And I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     
   Scenario: Mod can reveal challenge
@@ -842,7 +907,7 @@ Feature: Prompt Meme Challenge
   When mod fulfills claim
   When I reveal the "Battle 12" challenge
   Then I should see "Collection was successfully updated"
-  # 2 stories are now revealed, so notify the prompters/recipients
+  # 2 stories are now revealed, so notify the prompters
     And 2 emails should be delivered
     
   Scenario: Story is anon when challenge is revealed
@@ -862,7 +927,6 @@ Feature: Prompt Meme Challenge
     And I should see "Fandom: Stargate Atlantis"
     And I should see "Collections: Battle 12"
     And I should see "Anonymous" within ".byline"
-    And I should see "For myname4"
     And I should not see "mod1" within ".byline"
     And I should see "Alternate Universe - Historical"
     
