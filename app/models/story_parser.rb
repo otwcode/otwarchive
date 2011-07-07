@@ -391,7 +391,7 @@ class StoryParser
     def get_chapter_from_work_params(work_params)
       @chapter = Chapter.new(work_params[:chapter_attributes])
       # don't override specific chapter params (eg title) with work params  
-      chapter_params = work_params.delete_if {|name, param| !@chapter.attribute_names.include?(name.to_s) || defined?(work_params[:chapter_attributes][name.to_sym])}
+      chapter_params = work_params.delete_if {|name, param| !@chapter.attribute_names.include?(name.to_s) || !@chapter.send(name.to_s).blank?}
       @chapter.update_attributes(chapter_params)
       return @chapter
     end
@@ -914,7 +914,7 @@ class StoryParser
     # than on the work itself
     def shift_chapter_attributes(work_params)
       CHAPTER_ATTRIBUTES_ONLY.each_pair do |work_attrib, chapter_attrib|
-        if work_params[work_attrib]
+        if work_params[work_attrib] && !work_params[:chapter_attributes][chapter_attrib]
           work_params[:chapter_attributes][chapter_attrib] = work_params[work_attrib]
           work_params.delete(work_attrib)
         end
@@ -922,7 +922,7 @@ class StoryParser
 
       # copy any attributes from work to chapter as necessary
       CHAPTER_ATTRIBUTES_ALSO.each_pair do |work_attrib, chapter_attrib|
-        if work_params[work_attrib]
+        if work_params[work_attrib] && !work_params[:chapter_attributes][chapter_attrib]
           work_params[:chapter_attributes][chapter_attrib] = work_params[work_attrib]
         end
       end
@@ -960,6 +960,8 @@ class StoryParser
             value = $2
           end
           value = clean_tags(value) if is_tag[metaname]
+          value = clean_close_html_tags(value)
+          value.strip! # lose leading/trailing whitespace
           begin
             value = eval("convert_#{metaname.to_s.downcase}(value)")
           rescue NameError
@@ -1016,6 +1018,11 @@ class StoryParser
         end
       end
       nil
+    end
+
+    def clean_close_html_tags(value)
+      # if there are any closing html tags at the start of the value let's ditch them
+      value.gsub(/^(\s*<\/[^>]+>)+/, '')
     end
 
     # We clean the text as if it had been submitted as the content of a chapter
