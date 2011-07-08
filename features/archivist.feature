@@ -46,10 +46,9 @@ Feature: Archivist bulk imports
       And I should see "Welcome"
       And I should see "OTW Meetup in London"
       And I should see "That Shall Achieve The Sword"
-    When "notifying authors for imports" is fixed
-      # And I should see "We have notified the author(s) you imported stories for. You can also add them as co-authors manually."
-    # Given the system processes jobs
-    # Then show me the emails
-    # Then 1 email should be delivered to "shalott@intimations.org"
-    #   And 1 email should be delivered to "cesy@dreamwidth.org"
+      And I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."
+    Given the system processes jobs
+    Then 1 email should be delivered to "shalott@intimations.org"
+    # only 1 email even though it's two fics
+      And 1 email should be delivered to "cesy@dreamwidth.org"
 
