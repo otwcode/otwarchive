@@ -1,33 +1,36 @@
 @users @admin
 Feature: Archivist bulk imports
-  @archivist_import
-  Scenario: Log in as an archivist and import a big archive.
-    Given the following admin exists
-      | login       | password |
-      | EYalkut     | secret   |
-      And the following activated user exists
-      | login       | password      |
-      | elynross    | Yulet1de      |
-      And all emails have been delivered
-      And I have loaded the "roles" fixture
-    When I am logged in as "elynross" with password "Yulet1de"
-      And I follow "Import"
-    Then I should not see "Import works for others"
-    When I follow "Log out"
-      And I go to the admin_login page
-      And I fill in "admin_session_login" with "EYalkut"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
+
+  Scenario: Non-archivist cannot import for others
+  
+  When I am logged in as a random user
+    And I follow "Import"
+  Then I should not see "Import works for others"
+  
+  Scenario: Make a user an archivist
+  
+  Given I am logged in as "elynross"
+    And I have loaded the "roles" fixture
+    When I am logged in as an admin
       And I fill in "query" with "elynross"
       And I press "Find"
-    Then I should see "elynross" within "#admin_users_table"
     When I check "user_roles_4"
       And I press "Update"
     Then I should see "User was successfully updated"
-    When I follow "Log out"
-      And I am logged in as "elynross" with password "Yulet1de"
+    
+  Scenario: Archivist can see link to import for others
+  
+  Given I have an archivist "elynross"
+    When I am logged in as "elynross"
       And I follow "Import"
     Then I should see "Import works for others"
+
+  @archivist_import
+  Scenario: Log in as an archivist and import a big archive
+  
+    Given I have an archivist "elynross"
+    When I am logged in as "elynross"
+      And I follow "Import"
     When I check "Import works for others"
       And I fill in "urls" with
         """

@@ -37,6 +37,15 @@ Feature: Admin tasks
       And I fill in "admin_session_password" with "secret"
       And I press "Log in as admin"
     Then I should see "Successfully logged in"
+  
+  Scenario: admin can find users
+  
+  Given I am logged in as "someone"
+    And I have loaded the "roles" fixture
+    When I am logged in as an admin
+      And I fill in "query" with "someone"
+      And I press "Find"
+    Then I should see "someone" within "#admin_users_table"
     
   Scenario: Post a FAQ
   
@@ -75,7 +84,7 @@ Feature: Admin tasks
       And I have loaded the "roles" fixture
     When I am logged in as an admin
 
-    # search for a user
+    # change user email
 
     When I fill in "query" with "dizmo"
       And I press "Find"
