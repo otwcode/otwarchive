@@ -590,6 +590,13 @@ When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   When %{I follow "Remove prompt"}
 end
 
+When /^I edit the prompt by "([^\"]*)"$/ do |participant|
+  visit collection_path(Collection.find_by_title("Battle 12"))
+  When %{I follow "Prompts ("}
+  click_link("#{participant}")
+  When %{I follow "Edit"}
+end
+
 When /^I reveal the "([^\"]*)" challenge$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))

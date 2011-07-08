@@ -288,6 +288,17 @@ Feature: Prompt Meme Challenge
     And I should see "Prompts for Battle 12"
     And I should not see "Signups for Battle 12"
   #  And "myname1" should be emailed
+  
+  Scenario: Mod edits a prompt that doesn't fit the challenge rules
+  
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination C
+  When I am logged in as "mod1"
+  When I edit the prompt by "myname1"
+  Then I should see "Submit a Prompt For Battle 12"
+    And I should not see "You can't edit someone else's signup!"
+    And the "Stargate Atlantis" checkbox should be checked
 
   Scenario: User deletes one prompt
   
