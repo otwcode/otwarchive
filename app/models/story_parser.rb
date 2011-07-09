@@ -845,11 +845,9 @@ class StoryParser
       # harvest data
       info = @doc.css(".infobox .content").inner_html
 
-      if info.match(/Summary:.*?>(.*?)<br>/)
+      if info.match(/Summary:.*?>(.*?)<br>/m)
         work_params[:summary] = clean_storytext($1)
-      end
-      
-      
+      end      
 
       infotext = @doc.css(".infobox .content").inner_text      
 
@@ -891,12 +889,10 @@ class StoryParser
       @doc.css(".notes").each do |note|
         if note.inner_html.match(/Story Notes/)
           work_params[:notes] += note.css('.noteinfo').inner_html
-        elsif note.inner_html.match(/Chapter Notes/)
+        elsif note.inner_html.match(/(Chapter|Author\'s) Notes/)
           work_params[:chapter_attributes][:notes] = note.css('.noteinfo').inner_html
-        elsif note.inner_html.match(/Chapter End Notes/)
-          work_params[:chapter_attributes][:endnotes] = note.css('.noteinfo').inner_html
         elsif note.inner_html.match(/End Notes/)
-          work_params[:endnotes] = note.css('.noteinfo').inner_html
+          work_params[:chapter_attributes][:endnotes] = note.css('.noteinfo').inner_html
         end
       end
       
