@@ -115,9 +115,9 @@ class ChaptersController < ApplicationController
         end
         if params[:post_without_preview_button]
           @chapter.posted = true
-            if @chapter.save
+            if @chapter.save && @work.save
               post_chapter
-            redirect_to [@work, @chapter]
+              redirect_to [@work, @chapter]
             end
         elsif @work.save
           flash[:notice] = ts("This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
