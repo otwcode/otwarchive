@@ -13,6 +13,7 @@
 .autocomplete input {
 	display: block;
 	margin: 0.25em 0 0;
+	width: 100%;
 }
 .autocomplete ul li:hover, li.selected {
 	background: url(/images/header-red.png) top left #900; 

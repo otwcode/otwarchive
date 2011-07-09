@@ -41,7 +41,35 @@ class OwnedTagSet < ActiveRecord::Base
   
   def add_owner(pseud)
     tag_set_ownerships.build({:pseud => pseud, :owner => true})
-  end    
+  end
+  
+  def add_moderator(pseud)    
+    tag_set_ownerships.build({:pseud => pseud, :owner => false}) 
+  end
+  
+  def owner_changes=(pseud_list)
+    Pseud.parse_bylines(pseud_list)[:pseuds].each do |pseud|
+      if self.owners.include?(pseud)
+        self.owners -= [pseud] if self.owners.count > 1
+      else
+        self.moderators -= [pseud] if self.moderators.include?(pseud)
+        add_owner(pseud)
+      end
+    end
+  end
+  
+  def moderator_changes=(pseud_list)
+    Pseud.parse_bylines(pseud_list)[:pseuds].each do |pseud|
+      if self.moderators.include?(pseud)
+        self.moderators -= [pseud]
+      else
+        add_moderator(pseud) unless self.owners.include?(pseud)
+      end
+    end
+  end
+  
+  def owner_changes; nil; end
+  def moderator_changes; nil; end
   
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,
