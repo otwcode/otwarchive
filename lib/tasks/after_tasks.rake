@@ -273,4 +273,5 @@ end # this is the end that you have to put new tasks above
 # Remove tasks from the list once they've been run on the deployed site
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
-task :After => ['autocomplete:reload_data']
+#task :After => ['autocomplete:reload_data']
+task :After => []
