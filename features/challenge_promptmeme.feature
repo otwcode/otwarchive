@@ -33,6 +33,16 @@ Feature: Prompt Meme Challenge
   When I view open challenges
   Then I should see "Battle 12"
   
+  Scenario: Can edit settings for a prompt meme
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "mod1"
+  When I go to "Battle 12" collection's page
+    And I follow "Profile"
+  Then I should see "Challenge Settings" within ".navigation"
+  When I follow "Challenge Settings" within ".navigation"
+  Then I should see "Setting Up The Battle 12 Prompt Meme"
+  
   Scenario: Signup being open is shown on profile
   
   Given I have Battle 12 prompt meme fully set up
