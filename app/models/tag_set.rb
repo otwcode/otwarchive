@@ -10,6 +10,8 @@ class TagSet < ActiveRecord::Base
   
   has_many :set_taggings, :dependent => :destroy
   has_many :tags, :through => :set_taggings
+  
+  has_many :owned_tag_sets
 
   has_one :prompt
 
@@ -80,8 +82,6 @@ class TagSet < ActiveRecord::Base
         end
       end
     end
-    
-    
   end
 
   scope :matching, lambda {|tag_set_to_match|

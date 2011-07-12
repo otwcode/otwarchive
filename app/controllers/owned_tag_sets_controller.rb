@@ -1,11 +1,11 @@
 class OwnedTagSetsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
-  before_filter :load_tag_set, :only => [ :show, :edit, :update, :destroy, :nominate, :review ]
+  before_filter :load_tag_set, :only => [ :show, :edit, :update, :destroy, :review ]
   before_filter :users_only, :only => [ :new, :create, :nominate ]
   before_filter :moderators_only, :only => [ :edit, :update, :review ]
   before_filter :owners_only, :only => [ :destroy ]
-  before_filter :nominated_only, :only => [:nominate, :review]
+  before_filter :nominated_only, :only => [:review]
   
   def load_tag_set
     @tag_set = OwnedTagSet.find(params[:id])
@@ -30,7 +30,12 @@ class OwnedTagSetsController < ApplicationController
   ### ACTIONS
 
   def index
-    @tag_sets = OwnedTagSet.where(:visible => true).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+    if @user
+      @tag_sets = OwnedTagSet.owned_by(@user).visible
+    else
+      @tag_sets = OwnedTagSet.visible
+    end
+    @tag_sets = @tag_sets.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
   end
   
   def show
@@ -56,9 +61,10 @@ class OwnedTagSetsController < ApplicationController
     @tag_set.add_owner(current_user.default_pseud)
     if @tag_set.save
       flash[:notice] = ts('Tag set was successfully created.')
-      redirect_to tag_set_path(@tag_set) and return
-    end 
-    render :action => "new" and return
+      redirect_to tag_set_path(@tag_set)
+    else 
+      render :action => "new"
+    end
   end
 
   def edit
@@ -79,9 +85,6 @@ class OwnedTagSetsController < ApplicationController
     redirect_to tag_sets_path
   end
 
-  def nominate
-  end
-  
   def review
   end
 

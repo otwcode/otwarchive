@@ -51,12 +51,12 @@ class GiftExchange < ActiveRecord::Base
 
   after_save :copy_tag_set_from_offer_to_request
   def copy_tag_set_from_offer_to_request
-    if self.offer_restriction && self.offer_restriction.tag_set
-      self.request_restriction.build_tag_set unless self.request_restriction.tag_set
-      self.request_restriction.tag_set.tags = self.offer_restriction.tag_set.tags
+    if self.offer_restriction && !self.offer_restriction.owned_tag_sets.empty?
+      self.offer_restriction.owned_tag_sets.each do |owned_ts|
+        self.request_restriction.owned_tag_sets << owned_ts
+      end
       self.request_restriction.character_restrict_to_fandom = self.offer_restriction.character_restrict_to_fandom
       self.request_restriction.relationship_restrict_to_fandom = self.offer_restriction.relationship_restrict_to_fandom      
-      self.request_restriction.tag_set.save
       self.request_restriction.save
     end
   end

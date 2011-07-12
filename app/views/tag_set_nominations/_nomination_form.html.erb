@@ -1,0 +1,55 @@
+<h2><%= ts("Tag Nominations") %></h2>
+
+<h3><%= ts("Notes") %></h3>
+<ul class="notes">
+	<li>Please nominate the canonical form of a tag if possible. The autocomplete will only list canonical tags.</li>
+	<li>Your nominations will be reviewed by the tag set moderators and may not be included.</li> 
+</ul>
+
+<!-- /descriptions-->
+
+<!--main content-->
+<h3 class="landmark"><%= ts("Tag Nominations") %></h3>
+
+<%= form_for(@tag_set_nomination) do |f| %>
+  <fieldset class="preface profile">
+    <legend>Basic Information</legend>
+    <h4>Basic Information</h4>
+    <dl>
+      <dt><%= f.label :owned_tag_set, ts("Nominating For: ") %></dt>
+      <dd><%= f.text_field :owned_tag_set, autocomplete_options("nominated_tag_sets", :autocomplete_token_limit => 1) %></dd>
+        
+      <dt><%= f.label :pseud, ts("Pseud: ") %></dt>
+      <dd><%= f.select :pseud, current_user.pseuds.collect {|p| [p.name, p.id] } %>
+    </dl>
+  </fieldset>
+  <fieldset class="preface profile">
+    <legend>Tag Nominations</legend>
+    <h4>Tag Nominations</h4>
+  	<dl>			
+      <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
+        <% if @tag_set.send("#{tag_type}_nomination_limit") > 0 %>
+          <dt>
+            <%= f.label "#{tag_type}_nominations".to_sym, ts("#{tag_type.classify.pluralize} (Up To %{limit})", :limit => @tag_set.send("#{tag_type}_nomination_limit")) %>
+          </dt>
+          <dd>
+            <%= f.text_field "#{tag_type}_nominations".to_sym, autocomplete_options("#{tag_type}") %>
+          </dd>
+          <dt>
+            <%= f.label "#{tag_type}_nominations_notes".to_sym, ts("Brief notes") %>
+          </dt>
+          <dd>
+            <%= f.text_area "#{tag_type}_nominations_notes".to_sym, :rows => 4 %>
+          </dd>
+        <% end %>
+      <% end %>
+    </dl>
+  </fieldset>
+
+  <fieldset>
+  	<legend><%= ts('Submit') %></legend> 
+    <p class="submit">
+      <%= f.submit ts('Submit') %>
+    </p>
+  </fieldset>
+<% end %>

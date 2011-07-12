@@ -2,7 +2,7 @@ class AutocompleteController < ApplicationController
   respond_to :json
   
   skip_before_filter :store_location
-  skip_before_filter :set_current_user
+  skip_before_filter :set_current_user, :except => [:collection_parent_name, :owned_tag_sets]
   skip_before_filter :fetch_admin_settings
   skip_before_filter :set_redirects
   skip_before_filter :sanitize_params # can we dare!
@@ -101,8 +101,14 @@ class AutocompleteController < ApplicationController
                     .where(["pseuds.name LIKE ? AND challenge_signups.collection_id = ?", 
                             '%' + search_param + '%', collection_id]).map(&:byline))
   end
-
   
+  # owned tag sets that are visible
+  def owned_tag_sets
+    if params[:term].length > 0
+      search_param = '%' + params[:term] + '%'
+      render_output(OwnedTagSet.limit(10).order(:title).visible.where("owned_tag_sets.title LIKE ?", search_param).collect(&:title))
+    end
+  end
   
 private
 

@@ -70,6 +70,8 @@ class Tag < ActiveRecord::Base
   has_many :approved_collections, :through => :filtered_works
 
   has_many :set_taggings, :dependent => :destroy
+  has_many :tag_sets, :through => :set_taggings
+  has_many :owned_tag_sets, :through => :tag_sets
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -297,6 +299,15 @@ class Tag < ActiveRecord::Base
                   where("filter_counts.unhidden_works_count #{comparison} (select AVG(unhidden_works_count) from filter_counts where filter_id in (#{non_meta_ids.collect(&:id).join(',')})) * ?", options[:factor]).
                   order("count ASC")
     end
+  end
+  
+  def self.in_prompt_restriction(restriction)
+    joins("INNER JOIN set_taggings ON set_taggings.tag_id = tags.id
+           INNER JOIN tag_sets ON tag_sets.id = set_taggings.tag_set_id
+           INNER JOIN owned_tag_sets ON owned_tag_sets.tag_set_id = tag_sets.id
+           INNER JOIN owned_set_taggings ON owned_set_taggings.owned_tag_set_id = owned_tag_sets.id
+           INNER JOIN prompt_restrictions ON (prompt_restrictions.id = owned_set_taggings.set_taggable_id AND owned_set_taggings.set_taggable_type = 'PromptRestriction')").
+    where("prompt_restrictions.id = ?", restriction.id)           
   end
 
   # Used for associations, such as work.fandoms.string

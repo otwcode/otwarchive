@@ -105,7 +105,7 @@ class Prompt < ActiveRecord::Base
         # if we have a specified set of tags of this type, make sure that all the
         # tags in the prompt are in the set.
         if restriction.has_tags_of_type?(tag_type)
-          disallowed_taglist = tag_set ? (eval("tag_set.#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)) : []
+          disallowed_taglist = tag_set ? (eval("tag_set.#{tag_type}_taglist") - restriction.tags_of_type(tag_type)) : []
           unless disallowed_taglist.empty?
             errors.add(:base, ts("^These tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
               :prompt_type => self.class.name,

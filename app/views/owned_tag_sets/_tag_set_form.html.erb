@@ -3,7 +3,7 @@
 	<li>You can use tag sets when running a challenge (and eventually will be able to use them for browsing).</li>
 	<li>Visible tag sets can be viewed and used by others.</li> 
 	<li>Tag sets that are open to nominations can take nominations from the public.</li> 
-</p>
+</ul>
 
 <!-- /descriptions-->
 
@@ -54,8 +54,20 @@
 			<dd><%= tag_set_form.check_box :visible %></dd>
 
 			<dt><%= tag_set_form.label :nominated, ts("Open to nominations?") %></dt>
-			<dd><%= tag_set_form.check_box :nominated %></dd>
+			<dd><%= tag_set_form.check_box :nominated, :onchange => "if ($j(this).is(':checked')){$('nomination_limits').show();} else {$('nomination_limits').hide();}" %></dd>
 		</dl>
+	</fieldset>
+	
+	<fieldset id="nomination_limits" class="preface profile hideme">
+	  <legend>Nomination Limits</legend>
+	  <h3>Nomination Limits</h3>
+	  <p class="notes">Enter however many tags of each type you want users to be able to nominate.</p>
+	  <dl>
+	    <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
+        <dt><%= tag_set_form.label "#{tag_type}_nomination_limit".to_sym %></dt>
+        <dd><%= tag_set_form.text_field "#{tag_type}_nomination_limit".to_sym, :size => 4 %></dd>
+	    <% end %>
+	  </dl>
 	</fieldset>
 
   <fieldset class="preface profile">
@@ -65,8 +77,8 @@
     <%= tag_set_form.fields_for :tag_set do |internal_tag_set_form| %>
       <% TagSet::TAG_TYPES.each do |tag_type| %>
         <fieldset class="tag_set">
-          <legend><%= ts("%{tag_type} Tags", :tag_type => tag_type.classify) %></legend>
-          <h4><%= "#{tag_type.classify}" %></h4>
+          <legend><%= ts("#{tag_type.classify.pluralize}") %></legend>
+          <h4><%= "#{tag_type.classify.pluralize}" %></h4>
 
           <% unless @tag_set.tag_set.tags_with_type(tag_type).empty? %>
             <!-- create a scrollable checkboxes section to wrap the tags, see application_helper -->
@@ -79,7 +91,7 @@
           <% end %>
           <h5><%= internal_tag_set_form.label "#{tag_type}_tagnames_to_add".to_sym, "#{tag_type.classify.pluralize} to add: " %></h5>
           <p>
-            <%= internal_tag_set_form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options("tag?type=all") %>
+            <%= internal_tag_set_form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options("tag_type") %>
           </p>
         </fieldset>
       <% end %>

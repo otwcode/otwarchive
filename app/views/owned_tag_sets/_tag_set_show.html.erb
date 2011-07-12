@@ -1,0 +1,41 @@
+<div class="tag_set module">
+  <h3><%= ts("About %{name}", :name => @tag_set.title) %></h3>
+  <div class="wrapper">
+    <dl class="tag_set meta">
+      <dt><%= ts("Created at: ") %></dt>
+      <dd><%= l(@tag_set.created_at.to_date) %></dd>
+      <dt><%= ts("Maintainers:") %></dt>
+      <dd>
+        <ul>
+          <%= (@tag_set.owners + @tag_set.moderators).map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join(', ').html_safe %>
+        </ul>
+      </dd>
+      <dt><%= ts("Description:")%></dt>
+      <dd>
+        <%=raw sanitize_field(@tag_set, :description) %>
+        <% if @tag_set.nominated %>
+          <p class="notes">This tag set is open for nominations from the public. Current number of nominations allowed per user: </p>
+          <dl>
+          <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
+            <dt><%= ts("#{tag_type.pluralize}: ") %></dt>
+            <dd><%= @tag_set.send("#{tag_type}_nomination_limit") %></dd>
+          <% end %>
+          </dl>
+        <% end %>        
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<h3><%= ts("Tags") %></h3>
+
+<% if @tag_type %>
+  <%= cache("tag_set_show_#{@tag_set.tag_set.id}_#{@tag_type}") do %>
+    <%= render "tag_set_tags" %>
+  <% end %> <!-- end cache -->
+<% else %>
+  <%= cache("tag_set_show_#{@tag_set.tag_set.id}") do %>
+    <%= render "tag_set_tags" %>
+  <% end %> <!-- end cache -->
+<% end %>
+

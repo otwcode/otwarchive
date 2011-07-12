@@ -35,12 +35,13 @@
         <% num_allowed = eval("restriction.#{tag_type}_num_allowed") %>
         <% num_required = eval("restriction.#{tag_type}_num_required") %>
         <% @taglist ||= {} %>
-        <% @taglist["#{tag_type}-#{restriction.id}"] ||= restriction.tag_set.tags.with_type(tag_type.classify).by_name_without_articles %>
-        <% # do ratings, warnings, categories as taglists if not already specified %>
-        <% if @taglist["#{tag_type}-#{restriction.id}"].empty? && TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
+        <% taglist_size = tag_type.classify.constantize.in_prompt_restriction(restriction).count %>
+        <% if taglist_size > 0 && taglist_size <= ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
+          <% @taglist["#{tag_type}-#{restriction.id}"] ||= tag_type.classify.constantize.in_prompt_restriction(restriction).by_name_without_articles %>
+        <% elsif TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
+          <% # do ratings, warnings, categories as taglists if not already specified %>
           <% @taglist["#{tag_type}-#{restriction.id}"] = tag_type.classify.constantize.canonical.by_name_without_articles %>
         <% end %>        
-        <% taglist_size = @taglist["#{tag_type}-#{restriction.id}"].size %>
     
         <% if num_allowed > 0 %>
           <dt <%= num_required > 0 ? 'class="required"'.html_safe : '' %>>

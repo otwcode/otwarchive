@@ -8,14 +8,19 @@ class OwnedTagSet < ActiveRecord::Base
   # being used in prompts.
   # -- NN May 2011 
   
-  belongs_to :tag_set
+  belongs_to :tag_set, :dependent => :destroy
   accepts_nested_attributes_for :tag_set  
+
+  has_many :tag_set_nominations, :dependent => :destroy
 
   attr_protected :featured
 
   has_many :tag_set_ownerships, :dependent => :destroy
   has_many :moderators, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', false]
   has_many :owners, :through => :tag_set_ownerships, :source => :pseud, :conditions => ['tag_set_ownerships.owner = ?', true]
+  
+  has_many :owned_set_taggings, :dependent => :destroy
+  has_many :set_taggables, :through => :owned_set_taggings
 
   validates_presence_of :title, :message => ts("Please enter a title for your tag set.")
   validates_uniqueness_of :title, :case_sensitive => false, :message => ts('Sorry, that name is already taken. Try again, please!')
@@ -25,11 +30,40 @@ class OwnedTagSet < ActiveRecord::Base
   validates_length_of :title,
     :maximum => ArchiveConfig.TITLE_MAX,
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
+  validates_format_of :title,
+    :with => /\A[^,*<>^{}=`\\%]+\z/,
+    :message => 'of a tag set can not include the following restricted characters: , ^ * < > { } = ` \\ %'
 
   validates_length_of :description,
     :allow_blank => true,
     :maximum => ArchiveConfig.SUMMARY_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.SUMMARY_MAX)
+
+  validates_numericality_of :fandom_nomination_limit, :character_nomination_limit, :relationship_nomination_limit, :freeform_nomination_limit,
+    :only_integer => true, :less_than_or_equal_to => 20, :greater_than_or_equal_to => 0,
+    :message => ts('must be an integer between 0 and 20.')
+
+  def self.owned_by(user = User.current_user)
+    if user.is_a?(User)
+      select("DISTINCT owned_tag_sets.*").
+      joins("INNER JOIN tag_set_ownerships ON owned_tag_sets.id = tag_set_ownerships.owned_tag_set_id
+             INNER JOIN pseuds ON tag_set_ownerships.pseud_id = pseuds.id
+             INNER JOIN users ON pseuds.user_id = users.id").
+      where("users.id = ?", user.id)
+    end
+  end
+
+  def self.visible(user = User.current_user)
+    if user.is_a?(User)
+      select("DISTINCT owned_tag_sets.*").
+      joins("INNER JOIN tag_set_ownerships ON owned_tag_sets.id = tag_set_ownerships.owned_tag_set_id
+             INNER JOIN pseuds ON tag_set_ownerships.pseud_id = pseuds.id
+             INNER JOIN users ON pseuds.user_id = users.id").
+      where("owned_tag_sets.visible = true OR users.id = ?", user.id)
+    else
+      where("owned_tag_sets.visible = true")
+    end
+  end
 
   def user_is_owner?(user)
     !(owners & user.pseuds).empty?
@@ -71,6 +105,7 @@ class OwnedTagSet < ActiveRecord::Base
   def owner_changes; nil; end
   def moderator_changes; nil; end
   
+    
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,
   # so we just pass them through method_missing

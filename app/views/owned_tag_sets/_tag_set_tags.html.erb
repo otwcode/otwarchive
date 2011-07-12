@@ -1,5 +1,5 @@
 <% if @tag_type %>
-  <h3>Available <%= @tag_type.classify %> Options (<%= @tags.count %>)</h3>
+  <h3><%= @tag_type.classify.pluralize %> (<%= @tags.count %>)</h3>
 
   <% if @tag_type == "fandom" && @tags.count > ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
 

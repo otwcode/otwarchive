@@ -1,0 +1,26 @@
+<div class="tag_set module">
+  <h3><%= ts("Your Nominations For %{name}", :name => @tag_set.target_set.title) %></h3>
+  <div class="wrapper">
+    <dl class="tag_set meta">
+      <dt><%= ts("Created at: ") %></dt>
+      <dd><%= l(@tag_set.created_at.to_date) %></dd>
+      <dt><%= ts("Notes:")%></dt>
+      <dd>
+        <%=raw sanitize_field(@tag_set, :description) %>
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<h3><%= ts("Nominated Tags") %></h3>
+
+<% if @tag_type %>
+  <%= cache("tag_set_show_#{@tag_set.tag_set.id}_#{@tag_type}") do %>
+    <%= render "tag_set_tags" %>
+  <% end %> <!-- end cache -->
+<% else %>
+  <%= cache("tag_set_show_#{@tag_set.tag_set.id}") do %>
+    <%= render "tag_set_tags" %>
+  <% end %> <!-- end cache -->
+<% end %>
+

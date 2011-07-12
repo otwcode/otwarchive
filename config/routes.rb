@@ -66,8 +66,8 @@ Otwarchive::Application.routes.draw do
 	end
 
   resources :tag_sets, :controller => 'owned_tag_sets' do 
+    resources :nominations, :controller => 'tag_set_nominations'
     member do
-      get :nominate
       get :review
     end
   end
@@ -175,6 +175,7 @@ Otwarchive::Application.routes.draw do
         get :manage
       end
     end
+    resources :nominations, :controller => "tag_set_nominations", :only => [:index]
     resources :preferences, :only => [:index, :update]
     resource :profile, :only => [:show], :controller => "profile"
     resources :pseuds do
@@ -197,6 +198,7 @@ Otwarchive::Application.routes.draw do
     resources :signups, :controller => "challenge_signups", :only => [:index]
     resources :skins, :only => [:index]
     resources :subscriptions, :only => [:index, :create, :destroy]
+    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]    
     resources :works do
       collection do
         get :drafts
