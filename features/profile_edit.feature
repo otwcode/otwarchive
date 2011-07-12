@@ -93,5 +93,5 @@ Scenario: Edit profile - change password
  
   When I change my password
     Then I should see "Your password has been changed"
-	And 1 email should be delivered
+	And 0 emails should be delivered
 	
