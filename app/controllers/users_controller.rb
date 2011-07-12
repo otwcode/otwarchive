@@ -112,7 +112,6 @@ class UsersController < ApplicationController
       @user.recently_reset = false
       if @user.save
         flash[:notice] = ts("Your password has been changed")
-		UserMailer.reset_password(@user).deliver
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
         redirect_to user_profile_path(@user) and return
       else
