@@ -78,7 +78,7 @@ class UserSessionsController < ApplicationController
               # and tell them to change their password
               redirect_to change_password_user_path(@current_user) and return
             else
-              message = ts("The password you entered has expired. Please click the 'forgot password' link below.")
+              message = ts("The password you entered has expired. Please click the 'Reset password' link below.")
             end
           elsif user.active?
             message = ts("The password you entered doesn't match our records. Please try again or click the 'forgot password' link below.")

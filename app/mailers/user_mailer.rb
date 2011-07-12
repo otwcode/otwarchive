@@ -140,9 +140,9 @@ class UserMailer < ActionMailer::Base
   end
 
   # Sends a temporary password to the user
-  def reset_password(user_id)
+  def reset_password(user_id, activation_code)
     @user = User.find(user_id)
-    @password = @user.activation_code
+    @password = activation_code
     mail(
       :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Generated password"
