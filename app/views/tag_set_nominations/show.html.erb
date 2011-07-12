@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Pseud:</b>
+  <%= @tag_set_nomination.pseud %>
+</p>
+
+<p>
+  <b>Owned tag set:</b>
+  <%= @tag_set_nomination.owned_tag_set %>
+</p>
+
+<p>
+  <b>Fandom nominations:</b>
+  <%= @tag_set_nomination.fandom_nominations %>
+</p>
+
+<p>
+  <b>Character nominations:</b>
+  <%= @tag_set_nomination.character_nominations %>
+</p>
+
+<p>
+  <b>Relationship nominations:</b>
+  <%= @tag_set_nomination.relationship_nominations %>
+</p>
+
+<p>
+  <b>Freeform nominations:</b>
+  <%= @tag_set_nomination.freeform_nominations %>
+</p>
+
+<p>
+  <b>Fandom nominations notes:</b>
+  <%= @tag_set_nomination.fandom_nominations_notes %>
+</p>
+
+<p>
+  <b>Character nominations notes:</b>
+  <%= @tag_set_nomination.character_nominations_notes %>
+</p>
+
+<p>
+  <b>Relationship nominations notes:</b>
+  <%= @tag_set_nomination.relationship_nominations_notes %>
+</p>
+
+<p>
+  <b>Freeform nominations notes:</b>
+  <%= @tag_set_nomination.freeform_nominations_notes %>
+</p>
+
+
+<%= link_to 'Edit', edit_tag_set_nomination_path(@tag_set_nomination) %> |
+<%= link_to 'Back', tag_set_nominations_path %>
