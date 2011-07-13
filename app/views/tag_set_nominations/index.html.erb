@@ -1,15 +1,29 @@
-<h1>Listing tag_set_nominations</h1>
+<% if @user %>
+  <h2><%= ts("Your Nominations") %></h2>
+<% elsif @tag_set %>
+  <h2><%= ts("Nominations for %{title}", :title => @tag_set.title) %></h2>
+<% end %>
 
-    <td><%= tag_set_nomination.pseud %></td>
-    <td><%= tag_set_nomination.owned_tag_set %></td>
-    <td><%= tag_set_nomination.fandom_nominations %></td>
-    <td><%= tag_set_nomination.character_nominations %></td>
-    <td><%= tag_set_nomination.relationship_nominations %></td>
-    <td><%= tag_set_nomination.freeform_nominations %></td>
-    <td><%= tag_set_nomination.fandom_nominations_notes %></td>
-    <td><%= tag_set_nomination.character_nominations_notes %></td>
-    <td><%= tag_set_nomination.relationship_nominations_notes %></td>
-    <td><%= tag_set_nomination.freeform_nominations_notes %></td>
-    <td><%= link_to 'Show', tag_set_nomination %></td>
-    <td><%= link_to 'Edit', edit_tag_set_nomination_path(tag_set_nomination) %></td>
-    <td><%= link_to 'Destroy', tag_set_nomination, :confirm => 'Are you sure?', :method => :delete %></td>
+<% @tag_set_nominations.each do |tag_set_nomination| %>
+
+  <dl>
+    <dt><%= tag_set_nomination.pseud %></dt>
+    <dd>
+    <%= tag_set_nomination.fandom_nominations %>
+    <%= tag_set_nomination.fandom_nominations_notes %>
+    </dd><dd>
+    <%= tag_set_nomination.character_nominations %>
+    <%= tag_set_nomination.character_nominations_notes %>
+    </dd><dd>
+    <%= tag_set_nomination.relationship_nominations %>
+    <%= tag_set_nomination.relationship_nominations_notes %>
+    </dd><dd>
+    <%= tag_set_nomination.freeform_nominations %>
+    <%= tag_set_nomination.freeform_nominations_notes %>
+    </dd><dd>
+    <%= link_to 'Show', tag_set_nomination %>
+    <%= link_to 'Edit', edit_tag_set_nomination_path(tag_set_nomination) %>
+    <%= link_to 'Destroy', tag_set_nomination, :confirm => 'Are you sure you want to delete your nominations?', :method => :delete %>
+    </dd>
+  </dl>
+<% end %>

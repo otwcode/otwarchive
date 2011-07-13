@@ -11,16 +11,16 @@
 <!--main content-->
 <h3 class="landmark"><%= ts("Tag Nominations") %></h3>
 
-<%= form_for(@tag_set_nomination) do |f| %>
+<%= form_for(@tag_set_nomination, :url => (@tag_set_nomination.new_record? ? tag_set_nominations_path(@tag_set) : tag_set_nomination_path(@tag_set, @tag_set_nomination)), :html => {:method => (@tag_set_nomination.new_record? ? :post : :put)}) do |f| %>
   <fieldset class="preface profile">
     <legend>Basic Information</legend>
     <h4>Basic Information</h4>
     <dl>
-      <dt><%= f.label :owned_tag_set, ts("Nominating For: ") %></dt>
-      <dd><%= f.text_field :owned_tag_set, autocomplete_options("nominated_tag_sets", :autocomplete_token_limit => 1) %></dd>
+      <dt><%= f.label :owned_tag_set_id, ts("Nominating For: ") %></dt>
+      <dd><%= f.hidden_field :owned_tag_set_id, :value => @tag_set_nomination.owned_tag_set.id %><%= @tag_set_nomination.owned_tag_set.title %></dd>
         
-      <dt><%= f.label :pseud, ts("Pseud: ") %></dt>
-      <dd><%= f.select :pseud, current_user.pseuds.collect {|p| [p.name, p.id] } %>
+      <dt><%= f.label :pseud_id, ts("Pseud: ") %></dt>
+      <dd><%= f.select :pseud_id, current_user.pseuds.collect {|p| [p.name, p.id] } %>
     </dl>
   </fieldset>
   <fieldset class="preface profile">
@@ -28,12 +28,12 @@
     <h4>Tag Nominations</h4>
   	<dl>			
       <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
-        <% if @tag_set.send("#{tag_type}_nomination_limit") > 0 %>
+        <% if (limit = @tag_set.send("#{tag_type}_nomination_limit")) > 0 %>
           <dt>
-            <%= f.label "#{tag_type}_nominations".to_sym, ts("#{tag_type.classify.pluralize} (Up To %{limit})", :limit => @tag_set.send("#{tag_type}_nomination_limit")) %>
+            <%= f.label "#{tag_type}_nominations".to_sym, ts("#{tag_type.classify.pluralize} (Up To %{limit})", :limit => limit) %>
           </dt>
           <dd>
-            <%= f.text_field "#{tag_type}_nominations".to_sym, autocomplete_options("#{tag_type}") %>
+            <%= f.text_field "#{tag_type}_nominations".to_sym, autocomplete_options("#{tag_type}", :autocomplete_token_limit => limit) %>
           </dd>
           <dt>
             <%= f.label "#{tag_type}_nominations_notes".to_sym, ts("Brief notes") %>

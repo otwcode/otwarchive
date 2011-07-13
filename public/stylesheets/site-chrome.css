@@ -446,6 +446,11 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 /*TAG WRANGLINGS INDEX */
  .tag_wranglings-index .module   { width: 70%; margin:auto; }
 
+/* TAG NOMINATIONS */
+ .nominations ul li { display: inline; padding: 1em; }
+ .nominations .notes { padding-left: 4em; }
+ .unwrangled { border: 0.15em solid #CCB521;}
+ .nonexistent { border: 0.15em solid #C91441;}
 
 /* TRANSLATIONS*/
  #main.translation-translate   { margin-bottom: 2.5em }

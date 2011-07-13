@@ -1,10 +1,10 @@
 class TagSetNominationsController < ApplicationController
   before_filter :users_only
   before_filter :load_tag_set, :except => [ :index ]
-  before_filter :load_nomination, :only => [:show, :edit, :destroy]
+  before_filter :load_nomination, :only => [:show, :edit, :update, :destroy]
   
   def load_tag_set
-    @tag_set = OwnedTagSet.find(params[:owned_tag_set_id])
+    @tag_set = OwnedTagSet.find(params[:tag_set_id])
     unless @tag_set
       flash[:notice] = ts("What tag set did you want to nominate for?")
       redirect_to tag_sets_path and return
@@ -20,7 +20,20 @@ class TagSetNominationsController < ApplicationController
   end
     
   def index
-    @tag_set_nominations = TagSetNomination.all
+    if @tag_set && @tag_set.user_is_moderator?(current_user)
+      @tag_set_nominations = TagSetNomination.for_tag_set(@tag_set)
+      
+      
+      
+    elsif params[:user_id]
+      @user = User.find_by_login(params[:user_id])
+      if @user != current_user
+        flash[:error] = ts("You can only view your own nominations, sorry.")
+        redirect_to tag_sets_path and return
+      else
+        @tag_set_nominations = TagSetNomination.owned_by(@user)
+      end
+    end
   end
 
   def show
@@ -28,7 +41,11 @@ class TagSetNominationsController < ApplicationController
   end
 
   def new
-    @tag_set_nomination = TagSetNomination.new
+    if @tag_set_nomination = TagSetNomination.for_tag_set(@tag_set).owned_by(current_user).first
+      redirect_to edit_tag_set_nomination_path(@tag_set, @tag_set_nomination)
+    else      
+      @tag_set_nomination = TagSetNomination.new(:pseud => current_user.default_pseud, :owned_tag_set => @tag_set)
+    end
   end
 
   def edit
@@ -37,43 +54,26 @@ class TagSetNominationsController < ApplicationController
 
   def create
     @tag_set_nomination = TagSetNomination.new(params[:tag_set_nomination])
-
-    respond_to do |format|
-      if @tag_set_nomination.save
-        format.html { redirect_to(@tag_set_nomination, :notice => 'Tag set nomination was successfully created.') }
-        format.xml  { render :xml => @tag_set_nomination, :status => :created, :location => @tag_set_nomination }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @tag_set_nomination.errors, :status => :unprocessable_entity }
-      end
+    if @tag_set_nomination.save
+      flash[:notice] = ts('Your nominations were successfully submitted.')
+      redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
+    else
+      render :action => "new"
     end
   end
 
-  # PUT /tag_set_nominations/1
-  # PUT /tag_set_nominations/1.xml
   def update
-    @tag_set_nomination = TagSetNomination.find(params[:id])
-
-    respond_to do |format|
-      if @tag_set_nomination.update_attributes(params[:tag_set_nomination])
-        format.html { redirect_to(@tag_set_nomination, :notice => 'Tag set nomination was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @tag_set_nomination.errors, :status => :unprocessable_entity }
-      end
+    if @tag_set_nomination.update_attributes(params[:tag_set_nomination])
+      flash[:notice] = ts("Your nominations were successfully updated.")
+      redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
+    else
+      render :action => "edit"
     end
   end
 
-  # DELETE /tag_set_nominations/1
-  # DELETE /tag_set_nominations/1.xml
   def destroy
-    @tag_set_nomination = TagSetNomination.find(params[:id])
     @tag_set_nomination.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(tag_set_nominations_url) }
-      format.xml  { head :ok }
-    end
+    flash[:notice] = ts("Your nominations were deleted.")
+    redirect_to tag_set_nominations_url(@tag_set)
   end
 end

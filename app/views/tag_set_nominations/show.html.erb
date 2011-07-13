@@ -1,55 +1,70 @@
-<p id="notice"><%= notice %></p>
+<div class="navigation module">
+  <h3 class="landmark">Navigation</h3>
+  <ul class="navigation" role="navigation">
+    <% if @tag_set.nominated %>
+  	  <li><%= link_to ts("Edit"), edit_tag_set_nomination_path(@tag_set, @tag_set_nomination) %></li>
+  	<% end %>
+    <li><%= link_to ts("Delete"), tag_set_path(@tag_set),
+      :confirm => ts('Are you certain you want to delete this tag set?'),
+      :method => :delete %></li>
+  </ul>
+</div>
 
-<p>
-  <b>Pseud:</b>
-  <%= @tag_set_nomination.pseud %>
+<div class="tag_set module">
+  <h3><%= ts("Your Nominations For %{name}", :name => @tag_set.title) %></h3>
+  <div class="wrapper">
+    <dl class="meta">
+      <dt><%= ts("Created at: ") %></dt>
+      <dd><%= l(@tag_set_nomination.created_at.to_date) %></dd>
+    </dl>
+  </div>
+</div>
+
+<h3><%= ts("Nominated Tags") %></h3>
+
+<dl class="nominations">			
+  <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
+    <% if (limit = @tag_set.send("#{tag_type}_nomination_limit")) > 0 %>
+      <dt><%= ts("#{tag_type.classify.pluralize}: ") %></dt>
+      <dd>
+        <ul>
+          <% @tag_set_nomination.nominated_tags(tag_type).sort.each do |tag| %>
+            <li>
+              <% if (tagobj = tag_type.classify.constantize.find_by_name(tag)) %>
+                <% if tagobj.canonical %>
+                  <%= link_to_tag_works(tagobj) %>
+                <% elsif tagobj.merger %>
+                  <%= tag %> (<%= link_to_tag_works(tagobj.merger) %>)
+                <% else %>
+                  <span class="unwrangled"><%= tag %></span>
+                <% end %>
+              <% else %>
+                <span class="nonexistent"><%= tag %></span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </dd>
+      <% unless @tag_set_nomination.send("#{tag_type}_nominations_notes").blank? %>
+        <dd class="notes">
+          <%= @tag_set_nomination.send("#{tag_type}_nominations_notes") %>
+        </dd>
+      <% end %>
+    <% end %>
+  <% end %>
+</dl>
+
+
+<p class="notes">
+  Note: some of your tags may be marked as <span class="unwrangled">unwrangled</span>, meaning they currently exist in the archive but have
+  not been organized into our tagging system, and some may be marked as <span class="nonexistent">nonexistent</span>, meaning
+  they don't exist in the archive at all. If you have tags marked this way, please make sure you have them typed correctly
+  and add any notes you can to help our tag wranglers sort these tags out properly!
 </p>
 
-<p>
-  <b>Owned tag set:</b>
-  <%= @tag_set_nomination.owned_tag_set %>
+<p class="notes">
+  If you see one of your tags listed with a slightly different tag afterwards in parentheses, this means that the
+  tag you have nominated is wrangled and has a canonical synonym on the archive. The moderators may decide to use
+  the canonical synonym instead of the version you used, so if there is a specific reason why you want to nominate
+  the non-canonical version, you may want to explain in your notes to help them decide.
 </p>
-
-<p>
-  <b>Fandom nominations:</b>
-  <%= @tag_set_nomination.fandom_nominations %>
-</p>
-
-<p>
-  <b>Character nominations:</b>
-  <%= @tag_set_nomination.character_nominations %>
-</p>
-
-<p>
-  <b>Relationship nominations:</b>
-  <%= @tag_set_nomination.relationship_nominations %>
-</p>
-
-<p>
-  <b>Freeform nominations:</b>
-  <%= @tag_set_nomination.freeform_nominations %>
-</p>
-
-<p>
-  <b>Fandom nominations notes:</b>
-  <%= @tag_set_nomination.fandom_nominations_notes %>
-</p>
-
-<p>
-  <b>Character nominations notes:</b>
-  <%= @tag_set_nomination.character_nominations_notes %>
-</p>
-
-<p>
-  <b>Relationship nominations notes:</b>
-  <%= @tag_set_nomination.relationship_nominations_notes %>
-</p>
-
-<p>
-  <b>Freeform nominations notes:</b>
-  <%= @tag_set_nomination.freeform_nominations_notes %>
-</p>
-
-
-<%= link_to 'Edit', edit_tag_set_nomination_path(@tag_set_nomination) %> |
-<%= link_to 'Back', tag_set_nominations_path %>

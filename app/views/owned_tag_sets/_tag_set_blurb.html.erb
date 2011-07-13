@@ -38,7 +38,7 @@
         <li><%= link_to ts('Review'), review_tag_set_path(tag_set) %></li>
       <% end %>
       <% if tag_set.nominated %>
-        <li><%= link_to ts("Nominate"), nominate_tag_set_path(tag_set)%></li>
+        <li><%= link_to ts("Nominate"), new_tag_set_nomination_path(tag_set)%></li>
       <% end %>
     </ul>
   <% end %>

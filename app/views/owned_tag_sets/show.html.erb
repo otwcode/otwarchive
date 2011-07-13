@@ -2,17 +2,13 @@
   <h3 class="landmark">Navigation</h3>
   <ul class="navigation" role="navigation">
     <% if @tag_set.nominated %>
-  	  <li><%= link_to ts("Nominate"), nominate_tag_set_path(@tag_set) %></li>
+  	  <li><%= link_to ts("Nominate"), new_tag_set_nomination_path(@tag_set) %></li>
   	<% end %>
     <% if @tag_set.user_is_moderator?(current_user) %>
       <% if @tag_set.nominated %>
     	  <li><%= link_to ts("Review"), review_tag_set_path(@tag_set) %></li>
     	<% end %>
-    	<% if @tag_set.submission %>
-    	  <li><%= link_to ts("Edit"), nominate_tag_set_path(@tag_set.target_set) %></li>
-    	<% else %>
-  	    <li><%= link_to ts("Edit"), edit_tag_set_path(@tag_set) %></li>
-    	<% end %>
+	    <li><%= link_to ts("Edit"), edit_tag_set_path(@tag_set) %></li>
     	<% if @tag_set.user_is_owner?(current_user) %>
         <li><%= link_to ts("Delete"), tag_set_path(@tag_set),
           :confirm => ts('Are you certain you want to delete this tag set?'),
@@ -22,8 +18,44 @@
   </ul>
 </div>
 
-<% if @tag_set.submission %>
-  <%= render 'submission_show' %>
+<div class="tag_set module">
+  <h3><%= ts("About %{name}", :name => @tag_set.title) %></h3>
+  <div class="wrapper">
+    <dl class="tag_set meta">
+      <dt><%= ts("Created at: ") %></dt>
+      <dd><%= l(@tag_set.created_at.to_date) %></dd>
+      <dt><%= ts("Maintainers:") %></dt>
+      <dd>
+        <ul>
+          <%= (@tag_set.owners + @tag_set.moderators).map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join(', ').html_safe %>
+        </ul>
+      </dd>
+      <dt><%= ts("Description:")%></dt>
+      <dd>
+        <%=raw sanitize_field(@tag_set, :description) %>
+        <% if @tag_set.nominated %>
+          <p class="notes">This tag set is open for nominations from the public. Current number of nominations allowed per user: </p>
+          <dl>
+          <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
+            <dt><%= ts("#{tag_type.pluralize}: ") %></dt>
+            <dd><%= @tag_set.send("#{tag_type}_nomination_limit") %></dd>
+          <% end %>
+          </dl>
+        <% end %>        
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<h3><%= ts("Tags") %></h3>
+
+<% if @tag_type %>
+  <%= cache("tag_set_show_#{@tag_set.tag_set.id}_#{@tag_type}") do %>
+    <%= render "tag_set_tags" %>
+  <% end %> <!-- end cache -->
 <% else %>
-  <%= render 'tag_set_show' %>
+  <%= cache("tag_set_show_#{@tag_set.tag_set.id}") do %>
+    <%= render "tag_set_tags" %>
+  <% end %> <!-- end cache -->
 <% end %>
+
