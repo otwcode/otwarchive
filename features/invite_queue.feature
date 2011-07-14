@@ -57,9 +57,8 @@ Feature: Invite queue management
   When I turn off the invitation queue
   When I am logged out as an admin
   When I go to the invite_requests page
-  # issue 1402
-  #Then I should not see "Add yourself to the list"
-   # And I should not find "invite_request_email"
+  Then I should not see "Add yourself to the list"
+    And I should not find "invite_request_email"
   
   Scenario: Can still check status when queue is off
   
