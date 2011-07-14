@@ -51,8 +51,42 @@ Feature: Invite queue management
       And I press "Go"
     Then I should see "Invitation Status for test@archiveofourown.org"
       And I should see "You are currently number 1 on our waiting list! At our current rate, you should receive an invitation on or around"
+
+  Scenario: Can't add yourself to the queue when queue is off
+  
+  When I turn off the invitation queue
+  When I am logged out as an admin
+  When I go to the invite_requests page
+  # issue 1402
+  #Then I should not see "Add yourself to the list"
+   # And I should not find "invite_request_email"
+  
+  Scenario: Can still check status when queue is off
+  
+  When I turn off the invitation queue
+  When I am logged out as an admin
+  When I go to the invite_requests page
+  Then I should see "Wondering how long you'll have to wait"
+    And I should find "email"
+  
+  Scenario: queue sends out invites
+  
+    Given I have no users
+      And I have an AdminSetting
+      And the following admin exists
+      | login       | password   | email                    |
+      | admin-sam   | password   | test@archiveofourown.org |
+      And the following users exist
+      | login | password |
+      | user1 | password |
     
-    # queue sends out invites
+    # join queue
+    When I turn on the invitation queue
+    When I am on the homepage
+      And all emails have been delivered
+      And I follow "SIGN UP NOW"
+    When I fill in "invite_request_email" with "test@archiveofourown.org"
+      And I press "Add me to the list"
     When the invite_from_queue_at is yesterday
     And the check_queue rake task is run
     Then 1 email should be delivered to test@archiveofourown.org
