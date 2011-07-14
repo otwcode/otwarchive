@@ -323,4 +323,22 @@ Feature: Admin tasks
   When I go to the support page
   Then I should see "Support and Feedback"
     And I should see "testadmin@example.org" in the "feedback_email" input
-
+    
+  Scenario: Post known issues
+  
+  When I am logged in as an admin
+    And I follow "admin posts"
+    And I follow "Known Issues" within "#main"
+    And I follow "make a new known issues post"
+    And I fill in "known_issue_title" with "First known problem"
+    And I fill in "content" with "This is a bit of a problem"
+    # Suspect related to issue 2458
+  #  And I press "Post"
+  #Then show me the main content
+  
+  Scenario: Edit known issues
+  
+  # TODO
+  # Given I have posted known issues
+  # When I edit known issues
+  # Then I should see "Known issues updated successfully"

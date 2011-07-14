@@ -80,6 +80,16 @@ Given /^I have posted a FAQ$/ do
   When %{I make a 1st FAQ post}
 end
 
+Given /^I have posted known issues$/ do
+  When %{I am logged in as an admin}
+    And %{I follow "admin posts"}
+    And %{I follow "Known Issues" within "#main"}
+    And %{I follow "make a new known issues post"}
+    And %{I fill in "known_issue_title" with "First known problem"}
+    And %{I fill in "content" with "This is a bit of a problem"}
+    And %{I press "Post"}
+end
+
 ### WHEN
 
 When /^I make an admin post$/ do
