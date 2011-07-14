@@ -8,7 +8,7 @@ class TagSweeper < ActionController::Caching::Sweeper
   end
   
   def after_update(tag)
-    if tag.changed.include?(:canonical)
+    if tag.canonical_changed?
       if tag.canonical
         # newly canonical tag
         tag.add_to_autocomplete
