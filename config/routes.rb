@@ -4,7 +4,7 @@ Otwarchive::Application.routes.draw do
 
   match 'downloads/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
 
-  #### YULETIDE 2010 ####
+  #### STATIC CACHED COLLECTIONS ####
 
   namespace 'static' do
     resources :collections, :only => [:show] do
