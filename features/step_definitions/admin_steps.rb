@@ -75,6 +75,11 @@ Given /^tag wrangling is on$/ do
   And "I am logged out as an admin"
 end
 
+Given /^I have posted a FAQ$/ do
+  When "I am logged in as an admin"
+  When %{I make a 1st FAQ post}
+end
+
 ### WHEN
 
 When /^I make an admin post$/ do
