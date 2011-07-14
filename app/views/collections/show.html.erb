@@ -3,7 +3,16 @@
   <%= render :partial => "collections/header", :locals => {:collection => @collection} %>
 
   <!--main content-->
-  <!-- expects @works, @bookmarks -->
+  <% # expects @works, @bookmarks %>
+  
+    <% if @collection.challenge && @collection.challenge_type == "PromptMeme" %>
+    <p>
+  	  <%= ts("Total prompts") + ": " + @collection.prompts.count.to_s %>
+      </p><p>
+      <%= ts("Unanswered prompts") + ": " + @collection.prompts.claimed.count.to_s %>
+    </p>
+  	<% end %>
+    
     <% unless @works.blank? %>
       <%= render :partial => 'works_module', :locals => {:collection => @collection, :works => @works} %>
     <% end %>
