@@ -7,7 +7,7 @@ describe Work do
     before(:each) do
       @author = Factory.create(:user)
       @fandom1 = Factory.create(:fandom)
-      @chapter1 = Chapter.create(:content => "Awesome content")
+      @chapter1 = Factory.create(:chapter)
       
       @work = Work.new(:title => "Title")
       @work.fandoms << @fandom1
