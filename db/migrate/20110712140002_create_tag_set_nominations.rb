@@ -3,14 +3,17 @@ class CreateTagSetNominations < ActiveRecord::Migration
     create_table :tag_set_nominations do |t|
       t.references :pseud
       t.references :owned_tag_set
-      t.string :fandom_nominations
-      t.string :character_nominations
-      t.string :relationship_nominations
-      t.string :freeform_nominations
-      t.string :fandom_nominations_notes
-      t.string :character_nominations_notes
-      t.string :relationship_nominations_notes
-      t.string :freeform_nominations_notes
+      t.text :fandom_nominations
+      t.text :fandom_nomination_medias
+      t.text :character_nominations
+      t.text :character_nomination_fandoms
+      t.text :relationship_nominations
+      t.text :relationship_nomination_fandoms
+      t.text :freeform_nominations
+      t.text :fandom_nomination_notes
+      t.text :character_nomination_notes
+      t.text :relationship_nomination_notes
+      t.text :freeform_nomination_notes
 
       t.timestamps
     end

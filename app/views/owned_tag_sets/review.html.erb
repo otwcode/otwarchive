@@ -1,0 +1,59 @@
+<% # adding tooltips for review %>
+<link href="jquery.bubblepopup.v2.3.1.css" rel="stylesheet" type="text/css" />
+<script src="jquery.bubblepopup.v2.3.1.min.js" type="text/javascript"></script>
+
+<h2>Review Nominations</h2>
+
+<ul class="notes">
+  <li>Once you close nominations, we'll begin processing the nominations.</li> 
+
+<% if @nomination_count < 1 %>
+  <p class="notes">
+    <%= ts("There aren't any nominations for this tag set to review.") %>
+  </p>
+<% elsif @tag_set.nominated %>
+  <%= form_for(@tag_set, :url => tag_set_path(@tag_set), :html => {:method => :put}) do |tag_set_form| %>
+    <%= error_messages_for @tag_set %>
+    <p class="notes">
+      <% ts("There are currently %{count} nominations submitted for this tag set.", :count => @nomination_count) %>
+    </p>
+
+    <fieldset>
+      <dl>
+      	<dt><%= tag_set_form.label :nominated, ts("Close nominations and review?") %></dt>
+      	<dd>
+      	  <%= tag_set_form.check_box :nominated %>
+      	  <%= hidden_field_tag :review, :value => true %>
+      	</dd>
+      </dl>
+    </fieldset>
+    <fieldset>
+    	<legend><%= ts('Submit') %></legend> 
+      <p class="submit">
+        <%= tag_set_form.submit ts('Submit') %>
+      </p>
+    </fieldset>
+  <% end %>    
+<% else %>
+
+  
+  <!-- 
+    
+    The following canonical tags not already in the set were nominated:
+    (scrollable checkboxes, all checked by default)
+    
+    The following tags were nominated but are not canonical and have synonyms; you can add either the nominated version or the canonical version:
+    (scrollable checkboxes, canonical versions checked)
+    
+    The following tags were nominated but are unwrangled:
+    (scrollable checkboxes, unchecked)
+    
+    The following tags were nominated but don't exist on the archive at all: 
+
+    
+    The following nominated character tags don't have a fandom: 
+    
+    The following nominated relationship tags don't have a fandom:  -->
+
+
+<% end %>

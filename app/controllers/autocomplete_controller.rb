@@ -110,6 +110,16 @@ class AutocompleteController < ApplicationController
     end
   end
   
+  # owned tag sets that are visible and open to nominations
+  # returns title and id
+  def nominated_tag_sets
+    if params[:term].length > 0
+      search_param = '%' + params[:term] + '%'
+      results = OwnedTagSet.limit(10).order(:title).visible.where(:nominated => true).where("owned_tag_sets.title LIKE ?", search_param)
+      respond_with(results.map {|ots| {:id => ots.id, :name => ots.name}})
+    end
+  end
+  
 private
 
   def render_output(result_strings)

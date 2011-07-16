@@ -14,7 +14,7 @@ class TagSetNomination < ActiveRecord::Base
     end
   end
   
-  validate :tag_validity
+  #validate :tag_validity
   def tag_validity
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| 
       nominated_tags(tag_type).each do |tagname|
@@ -30,7 +30,7 @@ class TagSetNomination < ActiveRecord::Base
     end
   end
 
-  validate :nomination_limits
+  #validate :nomination_limits
   def nomination_limits
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| 
       tagcount = nominated_tags(tag_type).count
@@ -52,12 +52,24 @@ class TagSetNomination < ActiveRecord::Base
   end
 
   def nominated_tags(tag_type = "fandom")
-    tagnames = self.send("#{tag_type}_nominations")
+    tagnames = tag_type == "freeform" ? self.freeform_nominations : self.send("#{tag_type}_nominations").join(ArchiveConfig.DELIMITER_FOR_INPUT)
     if tagnames.blank?
       return []
     else
       return tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT)
     end
   end
+
+  serialize :fandom_nominations
+  serialize :fandom_nomination_notes
+  serialize :character_nominations
+  serialize :character_nomination_notes
+  serialize :relationship_nominations
+  serialize :relationship_nomination_notes
+  serialize :freeform_nominations
+  serialize :freeform_nomination_notes
+  serialize :fandom_nomination_medias
+  serialize :character_nomination_fandoms
+  serialize :relationship_nomination_fandoms  
   
 end

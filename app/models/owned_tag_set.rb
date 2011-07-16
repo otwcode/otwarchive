@@ -105,6 +105,25 @@ class OwnedTagSet < ActiveRecord::Base
   def owner_changes; nil; end
   def moderator_changes; nil; end
   
+
+  @queue = :owned_tag_set
+  # This will be called by a worker when a job needs to be processed
+  def self.perform(method, *args)
+    self.send(method, *args)
+  end
+
+  def process_nominations
+    $redis.
+    Resque.enqueue(OwnedTagSet, :delayed_process_nominations, self.id)
+  end
+  
+  def self.delayed_process_nominations(tag_set_id)
+    $redis.
+    owned_set = OwnedTagSet.find(tag_set_id)
+    owned_set.nominations.find_each do |nomination|
+    end
+  end
+
     
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,

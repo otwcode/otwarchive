@@ -72,8 +72,13 @@ class OwnedTagSetsController < ApplicationController
   
   def update
     if @tag_set.update_attributes(params[:owned_tag_set])
-      flash[:notice] = ts("Tag set was successfully updated.")
-      redirect_to tag_set_path(@tag_set)
+      if params[:review]
+        flash[:notice] = ts("Nominations have been closed.")
+        redirect_to review_tag_set_path(@tag_set)
+      else
+        flash[:notice] = ts("Tag set was successfully updated.")
+        redirect_to tag_set_path(@tag_set)
+      end
     else
       render :action => :edit
     end
@@ -86,6 +91,10 @@ class OwnedTagSetsController < ApplicationController
   end
 
   def review
+    @nomination_count = @tag_set.tag_set_nominations.count
+    if !@tag_set.nominated && @nomination_count > 0
+      @tag_set.process_nominations
+    end
   end
 
 

@@ -4,8 +4,8 @@
     <% if @tag_set.nominated %>
   	  <li><%= link_to ts("Edit"), edit_tag_set_nomination_path(@tag_set, @tag_set_nomination) %></li>
   	<% end %>
-    <li><%= link_to ts("Delete"), tag_set_path(@tag_set),
-      :confirm => ts('Are you certain you want to delete this tag set?'),
+    <li><%= link_to ts("Delete"), tag_set_nomination_path(@tag_set),
+      :confirm => ts('Are you certain you want to delete these nominations?'),
       :method => :delete %></li>
   </ul>
 </div>

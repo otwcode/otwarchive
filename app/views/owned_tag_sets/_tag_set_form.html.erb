@@ -53,7 +53,7 @@
 			<dt><%= tag_set_form.label :visible, ts("Visible to the public?") %></dt>
 			<dd><%= tag_set_form.check_box :visible %></dd>
 
-			<dt><%= tag_set_form.label :nominated, ts("Open to nominations?") %></dt>
+			<dt><%= tag_set_form.label :nominated, ts("Currently taking nominations?") %></dt>
 			<dd><%= tag_set_form.check_box :nominated, :onchange => "if ($j(this).is(':checked')){$('nomination_limits').show();} else {$('nomination_limits').hide();}" %></dd>
 		</dl>
 	</fieldset>
@@ -61,7 +61,12 @@
 	<fieldset id="nomination_limits" class="preface profile hideme">
 	  <legend>Nomination Limits</legend>
 	  <h3>Nomination Limits</h3>
-	  <p class="notes">Enter however many tags of each type you want users to be able to nominate.</p>
+	  <p class="notes">
+	    IMPORTANT NOTE: if you allow users to nominate BOTH fandoms and characters/relationships in the same tag set, 
+	    we will assume the character/relationship number you allow is PER FANDOM. If that's not what you want, you 
+	    can have users nominate fandoms in one tag set, and characters/relationships in another tag set. (You can then use
+	    both tag sets in your challenge settings.)
+	  </p>
 	  <dl>
 	    <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
         <dt><%= tag_set_form.label "#{tag_type}_nomination_limit".to_sym %></dt>
@@ -86,7 +91,7 @@
             <%= options_section(internal_tag_set_form, 
                                 "owned_tag_set[tag_set_attributes][#{tag_type}_tags_to_remove][]", 
                                 "owned_tag_set_tag_set_attributes_#{tag_type}_tags_to_remove", 
-                                @tag_set.tag_set.send("#{tag_type}_taglist"), 
+                                @tag_set.tag_set.with_type(tag_type).by_name_without_articles, 
                                 nil, "name", "id") %>
           <% end %>
           <h5><%= internal_tag_set_form.label "#{tag_type}_tagnames_to_add".to_sym, "#{tag_type.classify.pluralize} to add: " %></h5>

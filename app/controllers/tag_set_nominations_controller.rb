@@ -21,10 +21,7 @@ class TagSetNominationsController < ApplicationController
     
   def index
     if @tag_set && @tag_set.user_is_moderator?(current_user)
-      @tag_set_nominations = TagSetNomination.for_tag_set(@tag_set)
-      
-      
-      
+      redirect_to review_tag_set_path(@tag_set) and return
     elsif params[:user_id]
       @user = User.find_by_login(params[:user_id])
       if @user != current_user
@@ -33,6 +30,9 @@ class TagSetNominationsController < ApplicationController
       else
         @tag_set_nominations = TagSetNomination.owned_by(@user)
       end
+    else
+      flash[:error] = ts("What nominations did you want to work with?")
+      redirect_to tag_sets_path and return
     end
   end
 

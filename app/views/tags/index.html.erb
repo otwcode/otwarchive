@@ -2,6 +2,7 @@
 
 <% unless @collection %>
 <ul role="navigation" class="navigation">
+  <% if logged_in? %><li><%= link_to ts("Tag Sets"), tag_sets_path %></li><% end %>
   <li><%= link_to_if params[:show], ts('Most Popular'), tags_path %></li>
   <li><%= link_to ts('Random'), tags_path(:show => "random") %></li>
 </ul>
