@@ -728,7 +728,7 @@ class Work < ActiveRecord::Base
 
   # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
   def remove_filter_tagging(tag)
-    filter = tag.canonical? ? tag : tag.merger
+    filter = tag.filter
     if filter
       filters_to_remove = [filter] + filter.meta_tags
       filters_to_remove.each do |filter_to_remove|

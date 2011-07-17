@@ -542,6 +542,11 @@ class Tag < ActiveRecord::Base
   # and get rid of the old filter_taggings as appropriate
   def update_filters_for_merger_change
     if self.merger_id_changed?
+      if self.merger_id
+        self.merger = Tag.find_by_id(self.merger_id)
+      else
+        self.merger = nil
+      end
       if self.merger && self.merger.canonical?
         self.add_filter_taggings
       end
@@ -557,16 +562,22 @@ class Tag < ActiveRecord::Base
     filter_tag = self.filter
     if filter_tag  && !filter_tag.new_record?
       Work.with_any_tags([self, filter_tag].uniq).each do |work|
-        work.filters << filter_tag unless work.filters.include?(filter_tag)
+        if work.filters.include?(filter_tag)
+          ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
+          ft.update_attribute(:inherited, false)
+        else
+          work.filters << filter_tag
+          filter_tag.reset_filter_count
+        end
         unless filter_tag.meta_tags.empty?
           filter_tag.meta_tags.each do |m|
             unless work.filters.include?(m)
               work.filter_taggings.create!(:inherited => true, :filter_id => m.id)
+              m.reset_filter_count
             end
           end
         end
       end
-      filter.reset_filter_count
     end
   end
 
@@ -575,25 +586,28 @@ class Tag < ActiveRecord::Base
   # for potential duplication (ie, works tagged with more than one synonymous tag)
   def remove_filter_taggings(old_filter=nil)
     if old_filter
-      potential_duplicate_filters = [old_filter] + old_filter.mergers - [self]
       self.works.each do |work|
-        if (work.tags & potential_duplicate_filters).empty?
-          filter_tagging = work.filter_taggings.find_by_filter_id(old_filter.id)
-          filter_tagging.destroy if filter_tagging
-        end
-        unless old_filter.meta_tags.empty?
-          old_filter.meta_tags.each do |meta_tag|
-            other_sub_tags = meta_tag.sub_tags - [old_filter]
-            sub_mergers = other_sub_tags.empty? ? [] : other_sub_tags.collect(&:mergers).flatten.compact
-            if work.filters.include?(meta_tag) && (work.filters & other_sub_tags).empty?
-              unless work.tags.include?(meta_tag) || !(work.tags & meta_tag.mergers).empty? || !(work.tags & sub_mergers).empty?
-                work.filters.delete(meta_tag)
+        filters_to_remove = [old_filter] + old_filter.meta_tags
+        filters_to_remove.each do |filter_to_remove|
+          if work.filters.include?(filter_to_remove)
+            all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
+            sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
+            all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
+            remaining_tags = work.tags - [self]
+            remaining_tags += [self.merger] unless self.merger.nil?
+            if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
+              work.filters.delete(filter_to_remove)
+              filter_to_remove.reset_filter_count
+            else # we should keep filter_to_remove, but check if inheritence needs to be updated
+              direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
+              if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
+                ft = work.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
+                ft.update_attribute(:inherited, true)
               end
             end
           end
         end
       end
-      old_filter.reset_filter_count
     else
       self.filter_taggings.destroy_all
       self.reset_filter_count
