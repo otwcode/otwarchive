@@ -1,5 +1,5 @@
-class ChallengeSignupSweeper < ActionController::Caching::Sweeper
-  observe ChallengeSignup
+class PromptSweeper < ActionController::Caching::Sweeper
+  observe Prompt
   
   def after_save(record)
     expire_challenge_signup_cache_for(record)
@@ -26,7 +26,11 @@ class ChallengeSignupSweeper < ActionController::Caching::Sweeper
   end
   
   def get_requests_from_record(record, collection)
-    Prompt.find(:collection => collection, :type => 'request', :challenge_signup => record)
+    Prompt.find(:collection => collection, :type => 'request', :challenge_signup => get_signup_from_record(record))
+  end
+  
+  def get_signup_from_record(record)
+    ChallengeSignup.find_by_id(record.challenge_signup_id)
   end
       
   # Whenever these records are updated, we need to blank out the collections cache
