@@ -13,7 +13,7 @@ class Prompt < ActiveRecord::Base
   belongs_to :pseud
   has_one :user, :through => :pseud
 
-  belongs_to :challenge_signup, :touch => true
+  belongs_to :challenge_signup
 
   belongs_to :tag_set, :dependent => :destroy
   accepts_nested_attributes_for :tag_set

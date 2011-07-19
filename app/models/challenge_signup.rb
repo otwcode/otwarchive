@@ -5,7 +5,7 @@ class ChallengeSignup < ActiveRecord::Base
   belongs_to :pseud
   belongs_to :collection
 
-  has_many :prompts, :dependent => :destroy
+  has_many :prompts, :dependent => :destroy, :touch => true
   has_many :requests, :dependent => :destroy
   has_many :offers, :dependent => :destroy
 
