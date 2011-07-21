@@ -47,11 +47,19 @@ module AutocompleteSource
     end
   end
   
-  def remove_from_autocomplete
+  def remove_from_autocomplete    
     self.class.autocomplete_pieces(autocomplete_search_string).each do |word_piece|
       autocomplete_prefixes.each do |prefix|
-        $redis.zrem(self.class.autocomplete_completion_key(prefix), word_piece)
+        # we leave the word pieces in the completion set so we don't accidentally trash
+        # parts of other completions -- doing a weekly reload for cleanup is good enough
         if (self.class.is_complete_word?(word_piece))
+          word = self.class.get_word(word_piece)
+          phrases = $redis.zrevrangebyscore(self.class.autocomplete_score_key(prefix, word), 'inf', 0)
+          if phrases.count == 1 && phrases.first == autocomplete_value
+            # there's only one phrase for this word and we're removing it, remove the completed word from the completion set
+            $redis.zrem(self.class.autocomplete_completion_key(prefix), word_piece)
+          end
+          # remove the phrase we're deleting from the score set
           $redis.zrem(self.class.autocomplete_score_key(prefix, word_piece), autocomplete_value)
         end
       end
