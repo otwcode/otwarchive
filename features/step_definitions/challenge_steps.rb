@@ -47,7 +47,7 @@ end
 Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   Given %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   When "I fill in gift exchange challenge options"
-    click_button("Submit")
+    click_button("Update")
   Then %{I should see "Challenge was successfully created"}  
   When %{I follow "Challenge Settings"}
   Then %{I should see "Stargate" in the autocomplete}
@@ -56,7 +56,7 @@ end
 Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
   Given %{I am on "#{challengename}" gift exchange edit page}
   check "Signup open?"
-  click_button "Submit"
+  click_button "Update"
 end  
 
 Given /^I have Battle 12 prompt meme set up$/ do
@@ -78,6 +78,14 @@ Given /^I have no-column prompt meme fully set up$/ do
     And "I have standard challenge tags setup"
   When "I set up Battle 12 promptmeme collection"
   When "I fill in no-column challenge options"
+  When %{I follow "Log out"}
+end
+
+Given /^I have single-prompt prompt meme fully set up$/ do
+  Given %{I am logged in as "mod1"}
+    And "I have standard challenge tags setup"
+  When "I set up Battle 12 promptmeme collection"
+  When "I fill in single-prompt challenge options"
   When %{I follow "Log out"}
 end
 
@@ -151,7 +159,7 @@ When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/
   fill_in("prompt_meme_requests_num_required", :with => 1)
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_required", :with => 1)
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_allowed", :with => 2)
-  click_button("Submit")
+  click_button("Update")
   Then "I should see \"Challenge was successfully created\""
 end
 
@@ -181,14 +189,14 @@ When /^I fill in Battle 12 challenge options$/ do
     And %{I select "2016" from "prompt_meme_signups_close_at_1i"}
     And %{I select "(GMT-05:00) Eastern Time (US & Canada)" from "prompt_meme_time_zone"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I fill in unlimited prompt challenge options$/ do
   When "I fill in prompt meme challenge options"
     And %{I check "prompt_meme_request_restriction_attributes_character_restrict_to_fandom"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "50"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I fill in no-column challenge options$/ do
@@ -197,13 +205,19 @@ When /^I fill in no-column challenge options$/ do
     And %{I fill in "prompt_meme_request_restriction_attributes_character_num_allowed" with "0"}
     And %{I fill in "prompt_meme_request_restriction_attributes_relationship_num_allowed" with "0"}
     And %{I check "Signup open?"}
+    And %{I press "Update"}
+end
+
+When /^I fill in single-prompt challenge options$/ do
+  When %{I fill in "prompt_meme_requests_num_required" with "1"}
+    And %{I check "Signup open?"}
     And %{I press "Submit"}
 end
 
 When /^I fill in multi-prompt challenge options$/ do
   When "I fill in prompt meme challenge options"
     And %{I fill in "prompt_meme_requests_num_allowed" with "4"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I fill in prompt meme challenge options$/ do
@@ -366,7 +380,6 @@ When /^I sign up for "([^\"]*)" many-fandom prompt meme$/ do |title|
     And %{I fill in the 1st field with id matching "fandom_tagnames" with "Stargate Atlantis"}
     And %{I check the 1st checkbox with id matching "anonymous"}
     click_button "Submit"
-
 end
 
 When /^I sign up for "([^\"]*)" with combination A$/ do |title|
@@ -407,6 +420,20 @@ When /^I sign up for "([^\"]*)" with combination D$/ do |title|
     And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
     And %{I fill in the 2nd field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
+    And %{I press "Submit"}
+end
+
+When /^I sign up for "([^\"]*)" with combination SGA$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis"}
+    And %{I press "Submit"}
+end
+
+When /^I sign up for "([^\"]*)" with combination SG-1$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Sign Up"}
+    And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate SG-1"}
     And %{I press "Submit"}
 end
 
@@ -468,10 +495,22 @@ When /^I fulfill my claim$/ do
   When %{I start to fulfill my claim with "Fulfilled Story"}
   When %{I press "Preview"}
     And %{I press "Post"}
+  Then %{I should see "Work was successfully posted"}
 end
 
 When /^I fulfill my claim again$/ do
   When %{I start to fulfill my claim with "Second Story"}
+  When %{I press "Preview"}
+    And %{I press "Post"}
+  Then %{I should see "Work was successfully posted"}
+end
+
+When /^mod fulfills claim$/ do
+  When %{I am logged in as "mod1"}
+  When %{I claim a prompt from "Battle 12"}
+  When %{I start to fulfill my claim}
+    And %{I fill in "Work Title" with "Fulfilled Story-thing"}
+    And %{I fill in "content" with "This is an exciting story about Atlantis, but in a different universe this time"}
   When %{I press "Preview"}
     And %{I press "Post"}
 end
@@ -489,12 +528,17 @@ When /^I claim a prompt from "([^\"]*)"$/ do |title|
   When %{I press "Claim"}
 end
 
+When /^I claim two prompts from "([^\"]*)"$/ do |title|
+  When %{I claim a prompt from "#{title}"}
+  When %{I claim a prompt from "#{title}"}
+end
+
 When /^I close signups for "([^\"]*)"$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Challenge Settings"}
     And %{I uncheck "Signup open?"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
   Then %{I should see "Challenge was successfully updated"}
 end
 
@@ -528,6 +572,12 @@ When /^I delete my signup for "([^\"]*)"$/ do |title|
   Then %{I should see "Challenge signup was deleted."}
 end
 
+When /^I delete my prompt in "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Prompts ("}
+  When %{I follow "Remove prompt"}
+end
+
 When /^I delete the signup by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
@@ -538,6 +588,29 @@ When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
   When %{I follow "Remove prompt"}
+end
+
+When /^I edit the prompt by "([^\"]*)"$/ do |participant|
+  visit collection_path(Collection.find_by_title("Battle 12"))
+  When %{I follow "Prompts ("}
+  click_link("#{participant}")
+  When %{I follow "Edit"}
+end
+
+When /^I reveal the "([^\"]*)" challenge$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+    And %{I follow "Settings"}
+    And %{I uncheck "Is this collection currently unrevealed?"}
+    And %{I press "Update"}
+end
+
+When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+    And %{I follow "Settings"}
+    And %{I uncheck "Is this collection currently anonymous?"}
+    And %{I press "Update"}
 end
 
 ### THEN
@@ -696,9 +769,10 @@ Then /^I should just see request 1$/ do
 end
 
 Then /^I should see single prompt editing$/ do
-  page.should have_content("Submit a Prompt For Battle 12")
+  page.should have_content("Submit a Prompt for Battle 12")
   page.should have_content("Edit whole signup instead")
   page.should have_content("Freeforms")
   Then %{the "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" field should contain "Alternate Universe - Historical"}
   page.should have_no_content("Just add one new prompt instead")
 end
+

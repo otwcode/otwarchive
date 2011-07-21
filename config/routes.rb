@@ -122,9 +122,11 @@ Otwarchive::Application.routes.draw do
   resources :users do
     member do
       get :browse
+	  get :change_email
+	  post :change_email
       get :change_openid
       post :change_openid
-      get :change_password
+	  get :change_password
       post :change_password
       get :change_username
       post :change_username

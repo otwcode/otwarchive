@@ -151,11 +151,16 @@
           <dt><%= p.label :author %></dt>
           <dd><%= p.text_field :author, :value => work_parent_value(:author) %></dd>
 
+          <dt><%= p.label :language_id, ts("Language") %><%= link_to_help "languages-help" %>
+          </dt>
+          <dd><%= p.collection_select(:language_id, Language.all(:order => :short), :id, :name, :prompt => " ") =%></dd>
+          
           <dt class="work-restricted"><%= p.check_box :translation %></dt>
           <dd class="work-restricted">
             <%= p.label :translation, t('.is_translation', :default => "This is a translation") %>
             <%= link_to_help "translation-link" %>
           </dd>
+                  
         <% end %>
 
         <% unless @work.parent_work_relationships.blank? %>

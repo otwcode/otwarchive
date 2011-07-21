@@ -1,6 +1,17 @@
 @admin
 Feature: Admin tasks
 
+  Scenario: admin cannot log in as an ordinary user - it is a different type of account
+  
+  Given I the following admin exists
+      | login       | password |
+      | Zooey       | secret   |
+  When I go to the home page
+      And I fill in "user_session_login" with "Zooey"
+      And I fill in "user_session_password" with "secret"
+      And I press "Log in"
+    Then I should see "We couldn't find that user name in our database. Please try again"
+
   Scenario: Log in as an admin and do admin-y things. Wrong password fails admin login, you can find users, post a new FAQ section.
 
     Given I have no users
@@ -11,14 +22,6 @@ Feature: Admin tasks
       | login       | password      |
       | dizmo       | wrangulator   |
       And I have loaded the "roles" fixture
-
-    # admin cannot log in as an ordinary user - it is a different type of account
-
-    When I go to the home page
-      And I fill in "user_session_login" with "Zooey"
-      And I fill in "user_session_password" with "secret"
-      And I press "Log in"
-    Then I should see "We couldn't find that user name in our database. Please try again"
 
     # FAQs have not yet been posted
 
@@ -262,6 +265,7 @@ Feature: Admin tasks
     And I fill in "Comment" with "Excellent, my dear!"
     And I press "Add Comment"
   Then 1 email should be delivered to "testadmin@example.org"
+    And the email should contain "Excellent"
 
   # admin replies to comment of regular user
   Given I am logged out
@@ -295,6 +299,16 @@ Feature: Admin tasks
   When I follow "Edit"
     And I press "Update"
   Then 2 emails should be delivered to "testadmin@example.org"
+  
+  Scenario: User views RSS of admin posts
+  
+  Given I am logged in as an admin
+    And I make an admin post
+  When I am logged in
+    And I go to the admin-posts page
+  Then I should see "Subscribe with RSS"
+  When I follow "Subscribe with RSS"
+  Then I should see "Default Admin Post"
   
   Scenario: admin goes to the Support page
   

@@ -13,6 +13,14 @@ Given /^I have related works setup$/ do
     And "I am logged out"
 end
 
+Given /^a translation has been posted$/ do
+  When "I post a translation"
+end
+
+Given /^a remix has been posted$/ do
+  When "I post a related work"
+end
+
 ### WHEN
 
 When /^I post a related work$/ do

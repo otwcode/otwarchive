@@ -98,9 +98,9 @@ module ApplicationHelper
 
   def pseud_link(pseud)
     if @downloading
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false))
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
     else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author")
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author", :rel => "author")
     end
   end
 

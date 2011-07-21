@@ -3,6 +3,14 @@ Feature: Search Works
   In order to test search
   As a humble coder
   I have to use cucumber with thinking sphinx
+  
+  Scenario: first check the errors for an invalid search
+  
+  When I am on the homepage
+    And I fill in "site_search" with "Tag: harry potter Words: >1000 (Language: Deutsch | Tag: Deutsch)"
+    And I press "Search"
+  Then I should see "bad words format (ignored)"
+    And I should see "0 Found"
 
   # do everything that doesn't modify the works in one scenario
   # so you only have to load the fixtures and update the sphinx indexes once
@@ -10,14 +18,7 @@ Feature: Search Works
     Given I have loaded the fixtures
       And the work indexes are updated
 
-    # first check the errors for an invalid search
-    When I am on the homepage
-      And I fill in "site_search" with "Tag: harry potter Words: >1000 (Language: Deutsch | Tag: Deutsch)"
-      And I press "Search"
-    Then I should see "bad words format (ignored)"
-      And I should see "0 Found"
-
-    # then do some valid searches
+    # do some valid searches
     When I am on the homepage
       And I fill in "site_search" with "(title,summary): second words: >100"
       And I press "Search"
@@ -68,7 +69,8 @@ Feature: Search Works
     When I fill in "refine_word_count" with ""
       And I fill in "refine_revised_at" with "> 2 years ago"
       And I press "Search works"
-    Then I should see "1 Found"
+    # TODO: It's now more than 2 years since 2009 - should the fixtures be updated?
+    Then I should see "2 Found"
     When I follow "Advanced search"
     Then I should be on the search page
     When I fill in "refine_word_count" with "<1000"

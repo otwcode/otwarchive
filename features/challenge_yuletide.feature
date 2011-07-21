@@ -78,7 +78,7 @@ Feature: Collection
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
     And I check "gift_exchange_offer_restriction_attributes_character_restrict_to_fandom"
     And I check "Signup open?"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Challenge was successfully created"
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
@@ -329,7 +329,7 @@ Feature: Collection
     And I should not see "Generate Potential Matches"
   When I follow "Challenge Settings"
     And I uncheck "Signup open?"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Challenge was successfully updated"
   When I follow "Matching"
   Then I should see "Matching for Yuletide"
@@ -614,7 +614,7 @@ Feature: Collection
     And I follow "Yuletide"
     And I follow "Settings"
     And I uncheck "Is this collection currently unrevealed?"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Collection was successfully updated"
   Given the system processes jobs
     And I wait 3 seconds
@@ -683,7 +683,7 @@ Feature: Collection
     And I follow "Yuletide"
     And I follow "Settings"
     And I uncheck "Is this collection currently anonymous?"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Collection was successfully updated"
 
   # someone can now see their writer: will fail intermittently until pinch hitting is fixed above

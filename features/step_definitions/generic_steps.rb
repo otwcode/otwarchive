@@ -165,3 +165,8 @@ end
 Given /^I have no prompts$/ do
   Prompt.delete_all
 end
+
+Then /^I should find a checkbox "([^\"]*)"$/ do |name|
+  field = find_field(name)
+  field['checked'].respond_to? :should
+end

@@ -111,8 +111,9 @@
 <fieldset>
 <legend><%= t('.form_post', :default => 'Post Chapter') %></legend>
     <p class="submit">
-      <%= submit_tag t('.forms.preview', :default => 'Preview'), :name => 'preview_button' %>
-      <%= submit_tag t('.forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %>
+      <%= submit_tag ts('Preview'), :name => 'preview_button' %>
+      <%= submit_tag ts('Post without preview'), :name => 'post_without_preview_button' %>
+      <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
     </p>
 </fieldset>
 <% end %>
