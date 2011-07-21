@@ -67,7 +67,7 @@ gem 'ruby-debug19', :require => 'ruby-debug'
 gem 'radix'
 
 group :test do
-  gem 'rspec-rails', '>=2.0.0'
+  gem 'rspec-rails', '>=2.5.0'
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
