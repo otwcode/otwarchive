@@ -111,7 +111,7 @@
         <% end %>
       <% end %>
       
-      <% cache("collection-#{@collection.id}-prompt-#{prompt.id}") do %>
+      <% cache(prompt) do %>
       <!-- show tags, description, url for all allowed requests and offers: using a lot of evals here to DRY up the code since it's so repetitive -->
           <% TagSet::TAG_TYPES.each do |type| %>
             <% if eval("@show_request_#{type}_tags") %>
