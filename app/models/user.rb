@@ -201,7 +201,9 @@ class User < ActiveRecord::Base
 
   # use update_all to force the update even if the user is invalid
   def reset_user_password
-    User.update_all("activation_code = '#{generate_password(20)}', recently_reset = 1", "id = #{self.id}")
+    temp_password = generate_password(20)
+    User.update_all("activation_code = '#{temp_password}', recently_reset = 1, updated_at = '#{Time.now}'", "id = #{self.id}")
+    UserMailer.reset_password(self.id, temp_password).deliver
   end
 
   def activate

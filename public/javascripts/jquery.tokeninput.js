@@ -32,7 +32,7 @@ var DEFAULT_SETTINGS = {
     onResult: null,
     onAdd: null,
     onDelete: null,
-  noCache: false,
+  noCache: false
 };
 
 // Default classes to use when theming
