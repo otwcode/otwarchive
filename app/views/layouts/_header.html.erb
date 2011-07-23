@@ -18,7 +18,7 @@
       <li>
         <%= render :partial => 'user_sessions/login' %>
         <span><a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%= ts('Log in') %></a>
-        <a id='signin_open' onclick='toggleLogin("signin")'><%=h ts('Cancel') %></a></span>
+        <a id='signin_open' onclick='toggleLogin("signin")'><%= ts('Cancel') %></a></span>
       </li>
     </ul>
   <% end %>

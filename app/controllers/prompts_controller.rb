@@ -3,7 +3,7 @@ class PromptsController < ApplicationController
   before_filter :users_only
   before_filter :load_collection, :except => [:index]
   before_filter :load_challenge, :except => [:index]
-  before_filter :promptmeme_only, :except => [:index]
+  before_filter :promptmeme_only, :except => [:index, :new]
   before_filter :load_prompt_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :allowed_to_destroy, :only => [:destroy]
   before_filter :signup_owner_only, :only => [:edit]
@@ -57,7 +57,7 @@ class PromptsController < ApplicationController
   end
 
   def not_allowed
-    flash[:error] = t('challenge_signups.not_allowed', :default => "Sorry, you're not allowed to do that.")
+    flash[:error] = ts("Sorry, you're not allowed to do that.")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -129,7 +129,8 @@ class PromptsController < ApplicationController
 
   def new
     unless (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
-      @challenge_signup = ChallengeSignup.new
+      flash[:error] = ts("Please submit a basic signup with the required fields first")
+      redirect_to new_collection_signup_path(@collection) rescue redirect_to '/' and return
     end
   end
 

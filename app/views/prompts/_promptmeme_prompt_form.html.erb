@@ -14,6 +14,17 @@
       {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => false, :id => @challenge_signup.id}},
       :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => false, :id => @challenge_signup.id)) %>
     </li>
+    <% if @collection.challenge_type == "GiftExchange" %>
+      <li><% if params[:request] == "true" %>
+      <%= link_to( ts('Submit an offer instead?'),
+      {:url => {:controller => :prompts, :action => :new, :request => false}},
+      :href => url_for(:controller => :prompts, :action => :new, :request => false)) %>
+      <% else %>
+      <%= link_to( ts('Submit a request instead?'),
+      {:url => {:controller => :prompts, :action => :new, :request => true}},
+      :href => url_for(:controller => :prompts, :action => :new, :request => true)) %>
+      <% end %></li>
+    <% end %>
     <li><%= link_to 'Back to collection', @collection %></li>
 </ul>
 <!--/subnav-->
@@ -24,18 +35,31 @@
     <%= error_messages_for @challenge_signup %>
   
   <fieldset class="preface profile">
-    <% if @challenge.send("signup_instructions_requests") %>
-      <%=raw sanitize_field(@challenge, "signup_instructions_requests".to_sym) %>
+  
+    <% # set prompt_type %>
+    <% if @collection.challenge_type == "GiftExchange" %>
+      <% if params[:request] == "true" %>
+        <% prompt_type = "requests" %>
+      <% else %>
+        <% prompt_type = "offers" %>
+      <% end %>
+    <% end %>
+    <% if @collection.challenge_type == "PromptMeme" %>
+      <% prompt_type = "requests" %>
+    <% end %>
+    
+    <% if @challenge.send("signup_instructions_#{prompt_type}") %>
+      <%=raw sanitize_field(@challenge, "signup_instructions_#{prompt_type}".to_sym) %>
     <% end %>
     <% if edit_record %>
       <% prompttodo = @prompt %>
     <% else %>
-      <% prompttodo = @challenge_signup.requests.new %>
+      <% prompttodo = @challenge_signup.send(prompt_type).new %>
     <% end %>
-    <% index = @challenge_signup.requests.count %>
-      <%= signup_form.fields_for("requests".to_sym, prompttodo, :child_index => index) do |prompt_form| %>
+    <% index = @challenge_signup.send(prompt_type).count %>
+      <%= signup_form.fields_for("#{prompt_type}".to_sym, prompttodo, :child_index => index) do |prompt_form| %>
         <%= render :partial => "prompts/prompt_form", 
-            :locals => {:form => prompt_form, :is_offer => false, :index => index,
+            :locals => {:form => prompt_form, :is_offer => prompt_type == "offers" ? true : false, :index => index,
                         :required => true, :edit_record => false} %>
       <% end %>
   </fieldset>
