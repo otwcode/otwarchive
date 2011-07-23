@@ -1,25 +1,25 @@
 <% if logged_in? %>
   <p id="greeting">
-      <%=h t('.hi', :default => "Hi,") %> <%= link_to current_user.login, user_path(current_user), :class => 'login' %>!
+      <%= ts("Hi,") %> <%= link_to current_user.login, user_path(current_user), :class => 'login' %>!
     </p>
   <ul id="login">
     <li>
-      <%= link_to t('.post_new', :default => "Post New"), new_work_path %>&nbsp;|
+      <%= link_to ts("Post New"), new_work_path %>&nbsp;|
     </li>
 	<li>
-	<%= link_to t('.import', :default => "Import"), new_work_path(:import => true) %>	&nbsp;|
+	<%= link_to ts("Import"), new_work_path(:import => true) %>	&nbsp;|
 	</li>
     <li>
-      <%= link_to t('.log_out', :default => "Log out"), logout_path %>
+      <%= link_to ts('.log_out', :default => "Log out"), logout_path %>
     </li>
   </ul>
 <% elsif logged_in_as_admin? %>
   <ul id="greeting">
     <li>
-      <span><%=h t('.admin_hello', :default => "Hello,") %></span>&nbsp;<%= link_to current_admin.login, admin_path(current_admin), :class => 'login login-admin' %>!
+      <span><%= ts("Hello,") %></span>&nbsp;<%= link_to current_admin.login, admin_path(current_admin), :class => 'login login-admin' %>!
     </li>
     <li>
-      <%= link_to t('.admin_log_out', :default => "Log out"), admin_logout_path %>
+      <%= link_to ts("Log out"), admin_logout_path %>
     </li>
   </ul>
 <% end %>
