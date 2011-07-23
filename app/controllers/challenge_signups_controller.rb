@@ -9,8 +9,8 @@ class ChallengeSignupsController < ApplicationController
   before_filter :load_challenge, :except => [:index]
   before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :allowed_to_destroy, :only => [:destroy]
-  before_filter :signup_owner_only, :only => [:edit, :update]
-  before_filter :maintainer_or_signup_owner_only, :only => [:show]
+  before_filter :signup_owner_only, :only => [:edit]
+  before_filter :maintainer_or_signup_owner_only, :only => [:show, :update]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
 
   def load_challenge
@@ -25,7 +25,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def check_signup_open
-    signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user) || @collection.user_is_moderator?(current_user))
+    signup_closed and return unless (@challenge.signup_open || @collection.user_is_maintainer?(current_user))
   end
 
   def signup_closed
@@ -35,7 +35,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def signup_owner_only
-    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (!@challenge.signup_open && @collection.user_is_owner?(current_user)) || (@collection.challenge_type == "PromptMeme" && @collection.user_is_maintainer?(current_user)))
+    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)))
   end
 
   def maintainer_or_signup_owner_only
@@ -100,9 +100,7 @@ class ChallengeSignupsController < ApplicationController
       }
       format.csv {
         if (@collection.challenge_type == "GiftExchange" && @challenge.user_allowed_to_see_signups?(current_user)) || 
-        (@collection.challenge_type == "PromptMeme" && (
-        @collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)
-        ))
+        (@collection.challenge_type == "PromptMeme" && @collection.user_is_maintainer?(current_user))
           export_csv
         else
           flash[:error] = ts("You aren't allowed to see the CSV summary.")

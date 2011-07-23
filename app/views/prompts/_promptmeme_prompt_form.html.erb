@@ -20,7 +20,7 @@
 
 <!--main content-->
 
-  <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection, @challenge_signup, :single_prompt => "true") : collection_signups_path(@collection, @challenge_signup))) do |signup_form| %>
+  <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection, @challenge_signup, :single_prompt => "true") : collection_signup_path(@collection, @challenge_signup))) do |signup_form| %>
     <%= error_messages_for @challenge_signup %>
   
   <fieldset class="preface profile">
@@ -41,9 +41,9 @@
   </fieldset>
   
   <fieldset>
-  	<legend><%= 'Submit' -%></legend> 
+  	<legend><%= ts('Submit') %></legend> 
     <p class="submit">
-      <%= signup_form.submit 'Submit' %>
+      <%= signup_form.submit ts('Submit') %>
     </p>
   </fieldset>
     

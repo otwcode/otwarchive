@@ -33,7 +33,7 @@
     <% # hides this on a user's 'your signups' page and on a signup show page, since we only want it on the challenge index %>
       <% @claimed = 0
          challenge_signup.request_claims.each do |claim|
-            if claim.claiming_user == current_user && claim.request_prompt_id == prompt_id
+            if claim.claiming_user == current_user && claim.request_prompt_id == prompt.id
               @claimed = 1
             end
         end %>
@@ -47,9 +47,9 @@
           <%= form_for [@collection, new_claim], :url => collection_claims_path(@collection) do |claim_form| %>
               <%= claim_form.hidden_field :collection_id, :value => @collection.id %>
               <%= claim_form.hidden_field :request_signup_id, :value => challenge_signup.id %>
-              <%= claim_form.hidden_field :request_prompt_id, :value => prompt_id %>
+              <%= claim_form.hidden_field :request_prompt_id, :value => prompt.id %>
               <%= claim_form.hidden_field :claiming_user_id, :value => current_user.id %>
-              <%= submit_tag "Claim", :id => "prompt_" + prompt_id.to_s %>
+              <%= submit_tag "Claim", :id => "prompt_" + prompt.id.to_s %>
           <% end %>
       </li>
       <% end %>

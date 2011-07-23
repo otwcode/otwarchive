@@ -1,4 +1,11 @@
-<h2><%= t('.challenge_signups.enter', :default => "Sign Up For %{title}", :title => @collection.title) %></h2>
+<h2>
+  <% if @collection.challenge_type == "PromptMeme" %>
+    <%= ts("Submit a Prompt") %>
+  <% else %>
+    <%= ts("Sign Up") %>
+  <% end %>
+  <%= ts("For %{title}", :title => @collection.title) %>
+</h2>
 
 <!-- note for FRONT END
 The fields in the form frequently wrap around to a second line. 
@@ -11,7 +18,7 @@ So if anyone can think of a better design for this, that would be awesome
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection) : collection_signups_path(@collection))) do |signup_form| %>
+<%= form_for([@collection, @challenge_signup], :url => collection_signup_path(@collection)) do |signup_form| %>
   <%= error_messages_for @challenge_signup %>
 
   <fieldset class="preface profile">

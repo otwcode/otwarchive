@@ -10,7 +10,7 @@
 	<%= link_to ts("Import"), new_work_path(:import => true) %>	&nbsp;|
 	</li>
     <li>
-      <%= link_to ts('.log_out', :default => "Log out"), logout_path %>
+      <%= link_to ts("Log out"), logout_path %>
     </li>
   </ul>
 <% elsif logged_in_as_admin? %>

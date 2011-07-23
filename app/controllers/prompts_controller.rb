@@ -6,8 +6,8 @@ class PromptsController < ApplicationController
   before_filter :promptmeme_only, :except => [:index]
   before_filter :load_prompt_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :allowed_to_destroy, :only => [:destroy]
-  before_filter :signup_owner_only, :only => [:edit, :update]
-  before_filter :maintainer_or_signup_owner_only, :only => [:show]
+  before_filter :signup_owner_only, :only => [:edit]
+  before_filter :maintainer_or_signup_owner_only, :only => [:show, :update, :destroy]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
 
   def promptmeme_only
@@ -39,7 +39,7 @@ class PromptsController < ApplicationController
   end
 
   def signup_owner_only
-    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (!@challenge.signup_open && @collection.user_is_owner?(current_user)))
+    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)))
   end
 
   def maintainer_or_signup_owner_only
@@ -128,10 +128,7 @@ class PromptsController < ApplicationController
   end
 
   def new
-    if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
-      flash[:notice] = ts("You are already signed up for this challenge. You can edit your signup below.")
-      redirect_to edit_collection_signup_path(@collection, @challenge_signup)
-    else
+    unless (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
       @challenge_signup = ChallengeSignup.new
     end
   end
