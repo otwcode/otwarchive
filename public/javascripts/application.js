@@ -132,7 +132,7 @@ function remove_section(link, class_of_section_to_remove) {
 function add_section(link, nested_model_name, content) {
     // get the right new_id which should be in a div with class "last_id" at the bottom of 
     // the nearest section
-    var last_id = parseInt($j(link).parent().siblings('.last_id').html());
+    var last_id = parseInt($j(link).parent().siblings('.last_id').last().html());
     var new_id = last_id + 1;
     var regexp = new RegExp("new_" + nested_model_name, "g");
     content = content.replace(regexp, new_id)

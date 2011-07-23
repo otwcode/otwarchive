@@ -4,13 +4,13 @@ module ApplicationHelper
   
   include HtmlCleaner
 
-	# Generates class names for the main div in the application layout
-	def classes_for_main
+  # Generates class names for the main div in the application layout
+  def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " sidebar" if show_sidebar
     class_names
-	end
+  end
 
   # A more gracefully degrading link_to_remote.
   def link_to_remote(name, options = {}, html_options = {})

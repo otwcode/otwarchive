@@ -52,13 +52,13 @@
   <% end %>
   
   <fieldset class="preface profile">
-  	<legend><%= ts("Requests") %></legend>
-  	<h3>
-  	  <%= ts("Requests") %> 
-  	  (<%= @challenge.send("requests_num_required") -%>
-  	  <% if @challenge.send("requests_num_required") != @challenge.send("requests_num_allowed") -%>
-  	    - <%= @challenge.send("requests_num_allowed") -%><% end -%>)
-  	</h3>
+    <legend><%= ts("Requests") %></legend>
+    <h3>
+      <%= ts("Requests") %>
+      (<%= @challenge.send("requests_num_required") -%>
+      <% if @challenge.send("requests_num_required") != @challenge.send("requests_num_allowed") -%>
+        - <%= @challenge.send("requests_num_allowed") -%><% end -%>)
+    </h3>
     <% if @challenge.send("signup_instructions_requests") %>
       <%=raw sanitize_field(@challenge, "signup_instructions_requests".to_sym) %>
     <% end %>
@@ -72,7 +72,7 @@
   </fieldset>
   
   <fieldset>
-  	<legend><%= 'Submit' -%></legend> 
+    <legend><%= 'Submit' -%></legend>
     <p class="submit">
       <%= signup_form.submit 'Submit' %>
     </p>
@@ -86,13 +86,13 @@
     <%= error_messages_for @challenge_signup %>
 
   <fieldset class="preface profile">
-  	<legend>General Information</legend>
-  	<h3>General Information</h3>
+    <legend>General Information</legend>
+    <h3>General Information</h3>
     <% if @challenge.signup_instructions_general %>
       <%=raw sanitize_field(@challenge, :signup_instructions_general) %>
     <% end %>
     <dl>
-     	<% if current_user.pseuds.size > 1 %>
+       <% if current_user.pseuds.size > 1 %>
         <dt><%= signup_form.label :pseud_id, ts("Select pseudonym: ") -%></dt>
         <dd><%= signup_form.select :pseud_id, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud.id) %></dd>
       <% else -%>
@@ -103,18 +103,18 @@
 
   <% %w(requests).each do |prompt_type| %>
   <fieldset class="preface profile">
-  	<legend><%= ts("Requests") %></legend>
-  	<h3>
-  	  <%= ts("Requests") %> 
-  	  (<%= @challenge.send("requests_num_required") -%>
-  	  <% if @challenge.send("requests_num_required") != @challenge.send("requests_num_allowed") -%>
-  	    - <%= @challenge.send("requests_num_allowed") -%><% end -%>)
-  	</h3>
+    <legend><%= ts("Requests") %></legend>
+    <h3>
+      <%= ts("Requests") %>
+      (<%= @challenge.send("requests_num_required") -%>
+      <% if @challenge.send("requests_num_required") != @challenge.send("requests_num_allowed") -%>
+        - <%= @challenge.send("requests_num_allowed") -%><% end -%>)
+    </h3>
     <% if @challenge.send("signup_instructions_requests") %>
       <%=raw sanitize_field(@challenge, "signup_instructions_requests".to_sym) %>
     <% end %>
     <% if @challenge_signup.send("requests").empty? %>
-  	  <% 1.upto(@challenge.send("requests_num_required")) do %>
+      <% 1.upto(@challenge.send("requests_num_required")) do %>
         <% @challenge_signup.send("requests").build %>
       <% end %>
     <% end %>
@@ -137,7 +137,7 @@
   <% end # requests section %>
 
   <fieldset>
-  	<legend><%= 'Submit' -%></legend> 
+    <legend><%= 'Submit' -%></legend>
     <p class="submit">
       <%= signup_form.submit 'Submit' %>
     </p>

@@ -10,38 +10,39 @@
 <h3 class="landmark">Listing by fandom</h3>
 <%= form_tag url_for(:controller => 'tag_wranglers', :action => "create") do %>
   <p class="submit"><%= submit_tag 'Assign' %></p>
-  
+
   <h3>Assign fandoms to yourself</h3>
   <div>
     <p><%= label_tag "tag_fandom_string", "Enter as many fandoms as you like:" %></p>
     <%= text_field_tag "tag_fandom_string", params[:sign_up_fandoms], autocomplete_options("fandom") %>
-  </div> 
-  
+  </div>
+
   <ul class="index">
-  	<% @assignments.group_by(&:name).each do |name, assignments| %>
-  	<li class="fandom tag blurb">
-  	<h4><%= link_to name, {:controller => :tags, :action => :edit, :id => assignments.first} %></h4>
-   	<ul class="wranglers">
-  	<% assignments.collect(&:wrangler).compact.each do |wrangler| %>
-        <li><%= link_to wrangler, tag_wrangler_path(:id => wrangler) %> 
-        <%= link_to '(remove)', tag_wrangler_path(:id => wrangler, :fandom_id => assignments.first.id), :method => :delete %></li>
+    <% @assignments.group_by(&:name).each do |name, assignments| %>
+    <li class="fandom tag blurb">
+      <h4><%= link_to name, {:controller => :tags, :action => :edit, :id => assignments.first} %></h4>
+      <ul class="wranglers">
+      <% assignments.collect(&:wrangler).compact.each do |wrangler| %>
+        <li><%= link_to wrangler, tag_wrangler_path(:id => wrangler) %>
+            <%= link_to '(remove)', tag_wrangler_path(:id => wrangler, :fandom_id => assignments.first.id), :method => :delete %></li>
       <% end %>
-      </ul>	 
-        <div id="wranglers-for-<%= assignments.first.id %>">
-          <p><%= select_tag "assignments[#{assignments.first.id}][]", options_for_select([''] + @wranglers.collect(&:login)) %>
-          <%= link_to_function("add more") do |page| 
-              page.insert_html(:bottom, "wranglers-for-#{assignments.first.id}", 
-              '<p>' + select_tag("assignments[#{assignments.first.id}][]", options_for_select([''] + @wranglers.collect(&:login))) + '</p>')
-              end %></p>  
-        </div>
-  		</li>
-    <% end %>  
+      </ul>
+      <div id="wranglers-for-<%= assignments.first.id %>">
+        <p>
+          <% select_tag_to_add = select_tag("assignments[#{assignments.first.id}][]", options_for_select([''] + @wranglers.collect(&:login))) %>
+          <%= select_tag_to_add %>
+          <%= link_to_function("add more",
+                               "$j('#wranglers-for-#{assignments.first.id}').append('<p>" + escape_javascript(select_tag_to_add) + "</p>')") %>
+        </p>
+      </div>
+    </li>
+    <% end %>
   </ul>
   <%= hidden_field_tag :fandom_string, params[:fandom_string] %>
   <%= hidden_field_tag :media_id, params[:media_id] %>
   <%= hidden_field_tag :wrangler_id, params[:wrangler_id] %>
   <p class="submit"><%= submit_tag 'Assign' %></p>
-<% end %> 
+<% end %>
 <!--/content-->
 
 <!--subnav-->
@@ -64,7 +65,7 @@
     <%= text_field_tag :fandom_string, params[:fandom_string] %>
   </dd>
 </dl>
-<p class="submit"><%= submit_tag 'Go' %></p>  
+<p class="submit"><%= submit_tag 'Go' %></p>
 <% end %>
 <div class="clear"><!--presentational, phase me out--></div>
 <h3 class="landmark">Next Page</h3>
