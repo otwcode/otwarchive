@@ -55,8 +55,8 @@ class UsersController < ApplicationController
                    group("tags.id").order("work_count DESC") &
                    Work.visible_to_all.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-		INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-		INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
       visible_works = @user.works.visible_to_all
       visible_series = @user.series.visible_to_all
       visible_bookmarks = @user.bookmarks.visible_to_all
@@ -67,8 +67,8 @@ class UsersController < ApplicationController
                    group("tags.id").order("work_count DESC") &
                    Work.visible_to_registered_user.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-		INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-		INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
       visible_works = @user.works.visible_to_registered_user
       visible_series = @user.series.visible_to_registered_user
       visible_bookmarks = @user.bookmarks.visible_to_registered_user
@@ -262,12 +262,12 @@ class UsersController < ApplicationController
   # PUT /users/1.xml
   def update
     @user.profile.update_attributes(params[:profile_attributes])
-	if @user.profile.save
-	  flash[:notice] = ts("Your profile has been successfully updated")
-	  render :edit and return
-	else
-	  render :edit and return
-	end
+  if @user.profile.save
+    flash[:notice] = ts("Your profile has been successfully updated")
+    render :edit and return
+  else
+    render :edit and return
+  end
   end
   
   def change_email
@@ -277,19 +277,19 @@ class UsersController < ApplicationController
       if !reauthenticate
         render :change_email and return
       else
-		@old_email = @user.email
-		@user.email = params[:new_email]
-		@new_email = params[:new_email]
-		if @user.save
-		  flash[:notice] = ts("Your email has been successfully updated")
-		  UserMailer.change_email(@user.id, @old_email, @new_email).deliver
-		  @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
-		else
-		  render :change_email and return
-		end
-	  end
+    @old_email = @user.email
+    @user.email = params[:new_email]
+    @new_email = params[:new_email]
+    if @user.save
+      flash[:notice] = ts("Your email has been successfully updated")
+      UserMailer.change_email(@user.id, @old_email, @new_email).deliver
+      @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
+    else
+      render :change_email and return
     end
-	render :change_email and return
+    end
+    end
+  render :change_email and return
   end
 
   # DELETE /users/1
@@ -394,7 +394,10 @@ class UsersController < ApplicationController
   
   def end_banner
     @user.preference.update_attribute(:banner_seen, true)
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    respond_to do |format|
+      format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) and return }
+      format.js
+    end
   end
 
   def browse
@@ -417,20 +420,20 @@ class UsersController < ApplicationController
       if session.valid?
         return true
       else
-		if params[:new_email]
-		  flash.now[:error] = ts("Your password was incorrect")
-		else
-		  flash.now[:error] = ts("Your old password was incorrect")
-		end
-		@wrong_password = true
-		return false
+    if params[:new_email]
+      flash.now[:error] = ts("Your password was incorrect")
+    else
+      flash.now[:error] = ts("Your old password was incorrect")
+    end
+    @wrong_password = true
+    return false
        end
     else
-	  if params[:new_email]
-		flash.now[:error] = ts("You must enter your password")
-	  else
-		flash.now[:error] = ts("You must enter your old password")
-	  end
+    if params[:new_email]
+    flash.now[:error] = ts("You must enter your password")
+    else
+    flash.now[:error] = ts("You must enter your old password")
+    end
       @wrong_password = true
       return false
     end

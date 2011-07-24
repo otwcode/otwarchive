@@ -36,6 +36,7 @@ $j(document).ready(function() {
           $j(target_id + "_open").toggle();
           $j(target_id + "_closed").toggle();
     });
+    $j('#hide-notice-banner').click(function () { $j('#notice-banner').hide(); });
 });
 
 function visualizeTables() {

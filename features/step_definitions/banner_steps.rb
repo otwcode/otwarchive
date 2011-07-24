@@ -25,7 +25,7 @@ end
 When /^I turn off the banner$/ do
   Given %{I am logged in as "newname"}
   When %{I am on my user page}
-  When %{I follow "Hide this banner"}
+  When %{I press "Hide this banner"}
 end
 
 ### THEN
