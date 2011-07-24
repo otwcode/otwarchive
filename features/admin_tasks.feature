@@ -3,7 +3,7 @@ Feature: Admin tasks
 
   Scenario: admin cannot log in as an ordinary user - it is a different type of account
   
-  Given I the following admin exists
+  Given the following admin exists
       | login       | password |
       | Zooey       | secret   |
   When I go to the home page
@@ -11,36 +11,69 @@ Feature: Admin tasks
       And I fill in "user_session_password" with "secret"
       And I press "Log in"
     Then I should see "We couldn't find that user name in our database. Please try again"
-
-  Scenario: Log in as an admin and do admin-y things. Wrong password fails admin login, you can find users, post a new FAQ section.
-
-    Given I have no users
-      And the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
-      And the following activated user exists
+    
+  Scenario: Ordinary user cannot log in as admin
+  
+  Given the following activated user exists
       | login       | password      |
       | dizmo       | wrangulator   |
       And I have loaded the "roles" fixture
-
-    # FAQs have not yet been posted
-
-    When I go to the archive_faqs page
-    Then I should see "Some commonly asked questions about the Archive are answered here"
-      And I should not see "Some text"
-
-    # Login as an admin
-
-    When I go to the admin_login page
+  
+  When I go to the admin_login page
       And I fill in "admin_session_login" with "dizmo"
       And I fill in "admin_session_password" with "wrangulator"
       And I press "Log in as admin"
     Then I should see "Authentication failed"
+    
+  Scenario: Admin can log in
+  
+  Given I have no users
+      And the following admin exists
+      | login       | password |
+      | Zooey       | secret   |
+      And I have loaded the "roles" fixture
     When I go to the admin_login page
       And I fill in "admin_session_login" with "Zooey"
       And I fill in "admin_session_password" with "secret"
       And I press "Log in as admin"
     Then I should see "Successfully logged in"
+    
+  Scenario: Post a FAQ
+  
+    When I go to the archive_faqs page
+    Then I should see "Some commonly asked questions about the Archive are answered here"
+      And I should not see "Some text"
+    When I am logged in as an admin
+    When I follow "admin posts"
+      And I follow "Archive FAQ" within "#main"
+      And I should not see "Some text"
+    When I follow "Add a new section"
+      And I fill in "content" with "Some text, that is sufficiently long to pass validation."
+      And I fill in "title" with "New subsection"
+    When I press "Post"
+    Then I should see "ArchiveFaq was successfully created"
+    When I go to the archive_faqs page
+      And I follow "New subsection"
+    Then I should see "Some text, that is sufficiently long to pass validation" within ".userstuff"
+    
+  Scenario: Edit FAQ
+  
+  Given I have posted a FAQ
+  When I follow "admin posts"
+    And I follow "Archive FAQ" within "#main"
+    And I follow "Edit"
+    And I fill in "content" with "Number 1 posted FAQ, this is, and Yoda approves."
+    And I press "Post"
+  Then I should see "ArchiveFaq was successfully updated"
+    And I should see "Yoda approves"
+
+  Scenario: Find users
+
+    Given the following activated user exists
+      | login       | password      |
+      | dizmo       | wrangulator   |
+      And I have loaded the "roles" fixture
+    When I am logged in as an admin
 
     # search for a user
 
@@ -62,34 +95,16 @@ Feature: Admin tasks
     Then I should see "User was successfully updated"
       And the "user_roles_1" checkbox should not be checked
 
-    # add a new section to the FAQ
-
-    When I follow "admin posts"
-      And I follow "Archive FAQ" within "#main"
-      And I should not see "Some text"
-    When I follow "Add a new section"
-      And I fill in "content" with "Some text, that is sufficiently long to pass validation."
-      And I fill in "title" with "New subsection"
-    When I press "Post"
-    Then I should see "ArchiveFaq was successfully created"
-    When I go to the archive_faqs page
-      And I follow "New subsection"
-    Then I should see "Some text, that is sufficiently long to pass validation" within ".userstuff"
-
   Scenario: Change some admin settings for performance - guest downloading and tag wrangling
 
-  Given I have no users
-    And the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
-    And the following activated tag wrangler exists
-      | login       | password      |
-      | dizmo       | wrangulator   |
+  Given the following activated tag wrangler exists
+      | login           |
+      | dizmo           |
     And a character exists with name: "Ianto Jones", canonical: true
 
   # post a work and download it as a guest
 
-  When I am logged in as "dizmo" with password "wrangulator"
+  When I am logged in as "dizmo"
     And I post the work "Storytime"
     And I follow "Log out"
     And I view the work "Storytime"
@@ -97,11 +112,7 @@ Feature: Admin tasks
 
   # turn off guest downloading
 
-  When I go to the admin_login page
-    And I fill in "admin_session_login" with "Zooey"
-    And I fill in "admin_session_password" with "secret"
-    And I press "Log in as admin"
-  Then I should see "Successfully logged in"
+  When I am logged in as an admin
   When I follow "settings"
   Then I should see "Turn off downloading for guests"
     And I should see "Turn off tag wrangling for non-admins"
@@ -119,11 +130,7 @@ Feature: Admin tasks
 
   # Turn off tag wrangling
 
-  When I go to the admin_login page
-    And I fill in "admin_session_login" with "Zooey"
-    And I fill in "admin_session_password" with "secret"
-    And I press "Log in as admin"
-  Then I should see "Successfully logged in"
+  When I am logged in as an admin
   When I follow "settings"
     And I check "Turn off tag wrangling for non-admins"
     And I press "Update"
@@ -133,7 +140,7 @@ Feature: Admin tasks
 
   When I follow "Log out"
   Then I should see "Successfully logged out"
-  When I am logged in as "dizmo" with password "wrangulator"
+  When I am logged in as "dizmo"
     And I edit the tag "Ianto Jones"
   Then I should see "Wrangling is disabled at the moment. Please check back later."
     And I should not see "Synonym of"
@@ -316,4 +323,22 @@ Feature: Admin tasks
   When I go to the support page
   Then I should see "Support and Feedback"
     And I should see "testadmin@example.org" in the "feedback_email" input
-
+    
+  Scenario: Post known issues
+  
+  When I am logged in as an admin
+    And I follow "admin posts"
+    And I follow "Known Issues" within "#main"
+    And I follow "make a new known issues post"
+    And I fill in "known_issue_title" with "First known problem"
+    And I fill in "content" with "This is a bit of a problem"
+    # Suspect related to issue 2458
+  #  And I press "Post"
+  #Then show me the main content
+  
+  Scenario: Edit known issues
+  
+  # TODO
+  # Given I have posted known issues
+  # When I edit known issues
+  # Then I should see "Known issues updated successfully"
