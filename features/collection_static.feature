@@ -17,6 +17,7 @@ Feature: Basic collection navigation
   When I post the work "Work for my collection"
     And I edit the work "Work for my collection"
     And I fill in "Post to Collections/Challenges" with "my_collection"
+    And I fill in "Fandoms" with "New Fandom"
     And I press "Preview"
     And I press "Update"
     And I follow "My Collection"
@@ -29,10 +30,12 @@ Feature: Basic collection navigation
   When I follow "Works (1)"
   Then I should see "Work for my collection by mod"
     And I should see "1 Work found in My Collection"
+  When I follow "Work for my collection"
+    Then I should see the page title "Work for my collection - mod - New Fandom"
+  # TO DO: "Work for my collection - Anonymous - New Fandom"
   When I follow "Random Items"
   Then I should see "Work for my collection by mod"
   When I go to "My Collection" collection's static page
   Then I should see "All Fandoms"
     And I should see "Locked Works"
     And I should see "Welcome to My Collection!"
-
