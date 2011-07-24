@@ -54,7 +54,7 @@
       <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}" %>
       <% if controller.controller_name == 'inbox' %>
         <a name="comment_cancel" id="comment_cancel"><%= ts("Close") %></a>
-      <% elsif commentable.class.name == "Comment" %>
+      <% elsif commentable.class.name == "Comment" || !comment.new_record? %>
         <%= cancel_comment_button(comment, commentable) %>
       <% end %>
     </p>

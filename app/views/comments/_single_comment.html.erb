@@ -6,7 +6,7 @@
                :locals => {:comment => single_comment, :commentable => single_comment.commentable, :button_name => ts("Update")} %>    
   <% else %>
     <% if single_comment.is_deleted %>
-      <p>(<%= (ts("previous comment by ")) + get_commenter_pseud_or_name(single_comment) + (ts(" deleted")) %>)</p>
+      <p>(<%= ts("previous comment by ") %> <%= get_commenter_pseud_or_name(single_comment).html_safe %> <%= ts(" deleted") %>)</p>
     <% elsif single_comment.hidden_by_admin? && !logged_in_as_admin? %>
       <p class="message">(<%= ts("This comment is under review by an admin and is currently unavailable.") %>)</p>
     <% else %>
