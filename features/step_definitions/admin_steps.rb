@@ -128,4 +128,14 @@ When /^the check_queue rake task is run$/ do
   AdminSetting.check_queue
 end
 
+When /^I edit known issues$/ do
+  When %{I am logged in as an admin}
+    And %{I follow "admin posts"}
+    And %{I follow "Known Issues" within "#main"}
+    And %{I follow "Edit"}
+    And %{I fill in "known_issue_title" with "More known problems"}
+    And %{I fill in "content" with "This is a bit of a problem, and this is too"}
+    And %{I press "Post"}
+end
+
 ### THEN
