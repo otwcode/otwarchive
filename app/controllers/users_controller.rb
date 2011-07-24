@@ -252,7 +252,7 @@ class UsersController < ApplicationController
           redirect_to(login_path)
         end
       else
-        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again.")
+        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact <a href='/support'>support</a> for more help.").html_safe
         redirect_to ''
       end
     end
