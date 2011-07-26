@@ -26,8 +26,13 @@
     </dd>
 
     <dt><%= 'Category' %></dt>
-    <!-- FRONT-END: this is important info, so it would be good to have a way to make it stand out a little more . Attention SYSTEM MESSAGES wrangler-->
-    <dd><strong><%= @tag.type %></strong></dd>
+    <dd>
+      <% if !@tag.canonical? && @tag.set_taggings.count == 0 && @tag.works.count == 0 %>
+        <%= f.select :type, options_for_select(%w(Fandom Character Relationship Freeform UnsortedTag), @tag.type.to_s) %>
+      <% else %>
+        <strong><%= @tag.type %></strong>
+      <% end %>  
+    </dd>
 
     <% if @wranglers %>
     <dt><%= 'Wranglers' %></dt>
