@@ -122,7 +122,7 @@ class Bookmark < ActiveRecord::Base
         if tag
           self.tags << tag
         else
-          self.tags << Freeform.create(:name => string) 
+          self.tags << UnsortedTag.create(:name => string) 
         end
       end
     end
