@@ -206,6 +206,10 @@ class TagsController < ApplicationController
     # so that the associations are there to move when the synonym is created
     syn_string = params[:tag].delete(:syn_string)
     @tag.attributes = params[:tag]
+    # Limiting the conditions under which you can update the tag type
+    if !@tag.canonical? && %w(Fandom Character Relationship UnsortedTag).include?(params[:tag][:type])
+      @tag.type = params[:tag][:type]
+    end
     @tag.syn_string = syn_string if @tag.save
     if @tag.errors.empty? && @tag.save
       flash[:notice] = ts('Tag was updated.')
