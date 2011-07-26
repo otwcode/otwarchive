@@ -165,7 +165,7 @@ module TagsHelper
 
   def show_wrangling_dashboard
     can_wrangle? && 
-    (%w(tags tag_wranglings tag_wranglers tag_wrangling_requests).include?(controller.controller_name) ||
+    (%w(tags tag_wranglings tag_wranglers tag_wrangling_requests unsorted_tags).include?(controller.controller_name) ||
     (@tag && controller.controller_name == 'comments'))
   end
 
