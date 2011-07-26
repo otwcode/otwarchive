@@ -74,7 +74,8 @@
     <%= preference_form.check_box :show_random %>
   </dd>  
   <dt><%= label_tag :challenge_type, ts("If this collection is for a challenge, please choose the type") %>:</dt>
-    <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, @collection.challenge ? @collection.challenge.class.name : "") %></dd>
+  <% type = @collection.challenge ? @collection.challenge.class.name : @challenge_type %>
+  <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, type) %></dd>
 </dl>
 </fieldset>
   <% end %>
