@@ -6,8 +6,8 @@ class PromptsController < ApplicationController
   before_filter :promptmeme_only, :except => [:index, :new]
   before_filter :load_prompt_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :allowed_to_destroy, :only => [:destroy]
-  before_filter :signup_owner_only, :only => [:edit]
-  before_filter :maintainer_or_signup_owner_only, :only => [:show, :update, :destroy]
+  before_filter :signup_owner_only, :only => [:edit, :update]
+  before_filter :maintainer_or_signup_owner_only, :only => [:show]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
 
   def promptmeme_only
