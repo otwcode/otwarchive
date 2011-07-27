@@ -1,5 +1,6 @@
-# eventually for exporting to Excel TSV format
-# require 'iconv'
+# For exporting to Excel CSV format
+require 'iconv'
+require 'csv'
 
 class ChallengeSignupsController < ApplicationController
 
@@ -97,20 +98,14 @@ class ChallengeSignupsController < ApplicationController
             not_allowed
           end
       }
-      format.xls {
+      format.csv {
         if (@collection.challenge_type == "GiftExchange" && @challenge.user_allowed_to_see_signups?(current_user)) || 
         (@collection.challenge_type == "PromptMeme" && (
         @collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)
         ))
-          params[:show_urls] = true
-          params[:show_descriptions] = true
-          params[:show_claims] = true
-          params[:show_filled] = true
-          params[:xls] = true
-          @challenge_signups = @collection.signups
-          export_html
+          export_csv
         else
-          flash[:error] = ts("You aren't allowed to see the Excel summary.")
+          flash[:error] = ts("You aren't allowed to see the CSV summary.")
           redirect_to collection_path(@collection) rescue redirect_to '/' and return
         end
       }
@@ -194,24 +189,65 @@ class ChallengeSignupsController < ApplicationController
 
 
 protected
-  # eventually for exporting to excel tsv format
-  # BOM = "\377\376" #Byte Order Mark
-  #
-  # def export_tsv(signups)
-  #   filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.tsv"
-  #   content = signups.collect {|signup| signup.to_tsv}.join("\n")
-  #   content = BOM + Iconv.conv("utf-16le", "utf-8", content)
-  #   send_data content, :filename => filename
-  # end
 
-  # We just export an HTML table, but we give it the xls suffix to have Excel/Open Office recognize it correctly
-  def export_html
-    @page_title = "#{@collection.name} Signups at #{Time.now.strftime('%Y-%m-%d-%H%M')}"
-    @hide_navigation = true
-    filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.xls"
-    content = render_to_string(:template => "challenge_signups/index.html", :layout => 'barebones.html')
-    send_data content, :filename => filename
+  # Tab-separated CSV with utf-16le encoding and byte order mark
+  def export_csv
+    header = ["Pseud", "Email", "Signup URL"]
+
+    ["request", "offer"].each do |type|
+      @challenge.send("#{type.pluralize}_num_allowed").times do |i|
+        header << "#{type.capitalize} #{i+1} Tags"
+        header << "#{type.capitalize} #{i+1} Optional Tags" if
+          @challenge.send("#{type}_restriction").optional_tags_allowed
+        header << "#{type.capitalize} #{i+1} Description" if
+          @challenge.send("#{type}_restriction").description_allowed
+        header << "#{type.capitalize} #{i+1} URL" if
+          @challenge.send("#{type}_restriction").url_allowed
+      end
+    end
+
+    csv_data = CSV.generate(:col_sep => "\t", :encoding => "utf-8") do |csv|
+      csv << header
+      @collection.signups.each do |signup|
+        row = [signup.pseud.name, signup.pseud.user.email,
+               collection_signup_url(@collection, signup)]
+
+        ["request", "offer"].each do |type|
+          @challenge.send("#{type.pluralize}_num_allowed").times do |i|
+            request = signup.send(type.pluralize)[i]
+            any_types = TagSet::TAG_TYPES.select {|type| request && request.send("any_#{type}")}
+            any_types.map! { |type| ts("Any %{type}", :type => type.capitalize) }
+            tags = request.nil? ? [] : request.tag_set.tags.map {|tag| tag.name}
+            row << (tags + any_types).join(", ")
+            
+            if @challenge.send("#{type}_restriction").optional_tags_allowed
+              row << (request.nil? ? "" : request.optional_tag_set.tags.map {|tag| tag.name}.join(", "))
+            end
+            
+            if @challenge.send("#{type}_restriction").description_allowed
+              description = (request.nil? ? "" : sanitize_field(request, :description))
+              # Didn't find a way to get Excel 2007 to accept line
+              # breaks withing a field; not even when the row
+              # delimiter is set to \r\n and linebreaks within the
+              # field are only \n. :-(
+              # Thus stripping linebreaks.
+              row << description.gsub(/[\n\r]/, " ")
+            end
+            
+            if @challenge.send("#{type}_restriction").url_allowed
+              row << (request.nil? ? "" : request.url)
+            end
+          end
+        end
+        csv << row
+      end
+    end
+
+    filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
+
+    byte_order_mark = "\uFEFF"
+    csv_data = Iconv.conv("utf-16le", "utf-8", byte_order_mark + csv_data)
+    send_data(csv_data, :filename => filename, :encoding => "utf-16le")
   end
-
-
+  
 end
