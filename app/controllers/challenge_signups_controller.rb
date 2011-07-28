@@ -87,7 +87,7 @@ class ChallengeSignupsController < ApplicationController
     end
 
     # using respond_to in order to provide Excel output
-    # see below for export_excel method
+    # see below for export_csv method
     respond_to do |format|
       format.html {
           if @challenge.user_allowed_to_see_signups?(current_user)
@@ -190,8 +190,34 @@ class ChallengeSignupsController < ApplicationController
 
 protected
 
-  # Tab-separated CSV with utf-16le encoding and byte order mark
-  def export_csv
+  def request_to_array(type, request)
+    any_types = TagSet::TAG_TYPES.select {|type| request && request.send("any_#{type}")}
+    any_types.map! { |type| ts("Any %{type}", :type => type.capitalize) }
+    tags = request.nil? ? [] : request.tag_set.tags.map {|tag| tag.name}
+    rarray = [(tags + any_types).join(", ")]
+            
+    if @challenge.send("#{type}_restriction").optional_tags_allowed
+      rarray << (request.nil? ? "" : request.optional_tag_set.tags.map {|tag| tag.name}.join(", "))
+    end
+            
+    if @challenge.send("#{type}_restriction").description_allowed
+      description = (request.nil? ? "" : sanitize_field(request, :description))
+      # Didn't find a way to get Excel 2007 to accept line breaks
+      # withing a field; not even when the row delimiter is set to
+      # \r\n and linebreaks within the field are only \n. :-(
+      #
+      # Thus stripping linebreaks.
+      rarray << description.gsub(/[\n\r]/, " ")
+    end
+     
+    rarray << (request.nil? ? "" : request.url) if
+      @challenge.send("#{type}_restriction").url_allowed
+
+    return rarray
+  end
+  
+
+  def gift_exchange_to_csv
     header = ["Pseud", "Email", "Signup URL"]
 
     ["request", "offer"].each do |type|
@@ -208,41 +234,55 @@ protected
 
     csv_data = CSV.generate(:col_sep => "\t", :encoding => "utf-8") do |csv|
       csv << header
+      
       @collection.signups.each do |signup|
         row = [signup.pseud.name, signup.pseud.user.email,
                collection_signup_url(@collection, signup)]
 
         ["request", "offer"].each do |type|
           @challenge.send("#{type.pluralize}_num_allowed").times do |i|
-            request = signup.send(type.pluralize)[i]
-            any_types = TagSet::TAG_TYPES.select {|type| request && request.send("any_#{type}")}
-            any_types.map! { |type| ts("Any %{type}", :type => type.capitalize) }
-            tags = request.nil? ? [] : request.tag_set.tags.map {|tag| tag.name}
-            row << (tags + any_types).join(", ")
-            
-            if @challenge.send("#{type}_restriction").optional_tags_allowed
-              row << (request.nil? ? "" : request.optional_tag_set.tags.map {|tag| tag.name}.join(", "))
-            end
-            
-            if @challenge.send("#{type}_restriction").description_allowed
-              description = (request.nil? ? "" : sanitize_field(request, :description))
-              # Didn't find a way to get Excel 2007 to accept line
-              # breaks withing a field; not even when the row
-              # delimiter is set to \r\n and linebreaks within the
-              # field are only \n. :-(
-              # Thus stripping linebreaks.
-              row << description.gsub(/[\n\r]/, " ")
-            end
-            
-            if @challenge.send("#{type}_restriction").url_allowed
-              row << (request.nil? ? "" : request.url)
-            end
+            row += request_to_array(type, signup.send(type.pluralize)[i])
           end
         end
         csv << row
       end
     end
 
+    return csv_data
+  end
+
+  
+  def prompt_meme_to_csv
+    header = ["Pseud", "Email", "Signup URL", "Tags"]
+    header << "Optional Tags" if @challenge.request_restriction.optional_tags_allowed
+    header << "Description" if @challenge.request_restriction.description_allowed
+    header << "URL" if @challenge.request_restriction.url_allowed
+
+    csv_data = CSV.generate(:col_sep => "\t", :encoding => "utf-8") do |csv|
+      csv << header
+      @collection.prompts.where(:type => 'Request').each do |request|
+        if request.anonymous?
+          row = ["(Anonymous)", "", ""]
+        else
+          row = [request.challenge_signup.pseud.name,
+                 request.challenge_signup.pseud.user.email,
+                 collection_signup_url(@collection, request.challenge_signup)]
+        end
+
+        csv << (row + request_to_array("request", request))
+      end
+    end
+
+    return csv_data
+  end
+
+  
+  # Tab-separated CSV with utf-16le encoding (unicode) and byte order
+  # mark. This seems to be the only variant Excel can get
+  # automatically into proper table format. OpenOffice handles it
+  # well, too.
+  def export_csv
+    csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
     filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
 
     byte_order_mark = "\uFEFF"
