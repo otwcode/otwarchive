@@ -5,6 +5,7 @@
 
 <!--subnav-->
 <ul class="navigation" role="navigation">
+	<li><%= link_to ts("Edit My Profile"), edit_user_path(@user) %></li>
   <li><%= link_to ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
   <li><%= link_to ts("Change User Name"), change_username_user_path(@user) %></li>
   <li><%= link_to ts("Change Password"), change_password_user_path(@user) %></li>
