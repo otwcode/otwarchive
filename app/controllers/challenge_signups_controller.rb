@@ -287,7 +287,7 @@ protected
 
     byte_order_mark = "\uFEFF"
     csv_data = Iconv.conv("utf-16le", "utf-8", byte_order_mark + csv_data)
-    send_data(csv_data, :filename => filename, :encoding => "utf-16le")
+    send_data(csv_data, :filename => filename, :type => :csv)
   end
   
 end
