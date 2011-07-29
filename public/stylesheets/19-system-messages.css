@@ -28,10 +28,9 @@ span.error {border:0;}
 .draggable, .droppable {color:red;}
 
 /* SYMBOLS (help button)*/
-span.symbol { font-family:Cambria,Georgia,serif; height:1em; width:1em; margin:0 0.25em; border:1px solid; -moz-border-radius:0.75em; -webkit-border-radius:0.75em;}
-span.symbol span { color:#f8f1fe; height:1em; width:1em; padding:0.425em; }
+span.symbol { color:green; font-family:Cambria,Georgia,serif; height:1em; width:1em; margin:0 0.25em; border:1px solid; -moz-border-radius:0.75em; -webkit-border-radius:0.75em;text-transform:super;}
+span.symbol span { height:1em; width:1em; padding:0.425em; }
 #main .symbols a, #main .symbol a { text-decoration:none; border:none }
-span.question { background:#2b547c; border-color:#2a547c; }
 a.question {border:0; font-weight: bold;}
 
 /*SYMBOLS KEY (help content) */

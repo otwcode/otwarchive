@@ -4,19 +4,6 @@
 <%= error_messages_for @work %>
 <!--/descriptions-->
 
-<!--><ul class="navigation">
-  <% if @unposted %>
-    <li id='restore-link'>
-      <%= link_to ts('Restore From Last Unposted Draft?'), url_for(:action => :new, :load_unposted => true) %>
-    </li>
-  <% end %>
-  <li id="upload-link">
-    <%= link_to( ts('Import From An Existing URL Instead?'),
-      {:url => {:controller => :works, :action => :new, :import => true}},
-      :href => url_for(:controller => :works, :action => :new, :import => true)) %>
-  </li>
-</ul>-->
-
 <!--main content-->
 <%= render :partial => "standard_form" %>
 <!--/content-->

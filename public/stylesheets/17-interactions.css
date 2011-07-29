@@ -4,12 +4,16 @@ form fieldset legend, legend { height:0; width:0; font-size:0; opacity:0;}
 #main form fieldset.table		{ border:none;}
 form input { font-size: 1em;}
 form p.submit, input.submit { text-align:center;}
-#main form .submit input { width:auto;}
+#main form .submit input { color:#999; font-size:2em; width:auto; float:right; border:1px solid; -moz-border-radius:0.5em}
 form p { line-height:2; clear:both;}
-/*form dl { position:relative; }*/
+
 form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
 form dd { float: left;}
 form code { display:block;}
+form h3 {width:10%; float:left; clear:left; text-transform:lowercase; opacity:0.75; }
+form p {width:85%; float:left; clear:none}
+#main p input[type="text"], textarea { border:1px solid #ccc; box-shadow: 0px 1px 2px #ccc; width:100%; font-size:2em}
+textarea {font-size:1em;}
 p.character_counter { font-size:85.7%; color:#666; display:inline; position:relative;}
 .character_counter span { display:inline-block; width: 3.75em; text-align:right ;}
 form select { vertical-align:text-top; font-size: 1em;}
