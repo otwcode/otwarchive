@@ -285,7 +285,7 @@ class Work < ActiveRecord::Base
       add_to_collection(assignment.collection)
       self.gifts << Gift.new(:pseud => assignment.requesting_pseud) unless (recipients && recipients.include?(assignment.requesting_pseud.byline))
     end
-  end    
+  end
 
   def set_challenge_claim_info
     # if this is fulfilling a challenge claim, add the collection and recipient
@@ -294,12 +294,12 @@ class Work < ActiveRecord::Base
       self.gifts << Gift.new(:pseud => claim.requesting_pseud) unless (recipients && recipients.include?(claim.request_byline))
     end
     save
-  end      
+  end
 
   def challenge_assignment_ids
     challenge_assignments.map(&:id)
   end
-  
+
   def challenge_claim_ids
     challenge_claims.map(&:id)
   end
@@ -587,16 +587,25 @@ class Work < ActiveRecord::Base
   def create_hit_counter
     counter = self.build_hit_counter
     counter.save
+    $redis.set(self.redis_key(:hit_count), 0)
   end
 
   # save hits
   def increment_hit_count(visitor)
-    counter = self.hit_counter
-    if !counter.last_visitor || counter.last_visitor != visitor
+    if self.last_visitor != visitor
       unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
-        counter.update_attributes(:last_visitor => visitor, :hit_count => counter.hit_count + 1)
+        $redis.incr(self.redis_key(:hit_count))
+        $redis.set(self.redis_key(:last_visitor), visitor)
+        $redis.sadd("Work:new_hits", self.id)
       end
     end
+    return self.hits
+  end
+
+  # the last visitor is just used to decide whether or not to increment the hit count
+  # so persisting it in the database is not critical
+  def last_visitor
+    $redis.get(self.redis_key(:last_visitor))
   end
 
   # save downloads
@@ -642,8 +651,22 @@ class Work < ActiveRecord::Base
   end
 
   def hits
-    self.hit_counter ? self.hit_counter.hit_count : 0
+    redis_hits = $redis.get(self.redis_key(:hit_count))
+    return self.database_hits unless redis_hits
+    return redis_hits.to_i
   end
+
+  def database_hits
+    db_hits = self.hit_counter ? self.hit_counter.hit_count : 0
+    return db_hits
+  end
+
+  # helper method to generate redis keys
+  # examples: "work:2:hit_count", "work:776:last_visitor"
+  def redis_key(sym)
+    "work:#{self.id}:#{sym}"
+  end
+
 
   #######################################################################
   # TAGGING
@@ -875,7 +898,7 @@ class Work < ActiveRecord::Base
   scope :all_with_tags, includes(:tags)
 
   scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
-  
+
   scope :unrevealed, joins(:approved_collection_items) & CollectionItem.unrevealed
 
   # ugh, have to do a left join here
