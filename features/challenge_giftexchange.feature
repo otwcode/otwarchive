@@ -240,3 +240,15 @@ Feature: Gift Exchange Challenge
   Then I should see "Awesome Gift Exchange"
     And I should not see "Not yet posted"
     And I should see "Fulfilled Story"
+
+  @bla
+  Scenario: Download signups CSV
+    Given I am logged in as "mod1"
+    And I have created the gift exchange "My Gift Exchange"
+
+    When I go to the "My Gift Exchange" signups page
+    And I follow "Download (CSV)"
+    Then I should get a file with ending and type csv
+
+
+    
