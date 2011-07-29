@@ -8,7 +8,7 @@
 
 #globalize a:hover, #globalize a:active {
     background: #222;
-    color: #f8f1fe;
+    color: #fffef9;
 }
 
 #globalize ul {
@@ -25,7 +25,7 @@
 }
 
 #globalize select {
-    background: #f8f1fe;
+    background: #fffef9;
     color: #222;
 	padding: 0.125em;
 	border: 1px solid #999;

@@ -14,24 +14,24 @@
   <!--main content-->
   <% @admin_posts.each do |admin_post| %>
 
-    <div class="admin module" role="article">
-      <div class="admin-header">
-        <h3>
-          <%= link_to admin_post.title, admin_post %>
-        </h3>
-        <h4>
-          Published: <%= admin_post.created_at %>  
-          <% if logged_in_as_admin? %>
-            <%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), :class => "navigation" %>
-          <% end %>
+ 	<div class="admin module" role="article">
+			<div class="header">
+      <h3>
+				<%= link_to admin_post.title, admin_post %>
+			</h3>
+				<h4>
+					<%= ts('Published:') %> <%= admin_post.created_at %>  
+						<% if logged_in_as_admin? %>
+					    <%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), :class => "navigation" %>
+						<% end %>
         </h4>
       </div>
-      <div class="admin-content userstuff">
-        <%=raw sanitize_field(admin_post, :content) %>
+      <div class="admin userstuff">
+		    <%=raw sanitize_field(admin_post, :content) %>
       </div>
-      <!-- BEGIN comment section -->
-        <h3 class="landmark">Comment</h3>
-        <ul class="navigation">
+			<!-- BEGIN comment section -->
+				<h3 class="landmark"><%= ts('Comment') %></h3>
+				<ul class="navigation">
           <% if admin_post.count_visible_comments > 0 %>
             <li><%= link_to ( admin_post.count_visible_comments == 1 ? 
                               ts("Read %{comment_count} Comment", :comment_count => admin_post.count_visible_comments.to_s) : 

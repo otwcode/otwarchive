@@ -1,0 +1,39 @@
+/* anything in here should override other styles for admin users */
+
+#header .landmark {
+  color: #066 !important;
+}
+#header {
+  background: #066 top left no-repeat;
+}
+
+#login-block {
+  background: #066;
+}
+
+.home #login-block {
+  background: transparent;
+}
+
+#header ul.admin       { margin-top: 2.375em; position: absolute; right: 1em; z-index: 50 }
+#header ul.admin a,#header ul.admin .current
+             { border-bottom: 3px solid #111; float: right;}
+
+#admin-options a {
+  color: #900;
+}
+
+#admin_users_table th a:visited {
+  color: #ddd;
+}
+
+#admin_users_table th a:hover {
+  color: #066;
+}
+
+/* TABLES AND LISTS */
+table, thead td {
+  background: #E0EFE9
+}
+
+

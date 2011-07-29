@@ -1,6 +1,6 @@
 <% if logged_in? %>
   <p id="greeting">
-      <%= ts("Hi,") %> <%= link_to current_user.login, user_path(current_user), :class => "login" %>!
+      <%= link_to icon_display(current_user), :alt => current_user %>
     </p>
   <ul id="login">
     <li>

@@ -1,0 +1,63 @@
+/* === SYSTEM RULES === */
+/* === These notes should be stripped out and copied to style book before launch === */
+/* System messages use the following colours:
+* notice => blue: success,messages,additional information, no action needed, can proceed
+* warning => yellow: user may wish to change their mind, action optional, can proceed
+* error => red: mistake, go back and fix this problem, action needed before you can proceed
+*/
+
+/* MINIMAL STYLING*/
+.important { font-weight:900; }
+.message { font-size:1em; }
+.required, .error { color:#900; }
+.footnote { font-size:0.75em; }
+
+.flash { margin:0.5625em auto; padding:1em; }
+.flash_icon	{ float:left; width:50px; padding:0 0.5625em 0 0; border:0; }
+
+.notice, .comment_notice { background:#d1e1ef; border:1px solid #c2d2df;}
+
+.warning, .comment_warning	{ background:#edefd1; border:1px solid #dfdfc2;}
+.meta .warning { background:transparent; border:0}
+
+.error, .comment_error { background:#efd1d1; font-weight:bold; line-height:2; padding:.375em; border:1px solid #900;}
+.error ul	{ font-weight:100; width:90%; margin:auto; }
+.error ul li	{list-style-type:disc;}
+span.error {border:0;}
+
+.draggable, .droppable {color:red;}
+
+/* SYMBOLS (help button)*/
+span.symbol { font-family:Cambria,Georgia,serif; height:1em; width:1em; margin:0 0.25em; border:1px solid; -moz-border-radius:0.75em; -webkit-border-radius:0.75em;}
+span.symbol span { color:#f8f1fe; height:1em; width:1em; padding:0.425em; }
+#main .symbols a, #main .symbol a { text-decoration:none; border:none }
+span.question { background:#2b547c; border-color:#2a547c; }
+a.question {border:0; font-weight: bold;}
+
+/*SYMBOLS KEY (help content) */
+ dl#symbols-key, dl#bookmark-symbols-key { background: #f8f1fe }
+ dl#symbols-key dt { width: 100px }
+ dl#symbols-key h3 { margin: 0 }
+ dl#symbols-key dd { margin: -55px auto auto 100px }
+ #symbols-key dl { border: 1px solid #ddd; margin-bottom: 1.2525em; padding: 0.15em }
+ #symbols-key dl dt img, #bookmark-symbols-key dt img { height: 25px; width: 25px }
+ #symbols-key dl dt, #bookmark-symbols-key dt { width: 25px }
+ #symbols-key dl dd, #bookmark-symbols-key dd { margin: -1.2525em auto auto 35px }
+
+/*Live Validation */
+
+.LV_validation_message {font-weight:bold;}
+.LV_valid { color:#0c0;}
+.LV_invalid {color:#c00;}
+    
+.LV_invalid_field, 
+input.LV_invalid_field:hover, 
+input.LV_invalid_field:active,
+textarea.LV_invalid_field:hover, 
+textarea.LV_invalid_field:active {
+    border: 1px solid #c00;
+}
+
+
+
+

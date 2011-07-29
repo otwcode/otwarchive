@@ -1,0 +1,7 @@
+/* DASHBOARD*/
+ #dashboard ul         { margin: 1em 1em 3em 1em; width: 10.5em }
+ #dashboard a,#dashboard span
+              { color: #111; display: block; padding: 0 0.5625em; border: none;}
+ #dashboard li:hover,#dashboard a:hover
+              { background:#900 url(/images/header-red.png) bottom left repeat-x; color:; border:none;}
+ #dashboard ul#subnav    { margin:0; border: none; border-bottom: 2px solid #111;}

@@ -1,0 +1,211 @@
+
+/*3. PAGE BY PAGE, where page is a class of main*/
+
+/*HOME */
+.home .intro 	{ font:1.5em Georgia,serif; text-shadow:-1px -1px 1px #fff; margin: auto; max-width:39em; }
+.home .module h2 {font:bold oblique 2.5em Georgia,serif; text-transform:lowercase; margin-bottom:-0.25em; }
+.home .intro p {text-indent:2.5em;}
+.home .intro a, .home .intro em{font:bold oblique 100% Georgia,serif;}
+.home p#signup { background:url(/images/arrow.png) top left no-repeat; overflow:hidden; height:75px}
+.home p#signup a{ display:block; width:49%; float:right; border:1px solid #c8c8c8; padding:.25em; margin:0;text-align:center; background:url(/images/button-gradient.png) center repeat-x; background:(bottom, rgba(71,71,71,1) 5%, rgba(59,59,59,1) 50%, rgba(74,74,74,1) 55%, rgba(91,91,91,1) 100%);
+ -moz-border-radius:0.15em; 
+border-color:rgba(86,86,86,0.25);font:100 normal 1em "Lucida Grande",sans-serif; color:#2a2a2a; text-shadow:-2px -1px 2px #fff}
+
+.home .latest, .news { width:49%; float:left;}
+.home .latest h3, .news h3 { text-align:center;color:#f8f1fe;border-bottom:1px solid #c8c8c8;  text-shadow:-1px -1px 1px #333; font-size:1.5em; text-transform:lowercase; background:url(/images/scrubber.png) top left}
+.home .news h3 {text-align:right;}
+.home .latest dl {margin-left:2em;}
+
+
+/* SESSIONS (front front pages - login, create, logout(feedbacks)etc)*/
+ #main.session h1,#main.session h1,#main.passwords-new h1
+                { border: 0; margin: 0.75em 0 0.125em; text-align: left }
+ #main.session h1 a,#main.session h1 a,#main.passwords-new h1 a
+                { border: none; }
+ #main.session h1 span span   { font-size: 0.5625em }
+ #main.session h2,#main.session h2,#main.passwords-new h2
+                { font: 100 0.75em "Gill Sans", Georgia, Helvetica, Verdana, sans-serif; margin: 0.25em auto 2em }
+ .session #logo         { display: block; float: left; margin-bottom: 1.5em; width: 49% }
+ .session #signin         { float: left; margin-bottom: 1.5em; width: 49% }
+
+/* DASHBOARD: HISTORY */
+ .readings-index .module h3   { border-top: 2px dotted #ddd; font-size: 1em; margin-top: 0.5em; padding-top: 0.5em; }
+ .readings-index .reading.module     { border: 1px solid #ddd; margin: 0.25em; padding: 0 0.25em }
+ .readings-index li.blurb     { border: 0 }
+/* DASHBOARD: INBOX */
+ .inbox-show p.navigation    { float:left;}
+ #main.inbox-show .filters dd   { float:none;}
+ .inbox-show span.unread          { color: #900;}
+
+/* USER PROFILE SHOW */
+ .profile-show .module h3     { margin-top: 2.75em }
+ .profile-show .datetime     { top:-3.25em }
+
+/* USER PROFILE NEW or EDIT PSEUD */
+ .edit_pseud p.icon, .new_pseud p.icon { position: static; }
+
+/* USER OWN WORKS */
+ .works-own .own                { background: transparent; }
+ .works-own .own dl.stats { background: #eee; }
+
+/* WORKS INDEX */
+ .works-index .index                { width: 75% }
+ .works-index #search_main               { float: left;}
+ #main.works-index #search_main { border: none; }
+ .works-index #search_main input.text    { width: 30em;}
+ .works-index span.submit { margin-top: 0; margin-bottom: 0; }
+ #main.works-index #search_main input.text { border: 2px inset #f0f0f0; background-color: white; }
+
+ /* WORKS SHOW */
+ #main .notes                            { padding-bottom: 0.5em !important}
+
+/* MEDIA INDEX, SHOW, FANDOMS INDEX, SHOW*/
+  .media-index li.category      { min-height: 15em; padding: 1em; border: 1px solid #DDD; }
+  #main.media-index ol          { margin: 0 0 1em 1em; }
+  #main.media-index p           { margin-left: 1em;}
+  #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol
+                { list-style-type: decimal }
+  #main.media-index li.category { margin: 1em 2em }
+  .media-index li.odd,  .media-index li.even  { float: left; width: 40% }
+
+  .fandoms-index ul.index li    { float: left; width: 45% }
+  .fandoms-index ul.index li.odd          {clear: left;}
+  #main.fandoms-index ul.index li.even    {margin-left: 10%;}
+  .fandoms-index div.main-fandoms-listing {clear: both;}
+  .fandoms-index .filters     {float: left; width: 100%;}
+  .fandoms-index .alphabet li {display: inline;}
+  .fandoms-index li.letter    {float: left; width: 100%;}
+  .fandoms-index ul.letters   {float: left; width: 90%; margin: 2em; padding: 0 1em; border: 1px solid #eee;
+                              -moz-box-shadow: 3px 3px 4px #ccc; -webkit-box-shadow: 3px 3px 4px #ccc;
+                              box-shadow: 3px 3px 4px #ccc;
+                            
+  }
+  .fandoms-index ul.letters.collection {margin-left: 0; width: 95%;}
+  .fandoms-index li.letter h3 {background: #eee; padding: .25em; width: auto;}
+  .fandoms-index li.letter h3 .top {float: right; font-size: .9em;}
+  .fandoms-unassigned ul.fandoms li {float: left; width: 40%;}
+  .fandoms-unassigned .filters #media_id {width: 100%;}
+
+/* PEOPLE INDEX, PSEUDS-INDEX */
+ .pseud .user h4,  .pseud .user h5, .pseud .user blockquote
+                { margin:0 0 0 120px; float:left; clear:left; }
+ .people-index li.blurb, .pseuds-index li.blurb
+                { float: left; width: 90%;}
+/* COLLECTIONS INDEX*/
+ .collections-index .index     { width: 75% }
+ #main.collections-show h2 span { font-size: smaller }
+
+/* Collections */
+  .twobutton { width: 12em }
+  .fandoms-index h3.no_fandoms {float: left;}
+
+/* BOOKMARKS INDEX*/
+ .bookmarks-index .user .module      { float: none; }
+
+/* MANAGE SERIES */
+ #manage-series h3 {display: inline;}
+
+/* MANAGE ARCHIVE FAQS */
+ #manage-archive-faqs h3 {display: inline;}
+
+/* SKINS */
+  .skins-index .index     { width: 75% }
+  #main.skins-show h2 span { font-size: smaller }
+
+  #main.skins-show dl  { position: relative }
+  #main.skins-show dt  { font-size: 0.875em; font-weight: 100; width: 13.5em }
+  #main.skins-show dd  { margin: -1.1em 0 .7em 16em; }
+  #main.skins-edit form dt, #main.skins-new form dt {width: 15em;}
+
+/* TAG WRANGLERS INDEX */
+ #main.tag_wranglers-index .index       { width:100%; margin-top: 2em;}
+ #main.tag_wranglers-index .index li    { width:100%;}
+ #main.tag_wranglers-index form         { width: 60%;}
+ #main.tag_wranglers-index form.filters { width:16em; max-width:40%;}
+ #main.tag_wranglers-index .blurb       { float: left; }
+ #main.tag_wranglers-index .blurb h4, #main.tag_wranglers-index .blurb ul, #main.tag_wranglers-index .blurb form
+                                        { margin: 0;}
+ .tag_wranglers-index ul.wranglers li   { display: block;}
+ .tag_wranglers-index textarea          { width: 100%; height: 5em;}
+
+/* TAGS EDIT, front end coder please modularise the tooltip navigation rules*/
+ .tags-edit dd                  { width: 70%;}
+ .tags-edit dd input.tags       { width: 100%; }
+ #main.tags-edit ul.tags        { float: left; margin-right: 2em;}
+ #main.tags-edit ul.tags, #main.tags-edit ul.tags li
+                                { display: block; }
+ #main.tags-wrangle div.pagination  {clear: both;}
+
+/*TAGS INDEX */
+ .tags-index ul         { margin: 2em auto; text-align: center; line-height: 2;}
+ .tags-index li         { display: inline; padding: 0.25em 0.5625em }
+
+/*TAGS SHOW */
+ #main.tags-show ul.tree        { display: block; margin: .5em 1em; }
+ #main.tags-show ul.tree li     { display: block; list-style-type:disc; }
+
+/*TAG WRANGLINGS INDEX */
+ .tag_wranglings-index .module   { width: 70%; margin:auto; }
+
+
+/* TRANSLATIONS*/
+ #main.translation-translate   { margin-bottom: 2.5em }
+ dl.translations         { border-top: 1px solid; margin: 1.5em auto; padding: 1.5em 0 2.5em; position: relative }
+ .translations dt         { clear: both; margin: -0.25em; padding: 0.25em }
+ .translated           { background: #d1e1ef; font-style: italic }
+ .untranslated           { font-weight: 600 }
+
+/* LANGUAGES */
+ #main.languages-index #languages_table { margin-top: 0.5em; width: 80%; }
+
+/*ADMIN POSTS */
+ #main.admin_posts-index .module { width: 75%; clear: right; margin: 0.5em auto; border:1px solid; }
+ #dashboard.admin-posts li, #dashboard.wrangling li
+                                { font-size: 90%; margin: .5em 0em; }
+ #dashboard.admin-posts a:hover { background: #333; color: #fff; }
+ #main.admin_posts-index .wrapper, #main.admin_posts-show .admin-header, #main.archive_faqs-show .admin-header{clear:right;}
+ #main.admin_posts-show .userstuff { margin-top: 2em; } /* hacky fix so the first header doesn't overlap the subnav */
+ #main.admin_posts-show .admin-header h3, #main.admin_posts-index .admin-header h3,
+     #main.archive_faqs-show .admin-header h3, #main.archive_faqs-index .admin-header h3
+       { font-weight:500; padding: 0.125em; border-bottom:0.25em double #f8f1fe; color: #f8f1fe; background-color: #333; }
+ #main.admin_posts-index .admin-header h3 a, #main.admin_posts-index .admin-header h3 a:link, #main.admin_posts-index .admin-header h3 a:visited,
+    #main.admin_posts-show .admin-header h3 a, #main.admin_posts-show .admin-header h3 a:link, #main.admin_posts-show .admin-header h3 a:visited,
+        #main.archive_faqs-index .admin-header h3 a, #main.archive_faqs-index .admin-header h3 a:link, #main.archive_faqs-index .admin-header h3 a:visited,
+            #main.archive_faqs-show .admin-header h3 a, #main.archive_faqs-show .admin-header h3 a:link, #main.archive_faqs-show .admin-header h3 a:visited
+            { border-bottom:0; text-decoration: none; color: #f8f1fe; }
+ #main.admin_posts-show .admin-header h4, #main.admin_posts-index .admin-header h4,
+    #main.archive_faqs-show .admin-header h4, #main.archive_faqs-index .admin-header h4
+       { font-variant:small-caps; }
+
+/* ToS and ADMIN long body copy tweaks*/
+ #main #tos .toc li       { list-style-type: upper-roman }
+ .home-tos_faq #contents     { margin: auto; padding: 1em; width: 60% }
+ .home-tos_faq #contents h2   { text-align: center }
+ .home-tos_faq #contents ul li   { border-bottom: 1px solid #ddd; list-style-type: upper-roman}
+
+ #main.chapters-manage li.chapter-position-list        { padding: 0.5em;}
+ .ui-sortable>li { clear: both;}
+ .ui-sortable>li { border: 1px solid transparent;}
+ .ui-sortable>li:hover { background: #eee; border: 1px solid black; cursor: move;}
+ .ui-sortable>li.chapter-position-list { padding: 1em;}
+ #main.chapters-manage ul.navigation                   { display: inline; float: none; width: auto; }
+
+ #main.works-navigate ol, #main.works-navigate ol li   { display: block; }
+ #main.works-navigate ol a  {border: 0;}
+
+ /* FRONT END: temporary chapter index */
+ .chapters-show ul.navigation, .chapters-show ul.navigation li
+                                                    { position: relative; }
+ .chapters-show ul.navigation                       { z-index: 99;}
+ .chapters-show .wrapper                            { position: relative; }
+ .chapters-show #chapter-index                      { min-width: 15em; margin-left: auto; position: absolute; top: 1.6em; right: 0em; background: #fff; border: 2px solid black; padding: 1em; }
+ .chapters-show #chapter-index form                 { padding: 1em; }
+ #main div#chapter-index h4, #main div#chapter-index h4 a
+                                                    { margin: 0; border: none;}
+
+ #main.tags-search form, #main.tags-index form      {float: none;}
+
+ #main .hidden  {display: none;}
+
+ /*#main ul.navigation .draft-chapter { background: #efd1d1 }*/
+ #main ul.navigation .draft-chapter { color: red; }

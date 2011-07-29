@@ -1,0 +1,14 @@
+.translations-index textarea {height: 10em;}
+.translations-index form {clear:both;}
+.translations-index h2, .translations-index dl {clear:both;}
+.translations-index div.namespace {border:0.25em double #000; height:auto; margin-top: 2em; padding:0 2em 2em 2em;}
+.translations-index div.namespace span {padding-right:1em;}
+.translations-index .updated {color:orange;}
+.translations-index .translated {color:blue;}
+.translations-index .betaed {color:green;}
+.translations-index .not_translated {color:red;}
+.translations-index div.translation {margin:0 10% 0 10%; border-bottom: 1px solid black; padding: 2em 0 2em 0; overflow:auto;}
+.translation-admin-links a {color:#900;}
+
+.translation_notes-index .note-text {padding:1em;}
+.translation_notes-index .note {border-bottom:1px dashed black; padding-top:1em; width:80%;}

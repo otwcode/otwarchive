@@ -1,0 +1,19 @@
+/* HEADER*/
+#header { padding:0; background:url(/images/logo-stroke.png) no-repeat transparent;}
+#header h1 { display:none;}
+#header a {font-family:"Helvetica";}
+#header li, #header form, #header input { display: inline }
+
+#header #login-block     { font-size: 0.75em; text-align: right; border:0;}
+p#greeting, ul#login{ clear: right; float: right;  text-align:left; width:17.5em; padding:0 }
+#greeting.logged-out     { float: none; margin-top: 1em;  width:auto; padding-right: 0.5em; }
+
+
+#header .icon {float:right; margin: -1em}
+#login {float:right; text-align:right; margin:0.25em 0 0; }
+#login p {margin:0}
+#login ul.navigation {background:url(/images/scrubber.png) bottom left repeat-x; padding:1em 0.25em 1em 1em; margin-top:-1em}
+#login a{color:#fff0f9; padding:0.75em 0.15em;}
+
+#header #search>* {display:inline;}
+		

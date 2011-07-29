@@ -19,11 +19,11 @@
         %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
-
+ 
       <!-- Add coauthors-->
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'work'} %>
-
-
+ 
+ 
       <dt class="summary">
         <%= f.label :summary, ts("Summary (max %{max} characters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %>
       </dt>
@@ -60,7 +60,7 @@
               </dd>
             </dl>
           </dd>
-
+ 
           <dt class="endnotes">
             <%= check_box_tag "end-notes-options-show", "1", !@work.endnotes.blank?, :class => "toggle_formfield" %>
           </dt>
@@ -87,7 +87,7 @@
       </dd>
     </dl>
   </fieldset>
-
+ 
   <fieldset id="associations">
     <legend><%= ts('Associations') %></legend>
     <dl>
@@ -111,7 +111,7 @@
                 :checked_method => "challenge_claims", :name_method => "title" %>
         </dd>
       <% end %>
-      
+       
       <!-- Add collection -->
       <dt class="collection">
         <%= f.label :collection_names, ts("Post to Collections/Challenges: ") %> <%= link_to_help "add-work-to-collection" %>
@@ -119,14 +119,14 @@
       <dd class="collection">
         <%= f.text_field :collection_names, autocomplete_options("open_collection_names") %>
       </dd>
-
+ 
       <dt class="recipient">
         <%= f.label :recipients, ts("Recipient(s): (if this work is a gift)") %> <%= link_to_help "recipients" %>
       </dt>
       <dd class="recipient">
         <%= f.text_field :recipients, autocomplete_options("pseud") %>
       </dd>
-
+ 
       <!-- Inspiration / remix -->
       <dt class="work-parent">
         <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :class => "toggle_formfield" %>
@@ -134,7 +134,7 @@
       <dd class="work-parent">
         <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, or was inspired by another work") %>
       </dd>
-
+ 
       <!-- Toggles on with parent checkbox -->
       <dd id="parent-options">
         <dl>
@@ -144,25 +144,25 @@
             <%= p.text_field :url, :value => work_parent_value(:url) %>
             <p class="important">For a work in the archive, only the url is required.</p>
           </dd>
-
+ 
           <dt><%= p.label :title %></dt>
           <dd><%= p.text_field :title, :value => work_parent_value(:title) %></dd>
-
+ 
           <dt><%= p.label :author %></dt>
           <dd><%= p.text_field :author, :value => work_parent_value(:author) %></dd>
-
+ 
           <dt><%= p.label :language_id, ts("Language") %><%= link_to_help "languages-help" %>
           </dt>
           <dd><%= p.collection_select(:language_id, Language.all(:order => :short), :id, :name, :prompt => " ") =%></dd>
-          
+           
           <dt class="work-restricted"><%= p.check_box :translation %></dt>
           <dd class="work-restricted">
             <%= p.label :translation, ts("This is a translation") %>
             <%= link_to_help "translation-link" %>
           </dd>
-                  
+                   
         <% end %>
-
+ 
         <% unless @work.parent_work_relationships.blank? %>
           <dt><%= 'Current parent works' %></dt>
           <% for related_work in @work.parent_work_relationships %>
@@ -178,7 +178,7 @@
         <% end %>
         </dl>
       </dd>
-
+ 
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
       <dt class="work-is_serial">
@@ -188,7 +188,7 @@
         <%= label_tag 'series-options-show', ts("This work is part of a series") %>
         <%= link_to_help "choosing-series" %>
       </dd>
-
+ 
       <!-- Toggles on with series checkbox -->
       <dd id="series-options">
         <dl>
@@ -215,7 +215,7 @@
         <% end %>
         </dl>
       </dd>
-
+ 
     <%= fields_for "work[chapter_attributes]", @chapter do |c| %>
       <!-- Chaptered checkbox (work_is_wip) -->
       <!-- Checking this box causes the expected number of chapters box to appear; unchecking it causes it to disappear. -->
@@ -233,7 +233,7 @@
           <dd><%= c.text_field :title, :value => @chapter.title %></dd>
         </dl>
       </dd>
-
+ 
       <!-- User-facing dates -->
       <dt class="work-is-backdated">
         <%= check_box_tag "backdate-options-show", "1", check_backdate_box(@work, @chapter), :class => "toggle_formfield" %>
@@ -254,7 +254,7 @@
           </dd>
         </dl>
       </dd>
-
+ 
       <!-- Privacy dropdown (storyprivacy) -->
       <dt class="work-restricted">
         <%= f.check_box :restricted %>
@@ -262,7 +262,7 @@
       <dd class="work-restricted">
         <%= f.label :restricted, ts("Only show your work to registered users") %> <%= link_to_help "registered-users" %>
       </dd>
-
+ 
       <dt class="work-language">
         <%= f.label :language_id, ts("Choose a language") %><%= link_to_help "languages-help" %>
       </dt>
@@ -271,11 +271,11 @@
           <%= options_from_collection_for_select(Language.all(:order => :short), :id, :name, @work.language_id || Language.default.id) %>
         </select>
       </dd>
-
+ 
     </dl>
-
+ 
   </fieldset>
-
+ 
   <% if @chapters %>
     <fieldset class="work-text">
       <legend><%= 'Work Text' %></legend>
@@ -294,7 +294,7 @@
         <%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
         (<%= link_to ts('Public work skins'), skins_path(:work_skins => true) %>)
       </p>
-
+ 
       <p class="label"><%= label_tag 'content', ts("Work text"), :class => "required" %></p>
       <div id="toggleText">
       <p id="plainTextNotes" style="display: block"><%= allowed_html_instructions %></p>
@@ -305,7 +305,7 @@
         <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%=h 'Rich text' %></a></span>
         <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%=h 'HTML' %></a></span>
       </p>
-
+ 
       <div class="rtf-html-field">
       <%= c.text_area :content, :value => @chapter.content, :class => "mce-editor observe_textlength", :id => "content" %>
       <%= live_validation_for_field('content',
@@ -318,9 +318,9 @@
       </div>
     </fieldset>
   <% end %>
-
+ 
   <% end %> <!-- end of fields for chapters -->
-
+ 
   <fieldset class="post-work">
     <legend><%= 'Post New Work' %></legend>
     <p class="submit">

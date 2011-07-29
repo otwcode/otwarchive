@@ -1,25 +1,33 @@
-<%= stylesheet_link_tag 'archive_core', :media => 'all' %>
-<%= stylesheet_link_tag 'system-messages',
-                        'site-chrome',
-                        'forms',
-                        'live_validation',
-                        'auto_complete',
+<%= stylesheet_link_tag '01-core',
+'02-elements',
+'03-regions-header',
+'04-regions-dashboard',
+'05-regions-main',
+'06-regions-footer',
+'07-actions',
+'17-interactions',
+'08-roles-states',
+'10-types.css',
+'11-group-meta',
+'12-group-blurb',
+'13-group-preface',
+'14-group-comments',
+'15-group-profile',
+'16-main-pages',
+'18-userstuff',
+'19-system-messages',
                         :cache => 'cached_for_screen',
                         :media => 'screen' %>
-<%= stylesheet_link_tag 'userstuff', :media => 'all' %>
-<% if controller.controller_name == 'home' && controller.action_name == 'index' %>
-  <%= stylesheet_link_tag 'home', :media => 'screen' %>
-<% end %>
 <% if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' %>
   <%= stylesheet_link_tag 'translations', :media => 'screen' %>
 <% end %>
 <% if logged_in_as_admin? %>
-  <%= stylesheet_link_tag 'admin', :media => 'screen' %>
+  <%= stylesheet_link_tag '09-role-admin', :media => 'screen' %>
 <% end %>
 
-<%= stylesheet_link_tag 'handheld', :media => 'handheld' %>
-<%= stylesheet_link_tag 'aural', :media => 'speech' %>
-<%= stylesheet_link_tag 'print', :media => 'print' %>
+<%= stylesheet_link_tag '20-handheld', :media => 'handheld' %>
+<%= stylesheet_link_tag '22-aural', :media => 'speech' %>
+<%= stylesheet_link_tag '21-print', :media => 'print' %>
 
 <%= stylesheet_link_tag 'smoothness/jquery-ui-1.8.9.custom', :media => 'all' %>
 <%= stylesheet_link_tag 'jquery.qtip', :media => 'all' %>
@@ -83,7 +91,8 @@ if (typeof jQuery == 'undefined')
 <% end %>
 
 <%= iboxify_page %>
-
+<!--colours first draft-->
+<%= stylesheet_link_tag '23-colors' %>
 <% if current_user.is_a?(User) && (skin = current_user.try(:preference).try(:skin)) %>
   <% cache("#{skin.id}-site-skin") do %>
     <%= render "skins/skin_style_block", :skin => skin %>

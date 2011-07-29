@@ -1,0 +1,17 @@
+/*NAVIGATION, ACTIONS (BUTTONS)*/
+
+ ul#skiplinks, .landmark , .landmark a
+      { border: 0; font-size: 0; line-height: 0; height: 0; margin: 0; opacity:0; clear:right; }
+
+.current
+      { box-shadow: 0px 0px 5px rgba(153,0,0,1); padding: 0.25em; }
+#main .current, #header .current, #main .current a:visited
+      { box-shadow: 0px 0px 5px rgba(153,0,0,1); }
+
+/*navigation in context*/
+
+.navigation a { font:normal 1em 'Lucida Grande', Helvetica, Verdana, sans-serif; border-bottom:0; color:#3a3a3a; padding-left:0.25em}
+#header	ul.navigation {margin:-2em auto 0 115px;}
+
+
+ 
