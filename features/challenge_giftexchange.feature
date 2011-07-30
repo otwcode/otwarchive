@@ -241,7 +241,6 @@ Feature: Gift Exchange Challenge
     And I should not see "Not yet posted"
     And I should see "Fulfilled Story"
 
-  @bla
   Scenario: Download signups CSV
     Given I am logged in as "mod1"
     And I have created the gift exchange "My Gift Exchange"
