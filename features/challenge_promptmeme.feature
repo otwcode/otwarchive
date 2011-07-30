@@ -306,7 +306,7 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination C
   When I am logged in as "mod1"
   When I edit the prompt by "myname1"
-  Then I should see "Submit a Prompt For Battle 12"
+  Then I should see "Submit a Prompt for Battle 12"
     And I should not see "You can't edit someone else's signup!"
     And the "Stargate Atlantis" checkbox should be checked
 
@@ -1239,3 +1239,23 @@ Feature: Prompt Meme Challenge
   Then I should see "myname1" within "#fulfilled_claims"
     And I should see "Response posted on"
     And I should see "Not yet approved"
+
+
+  Scenario: Download prompt CSV from signups page
+  Given I am logged in as "mod1"
+  And I have standard challenge tags setup
+  And I create Battle 12 promptmeme
+
+  When I go to the "Battle 12" signups page
+  And I follow "Download (CSV)"
+  Then I should get a file with ending and type csv
+
+  Scenario: Download prompt CSV from requests page
+  Given I am logged in as "mod1"
+  And I have standard challenge tags setup
+  And I create Battle 12 promptmeme
+
+  When I go to the "Battle 12" requests page
+  And I follow "Download (CSV)"
+  Then I should get a file with ending and type csv
+
