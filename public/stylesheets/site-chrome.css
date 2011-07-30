@@ -448,7 +448,8 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
 /* TAG NOMINATIONS */
  .nominations ul li { display: inline; padding: 1em; }
- .nominations .notes { padding-left: 4em; }
+ .nominations div.hasnotes { display: inline; }
+ .nominations .notes { display: block; }
  .unwrangled { border: 0.15em solid #CCB521;}
  .nonexistent { border: 0.15em solid #C91441;}
 

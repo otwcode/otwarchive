@@ -468,9 +468,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
         // Check the token limit
         if(settings.tokenLimit !== null && token_count >= settings.tokenLimit) {
-            hide_dropdown();
             input_box.hide();
-            return;
         } else {
             input_box.focus();
         }
@@ -776,9 +774,9 @@ $.TokenList = function (input, url_or_data, settings) {
                   if($.isFunction(settings.onResult)) {
                       results = settings.onResult.call(hidden_input, results);
                   }
-		          if(!settings.noCache) {
-		              cache.add(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
-		          }
+    		          if(!settings.noCache) {
+    		              cache.add(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
+    		          }
 
                   // only populate the dropdown if the results are associated with the active search query
                   if(input_box.val().toLowerCase() === query) {

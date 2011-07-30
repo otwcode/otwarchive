@@ -14,7 +14,7 @@ class TagSetNomination < ActiveRecord::Base
     end
   end
   
-  #validate :tag_validity
+  validate :tag_validity
   def tag_validity
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| 
       nominated_tags(tag_type).each do |tagname|
@@ -30,15 +30,47 @@ class TagSetNomination < ActiveRecord::Base
     end
   end
 
-  #validate :nomination_limits
+  validate :nomination_limits
   def nomination_limits
-    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| 
-      tagcount = nominated_tags(tag_type).count
+    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|    
       limit = self.owned_tag_set.send("#{tag_type}_nomination_limit")
-      if tagcount > limit
-        errors.add(:base, ts("^You can only nominate %{limit} #{tag_type} tags.", :limit => limit))
+      over_limit = false
+      if count_by_fandom?(tag_type)
+        self.send("#{tag_type}_nominations").try(:count).times do |i|
+          if nominated_tags(tag_type, i).count > limit
+            over_limit = true
+            break
+          end
+        end
+      else  
+        tagcount = nominated_tags(tag_type).count
+        fandom_tagcount = tagcount if tag_type == "fandom"
+        over_limit = tagcount > limit
+      end
+      if over_limit
+        errors.add(:base, ts("^You can only nominate %{limit} #{tag_type} tags", :limit => limit) + 
+        	    count_by_fandom?(tag_type) ? ts(" per fandom.") : ".")
       end
     end 
+  end
+  
+  validate :no_tags_without_fandoms
+  def no_tags_without_fandoms
+    %w(character relationship).each do |tag_type|
+      if count_by_fandom?(tag_type)
+        self.send("#{tag_type}_nominations").try(:count).times do |i|
+          if nominated_tags(tag_type, i).count > 0 && nominated_tags("fandom", i).count == 0
+            errors.add(:base, ts("^You haven't specified the fandom for some of your nominated #{tag_type} tags."))
+            break
+          end
+        end
+      end
+    end
+  end
+  
+  def count_by_fandom?(tag_type)
+    fandom_limit = self.owned_tag_set.fandom_nomination_limit
+    %w(character relationship).include?(tag_type) && fandom_limit > 0
   end
   
   def self.owned_by(user = User.current_user)
@@ -51,8 +83,11 @@ class TagSetNomination < ActiveRecord::Base
     where(:owned_tag_set_id => tag_set.id)
   end
 
-  def nominated_tags(tag_type = "fandom")
-    tagnames = tag_type == "freeform" ? self.freeform_nominations : self.send("#{tag_type}_nominations").join(ArchiveConfig.DELIMITER_FOR_INPUT)
+  def nominated_tags(tag_type = "fandom", index = -1)
+    tagnames = tag_type == "freeform" ? self.freeform_nominations : 
+      (index == -1 ? self.send("#{tag_type}_nominations").join(ArchiveConfig.DELIMITER_FOR_INPUT) :
+            self.send("#{tag_type}_nominations").try(:at, index))
+            
     if tagnames.blank?
       return []
     else
@@ -60,14 +95,13 @@ class TagSetNomination < ActiveRecord::Base
     end
   end
 
+
   serialize :fandom_nominations
   serialize :fandom_nomination_notes
   serialize :character_nominations
   serialize :character_nomination_notes
   serialize :relationship_nominations
   serialize :relationship_nomination_notes
-  serialize :freeform_nominations
-  serialize :freeform_nomination_notes
   serialize :fandom_nomination_medias
   serialize :character_nomination_fandoms
   serialize :relationship_nomination_fandoms  

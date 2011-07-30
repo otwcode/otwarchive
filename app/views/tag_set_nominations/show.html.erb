@@ -27,29 +27,36 @@
     <% if (limit = @tag_set.send("#{tag_type}_nomination_limit")) > 0 %>
       <dt><%= ts("#{tag_type.classify.pluralize}: ") %></dt>
       <dd>
-        <ul>
-          <% @tag_set_nomination.nominated_tags(tag_type).sort.each do |tag| %>
-            <li>
-              <% if (tagobj = tag_type.classify.constantize.find_by_name(tag)) %>
-                <% if tagobj.canonical %>
-                  <%= link_to_tag_works(tagobj) %>
-                <% elsif tagobj.merger %>
-                  <%= tag %> (<%= link_to_tag_works(tagobj.merger) %>)
-                <% else %>
-                  <span class="unwrangled"><%= tag %></span>
+        <% if @tag_set_nomination.nominated_tags(tag_type).count == 0 %>
+          <%= ts("(None Nominated)") %>
+        <% else %>
+          <ul>
+            <% @tag_set_nomination.nominated_tags(tag_type).each_with_index do |tag, index| %>
+              <% notes = @tag_set_nomination.send("#{tag_type}_nomination_notes").try(:at, index) %>
+              <li>
+                <% if !notes.blank? %>
+                  <div class="hasnotes">
                 <% end %>
-              <% else %>
-                <span class="nonexistent"><%= tag %></span>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
+                <% if (tagobj = tag_type.classify.constantize.find_by_name(tag)) %>
+                  <% if tagobj.canonical %>
+                    <%= link_to_tag_works(tagobj) %>
+                  <% elsif tagobj.merger %>
+                    <%= tag %> (<%= link_to_tag_works(tagobj.merger) %>)
+                  <% else %>
+                    <span class="unwrangled"><%= tag %></span>                  
+                  <% end %>
+                <% else %>
+                  <span class="nonexistent"><%= tag %></span>
+                <% end %>
+                <% if !notes.blank? %>
+                  </div>
+                  <div class="notes"><%= notes %></div>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
       </dd>
-      <% unless @tag_set_nomination.send("#{tag_type}_nominations_notes").blank? %>
-        <dd class="notes">
-          <%= @tag_set_nomination.send("#{tag_type}_nominations_notes") %>
-        </dd>
-      <% end %>
     <% end %>
   <% end %>
 </dl>

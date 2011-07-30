@@ -55,6 +55,16 @@ class AutocompleteController < ApplicationController
                       .where(["canonical = 0 AND name LIKE ?",
                               '%' + search_param + '%']).limit(10).map(&:name))
   end
+  
+  # determine whether a particular tag is canonical or not
+  def is_canonical
+    t = Tag.find_by_name(params[:term])
+    if t.nil? || !t.canonical
+      respond_with(["0"])
+    else
+      respond_with(["1"])
+    end
+  end    
 
   
   # more-specific autocompletes should be added below here when they can't be avoided

@@ -52,43 +52,76 @@ function ShowExpandable() {
   if (collapsible != null) collapsible.style.display = 'none';
 }
 
+
+///////////////////////////////////////////////////////////////////
 // Autocomplete
-// set class to "autocomplete"
-// set attribute "autocomplete_method" to the action in autocomplete_controller you want to use
-// you can pass extra parameters at the end of the method with ?param=value&param=value
-// set attribute "autocomplete_live_params" to the ids of any attributes whose values should be read
-//  as: param=attribute_id&param=attribute_id
-// example: 
-// <input type="text" class="autocomplete" autocomplete_method="/autocomplete/relationship?tag_set_id=#{tag_set.id}" 
-//        autocomplete_live_params="fandom=work_fandom_field&character=work_character_field" 
-jQuery(function($){
+///////////////////////////////////////////////////////////////////
+
+function get_token_input_options(self) {
+  return {
+    searchingText: self.attr('autocomplete_searching_text'),
+    hintText: self.attr('autocomplete_hint_text'),
+    noResultsText: self.attr('autocomplete_no_results_text'),
+    minChars: self.attr('autocomplete_min_chars'),
+    queryParam: "term",
+    preventDuplicates: true,
+    tokenLimit: self.attr('autocomplete_token_limit'),
+    liveParams: self.attr('autocomplete_live_params'),
+    makeSortable: self.attr('autocomplete_sortable'),
+    noCache: self.attr('autocomplete_no_cache')    
+  };
+}
+
+// Look for autocomplete_options in application helper and throughout the views to
+// see how to use this!
+jQuery(function($) {
   $('input.autocomplete').livequery(function(){
     var self = $(this);
-    self.tokenInput(self.attr('autocomplete_method'), {
-        searchingText: self.attr('autocomplete_searching_text'),
-        hintText: self.attr('autocomplete_hint_text'),
-        noResultsText: self.attr('autocomplete_no_results_text'),
-        minChars: self.attr('autocomplete_min_chars'),
-        queryParam: "term",
-        preventDuplicates: true,
-        tokenLimit: self.attr('autocomplete_token_limit'),
-        liveParams: self.attr('autocomplete_live_params'),
-        makeSortable: self.attr('autocomplete_sortable'),
-        noCache: self.attr('autocomplete_no_cache')
-    });
+    var token_input_options = get_token_input_options(self);
+    self.tokenInput(self.attr('autocomplete_method'), token_input_options);
   });
 });
 
-// Single-value autocomplete
-jQuery(function($){
-    $('.single_autocomplete').livequery(function(){
-        var self = $(this);
-        self.autocomplete({
-            source: self.attr('autocomplete_method'),
-            minLength: self.attr('autocomplete_min_chars'),
-            autoFocus: true // to keep behavior similar to main autocomplete
-        });
+
+// Nominations autocomplete needs an on-add callback, which
+// checks to see if the tag selected is canonical or not, and if not, 
+// opens up the window to ask the user for more input
+jQuery(function($) {
+  $('input.autocomplete_with_canon_check').livequery(function(){
+    var self = $(this);
+    var id_to_show = '#info_for_' + self.attr('id');
+    var token_input_options = get_token_input_options(self);
+    $j.extend(token_input_options, {
+      onAdd: function(item) {
+        var ajax_query = {};
+        ajax_query.url = '/autocomplete/is_canonical?term=' + item.name;
+        ajax_query.success = function(results){
+          if (results[0] == "0") {
+            $(id_to_show).show();
+          } else {
+            $(id_to_show).hide();
+          }
+        };
+        $j.ajax(ajax_query);        
+      }
     });
+    
+    self.tokenInput(self.attr('autocomplete_method'), token_input_options);
+  });
+});
+
+///////////////////////////////////////////////////////////////////
+
+
+jQuery(function($){
+  $('.nominations .notes').hide();
+  $('.nominations .hasnotes').each(function(){
+    $(this).qtip({
+       content: $(this).next('.notes').html(),
+       position: { my: 'bottom center', at: 'top center'},
+       style: {classes: 'ui-tooltip-shadow ui-tooltip-dark'}
+    });	
+  });
 });
 
 

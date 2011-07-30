@@ -20,10 +20,10 @@
       <dd><%= f.hidden_field :owned_tag_set_id, :value => @tag_set_nomination.owned_tag_set.id %><%= @tag_set_nomination.owned_tag_set.title %></dd>
         
       <dt><%= f.label :pseud_id, ts("Pseud: ") %></dt>
-      <dd><%= f.select :pseud_id, current_user.pseuds.collect {|p| [p.name, p.id] } %>
+      <dd><%= f.select :pseud_id, current_user.pseuds.collect {|p| [p.name, p.id] } %></dd>
     </dl>
   </fieldset>
-  <fieldset class="preface profile">
+  <fieldset class="tagset preface profile">
     <legend>Tag Nominations</legend>
     <h4>Tag Nominations</h4>
     <% limit = {} %>
@@ -40,17 +40,29 @@
   	    <% limit[:fandom].times do |i| %>
           <dt><%= label_tag "tag_set_nomination_fandom_nominations_#{i}", ts("Fandom %{index}", :index => i+1) %></dt>
           <dd><%= text_field_tag "tag_set_nomination[fandom_nominations][]", @tag_set_nomination.fandom_nominations.try(:at, i),
-                  autocomplete_options("fandom", :autocomplete_token_limit => 1, :id => "tag_set_nomination_fandom_nominations_#{i}") %>
-          <dt><%= label_tag "tag_set_nomination_fandom_nomination_medias_#{i}", ts("Type of fandom?") %> <%= ts("(only needed if new)")%></dt>
-          <dd><%= select_tag "tag_set_nomination[fandom_nomination_medias][]", options_for_select(Media.canonical.by_name.collect {|m| [m.name, m.id]}), 
-                  :include_blank => true, :id => "tag_set_nomination_fandom_nomination_medias_#{i}" %></dd>
+                  autocomplete_options("fandom", :autocomplete_token_limit => 1, :id => "tag_set_nomination_fandom_nominations_#{i}", :class => "autocomplete_with_canon_check") %></dd>
+          <dd id="info_for_tag_set_nomination_fandom_nominations_<%= i %>" class="hideme">
+            The fandom you've entered isn't canonical. If it really is a new fandom, please give us some more information to help the moderators and tag wranglers set up the tags!
+            <dl>
+              <dt><%= label_tag "tag_set_nomination_fandom_nomination_medias_#{i}", ts("Type of fandom?") %></dt>
+              <dd><%= select_tag "tag_set_nomination[fandom_nomination_medias][]", options_for_select(Media.canonical.by_name.collect {|m| [m.name, m.id]}), 
+                      :include_blank => true, :id => "tag_set_nomination_fandom_nomination_medias_#{i}" %></dd>
+
+    	 	      <dt><%= label_tag "tag_set_nomination_fandom_nomination_notes_#{i}", ts("Brief Notes?") %></dt>
+    	 	      <dd>
+    	 	        <%= text_area_tag "tag_set_nomination[fandom_nomination_notes][]", @tag_set_nomination.fandom_nomination_notes.try(:at, i),
+    	 	                  :id => "tag_set_nomination_fandom_nomination_notes_#{i}" %>
+    	 	      </dd>
+    	 	    </dl>
+    	 	  </dd>
+                    
           <% # if fandoms are being nominated then any character/relationship noms go under fandom %>
           <% %w(character relationship).each do |tag_type| %>
             <% if limit[tag_type.to_sym] > 0 %>
               <dt><%= label_tag "tag_set_nomination_#{tag_type}_nominations_#{i}", ts("#{tag_type.classify.pluralize} (up to %{limit})", :limit => limit[tag_type.to_sym]) %></dt>
               <dd>
                 <%= text_field_tag "tag_set_nomination[#{tag_type}_nominations][]",  @tag_set_nomination.send("#{tag_type}_nominations").try(:at, i),
-                        autocomplete_options("#{tag_type}_by_fandom", :autocomplete_live_params => "fandom=tag_set_nomination_fandom_nominations_#{i}", 
+                        autocomplete_options("#{tag_type}_in_fandom", :autocomplete_live_params => "fandom=tag_set_nomination_fandom_nominations_#{i}", 
                             :autocomplete_token_limit => limit[tag_type.to_sym], :id => "tag_set_nomination_#{tag_type}_nominations_#{i}") %>
               </dd>
             <% end %>
@@ -65,11 +77,15 @@
             <dt><%= label_tag "tag_set_nomination_#{tag_type}_nominations_#{i}", ts("#{tag_type.classify} %{index}", :index => i+1) %></dt>
             <dd>
               <%= text_field_tag "tag_set_nomination[#{tag_type}_nominations][]",  @tag_set_nomination.send("#{tag_type}_nominations").try(:at, i),
-                      autocomplete_options("#{tag_type}_by_fandom", :autocomplete_live_params => "fandom=tag_set_nomination_#{tag_type}_nomination_fandoms_#{i}", 
+                      autocomplete_options("#{tag_type}_in_fandom", :autocomplete_live_params => "fandom=tag_set_nomination_#{tag_type}_nomination_fandoms_#{i}", 
                           :autocomplete_token_limit => limit[tag_type.to_sym], :id => "tag_set_nomination_#{tag_type}_nominations_#{i}") %>
             </dd>
+	 	        <dt><%= label_tag "tag_set_nomination_#{tag_type}_nomination_notes_#{i}", ts("Brief Notes") %></dt>
+	 	        <dd><%= text_area_tag "tag_set_nomination[#{tag_type}_nomination_notes][]", @tag_set_nomination.send("#{tag_type}_nomination_notes").try(:at, i),
+	 	                        :id => "tag_set_nomination_#{tag_type}_nomination_notes_#{i}" %>
+	 	        </dd>
             <dt><%= label_tag "tag_set_nomination_#{tag_type}_nomination_fandoms_#{i}", ts("Fandom (only needed if new)") %></dt>
-            <dd><%= text_field_tag "tag_set_nomination[#{tag_type}_nomination_fandoms][]", @tag_set_nomination.send("#{tag_type}_nomination_fandoms").try(:at, i)
+            <dd><%= text_field_tag "tag_set_nomination[#{tag_type}_nomination_fandoms][]", @tag_set_nomination.send("#{tag_type}_nomination_fandoms").try(:at, i),
                       autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
           <% end %>
         <% end %>
