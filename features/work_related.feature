@@ -198,8 +198,16 @@ Scenario: Can post a translation of an anonymous work
 Scenario: Posting a translation of an anonymous work should not allow you to see the author
 
 Scenario: Translate your own work
+  Given I have related works setup
+  When I post a translation of my own work
+  Then I approve a related work
 
 Scenario: Draft works should not show up on related works
+  # Given I have related works setup
+  # When I draft a translation
+  # When I am logged in as "inspiration"
+  #   And I view my related works
+  # Then I should not see "Draft of Translation of Worldbuilding"
 
 @work_external_parent
 Scenario: Listing external works as inspirations

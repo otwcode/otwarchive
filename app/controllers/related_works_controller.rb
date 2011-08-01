@@ -32,9 +32,11 @@ class RelatedWorksController < ApplicationController
       if current_user_owns?(@child)
         flash[:error] = ts("Sorry, but you don't have permission to do that. Try removing the link from your own work.")
         redirect_back_or_default(user_related_works_path(current_user))
+        return
       else
         flash[:error] = ts("Sorry, but you don't have permission to do that.")
         redirect_back_or_default(root_path)
+        return
       end
     end
     # the assumption here is that any update is a toggle from what was before
@@ -56,9 +58,11 @@ class RelatedWorksController < ApplicationController
       if @user
         flash[:error] = ts("Sorry, but you don't have permission to do that. You can only approve or remove the link from your own work.")
         redirect_back_or_default(user_related_works_path(current_user))
+        return
       else
         flash[:error] = ts("Sorry, but you don't have permission to do that.")
         redirect_back_or_default(root_path)
+        return
       end
     end
     @related_work.destroy
