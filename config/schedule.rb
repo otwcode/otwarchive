@@ -51,5 +51,5 @@ end
 
 # Move hit counts from redis to database
 every 1.hour do
-  rake "work:update_hit_counters
+  rake "work:update_hit_counters"
 end
