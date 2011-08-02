@@ -280,6 +280,16 @@ module ApplicationHelper
     return generated_html
   end
   
+  # Sets up expand/contract/shuffle buttons for any list whose id is passed in
+  # See the jquery code in application.js
+  # Note that these start hidden because if javascript is not available, we
+  # don't want to show the user the buttons at all.
+  def expand_contract_shuffle(list_id)
+    ('<span class="navigation expand hidden" action_target="#' + list_id + '"><a href="#">[ + ]</a></span>
+    <span class="navigation contract hidden" action_target="#' + list_id + '"><a href="#">[ - ]</a></span>
+    <span class="navigation shuffle hidden" action_target="#' + list_id + '"><a href="#">[ &#8645; ]</a></span>').html_safe
+  end
+  
   # returns the default autocomplete attributes, all of which can be overridden
   # note: we do this and put the message defaults here so we can use translation on them
   def autocomplete_options(method, options={})

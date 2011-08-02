@@ -1,6 +1,14 @@
+<div class="navigation module">
+  <h3 class="landmark">Navigation</h3>
+  <ul class="navigation" role="navigation">
+	  <li><%= link_to h(ts("Back To ")) + @tag_set_nomination.owned_tag_set.title, tag_set_path(@tag_set_nomination.owned_tag_set) %></li>
+    <li><%= link_to ts("Tag Sets"), tag_sets_path %></li>
+  </ul>
+</div>
+
 <h2><%= ts("Tag Nominations") %></h2>
 
-<h3><%= ts("Notes") %></h3>
+<h3 class="landmark"><%= ts("Notes") %></h3>
 <ul class="notes">
 	<li>Please nominate the canonical form of a tag if possible. The autocomplete will only list canonical tags.</li>
 	<li>Your nominations will be reviewed by the tag set moderators and may not be included.</li> 
@@ -12,93 +20,68 @@
 <h3 class="landmark"><%= ts("Tag Nominations") %></h3>
 
 <%= form_for(@tag_set_nomination, :url => (@tag_set_nomination.new_record? ? tag_set_nominations_path(@tag_set) : tag_set_nomination_path(@tag_set, @tag_set_nomination)), :html => {:method => (@tag_set_nomination.new_record? ? :post : :put)}) do |f| %>
-  <fieldset class="preface profile">
+  <fieldset>
     <legend>Basic Information</legend>
-    <h4>Basic Information</h4>
     <dl>
       <dt><%= f.label :owned_tag_set_id, ts("Nominating For: ") %></dt>
-      <dd><%= f.hidden_field :owned_tag_set_id, :value => @tag_set_nomination.owned_tag_set.id %><%= @tag_set_nomination.owned_tag_set.title %></dd>
+      <dd><%= f.hidden_field :owned_tag_set_id, :value => @tag_set_nomination.owned_tag_set.id %><%= link_to @tag_set_nomination.owned_tag_set.title, tag_set_path(@tag_set_nomination.owned_tag_set) %></dd>
         
       <dt><%= f.label :pseud_id, ts("Pseud: ") %></dt>
       <dd><%= f.select :pseud_id, current_user.pseuds.collect {|p| [p.name, p.id] } %></dd>
     </dl>
   </fieldset>
-  <fieldset class="tagset preface profile">
-    <legend>Tag Nominations</legend>
-    <h4>Tag Nominations</h4>
-    <% limit = {} %>
-	  <% limit[:fandom] = @tag_set.fandom_nomination_limit %>
-	  <% limit[:character] = @tag_set.character_nomination_limit %>
-	  <% limit[:relationship] = @tag_set.relationship_nomination_limit %>
-	  <% limit[:freeform] = @tag_set.freeform_nomination_limit %>
-	  <p class="notes"><%= nomination_notes(limit) %></p>
-	  <% if limit[:relationship] > 0 && limit[:fandom] > 1 %>
-	    <p class="notes"><%= ts("If crossover relationships are allowed, you can enter them under either fandom.") %></p>
-	  <% end %>
-  	<dl> 
-  	  <% if limit[:fandom] > 0 %>
-  	    <% limit[:fandom].times do |i| %>
-          <dt><%= label_tag "tag_set_nomination_fandom_nominations_#{i}", ts("Fandom %{index}", :index => i+1) %></dt>
-          <dd><%= text_field_tag "tag_set_nomination[fandom_nominations][]", @tag_set_nomination.fandom_nominations.try(:at, i),
-                  autocomplete_options("fandom", :autocomplete_token_limit => 1, :id => "tag_set_nomination_fandom_nominations_#{i}", :class => "autocomplete_with_canon_check") %></dd>
-          <dd id="info_for_tag_set_nomination_fandom_nominations_<%= i %>" class="hideme">
-            The fandom you've entered isn't canonical. If it really is a new fandom, please give us some more information to help the moderators and tag wranglers set up the tags!
-            <dl>
-              <dt><%= label_tag "tag_set_nomination_fandom_nomination_medias_#{i}", ts("Type of fandom?") %></dt>
-              <dd><%= select_tag "tag_set_nomination[fandom_nomination_medias][]", options_for_select(Media.canonical.by_name.collect {|m| [m.name, m.id]}), 
-                      :include_blank => true, :id => "tag_set_nomination_fandom_nomination_medias_#{i}" %></dd>
 
-    	 	      <dt><%= label_tag "tag_set_nomination_fandom_nomination_notes_#{i}", ts("Brief Notes?") %></dt>
-    	 	      <dd>
-    	 	        <%= text_area_tag "tag_set_nomination[fandom_nomination_notes][]", @tag_set_nomination.fandom_nomination_notes.try(:at, i),
-    	 	                  :id => "tag_set_nomination_fandom_nomination_notes_#{i}" %>
-    	 	      </dd>
-    	 	    </dl>
-    	 	  </dd>
-                    
-          <% # if fandoms are being nominated then any character/relationship noms go under fandom %>
-          <% %w(character relationship).each do |tag_type| %>
-            <% if limit[tag_type.to_sym] > 0 %>
-              <dt><%= label_tag "tag_set_nomination_#{tag_type}_nominations_#{i}", ts("#{tag_type.classify.pluralize} (up to %{limit})", :limit => limit[tag_type.to_sym]) %></dt>
-              <dd>
-                <%= text_field_tag "tag_set_nomination[#{tag_type}_nominations][]",  @tag_set_nomination.send("#{tag_type}_nominations").try(:at, i),
-                        autocomplete_options("#{tag_type}_in_fandom", :autocomplete_live_params => "fandom=tag_set_nomination_fandom_nominations_#{i}", 
-                            :autocomplete_token_limit => limit[tag_type.to_sym], :id => "tag_set_nomination_#{tag_type}_nominations_#{i}") %>
-              </dd>
-            <% end %>
+  <h4><%= ts("Tag Nominations") %></h4>
+  <p class="notes"><%= nomination_notes(@limit) %></p>
+  <% if @limit[:relationship] > 0 && @limit[:fandom] > 1 %>
+    <p class="notes"><%= ts("If crossover relationships are allowed, you can enter them under either fandom.") %></p>
+  <% end %>
+
+  <% if @limit[:fandom] > 0 %>
+    <% # char and relationship nominations grouped by fandom in separate fieldsets %>
+    <% @tag_set_nomination.fandom_nominations.each_with_index do |fandom_nomination, index| %>
+      <% f.fields_for :fandom_nominations, fandom_nomination do |nom_form| %>
+        <%= render 'fandom_nominations', :nom_form => nom_form, :fandom_nominations_counter => index %>
+      <% end %>
+    <% end %>
+
+
+  <% else %>
+    <% # nominations all on same level in fieldset/dls %>
+    <fieldset class="tagset">
+      <dl>
+        <% @tag_set_nomination.character_nominations.each_with_index do |character_nomination, index| %>
+          <% f.fields_for :character_nominations, character_nomination do |nom_form| %>
+            <%= render 'tag_nominations', :nom_form => nom_form, :tag_type => 'character', :tag_nominations_counter => index %>
           <% end %>
         <% end %>
-      <% end %>
+      </dl>
+    </fieldset>
 
-      <% if limit[:fandom] < 1 %>
-        <% # if no fandom nominations are allowed, char/relationship nominations go on their own with optional fandom specification %>
-        <% %w(character relationship).each do |tag_type| %>
-          <% limit[tag_type.to_sym].times do |i| %>
-            <dt><%= label_tag "tag_set_nomination_#{tag_type}_nominations_#{i}", ts("#{tag_type.classify} %{index}", :index => i+1) %></dt>
-            <dd>
-              <%= text_field_tag "tag_set_nomination[#{tag_type}_nominations][]",  @tag_set_nomination.send("#{tag_type}_nominations").try(:at, i),
-                      autocomplete_options("#{tag_type}_in_fandom", :autocomplete_live_params => "fandom=tag_set_nomination_#{tag_type}_nomination_fandoms_#{i}", 
-                          :autocomplete_token_limit => limit[tag_type.to_sym], :id => "tag_set_nomination_#{tag_type}_nominations_#{i}") %>
-            </dd>
-	 	        <dt><%= label_tag "tag_set_nomination_#{tag_type}_nomination_notes_#{i}", ts("Brief Notes") %></dt>
-	 	        <dd><%= text_area_tag "tag_set_nomination[#{tag_type}_nomination_notes][]", @tag_set_nomination.send("#{tag_type}_nomination_notes").try(:at, i),
-	 	                        :id => "tag_set_nomination_#{tag_type}_nomination_notes_#{i}" %>
-	 	        </dd>
-            <dt><%= label_tag "tag_set_nomination_#{tag_type}_nomination_fandoms_#{i}", ts("Fandom (only needed if new)") %></dt>
-            <dd><%= text_field_tag "tag_set_nomination[#{tag_type}_nomination_fandoms][]", @tag_set_nomination.send("#{tag_type}_nomination_fandoms").try(:at, i),
-                      autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
+    <fieldset class="tagset">
+      <dl>
+        <% @tag_set_nomination.relationship_nominations.each_with_index do |relationship_nomination, index| %>
+          <% f.fields_for :relationship_nominations, relationship_nomination do |nom_form| %>
+            <%= render 'tag_nominations', :nom_form => nom_form, :tag_type => 'relationship', :tag_nominations_counter => index %>
           <% end %>
         <% end %>
-      <% end %>
+      </dl>
+    </fieldset>
+  <% end %>
 
-      <% # freeform tags %>  	  
-      <% if limit[:freeform] > 0 %>
-        <dt><%= f.label :freeform_nominations, ts("Freeforms (Up To %{limit})", :limit => limit[:freeform]) %></dt>
-        <dd><%= f.text_field :freeform_nominations, autocomplete_options("freeform", :autocomplete_token_limit => limit[:freeform]) %></dd>
-      <% end %>
+  <% # freeform nominations go in their own fieldset %>
+  <% if @limit[:freeform] > 0 %>
+    <fieldset class="tagset <%= cycle :odd, :even %>">
+      <dl>
+        <% @tag_set_nomination.freeform_nominations.each_with_index do |freeform_nomination, index| %>
+          <% f.fields_for :freeform_nominations, freeform_nomination do |nom_form| %>
+            <%= render 'freeform_nominations', :nom_form => nom_form, :freeform_nominations_counter => index %>
+          <% end %>
+        <% end %>
+      </dl>      
+    </fieldset>
+  <% end %>
 
-    </dl>
-  </fieldset>
 
   <fieldset>
   	<legend><%= ts('Submit') %></legend> 

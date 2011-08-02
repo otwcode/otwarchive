@@ -1,0 +1,3 @@
+class FreeformNomination < TagNomination
+  
+end

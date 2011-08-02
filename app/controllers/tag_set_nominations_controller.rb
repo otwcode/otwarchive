@@ -45,12 +45,39 @@ class TagSetNominationsController < ApplicationController
       redirect_to edit_tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else      
       @tag_set_nomination = TagSetNomination.new(:pseud => current_user.default_pseud, :owned_tag_set => @tag_set)
+
+      # set the limit based on the tag set
+      set_limit
+
+      @limit[:fandom].times do 
+        fandom_nom = @tag_set_nomination.fandom_nominations.build
+        @limit[:character].times { fandom_nom.character_nominations.build }
+        @limit[:relationship].times { fandom_nom.relationship_nominations.build }
+      end
+
+      if @limit[:fandom] == 0
+        @limit[:character].times { @tag_set_nomination.character_nominations.build }
+        @limit[:relationship].times { @tag_set_nomination.relationship_nominations.build }
+      end
+      
+      @limit[:freeform].times { @tag_set_nomination.freeform_nominations.build }
     end
   end
 
   def edit
-    @tag_set_nomination = TagSetNomination.find(params[:id])
+    set_limit
   end
+
+  protected
+  def set_limit
+    @limit = {}
+	  @limit[:fandom] = @tag_set.fandom_nomination_limit
+	  @limit[:character] = @tag_set.character_nomination_limit
+	  @limit[:relationship] = @tag_set.relationship_nomination_limit 
+	  @limit[:freeform] = @tag_set.freeform_nomination_limit
+  end
+    
+  public
 
   def create
     @tag_set_nomination = TagSetNomination.new(params[:tag_set_nomination])
@@ -74,6 +101,6 @@ class TagSetNominationsController < ApplicationController
   def destroy
     @tag_set_nomination.destroy
     flash[:notice] = ts("Your nominations were deleted.")
-    redirect_to tag_set_nominations_url(@tag_set)
+    redirect_to tag_set_path(@tag_set)
   end
 end

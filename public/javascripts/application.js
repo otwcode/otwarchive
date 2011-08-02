@@ -85,11 +85,11 @@ jQuery(function($) {
 
 // Nominations autocomplete needs an on-add callback, which
 // checks to see if the tag selected is canonical or not, and if not, 
-// opens up the window to ask the user for more input
+// opens up the information in the following dd to ask the user for more input
 jQuery(function($) {
   $('input.autocomplete_with_canon_check').livequery(function(){
     var self = $(this);
-    var id_to_show = '#info_for_' + self.attr('id');
+    var extra_questions = self.parent().next();
     var token_input_options = get_token_input_options(self);
     $j.extend(token_input_options, {
       onAdd: function(item) {
@@ -97,9 +97,9 @@ jQuery(function($) {
         ajax_query.url = '/autocomplete/is_canonical?term=' + item.name;
         ajax_query.success = function(results){
           if (results[0] == "0") {
-            $(id_to_show).show();
+            extra_questions.show();
           } else {
-            $(id_to_show).hide();
+            extra_questions.hide();
           }
         };
         $j.ajax(ajax_query);        
@@ -112,7 +112,7 @@ jQuery(function($) {
 
 ///////////////////////////////////////////////////////////////////
 
-
+// Tooltips for nominations
 jQuery(function($){
   $('.nominations .notes').hide();
   $('.nominations .hasnotes').each(function(){
@@ -122,6 +122,59 @@ jQuery(function($){
        style: {classes: 'ui-tooltip-shadow ui-tooltip-dark'}
     });	
   });
+});
+
+// expand, contract, shuffle
+jQuery(function($){
+  $('.navigation.expand').each(function(){
+    // start by hiding the list in the page
+    list = $($(this).attr('action_target'));
+    if (list.children().size() > 25) {
+      list.hide();
+      $(this).show();      
+    } else {
+      // show the shuffle button only
+      $(this).nextAll(".shuffle").show();
+    }    
+    
+    // set up click event to expand the list 
+    $(this).click(function(event){
+      list = $($(this).attr('action_target'));
+      list.show();
+      
+      // show the contract & shuffle buttons and hide us
+      $(this).next(".contract").show();
+      $(this).nextAll(".shuffle").show();
+      $(this).hide();
+      
+      event.preventDefault(); // don't want to actually click the link
+    });
+  });
+  
+  $('.navigation.contract').each(function(){
+    $(this).click(function(event){
+      // hide the list when clicked
+      list = $($(this).attr('action_target'));
+      list.hide();
+
+      // show the expand and shuffle buttons and hide us
+      $(this).prev(".expand").show();
+      $(this).nextAll(".shuffle").hide();
+      $(this).hide();
+      
+      event.preventDefault(); // don't want to actually click the link
+    });
+  });
+  
+  $('.navigation.shuffle').each(function(){
+    // shuffle the list's children when clicked
+    $(this).click(function(event){
+      list = $($(this).attr('action_target'));
+      list.children().shuffle();
+      event.preventDefault(); // don't want to actually click the link
+    });
+  });
+  
 });
 
 

@@ -145,7 +145,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  #main dl.meta 				{ background: #fffef9; border: 2px solid; clear: right; margin: 0 auto; padding: 0.5em; position: relative }
  .meta dt, .meta dt.warning	{ font-size: 0.875em; font-weight: 100; width: 10.5em }
  #main .meta dd				{ margin: -1.3em 0 .7em 13em;  }
- #main .meta .stats dl dd,  #main .meta .stats dl dt	{ margin: 0 0.5em 0; width:auto; float:left}
+ #main .meta .stats dl dd,  #main .meta .stats dl dt, .meta dl.stats	{ margin: 0 0.5em 0 0; width:auto; float:left}
  .meta dd ul li 			{ display: inline; margin: auto;}
  .meta dd blockquote		{ margin: -1em 0 0 0 !important;}
 
@@ -354,19 +354,17 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
  #main .notes                            { padding-bottom: 0.5em !important}
 
 /* MEDIA INDEX, SHOW, FANDOMS INDEX, SHOW*/
-  .media-index li.category      { min-height: 15em; padding: 0; border: 1px solid #DDD; }
-  .media-index li.category h3   { background:#333; color:#fffef9; font-weight:100; padding: .5em 1em; border-bottom:0.25em double #fffef9; margin: 0; top: 0;}
-  .media-index li.category h3 a { color: #fff; }
-  #main.media-index ol          { margin: 0 0 1em 1em; }
-  #main.media-index p           { margin-left: 1em;}
-  #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol
+  .media li.category      { min-height: 15em; padding: 0; border: 1px solid #DDD; margin:0.5625em 2em 2em 0}
+  .media li.category h3   { background:#333; color:#fffef9; font-weight:100; padding: .5em 1em; border-bottom:0.25em double #fffef9; margin: 0; top: 0;}
+  .media li.category h3 a { color: #fff; }
+  .media p           { margin-right: 0.5625em; text-align:right}
+  #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol, .media ol
                 { list-style-type: decimal }
-  #main.media-index li.category { margin: 1em 2em }
-  .media-index li.odd           { float: left; width: 40% }
-  .media-index li.even          { float: left; width: 40% }
+  .media li.odd, .media li.even { float: left; width: 40% }
+  .media .category li {padding:0 0.5625em;}
   .fandoms-index ul.index li    { float: left; width: 45% }
   .fandoms-index ul.index li.odd          {clear: left;}
-  #main.fandoms-index ul.index li.even    {margin-left: 10%;}
+  #main .media li.even    	{ margin-left: 10%;}
   .fandoms-index div.main-fandoms-listing {clear: both;}
   .fandoms-index .filters     {float: left; width: 100%;}
   .fandoms-index .alphabet li {display: inline;}
@@ -374,10 +372,7 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
   .fandoms-index ul.letters   {float: left; width: 90%; margin: 2em; padding: 0 1em; border: 1px solid #eee;
                               -moz-box-shadow: 3px 3px 4px #ccc; -webkit-box-shadow: 3px 3px 4px #ccc;
                               box-shadow: 3px 3px 4px #ccc;
-                              /* For IE 8 */
-                              -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#cccccc')";
-                              /* For IE 5.5 - 7 */
-                              filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#cccccc');
+                          
   }
   .fandoms-index ul.letters.collection {margin-left: 0; width: 95%;}
   .fandoms-index li.letter h3 {background: #eee; padding: .25em; width: auto;}
@@ -400,6 +395,10 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
 /* BOOKMARKS INDEX*/
  .bookmarks-index .user .module      { float: none; }
+
+ /* TAGSET (MEDIA) INDEX - main weighting will be removed (here and media) in new skin*/
+ #main .tagset li.category {float:none; width:auto; margin:0.5em auto; min-height:inherit}
+ .tagset .category h3:hover {background:#ddd; color:#111}
 
 /* MANAGE SERIES */
  #manage-series h3 {display: inline;}

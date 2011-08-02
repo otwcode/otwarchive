@@ -71,14 +71,12 @@ class OwnedTagSetsController < ApplicationController
   end
   
   def update
-    if @tag_set.update_attributes(params[:owned_tag_set])
-      if params[:review]
-        flash[:notice] = ts("Nominations have been closed.")
-        redirect_to review_tag_set_path(@tag_set)
-      else
+    if params[:review] && @tag_set.update_attributes({:nominated => false})
+      flash[:notice] = ts("Nominations have been closed.")
+      redirect_to review_tag_set_path(@tag_set)
+    elsif !params[:review] && @tag_set.update_attributes(params[:owned_tag_set])
         flash[:notice] = ts("Tag set was successfully updated.")
         redirect_to tag_set_path(@tag_set)
-      end
     else
       render :action => :edit
     end
@@ -93,7 +91,19 @@ class OwnedTagSetsController < ApplicationController
   def review
     @nomination_count = @tag_set.tag_set_nominations.count
     if !@tag_set.nominated && @nomination_count > 0
-      @tag_set.process_nominations
+      if !@tag_set.is_processed?
+        @processing = true
+        if @tag_set.is_processing? && !params[:abort]
+          flash[:notice] = ts("Nominations for this tag set are already being processed. Abort and try again? (Please allow at least half an hour.)")
+        else
+          flash[:notice] = ts("Processing tag set nominations now... this may take a while!")
+          $redis.set("tag_set_processing_#{@tag_set.id}", "true")
+          @tag_set.process_nominations
+        end
+      else
+        # nominations are processed
+        @nominations = @tag_set.processed_nominations
+      end
     end
   end
 

@@ -2,6 +2,18 @@ class TagSetNomination < ActiveRecord::Base
   belongs_to :pseud
   belongs_to :owned_tag_set
   
+  has_many :fandom_nominations, :dependent => :destroy
+  accepts_nested_attributes_for :fandom_nominations, :allow_destroy => true
+
+  has_many :character_nominations, :dependent => :destroy
+  accepts_nested_attributes_for :character_nominations, :allow_destroy => true
+
+  has_many :relationship_nominations, :dependent => :destroy
+  accepts_nested_attributes_for :relationship_nominations, :allow_destroy => true
+
+  has_many :freeform_nominations, :dependent => :destroy
+  accepts_nested_attributes_for :freeform_nominations, :allow_destroy => true
+  
   validates_presence_of :owned_tag_set_id
   validates_presence_of :pseud_id
 
@@ -84,26 +96,11 @@ class TagSetNomination < ActiveRecord::Base
   end
 
   def nominated_tags(tag_type = "fandom", index = -1)
-    tagnames = tag_type == "freeform" ? self.freeform_nominations : 
-      (index == -1 ? self.send("#{tag_type}_nominations").join(ArchiveConfig.DELIMITER_FOR_INPUT) :
-            self.send("#{tag_type}_nominations").try(:at, index))
-            
-    if tagnames.blank?
-      return []
-    else
-      return tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT)
-    end
+    tag_type == "freeform" ? self.freeform_nominations : 
+      (tag_type == "fandom" ? self.fandom_nominations :
+        (index == -1 ? self.send("#{tag_type}_nominations") :
+          self.send("#{tag_type}_nominations").where(:fandom_index => index)))
   end
-
-
-  serialize :fandom_nominations
-  serialize :fandom_nomination_notes
-  serialize :character_nominations
-  serialize :character_nomination_notes
-  serialize :relationship_nominations
-  serialize :relationship_nomination_notes
-  serialize :fandom_nomination_medias
-  serialize :character_nomination_fandoms
-  serialize :relationship_nomination_fandoms  
   
+
 end

@@ -1,4 +1,4 @@
-<h2>Review Nominations</h2>
+<h2><%= ts("Review Nominations") %>h2>
 
 <ul class="notes">
   <li>Once you close nominations, we'll begin processing the nominations.</li> 
@@ -17,11 +17,8 @@
 
     <fieldset>
       <dl>
-      	<dt><%= tag_set_form.label :nominated, ts("Close nominations and review?") %></dt>
-      	<dd>
-      	  <%= tag_set_form.check_box :nominated %>
-      	  <%= hidden_field_tag :review, :value => true %>
-      	</dd>
+      	<dt><%= label_tag "begin_review", ts("Close nominations and review?") %></dt>
+      	<dd><%= check_box_tag "review" %></dd>
       </dl>
     </fieldset>
     <fieldset>

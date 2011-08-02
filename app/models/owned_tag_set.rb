@@ -43,6 +43,15 @@ class OwnedTagSet < ActiveRecord::Base
     :only_integer => true, :less_than_or_equal_to => 20, :greater_than_or_equal_to => 0,
     :message => ts('must be an integer between 0 and 20.')
 
+
+  validate :no_midstream_nomination_changes
+  def no_midstream_nomination_changes
+    if !self.tag_set_nominations.empty? && 
+      %w(fandom_nomination_limit character_nomination_limit relationship_nomination_limit freeform_nomination_limit).any? {|field| self.changed.include?(field)}
+      errors.add(:base, ts("^You cannot make changes to nomination settings when nominations already exist. Please review and delete existing nominations first."))
+    end
+  end
+
   def self.owned_by(user = User.current_user)
     if user.is_a?(User)
       select("DISTINCT owned_tag_sets.*").
@@ -104,7 +113,11 @@ class OwnedTagSet < ActiveRecord::Base
   
   def owner_changes; nil; end
   def moderator_changes; nil; end
-  
+
+
+  ##########################
+  # PROCESSING NOMINATIONS #
+  ##########################
 
   @queue = :owned_tag_set
   # This will be called by a worker when a job needs to be processed
@@ -112,18 +125,33 @@ class OwnedTagSet < ActiveRecord::Base
     self.send(method, *args)
   end
 
+  def is_processed?
+    $redis.exists("nominations_processed_#{self.id}")
+  end
+  
+  def is_processing?
+    $redis.exists("nominations_processing_#{self.id}")
+  end
+  
   def process_nominations
-    $redis.
+    $redis.del("nominations_processed_#{self.id}")
+    $redis.set("nominations_processing_#{self.id}", "true")
     Resque.enqueue(OwnedTagSet, :delayed_process_nominations, self.id)
   end
   
   def self.delayed_process_nominations(tag_set_id)
-    $redis.
     owned_set = OwnedTagSet.find(tag_set_id)
     owned_set.nominations.find_each do |nomination|
+      # process the nominations here and sock the results away in redis 
+      # with a 2 month expiration time limit
     end
+    $redis.del("nominations_processing_#{self.id}")
+    $redis.set("nominations_processed_#{self.id}", "true")
   end
-
+  
+  def processed_nominations
+    return [] unless self.is_processed?
+  end
     
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,

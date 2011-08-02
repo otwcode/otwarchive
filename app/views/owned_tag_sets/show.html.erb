@@ -1,4 +1,7 @@
-<div class="navigation module">
+<!--descriptive page name and messages-->
+<h2><%= ts("About %{name}", :name => @tag_set.title) %></h2>
+<!--navigation, sorting and actions-->
+
   <h3 class="landmark">Navigation</h3>
   <ul class="navigation" role="navigation">
     <% if @tag_set.nominated %>
@@ -16,10 +19,9 @@
       <% end %>
     <% end %>  
   </ul>
-</div>
 
+<!--metadata-->
 <div class="tag_set module">
-  <h3><%= ts("About %{name}", :name => @tag_set.title) %></h3>
   <div class="wrapper">
     <dl class="tag_set meta">
       <dt><%= ts("Created at: ") %></dt>
@@ -34,20 +36,23 @@
       <dd>
         <%=raw sanitize_field(@tag_set, :description) %>
         <% if @tag_set.nominated %>
-          <p class="notes">This tag set is open for nominations from the public. Current number of nominations allowed per user: </p>
-          <dl>
+          <dt class="stats"><%= ts("Stats:")%></dt>
+          <dd class="stats"><p class="notes">This tag set is open for nominations from the public. Current number of nominations allowed per user: </p>
+			<dl>
           <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
             <dt><%= ts("#{tag_type.pluralize}: ") %></dt>
             <dd><%= @tag_set.send("#{tag_type}_nomination_limit") %></dd>
           <% end %>
           </dl>
-        <% end %>        
+        <% end %>  
+      <div class="clear"><!--presentational--></div>
       </dd>
     </dl>
   </div>
 </div>
 
-<h3><%= ts("Tags") %></h3>
+<!--main content-->
+<h3 class="landmark"><%= ts("List of Tags") %></h3>
 
 <% if @tag_type %>
   <%= cache("tag_set_show_#{@tag_set.tag_set.id}_#{@tag_type}") do %>

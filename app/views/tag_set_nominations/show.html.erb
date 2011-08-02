@@ -22,15 +22,16 @@
 
 <h3><%= ts("Nominated Tags") %></h3>
 
-<dl class="nominations">			
+<ol class="nominations media index">			
   <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
     <% if (limit = @tag_set.send("#{tag_type}_nomination_limit")) > 0 %>
-      <dt><%= ts("#{tag_type.classify.pluralize}: ") %></dt>
-      <dd>
+      <li class="category <%= cycle :odd, :even %>">
+	  <h3><%= ts("#{tag_type.classify.pluralize}: ") %></h3>
+     
         <% if @tag_set_nomination.nominated_tags(tag_type).count == 0 %>
-          <%= ts("(None Nominated)") %>
+          <p><%= ts("(None Nominated)") %></p>
         <% else %>
-          <ul>
+          <ol>
             <% @tag_set_nomination.nominated_tags(tag_type).each_with_index do |tag, index| %>
               <% notes = @tag_set_nomination.send("#{tag_type}_nomination_notes").try(:at, index) %>
               <li>
@@ -54,12 +55,12 @@
                 <% end %>
               </li>
             <% end %>
-          </ul>
+          </ol>
         <% end %>
-      </dd>
+      </li>
     <% end %>
   <% end %>
-</dl>
+</ol>
 
 
 <p class="notes">
