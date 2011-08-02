@@ -24,25 +24,6 @@ set :set_path_automatically, false
 
 set :cron_log, "#{path}/log/whenever.log"
 
-# tasks for deployed site only
-if @not_stage == 'true'
-
-  # Check to see if the invite queue is enabled and invite users if appropriate
-  every 1.day, :at => '6:21 am' do
-    rake "invitations:check_queue"
-  end
-
-  # Resend signup emails
-  every 1.day, :at => '6:41 am' do
-    rake "admin:resend_signup_emails"
-  end
-
-  # reindex searchd
-  every 6.hours do
-    command "/static/bin/ts_reindex.sh"
-  end
-end
-
 # put a timestamp in the whenever log
 every 1.days, :at => 'midnight' do
   command "date"
@@ -68,4 +49,7 @@ every 1.day, :at => '7:40 am' do
   rake "work:purge_old_drafts"
 end
 
-
+# Move hit counts from redis to database
+every 1.hour do
+  rake "work:update_hit_counters"
+end
