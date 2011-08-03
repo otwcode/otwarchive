@@ -65,7 +65,6 @@ class TagSetNominationsController < ApplicationController
   end
 
   def edit
-    set_limit
   end
 
   protected
