@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
 
-  before_filter :users_only, :only => ['site_forms']
+  before_filter :users_only, :only => [:site_pages]
+  before_filter :check_permission_to_wrangle, :only => [:site_pages]
   
   # terms of service
   def tos
