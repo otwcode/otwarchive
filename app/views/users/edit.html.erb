@@ -5,28 +5,20 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="edit-navigation" role="navigation">
-  <li><%= link_to ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
-  <li><%= link_to ts("Change User Name"), change_username_user_path(@user) %></li>
+<ul class="navigation" role="navigation">
+  <li><%= t('.edit', :default => 'Edit:') %></li>
+  <li><%= link_to ts("Default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
+  <li><%= link_to ts("User Name"), change_username_user_path(@user) %></li>
   <li>
   <% if @user.crypted_password %>
-    <%= link_to ts("Change Password"), change_password_user_path(@user) %>
+    <%= link_to ts("Password"), change_password_user_path(@user) %>
   <% else %>
     <%= link_to ts("Add a Password"), change_password_user_path(@user) %>
   <% end %>
   </li>
   <li>
-  <%= link_to ts("Change Email"), change_email_user_path(@user) %>
+  <%= link_to ts("Email"), change_email_user_path(@user) %>
   </li>
-  <% if ArchiveConfig.USE_OPENID %>	
-    <li>
-    <% if @user.identity_url %>
-      <%= link_to ts("Change My OpenID"), change_openid_user_path(@user) %>
-    <% else %>
-      <%= link_to ts("Add An OpenID"), change_openid_user_path(@user) %>
-    <% end %>
-    </li>
-  <% end %>
 </ul>
 <!--/subnav-->
 

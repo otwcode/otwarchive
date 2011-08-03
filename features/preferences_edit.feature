@@ -32,7 +32,7 @@ Feature: Edit preferences
     And I should see "Edit My Profile"
     And I should see "Orphan My Works"
   When I follow "Edit My Profile"
-  Then I should see "Change Password"
+  Then I should see "Password"
   When I follow "editname"
   Then I should see "My Dashboard"
   When I follow "Profile"
