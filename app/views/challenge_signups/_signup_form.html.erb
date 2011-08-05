@@ -27,7 +27,7 @@ So if anyone can think of a better design for this, that would be awesome
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for([@collection, @challenge_signup], :url => collection_signups_path(@collection)) do |signup_form| %>
+<%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection) : collection_signups_path(@collection))) do |signup_form| %>
   <%= error_messages_for @challenge_signup %>
 
   <% if !@challenge.signup_instructions_general.nil? || current_user.pseuds.size > 1 %>
