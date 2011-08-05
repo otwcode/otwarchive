@@ -211,7 +211,7 @@ end
 When /^I fill in single-prompt challenge options$/ do
   When %{I fill in "prompt_meme_requests_num_required" with "1"}
     And %{I check "Signup open?"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I fill in multi-prompt challenge options$/ do
