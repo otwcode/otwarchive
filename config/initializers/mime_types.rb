@@ -12,6 +12,3 @@ Mime::Type.register 'application/epub', :epub
 
 # pdf files
 Mime::Type.register 'application/pdf', :pdf
-
-# comma separated values files
-Mime::Type.register 'text/csv', :csv
