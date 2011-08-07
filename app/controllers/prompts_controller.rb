@@ -3,7 +3,7 @@ class PromptsController < ApplicationController
   before_filter :users_only
   before_filter :load_collection, :except => [:index]
   before_filter :load_challenge, :except => [:index]
-  before_filter :promptmeme_only, :except => [:index]
+  before_filter :promptmeme_only, :except => [:index, :new]
   before_filter :load_prompt_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :allowed_to_destroy, :only => [:destroy]
   before_filter :signup_owner_only, :only => [:edit, :update]
@@ -39,7 +39,7 @@ class PromptsController < ApplicationController
   end
 
   def signup_owner_only
-    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (!@challenge.signup_open && @collection.user_is_owner?(current_user)))
+    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)))
   end
 
   def maintainer_or_signup_owner_only
@@ -57,7 +57,7 @@ class PromptsController < ApplicationController
   end
 
   def not_allowed
-    flash[:error] = t('challenge_signups.not_allowed', :default => "Sorry, you're not allowed to do that.")
+    flash[:error] = ts("Sorry, you're not allowed to do that.")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -128,11 +128,9 @@ class PromptsController < ApplicationController
   end
 
   def new
-    if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
-      flash[:notice] = ts("You are already signed up for this challenge. You can edit your signup below.")
-      redirect_to edit_collection_signup_path(@collection, @challenge_signup)
-    else
-      @challenge_signup = ChallengeSignup.new
+    unless (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
+      flash[:error] = ts("Please submit a basic signup with the required fields first")
+      redirect_to new_collection_signup_path(@collection) rescue redirect_to '/' and return
     end
   end
 

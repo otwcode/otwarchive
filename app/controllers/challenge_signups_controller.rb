@@ -19,23 +19,23 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def no_challenge
-    flash[:error] = t('challenges.no_challenge', :default => "What challenge did you want to sign up for?")
+    flash[:error] = ts("What challenge did you want to sign up for?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
 
   def check_signup_open
-    signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user) || @collection.user_is_moderator?(current_user))
+    signup_closed and return unless (@challenge.signup_open || @collection.user_is_maintainer?(current_user))
   end
 
   def signup_closed
-    flash[:error] = t('challenge_signups.signup_closed', :default => "Signup is currently closed: please contact a moderator for help.")
+    flash[:error] = ts("Signup is currently closed: please contact a moderator for help.")
     redirect_to @collection rescue redirect_to '/'
     false
   end
 
   def signup_owner_only
-    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (!@challenge.signup_open && @collection.user_is_owner?(current_user)) || (@collection.challenge_type == "PromptMeme" && @collection.user_is_maintainer?(current_user)))
+    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)))
   end
 
   def maintainer_or_signup_owner_only
@@ -43,7 +43,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def not_signup_owner
-    flash[:error] = t('challenge_signups.not_owner', :default => "You can't edit someone else's signup!")
+    flash[:error] = ts("You can't edit someone else's signup!")
     redirect_to @collection
     false
   end
@@ -53,7 +53,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def not_allowed
-    flash[:error] = t('challenge_signups.not_allowed', :default => "Sorry, you're not allowed to do that.")
+    flash[:error] = ts("Sorry, you're not allowed to do that.")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -64,7 +64,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def no_signup
-    flash[:error] = t('challenge_signups.no_signup', :default => "What signup did you want to work on?")
+    flash[:error] = ts("What signup did you want to work on?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -100,9 +100,7 @@ class ChallengeSignupsController < ApplicationController
       }
       format.csv {
         if (@collection.challenge_type == "GiftExchange" && @challenge.user_allowed_to_see_signups?(current_user)) || 
-        (@collection.challenge_type == "PromptMeme" && (
-        @collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)
-        ))
+        (@collection.challenge_type == "PromptMeme" && @collection.user_is_maintainer?(current_user))
           export_csv
         else
           flash[:error] = ts("You aren't allowed to see the CSV summary.")

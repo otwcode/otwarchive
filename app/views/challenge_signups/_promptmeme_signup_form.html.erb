@@ -7,19 +7,19 @@
 <!-- descriptions-->
 <!-- /descriptions-->
 <!--subnavigation, sorting and actions-->
-<% unless params[:single_prompt] == "true" || controller.action_name == "edit" %>
+<% unless params[:single_prompt] == "true" %>
 <ul class="navigation">
   <% if params[:single_prompt] == "true" %>
     <li>
-    <%= link_to( ts('Edit existing prompts instead?'),
+    <%= link_to( ts('Edit other existing prompts instead?'),
       {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => false}},
       :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => false)) %>
     </li>
-  <% elsif controller.action_name == "edit" %>
+  <% else %>
     <li>
     <%= link_to( ts('Just add one new prompt instead?'),
-      {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => true}},
-      :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => true)) %>
+      {:url => {:controller => :prompts, :action => :new}},
+      :href => url_for(:controller => :prompts, :action => :new)) %>
     </li>
   <% end %>
 </ul>
@@ -31,7 +31,8 @@
 <ul>
   <% @challenge_signup.send("requests").each_with_index do |prompt, index| %>
     <% if edit_record == true && index < @challenge_signup.requests.count %>
-      <li><%= link_to(ts("Request %{num}", :num => index+1), edit_collection_prompt_path(@challenge_signup.collection, prompt)) %></li>
+      <li><%= link_to(ts("Edit Request %{num}", :num => index+1), edit_collection_prompt_path(@challenge_signup.collection, prompt)) %>
+      <% if prompt.tag_set && !prompt.tag_set.tags.empty? %>(<ul class="tags inline"><%= tag_link_list(prompt.tag_set.tags, link_to_works=false) %></ul>)<% end %></li>
     <% else %>
       <li><%= ts("Request %{num}", :num => index+1) %></li>
     <% end %>
@@ -85,6 +86,7 @@
   <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection) : collection_signups_path(@collection))) do |signup_form| %>
     <%= error_messages_for @challenge_signup %>
 
+  <% if !@challenge.signup_instructions_general.nil? || current_user.pseuds.size > 1 %>
   <fieldset class="preface profile">
   	<legend>General Information</legend>
   	<h3>General Information</h3>
@@ -95,11 +97,14 @@
      	<% if current_user.pseuds.size > 1 %>
         <dt><%= signup_form.label :pseud_id, ts("Select pseudonym: ") -%></dt>
         <dd><%= signup_form.select :pseud_id, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud.id) %></dd>
-      <% else -%>
-        <p><%= signup_form.hidden_field :pseud_id, :value => (signup_form.object.new_record? ? current_user.default_pseud.id : signup_form.object.pseud.id) -%></p>
       <% end %>  
     </dl>
   </fieldset>
+  <% end %>
+  
+  <% if current_user.pseuds.size == 1 %>
+    <p><%= signup_form.hidden_field :pseud_id, :value => (signup_form.object.new_record? ? current_user.default_pseud.id : signup_form.object.pseud.id) %></p>
+  <% end %>
 
   <% %w(requests).each do |prompt_type| %>
   <fieldset class="preface profile">
