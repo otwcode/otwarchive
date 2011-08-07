@@ -8,10 +8,11 @@
   <% elsif @collection.challenge.user_allowed_to_sign_up?(current_user) || !@collection.moderated? || @collection.user_is_posting_participant?(current_user) %>
     <li><%= span_if_current ts("Prompt Form"), new_collection_signup_path(@collection) %></li>
   <% end %>
-
-    <li>
-      <%= span_if_current ts("Prompts (%{count})", :count => @collection.prompts.count), collection_requests_path(@collection) %>
-    </li>
+<% end %>
+  <li>
+    <%= span_if_current ts("Prompts (%{count})", :count => @collection.prompts.count), collection_requests_path(@collection) %>
+  </li>
+<% if logged_in? %>
     <li>
       <%= span_if_current ts("Claims (%{count})", :count => @collection.claims.count), collection_claims_path(@collection) %>
     </li>

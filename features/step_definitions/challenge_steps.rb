@@ -211,7 +211,7 @@ end
 When /^I fill in single-prompt challenge options$/ do
   When %{I fill in "prompt_meme_requests_num_required" with "1"}
     And %{I check "Signup open?"}
-    And %{I press "Submit"}
+    And %{I press "Update"}
 end
 
 When /^I fill in multi-prompt challenge options$/ do
@@ -575,19 +575,26 @@ end
 When /^I delete my prompt in "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Prompts ("}
-  When %{I follow "Remove prompt"}
+  When %{I follow "Delete"}
 end
 
 When /^I delete the signup by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
+  When %{I follow "#{participant}"}
   When %{I follow "Delete"}
+end
+
+When /^I edit the signup by "([^\"]*)"$/ do |participant|
+  visit collection_path(Collection.find_by_title("Battle 12"))
+  When %{I follow "Prompts ("}
+  When %{I follow "Edit whole signup"}
 end
 
 When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
-  When %{I follow "Remove prompt"}
+  When %{I follow "Delete"}
 end
 
 When /^I edit the prompt by "([^\"]*)"$/ do |participant|

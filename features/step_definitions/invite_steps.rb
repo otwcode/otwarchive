@@ -1,3 +1,5 @@
+### GIVEN
+
 Given /^an invitation(?: for "([^\"]+)") exists$/ do |invitee_email|
   invite = Invitation.new
   invite.invitee_email = (invitee_email ? invitee_email : "default@example.org")
@@ -9,6 +11,22 @@ def invite(attributes = {})
   @invite.invitee_email = "default@example.org"
   @invite.save  
   @invite
+end
+
+### WHEN
+
+When /^I turn on the invitation queue$/ do
+  When "I am logged in as an admin"
+  When %{I follow "settings"}
+      And %{I check "admin_setting_invite_from_queue_enabled"}
+      And %{I press "Update"}
+end
+
+When /^I turn off the invitation queue$/ do
+  When "I am logged in as an admin"
+  When %{I follow "settings"}
+      And %{I uncheck "admin_setting_invite_from_queue_enabled"}
+      And %{I press "Update"}
 end
 
 When /^I use an invitation to sign up$/ do
