@@ -1,4 +1,13 @@
 <div class="series module">
+<% if bookmark.bookmarkable.unrevealed? %>
+  <div class="header module mystery">
+    <h4 title="title"><%= ts("Mystery Series") %></h4>
+  </div>
+  <h6 class="landmark">Summary</h6>
+  <blockquote class="userstuff summary" title="summary">
+    <p><%= ts("This series is part of an ongoing challenge and will be revealed soon!") %></p>
+  </blockquote>
+<% else %>
 <div class="header module">
 <!--title, byline, fandom-->
   <h4><% if bookmark.bookmarkable.nil? %>
@@ -29,5 +38,6 @@
   <ul class="tags" title="tags">
     <%= blurb_tag_block(bookmark.bookmarkable) %>
   </ul>
+  <% end %>
 <% end %>
 </div>

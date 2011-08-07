@@ -10,7 +10,7 @@
   <%= render :partial => "bookmarks/#{bookmark.bookmarkable.class.to_s.underscore}_bookmark", :locals => { :bookmark => bookmark } %>   
 
 <!--summary-->
-<% unless bookmark.bookmarkable.summary.blank? %>
+<% unless bookmark.bookmarkable.summary.blank? || (bookmark.bookmarkable.respond_to?('unrevealed?') && bookmark.bookmarkable.unrevealed?) %>
     <h6 class="landmark">Summary</h6>
   <blockquote class="userstuff summary" title="summary">
     <%=raw strip_images(sanitize_field(bookmark.bookmarkable, :summary)) %>

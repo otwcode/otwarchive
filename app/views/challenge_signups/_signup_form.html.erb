@@ -1,4 +1,11 @@
-<h2><%= ts("Sign Up For %{title}", :title => @collection.title) %></h2>
+<h2>
+  <% if @collection.challenge_type == "PromptMeme" %>
+    <%= ts("Submit a Prompt") %>
+  <% else %>
+    <%= ts("Sign Up") %>
+  <% end %>
+  <%= ts("For %{title}", :title => @collection.title) %>
+</h2>
 
 <!-- note for FRONT END
 The fields in the form frequently wrap around to a second line. 
@@ -8,42 +15,60 @@ So if anyone can think of a better design for this, that would be awesome
 <!-- descriptions-->
 <!-- /descriptions-->
 <!--subnavigation, sorting and actions-->
+<ul class="navigation">
+  <li>
+    <% if @collection.challenge_type == "PromptMeme" %>
+      <%= link_to( ts('Just add one new prompt instead?'), {:url => {:controller => :prompts, :action => :new}}, :href => url_for(:controller => :prompts, :action => :new)) %>
+    <% else %>
+      <%= link_to( ts('Just add one new request or offer instead?'), {:url => {:controller => :prompts, :action => :new}}, :href => url_for(:controller => :prompts, :action => :new)) %>
+    <% end %>
+  </li>
+</ul>
 <!--/subnav-->
 
 <!--main content-->
 <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection) : collection_signups_path(@collection))) do |signup_form| %>
   <%= error_messages_for @challenge_signup %>
 
+  <% if !@challenge.signup_instructions_general.nil? || current_user.pseuds.size > 1 %>
   <fieldset class="preface profile">
-  	<legend>General Information</legend>
-  	<h3>General Information</h3>
+    <legend>General Information</legend>
+    <h3>General Information</h3>
     <% if @challenge.signup_instructions_general %>
       <%=raw sanitize_field(@challenge, :signup_instructions_general) %>
     <% end %>
-   	<% if signup_form.object.new_record? && current_user.pseuds.size > 1 %>
-      <dl>
-        <dt><%= signup_form.label :pseud_id, ts("Select pseudonym: ") %></dt>
+    <dl>
+       <% if signup_form.object.new_record? && current_user.pseuds.size > 1 %>
+        <dt><%= signup_form.label :pseud_id, ts("Select pseudonym: ") -%></dt>
         <dd><%= signup_form.select :pseud_id, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud.id) %></dd>
-      </dl>
-    <% else %>
-      <p><%= signup_form.hidden_field :pseud_id, :value => (signup_form.object.new_record? ? current_user.default_pseud.id : signup_form.object.pseud.id) %></p>
-    <% end %>  
+      <% end %>  
+    </dl>
   </fieldset>
+  <% end %>
+  
+  <% if !signup_form.object.new_record? || current_user.pseuds.size == 1 %>
+    <p><%= signup_form.hidden_field :pseud_id, :value => (signup_form.object.new_record? ? current_user.default_pseud.id : signup_form.object.pseud.id) %></p>
+  <% end %>
 
-  <% %w(requests offers).each do |prompt_type| %>
+  <% if @collection.challenge_type == "PromptMeme" %>
+    <% types = %w(requests) %>
+  <% else %>
+    <% types = %w(requests offers) %>
+  <% end %>
+  <% types.each do |prompt_type| %>
   <fieldset class="preface profile">
-  	<legend><%= prompt_type.capitalize %></legend>
-  	<h3>
-  	  <%= prompt_type.capitalize %> 
-  	  (<%= @challenge.send("#{prompt_type}_num_required") %>
-  	  <% if @challenge.send("#{prompt_type}_num_required") != @challenge.send("#{prompt_type}_num_allowed") %>
-  	    - <%= @challenge.send("#{prompt_type}_num_allowed") %><% end %>)
-  	</h3>
+    <legend><%= prompt_type.capitalize %></legend>
+    <h3>
+      <%= prompt_type.capitalize %> 
+      (<%= @challenge.send("#{prompt_type}_num_required") %>
+      <% if @challenge.send("#{prompt_type}_num_required") != @challenge.send("#{prompt_type}_num_allowed") %>
+        - <%= @challenge.send("#{prompt_type}_num_allowed") %><% end %>)
+    </h3>
     <% if @challenge.send("signup_instructions_#{prompt_type}") %>
       <%=raw sanitize_field(@challenge, "signup_instructions_#{prompt_type}".to_sym) %>
     <% end %>
     <% if @challenge_signup.send("#{prompt_type}").empty? %>
-  	  <% 1.upto(@challenge.send("#{prompt_type}_num_required")) do %>
+      <% 1.upto(@challenge.send("#{prompt_type}_num_required")) do %>
         <% @challenge_signup.send("#{prompt_type}").build %>
       <% end %>
     <% end %>
@@ -68,7 +93,7 @@ So if anyone can think of a better design for this, that would be awesome
   <% end # requests & offers section %>
 
   <fieldset>
-  	<legend><%= 'Submit' %></legend> 
+    <legend><%= 'Submit' %></legend> 
     <p class="submit">
       <%= signup_form.submit 'Submit' %>
     </p>
@@ -80,6 +105,6 @@ So if anyone can think of a better design for this, that would be awesome
 
 <!--subnav-->
 <ul class="navigation" role="navigation">
-<li><%= link_to 'Back', @collection %></li>
+  <li><%= link_to 'Back', @collection %></li>
 </ul>
 <!--/subnav-->

@@ -74,7 +74,8 @@
     <%= preference_form.check_box :show_random %>
   </dd>  
   <dt><%= label_tag :challenge_type, ts("If this collection is for a challenge, please choose the type") %>:</dt>
-    <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, @collection.challenge ? @collection.challenge.class.name : "") %></dd>
+  <% type = @collection.challenge ? @collection.challenge.class.name : @challenge_type %>
+  <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, type) %></dd>
 </dl>
 </fieldset>
   <% end %>
@@ -109,10 +110,10 @@
 
     <h3><%= profile_form.label :assignment_notification, ts("Assignment Notification Message") %>:</h3>
     <p class="note">
-      (This message will be appended to the assignment notifications sent out when you assign a challenge. Plain text only.)
+      (This message will be appended to the assignment notifications sent out when you assign a gift exchange challenge. Plain text only.)
     </p>
   	<p>
-      <%= profile_form.text_area :assignment_notification, :rows => 10, :cols => 80 %>
+      <%= profile_form.text_area :assignment_notification, :rows => 8, :cols => 80 %>
       <%= live_validation_for_field('collection_collection_profile_attributes_assignment_notification', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
       <%= generate_countdown_html("collection_collection_profile_attributes_assignment_notification", ArchiveConfig.SUMMARY_MAX) %>
     </p>
@@ -122,7 +123,7 @@
       (This message will be appended to the story notifications sent out when you reveal the stories in a gift exchange or prompt meme. Plain text only.)
     </p>
   	<p>
-      <%= profile_form.text_area :gift_notification, :rows => 10, :cols => 80 %>
+      <%= profile_form.text_area :gift_notification, :rows => 8, :cols => 80 %>
       <%= live_validation_for_field('collection_collection_profile_attributes_gift_notification', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
       <%= generate_countdown_html("collection_collection_profile_attributes_gift_notification", ArchiveConfig.SUMMARY_MAX) %>
     </p>
