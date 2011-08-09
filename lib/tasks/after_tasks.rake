@@ -269,7 +269,10 @@ namespace :After do
   task(:set_complete_status => :environment) do
     Work.update_all("complete = 1", "expected_number_of_chapters = 1")
     Work.find_each(:conditions => "expected_number_of_chapters > 1") do |w|
-      w.update_attribute(:complete, true) if w.chapters.posted.count == w.expected_number_of_chapters
+      puts w.id
+      if w.chapters.posted.count == w.expected_number_of_chapters
+        Work.update_all("complete = 1", "id = #{w.id}")
+      end
     end
   end
   
@@ -282,4 +285,4 @@ end # this is the end that you have to put new tasks above
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
 #task :After => ['autocomplete:reload_data']
-task :After => []
+task :After => ['After:set_complete_status']
