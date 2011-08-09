@@ -253,17 +253,11 @@ module TagsHelper
     categories = tag_groups['Category']
     symbol_block << get_symbol_link(get_category_class(categories), get_title_string(categories, "category"))
 
-    if item.class == Work
-      if item.is_wip
-        symbol_block << get_symbol_link( "complete-no iswip", "Work in Progress" )
-      else
-        symbol_block << get_symbol_link( "complete-yes iswip" , "Complete Work")
-      end
-    elsif item.class == Series
+    if [Work, Series].include?(item.class)
       if item.complete?
-        symbol_block << get_symbol_link( "complete-yes iswip" , "Complete Series")
+        symbol_block << get_symbol_link( "complete-no iswip", "#{item.class.to_s} in Progress" )
       else
-        symbol_block << get_symbol_link( "category-none iswip" , "Series in Progress")
+        symbol_block << get_symbol_link( "complete-yes iswip" , "Complete #{item.class.to_s}")
       end
     elsif item.class == ExternalWork
       symbol_block << get_symbol_link('external-work', "External Work")

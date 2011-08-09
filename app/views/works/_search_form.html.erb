@@ -73,6 +73,12 @@
     <%= check_box_tag "query[recced]", false, !@query[:recced].blank?, :id => 'refine_recced' %>
     <%= link_to_help "work-search-bookmark-help" %>
   </dd>
+  <dt>
+    <label for="refine_complete"><%= ts('Complete') %>?</label>
+  </dt>
+  <dd>
+    <%= check_box_tag "query[complete]", false, !@query[:complete].blank?, :id => 'refine_complete' %>
+  </dd>
   </dl>
   <p class="submit">
     <%= submit_tag ts('Search works'), :class => 'button', :name => nil %>

@@ -557,6 +557,14 @@ class Work < ActiveRecord::Base
   def multipart?
     self.number_of_chapters > 1
   end
+  
+  after_save :update_complete_status
+  def update_complete_status
+    self.complete = self.chapters.posted.count == expected_number_of_chapters
+    if self.complete_changed?
+      Work.update_all("complete = #{self.complete}", "id = #{self.id}")
+    end
+  end
 
   # Returns true if a work is not yet complete
   def is_wip
@@ -1018,87 +1026,48 @@ class Work < ActiveRecord::Base
 
   # Used for non-search work filtering
   def self.find_with_options(options = {})
-    command = ''
-    tags = (options[:boolean_type] == 'or') ?
-      '.with_any_filter_ids(options[:selected_tags])' :
-      '.with_all_filter_ids(options[:selected_tags])'
-    written = '.written_by_id(options[:selected_pseuds])'
-    written_having = '.written_by_id_having(options[:selected_pseuds])'
-    owned = '.owned_by(options[:user])'
-    collected = '.in_collection(options[:collection])'
-    sort = '.ordered_by_' + options[:sort_column] + '_' + options[:sort_direction].downcase
     page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
-    paginate = '.paginate(page_args)'
-    sort_and_paginate = sort + '.paginate(page_args)'
-    recent = (options[:collection] ? '' : '.recent')
+    sort_by = "#{options[:sort_column]} #{options[:sort_direction]}"
 
-    @works = []
     @pseuds = []
     @filters = []
-    owned_works = nil
-
-    # 1. individual user
-    # 1.1 individual pseud
-    # 1.1.1 and tags
-    # 1.2 and tags
-    # 2. tags
-    # 3. all
-
-    if !options[:user].nil? && !options[:selected_pseuds].empty? && !options[:selected_tags].empty?
-      # We have an indiv. user, selected pseuds and selected tags
-      owned_works = Work.owned_by(options[:user])
-      command << written + tags
-    elsif !options[:user].nil? && !options[:selected_pseuds].empty?
-      # We have an indiv. user, selected pseuds but no selected tags
-      owned_works = Work.owned_by(options[:user])
-      command << written_having
-    elsif !options[:user].nil? && !options[:selected_tags].empty?
-      # filtered results on a user's works page
-      # no pseuds but a specific user, and selected tags
-      command << owned + tags
-    elsif !options[:user].nil?
-      # a user's default works page
-      command << owned
-      @pseuds = options[:user].pseuds
-    elsif !options[:tag].blank?
-      # works for a specific tag
-      command << tags
-    elsif !options[:selected_tags].blank? && !options[:language_id].blank?
-      # language and selected tags
-      command << tags + '.by_language(options[:language_id])'
-    elsif !options[:selected_tags].blank?
-      # no user but selected tags
-      command << tags + recent
-    elsif !options[:language_id].blank?
-      command << '.by_language(options[:language_id])'
-    else
-      # all visible works
-      command << recent
-    end
-
+        
+    @works = Work.posted.unhidden
+    
     if User.current_user && User.current_user != :false
-      command << '.posted.unhidden'
-    else
-      command << '.posted.unhidden.unrestricted'
+      @works = @works.unrestricted
     end
 
-    # add on collections
-    command << (options[:collection] ? collected : '')
-
-    Rails.logger.debug "Eval: Work#{command + sort}"
+    if !options[:user].nil? && !options[:selected_pseuds].empty?
+      @works = @works.written_by_id(options[:selected_pseuds])
+    elsif !options[:user].nil?
+      @works = @works.owned_by(options[:user])
+    end
+    
+    if !options[:selected_tags].blank? || !options[:tag].blank?
+      if options[:boolean_type] == 'or'
+        @works = @works.with_any_filter_ids(options[:selected_tags])
+      else
+        @works = @works.with_all_filter_ids(options[:selected_tags])
+      end
+    end
+    
+    if options[:language_id]
+      @works = @works.by_language(options[:language_id])
+    end
+    if options[:complete]
+      @works = @works.where(:complete => true)
+    end
     if options[:collection]
-      @works = eval("Work#{command + sort}").find(:all, :select => "works.*, hit_counters.hit_count AS hit_count", :joins => :hit_counter).uniq
+      @works = @works.in_collection(options[:collection])
     else
-      @works = eval("Work#{command + sort}").find(:all, :select => "works.*, hit_counters.hit_count AS hit_count", :joins => :hit_counter, :limit => ArchiveConfig.SEARCH_RESULTS_MAX).uniq
+      @works = @works.limit(ArchiveConfig.SEARCH_RESULTS_MAX)
     end
+    
+    @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter).order(sort_by)
+    # for now, trigger the lazy loading so we don't get an error on @works.size
+    @works.compact
 
-    # Adds the co-authors of the displayed works to the available list of pseuds to filter on
-    @pseuds = (@pseuds + Pseud.on_works(@works)).uniq if !options[:user].nil?
-
-    # In order to filter by non-user coauthors, you need to split it up into two queries
-    # and then return the works that overlap (you could do this with a nested query, but
-    # it gets extremely complicated with the named scopes and all the other variables)
-    @works = @works & owned_works if owned_works
     if options[:user] || @works.size < ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
       # strip out works hidden in challenges if on a user's specific page or if there are too few in this listing to conceal
       @works = @works.delete_if {|w| w.unrevealed?}
@@ -1176,6 +1145,7 @@ class Work < ActiveRecord::Base
     has hit_counter.hit_count, :as => 'hit_count'
     has word_count, revised_at
     has posted, restricted, hidden_by_admin
+    has complete
     has bookmarks.rec, :as => 'recced'
     has bookmarks.pseud_id, :as => 'bookmarker'
 
