@@ -1034,7 +1034,7 @@ class Work < ActiveRecord::Base
         
     @works = Work.posted.unhidden
     
-    if User.current_user && User.current_user != :false
+    if User.current_user.nil? || User.current_user == :false
       @works = @works.unrestricted
     end
 
