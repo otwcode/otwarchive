@@ -333,12 +333,12 @@ Feature: Admin tasks
     And I fill in "known_issue_title" with "First known problem"
     And I fill in "content" with "This is a bit of a problem"
     # Suspect related to issue 2458
-  #  And I press "Post"
-  #Then show me the main content
+    And I press "Post"
+  Then I should see "KnownIssue was successfully created"
   
   Scenario: Edit known issues
   
   # TODO
-  # Given I have posted known issues
-  # When I edit known issues
-  # Then I should see "Known issues updated successfully"
+  Given I have posted known issues
+  When I edit known issues
+  Then I should see "KnownIssue was successfully updated"
