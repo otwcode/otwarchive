@@ -54,7 +54,8 @@ class Chapter < ActiveRecord::Base
   
   after_save :fix_positions
   def fix_positions
-    if work 
+    if work
+      positions_changed = false
       self.position ||= 1
       chapters = work.chapters.order(:position)
       if chapters && chapters.length > 1
@@ -62,8 +63,16 @@ class Chapter < ActiveRecord::Base
         chapters.insert(self.position-1, self)
         chapters.compact.each_with_index do |chapter, i|
           chapter.position = i+1
-          Chapter.update_all("position = #{chapter.position}", "id = #{chapter.id}") if chapter.position_changed?
+          if chapter.position_changed?
+            Chapter.update_all("position = #{chapter.position}", "id = #{chapter.id}")
+            positions_changed = true
+          end
         end
+      end
+      # We're caching the chapter positions in the comment blurbs
+      # so we need to expire them
+      if positions_changed
+        work.comments.each{ |c| c.touch }
       end
     end
   end
