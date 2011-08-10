@@ -6,7 +6,7 @@ class CreateTagNominations < ActiveRecord::Migration
       t.references :fandom_nomination
       t.string :tagname
       t.string :parent_tagname
-      t.text :notes
+      t.text :tagnotes
       t.boolean :approved, :default => false, :null => false
       t.boolean :rejected, :default => false, :null => false
       t.boolean :wrangled, :default => false, :null => false

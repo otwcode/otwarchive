@@ -11,14 +11,14 @@
         <dt><%= nom_form.label :parent_tagname, ts("Type of fandom?") %></dt>
         <dd><%= nom_form.select :parent_tagname, options_for_select(Media.canonical.by_name.collect {|m| [m.name, m.name]}), :include_blank => true %></dd>
 
-	 	    <dt><%= nom_form.label :notes, ts("Brief Notes?") %></dt>
-	 	    <dd><%= nom_form.text_area :notes %></dd>
+	 	    <dt><%= nom_form.label :tagnotes, ts("Brief Notes?") %></dt>
+	 	    <dd><%= nom_form.text_area :tagnotes %></dd>
 	 	  </dl>
 	 	</dd>
 
     <% # if fandoms are being nominated then any character/relationship noms go under fandom %>
     <% %w(character relationship).each do |tag_type| %>
-      <% nom_form.fields_for "#{tag_type}_nominations".to_sym do |nom_form2| %>
+      <%= nom_form.fields_for "#{tag_type}_nominations".to_sym do |nom_form2| %>
         <dt><%= nom_form2.label :tagname, ts("#{tag_type.classify}") %>
         <dd>
           <%= nom_form2.text_field :tagname, 

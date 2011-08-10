@@ -24,7 +24,7 @@
 
 <ol class="nominations media index">			
   <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
-    <% if (limit = @tag_set.send("#{tag_type}_nomination_limit")) > 0 %>
+    <% if @limit[tag_type] > 0 %>
       <li class="category <%= cycle :odd, :even %>">
 	  <h3><%= ts("#{tag_type.classify.pluralize}: ") %></h3>
      
@@ -33,25 +33,24 @@
         <% else %>
           <ol>
             <% @tag_set_nomination.nominated_tags(tag_type).each_with_index do |tag, index| %>
-              <% notes = @tag_set_nomination.send("#{tag_type}_nomination_notes").try(:at, index) %>
               <li>
-                <% if !notes.blank? %>
+                <% if !tag.tagnotes.blank? %>
                   <div class="hasnotes">
                 <% end %>
-                <% if (tagobj = tag_type.classify.constantize.find_by_name(tag)) %>
+                <% if (tagobj = tag_type.classify.constantize.find_by_name(tag.tagname)) %>
                   <% if tagobj.canonical %>
                     <%= link_to_tag_works(tagobj) %>
                   <% elsif tagobj.merger %>
-                    <%= tag %> (<%= link_to_tag_works(tagobj.merger) %>)
+                    <%= tag.tagname %> (<%= link_to_tag_works(tagobj.merger) %>)
                   <% else %>
-                    <span class="unwrangled"><%= tag %></span>                  
+                    <span class="unwrangled"><%= tag.tagname %></span>                  
                   <% end %>
                 <% else %>
-                  <span class="nonexistent"><%= tag %></span>
+                  <span class="nonexistent"><%= tag.tagname %></span>
                 <% end %>
-                <% if !notes.blank? %>
+                <% if !tag.tagnotes.blank? %>
                   </div>
-                  <div class="notes"><%= notes %></div>
+                  <div class="notes"><%= tag.tagnotes %></div>
                 <% end %>
               </li>
             <% end %>

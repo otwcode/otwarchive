@@ -10,7 +10,7 @@
     <dt><%= nom_form.label :parent_tagname, ts("Fandom this #{tag_type} belongs in:") %></dt>
     <dd><%= nom_form.text_field :parent_tagname, autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
 
-    <dt><%= nom_form.label :notes, ts("Brief Notes?") %></dt>
-    <dd><%= nom_form.text_area :notes %></dd>
+    <dt><%= nom_form.label :tagnotes, ts("Brief Notes?") %></dt>
+    <dd><%= nom_form.text_area :tagnotes %></dd>
   </dl>
 </dd>

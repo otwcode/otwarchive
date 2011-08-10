@@ -3,16 +3,14 @@ class TagSetNomination < ActiveRecord::Base
   belongs_to :owned_tag_set
   
   has_many :fandom_nominations, :dependent => :destroy
-  accepts_nested_attributes_for :fandom_nominations, :allow_destroy => true
-
   has_many :character_nominations, :dependent => :destroy
-  accepts_nested_attributes_for :character_nominations, :allow_destroy => true
-
   has_many :relationship_nominations, :dependent => :destroy
-  accepts_nested_attributes_for :relationship_nominations, :allow_destroy => true
-
   has_many :freeform_nominations, :dependent => :destroy
-  accepts_nested_attributes_for :freeform_nominations, :allow_destroy => true
+
+  accepts_nested_attributes_for :fandom_nominations, :character_nominations, :relationship_nominations, :freeform_nominations, {
+    :allow_destroy => true,
+    :reject_if => proc { |attrs| attrs[:tagname].blank? }
+  }
   
   validates_presence_of :owned_tag_set_id
   validates_presence_of :pseud_id
