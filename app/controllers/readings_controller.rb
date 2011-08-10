@@ -6,15 +6,15 @@ class ReadingsController < ApplicationController
 
   def load_user
     @user = User.find_by_login(params[:user_id])
-    @check_ownership_of = @user  
+    @check_ownership_of = @user
   end
-  
+
   def index
     @readings = @user.readings
     if params[:show] == 'to-read'
       @readings = @readings.where(:toread => true)
     end
-    @readings = @readings.paginate(:all, :order => "updated_at DESC", :page => params[:page])
+    @readings = @readings.paginate(:all, :order => "last_viewed DESC", :page => params[:page])
   end
 
   def destroy
@@ -23,7 +23,7 @@ class ReadingsController < ApplicationController
     flash[:notice] = t('story_deleted', :default => 'Work deleted from your history.')
     redirect_to user_readings_url(current_user)
   end
-  
+
   def clear
     @user.readings.each do |reading|
        begin
@@ -34,27 +34,6 @@ class ReadingsController < ApplicationController
      end
     flash[:notice] = t('history_deleted', :default => 'Your history is now cleared.')
     redirect_to user_readings_url(current_user)
-  end
-  
-  # marks a work to read later, or unmarks it if the work is already marked
-  def marktoread
-    reading = Reading.find(params[:id])
-    @work = Work.find(params[:work_id])
-      if reading == nil # failsafe
-          flash[:error] = t('marktoreadfailed', :default => "Marking a work to read later failed")
-      else
-        reading.major_version_read, reading.minor_version_read = @work.major_version, @work.minor_version
-        if reading.toread?
-          reading.toread = false
-          flash[:notice] = t('savedtoread', :default => "The work was marked as read.")
-        else
-          reading.toread = true
-          flash[:notice] = t('savedtoread', :default => "The work was marked to read later. You can find it in your history.")
-        end
-        reading.save
-      end
-    true
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
   protected

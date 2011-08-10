@@ -195,7 +195,7 @@ class WorksController < ApplicationController
     render :show
     Rails.logger.debug "Work remote addr: #{request.remote_ip}"
     @work.increment_hit_count(request.remote_ip)
-    Reading.update_or_create(@work, current_user)
+    Reading.update_or_create(@work, current_user) if current_user
   end
 
   def navigate
@@ -684,6 +684,14 @@ public
     redirect_to show_multiple_user_works_path(@user)
   end
 
+  # marks a work to read later, or unmarks it if the work is already marked
+  def marktoread
+    @work = Work.find(params[:id])
+    Reading.mark_to_read_later(@work, current_user)
+    flash[:notice] = ts("Your history was updated. It may take a short while to show up.")
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
+  end
+
   protected
 
   def load_pseuds
@@ -796,7 +804,7 @@ public
       redirect_to drafts_user_works_path(current_user)
     end
   end
-  
+
   # Takes an array of tags and returns a comma-separated list, without the markup
   def tag_list(tags)
     tags = tags.uniq.compact

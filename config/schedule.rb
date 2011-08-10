@@ -53,3 +53,8 @@ end
 every 1.hour do
   rake "work:update_hit_counters"
 end
+
+# Move readings from redis to database
+every 1.hour do
+  rake "readings:to_database"
+end

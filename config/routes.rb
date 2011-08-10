@@ -177,9 +177,6 @@ Otwarchive::Application.routes.draw do
       resources :bookmarks
     end
     resources :readings do
-      member do
-        get :marktoread
-      end
       collection do
         post :clear
       end
@@ -327,7 +324,7 @@ Otwarchive::Application.routes.draw do
         put :set
         get :purge
       end
-    end    
+    end
     resources :potential_matches do
       collection do
         get :generate
@@ -420,7 +417,7 @@ Otwarchive::Application.routes.draw do
       get :do_redirect
     end
   end
-    
+
   resources :abuse_reports
   resources :external_authors do
     resources :external_author_names
