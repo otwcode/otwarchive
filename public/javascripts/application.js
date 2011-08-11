@@ -278,14 +278,14 @@ function generateCharacterCounters() {
   $j(".observe_textlength").each(function(){
         //update relevant character counter span
         var input_id = '#' + $j(this).attr('id');
-        var maxlength = $j(input_id + '_counter').attr('maxlength');
+        var maxlength = $j(input_id + '_counter').attr('data-maxlength');
         var input_value = $j(input_id).val();
         input_value = (input_value.replace(/\r\n/g,'\n')).replace(/\r|\n/g,'\r\n'); 
         $j(input_id + '_counter').html(maxlength - input_value.length);
   });
   $j(".observe_textlength").live("keyup keydown mouseup mousedown change", function(){
         var input_id = '#' + $j(this).attr('id');
-        var maxlength = $j(input_id + '_counter').attr('maxlength');
+        var maxlength = $j(input_id + '_counter').attr('data-maxlength');
         var input_value = $j(input_id).val();
         input_value = (input_value.replace(/\r\n/g,'\n')).replace(/\r|\n/g,'\r\n'); 
         //$j(input_id).val(input_value); //this had really bad effects, don't do it

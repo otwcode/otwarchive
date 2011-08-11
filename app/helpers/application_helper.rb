@@ -231,7 +231,7 @@ module ApplicationHelper
 
   def generate_countdown_html(field_id, max) 
     generated_html = "<p class=\"character_counter\">".html_safe
-    generated_html += ("<span id=\"#{field_id}_counter\" maxlength=\"" + max.to_s + "\">" + max.to_s + "</span>").html_safe
+    generated_html += ("<span id=\"#{field_id}_counter\" data-maxlength=\"" + max.to_s + "\">" + max.to_s + "</span>").html_safe
     generated_html += " ".html_safe + (ts('characters left'))
     generated_html += "</p>".html_safe
     return generated_html
