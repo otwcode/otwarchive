@@ -91,7 +91,7 @@ module ApplicationHelper
       pseuds.collect { |pseud| 
         archivists[pseud].nil? ? 
             pseud_link(pseud) :
-            archivists[pseud] + ts("[archived by") + pseud_link(pseud) + "]"
+            archivists[pseud] + " [" + ts("archived by") + " " + pseud_link(pseud) + "]"
       }.join(', ').html_safe
     end
   end

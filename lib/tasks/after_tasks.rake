@@ -265,6 +265,16 @@ namespace :After do
 
   #### Add your new tasks here
   
+  desc "Send out external author invitations that got missed"
+  task(:invite_external_authors => :environment) do
+    Invitation.where("sent_at is NULL").where("external_author_id IS NOT NULL").each do |invite|
+      archivist = invite.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
+      UserMailer.invitation_to_claim(invite, archivist).deliver!
+      invite.sent_at = Time.now
+      invite.save
+    end
+  end
+  
 end # this is the end that you have to put new tasks above
 
 ##################
@@ -274,4 +284,4 @@ end # this is the end that you have to put new tasks above
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
 #task :After => ['autocomplete:reload_data']
-task :After => []
+task :After => ['After:invite_external_authors']
