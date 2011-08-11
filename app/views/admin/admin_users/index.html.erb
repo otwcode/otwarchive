@@ -18,34 +18,34 @@
 <div class="clear"><!--presentational, phase me out--></div>
 <% if @users %>
 
-<h3><%= @users.size == 1 ? "1 user found" : @users.size == 0 ? "No users found" : @users.size.to_s + " users found" %></h3>
+<h3><%= @users.size == 1 ? ts("1 user found") : @users.size == 0 ? ts("No users found") : @users.size.to_s + ts(" users found") %></h3>
 
 <% if @users.size > 0 %>
   <div class="wrapper">
-	<table id="admin_users_table">
-  <caption><%=h ts("List of users") %></caption>
+  <table id="admin_users_table">
+  <caption><%= ts("List of users") %></caption>
   <colgroup>
-	<col class="name"/>
-	<col span="6" />
-	</colgroup>
-	<thead>
-		<tr>
-    		<th scope="col"><%=h ts("Username") %></th>
-    		<th scope="col"><%=h ts("Email") %></th>
+  <col class="name"/>
+  <col span="6" />
+  </colgroup>
+  <thead>
+    <tr>
+        <th scope="col"><%= ts("Username") %></th>
+        <th scope="col"><%= ts("Email") %></th>
         <% for role in @roles %>
           <th scope="col"><%= role.name.try(:titleize) %></th>
         <% end %>
-    		<th scope="col"><%=h ts("Update") %></th>
-    		<th scope="col"><%=h ts("Details") %></th>
-  		</tr>
-	</thead>
-	<tbody>
+        <th scope="col"><%= ts("Update") %></th>
+        <th scope="col"><%= ts("Details") %></th>
+      </tr>
+  </thead>
+  <tbody>
     <% @users.each do |user| %>
-    	<tr id="user_<%= user.id %>">
-      		<%= render :partial => 'user_form', :locals => {:user => user} %>
-    	</tr> 
+      <tr id="user_<%= user.id %>">
+          <%= render :partial => 'user_form', :locals => {:user => user} %>
+      </tr>
   <% end %>
-	</tbody>
+  </tbody>
 <% end %>
   </table>
 </div>

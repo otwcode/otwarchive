@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h 'AO3 News (includes Release Notes)' %></h2>
+<h2><%= ts("AO3 News (includes Release Notes)") %></h2>
 <!--/descriptions-->
 <!--subnav-->
 <%= render :partial => 'admin/admin_nav' %>
@@ -15,10 +15,10 @@
     </colgroup>
     <thead>
       <tr>
-        <th scope="col"><%=h 'Title' %></th>
-        <th scope="col"><%=h 'Posted' %></th>
-        <th scope="col"><%=h 'Updated' %></th>
-        <th scope="col" colspan="3"><%=h 'Actions' %></th>
+        <th scope="col"><%= ts("Title") %></th>
+        <th scope="col"><%= ts("Posted") %></th>
+        <th scope="col"><%= ts("Updated") %></th>
+        <th scope="col" colspan="3"><%= ts("Actions") %></th>
       </tr>
     </thead>
     <tbody>
@@ -27,9 +27,9 @@
           <td><%= link_to admin_post.title, admin_post %></td>
           <td><%=h admin_post.created_at %></td>
           <td><%=h admin_post.updated_at %></td>
-          <td><%= link_to "Show", admin_post %></td>
-          <td><%= link_to "Edit", edit_admin_post_path(admin_post) %></td>
-          <td><%= link_to "Delete", admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
+          <td><%= link_to ts("Show"), admin_post %></td>
+          <td><%= link_to ts("Edit"), edit_admin_post_path(admin_post) %></td>
+          <td><%= link_to ts("Delete"), admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
         </tr>
       <% end %>
     </tbody>

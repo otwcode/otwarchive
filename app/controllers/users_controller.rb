@@ -420,20 +420,20 @@ class UsersController < ApplicationController
       if session.valid?
         return true
       else
-    if params[:new_email]
-      flash.now[:error] = ts("Your password was incorrect")
+        if params[:new_email]
+          flash.now[:error] = ts("Your password was incorrect")
+        else
+          flash.now[:error] = ts("Your old password was incorrect")
+        end
+        @wrong_password = true
+        return false
+      end
     else
-      flash.now[:error] = ts("Your old password was incorrect")
-    end
-    @wrong_password = true
-    return false
-       end
-    else
-    if params[:new_email]
-    flash.now[:error] = ts("You must enter your password")
-    else
-    flash.now[:error] = ts("You must enter your old password")
-    end
+      if params[:new_email]
+        flash.now[:error] = ts("You must enter your password")
+      else
+        flash.now[:error] = ts("You must enter your old password")
+      end
       @wrong_password = true
       return false
     end
