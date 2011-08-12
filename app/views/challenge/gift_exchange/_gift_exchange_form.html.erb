@@ -91,21 +91,21 @@
     <dl>
       <dt><%= f.label :signup_instructions_general, ts("General Signup Instructions") %>:</dt>
       <dd>
-        <%= f.text_area :signup_instructions_general, :rows => 6, :cols => 60 %>
+        <%= f.text_area :signup_instructions_general, :rows => 6, :cols => 60, :class => "observe_textlength" %>
         <%= live_validation_for_field(:gift_exchange_signup_instructions_general, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
         <%= generate_countdown_html("gift_exchange_signup_instructions_general", ArchiveConfig.INFO_MAX) %>        
       </dd>
 
       <dt><%= f.label :signup_instructions_requests, ts("Request Instructions") %>:</dt>
       <dd>
-        <%= f.text_area :signup_instructions_requests, :rows => 6, :cols => 60 %>
+        <%= f.text_area :signup_instructions_requests, :rows => 6, :cols => 60, :class => "observe_textlength" %>
         <%= live_validation_for_field(:gift_exchange_signup_instructions_requests, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
         <%= generate_countdown_html("gift_exchange_signup_instructions_requests", ArchiveConfig.INFO_MAX) %>        
       </dd>
       
       <dt><%= f.label :signup_instructions_offers, ts("Offer Instructions") %>:</dt>
       <dd>
-        <%= f.text_area :signup_instructions_offers, :rows => 6, :cols => 60 %>
+        <%= f.text_area :signup_instructions_offers, :rows => 6, :cols => 60, :class => "observe_textlength" %>
         <%= live_validation_for_field(:gift_exchange_signup_instructions_offers, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
         <%= generate_countdown_html("gift_exchange_signup_instructions_offers", ArchiveConfig.INFO_MAX) %>        
       </dd>

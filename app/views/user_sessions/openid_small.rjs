@@ -1,1 +1,0 @@
-page.replace_html(:small_login, :partial => 'user_sessions/openid_small')

@@ -1,6 +1,0 @@
-unless @works.blank?
-  page.replace 'collection-works', :partial => 'collections/works_module', :locals => {:collection => @collection, :works => @works}
-end
-unless @bookmarks.blank? 
-  page.replace 'collection-bookmarks', :partial => 'collections/bookmarks_module', :locals => {:collection => @collection, :bookmarks => @bookmarks}
-end

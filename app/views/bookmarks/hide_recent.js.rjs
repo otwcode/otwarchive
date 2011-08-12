@@ -1,3 +1,0 @@
-page.replace_html "recent_#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}", ""
-page.replace_html "recent_link_#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}", link_to_remote("View most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'fetch_recent', :id => @bookmark.id, :params => {:fetch => true} }, :method => :get)
-page["bookmark_#{@bookmark.id}"].visual_effect :scroll_to

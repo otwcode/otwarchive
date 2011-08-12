@@ -2,21 +2,21 @@
 
 <%= form_for(@collection, :html => {:multipart => true}) do |collection_form| %>
   <fieldset>
-	<legend>Header</legend>
-		<dl>
-	   
-	 	<% if @collection.new_record? && current_user.pseuds.size > 1 %>
+  <legend>Header</legend>
+    <dl>
+
+     <% if @collection.new_record? && current_user.pseuds.size > 1 %>
       <dt><%= label_tag "owner_pseuds[]", ts("Select owner pseudonym(s)") %>:</dt>
       <dd><%= select_tag "owner_pseuds[]", options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %></dd>
     <% else %>
       <p><%= hidden_field_tag "owner_pseuds[]", [current_user.default_pseud.id] %></p>
     <% end %>
-  
+
     <dt><%= collection_form.label :icon %></dt>
     <dd><%= collection_form.file_field :icon %></dd>
 
   <% if @collection.children.empty? %>
-	<dt>
+  <dt>
     <%= collection_form.label :parent_name, ts("Parent collection (must be one you maintain)") %>:</dt>
     <dd>
       <%= collection_form.text_field :parent_name, autocomplete_options("collection_parent_name", :autocomplete_token_limit => 1) %>
@@ -42,7 +42,7 @@
   <dt>
     <%= collection_form.label :description, ts("Brief Description") %>:</dt>
     <dd>
-<%= collection_form.text_area :description, :rows => 4, :cols => 60, :class => "description-field" %>
+<%= collection_form.text_area :description, :rows => 4, :cols => 60, :class => "description-field observe_textlength" %>
     <%= live_validation_for_field('collection_description', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
     <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) %>
   </dd>
@@ -51,9 +51,9 @@
   <% @collection.build_collection_preference unless @collection.collection_preference %>
   <%= collection_form.fields_for :collection_preference do |preference_form| %>
 <fieldset>
-	<legend>Preferences</legend>
+  <legend>Preferences</legend>
     <dl>
-	<dt><%= preference_form.label :moderated, ts("Is this collection moderated?") %> <%= link_to_help "moderated-collection" %></dt>
+  <dt><%= preference_form.label :moderated, ts("Is this collection moderated?") %> <%= link_to_help "moderated-collection" %></dt>
     <dd><%= preference_form.check_box :moderated %>
   </dd>
   <dt>
@@ -72,7 +72,7 @@
   </dt>
   <dd>
     <%= preference_form.check_box :show_random %>
-  </dd>  
+  </dd>
   <dt><%= label_tag :challenge_type, ts("If this collection is for a challenge, please choose the type") %>:</dt>
   <% type = @collection.challenge ? @collection.challenge.class.name : @challenge_type %>
   <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, type) %></dd>
@@ -83,27 +83,27 @@
   <% @collection.build_collection_profile unless @collection.collection_profile %>
   <%= collection_form.fields_for :collection_profile do |profile_form| %>
   <fieldset class="preface profile">
-		<legend>Profile</legend>
-		<p class="note">
-    Quick tip: if this is a subcollection or challenge, and you leave any of the following fields blank, they will be 
+    <legend>Profile</legend>
+    <p class="note">
+    Quick tip: if this is a subcollection or challenge, and you leave any of the following fields blank, they will be
     inherited from the parent collection, so you don't need to repeat shared information.
     </p>
     <p><%= allowed_html_instructions %></p>
     <h3><%= profile_form.label :intro, ts("Introduction") %>:</h3>
-  	<p>
-      <%= profile_form.text_area :intro, :rows => 10, :cols => 80 %>
+    <p>
+      <%= profile_form.text_area :intro, :rows => 10, :cols => 80, :class => "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_intro', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
       <%= generate_countdown_html("collection_collection_profile_attributes_intro", ArchiveConfig.INFO_MAX) %>
     </p>
 
       <h3><%= profile_form.label :faq, ts("FAQ") %>:</h3>
-      <p><%= profile_form.text_area :faq, :rows => 10, :cols => 80 %>
+      <p><%= profile_form.text_area :faq, :rows => 10, :cols => 80, :class => "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_faq', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
       <%= generate_countdown_html("collection_collection_profile_attributes_faq", ArchiveConfig.INFO_MAX) %>
     </p>
     <h3>
       <%= profile_form.label :rules, ts("Rules") %>:</h3>
-      <p><%= profile_form.text_area :rules, :rows => 10, :cols => 80 %>
+      <p><%= profile_form.text_area :rules, :rows => 10, :cols => 80, :class => "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_rules', :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
       <%= generate_countdown_html("collection_collection_profile_attributes_rules", ArchiveConfig.INFO_MAX) %>
     </p>
@@ -112,8 +112,8 @@
     <p class="note">
       (This message will be appended to the assignment notifications sent out when you assign a gift exchange challenge. Plain text only.)
     </p>
-  	<p>
-      <%= profile_form.text_area :assignment_notification, :rows => 8, :cols => 80 %>
+    <p>
+      <%= profile_form.text_area :assignment_notification, :rows => 8, :cols => 80, :class => "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_assignment_notification', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
       <%= generate_countdown_html("collection_collection_profile_attributes_assignment_notification", ArchiveConfig.SUMMARY_MAX) %>
     </p>
@@ -122,8 +122,8 @@
     <p class="note">
       (This message will be appended to the story notifications sent out when you reveal the stories in a gift exchange or prompt meme. Plain text only.)
     </p>
-  	<p>
-      <%= profile_form.text_area :gift_notification, :rows => 8, :cols => 80 %>
+    <p>
+      <%= profile_form.text_area :gift_notification, :rows => 8, :cols => 80, :class => "observe_textlength" %>
       <%= live_validation_for_field('collection_collection_profile_attributes_gift_notification', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
       <%= generate_countdown_html("collection_collection_profile_attributes_gift_notification", ArchiveConfig.SUMMARY_MAX) %>
     </p>
@@ -132,12 +132,12 @@
  </fieldset>
  <fieldset>
   <% if @collection.name.blank? %>
-    <legend><%= ts('Submit') %></legend> 
+    <legend><%= ts('Submit') %></legend>
   <p class="submit">
     <%= collection_form.submit ts('Submit') %>
   </p>
   <% else %>
-    	<legend><%= ts('Update') %></legend> 
+      <legend><%= ts('Update') %></legend>
   <p class="submit">
     <%= collection_form.submit ts('Update') %>
   </p>

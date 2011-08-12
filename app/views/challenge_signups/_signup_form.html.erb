@@ -32,13 +32,13 @@ So if anyone can think of a better design for this, that would be awesome
 
   <% if !@challenge.signup_instructions_general.nil? || current_user.pseuds.size > 1 %>
   <fieldset class="preface profile">
-  	<legend>General Information</legend>
-  	<h3>General Information</h3>
+    <legend>General Information</legend>
+    <h3>General Information</h3>
     <% if @challenge.signup_instructions_general %>
       <%=raw sanitize_field(@challenge, :signup_instructions_general) %>
     <% end %>
     <dl>
-     	<% if signup_form.object.new_record? && current_user.pseuds.size > 1 %>
+       <% if signup_form.object.new_record? && current_user.pseuds.size > 1 %>
         <dt><%= signup_form.label :pseud_id, ts("Select pseudonym: ") -%></dt>
         <dd><%= signup_form.select :pseud_id, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud.id) %></dd>
       <% end %>  
@@ -57,18 +57,18 @@ So if anyone can think of a better design for this, that would be awesome
   <% end %>
   <% types.each do |prompt_type| %>
   <fieldset class="preface profile">
-  	<legend><%= prompt_type.capitalize %></legend>
-  	<h3>
-  	  <%= prompt_type.capitalize %> 
-  	  (<%= @challenge.send("#{prompt_type}_num_required") %>
-  	  <% if @challenge.send("#{prompt_type}_num_required") != @challenge.send("#{prompt_type}_num_allowed") %>
-  	    - <%= @challenge.send("#{prompt_type}_num_allowed") %><% end %>)
-  	</h3>
+    <legend><%= prompt_type.capitalize %></legend>
+    <h3>
+      <%= prompt_type.capitalize %> 
+      (<%= @challenge.send("#{prompt_type}_num_required") %>
+      <% if @challenge.send("#{prompt_type}_num_required") != @challenge.send("#{prompt_type}_num_allowed") %>
+        - <%= @challenge.send("#{prompt_type}_num_allowed") %><% end %>)
+    </h3>
     <% if @challenge.send("signup_instructions_#{prompt_type}") %>
       <%=raw sanitize_field(@challenge, "signup_instructions_#{prompt_type}".to_sym) %>
     <% end %>
     <% if @challenge_signup.send("#{prompt_type}").empty? %>
-  	  <% 1.upto(@challenge.send("#{prompt_type}_num_required")) do %>
+      <% 1.upto(@challenge.send("#{prompt_type}_num_required")) do %>
         <% @challenge_signup.send("#{prompt_type}").build %>
       <% end %>
     <% end %>
@@ -93,7 +93,7 @@ So if anyone can think of a better design for this, that would be awesome
   <% end # requests & offers section %>
 
   <fieldset>
-  	<legend><%h= 'Submit' %></legend> 
+    <legend><%= 'Submit' %></legend> 
     <p class="submit">
       <%= signup_form.submit 'Submit' %>
     </p>
@@ -105,6 +105,6 @@ So if anyone can think of a better design for this, that would be awesome
 
 <!--subnav-->
 <ul class="navigation" role="navigation">
-<li><%= link_to 'Back', @collection %></li>
+  <li><%= link_to 'Back', @collection %></li>
 </ul>
 <!--/subnav-->

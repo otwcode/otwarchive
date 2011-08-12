@@ -28,7 +28,7 @@
   </p>
 
   <ul class="navigation">
-    <li><%= link_to t("potential_matches.cancel_generate", :default => "Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></li>
+    <li><%= link_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></li>
   </ul>
 
 <% elsif @assignments_with_no_potential_requests.size > 0 %>
@@ -44,7 +44,7 @@
   </p>
 
   <ul class="navigation">
-    <li><%= link_to t("potential_matches.regenerate", :default => "Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></li>
+    <li><%= link_to ts("Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></li>
   </ul>
   
   <table>
@@ -62,7 +62,7 @@
         <td><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></td>
         <td>
           <%= link_to "Edit", edit_collection_signup_path(@collection, assignment.offer_signup) %>
-          <%= link_to t('.challenge_signups.delete', :default => "Delete"), 
+          <%= link_to ts("Delete"), 
                   collection_signup_path(@collection, assignment.offer_signup), :confirm => 'Are you sure?', :method => :delete %>
               
         </td>

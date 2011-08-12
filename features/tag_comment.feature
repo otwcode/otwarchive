@@ -25,6 +25,7 @@ I'd like to comment on a tag'
     When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis"
     When I follow "Edit"
     Then the "Comment" field should contain "Shouldn't this be a metatag with Stargate?"
+      And I should see "Cancel"
     When I fill in "Comment" with "Yep, we should have a Stargate franchise metatag."
       And I press "Update"
     Then I should see "Comment was successfully updated."

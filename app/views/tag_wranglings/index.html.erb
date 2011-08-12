@@ -15,16 +15,16 @@ get started. (Note: to associate relationships with characters, first choose a f
 
 <% if params[:show] == "character_relationships" %>
   <div class="module">
-	<h3>First, choose a canonical fandom:</h3>
+  <h3>First, choose a canonical fandom:</h3>
   <%= form_tag url_for(:controller => 'tag_wranglings', :action => 'index'), :method => :get do %>
   <fieldset>
     <legend>Choose fandom</legend>
     <p>
-			<%= label_tag :fandom_string, ts("Fandom:") %> 
-			<%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %>
-		</p>
+      <%= label_tag :fandom_string, ts("Fandom:") %> 
+      <%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %>
+    </p>
   </fieldset>
-	<fieldset>
+  <fieldset>
     <legend>Submit</legend>
     <p class="submit"><%= hidden_field_tag :show, 'character_relationships' %><%= submit_tag "Go" %></p>
   </fieldset>
@@ -54,58 +54,59 @@ get started. (Note: to associate relationships with characters, first choose a f
   <% else %>
     <dt><%= label_tag :fandom_string, ts("Wrangle to Fandom") %></dt>
     <dd><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
-	<% end %>
-	<dt>Wrangle All <span class="landmark">the tags shown in <a href="#wrangulise">the table</a> (following)</span></dt>
-		<dd><span class="navigation">
-			<a onclick="$('wrangulator').getInputs('checkbox', 'selected_tags[]').each(function(box){box.checked = 1})">select <span class="landmark">all to wrangle</span></a> <a onclick="$('wrangulator').getInputs('checkbox', 'selected_tags[]').each(function(box){box.checked = 0})">deselect <span class="landmark">all tags to wrangle</span></a></span></dd>
-		<dt>Canonize All <span class="landmark">the tags shown in <a href="#wrangulise">the table</a> (following)</span></dt>
-		<dd><span class="navigation">
-			<a onclick="$('wrangulator').getInputs('checkbox', 'canonicals[]').each(function(box){box.checked = 1})">select <span class="landmark">all to make canonical</span></a>
-			<a onclick="$('wrangulator').getInputs('checkbox', 'canonicals[]').each(function(box){box.checked = 0})">deselect <span class="landmark">all canonical</span></a></span>
-		</dd>
-	</dl>
-	</fieldset>
-	<fieldset>
-		<legend>Submit</legend>
-		<p class="submit"><%= submit_tag "Wrangle" %></p>
-	</fieldset>
+  <% end %>
+  <dt>Wrangle All <span class="landmark">the tags shown in <a href="#wrangulise">the table</a> (following)</span></dt>
+    <dd><span class="navigation">
+      <a id="wrangle_all_select">select <span class="landmark">all to wrangle</span></a>
+      <a id="wrangle_all_deselect">deselect <span class="landmark">all tags to wrangle</span></a></span></dd>
+    <dt>Canonize All <span class="landmark">the tags shown in <a href="#wrangulise">the table</a> (following)</span></dt>
+    <dd><span class="navigation">
+      <a id="canonize_all_select">select <span class="landmark">all to make canonical</span></a>
+      <a id="canonize_all_deselect">deselect <span class="landmark">all canonical</span></a></span>
+    </dd>
+  </dl>
+  </fieldset>
+  <fieldset>
+    <legend>Submit</legend>
+    <p class="submit"><%= submit_tag "Wrangle" %></p>
+  </fieldset>
 </div>
     <hr class="clear" />
-	<fieldset class="table">
-		<legend>Choose tags from a table</legend>
+  <fieldset class="table">
+    <legend>Choose tags from a table</legend>
 <h3 class="landmark">Individual Selection Table</h3>
 <div class="wrapper">
-	<table summary="A subset of tags listed by name, with options to edit, wrangle, or view works tagged thus. Also listed is when each tag was created, whether each is canonical, and the number of works tagged thus." id="wrangulise">
-	<caption><%= @tags.first.class.to_s.pluralize %> to be wrangled</caption>
-	<colgroup>
-		<col class="name" />
-		<col span="4" />
-	</colgroup>
-	<thead>
+  <table summary="A subset of tags listed by name, with options to edit, wrangle, or view works tagged thus. Also listed is when each tag was created, whether each is canonical, and the number of works tagged thus." id="wrangulise">
+  <caption><%= @tags.first.class.to_s.pluralize %> to be wrangled</caption>
+  <colgroup>
+    <col class="name" />
+    <col span="4" />
+  </colgroup>
+  <thead>
     <tr>
-			<th scope="col">
-        <%= sort_link t('.sort.tag_name', :default => 'Tag Name'), :name, {:sort_default => true} %>
+      <th scope="col">
+        <%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
       </th>
       <th scope="col">Mass Wrangle</th>
       <th scope="col">
-        <%= sort_link t('.sort.created_at', :default => 'Created'), :created_at, {:desc_default => true} %>
+        <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
       </th>
       <% if params[:show] == 'character_relationships' %>
         <th scope="col">Characters</th>
       <% end %>
       <th scope="col">Canonical</th>
       <th scope="col">
-        <%= sort_link t('.sort.taggings_count', :default => 'Taggings Count'), :taggings_count, {:desc_default => true} %>
+        <%= sort_link ts('Taggings Count'), :taggings_count, {:desc_default => true} %>
       </th>
       <th scope="col">Manage</th>
     </tr>
   </thead>
   <tfoot>
-			<tr>
-				<th scope="row">Action:</th>
-				<td colspan="5"><span class="submit"><%= submit_tag "Wrangle" %></span></td>
-			</tr>
-		</tfoot>
+      <tr>
+        <th scope="row">Action:</th>
+        <td colspan="5"><span class="submit"><%= submit_tag "Wrangle" %></span></td>
+      </tr>
+    </tfoot>
       <tbody>
         <% for tag in @tags %>
         <tr>
@@ -157,3 +158,30 @@ get started. (Note: to associate relationships with characters, first choose a f
  <%= will_paginate @tags %>
 <% end %>
 <!--/subnav-->
+
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j(document).ready(function(){
+      $j("#wrangle_all_select").click(function() {
+        $j("#wrangulator").find(":checkbox[name='selected_tags[]']").each(function(index, ticky) {
+            $j(ticky).attr("checked", true);
+          });
+      });
+      $j("#wrangle_all_deselect").click(function() {
+        $j("#wrangulator").find(":checkbox[name='selected_tags[]']").each(function(index, ticky) {
+            $j(ticky).attr("checked", false);
+          });
+      });
+      $j("#canonize_all_select").click(function() {
+        $j("#wrangulator").find(":checkbox[name='canonicals[]']").each(function(index, ticky) {
+            $j(ticky).attr("checked", true);
+          });
+      });
+      $j("#canonize_all_deselect").click(function() {
+        $j("#wrangulator").find(":checkbox[name='canonicals[]']").each(function(index, ticky) {
+            $j(ticky).attr("checked", false);
+          });
+      });
+    })
+  <% end %>
+<% end %>

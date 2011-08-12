@@ -129,7 +129,7 @@ Feature: Edit chapters
     And I fill in "chapters_3" with "2"
     And I fill in "chapters_4" with "1"
   And I press "Update Positions"
-  Then I should see "Chapter orders have been successfully updated."
+  Then I should see "Chapter order has been successfully updated."
   When I am logged out
     And I go to epicauthor's works page
     And I follow "New Epic Work"

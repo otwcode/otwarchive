@@ -37,14 +37,14 @@
   <%= fields_for :profile_attributes,  @user.profile do |p| %>
      <dt><%= p.label :title, "Title" %></dt>
      <dd>
-        <%= p.text_field :title %>
+        <%= p.text_field :title, :class => "observe_textlength" %>
         <%= live_validation_for_field("profile_attributes_title", :presence => false, :maximum_length => Profile::PROFILE_TITLE_MAX) %>      
         <%= generate_countdown_html("profile_attributes_title", Profile::PROFILE_TITLE_MAX) %>
       </dd>
 
       <dt><%= p.label :location, "Location" %></dt>
       <dd>
-        <%= p.text_field :location %>
+        <%= p.text_field :location, :class => "observe_textlength" %>
         <%= live_validation_for_field("profile_attributes_location", :presence => false, :maximum_length => Profile::LOCATION_MAX) %>
         <%= generate_countdown_html("profile_attributes_location", Profile::LOCATION_MAX) %>
       </dd>
@@ -55,14 +55,13 @@
       <dt><p><%= p.label :about_me, "About Me" %></p></dt>
       <dd class="description">
         <p><code>a href, b, big, blockquote, br, caption, center, cite, code, col, colgroup, del, dd, dt, dl, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, ins, li, ol, p, pre, q, small, span, strike, strong, sub, sup, table, tr, td, th, tbody, thead, tfoot, u, ul</code></p>
-<%= p.text_area :about_me %>
+        <%= p.text_area :about_me, :class => "observe_textlength" %>
         <%= live_validation_for_field("profile_attributes_about_me", :presence => false, :maximum_length => Profile::ABOUT_ME_MAX) %>
         <%= generate_countdown_html("profile_attributes_about_me", Profile::ABOUT_ME_MAX) %>
       </dd>
     </dl>
   <% end %>
 
-	
   <p class="submit">
     <%= f.submit "Update" %>
   </p>

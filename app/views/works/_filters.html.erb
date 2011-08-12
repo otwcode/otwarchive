@@ -2,9 +2,9 @@
 <h3 class="landmark">Filters</h3>
 <%= form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'filters', :method => :get, :id => 'work_filters') do %>
   <%= field_set_tag h(ts('Filter results:')) + link_to_help("filters") do %>
- 		<dl class="filters" role="complementary navigation">
-			<% unless (@pseuds.size < 1 || (@user && @pseuds.size < 2 && !@author)) %>
-        <dt onclick='toggleFilters("filter-pseuds")'>
+    <dl class="filters" role="complementary navigation">
+      <% unless (@pseuds.size < 1 || (@user && @pseuds.size < 2 && !@author)) %>
+        <dt id="toggle_filter-pseuds" class="toggle_filters">
           <span id="filter-pseuds_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" %></span>
           <span id="filter-pseuds_open"><%= image_tag 'arrow-down.gif', :alt => "" %></span>              
           <%= ts('Pseud') %>
@@ -20,12 +20,12 @@
               <% end %>
             <% end %> 
           </ul>
-        </dd>			
-			<% end %>
-			<% unless @filters.blank? %>
-			  <% Tag::FILTERS.each do |type| %>
-				  <% unless @filters[type].blank? %>
-          <dt onclick='toggleFilters("tag_category_<%= type %>");' class="<%= type %>">
+        </dd>
+      <% end %>
+      <% unless @filters.blank? %>
+        <% Tag::FILTERS.each do |type| %>
+          <% unless @filters[type].blank? %>
+          <dt id="toggle_tag_category_<%= type %>" class="<%= type %> toggle_filters">
             <span id="tag_category_<%= type %>_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" %></span>
             <span id="tag_category_<%= type %>_open"><%= image_tag 'arrow-down.gif', :alt => ""%></span>              
             <%= type.constantize::NAME %> 
@@ -40,17 +40,17 @@
                   <%= label_tag "selected_tags_#{type.downcase}_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
                   <% else %>
                   <%= check_box_tag "selected_tags[tags][]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_tags_#{tag_info[:id]}" %>
-				  <% if (type == "Warning") %>
-				  <%= label_tag "selected_tags_tags_#{tag_info[:id]}", label_for_filter(type, tag_info) %>  
-				  <% else %>
+          <% if (type == "Warning") %>
+          <%= label_tag "selected_tags_tags_#{tag_info[:id]}", label_for_filter(type, tag_info) %>  
+          <% else %>
                   <%= label_tag "selected_tags_tags_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
                   <% end %> 
-				  <% end %> 
+          <% end %> 
                 </li>
               <% end %> 
            </ul>
           </dd>
-					<% end %>
+          <% end %>
         <% end %>         
       <% end %>
       <dt>Filter by:</dt>
@@ -60,17 +60,17 @@
         <%= radio_button_tag "boolean_type", 'or', params[:boolean_type] == 'or' %>
         <%= label_tag "boolean_type_or", "or (works with any of these tags)" %>      
       </dd>
-		</dl>
-		<p>
-  		<%= hidden_field_tag("tag_id", @tag.name) if @tag %>
-  		<%= hidden_field_tag("query", @query) if @query %>
-  		<%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
+    </dl>
+    <p>
+      <%= hidden_field_tag("tag_id", @tag.name) if @tag %>
+      <%= hidden_field_tag("query", @query) if @query %>
+      <%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
       <%= hidden_field_tag("pseud_id", @author.name) if @author %>
-  		<%= hidden_field_tag("user_id", @user.login) if @user %>
-  		<%= hidden_field_tag("language_id", params[:language_id]) if params[:language_id] %>
-		</p>
-		<div class="clear"><!--purely presentational for IE6; phase me out--></div>
-		<p class="submit"><%= submit_tag ts('Filter Works') %></p>
+      <%= hidden_field_tag("user_id", @user.login) if @user %>
+      <%= hidden_field_tag("language_id", params[:language_id]) if params[:language_id] %>
+    </p>
+    <div class="clear"><!--purely presentational for IE6; phase me out--></div>
+    <p class="submit"><%= submit_tag ts('Filter Works') %></p>
   <% end %>
   <% end %>
 <% end %>

@@ -1,14 +1,14 @@
 <% if logged_in? %>
   <p id="greeting">
-      <%= ts("Hi,") %> <%= link_to current_user.login, user_path(current_user), :class => 'login' %>!
+      <%= ts("Hi,") %> <%= link_to current_user.login, user_path(current_user), :class => "login" %>!
     </p>
   <ul id="login">
     <li>
       <%= link_to ts("Post New"), new_work_path %>&nbsp;|
     </li>
-	<li>
-	<%= link_to ts("Import"), new_work_path(:import => true) %>	&nbsp;|
-	</li>
+  <li>
+  <%= link_to ts("Import"), new_work_path(:import => true) %>  &nbsp;|
+  </li>
     <li>
       <%= link_to ts("Log out"), logout_path %>
     </li>
@@ -16,7 +16,7 @@
 <% elsif logged_in_as_admin? %>
   <ul id="greeting">
     <li>
-      <span><%= ts("Hello,") %></span>&nbsp;<%= link_to current_admin.login, admin_path(current_admin), :class => 'login login-admin' %>!
+      <span><%= ts("Hello,") %></span>&nbsp;<%= link_to current_admin.login, admin_path(current_admin), :class => "login login-admin" %>!
     </li>
     <li>
       <%= link_to ts("Log out"), admin_logout_path %>
