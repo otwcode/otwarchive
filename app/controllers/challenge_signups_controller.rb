@@ -99,8 +99,8 @@ class ChallengeSignupsController < ApplicationController
           end
       }
       format.csv {
-        if (@collection.challenge_type == "GiftExchange" && @challenge.user_allowed_to_see_signups?(current_user)) || 
-        (@collection.challenge_type == "PromptMeme" && @collection.user_is_maintainer?(current_user))
+        if (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) || 
+        (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
           export_csv
         else
           flash[:error] = ts("You aren't allowed to see the CSV summary.")
@@ -178,7 +178,7 @@ class ChallengeSignupsController < ApplicationController
       @challenge_signup.destroy
       flash[:notice] = ts("Challenge signup was deleted.")
     end
-    if @collection.user_is_maintainer?(current_user)
+    if @collection.user_is_maintainer?(current_user) || @collection.prompt_meme?
       redirect_to collection_signups_path(@collection)
     else
       redirect_to @collection
