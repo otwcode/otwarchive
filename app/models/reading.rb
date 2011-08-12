@@ -36,7 +36,7 @@ class Reading < ActiveRecord::Base
         reading.minor_version_read = minor_version
         reading.view_count = reading.view_count + 1 unless later
         reading.last_viewed = time
-        # toggle between to read and marking` read
+        # toggle between to read and marking read
         if later
           if reading.toread
           # it had been marked to read, and is now being marked read
