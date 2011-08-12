@@ -9,8 +9,8 @@
   <p class="footnote">
     <%= f.check_box :remember_me %>
     <%= f.label 'remember_me', ts("Remember me") %>&nbsp;|
-    <%= link_to_remote 'openid login', {:url => {:controller => :user_sessions, :action => 'openid_small'}},
-        :href => url_for(params.merge :use_openid => true), :class => 'footnote' %>&nbsp;|
+    <%= link_to 'openid login', {:controller => :user_sessions, :action => 'openid_small'}, :remote => true,
+        :class => 'footnote' %>&nbsp;|
     <%= link_to ts("forgot password?"), new_password_path %>
   </p>
   <p>

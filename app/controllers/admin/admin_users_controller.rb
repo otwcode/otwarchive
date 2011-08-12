@@ -3,7 +3,7 @@ class Admin::AdminUsersController < ApplicationController
   before_filter :admin_only
 
   def index
-    @roles = Role.assignable
+    @roles = Role.assignable.uniq
     if params[:role]
       if params[:role] == "0" && params[:query].blank?
         return flash[:error] = "Please enter a name or email address!"
@@ -149,6 +149,7 @@ class Admin::AdminUsersController < ApplicationController
       letter = '0'
     end
     @all_users = User.alphabetical.starting_with(letter)
+    @roles = Role.assignable.uniq
   end
 
   def send_notification

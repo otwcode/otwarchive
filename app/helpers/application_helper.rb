@@ -4,13 +4,13 @@ module ApplicationHelper
   
   include HtmlCleaner
 
-	# Generates class names for the main div in the application layout
-	def classes_for_main
+  # Generates class names for the main div in the application layout
+  def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " sidebar" if show_sidebar
     class_names
-	end
+  end
 
   # A more gracefully degrading link_to_remote.
   def link_to_remote(name, options = {}, html_options = {})
@@ -228,11 +228,11 @@ module ApplicationHelper
     out += observe_field(field_id, options.merge(:function => function))
     return out
   end
-  
+
   def generate_countdown_html(field_id, max) 
     generated_html = "<p class=\"character_counter\">".html_safe
-    generated_html += "<span id=\"#{field_id}_counter\">?</span>".html_safe
-    generated_html += countdown_field(field_id, field_id + "_counter", max) + " ".html_safe + h(ts('characters left'))
+    generated_html += ("<span id=\"#{field_id}_counter\" data-maxlength=\"" + max.to_s + "\">" + max.to_s + "</span>").html_safe
+    generated_html += " ".html_safe + (ts('characters left'))
     generated_html += "</p>".html_safe
     return generated_html
   end
@@ -297,18 +297,26 @@ module ApplicationHelper
   # toggle an options (scrollable checkboxes) section of a form to show all of the options
   def options_toggle(options_id, options_size)
     toggle_show = content_tag(:a, ts("Show all %{options_size} options", :options_size => options_size), 
-                              :class => "toggle", :id => "#{options_id}_show", 
-                              :onclick => "$('#{options_id}').writeAttribute('class', 'options all');
-                                           $('#{options_id}_hide').show();
-                                           this.hide();")
+                              :class => "toggle", :id => "#{options_id}_show")
 
     toggle_hide = content_tag(:a, ts("Collapse options"), :style => "display: none;",
-                              :class => "toggle", :id => "#{options_id}_hide", 
-                              :onclick => "$('#{options_id}').writeAttribute('class', 'options#{options_size > (ArchiveConfig.OPTIONS_TO_SHOW *   3) ? ' many' : ''}');
-                                           $('#{options_id}_show').show();
-                                           this.hide();")
+                              :class => "toggle", :id => "#{options_id}_hide")
 
-    toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide)
+    javascript_bits = content_for(:footer_js) {
+      javascript_tag("$j(document).ready(function(){\n" +
+        "$j('##{options_id}_show').click(function() {\n" +
+          "$j('##{options_id}').attr('class', 'options all');\n" + 
+          "$j('##{options_id}_hide').show();\n" +
+          "$j(this).hide();\n" +
+        "});" + "\n" + 
+        "$j('##{options_id}_hide').click(function() {\n" +
+          "$j('##{options_id}').attr('class', 'options#{options_size > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''}');\n" +
+          "$j('##{options_id}_show').show();\n" +
+          "$j(this).hide();\n" +
+        "});\n" +
+      "})")
+    }
+    toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide + "\n".html_safe + javascript_bits)
   end
 
   # create a scrollable checkboxes section for a form

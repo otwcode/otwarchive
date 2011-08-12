@@ -256,6 +256,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :compare
       post :merge
+      get :fetch
     end
     resources :bookmarks
     resources :related_works
@@ -374,7 +375,14 @@ Otwarchive::Application.routes.draw do
 
   #### SESSIONS ####
 
-  resources :user_sessions, :only => [:new, :create, :destroy]
+  resources :user_sessions, :only => [:new, :create, :destroy] do
+    collection do
+      get :openid_small
+      get :passwd_small
+      get :openid
+      get :passwd
+    end
+  end
   match 'login' => 'user_sessions#new'
   match 'logout' => 'user_sessions#destroy'
 

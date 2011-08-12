@@ -33,7 +33,7 @@ features planned. Please do use this form to let us know about your experience o
      </dd>
      <dt><%= f.label :summary, "Brief summary (required):" %></dt>
      <dd>
-       <%= f.text_field :summary, :size => 60 %>
+       <%= f.text_field :summary, :size => 60, :class => "observe_textlength" %>
        <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX) %>
        <p>
        <%= live_validation_for_field('feedback_summary', :failureMessage => 'Please enter a brief summary of your message') %>
