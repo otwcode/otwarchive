@@ -15,13 +15,13 @@
   <li>
   <h3 class="landmark">Actions</h3>
     <ul class="navigation">
-      <li><%= link_to "Show", known_issue %></li>
-      <li><%= link_to "Edit", edit_known_issue_path(known_issue) %></li>
-      <li><%= link_to "Delete", known_issue, :confirm => 'Are you sure?', :method => :delete %></li>
+      <li><%= link_to ts("Show"), known_issue %></li>
+      <li><%= link_to ts("Edit"), edit_known_issue_path(known_issue) %></li>
+      <li><%= link_to ts("Delete"), known_issue, :confirm => 'Are you sure?', :method => :delete %></li>
     </ul>
     <div class="admin userstuff" role="article">
       <h3><%=raw sanitize_field(known_issue, :title) %></h3>
-      <h6>Updated at: <%=h known_issue.updated_at %></h6>
+      <h6><%= ts("Updated at:") %> <%= known_issue.updated_at %></h6>
       <%=raw sanitize_field(known_issue, :content) %>
     </div>
   </li>

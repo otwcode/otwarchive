@@ -10,9 +10,9 @@
   <h3>
     <%= @known_issue.title %>
   </h3>
-  <h4>Updated: <%= @known_issue.updated_at %>
+  <h4><%= ts("Updated:") %> <%= @known_issue.updated_at %>
     <% if logged_in_as_admin? %>
-      <span class="navigation"><%= link_to 'Edit', edit_known_issue_path(@known_issue) %></span>
+      <span class="navigation"><%= link_to ts("Edit"), edit_known_issue_path(@known_issue) %></span>
     <% end %>
   </h4>
   <%=raw sanitize_field(@known_issue, :content) %>

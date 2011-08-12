@@ -12,7 +12,7 @@
 
   <% @known_issues.each do |known_issue| %>
     <div class="admin userstuff" role="article">
-      <h4>Updated <%=h known_issue.updated_at %></h4>
+      <h4><%= ts("Updated") %> <%= known_issue.updated_at %></h4>
       <%=raw sanitize_field(known_issue, :content) %>
     </div>
   <% end %>
