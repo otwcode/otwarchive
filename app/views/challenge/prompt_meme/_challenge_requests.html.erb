@@ -129,6 +129,10 @@
               <% end %>
             </td>
           <% end %>
+
+      <% end %><!-- end cache -->
+
+      <% # don't cache desc and URL, as they can be hidden %>
           <% if eval("show_request_description") %>
             <td><%= !prompt || prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) -%></td>
           <% end %>
@@ -136,8 +140,6 @@
             <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) -%></td>
           <% end %>
 
-      <% end %><!-- end cache --> 
-      
       <% # don't cache controls, as they're different for the mod %>
         <td class="navigation">
           <%= render :partial => "prompts/prompt_controls", :locals => {:challenge_signup => prompt.challenge_signup, :prompt => prompt} -%>
