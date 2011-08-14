@@ -103,6 +103,49 @@ module ApplicationHelper
       link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author", :rel => "author")
     end
   end
+  
+   # A plain text version of the byline, for when we don't want to deliver a linkified version.
+  def text_byline(creation, options={})
+    if creation.respond_to?(:anonymous?) && creation.anonymous?
+      anon_byline = h(ts("Anonymous"))
+      if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
+        anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
+        end
+      return anon_byline
+    end
+    non_anonymous_text_byline(creation)
+  end
+      
+  def non_anonymous_text_byline(creation)
+    if creation.respond_to?(:author)
+      creation.author
+    else
+      pseuds = []
+      pseuds << creation.authors if creation.authors
+      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
+      pseuds = pseuds.flatten.uniq.sort
+    
+      archivists = {}
+      if creation.is_a?(Work)
+        external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
+        external_creatorships.each do |ec|
+          archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
+          archivists[archivist_pseud] = ec.external_author_name.name
+        end
+      end
+    
+      pseuds.collect { |pseud| 
+        archivists[pseud].nil? ? 
+            pseud_text(pseud) :
+            archivists[pseud] + ts("[archived by") + pseud_text(pseud) + "]"
+      }.join(', ').html_safe
+    end
+  end
+
+  def pseud_text(pseud)
+      pseud.byline
+  end
+
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
