@@ -4,6 +4,13 @@ Feature: Comment on work
   As a reader
   I'd like to comment on a work
 
+Scenario: Comment links from downloads and static pages
+  When I am logged in as "author"
+    And I post the work "Generic Work"
+  When I am logged in as "commenter"
+    And I visit the new comment page for the work "Generic Work"
+  Then I should see the comment form
+
 Scenario: When logged in I can comment on a work
   Given I have no works or comments
   When I am logged in as "author"
