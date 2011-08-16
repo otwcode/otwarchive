@@ -327,6 +327,7 @@ class Collection < ActiveRecord::Base
   def unrevealed? ; self.collection_preference.unrevealed ; end
   def anonymous? ; self.collection_preference.anonymous ; end
   def challenge? ; !self.challenge.nil? ; end
+  
   def gift_exchange?
     if self.challenge_type == "GiftExchange"
       return true
