@@ -179,7 +179,7 @@ public
     end
 
     @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
-    @page_title
+    @page_title.html_safe
   end
 
   ### GLOBALIZATION ###

@@ -42,3 +42,12 @@ When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest$/ do |comme
   fill_in("Email", :with => "guest@foo.com")
   click_button "Add Comment"
 end
+
+When /^I visit the new comment page for the work "([^"]+)"$/ do |work|
+  work = Work.find_by_title!(work)
+  visit new_work_comment_path(work, :only_path => false)
+end
+
+Then /^I should see the comment form$/ do
+  Then %{I should see "New comment on"}
+end
