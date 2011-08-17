@@ -265,6 +265,17 @@ namespace :After do
 
   #### Add your new tasks here
   
+  desc "Set complete status for works"
+  task(:set_complete_status => :environment) do
+    Work.update_all("complete = 1", "expected_number_of_chapters = 1")
+    Work.find_each(:conditions => "expected_number_of_chapters > 1") do |w|
+      puts w.id
+      if w.chapters.posted.count == w.expected_number_of_chapters
+        Work.update_all("complete = 1", "id = #{w.id}")
+      end
+    end
+  end
+
   desc "Send out external author invitations that got missed"
   task(:invite_external_authors => :environment) do
     Invitation.where("sent_at is NULL").where("external_author_id IS NOT NULL").each do |invite|
@@ -284,4 +295,4 @@ end # this is the end that you have to put new tasks above
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
 #task :After => ['autocomplete:reload_data']
-task :After => ['After:invite_external_authors']
+task :After => ['After:set_complete_status', 'After:invite_external_authors']
