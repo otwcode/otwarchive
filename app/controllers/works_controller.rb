@@ -45,7 +45,20 @@ class WorksController < ApplicationController
     @tag = nil
     @selected_tags = []
     @selected_pseuds = []
-    @sort_column = (valid_sort_column(params[:sort_column]) ? params[:sort_column] : 'date')
+    @sort_column = case params[:sort_column]
+      when 'author'
+        'authors_to_sort_on'
+      when 'title'
+        'title_to_sort_on' 
+      when 'word_count'
+        'word_count'
+      when 'hit_count'
+        'hit_count'
+      when 'created_at'
+        'created_at'
+      else
+        'revised_at'
+      end
     @sort_direction = (valid_sort_direction(params[:sort_direction]) ? params[:sort_direction] : 'DESC')
     if !params[:sort_direction].blank? && !valid_sort_direction(params[:sort_direction])
       params[:sort_direction] = 'DESC'
@@ -67,7 +80,6 @@ class WorksController < ApplicationController
       @selected_tags = params[:selected_tags]
     end
 
-    @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank? && params[:language_id].blank? && params[:collection_id].blank?)
     # if we're browsing by a particular tag, just add that
     # tag to the selected_tags list.
     unless params[:tag_id].blank?
@@ -100,26 +112,31 @@ class WorksController < ApplicationController
       end
     end
 
-    @language_id = params[:language_id] ? Language.find_by_short(params[:language_id]) : nil
+    @language = Language.find_by_short(params[:language_id]) if params[:language_id]
     # Workaround for the getting-all-English-works problem
     # TODO: better limits
-    if @language_id && @language_id == Language.default
-      @language_id = nil
+    if @language && @language == Language.default
       @most_recent_works = true
     end
 
     # Now let's build the query
-    @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
-                                                    :tag => @tag, :selected_tags => @selected_tags,
+    @works, @filters, @pseuds = Work.find_with_options(:user => @user, 
+                                                    :author => @author, 
+                                                    :selected_pseuds => @selected_pseuds,
+                                                    :tag => @tag, 
+                                                    :selected_tags => @selected_tags,
                                                     :collection => @collection,
-                                                    :language_id => @language_id,
-                                                    :sort_column => @sort_column, :sort_direction => @sort_direction,
-                                                    :page => params[:page], :per_page => params[:per_page],
-                                                    :boolean_type => params[:boolean_type])
+                                                    :language_id => @language,
+                                                    :sort_column => @sort_column, 
+                                                    :sort_direction => @sort_direction,
+                                                    :page => params[:page], 
+                                                    :per_page => params[:per_page],
+                                                    :boolean_type => params[:boolean_type],
+                                                    :complete => params[:complete])
 
 
     # Limit the number of works returned and let users know that it's happening
-    if @most_recent_works && @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
+    if @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
       flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works
       we found using the current sort and filters are shown."
     end
