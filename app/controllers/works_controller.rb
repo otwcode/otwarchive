@@ -45,7 +45,20 @@ class WorksController < ApplicationController
     @tag = nil
     @selected_tags = []
     @selected_pseuds = []
-    @sort_column = (valid_sort_column(params[:sort_column]) ? params[:sort_column] : 'date')
+    @sort_column = case params[:sort_column]
+      when 'author'
+        'authors_to_sort_on'
+      when 'title'
+        'title_to_sort_on' 
+      when 'word_count'
+        'word_count'
+      when 'hit_count'
+        'hit_count'
+      when 'created_at'
+        'created_at'
+      else
+        'revised_at'
+      end
     @sort_direction = (valid_sort_direction(params[:sort_direction]) ? params[:sort_direction] : 'DESC')
     if !params[:sort_direction].blank? && !valid_sort_direction(params[:sort_direction])
       params[:sort_direction] = 'DESC'
@@ -67,7 +80,6 @@ class WorksController < ApplicationController
       @selected_tags = params[:selected_tags]
     end
 
-    @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank? && params[:language_id].blank? && params[:collection_id].blank?)
     # if we're browsing by a particular tag, just add that
     # tag to the selected_tags list.
     unless params[:tag_id].blank?
@@ -100,26 +112,31 @@ class WorksController < ApplicationController
       end
     end
 
-    @language_id = params[:language_id] ? Language.find_by_short(params[:language_id]) : nil
+    @language = Language.find_by_short(params[:language_id]) if params[:language_id]
     # Workaround for the getting-all-English-works problem
     # TODO: better limits
-    if @language_id && @language_id == Language.default
-      @language_id = nil
+    if @language && @language == Language.default
       @most_recent_works = true
     end
 
     # Now let's build the query
-    @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
-                                                    :tag => @tag, :selected_tags => @selected_tags,
+    @works, @filters, @pseuds = Work.find_with_options(:user => @user, 
+                                                    :author => @author, 
+                                                    :selected_pseuds => @selected_pseuds,
+                                                    :tag => @tag, 
+                                                    :selected_tags => @selected_tags,
                                                     :collection => @collection,
-                                                    :language_id => @language_id,
-                                                    :sort_column => @sort_column, :sort_direction => @sort_direction,
-                                                    :page => params[:page], :per_page => params[:per_page],
-                                                    :boolean_type => params[:boolean_type])
+                                                    :language_id => @language,
+                                                    :sort_column => @sort_column, 
+                                                    :sort_direction => @sort_direction,
+                                                    :page => params[:page], 
+                                                    :per_page => params[:per_page],
+                                                    :boolean_type => params[:boolean_type],
+                                                    :complete => params[:complete])
 
 
     # Limit the number of works returned and let users know that it's happening
-    if @most_recent_works && @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
+    if @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
       flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works
       we found using the current sort and filters are shown."
     end
@@ -195,7 +212,7 @@ class WorksController < ApplicationController
     render :show
     Rails.logger.debug "Work remote addr: #{request.remote_ip}"
     @work.increment_hit_count(request.remote_ip)
-    Reading.update_or_create(@work, current_user)
+    Reading.update_or_create(@work, current_user) if current_user
   end
 
   def navigate
@@ -613,7 +630,7 @@ protected
         @external_authors.each do |external_author|
           external_author.find_or_invite(current_user)
         end
-        message = ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
+        message = " " + ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
         flash[:notice] ? flash[:notice] += message : flash[:notice] = message
       end
     end
@@ -682,6 +699,14 @@ public
       flash[:error] = ts("There were problems editing some works: %{errors}", :errors => @errors.join(", "))
     end
     redirect_to show_multiple_user_works_path(@user)
+  end
+
+  # marks a work to read later, or unmarks it if the work is already marked
+  def marktoread
+    @work = Work.find(params[:id])
+    Reading.mark_to_read_later(@work, current_user)
+    flash[:notice] = ts("Your history was updated. It may take a short while to show up.")
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
   protected
@@ -796,7 +821,7 @@ public
       redirect_to drafts_user_works_path(current_user)
     end
   end
-  
+
   # Takes an array of tags and returns a comma-separated list, without the markup
   def tag_list(tags)
     tags = tags.uniq.compact

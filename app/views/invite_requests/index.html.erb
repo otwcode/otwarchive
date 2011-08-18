@@ -5,6 +5,7 @@
 <!--/descriptions-->
 
 <!--main content-->
+<% if @admin_settings.invite_from_queue_enabled? %>
 <h3 class="landmark">Add yourself to the list</h3>
 <%= form_for(@invite_request) do |f| %>
   <%= error_messages_for @invite_request %>
@@ -17,6 +18,7 @@
   <p class="submit">
     <%= f.submit 'Add me to the list' %>
   </p>
+<% end %>
 <% end %>
 
 <h3>Wondering how long you'll have to wait?</h3>

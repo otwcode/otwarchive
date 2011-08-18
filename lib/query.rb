@@ -105,6 +105,7 @@ module Query
     with[:rec] = true if query[:rec]
     with[:canonical] = true if query[:canonical]
     with[:recced] = true if query[:recced]
+    with[:complete] = true if query[:complete]
     with[:bookmarker] = Range.new(1,1000000) if query[:bookmarked]
     unless query[:date].blank?
       match = query[:date].match(/^([<>]*)\s*([\d -]+)\s*(year|week|month|day|hour)s?(\s*ago)?s*$/)

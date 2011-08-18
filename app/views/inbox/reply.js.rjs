@@ -1,7 +1,0 @@
-page.show 'reply-to-comment'
-page << "location.hash = '#reply-to-comment';"
-page.draggable 'reply-to-comment'
-page.replace_html 'reply-to-comment', 
-  :partial => 'comments/comment_form', 
-  :locals => {:comment => @comment, :commentable => @commentable, :button_name => t('.forms.add_comment', :default => "Add Comment")}
-page.replace_html 'close-popup', link_to_function(t('.close_reply_comment', :default => 'Close'), update_page {|page| page.hide 'reply-to-comment'})

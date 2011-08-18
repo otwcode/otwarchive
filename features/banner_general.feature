@@ -19,7 +19,7 @@ Scenario: User can turn off banner using words
   When an admin sets a custom banner notice
   When I am logged in as "newname"
   When I am on my user page
-  When I follow "Hide this banner"
+  When I press "Hide this banner"
   Then I should not see "Custom notice words"
 
 Scenario: User can turn off banner using X button

@@ -93,6 +93,7 @@ class CollectionsController < ApplicationController
         redirect_to(@collection)
       end
     else
+      @challenge_type = params[:challenge_type]
       render :action => "new"
     end
   end

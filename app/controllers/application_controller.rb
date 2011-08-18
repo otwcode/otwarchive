@@ -179,7 +179,7 @@ public
     end
 
     @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
-    @page_title
+    @page_title.html_safe
   end
 
   ### GLOBALIZATION ###
@@ -328,7 +328,7 @@ public
   def valid_sort_column(param, model='work')
     allowed = []
     if model.to_s.downcase == 'work'
-      allowed = ['author', 'title', 'date', 'word_count', 'hit_count']
+      allowed = ['author', 'title', 'date', 'created_at', 'word_count', 'hit_count']
     elsif model.to_s.downcase == 'tag'
       allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count']
     elsif model.to_s.downcase == 'collection'

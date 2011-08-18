@@ -234,6 +234,13 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   end
 end
 
+
+Then /^I should get a file with ending and type ([^\"]*)$/ do |type|
+  page.response_headers['Content-Disposition'].should =~ Regexp.new("filename=.*?\.#{type}")
+  page.response_headers['Content-Type'].should =~ Regexp.new("/#{type}")
+end
+
+
 Then /^show me the page$/ do
   save_and_open_page
 end

@@ -1,7 +1,0 @@
-# replace the "Cancel" link with "Delete" 
-# page.replace_html "delete_comment_link_#{@comment.id}", delete_comment_link(@comment) 
-
-# get rid of the delete comment form
-page.visual_effect :blind_up, "delete_comment_placeholder_#{@comment.id}", {duration: 0.3}
-page.delay(0.3) { page.replace_html "delete_comment_placeholder_#{@comment.id}", "" }
-page.delay(0.4) { page.toggle "navigation_for_comment_#{@comment.id}" }

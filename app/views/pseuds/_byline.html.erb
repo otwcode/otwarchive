@@ -26,7 +26,7 @@
 <% end %>
 
 <dt class="byline coauthors">
-  <%= check_box_tag "co-authors-options-show", "1", nil, :onclick => "toggleFormField('co-authors-options');" %>
+  <%= check_box_tag "co-authors-options-show", "1", nil, :class => "toggle_formfield" %>
 </dt>
 <dd class="byline coauthors">
   <%= label_tag "co-authors-options-show", ts('Add co-authors?') %>

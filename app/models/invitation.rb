@@ -62,7 +62,7 @@ class Invitation < ActiveRecord::Base
       begin
         if self.external_author
           archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
-          UserMailer.invitation_to_claim(self, archivist_login).deliver!
+          UserMailer.invitation_to_claim(self, archivist).deliver!
         else
           UserMailer.invitation(self).deliver!
         end

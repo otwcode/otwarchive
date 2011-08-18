@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 id='upload-heading'><%= ts('Import New Work') %></h2>
+<h2 id='upload-heading'><%= ts("Import New Work") %></h2>
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
@@ -10,7 +10,7 @@
     </li>
   <% end %>
   <li id="form-link">
-     <%= link_to( ts('Post New Work Instead?'),
+     <%= link_to( ts("Post New Work Instead?"),
        {:url => {:controller => :works, :action => :new, :import => false}},
        :href => url_for(:controller => :works, :action => :new, :import => false)) %>
   </li>
@@ -19,8 +19,8 @@
 <!-- This partial renders a form for importing a work from an existing URL -->
 <div class="clear"<!--purely presentational, phase me out--></div>
 <p class="message">
-  <strong><%= ts('Please note!') %></strong> 
-  <%= ts('We cannot always automatically import works.') %> If you have trouble, <%= link_to ts("please let us know"), new_feedback_report_path %> so we can improve this tool!</p> 
+  <strong><%= ts("Please note!") %></strong> 
+  <%= ts("We cannot always automatically import works.") %> If you have trouble, <%= link_to ts("please let us know"), new_feedback_report_path %> so we can improve this tool!</p> 
   
   <ul>
     <li>If your text gets truncated at the point of an em dash or accented character, you might have to manually set the encoding in the text field below.</li>
@@ -33,7 +33,7 @@
 <fieldset>
   <legend><%= ts("Works URLs") %></legend>
   <p>
-    <%= label_tag "urls", ts('URLs for existing work(s) or for the chapters of a single work, one URL per line:') %> <br />
+    <%= label_tag "urls", ts("URLs for existing work(s) or for the chapters of a single work, one URL per line:") %> <br />
     <%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
   </p>
   
@@ -82,9 +82,9 @@
 
 
 <fieldset>
-	<legend><%= "Submit" %></legend>
+  <legend><%= "Submit" %></legend>
   <p class="submit">
-  <%= submit_tag ts('Import') %>
+  <%= submit_tag ts("Import") %>
   </p>
 </fieldset>
 
