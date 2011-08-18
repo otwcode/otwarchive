@@ -200,7 +200,8 @@ Scenario: Posting a translation of an anonymous work should not allow you to see
 Scenario: Translate your own work
   Given I have related works setup
   When I post a translation of my own work
-  Then I approve a related work
+    And I approve a related work
+  Then approving the related work should succeed
 
 Scenario: Draft works should not show up on related works
   # Given I have related works setup
