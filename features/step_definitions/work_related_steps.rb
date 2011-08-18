@@ -51,7 +51,7 @@ end
 When /^I draft a translation$/ do
   When %{I go to the new work page}
     And %{I fill in "Fandoms" with "Stargate"}
-    And %{I fill in "Work Title" with "Draft of Translation of Worldbuilding"}
+    And %{I fill in "Work Title" with "Translation of Worldbuilding"}
     And %{I fill in "content" with "That could be an amusing crossover."}
     And %{I list the work "Worldbuilding" as inspiration}
     And %{I check "This is a translation"}
