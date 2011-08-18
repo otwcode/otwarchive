@@ -65,7 +65,6 @@ When /^I approve a related work$/ do
   When %{I follow "My Related Works"}
   When %{I follow "Approve"}
   When %{I press "Yes, link me!"}
-  Then %{I should see "Link was successfully approved"}
 end
 
 When /^I view my related works$/ do
@@ -82,4 +81,8 @@ end
 
 Then /^the original author should be emailed$/ do
   Then "1 email should be delivered"
+end
+
+Then /^approving the related work should succeed$/ do
+  Then %{I should see "Link was successfully approved"}
 end
