@@ -38,37 +38,18 @@ end
 
 When /^I post a translation$/ do
   When %{I am logged in as "translator"}
-    And %{I go to the new work page}
-    And %{I select "Not Rated" from "Rating"}
-    And %{I check "No Archive Warnings Apply"}
-    And %{I fill in "Fandoms" with "Stargate"}
-    And %{I fill in "Work Title" with "Worldbuilding Translated"}
-    And %{I fill in "content" with "That could be an amusing crossover."}
-    And %{I list the work "Worldbuilding" as inspiration}
-    And %{I check "This is a translation"}
-    And %{I select "Deutsch" from "Choose a language"}
-    And %{I press "Preview"}
+    And %{I draft a translation}
   When %{I press "Post"}
 end
 
 When /^I post a translation of my own work$/ do
   When %{I am logged in as "inspiration"}
-    And %{I go to the new work page}
-    And %{I select "Not Rated" from "Rating"}
-    And %{I check "No Archive Warnings Apply"}
-    And %{I fill in "Fandoms" with "Stargate"}
-    And %{I fill in "Work Title" with "Worldbuilding Translated"}
-    And %{I fill in "content" with "That could be an amusing crossover."}
-    And %{I list the work "Worldbuilding" as inspiration}
-    And %{I check "This is a translation"}
-    And %{I select "Deutsch" from "Choose a language"}
-    And %{I press "Preview"}
+    And %{I draft a translation}
   When %{I press "Post"}
 end
 
 When /^I draft a translation$/ do
-  When %{I am logged in as "translator"}
-    And %{I go to the new work page}
+  When %{I go to the new work page}
     And %{I fill in "Fandoms" with "Stargate"}
     And %{I fill in "Work Title" with "Draft of Translation of Worldbuilding"}
     And %{I fill in "content" with "That could be an amusing crossover."}
