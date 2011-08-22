@@ -5,7 +5,7 @@
 
 <!--subnav-->
 <ul class="navigation" role="navigation">
-  <li><%= ts("Edit"): %></li>
+  <li><%= ts("Edit") %>:</li>
 	<li><%= link_to ts("Profile"), edit_user_path(@user) %></li>
   <li><%= link_to ts("Default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
   <li><%= link_to ts("User Name"), change_username_user_path(@user) %></li>
