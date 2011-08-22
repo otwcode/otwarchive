@@ -116,7 +116,7 @@ class AutocompleteController < ApplicationController
   def owned_tag_sets
     if params[:term].length > 0
       search_param = '%' + params[:term] + '%'
-      render_output(OwnedTagSet.limit(10).order(:title).visible.where("owned_tag_sets.title LIKE ?", search_param).collect(&:title))
+      render_output(OwnedTagSet.limit(10).order(:title).usable.where("owned_tag_sets.title LIKE ?", search_param).collect(&:title))
     end
   end
   

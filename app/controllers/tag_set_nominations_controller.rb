@@ -2,7 +2,7 @@ class TagSetNominationsController < ApplicationController
   before_filter :users_only
   before_filter :load_tag_set, :except => [ :index ]
   before_filter :load_nomination, :only => [:show, :edit, :update, :destroy]
-  before_filter :set_limit, :only => [:new, :edit, :show, :create, :update]
+  before_filter :set_limit, :only => [:new, :edit, :show, :create, :update, :review]
   
   def load_tag_set
     @tag_set = OwnedTagSet.find(params[:tag_set_id])
@@ -46,15 +46,21 @@ class TagSetNominationsController < ApplicationController
 
             
   def index
-    if @tag_set && @tag_set.user_is_moderator?(current_user)
-      redirect_to review_tag_set_path(@tag_set) and return
-    elsif params[:user_id]
+    if params[:user_id]
       @user = User.find_by_login(params[:user_id])
       if @user != current_user
         flash[:error] = ts("You can only view your own nominations, sorry.")
         redirect_to tag_sets_path and return
       else
         @tag_set_nominations = TagSetNomination.owned_by(@user)
+      end
+    elsif (@tag_set = OwnedTagSet.find(params[:tag_set_id]))
+      if @tag_set.user_is_moderator?(current_user)
+        # reviewing nominations
+        setup_for_review
+      else
+        flash[:error] = ts("You can't see those nominations, sorry.")
+        redirect_to tag_sets_path and return
       end
     else
       flash[:error] = ts("What nominations did you want to work with?")
@@ -103,4 +109,29 @@ class TagSetNominationsController < ApplicationController
     flash[:notice] = ts("Your nominations were deleted.")
     redirect_to tag_set_path(@tag_set)
   end
+  
+  # set up various variables for reviewing nominations
+  def setup_for_review
+    set_limit
+    @nomination_count = @tag_set.tag_set_nominations.count
+    @tag_types = TagSet::TAG_TYPES_INITIALIZABLE.select {|type| @limit[type] > 0}
+    @tag_type = params[:tag_type] || @tag_types.first
+    
+    @nominations = (case @tag_type
+      when "fandom"
+        FandomNomination.for_tag_set(@tag_set)
+      when "freeform"
+        FreeformNomination.for_tag_set(@tag_set)
+      when "character"
+        @limit[:fandom] > 0 ? CharacterNomination.for_tag_set_through_fandom(@tag_set) : CharacterNomination.for_tag_set(@tag_set)
+      when "relationship"
+        @limit[:fandom] > 0 ? RelationshipNomination.for_tag_set_through_fandom(@tag_set) : RelationshipNomination.for_tag_set(@tag_set)
+    end).unreviewed.names_with_count    
+  end
+
+  def update_multiple
+    params[:tag_nomination_ids]
+  end
+  
+  
 end

@@ -141,16 +141,30 @@ class OwnedTagSet < ActiveRecord::Base
   
   def self.delayed_process_nominations(tag_set_id)
     owned_set = OwnedTagSet.find(tag_set_id)
-    owned_set.nominations.find_each do |nomination|
-      # process the nominations here and sock the results away in redis 
-      # with a 2 month expiration time limit
+    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
+      $redis.del("nominations_for_#{tag_type.classify}Nomination_#{tag_set_id}")
     end
-    $redis.del("nominations_processing_#{self.id}")
-    $redis.set("nominations_processed_#{self.id}", "true")
+    owned_set.nominations.find_each do |nomination|
+      nomination.process(tag_set_id)
+    end
+    $redis.del("nominations_processing_#{tag_set_id}")
+    $redis.set("nominations_processed_#{tag_set_id}", "true")
+
+    # expire all the processed data after some amount of time 
+    time_to_live = ArchiveConfig.DAYS_TO_SAVE_PROCESSED * 24 * 60 * 60
+    $redis.expire("nominations_processed_#{tag_set_id}", time_to_live)
+    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
+      $redis.expire("nominations_for_#{tag_type.classify}Nomination_#{tag_set_id}", time_to_live)
+    end
   end
   
   def processed_nominations
     return [] unless self.is_processed?
+  end
+
+  # we can use redis to speed this up since tagset data is loaded there for autocomplete
+  def already_in_set?(tagname)
+    true unless $redis.zscore("autocomplete_tagset_#{tag_set.id}", tagname).nil?
   end
     
   # We want to have all the matching methods defined on

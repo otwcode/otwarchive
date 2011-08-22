@@ -72,8 +72,8 @@ namespace :autocomplete do
   task(:load_tagset_data => :environment) do
     # we only load tagsets used in challenge settings, not ones used in
     # individual signups
-    PromptRestriction.all.each do |restriction|
-      tag_set = restriction.tag_set
+    OwnedTagSet.all.each do |ots|
+      tag_set = ots.tag_set
       key = "autocomplete_tagset_#{tag_set.id}"
       tag_set.tags.each do |tag|
         $redis.zadd(key, 0, tag.name)

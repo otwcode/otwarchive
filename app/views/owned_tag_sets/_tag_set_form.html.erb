@@ -1,7 +1,8 @@
 <h3><%= ts("Notes") %></h3>
 <ul class="notes">
-	<li>You can use tag sets when running a challenge (and eventually will be able to use them for browsing).</li>
-	<li>Visible tag sets can be viewed and used by others.</li> 
+	<li>You can use tag sets when running a challenge.</li>
+	<li>Visible tag sets have their contents visible to all users.</li>
+	<li>Usable tag sets can be used by other users in their challenges.</li> 
 	<li>Tag sets that are open to nominations can take nominations from the public.</li> 
 </ul>
 
@@ -50,11 +51,15 @@
 			<dt><%= tag_set_form.label :description, ts("Brief Description") %></dt>
 			<dd><%= tag_set_form.text_field :description %></dd>
 
-			<dt><%= tag_set_form.label :visible, ts("Visible to the public?") %></dt>
+			<dt><%= tag_set_form.label :visible, ts("Visible tag list?") %></dt>
 			<dd><%= tag_set_form.check_box :visible %></dd>
+
+			<dt><%= tag_set_form.label :usable, ts("Usable by others?") %></dt>
+			<dd><%= tag_set_form.check_box :usable %></dd>
 
 			<dt><%= tag_set_form.label :nominated, ts("Currently taking nominations?") %></dt>
 			<dd><%= tag_set_form.check_box :nominated, :onchange => "if ($j(this).is(':checked')){$('nomination_limits').show();} else {$('nomination_limits').hide();}" %></dd>
+
 		</dl>
 	</fieldset>
 	

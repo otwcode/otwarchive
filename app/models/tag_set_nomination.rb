@@ -67,4 +67,8 @@ class TagSetNomination < ActiveRecord::Base
     end
   end
   
+  def process(tag_set_id)
+    TagSet::TAG_TYPES_INITIALIZABLE.each {|tag_type| self.send("#{tag_type}_nominations").each {|nom| nom.process}}
+  end
+  
 end

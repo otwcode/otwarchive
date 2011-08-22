@@ -15,6 +15,29 @@ class TagNomination < ActiveRecord::Base
       errors.add(:base, ts("The tag %{tagname} is already in the archive but as a #{tag.type} tag.", :tagname => self.tagname))
     end
   end
+  
+  before_save :set_canonical
+  def set_canonical
+    self.canonical = !Tag.canonical.find_by_name(tagname).nil?
+  end
+  
+  before_save :set_exists
+  def set_exists
+    self.exists = !Tag.find_by_name(tagname).nil?
+  end
+  
+  def self.for_tag_set(tag_set)
+    joins(:tag_set_nomination => :owned_tag_set).
+    where("owned_tag_sets.id = ?", tag_set.id)
+  end
 
-
+  def self.names_with_count
+    select("tagname, count(*) as count").group("tagname").order("tagname")
+  end
+  
+  def self.unreviewed
+    where(:approved => false).where(:rejected => false)
+  end
+  
+  
 end
