@@ -114,15 +114,15 @@ Feature: Archivist bulk imports
       And the email should contain invitation warnings from "elynross" for work "Name change" in fandom "No Fandom"
   #    And 1 email should be delivered to "opendoors@transformativeworks.org"
   # TODO
-  
+
   Scenario: Claim a work and create a new account in response to an invite
   # TODO
-  
+
   Scenario: Orphan a work in response to an invite
   # TODO
-  
+
   Scenario: Refuse all further contact
   # TODO
-  
+
   Scenario: Importing straight into a collection
   # TODO
