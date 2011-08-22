@@ -9,14 +9,10 @@ Feature: Archivist bulk imports
   
   Scenario: Make a user an archivist
   
-  Given I am logged in as "elynross"
-    And I have loaded the "roles" fixture
-    When I am logged in as an admin
-      And I fill in "query" with "elynross"
-      And I press "Find"
-    When I check "user_roles_4"
-      And I press "Update"
-    Then I should see "User was successfully updated"
+  Given I have pre-archivist setup for "elynross"
+  When I am logged in as an admin
+    And I make "elynross" an archivist
+  Then I should see "User was successfully updated"
     
   Scenario: Archivist can see link to import for others
   
@@ -37,9 +33,7 @@ Feature: Archivist bulk imports
       """
       And I check "Post without previewing"
       And I press "Import"
-    Then I should not see "Importing completed successfully for the following works! (But please check the results over carefully!)"
-      And I should not see "Imported Works"
-      And I should not see "We were able to successfully upload the following works."
+    Then I should not see multi-story import messages
       And I should see "Welcome"
       And I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."
       
@@ -56,9 +50,7 @@ Feature: Archivist bulk imports
       """
       And I check "Post without previewing"
       And I press "Import"
-    Then I should see "Importing completed successfully for the following works! (But please check the results over carefully!)"
-      And I should see "Imported Works"
-      And I should see "We were able to successfully upload the following works."
+    Then I should see multi-story import messages
       And I should see "Welcome"
       And I should see "OTW Meetup in London"
       And I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."
@@ -76,7 +68,7 @@ Feature: Archivist bulk imports
       And I should see "That Shall Achieve The Sword"
     Given the system processes jobs
     Then 1 email should be delivered to "shalott@intimations.org"
-      And the email should contain invitation warnings
+      And the email should contain invitation warnings from "elynross" for work "That Shall Achieve The Sword" in fandom "Merlin UK"
  
   Scenario: Importing only sends one email even if there are many works
   
@@ -91,14 +83,46 @@ Feature: Archivist bulk imports
         """
       And I check "Post without previewing"
       And I press "Import"
-    Then I should see "Importing completed successfully for the following works! (But please check the results over carefully!)"
-      And I should see "Imported Works"
-      And I should see "We were able to successfully upload the following works."
+    Then I should see multi-story import messages
       And I should see "Welcome"
       And I should see "OTW Meetup in London"
       And I should see "We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually."
     Given the system processes jobs
     Then 1 email should be delivered to "cesy@dreamwidth.org"
 
-  Scenario: Importing doesn't send an email if you're already an author on the archive
+  Scenario: Importing sends a different email if you're already an author on the archive
+
+  Given the following activated user exists
+    | login | email               |
+    | cesy  | cesy@dreamwidth.org |
+  Given I have an archivist "heathercook"
+  When I am logged in as "heathercook"
+    And I import the work "http://cesy.dreamwidth.org/154770.html"
+  Then I should see import confirmation
+    And 1 email should be delivered to "cesy@dreamwidth.org"
+    And the email should contain claim information
+
+  Scenario: Importing sends a backup email to open doors if it can't find the author
+
+  Given I have an archivist "elynross"
+    When I am logged in as "elynross"
+      And I import the work "http://jennyst.dreamwidth.org/556.html"
+    Then I should see import confirmation
+      And I should see "Name change"
+    Given the system processes jobs
+    Then 1 email should be delivered to "jennyst@dreamwidth.org"
+      And the email should contain invitation warnings from "elynross" for work "Name change" in fandom "No Fandom"
+  #    And 1 email should be delivered to "opendoors@transformativeworks.org"
+  # TODO
+  
+  Scenario: Claim a work and create a new account in response to an invite
+  # TODO
+  
+  Scenario: Orphan a work in response to an invite
+  # TODO
+  
+  Scenario: Refuse all further contact
+  # TODO
+  
+  Scenario: Importing straight into a collection
   # TODO
