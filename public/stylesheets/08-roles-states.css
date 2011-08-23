@@ -1,26 +1,31 @@
 /* ROLES/STATES*/
- .own             { background: #eee; }
- .draft           { background: #eee; border: 2px dashed #ddd }
- .draft .wrapper      { background: #eee }
- .droppable         { color: red; }
- .canonical         { font-weight: 700 }
-
+.own, .relationships, .draft .wrapper, .unread 
+        { background:#eee; }
+.draft 
+        { background: #eee; border: 2px dashed #ddd }
+.draggable,.droppable       
+        { color: red }
+.canonical       
+        { font-weight: 700 }
+.hidden 	   	    
+        { display:none }
 
 /* Requests and offers in challenges */
- li.requested { font-weight: bold; }
- span.requested { color: #900; }
- span.offered { color: #008080; }
- span.offered.requested { color: #daa520; }
+li.requested 
+        { font-weight: bold; }
+span.requested 
+        { color: #900; }
+span.offered 
+        { color: #008080; }
+span.offered.requested 
+        { color: #daa520; }
 
-.blurb.relationships 
-	{ background: #eee; }
-.blurb blockquote, .blurb ul.wranglers, .blurb form
-	{ clear: none; margin: 0.5625em auto; text-align: justify }
-.blurb dl.stats
-	{ background: #eee; font-size: 0.8575em; text-align: right; padding: 0 0.3em 0.3em; margin-top: 0.1em; }
-.blurb.own dl.stats
-	{ padding-left: 11em; }
+/* CONTEXTS */
 .own dl.stats
-	{ background: #f8f1fe; padding-bottom: 0.10em}
+        { background: #f8f1fe; padding-bottom: 0.10em}
+.sidebar .own
+        { background:transparent;}
+	
+
 
 

@@ -1,21 +1,15 @@
 /* MAIN CONTENT */
-#main { 
-	margin: 1em auto; padding: 0 1em; position: relative 
-	}
-#main.sidebar {
- 	margin: 1em auto 1em 12em 
-	}
-#main.home {
-	padding:2em 7.5em;
-	}
-#main.error, #main.slow, #main.maintenance { 
-	background:url(/images/sadface.png) top right no-repeat; border: 0; font-weight: 700; min-height: 365px 
-	}
-#main.slow {
-	 background:url(/images/ao3-502.png) top right no-repeat;
-	 }
+#main
+        { font-size: 0.875em; line-height: 1.286; margin: 1em auto; padding: 0 2.5em; position: relative }
+#main.sidebar 
+        { margin: 1em auto 1em 15em }
+#main.home 
+        { padding:2em 7.5em; }
+#main.error, #main.slow, #main.maintenance 
+        { background:url(/images/sadface.png) top right no-repeat; border: 0; font-weight: 700; min-height: 365px }
+#main.slow 
+        { background:url(/images/ao3-502.png) top right no-repeat }
 #main.maintenance {
-	 background:url(/images/logo-ruby.png) top right no-repeat; 
-	}
+        { background:url(/images/logo-ruby.png) top right no-repeat }
 
 

@@ -10,6 +10,15 @@
 <!--main content-->
 <% unless @translations_of_user.blank? %>  
   <h3>Translations of <%= @user.login %>'s works</h3>
+  <% # FRONT END!!! 
+    # This page is:
+    # Foo's Related Works
+    # works by foo that someone has translated
+    # works by others that foo has translated
+    # works by foo that inspired other people
+    # works by others that inspired foo
+    # this should be four listboxes
+  %>
   
   <table id="translationsofme">
     <thead>
@@ -50,26 +59,13 @@
 <% end %>  
  
 <% unless @translations_by_user.blank? %>  
-  <h3>Works <%= @user.login %> has translated</h3>
-  
-  <table id="mytranslations">
-    <thead>
-      <tr>
-      <tr>
-        <th>Original</th>
-        <th class="translationwidth">Translation</th>
-        <th class="translationwidth">Language</th>
-        <% if current_user == @user %>
-        <th class="translationwidth">Remove connection</th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
+  <h3>Works translated by <%= @user.login %></h3>
+  <dl>
     <% @translations_by_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
-      <tr>
+      <dt>
         <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
-        <td><%= "A work in an unrevealed or anonymous challenge" %></td>
+        <%= "A work in an unrevealed or anonymous challenge" %></td>
         <% else %>
           <td><%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %></td>
           <td><%= link_to related_work.work.title.html_safe, related_work.work %></td>
@@ -88,75 +84,54 @@
 <% end %>
  
 <% unless @remixes_of_user.blank? %>
-  <h3>Works inspired by <%= @user.login %>'s works</h3>
+  <h3>Works inspired by <%= @user.login %></h3>
 
-  <table id="inspiredbyme">
-    <thead>
-      <tr>
-        <th>Remix/Inspired Work</th>
-        <th class="wide">Original</th>
-        <% if current_user == @user %>
-        <th class="narrow">Approve/remove link</th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
     <% @remixes_of_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
-      <tr>
+      <dt>
         <% if related_work.work.unrevealed? %>
-          <td><%= "A work in an unrevealed challenge" %></td>
+          <%= "A work in an unrevealed challenge" %>
         <% else %>
-          <td><%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %></td>
-          <td><%= link_to related_work.parent.title.html_safe, related_work.parent %></td>
+          <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %></dt>
+          <dd>was inspired by <%= link_to related_work.parent.title.html_safe, related_work.parent %>
           <% if current_user == @user %>
             <% if related_work.reciprocal? %>
-              <td><%= link_to "Remove", related_work %></td>
+              <span class="submit"><%= link_to "Remove", related_work %></span>
             <% else %>
-              <td><%= link_to "Approve", related_work %></td>
+             <span class="submit"><%= link_to "Approve", related_work %></span>
             <% end %>
           <% end %>
         <% end %>
-      </tr>
+      </dd>
       <% end %>
     <% end %>
-    </tbody>
-  </table>
+</dl>
 <% end %>  
   
 <% unless @remixes_by_user.blank? %>
-  <h3>Works <%= @user.login %>'s works were inspired by</h3>
-  
-  <table id="myinspirations">
-    <thead> 
-      <tr>
-        <th>Original</th>
-        <th class="wide">Remix/Inspired Work</th>
-        <% if current_user == @user %>
-        <th class="narrow">Remove connection</th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
+  <h3>Works that inspired <%= @user.login %></h3>
+  <dl>
     <% @remixes_by_user.each do |related_work| %>
       <% unless related_work.translation? %>
         <% if related_work.parent && related_work.work %>
-        <tr>
-          <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
-          <td><%= "A work in an unrevealed or anonymous challenge" %></td>
-          <% else %>
-            <td><%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %></td>
-            <td><%= link_to related_work.work.title.html_safe, related_work.work %></td>
-            <% if current_user == @user %>
-            <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></td>
+          <dt>            
+            <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
+              <%= ts("A work in an unrevealed or anonymous challenge") %>
+            <% else %>
+              <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>
             <% end %>
-          <% end %>
-        </tr>
+          </dt>
+ 		      <dd>
+ 		        <%= ts("inspired") %>
+            <%= link_to related_work.work.title, related_work.work %>
+            <% if current_user == @user %>
+              <p class="navigation"><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></p>
+            <% end %>
+          </dd>
         <% end %>
       <% end %>
     <% end %>
-    </tbody>
-  </table>
+  </dl>
 <% end %>
   
 <!--/main content-->

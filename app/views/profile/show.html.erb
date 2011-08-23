@@ -26,7 +26,7 @@
 </div>
   <% unless @user.profile.about_me.blank? %>
     <div class="user module">
-      <h3><%=h ts("Bio:") %></h3>
+      <h3><%=h ts("Bio") %></h3>
       <blockquote class="userstuff"><%=raw sanitize_field(@user.profile, :about_me) %></blockquote>
     </div>
   <% end %>

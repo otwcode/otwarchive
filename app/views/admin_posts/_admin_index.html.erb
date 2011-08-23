@@ -7,33 +7,33 @@
 
 <!--main content-->
 <div class="wrapper">
-  <table summary="This table lists News posts by title, date posted and date updated, and lets you show, edit, and delete each post. You can also make a new post.">
-    <caption>Manage News Postings</caption>
-    <colgroup>
-      <col class="name" />
-      <col span="5" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th scope="col"><%= ts("Title") %></th>
-        <th scope="col"><%= ts("Posted") %></th>
-        <th scope="col"><%= ts("Updated") %></th>
-        <th scope="col" colspan="3"><%= ts("Actions") %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @admin_posts.each do |admin_post| %>
-        <tr>
-          <td><%= link_to admin_post.title, admin_post %></td>
-          <td><%=h admin_post.created_at %></td>
-          <td><%=h admin_post.updated_at %></td>
-          <td><%= link_to ts("Show"), admin_post %></td>
-          <td><%= link_to ts("Edit"), edit_admin_post_path(admin_post) %></td>
-          <td><%= link_to ts("Delete"), admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+	<table summary="This table lists News posts by title, date posted and date updated, and lets you show, edit, and delete each post. You can also make a new post.">
+	<caption>Manage News Postings</caption>
+	<colgroup>
+	<col class="name" />
+	<col span="5" />
+	</colgroup>
+	<thead>
+		<tr>
+      <th scope="col"><%= ts("Title") %></th>
+      <th scope="col"><%= ts("Posted") %></th>
+      <th scope="col"><%= ts("Updated") %></th>
+      <th scope="col" colspan="3"><%= ts("Actions") %></th>
+		</tr>
+	</thead>
+	<tbody>	
+  <% @admin_posts.each do |admin_post| %>
+    <tr class="navigation">
+      <td><%= link_to admin_post.title, admin_post %></td>
+      <td><%= admin_post.created_at %></td>
+      <td><%= admin_post.updated_at %></td>
+      <td><%= link_to ts("Show"), admin_post %></td>
+      <td><%= link_to ts("Edit"), edit_admin_post_path(admin_post) %></td>
+      <td><%= link_to ts("Delete"), admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %> 
+</tbody>
+</table>
 </div>
 <!--/content-->
 <!--subnav-->

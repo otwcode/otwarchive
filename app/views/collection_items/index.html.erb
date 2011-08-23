@@ -7,7 +7,7 @@
 <!--/subnav-->
 
 <!--main content-->
-  <table id="collection_items_table" summary="This table shows the items you have submitted to collections; you can approve or reject or remove them.">
+  <div class="wrapper"><table id="collection_items_table" summary="This table shows the items you have submitted to collections; you can approve or reject or remove them.">
   <caption><%=h t('.ci_index.list', :default => "List of items in collections by %{user}", :user => @user.login) %></caption>  
 
 <% else %>
@@ -49,7 +49,7 @@
   <th scope="col"><%= link_to(ts("Word Count"), controller.request.fullpath.split('?').first + "?sort=word_count") %></th>  
   <th scope="col"><%= link_to(ts("Date Last Updated"), controller.request.fullpath.split('?').first + "?sort=date") %></th>  
   
-  <th scope="col" class="twobutton"><%=h t('.ci_index.manage', :default => "Manage") %></th>
+  <th scope="col"><%=h t('.ci_index.manage', :default => "Manage") %></th>
 </tr>
 </thead>
 <tbody>
@@ -58,4 +58,5 @@
 <% end %>
 </tbody>
 </table>
+</div>
 <!--/content-->

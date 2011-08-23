@@ -79,9 +79,10 @@
   <dd>
     <%= check_box_tag "query[complete]", false, !@query[:complete].blank?, :id => 'refine_complete' %>
   </dd>
-  </dl>
-  <p class="submit">
-    <%= submit_tag ts('Search works'), :class => 'button', :name => nil %>
-  </p>
+  <dt class="landmark">Submit</dt>
+	<dd class="submit">
+    	<%= submit_tag ts('Search works'), :class => 'button', :name => nil %>
+  </dd>
+</dl>
 </fieldset>
 <% end %>

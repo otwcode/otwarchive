@@ -12,3 +12,9 @@
  a.cloud7           { color: #860202; font-size: 1.875em; font-weight: 700 }
  a.cloud8           { color: #900; font-size: 2.25em; font-weight: 800 }
 
+/* GROUPS: MODULE, WRAPPER, INDEX */
+ .module,  .index        { width: 100%; position: relative; float: left; }
+ .wrapper          { box-shadow: 1px 1px 5px #aaa;}
+ 
+
+

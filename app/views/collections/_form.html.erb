@@ -85,10 +85,10 @@
   <% @collection.build_collection_profile unless @collection.collection_profile %>
   <%= collection_form.fields_for :collection_profile do |profile_form| %>
   <fieldset class="profile">
-    <legend>Profile</legend>
+		<legend>Profile</legend>
     <p><%= allowed_html_instructions %></p>
-	<p class="note">
-    Tip: if this is a subcollection or challenge, you don't need to repeat yourself: fields left blank will copy from your parent collection.
+	  <p class="note">
+      Tip: if this is a subcollection or challenge, you don't need to repeat yourself: fields left blank will copy from your parent collection.
     </p>
     
     <h3><%= profile_form.label :intro, ts("Introduction") %>:</h3>

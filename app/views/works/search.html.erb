@@ -28,7 +28,7 @@
   <% unless @query %>
   <% @query ||= {} %>
   <% end %>
-    <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
+    <p><%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
     <%= link_to_help "work-search-text-help" %> (any field)
 
   <%= hidden_field_tag "query[tag]", @query[:tag] %>
@@ -50,6 +50,8 @@
     <%= submit_tag ts('Refine search'), :class => 'button', :name => nil %>
 <% end %>
   </span>
+</p>
+<%= random_search_tip %>
 </fieldset>
 <% end %>
 

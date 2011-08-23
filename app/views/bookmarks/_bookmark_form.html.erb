@@ -5,19 +5,23 @@
 <% end %>
 
 <%= form_for([bookmarkable, bookmark], :url => {:controller => 'bookmarks', :action => action}) do |f| %>
-<p><label><%= ts("Pseud") %>:</label>
-    <% if current_user.pseuds.count > 1 %>
+<fieldset>
+<dl>
+<dt class="landmark"><label><%= ts("Pseud") %>:</label></dt>
+    <dd>
+	<% if current_user.pseuds.count > 1 %>
       <%= select_tag "bookmark[pseud_id]", options_for_select(current_user.pseuds.map{|pseud| [pseud.name, pseud.id]}, bookmark.pseud ? bookmark.pseud.id : current_user.default_pseud.id) %>
     <% else %>
     <%= current_user.default_pseud.name %>
       <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}" %>
     <% end %>
-</p>
+</dd>
+</dl>
+</fieldset>
 <% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
   <%= fields_for 'bookmark[external]', bookmarkable do |ew| %>
   <fieldset>
-    <legend>Work Preface</legend>
-  <dl>
+ <dl>
     <dt><%= ew.label :url, ts("URL") %>:</dt>
     <dd>
       <% if !params[:url_from_external].blank? %>
@@ -63,7 +67,7 @@
   </dl>
   </fieldset>
   <fieldset>
-    <legend>Work Tags</legend>
+    <legend>Add tags</legend>
     <p><%= ts("Author's Tags (comma separated, %{max} characters per tag). Please note that only fandom is required.", :max => ArchiveConfig.TAG_MAX) %>
     <%= link_to_help "tagging-help" %></p>
   <dl>
@@ -102,18 +106,18 @@
   <% end %>
 <% end %>
 <fieldset>
-  <legend>Bookmark Comments</legend>
+  <legend>Write Comments</legend>
 <dl>
-  <dt><%= f.label :notes, ts("Your Notes") %></dt>
+  <dt class="landmark"><%= f.label :notes, ts("Notes") %></dt>
   <dd>
     <%= allowed_html_instructions %>
     <%= f.text_area :notes, :rows => 4, :class => "notes-field observe_textlength" %>
     <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) %>
   </dd>
   
-  <dt><%= f.label :tag_string, ts("Your Tags") %></dt>
-  <dd>
-    <% dynamic ||= false %>
+	<dt class="landmark"><%= f.label :tag_string, ts("Your Tags") %></dt>
+	<dd>
+	  <% dynamic ||= false %>
     <%= f.text_field :tag_string, autocomplete_options('tag?type=all', :size => (dynamic ? 60 : 80)) %>
     <p class="character_counter">
       <%= ts("Comma separated, %{max} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
@@ -121,6 +125,8 @@
   </dd>
 </dl>
 </fieldset>
+<fieldset>
+<legend>Choose type and submit</legend>
 <% if bookmarkable.class != ExternalWork %>
   <p><%= ts("Please note that the author's summary and tags will be added automatically.") %>
 <% end %>
@@ -136,5 +142,6 @@
     <%= link_to ts("Back to My Bookmarks"), user_bookmarks_path(current_user) %>
   <% end %>
 </p>
+</fieldset>
 <% end %>
 </div>

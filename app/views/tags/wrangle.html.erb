@@ -39,8 +39,8 @@
 <% end %>
 
 <% if params[:show] %>
-  <ul class="navigation actions">
-    <li>Show: </li>
+  <ul class="navigation">
+    <li><h4>Show:</h4></li>
     <li><%= link_to 'all', url_for(:show => params[:show], :status => 'all') %></li>
     <li><%= link_to 'canonical', url_for(:show => params[:show], :status => 'canonical') %></li>
     <li><%= link_to 'non-canonical', url_for(:show => params[:show], :status => 'noncanonical') %></li>

@@ -1,6 +1,8 @@
 <h2>Edit <%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %> </h2>
 
+<div class="wrapper">
 <%= form_tag edit_multiple_user_works_path(@user),  :id => 'edit-multiple-works' do %>
+<% # FRONT END PLEASE CHECK THIS OVER I AM KEEPING THE VERSION FROM MY WEBDEV -- NN %>
   <fieldset>
     <p><%= submit_tag ts("Edit Checked") %></p>
   </fieldset>
@@ -19,6 +21,11 @@
         <th abbr="options" scope="col"><%= ts("Editing Options") %></th>
       </tr>
     </thead>
+    <tfoot>
+      <tr>
+        <td colspan="4"><%= render :partial => 'edit_multiple_controls' %></td>
+      </tr>
+    </tfoot>
     <tbody>
       <% for work in @works %>
         <tr>
@@ -39,11 +46,6 @@
         </tr>
       <% end %>
     </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="4"><%= render :partial => 'edit_multiple_controls' %></td>
-      </tr>
-    </tfoot>
   </table>
   </fieldset>
   
@@ -52,3 +54,4 @@
   </fieldset>
   	
 <% end %>
+</div>

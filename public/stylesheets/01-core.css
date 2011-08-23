@@ -1,8 +1,8 @@
 /*basic functionality*/
 body {
 background: url(/images/header.png) top no-repeat #f8f1fe;
-color: #3a3a3a;
-font: 100%/1.125 "Lucida Grande",sans-serif;
+color: #2a2a2a;
+font: 100%/1.286 "Lucida Grande",sans-serif;
 margin: 0;
 padding: 0
 }
@@ -22,7 +22,8 @@ opacity: 0;
 }
 #login-block,li.blurb,fieldset,form dl {
 border: 1px solid #ddd;
-padding: 1em
+padding: 1em;
+overflow:hidden;
 }
 .blurb li,.navigation>*,.stats>*,.meta ul li {
 list-style: none;

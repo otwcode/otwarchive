@@ -1,7 +1,14 @@
 <!--subnav-->
 <h3 class="landmark">Navigation</h3>
 <ul class="navigation" role="navigation">
-	<li><%= span_if_current ts('Public Skins'), skins_path %></li>
+	<li>
+    <% if params[:work_skins] %>
+      <%= link_to ts("Site Skins"), url_for(:work_skins => false) %>
+    <% else %>
+      <%= link_to ts("Work Skins"), url_for(:work_skins => true) %>
+    <% end %>
+  </li>
+<li><%= span_if_current ts('Public Skins'), skins_path %></li>
 	<% if logged_in? %>
     <li><%= span_if_current ts('My Skins'), user_skins_path(current_user) %></li>
     <% unless controller.action_name == "new" %>

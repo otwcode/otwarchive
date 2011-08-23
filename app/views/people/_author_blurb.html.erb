@@ -1,5 +1,5 @@
-<li class="user blurb" role="article">
-    <div class="module">
+<li class="user picture blurb" role="article">
+    <div class="header module">
 		  <h4><%= link_to(author.name, user_pseud_path(author.user, author)) %> 
       <% if (author.name != author.user.login) %>
         (<%= link_to(author.user_name, user_path(author.user)) %>)
@@ -13,6 +13,7 @@
 		<div class="icon">
 	        <%=raw standard_icon_display(author.user, author) %>
 	      </div>
+	</div>
       <% unless author.description.blank? %>
         <blockquote class="userstuff">
 		<p><%=raw sanitize_field(author, :description) %></p>
@@ -29,5 +30,4 @@
         </ul>
       <% end %>
       <% end %>
-  	</div>
 </li>

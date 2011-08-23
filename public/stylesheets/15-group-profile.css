@@ -1,13 +1,24 @@
+/* PROFILE -user profile user home, collections and challenges profiles and home, tag home */
 
-/* PROFILE -user profile user home, and soon collections and challenges profiles and home */
- #main .profile p.alt      { margin: 3em auto 3em 100px }
- .profile .header img       { left: 0; margin: 0 0 0.5625em; position: absolute; top: 0 }
- .profile .header h2       { font-size:2.25em; margin: 0.675em 0 0 100px; text-align: right; border-bottom:2px solid; }
- .profile .header .userstuff
-                                { margin-left: 120px;}
- .profile .module h3      { background: #222; color: #f8f1fe; margin:0; padding: 0.125em; border-bottom: 4px double #f8f1fe;}
- .profile .series         { clear:left; float:none;}
- .profile li.blurb        { margin-top: 0 }
- .profile .meta dt        { width:12em}
- #main .profile .meta dd     { margin: -1.125em auto 1.125em 13em;}
+.profile p.alt      
+        { margin: 8.5em auto 3em auto; }
+.profile .header 
+        { margin-bottom:0.643em;}
+.profile .header img, .profile .header .icon      
+        { position: absolute; top: 0; left:0}
+.profile .header .icon
+        { background: #900; height:100px; width:100px; margin-top:0}
+.profile .header h2
+        { margin: 0.675em 0 0 100px; text-align: right; border-bottom:2px solid; }
+.profile .header .userstuff
+        { margin-left: 120px;}
 
+.profile .module h3
+        { background: #ddd;  margin:0; padding: 0.125em;}
+.profile .fandom.module, .profile.tag .module 
+        { border:1px solid #ccc; margin:1.286em auto 0.643em auto; overflow:hidden; }
+.profile .fandom.module .index
+        { padding-left: 0.75em; 
+          box-shadow:inset 1px 1px 3px #bbb; border-radius:0.15em }
+.profile.tag .header.module  
+        { border:0;}

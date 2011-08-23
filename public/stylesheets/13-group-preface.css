@@ -1,13 +1,17 @@
-/* PREFACE - title, notes, description, collections faq, rules; has a fair few id weights as it sometimes appears within a userstuff*/
- .preface             { border-bottom: 3px double; margin: auto 3em 1.5em; padding: 0.5em 0.5em 0 }
- #main .preface .module      { float:none; margin:0; padding:0;  width:auto }
- #main .preface h3        { background: transparent; border-bottom: 1px solid; color: #333; font-size: 1.125em }
- #main .preface h2.title, #main .preface h3.title
-                { font-size: 1.5em; font-weight: 700; margin: 1.5em auto 0; text-align: center; border-bottom:0; clear: both;}
- #main .preface h3.byline, #main .preface .byline a
-                { border: 0; text-align: center; text-decoration: none }
- #main .preface a:link, #main .preface a:visited
-                { color: #333; }
- .preface a:hover         { text-decoration: underline }
- #main .preface blockquote    { border: 0}
+/* PREFACE - title, notes, description, collections faq, rules; has #id weights as it sometimes appears within a userstuff, so to override you must specify an additional #id*/
+
+div.preface
+        { border-bottom: 3px double; margin: auto 3em 1.5em; padding: 0.643em 0.643em 0 }
+#main .preface .module      
+        { float:none; margin:0; padding:0;  width:auto }
+#main .preface h3        
+        { background: transparent; border-bottom: 1px solid; }
+#main .preface h2.title, #main .preface h3.title
+        { font-weight: 700; text-align: center; border-bottom:0; clear: both;}
+#main .preface h3.byline, #main .preface .byline a
+        { border: 0; text-align: center; text-decoration: none }
+.preface a:hover         
+        { text-decoration: underline }
+#main .preface blockquote    
+        { border: 0 }
 

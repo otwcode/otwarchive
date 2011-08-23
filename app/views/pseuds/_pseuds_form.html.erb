@@ -37,9 +37,9 @@
     <%= f.text_field :icon_alt_text, :class => "observe_textlength" %>
     <%= generate_countdown_html("pseud_icon_alt_text", ArchiveConfig.ICON_ALT_MAX) %>
   </dd>
- 
-  </dl>
-  <p class="submit">
-    <%= f.submit button_text %>
-  </p>
+
+ <dt class="landmark">Submit</dt>
+ <dd class="submit">  <%= f.submit button_text %></dd>
+</dl>
+
 <% end %>

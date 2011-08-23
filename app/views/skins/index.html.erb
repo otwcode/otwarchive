@@ -1,14 +1,3 @@
-
-<ul class="navigation">
-  <li>
-    <% if params[:work_skins] %>
-      <%= link_to ts("See Site Skins Instead"), url_for(:work_skins => false) %>
-    <% else %>
-      <%= link_to ts("See Work Skins Instead"), url_for(:work_skins => true) %>
-    <% end %>
-  </li>
-</ul>
-
 <h2><%= @title %></h2>
 
 <p class="notes">

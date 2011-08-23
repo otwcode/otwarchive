@@ -11,7 +11,7 @@
 
 <!--main content-->
 <div class="admin" role="article">
-  <div class="admin-header">
+  <div class="header">
     <h3>
       <%= @admin_post.title %>
     </h3>
@@ -37,7 +37,7 @@
       </dl>
     <% end %>
   </div>
-  <div class="admin-content userstuff">
+  <div class="userstuff">
       <%=raw sanitize_field(@admin_post, :content) %>
   </div>
 </div>

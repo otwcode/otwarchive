@@ -24,7 +24,7 @@
 
 <% elsif params[:show_recent] %>
 <!-- The javascript expanded view that shows more bookmarks for a particular work on an aggregated view -->  
-   <ul class="recent-bookmarks">
+   <ul class="recent">
    <% for bookmark in @recent_bookmarks %>
      <%= render :partial => 'bookmarks/bookmark_user_info', :locals => {:bookmark => bookmark} %>         
    <% end %>

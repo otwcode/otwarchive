@@ -11,22 +11,26 @@
 <%= form_tag url_for(:controller => 'tag_wranglers', :action => "create") do %>
   <p class="submit"><%= submit_tag 'Assign' %></p>
 
+  <fieldset>
+	<legend>Assign fandoms to yourself</legend>
   <h3>Assign fandoms to yourself</h3>
-  <div>
     <p><%= label_tag "tag_fandom_string", "Enter as many fandoms as you like:" %></p>
     <%= text_field_tag "tag_fandom_string", params[:sign_up_fandoms], autocomplete_options("fandom") %>
-  </div>
-
   <ul class="index">
     <% @assignments.group_by(&:name).each do |name, assignments| %>
     <li class="fandom tag blurb">
       <h4><%= link_to name, {:controller => :tags, :action => :edit, :id => assignments.first} %></h4>
-      <ul class="wranglers">
-      <% assignments.collect(&:wrangler).compact.each do |wrangler| %>
-        <li><%= link_to wrangler, tag_wrangler_path(:id => wrangler) %>
-            <%= link_to '(remove)', tag_wrangler_path(:id => wrangler, :fandom_id => assignments.first.id), :method => :delete %></li>
+      <% wranglers = assignments.collect(&:wrangler).compact %>
+      <% unless wranglers.empty? %>
+        <ul class="wranglers">
+        <% wranglers.each do |wrangler| %>
+          <li>
+            <%= link_to wrangler, tag_wrangler_path(:id => wrangler) %>
+            <%= link_to '(remove)', tag_wrangler_path(:id => wrangler, :fandom_id => assignments.first.id), :method => :delete %>
+          </li>
+        <% end %>
+        </ul>
       <% end %>
-      </ul>
       <div id="wranglers-for-<%= assignments.first.id %>">
         <p>
           <% select_tag_to_add = select_tag("assignments[#{assignments.first.id}][]", options_for_select([''] + @wranglers.collect(&:login))) %>
@@ -41,14 +45,15 @@
   <%= hidden_field_tag :fandom_string, params[:fandom_string] %>
   <%= hidden_field_tag :media_id, params[:media_id] %>
   <%= hidden_field_tag :wrangler_id, params[:wrangler_id] %>
+  </fieldset>
   <p class="submit"><%= submit_tag 'Assign' %></p>
 <% end %>
 <!--/content-->
 
 <!--subnav-->
-<h3 class="landmark">Filters</h3>
 <%= form_tag tag_wranglers_path, :class => 'filters', :method => :get do %>
-  <dl class="filters">
+  <h3 class="landmark">Filters</h3>
+	<dl class="filters">
     <dt>Filter by Media</dt>
     <dd>
       <p>Show only:</p>

@@ -1,3 +1,14 @@
+/* TRANSLATIONS*/
+ #main.translation-translate   { margin-bottom: 2.5em }
+ dl.translations         { border-top: 1px solid; margin: 1.5em auto; padding: 1.5em 0 2.5em; position: relative }
+ .translations dt         { clear: both; margin: -0.25em; padding: 0.25em }
+ .translated           { background: #d1e1ef; font-style: italic }
+ .untranslated           { font-weight: 600 }
+
+/* LANGUAGES */
+ #main.languages-index #languages_table { margin-top: 0.5em; width: 80%; }
+
+
 .translations-index textarea {height: 10em;}
 .translations-index form {clear:both;}
 .translations-index h2, .translations-index dl {clear:both;}

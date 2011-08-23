@@ -1,19 +1,32 @@
-/* HEADER*/
-#header { padding:0; background:url(/images/logo-stroke.png) no-repeat transparent;}
-#header h1 { display:none;}
-#header a {font-family:"Helvetica";}
-#header li, #header form, #header input { display: inline }
+/* HEADER */
+#header 		
+        { padding:0; margin:0 0 2.25em 0;}
+#header h1 	
+	      {float:left; margin:0}
+#header li, #header form, #header input, #header #search>*  
+				{ display: inline }
+#header #login-block     
+				{ font-size: 0.75em; text-align: right; border:0; padding:0; float:right}
+p#greeting, ul#login
+				{ clear: right; float:right; width:12.5em; padding:0; margin:0  }
+#greeting.logged-out     
+				{ float: none; margin-top: 1em;  width:auto; padding-right: 0.5em; }
+#header .icon   
+        { float:right; margin:-0.75em 0 -0.5em; border-bottom:5px solid #900}
+#header #login
+ 	      { float:right; margin:0.25em 0 0; }
+#login p 		
+        { margin:0; }
+#header h1 a,#login a, #header h1 a:hover
+	      { padding:0; border:0; background:none}
 
-#header #login-block     { font-size: 0.75em; text-align: right; border:0;}
-p#greeting, ul#login{ clear: right; float: right;  text-align:left; width:17.5em; padding:0 }
-#greeting.logged-out     { float: none; margin-top: 1em;  width:auto; padding-right: 0.5em; }
-
-
-#header .icon {float:right; margin: -1em}
-#login {float:right; text-align:right; margin:0.25em 0 0; }
-#login p {margin:0}
-#login ul.navigation {background:url(/images/scrubber.png) bottom left repeat-x; padding:1em 0.25em 1em 1em; margin-top:-1em}
-#login a{color:#fff0f9; padding:0.75em 0.15em;}
-
-#header #search>* {display:inline;}
+/*ACTIONS AND INTERACTIONS IN HEADER REGION */
+#header .navigation
+      	{ margin:auto; float:none; text-transform:lowercase; font-size:0.875em}
+#header ul.navigation 
+        { margin-top:-3.5em;}
+#header .navigation fieldset 
+        { background:transparent; box-shadow:none; border:none; padding:0;}
+#header form input 
+        { text-transform: lowercase; width:inherit}
 		

@@ -8,22 +8,26 @@
 <% unless @inbox_comments.blank? %>  
   <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do %>
   <fieldset>
-  <legend>Mass Edit Options</legend>
-  <ul class="navigation actions">
-		<li>Select</li>
-		<li><a href="#" class="check_all">All</a></li>
-		<li><a href="#" class="check_none">None</a></li>
-  </ul>
-  <p class="submit">
-      <%= "Mark checked as:" %> 
+	<legend>Mass Edit Options</legend>
+	<dl class="navigation">
+    <dt>Select:</dt>
+    <dd>
+      <a class="checkall">all</a> </dd>
+    <dd>
+      <a class="checknone"none</a>
+    </dd>
+  	<dt class="submit">
+      <%= "Mark checked as:" %></dt>
+    <dd>
       <%= submit_tag ts("Read"), :name => 'read' %>
       <%= submit_tag ts("Unread"), :name => 'unread' %>
       <%= submit_tag ts("Delete From Inbox"), :name => 'delete' %>
-  </p>
-  </fieldset>
-  <fieldset>
-  <legend>List of Comments</legend>
-  <ol class="comment index">
+    </dd>
+  </dl>
+	</fieldset>
+	<fieldset class="comments">
+	<legend>List of Comments</legend>
+	<ol class="comment index">
     <% for inbox_comment in @inbox_comments %>
       <!-- START of single comment -->
       <li class="comment <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
@@ -88,9 +92,9 @@ inbox_comment.feedback_comment), :remote => true %>
 <!--/content-->
 
 <!--subnav-->
-<h3 class="landmark">Filter</h3>
 <%= form_tag(user_inbox_path(@user), :class => 'filters', :method => :get) do %>
-  <%= field_set_tag do %>
+  <h3 class="landmark">Filter</h3>
+	<%= field_set_tag do %>
     <dl class="filters">
       <dt><%= 'Filter by read' %></dt>
       <dd>

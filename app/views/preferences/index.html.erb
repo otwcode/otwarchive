@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts('Update My Preferences') %></h2>
+<h2><%= ts('Set My Preferences') %></h2>
 <%= error_messages_for :preference %>
 
 <!--/descriptions-->
@@ -16,7 +16,9 @@
 
 <!--main content-->
 <%= form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| %>
-  <h4><%= ts("Privacy") %></h4>
+<fieldset>
+	<legend><%= ts("Privacy") %></legend>
+	<h4><%= ts("Privacy") %></h4>
   <ul>
   	<li>
    	  <%= f.check_box :email_visible %>
@@ -40,8 +42,9 @@
    	
    	
   </ul>
-  
-  <h4><%= ts("Site Display") %></h4>
+  </fieldset>
+  <fieldset>
+	<legend><%= ts("Site Display") %></legend><h4><%= ts("Site Display") %></h4>
   <ul>
   	<li>
     	  <%= f.check_box :adult %>
@@ -74,7 +77,9 @@
       (<%= link_to ts('Public skins'), skins_path %>)
     </li>
   </ul>
-  
+</fieldset>
+<fieldset>
+	<legend><%= ts("Statistics") %></legend> 
   <h4><%= ts("Statistics") %></h4>
   <ul>
     <li>
@@ -92,7 +97,9 @@
       <%= f.label :hide_public_hit_count, ts("Don't publicly display hits on my works.") %>
     </li>
   </ul>
-  
+</fieldset>
+<fieldset>
+	<legend><%= ts("Comments") %></legend>  
   <h4><%= ts("Comments") %></h4>
   <ul>
   	<li>
@@ -120,7 +127,9 @@
     	  <%= f.label :admin_emails_off, ts("Turn off admin notification emails")  %>
   	</li>
   </ul>
-  
+</fieldset>
+<fieldset>
+	<legend><%= ts("Collections, Challenges and Gifts") %></legend>  
   <h4><%= ts("Collections, Challenges and Gifts") %></h4>
   <ul>
   	<li>
@@ -144,7 +153,10 @@
   	</li>
   </ul>
   
-  <h4><%= ts("Misc") %></h4>
+</fieldset>
+<fieldset>
+	<legend><%= ts("Misc") %></legend>
+	  <h4><%= ts("Misc") %></h4>
   <ul>
     <li>
       <%= f.label :time_zone, ts("Your time zone: ")%>
@@ -172,7 +184,7 @@
 			<%= link_to_help "work_title_format" %>
     </li>
   </ul>
-
+</fieldset>
 
 	<p class="submit">
   	<%= f.submit t('.forms.update', :default => "Update") %>

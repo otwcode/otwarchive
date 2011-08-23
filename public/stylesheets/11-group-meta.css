@@ -1,9 +1,16 @@
-
 /* META*/
- #main dl.meta 				{ background: #f8f1fe; border: 2px solid; clear: right; margin: 0 auto; padding: 0.5em; position: relative }
- .meta dt, .meta dt.warning	{ font-size: 0.875em; font-weight: 100; width: 10.5em }
- #main .meta dd				{ margin: -1.3em 0 .7em 13em;  }
- #main .meta .stats dl dd,  #main .meta .stats dl dt	{ margin: 0 0.5em 0; width:auto; float:left}
- .meta dd ul li 			{ display: inline; margin: auto;}
- .meta dd blockquote		{ margin: -1em 0 0 0 !important;}
+dl.meta
+        { border: 1px solid #ccc; clear: right; margin: 0 auto; padding: 1.5em 1.5em 3em 0.75em; position: relative }
+.meta dt 
+        { width: 10.5em }
+.meta .warning 
+        { background:transparent; border:0 }
+.meta dd				
+        { margin: -1.3em 0 .7em 13em }
+.meta .stats dl dd, .meta .stats dl dt	
+        { margin: 0 0.5em 0 0; width:auto; float:left }
+.meta dd ul li 			
+        { display: inline; margin: auto }
+.meta dd blockquote		
+        { margin: -1em 0 0 0 }
 

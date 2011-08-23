@@ -10,7 +10,7 @@
     <li><%= span_if_current('New Tag', new_tag_path) %></li>
 
     <% if @counts %>
-      <li><hr /></li>
+      </ul><ul class="navigation">
       <% if @tag && @uses %>
         <% for key in @uses %>
           <% if key == 'Works' || key == 'Bookmarks' %>

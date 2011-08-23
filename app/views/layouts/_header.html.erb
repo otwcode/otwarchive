@@ -1,10 +1,8 @@
 <!-- BEGIN BETA CAVEATS! -->
 <noscript>
-<div id="javascript-warning">
-  <p>
+<p id="javascript-warning">
     <%= ts("While we've done our best to make this site accessible without javascript, it will work better and look prettier with it enabled. Please consider turning it on!") %>
   </p>
-</div> 
 </noscript>
 <!-- END BETA CAVEATS! --> 
 
@@ -27,18 +25,19 @@
     <ul id="greeting" class="logged-out">
       <li>
         <%= render :partial => 'user_sessions/login' %>
-        <span><a id="signin_closed" style="display:none;"><%= ts("Log in") %></a>
-        <a id="signin_open"><%= ts("Cancel") %></a></span>
+        <span class="navigation"><a id='signin_closed' style='display:none;'><%= ts("Log in") %></a>
+        <a id='signin_open'><%= ts("Cancel") %></a></span>
       </li>
     </ul>
   <% end %>
+<div class="clear"><!--presentational--></div>
 </div>
 
 <% if @collection %>
   <h1 class="collections"><%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : ts("New Collection")) %></h1>
 <% else %>
   <h1>
-    <%= link_to ArchiveConfig.APP_NAME, root_path %> (BETA)
+    <%= link_to image_tag('logo-stroke.png', :alt => "#{ArchiveConfig.APP_NAME} (BETA)"), root_path %>
   </h1>
 <% end %>
 

@@ -8,7 +8,7 @@
     <%= select_tag "query[type]", options_for_select([""] + Tag::USER_DEFINED, @query[:type]) %>
     <label for="canonical">canonical?</label>&nbsp;<%= check_box_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %>
     <%= link_to_help "tag-search-type-help" %>
-  </p>
-  <span class="submit"><%= submit_tag ts("Search tags"), :name => nil %></span>
+ <span class="submit"><%= submit_tag ts("Search tags"), :name => nil %></span></p>
+<%= random_search_tip %>
 </fieldset>
 <% end %>
