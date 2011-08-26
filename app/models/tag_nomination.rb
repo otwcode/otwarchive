@@ -1,5 +1,6 @@
 class TagNomination < ActiveRecord::Base
   belongs_to :tag_set_nomination
+  has_one :owned_tag_set, :through => :tag_set_nomination
 
   validates_length_of :tagname,
     :maximum => ArchiveConfig.TAG_MAX,
@@ -15,17 +16,31 @@ class TagNomination < ActiveRecord::Base
       errors.add(:base, ts("The tag %{tagname} is already in the archive but as a #{tag.type} tag.", :tagname => self.tagname))
     end
   end
-  
-  before_save :set_canonical
-  def set_canonical
-    self.canonical = !Tag.canonical.find_by_name(tagname).nil?
+
+  before_save :set_tag_status
+  def set_tag_status
+    if (tag = Tag.find_by_name(tagname))
+      self.exists = true
+      self.tagname = tag.name
+      self.canonical = tag.canonical
+      self.synonym = tag.merger ? tag.merger.name : nil
+    else
+      self.exists = false
+      self.canonical = false
+      self.synonym = nil
+    end
+    true
   end
   
-  before_save :set_exists
-  def set_exists
-    self.exists = !Tag.find_by_name(tagname).nil?
+  # sneaky bit: if the tag set moderator has already rejected or approved this tag, don't 
+  # show it to them again.
+  before_save :set_approval_status
+  def set_approval_status
+    self.rejected = tag_set_nomination.owned_tag_set.already_rejected?(tagname)
+    self.approved = tag_set_nomination.owned_tag_set.already_in_set?(tagname) || tag_set_nomination.owned_tag_set.already_approved?(tagname)
+    true
   end
-  
+
   def self.for_tag_set(tag_set)
     joins(:tag_set_nomination => :owned_tag_set).
     where("owned_tag_sets.id = ?", tag_set.id)
@@ -37,7 +52,6 @@ class TagNomination < ActiveRecord::Base
   
   def self.unreviewed
     where(:approved => false).where(:rejected => false)
-  end
-  
+  end  
   
 end

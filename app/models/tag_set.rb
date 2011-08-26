@@ -26,6 +26,17 @@ class TagSet < ActiveRecord::Base
     @tagnames ? tagnames_to_list(@tagnames) : tags
   end
   
+  attr_writer :tagnames_to_add
+  def tagnames_to_add
+    @tagnames_to_add || ""
+  end
+  
+  attr_writer :tagnames_to_remove
+  def tagnames_to_remove
+    @tagnames_to_remove || ""
+  end
+  
+
   # this code just sets up functions fandom_tagnames/fandom_tagnames=, character_tagnames... etc
   # that work like tagnames above, except on separate types. 
   # 
@@ -62,6 +73,12 @@ class TagSet < ActiveRecord::Base
   def assign_tags
     if @tagnames
       self.tags = tagnames_to_list(@tagnames)
+    end
+    if !@tagnames_to_add.blank?
+      self.tags += tagnames_to_list(@tagnames_to_add)
+    end
+    if !@tagnames_to_remove.blank?
+      self.tags -= tagnames_to_list(@tagnames_to_remove).compact
     end
     
     TAG_TYPES.each do |type|

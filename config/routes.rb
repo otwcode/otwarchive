@@ -69,7 +69,7 @@ Otwarchive::Application.routes.draw do
     resources :nominations, :controller => 'tag_set_nominations' do
       collection do
         get :review
-        post :update_multiple
+        put :update_multiple
         get :request_wrangle
       end
       

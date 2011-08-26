@@ -10,7 +10,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20110828172403) do
+=======
+ActiveRecord::Schema.define(:version => 20110823015903) do
+>>>>>>> Tag nominations review process now working, whooo
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -587,6 +591,31 @@ ActiveRecord::Schema.define(:version => 20110828172403) do
     t.string  "salt",       :null => false
   end
 
+  create_table "owned_set_taggings", :force => true do |t|
+    t.integer  "owned_tag_set_id"
+    t.integer  "set_taggable_id"
+    t.string   "set_taggable_type", :limit => 100
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "owned_tag_sets", :force => true do |t|
+    t.integer  "tag_set_id"
+    t.boolean  "visible",                                    :default => false, :null => false
+    t.boolean  "nominated",                                  :default => false, :null => false
+    t.string   "title"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "featured",                                   :default => false, :null => false
+    t.integer  "description_sanitizer_version", :limit => 2, :default => 0,     :null => false
+    t.integer  "fandom_nomination_limit",                    :default => 0,     :null => false
+    t.integer  "character_nomination_limit",                 :default => 0,     :null => false
+    t.integer  "relationship_nomination_limit",              :default => 0,     :null => false
+    t.integer  "freeform_nomination_limit",                  :default => 0,     :null => false
+    t.boolean  "usable",                                     :default => false, :null => false
+  end
+
   create_table "potential_match_settings", :force => true do |t|
     t.integer  "num_required_prompts",           :default => 1,     :null => false
     t.integer  "num_required_fandoms",           :default => 0,     :null => false
@@ -707,43 +736,47 @@ ActiveRecord::Schema.define(:version => 20110828172403) do
 
   create_table "prompt_restrictions", :force => true do |t|
     t.integer  "tag_set_id"
-    t.boolean  "optional_tags_allowed",           :default => false, :null => false
-    t.boolean  "description_allowed",             :default => true,  :null => false
-    t.boolean  "url_required",                    :default => false, :null => false
-    t.integer  "fandom_num_required",             :default => 0,     :null => false
-    t.integer  "category_num_required",           :default => 0,     :null => false
-    t.integer  "rating_num_required",             :default => 0,     :null => false
-    t.integer  "character_num_required",          :default => 0,     :null => false
-    t.integer  "relationship_num_required",       :default => 0,     :null => false
-    t.integer  "freeform_num_required",           :default => 0,     :null => false
-    t.integer  "warning_num_required",            :default => 0,     :null => false
-    t.integer  "fandom_num_allowed",              :default => 1,     :null => false
-    t.integer  "category_num_allowed",            :default => 0,     :null => false
-    t.integer  "rating_num_allowed",              :default => 0,     :null => false
-    t.integer  "character_num_allowed",           :default => 1,     :null => false
-    t.integer  "relationship_num_allowed",        :default => 1,     :null => false
-    t.integer  "freeform_num_allowed",            :default => 0,     :null => false
-    t.integer  "warning_num_allowed",             :default => 0,     :null => false
+    t.boolean  "optional_tags_allowed",              :default => false, :null => false
+    t.boolean  "description_allowed",                :default => true,  :null => false
+    t.boolean  "url_required",                       :default => false, :null => false
+    t.integer  "fandom_num_required",                :default => 0,     :null => false
+    t.integer  "category_num_required",              :default => 0,     :null => false
+    t.integer  "rating_num_required",                :default => 0,     :null => false
+    t.integer  "character_num_required",             :default => 0,     :null => false
+    t.integer  "relationship_num_required",          :default => 0,     :null => false
+    t.integer  "freeform_num_required",              :default => 0,     :null => false
+    t.integer  "warning_num_required",               :default => 0,     :null => false
+    t.integer  "fandom_num_allowed",                 :default => 1,     :null => false
+    t.integer  "category_num_allowed",               :default => 0,     :null => false
+    t.integer  "rating_num_allowed",                 :default => 0,     :null => false
+    t.integer  "character_num_allowed",              :default => 1,     :null => false
+    t.integer  "relationship_num_allowed",           :default => 1,     :null => false
+    t.integer  "freeform_num_allowed",               :default => 0,     :null => false
+    t.integer  "warning_num_allowed",                :default => 0,     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "description_required",            :default => false, :null => false
-    t.boolean  "url_allowed",                     :default => false, :null => false
-    t.boolean  "allow_any_fandom",                :default => false, :null => false
-    t.boolean  "allow_any_character",             :default => false, :null => false
-    t.boolean  "allow_any_rating",                :default => false, :null => false
-    t.boolean  "allow_any_relationship",          :default => false, :null => false
-    t.boolean  "allow_any_category",              :default => false, :null => false
-    t.boolean  "allow_any_warning",               :default => false, :null => false
-    t.boolean  "allow_any_freeform",              :default => false, :null => false
-    t.boolean  "require_unique_fandom",           :default => false, :null => false
-    t.boolean  "require_unique_character",        :default => false, :null => false
-    t.boolean  "require_unique_rating",           :default => false, :null => false
-    t.boolean  "require_unique_relationship",     :default => false, :null => false
-    t.boolean  "require_unique_category",         :default => false, :null => false
-    t.boolean  "require_unique_warning",          :default => false, :null => false
-    t.boolean  "require_unique_freeform",         :default => false, :null => false
-    t.boolean  "character_restrict_to_fandom",    :default => false, :null => false
-    t.boolean  "relationship_restrict_to_fandom", :default => false, :null => false
+    t.boolean  "description_required",               :default => false, :null => false
+    t.boolean  "url_allowed",                        :default => false, :null => false
+    t.boolean  "allow_any_fandom",                   :default => false, :null => false
+    t.boolean  "allow_any_character",                :default => false, :null => false
+    t.boolean  "allow_any_rating",                   :default => false, :null => false
+    t.boolean  "allow_any_relationship",             :default => false, :null => false
+    t.boolean  "allow_any_category",                 :default => false, :null => false
+    t.boolean  "allow_any_warning",                  :default => false, :null => false
+    t.boolean  "allow_any_freeform",                 :default => false, :null => false
+    t.boolean  "require_unique_fandom",              :default => false, :null => false
+    t.boolean  "require_unique_character",           :default => false, :null => false
+    t.boolean  "require_unique_rating",              :default => false, :null => false
+    t.boolean  "require_unique_relationship",        :default => false, :null => false
+    t.boolean  "require_unique_category",            :default => false, :null => false
+    t.boolean  "require_unique_warning",             :default => false, :null => false
+    t.boolean  "require_unique_freeform",            :default => false, :null => false
+    t.boolean  "character_restrict_to_fandom",       :default => false, :null => false
+    t.boolean  "relationship_restrict_to_fandom",    :default => false, :null => false
+    t.boolean  "character_restrict_to_tag_set"
+    t.boolean  "relationship_restrict_to_tag_set"
+    t.boolean  "character_restrict_to_canonical"
+    t.boolean  "relationship_restrict_to_canonical"
   end
 
   create_table "prompts", :force => true do |t|
@@ -907,6 +940,40 @@ ActiveRecord::Schema.define(:version => 20110828172403) do
     t.integer  "user_id"
     t.integer  "subscribable_id"
     t.string   "subscribable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tag_nominations", :force => true do |t|
+    t.string   "type"
+    t.integer  "tag_set_nomination_id"
+    t.integer  "fandom_nomination_id"
+    t.string   "tagname"
+    t.string   "parent_tagname"
+    t.text     "tagnotes"
+    t.boolean  "approved",              :default => false, :null => false
+    t.boolean  "rejected",              :default => false, :null => false
+    t.boolean  "wrangled",              :default => false, :null => false
+    t.boolean  "ignored",               :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "canonical",             :default => false, :null => false
+    t.boolean  "exists",                :default => false, :null => false
+    t.boolean  "parented",              :default => false, :null => false
+    t.string   "synonym"
+  end
+
+  create_table "tag_set_nominations", :force => true do |t|
+    t.integer  "pseud_id"
+    t.integer  "owned_tag_set_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tag_set_ownerships", :force => true do |t|
+    t.integer  "pseud_id"
+    t.integer  "owned_tag_set_id"
+    t.boolean  "owner",            :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

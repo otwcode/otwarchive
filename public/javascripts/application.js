@@ -177,6 +177,37 @@ jQuery(function($){
   
 });
 
+// check all in a fieldset optionally with a string to match the name
+jQuery(function($){
+  $('.check_all').each(function(){
+    $(this).click(function(event){
+      var filter = $(this).attr('checkbox_name_filter');
+      var checkboxes;
+      if (filter) {
+        checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
+      } else {
+        checkboxes = $(this).closest("fieldset").children(':checkbox');
+      }
+      checkboxes.attr('checked', true);
+      event.preventDefault();   
+    });
+  });
+  
+  $('.check_none').each(function(){
+    $(this).click(function(event){
+      var filter = $(this).attr('checkbox_name_filter');
+      var checkboxes;
+      if (filter) {
+        checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
+      } else {
+        checkboxes = $(this).closest("fieldset").children(':checkbox');
+      }
+      checkboxes.attr('checked', false);
+      event.preventDefault();      
+    });
+  });
+});
+
 
 // Hides expandable fields if Javascript is enabled
 function hideExpandable() {

@@ -268,7 +268,7 @@ fieldset.tag_set ul li {display:inline;}
 
 
 /* challenge signup forms (see prompt_form partial esp) */
-.options {height: 6em; width: 30em; padding: 2px; overflow: auto; border: 1px solid #ccc;}
+.options {height: 6em; width: auto; padding: 2px; overflow: auto; border: 1px solid #ccc;}
 .many {height: 12em;}
 .all {height: auto;}
 .toggle {float: right; font-size: 0.875em;}

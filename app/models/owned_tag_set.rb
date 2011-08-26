@@ -12,6 +12,10 @@ class OwnedTagSet < ActiveRecord::Base
   accepts_nested_attributes_for :tag_set  
 
   has_many :tag_set_nominations, :dependent => :destroy
+  has_many :fandom_nominations, :through => :tag_set_nominations
+  has_many :character_nominations, :through => :tag_set_nominations
+  has_many :relationship_nominations, :through => :tag_set_nominations
+  has_many :freeform_nominations, :through => :tag_set_nominations
 
   attr_protected :featured
 
@@ -74,6 +78,9 @@ class OwnedTagSet < ActiveRecord::Base
     end
   end
 
+
+  #### MODERATOR/OWNER
+
   def user_is_owner?(user)
     !(owners & user.pseuds).empty?
   end
@@ -114,7 +121,29 @@ class OwnedTagSet < ActiveRecord::Base
   def owner_changes; nil; end
   def moderator_changes; nil; end
 
+  ##### MANAGING NOMINATIONS
 
+  # we can use redis to speed this up since tagset data is loaded there for autocomplete
+  def already_in_set?(tagname)
+    true unless $redis.zscore("autocomplete_tagset_#{tag_set.id}", tagname).nil?
+  end
+
+  def already_nominated?(tagname)
+    TagNomination.joins(:tag_set_nomination => :owned_tag_set).where("tag_set_nominations.owned_tag_set_id = ?", self.id).exists?(:tagname => tagname)
+  end
+  
+  def already_rejected?(tagname)
+    TagNomination.joins(:tag_set_nomination => :owned_tag_set).where("tag_set_nominations.owned_tag_set_id = ?", self.id).exists?(:tagname => tagname, :rejected => true)
+  end
+
+  def already_approved?(tagname)
+    TagNomination.joins(:tag_set_nomination => :owned_tag_set).where("tag_set_nominations.owned_tag_set_id = ?", self.id).exists?(:tagname => tagname, :approved => true)
+  end
+
+  def clear_nominations!
+    TagSetNomination.where(:owned_tag_set_id => self.id).delete_all
+  end
+  
   ##########################
   # PROCESSING NOMINATIONS #
   ##########################
@@ -162,11 +191,6 @@ class OwnedTagSet < ActiveRecord::Base
     return [] unless self.is_processed?
   end
 
-  # we can use redis to speed this up since tagset data is loaded there for autocomplete
-  def already_in_set?(tagname)
-    true unless $redis.zscore("autocomplete_tagset_#{tag_set.id}", tagname).nil?
-  end
-    
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,
   # so we just pass them through method_missing

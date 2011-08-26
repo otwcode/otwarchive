@@ -1,97 +1,127 @@
 <h2><%= ts("Review Nominations") %></h2>
 
-<% if @nomination_count < 1 %>
-  <p class="notes">
-    <%= ts("There aren't any nominations for this tag set to review.") %>
-  </p>
-<% else %>
+<div class="navigation module">
+  <h3 class="landmark">Navigation</h3>
+  <ul class="navigation" role="navigation">
+    <% @tag_types.each do |type| %>
+  	  <li><%= link_to_unless (@tag_type == type), ts("#{type.classify}"), url_for(:tag_type => type) %></li>
+  	<% end %>
+  </ul>
+</div>
 
-  <div class="navigation module">
-    <h3 class="landmark">Navigation</h3>
-    <ul class="navigation" role="navigation">
-      <% @tag_types.each do |type| %>
-    	  <li><%= link_to_unless (@tag_type == type), ts("#{type.classify}"), url_for(:tag_type => type) %></li>
-    	<% end %>
-    </ul>
-  </div>
+<p class="notes">
+  You can either approve or reject nominations, or leave them unmarked if you want to review them later on. Once a nomination
+  is either approved or rejected, it will no longer appear on this page. (You can always manually add a tag yourself if you 
+  accidentally reject one that you meant to approve.)
+</p>
+<p class="notes">
+  Please note that we may occasionally clear out old nominations after several months to avoid database clutter, so please don't 
+  leave nominations turned on unless you are actively reviewing nominations on a regular basis.
+</p>
 
-  <%= form_for :tag_set_nominations, :url => update_multiple_tag_set_nominations_path(@tag_set), :html => { :method => :put } do |form| %>
-    <h3>Nominated <%= @tag_type.classify.pluralize %></h3>
-    <% noms = @nominations.where(:canonical => true) %>
-    <% unless noms.first.nil? %>
-      <h4><%=ts("Canonical")%></h4>
-      <p class="notes">
-        The following nominated tags are canonical and wrangled, so they are safe to add.
-      </p>
-      <ul>
-      <% noms.each do |nom| %>
-        <li>
-          <%= label_tag "approve_#{nom.tagname}" do %>
-            <%= nom.tagname %> (<%= nom.count %>)
-            <%= check_box_tag "approve_#{nom.tagname}", 1, true %>            
-          <% end %>
-        </li>
-      <% end %>
-      </ul>
+<%= form_for :tag_set_nominations, :url => update_multiple_tag_set_nominations_path(@tag_set), :html => { :method => :put } do |form| %>
+  <h3>Nominated <%= @tag_type.classify.pluralize %><%= hidden_field_tag "tag_type", @tag_type %></h3>
+  <% noms = @nominations.where(:canonical => true) %>
+  <% unless noms.empty? %>
+    <fieldset>
+    <h4><%=ts("Canonical")%></h4>
+    <p class="notes">
+      The following nominated tags are canonical and wrangled, so they are safe to approve.
+    </p>
+    <p>
+      Approve <a href="#" class="check_all" checkbox_name_filter="approve">All</a> | <a href="#" class="check_none" checkbox_name_filter="approve">None</a>
+      Reject <a href="#" class="check_all" checkbox_name_filter="reject">All</a> | <a href="#" class="check_none" checkbox_name_filter="reject">None</a>
+    </p>
+    <ul class="options<%= noms.count > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''%>">
+    <% noms.names_with_count.each do |nom| %>
+      <li class="<%= cycle("odd", "even") %>">
+        <%= nom.tagname %> (<%= nom.count %>)
+        <%= label_tag "approve_#{nom.tagname}" do %>
+          <%= ts("Approve") %>
+          <%= check_box_tag "approve_#{nom.tagname}", 1, params["approve_#{nom.tagname}"] %>            
+        <% end %>
+        <%= label_tag "reject_#{nom.tagname}" do %>
+          <%= ts("Reject") %>
+          <%= check_box_tag "reject_#{nom.tagname}", 1, params["reject_#{nom.tagname}"] %>            
+        <% end %>
+      </li>        
     <% end %>
-  
-        <% # existing but noncanonical tags nominated %>
-        <% noms = @nominations.where(:canonical => false, :exists => true) %>
-        <% unless noms.first.nil? %>
-          <h4>Existing Tags</h4>
-          <ul>
-          <% noms.each do |nom| %>
-            <li><%= nom.tagname %> (<%= nom.count %>)</li>
-          <% end %>
-          </ul>
-        <% end %>
-  
-        <% # nonexistent tags nominated %>
-        <% noms = @nominations.where(:exists => false) %>
-        <% unless noms.first.nil? %>
-          <h4>Nonexistent Tags</h4>
-          <ul>
-          <% noms.each do |nom| %>
-            <li><%= nom.tagname %> (<%= nom.count %>)</li>
-          <% end %>
-          </ul>
-        <% end %>
-  
-        <% # unparented tags nominated %>
-        <% if %w(character relationship).include?(@tag_type) %>
-          <% noms = @nominations.where(:parented => false) %>
-          <% unless noms.first.nil? %>
-            <h4>Unparented Tags</h4>
-            <ul>
-            <% noms.each do |nom| %>
-              <li><%= nom.tagname %> (<%= nom.count %>)</li>
-            <% end %>
-            </ul>
-          <% end %>
-        <% end %>
-      </tbody>
-    </table>
+    </ul>
+    </fieldset>
   <% end %>
 
-  
-  
-  <!-- 
-    
-    The following canonical tags not already in the set were nominated:
-    (scrollable checkboxes, all checked by default)
-    
-    The following tags were nominated but are not canonical and have synonyms; you can add either the nominated version or the canonical version:
-    (scrollable checkboxes, canonical versions checked)
-    
-    The following tags were nominated but are unwrangled:
-    (scrollable checkboxes, unchecked)
-    
-    The following tags were nominated but don't exist on the archive at all: 
+  <% # existing but noncanonical tags %>
+  <% noms = @nominations.where(:canonical => false, :exists => true) %>
+  <% unless noms.empty? %>
+    <fieldset>
+    <h4>Existing Tags</h4>
+    <p class="notes">
+      The following nominated tags exist but are not canonical. They may have an official synonym, in which case
+      you can approve the synonym instead (or in addition if you really want, but that is not recommended).
+    </p>
+    <p>
+      Approve <a href="#" class="check_all" checkbox_name_filter="approve">All</a> | <a href="#" class="check_none" checkbox_name_filter="approve">None</a>
+      Reject <a href="#" class="check_all" checkbox_name_filter="reject">All</a> | <a href="#" class="check_none" checkbox_name_filter="reject">None</a>
+      Synonyms <a href="#" class="check_all" checkbox_name_filter="synonym">All</a> | <a href="#" class="check_none" checkbox_name_filter="synonym">None</a>
+    </p>
+    <ul class="options<%= noms.count > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''%>">
+    <% noms.names_with_count.each do |nom| %>
+      <li class="<%= cycle("odd", "even") %>">
+        <%= nom.tagname %> (<%= nom.count %>)
+        <%= label_tag "approve_#{nom.tagname}" do %>
+          <%= ts("Approve") %>
+          <%= check_box_tag "approve_#{nom.tagname}", 1, params["approve_#{nom.tagname}"] %>            
+        <% end %>
+        <%= label_tag "reject_#{nom.tagname}" do %>
+          <%= ts("Reject") %>
+          <%= check_box_tag "reject_#{nom.tagname}", 1, params["reject_#{nom.tagname}"] %>
+        <% end %>
+        <% if nom.synonym %>
+          <%= label_tag "approve_#{nom.synonym}" do %>
+            <%= ts("Approve Synonym Instead: ") %>
+            <%= nom.synonym %>
+            <%= check_box_tag "synonym_#{nom.synonym}", 1, params["synonym_#{nom.synonym}"] %>            
+          <% end %>
+        <% end %>
+      </li>        
+    <% end %>
+    </ul>
+    </fieldset>
+  <% end %>
 
-    
-    The following nominated character tags don't have a fandom: 
-    
-    The following nominated relationship tags don't have a fandom:  -->
+  <% # nonexistent tags nominated %>
+  <% noms = @nominations.where(:exists => false) %>
+  <% unless noms.empty? %>
+    <fieldset>
+    <h4>Nonexistent Tags</h4>
+    <p class="notes">
+      The following nominated tags don't exist on the archive at all. Please check these over
+      closely before approving them for addition!
+    </p>
+    <p>
+      Approve <a href="#" class="check_all" checkbox_name_filter="approve">All</a> | <a href="#" class="check_none" checkbox_name_filter="approve">None</a>
+      Reject <a href="#" class="check_all" checkbox_name_filter="reject">All</a> | <a href="#" class="check_none" checkbox_name_filter="reject">None</a>
+    </p>
+    <ul class="options<%= noms.count > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''%>">
+    <% noms.names_with_count.each do |nom| %>
+      <li class="<%= cycle("odd", "even") %>">
+        <%= nom.tagname %> (<%= nom.count %>)
+        <%= label_tag "approve_#{nom.tagname}" do %>
+          <%= ts("Approve") %>
+          <%= check_box_tag "approve_#{nom.tagname}", 1, params["approve_#{nom.tagname}"] %>            
+        <% end %>
+        <%= label_tag "reject_#{nom.tagname}" do %>
+          <%= ts("Reject") %>
+          <%= check_box_tag "reject_#{nom.tagname}", 1, params["reject_#{nom.tagname}"] %>            
+        <% end %>
+      </li>
+    <% end %>
+    </ul>
+    </fieldset>
+  <% end %>
 
+  <fieldset>
+    <p class="submit"><%= submit_tag "Submit" %></p>      
+  </fieldset>    
 
 <% end %>

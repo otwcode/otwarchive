@@ -8,14 +8,18 @@ class CharacterNomination < TagNomination
     errors.add(:base, ts("We need to know what fandom your character tag %{tagname} belongs in.", :tagname => self.tagname))
   end
 
-  def self.for_tag_set_through_fandom(tag_set)
-    joins(:fandom_nomination => [{:tag_set_nomination => :owned_tag_set}]).
-    where("owned_tag_sets.id = ?", tag_set.id)
-  end
-
   before_save :set_parented
   def set_parented
-    self.parented = (tag = Character.find_by_name(self.tagname)) && tag.parents.any? {|p| p.is_a?(Fandom)}
+    has_parent = (tag = Character.find_by_name(tagname)) && tag.parents.any? {|p| p.is_a?(Fandom)}
+    self.parented = has_parent ? true : false
+    true
+  end
+  
+  before_save :set_tag_set_nomination
+  def set_tag_set_nomination
+    if fandom_nomination && !tag_set_nomination
+      self.tag_set_nomination = fandom_nomination.tag_set_nomination
+    end
   end
 
 end

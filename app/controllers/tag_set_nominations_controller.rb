@@ -91,6 +91,7 @@ class TagSetNominationsController < ApplicationController
       flash[:notice] = ts('Your nominations were successfully submitted.')
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
+      build_nominations
       render :action => "new"
     end
   end
@@ -100,6 +101,7 @@ class TagSetNominationsController < ApplicationController
       flash[:notice] = ts("Your nominations were successfully updated.")
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
+      build_nominations
       render :action => "edit"
     end
   end
@@ -113,24 +115,47 @@ class TagSetNominationsController < ApplicationController
   # set up various variables for reviewing nominations
   def setup_for_review
     set_limit
-    @nomination_count = @tag_set.tag_set_nominations.count
     @tag_types = TagSet::TAG_TYPES_INITIALIZABLE.select {|type| @limit[type] > 0}
-    @tag_type = params[:tag_type] || @tag_types.first
-    
-    @nominations = (case @tag_type
-      when "fandom"
-        FandomNomination.for_tag_set(@tag_set)
-      when "freeform"
-        FreeformNomination.for_tag_set(@tag_set)
-      when "character"
-        @limit[:fandom] > 0 ? CharacterNomination.for_tag_set_through_fandom(@tag_set) : CharacterNomination.for_tag_set(@tag_set)
-      when "relationship"
-        @limit[:fandom] > 0 ? RelationshipNomination.for_tag_set_through_fandom(@tag_set) : RelationshipNomination.for_tag_set(@tag_set)
-    end).unreviewed.names_with_count    
+    @tag_type = params[:tag_type] || @tag_types.first    
+    @nominations = @tag_set.send("#{@tag_type}_nominations").unreviewed
   end
 
   def update_multiple
-    params[:tag_nomination_ids]
+    unless @tag_set.user_is_moderator?(current_user)
+      flash[:error] = ts("You don't have permission to do that.")
+      redirect_to tag_set_path(@tag_set) and return
+    end
+    
+    @tagnames_to_approve = []
+    @tagnames_to_reject = []
+    params.each_pair do |key,val|
+      if val && key.match(/^(approve|synonym)_(.*)$/)
+        @tagnames_to_approve << $2
+      elsif val && key.match(/^reject_(.*)$/)
+        @tagnames_to_reject << $1
+      end
+    end
+    
+    unless (intersect = (@tagnames_to_approve & @tagnames_to_reject)).empty?
+      flash[:error] = ts("You have both approved and rejected the following tags: %{intersect}", :intersect => intersect.join(", "))
+      setup_for_review
+      render :action => "index" and return
+    end
+    
+    @tag_set.tag_set.tagnames_to_add = @tagnames_to_approve.join(",")
+    @tag_set.tag_set.tagnames_to_remove = @tagnames_to_reject.join(",")
+    
+    if @tag_set.save && 
+          TagNomination.where("tagname IN (?)", @tagnames_to_approve).update_all(:approved => true, :rejected => false) &&
+          TagNomination.where("tagname IN (?)", @tagnames_to_reject).update_all(:rejected => true, :approved => false)
+      flash[:notice] = ts("Successfully approved: %{approved}<br />Rejected: %{rejected}", 
+          :approved => @tagnames_to_approve.join(', '), :rejected => @tagnames_to_reject.join(', '))
+      redirect_to tag_set_path(@tag_set) and return
+    else
+      flash[:error] = ts("We were unable to save your updates.")
+      setup_for_review
+      render :action => "index"
+    end
   end
   
   
