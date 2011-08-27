@@ -71,3 +71,15 @@ When /^I request some invites$/ do
       And %{I fill in "user_invite_request_reason" with "I want them for a friend"}
       And %{I press "Create"}
 end
+
+When /^I view requests as an admin$/ do
+  When %{I am logged in as an admin}
+    When %{I follow "invitations"}
+      And %{I follow "Manage requests"}
+end
+
+When /^an admin grants the request$/ do
+  When %{I view requests as an admin}
+    When %{I fill in "requests[user1]" with "2"}
+      And %{I press "Update"}
+end
