@@ -1,43 +1,44 @@
 @admin
 Feature: Invite requests
 
+  Scenario: Can't invite a friend from the homepage if you don't have any invitations
+  
+    Given I have invitations set up
+    When I try to invite a friend from the homepage
+    Then I should see "Invite a friend"
+      And I should see "Sorry, you have no unsent invitations right now."
+  
+  Scenario: Can't invite a friend from your user page if you don't have any invitations
+  
+    Given I have invitations set up
+    When I try to invite a friend from my user page
+    Then I should see "Invite a friend"
+      And I should see "Sorry, you have no unsent invitations right now."
+  
   Scenario: Request an invite for a friend
-    Given I have no users
-      And I have an AdminSetting
-      And the following admin exists
-      | login       | password   | email                    |
-      | admin-sam   | password   | test@archiveofourown.org |
-      And the following activated user exists
-      | login  | password |
-      | user1  | password |
-    
-    # user requests invites
-    When I am logged in as "user1" with password "password"
-      And I go to the homepage
-    Then I should see "INVITE A FRIEND"
-    When I follow "INVITE A FRIEND"
-    Then I should see "Invite a friend"
-      And I should see "Sorry, you have no unsent invitations right now."
-    When I go to user1's user page
-      And I follow "Invitations"
-    Then I should see "Invite a friend"
-      And I should see "Sorry, you have no unsent invitations right now."
-    When I follow "Request more"
+
+    Given I have invitations set up
+    When I try to invite a friend from my user page
+      And I follow "Request more"
     Then I should see "How many invites are you requesting?"
     When I fill in "user_invite_request_quantity" with "3"
       And I fill in "user_invite_request_reason" with "I want them for a friend"
       And I press "Create"
     Then I should see "Request was successfully created."
+    
+  Scenario: Requests are not instantly granted
+    
+    Given I have invitations set up
+    When I request some invites
     When I follow "Invitations"
     Then I should see "Sorry, you have no unsent invitations right now."
     
-    # admin grants request
+  Scenario: Admin can grant request
+    
+    Given I have invitations set up
+    When I request some invites
     When I follow "Log out"
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "admin-sam"
-      And I fill in "admin_session_password" with "password"
-      And I press "Log in as admin"
-    Then I should see "Successfully logged in"
+    When I am logged in as an admin
     When I follow "invitations"
       And I follow "Manage requests"
     Then I should see "user1"
