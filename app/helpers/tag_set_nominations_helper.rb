@@ -38,4 +38,19 @@ module TagSetNominationsHelper
     message
   end
   
+  
+  def noncanonical_info_class(form)
+    ((form.object.new_record? || form.object.canonical) ? ' hideme' : '')
+  end
+  
+  def nomination_status(nomination=nil)
+    if nomination && nomination.approved
+      '<span class="approved">&#x2714;</span>'.html_safe
+    elsif nomination && nomination.rejected
+      '<span class="rejected">X</span>'.html_safe
+    else
+      '<span class="unreviewed">?</span>'.html_safe
+    end
+  end
+  
 end

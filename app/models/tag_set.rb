@@ -78,7 +78,7 @@ class TagSet < ActiveRecord::Base
       self.tags += tagnames_to_list(@tagnames_to_add)
     end
     if !@tagnames_to_remove.blank?
-      self.tags -= tagnames_to_list(@tagnames_to_remove).compact
+      self.tags -= @tagnames_to_remove.split(ArchiveConfig.DELIMITER_FOR_INPUT).map {|tname| Tag.find_by_name(tname.squish)}.compact
     end
     
     TAG_TYPES.each do |type|

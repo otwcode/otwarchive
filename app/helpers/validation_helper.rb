@@ -24,9 +24,8 @@ module ValidationHelper
     if object && object.errors.any?
       error_messages = object.errors.full_messages.map {|msg| content_tag(:li, msg.gsub(/^(.+)\^/, '').html_safe)}.join("\n").html_safe
       message = '<div class="error" id="error">'.html_safe
-      message += content_tag(:h2, h(t('validation.couldnt_save', :default => "We couldn't save this %{objectname}, sorry!", 
-                          :objectname => object.class.name.to_s.gsub(/_/, ' ')))) 
-      message += content_tag(:p, h(t("validation.problems_found", :default => "Here are the problems we found: "))) 
+      message += content_tag(:h2, h(ts("We couldn't save this %{objectname}, sorry!", :objectname => object.class.name.to_s.gsub(/_/, ' ')))) 
+      message += content_tag(:p, h(ts("Here are the problems we found: "))) 
       message += content_tag(:ul, error_messages) 
       message += '</div>'.html_safe
     end

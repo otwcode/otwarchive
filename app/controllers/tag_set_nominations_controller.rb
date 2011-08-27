@@ -89,6 +89,7 @@ class TagSetNominationsController < ApplicationController
     @tag_set_nomination = TagSetNomination.new(params[:tag_set_nomination])
     if @tag_set_nomination.save
       flash[:notice] = ts('Your nominations were successfully submitted.')
+      request_noncanonical_info
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
       build_nominations
@@ -99,10 +100,20 @@ class TagSetNominationsController < ApplicationController
   def update
     if @tag_set_nomination.update_attributes(params[:tag_set_nomination])
       flash[:notice] = ts("Your nominations were successfully updated.")
+      request_noncanonical_info
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
       build_nominations
       render :action => "edit"
+    end
+  end
+
+  def request_noncanonical_info
+    if @tag_set_nomination.fandom_nominations.any? {|tn| !tn.canonical && tn.parent_tagname.blank?} ||
+      @tag_set_nomination.character_nominations.any? {|tn| !tn.canonical && (tn.parent_tagname.blank? && !tn.fandom_nomination)} ||
+      @tag_set_nomination.relationship_nominations.any? {|tn| !tn.canonical && (tn.parent_tagname.blank? && !tn.fandom_nomination)}
+      
+      flash[:notice] += ts(" Since some of your nominations are not canonical tags, please consider editing to add some extra information.")
     end
   end
 
@@ -116,15 +127,22 @@ class TagSetNominationsController < ApplicationController
   def setup_for_review
     set_limit
     @tag_types = TagSet::TAG_TYPES_INITIALIZABLE.select {|type| @limit[type] > 0}
-    @tag_type = params[:tag_type] || @tag_types.first    
+    @tag_type = params[:tag_type] || @tag_types.first
+    # make sure it's a valid tag type before we go send()ing it around
+    @tag_type = @tag_types.first unless @tag_types.include?(@tag_type)
     @nominations = @tag_set.send("#{@tag_type}_nominations").unreviewed
   end
 
+
+  # update_multiple gets called from the index/review form. 
+  # we get params like "approve_My Awesome Tag" and "reject_My Lousy Tag" for any tag nominations which were
+  # marked to be rejected
   def update_multiple
     unless @tag_set.user_is_moderator?(current_user)
       flash[:error] = ts("You don't have permission to do that.")
       redirect_to tag_set_path(@tag_set) and return
     end
+    setup_for_review
     
     @tagnames_to_approve = []
     @tagnames_to_reject = []
@@ -138,18 +156,17 @@ class TagSetNominationsController < ApplicationController
     
     unless (intersect = (@tagnames_to_approve & @tagnames_to_reject)).empty?
       flash[:error] = ts("You have both approved and rejected the following tags: %{intersect}", :intersect => intersect.join(", "))
-      setup_for_review
       render :action => "index" and return
     end
     
-    @tag_set.tag_set.tagnames_to_add = @tagnames_to_approve.join(",")
+    @tag_set.tag_set.send("#{@tag_type}_tagnames_to_add=", @tagnames_to_approve.join(","))
     @tag_set.tag_set.tagnames_to_remove = @tagnames_to_reject.join(",")
     
     if @tag_set.save && 
           TagNomination.where("tagname IN (?)", @tagnames_to_approve).update_all(:approved => true, :rejected => false) &&
           TagNomination.where("tagname IN (?)", @tagnames_to_reject).update_all(:rejected => true, :approved => false)
-      flash[:notice] = ts("Successfully approved: %{approved}<br />Rejected: %{rejected}", 
-          :approved => @tagnames_to_approve.join(', '), :rejected => @tagnames_to_reject.join(', '))
+      flash[:notice] = ts("Successfully approved: %{approved}", :approved => @tagnames_to_approve.join(', ')) + " " +
+        ts("Successfully rejected: %{rejected}", :rejected => @tagnames_to_reject.join(', '))
       redirect_to tag_set_path(@tag_set) and return
     else
       flash[:error] = ts("We were unable to save your updates.")
@@ -158,5 +175,15 @@ class TagSetNominationsController < ApplicationController
     end
   end
   
+  def destroy_multiple
+    unless @tag_set.user_is_owner?(current_user)
+      flash[:error] = ts("You don't have permission to do that.")
+      redirect_to tag_set_path(@tag_set) and return
+    end
+
+    @tag_set.clear_nominations!
+    flash[:notice] = ts("All nominations for this tag set have been cleared.")
+    redirect_to tag_set_path(@tag_set)
+  end
   
 end

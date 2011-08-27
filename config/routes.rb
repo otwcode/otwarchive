@@ -70,6 +70,7 @@ Otwarchive::Application.routes.draw do
       collection do
         get :review
         put :update_multiple
+        post :destroy_multiple
         get :request_wrangle
       end
       

@@ -32,8 +32,10 @@
           <p><%= ts("(None Nominated)") %></p>
         <% else %>
           <ol>
-            <% @tag_set_nomination.nominated_tags(tag_type).each_with_index do |tag, index| %>
+            <% @tag_set_nomination.send("#{tag_type}_nominations").each do |tag|%>
               <li>
+                <%= nomination_status(tag) %>
+                
                 <% if !tag.tagnotes.blank? %>
                   <div class="hasnotes">
                 <% end %>

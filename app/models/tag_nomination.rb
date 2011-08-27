@@ -13,8 +13,17 @@ class TagNomination < ActiveRecord::Base
   validate :type_validity
   def type_validity
     if !tagname.blank? && (tag = Tag.find_by_name(tagname)) && "#{tag.type}Nomination" != self.type
-      errors.add(:base, ts("The tag %{tagname} is already in the archive but as a #{tag.type} tag.", :tagname => self.tagname))
+      errors.add(:base, ts("^The tag %{tagname} is already in the archive but as a #{tag.type} tag.", :tagname => self.tagname))
     end
+  end
+
+  validate :not_already_approved, :on => :update
+  def not_already_approved
+    if tagname_changed? && (tagname != tagname_was) && self.approved 
+      errors.add(:base, ts("^You cannot change %{tagname_was} to %{tagname} because that nomination has already been approved.", :tagname_was => self.tagname_was, :tagname => self.tagname))
+      tagname = self.tagname_was
+    end
+    false
   end
 
   before_save :set_tag_status

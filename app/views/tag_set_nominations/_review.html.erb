@@ -4,8 +4,13 @@
   <h3 class="landmark">Navigation</h3>
   <ul class="navigation" role="navigation">
     <% @tag_types.each do |type| %>
-  	  <li><%= link_to_unless (@tag_type == type), ts("#{type.classify}"), url_for(:tag_type => type) %></li>
+  	  <li><%= link_to_unless (@tag_type == type), ts("#{type.classify.pluralize}"), url_for(:tag_type => type) %></li>
   	<% end %>
+  	<% if @tag_set.user_is_owner?(current_user) %>
+      <li><%= link_to ts("Clear Nominations"), destroy_multiple_tag_set_nominations_path(@tag_set),
+        :confirm => ts('Are you certain you want to clear nominations for this tag set? (This will NOT affect tags you have approved, but it will clear the history of rejected tags.)'),
+        :method => :post %></li>
+    <% end %>
   </ul>
 </div>
 
@@ -26,7 +31,8 @@
     <fieldset>
     <h4><%=ts("Canonical")%></h4>
     <p class="notes">
-      The following nominated tags are canonical and wrangled, so they are safe to approve.
+      The following nominated tags are canonical and wrangled. However, note that you may have more and less specific versions of the same tag
+      nominated (eg, "Sam" and "Sam Winchester" where "Sam" is a meta tag covering all characters named Sam Whatever). 
     </p>
     <p>
       Approve <a href="#" class="check_all" checkbox_name_filter="approve">All</a> | <a href="#" class="check_none" checkbox_name_filter="approve">None</a>
