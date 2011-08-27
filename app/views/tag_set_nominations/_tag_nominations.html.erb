@@ -1,6 +1,6 @@
 <dt><%= nom_form.label :tagname, ts("#{tag_type.classify} %{index}", :index => tag_nominations_counter+1) %>
 <dd>
-  <% if nom.approved %>
+  <% if nom.approved || nom.rejected %>
     <%= nom.tagname %>
   <% else %>
     <%= nom_form.text_field :tagname, 

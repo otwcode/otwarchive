@@ -19,8 +19,8 @@ class TagNomination < ActiveRecord::Base
 
   validate :not_already_approved, :on => :update
   def not_already_approved
-    if tagname_changed? && (tagname != tagname_was) && self.approved 
-      errors.add(:base, ts("^You cannot change %{tagname_was} to %{tagname} because that nomination has already been approved.", :tagname_was => self.tagname_was, :tagname => self.tagname))
+    if tagname_changed? && (tagname != tagname_was) && (self.approved || self.rejected) 
+      errors.add(:base, ts("^You cannot change %{tagname_was} to %{tagname} because that nomination has already been reviewed.", :tagname_was => self.tagname_was, :tagname => self.tagname))
       tagname = self.tagname_was
     end
     false

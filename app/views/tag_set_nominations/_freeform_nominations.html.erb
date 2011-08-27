@@ -1,6 +1,6 @@
 <dt><%= nom_form.label :tagname, ts("Freeform %{index}", :index => freeform_nominations_counter+1) %></dt>
 <dd>
-  <% if nom.approved %>
+  <% if nom.approved || nom.rejected %>
     <%= nom.tagname %>
   <% else %>
     <%= nom_form.text_field :tagname, autocomplete_options("freeform", :autocomplete_token_limit => 1) %>
