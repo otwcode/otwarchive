@@ -178,8 +178,10 @@ class ChallengeSignupsController < ApplicationController
       @challenge_signup.destroy
       flash[:notice] = ts("Challenge signup was deleted.")
     end
-    if @collection.user_is_maintainer?(current_user) || @collection.prompt_meme?
+    if @collection.user_is_maintainer?(current_user) && !@collection.prompt_meme?
       redirect_to collection_signups_path(@collection)
+    elsif @collection.prompt_meme?
+      redirect_to collection_requests_path(@collection)
     else
       redirect_to @collection
     end
