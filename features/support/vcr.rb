@@ -24,6 +24,7 @@ VCR.cucumber_tags do |t|
   t.tags '@work_import_special_characters_man_cp', :record => :all
   t.tags '@work_import_special_characters_man_utf'
   t.tags '@work_import_nul_character'
+  t.tags '@work_import_errors', :record => :all
 
   t.tags '@import_da'
   t.tags '@import_da_fic'
