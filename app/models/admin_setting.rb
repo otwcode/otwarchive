@@ -70,7 +70,7 @@ class AdminSetting < ActiveRecord::Base
   private
   
   def expire_cached_settings
-    if Rails.env.production?
+    if Rails.env.production? || Rails.env.test?
       Rails.cache.delete("admin_settings")
     end
   end
