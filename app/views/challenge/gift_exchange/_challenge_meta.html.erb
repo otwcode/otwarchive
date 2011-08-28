@@ -42,7 +42,7 @@
     <% @collection.signups.collect(&:pseud).compact.each_with_index do |pseud, index| %>
       <% if index == num_to_show %>
         </ul>
-        <h5 id="show_signups" style="display:none" class="showme">(See all...)</h5>
+        <h5 id="show_signups" class="showme">(See all...)</h5>
         <ul id="more_signups" class="hideme">
       <% end %>
       <li><%= "#{pseud.byline}" + (index != (num_to_show-1) && index != (signup_count-1) ? "," : "") %></li>
