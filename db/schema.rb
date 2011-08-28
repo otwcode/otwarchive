@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110619091342) do
+ActiveRecord::Schema.define(:version => 20110828172403) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -37,22 +37,23 @@ ActiveRecord::Schema.define(:version => 20110619091342) do
   add_index "admin_posts", ["translated_post_id"], :name => "index_admin_posts_on_post_id"
 
   create_table "admin_settings", :force => true do |t|
-    t.boolean  "account_creation_enabled",                 :default => true,                  :null => false
-    t.boolean  "invite_from_queue_enabled",                :default => true,                  :null => false
-    t.integer  "invite_from_queue_number",    :limit => 8
-    t.integer  "invite_from_queue_frequency", :limit => 3
-    t.integer  "days_to_purge_unactivated",   :limit => 3
-    t.integer  "last_updated_by",             :limit => 8
+    t.boolean  "account_creation_enabled",                   :default => true,                  :null => false
+    t.boolean  "invite_from_queue_enabled",                  :default => true,                  :null => false
+    t.integer  "invite_from_queue_number",      :limit => 8
+    t.integer  "invite_from_queue_frequency",   :limit => 3
+    t.integer  "days_to_purge_unactivated",     :limit => 3
+    t.integer  "last_updated_by",               :limit => 8
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "invite_from_queue_at",                     :default => '2009-11-07 21:27:21'
-    t.boolean  "suspend_filter_counts",                    :default => false
+    t.datetime "invite_from_queue_at",                       :default => '2009-11-07 21:27:21'
+    t.boolean  "suspend_filter_counts",                      :default => false
     t.datetime "suspend_filter_counts_at"
-    t.boolean  "enable_test_caching",                      :default => false
-    t.integer  "cache_expiration",            :limit => 8, :default => 10
-    t.boolean  "tag_wrangling_off",                        :default => false,                 :null => false
-    t.boolean  "guest_downloading_off",                    :default => false,                 :null => false
-    t.string   "banner_text",                              :default => ""
+    t.boolean  "enable_test_caching",                        :default => false
+    t.integer  "cache_expiration",              :limit => 8, :default => 10
+    t.boolean  "tag_wrangling_off",                          :default => false,                 :null => false
+    t.boolean  "guest_downloading_off",                      :default => false,                 :null => false
+    t.text     "banner_text"
+    t.integer  "banner_text_sanitizer_version", :limit => 2, :default => 0,                     :null => false
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"
@@ -365,6 +366,7 @@ ActiveRecord::Schema.define(:version => 20110619091342) do
     t.text     "summary"
     t.boolean  "hidden_by_admin",                        :default => false, :null => false
     t.integer  "summary_sanitizer_version", :limit => 2, :default => 0,     :null => false
+    t.integer  "language_id"
   end
 
   create_table "feedbacks", :force => true do |t|
@@ -793,7 +795,7 @@ ActiveRecord::Schema.define(:version => 20110619091342) do
     t.integer  "user_id"
     t.integer  "work_id"
     t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "last_viewed"
     t.integer  "view_count",         :default => 0
     t.boolean  "toread",             :default => false, :null => false
     t.boolean  "toskip",             :default => false, :null => false
