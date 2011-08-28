@@ -1,0 +1,24 @@
+<% unless current_user && current_user.try(:preference).try(:banner_seen) %>
+<% unless @bannertext.empty? || logged_in_as_admin? %>
+<% unless current_user.nil? && session[:hide_banner] %>
+  <div class="flash notice" id="notice-banner">
+    <p>
+      <%= @bannertext %>
+    </p>
+    <% if current_user.nil? %>
+      <p class="submit">
+        <%= link_to "Hide this banner", url_for(params.merge :hide_banner => true, :anchor => params[:anchor]), :class => 'navigation' %>
+        <%= link_to image_tag('close-flash.png'), nil, :remote => true, :id => "hide-notice-banner", :title => "Hide notices banner", :class => "showme" %>
+      </p>
+    <% else %>
+      <%= form_tag end_banner_user_path(current_user), :method => :post, :remote => true do %>
+        <p class="submit">
+          <%= submit_tag ts("Hide this banner") %>
+          <%= link_to image_tag('close-flash.png'), "#", :id => "hide-notice-banner", :title => "Hide notices banner", :class => "showme" %>
+        </p>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<% end %>
+<% end %>
