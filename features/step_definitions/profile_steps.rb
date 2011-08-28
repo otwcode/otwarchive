@@ -31,7 +31,7 @@ end
 
 
 When /^I enter an incorrect password$/ do
-  click_link("Change Email")
+  click_link("Email")
   fill_in("New Email", :with => "valid2@archiveofourown.org")
   fill_in("Confirm New Email", :with => "valid2@archiveofourown.org")
   fill_in("Password", :with => "passw")
@@ -40,7 +40,7 @@ end
 
 
 When /^I change my email$/ do
-  click_link("Change Email")
+  click_link("Email")
   fill_in("New Email", :with => "valid2@archiveofourown.org")
   fill_in("Confirm New Email", :with => "valid2@archiveofourown.org")
   fill_in("Password", :with => "password")
@@ -56,7 +56,7 @@ end
 
 		
 When /^I enter an invalid email$/ do
-  click_link("Change Email")
+  click_link("Email")
   fill_in("New Email", :with => "bob.bob.bob")
   fill_in("Confirm New Email", :with => "bob.bob.bob")
   fill_in("Password", :with => "password")
@@ -67,7 +67,7 @@ end
 When /^I enter a duplicate email$/ do
   user = Factory.create(:user, :login => "testuser2", :password => "password", :email => "foo@ao3.org")
   user.activate
-  click_link("Change Email")
+  click_link("Email")
   fill_in("New Email", :with => "foo@ao3.org")
   fill_in("Confirm New Email", :with => "foo@ao3.org")
   fill_in("Password", :with => "password")
@@ -110,7 +110,7 @@ end
 
 
 When /^I make a mistake typing my old password$/ do
-  click_link("Change Password")
+  click_link("Password")
   fill_in("New Password", :with => "newpass1")
   fill_in("Confirm New Password", :with => "newpass1")
   fill_in("Old Password", :with => "wrong")
@@ -119,7 +119,7 @@ end
 
 
 When /^I make a typing mistake confirming my new password$/ do
-  click_link("Change Password")
+  click_link("Password")
   fill_in("New Password", :with => "newpass1")
   fill_in("Confirm New Password", :with => "newpass2")
   fill_in("Old Password", :with => "password")
@@ -128,7 +128,7 @@ end
 
 
 When /^I change my password$/ do
-  click_link("Change Password")
+  click_link("Password")
   fill_in("New Password", :with => "newpass1")
   fill_in("Confirm New Password", :with => "newpass1")
   fill_in("Old Password", :with => "password")
