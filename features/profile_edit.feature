@@ -33,7 +33,7 @@ Scenario:	Edit profile - remove details
 		
 Scenario: Edit profile - changing email address requires reauthenticating
 
-  When I follow "Change Email"
+  When I follow "Email"
   And I fill in "New Email" with "blah"
   And I fill in "Confirm New Email" with "blah"
   And I press "Change Email"
