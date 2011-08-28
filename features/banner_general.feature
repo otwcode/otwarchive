@@ -25,10 +25,8 @@ Scenario: User can follow a link in the banner
   Given an admin sets a custom banner notice with a link
     And I am logged in as "ordinaryuser"
     And I am on the home page
-  #  Then show me the page
-  #When I follow "OTWtest"
-  #Then show me the page
-  #Then I should see "donate"
+  When I follow "OTWtest"
+  Then I should see "Support and Feedback"
 
 Scenario: User can turn off banner using words
 

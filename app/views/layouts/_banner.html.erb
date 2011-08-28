@@ -1,10 +1,8 @@
 <% unless current_user && current_user.try(:preference).try(:banner_seen) %>
-<% unless @bannertext.empty? || logged_in_as_admin? %>
+<% unless @bannertext.nil? || logged_in_as_admin? %>
 <% unless current_user.nil? && session[:hide_banner] %>
   <div class="flash notice" id="notice-banner">
-    <p>
-      <%= @bannertext %>
-    </p>
+    <%= @bannertext %>
     <% if current_user.nil? %>
       <p class="submit">
         <%= link_to "Hide this banner", url_for(params.merge :hide_banner => true, :anchor => params[:anchor]), :class => 'navigation' %>

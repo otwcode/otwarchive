@@ -47,12 +47,12 @@ public
   def fetch_admin_settings
     if Rails.env.development?
       @admin_settings = AdminSetting.first
-      unless @admin_settings.banner_text.empty?
+      unless @admin_settings.banner_text.nil? || @admin_settings.banner_text.empty?
         @bannertext = sanitize_field(@admin_settings, :banner_text).html_safe
       end
     else
       @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
-      unless @admin_settings.banner_text.empty?
+      unless @admin_settings.banner_text.nil? || @admin_settings.banner_text.empty?
         @bannertext = Rails.cache.fetch("banner_text"){sanitize_field(@admin_settings, :banner_text).html_safe}
       end
     end

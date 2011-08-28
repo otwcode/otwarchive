@@ -17,10 +17,9 @@ end
 When /^an admin sets a custom banner notice with a link$/ do
   Given %{I am logged in as an admin}
   When %{I follow "settings"}
-  When %{I fill in "Banner notice" with "Please donate to the <a href=http://transformativeworks.org>OTWtest</a>"}
+  When %{I fill in "Banner notice" with "Please donate to the <a href=support>OTWtest</a>"}
     And %{I press "Update"}
   Then %{I should see "Archive settings were successfully updated."}
-  Then "show me the main content"
 end
 
 When /^an admin sets a different banner notice$/ do
@@ -28,7 +27,7 @@ When /^an admin sets a different banner notice$/ do
   When %{I follow "settings"}
   When %{I fill in "Banner notice" with "Other words"}
     And %{I press "Update"}
-  Then %{I should see "Archive settings were successfully updated."}
+  Then %{I should see "Setting banner back on for all users. This may take some time"}
 end
 
 When /^I turn off the banner$/ do
