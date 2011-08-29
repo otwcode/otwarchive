@@ -46,32 +46,31 @@ class CommentObserver < ActiveRecord::Observer
     # send notification to the owner(s) of the ultimate parent, who can be users or admins
     if comment.ultimate_parent.is_a?(AdminPost)
       admins = comment.ultimate_parent.commentable_owners
+      admins.each do |admin|
+        # TODO: comments should be able to belong to an admin officially
+        # right now comment.comment_owner is nil for an admin, and going by email is not reliable
+        # unless admin == comment.comment_owner
+          AdminMailer.comment_notification(admin.id, comment.id).deliver
+        # end
+      end
     else
       if users.empty?
         users = comment.ultimate_parent.commentable_owners
       else
         users = comment.ultimate_parent.commentable_owners - users
       end
-    end
-    
-    users.each do |user|
-      unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
-        if notify_user_by_email?(user)
-          CommentMailer.comment_notification(user.id, comment.id).deliver
-        end
-        if notify_user_by_inbox?(user)
-          add_feedback_to_inbox(user, comment)
+      users.each do |user|
+        unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
+          if notify_user_by_email?(user)
+            CommentMailer.comment_notification(user.id, comment.id).deliver
+          end
+          if notify_user_by_inbox?(user)
+            add_feedback_to_inbox(user, comment)
+          end
         end
       end
     end
-      
-    admins.each do |admin|
-      # TODO: comments should be able to belong to an admin officially
-      # right now comment.comment_owner is nil for an admin, and going by email is not reliable
-      # unless admin == comment.comment_owner
-        AdminMailer.comment_notification(admin.id, comment.id).deliver
-      # end
-    end
+
   end
 
   def after_update(comment)
@@ -133,13 +132,13 @@ class CommentObserver < ActiveRecord::Observer
           end
         end
       end
-      
+
       admins.each do |admin|
         # TODO: comments should be able to belong to an admin officially
         # unless admin == comment.comment_owner
         AdminMailer.edited_comment_notification(admin.id, comment.id).deliver
       end
-      
+
     end
   end
 

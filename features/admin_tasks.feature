@@ -274,7 +274,7 @@ Feature: Admin tasks
     
   # regular user replies to admin post
   When I am logged out as an admin
-    And I am logged in as a random user
+    And I am logged in as "happyuser"
     And I go to the admin-posts page
   Given all emails have been delivered    
   When I follow "Add Comment"
@@ -297,6 +297,7 @@ Feature: Admin tasks
   # admin gets notified of their own comment, this is not a bug unless:
   # TODO: comments should be able to belong to an admin officially, otherwise someone can spoof being an admin by using the admin name and email
     And 1 email should be delivered to "testadmin@example.org"
+    And 1 email should be delivered to "happyuser"
   
   # regular user replies to comment of admin
   Given I am logged out as an admin
