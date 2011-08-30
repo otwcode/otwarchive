@@ -54,9 +54,11 @@ class CommentObserver < ActiveRecord::Observer
         # end
       end
     else
+      # at this point, users contains those who've already been notified
       if users.empty?
         users = comment.ultimate_parent.commentable_owners
       else
+        # replace with the owners of the commentable who haven't already been notified
         users = comment.ultimate_parent.commentable_owners - users
       end
       users.each do |user|
@@ -114,29 +116,29 @@ class CommentObserver < ActiveRecord::Observer
       # send notification to the owner(s) of the ultimate parent, who can be users or admins
       if comment.ultimate_parent.is_a?(AdminPost)
         admins = comment.ultimate_parent.commentable_owners
+        admins.each do |admin|
+          # TODO: comments should be able to belong to an admin officially
+          # unless admin == comment.comment_owner
+          AdminMailer.edited_comment_notification(admin.id, comment.id).deliver
+        end
       else
+        # at this point, users contains those who've already been notified
         if users.empty?
           users = comment.ultimate_parent.commentable_owners
         else
+          # replace with the owners of the commentable who haven't already been notified
           users = comment.ultimate_parent.commentable_owners - users
         end
-      end
-
-      users.each do |user|
-        unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
-          if notify_user_by_email?(user)
-            CommentMailer.edited_comment_notification(user.id, comment.id).deliver
-          end
-          if notify_user_by_inbox?(user)
-            update_feedback_in_inbox(user, comment)
+        users.each do |user|
+          unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
+            if notify_user_by_email?(user)
+              CommentMailer.edited_comment_notification(user.id, comment.id).deliver
+            end
+            if notify_user_by_inbox?(user)
+              update_feedback_in_inbox(user, comment)
+            end
           end
         end
-      end
-
-      admins.each do |admin|
-        # TODO: comments should be able to belong to an admin officially
-        # unless admin == comment.comment_owner
-        AdminMailer.edited_comment_notification(admin.id, comment.id).deliver
       end
 
     end

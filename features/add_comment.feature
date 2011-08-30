@@ -117,3 +117,4 @@ Scenario: Set preference and receive comment notifications of your own comments
     And I post the comment "Something" on the work "Generic Work"
   Then "author" should be emailed
     And "commenter" should be emailed
+    And 1 email should be delivered to "commenter"
