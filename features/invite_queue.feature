@@ -4,7 +4,8 @@ Feature: Invite queue management
   Scenario: Can turn queue off and it displays as off
   
   When I turn off the invitation queue
-  Then I should see "Archive settings were successfully updated"
+  Then I should see "Setting banner back on for all users. This may take some time"
+  # Changing from null to empty string counts as a change to the banner
   When I am logged out as an admin
   When I am on the homepage
   Then I should not see "SIGN UP NOW"
