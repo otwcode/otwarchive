@@ -71,8 +71,8 @@
         <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
         <td><%= "A work in an unrevealed or anonymous challenge" %></td>
         <% else %>
-          <td><%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %></td>
-          <td><%= link_to related_work.work.title, related_work.work %></td>
+          <td><%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %></td>
+          <td><%= link_to related_work.work.title.html_safe, related_work.work %></td>
           <td>
             From <%= language_link(related_work.parent) %> to <%= language_link(related_work.work) %>
           </td>
@@ -145,8 +145,8 @@
           <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
           <td><%= "A work in an unrevealed or anonymous challenge" %></td>
           <% else %>
-            <td><%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %></td>
-            <td><%= link_to related_work.work.title, related_work.work %></td>
+            <td><%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %></td>
+            <td><%= link_to related_work.work.title.html_safe, related_work.work %></td>
             <% if current_user == @user %>
             <td><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></td>
             <% end %>
