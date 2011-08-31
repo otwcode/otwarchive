@@ -131,7 +131,7 @@
       <% end %>
     <% end %>
     <% if @challenge.send("requests_num_allowed") > @challenge.send("requests_num_required") %>
-      <p class="navigation">
+      <p class="navigation showme" style="display: none;">
         <%= link_to_add_section(
              ts("Add another prompt? (Up to %{allowed} allowed.)", :allowed => @challenge.send("requests_num_allowed")), 
              signup_form, prompt_type.to_sym, "prompts/prompt_form", {:is_offer => false, :required => false, :edit_record => false}) 
