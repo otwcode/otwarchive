@@ -11,7 +11,7 @@ class KudoMailer < ActionMailer::Base
     @commentable = kudo.commentable
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] Kudos on " + @commentable.commentable_name
+      :subject => "[#{ArchiveConfig.APP_NAME}] Kudos on " + @commentable.commentable_name.gsub("&gt;", ">").gsub("&lt;", "<")
     )
   end
 
