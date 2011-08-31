@@ -3,47 +3,47 @@
 <% zone = (@collection.challenge.time_zone || Time.zone.name) -%>
 <% if @collection.challenge.signup_open %>
 
-  <dt><%= ts("Signup: ")%></dt>
-  <dd><%= link_to ts("CURRENTLY OPEN"), new_collection_signup_path(@collection) -%></dd>
+  <dt><%= ts("Signup") %>:</dt>
+  <dd><%= link_to ts("CURRENTLY OPEN"), new_collection_signup_path(@collection) %></dd>
 
-  <dt><%= ts("Signup closes: ")%></dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) -%></dd>
+  <dt><%= ts("Signup closes") %>:</dt>
+  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) %></dd>
 
 <% elsif Time.now < @collection.challenge.signups_open_at %>
 
-  <dt><%= ts("Signup opens: ")%></dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_open_at, zone) -%></dd>
+  <dt><%= ts("Signup opens") %>:</dt>
+  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_open_at, zone) %></dd>
 
 <% elsif Time.now > @collection.challenge.signups_close_at %>
 
-  <dt><%= ts("Signup: ")%></dt>
-  <dd><%= ts("SIGNUP PERIOD IS OVER")%></dd>
+  <dt><%= ts("Signup") %>:</dt>
+  <dd><%= ts("SIGNUP PERIOD IS OVER") %></dd>
 
 <% else %>
 
-  <dt><%= ts("Signup opens: ")%></dt>
+  <dt><%= ts("Signup opens") %>:</dt>
   <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_open_at, zone) -%></dd>
 
-  <dt><%= ts("Signup closes: ")%></dt>
+  <dt><%= ts("Signup closes") %>:</dt>
   <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) -%></dd>
 
 <% end %>
 
 <% if @collection.unrevealed? %>
-  <dt><%= ts("Works revealed: ")%></dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.works_reveal_at, zone) -%></dd>
+  <dt><%= ts("Works revealed") %>:</dt>
+  <dd class="datetime"><%= time_in_zone(@collection.challenge.works_reveal_at, zone) %></dd>
 <% end %>
 
 <% if @collection.anonymous? %>
-  <dt><%= ts("Authors revealed: ")%></dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.authors_reveal_at, zone) -%></dd>
+  <dt><%= ts("Authors revealed") %>:</dt>
+  <dd class="datetime"><%= time_in_zone(@collection.challenge.authors_reveal_at, zone) %></dd>
 <% end %>
 
-<dt><%= ts("Signed up:") %></dt>
+<dt><%= ts("Signed up") %>:</dt>
 <dd>
   <%= signup_count = @collection.signups.count -%>
   <% if signup_count < 6 %>
-    <%= ts(": Too few signups to display names") %>
+    <%= ts("Too few signups to display names") %>
   <% else %>
     <% num_to_show = 20 # arbitrary number for how many names to list %>
   
