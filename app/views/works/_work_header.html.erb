@@ -22,7 +22,8 @@
       <div id="chapter-index" style="display:none">
         <h4><%= link_to 'View full-page index', navigate_work_path(@work) %></h4>
         <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
-        <%= select_tag :selected_id, options_from_collection_for_select(@chapters, :id, :abbreviated_display_title, params[:id].to_i) %>
+        <% options = @chapters.map{|c| [c.abbreviated_display_title.html_safe, c.id] } %>
+        <%= select_tag :selected_id, options_for_select(options, params[:id].to_i) %>
         <%= submit_tag "Go" %>
         <% end %>
       </div>
