@@ -113,6 +113,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .droppable         { color: red; }
  .canonical         { font-weight: 700 }
  .inline                    { display:inline; margin-bottom: 0.5em}
+ .showme   {display: none;}
 
 /* Requests and offers in challenges */
  li.requested { font-weight: bold; }

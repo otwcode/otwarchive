@@ -40,30 +40,7 @@
   <div class="clear"></div>
 </div>
 
-<% unless current_user && current_user.try(:preference).try(:banner_seen) %>
-<% unless @admin_settings.banner_text.empty? || logged_in_as_admin? %>
-<% unless current_user.nil? && session[:hide_banner] %>
-  <div class="flash notice" id="notice-banner">
-    <p>
-      <%= @admin_settings.banner_text %>
-    </p>
-    <% if current_user.nil? %>
-      <p class="submit">
-        <%= link_to "Hide this banner", url_for(params.merge :hide_banner => true, :anchor => params[:anchor]), :class => 'navigation' %>
-        <%= link_to image_tag('close-flash.png'), nil, :remote => true, :id => "hide-notice-banner", :title => "Hide notices banner" %>
-      </p>
-    <% else %>
-      <%= form_tag end_banner_user_path(current_user), :method => :post, :remote => true do %>
-        <p class="submit">
-          <%= submit_tag ts("Hide this banner") %>
-          <%= link_to image_tag('close-flash.png'), "#", :id => "hide-notice-banner", :title => "Hide notices banner" %>
-        </p>
-      <% end %>
-    <% end %>
-  </div>
-<% end %>
-<% end %>
-<% end %>
+<%= render :partial => "layouts/banner" %>
 
 <div class="bigwrapper">
   <div class="open-beta-box">
