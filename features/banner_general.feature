@@ -14,6 +14,12 @@ Scenario: Admin can set banner
   When I am logged in as "ordinaryuser"
   Then the banner notice for a logged-in user should be set to "Custom notice"
 
+Scenario: Changing other settings doesn't change the banner
+
+  Given an admin sets a custom banner notice
+  When I turn off guest downloading
+  Then I should see "Archive settings were successfully updated"
+
 Scenario: Admin can set banner including a link
 
   Given an admin sets a custom banner notice with a link

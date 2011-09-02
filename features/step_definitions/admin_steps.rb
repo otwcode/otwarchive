@@ -92,6 +92,13 @@ end
 
 ### WHEN
 
+When /^I turn off guest downloading$/ do
+  Given "I am logged in as an admin"
+  And "I follow \"settings\""
+  And "I check \"Turn off downloading for guests\""
+  And "I press \"Update\""
+end
+
 When /^I make an admin post$/ do
   visit new_admin_post_path
   fill_in("Title", :with => "Default Admin Post")
