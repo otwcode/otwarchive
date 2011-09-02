@@ -473,14 +473,20 @@ class StoryParser
         site = $1
         storyid = $2        
         chapnum = 1
+        last_body = ""
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           loop do
             url = "#{site}/viewstory.php?action=printable&sid=#{storyid}&chapter=#{chapnum}"
             body = download_with_timeout(url)
-            if body.nil? || chapnum > MAX_CHAPTER_COUNT || body.match(/<div class='chaptertitle'> by <\/div>/) || body.match(/Access denied./) || body.match(/Chapter : /)
+            if body.nil? || chapnum > MAX_CHAPTER_COUNT
               break
             end
-            
+            if body == last_body
+              # whoops, hit some other kind of chapter ending we don't know, get rid of previous
+              @chapter_contents.pop
+              break
+            end
+            last_body = body
             @chapter_contents << body
             chapnum = chapnum + 1
           end
