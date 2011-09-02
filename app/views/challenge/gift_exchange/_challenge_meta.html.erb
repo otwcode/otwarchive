@@ -4,7 +4,7 @@
 <% if @collection.challenge.signup_open %>
 
   <dt><%= ts("Signup") %>:</dt>
-  <dd><%= link_to ts("CURRENTLY OPEN"), new_collection_signup_path(@collection) -%></dd>
+  <dd><%= link_to ts("CURRENTLY OPEN"), new_collection_signup_path(@collection) %></dd>
 
   <dt><%= ts("Signup closes") %>:</dt>
   <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) %></dd>
