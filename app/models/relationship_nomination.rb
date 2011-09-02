@@ -16,7 +16,12 @@ class RelationshipNomination < TagNomination
   before_save :set_parented
   def set_parented
     has_parent = (tag = Relationship.find_by_name(tagname)) && tag.parents.any? {|p| p.is_a?(Fandom)}
-    self.parented = has_parent ? true : false
+    if has_parent
+      self.parented = true
+    else
+      self.parented = false
+      self.parent_tagname = self.fandom_nomination.tagname unless self.parent_tagname
+    end   
     true
   end
 

@@ -22,9 +22,9 @@
   </ul>
 
 <!--metadata-->
-<div class="tag_set module">
+  <h3 class="landmark">Metadata</h3>
   <div class="wrapper">
-    <dl class="tag_set meta">
+    <dl class="tagset meta">
       <dt><%= ts("Created at: ") %></dt>
       <dd><%= l(@tag_set.created_at.to_date) %></dd>
       <dt><%= ts("Maintainers:") %></dt>
@@ -55,7 +55,7 @@
       </dd>
     </dl>
   </div>
-</div>
+
 
 <!--main content-->
 <% if @tag_set.visible || @tag_set.user_is_moderator?(current_user) %>

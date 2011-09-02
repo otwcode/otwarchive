@@ -1,0 +1,14 @@
+<fieldset>
+<%= f.object.tag.name %>
+<%= f.hidden_field :tag_id => f.object.tag.id %>
+<%= f.label :set_parent_tagnames, :class => "action" do %>
+  <%= ts("Parent(s): ") %>
+  <% tag_parents = TagNomination.where(:tagname => f.object.tag.name).select("parent_tagname, count(*) as count").group("parent_tagname").order("count DESC"). 
+      map {|tn| {id: tn.parent_tagname, :name: tn.parent_tagname}} %>
+  <%= f.text_field :parent_tagnames, autocomplete_options(tag_parents, :autocomplete_min_chars => 0) %>
+<% end %>
+<%= f.label :do_request, :class => "action" do %>
+  <%= ts("Request") %>
+  <%= f.check_box :do_request %>            
+<% end %>
+</fieldset>

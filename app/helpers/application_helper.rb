@@ -391,7 +391,7 @@ module ApplicationHelper
       checkbox_is_checked = options_checked_method ? form.object.send(options_checked_method).include?(option) : false
       checkbox_name = option.send(option_name_method)
       checkbox_value = option.send(option_value_method)
-      checkbox_and_label = label_tag checkbox_id do 
+      checkbox_and_label = label_tag checkbox_id, :class => "action" do 
         if option_disabled
           check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id, :disabled => "true") + checkbox_name
         else

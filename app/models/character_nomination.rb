@@ -11,7 +11,12 @@ class CharacterNomination < TagNomination
   before_save :set_parented
   def set_parented
     has_parent = (tag = Character.find_by_name(tagname)) && tag.parents.any? {|p| p.is_a?(Fandom)}
-    self.parented = has_parent ? true : false
+    if has_parent
+      self.parented = true
+    else
+      self.parented = false
+      self.parent_tagname = self.fandom_nomination.tagname unless self.parent_tagname
+    end   
     true
   end
   
@@ -20,6 +25,10 @@ class CharacterNomination < TagNomination
     if fandom_nomination && !tag_set_nomination
       self.tag_set_nomination = fandom_nomination.tag_set_nomination
     end
+  end
+
+  def nominated_parents
+    TagNomination.where(:parented => false, :tagname => self.tagname).select("parent_tagname, count(*) as count").group("parent_tagname").order("count DESC")
   end
 
 end

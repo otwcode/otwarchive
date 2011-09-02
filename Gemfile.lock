@@ -142,6 +142,7 @@ GEM
     mocha (0.9.9)
       rake
     mysql2 (0.2.6)
+    nested_form (0.1.1)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
@@ -245,6 +246,8 @@ GEM
       kgio (~> 2.4)
       rack
       raindrops (~> 0.6)
+    valium (0.2.1)
+      activerecord (>= 3.0.2)
     vcr (1.6.0)
     vegas (0.1.8)
       rack (>= 1.0.0)
@@ -279,6 +282,7 @@ DEPENDENCIES
   memcache-client
   mocha
   mysql2
+  nested_form
   nokogiri
   paperclip (>= 2.3.16)
   permit_yo
@@ -296,6 +300,7 @@ DEPENDENCIES
   thinking-sphinx!
   tolk!
   unicorn
+  valium
   vcr
   whenever (~> 0.6.2)
   will_paginate!

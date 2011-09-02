@@ -20,7 +20,7 @@
   </div>
 </div>
 
-<h3><%= ts("Nominated Tags") %></h3>
+<h3><%= ts("Nominated Tags") %> <%= link_to_help "tagset-nominated-tags" %></h3>
 
 <ol class="nominations media index">			
   <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
@@ -36,7 +36,7 @@
               <li>
                 <%= nomination_status(tag) %>
                 
-                <% if !tag.tagnotes.blank? %>
+                <% if !tag.parent_tagname.blank? %>
                   <div class="hasnotes">
                 <% end %>
                 <% if (tagobj = tag_type.classify.constantize.find_by_name(tag.tagname)) %>
@@ -50,9 +50,9 @@
                 <% else %>
                   <span class="nonexistent"><%= tag.tagname %></span>
                 <% end %>
-                <% if !tag.tagnotes.blank? %>
+                <% if !tag.parent_tagname.blank? %>
                   </div>
-                  <div class="notes"><%= tag.tagnotes %></div>
+                  <div class="notes"><%= tag.parent_tagname %></div>
                 <% end %>
               </li>
             <% end %>
@@ -63,17 +63,3 @@
   <% end %>
 </ol>
 
-
-<p class="notes">
-  Note: some of your tags may be marked as <span class="unwrangled">unwrangled</span>, meaning they currently exist in the archive but have
-  not been organized into our tagging system, and some may be marked as <span class="nonexistent">nonexistent</span>, meaning
-  they don't exist in the archive at all. If you have tags marked this way, please make sure you have them typed correctly
-  and add any notes you can to help our tag wranglers sort these tags out properly!
-</p>
-
-<p class="notes">
-  If you see one of your tags listed with a slightly different tag afterwards in parentheses, this means that the
-  tag you have nominated is wrangled and has a canonical synonym on the archive. The moderators may decide to use
-  the canonical synonym instead of the version you used, so if there is a specific reason why you want to nominate
-  the non-canonical version, you may want to explain in your notes to help them decide.
-</p>

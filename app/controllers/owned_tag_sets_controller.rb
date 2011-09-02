@@ -34,6 +34,13 @@ class OwnedTagSetsController < ApplicationController
       @tag_sets = OwnedTagSet.owned_by(@user).visible
     else
       @tag_sets = OwnedTagSet.visible
+      if params[:query]
+        @query = params[:query]
+        @tag_sets = @tag_sets.where("title LIKE ?", '%' + params[:query] + '%')
+      else
+        # show a random selection 
+        @tag_sets = @tag_sets.order("RAND()").limit(25)
+      end
     end
     @tag_sets = @tag_sets.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
   end
@@ -84,5 +91,19 @@ class OwnedTagSetsController < ApplicationController
     flash[:notice] = ts("Tag set was successfully deleted.")
     redirect_to tag_sets_path
   end
+  
+  def make_requests
+    already_requested_ids = TagWranglingRequest.where(:owned_tag_set_id => @tag_set.id)[:tag_id].join(',')
+    @unrequested_tags = Tag.joins(:tag_set).where(:tag_set_id => @tag_set.tag_set_id).
+        where("tags.id NOT IN (?)", already_requested_ids).order("tags.name ASC")
+    
+    # most likely tags to request for
+    @tags = @unrequested_tags.joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
+                where("filterable_id IS NULL OR tags.canonical = 0")
+      
+    # can also request wrangling manually for other tags
+    @parented_tags = base_tags
+  end
+  
 
 end

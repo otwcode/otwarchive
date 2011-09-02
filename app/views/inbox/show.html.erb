@@ -9,14 +9,10 @@
   <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do %>
   <fieldset>
   <legend>Mass Edit Options</legend>
-  <ul class="navigation">
-    <li>Select: </li>
-    <li>
-      <a class="checkall">all</a>
-    </li>
-    <li>
-      <a class="checknone">none</a>
-    </li>
+  <ul class="navigation actions">
+		<li>Select</li>
+		<li><a href="#" class="check_all">All</a></li>
+		<li><a href="#" class="check_none">None</a></li>
   </ul>
   <p class="submit">
       <%= "Mark checked as:" %> 
@@ -138,20 +134,3 @@ inbox_comment.feedback_comment), :remote => true %>
   <p class="submit"><%= submit_tag ts("Filter Inbox") %></p>
 <% end %>
 <!--/subnav-->
-
-<%= content_for :footer_js do %>
-  <%= javascript_tag do %>
-    $j(document).ready(function(){
-      $j(".checkall").click(function(){
-        $j("#inbox-form").find(":checkbox[name='inbox_comments[]']").each(function(index, ticky) {
-            $j(ticky).attr("checked", true);
-          });
-      });
-      $j(".checknone").click(function(){
-        $j("#inbox-form").find(":checkbox[name='inbox_comments[]']").each(function(index, ticky) {
-            $j(ticky).attr("checked", false);
-          });
-      });
-    })
-  <% end %>
-<% end %>

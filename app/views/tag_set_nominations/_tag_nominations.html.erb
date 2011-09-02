@@ -1,21 +1,27 @@
-<dt><%= nom_form.label :tagname, ts("#{tag_type.classify} %{index}", :index => tag_nominations_counter+1) %>
-<dd>
-  <% if nom.approved || nom.rejected %>
-    <%= nom.tagname %>
-  <% else %>
-    <%= nom_form.text_field :tagname, 
-              autocomplete_options("#{tag_type}_in_fandom", :autocomplete_live_params => "fandom=tag_set_nomination_#{tag_type}_nominations_attributes_#{tag_nominations_counter}_parent_tagname", 
-                  :autocomplete_token_limit => 1, :class => "autocomplete_with_canon_check") %>
-  <% end %>
-  <%= nomination_status(nom) %>
-</dd>
-<dd class="tagname info<%= noncanonical_info_class(nom_form) %>">
-  The <%= tag_type %> you've entered isn't canonical. If you really want a new tag added, please give us some extra information?
+<fieldset class="tagset">
   <dl>
-    <dt><%= nom_form.label :parent_tagname, ts("Fandom") %></dt>
-    <dd><%= nom_form.text_field :parent_tagname, autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
+    <% @tag_set_nomination.send("#{tag_type}_nominations").each_with_index do |nom, index| %>
+      <%= f.fields_for "#{tag_type}_nominations".to_sym, nom do |nom_form| %>
+        <dt><%= nom_form.label :tagname, ts("#{tag_type.classify} %{index}", :index => index+1) %>
+        <dd>
+          <% if nom.approved || nom.rejected %>
+            <%= nom.tagname %> <%= nomination_status(nom) %>
+          <% else %>
+            <%= nom_form.text_field :tagname, autocomplete_options(tag_type, :autocomplete_token_limit => 1) %>
+          <% end %>
+        </dd>
+        <% unless tag_type == "freeform" %>
+          <dt>
+            <%= nom_form.label :parent_tagname, ts("Fandom?") %>
+            <% unless @past_first %>
+              <%= link_to_help 'tagset-fandom-for-child' %>
+              <% @past_first = true %>
+            <% end %>
+          </dt>
+          <dd><%= nom_form.text_field :parent_tagname, autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
+        <% end %>
 
-    <dt><%= nom_form.label :tagnotes, ts("Notes") %></dt>
-    <dd><%= nom_form.text_area :tagnotes %></dd>
+      <% end %>
+    <% end %>
   </dl>
-</dd>
+</fieldset>

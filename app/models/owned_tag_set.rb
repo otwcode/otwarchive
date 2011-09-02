@@ -10,6 +10,9 @@ class OwnedTagSet < ActiveRecord::Base
   
   belongs_to :tag_set, :dependent => :destroy
   accepts_nested_attributes_for :tag_set  
+  
+  has_many :tag_wrangling_requests, :dependent => :destroy
+  accepts_nested_attributes_for :tag_wrangling_requests, :allow_destroy => true, :reject_if => proc { |attrs| !attrs[:do_request] }
 
   has_many :tag_set_nominations, :dependent => :destroy
   has_many :fandom_nominations, :through => :tag_set_nominations
@@ -122,7 +125,7 @@ class OwnedTagSet < ActiveRecord::Base
   def moderator_changes; nil; end
 
   ##### MANAGING NOMINATIONS
-
+  
   # we can use redis to speed this up since tagset data is loaded there for autocomplete
   def already_in_set?(tagname)
     true unless $redis.zscore("autocomplete_tagset_#{tag_set.id}", tagname).nil?
@@ -144,51 +147,16 @@ class OwnedTagSet < ActiveRecord::Base
     TagSetNomination.where(:owned_tag_set_id => self.id).delete_all
   end
   
+  
   ##########################
-  # PROCESSING NOMINATIONS #
-  ##########################
-
-  @queue = :owned_tag_set
-  # This will be called by a worker when a job needs to be processed
-  def self.perform(method, *args)
-    self.send(method, *args)
+  # MANAGING TAGS
+  
+  def noncanonical_tags
+    Tag.joins(:tag_set).where(:tag_set_id => self.tag_set_id).where(:canonical => false)
   end
 
-  def is_processed?
-    $redis.exists("nominations_processed_#{self.id}")
-  end
-  
-  def is_processing?
-    $redis.exists("nominations_processing_#{self.id}")
-  end
-  
-  def process_nominations
-    $redis.del("nominations_processed_#{self.id}")
-    $redis.set("nominations_processing_#{self.id}", "true")
-    Resque.enqueue(OwnedTagSet, :delayed_process_nominations, self.id)
-  end
-  
-  def self.delayed_process_nominations(tag_set_id)
-    owned_set = OwnedTagSet.find(tag_set_id)
-    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
-      $redis.del("nominations_for_#{tag_type.classify}Nomination_#{tag_set_id}")
-    end
-    owned_set.nominations.find_each do |nomination|
-      nomination.process(tag_set_id)
-    end
-    $redis.del("nominations_processing_#{tag_set_id}")
-    $redis.set("nominations_processed_#{tag_set_id}", "true")
-
-    # expire all the processed data after some amount of time 
-    time_to_live = ArchiveConfig.DAYS_TO_SAVE_PROCESSED * 24 * 60 * 60
-    $redis.expire("nominations_processed_#{tag_set_id}", time_to_live)
-    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
-      $redis.expire("nominations_for_#{tag_type.classify}Nomination_#{tag_set_id}", time_to_live)
-    end
-  end
-  
-  def processed_nominations
-    return [] unless self.is_processed?
+  def unparented_tags
+    Tag.joins(:tag_set).where(:tag_set_id => self.tag_set_id).with_no_parents
   end
 
   # We want to have all the matching methods defined on

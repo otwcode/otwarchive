@@ -1,18 +1,13 @@
-<div class="navigation module">
-  <h3 class="landmark">Navigation</h3>
+<h3 class="landmark">Navigation</h3>
   <ul class="navigation" role="navigation">
 	  <li><%= link_to h(ts("Back To ")) + @tag_set_nomination.owned_tag_set.title, tag_set_path(@tag_set_nomination.owned_tag_set) %></li>
     <li><%= link_to ts("Tag Sets"), tag_sets_path %></li>
   </ul>
-</div>
 
 <h2><%= ts("Tag Nominations") %></h2>
 
 <h3 class="landmark"><%= ts("Notes") %></h3>
-<ul class="notes">
-	<li>Please nominate the canonical form of a tag if possible. The autocomplete will only list canonical tags.</li>
-	<li>Your nominations will be reviewed by the tag set moderators and may not be included.</li> 
-</ul>
+<p class="notes">Please nominate the canonical form of a tag if possible. The autocomplete will only list canonical tags. Your nominations will be reviewed by the tag set moderators and may not be included.</p>
 
 <!-- /descriptions-->
 
@@ -40,50 +35,21 @@
   <% end %>
 
   <% if @limit[:fandom] > 0 %>
-    <% # char and relationship nominations grouped by fandom in separate fieldsets %>
-    <% @tag_set_nomination.fandom_nominations.each_with_index do |fandom_nomination, index| %>
-      <%= f.fields_for :fandom_nominations, fandom_nomination do |nom_form| %>
-        <%= render 'fandom_nominations', :nom_form => nom_form, :fandom_nominations_counter => index, :nom => fandom_nomination %>
-      <% end %>
-    <% end %>
 
+    <% # char and relationship nominations grouped with fandom %>
+    <%= render 'tag_nominations_by_fandom', :f => f %>
+    
+    <% # freeforms on their own %>
+    <%= render 'tag_nominations', :f => f, :tag_type => "freeform" %>
 
   <% else %>
+  
     <% # nominations all on same level in fieldset/dls %>
-    <fieldset class="tagset">
-      <dl>
-        <% @tag_set_nomination.character_nominations.each_with_index do |character_nomination, index| %>
-          <%= f.fields_for :character_nominations, character_nomination do |nom_form| %>
-            <%= render 'tag_nominations', :nom_form => nom_form, :tag_type => 'character', :tag_nominations_counter => index, :nom => character_nomination %>
-          <% end %>
-        <% end %>
-      </dl>
-    </fieldset>
-
-    <fieldset class="tagset">
-      <dl>
-        <% @tag_set_nomination.relationship_nominations.each_with_index do |relationship_nomination, index| %>
-          <%= f.fields_for :relationship_nominations, relationship_nomination do |nom_form| %>
-            <%= render 'tag_nominations', :nom_form => nom_form, :tag_type => 'relationship', :tag_nominations_counter => index, :nom => relationship_nomination %>
-          <% end %>
-        <% end %>
-      </dl>
-    </fieldset>
+    <% %w(character relationship freeform).each do |tag_type| %>
+      <%= render 'tag_nominations', :f => f, :tag_type => tag_type %>
+    <% end %>
+    
   <% end %>
-
-  <% # freeform nominations go in their own fieldset %>
-  <% if @limit[:freeform] > 0 %>
-    <fieldset class="tagset <%= cycle :odd, :even %>">
-      <dl>
-        <% @tag_set_nomination.freeform_nominations.each_with_index do |freeform_nomination, index| %>
-          <%= f.fields_for :freeform_nominations, freeform_nomination do |nom_form| %>
-            <%= render 'freeform_nominations', :nom_form => nom_form, :freeform_nominations_counter => index, :nom => freeform_nomination %>
-          <% end %>
-        <% end %>
-      </dl>      
-    </fieldset>
-  <% end %>
-
 
   <fieldset>
   	<legend><%= ts('Submit') %></legend> 
@@ -92,3 +58,4 @@
     </p>
   </fieldset>
 <% end %>
+

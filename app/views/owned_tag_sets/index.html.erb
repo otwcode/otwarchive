@@ -1,14 +1,22 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
-<% if @user %>
-  <h2><%= ts("%{user_name}'s Tag Sets", :user_name => @user.login) %></h2>
-<% else %>
-  <h2><%= ts("Tag Sets in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %></h2>
-<% end %>
+<h2>
+  <% if @user %>
+    <%= ts("%{user_name}'s Tag Sets", :user_name => @user.login) %>
+  <% elsif @tag_sets.empty? %>
+    <%= ts("Sorry, there were no tag sets found.") %>
+  <% elsif @query %>
+    <%= search_header @tag_sets, @query, "Tag Set" %>
+  <% else %>
+    <%= ts("Tag Sets in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %>
+  <% end %>
+</h2>
 
-<% if @tag_sets.empty? %>
-  <%= ts("Sorry, there were no tag sets found.") %>
-<% else %>
-  <h2><%= search_header @tag_sets, @query, "Tag Set" %> </h2>
+<%= link_to_help 'tagset-about', h(ts("Tag Set Help")) + '<span class="symbol question"><span>?</span></span>'.html_safe %>
+
+<%= form_tag tag_sets_path, :class => "search", :method => :get do |form| %>
+  <%= label_tag "query", ts("Search: ") %>
+  <%= text_field_tag "query", @query %>
+  <%= submit_tag "Go" %>
 <% end %>
 
 <!--/descriptions-->
@@ -18,18 +26,8 @@
     <h3 class="landmark">Navigation</h3>
     <ul class="navigation" role="navigation">
     	<li><%= link_to ts("New Tag Set"), new_tag_set_path %></li>
+    	<li><%= link_to ts("Tags"), tags_path %></li>
     </ul>
-  <% end %>
-
-  <% if @sort_and_filter %> 
-  <!--sorting subnav-->
-    <ul class="sorting navigation" role="navigation">
-      <li><h4><%= ts('Sort By') %></h4></li>
-      <li><%= sort_link ts('Title'), "tag_sets.title" %></li>
-      <li><%= sort_link ts('Date'), "tag_sets.created_at", {:sort_default => true, :desc_default => true} %></li>
-      <li><%= sort_link ts('Kudos'), "kudos", {:desc_default => true} %></li>
-    </ul>
-  <!---/subnav-->
   <% end %>
 </div>
 
@@ -40,7 +38,7 @@
   <!--main content-->
   <h3 class="landmark">Tag Sets List</h3>
 
-  <ul class="tag_set index">
+  <ul class="tagset index">
     <% @tag_sets.each do |tag_set| %>
       <%= render :partial => 'tag_set_blurb', :locals => {:tag_set => tag_set} %>
     <% end %>

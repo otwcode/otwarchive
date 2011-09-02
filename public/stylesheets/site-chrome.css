@@ -84,8 +84,8 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 #main li.bookmark .navigation, #main li.fandom .navigation,  #main.pseuds-index li.blurb .navigation
       { float:right; }
 /* Note: this next navigation context doesn't really feel like it should be on "stuff I own" but more about "navigation on indiv blurb" */
-#main .work .own .navigation, #main .bookmark .own .navigation, #main .series .own .navigation, #main .works .own .navigation, #main .own.work .navigation,
-#main.collections-index .blurb .navigation, #main.collections-list_challenges .blurb .navigation, #main .tag_set .blurb .navigation
+#main .work .own .navigation, #main .bookmark .own .navigation, #main .series .own .navigation, #main .works .own .navigation, #main .own.work .navigation, 
+#main.collections-index .blurb .navigation, #main.collections-list_challenges .blurb .navigation, #main .tagset .blurb .navigation
       { float:left; margin:-1.25em auto auto;}
 #main li.bookmark .own .navigation
       { float: left; margin:0.25em auto auto -0.25em;}
@@ -126,7 +126,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  span.offered.requested { color: #daa520; }
  
 /*TAGS */
- #main ul.tags li      { display:inline;}
+ #main .tags li      { display:inline;}
 
 /*CLOUD */
  a.cloud1           { color: #111; font-size: 0.625em; font-weight: 100 }
@@ -155,7 +155,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .blurb ul li,.blurb dd ul li  { display: inline }
  li.blurb             { padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em; position: relative; clear:left; min-height: 100px }
  .blurb .module          { float:none;}
- .work .blurb .header, .series .blurb .header,   .blurb .work .header, .bookmark .blurb .header, .works .blurb .header, .work.blurb .header
+ .work .blurb .header, .series .blurb .header,   .blurb .work .header, .bookmark .blurb .header, .works .blurb .header, .work.blurb .header, .tagset .header
           { min-height:55px; }
  .blurb .header h4         { font-size: 1.1425em; margin: 0.375em 5.25em 0 65px }
  #main .blurb .header img       { position: relative; margin: 0; }
@@ -215,6 +215,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
   #main .picture .blurb .navigation { margin-left: 120px; }
   #main .picture .blurb p.type { margin-bottom: 0.3em; margin-top: 0.3em; }
   .picture div.icon { top: 0.1em; }
+  
 
 /* BOOKMARK*/
  .bookmark p.count         { float: right }
@@ -228,6 +229,9 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 
 /* COLLECTION, ANON, MYSTERY */
  .blurb .mystery          { background: url(/images/mystery-s.png) 0 0 no-repeat }
+/*TAGSET for now style*/
+ .tagset .icon  {height:50px; width:50px; top:0; background: url(/images/tag_icon.png) 0 0 no-repeat; background-size:50px;}
+
 
 /* STATS*/
  .stats dt,.stats dd       { display: inline }
@@ -351,7 +355,7 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
  #main.works-index #search_main input.text { border: 2px inset #f0f0f0; background-color: white; }
 
  /* WORKS SHOW */
- #main .notes                            { padding-bottom: 0.5em !important}
+ #main .notes                            { padding-bottom: 0.5em !important; clear:right}
 
 /* MEDIA INDEX, SHOW, FANDOMS INDEX, SHOW*/
   .media li.category      { min-height: 15em; padding: 0; border: 1px solid #DDD; margin:0.5625em 2em 2em 0}
@@ -396,10 +400,6 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 /* BOOKMARKS INDEX*/
  .bookmarks-index .user .module      { float: none; }
 
- /* TAGSET (MEDIA) INDEX - main weighting will be removed (here and media) in new skin*/
- #main .tagset li.category {float:none; width:auto; margin:0.5em auto; min-height:inherit}
- .tagset .category h3:hover {background:#ddd; color:#111}
-
 /* MANAGE SERIES */
  #manage-series h3 {display: inline;}
 
@@ -414,6 +414,11 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
   #main.skins-show dt  { font-size: 0.875em; font-weight: 100; width: 13.5em }
   #main.skins-show dd  { margin: -1.1em 0 .7em 16em; }
   #main.skins-edit form dt, #main.skins-new form dt {width: 15em;}
+
+/* TAGSET (MEDIA) INDEX - main weighting will be removed (here and media) in new skin*/
+#main .tagset li.category {float:none; width:auto; margin:0.5em auto; min-height:inherit}
+.tagset .category h3:hover {background:#ddd; color:#111}
+
 
 /* TAG WRANGLERS INDEX */
  #main.tag_wranglers-index .index       { width:100%; margin-top: 2em;}
@@ -451,6 +456,10 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
  .nominations .notes { display: block; }
  .unwrangled { border: 0.15em solid #CCB521;}
  .nonexistent { border: 0.15em solid #C91441;}
+ 
+ /*TAGSET */
+.tagset {margin:0 auto 1em;}
+
 
 /* TRANSLATIONS*/
  #main.translation-translate   { margin-bottom: 2.5em }

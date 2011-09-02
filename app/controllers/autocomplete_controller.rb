@@ -7,7 +7,7 @@ class AutocompleteController < ApplicationController
   skip_before_filter :set_redirects
   skip_before_filter :sanitize_params # can we dare!
 
-  before_filter :require_term, :except => [:tag_in_fandom, :relationship_in_fandom, :character_in_fandom]
+  before_filter :require_term, :except => [:tag_in_fandom, :relationship_in_fandom, :character_in_fandom, :fandom_for_child]
   
   def require_term
     if params[:term].blank?
@@ -47,6 +47,16 @@ class AutocompleteController < ApplicationController
   def character_in_fandom; render_output(tag_in_fandom_output(params[:term], "character", params[:fandom], params[:fallback] || true)); end
   def relationship_in_fandom; render_output(tag_in_fandom_output(params[:term], "relationship", params[:fandom], params[:fallback] || true)); end
   
+  ## Parents for given tag
+  def fandom_for_child
+    results = Tag.autocomplete_fandom_for_child(params[:term], params[:child]) 
+    unless results.empty?
+      render_output(results)
+    else
+      render_output(tag_output(params[:term], "fandom"))
+    end
+  end
+  
   ## NONCANONICAL TAGS
   def noncanonical_tag
     search_param = params[:term]
@@ -65,6 +75,15 @@ class AutocompleteController < ApplicationController
       respond_with(["1"])
     end
   end    
+
+  # get the single parent for a child
+  def single_fandom_for_child
+    if (tag = Tag.where(:name => params[:term]).includes(:parents).first)
+      respond_with([tag.parents.order("taggings_count DESC").select {|p| p.is_a? Fandom}.first.name])
+    end
+  end
+  
+
 
   
   # more-specific autocompletes should be added below here when they can't be avoided

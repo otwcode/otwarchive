@@ -13,7 +13,7 @@
 <%= form_for(@tag_set, :url => (@tag_set.new_record? ? tag_sets_path : tag_set_path(@tag_set)), :html => {:method => (@tag_set.new_record? ? :post : :put)}) do |tag_set_form| %>
   <%= error_messages_for @tag_set %>
 
-  <fieldset class="tag_set preface profile">
+  <fieldset class="tagset profile">
 		<legend>Management</legend>
 		<h3>Management</h3>
 		<p class="notes">
@@ -41,7 +41,7 @@
 		</dl>  	
 	</fieldset>
 
-	<fieldset class="preface profile">
+	<fieldset class="profile">
     <legend>Description</legend>
     <h3>Description</h3>
 		<dl>
@@ -63,12 +63,11 @@
 		</dl>
 	</fieldset>
 	
-	<fieldset id="nomination_limits" class="preface profile hideme">
+	<fieldset id="nomination_limits" class="profile hideme">
 	  <legend>Nomination Limits</legend>
 	  <h3>Nomination Limits</h3>
-	  <p class="notes">
-	    IMPORTANT NOTE: if you allow users to nominate BOTH fandoms and characters/relationships in the same tag set, 
-	    we will assume the character/relationship number you allow is PER FANDOM. If that's not what you want, you 
+	  <p class="important note">If you allow users to nominate <em>both</em> fandoms and characters/relationships in the same tag set, 
+	    we will assume the character/relationship number you allow is <strong>per fandom</strong> If that's not what you want, you 
 	    can have users nominate fandoms in one tag set, and characters/relationships in another tag set. (You can then use
 	    both tag sets in your challenge settings.)
 	  </p>
@@ -80,13 +79,13 @@
 	  </dl>
 	</fieldset>
 
-  <fieldset class="preface profile">
+  <fieldset class="profile">
     <legend>Tags In Set</legend>
     <h3>Tags In Set</h3>
     <% @tag_set.build_tag_set unless @tag_set.tag_set %>
     <%= tag_set_form.fields_for :tag_set do |internal_tag_set_form| %>
       <% TagSet::TAG_TYPES.each do |tag_type| %>
-        <fieldset class="tag_set">
+        <fieldset class="tagset">
           <legend><%= ts("#{tag_type.classify.pluralize}") %></legend>
           <h4><%= "#{tag_type.classify.pluralize}" %></h4>
 

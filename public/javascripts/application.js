@@ -82,34 +82,6 @@ jQuery(function($) {
   });
 });
 
-
-// Nominations autocomplete needs an on-add callback, which
-// checks to see if the tag selected is canonical or not, and if not, 
-// opens up the information in the following dd to ask the user for more input
-jQuery(function($) {
-  $('input.autocomplete_with_canon_check').livequery(function(){
-    var self = $(this);
-    var extra_questions = self.parent().next();
-    var token_input_options = get_token_input_options(self);
-    $j.extend(token_input_options, {
-      onAdd: function(item) {
-        var ajax_query = {};
-        ajax_query.url = '/autocomplete/is_canonical?term=' + item.name;
-        ajax_query.success = function(results){
-          if (results[0] == "0") {
-            extra_questions.show();
-          } else {
-            extra_questions.hide();
-          }
-        };
-        $j.ajax(ajax_query);        
-      }
-    });
-    
-    self.tokenInput(self.attr('autocomplete_method'), token_input_options);
-  });
-});
-
 ///////////////////////////////////////////////////////////////////
 
 // Tooltips for nominations
@@ -177,7 +149,8 @@ jQuery(function($){
   
 });
 
-// check all in a fieldset optionally with a string to match the name
+// check all or none within the parent fieldset, optionally with a string to match on the name field of the checkboxes
+// stored in the "checkbox_name_filter" attribute on the all/none links. 
 jQuery(function($){
   $('.check_all').each(function(){
     $(this).click(function(event){
@@ -186,7 +159,7 @@ jQuery(function($){
       if (filter) {
         checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
       } else {
-        checkboxes = $(this).closest("fieldset").children(':checkbox');
+        checkboxes = $(this).closest("fieldset").find(':checkbox');
       }
       checkboxes.attr('checked', true);
       event.preventDefault();   
@@ -200,7 +173,7 @@ jQuery(function($){
       if (filter) {
         checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
       } else {
-        checkboxes = $(this).closest("fieldset").children(':checkbox');
+        checkboxes = $(this).closest("fieldset").find(':checkbox');
       }
       checkboxes.attr('checked', false);
       event.preventDefault();      
@@ -231,11 +204,6 @@ function handlePopUps() {
       window.open($j(element).attr('href'));
       event.stop();
     });    
-}
-
-// used in autocompleters to automatically insert comma
-function addCommaToField(element, item) {
-    element.value = element.value + ', '
 }
 
 // used in nested form fields for deleting a nested resource 
@@ -282,18 +250,6 @@ function showOptions(idToCheck, idToShow) {
     var areaToShow = document.getElementById(idToShow);
     if (checkbox.checked) {
         Element.toggle(idToShow)
-    }
-}
-
-function selectAllCheckboxes(basefield, count, checked) {
-    var checkbox;
-    for (i=1; i<=count; i++) {
-        checkbox = document.getElementById(basefield + '_' + i);
-        if (checked == 'invert') {
-            checkbox.checked = !checkbox.checked
-        } else {
-            checkbox.checked = checked
-        }
     }
 }
 
@@ -409,57 +365,3 @@ function generateCharacterCounters() {
         $j(input_id + '_counter').html(maxlength - input_value.length);
     });
 }
-
-
-//generic show hide toggler
-/*
-function ViewToggle(el_selector, show_link_selector, hide_link_selector, effect_duration, start_shown) {
-  this.el = el_selector
-  this.show_el = show_link_selector
-  this.hide_el = hide_link_selector
-  this.options = {
-    duration: effect_duration || 0.2
-  }
-  if (!start_shown) { // this is null == false, if not provided
-    // Call on body DOM loaded event courtesy of jQuery
-    var thisone = this
-    jQuery(function(){thisone.hide()})
-  }
-}
-ViewToggle.prototype = {
-  toggle: function toggle() {
-    var el = $(this.el)
-    if (el) Effect.toggle(el, 'blind', this.options)
-    this._toggle_el(this.show_el)
-    this._toggle_el(this.hide_el)
-  },
-  hide: function hide() {
-    var el = $(this.el)
-    if (el) Effect.BlindUp(el, this.options)
-    this._show_el(this.show_el)
-    this._hide_el(this.hide_el)
-  },
-  show: function show() {
-    var el = $(this.el)
-    if (el) Effect.BlindDown(el, this.options)
-    this._show_el(this.hide_el)
-    this._hide_el(this.show_el)
-  },
-  _hide_el: function(el) {
-    el = $(el)
-    if (el) Effect.Fade(el, {duration:0})
-  },
-  _toggle_el: function(el) {
-    el = $(el)
-    if (el) Effect.toggle(el, 'appear', {duration:0})
-  },
-  _show_el: function(el) {
-    el = $(el)
-    if (el) Effect.Appear(el, {duration:0})
-  }
-}
-
-// commented out for now as it is inadvertently disabling sessions view login login_view = new ViewToggle('signin', 'signin_closed', 'signin_open')
-subnav_view = new ViewToggle('subnav');
-flash_view = new ViewToggle('flash');
-*/

@@ -61,6 +61,6 @@ class TagNomination < ActiveRecord::Base
   
   def self.unreviewed
     where(:approved => false).where(:rejected => false)
-  end  
+  end
   
 end

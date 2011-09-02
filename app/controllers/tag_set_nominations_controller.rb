@@ -130,7 +130,11 @@ class TagSetNominationsController < ApplicationController
     @tag_type = params[:tag_type] || @tag_types.first
     # make sure it's a valid tag type before we go send()ing it around
     @tag_type = @tag_types.first unless @tag_types.include?(@tag_type)
-    @nominations = @tag_set.send("#{@tag_type}_nominations").unreviewed
+    noms = @tag_set.send("#{@tag_type}_nominations").unreviewed
+    @nominations = HashWithIndifferentAccess.new
+    @nominations[:canonical] = noms.where(:canonical => true)
+    @nominations[:existing] = noms.where(:canonical => false, :exists => true)
+    @nominations[:nonexistent] = noms.where(:exists => false)    
   end
 
 

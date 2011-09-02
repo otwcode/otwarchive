@@ -1,0 +1,2 @@
+class TagWranglingRequestController < ApplicationController
+end

@@ -1,0 +1,74 @@
+<div class="tagset"><!--this is probably what we should do for each feature, reckon?-->
+<h2><%= ts("Request Tag Wrangling") %></h2>
+
+<h3 class="landmark">Navigation</h3>
+<ul class="navigation" role="navigation">
+  <% @tag_types.each do |type| %>
+	  <li>
+	    <% if (@tag_type == type) %>
+	      <span class="current"><%= ts("#{type.classify.pluralize}") %></span>
+	    <% else %>
+	      <%= link_to ts("#{type.classify.pluralize}"), url_for(:tag_type => type) %>
+	    <% end %>
+	  </li>
+	<% end %>
+</ul>
+
+
+<p class="notes">
+  Here you can send a request to the tag wranglers to look over the tags that you've added to your set and
+  either make some of them official tags (for instance if you've added a brand-new fandom to the archive) or
+  slot new character and relationship tags into their appropriate fandom. 
+</p>
+
+<ul class="notes">
+  <li>You can send many requests to the wranglers: better to send many small requests than
+  one giant batch containing the result of weeks of nominations!</li>
+  <li>You do NOT have to request wrangling of noncanonical tags in order to use them in a challenge.</li>
+  <li>You DO have to request wrangling of tags into fandoms if you want users to select from only the tags
+    in a fandom when signing up for a challenge, for instance.</li>
+  <li>Please give the tag wranglers as much lead time as possible to handle any important requests.</li>
+  <li>Please ONLY submit requests for tags that are as close as you can get them to canonical form. 
+    That is, if you want to use the tag "Vamp Slayer" in your challenge instead of "Buffy Summers", you can, but 
+    please don't ask for it to be wrangled.</li>  
+</ul>
+
+<%= form_for(@tag_set, :url => tag_set_path(@tag_set), :html => {:method => :put}) do |tag_set_form| %>
+  <%= error_messages_for @tag_set %>
+
+  <h3>Request Tag Wrangling</h3>
+
+  <% unless @tags.empty? %>
+    <fieldset>
+      <p class="submit"><%= submit_tag "Submit" %></p>      
+    </fieldset>    
+
+    <fieldset>
+      <legend><%= ts("Tags") %></legend>
+      <h4><%= ts("Tags") %></h4>
+      <ul class="navigation actions">
+    		<li>Request</li>
+    		<li><a href="#" class="check_all">All</a></li>
+    		<li><a href="#" class="check_none">None</a></li>
+      </ul>
+      <ul class="options<%= @tags.count > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''%>">
+        <% @tags.each do |tag| %>
+          <li class="<%= cycle("odd", "even") %>">
+            <% request = @tag_set.tag_wrangling_requests.where(:tag_id => tag.id).first || @tag_set.tag_wrangling_requests.build(:tag => tag) %>
+            <% tag_set_form.fields_for request do |request_form| %>
+              <%= render "tag_wrangling_request_fields", :tag => tag, :f => request_form %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </fieldset>
+    
+    <fieldset>
+      <p class="submit"><%= submit_tag "Submit" %></p>      
+    </fieldset>    
+
+  <% end %>
+
+<% end %>
+
+</div>

@@ -65,6 +65,9 @@ gem 'jquery-rails', '>= 0.2.6'
 # for converting strings into numeric values eg for sorting autocomplete
 gem 'radix'
 
+gem 'nested_form'
+gem 'valium'
+
 group :test do
   gem 'rspec-rails', '>=2.5.0'
   gem 'pickle'

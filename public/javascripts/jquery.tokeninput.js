@@ -147,7 +147,10 @@ $.TokenList = function (input, url_or_data, settings) {
             outline: "none"
         })
         .focus(function () {
-            if (settings.tokenLimit === null || settings.tokenLimit !== token_count) {
+            if (settings.minChars == 0) {
+              // run the search
+              setTimeout(function(){do_search();}, 5);
+            } else if (settings.tokenLimit === null || settings.tokenLimit !== token_count) {
                 show_dropdown_hint();
             }
         })
@@ -703,12 +706,12 @@ $.TokenList = function (input, url_or_data, settings) {
     function do_search() {
         var query = input_box.val().toLowerCase();
 
-        if(query && query.length) {
+        if( (query && query.length) || settings.minChars == 0) {
             if(selected_token) {
                 deselect_token($(selected_token), POSITION.AFTER);
             }
 
-            if(query.length >= settings.minChars) {
+            if(settings.minChars == 0 || query.length >= settings.minChars) {
                 show_dropdown_searching();
                 clearTimeout(timeout);
 

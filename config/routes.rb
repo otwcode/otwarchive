@@ -68,12 +68,13 @@ Otwarchive::Application.routes.draw do
   resources :tag_sets, :controller => 'owned_tag_sets' do 
     resources :nominations, :controller => 'tag_set_nominations' do
       collection do
-        get :review
         put :update_multiple
         post :destroy_multiple
-        get :request_wrangle
       end
-      
+    end
+    member do
+      get :review
+      post :request
     end
   end
 
