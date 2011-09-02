@@ -2,35 +2,43 @@
 
 <% zone = (@collection.challenge.time_zone || Time.zone.name) %>
 <% if @collection.challenge.signup_open %>
-  <dt><%= ts("Signup")%>:</dt>
+
+  <dt><%= ts("Signup") %>:</dt>
   <dd><%= link_to ts("CURRENTLY OPEN"), new_collection_signup_path(@collection) %></dd>
 
-  <dt><%= ts("Signup closes")%>:</dt>
+  <dt><%= ts("Signup closes") %>:</dt>
   <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) %></dd>
 
 <% elsif Time.now < @collection.challenge.signups_open_at %>
 
-  <dt><%= ts("Signup opens")%>:</dt>
+  <dt><%= ts("Signup opens") %>:</dt>
   <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_open_at, zone) %></dd>
 
-  <dt><%= ts("Signup closes")%>:</dt>
+<% elsif Time.now > @collection.challenge.signups_close_at %>
+
+  <dt><%= ts("Signup") %>:</dt>
+  <dd><%= ts("SIGNUP PERIOD IS OVER") %></dd>
+
+<% else %>
+
+  <dt><%= ts("Signup opens") %>:</dt>
+  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_open_at, zone) %></dd>
+
+  <dt><%= ts("Signup closes") %>:</dt>
   <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) %></dd>
 
-<% elsif Time.now < @collection.challenge.signups_close_at %>
-  <dt><%= ts("Signup")%>:</dt>
-  <dd><%= ts("SIGNUP PERIOD IS OVER")%></dd>
 <% end %>
 
-<dt><%= ts("Assignments due")%>:</dt>
+<dt><%= ts("Assignments due") %>:</dt>
 <dd class="datetime"><%= time_in_zone(@collection.challenge.assignments_due_at, zone) %></dd>
 
 <% if @collection.unrevealed? %>
-  <dt><%= ts("Works revealed")%>:</dt>
+  <dt><%= ts("Works revealed") %>:</dt>
   <dd class="datetime"><%= time_in_zone(@collection.challenge.works_reveal_at, zone) %></dd>
 <% end %>
 
 <% if @collection.anonymous? %>
-  <dt><%= ts("Authors revealed")%>:</dt>
+  <dt><%= ts("Authors revealed") %>:</dt>
   <dd class="datetime"><%= time_in_zone(@collection.challenge.authors_reveal_at, zone) %></dd>
 <% end %>
 
