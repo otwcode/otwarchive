@@ -38,10 +38,7 @@ gem 'aws-s3', :require => 'aws/s3'
 gem 'mocha'
 gem 'css_parser'
 
-gem 'paperclip',
-  :git => 'git://github.com/thoughtbot/paperclip.git',
-  :branch => 'master',
-  :require => 'paperclip'
+gem 'paperclip', '>=2.3.16'
 
 gem 'tolk',
   :git => 'git://github.com/ambtus/tolk.git',
