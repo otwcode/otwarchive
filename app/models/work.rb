@@ -1148,7 +1148,6 @@ class Work < ActiveRecord::Base
     has complete
     has bookmarks.rec, :as => 'recced'
     has bookmarks.pseud_id, :as => 'bookmarker'
-    has complete
 
     has kudos(:id), :as => :kudos_id
     has "COUNT(DISTINCT kudos.id)", :as => :kudo_count, :type => :integer

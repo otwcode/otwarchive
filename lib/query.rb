@@ -6,7 +6,7 @@ module Query
   BOOKMARK_FIELDS = %w{tag indirect notes bookmarker}
   PEOPLE_FIELDS = %w{name icon_alt_text description}
   ALL_FIELDS = (WORK_FIELDS + BOOKMARK_FIELDS + PEOPLE_FIELDS).uniq
-  ALL_INDEXES = ALL_FIELDS + %w{words hits kudos date rec canonical recced bookmarked complete}
+  ALL_INDEXES = ALL_FIELDS + %w{words hits kudos date rec canonical recced bookmarked}
 
   # this does the actual search on the class given a standardized query hash
   def Query.search_with_sphinx(klass, query, page)
