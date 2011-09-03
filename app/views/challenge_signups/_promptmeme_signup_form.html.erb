@@ -44,7 +44,7 @@
   <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection, :single_prompt => params[:single_prompt]) : collection_signups_path(@collection))) do |signup_form| %>
     <%= error_messages_for @challenge_signup %>
   
-  <% if @challenge.signup_instructions_general %>
+  <% if !@challenge.signup_instructions_general.blank? %>
     <fieldset class="preface profile">
       <legend>General Information</legend>
       <h3>General Information</h3>
@@ -86,7 +86,7 @@
   <%= form_for([@collection, @challenge_signup], :url => (edit_record ? collection_signup_path(@collection) : collection_signups_path(@collection))) do |signup_form| %>
     <%= error_messages_for @challenge_signup %>
 
-  <% if !@challenge.signup_instructions_general.nil? || current_user.pseuds.size > 1 %>
+  <% if !@challenge.signup_instructions_general.blank? || current_user.pseuds.size > 1 %>
   <fieldset class="preface profile">
     <legend>General Information</legend>
     <h3>General Information</h3>
