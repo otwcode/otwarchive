@@ -46,6 +46,10 @@
 			  <dt><%= ts("Fandoms") %>:</dt>
     		<dd><%= link_to(collection.all_fandoms_count, collection_fandoms_path(collection)) %></dd>
     	<% end %>
+      <% if @collection.challenge && @collection.challenge_type == "PromptMeme" %>
+        <dt><%= ts("Total prompts") %></dt>
+        <dd><%= @collection.prompts.count.to_s %></dd>
+      <% end %>
 		  <dt><%= ts("Works") %>:</dt>
   		<dd><%= link_to(@works_count, collection_works_path(collection)) %></dd>
 			<% if (@bookmarks_count = collection.all_approved_bookmarks_count) > 0 %>

@@ -123,7 +123,15 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   When I am on my signups page
   Then I should see "Battle 12"
-  
+
+  Scenario: Prompt count shows on profile
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I go to "Battle 12" collection's page
+  Then show me the main content
+
   Scenario: Signups in the dashboard have correct controls
   
   Given I have Battle 12 prompt meme fully set up

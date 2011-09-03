@@ -6,11 +6,13 @@
   <% # expects @works, @bookmarks %>
   
     <% if @collection.challenge && @collection.challenge_type == "PromptMeme" %>
+    <div class="module">
     <p>
   	  <%= ts("Total prompts") + ": " + @collection.prompts.count.to_s %>
-      </p><p>
-      <%= ts("Unanswered prompts") + ": " + @collection.prompts.claimed.count.to_s %>
+    </p><p>
+      <%= ts("Claimed prompts") + ": " + @collection.prompts.claimed.count.to_s %>
     </p>
+    </div>
   	<% end %>
     
     <% unless @works.blank? %>

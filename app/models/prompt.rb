@@ -25,7 +25,7 @@ class Prompt < ActiveRecord::Base
   
   has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_prompt_id'
   
-  scope :claimed, joins("INNER JOIN challenge_claim on challenge_claims.id = prompts.id")
+  scope :claimed, joins("INNER JOIN challenge_claims on challenge_claims.id = prompts.id")
 
   before_destroy :clear_claims
   def clear_claims
