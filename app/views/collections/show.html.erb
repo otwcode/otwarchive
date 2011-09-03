@@ -5,7 +5,7 @@
   <!--main content-->
   <% # expects @works, @bookmarks %>
   
-    <% if @collection.challenge && @collection.challenge_type == "PromptMeme" %>
+    <% if @collection.challenge? && @collection.prompt_meme? %>
     <div class="module">
     <p>
   	  <%= ts("Total prompts") + ": " + @collection.prompts.count.to_s %>
