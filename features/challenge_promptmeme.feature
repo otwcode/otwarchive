@@ -4,35 +4,38 @@ Feature: Prompt Meme Challenge
   As a humble user
   I want to create a prompt meme and post to it
   
+  Scenario: Can create a collection to house a prompt meme
+  
+  Given I have standard challenge tags setup
+  When I set up Battle 12 promptmeme collection
+  Then I should be editing the challenge settings
+  
   Scenario: Creating a prompt meme has different instructions from a gift exchange
   
-  Given I am logged in as "mod1"
-    And I have standard challenge tags setup
+  Given I have standard challenge tags setup
   When I set up Battle 12 promptmeme collection
-  Then I should see "Setting Up The Battle 12 Prompt Meme"
   Then I should see prompt meme options
   
   Scenario: Create a prompt meme
   
-  Given I am logged in as "mod1"
-    And I have standard challenge tags setup
+  Given I have standard challenge tags setup
   When I create Battle 12 promptmeme
   Then Battle 12 prompt meme should be correctly created
   
   Scenario: User can see a prompt meme
   
   Given I have Battle 12 prompt meme fully set up
-    And I am logged in as "myname1"
+    And I am logged in as a random user
   When I go to the collections page
   Then I should see "Battle 12"
   
   Scenario: Prompt meme is in list of open challenges
   
   Given I have Battle 12 prompt meme fully set up
-    And I am logged in as "myname1"
+    And I am logged in as a random user
   When I view open challenges
   Then I should see "Battle 12"
-  
+
   Scenario: Past challenge is not in list of open challenges
   
   Given I am logged in as "mod1"
@@ -52,21 +55,27 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I view open challenges
   Then I should not see "Battle 12"
+
+  Scenario: Can access settings from profile navigation
+
+  Given I have Battle 12 prompt meme fully set up
+  When I go to "Battle 12" collection's page
+    And I follow "Profile"
+  Then I should see "Challenge Settings" within ".navigation"
+  When I follow "Challenge Settings" within ".navigation"
+  Then I should be editing the challenge settings
   
   Scenario: Can edit settings for a prompt meme
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "mod1"
-  When I go to "Battle 12" collection's page
-    And I follow "Profile"
-  Then I should see "Challenge Settings" within ".navigation"
-  When I follow "Challenge Settings" within ".navigation"
-  Then I should see "Setting Up The Battle 12 Prompt Meme"
+  When I edit settings for "Battle 12" challenge
+  Then I should be editing the challenge settings
   
   Scenario: Signup being open is shown on profile
   
   Given I have Battle 12 prompt meme fully set up
-    And I am logged in as "myname1"
+    And I am logged in as a random user
   When I go to "Battle 12" collection's page
     And I follow "Profile"
   Then I should see "Signup: CURRENTLY OPEN"
@@ -98,16 +107,29 @@ Feature: Prompt Meme Challenge
   When I fill in the missing prompt
   Then I should see "Signup was successfully created"
   
-  Scenario: View signups in the dashboard
+  Scenario: Correct number of signups is shown in user sidebar
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I am on my user page
   Then I should see "My Signups (1)"
-  When I follow "My Signups (1)"
+  
+  Scenario: View signups in the dashboard
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I am on my signups page
   Then I should see "Battle 12"
-    And I should see "Edit"
+  
+  Scenario: Signups in the dashboard have correct controls
+  
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I am on my signups page
+  Then I should see "Edit"
     And I should see "Delete"
   
   Scenario: View individual prompt
@@ -145,11 +167,8 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-    And I follow "Add another prompt"
-    And I check "Stargate Atlantis"
-    And I fill in "Freeforms" with "My extra tag"
-    And I submit
-  Then I should see "Prompt was successfully added"
+    And I add a new prompt to my signup
+  Then I should see "Prompt was successfully updated"
     And I should see "Request 3"
     And I should see "My extra tag"
   
@@ -516,6 +535,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Delete"
   When I follow "Delete"
   Then I should see "Your claim was deleted."
+  # confirm claim no longer exists
   When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should not see "Delete"
@@ -542,9 +562,11 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
     And I delete my signup for "Battle 12"
   Then I should see "Challenge signup was deleted."
+  # work fulfilling is still fine
   When I view the work "Fulfilled Story"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
     And I should not see "Stargate Atlantis"
+    # work is still fine as another user
   When I am logged in as "myname4"
     And I view the work "Fulfilled Story"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Battle 12"
