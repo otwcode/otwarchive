@@ -1179,7 +1179,7 @@ Feature: Prompt Meme Challenge
   Scenario: check that anon prompts are still anon on the fulfilling work
   # TODO
   
-  Scenario: All the rest of the unrefactored stuff
+  Scenario: Fulfilled claims show as fulfilled
   
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
@@ -1196,20 +1196,34 @@ Feature: Prompt Meme Challenge
     And I follow "Prompts (8)"
   When I press "Claim"
   Then I should see "New claim made."
-
-  # check that claims show as fulfilled
-  
-  When I follow "Log out"
-    And I am logged in as "myname4"
+  When I am logged in as "myname4"
     And I go to the collections page
     And I follow "Battle 12"
     And I follow "Claims"
   Then I should see "mod1" within "#fulfilled_claims"
     And I should see "myname4" within "#fulfilled_claims"
+    
+  Scenario: Make another claim and then fulfill from the post new form
   
-  # make another claim and then fulfill from the post new form
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  Given all emails have been delivered
+  When I reveal the authors of the "Battle 12" challenge
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts (8)"
+  When I press "Claim"
+  Then I should see "New claim made."
+  When I am logged in as "myname4"
+    And I go to the collections page
+    And I follow "Battle 12"
   When I follow "Prompts ("
-  Then I should see "Claim"
   When I press "Claim"
   Then I should see "New claim made"
   When I follow "Post New"
@@ -1224,8 +1238,33 @@ Feature: Prompt Meme Challenge
    # And I should see "Battle 12"
   When I view the work "Existing work"
   Then I should find "draft"
-    
-  # work left in draft so claim is not yet totally fulfilled
+  
+  Scenario: work left in draft so claim is not yet totally fulfilled
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  Given all emails have been delivered
+  When I reveal the authors of the "Battle 12" challenge
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts (8)"
+  When I press "Claim"
+  Then I should see "New claim made."
+  When I am logged in as "myname4"
+    And I go to the collections page
+    And I follow "Battle 12"
+  When I follow "Prompts ("
+  When I press "Claim"
+  When I follow "Post New"
+  When I fill in the basic work information for "Existing work"
+    And I check "Battle 12 (Anonymous)"
+    And I press "Preview"
   When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should see "myname4" within "#fulfilled_claims"
@@ -1240,7 +1279,35 @@ Feature: Prompt Meme Challenge
   Then I should see "Existing work"
     And "Issue 2259" is fixed
     
-  # post the draft and it is then fulfilled
+  Scenario: When draft is posted, claim is fulfilled
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I am logged in as "myname4"
+  When I claim a prompt from "Battle 12"
+  When I close signups for "Battle 12"
+  When I am logged in as "myname4"
+  When I fulfill my claim
+  When mod fulfills claim
+  When I reveal the "Battle 12" challenge
+  Given all emails have been delivered
+  When I reveal the authors of the "Battle 12" challenge
+  When I go to "Battle 12" collection's page
+    And I follow "Prompts (8)"
+  When I press "Claim"
+  Then I should see "New claim made."
+  When I am logged in as "myname4"
+    And I go to the collections page
+    And I follow "Battle 12"
+  When I follow "Prompts ("
+  When I press "Claim"
+  When I follow "Post New"
+  When I fill in the basic work information for "Existing work"
+    And I check "Battle 12 (Anonymous)"
+    And I press "Preview"
+  When I am on my user page
+    And I follow "My Drafts"
+    And all emails have been delivered
   When I follow "Post Draft"
   Then 1 email should be delivered
   Then I should see "Your work was successfully posted"
@@ -1254,27 +1321,32 @@ Feature: Prompt Meme Challenge
   When I follow "Response posted on"
   Then I should see "Existing work"
     And I should not find "draft"
-    
-  # fulfill a claim from an existing work
+  
+  Scenario: Fulfill a claim from an existing work
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I close signups for "Battle 12"
+  When I reveal the "Battle 12" challenge
+  When I reveal the authors of the "Battle 12" challenge
   When I am logged in as "myname1"
     And I go to "Battle 12" collection's page
     And I follow "Prompts ("
-  Then I should see "Claim"
   When I press "Claim"
   Then I should see "New claim made"
   When I post the work "Here's one I made earlier"
     And I edit the work "Here's one I made earlier"
-    And I check "Battle 12 (Anonymous)"
+    And I check "Battle 12"
     And I press "Preview"
   Then I should find "draft"
-    And I should see "In response to a prompt by: Anonymous"
+    And I should see "In response to a prompt by:"
     # TODO: Figure this out
   #  And I should see "Collections:"
    # And I should see "Battle 12"
   When I press "Update"
   Then I should see "Work was successfully updated"
     And I should not find "draft"
-    And I should see "In response to a prompt by: Anonymous"
+    And I should see "In response to a prompt by:"
   #TODO: Figure this one out, too
   #Then I should see "Collections:"
   #  And I should see "Battle 12"
@@ -1284,24 +1356,21 @@ Feature: Prompt Meme Challenge
     And I follow "Claims"
   Then I should see "myname1" within "#fulfilled_claims"
     And I should see "Response posted on"
-    And I should see "Not yet approved"
-
 
   Scenario: Download prompt CSV from signups page
+  
   Given I am logged in as "mod1"
-  And I have standard challenge tags setup
-  And I create Battle 12 promptmeme
-
+    And I have standard challenge tags setup
+    And I create Battle 12 promptmeme
   When I go to the "Battle 12" signups page
-  And I follow "Download (CSV)"
+    And I follow "Download (CSV)"
   Then I should get a file with ending and type csv
 
   Scenario: Download prompt CSV from requests page
+  
   Given I am logged in as "mod1"
-  And I have standard challenge tags setup
-  And I create Battle 12 promptmeme
-
+    And I have standard challenge tags setup
+    And I create Battle 12 promptmeme
   When I go to the "Battle 12" requests page
-  And I follow "Download (CSV)"
+    And I follow "Download (CSV)"
   Then I should get a file with ending and type csv
-
