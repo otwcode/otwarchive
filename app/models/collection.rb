@@ -163,10 +163,10 @@ class Collection < ActiveRecord::Base
 
   # we need to add other challenge types to this join in future
   scope :ge_signups_open, joins("INNER JOIN gift_exchanges on gift_exchanges.id = challenge_id").
-                       where("gift_exchanges.signup_open = 1 || gift_exchanges.signups_close_at > ?", Time.now).
+                       where("gift_exchanges.signup_open = 1 && gift_exchanges.signups_close_at > ?", Time.now).
                        order("gift_exchanges.signups_close_at")
   scope :pm_signups_open, joins("INNER JOIN prompt_memes on prompt_memes.id = challenge_id").
-                       where("prompt_memes.signup_open = 1 || prompt_memes.signups_close_at > ?", Time.now).
+                       where("prompt_memes.signup_open = 1 || (prompt_memes.signups_close_at > ? && prompt_memes.signups_open_at < ?)", Time.now).
                        order("prompt_memes.signups_close_at")
 
   scope :with_name_like, lambda {|name|
