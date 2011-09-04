@@ -34,7 +34,7 @@
         <% end %>         
       <% end %>
       <dt><%= ts("Language") %></dt>
-      <dd><%= select_tag :language_id, ('<option></option>' + options_from_collection_for_select(Language.all, :short, :name, params[:language_id])).html_safe %></dd>
+      <dd><%= select_tag :language_id, ('<option></option>' + options_from_collection_for_select(Language.default_order, :short, :name, params[:language_id])).html_safe %></dd>
       <dt><%= ts("Status") %></dt>
       <dd><%= check_box_tag 'complete', '1', params[:complete] == '1' %><%= label_tag 'complete', "Complete only" %></dd>
       <dt>Filter by:</dt>
