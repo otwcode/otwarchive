@@ -33,6 +33,26 @@ Feature: Prompt Meme Challenge
   When I view open challenges
   Then I should see "Battle 12"
   
+  Scenario: Past challenge is not in list of open challenges
+  
+  Given I am logged in as "mod1"
+    And I have standard challenge tags setup
+  When I set up Battle 12 promptmeme collection
+    And I fill in past challenge options
+    And I am logged in as "myname1"
+  When I view open challenges
+  Then I should not see "Battle 12"
+  
+  Scenario: Future challenge is not in list of open challenges
+  
+  Given I am logged in as "mod1"
+    And I have standard challenge tags setup
+  When I set up Battle 12 promptmeme collection
+    And I fill in future challenge options
+    And I am logged in as "myname1"
+  When I view open challenges
+  Then I should not see "Battle 12"
+  
   Scenario: Can edit settings for a prompt meme
   
   Given I have Battle 12 prompt meme fully set up
