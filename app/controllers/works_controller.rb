@@ -19,7 +19,7 @@ class WorksController < ApplicationController
   cache_sweeper :feed_sweeper
 
   def search
-    @languages = Language.all(:order => :short)
+    @languages = Language.default_order
     @query = {}
     if params[:query]
       @query = Query.standardize(params[:query])
