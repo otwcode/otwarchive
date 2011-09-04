@@ -28,7 +28,7 @@ class LocalesController < ApplicationController
   
   def new
     @locale = Locale.new
-    @languages = Language.all(:order => :short)
+    @languages = Language.default_order
   end
   
   def create   
