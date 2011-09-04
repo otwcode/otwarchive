@@ -192,6 +192,24 @@ When /^I fill in Battle 12 challenge options$/ do
     And %{I press "Update"}
 end
 
+When /^I fill in future challenge options$/ do
+  When "I fill in prompt meme challenge options"
+    And %{I select "2015" from "prompt_meme_signups_open_at_1i"}
+    And %{I select "2016" from "prompt_meme_signups_close_at_1i"}
+    And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
+    And %{I uncheck "Signup open?"}
+    And %{I press "Update"}
+end
+
+When /^I fill in past challenge options$/ do
+  When "I fill in prompt meme challenge options"
+    And %{I select "2010" from "prompt_meme_signups_open_at_1i"}
+    And %{I select "2010" from "prompt_meme_signups_close_at_1i"}
+    And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
+    And %{I uncheck "Signup open?"}
+    And %{I press "Update"}
+end
+
 When /^I fill in unlimited prompt challenge options$/ do
   When "I fill in prompt meme challenge options"
     And %{I check "prompt_meme_request_restriction_attributes_character_restrict_to_fandom"}
