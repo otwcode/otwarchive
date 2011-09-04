@@ -63,6 +63,12 @@ When /^I edit a comment$/ do
   click_button "Update"
 end
 
+# this step assumes we are on a page with a comment form
+When /^I post a comment "([^"]*)"$/ do |comment_text|
+  fill_in("Comment", :with => comment_text)
+  click_button("Add Comment")
+end
+
 When /^I visit the new comment page for the work "([^"]+)"$/ do |work|
   work = Work.find_by_title!(work)
   visit new_work_comment_path(work, :only_path => false)

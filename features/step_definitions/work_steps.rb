@@ -13,18 +13,22 @@ Given /^I have no works or comments$/ do
   Comment.delete_all
 end
 
-Given /^I view the chaptered work(?: with ([\d]+) comments?)? "([^"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |n_comments, title, mode|
+Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)? "([^"]*)"$/ do |n_chapters, n_comments, title|
   Given %{I am logged in as a random user}
-  And %{I post the chaptered work "#{title}"}
+  And %{I post the work "#{title}"}
   work = Work.find_by_title!(title)
   visit work_url(work)
+  n_chapters ||= 2
+  (n_chapters.to_i - 1).times do |i|
+    When %{I follow "Add Chapter"}
+    fill_in("content", :with => "Yet another chapter.")
+    click_button("Post without preview")
+  end
   n_comments ||= 0
   n_comments.to_i.times do |i|
     Given %{I post the comment "Bla bla" on the work "#{title}"}
   end
   And %{I am logged out}
-  visit work_url(work)
-  And %{I follow "Entire Work"} if mode == "full"
 end
 
 Given /^I have a work "([^\"]*)"$/ do |work|
@@ -32,11 +36,23 @@ Given /^I have a work "([^\"]*)"$/ do |work|
   When %{I post the work "#{work}"}
 end
 
+Given /the chaptered work setup/ do
+  Given %{the chaptered work with 3 chapters "Gimme Comments"}
+end
+
 ### WHEN
 
-When /^I view the work "([^\"]*)"$/ do |work|
+When /^I view the ([\d]+)(?: st|nd|rd|th) chapter$/ do |chapter_no|
+  (chapter_no.to_i - 1).times do |i|
+    When %{I follow "Next Chapter"}
+  end
+end
+
+When /^I view the work "([^\"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |work, mode|
   work = Work.find_by_title!(work)
   visit work_url(work)
+  When %{I follow "View Entire Work"} if mode == "full"
+  When %{I follow "View chapter by chapter"} if mode == "chapter-by-chapter"
 end
 
 When /^I edit the work "([^\"]*)"$/ do |work|
@@ -116,8 +132,10 @@ When /^I fill in basic work tags$/ do
   fill_in("Additional Tags", :with => DEFAULT_FREEFORM)
 end
 
-# TODO: The optional extras (fandom and freeform) in the When line don't seem to be working here - can anyone fix them?
-When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")(?: with category "([^\"]*)")$/ do |title, fandom, freeform, category|
+# the (?: ) construct means: do not use the stuff in () as a capture/match
+# the ()? construct means: the stuff in () is optional
+# they must be combined so that the entire thing is optional, and only the relevant bits are captured
+When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?(?: with category "([^\"]*)")?$/ do |title, fandom, freeform, category|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
@@ -127,7 +145,8 @@ When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*
   click_button("Preview")
 end
 
-When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")$/ do |title, fandom, freeform|
+When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?$/ do |title, fandom, freeform|
+  Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
   check(DEFAULT_CATEGORY)
@@ -136,11 +155,11 @@ When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*
   click_button("Preview")
 end
 
-When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")$/ do |title, fandom|
+When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")?$/ do |title, fandom|
   Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
-  check(category.nil? ? DEFAULT_CATEGORY : category)
+  check(DEFAULT_CATEGORY)
   fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
   click_button("Preview")
 end
