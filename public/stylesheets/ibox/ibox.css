@@ -87,7 +87,7 @@ color: #000;
 
 #ibox_close a:hover {
 background: #000;
-color: #f8f1fe;
+color: #f4effc;
 }
 
 /*note: there is no apparent reason to need this rule, and yet paragraphs have no margins in first_login_help. front end debugger needs to chase this up the cascade*/

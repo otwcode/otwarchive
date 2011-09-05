@@ -1,12 +1,20 @@
+/*==GROUP: COMMENTS
+Comments are shown in #feedback at the end of a chapter or work, at the end of news posts, and can also be shown on their own page as a threaded list. 
+The comment form generally belongs to the class "post".
+Comments are also shown in user home: inbox and that containing view is styled in zone: home.
+Wrangler discussion boards are not grouped with comments and they only show up in the Tag Zone.
+*/
 #feedback 
-        { margin:auto 2.5em;}
+        { margin:0 2.5em auto;}
 
 div.comment,li.comment 
         { position: relative; border:1px solid #ddd; overflow:hidden}
-.comment img.icon 
-        { height: 100px; width: 100px; float: left; margin:-1.5625em 0.5625em 0.5625em 0; }
+.comment img.icon, .comment .icon span.icon
+        { height: 100px; width: 100px; float: left; margin:-1.5625em 0.5625em 0.5625em 0;  }
 .comment h4 
-        { background:#ddd; padding:0.25em;margin:0 auto -.25em 100px }
+        { background:#ddd; padding:0.25em 0.25em 0.25em 120px;margin:0 auto -.25em}
+.comment p
+        { clear:none;}
 .comment ul 
         { margin-top:-1.286em}
 .thread .thread 
@@ -18,4 +26,5 @@ fieldset.comments
         { background:transparent; border:none; 
           box-shadow:none }
 
-.comment .datetime {position:absolute; top:1.5em; right:0}
+.comment .datetime 
+        { margin:-1.286em}

@@ -32,54 +32,53 @@
               
   <% unless @works.blank? %>
   <div class="work module<% if current_user == @user %> works-own<% end %>" id="user-works">
-    <h3><%=h ts("Recent works") %></h3>
+    <h3><%= ts("Recent works") %></h3>
     <ul class="index">
       <% for work in @works %>
     	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
       <% end %>
     </ul>
     <% if @works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-      <ul class="navigation"><li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li></ul>
+      <ul class="navigation" role="navigation"><li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li></ul>
     <% end %>
   </div>
   <% end %>
   
   <% unless @series.blank? %>
   <div class="series module<% if current_user == @user %> works-own<% end %>" id="user-series">
-    <h3><%=h ts("Recent series") %></h3>
+    <h3><%= ts("Recent series") %></h3>
     <ul class="index">
       <% for series in @series %>
         <%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
       <% end %>
       <% if @author %>
         <% if @author.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-        <ul class="navigation"><li><%= print_pseud_series_link(@author) %></li></ul>
+        <ul class="navigation" role="navigation"><li><%= print_pseud_series_link(@author) %></li></ul>
         <% end %>
       <% else %>
         <% if @user.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-        <ul class="navigation"><li><%= print_series_link(@user) %></li></ul>
+        <ul class="navigation" role="navigation"><li><%= print_series_link(@user) %></li></ul>
         <% end %>
       <% end %> 
     </ul>
-    
-  </div>
+   </div>
   <% end %>
   
   <% unless @bookmarks.blank? %>
   <div class="bookmark module" id="user-bookmarks">
-    <h3><%=h ts("Recent bookmarks") %></h3>
+    <h3><%= ts("Recent bookmarks") %></h3>
     <ul class="index">
       <% for bookmark in @bookmarks %>
-        <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
+        <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
       <% end %>
       <% unless @user == User.orphan_account %>
         <% if @author %>
           <% if @author.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-            <ul class="navigation"><li><%= print_pseud_bookmarks_link(@author) %></li></ul>
+            <ul class="navigation" role="navigation"><li><%= print_pseud_bookmarks_link(@author) %></li></ul>
           <% end %>
         <% else %>
           <% if @user.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-            <ul class="navigation"><li><%= print_bookmarks_link(@user) %></li></ul>
+            <ul class="navigation" role="navigation"><li><%= print_bookmarks_link(@user) %></li></ul>
           <% end %>
         <% end %> 
       <% end %>

@@ -10,7 +10,7 @@
 
 <!--subnav-->
 <% if current_user.is_a?(User) && current_user.is_translation_admin? %>
-<ul class="navigation">
+<ul class="navigation" role="navigation">
 <li><%= link_to t('.link_to_new', :default => 'Add new translators'), 
         (@locale ? new_locale_translator_path(@locale) : new_translator_path) %></li>
 </ul>

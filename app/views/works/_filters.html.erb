@@ -1,6 +1,6 @@
-<h3 class="landmark">Filters</h3>
 <%= form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'filters', :method => :get, :id => 'work_filters') do %>
-  <%= field_set_tag h(ts('Filter results:')) + link_to_help("filters") do %>
+  <h3 class="landmark">Filters</h3>
+	<%= field_set_tag h(ts('Filter results:')) + link_to_help("filters") do %>
     <dl class="filters" role="complementary navigation">
     <% unless @filters.blank? %>
       <% Tag::FILTERS.each do |type| %>

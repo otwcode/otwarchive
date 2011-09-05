@@ -1,4 +1,4 @@
-<%= form_tag compare_external_works_path, :method => :get do %>
+<%= form_tag compare_external_works_path, :class => 'search', :method => :get do %>
     <fieldset>
       <legend>Search for external works</legend>
       <p>
@@ -17,15 +17,15 @@
     <li>
       <%= render :partial => 'external_works/blurb', :locals => {:external_work => external_work} %>
       <dl>
-        <dt>Merge other external works to this one</dt>
+        <dt><label for="merger_id">Merge other external works to this one</label></dt>
         <dd><%= radio_button_tag "merger_id", external_work.id %></dd>
 
-        <dt>Merge this external work to another one</dt>
+        <dt><label for="to_merge[]">Merge this external work to another one</label></dt>
         <dd><%= check_box_tag "to_merge[]", external_work.id %></dd>      
       </dl>
     </li>
   <% end %>
   </ol>
-  <p><%= submit_tag %></p>
+  <p class="submit"><%= submit_tag %></p>
   <% end %>
 <% end %>

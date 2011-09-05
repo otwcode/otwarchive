@@ -23,7 +23,7 @@
 	</thead>
 	<tbody>	
   <% @admin_posts.each do |admin_post| %>
-    <tr class="navigation">
+    <tr class="navigation actions">
       <td><%= link_to admin_post.title, admin_post %></td>
       <td><%= admin_post.created_at %></td>
       <td><%= admin_post.updated_at %></td>

@@ -1,56 +1,58 @@
 <%= stylesheet_link_tag '01-core',
 '02-elements',
-'03-regions-header',
-'04-regions-dashboard',
-'05-regions-main',
-'06-regions-footer',
+'03-region-header',
+'04-region-dashboard',
+'05-region-main',
+'06-region-footer',
 '07-actions',
-'17-interactions',
-'08-roles-states',
-'10-groups.css',
+'08-interactions',
+'09-roles-states',
+'10-types-groups.css',
 '11-group-meta',
 '12-group-blurb',
 '13-group-preface',
 '14-group-comments',
-'15-group-profile',
-'16-main-pages',
-'18-userstuff',
-'19-system-messages',
+'15-zone-system',
+'16-zone-home',
+'17-zone-searchbrowse',
+'18-zone-tags',
+'19-zone-translation',
+'20-userstuff',
+'21-system-messages',
                         :cache => 'cached_for_screen',
                         :media => 'screen' %>
 <% if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' %>
-  <%= stylesheet_link_tag 'translations', :media => 'screen' %>
+  <%= stylesheet_link_tag 'role-translator', :media => 'screen' %>
 <% end %>
 <% if logged_in_as_admin? %>
-  <%= stylesheet_link_tag '09-role-admin', :media => 'screen' %>
+  <%= stylesheet_link_tag 'role-admin', :media => 'screen' %>
 <% end %>
 
-<%= stylesheet_link_tag '20-handheld', :media => 'handheld' %>
-<%= stylesheet_link_tag '22-aural', :media => 'speech' %>
-<%= stylesheet_link_tag '21-print', :media => 'print' %>
+<%= stylesheet_link_tag 'role-handheld', :media => 'handheld' %>
+<%= stylesheet_link_tag 'role-aural', :media => 'speech' %>
+<%= stylesheet_link_tag 'role-print', :media => 'print' %>
 
 <%= stylesheet_link_tag 'smoothness/jquery-ui-1.8.9.custom', :media => 'all' %>
 <%= stylesheet_link_tag 'jquery.qtip', :media => 'all' %>
 
 <!--plugins-->
-<!-- stylesheet_link_tag 'globalize', :media => 'screen' -->
 <!-- stylesheet_link_tag 'visualize.jQuery', :media => 'screen' -->
 
 <!-- browser-specific stylesheets -->
 <!--[if IE]>
-<%= stylesheet_link_tag 'ie_overrides', :media => 'all' %>
+<%= stylesheet_link_tag 'role-ie', :media => 'all' %>
 <![endif]-->
 <!--[if IE 5]>
-<%= stylesheet_link_tag 'ie5_overrides', :media => 'all' %>
+<%= stylesheet_link_tag 'role-ie5', :media => 'all' %>
 <![endif]-->
 <!--[if IE 6]>
-<%= stylesheet_link_tag 'ie6_overrides', :media => 'all' %>
+<%= stylesheet_link_tag 'role-ie6', :media => 'all' %>
 <![endif]-->
 <!--[if IE 7]>
-<%= stylesheet_link_tag 'ie7_overrides', :media => 'all' %>
+<%= stylesheet_link_tag 'role-ie7', :media => 'all' %>
 <![endif]-->
 <!--[if IE 8]>
-<%= stylesheet_link_tag 'ie8_overrides', :media => 'all' %>
+<%= stylesheet_link_tag 'role-ie8', :media => 'all' %>
 <![endif]-->
 
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
@@ -93,6 +95,9 @@ if (typeof jQuery == 'undefined')
 <%= iboxify_page %>
 <!--colours first draft-->
 <%= stylesheet_link_tag '23-colors' %>
+<!--sandbox for developers	-->
+<%= stylesheet_link_tag 'sandbox' %>
+
 <% if current_user.is_a?(User) && (skin = current_user.try(:preference).try(:skin)) %>
   <% cache("#{skin.id}-site-skin") do %>
     <%= render "skins/skin_style_block", :skin => skin %>

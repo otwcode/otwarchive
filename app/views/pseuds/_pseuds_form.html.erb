@@ -13,7 +13,7 @@
   </dd>
   <dt><%= f.label :description, ts("Description") %></dt>
   <dd>
-    <code>a href, em, strong, i, b</code><br />
+    <code>a href, em, strong, i, b</code>
     <%= f.text_area :description, :rows => 4, :cols => 60, :class => "observe_textlength" %>
     <%= generate_countdown_html("pseud_description", Pseud::DESCRIPTION_MAX) %>
   </dd>
@@ -21,18 +21,18 @@
   <dt><%= ts("Icon") %></dt>
   <dd>
     <p class="icon">
-      <%= standard_icon_display(@user, @pseud) %>
+      <%= icon_display(@user, @pseud) %>
     </p>
     <% if @pseud.icon_file_name %>
-      <%= f.check_box :delete_icon, {:checked => false} %>
-      %= f.label :delete_icon, ts("Delete this icon and revert to archive default icon") %><br/>
+     <p> <%= f.check_box :delete_icon, {:checked => false} %>
+      %= f.label :delete_icon, ts("Delete this icon and revert to archive default icon") %></p>
     <% end %>
-    <%= f.label :icon, ts("Upload a new icon:") %>
-    <%= f.file_field :icon %>
+    <p><%= f.label :icon, ts("Upload a new icon:") %>
+    <%= f.file_field :icon %></p>
     <p><%= ts("You may currently have one icon for each pseud. Icons may be in png, jpeg or gif format.") %></p>
   </dd>
  
-  <dt><%= f.label :icon_alt_text, ts("Icon alt text for screenreaders") %><%= link_to_help "icon-alt-text" %></dt>
+  <dt><%= f.label :icon_alt_text, ts("Icon alt text for screenreaders") %> <%= link_to_help "icon-alt-text" %></dt>
   <dd>
     <%= f.text_field :icon_alt_text, :class => "observe_textlength" %>
     <%= generate_countdown_html("pseud_icon_alt_text", ArchiveConfig.ICON_ALT_MAX) %>

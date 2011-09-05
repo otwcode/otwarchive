@@ -4,16 +4,6 @@
 //things to do when the page loads
 $j(document).ready(function() {
     // visualizeTables();
-    $j('#signin_open').click(function() {
-          $j('#signin').toggle();
-          $j('#signin_closed').toggle();
-          $j('#signin_open').toggle();
-      });
-    $j('#signin_closed').click(function() {
-          $j('#signin').toggle();
-          $j('#signin_open').toggle();
-          $j('#signin_closed').toggle();
-      });
     if ($j('#work-form')) { hideFormFields(); };     
     if ($j('form.filters')) { hideFilters(); };
     // initSelect('languages_menu');
@@ -22,8 +12,15 @@ $j(document).ready(function() {
     showShowMe();
     handlePopUps();
     generateCharacterCounters();
-    $j('.subnav_toggle').click(function(){
-          $j('#subnav').toggle();
+    $j('.subnav_toggle').click(function(event){
+		if ($j(this).closest('.subnav').size() == 0) {
+			// we don't have a parent subnav so we're showing the subnav below us
+			$j(this).parent().children('.subnav').toggle();
+		} else {
+			// we're hiding the parent subnav
+			$j(this).closest('.subnav').toggle();
+		}
+		event.preventDefault();
       });
     $j('#expandable-link').click(function(){
           expandList();
@@ -192,6 +189,42 @@ jQuery(function($) {
 
 
 
+// Set up open and close toggles for a given object
+// Typical setup:
+// <a id="foo_open">Open Foo</a>
+// <div id="foo" class="toggled">
+//   foo!
+//   <a id="foo_close">Close</a>
+// </div>
+jQuery(function($){
+  $('.toggled').each(function(){
+    var node = $(this);
+    var open_toggles = $('.' + node.attr('id') + "_open");
+    var close_toggles = $('.' + node.attr('id') + "_close");
+    
+    node.hide();
+    open_toggles.each(function(){$(this).show();});
+    close_toggles.each(function(){$(this).hide();});
+
+    open_toggles.each(function(){
+      $(this).click(function(){
+        node.show();
+        open_toggles.each(function(){$(this).hide();});
+        close_toggles.each(function(){$(this).show();});
+      });
+    });
+    
+    close_toggles.each(function(){
+      $(this).click(function(){
+        node.hide();
+        open_toggles.each(function(){$(this).show();});
+        close_toggles.each(function(){$(this).hide();});
+      });
+    });
+  });  
+}); 
+
+
 // Hides expandable fields if Javascript is enabled
 function hideExpandable() {
   var expandable = document.getElementById('expandable');
@@ -328,27 +361,6 @@ function hideFilters() {
     var selected = false;
     tags.each(function(index, tag) {if ($j(tag).is(':checked')) selected=true});
     if (selected != true) {toggleFilters(filter.id, 0);}
-  });  
-}
-
-// Toggles login block
-function toggleLogin(id, blind_duration) {
-  //blind_duration = (blind_duration == null ? 0.2 : blind_duration)
-  if ($j(id) != null) {
-    $j(id).toggle();
-    $j(id + "_open").toggle();
-    $j(id + "_closed").toggle();
-  }
-}
-
-// Rolls up Login if Javascript is enabled
-function hideLogin() {
-  var signin = $j('#signin');
-  signin.each(function(index, signin) {
-    var tags = $j(signin).find('input');
-    var selected = false;
-    tags.each(function(index, tag) {if ($j(tag).is(':checked')) selected=true});
-    if (selected != true) {toggleLogin('#signin', 0.0);}
   });  
 }
 

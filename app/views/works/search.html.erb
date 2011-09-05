@@ -1,4 +1,4 @@
-<h2>Work Search: Beta</h2>
+<h2><% ts('Work Search: Beta') %> <%= link_to_help "work-search-text-help" %></h2>
 
 <ul class="navigation" role="navigation"><li>
   <%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %>
@@ -29,7 +29,6 @@
   <% @query ||= {} %>
   <% end %>
     <p><%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
-    <%= link_to_help "work-search-text-help" %> (any field)
 
   <%= hidden_field_tag "query[tag]", @query[:tag] %>
   <%= hidden_field_tag "query[title]", @query[:title] %>
@@ -43,21 +42,21 @@
   <%= hidden_field_tag "query[recced]", @query[:recced] %>
   <%= hidden_field_tag "query[complete]", @query[:complete] %>
 
+	<span class="tip"><%= random_search_tip %></span>
   <span class="submit">
 <% if @query.blank? %>
-    <%= submit_tag ts('Search'), :class => 'button', :name => nil %>
+    <%= submit_tag ts('Search'), :name => nil %>
 <% else %>
-    <%= submit_tag ts('Refine search'), :class => 'button', :name => nil %>
+    <%= submit_tag ts('Refine search'), :name => nil %>
 <% end %>
   </span>
 </p>
-<%= random_search_tip %>
 </fieldset>
 <% end %>
 
 <% if @works %>
 <% begin %>
-  <p><strong><%= @works.total_entries %> Found</strong><%= link_to_help "work-search-results-help" %></p>
+  <h3><strong><%= @works.total_entries %> Found</strong> <%= link_to_help "work-search-results-help" %></h3>
 
   <h3 class="landmark">Works List</h3>
   <ol class="work index">

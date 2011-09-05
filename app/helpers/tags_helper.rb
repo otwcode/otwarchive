@@ -2,15 +2,7 @@ module TagsHelper
 
   # Takes an array of tags and returns a marked-up, comma-separated list of links to them
   def tag_link_list(tags, link_to_works=false)
-    tags = tags.uniq.compact
-    if !tags.blank? && tags.respond_to?(:collect)
-      last_tag = tags.pop
-      tag_list = tags.collect{|tag| "<li>" + (link_to_works ? link_to_tag_works(tag) : link_to_tag(tag)) + ", </li>"}.join
-      tag_list += content_tag(:li, (link_to_works ? link_to_tag_works(last_tag) : link_to_tag(last_tag)))
-      tag_list.html_safe
-    else
-      ""
-    end
+    tags = tags.uniq.compact.map {|tag| content_tag(:li, link_to_works ? link_to_tag_works(tag) : link_to_tag(tag))}.join.html_safe
   end
   
   def description(tag)
@@ -203,7 +195,6 @@ module TagsHelper
     item_class = item.class.to_s.underscore
     tag_groups ||= item.tag_groups
     categories = ['Warning', 'Relationship', 'Character', 'Freeform']
-    last_tag = categories.collect { |c| tag_groups[c] }.flatten.compact.last
     tag_block = ""
 
     categories.each do |category|
@@ -212,15 +203,14 @@ module TagsHelper
         if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
           open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
           close_tags = "</strong></li>"
-          delimiter = (class_name == 'freeforms' || last_tag.is_a?(Warning)) ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT
-          tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + delimiter + close_tags
+          tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + close_tags
         elsif class_name == "warnings"
           open_tags = "<li class='#{class_name}'><strong>"
           close_tags = "</strong></li>"
-          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
+          link_array = tags.collect{|tag| link_to_tag(tag)}
           tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
         else
-          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
+          link_array = tags.collect{|tag| link_to_tag(tag)}
           tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'
         end
       end

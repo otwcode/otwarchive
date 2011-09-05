@@ -1,6 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
-<div class="tag profile">
-  <div class="header module">
+<div class="tag home profile">
+  <div class="primary header module">
     <h2><%= @tag.name %></h2>
     <div class="icon"></div>
 	<% if can_wrangle? %>
@@ -107,7 +107,7 @@
     <%= paginated_section @bookmarks, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
       <ul class="bookmark work index">
         <% for bookmark in @bookmarks %>
-          <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
+          <%= render :partial => 'bookmarks/bookmark_blurb', :locals => {:bookmark => bookmark} %>
         <% end %>
       </ul>
     <% end %>

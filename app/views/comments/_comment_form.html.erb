@@ -2,7 +2,7 @@
 <% if !commentable && @commentable %>
   <% commentable = @commentable %>
 <% end %>
-<div class="comment_form" id="comment_form_for_<%= commentable.id %>">
+<div class="create comment" id="comment_form_for_<%= commentable.id %>">
   <%= form_for value_for_comment_form(commentable, comment), :remote => !comment.new_record?, :html => {:id => "comment_for_#{commentable.id}"} do |f| %>
     <% if controller.controller_name == "inbox" %>
     <h4>Reply to <%= get_commenter_pseud_or_name(commentable) %> on <%= commentable_description_link(commentable) %></h4>   
@@ -47,17 +47,18 @@
               :tooLongMessage => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)) %>
         </p>
       </dd>
-    </dl>
-    <p><input type="hidden" id="controller_name_for_<%= commentable.id %>" name="controller_name" value="<%= @controller_name ||= controller.controller_name %>" />
-    </p>
-    <p class="submit">
+    <dd><input type="hidden" id="controller_name_for_<%= commentable.id %>" name="controller_name" value="<%= @controller_name ||= controller.controller_name %>" />
+    </dd>
+    <dt class="landmark"><%= f.label "comment_submit_for_#{commentable.id}", ts("Submit") %></dt>
+	<dd class="submit">
       <%= f.submit button_name, :id => "comment_submit_for_#{commentable.id}" %>
       <% if controller.controller_name == 'inbox' %>
         <a name="comment_cancel" id="comment_cancel"><%= ts("Close") %></a>
       <% elsif commentable.class.name == "Comment" || !comment.new_record? %>
         <%= cancel_comment_button(comment, commentable) %>
       <% end %>
-    </p>
+    </dd>
   <% end %>
+    </dl>
 </div> 
 <div class="clear"></div>

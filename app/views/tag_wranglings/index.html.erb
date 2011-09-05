@@ -1,3 +1,4 @@
+<div class="tag wrangling home">
 <!--Descriptive page name, messages and instructions-->
 <h2><%= ts("Tag Wrangling") %></h2>
 <!--/descriptions-->
@@ -129,8 +130,8 @@ get started. (Note: to associate relationships with characters, first choose a f
             <% end %>
           </td>
           <td><%= tag.taggings_count %></td>
-          <td class="navigation actions">
-            <ul class="navigation actions">
+          <td class="navigation" role="navigation">
+            <ul class="navigation" role="navigation">
               <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li>
               <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li>
               <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>
@@ -184,3 +185,4 @@ get started. (Note: to associate relationships with characters, first choose a f
     })
   <% end %>
 <% end %>
+</div>

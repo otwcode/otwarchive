@@ -1,0 +1,28 @@
+/*emphasis */
+h1, h2, h3, h4, h5, h6, #header .navigation a {font-weight:bold;}
+
+/* stacking */
+.own {z-index:-30;}
+form.filters {z-index:-50;}
+.index .user {z-index:20;}
+
+/*hL*/
+form.filters {position:relative;}
+.index .user, .index .blurb .heading {zoom:1;}
+
+/* Issue 2222 Media fandoms page */
+.fandoms-index .index li, .fandoms-index .index,
+.fandoms-index li, .fandoms-index ul {float: none !important;}
+.fandoms-index .index .even {margin-left: 0 !important;}
+.fandoms-index .letter h3 .top {display: none !important; float: none !important;}
+
+/*transparency */
+.kudos {background:url(/images/kudos-legacy.png) top left no-repeat;}
+
+/*min-height */
+#header {height:120px;}
+.titles {height:70px; }
+.media-index li.category {height: 15em; }
+.blurb .header {height:55px;}
+.bookmark .picture .header {height:25px;}
+

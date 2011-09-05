@@ -9,7 +9,7 @@
 
 <%= challenge_form.fields_for(is_offer ? :offer_restriction : :request_restriction) do |prompt_restriction_form| %>
 
-  <fieldset class="preface profile">
+  <fieldset>
 
     <% if is_offer %>
       <!-- skip the notes -->
@@ -63,7 +63,6 @@
         <% end %>
         <dt><%= prompt_restriction_form.label :tag_sets_to_add, ts("Tag Sets To Use: ") %></dt>
         <dd title="tag sets to use"><%= prompt_restriction_form.text_field :tag_sets_to_add, autocomplete_options("owned_tag_sets") %></dd>
-
         <% TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type| %>
           <dt><%= ts("#{tag_type.classify} Settings") %> <%= link_to_help("prompt-restriction-character-and-relationship") %></dt>
           <dd>

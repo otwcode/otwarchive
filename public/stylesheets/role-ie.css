@@ -1,0 +1,33 @@
+/* Put any IE-specific overrides into this file -- it will be loaded last and conditionally, only if the browser is IE. */
+
+/* emphasis */
+.navigation a:hover, .submit a:hover, .action a:hover {background:#bbb;}
+
+/* pathing and inheritance*/
+html body #header form #small_login {width: 99% !important;}
+#signin #small_login p.submit, #header #search .submit, .stats dd, .stats dt {float:none; display:inline;}
+.blurb .stats dd, #comment_form p { position:static;}
+div.navigation {border:0;}
+
+/*layer stacking*/
+#new_comment .module {position:static;}
+
+/*explicit widths*/
+.blurb .header, .bookmark .header {width:auto; border:0}
+
+/*margin and padding quirks*/ 
+.bookmark ul.required-tags, .comment div.icon, #main .bookmark .required-tags li { margin:0;}
+.blurb .required-tags, .blurb .icon { left: 0; }
+
+/*line-height and baseline */
+.heading h3, .heading h4 {font-weight:bold; line-height:1.125;}
+
+/*hasLayout */
+#header a, #header a img, .index, .profile, .module, a, li a, form dd, .bookmark li, #feedback, .series, #header #signin, .blurb .tags li, #comment_form code, .autocomplete li.added, .navigation a, .submit input, .submit a, .navigation input, .current, .delete a, .action, input[type="submit"],.landmark, button  {zoom:1;}
+
+/*and zoom resets */
+.stats a, .preface a, .meta .series {zoom:normal;}
+
+/*transparency (5,6,7,8), needs performance test */
+.landmark {filter: alpha(opacity=0);}
+

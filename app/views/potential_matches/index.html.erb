@@ -27,9 +27,7 @@
     Currently generating potential matches for: <%= @current_position %>
   </p>
 
-  <ul class="navigation">
-    <li><%= link_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></li>
-  </ul>
+  <p class="navigation" role="navigation"><%= link_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></p>
 
 <% elsif @assignments_with_no_potential_requests.size > 0 %>
   <h3>No Potential Recipients</h3>
@@ -43,9 +41,7 @@
     Then regenerate potential matches to continue. 
   </p>
 
-  <ul class="navigation">
-    <li><%= link_to ts("Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></li>
-  </ul>
+  <p class="navigation" role="navigation"><%= link_to ts("Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></p>
   
   <table>
     <thead>

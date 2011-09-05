@@ -19,7 +19,7 @@ reading.work} %></ul>
   </h3>
 <% end %>
 <!-- actions -->
-  <ul class="navigation">
+  <ul class="navigation actions" role="navigation">
      <li><%= link_to t('.links.delete', :default => "Delete"), user_reading_path(current_user, reading), :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
   </ul>
 </div>

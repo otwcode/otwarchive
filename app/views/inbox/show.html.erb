@@ -7,23 +7,15 @@
 <!--main content-->
 <% unless @inbox_comments.blank? %>  
   <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do %>
-  <fieldset>
+  <fieldset class="navigation actions">
 	<legend>Mass Edit Options</legend>
-	<dl class="navigation">
-    <dt>Select:</dt>
-    <dd>
-      <a class="checkall">all</a> </dd>
-    <dd>
-      <a class="checknone"none</a>
-    </dd>
-  	<dt class="submit">
-      <%= "Mark checked as:" %></dt>
-    <dd>
-      <%= submit_tag ts("Read"), :name => 'read' %>
-      <%= submit_tag ts("Unread"), :name => 'unread' %>
-      <%= submit_tag ts("Delete From Inbox"), :name => 'delete' %>
-    </dd>
-  </dl>
+	<ul role="navigation">
+    <li><a class="checkall">select all</a></li>
+	<li><a class="checknone">select none</a></li>
+	<li><%= submit_tag ts("Mark Read"), :name => 'read' %></li>
+    <li><%= submit_tag ts("Mark Unread"), :name => 'unread' %></li>
+    <li><%= submit_tag ts("Delete From Inbox"), :name => 'delete' %></li>
+    </ul>
 	</fieldset>
 	<fieldset class="comments">
 	<legend>List of Comments</legend>
@@ -34,7 +26,7 @@
         <h4><%= get_commenter_pseud_or_name(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
         <div class="icon">
           <% if !inbox_comment.feedback_comment.pseud.nil? %>
-            <%= standard_icon_display(inbox_comment.feedback_comment.pseud.user, inbox_comment.feedback_comment.pseud) %>
+            <%= icon_display(inbox_comment.feedback_comment.pseud.user, inbox_comment.feedback_comment.pseud) %>
           <% else %>
             <span class="visitor icon"><!-- visitor icon holder --></span>
           <% end %>
@@ -42,7 +34,7 @@
         <blockquote class="userstuff"><%=raw sanitize_field(inbox_comment.feedback_comment, :content) %></blockquote>
         <p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
         <h5 class="landmark">Comment Actions</h5>
-        <ul class="navigation">
+        <ul class="navigation" role="navigation">
           <% unless inbox_comment.read? %>
             <li><span class="unread">Unread</span></li>
           <% end %>
@@ -51,7 +43,7 @@
             <%= link_to "Reply", reply_user_inbox_path(current_user, :comment_id => 
 inbox_comment.feedback_comment), :remote => true %>
           </li>
-          <li>
+          <li class="action">
             <%= label_tag "inbox_comments_#{inbox_comment.id}", "Select" %>
             <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, :title => "select this comment", :id => "inbox_comments_#{inbox_comment.id}" %>
           </li>
@@ -61,27 +53,16 @@ inbox_comment.feedback_comment), :remote => true %>
     <% end %>
   </ol>
   </fieldset>
-  <fieldset>
-  <legend>Mass Edit Options Again</legend>
-  <ul class="navigation">
-    <li>Select: </li>
-    <li>
-      <a class="checkall">all</a>
-    </li>
-    <li>
-      <a class="checknone">none</a>
-    </li>
-  </ul>
-    <p class="submit">
-      <%= hidden_field_tag("filters[read]", params[:filters][:read]) if params[:filters] %>
-      <%= hidden_field_tag("filters[replied_to]", params[:filters][:replied_to]) if params[:filters] %>
-      <%= hidden_field_tag("filters[date]", params[:filters][:date]) if params[:filters] %>
-      <%= "Mark checked as:" %> 
-      <%= submit_tag ts("Read"), :name => 'read' %>
-      <%= submit_tag ts("Unread"), :name => 'unread' %>
-      <%= submit_tag ts("Delete From Inbox"), :name => 'delete' %>
-    </p>
-  </fieldset>
+  <fieldset class="navigation actions">
+	<legend>Mass Edit Options</legend>
+	<ul role="navigation">
+    <li><a class="checkall">select all</a></li>
+	<li><a class="checknone">select none</a></li>
+	<li><%= submit_tag ts("Mark Read"), :name => 'read' %></li>
+    <li><%= submit_tag ts("Mark Unread"), :name => 'unread' %></li>
+    <li><%= submit_tag ts("Delete From Inbox"), :name => 'delete' %></li>
+    </ul>
+	</fieldset>
     <!-- coming soon <%= submit_tag t('.mass_reply', :default => 'mass reply') %> -->
   <% end %> <!-- end of inbox form -->
   

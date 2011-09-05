@@ -1,0 +1,9 @@
+/*min-height */
+#header {height:120px;}
+.titles {height:70px; }
+.media-index li.category {height: 15em; }
+.blurb .header {height:55px;}
+.bookmark .picture .header {height:25px;}
+
+/*transparency */
+.kudos {background:url(/images/kudos-legacy.png) top left no-repeat;}

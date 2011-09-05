@@ -5,7 +5,7 @@
 	</h4>
 	<% unless single_comment.pseud.nil? %>
 		<div class="icon">
-	  <%= standard_icon_display(single_comment.pseud.user, single_comment.pseud) %>
+	  <%= icon_display(single_comment.pseud.user, single_comment.pseud) %>
 		</div>
 	<% end %>
 	<blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>

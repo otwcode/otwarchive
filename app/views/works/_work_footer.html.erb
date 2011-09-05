@@ -1,7 +1,7 @@
 <!-- footer for work -->
 
   <% unless @work.approved_children.blank? %>
-  <div id="children" class="module">
+  <div id="children" class="children module">
     <h4><%= ts('Works inspired by this one:') %></h4>
     <ul>
     <% for related_work in @work.approved_related_works %>

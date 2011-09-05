@@ -1,6 +1,6 @@
 <h2>Assignments for <%= @collection.title %></h2>
 
-<ul class="navigation">
+<ul class="navigation" role="navigation">
   <li>
     <% if params[:show_covered] %>
       <%= link_to ts("Show Needed Pinch Hits"), collection_assignments_path(@collection) %>
@@ -43,7 +43,7 @@
               <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", :autocomplete_token_limit => 1) %>
           </td>
           <td>
-              <ul class="navigation">
+              <ul class="navigation" role="navigation">
                 <li><%= submit_tag ts("Assign") %></li>
                 <li><%= link_to ts("Undefault"), undefault_collection_assignment_path(@collection, assignment) %></li>
                 <% unless assignment.covered_at.nil? %>
@@ -63,7 +63,7 @@
 <h3><%= ts("Assignments") %> <%= link_to_help 'challenge-assignments' %></h3>
 
 <%= form_tag default_multiple_collection_assignments_path, :method => :put do %>
-  <ul class="navigation">
+  <ul class="navigation" role="navigation">
   	<li><%= link_to ts("Manage Items"), collection_items_path(@collection) %></li>
     <li><%= submit_tag "Save Defaults"%></li>
     <li>
@@ -128,7 +128,7 @@
 
   <%= will_paginate @open_assignments %>
 
-  <ul class="navigation">
+  <ul class="navigation actions">
     <li><%= link_to ts("Purge Assignments"), purge_collection_assignments_path(@collection), 
             :confirm => ts("This will delete ALL assignments so you can edit and send them over. Please do not do this unless you absolutely must!") %>
     </li>

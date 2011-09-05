@@ -22,9 +22,8 @@
   <ul id="skiplinks"><li><a href="#main"><%= ts("Main Content") %></a></li><li><a href="#signup"><%= ts("Sign Up") %></a></li></ul>
   
   <!-- BEGIN main -->
-    <div class="home" id="home">
-      <%= flash_div :error, :warning, :notice %>
-      <%= yield  %>
+    <div id="home">
+    <%= yield  %>
     </div>
   <!-- END main -->
   

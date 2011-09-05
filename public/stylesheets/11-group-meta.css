@@ -1,6 +1,8 @@
-/* META*/
+/*==GROUP: META 
+meta shows at the start of a work, or a series listing, or a user profile: 
+it shows all the tags, stats and other associations we hold on that object*/
 dl.meta
-        { border: 1px solid #ccc; clear: right; margin: 0 auto; padding: 1.5em 1.5em 3em 0.75em; position: relative }
+        { border: 1px solid #ccc; clear: right; margin: 0 auto; padding: 1.286em 0.75em 2.5em; position: relative }
 .meta dt 
         { width: 10.5em }
 .meta .warning 
@@ -11,6 +13,13 @@ dl.meta
         { margin: 0 0.5em 0 0; width:auto; float:left }
 .meta dd ul li 			
         { display: inline; margin: auto }
+.meta dd ul li:after
+        { content:","; }
 .meta dd blockquote		
         { margin: -1em 0 0 0 }
+/*CONTEXTS */
+.dashboard .meta .clear
+        { clear:none; clear:right;}
+.post .meta dd ul li, .post .meta dd ul li:after 
+        { display: block; content:none}
 

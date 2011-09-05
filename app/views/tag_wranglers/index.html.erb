@@ -1,3 +1,4 @@
+<div class="tag wrangling wranglers home">
 <!--Descriptive page name, messages and instructions-->
 <h2>Tag Wrangling Assignments</h2>
 <!--/descriptions-->
@@ -8,12 +9,11 @@
 
 <!--main content-->
 <h3 class="landmark">Listing by fandom</h3>
-<%= form_tag url_for(:controller => 'tag_wranglers', :action => "create") do %>
-  <p class="submit"><%= submit_tag 'Assign' %></p>
-
-  <fieldset>
+<%= form_tag url_for(:controller => 'tag_wranglers', :action => "create"), :id => "tag_wranglers" do %>
+<fieldset>
 	<legend>Assign fandoms to yourself</legend>
-  <h3>Assign fandoms to yourself</h3>
+    <p class="submit"><%= submit_tag 'Assign' %></p>
+<h3>Assign fandoms to yourself</h3>
     <p><%= label_tag "tag_fandom_string", "Enter as many fandoms as you like:" %></p>
     <%= text_field_tag "tag_fandom_string", params[:sign_up_fandoms], autocomplete_options("fandom") %>
   <ul class="index">
@@ -54,25 +54,24 @@
 <%= form_tag tag_wranglers_path, :class => 'filters', :method => :get do %>
   <h3 class="landmark">Filters</h3>
 	<dl class="filters">
-    <dt>Filter by Media</dt>
+    <dt>Show Only Media</dt>
     <dd>
-      <p>Show only:</p>
       <%= select_tag :media_id, options_for_select([''] + Media.canonical.by_name.collect(&:name), params[:media_id]) %>
     </dd>
-  <dt>Filter by Wrangler</dt>
+  <dt>Show Only Wrangler</dt>
   <dd>
-    <p>Show only:</p>
     <%= select_tag :wrangler_id, options_for_select(['', 'No Wrangler'] + @wranglers.collect(&:login), params[:wrangler_id]) %>
   </dd>
-  <dt>Filter by Fandom Name</dt>
+  <dt>Only Fandoms Starting With</dt>
   <dd>
-    <p>Show only fandoms that start with:</p>
-    <%= text_field_tag :fandom_string, params[:fandom_string] %>
+	<%= text_field_tag :fandom_string, params[:fandom_string] %>
   </dd>
+<dt class="landmark">Submit</dt>
+<dd class="submit"><%= submit_tag 'Filter' %></dd>
 </dl>
-<p class="submit"><%= submit_tag 'Go' %></p>
 <% end %>
 <div class="clear"><!--presentational, phase me out--></div>
 <h3 class="landmark">Next Page</h3>
 <%= will_paginate(@assignments) %>
 <!--/subnav-->
+</div>

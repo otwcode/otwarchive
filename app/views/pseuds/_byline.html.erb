@@ -1,7 +1,7 @@
 <!-- Co-Author stuff -->
 
 <dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' %>>
-  <%= label_tag "#{type}_author_attributes_ids_", ts("Select author/pseudonym(s)") %>
+  <%= label_tag "#{type}_author_attributes_ids_", ts("Author / Pseud(s)") %>
 </dt>
 <dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' %>>
   <%= select_tag "#{type}[author_attributes][ids][]",
@@ -26,16 +26,11 @@
 <% end %>
 
 <dt class="byline coauthors">
-  <%= check_box_tag "co-authors-options-show", "1", nil, :class => "toggle_formfield" %>
+ <%= label_tag "co-authors-options-show", ts('Add co-authors?') %> 
 </dt>
 <dd class="byline coauthors">
-  <%= label_tag "co-authors-options-show", ts('Add co-authors?') %>
+  <%= check_box_tag "co-authors-options-show", "1", nil, :class => "toggle_formfield" %>
 </dd>
 <dd id="co-authors-options">
-  <dl class="coauthors">
-    <dt><%= label_tag :pseud_byline, ts("Enter co-author name(s):") %></dt>
-    <dd>
-      <%= text_field :pseud, :byline, autocomplete_options("pseud", :size => 50) %>
-    </dd>
-  </dl>
+<!--BACK END, please title this input as "co-authors"--><%= text_field :pseud, :byline, autocomplete_options("pseud", :size => 50) %>
 </dd>

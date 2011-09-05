@@ -1,6 +1,5 @@
-<div id="user-page" class="profile">
-  <!--Descriptive page name, messages and instructions-->
-  <div class="header module">
+<!--Descriptive page name, messages and instructions-->
+  <div class="primary header module">
   	<h2><%= link_to_unless_current(@user.login, @user) %>
   	</h2>
   	<p><%= icon_display(@user) %></p>
@@ -14,7 +13,7 @@
   </div>
   <!--/subnav-->
   
-  <h1>Author Browsing (Alpha)</h1>
+  <h3>Author Browsing (Alpha)</h3>
 
   <!--main content-->
 

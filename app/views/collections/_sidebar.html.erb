@@ -1,5 +1,5 @@
 <div id="dashboard" role="navigation">
-  <ul role="navigation">
+  <ul class="navigation" role="navigation">
     <li><%= span_if_current ts("Dashboard"), @collection %></li>
     <li><%= span_if_current ts("Profile"), collection_profile_path(@collection) %></li>
     <% if !@collection.collection_profile.faq.blank? %>

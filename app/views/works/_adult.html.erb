@@ -2,7 +2,7 @@
 <%= ts('This work potentially has adult content. If you proceed you have agreed that you are willing to see such content.') %>
 </p>
 
-<ul class="navigation">
+<ul class="navigation" role="navigation">
 <li><%= link_to ts('Proceed'), url_for(params.merge :view_adult => true, :anchor => params[:anchor]) %></li>
 <li><%= link_to ts('Go Back'), :back %></li>
 </ul>

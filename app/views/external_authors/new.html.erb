@@ -2,7 +2,5 @@
 
 <%= render "external_author_form" %>
 
-<ul class="navigation">
-	<li><%= link_to t('.back', :default => 'Back'), user_external_authors_path(@user) %></li>
-</ul>
+<p class="navigation actions" role="navigation"><%= link_to t('.back', :default => 'Back'), user_external_authors_path(@user) %></p>
 

@@ -16,7 +16,7 @@
 	<body onload="hideFormFields(); initSelect('languages_menu')">
     <%= render :partial => 'layouts/header' %>
 <!-- BEGIN main -->
-		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> session">
+		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session">
 			<%= flash_div :error, :warning, :notice %>
 			
 			<p id="logo">

@@ -5,7 +5,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation">
+<ul class="navigation" role="navigation">
 	<li><%= link_to t('.add_chapter', :default => 'Add Chapter'), new_work_chapter_path(@work) %></li>
   <% if @chapters %>
     <li><%= t('.edit_chapter', :default => 'Edit Chapter:') %> 

@@ -60,7 +60,7 @@
  
 <% unless @translations_by_user.blank? %>  
   <h3>Works translated by <%= @user.login %></h3>
-  <dl>
+  <dl class="own translations">
     <% @translations_by_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
       <dt>
@@ -85,7 +85,7 @@
  
 <% unless @remixes_of_user.blank? %>
   <h3>Works inspired by <%= @user.login %></h3>
-
+<dl class="inspired index">
     <% @remixes_of_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
       <dt>
@@ -110,7 +110,7 @@
   
 <% unless @remixes_by_user.blank? %>
   <h3>Works that inspired <%= @user.login %></h3>
-  <dl>
+  <dl class="inspired index">
     <% @remixes_by_user.each do |related_work| %>
       <% unless related_work.translation? %>
         <% if related_work.parent && related_work.work %>
@@ -125,7 +125,7 @@
  		        <%= ts("inspired") %>
             <%= link_to related_work.work.title, related_work.work %>
             <% if current_user == @user %>
-              <p class="navigation"><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></p>
+            <span class="navigation" role="navigation"><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></span>
             <% end %>
           </dd>
         <% end %>

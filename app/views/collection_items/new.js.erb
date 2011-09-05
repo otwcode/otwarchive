@@ -1,4 +1,0 @@
-$j('#dynamic-collection_item').show();
-$j('#dynamic-collection_item').draggable();
-$j('#dynamic-collection_item').html("<%= escape_javascript(render :partial => "collection_items/collection_item_form", :locals => {:item => @item, :dynamic => true}) %>");
-$j('#collection_item_cancel').click(function() { $j('#dynamic-collection_item').hide();});

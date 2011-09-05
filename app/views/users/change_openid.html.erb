@@ -9,7 +9,7 @@
 <%= error_messages_for :user %>
 <!--/descriptions-->
 
-<!--subnav-->
+<!--subnav NOTE TO BACK END, SHOULD THIS BE LIKE THE OTHERS IE CHANGE_USERNAME AND IF SO SHOULD THAT BE A CHANGE USER DATA NAVIGATION PARTIAL?-->
 <ul class="navigation" role="navigation">
   <li><%= link_to ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
   <li><%= link_to ts("Change My User Name"), change_username_user_path(@user) %></li>

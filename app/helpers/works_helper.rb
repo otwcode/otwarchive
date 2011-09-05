@@ -109,7 +109,7 @@ module WorksHelper
       if reading && reading.toread?
         link_to "Mark as read", marktoread_work_path(work)
       else
-        link_to "Mark to read later", marktoread_work_path(work)
+        link_to "Mark for later", marktoread_work_path(work)
       end
     end
   end
@@ -154,6 +154,13 @@ module WorksHelper
       [work_embed, tags_text, bookmark_text].compact.join("\n")
     end
   end
+  
+  def get_endnotes_link
+    current_page?(:controller => 'chapters', :action => 'show') ?
+      chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') :
+      "#work_endnotes"
+  end      
+    
 
   def download_url_for_work(work, format)
     url_for ("/downloads/#{work.download_authors}/#{work.id}/#{work.download_title}.#{format}").gsub(' ', '%20')

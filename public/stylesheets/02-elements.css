@@ -1,3 +1,4 @@
+/*==ELEMENTS/*
 /*MEYERS RESET.***********************************************do not edit */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td	{ border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; list-style: none; margin: 0; padding: 0; }
 /************************************************end of uneditable rules */
@@ -5,17 +6,12 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 /* This sheet sets out the global rules for normal elements */
 
 body
-        { font: 100%/1.125 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif; }
-a, a:link				
+        { font: 100%/1.125 'Lucida Grande', Verdana, Helvetica, sans-serif; }
+a, a:link, a:visited:hover				
         { color: #111; text-decoration: none; border-bottom: 1px solid; cursor:hand; }
-a.tag, .tags a			
-        { color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted; line-height:1.5;}
 a:visited	
-        { color: #777; text-decoration: none; border-bottom: 1px dashed;}
-a:hover	
-        { color: #999; }
-a.tag:hover	
-        { background: #900; color: #f8f1fe; }
+        { color: #666; text-decoration: none; border-bottom: 1px dashed;}
+a:hover	{ color: #999; }
 a:active, a:focus
         { outline:1px dotted;}
 a img	  { border: 0; }
@@ -23,59 +19,60 @@ a img	  { border: 0; }
 h1, h2, h3, h4, h5, h6	
         { font-family: Georgia, sans-serif; font-weight: 400;}
 h1			{ font-size: 2.5em; line-height: 1; margin: 0.5em 0; }
-h2      { font-size: 2.25em; line-height: 1; margin: 0.5em 0; text-shadow: -1px -1px 2px #fff}
-h3			{ font-size: 1.5em; line-height: 1; margin: .643em 0; }
-h4			{ font-size: 1.125em; line-height: 1.125; margin:1.138889em 0; }
-h5			{ font-size: 1em; line-height: 1.1286; margin:0.643em 0; }
+h2      { font-size: 2.143em; line-height: 1; margin:0.429em 0; 
+          text-shadow: -1px -1px 2px #fff; }
+/*24px skipped: font-size: 1.714em; line-height: 1; margin: 0.429em 0;}*/
+h3			{ font-size: 1.286em; line-height: 1; margin: .5375em 0; }
+h4			{ font-size: 1.143em; line-height: 1.125; margin:0.5em 0; }
+h5			{ font-size: 1em; line-height: 1.286; margin:0.643em 0; }
 h6			{ font-size: 0.875em; line-height: 1.5; margin: 1.5em 0; }
 
-p,li,dd { margin:0.643em 0;}
-hr			{ margin: 0.75em auto; border:0; border-bottom: 3px double; }
+p,li,dd,hr
+        { margin:0.643em 0;}
+hr			{ border:0; border-bottom: 3px double; }
 .clear	{ clear: both; height: 0; border: 0; margin:0; background:transparent; opacity:0}
 
 blockquote, pre		
-        { font: 100 1em/1.125 'Lucida Grande', Verdana, Helvetica, Tahoma, Arial, sans-serif;  margin: 1.5em; }
-kbd, tt, code, var		
-        { font: normal 0.75em consolas, courier, monospace; margin: auto; padding: 0.25em; }
-p code, dd code, li code{ font-size: 0.98em;}
-pre     { white-space: pre; font-family: consolas, courier, monospace;}
+        { font: 100 1em 'Lucida Grande', Verdana, Helvetica, sans-serif;  margin: 0.643em; }
+kbd, tt, code, var, pre		
+        { font: normal 0.75em 'Monaco', 'Consolas', Courier, monospace; margin: auto; }
+pre     { white-space: pre; }
 strong, b
-        { font-weight: bolder; }
+        { font-weight: bold; }
 em, cite, i
         { font-style: oblique; }
 cite em, em cite, cite i, i cite, i em, em i, em em, i i, cite cite	
         { font-style: normal; }
-em cite, i cite			
+em cite, i cite, ins, u 			
         { text-decoration: underline; }
-dfn, abbr, acronym		
-        { font-variant: small-caps; cursor: help; }
 del, strike 			
         { text-decoration:line-through;}
-ins, u 	{ text-decoration: underline;}
+dfn, abbr, acronym		
+        { font-variant: small-caps; cursor: help; }
 big 		{ font-size: larger;}
 small, sub, sup 		
         { font-size: smaller;}
 small small small small 
         { font-size: 100%;}
-sub 		{ vertical-align: sub;}
-sup 		{ vertical-align:super;}
+sub 		{ vertical-align: sub; line-height:0}
+sup 		{ vertical-align:super; line-height:0}
 
-table		{ background: #f3efec; border-collapse: collapse; margin:auto; width:100%; clear: right; font-size: 0.97em;}
-caption	{ font-size:0; color:#f8f1fe; }
+table		{ background: #f3efec; border-collapse: collapse; margin:auto; width:100%; clear: right; }
+caption	{ height:0; width:0; font-size:0; opacity:0; padding:0; margin:0; }
 thead, tfoot
-        { border-bottom:2px solid #bbb; padding: 0.75em; vertical-align:top;}
+        { border-bottom:2px solid #bbb; padding: 0.643em; vertical-align:top;}
 tfoot td				
-        { border-top:1px solid #aaa}
+        { border-top:1px solid #bbb}
 td th		{ padding-right: 1em; }
-tbody tr{ border-bottom: 1px solid #f8f1fe;}
-td			{ padding:0.2em; vertical-align: top;}
+tbody tr{ border-bottom: 1px solid #f4effc;}
+td			{ padding:0.25em; vertical-align: top;}
 th      { text-align: left;}
 thead td
-        { background: #f3efec;  border-bottom: 1px solid #f8f1fe;}
+        { background: #f3efec;  border-bottom: 1px solid #f4effc;}
 col.name
-        { background: #f8f1fe; border:1px solid #999;}
+        { background: #f4effc; border:1px solid #999;}
 th, tr:hover 
-        { background:#f8f1fe; border:1px solid #bbb; padding:0.15em 0.5em 0.25em; vertical-align:top; }
+        { background:#f4effc; border:1px solid #bbb; padding:0.15em 0.5em 0.25em; vertical-align:top; }
 th 		  { font-weight: bold; border:1px solid #bbb; padding:0.25em}
 th a, th a:visited, th a:link
         { text-decoration: none; border:0;}

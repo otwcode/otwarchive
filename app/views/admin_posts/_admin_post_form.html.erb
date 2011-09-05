@@ -1,4 +1,4 @@
-<div id="work-form">
+<div id="work-form" class="create news">
 	<%= form_for(@admin_post) do |f| %>
 	<%= error_messages_for @admin_post %>
 	
@@ -10,9 +10,7 @@
       </p>
 
     <fieldset>
-      <p class="label">
-        <%= f.label :content, ts("Post Content") %>
-      </p>
+      <legend><%= f.label :content, ts("Post Content") %></legend>
       <div id="toggleText">
         <p id="plainTextNotes" style="display: block"><%= allowed_html_instructions %></p>
         <p id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>

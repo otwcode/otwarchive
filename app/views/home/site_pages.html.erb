@@ -1,4 +1,5 @@
-<h3>Archive Pages</h3>
+<div class="system docs">
+	<h2>Archive Pages</h2>
 
 <p class="notes">
   The following links will take you to all of the possible pages in the archive. 
@@ -34,3 +35,4 @@
 <ul>
   <%= @paths.sort {|a,b| a[0] <=> b[0]}.map {|path, name| content_tag(:li, link_to("#{path}  (#{name})", path))}.join("\n").html_safe %>
 </ul>
+</div>

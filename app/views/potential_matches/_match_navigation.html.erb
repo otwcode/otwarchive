@@ -1,7 +1,7 @@
 <% if !@collection.challenge.signup_open %>
 
   <% if top && !@collection.potential_matches.empty? %>
-    <ul class="navigation">
+    <ul class="navigation" role="navigation">
       <li>
         <%= link_to "Send Assignments", send_out_collection_assignments_path(@collection), :confirm => "Are you sure? This will send out the currently saved assignments to all participants!" %>
       </li>
@@ -9,7 +9,7 @@
     <div class="clear"></div>
   <% end %>
   
-  <ul class="navigation">
+  <ul class="navigation" role="navigation">
     <% if @collection.potential_matches.empty? %>
       <li>
         <% if @settings.no_match_required? %>
@@ -30,7 +30,7 @@
 
   <% if !top && !@collection.potential_matches.empty? %>
     <div class="clear"></div>
-    <ul class="navigation">
+    <ul class="navigation" role="navigation">
       <li>
         <%= link_to "Send Assignments", send_out_collection_assignments_path(@collection), :confirm => "Are you sure? This will send out the currently saved assignments to all participants!" %>
       </li>

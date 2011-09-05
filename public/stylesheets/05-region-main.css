@@ -1,0 +1,15 @@
+/*==REGION: MAIN is #3 of the 4 regions shown on every page */
+#main
+        { font-size: 0.875em; line-height: 1.286; margin: auto; padding: 0 2.5em 3.5em; position: relative; min-height:450px; }
+#main.dashboard 
+        { margin: auto auto 1em 15em }
+#main.home 
+        { padding:2em 7.5em; }
+#main.error, #main.slow, #main.maintenance 
+        { background:url(/images/sadface.png) top right no-repeat; border: 0; font-weight: 700; }
+#main.slow 
+        { background:url(/images/ao3-502.png) top right no-repeat }
+#main.maintenance {
+        { background:url(/images/logo-ruby.png) top right no-repeat }
+
+

@@ -1,12 +1,13 @@
-<!--Descriptive page name, messages and instructions--><h2><%= ts("Find users:") %></h2>
+<!--Descriptive page name, messages and instructions--><h2><%= ts("Find users") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <!--/subnav-->
 
 <!--main content-->
+<!--BACK END, give this form the class "search?"-->
 <%= form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get do %>
-    <p><%= ts("Search for a user by username, pseud or email, or search by role") %></p>
+<p class="note"><%= ts("Search for a user by username, pseud or email, or search by role") %></p>
 <dl>
     <dt><%= label_tag "query", ts("Name or email") %></dt>
       <dd><%= text_field_tag "query", params[:query] %></dd>

@@ -1,0 +1,8 @@
+#main.admin_posts-index .module { float:none; } /* float issues on admin posts index */
+
+/* The input-field in Series Options on the New Work form is centred for no reason */
+#series-options input[type="text"] {position:absolute;}
+
+/*ISSUE 1384 content warning required-tag positioning */
+.blurb .required-tags li .warnings
+        {  margin:28px 28px 0 -30px}

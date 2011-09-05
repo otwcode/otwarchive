@@ -1,8 +1,7 @@
-<div class="collection profile module">
+<div class="collection home profile">
   <%= render :partial => 'collections/header', :locals => {:collection => @collection} %>
 
-<div class="collection module">
-  <h3><%= ts("About %{name}", :name => @collection.title +  ((@collection.title != @collection.name) ? " (#{@collection.name})" : "")) %></h3>
+<h3><%= ts("About %{name}", :name => @collection.title +  ((@collection.title != @collection.name) ? " (#{@collection.name})" : "")) %></h3>
   <div class="wrapper">
     <dl class="collection meta">
       <dt><%= ts("Active since: ") %>
@@ -25,12 +24,11 @@
       <% end %>
     </dl>
   </div>
-</div>
+
 
 <% cache("collection-profile-#{@collection.id}") do %>
 
 <!--main content-->
-<hr class="clear"/><!-- FRONT END this is here temporarily until the right fix can be put in -->
 
 <% if show_collection_preface(@collection) %>
   <div class="collection preface">

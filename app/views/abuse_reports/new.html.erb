@@ -6,7 +6,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for(@abuse_report) do |f| %>
+<%= form_for(@abuse_report), :class =>"post", do |f| %>
   <fieldset>
 	<legend>Link and Describe Abuse</legend>
 	<dl>
@@ -38,11 +38,9 @@
      
     <%= f.hidden_field :ip_address, :value => request.remote_ip %>
 	</dd>		
- </dl>
-</fieldset>
-<fieldset>
-	<legend>Send Message to Abuse Team</legend>
-		  <p class="submit"><%= f.submit t('.submit', :default => "Submit") %></p>
+<dt class="landmark">Send to Abuse Team</dt>
+		  <dd class="submit"><%= f.submit t('.submit', :default => "Submit") %></dd>
+		</dl>
 </fieldset>
 
 <% end %>

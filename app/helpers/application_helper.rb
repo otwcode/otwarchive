@@ -8,7 +8,7 @@ module ApplicationHelper
   def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
-    class_names += " sidebar" if show_sidebar
+    class_names += " dashboard" if show_sidebar
     class_names
   end
 
@@ -31,7 +31,7 @@ module ApplicationHelper
     link_to (ts("Subscribe with RSS ") + image_tag("feed-icon-14x14.png", :size => "14x14", :alt => "")).html_safe , link_to_feed, :class => "rsslink"
   end
   
-  def allowed_html_instructions(show_list = true)
+  def allowed_html_instructions(show_list = false)
     h(ts("Plain text with limited html")) + 
     link_to_help("html-help") + (show_list ? 
     "<code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 

@@ -1,14 +1,16 @@
 <% @query = {} unless @query %>
 <%= form_tag url_for(:controller => 'tags', :action => 'search'), :class => 'search', :method => :get do %>
-<fieldset>
+<fieldset class="tags">
   <legend>Search tags</legend>
-  <p>
-    <%= text_field_tag "query[name]", @query[:name], :id => 'tag_search'  %>
-    <%= link_to_help "tag-search-text-help" %>
-    <%= select_tag "query[type]", options_for_select([""] + Tag::USER_DEFINED, @query[:type]) %>
-    <label for="canonical">canonical?</label>&nbsp;<%= check_box_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %>
-    <%= link_to_help "tag-search-type-help" %>
- <span class="submit"><%= submit_tag ts("Search tags"), :name => nil %></span></p>
-<%= random_search_tip %>
+  <dl>
+	<dt><label for="tag_search">Enter tags</label> <%= link_to_help "tag-search-text-help" %></dt>
+    <dd><%= text_field_tag "query[name]", @query[:name], :id => 'tag_search'  %></dd>
+    <dt><label for="select_query">Choose type</label> <%= link_to_help "tag-search-query-help" %></dt>
+    <dd><%= select_tag "query[type]", options_for_select([""] + Tag::USER_DEFINED, @query[:type]) %></dd>
+    <dt><label for="canonical">Canonical?</label></dt>
+	<dd><%= check_box_tag "query[canonical]", true, @query[:canonical], :id => 'canonical' %></dd>
+  <dt class="landmark">Search</dt>
+	<dd class="submit"><%= submit_tag ts("Search tags"), :name => nil %></dd>
+</dl>
 </fieldset>
 <% end %>

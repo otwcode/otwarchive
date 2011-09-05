@@ -12,7 +12,7 @@
 	<% if logged_in? %>
     <li><%= span_if_current ts('My Skins'), user_skins_path(current_user) %></li>
     <% unless controller.action_name == "new" %>
-      <li><%= link_to ts('Create New Skin'), new_skin_path %></li>
+      <li><%= link_to ts('Create Skin'), new_skin_path %></li>
     <% end %>
     
     <!-- wizard-to-custom-css switchers for new and edit -->

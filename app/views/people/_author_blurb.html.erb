@@ -11,7 +11,7 @@
         <h5><%= authored_items(author, @work_counts, @rec_counts) %></h5>
       <% end %>
 		<div class="icon">
-	        <%=raw standard_icon_display(author.user, author) %>
+	        <%=raw icon_display(author.user, author) %>
 	      </div>
 	</div>
       <% unless author.description.blank? %>

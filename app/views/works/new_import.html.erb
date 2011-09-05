@@ -1,9 +1,17 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 id='upload-heading'><%= ts("Import New Work") %></h2>
+<h2><%= ts("Import New Work") %> <%= link_to_help 'work-import'%></h2>
 <%= error_messages_for :work %>
+	<p class="important message">
+    <strong><%= ts("Please note!") %></strong>   
+    <%= ts("We cannot always automatically import works. If you have trouble, ") %> 
+    <%= link_to ts("please let us know"), new_feedback_report_path %>
+    <%= ts("so we can improve this tool!") %>
+  </p> 
+
 <!--/descriptions-->
 
-<ul class="navigation">
+<!--subnav-->
+<ul class="navigation" role="navigation">
   <% if @unposted %>
     <li id='restore-link'>
       <%= link_to ts('Restore From Last Unposted Draft?'), url_for(:action => :new, :load_unposted => true) %>
@@ -17,69 +25,62 @@
 </ul>
 
 <!-- This partial renders a form for importing a work from an existing URL -->
-<div class="clear"<!--purely presentational, phase me out--></div>
-<p class="message">
-  <strong><%= ts("Please note!") %></strong> 
-  <%= ts("We cannot always automatically import works.") %> If you have trouble, <%= link_to ts("please let us know"), new_feedback_report_path %> so we can improve this tool!</p> 
+
+
   
-  <ul>
-    <li>If your text gets truncated at the point of an em dash or accented character, you might have to manually set the encoding in the text field below.</li>
-    <li>If you are importing a chaptered work from ff.net or any efiction archive (that is, an archive that uses "viewstory.php" in the url), you only need to enter the URL of the first chapter and the entire work will be downloaded with the chapters preserved. (Note: as a result, you cannot turn multiple ff.net or efiction works into the chapters of a single work.)</li>
-    <li>Unless you check the override box, any information you enter under Work Tags will only be used if the importer cannot determine tags from the work itself.</li>
-    <li>You will be able to edit and complete the standard header information after the import has been completed.</li>
-  </ul>
-  
+<div class="import work post">
 <%= form_tag url_for(:controller => :works, :action => :import) do %>
 <fieldset>
   <legend><%= ts("Works URLs") %></legend>
-  <p>
-    <%= label_tag "urls", ts("URLs for existing work(s) or for the chapters of a single work, one URL per line:") %> <br />
-    <%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
-  </p>
-  
-  <p>
-    <%= label_tag "encoding", ts("Set custom encoding to overwrite automatic detection: ") %> 
-    <%= select_tag "encoding", options_for_select([''] + Encoding.name_list.sort) %> <%= link_to_help "encoding-help" %>
-  </p>
-  
-  <p>
-    <%= radio_button_tag "import_multiple", "works", true %>
+  <dl>
+    <dt class="required"><%= label_tag "urls", ts("URLs") %></dt>
+   <dd><%= text_area_tag "urls", @urls ? @urls.join("\n") : "", :rows => 20, :cols => 90 %>
+	<p class="footnote">URLs for existing work(s) or for the chapters of a single work; <strong>one URL per line</strong>.</p>
+  </dd>
+   <dt>
+    <%= label_tag "encoding", ts("Set custom encoding") %> <%= link_to_help "encoding-help" %></dt> 
+    <dd><%= select_tag "encoding", options_for_select([''] + Encoding.name_list.sort) %></dd>
+	<dt>Preferences</dt>
+	<dd>
+	<ul>
+	<li><%= radio_button_tag "import_multiple", "works", true %>
     <%= label_tag "import_multiple_works", ts("Works (limit of %{max})", :max => current_user.archivist ? ArchiveConfig.IMPORT_MAX_WORKS_BY_ARCHIVIST : ArchiveConfig.IMPORT_MAX_WORKS) %>
-    <br />
-    <%= radio_button_tag "import_multiple", "chapters" %>
+    </li>
+    <li><%= radio_button_tag "import_multiple", "chapters" %>
     <%= label_tag "import_multiple_chapters", ts("Chapters in a single work (limit of %{max})", :max => ArchiveConfig.IMPORT_MAX_CHAPTERS) %>
-  </p>
+  </li>
   
   <% if current_user.archivist %>
-  <p>
+  <li>
     <%= check_box_tag "importing_for_others" %>
-    <%= label_tag "importing_for_others", ts("Import works for others (ONLY WITH PERMISSION)") %>
-  </p>
+    <%= label_tag "importing_for_others", ts("Import for others ONLY with permission") %>
+  </li>
   <% end %>
 
-  <p>
+  <li>
     <%= check_box_tag "post_without_preview" %>
     <% if current_user.archivist %>
       <%= label_tag "post_without_preview", ts("Post without previewing (STRONGLY recommended if importing for others!)") %>
     <% else %>
       <%= label_tag "post_without_preview", ts("Post without previewing.") %>
     <% end %>
-  </p>
+  </li>
 
-  <p>
+  <li>
     <%= check_box_tag "restricted" %>
-    <%= label_tag "restricted", ts("Lock all imported stories to registered users only.") %>
-  </p>
+    <%= label_tag "restricted", ts("Lock all imports to registered users only.") %>
+  </li>
 
-  <p>
+  <li>
     <%= check_box_tag "override_tags" %>
     <%= label_tag "override_tags", ts("Set the tags below on all stories, overriding whatever the importer finds.") %>
-  </p>
-
-  <div id="work-form" class="work-form"><%= render :partial => 'work_tags_form', :locals => {:include_blank => true} %></div>
-
+  </li>
+</ul>
+</dd>
+</dl>
 </fieldset>
 
+<%= render :partial => 'work_tags_form', :locals => {:include_blank => true} %>
 
 <fieldset>
   <legend><%= "Submit" %></legend>
@@ -89,3 +90,4 @@
 </fieldset>
 
 <% end %>
+</div>

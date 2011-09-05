@@ -43,7 +43,7 @@
         <dt><%= p.label :date_of_birth, "Date of Birth" %></dt>
         <dd class="datetime"><%= p.date_select :date_of_birth, :start_year => 13.years.ago.year, :end_year => 90.years.ago.year, :include_blank => true %></dd>
 
-        <dt><p><%= p.label :about_me, "About Me" %></p></dt>
+        <dt><%= p.label :about_me, "About Me" %></dt>
         <dd class="description">
           <p><%= allowed_html_instructions %></p>
           <%= p.text_area :about_me, :class => "observe_textlength" %>

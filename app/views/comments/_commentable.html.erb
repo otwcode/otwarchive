@@ -1,5 +1,5 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
-<div id="feedback" role="complementary">
+<div id="feedback" class="feedback" role="complementary">
 	
   <h3 class="landmark">Actions</h3>
 	<ul class="navigation" role="navigation">
@@ -13,7 +13,7 @@
         <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
     <% end %>
     <% if @admin_post %>
-        <li><%= link_to h(ts('Back to AO3 News Index')), admin_posts_path %></li>
+        <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
     <% end %>
     <% if @work && !is_author_of?(@work) %>
       <li>
@@ -25,20 +25,18 @@
       </li>
     <% end %>
     <% if @work && is_author_of?(@work) %>
-        <li id="add_collection_link"><%= collection_link(@work) %></li>
+      <%= link_to ts("Add To Collections"), "#collection-form", :class => "collection_item_form_placement_open"%>
     <% end %>
     <% if logged_in? && @work %>
-        <li id="add_bookmark_link"><%= bookmark_link(commentable) %></li>
+      <li>
+        <% @bookmark ||= bookmark_if_exists(commentable) %>
+        <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
+      </li>
     <% end %>
     <% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) %>
         <li id="show_comments_link"><%= show_hide_comments_link(commentable) %></li>
     <% end %>
   </ul>
-
-  <!-- if we have javascript, here is where the collection window will pop up -->
-  <div id="dynamic-collection_item" class="wrapper" style="display:none;"></div>
-  <!-- if we have javascript, here is where the bookmark window will pop up -->
-  <div style="position:relative;"><div id="dynamic-bookmark" class="wrapper" style="display:none;"></div></div>
 
   <h3 class="landmark"><a name="comments">Comments</a></h3>
 
@@ -63,7 +61,26 @@
       </ol><!-- need to tack this on to close thread -->
     </div>
   <% else %>
-    <div id="comments_placeholder" style="display: none;"></div>
+    <div id="comments_placeholder" class="hidden"></div>
+  <% end %>
+
+  <% if logged_in? && @work %>
+    <% if is_author_of?(@work) %>
+      <div id="collection_item_form_placement" class="wrapper toggled">
+        <%= render "collection_items/collection_item_form", :item => @work, :in_page => true %>
+      </div>
+    <% end %>
+  
+    <div style="position:relative;"><!-- FRONT END: do we still need this div now? -->
+      <div id="bookmark_form_placement" class="wrapper toggled">
+        <% @bookmark ||= bookmark_if_exists(commentable) %>
+        <% if @bookmark %>
+          <%= render "bookmarks/bookmark_form", :bookmarkable => commentable, :bookmark => @bookmark, :button_name => ts("Edit"), :action => :update, :in_page => true %>
+        <% else %>
+          <%= render "bookmarks/bookmark_form", :bookmarkable => commentable, :bookmark => Bookmark.new, :button_name => ts("Create"), :action => :create, :in_page => true %>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 
 </div>

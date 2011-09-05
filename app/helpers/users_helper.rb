@@ -21,7 +21,7 @@ module UsersHelper
   end
   
   # Determine which icon to show on user pages
-  def standard_icon(user, pseud=nil)
+  def standard_icon(user=nil, pseud=nil)
     if pseud
       pseud.icon.url(:standard)
     elsif user && user.default_pseud
@@ -31,18 +31,9 @@ module UsersHelper
     end
   end
   
-  def standard_icon_display(user, pseud=nil)
-    pseud ||= user.default_pseud
-    image_tag(standard_icon(user, pseud), :alt => (pseud.try(:icon_file_name) ? pseud.icon_alt_text : "Archive of Our Own default icon: the AO3 logo in grey, on a white background"), :class => "icon")
-  end
-  
-  def icon_display(user, pseud=nil)
-    pseud ||= user.default_pseud
-    if current_user == user
-      link_to standard_icon_display(user, pseud), [:edit, user, pseud], :title => "Edit pseud"
-    else
-      standard_icon_display(user, pseud)
-    end
+  def icon_display(user=nil, pseud=nil)
+    pseud ||= user.default_pseud if user
+    image_tag(standard_icon(user, pseud), :alt => (pseud.try(:icon_file_name) ? pseud.icon_alt_text : "default AO3 icon"), :class => "icon")
   end
   
   # Prints coauthors

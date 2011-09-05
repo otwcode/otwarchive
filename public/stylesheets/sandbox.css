@@ -1,0 +1,60 @@
+/*==SANDBOX: All temporary, development, and unreviewed css lives here. 
+Rules will be incorporated into the main cascade by Front End before deploy. 
+If you've just coded up a new feature and put in some layout, put that layout here, 
+with a comment, and the Front End Santa will make your wishes come true. 
+Or if you've put in a fix and you've not yet read the Front End Docs? 
+Put your fix in here.
+Examples:
+
+/*Fix for issue 996 
+.bookmark .header {float:left;}
+
+/*Draft layout for views/shiny/new by astolat. 
+It has to be purple, see wiki, ADT meeting 25
+.shiny-happy-people table {display:table-cell; 
+background:purple; color:#555;}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Some helpful notes
+0.875em/1.286 line height = 14px with 18px leading
+0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements
+
+We use simple hex greyscale: 
+0 1 2 3 4 5 6 7 8 9 a b c d e f
+0 = black.......greys.........f = white
+
+---border colours, greyscale:
+darkest #999
+brightest #fff
+---background colours
+form #ddd
+accent #ccc
+highlight #eee
+---livery is red
+ao3/otw #900
+darker #700
+*/
+
+
+
+
+
+
+

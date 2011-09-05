@@ -94,6 +94,9 @@
     <% end %>
      
   </dl>
+  <% unless required %>
+    <p class="navigation actions" role="navigation"><%= link_to_remove_section(ts("Remove?"), form) %></p>
+  <% end %>
 </fieldset>
 </div>
 

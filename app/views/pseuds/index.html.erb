@@ -4,7 +4,7 @@
 
 <!--subnav-->
 <% if current_user == @user %>
-<ul class="navigation">
+<ul class="navigation" role="navigation">
   <li><%= link_to ts('New Pseud'), new_user_pseud_path(@user) %></li>
 </ul>
 <% end %>
@@ -20,7 +20,7 @@
 
 <!--subnav-->
 <% if current_user == @user %>
-<ul class="navigation">
+<ul class="navigation" role="navigation">
   <li><%= link_to ts('New Pseud'), new_user_pseud_path(@user) %></li>
 </ul>
 <% end %>

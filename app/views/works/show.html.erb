@@ -1,4 +1,5 @@
 <!--page description, messages-->
+<p class="landmark"><a name="top">&nbsp;</a></p>
 <% if @work.unrevealed? %>
   <p class="message">
     <%= ts("This work is part of an ongoing challenge and will be revealed soon! You can find details here: ") %>
@@ -16,7 +17,6 @@
 <!-- BEGIN revealed -->
 <% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
 <!-- BEGIN work -->
-  <p class="landmark"><a name="top">&nbsp;</a></p>
 <!--work description, metadata, notes and messages-->
   <%= render :partial => 'works/work_header' %>
   <% if logged_in_as_admin? %>

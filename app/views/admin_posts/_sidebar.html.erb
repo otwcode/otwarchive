@@ -1,6 +1,6 @@
 <div id="dashboard" class="admin">
 	<h3 class="landmark">Page Summary</h3>
-	<ul class="navigation" role="navigation">
+	<ul class="navigation actions" role="navigation">
 	  <% @admin_posts.each do |admin_post| %>
   		<li><%= span_if_current admin_post.title + " (#{admin_post.count_visible_comments})", admin_post %></li>
     <% end %>

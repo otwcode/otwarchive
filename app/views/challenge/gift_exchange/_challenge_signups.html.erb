@@ -9,9 +9,10 @@
 <% show_offer_optional_tags = @challenge.offer_restriction.optional_tags_allowed %>
 
 <% unless @hide_navigation %>
-  <ul class="navigation">
-    <li><%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv), html_options = {:class => "nav-with-help"} %>
-        <%= link_to_help "csv-download"%>
+  <ul class="navigation" role="navigation">
+    <li>
+      <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv), html_options = {:class => "nav-with-help"} %>
+      <%= link_to_help "csv-download"%>
     </li>
     <% if show_offer_description || show_request_description %>
       <li><%= link_to ts("Hide Descriptions"), 
@@ -66,7 +67,7 @@
     <tr>
       <% unless @hide_navigation %>
         <!-- because rows can be unmanageably long, put nav at start -->
-        <td class="navigation">
+        <td class="navigation" role="navigation">
           <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
         </td>
       <% end %>

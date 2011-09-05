@@ -1,4 +1,4 @@
-<!-- descriptions-->
+<!-- descriptions NOTE: WHERE IS THIS? IS IT REALLY A PROFILE?-->
 <div id="collection-page" class="profile">
   <!-- /descriptions-->
   <!--subnavigation, sorting and actions-->
@@ -38,7 +38,7 @@
 
   <!--/content-->
   <% if !@challenge_assignment.fulfilled? && @challenge_assignment.offering_pseud.user == current_user %>
-    <ul class="navigation">
+    <ul class="navigation actions" role="navigation">
       <li>
         <%= link_to "Default", default_user_assignment_path(@challenge_assignment.offering_pseud.user, @challenge_assignment), 
             :confirm => "Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone." %>

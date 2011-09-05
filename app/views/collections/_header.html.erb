@@ -1,13 +1,13 @@
 
 <!--Descriptive page name, messages and instructions-->
-<div class="header module">
+<div class="primary header module">
 	<h2><%= link_to_unless_current(@collection.title, @collection) %></h2>
 	<p class="icon"><%= image_tag(@collection.icon.url(:standard), :size => "100x100", :alt => "", :class => "icon") %></p>
 <!--/descriptions-->
 
 <!--subnav-->
   <ul class="navigation" role="navigation">
-    <li><%= link_to_unless_current t('.profile', :default =>"Profile"), collection_profile_path(@collection) %></li>
+    <li><%= span_if_current t('.profile', :default =>"Profile"), collection_profile_path(@collection) %></li>
 
     <% if logged_in? && !@collection.closed? && @collection.challenge_type != "PromptMeme" %>
       <li><%= link_to t('.collections.post_new', :default => "Post To Collection"), new_collection_work_path(@collection) %></li>

@@ -1,7 +1,5 @@
-<fieldset>
-  <legend>Skin Wizard</legend>
-  <h3><%= ts("Archive Skin Wizard") %></h3>
-
+<fieldse class="post skin wizard">
+  <legend>Wizard</legend>
   <dl>
     <dt><%= f.label :title, ts('Title') %></dt>
     <dd><%= f.text_field :title %></dd>
@@ -9,15 +7,14 @@
     <dt><%= f.label :description, ts('Description') %></dt>
     <dd><%= f.text_field :description %></dd>
 
-    <dt><%= f.label :margin, ts('Margin width (%)') %></dt>
-    <dd><%= f.text_field :margin %> <%= link_to_help('skins-wizard-margin') %></dd>
+    <dt><%= f.label :margin, ts('Margin width (%)') %> <%= link_to_help('skins-wizard-margin') %></dt>
+    <dd><%= f.text_field :margin %></dd>
 
-    <dt><%= f.label :font, ts("Font family") %></dt>
-    <dd><%= f.text_field :font %> <%= link_to_help('skins-wizard-font') %></dd>
+    <dt><%= f.label :font, ts("Font family") %> <%= link_to_help('skins-wizard-font') %></dt>
+    <dd><%= f.text_field :font %></dd>
   
     <dt>
       <%= f.label :background_color, ts('Background color (name or hex code)') %>
-      <p><%= t('background_color_default', :default => 'default: #FFFEF9') %></p>
     </dt>
     <dd>
       <%= f.text_field :background_color %>
@@ -25,7 +22,6 @@
   
     <dt>
       <%= f.label :foreground_color, t('foreground_color', :default => 'Foreground color (name or hex code)') %>
-      <p><%=ts('default: #222222') %></p>
     </dt>
     <dd>
       <%= f.text_field :foreground_color %>
@@ -33,13 +29,11 @@
   
     <dt>
       <%= f.label :base_em, ts('Percent of base font size (%)') %>
-      <p><%=ts('default: 100') %></p>
     </dt>
     <dd><%= f.text_field :base_em %></dd>
     
     <dt>
       <%= f.label :paragraph_margin, ts('Vertical gap between paragraphs') %>
-      <p><%=ts('default: 1.5') %></p>
     </dt>
     <dd><%= f.text_field :paragraph_margin %></dd>
     
@@ -48,9 +42,6 @@
     
     <dt><%= f.label :accent_color, ts('Accent color') %></dt>
     <dd><%= f.text_field :accent_color %></dd>
-    
-    <%= hidden_field_tag "wizard", true %>
-    
-  </dl>
-
+    </dl>
+<%= hidden_field_tag "wizard", true %>
 </fieldset>

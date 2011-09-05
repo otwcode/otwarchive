@@ -27,18 +27,17 @@
           <%= link_to h(skin.title), skin %>
           <span class="byline">
             by <%= skin.byline %>
-            <% if @user %>
-              <% if skin.official? %> 
-                (Approved)
-              <% elsif skin.rejected? %>
-                (Declined: <%= link_to_help "skins-approval" %> <%= skin.admin_note %>) 
-              <% elsif skin.public? %> 
-                (Not yet reviewed) <%= link_to_help "skins-approval" %>
-              <% end %>
-            <% end %>
           </span>
         </h4>
-
+		<% if @user %>
+          <% if skin.official? %> 
+            <p class="status approved">(Approved)</p>
+          <% elsif skin.rejected? %>
+            <p class="status declined">(Declined: <%= link_to_help "skins-approval" %> <%= skin.admin_note %>)</p> 
+          <% elsif skin.public? %> 
+            <p class="status unread">(Not yet reviewed) <%= link_to_help "skins-approval" %></p>
+          <% end %>
+        <% end %>
         <div class="icon"><%= skin_preview_display(skin) %></div>
       </div>
       

@@ -1,0 +1,47 @@
+/*==ZONE: HOME 
+user home
+collections and challenges home
+tag home 
+--this zone always shows a dashboard styled in region-dashboard and its parent is #main.dashboard */
+
+.home p      
+        { clear:right }
+.home .module, .home .module .bookmark .user
+        { border:1px solid #ccc; margin:1.286em auto auto; overflow:hidden; }
+.home .module .module
+        { border:0; margin:auto;}
+.home .header img, .home .header .icon      
+        { position: absolute; top: 0; left:0}
+.home.tags .header p.icon
+        { background: url(/images/tag_icon.png) top left no-repeat #900; margin:auto}
+.home .header h2
+        { margin: 0 0 0 100px; text-align: right; border-bottom:2px solid; }
+.home .header .userstuff
+        { margin-left: 120px;}
+.home .module h3
+        { background: #ddd;  margin:0; padding: 0.125em;}
+.home .module .index
+        { padding-left: 0.75em; 
+          box-shadow:inset 1px 1px 3px #bbb; border-radius:0.15em }
+.home .module .blurb
+        { margin:0.643em auto auto -0.75em; padding: 0.75em 1em;
+           box-shadow: none;}
+.home .primary
+        { margin: 0 0 0.643em; min-height:100px; border:0;}
+        
+/*specific pages linked in dashboard*/
+/*SHOW USER COLLECTIONS*/
+.collections-index.dashboard .index
+        { width: 100%; } 
+/*HISTORY */
+.readings-index h3 
+        { background:#ddd; margin:-0.5em 0 -0.25em 0; padding:0.25em}
+/*INBOX */
+#inbox-form
+        { float:left; width: 75%;}
+/*RELATED WORKS */
+.inspired dd
+        { margin: 0.643em 0 0.643em 2.5em;}
+/* USER PROFILE NEW or EDIT PSEUD */
+.edit_pseud p.icon, .new_pseud p.icon 
+        { position: static; }

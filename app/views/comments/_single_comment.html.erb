@@ -12,9 +12,7 @@
         (<%= ts("previous comment by %{name} deleted", :name => get_commenter_pseud_or_name(single_comment)) %>)
       </p>
     <% elsif single_comment.hidden_by_admin? && !logged_in_as_admin? %>
-      <p class="message">
-        (<%= ts("This comment is under review by an admin and is currently unavailable.") %>)
-      </p>
+      <p class="message">(<%= ts("This comment is under review by an admin and is currently unavailable.") %>)</p>
     <% else %>
       <% cache single_comment do %>
         <h4>
@@ -27,17 +25,14 @@
         </h4>
         <div class="icon">
           <% if !single_comment.pseud.nil? %>
-            <%= standard_icon_display(single_comment.pseud.user, single_comment.pseud) %>
+            <%= icon_display(single_comment.pseud.user, single_comment.pseud) %>
           <% else %>
             <span class="visitor icon"><!-- visitor icon holder --></span>
           <% end %>
         </div>
-        <blockquote class="userstuff">
-          <%=raw sanitize_field(single_comment, :content) %>
-        </blockquote>
+        <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>
         <p class="datetime">
-          <%= ts("Posted") %> 
-          <%= time_in_zone(single_comment.created_at) %>
+          <%= ts("Posted") %> <%= time_in_zone(single_comment.created_at) %>
         </p>
         <% unless single_comment.edited_at.blank? %>
           <p class="datetime edited">

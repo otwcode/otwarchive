@@ -1,4 +1,4 @@
-$j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').html('<%= escape_javascript(render :partial => "bookmarks", :locals => {:recent_bookmarks => @recent_bookmarks, :params => {:show_recent => true}}) %>');
+$j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').html('<%= escape_javascript(render "bookmarks", :params => {:show_recent => true}) %>');
 <% if @bookmark.bookmarkable.bookmarks.size > 5 %>
   $j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').append('<%= escape_javascript(link_to(ts("View all"), eval(@bookmark.bookmarkable.class.to_s.underscore + "_bookmarks_path(@bookmark.bookmarkable)"))) %>');
   $j('#recent_<%= "#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"%>').append(" | ");

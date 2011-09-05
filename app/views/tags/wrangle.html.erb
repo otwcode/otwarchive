@@ -2,9 +2,9 @@
 <h2><%= ts('Wrangle Tags for') %> <%= link_to_tag(@tag) %></h2>
 <!--/descriptions-->
 <!--subnav-->
-<ul class="navigation actions">
-<li><%= link_to 'edit tag and parent associations', {:controller => :tags, :action => :edit, :id => @tag} %></li>
-<li><%= tag_comment_link(@tag) %></li>
+<ul class="navigation" role="navigation">
+  <li><%= link_to 'edit tag and parent associations', {:controller => :tags, :action => :edit, :id => @tag} %></li>
+  <li><%= tag_comment_link(@tag) %></li>
 </ul>
 <!--/subnav-->
 
@@ -39,7 +39,7 @@
 <% end %>
 
 <% if params[:show] %>
-  <ul class="navigation">
+  <ul class="navigation" role="navigation">
     <li><h4>Show:</h4></li>
     <li><%= link_to 'all', url_for(:show => params[:show], :status => 'all') %></li>
     <li><%= link_to 'canonical', url_for(:show => params[:show], :status => 'canonical') %></li>
@@ -108,8 +108,8 @@
         </td>
         <td><%= tag.created_at.to_date %></td>
         <td><%= tag.taggings_count %></td>
-        <td class="navigation actions">
-          <ul class="navigation actions">
+        <td class="navigation" role="navigation">
+          <ul class="navigation" role="navigation">
             <% unless params[:status] == "unwrangled" %>
             <li><%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %></li>
             <% end %>

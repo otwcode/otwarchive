@@ -1,29 +1,34 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
-<h2><%= t('.collections.new', :default => "New Collection") %></h2>
+<h2><%= ts("New Collection") %></h2>
 
-<h3><%=h 'Suggestions' %></h3>
+<h3><%= 'Suggestions' %></h3>
 <ul class="notes">
-  <li>Keep in mind that only registered users can post anyway, so leaving your
-      collection unmoderated will not open you up to spambots or similar issues. 
-      Mostly users won't add items to a collection inappropriately, so you don't
-      need to add the overhead of approving stories and members unless you really 
-      need it. You can always reject stories after the fact.</li>
-  <li>If you would like to run a regular challenge (eg, an annual challenge like Yuletide, 
-      or a weekly challenge similar to sga_flashfic), the best way to do that is to set 
-      up one parent collection, set it to be closed (meaning that people can't
-      add stories directly to the parent collection) and then add new subcollections 
-      for each challenge.
-   </li>
-    <li>
-      If you limit membership for each challenge (eg, for a gift exchange), you can have people sign
-      up for the subcollections separately. If you just want the whole thing moderated,
-      you can have people sign up and be members of the parent collection, and then they will 
-      be able to post in each subcollection automatically.
-    </li>  
-</ul>
+  <li>
+    Keep in mind that only registered users can post anyway, so leaving your
+    collection unmoderated will not open you up to spambots or similar issues. 
+    Mostly users won't add items to a collection inappropriately, so you don't
+    need to add the overhead of approving stories and members unless you really 
+    need it. You can always reject stories after the fact.
+  </li>
+  <li>
+    If you would like to run a regular challenge (eg, an annual challenge like Yuletide, 
+    or a weekly challenge similar to sga_flashfic), the best way to do that is to set 
+    up one parent collection, set it to be closed (meaning that people can't
+    add stories directly to the parent collection) and then add new subcollections 
+    for each challenge.
+  </li>
+  <li>
+    If you limit membership for each challenge (eg, for a gift exchange), you can have people sign
+    up for the subcollections separately. If you just want the whole thing moderated,
+    you can have people sign up and be members of the parent collection, and then they will 
+    be able to post in each subcollection automatically.
+  </li>
+</ul>  
 <!-- /descriptions-->
 <!--subnavgiation, sorting and actions-->
-<!--/subnav-->
+<ul class="navigation" role="navigation">
+<li><%= link_to 'Back', collections_path %></li>
+</ul><!--/subnav-->
 
 <!--main content-->
 <h3 class="landmark">New Collection Form</h3>

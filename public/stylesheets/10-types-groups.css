@@ -1,0 +1,38 @@
+/*==TYPES OF DATA, GROUPS OF DATA */
+
+/*TYPE: TAGS */
+a.tag, .tags a			{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted;}
+a.tag:hover	        { background: #900; color: #f4effc; }
+.tags li            { display:inline;}
+.tags li:after      { content:", "; }
+.tags li:last-child:after
+                    { content:"."; }
+.tags li:only-child:after
+                    { content:none; }
+.filters .tags li   { display: block;}
+
+/*GROUP CLOUD */
+ul.cloud           { margin: 2em auto; text-align: center; line-height: 2; }
+a.cloud1           { color: #111; font-size: 0.625em; font-weight: 100 }
+a.cloud2           { color: #240F0F; font-size: 0.75em; font-weight: 200 }
+a.cloud3           { color: #380C0C; font-size: 0.875em; font-weight: 300 }
+a.cloud4           { color: #4B0A0A; font-size: 1em; font-weight: 400 }
+a.cloud5           { color: #5F0707; font-size: 1.125em; font-weight: 500 }
+a.cloud6           { color: #720505; font-size: 1.5em; font-weight: 600 }
+a.cloud7           { color: #860202; font-size: 1.875em; font-weight: 700 }
+a.cloud8           { color: #900; font-size: 2.25em; font-weight: 800 }
+
+/*TYPES*/
+.series.footnote    { font-size:100%; float:none; }
+.warning .footnote  { color:#2a2a2a;}
+.kudos              { background:url(/images/kudos.png) bottom left no-repeat; padding:27px 0 9px 75px; margin:0}
+.icon               { background:url(/images/user_icon.png) no-repeat #900) top left no-repeat; height:100px; width:100px;}
+
+/* GROUPS: MODULE, WRAPPER, INDEX */
+.module,  .index    { width: 100%; position: relative; float: left; }
+.wrapper            { box-shadow: 1px 1px 5px #aaa;}
+
+
+ 
+
+

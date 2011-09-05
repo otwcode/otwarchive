@@ -1,25 +1,22 @@
 <% if logged_in? %>
-  <p id="greeting">
-      <%= link_to icon_display(current_user), :alt => current_user %>
-    </p>
-  <ul id="login">
-    <li>
-      <%= link_to ts("Post New"), new_work_path %>&nbsp;|
-    </li>
-<!--  <li>
-  <%= link_to ts("Import"), new_work_path(:import => true) %>  &nbsp;|
-  </li>-->
-    <li>
-      <%= link_to ts("Log out"), logout_path %>
-    </li>
-  </ul>
+  <div id="greeting">
+    <p class="icon">
+	<span class="landmark"><% ts('Hello,') %></span>
+	<%= link_to icon_display(current_user), :alt => current_user %></p>
+    <ul class="navigation" role="navigation">
+	    <li>
+        <%= link_to ts("Post New"), new_work_path %>
+      </li>
+      <li>
+        <%= link_to ts("Log out"), logout_path %>
+      </li>
+    </ul>
+  </div>
 <% elsif logged_in_as_admin? %>
-  <ul id="greeting">
-    <li>
-      <span><%= ts("Hello,") %></span>&nbsp;<%= link_to current_admin.login, admin_path(current_admin), :class => "login login-admin" %>!
-    </li>
-    <li>
+  <div id="greeting">
+	  <p class="icon"><%= link_to icon_display(current_user) %></p>
+	  <p class="navigation" role="navigation">
       <%= link_to ts("Log out"), admin_logout_path %>
-    </li>
-  </ul>
+    </p>
+  </div>
 <% end %>

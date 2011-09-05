@@ -1,8 +1,8 @@
-/*basic functionality*/
+/*==CORE: basic functionality*/
 body {
-background: url(/images/header.png) top no-repeat #f8f1fe;
+background: #f4effc;
 color: #2a2a2a;
-font: 100%/1.286 "Lucida Grande",sans-serif;
+font: 100%/1.125 "Lucida Grande",sans-serif;
 margin: 0;
 padding: 0
 }
@@ -29,3 +29,6 @@ overflow:hidden;
 list-style: none;
 display: inline;
 }
+
+/*DEVELOPMENT ONLY. DO NOT DEPLOY */
+#debug {display:none;}
