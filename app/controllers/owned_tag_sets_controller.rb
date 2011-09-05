@@ -1,7 +1,7 @@
 class OwnedTagSetsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
-  before_filter :load_tag_set, :only => [ :show, :edit, :update, :destroy, :review ]
+  before_filter :load_tag_set, :only => [ :show, :edit, :update, :destroy, :request_wrangling ]
   before_filter :users_only, :only => [ :new, :create, :nominate ]
   before_filter :moderators_only, :only => [ :edit, :update, :review ]
   before_filter :owners_only, :only => [ :destroy ]
@@ -92,17 +92,23 @@ class OwnedTagSetsController < ApplicationController
     redirect_to tag_sets_path
   end
   
-  def make_requests
-    already_requested_ids = TagWranglingRequest.where(:owned_tag_set_id => @tag_set.id)[:tag_id].join(',')
-    @unrequested_tags = Tag.joins(:tag_set).where(:tag_set_id => @tag_set.tag_set_id).
-        where("tags.id NOT IN (?)", already_requested_ids).order("tags.name ASC")
+  def request_wrangling
+    already_requested_ids = TagWranglingRequest.where(:owned_tag_set_id => @tag_set.id)[:tag_id].map(&:tag_id)
+    @unrequested_tags = Tag.joins(:set_taggings).where("set_taggings.tag_set_id = ?", @tag_set.tag_set_id).order("tags.name ASC")
+    @unrequested_tags = @unrequested_tags.where("tags.id NOT IN (?)", already_requested_ids) unless already_requested_ids.empty?
     
-    # most likely tags to request for
+    # now get most likely tags to request for:
+    # noncanonical and unparented tags
     @tags = @unrequested_tags.joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
                 where("filterable_id IS NULL OR tags.canonical = 0")
-      
-    # can also request wrangling manually for other tags
-    @parented_tags = base_tags
+    @requests = []
+    @tags[:id].each {|tag_id| @requests << @tag_set.tag_wrangling_requests.build(:tag_id => tag_id)}
+
+    if @requests.count < 30
+      @inline_autocomplete = true
+    else
+      @inline_autocomplete = false
+    end      
   end
   
 

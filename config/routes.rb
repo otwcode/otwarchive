@@ -72,9 +72,10 @@ Otwarchive::Application.routes.draw do
         post :destroy_multiple
       end
     end
+    resources :tag_wrangling_requests, :only => [:index]
     member do
-      get :review
-      post :request
+      get :request_wrangling
+      post :submit_wrangling
     end
   end
 

@@ -66,6 +66,7 @@ gem 'jquery-rails', '>= 0.2.6'
 gem 'radix'
 
 gem 'nested_form'
+
 gem 'valium'
 
 group :test do

@@ -1,6 +1,7 @@
 <div class="navigation module">
   <h3 class="landmark">Navigation</h3>
   <ul class="navigation" role="navigation">
+    <li><%= link_to ts("Back To %{title}", :title => @tag_set.title), tag_set_path(@tag_set) %>
     <% if @tag_set.nominated %>
   	  <li><%= link_to ts("Edit"), edit_tag_set_nomination_path(@tag_set, @tag_set_nomination) %></li>
   	<% end %>
@@ -11,7 +12,7 @@
 </div>
 
 <div class="tag_set module">
-  <h3><%= ts("Your Nominations For %{name}", :name => @tag_set.title) %></h3>
+  <h3><%= ts("Your Nominations For %{title}", :title => @tag_set.title) %></h3>
   <div class="wrapper">
     <dl class="meta">
       <dt><%= ts("Created at: ") %></dt>

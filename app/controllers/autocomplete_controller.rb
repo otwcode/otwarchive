@@ -56,7 +56,16 @@ class AutocompleteController < ApplicationController
       render_output(tag_output(params[:term], "fandom"))
     end
   end
-  
+
+  # Nominated parents
+  def nominated_parents
+    parents = TagNomination.where(:tagname => params[:tagname]).select("parent_tagname, count(*) as count").group("parent_tagname").order("count DESC")
+    if params[:term]
+      parents = parents.where("parent_tagname LIKE ?", "%#{params[:term]}%")
+    end
+    respond_with(parents[:parent_tagname])
+  end
+
   ## NONCANONICAL TAGS
   def noncanonical_tag
     search_param = params[:term]

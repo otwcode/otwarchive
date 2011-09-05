@@ -49,7 +49,7 @@ module TagSetNominationsHelper
     elsif nomination && nomination.rejected
       '<span class="rejected">X</span>'.html_safe
     else
-      '<span class="unreviewed">?</span>'
+      '<span class="unreviewed">?</span>'.html_safe
     end
   end
   

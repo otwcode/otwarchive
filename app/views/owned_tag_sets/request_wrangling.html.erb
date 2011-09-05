@@ -3,15 +3,8 @@
 
 <h3 class="landmark">Navigation</h3>
 <ul class="navigation" role="navigation">
-  <% @tag_types.each do |type| %>
-	  <li>
-	    <% if (@tag_type == type) %>
-	      <span class="current"><%= ts("#{type.classify.pluralize}") %></span>
-	    <% else %>
-	      <%= link_to ts("#{type.classify.pluralize}"), url_for(:tag_type => type) %>
-	    <% end %>
-	  </li>
-	<% end %>
+  <li><%= link_to ts("Back to %{title}", :title => @tag_set.title) %></li>
+  <li><%= link_to ts("Submitted Requests"), tag_set_tag_wrangling_requests_path(@tag_set) %></li>
 </ul>
 
 
@@ -52,11 +45,10 @@
     		<li><a href="#" class="check_none">None</a></li>
       </ul>
       <ul class="options<%= @tags.count > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''%>">
-        <% @tags.each do |tag| %>
+      <% @requests.each_with_index do |request, index| %>
           <li class="<%= cycle("odd", "even") %>">
-            <% request = @tag_set.tag_wrangling_requests.where(:tag_id => tag.id).first || @tag_set.tag_wrangling_requests.build(:tag => tag) %>
-            <% tag_set_form.fields_for request do |request_form| %>
-              <%= render "tag_wrangling_request_fields", :tag => tag, :f => request_form %>
+            <%= tag_set_form.fields_for :tag_wrangling_requests, request do |request_form| %>
+              <%= render "tag_wrangling_request_fields", :f => request_form, :index => index %>
             <% end %>
           </li>
         <% end %>

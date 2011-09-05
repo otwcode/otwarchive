@@ -1,14 +1,22 @@
 <fieldset>
-<%= f.object.tag.name %>
-<%= f.hidden_field :tag_id => f.object.tag.id %>
-<%= f.label :set_parent_tagnames, :class => "action" do %>
-  <%= ts("Parent(s): ") %>
-  <% tag_parents = TagNomination.where(:tagname => f.object.tag.name).select("parent_tagname, count(*) as count").group("parent_tagname").order("count DESC"). 
-      map {|tn| {id: tn.parent_tagname, :name: tn.parent_tagname}} %>
-  <%= f.text_field :parent_tagnames, autocomplete_options(tag_parents, :autocomplete_min_chars => 0) %>
-<% end %>
-<%= f.label :do_request, :class => "action" do %>
-  <%= ts("Request") %>
-  <%= f.check_box :do_request %>            
-<% end %>
+
+  <%= f.object.tag.name %>
+  <%= f.hidden_field :tag_id, :value => f.object.tag.id %>
+
+  <label class="action">
+    <%= ts("Parent(s): ") %>
+    <% if false #@inline_autocomplete %>
+      <% nominated_parents = TagNomination.where(:tagname => f.object.tag.name).group("parent_tagname").order("count_id DESC").count('id')[:parent_tagname] || [] %>
+      <% nominated_parents = nominated_parents.map {|tagname| {id: tagname, name: tagname}} %>
+      <%= f.text_field :parent_tagnames, autocomplete_options(nominated_parents, :autocomplete_min_chars => 0) %>
+    <% else %>
+      <%= f.text_field :parent_tagnames, autocomplete_options("nominated_parents?tagname=#{f.object.tag.name}", :autocomplete_min_chars => 0) %>
+    <% end %>
+  </label>
+
+  <label class="action">
+    <%= ts("Request") %>
+    <%= f.check_box :do_request %>            
+  </label>
+
 </fieldset>

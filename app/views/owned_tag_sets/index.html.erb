@@ -40,7 +40,7 @@
 
   <ul class="tagset index">
     <% @tag_sets.each do |tag_set| %>
-      <%= render :partial => 'tag_set_blurb', :locals => {:tag_set => tag_set} %>
+      <%= render 'tag_set_blurb', :tag_set => tag_set %>
     <% end %>
   </ul>
 
