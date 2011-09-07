@@ -48,3 +48,11 @@ Scenario: Posting top level comment on a middle chapter, while in temporary view
     And I should see "Chapter 2"
     And I should not see "Chapter 1"
 
+Scenario: Posting a reply comment to a comment on a middle chapter, with default settings
+  Given the chaptered work with comments setup
+    And I am logged in as a random user
+    And I view the work "Gimme Comments"
+    And I view the 2nd chapter
+    And I follow "Read Comments"
+  When I reply to a comment with "Supercalifragelistic"
+  Then I should see "Supercalifragelistic"

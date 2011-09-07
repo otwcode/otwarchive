@@ -24,11 +24,13 @@ Given /^the chaptered work(?: with ([\d]+) chapters)?(?: with ([\d]+) comments?)
     fill_in("content", :with => "Yet another chapter.")
     click_button("Post without preview")
   end
+  And %{I am logged out}
   n_comments ||= 0
   n_comments.to_i.times do |i|
-    Given %{I post the comment "Bla bla" on the work "#{title}"}
+    Given %{I am logged in as a random user}
+    And %{I post the comment "Bla bla" on the work "#{title}"}
+    And %{I am logged out}
   end
-  And %{I am logged out}
 end
 
 Given /^I have a work "([^\"]*)"$/ do |work|
@@ -36,8 +38,20 @@ Given /^I have a work "([^\"]*)"$/ do |work|
   When %{I post the work "#{work}"}
 end
 
-Given /the chaptered work setup/ do
+Given /^the chaptered work setup$/ do
   Given %{the chaptered work with 3 chapters "Gimme Comments"}
+end
+
+Given /^the chaptered work with comments setup$/ do
+  Given %{the chaptered work with 3 chapters "Gimme Comments"}
+  When "I am logged in as a random user"
+  And %{I view the work "Gimme Comments"}
+    And %{I post a comment "Woohoo"}
+  (2..3).each do |i|
+    And %{I view the #{i.to_s}th chapter}
+    And %{I post a comment "Woohoo"}
+  end
+  And "I am logged out"
 end
 
 ### WHEN
