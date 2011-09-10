@@ -383,17 +383,6 @@ class Tag < ActiveRecord::Base
     end
   end
   
-  
-  def self.autocomplete_fandom_for_child(search_param, child)
-    return [] if child.blank?
-    child_tag = Tag.where(:name => child).includes(:parents).first or return []
-    if search_param.blank?
-      child_tag.parents.where(:type => 'Fandom').collect(&:name)
-    else
-      child_tag.parents.where(:type => 'Fandom').where("name LIKE ?", '%' + search_param + '%').collect(&:name)
-    end
-  end
-  
   ## END AUTOCOMPLETE
 
 

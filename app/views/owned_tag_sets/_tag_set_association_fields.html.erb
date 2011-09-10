@@ -1,0 +1,13 @@
+<fieldset>
+  <dl>
+    <dt><%= f.label :tag_id, ts("Tag: ") %></dt>
+    <dd>
+      <%= f.hidden_field :create_association, :value => true %>
+      <%= f.select :tag_id, options_for_select(@tags_in_set, f.object.tag_id) %>
+    </dd>
+    <dt><%= f.label :parent_tag_id, ts("Parent tag: ") %></dt>
+    <dd><%= f.select :parent_tag_id, options_for_select(@tags_in_set, f.object.parent_tag_id) %></dd>
+  </dl>
+  
+  <p class="actions"><%= f.link_to_remove ts("Cancel") %></p>
+</fieldset>

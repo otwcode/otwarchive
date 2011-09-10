@@ -7,15 +7,17 @@ class AutocompleteController < ApplicationController
   skip_before_filter :set_redirects
   skip_before_filter :sanitize_params # can we dare!
 
-  before_filter :require_term, :except => [:tag_in_fandom, :relationship_in_fandom, :character_in_fandom, :fandom_for_child]
-  
-  def require_term
-    if params[:term].blank?
-      flash[:error] = ts("What were you trying to autocomplete?")
-      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
-    end
-  end
-
+  #### DO WE NEED THIS AT ALL? IF IT FIRES WITHOUT A TERM AND 500s BECAUSE USER DID SOMETHING WACKY SO WHAT
+  # # If you have an autocomplete that should fire without a term add it here
+  # before_filter :require_term, :except => [:tag_in_fandom, :relationship_in_fandom, :character_in_fandom, :nominated_parents]
+  # 
+  # def require_term
+  #   if params[:term].blank?
+  #     flash[:error] = ts("What were you trying to autocomplete?")
+  #     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+  #   end
+  # end
+  # 
   #########################################
   ############# LOOKUP ACTIONS GO HERE
   
@@ -40,6 +42,12 @@ class AutocompleteController < ApplicationController
     render_output(Tag.autocomplete_lookup(params[:term], "autocomplete_tag_#{params[:type]}", :constraint_sets => ["autocomplete_tagset_#{params[:tag_set_id]}"]).map {|r| Tag.name_from_autocomplete(r)})
   end
   
+  def tag_ids_in_set
+    start = $redis.zrank("autocomplete_tagset_#{tag_set.id}", )
+    respond_with $redis.zrange("autocomplete_tagset_#{tag_set.id}", 0, -1).
+      map {|redis_tag| Tag.parse_autocomplete_value(redis_tag)}.each_pair {|id, name| {id: id, name: name}}
+  end
+  
   ## TAGS IN FANDOMS
   def tag_in_fandom
     render_output(tag_in_fandom_output(params[:term], params[:type], params[:fandom], params[:fallback] || true)) 
@@ -47,25 +55,6 @@ class AutocompleteController < ApplicationController
   def character_in_fandom; render_output(tag_in_fandom_output(params[:term], "character", params[:fandom], params[:fallback] || true)); end
   def relationship_in_fandom; render_output(tag_in_fandom_output(params[:term], "relationship", params[:fandom], params[:fallback] || true)); end
   
-  ## Parents for given tag
-  def fandom_for_child
-    results = Tag.autocomplete_fandom_for_child(params[:term], params[:child]) 
-    unless results.empty?
-      render_output(results)
-    else
-      render_output(tag_output(params[:term], "fandom"))
-    end
-  end
-
-  # Nominated parents
-  def nominated_parents
-    parents = TagNomination.where(:tagname => params[:tagname]).select("parent_tagname, count(*) as count").group("parent_tagname").order("count DESC")
-    if params[:term]
-      parents = parents.where("parent_tagname LIKE ?", "%#{params[:term]}%")
-    end
-    respond_with(parents[:parent_tagname])
-  end
-
   ## NONCANONICAL TAGS
   def noncanonical_tag
     search_param = params[:term]
@@ -75,29 +64,16 @@ class AutocompleteController < ApplicationController
                               '%' + search_param + '%']).limit(10).map(&:name))
   end
   
-  # determine whether a particular tag is canonical or not
-  def is_canonical
-    t = Tag.find_by_name(params[:term])
-    if t.nil? || !t.canonical
-      respond_with(["0"])
-    else
-      respond_with(["1"])
-    end
-  end    
-
-  # get the single parent for a child
-  def single_fandom_for_child
-    if (tag = Tag.where(:name => params[:term]).includes(:parents).first)
-      respond_with([tag.parents.order("taggings_count DESC").select {|p| p.is_a? Fandom}.first.name])
-    end
-  end
-  
-
-
   
   # more-specific autocompletes should be added below here when they can't be avoided
 
-  
+
+  # Nominated parents
+  def nominated_parents
+    render_output(TagNomination.for_tag_set(OwnedTagSet.find(params[:tag_set_id])).nominated_parents(params[:tagname], params[:term]))
+  end
+
+
   # look up collections ranked by number of items they contain
 
   def collection_fullname

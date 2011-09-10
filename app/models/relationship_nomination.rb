@@ -3,26 +3,9 @@ class RelationshipNomination < TagNomination
 
   validate :known_fandom
   def known_fandom
-    return true if self.fandom_nomination || self.parent_tagname
+    return true if (!parent_tagname.blank? || self.fandom_nomination || from_fandom_nomination)
     return true if (tag = Relationship.find_by_name(self.tagname)) && tag.parents.any? {|p| p.is_a?(Fandom)}
-    errors.add(:base, ts("We need to know what fandom your relationship tag %{tagname} belongs in.", :tagname => self.tagname))
-  end
-
-  def self.for_tag_set_through_fandom(tag_set)
-    joins(:fandom_nomination => [{:tag_set_nomination => :owned_tag_set}]).
-    where("owned_tag_sets.id = ?", tag_set.id)
-  end
-
-  before_save :set_parented
-  def set_parented
-    has_parent = (tag = Relationship.find_by_name(tagname)) && tag.parents.any? {|p| p.is_a?(Fandom)}
-    if has_parent
-      self.parented = true
-    else
-      self.parented = false
-      self.parent_tagname = self.fandom_nomination.tagname unless self.parent_tagname
-    end   
-    true
+    errors.add(:base, ts("^We need to know what fandom your relationship tag %{tagname} belongs in.", :tagname => self.tagname))
   end
 
   before_save :set_tag_set_nomination
@@ -32,4 +15,9 @@ class RelationshipNomination < TagNomination
     end
   end
     
+  def get_parent_tagname
+    (self.parent_tagname.blank? ? self.parent_tagname : nil) || (self.fandom_nomination ? self.fandom_nomination.tagname : nil)
+  end
+
+
 end

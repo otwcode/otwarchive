@@ -24,7 +24,9 @@ The flash divs are intended for use to show error messages
 
 .error, .comment_error { background:#efd1d1; font-weight:bold; line-height:2; padding:.375em; border:1px solid #900;}
 .error ul	{ font-weight:100; width:90%; margin:auto; }
-.error ul li	{list-style-type:disc;}
+
+ul.notes {position:static; margin:auto 2.5em; border:1px solid #aaa; background:#E9E2DD; padding:1em 2.5em  }
+ul.notes li{list-style-type:disc; padding-left:1.5em}
 span.error {border:0;}
 
 .draggable, .droppable {color:red;}
@@ -35,6 +37,9 @@ span.symbol span { color:#fffef9; height:1em; width:1em; padding:0.425em; }
 #main .symbols a, #main .symbol a { text-decoration:none; border:none }
 span.question { background:#2b547c; border-color:#2a547c; }
 a.question {border:0; font-weight: bold;}
+
+span.working {position:relative; height:auto; width:auto; margin:0; border:0;}
+span.working img {position:absolute; z-index:1000;}
 
 /*SYMBOLS KEY (help content) */
  dl#symbols-key, dl#bookmark-symbols-key { background: #fffef9 }

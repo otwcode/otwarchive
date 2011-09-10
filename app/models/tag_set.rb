@@ -26,11 +26,6 @@ class TagSet < ActiveRecord::Base
     @tagnames ? tagnames_to_list(@tagnames) : tags
   end
   
-  attr_writer :tagnames_to_add
-  def tagnames_to_add
-    @tagnames_to_add || ""
-  end
-  
   attr_writer :tagnames_to_remove
   def tagnames_to_remove
     @tagnames_to_remove || ""
@@ -56,6 +51,7 @@ class TagSet < ActiveRecord::Base
       self.instance_variable_get("@#{type}_tagnames") ? tagnames_to_list(self.instance_variable_get("@#{type}_tagnames"), "#{type}") : with_type(type)
     end
     
+    # _to_add/remove only rather than reset the entire list (much faster in large tagsets!)
     attr_writer "#{type}_tagnames_to_add".to_sym
     define_method("#{type}_tagnames_to_add") do 
       self.instance_variable_get("@#{type}_tagnames_to_add") || ""
@@ -67,7 +63,7 @@ class TagSet < ActiveRecord::Base
     end
 
   end
-
+  
   # this actually runs and saves the tags but only after validation
   after_save :assign_tags
   def assign_tags
@@ -202,7 +198,12 @@ class TagSet < ActiveRecord::Base
     def tagnames_to_list(taglist, type=nil)
       taglist = (taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : taglist)
       if type
-        taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_or_create_by_name(tagname.squish)}
+        if Tag::USER_DEFINED.include?(type.classify)
+          # allow users to create these
+          taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_or_create_by_name(tagname.squish)}
+        else
+          taglist.reject {|tagname| tagname.blank? }.map {|tagname| (type.classify.constantize).find_by_name(tagname.squish)}.compact
+        end
       else
         taglist.reject {|tagname| tagname.blank? }.map {|tagname| Tag.find_by_name(tagname.squish) || Freeform.find_or_create_by_name(tagname.squish)}
       end

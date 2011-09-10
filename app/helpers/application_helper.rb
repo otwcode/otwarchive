@@ -295,12 +295,16 @@ module ApplicationHelper
   def autocomplete_options(method, options={})
     {      
       :class => "autocomplete",
-      :autocomplete_method => (method.is_a?(Array) ? method.to_s : "/autocomplete/#{method}"),
+      :autocomplete_method => (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
       :autocomplete_hint_text => ts("Start typing for suggestions!"),
       :autocomplete_no_results_text => ts("(No suggestions found)"),
       :autocomplete_min_chars => 1,
       :autocomplete_searching_text => ts("Searching...")
     }.merge(options)
+  end
+
+  def working_symbol
+    '<span class="working symbol"><img src="/images/loading.gif alt="working"/></span>'.html_safe
   end
     
   # see http://asciicasts.com/episodes/197-nested-model-form-part-2
@@ -350,10 +354,10 @@ module ApplicationHelper
   # toggle an options (scrollable checkboxes) section of a form to show all of the options
   def options_toggle(options_id, options_size)
     toggle_show = content_tag(:a, ts("Show all %{options_size} options", :options_size => options_size), 
-                              :class => "toggle", :id => "#{options_id}_show")
+                              :class => "toggle actions", :id => "#{options_id}_show")
 
     toggle_hide = content_tag(:a, ts("Collapse options"), :style => "display: none;",
-                              :class => "toggle", :id => "#{options_id}_hide")
+                              :class => "toggle actions", :id => "#{options_id}_hide")
 
     javascript_bits = content_for(:footer_js) {
       javascript_tag("$j(document).ready(function(){\n" +
@@ -372,7 +376,7 @@ module ApplicationHelper
     toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide + "\n".html_safe + javascript_bits)
   end
 
-  # create a scrollable checkboxes section for a form
+  # create a scrollable checkboxes section for a form that can be toggled open/closed
   # form: the form this is being created in
   # fieldname: the fieldname for the field being filled in by the checkboxes -- eg "work[tagnames][]"
   # id: the base id for the checkbox fields -- eg "work_tagnames"
@@ -418,5 +422,5 @@ module ApplicationHelper
         hidden_field_tag(fieldname, " ")
     end
   end
-  
+    
 end # end of ApplicationHelper

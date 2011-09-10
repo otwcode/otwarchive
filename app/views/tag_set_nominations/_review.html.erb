@@ -2,7 +2,8 @@
 	<h2><%= ts("Review Nominations") %></h2>
 
 <h3 class="landmark">Navigation</h3>
-  <ul class="navigation" role="navigation">
+  <ul class="navigation actions" role="navigation actions">
+    <!--BACK END, link back to tag set index here-->
     <% @tag_types.each do |type| %>
   	  <li>
   	    <% if (@tag_type == type) %>
@@ -20,17 +21,15 @@
   </ul>
 
 
-<p class="notes">
-  You can either approve or reject nominations, or leave them unmarked if you want to review them later on. Once a nomination
-  is either approved or rejected, it will no longer appear on this page. (You can always manually add a tag yourself if you 
-  accidentally reject one that you meant to approve.)
-</p>
-<p class="notes">
-  Please note that we may occasionally clear out old nominations after several months to avoid database clutter, so please don't 
-  leave nominations turned on unless you are actively reviewing nominations on a regular basis.
-</p>
+<ul class="notes">
+  <li>You can approve or reject nominations, or leave them for later. Once a nomination
+  has been either approved or rejected, it won't appear on this page.</li>
+  <li>If you reject a tag that you meant to approve, you can re-add it manually.</li>
+  <li>We might clear out old nominations after several months to avoid database clutter, so please don't 
+  leave nominations turned on unless you are reviewing nominations regularly.</li>
+</ul>
 
-<%= form_for :tag_set_nominations, :url => update_multiple_tag_set_nominations_path(@tag_set), :html => { :method => :put } do |form| %>
+<%= form_for :tag_set_nominations, :url => update_multiple_tag_set_nominations_path(@tag_set), :html => { :method => :put, :class => "tagset" } do |form| %>
   <h3>Nominated <%= @tag_type.classify.pluralize %><%= hidden_field_tag "tag_type", @tag_type %></h3>
   
   <% %w(canonical existing nonexistent).each do |section| %>

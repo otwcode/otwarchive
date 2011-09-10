@@ -19,7 +19,7 @@
             <% @past_first = true %>
           <% end %>           
         </dt>
-        <dd><%= nom_form.select :parent_tagname, options_for_select(Media.canonical.by_name.collect {|m| [m.name, m.name]}), :include_blank => true %></dd>
+        <dd><%= nom_form.select :parent_tagname, options_for_select(Media.canonical.by_name.collect {|m| [m.name, m.name]}, nom_form.object.parent_tagname), :include_blank => true %></dd>
 
         <% # if fandoms are being nominated then any character/relationship noms go under fandom %>
         <% %w(character relationship).each do |tag_type| %>
@@ -33,6 +33,7 @@
                           autocomplete_options("#{tag_type}_in_fandom", :autocomplete_token_limit => 1, 
                           :autocomplete_live_params => "fandom=tag_set_nomination_fandom_nominations_attributes_#{index}_tagname") %>
               <% end %>
+              <%= nom_form2.hidden_field :from_fandom_nomination, :value => true %>
             </dd>
           <% end %>
         <% end %>

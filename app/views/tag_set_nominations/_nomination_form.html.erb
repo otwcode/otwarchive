@@ -1,5 +1,5 @@
 <h3 class="landmark">Navigation</h3>
-  <ul class="navigation" role="navigation">
+  <ul class="navigation actions" role="navigation actions">
 	  <li><%= link_to h(ts("Back To ")) + @tag_set_nomination.owned_tag_set.title, tag_set_path(@tag_set_nomination.owned_tag_set) %></li>
     <li><%= link_to ts("Tag Sets"), tag_sets_path %></li>
   </ul>
@@ -16,7 +16,7 @@
 
 <%= error_messages_for :tag_set_nomination %>
 
-<%= form_for(@tag_set_nomination, :url => (@tag_set_nomination.new_record? ? tag_set_nominations_path(@tag_set) : tag_set_nomination_path(@tag_set, @tag_set_nomination)), :html => {:method => (@tag_set_nomination.new_record? ? :post : :put), :id => "tag_set_nomination_form"}) do |f| %>
+<%= form_for(@tag_set_nomination, :url => (@tag_set_nomination.new_record? ? tag_set_nominations_path(@tag_set) : tag_set_nomination_path(@tag_set, @tag_set_nomination)), :html => {:method => (@tag_set_nomination.new_record? ? :post : :put), :id => "tag_set_nomination_form", :class => "tagset"}) do |f| %>
   <fieldset>
     <legend>Basic Information</legend>
     <dl>

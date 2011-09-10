@@ -1,6 +1,6 @@
 <div class="navigation module">
   <h3 class="landmark">Navigation</h3>
-  <ul class="navigation" role="navigation">
+  <ul class="navigation actions" role="navigation actions">
     <li><%= link_to ts("Back To %{title}", :title => @tag_set.title), tag_set_path(@tag_set) %>
     <% if @tag_set.nominated %>
   	  <li><%= link_to ts("Edit"), edit_tag_set_nomination_path(@tag_set, @tag_set_nomination) %></li>

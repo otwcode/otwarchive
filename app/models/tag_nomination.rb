@@ -1,6 +1,8 @@
 class TagNomination < ActiveRecord::Base
   belongs_to :tag_set_nomination
   has_one :owned_tag_set, :through => :tag_set_nomination
+  
+  attr_accessor :from_fandom_nomination
 
   validates_length_of :tagname,
     :maximum => ArchiveConfig.TAG_MAX,
@@ -40,13 +42,37 @@ class TagNomination < ActiveRecord::Base
     end
     true
   end
+
+  before_save :set_parented
+  def set_parented    
+    if type == "FreeformNomination"
+      # skip freeforms
+      self.parented = true
+    elsif (tag = Tag.find_by_name(tagname)) && 
+      ((!tag.parents.empty? && get_parent_tagname.blank?) || tag.parents.collect(&:name).include?(get_parent_tagname))
+      # if this is an existing tag and has matching parents, or no parent specified and it already has one 
+      self.parented = true
+    else
+      self.parented = false
+      self.parent_tagname = get_parent_tagname unless self.parent_tagname
+    end   
+    true
+  end
+
+  # here so we can override it in char/relationship noms
+  def get_parent_tagname
+    (self.parent_tagname.blank? ? self.parent_tagname : nil)
+  end
+
   
   # sneaky bit: if the tag set moderator has already rejected or approved this tag, don't 
   # show it to them again.
   before_save :set_approval_status
   def set_approval_status
-    self.rejected = tag_set_nomination.owned_tag_set.already_rejected?(tagname)
-    self.approved = tag_set_nomination.owned_tag_set.already_in_set?(tagname) || tag_set_nomination.owned_tag_set.already_approved?(tagname)
+    nom = tag_set_nomination
+    nom = fandom_nomination.tag_set_nomination if !nom && from_fandom_nomination          
+    self.rejected = nom.owned_tag_set.already_rejected?(tagname)
+    self.approved = nom.owned_tag_set.already_in_set?(tagname) || nom.owned_tag_set.already_approved?(tagname)
     true
   end
 
@@ -61,6 +87,16 @@ class TagNomination < ActiveRecord::Base
   
   def self.unreviewed
     where(:approved => false).where(:rejected => false)
+  end
+  
+  # returns an array of all the parent tagnames for the given tag 
+  # can be chained with other queries but must come at the end
+  def self.nominated_parents(child_tagname, parent_search_term="")
+    parents = where(:tagname => child_tagname).where("parent_tagname != ''")
+    unless parent_search_term.blank?
+      parents = parents.where("parent_tagname LIKE ?", "%#{parent_search_term}%")
+    end
+    parents.group("parent_tagname").order("count_id DESC").count('id').keys
   end
   
 end

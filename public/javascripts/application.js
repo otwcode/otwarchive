@@ -78,9 +78,16 @@ jQuery(function($) {
   $('input.autocomplete').livequery(function(){
     var self = $(this);
     var token_input_options = get_token_input_options(self);
-    self.tokenInput(self.attr('autocomplete_method'), token_input_options);
+    var method;
+    try {
+        method = $.parseJSON(self.attr('autocomplete_method'));
+    } catch (err) {
+        method = self.attr('autocomplete_method');
+    }
+    self.tokenInput(method, token_input_options);
   });
 });
+
 
 ///////////////////////////////////////////////////////////////////
 

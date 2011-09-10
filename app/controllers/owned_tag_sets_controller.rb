@@ -75,6 +75,7 @@ class OwnedTagSetsController < ApplicationController
   end
 
   def edit
+    get_tags_to_associate
   end
   
   def update
@@ -92,24 +93,30 @@ class OwnedTagSetsController < ApplicationController
     redirect_to tag_sets_path
   end
   
-  def request_wrangling
-    already_requested_ids = TagWranglingRequest.where(:owned_tag_set_id => @tag_set.id)[:tag_id].map(&:tag_id)
-    @unrequested_tags = Tag.joins(:set_taggings).where("set_taggings.tag_set_id = ?", @tag_set.tag_set_id).order("tags.name ASC")
-    @unrequested_tags = @unrequested_tags.where("tags.id NOT IN (?)", already_requested_ids) unless already_requested_ids.empty?
-    
-    # now get most likely tags to request for:
-    # noncanonical and unparented tags
-    @tags = @unrequested_tags.joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
-                where("filterable_id IS NULL OR tags.canonical = 0")
-    @requests = []
-    @tags[:id].each {|tag_id| @requests << @tag_set.tag_wrangling_requests.build(:tag_id => tag_id)}
+  def get_tags_to_associate
+    # for manual associations
+    @tags_in_set = Tag.joins(:set_taggings).where("set_taggings.tag_set_id = ?", @tag_set.tag_set_id).order("tags.name ASC")[:name, :id]
+        
+    # get the tags for which we have a parent nomination which doesn't already
+    # exist in the database 
+    @tags_to_associate = Tag.joins(:set_taggings).where("set_taggings.tag_set_id = ?", @tag_set.tag_set_id).
+      joins("LEFT JOIN tag_nominations ON tag_nominations.tagname = tags.name").
+      where("tag_nominations.parented = 0 AND EXISTS 
+        (SELECT * from tags WHERE tags.name = tag_nominations.parent_tagname)")
 
-    if @requests.count < 30
-      @inline_autocomplete = true
-    else
-      @inline_autocomplete = false
-    end      
+    # also constrain by fandoms added to this set? hmm
+    # INNER JOIN set_taggings on set_taggings.tags_id = tags.id
+    # WHERE set_taggings.tag_set_id = #{@tag_set.tag_set_id}
+        
+    # skip already associated tags
+    associated_tag_ids = TagSetAssociation.where(:owned_tag_set_id => @tag_set.id)[:tag_id]    
+    @tags_to_associate = @tags_to_associate.where("tags.id NOT IN (?)", associated_tag_ids) unless associated_tag_ids.empty?
+          
+    # now get out just the tags and nominated parent tagnames in order of # nominations
+    @tags_to_associate = @tags_to_associate.select("DISTINCT tags.id, tags.name, tag_nominations.parent_tagname").
+      order("tags.name ASC")
+      
   end
   
-
+  
 end

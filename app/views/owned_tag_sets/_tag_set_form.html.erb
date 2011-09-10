@@ -1,8 +1,8 @@
 <h3><%= ts("Notes") %></h3>
 <ul class="notes">
 	<li>You can use tag sets when running a challenge.</li>
-	<li>Visible tag sets have their contents visible to all users.</li>
-	<li>Usable tag sets can be used by other users in their challenges.</li> 
+	<li>"Visible" tag sets are shown to all users.</li>
+	<li>"Usable" tag sets can be used by others in their challenges.</li> 
 	<li>Tag sets that are open to nominations can take nominations from the public.</li> 
 </ul>
 
@@ -10,21 +10,20 @@
 
 <!--main content-->
 <h3 class="landmark">Tag Set Settings</h3>
-<%= form_for(@tag_set, :url => (@tag_set.new_record? ? tag_sets_path : tag_set_path(@tag_set)), :html => {:method => (@tag_set.new_record? ? :post : :put)}) do |tag_set_form| %>
+<%= nested_form_for(@tag_set, :url => (@tag_set.new_record? ? tag_sets_path : tag_set_path(@tag_set)), :html => {:method => (@tag_set.new_record? ? :post : :put), :class => "verbose tagset"}) do |tag_set_form| %>
   <%= error_messages_for @tag_set %>
 
-  <fieldset class="tagset profile">
+  <fieldset>
 		<legend>Management</legend>
-		<h3>Management</h3>
 		<p class="notes">
-			To add or remove an owner or moderator, enter their name. If they are currently on the list they will be removed; if not, they will be added.
-			Note that you cannot remove the sole owner of a tag set.
+			To add or remove an owner or moderator, enter their name. If they are already on the list they will be removed; if not, they will be added.
+			You can't remove the sole owner of a tag set.
 		</p>
 		
 		<dl>
 		  <dt><%= ts("Current Owners") %></dt>
 		  <dd>
-		    <ul>
+		    <ul class="mods">
 		      <%= @tag_set.new_record? ? content_tag(:li, current_user.default_pseud.byline) : @tag_set.owners.collect(&:byline).sort.map {|owner| content_tag(:li, owner)}.join(', ').html_safe =%>
 		    </ul>
 		  </dd>
@@ -33,7 +32,7 @@
 
 		  <dt><%= ts("Current Moderators") %></dt>
 		  <dd>
-		    <ul><%= @tag_set.moderators.empty? ? content_tag(:li, ts("None")) : @tag_set.moderators.collect(&:byline).sort.map {|mod| content_tag(:li, mod)}.join(', ').html_safe =%></ul>
+		    <ul class="mod"><%= @tag_set.moderators.empty? ? content_tag(:li, ts("None")) : @tag_set.moderators.collect(&:byline).sort.map {|mod| content_tag(:li, mod)}.join(', ').html_safe =%></ul>
 		  </dd>
 		  
 		  <dt><%= tag_set_form.label :moderator_changes, ts("Add/Remove Moderators: ") %></dt>
@@ -41,9 +40,8 @@
 		</dl>  	
 	</fieldset>
 
-	<fieldset class="profile">
+	<fieldset>
     <legend>Description</legend>
-    <h3>Description</h3>
 		<dl>
 			<dt><%= tag_set_form.label :title, ts("Title* (text only)") %></dt>
 			<dd><%= tag_set_form.text_field :title %></dd>
@@ -63,11 +61,11 @@
 		</dl>
 	</fieldset>
 	
-	<fieldset id="nomination_limits" class="profile hideme">
+	<fieldset id="nomination_limits" class="hideme">
 	  <legend>Nomination Limits</legend>
 	  <h3>Nomination Limits</h3>
-	  <p class="important note">If you allow users to nominate <em>both</em> fandoms and characters/relationships in the same tag set, 
-	    we will assume the character/relationship number you allow is <strong>per fandom</strong> If that's not what you want, you 
+	  <p class="notes">If you allow users to nominate <em>both</em> fandoms and characters/relationships in the same tag set, 
+	    we will assume the character/relationship number you allow is <strong>per fandom</strong>. If that's not what you want, you 
 	    can have users nominate fandoms in one tag set, and characters/relationships in another tag set. (You can then use
 	    both tag sets in your challenge settings.)
 	  </p>
@@ -79,33 +77,105 @@
 	  </dl>
 	</fieldset>
 
-  <fieldset class="profile">
+  <fieldset>
     <legend>Tags In Set</legend>
     <h3>Tags In Set</h3>
     <% @tag_set.build_tag_set unless @tag_set.tag_set %>
     <%= tag_set_form.fields_for :tag_set do |internal_tag_set_form| %>
       <% TagSet::TAG_TYPES.each do |tag_type| %>
-        <fieldset class="tagset">
+        <% if %w(rating category warning).include?(tag_type) && @tag_set.tag_set.tags_with_type(tag_type).empty? %>
+          <% # toggle this section since mostly we don't use it %>
+          <p class="actions">
+            <a class="<%= tag_type %>_tagset_open"><%= ts("Add #{tag_type.classify.pluralize}" )%></a>
+            <a class="<%= tag_type %>_tagset_close"><%= ts("Close #{tag_type.classify.pluralize}" )%></a>
+          </p>
+          <fieldset class="tagset toggled" id="<%= tag_type %>_tagset">
+        <% else %>
+          <fieldset class="tagset">
+        <% end %>  
           <legend><%= ts("#{tag_type.classify.pluralize}") %></legend>
           <h4><%= "#{tag_type.classify.pluralize}" %></h4>
 
           <% unless @tag_set.tag_set.tags_with_type(tag_type).empty? %>
             <!-- create a scrollable checkboxes section to wrap the tags, see application_helper -->
-            <h5><%= internal_tag_set_form.label "#{tag_type}_tags_to_remove".to_sym, "Currently in set (check to remove): " %></h4>
+            <ul class="navigation actions">
+          		<li><a href="#" class="check_all">Check All</a></li>
+          		<li><a href="#" class="check_none">Check None</a></li>
+            </ul>
+            <p><%= internal_tag_set_form.label "#{tag_type}_tags_to_remove".to_sym, "Currently in set (check to remove): " %></p>
             <%= options_section(internal_tag_set_form, 
                                 "owned_tag_set[tag_set_attributes][#{tag_type}_tags_to_remove][]", 
                                 "owned_tag_set_tag_set_attributes_#{tag_type}_tags_to_remove", 
                                 @tag_set.tag_set.with_type(tag_type).by_name_without_articles, 
                                 nil, "name", "id") %>
           <% end %>
-          <h5><%= internal_tag_set_form.label "#{tag_type}_tagnames_to_add".to_sym, "#{tag_type.classify.pluralize} to add: " %></h5>
+          <h4><%= internal_tag_set_form.label "#{tag_type}_tagnames_to_add".to_sym, "#{tag_type.classify.pluralize} to add: " %></h4>
           <p>
             <%= internal_tag_set_form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options("tag_type") %>
           </p>
         </fieldset>
       <% end %>
-    <% end %>
+    <% end %>    
   </fieldset>
+  
+  <fieldset>
+    <legend>Tag Associations</legend>
+    <h3>Tag Associations</h3>
+    <% unless @tag_set.tag_set_associations.empty? %>
+      <fieldset>
+        <ul class="navigation actions">
+      		<li><a href="#" class="check_all">Check All</a></li>
+      		<li><a href="#" class="check_none">Check None</a></li>
+        </ul>
+        <p class="note"><%= ts("Currently in set (check to remove): ")%></p>
+        <%= options_toggle("associations_to_remove", @tag_set.tag_set_associations.count) %>
+        <ul id="associations_to_remove" class="options many">
+          <% @tag_set.tag_set_associations.includes(:tag, :parent_tag).each do |association| %>    
+            <li>
+              <%= tag_set_form.fields_for :tag_set_associations, association do |association_form| %>
+                <% association_form.label "_destroy" do %>
+                  <%= association.tag.name %> (<%= association.parent_tag.name %>)
+                  <%= association_form.check_box "_destroy" %>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </fieldset>
+    <% end %>
+
+    <% unless @tags_to_associate.empty? %>
+      <h4><%= ts("Add Nominated Associations") %></h4>
+      <fieldset>
+        <ul class="navigation actions">
+      		<li><a href="#" class="check_all">Check All</a></li>
+      		<li><a href="#" class="check_none">Check None</a></li>
+        </ul>
+        <%= options_toggle("nominated_associations_to_add", @tags_to_associate.count) %>
+        <ul id="nominated_associations_to_add" class="options many">
+          <% @tags_to_associate.each do |tag| %>
+            <li>
+              <% association = @tag_set.tag_set_associations.build(:tag_id => tag.id, :parent_tagname => tag.parent_tagname) %>
+              <% tag_set_form.fields_for :tag_set_associations, association do |association_form| %>
+                <label>
+                  <%= tag.name %> (<%= tag.parent_tagname %>)
+                  <%= association_form.check_box :create_association %>
+                </label>
+                <%= association_form.hidden_field :tag_id, :value => tag.id %>
+                <%= association_form.hidden_field :parent_tagname, :value => tag.parent_tagname %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </fieldset>
+    <% end %>
+    
+    <h5><%= ts("Manually Add") %></h5>
+    <%= tag_set_form.fields_for :tag_set_associations %>
+    <p class="actions"><%= tag_set_form.link_to_add ts("Add Association"), :tag_set_associations %></p>
+
+  </fieldset>
+  
   
   <fieldset>
   	<legend><%= ts('Submit') %></legend> 
@@ -115,3 +185,4 @@
   </fieldset>
     
 <% end %>
+<div class="clear"><!--presentational--></div>

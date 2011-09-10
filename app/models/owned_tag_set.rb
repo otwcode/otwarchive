@@ -11,8 +11,8 @@ class OwnedTagSet < ActiveRecord::Base
   belongs_to :tag_set, :dependent => :destroy
   accepts_nested_attributes_for :tag_set  
   
-  has_many :tag_wrangling_requests, :dependent => :destroy
-  accepts_nested_attributes_for :tag_wrangling_requests, :allow_destroy => true, :reject_if => proc { |attrs| !attrs[:do_request] }
+  has_many :tag_set_associations, :dependent => :destroy
+  accepts_nested_attributes_for :tag_set_associations, :allow_destroy => true, :reject_if => proc { |attrs| !attrs[:create_association] || !attrs[:tag_id] }
 
   has_many :tag_set_nominations, :dependent => :destroy
   has_many :fandom_nominations, :through => :tag_set_nominations
@@ -131,6 +131,11 @@ class OwnedTagSet < ActiveRecord::Base
     true unless $redis.zscore("autocomplete_tagset_#{tag_set.id}", tagname).nil?
   end
 
+  # returns an array of arrays [id, name]
+  def tags_in_set
+    $redis.zrange("autocomplete_tagset_#{tag_set.id}", 0, -1).map {|redis_tag| Tag.parse_autocomplete_value(redis_tag)}
+  end
+
   def already_nominated?(tagname)
     TagNomination.joins(:tag_set_nomination => :owned_tag_set).where("tag_set_nominations.owned_tag_set_id = ?", self.id).exists?(:tagname => tagname)
   end
@@ -151,14 +156,6 @@ class OwnedTagSet < ActiveRecord::Base
   ##########################
   # MANAGING TAGS
   
-  def noncanonical_tags
-    Tag.joins(:tag_set).where(:tag_set_id => self.tag_set_id).where(:canonical => false)
-  end
-
-  def unparented_tags
-    Tag.joins(:tag_set).where(:tag_set_id => self.tag_set_id).with_no_parents
-  end
-
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,
   # so we just pass them through method_missing

@@ -72,10 +72,12 @@ Otwarchive::Application.routes.draw do
         post :destroy_multiple
       end
     end
-    resources :tag_wrangling_requests, :only => [:index]
-    member do
-      get :request_wrangling
-      post :submit_wrangling
+    resources :tag_set_associations, :only => [:index]
+  end
+
+  resources :tag_wrangling_requests, :only => [:index] do
+    collection do
+      put :update_multiple
     end
   end
 

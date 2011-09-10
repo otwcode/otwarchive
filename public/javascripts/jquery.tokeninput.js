@@ -32,13 +32,13 @@ var DEFAULT_SETTINGS = {
     onResult: null,
     onAdd: null,
     onDelete: null,
-  noCache: false
+    noCache: false
 };
 
 // Default classes to use when theming
 var DEFAULT_CLASSES = {
     tokenList: "autocomplete",
-	sortable: "sortable",
+    sortable: "sortable",
     token: "added tag",
     tokenDelete: "delete",
     selectedToken: "selected added tag",
@@ -302,9 +302,9 @@ $.TokenList = function (input, url_or_data, settings) {
         })
         .insertBefore(hidden_input);
 
-	if(settings.makeSortable) {
-		token_list.addClass(settings.classes.sortable);
-	}
+    if(settings.makeSortable) {
+        token_list.addClass(settings.classes.sortable);
+    }
 
     // The token holding the input box
     var input_token = $("<li />")
@@ -339,15 +339,15 @@ $.TokenList = function (input, url_or_data, settings) {
         li_data = settings.onResult.call(hidden_input, li_data);
     }    
 
-	// clear the input
+    // clear the input
     $(input).val("");
     hidden_input.val("");
     input_box.val("");
 
-	// pre-populate the list
+    // pre-populate the list
     if(li_data && li_data.length) {
         if(typeof(li_data) === "string") {
-			insert_token(li_data, li_data);
+            insert_token(li_data, li_data);
         } else {
             $.each(li_data, function (index, value) {
                 insert_token(value.id, value.name);
@@ -395,9 +395,9 @@ $.TokenList = function (input, url_or_data, settings) {
           .insertBefore(input_token);
           
           if(settings.makeSortable) {
-			// use the jqueryUI Sortable method
-			// this_token.sortable();
-			// this_token.addClass("ui-state-default");
+            // use the jqueryUI Sortable method
+            // this_token.sortable();
+            // this_token.addClass("ui-state-default");
           };
 
         // The 'delete token' button
@@ -726,83 +726,96 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Do the actual search
     function run_search(query) {
-    if(!settings.noCache) {
-          var cached_results = cache.get(query);      
-    }
+        if(!settings.noCache) {
+            var cached_results = cache.get(query);      
+        }
         if(!settings.noCache && cached_results) {
             populate_dropdown(query, cached_results);
         } else {
-            // Are we doing an ajax search or local data search?
-            if(settings.url) {
-                // Extract exisiting get params
-                var ajax_params = {};
-                ajax_params.data = {};
-                if(settings.url.indexOf("?") > -1) {
-                    var parts = settings.url.split("?");
-                    ajax_params.url = parts[0];
-
-                    var param_array = parts[1].split("&");
-                    $.each(param_array, function (index, value) {
-                        var kv = value.split("=");
-                        ajax_params.data[kv[0]] = kv[1];
-                    });
-                } else {
-                    ajax_params.url = settings.url;
-                }
-
-                // Get live params
-                if(settings.liveParams) {
-                    var live_param_fields = settings.liveParams.split("&")
-                    $.each(live_param_fields, function (index, value) {
-                        var kv = value.split("=");
-                        var id_to_get = "#" + kv[1];
-						// this will work on both checkboxes and on text fields
-                        var id_contents = $(id_to_get).map(function(i,n){return $(n).val();}).get();
-                        if(id_contents) {
-                            ajax_params.data[kv[0]] = id_contents;
-                        }
-                    });
-                }
-
-                // Prepare the request
-                ajax_params.data[settings.queryParam] = query;
-                ajax_params.type = settings.method;
-                ajax_params.dataType = settings.contentType;
-                if(settings.crossDomain) {
-                    ajax_params.dataType = "jsonp";
-                }
-
-                // Attach the success callback
-                ajax_params.success = function(results) {
-                  if($.isFunction(settings.onResult)) {
-                      results = settings.onResult.call(hidden_input, results);
-                  }
-    		          if(!settings.noCache) {
-    		              cache.add(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
-    		          }
-
-                  // only populate the dropdown if the results are associated with the active search query
-                  if(input_box.val().toLowerCase() === query) {
-                      populate_dropdown(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
-                  }
-                };
-
-                // Make the request
-                $.ajax(ajax_params);
-            } else if(settings.local_data) {
-                // Do the search through local data
-                var results = $.grep(settings.local_data, function (row) {
-                    return row.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-                });
-
-                if($.isFunction(settings.onResult)) {
-                    results = settings.onResult.call(hidden_input, results);
-                }
-                cache.add(query, results);
-                populate_dropdown(query, results);
-            }
+            search_and_cache(query);
         }
     }
+
+    // Populate the cache with results and return the results
+    function search_and_cache(query) {
+        // Are we doing an ajax search or local data search?
+        if(settings.url) { // ajax search
+            ajax_search(query);
+        } else if(settings.local_data) {
+            // Do the search through local data
+            var results = $.grep(settings.local_data, function (row) {
+                return row.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+            });
+
+            if($.isFunction(settings.onResult)) {
+                results = settings.onResult.call(hidden_input, results);
+            }
+            cache.add(query, results);
+            populate_dropdown(query, results);            
+        }
+    }
+
+    // Run ajax query
+    function ajax_search(query) {
+        // Extract exisiting get params
+        var ajax_params = {};
+        ajax_params.data = {};
+        if(settings.url.indexOf("?") > -1) {
+            var parts = settings.url.split("?");
+            ajax_params.url = parts[0];
+
+            var param_array = parts[1].split("&");
+            $.each(param_array, function (index, value) {
+                var kv = value.split("=");
+                ajax_params.data[kv[0]] = kv[1];
+            });
+        } else {
+            ajax_params.url = settings.url;
+        }
+
+        // Get live params
+        if(settings.liveParams) {
+            var live_param_fields = settings.liveParams.split("&")
+            $.each(live_param_fields, function (index, value) {
+                var kv = value.split("=");
+                var id_to_get = "#" + kv[1];
+                // this will work on both checkboxes and on text fields
+                var id_contents = $(id_to_get).map(function(i,n){return $(n).val();}).get();
+                if(id_contents) {
+                    ajax_params.data[kv[0]] = id_contents;
+                }
+            });
+        }
+
+        // Prepare the request
+        ajax_params.data[settings.queryParam] = query;
+        ajax_params.type = settings.method;
+        ajax_params.dataType = settings.contentType;
+        if(settings.crossDomain) {
+            ajax_params.dataType = "jsonp";
+        }
+
+        // Attach the success callback
+        ajax_params.success = function(results) {
+            if($.isFunction(settings.onResult)) {
+                results = settings.onResult.call(hidden_input, results);
+            }
+
+            if(!settings.noCache) {
+                cache.add(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
+            }
+
+            // only populate the dropdown if the results are associated with the active search query
+            if(input_box.val().toLowerCase() === query) {
+                populate_dropdown(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
+            }
+        };
+
+        // Make the request
+        $.ajax(ajax_params);        
+    }
+    
+
 };
 
 // Really basic cache for the results

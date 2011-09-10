@@ -3,7 +3,7 @@
 <!--navigation, sorting and actions-->
 
   <h3 class="landmark">Navigation</h3>
-  <ul class="navigation" role="navigation">
+  <ul class="navigation actions" role="navigation actions">
     <% if @tag_set.nominated %>
   	  <li><%= link_to ts("Nominate"), new_tag_set_nomination_path(@tag_set) %></li>
   	<% end %>
@@ -11,7 +11,6 @@
       <% if @tag_set.tag_set_nominations.count > 0 %>
     	  <li><%= link_to ts("Review Nominations"), tag_set_nominations_path(@tag_set) %></li>
     	<% end %>
-    	<li><%= link_to ts("Request Wrangling"), request_wrangling_tag_set_path(@tag_set) %></li>
 	    <li><%= link_to ts("Edit"), edit_tag_set_path(@tag_set) %></li>
     	<% if @tag_set.user_is_owner?(current_user) %>
         <li><%= link_to ts("Delete"), tag_set_path(@tag_set),
@@ -37,12 +36,12 @@
       <dd>
         <%=raw sanitize_field(@tag_set, :description) %>
         <% if @tag_set.usable %>
-          <p class="notes">This tag set can be used in challenge settings by any user.</p>
+          <p>This tag set can be used in challenge settings by any user.</p>
         <% end %>
         <% if @tag_set.nominated %>
           <dt class="stats"><%= ts("Stats:")%></dt>
           <dd class="stats">
-            <p class="notes">This tag set is open for nominations from the public. Current number of nominations allowed per user: </p>
+            <p>This tag set is open for nominations from the public. Current number of nominations allowed per user: </p>
 			      <dl>
               <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
                 <dt><%= ts("#{tag_type.pluralize}: ") %></dt>
@@ -59,7 +58,7 @@
 
 <!--main content-->
 <% if @tag_set.visible || @tag_set.user_is_moderator?(current_user) %>
-  <h3 class="landmark"><%= ts("List of Tags") %></h3>
+  <h3 class="landmark"><%= ts("Listing Tags") %></h3>
 
   <% if @tag_type %>
     <%= cache("tag_set_show_#{@tag_set.tag_set.id}_#{@tag_type}") do %>
@@ -71,6 +70,6 @@
     <% end %> <!-- end cache -->
   <% end %>
 <% else %>
-  <p class="notes">The moderators have chosen not to make the tags in this set visible to the public (possibly while nominations are underway).</p>
+  <p class="notice">The moderators have chosen not to make the tags in this set visible to the public (possibly while nominations are underway).</p>
 <% end %>
 
