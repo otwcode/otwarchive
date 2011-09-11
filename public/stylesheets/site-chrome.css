@@ -57,6 +57,10 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 
 #main .navigation a, #main ul.edit-navigation a, .submit input, .submit a, #main .navigation input
          { background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
+#main .navigation a.nav-with-help
+         { background: transparent; border:0; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; margin-right: -1em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
+#main .navigation a.question
+         { background: transparent; border:0; border-right:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
 .submit input.text, #main .navigation input.text
          { cursor: text;}
 #main.admin_users-show .navigation form, #main.admin_users-show .navigation div
