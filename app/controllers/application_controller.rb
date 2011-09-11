@@ -44,8 +44,18 @@ protected
 public
 
   before_filter :fetch_admin_settings
-  def fetch_admin_settings    
-    @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+  def fetch_admin_settings
+    if Rails.env.development?
+      @admin_settings = AdminSetting.first
+      unless @admin_settings.banner_text.blank?
+        @bannertext = sanitize_field(@admin_settings, :banner_text).html_safe
+      end
+    else
+      @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+      unless @admin_settings.banner_text.blank?
+        @bannertext = Rails.cache.fetch("banner_text"){sanitize_field(@admin_settings, :banner_text).html_safe}
+      end
+    end
   end
 
   # store previous page in session to make redirecting back possible
