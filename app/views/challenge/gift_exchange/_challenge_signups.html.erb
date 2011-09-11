@@ -10,7 +10,9 @@
 
 <% unless @hide_navigation %>
   <ul class="navigation">
-    <li><%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv) %></li>
+    <li><%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv), html_options = {:class => "nav-with-help"} %>
+        <%= link_to_help "csv-download"%>
+    </li>
     <% if show_offer_description || show_request_description %>
       <li><%= link_to ts("Hide Descriptions"), 
           collection_signups_path(@collection, :show_descriptions => false, :show_urls => params[:show_urls]) %></li>
