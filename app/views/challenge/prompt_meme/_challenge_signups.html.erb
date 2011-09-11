@@ -12,7 +12,10 @@
 <% if (current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) || show_request_description || params[:hide_descriptions] || show_request_url || params[:hide_urls] %>
   <ul class="navigation">
     <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
-      <li><%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv) %></li>
+      <li>
+        <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv), html_options = {:class => "nav-with-help"} %>
+        <%= link_to_help "csv-download" %>
+      </li>
     <% end %>
     <% if show_request_description %>
       <li><%= link_to ts("Hide Descriptions"), 
