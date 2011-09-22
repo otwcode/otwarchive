@@ -17,24 +17,30 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 # or who have problematic works which need testing
 SEEDS = [
           "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling",
-          "Cesy", "cesytest", "Celandine", "Chandri", "ealusaid", "eel",
+          "Cesy", "cesytest", "Celandine", "Chandri", "eel",
           "elz", "erda", "Enigel", "hope", "Jaetion", "justira", "jetta_e_rus",
           "lim", "Lisztful", "melange", "mumble", "Rebecca", "rklyne", "Rustler",
           "Sidra", "staranise", "Stowaway", "testy", "Tel", "tomatopudding",
           "zelempa", "zoemathemata", "Zooey_Glass", "zlabya",
 ]
 
-# try to pick different types of collections and ones with challenges in different stages, if possible
+# a bunch of bigger collections (>250 works)
+# probably would be scooped up anyway, but just in case
 
-COLLECTIONS = [
-
+COLLECTION_SEEDS = [
+          "yuletide2009", "ladieschoice", "yuletidemadness2009", "female_focus",
+          "crossgen_slash", "PornBattleIX", "Remix2010", "yuletide2010", "fic_promptly",
+          "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
+          "Remix2011", "PornBattleXII",
 ]
 
 # Note: every NTH user (randomized) will have all their associated records dumped
 # many more than that users will be in the database, however because of associations
 # This number is also used to limit the number of readings, comments, and feedbacks
 # this number should increase as the archive grows to keep the decimated database a reasonable size
-NTH = 100
+NTH = 200
+# Every Mth work in a collection
+MTH = 50
 
 # private bookmarks and unpublished works are not selected in a multi-user dump
 MULTI = true
@@ -123,7 +129,7 @@ def write_model(thing)
   File.open(file, 'a') {|f| f.write(thing.sql_show_insert) }
 end
 
-### start work  ###
+### start work (I know it's linear instead of object oriented. sue me. or fix it yourself) ###
 
 FileUtils.mkdir_p(BACKUPDIR)
 FileUtils.chdir(BACKUPDIR)
@@ -132,17 +138,19 @@ USERS = []
 WORKS = []
 PSEUDS = []
 TAGS = []
+COLLECTIONS = []
 
 # the user is the starting point.
 SEEDS.each do |seed|
   user = User.find_by_login(seed)
+  raise "seed #{seed} is not a user!!!" unless user.is_a?(User)
   USERS << user
 end
-# random Nth user
+# add random Nth user
 User.find_in_batches(:batch_size => NTH ) {|users| USERS << users.sample } if MULTI
 
 # return an array of records associated with the users
-# but keep the works, pseuds and tags for later
+# but keep the collections, works, pseuds and tags for later
 def user_associations(users)
   x = []
   users.each do |u|
@@ -187,6 +195,7 @@ def user_associations(users)
 
     # most of the associations are actually through the pseuds
     u.pseuds.each do |p|
+      p.collections.each {|c| COLLECTIONS << c}
       p.comments.find_in_batches(:batch_size => NTH) do |comments|
         comment = comments.last
         x << comment
@@ -243,25 +252,71 @@ def user_associations(users)
           x << item
         end
       end
-      x << p.collections
-      p.collections.each do |c|
-        x << c.collection_profile
-        x << c.collection_preference
-        x << c.collection_participants
-        PSEUDS << c.collection_participants.map(&:pseud)
-      end
     end
   end
   x.flatten.compact.uniq
 end
 
-# For these users only, get all their associated records
+# dump the records associated with the USERS
 puts ""
-puts "Dumping records for #{USERS.compact.uniq.size} users (minus WORKS, PSEUDS & TAGS)"
+puts "Dumping records for #{USERS.compact.uniq.size} users (collecting COLLECTIONS, WORKS, PSEUDS & TAGS)"
 user_associations(USERS.compact.uniq).each {|item| write_model(item)}
 
-## Now deal with WORKS, PSEUDS, and TAGS.
-## WORKS first, because it adds more to PSEUDS and TAGS
+## Now deal with COLLECTIONS, WORKS, PSEUDS, and TAGS
+## COLLECTIONS first because it add more WORKS
+
+if MULTI
+  COLLECTION_SEEDS.each do |seed|
+    collection = Collection.find_by_name(seed)
+    raise "seed #{collection} is not a collection!!!" unless collection.is_a?(Collection)
+    COLLECTIONS << collection
+  end
+  COLLECTIONS.compact.each {|c| COLLECTIONS << c.parent }
+end
+
+# return an array of records associated with the collection
+# but keep the works and pseuds for later
+def collection_associations(items)
+  puts " collecting collection associations"
+  x = []
+  items.each do |collection|
+    puts " collecting #{collection.name}'s records"
+    # dump the collection itself
+    x << collection
+
+    # add related works.
+    # if the work is private or unrevealed it will get culled in the works_associations task
+    if MULTI
+      collection.works.find_in_batches(:batch_size => MTH ) {|work| WORKS << work }
+    else
+      # dunno if you should really get all the works in your collection, but we don't use the
+      # non-MULTI version right now anyway so it doesn't really matter
+      collection.works.each {|work| WORKS << work }
+    end
+
+    # add participants and their related pseuds
+    x << collection.collection_participants
+    collection.collection_participants.each {|participant| PSEUDS << participant.pseud }
+
+    # add the rest of the associations
+    x << collection.collection_profile
+    x << collection.collection_preference
+    x << collection.challenge
+    x << collection.prompts
+    x << collection.signups
+    x << collection.assignments
+    x << collection.claims
+  end
+  x.flatten.compact.uniq
+end
+
+# dump the records associated with the COLLECTIONS
+puts ""
+puts "Dumping records for #{COLLECTIONS.flatten.compact.uniq.size} collections (collecting WORKS & PSEUDS)"
+collection_associations(COLLECTIONS.flatten.compact.uniq).each {|item| write_model(item)}
+
+## Now deal with WORKS, PSEUDS, and TAGS
+## WORKS next, because it adds more to PSEUDS and TAGS
 
 # return an array of records associated with the works
 # but keep the pseuds and tags for later
@@ -271,42 +326,37 @@ def work_associations(items)
   items.each do |work|
     print "."; STDOUT.flush
     next unless (!work.unrevealed? && work.posted?) || !MULTI
-    x << work.taggings
-    TAGS << work.tags
-    x << work.creatorships
-    PSEUDS << work.pseuds
+    # dump the work itself
     x << work
+
+    # add associations for the work and its chapters (keeping tags and pseuds for later)
+    x << work.taggings
+    work.tags.each { |t| TAGS << t }
+    x << work.creatorships
+    work.pseuds.each {|p| PSEUDS << p }
     x << work.language
     x << work.hit_counter
     x << work.gifts
-    PSEUDS << work.gifts.map(&:pseud)
+    work.gifts.each {|g| PSEUDS << g.pseud }
     x << work.kudos
-    PSEUDS << work.kudos.map(&:pseud)
-    x << work.collection_items
-    x << work.collections
-    work.collections.each do |c|
-      x << c.collection_profile
-      x << c.collection_preference
-      x << c.collection_participants
-      PSEUDS << c.collection_participants.map(&:pseud)
-    end
+    work.kudos.each {|k| PSEUDS << k.pseud }
     x << work.serial_works
     x << work.series
     work.chapters.each do |c|
       x << c if c.posted? || !MULTI
-      PSEUDS << c.pseuds
+      c.pseuds.each {|p| PSEUDS << p }
       x << c.comments
-      PSEUDS << c.comments.map(&:pseud)
+      c.comments.each { |c| PSEUDS << c.pseud }
       x << c.kudos
-      PSEUDS << c.kudos.map(&:pseud)
+      c.kudos.each { |k| PSEUDS << k.pseud }
     end
   end
   x.flatten.compact.uniq
 end
 
 puts ""
-puts "Dumping records for #{WORKS.compact.uniq.size} works (minus PSEUDS & TAGS)"
-work_associations(WORKS.compact.uniq).each {|item| write_model(item)}
+puts "Dumping records for #{WORKS.flatten.compact.uniq.size} works (collecting PSEUDS & TAGS)"
+work_associations(WORKS.flatten.compact.uniq).each {|item| write_model(item)}
 
 # return an array of records associated with the tags
 def tag_assocations(tags)
@@ -326,17 +376,17 @@ end
 
 original_tags = TAGS.flatten.compact.uniq
 puts ""
-puts "Dumping records for the associations for #{original_tags.size} tags (minus PSEUDS)"
+puts "Dumping records for the associations for #{original_tags.size} tags (collecting PSEUDS)"
 tag_assocations(original_tags).each {|item| write_model(item)}
 
 new_tags = TAGS.flatten.compact.uniq - original_tags
 puts ""
-puts "Dumping records for the associations for #{new_tags.size} more tags (minus PSEUDS)"
+puts "Dumping records for the associations for #{new_tags.size} more tags (collecting PSEUDS)"
 tag_assocations(new_tags).each {|item| write_model(item)}
 
 more_tags = TAGS.flatten.compact.uniq - original_tags - new_tags
 puts ""
-puts "Dumping records for the associations for #{more_tags.size} more tags (minus PSEUDS)"
+puts "Dumping records for the associations for #{more_tags.size} more tags (collecting PSEUDS)"
 tag_assocations(new_tags).each {|item| write_model(item)}
 
 # stop after three levels of tags, that's enough wrangling for a decimated database
@@ -361,8 +411,7 @@ puts ""
 puts "Dumping records for #{PSEUDS.flatten.compact.uniq.size} pseuds"
 pseud_associations(PSEUDS.flatten.compact.uniq).each {|item| write_model(item)}
 
-
-# dump models not directly associated with users
+# dump models not gathered elsewhere
 if MULTI
   # roles are associated with users, but we need them all
   puts ""
