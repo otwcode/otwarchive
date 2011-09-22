@@ -2,6 +2,8 @@
 <h2>
   <% if @user %>
     <%= ts("%{user_name}'s Tag Sets", :user_name => @user.login) %> <%= link_to_help 'tagset-about' %>
+  <% elsif @restriction %>
+    <%= ts("Tag Sets Used In This Challenge") %>
   <% elsif @tag_sets.empty? %>
     <%= ts("Sorry, there were no tag sets found.") %>
   <% elsif @query %>
@@ -23,7 +25,7 @@
 
 <% if logged_in? %>
     <h3 class="landmark">Navigation</h3>
-    <ul class="navigation actions" role="navigation actions">
+    <ul class="navigation actions" role="navigation">
     	<li><%= link_to ts("New Tag Set"), new_tag_set_path %></li>
     	<li><%= link_to ts("Tags"), tags_path %></li>
     </ul>

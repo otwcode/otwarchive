@@ -72,6 +72,9 @@ class Tag < ActiveRecord::Base
   has_many :set_taggings, :dependent => :destroy
   has_many :tag_sets, :through => :set_taggings
   has_many :owned_tag_sets, :through => :tag_sets
+  
+  has_many :tag_set_associations, :dependent => :destroy
+  has_many :parent_tag_set_associations, :class_name => 'TagSetAssociation', :foreign_key => 'parent_tag_id', :dependent => :destroy
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -278,7 +281,8 @@ class Tag < ActiveRecord::Base
 
 
   # Get tags that are either above or below the average popularity
-  def self.with_popularity_relative_to_average(options = {:factor => 1, :include_meta => false, :greater_than => false, :names_only => false})
+  def self.with_popularity_relative_to_average(options = {})
+    options.reverse_merge!({:factor => 1, :include_meta => false, :greater_than => false, :names_only => false})
     comparison = "<"
     comparison = ">" if options[:greater_than]
 
@@ -360,24 +364,27 @@ class Tag < ActiveRecord::Base
   end
   
   # look up tags that have been wrangled into a given fandom
-  def self.autocomplete_fandom_lookup(search_param, tag_type, fandom, fallback=true)
+  def self.autocomplete_fandom_lookup(options = {})
+    options.reverse_merge!({:term => "", :tag_type => "character", :fandom => "", :fallback => true})
+    search_param = options[:term]
+    tag_type = options[:tag_type]
+    fandoms = Tag.get_search_terms(options[:fandom])
+      
     # fandom sets are too small to bother breaking up
     # we're just getting ALL the tags in the set(s) for the fandom(s) and then manually matching
     results = []
-    fandoms = fandom.is_a?(Array) ? fandom.map {|f| f.split(',').map {|w| w.strip}}.flatten : (fandom.blank? ? [] : fandom.split(','))
-    search_regex = Regexp.new(Regexp.escape(search_param), Regexp::IGNORECASE)
     fandoms.each do |single_fandom|
-      single_fandom.downcase!
       if search_param.blank?
         # just return ALL the characters
         results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else
+        search_regex = Tag.get_search_regex(search_param)
         results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
       end
     end
-    if fallback && results.empty? && search_param.length > 0
+    if options[:fallback] && results.empty? && search_param.length > 0
       # do a standard tag lookup instead
-      Tag.autocomplete_lookup(search_param, "autocomplete_tag_#{tag_type}")
+      Tag.autocomplete_lookup(:search_param => search_param, :autocomplete_prefix => "autocomplete_tag_#{tag_type}")
     else
       results
     end

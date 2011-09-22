@@ -58,31 +58,23 @@
         <% unless restriction.owned_tag_sets.empty? %>
           <dt><%= prompt_restriction_form.label :tag_sets_to_remove, ts("Current Tag Sets (check to remove):") %></dt>
           <dd>
-            <%= options_section(prompt_restriction_form, 
-                              "prompt_restriction[tag_sets_to_remove][]", 
-                              "prompt_restriction_tag_sets_to_remove", 
-                              restriction.owned_tag_sets, 
-                              nil, "title", "id") %>
+            <%= checkbox_section(prompt_restriction_form, :tag_sets_to_remove, restriction.owned_tag_sets, :name_method => "title") %>
           </dd>
         <% end %>
         <dt><%= prompt_restriction_form.label :tag_sets_to_add, ts("Tag Sets To Use: ") %></dt>
-        <dd><%= prompt_restriction_form.text_field :tag_sets_to_add, autocomplete_options("owned_tag_sets") %></dd>
+        <dd title="tag sets to use"><%= prompt_restriction_form.text_field :tag_sets_to_add, autocomplete_options("owned_tag_sets") %></dd>
 
         <% TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type| %>
           <dt><%= ts("#{tag_type.classify} Settings") %> <%= link_to_help("prompt-restriction-character-and-relationship") %></dt>
           <dd>
             <ul>
               <li>
-                <%= prompt_restriction_form.label "#{tag_type}_restrict_to_canonical", ts("Canonical only?") %>
-                <%= prompt_restriction_form.check_box "#{tag_type}_restrict_to_canonical", :checked => restriction.send("#{tag_type}_restrict_to_canonical") %>
-              </li>
-              <li>
-                <%= prompt_restriction_form.label "#{tag_type}_restrict_to_fandom", ts("Restrict to fandom?") %>
                 <%= prompt_restriction_form.check_box "#{tag_type}_restrict_to_fandom", :checked => restriction.send("#{tag_type}_restrict_to_fandom") %>
+              <%= prompt_restriction_form.label "#{tag_type}_restrict_to_fandom", ts("Fandom only?") %>
               </li>
               <li>
-                <%= prompt_restriction_form.label "#{tag_type}_restrict_to_tag_set", ts("Restrict to tag set?") %>
                 <%= prompt_restriction_form.check_box "#{tag_type}_restrict_to_tag_set", :checked => restriction.send("#{tag_type}_restrict_to_tag_set") %>
+                <%= prompt_restriction_form.label "#{tag_type}_restrict_to_tag_set", ts("Tag set fandom only?") %>
               </li>
             </ul>
           </dd>

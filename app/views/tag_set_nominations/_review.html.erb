@@ -2,8 +2,7 @@
 	<h2><%= ts("Review Nominations") %></h2>
 
 <h3 class="landmark">Navigation</h3>
-  <ul class="navigation actions" role="navigation actions">
-    <!--BACK END, link back to tag set index here-->
+  <ul class="navigation actions" role="navigation">
     <% @tag_types.each do |type| %>
   	  <li>
   	    <% if (@tag_type == type) %>
@@ -18,6 +17,7 @@
         :confirm => ts('Are you certain you want to clear nominations for this tag set? (This will NOT affect tags you have approved, but it will clear the history of rejected tags.)'),
         :method => :post %></li>
     <% end %>
+    <li><%= link_to ts("Back To %{title}", :title => @tag_set.title), tag_set_path(@tag_set) %></li>
   </ul>
 
 

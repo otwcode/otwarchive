@@ -12,7 +12,8 @@ class OwnedTagSet < ActiveRecord::Base
   accepts_nested_attributes_for :tag_set  
   
   has_many :tag_set_associations, :dependent => :destroy
-  accepts_nested_attributes_for :tag_set_associations, :allow_destroy => true, :reject_if => proc { |attrs| !attrs[:create_association] || !attrs[:tag_id] }
+  accepts_nested_attributes_for :tag_set_associations, :allow_destroy => true, 
+    :reject_if => proc { |attrs| !attrs[:create_association] || attrs[:tag_id].blank? || (attrs[:parent_tag_id].blank? && attrs[:parent_tagname].blank?) }
 
   has_many :tag_set_nominations, :dependent => :destroy
   has_many :fandom_nominations, :through => :tag_set_nominations
@@ -50,6 +51,11 @@ class OwnedTagSet < ActiveRecord::Base
     :only_integer => true, :less_than_or_equal_to => 20, :greater_than_or_equal_to => 0,
     :message => ts('must be an integer between 0 and 20.')
 
+  after_update :cleanup_outdated_associations
+  def cleanup_outdated_associations
+    tag_ids = SetTagging.where(:tag_set_id => self.tag_set.id)[:tag_id]
+    TagSetAssociation.where(:owned_tag_set_id => self.id).where("tag_id NOT IN (?) OR parent_tag_id NOT IN (?)", tag_ids, tag_ids).delete_all
+  end
 
   validate :no_midstream_nomination_changes
   def no_midstream_nomination_changes
@@ -151,21 +157,24 @@ class OwnedTagSet < ActiveRecord::Base
   def clear_nominations!
     TagSetNomination.where(:owned_tag_set_id => self.id).delete_all
   end
+
+
+  ##### MANAGING ASSOCIATIONS
   
-  
-  ##########################
-  # MANAGING TAGS
-  
-  # We want to have all the matching methods defined on
-  # TagSet available here, too, without rewriting them,
-  # so we just pass them through method_missing
-  def method_missing(method)
-    super || (tag_set && tag_set.respond_to?(method) ? tag_set.send(method) : super)
+  def load_batch_associations!(batch_associations, options = {})
+    options.reverse_merge!({:do_relationships => false})
+    association_lines = batch_associations.split("\n")
+    association_lines.each do |line|
+      children_names = line.split(',')
+      parent_tag_id = Tag.where(:name => children.pop.strip).value_of :id
+      next unless parent_tag_id
+      children_names.each do |child|
+        child_tag_id = Tag.where(:name => child.strip).value_of :id
+        assoc = tag_set_associations.build(:tag_id => child_tag_id, :parent_tag_id => parent_tag_id)
+        assoc.save
+      end
+    end
   end
 
-  def respond_to?(method, include_private = false)
-    super || tag_set.respond_to?(method, include_private)
-  end
-
-  
+    
 end

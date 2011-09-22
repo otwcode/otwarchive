@@ -5,7 +5,8 @@
         (<%= link_to(author.user_name, user_path(author.user)) %>)
       <% end %>
       </h4>
-      <!--BACK END- suggest comma separator instead of pipe-->
+      <!--BACK END- suggest comma separator instead of pipe -->
+      <!-- FRONT END: titles not infrequently contain commas though. maybe some other method of separating? -->
 		<% unless authored_items(author, @work_counts, @rec_counts).blank? %>
         <h5><%= authored_items(author, @work_counts, @rec_counts) %></h5>
       <% end %>

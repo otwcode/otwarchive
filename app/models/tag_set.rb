@@ -11,7 +11,7 @@ class TagSet < ActiveRecord::Base
   has_many :set_taggings, :dependent => :destroy
   has_many :tags, :through => :set_taggings
   
-  has_many :owned_tag_sets
+  has_one :owned_tag_set
 
   has_one :prompt
 
@@ -64,39 +64,59 @@ class TagSet < ActiveRecord::Base
 
   end
   
-  # this actually runs and saves the tags but only after validation
+  # this actually runs and saves the tags and updates the autocomplete
+  # NOTE: if more than one is set, the precedence is as follows:
+  # tagnames=
+  # tagnames_to_add/_remove
+  # [type]_tagnames
+  # [type]_tagnames_to_add/_remove
   after_save :assign_tags
   def assign_tags
-    if @tagnames
-      self.tags = tagnames_to_list(@tagnames)
-    end
-    if !@tagnames_to_add.blank?
-      self.tags += tagnames_to_list(@tagnames_to_add)
-    end
-    if !@tagnames_to_remove.blank?
-      self.tags -= @tagnames_to_remove.split(ArchiveConfig.DELIMITER_FOR_INPUT).map {|tname| Tag.find_by_name(tname.squish)}.compact
-    end
-    
+    tags_to_add = []
+    tags_to_remove = []
+
     TAG_TYPES.each do |type|
       if self.instance_variable_get("@#{type}_tagnames")
+        # explicitly set the list of type_tagnames
         new_tags = self.send("#{type}_taglist")
         old_tags = self.with_type(type.classify)
-        tags_to_add = new_tags - old_tags
-        tags_to_remove = old_tags - new_tags
-        self.tags -= tags_to_remove
-        self.tags += tags_to_add
+        tags_to_add += (new_tags - old_tags)
+        tags_to_remove += (old_tags - new_tags)
       else
+        #
         if !self.instance_variable_get("@#{type}_tagnames_to_add").blank?
-          self.tags += tagnames_to_list(self.instance_variable_get("@#{type}_tagnames_to_add"), type)
+          tags_to_add += tagnames_to_list(self.instance_variable_get("@#{type}_tagnames_to_add"), type)
         end
         if !self.instance_variable_get("@#{type}_tags_to_remove").blank?
           tagclass = type.classify.constantize
-          self.tags -= (self.instance_variable_get("@#{type}_tags_to_remove").map {|tag_id| tag_id.blank? ? nil : tagclass.find(tag_id)}.compact)
+          tags_to_remove += (self.instance_variable_get("@#{type}_tags_to_remove").map {|tag_id| tag_id.blank? ? nil : tagclass.find(tag_id)}.compact)
         end
       end
     end
-  end
 
+    # These override the type-specific 
+    if !@tagnames_to_add.blank?
+      tags_to_add = tagnames_to_list(@tagnames_to_add)
+    end
+    if !@tagnames_to_remove.blank?
+      tags_to_remove = @tagnames_to_remove.split(ArchiveConfig.DELIMITER_FOR_INPUT).map {|tname| Tag.find_by_name(tname.squish)}.compact
+    end
+
+    # And this overrides the add/remove-specific
+    if @tagnames
+      new_tags = tagnames_to_list(@tagnames)
+      tags_to_add = new_tags - self.tags
+      tags_to_remove = (self.tags - new_tags)
+    end
+    
+    # actually remove and add the tags, and update autocomplete
+    self.tags -= tags_to_remove
+    remove_tags_from_autocomplete(tags_to_remove)
+
+    self.tags += tags_to_add
+    add_tags_to_autocomplete(tags_to_add)
+  end
+  
   scope :matching, lambda {|tag_set_to_match|
     select("DISTINCT tag_sets.*").
     joins(:tags).
@@ -104,6 +124,9 @@ class TagSet < ActiveRecord::Base
     where("tag_sets.id != ? AND tags.id in (?)", tag_set_to_match.id, tag_set_to_match.tags).
     order("count(tags.id) desc")
   }
+
+
+  ### Various utility methods
   
   def +(other)
     TagSet.new(:tags => (self.tags + other.tags))
@@ -128,6 +151,21 @@ class TagSet < ActiveRecord::Base
   def empty?
     self.tags.empty?
   end
+  
+  # returns the topmost tag type we have in this set
+  def topmost_tag_type
+    topmost_type = ""
+    TagSet::TAG_TYPES.each do |tag_type| 
+      if self.tags.with_type(tag_type).exists? 
+        topmost_type = tag_type
+        break
+      end
+    end
+    topmost_type
+  end
+  
+  
+  ### Matching
   
   def match_rank(another, type=nil)
     # if we don't have any tags of this type, anything matches us
@@ -208,5 +246,72 @@ class TagSet < ActiveRecord::Base
         taglist.reject {|tagname| tagname.blank? }.map {|tagname| Tag.find_by_name(tagname.squish) || Freeform.find_or_create_by_name(tagname.squish)}
       end
     end
+
+
+  ### autocomplete
+  public
+
+  # set up autocomplete and override some methods
+  include AutocompleteSource
+  
+  def autocomplete_prefixes
+    prefixes = [ ]
+    prefixes
+  end
+  
+  def add_to_autocomplete(score = nil)
+    add_tags_to_autocomplete(self.tags)
+  end
+
+  def remove_from_autocomplete
+    $redis.del("autocomplete_tagset_#{self.id}")
+  end
+  
+  def add_tags_to_autocomplete(tags_to_add)
+    tags_to_add.each do |tag| 
+      value = tag.autocomplete_value
+      $redis.zadd("autocomplete_tagset_all_#{self.id}", 0, value)
+      $redis.zadd("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", 0, value)
+    end
+  end
+  
+  def remove_tags_from_autocomplete(tags_to_remove)
+    tags_to_remove.each do |tag| 
+      value = tag.autocomplete_value
+      $redis.zremove("autocomplete_tagset_all_#{self.id}", value)
+      $redis.zremove("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", value)
+    end
+  end
+    
+  # returns tags that are in ANY or ALL of the specified tag sets
+  def self.autocomplete_lookup(options={})
+    options.reverse_merge!({:term => "", :tag_type => "all", :tag_set => "", :in_any => true})
+    tag_type = options[:tag_type]
+    search_param = options[:term]
+    tag_sets = TagSet.get_search_terms(options[:tag_set])
+
+    combo_key = "autocomplete_tagset_combo_#{tag_sets.join('_')}"
+
+    # get the intersection of the wrangled fandom and the associations from the various tag sets
+    keys_to_lookup = tag_sets.map {|set| "autocomplete_tagset_#{tag_type}_#{set}"}.flatten
+    
+    if options[:in_any]
+      # get the union since we want tags in ANY of these sets
+      $redis.zunionstore(combo_key, keys_to_lookup, :aggregate => :max)
+    else
+      # take the intersection of ALL of these sets
+      $redis.zinterstore(combo_key, keys_to_lookup, :aggregate => :max)
+    end
+    results = $redis.zrange(combo_key, 0, -1)
+    # expire fast
+    $redis.expire combo_key, 1
+    
+    unless search_param.blank?
+      search_regex = Tag.get_search_regex(search_param)
+      return results.select {|tag| tag.match(search_regex)}
+    else
+      return results
+    end
+  end
   
 end

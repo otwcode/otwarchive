@@ -3,7 +3,7 @@
   <div class="header module">
     <h2><%= @tag.name %></h2>
     <% if can_wrangle? %>
-    <ul class="navigation actions" role="navigation actions">
+    <ul class="navigation actions" role="navigation">
       <li><%= link_to 'Edit', {:controller => :tags, :action => :edit, :id => @tag} %> </li>
       <li><%= tag_comment_link(@tag) %></li>  
     </ul>

@@ -73,6 +73,12 @@ Otwarchive::Application.routes.draw do
       end
     end
     resources :tag_set_associations, :only => [:index]
+    member do
+      get :batch_load
+      put :do_batch_load
+      get :review_associations
+      put :update_associations
+    end
   end
 
   resources :tag_wrangling_requests, :only => [:index] do
@@ -288,8 +294,6 @@ Otwarchive::Application.routes.draw do
   #### COLLECTIONS ####
 
   resources :gifts
-  resources :prompt_restrictions
-  resources :tag_sets, :only => [:show]
   resources :prompts
   resources :collections do
     collection do

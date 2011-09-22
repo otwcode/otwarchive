@@ -392,8 +392,8 @@ class Collection < ActiveRecord::Base
     
     if !filters[:title].blank?
       # we get the matching collections out of autocomplete and use their ids
-      ids = Collection.autocomplete_lookup(filters[:title], 
-                filters[:closed].blank? ? "autocomplete_collection_all" : (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open")
+      ids = Collection.autocomplete_lookup(:search_param => filters[:title], 
+                :autocomplete_prefix => (filters[:closed].blank? ? "autocomplete_collection_all" : (filters[:closed] ? "autocomplete_collection_closed" : "autocomplete_collection_open"))
              ).map {|result| Collection.id_from_autocomplete(result)}
       query = query.where("collections.id in (?)", ids)
     else

@@ -9,7 +9,7 @@ class ChallengeRequestsController < ApplicationController
       redirect_to '/' and return
     end
     unless @collection.challenge_type == "PromptMeme" || (@collection.challenge_type == "GiftExchange" && @collection.challenge.user_allowed_to_see_requests_summary?(current_user))
-      flash.now[:notice] = ts("You are not allowed to view requests summary!")
+      flash.now[:notice] = ts("You are not allowed to view the requests summary!")
       redirect_to collection_path(@collection) and return
     end
   end

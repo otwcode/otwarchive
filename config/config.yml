@@ -154,6 +154,9 @@ FREEFORM_CATEGORY_NAME: 'Additional Tags'
 COMMON_CATEGORY_NAME: 'Common'
 BANNED_CATEGORY_NAME: 'Banned'
 
+# DATE TIME FORMAT see http://ruby-doc.org/core/classes/Time.html#M000392
+DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p %Z'
+
 # SEARCH TIPS
 SEARCH_TIPS: ['tag: arthur/merlin, words: >1000', 'words: 100', 'tag: buffy gen teen "no archive warnings"', 'tag: lex slash (mature|explicit)', '"cerulean orbs"']
 

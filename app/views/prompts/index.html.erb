@@ -8,22 +8,27 @@
   <!-- view in user dashboard -->
 
   <h2><%= ts("Challenge Signups for %{user}", :user => @user.login) %></h2>
-
-  <table>
-    <tr>
-      <th>Pseud</th>
-      <th>Collection</th>
-      <th>Manage</th>
+<!--TABLEWATCH!!-->
+  <table summary="">
+    <caption></caption>
+    <thead>
+      <tr>
+      <th scope="col">Pseud</th>
+      <th scope="col">Collection</th>
+      <th scope="col">Manage</th>
     </tr>
+  </thead>
+  <tbody>
     <% @challenge_signups.each do |challenge_signup| %>
       <tr>
-        <td><%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup) %></td>
+        <th scope="row"><%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup) %></td>
         <td><%= link_to challenge_signup.collection.title, challenge_signup.collection %></td>
         <td class="navigation">
           <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
         </td>
       </tr>
     <% end %>
+  </tbody>
   </table>
 
 <% end %>

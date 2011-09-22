@@ -324,6 +324,7 @@ module ApplicationHelper
   end
   
   def time_in_zone(time, zone=nil, user=User.current_user)
+    return ts("(no time specified)") if time.blank?
     zone = ((user && user.is_a?(User) && user.preference.time_zone) ? user.preference.time_zone : Time.zone.name) unless zone
     time_in_zone = time.in_time_zone(zone)
     time_in_zone_string = time_in_zone.strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> 
@@ -350,77 +351,123 @@ module ApplicationHelper
       <img src=\"/images/envelope_icon.gif\" alt=\"#{h(user.login)}'s email\">
     </a>".html_safe
   end
-  
-  # toggle an options (scrollable checkboxes) section of a form to show all of the options
-  def options_toggle(options_id, options_size)
-    toggle_show = content_tag(:a, ts("Show all %{options_size} options", :options_size => options_size), 
-                              :class => "toggle actions", :id => "#{options_id}_show")
 
-    toggle_hide = content_tag(:a, ts("Collapse options"), :style => "display: none;",
-                              :class => "toggle actions", :id => "#{options_id}_hide")
+  # these two handy methods will take a form object (eg from form_for) and an attribute (eg :title or '_destroy')
+  # and generate the id or name that Rails will output for that object
+  def field_attribute(attribute)
+    attribute.to_s.sub(/\?$/,"")
+  end
+
+  def name_to_id(name)
+    name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
+  end
+  
+  def field_id(form, attribute)
+    name_to_id(field_name(form, attribute))
+  end
+
+  def field_name(form, attribute)
+    "#{form.object_name}[#{field_attribute(attribute)}]"
+  end
+  
+  def nested_field_id(form, nested_object, attribute)
+    name_to_id(nested_field_name(form, nested_object, attribute))
+  end
+  
+  def nested_field_name(form, nested_object, attribute)
+    "#{form.object_name}[#{nested_object.class.name.underscore}_attributes][#{nested_object.id}][#{field_attribute(attribute)}]"
+  end
+  
+  
+  # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
+  def checkboxes_toggle(checkboxes_id, checkboxes_size)
+    toggle_show = content_tag(:a, ts("Show all %{checkboxes_size} checkboxes", :checkboxes_size => checkboxes_size), 
+                              :class => "toggle", :id => "#{checkboxes_id}_show")
+
+    toggle_hide = content_tag(:a, ts("Collapse checkboxes"), :style => "display: none;",
+                              :class => "toggle", :id => "#{checkboxes_id}_hide")
 
     javascript_bits = content_for(:footer_js) {
       javascript_tag("$j(document).ready(function(){\n" +
-        "$j('##{options_id}_show').click(function() {\n" +
-          "$j('##{options_id}').attr('class', 'options all');\n" + 
-          "$j('##{options_id}_hide').show();\n" +
+        "$j('##{checkboxes_id}_show').click(function() {\n" +
+          "$j('##{checkboxes_id}').attr('class', 'module options all');\n" + 
+          "$j('##{checkboxes_id}_hide').show();\n" +
           "$j(this).hide();\n" +
         "});" + "\n" + 
-        "$j('##{options_id}_hide').click(function() {\n" +
-          "$j('##{options_id}').attr('class', 'options#{options_size > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''}');\n" +
-          "$j('##{options_id}_show').show();\n" +
+        "$j('##{checkboxes_id}_hide').click(function() {\n" +
+          "$j('##{checkboxes_id}').attr('class', 'module options#{checkboxes_size > ArchiveConfig.OPTIONS_TO_SHOW ? ' many' : ''}');\n" +
+          "$j('##{checkboxes_id}_show').show();\n" +
           "$j(this).hide();\n" +
         "});\n" +
       "})")
     }
-    toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide + "\n".html_safe + javascript_bits)
+    toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide + "\n".html_safe + javascript_bits, :class => "actions")
   end
-
+  
+  # FRONT END: is this and the toggle now formatted properly? (NB in the signup form this is currently displaying to the left of the inline checkboxes)
+  #
   # create a scrollable checkboxes section for a form that can be toggled open/closed
   # form: the form this is being created in
-  # fieldname: the fieldname for the field being filled in by the checkboxes -- eg "work[tagnames][]"
-  # id: the base id for the checkbox fields -- eg "work_tagnames"
-  # options: the array of options (which should be objects of some sort)
-  # options_checked_method: a method that can be run on the object of the form to get back a list 
+  # attribute: the attribute being set 
+  # choices: the array of options (which should be objects of some sort)
+  # checked_method: a method that can be run on the object of the form to get back a list 
   #         of currently-set options
-  # option_name_method: a method that can be run on each individual option to get its pretty name for labelling
+  # name_method: a method that can be run on each individual option to get its pretty name for labelling (typically just "name")
+  # value_method: a value that can be run to get the value of each individual option
+  # 
   #
   # See the prompt_form in challenge signups for example of usage
-  def options_section(form, fieldname, id, options, options_checked_method, option_name_method="name", option_value_method="id", option_disabled=false)
-    size = options.size
-    options_id = "#{id}_options"
+  def checkbox_section(form, attribute, choices, options = {})
+    options = {
+      :checked_method => nil, 
+      :name_method => "name", 
+      :value_method => "id", 
+      :disabled => false,
+      :include_toggle => true,
+      :checkbox_side => "left",
+    }.merge(options)
     
-    options_checkboxes = options.map do |option|
-      checkbox_id = "#{id}_#{option.id}"
-      checkbox_is_checked = options_checked_method ? form.object.send(options_checked_method).include?(option) : false
-      checkbox_name = option.send(option_name_method)
-      checkbox_value = option.send(option_value_method)
+    field_name = options[:field_name] || field_name(form, attribute)
+    field_name += '[]'
+    base_id = options[:field_id] || field_id(form, attribute)
+    checkboxes_id = "#{base_id}_checkboxes"
+    opts = options[:disabled] ? {:disabled => "true"} : {}
+    already_checked = options[:checked_method] ? form.object.send(options[:checked_method]) : []
+    
+    checkboxes = choices.map do |choice|
+      is_checked = options[:checked_method] ? already_checked.include?(choice) : false
+      display_name = choice.send(options[:name_method]).html_safe
+      value = choice.send(options[:value_method])
+      checkbox_id = "#{base_id}_#{name_to_id(value)}"
+      checkbox = check_box_tag(field_name, value, is_checked, opts.merge({:id => checkbox_id}))
       checkbox_and_label = label_tag checkbox_id, :class => "action" do 
-        if option_disabled
-          check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id, :disabled => "true") + checkbox_name
-        else
-          check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id) + checkbox_name
-        end
+        options[:checkbox_side] == "left" ? checkbox + display_name : display_name + checkbox
       end
       content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
     end.join("\n").html_safe
+    checkboxes_ul = content_tag(:ul, checkboxes)
 
     # reset the tiger striping
     reset_cycle("tigerstriping")
 
-    # if there are only a few options, don't show the scrolling and the toggle
-    if size <= ArchiveConfig.OPTIONS_TO_SHOW
-      content_tag(:ul, options_checkboxes, :id => options_id) + hidden_field_tag(fieldname, " ")
-    else
-      # return the toggle, the options in a scrollable field, and a hidden field 
-      # to ensure the results are sent even if the user has unchecked all the options
-      options_toggle(options_id, size) + 
-        "\n".html_safe +
-        content_tag(:ul, options_checkboxes, :id => options_id, 
-                    :class => "options#{size > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''}") + 
-        "\n".html_safe +
-        hidden_field_tag(fieldname, " ")
+    # if there are only a few choices, don't show the scrolling and the toggle
+    size = choices.size
+    css_class = "module options"
+    toggle = "".html_safe
+    if size > ArchiveConfig.OPTIONS_TO_SHOW
+      toggle = checkboxes_toggle(checkboxes_id, size) if options[:include_toggle]
+      css_class += " many"
     end
+      
+    # We wrap the whole thing in a div module with the classes
+    return content_tag(:div, toggle + checkboxes_ul + hidden_field_tag(field_name, " "), :id => checkboxes_id, :class => css_class)
+  end
+  
+  def check_all_none
+    '<ul class="navigation actions">
+      <li><a href="#" class="check_all">Check All</a></li>
+      <li><a href="#" class="check_none">Check None</a></li>
+    </ul>'.html_safe
   end
     
 end # end of ApplicationHelper

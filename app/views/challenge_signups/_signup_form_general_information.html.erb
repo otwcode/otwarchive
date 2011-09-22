@@ -1,0 +1,21 @@
+<fieldset>
+  <legend>General Information</legend>
+  <h3 class="landmark">General Information</h3>
+  <% if @challenge.signup_instructions_general %>
+    <blockquote class="userstuff">
+      <%=raw sanitize_field(@challenge, :signup_instructions_general) %>
+    </blockquote>
+  <% end %>
+  <dl>
+    <dt><%= form.label :pseud_id, ts("Name: ") -%></dt>
+    <dd>
+      <% if form.object.new_record? && current_user.pseuds.size > 1 %>
+        <%= form.select :pseud_id, options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud.id) %>
+      <% else %>
+        <% pseud = form.object.new_record? ? current_user.default_pseud : form.object.pseud %>
+        <span class="byline"><%= pseud.byline %></span>
+        <%= form.hidden_field :pseud_id, :value => pseud.id %>
+      <% end %>
+    </dd>
+  </dl>
+</fieldset>

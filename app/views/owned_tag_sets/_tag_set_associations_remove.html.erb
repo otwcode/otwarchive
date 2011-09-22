@@ -1,0 +1,20 @@
+<% # expects "form" and @tag_set %>
+<fieldset>
+  <dl>
+    <dt class="note"><%= ts("Currently in set")%></dt>
+    <dd>
+      <%= check_all_none %>
+      <ul class="tagset">
+        <% @tag_set.tag_set_associations.joins(:tag, :parent_tag).order("parent_tags_tag_set_associations.name, tags.name").each do |association| %>
+          <li>
+            <% id = field_id(form, "tag_set_association_attributes") %>
+            <label class="action" for="<%= nested_field_id(form, association, "_destroy") %>">
+              <%= association.tag.name %> (<%= association.parent_tag.name %>)
+              <%= check_box_tag nested_field_name(form, association, "_destroy") %>
+            </label>
+          </li>
+        <% end %>
+      </ul>
+    </dd>
+  </dl>
+</fieldset>

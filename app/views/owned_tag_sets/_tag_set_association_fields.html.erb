@@ -3,11 +3,12 @@
     <dt><%= f.label :tag_id, ts("Tag: ") %></dt>
     <dd>
       <%= f.hidden_field :create_association, :value => true %>
-      <%= f.select :tag_id, options_for_select(@tags_in_set, f.object.tag_id) %>
+      <%= f.select :tag_id, options_for_select(@child_tags_in_set, f.object.tag_id), :include_blank => true %>
     </dd>
     <dt><%= f.label :parent_tag_id, ts("Parent tag: ") %></dt>
-    <dd><%= f.select :parent_tag_id, options_for_select(@tags_in_set, f.object.parent_tag_id) %></dd>
+    <dd><%= f.select :parent_tag_id, options_for_select(@parent_tags_in_set, f.object.parent_tag_id), :include_blank => true %></dd>
+    <dt class="landmark">Cancel</dt>
+    <!--FRONT END, DON'T FORGET TO READD SUBMIT AFTER SKINS-->
+    <dd class="actions"><%= f.link_to_remove ts("Cancel") %></dd>
   </dl>
-  
-  <p class="actions"><%= f.link_to_remove ts("Cancel") %></p>
 </fieldset>

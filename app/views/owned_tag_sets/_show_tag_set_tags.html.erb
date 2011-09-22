@@ -1,5 +1,5 @@
 <% if @tag_type %>
-  <h4>Tags by <%= @tag_type.classify.pluralize %> (<%= @tags.count %>)</h4>
+  <h4><%= @tag_type.classify.pluralize %> (<%= @tags.count %>)</h4>
 
   <% if @tag_type == "fandom" && @tags.count > ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
 
@@ -10,7 +10,7 @@
           <li class="category <%= cycle :odd, :even %>">
   			    <h3><%= medium.name %> (<%= @tags.with_parents([medium]).count %>) <%= expand_contract_shuffle("list_for_media_#{medium.id}") %></h3>
             <ol id="list_for_media_<%= medium.id %>" class="tags">
-              <%= @tags.with_parents([medium]).by_name_without_articles.map {|tag| content_tag(:li, tag.name)}.join("\n").html_safe %>
+              <%= tag_relation_to_list @tags.with_parents([medium]) %>
             </ol>
         	</li>
         <% end %>
@@ -19,7 +19,7 @@
         <li class="category">
   		    <h3>No Media Specified (<%= @tags.with_no_parents.count %>)</h3>
           <ol class="tags">
-            <%= @tags.with_no_parents.by_name_without_articles.map {|tag| content_tag(:li, tag.name)}.join("\n").html_safe %>
+            <%= tag_relation_to_list @tags.with_no_parents %>
           </ol>
   	    </li>
       <% end %>
@@ -29,12 +29,13 @@
 
     <!-- sort tags out by fandom -->    
     <ol class="tagset fandom index">
-	    <% @tag_set.with_type("fandom").by_name_without_articles.each do |fandom| %>
+      
+	    <% @tag_set.with_type("fandom").by_name_without_articles.each do |fandom_id, fandom_name| %>
         <% if @tags.with_parents([fandom]).count > 0 %>
           <li class="category <%= cycle :odd, :even %>">
 	          <h3><%= fandom.name %> (<%= @tags.with_parents([fandom]).count %>) <%= expand_contract_shuffle("list_for_fandom_#{fandom.id}") %></h3>
             <ol id="list_for_fandom_<%= fandom.id %>" class="tags">
-              <%= @tags.with_parents([fandom]).by_name_without_articles.map {|tag| content_tag(:li, tag.name)}.join("\n").html_safe %>
+              <%= tag_relation_to_list @tags.with_parents([fandom]) %>
             </ol>
         	</li>
         <% end %>
@@ -43,7 +44,7 @@
         <li class="category">
 	        <h3>No Fandom Specified (<%= @tags.with_no_parents.count %>)</h3>
           <ol class="tags">
-            <%= @tags.with_no_parents.by_name_without_articles.map {|tag| content_tag(:li, tag.name)}.join("\n").html_safe %>
+            <%= tag_relation_to_list @tags.with_no_parents %>
           </ol>
     	  </li>
       <% end %>
@@ -53,7 +54,7 @@
 
     <!-- show all the tags alphabetically -->
     <ol class="tagset tags index">
-      <%= @tags.by_name_without_articles.map {|tag| content_tag(:li, tag.name)}.join("\n").html_safe %>
+      <%= tag_relation_to_list @tags %>
     </ol>
 
   <% end %>
@@ -65,7 +66,7 @@
     <% @tag_type = type %>
     <% @tags = @tags.with_type(type) %>
     <% if @tags.count > 0 %>
-      <%= render "tag_set_tags" %>
+      <%= render "show_tag_set_tags" %>
     <% end %>
   <% end %>
 

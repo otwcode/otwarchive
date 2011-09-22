@@ -70,7 +70,7 @@
       <li>
         <%= link_to ts("Remove prompt"), 
           collection_prompt_path(challenge_signup.collection, Prompt.find_by_id(prompt_id)), 
-          :confirm => ts("Are you sure? All information in this prompt will be lost."), :method => :delete %>
+          :confirm => ts("Are you sure? Everything in this prompt will be lost."), :method => :delete %>
       </li>
     <% end %>
   </ul>

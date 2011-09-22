@@ -1,4 +1,4 @@
-module TagSetNominationsHelper
+module TagSetsHelper
   
   def nomination_notes(limit)
     message = ""
@@ -51,6 +51,10 @@ module TagSetNominationsHelper
     else
       '<span class="unreviewed">?</span>'.html_safe
     end
+  end
+  
+  def tag_relation_to_list(tag_relation)
+    tag_relation.by_name_without_articles.value_of(:name).map {|tagname| content_tag(:li, tagname)}.join("\n").html_safe
   end
   
 end

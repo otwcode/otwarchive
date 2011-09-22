@@ -34,8 +34,48 @@ class PromptRestriction < ActiveRecord::Base
     end
   end
 
+  def required(tag_type)
+    self.send("#{tag_type}_num_required")
+  end
+
+  def allowed(tag_type)
+    self.send("#{tag_type}_num_allowed")
+  end
+  
+  def restricted?(tag_type, restriction)
+    self.send("#{tag_type}_restrict_to_#{restriction}")
+  end
+  
+  def allow_any?(tag_type)
+    self.send("allow_any_#{tag_type}")
+  end
+  
+  def require_unique?(tag_type)
+    self.send("require_unique_#{tag_type}")
+  end
+
+  def topmost_tag_type
+    topmost_type = ""
+    TagSet::TAG_TYPES.each do |tag_type| 
+      if self.allowed(tag_type) > 0 
+        topmost_type = tag_type
+        break
+      end
+    end
+    topmost_type
+  end
+  
+  def set_owned_tag_sets(sets)
+    self.owned_set_taggings.delete_all
+    current = self.owned_tag_sets
+    new_sets = sets - self.owned_tag_sets
+    remove_sets = self.owned_tag_sets - sets
+    self.owned_tag_sets += new_sets
+    self.owned_tag_sets -= remove_sets
+  end
+
   def tag_sets_to_add=(tag_set_titles)
-    tag_set_titles.split(',').each do |title|
+    tag_set_titles.split(',').reject {|title| title.blank?}.each do |title|
       title.strip!
       ots = OwnedTagSet.find_by_title(title)
       errors.add(:base, ts("We couldn't find the tag set {{title}}.", :title => h(title))) and return if ots.nil?
@@ -47,8 +87,9 @@ class PromptRestriction < ActiveRecord::Base
   end
   
   def tag_sets_to_remove=(tag_set_ids)
-    tag_set_ids.each do |id|
-      ots = OwnedTagSet.find(id)
+    tag_set_ids.reject {|id| id.blank?}.each do |id|
+      id.strip!
+      ots = OwnedTagSet.find(id) || nil
       if ots && self.owned_tag_sets.include?(ots)
         self.owned_tag_sets -= [ots]
       end
@@ -57,6 +98,26 @@ class PromptRestriction < ActiveRecord::Base
 
   def tag_sets_to_add; nil; end
   def tag_sets_to_remove; nil; end
+
+  # Efficiently get ids of all tagsets thanks to Valium
+  def owned_tag_set_ids
+    OwnedSetTagging.where(:set_taggable_type => self.class.name, :set_taggable_id => self.id).value_of :tag_set_id
+  end
+  
+  def tag_set_ids
+    TagSet.joins("INNER JOIN owned_tag_sets ON owned_tag_sets.tag_set_id = tag_sets.id
+                  INNER JOIN owned_set_taggings ON owned_set_taggings.owned_tag_set_id = owned_tag_sets.id").
+           where("owned_set_taggings.set_taggable_id = #{PromptRestriction.first.id} AND owned_set_taggings.set_taggable_type = 'PromptRestriction'").value_of :id
+  end
+  
+  def has_tags?(type="tag")
+    tags(type).exists?
+  end
+
+  def tags(type="tag")
+    type.classify.constantize.in_prompt_restriction(self)
+  end
+
 
   # If the user wants to initialize the tags, let them
 
@@ -94,18 +155,5 @@ class PromptRestriction < ActiveRecord::Base
   #   prompt_restriction.tag_set.save
   # end
 
-  def has_tags_of_type?(type)
-    type = type.classify
-    !self.tag_sets.all? {|ts| ts.with_type(type).empty?}
-  end
-
-  def tags_of_type(type)
-    type = type.classify
-    self.tag_sets.collect {|ts| ts.with_type(type)}.flatten.uniq
-  end
-  
-  def tags
-    self.tag_sets.inject([]) {|tags, ts| tags << ts.tags}.uniq
-  end
 
 end

@@ -62,7 +62,7 @@
         <li><%= link_to 'Edit', edit_collection_path(collection) %></li>
       <% end %>
       <% if collection.challenge && collection.challenge.signup_open && logged_in? %>
-        <%= render :partial => "challenge/#{challenge_class_name(collection)}/challenge_navigation_user", :locals => {:collection => collection} %>
+        <%= render "challenge/#{challenge_class_name(collection)}/challenge_navigation_user", :collection => collection %>
       <% end %>
     </ul>
   <% end %>

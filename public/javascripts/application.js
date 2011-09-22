@@ -67,8 +67,7 @@ function get_token_input_options(self) {
     preventDuplicates: true,
     tokenLimit: self.attr('autocomplete_token_limit'),
     liveParams: self.attr('autocomplete_live_params'),
-    makeSortable: self.attr('autocomplete_sortable'),
-    noCache: self.attr('autocomplete_no_cache')    
+    makeSortable: self.attr('autocomplete_sortable')
   };
 }
 
@@ -90,18 +89,6 @@ jQuery(function($) {
 
 
 ///////////////////////////////////////////////////////////////////
-
-// Tooltips for nominations
-jQuery(function($){
-  $('.nominations .notes').hide();
-  $('.nominations .hasnotes').each(function(){
-    $(this).qtip({
-       content: $(this).next('.notes').html(),
-       position: { my: 'bottom center', at: 'top center'},
-       style: {classes: 'ui-tooltip-shadow ui-tooltip-dark'}
-    });	
-  });
-});
 
 // expand, contract, shuffle
 jQuery(function($){
@@ -187,6 +174,18 @@ jQuery(function($){
     });
   });
 });
+
+// Timepicker
+jQuery(function($) {
+  $('.timepicker').datetimepicker({
+    ampm: true,
+    dateFormat: 'yy-mm-dd',
+    timeFormat: 'hh:mmTT',
+    hourGrid: 5,
+    minuteGrid: 10
+  });
+});
+
 
 
 // Hides expandable fields if Javascript is enabled

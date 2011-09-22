@@ -28,7 +28,7 @@
 <% if params[:show] && params[:show] !~ /suggested/ %>
   <h3>Add new <%= params[:show] %></h3>
   <%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
-    <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{@tag.type.downcase}") %>
+    <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{params[:show].singularize}") %>
     <%= hidden_field_tag :show, params[:show] %>
     <%= hidden_field_tag :sort_column, params[:sort_column] %>
     <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
@@ -60,7 +60,7 @@
     <table>
       <tr>
         <th>
-          <%= sort_link t('.sort.tag_name', :default => 'Tag Name'), :name, {:sort_default => true} %>
+          <%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
         </th>
         <% if params[:show] == "relationships" %>
         <th>Characters</th>
@@ -72,10 +72,10 @@
         <th>Synonym</th>
         <% end %>
         <th>
-          <%= sort_link t('.sort.created_at', :default => 'Created'), :created_at, {:desc_default => true} %>
+          <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
         </th>
         <th>
-          <%= sort_link t('.sort.taggings_count', :default => 'Taggings Count'), :taggings_count, {:desc_default => true} %>
+          <%= sort_link ts('Taggings Count'), :taggings_count, {:desc_default => true} %>
         </th>
         <th scope="col">Manage</th>
       </tr>

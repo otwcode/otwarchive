@@ -421,8 +421,9 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
 /* TAGSET (MEDIA) INDEX - main weighting will be removed (here and media) in new skin*/
 #main .tagset li.category {float:none; width:auto; margin:0.5em auto; min-height:inherit}
-.tagset .category h3:hover {background:#ddd; color:#111}
-
+.tagset .category h3:hover, #main ol.tagset.tags li:hover, #main ol.tagset .tags li:hover {background:#ddd; color:#111}
+.tagset li.category h3 a { color: #000; }
+#main ol.tagset.tags li, #main ol.tagset .tags li { line-height: 2; white-space: nowrap; background: #eee; padding: 0.25em; border: 0.1px solid black;} 
 
 /* TAG WRANGLERS INDEX */
  #main.tag_wranglers-index .index       { width:100%; margin-top: 2em;}

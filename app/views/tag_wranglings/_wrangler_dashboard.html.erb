@@ -1,5 +1,5 @@
-<div id="dashboard" role="navigation actions" class="wrangling">
-  <ul class="navigation actions" role="navigation actions">
+<div id="dashboard" role="navigation" class="wrangling">
+  <ul class="navigation" role="navigation">
     <% if current_user.is_a?(User) %>
     <li><%= span_if_current('Wrangling Home', tag_wrangler_path(current_user)) %></li>
     <% end %>

@@ -143,6 +143,13 @@ class ChallengeSignupsController < ApplicationController
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     else
       @challenge_signup = ChallengeSignup.new
+      @challenge.class::PROMPT_TYPES.each do |prompt_type|
+        @challenge.required(prompt_type).times do 
+          @challenge_signup.send("#{prompt_type}").build
+        end
+      end
+      
+      
     end
   end
 

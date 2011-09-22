@@ -69,6 +69,11 @@ gem 'nested_form'
 
 gem 'valium'
 
+gem 'best_in_place'
+
+gem 'timeliness'
+
+
 group :test do
   gem 'rspec-rails', '>=2.5.0'
   gem 'pickle'
