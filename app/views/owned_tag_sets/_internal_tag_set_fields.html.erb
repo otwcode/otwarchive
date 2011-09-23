@@ -2,41 +2,42 @@
 
 <% # cannot have fieldset as first child of dl, only of dt/dd %>
 
-    <% TagSet::TAG_TYPES.each do |tag_type| %>
-      <% unless TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
-        <% # we need this fieldset or the check all/none will happen too broadly %>
-        <fieldset class="tagset">
-          <dl>
-            <% unless @tag_set.tag_set.tags_with_type(tag_type).empty? %>
-              <dt><%= form.label "#{tag_type}_tags_to_remove".to_sym, ts("#{tag_type.classify.pluralize}") %></dt>
-              <dd title="<%= tag_type.classify.pluralize %>">
-                <%= check_all_none %>
-                <%= checkbox_section(form, "#{tag_type}_tags_to_remove", 
-                                  @tag_set.tag_set.with_type(tag_type).by_name_without_articles, 
-                                  :include_toggle => false, :checkbox_side => "right") %>
-              </dd>
-            <% end %>
-            <dt><%= form.label "#{tag_type}_tagnames_to_add".to_sym, ts("Add:") %></dt>
-            <dd title="add tags"><%= form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options("tag_type") %></dd>
-          </dl>
-        </fieldset>
-      <% else %>
-        <% if first_checkbox_type %>
-          <% # we've hit the first of the type of tags that just get checkboxes and no autocomplete so we close & reopen the fieldset and dl %>
-          <% first_checkbox_type = false %>         
+<% TagSet::TAG_TYPES.each do |tag_type| %>
+  <% unless TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
+    <% # we need this fieldset or the check all/none will happen too broadly %>
+    <fieldset class="tagset">
+      <dl>
+        <% if @tag_set.tag_set.tags_with_type(tag_type).empty? %>
+          <% add_label = ts("Add #{tag_type.classify.pluralize}:") %>
+        <% else %>
+          <% add_label = ts("Add:") %>
+          <dt><%= form.label "#{tag_type}_tags_to_remove".to_sym, ts("#{tag_type.classify.pluralize}") %></dt>
+          <dd title="<%= tag_type.classify.pluralize %>">
+            <%= check_all_none %>
+            <%= checkbox_section(form, "#{tag_type}_tags_to_remove", @tag_set.tag_set.with_type(tag_type).by_name_without_articles) %>
+          </dd>
         <% end %>
-
-        <% # we need this fieldset or the check all/none will happen too broadly %>
-        <fieldset class="tagset">    
-          <dl>
-          <% # ratings, etc %>
-          <dt><%= tag_type.classify.pluralize %></dt>
-          <dd><%= check_all_none %>
-          <%= checkbox_section(form, "#{tag_type}_tagnames_to_add", tag_type.classify.constantize.all,
-                               :checked_method => "#{tag_type}_taglist", 
-                               :value_method => "name", :include_toggle => false, :checkbox_side => "right") %></dd>
-        </dl>
-        </fieldset>
-      <% end %>
+        <dt><%= form.label "#{tag_type}_tagnames_to_add".to_sym, add_label %></dt>
+        <dd title="add tags"><%= form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options("tag_type") %></dd>
+      </dl>
+    </fieldset>
+  <% else %>
+    <% if first_checkbox_type %>
+      <% # we've hit the first of the type of tags that just get checkboxes and no autocomplete so we close & reopen the fieldset and dl %>
+      <% first_checkbox_type = false %>         
     <% end %>
+
+    <% # we need this fieldset or the check all/none will happen too broadly %>
+    <fieldset class="tagset">    
+      <dl>
+      <% # ratings, etc %>
+      <dt><%= tag_type.classify.pluralize %></dt>
+      <dd><%= check_all_none %>
+      <%= checkbox_section(form, "#{tag_type}_tagnames_to_add", tag_type.classify.constantize.all,
+                           :checked_method => "#{tag_type}_taglist", 
+                           :value_method => "name", :include_toggle => false, :checkbox_side => "right") %></dd>
+    </dl>
+    </fieldset>
+  <% end %>
+<% end %>
 

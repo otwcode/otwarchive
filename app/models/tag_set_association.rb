@@ -79,15 +79,25 @@ class TagSetAssociation < ActiveRecord::Base
 
     # get the union of the wrangled fandom and the associations from the various tag sets
     keys_to_lookup = tag_sets.map {|set| fandoms.map {|fandom| "autocomplete_association_#{tag_type}_#{set}_#{fandom}"}}.flatten
-    if options[:include_wrangled] == "true"
-      keys_to_lookup += fandoms.map {|fandom| "autocomplete_fandom_#{fandom}_#{tag_type}"}.flatten
+    keys_to_lookup += fandoms.map {|fandom| "autocomplete_fandom_#{fandom}_#{tag_type}"}.flatten
+
+    # if we don't want tags that aren't in the tag set(s), we need to first
+    # get the union of all the tags in the tag set(s), then get the intersection
+    # of those tags, and the associated tags
+    if options[:include_wrangled] == "false"
+      combo_key2 = combo_key + "2"
+      combo_key3 = combo_key + "3"
+      keys_for_intersect = tag_sets.map {|set| "autocomplete_tagset_#{tag_type}_#{set}"}.flatten
+      $redis.zunionstore(combo_key2, keys_to_lookup, :aggregate => :max)
+      $redis.zunionstore(combo_key3, keys_for_intersect, :aggregate => :max)
+      $redis.zintersect(combo_key, [combo_key2, combo_key3], :aggregate => :max)
+      $redis.expire combo_key2, 1
+      $redis.expire combo_key3, 1
+    else
+      $redis.zunionstore(combo_key, keys_to_lookup, :aggregate => :max)
     end
     
-    Rails.logger.info "!*!*!*!!! Looking up #{keys_to_lookup.join(', ')}"
-    
-    $redis.zunionstore(combo_key, keys_to_lookup, :aggregate => :max)
     results = $redis.zrevrange(combo_key, 0, -1)
-    # expire fast
     $redis.expire combo_key, 1
     
     unless search_param.blank?

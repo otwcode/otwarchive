@@ -1,6 +1,6 @@
 class PromptRestriction < ActiveRecord::Base
   has_many :owned_set_taggings, :as => :set_taggable, :dependent => :destroy
-  has_many :owned_tag_sets, :through => :owned_set_taggings
+  has_many :owned_tag_sets, :through => :owned_set_taggings, :select => "DISTINCT owned_tag_sets.*"
   has_many :tag_sets, :through => :owned_tag_sets
 
   # note: there is no has_one/has_many association here because this class may or may not
@@ -117,43 +117,5 @@ class PromptRestriction < ActiveRecord::Base
   def tags(type="tag")
     type.classify.constantize.in_prompt_restriction(self)
   end
-
-
-  # If the user wants to initialize the tags, let them
-
-  # TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
-  #   attr_accessor "#{tag_type}_init_less_than_average".to_sym
-  #   attr_accessor "#{tag_type}_init_greater_than_average".to_sym
-  #   attr_accessor "#{tag_type}_init_factor".to_sym
-  # end
-
-  # after_save :init_tags
-  # def init_tags
-  #   return if @tag_set_initialized
-  #   @tag_set_initialized = true
-  #   TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
-  #     if self.send("#{tag_type}_init_less_than_average") == "1" || self.send("#{tag_type}_init_greater_than_average") == "1"
-  #       initialize_tags(tag_type.classify.constantize, self.send("#{tag_type}_init_factor").to_f, (self.send("#{tag_type}_init_greater_than_average") == "1"))
-  #     end
-  #   end
-  # end
-
-  # tag initialization needs to be able to run in the background
-  # def initialize_tags(tag_type, factor, greater_than)
-  #   Resque.enqueue(PromptRestriction, self.id, tag_type, factor, greater_than)
-  # end
-  # @queue = :collection
-  # def self.perform(prompt_restriction_id, tag_type, factor, greater_than)
-  #   self.initialize_tags_in_background(prompt_restriction_id, tag_type, factor, greater_than)
-  # end
-  # def self.initialize_tags_in_background(prompt_restriction_id, tag_type, factor, greater_than)
-  #   prompt_restriction = PromptRestriction.find(prompt_restriction_id)
-  #   prompt_restriction.tag_set ||= TagSet.new
-  #   prompt_restriction.tag_set.send("#{tag_type.name.underscore}_tagnames=",
-  #             tag_type.with_popularity_relative_to_average(:factor => factor, :greater_than => greater_than, :names_only => true).
-  #                         collect(&:name))
-  #   prompt_restriction.tag_set.save
-  # end
-
 
 end

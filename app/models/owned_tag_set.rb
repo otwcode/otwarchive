@@ -86,7 +86,24 @@ class OwnedTagSet < ActiveRecord::Base
       where("owned_tag_sets.visible = true")
     end
   end
-
+  
+  def self.usable(user = User.current_user)
+    if user.is_a?(User)
+      select("DISTINCT owned_tag_sets.*").
+      joins("INNER JOIN tag_set_ownerships ON owned_tag_sets.id = tag_set_ownerships.owned_tag_set_id
+             INNER JOIN pseuds ON tag_set_ownerships.pseud_id = pseuds.id
+             INNER JOIN users ON pseuds.user_id = users.id").
+      where("owned_tag_sets.usable = true OR users.id = ?", user.id)
+    else
+      where("owned_tag_sets.usable = true")
+    end
+  end
+  
+  def self.in_prompt_restriction(restriction)
+    joins(:owned_set_taggings).
+    where("owned_set_taggings.set_taggable_type = ?", restriction.class.to_s).
+    where("owned_set_taggings.set_taggable_id = ?", restriction.id)
+  end
 
   #### MODERATOR/OWNER
 

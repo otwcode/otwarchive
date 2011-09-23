@@ -2,19 +2,23 @@
 <div class="removeme">
 <% # CODE NOTES: 
   # This is meant to be used as a nested form inside other forms, so that multiple prompts can be submitted within a single form. 
-  # It expects the local variables: 
-  # "form" for the prompt form 
-  # "index" representing which prompt this is, if there are multiple prompts being submitted
-  # "edit_record" showing if this is editing an existing prompt or adding a new one
+  # It expects a form being passed in
+  # If the local variable "index" is passed in, that will represent which prompt this is, if there are multiple prompts being submitted
+  # If the local variable "required" is passed in, this prompt is required
+  # See the challenge_signup form for an example of how this is used. 
+%>
 
-  # See the challenge_signup form for an example of how this is used. %>
-
+<% index ||= "" %>
+<% required ||= false %>
 <% prompt_type = form.object.class.name.downcase %>
 <% prompt_types = prompt_type.pluralize %>
 <% restriction = @challenge.send("#{prompt_type}_restriction") %>
 
 <fieldset class="tagset">
-  <% if index.is_a? String %>
+  <% if index.blank? %>
+    <legend><%= "#{prompt_type.capitalize}" %></legend>
+    <h3><%= "#{prompt_type.capitalize}" %></h3>  
+  <% elsif index.is_a? String %>
     <legend><%= "#{prompt_type.capitalize} #{index}" %></legend>
     <h3><%= "#{prompt_type.capitalize} #{index}" %></h3>
   <% else %>
@@ -58,22 +62,29 @@
       <% end %>
     <% end %>
     
-    <% if @collection.challenge_type == "PromptMeme"  %>
+    <% if @collection.challenge.respond_to?(:anonymous) %>
+      <% # REFACTOR: Anonymity should not be based on a type of challenge but on whether the specific challenge ALLOWS anonymity or not, 
+         # (currently the prompt memes don't allow a mod to specify no anonymity allowed)
+         # and should probably be done via an Anonymous user like the Orphan user.  
+      %>
       <dt>
         <%= form.label :anonymous, ts("Semi-anonymous prompt (note, this is not totally secure, and is still guessable in some places): ") %>
-        <% if edit_record %>
-        <% anon = form.object.anonymous %>
+        <% if form.object.new_record? %>
+          <% anon = @challenge.anonymous %>
         <% else %>
-        <% anon = @challenge.anonymous %>
+          <% anon = form.object.anonymous %>
         <% end %>
       </dt>
       <dd><%= form.check_box :anonymous, :checked => anon %></dd>
     <% end %>
+
+    <% unless required %>
+      <dt class="landmark">Remove</dt>
+      <!--FRONT END, DON'T FORGET TO READD SUBMIT AFTER SKINS-->
+      <dd class="actions"><%= link_to_remove_section ts("Remove?"), form %></dd>
+    <% end %>
      
   </dl>
-  <% unless required %>
-    <p class="navigation"><%= link_to_remove_section(ts("Remove?"), form) %></p>
-  <% end %>
 </fieldset>
 </div>
 

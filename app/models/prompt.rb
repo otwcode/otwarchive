@@ -104,8 +104,10 @@ class Prompt < ActiveRecord::Base
       TagSet::TAG_TYPES.each do |tag_type|
         # if we have a specified set of tags of this type, make sure that all the
         # tags in the prompt are in the set.
-        if restriction.has_tags?(tag_type)
-          disallowed_taglist = tag_set ? (eval("tag_set.#{tag_type}_taglist") - restriction.tags(tag_type)) : []
+        if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom")
+          # skip the check, there might be some tags in the set used just for adding associations
+        elsif restriction.has_tags?(tag_type)
+          disallowed_taglist = tag_set ? (tag_set.send("#{tag_type}_taglist") - restriction.tags(tag_type)) : []
           unless disallowed_taglist.empty?
             errors.add(:base, ts("^These tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
               :prompt_type => self.class.name,
@@ -126,7 +128,9 @@ class Prompt < ActiveRecord::Base
         if restriction.send("#{tag_type}_restrict_to_fandom")
           allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
           disallowed_taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") - allowed_tags : []
-          unless disallowed_taglist.empty?
+          # check for tag set associations
+          disallowed_taglist.reject! {|tag| TagSetAssociation.where(:tag_id => tag.id, :parent_tag_id => tag_set.fandom_taglist).exists?}
+          unless disallowed_taglist.empty?            
             errors.add(:base, ts("^Your %{prompt_type} has some %{tag_type} tags that are not in the selected fandom(s), %{fandom}: %{taglist} (If this is an error, please let us know via the support form!)",
                               :prompt_type => self.class.name,
                               :tag_type => tag_type, :fandom => tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),

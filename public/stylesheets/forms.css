@@ -155,10 +155,12 @@ duplication doesn't matter for now - auto_complete.css is gone in my webdev. max
 
 /*CUSTOM ELEMENT: IF MANY SHOW MORE
 should probably generalise this to all height-based show more toggles*/
-div.many{ overflow: auto; max-height:5em; border:1px solid #ddd;}
+div.many{ overflow: auto; max-height:10em; border:1px solid #ddd;}
 form .module p.actions 
         { background:#f3efec; border:1px solid #ddd; float:none; text-align:left; margin:0 !important }
 div.all { height: auto;}
+form div.lots ul li, form div.all ul li 
+        { display:block;}
 
 /* INTERACTION: SEARCH */
 .search p, li.search form p

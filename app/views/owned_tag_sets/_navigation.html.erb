@@ -4,10 +4,12 @@
     <% if @tag_set.nominated %>
   	  <li><%= span_if_current ts("Nominate"), new_tag_set_nomination_path(@tag_set) %></li>
   	<% end %>
-    <% if @tag_set.user_is_moderator?(current_user) && @tag_set.tag_set_nominations.count > 0 %>
+    <% if @tag_set.user_is_moderator?(current_user) %>
       <li><%= span_if_current ts("Edit"), edit_tag_set_path(@tag_set) %></li>
-  	  <li><%= span_if_current ts("Review Nominations"), tag_set_nominations_path(@tag_set) %></li>
-  	  <li><%= span_if_current ts("Review Associations"), review_associations_tag_set_path(@tag_set) %></li>
+      <% if @tag_set.tag_set_nominations.count > 0 %>
+  	    <li><%= span_if_current ts("Review Nominations"), tag_set_nominations_path(@tag_set) %></li>
+  	    <li><%= span_if_current ts("Review Associations"), review_associations_tag_set_path(@tag_set) %></li>
+  	  <% end %>
   	<% end %>
     <% if @tag_set.user_is_owner?(current_user) %>
       <li><%= span_if_current ts("Batch Load"), batch_load_tag_set_path(@tag_set) %></li>

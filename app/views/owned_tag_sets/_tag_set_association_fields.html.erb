@@ -9,6 +9,6 @@
     <dd><%= f.select :parent_tag_id, options_for_select(@parent_tags_in_set, f.object.parent_tag_id), :include_blank => true %></dd>
     <dt class="landmark">Cancel</dt>
     <!--FRONT END, DON'T FORGET TO READD SUBMIT AFTER SKINS-->
-    <dd class="actions"><%= f.link_to_remove ts("Cancel") %></dd>
+    <dd class="actions"><%= link_to_remove_section ts("Cancel"), f %></dd>
   </dl>
 </fieldset>

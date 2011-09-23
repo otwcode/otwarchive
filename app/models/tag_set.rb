@@ -48,10 +48,10 @@ class TagSet < ActiveRecord::Base
     end
     
     define_method("#{type}_taglist") do
-      self.instance_variable_get("@#{type}_tagnames") ? tagnames_to_list(self.instance_variable_get("@#{type}_tagnames"), "#{type}") : with_type(type)
+      self.instance_variable_get("@#{type}_tagnames") ? tagnames_to_list(self.instance_variable_get("@#{type}_tagnames"), type) : with_type(type)
     end
     
-    # _to_add/remove only rather than reset the entire list (much faster in large tagsets!)
+    # _to_add/remove only
     attr_writer "#{type}_tagnames_to_add".to_sym
     define_method("#{type}_tagnames_to_add") do 
       self.instance_variable_get("@#{type}_tagnames_to_add") || ""
@@ -94,10 +94,7 @@ class TagSet < ActiveRecord::Base
       end
     end
 
-    # These override the type-specific 
-    if !@tagnames_to_add.blank?
-      tags_to_add = tagnames_to_list(@tagnames_to_add)
-    end
+    # This overrides the type-specific 
     if !@tagnames_to_remove.blank?
       tags_to_remove = @tagnames_to_remove.split(ArchiveConfig.DELIMITER_FOR_INPUT).map {|tname| Tag.find_by_name(tname.squish)}.compact
     end
@@ -116,6 +113,27 @@ class TagSet < ActiveRecord::Base
     self.tags += tags_to_add
     add_tags_to_autocomplete(tags_to_add)
   end
+
+  # Tags must already exist unless they are being added to an owned tag set
+  validate :tagnames_must_exist
+  def tagnames_must_exist
+    nonexist = []
+    if @tagnames
+      nonexist += @tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT).select {|t| !Tag.where(:name => t.squish).exists?}
+    end
+    if owned_tag_set.nil?
+      TAG_TYPES.each do |type|
+        if (tagnames = self.instance_variable_get("@#{type}_tagnames_to_add"))
+          nonexist += tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT).select {|t| !Tag.where(:name => t.squish).exists?}
+        end
+      end
+    end
+
+    unless nonexist.empty?
+      errors.add(:tagnames, ts("^The following tags don't exist and can't be used: %{taglist}", :taglist => nonexist.join(", ") ))
+    end
+  end
+  
   
   scope :matching, lambda {|tag_set_to_match|
     select("DISTINCT tag_sets.*").
@@ -302,7 +320,7 @@ class TagSet < ActiveRecord::Base
       # take the intersection of ALL of these sets
       $redis.zinterstore(combo_key, keys_to_lookup, :aggregate => :max)
     end
-    results = $redis.zrange(combo_key, 0, -1)
+    results = $redis.zrevrange(combo_key, 0, -1)
     # expire fast
     $redis.expire combo_key, 1
     

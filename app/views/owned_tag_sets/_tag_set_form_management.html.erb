@@ -39,12 +39,12 @@
   <dd><%= form.check_box :usable %></dd>
 
   <dt><%= form.label :nominated, ts("Currently taking nominations?") %></dt>
-  <dd><%= form.check_box :nominated, :onchange => "if ($j(this).is(':checked')){$('nomination_limits').show();} else {$('nomination_limits').hide();}" %></dd>
+  <dd><%= form.check_box :nominated, :onchange => "if ($j(this).is(':checked')){$j('#nomination_limits').show();} else {$j('#nomination_limits').hide();}" %></dd>
 
 </dl>
 </fieldset>
 
-<fieldset id="nomination_limits" class="hideme">
+<fieldset id="nomination_limits"<%= form.object.nominated ? 'class="hideme"' : ''%>>
 <legend>Nomination Limits</legend>
 <h3>Nomination Limits</h3>
 <p class="notes">If you allow users to nominate <em>both</em> fandoms and characters/relationships in the same tag set, 
@@ -55,6 +55,6 @@
 <dl>
   <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
     <dt><%= form.label "#{tag_type}_nomination_limit".to_sym %></dt>
-    <dd><%= form.text_field "#{tag_type}_nomination_limit".to_sym, :size => 4 %></dd>
+    <dd><%= form.text_field "#{tag_type}_nomination_limit".to_sym, :class => "number" %></dd>
   <% end %>
 </dl>

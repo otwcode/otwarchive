@@ -33,7 +33,7 @@ class OwnedTagSetsController < ApplicationController
       @tag_sets = OwnedTagSet.owned_by(@user).visible
     elsif params[:restriction]
       @restriction = PromptRestriction.find(params[:restriction])
-      @tag_sets = @restriction.owned_tag_sets.visible
+      @tag_sets = OwnedTagSet.visible.in_prompt_restriction(@restriction)
       if @tag_sets.count == 1
         redirect_to tag_set_path(@tag_sets.first, :tag_type => (params[:tag_type] || "fandom")) and return
       end

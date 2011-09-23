@@ -1,5 +1,16 @@
-<%- if @collection.challenge_type == "PromptMeme" %>
-  <%= render :partial => "promptmeme_prompt_form", :locals => {:edit_record => true}  %>
-<%- else %>
-  <%= render :partial => "giftexchange_prompt_form", :locals => {:edit_record => true}  %>
-<%- end %>
+<ul class="navigation" role="navigation">
+  <% if @prompt.challenge_signup %>
+    <li><%= link_to ts('Edit whole signup instead?'), edit_collection_signup_path(@collection, @prompt.challenge_signup) %></li>
+  <% end %>
+  <li><%= link_to ts('Back to %{title}', :title => @collection.title), @collection %></li>
+</ul>
+
+<%= form_for :prompt, @prompt, :url => collection_prompt_path(@collection, @prompt), :html => {:method => :put} do |form| %>
+  <%= render "prompt_form", :form => form, :required => true %>
+
+  <fieldset>
+    <legend><%= 'Submit' %></legend> 
+    <p class="submit"><%= form.submit ts('Submit') %></p>
+  </fieldset>
+
+<% end %>

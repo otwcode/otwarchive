@@ -251,27 +251,6 @@ module ApplicationHelper
     params.reject{|k,v| k == name}
   end
 
-  # character counter helpers
-  # countdown should count newlines as "\r\n" combos, regardless of the OS and browsers' whim;
-  # so we count any single "\n"s and "\r"s as "\r\n", which is what they'd end up as in the db anyway
-  def countdown_field(field_id, update_id, max, options = {})
-    function = "value = $F('#{field_id}'); value=(value.replace(/\\r\\n/g,'\\n')).replace(/\\r|\\n/g,'\\r\\n'); $('#{update_id}').innerHTML = (#{max} - value.length);"
-    count_field_tag(field_id, function, options)
-  end
-  
-  def count_field(field_id, update_id, options = {})
-    function = "$('#{update_id}').innerHTML = $F('#{field_id}').length;"
-    count_field_tag(field_id, function, options)
-  end
-  
-  def count_field_tag(field_id, function, options = {})  
-    out = javascript_tag function
-    default_option = {:frequency => 0.25}
-    options = default_option.merge(options)
-    out += observe_field(field_id, options.merge(:function => function))
-    return out
-  end
-
   def generate_countdown_html(field_id, max) 
     generated_html = "<p class=\"character_counter\">".html_safe
     generated_html += ("<span id=\"#{field_id}_counter\" data-maxlength=\"" + max.to_s + "\">" + max.to_s + "</span>").html_safe
@@ -303,10 +282,6 @@ module ApplicationHelper
     }.merge(options)
   end
 
-  def working_symbol
-    '<span class="working symbol"><img src="/images/loading.gif alt="working"/></span>'.html_safe
-  end
-    
   # see http://asciicasts.com/episodes/197-nested-model-form-part-2
   def link_to_add_section(linktext, form, nested_model_name, partial_to_render, locals = {})
     new_nested_model = form.object.class.reflect_on_association(nested_model_name).klass.new
@@ -380,24 +355,26 @@ module ApplicationHelper
   
   
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
-  def checkboxes_toggle(checkboxes_id, checkboxes_size)
+  def checkbox_section_toggle(checkboxes_id, checkboxes_size)
     toggle_show = content_tag(:a, ts("Show all %{checkboxes_size} checkboxes", :checkboxes_size => checkboxes_size), 
-                              :class => "toggle", :id => "#{checkboxes_id}_show")
+                              :class => "toggle #{checkboxes_id}_show")
 
     toggle_hide = content_tag(:a, ts("Collapse checkboxes"), :style => "display: none;",
-                              :class => "toggle", :id => "#{checkboxes_id}_hide")
-
+                              :class => "toggle #{checkboxes_id}_hide", :href => "##{checkboxes_id}")
+    
+    css_class = checkbox_section_css_class(checkboxes_size)
+ 
     javascript_bits = content_for(:footer_js) {
       javascript_tag("$j(document).ready(function(){\n" +
-        "$j('##{checkboxes_id}_show').click(function() {\n" +
+        "$j('.#{checkboxes_id}_show').click(function() {\n" +
           "$j('##{checkboxes_id}').attr('class', 'module options all');\n" + 
-          "$j('##{checkboxes_id}_hide').show();\n" +
-          "$j(this).hide();\n" +
+          "$j('.#{checkboxes_id}_hide').show();\n" +
+          "$j('.#{checkboxes_id}_show').hide();\n" +
         "});" + "\n" + 
-        "$j('##{checkboxes_id}_hide').click(function() {\n" +
-          "$j('##{checkboxes_id}').attr('class', 'module options#{checkboxes_size > ArchiveConfig.OPTIONS_TO_SHOW ? ' many' : ''}');\n" +
-          "$j('##{checkboxes_id}_show').show();\n" +
-          "$j(this).hide();\n" +
+        "$j('.#{checkboxes_id}_hide').click(function() {\n" +
+          "$j('##{checkboxes_id}').attr('class', '#{css_class}');\n" +
+          "$j('.#{checkboxes_id}_show').show();\n" +
+          "$j('.#{checkboxes_id}_hide').hide();\n" +
         "});\n" +
       "})")
     }
@@ -452,15 +429,25 @@ module ApplicationHelper
 
     # if there are only a few choices, don't show the scrolling and the toggle
     size = choices.size
-    css_class = "module options"
+    css_class = checkbox_section_css_class(size)
     toggle = "".html_safe
-    if size > ArchiveConfig.OPTIONS_TO_SHOW
-      toggle = checkboxes_toggle(checkboxes_id, size) if options[:include_toggle]
-      css_class += " many"
+    if options[:include_toggle] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
+      toggle = checkbox_section_toggle(checkboxes_id, size)
     end
       
     # We wrap the whole thing in a div module with the classes
-    return content_tag(:div, toggle + checkboxes_ul + hidden_field_tag(field_name, " "), :id => checkboxes_id, :class => css_class)
+    return content_tag(:div, toggle + checkboxes_ul + toggle + hidden_field_tag(field_name, " "), :id => checkboxes_id, :class => css_class)
+  end
+  
+  def checkbox_section_css_class(size)
+    css_class = "module options"
+    if size > ArchiveConfig.OPTIONS_TO_SHOW
+      css_class += " many"
+    end
+    if size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
+      css_class += " lots"
+    end
+    css_class
   end
   
   def check_all_none

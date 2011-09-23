@@ -307,11 +307,7 @@ Otwarchive::Application.routes.draw do
     resources :media
     resources :fandoms
     resources :people
-    resources :prompts, :controller => "prompts" do
-      collection do
-        get :summary
-      end
-    end
+    resources :prompts
     resources :tags do
       resources :works
     end

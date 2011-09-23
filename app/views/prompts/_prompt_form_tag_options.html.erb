@@ -39,7 +39,7 @@
         <% if TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
           <% # do ratings, warnings, categories as taglists if not already specified %>
           <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.all),
-                  :checked_method => "#{tag_type}_taglist", :value_method => "name" %>
+                  :checked_method => "#{tag_type}_tagnames", :value_method => "name" %>
     
         <% elsif TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && (restriction.restricted?(tag_type, "fandom") || restriction.restricted?(tag_type, "tag_set")) %>
           <% # characters or relationships restricted to fandom: use an autocomplete and either do/don't include wrangled tags %>
@@ -64,7 +64,7 @@
 
               <!-- create a scrollable checkboxes section to wrap the tags, see application_helper -->
               <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", restriction.tags(tag_type).by_name_without_articles.value_of(:name),
-                    :checked_method => "#{tag_type}_taglist", :value_method => "to_s", :name_method => "to_s" %>
+                    :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s" %>
             <% else # we have set options but too many for tickyboxes, do autocomplete instead %>        
               <div title="<%= ts("choose #{tag_type.pluralize} from the challenge options") %>">
                 <%= tag_set_form.text_field "#{tag_type}_tagnames", 
@@ -73,9 +73,8 @@
     
               <p>
                 <% # TODO: would be nice to improve this for the case of multiple tag sets, currently it links to just an index of all the tag sets for this challenge %>
-                <%= link_to(ts("(See %{taglist_size} options)", :taglist_size => restriction.tags(tag_type).count), 
-                          tag_sets_path(:restriction => restriction.id, :tag_type => tag_type), 
-                          :class => "toggle", :data_popup => true) %>
+                <%= link_to( ts("(See %{taglist_size} options)", :taglist_size => restriction.tags(tag_type).count), 
+                          tag_sets_path(:restriction => restriction.id, :tag_type => tag_type), :target => "_blank", :class => "toggle") %>
               </p>
             <% end %>
           <% else # no specified tags so let's just go with standard autocomplete %>

@@ -25,7 +25,8 @@
     <dl>
       <dt><%= f.label :anonymous, ts("Prompts anonymous by default? (Participants can override)") %></dt>
       <dd><%= f.check_box :anonymous %>
-      <dt><%= f.label :requests_num_required, ts("Number of prompts per signup: ") -%></dt>
+      <dt><%= f.label :requests_num_required, ts("Number of prompts per signup: ") %></dt>
+      <dd><%= f.text_field :requests_num_required, :class => "number" %></dt>
     </dl>
   </fieldset>
 

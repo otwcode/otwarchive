@@ -29,6 +29,7 @@ module AutocompleteSource
   end
   
   def add_to_autocomplete(score = nil)
+    Rails.logger.info "Adding #{autocomplete_value}"
     score = autocomplete_score unless score
     self.class.autocomplete_pieces(autocomplete_search_string).each do |word_piece|
       # each prefix represents an autocompletion space -- eg, "autocomplete_collection_all"

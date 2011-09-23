@@ -2,7 +2,7 @@ module ChallengeCore
 
   # Used to ensure allowed is no less than required
   def update_allowed_values
-    PROMPT_TYPES.each do |prompt_type|
+    self.class::PROMPT_TYPES.each do |prompt_type|
       required = required(prompt_type)
       eval("#{prompt_type}_num_allowed = required") if required > allowed(prompt_type)
     end

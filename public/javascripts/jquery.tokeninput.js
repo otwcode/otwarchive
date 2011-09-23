@@ -148,10 +148,10 @@ $.TokenList = function (input, url_or_data, settings) {
         })
         .focus(function () {
             if (settings.tokenLimit === null || settings.tokenLimit !== token_count) {
-                if (settings.minChars == 0) {
-                  // run the search
-                  setTimeout(function(){do_search();}, 5);
-                } else {                    
+                if ((settings.tokenLimit === null || settings.tokenLimit !== token_count) && settings.minChars == 0) {
+                    // run the search
+                    setTimeout(function(){do_search();}, 5);
+                } else {
                     show_dropdown_hint();
                 }
             }
@@ -185,7 +185,7 @@ $.TokenList = function (input, url_or_data, settings) {
                             }                            
                         } else {
                             previous_token = input_token.prev();
-                            next_token = input_token.next();                            
+                            next_token = input_token.next();
                         }
 
                         if((event.keyCode === KEY.LEFT || event.keyCode === KEY.UP) && previous_token.length) {
@@ -249,12 +249,14 @@ $.TokenList = function (input, url_or_data, settings) {
                 case KEY.NUMPAD_ENTER:
                   if(selected_dropdown_item) {
                     add_token($(selected_dropdown_item));
+                    hide_dropdown();
                     return false;
                   } else if(input_box.val()) {
                     // split contents and add them
                     $.each(input_box.val().split(settings.tokenDelimiter), function(index, item) {
                       add_token($.trim(item));
                     });
+                    hide_dropdown();
                     return false;
                   }
                   break;

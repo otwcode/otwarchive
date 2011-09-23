@@ -8,11 +8,14 @@
 
 <!-- /descriptions-->
 
-<%= render "navigation" %>
-
+<h3 class="landmark">Navigation</h3>
+<ul class="navigation actions" role="navigation">
+  <li><%= link_to ts("Back to Tag Sets"), tag_sets_path %></li>
+</ul>
+    
 <!--main content-->
 <h3 class="landmark">Tag Set Settings</h3>
-<%= nested_form_for(@tag_set, :url => (@tag_set.new_record? ? tag_sets_path : tag_set_path(@tag_set)), :html => {:method => (@tag_set.new_record? ? :post : :put), :class => "verbose tagset"}) do |tag_set_form| %>
+<%= form_for(@tag_set, :url => (@tag_set.new_record? ? tag_sets_path : tag_set_path(@tag_set)), :html => {:method => (@tag_set.new_record? ? :post : :put), :class => "verbose tagset"}) do |tag_set_form| %>
   <%= error_messages_for @tag_set %>
 
   <fieldset>
@@ -31,13 +34,15 @@
   
   <fieldset class="tagset">
     <legend>Tag Associations</legend>
-    <h3>Tag Associations (check to remove)</h3>
+    <h3><%= ts("Tag Associations") %> <%= @tag_set.tag_set_associations.empty? ? '' : ts("(check to remove)") %> <%= link_to_help('tagset-tag-associations')%></h3>
     <% unless @tag_set.tag_set_associations.empty? %>
       <%= render "tag_set_associations_remove", :form => tag_set_form %>
     <% end %>
-    <%= tag_set_form.fields_for :tag_set_associations %>
-    <!--BAG END: This can't be p because cannot have dl as child of p. Can you pos close the p and then load the nested partial? Have bodged with div for now-->
-    <div><%= tag_set_form.link_to_add ts("Add Association"), :tag_set_associations, :class => "action" %></div>
+    <% unless @tag_set.new_record? || @child_tags_in_set.empty? || @parent_tags_in_set.empty? %>
+      <p class="navigation">
+        <%= link_to_add_section(ts("Add Association"), signup_form, :tag_set_associations, "tag_set_association_fields") %>
+      </p>
+    <% end %>
   </fieldset>
   
   <fieldset>
