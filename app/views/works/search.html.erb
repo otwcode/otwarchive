@@ -18,6 +18,7 @@
   <% unless @query[:language].blank? %><%= ts('Language') %>: <%= @query[:language] %> <% end %>
   <% unless @query[:bookmarked].blank? %><%= ts('Bookmarked') %><% end %>
   <% unless @query[:recced].blank? %><%= ts('Recced') %><% end %>
+  <% unless @query[:complete].blank? %><%= ts('Complete') %><% end %>
 <% end %>
 </p>
 
@@ -40,6 +41,7 @@
   <%= hidden_field_tag "query[language]", @query[:language] %>
   <%= hidden_field_tag "query[bookmarked]", @query[:bookmarked] %>
   <%= hidden_field_tag "query[recced]", @query[:recced] %>
+  <%= hidden_field_tag "query[complete]", @query[:complete] %>
 
   <span class="submit">
 <% if @query.blank? %>
