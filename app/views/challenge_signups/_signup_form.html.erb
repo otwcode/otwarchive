@@ -6,6 +6,31 @@
 <!--/subnav-->
 
 <!--main content-->
+
+<% types = @challenge.class::PROMPT_TYPES.select {|t| @challenge.allowed(t) > @challenge.required(t)} %>
+<% unless types.empty? %>
+  <!-- noscript -->
+    <fieldset>
+      <legend><%= ts("Add Prompts") %></legend>
+      <h3><%= ts("Add Prompts") %></h3>
+      <p class="notes">
+        <%= ts("Since you don't have Javascript turned on, please tell us how many #{types.to_sentence} you want to submit: ") %>
+        <strong><br />HEY BACK END THIS SHOULD BE MADE NOSCRIPT AFTER INITIAL TESTING DON'T FORGET!</strong>
+      </p>
+      <%= form_tag({}, {:method => :get}) do %>
+        <dl>
+          <% types.each do |type| %>
+            <dt><%= label_tag "num_#{type}", ts("#{type.classify.pluralize} (Up to %{allowed})", :allowed => @challenge.allowed(type)) %></dt>
+            <dd><%= text_field_tag "num_#{type}", params["num_#{type}"] || @challenge.required(type), :class => "number" %></dd>
+          <% end %>
+        </dl>
+        <p class="submit"><%= submit_tag ts('Update Form') %></p>
+      <% end %>
+    </fieldset>
+  <!-- /noscript -->
+<% end %>
+
+
 <%= form_for([@collection, @challenge_signup], :url => (@challenge_signup.new_record? ? collection_signups_path(@collection) : collection_signup_path(@collection))) do |signup_form| %>
   <%= error_messages_for @challenge_signup %>
 
@@ -27,11 +52,9 @@
     <% end %>
     
     <% if @challenge.allowed(prompt_type) > @challenge.required(prompt_type) %>
-      <p class="navigation showme" style="display: none;">
-        <%= link_to_add_section(
-             ts("Add another %{type}? (Up to %{allowed} allowed.)", :type => prompt_type.singularize, :allowed => @challenge.allowed(prompt_type)), 
-             signup_form, prompt_type.to_sym, "prompts/prompt_form", :required => false) 
-        %>
+      <p class="navigation">
+        <% linktext = ts("Add another %{type}? (Up to %{allowed} allowed.)", :type => prompt_type.singularize, :allowed => @challenge.allowed(prompt_type)) %>
+        <%= link_to_add_section(linktext, signup_form, prompt_type.to_sym, "prompts/prompt_form", :required => false) %>
       </p>
     <% end %>
 

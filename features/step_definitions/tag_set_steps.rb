@@ -1,5 +1,5 @@
 
-When /^I follow the add new tagset link$/
+When /^I follow the add new tagset link$/ do
   Given %{I follow "New Tag Set"}
 end
 

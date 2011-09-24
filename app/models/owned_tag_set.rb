@@ -108,11 +108,11 @@ class OwnedTagSet < ActiveRecord::Base
   #### MODERATOR/OWNER
 
   def user_is_owner?(user)
-    !(owners & user.pseuds).empty?
+    user.is_a?(User) && !(owners & user.pseuds).empty?
   end
   
   def user_is_moderator?(user)
-    user_is_owner?(user) || !(moderators & user.pseuds).empty?
+    user.is_a?(User) && (user_is_owner?(user) || !(moderators & user.pseuds).empty?)
   end
   
   def add_owner(pseud)

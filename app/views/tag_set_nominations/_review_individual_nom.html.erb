@@ -1,0 +1,35 @@
+<% # expects locals nom and section %>
+<%= nom.tagname %> (<%= nom.times_nominated(@tag_set) %>)
+<%= label_tag "approve_#{nom.tagname}", :class => "action" do %>
+  <%= ts("Approve") %>
+  <%= check_box_tag "approve_#{nom.tagname}", 1, params["approve_#{nom.tagname}"] %>            
+<% end %>
+<%= label_tag "reject_#{nom.tagname}", :class => "action"  do %>
+  <%= ts("Reject") %>
+  <%= check_box_tag "reject_#{nom.tagname}", 1, params["reject_#{nom.tagname}"] %>            
+<% end %>
+<% if section == "existing" && nom.synonym %>
+  <%= label_tag "approve_#{nom.synonym}", :class => "action" do %>
+    <%= nom.synonym %>
+    <%= check_box_tag "synonym_#{nom.synonym}", 1, params["synonym_#{nom.synonym}"] %>            
+  <% end %>
+<% end %>
+
+<% if nom.class == FandomNomination %>
+  <% %w(character relationship).each do |tag_type| %>
+    <% child_noms = "#{tag_type}_nomination".classify.constantize.where(:parent_tagname => nom.tagname).unreviewed %>
+    <% unless child_noms.empty? %>
+      <h4><%= tag_type.classify.pluralize %></h4>
+      <ul>
+        <% child_noms.each do |child_nom| %>
+          <% # render this same form recursively %>
+          <% next if @tagnames_seen.include?(child_nom.tagname) %>
+          <% @tagnames_seen << child_nom.tagname %>
+          <li>
+            <%= render "review_individual_nom", :nom => child_nom, :section => section %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+<% end %>

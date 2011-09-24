@@ -147,8 +147,8 @@ $.TokenList = function (input, url_or_data, settings) {
             outline: "none"
         })
         .focus(function () {
-            if (settings.tokenLimit === null || settings.tokenLimit !== token_count) {
-                if ((settings.tokenLimit === null || settings.tokenLimit !== token_count) && settings.minChars == 0) {
+            if (settings.tokenLimit === null || token_count < settings.tokenLimit) {
+                if ($(this).val().length >= settings.minChars) {
                     // run the search
                     setTimeout(function(){do_search();}, 5);
                 } else {
@@ -157,9 +157,7 @@ $.TokenList = function (input, url_or_data, settings) {
             }
         })
         .blur(function () {
-            if (!$(this).val()) {
-                hide_dropdown();
-            }
+            hide_dropdown();
         })
         .keydown(function (event) {
             var previous_token;
@@ -250,14 +248,22 @@ $.TokenList = function (input, url_or_data, settings) {
                   if(selected_dropdown_item) {
                     add_token($(selected_dropdown_item));
                     hide_dropdown();
-                    return false;
+                    if (event.keyCode === KEY.TAB && settings.tokenLimit && settings.tokenLimit === token_count) {
+                        break;
+                    } else {
+                        return false;                        
+                    }
                   } else if(input_box.val()) {
                     // split contents and add them
                     $.each(input_box.val().split(settings.tokenDelimiter), function(index, item) {
                       add_token($.trim(item));
                     });
                     hide_dropdown();
-                    return false;
+                    if (event.keyCode === KEY.TAB && settings.tokenLimit && settings.tokenLimit === token_count) {
+                        break;
+                    } else {
+                        return false;                        
+                    }
                   }
                   break;
 
@@ -273,6 +279,16 @@ $.TokenList = function (input, url_or_data, settings) {
                     break;
             }
         });
+        
+    // If the parent form is submitted and there is data in the input box, submit it
+    $(input).closest("form").submit(function (){
+        if(input_box.val()) {
+            // split contents and add them
+            $.each(input_box.val().split(settings.tokenDelimiter), function(index, item) {
+              add_token($.trim(item));
+            });
+        }
+    });
 
     // Keep a reference to the original input box
     var hidden_input = $(input)
@@ -337,21 +353,6 @@ $.TokenList = function (input, url_or_data, settings) {
         //.appendTo("body")
         .insertAfter(input_box)
         .hide();
-
-    // Magic element to help us resize the text input
-    // var input_resizer = $("<tester/>")
-    //     .insertAfter(input_box)
-    //     .css({
-    //         position: "absolute",
-    //         top: -9999,
-    //         left: -9999,
-    //         width: "auto",
-    //         fontSize: input_box.css("fontSize"),
-    //         fontFamily: input_box.css("fontFamily"),
-    //         fontWeight: input_box.css("fontWeight"),
-    //         letterSpacing: input_box.css("letterSpacing"),
-    //         whiteSpace: "nowrap"
-    //     });
         
     // Save data to pre-populate list with
     var li_data = $(input).val() || settings.prePopulate
@@ -626,9 +627,15 @@ $.TokenList = function (input, url_or_data, settings) {
 
     // Hide and clear the results dropdown
     function hide_dropdown () {
-        dropdown.hide().empty();
+        // dropdown.hide().empty();
+        // first_dropdown_item = null;
+        // selected_dropdown_item = null;
+        
+        dropdown.hide();
+        if (selected_dropdown_item) {
+            $(selected_dropdown_item).removeClass(settings.classes.selectedToken);
+        }
         selected_dropdown_item = null;
-        first_dropdown_item = null;
     }
 
     function show_dropdown() {
@@ -708,7 +715,6 @@ $.TokenList = function (input, url_or_data, settings) {
             }
         } else {
             if(settings.noResultsText) {
-                dropdown.html("<p>"+settings.noResultsText+"</p>");
                 dropdown.html("<p class='notice'>"+settings.noResultsText+"</p>");
                 show_dropdown();
             }
@@ -850,7 +856,7 @@ $.TokenList = function (input, url_or_data, settings) {
             }
 
             // only populate the dropdown if the results are associated with the active search query
-            if(input_box.val().toLowerCase() === query) {
+            if(input_box.val().toLowerCase() === query && input_box.is(":focus")) {
                 populate_dropdown(query, settings.jsonContainer ? results[settings.jsonContainer] : results);
             }
         };

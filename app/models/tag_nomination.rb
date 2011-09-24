@@ -99,4 +99,16 @@ class TagNomination < ActiveRecord::Base
     parents.group("parent_tagname").order("count_id DESC").count('id').keys
   end
   
+  def unreviewed?
+    !approved && !rejected
+  end
+  
+  def reviewed?
+    approved || rejected
+  end
+
+  def times_nominated(tag_set)
+    TagNomination.for_tag_set(tag_set).where(:tagname => self.tagname).count
+  end
+  
 end

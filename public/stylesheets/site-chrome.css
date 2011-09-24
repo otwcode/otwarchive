@@ -365,6 +365,7 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
   .media li.category      { min-height: 15em; padding: 0; border: 1px solid #DDD; margin:0.5625em 2em 2em 0}
   .media li.category h3   { background:#333; color:#fffef9; font-weight:100; padding: .5em 1em; border-bottom:0.25em double #fffef9; margin: 0; top: 0;}
   .media li.category h3 a { color: #fff; }
+  .media li.category h4 { padding: .5em 1em; margin: 0; }
   .media p           { margin-right: 0.5625em; text-align:right}
   #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol, .media ol
                 { list-style-type: decimal }
@@ -457,8 +458,6 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
 /* TAG NOMINATIONS */
  .nominations ul li { display: inline; padding: 1em; }
- .nominations div.hasnotes { display: inline; }
- .nominations .notes { display: block; }
  .unwrangled { border: 0.15em solid #CCB521;}
  .nonexistent { border: 0.15em solid #C91441;}
  

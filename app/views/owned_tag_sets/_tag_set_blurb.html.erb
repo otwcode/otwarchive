@@ -29,7 +29,7 @@
 	  <% end %>
   </dl>
     
-  <% if tag_set.user_is_moderator?(current_user) || (logged_in? && tag_set.nominated) %>
+  <% if logged_in? && (tag_set.user_is_moderator?(current_user) || tag_set.nominated) %>
     <h6 class="landmark">User Actions</h6>
 	  <ul class="navigation actions" role="navigation">
       <% if tag_set.user_is_owner?(current_user) %>

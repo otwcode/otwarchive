@@ -137,23 +137,36 @@ class ChallengeSignupsController < ApplicationController
   def show
   end
 
+  protected
+  def build_prompts
+    @challenge.class::PROMPT_TYPES.each do |prompt_type|
+      num_to_build = params["num_#{prompt_type}"].to_i || @challenge.required(prompt_type)
+      if num_to_build < @challenge.required(prompt_type)
+        flash[:notice] = ts("You must submit at least %{required} #{prompt_type}.", :required => @challenge.required(prompt_type))
+        num_to_build = @challenge.required(prompt_type)
+      elsif num_to_build > @challenge.allowed(prompt_type)
+        flash[:notice] = ts("You can only submit up to %{allowed} #{prompt_type}.", :allowed => @challenge.allowed(prompt_type))
+        num_to_build = @challenge.allowed(prompt_type)
+      end
+      num_to_build.times do |i|
+        prompt = @challenge_signup.send(prompt_type)[i] || @challenge_signup.send(prompt_type).build
+      end
+    end
+  end
+
+  public
   def new
     if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
       flash[:notice] = ts("You are already signed up for this challenge. You can edit your signup below.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     else
       @challenge_signup = ChallengeSignup.new
-      @challenge.class::PROMPT_TYPES.each do |prompt_type|
-        @challenge.required(prompt_type).times do 
-          @challenge_signup.send("#{prompt_type}").build
-        end
-      end
-      
-      
+      build_prompts
     end
   end
 
   def edit
+    build_prompts
   end
 
   def create

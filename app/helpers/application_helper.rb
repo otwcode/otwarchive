@@ -290,12 +290,12 @@ module ApplicationHelper
       form.fields_for(nested_model_name, new_nested_model, :child_index => child_index) {|child_form|
         render(:partial => partial_to_render, :locals => {:form => child_form, :index => child_index}.merge(locals))
       }
-    link_to_function(linktext, "add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")", :id => "add_section")
+    link_to_function(linktext, "add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")", :class => "hidden showme")
   end
 
   def link_to_remove_section(linktext, form, class_of_section_to_remove="removeme")
     form.hidden_field(:_destroy) + "\n" +
-    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")")
+    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", :class => "hidden showme")
   end
   
   def time_in_zone(time, zone=nil, user=User.current_user)

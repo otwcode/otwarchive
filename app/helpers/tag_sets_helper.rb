@@ -8,10 +8,10 @@ module TagSetsHelper
           message = ts("You can nominate up to %{f} fandoms and up to %{c} characters and %{r} relationships for each one.", 
             :f => limit[:fandom], :c => limit[:character], :r => limit[:relationship])
         else
-          message = ts("You can nominate up to %{f} fandoms and up to %{c} characters for each one", :f => limit[:fandom], :c => limit[:character])
+          message = ts("You can nominate up to %{f} fandoms and up to %{c} characters for each one.", :f => limit[:fandom], :c => limit[:character])
         end
       elsif limit[:relationship] > 0
-        message = ts("You can nominate up to %{f} fandoms and up to %{r} relationships for each one", :f => limit[:fandom], :r => limit[:relationship])
+        message = ts("You can nominate up to %{f} fandoms and up to %{r} relationships for each one.", :f => limit[:fandom], :r => limit[:relationship])
       else
         message = ts("You can nominate up to %{f} fandoms.", :f => limit[:fandom])
       end
@@ -45,11 +45,11 @@ module TagSetsHelper
   
   def nomination_status(nomination=nil)
     if nomination && nomination.approved
-      '<span class="approved">&#x2714;</span>'.html_safe
+      '<span class="symbol approved" tooltip="This nomination has been approved!"><span>&#x2714;</span></span>'.html_safe
     elsif nomination && nomination.rejected
-      '<span class="rejected">X</span>'.html_safe
+      '<span class="symbol rejected" tooltip="This nomination was rejected."><span>X</span></span>'.html_safe
     else
-      '<span class="unreviewed">?</span>'.html_safe
+      '<span class="symbol unreviewed" tooltip="This nomination has not been reviewed yet and can still be changed."><span>?</span></span>'.html_safe
     end
   end
   

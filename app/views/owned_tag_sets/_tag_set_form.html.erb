@@ -40,7 +40,7 @@
     <% end %>
     <% unless @tag_set.new_record? || @child_tags_in_set.empty? || @parent_tags_in_set.empty? %>
       <p class="navigation">
-        <%= link_to_add_section(ts("Add Association"), signup_form, :tag_set_associations, "tag_set_association_fields") %>
+        <%= link_to_add_section(ts("Add Association"), tag_set_form, :tag_set_associations, "tag_set_association_fields") %>
       </p>
     <% end %>
   </fieldset>

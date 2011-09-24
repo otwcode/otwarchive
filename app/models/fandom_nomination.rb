@@ -5,13 +5,14 @@ class FandomNomination < TagNomination
   has_many :relationship_nominations, :dependent => :destroy
   accepts_nested_attributes_for :relationship_nominations, :allow_destroy => true, :reject_if => proc { |attrs| attrs[:tagname].blank? }
 
-  validate :known_media
-  def known_media
-    return true if !parent_tagname.blank?
-    return true if (tag = Fandom.find_by_name(self.tagname)) && tag.parents.any? {|p| p.is_a?(Media)}
-    errors.add(:base, ts("^We need to know what type your new fandom tag %{tagname} belongs in.", :tagname => self.tagname))
-    false
+
+  def character_tagnames
+    CharacterNomination.for_tag_set(owned_tag_set).where(:parent_tagname => tagname).value_of :tagname
+  end
+
+  def relationship_tagnames
+    RelationshipNomination.for_tag_set(owned_tag_set).where(:parent_tagname => tagname).value_of :tagname
   end
   
-
+  
 end

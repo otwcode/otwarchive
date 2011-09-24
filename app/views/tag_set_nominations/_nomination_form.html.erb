@@ -4,7 +4,7 @@
     <li><%= link_to ts("Tag Sets"), tag_sets_path %></li>
   </ul>
 
-<h2><%= ts("Tag Nominations") %></h2>
+<h2><%= ts("Tag Nominations for %{title}", :title => @tag_set_nomination.owned_tag_set.title) %></h2>
 
 <h3 class="landmark"><%= ts("Notes") %></h3>
 <p class="notes">Please nominate the canonical form of a tag if possible. The autocomplete will only list canonical tags. Your nominations will be reviewed by the tag set moderators and may not be included.</p>
@@ -40,13 +40,17 @@
     <%= render 'tag_nominations_by_fandom', :f => f %>
     
     <% # freeforms on their own %>
-    <%= render 'tag_nominations', :f => f, :tag_type => "freeform" %>
+    <% if @limit[:freeform] > 0 %>
+      <%= render 'tag_nominations', :f => f, :tag_type => "freeform" %>
+    <% end %>
 
   <% else %>
   
     <% # nominations all on same level in fieldset/dls %>
     <% %w(character relationship freeform).each do |tag_type| %>
-      <%= render 'tag_nominations', :f => f, :tag_type => tag_type %>
+      <% if @limit[tag_type] > 0 %>
+        <%= render 'tag_nominations', :f => f, :tag_type => tag_type %>
+      <% end %>
     <% end %>
     
   <% end %>

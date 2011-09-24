@@ -37,6 +37,7 @@ $j(document).ready(function() {
           $j(target_id + "_closed").toggle();
     });
     $j('#hide-notice-banner').click(function () { $j('#notice-banner').hide(); });
+    setupTooltips();
 });
 
 function visualizeTables() {
@@ -370,4 +371,13 @@ function generateCharacterCounters() {
         //$j(input_id).val(input_value); //this had really bad effects, don't do it
         $j(input_id + '_counter').html(maxlength - input_value.length);
     });
+}
+
+function setupTooltips() {
+    $j('span[tooltip]').each(function(){
+       $j(this).qtip({
+          content: $j(this).attr('tooltip'),
+          position: {corner: {target: 'topMiddle'}}
+       });
+    });    
 }

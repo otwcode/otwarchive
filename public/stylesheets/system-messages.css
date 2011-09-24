@@ -37,6 +37,8 @@ span.symbol span { color:#fffef9; height:1em; width:1em; padding:0.425em; }
 #main .symbols a, #main .symbol a { text-decoration:none; border:none }
 span.question { background:#2b547c; border-color:#2a547c; }
 a.question {border:0; font-weight: bold;}
+span.unreviewed span, span.approved span, span.rejected span { color: #2b547c;}
+span.unreviewed, span.approved, span.rejected { background: #fffef9; }
 
 span.working {position:relative; height:auto; width:auto; margin:0; border:0;}
 span.working img {position:absolute; z-index:1000;}

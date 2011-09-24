@@ -115,7 +115,7 @@ class TagSet < ActiveRecord::Base
   end
 
   # Tags must already exist unless they are being added to an owned tag set
-  validate :tagnames_must_exist
+  validate :tagnames_must_exist, :if => "owned_tag_set.nil?"
   def tagnames_must_exist
     nonexist = []
     if @tagnames
@@ -124,7 +124,8 @@ class TagSet < ActiveRecord::Base
     if owned_tag_set.nil?
       TAG_TYPES.each do |type|
         if (tagnames = self.instance_variable_get("@#{type}_tagnames_to_add"))
-          nonexist += tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT).select {|t| !Tag.where(:name => t.squish).exists?}
+          tagnames = (tagnames.is_a?(Array) ? tagnames : tagnames.split(ArchiveConfig.DELIMITER_FOR_INPUT)).map {|t| t.squish}
+          nonexist += tagnames.select {|t| !t.blank? && !Tag.where(:name => t).exists?}
         end
       end
     end
@@ -296,8 +297,8 @@ class TagSet < ActiveRecord::Base
   def remove_tags_from_autocomplete(tags_to_remove)
     tags_to_remove.each do |tag| 
       value = tag.autocomplete_value
-      $redis.zremove("autocomplete_tagset_all_#{self.id}", value)
-      $redis.zremove("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", value)
+      $redis.zrem("autocomplete_tagset_all_#{self.id}", value)
+      $redis.zrem("autocomplete_tagset_#{tag.type.downcase}_#{self.id}", value)
     end
   end
     

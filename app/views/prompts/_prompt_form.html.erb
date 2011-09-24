@@ -81,7 +81,14 @@
     <% unless required %>
       <dt class="landmark">Remove</dt>
       <!--FRONT END, DON'T FORGET TO READD SUBMIT AFTER SKINS-->
-      <dd class="actions"><%= link_to_remove_section ts("Remove?"), form %></dd>
+      <dd class="actions">
+        <%= link_to_remove_section ts("Remove?"), form %>
+        <noscript>
+          <% form.label ts("Remove?") do %>
+            <%= form.check_box "_destroy" %>
+          <% end %>
+        </noscript>
+      </dd>
     <% end %>
      
   </dl>

@@ -109,32 +109,46 @@ class TagSetNominationsController < ApplicationController
   end
 
   def request_noncanonical_info
-    if @tag_set_nomination.fandom_nominations.any? {|tn| !tn.canonical && tn.parent_tagname.blank?} ||
-      @tag_set_nomination.character_nominations.any? {|tn| !tn.canonical && (tn.parent_tagname.blank? && !tn.fandom_nomination)} ||
+    if @tag_set_nomination.character_nominations.any? {|tn| !tn.canonical && (tn.parent_tagname.blank? && !tn.fandom_nomination)} ||
       @tag_set_nomination.relationship_nominations.any? {|tn| !tn.canonical && (tn.parent_tagname.blank? && !tn.fandom_nomination)}
       
-      flash[:notice] += ts(" Since some of your nominations are not canonical tags, please consider editing to add some extra information.")
+      flash[:notice] += ts(" Since some of your nominations are not canonical tags, please consider editing to add their fandoms.")
     end
   end
 
   def destroy
-    @tag_set_nomination.destroy
-    flash[:notice] = ts("Your nominations were deleted.")
-    redirect_to tag_set_path(@tag_set)
+    unless @tag_set_nomination.unreviewed? || @tag_set.user_is_moderator?(current_user)
+      flash[:error] = ts("You cannot delete nominations after some of them have been reviewed, sorry!")
+      redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
+    else
+      @tag_set_nomination.destroy
+      flash[:notice] = ts("Your nominations were deleted.")
+      redirect_to tag_set_path(@tag_set)
+    end
   end
   
   # set up various variables for reviewing nominations
   def setup_for_review
     set_limit
-    @tag_types = TagSet::TAG_TYPES_INITIALIZABLE.select {|type| @limit[type] > 0}
-    @tag_type = params[:tag_type] || @tag_types.first
-    # make sure it's a valid tag type before we go send()ing it around
-    @tag_type = @tag_types.first unless @tag_types.include?(@tag_type)
-    noms = @tag_set.send("#{@tag_type}_nominations").unreviewed
+    nom_limit = 50
+    if @limit[:fandom] > 0
+      # char and rel tags under fandom noms
+      @tag_types = %w(fandom freeform).select {|type| @limit[type] > 0}
+      if @limit[:character] > 0 || @limit[:relationship] > 0
+        nom_limit = 20
+      end
+    else
+      @tag_types = TagSet::TAG_TYPES_INITIALIZABLE.select {|type| @limit[type] > 0}
+    end
+    
     @nominations = HashWithIndifferentAccess.new
-    @nominations[:canonical] = noms.where(:canonical => true)
-    @nominations[:existing] = noms.where(:canonical => false, :exists => true)
-    @nominations[:nonexistent] = noms.where(:exists => false)    
+    @tag_types.each do |tag_type|
+      noms = "#{tag_type}_nomination".classify.constantize.for_tag_set(@tag_set).unreviewed.limit(nom_limit)
+      @nominations[tag_type] = HashWithIndifferentAccess.new
+      @nominations[tag_type][:canonical] = noms.where(:canonical => true)
+      @nominations[tag_type][:existing] = noms.where(:canonical => false, :exists => true)
+      @nominations[tag_type][:nonexistent] = noms.where(:exists => false)
+    end
   end
 
 

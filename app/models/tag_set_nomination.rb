@@ -38,6 +38,23 @@ class TagSetNomination < ActiveRecord::Base
       end
     end 
   end
+
+  # Have NONE of the nominations been reviewed?
+  def unreviewed?
+    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
+      return false if self.send("#{tag_type}_nominations").any? {|tn| tn.reviewed?}
+    end
+    return true
+  end
+
+  # Have ALL the nominations been reviewed?
+  def reviewed?
+    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
+      return false if self.send("#{tag_type}_nominations").any? {|tn| tn.unreviewed?}
+    end
+    return true
+  end
+
   
   def count_by_fandom?(tag_type)
     %w(character relationship).include?(tag_type) && self.owned_tag_set.fandom_nomination_limit > 0
