@@ -48,7 +48,7 @@
     	<% end %>
       <% if collection.challenge? && collection.prompt_meme? %>
         <dt><%= ts("Prompts") %></dt>
-        <dd><%= link_to(collection.prompts.count.to_s, collection_requests_path(@collection)) %></dd>
+        <dd><%= link_to(collection.prompts.count.to_s, collection_requests_path(collection)) %></dd>
       <% end %>
 		  <dt><%= ts("Works") %>:</dt>
   		<dd><%= link_to(@works_count, collection_works_path(collection)) %></dd>
