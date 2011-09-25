@@ -21,6 +21,15 @@ Scenario: When logged in I can comment on a work
     And I press "Add Comment" 
   Then I should see "Comment created!" 
     And I should see "I loved this!" within ".odd"
+    And I should not see "on Chapter 1" within ".odd"
+  When I am logged in as "author"
+    And I view the work "The One Where Neal is Awesome"
+    And I follow "Add Chapter"
+    And I fill in "content" with "A second chapter to test multi-chapter comments"
+    And I press "Post without preview"
+    And I follow "View Entire Work"
+    And I follow "Read Comments (1)"
+  Then I should see "commenter on Chapter 1" within "h4"
     
 Scenario: Comment threading, comment editing
   When I am logged in as "author"
