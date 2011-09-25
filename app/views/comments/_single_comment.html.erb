@@ -17,7 +17,14 @@
       </p>
     <% else %>
       <% cache single_comment do %>
-        <h4><%= get_commenter_pseud_or_name(single_comment) %></h4>
+        <h4>
+          <%= get_commenter_pseud_or_name(single_comment) %>
+          <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
+            <span class='parent'>
+              <%= ts('on Chapter %{position}', :position => single_comment.parent.position) %>
+            </span>
+          <% end %>
+        </h4>
         <div class="icon">
           <% if !single_comment.pseud.nil? %>
             <%= standard_icon_display(single_comment.pseud.user, single_comment.pseud) %>
@@ -25,11 +32,6 @@
             <span class="visitor icon"><!-- visitor icon holder --></span>
           <% end %>
         </div>
-        <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
-          <p class='parent'>
-            <%= ts('Comment on Chapter %{position}', :position => single_comment.parent.position) %>
-          </p>
-        <% end %>
         <blockquote class="userstuff">
           <%=raw sanitize_field(single_comment, :content) %>
         </blockquote>
