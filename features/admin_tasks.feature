@@ -249,14 +249,15 @@ Feature: Admin tasks
   Then I should see "rolex"
     And I should see "Spam"
   When I follow "Spam"
-  Then I should not see "rolex"
+  Then I should see "Not Spam"
   When I follow "Hide Comments"
   # TODO: Figure out if this is a defect or not, that it shows 2 instead of 1
   # Then I should see "Read Comments (1)"
 
   # comment should no longer be there
   When I follow "Read Comments"
-  Then I should not see "rolex"
+  Then I should see "rolex"
+    And I should see "Not Spam"
   When I am logged out as an admin
     And I view the work "The One Where Neal is Awesome"
     And I follow "Read Comments"
@@ -264,8 +265,7 @@ Feature: Admin tasks
   When I am logged in as "author" with password "password"
     And I view the work "The One Where Neal is Awesome"
     And I follow "Read Comments"
-    And "Issue 2213" is fixed
-  # Then I should not see "rolex"
+    Then I should not see "rolex"
 
   Scenario: make an admin post and receive comment notifications for comments posted to it
   
