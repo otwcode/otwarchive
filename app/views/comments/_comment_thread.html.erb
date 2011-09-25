@@ -1,7 +1,7 @@
 <!-- START thread -->
 <ol class="thread">
   <% for comment in comments %>
-    <% if comment.approved or logged_in? %>
+    <% if comment.approved? || logged_in_as_admin? %>
     
       <%= render :partial => 'comments/single_comment', :object => comment %>	  
       
