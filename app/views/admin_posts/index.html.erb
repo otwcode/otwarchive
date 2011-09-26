@@ -2,17 +2,8 @@
 <% if logged_in_as_admin? %>
   <%= render :partial => "admin_index" %>
 <% else %>
-<h2><%=h 'AO3 News' %></h2>
-<% if @tag %>
-<p>
-  <%= "Tagged: #{@tag.name}" %>
-  &nbsp;&nbsp;
-  <%= link_to "View All", admin_posts_path %>
-</p>
-<% end %>
-<% if @language %>
-<p><%= "Language: #{@language.name}" %></p>
-<% end %>
+<h2><%= link_to 'AO3 News', admin_posts_path %></h2>
+<%= render 'filters' %>
 <!--/descriptions-->
 
   <!--subnav-->
