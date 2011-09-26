@@ -2,7 +2,7 @@
 <% if logged_in_as_admin? %>
   <%= render :partial => "admin_index" %>
 <% else %>
-<h2><%= link_to 'AO3 News', admin_posts_path %></h2>
+<h2><%= link_to ts('AO3 News'), admin_posts_path %></h2>
 <%= render 'filters' %>
 <!--/descriptions-->
 
