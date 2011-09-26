@@ -15,8 +15,10 @@ class AdminPostsController < ApplicationController
     if params[:language_id]
       @language = Language.find_by_short(params[:language_id])
       @admin_posts = @admin_posts.where(:language_id => @language.id)
+      @tags = AdminPostTag.where(:language_id => @language.id).order(:name)
     else
       @admin_posts = @admin_posts.non_translated
+      @tags = AdminPostTag.order(:name)
     end
     @admin_posts = @admin_posts.order('created_at DESC').paginate(:page => params[:page], :per_page => 8)
   end

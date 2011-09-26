@@ -1,29 +1,20 @@
 <div class="admin home">
-  <!--Descriptive page name, messages and instructions-->
+<!--Descriptive page name, messages and instructions-->
   <% if logged_in_as_admin? %>
     <%= render :partial => "admin_index" %>
   <% else %>
     <div class="primary header module">
-      <h2 class="heading"><%= ts("AO3 News") %></h2>
+      <h2 class="heading"><%= link_to ts("AO3 News"), admin_posts_path %></h2>
       <div class="icon"></div>
+      <%= render 'filters' %>
+<!--/descriptions-->
+
       <!--subnav-->
-      <% if @tag %>
-        <p>
-          <%= "Tagged: #{@tag.name}" %>
-          &nbsp;&nbsp;
-          <%= link_to "View All", admin_posts_path %>
-        </p>
-      <% end %>
-      <% if @language %>
-        <p><%= "Language: #{@language.name}" %></p>
-      <% end %>
-  <!--/descriptions-->
-  <!--subnav-->
-  <ul class="navigation actions" role="navigation">
-    <li><%= link_to_rss admin_posts_path(:rss) %></li>
-  </ul>
-  <!--/subnav-->
-  </div>
+      <ul class="navigation actions" role="navigation">
+        <li><%= link_to_rss admin_posts_path(:rss) %></li>
+      </ul>
+      <!--/subnav-->
+    </div>
   <!--main content-->
   <% @admin_posts.each do |admin_post| %>
 
