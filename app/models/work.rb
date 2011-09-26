@@ -510,9 +510,14 @@ class Work < ActiveRecord::Base
   end
 
   # Change the positions of the chapters in the work
-	def reorder(positions)
-	  SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
-	end
+  def reorder(positions)
+    SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
+    # We're caching the chapter positions in the comment blurbs
+    # so we need to expire them
+    unless self.comments.empty?
+      self.comments.each{ |c| c.touch }
+    end
+  end
 
   # Get the total number of chapters for a work
   def number_of_chapters
