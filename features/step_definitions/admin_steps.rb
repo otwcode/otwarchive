@@ -90,6 +90,12 @@ Given /^I have posted known issues$/ do
     And %{I press "Post"}
 end
 
+Given /^I have posted an admin post$/ do
+  Given "I am logged in as an admin"
+    And "I make an admin post"
+    And "I am logged out as an admin"
+end
+
 ### WHEN
 
 When /^I turn off guest downloading$/ do
