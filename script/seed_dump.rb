@@ -28,7 +28,7 @@ SEEDS = [
 EMAIL = [ "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
           "admin-kielix", "admin-shalott", "admin-sidra",
           "astolat", "aworldinside", "bingeling", "cesy", "cesytest", "elz",
-          "Enigel", "Sidra", "testy", "xparrot", "Zooey_Glass" ]
+          "Enigel", "mumble", "Sidra", "testy", "xparrot", "Zooey_Glass" ]
 
 # a bunch of bigger collections (>250 works)
 # probably would be scooped up anyway, but just in case
