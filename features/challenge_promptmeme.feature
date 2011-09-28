@@ -139,7 +139,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I go to the collections page
-  Then I should see "Prompts: 2"
+  Then I should see "Prompts 2"
 
   Scenario: Signups in the dashboard have correct controls
   
