@@ -94,10 +94,8 @@ Feature: Collection
     And I should see "Part of Hidden Treasury"
   When I go to the bookmarks page
   Then I should see "List of Bookmarks"
-    And "Issue 2208" is fixed
-    # And I should see "Mystery Work"
-    # And I should not see "Another Snippet"
-    And I should see "Another Snippet"
+    And I should see "Mystery Work"
+    And I should not see "Another Snippet"
   
   When I am logged in as "myname2" with password "something"
     And I go to the collections page
@@ -112,7 +110,7 @@ Feature: Collection
   # Reveal the collection
   When I follow "Settings"
     And I uncheck "Is this collection currently unrevealed?"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Collection was successfully updated"  
   # Works should no longer be hidden on the collection dashboard
     And I should not see "Mystery Work"
@@ -273,7 +271,7 @@ Feature: Collection
   When I go to "Anonymous Hugs" collection's page
     And I follow "Settings"
     And I uncheck "Is this collection currently anonymous?"
-    And I press "Submit"
+    And I press "Update"
   Then I should see "Collection was successfully updated"  
   # Authors should no longer be hidden on the collection dashboard
     And I should not see "New Snippet by Anonymous"

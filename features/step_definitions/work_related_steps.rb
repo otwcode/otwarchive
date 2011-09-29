@@ -13,6 +13,14 @@ Given /^I have related works setup$/ do
     And "I am logged out"
 end
 
+Given /^a translation has been posted$/ do
+  When "I post a translation"
+end
+
+Given /^a remix has been posted$/ do
+  When "I post a related work"
+end
+
 ### WHEN
 
 When /^I post a related work$/ do
@@ -30,9 +38,18 @@ end
 
 When /^I post a translation$/ do
   When %{I am logged in as "translator"}
-    And %{I go to the new work page}
-    And %{I select "Not Rated" from "Rating"}
-    And %{I check "No Archive Warnings Apply"}
+    And %{I draft a translation}
+  When %{I press "Post"}
+end
+
+When /^I post a translation of my own work$/ do
+  When %{I am logged in as "inspiration"}
+    And %{I draft a translation}
+  When %{I press "Post"}
+end
+
+When /^I draft a translation$/ do
+  When %{I go to the new work page}
     And %{I fill in "Fandoms" with "Stargate"}
     And %{I fill in "Work Title" with "Worldbuilding Translated"}
     And %{I fill in "content" with "That could be an amusing crossover."}
@@ -40,7 +57,6 @@ When /^I post a translation$/ do
     And %{I check "This is a translation"}
     And %{I select "Deutsch" from "Choose a language"}
     And %{I press "Preview"}
-  When %{I press "Post"}
 end
 
 When /^I approve a related work$/ do
@@ -49,7 +65,6 @@ When /^I approve a related work$/ do
   When %{I follow "My Related Works"}
   When %{I follow "Approve"}
   When %{I press "Yes, link me!"}
-  Then %{I should see "Link was successfully approved"}
 end
 
 When /^I view my related works$/ do
@@ -66,4 +81,8 @@ end
 
 Then /^the original author should be emailed$/ do
   Then "1 email should be delivered"
+end
+
+Then /^approving the related work should succeed$/ do
+  Then %{I should see "Link was successfully approved"}
 end

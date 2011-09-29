@@ -6,9 +6,9 @@
 <caption><%=h t('.list', :default => "List of participants") %></caption>
 <thead>
 	<tr>
-  <th scope="col"><%=h t('.participant', :default => "Participant") %></th>
-  <th scope="col"><%=h t('.role', :default => "Role") %></th>
-  <th scope="col"><%=h t('.manage', :default => "Manage") %></th>
+  <th scope="col"><%= ts("Participant") %></th>
+  <th scope="col"><%= ts("Role") %></th>
+  <th scope="col"><%= ts("Manage") %></th>
 </tr>
 </thead>
 <tbody>
@@ -18,7 +18,7 @@
 </tbody>
 <tfoot>
 	<tr>
-		<th scope="col" colspan="3"><%=h t('.add_participants', :default => "Add Participant") %></th>
+		<th scope="col" colspan="3"><%= ts("Add Participant") %></th>
 <%= render :partial => 'add_participants_form' %>
 </tr>
 </tfoot>

@@ -1,2 +1,0 @@
-page.hide 'first-login-help-banner'
-page << "hideIbox();"

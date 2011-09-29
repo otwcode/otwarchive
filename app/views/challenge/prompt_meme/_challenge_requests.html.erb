@@ -12,7 +12,10 @@
 <% if (current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) || show_request_description || params[:hide_descriptions] || show_request_url || params[:hide_urls] %>
   <ul class="navigation">
     <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
-      <li><%= link_to ts("Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
+      <li>
+        <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv), html_options = {:class => "nav-with-help"} %>
+      <%= link_to_help "csv-download" %>
+    </li>
     <% end %>
     <% if show_request_description %>
       <li><%= link_to ts("Hide Descriptions"), 
@@ -65,7 +68,7 @@
   <!-- header row -->
   <thead><tr>
     <th scope="col">Pseud</th>
-    <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
+    <% if current_user && @collection.user_is_maintainer?(current_user) %>
       <th scope="col">Email</th>
     <% end %>
     
@@ -92,32 +95,32 @@
   </tr></thead>
 
   <!-- body of table --><tbody>
-  <% @requests.each do |challenge_signup| %> 
-    <% if params[:show_filled] == "true" || challenge_signup.unfulfilled? %>
-        <% prompt = challenge_signup %>
+  <% @requests.each do |promptall| %>
+    <% if params[:show_filled] == "true" || promptall.unfulfilled? %>
+        <% prompt = promptall %>
     <% end %>
     <% unless !prompt %>
     <tr>
-
-      <% cache("collection-#{@collection.id}-signup-#{challenge_signup.id}") do %>
-      
-      <td><% if !prompt || prompt.anonymous? %>
-        (Anonymous)</td>
-        <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
+      <% # don't cache this bit %>
+      <% if !prompt || prompt.anonymous? %>
+        <td>(Anonymous)</td>
+        <% if current_user && @collection.user_is_maintainer?(current_user) %>
           <td>&nbsp;</td>
         <% end %>
       <% else %>
-        <%= link_to prompt.challenge_signup.pseud.name, collection_signup_path(@collection, prompt.challenge_signup) %></td>
-        <% if current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)) %>
+        <td><%= link_to prompt.challenge_signup.pseud.name, collection_signup_path(@collection, prompt.challenge_signup) %></td>
+        <% if current_user && @collection.user_is_maintainer?(current_user) %>
           <td><%= mailto_link prompt.challenge_signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></td>
         <% end %>
       <% end %>
+      
+      <% cache(prompt) do %>
       <!-- show tags, description, url for all allowed requests and offers: using a lot of evals here to DRY up the code since it's so repetitive -->
           <% TagSet::TAG_TYPES.each do |type| %>
             <% if eval("@show_request_#{type}_tags") %>
               <td>
                 <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
-                  <%= content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type))) %>
+                  <%= content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type)), :class => "tags") %>
                 <% end %>
               </td>
             <% end %>  
@@ -125,10 +128,14 @@
           <% if eval("show_request_optional_tags") %>
             <td>
               <% if prompt && prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
-                <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
+                <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags), :class => "tags") %>
               <% end %>
             </td>
           <% end %>
+
+      <% end %><!-- end cache -->
+
+      <% # don't cache desc and URL, as they can be hidden %>
           <% if eval("show_request_description") %>
             <td><%= !prompt || prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) -%></td>
           <% end %>
@@ -136,11 +143,9 @@
             <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) -%></td>
           <% end %>
 
-      <% end %><!-- end cache --> 
-      
       <% # don't cache controls, as they're different for the mod %>
         <td class="navigation">
-          <%= render :partial => "challenge_signups/signup_controls", :locals => {:challenge_signup => prompt.challenge_signup, :prompt_id => prompt.id} -%>
+          <%= render :partial => "prompts/prompt_controls", :locals => {:challenge_signup => prompt.challenge_signup, :prompt => prompt} -%>
         </td>
       <% if params[:show_claims] == "true" %>
         <td>
@@ -162,3 +167,5 @@
   <% end %>
   </tbody>
 </table>
+
+<%= will_paginate @requests %>

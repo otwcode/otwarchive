@@ -6,6 +6,8 @@ class AdminSetting < ActiveRecord::Base
   before_save :update_invite_date
   before_update :check_filter_status
   after_save :expire_cached_settings
+  
+  attr_protected :banner_text_sanitizer_version
 
   def self.invite_from_queue_enabled?
     self.first ? self.first.invite_from_queue_enabled? : ArchiveConfig.INVITE_FROM_QUEUE_ENABLED
@@ -70,7 +72,10 @@ class AdminSetting < ActiveRecord::Base
   private
   
   def expire_cached_settings
-    Rails.cache.delete("admin_settings")
+    if Rails.env.production? || Rails.env.test?
+      Rails.cache.delete("admin_settings")
+      Rails.cache.delete("banner_text")
+    end
   end
 
   def check_filter_status

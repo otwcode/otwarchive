@@ -3,7 +3,7 @@
 require 'ostruct'
 require 'yaml'
 hash = YAML.load_file("#{Rails.root}/config/config.yml")
-if File.exist?("#{Rails.root}/config/local.yml") && !Rails.env.test?
+if !Rails.env.test?
   hash.merge! YAML.load_file("#{Rails.root}/config/local.yml")
 end
 ::ArchiveConfig = OpenStruct.new(hash)
@@ -15,7 +15,11 @@ if Rails.env == 'production'
     config.api_key = ArchiveConfig.HOPTOAD_KEY
     config.params_filters << ["email", "crypted_password", "salt"]
   end
+  PiwikAnalytics::Config.id_site = ArchiveConfig.PIWIK_SITE_NUMBER
+  PiwikAnalytics::Config.url = ArchiveConfig.PIWIK_URL
+  PiwikAnalytics::Config.use_async = ArchiveConfig.PIWIK_USE_ASYNC
 end
+
 
 
 ### more items here preserved from Rails 2 environment.rb that might not belong here

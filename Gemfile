@@ -38,10 +38,7 @@ gem 'aws-s3', :require => 'aws/s3'
 gem 'mocha'
 gem 'css_parser'
 
-gem 'paperclip',
-  :git => 'git://github.com/thoughtbot/paperclip.git',
-  :branch => 'master',
-  :require => 'paperclip'
+gem 'paperclip', '>=2.3.16'
 
 gem 'tolk',
   :git => 'git://github.com/ambtus/tolk.git',
@@ -62,6 +59,8 @@ gem "escape_utils"
 
 # enable debugging with "rails server -u" or "rails server --debugger"
 gem 'ruby-debug19', :require => 'ruby-debug'
+
+gem 'jquery-rails', '>= 0.2.6'
 
 # for converting strings into numeric values eg for sorting autocomplete
 gem 'radix'
@@ -91,4 +90,3 @@ group :production do
   gem "memcache-client"
   gem "hoptoad_notifier", "~> 2.3"
 end
-

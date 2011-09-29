@@ -10,16 +10,36 @@ Scenario: Banner is blank until admin sets it
 
 Scenario: Admin can set banner
 
-  When an admin sets a custom banner notice
-    And I am logged in as "ordinaryuser"
+  Given an admin sets a custom banner notice
+  When I am logged in as "ordinaryuser"
   Then the banner notice for a logged-in user should be set to "Custom notice"
+
+Scenario: Changing other settings doesn't change the banner
+
+  Given an admin sets a custom banner notice
+  When I turn off guest downloading
+  Then I should see "Archive settings were successfully updated"
+
+Scenario: Admin can set banner including a link
+
+  Given an admin sets a custom banner notice with a link
+  When I am logged in as "ordinaryuser"
+  Then the banner notice for a logged-in user should be set to "Please donate to the OTWtest"
+
+Scenario: User can follow a link in the banner
+
+  Given an admin sets a custom banner notice with a link
+    And I am logged in as "ordinaryuser"
+    And I am on the home page
+  When I follow "OTWtest"
+  Then I should see "Support and Feedback"
 
 Scenario: User can turn off banner using words
 
   When an admin sets a custom banner notice
   When I am logged in as "newname"
   When I am on my user page
-  When I follow "Hide this banner"
+  When I press "Hide this banner"
   Then I should not see "Custom notice words"
 
 Scenario: User can turn off banner using X button

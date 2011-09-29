@@ -1,19 +1,19 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts('New comment for') %> <%= @comment.commentable_name %></h2>
+<h2><%= ts("New comment on %{name}", :name => @name) %></h2>
 <%= error_messages_for :comment %>
 <!--/descriptions-->
 
 <!--main content-->
 <%= render :partial => 'comments/comment_form', :locals => {
     :comment => @comment, 
-    :commentable => @comment.commentable, 
-    :button_name => ts('Add Comment')
+    :commentable => @commentable,
+    :button_name => ts("Add Comment")
   } 
 %>
 <!--/content-->
 
 <!--subnav-->
 <ul class="navigation"><!--INVESTIGATE-->
-  <li><%= link_to ts('Back'), @commentable %></li>
+  <li><%= link_to ts("Back"), @commentable.is_a?(Tag) ? tag_path(@commentable) : polymorphic_path(@commentable) %></li>
 </ul>
 <!--/subnav-->

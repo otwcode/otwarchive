@@ -4,13 +4,13 @@ module ApplicationHelper
   
   include HtmlCleaner
 
-	# Generates class names for the main div in the application layout
-	def classes_for_main
+  # Generates class names for the main div in the application layout
+  def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " sidebar" if show_sidebar
     class_names
-	end
+  end
 
   # A more gracefully degrading link_to_remote.
   def link_to_remote(name, options = {}, html_options = {})
@@ -61,7 +61,7 @@ module ApplicationHelper
   # and show only the authors when in preview_mode, unless they're empty
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = h(ts("Anonymous"))
+      anon_byline = ts("Anonymous")
       if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
         end
@@ -91,18 +91,61 @@ module ApplicationHelper
       pseuds.collect { |pseud| 
         archivists[pseud].nil? ? 
             pseud_link(pseud) :
-            archivists[pseud] + ts("[archived by") + pseud_link(pseud) + "]"
+            archivists[pseud] + " [" + ts("archived by %{name}", :name => pseud_link(pseud)) + "]"
       }.join(', ').html_safe
     end
   end
 
   def pseud_link(pseud)
     if @downloading
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false))
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
     else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author")
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author", :rel => "author")
     end
   end
+  
+   # A plain text version of the byline, for when we don't want to deliver a linkified version.
+  def text_byline(creation, options={})
+    if creation.respond_to?(:anonymous?) && creation.anonymous?
+      anon_byline = ts("Anonymous")
+      if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
+        anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
+        end
+      return anon_byline
+    end
+    non_anonymous_text_byline(creation)
+  end
+      
+  def non_anonymous_text_byline(creation)
+    if creation.respond_to?(:author)
+      creation.author
+    else
+      pseuds = []
+      pseuds << creation.authors if creation.authors
+      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
+      pseuds = pseuds.flatten.uniq.sort
+    
+      archivists = {}
+      if creation.is_a?(Work)
+        external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
+        external_creatorships.each do |ec|
+          archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
+          archivists[archivist_pseud] = ec.external_author_name.name
+        end
+      end
+    
+      pseuds.collect { |pseud| 
+        archivists[pseud].nil? ? 
+            pseud_text(pseud) :
+            archivists[pseud] + ts("[archived by") + pseud_text(pseud) + "]"
+      }.join(', ').html_safe
+    end
+  end
+
+  def pseud_text(pseud)
+      pseud.byline
+  end
+
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
@@ -228,11 +271,11 @@ module ApplicationHelper
     out += observe_field(field_id, options.merge(:function => function))
     return out
   end
-  
+
   def generate_countdown_html(field_id, max) 
     generated_html = "<p class=\"character_counter\">".html_safe
-    generated_html += "<span id=\"#{field_id}_counter\">?</span>".html_safe
-    generated_html += countdown_field(field_id, field_id + "_counter", max) + " ".html_safe + h(ts('characters left'))
+    generated_html += ("<span id=\"#{field_id}_counter\" data-maxlength=\"" + max.to_s + "\">" + max.to_s + "</span>").html_safe
+    generated_html += " ".html_safe + (ts('characters left'))
     generated_html += "</p>".html_safe
     return generated_html
   end
@@ -297,18 +340,26 @@ module ApplicationHelper
   # toggle an options (scrollable checkboxes) section of a form to show all of the options
   def options_toggle(options_id, options_size)
     toggle_show = content_tag(:a, ts("Show all %{options_size} options", :options_size => options_size), 
-                              :class => "toggle", :id => "#{options_id}_show", 
-                              :onclick => "$('#{options_id}').writeAttribute('class', 'options all');
-                                           $('#{options_id}_hide').show();
-                                           this.hide();")
+                              :class => "toggle", :id => "#{options_id}_show")
 
     toggle_hide = content_tag(:a, ts("Collapse options"), :style => "display: none;",
-                              :class => "toggle", :id => "#{options_id}_hide", 
-                              :onclick => "$('#{options_id}').writeAttribute('class', 'options#{options_size > (ArchiveConfig.OPTIONS_TO_SHOW *   3) ? ' many' : ''}');
-                                           $('#{options_id}_show').show();
-                                           this.hide();")
+                              :class => "toggle", :id => "#{options_id}_hide")
 
-    toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide)
+    javascript_bits = content_for(:footer_js) {
+      javascript_tag("$j(document).ready(function(){\n" +
+        "$j('##{options_id}_show').click(function() {\n" +
+          "$j('##{options_id}').attr('class', 'options all');\n" + 
+          "$j('##{options_id}_hide').show();\n" +
+          "$j(this).hide();\n" +
+        "});" + "\n" + 
+        "$j('##{options_id}_hide').click(function() {\n" +
+          "$j('##{options_id}').attr('class', 'options#{options_size > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''}');\n" +
+          "$j('##{options_id}_show').show();\n" +
+          "$j(this).hide();\n" +
+        "});\n" +
+      "})")
+    }
+    toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide + "\n".html_safe + javascript_bits)
   end
 
   # create a scrollable checkboxes section for a form

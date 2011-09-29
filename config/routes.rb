@@ -4,14 +4,14 @@ Otwarchive::Application.routes.draw do
 
   match 'downloads/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
 
-  #### YULETIDE 2010 ####
+  #### STATIC CACHED COLLECTIONS ####
 
   namespace 'static' do
-    resources :collections do
-      resources :media
-      resources :fandoms
-      resources :works
-      resources :restricted_works
+    resources :collections, :only => [:show] do
+      resources :media, :only => [:show]
+      resources :fandoms, :only => [:index, :show]
+      resources :works, :only => [:show]
+      resources :restricted_works, :only => [:index, :show]
     end
   end
 
@@ -72,21 +72,20 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
 
-  resources :admin_sessions
+  resources :admin_sessions, :only => [:new, :create, :destroy]
 
   match '/admin/login' => 'admin_sessions#new'
   match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
     resources :settings
-    resources :approve_skins
     resources :skins do
       collection do
         get :index_rejected
         get :index_approved
       end
     end
-    resources :user_creations do
+    resources :user_creations, :only => [:destroy] do
       member do
         get :hide
       end
@@ -110,28 +109,30 @@ Otwarchive::Application.routes.draw do
 
   #### USERS ####
 
-  resources :people do
+  resources :people, :only => [:index, :show] do
     collection do
       get :search
     end
   end
 
-  resources :passwords
+  resources :passwords, :only => [:new, :create]
 
   # When adding new nested resources, please keep them in alphabetical order
   resources :users do
     member do
       get :browse
+	  get :change_email
+	  post :change_email
       get :change_openid
       post :change_openid
-      get :change_password
+	  get :change_password
       post :change_password
       get :change_username
       post :change_username
       post :end_first_login
       post :end_banner
     end
-    resources :assignments, :controller => "challenge_assignments" do
+    resources :assignments, :controller => "challenge_assignments", :only => [:index] do
       member do
         get :default
       end
@@ -176,9 +177,6 @@ Otwarchive::Application.routes.draw do
       resources :bookmarks
     end
     resources :readings do
-      member do
-        get :marktoread
-      end
       collection do
         post :clear
       end
@@ -255,6 +253,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :compare
       post :merge
+      get :fetch
     end
     resources :bookmarks
     resources :related_works
@@ -306,7 +305,7 @@ Otwarchive::Application.routes.draw do
         get :summary
       end
     end
-    resources :assignments, :controller => "challenge_assignments" do
+    resources :assignments, :controller => "challenge_assignments", :except => [:new, :edit, :update] do
       collection do
         get :generate
         put :set
@@ -326,7 +325,7 @@ Otwarchive::Application.routes.draw do
         put :set
         get :purge
       end
-    end    
+    end
     resources :potential_matches do
       collection do
         get :generate
@@ -373,7 +372,14 @@ Otwarchive::Application.routes.draw do
 
   #### SESSIONS ####
 
-  resources :user_sessions
+  resources :user_sessions, :only => [:new, :create, :destroy] do
+    collection do
+      get :openid_small
+      get :passwd_small
+      get :openid
+      get :passwd
+    end
+  end
   match 'login' => 'user_sessions#new'
   match 'logout' => 'user_sessions#destroy'
 
@@ -414,12 +420,17 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :redirects
+  resources :redirects, :only => [:index] do
+    collection do
+      get :do_redirect
+    end
+  end
+
   resources :abuse_reports
   resources :external_authors do
     resources :external_author_names
   end
-  resources :orphans do
+  resources :orphans, :only => [:index, :new, :create] do
     collection do
       get :about
     end
@@ -432,6 +443,7 @@ Otwarchive::Application.routes.draw do
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
   match 'site_map' => 'home#site_map'
+  match 'site_pages' => 'home#site_pages'
   match 'first_login_help' => 'home#first_login_help'
   match 'delete_confirmation' => 'users#delete_confirmation'
   match 'activate/:id' => 'users#activate', :as => 'activate'

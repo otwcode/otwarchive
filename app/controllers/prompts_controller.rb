@@ -3,7 +3,7 @@ class PromptsController < ApplicationController
   before_filter :users_only
   before_filter :load_collection, :except => [:index]
   before_filter :load_challenge, :except => [:index]
-  before_filter :promptmeme_only, :except => [:index]
+  before_filter :promptmeme_only, :except => [:index, :new]
   before_filter :load_prompt_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :allowed_to_destroy, :only => [:destroy]
   before_filter :signup_owner_only, :only => [:edit, :update]
@@ -39,7 +39,7 @@ class PromptsController < ApplicationController
   end
 
   def signup_owner_only
-    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (!@challenge.signup_open && @collection.user_is_owner?(current_user)))
+    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)))
   end
 
   def maintainer_or_signup_owner_only
@@ -57,7 +57,7 @@ class PromptsController < ApplicationController
   end
 
   def not_allowed
-    flash[:error] = t('challenge_signups.not_allowed', :default => "Sorry, you're not allowed to do that.")
+    flash[:error] = ts("Sorry, you're not allowed to do that.")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -91,35 +91,12 @@ class PromptsController < ApplicationController
       return false unless @challenge
     end
 
-    # using respond_to in order to provide Excel output
-    # see below for export_excel method
-    respond_to do |format|
-      format.html {
-          if @challenge.user_allowed_to_see_signups?(current_user)
-            @challenge_signups = @collection.signups.joins(:pseud).paginate(:page => params[:page], :per_page => 20, :order => "pseuds.name")
-          elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
-            @challenge_signups = @collection.signups.by_user(current_user)
-          else
-            not_allowed
-          end
-      }
-      format.xls {
-        if (@collection.challenge_type == "GiftExchange" && @challenge.user_allowed_to_see_signups?(current_user)) || 
-        (@collection.challenge_type == "PromptMeme" && (
-        @collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user)
-        ))
-          params[:show_urls] = true
-          params[:show_descriptions] = true
-          params[:show_claims] = true
-          params[:show_filled] = true
-          params[:xls] = true
-          @challenge_signups = @collection.signups
-          export_html
-        else
-          flash[:error] = ts("You aren't allowed to see the Excel summary.")
-          redirect_to collection_path(@collection) rescue redirect_to '/' and return
-        end
-      }
+    if @challenge.user_allowed_to_see_signups?(current_user)
+      @challenge_signups = @collection.signups.joins(:pseud).paginate(:page => params[:page], :per_page => 20, :order => "pseuds.name")
+    elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+      @challenge_signups = @collection.signups.by_user(current_user)
+    else
+      not_allowed
     end
   end
 
@@ -151,11 +128,9 @@ class PromptsController < ApplicationController
   end
 
   def new
-    if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
-      flash[:notice] = ts("You are already signed up for this challenge. You can edit your signup below.")
-      redirect_to edit_collection_signup_path(@collection, @challenge_signup)
-    else
-      @challenge_signup = ChallengeSignup.new
+    unless (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
+      flash[:error] = ts("Please submit a basic signup with the required fields first")
+      redirect_to new_collection_signup_path(@collection) rescue redirect_to '/' and return
     end
   end
 
@@ -191,33 +166,13 @@ class PromptsController < ApplicationController
       @prompt.destroy
       flash[:notice] = ts("Prompt was deleted.")
     end
-    if @collection.user_is_maintainer?(current_user)
+    if @collection.user_is_maintainer?(current_user) && @collection.challenge_type == "PromptMeme"
+      redirect_to collection_requests_path(@collection)
+    elsif @collection.user_is_maintainer?(current_user)
       redirect_to collection_signups_path(@collection)
     else
       redirect_to @collection
     end
   end
-
-
-protected
-  # eventually for exporting to excel tsv format
-  # BOM = "\377\376" #Byte Order Mark
-  #
-  # def export_tsv(signups)
-  #   filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.tsv"
-  #   content = signups.collect {|signup| signup.to_tsv}.join("\n")
-  #   content = BOM + Iconv.conv("utf-16le", "utf-8", content)
-  #   send_data content, :filename => filename
-  # end
-
-  # We just export an HTML table, but we give it the xls suffix to have Excel/Open Office recognize it correctly
-  def export_html
-    @page_title = "#{@collection.name} Signups at #{Time.now.strftime('%Y-%m-%d-%H%M')}"
-    @hide_navigation = true
-    filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.xls"
-    content = render_to_string(:template => "challenge_signups/index.html", :layout => 'barebones.html')
-    send_data content, :filename => filename
-  end
-
 
 end

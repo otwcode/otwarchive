@@ -4,39 +4,50 @@ Feature: Comment on work
   As a reader
   I'd like to comment on a work
 
-Scenario: When logged in I can comment on a work, comment threading, comment editing
+Scenario: Comment links from downloads and static pages
+  When I am logged in as "author"
+    And I post the work "Generic Work"
+  When I am logged in as "commenter"
+    And I visit the new comment page for the work "Generic Work"
+  Then I should see the comment form
+
+Scenario: When logged in I can comment on a work
   Given I have no works or comments
-    And the following activated user exists
-    | login         | password   |
-    | author        | password   |
-    And given the following activated users exist
-    | login         | password   |
-    | commenter     | password   |
-    | commenter2    | password   |
-    | commenter3    | password   |
-  When I am logged in as "author" with password "password"
+  When I am logged in as "author"
     And I post the work "The One Where Neal is Awesome"
-  When I am logged out
-    And I am logged in as "commenter" with password "password" 
+  When I am logged in as "commenter"
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "I loved this!"
     And I press "Add Comment" 
   Then I should see "Comment created!" 
     And I should see "I loved this!" within ".odd"
+    And I should not see "on Chapter 1" within ".odd"
+  When I am logged in as "author"
+    And I view the work "The One Where Neal is Awesome"
+    And I follow "Add Chapter"
+    And I fill in "content" with "A second chapter to test multi-chapter comments"
+    And I press "Post without preview"
+    And I follow "View Entire Work"
+    And I follow "Read Comments (1)"
+  Then I should see "commenter on Chapter 1" within "h4"
+    
+Scenario: Comment threading, comment editing
+  When I am logged in as "author"
+    And I post the work "The One Where Neal is Awesome"
+  When I am logged in as "commenter"
+    And I post the comment "I loved this!" on the work "The One Where Neal is Awesome"
   When I follow "Reply"
     And I fill in "Comment" with "I wanted to say more." within ".odd"
     And I press "Add Comment" within ".odd"
   Then I should see "Comment created!"
     And I should see "I wanted to say more." within ".even"
-  When I follow "Log out" 	
-    And I am logged in as "commenter2" with password "password" 
+  When I am logged in as "commenter2"
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "I loved it, too."
     And I press "Add Comment"
   Then I should see "Comment created!"
     And I should see "I loved it, too."
-  When I follow "Log out" 	
-    And I am logged in as "author" with password "password" 
+  When I am logged in as "author"
     And I view the work "The One Where Neal is Awesome"
     And I follow "Read Comments (3)"
     And I follow "Reply" within ".even"
@@ -44,8 +55,7 @@ Scenario: When logged in I can comment on a work, comment threading, comment edi
     And I press "Add Comment" within ".even"
   Then I should see "Comment created!"
     And I should see "Thank you." within ".odd"
-  When I am logged out
-    And I am logged in as "commenter" with password "password" 
+  When I am logged in as "commenter"
     And I view the work "The One Where Neal is Awesome"
     And I follow "Read Comments (4)"
     And I follow "Reply" within ".thread .thread .odd"
@@ -59,8 +69,7 @@ Scenario: When logged in I can comment on a work, comment threading, comment edi
     And I should not see "Mistaken comment"
     And I should see "Posted"
     And I should see "Last Edited"
-  When I am logged out
-    And I am logged in as "commenter3" with password "password" 
+  When I am logged in as "commenter3"
     And I view the work "The One Where Neal is Awesome"
     And I follow "Read Comments (5)"
     And I follow "Reply" within ".thread .even"
@@ -76,14 +85,9 @@ Scenario: When logged in I can comment on a work, comment threading, comment edi
     And I should see "I loved this" within ".odd"
 
   Scenario: Try to post an invalid comment '
-    Given the following activated users exist
-      | login        | password   |
-      | author       | password   |
-      | commenter    | password   |
-    When I am logged in as "author" with password "password"
+    When I am logged in as "author"
       And I post the work "Generic Work"
-      And I am logged out
-    When I am logged in as "commenter" with password "password"
+    When I am logged in as "commenter"
       And I view the work "Generic Work"
       And I compose an invalid comment
       And I press "Add Comment"
@@ -103,3 +107,23 @@ Scenario: When logged in I can comment on a work, comment threading, comment edi
       And I press "Update"
     Then I should see "must be less than"
       And I should see "Sed mollis sapien ac massa pulvinar facilisis"
+      
+Scenario: Don't receive comment notifications of your own comments by default
+
+  When I am logged in as "author"
+    And I post the work "Generic Work"
+  When I am logged in as "commenter"
+    And I post the comment "Something" on the work "Generic Work"
+  Then "author" should be emailed
+    And "commenter" should not be emailed
+    
+Scenario: Set preference and receive comment notifications of your own comments
+
+  When I am logged in as "author"
+    And I post the work "Generic Work"
+  When I am logged in as "commenter"
+    And I set my preferences to receive copies of my own comments
+    And I post the comment "Something" on the work "Generic Work"
+  Then "author" should be emailed
+    And "commenter" should be emailed
+    And 1 email should be delivered to "commenter"

@@ -44,8 +44,18 @@ protected
 public
 
   before_filter :fetch_admin_settings
-  def fetch_admin_settings    
-    @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+  def fetch_admin_settings
+    if Rails.env.development?
+      @admin_settings = AdminSetting.first
+      unless @admin_settings.banner_text.blank?
+        @bannertext = sanitize_field(@admin_settings, :banner_text).html_safe
+      end
+    else
+      @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+      unless @admin_settings.banner_text.blank?
+        @bannertext = Rails.cache.fetch("banner_text"){sanitize_field(@admin_settings, :banner_text).html_safe}
+      end
+    end
   end
 
   # store previous page in session to make redirecting back possible
@@ -179,7 +189,7 @@ public
     end
 
     @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
-    @page_title
+    @page_title.html_safe
   end
 
   ### GLOBALIZATION ###
@@ -328,7 +338,7 @@ public
   def valid_sort_column(param, model='work')
     allowed = []
     if model.to_s.downcase == 'work'
-      allowed = ['author', 'title', 'date', 'word_count', 'hit_count']
+      allowed = ['author', 'title', 'date', 'created_at', 'word_count', 'hit_count']
     elsif model.to_s.downcase == 'tag'
       allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count']
     elsif model.to_s.downcase == 'collection'

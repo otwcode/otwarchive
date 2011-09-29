@@ -4,13 +4,13 @@ Feature: Inspirations, remixes and translations
   As a fan author, part of a fan community
   I want to be able to list related works
 
-Scenario: Posting a remix / inspired-by work, then editing
+Scenario: Posting a remix / inspired-by work should email the original author
   Given I have related works setup
   When I post a related work
   Then a related work should be seen
     And the original author should be emailed
-    
-Scenario: check that I see a remix under related works
+
+Scenario: check that remixer can see a remix under related works
 
   Given I have related works setup
   When I post a related work
@@ -19,8 +19,17 @@ Scenario: check that I see a remix under related works
   When I follow "My Related Works"
   Then I should see "Works remixer's works were inspired by"
     And I should see "Worldbuilding by inspiration"
+    
+Scenario: Author can see a remix under related works
 
-Scenario: posting a translation
+  Given I have related works setup
+  When I post a related work
+  When I am logged in as "inspiration"
+    And I view my related works
+  Then I should see "Works inspired by inspiration's works"
+    And I should see "Followup by remixer"
+
+Scenario: Can post a translation and it emails the original author
 
   Given I have related works setup
   When I post a translation
@@ -28,23 +37,55 @@ Scenario: posting a translation
     And I should see "A translation of Worldbuilding by inspiration"
     And 1 email should be delivered
 
-Scenario: check that I see a translation under related works
+Scenario: Translator sees a translation under related works
 
   Given I have related works setup
   When I post a translation
-  When I go to translator's user page
+  When I go to my user page
   Then I should see "My Related Works (1)"
   When I follow "My Related Works"
   Then I should see "Works translator has translated"
     And I should see "Worldbuilding by inspiration"
     And I should see "From English to Deutsch"
 
-Scenario: check that unapproved rels do not appear on the original
+Scenario: Unapproved rels do not appear on the original
 
   Given I have related works setup
   When I post a translation
   When I view the work "Worldbuilding"
   Then I should not see "Translated"
+  
+Scenario: Can approve a relationship
+
+  Given I have related works setup
+  When I post a related work
+  When I am logged in as "inspiration"
+    And I view my related works
+  When I follow "Approve"
+  Then I should see "Approve Link"
+  When I press "Yes, link me!"
+  Then I should see "Link was successfully approved"
+    And I should see "Works inspired by this one:"
+    And I should see "Followup by remixer"
+
+  Scenario: Can approve a translation
+
+  Given I have related works setup
+  When I post a translation
+  When I approve a related work
+  Then I should see "Link was successfully approved"
+    And I should see "Translation into Deutsch available:" within ".notes"
+    And I should see "Worldbuilding Translated by translator" within ".notes"
+    And I should see "Works inspired by this one:"
+    And I should see "Worldbuilding Translated by translator" within "li"
+
+Scenario: Approved work appears
+
+  Given I have related works setup
+  When I post a translation
+  When I approve a related work
+  When I view the work "Worldbuilding"
+  Then I should see "Translated"
 
 Scenario: See approved and unapproved relationships on the related works page as an author
 
@@ -55,50 +96,33 @@ Scenario: See approved and unapproved relationships on the related works page as
   When I view my related works
   Then I should see "Worldbuilding Approve"
     And I should see "Deutsch Remove"
-
-Scenario: approve remix and check they appear on the original, then remove and check
+    
+Scenario: Cannot see someone else's related works page
 
   Given I have related works setup
   When I post a related work
   When I am logged in as "inspiration"
-    And I view my related works
-  Then I should see "Works inspired by inspiration's works"
-    And I should see "Followup by remixer"
-  When I follow "Approve"
-  Then I should see "Approve Link"
-  When I press "Yes, link me!"
-  Then I should see "Link was successfully approved"
-    And I should see "Works inspired by this one:"
-    And I should see "Followup by remixer"
-  When I follow "my home"
-  Then I should see "My Related Works (1)"
+  When I go to remixer's user page
+  Then I should not see "Related Works"
+
+Scenario: Remove a previously approved relationship
+
+  Given I have related works setup
+  When I post a related work
+  When I approve a related work
   When I view my related works
     And I follow "Remove"
   Then I should see "Remove Link"
   When I press "Remove link"
   Then I should see "Link was successfully removed"
     And I should not see "Followup by remixer"
-  
-Scenario: approve translation and check they appear on the original, then remove and check
+    
+Scenario: Remove a previously approved translation
 
   Given I have related works setup
-  When I post a translation
-  When I am logged in as "inspiration"
-    And I go to my user page
-  Then I should see "My Related Works (1)"
-  When I follow "My Related Works"
-  Then I should see "Translations of inspiration's works"
-    And I should see "Worldbuilding Translated by translator"
-    And I should see "From English to Deutsch"
-  When I follow "Approve" within "#translationsofme"
-    And I press "Yes, link me!"
-  Then I should see "Link was successfully approved"
-    And I should see "Translation into Deutsch available:" within ".notes"
-    And I should see "Worldbuilding Translated by translator" within ".notes"
-    And I should see "Works inspired by this one:"
-    And I should see "Worldbuilding Translated by translator" within "li"
-  When I go to my user page
-    And I follow "My Related Works"
+    And a translation has been posted
+  When I approve a related work
+  When I view my related works
     And I follow "Remove" within "#translationsofme"
   Then I should see "Remove Link"
   When I press "Remove link"
@@ -120,7 +144,73 @@ Scenario: editing existing work should also send email
     And I should see "Inspired by Worldbuilding Two by inspiration"
     And "issue 1509" is fixed
     # And 1 email should be delivered
+
+Scenario: Remixer receives comments on remix, author doesn't
+
+  Given I have related works setup
+  When I post a related work
+    And all emails have been delivered
+  When I am logged in as "commenter"
+  When I post the comment "Blah" on the work "Followup"
+  Then "remixer" should be emailed
+    And "inspiration" should not be emailed
     
+Scenario: Translator receives comments on translation, author doesn't
+
+  Given I have related works setup
+    And a translation has been posted
+    And all emails have been delivered
+  When I am logged in as "commenter"
+  When I post the comment "Blah" on the work "Worldbuilding Translated"
+  Then "translator" should be emailed
+    And "inspiration" should not be emailed
+
+Scenario: Author chooses to receive comments on translation
+
+  #Given I have related works setup
+  #  And a translation has been posted
+  #  And all emails have been delivered
+  #When I am logged in as "inspiration"
+  #  And I approve a related work
+  #  And I set my preferences to receive comments on translated works
+  #When I am logged in as "commenter"
+  #  And I post the comment "Blah" on the work "Worldbuilding Translated"
+  #Then "translator" should be emailed
+  #  And "inspiration" should be emailed
+
+Scenario: Author doesn't receive comments if they haven't approved the translation
+
+  #Given I have related works setup
+  #  And a translation has been posted
+  #  And all emails have been delivered
+  #When I am logged in as "inspiration"
+  #  And I set my preferences to receive comments on translated works
+  #When I am logged in as "commenter"
+  #When I post the comment "Blah" on the work "Worldbuilding Translated"
+  #Then "inspiration" should not be emailed
+  
+Scenario: Can post a translation of a mystery work
+
+Scenario: Posting a translation of a mystery work should not allow you to see the work
+
+Scenario: Can post a translation of an anonymous work
+
+Scenario: Posting a translation of an anonymous work should not allow you to see the author
+
+Scenario: Translate your own work
+  Given I have related works setup
+  When I post a translation of my own work
+    And I approve a related work
+  Then approving the related work should succeed
+
+Scenario: Draft works should not show up on related works
+  # Given I have related works setup
+  #   And I am logged in as "translator"
+  #   And I draft a translation
+  # When I am logged in as "inspiration"
+  #   And I view my related works
+  # Then I should not see "Worldbuilding Translated"
+
 @work_external_parent
 Scenario: Listing external works as inspirations
 
@@ -162,7 +252,36 @@ Scenario: Listing external works as inspirations
   Then I should see "Work was successfully updated"
     And I should see "A translation of Worldbuilding by BNF"
     And I should see "Inspired by Worldbuilding Two by BNF"
+  When I view my related works
+  Then I should see "From N/A to English"
+    
+@work_external_language
+Scenario: External work language    
 
+  Given basic tags
+  Given basic languages
+  When I am logged in as "remixer" with password "password"
+    And I go to the new work page
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "Fandoms" with "Stargate"
+    And I fill in "Work Title" with "Followup 4"
+    And I fill in "content" with "That could be an amusing crossover."
+    And I check "parent-options-show"
+    And I fill in "Url" with "www.google.com"
+    And I fill in "Title" with "German Worldbuilding"
+    And I fill in "Author" with "BNF"
+    And I select "Deutsch" from "Language"
+    And I check "This is a translation"    
+    And I press "Preview"
+  Then I should see "Draft was successfully created"
+  When I press "Post"
+  Then I should see "Work was successfully posted"
+    And I should see "A translation of German Worldbuilding by BNF"
+  When I view my related works
+  Then I should see "From Deutsch to English"
+    And I should not see "From N/A to English"
+    
 # TODO after issue 1741 is resolved
 # Scenario: Test that I can remove relationships that I initiated from my own works
 # especially during posting / editing / previewing a work

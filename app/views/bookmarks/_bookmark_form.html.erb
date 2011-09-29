@@ -25,28 +25,39 @@
       <% else %>
         <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1) %>
       <% end %>
-	    <%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'}, :with => 'external_url', :on => 'blur' %>
-	    <%= hidden_field 'fetched', :value => '' %>
+      <%= hidden_field "fetched", "", :id => "fetched" %>
+      <%= content_for :footer_js do %>
+        <%= javascript_tag do %>
+          $j("#bookmark_external_url").blur(function() {
+            $j.ajax({
+              type: "get",
+              data: "external_work_url=" + $j("#bookmark_external_url").val(),
+              dataType: "script",
+              url: "<%= url_for(:controller => "external_works", :action => "fetch") %>"
+            })
+          })
+        <% end %>
+      <% end %>
     </dd>
     <dt><%= ew.label :author, ts("Author") %>:</dt>
     <dd>
-      <%= ew.text_field :author %>
+      <%= ew.text_field :author, :class => "observe_textlength" %>
       <%= generate_countdown_html("bookmark_external_author", ExternalWork::AUTHOR_LENGTH_MAX) %>
     </dd>
-	<dt><%= ew.label :title, ts("Title") %>:</dt>
-		<dd>
+  <dt><%= ew.label :title, ts("Title") %>:</dt>
+    <dd>
       <% if !params[:url_from_external].blank? %>
-        <%= ew.text_field :title, :value => params[:title_from_external] %>
+        <%= ew.text_field :title, :value => params[:title_from_external], :class => "observe_textlength" %>
       <% else %>
-        <%= ew.text_field :title %>
+        <%= ew.text_field :title, :class => "observe_textlength" %>
       <% end %>
       <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) %>
     </dd>
-	<dt>
-	<%= ew.label :summary, ts("Author's Summary") %>
-	<%= ts("(please copy and paste from original work)") %></dt>
-		<dd>
-      <%= ew.text_area :summary, :rows => 5, :class => "summary-field"%>
+  <dt>
+  <%= ew.label :summary, ts("Author's Summary") %>
+  <%= ts("(please copy and paste from original work)") %></dt>
+    <dd>
+      <%= ew.text_area :summary, :rows => 5, :class => "summary-field observe_textlength"%>
       <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) %>
     </dd>
   </dl>
@@ -96,13 +107,13 @@
   <dt><%= f.label :notes, ts("Your Notes") %></dt>
   <dd>
     <%= allowed_html_instructions %>
-    <%= f.text_area :notes, :rows => 4, :class => "notes-field" %>
+    <%= f.text_area :notes, :rows => 4, :class => "notes-field observe_textlength" %>
     <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) %>
   </dd>
   
-	<dt><%= f.label :tag_string, ts("Your Tags") %></dt>
-	<dd>
-	  <% dynamic ||= false %>
+  <dt><%= f.label :tag_string, ts("Your Tags") %></dt>
+  <dd>
+    <% dynamic ||= false %>
     <%= f.text_field :tag_string, autocomplete_options('tag?type=all', :size => (dynamic ? 60 : 80)) %>
     <p class="character_counter">
       <%= ts("Comma separated, %{max} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
@@ -120,7 +131,7 @@
 <p class="submit">
   <%= f.submit(button_name) %>
   <% if dynamic %>
-    <a href="#" name="bookmark_cancel" id="bookmark_cancel"><%= ts("Cancel") %></a>
+    <a name="bookmark_cancel" id="bookmark_cancel"><%= ts("Cancel") %></a>
   <% else %>
     <%= link_to ts("Back to My Bookmarks"), user_bookmarks_path(current_user) %>
   <% end %>

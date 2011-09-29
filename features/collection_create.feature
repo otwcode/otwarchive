@@ -114,3 +114,36 @@ Feature: Collection
     And I follow "Collection name"
   Then I should see "The name of the collection can be"
   
+  Scenario: Fill out new collection form with faulty data
+
+   Given I am logged in as a random user
+   And I am on the collections page
+
+   When I follow "New Collection"
+   And I fill in the following:
+   | Collection Name                 | faulty name         |
+   | Display Title                   | Awesome Collection  |
+   | Email                           | fangirl@example.org |
+   | Brief Description               | My Description      |
+   | Introduction                    | My Introduction     |
+   | FAQ                             | My FAQ              |
+   | Rules                           | My Rules            |
+   | Assignment Notification Message | My Message          |
+   | Gift Notification Message       | My Other Message    |
+
+   And I check "Is this collection closed?"
+   And I select "Gift Exchange" from "If this collection is for a challenge"
+   And I press "Submit"
+
+   Then I should see "We couldn't save this Collection"
+   And I should see "faulty name" in the "Collection Name" input
+   And I should see "Awesome Collection" in the "Display Title" input
+   And I should see "fangirl@example.org" in the "Email" input
+   And I should see "My Description" in the "Brief Description" input
+   And I should see "My Introduction" in the "Introduction" input
+   And I should see "My FAQ" in the "FAQ" input
+   And I should see "My Rules" in the "Rules" input
+   And I should see "My Message" in the "Assignment Notification Message" input
+   And I should see "My Other Message" in the "Gift Notification Message" input
+   And the "Is this collection closed?" checkbox should not be disabled
+   And "Gift Exchange" should be selected within "If this collection is for a challenge"

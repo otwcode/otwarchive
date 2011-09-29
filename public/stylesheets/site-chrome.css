@@ -54,10 +54,15 @@ NAVIGATION, ACTIONS (BUTTONS)*/
       { margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
  .navigation li,li.navigation,  #main .navigation h4, .navigation div
       { display: inline }
-#main .navigation a, .submit input, .submit a, #main .navigation input
-            { background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
+
+#main .navigation a, #main ul.edit-navigation a, .submit input, .submit a, #main .navigation input
+         { background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
+#main .navigation a.nav-with-help
+         { background: transparent; border:0; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; margin-right: -1em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
+#main .navigation a.question
+         { background: transparent; border:0; border-right:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
 .submit input.text, #main .navigation input.text
-            { cursor: text;}
+         { cursor: text;}
 #main.admin_users-show .navigation form, #main.admin_users-show .navigation div
       { display: inline; } /* cancelling out the side-effects of button_to */
  .navigation a:hover, .submit a:hover, .submit input:hover, .navigation input:hover
@@ -112,6 +117,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .droppable         { color: red; }
  .canonical         { font-weight: 700 }
  .inline                    { display:inline; margin-bottom: 0.5em}
+ .showme   {display: none;}
 
 /* Requests and offers in challenges */
  li.requested { font-weight: bold; }
@@ -272,10 +278,11 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 li.comment     { position:relative; clear:right;  padding: 0.8575em 0.25em; min-height: 100px; }
 .comment h4, li.comment blockquote
         { margin-left: 110px; display:block;}
+#main li.comment .parent  {font-size: .8em;}
 li.comment blockquote blockquote
         { margin:auto auto auto 1.5em; padding:0.75em;}
 li.comment p    { clear: none; }
-li.comment h4  { font-size: 1.25em; margin-top:0; }
+li.comment h4  { font-size: 1.25em; margin-top:0; margin-bottom: 0;}
 .comment .even, .thread .even
         { background:#eee; }
 .comment .odd, .thread .odd

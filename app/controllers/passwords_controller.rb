@@ -19,7 +19,6 @@ class PasswordsController < ApplicationController
       if @user_session
         @user_session.destroy
       end
-      UserMailer.reset_password(@user.id).deliver
       flash[:notice] = t('check_email', :default => 'Check your email for your generated password.')
       redirect_to login_path
     end

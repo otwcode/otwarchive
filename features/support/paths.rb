@@ -63,6 +63,10 @@ module NavigationHelpers
       user_subscriptions_path(User.current_user)      
     when /my profile page/
       user_profile_path(User.current_user)
+    when /my claims page/
+      user_claims_path(User.current_user)
+    when /my signups page/
+      user_signups_path(User.current_user)
     when /the import page/
       new_work_path(:import => 'true')
     when /the work-skins page/
@@ -75,6 +79,10 @@ module NavigationHelpers
       edit_skin_path(Skin.find_by_title($1))
     when /^"(.*)" collection's page$/i                      # e.g. when I go to "Collection name" collection's page
       collection_path(Collection.find_by_title($1))
+    when /^the "(.*)" signups page$/i                      # e.g. when I go to "Collection name" signup page
+      collection_signups_path(Collection.find_by_title($1))
+    when /^the "(.*)" requests page$/i                      # e.g. when I go to "Collection name" signup page
+      collection_requests_path(Collection.find_by_title($1))
     when /^"(.*)" collection's url$/i                      # e.g. when I go to "Collection name" collection's url
       collection_url(Collection.find_by_title($1)).sub("http://www.example.com", ArchiveConfig.APP_URL)
     when /^"(.*)" gift exchange edit page$/i

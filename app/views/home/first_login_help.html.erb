@@ -1,7 +1,10 @@
 <!-- Note: anticipates that current_user is set -->
 <h2>Welcome to the Archive of Our Own!</h2>
-<p>Here are some tips to help you get started. <% if current_user %>
-<%= link_to "Dismiss this message permanently", end_first_login_user_path(current_user), :method => :post, :remote => true, :class => 'navigation' %></p>
+<p>Here are some tips to help you get started.</p>
+<% if current_user %>
+  <%= form_tag end_first_login_user_path(current_user), :method => :post, :remote => true do %>
+    <p class="submit"><%= submit_tag ts("Dismiss this message permanently") %></p>
+  <% end %>
 <% end %>
 
 <h3 class="landmark">Table Of Contents</h3>

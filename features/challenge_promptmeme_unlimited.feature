@@ -19,7 +19,7 @@ Feature: Prompt Meme Challenge
       And I fill in "prompt_meme_requests_num_allowed" with "50"
       And I fill in "prompt_meme_requests_num_required" with "2"
       And I check "Signup open?"
-      And I press "Submit"
+      And I press "Update"
     
     # check the autocomplete is working; the tag is not connected to the fandom, so remove it after that
   

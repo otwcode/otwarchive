@@ -2,8 +2,8 @@ class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_openid, :browse]
-  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_openid]
+  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_email, :change_openid, :browse]
+  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_email, :change_openid]
   before_filter :check_account_creation_status, :only => [:new, :create]
 
   def load_user
@@ -55,8 +55,8 @@ class UsersController < ApplicationController
                    group("tags.id").order("work_count DESC") &
                    Work.visible_to_all.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                               INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
       visible_works = @user.works.visible_to_all
       visible_series = @user.series.visible_to_all
       visible_bookmarks = @user.bookmarks.visible_to_all
@@ -67,8 +67,8 @@ class UsersController < ApplicationController
                    group("tags.id").order("work_count DESC") &
                    Work.visible_to_registered_user.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                               INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
       visible_works = @user.works.visible_to_registered_user
       visible_series = @user.series.visible_to_registered_user
       visible_bookmarks = @user.bookmarks.visible_to_registered_user
@@ -112,7 +112,6 @@ class UsersController < ApplicationController
       @user.recently_reset = false
       if @user.save
         flash[:notice] = ts("Your password has been changed")
-				UserMailer.reset_password(@user).deliver
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
         redirect_to user_profile_path(@user) and return
       else
@@ -120,8 +119,8 @@ class UsersController < ApplicationController
       end
     end
   end
-	
-	
+
+
   def change_openid
     if params[:identity_url]
       @openid_url = params[:identity_url]
@@ -253,7 +252,7 @@ class UsersController < ApplicationController
           redirect_to(login_path)
         end
       else
-        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again.")
+        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact <a href='/support'>support</a> for more help.").html_safe
         redirect_to ''
       end
     end
@@ -262,33 +261,35 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    if params[:new_email] == @user.email
-			#change profile
-			@user.profile.update_attributes(params[:profile_attributes])
-			if @user.profile.save 
-			  flash[:notice] = ts("Your profile has been successfully updated")
-			else
-				render :edit and return
-			end
-			redirect_to user_profile_path(@user) and return
-		else
-			#have to reuthenticate to change email
-			if !reauthenticate
-        render :edit and return
+    @user.profile.update_attributes(params[:profile_attributes])
+  if @user.profile.save
+    flash[:notice] = ts("Your profile has been successfully updated")
+    render :edit and return
+  else
+    render :edit and return
+  end
+  end
+  
+  def change_email
+    if params[:new_email].blank?
+      render :change_email and return
+    else
+      if !reauthenticate
+        render :change_email and return
       else
-				@old_email = @user.email	
-				@user.email = params[:new_email]
-				@new_email = params[:new_email]
-        if @user.save
-					flash[:notice] = ts("Your email has been successfully updated")
-					UserMailer.change_email(@user.id, @old_email, @new_email).deliver
-			    @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
-        else
-          render :edit and return
-        end
-				redirect_to user_profile_path(@user) and return
-			end
-		end
+    @old_email = @user.email
+    @user.email = params[:new_email]
+    @new_email = params[:new_email]
+    if @user.save
+      flash[:notice] = ts("Your email has been successfully updated")
+      UserMailer.change_email(@user.id, @old_email, @new_email).deliver
+      @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
+    else
+      render :change_email and return
+    end
+    end
+    end
+  render :change_email and return
   end
 
   # DELETE /users/1
@@ -385,14 +386,18 @@ class UsersController < ApplicationController
 
   def end_first_login
     @user.preference.update_attribute(:first_login, false)
-    if !(request.xml_http_request?)
-      redirect_to @user
+    respond_to do |format|
+      format.html { redirect_to @user and return }
+      format.js
     end
   end
   
   def end_banner
     @user.preference.update_attribute(:banner_seen, true)
-    redirect_to(request.env["HTTP_REFERER"] || root_path)
+    respond_to do |format|
+      format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) and return }
+      format.js
+    end
   end
 
   def browse
@@ -409,21 +414,28 @@ class UsersController < ApplicationController
 
   private
 
-    def reauthenticate
-      if !params[:password_check].blank?
-        session = UserSession.new(:login => @user.login, :password => params[:password_check])
-        if session.valid?
-          return true
+  def reauthenticate
+    if !params[:password_check].blank?
+      session = UserSession.new(:login => @user.login, :password => params[:password_check])
+      if session.valid?
+        return true
+      else
+        if params[:new_email]
+          flash.now[:error] = ts("Your password was incorrect")
         else
           flash.now[:error] = ts("Your old password was incorrect")
-          @wrong_password = true
-          return false
         end
-      else
-        flash.now[:error] = ts("You must authenticate again first")
         @wrong_password = true
         return false
       end
+    else
+      if params[:new_email]
+        flash.now[:error] = ts("You must enter your password")
+      else
+        flash.now[:error] = ts("You must enter your old password")
+      end
+      @wrong_password = true
+      return false
     end
-	end
-
+  end
+end

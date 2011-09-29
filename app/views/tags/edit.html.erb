@@ -86,7 +86,7 @@
       <% end %>
       <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
       <dd>
-        <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{tag_type.downcase}", :class => 'tags autocomplete') %>
+        <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type == 'MetaTag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
         <% if @parents[tag_type] %>
           <% @parents[tag_type].in_groups(2, false) do |tag_list| %>
           <ul class="tags">
