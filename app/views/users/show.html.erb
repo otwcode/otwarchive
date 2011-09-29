@@ -1,17 +1,18 @@
 <% if @user == current_user && @user.preference.try(:first_login) %>
   <!-- pseudoflash because putting it in a real one was making for some ugly code -->
   <div class="flash notice" id="first-login-help-banner">
+  
     <p>
-      Hi! It looks like you've just logged into the archive for the first time. 
-      <%= link_to_ibox ts("Learn some tips and tricks"), :for => first_login_help_path, :title => "First login help", :size => "600x400" %> 
-      or dismiss this message permanently.
+      Hi! It looks like you've just logged into the archive for the first time.
+      <%= link_to_ibox ts("Learn some tips and tricks."), :for => first_login_help_path, :title => "First login help", :size => "600x400" %>
+    <%= form_tag end_first_login_user_path(current_user), :method => :post, :remote => true, :class => "banner" do %>
+      <span class="submit">
+        <%= submit_tag ts("Dismiss permanently") %>
+        <%= link_to ts("Hide"), nil, :remote => true, :id => "hide-first-login-help", :title => "Hide first login help banner" %>
+      </span>
+    <% end %>
     </p>
-      <%= form_tag end_first_login_user_path(current_user), :method => :post, :remote => true do %>
-    <p class="submit">
-      <%= submit_tag ts("Dismiss permanently") %>
-      <%= link_to image_tag('close-flash.png'), nil, :remote => true, :id => "hide-first-login-help", :title => "Hide first login help banner" %>
-    </p>
-      <% end %>
+
   </div>
 <% end %>
 

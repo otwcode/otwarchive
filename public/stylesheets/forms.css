@@ -18,6 +18,7 @@ form select { vertical-align:text-top; font-size: 1em;}
 
 /*DASHBOARD */
 .sidebar form {float:left}
+.sidebar form.banner, .sidebar form.banner span.submit {float:none; display: inline;}
 
 /*DASHBOARD: EDIT MULTIPLE WORKS */
  p.buttons {text-align:center;}
