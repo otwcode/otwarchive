@@ -35,14 +35,14 @@ describe User do
       @user.errors[:login].should_not be_empty
     end
 
-    it "should not save user with existing login" do
+    it "should not save user when login exists already" do
       user2 = Factory.create(:user)
       @user.login = user2.login
       @user.save.should be_false
       @user.errors[:login].should_not be_empty
     end
 
-    it "should not save user with existing email" do
+    it "should not save user when email exists already" do
       user2 = Factory.create(:user)
       @user.email = user2.email
       @user.save.should be_false
