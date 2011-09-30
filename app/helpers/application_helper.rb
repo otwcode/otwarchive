@@ -34,7 +34,7 @@ module ApplicationHelper
   def allowed_html_instructions(show_list = true)
     h(ts("Plain text with limited html")) + 
     link_to_help("html-help") + (show_list ? 
-    "<br /><code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
+    "<code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
       col, colgroup, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
       ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td, 
       tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>" : "").html_safe
@@ -263,10 +263,10 @@ module ApplicationHelper
   # See the jquery code in application.js
   # Note that these start hidden because if javascript is not available, we
   # don't want to show the user the buttons at all.
-  def expand_contract_shuffle(list_id)
-    ('<span class="navigation expand hidden" action_target="#' + list_id + '"><a href="#">[ + ]</a></span>
-    <span class="navigation contract hidden" action_target="#' + list_id + '"><a href="#">[ - ]</a></span>
-    <span class="navigation shuffle hidden" action_target="#' + list_id + '"><a href="#">[ &#8645; ]</a></span>').html_safe
+  def expand_contract_shuffle(list_id, shuffle=true)
+    ('<span class="action expand hidden" title="expand" action_target="#' + list_id + '"><a href="#">&#8595;</a></span>
+    <span class="action contract hidden" title="contract" action_target="#' + list_id + '"><a href="#">&#8593;</a></span>').html_safe +
+    (shuffle ? ('<span class="action shuffle hidden" title="shuffle" action_target="#' + list_id + '"><a href="#">&#8645;</a></span>') : '').html_safe
   end
   
   # returns the default autocomplete attributes, all of which can be overridden
@@ -293,9 +293,10 @@ module ApplicationHelper
     link_to_function(linktext, "add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")", :class => "hidden showme")
   end
 
+  # This is only shown via javascript anyway
   def link_to_remove_section(linktext, form, class_of_section_to_remove="removeme")
     form.hidden_field(:_destroy) + "\n" +
-    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", :class => "hidden showme")
+    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")")
   end
   
   def time_in_zone(time, zone=nil, user=User.current_user)
@@ -350,7 +351,7 @@ module ApplicationHelper
   end
   
   def nested_field_name(form, nested_object, attribute)
-    "#{form.object_name}[#{nested_object.class.name.underscore}_attributes][#{nested_object.id}][#{field_attribute(attribute)}]"
+    "#{form.object_name}[#{nested_object.class.table_name}_attributes][#{nested_object.id}][#{field_attribute(attribute)}]"
   end
   
   
@@ -451,10 +452,19 @@ module ApplicationHelper
   end
   
   def check_all_none
-    '<ul class="navigation actions">
+    '<ul class="actions">
       <li><a href="#" class="check_all">Check All</a></li>
       <li><a href="#" class="check_none">Check None</a></li>
     </ul>'.html_safe
+  end
+  
+  def submit_button(form, button_text=nil)
+    button_text ||= form.object.new_record? ? ts("Submit") : ts("Update")
+    content_tag(:p, form.submit(button_text), :class=>"submit")
+  end
+    
+  def submit_fieldset(form, button_text=nil)
+    content_tag(:fieldset, content_tag(:legend, ts("Actions")) + submit_button(form, button_text))
   end
     
 end # end of ApplicationHelper

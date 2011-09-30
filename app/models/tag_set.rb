@@ -8,6 +8,8 @@ class TagSet < ActiveRecord::Base
   TAG_TYPES_RESTRICTED_TO_FANDOM = %w(character relationship)
   TAGS_AS_CHECKBOXES = %w(category rating warning)
   
+  attr_accessor :from_owned_tag_set
+  
   has_many :set_taggings, :dependent => :destroy
   has_many :tags, :through => :set_taggings
   
@@ -115,7 +117,7 @@ class TagSet < ActiveRecord::Base
   end
 
   # Tags must already exist unless they are being added to an owned tag set
-  validate :tagnames_must_exist, :if => "owned_tag_set.nil?"
+  validate :tagnames_must_exist, :unless => :from_owned_tag_set
   def tagnames_must_exist
     nonexist = []
     if @tagnames
@@ -155,16 +157,16 @@ class TagSet < ActiveRecord::Base
     TagSet.new(:tags => (self.tags - other.tags))
   end
   
-  def has_tag?(tag)
-    self.tags.include?(tag)
+  def with_type(type)
+    self.tags.with_type(type)
   end
   
-  def with_type(type)
-    return self.new_record? ? self.tags.select {|t| t.type == type.classify} : self.tags.with_type(type)
+  def has_type?(type)
+    with_type(type).exists?
   end
-
-  def tags_with_type(type)
-    return with_type(type)
+  
+  def with_type_from_redis(type)
+    
   end
 
   def empty?
@@ -173,14 +175,12 @@ class TagSet < ActiveRecord::Base
   
   # returns the topmost tag type we have in this set
   def topmost_tag_type
-    topmost_type = ""
     TagSet::TAG_TYPES.each do |tag_type| 
       if self.tags.with_type(tag_type).exists? 
-        topmost_type = tag_type
-        break
+        return tag_type
       end
     end
-    topmost_type
+    ""
   end
   
   
@@ -189,14 +189,14 @@ class TagSet < ActiveRecord::Base
   def match_rank(another, type=nil)
     # if we don't have any tags of this type, anything matches us
     return ALL if tags.empty?
-    return ALL if type && tags_with_type(type).empty?
+    return ALL if type && with_type(type).empty?
     return ALL if is_subset_of?(another, type) 
     matching_tags(another, type).size
   end
   
   def exact_match?(another, type=nil)
     if type
-      self.tags_with_type(type).to_a == another.tags_with_type(type).to_a
+      self.with_type(type).to_a == another.with_type(type).to_a
     else
       self.tags == another.tags
     end
@@ -204,7 +204,7 @@ class TagSet < ActiveRecord::Base
     
   def no_match?(another, type=nil)
     if type
-      (self.tags_with_type(type).to_a & another.tags_with_type(type).to_a).empty? && !self.tags.empty?
+      (self.with_type(type).to_a & another.with_type(type).to_a).empty? && !self.tags.empty?
     else
       (self.tags & another.tags).empty? && !self.tags.empty?
     end
@@ -212,29 +212,29 @@ class TagSet < ActiveRecord::Base
   
   def partial_match?(another, type=nil)
     if type
-      !(self.tags_with_type(type).to_a & another.tags_with_type(type).to_a).empty?
+      !(self.with_type(type).to_a & another.with_type(type).to_a).empty?
     else
       !(self.tags & another.tags).empty?
     end
   end
   
   # checks to see if this is a subset of another tagset
-  # note: we have to cast tags_with_type to an array because one of the tag sets may actually
+  # note: we have to cast with_type to an array because one of the tag sets may actually
   # be an activequery object 
   def is_subset_of?(another, type=nil)
     if type
-      (self.tags_with_type(type).to_a & another.tags_with_type(type).to_a) == self.tags_with_type(type).to_a
+      (self.with_type(type).to_a & another.with_type(type).to_a) == self.with_type(type).to_a
     else
       (self.tags & another.tags) == self.tags
     end
   end
   
   # checks to see if this is a superset of another tagset
-  # note: we have to cast tags_with_type to an array because one of the tag sets may actually
+  # note: we have to cast with_type to an array because one of the tag sets may actually
   # be an activequery object 
   def is_superset_of?(another, type=nil)
     if type
-      (self.tags_with_type(type).to_a & another.tags_with_type(type).to_a) == another.tags_with_type(type).to_a
+      (self.with_type(type).to_a & another.with_type(type).to_a) == another.with_type(type).to_a
     else
       (self.tags & another.tags) == another.tags
     end
@@ -243,7 +243,7 @@ class TagSet < ActiveRecord::Base
   # returns matching tags
   def matching_tags(another, type=nil)
     if type
-      self.tags_with_type(type).to_a & another.tags_with_type(type).to_a
+      self.with_type(type).to_a & another.with_type(type).to_a
     else
       self.tags & another.tags
     end

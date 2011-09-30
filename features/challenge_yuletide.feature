@@ -15,6 +15,7 @@ Feature: Collection
     | myname3        | something   |
     | myname4        | something   |
     | pinchhitter    | password    |
+    And I am logged in as "mod1" with password "something"
     And I have Yuletide challenge tags setup
     And I have no challenge assignments
     And I add the fandom "Stargate Atlantis" to the character "John Sheppard"
@@ -28,7 +29,6 @@ Feature: Collection
     And I add the fandom "Starsky & Hutch" to the character "Foo The Wonder Goat"
     And a character exists with name: "Obscure person", canonical: true
     And I add the fandom "Tiny fandom" to the character "Obscure person"
-    And I am logged in as "mod1"
   When I go to the collections page
   Then I should see "Collections in the "
     And I should not see "Yuletide"
@@ -39,9 +39,9 @@ Feature: Collection
     And I fill in "FAQ" with "<dl><dt>What is this thing?</dt><dd>It's a gift exchange-y thing</dd></dl>"
     And I fill in "Rules" with "Be even nicer to people"
     And I select "Gift Exchange" from "challenge_type"
-    And I check "Is this collection currently unrevealed?"
-    And I check "Is this collection currently anonymous?"
-    And I press "Submit"
+    And I check "This collection is unrevealed"
+    And I check "This collection is anonymous"
+    And I submit
   Then I should see "Collection was successfully created"
     And I should see "Setting Up The Yuletide Gift Exchange"
   When I fill in "General Signup Instructions" with "Here are some general tips"
@@ -63,7 +63,7 @@ Feature: Collection
     And I fill in "gift_exchange_requests_num_allowed" with "3"
     And I fill in "gift_exchange_offers_num_required" with "2"
     And I fill in "gift_exchange_offers_num_allowed" with "3"
-    And I fill in "gift_exchange_offer_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Starsky & Hutch, Stargate Atlantis, Tiny fandom, Care Bears, Yuletide Hippos RPF"
+    And I fill in "Tag Sets To Use:" with "Standard Challenge Tags"
     And I fill in "gift_exchange_request_restriction_attributes_fandom_num_required" with "1"
     And I fill in "gift_exchange_request_restriction_attributes_fandom_num_allowed" with "1"
     And I check "gift_exchange_request_restriction_attributes_require_unique_fandom"
@@ -78,7 +78,7 @@ Feature: Collection
     And I select "1" from "gift_exchange_potential_match_settings_attributes_num_required_characters"
     And I check "gift_exchange_offer_restriction_attributes_character_restrict_to_fandom"
     And I check "Signup open?"
-    And I press "Update"
+    And I submit
   Then I should see "Challenge was successfully created"
   When I follow "Log out"
     And I am logged in as "myname1" with password "something"
@@ -107,7 +107,6 @@ Feature: Collection
     And I should see "Please request easy things"
     And I should see "Request 1"
     And I should see "Fandom (1):"
-    And I should see "Show all 5 options"
     And I should see "Care Bears"
     And I should see "Stargate Atlantis"
     And I should see "Starsky & Hutch"
@@ -135,13 +134,13 @@ Feature: Collection
     And I check the 3rd checkbox with the value "Care Bears"
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Obscure person"
     And I press "Submit"
-  Then I should see "We couldn't save this ChallengeSignup, sorry!"
+  Then I should see a save error message
   # TODO: We should probably make these error message more friendly
     # errors for the empty request
     And I should see "Request must have exactly 1 fandom tags. You currently have none."
     # errors for the not-quite-filled offer
     And I should see "Offer must have between 2 and 3 character tags. You currently have (1) -- Obscure person"
-    And I should see "Your Offer has some character tags that are not in the selected fandom(s)"
+    And I should see a not-in-fandom error message
     # errors for the empty offer
     And I should see "Offer must have exactly 1 fandom tags. You currently have none."
     And I should see "Offer must have between 2 and 3 character tags. You currently have none."
@@ -154,13 +153,13 @@ Feature: Collection
     And I check the 4th checkbox with the value "Care Bears"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
     And I press "Submit"
-  Then I should see "We couldn't save this ChallengeSignup, sorry!"
+  Then I should see a save error message
     And I should see "Request must have between 0 and 2 character tags. You currently have (3) -- John Sheppard, Teyla Emmagan, Obscure person."
-    And I should see "Your Request has some character tags that are not in the selected fandom(s), Stargate Atlantis: Obscure person"
+    And I should see a not-in-fandom error message for "Obscure person" in "Stargate Atlantis"
     And I should see "Request must have exactly 1 fandom tags. You currently have (2) -- Starsky & Hutch, Tiny fandom."
-    And I should see "Your Offer has some character tags that are not in the selected fandom(s), Care Bears: Obscure person, John Sheppard"
+    And I should see a not-in-fandom error message for "Obscure person, John Sheppard" in "Care Bears"
     And I should see "Offer must have between 2 and 3 character tags. You currently have (4) -- Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat."
-    And I should see "Your Offer has some character tags that are not in the selected fandom(s), Care Bears: Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat"
+    And I should see a not-in-fandom error message for "Obscure person, John Sheppard, Teyla Emmagan, Foo The Wonder Goat" in "Care Bears"
     And I should see "You have submitted more than one offer with the same fandom tags. This challenge requires them all to be unique."
   # now fill in correctly
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard, Teyla Emmagan"
@@ -224,8 +223,8 @@ Feature: Collection
     And I fill in "challenge_signup_offers_attributes_0_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
     And I fill in "challenge_signup_offers_attributes_1_tag_set_attributes_character_tagnames" with "Teyla Emmagan, John Sheppard"
     And I press "Submit"
-  Then I should see "We couldn't save this ChallengeSignup, sorry!"
-    And I should see "The following character tags aren't canonical and can't be used: Any"
+  Then I should see a save error message
+    And I should see a not-in-fandom error message for "Any" in "Starsky & Hutch"
   When I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with ""
     And I press "Submit"
   Then I should see "Signup was successfully created"
@@ -613,7 +612,7 @@ Feature: Collection
     And I go to the collections page
     And I follow "Yuletide"
     And I follow "Settings"
-    And I uncheck "Is this collection currently unrevealed?"
+    And I uncheck "This collection is unrevealed"
     And I press "Update"
   Then I should see "Collection was successfully updated"
   Given the system processes jobs
@@ -682,7 +681,7 @@ Feature: Collection
     And I go to the collections page
     And I follow "Yuletide"
     And I follow "Settings"
-    And I uncheck "Is this collection currently anonymous?"
+    And I uncheck "This collection is anonymous"
     And I press "Update"
   Then I should see "Collection was successfully updated"
 

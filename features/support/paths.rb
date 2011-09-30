@@ -103,8 +103,14 @@ module NavigationHelpers
       admin_posts_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
-    when/^the support page$/i
+    when /^the support page$/i
       new_feedback_report_path
+    when /^the new tag ?set page$/i
+      new_tag_set_path
+    when /^the "(.*)" tag ?set edit page$/i
+      edit_tag_set_path(OwnedTagSet.find_by_title($1))    
+    when /^the "(.*)" tag ?set page$/i
+      tag_set_path(OwnedTagSet.find_by_title($1))    
       
     # Here is an example that pulls values out of the Regexp:
     #

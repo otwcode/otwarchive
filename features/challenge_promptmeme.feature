@@ -138,8 +138,8 @@ Feature: Prompt Meme Challenge
   When I edit my signup for "Battle 12"
   When I follow "Request 1"
   Then I should not see "Request 2"
-    And I should see "Edit whole signup instead"
-
+    And I should see "Edit whole signup"
+ 
  Scenario: Add one new prompt to existing signup
   
   Given I have Battle 12 prompt meme fully set up
@@ -147,9 +147,9 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
     And I follow "Add another prompt"
     And I check "Stargate Atlantis"
-    And I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" with "My extra tag"
-    And I press "Submit"
-  Then I should see "Signup was successfully updated"
+    And I fill in "Freeforms" with "My extra tag"
+    And I submit
+  Then I should see "Prompt was successfully added"
     And I should see "Request 3"
     And I should see "My extra tag"
   
@@ -244,7 +244,7 @@ Feature: Prompt Meme Challenge
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I start to sign up for "Battle 12"
-  Then I should see "Select pseudonym"
+  Then I should see "othername"
   
   Scenario: User changes pseud on a challenge signup
   
@@ -255,16 +255,17 @@ Feature: Prompt Meme Challenge
   Then I should see "Signup was successfully created"
     And I should see "Signup for myname1"
   When I edit my signup for "Battle 12"
-  Then I should see "Select pseudonym"
-  When I select "othername" from "Select pseudonym"
-    And I press "Submit"
+  Then I should see "othername"
+  When I select "othername" from "Name:"
+    # two forms in this page, must specify which button to press
+    And I press "Update" 
   Then I should see "Signup was successfully updated"
   Then I should see "Signup for othername (myname1)"
   
   Scenario: Add more requests button disappears correctly from signup show page
   
-  Given I have standard challenge tags setup
-    And I am logged in as "mod1"
+  Given I am logged in as "mod1"
+    And I have standard challenge tags setup
   When I set up a basic promptmeme "Battle 12"
     And I follow "Challenge Settings"
   When I fill in multi-prompt challenge options
@@ -273,21 +274,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Add another prompt"
   When I add prompt 4
   Then I should not see "Add another prompt"
-  
-  Scenario: Add more requests button disappears correctly from signup show page
-  
-  Given I have standard challenge tags setup
-    And I am logged in as "mod1"
-  When I set up a basic promptmeme "Battle 12"
-    And I follow "Challenge Settings"
-  When I fill in multi-prompt challenge options
-  When I sign up for Battle 12 with combination D
-    And I add prompt 3
-  Then I should see "Add another prompt"
-  When I add prompt 4
-    And I follow "Request 4"
-  Then I should not see "Add another prompt"
-  
+    
   Scenario: Remove prompt button shouldn't show on My Signups
   
   Given I have Battle 12 prompt meme fully set up
@@ -337,7 +324,7 @@ Feature: Prompt Meme Challenge
   When I edit the prompt by "myname1"
   Then I should not see "Submit a Prompt for Battle 12"
     And I should see "You can't edit someone else's signup!"
-
+  
   Scenario: User deletes one prompt
   
   Given I have Battle 12 prompt meme fully set up
@@ -747,7 +734,6 @@ Feature: Prompt Meme Challenge
   # TODO: fix the broken bit
   #Then I should see "Stargate Atlantis"
   #  And I should see "Stargate SG-1"
-  #Then show me the main content
   
   Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
@@ -794,7 +780,7 @@ Feature: Prompt Meme Challenge
     And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and then changes their mind and fulfills the gift exchange instead
-
+  
   Given I have Battle 12 prompt meme fully set up
     And everyone has signed up for Battle 12
   Given I have created the gift exchange "My Gift Exchange"
@@ -1010,7 +996,7 @@ Feature: Prompt Meme Challenge
   When I close signups for "Battle 12"
   When I go to "Battle 12" collection's page
     And I follow "Settings"
-    And I uncheck "Is this collection currently unrevealed?"
+    And I uncheck "This collection is unrevealed"
     And I press "Update"
   Then I should see "Collection was successfully updated"
   

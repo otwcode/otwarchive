@@ -30,8 +30,8 @@ class OwnedTagSet < ActiveRecord::Base
   has_many :owned_set_taggings, :dependent => :destroy
   has_many :set_taggables, :through => :owned_set_taggings
 
-  validates_presence_of :title, :message => ts("Please enter a title for your tag set.")
-  validates_uniqueness_of :title, :case_sensitive => false, :message => ts('Sorry, that name is already taken. Try again, please!')
+  validates_presence_of :title, :message => ts("^Please enter a title for your tag set.")
+  validates_uniqueness_of :title, :case_sensitive => false, :message => ts('^Sorry, that name is already taken. Try again, please!')
   validates_length_of :title,
     :minimum => ArchiveConfig.TITLE_MIN,
     :too_short=> ts("must be at least %{min} characters long.", :min => ArchiveConfig.TITLE_MIN)
@@ -40,7 +40,7 @@ class OwnedTagSet < ActiveRecord::Base
     :too_long=> ts("must be less than %{max} characters long.", :max => ArchiveConfig.TITLE_MAX)
   validates_format_of :title,
     :with => /\A[^,*<>^{}=`\\%]+\z/,
-    :message => 'of a tag set can not include the following restricted characters: , ^ * < > { } = ` \\ %'
+    :message => '^The title of a tag set can not include the following restricted characters: , ^ * < > { } = ` \\ %'
 
   validates_length_of :description,
     :allow_blank => true,
@@ -178,19 +178,60 @@ class OwnedTagSet < ActiveRecord::Base
 
   ##### MANAGING ASSOCIATIONS
   
+  def associations_to_remove=(assoc_ids)
+    TagSetAssociation.for_tag_set(self).where(:id => assoc_ids).delete_all
+  end
+  
   def load_batch_associations!(batch_associations, options = {})
     options.reverse_merge!({:do_relationships => false})
     association_lines = batch_associations.split("\n")
+    fandom_tagnames_to_add = []
+    child_tagnames_to_add = []
+    assocs_to_save = []
+    failed = []
+    
     association_lines.each do |line|
       children_names = line.split(',')
-      parent_tag_id = Tag.where(:name => children.pop.strip).value_of :id
-      next unless parent_tag_id
-      children_names.each do |child|
-        child_tag_id = Tag.where(:name => child.strip).value_of :id
-        assoc = tag_set_associations.build(:tag_id => child_tag_id, :parent_tag_id => parent_tag_id)
-        assoc.save
+      parent_name = children_names.shift.strip
+      parent_tag_id = Fandom.where(:name => parent_name).value_of(:id).first
+      unless parent_tag_id
+        failed << line
+        next
       end
+      failed_children = []
+      added_parent = false
+      children_names.map {|c| c.strip}.each_with_index do |child_name|
+        child_tag_id = (options[:do_relationships] ? Relationship : Character).where(:name => child_name).value_of(:id).first
+        unless child_tag_id
+          failed_children << child_name
+          next
+        end
+        assoc = tag_set_associations.build(:tag_id => child_tag_id, :parent_tag_id => parent_tag_id)
+        unless assoc.valid?
+          failed_children << child_name
+          next
+        end
+        assocs_to_save << assoc
+        child_tagnames_to_add << child_name
+        fandom_tagnames_to_add << parent_name unless added_parent
+        added_parent = true
+      end
+      failed << "#{parent_name}, #{failed_children.join(', ')}" unless failed_children.empty?
     end
+    
+    # add the tags to the set
+    tag_set.fandom_tagnames_to_add = fandom_tagnames_to_add
+    tag_set.send (options[:do_relationships] ? :relationship_tagnames_to_add= : :character_tagnames_to_add=), child_tagnames_to_add
+    
+    if tag_set.save
+      # save the associations
+      assocs_to_save.each {|assoc| assoc.save}
+    else
+      # whoops, nothing worked
+      failed = association_lines
+    end
+        
+    return failed
   end
 
     

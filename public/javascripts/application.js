@@ -38,6 +38,9 @@ $j(document).ready(function() {
     });
     $j('#hide-notice-banner').click(function () { $j('#notice-banner').hide(); });
     setupTooltips();
+
+    // Activating Best In Place 
+    jQuery(".best_in_place").best_in_place();
 });
 
 function visualizeTables() {
@@ -88,20 +91,20 @@ jQuery(function($) {
   });
 });
 
-
 ///////////////////////////////////////////////////////////////////
 
 // expand, contract, shuffle
 jQuery(function($){
-  $('.navigation.expand').each(function(){
+  $('.expand').each(function(){
     // start by hiding the list in the page
     list = $($(this).attr('action_target'));
-    if (list.children().size() > 25) {
+    if (list.children().size() > 25 || list.attr('force_contract')) {
       list.hide();
       $(this).show();      
     } else {
-      // show the shuffle button only
+      // show the shuffle and contract button only
       $(this).nextAll(".shuffle").show();
+      $(this).next(".contract").show();
     }    
     
     // set up click event to expand the list 
@@ -118,7 +121,7 @@ jQuery(function($){
     });
   });
   
-  $('.navigation.contract').each(function(){
+  $('.contract').each(function(){
     $(this).click(function(event){
       // hide the list when clicked
       list = $($(this).attr('action_target'));
@@ -133,7 +136,7 @@ jQuery(function($){
     });
   });
   
-  $('.navigation.shuffle').each(function(){
+  $('.shuffle').each(function(){
     // shuffle the list's children when clicked
     $(this).click(function(event){
       list = $($(this).attr('action_target'));

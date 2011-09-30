@@ -2,7 +2,9 @@
 <div class="removeme">
 <% # CODE NOTES: 
   # This is meant to be used as a nested form inside other forms, so that multiple prompts can be submitted within a single form. 
-  # It expects a form being passed in
+  # It is also meant to be used with javascript-based live adding (that is, not with ajax) which means locals will not be re-evaluated when it is added;
+  #   keep this in mind when using the add_section code!
+  # It expects a form being passed in as "form"
   # If the local variable "index" is passed in, that will represent which prompt this is, if there are multiple prompts being submitted
   # If the local variable "required" is passed in, this prompt is required
   # See the challenge_signup form for an example of how this is used. 
@@ -10,21 +12,20 @@
 
 <% index ||= "" %>
 <% required ||= false %>
-<% prompt_type = form.object.class.name.downcase %>
+<% prompt_title = form.object.class.name %>
+<% prompt_type = prompt_title.downcase %>
 <% prompt_types = prompt_type.pluralize %>
 <% restriction = @challenge.send("#{prompt_type}_restriction") %>
 
 <fieldset class="tagset">
-  <% if index.blank? %>
-    <legend><%= "#{prompt_type.capitalize}" %></legend>
-    <h3><%= "#{prompt_type.capitalize}" %></h3>  
-  <% elsif index.is_a? String %>
-    <legend><%= "#{prompt_type.capitalize} #{index}" %></legend>
-    <h3><%= "#{prompt_type.capitalize} #{index}" %></h3>
+  <% if index.is_a? String %>
+    <% prompt_title += " #{index}" %>
   <% else %>
-  	<legend><%= "#{prompt_type.capitalize} #{(index + 1)}" %></legend>
-    <h3><%= "#{prompt_type.capitalize} #{(index + 1)}" %></h3>
+    <% prompt_title += " #{(index + 1)}" %>
   <% end %>
+
+  <legend><%= prompt_title %></legend>
+  <h3><%= form.object.new_record? ? prompt_title : link_to(prompt_title, collection_prompt_path(@collection, form.object)) %></h3>  
 
   <div>
     <%= form.hidden_field :collection_id, :value => @collection.id %>
@@ -82,9 +83,10 @@
       <dt class="landmark">Remove</dt>
       <!--FRONT END, DON'T FORGET TO READD SUBMIT AFTER SKINS-->
       <dd class="actions">
-        <%= link_to_remove_section ts("Remove?"), form %>
+        <%= link_to_remove_section(ts("Remove?"), form) %>
         <noscript>
-          <% form.label ts("Remove?") do %>
+          <%= form.label "_destroy" do %>
+            <%= ts("Remove?") %>
             <%= form.check_box "_destroy" %>
           <% end %>
         </noscript>

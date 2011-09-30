@@ -98,11 +98,6 @@ class ChallengeAssignmentsController < ApplicationController
     @challenge_assignment.user_allowed_to_destroy?(current_user) || not_allowed
   end
 
-  def not_allowed
-    flash[:error] = t('challenge_signups.not_allowed', :default => "Sorry, you're not allowed to do that.")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
-  end
 
 
   # ACTIONS

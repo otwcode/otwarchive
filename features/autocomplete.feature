@@ -40,16 +40,4 @@ Scenario: Pseud and collection autocompletes should work
     And the gift recipient autocomplete field should list matching users
     And the collection item autocomplete field should list matching collections
 
-Scenario: Gift exchange setting autocompletes should work and values entered should be remembered
-	Given I am logged in
-		And a set of tags for testing autocomplete
-		And a gift exchange for testing autocomplete
-	When I edit the gift exchange for testing autocomplete
-  Then the tag autocomplete fields should list only matching canonical tags
-	When I submit values in the tag autocomplete fields
-		And I edit the gift exchange for testing autocomplete
-	Then the tag autocomplete fields should have the entered values
-	When I submit	
-		And I edit the gift exchange for testing autocomplete
-	Then the tag autocomplete fields should have the entered values
 	

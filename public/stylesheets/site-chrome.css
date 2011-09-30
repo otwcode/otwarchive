@@ -363,7 +363,7 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
 /* MEDIA INDEX, SHOW, FANDOMS INDEX, SHOW*/
   .media li.category      { min-height: 15em; padding: 0; border: 1px solid #DDD; margin:0.5625em 2em 2em 0}
-  .media li.category h3   { background:#333; color:#fffef9; font-weight:100; padding: .5em 1em; border-bottom:0.25em double #fffef9; margin: 0; top: 0;}
+  .media li.category h3   { background:#555; color:#fffef9; font-weight:100; padding: .5em 1em; border-bottom:0.25em double #fffef9; margin: 0; top: 0;}
   .media li.category h3 a { color: #fff; }
   .media li.category h4 { padding: .5em 1em; margin: 0; }
   .media p           { margin-right: 0.5625em; text-align:right}
@@ -423,8 +423,8 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 /* TAGSET (MEDIA) INDEX - main weighting will be removed (here and media) in new skin*/
 #main .tagset li.category {float:none; width:auto; margin:0.5em auto; min-height:inherit}
 .tagset .category h3:hover, #main ol.tagset.tags li:hover, #main ol.tagset .tags li:hover {background:#ddd; color:#111}
-.tagset li.category h3 a { color: #000; }
-#main ol.tagset.tags li, #main ol.tagset .tags li { line-height: 2; white-space: nowrap; background: #eee; padding: 0.25em; border: 0.1px solid black;} 
+.tagset li.category h3 a { color: #000; border-bottom: 0;}
+#main ol.tagset.tags li, #main ol.tagset .tags li { line-height: 2; white-space: nowrap; background: #eee; padding: 0.35em; margin: 0.5em; display: block;} 
 
 /* TAG WRANGLERS INDEX */
  #main.tag_wranglers-index .index       { width:100%; margin-top: 2em;}
@@ -458,9 +458,13 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
 /* TAG NOMINATIONS */
  .nominations ul li { display: inline; padding: 1em; }
- .unwrangled { border: 0.15em solid #CCB521;}
- .nonexistent { border: 0.15em solid #C91441;}
- 
+ .unwrangled { border:1px solid #900;}
+ .nonexistent {color:#111;  border: 2px dashed #aaa; padding:0.15em;}
+ .tagset .options li {position:relative; padding:0.15em; overflow:hidden}
+ .tagset .options.lots li {margin: 0 !important;}
+ .tagset .options li h5 {font-size:1.286em; margin:-0.15em;}
+ .tagset th[title="nomination"] {width:50%; max-width:18em; font-weight:normal}
+ .tagset table span.synonym {display:block;}
  /*TAGSET */
 .tagset {margin:0 auto 1em;}
 

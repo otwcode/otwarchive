@@ -47,9 +47,9 @@ module TagSetsHelper
     if nomination && nomination.approved
       '<span class="symbol approved" tooltip="This nomination has been approved!"><span>&#x2714;</span></span>'.html_safe
     elsif nomination && nomination.rejected
-      '<span class="symbol rejected" tooltip="This nomination was rejected."><span>X</span></span>'.html_safe
+      '<span class="symbol rejected" tooltip="This nomination was rejected (but an alternate version may have been approved instead)."><span>&#x2718;</span></span>'.html_safe
     else
-      '<span class="symbol unreviewed" tooltip="This nomination has not been reviewed yet and can still be changed."><span>?</span></span>'.html_safe
+      '<span class="symbol unreviewed" tooltip="This nomination has not been reviewed yet and can still be changed."><span>&#x2753;</span></span>'.html_safe
     end
   end
   

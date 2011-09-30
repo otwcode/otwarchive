@@ -44,6 +44,15 @@ module ChallengeCore
     self.collection.user_is_maintainer?(user) || 
       (self.signup_open && (!self.collection.moderated? || self.collection.user_is_posting_participant?(user)))
   end
+  
+  def user_allowed_to_see_prompt?(user, prompt)
+    true
+  end
+
+  # whether users can change the name on their signup or not -- override in challenge class as appropriate
+  def allow_name_change?
+    true
+  end
 
   module ClassMethods
     # override datetime setters so we can take strings

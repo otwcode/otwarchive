@@ -80,6 +80,7 @@ Otwarchive::Application.routes.draw do
       put :update_associations
     end
   end
+  resources :tag_nominations, :only => [:update]
 
   resources :tag_wrangling_requests, :only => [:index] do
     collection do

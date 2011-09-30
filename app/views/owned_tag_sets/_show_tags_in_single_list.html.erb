@@ -1,0 +1,7 @@
+<% # not too many, so just show them in a single group %>
+<li class="<%= tag_type %> listbox">
+  <h3 class="expander_parent"><%= ts("#{tag_type.classify.pluralize}") %> <%= expand_contract_shuffle("list_for_#{tag_type}") %> </h3>
+  <ol id="list_for_<%= tag_type %>" class="tags index">
+    <%= tag_relation_to_list @tag_set.tag_set.with_type(tag_type) %>
+  </ol>
+</li>

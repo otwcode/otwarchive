@@ -102,7 +102,7 @@ When /^I create a skin to change the header color$/ do
     And %{I fill in "Title" with "Shiny"}
     And %{I fill in "Header color" with "blue"}
     And %{I press "Create"}
-  Then %{I should see "Skin was created successfully"}
+  Then %{I should see "Skin was successfully created"}
   When %{I press "Use"}
 end
 
@@ -112,7 +112,7 @@ When /^I create a skin to change the accent color$/ do
     And %{I fill in "Title" with "Shiny"}
     And %{I fill in "Accent color" with "blue"}
     And %{I press "Create"}
-  Then %{I should see "Skin was created successfully"}
+  Then %{I should see "Skin was successfully created"}
   When %{I press "Use"}
 end
 

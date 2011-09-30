@@ -1,13 +1,9 @@
-<% first_checkbox_type = true %>
-
-<% # cannot have fieldset as first child of dl, only of dt/dd %>
-
 <% TagSet::TAG_TYPES.each do |tag_type| %>
   <% unless TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
-    <% # we need this fieldset or the check all/none will happen too broadly %>
+    <% # fandoms, chars, relationships, freeforms %>
     <fieldset class="tagset">
       <dl>
-        <% if @tag_set.tag_set.tags_with_type(tag_type).empty? %>
+        <% if @tag_set.tag_set.with_type(tag_type).empty? %>
           <% add_label = ts("Add #{tag_type.classify.pluralize}:") %>
         <% else %>
           <% add_label = ts("Add:") %>
@@ -21,21 +17,16 @@
         <dd title="add tags"><%= form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options("tag_type") %></dd>
       </dl>
     </fieldset>
-  <% else %>
-    <% if first_checkbox_type %>
-      <% # we've hit the first of the type of tags that just get checkboxes and no autocomplete so we close & reopen the fieldset and dl %>
-      <% first_checkbox_type = false %>         
-    <% end %>
 
-    <% # we need this fieldset or the check all/none will happen too broadly %>
+  <% else %>
+    <% # ratings, categories, warnings %>
     <fieldset class="tagset">    
       <dl>
-      <% # ratings, etc %>
-      <dt><%= tag_type.classify.pluralize %></dt>
-      <dd><%= check_all_none %>
-      <%= checkbox_section(form, "#{tag_type}_tagnames_to_add", tag_type.classify.constantize.all,
-                           :checked_method => "#{tag_type}_taglist", 
-                           :value_method => "name", :include_toggle => false, :checkbox_side => "right") %></dd>
+        <dt><%= tag_type.classify.pluralize %></dt>
+        <dd><%= check_all_none %>
+        <%= checkbox_section(form, "#{tag_type}_tagnames", tag_type.classify.constantize.value_of(:name),
+                             :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s",
+                             :checkbox_side => "right") %></dd>
     </dl>
     </fieldset>
   <% end %>

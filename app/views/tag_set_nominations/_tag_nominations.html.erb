@@ -7,7 +7,9 @@
           <% if nom.approved || nom.rejected %>
             <%= nom.tagname %> <%= nomination_status(nom) %>
           <% else %>
-            <%= nom_form.text_field :tagname, autocomplete_options(tag_type, :autocomplete_token_limit => 1) %>
+            <span title="<%= ts("#{tag_type.classify} %{index}", :index => index+1) %>">
+              <%= nom_form.text_field :tagname, autocomplete_options(tag_type, :autocomplete_token_limit => 1) %>
+            </span>
           <% end %>
         </dd>
         <% unless tag_type == "freeform" %>
@@ -18,7 +20,7 @@
               <% @past_first = true %>
             <% end %>
           </dt>
-          <dd><%= nom_form.text_field :parent_tagname, autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
+          <dd title="<%= ts("which fandom?") %>"><%= nom_form.text_field :parent_tagname, autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
         <% end %>
 
       <% end %>

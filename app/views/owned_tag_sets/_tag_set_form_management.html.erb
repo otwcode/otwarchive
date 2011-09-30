@@ -15,7 +15,7 @@
 
   <dt><%= ts("Current Moderators") %></dt>
   <dd>
-    <ul class="mod"><%= @tag_set.moderators.empty? ? content_tag(:li, ts("None")) : @tag_set.moderators.collect(&:byline).sort.map {|mod| content_tag(:li, mod)}.join(', ').html_safe =%></ul>
+    <ul class="mods"><%= @tag_set.moderators.empty? ? content_tag(:li, ts("None")) : @tag_set.moderators.collect(&:byline).sort.map {|mod| content_tag(:li, mod)}.join(', ').html_safe =%></ul>
   </dd>
   
   <dt><%= form.label :moderator_changes, ts("Add/Remove Moderators: ") %></dt>
@@ -44,13 +44,13 @@
 </dl>
 </fieldset>
 
-<fieldset id="nomination_limits"<%= form.object.nominated ? 'class="hideme"' : ''%>>
+<fieldset id="nomination_limits" class="tagset<%= form.object.nominated ? '' : ' hideme' %>">
 <legend>Nomination Limits</legend>
 <h3>Nomination Limits</h3>
 <p class="notes">If you allow users to nominate <em>both</em> fandoms and characters/relationships in the same tag set, 
-  we will assume the character/relationship number you allow is <strong>per fandom</strong>. If that's not what you want, you 
-  can have users nominate fandoms in one tag set, and characters/relationships in another tag set. (You can then use
-  both tag sets in your challenge settings.)
+  the number of characters/relationships they can nominate is <strong>per fandom</strong>. If that's not what you want, you 
+  can have users nominate fandoms in one tag set, and characters/relationships in another tag set. You can then use
+  both tag sets in your challenge settings. 
 </p>
 <dl>
   <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>

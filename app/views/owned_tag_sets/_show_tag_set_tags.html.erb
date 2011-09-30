@@ -1,74 +1,75 @@
-<% if @tag_type %>
-  <h4><%= @tag_type.classify.pluralize %> (<%= @tags.count %>)</h4>
-
-  <% if @tag_type == "fandom" && @tags.count > ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
-
-    <!-- sort tags out by media -->
-    <ol class="tagset media index">
-	    <% Media.by_name.each do |medium| %>
-        <% if @tags.with_parents([medium]).count > 0 %>
-          <li class="category <%= cycle :odd, :even %>">
-  			    <h3><%= medium.name %> (<%= @tags.with_parents([medium]).count %>) <%= expand_contract_shuffle("list_for_media_#{medium.id}") %></h3>
-            <ol id="list_for_media_<%= medium.id %>" class="tags">
-              <%= tag_relation_to_list @tags.with_parents([medium]) %>
-            </ol>
-        	</li>
-        <% end %>
-      <% end %>
-      <% if @tags.with_no_parents.count > 0 %>
-        <li class="category">
-  		    <h3>No Media Specified (<%= @tags.with_no_parents.count %>)</h3>
-          <ol class="tags">
-            <%= tag_relation_to_list @tags.with_no_parents %>
-          </ol>
-  	    </li>
-      <% end %>
-    </ol>
-    
-  <% elsif (@tag_type == "character" || @tag_type == "relationship") && @tags.count > ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
-
-    <!-- sort tags out by fandom -->    
-    <ol class="tagset fandom index">
-      
-	    <% @tag_set.with_type("fandom").by_name_without_articles.each do |fandom_id, fandom_name| %>
-        <% if @tags.with_parents([fandom]).count > 0 %>
-          <li class="category <%= cycle :odd, :even %>">
-	          <h3><%= fandom.name %> (<%= @tags.with_parents([fandom]).count %>) <%= expand_contract_shuffle("list_for_fandom_#{fandom.id}") %></h3>
-            <ol id="list_for_fandom_<%= fandom.id %>" class="tags">
-              <%= tag_relation_to_list @tags.with_parents([fandom]) %>
-            </ol>
-        	</li>
-        <% end %>
-      <% end %>
-      <% if @tags.with_no_parents.count > 0 %>
-        <li class="category">
-	        <h3>No Fandom Specified (<%= @tags.with_no_parents.count %>)</h3>
-          <ol class="tags">
-            <%= tag_relation_to_list @tags.with_no_parents %>
-          </ol>
-    	  </li>
-      <% end %>
-    </ol>
-
-  <% else %>
-
-    <!-- show all the tags alphabetically -->
-    <ol class="tagset tags index">
-      <%= tag_relation_to_list @tags %>
-    </ol>
-
-  <% end %>
-
-<% else %>
-
-  <!-- recursively render by type -->
-  <% TagSet::TAG_TYPES.each do |type| %>
-    <% @tag_type = type %>
-    <% @tags = @tags.with_type(type) %>
-    <% if @tags.count > 0 %>
-      <%= render "show_tag_set_tags" %>
+<ol class="tagset index">
+  <% # first show any ratings, categories, or warnings, since there will only be a small number if any %>
+  <% TagSet::TAGS_AS_CHECKBOXES.each do |tag_type| %>
+    <% if @tag_set.tag_set.with_type(tag_type).exists? %>
+      <%= render "show_tags_in_single_list", :tag_type => tag_type %>
     <% end %>
   <% end %>
 
-<% end %>
-        
+  <% if @fandom_hash %>
+    <% # we're doing the fandoms by media and any char/rel tags will be nested %>
+    <%= render "show_fandoms_by_media" %>
+  <% end %>
+
+  <% if @character_hash || @relationship_hash %>
+    <% # if there was a fandom display, check for any that weren't shown in the fandom display %>
+    <% all_fandom_keys = (@character_hash.keys | @relationship_hash.keys).sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')} %>
+    <% all_fandom_keys -= @tag_set.tag_set.with_type("fandom").value_of :name %>
+  
+    <% if @fandom_hash && !all_fandom_keys.empty? %>
+
+      <% # DEAR FRONT END I suspect there is a better way to do this within the list and feel free to replace it with that better way! %>
+      <% # start of the ugly %>
+      </ol>  
+      <h4><%= ts("The following characters and relationships in the set don't seem to be connected to any fandom in the set as far as we can tell. You might want to set up associations for them.") %></h4>
+      <% # reopen new ol %>
+      <ol class="tagset index">
+      <% # end of ugly %>
+
+      <li class="cast listbox">
+        <h3><%= ts("Unassociated Characters & Relationships") %> <%= expand_contract_shuffle("list_for_unassociated_char_and_rel") %></h3>
+        <ol id="list_for_unassociated_char_and_rel" class="tags index">
+          <% # we have to use the splat operator here because values_at uses args %>
+          <%= @character_hash.values_at(*all_fandom_keys).flatten.uniq.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}.map {|tag| content_tag(:li, tag)}.join("\n").html_safe %>
+          <%= @relationship_hash.values_at(*all_fandom_keys).flatten.uniq.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}.map {|tag| content_tag(:li, tag)}.join("\n").html_safe %>
+        </ol>
+      </li>
+    
+    <% else %>  
+  
+      <% all_fandom_keys.each do |fandom| %>
+        <% 
+           # this gets called a ton if there are a lot of fandoms so not doing it in a partial for performance, although
+           # as a result it's mostly duplicated in show_fandoms_by_media :( 
+        %>
+        <% has_characters = (@character_hash && @character_hash[fandom]) ? @character_hash[fandom].size : 0 %>
+        <% has_relationships = (@relationship_hash && @relationship_hash[fandom]) ? @relationship_hash[fandom].size : 0 %>
+        <li class="fandom listbox <%= cycle :odd, :even %>">
+          <% if (has_relationships + has_characters) > 0 %>
+            <h3 class="expander_parent">
+              <%= ts("%{fandom}", :fandom => fandom) %>
+              (<%= has_relationships + has_characters %>)
+              <%= expand_contract_shuffle(list_id) %>
+              <% list_id = "list_for_fandom_#{fandom.gsub(/[^\w]/, '_')}" %>
+              <%= expand_contract_shuffle(list_id) %>
+            </h3>
+            <ol id="<%= list_id %>" class="tags index">
+              <% if has_characters > 0 %>
+                <%= @character_hash[fandom].map {|character| content_tag(:li, character)}.join("\n").html_safe %>
+              <% end %>
+              <% if has_relationships > 0 %>
+                <%= @relationship_hash[fandom].map {|relationship| content_tag(:li, relationship)}.join("\n").html_safe %>
+              <% end %>
+            </ol>
+          <% else %>
+            <h3><%= ts("%{fandom}", :fandom => fandom) %> (0)</h3>
+          <% end %>          
+        </li>
+      <% end %>
+      
+    <% end %>
+  <% end %>
+
+  <% # finally, freeform tags, if necessary broken up into alphabetical lists %>
+  <%= render "show_tags_by_alpha", :tag_type => "freeform" %>
+</ol>

@@ -1,4 +1,4 @@
-<div class="navigation module">
+
   <h3 class="landmark">Navigation</h3>
   <ul class="navigation actions" role="navigation">
     <li><%= link_to ts("Back To %{title}", :title => @tag_set.title), tag_set_path(@tag_set) %>
@@ -13,9 +13,9 @@
       </li>
     <% end %>
   </ul>
-</div>
 
-<div class="tag_set module">
+
+
   <h3><%= ts("Your Nominations For %{title}", :title => @tag_set.title) %></h3>
   <div class="wrapper">
     <dl class="meta">
@@ -33,7 +33,7 @@
       </dd>
     </dl>
   </div>
-</div>
+
 
 <h3><%= ts("Nominated Tags") %> <%= link_to_help "tagset-nominated-tags" %></h3>
 
@@ -42,7 +42,7 @@
 
     <% # group by fandom %>
     <% @tag_set_nomination.fandom_nominations.each do |fandom_nom| %>
-      <li class="category <%= cycle :odd, :even %>">
+      <li class="category module <%= cycle :odd, :even %>">
         <h3><%= render "show_tag_status", :tag => fandom_nom %></h3>
         <% TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type| %>
           <% if @limit[tag_type] > 0 %>
@@ -50,8 +50,12 @@
             <% if fandom_nom.send("#{tag_type}_nominations").count == 0 %>
               <p><%= ts("None nominated in this fandom.") %></p>
             <% else %>
+              <!--BACK END: is this list ordered? Or are these lis peers? If flat hierarchy pls use ul-->
               <ol>
-                <% fandom_nom.send("#{tag_type}_nominations").each do |tag| %><li><%= render "show_tag_status", :tag => tag %></li><% end %>
+                <% fandom_nom.send("#{tag_type}_nominations").each do |tag| %>
+                <li><!--BACK END, pls class this containing li with unreviewed or unwrangled or w/e like  blurb_tag_block (because the li contains two elements: the help button and the span, we class the parent container so we can target the group)-->
+                <%= render "show_tag_status", :tag => tag %></li>
+                <% end %>
               </ol>
             <% end %>
           <% end %>

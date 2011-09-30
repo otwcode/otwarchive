@@ -3,7 +3,7 @@ class OwnedTagSetsController < ApplicationController
 
   before_filter :load_tag_set, :except => [ :index, :new, :create ]
   before_filter :users_only, :only => [ :new, :create, :nominate ]
-  before_filter :moderators_only, :except => [ :index, :new, :create ]
+  before_filter :moderators_only, :except => [ :index, :new, :create, :show ]
   before_filter :owners_only, :only => [ :destroy ]
   
   def load_tag_set
@@ -51,31 +51,39 @@ class OwnedTagSetsController < ApplicationController
   end
   
   def show
-    unless @tag_set.visible || @tag_set.user_is_moderator?(current_user)
-      flash[:error] = ts("That tag set is not available for public viewing.")
-      redirect_to tag_sets_path and return
-    end
-    # 
-    # if params[:tag_type] && TagSet::TAG_TYPES.include?(params[:tag_type])
-    #   @topmost_tag_type = params[:tag_type]
-    # else
-    #   @topmost_tag_type =  @tag_set.tag_set.topmost_tag_type
-    # end
-    # 
-    # # Get all the tags of the topmost type with any children in the set, and the associated tags of this set
-    # @topmost_tags = @tag_set.tag_set.tags.where(:type => @topmost_tag_type.classify).value_of :id, :name
-    # topmost_ids = @topmost_tags.collect {|tt| tt.first}
-    # child_ids = @tag_set.tag_set_associations.where(:parent_tag_id => topmost_ids).value_of :tag_id
-    # 
+    if @tag_set.visible || @tag_set.user_is_moderator?(current_user)
+      # 
+      # if params[:tag_type] && TagSet::TAG_TYPES.include?(params[:tag_type])
+      #   @topmost_tag_type = params[:tag_type]
+      # else
+      #   @topmost_tag_type =  @tag_set.tag_set.topmost_tag_type
+      # end
+      # 
+      # # Get all the tags of the topmost type with any children in the set, and the associated tags of this set
+      # @topmost_tags = @tag_set.tag_set.tags.where(:type => @topmost_tag_type.classify).value_of :id, :name
+      # topmost_ids = @topmost_tags.collect {|tt| tt.first}
+      # child_ids = @tag_set.tag_set_associations.where(:parent_tag_id => topmost_ids).value_of :tag_id
+      # 
       
-    if params[:tag_type] && TagSet::TAG_TYPES.include?(params[:tag_type])
-      @tag_type = params[:tag_type]
-      @tags = @tag_set.tag_set.with_type(@tag_type)
-    else
-      @tags = @tag_set.tag_set.tags
-      @associations = @tag_set.tag_set_associations
+      # @associations = @tag_set.tag_set_associations
+      if @tag_set.tag_set.has_type?("fandom")
+        @fandom_hash = Tag.names_by_parent(Fandom.in_tag_set(@tag_set.tag_set), "media") 
+      end
+
+      if @tag_set.tag_set.has_type?("character")
+        @character_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), "character")
+        canonical_hash = Tag.names_by_parent(Character.in_tag_set(@tag_set.tag_set), "fandom") 
+        # merge the values of the two hashes (each value is an array) as a set (ie remove duplicates)
+        @character_hash.merge!(canonical_hash) {|key, oldval, newval| (oldval | newval) }
+      end 
+
+      if @tag_set.tag_set.has_type?("relationship") 
+        @relationship_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), "relationship")
+        canonical_hash = Tag.names_by_parent(Relationship.in_tag_set(@tag_set.tag_set), "fandom") 
+        @relationship_hash.merge!(canonical_hash) {|key, oldval, newval| (oldval | newval) }
+      end 
+      
     end
-    
   end
 
   def new
@@ -132,16 +140,18 @@ class OwnedTagSetsController < ApplicationController
   
   def do_batch_load
     if params[:batch_associations]
-      rejected = @tag_set.load_batch_associations!(params[:batch_associations], :do_relationships => (params[:batch_do_relationship] ? true : false))
-      if rejected.blank?
-        flash[:notice] = ts("Batch associations loaded!")
+      failed = @tag_set.load_batch_associations!(params[:batch_associations], :do_relationships => (params[:batch_do_relationship] ? true : false))
+      if failed.empty?
+        flash[:notice] = ts("Tags and associations loaded!")
+        redirect_to tag_set_path(@tag_set) and return      
       else
-        flash[:notice] = ts("Not all associations could be loaded. Please check over the results.")
+        flash.now[:notice] = ts("We couldn't add all the tags and associations you wanted -- the ones left below didn't work. See the help for suggestions!")
+        @failed_batch_associations = failed.join("\n")
+        render :action => :batch_load and return
       end
-      redirect_to tag_set_path(@tag_set) and return      
     else
       flash[:error] = ts("What did you want to load?")
-      redirect_to :action => :batch_load_associations and return
+      redirect_to :action => :batch_load and return
     end
   end
   

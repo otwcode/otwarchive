@@ -5,28 +5,28 @@ Feature: Gift Exchange Challenge
   I want to run a gift exchange
 
   Scenario: Create a collection to house a gift exchange
-  Given I have standard challenge tags setup
-    And I am logged in as "mod1"
+  Given I am logged in as "mod1"
+    And I have standard challenge tags setup
   When I set up the collection "My Gift Exchange" 
     And I select "Gift Exchange" from "challenge_type"
-    And I press "Submit"
+    And I submit
   Then My Gift Exchange gift exchange should be correctly created
 
   Scenario: Enter settings for a gift exchange
   Given I am logged in as "mod1"
     And I have set up the gift exchange "My Gift Exchange"
   When I fill in gift exchange challenge options
-    And I press "Update"
+    And I submit
   Then My Gift Exchange gift exchange should be fully created
 
   Scenario: Open signup in a gift exchange
-  Given I have created the gift exchange "My Gift Exchange"
+  Given I am logged in as "mod1"
+    And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
   When I check "Signup open?"
-    And I press "Update"
+    And I submit
   Then I should see "Challenge was successfully updated"
-  When I follow "Profile"
-  Then I should see "Signup: CURRENTLY OPEN" within ".collection.meta"
+    And I should see "Signup: CURRENTLY OPEN" within ".collection.meta"
     And I should see "Signup closes:"
     
   Scenario: Gift exchange appears in list of open challenges
@@ -34,7 +34,7 @@ Feature: Gift Exchange Challenge
     And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
   When I check "Signup open?"
-    And I press "Update"
+    And I submit
   When I view open challenges
   Then I should see "My Gift Exchange"  
 
@@ -43,9 +43,8 @@ Feature: Gift Exchange Challenge
     And I have created the gift exchange "My Gift Exchange"
     And I am on "My Gift Exchange" gift exchange edit page
   When I select "(GMT-09:00) Alaska" from "gift_exchange_time_zone"
-    And I press "Update"
+    And I submit
   Then I should see "Challenge was successfully updated"
-  When I follow "Profile"
   Then I should find "Alaska"
   
   Scenario: Add a co-mod
@@ -58,7 +57,7 @@ Feature: Gift Exchange Challenge
     And I have opened signup for the gift exchange "Awesome Gift Exchange"
   When I go to "Awesome Gift Exchange" collection's page
     And I follow "Membership"
-    And I fill in "Add new members" with "comod"
+    And I fill in "participants_to_invite" with "comod"
     And I press "Submit"
   Then I should see "New members invited: comod"
 
@@ -169,7 +168,7 @@ Feature: Gift Exchange Challenge
       And the email should link to myname1's user url
       And the email should link to the works tagged "Stargate Atlantis"
       
-  Scenario: User signs up for two gift exchanges at once
+  Scenario: User signs up for two gift exchanges at once #'
   
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
@@ -197,7 +196,7 @@ Feature: Gift Exchange Challenge
     And I have opened signup for the gift exchange "Sensitive Gift Exchange"
   When I am logged in as "myname1"
   When I start to sign up for "Sensitive Gift Exchange" gift exchange
-  Then I should see "Select pseudonym"
+  Then I should see "othername"
   
   Scenario: User tries to change pseud on a challenge signup and should not be able to, as it would break matching
   
@@ -210,7 +209,7 @@ Feature: Gift Exchange Challenge
   Then I should see "Signup was successfully created"
     And I should see "Signup for myname1"
   When I edit my signup for "Sensitive Gift Exchange"
-  Then I should not see "Select pseudonym"
+  Then I should not see "othername"
   
   Scenario: User can see their assignment
   

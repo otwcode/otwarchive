@@ -19,13 +19,14 @@
         ["falseValue", "trueValue"]
 */
 
+(function ($) {
 function BestInPlaceEditor(e) {
   this.element = jQuery(e);
   this.initOptions();
   this.bindForm();
   this.initNil();
   $(this.activator).bind('click', {editor: this}, this.clickHandler);
-}
+};
 
 BestInPlaceEditor.prototype = {
   // Public Interface Functions //////////////////////////////////////////////
@@ -320,12 +321,13 @@ BestInPlaceEditor.forms = {
   }
 };
 
-jQuery.fn.best_in_place = function() {
+$.fn.best_in_place = function() {
   this.each(function(){
     jQuery(this).data('bestInPlaceEditor', new BestInPlaceEditor(this));
   });
   return this;
 };
+}(jQuery));
 
 
 

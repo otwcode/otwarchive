@@ -1,35 +1,48 @@
-<% # expects locals nom and section %>
-<%= nom.tagname %> (<%= nom.times_nominated(@tag_set) %>)
-<%= label_tag "approve_#{nom.tagname}", :class => "action" do %>
-  <%= ts("Approve") %>
-  <%= check_box_tag "approve_#{nom.tagname}", 1, params["approve_#{nom.tagname}"] %>            
-<% end %>
-<%= label_tag "reject_#{nom.tagname}", :class => "action"  do %>
-  <%= ts("Reject") %>
-  <%= check_box_tag "reject_#{nom.tagname}", 1, params["reject_#{nom.tagname}"] %>            
-<% end %>
-<% if section == "existing" && nom.synonym %>
-  <%= label_tag "approve_#{nom.synonym}", :class => "action" do %>
-    <%= nom.synonym %>
-    <%= check_box_tag "synonym_#{nom.synonym}", 1, params["synonym_#{nom.synonym}"] %>            
+<% # expects locals tag_type, nom, and section %>
+<% if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) %>
+  <% if nom.parent_tagname && nom.parent_tagname.downcase != @last_parent_tagname.downcase %>                
+    <tr><th scope="col" colspan="<%= section == "existing" ? 5 : 4 %>"><%= nom.parent_tagname %></th></tr>
+    <% @last_parent_tagname = nom.parent_tagname %>
+  <% elsif nom.parent_tagname.blank? && !@no_parent_tagname_seen %>
+    <tr><th scope="col" colspan="<%= section == "existing" ? 5 : 4 %>"><%= ts("(No Fandom Specified)")%></th></tr>
+    <% @no_parent_tagname_seen = true %>
   <% end %>
 <% end %>
 
-<% if nom.class == FandomNomination %>
-  <% %w(character relationship).each do |tag_type| %>
-    <% child_noms = "#{tag_type}_nomination".classify.constantize.where(:parent_tagname => nom.tagname).unreviewed %>
-    <% unless child_noms.empty? %>
-      <h4><%= tag_type.classify.pluralize %></h4>
-      <ul>
-        <% child_noms.each do |child_nom| %>
-          <% # render this same form recursively %>
-          <% next if @tagnames_seen.include?(child_nom.tagname) %>
-          <% @tagnames_seen << child_nom.tagname %>
-          <li>
-            <%= render "review_individual_nom", :nom => child_nom, :section => section %>
-          </li>
+
+<tr>
+  <th scope="row" title="nomination">
+    <span class="nomination">
+      <%= nom.tagname %>
+      <% if (nom_count = nom.times_nominated(@tag_set)) > 1 %>
+        <span class="count">(x<%= nom_count %>)</span>
+      <% end %>
+    </span>
+    <% if section == "existing" %>
+        <% if nom.synonym %>
+          <span title="official synonym" class="synonym">
+          (<%= label_tag "#{tag_type}_synonym_#{nom.synonym}" do %>
+            <%= nom.synonym %>
+            <%= check_box_tag "#{tag_type}_synonym_#{nom.synonym}", 1, params["#{tag_type}_synonym_#{nom.synonym}"] %>)
+            </span>
+          <% end %>
         <% end %>
-      </ul>
     <% end %>
-  <% end %>
-<% end %>
+  </th>
+  
+  <td title="approve" class="action">
+    <%= label_tag "#{tag_type}_approve_#{nom.tagname}" do %>
+      <span class="yes">+</span>
+      <%= check_box_tag "#{tag_type}_approve_#{nom.tagname}", 1, params["#{tag_type}_approve_#{nom.tagname}"] %>
+    <% end %>
+  </td>
+  <td title="reject" class="action">
+    <%= label_tag "#{tag_type}_reject_#{nom.tagname}" do %>
+      <span class="no">x</span>
+      <%= check_box_tag "#{tag_type}_reject_#{nom.tagname}", 1, params["#{tag_type}_reject_#{nom.tagname}"] %>
+    <% end %>
+  </td>
+  <td title="edit <%= nom.tagname %>" class="edit action">
+    <%= text_field_tag "#{tag_type}_change_#{nom.tagname}", nil, autocomplete_options("tag?type=#{tag_type}", :autocomplete_token_limit => 1, :title => "change tag name") %>
+  </td>
+</tr>

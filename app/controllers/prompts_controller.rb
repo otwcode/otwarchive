@@ -10,6 +10,7 @@ class PromptsController < ApplicationController
   before_filter :signup_owner_only, :only => [:edit, :update]
   before_filter :maintainer_or_signup_owner_only, :only => [:show]
   before_filter :check_signup_open, :only => [:new, :create, :edit, :update]
+  before_filter :allowed_to_see, :only => [:show]
 
   # def promptmeme_only
   #   unless @collection.challenge_type == "PromptMeme"
@@ -55,7 +56,7 @@ class PromptsController < ApplicationController
   end
 
   def maintainer_or_signup_owner_only
-    not_allowed and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
+    not_allowed(@collection) and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
   end
 
   def not_signup_owner
@@ -65,13 +66,11 @@ class PromptsController < ApplicationController
   end
 
   def allowed_to_destroy
-    @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed
+    @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
   end
 
-  def not_allowed
-    flash[:error] = ts("Sorry, you're not allowed to do that.")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
+  def allowed_to_see
+    @challenge.user_allowed_to_see_prompt?(current_user, @prompt) || not_allowed(@collection)
   end
 
   def load_prompt_from_id
@@ -98,13 +97,16 @@ class PromptsController < ApplicationController
 
   def new
     if params[:prompt_type] == "offer"
+      @index = @challenge_signup.offers.count
       @prompt = @challenge_signup.offers.build
     else
+      @index = @challenge_signup.requests.count
       @prompt = @challenge_signup.requests.build
     end
   end
 
   def edit
+    @index = @challenge_signup.send(@prompt.class.name.downcase.pluralize).index(@prompt)
   end
 
   def create

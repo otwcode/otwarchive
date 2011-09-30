@@ -9,13 +9,13 @@ input[type="submit"], button, label.action*/
         { display:inline; text-transform:lowercase;}
 ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions
         { padding:0.429em 0.25em 0.25em 0; float:right;  text-align:center; }
-.actions a, .action, .actions input, input[type="submit"], button,  a.toggle
-        { background:#eee; color:#444; width:auto; font-size:100%; height:1.286em; line-height:1.286; vertical-align:middle; display:inline-block; padding: 0.25em 0.75em; white-space: nowrap; overflow: visible; position: relative; cursor: pointer; text-decoration: none; border: 1px solid #bbb; border-bottom:1px solid #aaa; 
-          background:-moz-linear-gradient(#fff 2%,#e9e2dd 95%, #bbb 100%);
-          background:-webkit-linear-gradient(#fff 2%,#e9e2dd 95%, #bbb 100%);
-          background:-o-linear-gradient(#fff 2%,#e9e2dd 95%, #bbb 100%);
-          background:-ms-linear-gradient(#fff 2%,#e9e2dd 95%, #bbb 100%);
-          background:linear-gradient(#fff 2%,#e9e2dd 95%, #bbb 100%);
+.actions a, .action, .actions input, input[type="submit"], button, .current
+        { background:#eee; color:#444; width:auto; font-size:100%; height:1.286em; line-height:1.286; vertical-align:middle; display:inline-block; padding: 0.25em 0.75em; white-space: nowrap; overflow: visible; position: relative; cursor: pointer; text-decoration: none; border: 1px solid #bbb; border-bottom:1px solid #aaa; text-transform:lowercase;
+          background:-moz-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+          background:-webkit-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+          background:-o-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+          background:-ms-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+          background:linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
           border-radius:0.25em; box-shadow:none; }
 input[type="submit"] 
         { height:1.929em; }
@@ -50,13 +50,17 @@ dl.stats + h6 + .actions, li.news .actions
         { top:2.5em;}
 .dashboard .landmark 
         { clear:right; }
+td.action
+        {display:table-cell; 
+          border-radius:0}
         
 /*==INTERACTIONS: global form rules TEMP*/
 
-form    { clear:right; }
+form, fieldset
+        { clear:right; }
 
 fieldset, form dl, fieldset dl dl, fieldset fieldset fieldset, fieldset fieldset dl dl, dd.hideme 
-        { background:#e9e2dd; border:2px solid #f3efec; margin:0.643em; padding:0.643em; overflow:hidden;
+        { background:#ddd; border:2px solid #f3efec; margin:0.643em; padding:0.643em;
           box-shadow:inset 1px 0 5px #999; }
 fieldset dl, fieldset.navigation, fieldset dl fieldset dl
         { background:transparent; border:none; clear:right;
@@ -124,7 +128,7 @@ duplication doesn't matter for now - auto_complete.css is gone in my webdev. max
 .autocomplete ul li 
         { padding: 0.125em;	margin: 0.25em auto auto; }
 .autocomplete input
-        { display: block;	margin: 0.25em 0 0;}
+        { display: block;	margin: 0.25em 0 0; min-width:10em}
 .autocomplete ul li:hover, li.selected 
         { background: url(/images/header-red.png) top left #900; color: #fff; }
 .required .autocomplete
@@ -155,12 +159,18 @@ duplication doesn't matter for now - auto_complete.css is gone in my webdev. max
 
 /*CUSTOM ELEMENT: IF MANY SHOW MORE
 should probably generalise this to all height-based show more toggles*/
-div.many{ overflow: auto; max-height:10em; border:1px solid #ddd;}
+div.many, div.all
+        { border:1px solid #ddd;}
 form .module p.actions 
         { background:#f3efec; border:1px solid #ddd; float:none; text-align:left; margin:0 !important }
 div.all { height: auto;}
 form div.lots ul li, form div.all ul li 
         { display:block;}
+div.many ul 
+        { overflow: auto; max-height:10em;}
+        
+/* CUSTOM ELEMENT: BEST-IN-PLACE editor */
+.tagset .options li span.best_in_place {display: inline; border: 1px solid green;}
 
 /* INTERACTION: SEARCH */
 .search p, li.search form p
@@ -214,7 +224,7 @@ experimental, developing here, (may combine with .toggled rules)*/
          { width:auto;}
 
 /*TEMP OVERRIDES */
-#header h1 a, #header fieldset, #header form, #header p
+#header h1 a, #header fieldset, #header form, #home-header form, #home-header fieldset, #header p
         { background:transparent;border:0; padding:0; margin: 0;
           box-shadow:none; }
 .dashboard .meta .clear
@@ -228,6 +238,9 @@ experimental, developing here, (may combine with .toggled rules)*/
 #main form .datetime {position:static;}
 .autocomplete .dropdown {max-height:22.5em; overflow:auto;}
 .autocomplete .dropdown li {display:block !important;}
+#search p{text-align:right; margin:0}
+#search input.button {font-size:0.75em; }
+#tos-partial {height:12em; overflow:auto;}
 
 
 /* Added for timepicker currently used on gift exchange */
@@ -247,8 +260,11 @@ fieldset.tagset ul li, .tagset .mods li {display:inline;}
 /* challenge signup forms (see prompt_form partial esp) */
 .tag_set_nominations-index li.odd {display: block; background:#fffef9}
 .tagset h3, .tagset ul.options {clear:right;}
+form.tagset h4 {float:left; clear:both}
+.tagset table {clear:both;}
 ul.tagset,.tagset ul.options  {border:1px solid #ddd; clear:both; padding:0.15em;}
 #main form .tagset .navigation {float:left;}
+
 
 
 
@@ -288,13 +304,6 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
                                     { width: 100%; }
 #reply-to-comment #new_comment      { margin-top: 0; }                                    
 #reply-to-comment p#close-popup     { top:0; right:2em; position:absolute; z-index:60;}
-
-
-
-
-  
-
- 
 
 
 

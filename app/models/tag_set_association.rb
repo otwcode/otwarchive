@@ -16,8 +16,36 @@ class TagSetAssociation < ActiveRecord::Base
   
   attr_accessor :create_association
   
+  def to_s
+    "#{tag.name} (#{parent_tag.name})"
+  end
+  
   def self.for_tag_set(tagset)
     where(:owned_tag_set_id => tagset.id)
+  end
+
+  # almost exactly like the same code in tag.rb
+  def self.parent_names(child_type, parent_type = "fandom")
+    joins(:tag, :parent_tag).where("tags.type = ? AND parent_tags_tag_set_associations.type = ?", child_type.capitalize, parent_type.capitalize).
+    order("case when lower(substring(parent_tags_tag_set_associations.name from 1 for 4)) = 'the ' then substring(parent_tags_tag_set_associations.name from 5)
+            when lower(substring(parent_tags_tag_set_associations.name from 1 for 2)) = 'a ' then substring(parent_tags_tag_set_associations.name from 3)
+            when lower(substring(parent_tags_tag_set_associations.name from 1 for 3)) = 'an ' then substring(parent_tags_tag_set_associations.name from 4)
+            else parent_tags_tag_set_associations.name
+            end").
+    group('parent_tags_tag_set_associations.name').
+    select("parent_tags_tag_set_associations.name as parent_name, 
+      group_concat(distinct tags.name order by case when lower(substring(tags.name from 1 for 4)) = 'the ' then substring(tags.name from 5)
+              when lower(substring(tags.name from 1 for 2)) = 'a ' then substring(tags.name from 3)
+              when lower(substring(tags.name from 1 for 3)) = 'an ' then substring(tags.name from 4)
+              else tags.name
+              end) as child_names")
+  end
+  
+  def self.names_by_parent(child_relation, child_type, parent_type = "fandom")
+    hash = {}
+    results = ActiveRecord::Base.connection.execute(child_relation.parent_names(child_type, parent_type).to_sql)
+    results.each {|row| hash[row.first] = row.second.split(',')}
+    hash
   end
 
   def parent_tagname

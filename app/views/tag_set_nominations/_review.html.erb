@@ -15,62 +15,70 @@
 <ul class="notes">
   <li>You can approve or reject nominations, or leave them for later. Once a nomination
   has been either approved or rejected, it won't appear on this page.</li>
-  <li>If you reject a tag that you meant to approve, you can re-add it manually.</li>
+
   <li>We might clear out old nominations after several months to avoid database clutter, so please don't 
   leave nominations turned on unless you are reviewing nominations regularly.</li>
+
   <li>If you reject a fandom nomination, we will automatically reject all character and relationship nominations submitted 
-    for that fandom. We will NOT automatically approve character nominations.</li>
+    for that fandom. We will <em>not</em> automatically approve character nominations.</li>
+
+  <li>If you approve an official synonym, we will automatically approve all the nominations with that synonym, 
+      but only add that one synonym to your tag set.</li>
+
+  <li>If you make a tag that uses the same name as an existing tag of another type (eg if you made a character tag "Firefly" but that tag was already used for the show), the archive will automatically tag on the type, so you'll see "Firefly - Character" in your tag set.</li> 
+
 </ul>
 
 <%= form_for :tag_set_nominations, :url => update_multiple_tag_set_nominations_path(@tag_set), :html => { :method => :put, :class => "tagset" } do |form| %>
-  <% @tagnames_seen = [] %>
+  <%= error_messages_formatted @errors %>
+
+  <% @tagnames_seen = {} %>
   <% @tag_types.each do |tag_type| %>
 
-    <h3>Nominated <%= tag_type.classify.pluralize %></h3>
-  
-    <% %w(canonical existing nonexistent).each do |section| %>
-      <% noms = @nominations[tag_type][section] %>
-      <% unless noms.empty? %>
-        <fieldset>
-          <legend><%=ts("#{section.capitalize}")%></legend>
-  	      <h4><%=ts("#{section.capitalize}")%></h4>
-          <p class="notes">
-            <% if section == "canonical" %>          
-              These tags are canonical and wrangled. However, you may have more and less specific versions of the same tag
-              nominated (eg, "Sam" and "Sam Winchester" where "Sam" is a meta tag covering all characters named Sam Whatever). 
-            <% elsif section == "existing" %>
-              The following nominated tags exist but are not canonical. They may have an official synonym, in which case
-              you can approve the synonym instead (or in addition if you really want, but that is not recommended).
-            <% else %>
-              These nominated tags don't exist on the archive at all. Please check them
-              closely before approving them for addition!
-            <% end %>
-          </p>
-          <ul class="navigation actions">
-        		<li>Approve</li>
-        		<li><a href="#" class="check_all" checkbox_name_filter="approve">All</a></li>
-        		<li><a href="#" class="check_none" checkbox_name_filter="approve">None</a></li>
-  	        <li>Reject</li>
-        		<li><a href="#" class="check_all" checkbox_name_filter="reject">All</a></li>
-        	 	<li><a href="#" class="check_none" checkbox_name_filter="reject">None</a></li>
-        	 	<% if section == "existing" %>
-              <li>Synonym</li>
-          	  <li><a href="#" class="check_all" checkbox_name_filter="synonym">All</a></li>
-          	  <li><a href="#" class="check_none" checkbox_name_filter="synonym">None</a></li>
-        	 	<% end %>
-          </ul>
-          <ul class="options all">
-            <% noms.each do |nom| %>
-              <% next if @tagnames_seen.include?(nom.tagname) %>
-              <% @tagnames_seen << nom.tagname %>
-              <li class="<%= cycle("odd", "even") %>">
-                <%= render "review_individual_nom", :nom => nom, :section => section %>
-              </li>
-            <% end %>
-          </ul>
-        </fieldset>
+    <h3>Nominated <%= tag_type.classify.pluralize %> <%= expand_contract_shuffle("list_for_review_#{tag_type}", shuffle=false) %></h3>
+    <ul id="list_for_review_<%= tag_type %>" force_contract="true">
+      <% %w(canonical existing nonexistent).each do |section| %>
+        <% noms = @nominations[tag_type][section] %>
+        <% if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) %>
+          <% noms = noms.order(:parent_tagname, :tagname) %>
+          <% @last_parent_tagname = ""; @no_parent_tagname_seen = false %>
+        <% else %>
+          <% noms = noms.order(:tagname) %>
+        <% end %>
+        <% unless noms.empty? %>
+          <li>
+            <fieldset class="<%= section %>">
+              <legend><%=ts("#{section.capitalize}")%></legend>
+      	      <h4><%=ts("#{section.capitalize}")%></h4>
+      	      <ul class="actions">
+            		<li>Approve</li>
+            		<li><a href="#" class="check_all" checkbox_name_filter="approve">All</a></li>
+            		<li><a href="#" class="check_none" checkbox_name_filter="approve">None</a></li>
+                <li>Reject</li>
+            		<li><a href="#" class="check_all" checkbox_name_filter="reject">All</a></li>
+            	 	<li><a href="#" class="check_none" checkbox_name_filter="reject">None</a></li>
+            	 	<% if section == "existing" %>
+                  <li>Synonym</li>
+              	  <li><a href="#" class="check_all" checkbox_name_filter="synonym">All</a></li>
+              	  <li><a href="#" class="check_none" checkbox_name_filter="synonym">None</a></li>
+            	 	<% end %>
+              </ul>
+              <table summary="<%= ts("approve, reject, or edit nominations for #{section} #{tag_type.pluralize}") %>">
+      	        <caption><%=ts("#{section.capitalize}")%></caption>
+                <%= render "review_thead", :section => section %>
+                <tbody>
+                  <% noms.each do |nom| %>
+                    <% next if @tagnames_seen[nom.tagname] %>
+                    <% @tagnames_seen[nom.tagname] = 1 %>
+                    <%= render "review_individual_nom", :tag_type => tag_type, :nom => nom, :section => section %>
+                  <% end %>
+                </tbody>
+              </table>
+            </fieldset>
+          </li>
+        <% end %>
       <% end %>
-    <% end %>
+    </ul>
   <% end %>
 
   <fieldset>

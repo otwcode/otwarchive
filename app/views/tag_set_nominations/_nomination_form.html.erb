@@ -1,15 +1,11 @@
+<h2><%= ts("Tag Nominations for %{title}", :title => @tag_set_nomination.owned_tag_set.title) %></h2>
+<p class="notes">Please nominate the canonical form of a tag if possible. The autocomplete will only list canonical tags. Your nominations will be reviewed by the tag set moderators and may not be included.</p>
+
 <h3 class="landmark">Navigation</h3>
   <ul class="navigation actions" role="navigation">
 	  <li><%= link_to h(ts("Back To ")) + @tag_set_nomination.owned_tag_set.title, tag_set_path(@tag_set_nomination.owned_tag_set) %></li>
     <li><%= link_to ts("Tag Sets"), tag_sets_path %></li>
   </ul>
-
-<h2><%= ts("Tag Nominations for %{title}", :title => @tag_set_nomination.owned_tag_set.title) %></h2>
-
-<h3 class="landmark"><%= ts("Notes") %></h3>
-<p class="notes">Please nominate the canonical form of a tag if possible. The autocomplete will only list canonical tags. Your nominations will be reviewed by the tag set moderators and may not be included.</p>
-
-<!-- /descriptions-->
 
 <!--main content-->
 <h3 class="landmark"><%= ts("Nominate Tags Form") %></h3>

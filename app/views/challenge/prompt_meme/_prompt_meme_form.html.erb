@@ -24,9 +24,10 @@
     <h3>Prompts</h3>
     <dl>
       <dt><%= f.label :anonymous, ts("Prompts anonymous by default? (Participants can override)") %></dt>
-      <dd><%= f.check_box :anonymous %>
-      <dt><%= f.label :requests_num_required, ts("Number of prompts per signup: ") %></dt>
-      <dd><%= f.text_field :requests_num_required, :class => "number" %></dt>
+      <dd><%= f.check_box :anonymous %></dd>
+      <dt><%= f.label :requests_num_required, ts("Number of prompts per signup") %>:</dt>
+      <%= required_and_allowed(f, "requests", false) %>
+
     </dl>
   </fieldset>
 
@@ -35,10 +36,7 @@
 
   <%= render "challenge/shared/challenge_form_instructions", :f => f %>
 
-  <fieldset>
-    <legend><%= ts('Submit') %></legend> 
-    <p class="submit"><%= f.submit ts('Submit') %></p>
-  </fieldset>
+  <%= submit_fieldset f %>
 
 <% end %>
 

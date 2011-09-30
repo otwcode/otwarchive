@@ -52,27 +52,22 @@ class TagNomination < ActiveRecord::Base
       ((!tag.parents.empty? && get_parent_tagname.blank?) || tag.parents.collect(&:name).include?(get_parent_tagname))
       # if this is an existing tag and has matching parents, or no parent specified and it already has one 
       self.parented = true
+      self.parent_tagname ||= get_parent_tagname
     else
       self.parented = false
-      self.parent_tagname = get_parent_tagname unless self.parent_tagname
+      self.parent_tagname ||= get_parent_tagname 
     end   
     true
   end
-
-  # here so we can override it in char/relationship noms
-  def get_parent_tagname
-    (self.parent_tagname.blank? ? self.parent_tagname : nil)
-  end
-
   
   # sneaky bit: if the tag set moderator has already rejected or approved this tag, don't 
   # show it to them again.
   before_save :set_approval_status
   def set_approval_status
-    nom = tag_set_nomination
-    nom = fandom_nomination.tag_set_nomination if !nom && from_fandom_nomination          
-    self.rejected = nom.owned_tag_set.already_rejected?(tagname)
-    self.approved = nom.owned_tag_set.already_in_set?(tagname) || nom.owned_tag_set.already_approved?(tagname)
+    set_noms = tag_set_nomination
+    set_noms = fandom_nomination.tag_set_nomination if !set_noms && from_fandom_nomination          
+    self.rejected = set_noms.owned_tag_set.already_rejected?(tagname) || false
+    self.approved = set_noms.owned_tag_set.already_in_set?(tagname) || (synonym && set_noms.owned_tag_set.already_in_set?(synonym)) || false
     true
   end
 
@@ -97,6 +92,32 @@ class TagNomination < ActiveRecord::Base
       parents = parents.where("parent_tagname LIKE ?", "%#{parent_search_term}%")
     end
     parents.group("parent_tagname").order("count_id DESC").count('id').keys
+  end
+
+  # Can we change the name to this new name?
+  def change_tagname?(new_tagname)
+    tagname = new_tagname
+    if self.valid?
+      return true
+    else
+      return false
+    end
+  end
+
+  # If the mod is changing our name, change all other noms in this set as well
+  # NOTE: YOU CAN ONLY USE THIS IF YOU SUBSEQUENTLY MANUALLY UPDATE THE STATUS OF ALL THE TAG NOMS
+  def change_tagname!(new_tagname)
+    if change_tagname?(new_tagname)
+      # name change is ok - we use update_all because we assume our status is being updated up a level
+      TagNomination.for_tag_set(owned_tag_set).where(:tagname => tagname).update_all(:tagname => new_tagname)
+      return true
+    end
+    return false
+  end
+
+  # here so we can override it in char/relationship noms
+  def get_parent_tagname
+    (self.parent_tagname.blank? ? self.parent_tagname : nil)
   end
   
   def unreviewed?

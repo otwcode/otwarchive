@@ -5,8 +5,12 @@
     <% num_allowed = restriction.allowed(tag_type) %>
     <% num_required = restriction.required(tag_type) %>
     <% if num_allowed > 0 %>
+      <% # save some local variables to make the tag_set_form cleaner %>
+      <% tag_fieldname = field_name(tag_set_form, "#{tag_type}_tagnames") %>
+      <% tag_field_id =  field_id(tag_set_form, "#{tag_type}_tagnames") %>
+
       <dt<%= num_required > 0 ? ' class="required"'.html_safe : '' %>>
-        <%= tag_set_form.label tag_type.pluralize.to_sym, ((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize, :class => tag_type %>
+        <%= tag_set_form.label "#{tag_type}_tagnames".to_sym, ((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize, :class => tag_type %>
         <%= num_required == num_allowed ? " (#{num_required})" : " (#{num_required} - #{num_allowed})" %>:
       </dt>
 
@@ -14,10 +18,6 @@
         <% # kludge required for bug in nested_attributes_for:https://rails.lighthouseapp.com/projects/8994/tickets/2646-validations-not-called-when-model-updating-using-nested-attributes %>
         <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
 
-        <% # save some local variables to make the tag_set_form cleaner %>
-        <% tag_fieldname = field_name(tag_set_form, "#{tag_type}_tagnames") %>
-        <% tag_field_id =  field_id(tag_set_form, "#{tag_type}_tagnames") %>
-  
         <%  # Pseudocode for this long if
             # if rating/warning/category
             #   checkboxes from tag set
@@ -79,7 +79,7 @@
             <% end %>
           <% else # no specified tags so let's just go with standard autocomplete %>
             <div title="<%= ts("choose #{tag_type.pluralize} from canonical archive tags") %>">
-              <%= tag_set_form.text_field "#{tag_type}_tagnames", autocomplete_options(tag_type, :autocomplete_token_limit => num_allowed) %>challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames_checkboxes
+              <%= tag_set_form.text_field "#{tag_type}_tagnames", autocomplete_options(tag_type, :autocomplete_token_limit => num_allowed) %>
             </div>
           <% end %>
         <% end %>

@@ -64,6 +64,11 @@ class GiftExchange < ActiveRecord::Base
     end
   end
   
+  # override core
+  def allow_name_change?
+    false
+  end
+  
   def topmost_tag_type
     self.request_restriction.topmost_tag_type
   end
@@ -71,5 +76,8 @@ class GiftExchange < ActiveRecord::Base
   def user_allowed_to_see_requests_summary?(user)
     self.collection.user_is_maintainer?(user) || self.requests_summary_visible?
   end
-
+  
+  def user_allowed_to_see_prompt?(user, prompt)
+    self.collection.user_is_maintainer?(user) || prompt.pseud.user == user
+  end
 end
