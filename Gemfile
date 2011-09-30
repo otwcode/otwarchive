@@ -66,7 +66,7 @@ gem 'jquery-rails', '>= 0.2.6'
 gem 'radix'
 
 group :test do
-  gem 'rspec-rails', '>=2.0.0'
+  gem 'rspec-rails', '>=2.5.0'
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
