@@ -1032,12 +1032,7 @@ class Work < ActiveRecord::Base
 
     @pseuds = []
     @filters = []
-        
-    @works = Work.posted.unhidden
-    
-    if User.current_user.nil? || User.current_user == :false
-      @works = @works.unrestricted
-    end
+    @works = Work
 
     if !options[:user].nil? && !options[:selected_pseuds].empty?
       @works = @works.written_by_id(options[:selected_pseuds])
@@ -1065,7 +1060,11 @@ class Work < ActiveRecord::Base
       @works = @works.limit(ArchiveConfig.SEARCH_RESULTS_MAX)
     end
     
-    @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter).order(sort_by)
+    if User.current_user.nil? || User.current_user == :false
+      @works = @works.unrestricted
+    end
+    
+    @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter).order(sort_by).posted.unhidden
     # for now, trigger the lazy loading so we don't get an error on @works.size
     @works.compact
 
