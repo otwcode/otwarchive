@@ -602,6 +602,7 @@ class Work < ActiveRecord::Base
   def increment_hit_count(visitor)
     if self.last_visitor != visitor
       unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
+        $redis.set(self.redis_key(:hit_count), self.database_hits) unless $redis.get(self.redis_key(:hit_count))
         $redis.incr(self.redis_key(:hit_count))
         $redis.set(self.redis_key(:last_visitor), visitor)
         $redis.sadd("Work:new_hits", self.id)
