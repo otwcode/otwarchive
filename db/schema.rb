@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20111013010307) do
     t.integer  "language_id"
   end
 
+  add_index "admin_posts", ["created_at"], :name => "index_admin_posts_on_created_at"
   add_index "admin_posts", ["translated_post_id"], :name => "index_admin_posts_on_post_id"
 
   create_table "admin_settings", :force => true do |t|
