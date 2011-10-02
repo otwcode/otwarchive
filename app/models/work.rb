@@ -1064,7 +1064,11 @@ class Work < ActiveRecord::Base
       @works = @works.unrestricted
     end
     
-    @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter).order(sort_by).posted.unhidden
+    if options[:sort_column] == "hit_count"
+      @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter)
+    end
+    
+    @works = @works.order(sort_by).posted.unhidden
     # for now, trigger the lazy loading so we don't get an error on @works.size
     @works.compact
 
