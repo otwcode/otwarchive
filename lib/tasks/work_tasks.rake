@@ -17,21 +17,17 @@ namespace :work do
 
   desc "update database hit counters from redis"
   task(:update_hit_counters => :environment) do
-    $redis.smembers("Work:new_hits").each do |work_id_str|
-      $redis.srem("Work:new_hits", work_id_str)
-      work = Work.find_by_id(work_id_str.to_i)
-      if work
-        work.create_hit_counter unless work.hit_counter
-        if work.hits < work.database_hits
-          puts "The redis hit count for work id: #{work_id_str} was fewer than the database hit count. redis has been updated with the database value"
-          $redis.set(work.redis_key(:hit_count), work.database_hits)
-        else
-          # puts "Work #{work_id_str} hit count updated from #{work.database_hits} to #{work.hits}"
-          work.hit_counter.update_attribute(:hit_count, work.hits)
-        end
-      else
-        puts "Work #{work_id_str} no longer exists"
-      end
+    work_ids = $redis.smembers("Work:new_hits").map{|id| id.to_i}
+    found_works = []
+    HitCounter.find_each(:conditions => ["work_id IN (?)", work_ids]) do |hit_counter|
+      hit_counter.update_from_redis
+      $redis.srem("Work:new_hits", hit_counter.work_id)
+      found_works << hit_counter.work_id
+    end
+    # Create hit counters for works that don't have them yet
+    (work_ids - found_works).each do |work_id|
+      HitCounter.create(:work_id => work_id, :hit_count => HitCounter.redis_hits_for_work(work_id))
+      $redis.srem("Work:new_hits", hit_counter.work_id)
     end
   end
 end
