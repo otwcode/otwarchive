@@ -18,7 +18,7 @@ Feature: Languages
   When I follow "Log out"
   Then I should see "Successfully logged out"
   
-  # post a work in that language
+  Scenario: post a work in another language
   
   Given the following activated users exist
       | login         | password   |
@@ -26,12 +26,8 @@ Feature: Languages
       | germanuser1   | password   |
       | germanuser2   | password   |
       | frenchuser    | password   |
-      And I am logged in as "germanuser1" with password "password"
       And basic tags
       And basic languages
-  Then I should see "Hi, germanuser1!"
-  When I follow "Log out"
-  Then I should see "logged out"
   When I am logged in as "germanuser2" with password "password"
     And I post the work "Die Rache der Sith"
     And I follow "Edit"

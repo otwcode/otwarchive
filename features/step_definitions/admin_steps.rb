@@ -110,7 +110,15 @@ When /^I make an admin post$/ do
   fill_in("Title", :with => "Default Admin Post")
   fill_in("content", :with => "Content of the admin post.")
   click_button("Post")
-  Then %{I should see "AdminPost was successfully created."}
+end
+
+When /^I make a translation of an admin post$/ do
+  visit new_admin_post_path
+  fill_in("Title", :with => "Deutsch Ankuendigung")
+  fill_in("content", :with => "Deutsch Woerter")
+  When %{I select "Deutsch" from "Choose a language"}
+    And %{I select "Default Admin Post" from "Is this a translation of another post?"}
+  click_button("Post")
 end
 
 When /^I make a(?: (\d+)(?:st|nd|rd|th)?)? FAQ post$/ do |n|
@@ -152,3 +160,13 @@ When /^I edit known issues$/ do
 end
 
 ### THEN
+
+Then /^I should see a translated admin post$/ do
+  When %{I go to the admin-posts page}
+  Then %{I should see "Default Admin Post"}
+    And %{I should not see "Deutsch"}
+  When %{I follow "Default Admin Post"}
+  Then %{I should see "Translations: Deutsch Deutsch Ankuendigung"}
+  When %{I follow "Deutsch Ankuendigung"}
+  Then %{I should see "Deutsch Woerter"}
+end
