@@ -5,11 +5,20 @@ class AdminPostsController < ApplicationController
   # GET /admin_posts
   # GET /admin_posts.xml
   def index
+    if params[:tag]
+      @tag = AdminPostTag.find_by_id(params[:tag])
+      if @tag
+        @admin_posts = @tag.admin_posts
+      end
+    end
+    @admin_posts ||= AdminPost
     if params[:language_id]
       @language = Language.find_by_short(params[:language_id])
-      @admin_posts = @language.admin_posts
+      @admin_posts = @admin_posts.where(:language_id => @language.id)
+      @tags = AdminPostTag.where(:language_id => @language.id).order(:name)
     else
-      @admin_posts = AdminPost.non_translated
+      @admin_posts = @admin_posts.non_translated
+      @tags = AdminPostTag.order(:name)
     end
     @admin_posts = @admin_posts.order('created_at DESC').paginate(:page => params[:page], :per_page => 8)
   end

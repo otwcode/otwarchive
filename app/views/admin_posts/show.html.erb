@@ -1,10 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= 'AO3 News' %></h2>
+<h2><%= link_to ts('AO3 News'), admin_posts_path %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <ul class="navigation" role="navigation">
-  <li><%= link_to ts("Back to AO3 News Index"), admin_posts_path %></li>
   <li><%= link_to_rss admin_posts_path(:rss) %></li>
 </ul>
 <!--/subnav-->
@@ -40,6 +39,13 @@
   <div class="admin-content userstuff">
       <%=raw sanitize_field(@admin_post, :content) %>
   </div>
+  <% if @admin_post.tags.length > 0 %>
+  <ul class="tags">
+    <% for tag in @admin_post.tags %>
+      <li><%= link_to tag.name, admin_posts_path(:tag => tag.id) %></li>
+    <% end %>
+  </ul>
+  <% end %>
 </div>
 <!--/content-->
 

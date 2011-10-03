@@ -34,6 +34,8 @@
         <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
       </div>
       <dl>
+        <dt><%= f.label :tag_list, ts("Tags") %></dt>
+        <dd><%= f.text_field :tag_list %></dd>
         <dt>
           <%= f.label :language_id, ts("Choose a language") %>
         </dt>
