@@ -1,0 +1,27 @@
+<h2><%= ts("Batch Loading") %><%= link_to_help "tagset-batch-load" %></h2>
+
+<!-- /descriptions-->
+<%= render "navigation" %>
+
+<!--main content-->
+<%= form_for(@tag_set, :url => do_batch_load_tag_set_path(@tag_set), :html => {:method => :put, :class => "tagset"}) do |form| %>
+  <fieldset class="tagset">
+    <legend>Batch Load</legend>
+    <h3><label for="batch_associations">Batch Load Tag Associations</label></h3>
+    <p class="note">One line per fandom in the form: <code>fandom,character,character,character,...</code></p>
+    <%= text_area_tag "batch_associations", @failed_batch_associations %>
+    <dl>
+      <dt><%= label_tag "batch_do_relationships", ts("Relationships instead?") %></dt>
+      <dd><%= check_box_tag "batch_do_relationships" %></dd>
+    </dl>
+  </fieldset>
+
+  <fieldset>
+    <legend><%= ts('Submit') %></legend> 
+    <p class="submit">
+      <%= form.submit ts('Submit') %>
+    </p>
+  </fieldset>
+    
+<% end %>
+<div class="clear"><!--presentational--></div>

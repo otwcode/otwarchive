@@ -21,22 +21,25 @@
 
     <dl>
       <dt>
-        <%= match_settings_form.label(:num_required_prompts, t('.num_required_prompts', :default => "Requests: ")) %>
+        <%= match_settings_form.label(:num_required_prompts, ts("Requests: ")) %>
       </dt>
       <dd><%= match_settings_form.select(:num_required_prompts, PotentialMatchSettings::REQUIRED_MATCH_OPTIONS.select {|k,v| k != "0"}, :selected => potential_match_settings.num_required_prompts) %></dd>
 
-      <% %w(fandoms characters relationships freeforms categories ratings warnings).each do |type| %>
-        <dt><%= match_settings_form.label("num_required_#{type}", "#{type.capitalize}:") %></dt>
+      <% TagSet::TAG_TYPES.map {|t| t.pluralize }.each do |type| %>
+        <dt class="<%= type.downcase %>"><%= match_settings_form.label("num_required_#{type}", "#{type.capitalize}:") %></dt>
         <dd><%= match_settings_form.select("num_required_#{type}", PotentialMatchSettings::REQUIRED_MATCH_OPTIONS, :selected => potential_match_settings.send("num_required_#{type}")) %></dd>
       <% end %>
 
       <dt>
-        <%= t("potential_match_settings.optional_tags", :default => "Count optional tags for...") %>
+        <%= ts("Count optional tags for...") %>
         <%= link_to_help("challenge-include-optional-tags") %>
       </dt>
-      <% %w(fandoms characters relationships freeforms categories ratings warnings).each do |type| %>
+      <% TagSet::TAG_TYPES.map {|t| t.pluralize }.each do |type| %>
         <dd>
-          <%= match_settings_form.label("include_optional_#{type}", type.capitalize) %><%= match_settings_form.check_box("include_optional_#{type}", :checked => potential_match_settings.send("include_optional_#{type}")) %>
+          <ul>
+          <li><%= match_settings_form.check_box("include_optional_#{type}", :checked => potential_match_settings.send("include_optional_#{type}")) %>
+          <%= match_settings_form.label("include_optional_#{type}", type.capitalize) %></li>
+        </ul>
         </dd>
       <% end %>
     </dl>

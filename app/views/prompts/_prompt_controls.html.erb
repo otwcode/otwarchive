@@ -1,32 +1,36 @@
 <% # requires 'challenge_signup' and 'prompt' locals %>
-<% if challenge_signup.collection.challenge.signup_open || (!challenge_signup.collection.challenge.signup_open && challenge_signup.collection.user_is_maintainer?(current_user)) || challenge_signup.collection.challenge_type == "PromptMeme" %>
+<% # to make the code more readable: %>
+<% collection = challenge_signup.collection %>
+<% challenge = collection.challenge %>
+<% user = challenge_signup.pseud.user %>
+
+<% if challenge.signup_open || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || collection.challenge_type == "PromptMeme" %>
   <ul class="navigation" role="navigation">
     <% # The edit link should show up only for the user who actually signed up while signups are open or for the owner or mod once signups are closed or always on a prompt meme %>
-    <% if (challenge_signup.collection.challenge.signup_open && challenge_signup.pseud.user == current_user) || (!challenge_signup.collection.challenge.signup_open && challenge_signup.collection.user_is_maintainer?(current_user)) || (challenge_signup.collection.challenge_type == "PromptMeme" && challenge_signup.collection.user_is_maintainer?(current_user)) %>
+    <% if (challenge.signup_open && user == current_user) || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || (collection.challenge_type == "PromptMeme" && collection.user_is_maintainer?(current_user)) %>
       <li>
-          <%= link_to(ts('Edit whole signup'), edit_collection_signup_path(challenge_signup.collection, challenge_signup)) %>
+          <%= link_to(ts('Edit whole signup'), edit_collection_signup_path(collection, challenge_signup)) %>
       </li>
       <li>
-          <%= link_to(ts('Edit this prompt'), edit_collection_prompt_path(challenge_signup.collection, prompt)) %>
+          <%= link_to(ts('Edit this prompt'), edit_collection_prompt_path(collection, prompt)) %>
       </li>
     <% end %>
     <% # The add new prompt link should show up only for the user who actually signed up while signups are open and only on a signup show page, and only for a prompt meme and if they haven't hit the max number of prompts %>
-    <% if (challenge_signup.collection.challenge.signup_open && challenge_signup.pseud.user == current_user && controller.action_name == "show" && challenge_signup.collection.challenge_type == "PromptMeme" && challenge_signup.requests.count < challenge_signup.collection.challenge.requests_num_allowed)  %>
+    <% if (challenge.signup_open && user == current_user && controller.action_name == "show" && collection.challenge_type == "PromptMeme" && challenge_signup.requests.count < challenge.requests_num_allowed)  %>
       <li>
-        <%= link_to( ts('Add another prompt'), {:url => {:controller => :challenge_signups, :action => :edit, :single_prompt => true, :id => challenge_signup.id}},
-      :href => url_for(:controller => :challenge_signups, :action => :edit, :single_prompt => true, :id => challenge_signup.id)) %>
+        <%= link_to ts('Add another prompt'), new_collection_prompt_path(collection) %>
       </li>
     <% end %>
     <% # The delete link should show up only for the user who actually signed up while signups are open or for the owner or mod %>
-    <% if (challenge_signup.collection.challenge.signup_open && challenge_signup.pseud.user == current_user) || (challenge_signup.collection.user_is_maintainer?(current_user)) %>
+    <% if (challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user)) %>
     <li>
         <%= link_to ts("Delete"), 
-          collection_prompt_path(challenge_signup.collection, prompt), 
+          collection_prompt_path(collection, prompt), 
           :confirm => ts("Are you sure? All information in this prompt will be lost."), 
           :method => :delete %>
     </li>
     <% end %>
-    <% if current_user && challenge_signup.collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
+    <% if current_user && collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
     <% # hides this on a user's 'your signups' page and on a signup show page, since we only want it on the challenge index %>
       <% @claimed = 0
          challenge_signup.request_claims.each do |claim|
@@ -50,7 +54,7 @@
           <% end %>
       </li>
       <% end %>
-    <% elsif challenge_signup.collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
+    <% elsif collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
       <li><%= ts("Sign in to claim prompts") %></li>
     <% end %>
   </ul>

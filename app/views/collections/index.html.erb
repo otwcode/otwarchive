@@ -1,48 +1,49 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <% if @user %>
-<h2><%= ts("%{user_name}'s Collections", :user_name => @user.login) %></h2>
+  <h2><%= ts("%{user_name}'s Collections", :user_name => @user.login) %></h2>
 <% elsif @collection %>
-<h2><%= ts("Challenges/Subcollections in %{collection_name}", :collection_name => @collection.title) %></h2>
+  <h2><%= ts("Challenges/Subcollections in %{collection_name}", :collection_name => @collection.title) %></h2>
 <% elsif @work %>
-<h2><%=ts("Collections including ") + @work.title.html_safe %></h2>
+  <h2><%= ts("Collections including ") + @work.title.html_safe %></h2>
 <% else %>
-<h2><%=h t('.listing_collections', :default => "Collections in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %></h2>
+  <h2><%= ts("Collections in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %></h2>
 <% end %>
 
- <% if @collections.empty? %>
+<% if @collections.empty? %>
   <%= ts("Sorry, there were no collections found.") %>
- <%else %>
+<% else %>
   <h2><%= search_header @collections, @query, "Collection" %> </h2>
- <% end %>
+<% end %>
  
 <!--/descriptions-->
 <!--Subnavigation, sorting and actions-->
 <div class="navigation module">
-<% if logged_in? %>
-<h3 class="landmark">Navigation</h3>
-<ul class="navigation" role="navigation">
-  <% if @user && @user == current_user %>
-    <li><%= link_to ts("Manage Collected Works"), user_collection_items_path(@user) %></li>
-  <% end %>
-  <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
-    <li><%= link_to ts("New Subcollection"), new_collection_collection_path(@collection) %></li>
-  <% else %>
-	  <li><%= link_to ts("See Open Challenges"), list_challenges_collections_path %></li>
-	  <li><%= link_to ts("New Collection"), new_collection_path %></li>
-	<% end %>
-</ul>
-<% end %>
-
-<% if @sort_and_filter %> 
-<!--sorting subnav-->
-  <ul class="sorting navigation" role="navigation">
-    <li><h4><%= ts('Sort By') %></h4></li>
-    <li><%= sort_link ts('Title'), "collections.title" %></li>
-    <li><%= sort_link ts('Date'), "collections.created_at", {:sort_default => true, :desc_default => true} %></li>
-    <li><%= sort_link ts('Size'), "item_count", {:desc_default => true} %></li>
+  <% if logged_in? %>
+  <h3 class="landmark">Navigation</h3>
+  <ul class="navigation" role="navigation">
+    <% if @user && @user == current_user %>
+      <li><%= link_to ts("Manage Collected Works"), user_collection_items_path(@user) %></li>
+    <% end %>
+    <% if @collection && !@collection.parent && @collection.user_is_maintainer?(current_user) %>
+      <li><%= link_to ts("New Subcollection"), new_collection_collection_path(@collection) %></li>
+    <% else %>
+  	  <li><%= link_to ts("See Open Challenges"), list_challenges_collections_path %></li>
+  	  <li><%= link_to ts("New Collection"), new_collection_path %></li>
+  	<% end %>
   </ul>
-<!---/subnav-->
-<% end %>
+  <% end %>
+
+  <% if @sort_and_filter %> 
+  <!--sorting subnav-->
+    <ul class="sorting navigation" role="navigation">
+      <li><h4><%= ts('Sort By') %></h4></li>
+      <li><%= sort_link ts('Title'), "collections.title" %></li>
+      <li><%= sort_link ts('Date'), "collections.created_at", {:sort_default => true, :desc_default => true} %></li>
+      <li><%= sort_link ts('Size'), "item_count", {:desc_default => true} %></li>
+      <li><%= sort_link ts('Kudos'), "kudos", {:desc_default => true} %></li>
+    </ul>
+  <!---/subnav-->
+  <% end %>
 </div>
 
 <% unless @collections.blank? %>

@@ -1,14 +1,20 @@
+###### ERROR MESSAGES
+Then /^I should see a not\-in\-fandom error message for "([^"]+)" in "([^"]+)"$/ do |tag, fandom|
+  Then %{I should see "are not in the selected fandom(s), #{fandom}: #{tag}"}
+end
+
+Then /^I should see a not\-in\-fandom error message$/ do 
+  Then %{I should see "are not in the selected fandom(s)"}
+end
+
+
 ### GIVEN
 
 Given /^I have no challenge assignments$/ do
   Collection.delete_all
 end
 
-Given /^I have standard challenge users$/ do
-  Given %{the users "mod1, myname1, myname2, myname3, myname4"}  
-end
-
-Given /^I have standard challenge tags setup$/ do
+Given /^I have standard challenge tags set ?up$/ do
   Given "I have no tags"
     And "basic tags"
     And %{a canonical fandom "Stargate Atlantis"}
@@ -18,10 +24,12 @@ Given /^I have standard challenge tags setup$/ do
     And %{a canonical freeform "Alternate Universe - High School"}
     And %{a canonical freeform "Something else weird"}
     And %{a canonical freeform "My extra tag"}
+    And %{I set up the tag set "Standard Challenge Tags" with the fandom tags "Stargate Atlantis, Stargate SG-1", the character tag "John Sheppard"}
 end
 
-Given /^I have Yuletide challenge tags setup$/ do
+Given /^I have Yuletide challenge tags set ?up$/ do
   Given "I have standard challenge tags setup"
+    And %{I add the fandom tags "Starsky & Hutch, Tiny fandom, Care Bears, Yuletide Hippos RPF" to the tag set "Standard Challenge Tags"}
     And %{a canonical fandom "Starsky & Hutch"}
     And %{a canonical fandom "Tiny fandom"}
     And %{a canonical fandom "Care Bears"}
@@ -33,8 +41,8 @@ Given /^I have set up the gift exchange "([^\"]*)"$/ do |challengename|
 end
 
 Given /^I have set up the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
-  Given "I have standard challenge tags setup"
-    And %{I am logged in as "mod1"}
+  Given %{I am logged in as "mod1"}
+    And "I have standard challenge tags setup"
     And %{I set up the collection "#{challengename}" with name "#{name}"}
     And %{I select "Gift Exchange" from "challenge_type"}
   click_button("Submit")
@@ -47,16 +55,14 @@ end
 Given /^I have created the gift exchange "([^\"]*)" with name "([^\"]*)"$/ do |challengename, name|
   Given %{I have set up the gift exchange "#{challengename}" with name "#{name}"}
   When "I fill in gift exchange challenge options"
-    click_button("Update")
+    And "I submit"
   Then %{I should see "Challenge was successfully created"}  
-  When %{I follow "Challenge Settings"}
-  Then %{I should see "Stargate" in the autocomplete}
 end
 
 Given /^I have opened signup for the gift exchange "([^\"]*)"$/ do |challengename|
   Given %{I am on "#{challengename}" gift exchange edit page}
   check "Signup open?"
-  click_button "Update"
+  And "I submit"
 end  
 
 Given /^I have Battle 12 prompt meme set up$/ do
@@ -148,18 +154,19 @@ When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/
   end
   fill_in("collection_title", :with => title)
   if type == "anon"
-    check("Is this collection currently unrevealed?")
-    check("Is this collection currently anonymous?")
+    check("This collection is unrevealed")
+    check("This collection is anonymous")
   end
   select("Prompt Meme", :from => "challenge_type")
-  click_button("Submit")
+  And %{I submit}
   Then "I should see \"Collection was successfully created\""
+
   check("prompt_meme_signup_open")
   fill_in("prompt_meme_requests_num_allowed", :with => ArchiveConfig.PROMPT_MEME_PROMPTS_MAX)
   fill_in("prompt_meme_requests_num_required", :with => 1)
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_required", :with => 1)
   fill_in("prompt_meme_request_restriction_attributes_fandom_num_allowed", :with => 2)
-  click_button("Update")
+  And %{I submit}
   Then "I should see \"Challenge was successfully created\""
 end
 
@@ -170,10 +177,10 @@ When /^I set up Battle 12 promptmeme collection$/ do
   fill_in("Introduction", :with => "Welcome to the meme")
   fill_in("FAQ", :with => "<dl><dt>What is this thing?</dt><dd>It is a comment fic thing</dd></dl>")
   fill_in("Rules", :with => "Be nicer to people")
-  check("Is this collection currently unrevealed?")
-  check("Is this collection currently anonymous?")
+  check("This collection is unrevealed")
+  check("This collection is anonymous")
   select("Prompt Meme", :from => "challenge_type")
-  click_button("Submit")
+  And %{I submit}
   Then "I should see \"Collection was successfully created\""
 end
 
@@ -185,36 +192,36 @@ end
 When /^I fill in Battle 12 challenge options$/ do
   When "I fill in prompt meme challenge options"
     And %{I fill in "Signup Instructions" with "Please request easy things"}
-    And %{I select "2010" from "prompt_meme_signups_open_at_1i"}
-    And %{I select "2016" from "prompt_meme_signups_close_at_1i"}
-    And %{I select "(GMT-05:00) Eastern Time (US & Canada)" from "prompt_meme_time_zone"}
+    And %{I fill in "Signup opens" with "2010-09-20 12:40AM"}
+    And %{I fill in "Signup closes" with "2016-09-20 12:40AM"}
+    And %{I select "(GMT-05:00) Eastern Time (US & Canada)" from "Time zone"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
-    And %{I press "Update"}
+    And %{I submit}
 end
 
 When /^I fill in future challenge options$/ do
   When "I fill in prompt meme challenge options"
-    And %{I select "2015" from "prompt_meme_signups_open_at_1i"}
-    And %{I select "2016" from "prompt_meme_signups_close_at_1i"}
+    And %{I fill in "Signup opens" with "2015-09-20 12:40AM"}
+    And %{I fill in "Signup closes" with "2016-09-20 12:40AM"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
     And %{I uncheck "Signup open?"}
-    And %{I press "Update"}
+    And %{I submit}
 end
 
 When /^I fill in past challenge options$/ do
   When "I fill in prompt meme challenge options"
-    And %{I select "2010" from "prompt_meme_signups_open_at_1i"}
-    And %{I select "2010" from "prompt_meme_signups_close_at_1i"}
+    And %{I fill in "Signup opens" with "2010-09-20 12:40AM"}
+    And %{I fill in "Signup closes" with "2010-09-20 12:40AM"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
     And %{I uncheck "Signup open?"}
-    And %{I press "Update"}
+    And %{I submit}
 end
 
 When /^I fill in unlimited prompt challenge options$/ do
   When "I fill in prompt meme challenge options"
     And %{I check "prompt_meme_request_restriction_attributes_character_restrict_to_fandom"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "50"}
-    And %{I press "Update"}
+    And %{I submit}
 end
 
 When /^I fill in no-column challenge options$/ do
@@ -223,24 +230,24 @@ When /^I fill in no-column challenge options$/ do
     And %{I fill in "prompt_meme_request_restriction_attributes_character_num_allowed" with "0"}
     And %{I fill in "prompt_meme_request_restriction_attributes_relationship_num_allowed" with "0"}
     And %{I check "Signup open?"}
-    And %{I press "Update"}
+    And %{I submit}
 end
 
 When /^I fill in single-prompt challenge options$/ do
   When %{I fill in "prompt_meme_requests_num_required" with "1"}
     And %{I check "Signup open?"}
-    And %{I press "Update"}
+    And %{I submit}
 end
 
 When /^I fill in multi-prompt challenge options$/ do
   When "I fill in prompt meme challenge options"
     And %{I fill in "prompt_meme_requests_num_allowed" with "4"}
-    And %{I press "Update"}
+    And %{I submit}
 end
 
 When /^I fill in prompt meme challenge options$/ do
   When %{I fill in "General Signup Instructions" with "Here are some general tips"}
-    And %{I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate SG-1, Stargate Atlantis"}
+    fill_in("Tag Sets To Use:", :with => "Standard Challenge Tags")
     And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"}
     And %{I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "1"}
     And %{I fill in "prompt_meme_request_restriction_attributes_freeform_num_allowed" with "2"}
@@ -249,10 +256,10 @@ When /^I fill in prompt meme challenge options$/ do
 end
 
 When /^I fill in gift exchange challenge options$/ do
-    select("2010", :from => "gift_exchange_signups_open_at_1i")
-    select("2013", :from => "gift_exchange_signups_close_at_1i")
+  When %{I fill in "Signup opens" with "2010-09-20 12:40AM"}
+    And %{I fill in "Signup closes" with "2013-09-20 12:40AM"}
     select("(GMT-05:00) Eastern Time (US & Canada)", :from => "gift_exchange_time_zone")
-    fill_in("Fandoms", :with => "Stargate SG-1, Stargate Atlantis")
+    fill_in("Tag Sets To Use:", :with => "Standard Challenge Tags")
     fill_in("gift_exchange_request_restriction_attributes_fandom_num_required", :with => "1")
     fill_in("gift_exchange_request_restriction_attributes_fandom_num_allowed", :with => "1")
     fill_in("gift_exchange_request_restriction_attributes_freeform_num_allowed", :with => "2")
@@ -265,7 +272,7 @@ end
 When /^I change the challenge timezone to Alaska$/ do
   When %{I follow "Challenge Settings"}
     And %{I select "(GMT-09:00) Alaska" from "prompt_meme_time_zone"}
-    And %{I press "Submit"}
+    And %{I submit}
     Then %{I should see "Challenge was successfully updated"}
 end
 
@@ -274,7 +281,7 @@ When /^I open signups for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Challenge Settings"}
     And %{I check "Signup open?"}
-    And %{I press "Submit"}
+    And %{I submit}
   Then %{I should see "Challenge was successfully updated"}
 end
 
@@ -294,6 +301,7 @@ When /^I sign up for Battle 12$/ do
     And %{I check the 2nd checkbox with the value "Stargate SG-1"}
     And %{I check the 2nd checkbox with id matching "anonymous"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
+    # We have to use explicit button names because there are two forms on this page - the form to expand prompts
     click_button "Submit"
 end
 
@@ -342,40 +350,22 @@ When /^I sign up for Battle 12 with combination E$/ do
 end
 
 When /^I add prompt (\d+)$/ do |number|
+  When %{I add prompt #{number} with "Stargate Atlantis"}
+end
+
+When /^I add prompt (\d+) with "([^"]+)"$/ do |number, tag|
   When %{I follow "Add another prompt"}
   Then %{I should see "Request #{number}"}
-  When %{I check the 1st checkbox with the value "Stargate Atlantis"}
-    And %{I press "Submit"}
-  Then %{I should see "Signup was successfully updated"}
+  When %{I check the 1st checkbox with the value "#{tag}"}
+    # there is only one form on the individual prompt page
+    And %{I submit}
+  Then %{I should see "Prompt was successfully added"}
 end
 
-When /^I add prompt (\d+) with SG-1$/ do |number|
-  When %{I follow "Add another prompt"}
-  Then %{I should see "Request #{number}"}
-  When %{I check the 1st checkbox with the value "Stargate SG-1"}
-    And %{I press "Submit"}
-  Then %{I should see "Signup was successfully updated"}
-end
-
-When /^I add (\d+) prompts starting from (\d+)$/ do |number_of_prompts, start|
-  @index = start
-  while @index < number_of_prompts
-    When "I add prompt #{@index}"
-    @index = @index + 1
-  end
-end
-
-When /^I add 34 prompts$/ do
-  @index = 3
-  while @index < 35
-    When "I add prompt #{@index}"
-    @index = @index + 1
-  end
-end
-
-When /^I add 24 prompts$/ do
-  @index = 3
-  while @index < 25
+When /^I add prompts up to (\d+) starting with (\d+)$/ do |final_number_of_prompts, start|
+  @index = start.to_i
+  final_number_of_prompts = final_number_of_prompts.to_i
+  while @index <= final_number_of_prompts
     When "I add prompt #{@index}"
     @index = @index + 1
   end
@@ -389,7 +379,6 @@ When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
     And %{I check the 2nd checkbox with id matching "anonymous"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
     click_button "Submit"
-
 end
 
 When /^I sign up for "([^\"]*)" many-fandom prompt meme$/ do |title|
@@ -418,7 +407,7 @@ When /^I sign up for "([^\"]*)" with combination B$/ do |title|
     And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - High School, Something else weird"}
     And %{I fill in the 2nd field with id matching "freeform_tagnames" with "Alternate Universe - High School"}
-    And %{I press "Submit"}
+    click_button "Submit"
 end
 
 When /^I sign up for "([^\"]*)" with combination C$/ do |title|
@@ -428,7 +417,7 @@ When /^I sign up for "([^\"]*)" with combination C$/ do |title|
     And %{I check the 2nd checkbox with the value "Stargate SG-1"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
     And %{I fill in the 2nd field with id matching "freeform_tagnames" with "Something else weird"}
-    And %{I press "Submit"}
+    click_button "Submit"
 end
 
 When /^I sign up for "([^\"]*)" with combination D$/ do |title|
@@ -438,21 +427,21 @@ When /^I sign up for "([^\"]*)" with combination D$/ do |title|
     And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
     And %{I fill in the 2nd field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
-    And %{I press "Submit"}
+    click_button "Submit"
 end
 
 When /^I sign up for "([^\"]*)" with combination SGA$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
     And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis"}
-    And %{I press "Submit"}
+    click_button "Submit"
 end
 
 When /^I sign up for "([^\"]*)" with combination SG-1$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
     And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate SG-1"}
-    And %{I press "Submit"}
+    click_button "Submit"
 end
 
 When /^I sign up for "([^\"]*)" with missing prompts$/ do |title|
@@ -460,12 +449,12 @@ When /^I sign up for "([^\"]*)" with missing prompts$/ do |title|
   When %{I follow "Sign Up"}
     And %{I check the 1st checkbox with the value "Stargate Atlantis"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
-    And %{I press "Submit"}
+    click_button "Submit"
 end
 
 When /^I fill in the missing prompt$/ do
   When %{I check the 2nd checkbox with the value "Stargate Atlantis"}
-    And %{I press "Submit"}
+    click_button "Submit"
 end
 
 When /^I start to sign up for "([^\"]*)"$/ do |title|
@@ -557,7 +546,7 @@ When /^I close signups for "([^\"]*)"$/ do |title|
   When %{I follow "Challenge Settings"}
     And %{I uncheck "Signup open?"}
     And %{I press "Update"}
-  Then %{I should see "Challenge was successfully updated"}
+  Then %{I should see an update confirmation message}
 end
 
 When /^I view prompts for "([^\"]*)"$/ do |title|
@@ -626,7 +615,7 @@ When /^I reveal the "([^\"]*)" challenge$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
     And %{I follow "Settings"}
-    And %{I uncheck "Is this collection currently unrevealed?"}
+    And %{I uncheck "This collection is unrevealed"}
     And %{I press "Update"}
 end
 
@@ -634,7 +623,7 @@ When /^I reveal the authors of the "([^\"]*)" challenge$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
     And %{I follow "Settings"}
-    And %{I uncheck "Is this collection currently anonymous?"}
+    And %{I uncheck "This collection is anonymous"}
     And %{I press "Update"}
 end
 
@@ -749,7 +738,6 @@ end
 
 Then /^My Gift Exchange gift exchange should be fully created$/ do
   Then %{I should see "Challenge was successfully created"}
-  When %{I follow "Profile"}
   Then %{I should see "2011" within ".collection.meta"}
   Then "My Gift Exchange collection exists"
 end
@@ -785,7 +773,7 @@ Then /^I should see the whole signup$/ do
 end
 
 Then /^I should just see request 1$/ do
-  page.should have_content("Prompt by myname1")
+  page.should have_content("Request by myname1")
   page.should have_content("Edit whole signup")
   page.should have_content("Edit this prompt")
   page.should have_content("Stargate Atlantis")
@@ -794,10 +782,9 @@ Then /^I should just see request 1$/ do
 end
 
 Then /^I should see single prompt editing$/ do
-  page.should have_content("Submit a Prompt for Battle 12")
   page.should have_content("Edit whole signup instead")
   page.should have_content("Freeforms")
-  Then %{the "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" field should contain "Alternate Universe - Historical"}
+  Then %{the field labeled "Freeforms" should contain "Alternate Universe - Historical"}
   page.should have_no_content("Just add one new prompt instead")
 end
 

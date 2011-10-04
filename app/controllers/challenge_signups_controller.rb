@@ -39,7 +39,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def maintainer_or_signup_owner_only
-    not_allowed and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
+    not_allowed(@collection) and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
   end
 
   def not_signup_owner
@@ -49,13 +49,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def allowed_to_destroy
-    @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed
-  end
-
-  def not_allowed
-    flash[:error] = ts("Sorry, you're not allowed to do that.")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
+    @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
   end
 
   def load_signup_from_id
@@ -95,7 +89,7 @@ class ChallengeSignupsController < ApplicationController
           elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
             @challenge_signups = @collection.signups.by_user(current_user)
           else
-            not_allowed
+            not_allowed(@collection)
           end
       }
       format.csv {
@@ -137,16 +131,42 @@ class ChallengeSignupsController < ApplicationController
   def show
   end
 
+  protected
+  def build_prompts
+    notice = ""
+    @challenge.class::PROMPT_TYPES.each do |prompt_type|      
+      num_to_build = params["num_#{prompt_type}"] ? params["num_#{prompt_type}"].to_i : @challenge.required(prompt_type)
+      if num_to_build < @challenge.required(prompt_type)
+        notice += ts("You must submit at least %{required} #{prompt_type}. ", :required => @challenge.required(prompt_type))
+        num_to_build = @challenge.required(prompt_type)
+      elsif num_to_build > @challenge.allowed(prompt_type)
+        notice += ts("You can only submit up to %{allowed} #{prompt_type}. ", :allowed => @challenge.allowed(prompt_type))
+        num_to_build = @challenge.allowed(prompt_type)
+      elsif params["num_#{prompt_type}"]
+        notice += ts("Set up %{num} #{prompt_type.pluralize}. ", :num => num_to_build)
+      end
+      num_to_build.times do |i|
+        prompt = @challenge_signup.send(prompt_type)[i] || @challenge_signup.send(prompt_type).build
+      end
+    end
+    unless notice.blank?
+      flash[:notice] = notice
+    end
+  end
+
+  public
   def new
     if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
       flash[:notice] = ts("You are already signed up for this challenge. You can edit your signup below.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     else
       @challenge_signup = ChallengeSignup.new
+      build_prompts
     end
   end
 
   def edit
+    build_prompts
   end
 
   def create

@@ -2,50 +2,85 @@ class AutocompleteController < ApplicationController
   respond_to :json
   
   skip_before_filter :store_location
-  skip_before_filter :set_current_user
+  skip_before_filter :set_current_user, :except => [:collection_parent_name, :owned_tag_sets]
   skip_before_filter :fetch_admin_settings
   skip_before_filter :set_redirects
   skip_before_filter :sanitize_params # can we dare!
 
-  before_filter :require_term, :except => [:tag_in_fandom, :relationship_in_fandom, :character_in_fandom]
-  
-  def require_term
-    if params[:term].blank?
-      flash[:error] = ts("What were you trying to autocomplete?")
-      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
-    end
-  end
-
+  #### DO WE NEED THIS AT ALL? IF IT FIRES WITHOUT A TERM AND 500s BECAUSE USER DID SOMETHING WACKY SO WHAT
+  # # If you have an autocomplete that should fire without a term add it here
+  # before_filter :require_term, :except => [:tag_in_fandom, :relationship_in_fandom, :character_in_fandom, :nominated_parents]
+  # 
+  # def require_term
+  #   if params[:term].blank?
+  #     flash[:error] = ts("What were you trying to autocomplete?")
+  #     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+  #   end
+  # end
+  # 
   #########################################
   ############# LOOKUP ACTIONS GO HERE
   
   # PSEUDS
   def pseud
-    render_output(Pseud.autocomplete_lookup(params[:term], "autocomplete_pseud").map {|res| Pseud.fullname_from_autocomplete(res)})
+    render_output(Pseud.autocomplete_lookup(:search_param => params[:term], :autocomplete_prefix => "autocomplete_pseud").map {|res| Pseud.fullname_from_autocomplete(res)})
   end
   
   ## TAGS  
-  def tag
-    render_output(tag_output(params[:term], params[:type]))
-  end
-  # these are all duplicates of "tag" but make our calls to autocomplete more readable
-  def fandom; render_output(tag_output(params[:term], "fandom")); end
-  def character; render_output(tag_output(params[:term], "character")); end
-  def relationship; render_output(tag_output(params[:term], "relationship")); end
-  def freeform; render_output(tag_output(params[:term], "freeform")); end
+  private
+    def tag_output(search_param, tag_type)
+      render_output Tag.autocomplete_lookup(:search_param => search_param, :autocomplete_prefix => "autocomplete_tag_#{tag_type}").map {|r| Tag.name_from_autocomplete(r)}
+    end
+  public  
+  # these are all basically duplicates but make our calls to autocomplete more readable
+  def tag; tag_output(params[:term], params[:type]); end
+  def fandom; tag_output(params[:term], "fandom"); end
+  def character; tag_output(params[:term], "character"); end
+  def relationship; tag_output(params[:term], "relationship"); end
+  def freeform; tag_output(params[:term], "freeform"); end
 
-
-  ## TAGS IN SET
-  def tag_in_set
-    render_output(Tag.autocomplete_lookup(params[:term], "autocomplete_tag_#{params[:type]}", :constraint_sets => ["autocomplete_tagset_#{params[:tag_set_id]}"]).map {|r| Tag.name_from_autocomplete(r)})
-  end
   
   ## TAGS IN FANDOMS
-  def tag_in_fandom
-    render_output(tag_in_fandom_output(params[:term], params[:type], params[:fandom], params[:fallback] || true)) 
+  private
+    def tag_in_fandom_output(params)
+      render_output(Tag.autocomplete_fandom_lookup(params).map {|r| Tag.name_from_autocomplete(r)})
+    end
+  public
+  def tag_in_fandom; tag_in_fandom_output(params); end
+  def character_in_fandom; tag_in_fandom_output(params.merge({:tag_type => "character"})); end
+  def relationship_in_fandom; tag_in_fandom_output(params.merge({:tag_type => "relationship"})); end
+
+
+  ## TAGS IN SETS
+  #
+  # Note that only tagsets in OwnedTagSets are in autocomplete
+  #
+
+  # expects the following params: 
+  # :tag_set - tag set ids comma-separated
+  # :tag_type - tag type as a string unless "all" desired
+  # :in_any - set to false if only want tags in ALL specified sets
+  # :term - the search term
+  def tags_in_sets
+    results = OwnedTagSet.autocomplete_lookup(params)
+    render_output(results.map {|r| Tag.name_from_autocomplete(r)})
   end
-  def character_in_fandom; render_output(tag_in_fandom_output(params[:term], "character", params[:fandom], params[:fallback] || true)); end
-  def relationship_in_fandom; render_output(tag_in_fandom_output(params[:term], "relationship", params[:fandom], params[:fallback] || true)); end
+  
+  # expects the following params: 
+  # :fandom - fandom name(s) as an array or a comma-separated string
+  # :tag_set - tag set id(s) as an array or a comma-separated string
+  # :tag_type - tag type as a string unless "all" desired
+  # :include_wrangled - set to false if you only want tags from the set associations and NOT tags wrangled into the fandom
+  # :fallback - set to false to NOT do 
+  # :term - the search term
+  def associated_tags
+    if params[:fandom].blank? 
+      render_output([ts("Please select a fandom first!")])
+    else
+      results = TagSetAssociation.autocomplete_lookup(params)
+      render_output(results.map {|r| Tag.name_from_autocomplete(r)})
+    end
+  end
   
   ## NONCANONICAL TAGS
   def noncanonical_tag
@@ -55,15 +90,21 @@ class AutocompleteController < ApplicationController
                       .where(["canonical = 0 AND name LIKE ?",
                               '%' + search_param + '%']).limit(10).map(&:name))
   end
-
+  
   
   # more-specific autocompletes should be added below here when they can't be avoided
 
-  
+
+  # Nominated parents
+  def nominated_parents
+    render_output(TagNomination.for_tag_set(OwnedTagSet.find(params[:tag_set_id])).nominated_parents(params[:tagname], params[:term]))
+  end
+
+
   # look up collections ranked by number of items they contain
 
   def collection_fullname
-    results = Collection.autocomplete_lookup(params[:term], "autocomplete_collection_all").map {|res| Collection.fullname_from_autocomplete(res)}
+    results = Collection.autocomplete_lookup(:search_param => params[:term], :autocomplete_prefix => "autocomplete_collection_all").map {|res| Collection.fullname_from_autocomplete(res)}
     render_output(results)
   end
 
@@ -71,7 +112,7 @@ class AutocompleteController < ApplicationController
   
   def open_collection_names
     # in this case we want different ids from names so we can display the title but only put in the name
-    results = Collection.autocomplete_lookup(params[:term], "autocomplete_collection_open").map do |str| 
+    results = Collection.autocomplete_lookup(:search_param => params[:term], :autocomplete_prefix => "autocomplete_collection_open").map do |str| 
       {:id => Collection.name_from_autocomplete(str), :name => Collection.title_from_autocomplete(str)}
     end
     respond_with(results)
@@ -101,7 +142,14 @@ class AutocompleteController < ApplicationController
                     .where(["pseuds.name LIKE ? AND challenge_signups.collection_id = ?", 
                             '%' + search_param + '%', collection_id]).map(&:byline))
   end
-
+  
+  # owned tag sets that are usable by all
+  def owned_tag_sets
+    if params[:term].length > 0
+      search_param = '%' + params[:term] + '%'
+      render_output(OwnedTagSet.limit(10).order(:title).usable.where("owned_tag_sets.title LIKE ?", search_param).collect(&:title))
+    end
+  end
   
   
 private
@@ -114,12 +162,6 @@ private
     end
   end
   
-  def tag_output(search_param, tag_type)
-    Tag.autocomplete_lookup(search_param, "autocomplete_tag_#{tag_type}").map {|r| Tag.name_from_autocomplete(r)}
-  end
-  
-  def tag_in_fandom_output(search_param, tag_type, fandom, fallback = true)
-    Tag.autocomplete_fandom_lookup(search_param, tag_type, fandom, fallback).map {|r| Tag.name_from_autocomplete(r)}
-  end
+
 end
 

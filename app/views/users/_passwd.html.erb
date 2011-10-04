@@ -1,8 +1,7 @@
 <dl>
   <!-- Login -->
   <dt>
-    <%= f.label :login, ts("What would you like as your user name?") %>
-    <%= ts("You may post works under multiple pseudonyms, but you can only have one user name which will be visible. For more information, visit the") %> <%= link_to ts("FAQ"), archive_faq_path(3) %>
+    <%= f.label :login, ts("User Name") %>
   </dt>
   <dd>
     <%= f.text_field :login, :class => "user_login" %>
@@ -12,8 +11,7 @@
   </dd>
   <!-- Password -->
   <dt>
-    <%= f.label :password, "And your password?" %>
-    <%= ts("(Make it a") %>&nbsp;<a href="http://passwordstrength.net" ><%=ts("strong") %></a>&nbsp;<%=ts("one! It needs to be at least 6 characters long.)") %>
+    <%= f.label :password, "Password" %>
   </dt>
   <dd>
     <%= f.password_field :password  %>
@@ -23,18 +21,17 @@
           :failureMessage => "Please enter a password! (At least #{User::PASSWORD_LENGTH_MIN} letters long, please.)") %>
   </dd>
   <!-- Confirm password -->
-  <dt><%= f.label :password_confirmation, "Enter it again so we're sure we've got it?" %></dt>
+  <dt><%= f.label :password_confirmation, "Confirm Password" %></dt>
   <dd>
     <%= f.password_field :password_confirmation %>
     <%= live_validation_for_field('user_password_confirmation',
           :maximum_length => User::PASSWORD_LENGTH_MAX, 
           :minimum_length => User::PASSWORD_LENGTH_MIN,
-          :failureMessage => 'Please enter the same password as above.') %>
+          :failureMessage => 'Please enter the same password in both fields.') %>
   </dd>
   <!-- Email -->
   <dt>
-    <%= f.label :email, ts("What email address would you like us to use?") %>
-    <%= ts("Must be valid. We'll be sending a confirmation email before you can activate your account.") %>
+    <%= f.label :email, ts("Valid Email") %>
   </dt>
   <dd><%= f.text_field :email %></dd>
 </dl>

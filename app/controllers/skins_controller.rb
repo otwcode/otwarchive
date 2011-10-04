@@ -56,7 +56,7 @@ class SkinsController < ApplicationController
     @skin.author = current_user
     if @skin.save
       redirect_to @skin
-      flash[:notice] = "Skin was created successfully"
+      flash[:notice] = "Skin was successfully created"
     else
       if params[:wizard]
         render :new_wizard

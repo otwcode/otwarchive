@@ -45,25 +45,16 @@ get started. (Note: to associate relationships with characters, first choose a f
   <fieldset>
   <legend>Assign and Mass Select</legend>
   <dl>
-  <% if params[:show] == "fandoms" %>
-    <dt><%= label_tag :media, ts("Wrangle to Media") %></dt>
-    <dd><%= select_tag :media, options_for_select(@media_names) %></dd>
-  <% elsif params[:show] == "character_relationships" %>
-    <dt><%= label_tag :character_string, ts("Wrangle to Character") %></dt>
-    <dd><%= text_field_tag 'character_string', params[:character_string], autocomplete_options("character", :autocomplete_token_limit => 1) %></dd>
-  <% else %>
-    <dt><%= label_tag :fandom_string, ts("Wrangle to Fandom") %></dt>
-    <dd><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
-  <% end %>
-  <dt>Wrangle All <span class="landmark">the tags shown in <a href="#wrangulise">the table</a> (following)</span></dt>
-    <dd><span class="navigation">
-      <a id="wrangle_all_select">select <span class="landmark">all to wrangle</span></a>
-      <a id="wrangle_all_deselect">deselect <span class="landmark">all tags to wrangle</span></a></span></dd>
-    <dt>Canonize All <span class="landmark">the tags shown in <a href="#wrangulise">the table</a> (following)</span></dt>
-    <dd><span class="navigation">
-      <a id="canonize_all_select">select <span class="landmark">all to make canonical</span></a>
-      <a id="canonize_all_deselect">deselect <span class="landmark">all canonical</span></a></span>
-    </dd>
+    <% if params[:show] == "fandoms" %>
+      <dt><%= label_tag :media, ts("Wrangle to Media") %></dt>
+      <dd><%= select_tag :media, options_for_select(@media_names) %></dd>
+    <% elsif params[:show] == "character_relationships" %>
+      <dt><%= label_tag :character_string, ts("Wrangle to Character") %></dt>
+      <dd><%= text_field_tag 'character_string', params[:character_string], autocomplete_options("character", :autocomplete_token_limit => 1) %></dd>
+    <% else %>
+      <dt><%= label_tag :fandom_string, ts("Wrangle to Fandom") %></dt>
+      <dd><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
+    <% end %>
   </dl>
   </fieldset>
   <fieldset>
@@ -87,14 +78,22 @@ get started. (Note: to associate relationships with characters, first choose a f
       <th scope="col">
         <%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
       </th>
-      <th scope="col">Mass Wrangle</th>
+      <th scope="col">
+        Mass Wrangle
+        <a class="action" id="wrangle_all_select">All</a>
+        <a class="action" id="wrangle_all_deselect">None</a></span></dd>        
+      </th>
       <th scope="col">
         <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
       </th>
       <% if params[:show] == 'character_relationships' %>
         <th scope="col">Characters</th>
       <% end %>
-      <th scope="col">Canonical</th>
+      <th scope="col">
+        Canonical
+        <a class="action" id="canonize_all_select">All</a>
+        <a class="action" id="canonize_all_deselect">None</a>
+      </th>
       <th scope="col">
         <%= sort_link ts('Taggings Count'), :taggings_count, {:desc_default => true} %>
       </th>
@@ -130,8 +129,8 @@ get started. (Note: to associate relationships with characters, first choose a f
             <% end %>
           </td>
           <td><%= tag.taggings_count %></td>
-          <td class="navigation">
-            <ul class="navigation">
+          <td class="navigation actions">
+            <ul class="navigation actions">
               <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li>
               <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li>
               <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>

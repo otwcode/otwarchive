@@ -45,7 +45,6 @@ class HomeController < ApplicationController
     @errors << "Skipping translation and external author pages because these areas are in-progress."
 
     page_routes.each do |r|
-      Rails.logger.info "Looking at route #{r.name}"
       path = r.path.split('(').first
       while (path.match(/:([^\/]+)_id\//)) do
         id = get_id(path, current_user, $1.singularize)

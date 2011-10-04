@@ -96,20 +96,31 @@ class Prompt < ActiveRecord::Base
   end
 
   # make sure that if there is a specified set of allowed tags, the user's choices
-  # are within that set 
+  # are within that set, or otherwise canonical 
   validate :allowed_tags
   def allowed_tags
     restriction = get_prompt_restriction
-    if restriction
+    if restriction && tag_set
       TagSet::TAG_TYPES.each do |tag_type|
         # if we have a specified set of tags of this type, make sure that all the
         # tags in the prompt are in the set.
-        if restriction.has_tags_of_type?(tag_type)
-          disallowed_taglist = tag_set ? (eval("tag_set.#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)) : []
+        if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom")
+          # skip the check, these will be tested in restricted_tags below
+        elsif restriction.has_tags?(tag_type)
+          disallowed_taglist = tag_set.send("#{tag_type}_taglist") - restriction.tags(tag_type)
           unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
-              :prompt_type => self.class.name,
+            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
+              :tag_type => tag_type,
+              :prompt_type => self.class.name.downcase,
               :taglist => disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
+          end
+        else
+          noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
+          unless noncanonical_taglist.empty?
+            errors.add(:base, ts("These %{tag_type} tags in your %{prompt_type} are not canonical and can't be used unless the moderator adds them: %{taglist}",
+              :tag_type => tag_type,
+              :prompt_type => self.class.name.downcase,
+              :taglist => noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
         end
       end
@@ -126,9 +137,11 @@ class Prompt < ActiveRecord::Base
         if restriction.send("#{tag_type}_restrict_to_fandom")
           allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
           disallowed_taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") - allowed_tags : []
-          unless disallowed_taglist.empty?
-            errors.add(:base, ts("^Your %{prompt_type} has some %{tag_type} tags that are not in the selected fandom(s), %{fandom}: %{taglist} (If this is an error, please let us know via the support form!)",
-                              :prompt_type => self.class.name,
+          # check for tag set associations
+          disallowed_taglist.reject! {|tag| TagSetAssociation.where(:tag_id => tag.id, :parent_tag_id => tag_set.fandom_taglist).exists?}
+          unless disallowed_taglist.empty?            
+            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)",
+                              :prompt_type => self.class.name.downcase,
                               :tag_type => tag_type, :fandom => tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
                               :taglist => disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
@@ -136,7 +149,7 @@ class Prompt < ActiveRecord::Base
       end
     end
   end
-  
+      
   # make sure we are not blank
   def blank?
     return false if (url || description)

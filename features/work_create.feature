@@ -245,7 +245,7 @@ Feature: Create Works
     When I fill in "content" with "Text and some longer text"
       And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
-    Then I should see "We couldn't save this Work, sorry!"
+    Then I should see a save error message
       And I should see "We couldn't find a collection with the name collection1"
       And I should see "We couldn't find a collection with the name collection2"
     When I fill in "work_collection_names" with ""

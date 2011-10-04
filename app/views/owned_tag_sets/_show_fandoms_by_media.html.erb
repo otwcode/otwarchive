@@ -1,0 +1,47 @@
+<% @fandom_hash.keys.each do |media| %>
+  <li class="media listbox <%= cycle :odd, :even %>">
+    <h3 class="expander_parent">
+      <%= ts("%{media}", :media => media) %>
+      <% list_id = "list_for_media_#{media.gsub(/[^\w]/, '_')}" %>
+      (<%= @fandom_hash[media].size %>)
+      <%= expand_contract_shuffle(list_id) %>
+    </h3>
+    <ol id="<%= list_id %>" class="tags index" force_contract="true">
+      <% unless @character_hash || @relationship_hash %>
+        <% # we're just doing fandoms -- pop them into li and move on! %>
+        <%= @fandom_hash[media].map {|fandom| content_tag(:li, fandom)}.join("\n").html_safe %>
+      <% else %>
+        <% # some fandoms have chars or rels underneath %>
+        <% @fandom_hash[media].each do |fandom| %>
+          <% # test to make sure we've actually got chars or rels for this individual fandom %>
+          <% has_characters = (@character_hash && @character_hash[fandom]) ? @character_hash[fandom].size : 0 %>
+          <% has_relationships = (@relationship_hash && @relationship_hash[fandom]) ? @relationship_hash[fandom].size : 0 %>
+          <% 
+             # this gets called a ton if there are a lot of fandoms so not doing it in a partial to save on time, although
+             # as a result it's duplicated in show_tag_set_tags :( 
+          %>
+          <li class="fandom listbox <%= cycle :odd, :even %>">
+            <% if (has_relationships + has_characters) > 0 %>
+              <h3 class="expander_parent">
+                <%= ts("%{fandom}", :fandom => fandom) %>
+                <% list_id = "list_for_fandom_#{fandom.gsub(/[^\w]/, '_')}" %>
+                (<%= has_relationships + has_characters %>)
+                <%= expand_contract_shuffle(list_id) %>
+              </h3>
+              <ol id="<%= list_id %>" class="tags index" force_contract="true">
+                <% if has_characters > 0 %>
+                  <%= @character_hash[fandom].map {|character| @character_seen[character] = 1; content_tag(:li, character)}.join("\n").html_safe %>
+                <% end %>
+                <% if has_relationships > 0 %>
+                  <%= @relationship_hash[fandom].map {|relationship| @relationship_seen[relationship] = 1; content_tag(:li, relationship)}.join("\n").html_safe %>
+                <% end %>                
+              </ol>
+            <% else %>
+              <h3><%= ts("%{fandom}", :fandom => fandom) %> (0)</h3>
+            <% end %>
+          </li>
+        <% end %>
+      <% end %>
+    </ol>
+  </li>
+<% end %>

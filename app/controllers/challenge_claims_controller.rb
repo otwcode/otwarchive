@@ -61,15 +61,9 @@ class ChallengeClaimsController < ApplicationController
   end      
   
   def allowed_to_destroy
-    @challenge_claim.user_allowed_to_destroy?(current_user) || not_allowed
+    @challenge_claim.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
   end
-  
-  def not_allowed
-    flash[:error] = ts("Sorry, you're not allowed to do that.")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
-  end
-  
+    
   
   # ACTIONS
 

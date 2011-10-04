@@ -70,6 +70,11 @@ class Tag < ActiveRecord::Base
   has_many :approved_collections, :through => :filtered_works
 
   has_many :set_taggings, :dependent => :destroy
+  has_many :tag_sets, :through => :set_taggings
+  has_many :owned_tag_sets, :through => :tag_sets
+  
+  has_many :tag_set_associations, :dependent => :destroy
+  has_many :parent_tag_set_associations, :class_name => 'TagSetAssociation', :foreign_key => 'parent_tag_id', :dependent => :destroy
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -156,12 +161,6 @@ class Tag < ActiveRecord::Base
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
 
-  scope :by_name_without_articles, order("case when lower(substring(name from 1 for 4)) = 'the ' then substring(name from 5)
-                                               when lower(substring(name from 1 for 2)) = 'a ' then substring(name from 3)
-                                               when lower(substring(name from 1 for 3)) = 'an ' then substring(name from 4)
-                                              else name
-                                              end")
-
   scope :by_pseud, lambda {|pseud|
     joins(:works => :pseuds).
     where(:pseuds => {:id => pseud.id})
@@ -172,9 +171,9 @@ class Tag < ActiveRecord::Base
 
   # This will return all tags that have one of the given tags as a parent
   scope :with_parents, lambda {|parents|
-    joins(:common_taggings).where("filterable_id in (?)", parents.collect(&:id))
+    joins(:common_taggings).where("filterable_id in (?)", parents.first.is_a?(Integer) ? parents : (parents.respond_to?(:value_of) ? parents.value_of(:id) : parents.collect(&:id)))
   }
-
+  
   scope :with_no_parents,
     joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
     where("filterable_id IS NULL")
@@ -276,7 +275,8 @@ class Tag < ActiveRecord::Base
 
 
   # Get tags that are either above or below the average popularity
-  def self.with_popularity_relative_to_average(options = {:factor => 1, :include_meta => false, :greater_than => false, :names_only => false})
+  def self.with_popularity_relative_to_average(options = {})
+    options.reverse_merge!({:factor => 1, :include_meta => false, :greater_than => false, :names_only => false})
     comparison = "<"
     comparison = ">" if options[:greater_than]
 
@@ -297,6 +297,52 @@ class Tag < ActiveRecord::Base
                   where("filter_counts.unhidden_works_count #{comparison} (select AVG(unhidden_works_count) from filter_counts where filter_id in (#{non_meta_ids.collect(&:id).join(',')})) * ?", options[:factor]).
                   order("count ASC")
     end
+  end
+  
+  def self.in_prompt_restriction(restriction)
+    joins("INNER JOIN set_taggings ON set_taggings.tag_id = tags.id
+           INNER JOIN tag_sets ON tag_sets.id = set_taggings.tag_set_id
+           INNER JOIN owned_tag_sets ON owned_tag_sets.tag_set_id = tag_sets.id
+           INNER JOIN owned_set_taggings ON owned_set_taggings.owned_tag_set_id = owned_tag_sets.id
+           INNER JOIN prompt_restrictions ON (prompt_restrictions.id = owned_set_taggings.set_taggable_id AND owned_set_taggings.set_taggable_type = 'PromptRestriction')").
+    where("prompt_restrictions.id = ?", restriction.id)           
+  end
+  
+  def self.by_name_without_articles(fieldname = "name")
+    fieldname = "name" unless fieldname.match(/^([\w]+\.)?[\w]+$/)
+    order("case when lower(substring(#{fieldname} from 1 for 4)) = 'the ' then substring(#{fieldname} from 5)
+            when lower(substring(#{fieldname} from 1 for 2)) = 'a ' then substring(#{fieldname} from 3)
+            when lower(substring(#{fieldname} from 1 for 3)) = 'an ' then substring(#{fieldname} from 4)
+            else #{fieldname}
+            end")
+  end
+  
+  def self.in_tag_set(tag_set)
+    joins(:set_taggings).where("set_taggings.tag_set_id = ?", tag_set.id)
+  end
+  
+  # gives you: tags.parent_names each {|tag| [tag.parent_name, tag.child_names]} - parent  child,child,child,child... 
+  def self.parent_names(parent_type = 'fandom')
+    joins(:parents).where("parents_tags.type = ?", parent_type.capitalize).
+    by_name_without_articles("parents_tags.name").
+    group('parents_tags.name').
+    select("parents_tags.name as parent_name, 
+      group_concat(distinct tags.name order by case when lower(substring(tags.name from 1 for 4)) = 'the ' then substring(tags.name from 5)
+              when lower(substring(tags.name from 1 for 2)) = 'a ' then substring(tags.name from 3)
+              when lower(substring(tags.name from 1 for 3)) = 'an ' then substring(tags.name from 4)
+              else tags.name
+              end) as child_names")
+  end
+  
+  # Because this can be called by a gigantor tag set and all we need are names not objects,
+  # we do an end-run around ActiveRecord and just get the results straight from the db, but 
+  # we borrow the sql from parent_names above 
+  # returns a hash[parent_name] = child_names
+  def self.names_by_parent(child_relation, parent_type = 'fandom')
+    hash = {}
+    results = ActiveRecord::Base.connection.execute(child_relation.parent_names(parent_type).to_sql)
+    results.each {|row| hash[row.first] = row.second.split(',')}
+    hash
   end
 
   # Used for associations, such as work.fandoms.string
@@ -349,29 +395,32 @@ class Tag < ActiveRecord::Base
   end
   
   # look up tags that have been wrangled into a given fandom
-  def self.autocomplete_fandom_lookup(search_param, tag_type, fandom, fallback=true)
+  def self.autocomplete_fandom_lookup(options = {})
+    options.reverse_merge!({:term => "", :tag_type => "character", :fandom => "", :fallback => true})
+    search_param = options[:term]
+    tag_type = options[:tag_type]
+    fandoms = Tag.get_search_terms(options[:fandom])
+      
     # fandom sets are too small to bother breaking up
     # we're just getting ALL the tags in the set(s) for the fandom(s) and then manually matching
     results = []
-    fandoms = fandom.is_a?(Array) ? fandom.map {|f| f.split(',').map {|w| w.strip}}.flatten : (fandom.blank? ? [] : fandom.split(','))
-    search_regex = Regexp.new(Regexp.escape(search_param), Regexp::IGNORECASE)
     fandoms.each do |single_fandom|
-      single_fandom.downcase!
       if search_param.blank?
         # just return ALL the characters
         results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
       else
+        search_regex = Tag.get_search_regex(search_param)
         results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
       end
     end
-    if fallback && results.empty? && search_param.length > 0
+    if options[:fallback] && results.empty? && search_param.length > 0
       # do a standard tag lookup instead
-      Tag.autocomplete_lookup(search_param, "autocomplete_tag_#{tag_type}")
+      Tag.autocomplete_lookup(:search_param => search_param, :autocomplete_prefix => "autocomplete_tag_#{tag_type}")
     else
       results
     end
   end
-
+  
   ## END AUTOCOMPLETE
 
 

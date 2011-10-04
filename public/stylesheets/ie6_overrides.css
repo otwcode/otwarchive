@@ -24,3 +24,6 @@ form.filters {position:relative;}
 .fandoms-index .index .even {margin-left: 0 !important;}
 .fandoms-index .letter h3 .top {display: none !important; float: none !important;}
 
+div.many ul 
+        { overflow: auto; height:10em;}
+

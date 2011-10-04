@@ -19,8 +19,9 @@ end
 Given /^I have a hidden collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
   When %{I am logged in as "moderator"}
   When %{I set up the collection "#{title}" with name "#{name}"}
-  When %{I check "Is this collection currently unrevealed?"}
-  click_button("Submit")
+  When %{I check "This collection is unrevealed"}
+  And %{I submit}
+
   Then %{I should see "Collection was successfully created."}
   When "I am logged out"
 end
@@ -28,19 +29,22 @@ end
 Given /^I have an anonymous collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
   When %{I am logged in as "moderator"}
   When %{I set up the collection "#{title}" with name "#{name}"}
-  When %{I check "Is this collection currently anonymous?"}
-  click_button("Submit")
+  When %{I check "This collection is anonymous"}
+  And %{I submit}
+
   Then %{I should see "Collection was successfully created."}
   When "I am logged out"
 end
 
 Given /^I have added a co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
+  # create the user 
   Given %{I am logged in as "#{name}"}
   Given %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
   click_link("Membership")
-  When %{I fill in "Add new members" with "#{name}"}
-  click_button("Submit")
+  When %{I fill in "participants_to_invite" with "#{name}"}
+    And %{I press "Submit"}
+
   When %{I select "Moderator" from "#{name}_role"}
   click_button("#{name}_submit")
   Then %{I should see "Updated #{name}"}
@@ -62,7 +66,7 @@ end
 
 When /^I create the collection "([^\"]*)"$/ do |title|
   When %{I set up the collection "#{title}"}
-  click_button("Submit")
+    And %{I submit}
   Then %{I should see "Collection was successfully created."}
 end
 
@@ -74,7 +78,7 @@ When /^I reveal works for "([^\"]*)"$/ do |title|
   When %{I am logged in as "mod1"}
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Settings"}
-  uncheck "Is this collection currently unrevealed?"
+  uncheck "This collection is unrevealed"
   click_button "Update"
 end
 

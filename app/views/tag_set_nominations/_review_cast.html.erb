@@ -1,0 +1,16 @@
+<% # expects fandoms %>
+<% current_fandom = "" %>
+<% cast.each do |cast_nom| %>
+  <% if cast_nom.parent_tagname != current_fandom %>
+    <% # start a new fandom heading %>
+    <% current_fandom = cast_nom.parent_tagname %>
+    </ol>
+    </li>
+    <li class="fandom listbox <%= cycle :odd, :even %>">
+    <h3><%= current_fandom %> <%= ts("(already approved)") %></h3>
+    <ol class="tags index">
+  <% end %>
+  <li>
+    <%= render "review_individual_nom", :nom => cast_nom %>
+  </li>
+<% end %>

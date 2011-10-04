@@ -23,7 +23,7 @@ Feature: creating and editing skins
     And I fill in "Title" with "my blinking skin"
     And I fill in "CSS" with "#title { text-decoration: blink;}"
     And I press "Create"
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
     And I should see "my blinking skin skin by skinner"
     And I should see "text-decoration: blink;"
     And I should see "(No Description Provided)"
@@ -49,7 +49,7 @@ Feature: creating and editing skins
       body { background-color: #ffffff;}
       h1 { font-family: 'Fertigo Pro', Verdana, serif; }
       """
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
     And I should see "background-color: #ffffff;"
     And I should see "font-family: 'Fertigo Pro', Verdana, serif"
 
@@ -59,7 +59,7 @@ Feature: creating and editing skins
       """  
       body {background:#ffffff url('http://mywebsite.com/img_tree.png') no-repeat right top;}
       """
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
     And I should see "url('http://mywebsite.com/img_tree.png')"
     And I should see "no-repeat"
 
@@ -73,7 +73,7 @@ Feature: creating and editing skins
       dd {color: blue;}
       /* end comment */
       """
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
     And I should see "starting comment"
     And I should see "middle comment"
     And I should see "end comment"
@@ -87,7 +87,7 @@ Feature: creating and editing skins
       .profile .module h3, .media-index li.category h3 { border-left: 4px double #111 !important; border-bottom-right-radius: 0 !important; }
       li {box-shadow: inset 0 0px 20px 1px #fff, 0px 1px 0 rgba(140,120,50,0.75), 0 6px 0px #1f3053, 0 8px 4px 1px #111}
       """
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
     And I should see "border-bottom-right-radius: 0 !important"
     And I should see "box-shadow"
     And I should see "inset 0 0px 20px 1px #fff, 0px 1px 0 rgba(140,120,50,0.75), 0 6px 0px #1f3053, 0 8px 4px 1px #111"
@@ -100,7 +100,7 @@ Feature: creating and editing skins
       #header .navigation li { text-transform: capitalize; }
       table { border-collapse: separate !important; }    
       """
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
     And I should see "baseline"
     And I should see "capitalize"
     And I should see "separate"
@@ -113,7 +113,7 @@ Feature: creating and editing skins
       li.relationships + li.freeforms:before { content: 'Freeform: '; }
       li:before {content: url('http://foo.com/bullet.jpg')}
       """
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
     And I should see "content: '||'"
     And I should see "content: 'Freeform: '"
     And I should see "content: url('http://foo.com/bullet.jpg')"
@@ -144,7 +144,7 @@ Feature: creating and editing skins
         color:rgba(254,254,254,1)
       }
       """
-    Then I should see "Skin was created successfully"
+    Then I should see "Skin was successfully created"
       And I should see "rgba(254,254,254,1)"
       And I should see "-moz-border-radius"
 
@@ -169,7 +169,7 @@ Feature: creating and editing skins
                   	-webkit-transform: scale(2.1) rotate(-90deg)
       }
       """
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
     And I should see "-moz-linear-gradient"
     And I should see "-webkit-linear-gradient"
     And I should see "rotate(-0.5deg)"
@@ -185,7 +185,7 @@ Feature: creating and editing skins
   # When I create the skin "valid skin" with css
   #     """  
   #     """
-  # Then I should see "Skin was created successfully"
+  # Then I should see "Skin was successfully created"
   #   And I should see ""
 
   ########################################################
@@ -324,7 +324,7 @@ Feature: creating and editing skins
   Then I should see "Skin preview should be set for the skin to be public"
   When I attach the file "test/fixtures/skin_test_preview.png" to "skin_icon"
     And I press "Create"
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
   
   Scenario: Newly created public skins should not appear on the main skins page until approved and should be
     marked as not-yet-approved
@@ -442,11 +442,11 @@ Feature: creating and editing skins
     And I fill in "Description" with "Layout skin"
     And I fill in "skin_margin" with "text"
     And I press "Create"
-  Then I should see "We couldn't save this Skin"
+  Then I should see a save error message
     And I should see "Margin is not a number"
   When I fill in "skin_margin" with "5"
     And I press "Create"
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
     And I should see "Margin5"
   When I follow "Edit"
     And I follow "Use Wizard Instead?"
@@ -482,7 +482,7 @@ Feature: creating and editing skins
     And I fill in "Description" with "Great work skin"
     And I fill in "CSS" with "p {color: purple;}"
     And I press "Create"
-  Then I should see "Skin was created successfully"
+  Then I should see "Skin was successfully created"
     And I should see "#workskin p"
   When I go to the new work page
   Then I should see "Awesome Work Skin"

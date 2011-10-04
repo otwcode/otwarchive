@@ -3,7 +3,7 @@
 <!--/descriptions-->
 
 <!--main content-->
-<ul class="fandom index">
+<ul class="media fandom index">
 <% for medium in @media %>
   <li id="medium_<%= medium.id %>" class="category <%= cycle :odd, :even %>">
     <h3><%= link_to medium.name, medium_fandoms_path(medium) %></h3>

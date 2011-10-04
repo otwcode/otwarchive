@@ -225,7 +225,7 @@ Scenario: Listing external works as inspirations
     And I check "parent-options-show"
     And I fill in "Url" with "google.com"
     And I press "Preview"
-  Then I should see "We couldn't save this Work, sorry"
+  Then I should see a save error message
     And I should see "A parent work outside the archive needs to have a title."
     And I should see "A parent work outside the archive needs to have an author."
   When I fill in "Title" with "Worldbuilding"
@@ -241,7 +241,7 @@ Scenario: Listing external works as inspirations
     And I fill in "Url" with "testarchive.transformativeworks.org"
     And "issue 1806" is fixed
     # And I press "Preview"
-  # Then I should see "We couldn't save this work, sorry"
+  # Then I should see a save error message
     # And I should see "A parent work outside the archive needs to have a title."
     # And I should see "A parent work outside the archive needs to have an author."
   When I fill in "Title" with "Worldbuilding Two"

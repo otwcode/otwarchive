@@ -1,0 +1,39 @@
+<% # expects nom %>
+<% unless @tagnames_seen[nom.tagname] %>
+  <% @tagnames_seen[nom.tagname] = 1 %>
+  <div class="nomination module">
+    <% tag_type = nom.class.name.gsub(/Nomination/, '').downcase %>
+    <%= nomination_status_span(nom) %>
+      <%= nom.tagname %>
+      <% # if this nomination doesn't have a parent tag in db but does have one nominated, list here %>
+      <%= (!nom.parented? && nom.parent_tagname) ? "(#{nom.parent_tagname})" : '' %>
+      <% if (nom_count = nom.times_nominated(@tag_set)) > 1 %>
+        <span class="count">(x<%= nom_count %>)</span>
+      <% end %>
+    </span>
+
+    <span class="actions">
+      <%= label_tag "#{tag_type}_approve_#{nom.tagname}", :class => "action" do %>
+        <span class="yes">+</span>
+        <%= check_box_tag "#{tag_type}_approve_#{nom.tagname}", 1, params["#{tag_type}_approve_#{nom.tagname}"] %>
+      <% end %>
+      <%= label_tag "#{tag_type}_reject_#{nom.tagname}", :class => "action" do %>
+        <span class="no">x</span>
+        <%= check_box_tag "#{tag_type}_reject_#{nom.tagname}", 1, params["#{tag_type}_reject_#{nom.tagname}"] %>
+      <% end %>
+    </span>
+
+    <%= text_field_tag "#{tag_type}_change_#{nom.tagname}", nil, autocomplete_options("tag?type=#{tag_type}", :autocomplete_token_limit => 1, :title => "change tag name") %>
+
+    <!--FRONT END: can you solve this display problem: display:table, liquid, retain scanlines with synonym next to tagname? Have put at end for now-->
+    <% if nom.synonym %>
+      <span title="official synonym" class="synonym">
+        <%= label_tag "#{tag_type}_synonym_#{nom.synonym}" do %>
+          (Choose <%= nom.synonym %> instead
+          <%= check_box_tag "#{tag_type}_synonym_#{nom.synonym}", 1, params["#{tag_type}_synonym_#{nom.synonym}"] %>)
+        <% end %>
+      </span>
+    <% end %>
+  </div>
+
+<% end %>

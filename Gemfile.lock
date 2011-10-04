@@ -68,6 +68,8 @@ GEM
       builder
       mime-types
       xml-simple
+    best_in_place (0.1.9)
+      rails (~> 3.0.0)
     builder (2.1.2)
     capistrano (2.5.19)
       highline
@@ -238,6 +240,7 @@ GEM
     term-ansicolor (1.0.5)
     thor (0.14.6)
     tilt (1.2.2)
+    timeliness (0.3.4)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.24)
@@ -245,6 +248,8 @@ GEM
       kgio (~> 2.4)
       rack
       raindrops (~> 0.6)
+    valium (0.2.1)
+      activerecord (>= 3.0.2)
     vcr (1.6.0)
     vegas (0.1.8)
       rack (>= 1.0.0)
@@ -261,6 +266,7 @@ PLATFORMS
 DEPENDENCIES
   authlogic!
   aws-s3
+  best_in_place
   bundler (~> 1.0.0)
   capistrano-gitflow_version (>= 0.0.3)
   capybara (= 0.3.9)
@@ -294,8 +300,10 @@ DEPENDENCIES
   sanitize
   shoulda
   thinking-sphinx!
+  timeliness
   tolk!
   unicorn
+  valium
   vcr
   whenever (~> 0.6.2)
   will_paginate!
