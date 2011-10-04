@@ -73,7 +73,7 @@ class OwnedTagSetsController < ApplicationController
         @fandom_keys_from_other_tags += @relationship_hash.keys
       end 
 
-      @fandom_keys_from_other_tags.uniq!.sort! {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}
+      @fandom_keys_from_other_tags.uniq!.sort! {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')} unless @fandom_keys_from_other_tags.empty?
 
       if @tag_set.tag_set.has_type?("fandom")
         @fandom_hash = Tag.names_by_parent(Fandom.in_tag_set(@tag_set.tag_set), "media") 
