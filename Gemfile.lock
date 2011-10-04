@@ -144,7 +144,6 @@ GEM
     mocha (0.9.9)
       rake
     mysql2 (0.2.6)
-    nested_form (0.1.1)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
@@ -286,7 +285,6 @@ DEPENDENCIES
   memcache-client
   mocha
   mysql2
-  nested_form
   nokogiri
   paperclip (>= 2.3.16)
   permit_yo
