@@ -7,7 +7,6 @@ class Chapter < ActiveRecord::Base
   has_many :pseuds, :through => :creatorships
 
   belongs_to :work
-  validates_presence_of :work
   # acts_as_list :scope => 'work_id = #{work_id}'
 
   acts_as_commentable
