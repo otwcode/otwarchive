@@ -241,6 +241,11 @@ class Prompt < ActiveRecord::Base
     end
   end
 
+  # tag groups
+  def tag_groups
+    self.tag_set.tags.group_by { |t| t.type.to_s }
+  end
+
   # Takes an array of tags and returns a marked-up, comma-separated list
   def tag_link_list(tags)
     tags = tags.uniq.compact

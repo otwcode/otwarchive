@@ -13,19 +13,19 @@
 </fieldset>
 <fieldset>
   <legend><%= ts("Notify Groups") %></legend>
-  <dl>
-    <dt><%= label_tag "notify_all", ts("Notify All Users") %></dt>
-    <dd><%= check_box_tag "notify_all[]", 0, nil, {:id => "notify_all"} %></dd>
+  <ul>
+    <li><%= check_box_tag "notify_all[]", 0, nil, {:id => "notify_all"} %>
+	<%= label_tag "notify_all", ts("Notify All Users") %> </li>
     
     <% @roles.each do |role| %>
-      <dt><%= label_tag "notify_all_#{role.name}", ts("Notify All %{role_name}", :role_name => role.name.humanize.titlecase.pluralize) %></dt>
-      <dd><%= check_box_tag "notify_all[]", role.name, nil, {:id => "notify_all_#{role.name}"} %></dd>
+      <li><%= check_box_tag "notify_all[]", role.name, nil, {:id => "notify_all_#{role.name}"} %>
+	<%= label_tag "notify_all_#{role.name}", ts("Notify All %{role_name}", :role_name => role.name.humanize.titlecase.pluralize) %></li>
     <% end %>
-  </dl>
+  </ul>
 </fieldset>
 <fieldset>
   <legend><%= ts("Send, Or Continue") %></legend>
-    <p class="submit"><%= submit_tag ts("Send Notification") %></p>
+    <p class="submit actions"><%= submit_tag ts("Send Notification") %></p>
 </fieldset>
 <fieldset>
   <legend><%= ts("Notify Individuals") %></legend>
@@ -61,6 +61,6 @@
 </fieldset>
 <fieldset>
   <legend><%= ts("Send Notification") %></legend>
-  <p class="submit"><%= submit_tag ts("Send Notification") %></p>
+  <p class="submit actions"><%= submit_tag ts("Send Notification") %></p>
 </fieldset>
 <% end %>

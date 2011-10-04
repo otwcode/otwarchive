@@ -1,18 +1,22 @@
 /*==ROLES AND STATES */
-.own, .relationships, .draft .wrapper, .unread
-        { background:#eee; }
-.draft 
-        { background: #eee; border: 2px dashed #ddd }
-.draggable,.droppable,     
-        { color: #900 }
+.own, .draft, .draft .wrapper, .unread, .child, .unwrangled, .unreviewed
+        { background:#e8e6ed; 
+          opacity:0.95;}
+.draft,.nonexistent
+        { border: 2px dashed #aaa; padding:0.643em;
+          border-radius:0.5em }
 .canonical       
         { font-weight: 700 }
-.hidden 	   	    
+.hidden, body .hidden 	   	    
         { display:none }
-/*(this unread span in user inbox is mimicking the ".navigation .current" style)*/
-span.unread
-        { background:#ccc; color:#000; display: inline-block; padding: 0.25em 0.75em; white-space: nowrap; overflow: visible; position: relative; cursor: pointer; text-decoration: none; border: 1px solid #bbb; border-bottom:1px solid #aaa; text-transform:lowercase;
-          border-radius:0.375em; }
+.draggable,.droppable,     
+        { color: #900 }
+
+/*(this unread span in user inbox spoofs the ".navigation .current" style)*/
+span.unread, .replied
+        { background:#ccc; color:#900; width:auto; font-size:100%; height:1.286em; line-height:1.286; vertical-align:middle; display:inline-block; padding: 0.25em 0.75em; white-space: nowrap; overflow: visible; position: relative; cursor: pointer; text-decoration: none; border: 1px solid #bbb; border-bottom:1px solid #aaa; text-transform:lowercase;
+          border-radius:0.25em; }
+.replied{ color: green;}
 
 /* Requests and offers in challenges */
 li.requested 
@@ -27,6 +31,7 @@ span.offered.requested
 /* CONTEXTS */
 .dashboard .own
         { background:transparent;}
+
 	
 
 

@@ -52,7 +52,7 @@
     <% end %>
     
     <% if @challenge.allowed(prompt_type) > @challenge.required(prompt_type) %>
-      <p class="navigation" role="navigation">
+      <p class="navigation actions" role="navigation">
         <% linktext = ts("Add another %{type}? (Up to %{allowed} allowed.)", :type => prompt_type.singularize, :allowed => @challenge.allowed(prompt_type)) %>
         <%= link_to_add_section(linktext, signup_form, prompt_type.to_sym, "prompts/prompt_form", :required => false) %>
       </p>
@@ -68,7 +68,7 @@
 <!--/content-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
   <li><%= link_to 'Back', @collection %></li>
 </ul>
 <!--/subnav-->

@@ -4,7 +4,7 @@
 
 <!--subnav-->
 
-<ul class="navigation actions  buttons" role="navigation actions ">
+<ul class="navigation actions" role="navigation actions ">
   <li><%= button_to ts("Send Activation Email"), {:action => 'send_activation', :id => @user}, :disabled => @user.active? %></li>
   <li>
     <%= button_to ts("Activate User Account"), {:action => 'activate', :id => @user}, :disabled => @user.active? %>
@@ -25,7 +25,7 @@
     <p><% unless @user.suspended? %> 
         <%= radio_button_tag 'admin_action', 'suspend', false, :disabled => (@user.suspended? || @user.banned?) %>
         <%= label_tag 'admin_action_suspend', ts("Suspend: enter a whole number of days") %>
-        <%= text_field_tag 'suspend_days', '', {:class => "number-field", :size => 2, :disabled => @user.suspended?} %>
+        <%= text_field_tag 'suspend_days', '', {:class => "number", :size => 2, :disabled => @user.suspended?} %>
         <%= live_validation_for_field('suspend_days', :presence => false, :numericality => true)%> 
       <% else %>
         <%= radio_button_tag 'admin_action', 'unsuspend', false %>
@@ -53,7 +53,7 @@
     </p>
   </fieldset>
 
-  <p class="submit"><%= submit_tag ts("Update") %></p>
+  <p class="submit actions"><%= submit_tag ts("Update") %></p>
 <% end %>
 
 <%= render :partial => 'user_history', :locals => {:user => @user} %>

@@ -45,7 +45,7 @@
   </fieldset>
 
   <% if show_tag_options %>
-    <fieldset class="preface profile">
+    <fieldset>
       <legend><%= ts("Tag Options") %></legend>
       <h3><%= ts("Tag Options") %> <%= link_to_help("prompt-restriction-tag-set" + (type == "gift_exchange" ? "" : "-promptmeme")) %> </h3>
       <p class="note">
@@ -53,7 +53,6 @@
         your challenge. You can make your own custom tag set(s) or use any existing public tag set (but be aware that if it's not a tag set 
         that you own, the tag set owners may change the contents of the tag set without warning).
       </p> 
-      
       <dl>
         <% unless restriction.owned_tag_sets.empty? %>
           <dt><%= prompt_restriction_form.label :tag_sets_to_remove, ts("Current Tag Sets (check to remove):") %></dt>

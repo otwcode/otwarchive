@@ -1,9 +1,9 @@
-<!--Descriptive page name, messages and instructions-->
+<!--ZONE TAGS, ZONE HOME? Descriptive page name, messages and instructions-->
 <h2><%= @fandom.name %></h2>
 <!--/descriptions-->
 
 <!--subnavigation, sorting and actions-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
   <li><%= link_to "Works", tag_works_path(@fandom) %></li>
   <li><%= link_to "Bookmarks", tag_bookmarks_path(@fandom) %></li>
 </ul>
@@ -12,12 +12,12 @@
 <!--main content-->
 <h3><%= ts('Characters and Relationships') %></h3>
 <% unless @characters.blank? %>
-<ul>
+<ul class="characters relationships index">
   <% for character in @characters %>
   <li>
-    <%= link_to character.name, tag_works_path(character) %>
+    <h4><%= link_to character.name, tag_works_path(character) %></h4>
     <% unless character.relationships.empty? %>
-    <ul>
+    <ul class="tags">
       <% for relationship in character.relationships %>
       <li><%= link_to relationship.name, tag_works_path(relationship) %></li>
       <% end %>

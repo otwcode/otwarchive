@@ -1,12 +1,12 @@
 <!--Descriptive page name, messages and instructions-->
 <h2><%= ts('Change My User Name') %></h2>
 <%= error_messages_for :user %>
-<p><%= ts("Please use this feature with caution. We will not redirect your old user name to your new one. Bookmarks and external links to your user page and your pseud pages under the old name will no longer work and the old name may be used by someone else unless all you are changing is capitalization.") %></p>
+<p class="caution"><%= ts("Please use this feature with caution. We will not redirect your old user name to your new one. Bookmarks and external links to your user page and your pseud pages under the old name will no longer work and the old name may be used by someone else unless all you are changing is capitalization.") %></p>
 <p><%= ts("If that is not what you want, you can") %> <%= link_to ts("create a new Pseud"), new_user_pseud_path(@user) %> <%= ts("instead.") %></p>
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
   <li><%= span_if_current ts("Edit My Profile"), edit_user_path(@user) %></li>
   <li><%= span_if_current ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
   <li><%= span_if_current ts("Change User Name"), change_username_user_path(@user) %></li>
@@ -39,7 +39,7 @@
     <dt id="passwd"><%= label_tag :password, ts("Re-enter Your Password") %></dt>
       <dd id="passwd"><%= password_field_tag :password %></dd>
   <dt class="landmark"><%= ts("Submit") %></dt>
-	<dd class="submit"><%= submit_tag "Change" %></dd>
+	<dd class="submit actions"><%= submit_tag "Change" %></dd>
 </dl>
 <% end %>
 <% if @wrong_password %>

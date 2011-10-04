@@ -1,5 +1,5 @@
-<!--BACK END: this is accessed via the user dashboard so needs the user dashboard view and so therefore a route back-->
-<div id="skin-page" class="skins home">
+<!--BACK END: this is accessed via the user dashboard so needs the user dashboard view and so therefore a navigation pathway back-->
+<div class="skins home">
   
   <div class="primary header module">
     <h2>
@@ -14,17 +14,17 @@
 
 
 <div class="css module">
-    <h3>CSS</h3>
+    <h3><abbr title="cascading style sheets">CSS</abbr</h3>
     <blockquote><pre><%= @skin.css %></pre></blockquote>
 </div>
 
     <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em || @skin.paragraph_margin || !@skin.headercolor.blank? || !@skin.accent_color.blank? %>
       <div class="wizard module">
 		<h3>Wizard Settings</h3>
-      <p class="notes">(can be overridden by custom CSS)</p>
+      <p class="notes">(Can be overridden by custom <abbr title="cascading style sheets">CSS</abbr>)</p>
   
       <div class="wrapper">
-		<!--is this meta?-->
+		<!--REVIEW: is this meta?-->
 		<dl class="meta">
         <% if @skin.margin %><dt>Margin</dt><dd><%= @skin.margin %><% end %>
         <% unless @skin.font.blank? %><dt>Font</dt><dd><%= @skin.font %><% end %>

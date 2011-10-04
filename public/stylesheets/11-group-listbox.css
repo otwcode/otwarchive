@@ -1,0 +1,47 @@
+/*==GROUP: LISTBOX 
+listbox is a group containing a heading with span actions and an index list
+rarely it has an explanatory paragraph and more often actions at the bottom too, like "show more"
+listboxes can nest
+listboxes show up where there's more than one index, like in user home, media-index, and many tag views
+*/
+
+li.listbox, div.listbox
+        { width: 100%; position: relative; float: left; background:#ddd; border:1px solid #ccc; margin: 0.643em auto; overflow:hidden;}
+.listbox h3, .listbox h4, .listbox h3 a:visited, .listbox h4 a:visited
+        { margin:0; color:#222; margin-top:0; padding:0.25em; }
+.listbox h3 span, .listbox h4 span
+        { font-size:smaller;}
+.listbox .index
+        { padding: 0.643em 0.75em; width:98.5%; background:#f4effc;
+          box-shadow:inset 1px 1px 3px #bbb; border-radius:0.15em }
+li.listbox 
+        { width: 45%; margin-right:1.5em; }
+.listbox li.blurb
+        { margin:0 auto 1.286em -0.75em;
+          box-shadow:none;}
+        
+/* modification: MEDIUM*/
+li.listbox.medium
+        { min-height: 17.5em;}
+        
+/*CONTEXTS*/
+.fandoms-index li.listbox
+        { width:100%;}
+
+/*INTERACTION context: form (see tagset for example)
+test note: a best fit needs to be written for ie5,6,7 for these table displays*/
+form li.listbox .index
+        { display:table;  }
+form li.listbox .index li, form li.listbox div.nomination
+        { display:table-row-group;}
+form li.listbox ul.autocomplete, form li.listbox .index .actions, form li.listbox span.nomination
+        { float:none; background:#ddd; border-bottom:1px solid #f3efec;
+          display:table-cell;}
+form li.listbox label
+        { display:table-cell;}
+form li.listbox span.synonym
+        { display:table-row}
+form li.listbox span.nomination 
+        { background:#f4effc;}
+        
+

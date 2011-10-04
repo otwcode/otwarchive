@@ -19,7 +19,7 @@
 <% end %>
 <!-- /end descriptions-->
 
-<div class="navigation module">
+<div class="navigation actions module">
 <!--Subnavigation, sorting and actions.-->
 <h3 class="landmark">Navigation, Sorting and Actions</h3>
 <!--gift search subnav-->
@@ -28,7 +28,7 @@
 <% end %>
 <!--user role subnav-->
 <% if params[:tag_id] || (@user && @user == current_user) %>
-<ul class="user navigation" role="navigation">
+<ul class="user navigation actions" role="navigation">
   <% if @user && @user == current_user %>
     <li id="edit_multiple">
       <%= link_to t('.edit_multiple_link', :default => 'Edit Multiple Works'), show_multiple_user_works_path(@user) %></li>
@@ -39,7 +39,7 @@
 </ul>
 <% end %>
 <!--sorting subnav-->
-  <ul class="sorting navigation" role="navigation">
+  <ul class="sorting actions" role="menu">
     <li><h4><%= t('.sort_by', :default => 'Sort By') %></h4></li>
     <% unless @query.blank? %>
       <li><%= sort_link ts('Relevance') %></li>
@@ -58,7 +58,7 @@
 
 <!--main content-->
 <h3 class="landmark">Works List</h3>
- <ol class="work index<% if @user && @user == current_user %> works-own<% end %>">
+ <ol class="work index">
     <% for work in @works %>
       <% if work %>
       <%= render :partial => 'work_blurb', :locals => {:work => work} %>

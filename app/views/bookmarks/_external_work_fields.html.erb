@@ -1,7 +1,8 @@
 <fieldset>
+	<legend>External Work</legend>
   <dl>
     <dt><%= ew.label :url, ts("URL") %>:</dt>
-    <dd>
+    <dd title="URL">
       <% if !params[:url_from_external].blank? %>
         <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1, :value => params[:url_from_external]) %>
       <% else %>
@@ -40,22 +41,22 @@
       <%= ts("(please copy and paste from original work)") %>
     </dt>
     <dd>
-      <%= ew.text_area :summary, :rows => 5, :class => "summary-field observe_textlength"%>
+      <%= ew.text_area :summary, :rows => 5, :class => "observe_textlength"%>
       <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) %>
     </dd>
   </dl>
 </fieldset>
 <fieldset>
-  <legend>Add tags</legend>
+  <legend>Tag</legend>
   <p>
-    <%= ts("Author's Tags (comma separated, %{max} characters per tag). Please note that only fandom is required.", :max => ArchiveConfig.TAG_MAX) %>
+    <%= ts("Author's Tags (comma separated, %{max} characters per tag). Only a fandom is required.", :max => ArchiveConfig.TAG_MAX) %>
     <%= link_to_help "tagging-help" %>
   </p>
   <dl>
-    <dt>
+    <dt class="required">
       <%= ew.label :fandom_string, Fandom::NAME.pluralize %>
     </dt>
-    <dd>
+    <dd title="fandom required">
       <%= ew.text_field :fandom_string, autocomplete_options('fandom') %>
     </dd>
     <dt class="rating">
@@ -73,13 +74,13 @@
     <dt>
       <%= ew.label :relationship_string, Relationship::NAME.pluralize %>
     </dt>
-    <dd>
+    <dd title-"relationship">
       <%= ew.text_field :relationship_string, autocomplete_options('relationship_in_fandom', :autocomplete_live_params => 'fandom=bookmark_external_fandom_string') %>
     </dd>
     <dt>
       <%= ew.label :character_string, Character::NAME.pluralize %>
     </dt>
-    <dd>
+    <dd title="character">
       <%= ew.text_field :character_string, autocomplete_options('character_in_fandom', :autocomplete_live_params => 'fandom=bookmark_external_fandom_string') %>
     </dd>
   </dl>

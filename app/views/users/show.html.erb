@@ -7,7 +7,7 @@
       or dismiss this message permanently.
     </p>
       <%= form_tag end_first_login_user_path(current_user), :method => :post, :remote => true do %>
-    <p class="submit">
+    <p class="submit actions">
       <%= submit_tag ts("Dismiss permanently") %>
       <%= link_to image_tag('close-flash.png'), nil, :remote => true, :id => "hide-first-login-help", :title => "Hide first login help banner" %>
     </p>
@@ -15,7 +15,7 @@
   </div>
 <% end %>
 
-<div id="user-page" class="user home">
+<div class="user home">
   <%= render :partial => "users/header", :locals => {:user => @user} %>
   <%= render :partial => "users/contents" %>
 </div> 

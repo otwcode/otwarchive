@@ -3,7 +3,7 @@
 <div class="navigation module">
 <% if logged_in? %>
 <h3 class="landmark">Navigation</h3>
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
     <li><%= link_to ts("My Claims"), user_claims_path(current_user) %></li>
 </ul>
 <% end %>
@@ -18,27 +18,28 @@
 <% end %>
 
 <h3>Unfulfilled Claims</h3>
-  
-  <table id="unfulfilled_claims">
+<!--FRONT END: TABLEWATCH!!-->  
+  <table id="unfulfilled_claims" summary="">
+    <caption></caption>
     <thead>
       <tr>
-        <th>Pseud</th>
-        <th>Writing For</th>
-        <th>Prompt Info</th>
-        <th>Actions</th>
+        <th scope="col">Pseud</th>
+        <th scope="col">Writing For</th>
+        <th scope="col">Prompt Info</th>
+        <th scope="col">Actions</th>
       </tr>
     </thead>
-
+<tbody>
     <% @unposted_claims.each do |claim| %>
       <tr>
-        <td>
+        <th scope="row">
           <% claimer = User.find_by_id(claim.claiming_user_id) %>
           <% if @collection.anonymous? && !(current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) %>
             Secret!
           <% else %>
             <%= claimer.default_pseud.name -%>
           <% end %>
-        </td>
+        </th>
         <td>
           <% request = claim.request_signup %>
           <% prompt_id = claim.request_prompt_id %>
@@ -72,32 +73,34 @@
         </td>
       </tr>
     <% end %>
-  </table>
+ </tbody>
+</table>
 
   <%= will_paginate @unposted_claims -%>
   
   <h3>Fulfilled Claims</h3>
 
-  <table id="fulfilled_claims">
+  <table id="fulfilled_claims" summary="">
+    <caption></caption>
     <thead>
       <tr>
-        <th>Pseud</th>
-        <th>Writing For</th>
-        <th>Prompt Info</th>
-        <th>Work Info</th>
+        <th scope="col">Pseud</th>
+        <th scope="col">Writing For</th>
+        <th scope="col">Prompt Info</th>
+        <th scope="col">Work Info</th>
       </tr>
     </thead>
-
+<tbody>
     <% @posted_claims.each do |claim| %>
       <tr>
-        <td>
+        <th scope="row">
           <% claimer = User.find_by_id(claim.claiming_user_id) %>
           <% if @collection.anonymous? && !(current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) %>
             Secret!
           <% else %>
             <%= claimer.default_pseud.name -%>
           <% end %>
-        </td>
+        </th>
         <td>
           <% request = claim.request_signup %>
           <% prompt_id = claim.request_prompt_id %>
@@ -137,7 +140,8 @@
         </td>
       </tr>
     <% end %>
-  </table>
+</tbody>
+</table>
 
   <%= will_paginate @posted_claims -%>
 

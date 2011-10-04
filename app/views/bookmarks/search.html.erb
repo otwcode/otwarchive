@@ -1,6 +1,7 @@
+<!--SEARCHBROWSE-->
 <h2><% ts("Bookmark Search: Beta") %></h2>
 
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %></li></ul>
 
 <%= render :partial => 'bookmarks/search_form' %>

@@ -1,7 +1,7 @@
 <!--Descriptive page name, messages and instructions-->
-<div class="userstuff">
+<div class="system docs userstuff">
   <h2><%=h ts('About Orphaning') %></h2>
-  <p class="important message"><strong><%=h ts('As orphaning is a permanent step, please be sure to read the following explanation in full before orphaning any of your works!') %></strong></p>
+  <p class="important message"><strong><%=h ts('Orphaning is permanent. It cannot be undone. Please make sure you read the following explanation in full before orphaning any of your works!') %></strong></p>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -26,13 +26,13 @@
   </ul>
   <h3><%=h ts('What options are available?') %></h3>
   <p><%=h ts('There are a number of orphaning options available. You can choose to:') %></p>
-  <ul>
+  <ol id="pseud-options">
     <li><%=h ts('Orphan a single work - from the edit page for the work') %></li>
     <li><%=h ts("Orphan all your works - from the 'My Preferences' page") %></li>
     <li><%=h ts("Orphan all works posted under a specific pseud - from the 'Manage My Pseuds' page") %></li>
-  </ul>
+  </ol>
   <p><%=h ts('Once you have decided which work(s) you wish to orphan, you have two options:') %></p>
-  <ul>
+  <ol>
     <li><h4><%=h ts('Use the default orphan pseud') %>.</h4>
     <%=h ts('The work will be transferred to the orphan_account and the default orphan_account pseud.') %>&nbsp;
     <%=h ts("The byline on the work will read 'orphan_account'.") %></li>
@@ -40,9 +40,9 @@
     <%=h ts('The work will be transferred to the orphan_account, but a new pseud will be created with the same name as the pseud you used to author the work.') %>&nbsp;
     <%=h ts("As an example: if you authored the work using the pseud 'awesomefangirl', after orphaning the byline will read 'awesomefangirl [orphan_account]'.") %>&nbsp;
     <%=h ts('While the pseud will no longer link back to your account, if you have a very distinctive pseud this option might still allow a reader to identify you as the author.') %></li>
-  </ul>
+  </ol>
   <h3><%=h ts('Can I orphan a work which I have co-authored with someone else?') %></h3>
-  <p><%=h ts('You have the choice of either removing yourself as a co-author, or orphaning your part of the work (with the same pseud options as above).') %>&nbsp;
+  <p><%=h ts('You have the choice of either removing yourself as a co-author, or orphaning your part of the work (with the same).') %> <a href="#pseud-options">pseud options</a>.&nbsp;
   <%=h ts('Your co-author will not be affected and will remain a co-author of the work.') %></p>
   <h3><%=h ts('What happens if I want to orphan a single work in a series?') %></h3>
   <p><%=h ts('You can orphan the work normally, and the byline will be changed to reflect the new author name.') %>&nbsp;
@@ -53,7 +53,7 @@
 <!--/content-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
   <li><%= link_to ts('Back'), :back %></li>
   <li><%= link_to ts('View Orphaned Works'), user_works_path(User.orphan_account) %></li>
 </ul>

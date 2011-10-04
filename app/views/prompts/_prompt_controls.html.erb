@@ -5,7 +5,7 @@
 <% user = challenge_signup.pseud.user %>
 
 <% if challenge.signup_open || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || collection.challenge_type == "PromptMeme" %>
-  <ul class="navigation" role="navigation">
+  <ul class="navigation actions" role="navigation">
     <% # The edit link should show up only for the user who actually signed up while signups are open or for the owner or mod once signups are closed or always on a prompt meme %>
     <% if (challenge.signup_open && user == current_user) || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || (collection.challenge_type == "PromptMeme" && collection.user_is_maintainer?(current_user)) %>
       <li>

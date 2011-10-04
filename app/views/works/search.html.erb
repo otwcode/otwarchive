@@ -1,6 +1,6 @@
-<h2><% ts('Work Search: Beta') %> <%= link_to_help "work-search-text-help" %></h2>
+<h2><%= ts('Work Search: Beta') %></h2>
 
-<ul class="navigation" role="navigation"><li>
+<ul class="navigation actions" role="navigation"><li>
   <%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %>
 </li></ul>
 
@@ -22,13 +22,15 @@
 <% end %>
 </p>
 
-<%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do %>
+<%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'simple search', :method => :get do %>
 <fieldset>
   <legend>Search works</legend>
   <% unless @query %>
   <% @query ||= {} %>
   <% end %>
-    <p><%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
+    <!--BACK END, please title this text field-->
+	<p><%= link_to_help "work-search-text-help" %> 
+	<%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
 
   <%= hidden_field_tag "query[tag]", @query[:tag] %>
   <%= hidden_field_tag "query[title]", @query[:title] %>
@@ -43,7 +45,7 @@
   <%= hidden_field_tag "query[complete]", @query[:complete] %>
 
 	<span class="tip"><%= random_search_tip %></span>
-  <span class="submit">
+  <span class="submit actions">
 <% if @query.blank? %>
     <%= submit_tag ts('Search'), :name => nil %>
 <% else %>

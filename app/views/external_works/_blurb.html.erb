@@ -1,4 +1,4 @@
-<li class="work blurb" id="work_<%=h external_work.id %>" role="article">
+<li class="work blurb" id="work_<%= external_work.id %>" role="article">
 
   <!--title, author, fandom-->
   <div class="header module">
@@ -13,6 +13,8 @@
       <%= external_work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ').html_safe %>
       &nbsp;
     </h5>
+    
+    <p class="notice"><%= ts("This work isn't hosted on the Archive so this blurb might not be complete or accurate.") %></p>
 
     <%= get_symbols_for(external_work) %>
     <p class="datetime"><%= set_format_for_date(external_work.created_at) %></p>
@@ -26,10 +28,10 @@
 
   <!--summary-->	
   <% unless external_work.summary.blank? %>
-  <h6 class="landmark">Summary</h6>
-  <blockquote class="userstuff summary" title="summary">
-    <%=raw strip_images(sanitize_field(external_work, :summary)) %>
-  </blockquote>
+    <h6 class="landmark">Summary</h6>
+    <blockquote class="userstuff summary" title="summary">
+      <%=raw strip_images(sanitize_field(external_work, :summary)) %>
+    </blockquote>
   <% end %>
 
   <!--stats-->
@@ -44,10 +46,10 @@
   </dl>
 
   <% if logged_in_as_admin? %>
-  <h6 class="landmark">Author Actions</h6>
-  <ul class="navigation" role="navigation">
-    <li><%= link_to ts("Edit"), edit_external_work_path(external_work) %></li>
-  </ul>
+    <h6 class="landmark">Author Actions</h6>
+    <ul class="navigation actions" role="navigation">
+      <li><%= link_to ts("Edit"), edit_external_work_path(external_work) %></li>
+    </ul>
   <% end %>
 
 </li>

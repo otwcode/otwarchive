@@ -5,17 +5,17 @@
   <h3><% ts("Add %{title} to collections", :title => item.title) %></h3>
 
 <%= form_for([item, @collection_item], :url => {:controller => 'collection_items', :action => :create}) do |form| %>
-  <p>
-  <%= label_tag :collection_names, ts("Enter collection name(s): ") %>
-  <%= text_field_tag :collection_names, nil, autocomplete_options("open_collection_names", :size => 40) %>
-  </p>
-  <p class="submit">
+<dl>
+	<dt><%= label_tag :collection_names, ts("Collection name(s): ") %></dt>
+  <dd title="collection name"><%= text_field_tag :collection_names, nil, autocomplete_options("open_collection_names", :size => 40) %></dd>
+	<dt class="landmark">Submit</dt>
+  <dd class="submit actions">
     <%= form.submit(ts("Add")) %>
     <% if in_page %>
       <a class="collection_item_form_placement_close" href="#comments"><%= ts("Cancel") %></a>
     <% else %>
       <%= link_to ts("Back"), polymorphic_path(item) %>
     <% end %>
-  </p>
+  </dl>
 <% end %>
 </div>

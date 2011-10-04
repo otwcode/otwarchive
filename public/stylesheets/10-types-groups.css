@@ -1,36 +1,55 @@
 /*==TYPES OF DATA, GROUPS OF DATA */
 
 /*TYPE: TAGS */
-a.tag, .tags a			{ color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted;}
-a.tag:hover	        { background: #900; color: #f4effc; }
-.tags li            { display:inline;}
-.tags li:after      { content:", "; }
-.tags li:last-child:after
-                    { content:"."; }
-.tags li:only-child:after
-                    { content:none; }
-.filters .tags li   { display: block;}
+a.tag, .tags a
+        { color: #111; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted;}
+a.tag:hover	
+        { background: #900; color: #f4effc; }
+.tags li{ display:inline;}
+.tags li:after
+        { content:", "; }
+.tags li:last-child:after,.tags li:only-child:after, .filters .tags li:after, .filters .tags li:last-child:after, .review .tags li:after
+        { content:none; }
+.filters .tags li, .review .tags
+        { display: block;}
 
 /*GROUP CLOUD */
-ul.cloud           { margin: 2em auto; text-align: center; line-height: 2; }
-a.cloud1           { color: #111; font-size: 0.625em; font-weight: 100 }
-a.cloud2           { color: #240F0F; font-size: 0.75em; font-weight: 200 }
-a.cloud3           { color: #380C0C; font-size: 0.875em; font-weight: 300 }
-a.cloud4           { color: #4B0A0A; font-size: 1em; font-weight: 400 }
-a.cloud5           { color: #5F0707; font-size: 1.125em; font-weight: 500 }
-a.cloud6           { color: #720505; font-size: 1.5em; font-weight: 600 }
-a.cloud7           { color: #860202; font-size: 1.875em; font-weight: 700 }
-a.cloud8           { color: #900; font-size: 2.25em; font-weight: 800 }
+ul.cloud{ margin: 2em auto; text-align: center; line-height: 2; }
+a.cloud1{ color: #111; font-size: 0.625em; font-weight: 100 }
+a.cloud2{ color: #240F0F; font-size: 0.75em; font-weight: 200 }
+a.cloud3{ color: #380C0C; font-size: 0.875em; font-weight: 300 }
+a.cloud4{ color: #4B0A0A; font-size: 1em; font-weight: 400 }
+a.cloud5{ color: #5F0707; font-size: 1.125em; font-weight: 500 }
+a.cloud6{ color: #720505; font-size: 1.5em; font-weight: 600 }
+a.cloud7{ color: #860202; font-size: 1.875em; font-weight: 700 }
+a.cloud8{ color: #900; font-size: 2.25em; font-weight: 800 }
+
+/* GROUPS: MODULE, WRAPPER, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)*/
+.module, .index    
+        { width: 100%; position: relative; float: left; } 
+.wrapper{ box-shadow: 1px 1px 5px #aaa;}
+#outer.wrapper, #inner.wrapper     
+        { box-shadow:none;}
+dl.index dd         
+        { margin:0 auto 0.643em 2.5em; overflow:hidden; background: #e8e6ed;}
 
 /*TYPES*/
-.series.footnote    { font-size:100%; float:none; }
-.warning .footnote  { color:#2a2a2a;}
-.kudos              { background:url(/images/kudos.png) bottom left no-repeat; padding:27px 0 9px 75px; margin:0}
-.icon               { background:url(/images/user_icon.png) no-repeat #900) top left no-repeat; height:100px; width:100px;}
+a.work  { font:100 1.143em/1.125 Georgia,serif; margin:0.5em 0; color:#900}
+.warning, .warnings,span.byline, a.user        
+        { font-weight:bold;}
+li.relationships    
+        { background:#eee;}
+.series.footnote    
+        { font-size:100%; float:none; }
+.kudos  { background:url("/images/skins/iconsets/default/kudos.png") bottom left no-repeat; padding:25px 0 25px 55px; margin:0}
+.icon   { background:url("/images/skins/iconsets/default/icon_user.png") #900 top left no-repeat; height:100px; width:100px; margin:0;}
+.stats dd 
+        { white-space:nowrap; border-right:10px solid transparent; }
+dl.language dt
+        { width: 10em }
+dl.language dd	    
+        { margin: -1.3em 0 .7em 11em; border:none }
 
-/* GROUPS: MODULE, WRAPPER, INDEX */
-.module,  .index    { width: 100%; position: relative; float: left; }
-.wrapper            { box-shadow: 1px 1px 5px #aaa;}
 
 
  

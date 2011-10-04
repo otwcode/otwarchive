@@ -7,9 +7,9 @@
 <!--main content-->
 <% unless @inbox_comments.blank? %>  
   <%= form_tag user_inbox_path(@user), :method => :put, :id => 'inbox-form' do %>
-  <fieldset class="navigation actions">
+  <fieldset class="actions">
 	<legend>Mass Edit Options</legend>
-	<ul role="navigation">
+	<ul role="menu">
     <li><a class="checkall">select all</a></li>
 	<li><a class="checknone">select none</a></li>
 	<li><%= submit_tag ts("Mark Read"), :name => 'read' %></li>
@@ -23,7 +23,7 @@
     <% for inbox_comment in @inbox_comments %>
       <!-- START of single comment -->
       <li class="comment <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
-        <h4><%= get_commenter_pseud_or_name(inbox_comment.feedback_comment) %> <%= 'to' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
+        <h4 class="byline"><%= get_commenter_pseud_or_name(inbox_comment.feedback_comment) %> <%= 'on' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
         <div class="icon">
           <% if !inbox_comment.feedback_comment.pseud.nil? %>
             <%= icon_display(inbox_comment.feedback_comment.pseud.user, inbox_comment.feedback_comment.pseud) %>
@@ -34,17 +34,20 @@
         <blockquote class="userstuff"><%=raw sanitize_field(inbox_comment.feedback_comment, :content) %></blockquote>
         <p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
         <h5 class="landmark">Comment Actions</h5>
-        <ul class="navigation" role="navigation">
+        <ul class="navigation actions" role="navigation">
           <% unless inbox_comment.read? %>
             <li><span class="unread">Unread</span></li>
           <% end %>
           <li>
-            <%= image_tag("replied_to.png", :size => "15x15", :alt => "Replied To") if inbox_comment.replied_to? %>
-            <%= link_to "Reply", reply_user_inbox_path(current_user, :comment_id => 
+          <% if inbox_comment.replied_to? %>
+         <!--BACK END, checkmark means error in several countries, but ts() escapes the entity on the page
+         any ideas?-->
+         <span class="replied" title="replied to">&#10004;</span>
+         <% end %>
+          <%= link_to "Reply", reply_user_inbox_path(current_user, :comment_id => 
 inbox_comment.feedback_comment), :remote => true %>
           </li>
           <li class="action">
-            <%= label_tag "inbox_comments_#{inbox_comment.id}", "Select" %>
             <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, :title => "select this comment", :id => "inbox_comments_#{inbox_comment.id}" %>
           </li>
         </ul>
@@ -53,9 +56,9 @@ inbox_comment.feedback_comment), :remote => true %>
     <% end %>
   </ol>
   </fieldset>
-  <fieldset class="navigation actions">
+  <fieldset class="actions">
 	<legend>Mass Edit Options</legend>
-	<ul role="navigation">
+	<ul role="menu">
     <li><a class="checkall">select all</a></li>
 	<li><a class="checknone">select none</a></li>
 	<li><%= submit_tag ts("Mark Read"), :name => 'read' %></li>
@@ -66,8 +69,9 @@ inbox_comment.feedback_comment), :remote => true %>
     <!-- coming soon <%= submit_tag t('.mass_reply', :default => 'mass reply') %> -->
   <% end %> <!-- end of inbox form -->
   
+  <!--BACK END URGENT BEFORE COMMIT, this is broken in display but I can't find the styles, it needs position: absolute probably but bookmarks were always broken with that-->
   <!-- we can't open comment forms inside the inbox form, which is why this is down here -->
-  <div id="reply-to-comment" style="display:none;"></div> <!-- this div will contain the reply to comment form -->
+  <div id="reply-to-comment" style="display:none;"><!-- this div will contain the reply to comment form --></div> 
 <% end %>
 
 <!--/content-->
@@ -76,7 +80,7 @@ inbox_comment.feedback_comment), :remote => true %>
 <%= form_tag(user_inbox_path(@user), :class => 'filters', :method => :get) do %>
   <h3 class="landmark">Filter</h3>
 	<%= field_set_tag do %>
-    <dl class="filters">
+    <dl class="filters" role="menu">
       <dt><%= 'Filter by read' %></dt>
       <dd>
         <%= radio_button_tag 'filters[read]', 'all', (@select_read != 'true' && @select_read != 'false') %>
@@ -114,8 +118,9 @@ inbox_comment.feedback_comment), :remote => true %>
         <%= radio_button_tag 'filters[date]', 'ASC', @select_date == 'ASC' %>
         <%= label_tag 'filters_date_asc', 'Oldest first' %>
       </dd>
+      <dt class="landmark">Submit</dt>
+      <dd class="submit actions"><%= submit_tag ts("Filter") %></dd>
     </dl>
   <% end %>
-  <p class="submit"><%= submit_tag ts("Filter Inbox") %></p>
 <% end %>
 <!--/subnav-->

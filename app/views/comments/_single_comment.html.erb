@@ -15,7 +15,8 @@
       <p class="message">(<%= ts("This comment is under review by an admin and is currently unavailable.") %>)</p>
     <% else %>
       <% cache single_comment do %>
-        <h4>
+        <% # FRONT END, update this if a.user comes in %>
+        <h4 class="byline">
           <%= get_commenter_pseud_or_name(single_comment) %>
           <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
             <span class='parent'>
@@ -27,7 +28,7 @@
           <% if !single_comment.pseud.nil? %>
             <%= icon_display(single_comment.pseud.user, single_comment.pseud) %>
           <% else %>
-            <span class="visitor icon"><!-- visitor icon holder --></span>
+            <span class="visitor"><!-- visitor icon holder --></span>
           <% end %>
         </div>
         <blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>
@@ -36,19 +37,15 @@
         </p>
         <% unless single_comment.edited_at.blank? %>
           <p class="datetime edited">
-            <%= ts("Last Edited") %> 
-            <%= time_in_zone(single_comment.edited_at) %>
+            <%= ts("Last Edited") %> <%= time_in_zone(single_comment.edited_at) %>
           </p>
         <% end %>
       <% end %><!-- end caching -->
       <h5 class="landmark">Comment Actions</h5>
-      <ul class="navigation" role="navigation" id="navigation_for_comment_<%= single_comment.id %>">
-        <li id="add_comment_reply_link_<%= single_comment.id %>">
-          <%= add_cancel_comment_reply_link single_comment %>
-        </li>
-        <li>
-          <%= link_to ts("Thread"), single_comment %>
-        </li>
+
+      <ul class="navigation actions" role="menu" id="navigation_for_comment_<%= single_comment.id %>">
+        <li id="add_comment_reply_link_<%= single_comment.id %>"><%= add_cancel_comment_reply_link single_comment %></li>
+        <li><%= link_to ts("Thread"), single_comment %></li>
         <% if is_author_of?(single_comment) && single_comment.count_all_comments == 0 %>
           <li id="edit_comment_link_<%= single_comment.id %>">
             <%= edit_comment_link single_comment %>

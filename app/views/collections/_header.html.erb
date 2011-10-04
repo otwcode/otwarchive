@@ -6,7 +6,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-  <ul class="navigation" role="navigation">
+  <ul class="navigation actions" role="navigation">
     <li><%= span_if_current t('.profile', :default =>"Profile"), collection_profile_path(@collection) %></li>
 
     <% if logged_in? && !@collection.closed? && @collection.challenge_type != "PromptMeme" %>

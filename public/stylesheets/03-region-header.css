@@ -14,21 +14,24 @@ notice that CSS3 declarations sit on their own line and always come last*/
         { margin-left:120px; background:#ddd; border:2px solid #fff;  padding:0.375em;
           box-shadow:inset 1px 0 5px #555; }
 #header ul.main 
-        { float:none; margin: auto; background:#900 url(/images/header-tile.png); border-bottom:2px solid #700; padding:0.25em 120px;
+        { float:none; margin: auto; background:#900 url(/images/skins/textures/tile_ao3.png); border-bottom:2px solid #700; padding:0.25em 120px;
           box-shadow:inset 0 -5px 10px rgba(0,0,0,0.5)}
-#header .main a, #header .main input
-        { border-color:#a00;border-bottom-color:#400; }
-#header h1 a, #greeting ul.navigation a, #header .icon a, #header fieldset 
-        { color:#900; background:transparent;border:0; padding:0; margin:0 0 -0.25em 0;
-          box-shadow:none;}
-#header p
-        { margin: -0.15em 0; padding:0; text-align:right;}
-#greeting .navigation
-        { font-size:0.75em; padding:0.5em 0.75em 0}
-#greeting img 
-        { border-bottom:5px solid #900;}
+#header .main a, #header .main .current, #header .main input, #header .search input
+        { border-color:#a00; border-bottom-color:#400; }
+#header .search input[type="text"]
+        { border-color:#300;}
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p
+        { color:#900; background:transparent;border:0; padding:0; margin: 0;
+          box-shadow:none; }
+#greeting .icon 
+        { float:right; padding:0;  margin:0 0 -0.429em 0; border-bottom:5px solid #900}
+#greeting 
+        { right:0; position:absolute; width:120px; font-size:0.75em;}
+#greeting .navigation a 
+        { padding:0.15em; }
+
 
 /*CONTEXT: collections*/
 #header h2 
-        { margin:0; padding:0.25em 120px 0.25em 6.5625em; border-top:1px solid;
-          box-shadow: inset 1px 2px 3px #333; text-shadow: none; }
+        { margin:0; padding:0.25em 120px 0.25em 6.5625em; border-top:1px solid; color:#fff;
+          text-shadow:-1px 0 1px #aaa; box-shadow: inset 1px 2px 3px #333; }

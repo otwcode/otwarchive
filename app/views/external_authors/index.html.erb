@@ -9,7 +9,7 @@
 
   <!--
   Adding/removing new external identities is coming soon 
-    <ul class="navigation" role="navigation">
+    <ul class="navigation actions" role="navigation">
       <li><%= link_to t('.new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></li>
     </ul>
   -->
@@ -39,7 +39,7 @@
     
     
       <% if @user && current_user == @user %>
-        <ul class="navigation actions" role="navigation">
+        <ul class="actions" role="menu">
           <li><%= link_to t('.edit_link', :default => 'Edit'), [:edit, @user, external_author] %></li>
           <!-- coming soon 
           <li>

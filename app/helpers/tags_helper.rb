@@ -251,6 +251,12 @@ module TagsHelper
       end
     elsif item.class == ExternalWork
       symbol_block << get_symbol_link('external-work', "External Work")
+    elsif item.class == Prompt
+      if item.unfulfilled?
+        symbol_block << get_symbol_link( "complete-no", "#{item.class.to_s} Unfulfilled" )
+      else
+        symbol_block << get_symbol_link("complete-yes", "#{item.class.to_s} Fulfilled" )
+      end
     end
 
     symbol_block << "</ul>" unless symbols_only

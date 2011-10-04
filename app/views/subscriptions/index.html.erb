@@ -1,20 +1,19 @@
-<h1>Listing subscriptions</h1>
+<!--Descriptive page name, messages and instructions-->
+<h2>Listing subscriptions</h2>
+<!--/descriptions-->
 
-<table>
-  <tr>
-    <th>Subscribed To</th>
-    <th>Unsubscribe?</th>
-  </tr>
+<!--subnav-->
+<!--/subnav-->
 
+<!--main content-->
+<dl class="subscription index">
 <% @subscriptions.each do |subscription| %>
-  <tr>
-    <td>
+  <dt>
       <%= link_to(subscription.name, subscription.subscribable) %>
-    </td>
-    <td>
+    </dt>
+    <dd>
       <%= link_to "Unsubscribe from #{subscription.name}", user_subscription_path(current_user, subscription), 
                   :confirm => 'Are you sure?', :method => :delete %>
-    </td>
-  </tr>
+    </dd>
 <% end %>
-</table>
+</dl>

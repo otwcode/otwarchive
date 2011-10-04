@@ -1,4 +1,4 @@
-<div id="work-form" class="create issue">
+<div id="work-form" class="post issue">
   <%= form_for(@known_issue) do |f| %>
     <%= error_messages_for @known_issue %>
 
@@ -40,7 +40,7 @@
     
     <fieldset>
       <legend><%= ts("Post") %></legend>
-      <p class="submit">
+      <p class="submit actions">
         <%= submit_tag ts("Post"), :name => 'post_button' %>
       </p>
     </fieldset>

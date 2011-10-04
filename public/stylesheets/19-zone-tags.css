@@ -1,0 +1,13 @@
+/*==ZONE: TAGS, TAGSETS, and TAG WRANGLING 
+tag wrangling is a type of Home Zone
+tags shown in many contexts across the site are set in types-groups.css*/
+
+/*TAG HOME this selector seems weirdly specific, review*/
+.home.tags .header p.icon, .home.tags .header div.icon
+        { background: url(/images/skins/iconsets/default/icon_tag.png) top left no-repeat #900; margin:auto}
+
+/*TAGS SHOW */
+ul.tree, ul.tree li
+        { display: block; list-style-type:disc; }
+.tag_wranglers-index #tag_wranglers 
+        { width:75%; float:left;}

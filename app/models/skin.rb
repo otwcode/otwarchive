@@ -1,6 +1,9 @@
 include HtmlCleaner
 include CssCleaner
 
+# BACK END, instead of this hardcoded default image can we have
+# <div class="icon"></div>
+# obviously no alt text is necessary in this case
 class Skin < ActiveRecord::Base
 
   TYPE_OPTIONS = [
@@ -19,7 +22,7 @@ class Skin < ActiveRecord::Base
                     :storage => Rails.env.production? ? :s3 : :filesystem,
                     :s3_credentials => "#{Rails.root}/config/s3.yml",
                     :bucket => Rails.env.production? ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
-                    :default_url => "/images/skin_preview_none.png"
+                    :default_url => "/images/skins/iconsets/default/icon_skins.png"
 
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
@@ -35,7 +38,7 @@ class Skin < ActiveRecord::Base
   validate :valid_public_preview
   def valid_public_preview
     return true if (self.official? || !self.public? || self.icon_file_name)
-    errors.add(:base, ts("Skin preview should be set for the skin to be public: please take a screencap of your skin in action."))
+    errors.add(:base, ts("You need to upload a screencap if you want to share your skin."))
     return false
   end
 
@@ -125,7 +128,7 @@ class Skin < ActiveRecord::Base
 
   def self.create_default
     skin = Skin.find_or_create_by_title_and_official(:title => "Default", :css => "", :public => true, :official => true)
-    File.open(Rails.public_path + '/images/skin_preview_default.png', 'rb') {|preview_file| skin.icon = preview_file}
+    File.open(Rails.public_path + '/images/skins/previews/default.png', 'rb') {|preview_file| skin.icon = preview_file}
     skin.official = true
     skin.save!
     skin
@@ -134,7 +137,7 @@ class Skin < ActiveRecord::Base
   def self.import_plain_text
     css = File.read(Rails.public_path + "/stylesheets/plain_text_skin.css")
     skin = Skin.find_or_create_by_title_and_official(:title => "Plain Text", :css => css, :public => true, :official => true)
-    File.open(Rails.public_path + '/images/skin_preview_plaintext.png', 'rb') {|preview_file| skin.icon = preview_file}
+    File.open(Rails.public_path + '/images/skins/previews/plaintext.png', 'rb') {|preview_file| skin.icon = preview_file}
     skin.official = true
     skin.save!
     skin

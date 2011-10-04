@@ -1,36 +1,42 @@
 <div class="tag wrangling home">
 <!--Descriptive page name, messages and instructions-->
 <h2><%= ts("Tag Wrangling") %></h2>
-<!--/descriptions-->
+<% unless params[:show] %>
+  <h4 class="landmark">Notes</h4>
+  <ul class="notes">
+    <li>When users create new tags, they're not 'canonical', or official, and they don't have any associations with other tags.</li>
+    <li>Use mass wrangling pages to manage new tags as they come in, and to edit multiple tags at once.</li> 
+    <li>The counts (47) are the number of unwrangled tags in each category.</li>
+    <li>To associate relationships with characters, first choose a fandom to narrow down the scope. Choose a category to get started.</li>
+  </ul>
+
+<% end %><!--/descriptions-->
+
 <!--subnav-->
 <!--/subnav-->
-<!--main content-->
-<h3><%= ts("Mass Wrangle New/Unwrangled Tags") %></h3>
-<% unless params[:show] %>
-  <p>When users create new tags, they're initially not 'canonical', or official, and they don't have any associations with other tags.
-The mass wrangling pages are the easiest way to manage new tags as they come in and edit multiple tags at once. Choose a category below to
-get started. (Note: to associate relationships with characters, first choose a fandom to narrow down the scope.)</p>
 
-  <p>The counts are the number of unwrangled tags in each category.</p>
-<% end %>
+<!--main content-->
+<h3><%= ts("Mass Wrangle New/Unwrangled Tags") %> 
+<!--BACK END pls for each tag_wranglings_path(:show => "n") then append "by n"--></h3>
+
 
 <% if params[:show] == "character_relationships" %>
-  <div class="module">
+
   <h3>First, choose a canonical fandom:</h3>
   <%= form_tag url_for(:controller => 'tag_wranglings', :action => 'index'), :method => :get do %>
   <fieldset>
     <legend>Choose fandom</legend>
-    <p>
+    <p title="fandom">
       <%= label_tag :fandom_string, ts("Fandom:") %> 
       <%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %>
     </p>
   </fieldset>
   <fieldset>
     <legend>Submit</legend>
-    <p class="submit"><%= hidden_field_tag :show, 'character_relationships' %><%= submit_tag "Go" %></p>
+    <p class="submit actions"><%= hidden_field_tag :show, 'character_relationships' %><%= submit_tag "Go" %></p>
   </fieldset>
   <% end %>
-  </div>
+
 <% end %>
 
 <% if @tags && @tags.empty? %>
@@ -42,7 +48,7 @@ get started. (Note: to associate relationships with characters, first choose a f
 <% elsif @tags %>
   <%= will_paginate @tags %>
   <%= form_tag url_for(:controller => 'tag_wranglings', :action => 'wrangle'), :method => :post, :id => 'wrangulator' do %>
-  <div class="module">
+
   <fieldset>
   <legend>Assign and Mass Select</legend>
   <dl>
@@ -51,18 +57,19 @@ get started. (Note: to associate relationships with characters, first choose a f
       <dd><%= select_tag :media, options_for_select(@media_names) %></dd>
     <% elsif params[:show] == "character_relationships" %>
       <dt><%= label_tag :character_string, ts("Wrangle to Character") %></dt>
-      <dd><%= text_field_tag 'character_string', params[:character_string], autocomplete_options("character", :autocomplete_token_limit => 1) %></dd>
+      <dd title="wrangle to character"><%= text_field_tag 'character_string', params[:character_string], autocomplete_options("character", :autocomplete_token_limit => 1) %></dd>
     <% else %>
       <dt><%= label_tag :fandom_string, ts("Wrangle to Fandom") %></dt>
-      <dd><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
+      <dd title="wrangle to fandom"><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
     <% end %>
   </dl>
   </fieldset>
+ 
   <fieldset>
     <legend>Submit</legend>
-    <p class="submit"><%= submit_tag "Wrangle" %></p>
+    <p class="submit actions"><%= submit_tag "Wrangle" %></p>
   </fieldset>
-</div>
+
 
 	<fieldset class="table">
 		<legend>Choose tags from a table</legend>
@@ -74,17 +81,18 @@ get started. (Note: to associate relationships with characters, first choose a f
     <col class="name" />
     <col span="4" />
   </colgroup>
-  <thead>
+  <thead role="navigation">
     <tr>
       <th scope="col">
         <%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
       </th>
       <th scope="col">
         Mass Wrangle
+        <% # FRONT END THESE BUTTONS NEED REVIEW %>
         <a class="action" id="wrangle_all_select">All</a>
         <a class="action" id="wrangle_all_deselect">None</a></span></dd>        
       </th>
-      <th scope="col">
+      <th scope="col" title="sort by">
         <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
       </th>
       <% if params[:show] == 'character_relationships' %>
@@ -95,8 +103,8 @@ get started. (Note: to associate relationships with characters, first choose a f
         <a class="action" id="canonize_all_select">All</a>
         <a class="action" id="canonize_all_deselect">None</a>
       </th>
-      <th scope="col">
-        <%= sort_link ts('Taggings Count'), :taggings_count, {:desc_default => true} %>
+      <th scope="col" title="sort by">
+        <%= sort_link ts('Taggings'), :taggings_count, {:desc_default => true} %>
       </th>
       <th scope="col">Manage</th>
     </tr>
@@ -104,34 +112,34 @@ get started. (Note: to associate relationships with characters, first choose a f
   <tfoot>
       <tr>
         <th scope="row">Action:</th>
-        <td colspan="5"><span class="submit"><%= submit_tag "Wrangle" %></span></td>
+        <td colspan="5"><span class="submit actions"><%= submit_tag "Wrangle" %></span></td>
       </tr>
     </tfoot>
       <tbody>
         <% for tag in @tags %>
         <tr>
-          <td>
+          <td title="tag">
             <%= label_tag "selected_tags_#{tag.id}", "#{tag.name}" %>
           </td>
-          <td><%= check_box_tag "selected_tags[]", tag.id, nil, :id => "selected_tags_#{tag.id}" %></td>
-          <td><%= l(tag.created_at.to_date) %></td>
+          <td title="mass wrangle?"><%= check_box_tag "selected_tags[]", tag.id, nil, :id => "selected_tags_#{tag.id}" %></td>
+          <td title="created"><%= l(tag.created_at.to_date) %></td>
           <% if params[:show] == 'character_relationships' %>
-          <td>
+          <td title="characters">
             <% unless tag.characters.empty? %>
             <ul><%= tag_link_list(tag.characters) %></ul>
             <% end %>
           </td>
           <% end %>
-          <td>
+          <td title="canonical?">
             <% if tag.canonical? %>
               Yes
             <% else %>
               <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" %>
             <% end %>
           </td>
-          <td><%= tag.taggings_count %></td>
-          <td class="navigation" role="navigation">
-            <ul class="navigation" role="navigation">
+          <td title="taggings"><%= tag.taggings_count %></td>
+          <td>
+            <ul class="navigation actions" role="navigation">
               <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li>
               <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li>
               <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>

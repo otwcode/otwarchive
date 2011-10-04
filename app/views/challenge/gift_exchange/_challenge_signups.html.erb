@@ -30,7 +30,7 @@
     <% end %>
   </ul>
 <% end %>
-
+<!--FRONT END: TABLEWATCH!!-->
 <table>
   <!-- top header row showing requests and offers numbered -->
   <tr>
@@ -67,7 +67,7 @@
     <tr>
       <% unless @hide_navigation %>
         <!-- because rows can be unmanageably long, put nav at start -->
-        <td class="navigation" role="navigation">
+        <td class="navigation actions" role="navigation">
           <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
         </td>
       <% end %>

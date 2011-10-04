@@ -5,7 +5,7 @@
 
 <!--subnav-->
 <% # BACK END FIX THIS PLEASE SHOULD SHOW THE PAGE WE'RE ON AND MOVE NAV INTO PARTIAL %>
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
   <li><%= span_if_current ts("Edit My Profile"), edit_user_path(@user) %></li>
   <li><%= span_if_current ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
   <li><%= span_if_current ts("Change User Name"), change_username_user_path(@user) %></li>
@@ -30,7 +30,7 @@
     <dt><%= label_tag :email_confirmation, ts("Confirm New Email") %></dt>
     <dd><%= email_field_tag :email_confirmation %></dd>
   	<dt class="landmark"><%= label_tag :submit, ts("Submit") %></dt>
-	<dd class="submit">
+	<dd class="submit actions">
     <%= submit_tag "Change Email" %>
   </dd>
 </dl>

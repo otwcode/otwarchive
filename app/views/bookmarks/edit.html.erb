@@ -5,7 +5,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to_new_bookmarkable_bookmark(@bookmark.bookmarkable) if @bookmark.bookmarkable %></li>
 <% if params[:existing] && @bookmark.bookmarkable %>
   	<li><%= link_to_user_bookmarkable_bookmarks(@bookmark.bookmarkable) %></li>

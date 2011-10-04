@@ -9,12 +9,12 @@
 
   <h2><%= ts("Challenge Signups for %{user}", :user => @user.login) %></h2>
 
-<dl>
+<dl class="signup index">
     <% @challenge_signups.each do |challenge_signup| %>
-      <dt><%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup) %></dt>
-        <dd><%= link_to challenge_signup.collection.title, challenge_signup.collection %></dd>
-        <dd class="navigation" role="navigation">
-          <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
+      <dt class="byline"><%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup) %></dt>
+        <dd><%= link_to challenge_signup.collection.title, challenge_signup.collection %>
+<!--menu of actions-->
+        <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
         </dd>
     <% end %>
   </dl>

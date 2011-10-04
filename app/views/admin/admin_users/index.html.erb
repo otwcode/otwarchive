@@ -5,7 +5,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<!--BACK END, give this form the class "search?"-->
+<!--BACK END, give this form the class  and role "search?"-->
 <%= form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get do %>
 <p class="note"><%= ts("Search for a user by username, pseud or email, or search by role") %></p>
 <dl>
@@ -14,7 +14,7 @@
     <dt><%= label_tag "role", ts("Role") %></dt>
       <dd><%= select_tag "role", "<option id='0' name='regular' value='0'>Regular User</option><option id='1' name='unvalidated' value='1'>Unvalidated</option>".html_safe + options_for_select(@roles.map{|role| [role.name.humanize.titlecase, role.name]}, params[:role] ? params[:role] : nil) %></dd>
   </dl>
-  <p class="submit"><%= submit_tag ts("Find") %></p>
+  <p class="submit actions"><%= submit_tag ts("Find") %></p>
 <% end %>
 <div class="clear"><!--presentational, phase me out--></div>
 <% if @users %>

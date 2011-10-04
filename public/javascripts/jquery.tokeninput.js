@@ -307,7 +307,7 @@ $.TokenList = function (input, url_or_data, settings) {
     var first_dropdown_item = null;
 
     // The list to store the token items in
-    var token_list = $("<ul />")
+    var token_list = $("<ul role=\"listbox\" aria-activedescendant=\"ui-active-menuitem\"/>")
         .addClass(settings.classes.tokenList)
         .click(function (event) {
             var li = $(event.target).closest("li");
@@ -342,7 +342,7 @@ $.TokenList = function (input, url_or_data, settings) {
     }
 
     // The token holding the input box
-    var input_token = $("<li />")
+    var input_token = $("<li role=\"menuitem\" />")
         .addClass(settings.classes.inputToken)
         .appendTo(token_list)
         .append(input_box);

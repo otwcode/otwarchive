@@ -2,7 +2,7 @@
   <!--Descriptive page name, messages and instructions-->
   <h2>Restricted Works</h2>
 
-  <ul>
+  <ul class="work index">
     <% for work in @works %>
       <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
       <li class="blurb">

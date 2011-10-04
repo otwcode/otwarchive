@@ -19,15 +19,14 @@
     # works by others that inspired foo
     # this should be four listboxes
   %>
-  
   <table id="translationsofme">
     <thead>
       <tr>
         <th>Translation</th>
-        <th class="translationwidth">Original</th>
-        <th class="translationwidth">Language</th>
+        <th>Original</th>
+        <th>Language</th>
         <% if current_user == @user %>
-        <th class="translationwidth">Approve/remove link</th>
+        <th>Approve/remove link</th>
         <% end %>
       </tr>
     </thead>
@@ -60,7 +59,7 @@
  
 <% unless @translations_by_user.blank? %>  
   <h3>Works translated by <%= @user.login %></h3>
-  <dl class="own translations">
+  <dl class="own translations index">
     <% @translations_by_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
       <dt>
@@ -88,17 +87,17 @@
 <dl class="inspired index">
     <% @remixes_of_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
-      <dt>
+      <dt class="child">
         <% if related_work.work.unrevealed? %>
           <%= "A work in an unrevealed challenge" %>
         <% else %>
           <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %></dt>
-          <dd>was inspired by <%= link_to related_work.parent.title.html_safe, related_work.parent %>
+          <dd class="parent">was inspired by <%= link_to related_work.parent.title.html_safe, related_work.parent %>
           <% if current_user == @user %>
             <% if related_work.reciprocal? %>
-              <span class="submit"><%= link_to "Remove", related_work %></span>
+              <span class="submit actions"><%= link_to "Remove", related_work %></span>
             <% else %>
-             <span class="submit"><%= link_to "Approve", related_work %></span>
+             <span class="submit actions"><%= link_to "Approve", related_work %></span>
             <% end %>
           <% end %>
         <% end %>
@@ -114,18 +113,18 @@
     <% @remixes_by_user.each do |related_work| %>
       <% unless related_work.translation? %>
         <% if related_work.parent && related_work.work %>
-          <dt>            
+          <dt class="parent">            
             <% if related_work.work.unrevealed? || related_work.work.anonymous? %>
               <%= ts("A work in an unrevealed or anonymous challenge") %>
             <% else %>
               <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>
             <% end %>
           </dt>
- 		      <dd>
+ 		      <dd class="child">
  		        <%= ts("inspired") %>
             <%= link_to related_work.work.title, related_work.work %>
             <% if current_user == @user %>
-            <span class="navigation" role="navigation"><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></span>
+            <span class="actions" role="button"><%= link_to "Remove", {:controller => :related_works, :action => :destroy, :id => related_work.id},  :confirm => ts('Are you sure?'), :method => :delete %></span>
             <% end %>
           </dd>
         <% end %>

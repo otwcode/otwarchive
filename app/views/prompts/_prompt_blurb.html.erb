@@ -1,0 +1,51 @@
+<li class="<% if is_author_of?(prompt) %>own <% end %>prompt blurb" role="article">
+  <div class="header module">
+    <h4 title="title">
+      <%= prompt.title %>
+      <%= ts("by %{person}", :person => prompt.anonymous? ? "Anonymous" : prompt.pseud.byline) %>
+    </h4>
+
+    <% tag_groups = prompt.tag_groups %>
+    <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
+
+    <% # eventually we should let mod specify topmost tag type to display -- ie chars and rels for single-fandom meme, freeforms for single-relationship meme  %>
+	  <h5 title="fandom">
+      <%= tag_groups['Fandom'].collect{|tag| link_to_tag(tag) }.join(', ').html_safe if tag_groups['Fandom'] %>
+		  &nbsp;
+	  </h5>
+
+    <!--required tags-->
+	  <%= get_symbols_for(prompt, tag_groups) %>
+	  <p class="datetime"><%= set_format_for_date(prompt.revised_at) %></p>
+  </div>
+    
+  <h6 class="landmark">Tags</h6>  
+  <ul class="tags">
+    <%= blurb_tag_block(work, tag_groups) %>
+    <% unless any_types.empty? %>
+      <%= any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize), :class => "tag") }.html_safe %>
+    <% end %>
+  </ul>
+  <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
+    <p>Optional:</p>
+    <ul class="tags">
+      <%= tag_link_list(prompt.optional_tag_set.tags, link_to_works=true) %>
+    </ul>
+  <% end %>
+    
+  <% unless prompt.description.blank? %>
+    <h6 class="landmark">Summary</h6>
+    <blockquote class="userstuff summary" title="prompt">
+      <%=raw sanitize_field(prompt, :description) %>
+    </blockquote>
+  <% end %>
+
+  <% unless prompt.url.blank? %>
+    <p>
+      <% url_label = prompt.collection.challenge.send("request_url_label") %><%= url_label.blank? ? ts("URL") : url_label %>:
+      <%= link_to(prompt.url, prompt.url) %>
+    </p>
+  <% end %>   
+
+  <%= render "prompts/prompt_controls", :challenge_signup => prompt.challenge_signup, :prompt => prompt %>
+</li>

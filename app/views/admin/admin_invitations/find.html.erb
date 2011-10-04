@@ -15,7 +15,7 @@
     <dt><%= label_tag :invitee_email, t('.find_email', :default => 'Enter all or part of an email address:') %></dt>
     <dd><%= text_field_tag :invitee_email, params[:invitee_email]  %></dd>    
   </dl>
-  <p class="submit"><%= submit_tag "Go" %></p>
+  <p class="submit actions"><%= submit_tag "Go" %></p>
 <% end %>
 
 <% if @user %>

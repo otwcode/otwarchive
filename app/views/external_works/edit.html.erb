@@ -21,13 +21,13 @@
         <%= f.label :summary, ts("Author's Summary") %>
         <%= ts("(please copy and paste from original work)") %></dt>
         <dd>
-          <%= f.text_area :summary, :rows => 5, :class => "summary-field observe_textlength"%>
+          <%= f.text_area :summary, :rows => 5, :class => "observe_textlength"%>
           <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) %>
         </dd>
       </dl>
     </fieldset>
 
     <%= render :partial => 'works/work_tags_form', :locals => {:work => @external_work, :include_blank => false} %>
-    <p class="submit"><%= f.submit %></p>
+    <p class="submit actions"><%= f.submit %></p>
   <% end %>
 </div>

@@ -1,6 +1,6 @@
 <!-- BEGIN navigation -->
 <h3 class="landmark">Actions</h3>
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="menu">
   <% if is_author_of?(@work) %>
     <li><%= link_to ts("Add Chapter"), new_work_chapter_path(@work) %></li>
     <li><%= link_to ts("Edit"), edit_work_path(@work) %></li>
@@ -21,19 +21,23 @@
       <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
     <% end %>
     
-    <li class="chapter">
-      <%= link_to 'Chapter Index', navigate_work_path(@work), :class => "subnav_toggle" %>
-      <ul class="subnav" style="display:none">
+    <li class="chapter" aria-haspopup="true">
+      <noscript>
+        <%= link_to ts('Chapter Index'), navigate_work_path(@work) %>
+      </noscript>
+      <a class="chapter_index_open open hidden"><%= ts('Chapter Index') %></a>
+      <a class="chapter_index_close close hidden"><%= ts('Chapter Index') %></a>
+      <ul id="chapter_index" class="toggled hidden secondary">
         <li>
           <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
             <p>
               <%= select_tag :selected_id, options_from_collection_for_select(@chapters, :id, :abbreviated_display_title, params[:id].to_i) %>
-              <span class="submit"><%= submit_tag "Go" %></span>
+              <span class="submit actions"><%= submit_tag "Go" %></span>
             </p>
           <% end %>
         </li>
-		<li><%= link_to 'Full-page index', navigate_work_path(@work) %></li>
-        <li><a class="subnav_toggle close" style="cursor: pointer;" title="Close Chapter Index">X</a></li>
+		    <li><%= link_to 'Full-page index', navigate_work_path(@work) %></li>
+        <li><a class="chapter_index_close close" style="cursor: pointer;" title="Close Chapter Index">X</a></li>
       </ul>
     </li>
   <% elsif @chapters %>
@@ -44,7 +48,7 @@
   <% # for users, bookmark and mark to read later %>
   <% if current_user.is_a?(User) %>
     <% @bookmark ||= bookmark_if_exists(@work) %>
-    <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
+    <li><%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
 
     <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
       <li><%= marktoread_link(@work) %></li>
@@ -53,7 +57,7 @@
 
   <li><%= link_to "Comments", (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
 
-  <!-- allow user to disable style on work if it has been customized -->
+<!-- allow user to disable style on work if it has been customized -->
   <% if @work.work_skin %>
     <li>
       <% if Preference.disable_work_skin?(params[:style]) %>
@@ -76,7 +80,7 @@
       <% else %>
         <!-- twitter, tumblr buttons go here -->
         <p>
-          <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="ao3org" data-text="<%= @tweet_text %>" data-url="<%= work_url(@work) %>">Tweet</a>
+          <a href="http://twitter.com/share" class="twitter" data-count="horizontal" data-via="ao3org" data-text="<%= @tweet_text %>" data-url="<%= work_url(@work) %>">Tweet</a>
           <% content_for :footer_js do %>
             <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
           <% end %>
@@ -85,14 +89,15 @@
     </div>
   </li>
 
-  <li>
-    <a title="Download" class="subnav_toggle"><%= ts("Download") %> &#8595;</a>
-    <ul class="hideme subnav">
+  <li aria-haspopup="true">
+    <a title="Download" class="downloads_open open"><%= ts("Download") %> &#8595;</a>
+    <a title="Download Close" class="downloads_close close hidden"><%= ts("Download") %> &#8595;</a>
+    <ul id="downloads" class="toggled secondary">
       <li><%= link_to ts("MOBI"), download_url_for_work(@work, "mobi") %></li>
       <li><%= link_to ts("EPUB"), download_url_for_work(@work, "epub") %></li>
       <li><%= link_to ts("PDF"), download_url_for_work(@work, "pdf") %></li>
       <li><%= link_to ts("HTML"), download_url_for_work(@work, "html") %></li>
-      <li><a class="subnav_toggle close" style="cursor: pointer;" title="Close Download Options">X</a></li>
+      <li><a class="downloads_close close hidden" style="cursor: pointer;" title="Close Download Options">X</a></li>
     </ul>
   </li>
 </ul>

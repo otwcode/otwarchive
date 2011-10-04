@@ -2,21 +2,21 @@
 <% if params[:work_id] %>
   <%= render 'works/work_blurb', :work => @bookmarkable %>
 <% elsif params[:external_work_id] %>
-  <%= render 'external_works/external_work_blurb', :external_work => @bookmarkable %>
+  <%= render 'external_works/blurb', :external_work => @bookmarkable %>
 <% elsif params[:series_id] %>
-  <%= render :partial => 'series/series_blurb', :series => @bookmarkable %>
+  <%= render 'series/series_blurb', :series => @bookmarkable %>
 <% end %>
 
 <% if params[:show_recent] %>
   <% # The javascript expanded view that shows more bookmarks for a particular work on an aggregated view %>  
   <% # because this isn't rendered inside the index view we need to put a ul around it %>
   <ul class="recent">
-    <% @bookmarks.each do |bookmark| %><%= render 'bookmarks/bookmark_blurb_user_info', :bookmark => bookmark %><% end %>
+    <% @bookmarks.each do |bookmark| %><%= render 'bookmarks/bookmark_blurb_short', :bookmark => bookmark %><% end %>
   </ul>
 
 <% elsif @bookmarkable %>
   <% # show only partial view for each bookmark since the bookmarked object is already shown above %>
-  <% @bookmarks.each do |bookmark| %><%= render 'bookmarks/bookmark_blurb_user_info', :bookmark => bookmark %><% end %>
+  <% @bookmarks.each do |bookmark| %><%= render 'bookmarks/bookmark_blurb_short', :bookmark => bookmark %><% end %>
 
 <% else %>
   <% # Standard bookmarks index with full blurb %> 

@@ -1,4 +1,4 @@
-<!--descriptive page name and system messages, descriptions, and instructions.-->
+<!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
 <h2>
   <% if @most_recent_bookmarks %>
     <%= ts("Recent") %>
@@ -17,7 +17,7 @@
 
 <!--subnav-->
 <h3 class="landmark">Actions</h3>
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
   <% if current_user.is_a?(User) %>
     <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
   <% end %>

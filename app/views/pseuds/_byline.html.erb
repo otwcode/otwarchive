@@ -1,6 +1,8 @@
 <!-- Co-Author stuff -->
 
-<dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' %>>
+<!-- BACK END: this style="display:none" is throwing errors on the page: an attribute value must be a literal unless it contains only name characters: dt class="byline" style=&quot;display: none;&quot;-->
+  
+  <dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' %>>
   <%= label_tag "#{type}_author_attributes_ids_", ts("Author / Pseud(s)") %>
 </dt>
 <dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' %>>
@@ -30,7 +32,8 @@
 </dt>
 <dd class="byline coauthors">
   <%= check_box_tag "co-authors-options-show", "1", nil, :class => "toggle_formfield" %>
-</dd>
-<dd id="co-authors-options">
-<!--BACK END, please title this input as "co-authors"--><%= text_field :pseud, :byline, autocomplete_options("pseud", :size => 50) %>
+
+<fieldset id="co-authors-options" title="Add Co Authors">
+<%= text_field :pseud, :byline, autocomplete_options("pseud", :size => 50) %>
+</fieldset>
 </dd>

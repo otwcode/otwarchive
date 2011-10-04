@@ -69,14 +69,15 @@
          # and should probably be done via an Anonymous user like the Orphan user.  
       %>
       <dt>
-        <%= form.label :anonymous, ts("Semi-anonymous prompt (note, this is not totally secure, and is still guessable in some places): ") %>
+        <%= form.label :anonymous, ts("Semi-anonymous prompt (not secure): ") %>
         <% if form.object.new_record? %>
-          <% anon = @challenge.anonymous %>
+        <% anon = form.object.anonymous %>
         <% else %>
           <% anon = form.object.anonymous %>
         <% end %>
       </dt>
-      <dd><%= form.check_box :anonymous, :checked => anon %></dd>
+      <dd><%= form.check_box :anonymous, :checked => anon %>
+	<p class="footnote">(note, this is not totally secure, and is still guessable in some places)</p></dd>
     <% end %>
 
     <% unless required %>
@@ -95,7 +96,7 @@
      
   </dl>
   <% unless required %>
-    <p class="navigation actions" role="navigation"><%= link_to_remove_section(ts("Remove?"), form) %></p>
+    <p class="actions" role="button"><%= link_to_remove_section(ts("Remove?"), form) %></p>
   <% end %>
 </fieldset>
 </div>

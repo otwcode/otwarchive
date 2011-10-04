@@ -20,7 +20,7 @@
       <%= render 'user_sessions/greeting' %>
     <% else %>
       <%= render 'user_sessions/login' %>
-      <p class="navigation" role="navigation">
+      <p class="actions" role="menu">
   			<a class='small_login_open hidden'><%= ts("Log in") %></a> 
   			<a class='small_login_close hidden'><%= ts("Cancel") %></a>
   		</p>
@@ -28,11 +28,11 @@
   </div>
 
   <h1>
-    <%= link_to image_tag('logo-stroke.png', :alt => "#{ArchiveConfig.APP_NAME} (BETA)"), root_path %>
+    <%= link_to image_tag('/images/ao3_logos/logo-stroke.png', :alt => "#{ArchiveConfig.APP_NAME} (BETA)"), root_path %>
   </h1>
 
   <h3 class="landmark">Site Navigation</h3>
-  <ul class="main navigation" role="navigation">
+  <ul class="main navigation actions" role="navigation">
     <li><%= logged_in? ? span_if_current('my home', user_path(current_user)) : span_if_current('home', root_path) %></li>
     <li><%= span_if_current('fandoms', media_path) %></li>
     <li><%= span_if_current('works', works_path) %></li>
@@ -40,7 +40,7 @@
     <li><%= span_if_current('bookmarks', bookmarks_path) %></li>
     <li><%= span_if_current('tags', tags_path) %></li>
     <li><%= span_if_current('collections', collections_path) %></li>
-	  <li class="search"><%= render :partial => 'works/search_box' %></li>
+	<li class="search"><%= render :partial => 'works/search_box' %></li>
   </ul>
 
   <% if logged_in_as_admin? %>

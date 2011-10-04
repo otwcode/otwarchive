@@ -3,8 +3,8 @@
 <%= render :partial => 'tags/search_form' %>
 
 <% if @tags %>
-  <p><strong><%= @tags.total_entries %> Found</strong><%= link_to_help "tag-search-results-help" %></p>
-  <h3 class="landmark">Tags List</h3>
+  <h3><%= @tags.total_entries %> Found <%= link_to_help "tag-search-results-help" %></h3>
+  <h4 class="landmark">Listing Tags</h4>
   <ol class="tag index">
     <% for tag in @tags %>
       <% unless tag.nil? %>

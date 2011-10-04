@@ -1,4 +1,4 @@
-<!--Descriptive page name, messages and instructions-->
+<!--ZONE- TAGS, ZONE HOME? Descriptive page name, messages and instructions-->
 <h2>Fandoms in need of a wrangler</h2>
 <!--/descriptions-->
 
@@ -6,7 +6,7 @@
 <%= will_paginate(@fandoms) %>
 
 <!--sorting subnav-->
-<ul class="sorting navigation" role="navigation">
+<ul class="sorting actions" role="menu">
   <li><h4><%= ts('Sort By') %></h4></li>
   <li><%= link_to ts('Name'), unassigned_fandoms_path %></li>
   <li><%= link_to ts('Work Count'), unassigned_fandoms_path(:sort => :count) %></li>
@@ -30,14 +30,14 @@
 <!--subnav-->
 <h3 class="landmark"><%= ts('Filters') %></h3>
 <%= form_tag unassigned_fandoms_path, :class => 'filters', :method => :get do %>
-  <dl class="filters">
+  <dl class="filters" role="menu">
     <dt>Filter by Media</dt>
     <dd>
       <p>Show only:</p>
       <%= select_tag :media_id, options_for_select([''] + Media.canonical.by_name.map{|m| m.name}, params[:media_id]) %>
     </dd>
   </dl>
-  <p class="submit"><%= submit_tag 'Go' %></p>  
+  <p class="submit actions"><%= submit_tag 'Go' %></p>  
 <% end %>
 <div class="clear"><!--presentational, phase me out--></div>
 <h3 class="landmark">Next Page</h3>

@@ -5,7 +5,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
   <li><%= link_to ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
   <li><%= link_to ts("Change User Name"), change_username_user_path(@user) %></li>
   <li>
@@ -51,7 +51,7 @@
           <%= generate_countdown_html("profile_attributes_about_me", Profile::ABOUT_ME_MAX) %>
         </dd>
   		<dt class="landmark"><%= p.label :update, "Update" %></dt>
-  		<dd class="submit"><%= f.submit "Update" %></dd>
+  		<dd class="submit actions"><%= f.submit "Update" %></dd>
     <% end %>
   </dl>
 

@@ -1,7 +1,7 @@
 <!--Descriptive page name, messages and instructions-->
 <h2><%= ts('Orphan Work') %></h2>
 
-<p>
+<p class="caution">
 <%= ts('Are you sure you want to') %>
 <strong><%= ts("permanently")%></strong>
 <%= ts('remove all identifying data from your work ') + work.title.html_safe + ts(', its chapters, associated series and any feedback replies you may have left on it?') %>
@@ -17,7 +17,7 @@
   <%= render :partial => 'orphans/choose_pseud' %>
   
   <p><%= hidden_field_tag 'work_id', work.id %></p>
-  <p class="submit"><%= submit_tag ts("Yes, I'm sure") %></p>
+  <p class="submit actions"><%= submit_tag ts("Yes, I'm sure") %></p>
 <% end %>
 <!--/content-->
 

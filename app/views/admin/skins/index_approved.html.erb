@@ -7,8 +7,6 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark"><%= ts('Manage Skins') %></h3>
-
 <%=  form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :put} do %>
 
   <!-- review of approved skins -->
@@ -16,26 +14,31 @@
     <legend><%= ts('Approved Skins') %></legend>
     <h3><%= ts('Approved Skins') %></h3>
 
-    <table id="approved">
-      <tr>
-        <th><%= ts('Skin') %></th>
-        <th><%= ts('Type') %></th>
-        <th><%= ts('Creator') %></th>
-        <th><%= ts('Admin Note') %></th>
-        <th><%= ts('Unapprove') %></th>
+    <table id="approved" summary="">
+      <caption></caption>
+      <thead>
+        <tr>
+        <th scope="col"><%= ts('Skin') %></th>
+        <th scope="col"><%= ts('Type') %></th>
+        <th scope="col"><%= ts('Creator') %></th>
+        <th scope="col"><%= ts('Admin Note') %></th>
+        <th scope="col"><%= ts('Unapprove') %></th>
       </tr>
+    </thead>
+    <tbody>
       <% @approved_skins.each_with_index do |skin, i| %>
         <tr>
-          <td><%= link_to skin.title, skin_path(skin) %></td>
+          <th scope="row"><%= link_to skin.title, skin_path(skin) %></th>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
           <td><%=h skin.admin_note %></td>
           <td><%= check_box_tag "make_unofficial[]", skin.id, false, :id => "make_unofficial_#{skin.title.downcase.gsub(/ +/, '_')}" %></td>
         </tr>
       <% end %>
+    </tbody>
     </table>
   </fieldset>
 
-  <p class="submit"><%= submit_tag "Update" %></p>
+  <p class="submit actions"><%= submit_tag "Update" %></p>
 
 <% end %>

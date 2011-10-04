@@ -35,7 +35,7 @@
 
   <fieldset>
     <legend><%= t('.post_work', :default => 'Post Work') %></legend>
-    <p class="submit">
+    <p class="submit cancel edit actions">
   	<% if @work.posted? %>
   		<%= submit_tag t('.forms.update', :default => 'Update'), :name => 'update_button' %>
   	<% else %>

@@ -1,3 +1,4 @@
+<!--BACK END, would love system docs to be classes of main-->
 <div class="system docs">
 	<h2>Archive Pages</h2>
 
@@ -19,6 +20,11 @@
   that you can see, or make a new object.
 </p>
 
+<h4>Pages</h4>
+<ul>
+  <%= @paths.sort {|a,b| a[0] <=> b[0]}.map {|path, name| content_tag(:li, link_to("#{path}  (#{name})", path))}.join("\n").html_safe %>
+</ul>
+
 <% unless @errors.empty? %>  
   <h4>Errors</h4>
   <p class="notes">
@@ -31,8 +37,5 @@
   </ul>
 <% end %>
 
-<h4>Pages</h4>
-<ul>
-  <%= @paths.sort {|a,b| a[0] <=> b[0]}.map {|path, name| content_tag(:li, link_to("#{path}  (#{name})", path))}.join("\n").html_safe %>
-</ul>
+
 </div>

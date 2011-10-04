@@ -16,22 +16,26 @@
     <legend><%= ts('Approval Queue') %></legend>
     <h3><%= ts('Approval Queue') %></h3>
 
-    <table id="unapproved">
-      <tr>
-        <th>Skin</th>
-        <th>Type</th>
-        <th>Creator</th>
-        <th>Preview</th>
-        <th>Description</th>
-        <th>Admin Note</th>
-        <th>Approve</th>
-        <th>Reject</th>
+    <table id="unapproved" summary="">
+      <caption></caption>
+      <thead>
+        <tr>
+        <th scope="col">Skin</th>
+        <th scope="col">Type</th>
+        <th scope="col">Creator</th>
+        <th scope="col">Preview</th>
+        <th scope="col">Description</th>
+        <th scope="col">Admin Note</th>
+        <th scope="col">Approve</th>
+        <th scope="col">Reject</th>
       </tr>
+    </thead>
+      <tbody>
       <% @unapproved_skins.each_with_index do |skin, i| %>
         <tr>
-          <td>
+          <th scope="row">
             <%= label_tag "make_official_#{skin.id}", (link_to skin.title, skin_path(skin)) %>
-          </td>
+          </th>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
           <td><%= skin_preview_display(skin) %></td>
@@ -47,10 +51,11 @@
           </td>
         </tr>
       <% end %>
+    </tbody>
     </table>
   </fieldset>
 
-  <p class="submit"><%= submit_tag "Update" %></p>
+  <p class="submit actions"><%= submit_tag "Update" %></p>
 
 <% end %>
 

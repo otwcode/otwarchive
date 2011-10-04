@@ -58,10 +58,10 @@
   <!--/main-->
 
   <% unless chapter.endnotes.blank? %>
-    <div class="chapter preface footnote module" id="chapter_<%= chapter.position.to_s %>_endnotes">
+    <div class="chapter preface"><div class="end notes module" id="chapter_<%= chapter.position.to_s %>_endnotes" role="complementary">
      <h3><%=h ts('Notes:') %></h3>
         <blockquote class="userstuff"><%=raw sanitize_field(chapter, :endnotes) %></blockquote>
-    </div>
+    </div></div>
   <% end %>
   
 </div>

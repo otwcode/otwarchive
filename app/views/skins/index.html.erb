@@ -2,9 +2,9 @@
 
 <p class="notes">
   <% if params[:work_skins] %>
-    A work skin lets you customize the way your stories look for other readers. 
+    With work skins you can customize the way your own works are shown to viewers. 
   <% else %>
-    A site skin lets you change the way the archive looks in your browser and customize your reading experience.
+    With site skins you can customize <abbr title="Archive Of Our Own">AO3</abbr> for your own browser.
   <% end %>
   <%= link_to_help "skins-basics" %>
 </p>
@@ -16,10 +16,10 @@
 <% if @skins.empty? %>
   <p>
     No <%= params[:work_skins] ? "work" : "site" %> skins here yet! 
-    <% if logged_in? %>Why not try and <%= link_to ts('make one'), new_skin_path(:skin_type => params[:work_skins] ? "WorkSkin" : "Skin") %>?<% end %>
+    <% if logged_in? %>Why not try <%= link_to ts('making one'), new_skin_path(:skin_type => params[:work_skins] ? "WorkSkin" : "Skin") %>?<% end %>
   </p>
 <% else %>
-  <ul class="skins picture index">
+  <ul class="skins index">
   <% for skin in @skins %>
     <li class="skins <% if skin.editable? %>own<% end %> picture blurb">
       <div class="header module">
@@ -39,11 +39,13 @@
           <% end %>
         <% end %>
         <div class="icon"><%= skin_preview_display(skin) %></div>
+		<p class="datetime"><%= set_format_for_date(skin.created_at) %></p>
       </div>
       
       <!--summary/descriptions-->
       <h6 class="landmark">Description</h6>
       <blockquote class="userstuff summary">
+	<!--BACK END:  please enclose the text "No Description Provided" in <p>-->
         <%=raw skin.description.blank? ? h(ts("(No Description Provided)")) : strip_images(sanitize_field(skin, :description)) %>
       </blockquote>
     

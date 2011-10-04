@@ -1,17 +1,20 @@
 <!--Descriptive page name, messages and instructions-->
 <h2><%= ts("Import New Work") %> <%= link_to_help 'work-import'%></h2>
 <%= error_messages_for :work %>
-	<p class="important message">
+	<div class="notice">
+	  <p class="important">
     <strong><%= ts("Please note!") %></strong>   
-    <%= ts("We cannot always automatically import works. If you have trouble, ") %> 
+    <%= ts("This doesn't always work. If you have trouble, ") %> 
     <%= link_to ts("please let us know"), new_feedback_report_path %>
     <%= ts("so we can improve this tool!") %>
   </p> 
+  <p>You might find the <a href="http://archiveofourown.org/archive_faqs/9">Import <abbr title="frequently asked questions">FAQ</abbr></a> useful.</p>
+</div>
 
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="actions" role="menu">
   <% if @unposted %>
     <li id='restore-link'>
       <%= link_to ts('Restore From Last Unposted Draft?'), url_for(:action => :new, :load_unposted => true) %>
@@ -73,7 +76,7 @@
 
   <li>
     <%= check_box_tag "override_tags" %>
-    <%= label_tag "override_tags", ts("Set the tags below on all stories, overriding whatever the importer finds.") %>
+    <%= label_tag "override_tags", ts("Set the following tags on all stories, overriding whatever the importer finds.") %>
   </li>
 </ul>
 </dd>
@@ -84,7 +87,7 @@
 
 <fieldset>
   <legend><%= "Submit" %></legend>
-  <p class="submit">
+  <p class="submit actions">
   <%= submit_tag ts("Import") %>
   </p>
 </fieldset>

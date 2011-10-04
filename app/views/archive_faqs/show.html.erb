@@ -3,14 +3,14 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to t('.back_to_archive_faq_text', :default => 'Back to Archive FAQ'), archive_faqs_path %></li>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
 <div class="admin" role="article">
-  <div class="admin-header">
+  <div class="header">
     <h3>
       <%= @archive_faq.title %>
     </h3>
@@ -20,7 +20,7 @@
       </h4>
     <% end %>
   </div>
-  <div class="admin-content userstuff">
+  <div class="body userstuff">
     <%=raw sanitize_field(@archive_faq, :content) %>
   </div>
 </div>

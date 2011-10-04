@@ -27,10 +27,18 @@ module ApplicationHelper
     current_page?(path) ? "<span class=\"current\">#{link}</span>".html_safe : link
   end
   
+#BACK END, can we move this hardcoded image out and replace with
+#<a href="" title="subscribe to feed" class="rss"><span>Subscribe with RSS</span></a>
+
   def link_to_rss(link_to_feed)
-    link_to (ts("Subscribe with RSS ") + image_tag("feed-icon-14x14.png", :size => "14x14", :alt => "")).html_safe , link_to_feed, :class => "rsslink"
+    link_to (ts("Subscribe with RSS ") + image_tag("/images/skins/iconsets/default/rss.png", :size => "14x14", :alt => "")).html_safe , link_to_feed, :class => "rss"
   end
   
+#BACK END, suggest 3 levels: 
+#1: default showing just the link to help
+#2: text: plain text with limited html and link to help
+#3 text: plain text and limited html, link to help, list of allowed html
+
   def allowed_html_instructions(show_list = false)
     h(ts("Plain text with limited html")) + 
     link_to_help("html-help") + (show_list ? 
@@ -158,7 +166,7 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
     
-    link_to_ibox(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question").html_safe
+    " ".html_safe + link_to_ibox(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question").html_safe
   end
   
   # Inserts the flash alert messages for flash[:key] wherever 
@@ -174,10 +182,10 @@ module ApplicationHelper
   # The resulting HTML will look like this:
   #       <div class="flash error">OMG ERRORZ AIE</div>
   #
-  # The CSS classes are specified in archive_core.css.
+  # The CSS classes are specified in system-messages.css.
   #
   # You can also have multiple possible flash alerts in a single location with:
-  #       <%= flash_div :error, :warning, :notice %>
+  #       <%= flash_div :error, :caution, :notice %>
   # (These are the three varieties currently defined.) 
   #
   def flash_div *keys
@@ -192,7 +200,7 @@ module ApplicationHelper
     }.join.html_safe
   end
 
-  # Gets an error for a given field if it exists. 
+  # Gets an error for a given field if it exists. BACK END pls explain this to lim
   def flash_field(fieldname)
     if flash[fieldname]
       content_tag(:span, h(flash[fieldname]), :class => "fielderror").html_safe
@@ -255,6 +263,7 @@ module ApplicationHelper
     params.reject{|k,v| k == name}
   end
 
+  #BACK END note: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max) 
     generated_html = "<p class=\"character_counter\">".html_safe
     generated_html += ("<span id=\"#{field_id}_counter\" data-maxlength=\"" + max.to_s + "\">" + max.to_s + "</span>").html_safe
@@ -328,7 +337,7 @@ module ApplicationHelper
   
   def mailto_link(user, options={})
     "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_NAME}]#{options[:subject]}\" class=\"mailto\">
-      <img src=\"/images/envelope_icon.gif\" alt=\"#{h(user.login)}'s email\">
+      <img src=\"/images/envelope_icon.gif\" alt=\"email #{h(user.login)}\">
     </a>".html_safe
   end
 

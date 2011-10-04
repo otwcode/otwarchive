@@ -5,7 +5,7 @@ speak: no-punctuation
 em {
 voice-stress: moderate;
 }
-strong, .warning {
+strong, .warnings, .caution {
 voice-stress: strong;
 }
 cite {

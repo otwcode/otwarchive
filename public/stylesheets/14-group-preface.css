@@ -1,0 +1,33 @@
+/*==GROUP: PREFACE 
+-title, notes and footnotes, description, collections faq, rules, etc; 
+basically user notes, describing a work, collection, or challenge
+here we style headings and containers, and container contexts
+blockquote contents (the user-written notes) are styled in userstuff.css like all other user content
+.preface appears within #workskin on a work page
+*/
+
+div.preface
+        { margin: 1.5em 3em; padding: 0.643em 0.643em 0; float:none; }
+div.preface .module      
+        { float:none; margin:0; padding:0;  width:auto; border:0; }
+.chapter .preface
+        { border-top: 1px solid;}
+.preface .summary h3, .notes h3        
+        { background: transparent; border-bottom: 1px solid; }
+div.preface .title
+        { font-variant:small-caps; border-bottom:0; clear: right;}
+div.preface .title, div.preface .byline, div.preface .byline a
+        { border: 0; text-align: center; text-decoration: none }
+.preface a:hover         
+        { text-decoration: underline }
+.preface blockquote    
+        { border: 0 }
+div.preface .notes, div.preface .summary
+        { min-height:5em;}
+div.preface .end
+        { margin-bottom:2.5em; border-bottom:1px dotted;}
+/*CONTEXTS */
+.dashboard .preface .title
+                { clear:right;}
+
+

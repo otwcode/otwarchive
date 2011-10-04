@@ -16,6 +16,90 @@ background:purple; color:#555;}
 
 */
 
+/*OPERA 11 HEADER SEARCH V. TEMP FIX*/
+@media not screen and (1) {
+        #header fieldset {margin-bottom:-0.643em} 
+}
+
+/*TAGSET DRAFT to be integrated
+ .nominations ul li { display: inline; padding: 1em; }
+ .unwrangled { border:1px solid #900;}
+ .nonexistent {color:#111;  border: 2px dashed #aaa; padding:0.15em;}
+ .tagset .options li {position:relative; padding:0.15em; overflow:hidden}
+ .tagset .options.lots li {margin: 0 !important;}
+ .tagset .options li h5 {font-size:1.286em; margin:-0.15em;}
+ .tagset th[title="nomination"] {width:50%; max-width:18em; font-weight:normal}
+ .tagset table span.synonym {display:block;}*/
+ 
+ /*TAGSET TEMP         
+ form.tagset dd.info {border:2px solid #f3efec; box-shadow:inset 1px 0 2px #999; padding:0.375em; clear:left;}
+ fieldset.tagset ul li, .tagset .mods li {display:inline;}*/
+
+ /* challenge signup forms (see prompt_form partial esp) 
+ .tag_set_nominations-index li.odd {display: block; background:#fffef9}
+ .tagset h3, .tagset ul.options {clear:right;}
+ form.tagset h4 {float:left; clear:both}
+ .tagset table {clear:both;}
+ ul.tagset,.tagset ul.options  {border:1px solid #ddd; clear:both; padding:0.15em;}
+ #main form .tagset .navigation {float:left;}*/
+ 
+ 
+ /*CUSTOM ELEMENT: IF MANY SHOW MORE
+ should probably generalise this to all height-based show more toggles
+ NOTE: THIS LOOKS AN AWFUL LOT LIKE LISTBOX, can we generalise?*/
+ div.many, div.all
+         { border:1px solid #ddd;}
+ form .module p.actions 
+         { background:#f3efec; border:1px solid #ddd; float:none; text-align:left; margin:0 !important }
+ div.all { height: auto;}
+ form div.lots ul li, form div.all ul li 
+         { display:block;}
+ div.many ul 
+         { overflow: auto; max-height:10em;}
+         
+/* CUSTOM ELEMENT: TIMEPICKER Added for timepicker currently used on gift exchange */
+         .ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
+         .ui-timepicker-div dl{ text-align: left; }
+         .ui-timepicker-div dl dt{ height: 25px; }
+         .ui-timepicker-div dl dd{ margin: -25px 10px 10px 65px; }
+         .ui-timepicker-div td { font-size: 90%; }
+
+
+
+/*LISTBOX expand collapse with growing boxes NEEDS JAVASCRIPT as onhover is not desirable
+drafting adding class "expanded" onclick? 
+Is this a variant of show many show more or shall i put it in roles/states
+note: this does not reflow content, is reflow desirable?*/
+
+li.collapsed { height:2em; min-height:0; 
+-webkit-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;}
+li.expanded{ width:100%;height:auto;position:absolute;z-index:500;
+  -webkit-transform: scale(1.02);
+  -moz-transform: scale(1.02);
+  -o-transform: scale(1.02);
+  -ms-transform: scale(1.02);
+   box-shadow:1px 1px 3px #555;}
+   
+   
+/*QUICK EXAMPLE for shalott pls remove
+li.listbox { opacity:0.9; 
+-webkit-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;}
+li.listbox:hover{ width:92%;height:auto; opacity:1;
+  -webkit-transform: scale(1.02);
+  -moz-transform: scale(1.02);
+  -o-transform: scale(1.02);
+  -ms-transform: scale(1.02);
+   box-shadow:2px 2px 3px #777;}*/
+   
+   
+
 
 
 

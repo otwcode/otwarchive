@@ -1,3 +1,6 @@
+<% # FRONT END THIS FORM IS VERY DIFFERENT PLEASE REVIEW <3 %>
+  
+  
 <% form.object.build_tag_set unless form.object.tag_set %>
 <%= form.fields_for :tag_set do |tag_set_form| %>
   <% TagSet::TAG_TYPES.each do |tag_type| %>
@@ -14,7 +17,7 @@
         <%= num_required == num_allowed ? " (#{num_required})" : " (#{num_required} - #{num_allowed})" %>:
       </dt>
 
-      <dd>
+      <dd title="<%= ts("choose #{tag_type.pluralize}") %>">
         <% # kludge required for bug in nested_attributes_for:https://rails.lighthouseapp.com/projects/8994/tickets/2646-validations-not-called-when-model-updating-using-nested-attributes %>
         <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
 

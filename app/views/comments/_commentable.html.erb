@@ -2,7 +2,7 @@
 <div id="feedback" class="feedback" role="complementary">
 	
   <h3 class="landmark">Actions</h3>
-	<ul class="navigation" role="navigation">
+	<ul class="navigation actions" role="navigation">
     <% if @work || @admin_post %>
         <li><%= link_to '&#8593; '.html_safe + h(ts('Top')), :anchor => "main" %></li>
     <% end %>
@@ -20,7 +20,7 @@
         <%= form_for Kudo.new do |kudo_form| %>
           <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
           <%= kudo_form.hidden_field :commentable_type, :value => 'Work' %>
-          <%= kudo_form.submit ts("Leave Kudos ♥") %>
+          <%= kudo_form.submit ts("Kudos ♥") %>
         <% end %>
       </li>
     <% end %>
@@ -48,7 +48,7 @@
 
   <div id="add_comment_placeholder">
     <div id="add_comment">
-      <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => ts('Add Comment')}%> 		
+      <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => ts('Comment')}%> 		
     </div>
   </div>
 
@@ -71,8 +71,7 @@
       </div>
     <% end %>
   
-    <div style="position:relative;"><!-- FRONT END: do we still need this div now? -->
-      <div id="bookmark_form_placement" class="wrapper toggled">
+ 	<div id="bookmark_form_placement" class="wrapper toggled">
         <% @bookmark ||= bookmark_if_exists(commentable) %>
         <% if @bookmark %>
           <%= render "bookmarks/bookmark_form", :bookmarkable => commentable, :bookmark => @bookmark, :button_name => ts("Edit"), :action => :update, :in_page => true %>

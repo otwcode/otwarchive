@@ -30,10 +30,17 @@ module UsersHelper
       "/images/user_icon.png"
     end
   end
-  
+#BACK END if the icon is just a default and has no meaning please don't give it an alt  
   def icon_display(user=nil, pseud=nil)
+    path = user ? (pseud ? user_pseud_path(pseud.user, pseud) : user_path(user)) : nil
     pseud ||= user.default_pseud if user
-    image_tag(standard_icon(user, pseud), :alt => (pseud.try(:icon_file_name) ? pseud.icon_alt_text : "default AO3 icon"), :class => "icon")
+    alt_text = pseud.try(:icon_alt_text) || pseud.try(:byline) || ts("Default AO3 icon")
+
+    if path
+      link_to image_tag(standard_icon(user, pseud), :alt => alt_text, :class => "icon"), path
+    else
+      image_tag(standard_icon(user, pseud), :alt => alt_text, :class => "icon")
+    end
   end
   
   # Prints coauthors
@@ -45,40 +52,24 @@ module UsersHelper
   # (The total should reflect the number of bookmarks the user can actually see.)
   def print_bookmarks_link(user)
     total = (logged_in_as_admin? || current_user == user) ? @user.bookmarks.count : @user.bookmarks.visible.size
-    if @user == current_user
-	  span_if_current t('users_helper.my_bookmarks', :default => "My Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
-	else
-	  span_if_current t('users_helper.bookmarks', :default => "Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
-	end
+	  span_if_current ts("Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_bookmarks_path(@user)
   end
 	
   def print_pseud_bookmarks_link(pseud)
     total = (logged_in_as_admin? || current_user == pseud.user) ? pseud.bookmarks.count : pseud.bookmarks.visible.count
-    if @user == current_user
-  	  span_if_current t('users_helper.my_pseud_bookmarks', :default => "My Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
-  	else
-  	  span_if_current t('users_helper.pseud_bookmarks', :default => "Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
-  	end
+	  span_if_current ts("Bookmarks (%{bookmark_number})", :bookmark_number => total.to_s), user_pseud_bookmarks_path(@user, pseud)
   end
   
   # Prints link to works page with user-appropriate number of works
   # (The total should reflect the number of works the user can actually see.)
   def print_works_link(user)
     total = user.visible_work_count
-    if @user == current_user
-	  span_if_current t('users_helper.my_works', :default => "My Works (%{works_number})", :works_number => total.to_s), user_works_path(@user)
-	else
-	  span_if_current t('users_helper.works', :default => "Works (%{works_number})", :works_number => total.to_s), user_works_path(@user)
-	end
+	  span_if_current ts("Works (%{works_number})", :works_number => total.to_s), user_works_path(@user)
   end
   
   def print_pseud_works_link(pseud)
     total = pseud.visible_works_count
-    if @user == current_user
-	  span_if_current t('users_helper.my_works', :default => "My Works (%{works_number})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
-	else
-	  span_if_current t('users_helper.works', :default => "Works (%{works_number})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
-	end
+	  span_if_current ts("Works (%{works_number})", :works_number => total.to_s), user_pseud_works_path(@user, pseud)
   end
 
   # Prints link to series page with user-appropriate number of series
@@ -88,11 +79,7 @@ module UsersHelper
     else
       total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds(user.pseuds).length
     end
-    if @user == current_user
-  	  span_if_current ts("My Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
-  	else
-  	  span_if_current ts("Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
-  	end
+	  span_if_current ts("Series (%{series_number})", :series_number => total.to_s), user_series_index_path(@user)
   end
   
   def print_pseud_series_link(pseud)
@@ -101,11 +88,7 @@ module UsersHelper
     else
       total = Series.visible_to_registered_user.exclude_anonymous.for_pseuds([pseud]).length
     end
-  	if @user == current_user
-  	  span_if_current ts("My Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
-  	else
-  	  span_if_current ts("Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
-  	end
+	  span_if_current ts("Series (%{series_number})", :series_number => total.to_s), user_pseud_series_index_path(@user, pseud)
   end
   
   def print_gifts_link(user)
@@ -114,18 +97,9 @@ module UsersHelper
     else
       gift_number = user.gift_works.visible_to_registered_user.count(:id, :distinct => true)
     end
-  	if user == current_user
-      span_if_current ts("My Gifts (%{gift_number})", :gift_number => gift_number.to_s), user_gifts_path(user)
-    else
-      span_if_current ts("Gifts (%{gift_number})", :gift_number => gift_number.to_s), user_gifts_path(user)
-    end
+    span_if_current ts("Gifts (%{gift_number})", :gift_number => gift_number.to_s), user_gifts_path(user)
   end
 
-  def print_drafts_link(user)
-    total = @user.unposted_works.size
-    span_if_current t('users_helper.my_drafts', :default => "My Drafts") + " (#{total})", drafts_user_works_path(@user)
-  end
-  
   def authored_items(pseud, work_counts={}, rec_counts={})
     visible_works = pseud.respond_to?(:work_count) ? pseud.work_count.to_i : (work_counts[pseud.id] || 0)
     visible_recs = pseud.respond_to?(:rec_count) ? pseud.rec_count.to_i : (rec_counts[pseud.id] || 0)

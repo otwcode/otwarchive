@@ -1,4 +1,4 @@
-<%= form_tag url_for(:controller => 'people', :action => 'search'), :class => 'search', :method => :get do %>
+<%= form_tag url_for(:controller => 'people', :action => 'search'), :class => 'search', :role => 'search', :method => :get do %>
 <fieldset>
   <legend>Search people</legend>
   <dl>
@@ -35,6 +35,6 @@
     <%= text_field_tag "query[text]", @query[:text], :id => 'text' %>
   </dd>
   </dl>
-  <p class="submit"><%= submit_tag t('.people.search', :default => 'Search people'), :name => nil %></p>
+  <p class="submit actions"><%= submit_tag t('.people.search', :default => 'Search people'), :name => nil %></p>
 </fieldset>
 <% end %>

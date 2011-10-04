@@ -6,7 +6,7 @@
   <!--/descriptions-->
 
   <!--subnav-->
-    <ul class="navigation" role="navigation">
+    <ul class="sorting actions" role="menu">
       <li><%= link_to "Sort by name", url_for(:sort => "name") %></li>
       <li><%= link_to "Sort by count", url_for(:sort => "count") %></li>
     </ul>
@@ -18,7 +18,7 @@
   <!--main content-->
 
   <% unless @co_authors.nil? || @co_authors.length == 0 %>
-  <div class="coauthor module" id="user-coauthors">
+  <div class="coauthor listbox" id="user-coauthors">
     <h3><%=h ts("Co-Authors") %></h3>
     <ul class="index">
       <% for pseud in @co_authors %>
@@ -33,7 +33,7 @@
 
   <% for tag_type in @tag_types %>
     <% unless @tags[tag_type].blank? %>
-    <div class="#{tag_type.downcase} module" id="user-#{tag_type.downcase.pluralize}">
+    <div class="#{tag_type.downcase} listbox" id="user-#{tag_type.downcase.pluralize}">
       <h3><%=h ts(tag_type.pluralize) %></h3>
       <ul class="index">
         <% @tags[tag_type].each_with_index do |tag, i| %>

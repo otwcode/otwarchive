@@ -1,0 +1,33 @@
+/*==ZONE: HOME 
+user home
+collections and challenges home
+tag home
+admin comms home 
+--this zone always shows a dashboard styled in region-dashboard and its parent is #main.dashboard */
+
+.home p, .home .header      
+        { clear:right }
+.home .header img.icon, .home .header .icon      
+        { position: absolute; top: 0; left:0}
+.home .header h2
+        { margin: 0 0 0 100px; text-align: right; border-bottom:2px solid; }
+.home .header .userstuff
+        { margin-left: 120px;}
+.admin .header h3
+        { font-size: 2.143em; text-align:center; }
+.home .module div.userstuff
+        { padding:0.643em 2.5em; }
+.home .primary
+        { margin: 0 0 0.643em; min-height:100px; }
+        
+
+/*specific pages linked in dashboard, to be generalised away*/
+/*SHOW USER COLLECTIONS*/
+.collections-index.dashboard .index
+        { width: 100%; } 
+/*HISTORY note:listbox?*/
+.readings-index h3 
+        { background:#ddd; margin:-0.5em 0 -0.25em 0; padding:0.25em}
+/*INBOX */
+#inbox-form
+        { float:left; width: 75%;}

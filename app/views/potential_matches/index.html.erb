@@ -1,25 +1,25 @@
 <h2>Matching for <%= @collection.title %></h2>
 <% if !@settings %>
-  <p class="note">
-    Your challenge doesn't currently have any match settings defined. To set them up, please
+  <!--BACK END, pls link to challenge settings minimum number to match section--><p class="note">
+    Your challenge doesn't have any match settings defined. To define some, please
     go to Challenge Settings and enter them in the <strong>Minimum Number To Match</strong> section. 
-    You will then be able to use the archive matching tools to help you create 
+   The archive matching tools will help you create 
     and send out assignments for all your challenge participants, after signup is over. 
   </p>
 <% elsif @challenge.signup_open %>
   <p class="note">
-    You cannot generate matches while signup is still open. After you have closed signup (in Challenge Settings),
+    You can't generate matches while signup is still open. After you have closed signup (in Challenge Settings),
     you will be able to generate potential matches here.
   </p>
 <% elsif @collection.signups.count < 2 %>
   <p class="note">
-    You cannot generate matches without at least two people signed up. :)
+    You can't generate matches without at least two people signed up. :)
   </p>
 <% elsif @in_progress %>
 
   <p class="note">
-    The archive is currently generating potential matches for this challenge. This process can take some time,
-    especially for a large challenge! A notification email will be sent to the collection maintainers when
+    The archive is generating potential matches for this challenge. This can take a long time,
+    especially for a large challenge! We'll send an email to the collection maintainers when
     all potential matches have been generated.
   </p>
 
@@ -27,11 +27,11 @@
     Currently generating potential matches for: <%= @current_position %>
   </p>
 
-  <p class="navigation" role="navigation"><%= link_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></p>
+  <p class="actions" role="button"><%= link_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></p>
 
 <% elsif @assignments_with_no_potential_requests.size > 0 %>
   <h3>No Potential Recipients</h3>
-  <p class="note">
+  <p class="caution note">
     <strong>Warning!</strong> These participants have no potential <strong>recipients</strong>: no one else
     signed up for the challenge has requested anything that matches what they have offered. 
   </p>
@@ -41,8 +41,8 @@
     Then regenerate potential matches to continue. 
   </p>
 
-  <p class="navigation" role="navigation"><%= link_to ts("Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></p>
-  
+  <p class="navigation actions" role="navigation"><%= link_to ts("Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></p>
+  <!--FRONT END: TABLEWATCH!!-->
   <table>
     <thead>
       <tr>
@@ -54,7 +54,7 @@
     
     <% @assignments_with_no_potential_requests.each do |assignment| %>
       <tr>
-        <th scope="row"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></th>
+        <th scope="row" class="byline"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></th>
         <td><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></td>
         <td>
           <%= link_to "Edit", edit_collection_signup_path(@collection, assignment.offer_signup) %>
@@ -79,8 +79,8 @@
       <h3>Missing Recipients</h3>
       <p class="note">
         These people could not be assigned a recipient. 
-        You may be able to assign a recipient by shuffling the assigned givers below in the
-        main assignments (in which case the giver's line will disappear from this section after you update), 
+        You may be able to assign a recipient by shuffling the assigned givers in the
+        <a href="#main-assignments">main assignments</a> (in which case the giver's line will disappear from this section after you update), 
         or you can manually assign a pinch recipient (who will then get two gifts instead of one).
       </p>
 
@@ -102,11 +102,12 @@
     <% end %>
 
     <% if @assignments_with_no_offer.size > 0 %>
-      <h3>Missing Givers</h3>
+      <h3 id="missing-givers">Missing Givers</h3>
       <p class="note">
-        These people could not be assigned a giver. You can shuffle the main assignments below to free someone up, or you can assign a pinch hitter. 
+        These people could not be assigned a giver. You can shuffle the <a href="#main-assignments">main assignments</a> to free someone up, or you can assign a pinch hitter. 
         (Note: the form <em>will</em> allow you to double-assign people, but you will want to make sure they are willing to write two assignments first!)
       </p>
+      <!--TABLEWATCH!!-->
       <table summary="lists assignments with no giver; you can assign a pinch hitter">
         <caption>Lists assignments with no giver.</caption>
         <thead>
@@ -125,13 +126,13 @@
       </table>
     <% end %>
 
-    <h3>Main Assignments</h3>
+    <h3 id="main-assignments">Main Assignments</h3>
     <p class="note">
       You can shuffle these assignments around as much as you want. 
-      Note that circular matches (where A is assigned to B and B is assigned to A)
+      Circular matches (where A is assigned to B and B is assigned to A)
       will happen sometimes randomly. 
     </p>
-    
+<!--TABLEWATCH!!-->   
     <table summary="lists assignments with giver; you can reassign">
       <caption>Lists assignments with an assigned giver.</caption>
       <thead>

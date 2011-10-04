@@ -1,7 +1,26 @@
-/*I have not touched this and it is not part of my design-- lim 01/09/11*/
-#header   {background: #000; color: #fff; padding: .5em 0; font-family: Cambria, Constantia, Palatino, Georgia, sans-serif; font-weight: 400; width: 100%; margin: 0; height: 1.5em;}
-#header a {color: #fff; text-decoration: none; border: none;}
-#header a:hover {text-decoration: underline;}
-#header h1 {font-size: 1em; float: left; margin: 0; padding: .25em .5em; line-height: 1.25em;}
+ul#skiplinks, .landmark , .landmark a
+{ border: 0; font-size: 0; line-height: 0; height: 0; margin: 0; clear:both; color:transparent; opacity:0; }
+.clear {clear:both;}
+body {padding:0; margin:0; font-size:0.875em}
+a{color:#900;}
+a:visited {color:#555;}
+a:hover {color:#ddd;}
 
+#header {background:#000; margin:0; padding:1em; position:relative}
+#header h1, #header h2, #header ul.navigation {display:inline; font-size:1.5em; }
+#header a, #header a:link {color:#fff}
+a, a:link, #header ul ul li a:link{color:#900;}
 
+#header ul.navigation ul {position:absolute; margin-left:-999em; background: #fff; font-size:0.75em}
+#header ul.navigation:hover ul{position:absolute; margin:0 0 0 19.5em}
+#header ul ul li a{color:#900;;padding:0.5em; border:1px solid #555; display:block}
+#header ul ul li a:hover {background:#ddd; color:#000;}
+
+#main {padding:0 2.5em;}
+h3,h4,h5,h6,p {line-height:1; margin:0.375em 0;}
+ul {margin:0 0.15em; text-indent:0; padding:0 }
+
+ul li, .blurb li,.navigation>*,.stats>*,.meta ul li {list-style: none;display: inline;}
+blockquote.summary {background:#eee; padding:0.25em; border:1px solid #ddd}
+li.blurb {margin:auto; border-top:1px solid #ccc;}
+.blurb dl.stats { background: #eee; font-size: 0.8575em; text-align: right; padding: 0 0.375em 0.375em; margin: 1.286em auto 0; }

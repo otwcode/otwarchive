@@ -17,7 +17,7 @@
     <ul class="navigation actions" role="navigation">
       <li><%= link_to ts("Show"), known_issue %></li>
       <li><%= link_to ts("Edit"), edit_known_issue_path(known_issue) %></li>
-      <li><%= link_to ts("Delete"), known_issue, :confirm => 'Are you sure?', :method => :delete %></li>
+      <li role="button"><%= link_to ts("Delete"), known_issue, :confirm => 'Are you sure?', :method => :delete %></li>
     </ul>
     <div class="admin userstuff" role="article">
       <h3><%=raw sanitize_field(known_issue, :title) %></h3>

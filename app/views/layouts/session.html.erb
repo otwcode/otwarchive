@@ -17,7 +17,7 @@
     <%= render :partial => 'layouts/header' %>
 <!-- BEGIN main -->
 		<div id="main" class="<%= controller.controller_name + '-' + controller.action_name %> system session">
-			<%= flash_div :error, :warning, :notice %>
+			<%= flash_div :error, :caution, :notice %>
 			
 			<p id="logo">
 				<%= image_tag(ArchiveConfig.LOGO, :alt => ArchiveConfig.ALT_LOGO) %>

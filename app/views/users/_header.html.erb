@@ -8,7 +8,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-  <ul class="navigation" role="navigation">
+  <ul class="navigation actions" role="navigation">
     <li><%= span_if_current ts("Profile"), user_profile_path(user) %></li>
     <% if @user == current_user %>
       <li><%= link_to ts("Post New"), new_work_path %></li>

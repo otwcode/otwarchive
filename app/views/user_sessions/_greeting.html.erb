@@ -1,22 +1,17 @@
 <% if logged_in? %>
   <div id="greeting">
-    <p class="icon">
-	<span class="landmark"><% ts('Hello,') %></span>
-	<%= link_to icon_display(current_user), :alt => current_user %></p>
-    <ul class="navigation" role="navigation">
-	    <li>
-        <%= link_to ts("Post New"), new_work_path %>
-      </li>
-      <li>
-        <%= link_to ts("Log out"), logout_path %>
-      </li>
+    <p class="icon"><%= icon_display(current_user) %></p>
+    <ul class="navigation actions" role="navigation">
+	    <li><%= link_to ts("Post New"), new_work_path %></li>
+      <li> <%= link_to ts("Log out"), logout_path %></li>
     </ul>
   </div>
+
 <% elsif logged_in_as_admin? %>
   <div id="greeting">
-	  <p class="icon"><%= link_to icon_display(current_user) %></p>
-	  <p class="navigation" role="navigation">
-      <%= link_to ts("Log out"), admin_logout_path %>
-    </p>
+	  <p class="icon"><%= icon_display(current_user) %></p>
+	  <ul class="navigation actions" role="navigation">
+      <li><span class="current">Admin</span></li>
+      <li><%= link_to ts("Log out"), admin_logout_path %></li>
   </div>
 <% end %>

@@ -1,4 +1,5 @@
-<!--Descriptive page name, messages and instructions-->
+<!--SEARCHBROWSE Descriptive page name, messages and instructions-->
+<!--LIM REGULARISE THIS WITH TAGSET LISTBOX-->
 <% if @collection %>
   <h2><%= link_to(@collection.title, @collection) %> > <%=h ts("Fandoms") %></h2>
 <% elsif @medium %>
@@ -11,8 +12,8 @@
 <div class="filters">
 	<h3 class="landmark"><%= ts('Filters') %></h3>
   <%= form_tag '', :method => :get do %>
-    <%= select_tag :medium_id, options_for_select(['All Media Types'] + @media.map{|m| m.name}, params[:medium_id]) %>
-    <%= submit_tag "Show" %>
+    <fieldset><p title="Choose media type"><%= select_tag :medium_id, options_for_select(['All Media Types'] + @media.map{|m| m.name}, params[:medium_id]) %>
+    <%= submit_tag "Show" %></p></fieldset>
   <% end %>
 </div>
 <% end %>
@@ -21,20 +22,20 @@
 <!--main content-->
 <% if @fandoms_by_letter && !@fandoms_by_letter.empty? %>
   <h3 class="landmark"><%= ts('Alphabet Navigation') %></h3>
-<ul class="alphabet navigation">
+<ul class="alphabet navigation actions" id="alphabet" role="navigation">
     <% for letter in @fandoms_by_letter.keys %>
       <li><%= link_to letter, "#letter-#{letter}" %></li>
     <% end %>
   </ul>
   <h3 class="landmark"><%= ts('Alphabetised List of Fandoms') %></h3>
-<ol class="letters <%= 'collection' if @collection %>">
+<ol class="alphabet fandom index <%= 'collection' if @collection %>">
     <% @fandoms_by_letter.each_pair do |letter, fandoms| %>
-      <li id='letter-<%= letter %>' class='letter'>
+      <li id='letter-<%= letter %>' class='letter listbox'>
         <h3>
           <%= letter %>
-          <span class="top"><%= link_to "top", "#skiplinks" %></span>
+          <span class="action top" title="top"><%= link_to "\&#8593;", "#alphabet" %></span>
         </h3>
-        <ul class="fandom index">
+        <ul class="tags index">
           <% for fandom in fandoms %>
           <li class='<%= cycle('odd', 'even', :name => "letter-#{letter}") %>'>
             <%= link_to_tag_works_with_text(fandom, fandom.name) %>

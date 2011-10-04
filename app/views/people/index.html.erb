@@ -1,4 +1,4 @@
-<!--Descriptive page name, messages and instructions-->
+<!--SEARCHBROWSE Descriptive page name, messages and instructions-->
 <% if @collection %>
   <h2><%= authors_header @authors %> <%= "in" %> '<%= (params[:letter] && params[:letter].is_a?(String)) ? params[:letter] : @pseuds_alphabet[0] %>' <%= ts("in %{collection}", :collection => @collection.title) %></h2>
   
@@ -26,5 +26,5 @@
     <a href="<%= person_path(character) %>"><%= character.char %></a>
   <% end %>
   </div>
-  <p class="navigation" role="navigation"><%= link_to "People Search (Alpha)", search_people_path %></p>
+  <p class="navigation actions" role="navigation"><%= link_to "People Search (Alpha)", search_people_path %></p>
 <% end %>

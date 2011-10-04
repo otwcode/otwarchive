@@ -6,34 +6,40 @@
 
 <!--main content-->
 <% if @admin_settings.invite_from_queue_enabled? %>
+
 <h3 class="landmark">Add yourself to the list</h3>
+
+<!--BACK END, please move this class "simple" into the form and lose this div-->
+<div class="simple">
 <%= form_for(@invite_request) do |f| %>
   <%= error_messages_for @invite_request %>
-
+<fieldset>
   <p>
     <%= f.label :email %>
     <%= f.text_field :email %>
-  </p>
-
-  <p class="submit">
+  <span class="submit actions">
     <%= f.submit 'Add me to the list' %>
-  </p>
+  <span></p>
+</fieldset>
 <% end %>
 <% end %>
+</div>
 
 <h3>Wondering how long you'll have to wait?</h3>
 
+<!--BACK END, please move this class into the form and lose this div-->
+<div class="simple">
 <%= form_tag url_for(:action => :show), {:remote => true, :method => :get} do %>
-
+<fieldset>
   <p>
     <%= label_tag :email %>
     <%= text_field_tag :email %>
+    <span class="submit actions">
+    <%= submit_tag 'Go' %></span>
   </p>
-
-  <p class="submit">
-    <%= submit_tag 'Go' %>
-  </p>
+</fieldset>
 <% end %>
+</div>
 
 <div id="invite-status"></div>
 <!--/content-->

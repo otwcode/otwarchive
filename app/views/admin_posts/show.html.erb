@@ -1,16 +1,18 @@
+<div class="admin home">
 <!--Descriptive page name, messages and instructions-->
-<h2><%= 'AO3 News' %></h2>
+<div class="primary header module">
+	<h2><%= 'AO3 News' %></h2>
 <!--/descriptions-->
-
+<div class="icon"></div>
 <!--subnav-->
-<ul class="navigation actions" role="navigation actions">
+<ul class="navigation actions" role="navigation">
   <li><%= link_to ts("Back to AO3 News Index"), admin_posts_path %></li>
   <li><%= link_to_rss admin_posts_path(:rss) %></li>
 </ul>
 <!--/subnav-->
-
+</div>
 <!--main content-->
-<div class="admin" role="article">
+<div role="article">
   <div class="header">
     <h3>
       <%= @admin_post.title %>
@@ -25,7 +27,7 @@
       <h4>Original: <%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></h4>
     <% elsif !@admin_post.translations.empty? %>
       <h4>Translations:</h4>
-      <dl>
+      <dl class="language">
         <% for admin_post in @admin_post.translations %>
           <dt>
             <%= link_to admin_post.language.name, language_admin_posts_path(admin_post.language) %>
@@ -46,3 +48,4 @@
 <!-- BEGIN comment section -->
 <%= render :partial => 'comments/commentable', :locals => {:commentable => @admin_post} %>
 <!-- END comment section -->
+</div>

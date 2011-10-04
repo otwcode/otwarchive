@@ -9,11 +9,11 @@
 <h2>Invite a friend</h2>
 <!--/descriptions-->
 
-<!--subnav-->
-<h3 class="landmark">Actions</h3>
-<ul class="navigation" role="navigation">
-  <li><%= link_to "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></li>
-  <li><%= link_to "Request more", new_user_invite_request_path %></li>
+<!--subnav BACK END: I have pasted this nav block into every user invitations view- there may be a better/DRYer way to do that-->
+<ul class="navigation actions" role="navigation">
+   <li><%= span_if_current t('.invitations', :default =>"Invitations"), user_invitations_path(@user) %></li>
+   <li><%= span_if_current "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></li>
+   <li><%= span_if_current "Request more", new_user_invite_request_path %></li>
 </ul>
 
 <!--/subnav-->
@@ -21,7 +21,7 @@
 <!--main content-->
 <div class="module">
 <% if @unsent_invitations.blank? %>
-  <p>Sorry, you have no unsent invitations right now.</p>  
+  <p>Sorry, you have no unsent invitations right now. <%= link_to "Request more", new_user_invite_request_path %></p>  
 <% else %>
   <p>You have <%= @user.invitations.unsent.count.to_s %> open invitations and <%= @user.invitations.unredeemed.count.to_s %> that have been sent but not yet used.</p>
   <%= form_tag url_for(:controller => 'invitations', :action => 'invite_friend', :user_id => @user) do %>
@@ -40,7 +40,7 @@
         </ul>
       </dd>
     </dl>
-    <p class="submit"><%= submit_tag t('.submit_invite', :default => 'Send invite')  %></p>
+    <p class="submit actions"><%= submit_tag t('.submit_invite', :default => 'Send invite')  %></p>
   <% end %>
 <% end %>
 </div>
