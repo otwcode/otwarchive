@@ -1,0 +1,64 @@
+<div class="tagset"><!--this is probably what we should do for each feature, reckon?-->
+	<h2><%= ts("Review Nominations for %{title}", :title => @tag_set.title) %></h2>
+
+<h3 class="landmark">Navigation</h3>
+  <ul class="navigation actions" role="navigation">
+  	<% if @tag_set.user_is_owner?(current_user) %>
+      <li><%= link_to ts("Clear Nominations"), destroy_multiple_tag_set_nominations_path(@tag_set),
+        :confirm => ts('Are you certain you want to clear nominations for this tag set? (This will NOT affect tags you have approved, but it will clear the history of rejected tags.)'),
+        :method => :post %></li>
+    <% end %>
+    <li><%= link_to ts("Back To %{title}", :title => @tag_set.title), tag_set_path(@tag_set) %></li>
+  </ul>
+
+
+<ul class="notes">
+  <li>We may clear out old nominations (that is, after several months) to avoid database clutter. Please don't 
+  leave nominations turned on unless you are reviewing nominations regularly!</li>  
+
+  <li>You can approve or reject nominations, or leave them for later. Once a nomination
+  has been either approved or rejected, it won't appear on this page again.</li>
+  
+  <li>If you reject a fandom nomination, we will automatically reject all character and relationship nominations submitted 
+    for that fandom. We will <em>not</em> automatically approve character nominations.</li>
+
+  <li>If you approve an official synonym, we will automatically approve all the nominations with that synonym, 
+      but only add that one synonym to your tag set.</li>
+
+  <li>If you make a tag that uses the same name as an existing tag of another type (eg if you made a character tag "Firefly" but that tag was already used for the show), the archive will automatically tag on the type, so you'll see "Firefly - Character" in your tag set.</li> 
+
+</ul>
+
+<%= form_for :tag_set_nominations, :url => update_multiple_tag_set_nominations_path(@tag_set), :html => { :method => :put, :class => "tagset" } do |form| %>
+  <%= error_messages_formatted @errors %>
+
+  <% @tagnames_seen = {} %>
+
+  <ol class="tagset review index">
+    <% if @nominations[:fandom] %>
+      <%= render "review_fandoms", :fandoms => @nominations[:fandom] %>
+      <% if @nominations[:cast] %>
+        <%= render "review_cast", :cast => @nominations[:cast] %>
+      <% end %>
+    <% end %>
+  
+    <% %w(character relationship freeform).each do |tag_type| %>
+      <% if @nominations[tag_type] %>
+        <li class="<%= tag_type %> listbox <%= cycle :odd, :even %>">
+          <h3><%= tag_type.classify.pluralize %></h3>
+          <ol class="tags index">
+            <% @nominations[tag_type].each do |nom| %>
+              <li><%= render "review_individual_nom", :nom => nom %></li>
+            <% end %>
+          </ol>
+        </li>
+      <% end %>
+    <% end %>
+  </ol>
+<div class="clear"><!--presentational--></div>
+  <fieldset>
+    <p class="submit"><%= submit_tag "Submit" %></p>      
+  </fieldset>    
+
+<% end %>
+</div>

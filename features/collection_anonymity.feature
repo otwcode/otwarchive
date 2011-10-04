@@ -21,8 +21,8 @@ Feature: Collection
   When I follow "New Collection"
     And I fill in "Display Title" with "Hidden Treasury"
     And I fill in "Collection Name" with "hidden_treasury"
-    And I check "Is this collection currently unrevealed?"
-    And I press "Submit"
+    And I check "This collection is unrevealed"
+    And I submit
   Then I should see "Collection was successfully created"
 
   # Adding existing work to the collection without preview
@@ -109,7 +109,7 @@ Feature: Collection
   
   # Reveal the collection
   When I follow "Settings"
-    And I uncheck "Is this collection currently unrevealed?"
+    And I uncheck "This collection is unrevealed"
     And I press "Update"
   Then I should see "Collection was successfully updated"  
   # Works should no longer be hidden on the collection dashboard
@@ -173,8 +173,8 @@ Feature: Collection
   When I follow "New Collection"
     And I fill in "Display Title" with "Anonymous Hugs"
     And I fill in "Collection Name" with "anonyhugs"
-    And I check "Is this collection currently anonymous?"
-    And I press "Submit"
+    And I check "This collection is anonymous"
+    And I submit
   Then I should see "Collection was successfully created"
 
   # Adding existing work to the collection without preview
@@ -270,7 +270,7 @@ Feature: Collection
   # Reveal the authors
   When I go to "Anonymous Hugs" collection's page
     And I follow "Settings"
-    And I uncheck "Is this collection currently anonymous?"
+    And I uncheck "This collection is anonymous"
     And I press "Update"
   Then I should see "Collection was successfully updated"  
   # Authors should no longer be hidden on the collection dashboard
@@ -322,8 +322,8 @@ Feature: Collection
   When I follow "New Collection"
     And I fill in "Display Title" with "Hidden Treasury"
     And I fill in "Collection Name" with "hidden_treasury"
-    And I check "Is this collection currently unrevealed?"
-    And I press "Submit"
+    And I check "This collection is unrevealed"
+    And I submit
   Then I should see "Collection was successfully created"
   
   # post to collection for day 1

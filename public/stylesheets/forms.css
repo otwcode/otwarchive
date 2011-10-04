@@ -1,214 +1,276 @@
-/* GLOBAL */
-/*form buttons (input, button, are currently styled the same as navigation and sorting buttons, in site-chrome.css)
-  forms embedded in navigation are also styled in site-chrome.css
-*/
-form fieldset legend, legend { height:0; width:0; font-size:0; color:#fffef9;}
-#main form fieldset.table		{ border:none;}
-form input { font-size: 1em;}
-form p.submit, input.submit { text-align:center;}
-#main form .submit input { width:auto;}
-form p { line-height:2; clear:both;}
-/*form dl { position:relative; }*/
-form dt { float:left; clear:left; width:12em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
-form dd { float: left;}
-form code { display:block;}
-p.character_counter { font-size:85.7%; color:#666; display:inline; position:relative;}
-.character_counter span { display:inline-block; width: 3.75em; text-align:right ;}
-form select { vertical-align:text-top; font-size: 1em;}
+/*TEMP BODGE LIM 16/09/11*/
 
-/*DASHBOARD */
-.sidebar form {float:left}
+/*==ACTIONS: buttons! temp
+subtypes:
+.submit, .cancel, .close, .delete, .pagination, .current
+input[type="submit"], button, label.action*/
 
-/*DASHBOARD: EDIT MULTIPLE WORKS */
- p.buttons {text-align:center;}
- form .edit-multiple-controls p.submit { text-align: left; clear: none;}
+.actions * 
+        { display:inline; text-transform:lowercase;}
+ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions
+        { padding:0.429em 0.25em 0.25em 0; float:right;  text-align:center; }
+.actions a, .action, .actions input, input[type="submit"], button, .current
+        { background:#eee; color:#444; width:auto; font-size:100%; height:1.286em; line-height:1.286; vertical-align:middle; display:inline-block; padding: 0.25em 0.75em; white-space: nowrap; overflow: visible; position: relative; cursor: pointer; text-decoration: none; border: 1px solid #bbb; border-bottom:1px solid #aaa; text-transform:lowercase;
+          background:-moz-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+          background:-webkit-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+          background:-o-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+          background:-ms-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+          background:linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+          border-radius:0.25em; box-shadow:none; }
+input[type="submit"] 
+        { height:1.929em; }
+p.submit, input.submit, dd.submit 
+        { text-align:right; }
+.actions input.text,.actions input[type="text"]
+        { cursor: text; }
+/*subtypes and modes */
 
-/*DASHBOARD: EDIT PREFERENCES */
- form.edit_preference ul { margin:0.562625em auto 1.12525em auto; padding:0.562625em 0; border-bottom:1px dashed;}
- .edit_preference li { margin:0.562625em 0;}
+.actions a:visited
+        { color: #111; }
+.actions a:hover, .actions input:hover, a.toggle:hover, .action:hover, .submit input:hover
+        { color:#900; border-top:1px solid #999; border-left:1px solid #999; 
+          box-shadow:inset 2px 2px 2px #bbb  }
+.actions a:active
+        { color:#111; background:#ccc; outline:none; border-color:#fff;
+          box-shadow:inset 1px 1px 3px #333;}
+.delete a, span.delete
+        { color:#900; font-weight:900; margin-right:0.375em; padding:0 0.1em 0.15em;
+          box-shadow:-1px -1px 2px rgba(0,0,0,0.75); border-radius:0.875em; }
+.secondary    
+        { background: #fffef9; position: absolute; z-index: 99; border:2px solid #bbb; margin: auto; padding:0.375em;overflow:hidden; right:2.5em; 
+          box-shadow:2px 2px 5px #bbb; border-radius:0.15em }
+/* CONTEXTS */
+form dd .actions,dl.stats + h6 + .actions
+        { float: left;}
+dl.stats + h6 + .actions, li.news .actions 
+        { margin:-2em auto 0; }
+.actions .secondary .submit
+        { float:none;}
+.chapter .secondary
+        { top:2.5em;}
+.dashboard .landmark 
+        { clear:right; }
+td.action
+        {display:table-cell; 
+          border-radius:0}
+        
+/*==INTERACTIONS: global form rules TEMP*/
 
-/*DASHBOARD: EDIT PROFILE*/
- #main.users-edit form dl {margin: 0 auto;}
- #main.users-edit dt	{ width:12em; }
- #main.users-edit dd.description {float:none;}
- #main.users-edit textarea#profile_attributes_about_me { height:12em; width:99%; }
- #main.users-edit hr.clear {margin-top:39em;}
- #main.users-edit #link_to_openid, #main.users-edit #link_to_passwd {clear:both; margin:0 0.25em 0.5625em 11.125em; font-size:1.125em;}
+form, fieldset
+        { clear:right; }
 
-/* DASHBOARD: PSEUD EDIT/NEW FORMS */
-#main .pseud-edit .pseud-name div.character_counter { width: 20em; }
+fieldset, form dl, fieldset dl dl, fieldset fieldset fieldset, fieldset fieldset dl dl, dd.hideme 
+        { background:#ddd; border:2px solid #f3efec; margin:0.643em; padding:0.643em;
+          box-shadow:inset 1px 0 5px #999; }
+fieldset dl, fieldset.navigation, fieldset dl fieldset dl
+        { background:transparent; border:none; clear:right;
+          box-shadow:none; }
+fieldset fieldset, fieldset dl dl 
+        { background:#fffef9; clear:right;}
+fieldset dd dl, form .meta dd, fieldset dl fieldset dl, dd fieldset
+        { margin: 0.643em 0;}
+/*end nesting */
 
-/* DASHBOARD: INBOX */
-#inbox-form {width:72.5%;}
+legend, input[type="hidden"]
+        { height:0; width:0; font-size:0; opacity:0; padding:0; margin:0}
+label   { cursor: pointer; margin-right:0.375em}
+dd label{ white-space: nowrap;}
+input,textarea   
+        { font-size:100%; width:100%; border:1px solid #bbb; background:#fff; 
+          box-shadow: inset 0px 1px 2px #ccc; }
+textarea 
+        { min-height:12em;}
+input:focus, select:focus, textarea:focus
+        { background:#f3efec; }
+input[type="radio"] + label, input[type="checkbox"] + label
+        { padding-left: 1em }
+select  { vertical-align:text-top; width:100% }
+.datetime select 
+        { width:32.5%; }
+input[type="radio"], input[type="checkbox"], input[type="file"], p input, p select, h4 select 
+        { width:auto; margin-right:0.375em}
+input.number
+        { width: 4em; margin-right:0.375em}
+option, .navigation option, form code  
+        { display:block; }
+form p  { clear:right; margin:auto; padding:0.643em; }
+form dt, form .meta dt 
+        { float:left; clear:left; min-width:10.5em; width:25%; padding:0.25em 0.5625em 0 0; border-bottom:1px solid #f3efec; }
+form dd, form .meta dd
+        { float: left; width:72.5%;}
+form dt .warning 
+        { background:transparent; border:0}
 
-/*DASHBOARD: REQUEST INVITES */
-#invitations-index form {clear:right;}
-#new_user_invite_request p.submit {float:left;}
+/* CUSTOM ELEMENT: CHARACTER COUNTER */
+p.character_counter 
+        { font-size:smaller; text-align:right;}
+.character_counter span 
+        { display:inline-block; width: 3.75em;}
+.comment .character_counter 
+        { float:left}
 
-/* SIGN IN BOX */
-#signin p { display:inline;}
-#signin p.footnote	{ font-size:85.7%;  padding:0.125em 0 0 .125em;}
-#signin input#remember_me	{ margin:0.125em 0.125em 0.125em 0; vertical-align:middle; }
-img#openid	{ margin-left:-20px; vertical-align:middle; }
-/* sign in box when present in #header #login-block */
-#header #signin form { background: url(/images/header-red.png) bottom left repeat-x #777; margin:-1.5em -0.25em 1em;padding:0.25em; border:1px groove #500;}
-#header #signin p.submit, #header #signin .submit input {padding:0.15em; border:0; line-height:1;}
+/*CUSTOM ELEMENT: LIVE VALIDATION*/
+.LV_validation_message 
+        { font-weight:bold; }
+.LV_valid 
+        { color:#0c0;}
+.LV_invalid 
+        {color:#c00;}
+.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active 
+        { border: 1px solid #c00; }
+        
+/* CUSTOM ELEMENT: AUTO COMPLETE */
+/* FRONT END: this currently duplicates auto_complete.css, which is winning? Also is there a way we could make the drop-down list a scrolling list if it is long? 
+duplication doesn't matter for now - auto_complete.css is gone in my webdev. max-height added (but won't work in ie6)*/
+.autocomplete div.dropdown ul 
+        {	background: #fff; border: 1px solid #eee; padding: 0.125em; line-height: 1.286; color:#000;
+	        background: rgba(255,255,255,0.9); box-shadow: 1px 3px 5px rgba(0,0,0,0.5) }
+.autocomplete ul li 
+        { padding: 0.125em;	margin: 0.25em auto auto; }
+.autocomplete input
+        { display: block;	margin: 0.25em 0 0; min-width:10em}
+.autocomplete ul li:hover, li.selected 
+        { background: url(/images/header-red.png) top left #900; color: #fff; }
+.required .autocomplete
+        { color:#222; }
+.autocomplete .notice
+        { font-size:0.875em; margin-top:0 !important}
+.autocomplete li.added, .post .meta dd ul li.added
+        { display: inline-block; white-space: nowrap; }
 
-/*SESSIONS (front front pages - login, create, etc)*/
-.session form {padding-top:1.5em;margin-bottom:1.5em; padding-bottom:1.5em; border-bottom:1px solid; }
-.session form p, .session input#user_session_login, .session input#user_session_password, .session input#openid_url {float:none; display:block !important;margin:0 0 0.875em 0; width:24em;}
-.session input#openid_url, .session form img {display:inline;}
-#main.session #signin form p.submit {margin:-2em auto 0 auto; width:6em; float:right;}
-#main.session #signin form p.openid {margin-top:2em }
+/* CUSTOM ELEMENT: SORTABLE LIST (note: hope to merge with .sortable and .draggable etc)*/
+.ui-sortable li 
+        { border: 2px solid transparent; box-shadow:1px 1px 3px transparent}
+.ui-sortable li:hover 
+        { background: #ddd; border: 2px solid #999; cursor: move; 
+          box-shadow:1px 1px 3px #bbb }
 
-#main.users-new form dt {width:100%; float:none;}
-#main.users-new form dl {position: static;}
-#tos-partial {height: 10em; overflow:auto; border: 1px solid}
+/* CUSTOM ELEMENT: TOGGLED FORMS (bookmark and collection - hidden with jS) */
+.toggled form dd 
+        { width:99%;}
+.toggled form p.footnote
+        { float:none; margin:auto; padding:0; line-height:0.5;}
+.toggled form
+        {  padding:0.5em; border:1px solid #ccc;
+          box-shadow:1px 2px 5px; }
+.toggled form fieldset, .toggled form dl, .secondary .toggled form
+        { border:none; background:transparent; margin:0; padding:0; 
+          box-shadow:none; }
 
-/* SITE SEARCH */
-#header #search {float:right;clear:right;}
-#search p { font-size: 0.8575em; padding: 0 0.25em 0 0; margin: 0; }
+/*CUSTOM ELEMENT: IF MANY SHOW MORE
+should probably generalise this to all height-based show more toggles*/
+div.many, div.all
+        { border:1px solid #ddd;}
+form .module p.actions 
+        { background:#f3efec; border:1px solid #ddd; float:none; text-align:left; margin:0 !important }
+div.all { height: auto;}
+form div.lots ul li, form div.all ul li 
+        { display:block;}
+div.many ul 
+        { overflow: auto; max-height:10em;}
+        
+/* CUSTOM ELEMENT: BEST-IN-PLACE editor */
+.tagset .options li span.best_in_place {display: inline; border: 1px solid green;}
 
-/*Subset search IN MAIN */
-#main .search {width:50%; margin: auto auto 0.5em auto; border:1px solid #ddd; padding:0.5em;}
+/* INTERACTION: SEARCH */
+.search p, li.search form p
+        { position:relative;}
+.search span.tip 
+        { background:#ddd;  border:1px solid #fff; padding:0.15em; position:absolute; left:-999em; font-size:0.75em}
+.search:hover .tip
+        { left:1em; top:3.5em; }
+li.search:hover .tip 
+        { left:0; top:2.5em;}
+.search .tags dd.submit 
+        { margin:-3em 0.643em 0;}
+/* INTERACTION: FILTER */
+form.filters 
+        { width:22.5%; float:right; }
+.filters .tags
+        { display:block;}
+form.filters dl 
+        { margin-top:0.375em;  padding-top:0 }
+.filters dd 
+       { width:100%; }
 
-/*ADMIN */
-.admin_sessions-new dt { width:12em; padding-top:0.5em;}
-.admin_sessions-new form {width: 50%; margin:auto; padding:0.25em;}
-.admin_users-notify dd {width:40%;}
-.admin_users-notify input {width:100%;}
-.admin_users-notify textarea {height:20em; width:100%;}
+/*INTERACTION: LOGIN SIGNUP*/
+/*INTERACTION: POST (work, chapter, comment, news, feedback, challenge etc) */
+.post .required .warnings
+        { font-weight:normal; color:#2a2a2a;}
+.post .text textarea
+        { height: 36em; clear:right}
+/* MODE: VERBOSE
+forms with more than three fieldsets 
+(01/09/11 all forms show nearly all options at the moment, some nested fieldsets hidden with .hideme
+but I suggest simple and verbose views, 
+with simple as default and verbose as child of simple, especially for 
+.post (work, bookmark, challenge etc)*/
+.verbose .landmark
+        { height:auto; width:auto; min-width:10.5em; width:25%; font-size:100%; opacity:1; color:#111; line-height:1 }
+.verbose legend
+        { height:auto; width:auto; font-size:100%; opacity:1; background:#fffef9;border:2px solid #ddd; padding:0.5em; 
+           box-shadow:1px 2px 3px #999}
+/* MODE: SIMPLE, 3 or fewer
+experimental, developing here, (may combine with .toggled rules)*/
+.simple .search, .simple.search 
+        { display:table; margin:auto}
+.simple span.actions 
+        { float:none;}
 
-.admin_invitations-index form {float:right; width:99%; border:1px solid #ddd; margin: 0 auto 1em auto; padding:.5em;}
-.settings-index dt {width: 70%}
-.admin_invitations-index h3 {clear: right;}
+/* CONTEXT: dashboard*/
+.dashboard fieldset 
+         { clear:right; }
+.dashboard .filters dt 
+         { width:auto;}
 
-/*ABUSE, FEEDBACK */
-#main.abuse_reports-new dt, form#new_feedback dt, form#new_feedback dd { width:100%; float:none;}
-#new_feedback p.submit {text-align: left;}
-.feedbacks-new form p.message { clear: both; }
-
-/* POST WORK */
-#work-form fieldset, #upload-work-form fieldset {background:#fffef9; font-size:0.875em; margin: 0.5625em 0 2em 0; padding:0.375em 1.5em 3em 1.5em; border:1px solid #bbb; }
-#work-form fieldset fieldset { line-height:1.5; margin: 0 auto 0.5625em auto; padding-bottom:1em}
-#work-form legend {background:#fffef9; padding:0.375em; height:auto; width:auto; font-size: 1em;color:#222222;}
-.works-preview legend, .works-update legend {color:#fff;}
-#work-form input[type="text"] {width:70em;}
-#work-form select {width:74em;}
-#work-form textarea {width:75.5em;}
-
-#work-form dl, #work-form dt, #work-form dd {float: none; display:block; margin:0; padding:0;width: auto;border: 0}
-#work-form dt, #work-form dd {font-size:1em;}
-#work-form dd dt, #work-form dd dd, #work-form dd fieldset {font-size:1.1em;letter-spacing:normal;}
-#work-form dl {margin-top: 0;}
-#work-form dl dl, #work-form .meta dl {margin-top: 0;}
-#work-form dd fieldset, #work-form dd fieldset legend, #work-form fieldset.post-work {margin:0; padding:0; border:0;}
-#work-form dd fieldset legend, #work-form fieldset.post-work legend{height:0;width:0;font-size:0;}
-
-#work-form dt {margin: 1.5em 0 .5em 0;}
-#work-form dt.work-parent,
-#work-form dt.work-is_serial,
-#work-form dt.work-restricted,
-#work-form dt.work-is_wip,
-#work-form dt.work-is-backdated,
-#work-form dt.coauthors,
-#work-form dt.endnotes  {position:relative; bottom:-1.5em; width:2em; height:1em; margin:1em 0 0 0;}
-#work-form dd.work-parent,
-#work-form dd.work-is_serial,
-#work-form dd.work-restricted,
-#work-form dd.work-is_wip,
-#work-form dd.work-is-backdated,
-#work-form dd.coauthors,
-#work-form dd.endnotes {position:relative;top:.5em;left:2em;width:60em;}
-
-#work-form dd dl {margin:0 0 0 5em;}
-#work-form dd dt {position:relative;bottom:-1em;height:1em;padding:0;margin:0;}
-#work-form dd dd {position:relative;top:0;padding:0;margin:0;}
-
-#work-form .meta input[type="text"] {width:49em;}
-#work-form .meta select {width:51.73em;}
-#work-form fieldset.meta, #upload-work-form fieldset.meta {background:#ddd; }
-#work-form .meta dt, #upload-work-form .meta dt  { float:left; clear:left; width:9em; margin: 0; padding:0.25em 0.5625em 0.25em 0}
-#work-form .meta dd, #upload-work-form .meta dd  { float: left; margin:0 0 1em 0; padding:0;}
-#work-form .meta dd.delay_notice {padding-left:9.5625em;margin-top:-1em;clear:left;width:70%;}
-#upload-work-form .meta input, #upload-work-form .meta select, #upload-work-form .meta textarea {width:99%; margin:auto}
-#upload-work-form .override-tags { margin-bottom:0.75em; margin-left:1em; }
-
-#work-form .meta .warning dl, #work-form .meta .warning dt, #work-form .meta .warning dd, #work-form .meta .category dl, #work-form .meta .category dt, #work-form .meta .category dd {float:none; clear:none; display:block; position:relative; margin:0;}
-#work-form .meta .warning dl, #work-form .meta .category dl {border: 1px solid #7f9db9; background:#ffffff; width:48.15em; padding: .2em .5em .4em .5em}
-#work-form .meta .warning dt, #work-form .meta .category dt {top:0; left:0; width:1.8em; height:0;margin-bottom:-.2em;}
-#work-form .meta .warning dd, #work-form .meta .category dd {top:-.1em; left:1.8em;position:relative;width:auto;}
-#work-form .meta .category dd {width:5em;}
-#work-form .meta .category dt.even {left: 10em; top:-1.6em; margin-bottom:-1.8em;}
-#work-form .meta .category dd.even {left: 11.8em; top:0em;}
-
-#work-preface textarea {height:10em;}
-#work-form dd.validation {padding:0.5em 0 1em 0;}
-#work-form span.LV_validation_message  {display:inline;clear:none;float:left;margin:0; padding-top:.4em;}
-#work-form p.character_counter  {display:inline;clear:none;float:left;margin:0;}
-#work-form .rtf-html-field textarea {float: left; clear:both;}
-#work-form .rtf-html-field p.character_counter {display: block; clear:both;}
-#work-form #work_title {display:block;} /* Enigel 03-2010 */
-#work-form .byline input[type="checkbox"] {margin: 0 .5em 0 0;}
-#co-authors-options dl.coauthors, #co-authors-options dl dt, #co-authors-options dl dd {top:0; left:0; margin:.1em 0 0 0;}
-#co-authors-options dl dt, #co-authors-options dl dd {margin-top:.5em;}
-#work-form dl.notes {margin:-1.5em 0 0 0;}
-#work-form dl.notes dl {margin:.7em 0 0 .1em; top:0; left:0;}
-#work-form dl.notes dl dt {top:0; left: 0; margin:0;}
-#work-form dl.notes dl dd {top:0; left: 0; margin:.5em 0 0 0;}
-#work-form dl.notes dl dd.validation {margin-top:0;}
-#work-form .endnotes span.warning {position:absolute; top:0; left:10em;}
-
-#work-form #work_challenge_claim_ids_options {width: 60em;}
-
-#work-form #parent-options dl dt {width:9em;}
-#work-form #parent-options dl dd {left:10em;}
-#work-form dd ul.navigation {float:left;}
-#work-form dd dd input[type="text"] {width:80%;}
-#work-form dd dd select {width:auto;}
-#series-options dl dt {width: 19em;}
-#series-options dl dd {left:20em;width:46em;}
-#series-options input[type="text"] {width:45em;}
-#chapters-options select {width:47.5em;}
-#chapters-options dl dt {width: 8em;}
-#chapters-options dl dd {left:9em;width:56em;}
-#chapters-options input[type="text"] {width:56em;}
-#chapters-options input[type="text"].number-field {width:10em;}
-#work-form #chapter-ordering input.number-field { width:5em! important;}
-#backdate-options dl dd.managePublicationDate {top:1.5em;}
-#managePublicationDate select {width:auto;}
-#work-form dt.work-language {position:relative; bottom:-1.5em; width:12em; height:1em; margin:1em 0 0 0;}
-#work-form dd.work-language {position:relative;top:.5em;left:13em;width:2em;}
-#work-form dd.work-language select {width:auto;}
-
-#work-form .work-text textarea {width:99%;}
-#work-form textarea#content { height:31.25em;}
-#work-form dd.optionalField { clear: left; width: 100%; }
-#work-form dd.optionalField dd { font-size: 1em;}
-#work-form .optionalField {font-size: 1em;}
-
-#work-form p.submit input { font-size:1em; width: auto; text-align:center}
+/*TEMP OVERRIDES */
+#header h1 a, #header fieldset, #header form, #home-header form, #home-header fieldset, #header p
+        { background:transparent;border:0; padding:0; margin: 0;
+          box-shadow:none; }
+.dashboard .meta .clear
+        { clear:none; clear:right;}
+.work-form .meta dd ul li 
+        { display: block; }
+#main .work-form .meta dd {margin-left:22.5%;}
+#main .work-form .preface { margin:0.643em; border-bottom:0 }
+#main .navigation input[type="text"] {background:#fff;}
+.current {border-radius:0;}
+#main form .datetime {position:static;}
+.autocomplete .dropdown {max-height:22.5em; overflow:auto;}
+.autocomplete .dropdown li {display:block !important;}
+#search p{text-align:right; margin:0}
+#search input.button {font-size:0.75em; }
+#tos-partial {height:12em; overflow:auto;}
 
 
-/*EDIT CHAPTERS */ 
-#main.chapters-edit dt {width:100%;float:none;}
-#main.chapters-new #work-form p input {width:auto}
-#main.chapters-new.chapter_title input { width:80%; }
-#main.chapters-new dt, #main.chapters-new dd {clear:both; width:100%;}
-#main.chapters-new dd textarea, #main.chapters-edit dd textarea, #main.chapters-update dd textarea {width:99%;margin:auto;}
-#main.chapters-new #chapter-ordering select, #main.chapters-edit #chapter-ordering select, #main.chapters-update #chapter-ordering select {width:auto; float:left;}
+/* Added for timepicker currently used on gift exchange */
+.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
+.ui-timepicker-div dl{ text-align: left; }
+.ui-timepicker-div dl dt{ height: 25px; }
+.ui-timepicker-div dl dd{ margin: -25px 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
 
-/*FILTERS*/
-form.filters	{ margin: 0.5em auto; width:12.25em; max-width:20%; padding:0.75em 0.5625em; float:right; border: 2px solid #ddd; background: #eee;}
-.filters legend	{font-size: 1em; color:#111; height:1.5em; width: auto;}
-.filters a 		{ float: right; margin-top: -1.25em;}
-.filters legend a {float:none; margin:0 }
-form.filters dt	{ background: #eee; font-weight: 600; text-transform: capitalize; margin:0.5625em auto 0; padding:0; font-size: 0.875em; float: none; width: auto; clear:both;}
-.filters dd {padding:0;}
-.filters dt:hover	{ color:#fffef9; background:#777; } 
-.filters span {font-weight: 500;}
-.filters dd label {font-size:0.8575em;}
 
+
+          
+ /*TAGSET TEMP */         
+form.tagset dd.info {border:2px solid #f3efec; box-shadow:inset 1px 0px 2px #999; padding:0.375em; clear:left;}
+fieldset.tagset ul li, .tagset .mods li {display:inline;}
+
+/* challenge signup forms (see prompt_form partial esp) */
+.tag_set_nominations-index li.odd {display: block; background:#fffef9}
+.tagset h3, .tagset ul.options {clear:right;}
+form.tagset h4 {float:left; clear:both}
+.tagset table {clear:both;}
+ul.tagset,.tagset ul.options  {border:1px solid #ddd; clear:both; padding:0.15em;}
+#main form .tagset .navigation {float:left;}
+
+
+
+
+
+
+/*TEMP LEGACIES */
 /*COMMENT */
 p.comment_form.instructions, dd.comment_form.instructions {font-size: 0.8575em;}
 .comment_form dd.module {width:70%; margin-top:-0}
@@ -222,8 +284,6 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
 
 /* TAGS */
 #edit-tag input[readonly] { background:#ededde; border:1px solid #dfdffd;}
-
-/* GLOBALIZE (in footer) you can find this in globalize.css*/
 
 /* BOOKMARKING */
 #dynamic-bookmark { position: absolute;  z-index: 50; background:#fffef9;}
@@ -245,24 +305,8 @@ form#wrangle-select-fandom p, form#wrangle-select-media p{ display:inline; margi
 #reply-to-comment #new_comment      { margin-top: 0; }                                    
 #reply-to-comment p#close-popup     { top:0; right:2em; position:absolute; z-index:60;}
 
-/*COLLECTIONS, CREATE, similar complex forms*/
-form.new_collection fieldset,  form.new_user fieldset,  form.edit_collection fieldset {border:1px solid #ddd; padding:0.5em; margin:1em auto;}
-form.new_collection p, form.new_user p , form.edit_collection p {font-size:1.5em;}
-form.new_collection dt , form.edit_collection dt {width:45%;}
-form.new_collection div, form.edit_collection div {display:block;}
-/* temp workaround for collection_participants/participant_form */
-.collection_participants-index table td.submit input { font-size:0.75em}
 
-/* challenge signup forms (see prompt_form partial esp) */
-.options {height: 6em; width: 30em; padding: 2px; overflow: auto; border: 1px solid #ccc;}
-.many {height: 12em;}
-.all {height: auto;}
-.toggle {float: right; font-size: 0.875em;}
-.options .odd { background:#f6f0f0;}
 
-/* tag set form */
-fieldset.tag_set  {border:1px solid #bbb; padding: 0.5em; margin: 0.5em auto;}
-fieldset.tag_set textarea {width: 90%;}
-fieldset.tag_set ul li {display:inline;}
+
 
 

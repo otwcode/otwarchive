@@ -15,12 +15,6 @@ class CollectionParticipantsController < ApplicationController
     false
   end
   
-  def not_allowed
-    flash[:error] = t('collection_participants.not_allowed', :default => "Sorry, you're not allowed to do that.")
-    redirect_to collection_participants_path(@collection)
-    false
-  end
-  
   def no_participant
     flash[:error] = t('no_participant', :default => "Which participant did you want to work with?")
     redirect_to root_path
@@ -38,11 +32,11 @@ class CollectionParticipantsController < ApplicationController
   end    
 
   def allowed_to_promote
-    @participant.user_allowed_to_promote?(current_user, @new_role) || not_allowed
+    @participant.user_allowed_to_promote?(current_user, @new_role) || not_allowed(@collection)
   end
   
   def allowed_to_destroy
-    @participant.user_allowed_to_destroy?(current_user) || not_allowed
+    @participant.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
   end
 
   def has_other_owners

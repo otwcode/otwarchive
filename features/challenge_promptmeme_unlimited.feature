@@ -4,47 +4,10 @@ Feature: Prompt Meme Challenge
   As a humble user
   I want to create a prompt meme and post to it
   
-  Scenario: Check the autocomplete is working
-  
-    Given I have standard challenge tags setup
-      And I am logged in as "mod1"
-    When I set up a basic promptmeme "Battle 12"
-      And I follow "Challenge Settings"
-      And I should see "Setting Up The Battle 12 Prompt Meme"
-    When I fill in "prompt_meme_request_restriction_attributes_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis, Stargate SG-1"
-      And I fill in "prompt_meme_request_restriction_attributes_fandom_num_required" with "1"
-      And I fill in "prompt_meme_request_restriction_attributes_fandom_num_allowed" with "1"
-      And I fill in "prompt_meme_request_restriction_attributes_character_num_allowed" with "2"
-      And I check "prompt_meme_request_restriction_attributes_character_restrict_to_fandom"
-      And I fill in "prompt_meme_requests_num_allowed" with "50"
-      And I fill in "prompt_meme_requests_num_required" with "2"
-      And I check "Signup open?"
-      And I press "Update"
-    
-    # check the autocomplete is working; the tag is not connected to the fandom, so remove it after that
-  
-    When I am logged in as "myname1"
-    When I go to "Battle 12" collection's page
-      And I follow "Sign Up"
-      And I check the 1st checkbox with the value "Stargate Atlantis"
-      And I fill in the 1st field with id matching "character_tagnames" with "John"
-    Then I should see "John Sheppard" in the autocomplete
-  
-    # check the autocomplete is working for the single prompt add form
-  
-    When I fill in the 1st field with id matching "character_tagnames" with ""
-      And I check the 1st checkbox with the value "Stargate Atlantis"
-      And I press "Submit"
-    When I follow "Add another prompt"
-    When I check the 2nd checkbox with the value "Stargate Atlantis"
-      And I fill in the 2nd field with id matching "character_tagnames" with "John"
-    Then I should see "John Sheppard" in the autocomplete
-
-
   Scenario: Create a prompt meme for a large challenge like bigger memes
 
-  Given I have standard challenge tags setup
-    And I am logged in as "mod1"
+  Given I am logged in as "mod1"
+    And I have standard challenge tags setup
   When I set up a basic promptmeme "Battle 12"
     And I follow "Challenge Settings"
   When I fill in unlimited prompt challenge options
@@ -70,8 +33,8 @@ Feature: Prompt Meme Challenge
   When I follow "Log out"
     And I am logged in as "myname2" with password "something"
   When I sign up for Battle 12 with combination D
-    And I add 34 prompts
-  Then I should see "Signup was successfully updated"
+    And I add prompts up to 34 starting with 3
+  Then I should see "Prompt was successfully added"
   When I go to "Battle 12" collection's page
     And I follow "Prompts ("
     And I press "Claim"
@@ -82,9 +45,9 @@ Feature: Prompt Meme Challenge
   When I follow "Log out"
     And I am logged in as "myname3" with password "something"
   When I sign up for Battle 12 with combination D
-    And I add 24 prompts
-    And I add prompt 25 with SG-1
-  Then I should see "Signup was successfully updated"
+    And I add prompts up to 24 starting with 3
+    And I add prompt 25 with "Stargate SG-1"
+  Then I should see "Prompt was successfully added"
   
   # filter by fandom
   When I go to "Battle 12" collection's page

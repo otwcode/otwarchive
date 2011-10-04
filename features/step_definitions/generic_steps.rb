@@ -15,6 +15,19 @@ Then /^show me the main content$/ do
   puts "\n" + find("#main").node.inner_html
 end
 
+Then /^show me the errors$/ do 
+  puts "\n" + find("div.error").node.inner_html
+end
+
+Then /^show me the form$/ do
+  Then %{show me the 1st form}
+end
+
+Then /^show me the (\d+)(?:st|nd|rd|th) form$/ do |index|
+  puts "\n" + page.all("#main form")[(index.to_i-1)].node.inner_html
+end
+
+
 Given /^I wait (\d+) seconds?$/ do |number|
   Kernel::sleep number.to_i
 end
@@ -43,6 +56,18 @@ end
 
 When /^I fill in "([^\"]*)" with '([^\']*)'$/ do |field, value|
   fill_in(field, :with => value)
+end
+
+Then /^I should see a create confirmation message$/ do
+  page.find('was successfully created')
+end
+
+Then /^I should see an update confirmation message$/ do
+  page.find('was successfully updated')
+end
+
+Then /^I should see a save error message$/ do
+  Then %{I should see "We couldn't save"}
 end
 
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
@@ -123,28 +148,44 @@ Then /^I should find "([^"]*)" selected within "([^"]*)"$/ do |text, selector|
 end
 
 
-When /^I check the (\d+)(st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, junk, value|
+When /^I check the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
   check(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(index.to_i-1)].node['id'])
 end
 
-When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |index, junk, value|
-  When %{I check the #{index}#{junk} checkbox with the value "#{value}"}
+When /^I check the (\d+)(st|nd|rd|th) checkbox with value "([^"]*)"$/ do |index, suffix, value|
+  When %{I check the #{index}#{suffix} checkbox with the value "#{value}"}
 end
 
-When /^I uncheck the (\d+)(st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, junk, value|
+When /^I uncheck the (\d+)(?:st|nd|rd|th) checkbox with the value "([^"]*)"$/ do |index, value|
   uncheck(page.all("input[type='checkbox']").select {|el| el.node['value'] == value}[(index.to_i-1)].node['id'])
 end
 
-When /^I check the (\d+)(st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do |index, junk, id_string|
+When /^I check the (\d+)(?:st|nd|rd|th) checkbox with id matching "([^"]*)"$/ do |index, id_string|
   check(page.all("input[type='checkbox']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(index.to_i-1)].node['id'])
 end
 
-When /^I fill in the (\d+)(st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, junk, id_string, value|
+When /^I fill in the (\d+)(?:st|nd|rd|th) field with id matching "([^"]*)" with "([^"]*)"$/ do |index, id_string, value|
   fill_in(page.all("input[type='text']").select {|el| el.node['id'] && el.node['id'].match(/#{id_string}/)}[(index.to_i-1)].node['id'], :with => value)
 end
 
+
+# These submit steps will only find submit tags inside a <p class="submit">
+# That wrapping paragraph tag will be generated automatically if you use
+# the submit_button or submit_fieldset helpers in application_helper.rb
+# The text on the button will not matter and can be changed without breaking tests. 
+#
+# NOTE: 
+# If you have multiple forms on a page you will need to specify which one you want to submit with, eg,
+# "I submit with the 2nd button", but in those cases you probably want to make sure that
+# the different forms have different button text anyway, and submit them using
+# When I press "Button Text"
+When /^I submit with the (\d+)(?:st|nd|rd|th) button$/ do |index|
+  page.all("p.submit input[type='submit']")[(index.to_i-1)].click
+end
+
+# This will submit the first submit button in a page by default
 When /^I submit$/ do
-  %{When I press "Submit"}
+  When %{I submit with the 1st button}
 end
 
 # we want greedy matching for this one so we can handle tags that have attributes in them

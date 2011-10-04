@@ -65,6 +65,28 @@ Otwarchive::Application.routes.draw do
     resources :comments
 	end
 
+  resources :tag_sets, :controller => 'owned_tag_sets' do 
+    resources :nominations, :controller => 'tag_set_nominations' do
+      collection do
+        put :update_multiple
+        post :destroy_multiple
+      end
+    end
+    resources :tag_set_associations, :only => [:index]
+    member do
+      get :batch_load
+      put :do_batch_load
+      get :review_associations
+      put :update_associations
+    end
+  end
+  resources :tag_nominations, :only => [:update]
+
+  resources :tag_wrangling_requests, :only => [:index] do
+    collection do
+      put :update_multiple
+    end
+  end
 
   #### ADMIN ####
   resources :admins
@@ -169,6 +191,7 @@ Otwarchive::Application.routes.draw do
         get :manage
       end
     end
+    resources :nominations, :controller => "tag_set_nominations", :only => [:index]
     resources :preferences, :only => [:index, :update]
     resource :profile, :only => [:show], :controller => "profile"
     resources :pseuds do
@@ -191,6 +214,7 @@ Otwarchive::Application.routes.draw do
     resources :signups, :controller => "challenge_signups", :only => [:index]
     resources :skins, :only => [:index]
     resources :subscriptions, :only => [:index, :create, :destroy]
+    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]    
     resources :works do
       collection do
         get :drafts
@@ -271,8 +295,7 @@ Otwarchive::Application.routes.draw do
   #### COLLECTIONS ####
 
   resources :gifts
-  resources :prompt_restrictions
-  resources :tag_sets, :only => [:show]
+  resources :prompts
   resources :collections do
     collection do
       get :list_challenges
@@ -285,11 +308,7 @@ Otwarchive::Application.routes.draw do
     resources :media
     resources :fandoms
     resources :people
-    resources :prompts, :controller => "prompts" do
-      collection do
-        get :summary
-      end
-    end
+    resources :prompts
     resources :tags do
       resources :works
     end

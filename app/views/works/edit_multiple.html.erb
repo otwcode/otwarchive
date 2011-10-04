@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('.edit_multiple', :default => "Editing Multiple Works") %></h2>
+<h2><%= ts("Editing Multiple Works") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -32,12 +32,14 @@
       </tr>
     <% end %>
   </table>
+  
+  <p class="required message"><%= ts("* Required information") %></p>
 
-  <p class="required message"><%=h t('.required_info', :default => "* Required information") %></p>
+  <div id="work-form" class="work-form"><%= render 'work_tags_form', :include_blank => true %></div>
 
-  <div id="work-form" class="work-form"><%= render :partial => 'work_tags_form', :locals => {:include_blank => true} %></div>
-
-  <p class="submit"><%= submit_tag t('.update_multiple', :default => "Update All Stories"), :confirm => "Are you sure? Remember this will replace all existing values!" %></p>
+  <fieldset>
+    <p class="submit"><%= submit_tag ts("Update All Stories"), :confirm => ts("Are you sure? Remember this will replace all existing values!") %></p>
+  </fieldset>
 
 <% end %>
 <!--/content-->

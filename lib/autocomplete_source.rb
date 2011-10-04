@@ -67,6 +67,19 @@ module AutocompleteSource
   end
   
   module ClassMethods
+    
+    # returns a properly escaped and case-insensitive regexp for a more manual search
+    def get_search_regex(search_param)
+      Regexp.new(Regexp.escape(search_param), Regexp::IGNORECASE)      
+    end
+    
+    # takes either an array or string of search terms (typically extra values passed in through live params, like fandom)
+    # and returns an array of stripped and lowercase words for actual searching or use in keys
+    def get_search_terms(search_term)      
+      terms = search_term.is_a?(Array) ? search_term.map {|term| term.split(',')}.flatten : (search_term.blank? ? [] : search_term.split(','))
+      terms.map {|term| term.strip.downcase}
+    end
+    
     def parse_autocomplete_value(current_autocomplete_value)
       current_autocomplete_value.split(AUTOCOMPLETE_DELIMITER, 3)
     end
@@ -87,7 +100,10 @@ module AutocompleteSource
       parse_autocomplete_value(current_autocomplete_value)[2]
     end
 
-    def autocomplete_lookup(search_param, autocomplete_prefix, options = {:sort => "down"})
+    def autocomplete_lookup(options = {})
+      options.reverse_merge!({:search_param => "", :autocomplete_prefix => "", :sort => "down"})
+      search_param = options[:search_param]
+      autocomplete_prefix = options[:autocomplete_prefix]
       if $redis.exists(autocomplete_cache_key(autocomplete_prefix, search_param))
         return $redis.zrange(autocomplete_cache_key(autocomplete_prefix, search_param), 0, -1)
       end

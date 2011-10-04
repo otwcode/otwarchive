@@ -6,25 +6,19 @@ class CollectionItemsController < ApplicationController
   
   cache_sweeper :collection_sweeper
 
-  def not_allowed
-    flash[:error] = t('collection_items.not_allowed', :default => "Sorry, you're not allowed to do that.")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
-  end
-
   def load_item_and_collection
     if params[:collection_item]
       @collection_item = CollectionItem.find(params[:collection_item][:id])
     else
       @collection_item = CollectionItem.find(params[:id])
     end
-    not_allowed and return unless @collection_item
+    not_allowed(@collection) and return unless @collection_item
     @collection = @collection_item.collection
   end    
 
   
   def allowed_to_destroy
-    @collection_item.user_allowed_to_destroy?(current_user) || not_allowed
+    @collection_item.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
   end
   
   def index

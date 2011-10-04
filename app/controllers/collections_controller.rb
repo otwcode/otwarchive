@@ -20,11 +20,11 @@ class CollectionsController < ApplicationController
       @collections = @user.owned_collections.by_title.paginate(:page => params[:page])
     else
       if params[:user_id]
-        flash[:error].now = ts("We couldn't find a user by that name, sorry.")
+        flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
       elsif params[:collection_id]
-        flash[:error].now = ts("We couldn't find a collection by that name.")
+        flash.now[:error] = ts("We couldn't find a collection by that name.")
       elsif params[:work_id]
-        flash[:error].now = ts("We couldn't find that work.")
+        flash.now[:error] = ts("We couldn't find that work.")
       end
       @sort_and_filter = true
       params[:collection_filters] ||= {}

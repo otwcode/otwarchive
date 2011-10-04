@@ -161,9 +161,9 @@ module TagsHelper
   end
 
   def show_wrangling_dashboard
-    %w(tag_wranglings tag_wranglers).include?(controller.controller_name) ||
-    (can_wrangle? && controller.controller_name == 'tags') ||
-    (@tag && controller.controller_name == 'comments')
+    can_wrangle? && 
+    (%w(tags tag_wranglings tag_wranglers tag_wrangling_requests).include?(controller.controller_name) ||
+    (@tag && controller.controller_name == 'comments'))
   end
 
   # Returns a nested list of meta tags

@@ -41,12 +41,6 @@ class PotentialMatchesController < ApplicationController
     false
   end
   
-  def not_allowed
-    flash[:error] = t('potential_match.not_allowed', :default => "Sorry, you're not allowed to do that.")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
-  end
-
   def check_assignments_not_sent
     assignments_sent and return unless @challenge.assignments_sent_at.nil? 
   end

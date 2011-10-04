@@ -54,8 +54,11 @@ NAVIGATION, ACTIONS (BUTTONS)*/
       { margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
  .navigation li,li.navigation,  #main .navigation h4, .navigation div
       { display: inline }
-
-#main .navigation a, #main ul.edit-navigation a, .submit input, .submit a, #main .navigation input
+#main ul.edit-navigation 
+         { margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:left; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
+	  .edit-navigation li  
+	  {display:inline;}
+#main .navigation a, #main ul.edit-navigation a, .submit input, .submit a, #main .navigation input, .actions a
          { background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
 #main .navigation a.nav-with-help
          { background: transparent; border:0; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; margin-right: -1em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
@@ -84,8 +87,8 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 #main li.bookmark .navigation, #main li.fandom .navigation,  #main.pseuds-index li.blurb .navigation
       { float:right; }
 /* Note: this next navigation context doesn't really feel like it should be on "stuff I own" but more about "navigation on indiv blurb" */
-#main .work .own .navigation, #main .bookmark .own .navigation, #main .series .own .navigation, #main .works .own .navigation, #main .own.work .navigation,
-#main.collections-index .blurb .navigation, #main.collections-list_challenges .blurb .navigation
+#main .work .own .navigation, #main .bookmark .own .navigation, #main .series .own .navigation, #main .works .own .navigation, #main .own.work .navigation, 
+#main.collections-index .blurb .navigation, #main.collections-list_challenges .blurb .navigation, #main .tagset .blurb .navigation
       { float:left; margin:-1.25em auto auto;}
 #main li.bookmark .own .navigation
       { float: left; margin:0.25em auto auto -0.25em;}
@@ -119,6 +122,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .inline                    { display:inline; margin-bottom: 0.5em}
  .showme   {display: none;}
 
+
 /* Requests and offers in challenges */
  li.requested { font-weight: bold; }
  span.requested { color: #900; }
@@ -126,7 +130,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  span.offered.requested { color: #daa520; }
  
 /*TAGS */
- #main ul.tags li      { display:inline;}
+ #main .tags li      { display:inline;}
 
 /*CLOUD */
  a.cloud1           { color: #111; font-size: 0.625em; font-weight: 100 }
@@ -145,7 +149,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  #main dl.meta 				{ background: #fffef9; border: 2px solid; clear: right; margin: 0 auto; padding: 0.5em; position: relative }
  .meta dt, .meta dt.warning	{ font-size: 0.875em; font-weight: 100; width: 10.5em }
  #main .meta dd				{ margin: -1.3em 0 .7em 13em;  }
- #main .meta .stats dl dd,  #main .meta .stats dl dt	{ margin: 0 0.5em 0; width:auto; float:left}
+ #main .meta .stats dl dd,  #main .meta .stats dl dt, .meta dl.stats	{ margin: 0 0.5em 0 0; width:auto; float:left}
  .meta dd ul li 			{ display: inline; margin: auto;}
  .meta dd blockquote		{ margin: -1em 0 0 0 !important;}
 
@@ -155,12 +159,13 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .blurb ul li,.blurb dd ul li  { display: inline }
  li.blurb             { padding-left: 0.5em; padding-right: 0.5em; padding-top: 0.25em; padding-bottom: 0.25em; position: relative; clear:left; min-height: 100px }
  .blurb .module          { float:none;}
- .work .blurb .header, .series .blurb .header,   .blurb .work .header, .bookmark .blurb .header, .works .blurb .header, .work.blurb .header
+ .work .blurb .header, .series .blurb .header,   .blurb .work .header, .bookmark .blurb .header, .works .blurb .header, .work.blurb .header, .tagset .header
           { min-height:55px; }
  .blurb .header h4         { font-size: 1.1425em; margin: 0.375em 5.25em 0 65px }
  #main .blurb .header img       { position: relative; margin: 0; }
  .blurb .header h5, .blurb .header ul
                  { font-size: 1em; margin: 0.375em 6em 0 65px }
+ .tag_set .blurb .header h4, .tag_set .blurb .header ul { margin-left: 0;}
  .blurb h4 a:link,.blurb h4 img { color: #900; vertical-align: bottom }
  .blurb ul.required-tags     { position: absolute; top: 0; width:60px; margin:0;}
  .blurb ul.required-tags li, #main .blurb ul.required-tags li img, .blurb ul.required-tags li a
@@ -195,7 +200,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
   .blurb .warning-no {background:url("/images/warning-no-s.png");}
   .blurb .warning-choosenotto {background:url("/images/warning-choosenotto-s.png");}
   .blurb .external-work {background:url("/images/external-work-s.png");}
- */end icon image replacement */
+ /*end icon image replacement */
 
  .blurb .relationships       { background: #eee; }
  .blurb blockquote, .blurb ul.wranglers, .blurb form
@@ -214,6 +219,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
   #main .picture .blurb .navigation { margin-left: 120px; }
   #main .picture .blurb p.type { margin-bottom: 0.3em; margin-top: 0.3em; }
   .picture div.icon { top: 0.1em; }
+  
 
 /* BOOKMARK*/
  .bookmark p.count         { float: right }
@@ -227,6 +233,9 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 
 /* COLLECTION, ANON, MYSTERY */
  .blurb .mystery          { background: url(/images/mystery-s.png) 0 0 no-repeat }
+/*TAGSET for now style*/
+ .tagset .icon  {height:50px; width:50px; top:0; background: url(/images/tag_icon.png) 0 0 no-repeat; background-size:50px;}
+
 
 /* STATS*/
  .stats dt,.stats dd       { display: inline }
@@ -350,22 +359,21 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
  #main.works-index #search_main input.text { border: 2px inset #f0f0f0; background-color: white; }
 
  /* WORKS SHOW */
- #main .notes                            { padding-bottom: 0.5em !important}
+ #main .notes                            { padding-bottom: 0.5em !important; clear:right}
 
 /* MEDIA INDEX, SHOW, FANDOMS INDEX, SHOW*/
-  .media-index li.category      { min-height: 15em; padding: 0; border: 1px solid #DDD; }
-  .media-index li.category h3   { background:#333; color:#fffef9; font-weight:100; padding: .5em 1em; border-bottom:0.25em double #fffef9; margin: 0; top: 0;}
-  .media-index li.category h3 a { color: #fff; }
-  #main.media-index ol          { margin: 0 0 1em 1em; }
-  #main.media-index p           { margin-left: 1em;}
-  #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol
+  .media li.category      { min-height: 15em; padding: 0; border: 1px solid #DDD; margin:0.5625em 2em 2em 0}
+  .media li.category h3   { background:#555; color:#fffef9; font-weight:100; padding: .5em 1em; border-bottom:0.25em double #fffef9; margin: 0; top: 0;}
+  .media li.category h3 a { color: #fff; }
+  .media li.category h4 { padding: .5em 1em; margin: 0; }
+  .media p           { margin-right: 0.5625em; text-align:right}
+  #main.media-index ol, #main.fandoms-index ol, #main.fandoms-show ol, .media ol
                 { list-style-type: decimal }
-  #main.media-index li.category { margin: 1em 2em }
-  .media-index li.odd           { float: left; width: 40% }
-  .media-index li.even          { float: left; width: 40% }
+  .media li.odd, .media li.even { float: left; width: 40% }
+  .media .category li {padding:0 0.5625em;}
   .fandoms-index ul.index li    { float: left; width: 45% }
   .fandoms-index ul.index li.odd          {clear: left;}
-  #main.fandoms-index ul.index li.even    {margin-left: 10%;}
+  #main .media li.even    	{ margin-left: 10%;}
   .fandoms-index div.main-fandoms-listing {clear: both;}
   .fandoms-index .filters     {float: left; width: 100%;}
   .fandoms-index .alphabet li {display: inline;}
@@ -373,10 +381,7 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
   .fandoms-index ul.letters   {float: left; width: 90%; margin: 2em; padding: 0 1em; border: 1px solid #eee;
                               -moz-box-shadow: 3px 3px 4px #ccc; -webkit-box-shadow: 3px 3px 4px #ccc;
                               box-shadow: 3px 3px 4px #ccc;
-                              /* For IE 8 */
-                              -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#cccccc')";
-                              /* For IE 5.5 - 7 */
-                              filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#cccccc');
+                          
   }
   .fandoms-index ul.letters.collection {margin-left: 0; width: 95%;}
   .fandoms-index li.letter h3 {background: #eee; padding: .25em; width: auto;}
@@ -415,6 +420,12 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
   #main.skins-show dd  { margin: -1.1em 0 .7em 16em; }
   #main.skins-edit form dt, #main.skins-new form dt {width: 15em;}
 
+/* TAGSET (MEDIA) INDEX - main weighting will be removed (here and media) in new skin*/
+#main .tagset li.category {float:none; width:auto; margin:0.5em auto; min-height:inherit}
+.tagset .category h3:hover, #main ol.tagset.tags li:hover, #main ol.tagset .tags li:hover {background:#ddd; color:#111}
+.tagset li.category h3 a { color: #000; border-bottom: 0;}
+#main ol.tagset.tags li, #main ol.tagset .tags li { line-height: 2; white-space: nowrap; background: #eee; padding: 0.35em; margin: 0.5em; display: block;} 
+
 /* TAG WRANGLERS INDEX */
  #main.tag_wranglers-index .index       { width:100%; margin-top: 2em;}
  #main.tag_wranglers-index .index li    { width:100%;}
@@ -444,6 +455,18 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
 /*TAG WRANGLINGS INDEX */
  .tag_wranglings-index .module   { width: 70%; margin:auto; }
+
+/* TAG NOMINATIONS */
+ .nominations ul li { display: inline; padding: 1em; }
+ .unwrangled { border:1px solid #900;}
+ .nonexistent {color:#111;  border: 2px dashed #aaa; padding:0.15em;}
+ .tagset .options li {position:relative; padding:0.15em; overflow:hidden}
+ .tagset .options.lots li {margin: 0 !important;}
+ .tagset .options li h5 {font-size:1.286em; margin:-0.15em;}
+ .tagset th[title="nomination"] {width:50%; max-width:18em; font-weight:normal}
+ .tagset table span.synonym {display:block;}
+ /*TAGSET */
+.tagset {margin:0 auto 1em;}
 
 
 /* TRANSLATIONS*/

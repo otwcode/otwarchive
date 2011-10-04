@@ -2,7 +2,7 @@
 <h2><%= ts('Wrangle Tags for') %> <%= link_to_tag(@tag) %></h2>
 <!--/descriptions-->
 <!--subnav-->
-<ul class="navigation">
+<ul class="navigation actions">
 <li><%= link_to 'edit tag and parent associations', {:controller => :tags, :action => :edit, :id => @tag} %></li>
 <li><%= tag_comment_link(@tag) %></li>
 </ul>
@@ -28,7 +28,7 @@
 <% if params[:show] && params[:show] !~ /suggested/ %>
   <h3>Add new <%= params[:show] %></h3>
   <%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
-    <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{@tag.type.downcase}") %>
+    <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{params[:show].singularize}") %>
     <%= hidden_field_tag :show, params[:show] %>
     <%= hidden_field_tag :sort_column, params[:sort_column] %>
     <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
@@ -39,7 +39,7 @@
 <% end %>
 
 <% if params[:show] %>
-  <ul class="navigation">
+  <ul class="navigation actions">
     <li>Show: </li>
     <li><%= link_to 'all', url_for(:show => params[:show], :status => 'all') %></li>
     <li><%= link_to 'canonical', url_for(:show => params[:show], :status => 'canonical') %></li>
@@ -60,7 +60,7 @@
     <table>
       <tr>
         <th>
-          <%= sort_link t('.sort.tag_name', :default => 'Tag Name'), :name, {:sort_default => true} %>
+          <%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
         </th>
         <% if params[:show] == "relationships" %>
         <th>Characters</th>
@@ -72,10 +72,10 @@
         <th>Synonym</th>
         <% end %>
         <th>
-          <%= sort_link t('.sort.created_at', :default => 'Created'), :created_at, {:desc_default => true} %>
+          <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
         </th>
         <th>
-          <%= sort_link t('.sort.taggings_count', :default => 'Taggings Count'), :taggings_count, {:desc_default => true} %>
+          <%= sort_link ts('Taggings Count'), :taggings_count, {:desc_default => true} %>
         </th>
         <th scope="col">Manage</th>
       </tr>
@@ -108,8 +108,8 @@
         </td>
         <td><%= tag.created_at.to_date %></td>
         <td><%= tag.taggings_count %></td>
-        <td class="navigation">
-          <ul class="navigation">
+        <td class="navigation actions">
+          <ul class="navigation actions">
             <% unless params[:status] == "unwrangled" %>
             <li><%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %></li>
             <% end %>

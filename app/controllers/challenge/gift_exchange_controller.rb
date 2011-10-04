@@ -22,7 +22,8 @@ class Challenge::GiftExchangeController < ChallengesController
 
   def new
     if (@collection.challenge)
-      flash[:notice] = t('gift_exchange.already_challenge', :default => "There is already a challenge set up for this collection.")
+      flash[:notice] = ts("There is already a challenge set up for this collection.")
+      # TODO this will break if the challenge isn't a gift exchange
       redirect_to edit_collection_gift_exchange_path(@collection)
     else
       @challenge = GiftExchange.new
@@ -37,13 +38,8 @@ class Challenge::GiftExchangeController < ChallengesController
     if @challenge.save
       @collection.challenge = @challenge
       @collection.save
-      flash[:notice] = ts('Challenge was successfully created.')
-      
-      # see if we initialized the tag set
-      if initializing_tag_sets?
-        flash[:notice] += ts(' The tag list is being initialized. Please wait a short while and then check your challenge settings to customize the results.')
-      end
-      redirect_to @collection
+      flash[:notice] = ts('Challenge was successfully created.')      
+      redirect_to collection_profile_path(@collection)
     else
       render :action => :new
     end
@@ -57,11 +53,7 @@ class Challenge::GiftExchangeController < ChallengesController
       expire_fragment(:controller => 'challenge_signups', :action => 'new')
       
       # see if we initialized the tag set
-      if initializing_tag_sets?
-        # we were asked to initialize the tag set
-        flash[:notice] += ts(' The tag list is being initialized. Please wait a short while and then check your challenge settings to customize the results.')
-      end
-      redirect_to @collection
+      redirect_to collection_profile_path(@collection)
     else
       render :action => :edit
     end

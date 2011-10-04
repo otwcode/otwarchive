@@ -9,7 +9,7 @@ module PromptRestrictionsHelper
       end
     end
   end
-  
+
   def prompt_restriction_settings(form, include_description = false, allowany)
     
     result = "<!-- prompt restriction settings helper function -->".html_safe
@@ -47,21 +47,25 @@ module PromptRestrictionsHelper
   
   def required_and_allowed_boolean(form, fieldname)
     content_tag(:dd, ("Required: " + form.check_box( ("#{fieldname}_required").to_sym) + 
-               " Allowed: " + form.check_box( ("#{fieldname}_allowed").to_sym) ).html_safe )
+                      " Allowed: " + form.check_box( ("#{fieldname}_allowed").to_sym) ).html_safe )
   end
   
   def required_and_allowed(form, tag_type, allowany)
-    fields = "Required: " + form.text_field( ("#{tag_type}_num_required").to_sym, :size => 1 )
-    fields += " Allowed: " + form.text_field( ("#{tag_type}_num_allowed").to_sym, :size => 2 )
+    fields = "Required: " + form.text_field( ("#{tag_type}_num_required").to_sym, :class => "number" )
+    fields += " Allowed: " + form.text_field( ("#{tag_type}_num_allowed").to_sym, :class => "number" )
     if TagSet::TAG_TYPES.include?(tag_type)
       if allowany
-        fields += " Allow Any? " + form.check_box("allow_any_#{tag_type}".to_sym)
+        fields += label_tag field_id(form, "allow_any_#{tag_type}") do 
+          h(ts("Allow Any")) + form.check_box("allow_any_#{tag_type}".to_sym)
+        end
       else
         form.hidden_field :"allow_any_#{tag_type}".to_sym, :value => false
       end
-      fields += " Must Be Unique? " + form.check_box("require_unique_#{tag_type}".to_sym)
+      fields += label_tag field_id(form, "require_unique_#{tag_type}") do 
+        h(ts("Must Be Unique?")) + form.check_box("require_unique_#{tag_type}".to_sym)
+      end
     end
-    content_tag(:dd, fields.html_safe)
+    content_tag(:dd, fields.html_safe, :title => ts("#{tag_type.pluralize}")) + "\n".html_safe
   end  
 
 end

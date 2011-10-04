@@ -36,9 +36,10 @@
       <caption><%= ts("Select Users To Notify") %></caption>
       <thead>
         <tr>
-          <th scope="row"><%= ts("All/None") %></th>
-          <td>
-            <input type="checkbox" id="select_all">
+          <th scope="row"><%= ts("Select") %></th>
+          <td class="action">
+            <a href="#" class="check_all">All</a>
+            <a href="#" class="check_none">None</a>
           </td>
         </tr>
         <tr>
@@ -62,16 +63,4 @@
   <legend><%= ts("Send Notification") %></legend>
   <p class="submit"><%= submit_tag ts("Send Notification") %></p>
 </fieldset>
-<% end %>
-<!--/content-->
-<%= content_for :footer_js do %>
-  <%= javascript_tag do %>
-    $j(document).ready(function(){
-      $j("#select_all").change(function() {
-        $j(":checkbox[name='user_ids[]']").each(function(index, ticky) {
-            $j(ticky).attr("checked", !$j(ticky).attr("checked"));
-          });
-      });
-    })
-  <% end %>
 <% end %>

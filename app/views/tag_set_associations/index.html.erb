@@ -1,0 +1,22 @@
+<% unless @tags_to_associate.empty? %>
+  <h4><%= ts("Add Nominated Associations") %></h4>
+  <fieldset>
+    <ul class="navigation actions">
+      <li><a href="#" class="check_all">Check All</a></li>
+      <li><a href="#" class="check_none">Check None</a></li>
+    </ul>
+    <ul id="nominated_associations_to_add" class="options many">
+      <% @tags_to_associate.each do |tag| %>
+        <li>
+          <% association = @tag_set.tag_set_associations.build(:tag_id => tag.id, :parent_tagname => tag.parent_tagname) %>
+          <label class="action" for="<%= nested_field_id(tag_set_form, association, :create_association) %>">
+            <%= tag.name %> (<%= tag.parent_tagname %>)
+            <%= check_box_tag nested_field_name(tag_set_form, association, :create_association) %>
+          </label>
+          <%= hidden_field_tag nested_field_name(tag_set_form, association, :tag_id), tag.id %>
+          <%= hidden_field_tag nested_field_name(tag_set_form, association, :parent_tagname), tag.parent_tagname %>
+        </li>
+      <% end %>
+    </ul>
+  </fieldset>
+<% end %>

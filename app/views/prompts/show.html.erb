@@ -4,7 +4,7 @@
   <!--subnavigation, sorting and actions-->
   <!--/subnav-->
   <!--main content-->
-  <h3><%= ts("Prompt by %{person}", :person => @prompt.anonymous? ? "Anonymous" : @challenge_signup.pseud.byline) %></h3>
+  <h3><%= ts("#{@prompt.class.name} by %{person}", :person => @prompt.anonymous? ? "Anonymous" : @challenge_signup.pseud.byline) %></h3>
 
   <div class="collection preface">
     <%= render :partial => "challenge_signups/show_prompt", :locals => {:challenge_signup => @challenge_signup, :prompt => @prompt, :display_anon => "false"} %>

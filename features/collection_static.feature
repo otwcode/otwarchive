@@ -7,7 +7,7 @@ Feature: Basic collection navigation
     And I follow "New Collection"
     And I fill in "Collection Name" with "my_collection"
     And I fill in "Display Title" with "My Collection"
-    And I press "Submit"
+    And I submit
   Then I should see "Collection was successfully created."
     And I should see "Works (0)"
     And I should see "Fandoms (0)"

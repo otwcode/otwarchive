@@ -1,29 +1,4 @@
-<% if @collection && @collection.challenge %>
-  <!-- signups for a given challenge -->
-
-  <!-- render differently based on the challenge -->
-  <%= render "challenge/#{challenge_class_name(@collection)}/challenge_signups.html" %>
-  
-<% elsif @user %>
-  <!-- view in user dashboard -->
-
-  <h2><%= ts("Challenge Signups for %{user}", :user => @user.login) %></h2>
-
-  <table>
-    <tr>
-      <th>Pseud</th>
-      <th>Collection</th>
-      <th>Manage</th>
-    </tr>
-    <% @challenge_signups.each do |challenge_signup| %>
-      <tr>
-        <td><%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup) %></td>
-        <td><%= link_to challenge_signup.collection.title, challenge_signup.collection %></td>
-        <td class="navigation">
-          <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-
-<% end %>
+<% 
+  # this currently doesn't get called anywhere  
+  # presumably this rather than the challenge signups index should be the list of prompts eg in a prompt meme 
+%>

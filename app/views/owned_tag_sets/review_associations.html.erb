@@ -1,0 +1,41 @@
+<h3><%= ts("Notes") %></h3>
+<ul class="notes">
+  <li>Nominated associations will appear only for tags that have already been added to your set.</li>
+  <li>If tags have been nominated in fandoms that are not in the archive and not in your set, you must first add the fandom to your set to associate them.</li>
+</ul>
+
+<!-- /descriptions-->
+
+<%= render "navigation" %>
+
+<!--main content-->
+<%= form_for(@tag_set, :url => update_associations_tag_set_path(@tag_set), :html => {:method => :put, :class => "verbose tagset"}) do |form| %>
+  <%= error_messages_for @tag_set %>
+  
+  <% unless @tags_to_associate.empty? %>
+    <fieldset class="tagset">
+      <legend>Approve Nominated Associations</legend>
+      <h3><%= ts("Approve Nominated Associations") %></h3>
+      <%= check_all_none %>
+      <ul id="nominated_associations_to_add" class="options many">
+        <% @tags_to_associate.each do |tag| %>
+          <li>
+            <% association = @tag_set.tag_set_associations.build(:tag_id => tag.id, :parent_tagname => tag.parent_tagname) %>
+            <%= form.fields_for :tag_set_associations, association do |assoc_form| %>
+              <label class="action" for="<%= field_id(assoc_form, :create_association) %>">
+                <%= tag.name %> (<%= tag.parent_tagname %>)
+                <%= assoc_form.check_box :create_association %>
+              </label>
+              <%= assoc_form.hidden_field :tag_id, :value => tag.id %>
+              <%= assoc_form.hidden_field :parent_tagname, :value => tag.parent_tagname %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </fieldset>
+  <% end %>
+  
+  <%= submit_fieldset form %>
+    
+<% end %>
+<div class="clear"><!--presentational--></div>

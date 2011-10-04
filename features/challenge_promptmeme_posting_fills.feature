@@ -16,6 +16,7 @@ Feature: Prompt Meme Challenge
     And I follow "Sign Up"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "GhostSoup"
     And I check "challenge_signup_requests_attributes_0_anonymous"
+    # there are two forms in this page, can't use I submit
     And I press "Submit"
   Then I should see "Signup was successfully created"
   When I follow "Log out"

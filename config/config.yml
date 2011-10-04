@@ -63,6 +63,9 @@ INVITE_FROM_QUEUE_FREQUENCY: 7
 ACCOUNT_CREATION_ENABLED: false
 DAYS_TO_PURGE_UNACTIVATED: 7
 
+# this determines how long we keep processed results like tag set nominations in redis
+DAYS_TO_SAVE_PROCESSED: 56
+
 # validation values -- max/min lengths
 TITLE_MAX: 255
 TITLE_MIN: 1
@@ -150,6 +153,9 @@ CHARACTER_CATEGORY_NAME: 'Character'
 FREEFORM_CATEGORY_NAME: 'Additional Tags'
 COMMON_CATEGORY_NAME: 'Common'
 BANNED_CATEGORY_NAME: 'Banned'
+
+# DATE TIME FORMAT see http://ruby-doc.org/core/classes/Time.html#M000392
+DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p'
 
 # SEARCH TIPS
 SEARCH_TIPS: ['tag: arthur/merlin, words: >1000', 'words: 100', 'tag: buffy gen teen "no archive warnings"', 'tag: lex slash (mature|explicit)', '"cerulean orbs"']

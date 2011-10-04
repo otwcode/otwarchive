@@ -21,7 +21,7 @@ Feature: Collection
     And I fill in "Introduction" with "Welcome to the collection"
     And I fill in "FAQ" with "<dl><dt>What is this thing?</dt><dd>It's a collection</dd></dl>"
     And I fill in "Rules" with "Be nice to people"
-    And I press "Submit"
+    And I submit
   Then I should see "Collection was successfully created"
   When I follow "Profile"
   Then I should see "Welcome to the collection" within "#intro"
@@ -74,7 +74,7 @@ Feature: Collection
     And I fill in "collection_parent_name" with "collection_thing"
     And I fill in "Display Title" with "My SubCollection"
     And I fill in "Collection Name" with "subcollection_thing"
-    And I press "Submit"
+    And I submit
   Then I should see "Collection was successfully created"
   
   # and posting to that
@@ -131,11 +131,11 @@ Feature: Collection
    | Assignment Notification Message | My Message          |
    | Gift Notification Message       | My Other Message    |
 
-   And I check "Is this collection closed?"
+   And I check "This collection is closed"
    And I select "Gift Exchange" from "If this collection is for a challenge"
-   And I press "Submit"
+   And I submit
 
-   Then I should see "We couldn't save this Collection"
+   Then I should see a save error message
    And I should see "faulty name" in the "Collection Name" input
    And I should see "Awesome Collection" in the "Display Title" input
    And I should see "fangirl@example.org" in the "Email" input
@@ -145,5 +145,5 @@ Feature: Collection
    And I should see "My Rules" in the "Rules" input
    And I should see "My Message" in the "Assignment Notification Message" input
    And I should see "My Other Message" in the "Gift Notification Message" input
-   And the "Is this collection closed?" checkbox should not be disabled
+   And the "This collection is closed" checkbox should not be disabled
    And "Gift Exchange" should be selected within "If this collection is for a challenge"

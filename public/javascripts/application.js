@@ -37,6 +37,10 @@ $j(document).ready(function() {
           $j(target_id + "_closed").toggle();
     });
     $j('#hide-notice-banner').click(function () { $j('#notice-banner').hide(); });
+    setupTooltips();
+
+    // Activating Best In Place 
+    jQuery(".best_in_place").best_in_place();
 });
 
 function visualizeTables() {
@@ -52,44 +56,140 @@ function ShowExpandable() {
   if (collapsible != null) collapsible.style.display = 'none';
 }
 
+
+///////////////////////////////////////////////////////////////////
 // Autocomplete
-// set class to "autocomplete"
-// set attribute "autocomplete_method" to the action in autocomplete_controller you want to use
-// you can pass extra parameters at the end of the method with ?param=value&param=value
-// set attribute "autocomplete_live_params" to the ids of any attributes whose values should be read
-//  as: param=attribute_id&param=attribute_id
-// example: 
-// <input type="text" class="autocomplete" autocomplete_method="/autocomplete/relationship?tag_set_id=#{tag_set.id}" 
-//        autocomplete_live_params="fandom=work_fandom_field&character=work_character_field" 
-jQuery(function($){
+///////////////////////////////////////////////////////////////////
+
+function get_token_input_options(self) {
+  return {
+    searchingText: self.attr('autocomplete_searching_text'),
+    hintText: self.attr('autocomplete_hint_text'),
+    noResultsText: self.attr('autocomplete_no_results_text'),
+    minChars: self.attr('autocomplete_min_chars'),
+    queryParam: "term",
+    preventDuplicates: true,
+    tokenLimit: self.attr('autocomplete_token_limit'),
+    liveParams: self.attr('autocomplete_live_params'),
+    makeSortable: self.attr('autocomplete_sortable')
+  };
+}
+
+// Look for autocomplete_options in application helper and throughout the views to
+// see how to use this!
+jQuery(function($) {
   $('input.autocomplete').livequery(function(){
     var self = $(this);
-    self.tokenInput(self.attr('autocomplete_method'), {
-        searchingText: self.attr('autocomplete_searching_text'),
-        hintText: self.attr('autocomplete_hint_text'),
-        noResultsText: self.attr('autocomplete_no_results_text'),
-        minChars: self.attr('autocomplete_min_chars'),
-        queryParam: "term",
-        preventDuplicates: true,
-        tokenLimit: self.attr('autocomplete_token_limit'),
-        liveParams: self.attr('autocomplete_live_params'),
-        makeSortable: self.attr('autocomplete_sortable'),
-        noCache: self.attr('autocomplete_no_cache')
+    var token_input_options = get_token_input_options(self);
+    var method;
+    try {
+        method = $.parseJSON(self.attr('autocomplete_method'));
+    } catch (err) {
+        method = self.attr('autocomplete_method');
+    }
+    self.tokenInput(method, token_input_options);
+  });
+});
+
+///////////////////////////////////////////////////////////////////
+
+// expand, contract, shuffle
+jQuery(function($){
+  $('.expand').each(function(){
+    // start by hiding the list in the page
+    list = $($(this).attr('action_target'));
+    if (!list.attr('force_expand') || list.children().size() > 25 || list.attr('force_contract')) {
+      list.hide();
+      $(this).show();      
+    } else {
+      // show the shuffle and contract button only
+      $(this).nextAll(".shuffle").show();
+      $(this).next(".contract").show();
+    }    
+    
+    // set up click event to expand the list 
+    $(this).click(function(event){
+      list = $($(this).attr('action_target'));
+      list.show();
+      
+      // show the contract & shuffle buttons and hide us
+      $(this).next(".contract").show();
+      $(this).nextAll(".shuffle").show();
+      $(this).hide();
+      
+      event.preventDefault(); // don't want to actually click the link
+    });
+  });
+  
+  $('.contract').each(function(){
+    $(this).click(function(event){
+      // hide the list when clicked
+      list = $($(this).attr('action_target'));
+      list.hide();
+
+      // show the expand and shuffle buttons and hide us
+      $(this).prev(".expand").show();
+      $(this).nextAll(".shuffle").hide();
+      $(this).hide();
+      
+      event.preventDefault(); // don't want to actually click the link
+    });
+  });
+  
+  $('.shuffle').each(function(){
+    // shuffle the list's children when clicked
+    $(this).click(function(event){
+      list = $($(this).attr('action_target'));
+      list.children().shuffle();
+      event.preventDefault(); // don't want to actually click the link
+    });
+  });
+  
+});
+
+// check all or none within the parent fieldset, optionally with a string to match on the name field of the checkboxes
+// stored in the "checkbox_name_filter" attribute on the all/none links. 
+jQuery(function($){
+  $('.check_all').each(function(){
+    $(this).click(function(event){
+      var filter = $(this).attr('checkbox_name_filter');
+      var checkboxes;
+      if (filter) {
+        checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
+      } else {
+        checkboxes = $(this).closest("fieldset").find(':checkbox');
+      }
+      checkboxes.attr('checked', true);
+      event.preventDefault();   
+    });
+  });
+  
+  $('.check_none').each(function(){
+    $(this).click(function(event){
+      var filter = $(this).attr('checkbox_name_filter');
+      var checkboxes;
+      if (filter) {
+        checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
+      } else {
+        checkboxes = $(this).closest("fieldset").find(':checkbox');
+      }
+      checkboxes.attr('checked', false);
+      event.preventDefault();      
     });
   });
 });
 
-// Single-value autocomplete
-jQuery(function($){
-    $('.single_autocomplete').livequery(function(){
-        var self = $(this);
-        self.autocomplete({
-            source: self.attr('autocomplete_method'),
-            minLength: self.attr('autocomplete_min_chars'),
-            autoFocus: true // to keep behavior similar to main autocomplete
-        });
-    });
+// Timepicker
+jQuery(function($) {
+  $('.timepicker').datetimepicker({
+    ampm: true,
+    dateFormat: 'yy-mm-dd',
+    timeFormat: 'hh:mmTT',
+    hourGrid: 5,
+    minuteGrid: 10
+  });
 });
+
 
 
 // Hides expandable fields if Javascript is enabled
@@ -114,11 +214,6 @@ function handlePopUps() {
       window.open($j(element).attr('href'));
       event.stop();
     });    
-}
-
-// used in autocompleters to automatically insert comma
-function addCommaToField(element, item) {
-    element.value = element.value + ', '
 }
 
 // used in nested form fields for deleting a nested resource 
@@ -165,18 +260,6 @@ function showOptions(idToCheck, idToShow) {
     var areaToShow = document.getElementById(idToShow);
     if (checkbox.checked) {
         Element.toggle(idToShow)
-    }
-}
-
-function selectAllCheckboxes(basefield, count, checked) {
-    var checkbox;
-    for (i=1; i<=count; i++) {
-        checkbox = document.getElementById(basefield + '_' + i);
-        if (checked == 'invert') {
-            checkbox.checked = !checkbox.checked
-        } else {
-            checkbox.checked = checked
-        }
     }
 }
 
@@ -293,56 +376,11 @@ function generateCharacterCounters() {
     });
 }
 
-
-//generic show hide toggler
-/*
-function ViewToggle(el_selector, show_link_selector, hide_link_selector, effect_duration, start_shown) {
-  this.el = el_selector
-  this.show_el = show_link_selector
-  this.hide_el = hide_link_selector
-  this.options = {
-    duration: effect_duration || 0.2
-  }
-  if (!start_shown) { // this is null == false, if not provided
-    // Call on body DOM loaded event courtesy of jQuery
-    var thisone = this
-    jQuery(function(){thisone.hide()})
-  }
+function setupTooltips() {
+    $j('span[tooltip]').each(function(){
+       $j(this).qtip({
+          content: $j(this).attr('tooltip'),
+          position: {corner: {target: 'topMiddle'}}
+       });
+    });    
 }
-ViewToggle.prototype = {
-  toggle: function toggle() {
-    var el = $(this.el)
-    if (el) Effect.toggle(el, 'blind', this.options)
-    this._toggle_el(this.show_el)
-    this._toggle_el(this.hide_el)
-  },
-  hide: function hide() {
-    var el = $(this.el)
-    if (el) Effect.BlindUp(el, this.options)
-    this._show_el(this.show_el)
-    this._hide_el(this.hide_el)
-  },
-  show: function show() {
-    var el = $(this.el)
-    if (el) Effect.BlindDown(el, this.options)
-    this._show_el(this.hide_el)
-    this._hide_el(this.show_el)
-  },
-  _hide_el: function(el) {
-    el = $(el)
-    if (el) Effect.Fade(el, {duration:0})
-  },
-  _toggle_el: function(el) {
-    el = $(el)
-    if (el) Effect.toggle(el, 'appear', {duration:0})
-  },
-  _show_el: function(el) {
-    el = $(el)
-    if (el) Effect.Appear(el, {duration:0})
-  }
-}
-
-// commented out for now as it is inadvertently disabling sessions view login login_view = new ViewToggle('signin', 'signin_closed', 'signin_open')
-subnav_view = new ViewToggle('subnav');
-flash_view = new ViewToggle('flash');
-*/

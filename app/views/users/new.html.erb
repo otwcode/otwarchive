@@ -16,14 +16,16 @@
 <!-- TODO add ajax -->
 <%= form_for @user do |f| %>
   <%= hidden_field_tag :invitation_token, @user.invitation_token %>
-  <fieldset><legend>User Details</legend>
+ 
   <% if params[:use_openid] && ArchiveConfig.USE_OPENID %>
-    <p><%= link_to ts('Sign up using Password'), new_user_path(:invitation_token => @user.invitation_token) %></p>
+    <p class="actions" role="navigation"><%= link_to ts('Sign up using Password'), new_user_path(:invitation_token => @user.invitation_token) %></p>
     <%= render :partial => "openid", :locals => {:f => f} %>
   <%- else %>
     <% if ArchiveConfig.USE_OPENID %>
-      <p><%= link_to ts('Sign up using OpenID'), new_user_path(:use_openid => true, :invitation_token => @user.invitation_token) %></p>
+      <p class="actions" role="navigation"><%= link_to ts('Sign up using OpenID'), new_user_path(:use_openid => true, :invitation_token => @user.invitation_token) %></p>
     <% end %>
+    
+    <fieldset><legend>User Details</legend>
     <%= render :partial => "passwd", :locals => {:f => f} %>
   <% end %>
   </fieldset>

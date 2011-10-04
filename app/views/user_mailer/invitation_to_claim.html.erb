@@ -31,7 +31,7 @@
 </p>
 
 <p>
-  <%=h "You can claim your account or remove your stories at the following address:" %>
+  <%= "You can claim your account or remove your stories at the following address:" %>
   <%= link_to(claim_url(:invitation_token => @token), claim_url(:invitation_token => @token)) %>
 </p>  
 

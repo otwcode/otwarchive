@@ -78,6 +78,7 @@ class StoryParser
       begin
         work = download_and_parse_story(url, options)
         if work && work.save
+          work.chapters.each {|chap| chap.save}
           works << work
         else
           failed_urls << url
@@ -244,7 +245,7 @@ class StoryParser
       return chapter
     end
 
-    def set_work_attributes(work, location, options = {})
+    def set_work_attributes(work, location="", options = {})
       raise Error, "Work could not be downloaded" if work.nil?
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
@@ -263,7 +264,7 @@ class StoryParser
 
       # handle importing works for others
       if options[:importing_for_others]
-        external_author_name = parse_author(location)
+        external_author_name = options[:external_author_name] || parse_author(location)
         if external_author_name
           if external_author_name.external_author.do_not_import
             # we're not allowed to import works from this address
@@ -292,7 +293,8 @@ class StoryParser
       work.posted = true if options[:post_without_preview]
       work.chapters.each do |chapter|
         chapter.posted = true
-        chapter.save
+        # ack! causing the chapters to exist even if work doesn't get created!
+        # chapter.save
       end
       return work
     end
@@ -688,7 +690,6 @@ class StoryParser
       return work_params
     end
 
-    
     # Parses a story from the Yuletide archive (an AutomatedArchive)
     def parse_story_from_yuletide(story)
       work_params = {:chapter_attributes => {}}
@@ -1086,14 +1087,32 @@ class StoryParser
       return convert_rating(rating)
     end
 
-    def convert_revised_at(date)
+    def convert_revised_at(date_string)
       begin
-        date = Date.parse(date)
+        date = nil
+        if date_string.match(/^(\d+)$/)
+          # probably seconds since the epoch
+          date = Time.at($1.to_i)
+        end
+        date ||= Date.parse(date_string)
         return '' if date > Date.today
         return date
-      rescue ArgumentError
+      rescue ArgumentError, TypeError
         return ''
       end
+    end
+    
+    # tries to find appropriate existing collections and converts them to comma-separated collection names only
+    def get_collection_names(collection_string)
+      cnames = ""
+      collection_string.split(',').map {|cn| cn.squish}.each do |collection_name|
+        collection = Collection.find_by_name(collection_name) || Collection.find_by_title(collection_name)
+        if collection 
+          cnames += ", " unless cnames.blank?
+          cnames += collection.name
+        end
+      end
+      cnames
     end
 
 end

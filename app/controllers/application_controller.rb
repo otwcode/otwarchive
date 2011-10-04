@@ -168,6 +168,12 @@ public
     logged_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
   end
 
+  def not_allowed(fallback=nil)
+    flash[:error] = ts("Sorry, you're not allowed to do that.")
+    redirect_to (fallback || root_path) rescue redirect_to '/'
+  end
+  
+
   @over_anon_threshold = true if @over_anon_threshold.nil?
 
   def get_page_title(fandom, author, title, options = {})
