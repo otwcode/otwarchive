@@ -13,31 +13,29 @@
 
   <% if @character_hash || @relationship_hash %>
     <% # if there was a fandom display, check for any that weren't shown in the fandom display %>
-    <% all_fandom_keys = (@character_hash.keys | @relationship_hash.keys).sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')} %>
-    <% all_fandom_keys -= @tag_set.tag_set.with_type("fandom").value_of :name %>
   
-    <% if @fandom_hash && !all_fandom_keys.empty? %>
-
-      <% # DEAR FRONT END I suspect there is a better way to do this within the list and feel free to replace it with that better way! %>
-      <% # start of the ugly %>
-      </ol>  
-      <h4><%= ts("The following characters and relationships in the set don't seem to be connected to any fandom in the set as far as we can tell. You might want to set up associations for them.") %></h4>
-      <% # reopen new ol %>
-      <ol class="tagset index">
-      <% # end of ugly %>
-
-      <li class="cast listbox">
-        <h3><%= ts("Unassociated Characters & Relationships") %> <%= expand_contract_shuffle("list_for_unassociated_char_and_rel") %></h3>
-        <ol id="list_for_unassociated_char_and_rel" class="tags index">
-          <% # we have to use the splat operator here because values_at uses args %>
-          <%= @character_hash.values_at(*all_fandom_keys).flatten.uniq.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}.map {|tag| content_tag(:li, tag)}.join("\n").html_safe %>
-          <%= @relationship_hash.values_at(*all_fandom_keys).flatten.uniq.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}.map {|tag| content_tag(:li, tag)}.join("\n").html_safe %>
+    <% if @fandom_hash %>
+      <% @unassociated_chars.reject {|c| @character_seen[c]} %>
+      <% @unassociated_rels.reject {|r| @relationship_seen[r]} %>
+      <% unless @unassociated_chars.empty? && @unassociated_rels.empty? %>
+        <% # close ol %>
         </ol>
-      </li>
+        <h4><%= ts("The following characters and relationships in this set don't seem to be connected to any fandom in the set as far as we can tell. You might want to set up associations for them.") %></h4>
+        <% # reopen new ol %>
+        <ol class="tagset index">
+
+        <li class="cast listbox">
+          <h3><%= ts("Unassociated Characters & Relationships") %> <%= expand_contract_shuffle("list_for_unassociated_char_and_rel") %></h3>
+          <ol id="list_for_unassociated_char_and_rel" class="tags index">
+            <%= @unassociated_chars.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}.map {|tag| content_tag(:li, tag)}.join("\n").html_safe %>
+            <%= @unassociated_rels.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}.map {|tag| content_tag(:li, tag)}.join("\n").html_safe %>
+          </ol>
+        </li>
+      <% end %>
     
     <% else %>  
   
-      <% all_fandom_keys.each do |fandom| %>
+      <% @fandom_keys_from_other_tags.each do |fandom| %>
         <% 
            # this gets called a ton if there are a lot of fandoms so not doing it in a partial for performance, although
            # as a result it's mostly duplicated in show_fandoms_by_media :( 
@@ -49,7 +47,6 @@
             <h3 class="expander_parent">
               <%= ts("%{fandom}", :fandom => fandom) %>
               (<%= has_relationships + has_characters %>)
-              <%= expand_contract_shuffle(list_id) %>
               <% list_id = "list_for_fandom_#{fandom.gsub(/[^\w]/, '_')}" %>
               <%= expand_contract_shuffle(list_id) %>
             </h3>

@@ -45,12 +45,37 @@ module TagSetsHelper
   
   def nomination_status(nomination=nil)
     if nomination && nomination.approved
-      '<span class="symbol approved" tooltip="This nomination has been approved!"><span>&#x2714;</span></span>'.html_safe
+      '<span class="symbol approved" tooltip="This nomination has been approved!"><span>&#10004;</span></span>'.html_safe
     elsif nomination && nomination.rejected
-      '<span class="symbol rejected" tooltip="This nomination was rejected (but an alternate version may have been approved instead)."><span>&#x2718;</span></span>'.html_safe
+      '<span class="symbol rejected" tooltip="This nomination was rejected (but another version may have been approved instead)."><span>&#10006;</span></span>'.html_safe
     else
       '<span class="symbol unreviewed" tooltip="This nomination has not been reviewed yet and can still be changed."><span>&#x2753;</span></span>'.html_safe
     end
+  end
+  
+#BACK END, I attempted to put titles in but it's rendering as oldtitle
+  def nomination_status_span(nom)
+    status = "nonexistent"
+    tooltip = ts("This tag has never been used on the archive before. Check the spelling!")
+    title = ts("nonexistent tag")
+    case
+    when nom.canonical
+      if nom.parented
+        status = "canonical"
+        tooltip = ts("This is a canonical archive tag.")
+        title = ts("canonical tag")
+      else
+        status = "unparented"
+        tooltip = ts("This is a canonical archive tag but without a parent (usually a fandom).")
+        title = ts("canonical tag without parent")
+      end
+    when nom.exists
+      status = "unwrangled"
+      tooltip = ts("This is not an official archive tag.")
+      title = ts("unofficial tag")
+    end
+    
+    return "<span class='nomination #{status}' title='#{title}' tooltip='#{tooltip}'>".html_safe
   end
   
   def tag_relation_to_list(tag_relation)

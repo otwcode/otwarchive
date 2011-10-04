@@ -1,8 +1,11 @@
 class FandomNomination < TagNomination
-  has_many :character_nominations, :dependent => :destroy
+  belongs_to :tag_set_nomination #, :inverse_of => :fandom_nominations
+  has_one :owned_tag_set, :through => :tag_set_nomination #, :inverse_of => :fandom_nominations
+
+  has_many :character_nominations, :dependent => :destroy #, :inverse_of => :fandom_nomination
   accepts_nested_attributes_for :character_nominations, :allow_destroy => true, :reject_if => proc { |attrs| attrs[:tagname].blank? }
 
-  has_many :relationship_nominations, :dependent => :destroy
+  has_many :relationship_nominations, :dependent => :destroy #, :inverse_of => :fandom_nomination
   accepts_nested_attributes_for :relationship_nominations, :allow_destroy => true, :reject_if => proc { |attrs| attrs[:tagname].blank? }
 
 

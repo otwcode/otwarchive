@@ -15,11 +15,11 @@ class OwnedTagSet < ActiveRecord::Base
   accepts_nested_attributes_for :tag_set_associations, :allow_destroy => true, 
     :reject_if => proc { |attrs| !attrs[:create_association] || attrs[:tag_id].blank? || (attrs[:parent_tag_id].blank? && attrs[:parent_tagname].blank?) }
 
-  has_many :tag_set_nominations, :dependent => :destroy
-  has_many :fandom_nominations, :through => :tag_set_nominations
-  has_many :character_nominations, :through => :tag_set_nominations
-  has_many :relationship_nominations, :through => :tag_set_nominations
-  has_many :freeform_nominations, :through => :tag_set_nominations
+  has_many :tag_set_nominations, :dependent => :destroy #, :inverse_of => :owned_tag_set
+  has_many :fandom_nominations, :through => :tag_set_nominations #, :inverse_of => :owned_tag_set
+  has_many :character_nominations, :through => :tag_set_nominations #, :inverse_of => :owned_tag_set
+  has_many :relationship_nominations, :through => :tag_set_nominations #, :inverse_of => :owned_tag_set
+  has_many :freeform_nominations, :through => :tag_set_nominations #, :inverse_of => :owned_tag_set
 
   attr_protected :featured
 
@@ -50,6 +50,7 @@ class OwnedTagSet < ActiveRecord::Base
   validates_numericality_of :fandom_nomination_limit, :character_nomination_limit, :relationship_nomination_limit, :freeform_nomination_limit,
     :only_integer => true, :less_than_or_equal_to => 20, :greater_than_or_equal_to => 0,
     :message => ts('must be an integer between 0 and 20.')
+
 
   after_update :cleanup_outdated_associations
   def cleanup_outdated_associations

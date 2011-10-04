@@ -1,5 +1,9 @@
 <h2><%= ts("Tag Nominations for %{title}", :title => @tag_set_nomination.owned_tag_set.title) %></h2>
-<p class="notes">Please nominate the canonical form of a tag if possible. The autocomplete will only list canonical tags. Your nominations will be reviewed by the tag set moderators and may not be included.</p>
+<ul class="notes">
+  <li>Please nominate the canonical version of a tag if there is one in the archive. The autocomplete will list canonical tags for you.</li>
+  <li>Your nominations will be reviewed by the tag set moderators and may be changed or left out (sometimes just because a different form of your nomination was included)</li>
+  <li>Old nominations are deleted occasionally to clean up the database, so please be sure that a tag set is being reviewed actively before you nominate!</li>
+</ul>
 
 <h3 class="landmark">Navigation</h3>
   <ul class="navigation actions" role="navigation">

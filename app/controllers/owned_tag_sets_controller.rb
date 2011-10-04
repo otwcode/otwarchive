@@ -52,37 +52,46 @@ class OwnedTagSetsController < ApplicationController
   
   def show
     if @tag_set.visible || @tag_set.user_is_moderator?(current_user)
-      # 
-      # if params[:tag_type] && TagSet::TAG_TYPES.include?(params[:tag_type])
-      #   @topmost_tag_type = params[:tag_type]
-      # else
-      #   @topmost_tag_type =  @tag_set.tag_set.topmost_tag_type
-      # end
-      # 
-      # # Get all the tags of the topmost type with any children in the set, and the associated tags of this set
-      # @topmost_tags = @tag_set.tag_set.tags.where(:type => @topmost_tag_type.classify).value_of :id, :name
-      # topmost_ids = @topmost_tags.collect {|tt| tt.first}
-      # child_ids = @tag_set.tag_set_associations.where(:parent_tag_id => topmost_ids).value_of :tag_id
-      # 
-      
-      # @associations = @tag_set.tag_set_associations
-      if @tag_set.tag_set.has_type?("fandom")
-        @fandom_hash = Tag.names_by_parent(Fandom.in_tag_set(@tag_set.tag_set), "media") 
-      end
 
+      @fandom_keys_from_other_tags = []
       if @tag_set.tag_set.has_type?("character")
         @character_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), "character")
         canonical_hash = Tag.names_by_parent(Character.in_tag_set(@tag_set.tag_set), "fandom") 
         # merge the values of the two hashes (each value is an array) as a set (ie remove duplicates)
         @character_hash.merge!(canonical_hash) {|key, oldval, newval| (oldval | newval) }
+        remaining = @tag_set.tag_set.with_type("character").with_no_parents.value_of(:name)
+        @character_hash["(No linked fandom - might need association)"] ||= []; @character_hash["(No linked fandom - might need association)"] += remaining unless remaining.empty?
+        @fandom_keys_from_other_tags += @character_hash.keys
       end 
 
       if @tag_set.tag_set.has_type?("relationship") 
         @relationship_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), "relationship")
         canonical_hash = Tag.names_by_parent(Relationship.in_tag_set(@tag_set.tag_set), "fandom") 
         @relationship_hash.merge!(canonical_hash) {|key, oldval, newval| (oldval | newval) }
+        remaining = @tag_set.tag_set.with_type("relationship").with_no_parents.value_of(:name)
+        @relationship_hash["(No linked fandom - might need association)"] ||= []; @relationship_hash["(No linked fandom - might need association)"] += remaining unless remaining.empty?
+        @fandom_keys_from_other_tags += @relationship_hash.keys
       end 
-      
+
+      @fandom_keys_from_other_tags.uniq!.sort! {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}
+
+      if @tag_set.tag_set.has_type?("fandom")
+        @fandom_hash = Tag.names_by_parent(Fandom.in_tag_set(@tag_set.tag_set), "media") 
+        @fandom_hash["(No Media)"] ||= []; @fandom_hash["(No Media)"] += @tag_set.tag_set.with_type("fandom").with_no_parents.value_of(:name)
+
+        # we want to collect and warn about any chars or relationships not in the fandoms
+        @character_seen = {}
+        @relationship_seen = {}
+        @fandom_keys_from_other_tags -= @fandom_hash.values.flatten
+        unless @fandom_keys_from_other_tags.empty?
+          if @character_hash
+            @unassociated_chars = @character_hash.values_at(*@fandom_keys_from_other_tags).flatten.compact.uniq
+          end 
+          if @relationship_hash
+            @unassociated_rels = @relationship_hash.values_at(*@fandom_keys_from_other_tags).flatten.compact.uniq
+          end
+        end
+      end      
     end
   end
 
@@ -168,17 +177,14 @@ class OwnedTagSetsController < ApplicationController
   end
 
   def get_tags_to_associate
-    # get the tags for which we have a parent nomination which doesn't already
-    # exist in the database 
+    # get the tags for which we have a parent nomination which doesn't already exist in the database 
     @tags_to_associate = Tag.joins(:set_taggings).where("set_taggings.tag_set_id = ?", @tag_set.tag_set_id).
       joins("INNER JOIN tag_nominations ON tag_nominations.tagname = tags.name").
-      where("tag_nominations.parented = 0 AND EXISTS 
+      joins("INNER JOIN tag_set_nominations ON tag_nominations.tag_set_nomination_id = tag_set_nominations.id").
+      where("tag_set_nominations.owned_tag_set_id = ?", @tag_set.id).
+      where("tag_nominations.parented = 0 AND tag_nominations.rejected != 1 AND EXISTS 
         (SELECT * from tags WHERE tags.name = tag_nominations.parent_tagname)")
-
-    # also constrain by fandoms added to this set? hmm
-    # INNER JOIN set_taggings on set_taggings.tags_id = tags.id
-    # WHERE set_taggings.tag_set_id = #{@tag_set.tag_set_id}
-        
+      
     # skip already associated tags
     associated_tag_ids = TagSetAssociation.where(:owned_tag_set_id => @tag_set.id).value_of :tag_id    
     @tags_to_associate = @tags_to_associate.where("tags.id NOT IN (?)", associated_tag_ids) unless associated_tag_ids.empty?

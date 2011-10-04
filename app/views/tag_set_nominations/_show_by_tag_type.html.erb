@@ -1,10 +1,10 @@
 <% if @limit[tag_type] > 0 %>
-  <li class="category <%= cycle :odd, :even %>">
+  <li class="listbox <%= cycle :odd, :even %> <%= tag_type %>">
     <h3><%= ts("#{tag_type.classify.pluralize}: ") %></h3>   
     <% if @tag_set_nomination.nominated_tags(tag_type).count == 0 %>
       <p><%= ts("(None Nominated)") %></p>
     <% else %>
-      <ol>
+      <ol class="tags index">
         <% @tag_set_nomination.send("#{tag_type}_nominations").each do |tag| %>
           <li><%= render "show_tag_status", :tag => tag %></li>
         <% end %>

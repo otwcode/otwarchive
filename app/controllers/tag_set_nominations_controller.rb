@@ -109,10 +109,10 @@ class TagSetNominationsController < ApplicationController
   end
 
   def request_noncanonical_info
-    if @tag_set_nomination.character_nominations.any? {|tn| !tn.canonical && (tn.parent_tagname.blank? && !tn.fandom_nomination)} ||
-      @tag_set_nomination.relationship_nominations.any? {|tn| !tn.canonical && (tn.parent_tagname.blank? && !tn.fandom_nomination)}
+    if @tag_set_nomination.character_nominations.any? {|tn| !tn.parented && tn.parent_tagname.blank?} ||
+      @tag_set_nomination.relationship_nominations.any? {|tn| !tn.parented && tn.parent_tagname.blank?}
       
-      flash[:notice] += ts(" Since some of your nominations are not canonical tags, please consider editing to add their fandoms.")
+      flash[:notice] += ts(" Please consider editing to add fandoms to any of your non-canonical tags!")
     end
   end
 
@@ -126,20 +126,43 @@ class TagSetNominationsController < ApplicationController
       redirect_to tag_set_path(@tag_set)
     end
   end
+
+  def base_nom_query(tag_type)
+    TagNomination.where(:type => (tag_type.is_a?(Array) ? tag_type.map {|t| "#{t.classify}Nomination"} : "#{tag_type.classify}Nomination")).for_tag_set(@tag_set).unreviewed.limit(@nom_limit)
+  end
   
   # set up various variables for reviewing nominations
   def setup_for_review
     set_limit
-    nom_limit = 30
-    @tag_types = TagSet::TAG_TYPES_INITIALIZABLE.select {|type| @limit[type] > 0}
-    
+    @nom_limit = 30
     @nominations = HashWithIndifferentAccess.new
-    @tag_types.each do |tag_type|
-      noms = "#{tag_type}_nomination".classify.constantize.for_tag_set(@tag_set).unreviewed.limit(nom_limit)
-      @nominations[tag_type] = HashWithIndifferentAccess.new
-      @nominations[tag_type][:canonical] = noms.where(:canonical => true)
-      @nominations[tag_type][:existing] = noms.where(:canonical => false, :exists => true)
-      @nominations[tag_type][:nonexistent] = noms.where(:exists => false)
+    more_noms = false
+
+    if @limit[:fandom] > 0
+      # all char and rel tags happen under fandom noms
+      @nominations[:fandom] = base_nom_query("fandom")
+      more_noms = true if @tag_set.fandom_nominations.unreviewed.count > @nom_limit
+      if (@limit[:character] > 0 || @limit[:relationship] > 0) 
+        @nominations[:cast] = base_nom_query(%w(character relationship)).
+          join_fandom_nomination.
+          where('fandom_nominations_tag_nominations.approved = 1').
+          order(:parent_tagname, :type)
+      end
+    else
+      # if there are no fandoms we're going to assume this is a one or few fandom tagset
+      @nominations[:character] = base_nom_query("character").order(:parent_tagname) if @limit[:character] > 0
+      @nominations[:relationship] = base_nom_query("relationship").order(:parent_tagname) if @limit[:relationship] > 0
+      more_noms = true if (@tag_set.character_nominations.count > @nom_limit || @tag_set.relationship_nominations.count > @nom_limit)
+    end
+    @nominations[:freeform] = base_nom_query("freeform") if @limit[:freeform] > 0
+    more_noms = true if @tag_set.freeform_nominations.count > @nom_limit
+    
+    if more_noms
+      flash[:notice] = ts("There are too many nominations awaiting review to show at once! After you approve or rejecte some, new ones will appear here.")
+    end
+    
+    if @tag_set.tag_nominations.unreviewed.empty?
+      flash[:notice] = ts("No nominations to review!")
     end
   end
   
@@ -161,66 +184,24 @@ class TagSetNominationsController < ApplicationController
       flash[:error] = ts("You don't have permission to do that.")
       redirect_to tag_set_path(@tag_set) and return
     end
+    setup_for_review    
 
-    @errors = []
-
-    # We start by just sorting out the data the mod has sent us
-    @approve = HashWithIndifferentAccess.new
-    @synonym = HashWithIndifferentAccess.new
-    @reject = HashWithIndifferentAccess.new
-    @change = HashWithIndifferentAccess.new
-    TagSet::TAG_TYPES.each do |tag_type|
-      @approve[tag_type] = []
-      @synonym[tag_type] = []
-      @reject[tag_type] = []
-      @change[tag_type] = []
-    end
-    
-    params.each_pair do |key, val|
-      next unless val.present?
-      if key.match(/^([a-z]+)_(approve|reject|synonym|change)_(.*)$/)
-        type = $1
-        action = $2
-        name = $3
-        if TagSet::TAG_TYPES.include?(type)
-          # we're safe
-          case action
-          when "reject"
-            @reject[type] << name
-          when "synonym"
-            @synonym[type] << name
-          when "approve"
-            @approve[type] << name unless params["#{type}_change_#{name}"] != name
-          when "change"
-            next if val == name
-            # this is the tricky one: make sure we can do this name change
-            tagnom = TagNomination.for_tag_set(@tag_set).where(:type => "#{type.classify}Nomination", :tagname => name).first
-            if !tagnom 
-              @errors << ts("Couldn't find a #{type} nomination for #{name}")
-            elsif !tagnom.change_tagname?(val)
-              @errors << ts("Invalid name change for #{name} to #{val}: %{msg}", :msg => tagnom.errors.full_messages.join(', '))
-            else
-              @change[type] << [name, val]
-            end
-          end
-        end
-      end
-    end
-    
-    TagSet::TAG_TYPES.each do |tag_type|
-      unless (intersect = @approve[tag_type] & @reject[tag_type]).empty?
-        @errors << ts("You have both approved and rejected the following %{type} tags: %{intersect}", :type => tag_type, :intersect => intersect.join(", "))
-      end
-    end
+    # Collate the input into @approve, @reject, @synonym, @change, checking for:
+    # - invalid tag name changes
+    # - approve & reject both selected
+    # put errors in @errors, mark types to force to be expanded with @force_expand
+    @approve = HashWithIndifferentAccess.new; @synonym = HashWithIndifferentAccess.new
+    @reject = HashWithIndifferentAccess.new; @change = HashWithIndifferentAccess.new
+    @errors = []; @force_expand = {}
+    collect_update_multiple_results
     
     # If we have errors don't move ahead
     unless @errors.empty?
-      setup_for_review
       render :action => "index" and return
     end
-
+    
     # OK, now we're going ahead and making piles of db changes! eep! D:
-    TagSet::TAG_TYPES.each do |tag_type|
+    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
       @tagnames_to_add = @approve[tag_type] + @synonym[tag_type]
       @tagnames_to_remove = @reject[tag_type]
       
@@ -234,19 +215,16 @@ class TagSetNominationsController < ApplicationController
           # ughhhh
           @errors = tagnom.errors.full_messages
           flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")
-          setup_for_review
           render :action => "index" and return           
         end
       end
 
       # update the tag set
-      @tag_set.tag_set.send("#{tag_type}_tagnames_to_add=", @tagnames_to_add.join(","))
-      @tag_set.tag_set.tagnames_to_remove = @tagnames_to_remove.join(",")
+      @tag_set.tag_set.send("#{tag_type}_tagnames_to_add=", @tagnames_to_add)
+      @tag_set.tag_set.tagnames_to_remove = @tagnames_to_remove            
       unless @tag_set.save
-        # ughhhh
         @errors = @tag_set.errors.full_messages
         flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")
-        setup_for_review
         render :action => "index" and return
       end
       
@@ -254,13 +232,73 @@ class TagSetNominationsController < ApplicationController
       TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", @tagnames_to_add).update_all(:approved => true, :rejected => false)
       TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).update_all(:approved => true, :rejected => false)          
       TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", @tagnames_to_remove).update_all(:rejected => true, :approved => false)
-      @notice << '<li>'.html_safe + ts("Successfully added to set: %{approved}", :approved => @tagnames_to_add.join(', ')) + '</li>'.html_safe
-      @notice << '<li>'.html_safe + ts("Successfully rejected: %{rejected}", :rejected => @tagnames_to_remove.join(', ')) + '</li>'.html_safe
+      @notice ||= []
+      @notice << ts("Successfully added to set: %{approved}", :approved => @tagnames_to_add.join(', ')) unless @tagnames_to_add.empty?
+      @notice << ts("Successfully rejected: %{rejected}", :rejected => @tagnames_to_remove.join(', ')) unless @tagnames_to_remove.empty?
     end
     
     # If we got here we made it through, YAY
-    flash[:notice] = '<ul>' + @notice.join("\n").html_safe + '</ul>'.html_safe
-    redirect_to tag_set_nominations_path(@tag_set) and return
+    flash[:notice] = @notice
+    if @tag_set.tag_nominations.unreviewed.empty? 
+      flash[:notice] << ts("All nominations reviewed, yay!")
+      redirect_to tag_set_path(@tag_set)
+    else
+      flash[:notice] << ts("Still some nominations left to review!")
+      redirect_to tag_set_nominations_path(@tag_set) and return
+    end
   end
+  
+  protected
+  
+  # gathers up the data for all the tag types 
+  def collect_update_multiple_results
+    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
+      @approve[tag_type] = []
+      @synonym[tag_type] = []
+      @reject[tag_type] = []
+      @change[tag_type] = []
+    end
+    
+    params.each_pair do |key, val|
+      next unless val.present?
+      if key.match(/^([a-z]+)_(approve|reject|synonym|change)_(.*)$/)
+        type = $1
+        action = $2
+        name = $3
+        if TagSet::TAG_TYPES_INITIALIZABLE.include?(type)
+          # we're safe
+          case action
+          when "reject"
+            @reject[type] << name
+          when "synonym"
+            @synonym[type] << name
+          when "approve"
+            @approve[type] << name unless params["#{type}_change_#{name}"].present? && (params["#{type}_change_#{name}"] != name)
+          when "change"
+            next if val == name
+            # this is the tricky one: make sure we can do this name change
+            tagnom = TagNomination.for_tag_set(@tag_set).where(:type => "#{type.classify}Nomination", :tagname => name).first
+            if !tagnom 
+              @errors << ts("Couldn't find a #{type} nomination for #{name}")
+              @force_expand[type] = true
+            elsif !tagnom.change_tagname?(val)
+              @errors << ts("Invalid name change for #{name} to #{val}: %{msg}", :msg => tagnom.errors.full_messages.join(', '))
+              @force_expand[type] = true
+            else
+              @change[type] << [name, val]
+            end
+          end
+        end
+      end
+    end
+    
+    TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
+      unless (intersect = @approve[tag_type] & @reject[tag_type]).empty?
+        @errors << ts("You have both approved and rejected the following %{type} tags: %{intersect}", :type => tag_type, :intersect => intersect.join(", "))
+        @force_expand[tag_type] = true
+      end
+    end
+  end
+  
 
 end

@@ -98,7 +98,7 @@ jQuery(function($){
   $('.expand').each(function(){
     // start by hiding the list in the page
     list = $($(this).attr('action_target'));
-    if (list.children().size() > 25 || list.attr('force_contract')) {
+    if (!list.attr('force_expand') || list.children().size() > 25 || list.attr('force_contract')) {
       list.hide();
       $(this).show();      
     } else {

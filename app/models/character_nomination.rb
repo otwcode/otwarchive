@@ -1,5 +1,8 @@
 class CharacterNomination < TagNomination
-  belongs_to :fandom_nomination
+  belongs_to :tag_set_nomination #, :inverse_of => :character_nominations
+  has_one :owned_tag_set, :through => :tag_set_nomination #, :inverse_of => :character_nominations
+  belongs_to :fandom_nomination #, :inverse_of => :character_nominations
+  
 
   validate :known_fandom
   def known_fandom
@@ -16,7 +19,7 @@ class CharacterNomination < TagNomination
   end
 
   def get_parent_tagname
-    self.parent_tagname.blank? ? self.parent_tagname : (
+    self.parent_tagname.present? ? self.parent_tagname : (
       self.fandom_nomination ? self.fandom_nomination.tagname : 
         Tag.find_by_name(self.tagname).try(:parents).try(:first).try(:name))
   end

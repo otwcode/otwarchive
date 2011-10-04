@@ -13,12 +13,12 @@
 
 
 <ul class="notes">
+  <li>We may clear out old nominations (that is, after several months) to avoid database clutter. Please don't 
+  leave nominations turned on unless you are reviewing nominations regularly!</li>  
+
   <li>You can approve or reject nominations, or leave them for later. Once a nomination
-  has been either approved or rejected, it won't appear on this page.</li>
-
-  <li>We might clear out old nominations after several months to avoid database clutter, so please don't 
-  leave nominations turned on unless you are reviewing nominations regularly.</li>
-
+  has been either approved or rejected, it won't appear on this page again.</li>
+  
   <li>If you reject a fandom nomination, we will automatically reject all character and relationship nominations submitted 
     for that fandom. We will <em>not</em> automatically approve character nominations.</li>
 
@@ -33,54 +33,29 @@
   <%= error_messages_formatted @errors %>
 
   <% @tagnames_seen = {} %>
-  <% @tag_types.each do |tag_type| %>
 
-    <h3>Nominated <%= tag_type.classify.pluralize %> <%= expand_contract_shuffle("list_for_review_#{tag_type}", shuffle=false) %></h3>
-    <ul id="list_for_review_<%= tag_type %>" force_contract="true">
-      <% %w(canonical existing nonexistent).each do |section| %>
-        <% noms = @nominations[tag_type][section] %>
-        <% if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) %>
-          <% noms = noms.order(:parent_tagname, :tagname) %>
-          <% @last_parent_tagname = ""; @no_parent_tagname_seen = false %>
-        <% else %>
-          <% noms = noms.order(:tagname) %>
-        <% end %>
-        <% unless noms.empty? %>
-          <li>
-            <fieldset class="<%= section %>">
-              <legend><%=ts("#{section.capitalize}")%></legend>
-      	      <h4><%=ts("#{section.capitalize}")%></h4>
-      	      <ul class="actions">
-            		<li>Approve</li>
-            		<li><a href="#" class="check_all" checkbox_name_filter="approve">All</a></li>
-            		<li><a href="#" class="check_none" checkbox_name_filter="approve">None</a></li>
-                <li>Reject</li>
-            		<li><a href="#" class="check_all" checkbox_name_filter="reject">All</a></li>
-            	 	<li><a href="#" class="check_none" checkbox_name_filter="reject">None</a></li>
-            	 	<% if section == "existing" %>
-                  <li>Synonym</li>
-              	  <li><a href="#" class="check_all" checkbox_name_filter="synonym">All</a></li>
-              	  <li><a href="#" class="check_none" checkbox_name_filter="synonym">None</a></li>
-            	 	<% end %>
-              </ul>
-              <table summary="<%= ts("approve, reject, or edit nominations for #{section} #{tag_type.pluralize}") %>">
-      	        <caption><%=ts("#{section.capitalize}")%></caption>
-                <%= render "review_thead", :section => section %>
-                <tbody>
-                  <% noms.each do |nom| %>
-                    <% next if @tagnames_seen[nom.tagname] %>
-                    <% @tagnames_seen[nom.tagname] = 1 %>
-                    <%= render "review_individual_nom", :tag_type => tag_type, :nom => nom, :section => section %>
-                  <% end %>
-                </tbody>
-              </table>
-            </fieldset>
-          </li>
-        <% end %>
+  <ol class="tagset review index">
+    <% if @nominations[:fandom] %>
+      <%= render "review_fandoms", :fandoms => @nominations[:fandom] %>
+      <% if @nominations[:cast] %>
+        <%= render "review_cast", :cast => @nominations[:cast] %>
       <% end %>
-    </ul>
-  <% end %>
-
+    <% end %>
+  
+    <% %w(character relationship freeform).each do |tag_type| %>
+      <% if @nominations[tag_type] %>
+        <li class="<%= tag_type %> listbox <%= cycle :odd, :even %>">
+          <h3><%= tag_type.classify.pluralize %></h3>
+          <ol class="tags index">
+            <% @nominations[tag_type].each do |nom| %>
+              <li><%= render "review_individual_nom", :nom => nom %></li>
+            <% end %>
+          </ol>
+        </li>
+      <% end %>
+    <% end %>
+  </ol>
+<div class="clear"><!--presentational--></div>
   <fieldset>
     <p class="submit"><%= submit_tag "Submit" %></p>      
   </fieldset>    

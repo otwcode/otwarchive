@@ -1,0 +1,22 @@
+<% # expects fandoms %>
+<% fandoms.each do |fandom| %>
+  <% cast = TagNomination.for_tag_set(@tag_set).where(:parent_tagname => fandom.tagname).unreviewed.order(:type) %>
+  <li class="fandom listbox <%= cycle :odd, :even %>">
+    <h3>
+      <!--BACK END absolutely cannot have block (autocomplete) child of h3
+      have bodged this for now -->
+      <%= fandom.tagname %>
+      <!--BACK END expand contract shuffle see listbox draft in limdev-->
+    </h3>
+    <%= render "review_individual_nom", :nom => fandom %>
+    <% if cast.count > 0 %>
+      <ol class="tags index">
+        <% cast.each do |cast_nom| %>
+          <li>
+            <%= render "review_individual_nom", :nom => cast_nom %>
+          </li>
+        <% end %>
+      </ol>
+    <% end %>
+  </li>
+<% end %>

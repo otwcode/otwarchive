@@ -1,5 +1,5 @@
 class TagNomination < ActiveRecord::Base
-  belongs_to :tag_set_nomination
+  belongs_to :tag_set_nomination #, :inverse_of => :tag_nominations
   has_one :owned_tag_set, :through => :tag_set_nomination
   
   attr_accessor :from_fandom_nomination
@@ -19,13 +19,24 @@ class TagNomination < ActiveRecord::Base
     end
   end
 
-  validate :not_already_approved, :on => :update
-  def not_already_approved
+  validate :not_already_reviewed, :on => :update
+  def not_already_reviewed
     if tagname_changed? && (tagname != tagname_was) && (self.approved || self.rejected) 
       errors.add(:base, ts("^You cannot change %{tagname_was} to %{tagname} because that nomination has already been reviewed.", :tagname_was => self.tagname_was, :tagname => self.tagname))
       tagname = self.tagname_was
     end
     false
+  end
+  
+  # This makes sure no tagnames are nominated for different parents in this tag set
+  validate :require_unique_tagname_with_parent
+  def require_unique_tagname_with_parent
+    query = TagNomination.for_tag_set(self.tag_set_nomination.owned_tag_set).where(:tagname => self.tagname).where("parent_tagname != ?", (self.get_parent_tagname || ''))
+    # let people change their own!
+    query = query.where("tag_nominations.id != ?", self.id) if !(self.new_record?)
+    if query.exists?
+      errors.add(:base, ts("^Someone else has already nominated %{tagname} for this set but in a different fandom. Please be more specific.", :tagname => self.tagname))
+    end
   end
 
   before_save :set_tag_status
@@ -93,10 +104,18 @@ class TagNomination < ActiveRecord::Base
     end
     parents.group("parent_tagname").order("count_id DESC").count('id').keys
   end
+  
+  # We need this manual join in order to do a query over multiple types of tags
+  # (ie, via TagNomination.where(:type => ...))
+  def self.join_fandom_nomination
+    joins("INNER JOIN tag_nominations fandom_nominations_tag_nominations ON 
+      fandom_nominations_tag_nominations.id = tag_nominations.fandom_nomination_id AND 
+      fandom_nominations_tag_nominations.type = 'FandomNomination'")
+  end
 
   # Can we change the name to this new name?
   def change_tagname?(new_tagname)
-    tagname = new_tagname
+    self.tagname = new_tagname
     if self.valid?
       return true
     else
@@ -107,9 +126,10 @@ class TagNomination < ActiveRecord::Base
   # If the mod is changing our name, change all other noms in this set as well
   # NOTE: YOU CAN ONLY USE THIS IF YOU SUBSEQUENTLY MANUALLY UPDATE THE STATUS OF ALL THE TAG NOMS
   def change_tagname!(new_tagname)
+    old_tagname = self.tagname
     if change_tagname?(new_tagname)
       # name change is ok - we use update_all because we assume our status is being updated up a level
-      TagNomination.for_tag_set(owned_tag_set).where(:tagname => tagname).update_all(:tagname => new_tagname)
+      TagNomination.for_tag_set(owned_tag_set).where(:tagname => old_tagname).update_all(:tagname => new_tagname)
       return true
     end
     return false
@@ -117,7 +137,7 @@ class TagNomination < ActiveRecord::Base
 
   # here so we can override it in char/relationship noms
   def get_parent_tagname
-    (self.parent_tagname.blank? ? self.parent_tagname : nil)
+    self.parent_tagname.present? ? self.parent_tagname : nil
   end
   
   def unreviewed?
