@@ -26,7 +26,7 @@ namespace :work do
     end
     # Create hit counters for works that don't have them yet
     (work_ids - found_works).each do |work_id|
-      HitCounter.create(:work_id => work_id, :hit_count => HitCounter.redis_hits_for_work(work_id))
+      hit_counter = HitCounter.create(:work_id => work_id, :hit_count => HitCounter.redis_hits_for_work(work_id))
       $redis.srem("Work:new_hits", hit_counter.work_id)
     end
   end

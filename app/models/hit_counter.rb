@@ -13,6 +13,7 @@ class HitCounter < ActiveRecord::Base
     if redis_hits > hit_count
       HitCounter.update_all("hit_count = #{redis_hits}", "id = #{id}")
     else
+      puts "The redis hit count for work id: #{work_id} was #{redis_hits}. redis has been updated with the database value of #{hit_count}"
       $redis.set(redis_key(:hit_count), hit_count)
     end
   end
