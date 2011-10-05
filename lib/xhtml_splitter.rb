@@ -5,19 +5,23 @@ module XhtmlSplitter
 
   TAG_PATTERN = /<(\/?)(\w+)(.*?)(\/?)>/
 
+  XSL = Nokogiri::XSLT(File.open("#{Rails.root.to_s}/lib/xhtml_splitter.xsl"))
+
   
-  # Split a string of valid xhtml into chunks that are smaller than
+  # Split a string of valid html into chunks that are smaller than
   # maxbytes bytes
   #
-  # Algorithm is as follows: copy the xhtml over to the new part line
-  # by line, keeping track of opening and closing html tags via a
-  # stack. If the new part gets close to maxbytes bytes, stop, close
-  # all still-open tags. start with a new part where the still-open
-  # tags get re-opened.
-  #
-  # Relies on tags not spanning multiple lines, which our
-  # Nokogiri-parsed HTML adheres
-  def split_xhtml(html, maxbytes=300*1024)
+  # Algorithm is as follows: convert html to xhtml and split it into
+  # multiple lines via xslt at certain tags. (See xslt which tags go
+  # on a new line.) Copy xhtml over to the new part line by line,
+  # keeping track of opening and closing html tags via a stack. If the
+  # new part gets close to maxbytes bytes, stop, close all still-open
+  # tags. start with a new part where the still-open tags get
+  # re-opened.
+
+  def split_xhtml(html, maxbytes=280*1024)
+    doc = XSL.transform(Nokogiri::XML.parse("<myroot>#{html}</myroot>"))
+    html = doc.xpath("/myroot/*").to_s
     return [html] if html.bytesize < maxbytes
 
     parts = []
@@ -29,7 +33,12 @@ module XhtmlSplitter
       stack_tags(line, tag_stack)
       if new_part.bytesize >= 0.85 * maxbytes
         new_part = close_tags(new_part, tag_stack)
-        raise Error, "Part too big." if new_part.bytesize >= maxbytes
+        if new_part.bytesize >= maxbytes
+          raise Error, "Part too big."
+          # This might happen the last line before the split is very
+          # long. If we actually run into this problem, we could try
+          # to split the line further
+        end
         parts << new_part
         new_part = open_tags(tag_stack)
       end

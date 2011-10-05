@@ -1,7 +1,8 @@
 <% @chapter = chapter if defined?(chapter) %>
-<% @chapters = chapter if defined?(chapters) %>
+<% @meta = meta if defined?(meta) %>
+<% @endnotes = endnotes if defined?(endnotes) %>
 
-<% if @chapters.size > 1 %>
+<% if @meta %>
   <div class="meta">
     <% unless @mobi %><h2 class="heading"><%= @chapter.chapter_title.html_safe %></h2><% end %>
     <% if (!@chapter.pseuds.blank? && (@chapter.pseuds != @work.pseuds)) %>
@@ -30,13 +31,13 @@
 
 <!--chapter content-->
 <div class="userstuff">
-  <%=raw sanitize_field(@chapter, :content) %>
+  <%=raw (defined?(@content) ? @content : sanitize_field(@chapter, :content)) %>
 </div>
 <!--/chapter content-->
 
-<% unless @chapter.endnotes.blank? %>
+<% if @endnotes && !@chapter.endnotes.blank? %>
   <div class="meta" id="endnotes<%= @chapter.position %>">
     <p><%= ts('Chapter End Notes') %></p>
-    <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :endnotes) %></blockquote>
+    <blockquote class="userstuff"><%= raw sanitize_field(@chapter, :endnotes) %></blockquote>
   </div>
 <% end %>

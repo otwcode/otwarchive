@@ -1,3 +1,5 @@
+include XhtmlSplitter
+
 class DownloadsController < ApplicationController
 
   skip_before_filter :store_location, :only => :show
@@ -168,23 +170,37 @@ protected
     FileUtils.mkdir_p "#{epubdir}/META-INF"
     FileUtils.cp("#{Rails.root}/app/views/epub/container.xml", "#{epubdir}/META-INF")
 
-    # write the OEBPS navigation files
-    FileUtils.mkdir_p "#{epubdir}/OEBPS"
-    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx"))}
-    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf"))}
-
     # write the OEBPS content files
+    FileUtils.mkdir_p "#{epubdir}/OEBPS"
     preface = render_to_string(:template => "downloads/_download_preface.html", :layout => 'barebones.html')
     render_xhtml(preface, "preface")
 
+    @parts = []
     @chapters.each_with_index do |chapter, index|
       @chapter = chapter
-      html = render_to_string(:template => "downloads/_download_chapter.html", :layout => "barebones.html")
-      render_xhtml(html, "chapter#{index + 1}")
+      
+      # split chapters into multiple parts if they are too big
+      @parts << split_xhtml(sanitize_field(@chapter, :content))
+      @parts[-1].each_with_index do |part, partindex|
+        @content = part
+        # we only need the chapter meta/endnotes info if it's a
+        # multichaptered work and if we are displaying the first/last
+        # part of a chapter
+        @meta = @chapters.size > 1 && partindex == 0
+        @endnotes = @chapters.size > 1 && partindex == @parts[-1].size
+        html = render_to_string(:template => "downloads/_download_chapter.html", :layout => "barebones.html")
+        render_xhtml(html, "chapter#{index + 1}_#{partindex + 1}")
+      end
     end
 
     afterword = render_to_string(:template => "downloads/_download_afterword.html", :layout => 'barebones.html')
     render_xhtml(afterword, "afterword")
+
+    # write the OEBPS navigation files
+    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx"))}
+    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf"))}
+
+
   end
 
   def render_xhtml(html, filename)

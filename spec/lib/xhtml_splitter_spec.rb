@@ -11,16 +11,16 @@ describe XhtmlSplitter do
         <div bgcolor=\"red\">
           <div>
             <p align=\"center\">
-              one
+              one one one one one
             </p>
-            <p>two</p>
-            <p>thr<br/>ee</p>
-            <p>for</p>
-            <p>five</p>
+            <p>two two two two two</p>
+            <p>three<br/>three</p>
+            <p>four four four four</p>
+            <p>five five five five</p>
             <hr/>
-            <p><i>six</i></p>
-            <p>seven</p>
-            <p><b>eight</b></p>
+            <p><i>six</i> six six six six</p>
+            <p>seven seven seven seven seven</p>
+            <p><b>eight </b>eight eight eight</p>
             <p>nine</p>
             <p>ten</p>
          </div>
@@ -32,8 +32,8 @@ describe XhtmlSplitter do
 
     end
     
-    it "should not touch small html" do
-      split_xhtml(@html).should == [@html]
+    it "should not split small html" do
+      split_xhtml(@html).size.should == 1
     end
 
     it "should split in two small parts" do
@@ -41,6 +41,19 @@ describe XhtmlSplitter do
       result.size.should == 2
       result[0].bytesize.should < 300
       result[1].bytesize.should < 300
+    end
+    
+    it "should split in two small parts if html is a single line" do
+      result = split_xhtml(@html.gsub("\n", ""), 300)
+      result.size.should == 2
+      result[0].bytesize.should < 300
+      result[1].bytesize.should < 300
+    end
+    
+    it "should handle html with more than one root element" do
+      result = split_xhtml("<p>aaa</p><p>bbb</p><p>ccc</p>")
+      doc = Nokogiri::HTML.fragment(result[0])
+      doc.xpath("./p").size.should == 3
     end
     
     it "should produce valid splitted XHTML parts" do
