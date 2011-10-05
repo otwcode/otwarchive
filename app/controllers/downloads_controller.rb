@@ -93,12 +93,7 @@ protected
   end
 
   def download_epub
-    # if only one chapter can use same file as html and pdf versions
-    if @chapters.size == 1
-      create_epub_files("single")
-    else
-      create_epub_files
-    end
+    create_epub_files
 
     # stuff contents of epub directory into a zip file named with .epub extension
     # note: we have to zip this up in this particular order because "mimetype" must be the first item in the zipfile
@@ -161,7 +156,7 @@ protected
     File.open("#{@work.download_dir}/mobi/#{basename}.html", 'w') {|f| f.write(html)}
   end
 
-  def create_epub_files(single = "")
+  def create_epub_files
     return if File.exists?("#{@work.download_basename}.epub")
   # Manually building an epub file here
   # See http://www.jedisaber.com/eBooks/tutorial.asp for details
@@ -175,27 +170,21 @@ protected
 
     # write the OEBPS navigation files
     FileUtils.mkdir_p "#{epubdir}/OEBPS"
-    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx#{single}"))}
-    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf#{single}"))}
+    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx"))}
+    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf"))}
 
     # write the OEBPS content files
-    if single == "single"
-      # can use work html, but needs translation into proper xhtml
-      create_work_html
-      render_xhtml(File.read("#{@work.download_basename}.html"), "work")
-    else
-      preface = render_to_string(:template => "downloads/_download_preface.html", :layout => 'barebones.html')
-      render_xhtml(preface, "preface")
+    preface = render_to_string(:template => "downloads/_download_preface.html", :layout => 'barebones.html')
+    render_xhtml(preface, "preface")
 
-      @chapters.each_with_index do |chapter, index|
-        @chapter = chapter
-        html = render_to_string(:template => "downloads/_download_chapter.html", :layout => "barebones.html")
-        render_xhtml(html, "chapter#{index + 1}")
-      end
-
-      afterword = render_to_string(:template => "downloads/_download_afterword.html", :layout => 'barebones.html')
-      render_xhtml(afterword, "afterword")
+    @chapters.each_with_index do |chapter, index|
+      @chapter = chapter
+      html = render_to_string(:template => "downloads/_download_chapter.html", :layout => "barebones.html")
+      render_xhtml(html, "chapter#{index + 1}")
     end
+
+    afterword = render_to_string(:template => "downloads/_download_afterword.html", :layout => 'barebones.html')
+    render_xhtml(afterword, "afterword")
   end
 
   def render_xhtml(html, filename)
