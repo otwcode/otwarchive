@@ -1012,19 +1012,6 @@ ActiveRecord::Schema.define(:version => 20111013010307) do
     t.datetime "updated_at"
   end
 
-  create_table "system_metrics", :force => true do |t|
-    t.string   "name",               :null => false
-    t.datetime "started_at",         :null => false
-    t.string   "transaction_id"
-    t.text     "payload"
-    t.float    "duration",           :null => false
-    t.float    "exclusive_duration", :null => false
-    t.integer  "request_id"
-    t.integer  "parent_id"
-    t.string   "action",             :null => false
-    t.string   "category",           :null => false
-  end
-
   create_table "tag_sets", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
