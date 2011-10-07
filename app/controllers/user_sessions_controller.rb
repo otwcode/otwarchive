@@ -81,12 +81,17 @@ class UserSessionsController < ApplicationController
               message = ts("The password you entered has expired. Please click the 'Reset password' link below.")
             end
           elsif user.active?
-            message = ts("The password you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+            if @user_session.being_brute_force_protected? 
+           
+              message = ts("Your account has been locked for 30 minutes due to too many failed login attempts.")
+            else
+              message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+            end
           else
             message = ts("You'll need to activate your account before you can log in. Please check your email or contact support.")
           end
         else
-          message = ts("We couldn't find that user name in our database. Please try again.")
+          message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
         end
         flash.now[:error] = message
         @user_session = UserSession.new(params[:user_session])

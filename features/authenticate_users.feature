@@ -12,7 +12,7 @@ Feature: User Authentication
       And I fill in "User name" with "sam"
       And I fill in "Password" with "test"
       And I press "Log in"
-    Then I should see "The password you entered doesn't match our records"
+    Then I should see "The password or user name you entered doesn't match our records"
     And I should see "Forgot your password or user name?"
     When I follow "Reset password"
     Then I should see "Please tell us the user name or email address you used when you signed up for your Archive account"
@@ -105,7 +105,7 @@ Feature: User Authentication
       And I fill in "User name" with "sammy"
       And I fill in "Password" with "test"
       And I press "Log in"
-    Then I should see "We couldn't find that user name in our database. Please try again"
+    Then I should see "The password or user name you entered doesn't match our records."
 
   Scenario: Wrong username
     Given I have no users
@@ -117,7 +117,7 @@ Feature: User Authentication
       And I fill in "User name" with "sam"
       And I fill in "Password" with "tester"
       And I press "Log in"
-    Then I should see "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below."
+    Then I should see "The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below."
 
   Scenario: Logged out
     Given I have no users
