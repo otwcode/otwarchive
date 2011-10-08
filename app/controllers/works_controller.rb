@@ -574,10 +574,10 @@ protected
         @work = storyparser.download_and_parse_chapters_into_story(urls, options)
       end
     rescue Timeout::Error
-      flash[:error] = ts("Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.")
+      flash.now[:error] = ts("Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.")
       render :new_import and return
     rescue StoryParser::Error => exception
-      flash[:error] = ts("We couldn't successfully import that work, sorry: %{message}", :message => exception.message)
+      flash.now[:error] = ts("We couldn't successfully import that work, sorry: %{message}", :message => exception.message)
       render :new_import and return
     end
 
