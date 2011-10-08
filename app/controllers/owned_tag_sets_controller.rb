@@ -54,35 +54,39 @@ class OwnedTagSetsController < ApplicationController
     if @tag_set.visible || @tag_set.user_is_moderator?(current_user)
 
       @fandom_keys_from_other_tags = []
-      if @tag_set.tag_set.has_type?("character")
+      if @tag_set.has_type?("character")
         @character_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), "character")
-        canonical_hash = Tag.names_by_parent(Character.in_tag_set(@tag_set.tag_set), "fandom") 
+        canonical_hash = Tag.names_by_parent(Character.in_tag_set(@tag_set), "fandom") 
         # merge the values of the two hashes (each value is an array) as a set (ie remove duplicates)
         @character_hash.merge!(canonical_hash) {|key, oldval, newval| (oldval | newval) }
-        remaining = @tag_set.tag_set.with_type("character").with_no_parents.value_of(:name)
+        remaining = @tag_set.with_type("character").with_no_parents.value_of(:name)
         @character_hash["(No linked fandom - might need association)"] ||= []; @character_hash["(No linked fandom - might need association)"] += remaining unless remaining.empty?
         @fandom_keys_from_other_tags += @character_hash.keys
       end 
 
-      if @tag_set.tag_set.has_type?("relationship") 
+      if @tag_set.has_type?("relationship") 
         @relationship_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), "relationship")
-        canonical_hash = Tag.names_by_parent(Relationship.in_tag_set(@tag_set.tag_set), "fandom") 
+        canonical_hash = Tag.names_by_parent(Relationship.in_tag_set(@tag_set), "fandom") 
         @relationship_hash.merge!(canonical_hash) {|key, oldval, newval| (oldval | newval) }
-        remaining = @tag_set.tag_set.with_type("relationship").with_no_parents.value_of(:name)
+        remaining = @tag_set.with_type("relationship").with_no_parents.value_of(:name)
         @relationship_hash["(No linked fandom - might need association)"] ||= []; @relationship_hash["(No linked fandom - might need association)"] += remaining unless remaining.empty?
         @fandom_keys_from_other_tags += @relationship_hash.keys
       end 
 
-      @fandom_keys_from_other_tags.uniq!.sort! {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')} unless @fandom_keys_from_other_tags.empty?
+      if @fandom_keys_from_other_tags && !@fandom_keys_from_other_tags.empty?
+        @fandom_keys_from_other_tags = @fandom_keys_from_other_tags.compact.uniq.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')} 
+      end
 
-      if @tag_set.tag_set.has_type?("fandom")
-        @fandom_hash = Tag.names_by_parent(Fandom.in_tag_set(@tag_set.tag_set), "media") 
-        @fandom_hash["(No Media)"] ||= []; @fandom_hash["(No Media)"] += @tag_set.tag_set.with_type("fandom").with_no_parents.value_of(:name)
+      if @tag_set.has_type?("fandom")
+        @fandom_hash = Tag.names_by_parent(Fandom.in_tag_set(@tag_set), "media") 
+        @fandom_hash["(No Media)"] ||= []; @fandom_hash["(No Media)"] += @tag_set.with_type("fandom").with_no_parents.value_of(:name)
 
         # we want to collect and warn about any chars or relationships not in the fandoms
         @character_seen = {}
         @relationship_seen = {}
         @fandom_keys_from_other_tags -= @fandom_hash.values.flatten
+        @unassociated_chars = []
+        @unassociated_rels = []
         unless @fandom_keys_from_other_tags.empty?
           if @character_hash
             @unassociated_chars = @character_hash.values_at(*@fandom_keys_from_other_tags).flatten.compact.uniq

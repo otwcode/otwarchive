@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("Edit Series") %></h2>
+<h2 class="heading"><%= ts("Edit Series") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<h3 class="landmark">Actions</h3>
+<h3 class="landmark heading">Actions</h3>
 <ul class="navigation actions" role="menu">
   <li><%= link_to ts("Back To Series"), @series %></li>
   <li><%= link_to ts("Delete Series"), @series, :confirm => 'Are you sure?', :method => :delete %></li>

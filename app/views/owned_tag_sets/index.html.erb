@@ -1,11 +1,11 @@
+<!--TAG ZONE: tagsets-->
+<div class="tag tagset">
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
-<h2>
+<h2 class="heading">
   <% if @user %>
     <%= ts("%{user_name}'s Tag Sets", :user_name => @user.login) %> <%= link_to_help 'tagset-about' %>
   <% elsif @restriction %>
     <%= ts("Tag Sets Used In This Challenge") %>
-  <% elsif @tag_sets.empty? %>
-    <%= ts("Sorry, there were no tag sets found.") %>
   <% elsif @query %>
     <%= search_header @tag_sets, @query, "Tag Set" %> <%= link_to_help 'tagset-about' %>
   <% else %>
@@ -24,19 +24,21 @@
 <% end %>
 
 <% if logged_in? %>
-    <h3 class="landmark">Navigation</h3>
+    <h3 class="landmark heading">Navigation</h3>
     <ul class="navigation actions" role="navigation">
     	<li><%= link_to ts("New Tag Set"), new_tag_set_path %></li>
     	<li><%= link_to ts("Tags"), tags_path %></li>
     </ul>
   <% end %>
 
-<% unless @tag_sets.empty? %>
+<% if @tag_sets.empty? %>
+  <%= ts("No tag sets found.") %>
+<% else %>
   <%= will_paginate @tag_sets, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
 
 <!--main content-->
-  <h3 class="landmark">Listing Tag Sets</h3>
-	<ul class="tagset index">
+  <h3 class="landmark heading">Listing Tag Sets</h3>
+	<ul class="index">
     <% @tag_sets.each do |tag_set| %>
       <%= render 'tag_set_blurb', :tag_set => tag_set %>
     <% end %>
@@ -46,3 +48,4 @@
 
   <%= will_paginate @tag_sets, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
 <% end %>
+</div>

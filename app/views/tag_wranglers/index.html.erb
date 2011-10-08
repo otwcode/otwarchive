@@ -1,6 +1,6 @@
 <div class="tag wrangling wranglers home">
 <!--Descriptive page name, messages and instructions-->
-<h2>Tag Wrangling Assignments</h2>
+<h2 class="heading">Tag Wrangling Assignments</h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -8,12 +8,12 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark">Listing by fandom</h3>
+<h3 class="landmark heading">Listing by fandom</h3>
 <%= form_tag url_for(:controller => 'tag_wranglers', :action => "create"), :id => "tag_wranglers" do %>
 <fieldset>
 	<legend>Assign fandoms to yourself</legend>
     <p class="submit actions"><%= submit_tag 'Assign' %></p>
-<h3>Assign fandoms to yourself</h3>
+<h3 class="heading">Assign fandoms to yourself</h3>
     <p class="note">
     (<%= label_tag "tag_fandom_string", "Enter as many fandoms as you like." %>)
   </p>
@@ -24,7 +24,7 @@
     <% @assignments.group_by(&:name).each do |name, assignments| %>
     <li class="fandom tag picture blurb">
       <div class="header module">
-        <h4><%= link_to name, {:controller => :tags, :action => :edit, :id => assignments.first} %></h4>
+        <h4 class="heading"><%= link_to name, {:controller => :tags, :action => :edit, :id => assignments.first} %></h4>
       <% wranglers = assignments.collect(&:wrangler).compact %>
       <% unless wranglers.empty? %>
         <ul class="wranglers">
@@ -67,7 +67,7 @@
 <!--subnav-->
 <%= form_tag tag_wranglers_path, :class => 'filters', :method => :get do %>
   <fieldset>
-    <h3 class="landmark">Filters</h3>
+    <h3 class="landmark heading">Filters</h3>
 	<dl class="filters" role="menu">
     <dt>Show Only Media</dt>
     <dd>
@@ -87,7 +87,7 @@
 </fieldset>
 <% end %>
 <div class="clear"><!--presentational, phase me out--></div>
-<h3 class="landmark">Next Page</h3>
+<h3 class="landmark heading">Next Page</h3>
 <%= will_paginate(@assignments) %>
 <!--/subnav-->
 </div>

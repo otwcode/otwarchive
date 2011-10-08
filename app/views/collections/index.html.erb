@@ -1,25 +1,25 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <% if @user %>
-  <h2><%= ts("%{user_name}'s Collections", :user_name => @user.login) %></h2>
+  <h2 class="heading"><%= ts("%{user_name}'s Collections", :user_name => @user.login) %></h2>
 <% elsif @collection %>
-  <h2><%= ts("Challenges/Subcollections in %{collection_name}", :collection_name => @collection.title) %></h2>
+  <h2 class="heading"><%= ts("Challenges/Subcollections in %{collection_name}", :collection_name => @collection.title) %></h2>
 <% elsif @work %>
-  <h2><%= ts("Collections including ") + @work.title.html_safe %></h2>
+  <h2 class="heading"><%= ts("Collections including ") + @work.title.html_safe %></h2>
 <% else %>
-  <h2><%= ts("Collections in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %></h2>
+  <h2 class="heading"><%= ts("Collections in the %{archive_name}", :archive_name => ArchiveConfig.APP_NAME) %></h2>
 <% end %>
 
 <% if @collections.empty? %>
   <%= ts("Sorry, there were no collections found.") %>
 <% else %>
-  <h3><%= search_header @collections, @query, "Collection" %> </h3>
+  <h3 class="heading"><%= search_header @collections, @query, "Collection" %> </h3>
 <% end %>
  
 <!--/descriptions-->
 <!--Subnavigation, sorting and actions-->
 <div class="navigation module">
   <% if logged_in? %>
-    <h3 class="landmark">Navigation</h3>
+    <h3 class="landmark heading">Navigation</h3>
     <ul class="navigation actions" role="navigation">
       <% if @user && @user == current_user %>
         <li><%= link_to ts("Manage Collected Works"), user_collection_items_path(@user) %></li>
@@ -36,7 +36,7 @@
   <% if @sort_and_filter %> 
   <!--sorting subnav-->
     <ul class="sorting actions" role="menu">
-      <li><h4><%= ts('Sort By') %></h4></li>
+       <li><%= link_to ts("New Collection"), new_collection_path %></li><li><h4 class="heading"><%= ts('Sort By') %></h4></li>
       <li><%= sort_link ts('Title'), "collections.title" %></li>
       <li><%= sort_link ts('Date'), "collections.created_at", {:sort_default => true, :desc_default => true} %></li>
       <li><%= sort_link ts('Size'), "item_count", {:desc_default => true} %></li>
@@ -50,7 +50,7 @@
   <%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
 
   <!--main content-->
-  <h3 class="landmark">List of Collections</h3>
+  <h3 class="landmark heading">List of Collections</h3>
   <ul class="collection picture index">
   <% @collections.each do |collection| %>
     <%= render :partial => "collection_blurb", :locals => {:collection => collection} %>

@@ -1,18 +1,16 @@
-<h2>Edit <%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %> </h2>
+<h2 class="heading">Edit <%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %> </h2>
 <!--FRONT END: TABLEWATCH!!-->
 <div class="wrapper">
 <%= form_tag edit_multiple_user_works_path(@user),  :id => 'edit-multiple-works' do %>
 <% # FRONT END PLEASE CHECK THIS OVER there were lots of things to merge -- NN %>
-  <fieldset>
-    <p><%= submit_tag ts("Edit Checked") %></p>
-  </fieldset>
 
-  <fieldset>
   <table class="work index" summary="This page shows a list of your works. You can select a work, or many works, and then choose to edit, orphan, or delete them. You can post multiple drafts on this page too.">
     <caption><%= ts("Editing Multiple Works") %></caption>
     <thead>
       <tr>
-        <td colspan="4"><%= render :partial => 'edit_multiple_controls' %></td>
+        <th scope="row" colspan="2"><%= ts("Actions") %></th>
+        <td><%= render :partial => 'edit_multiple_controls' %></td>
+        <td><span class="submit actions"><%= submit_tag ts("Edit Checked") %></span></td>
       </tr>
       <tr>
         <th scope="col"><%= ts("Title") %></th>
@@ -23,13 +21,15 @@
     </thead>
     <tfoot>
       <tr>
-        <td colspan="4"><%= render :partial => 'edit_multiple_controls' %></td>
+        <th scope="row" colspan="2"><%= ts("Actions") %></th>
+        <td><%= render :partial => 'edit_multiple_controls' %></td>
+        <td><span class="submit actions"><%= submit_tag ts("Edit Checked") %></span></td>
       </tr>
     </tfoot>
     <tbody>
       <% for work in @works %>
         <tr>
-          <td><%= label_tag "work_ids[]", link_to(work.title.html_safe, work_path(work)) %></td>
+          <th scope="row"><%= label_tag "work_ids[]", link_to(work.title.html_safe, work_path(work)) %></th>
           <td><%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ').html_safe %></td>
           <td><%= check_box_tag "work_ids[]", work.id %></td>
           <td class="navigation actions" role="menu">
@@ -46,12 +46,7 @@
         </tr>
       <% end %>
     </tbody>
-  </table>
-  </fieldset>
-  
-  <fieldset>
-    <p><%= submit_tag ts("Edit Checked") %></p>
-  </fieldset>
-  	
+  </table>  
+ 	
 <% end %>
 </div>

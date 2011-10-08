@@ -1,4 +1,4 @@
-<h2>External Works</h2>
+<h2 class="heading">External Works</h2>
 
 <!--navigation-->
 <% if logged_in_as_admin? %>
@@ -7,7 +7,7 @@
  <%= will_paginate @external_works %>
 
 <% unless @external_works.blank? %>
-  <h3 class="landmark">Listing External Works</h3>
+  <h3 class="landmark heading">Listing External Works</h3>
 	<ol class="work index">
   <% for external_work in @external_works %>
   	<%= render :partial => 'external_works/blurb', :locals => {:external_work => external_work} %>

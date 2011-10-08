@@ -1,7 +1,7 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
 <div id="feedback" class="feedback" role="complementary">
 	
-  <h3 class="landmark">Actions</h3>
+  <h3 class="landmark heading">Actions</h3>
 	<ul class="navigation actions" role="navigation">
     <% if @work || @admin_post %>
         <li><%= link_to '&#8593; '.html_safe + h(ts('Top')), :anchor => "main" %></li>
@@ -38,7 +38,7 @@
     <% end %>
   </ul>
 
-  <h3 class="landmark"><a name="comments">Comments</a></h3>
+  <h3 class="landmark heading"><a name="comments">Comments</a></h3>
 
   <%= flash_div :comment_error, :comment_notice %>
 

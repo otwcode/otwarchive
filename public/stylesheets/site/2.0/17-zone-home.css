@@ -1,0 +1,41 @@
+/*==ZONE: HOME 
+user home
+collections and challenges home
+tag home
+admin comms home 
+--this zone always shows a dashboard styled in region-dashboard and its parent is #main.dashboard */
+
+.home p, .home .header      
+        { clear:right }
+.home .header img.icon, .home .header .icon      
+        { position: absolute; top: 0; left:0}
+.home .header h2
+        { margin: 0 0 0 100px; text-align: right; border-bottom:2px solid; }
+.home .header .userstuff, .home .header dl.stats
+        { margin-left: 120px;}
+.admin .header h3
+        { font-size: 2.143em; text-align:center; }
+.home .module div.userstuff
+        { padding:0.643em 2.5em; }
+.home .primary
+        { margin: 0 0 0.643em; min-height:100px; }
+        
+/*primary header icons */
+.collection .primary .icon
+        { background: url("images/skins/iconsets/default/icon_collection.png");}
+.admin .primary .icon
+        { background: url("images/skins/iconsets/default/icon_admin.png");}
+.tag .primary .icon, .tagset .primary .icon
+        { background: url("/images/skins/iconsets/default/icon_tag.png");}
+        
+/*contexts*/
+/*(no filters)*/
+.dashboard .index
+        { width: 100%; } 
+/*(with filters)*/
+#inbox-form
+        { float:left; width: 75%;}
+
+/*HISTORY note:listbox? generalise this irregular structure*/
+.readings-index h3 
+        { background:#ddd; margin:-0.5em 0 -0.25em 0; padding:0.25em}

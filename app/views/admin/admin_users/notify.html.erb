@@ -1,14 +1,14 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("Send Notification To Users") %></h2>
+<h2 class="heading"><%= ts("Send Notification To Users") %></h2>
 <!--/descriptions-->
 
 <!--main content-->
 <%= form_tag send_notification_admin_users_path, :method => :post do %>
 <fieldset>
   <legend><%= ts("Write Notification") %></legend>
-    <h3><%= label_tag "subject", ts("Subject") %></h3>
+    <h3 class="heading"><%= label_tag "subject", ts("Subject") %></h3>
     <div><%= text_field_tag "subject" %></div>
-  <h3><%= label_tag "content", ts("Message") %></h3>
+  <h3 class="heading"><%= label_tag "content", ts("Message") %></h3>
     <div><%= text_area_tag "content" %></div>
 </fieldset>
 <fieldset>
@@ -29,7 +29,7 @@
 </fieldset>
 <fieldset>
   <legend><%= ts("Notify Individuals") %></legend>
-    <h3><%= ts("Or Select Users To Notify") %></h3>
+    <h3 class="heading"><%= ts("Or Select Users To Notify") %></h3>
   <%= alpha_paginated_section %>
   <div class="wrapper">
       <table id="admin_users_table">

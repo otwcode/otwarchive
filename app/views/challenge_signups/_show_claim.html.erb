@@ -1,7 +1,7 @@
 <!-- expects local variable "challenge_signup" and "claim" -->
 <% challenge_signup.requests.each_with_index do |request, index| %>
   <% if claim.request_prompt_id = index+1 %>
-  <h3><%=h t('.signup.show.request', :default => "Request {{num}}", :num => index+1) %><%= claim.request_prompt_id %></h3>
+  <h3 class="heading"><%=h t('.signup.show.request', :default => "Request {{num}}", :num => index+1) %><%= claim.request_prompt_id %></h3>
   <div class="wrapper">
     <dl class="collection meta">
       <%= request.url.blank? ? "" : "<dt>URL:</dt><dd>" + link_to(request.url, request.url) + "</dd>" -%>
@@ -12,7 +12,7 @@
           <% if @host %>
             <%= request.tag_set.tags.collect(&:name).join(", ")%>
           <% else %>
-            <ul class="tags">
+            <ul class="tags commas">
               <%= tag_link_list request.tag_set.tags %>
             </ul>
           <% end %>
@@ -21,7 +21,7 @@
             <% if @host %>
               <%= request.optional_tag_set.tags.collect(&:name).join(", ") -%>
             <% else %>
-              <ul class="tags">
+              <ul class="tags commas">
                 <%= tag_link_list(request.optional_tag_set.tags) %>
               </ul>
             <% end %>

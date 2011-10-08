@@ -176,9 +176,7 @@ class TagSet < ActiveRecord::Base
   # returns the topmost tag type we have in this set
   def topmost_tag_type
     TagSet::TAG_TYPES.each do |tag_type| 
-      if self.tags.with_type(tag_type).exists? 
-        return tag_type
-      end
+      return tag_type if self.has_type?(tag_type)
     end
     ""
   end

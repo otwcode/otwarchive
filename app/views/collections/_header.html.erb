@@ -1,8 +1,10 @@
 
 <!--Descriptive page name, messages and instructions-->
 <div class="primary header module">
-	<h2><%= link_to_unless_current(@collection.title, @collection) %></h2>
-	<p class="icon"><%= image_tag(@collection.icon.url(:standard), :size => "100x100", :alt => "", :class => "icon") %></p>
+	<h2 class="heading"><%= link_to_unless_current(@collection.title, @collection) %></h2>
+	<div class="icon">
+	<!-- back end if pos can we make this only print an img if there's one uploaded-->
+	<%= image_tag(@collection.icon.url(:standard), :size => "100x100", :alt => "") %></div>
 <!--/descriptions-->
 
 <!--subnav-->

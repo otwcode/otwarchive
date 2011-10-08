@@ -98,9 +98,9 @@ createIbox = function(elem) {
 	strHTML +=  indicator_img_html;
 	strHTML +=  "</div>";
 	strHTML +=	"<div id=\"ibox_wrapper\" style=\"display:none\">";
-	strHTML +=	"<div id=\"ibox_content\"></div>";
+	strHTML +=	"<div id=\"ibox_content\" class=\"userstuff\"></div>";
 	strHTML +=	"<div id=\"ibox_footer_wrapper\"><div id=\"ibox_close\" style=\"float:right;\">";
-	strHTML +=	"<a id=\"ibox_close_a\" href=\"javascript:void(null);\" >CLOSE</a></div>";
+	strHTML +=	"<a id=\"ibox_close_a\" href=\"javascript:void(null);\" class=\"action\">CLOSE</a></div>";
 	strHTML +=  "<div id=\"ibox_footer\">&nbsp;</div></div></div></div>";
 
 	var docBody = document.getElementsByTagName("body")[0];
@@ -186,10 +186,10 @@ showIbox = function(url,title,params) {
 
 			
 			if(params['height']) {ibox.style.height = params['height']+'px';} 
-			else {ibox.style.height = '280px';}
+			else {ibox.style.height = '75%';}
 			
 			if(params['width']) {ibox.style.width = params['width']+'px';} 
-			else {ibox.style.width = '450px';}
+			else {ibox.style.width = '75%';}
 
 		
 			ibox.style.display = "";
@@ -218,10 +218,10 @@ showIbox = function(url,title,params) {
 					hideIndicator();
 					
 					if(params['height']) {ibox.style.height = params['height']+'px';} 
-					else {ibox.style.height = '280px';}
+					else {ibox.style.height = '75%';}
 					
 					if(params['width']) {ibox.style.width = params['width']+'px';} 
-					else {ibox.style.width = '450px';}
+					else {ibox.style.width = '75%';}
 		
 					ibox.style.display = "";
 					ibox.style.visibility = "hidden";

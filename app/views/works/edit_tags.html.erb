@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts('Edit Work Tags for ') + @work.title.html_safe %></h2>
+<h2 class="heading"><%= ts('Edit Work Tags for ') + @work.title.html_safe %></h2>
 <p class="navigation actions"><%= link_to t('.back_to_work', :default => 'Return to work'), @work %></p>
 <%= error_messages_for :work %>
 <!--/descriptions-->

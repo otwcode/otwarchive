@@ -1,7 +1,7 @@
 <div id="user-page" class="tag wrangler home profile">
 <div class="primary header module">
 <!--Descriptive page name, messages and instructions-->
-<h2><%= @wrangler.login %>'s Wrangling Page</h2>
+<h2 class="heading"><%= @wrangler.login %>'s Wrangling Page</h2>
 	<p><%= icon_display(@wrangler) %></p>
 	<!--/descriptions-->
 </div>
@@ -20,7 +20,7 @@
 feedback needed from realuse (is it annoying having the announcement on every cell, and is it doubling up, basically?)-->
 <% unless @fandoms.empty? %>
   <div class="assigned module">
-	<h3>Assigned Fandoms</h3>
+	<h3 class="heading">Assigned Fandoms</h3>
   <p>Fandoms assigned to you via the <%= link_to 'tag wranglers page', tag_wranglers_path %>. The unwrangled count is the number of
   unwrangled tags which were used on works in the given fandom.</p>
   <table summary="">
@@ -59,7 +59,7 @@ feedback needed from realuse (is it annoying having the announcement on every ce
 <div class="clear"><!--presentational-->
 
 <div class="navigation module" role="navigation">
-<h3>Mass Wrangle New/Unwrangled Tags</h3>
+<h3 class="heading">Mass Wrangle New/Unwrangled Tags</h3>
 <ul>
   <li><%= link_to "Fandoms by media (#{@counts[:fandoms]})", tag_wranglings_path(:show => "fandoms") %></li>
   <li><%= link_to "Characters by fandom (#{@counts[:characters]})", tag_wranglings_path(:show => "characters") %></li>
@@ -69,7 +69,7 @@ feedback needed from realuse (is it annoying having the announcement on every ce
 </ul>
 </div>
 <div class="search module">
-	<h3>Find a Tag</h3>
+	<h3 class="heading">Find a Tag</h3>
 <%= render :partial => 'tags/search_form' %>
 </div>
 <!--/content-->

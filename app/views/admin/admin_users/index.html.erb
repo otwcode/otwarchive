@@ -1,4 +1,4 @@
-<!--Descriptive page name, messages and instructions--><h2><%= ts("Find users") %></h2>
+<!--Descriptive page name, messages and instructions--><h2 class="heading"><%= ts("Find users") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -19,7 +19,7 @@
 <div class="clear"><!--presentational, phase me out--></div>
 <% if @users %>
 
-<h3><%= @users.size == 1 ? ts("1 user found") : @users.size == 0 ? ts("No users found") : @users.size.to_s + ts(" users found") %></h3>
+<h3 class="heading"><%= @users.size == 1 ? ts("1 user found") : @users.size == 0 ? ts("No users found") : @users.size.to_s + ts(" users found") %></h3>
 
 <% if @users.size > 0 %>
   <div class="wrapper">

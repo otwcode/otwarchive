@@ -1,8 +1,8 @@
 <div class="tag wrangling home">
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("Tag Wrangling") %></h2>
+<h2 class="heading"><%= ts("Tag Wrangling") %></h2>
 <% unless params[:show] %>
-  <h4 class="landmark">Notes</h4>
+  <h4 class="landmark heading">Notes</h4>
   <ul class="notes">
     <li>When users create new tags, they're not 'canonical', or official, and they don't have any associations with other tags.</li>
     <li>Use mass wrangling pages to manage new tags as they come in, and to edit multiple tags at once.</li> 
@@ -16,13 +16,13 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3><%= ts("Mass Wrangle New/Unwrangled Tags") %> 
+<h3 class="heading"><%= ts("Mass Wrangle New/Unwrangled Tags") %> 
 <!--BACK END pls for each tag_wranglings_path(:show => "n") then append "by n"--></h3>
 
 
 <% if params[:show] == "character_relationships" %>
 
-  <h3>First, choose a canonical fandom:</h3>
+  <h3 class="heading">First, choose a canonical fandom:</h3>
   <%= form_tag url_for(:controller => 'tag_wranglings', :action => 'index'), :method => :get do %>
   <fieldset>
     <legend>Choose fandom</legend>
@@ -73,7 +73,7 @@
 
 	<fieldset class="table">
 		<legend>Choose tags from a table</legend>
-<h3 class="landmark">Individual Selection Table</h3>
+<h3 class="landmark heading">Individual Selection Table</h3>
 <div class="wrapper">
   <table summary="A subset of tags listed by name, with options to edit, wrangle, or view works tagged thus. Also listed is when each tag was created, whether each is canonical, and the number of works tagged thus." id="wrangulise">
   <caption><%= @tags.first.class.to_s.pluralize %> to be wrangled</caption>

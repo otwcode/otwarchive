@@ -1,5 +1,5 @@
 <% cache("#{work.cache_key}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
-<h3 class="landmark">Work Header</h3>
+<h3 class="landmark heading">Work Header</h3>
 
 <div class="wrapper">
 
@@ -18,7 +18,7 @@
           </dt>
 
           <dd class="<%= type.downcase %> tags">
-            <ul>
+            <ul class="commas">
               <% if (type == "Warning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) %>
                 <li id="work_<%= work.id %>_category_<%= type.downcase.pluralize %>"><%= show_hidden_tags_link(work, type.downcase.pluralize) %> </li>
              <% else %>

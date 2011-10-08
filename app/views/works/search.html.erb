@@ -1,4 +1,4 @@
-<h2><%= ts('Work Search: Beta') %></h2>
+<h2 class="heading"><%= ts('Work Search: Beta') %></h2>
 
 <ul class="navigation actions" role="navigation"><li>
   <%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %>
@@ -58,9 +58,9 @@
 
 <% if @works %>
 <% begin %>
-  <h3><strong><%= @works.total_entries %> Found</strong> <%= link_to_help "work-search-results-help" %></h3>
+  <h3 class="heading"><strong><%= @works.total_entries %> Found</strong> <%= link_to_help "work-search-results-help" %></h3>
 
-  <h3 class="landmark">Works List</h3>
+  <h3 class="landmark heading">Works List</h3>
   <ol class="work index">
     <% @works.each do |work| %>
       <% unless work.nil? %>

@@ -1,11 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts('Set My Preferences') %></h2>
+<h2 class="heading"><%= ts('Set My Preferences') %></h2>
 <%= error_messages_for :preference %>
 
 <!--/descriptions-->
 
 <!--subnav-->
-<h3 class="landmark">Navigation</h3>
+<h3 class="landmark heading">Navigation</h3>
 <ul class="navigation actions" role="navigation">
 	<li><%= link_to ts("Edit My Profile"), edit_user_path(@user) %></li>
 	<li><%= link_to ts('Manage My Pseuds'), user_pseuds_path(@user) %></li>
@@ -18,7 +18,7 @@
 <%= form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| %>
 <fieldset>
 	<legend><%= ts("Privacy") %></legend>
-	<h4><%= ts("Privacy") %></h4>
+	<h4 class="heading"><%= ts("Privacy") %></h4>
   <ul>
   	<li>
    	  <%= f.check_box :email_visible %>
@@ -44,7 +44,7 @@
   </ul>
   </fieldset>
   <fieldset>
-	<legend><%= ts("Display") %></legend><h4><%= ts("Display") %></h4>
+	<legend><%= ts("Display") %></legend><h4 class="heading"><%= ts("Display") %></h4>
   <ul>
   	<li>
     	  <%= f.check_box :adult %>
@@ -87,7 +87,7 @@
 </fieldset>
 <fieldset>
 	<legend><%= ts("Statistics") %></legend> 
-  <h4><%= ts("Statistics") %></h4>
+  <h4 class="heading"><%= ts("Statistics") %></h4>
   <ul>
     <li>
       <%= f.check_box :hide_all_hit_counts %>
@@ -107,7 +107,7 @@
 </fieldset>
 <fieldset>
 	<legend><%= ts("Comments") %></legend>  
-  <h4><%= ts("Comments") %></h4>
+  <h4 class="heading"><%= ts("Comments") %></h4>
   <ul>
   	<li>
     	  <%= f.check_box :comment_emails_off %>
@@ -137,7 +137,7 @@
 </fieldset>
 <fieldset>
 	<legend><%= ts("Collections, Challenges and Gifts") %></legend>  
-  <h4><%= ts("Collections, Challenges and Gifts") %></h4>
+  <h4 class="heading"><%= ts("Collections, Challenges and Gifts") %></h4>
   <ul>
   	<li>
   	  <%= f.check_box :automatically_approve_collections %>
@@ -163,7 +163,7 @@
 
 <fieldset>
 	<legend><%= ts("Misc") %></legend>
-	  <h4><%= ts("Misc") %></h4>
+	  <h4 class="heading"><%= ts("Misc") %></h4>
   <ul>
   	<li>
   	  <%= f.check_box :history_enabled %>

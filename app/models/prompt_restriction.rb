@@ -107,7 +107,7 @@ class PromptRestriction < ActiveRecord::Base
   def tag_set_ids
     TagSet.joins("INNER JOIN owned_tag_sets ON owned_tag_sets.tag_set_id = tag_sets.id
                   INNER JOIN owned_set_taggings ON owned_set_taggings.owned_tag_set_id = owned_tag_sets.id").
-           where("owned_set_taggings.set_taggable_id = #{PromptRestriction.first.id} AND owned_set_taggings.set_taggable_type = 'PromptRestriction'").value_of :id
+           where("owned_set_taggings.set_taggable_id = ? AND owned_set_taggings.set_taggable_type = 'PromptRestriction'", self.id).value_of :id
   end
   
   def has_tags?(type="tag")

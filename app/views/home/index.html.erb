@@ -2,7 +2,7 @@
 <div id="main" class="system">
   <%= flash_div :error, :caution, :notice %>
   <div class="intro module">
-	<h2><%= ts('hi!') %></h2>
+	<h2 class="heading"><%= ts('hi!') %></h2>
 	<p>We're a <em>fan</em>-created, <em>fan</em>-run, non-profit, non-commercial archive for transformative <em>fan</em>works, like <em>fan</em>fiction and <em>fan</em>art.
 					</p>
 					<p>We're the <%= link_to t('.archive_faq', :default => "Archive of Our Own"), archive_faqs_path %>, but you can call us <%= link_to ts('AO3'), works_path %></p>
@@ -21,7 +21,7 @@
   </div>
   
   <div class="latest module">
-      <h3>Explore</h3>
+      <h3 class="heading">Explore</h3>
       <ul class="meters">
         <li>
 	  <span><%= link_to ts('fandoms'), media_path %></span>: 
@@ -39,7 +39,7 @@
     </div>
     <% if @admin_post %>
       <div class="news module">
-        <h3>News</h3>
+        <h3 class="heading">News</h3>
         <p><%= link_to @admin_post.title, @admin_post %></p>
         <% if @admin_post_show_more %>
           <p><%= link_to h(ts('More news')) + '&#8230;'.html_safe, admin_posts_path %></p>

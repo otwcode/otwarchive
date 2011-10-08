@@ -1,12 +1,12 @@
 <!-- expects local value "prompt" and optional "display_anon" -->
 <div class="wrapper">
-  <dl class="collection meta">
+  <dl class="collection prompt meta">
   <% if (prompt.anonymous? && current_user && current_user == prompt.challenge_signup.pseud.user) || prompt.anonymous? == false || (display_anon && display_anon == true) %>
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
     <% if any_types || (prompt.tag_set && !prompt.tag_set.tags.empty?) %>
       <dt>Tags:</dt>
       <dd>
-        <ul class="tags">
+        <ul class="tags commas">
           <%= prompt.tag_set && !prompt.tag_set.tags.empty? ? tag_link_list(prompt.tag_set.tags, link_to_works=true) + (any_types.empty? ? "" : ", ") : "" %>
           <% unless any_types.empty? %>
             <%= any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize)) }.join(", ").html_safe %>
@@ -14,7 +14,7 @@
         </ul>
         <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
           <p>Optional:</p>
-          <ul class="tags">
+          <ul class="tags commas">
             <%= tag_link_list(prompt.optional_tag_set.tags, link_to_works=true) %>
           </ul>
         <% end %>

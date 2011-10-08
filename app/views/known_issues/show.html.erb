@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("Known Issues") %></h2>
+<h2 class="heading"><%= ts("Known Issues") %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -7,10 +7,10 @@
 
 <!--main content-->
 <div class="admin userstuff" role="article">
-  <h3>
+  <h3 class="heading">
     <%= @known_issue.title %>
   </h3>
-  <h4><%= ts("Updated:") %> <%= @known_issue.updated_at %>
+  <h4 class="heading"><%= ts("Updated:") %> <%= @known_issue.updated_at %>
     <% if logged_in_as_admin? %>
       <span class="navigation actions" role="navigation"><%= link_to ts("Edit"), edit_known_issue_path(@known_issue) %></span>
     <% end %>

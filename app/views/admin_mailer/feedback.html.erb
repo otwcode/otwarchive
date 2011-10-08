@@ -1,8 +1,8 @@
-<h2><%=h t('.heres_some_feedback', :default => "Here's some user feedback on the archive!") %></h2>
+<h2 class="heading"><%=h t('.heres_some_feedback', :default => "Here's some user feedback on the archive!") %></h2>
 
 <%= ArchiveConfig.REVISION.blank? ? "" : "<p>" + t('.revision', :default => "Archive revision: (rev. %{revision})", :revision => ArchiveConfig.REVISION) + "</p>" %>
 
-<h3><%=h t('.feedback', :default => "Feedback:") %></h3>
+<h3 class="heading"><%=h t('.feedback', :default => "Feedback:") %></h3>
 
 <%=raw @summary %>
 <%=raw @comment %>

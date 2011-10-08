@@ -12,12 +12,12 @@
     <% if logged_in? %>
       <% if current_user.pseuds.count > 1 %>
 
-        <h4>Comment as <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, {:selected => (comment.pseud ? comment.pseud.id.to_s : current_user.default_pseud.id.to_s)}, :id => "comment_pseud_id_for_#{commentable.id}", :title => ts("Choose Name") %> <% if controller.controller_name == "inbox" %>
+        <h4 class="heading">Comment as <%= f.collection_select :pseud_id, current_user.pseuds, :id, :name, {:selected => (comment.pseud ? comment.pseud.id.to_s : current_user.default_pseud.id.to_s)}, :id => "comment_pseud_id_for_#{commentable.id}", :title => ts("Choose Name") %> <% if controller.controller_name == "inbox" %>
             <span>to <%= get_commenter_pseud_or_name(commentable) %> on <%= commentable_description_link(commentable) %></span>   
             <% end %>
             (<%= allowed_html_instructions(show_list=false) %>)</h4>
       <% else %>
-        <h4>Comment as <span class="byline"><%= current_user.default_pseud.name %></span> 
+        <h4 class="heading">Comment as <span class="byline"><%= current_user.default_pseud.name %></span> 
         <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}", :id => "comment_pseud_id_for_#{commentable.id}" %>
         
         <% if controller.controller_name == "inbox" %>
@@ -27,7 +27,7 @@
          <p class="footnote">(<%= allowed_html_instructions %>)</p>
       <% end %>
     <% elsif logged_in_as_admin? %>
-      <h4>Comment as <span class="byline"><%= current_admin.login %></span> 
+      <h4 class="heading">Comment as <span class="byline"><%= current_admin.login %></span> 
           <%= f.hidden_field :name, :value => "#{current_admin.login}", :id => "comment_name_for_#{commentable.id}" %>
           <%= f.hidden_field :email, :value => "#{current_admin.email}", :id => "comment_email_for_#{commentable.id}" %></h4>
      <p class="footnote">(<%= allowed_html_instructions %>)</p>

@@ -108,6 +108,7 @@ class TagSetAssociation < ActiveRecord::Base
     # get the union of the wrangled fandom and the associations from the various tag sets
     keys_to_lookup = tag_sets.map {|set| fandoms.map {|fandom| "autocomplete_association_#{tag_type}_#{set}_#{fandom}"}}.flatten
     keys_to_lookup += fandoms.map {|fandom| "autocomplete_fandom_#{fandom}_#{tag_type}"}.flatten
+    return [] if keys_to_lookup.empty?
 
     # if we don't want tags that aren't in the tag set(s), we need to first
     # get the union of all the tags in the tag set(s), then get the intersection
@@ -118,7 +119,7 @@ class TagSetAssociation < ActiveRecord::Base
       keys_for_intersect = tag_sets.map {|set| "autocomplete_tagset_#{tag_type}_#{set}"}.flatten
       $redis.zunionstore(combo_key2, keys_to_lookup, :aggregate => :max)
       $redis.zunionstore(combo_key3, keys_for_intersect, :aggregate => :max)
-      $redis.zintersect(combo_key, [combo_key2, combo_key3], :aggregate => :max)
+      $redis.zinterstore(combo_key, [combo_key2, combo_key3], :aggregate => :max)
       $redis.expire combo_key2, 1
       $redis.expire combo_key3, 1
     else

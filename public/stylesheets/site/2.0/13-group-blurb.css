@@ -1,0 +1,119 @@
+/*==GROUP: BLURB
+The blurb class is used wherever we show a list of works, collections, bookmarks, etc; each list item is a blurb
+it shows all the tags, stats and other associations we hold on that object, and sometimes it shows short user notes too, like a summary, bookmark notes, or collection description.
+
+Intrepid skinsers: 
+Probably 40% of this sheet deals with icon block rules, but it's not very complicated, 
+just the same thing repeated for each icon. 
+The positioning and sizing is for 25px icons; 
+there is a full set available at 50px, see [skins link here].
+You can use your own icon set, or choose to show the text instead, 
+by overriding the rules in the marked off section.
+Perhaps we can make a wizard for this specific task.
+*/
+
+.blurb ul li,.blurb dd ul li, .blurb ul.type  
+        { display: inline }
+li.blurb{ position: relative; clear:left; padding: 0.643em 1em; 
+          box-shadow:inset 1px 1px 3px #ccc; border-radius:0.15em; }
+.blurb .module         
+        { float:none;}
+.blurb .header
+        { min-height:55px; margin-bottom:0.643em}
+.blurb .header .heading, .blurb .header ul, .blurb .header p.status        
+        { display: block; background:transparent; margin: 0.375em 5.25em 0 65px }
+.blurb .header img     
+        { position: relative; margin: 0; }
+.blurb h4 a:link,.blurb h4 img 
+        { color: #900; vertical-align: bottom }
+.blurb .header p.notice
+        { margin: 1.286em 0 0 0;}
+
+/* ==START icon block rules*/
+.blurb ul.required-tags     
+        { position: absolute; top: 0; width:60px; margin:0;}
+.blurb ul.required-tags li, #main.blurb ul.required-tags li img,.blurb ul.required-tags li a
+        { position:static; display: inline; height: 25px; width: 25px; border:none; }
+.blurb ul.required-tags li  span.text 
+        { display:none }
+.blurb ul.required-tags li span
+        { background-repeat:no-repeat; height: 25px; width: 25px; display:block;}
+.blurb ul.recent-bookmarks li 
+        { display: block; }
+.blurb .category,.blurb .iswip,.blurb .external-work
+        { position: absolute; left: 28px; }
+.blurb .category
+        { top: 0; }
+.blurb .iswip,.blurb .external-work
+        { top: 28px; }
+.blurb .rating,.blurb .required-tags .warnings
+        { margin:0 0 3px }
+/*icon image replacement*/
+.blurb .rating-general-audience {background:url("/images/skins/iconsets/default/rating-general-audience-s.png");}
+.blurb .rating-explicit         {background:url("/images/skins/iconsets/default/rating-explicit-s.png");}
+.blurb .rating-mature           {background:url("/images/skins/iconsets/default/rating-mature-s.png");}
+.blurb .rating-notrated         {background:url("/images/skins/iconsets/default/rating-notrated-s.png");}
+.blurb .rating-teen             {background:url("/images/skins/iconsets/default/rating-teen-s.png");}
+.blurb .category-femslash       {background:url("/images/skins/iconsets/default/category-femslash-s.png");}
+.blurb .category-gen            {background:url("/images/skins/iconsets/default/category-gen-s.png");}
+.blurb .category-slash          {background:url("/images/skins/iconsets/default/category-slash-s.png");}
+.blurb .category-het            {background:url("/images/skins/iconsets/default/category-het-s.png");}
+.blurb .category-multi          {background:url("/images/skins/iconsets/default/category-multi-s.png");}
+.blurb .category-other          {background:url("/images/skins/iconsets/default/category-other-s.png");}
+.blurb .category-none           {background:url("/images/skins/iconsets/default/category-none-s.png");}
+.blurb .complete-no             {background:url("/images/skins/iconsets/default/complete-no-s.png");}
+.blurb .complete-yes            {background:url("/images/skins/iconsets/default/complete-yes-s.png");}
+.blurb .warning-yes             {background:url("/images/skins/iconsets/default/warning-yes-s.png");}
+.blurb .warning-no              {background:url("/images/skins/iconsets/default/warning-no-s.png");}
+.blurb .warning-choosenotto     {background:url("/images/skins/iconsets/default/warning-choosenotto-s.png");}
+.blurb .external-work           {background:url("/images/skins/iconsets/default/warning-external-work-s.png");}
+ /*END icon block rules==*/
+
+.blurb .datetime 
+        { position:absolute; top:0; right:0; margin:0;}
+.blurb blockquote,.blurb .series,.blurb form
+        { clear: none; margin: 0.643em auto; text-align: justify }
+.blurb dl.stats
+        { font-size: 0.8575em; text-align: right; padding: 0 0.375em 0.375em; margin: 1.286em auto 0; }
+.blurb.own dl.stats
+        { padding-left: 11em; }
+	
+/*modification: PICTURE 
+use this along with "index" and "blurb" for indices where we have icon pictures,
+eg collections, users, skins, instead of the 4-icon list
+*/
+.picture .icon img, .picture .icon 
+        { position: absolute; top:0; height:55px; width:55px;}
+.picture .header 
+        { border-bottom:1px solid #ccc }
+.index .collection .icon
+        { background:url("/images/skins/iconsets/default/icon_collection-s.png");}
+.index .skins .icon
+        { background:url("/images/skins/iconsets/default/icon_skins.png");}
+.index .mystery .icon
+        { background:url("/images/skins/iconsets/default/icon_mystery-s.png");}
+.index .tag .icon, .index .tagset .icon
+        { background:url("/images/skins/iconsets/default/icon_tag.png"); background-size:55px}
+
+
+
+/* modification: BOOKMARK*/
+
+.bookmark p.count	
+        { right:0.5em; position:absolute; z-index:50; width:60px; }
+.bookmark .count img,  .bookmark .symbol img
+        { height: 25px; width: 25px }
+.bookmark p.count span	
+        { background: url("/images/skins/iconsets/default/category-none-s.png") top left no-repeat; border: 1px solid #eee; display: block; float: left; height: 25px; line-height: 1.875; margin: 0 2.5px 0 0; text-align: center; width: 25px }
+.bookmark.blurb	
+        { border: 1px solid #ccc; }
+.bookmark .user	
+        { border: 1px solid #ddd; width:auto; margin: 0.25em 0.125em; padding: 0.125em; clear:right;}
+.bookmark .picture .header
+        { min-height:25px; }
+.bookmark .picture .header .icon
+        { height:25px; width: 50px; margin-left: 0.125em; background:url("/images/skins/iconsets/default/bookmark-rec.png"); 
+          background-size:25px 25px}
+
+	
+

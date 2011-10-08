@@ -1,13 +1,13 @@
 <li class="user blurb picture" role="article">
   <div class="header module">
-    <h4><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) %> 
+    <h4 class="heading"><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) %> 
       <% if (pseud.name != pseud.user_name || pseud.user.pseuds.size > 1) %>
         (<%= link_to(pseud.user_name, user_path(pseud.user)) %>)
       <% end %>
     </h4>
     <!--BACK END- suggest comma separator instead of pipe-->
     <% unless authored_items(pseud, @work_counts, @rec_counts).blank? %>
-      <h5><%= authored_items(pseud, @work_counts, @rec_counts) %></h5>
+      <h5 class="heading"><%= authored_items(pseud, @work_counts, @rec_counts) %></h5>
     <% end %>
     <div class="icon">
       <%= icon_display(@user, pseud) %>
@@ -21,7 +21,7 @@
     <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
     
     <% if current_user == pseud.user %>
-       <h6 class="landmark">User Actions</h6>
+       <h6 class="landmark heading">User Actions</h6>
  	<ul class="navigation actions" role="navigation">
       <li><%= link_to "#{h(ts('Edit'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [:edit, @user, pseud], :id => "edit_#{pseud.name.downcase.gsub(" ", "_")}" %></li>
       <% unless pseud.works.blank? %>

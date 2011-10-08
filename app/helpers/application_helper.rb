@@ -395,7 +395,7 @@ module ApplicationHelper
     toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide + "\n".html_safe + javascript_bits, :class => "actions")
   end
   
-  # FRONT END: is this and the toggle now formatted properly? (NB in the signup form this is currently displaying to the left of the inline checkboxes)
+  # FRONT END: is this and the toggle now formatted properly? (NB in the signup form this is currently displaying to the left of the inline checkboxes) I suspect this is a listbox
   #
   # create a scrollable checkboxes section for a form that can be toggled open/closed
   # form: the form this is being created in
@@ -416,6 +416,7 @@ module ApplicationHelper
       :disabled => false,
       :include_toggle => true,
       :checkbox_side => "left",
+      :include_blank => true
     }.merge(options)
     
     field_name = options[:field_name] || field_name(form, attribute)
@@ -423,7 +424,14 @@ module ApplicationHelper
     base_id = options[:field_id] || field_id(form, attribute)
     checkboxes_id = "#{base_id}_checkboxes"
     opts = options[:disabled] ? {:disabled => "true"} : {}
-    already_checked = options[:checked_method] ? form.object.send(options[:checked_method]) : []
+    already_checked = case 
+      when options[:checked_method].is_a?(Array)
+        options[:checked_method]
+      when options[:checked_method].nil?
+        []
+      else
+        form.object.send(options[:checked_method])
+      end
     
     checkboxes = choices.map do |choice|
       is_checked = options[:checked_method] ? already_checked.include?(choice) : false
@@ -450,11 +458,11 @@ module ApplicationHelper
     end
       
     # We wrap the whole thing in a div module with the classes
-    return content_tag(:div, toggle + checkboxes_ul + toggle + hidden_field_tag(field_name, " "), :id => checkboxes_id, :class => css_class)
+    return content_tag(:div, toggle + checkboxes_ul + toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id, :class => css_class)
   end
   
   def checkbox_section_css_class(size)
-    css_class = "module options"
+    css_class = "options index"
     if size > ArchiveConfig.OPTIONS_TO_SHOW
       css_class += " many"
     end

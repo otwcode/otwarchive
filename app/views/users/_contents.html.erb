@@ -3,12 +3,12 @@
   <% unless @fandoms.empty? %>
   <div class="fandom listbox" id="user-fandoms">
     <!--NOTE TO BACK END, can this be regularised to one list and make expandable?-->
-    <h3><%= ts("Fandoms") %></h3>
+    <h3 class="heading"><%= ts("Fandoms") %></h3>
     <ol class="index">
       <% @fandoms.each_with_index do |fandom, i| %>        
         <% if i == ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
           </ol>
-          <h4 class="landmark"><%= ts("Listing More Fandoms") %></h4>
+          <h4 class="landmark heading"><%= ts("Listing More Fandoms") %></h4>
           <ol id="fandom_full_list" class="index toggled<%= params[:expand_fandoms] ? '' : ' hidden' %>">
         <% end %>
         <li>
@@ -38,7 +38,7 @@
               
   <% unless @works.blank? %>
   <div class="work listbox" id="user-works">
-    <h3><%= ts("Recent works") %></h3>
+    <h3 class="heading"><%= ts("Recent works") %></h3>
     <ul class="index">
       <% for work in @works %>
     	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
@@ -52,7 +52,7 @@
   
   <% unless @series.blank? %>
   <div class="series listbox" id="user-series">
-    <h3><%= ts("Recent series") %></h3>
+    <h3 class="heading"><%= ts("Recent series") %></h3>
     <ol class="index">
       <% for series in @series %>
         <%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
@@ -72,7 +72,7 @@
   
   <% unless @bookmarks.blank? %>
   <div class="bookmark listbox" id="user-bookmarks">
-    <h3><%= ts("Recent bookmarks") %></h3>
+    <h3 class="heading"><%= ts("Recent bookmarks") %></h3>
     <ol class="index">
       <% for bookmark in @bookmarks %>
         <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>

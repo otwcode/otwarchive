@@ -19,6 +19,11 @@ module SkinsHelper
     end
   end
     
+  def set_site_skin
+    @site_skin = current_user.try(:preference).try(:skin) if current_user.is_a?(User) 
+    @site_skin ||= AdminSetting.default_skin
+  end
+    
 end
 
-#BACK END, pls regularise this with the other blurbs so we just have <div class="icon"></div>?
+#BACK END, pls regularise this with the other blurbs so we just have <div class="icon"></div> and no image if no image uploaded?

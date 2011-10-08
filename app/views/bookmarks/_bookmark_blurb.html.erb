@@ -14,7 +14,7 @@
 
     <!--summary-->
     <% unless bookmark.bookmarkable.summary.blank? || (bookmark.bookmarkable.respond_to?('unrevealed?') && bookmark.bookmarkable.unrevealed?) %>
-      <h6 class="landmark">Summary</h6>
+      <h6 class="landmark heading">Summary</h6>
       <blockquote class="userstuff summary" title="summary">
         <%=raw strip_images(sanitize_field(bookmark.bookmarkable, :summary)) %>
       </blockquote>
@@ -55,8 +55,8 @@
 
     <!--tags-->
     <% unless bookmark.tag_string.blank? %>
-      <h6 class="landmark">Tags</h6>
-      <ul class="tags">
+      <h6 class="landmark heading">Tags</h6>
+      <ul class="tags commas">
         <% bookmark.tags.each do |tag| %>
           <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') %></li>
         <% end %>
@@ -65,7 +65,7 @@
 
     <!--notes-->
     <% unless bookmark.notes.blank? %>
-      <h6 class="landmark">Notes</h6>
+      <h6 class="landmark heading">Notes</h6>
       <blockquote class="userstuff notes" title="notes">
         <%=raw sanitize_field(bookmark, :notes) %>
       </blockquote>

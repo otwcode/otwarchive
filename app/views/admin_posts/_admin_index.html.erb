@@ -1,12 +1,12 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("AO3 News (includes Release Notes)") %></h2>
+<h2 class="heading"><%= ts("AO3 News (includes Release Notes)") %></h2>
 <!--/descriptions-->
 <!--subnav-->
 <%= render :partial => 'admin/admin_nav' %>
 <!--/subnav-->
 
 <!--main content-->
-<h3>Manage News Postings</h3>
+<h3 class="heading">Manage News Postings</h3>
 <dl class="news index">
   <% @admin_posts.each do |admin_post| %>
   <dt><%= link_to admin_post.title, admin_post %></dt>

@@ -52,6 +52,8 @@ class ChallengeSignup < ActiveRecord::Base
 
   ### VALIDATION
 
+  validates_presence_of :pseud, :collection
+
   # only one signup per challenge!
   validates_uniqueness_of :pseud_id, :scope => [:collection_id], :message => ts("^You seem to already have signed up for this challenge.")
 

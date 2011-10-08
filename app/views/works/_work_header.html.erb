@@ -26,7 +26,7 @@
 
       <% unless @work.summary.blank? %>
         <div class="summary module" role="complementary">
-          <h3><%= ts("Summary:") %></h3>
+          <h3 class="heading"><%= ts("Summary:") %></h3>
           <% unless @work.summary.blank? %>
             <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
           <% end %>

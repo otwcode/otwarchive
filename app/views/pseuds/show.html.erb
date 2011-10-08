@@ -3,7 +3,7 @@
   <%= render :partial => "users/contents" %>
 </div>
 
-<h3 class="landmark">Navigation</h3>
+<h3 class="landmark heading">Navigation</h3>
 <ul class="navigation actions" role="navigation">
   <% if @user == current_user %>
     <li><%= link_to t('.edit_link', :default => 'Edit Pseud'), [:edit, @user, @author] %></li>

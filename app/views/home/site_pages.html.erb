@@ -1,6 +1,6 @@
 <!--BACK END, would love system docs to be classes of main-->
 <div class="system docs">
-	<h2>Archive Pages</h2>
+	<h2 class="heading">Archive Pages</h2>
 
 <p class="notes">
   The following links will take you to all of the possible pages in the archive. 
@@ -20,13 +20,13 @@
   that you can see, or make a new object.
 </p>
 
-<h4>Pages</h4>
+<h4 class="heading">Pages</h4>
 <ul>
   <%= @paths.sort {|a,b| a[0] <=> b[0]}.map {|path, name| content_tag(:li, link_to("#{path}  (#{name})", path))}.join("\n").html_safe %>
 </ul>
 
 <% unless @errors.empty? %>  
-  <h4>Errors</h4>
+  <h4 class="heading">Errors</h4>
   <p class="notes">
     There were problems linking to the following pages, either because we couldn't find an object to use or because it's a 
     weird kind of page. You can manually fix and paste these routes in to see those pages.

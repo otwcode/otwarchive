@@ -16,7 +16,7 @@
     <% else %>
       <% cache single_comment do %>
         <% # FRONT END, update this if a.user comes in %>
-        <h4 class="byline">
+        <h4 class="heading byline">
           <%= get_commenter_pseud_or_name(single_comment) %>
           <% if single_comment.parent.is_a?(Chapter) && single_comment.ultimate_parent.expected_number_of_chapters != 1 %>
             <span class='parent'>
@@ -41,7 +41,7 @@
           </p>
         <% end %>
       <% end %><!-- end caching -->
-      <h5 class="landmark">Comment Actions</h5>
+      <h5 class="landmark heading">Comment Actions</h5>
 
       <ul class="navigation actions" role="menu" id="navigation_for_comment_<%= single_comment.id %>">
         <li id="add_comment_reply_link_<%= single_comment.id %>"><%= add_cancel_comment_reply_link single_comment %></li>

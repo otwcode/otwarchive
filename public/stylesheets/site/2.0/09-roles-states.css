@@ -1,0 +1,44 @@
+/*==ROLES AND STATES */
+.own, .draft, .draft .wrapper, .unread, .child, .unwrangled, .unreviewed
+        { background:#e8e6ed; 
+          opacity:0.95;}
+.unwrangled
+        { border:1px dashed #900;}
+.draft, .nonexistent
+        { border: 2px dashed #aaa; padding:0.643em;
+          border-radius:0.5em }
+span.nonexistent
+        { padding:0 }
+.unparented
+        { border: 1px dashed #425E96;}
+.canonical, li.requested       
+        { font-weight: 700 }
+.hidden, body .hidden 	   	    
+        { display:none }
+.draggable,.droppable,span.requested      
+        { color: #900 }
+span.offered 
+        { color: #008080; }
+span.offered.requested 
+        { color: #daa520; }
+        
+/*(these states spoof the ".navigation .current" style)*/
+span.unread, .replied, li.claimed
+        { background:#ccc; color:#900; width:auto; font-size:100%; height:1.286em; line-height:1.286; vertical-align:middle; display:inline-block; padding: 0.25em 0.75em; white-space: nowrap; overflow: visible; position: relative; cursor: pointer; text-decoration: none; border: 1px solid #bbb; border-bottom:1px solid #aaa; text-transform:lowercase;
+          border-radius:0.25em; }
+.replied{ color: green;}
+
+/*This is a helper for Back End and can be overridden contextually anywhere*/
+.commas li:after
+        { content:", "; }
+.commas li:last-child:after, .commas li:only-child:after
+        { content:none; }
+
+/* CONTEXTS */
+.dashboard .own
+        { background:transparent;}
+
+	
+
+
+

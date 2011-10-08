@@ -1,0 +1,46 @@
+/*==GROUP: LISTBOX 
+listbox is a group containing a heading and an index list 
+it's new, so it's probably going to change a bit
+key: <always> {sometimes}
+
+<listbox>
+<heading> {span.actions} </heading>
+{p or ul.actions}
+<index> list </index>
+{actions}
+</listbox>
+
+listboxes can nest
+listboxes show up where there's more than one index, like in user home, media-index, and many tag views
+listboxes will sometimes be expandable, sortable, shuffle-able etc, but we haven't finished that yet
+*/
+
+.listbox, fieldset fieldset.listbox
+        { clear:right; background:#ddd; border:2px solid #ccc; padding:0; outline:1px solid #fff;  margin:0.643em; overflow:hidden;
+          box-shadow:none;}
+.listbox .heading
+        { display: inline-block;}
+.listbox .landmark.heading, .listbox .tags .listbox, .listbox .lots ul li, .listbox .all ul li 
+        { display: block;}
+.listbox .heading, .listbox .heading a:visited
+        { margin:0; color:#222; margin-top:0; padding:0.25em; }
+.listbox .index, .dashboard .listbox .index
+        { width:auto; padding: 0.643em; float:none; clear:right; background:#f4effc;
+          box-shadow:inset 1px 1px 3px #bbb;}
+.listbox li.blurb
+        { box-shadow:none;}
+       
+/* modification: MEDIUM*/
+li.listbox.medium
+        { min-height: 17.5em; width: 45%; float:left; clear:none; margin-right:1.5em; }
+        
+/*CONTEXTS*/
+.fandoms-index li.listbox
+        { width:100%;}
+
+/*INTERACTION context (show many/more/lots)*/
+.listbox .all 
+        { height: auto;}
+.listbox .many ul 
+        { overflow: auto; max-height:10em;}
+

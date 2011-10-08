@@ -1,25 +1,15 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("Members of %{title}", :title => @collection.title) %></h2>
+<h2 class="heading"><%= ts("Members of %{title}", :title => @collection.title) %></h2>
 <!--descriptions-->
-<!--FRONT END: TABLEWATCH!!-->
-<table id="collection_participants_table" summary="This table shows the participants in your collection; you can change their roles, remove participants and add new ones">
-  <caption><%= ts("List of members") %></caption>
-  <thead>
-  	<tr>
-      <th scope="col"><%= ts("Member") %></th>
-      <th scope="col"><%= ts("Role") %></th>
-      <th scope="col"><%= ts("Manage") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @collection_participants.each do |participant| %>
+
+<!--add members-->
+<%= render :partial => 'add_participants_form' %>
+
+<!--list members-->
+<dl class="members index">
+<% @collection_participants.each do |participant| %>
       <%= render :partial => 'participant_form', :locals => {:participant => participant} %>
     <% end %>
-  </tbody>
-  <tfoot>
-  	<tr>
-  		<th scope="col" colspan="3"><%= ts("Add New Members") %></th>
-      <%= render :partial => 'add_participants_form' %>
-    </tr>
-  </tfoot>
-</table>
+</dl>
+
+

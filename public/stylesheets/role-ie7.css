@@ -1,6 +1,0 @@
-/*ISSUE 1384 content warning required-tag positioning */
-.blurb .required-tags li .warnings
-        {  margin:28px 28px 0 -30px}
-        
-/*min-width*/
-.dashboard form.filters {min-width:8em;}

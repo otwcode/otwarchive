@@ -6,7 +6,7 @@
 %>
 
 <div class="post bookmark <% if bookmarkable.class == ExternalWork %>verbose<% end %>" id="bookmark-form">
-  <h3 class="landmark">Bookmark</h3>
+  <h3 class="landmark heading">Bookmark</h3>
   <% if bookmarkable.class == ExternalWork %><%= render "bookmarks/bookmarklet" %><% end %>
 
   <%= form_for([bookmarkable, bookmark], :url => {:controller => 'bookmarks', :action => action}) do |f| %>
@@ -24,7 +24,7 @@
       </p>
     <% end %>
 
-    <h4>
+    <h4 class="heading">
       <% if current_user.pseuds.count > 1 %>
         <!-- BACK END, please title this select tag "choose pseud"-->
         <%= select_tag "bookmark[pseud_id]", 

@@ -4,7 +4,7 @@
   <%= render :partial => "admin_index" %>
 <% else %>
 <div class="primary header module">
-<h2><%= ts("AO3 News") %></h2>
+<h2 class="heading"><%= ts("AO3 News") %></h2>
   <!--/descriptions-->
 <div class="icon"></div>
 <!--subnav-->
@@ -19,10 +19,10 @@
 
  	<div class="module" role="article">
 			<div class="header">
-      <h3>
+      <h3 class="heading">
 				<%= link_to admin_post.title, admin_post %>
 			</h3>
-				<h4>
+				<h4 class="heading">
 					<%= ts('Published:') %> <span class="datetime"><%= admin_post.created_at %></span> 
 						<% if logged_in_as_admin? %>
 					    <span class="actions"><%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), :class => "navigation" %></span>
@@ -33,7 +33,7 @@
 		    <%=raw sanitize_field(admin_post, :content) %>
       </div>
 			<!-- BEGIN comment section -->
-				<h3 class="landmark"><%= ts('Comment') %></h3>
+				<h3 class="landmark heading"><%= ts('Comment') %></h3>
 				<ul class="navigation actions" role="navigation">
           <% if admin_post.count_visible_comments > 0 %>
             <li><%= link_to ( admin_post.count_visible_comments == 1 ? 

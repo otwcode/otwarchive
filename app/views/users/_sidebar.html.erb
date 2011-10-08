@@ -1,5 +1,5 @@
 <div id="dashboard" class="<%= @user == current_user ? "own" : "" %>" role="navigation region">
-<h4 class="landmark"><%= ts("Preferences")%></h4>
+<h4 class="landmark heading"><%= ts("Preferences")%></h4>
 <ul class="navigation actions">
   <li><%= span_if_current ts("Dashboard"), @user %></li>
   <% if @user.pseuds.size > 1 %>
@@ -22,7 +22,7 @@
 </ul>
 	
 	
-<h4 class="landmark"><%= ts("Pitch")%></h4>
+<h4 class="landmark heading"><%= ts("Pitch")%></h4>
 <ul class="navigation actions">
 	<li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li>
 	<% if @user == current_user %>
@@ -38,7 +38,7 @@
 </ul>
 	
 <% if @user == current_user %>
-  <h4 class="landmark"><%= ts("Catch")%></h4>
+  <h4 class="landmark heading"><%= ts("Catch")%></h4>
   <ul class="navigation actions">
 	  <li><%= span_if_current ts("Inbox (%{inbox_number})", :inbox_number => @user.unread_inbox_comments_count.to_s), user_inbox_path(@user) %></li>
     <% if @user.preference.try(:history_enabled?) %>
@@ -48,7 +48,7 @@
   </ul>
 <% end %>	
 	
-<h4 class="landmark"><%= ts("Switch")%></h4>
+<h4 class="landmark heading"><%= ts("Switch")%></h4>
 <ul class="navigation actions">
   <% if @user == current_user %>
     <li><%= span_if_current ts("Signups (%{signup_number})", :signup_number =>@user.challenge_signups.count), user_signups_path(@user) %></li>

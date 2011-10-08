@@ -1,7 +1,7 @@
-<div class="tagset"><!--this is probably what we should do for each feature, reckon?-->
-	<h2><%= ts("Review Nominations for %{title}", :title => @tag_set.title) %></h2>
+<div class="tag tagset"><!--this is probably what we should do for each feature, reckon?-->
+	<h2 class="heading"><%= ts("Review Nominations for %{title}", :title => @tag_set.title) %></h2>
 
-<h3 class="landmark">Navigation</h3>
+<h3 class="landmark heading">Navigation</h3>
   <ul class="navigation actions" role="navigation">
   	<% if @tag_set.user_is_owner?(current_user) %>
       <li><%= link_to ts("Clear Nominations"), destroy_multiple_tag_set_nominations_path(@tag_set),
@@ -13,19 +13,19 @@
 
 
 <ul class="notes">
-  <li>We may clear out old nominations (that is, after several months) to avoid database clutter. Please don't 
-  leave nominations turned on unless you are reviewing nominations regularly!</li>  
+  <li>Old (several months) nominations are sometimes cleared from the database. Please review
+    nominations regularly or turn them off.</li>  
 
   <li>You can approve or reject nominations, or leave them for later. Once a nomination
   has been either approved or rejected, it won't appear on this page again.</li>
   
-  <li>If you reject a fandom nomination, we will automatically reject all character and relationship nominations submitted 
+  <li>If you reject a fandom nomination, you automatically reject all character and relationship nominations submitted 
     for that fandom. We will <em>not</em> automatically approve character nominations.</li>
 
   <li>If you approve an official synonym, we will automatically approve all the nominations with that synonym, 
       but only add that one synonym to your tag set.</li>
 
-  <li>If you make a tag that uses the same name as an existing tag of another type (eg if you made a character tag "Firefly" but that tag was already used for the show), the archive will automatically tag on the type, so you'll see "Firefly - Character" in your tag set.</li> 
+  <li>If your tag has the same name as an existing tag of another type (eg if you made a character tag "Firefly" but that tag was already used for the show), the archive will automatically tag on the type, so you'll see "Firefly - Character" in your tag set.</li> 
 
 </ul>
 
@@ -34,7 +34,7 @@
 
   <% @tagnames_seen = {} %>
 
-  <ol class="tagset review index">
+  <ol class="review index">
     <% if @nominations[:fandom] %>
       <%= render "review_fandoms", :fandoms => @nominations[:fandom] %>
       <% if @nominations[:cast] %>
@@ -45,7 +45,7 @@
     <% %w(character relationship freeform).each do |tag_type| %>
       <% if @nominations[tag_type] %>
         <li class="<%= tag_type %> listbox <%= cycle :odd, :even %>">
-          <h3><%= tag_type.classify.pluralize %></h3>
+          <h3 class="heading"><%= tag_type.classify.pluralize %></h3>
           <ol class="tags index">
             <% @nominations[tag_type].each do |nom| %>
               <li><%= render "review_individual_nom", :nom => nom %></li>

@@ -1,11 +1,11 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
+<h2 class="heading"><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
 <!--/descriptions-->
 
 <!--subnav -->
-<h3 class="landmark">Actions</h3>
+<h3 class="landmark heading">Actions</h3>
 <ul class="navigation actions" role="navigation">
-  <li><h4><%= ts("Manage:") %></h4></li>
+  <li><h4 class="heading"><%= ts("Manage:") %></h4></li>
   <li>
     <%= span_if_current("unsent (#{@user.invitations.unsent.count.to_s})", 
       manage_user_invitations_path(@user, :status => :unsent)) %>

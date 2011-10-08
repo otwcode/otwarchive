@@ -1,5 +1,5 @@
 <!--SEARCHBROWSE-->
-<h2><% ts("Bookmark Search: Beta") %></h2>
+<h2 class="heading"><% ts("Bookmark Search: Beta") %></h2>
 
 <ul class="navigation actions" role="navigation">
 	<li><%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %></li></ul>
@@ -8,7 +8,7 @@
 
 <% if @bookmarks %>
   <p><strong><%= @bookmarks.total_entries %> Found</strong><%= link_to_help "bookmark-search-results-help" %></p>
-  <h3 class="landmark">Bookmarks List</h3>
+  <h3 class="landmark heading">Bookmarks List</h3>
   <ol class="bookmark index">
     <% for bookmark in @bookmarks %>
       <% unless bookmark.nil? %>

@@ -1,57 +1,18 @@
-<%= stylesheet_link_tag '01-core',
-'02-elements',
-'03-region-header',
-'04-region-dashboard',
-'05-region-main',
-'06-region-footer',
-'07-interactions',
-'08-actions',
-'09-roles-states',
-'10-types-groups',
-'11-group-listbox',
-'12-group-meta',
-'13-group-blurb',
-'14-group-preface',
-'15-group-comments',
-'16-zone-system',
-'17-zone-home',
-'18-zone-searchbrowse',
-'19-zone-tags',
-'20-zone-translation',
-'21-userstuff',
-'22-system-messages',
-                        :cache => 'cached_for_screen',
-                        :media => 'screen' %>
+<% set_site_skin %>
+<% roles = Skin::DEFAULT_ROLES_TO_INCLUDE %>
 <% if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' %>
-  <%= stylesheet_link_tag 'role-translator', :media => 'screen' %>
+  <% roles << "translator" %>
 <% end %>
 <% if logged_in_as_admin? %>
-  <%= stylesheet_link_tag 'role-admin', :media => 'screen' %>
+  <% roles << "admin" %>
 <% end %>
+<!-- % cache("#{@site_skin.id}-site-skin") do % -->
 
-<%= stylesheet_link_tag 'role-handheld', :media => 'only screen and (max-width: 480px), handheld' %>
-<%= stylesheet_link_tag 'role-aural', :media => 'speech' %>
-<%= stylesheet_link_tag 'role-print', :media => 'print' %>
+<%= @site_skin.get_style(roles) %>
 
-<%= stylesheet_link_tag 'smoothness/jquery-ui-1.8.9.custom', :media => 'all' %>
-<%= stylesheet_link_tag 'jquery.qtip', :media => 'all' %>
+<!--sandbox for developers	-->
+<%= stylesheet_link_tag 'sandbox' %>
 
-<!--plugins-->
-<!-- stylesheet_link_tag 'visualize.jQuery', :media => 'screen' -->
-
-<!-- internet explorer stylesheets -->
-<!--[if lte IE 8]>
-<%= stylesheet_link_tag 'role-ie', :media => 'all' %>
-<![endif]-->
-<!--[if IE 5]>
-<%= stylesheet_link_tag 'role-ie5', :media => 'all' %>
-<![endif]-->
-<!--[if IE 6]>
-<%= stylesheet_link_tag 'role-ie6', :media => 'all' %>
-<![endif]-->
-<!--[if IE 7]>
-<%= stylesheet_link_tag 'role-ie7', :media => 'all' %>
-<![endif]-->
 
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
 <!-- check to see if this controller/action allow tinymce before we load the gigantor js; see application_helper -->
@@ -83,20 +44,11 @@ if (typeof jQuery == 'undefined')
 <%= javascript_include_tag 'jquery.purr.js' %>
 <%= javascript_include_tag 'best_in_place.js' %>
 <%= javascript_include_tag "jquery-ui-timepicker-addon.js" %>
+<%= javascript_include_tag "ibox/ibox" %>
 
 <%= csrf_meta_tag %>
 
 <% if allow_tinymce?(controller) %>
   <%= yield :tinymce_init %>
-<% end %>
-
-<%= iboxify_page %>
-<!--sandbox for developers	-->
-<%= stylesheet_link_tag 'sandbox' %>
-
-<% if current_user.is_a?(User) && (skin = current_user.try(:preference).try(:skin)) %>
-  <% cache("#{skin.id}-site-skin") do %>
-    <%= render "skins/skin_style_block", :skin => skin %>
-  <% end %><!-- end site skin cache -->
 <% end %>
 

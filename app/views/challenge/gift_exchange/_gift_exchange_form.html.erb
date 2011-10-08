@@ -1,6 +1,6 @@
-<h2><%= ts("Setting Up The %{title} Gift Exchange", :title => @collection.title) %></h2>
+<h2 class="heading"><%= ts("Setting Up The %{title} Gift Exchange", :title => @collection.title) %></h2>
 
-<h3><%= ts('Suggestions') %></h3>
+<h3 class="landmark heading"><%= ts('Notes') %></h3>
 <ul class="notes">
   <li>The more options you allow here, the more complicated your signup form will be.</li>
   <li>If you keep to one request and one offer, automated matching will be easier! A single request can include multiple fandoms. Unless you want to do fairly complicated requests, you probably don't need more than one request/offer.</li>
@@ -12,18 +12,18 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark">Gift Exchange Settings</h3>
-
+<h3 class="landmark heading">Gift Exchange Settings</h3>
+<div class="verbose create challenge"><!--BACK END, please put these classes on this form instead-->
 <%= form_for([@collection, @challenge], :url => collection_gift_exchange_path(@collection)) do |f| %>
   <%= error_messages_for @challenge %>
   <%= render "challenge/shared/challenge_form_schedule", :f => f %>
 
-  <fieldset class="preface profile">
+  <fieldset>
   	<legend>Requests and Offers</legend>
-  	<h3>Requests and Offers</h3>
+  	<h3 class="landmark heading">Requests and Offers</h3>
     <dl>
-      <dt><%= f.label :requests_summary_visible, ts("Requests visible?") %>:</dt>
-      <dd><%= f.check_box :requests_summary_visible %> <%= link_to_help "challenge-requests-summary" %></dd>
+      <dt><%= f.label :requests_summary_visible, ts("Requests visible?") %>: <%= link_to_help "challenge-requests-summary" %></dt>
+      <dd><%= f.check_box :requests_summary_visible %></dd>
 
       <dt><%= f.label :requests_num_required, ts("Number of requests per signup") %>:</dt>
       <%= required_and_allowed(f, "requests", false) %>
@@ -54,4 +54,4 @@
 <!--subnav-->
 <%= render "challenge/shared/challenge_form_delete" %>
 <!--/subnav-->
-
+</div>

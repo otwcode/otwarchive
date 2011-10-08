@@ -158,11 +158,13 @@ module TagsHelper
     (@tag && controller.controller_name == 'comments'))
   end
 
-  # Returns a nested list of meta tags
+  # Returns a nested list of meta tags 
+  # BACK END, SEMI URGENT this is completely invalid - cannot have ul as child of ul, only of li
+
   def meta_tag_tree(tag)
     meta_ul = ""
     unless tag.direct_meta_tags.empty?
-      meta_ul << "<ul class='tags tree'>"
+      meta_ul << "<ul class='tags tree index'>"
       tag.direct_meta_tags.each do |meta|
         meta_ul << "<li>" + link_to_tag(meta) + "</li>"
         unless meta.direct_meta_tags.empty?
@@ -178,7 +180,7 @@ module TagsHelper
   def sub_tag_tree(tag)
     sub_ul = ""
     unless tag.direct_sub_tags.empty?
-      sub_ul << "<ul class='tags tree'>"
+      sub_ul << "<ul class='tags tree index'>"
       tag.direct_sub_tags.each do |sub|
         sub_ul << "<li>" + link_to_tag(sub) + "</li>"
         unless sub.direct_sub_tags.empty?

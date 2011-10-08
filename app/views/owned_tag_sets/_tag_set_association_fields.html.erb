@@ -1,8 +1,8 @@
 <% index ||= 0 %>
 <div class="removeme">
 <fieldset class="secondary">
-    <p class="actions cancel" title="cancel"><%= link_to_remove_section ts("x"), form %></p>
-    <dl>
+  <p class="actions cancel" title="cancel"><%= link_to_remove_section ts("x"), form %></p>
+  <dl>
     <dt><%= form.label :tag_id, ts("Tag: ") %></dt>
     <dd>
       <%= form.hidden_field :create_association, :value => true %>

@@ -10,7 +10,7 @@
   # See the challenge_signup form for an example of how this is used. 
 %>
 
-<% index ||= "" %>
+<% index ||= 0 %>
 <% required ||= false %>
 <% prompt_title = form.object.class.name %>
 <% prompt_type = prompt_title.downcase %>
@@ -25,7 +25,7 @@
   <% end %>
 
   <legend><%= prompt_title %></legend>
-  <h3><%= form.object.new_record? ? prompt_title : link_to(prompt_title, collection_prompt_path(@collection, form.object)) %></h3>  
+  <h3 class="heading"><%= form.object.new_record? ? prompt_title : link_to(prompt_title, collection_prompt_path(@collection, form.object)) %></h3>  
 
   <div>
     <%= form.hidden_field :collection_id, :value => @collection.id %>
@@ -69,7 +69,7 @@
          # and should probably be done via an Anonymous user like the Orphan user.  
       %>
       <dt>
-        <%= form.label :anonymous, ts("Semi-anonymous prompt (not secure): ") %>
+        <%= form.label :anonymous, ts("Semi-anonymous prompt: ") %>
         <% if form.object.new_record? %>
         <% anon = form.object.anonymous %>
         <% else %>
@@ -79,24 +79,18 @@
       <dd><%= form.check_box :anonymous, :checked => anon %>
 	<p class="footnote">(note, this is not totally secure, and is still guessable in some places)</p></dd>
     <% end %>
-
-    <% unless required %>
-      <dt class="landmark">Remove</dt>
-      <!--FRONT END, DON'T FORGET TO READD SUBMIT AFTER SKINS-->
-      <dd class="actions">
-        <%= link_to_remove_section(ts("Remove?"), form) %>
-        <noscript>
-          <%= form.label "_destroy" do %>
-            <%= ts("Remove?") %>
-            <%= form.check_box "_destroy" %>
-          <% end %>
-        </noscript>
-      </dd>
-    <% end %>
      
   </dl>
   <% unless required %>
-    <p class="actions" role="button"><%= link_to_remove_section(ts("Remove?"), form) %></p>
+    <p class="actions" role="button">
+      <%= link_to_remove_section(ts("Remove?"), form) %>
+      <noscript>
+        <%= form.label "_destroy" do %>
+          <%= ts("Remove?") %>
+          <%= form.check_box "_destroy" %>
+        <% end %>
+      </noscript>      
+    </p>
   <% end %>
 </fieldset>
 </div>

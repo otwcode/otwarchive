@@ -1,6 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
 <% if @user %>
-<h2><%= @user.login %>'s Related Works</h2>
+<h2 class="heading"><%= @user.login %>'s Related Works</h2>
 <% end %>
 <!--/descriptions-->
 
@@ -9,7 +9,7 @@
 
 <!--main content-->
 <% unless @translations_of_user.blank? %>  
-  <h3>Translations of <%= @user.login %>'s works</h3>
+  <h3 class="heading">Translations of <%= @user.login %>'s works</h3>
   <% # FRONT END!!! 
     # This page is:
     # Foo's Related Works
@@ -58,7 +58,7 @@
 <% end %>  
  
 <% unless @translations_by_user.blank? %>  
-  <h3>Works translated by <%= @user.login %></h3>
+  <h3 class="heading">Works translated by <%= @user.login %></h3>
   <dl class="own translations index">
     <% @translations_by_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
@@ -83,7 +83,7 @@
 <% end %>
  
 <% unless @remixes_of_user.blank? %>
-  <h3>Works inspired by <%= @user.login %></h3>
+  <h3 class="heading">Works inspired by <%= @user.login %></h3>
 <dl class="inspired index">
     <% @remixes_of_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
@@ -108,7 +108,7 @@
 <% end %>  
   
 <% unless @remixes_by_user.blank? %>
-  <h3>Works that inspired <%= @user.login %></h3>
+  <h3 class="heading">Works that inspired <%= @user.login %></h3>
   <dl class="inspired index">
     <% @remixes_by_user.each do |related_work| %>
       <% unless related_work.translation? %>

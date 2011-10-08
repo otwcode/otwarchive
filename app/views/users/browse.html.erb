@@ -1,6 +1,6 @@
 <!--Descriptive page name, messages and instructions-->
   <div class="primary header module">
-  	<h2><%= link_to_unless_current(@user.login, @user) %>
+  	<h2 class="heading"><%= link_to_unless_current(@user.login, @user) %>
   	</h2>
   	<p><%= icon_display(@user) %></p>
   <!--/descriptions-->
@@ -13,13 +13,13 @@
   </div>
   <!--/subnav-->
   
-  <h3>Author Browsing (Alpha)</h3>
+  <h3 class="heading">Author Browsing (Alpha)</h3>
 
   <!--main content-->
 
   <% unless @co_authors.nil? || @co_authors.length == 0 %>
   <div class="coauthor listbox" id="user-coauthors">
-    <h3><%=h ts("Co-Authors") %></h3>
+    <h3 class="heading"><%=h ts("Co-Authors") %></h3>
     <ul class="index">
       <% for pseud in @co_authors %>
         <li>
@@ -34,7 +34,7 @@
   <% for tag_type in @tag_types %>
     <% unless @tags[tag_type].blank? %>
     <div class="#{tag_type.downcase} listbox" id="user-#{tag_type.downcase.pluralize}">
-      <h3><%=h ts(tag_type.pluralize) %></h3>
+      <h3 class="heading"><%=h ts(tag_type.pluralize) %></h3>
       <ul class="index">
         <% @tags[tag_type].each_with_index do |tag, i| %>
           <% if !params["expand_#{tag_type.downcase.pluralize}"] && 

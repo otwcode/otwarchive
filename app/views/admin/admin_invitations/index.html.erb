@@ -1,4 +1,4 @@
-<!--Descriptive page name, messages and instructions--><h2><%=h ts("Invite new users") %></h2>
+<!--Descriptive page name, messages and instructions--><h2 class="heading"><%=h ts("Invite new users") %></h2>
 <!--/descriptions-->
 <!--subnav-->
 <ul class="navigation actions" role="navigation">
@@ -9,7 +9,7 @@
 <!--main content-->
 <%= form_tag :controller => 'admin/admin_invitations', :action => :create do %>
   <fieldset class="simple">
-	<h3>Send to email</h3>
+	<h3 class="heading">Send to email</h3>
     <p>Send an invite code to the following email address: <!--BACK END: please put this title on the text_field instead--><span title="invite by email"><%= text_field_tag "invitation[invitee_email]", @invitation.try(:invitee_email) || "" %></span>
   <span class="submit actions"><%= submit_tag ts('Invite user')  %></span></p>
 </fieldset>
@@ -18,7 +18,7 @@
  
  <%= form_tag url_for(:controller => 'admin/admin_invitations', :action => 'invite_from_queue') do %>
     <fieldset class="simple">
-		<h3>Send invite codes to people in our <%= link_to 'invitations queue', invite_requests_path %></h3>
+		<h3 class="heading">Send invite codes to people in our <%= link_to 'invitations queue', invite_requests_path %></h3>
 		<p>There are <%= InviteRequest.count %> requests in the queue.</p>
 		<p><%= label_tag :invite_from_queue, ts('Number of people to invite') %>: <%= text_field_tag :invite_from_queue  %> 			<span class="submit actions"><%= submit_tag ts('Invite from queue')  %></span></p>
   </fieldset>
@@ -27,7 +27,7 @@
 
 	 <%= form_tag url_for(:controller => 'admin/admin_invitations', :action => 'grant_invites_to_users') do %>
     <fieldset>
-	<h3><%=h 'Give invite codes to current users' %></h3>
+	<h3 class="heading"><%=h 'Give invite codes to current users' %></h3>
 	<dl>
       <dt><%= label_tag :number_of_invites, ts('Number of invites') %>:</dt>
       <dd><%= text_field_tag :number_of_invites %></dd>
@@ -42,7 +42,7 @@
 
  <%= form_tag url_for(:controller => 'admin/admin_invitations', :action => 'find'), :method => :get do %>
         <fieldset>
-	<h3><%=h 'Track invitations' %></h3>
+	<h3 class="heading"><%=h 'Track invitations' %></h3>
 <dl>
       <dt><%= label_tag :user_name, ts('Enter a user name') %>:</dt>
       <dd><%= text_field_tag :user_name  %></dd>

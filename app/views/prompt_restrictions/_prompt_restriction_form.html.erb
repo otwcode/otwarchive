@@ -1,4 +1,5 @@
-<!-- prompt restriction_form partial, expects a local variable called "challenge_form" and @challenge and "type", as well as boolean "is_offer" and "show_tag_options"  -->
+<!-- prompt restriction_form partial, expects a local variable called "challenge_form" and @challenge and "type", as well as boolean "is_offer" and "show_tag_options"  
+is verbose-->
 <% if is_offer %>
   <% @challenge.build_offer_restriction unless @challenge.offer_restriction %>
   <% restriction = @challenge.offer_restriction %>
@@ -14,25 +15,23 @@
     <% if is_offer %>
       <!-- skip the notes -->
     	<legend>Offer Settings</legend>
-    	<h3>Offer Settings</h3>
+    	<h3 class-"landmark">Offer Settings</h3>
     	<p class="note">
     	  These settings determine what each separate offer can contain. Note these can be entirely different from the request settings!
     	</p>
     <% else %>
     	<legend>Request Settings</legend>
-    	<h3>Request Settings</h3>
+    	<h3 class-"landmark">Request Settings</h3>
     	<p class="note">
     	  These settings determine what each separate request can contain, and in particular how many different tags of each kind.
     	  <% unless type == "prompt_meme" %>If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.<% end %>
     	</p>
     	<% unless type == "prompt_meme" %><p class="note">
-    	  If you check "Allow Any?" then users will be able to select "Any" for that field, which means they will match no matter 
-    	  what the person offering has put into that field. Note: this option is generally safer for offers than requests!
+    	  Checking "Allow Any?" allows users to select "Any" for that field; this means they will match <em>anything</em> put in that field. This option is safer for offers than requests!
     	</p><% end %>
     	<p class="note">
-    	  If you check "Must Be Unique?" then users will not be allowed to repeat the same value across prompts. That is, if 
-    	  you allow three prompts and specify that fandom must be unique, the user will have to specify completely different fandoms
-    	  for all three prompts -- no overlap allowed. Please explain this in your signup instructions!
+    	  If you allow three prompts and specify that fandom "must be unique", the user will have to choose completely different fandoms
+    	  for all three prompts&#8212;no overlap allowed. Please explain this in your signup instructions!
     	</p> 
     <% end %>
     <dl>
@@ -47,17 +46,19 @@
   <% if show_tag_options %>
     <fieldset>
       <legend><%= ts("Tag Options") %></legend>
-      <h3><%= ts("Tag Options") %> <%= link_to_help("prompt-restriction-tag-set" + (type == "gift_exchange" ? "" : "-promptmeme")) %> </h3>
+      <h3 class-"landmark"><%= ts("Tag Options") %> <%= link_to_help("prompt-restriction-tag-set" + (type == "gift_exchange" ? "" : "-promptmeme")) %> </h3>
       <p class="note">
-        Here you can select one or more <%= link_to(ts("tag sets"), tag_sets_path) %> which will determine what tags users can choose from in
-        your challenge. You can make your own custom tag set(s) or use any existing public tag set (but be aware that if it's not a tag set 
-        that you own, the tag set owners may change the contents of the tag set without warning).
+     <%= link_to(ts("Tag sets"), tag_sets_path) %> show what tags can be used in
+        your challenge. You can make your own or use any public tag set. Beware: owners can change the contents of their public tag set without warning.
       </p> 
       <dl>
         <% unless restriction.owned_tag_sets.empty? %>
-          <dt><%= prompt_restriction_form.label :tag_sets_to_remove, ts("Current Tag Sets (check to remove):") %></dt>
+          <dt><%= prompt_restriction_form.label :tag_sets_to_remove, ts("Current Tag Sets:") %></dt>
           <dd>
+            <fieldset class="listbox">
+              <h4 class="heading">Check to remove</h4>
             <%= checkbox_section(prompt_restriction_form, :tag_sets_to_remove, restriction.owned_tag_sets, :name_method => "title") %>
+          </fieldset>
           </dd>
         <% end %>
         <dt><%= prompt_restriction_form.label :tag_sets_to_add, ts("Tag Sets To Use: ") %></dt>

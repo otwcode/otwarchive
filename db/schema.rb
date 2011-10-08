@@ -136,6 +136,8 @@ ActiveRecord::Schema.define(:version => 20110908191743) do
     t.datetime "updated_at"
   end
 
+  add_index "challenge_claims", ["creation_id", "creation_type"], :name => "creations"
+
   create_table "challenge_signups", :force => true do |t|
     t.integer  "collection_id"
     t.integer  "pseud_id"
@@ -897,6 +899,14 @@ ActiveRecord::Schema.define(:version => 20110908191743) do
     t.datetime "updated_at"
   end
 
+  create_table "skin_parents", :force => true do |t|
+    t.integer  "skin_id"
+    t.integer  "skin_parent_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "skins", :force => true do |t|
     t.string   "title"
     t.integer  "author_id"
@@ -934,6 +944,18 @@ ActiveRecord::Schema.define(:version => 20110908191743) do
     t.integer  "user_id"
     t.integer  "subscribable_id"
     t.string   "subscribable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subscriptions", ["subscribable_id", "subscribable_type"], :name => "subscribable"
+  add_index "subscriptions", ["user_id"], :name => "user_id"
+
+  create_table "support_tickets", :force => true do |t|
+    t.string   "email_address"
+    t.string   "title"
+    t.text     "description"
+    t.integer  "description_sanitizer_version", :limit => 2, :default => 0, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

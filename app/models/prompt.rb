@@ -35,6 +35,15 @@ class Prompt < ActiveRecord::Base
   attr_protected :description_sanitizer_version
 
   validates_presence_of :collection_id
+  
+  validates_presence_of :challenge_signup
+  before_save :set_pseud
+  def set_pseud
+    unless self.pseud
+      self.pseud = self.challenge_signup.pseud
+    end
+    true
+  end
 
   # based on the prompt restriction
   validates_presence_of :url, :if => :url_required?
@@ -243,7 +252,7 @@ class Prompt < ActiveRecord::Base
 
   # tag groups
   def tag_groups
-    self.tag_set.tags.group_by { |t| t.type.to_s }
+    self.tag_set ? self.tag_set.tags.group_by { |t| t.type.to_s } : {}
   end
 
   # Takes an array of tags and returns a marked-up, comma-separated list

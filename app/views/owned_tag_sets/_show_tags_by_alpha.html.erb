@@ -1,5 +1,6 @@
 <% # expects tag_type %>
-<% if (tags = @tag_set.tag_set.with_type(tag_type)).exists? %>
+<% if @tag_set.has_type?(tag_type) %>
+  <% tags = @tag_set.with_type(tag_type) %>
   <% if tags.count <= ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
     <%= render "show_tags_in_single_list", :tag_type => tag_type %>
   <% else %>
@@ -24,7 +25,7 @@
           <% first_letter = tagname.gsub(/^(the |an |a )?/i, '')[0,1] %>
           <% while !(first_letter.match /[#{ranges[current_range]}]/i) do current_range = current_range+1 end %>
           <li class="<%= tag_type %> letter range listbox <%= cycle :odd, :even %>">
-            <h3 class="expander_parent">
+            <h3 class="expander_parent heading">
               <%= ts("#{tag_type.classify.pluralize}") %>
               <span class="range">(<%= ranges[current_range] %>)</span>
               <%= expand_contract_shuffle("list_for_#{tag_type}_#{ranges[current_range]}") %>
@@ -33,7 +34,7 @@
         <% elsif current_range_unseen %>
           <% # handling the case where we're seeing a number match - we do it this way so we don't have an empty list of tags to start %>
           <li class="<%= tag_type %> number letter range listbox <%= cycle :odd, :even %>">
-            <h3 class="expander_parent"><%= expand_contract_shuffle("list_for_#{tag_type}_0") %> <%= ts("#{tag_type.classify.pluralize} (%{letter})", :letter => "0-9") %></h3>
+            <h3 class="expander_parent heading"><%= expand_contract_shuffle("list_for_#{tag_type}_0") %> <%= ts("#{tag_type.classify.pluralize} (%{letter})", :letter => "0-9") %></h3>
             <ol id="list_for_<%= tag_type %>_0" class="tags index" force_contract="true">
         <% end %>
         <% current_range_unseen = false %>

@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>
+<h2 class="heading">
 	<%= @series.title %>
 	<% if @series.restricted %>
 		<%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %>
@@ -9,7 +9,7 @@
 
 <!--subnav-->
 <% if logged_in? %>
-<h3 class="landmark">Actions</h3>
+<h3 class="landmark heading">Actions</h3>
 <ul class="navigation actions" role="navigation">
   <% @bookmark ||= bookmark_if_exists(@series) %>
   <li><%= link_to (@bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
@@ -27,7 +27,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark">Series Metadata</h3>
+<h3 class="landmark heading">Series Metadata</h3>
 <div class="wrapper">
 	<dl class="series meta">
     <dt><%= 'Series begun:' %></dt>
@@ -77,7 +77,7 @@
 <%= render :partial => 'admin/admin_options', :locals => {:item => @series} %>
 <% end %>
 
-<h3 class="landmark">List of Series</h3>
+<h3 class="landmark heading">List of Series</h3>
 <ul class="series work index">
   <% for serial in @serial_works %>
     <%= render :partial => 'works/work_blurb', :locals => {:work => serial.work} %>

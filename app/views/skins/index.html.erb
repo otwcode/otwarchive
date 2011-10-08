@@ -1,4 +1,4 @@
-<h2><%= @title %></h2>
+<h2 class="heading"><%= @title %></h2>
 
 <p class="notes">
   <% if params[:work_skins] %>
@@ -11,7 +11,7 @@
 
 <%= render :partial => "skin_top_navigation" %>
 
-<h3 class="landmark">List of Skins</h3>
+<h3 class="landmark heading">List of Skins</h3>
 
 <% if @skins.empty? %>
   <p>
@@ -23,7 +23,7 @@
   <% for skin in @skins %>
     <li class="skins <% if skin.editable? %>own<% end %> picture blurb">
       <div class="header module">
-        <h4 title="title">
+        <h4 class="heading" title="title">
           <%= link_to h(skin.title), skin %>
           <span class="byline">
             by <%= skin.byline %>
@@ -43,7 +43,7 @@
       </div>
       
       <!--summary/descriptions-->
-      <h6 class="landmark">Description</h6>
+      <h6 class="landmark heading">Description</h6>
       <blockquote class="userstuff summary">
 	<!--BACK END:  please enclose the text "No Description Provided" in <p>-->
         <%=raw skin.description.blank? ? h(ts("(No Description Provided)")) : strip_images(sanitize_field(skin, :description)) %>

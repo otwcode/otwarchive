@@ -1,7 +1,7 @@
 <div class="admin home">
 <!--Descriptive page name, messages and instructions-->
 <div class="primary header module">
-	<h2><%= 'AO3 News' %></h2>
+	<h2 class="heading"><%= 'AO3 News' %></h2>
 <!--/descriptions-->
 <div class="icon"></div>
 <!--subnav-->
@@ -14,19 +14,19 @@
 <!--main content-->
 <div role="article">
   <div class="header">
-    <h3>
+    <h3 class="heading">
       <%= @admin_post.title %>
     </h3>
-      <h4>
+      <h4 class="heading">
         Published: <%= @admin_post.created_at %>  
         <% if logged_in_as_admin? %>
             <%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), :class => 'navigation' %>
         <% end %>
       </h4>
     <% if @admin_post.translated_post %>
-      <h4>Original: <%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></h4>
+      <h4 class="heading">Original: <%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></h4>
     <% elsif !@admin_post.translations.empty? %>
-      <h4>Translations:</h4>
+      <h4 class="heading">Translations:</h4>
       <dl class="language">
         <% for admin_post in @admin_post.translations %>
           <dt>

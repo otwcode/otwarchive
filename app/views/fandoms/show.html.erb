@@ -1,5 +1,5 @@
 <!--ZONE TAGS, ZONE HOME? Descriptive page name, messages and instructions-->
-<h2><%= @fandom.name %></h2>
+<h2 class="heading"><%= @fandom.name %></h2>
 <!--/descriptions-->
 
 <!--subnavigation, sorting and actions-->
@@ -10,14 +10,14 @@
 <!--subnav-->
 
 <!--main content-->
-<h3><%= ts('Characters and Relationships') %></h3>
+<h3 class="heading"><%= ts('Characters and Relationships') %></h3>
 <% unless @characters.blank? %>
 <ul class="characters relationships index">
   <% for character in @characters %>
   <li>
-    <h4><%= link_to character.name, tag_works_path(character) %></h4>
+    <h4 class="heading"><%= link_to character.name, tag_works_path(character) %></h4>
     <% unless character.relationships.empty? %>
-    <ul class="tags">
+    <ul class="tags commas">
       <% for relationship in character.relationships %>
       <li><%= link_to relationship.name, tag_works_path(relationship) %></li>
       <% end %>

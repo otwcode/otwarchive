@@ -1,5 +1,5 @@
 <!--BACK END: if this is only accessed via the user dashboard it needs the user dashboard view-->
-<h2><%= ts('Edit Archive Skin')  %></h2>
+<h2 class="heading"><%= ts('Edit Archive Skin')  %></h2>
 
 <%= error_messages_for :skin %>
 
@@ -7,13 +7,13 @@
 <%= render :partial => "skin_top_navigation" %>
 <!--/subnav-->
 
-<h3 class="landmark"><%= ts("Edit Archive Skin Form") %></h3>
-<%= form_for(@skin, :html => {:multipart => true}) do |f| %>
+<h3 class="landmark heading"><%= ts("Edit Archive Skin Form") %></h3>
+<%= nested_form_for(@skin, :html => {:multipart => true}) do |f| %>
 
   <% if params[:wizard] %>
-    <%= render :partial => 'wizard_form', :locals => {:f => f} %>
+    <%= render 'wizard_form', :f => f %>
   <% else %>
-    <%= render :partial => 'form', :locals => {:f => f} %>
+    <%= render 'form', :f => f %>
   <% end %>
 
   <p class="submit actions"><%= f.submit ts('Update')  %></p>

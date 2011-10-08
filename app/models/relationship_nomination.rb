@@ -1,7 +1,7 @@
 class RelationshipNomination < TagNomination
-  belongs_to :tag_set_nomination #, :inverse_of => :relationship_nominations
-  has_one :owned_tag_set, :through => :tag_set_nomination #, :inverse_of => :relationship_nominations
-  belongs_to :fandom_nomination #, :inverse_of => :relationship_nominations
+  belongs_to :tag_set_nomination
+  belongs_to :fandom_nomination, :inverse_of => :character_nominations
+  has_one :owned_tag_set, :through => :tag_set_nomination
 
   validate :known_fandom
   def known_fandom
@@ -23,5 +23,8 @@ class RelationshipNomination < TagNomination
         Tag.find_by_name(self.tagname).try(:parents).try(:first).try(:name))
   end
 
+  def get_owned_tag_set
+    @tag_set || self.tag_set_nomination ? self.tag_set_nomination.owned_tag_set : self.fandom_nomination.get_owned_tag_set
+  end
 
 end

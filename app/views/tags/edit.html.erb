@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("Edit") %> <cite><%= link_to_tag(@tag) %></cite> <%= ts('Tag') %></h2>
+<h2 class="heading"><%= ts("Edit") %> <cite><%= link_to_tag(@tag) %></cite> <%= ts('Tag') %></h2>
 <%= error_messages_for :tag %>
 <!--/descriptions-->
 
@@ -73,7 +73,7 @@
         <dt>Suggested Fandoms:</dt>
         <dd>
         <% @suggested_fandoms[0..19].in_groups(2, false) do |fandom_list| %>
-          <ul class="tags">
+          <ul class="tags commas">
           <% for tag in fandom_list %>
             <li><%= link_to_edit_tag(tag) %></li>
           <% end %>
@@ -89,7 +89,7 @@
         <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type.downcase == 'MetaTag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
         <% if @parents[tag_type] %>
           <% @parents[tag_type].in_groups(2, false) do |tag_list| %>
-          <ul class="tags">
+          <ul class="tags commas">
           <% for tag in tag_list %>
             <li>
               <%= link_to_edit_tag(tag) %>
@@ -119,7 +119,7 @@
 																					:class => 'tags autocomplete') %><br />
           <% if @children[tag_type] %>
             <% @children[tag_type][0..19].in_groups(2, false) do |tag_list| %>
-            <ul class="tags">
+            <ul class="tags commas">
             <% for tag in tag_list %>
               <li>
                 <%= link_to_edit_tag(tag) %>

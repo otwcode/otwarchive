@@ -27,14 +27,15 @@ module UsersHelper
     elsif user && user.default_pseud
       user.default_pseud.icon.url(:standard)
     else
-      "/images/user_icon.png"
+      "/images/skins/iconsets/default/icon_user.png"
     end
   end
-#BACK END if the icon is just a default and has no meaning please don't give it an alt  
+# BACK END if the icon is just a default and has no meaning please don't give it an alt
+# there's no obvious need (to front end, obv prob back end reason) to print a default icon at all? 
   def icon_display(user=nil, pseud=nil)
     path = user ? (pseud ? user_pseud_path(pseud.user, pseud) : user_path(user)) : nil
     pseud ||= user.default_pseud if user
-    alt_text = pseud.try(:icon_alt_text) || pseud.try(:byline) || ts("Default AO3 icon")
+    alt_text = pseud.try(:icon_alt_text) || pseud.try(:byline) || ts("")
 
     if path
       link_to image_tag(standard_icon(user, pseud), :alt => alt_text, :class => "icon"), path

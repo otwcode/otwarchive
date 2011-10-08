@@ -1,6 +1,5 @@
 <!--SEARCHBROWSE-->
-<h2>Tags</h2>
-<%= render :partial => 'tags/search_form' %>
+<h2 class="heading">Tags</h2>
 <% unless @collection %>
 <ul role="navigation" class="navigation actions" role="navigation">
   <% if logged_in? %><li><%= link_to ts("Tag Sets"), tag_sets_path %></li><% end %>
@@ -10,8 +9,9 @@
 </ul>
 <% end %>
 
+
 <% unless @collection %>
-<h3 class="landmark">
+<h3 class="landmark heading">
   <% if params[:show] == "popular" %>
     <%= ts('Browse Popular Tags')%>
   <% else %>
@@ -24,3 +24,6 @@
   <% end %>
 </ul>
 <% end %>
+
+
+<%= render :partial => 'tags/search_form' %>

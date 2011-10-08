@@ -1,10 +1,9 @@
-<fieldset class="preface profile">
+<fieldset>
   <legend><%= ts("Signup Instructions") %></legend>
-  <h3><%= ts("Signup Instructions") %></h3>
+  <h3 class="heading"><%= ts("Signup Instructions") %></h3>
   <p class="note">
-    <%= ts("Explain to your members how you want them to sign up.") %>
+    <%= ts("Explain to your members how you want them to sign up.") %> <%= allowed_html_instructions %>
   </p>
-  <p><%= allowed_html_instructions %></p>
   <dl>
     <dt><%= f.label :signup_instructions_general, ts("General Signup Instructions: ") %></dt>
     <dd>
@@ -23,16 +22,22 @@
     <% end %>
   </dl>
 
-  <h4>Change the labels</h4>
+  <h4 class="heading">Change the labels</h4>
   <p>You can change these form fields to something more useful for your own challenge.</p>
   <dl>
     <% f.object.class::PROMPT_TYPES.each do |prompt_types| %>
       <% prompt_type = prompt_types.singularize %>
-      <dt><%= f.label "#{prompt_type}_url_label".to_sym, ts("In #{prompt_types}, change \"Prompt URL\" to") %>:</dt>
+      <dt><!--BACK END, if pos please capitalize {prompt_types}-->
+      <%= ts("In #{prompt_types} change") %></dt>
+      <dd>
+        <fieldset>
+          <dt><%= f.label "#{prompt_type}_url_label".to_sym, ts("\"Prompt URL\" to") %>:</dt>
       <dd><%= f.text_field "#{prompt_type}_url_label".to_sym %></dd>
 
-      <dt><%= f.label "#{prompt_type}_description_label".to_sym, ts("In #{prompt_types}, change \"Description\" to") %>:</dt>
+      <dt><%= f.label "#{prompt_type}_description_label".to_sym, ts("\"Description\" to") %>:</dt>
       <dd><%= f.text_field "#{prompt_type}_description_label".to_sym %></dd>
+    </fieldset>
+    </dd>
     <% end %>
   </dl>
 </fieldset>
