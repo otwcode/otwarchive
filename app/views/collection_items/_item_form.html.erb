@@ -1,48 +1,76 @@
 <% if collection_item %>
-<tr id="collection_item_<%= collection_item.id %>">
-<th scope="row">
+  <% item_name = collection_item.item_type == "Bookmark" ? 
+              ts("Bookmark for %{title}", :title => collection_item.item.bookmarkable.title) : 
+              (collection_item.item.title + (!collection_item.item.posted? ? ts("(draft)") : "")) %>
+
   <%= form_for(collection_item, :as => :collection_item, :url => {:controller => "collection_items", :action => "update"}) do |form| %>
-    <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
-    <%= link_to(
-      collection_item.item_type == "Bookmark" ? t('.collection_items.bookmark', :default => "Bookmark for %{title}", :title => collection_item.title) : 
-      collection_item.title + (!collection_item.item.posted? ? t('.collection_items.draft', :default => "(draft)") : ""), collection_item.item) %>
-</th>
-<% unless @user %>
-  <!-- collection view -->
-  <td><%= collection_item.item_creator_names %></td>
-  <td><%= collection_item.item_creator_pseuds.map {|pseud| collection_item.collection.user_is_posting_participant?(pseud.user) ? "Y" : "N"}.join(", ") %></td>
-  <td><%= CollectionItem::LABEL[collection_item.user_approval_status] %></td>
-  <td><%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %></td>
-  <% if @collection.gift_exchange? %>
-    <td><%= collection_item.recipients %></td>
-  <% end %>
-  <% if @collection.unrevealed? %>
-    <td><%= form.check_box :unrevealed, :id => "unreveal_" + collection_item.id.to_s %></td>
-  <% end %>
-  <% if @collection.anonymous? %>
-    <td><%= form.check_box :anonymous %></td>
-  <% end %>
-<% else %>
-  <!-- user version -->
-  <td><%= link_to collection_item.collection.title, collection_path(collection_item.collection) %></td>
-  <td><%=h collection_item.collection.user_is_posting_participant?(@user) ? "Y" : "N" %>
-  <td><%= form.select(:user_approval_status, CollectionItem::APPROVAL_OPTIONS) %><%= hidden_field_tag :user_id, @user.login %></td>
-  <td><%= CollectionItem::LABEL[collection_item.collection_approval_status] %></td>
-<% end %>
+    <!--is this the heading?-->
+    <dt id="collection_item_<%= collection_item.id %>">
+        <%= form.hidden_field :id %><%= form.hidden_field :collection_id %>
+    
+    <!--heading?-->
+        <%= link_to(item_name, collection_item.item) %>
+    </dt>
 
-<td><%= collection_item.item.respond_to?(:word_count) ? collection_item.item.word_count : t('.collection_items.na', :default => "N/A") %></td>
-<td><%= collection_item.item_date.to_date %></td>
+    <!--OPEN DD-->
+    <dd>
+    <!--this contains all the associations and actions in a dl.index pattern-->
+      <% unless @user %>
 
-<td class="submit button">
-  <%= form.submit ts("Update"), :id => "submit_" + collection_item.id.to_s %>
-  <% end %> 
-  <%= button_to t('.item_remove', :default => "Remove"), 
-                @user ? user_collection_item_path(@user, collection_item) : collection_item_path(collection_item.collection, collection_item), 
-                :confirm => t('.item_confirm_delete', :default => 'Are you certain you want to entirely remove %{item} from the collection?', 
-                :item => collection_item.item_type == "Bookmark" ? 
-                t('.collection_items.bookmark', :default => "Bookmark for %{title}", :title => collection_item.item.bookmarkable.title) : 
-                collection_item.item.title), 
-                :method => :delete %>
-</td>
-</tr>
+        <h5 class="heading">
+          <ul>
+            <% collection_item.item_creator_pseuds.each do |pseud| %>
+              <li>
+                <%= pseud.byline %>
+                <% if collection_item.collection.user_is_posting_participant?(pseud.user) %>
+                  <%= ts("(Member)")%>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+  
+          <% if @collection.gift_exchange? %>
+            <span class="recipients" title="recipients">for <%= collection_item.recipients %></span>
+          <% end %>
+        </h5>
+        <p class="status">
+          <%= CollectionItem::LABEL[collection_item.user_approval_status] %> By User
+          <%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %>
+        </p>
+ 
+      <% else %>
+
+        <!-- user version -->
+        <!--heading-->
+        <dt><%= link_to collection_item.collection.title, collection_path(collection_item.collection) %></dt>
+        <dd>
+          <p>Posting? <%= collection_item.collection.user_is_posting_participant?(@user) ? "Y" : "N" %></p>
+          <p class="status" title="approval status">
+          <%= CollectionItem::LABEL[collection_item.collection_approval_status] %> By Moderators
+          <%= form.select(:user_approval_status, CollectionItem::APPROVAL_OPTIONS) %><%= hidden_field_tag :user_id, @user.login %>
+          </p>
+          <p class="datetime"><%= collection_item.item_date.to_date %></p>
+        </dd>
+      <% end %>
+
+      <!-- shows for both mods and users -->
+      <ul class="submit actions" role="menu">
+        <% if @collection.unrevealed? %>
+          <li><label class="action">Unreveal <%= form.check_box :unrevealed, :id => "unreveal_" + collection_item.id.to_s %></label></li>
+        <% end %>
+        <% if @collection.anonymous? %>
+          <li><label class="action">Anonymous <%= form.check_box :anonymous %></label></li>
+        <% end %>
+        <li><%= form.submit ts("Update"), :id => "submit_" + collection_item.id.to_s %></li>
+        <li>
+          <%= button_to ts("Remove"), 
+                  @user ? user_collection_item_path(@user, collection_item) : collection_item_path(collection_item.collection, collection_item), 
+                      :confirm => ts('Are you certain you want to entirely remove %{item} from the collection?', :item => item_name), 
+                      :method => :delete %>
+        </li>
+      </ul>
+
+    <!--CLOSE DD-->
+    </dd>
+  <% end %>
 <% end %>

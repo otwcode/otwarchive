@@ -1,35 +1,16 @@
-<h2><%= ts("Signups for %{collection}", :collection => @collection.title) %></h2>
+<h2 class="heading"><%= ts("Signups for %{collection}", :collection => @collection.title) %></h2>
   
 <% @challenge ||= @collection.challenge %>
-<% show_request_url = @challenge.request_restriction.url_allowed && params[:show_urls] %>
-<% show_offer_url = @challenge.offer_restriction.url_allowed && params[:show_urls] %>
-<% show_request_description = @challenge.request_restriction.description_allowed && params[:show_descriptions] %>
-<% show_offer_description = @challenge.offer_restriction.description_allowed && params[:show_descriptions] %>
-<% show_request_optional_tags = @challenge.request_restriction.optional_tags_allowed %>
-<% show_offer_optional_tags = @challenge.offer_restriction.optional_tags_allowed %>
 
 <% unless @hide_navigation %>
-  <ul class="navigation">
-    <li><%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv), html_options = {:class => "nav-with-help"} %>
-        <%= link_to_help "csv-download"%>
+  <ul class="navigation" role="menu">
+    <li class="action">
+      <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv) %> 
+      <%= link_to_help "csv-download"%>
     </li>
-    <% if show_offer_description || show_request_description %>
-      <li><%= link_to ts("Hide Descriptions"), 
-          collection_signups_path(@collection, :show_descriptions => false, :show_urls => params[:show_urls]) %></li>
-    <% elsif !params[:show_descriptions] %>
-      <li><%= link_to ts("Show Descriptions"), 
-          collection_signups_path(@collection, :show_descriptions => true, :show_urls => params[:show_urls]) %></li>
-    <% end %>
-    <% if show_offer_url|| show_request_url %>
-      <li><%= link_to ts("Hide URLs"), 
-          collection_signups_path(@collection, :show_descriptions => params[:show_descriptions], :show_urls => false) %></li>
-    <% elsif !params[:show_urls] %>
-      <li><%= link_to ts("Show URLs"), 
-          collection_signups_path(@collection, :show_descriptions => params[:show_descriptions], :show_urls => true) %></li>
-    <% end %>
   </ul>
 <% end %>
-
+<!--FRONT END: TABLEWATCH!!-->
 <table>
   <!-- top header row showing requests and offers numbered -->
   <tr>
@@ -66,7 +47,7 @@
     <tr>
       <% unless @hide_navigation %>
         <!-- because rows can be unmanageably long, put nav at start -->
-        <td class="navigation">
+        <td class="navigation actions" role="menu">
           <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
         </td>
       <% end %>

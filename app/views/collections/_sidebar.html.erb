@@ -1,5 +1,6 @@
-<div id="dashboard" role="navigation">
-  <ul role="navigation">
+<div id="dashboard" role="navigation region">
+  <h3 class="landmark heading">Dashboard</h3>
+  <ul class="navigation actions">
     <li><%= span_if_current ts("Dashboard"), @collection %></li>
     <li><%= span_if_current ts("Profile"), collection_profile_path(@collection) %></li>
     <% if !@collection.collection_profile.faq.blank? %>

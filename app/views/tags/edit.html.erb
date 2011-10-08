@@ -1,10 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("Edit") %> <cite><%= link_to_tag(@tag) %></cite> <%= ts('Tag') %></h2>
+<h2 class="heading"><%= ts("Edit") %> <cite><%= link_to_tag(@tag) %></cite> <%= ts('Tag') %></h2>
 <%= error_messages_for :tag %>
 <!--/descriptions-->
 
 <!--subnav-->
-<p class="navigation actions"><%= tag_comment_link(@tag) %></p>
+<p class="navigation actions" role="navigation"><%= tag_comment_link(@tag) %></p>
 <!--/subnav-->
 
 <!--main content-->
@@ -39,7 +39,7 @@
       <%= f.check_box("canonical", :disabled => !(logged_in_as_admin? || Tag::USER_DEFINED.include?(@tag.class.name)) || !@tag.mergers.empty? || !@tag.children.empty? ) %>&nbsp;
       <%= "This is the official name for the " + @tag.class.name %>
       <% if Tag::USER_DEFINED.include?(@tag.class.name) && @tag.canonical? && (!@tag.mergers.empty? || !@tag.children.empty?) %>
-      <p><%= link_to 'Make tag non-canonical and unhook all associations', {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" %></p>
+      <p class="navigation actions" role="navigation"><%= link_to 'Make tag non-canonical and unhook all associations', {:controller => :tags, :action => :update, 'tag[canonical]' => 0, :id => @tag}, :method => :put, :confirm => "Are you sure?" %></p>
       <% end %>
     </dd>
 
@@ -54,7 +54,7 @@
       <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
       <p>Choose an existing tag or add a new tag name here to create a new canonical and associate this tag with it.</p>
       <% if @tag.merger %>
-        <p>Edit <%= link_to_edit_tag(@tag.merger) %></p>
+        <p class="navigation actions" role="navigation">Edit <%= link_to_edit_tag(@tag.merger) %></p>
       <% elsif @tag.canonical? %>
         <!-- FRONT-END: if we have some sort of ACHTUNG! class, this would be a good place for it. Attention SYSTEM MESSAGES wrangler-->
         <p class="important warning">Adding a synonym to a canonical tag will make it non-canonical and move its associations to the other tag. <strong>(Be careful with this!)</strong></p>
@@ -70,10 +70,10 @@
   <dl>
     <% @tag.parent_types.each do |tag_type| %>
       <% if tag_type == 'Fandom' && !@suggested_fandoms.blank? %>
-        <dt> Suggested Fandoms:</dt>
+        <dt>Suggested Fandoms:</dt>
         <dd>
         <% @suggested_fandoms[0..19].in_groups(2, false) do |fandom_list| %>
-          <ul class="tags">
+          <ul class="tags commas">
           <% for tag in fandom_list %>
             <li><%= link_to_edit_tag(tag) %></li>
           <% end %>
@@ -85,16 +85,16 @@
         </dd>
       <% end %>
       <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
-      <dd>
+      <dd title="<%= tag_category_name(tag_type) %>">
         <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type.downcase == 'MetaTag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
         <% if @parents[tag_type] %>
           <% @parents[tag_type].in_groups(2, false) do |tag_list| %>
-          <ul class="tags">
+          <ul class="tags commas">
           <% for tag in tag_list %>
             <li>
               <%= link_to_edit_tag(tag) %>
-              <span>
-                <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
+              <span class="delete">
+                <%= link_to 'X', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
               </span>
             </li>
           <% end %>
@@ -109,7 +109,7 @@
   <% if @tag.canonical? %>
   <fieldset>
     <legend>Child tags:</legend>
-    <p><%= link_to 'wrangle all child tags', {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
+    <p class="navigation actions" role="navigation"><%= link_to 'wrangle all child tags', {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
     <dl>
       <% @tag.child_types.each do |tag_type| %>
         <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
@@ -119,19 +119,19 @@
 																					:class => 'tags autocomplete') %><br />
           <% if @children[tag_type] %>
             <% @children[tag_type][0..19].in_groups(2, false) do |tag_list| %>
-            <ul class="tags">
+            <ul class="tags commas">
             <% for tag in tag_list %>
               <li>
                 <%= link_to_edit_tag(tag) %>
-                <span>
-                  <%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
+                <span class="delete">
+                  <%= link_to 'X', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
                 </span>
               </li>
             <% end %>
             </ul>
             <% end %>
             <% if @children[tag_type].length > 20 %>
-            <p><%= link_to "See all (#{@tag.send(tag_type.underscore.pluralize).count})", {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %></p>
+            <p class="navigation actions" role="navigation"><%= link_to "See all (#{@tag.send(tag_type.underscore.pluralize).count})", {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %></p>
             <% end %>
           <% end %>
         </dd>
@@ -140,12 +140,12 @@
   </fieldset>
   <% end %>
   <% elsif @tag.is_a?(Media) %>
-    <p><%= link_to 'See all fandoms', {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
+    <p class="navigation actions" role="navigation"><%= link_to 'See all fandoms', {:controller => :tags, :action => :wrangle, :id => @tag, :show => 'fandoms'} %></p>
   <% end %>
 
   <fieldset>
   <legend>Submit</legend>
-  <p class="submit">
+  <p class="submit actions">
     <%= submit_tag "Save changes" %>
   </p>
   </fieldset>

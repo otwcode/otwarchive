@@ -1,19 +1,19 @@
-<div id="work-form">
+<div id="work-form" class="verbose post work chapter">
 <%= form_for([@work, chapter]) do |f| %>
 
 <fieldset id="chapter-ordering">
   <legend><%= ts("Naming, Ordering and Date") %></legend>
   <dl>
     <dt><%= f.label :title, ts("Chapter title") %></dt>
-    <dd><p><%= f.text_field :title, :class => "storyinputfield observe_textlength", :live => true %>
+    <dd><p><%= f.text_field :title, :class => "observe_textlength", :live => true %>
     <%= link_to_help "chapter-title" %></p>
     <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
     </dd>
   
     <dt><%= f.label :position, ts("Chapter number") %></dt>
-    <dd><p><%= f.text_field :position, :class => "number-field" %> 
+    <dd><p><%= f.text_field :position, :class => "number" %> 
     <%= f.label :wip_length, ts("of"), :title => ts("of total chapters") %> 
-    <%= f.text_field :wip_length, :class => "number-field" %> 
+    <%= f.text_field :wip_length, :class => "number" %> 
     </p></dd>
     <dt id="managePublicationDate">
     <%= f.label :published_at, ts("Chapter publication date") %></dt>
@@ -35,50 +35,8 @@
         <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) %>
       </dd>
       
-      <dt><%= ts("Add notes:") %></dt>
-      <dd>
-        <dl class="notes">
-          <dt class="endnotes">
-            <%= check_box_tag "front-notes-options-show", "1", !chapter.notes.blank?, :class => "toggle_formfield" %>
-          </dt>
-          <dd class="endnotes">
-            <%= label_tag 'front-notes-options-show', ts("at the beginning") %>
-            <span id="worknoteswarning" class="warning" <% if chapter.notes.blank? %> style="display: none" <% end %>>
-            <%= ts("Warning: Unchecking this box will delete any existing beginning note.") %></span>
-          </dd>
-          <dd id="front-notes-options" class="work-endnotes optionalField">
-            <dl>     
-              <dt class="notes">
-                <%= f.label :notes, ts("Chapter notes (max %{max} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %>
-              </dt>
-              <dd class="notes">
-                <%= f.text_area :notes, :rows => 4, :cols => 60, :live => true, :class => "observe_textlength" %>
-                <%= generate_countdown_html("chapter_notes", ArchiveConfig.NOTES_MAX) %>
-              </dd>
-            </dl>
-          </dd>      
-        
-          <dt class="endnotes">
-            <%= check_box_tag "end-notes-options-show", "1", !chapter.endnotes.blank?, :class => "toggle_formfield" %>
-          </dt>
-          <dd class="endnotes">
-            <%= label_tag 'end-notes-options-show', ts("at the end") %>
-            <span id="workendnoteswarning" class="warning" <% if chapter.endnotes.blank? %> style="display: none" <% end %>>
-            <%= ts("Warning: Unchecking this box will delete any existing end note.") %></span>
-          </dd>
-          <dd id="end-notes-options" class="work-endnotes optionalField">
-            <dl>
-              <dt class="notes">
-                <%= f.label :endnotes, ts("Chapter notes (max %{max} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %>
-              </dt>
-              <dd class="notes">
-                <%= f.text_area :endnotes, :rows => 4, :cols => 60, :live => true, :class => "observe_textlength" %>
-                <%= generate_countdown_html("chapter_endnotes", ArchiveConfig.NOTES_MAX) %>
-              </dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
+      <%= render "works/notes_form", :f => f, :type => 'chapter' %>
+      
     </dl>
 </fieldset>
 
@@ -110,7 +68,7 @@
 
 <fieldset>
 <legend><%= ts("Post Chapter") %></legend>
-    <p class="submit">
+    <p class="submit actions">
       <%= submit_tag ts('Preview'), :name => 'preview_button' %>
       <%= submit_tag ts('Post without preview'), :name => 'post_without_preview_button' %>
       <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>

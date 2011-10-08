@@ -14,7 +14,7 @@
       <%= render :partial => 'external_author_name', :locals => {:form => name_form} %>
     <% end %>
 
-    <p class="navigation"><%= add_name_link(f) %></p>
+    <p class="actions" role="button"><%= add_name_link(f) %></p>
   </fieldset>
 
   <fieldset>
@@ -30,7 +30,7 @@
   
   <fieldset>
   	<legend><%= ts("Submit") %></legend> 
-    <p class="submit">
+    <p class="submit actions">
       <%= f.submit ts("Submit") %>
     </p>
   </fieldset>

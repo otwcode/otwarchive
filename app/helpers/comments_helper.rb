@@ -12,7 +12,7 @@ module CommentsHelper
     else
       title = link_to(commentable.commentable_name, commentable)
     end
-    h(ts('Viewing Comments on ')) + title
+    h(ts('Reading Comments on ')) + title
   end
   
   def last_reply_by(comment)
@@ -89,7 +89,7 @@ module CommentsHelper
                             commentable.name : 
                             commentable.id
       link_to(
-          ts("Read Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s),
+          ts("Comments (%{comment_count})", :comment_count => commentable.count_visible_comments.to_s),
           url_for(:controller => :comments, 
                   :action => :show_comments, 
                   commentable_id => commentable_value,

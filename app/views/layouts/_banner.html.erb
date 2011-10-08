@@ -1,3 +1,6 @@
+<% # BACK END this seems giant and messy and confusing, pls can we review? 
+   # FRONT END yes let us rewrite this
+%>
 <% unless current_user && current_user.try(:preference).try(:banner_seen) %>
 <% unless @bannertext.nil? || logged_in_as_admin? %>
 <% unless current_user.nil? && session[:hide_banner] %>

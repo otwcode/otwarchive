@@ -1,4 +1,4 @@
-<h2><%= ts("Sign Up For %{title}", :title => @collection.title) %></h2>
+<h2 class="heading"><%= ts("Sign Up For %{title}", :title => @collection.title) %></h2>
 
 <!-- descriptions-->
 <!-- /descriptions-->
@@ -9,25 +9,26 @@
 
 <% types = @challenge.class::PROMPT_TYPES.select {|t| @challenge.allowed(t) > @challenge.required(t)} %>
 <% unless types.empty? %>
-  <!-- noscript -->
+  <noscript>
     <fieldset>
       <legend><%= ts("Add Prompts") %></legend>
-      <h3><%= ts("Add Prompts") %></h3>
+      <h3 class="heading"><%= ts("Add Prompts") %></h3>
       <p class="notes">
         <%= ts("Since you don't have Javascript turned on, please tell us how many #{types.to_sentence} you want to submit: ") %>
-        <strong><br />HEY BACK END THIS SHOULD BE MADE NOSCRIPT AFTER INITIAL TESTING DON'T FORGET!</strong>
       </p>
       <%= form_tag({}, {:method => :get}) do %>
-        <dl>
+       <!--BACK END how many types could this have? could this be a p instead?--> 
+       <dl>
           <% types.each do |type| %>
             <dt><%= label_tag "num_#{type}", ts("#{type.classify.pluralize} (Up to %{allowed})", :allowed => @challenge.allowed(type)) %></dt>
             <dd><%= text_field_tag "num_#{type}", params["num_#{type}"] || @challenge.required(type), :class => "number" %></dd>
           <% end %>
-        </dl>
-        <p class="submit"><%= submit_tag ts('Update Form') %></p>
+        <dt class="landmark">Submit</dt>
+        <dd class="submit"><%= submit_tag ts('Update Form') %></dd>
+      </dl>
       <% end %>
     </fieldset>
-  <!-- /noscript -->
+  </noscript>
 <% end %>
 
 
@@ -40,10 +41,12 @@
   <% @challenge.class::PROMPT_TYPES.each do |prompt_type| %>
   <fieldset>
     <legend><%= prompt_type.capitalize %></legend>
-    <h3>
+    <h3 class="heading">
       <%= prompt_type.capitalize %> (<%= @challenge.allowed_range_string(prompt_type) %>)      
     </h3>
+    <blockquote class="userstuff">
     <%=raw sanitize_field(@challenge, "signup_instructions_#{prompt_type}".to_sym) %>
+  </blockquote>
     
     <% @challenge_signup.send("#{prompt_type}").each_with_index do |prompt, index| %>
       <%= signup_form.fields_for prompt_type.to_sym, prompt do |prompt_form| %>
@@ -52,7 +55,7 @@
     <% end %>
     
     <% if @challenge.allowed(prompt_type) > @challenge.required(prompt_type) %>
-      <p class="navigation">
+      <p class="actions" role="button">
         <% linktext = ts("Add another %{type}? (Up to %{allowed} allowed.)", :type => prompt_type.singularize, :allowed => @challenge.allowed(prompt_type)) %>
         <%= link_to_add_section(linktext, signup_form, prompt_type.to_sym, "prompts/prompt_form", :required => false) %>
       </p>
@@ -68,7 +71,7 @@
 <!--/content-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
   <li><%= link_to 'Back', @collection %></li>
 </ul>
 <!--/subnav-->

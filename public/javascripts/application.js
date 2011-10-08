@@ -4,38 +4,18 @@
 //things to do when the page loads
 $j(document).ready(function() {
     // visualizeTables();
-    $j('#signin_open').click(function() {
-          $j('#signin').toggle();
-          $j('#signin_closed').toggle();
-          $j('#signin_open').toggle();
-      });
-    $j('#signin_closed').click(function() {
-          $j('#signin').toggle();
-          $j('#signin_open').toggle();
-          $j('#signin_closed').toggle();
-      });
+    // initSelect('languages_menu');
+    setupToggled();
     if ($j('#work-form')) { hideFormFields(); };     
     if ($j('form.filters')) { hideFilters(); };
-    // initSelect('languages_menu');
-    hideExpandable();
     hideHideMe();
     showShowMe();
     handlePopUps();
     generateCharacterCounters();
-    $j('.subnav_toggle').click(function(){
-          $j('#subnav').toggle();
-      });
     $j('#expandable-link').click(function(){
           expandList();
           return false;
       });
-    $j('#chapter_index_toggle').click(function() { $j('#chapter-index').toggle(); });
-    $j(".toggle_filters").click(function(){
-          target_id = "#" + $j(this).attr("id").replace("toggle_", "");
-          $j(target_id).toggle();
-          $j(target_id + "_open").toggle();
-          $j(target_id + "_closed").toggle();
-    });
     $j('#hide-notice-banner').click(function () { $j('#notice-banner').hide(); });
     setupTooltips();
 
@@ -191,6 +171,48 @@ jQuery(function($) {
 });
 
 
+// Set up open and close toggles for a given object
+// Typical setup (this will leave the toggled item open for users without javascript but hide the controls from them):
+// <a class="foo_open hidden">Open Foo</a>
+// <div id="foo" class="toggled">
+//   foo!
+//   <a class="foo_close hidden">Close</a>
+// </div>
+// 
+// Notes:
+// - The open button CANNOT be inside the toggled div, the close button can be (but doesn't have to be)
+// - You can have multiple open and close buttons for the same div since those are labeled with classes
+// - You don't have to use div and a, those are just examples. anything you put the toggled and _open/_close classes on will work.
+// - If you want the toggled thing not to be visible to users without javascript by default, add the class "hidden" to the toggled item as well
+//   (and you can then add an alternative link for them using <noscript>)
+function setupToggled(){
+  $j('.toggled').each(function(){
+    var node = $j(this);
+    var open_toggles = $j('.' + node.attr('id') + "_open");
+    var close_toggles = $j('.' + node.attr('id') + "_close");
+    
+    node.hide();
+    close_toggles.each(function(){$j(this).hide();});
+    open_toggles.each(function(){$j(this).show();});
+
+    open_toggles.each(function(){
+      $j(this).click(function(){
+        node.show();
+        open_toggles.each(function(){$j(this).hide();});
+        close_toggles.each(function(){$j(this).show();});
+      });
+    });
+    
+    close_toggles.each(function(){
+      $j(this).click(function(){
+        node.hide();
+        close_toggles.each(function(){$j(this).hide();});
+        open_toggles.each(function(){$j(this).show();});
+      });
+    });
+  });  
+}
+
 
 // Hides expandable fields if Javascript is enabled
 function hideExpandable() {
@@ -199,13 +221,11 @@ function hideExpandable() {
 }
 
 function hideHideMe() {
-    nodes = $j('.hideme');
-    nodes.each(function(index, node) { $j(node).hide(); });
+    $j('.hideme').each(function() { $j(this).hide(); });
 }
 
 function showShowMe() {
-    nodes = $j('.showme');
-    nodes.each(function(index, node) { $j(node).show(); });
+    $j('.showme').each(function() { $j(this).show(); });
 }
 
 function handlePopUps() {
@@ -276,37 +296,6 @@ function hideFormFields() {
     }
 }
 
-// TODO: combine and simplify during Javascript review
-// Currently used to expand/show fandoms on the user dashboard
-function expandList() {
-    var hidden_lis = $j('li.hidden');
-    hidden_lis.each(function(index, li) {
-        $j(li).removeClass('hidden');
-        $j(li).addClass('not-hidden');
-    });
-    $j('#expandable-link').text("\< Hide full list");
-    $j('#expandable-link').unbind('click');
-    $j('#expandable-link').click(function(){
-        contractList();
-        return false;
-    });
-}
-
-function contractList() {
-    var hidden_lis = $j('li.not-hidden');
-    hidden_lis.each(function(index, li) {
-        $j(li).removeClass('not-hidden');
-        $j(li).addClass('hidden');  
-    });
-    $j('#expandable-link').text("\> Expand full list");    
-    $j('#expandable-link').unbind('click');
-    $j('#expandable-link').click(function(){
-        expandList();
-        return false;
-    });
-}
-
-
 // Toggles items in filter list
 function toggleFilters(id, blind_duration) {
   blind_duration = (blind_duration == null ? 0.2 : blind_duration = 0.2)
@@ -328,27 +317,6 @@ function hideFilters() {
     var selected = false;
     tags.each(function(index, tag) {if ($j(tag).is(':checked')) selected=true});
     if (selected != true) {toggleFilters(filter.id, 0);}
-  });  
-}
-
-// Toggles login block
-function toggleLogin(id, blind_duration) {
-  //blind_duration = (blind_duration == null ? 0.2 : blind_duration)
-  if ($j(id) != null) {
-    $j(id).toggle();
-    $j(id + "_open").toggle();
-    $j(id + "_closed").toggle();
-  }
-}
-
-// Rolls up Login if Javascript is enabled
-function hideLogin() {
-  var signin = $j('#signin');
-  signin.each(function(index, signin) {
-    var tags = $j(signin).find('input');
-    var selected = false;
-    tags.each(function(index, tag) {if ($j(tag).is(':checked')) selected=true});
-    if (selected != true) {toggleLogin('#signin', 0.0);}
   });  
 }
 

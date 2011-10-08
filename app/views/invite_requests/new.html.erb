@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>New invite_request</h2>
+<h2 class="heading">New invite_request</h2>
 <!--/descriptions-->
 
 
@@ -15,12 +15,13 @@
     <dd><%= f.text_field :email %></dd>
     <dt><%= f.label :position %></dt>
     <dd><%= f.text_field :position %></dd>
-  </dl>
-  <p class="submit"> <%= f.submit 'Create' %></p>
+  	<dt class="landmark">Submit</dt>
+	<dd class="submit actions"> <%= f.submit 'Create' %></dd>
+</dl>
 <% end %>
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to 'Back', invite_requests_path %></li>
 </ul>
 <!--/subnav-->

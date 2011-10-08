@@ -1,49 +1,18 @@
-<%= stylesheet_link_tag 'archive_core', :media => 'all' %>
-<%= stylesheet_link_tag 'system-messages',
-                        'site-chrome',
-                        'forms',
-                        'live_validation',
-                        'auto_complete',
-                        :cache => 'cached_for_screen',
-                        :media => 'screen' %>
-<%= stylesheet_link_tag 'userstuff', :media => 'all' %>
-<% if controller.controller_name == 'home' && controller.action_name == 'index' %>
-  <%= stylesheet_link_tag 'home', :media => 'screen' %>
-<% end %>
+<% set_site_skin %>
+<% roles = Skin::DEFAULT_ROLES_TO_INCLUDE %>
 <% if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' %>
-  <%= stylesheet_link_tag 'translations', :media => 'screen' %>
+  <% roles << "translator" %>
 <% end %>
 <% if logged_in_as_admin? %>
-  <%= stylesheet_link_tag 'admin', :media => 'screen' %>
+  <% roles << "admin" %>
 <% end %>
+<!-- % cache("#{@site_skin.id}-site-skin") do % -->
 
-<%= stylesheet_link_tag 'handheld', :media => 'handheld' %>
-<%= stylesheet_link_tag 'aural', :media => 'speech' %>
-<%= stylesheet_link_tag 'print', :media => 'print' %>
+<%= @site_skin.get_style(roles) %>
 
-<%= stylesheet_link_tag 'smoothness/jquery-ui-1.8.9.custom', :media => 'all' %>
-<%= stylesheet_link_tag 'jquery.qtip', :media => 'all' %>
+<!--sandbox for developers	-->
+<%= stylesheet_link_tag 'sandbox' %>
 
-<!--plugins-->
-<!-- stylesheet_link_tag 'globalize', :media => 'screen' -->
-<!-- stylesheet_link_tag 'visualize.jQuery', :media => 'screen' -->
-
-<!-- browser-specific stylesheets -->
-<!--[if IE]>
-<%= stylesheet_link_tag 'ie_overrides', :media => 'all' %>
-<![endif]-->
-<!--[if IE 5]>
-<%= stylesheet_link_tag 'ie5_overrides', :media => 'all' %>
-<![endif]-->
-<!--[if IE 6]>
-<%= stylesheet_link_tag 'ie6_overrides', :media => 'all' %>
-<![endif]-->
-<!--[if IE 7]>
-<%= stylesheet_link_tag 'ie7_overrides', :media => 'all' %>
-<![endif]-->
-<!--[if IE 8]>
-<%= stylesheet_link_tag 'ie8_overrides', :media => 'all' %>
-<![endif]-->
 
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
 <!-- check to see if this controller/action allow tinymce before we load the gigantor js; see application_helper -->
@@ -75,18 +44,11 @@ if (typeof jQuery == 'undefined')
 <%= javascript_include_tag 'jquery.purr.js' %>
 <%= javascript_include_tag 'best_in_place.js' %>
 <%= javascript_include_tag "jquery-ui-timepicker-addon.js" %>
+<%= javascript_include_tag "ibox/ibox" %>
 
 <%= csrf_meta_tag %>
 
 <% if allow_tinymce?(controller) %>
   <%= yield :tinymce_init %>
-<% end %>
-
-<%= iboxify_page %>
-
-<% if current_user.is_a?(User) && (skin = current_user.try(:preference).try(:skin)) %>
-  <% cache("#{skin.id}-site-skin") do %>
-    <%= render "skins/skin_style_block", :skin => skin %>
-  <% end %><!-- end site skin cache -->
 <% end %>
 

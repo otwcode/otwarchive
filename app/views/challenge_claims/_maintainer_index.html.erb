@@ -1,143 +1,42 @@
-<h2>Claims for <%= @collection.title %></h2>
+<div class="collection home">
 
-<div class="navigation module">
-<% if logged_in? %>
-<h3 class="landmark">Navigation</h3>
-<ul class="navigation" role="navigation">
-    <li><%= link_to ts("My Claims"), user_claims_path(current_user) %></li>
-</ul>
+    <h2 class="heading">Claims for <%= @collection.title %></h2>
+
+    <% if logged_in? %>
+      <ul class="navigation actions" role="navigation">
+        <li><%= link_to ts("My Claims"), user_claims_path(current_user) %></li>
+    </ul>
+  <% end %>
+
+
+<% # BACK END TODO this is broken, you can't use paginate twice in the same page on two separate sets of data like this, but it's already broken this way on beta so leaving it for now %>
+
+<% unless @unposted_claims.empty? %>
+  <div class="unposted claims listbox">
+    <h3 class="heading">Unposted Claims</h3>
+  <%= will_paginate @unposted_claims -%>
+  <ul class="index">
+    <% @unposted_claims.each do |claim| %>
+      <%= render "challenge_claims/claim_blurb", :claim => claim %>
+    <% end %>
+  </ul>
+  <%= will_paginate @unposted_claims -%>
+</div>
 <% end %>
+
+<% unless @posted_claims.empty? %>
+  <div class="posted claims listbox">
+      <h3 class="heading">Posted Claims</h3>
+  <%= will_paginate @posted_claims -%>
+  <ul class="index">
+    <% @posted_claims.each do |claim| %>
+      <%= render "challenge_claims/claim_blurb", :claim => claim %>
+    <% end %>
+  </ul>
+  <%= will_paginate @posted_claims -%>
+</div>
+<% end %>
+
 </div>
 
-<% @tagcount = "false" %>
-<% TagSet::TAG_TYPES.each do |type| %>
-  <% eval("@show_request_#{type}_tags = (@challenge.request_restriction.#{type}_num_allowed > 0) && !params[:hide_tags]") %>
-  <% if eval("@show_request_#{type}_tags") %>
-    <% @tagcount = "true" %>
-  <% end %>
-<% end %>
-
-<h3>Unfulfilled Claims</h3>
-  
-  <table id="unfulfilled_claims">
-    <thead>
-      <tr>
-        <th>Pseud</th>
-        <th>Writing For</th>
-        <th>Prompt Info</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-
-    <% @unposted_claims.each do |claim| %>
-      <tr>
-        <td>
-          <% claimer = User.find_by_id(claim.claiming_user_id) %>
-          <% if @collection.anonymous? && !(current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) %>
-            Secret!
-          <% else %>
-            <%= claimer.default_pseud.name -%>
-          <% end %>
-        </td>
-        <td>
-          <% request = claim.request_signup %>
-          <% prompt_id = claim.request_prompt_id %>
-          <% prompt = Prompt.find_by_id(prompt_id) %>
-          <% if !prompt || prompt.anonymous? %>
-            (Anonymous)
-          <% else %>
-            <%= link_to request.pseud.byline, collection_claim_path(@collection, claim) -%>
-          <% end %>
-        </td>
-        <td>
-        <% if @tagcount == "true" %>
-          <% TagSet::TAG_TYPES.each do |type| %>
-            <% if eval("@show_request_#{type}_tags") %>
-                <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
-                  <%= content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type))) %>
-                <% end %>
-            <% end %>  
-          <% end %>
-        <% else %>
-          <%= prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) %> <%= prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) %>
-        <% end %>
-        </td>
-        <td>
-          <% if claim.claiming_pseud.user == current_user %>
-            <%= link_to ts("Post To Fulfill"), new_collection_work_path(@collection, :claim_id => claim.id) %>
-          <% end %>
-          <% if claim.claiming_pseud.user == current_user || @collection.user_is_maintainer?(current_user) %>
-            <%= link_to ts("Delete"), collection_claim_path(@collection, claim), :confirm => ts('Are you sure you want to delete this claim?'), :method => :delete %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-
-  <%= will_paginate @unposted_claims -%>
-  
-  <h3>Fulfilled Claims</h3>
-
-  <table id="fulfilled_claims">
-    <thead>
-      <tr>
-        <th>Pseud</th>
-        <th>Writing For</th>
-        <th>Prompt Info</th>
-        <th>Work Info</th>
-      </tr>
-    </thead>
-
-    <% @posted_claims.each do |claim| %>
-      <tr>
-        <td>
-          <% claimer = User.find_by_id(claim.claiming_user_id) %>
-          <% if @collection.anonymous? && !(current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) %>
-            Secret!
-          <% else %>
-            <%= claimer.default_pseud.name -%>
-          <% end %>
-        </td>
-        <td>
-          <% request = claim.request_signup %>
-          <% prompt_id = claim.request_prompt_id %>
-          <% prompt = Prompt.find_by_id(prompt_id) %>
-          <% if !prompt || prompt.anonymous? %>
-            (Anonymous)
-          <% else %>
-            <%= link_to request.pseud.byline, collection_claim_path(@collection, claim) -%>
-          <% end %>
-        </td>
-        <td>
-        <% if @tagcount == "true" %>
-          <% TagSet::TAG_TYPES.each do |type| %>
-            <% if eval("@show_request_#{type}_tags") %>
-                <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
-                  <%= content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type))) %>
-                <% end %>
-            <% end %>  
-          <% end %>
-        <% else %>
-          <%= prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) %> <%= prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) %>
-        <% end %>
-        </td>
-        <td>
-          <% if claim.creation %>
-            <% if @collection.unrevealed? && !(current_user && (@collection.user_is_moderator?(current_user) || @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user))) %>
-              Secret!
-            <% else %>
-              <%= link_to "Response posted on #{claim.creation.published_at}.", claim.creation %>
-              <% if !claim.fulfilled? %>
-                <strong>Not yet approved</strong>
-              <% end %>
-            <% end %>
-          <% else %>
-            Not yet posted
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-
-  <%= will_paginate @posted_claims -%>
 

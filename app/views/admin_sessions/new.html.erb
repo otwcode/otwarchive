@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("Log in as Admin") %></h2>
+<h2 class="heading"><%= ts("Log in as Admin") %></h2>
 <!--/descriptions-->
 
 <!--main content-->
@@ -10,7 +10,7 @@
 		<dt><%= form.label :password, ts("Admin password") %></dt>
   	<dd><%= form.password_field :password %></dd>
 	</dl>
-  <p class="submit"><%= form.submit ts('Log in as admin') %></p>
+  <p class="submit actions"><%= form.submit ts('Log in as admin') %></p>
 <% end %>
 <!--/content-->
 

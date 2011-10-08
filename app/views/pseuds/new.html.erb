@@ -1,10 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= t('.new_pseud', :default => 'New pseud') %></h2>
+<h2 class="heading"><%= t('.new_pseud', :default => 'New pseud') %></h2>
 <%= error_messages_for :pseud %>
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
 <li><%= link_to t('.index_link', :default => 'Back To Pseuds'), user_pseuds_path(@user) %></li>
 </ul>
 <!--/subnav-->

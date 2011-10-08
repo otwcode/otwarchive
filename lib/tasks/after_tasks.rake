@@ -285,6 +285,61 @@ namespace :After do
 #    end
 #  end
   #### Add your new tasks here
+
+  desc "Convert existing prompt restriction tag sets to owned tag sets"
+  task(:convert_tag_sets => :environment) do
+    GiftExchange.includes(:prompt_restriction, :request_restriction, :offer_restriction).find_each do |exchange|
+      owners = exchange.collection.all_owners
+      title = exchange.collection.title
+      convert_restriction_tagset(exchange.prompt_restriction, owners, title)
+      convert_restriction_tagset(exchange.request_restriction, owners, title)
+      convert_restriction_tagset(exchange.offer_restriction, owners, title)
+    end
+    PromptMeme.includes(:request_restriction).find_each do |meme|
+      owners = meme.collection.all_owners
+      title = meme.collection.title
+      convert_restriction_tagset(meme.prompt_restriction, owners, title)
+      convert_restriction_tagset(meme.request_restriction, owners, title)
+    end
+  end
+  
+  def convert_restriction_tagset(restriction, owner_pseuds, title)
+    if restriction && restriction.tag_set_id
+      title.gsub!(/[\,\^\*\<\>\{\}\=\`\\\%]/, '_')
+      ots = OwnedTagSet.new(:tag_set_id => restriction.tag_set_id, :title => "Tag Set For #{title}")
+      # make all the owners of the collection the owners of the tag set
+      owner_pseuds.each {|owner| ots.add_owner(owner)}
+      ots.save
+      restriction.owned_tag_sets << ots
+      restriction.tag_set_id = nil
+      restriction.save
+    end
+  end
+
+  desc "Load site skins"
+  task(:load_site_skins => :environment) do
+    Skin.load_site_css
+  end
+
+  desc "Convert existing skins to be based off version 1.0"
+  task(:convert_existing_skins => :environment) do
+    oldskin = Skin.find_by_title_and_official("Archive 1.0", true)
+    unless oldskin
+      puts "WARNING: couldn't convert skins, version 1.0 skin not found: did you load the site skins?"
+      exit
+    end
+    puts "NOTE: skins that will not convert are invalid because of missing preview images or old unsanitized code - do we want to disable them?"
+    Skin.site_skins.each do |skin|
+      next if skin.css.blank? || !skin.parent_skins.empty?
+      skin.role = "override"
+      if skin.save
+        skin.parent_skins << oldskin
+        skin.save
+      else
+        puts "Couldn't convert #{skin.title}: #{skin.errors.to_s}"
+      end
+    end
+  end
   
 end # this is the end that you have to put new tasks above
 
@@ -296,4 +351,4 @@ desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
 #task :After => ['autocomplete:reload_data']
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
-task :After => []
+task :After => ['After:convert_tag_sets', 'After:load_site_skins', 'After:convert_existing_skins', 'autocomplete:reload_tagset_data']

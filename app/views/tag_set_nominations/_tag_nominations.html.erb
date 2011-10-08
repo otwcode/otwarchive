@@ -7,9 +7,9 @@
           <% if nom.approved || nom.rejected %>
             <%= nom.tagname %> <%= nomination_status(nom) %>
           <% else %>
-            <span title="<%= ts("#{tag_type.classify} %{index}", :index => index+1) %>">
+            <div title="<%= ts("#{tag_type.classify} %{index}", :index => index+1) %>">
               <%= nom_form.text_field :tagname, autocomplete_options(tag_type, :autocomplete_token_limit => 1) %>
-            </span>
+            </div>
           <% end %>
         </dd>
         <% unless tag_type == "freeform" %>

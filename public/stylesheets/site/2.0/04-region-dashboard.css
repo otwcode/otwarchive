@@ -1,0 +1,22 @@
+/*==REGION: DASHBOARD is #2 of the 4 regions shown on every page */
+#dashboard  
+        { width: 12em; float: left; padding: 0 0.5625em; }
+#dashboard a,#dashboard span
+        { color: #111; display: block; white-space:normal; height:auto; line-height:2; padding: 0 0.5625em; border: none; background:transparent;
+          word-wrap:break-word; }
+#dashboard a:hover 
+        { background:#ddd; color:#900; }
+#dashboard ul.navigation, #dashboard ul 
+        { float:none; display:block; padding:1.286em 0; text-align:right; border-top: 2px solid #ddd; position:relative; }
+#dashboard .current 
+        { background:#ccc; }
+#dashboard .secondary
+        { left:2.5em; right:auto; }
+#dashboard.own 
+        { background:transparent; border-top:15px solid #900; border-bottom:15px solid #900;
+          border-radius:0.25em;}
+#dashboard.own ul.navigation li span.current:before 
+        { content:"My "; }
+        
+
+

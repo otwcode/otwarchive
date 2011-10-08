@@ -318,7 +318,11 @@ class Tag < ActiveRecord::Base
   end
   
   def self.in_tag_set(tag_set)
-    joins(:set_taggings).where("set_taggings.tag_set_id = ?", tag_set.id)
+    if tag_set.is_a?(OwnedTagSet)
+      joins(:set_taggings).where("set_taggings.tag_set_id = ?", tag_set.tag_set_id)
+    else
+      joins(:set_taggings).where("set_taggings.tag_set_id = ?", tag_set.id)
+    end      
   end
   
   # gives you: tags.parent_names each {|tag| [tag.parent_name, tag.child_names]} - parent  child,child,child,child... 

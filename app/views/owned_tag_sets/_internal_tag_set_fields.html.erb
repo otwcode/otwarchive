@@ -1,33 +1,33 @@
 <% TagSet::TAG_TYPES.each do |tag_type| %>
   <% unless TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
     <% # fandoms, chars, relationships, freeforms %>
-    <fieldset class="tagset">
-      <dl>
-        <% if @tag_set.tag_set.with_type(tag_type).empty? %>
-          <% add_label = ts("Add #{tag_type.classify.pluralize}:") %>
+
+      <fieldset>
+
+     <% if @tag_set.with_type(tag_type).empty? %>
+        <h4 class="heading"><% add_label = ts("Add #{tag_type.classify.pluralize}:") %></h4>
+        
         <% else %>
           <% add_label = ts("Add:") %>
-          <dt><%= form.label "#{tag_type}_tags_to_remove".to_sym, ts("#{tag_type.classify.pluralize}") %></dt>
-          <dd title="<%= tag_type.classify.pluralize %>">
-            <%= check_all_none %>
-            <%= checkbox_section(form, "#{tag_type}_tags_to_remove", @tag_set.tag_set.with_type(tag_type).by_name_without_articles) %>
-          </dd>
+         <fieldset class="tagset listbox">
+         <h4 class="heading"><%= form.label "#{tag_type}_tags_to_remove".to_sym, ts("#{tag_type.classify.pluralize}") %></h4>
+         <%= check_all_none %>
+            <%= checkbox_section(form, "#{tag_type}_tags_to_remove", @tag_set.with_type(tag_type).by_name_without_articles) %>
         <% end %>
-        <dt><%= form.label "#{tag_type}_tagnames_to_add".to_sym, add_label %></dt>
-        <dd title="add tags"><%= form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options("tag_type") %></dd>
-      </dl>
-    </fieldset>
+        
+        <h5 class="heading"><%= form.label "#{tag_type}_tagnames_to_add".to_sym, add_label %></h5>
+        <div title="add tags"><%= form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options("tag_type") %></div>
+      
+      </fieldset>
 
   <% else %>
     <% # ratings, categories, warnings %>
-    <fieldset class="tagset">    
-      <dl>
-        <dt><%= tag_type.classify.pluralize %></dt>
-        <dd><%= check_all_none %>
-        <%= checkbox_section(form, "#{tag_type}_tagnames", tag_type.classify.constantize.value_of(:name),
+    <fieldset class="tagset listbox">    
+      <h4 class="heading"><%= tag_type.classify.pluralize %></h4>
+      <%= check_all_none %>
+      <%= checkbox_section(form, "#{tag_type}_tagnames", tag_type.classify.constantize.value_of(:name),
                              :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s",
-                             :checkbox_side => "right") %></dd>
-    </dl>
+                             :checkbox_side => "left") %>
     </fieldset>
   <% end %>
 <% end %>

@@ -8,6 +8,8 @@ class AdminSetting < ActiveRecord::Base
   after_save :expire_cached_settings
   
   attr_protected :banner_text_sanitizer_version
+  
+  belongs_to :default_skin, :class_name => 'Skin'
 
   def self.invite_from_queue_enabled?
     self.first ? self.first.invite_from_queue_enabled? : ArchiveConfig.INVITE_FROM_QUEUE_ENABLED
@@ -41,6 +43,9 @@ class AdminSetting < ActiveRecord::Base
   end
   def self.guest_downloading_off?
     self.first ? self.first.guest_downloading_off? : false
+  end
+  def self.default_skin
+    self.first ? (self.first.default_skin || Skin.get_default_skin) : Skin.get_default_skin
   end
 
   # run once a day from cron

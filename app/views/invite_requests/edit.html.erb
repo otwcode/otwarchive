@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>Editing invite_request</h2>
+<h2 class="heading">Editing invite_request</h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to 'Show', @invite_request %></li>
 	<li><%= link_to 'Back', invite_requests_path %></li>
 </ul>
@@ -18,14 +18,14 @@
     <dt><%= f.label :position %></dt>
     <dd><%= f.text_field :position %></dd>
   </dl>
-  <p class="submit">
+  <p class="submit actions">
     <%= f.submit 'Update' %>
   </p>
 <% end %>
 <!--/content-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to 'Show', @invite_request %></li>
 	<li><%= link_to 'Back', invite_requests_path %></li>
 </ul>

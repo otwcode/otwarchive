@@ -120,12 +120,12 @@ class AutocompleteController < ApplicationController
   
   # For creating collections, autocomplete the name of a parent collection owned by the user only
   def collection_parent_name
-    render_output(current_user.maintained_collections.top_level.with_name_like(params[:term]).map(&:name).sort)
+    render_output(current_user.maintained_collections.top_level.with_name_like(params[:term]).value_of(:name).sort)
   end
 
   # for looking up existing urls for external works to avoid duplication 
   def external_work
-    render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).map(&:url))    
+    render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).value_of(:url))    
   end
   
   # encodings for importing
@@ -151,6 +151,21 @@ class AutocompleteController < ApplicationController
     end
   end
   
+  # skins for parenting
+  def site_skins
+    if params[:term].present?
+      search_param = '%' + params[:term] + '%'
+      query = Skin.site_skins.where("title LIKE ?", search_param).limit(15).sort_by_recent
+      if logged_in?
+        query = query.approved_or_owned_by(current_user)
+      else
+        query = query.approved_skins
+      end
+      results = query.value_of :id, :title
+      Rails.logger.info "results: #{results.to_s}"
+      render_output(results.map {|first,second| {:id => first, :name => second}})
+    end
+  end
   
 private
 

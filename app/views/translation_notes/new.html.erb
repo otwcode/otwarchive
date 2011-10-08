@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>New translation_note</h2>
+<h2 class="heading">New translation_note</h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -17,14 +17,14 @@
     <%= f.label :note, 'Your notes:' %>
     <%= f.text_area :note %>
   </p>
-  <p class="submit">
+  <p class="submit actions">
     <%= f.submit "Create" %>
   </p>
 <% end %>
 <!--/content-->
 
 <!--/subnav-->
-<ul class="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to 'Back', translations_path %></li>
 </ul>
 <!--/subnav-->

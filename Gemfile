@@ -62,9 +62,6 @@ gem 'ruby-debug19', :require => 'ruby-debug'
 
 gem 'jquery-rails', '>= 0.2.6'
 
-# for converting strings into numeric values eg for sorting autocomplete
-gem 'radix'
-
 gem 'valium'
 
 gem 'best_in_place'

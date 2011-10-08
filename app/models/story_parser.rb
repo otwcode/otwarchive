@@ -973,7 +973,13 @@ class StoryParser
       story = ""
       Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
         begin
-          response = Net::HTTP.get_response(URI.parse(location))
+          # we do a little cleanup here in case the user hasn't included the 'http://' 
+          # or if they've used capital letters or an underscore in the hostname
+          uri = URI.parse(location)
+          uri = URI.parse('http://' + location) if uri.class.name == "URI::Generic"
+          uri.host.downcase!
+          uri.host.gsub!(/_/, '-')
+          response = Net::HTTP.get_response(uri)
           case response
           when Net::HTTPSuccess
             story = response.body
@@ -995,7 +1001,7 @@ class StoryParser
         end
       }
       if story.blank?
-        raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete (for example, not missing 'http://') and try again."
+        raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete, and try again."
       end
       story
     end

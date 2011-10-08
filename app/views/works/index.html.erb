@@ -1,6 +1,6 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <!--NOTE FOR BACK END: set this in the controller and just send a @page_heading variable or something to the view-->
-<h2><%= search_header @works, @query, "Work" %>
+<h2 class="heading"><%= search_header @works, @query, "Work" %>
   <% if @collection %>
    <%= ts("in %{collection_title}", :collection_title => link_to(@collection.title, @collection)).html_safe %>
   <% elsif @user %>
@@ -19,16 +19,16 @@
 <% end %>
 <!-- /end descriptions-->
 
-<div class="navigation module">
+<div class="navigation actions module">
 <!--Subnavigation, sorting and actions.-->
-<h3 class="landmark">Navigation, Sorting and Actions</h3>
+<h3 class="landmark heading">Navigation, Sorting and Actions</h3>
 <!--gift search subnav-->
 <% if @collection && @collection.gift_exchange? %>
   <%= render :partial => 'gifts/gift_search' %>
 <% end %>
 <!--user role subnav-->
 <% if params[:tag_id] || (@user && @user == current_user) %>
-<ul class="user navigation" role="navigation">
+<ul class="user navigation actions" role="navigation">
   <% if @user && @user == current_user %>
     <li id="edit_multiple">
       <%= link_to t('.edit_multiple_link', :default => 'Edit Multiple Works'), show_multiple_user_works_path(@user) %></li>
@@ -39,8 +39,8 @@
 </ul>
 <% end %>
 <!--sorting subnav-->
-  <ul class="sorting navigation" role="navigation">
-    <li><h4><%= t('.sort_by', :default => 'Sort By') %></h4></li>
+  <ul class="sorting actions" role="menu">
+    <li><h4 class="heading"><%= t('.sort_by', :default => 'Sort By') %></h4></li>
     <% unless @query.blank? %>
       <li><%= sort_link ts('Relevance') %></li>
     <% end %>
@@ -57,8 +57,8 @@
 <!---/subnav-->
 
 <!--main content-->
-<h3 class="landmark">Works List</h3>
- <ol class="work index<% if @user && @user == current_user %> works-own<% end %>">
+<h3 class="landmark heading">Works List</h3>
+ <ol class="work index">
     <% for work in @works %>
       <% if work %>
       <%= render :partial => 'work_blurb', :locals => {:work => work} %>

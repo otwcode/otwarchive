@@ -172,7 +172,6 @@ GEM
       ruby-openid (>= 2.1.8)
     rack-test (0.5.7)
       rack (>= 1.0)
-    radix (2.0.0)
     rails (3.0.4)
       actionmailer (= 3.0.4)
       actionpack (= 3.0.4)
@@ -290,7 +289,6 @@ DEPENDENCIES
   permit_yo
   pickle
   rack-openid (>= 0.2.1)
-  radix
   rails (= 3.0.4)
   resque (>= 1.14.0)
   resque_mailer

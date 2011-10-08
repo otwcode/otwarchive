@@ -1,11 +1,12 @@
 <!-- BEGIN footer -->
 <div id="footer" role="contentinfo">
-	<h3 class="landmark">Footer</h3>
+	<h3 class="landmark heading">Footer</h3>
   <div id="globalize"><!-- locales_menu --></div>
+	<p class="beta"><span class="landmark"><abbr title="Archive Of Our Own">AO3</abbr> Beta</span></p>
 
   <%= yield :footer_js %>
 
-  <ul class="navigation" role="navigation">
+  <ul class="navigation actions" role="navigation">
     <li><%= link_to "Terms of Service", tos_path %></li>
     <li>&#8212; <%= link_to "Site Map", site_map_path %></li>
     <li>&#8212; <%= link_to 'Report Abuse', new_abuse_report_path %></li>
@@ -16,7 +17,7 @@
       <li>&#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path %></li>
     <% end %>
     <% if Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
-      <li><%= link_to 'Devmode', devmode_path %></li>
+      <li>&#8212; <%= link_to 'Devmode', devmode_path %></li>
     <% end %>
     <li>&#8212; <a href="http://creativecommons.org/licenses/GPL/2.0/" title="View License">GPL/CC</a> <%=h t('.layout.footer.by_the_otw', :default => 'by the') %> <a href="http://transformativeworks.org/" title="The Organization for Transformative Works">OTW</a></li>
     <% unless ArchiveConfig.REVISION.blank? %>

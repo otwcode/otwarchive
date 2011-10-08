@@ -1,7 +1,7 @@
-<div id="collection-page" class="profile">
-
+<div id="collection-page" class="collection prompt profile">
+<!--BACK END, NOT REALLY SURE WHAT THIS PAGE DOES - CAN IT HAVE A LISTBOX OF WORK BLURBS AT BOTTOM?-->
   <% request = @challenge_claim.request_signup %>
-  <h3>
+  <h3 class="heading">
     <% if request %>
       <%=h ts("Claimed by %{offerer}: %{requester}", 
         :requester => @challenge_claim.request_prompt.anonymous? ? "Anonymous" : request.pseud.byline, :offerer => @challenge_claim.collection.anonymous? ? "Anonymous" : @challenge_claim.claim_byline) -%>
@@ -10,13 +10,12 @@
     <% end %>
   </h3>
 
-  <div class="collection preface">
+  <div class="module">
     <% if request %>
-      <h3><%=h ts("Request by %{requester}", :requester => @challenge_claim.request_prompt.anonymous? ? "Anonymous" : request.pseud.byline) %></h3>
+      <h3 class="heading"><%=h ts("Request by %{requester}", :requester => @challenge_claim.request_prompt.anonymous? ? "Anonymous" : request.pseud.byline) %></h3>
       <%= render :partial => "challenge_signups/show_prompt", :locals => {:prompt => @challenge_claim.request_prompt, :display_anon => true} %>
     <% else %>
-      <p class="note">No request!</p>
-      <p class="note">Contact challenge moderators for help.</p>
+      <p class="note">No request! Contact <!--BACK END please linkify-->challenge moderators for help.</p>
     <% end %>
   </div>
 
@@ -31,7 +30,7 @@
   <% end %>
   
   <% if !@challenge_claim.fulfilled? && @challenge_claim.claiming_pseud.user == current_user %>
-    <ul class="navigation">
+    <ul class="actions" role="menu">
       <li><%= link_to ts("Post To Fulfill"), new_collection_work_path(@challenge_claim.collection, :claim_id => @challenge_claim.id) %></li>
       <li><%= link_to ts("Delete"), collection_claim_path(@challenge_claim.collection, @challenge_claim), :confirm => ts('Are you sure you want to delete this claim?'), :method => :delete %></li>
     </ul>

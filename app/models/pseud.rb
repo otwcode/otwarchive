@@ -1,5 +1,3 @@
-require 'radix'
-
 class Pseud < ActiveRecord::Base
 
   attr_protected :description_sanitizer_version
@@ -10,7 +8,7 @@ class Pseud < ActiveRecord::Base
     :storage => Rails.env.production? ? :s3 : :filesystem,
     :s3_credentials => "#{Rails.root}/config/s3.yml",
     :bucket => Rails.env.production? ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
-    :default_url => "/images/user_icon.png"
+    :default_url => "/images/skins/iconsets/default/icon_user.png"
 
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
