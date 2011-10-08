@@ -1,68 +1,9 @@
-<h3>Your Claims<% if @collection %> In <%= link_to(@collection.title, @collection) %><% end %></h3>
-
-<table id="claims_table">
-  <tr>
-    <% unless @collection %><th>Challenge</th><% end %>
-    <th>Writing For</th>
-    <th>Due At</th>
-    <th>Details</th>
-    <th>Work</th>
-    <th>Manage</th>
-  </tr>
+<h2 class="heading">Your Claims<% if @collection %> In <%= link_to(@collection.title, @collection) %><% end %></h2>
+<!--FRONT END: TABLEWATCH!!-->
+<ul class="index">
 
   <% @challenge_claims.each do |claim| %>
-    <% @request = claim.request_signup %>
-    <% @challenge = claim.collection.challenge %>
-    <tr>
-      <% unless @collection %><td><%= link_to claim.collection.title, collection_url(claim.collection) -%></td><% end %>
-      <% prompt_id = claim.request_prompt_id %>
-      <% prompt = Prompt.find_by_id(prompt_id) %>
-      <td><% if @request && !prompt.anonymous? %>
-      <%= link_to(@request.pseud.byline, collection_claim_path(claim.collection, claim)) %>
-      <% elsif prompt.anonymous? %>
-      <%= link_to(ts("Anonymous"), collection_claim_path(claim.collection, claim)) %>
-      <% else %>
-      None
-      <% end %>
-      </td>
-      <% if @challenge.respond_to?("assignments_due_at") %>
-        <td><%= time_in_zone(@challenge.assignments_due_at, (@challenge.time_zone || Time.zone.name)) -%></td>
-      <% else %>
-        <td>None set</td>
-      <% end %>
-      <td>
-          <% TagSet::TAG_TYPES.each do |type| %>
-            <% eval("@show_request_#{type}_tags = (@challenge.request_restriction.#{type}_num_allowed > 0) && !params[:hide_tags]") %>
-          <% end %>
-          <% TagSet::TAG_TYPES.each do |type| %>
-            <% if eval("@show_request_#{type}_tags") %>
-                <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
-                  <%= content_tag(:ul, tag_link_list(prompt.tag_set.with_type(type))) %>
-                <% end %>
-            <% end %>  
-          <% end %>
-      </td>
-      <td>
-        <% if claim.creation %>
-          <% if claim.creation.is_a?(Work) %>
-            <%= link_to claim.creation.title, work_path(claim.creation) -%>
-          <% end %>
-          <% if !claim.fulfilled? %>
-            <br/><strong>This work has not yet been approved by the challenge moderators.</strong>
-          <% end %>
-        <% else %>
-          Not yet posted.
-        <% end %>
-      </td>
-      <td>
-          <ul class="navigation">
-            <li><%= link_to ts("Post To Fulfill"), new_collection_work_path(claim.collection, :claim_id => claim.id) %></li>
-            <% unless claim.fulfilled? %>
-              <li><%= link_to ts("Delete"), collection_claim_path(claim.collection, claim), :confirm => ts('Are you sure you want to delete this claim?'), :method => :delete %></li>
-            <% end %>
-          </ul>
-      </td>
-    </tr>
+    <%= render "challenge_claims/claim_blurb", :claim => claim %>
   <% end %>
   
-</table>
+</ul>

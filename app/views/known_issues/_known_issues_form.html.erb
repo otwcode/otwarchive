@@ -1,4 +1,4 @@
-<div id="work-form">
+<div id="work-form" class="post issue">
   <%= form_for(@known_issue) do |f| %>
     <%= error_messages_for @known_issue %>
 
@@ -12,7 +12,7 @@
    
     <fieldset>
       <legend><%= ts("Add known issue") %></legend>
-      <h3>
+      <h3 class="heading">
         <%= f.label :content, ts("Post most recent Known Issues content") %>
       </h3>
       
@@ -40,7 +40,7 @@
     
     <fieldset>
       <legend><%= ts("Post") %></legend>
-      <p class="submit">
+      <p class="submit actions">
         <%= submit_tag ts("Post"), :name => 'post_button' %>
       </p>
     </fieldset>

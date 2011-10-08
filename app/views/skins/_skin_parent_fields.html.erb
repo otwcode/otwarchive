@@ -1,0 +1,15 @@
+<% index ||= 0 %>
+<div class="removeme">
+  <fieldset>
+    <p class="actions cancel" title="cancel"><%= link_to_remove_section ts("x"), form %></p>
+    <dl>
+      <dt>
+        <%= ts("Parent ") %><%= form.text_field :position, :class => "number", :value => index, :title => "position of parent as integer" %>
+      </dt>
+      <dd>
+        <%= form.text_field :parent_skin, autocomplete_options("site_skins", :title => "title of parent skin") %>
+      </dd>
+    </dl>
+  </fieldset>
+</div>
+<div class="last_id" style="display:none;"><%= index.is_a?(String) ? index : index+1 %></div>

@@ -6,7 +6,7 @@
 <dl>
   <dt><%= ts("Current Owners") %></dt>
   <dd>
-    <ul class="mods">
+    <ul class="mods commas">
       <%= @tag_set.new_record? ? content_tag(:li, current_user.default_pseud.byline) : @tag_set.owners.collect(&:byline).sort.map {|owner| content_tag(:li, owner)}.join(', ').html_safe =%>
     </ul>
   </dd>
@@ -40,18 +40,18 @@
 
   <dt><%= form.label :nominated, ts("Currently taking nominations?") %></dt>
   <dd><%= form.check_box :nominated, :onchange => "if ($j(this).is(':checked')){$j('#nomination_limits').show();} else {$j('#nomination_limits').hide();}" %></dd>
-
 </dl>
 </fieldset>
 
-<fieldset id="nomination_limits" class="tagset<%= form.object.nominated ? '' : ' hideme' %>">
+<fieldset id="nomination_limits" class="<%= form.object.nominated ? '' : ' hideme' %>">
 <legend>Nomination Limits</legend>
-<h3>Nomination Limits</h3>
-<p class="notes">If you allow users to nominate <em>both</em> fandoms and characters/relationships in the same tag set, 
-  the number of characters/relationships they can nominate is <strong>per fandom</strong>. If that's not what you want, you 
-  can have users nominate fandoms in one tag set, and characters/relationships in another tag set. You can then use
-  both tag sets in your challenge settings. 
-</p>
+<h3 class="landmark heading">Nomination Limits</h3>
+<ul class="notes">
+  <li>If you allow <em>both</em> fandoms and characters/relationships in the same tag set, 
+  the number of characters/relationships is <strong>per fandom</strong>.</li>
+  <li> If that's not what you want, you 
+  can have users nominate fandoms in one tag set, and characters/relationships in another tag set. Then use both tag sets in your challenge settings. </li>
+</ul>
 <dl>
   <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
     <dt><%= form.label "#{tag_type}_nomination_limit".to_sym %></dt>

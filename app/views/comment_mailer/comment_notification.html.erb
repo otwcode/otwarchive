@@ -1,4 +1,4 @@
-<h4>
+<h4 class="heading">
 <% if @comment.comment_owner %>
   <%= link_to @comment.comment_owner_name, polymorphic_url(@comment.comment_owner, :only_path => false) %>
 <% else %>

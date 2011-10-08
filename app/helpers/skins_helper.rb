@@ -12,11 +12,18 @@ module SkinsHelper
       if skin.icon_file_name
         link_to image_tag(skin.icon.url(:standard), :alt => skin.icon_alt_text, :class => "icon"), skin.icon.url(:original)
       else
-        image_tag(skin.icon.url(:standard), :alt => "No skin preview available", :class => "icon")
+        image_tag(skin.icon.url(:standard), :alt => "", :class => "icon")
       end
     else
-      image_tag("/images/skin_preview_none.png", :size => "100x100", :alt => "No skin preview available", :class => "icon")
+      image_tag("/images/skins/iconsets/default/icon_skins.png", :size => "100x100", :alt => "", :class => "icon")
     end
   end
     
+  def set_site_skin
+    @site_skin = current_user.try(:preference).try(:skin) if current_user.is_a?(User) 
+    @site_skin ||= AdminSetting.default_skin
+  end
+    
 end
+
+#BACK END, pls regularise this with the other blurbs so we just have <div class="icon"></div> and no image if no image uploaded?

@@ -1,14 +1,15 @@
 
 <!--Descriptive page name, messages and instructions-->
-<div class="header module">
-	<h2><%= link_to_unless_current(@collection.title, @collection) %></h2>
-	<p><%= image_tag(@collection.icon.url(:standard), :size => "100x100", :alt => "icon for #{@collection.name}", :class => "icon") %></p>
-	<blockquote class="userstuff"><%=raw sanitize_field(@collection, :description) %></blockquote>
+<div class="primary header module">
+	<h2 class="heading"><%= link_to_unless_current(@collection.title, @collection) %></h2>
+	<div class="icon">
+	<!-- back end if pos can we make this only print an img if there's one uploaded-->
+	<%= image_tag(@collection.icon.url(:standard), :size => "100x100", :alt => "") %></div>
 <!--/descriptions-->
 
 <!--subnav-->
-  <ul class="navigation" role="navigation">
-    <li><%= link_to_unless_current t('.profile', :default =>"Profile"), collection_profile_path(@collection) %></li>
+  <ul class="navigation actions" role="navigation">
+    <li><%= span_if_current t('.profile', :default =>"Profile"), collection_profile_path(@collection) %></li>
 
     <% if logged_in? && !@collection.closed? && @collection.challenge_type != "PromptMeme" %>
       <li><%= link_to t('.collections.post_new', :default => "Post To Collection"), new_collection_work_path(@collection) %></li>
@@ -33,8 +34,8 @@
     	<li><%= link_to ts("Membership"), collection_participants_path(@collection) %></li>
     	<li><%= link_to ts("Manage Items"), collection_items_path(@collection) %></li>
     <% end %>
-
-  </ul>
-</div>
+</ul>
 <!--/subnav-->
+<blockquote class="userstuff"><%=raw sanitize_field(@collection, :description) %></blockquote>
+</div>
 

@@ -1,14 +1,15 @@
-<!--Descriptive page name, messages and instructions--><h2><%=h t('.abuse_report', :default => "Abuse Report") %> <%= @abuse_report.id %></h2>
+<!--Descriptive page name, messages and instructions--><h2 class="heading"><%=h t('.abuse_report', :default => "Abuse Report") %> <%= @abuse_report.id %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to t('.index_link', :default => 'All abuse reports'), abuse_reports_path %></li>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
-<!--FRONT END, should this be a table or should it be an inbox?-->
+<!--FRONT END, should this be a table or should it be an inbox?
+need to see some realdata to know, suspect inbox-->
 <div class="wrapper">
 	<table id="abuse_report_table" summary="">
 		<caption><%=h t('.description', :default => "Detailed abuse report") %></caption>
@@ -33,7 +34,7 @@
 <!--/content-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to t('.index_link', :default => 'All abuse reports'), abuse_reports_path %></li>
 </ul>
 <!--/subnav-->

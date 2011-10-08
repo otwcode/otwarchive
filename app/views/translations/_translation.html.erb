@@ -39,6 +39,6 @@
     <dd><%= translation_status(translation, local_translation) %></dd>            
   </dl>
   <% if logged_in_as_admin? || current_user.id == local_translation.translator_id || current_user.id == local_translation.beta_id || current_user.is_translation_admin? %>
-  <p class="submit"><%= f.submit %></p>
+  <p class="submit actions"><%= f.submit %></p>
   <% end %>
 <% end %>

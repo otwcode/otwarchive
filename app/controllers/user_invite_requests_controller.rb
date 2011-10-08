@@ -12,7 +12,6 @@ class UserInviteRequestsController < ApplicationController
   def new
     if logged_in? 
       @user = current_user
-      @hide_dashboard = true
       @user_invite_request = @user.user_invite_requests.build
     else
       flash[:error] = "Please log in."

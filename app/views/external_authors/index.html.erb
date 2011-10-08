@@ -1,5 +1,5 @@
 <% if @user && current_user == @user %>
-<h2><%= t('.external_authors_for', :default => "External author identities for %{user}", :user => @user.login) %></h2>
+<h2 class="heading"><%= t('.external_authors_for', :default => "External author identities for %{user}", :user => @user.login) %></h2>
 
   <p>
     <%= t('.external_authors_explanation', 
@@ -9,18 +9,18 @@
 
   <!--
   Adding/removing new external identities is coming soon 
-    <ul class="navigation">
+    <ul class="navigation actions" role="navigation">
       <li><%= link_to t('.new_external_author', :default => 'New external author identity'), new_user_external_author_path(@user) %></li>
     </ul>
   -->
 <% elsif current_user.archivist %>
-<h2><%= t('.external_authors_unclaimed', :default => "External Authors Imported") %></h2>
+<h2 class="heading"><%= t('.external_authors_unclaimed', :default => "External Authors Imported") %></h2>
 <% end %>
 
 <ul class="index">
   <% @external_authors.each do |external_author| %>
     <li>
-      <h4>Identity: <%= external_author.external_author_names.collect(&:name).join(", ") %>
+      <h4 class="heading">Identity: <%= external_author.external_author_names.collect(&:name).join(", ") %>
       </h4>
       <% if external_author.do_not_email %>
         <p><%= t('.do_not_email', :default => "No notifications will be sent to this email address." ) %></p>
@@ -30,7 +30,7 @@
         <p><%= t('.do_not_import', :default => "Archivists may not import stories with this email." ) %></p>
       <% end %>
       
-      <h4>Works:</h4>
+      <h4 class="heading">Works:</h4>
         <ul class="work index">
         <% external_author.external_creatorships.each do |ext_creatorship| %>
         <li><%= link_to(ext_creatorship.creation.title, work_path(ext_creatorship.creation)) %></li>
@@ -39,7 +39,7 @@
     
     
       <% if @user && current_user == @user %>
-        <ul class="navigation">
+        <ul class="actions" role="menu">
           <li><%= link_to t('.edit_link', :default => 'Edit'), [:edit, @user, external_author] %></li>
           <!-- coming soon 
           <li>

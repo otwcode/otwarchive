@@ -1,6 +1,7 @@
 <% # expects nom %>
 <% unless @tagnames_seen[nom.tagname] %>
   <% @tagnames_seen[nom.tagname] = 1 %>
+  <!--FRONT END NEXT DEPLOY suspect this would be better off as a dl-->
   <div class="nomination module">
     <% tag_type = nom.class.name.gsub(/Nomination/, '').downcase %>
     <%= nomination_status_span(nom) %>
@@ -25,7 +26,7 @@
 
     <%= text_field_tag "#{tag_type}_change_#{nom.tagname}", nil, autocomplete_options("tag?type=#{tag_type}", :autocomplete_token_limit => 1, :title => "change tag name") %>
 
-    <!--FRONT END: can you solve this display problem: display:table, liquid, retain scanlines with synonym next to tagname? Have put at end for now-->
+
     <% if nom.synonym %>
       <span title="official synonym" class="synonym">
         <%= label_tag "#{tag_type}_synonym_#{nom.synonym}" do %>

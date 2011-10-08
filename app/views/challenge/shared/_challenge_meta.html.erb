@@ -3,7 +3,7 @@
 <% zone = (@collection.challenge.time_zone || Time.zone.name) %>
 <% if @collection.challenge.signup_open %>
   <dt><%= ts("Signup")%>:</dt>
-  <dd><%= link_to ts("CURRENTLY OPEN"), new_collection_signup_path(@collection) %></dd>
+  <dd><strong><%= link_to ts("Open"), new_collection_signup_path(@collection) %></strong></dd>
 
   <dt><%= ts("Signup closes")%>:</dt>
   <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) %></dd>
@@ -18,7 +18,8 @@
 
 <% elsif Time.now < (@collection.challenge.signups_close_at || 1.day.ago) %>
   <dt><%= ts("Signup")%>:</dt>
-  <dd><%= ts("SIGNUP PERIOD IS OVER")%></dd>
+  <dd><strong><%= ts("Closed")%></strong> 
+    <span class="datetime">(on <%= time_in_zone(challenge.signups_close_at, zone) %>)</span></dd>
 <% end %>
 
 <dt><%= ts("Assignments due")%>:</dt>

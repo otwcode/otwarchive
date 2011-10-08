@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('.preview_story', :default => "Preview Work") %></h2>
+<h2 class="heading"><%=h t('.preview_story', :default => "Preview Work") %></h2>
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
@@ -18,7 +18,7 @@
     </div>
     <% unless @work.endnotes.blank? %>
       <div class="preface notes">
-          <h3><%=h t('.notes', :default => "Notes:") %></h3>
+          <h3 class="heading"><%=h t('.notes', :default => "Notes:") %></h3>
           <blockquote class="userstuff"><%=raw sanitize_field(@work, :endnotes) %></blockquote>
        </div>
 
@@ -35,7 +35,7 @@
 
   <fieldset>
     <legend><%= t('.post_work', :default => 'Post Work') %></legend>
-    <p class="submit">
+    <p class="submit cancel edit actions">
   	<% if @work.posted? %>
   		<%= submit_tag t('.forms.update', :default => 'Update'), :name => 'update_button' %>
   	<% else %>

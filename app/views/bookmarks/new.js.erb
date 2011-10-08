@@ -1,8 +1,0 @@
-$j('#dynamic-bookmark').show();
-$j('#dynamic-bookmark').draggable({ opacity: 0.80 });
-window.location.hash = 'dynamic-bookmark';
-$j('#dynamic-bookmark').html("<%= escape_javascript(render :partial => "bookmarks/bookmark_form", :locals => {:bookmarkable => @bookmarkable, :bookmark => @bookmark, :button_name => ts("Create"), :action => :create, :dynamic => true}) %>");
-$j('#bookmark_cancel').click(function(){ 
-    $j('#dynamic-bookmark').hide();
-    history.back(1);
-  });

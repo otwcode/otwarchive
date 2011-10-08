@@ -5,14 +5,14 @@
 <% user = challenge_signup.pseud.user %>
 
 <% if challenge.signup_open || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || collection.challenge_type == "PromptMeme" %>
-  <ul class="navigation" role="navigation">
+  <ul class="navigation actions" role="menu">
     <% # The edit link should show up only for the user who actually signed up while signups are open or for the owner or mod once signups are closed or always on a prompt meme %>
     <% if (challenge.signup_open && user == current_user) || (!challenge.signup_open && collection.user_is_maintainer?(current_user)) || (collection.challenge_type == "PromptMeme" && collection.user_is_maintainer?(current_user)) %>
       <li>
           <%= link_to(ts('Edit whole signup'), edit_collection_signup_path(collection, challenge_signup)) %>
       </li>
       <li>
-          <%= link_to(ts('Edit this prompt'), edit_collection_prompt_path(collection, prompt)) %>
+          <%= link_to(ts('Edit prompt'), edit_collection_prompt_path(collection, prompt)) %>
       </li>
     <% end %>
     <% # The add new prompt link should show up only for the user who actually signed up while signups are open and only on a signup show page, and only for a prompt meme and if they haven't hit the max number of prompts %>
@@ -39,8 +39,8 @@
             end
         end %>
       <% if @claimed == 1 %>
-      <li>
-        <%= ts("Already claimed by you") %>
+      <li class="claimed">
+        <%= ts("Claimed by you") %>
       </li>
       <% else %>
       <li>

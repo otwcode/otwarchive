@@ -1,4 +1,4 @@
-<h2>Your Imported Stories</h2>
+<h2 class="heading">Your Imported Stories</h2>
 <p class="message">
   One or more of your stories have been uploaded to the archive by an archivist 
   (who previously hosted them with your permission on an archive that has been backed up here).
@@ -16,7 +16,7 @@
   We would like to invite you to join our beta test and create an account! If you do, the stories will automatically be added
   to your account as soon as you have done so, and you will have full control over them.
   If you already <strong>have</strong> an archive account, just log in and reload this page, and we'll assign you the stories. Otherwise,
-  please choose below!
+  please choose from the following!
 </p>
 <p>
   <%= button_to t("claim.sign_me_up", :default => "Sign me up and give me my stories! Yay!"), new_user_path(:invitation_token => @invitation.token) %>
@@ -25,7 +25,7 @@
 
 <hr />
 
-<h3>If You Don't Want An Archive Account</h3>
+<h3 class="heading">If You Don't Want An Archive Account</h3>
 
 <p class="message">
   If you don't want to claim these stories on the archive, you can either orphan them (leave them in the archive with your contact information
@@ -58,7 +58,7 @@
     If you do not block importing, but do turn off email notification, stories from this email account may still be imported, 
     you will just not be informed. If that's not what you want, please be sure to turn off importing.
   </p>
-  <p class="submit">
+  <p class="submit actions">
     <%= f.submit t('.update', :default => 'Update') %>
   </p>
 <% end %>

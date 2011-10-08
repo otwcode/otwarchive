@@ -1,14 +1,14 @@
 <!--Descriptive page name, messages and instructions-->
-<div class="header module">
+<div class="primary header module">
 	<% 	display_name = @author ? @author.name : @user.login	%>
-	<h2><%= @author ? link_to_unless_current(display_name, user_pseud_path(user, @author)) : link_to_unless_current(display_name, user) %>
+	<h2 class="heading"><%= @author ? link_to_unless_current(display_name, user_pseud_path(user, @author)) : link_to_unless_current(display_name, user) %>
 	</h2>
 	<!--pseuds switcher goes here structure: div class pseuds arrow ul id expandable end div. the code is in users/_sidebar and a helper. i will lay it out once it's in . lim-->
-	<p><%= icon_display(@user, @author) %></p>
+	<p class="icon"><%= icon_display(@user, @author) %></p>
 <!--/descriptions-->
 
 <!--subnav-->
-  <ul class="navigation" role="navigation">
+  <ul class="navigation actions" role="navigation">
     <li><%= span_if_current ts("Profile"), user_profile_path(user) %></li>
     <% if @user == current_user %>
       <li><%= link_to ts("Post New"), new_work_path %></li>

@@ -1,12 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>Tag Wrangling Discussion</h2>
+<h2 class="heading">Tag Wrangling Discussion</h2>
 <!--/descriptions-->
 
 <%= will_paginate(@comments) %>
-
-<!--ADT FRONT END, suggest this should be an inbox-->
 <div class="wrapper">
-	<table summary="">
+	<table summary="a message board displaying discussions about tags">
 		<caption></caption>
 		<thead>
 			<tr>
@@ -21,7 +19,7 @@
 		<tbody>
   <% for comment in @comments %>
   	<tr>
-    	<td><%= link_to_tag(comment.parent) %></td>
+    	<th scope="row"><%= link_to_tag(comment.parent) %></th>
     	<td><%= link_to strip_tags(comment.content[0..50]) + '...', comment, :title => strip_tags(comment.content) %></td>
     	<td><%= comment.count_all_comments %></td>
     	<td>

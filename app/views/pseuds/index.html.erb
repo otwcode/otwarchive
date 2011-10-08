@@ -1,10 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("Pseuds for %{user}", :user => @user.login) %></h2>
+<h2 class="heading"><%= ts("Pseuds for %{user}", :user => @user.login) %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
 <% if current_user == @user %>
-<ul class="navigation">
+<ul class="navigation actions" role="navigation">
   <li><%= link_to ts('New Pseud'), new_user_pseud_path(@user) %></li>
 </ul>
 <% end %>
@@ -20,7 +20,7 @@
 
 <!--subnav-->
 <% if current_user == @user %>
-<ul class="navigation">
+<ul class="navigation actions" role="navigation">
   <li><%= link_to ts('New Pseud'), new_user_pseud_path(@user) %></li>
 </ul>
 <% end %>

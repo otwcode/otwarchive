@@ -20,18 +20,18 @@ class SkinsController < ApplicationController
         redirect_to skins_path and return
       end
       if params[:work_skins]
-        @skins = @user.work_skins
+        @skins = @user.work_skins.sort_by_recent
         @title = ts('My Work Skins')
       else
-        @skins = @user.skins.site_skins
+        @skins = @user.skins.site_skins.sort_by_recent
         @title = ts('My Site Skins')
       end
     else
       if params[:work_skins]
-        @skins = WorkSkin.approved_skins
+        @skins = WorkSkin.approved_skins.sort_by_recent
         @title = ts('Public Work Skins')
       else
-        @skins = Skin.approved_skins.site_skins
+        @skins = Skin.approved_skins.usable.site_skins.sort_by_recent
         @title = ts('Public Skins')
       end
     end
@@ -52,6 +52,10 @@ class SkinsController < ApplicationController
   end
 
   def create
+    if params[:skin][:title].match(/archive/i)
+      flash[:error] = ts("You can't use the word 'archive' in your skin title, sorry! (We have to reserve it for official skins.)")
+      render :new and return
+    end
     @skin = params[:skin_type] ? params[:skin_type].constantize.new(params[:skin]) : Skin.new(params[:skin])
     @skin.author = current_user
     if @skin.save
@@ -70,6 +74,10 @@ class SkinsController < ApplicationController
   end
 
   def update
+    if params[:skin][:title].match("/^Archive/")
+      flash[:error] = ts("You can't name your skin starting with 'Archive', sorry!")
+      render :edit and return
+    end
     if @skin.update_attributes(params[:skin])
       flash[:notice] = "Skin updated."
       redirect_to @skin

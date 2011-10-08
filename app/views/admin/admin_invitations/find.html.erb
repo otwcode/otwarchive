@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%h= 'Track invitations' %></h2>
+<h2 class="heading"><%h= 'Track invitations' %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -15,11 +15,11 @@
     <dt><%= label_tag :invitee_email, t('.find_email', :default => 'Enter all or part of an email address:') %></dt>
     <dd><%= text_field_tag :invitee_email, params[:invitee_email]  %></dd>    
   </dl>
-  <p class="submit"><%= submit_tag "Go" %></p>
+  <p class="submit actions"><%= submit_tag "Go" %></p>
 <% end %>
 
 <% if @user %>
-<h3><%h= 'Invitations for' %> <%= link_to @user.login, user_invitations_path(@user) %></h3>
+<h3 class="heading"><%h= 'Invitations for' %> <%= link_to @user.login, user_invitations_path(@user) %></h3>
 <%= render :partial => 'invitations/user_invitations', :locals => {:invitations => @invitations} %>
 <% elsif @invitation %>
 <%= render :partial => 'invitations/invitation', :locals => {:invitation => @invitation} %>

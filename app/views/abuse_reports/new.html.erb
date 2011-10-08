@@ -1,4 +1,4 @@
-<!--Descriptive page name, messages and instructions--><h2><%=h t('.report_abuse', :default => 'Report Abuse') %></h2>
+<!--Descriptive page name, messages and instructions--><h2 class="heading"><%=h t('.report_abuse', :default => 'Report Abuse') %></h2>
 <%= error_messages_for :abuse_report %>
 <!--/descriptions-->
 
@@ -6,8 +6,10 @@
 <!--/subnav-->
 
 <!--main content-->
-<%= form_for(@abuse_report) do |f| %>
-  <dl>
+<%= form_for(@abuse_report), :class =>"post", do |f| %>
+  <fieldset>
+	<legend>Link and Describe Abuse</legend>
+	<dl>
   	<dt><%= f.label :url, t('.link', :default => "Link to the page you are reporting (required):") %></dt>
   	<dd><%= f.text_field :url, :size => 60 %>
 		  <p class="footnote"><%=h t('.pre_filled', :default => "If you came here from the abuse link at the bottom of the page, this will be filled in for you.") %></p>
@@ -30,15 +32,16 @@
 	  <dt><%= f.label :email, t('.your_email', :default => "Your email (optional):") %></dt>
     <dd><%= f.text_field :email, :size => 60 %>
 		  <p class="footnote"><%=h t('.anonymous_report', :default => "Leave this blank to file an anonymous report.") %></p>
-		</dd>
 
       <p><%= label_tag('cc_me', "Email me a copy of my message (optional): ") %><%= check_box_tag('cc_me', false) %></p>
 
      
     <%= f.hidden_field :ip_address, :value => request.remote_ip %>
-			
- 	  <dt><%=h t('.submit_message', :default => "Submit your message to the abuse team:") %></dt>
-	  <dd class="submit"><%= f.submit t('.submit', :default => "Submit") %></dd>
-	</dl>
+	</dd>		
+<dt class="landmark">Send to Abuse Team</dt>
+		  <dd class="submit actions"><%= f.submit t('.submit', :default => "Submit") %></dd>
+		</dl>
+</fieldset>
+
 <% end %>
 <!--/content-->

@@ -1,8 +1,8 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h "Create Account" %></h2>
+<h2 class="heading"><%=h "Create Account" %></h2>
 <% if @user.errors.any? %>
   <div id="errorExplanationNone">
-     <p><%= ts("Oops, there's some problems with the stuff you told us.") %></p>
+     <h4 class="heading"><%= ts("Oops, there's some problems with the stuff you told us.") %></h4>
      <ul>
        <% @user.errors.full_messages.each do |msg| %>
        <li><%= msg %></li>
@@ -33,8 +33,7 @@
   <%= render :partial => "legal", :locals => {:f => f} %>
   </fieldset>
   <fieldset><legend>Submit</legend>
-  <!-- Buttons for "Cancel" and "Create Account" -->
-  <p class="submit">
+  <p class="submit cancel actions">
     <input type="submit" name="cancel_create_account" value="Cancel" />
     <%= submit_tag 'Create Account' %>
   </p>

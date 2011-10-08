@@ -1,0 +1,76 @@
+<h3>Skin Conditions</h3>
+
+<p>
+  If you want a certain chunk of CSS loaded only in particular situations, you can create a skin with a specific set of conditions. 
+  We'll load that skin only when needed. The conditions we have available are:
+</p>
+
+<ul>
+  <li>
+    <h4>Role</h4>
+    <dl>
+      <dt>user</dt>
+      <dd>What you want 95% of the time. Will be loaded always, after the official archive style.</dd>
+
+      <dt>override</dt>
+      <dd>Will REPLACE the official archive style. Useful for complex skins where you don't want most of the default style underlying your work. (You can use the parts you want to keep as parents.)</dd>
+    </dl>
+  </li>
+  
+  <li>
+    <h4>Parent Only</h4>
+    <p class="note">
+      If you select this, neither you (nor anyone else) will be able to use this skin directly: it will only be used as a parent. 
+      The skin (even if made public) will not be listed in the main skins listing, only in the description of skins where it is
+      used as a parent.
+    </p>
+  </li> 
+      
+  
+  <li>
+    <h4>Media</h4>
+    <p class="note">
+      You can choose more than one media. 
+      Media stylesheets will only be loaded if whatever device you're browsing on supports it. 
+      For instance, not all screenreaders support aural CSS and don't load "speech" stylesheets. If yours doesn't, 
+      you can create a skin with media "all" instead.
+    </p>
+    <dl>
+      <dt>all</dt>
+      <dd>What you want 95% of the time. Loaded for all devices. (Some very old browsers don't understand "all" and require "screen".)</dd>
+      
+      <dt>screen</dt>
+      <dd>Loaded for computer screens. (Generally loaded all the time.)</dd>
+        
+      <dt>handheld</dt>
+      <dd>Will be loaded only for mobile devices and/or small screens.</dd>
+  
+      <dt>speech</dt>
+      <dd>Will be loaded only for screenreaders.</dd>
+  
+      <dt>print</dt>
+      <dd>Will be loaded only when the page is printed.</dd>
+
+      <dt>braille, embossed, projection, tty, tv</dt>
+      <dd>See <a href="http://www.w3.org/TR/CSS2/media.html">the W3C media specs</a> for details.</dd>  
+      
+      <dt>only screen and (max-width: 450px)</dt>
+      <dd>Loaded for iPhone (it doesn't load handheld stylesheets otherwise)</dd>
+    </dl>
+  </li>
+  
+  <li>
+    <h4>IE Conditions</h4>
+    <dl>
+      <dt>IE</dt>
+      <dd>Will be loaded for any Internet Explorer browser.</dd>
+      
+      <dt>IE5, IE6, IE7, IE8, IE9</dt>
+      <dd>Will be loaded only for this particular version of the Internet Explorer browser.</dd>
+
+      <dt>IE8_or_lower</dt>
+      <dd>Will be loaded for IE8 and below</dd>
+    </dl>
+  </li>
+</ul>
+    

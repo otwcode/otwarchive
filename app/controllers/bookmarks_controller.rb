@@ -11,6 +11,8 @@ class BookmarksController < ApplicationController
   def load_bookmarkable
     if params[:work_id]
       @bookmarkable = Work.find(params[:work_id])
+    elsif params[:chapter_id]
+      @bookmarkable = Chapter.find(params[:chapter_id]).try(:work)
     elsif params[:external_work_id]
       @bookmarkable = ExternalWork.find(params[:external_work_id])
     elsif params[:series_id]
@@ -151,13 +153,25 @@ class BookmarksController < ApplicationController
     @bookmark = Bookmark.new
     respond_to do |format|
       format.html
-      format.js
+      format.js { 
+        @button_name = ts("Create")
+        @action = :create
+        render :action => "bookmark_form_dynamic" 
+      }
     end
   end
 
   # GET /bookmarks/1/edit
   def edit
     @bookmarkable = @bookmark.bookmarkable
+    respond_to do |format|
+      format.html
+      format.js { 
+        @button_name = ts("Update")
+        @action = :update
+        render :action => "bookmark_form_dynamic" 
+      }
+    end    
   end
 
   # POST /bookmarks
@@ -204,7 +218,7 @@ class BookmarksController < ApplicationController
     @bookmarkable = @bookmark.bookmarkable
     respond_to do |format|
       format.js {
-        @recent_bookmarks = @bookmarkable.bookmarks.visible(:order => "created_at DESC").offset(1).limit(4)
+        @bookmarks = @bookmarkable.bookmarks.visible(:order => "created_at DESC").offset(1).limit(4)
       }
       format.html do
         id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym

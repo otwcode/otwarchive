@@ -43,10 +43,14 @@ class TagSetNomination < ActiveRecord::Base
   # This makes sure a single user doesn't nominate the same tagname twice
   validate :require_unique_tagnames
   def require_unique_tagnames
-    tagnames = []
-    %w(fandom character relationship freeform).each do |nomtype|
-      tagnames += self.send("#{nomtype}_nominations").map(&:tagname).reject {|t| t.blank?}
+    noms = self.fandom_nominations + self.freeform_nominations
+    if self.fandom_nominations.empty?
+      noms += self.character_nominations + self.relationship_nominations
+    else
+      noms += self.fandom_nominations.collect(&:character_nominations).flatten
+      noms += self.fandom_nominations.collect(&:relationship_nominations).flatten
     end
+    tagnames = noms.map(&:tagname).reject {|t| t.blank?}
     duplicates = tagnames.group_by {|tagname| tagname}.select {|k,v| v.size > 1}.keys
     errors.add(:base, ts("You seem to be trying to nominate %{duplicates} more than once.", :duplicates => duplicates.join(', '))) unless duplicates.empty?
   end

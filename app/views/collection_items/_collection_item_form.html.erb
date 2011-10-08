@@ -1,22 +1,23 @@
 <% item ||= @item %>
 <% @collection_item ||= CollectionItem.new %>
-<% dynamic ||= false %>
+<% in_page ||= false %>
 <div id="collection-form">
-  <h3><% ts("Add %{title} to collections", :title => item.title) %>
-  </h3>
+  <h3 class="heading"><% ts("Add %{title} to collections", :title => item.title) %></h3>
 
 <%= form_for([item, @collection_item], :url => {:controller => 'collection_items', :action => :create}) do |form| %>
-  <p>
-  <%= label_tag :collection_names, ts("Enter collection name(s): ") %>
+<dl>
+	<dt><%= label_tag :collection_names, ts("Collection name(s): ") %></dt>
+  <dd title="collection name">
   <%= text_field_tag :collection_names, nil, autocomplete_options("open_collection_names", :size => 40) %>
-  </p>
-  <p class="submit">
+  </dd>
+	<dt class="landmark">Submit</dt>
+  <dd class="submit actions">
     <%= form.submit(ts("Add")) %>
-    <% if dynamic %>
-      <a name="collection_item_cancel" id="collection_item_cancel"><%= ts("Cancel") %></a>
+    <% if in_page %>
+      <a class="collection_item_form_placement_close" href="#comments"><%= ts("Cancel") %></a>
     <% else %>
       <%= link_to ts("Back"), polymorphic_path(item) %>
     <% end %>
-  </p>
+  </dl>
 <% end %>
 </div>

@@ -11,6 +11,6 @@
       <%= check_box_tag "user[roles][]", role.id, user.roles.include?(role), :title => role.name, :id => "user_roles_#{role.id}" %>
     </td>
   <% end %>
-  <td><%= submit_tag ts("Update") %></td>
-  <td><%= link_to ts("Details"), admin_user_path(user) %></td>
+  <td class="actions"><%= submit_tag ts("Update") %></td>
+  <td class="actions"><%= link_to ts("Details"), admin_user_path(user) %></td>
 <% end %>

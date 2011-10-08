@@ -9,17 +9,21 @@ class OwnedTagSet < ActiveRecord::Base
   # -- NN May 2011 
   
   belongs_to :tag_set, :dependent => :destroy
-  accepts_nested_attributes_for :tag_set  
+  accepts_nested_attributes_for :tag_set
+  
+  # delegate the tag set commands
+  delegate :tags, :with_type, :has_type?, :to => :tag_set, :allow_nil => true  
   
   has_many :tag_set_associations, :dependent => :destroy
   accepts_nested_attributes_for :tag_set_associations, :allow_destroy => true, 
     :reject_if => proc { |attrs| !attrs[:create_association] || attrs[:tag_id].blank? || (attrs[:parent_tag_id].blank? && attrs[:parent_tagname].blank?) }
 
-  has_many :tag_set_nominations, :dependent => :destroy #, :inverse_of => :owned_tag_set
-  has_many :fandom_nominations, :through => :tag_set_nominations #, :inverse_of => :owned_tag_set
-  has_many :character_nominations, :through => :tag_set_nominations #, :inverse_of => :owned_tag_set
-  has_many :relationship_nominations, :through => :tag_set_nominations #, :inverse_of => :owned_tag_set
-  has_many :freeform_nominations, :through => :tag_set_nominations #, :inverse_of => :owned_tag_set
+  has_many :tag_set_nominations, :dependent => :destroy 
+  has_many :tag_nominations, :through => :tag_set_nominations, :dependent => :destroy
+  has_many :fandom_nominations, :through => :tag_set_nominations 
+  has_many :character_nominations, :through => :tag_set_nominations
+  has_many :relationship_nominations, :through => :tag_set_nominations
+  has_many :freeform_nominations, :through => :tag_set_nominations
 
   attr_protected :featured
 

@@ -18,6 +18,10 @@ class TagSetNominationsController < ApplicationController
       flash[:notice] = ts("Which nominations did you want to work with?")
       redirect_to user_tag_set_nominations_path(@user) and return
     end
+    unless current_user.is_author_of?(@tag_set_nomination)
+      flash[:notice] = ts("You can only see your own nominations.")
+      redirect_to tag_set_path(@tag_set) and return
+    end
   end
 
   def set_limit
@@ -221,7 +225,7 @@ class TagSetNominationsController < ApplicationController
 
       # update the tag set
       @tag_set.tag_set.send("#{tag_type}_tagnames_to_add=", @tagnames_to_add)
-      @tag_set.tag_set.tagnames_to_remove = @tagnames_to_remove            
+      @tag_set.tag_set.tagnames_to_remove = @tagnames_to_remove.join(',')        
       unless @tag_set.save
         @errors = @tag_set.errors.full_messages
         flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")

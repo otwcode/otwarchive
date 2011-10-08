@@ -1,12 +1,12 @@
 <% if @associations && !@associations.empty? %>
-  <h4><%= ts("Tag Set Associations") %> (<%= @associations.count %>)</h4>
+  <h4 class="heading"><%= ts("Tag Set Associations") %> (<%= @associations.count %>)</h4>
 
-  <ol class="tagset index">
+  <ol class="index">
     <% @associations.group(:parent_tag_id).joins(:tag, :parent_tag).
             select("parent_tags_tag_set_associations.name as parent, group_concat(tags.name ORDER BY tags.name) as children").each do |assoc| %>
       <li class="association listbox">
-        <h3><%= assoc.parent %></h3>
-        <ol class="child tags">
+        <h3 class="heading"><%= assoc.parent %></h3>
+        <ol class="child tags index">
           <%= assoc.children.split(',').map {|child| content_tag(:li, child)}.join("\n").html_safe %>
         </ol>
       </li>

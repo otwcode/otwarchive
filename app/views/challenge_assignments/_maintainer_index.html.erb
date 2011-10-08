@@ -1,6 +1,7 @@
-<h2>Assignments for <%= @collection.title %></h2>
+<!--SUSPECT THIS OF BEING COLLECTION HOME ZONE-->
+<h2 class="heading">Assignments for <%= @collection.title %></h2>
 
-<ul class="navigation">
+<ul class="navigation actions" role="navigation">
   <li>
     <% if params[:show_covered] %>
       <%= link_to ts("Show Needed Pinch Hits"), collection_assignments_path(@collection) %>
@@ -15,26 +16,30 @@
 <% elsif @collection.assignments.defaulted.uncovered.count < 1 && !params[:show_covered] %>
   <p class="note">All defaulted assignments are covered!</p>
 <% else %>
-  <h3><%= ts("Defaulted Assignments") %> <%= link_to_help 'challenge-defaulted-assignments' %></h3>
-  <table>
-    <tr>
-      <th><%= ts("Recipient") %></th>
-      <th><%= ts("Recipient Defaulted?") %></th>
+  <h3 class="heading"><%= ts("Defaulted Assignments") %> <%= link_to_help 'challenge-defaulted-assignments' %></h3>
+<!--FRONT END: TABLEWATCH!!-->
+  <table summary="">
+    <caption></caption>
+    <thead>
+      <tr>
+      <th scope="col"><%= ts("Recipient") %></th>
+      <th scope="col"><%= ts("Recipient Defaulted?") %></th>
       <% if params[:show_covered] %><th><%= ts("Covered?") %></th><% end %>
-      <th><%= ts("Assigned Writer") %></th>
-      <th><%= ts("Current Pinch Hitter") %></th>
-      <th><%= ts("Manage") %></th>
+      <th scope="col"><%= ts("Assigned Writer") %></th>
+      <th scope="col"><%= ts("Current Pinch Hitter") %></th>
+      <th scope="col"><%= ts("Manage") %></th>
     </tr>
-    
+  </thead>
+  <tbody>
     <% @defaulted_assignments.each do |assignment| %>
       <% request = assignment.request_signup || assignment.pinch_request_signup %>
       <% if request %>
         <tr>
-          <td><%= link_to assignment.request_byline, collection_signup_path(@collection, request) %></td>
+          <th scope="row"><%= link_to assignment.request_byline, collection_signup_path(@collection, request) %></th>
           <td><%= ChallengeAssignment.in_collection(@collection).by_offering_user(request.pseud.user).all? {|recip_assignment| recip_assignment.defaulted} ? "Yes" : "No" %></td>
           <% if params[:show_covered] %><td><%= assignment.covered_at.nil? ? "No" : "Yes" %></td><% end %>
           <td><%= assignment.offer_byline %></td>
-          <td>
+          <td><!--this may need titling but what with?-->
             <% new_assignment = assignment.covered_at ? request.request_assignments.last : ChallengeAssignment.new %>
             <%= form_for [@collection, new_assignment], :url => collection_assignments_path(@collection) do |assignment_form| %>
               <%= hidden_field_tag :assignment_to_cover, assignment.id %>
@@ -43,7 +48,7 @@
               <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", :autocomplete_token_limit => 1) %>
           </td>
           <td>
-              <ul class="navigation">
+              <ul class="navigation actions" role="navigation">
                 <li><%= submit_tag ts("Assign") %></li>
                 <li><%= link_to ts("Undefault"), undefault_collection_assignment_path(@collection, assignment) %></li>
                 <% unless assignment.covered_at.nil? %>
@@ -57,14 +62,15 @@
         </tr>
       <% end %>
     <% end %>
-  </table>
+ </tbody>
+</table>
 <% end %>
 
-<h3><%= ts("Assignments") %> <%= link_to_help 'challenge-assignments' %></h3>
+<h3 class="heading"><%= ts("Assignments") %> <%= link_to_help 'challenge-assignments' %></h3>
 
 <%= form_tag default_multiple_collection_assignments_path, :method => :put do %>
-  <ul class="navigation">
-  	<li><%= link_to ts("Manage Items"), collection_items_path(@collection) %></li>
+  <ul class="navigation actions" role="menu">
+  	<li role="navigation"><%= link_to ts("Manage Items"), collection_items_path(@collection) %></li>
     <li><%= submit_tag "Save Defaults"%></li>
     <li>
       <%= link_to "Default All Unposted", default_all_collection_assignments_path(@collection),
@@ -128,7 +134,7 @@
 
   <%= will_paginate @open_assignments %>
 
-  <ul class="navigation">
+  <ul class="navigation actions" role="menu">
     <li><%= link_to ts("Purge Assignments"), purge_collection_assignments_path(@collection), 
             :confirm => ts("This will delete ALL assignments so you can edit and send them over. Please do not do this unless you absolutely must!") %>
     </li>

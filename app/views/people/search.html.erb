@@ -1,14 +1,15 @@
-<h2>People Search: Alpha</h2>
+<!--SEARCHBROWSE-->
+<h2 class="heading">People Search: Alpha</h2>
 
-<ul class="navigation" role="navigation"><li>
+<ul class="navigation actions" role="navigation"><li>
   <%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %>
 </li></ul>
 
 <%= render :partial => 'people/search_form' %>
 
 <% if @people %>
-  <p><strong><%= @people.total_entries %> Found</strong><%= link_to_help "people-search-results-help" %></p>
-  <h3 class="landmark">People List</h3>
+  <p><strong><%= @people.total_entries %> Found</strong> <%= link_to_help "people-search-results-help" %></p>
+  <h3 class="landmark heading">People List</h3>
   <ol class="pseud index">
     <% for person in @people %>
       <% unless person.nil? %>

@@ -6,7 +6,7 @@
 
   <%= render :partial => 'hidden_fields', :locals => {:form => f} %>
 
-  <p class="submit">
+  <p class="submit actions">
   	<% if @chapter.posted? %>
 		<%= submit_tag t('.forms.update', :default => 'Update'), :name => 'update_button' %>
 	<% else %>

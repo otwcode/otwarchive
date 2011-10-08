@@ -1,16 +1,16 @@
-<h3 class="landmark">Filters</h3>
 <%= form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'filters', :method => :get, :id => 'work_filters') do %>
-  <%= field_set_tag h(ts('Filter results:')) + link_to_help("filters") do %>
-    <dl class="filters" role="complementary navigation">
+  <h3 class="landmark heading">Filters</h3>
+	<%= field_set_tag h(ts('Filter results:')) + link_to_help("filters") do %>
+    <dl class="filters" role="menu">
     <% unless @filters.blank? %>
       <% Tag::FILTERS.each do |type| %>
         <% unless @filters[type].blank? %>
-          <dt id="toggle_tag_category_<%= type %>" class="<%= type %> toggle_filters">        
-            <span id="tag_category_<%= type %>_closed" style="display: none;"><%= image_tag 'arrow-right.gif', :alt => "" %></span>
-            <span id="tag_category_<%= type %>_open"><%= image_tag 'arrow-down.gif', :alt => ""%></span>              
+          <dt>        
+            <span class="tag_category_<%= type %>_open hidden"><%= image_tag 'arrow-right.gif', :alt => "" %></span>
+            <span class="tag_category_<%= type %>_close hidden"><%= image_tag 'arrow-down.gif', :alt => ""%></span>              
             <%= type.constantize::NAME %> 
           </dt>
-          <dd id="tag_category_<%= type %>" class="tags">
+          <dd id="tag_category_<%= type %>" class="tags toggled">
             <ul>              
               <% @filters[type].each do |tag_info| %>
                 <li>
@@ -44,15 +44,15 @@
         <%= radio_button_tag "boolean_type", 'or', params[:boolean_type] == 'or' %>
         <%= label_tag "boolean_type_or", "or (works with any of these tags)" %>      
       </dd>
-    </dl>
-    <p>
+    <dt class="landmark">Submit</dt>
+	 <dd class="submit actions"><%= submit_tag ts('Filter Works') %></dd>
+</dl>
+    <div>
       <%= hidden_field_tag("tag_id", @tag.name) if @tag %>
       <%= hidden_field_tag("query", @query) if @query %>
       <%= hidden_field_tag("fandom_id", @fandom.id) if @fandom %>
       <%= hidden_field_tag("pseud_id", @author.name) if @author %>
       <%= hidden_field_tag("user_id", @user.login) if @user %>
-    </p>
-    <div class="clear"><!--purely presentational for IE6; phase me out--></div>
-    <p class="submit"><%= submit_tag ts('Filter Works') %></p>
-  <% end %>
+    </div>
+<% end %>
 <% end %>

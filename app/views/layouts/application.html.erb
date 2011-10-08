@@ -14,7 +14,8 @@
     <meta name="robots" content="noindex" />
     <meta name="googlebot" content="noindex" />
   <% end %>
-  <title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+<title>
     <% if defined?(@page_title) %>
       <%= @page_title %>
     <% else %>
@@ -33,10 +34,11 @@
 
   </head>
 
-  <body onload="hideLogin();">
-  <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
+  <body>
+  <div id="outer" class="wrapper">
+    <ul id="skiplinks"><li><a href="#main"><%= ts('Main Content') %></a></li></ul>
   <%= render :partial => 'layouts/header' %>
-
+  <div id="inner" class="wrapper">
     <!-- BEGIN sidebar -->
     <% if @admin_posts %>
       <%= render :partial => 'admin_posts/sidebar' %>
@@ -51,13 +53,13 @@
 
     <!-- BEGIN main -->
     <div id="main" class="<%= classes_for_main %>" role="main">
-      <%= flash_div :error, :warning, :notice %>
+      <%= flash_div :error, :caution, :notice %>
       <%= yield  %>
     <div class="clear"><!--presentational--></div>
   </div>
     <!-- END main -->
-
+</div>
     <%= render :partial => 'layouts/footer' %>
-
+</div>
   </body>
 </html>

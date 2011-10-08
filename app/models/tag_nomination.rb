@@ -1,5 +1,5 @@
 class TagNomination < ActiveRecord::Base
-  belongs_to :tag_set_nomination #, :inverse_of => :tag_nominations
+  belongs_to :tag_set_nomination, :inverse_of => :tag_nominations
   has_one :owned_tag_set, :through => :tag_set_nomination
   
   attr_accessor :from_fandom_nomination
@@ -31,12 +31,16 @@ class TagNomination < ActiveRecord::Base
   # This makes sure no tagnames are nominated for different parents in this tag set
   validate :require_unique_tagname_with_parent
   def require_unique_tagname_with_parent
-    query = TagNomination.for_tag_set(self.tag_set_nomination.owned_tag_set).where(:tagname => self.tagname).where("parent_tagname != ?", (self.get_parent_tagname || ''))
+    query = TagNomination.for_tag_set(get_owned_tag_set).where(:tagname => self.tagname).where("parent_tagname != ?", (self.get_parent_tagname || ''))
     # let people change their own!
     query = query.where("tag_nominations.id != ?", self.id) if !(self.new_record?)
     if query.exists?
       errors.add(:base, ts("^Someone else has already nominated %{tagname} for this set but in a different fandom. Please be more specific.", :tagname => self.tagname))
     end
+  end
+
+  def get_owned_tag_set
+    @tag_set || self.tag_set_nomination.owned_tag_set
   end
 
   before_save :set_tag_status
