@@ -51,9 +51,12 @@ describe XhtmlSplitter do
     end
     
     it "should handle html with more than one root element" do
-      result = split_xhtml("<p>aaa</p><p>bbb</p><p>ccc</p>")
+      result = split_xhtml("<p>aaa</p>" * 40, 300)
+      result.size.should == 2
       doc = Nokogiri::HTML.fragment(result[0])
-      doc.xpath("./p").size.should == 3
+      doc.xpath("./p").size.should > 1
+      doc = Nokogiri::HTML.fragment(result[1])
+      doc.xpath("./p").size.should > 1
     end
     
     it "should produce valid splitted XHTML parts" do

@@ -20,9 +20,9 @@ module XhtmlSplitter
   # re-opened.
 
   def split_xhtml(html, maxbytes=280*1024)
-    doc = XSL.transform(Nokogiri::XML.parse("<myroot>#{html}</myroot>"))
-    html = doc.xpath("/myroot/*").to_s
     return [html] if html.bytesize < maxbytes
+    doc = XSL.transform(Nokogiri::XML.parse("<myroot>#{html}</myroot>"))
+    html = doc.children.to_s.gsub(/(\A<myroot>)|(<\/myroot>\Z)/, "")
 
     parts = []
     tag_stack = []
@@ -35,9 +35,9 @@ module XhtmlSplitter
         new_part = close_tags(new_part, tag_stack)
         if new_part.bytesize >= maxbytes
           raise Error, "Part too big."
-          # This might happen the last line before the split is very
-          # long. If we actually run into this problem, we could try
-          # to split the line further
+          # This might happen if the last line before the split is
+          # very long. If we actually do see this error in production,
+          # we could try to split the line further
         end
         parts << new_part
         new_part = open_tags(tag_stack)

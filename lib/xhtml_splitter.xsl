@@ -22,3 +22,5 @@
     <xsl:apply-templates select="@*|node()"/>
   </xsl:copy>
 </xsl:template>
+
+</xsl:stylesheet>
