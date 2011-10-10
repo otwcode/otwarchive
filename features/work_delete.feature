@@ -3,38 +3,26 @@ Feature: Delete Works
   Check that everything disappears correctly when deleting a work
 
   Scenario: Deleting a minimally valid work
-    Given basic tags
-      And all emails have been delivered
-      And I am logged in as "newbie" with password "password"
-    When I go to the new work page
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
-      And I fill in "content" with "Bad things happen, etc."
-      And I press "Preview"
-      And I press "Post"
-    Then I should see "Work was successfully posted."
-    When I go to the works page
-    Then I should see "All Hell Breaks Loose"
-    When I follow "All Hell Breaks Loose"
-      And I follow "Delete"
+    Given I am logged in as "newbie"
+      And I post the work "All Hell Breaks Loose"
+    When I delete the work "All Hell Breaks Loose"
     Then I should see "Your work All Hell Breaks Loose was deleted."
       And "newbie" should be emailed
-      # TODO: Figure out why these steps aren't working even though the feature is fine
+      # TODO: Figure out why these steps aren't working even though the feature is fine (multipart email?)
       # And the email should contain "All Hell Breaks Loose"
-      #And the email should contain "Your story All Hell Breaks Loose was deleted at your request."
-      #And the email should contain "If you have questions, please contact Support (http://archiveofourown.org/support)."
-      #And the email should contain "Attached is a copy of your work for your reference."
-      #And the email should contain "Bad things happen, etc."
+      # And the email should contain "Your story All Hell Breaks Loose was deleted at your request."
+      # And the email should contain "If you have questions, please contact Support (http://archiveofourown.org/support)."
+      # And the email should contain "Attached is a copy of your work for your reference."
+      # And the email should contain "Bad things happen, etc."
     When I go to the works page
     Then I should not see "All Hell Breaks Loose"
     When I go to newbie's user page
     Then I should not see "All Hell Breaks Loose"
 
+  # TODO: refactor the scenarios below >.<
   Scenario: Deleting minimally valid work when you have more than one pseud
     Given basic tags
-      And I am logged in as "newbie" with password "password"
+      And I am logged in as "newbie"
       And "newbie" creates the pseud "Pointless Pseud"
       And I follow "Edit"
       And I check "Is default"
@@ -52,8 +40,7 @@ Feature: Delete Works
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "All Hell Breaks Loose"
-    When I follow "All Hell Breaks Loose"
-      And I follow "Delete"
+    When I delete the work "All Hell Breaks Loose"
     Then I should see "Your work All Hell Breaks Loose was deleted."
       And 1 email should be delivered
     When I go to the works page
@@ -205,9 +192,7 @@ Feature: Delete Works
       And I am logged in as "thorough" with password "something"
     When I go to giftee's user page
     Then I should see "Gifts (1)"
-    When I follow "Gifts (1)"
-      And I follow "All Something Breaks Loose"
-      And I follow "Delete"
+    When I delete the work "All Something Breaks Loose"
     Then I should see "Your work All Something Breaks Loose was deleted."
     When I go to giftee's user page
     Then I should see "Gifts (0)"
