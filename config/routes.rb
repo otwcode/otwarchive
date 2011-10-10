@@ -145,11 +145,11 @@ Otwarchive::Application.routes.draw do
   resources :users do
     member do
       get :browse
-	  get :change_email
-	  post :change_email
+      get :change_email
+      post :change_email
       get :change_openid
       post :change_openid
-	  get :change_password
+      get :change_password
       post :change_password
       get :change_username
       post :change_username
@@ -437,6 +437,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :search
     end
+    resources :collection_items
   end
 
   resources :kudos, :only => [:create, :show]

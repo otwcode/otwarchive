@@ -234,6 +234,12 @@ When /^I delete the work "([^\"]*)"$/ do |work|
   click_button("Yes, Delete Work")
 end
 
+When /^I add my work to the collection$/ do
+  When %{I follow "Add To Collection"}
+  fill_in("collection_names", :with => "Various Penguins")
+  click_button("Add")
+end
+
 ### THEN
 
 Then /^I should see Updated today$/ do
