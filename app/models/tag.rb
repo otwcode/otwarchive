@@ -542,6 +542,7 @@ class Tag < ActiveRecord::Base
   # and get rid of the old filter_taggings as appropriate
   def update_filters_for_merger_change
     if self.merger_id_changed?
+      # setting the merger_id doesn't update the merger so we do it here
       if self.merger_id
         self.merger = Tag.find_by_id(self.merger_id)
       else
@@ -563,6 +564,10 @@ class Tag < ActiveRecord::Base
     if filter_tag  && !filter_tag.new_record?
       Work.with_any_tags([self, filter_tag].uniq).each do |work|
         if work.filters.include?(filter_tag)
+          # If the work filters already included the filter tag (e.g. because the
+          # new filter tag is a meta tag of an existing tag) we make sure to set
+          # the inheritance to false, since the work is now directly tagged with
+          # the filter or one of its synonyms
           ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
           ft.update_attribute(:inherited, false)
         else
@@ -586,14 +591,24 @@ class Tag < ActiveRecord::Base
   # for potential duplication (ie, works tagged with more than one synonymous tag)
   def remove_filter_taggings(old_filter=nil)
     if old_filter
+      # An old merger of a tag needs to be removed
+      # This means we remove the old merger itself and all its meta tags unless they
+      # should remain because of other existing tags of the work (or because they are
+      # also meta tags of the new merger)
       self.works.each do |work|
         filters_to_remove = [old_filter] + old_filter.meta_tags
         filters_to_remove.each do |filter_to_remove|
           if work.filters.include?(filter_to_remove)
+            # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
+            # meta. If any of these or its mergers (synonyms) are tags of the work, the
+            # filter_to_remove remains
             all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
             sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
             all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
+            # don't include self because at this point in time (before the save) self
+            # is still in the list of submergers from when it was a synonym to the old filter
             remaining_tags = work.tags - [self]
+            # instead we add the new merger of self (if there is one) as the relevant one to check
             remaining_tags += [self.merger] unless self.merger.nil?
             if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
               work.filters.delete(filter_to_remove)
@@ -615,19 +630,21 @@ class Tag < ActiveRecord::Base
   end
 
   def reset_filter_count
-    current_filter = self.filter
-    # we only need to cache values for user-defined tags
-    # because they're the only ones we access
-    if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
-      attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
-                    :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
-      if current_filter.filter_count
-        unless current_filter.filter_count.update_attributes(attributes)
-          raise "Filter count error for #{current_filter.name}"
-        end
-      else
-        unless current_filter.create_filter_count(attributes)
-          raise "Filter count error for #{current_filter.name}"
+    unless admin_settings.suspend_filter_counts?
+      current_filter = self.filter
+      # we only need to cache values for user-defined tags
+      # because they're the only ones we access
+      if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
+        attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
+          :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
+        if current_filter.filter_count
+          unless current_filter.filter_count.update_attributes(attributes)
+            raise "Filter count error for #{current_filter.name}"
+          end
+        else
+          unless current_filter.create_filter_count(attributes)
+            raise "Filter count error for #{current_filter.name}"
+          end
         end
       end
     end

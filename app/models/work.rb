@@ -718,7 +718,7 @@ class Work < ActiveRecord::Base
         else
           self.filters << filter
         end
-        filter.reset_filter_count unless admin_settings.suspend_filter_counts?
+        filter.reset_filter_count
       elsif !meta
         ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
         ft.update_attribute(:inherited, false)
