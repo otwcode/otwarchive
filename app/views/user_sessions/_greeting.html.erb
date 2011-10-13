@@ -2,8 +2,8 @@
   <div id="greeting">
     <p class="icon"><%= icon_display(current_user) %></p>
     <ul class="navigation actions" role="navigation">
-	    <li><%= link_to ts("Post New"), new_work_path %></li>
-      <li> <%= link_to ts("Log out"), logout_path %></li>
+	    <li><%= link_to ts("post new"), new_work_path %></li>
+      <li> <%= link_to ts("log out"), logout_path %></li>
     </ul>
   </div>
 
@@ -12,6 +12,6 @@
 	  <p class="icon"><%= icon_display(current_user) %></p>
 	  <ul class="navigation actions" role="navigation">
       <li><span class="current">Admin</span></li>
-      <li><%= link_to ts("Log out"), admin_logout_path %></li>
+      <li><%= link_to ts("log out"), admin_logout_path %></li>
   </div>
 <% end %>

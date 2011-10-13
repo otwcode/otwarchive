@@ -14,8 +14,8 @@ class Collection < ActiveRecord::Base
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
 
-  belongs_to :parent, :class_name => "Collection"
-  has_many :children, :class_name => "Collection", :foreign_key => "parent_id"
+  belongs_to :parent, :class_name => "Collection", :inverse_of => :children
+  has_many :children, :class_name => "Collection", :foreign_key => "parent_id", :inverse_of => :parent
 
   has_one :collection_profile, :dependent => :destroy
   accepts_nested_attributes_for :collection_profile
@@ -83,32 +83,31 @@ class Collection < ActiveRecord::Base
                              [ts("Prompt Meme"), "PromptMeme"],
                            ]
 
-  validate :must_have_owners, :on => :save
-  validate :collection_depth, :on => :save
-  validate :parent_exists, :on => :save
-  validate :parent_is_allowed, :on => :save
-
+  validate :must_have_owners
   def must_have_owners
     # we have to use collection participants because the association may not exist until after
     # the collection is saved
     errors.add(:base, ts("Collection has no valid owners.")) if (self.collection_participants + (self.parent ? self.parent.collection_participants : [])).select {|p| p.is_owner?}.empty?
   end
 
+  validate :collection_depth
   def collection_depth
     if (self.parent && self.parent.parent) || (self.parent && !self.children.empty?) || (!self.children.empty? && !self.children.collect(&:children).flatten.empty?)
-      errors.add(:base, ts("You cannot nest collections more than one deep."))
+      errors.add(:base, ts("Sorry, but %{name} is a subcollection, so it can't also be a parent collection.", :name => parent.name))
     end
   end
 
+  validate :parent_exists
   def parent_exists
     unless parent_name.blank? || Collection.find_by_name(parent_name)
       errors.add(:base, ts("We couldn't find a collection with name %{name}.", :name => parent_name))
     end
   end
 
+  validate :parent_is_allowed
   def parent_is_allowed
     if parent && parent == self
-      errors.add(:base, ts("Collections are not self-parenting."))
+      errors.add(:base, ts("You can't make a collection its own parent."))
     elsif parent && !parent.user_is_maintainer?(User.current_user)
       errors.add(:base, ts("You don't have permission to work on a subcollection of %{name}.", :name => parent.name))
     end

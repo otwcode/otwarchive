@@ -238,7 +238,8 @@ class WorksController < ApplicationController
       @work.challenge_claims << @challenge_claim
       @work.collections << @challenge_claim.collection
       TagSet::TAG_TYPES.each do |type|
-        eval("@work.#{type.pluralize}") << @challenge_claim.request_prompt.tag_set.with_type(type)
+        tags = @challenge_claim.request_prompt.tag_set.try(:with_type, type)
+        @work.send("#{type.pluralize}=", tags) if tags && tags.empty?
       end
     else
       @work.collection_names = @collection.name if @collection

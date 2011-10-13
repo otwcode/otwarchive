@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110908191743) do
+ActiveRecord::Schema.define(:version => 20111013010307) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(:version => 20110908191743) do
     t.boolean  "guest_downloading_off",                      :default => false,                 :null => false
     t.text     "banner_text"
     t.integer  "banner_text_sanitizer_version", :limit => 2, :default => 0,                     :null => false
+    t.integer  "default_skin_id"
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"
@@ -773,6 +774,8 @@ ActiveRecord::Schema.define(:version => 20110908191743) do
     t.boolean  "relationship_restrict_to_fandom",  :default => false, :null => false
     t.boolean  "character_restrict_to_tag_set",    :default => false, :null => false
     t.boolean  "relationship_restrict_to_tag_set", :default => false, :null => false
+    t.boolean  "title_required",                   :default => false, :null => false
+    t.boolean  "title_allowed",                    :default => false, :null => false
   end
 
   create_table "prompts", :force => true do |t|
@@ -900,8 +903,8 @@ ActiveRecord::Schema.define(:version => 20110908191743) do
   end
 
   create_table "skin_parents", :force => true do |t|
-    t.integer  "skin_id"
-    t.integer  "skin_parent_id"
+    t.integer  "child_skin_id"
+    t.integer  "parent_skin_id"
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -934,6 +937,13 @@ ActiveRecord::Schema.define(:version => 20110908191743) do
     t.float    "paragraph_margin"
     t.string   "headercolor"
     t.string   "accent_color"
+    t.string   "role"
+    t.string   "media"
+    t.string   "ie_condition"
+    t.string   "filename"
+    t.boolean  "do_not_upgrade",                             :default => false, :null => false
+    t.boolean  "cached",                                     :default => false, :null => false
+    t.boolean  "unusable",                                   :default => false, :null => false
   end
 
   add_index "skins", ["author_id"], :name => "index_skins_on_author_id"

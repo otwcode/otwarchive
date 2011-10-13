@@ -119,19 +119,32 @@ class ChallengeAssignmentsController < ApplicationController
       return unless load_collection
       @challenge = @collection.challenge if @collection
       signup_open and return unless !@challenge.signup_open
-
-      if params[:show_covered]
-        @defaulted_assignments = @collection.assignments.defaulted.order_by_requesting_pseud
+      access_denied and return unless @challenge.user_allowed_to_see_assignments?(current_user)
+      
+      @assignments = case
+      when params[:defaulted]
+        @collection.assignments.defaulted.order_by_requesting_pseud
+      when params[:fulfilled]
+        @collection.assignments.fulfilled.order_by_requesting_pseud
+      when params[:unfulfilled]
+        @collection.assignments.unfulfilled.order_by_requesting_pseud
       else
-        @defaulted_assignments = @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
+        @collection.assignments
       end
+      @assignments = @assignments.paginate :page => params[:page], :per_page => 20
 
-      @open_assignments = @collection.assignments.undefaulted.order_by_offering_pseud.paginate :page => params[:page], :per_page => 20
-
-      if !@challenge.user_allowed_to_see_assignments?(current_user)
-        @user = current_user
-        @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted
-      end
+      # if params[:show_covered]
+      #   @defaulted_assignments = @collection.assignments.defaulted.order_by_requesting_pseud
+      # else
+      #   @defaulted_assignments = @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
+      # end
+      # 
+      # @open_assignments = @collection.assignments.undefaulted.order_by_offering_pseud.paginate :page => params[:page], :per_page => 20
+      # 
+      # if !@challenge.user_allowed_to_see_assignments?(current_user)
+      #   @user = current_user
+      #   @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted
+      # end
 
     end
   end

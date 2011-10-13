@@ -2,84 +2,77 @@
 <p class="notice required">* <%= ts('Required information') %></p>
 <%= form_for(@collection, :html => {:multipart => true, :class => "post verbose collection"}) do |collection_form| %>
   <fieldset>
-  <legend>Header</legend>
+    <legend>Header</legend>
     <dl>
 
-     <% if @collection.new_record? && current_user.pseuds.size > 1 %>
-      <dt><%= label_tag "owner_pseuds[]", ts("Owner Pseud(s)") %>:</dt>
-      <dd><%= select_tag "owner_pseuds[]", options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %></dd>
-    <% else %>
-      <p><%= hidden_field_tag "owner_pseuds[]", [current_user.default_pseud.id] %></p>
-    <% end %>
+      <% if @collection.new_record? && current_user.pseuds.size > 1 %>
+        <dt><%= label_tag "owner_pseuds[]", ts("Owner Pseud(s)") %>:</dt>
+        <dd><%= select_tag "owner_pseuds[]", options_from_collection_for_select(current_user.pseuds, :id, :name, current_user.default_pseud), :multiple => true %></dd>
+      <% else %>
+        <p><%= hidden_field_tag "owner_pseuds[]", [current_user.default_pseud.id] %></p>
+      <% end %>
 
-    <dt><%= collection_form.label :icon %>:</dt>
-    <dd><%= collection_form.file_field :icon %></dd>
-
-  <% if @collection.children.empty? %>
-  <dt>
-    <%= collection_form.label :parent_name, ts("Parent Collection (that you maintain)") %>:</dt>
-    <dd title="parent collection you maintain">
-      <%= collection_form.text_field :parent_name, autocomplete_options("collection_parent_name", :autocomplete_token_limit => 1) %>
-    </dd>
-  <% end %>
-
-    <dt class="required"><%= collection_form.label :name, ts("Collection Name*") %>:<%= link_to_help "collection-name" %></dt>
-    <dd><%= collection_form.text_field :name %>
-	<p class="footnote">(letters, numbers, underscores)</p></dd>
+      <dt class="required"><%= collection_form.label :name, ts("Collection Name*") %>:<%= link_to_help "collection-name" %></dt>
+      <dd>
+        <%= collection_form.text_field :name %>
+  	    <p class="footnote">(letters, numbers, underscores)</p>
+    	</dd>
 
 
-  <dt class="required">
-    <%= collection_form.label :title, ts("Display Title*") %>:</dt>
-   <dd> <%= collection_form.text_field :title %>
-	<p class="footnote">(text only)</p></dd>
+      <dt class="required"><%= collection_form.label :title, ts("Display Title*") %>:</dt>
+      <dd>
+        <%= collection_form.text_field :title %>
+    	  <p class="footnote">(text only)</p>
+    	</dd>
 
-  <dt>
-    <%= collection_form.label :email, ts("Collection Email (optional)") %>:</dt>
-    <dd><%= collection_form.text_field :email, :size => 40 %>
-  </dd>
-  <dt>
-    <%= collection_form.label :header_image_url, ts("Custom Header URL") %>:</dt>
-   <dd><%= collection_form.text_field :header_image_url %>
-	<p class="footnote">JPG, GIF, PNG</p>
-  </dd>
-  <dt>
-    <%= collection_form.label :description, ts("Brief Description") %>:</dt>
-    <dd>
-<%= collection_form.text_area :description, :rows => 4, :cols => 60, :class => "description-field observe_textlength" %>
-    <%= live_validation_for_field('collection_description', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
-    <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) %>
-  </dd>
-</dl>
-</fieldset>
+      <% if @collection.children.empty? %>
+        <dt><%= collection_form.label :parent_name, ts("Parent Collection (that you maintain)") %>:</dt>
+        <dd title="parent collection you maintain">
+          <%= collection_form.text_field :parent_name, autocomplete_options("collection_parent_name", :autocomplete_token_limit => 1) %>
+        </dd>
+      <% end %>
+
+      <dt><%= collection_form.label :email, ts("Collection Email (optional)") %>:</dt>
+      <dd><%= collection_form.text_field :email, :size => 40 %></dd>
+
+      <dt><%= collection_form.label :icon %>:</dt>
+      <dd><%= collection_form.file_field :icon %></dd>
+
+      <dt><%= collection_form.label :header_image_url, ts("Custom Header URL") %>:</dt>
+      <dd>
+        <%= collection_form.text_field :header_image_url %>
+    	  <p class="footnote">JPG, GIF, PNG</p>
+      </dd>
+      <dt><%= collection_form.label :description, ts("Brief Description") %>:</dt>
+      <dd>
+        <%= collection_form.text_area :description, :rows => 4, :cols => 60, :class => "description-field observe_textlength" %>
+        <%= live_validation_for_field('collection_description', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
+        <%= generate_countdown_html("collection_description", ArchiveConfig.SUMMARY_MAX) %>
+      </dd>
+    </dl>
+  </fieldset>
   <% @collection.build_collection_preference unless @collection.collection_preference %>
   <%= collection_form.fields_for :collection_preference do |preference_form| %>
-<fieldset>
-  <legend>Preferences</legend>
-    <dl>
-  <dt><%= preference_form.check_box :moderated %></dt>
-    <dd><%= preference_form.label :moderated, ts("This collection is moderated") %> <%= link_to_help "moderated-collection" %>
-  </dd>
-  <dt>
-    <%= preference_form.check_box :closed %></dt>
-    <dd><%= preference_form.label :closed, ts("This collection is closed") %></dd>
-  <dt>
-    <%= preference_form.check_box :unrevealed %></dt>
-   <dd><%= preference_form.label :unrevealed, ts("This collection is unrevealed") %>
-  </dd>
-  <dt><%= preference_form.check_box :anonymous %></dt>
-    <dd><%= preference_form.label :anonymous, ts("This collection is anonymous") %>
-  </dd>
-  <dt>
-    <%= preference_form.check_box :show_random %>
-  </dt>
-  <dd>
-    <%= preference_form.label :show_random, ts("Show random works on the front page instead of the most recent") %>
-  </dd>
-  <dt><%= label_tag :challenge_type, ts("Type of challenge, if any") %>:</dt>
-  <% type = @collection.challenge ? @collection.challenge.class.name : @challenge_type %>
-  <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, type) %></dd>
-</dl>
-</fieldset>
+    <fieldset>
+      <legend>Preferences</legend>
+      <dl>
+        <dt><%= preference_form.check_box :moderated %></dt>
+        <dd><%= preference_form.label :moderated, ts("This collection is moderated") %> <%= link_to_help "moderated-collection" %></dd>
+        <dt><%= preference_form.check_box :closed %></dt>
+        <dd><%= preference_form.label :closed, ts("This collection is closed") %></dd>
+        <dt><%= preference_form.check_box :unrevealed %></dt>
+        <dd><%= preference_form.label :unrevealed, ts("This collection is unrevealed") %></dd>
+        <dt><%= preference_form.check_box :anonymous %></dt>
+        <dd><%= preference_form.label :anonymous, ts("This collection is anonymous") %></dd>
+        <dt><%= preference_form.check_box :show_random %></dt>
+        <dd>
+          <%= preference_form.label :show_random, ts("Show random works on the front page instead of the most recent") %>
+        </dd>
+        <dt><%= label_tag :challenge_type, ts("Type of challenge, if any") %>:</dt>
+        <% type = @collection.challenge ? @collection.challenge.class.name : @challenge_type %>
+        <dd><%= select_tag :challenge_type, options_for_select(Collection::CHALLENGE_TYPE_OPTIONS, type) %></dd>
+      </dl>
+    </fieldset>
   <% end %>
 
   <% @collection.build_collection_profile unless @collection.collection_profile %>

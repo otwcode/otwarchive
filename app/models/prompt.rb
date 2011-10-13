@@ -13,7 +13,7 @@ class Prompt < ActiveRecord::Base
   belongs_to :pseud
   has_one :user, :through => :pseud
 
-  belongs_to :challenge_signup, :touch => true
+  belongs_to :challenge_signup, :touch => true, :inverse_of => :prompts
 
   belongs_to :tag_set, :dependent => :destroy
   accepts_nested_attributes_for :tag_set
@@ -48,12 +48,19 @@ class Prompt < ActiveRecord::Base
   # based on the prompt restriction
   validates_presence_of :url, :if => :url_required?
   validates_presence_of :description, :if => :description_required?
+  validates_presence_of :title, :if => :title_required?
   def url_required?
     (restriction = get_prompt_restriction) && restriction.url_required
   end
   def description_required?
     (restriction = get_prompt_restriction) && restriction.description_required
   end
+  def title_required?
+    (restriction = get_prompt_restriction) && restriction.title_required
+  end
+  validates_length_of :title,
+    :maximum => ArchiveConfig.TITLE_MAX,
+    :too_long=> ts("must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
 
   validates :url, :url_format => {:allow_blank => true} # we validate the presence above, conditionally
 
@@ -311,14 +318,8 @@ class Prompt < ActiveRecord::Base
   
   # checks if a prompt has been filled in a prompt meme
   def unfulfilled?
-    if self.request_claims.blank?
+    if self.request_claims.empty? || !self.request_claims.fulfilled.exists?
       return true
-    else
-      self.request_claims.each do |claim| 
-        if claim.fulfilled? 
-          return false
-        end
-      end
     end
   end
 

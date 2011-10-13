@@ -1,15 +1,14 @@
 <div class="tag tagset"><!--this is probably what we should do for each feature, reckon?-->
 	<h2 class="heading"><%= ts("Review Nominations for %{title}", :title => @tag_set.title) %></h2>
 
-<h3 class="landmark heading">Navigation</h3>
-  <ul class="navigation actions" role="navigation">
-  	<% if @tag_set.user_is_owner?(current_user) %>
-      <li><%= link_to ts("Clear Nominations"), destroy_multiple_tag_set_nominations_path(@tag_set),
-        :confirm => ts('Are you certain you want to clear nominations for this tag set? (This will NOT affect tags you have approved, but it will clear the history of rejected tags.)'),
-        :method => :post %></li>
-    <% end %>
-    <li><%= link_to ts("Back To %{title}", :title => @tag_set.title), tag_set_path(@tag_set) %></li>
-  </ul>
+<ul class="navigation actions" role="navigation">
+	<% if @tag_set.user_is_owner?(current_user) %>
+    <li><%= link_to ts("Clear Nominations"), destroy_multiple_tag_set_nominations_path(@tag_set),
+      :confirm => ts('Are you certain you want to clear nominations for this tag set? (This will NOT affect the tags already in your set, but it will clear the history of rejected tags and users will be able to nominate again.)'),
+      :method => :post %></li>
+  <% end %>
+  <li><%= link_to ts("Back To %{title}", :title => @tag_set.title), tag_set_path(@tag_set) %></li>
+</ul>
 
 
 <ul class="notes">
@@ -19,43 +18,40 @@
   <li>You can approve or reject nominations, or leave them for later. Once a nomination
   has been either approved or rejected, it won't appear on this page again.</li>
   
-  <li>If you reject a fandom nomination, you automatically reject all character and relationship nominations submitted 
+  <li>If you reject a fandom nomination, we will automatically reject all character and relationship nominations submitted 
     for that fandom. We will <em>not</em> automatically approve character nominations.</li>
-
-  <li>If you approve an official synonym, we will automatically approve all the nominations with that synonym, 
-      but only add that one synonym to your tag set.</li>
-
-  <li>If your tag has the same name as an existing tag of another type (eg if you made a character tag "Firefly" but that tag was already used for the show), the archive will automatically tag on the type, so you'll see "Firefly - Character" in your tag set.</li> 
-
+    
+  <li>If you approve non-canonical fandoms and characters, you will have to set up associations for them.</li>
 </ul>
 
-<%= form_for :tag_set_nominations, :url => update_multiple_tag_set_nominations_path(@tag_set), :html => { :method => :put, :class => "tagset" } do |form| %>
+<%= form_for :tag_set_nominations, :url => update_multiple_tag_set_nominations_path(@tag_set), :html => { :method => :put, :class => "tagset review" } do |form| %>
   <%= error_messages_formatted @errors %>
 
   <% @tagnames_seen = {} %>
 
-  <ol class="review index">
-    <% if @nominations[:fandom] %>
-      <%= render "review_fandoms", :fandoms => @nominations[:fandom] %>
-      <% if @nominations[:cast] %>
-        <%= render "review_cast", :cast => @nominations[:cast] %>
-      <% end %>
-    <% end %>
-  
-    <% %w(character relationship freeform).each do |tag_type| %>
-      <% if @nominations[tag_type] %>
-        <li class="<%= tag_type %> listbox <%= cycle :odd, :even %>">
-          <h3 class="heading"><%= tag_type.classify.pluralize %></h3>
-          <ol class="tags index">
+  <% %w(cast fandom character relationship freeform).each do |tag_type| %>
+    <% if @nominations[tag_type] %>
+      <fieldset class="<%= tag_type %> listbox <%= cycle :odd, :even, :name => "top_level" %>">
+        <% heading = tag_type == "cast" ? ts("Already Approved Fandoms") : ts("#{tag_type.classify.pluralize}")%>
+        <legend><%= heading %></legend>
+        <h3 class="heading"><%= heading %></h3>
+          <%= check_all_none("Reject All", "Reject None", "reject") %>
+          <%= check_all_none("Approve All", "Approve None", "approve") %>
+        <ol class="tags index">
+          <% if tag_type == "fandom" %>
+            <%= render "review_fandoms", :fandoms => @nominations[:fandom] %>
+          <% elsif tag_type == "cast" %>
+            <%= render "review_cast", :cast => @nominations[:cast] %>
+          <% else %>
             <% @nominations[tag_type].each do |nom| %>
               <li><%= render "review_individual_nom", :nom => nom %></li>
             <% end %>
-          </ol>
-        </li>
-      <% end %>
+          <% end %>
+        </ol>
+      </fieldset>
     <% end %>
-  </ol>
-<div class="clear"><!--presentational--></div>
+  <% end %>
+
   <fieldset>
     <p class="submit"><%= submit_tag "Submit" %></p>      
   </fieldset>    

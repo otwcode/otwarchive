@@ -80,9 +80,13 @@ class TagNomination < ActiveRecord::Base
   before_save :set_approval_status
   def set_approval_status
     set_noms = tag_set_nomination
-    set_noms = fandom_nomination.tag_set_nomination if !set_noms && from_fandom_nomination          
+    set_noms = fandom_nomination.tag_set_nomination if !set_noms && from_fandom_nomination    
     self.rejected = set_noms.owned_tag_set.already_rejected?(tagname) || false
-    self.approved = set_noms.owned_tag_set.already_in_set?(tagname) || (synonym && set_noms.owned_tag_set.already_in_set?(synonym)) || false
+    if self.rejected
+      self.approved = false
+    else
+      self.approved = set_noms.owned_tag_set.already_in_set?(tagname) || (synonym && set_noms.owned_tag_set.already_in_set?(synonym)) || false
+    end
     true
   end
 

@@ -1,6 +1,6 @@
 <%= form_tag collections_url, :method => :get, :class => 'filters' do %>
   <h3 class="landmark heading">Filters</h3>
-<%= field_set_tag t('.filter_these', :default => 'Filter collections:') do %>
+<%= field_set_tag ts('Filter collections:') do %>
  		<dl class="filters" role="menu">
       <dt><%= label_tag 'collection_filters_title', "Filter by title or name" %></dt>
       <dd title="by title or name">

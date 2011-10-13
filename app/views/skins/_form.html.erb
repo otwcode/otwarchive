@@ -1,9 +1,4 @@
-
-<fieldset class="post skin">
-  <legend>Archive Skin</legend>
-  <h3 class="heading">Archive Skin</h3>
-
-  <fieldset>
+<fieldset>
     <legend>About</legend>
     <h3 class="heading">About</h3>
     <dl>      
@@ -31,14 +26,8 @@
 
   <fieldset>
     <legend>CSS</legend>
-    <h3 class="heading landark">CSS</h3>
-    <dl>
-      <dt>
-        <%= f.label :css, ts('CSS') %> 
-        <%= link_to_help "skins-creating" %>
-      </dt>
-      <dd><%= f.text_area :css, :cols => 70 %></dd>        
-    </dl>
+    <h3 class="heading"><%= f.label :css, ts('CSS') %> <%= link_to_help "skins-creating" %></h3>
+      <p><%= f.text_area :css, :cols => 70 %></p>        
   </fieldset>
   
   <fieldset class="verbose<%= (@skin.type || params[:skin_type]) == 'WorkSkin' ? ' hidden' : ''%>">
@@ -80,5 +69,4 @@
       <p class="actions" role="button"><%= link_to_add_section(ts("Add parent skin"), f, :skin_parents, "skin_parent_fields") %></p>
     </fieldset>
   </fieldset>
-        
-</fieldset>
+

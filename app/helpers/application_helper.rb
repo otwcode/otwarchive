@@ -219,6 +219,8 @@ module ApplicationHelper
   end  
   
   # Generates sorting links for index pages, with column names and directions
+  # BACK END, revision on this: remove the <span class="landmark"> etc 
+  # instead title the link "sort up" or "sort down" pls
   def sort_link(title, column=nil, options = {})
     condition = options[:unless] if options.has_key?(:unless)
 
@@ -279,7 +281,7 @@ module ApplicationHelper
   def expand_contract_shuffle(list_id, shuffle=true)
     ('<span class="action expand hidden" title="expand" action_target="#' + list_id + '"><a href="#">&#8595;</a></span>
     <span class="action contract hidden" title="contract" action_target="#' + list_id + '"><a href="#">&#8593;</a></span>').html_safe +
-    (shuffle ? ('<span class="action shuffle hidden" title="shuffle" action_target="#' + list_id + '"><a href="#">&#8645;</a></span>') : '').html_safe
+    (shuffle ? ('<span class="action shuffle hidden" title="shuffle" action_target="#' + list_id + '"><a href="#">&#8646;</a></span>') : '').html_safe
   end
   
   # returns the default autocomplete attributes, all of which can be overridden
@@ -472,19 +474,21 @@ module ApplicationHelper
     css_class
   end
   
-  def check_all_none
-    '<ul class="actions">
-      <li><a href="#" class="check_all">Check All</a></li>
-      <li><a href="#" class="check_none">Check None</a></li>
-    </ul>'.html_safe
+  def check_all_none(all_text="All", none_text="None", name_filter=nil)
+    filter_attrib = (name_filter ? " checkbox_name_filter=\"#{name_filter}\"" : '')    
+    ('<ul class="actions">
+      <li><a href="#" class="check_all"' + 
+      "#{filter_attrib}>#{all_text}</a></li>" +
+      '<li><a href="#" class="check_none"' + 
+      "#{filter_attrib}>#{none_text}</a></li></ul>").html_safe
   end
   
-  def submit_button(form, button_text=nil)
-    button_text ||= form.object.new_record? ? ts("Submit") : ts("Update")
-    content_tag(:p, form.submit(button_text), :class=>"submit")
+  def submit_button(form=nil, button_text=nil)
+    button_text ||= (form.nil? || form.object.nil? || form.object.new_record?) ? ts("Submit") : ts("Update")
+    content_tag(:p, (form.nil? ? submit_tag(button_text) : form.submit(button_text)), :class=>"submit")
   end
     
-  def submit_fieldset(form, button_text=nil)
+  def submit_fieldset(form=nil, button_text=nil)
     content_tag(:fieldset, content_tag(:legend, ts("Actions")) + submit_button(form, button_text))
   end
     

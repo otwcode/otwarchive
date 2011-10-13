@@ -36,7 +36,6 @@
   <% if @sort_and_filter %> 
   <!--sorting subnav-->
     <ul class="sorting actions" role="menu">
-       <li><%= link_to ts("New Collection"), new_collection_path %></li><li><h4 class="heading"><%= ts('Sort By') %></h4></li>
       <li><%= sort_link ts('Title'), "collections.title" %></li>
       <li><%= sort_link ts('Date'), "collections.created_at", {:sort_default => true, :desc_default => true} %></li>
       <li><%= sort_link ts('Size'), "item_count", {:desc_default => true} %></li>

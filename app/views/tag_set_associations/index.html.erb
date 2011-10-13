@@ -1,22 +1,42 @@
-<% unless @tags_to_associate.empty? %>
-  <h4 class="heading"><%= ts("Add Nominated Associations") %></h4>
-  <fieldset>
-    <ul class="navigation actions">
-      <li><a href="#" class="check_all">Check All</a></li>
-      <li><a href="#" class="check_none">Check None</a></li>
-    </ul>
-    <ul id="nominated_associations_to_add" class="options many">
-      <% @tags_to_associate.each do |tag| %>
-        <li>
-          <% association = @tag_set.tag_set_associations.build(:tag_id => tag.id, :parent_tagname => tag.parent_tagname) %>
-          <label class="action" for="<%= nested_field_id(tag_set_form, association, :create_association) %>">
-            <%= tag.name %> (<%= tag.parent_tagname %>)
-            <%= check_box_tag nested_field_name(tag_set_form, association, :create_association) %>
-          </label>
-          <%= hidden_field_tag nested_field_name(tag_set_form, association, :tag_id), tag.id %>
-          <%= hidden_field_tag nested_field_name(tag_set_form, association, :parent_tagname), tag.parent_tagname %>
-        </li>
-      <% end %>
-    </ul>
-  </fieldset>
+<div class="tag tagset"><!--this is probably what we should do for each feature, reckon?-->
+	<h2 class="heading"><%= ts("Review Associations for %{title}", :title => @tag_set.title) %></h2>
+
+<%= render "owned_tag_sets/navigation" %>
+
+<h3 class="heading landmark"><%= ts("Notes") %></h3>
+<ul class="notes">
+  <li>Nominated associations will appear only for tags that have already been added to your set.</li>
+  <li>If tags have been nominated in fandoms that are not in the archive and not in your set, you must first add the fandom to your set to associate them.</li>
+</ul>
+
+<!-- /descriptions-->
+
+<!--main content-->
+<%= form_tag update_multiple_tag_set_associations_path(@tag_set), :method => :put, :class => "tagset review" do %>
+  <%= error_messages_formatted @errors %>
+  
+  <% if @tags_to_associate.empty? %>
+    <p><%= ts("No nominated associations to review!") %></p>
+  <% else %>
+    <fieldset class="tagset listbox">
+      <legend>Approve Nominated Associations</legend>
+        <h3 class="heading"><%= ts("Approve Nominated Associations") %></h3>
+        <%= check_all_none %>
+        <ul id="nominated_associations_to_add" class="options many index">
+          <% @tags_to_associate.each do |tag| %>
+          <li>
+            <% fieldname = "create_association_#{tag.id}_#{tag.parent_tagname}" %>
+            <label class="action" for="<%= name_to_id(fieldname) %>">
+              <%= tag.name %> &#8594; <%= tag.parent_tagname %>
+              <%= check_box_tag fieldname %>
+            </label>
+          </li>
+        <% end %>
+      </ul>
+    </fieldset>
+  <% end %>
+  
+  <%= submit_fieldset %>
+    
 <% end %>
+</div>

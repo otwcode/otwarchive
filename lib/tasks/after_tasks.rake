@@ -289,30 +289,41 @@ namespace :After do
   desc "Convert existing prompt restriction tag sets to owned tag sets"
   task(:convert_tag_sets => :environment) do
     GiftExchange.includes(:prompt_restriction, :request_restriction, :offer_restriction).find_each do |exchange|
+      unless exchange.collection
+        puts "No collection for gift exchange #{exchange.id}!"
+        next
+      end
       owners = exchange.collection.all_owners
       title = exchange.collection.title
-      convert_restriction_tagset(exchange.prompt_restriction, owners, title)
-      convert_restriction_tagset(exchange.request_restriction, owners, title)
-      convert_restriction_tagset(exchange.offer_restriction, owners, title)
+      convert_restriction_tagset(exchange.prompt_restriction, owners, title + "_prompts")
+      convert_restriction_tagset(exchange.request_restriction, owners, title + "_requests")
+      convert_restriction_tagset(exchange.offer_restriction, owners, title + "_offers")
     end
     PromptMeme.includes(:request_restriction).find_each do |meme|
+      unless meme.collection
+        puts "No collection for prompt meme #{meme.id}!"
+        next
+      end
       owners = meme.collection.all_owners
       title = meme.collection.title
-      convert_restriction_tagset(meme.prompt_restriction, owners, title)
-      convert_restriction_tagset(meme.request_restriction, owners, title)
+      convert_restriction_tagset(meme.prompt_restriction, owners, title + "_prompts")
+      convert_restriction_tagset(meme.request_restriction, owners, title + "_requests")
     end
   end
   
   def convert_restriction_tagset(restriction, owner_pseuds, title)
     if restriction && restriction.tag_set_id
-      title.gsub!(/[\,\^\*\<\>\{\}\=\`\\\%]/, '_')
-      ots = OwnedTagSet.new(:tag_set_id => restriction.tag_set_id, :title => "Tag Set For #{title}")
+      tag_set_title = "Tag Set For #{title.gsub(/[^\w\s]+/, '_')}"
+      ots = OwnedTagSet.new(:tag_set_id => restriction.tag_set_id, :title => tag_set_title)
       # make all the owners of the collection the owners of the tag set
       owner_pseuds.each {|owner| ots.add_owner(owner)}
-      ots.save
-      restriction.owned_tag_sets << ots
-      restriction.tag_set_id = nil
-      restriction.save
+      if ots.save
+        restriction.owned_tag_sets << ots
+        restriction.tag_set_id = nil
+        restriction.save
+      else
+        puts "Couldn't convert #{tag_set_title}: #{ots.errors.to_s}"
+      end
     end
   end
 
@@ -347,8 +358,10 @@ end # this is the end that you have to put new tasks above
 # ADD NEW MIGRATE TASKS TO THIS LIST ONCE THEY ARE WORKING
 
 # Remove tasks from the list once they've been run on the deployed site
+# NOTE: 
 desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
 #task :After => ['autocomplete:reload_data']
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
-task :After => ['After:convert_tag_sets', 'After:load_site_skins', 'After:convert_existing_skins', 'autocomplete:reload_tagset_data']
+task :After => ['After:convert_tag_sets', 'After:load_site_skins', 'After:convert_existing_skins', 
+                'autocomplete:reload_data']

@@ -6,38 +6,38 @@
 1. Page regions*/
 
 /* HEADER*/
- #header           { background: #900 url(/images/header-red.png) top left repeat-x; color: #fffef9; font-family: FertigoProRegular, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; padding: 0.25em 0 0; position: relative }
+ #header           { background: #900 url(/images/legacy/header-red.png) top left repeat-x; color: #fffef9; font-family: FertigoProRegular, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; padding: 0.25em 0 0; position: relative }
  #header #login-block     { color: #fffef9; font-size: 0.75em; text-align: right; }
  #login li           { display: inline }
  p#greeting, ul#login, #search{ clear: right; float: right;  text-align:left; width:17.5em; padding:0 }
  #greeting.logged-out     { float: none; margin-top: 1em;  width:auto; padding-right: 0.5em; }
  #header h1         { float: left; font-size: 1.5em; margin: 0; padding-left: 0.75em }
- #header h1.collection     { background: #900 url(/images/header-red.png) top left repeat-x; border-bottom: 6px solid #111; float:none; margin-top:-.25em;}
+ #header h1.collection     { background: #900 url(/images/legacy/header-red.png) top left repeat-x; border-bottom: 6px solid #111; float:none; margin-top:-.25em;}
  #header a,#header a:visited
               { color: #fffef9; font-weight: 600; border: none;}
  #header a:hover       { color: #000; border: none;}
  #header ul.navigation     { border-left: 1px solid #111; clear: both; list-style: none; margin: 0 0 0 1em; position: relative }
  #header .navigation a,#header .navigation .current
-              { background: #fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; border: 1px solid #111; border-bottom: 0; color: #111; display: block; float: left; font-family: FertigoProRegular, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; font-weight: 100; margin: 0; padding: 0.5625em; text-decoration: none !important;}
+              { background: #fffef9 url(/images/legacy/fffef9-ccc.png) bottom left repeat-x; border: 1px solid #111; border-bottom: 0; color: #111; display: block; float: left; font-family: FertigoProRegular, Cambria, Candara, Corbel, Geneva, Verdana, Tahoma, Helvetica, Arial, sans-serif; font-weight: 100; margin: 0; padding: 0.5625em; text-decoration: none !important;}
  #header ul.admin       { margin-top: 2.375em; position: absolute; right: 1em; z-index: 50 }
  #header ul.admin a,#header ul.admin .current
               { border-bottom: 3px solid #111; float: right;}
- #header .clear         { background: url(/images/headergradient.png) top left repeat-x #fffef9; border-top: 6px solid #111; height: 20px }
+ #header .clear         { background: url(/images/legacy/headergradient.png) top left repeat-x #fffef9; border-top: 6px solid #111; height: 20px }
 
 /* DASHBOARD*/
  #dashboard ul         { background: #fffef9; border: 2px solid #111; float: left; font: 100 1em/1.5 'Lucida Grande', Geneva, Verdana, Helvetica, Arial, sans-serif; margin: 1em 1em 3em 1em; width: 10.5em }
  #dashboard a,#dashboard span
               { color: #111; display: block; padding: 0 0.5625em; border: none;}
  #dashboard li:hover,#dashboard a:hover
-              { background:#900 url(/images/header-red.png) bottom left repeat-x; color: #fffef9; border:none;}
+              { background:#900 url(/images/legacy/header-red.png) bottom left repeat-x; color: #fffef9; border:none;}
  #dashboard ul#subnav    { margin:0; border: none; border-bottom: 2px solid #111;}
 
 /* MAIN CONTENT */
  #main             { margin: 1em auto; padding: 0 1em; position: relative }
  #main.sidebar         { margin: 1em auto 1em 12em }
- #main.error         { background: #fffef9 url(/images/sadface.png) top right no-repeat; border: 0; font-weight: 700; min-height: 365px }
- #main.slow         { background: #fffef9 url(/images/ao3-502.png) top right no-repeat; border: 0; font-weight: 700; min-height: 365px }
- #main.maintenance       { background: #fffef9 url(/images/logo-ruby.png) top right no-repeat; }
+ #main.error         { background: #fffef9 url(/images/ao3_logos/sadface.png) top right no-repeat; border: 0; font-weight: 700; min-height: 365px }
+ #main.slow         { background: #fffef9 url(/images/ao3_logos/ao3-502.png) top right no-repeat; border: 0; font-weight: 700; min-height: 365px }
+ #main.maintenance       { background: #fffef9 url(/images/ao3_logos/logo-ruby.png) top right no-repeat; }
 
 /* FOOTER */
  #footer ul         { border-top: 1px solid #999; clear: both; color: #999; font-size: 0.75em; margin: 1.5em 0; padding: 1em; text-align: center }
@@ -51,15 +51,15 @@ NAVIGATION, ACTIONS (BUTTONS)*/
       {color:#900 !important;}
 
 #main ul.navigation, p.navigation, li.navigation, span.navigation, p.submit, dd.submit, span.submit
-      { margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
+      { margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/legacy/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:right; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
  .navigation li,li.navigation,  #main .navigation h4, .navigation div
       { display: inline }
 #main ul.edit-navigation 
-         { margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:left; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
+         { margin: 0.5em auto 1em; border:1px solid #bbb; background:#fffef9 url(/images/legacy/fffef9-ccc.png) bottom left repeat-x; padding:0.15em 0.5em 0.25em; float:left; border-radius:3em; -moz-border-radius:3em; -webkit-border-radius:2em;}
 	  .edit-navigation li  
 	  {display:inline;}
 #main .navigation a, #main ul.edit-navigation a, .submit input, .submit a, #main .navigation input
-         { background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
+         { font-family: "Lucida Grande","Lucida Sans Unicode", "Arial Unicode MS", sans-serif; background: transparent; border:0;  border-right:1px solid #ccc; border-left:1px solid #ccc; cursor: pointer; font-weight: 700; margin: 0 0.125em; padding: 0.25em 0.5em; text-decoration: none; width: auto }
 .submit input.text, #main .navigation input.text
          { cursor: text;}
 #main.admin_users-show .navigation form, #main.admin_users-show .navigation div
@@ -103,11 +103,11 @@ NAVIGATION, ACTIONS (BUTTONS)*/
 /*Navigation in tables*/
 #main table ul.navigation, table span.navigation, table span.input  {margin:auto; border:none; background:transparent; padding:0; float:none; border-radius:0; -moz-border-radius:0; -webkit-border-radius:0}
 #main table .navigation li a, #main td.submit input{ border:none; float:none}
-#main table td.navigation, td.submit {border:1px solid #bbb; background:#fffef9 url(/images/fffef9-ccc.png) bottom left repeat-x;}
+#main table td.navigation, td.submit {border:1px solid #bbb; background:#fffef9 url(/images/legacy/fffef9-ccc.png) bottom left repeat-x;}
 
 /* GROUPING: MODULE, WRAPPER, INDEX */
  .module,  .index        { width: 100%; position: relative; float: left; }
- .wrapper          { background: transparent url(/images/drop-shadow-light.gif) bottom right repeat-y; padding: 0 12px 13px 0;}
+ .wrapper          { background: transparent url(/images/legacy/drop-shadow-light.gif) bottom right repeat-y; padding: 0 12px 13px 0;}
 
 /* ROLES/STATES*/
  .own             { background: #eee; }
@@ -175,24 +175,24 @@ NAVIGATION, ACTIONS (BUTTONS)*/
                  { margin:0 0 3px }
 
  /*icon image replacement*/
-  .blurb .rating-general-audience {background:url("/images/rating-general-audience-s.png");}
-  .blurb .rating-explicit {background:url("/images/rating-explicit-s.png");}
-  .blurb .rating-mature {background:url("/images/rating-mature-s.png");}
-  .blurb .rating-notrated {background:url("/images/rating-notrated-s.png");}
-  .blurb .rating-teen {background:url("/images/rating-teen-s.png");}
-  .blurb .category-femslash {background:url("/images/category-femslash-s.png");}
-  .blurb .category-gen {background:url("/images/category-gen-s.png");}
-  .blurb .category-slash {background:url("/images/category-slash-s.png");}
-  .blurb .category-het {background:url("/images/category-het-s.png");}
-  .blurb .category-multi {background:url("/images/category-multi-s.png");}
-  .blurb .category-other {background:url("/images/category-other-s.png");}
-  .blurb .category-none {background:url("/images/category-none-s.png");}
-  .blurb .complete-no {background:url("/images/complete-no-s.png");}
-  .blurb .complete-yes {background:url("/images/complete-yes-s.png");}
-  .blurb .warning-yes {background:url("/images/warning-yes-s.png");}
-  .blurb .warning-no {background:url("/images/warning-no-s.png");}
-  .blurb .warning-choosenotto {background:url("/images/warning-choosenotto-s.png");}
-  .blurb .external-work {background:url("/images/external-work-s.png");}
+  .blurb .rating-general-audience {background:url("/images/skins/iconsets/legacy/rating-general-audience.png");}
+  .blurb .rating-explicit {background:url("/images/skins/iconsets/legacy/rating-explicit.png");}
+  .blurb .rating-mature {background:url("/images/skins/iconsets/legacy/rating-mature.png");}
+  .blurb .rating-notrated {background:url("/images/skins/iconsets/legacy/rating-notrated.png");}
+  .blurb .rating-teen {background:url("/images/skins/iconsets/legacy/rating-teen.png");}
+  .blurb .category-femslash {background:url("/skins/iconsets/legacy/images/category-femslash.png");}
+  .blurb .category-gen {background:url("/images/skins/iconsets/legacy/category-gen.png");}
+  .blurb .category-slash {background:url("/images/skins/iconsets/legacy/category-slash.png");}
+  .blurb .category-het {background:url("/images/skins/iconsets/legacy/category-het.png");}
+  .blurb .category-multi {background:url("/images/skins/iconsets/legacy/category-multi.png");}
+  .blurb .category-other {background:url("/images/skins/iconsets/legacy/category-other.png");}
+  .blurb .category-none {background:url("/images/skins/iconsets/legacy/category-none.png");}
+  .blurb .complete-no {background:url("/images/skins/iconsets/legacy/complete-no.png");}
+  .blurb .complete-yes {background:url("/images/skins/iconsets/legacy/complete-yes.png");}
+  .blurb .warning-yes {background:url("/images/skins/iconsets/legacy/warning-yes.png");}
+  .blurb .warning-no {background:url("/images/skins/iconsets/legacy/warning-no.png");}
+  .blurb .warning-choosenotto {background:url("/images/skins/iconsets/legacy/warning-choosenotto.png");}
+  .blurb .external-work {background:url("/images/skins/iconsets/legacy/external-work.png");}
  */end icon image replacement */
 
  .blurb .relationships       { background: #eee; }
@@ -217,14 +217,14 @@ NAVIGATION, ACTIONS (BUTTONS)*/
  .bookmark p.count         { float: right }
  .bookmark .count img,  .bookmark .symbol img
                 { height: 25px; width: 25px }
- .bookmark p.count span     { background: url(/images/category-none.png) top left no-repeat; border: 1px solid #eee; display: block; float: left; height: 25px; line-height: 1.875; margin: 0 2.5px 0 0; text-align: center; width: 25px }
+ .bookmark p.count span     { background: url(/images/skins/iconsets/legacy/category-none.png) top left no-repeat; border: 1px solid #eee; display: block; float: left; height: 25px; line-height: 1.875; margin: 0 2.5px 0 0; text-align: center; width: 25px }
  .bookmark .blurb         { border: 1px solid #ccc; padding: 0.125em 0.4em; }
  .bookmark .user         { clear:right; border: 1px solid #ddd; width:auto; margin: 0.25em 0.125em; padding: 0.125em; }
  #main .bookmark .user .navigation
                 { font-size: 0.8575em; margin: 0.5em 0 0.5em -.5em}
 
 /* COLLECTION, ANON, MYSTERY */
- .blurb .mystery          { background: url(/images/mystery-s.png) 0 0 no-repeat }
+ .blurb .mystery          { background: url(/images/skins/iconsets/legacy/mystery.png) 0 0 no-repeat }
 
 /* STATS*/
  .stats dt,.stats dd       { display: inline }
@@ -289,7 +289,7 @@ li.comment h4  { font-size: 1.25em; margin-top:0; }
         { top:0.875em;}
 
 /* KUDOS */
-p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background: url('/images/kudos.png') no-repeat;}
+p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background: url('/images/skins/iconsets/legacy/kudos.png') no-repeat;}
 
 /* SERIES */
  p.series             { text-align:center; margin: 0 auto 2.5em auto}
@@ -504,3 +504,62 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 
  /*#main ul.navigation .draft-chapter { background: #efd1d1 }*/
  #main ul.navigation .draft-chapter { color: red; }
+ 
+ /* this block has been added to give a reasonable display to this 1.0 style running on new html
+ though we earnestly recommend you update to site 2.0 instead */
+ .actions li 
+        { display:inline;}
+ #header h1 span.landmark
+         { height:auto;width:auto;opacity:1;font-size:100%;color:#fff;}
+ #header p.icon,#header h1 img,.tip
+         { display:none;}
+ #login .navigation,#header li.search
+         { text-align:right;float:right;}
+ #header #login a
+         { color:#fff;background:none;border:none;}
+ #header #login
+         { float:right;}
+ #header ul.main a
+         { border-bottom:1px solid #000;}
+ #header .search span.submit,#header search input
+         { display:inline;border:1px solid;border-radius:0;padding:0;margin:0}
+ #dashboard 
+        { width:12em; }
+ #dashboard ul 
+        { margin:1em;}
+ #main.dashboard 
+        { float:none; margin-left:12em }
+ #dashboard a:hover
+        { color: #000;}
+ 
+ .skins .blurb .icon
+         { height:50px;width:50px;}
+ .skins .blurb blockquote
+         { margin-left:65px;}
+ /*==LISTBOX*/
+ .listbox,fieldset fieldset.listbox
+         { clear:right;background:#ddd;border:2px solid #ccc;padding:0;outline:1px solid #fff;margin:0.643em;overflow:hidden;box-shadow:none;}
+ .listbox .heading
+         { display:inline-block;}
+ .listbox .landmark.heading,.listbox .tags .listbox,.listbox .lots ul li,.listbox .all ul li
+         { display:block;}
+ .listbox .heading,.listbox .heading a:visited
+         { margin:0;color:#222;margin-top:0;padding:0.25em;}
+ .listbox .index,.dashboard .listbox .index
+         { width:auto;padding:0.643em;float:none;clear:right;background:#fffef9;box-shadow:inset 1px 1px 3px #bbb;}
+ .listbox li.blurb
+         { box-shadow:none;}
+ /* modification:MEDIUM*/
+ li.listbox.medium
+         { min-height:17.5em;width:45%;float:left;clear:none;margin-right:1.5em;}
+ /*CONTEXTS*/
+ .fandoms-index li.listbox
+         { width:100%;}
+ .commas li.listbox:after
+         { content:none;}
+ /*INTERACTION context (show many/more/lots)*/
+ .listbox .all
+         { height:auto;}
+ .listbox .many ul
+         { overflow:auto;max-height:10em;}
+ 

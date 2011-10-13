@@ -21,12 +21,14 @@ class FandomNomination < TagNomination
   def reject_children
     character_nominations.each {|char| char.rejected = true; char.save}
     relationship_nominations.each {|rel| rel.rejected = true; rel.save}
+    true
   end
   
   after_save :update_child_parent_tagnames, :if => "tagname_changed?"
   def update_child_parent_tagnames
     character_nominations.each {|char| char.parent_tagname = self.tagname; char.save}
     relationship_nominations.each {|rel| rel.parent_tagname = self.tagname; rel.save}
+    true
   end
   
 end

@@ -1,4 +1,4 @@
-
+<% # expects "work" %>
 <li class="<% if is_author_of?(work) %>own <% end %>work blurb" id="work_<%= work.id %>" role="article">
 
   <% if !is_author_of?(work) && (work.unrevealed? || (work.anonymous? && !@over_anon_threshold && @search)) %>

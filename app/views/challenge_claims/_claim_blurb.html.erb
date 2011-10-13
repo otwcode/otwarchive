@@ -18,6 +18,7 @@
     <h5 class="heading">
       In <%= link_to collection.title, collection_url(collection) %>  
       <span class="byline">
+        By <%= claim.claiming_user.default_pseud.byline %>
         For 
         <% if claim.request_signup && !prompt.anonymous? %>
           <%= link_to(claim.request_signup.pseud.byline, collection_claim_path(claim.collection, claim)) %>

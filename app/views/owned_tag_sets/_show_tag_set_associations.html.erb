@@ -6,7 +6,7 @@
             select("parent_tags_tag_set_associations.name as parent, group_concat(tags.name ORDER BY tags.name) as children").each do |assoc| %>
       <li class="association listbox">
         <h3 class="heading"><%= assoc.parent %></h3>
-        <ol class="child tags index">
+        <ol class="child tags index commas">
           <%= assoc.children.split(',').map {|child| content_tag(:li, child)}.join("\n").html_safe %>
         </ol>
       </li>

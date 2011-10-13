@@ -1,7 +1,8 @@
-<%= form_tag compare_external_works_path, :class => 'search', :role => 'search', :method => :get do %>
+<%= form_tag compare_external_works_path, :class => 'simple search', :role => 'search', :method => :get do %>
     <fieldset>
       <legend>Search for external works</legend>
       <p title="URL">
+        <!--BACK END please title the text_field and remove this label-->
         <%= label_tag :external_work_url %>: 
         <%= text_field_tag :external_work_url, params[:external_work_url], autocomplete_options("external_work", :autocomplete_token_limit => 1) %>
         <%= submit_tag ts('Search') %>

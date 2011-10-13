@@ -1,18 +1,18 @@
 <li class="<% if tag_set.user_is_owner?(current_user) %>own<% end %> tagset picture blurb">
  	<div class="header module">
 		<h4 class="heading" title="name">
-		  <%= link_to tag_set.title, tag_set_path(tag_set) %>
-			<%= ts('by') %>
-			<%= tag_set.owners.map {|owner| link_to(owner.byline, owner.user)}.join(", ").html_safe %>
-		</h4>
+		  <%= link_to tag_set.title, tag_set_path(tag_set) %></h4>
 		<p class="datetime"><%= l(tag_set.updated_at.to_date) %></p>
-		<div class="icon"></div>
-	  <% if tag_set.moderators.length > 0 %>
-  		<h6 class="landmark heading">Mods</h6>
+		<h6 class="landmark heading">Owners and Mods</h6>
+	  <ul title="owned by" class="mods commas">
+		  <%= tag_set.owners.map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join("\n").html_safe %>
+		</ul>
+		 <% if tag_set.moderators.length > 0 %>
   		<ul title="moderated by" class="mods commas">
-  			<%= tag_set.moderators.map {|mod| content_tag(:li, link_to(mod.byline, mod.user))}.join(", ").html_safe %>
+  			<%= tag_set.moderators.map {|mod| content_tag(:li, link_to(mod.byline, mod.user))}.join("\n").html_safe %>
   	  </ul>
     <% end %>
+	<div class="icon"></div>
 	</div>
 
   <!--summary/descriptions-->
@@ -25,7 +25,7 @@
   <% if tag_set.tag_set %>
   	<dl class="stats" title="stats">
   	  <% %w(fandom character relationship freeform).each do |tag_type| %>
-  	    <dt><%= ts("#{tag_type.classify.pluralize}") %></dt>
+  	    <dt><%= ts("#{tag_type.classify.pluralize}") %>:</dt>
   	    <dd><%= tag_set.with_type(tag_type).count %></dd>
   	  <% end %>
     </dl>

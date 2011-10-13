@@ -48,15 +48,6 @@ Don't go further with the deploy until you have fixed the problem!"
 
   # sub tasks
 
-  desc "Build stylesheet cache"
-  task(:build_cache) do
-    File.open("#{CURRENT_DIR}/public/stylesheets/cached_for_screen.css", 'w') do |all|
-      ['system-messages', 'site-chrome', 'forms', 'live_validation', 'auto_complete'].each do |file|
-        all.write(File.read("#{CURRENT_DIR}/public/stylesheets/#{file}.css"))
-      end
-    end
-  end
-
   desc "Run svn update"
   task(:svn_update) do
     notice "Running svn update"
@@ -126,9 +117,9 @@ Don't go further with the deploy until you have fixed the problem!"
     notice "Deploying to revision #{@new_rev}..."
     ok_or_warn %Q{cap deploy:update -s revision=#{@new_rev}}
 
-    # create stylesheet cache in new current
-    notice "creating stylesheet cache"
-    Rake::Task['deploy:build_cache'].invoke
+    # create error pages
+    notice "creating error pages"
+    Rake::Task['deploy:build_error_pages'].invoke
 
     # copying allows you to overwrite subversion versions
     # but it means if you change something you have to change it in both places
