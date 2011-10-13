@@ -88,9 +88,10 @@
       </th>
       <th scope="col">
         Mass Wrangle
-        <% # FRONT END THESE BUTTONS NEED REVIEW %>
-        <a class="action" id="wrangle_all_select">All</a>
-        <a class="action" id="wrangle_all_deselect">None</a></span></dd>        
+     <ul class="actions" role="menu">
+        <li><a id="wrangle_all_select" title="select">All</a></li>
+        <li><a id="wrangle_all_deselect" title="select">None</a></li>
+      </ul>        
       </th>
       <th scope="col" title="sort by">
         <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
@@ -100,8 +101,10 @@
       <% end %>
       <th scope="col">
         Canonical
-        <a class="action" id="canonize_all_select">All</a>
-        <a class="action" id="canonize_all_deselect">None</a>
+        <ul class="actions" role="menu">
+            <li><a id="canonize_all_select" title="select">All</a></li>
+            <li><a id="canonize_all_deselect" title="select">None</a></li>
+          </ul>
       </th>
       <th scope="col" title="sort by">
         <%= sort_link ts('Taggings'), :taggings_count, {:desc_default => true} %>
@@ -111,8 +114,8 @@
   </thead>
   <tfoot>
       <tr>
-        <th scope="row">Action:</th>
-        <td colspan="5"><span class="submit actions"><%= submit_tag "Wrangle" %></span></td>
+        <th scope="row" colspan="5">Action:</th>
+        <td><span class="submit actions"><%= submit_tag "Wrangle" %></span></td>
       </tr>
     </tfoot>
       <tbody>

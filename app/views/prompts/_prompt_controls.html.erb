@@ -40,7 +40,7 @@
         end %>
       <% if @claimed == 1 %>
       <li class="claimed">
-        <%= ts("Claimed by you") %>
+        <%= link_to ts("Claimed by you"), collection_claim_path(claim.collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %>
       </li>
       <% else %>
       <li>

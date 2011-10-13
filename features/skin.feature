@@ -4,17 +4,17 @@ Feature: creating and editing skins
   Scenario: A user's initial skin should be set to default
   Given basic skins
     And I am logged in as "skinner"
-  When I follow "skinner"
-    And I follow "Preferences"
+  When I am on skinner's preferences page
   Then "Default" should be selected within "preference_skin_id"
   
   Scenario: A user should be able to choose a different public skin in their preferences
   Given basic skins
+    And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And I am logged in as "skinner"
-  When I change my skin to "Plain Text"
+  When I change my skin to "public skin"
   When I am on skinner's preferences page
-  Then "Plain Text" should be selected within "preference_skin_id"
-    And I should see "font-family: serif !important;" within "style"
+  Then "public skin" should be selected within "preference_skin_id"
+    And I should see "text-decoration: blink;" within "style"
   
   Scenario: A user should be able to create a skin with CSS
   Given basic skins
@@ -302,7 +302,6 @@ Feature: creating and editing skins
   When I am on the skins page
   Then I should not see "my skin"
     And I should see "Default"
-    And I should see "Plain Text"
     
   Scenario: The user who creates a skin should be able to edit it
   Given I am logged in as "skinner" 
@@ -321,7 +320,7 @@ Feature: creating and editing skins
     And I fill in "Description" with "Blinky love"
     And I check "skin_public"
     And I press "Create"
-  Then I should see "Skin preview should be set for the skin to be public"
+  Then I should see "You need to upload a screencap"
   When I attach the file "test/fixtures/skin_test_preview.png" to "skin_icon"
     And I press "Create"
   Then I should see "Skin was successfully created"
@@ -428,7 +427,6 @@ Feature: creating and editing skins
   Given basic skins
   When I am on the skins page
   Then I should see "Default by AO3"
-    And I should see "Plain Text by AO3"
   Given I am logged in as "skinner" 
   When I am on skin's new page
   Then I should see "CSS" within "dl"

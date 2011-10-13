@@ -11,7 +11,7 @@
 <!--trying out the same dl.index pattern as used on inspired-by lists etc-->
 <dl class="index">
 <% @collection_items.each do |collection_item| %>
-  <%= render :partial => 'item_form', :locals => {:collection_item => collection_item} %>
+  <%= render 'item_form', :collection_item => collection_item %>
 <% end %>
 </dl>
 <!--/content-->

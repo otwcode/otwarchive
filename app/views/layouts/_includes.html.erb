@@ -1,6 +1,6 @@
 <% set_site_skin %>
 <% roles = Skin::DEFAULT_ROLES_TO_INCLUDE %>
-<% if controller.controller_name == 'translations' || controller.controller_name == 'translation_notes' %>
+<% if controller && (controller.controller_name == 'translations' || controller.controller_name == 'translation_notes') %>
   <% roles << "translator" %>
 <% end %>
 <% if logged_in_as_admin? %>
@@ -8,7 +8,7 @@
 <% end %>
 <!-- % cache("#{@site_skin.id}-site-skin") do % -->
 
-<%= @site_skin.get_style(roles) %>
+<%= @site_skin.get_style(roles) if @site_skin %>
 
 <!--sandbox for developers	-->
 <%= stylesheet_link_tag 'sandbox' %>

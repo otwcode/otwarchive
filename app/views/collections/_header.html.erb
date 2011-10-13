@@ -3,12 +3,12 @@
 <div class="primary header module">
 	<h2 class="heading"><%= link_to_unless_current(@collection.title, @collection) %></h2>
 	<div class="icon">
-	<!-- back end if pos can we make this only print an img if there's one uploaded-->
+	<% #back end if pos can we make this only print an img if there's one uploaded  %>
 	<%= image_tag(@collection.icon.url(:standard), :size => "100x100", :alt => "") %></div>
 <!--/descriptions-->
 
 <!--subnav-->
-  <ul class="navigation actions" role="navigation">
+  <ul class="navigation actions" role="menu">
     <li><%= span_if_current t('.profile', :default =>"Profile"), collection_profile_path(@collection) %></li>
 
     <% if logged_in? && !@collection.closed? && @collection.challenge_type != "PromptMeme" %>

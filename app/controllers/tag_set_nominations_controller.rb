@@ -18,7 +18,7 @@ class TagSetNominationsController < ApplicationController
       flash[:notice] = ts("Which nominations did you want to work with?")
       redirect_to user_tag_set_nominations_path(@user) and return
     end
-    unless current_user.is_author_of?(@tag_set_nomination)
+    unless current_user.is_author_of?(@tag_set_nomination) || @tag_set.user_is_moderator?(current_user)
       flash[:notice] = ts("You can only see your own nominations.")
       redirect_to tag_set_path(@tag_set) and return
     end
@@ -132,7 +132,8 @@ class TagSetNominationsController < ApplicationController
   end
 
   def base_nom_query(tag_type)
-    TagNomination.where(:type => (tag_type.is_a?(Array) ? tag_type.map {|t| "#{t.classify}Nomination"} : "#{tag_type.classify}Nomination")).for_tag_set(@tag_set).unreviewed.limit(@nom_limit)
+    TagNomination.where(:type => (tag_type.is_a?(Array) ? tag_type.map {|t| "#{t.classify}Nomination"} : "#{tag_type.classify}Nomination")).
+      for_tag_set(@tag_set).unreviewed.limit(@nom_limit)
   end
   
   # set up various variables for reviewing nominations
@@ -144,21 +145,21 @@ class TagSetNominationsController < ApplicationController
 
     if @limit[:fandom] > 0
       # all char and rel tags happen under fandom noms
-      @nominations[:fandom] = base_nom_query("fandom")
+      @nominations[:fandom] = base_nom_query("fandom").order(:tagname)
       more_noms = true if @tag_set.fandom_nominations.unreviewed.count > @nom_limit
       if (@limit[:character] > 0 || @limit[:relationship] > 0) 
         @nominations[:cast] = base_nom_query(%w(character relationship)).
           join_fandom_nomination.
           where('fandom_nominations_tag_nominations.approved = 1').
-          order(:parent_tagname, :type)
+          order(:parent_tagname, :type, :tagname)
       end
     else
       # if there are no fandoms we're going to assume this is a one or few fandom tagset
-      @nominations[:character] = base_nom_query("character").order(:parent_tagname) if @limit[:character] > 0
-      @nominations[:relationship] = base_nom_query("relationship").order(:parent_tagname) if @limit[:relationship] > 0
+      @nominations[:character] = base_nom_query("character").order(:parent_tagname, :tagname) if @limit[:character] > 0
+      @nominations[:relationship] = base_nom_query("relationship").order(:parent_tagname, :tagname) if @limit[:relationship] > 0
       more_noms = true if (@tag_set.character_nominations.count > @nom_limit || @tag_set.relationship_nominations.count > @nom_limit)
     end
-    @nominations[:freeform] = base_nom_query("freeform") if @limit[:freeform] > 0
+    @nominations[:freeform] = base_nom_query("freeform").order(:tagname) if @limit[:freeform] > 0
     more_noms = true if @tag_set.freeform_nominations.count > @nom_limit
     
     if more_noms
@@ -206,7 +207,7 @@ class TagSetNominationsController < ApplicationController
     
     # OK, now we're going ahead and making piles of db changes! eep! D:
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
-      @tagnames_to_add = @approve[tag_type] + @synonym[tag_type]
+      @tagnames_to_add = @approve[tag_type]
       @tagnames_to_remove = @reject[tag_type]
       
       # do the name changes
@@ -236,6 +237,12 @@ class TagSetNominationsController < ApplicationController
       TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", @tagnames_to_add).update_all(:approved => true, :rejected => false)
       TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).update_all(:approved => true, :rejected => false)          
       TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", @tagnames_to_remove).update_all(:rejected => true, :approved => false)
+      if tag_type == "fandom"
+        # reject children of rejected fandom
+        TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", @tagnames_to_remove).each do |rejected_fandom_nom|
+          rejected_fandom_nom.reject_children
+        end
+      end
       @notice ||= []
       @notice << ts("Successfully added to set: %{approved}", :approved => @tagnames_to_add.join(', ')) unless @tagnames_to_add.empty?
       @notice << ts("Successfully rejected: %{rejected}", :rejected => @tagnames_to_remove.join(', ')) unless @tagnames_to_remove.empty?
@@ -274,11 +281,9 @@ class TagSetNominationsController < ApplicationController
           case action
           when "reject"
             @reject[type] << name
-          when "synonym"
-            @synonym[type] << name
           when "approve"
             @approve[type] << name unless params["#{type}_change_#{name}"].present? && (params["#{type}_change_#{name}"] != name)
-          when "change"
+          when "synonym", "change"
             next if val == name
             # this is the tricky one: make sure we can do this name change
             tagnom = TagNomination.for_tag_set(@tag_set).where(:type => "#{type.classify}Nomination", :tagname => name).first

@@ -5,9 +5,9 @@ class ChallengeSignup < ActiveRecord::Base
   belongs_to :pseud
   belongs_to :collection
 
-  has_many :prompts, :dependent => :destroy
-  has_many :requests, :dependent => :destroy
-  has_many :offers, :dependent => :destroy
+  has_many :prompts, :dependent => :destroy, :inverse_of => :challenge_signup
+  has_many :requests, :dependent => :destroy, :inverse_of => :challenge_signup
+  has_many :offers, :dependent => :destroy, :inverse_of => :challenge_signup
 
   has_many :offer_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'offer_signup_id', :dependent => :destroy
   has_many :request_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'request_signup_id', :dependent => :destroy
@@ -68,15 +68,12 @@ class ChallengeSignup < ActiveRecord::Base
         count = eval("@#{prompt_type}") ? eval("@#{prompt_type}.size") : eval("#{prompt_type}.size")
         unless count.between?(required, allowed)
           if allowed == 0
-            errors_to_add << t("challenge_signup.#{prompt_type}_not_allowed",
-              :default => "You cannot submit any #{prompt_type.pluralize} for this challenge.")
+            errors_to_add << ts("You cannot submit any #{prompt_type.pluralize} for this challenge.")
           elsif required == allowed
-            errors_to_add << t("challenge_signup.#{prompt_type}_mismatch",
-              :default => "You must submit exactly %{required} #{required > 1 ? prompt_type.pluralize : prompt_type} for this challenge. You currently have %{count}.",
+            errors_to_add << ts("You must submit exactly %{required} #{required > 1 ? prompt_type.pluralize : prompt_type} for this challenge. You currently have %{count}.",
               :required => required, :count => count)
           else
-            errors_to_add << t("challenge_signup.#{prompt_type}_range_mismatch",
-              :default => "You must submit between %{required} and %{allowed} #{prompt_type.pluralize} to sign up for this challenge. You currently have %{count}.",
+            errors_to_add << ts("You must submit between %{required} and %{allowed} #{prompt_type.pluralize} to sign up for this challenge. You currently have %{count}.",
               :required => required, :allowed => allowed, :count => count)
           end
         end

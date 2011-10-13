@@ -51,51 +51,75 @@ class OwnedTagSetsController < ApplicationController
   end
   
   def show
+    # don't bother collecting tags unless the user gets to see them
     if @tag_set.visible || @tag_set.user_is_moderator?(current_user)
 
+      # we use this to collect up fandom parents for characters and relationships
       @fandom_keys_from_other_tags = []
-      if @tag_set.has_type?("character")
-        @character_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), "character")
-        canonical_hash = Tag.names_by_parent(Character.in_tag_set(@tag_set), "fandom") 
-        # merge the values of the two hashes (each value is an array) as a set (ie remove duplicates)
-        @character_hash.merge!(canonical_hash) {|key, oldval, newval| (oldval | newval) }
-        remaining = @tag_set.with_type("character").with_no_parents.value_of(:name)
-        @character_hash["(No linked fandom - might need association)"] ||= []; @character_hash["(No linked fandom - might need association)"] += remaining unless remaining.empty?
-        @fandom_keys_from_other_tags += @character_hash.keys
-      end 
+      
+      # we use this to store the tag name results
+      @tag_hash = HashWithIndifferentAccess.new
+      
+      %w(character relationship).each do |tag_type|
+        if @tag_set.has_type?(tag_type)
+          ## names_by_parent returns a hash of arrays like so: 
+          ## hash[parent_name] => [child name, child name, child name] 
 
-      if @tag_set.has_type?("relationship") 
-        @relationship_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), "relationship")
-        canonical_hash = Tag.names_by_parent(Relationship.in_tag_set(@tag_set), "fandom") 
-        @relationship_hash.merge!(canonical_hash) {|key, oldval, newval| (oldval | newval) }
-        remaining = @tag_set.with_type("relationship").with_no_parents.value_of(:name)
-        @relationship_hash["(No linked fandom - might need association)"] ||= []; @relationship_hash["(No linked fandom - might need association)"] += remaining unless remaining.empty?
-        @fandom_keys_from_other_tags += @relationship_hash.keys
-      end 
+          # get the manually associated fandoms
+          assoc_hash = TagSetAssociation.names_by_parent(TagSetAssociation.for_tag_set(@tag_set), tag_type)
+          
+          # get canonically associated fandoms
+          canonical_hash = Tag.names_by_parent(tag_type.classify.constantize.in_tag_set(@tag_set), "fandom")
 
-      if @fandom_keys_from_other_tags && !@fandom_keys_from_other_tags.empty?
-        @fandom_keys_from_other_tags = @fandom_keys_from_other_tags.compact.uniq.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')} 
+          # merge the values of the two hashes (each value is an array) as a set (ie remove duplicates)
+          @tag_hash[tag_type] = assoc_hash.merge(canonical_hash) {|key, oldval, newval| (oldval | newval) }
+
+          # get any tags without a fandom
+          remaining = @tag_set.with_type(tag_type).with_no_parents
+          if remaining.count > 0
+            @tag_hash[tag_type]["(No linked fandom - might need association)"] ||= []
+            @tag_hash[tag_type]["(No linked fandom - might need association)"] += remaining.value_of(:name)
+          end
+
+          # store the parents 
+          @fandom_keys_from_other_tags += @tag_hash[tag_type].keys
+        end
       end
-
+      
+      # get rid of duplicates and sort
+      @fandom_keys_from_other_tags = @fandom_keys_from_other_tags.compact.uniq.sort {|a,b| a.gsub(/^(the |an |a )/, '') <=> b.gsub(/^(the |an |a )/, '')}       
+      
+      # now handle fandoms
       if @tag_set.has_type?("fandom")
-        @fandom_hash = Tag.names_by_parent(Fandom.in_tag_set(@tag_set), "media") 
-        @fandom_hash["(No Media)"] ||= []; @fandom_hash["(No Media)"] += @tag_set.with_type("fandom").with_no_parents.value_of(:name)
+        # Get fandoms hashed by media -- just the canonical associations
+        @tag_hash[:fandom] = Tag.names_by_parent(Fandom.in_tag_set(@tag_set), "media") 
+        
+        # get any fandoms without a media
+        if @tag_set.with_type("fandom").with_no_parents.count > 0
+          @tag_hash[:fandom]["(No Media)"] ||= []
+          @tag_hash[:fandom]["(No Media)"] += @tag_set.with_type("fandom").with_no_parents.value_of(:name)
+        end
 
-        # we want to collect and warn about any chars or relationships not in the fandoms
+        # we want to collect and warn about any chars or relationships not in the set's fandoms
         @character_seen = {}
         @relationship_seen = {}
-        @fandom_keys_from_other_tags -= @fandom_hash.values.flatten
+
+        # clear out the fandoms we're showing from the list of other tags
+        if @fandom_keys_from_other_tags && !@fandom_keys_from_other_tags.empty?
+          @fandom_keys_from_other_tags -= @tag_hash[:fandom].values.flatten
+        end
+
         @unassociated_chars = []
         @unassociated_rels = []
         unless @fandom_keys_from_other_tags.empty?
-          if @character_hash
-            @unassociated_chars = @character_hash.values_at(*@fandom_keys_from_other_tags).flatten.compact.uniq
+          if @tag_hash[:character]
+            @unassociated_chars = @tag_hash[:character].values_at(*@fandom_keys_from_other_tags).flatten.compact.uniq
           end 
-          if @relationship_hash
-            @unassociated_rels = @relationship_hash.values_at(*@fandom_keys_from_other_tags).flatten.compact.uniq
+          if @tag_hash[:relationship]
+            @unassociated_rels = @tag_hash[:relationship].values_at(*@fandom_keys_from_other_tags).flatten.compact.uniq
           end
         end
-      end      
+      end
     end
   end
 
@@ -133,20 +157,6 @@ class OwnedTagSetsController < ApplicationController
     flash[:notice] = ts("Tag set was successfully deleted.")
     redirect_to tag_sets_path
   end
-  
-  def review_associations
-    get_tags_to_associate
-  end
-  
-  def update_associations
-    if @tag_set.update_attributes(params[:owned_tag_set])
-      flash[:notice] = ts("Nominated associations were added.")
-      redirect_to tag_set_path(@tag_set)
-    else
-      get_tags_to_associate
-      render :action => :review_associations
-    end
-  end
 
   def batch_load
   end
@@ -180,23 +190,5 @@ class OwnedTagSetsController < ApplicationController
     @child_tags_in_set = @tags_in_set.where("type IN ('Relationship', 'Character')").value_of :name, :id 
   end
 
-  def get_tags_to_associate
-    # get the tags for which we have a parent nomination which doesn't already exist in the database 
-    @tags_to_associate = Tag.joins(:set_taggings).where("set_taggings.tag_set_id = ?", @tag_set.tag_set_id).
-      joins("INNER JOIN tag_nominations ON tag_nominations.tagname = tags.name").
-      joins("INNER JOIN tag_set_nominations ON tag_nominations.tag_set_nomination_id = tag_set_nominations.id").
-      where("tag_set_nominations.owned_tag_set_id = ?", @tag_set.id).
-      where("tag_nominations.parented = 0 AND tag_nominations.rejected != 1 AND EXISTS 
-        (SELECT * from tags WHERE tags.name = tag_nominations.parent_tagname)")
-      
-    # skip already associated tags
-    associated_tag_ids = TagSetAssociation.where(:owned_tag_set_id => @tag_set.id).value_of :tag_id    
-    @tags_to_associate = @tags_to_associate.where("tags.id NOT IN (?)", associated_tag_ids) unless associated_tag_ids.empty?
-          
-    # now get out just the tags and nominated parent tagnames in order of # nominations
-    @tags_to_associate = @tags_to_associate.select("DISTINCT tags.id, tags.name, tag_nominations.parent_tagname").
-      order("tags.name ASC")
-      
-  end
     
 end

@@ -1,13 +1,12 @@
 <!--SEARCHBROWSE Descriptive page name, messages and instructions-->
-<!--LIM REGULARISE THIS WITH TAGSET LISTBOX-->
 <% if @collection %>
-  <h2 class="heading"><%= link_to(@collection.title, @collection) %> > <%=h ts("Fandoms") %></h2>
+  <h2 class="heading"><%= link_to(@collection.title, @collection) %> > <%= ts("Fandoms") %></h2>
 <% elsif @medium %>
-  <h2 class="heading"><%= link_to ts('Fandoms'), media_path %> > <%=h @medium.name %></h2>
+  <h2 class="heading"><%= link_to ts('Fandoms'), media_path %> > <%= @medium.name %></h2>
 <% else %>
   <h2 class="heading"><%= link_to ts('Fandoms'), media_path %></h2>
 <% end %>
-
+<p>You can search this page by pressing <kbd>ctrl F</kbd> and typing in what you are looking for.</p>
 <% if @collection %>
 <div class="filters">
 	<h3 class="landmark heading"><%= ts('Filters') %></h3>
@@ -33,7 +32,7 @@
       <li id='letter-<%= letter %>' class='letter listbox'>
         <h3 class="heading">
           <%= letter %>
-          <span class="action top" title="top"><%= link_to "\&#8593;", "#alphabet" %></span>
+          <span class="action top" title="top"><%= link_to '&#8593;'.html_safe, "#alphabet" %></span>
         </h3>
         <ul class="tags index">
           <% for fandom in fandoms %>

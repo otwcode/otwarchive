@@ -93,14 +93,14 @@ hideIndicator = function() {
 
 createIbox = function(elem) {
 	// a trick on just creating an ibox wrapper then doing an innerHTML on our root ibox element
-	var strHTML = "<div id=\"ibox_w\" style=\"display:none;\"></div>";
-	strHTML +=	"<div id=\"ibox_progress\" style=\"display:none;\">";
+	var strHTML = "<div id=\"ibox_w\" aria-live=\"assertive\" aria-relevant=\"additions removals text\" role=\"dialog\" tabindex=\"-1\" style=\"display:none;\"></div>";
+	strHTML +=	"<div id=\"ibox_progress\" aria-busy=\"true\" style=\"display:none;\">";
 	strHTML +=  indicator_img_html;
 	strHTML +=  "</div>";
 	strHTML +=	"<div id=\"ibox_wrapper\" style=\"display:none\">";
-	strHTML +=	"<div id=\"ibox_content\" class=\"userstuff\"></div>";
+	strHTML +=	"<div id=\"ibox_content\" aria-busy=\"false\" class=\"userstuff\"></div>";
 	strHTML +=	"<div id=\"ibox_footer_wrapper\"><div id=\"ibox_close\" style=\"float:right;\">";
-	strHTML +=	"<a id=\"ibox_close_a\" href=\"javascript:void(null);\" class=\"action\">CLOSE</a></div>";
+	strHTML +=	"<a id=\"ibox_close_a\" href=\"javascript:void(null);\" class=\"action\" role=\"button\">CLOSE</a></div>";
 	strHTML +=  "<div id=\"ibox_footer\">&nbsp;</div></div></div></div>";
 
 	var docBody = document.getElementsByTagName("body")[0];

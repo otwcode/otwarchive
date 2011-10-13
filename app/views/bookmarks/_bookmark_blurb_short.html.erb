@@ -1,11 +1,10 @@
 <!-- This partial requires local variable 'bookmark' -->
-<li class="user<% if is_author_of?(bookmark) %> own<% end %> picture blurb">
+<li class="user<% if is_author_of?(bookmark) %> own<% end %> blurb">
 	<div class="header module">
-  	<h5 class="byline">
+  	<h5 class="byline heading">
       <%= ts("Bookmarked by ") %>
       <%= link_to(bookmark.pseud.byline, user_pseud_path(bookmark.pseud.user, bookmark.pseud)) %>
     </h5>
-  	 <div class="icon"></div>
 	   <p class="datetime"><%= set_format_for_date(bookmark.created_at) %></p>
 	</div>
 <!--tags-->

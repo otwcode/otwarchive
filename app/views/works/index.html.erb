@@ -40,7 +40,7 @@
 <% end %>
 <!--sorting subnav-->
   <ul class="sorting actions" role="menu">
-    <li><h4 class="heading"><%= t('.sort_by', :default => 'Sort By') %></h4></li>
+    <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
     <% unless @query.blank? %>
       <li><%= sort_link ts('Relevance') %></li>
     <% end %>

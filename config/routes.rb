@@ -72,12 +72,14 @@ Otwarchive::Application.routes.draw do
         post :destroy_multiple
       end
     end
-    resources :tag_set_associations, :only => [:index]
+    resources :associations, :controller => 'tag_set_associations', :only => [:index] do
+      collection do
+        put :update_multiple
+      end
+    end      
     member do
       get :batch_load
       put :do_batch_load
-      get :review_associations
-      put :update_associations
     end
   end
   resources :tag_nominations, :only => [:update]

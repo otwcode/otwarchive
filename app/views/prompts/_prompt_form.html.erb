@@ -12,26 +12,33 @@
 
 <% index ||= 0 %>
 <% required ||= false %>
-<% prompt_title = form.object.class.name %>
-<% prompt_type = prompt_title.downcase %>
+<% prompt_label = form.object.class.name %>
+<% prompt_type = prompt_label.downcase %>
 <% prompt_types = prompt_type.pluralize %>
 <% restriction = @challenge.send("#{prompt_type}_restriction") %>
 
 <fieldset class="tagset">
   <% if index.is_a? String %>
-    <% prompt_title += " #{index}" %>
+    <% prompt_label += " #{index}" %>
   <% else %>
-    <% prompt_title += " #{(index + 1)}" %>
+    <% prompt_label += " #{(index + 1)}" %>
   <% end %>
 
-  <legend><%= prompt_title %></legend>
-  <h3 class="heading"><%= form.object.new_record? ? prompt_title : link_to(prompt_title, collection_prompt_path(@collection, form.object)) %></h3>  
+  <legend><%= prompt_label %></legend>
+  <h3 class="heading"><%= form.object.new_record? ? prompt_label : link_to(prompt_label, collection_prompt_path(@collection, form.object)) %></h3>  
 
   <div>
     <%= form.hidden_field :collection_id, :value => @collection.id %>
   </div>
   
   <dl>
+    <% if restriction.title_allowed %>
+    <dt<%= restriction.title_required ? ' class="required"' : '' %>>
+      <%= form.label :title, ts("Title: ") %>
+    </dt>
+    <dd><%= form.text_field :title %></dd>
+    <% end %>    
+    
     <!-- tags section -->
     <%= render "prompts/prompt_form_tag_options", :form => form, :restriction => restriction %>
     
@@ -40,7 +47,7 @@
       <% url_label = @challenge.send("#{prompt_type}_url_label") %>
       <%= form.label :url , (url_label.blank? ? ts("Prompt URL: ") : url_label) %>
     </dt>
-    <dd><%= form.text_field :url, :size => 50 %></dd>
+    <dd><%= form.text_field :url %></dd>
     <% end %>
 
     <% if restriction.description_allowed  %>

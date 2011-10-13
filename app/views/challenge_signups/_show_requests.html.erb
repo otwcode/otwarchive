@@ -1,5 +1,9 @@
 <!-- expects local variable "challenge_signup" -->
+<div class="requests listbox">
+<h3 class="heading">Requests</h3>
+<ol class="index">
 <% challenge_signup.requests.each_with_index do |request, index| %>
-  <h3 class="heading"><%= link_to(ts("Request %{num}", :num => index+1), collection_prompt_path(challenge_signup.collection, request)) %></h3>
-  <%= render :partial => "challenge_signups/show_prompt", :locals => {:prompt => request, :display_anon => false} %>
+  <%= render "prompts/prompt_blurb", :prompt => request %>
 <% end %>
+</ol>
+</div>

@@ -15,21 +15,22 @@
 <!--/descriptions-->
 
 <!--Subnavigation, sorting and actions-->
-<%= form_tag tag_sets_path, :class => "simple search", :method => :get do |form| %>
-  <fieldset>
-	<p><%= label_tag "query", ts("Search: ") %>
-  <%= text_field_tag "query", @query %>
-  <%= submit_tag "Go" %></p>
-</fieldset>
-<% end %>
-
-<% if logged_in? %>
-    <h3 class="landmark heading">Navigation</h3>
     <ul class="navigation actions" role="navigation">
+    <li class="search" role="search">
+      <%= form_tag tag_sets_path, :class => "simple search", :method => :get do |form| %>
+      <fieldset>
+	      <!--BACK END pls :title => "search" the following text field instead of this p-->
+	      <p title="search">
+	      <%= text_field_tag "query", @query %>
+        <%= submit_tag "Search" %></p>
+      </fieldset>
+    <% end %>
+  </li>
+<% if logged_in? %>
     	<li><%= link_to ts("New Tag Set"), new_tag_set_path %></li>
     	<li><%= link_to ts("Tags"), tags_path %></li>
-    </ul>
   <% end %>
+</ul>
 
 <% if @tag_sets.empty? %>
   <%= ts("No tag sets found.") %>

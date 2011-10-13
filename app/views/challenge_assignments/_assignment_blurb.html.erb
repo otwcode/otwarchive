@@ -1,0 +1,40 @@
+<!--rough draft-->
+
+<dt><%= challenge_assignment_byline(assignment) %> <%= challenge_assignment_email(assignment) %></dt>
+<dd>
+    <% request = assignment.request_signup || assignment.pinch_request_signup %>
+    <% if request %>
+      For <%= link_to assignment.request_byline, collection_assignment_path(@collection, assignment) %>
+      <%= assignment.pinch_request_signup && assignment.pinch_request_signup == request ? "* (pinch recipient)" : "" %>
+    <% else %>
+      <strong>No Recipient</strong>
+    <% end %>
+
+<!--stats-->
+<dl class="stats">
+    <% if assignment.creation %>
+      <dt>Posted</dt>
+      <dd><%= link_to ts("%{published_at}", :published_at => assignment.creation.published_at), assignment.creation %></dd>
+      <% if assignment.creation.respond_to?(:word_count) %>
+        <dt>Words</dt>
+        <dd><%= ts("(%{count})", :count => assignment.creation.word_count) %></dd>
+      <% end %>
+      
+      <dt>Status</dt>
+      <% if !assignment.fulfilled? %>
+        <dd><strong><!--link to approve pane or allow an approve button-->
+        <%= ts("Unapproved") %></strong></dd>
+      <% end %>
+    <% else %>
+      <dd>Unposted</dd>
+    <% end %>
+  </dl>
+
+<!--actions-->
+<% unless assignment.fulfilled? %>
+      <%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>
+        <label class="action" title="default"><%= assignment_form.check_box :defaulted %></label>
+      <% end %>
+    <% end %>
+
+</dd>

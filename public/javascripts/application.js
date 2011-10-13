@@ -7,7 +7,6 @@ $j(document).ready(function() {
     // initSelect('languages_menu');
     setupToggled();
     if ($j('#work-form')) { hideFormFields(); };     
-    if ($j('form.filters')) { hideFilters(); };
     hideHideMe();
     showShowMe();
     handlePopUps();
@@ -18,9 +17,6 @@ $j(document).ready(function() {
       });
     $j('#hide-notice-banner').click(function () { $j('#notice-banner').hide(); });
     setupTooltips();
-
-    // Activating Best In Place 
-    jQuery(".best_in_place").best_in_place();
 });
 
 function visualizeTables() {
@@ -294,30 +290,6 @@ function hideFormFields() {
         });
         $j('#work-form').className = $j('#work-form').className;
     }
-}
-
-// Toggles items in filter list
-function toggleFilters(id, blind_duration) {
-  blind_duration = (blind_duration == null ? 0.2 : blind_duration = 0.2)
-  var filter = document.getElementById(id);
-  var filter_open = document.getElementById(id + "_open")
-  var filter_closed = document.getElementById(id + "_closed")
-  if (filter != null) {
-    $j(filter).toggle();
-    $j(filter_open).toggle();
-    $j(filter_closed).toggle();
-  }
-}
-
-// Collapses filter list if Javascript is enabled, unless an input from that filter is selected
-function hideFilters() {
-  var filters = $j('dd.tags');
-  filters.each(function(index, filter) {
-    var tags = $j(filter).find('input');
-    var selected = false;
-    tags.each(function(index, tag) {if ($j(tag).is(':checked')) selected=true});
-    if (selected != true) {toggleFilters(filter.id, 0);}
-  });  
 }
 
 // Hides the extra checkbox fields in prompt form

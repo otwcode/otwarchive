@@ -1,5 +1,6 @@
+<!--FRONT END REVIEW: where is this h2?-->
 <!-- descriptions-->
-<div id="collection-page" class="profile">
+<div id="collection-page" class="collection home profile">
   <!-- /descriptions-->
   <!--subnavigation, sorting and actions-->
   <!--/subnav-->
@@ -9,7 +10,7 @@
       :requester => @potential_match.request_signup.pseud.byline, :offerer => @potential_match.offer_signup.pseud.byline) %>
   </h3>
 
-  <div class="collection meta">
+  <div class="meta">
     <h3 class="heading">Summary</h3>
     <dl>
       <dt>Number of requests matched: </dt>
@@ -28,7 +29,8 @@
     </dl>
   </div>
 
-  <div class="collection preface">
+  <!--FRONT END REVIEW: DOUBT THIS IS A PREFACE-->
+  <div class="preface">
     <h3 class="heading"><%=h t("potential_matches.requests_for", :default => "Requests by %{requester}", :requester => @potential_match.request_signup.pseud.byline) %></h3>
     <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => @potential_match.request_signup} %>
     

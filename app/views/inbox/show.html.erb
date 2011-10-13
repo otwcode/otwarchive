@@ -34,7 +34,7 @@
         <blockquote class="userstuff"><%=raw sanitize_field(inbox_comment.feedback_comment, :content) %></blockquote>
         <p class="datetime"><%= distance_of_time_in_words_to_now(inbox_comment.created_at) %></p>
         <h5 class="landmark heading">Comment Actions</h5>
-        <ul class="navigation actions" role="navigation">
+        <ul class="navigation actions" role="menu">
           <% unless inbox_comment.read? %>
             <li><span class="unread">Unread</span></li>
           <% end %>

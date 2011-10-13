@@ -194,6 +194,7 @@ class OwnedTagSet < ActiveRecord::Base
     child_tagnames_to_add = []
     assocs_to_save = []
     failed = []
+    canonical = []
     
     association_lines.each do |line|
       children_names = line.split(',')
@@ -221,7 +222,7 @@ class OwnedTagSet < ActiveRecord::Base
         fandom_tagnames_to_add << parent_name unless added_parent
         added_parent = true
       end
-      failed << "#{parent_name}, #{failed_children.join(', ')}" unless failed_children.empty?
+      failed << "#{parent_name},#{failed_children.join(',')}" unless failed_children.empty?
     end
     
     # add the tags to the set

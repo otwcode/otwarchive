@@ -1,11 +1,11 @@
 <% # expects fandoms %>
 <% fandoms.each do |fandom| %>
   <% unless @tagnames_seen[fandom.tagname] %>
-    <% cast = TagNomination.for_tag_set(@tag_set).where(:parent_tagname => fandom.tagname).unreviewed.order(:type) %>
+    <% cast = TagNomination.for_tag_set(@tag_set).where(:parent_tagname => fandom.tagname).unreviewed.order(:type, :tagname) %>
     <li class="fandom listbox <%= cycle :odd, :even %>">
       <h3 class="heading">
         <%= fandom.tagname %></h3>
-      <div class=""><%= render "review_individual_nom", :nom => fandom %></div>
+      <%= render "review_individual_nom", :nom => fandom %>
       <% if cast.count > 0 %>
         <ol class="tags index">
           <% cast.each do |cast_nom| %>
