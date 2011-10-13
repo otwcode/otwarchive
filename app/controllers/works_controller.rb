@@ -6,8 +6,8 @@ class WorksController < ApplicationController
   before_filter :load_collection
   before_filter :users_only, :only => [ :new, :create, :import, :import_multiple, :drafts, :preview, :show_multiple ]
   before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :show_multiple, :edit_multiple ]
-  before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :destroy, :preview, :edit_tags, :update_tags ]
-  before_filter :check_ownership, :only => [ :edit, :update, :destroy, :preview ]
+  before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :confirm_delete, :destroy, :preview, :edit_tags, :update_tags ]
+  before_filter :check_ownership, :only => [ :edit, :update, :confirm_delete, :destroy, :preview ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
@@ -490,6 +490,9 @@ class WorksController < ApplicationController
 
   def preview_tags
     @preview_mode = true
+  end
+
+  def confirm_delete
   end
 
   # DELETE /works/1
