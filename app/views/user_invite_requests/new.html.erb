@@ -3,7 +3,6 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<h3 class="landmark heading">Actions</h3>
 <ul class="navigation actions" role="navigation">
    <li><%= span_if_current t('.invitations', :default =>"Invitations"), user_invitations_path(@user) %></li>
    <li><%= span_if_current "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></li>

@@ -136,11 +136,11 @@ class ChallengeAssignment < ActiveRecord::Base
   end
 
   def offer_byline
-    offer_signup ? offer_signup.pseud.byline : (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "- none -")
+    offer_signup && offer_signup.pseud ? offer_signup.pseud.byline : (pinch_hitter ? (pinch_hitter.byline + "* (pinch hitter)") : "- none -")
   end
 
   def request_byline
-    request_signup ? request_signup.pseud.byline : (pinch_request_signup ? (pinch_request_byline + "* (pinch recipient)") : "- None -")
+    request_signup && request_signup.pseud ? request_signup.pseud.byline : (pinch_request_signup ? (pinch_request_byline + "* (pinch recipient)") : "- None -")
   end
 
   def pinch_hitter_byline

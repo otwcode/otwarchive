@@ -16,13 +16,14 @@ background:purple; color:#555;}
 
 */
 
-/*OPERA 11 HEADER SEARCH V. TEMP FIX*/
+/*OPERA 11 HEADER SEARCH TEMP FIX*/
 @media not screen and (1) {
         #header fieldset {margin-bottom:-0.643em} 
 }
 
 /*DEVELOPMENT ONLY. DO NOT DEPLOY */
 #debug {display:none;}
+.blurb ul.required-tags:active, .blurb ul.required-tags a:active {outline:2px dotted red;}
 
 /*LISTBOX in dev
 expand collapse with growing boxes NEEDS JAVASCRIPT as onhover is not desirable
@@ -51,48 +52,10 @@ but I suggest simple and verbose views, with simple as default and verbose as ch
 /* MODE: SIMPLE, 3 or fewer
 experimental, developing here, (may combine with .toggled rules)
 drafting: form.simple {background:#ddd; float:none; display:table; margin:0.643em auto; padding:0.643em}*/
-.simple .search, .simple.search { display:table; margin:auto}
 .simple span.actions { float:none;}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 /*Some helpful notes
 0.875em/1.286 line height = 14px with 18px leading
-0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements
-
-We use simple hex greyscale: 
-0 1 2 3 4 5 6 7 8 9 a b c d e f
-0 = black.......greys.........f = white
-
----border colours, greyscale:
-darkest #999
-brightest #fff
----background colours
-form #ddd
-accent #ccc
-highlight #eee
----livery is red
-ao3/otw #900
-darker #700
-*/
-
-
-
-
-
-
-
+0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements */

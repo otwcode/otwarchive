@@ -1,7 +1,8 @@
+<% # expects "prompt" %>
 <li class="<% if is_author_of?(prompt) %>own <% end %>prompt blurb" role="article">
   <div class="header module">
     <h4 class="heading" title="title">
-      <%= prompt.title %>
+      <%= prompt.title || ts("Untitled") %>
       <%= ts("by %{person}", :person => prompt.anonymous? ? "Anonymous" : (prompt.pseud ? prompt.pseud.byline : prompt.challenge_signup.pseud.byline)) %>
     </h4>
 
@@ -16,14 +17,14 @@
     <!--required tags-->
 	  <%= get_symbols_for(prompt, tag_groups) %>
 	  <p class="datetime"><%= set_format_for_date(prompt.created_at) %></p>
-</div>
+  </div>
     
   <h6 class="landmark heading">Tags</h6>  
   <ul class="tags commas">
     <%= blurb_tag_block(prompt, tag_groups) %>
     <% any_types = TagSet::TAG_TYPES.select {|type| prompt.send("any_#{type}")} %>
     <% unless any_types.empty? %>
-      <%= any_types.map {|type| content_tag(:li, ts("Any %{type}", :type => type.capitalize), :class => "tag") }.html_safe %>
+      <%= any_types.map {|type| content_tag(:li, ts("Any #{type.capitalize}"), :class => "tag") }.join("\n").html_safe %>
     <% end %>
   </ul>
   <% if prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
@@ -48,4 +49,34 @@
   <% end %>   
 
   <%= render "prompts/prompt_controls", :challenge_signup => prompt.challenge_signup, :prompt => prompt %>
+  
+  <% unless (suppress_claims ||= false) %>  
+    <% # if prompt has been claimed list by whom %>
+    <% unless prompt.request_claims.unfulfilled.empty? %>
+      <div class="claims listbox">
+        <h7 class="heading"><%= ts("Claimed By")%></h7>
+        <ul class="index">
+          <% if prompt.collection.anonymous? %>
+            <%= ts("%{count} anonymous claimants", :count => prompt.request_claims.unfulfilled.count) %>
+          <% else %>
+            <%= User.for_claims(prompt.request_claims.unfulfilled.value_of(:id)).value_of(:login).map {|user| content_tag(:li, user)}.join("\n").html_safe %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+    <% # if prompt has been fulfilled list works %>
+    <% unless prompt.unfulfilled? %>
+      <div class="works listbox">
+        <h7 class="heading"><%= ts("Fulfilled By")%></h7>
+        <ul class="index">
+          <% prompt.request_claims.fulfilled.map(&:creation).each do |creation| %>
+            <% if creation.is_a?(Work) %>
+              <%= render "works/work_blurb", :work => creation %>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  <% end %>
 </li>

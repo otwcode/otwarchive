@@ -7,7 +7,7 @@
         <li><%= link_to '&#8593; '.html_safe + h(ts('Top')), :anchor => "main" %></li>
     <% end %>
     <% if @work && @previous_chapter %>
-        <li><%= link_to '&#8592'.html_safe + h(ts('Previous Chapter')), [@work, @previous_chapter] %></li>
+        <li><%= link_to '&#9664'.html_safe + h(ts('Previous Chapter')), [@work, @previous_chapter] %></li>
     <% end %>
     <% if @work && @next_chapter %>
         <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>

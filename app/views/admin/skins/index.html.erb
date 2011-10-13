@@ -34,7 +34,8 @@
       <% @unapproved_skins.each_with_index do |skin, i| %>
         <tr>
           <th scope="row">
-            <%= label_tag "make_official_#{skin.id}", (link_to skin.title, skin_path(skin)) %>
+            <% skin_name = skin.title.downcase.gsub(/ +/, '_') %>
+            <%= label_tag "make_official_#{skin_name}", (link_to skin.title, skin_path(skin)) %>
           </th>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
@@ -44,10 +45,10 @@
           </td>
           <td><%= text_field_tag "skin_admin_note[#{skin.id}]", h(skin.admin_note) %></td>
           <td>
-            <%= check_box_tag "make_official[]", skin.id, false, :id => "make_official_#{skin.id}" %>
+            <%= check_box_tag "make_official[]", skin.id, false, :id => "make_official_#{skin_name}" %>
           </td>
           <td>
-            <%= check_box_tag "make_rejected[]", skin.id, false, :id => "make_rejected_#{skin.id}" %>
+            <%= check_box_tag "make_rejected[]", skin.id, false, :id => "make_rejected_#{skin_name}" %>
           </td>
         </tr>
       <% end %>

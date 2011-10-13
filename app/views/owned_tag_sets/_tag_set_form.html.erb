@@ -1,6 +1,5 @@
 <% if @tag_set.new_record? %>
-  <h3 class="landmark heading">Navigation</h3>
-  <ul class="navigation actions" role="navigation">
+<ul class="navigation actions" role="navigation">
     <li><%= link_to ts("Back to Tag Sets"), tag_sets_path %></li>
   </ul>
 <% else %>
@@ -9,10 +8,11 @@
 
 <h3 class="landmark heading"><%= ts("Notes") %></h3>
 <ul class="notes">
-  <li>You can use tag sets when running a challenge.</li><!--are tagsets FOR challenges?-->
+  <li>Tag sets are used for running a challenge.</li>
   <li>"Visible" tag sets are shown to all users.</li>
   <li>"Usable" tag sets can be used by others in their challenges.</li> 
   <li>Tag sets that are open to nominations can take nominations from the public.</li> 
+  <li>Tag names have to be unique. If necessary the archive may add on the tag type. (For instance, if you entered a character "Firefly", you'd see "Firefly - Character" in your tag set instead since the tag Firefly is already used for the show.)</li>   
 </ul>
 
 <!-- /descriptions-->
@@ -34,7 +34,7 @@
     <% @tag_set.build_tag_set unless @tag_set.tag_set %>
     <%= tag_set_form.fields_for :tag_set do |internal_tag_set_form| %>
       <div><%= internal_tag_set_form.hidden_field :from_owned_tag_set, :value => true %></div>
-      <ul>
+
       <%= render "internal_tag_set_fields", :form => internal_tag_set_form %>
 
     <% end %>

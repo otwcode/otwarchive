@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
   has_many :challenge_signups, :through => :pseuds
   has_many :offer_assignments, :through => :pseuds
   has_many :pinch_hit_assignments, :through => :pseuds
-  has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'claiming_user_id'
+  has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'claiming_user_id', :inverse_of => :claiming_user
   has_many :gifts, :through => :pseuds
   has_many :gift_works, :through => :pseuds, :uniq => true
 
@@ -186,6 +186,11 @@ class User < ActiveRecord::Base
     login
   end
 
+
+  def self.for_claims(claims_ids)    
+    joins(:request_claims).
+    where("challenge_claims.id IN (?)", claims_ids)
+  end
 
   ### AUTHENTICATION AND PASSWORDS
   def active?

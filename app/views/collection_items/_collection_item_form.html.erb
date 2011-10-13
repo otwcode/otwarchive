@@ -2,7 +2,7 @@
 <% @collection_item ||= CollectionItem.new %>
 <% in_page ||= false %>
 <div id="collection-form">
-  <h3 class="heading"><% ts("Add %{title} to collections", :title => item.title) %></h3>
+  <h3 class="heading"><%= ts("Add %{title} to collections", :title => item.title) %></h3>
 
 <%= form_for([item, @collection_item], :url => {:controller => 'collection_items', :action => :create}) do |form| %>
 <dl>

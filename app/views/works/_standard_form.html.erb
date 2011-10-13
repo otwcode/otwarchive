@@ -81,54 +81,53 @@
       <!-- Inspiration / remix -->
       <dt class="parent">
        	<%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :class => "toggle_formfield" %>
- 		</dt>
+ 		  </dt>
       <dd class="parent">
         <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, or was inspired by another work") %> 
  
-      <!-- Toggles on with parent checkbox -->
-      <fieldset id="parent-options">
-        <dl>
-        <%= fields_for "work[parent_attributes]" do |p| %>
-          <dt><%= p.label :url %></dt>
-          <dd>
-            <%= p.text_field :url, :value => work_parent_value(:url) %>
-            <p class="important">For a work in the archive, only the url is required.</p>
-          </dd>
- 
-          <dt><%= p.label :title %></dt>
-          <dd><%= p.text_field :title, :value => work_parent_value(:title) %></dd>
- 
-          <dt><%= p.label :author %></dt>
-          <dd><%= p.text_field :author, :value => work_parent_value(:author) %></dd>
- 
-          <dt><%= p.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %>
-          </dt>
-          <dd><%= p.collection_select(:language_id, Language.all(:order => :short), :id, :name, :prompt => " ") =%></dd>
-           
-          <dt class="translation"><%= p.check_box :translation %></dt>
-          <dd class="translation">
-            <%= p.label :translation, ts("This is a translation") %>
-            <%= link_to_help "translation-link" %>
-          </dd>
-                   
-        <% end %>
- 
-        <% unless @work.parent_work_relationships.blank? %>
-          <dt><%= 'Current parent works' %></dt>
-          <% for related_work in @work.parent_work_relationships %>
-            <% if related_work.parent %>
+        <!-- Toggles on with parent checkbox -->
+        <fieldset id="parent-options">
+          <dl>
+          <%= fields_for "work[parent_attributes]" do |p| %>
+            <dt><%= p.label :url %></dt>
             <dd>
-              <ul class="navigation actions" role="navigation">
-                <li><%= link_to related_work.parent.title, related_work.parent %></li>
-                <li><%= link_to 'Remove', related_work, :confirm => 'Are you sure?', :method => :delete %></li>
-              </ul>
+              <%= p.text_field :url, :value => work_parent_value(:url) %>
+              <p class="important">For a work in the archive, only the url is required.</p>
             </dd>
+ 
+            <dt><%= p.label :title %></dt>
+            <dd><%= p.text_field :title, :value => work_parent_value(:title) %></dd>
+ 
+            <dt><%= p.label :author %></dt>
+            <dd><%= p.text_field :author, :value => work_parent_value(:author) %></dd>
+ 
+            <dt><%= p.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
+            <dd><%= p.collection_select(:language_id, Language.all(:order => :short), :id, :name, :prompt => " ") =%></dd>
+           
+            <dt class="translation"><%= p.check_box :translation %></dt>
+            <dd class="translation">
+              <%= p.label :translation, ts("This is a translation") %>
+              <%= link_to_help "translation-link" %>
+            </dd>
+                   
+          <% end %>
+ 
+          <% unless @work.parent_work_relationships.blank? %>
+            <dt><%= 'Current parent works' %></dt>
+            <% for related_work in @work.parent_work_relationships %>
+              <% if related_work.parent %>
+              <dd>
+                <ul class="navigation actions" role="navigation">
+                  <li><%= link_to related_work.parent.title, related_work.parent %></li>
+                  <li><%= link_to 'Remove', related_work, :confirm => 'Are you sure you want to delete the connection to this work?', :method => :delete %></li>
+                </ul>
+              </dd>
+              <% end %>
             <% end %>
           <% end %>
-        <% end %>
         </dl>
       </fieldset>
-	</dd>
+  	</dd>
  
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->

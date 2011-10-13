@@ -17,6 +17,9 @@ module PromptRestrictionsHelper
                           link_to_help("challenge-optional-tags"))
     result += content_tag(:dd, form.check_box(:optional_tags_allowed))
 
+    result += content_tag(:dt, form.label(:title_allowed, ts("Title:")))
+    result += required_and_allowed_boolean(form, "title")
+
     result += content_tag(:dt, form.label(:description_allowed, ts("Details/Description:")))
     result += required_and_allowed_boolean(form, "description")
 

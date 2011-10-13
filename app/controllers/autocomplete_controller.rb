@@ -2,7 +2,7 @@ class AutocompleteController < ApplicationController
   respond_to :json
   
   skip_before_filter :store_location
-  skip_before_filter :set_current_user, :except => [:collection_parent_name, :owned_tag_sets]
+  skip_before_filter :set_current_user, :except => [:collection_parent_name, :owned_tag_sets, :site_skins]
   skip_before_filter :fetch_admin_settings
   skip_before_filter :set_redirects
   skip_before_filter :sanitize_params # can we dare!

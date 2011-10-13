@@ -233,7 +233,7 @@ class Skin < ActiveRecord::Base
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
     style = ""
     if self.role != "override" && self.role != "site"
-      style += Skin.default.get_style(roles_to_include)
+      style += AdminSetting.default_skin ? AdminSetting.default_skin.get_style(roles_to_include) : ""
     end
     style += self.get_style_block(roles_to_include)
     style.html_safe
@@ -373,33 +373,36 @@ class Skin < ActiveRecord::Base
         if Rails.env.production?
           top_skin.cache!
         end
-        Rails.logger.info "Loaded site skin version #{version}"
       end
     end
   end
 
-  # Get the most recent version and find the topmost skin, cache it
-  def self.get_default_skin
-    topmost_version = Skin.skin_dir_entries(Skin.site_skins_dir, /^\d+\.\d+$/).last
-    current_topmost_skin = Skin.find_by_title_and_official("Archive #{topmost_version}", true)
-    if Rails.env.production?
-      current_topmost_skin.cache! unless current_topmost_skin.cached?
+  # Get the most recent version and find the topmost skin
+  def self.get_current_version
+    Skin.skin_dir_entries(Skin.site_skins_dir, /^\d+\.\d+$/).last
+  end
+  
+  def self.get_current_site_skin
+    current_version = Skin.get_current_version
+    if current_version
+      Skin.find_by_title_and_official("Archive #{Skin.get_current_version}", true)
+    else
+      nil
     end
-    return current_topmost_skin
   end    
 
   def self.default
-    AdminSetting.default_skin
+    Skin.find_by_title_and_official("Default", true) || Skin.create_default
   end
 
-  def self.plain_text
-    Skin.find_by_title_and_official("Plain Text", true) || Skin.import_plain_text
-  end
-
-  def self.import_plain_text
-    css = File.read(Rails.public_path + "/stylesheets/plain_text_skin.css")
-    skin = Skin.find_or_create_by_title_and_official(:title => "Plain Text", :css => css, :public => true, :official => true)
-    File.open(Rails.public_path + '/images/skins/previews/plaintext.png', 'rb') {|preview_file| skin.icon = preview_file}
+  def self.create_default
+    skin = Skin.find_or_create_by_title_and_official(:title => "Default", :css => "", :public => true, :role => "user")
+    current_version = Skin.get_current_version
+    if current_version
+      File.open(Skin.site_skins_dir + current_version + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+    else
+      File.open(Skin.site_skins_dir + '/preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+    end
     skin.official = true
     skin.save!
     skin

@@ -24,9 +24,9 @@
       <p class="actions">
         <noscript>  
           <% if params[:expand_fandoms] %>
-            <%= link_to ts("< Hide full list"), [@user, @author] %>
+            <%= link_to ts("Hide full list"), [@user, @author] %>
           <% else %>
-            <%= link_to ts("> Expand full list"), url_for(:expand_fandoms => true) %>
+            <%= link_to ts("Expand full list"), url_for(:expand_fandoms => true) %>
           <% end %>
         </noscript>
         <a class="fandom_full_list_open hidden"><%= ts("> Expand full list") %></a>

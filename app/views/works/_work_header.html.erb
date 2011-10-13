@@ -13,12 +13,12 @@
 <!-- BEGIN section where work skin applies -->
 <div id="workskin">
   <div class="preface">
-    <h2 class="title">
+    <h2 class="title heading">
       <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
       <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
       <%= @work.title.html_safe %>
     </h2>
-    <h3 class="byline">
+    <h3 class="byline heading">
       <%= byline(@work) %>
     </h3>
 

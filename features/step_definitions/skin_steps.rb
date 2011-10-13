@@ -2,7 +2,6 @@ DEFAULT_CSS = "\"#title { text-decoration: blink;}\""
 
 Given /^basic skins$/ do
   assert Skin.default
-  assert Skin.plain_text
   assert WorkSkin.basic_formatting
 end
 
@@ -43,6 +42,7 @@ Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name,
   Given "I attach the file \"test/fixtures/skin_test_preview.png\" to \"skin_icon\""
   check("skin_public")
   click_button("Create")
+  Then I should see "Skin was successfully created"
 end
 
 Given /^the unapproved public skin "([^"]*)"$/ do |skin_name|
@@ -52,7 +52,7 @@ end
 Given /^I approve the skin "([^"]*)"$/ do |skin_name|
   Given "I am logged in as an admin"
   visit admin_skins_url
-  check("#{skin_name}")
+  check("make_official_#{skin_name.gsub(/\s/, '_')}")
   click_button("Update")
 end
 

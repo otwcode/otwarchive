@@ -47,7 +47,7 @@
 
   <div class="user module<% if is_author_of?(bookmark) %> own<% end %>">
     <!--bookmarker, time-->
-    <h5 class="byline">
+    <h5 class="byline heading">
       <%= ts("Last bookmarked by ") %>
       <%= link_to(bookmark.pseud.byline, user_pseud_path(bookmark.pseud.user, bookmark.pseud)) %>
     </h5>

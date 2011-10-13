@@ -1,4 +1,4 @@
-<div id="collection-page" class="collection prompt profile">
+<div id="collection-page" class="collection prompt home">
 <!--BACK END, NOT REALLY SURE WHAT THIS PAGE DOES - CAN IT HAVE A LISTBOX OF WORK BLURBS AT BOTTOM?-->
   <% request = @challenge_claim.request_signup %>
   <h3 class="heading">
@@ -12,8 +12,7 @@
 
   <div class="module">
     <% if request %>
-      <h3 class="heading"><%=h ts("Request by %{requester}", :requester => @challenge_claim.request_prompt.anonymous? ? "Anonymous" : request.pseud.byline) %></h3>
-      <%= render :partial => "challenge_signups/show_prompt", :locals => {:prompt => @challenge_claim.request_prompt, :display_anon => true} %>
+      <%= render "prompts/prompt_blurb", :prompt => @challenge_claim.request_prompt %>
     <% else %>
       <p class="note">No request! Contact <!--BACK END please linkify-->challenge moderators for help.</p>
     <% end %>

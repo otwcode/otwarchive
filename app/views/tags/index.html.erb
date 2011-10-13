@@ -2,6 +2,7 @@
 <h2 class="heading">Tags</h2>
 <% unless @collection %>
 <ul role="navigation" class="navigation actions" role="navigation">
+  <li class="search"><%= render :partial => 'tags/search_form' %></li>
   <% if logged_in? %><li><%= link_to ts("Tag Sets"), tag_sets_path %></li><% end %>
   <!--BACK END, please make this span_if_current-->
   <li><%= link_to_if params[:show], ts('Most Popular'), tags_path %></li>
@@ -25,5 +26,3 @@
 </ul>
 <% end %>
 
-
-<%= render :partial => 'tags/search_form' %>

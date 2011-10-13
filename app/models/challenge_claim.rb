@@ -2,6 +2,7 @@ class ChallengeClaim < ActiveRecord::Base
   # We use "-1" to represent all the requested items matching 
   ALL = -1
 
+  belongs_to :claiming_user, :class_name => "User", :inverse_of => :request_claims
   belongs_to :collection
   belongs_to :request_signup, :class_name => "ChallengeSignup"
   belongs_to :request_prompt, :class_name => "Prompt"

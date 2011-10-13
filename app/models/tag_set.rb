@@ -108,6 +108,9 @@ class TagSet < ActiveRecord::Base
       tags_to_remove = (self.tags - new_tags)
     end
     
+    tags_to_remove.uniq!
+    tags_to_add.uniq!
+    
     # actually remove and add the tags, and update autocomplete
     self.tags -= tags_to_remove
     remove_tags_from_autocomplete(tags_to_remove)
@@ -251,7 +254,7 @@ class TagSet < ActiveRecord::Base
   
   protected
     def tagnames_to_list(taglist, type=nil)
-      taglist = (taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : taglist)
+      taglist = (taglist.kind_of?(String) ? taglist.split(ArchiveConfig.DELIMITER_FOR_INPUT) : taglist).uniq
       if type
         if Tag::USER_DEFINED.include?(type.classify)
           # allow users to create these
