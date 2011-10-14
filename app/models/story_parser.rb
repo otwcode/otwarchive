@@ -50,7 +50,7 @@ class StoryParser
 
   # places for which we have a download_chaptered_from
   # to get a set of chapters all together
-  CHAPTERED_STORY_LOCATIONS = %w(ffnet efiction)
+  CHAPTERED_STORY_LOCATIONS = %w(ffnet efiction_exceptions efiction)
 
   # regular expressions to match against the URLS
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
@@ -61,8 +61,9 @@ class StoryParser
   SOURCE_DEVIANTART = 'deviantart\.com'
   SOURCE_LOTRFANFICTION = 'lotrfanfiction\.com'
   SOURCE_TWILIGHTARCHIVES = 'twilightarchives\.com'
+  SOURCE_EFICTION_EXCEPTIONS = '(the\-archive\.net)'
   SOURCE_EFICTION = 'viewstory\.php'
-
+  
   # time out if we can't download fast enough
   STORY_DOWNLOAD_TIMEOUT = 60
   MAX_CHAPTER_COUNT = 200
@@ -407,9 +408,6 @@ class StoryParser
         story = eval("download_from_#{source.downcase}(location)")
       end
 
-      # clean up any erroneously included string terminator (Issue 785)
-      story = story.gsub("\000", "")
-      
       #story = fix_bad_characters(story)
       # ^ This eats ALL special characters. I don't think we need it at all
       # so I'm taking it out. If we want it back, it should be the last
@@ -439,6 +437,18 @@ class StoryParser
         }
       end
       return text
+    end
+    
+    # this is an efiction archive but it doesn't handle chapters normally
+    # best way to handle is to get the full story printable version
+    def download_chaptered_from_efiction_exceptions(location)
+      if location.match(/^(.*)\/.*viewstory\.php.*sid=(\d+)($|&)/i)
+        location = "#{$1}/viewstory.php?action=printable&psid=#{$2}"
+      end
+      @chapter_contents = []
+      body = download_with_timeout(location)
+      @chapter_contents << body unless body.nil?
+      return @chapter_contents
     end
 
     # grab all the chapters of the story from ff.net
@@ -473,14 +483,20 @@ class StoryParser
         site = $1
         storyid = $2        
         chapnum = 1
+        last_body = ""
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           loop do
             url = "#{site}/viewstory.php?action=printable&sid=#{storyid}&chapter=#{chapnum}"
             body = download_with_timeout(url)
-            if body.nil? || chapnum > MAX_CHAPTER_COUNT || body.match(/<div class='chaptertitle'> by <\/div>/) || body.match(/Access denied./) || body.match(/Chapter : /)
+            if body.nil? || chapnum > MAX_CHAPTER_COUNT
               break
             end
-            
+            if body == last_body
+              # whoops, hit some other kind of chapter ending we don't know, get rid of previous
+              @chapter_contents.pop
+              break
+            end
+            last_body = body
             @chapter_contents << body
             chapnum = chapnum + 1
           end
@@ -1003,6 +1019,9 @@ class StoryParser
       if story.blank?
         raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete, and try again."
       end
+      
+      # clean up any erroneously included string terminator (Issue 785)
+      story.gsub!("\000", "")
       story
     end
 

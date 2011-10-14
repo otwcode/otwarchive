@@ -150,7 +150,7 @@ Feature: Import Works
     Given basic tags
       And I am logged in as a random user
     When I go to the import page
-      And I fill in "urls" with "http://www.the-archive.net/viewstory.php?sid=1910"
+      And I fill in "urls" with "http://www.the-archive.net/viewstory.php?sid=1909"
     When I press "Import"
     Then I should see "Preview Work"
       And I should see "When I get out of here"
