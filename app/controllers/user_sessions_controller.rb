@@ -83,7 +83,7 @@ class UserSessionsController < ApplicationController
           elsif user.active?
             if @user_session.being_brute_force_protected? 
            
-              message = ts("Your account has been locked for 30 minutes due to too many failed login attempts.")
+              message = ts("Your account has been locked for 5 minutes due to too many failed login attempts.")
             else
               message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
             end
