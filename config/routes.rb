@@ -244,6 +244,7 @@ Otwarchive::Application.routes.draw do
       get :preview_tags
       put :update_tags
       get :marktoread
+      get :confirm_delete
     end
     resources :bookmarks
     resources :chapters do

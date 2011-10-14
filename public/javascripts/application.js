@@ -17,6 +17,12 @@ $j(document).ready(function() {
       });
     $j('#hide-notice-banner').click(function () { $j('#notice-banner').hide(); });
     setupTooltips();
+
+    // replace all GET delete links with their AJAXified equivalent
+    $j('a[href$="/confirm_delete"]').each(function(){
+        this.href = this.href.replace(/\/confirm_delete$/, "");
+        $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
+      });
 });
 
 function visualizeTables() {

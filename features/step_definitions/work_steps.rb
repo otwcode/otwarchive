@@ -227,6 +227,13 @@ When /^I browse the "([^"]+)" works with an empty page parameter$/ do |tagname|
   visit tag_works_path(tag, :page => "")
 end
 
+When /^I delete the work "([^\"]*)"$/ do |work|
+  work = Work.find_by_title!(work)
+  visit work_url(work)
+  And %{I follow "Delete"}
+  click_button("Yes, Delete Work")
+end
+
 ### THEN
 
 Then /^I should see Updated today$/ do
