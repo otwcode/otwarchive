@@ -487,9 +487,7 @@ class StoryParser
         Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
           loop do
             url = "#{site}/viewstory.php?action=printable&sid=#{storyid}&chapter=#{chapnum}"
-            Rails.logger.info "*!*!*!*!* downloading from #{url}"
             body = download_with_timeout(url)
-            Rails.logger.info "body: #{body}"
             if body.nil? || chapnum > MAX_CHAPTER_COUNT
               break
             end
