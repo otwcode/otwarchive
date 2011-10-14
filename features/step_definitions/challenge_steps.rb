@@ -76,7 +76,6 @@ Given /^I have Battle 12 prompt meme fully set up$/ do
     And "I have standard challenge tags setup"
   When "I set up Battle 12 promptmeme collection"
   When "I fill in Battle 12 challenge options"
-  When %{I follow "Log out"}
 end
 
 Given /^I have no-column prompt meme fully set up$/ do
@@ -84,7 +83,6 @@ Given /^I have no-column prompt meme fully set up$/ do
     And "I have standard challenge tags setup"
   When "I set up Battle 12 promptmeme collection"
   When "I fill in no-column challenge options"
-  When %{I follow "Log out"}
 end
 
 Given /^I have single-prompt prompt meme fully set up$/ do
@@ -92,7 +90,6 @@ Given /^I have single-prompt prompt meme fully set up$/ do
     And "I have standard challenge tags setup"
   When "I set up Battle 12 promptmeme collection"
   When "I fill in single-prompt challenge options"
-  When %{I follow "Log out"}
 end
 
 Given /^everyone has signed up for Battle 12$/ do
@@ -171,6 +168,7 @@ When /^I set up an?(?: ([^"]*)) promptmeme "([^\"]*)"(?: with name "([^"]*)")?$/
 end
 
 When /^I set up Battle 12 promptmeme collection$/ do
+  Given %{I am logged in as "mod1"}
   visit new_collection_path
   fill_in("collection_name", :with => "lotsofprompts")
   fill_in("collection_title", :with => "Battle 12")
@@ -269,6 +267,11 @@ When /^I fill in gift exchange challenge options$/ do
     select("1", :from => "gift_exchange_potential_match_settings_attributes_num_required_fandoms")
 end
 
+When /^I edit settings for "([^\"]*)" challenge$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Challenge Settings"}
+end
+
 When /^I change the challenge timezone to Alaska$/ do
   When %{I follow "Challenge Settings"}
     And %{I select "(GMT-09:00) Alaska" from "prompt_meme_time_zone"}
@@ -289,6 +292,8 @@ When /^I view open challenges$/ do
   When "I go to the collections page"
   When %{I follow "See Open Challenges"}
 end
+
+### WHEN sign up
 
 When /^I start signing up for Battle 12$/ do
   visit collection_path(Collection.find_by_title("Battle 12"))
@@ -347,28 +352,6 @@ When /^I sign up for Battle 12 with combination E$/ do
     And "I follow \"Sign Up\""
     And %{I fill in "Description:" with "Weird description"}
     And "I press \"Submit\""
-end
-
-When /^I add prompt (\d+)$/ do |number|
-  When %{I add prompt #{number} with "Stargate Atlantis"}
-end
-
-When /^I add prompt (\d+) with "([^"]+)"$/ do |number, tag|
-  When %{I follow "Add another prompt"}
-  Then %{I should see "Request #{number}"}
-  When %{I check the 1st checkbox with the value "#{tag}"}
-    # there is only one form on the individual prompt page
-    And %{I submit}
-  Then %{I should see "Prompt was successfully added"}
-end
-
-When /^I add prompts up to (\d+) starting with (\d+)$/ do |final_number_of_prompts, start|
-  @index = start.to_i
-  final_number_of_prompts = final_number_of_prompts.to_i
-  while @index <= final_number_of_prompts
-    When "I add prompt #{@index}"
-    @index = @index + 1
-  end
 end
 
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
@@ -452,11 +435,6 @@ When /^I sign up for "([^\"]*)" with missing prompts$/ do |title|
     click_button "Submit"
 end
 
-When /^I fill in the missing prompt$/ do
-  When %{I check the 2nd checkbox with the value "Stargate Atlantis"}
-    click_button "Submit"
-end
-
 When /^I start to sign up for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
@@ -468,6 +446,55 @@ When /^I start to sign up for "([^\"]*)" gift exchange$/ do |title|
   When %{I follow "Sign Up"}
 end
 
+### WHEN editing signups
+
+When /^I add prompt (\d+)$/ do |number|
+  When %{I add prompt #{number} with "Stargate Atlantis"}
+end
+
+When /^I add prompt (\d+) with "([^"]+)"$/ do |number, tag|
+  When %{I follow "Add another prompt"}
+  Then %{I should see "Request #{number}"}
+  When %{I check the 1st checkbox with the value "#{tag}"}
+    # there is only one form on the individual prompt page
+    And %{I submit}
+  Then %{I should see "Prompt was successfully added"}
+end
+
+When /^I add prompts up to (\d+) starting with (\d+)$/ do |final_number_of_prompts, start|
+  @index = start.to_i
+  final_number_of_prompts = final_number_of_prompts.to_i
+  while @index <= final_number_of_prompts
+    When "I add prompt #{@index}"
+    @index = @index + 1
+  end
+end
+
+When /^I fill in the missing prompt$/ do
+  When %{I check the 2nd checkbox with the value "Stargate Atlantis"}
+    click_button "Submit"
+end
+
+When /^I edit my signup for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Edit Signup"}
+end
+
+When /^I add a new prompt to my signup$/ do
+  When %{I follow "Add another prompt"}
+    And %{I check "Stargate Atlantis"}
+    And %{I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" with "My extra tag"}
+    And %{I press "Submit"}
+end
+
+When /^I edit the signup by "([^\"]*)"$/ do |participant|
+  visit collection_path(Collection.find_by_title("Battle 12"))
+  When %{I follow "Prompts ("}
+  When %{I follow "Edit whole signup"}
+end
+
+### WHEN viewing after signups
+
 When /^I view my signup for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Your Prompts"}
@@ -477,6 +504,28 @@ When /^I view claims for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Claims ("}
 end
+
+When /^I view prompts for "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Prompts ("}
+end
+
+### WHEN claiming
+
+When /^I claim a prompt from "([^\"]*)"$/ do |title|
+  visit collection_path(Collection.find_by_title(title))
+    And %{I follow "Prompts ("}
+  Then %{I should see "Claim" within "th"}
+    And %{I should not see "Sign in to claim prompts"}
+  When %{I press "Claim"}
+end
+
+When /^I claim two prompts from "([^\"]*)"$/ do |title|
+  When %{I claim a prompt from "#{title}"}
+  When %{I claim a prompt from "#{title}"}
+end
+
+### WHEN fulfilling claims
 
 When /^I start to fulfill my claim with "([^\"]*)"$/ do |title|
   When %{I am on my user page}
@@ -522,37 +571,7 @@ When /^mod fulfills claim$/ do
     And %{I press "Post"}
 end
 
-When /^I edit my signup for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Edit Signup"}
-end
-
-When /^I claim a prompt from "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
-    And %{I follow "Prompts ("}
-  Then %{I should see "Claim" within "th"}
-    And %{I should not see "Sign in to claim prompts"}
-  When %{I press "Claim"}
-end
-
-When /^I claim two prompts from "([^\"]*)"$/ do |title|
-  When %{I claim a prompt from "#{title}"}
-  When %{I claim a prompt from "#{title}"}
-end
-
-When /^I close signups for "([^\"]*)"$/ do |title|
-  When %{I am logged in as "mod1"}
-  visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Challenge Settings"}
-    And %{I uncheck "Signup open?"}
-    And %{I press "Update"}
-  Then %{I should see an update confirmation message}
-end
-
-When /^I view prompts for "([^\"]*)"$/ do |title|
-  visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Prompts ("}
-end
+### WHEN fulfilling assignments
 
 When /^I start to fulfill my assignment$/ do
   When %{I am on my user page}
@@ -570,6 +589,17 @@ When /^I fulfill my assignment$/ do
   When %{I press "Preview"}
     And %{I press "Post"}
   Then %{I should see "Work was successfully posted"}
+end
+
+### WHEN other
+
+When /^I close signups for "([^\"]*)"$/ do |title|
+  When %{I am logged in as "mod1"}
+  visit collection_path(Collection.find_by_title(title))
+  When %{I follow "Challenge Settings"}
+    And %{I uncheck "Signup open?"}
+    And %{I press "Update"}
+  Then %{I should see an update confirmation message}
 end
 
 When /^I delete my signup for "([^\"]*)"$/ do |title|
@@ -590,12 +620,6 @@ When /^I delete the signup by "([^\"]*)"$/ do |participant|
   When %{I follow "Prompts ("}
   When %{I follow "#{participant}"}
   When %{I follow "Delete"}
-end
-
-When /^I edit the signup by "([^\"]*)"$/ do |participant|
-  visit collection_path(Collection.find_by_title("Battle 12"))
-  When %{I follow "Prompts ("}
-  When %{I follow "Edit whole signup"}
 end
 
 When /^I delete the prompt by "([^\"]*)"$/ do |participant|
@@ -653,6 +677,10 @@ Then /^I should see gift exchange options$/ do
     And %{I should see "Allow Any"}
 end
 
+Then /^I should be editing the challenge settings$/ do
+  Then %{I should see "Setting Up The Battle 12 Prompt Meme"}
+end
+
 Then /^signup should be open$/ do
   When %{I follow "Profile"}
   Then %{I should see "Signup: CURRENTLY OPEN" within ".collection.meta"}
@@ -703,6 +731,7 @@ end
 
 Then /^claims are hidden$/ do
   When %{I go to "Battle 12" collection's page}
+  #' setting highlighting back
     And %{I follow "Claims"}
   Then %{I should see "Unfulfilled Claims"}
     And %{I should see "Fulfilled Claims"}
@@ -713,8 +742,9 @@ end
 
 Then /^claims are shown$/ do
   When %{I go to "Battle 12" collection's page}
+  #' setting highlighting back
     And %{I follow "Claims"}
-    And %{I should see "Unfulfilled Claims"}
+  Then %{I should see "Unfulfilled Claims"}
     And %{I should see "Fulfilled Claims"}
     And %{I should see "myname4" within "#unfulfilled_claims"}
     And %{I should not see "Secret!" within "#unfulfilled_claims"}
