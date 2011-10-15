@@ -1,11 +1,11 @@
 class Bookmark < ActiveRecord::Base
+
+  include Collectible
+
   belongs_to :bookmarkable, :polymorphic => true
   belongs_to :pseud
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
-
-  has_many :collection_items, :as => :item, :dependent => :destroy
-  has_many :collections, :through => :collection_items
 
   attr_protected :notes_sanitizer_version
 
