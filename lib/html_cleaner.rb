@@ -54,6 +54,7 @@ module HtmlCleaner
     
     # trash a whole bunch of crappy non-printing format characters stuck 
     # in most commonly by MS Word
+    # \p{Cf} matches all unicode char in the "other, format" category
     text.gsub!(/\p{Cf}/u, '')
 
     return text
