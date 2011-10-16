@@ -9,7 +9,7 @@ module CollectionsHelper
       if item.class == Work
         link_to ts("Add To Collection"), new_work_collection_item_path(item), :remote => true
       elsif item.class == Bookmark
-        link_to ts("Add To Collection"), new_bookmark_collection_item_path(item), :remote => true
+        link_to ts("Add To Collection"), new_bookmark_collection_item_path(item)
       end
     end
   end
