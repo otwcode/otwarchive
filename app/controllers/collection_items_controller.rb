@@ -131,9 +131,12 @@ class CollectionItemsController < ApplicationController
                             :collections => new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
-      flash[:notice] = "<br />" + ts("Your addition will have to be approved before it appears in %{moderated}.",
+      flash[:notice] += "<br />" + ts("Your addition will have to be approved before it appears in %{moderated}.",
         :moderated => unapproved_collections.collect(&:title).join(", "))
     end
+
+    flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
+    flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
     redirect_to(@item)
   end
