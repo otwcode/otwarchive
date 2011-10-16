@@ -236,7 +236,7 @@ end
 
 When /^I add my work to the collection$/ do
   When %{I follow "Add To Collection"}
-  fill_in("collection_names", :with => "Various Penguins")
+  fill_in("collection_names", :with => "Various_Penguins")
   click_button("Add")
 end
 
