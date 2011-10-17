@@ -1,21 +1,20 @@
 <p class="required note">All news posts need a title and some content.</p>
 <div id="work-form" class="post news">
-	<%= form_for(@admin_post) do |f| %>
-	<%= error_messages_for @admin_post %>
-<fieldset>
-	<legend><%= ts("Post News") %></legend>
-     <p><input type="hidden" name="admin_post[admin_id]" value="<%= current_admin.id %>" /></p>
-     <p><%= f.text_field :title, :title =>"title" %></p>
-	<!--BACK END, can we DRY up these post forms? There's 
-admin_post_form, archive_faq_form, _chapter_form, known_issues_form, standard form-->
-	<p id="toggleText">
-		<span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
-		<span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon  (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
-		<span class="rtf-html-switch actions">
-			<span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%=h 'Rich text' %></a></span>
-			<span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%=h 'HTML' %></a></span>
-		<span>
-	</p>
+  <%= form_for(@admin_post) do |f| %>
+    <%= error_messages_for @admin_post %>
+    <fieldset>
+      <legend><%= ts("Post News") %></legend>
+      <p><input type="hidden" name="admin_post[admin_id]" value="<%= current_admin.id %>" /></p>
+      <p><%= f.text_field :title, :title =>"title" %></p>
+      <!--BACK END, can we DRY up these post forms? There's admin_post_form, archive_faq_form, _chapter_form, known_issues_form, standard form-->
+      <p id="toggleText">
+        <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
+        <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon  (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
+        <span class="rtf-html-switch actions">
+          <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%= ts('Rich text') %></a></span>
+          <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%= ts('HTML') %></a></span>
+        <span>
+      </p>
       <% use_tinymce %>
       <div class="rtf-html-field">
         <p><%= f.text_area :content, :class => "mce-editor observe_textlength", :id => "content", :title =>"content" %></p>
@@ -27,10 +26,12 @@ admin_post_form, archive_faq_form, _chapter_form, known_issues_form, standard fo
         %>
         <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
       </div>
-      </fieldset>
-<fieldset>
-	<legend>Set Preferences</legend>
-	<dl>
+    </fieldset>
+    <fieldset>
+      <legend><%= ts("Set Preferences") %></legend>
+      <dl>
+        <dt><%= f.label :tag_list, ts("Tags") %></dt>
+        <dd><%= f.text_field :tag_list %></dd>
         <dt>
           <%= f.label :language_id, ts("Choose a language") %>
         </dt>
