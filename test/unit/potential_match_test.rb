@@ -7,7 +7,7 @@ class PotentialMatchTest < ActiveSupport::TestCase
     challenge_setup(num_signups) 
   
     # create potential matches
-    PotentialMatch.generate!(@collection)
+    PotentialMatch.generate(@collection)
     @collection.reload
 
     assert !@collection.potential_matches.empty?

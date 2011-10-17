@@ -37,7 +37,7 @@ Feature: Prompt Meme Challenge
 
   # sign up as first prompter
   
-  When I follow "Log out"
+  When I log out
     And I am logged in as "prompter1" with password "something"
   When I go to "Spring Kink" collection's page
     And I follow "Sign Up"

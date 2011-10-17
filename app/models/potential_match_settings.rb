@@ -1,7 +1,7 @@
 class PotentialMatchSettings < ActiveRecord::Base
   ALL = -1
   REQUIRED_MATCH_OPTIONS =  [
-                              [t('potential_match_settings.all', :default => "All"), ALL],
+                              [ts("All"), ALL],
                               ["0", 0],
                               ["1", 1],
                               ["2", 2],

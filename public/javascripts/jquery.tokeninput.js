@@ -142,7 +142,7 @@ $.TokenList = function (input, url_or_data, settings) {
     var input_val;
 
     // Create a new text input an attach keyup events
-    var input_box = $("<input type=\"text\"  autocomplete=\"off\" role=\"combobox\" aria-expanded=\"true\" aria-autocomplete=\"list\">")
+    var input_box = $("<input type=\"text\" class=\"text\" autocomplete=\"off\" role=\"combobox\" aria-expanded=\"true\" aria-autocomplete=\"list\">")
         .css({
             outline: "none"
         })

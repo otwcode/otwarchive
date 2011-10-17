@@ -80,7 +80,7 @@ Feature: Collection
     And I check "Signup open?"
     And I submit
   Then I should see "Challenge was successfully created"
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
   When I go to the collections page
   Then I should see "Yuletide"
@@ -184,7 +184,7 @@ Feature: Collection
     And I should see "Delete"
 
   # another person signs up
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname2" with password "something"
   When I go to the collections page
     And I follow "Yuletide"
@@ -210,7 +210,7 @@ Feature: Collection
   Then I should see "Signup was successfully created"
 
   # and a third person signs up
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname3" with password "something"
   When I go to the collections page
     And I follow "Yuletide"
@@ -230,7 +230,7 @@ Feature: Collection
   Then I should see "Signup was successfully created"
 
   # fourth person signs up
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname4" with password "something"
   When I go to the collections page
     And I follow "Yuletide"
@@ -255,7 +255,7 @@ Feature: Collection
     And I should not see "Stargate Atlantis"
 
   # fifth person signs up
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname5" with password "something"
   When I go to the collections page
     And I follow "Yuletide"
@@ -282,7 +282,7 @@ Feature: Collection
     And I should see "Tiny fandom [3, 3]"
 
   # signup summary changes when another person signs up
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname6" with password "something"
   When I go to the collections page
     And I follow "Yuletide"
@@ -305,7 +305,7 @@ Feature: Collection
     And I should see "Tiny fandom [3, 4]"
 
   # mod can view signups
-  When I follow "Log out"
+  When I log out
     And I am logged in as "mod1" with password "something"
     And I go to the collections page
     And I follow "Yuletide"
@@ -378,7 +378,7 @@ Feature: Collection
       And 7 emails should be delivered
 
   # first user starts posting
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
     And I go to myname1's user page
     And all emails have been delivered
@@ -402,7 +402,7 @@ Feature: Collection
     And 0 emails should be delivered
 
   # someone looks while it's still a draft
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname2" with password "something"
     And I go to myname2's user page
     #' stop annoying syntax highlighting after apostrophe
@@ -426,7 +426,7 @@ Feature: Collection
     And I should not see "myname" within "#main"
 
   # first user posts the work
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
     And I go to myname1's user page
     #' stop annoying syntax highlighting after apostrophe
@@ -450,7 +450,7 @@ Feature: Collection
     And 0 emails should be delivered
 
   # someone tries to view it
-  When I follow "Log out"
+  When I log out
     And I go to myname1's user page
     #' stop annoying syntax highlighting after apostrophe
   Then I should see "Mystery Work"
@@ -492,7 +492,7 @@ Feature: Collection
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
-  When I follow "Log out"
+  When I log out
   Then I should see "Successfully logged out"
 
   When I am logged in as "myname3" with password "something"
@@ -513,7 +513,7 @@ Feature: Collection
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
-  When I follow "Log out"
+  When I log out
   Then I should see "Successfully logged out"
 
   When I am logged in as "myname4" with password "something"
@@ -534,7 +534,7 @@ Feature: Collection
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
-  When I follow "Log out"
+  When I log out
   Then I should see "Successfully logged out"
 
   # user leaves it as a draft
@@ -555,7 +555,7 @@ Feature: Collection
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
-  When I follow "Log out"
+  When I log out
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
 
   # TODO: Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
@@ -582,7 +582,7 @@ Feature: Collection
   # Then show me the page
 
   # pinch hitter writes story
-  When I follow "Log out"
+  When I log out
     And I am logged in as "pinchhitter" with password "something"
     And I go to pinchhitter's user page
     And I follow "My Assignments"
@@ -601,7 +601,7 @@ Feature: Collection
   #  And I should see "Collections:"
   #  And I should see "Yuletide" within ".meta"
   #  And I should see "Anonymous"
-  When I follow "Log out"
+  When I log out
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
   # Then I should see "Successfully logged out"
 
@@ -632,7 +632,7 @@ Feature: Collection
     And the email should not contain "myname6"
 
   # someone views the story they wrote and it is anonymous
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
     And I follow "myname1"
   Then I should see "Fulfilling Story"
@@ -645,7 +645,7 @@ Feature: Collection
 
   # someone views their gift and it is anonymous
   # Needs everyone to have fulfilled their assignments to be sure of finding a gift
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname2" with password "something"
   When I follow "myname2"
     And I follow "My Gifts"
@@ -668,15 +668,15 @@ Feature: Collection
     # TODO: Check downloads more thoroughly
   # When I follow "MOBI"
   # Then I should see "Anonymous"
-  When I follow "Log out"
+  When I log out
   Then I should see "Successfully logged out"
 
   # mod reveals authors on Jan 1st
   When "issue 1847" is fixed
-  # When I follow "Log out"
+  # When I log out
   When I am logged in as "mod1" with password "something"
   When I am on the collections page
-    And I follow "Log out"
+    And I log out
     And I am logged in as "mod1" with password "something"
     And I go to the collections page
     And I follow "Yuletide"
@@ -686,7 +686,7 @@ Feature: Collection
   Then I should see "Collection was successfully updated"
 
   # someone can now see their writer: will fail intermittently until pinch hitting is fixed above
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
     And the system processes jobs
     And I follow "myname1"
@@ -698,11 +698,11 @@ Feature: Collection
 
   When I follow "Post New"
   Then I should not see "Does this fulfill a challenge assignment"
-  When I follow "Log out"
+  When I log out
     And I am logged in as "pinchhitter" with password "something"
     And I follow "Post New"
   Then I should not see "Does this fulfill a challenge assignment"
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname6" with password "something"
     And I follow "Post New"
   Then I should not see "Does this fulfill a challenge assignment"

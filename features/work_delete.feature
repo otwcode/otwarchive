@@ -23,11 +23,7 @@ Feature: Delete Works
   Scenario: Deleting minimally valid work when you have more than one pseud
     Given basic tags
       And I am logged in as "newbie"
-      And "newbie" creates the pseud "Pointless Pseud"
-      And I follow "Edit"
-      And I check "Is default"
-      And I press "Update"
-    Then I should see "Pseud was successfully updated."
+      And "newbie" creates the default pseud "Pointless Pseud"
     When I go to the new work page
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
@@ -150,7 +146,7 @@ Feature: Delete Works
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Let's write another story"
       And I should not see "Bad things happen, etc."
-    When I follow "View Entire Work"
+    When I follow "Entire Work"
     Then I should see "Bad things happen, etc."
       And I should see "Let's write another story"
     When I follow "Edit"
@@ -177,10 +173,10 @@ Feature: Delete Works
       And I press "Update"
     Then I should see "Work was successfully updated"
       And I should see "For giftee"
-    When I follow "Log out"
+    When I log out
       And I am logged in as "someone_else" with password "something"
       And I view the work "All Something Breaks Loose"
-      And I press "Leave Kudos"
+      And I press "Kudos"
       # TODO: Figure out why this isn't working
     # Then I should see "someone_else left kudos!"
     When I follow "Bookmark"
@@ -188,7 +184,7 @@ Feature: Delete Works
     Then I should see "Bookmark was successfully created"
     When I go to the bookmarks page
     Then I should see "All Something Breaks Loose"
-    When I follow "Log out"
+    When I log out
       And I am logged in as "thorough" with password "something"
     When I go to giftee's user page
     Then I should see "Gifts (1)"

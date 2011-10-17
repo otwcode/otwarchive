@@ -20,11 +20,10 @@ Feature: Invite requests
     Given I have invitations set up
     When I try to invite a friend from my user page
       And I follow "Request more"
-    Then I should see "How many invites are you requesting?"
     When I fill in "user_invite_request_quantity" with "3"
       And I fill in "user_invite_request_reason" with "I want them for a friend"
-      And I press "Create"
-    Then I should see "Request was successfully created."
+      And I press "Send Request"
+    Then I should see a create confirmation message
 
   Scenario: Requests are not instantly granted
 
@@ -82,7 +81,7 @@ Feature: Invite requests
       And I press "Send invite"
     Then 1 email should be delivered to test@archiveofourown.org
       And the email should contain "user1 has invited you to join our beta!"
-    When I follow "Log out"
+    When I log out
     Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
     
     # user uses invite

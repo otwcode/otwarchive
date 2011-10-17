@@ -10,9 +10,8 @@
       :requester => @potential_match.request_signup.pseud.byline, :offerer => @potential_match.offer_signup.pseud.byline) %>
   </h3>
 
-  <div class="meta">
-    <h3 class="heading">Summary</h3>
-    <dl>
+  <div class="wrapper">
+    <dl class="meta">
       <dt>Number of requests matched: </dt>
       <dd><%= @potential_match.num_prompts_matched %></dd>
     
@@ -29,14 +28,11 @@
     </dl>
   </div>
 
-  <!--FRONT END REVIEW: DOUBT THIS IS A PREFACE-->
-  <div class="preface">
-    <h3 class="heading"><%=h t("potential_matches.requests_for", :default => "Requests by %{requester}", :requester => @potential_match.request_signup.pseud.byline) %></h3>
-    <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => @potential_match.request_signup} %>
+
+ <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => @potential_match.request_signup} %>
     
-    <h3 class="heading"><%=h t("potential_matches.offers_for", :default => "Offers from %{offerer}", :offerer => @potential_match.offer_signup.pseud.byline) %></h3>
-    <%= render :partial => "challenge_signups/show_offers", :locals => {:challenge_signup => @potential_match.offer_signup} %>
-  </div>
+ <%= render :partial => "challenge_signups/show_offers", :locals => {:challenge_signup => @potential_match.offer_signup} %>
+
 
   <!--/content-->
   

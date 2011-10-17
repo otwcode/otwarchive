@@ -19,7 +19,7 @@ module SeriesHelper
   
   def work_series_description(work, series)
     serial = SerialWork.where(:work_id => work.id, :series_id => series.id).first
-    ("Part <strong>#{serial.position}</strong> of the series " + link_to(series.title, series)).html_safe 
+    ("Part <strong>#{serial.position}</strong> of " + link_to(series.title, series)).html_safe 
   end
 
   def series_list_for_feeds(work)

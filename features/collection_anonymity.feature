@@ -26,7 +26,7 @@ Feature: Collection
   Then I should see "Collection was successfully created"
 
   # Adding existing work to the collection without preview
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
     And I post the work "Old Snippet"
     And I edit the work "Old Snippet"
@@ -88,7 +88,7 @@ Feature: Collection
     And I fill in "work_series_attributes_title" with "New series"
     And I press "Post without preview"
         
-  When I follow "Log out"
+  When I log out
     And I go to "Hidden Treasury" collection's page
   Then I should see "Mystery Work"
     And I should see "Part of Hidden Treasury"
@@ -130,7 +130,7 @@ Feature: Collection
     And I should see "This is another new snippet written for this hidden challenge"
     
   # visitor should see all these works too
-  When I follow "Log out"
+  When I log out
     And I view the work "New Snippet"
   Then I should not see "This work is part of an ongoing challenge and will be revealed soon"
     And I should see "This is a new snippet written for this hidden challenge"
@@ -178,7 +178,7 @@ Feature: Collection
   Then I should see "Collection was successfully created"
 
   # Adding existing work to the collection without preview
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
     And I post the work "Old Snippet"
     And I edit the work "Old Snippet"
@@ -244,7 +244,7 @@ Feature: Collection
     And I press "Post without preview"
   Then I should see "Part 2 of the New series series"
         
-  When I follow "Log out"
+  When I log out
     And I go to "Anonymous Hugs" collection's page
   Then I should see "New Snippet by Anonymous"
     And I should see "Old Snippet by Anonymous"
@@ -288,7 +288,7 @@ Feature: Collection
   Then I should see "myname1" within ".byline"
     
   # visitor should see all these works too
-  When I follow "Log out"
+  When I log out
     And I view the work "New Snippet"
   Then I should see "myname1" within ".byline"
   When I view the work "Old Snippet"
@@ -327,7 +327,7 @@ Feature: Collection
   Then I should see "Collection was successfully created"
   
   # post to collection for day 1
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
   Given all emails have been delivered
   When I go to "Hidden Treasury" collection's page
@@ -362,7 +362,7 @@ Feature: Collection
     And 0 emails should be delivered
     
   # fics are both hidden
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname3" with password "something"
   When I view the work "New Snippet"
   Then I should see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"
@@ -372,7 +372,7 @@ Feature: Collection
     And I should not see "Purim Day 2"
     
   # mod views fics
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname2" with password "something"
     And I go to "Hidden Treasury" collection's page
     And I follow "Manage Items"
@@ -386,7 +386,7 @@ Feature: Collection
   # Then 1 email should be delivered
     
   # first fic now visible, second still not
-  #When I follow "Log out"
+  #When I log out
   #  And I am logged in as "myname3" with password "something"
   #When I view the work "New Snippet"
   #Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: Hidden Treasury"

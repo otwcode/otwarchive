@@ -35,6 +35,8 @@ class ChallengeAssignment < ActiveRecord::Base
   scope :undefaulted, where("defaulted_at IS NULL")
   scope :uncovered, where("covered_at IS NULL")
   scope :covered, where("covered_at IS NOT NULL")
+  
+  scope :with_pinch_hitter, where("pinch_hitter_id IS NOT NULL")
 
   scope :with_offer, where("offer_signup_id IS NOT NULL")
   scope :with_request, where("request_signup_id IS NOT NULL")
@@ -83,6 +85,10 @@ class ChallengeAssignment < ActiveRecord::Base
       request_signup.save
     end
   end
+  
+  def request
+    self.request_signup || self.pinch_request_signup
+  end
 
   def get_collection_item
     return nil unless self.creation
@@ -104,7 +110,7 @@ class ChallengeAssignment < ActiveRecord::Base
   def defaulted
     !self.defaulted_at.nil?
   end
-
+  
   include Comparable
   # sort in order that puts assignments with no request ahead of assignments with no offer,
   # ahead of assignments with both request and offer, and within each group sorts by
@@ -159,8 +165,25 @@ class ChallengeAssignment < ActiveRecord::Base
     pinch_pseud = Pseud.by_byline(byline).first
     self.pinch_request_signup = ChallengeSignup.in_collection(self.collection).by_pseud(pinch_pseud).first if pinch_pseud
   end
+  
+  def default
+    self.defaulted_at = Time.now
+    save
+  end
 
-  def send_out!
+  def cover(pseud)
+    self.covered_at = Time.now
+    new_assignment = self.covered_at ? request.request_assignments.last : ChallengeAssignment.new
+    new_assignment.collection = self.collection
+    new_assignment.request_signup_id = request.id
+    new_assignment.pinch_hitter = pseud
+    new_assignment.sent_at = nil
+    new_assignment.save!
+    new_assignment.send_out
+    new_assignment.save && save
+  end
+
+  def send_out
     # don't resend!
     unless self.sent_at
       self.sent_at = Time.now
@@ -178,7 +201,7 @@ class ChallengeAssignment < ActiveRecord::Base
   end
 
   # send assignments out to all participants
-  def self.send_out!(collection)
+  def self.send_out(collection)
     Resque.enqueue(ChallengeAssignment, :delayed_send_out, collection.id)
   end
 
@@ -192,7 +215,7 @@ class ChallengeAssignment < ActiveRecord::Base
 
     # send out each assignment
     collection.assignments.each do |assignment|
-      assignment.send_out!
+      assignment.send_out
     end
     collection.notify_maintainers("Assignments Sent", "All assignments have now been sent out.")
 
@@ -202,12 +225,13 @@ class ChallengeAssignment < ActiveRecord::Base
 
   # generate automatic match for a collection
   # this requires potential matches to already be generated
-  def self.generate!(collection)
+  def self.generate(collection)
     Resque.enqueue(ChallengeAssignment, :delayed_generate, collection.id)
   end
 
   def self.delayed_generate(collection_id)
     collection = Collection.find(collection_id)
+    settings = collection.challenge.potential_match_settings
 
     ChallengeAssignment.clear!(collection)
 
@@ -215,17 +239,24 @@ class ChallengeAssignment < ActiveRecord::Base
     @request_match_buckets = {}
     @offer_match_buckets = {}
     @max_match_count = 0
-    collection.signups.each do |signup|
-      next if signup.nil?
-      request_match_count = signup.request_potential_matches.count
-      @request_match_buckets[request_match_count] ||= []
-      @request_match_buckets[request_match_count] << signup
-      @max_match_count = (request_match_count > @max_match_count ? request_match_count : @max_match_count)
+    if settings.nil? || settings.no_match_required?
+       # stuff everyone into the same bucket
+       @max_match_count = 1
+       @request_match_buckets[1] = collection.signups
+       @offer_match_buckets[1] = collection.signups
+    else    
+      collection.signups.find do |signup|
+        next if signup.nil?
+        request_match_count = signup.request_potential_matches.count
+        @request_match_buckets[request_match_count] ||= []
+        @request_match_buckets[request_match_count] << signup
+        @max_match_count = (request_match_count > @max_match_count ? request_match_count : @max_match_count)
 
-      offer_match_count = signup.offer_potential_matches.count
-      @offer_match_buckets[offer_match_count] ||= []
-      @offer_match_buckets[offer_match_count] << signup
-      @max_match_count = (offer_match_count > @max_match_count ? offer_match_count : @max_match_count)
+        offer_match_count = signup.offer_potential_matches.count
+        @offer_match_buckets[offer_match_count] ||= []
+        @offer_match_buckets[offer_match_count] << signup
+        @max_match_count = (offer_match_count > @max_match_count ? offer_match_count : @max_match_count)
+      end
     end
 
     # now that we have the buckets, we go through assigning people in order

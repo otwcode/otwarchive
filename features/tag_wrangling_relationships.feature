@@ -237,7 +237,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I fill in "content" with "a long story about nothing"
     And I press "Preview"
     And I press "Post"
-    And I follow "Log out"
+    And I log out
   
   # wrangle the tags to be as close of those that have errored on beta and test
   When I am logged in as "Enigel" with password "wrangulate"

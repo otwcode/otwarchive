@@ -3,11 +3,7 @@
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation actions" role="navigation">
-   <li><%= span_if_current t('.invitations', :default =>"Invitations"), user_invitations_path(@user) %></li>
-   <li><%= span_if_current "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></li>
-  <li><%= span_if_current "Request more", new_user_invite_request_path %></li>
-</ul>
+<%= render "invitations/user_invitations_navigation" %>
 
 <!--main content-->
 <%= form_for(@user_invite_request) do |f| %>

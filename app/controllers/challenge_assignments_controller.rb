@@ -122,30 +122,16 @@ class ChallengeAssignmentsController < ApplicationController
       access_denied and return unless @challenge.user_allowed_to_see_assignments?(current_user)
       
       @assignments = case
-      when params[:defaulted]
-        @collection.assignments.defaulted.order_by_requesting_pseud
+      when params[:pinch_hit]
+        @collection.assignments.with_pinch_hitter.order_by_requesting_pseud
       when params[:fulfilled]
-        @collection.assignments.fulfilled.order_by_requesting_pseud
+        @collection.assignments.fulfilled.order_by_offering_pseud
       when params[:unfulfilled]
-        @collection.assignments.unfulfilled.order_by_requesting_pseud
+        @collection.assignments.unfulfilled.order_by_offering_pseud
       else
-        @collection.assignments
+        @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
       end
       @assignments = @assignments.paginate :page => params[:page], :per_page => 20
-
-      # if params[:show_covered]
-      #   @defaulted_assignments = @collection.assignments.defaulted.order_by_requesting_pseud
-      # else
-      #   @defaulted_assignments = @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
-      # end
-      # 
-      # @open_assignments = @collection.assignments.undefaulted.order_by_offering_pseud.paginate :page => params[:page], :per_page => 20
-      # 
-      # if !@challenge.user_allowed_to_see_assignments?(current_user)
-      #   @user = current_user
-      #   @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted
-      # end
-
     end
   end
 
@@ -158,13 +144,13 @@ class ChallengeAssignmentsController < ApplicationController
 
   def generate
     # regenerate assignments using the current potential matches
-    ChallengeAssignment.generate!(@collection)
+    ChallengeAssignment.generate(@collection)
     flash[:notice] = ts("Beginning regeneration of assignments. This may take some time, especially if your challenge is large.")
     redirect_to collection_potential_matches_path(@collection)
   end
 
   def send_out
-    ChallengeAssignment.send_out!(@collection)
+    ChallengeAssignment.send_out(@collection)
     flash[:notice] = "Assignments are now being sent out."
     redirect_to collection_assignments_path(@collection)
   end
@@ -176,22 +162,6 @@ class ChallengeAssignmentsController < ApplicationController
     ChallengeAssignment.update_placeholder_assignments!(@collection)
     flash[:notice] = "Assignments updated"
     redirect_to collection_potential_matches_path(@collection)
-  end
-
-  def create
-    # create a new (presumably pinch hit) assignment
-    assignment = ChallengeAssignment.new(params[:challenge_assignment])
-    if assignment.save
-      assignment.send_out!
-      flash[:notice] = "New assignment created and sent."
-    else
-      flash[:error] = "We couldn't save the new assignment."
-    end
-    if params[:assignment_to_cover] && (@old_assignment = ChallengeAssignment.find(params[:assignment_to_cover]))
-      @old_assignment.covered_at = Time.now
-      @old_assignment.save
-    end
-    redirect_to collection_assignments_path(@collection)
   end
 
   def purge
@@ -207,6 +177,35 @@ class ChallengeAssignmentsController < ApplicationController
     ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values)
     flash[:notice] = "Defaulters updated."
     redirect_to collection_assignments_path(@collection)
+  end
+  
+  def update_multiple
+    @errors = []
+    params.each_pair do |key, val|
+      action, id = key.split(/_/)
+      assignment = ChallengeAssignment.find(id)
+      unless assignment
+        @errors << ts("Couldn't find assignment with id #{id}!")
+        next
+      end
+      case action
+      when "default"
+        # default_assignment_id = y/n
+        assignment.default || @errors << ts("We couldn't default the assignment for #{assignment.offer_byline}")
+      when "undefault"
+        # undefault_[assignment_id] = y/n - if set, undefault
+        assignnment.defaulted_at = nil
+        assignment.save || @errors << ts("We couldn't undefault the assignment covering #{assignment.request_byline}.")
+      when "cover"
+        # cover_[assignment_id] = pinch hitter pseud
+        pseud = Pseud.parse_byline(val)
+        if pseud.nil?
+          @errors << ts("We couldn't find the user #{val} to assign that to.")
+        else
+          assignment.cover(pseud) || @errors << ts("We couldn't assign #{val} to cover #{assignment.request_byline}.")
+        end
+      end
+    end
   end
 
   def default_all

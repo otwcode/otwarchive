@@ -1,14 +1,14 @@
 <!--SUSPECT THIS OF BEING COLLECTION HOME ZONE-->
-<h2 class="heading">Assignments for <%= @collection.title %></h2>
+<h2 class="heading">Assignments for <%= @collection.title %> <%= link_to_help 'challenge-assignments' %></h2>
 
 <ul class="navigation actions" role="navigation">
-  <li><%= span_if_current ts("Pinch Hits"), collection_assignments_path(@collection, :defaulted => true) %></li>
-  <li><%= span_if_current ts("Unposted"), collection_assignments_path(@collection, :unfulfilled => true) %></li>
+  <li><%= span_if_current ts("Defaulted"), collection_assignments_path(@collection), !(params[:pinch_hit] || params[:unfulfilled] || params[:fulfilled]) %></li>
+  <li><%= span_if_current ts("Pinch Hits"), collection_assignments_path(@collection, :pinch_hit => true)%></li>
+  <li><%= span_if_current ts("Open"), collection_assignments_path(@collection, :unfulfilled => true) %></li>
   <% if @collection.moderated? %>
     <li><%= span_if_current ts("Awaiting Approval"), collection_items_path(@collection) %>
-    <li><%= span_if_current ts("Approved"), collection_assignments_path(@collection, :fulfilled => true) %></li>
   <% else %>
-    <li><%= span_if_current ts("Completed"), collection_assignments_path(@collection, :fulfilled => true) %></li>
+    <li><%= span_if_current ts("Complete"), collection_assignments_path(@collection, :fulfilled => true) %></li>
   <% end %>
   <li role="button">
     <%= link_to "Default All Incomplete", default_all_collection_assignments_path(@collection),
@@ -19,19 +19,19 @@
   </li>
 </ul>
 
-<h3 class="heading"><%= ts("Assignments") %> <%= link_to_help 'challenge-assignments' %></h3>
-
-<% if params[:defaulted] %>
-  <%= render "maintainer_index_defaulted" %>
-<% elsif params[:unfulfilled] %>
-  <%= render "maintainer_index_unfulfilled" %>
-<% elsif params[:fulfilled] %>
-  <%= render "maintainer_index_fulfilled" %>
+<% if @assignments.count < 1 %>
+  <p class="note">No assignments to review!</p>
 <% else %>
-  <p class="note">
-    Please select one of the options to review assignments for this challenge.
-  </p>
-  <!--BACK END, strongly suggest you have one of the options showing (some content) on this page (Awaiting Approval?) instead of this note!!-->
-<% end %>
 
-<%= will_paginate @assignments %>
+  <% if !(params[:pinch_hit] || params[:unfulfilled] || params[:fulfilled]) %>
+    <%= render "maintainer_index_defaulted" %>
+  <% elsif params[:pinch_hit] %>
+    <%= render "maintainer_index_pinch_hit" %>
+  <% elsif params[:unfulfilled] %>
+    <%= render "maintainer_index_unfulfilled" %>
+  <% elsif params[:fulfilled] %>
+    <%= render "maintainer_index_fulfilled" %>
+  <% end %>
+
+  <%= will_paginate @assignments %>
+<% end %>

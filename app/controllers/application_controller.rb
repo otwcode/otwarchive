@@ -22,6 +22,9 @@ protected
 
   def current_user
     @current_user = current_user_session && current_user_session.record
+    # if Rails.env.development? && params[:force_current_user].present?
+    #   @current_user = User.find_by_login(params[:force_current_user])
+    # end
   end
 
   def current_admin_session

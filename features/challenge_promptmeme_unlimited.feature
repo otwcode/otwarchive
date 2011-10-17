@@ -30,7 +30,7 @@ Feature: Prompt Meme Challenge
   
   # second user creates another load of prompts
   
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname2" with password "something"
   When I sign up for Battle 12 with combination D
     And I add prompts up to 34 starting with 3
@@ -42,7 +42,7 @@ Feature: Prompt Meme Challenge
   
   # 3rd user creates some more prompts
   
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname3" with password "something"
   When I sign up for Battle 12 with combination D
     And I add prompts up to 24 starting with 3

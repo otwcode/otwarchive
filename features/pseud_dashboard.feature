@@ -31,7 +31,7 @@ Feature: Pseud dashboard
     And I press "Save changes"
   Then I should see "Tag was updated"
 
-  When I follow "Log out"
+  When I log out
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
 
   # set up pseuds

@@ -18,7 +18,7 @@ Feature: Tag wrangling
       And I have loaded the "roles" fixture
     When I am logged in as "dizmo" with password "wrangulator"
     Then I should not see "Tag Wrangling"
-    When I follow "Log out"
+    When I log out
       And I go to the admin_login page
       And I fill in "admin_session_login" with "Zooey"
       And I fill in "admin_session_password" with "secret"
@@ -32,7 +32,7 @@ Feature: Tag wrangling
     When I check "user_roles_1"
       And I press "Update"
     Then I should see "User was successfully updated"
-    When I follow "Log out"
+    When I log out
     
     # accessing wrangling pages
       And I am logged in as "dizmo" with password "wrangulator"

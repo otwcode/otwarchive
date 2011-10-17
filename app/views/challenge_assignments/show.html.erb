@@ -1,5 +1,5 @@
 <!-- descriptions NOTE: WHERE IS THIS? IS IT REALLY A PROFILE?-->
-<div id="collection-page" class="collection home profile">
+<div id="collection-page" class="collection challenge assignments home profile">
   <!-- /descriptions-->
   <!--subnavigation, sorting and actions-->
   <!--/subnav-->
@@ -16,8 +16,7 @@
     <% end %>
   </h3>
 
-  <div class="collection preface">
-    <% if request %>
+  <% if request %>
       <h3 class="heading"><%=h t("challenge_assignments.requests_for", :default => "Requests by %{requester}", :requester => request.pseud.byline) %></h3>
       <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => request} %>
     <% else %>
@@ -34,8 +33,7 @@
       <p class="note">No assigned giver!</p>
       <p class="note">Contact challenge moderators for help.</p>
     <% end %>
-  </div>
-
+ 
   <!--/content-->
   <% if !@challenge_assignment.fulfilled? && @challenge_assignment.offering_pseud.user == current_user %>
     <ul class="navigation actions" role="menu">

@@ -1,38 +1,38 @@
 <!-- added to the meta section for the collection. please enclose elements in dt/dd. @collection is defined here but @challenge may not be.  -->
-
-<% zone = (@collection.challenge.time_zone || Time.zone.name) %>
-<% if @collection.challenge.signup_open %>
+<% challenge = @collection.challenge %>
+<% zone = (challenge.time_zone || Time.zone.name) %>
+<% if challenge.signup_open %>
   <dt><%= ts("Signup")%>:</dt>
   <dd><strong><%= link_to ts("Open"), new_collection_signup_path(@collection) %></strong></dd>
 
   <dt><%= ts("Signup closes")%>:</dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) %></dd>
+  <dd class="datetime"><%= time_in_zone(challenge.signups_close_at, zone) %></dd>
 
-<% elsif Time.now < (@collection.challenge.signups_open_at || 1.day.ago) %>
+<% elsif Time.now < (challenge.signups_open_at || 1.day.ago) %>
 
   <dt><%= ts("Signup opens")%>:</dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_open_at, zone) %></dd>
+  <dd class="datetime"><%= time_in_zone(challenge.signups_open_at, zone) %></dd>
 
   <dt><%= ts("Signup closes")%>:</dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.signups_close_at, zone) %></dd>
+  <dd class="datetime"><%= time_in_zone(challenge.signups_close_at, zone) %></dd>
 
-<% elsif Time.now < (@collection.challenge.signups_close_at || 1.day.ago) %>
+<% elsif Time.now < (challenge.signups_close_at || 1.day.ago) %>
   <dt><%= ts("Signup")%>:</dt>
   <dd><strong><%= ts("Closed")%></strong> 
     <span class="datetime">(on <%= time_in_zone(challenge.signups_close_at, zone) %>)</span></dd>
 <% end %>
 
 <dt><%= ts("Assignments due")%>:</dt>
-<dd class="datetime"><%= time_in_zone(@collection.challenge.assignments_due_at, zone) %></dd>
+<dd class="datetime"><%= time_in_zone(challenge.assignments_due_at, zone) %></dd>
 
 <% if @collection.unrevealed? %>
   <dt><%= ts("Works revealed")%>:</dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.works_reveal_at, zone) %></dd>
+  <dd class="datetime"><%= time_in_zone(challenge.works_reveal_at, zone) %></dd>
 <% end %>
 
 <% if @collection.anonymous? %>
   <dt><%= ts("Authors revealed")%>:</dt>
-  <dd class="datetime"><%= time_in_zone(@collection.challenge.authors_reveal_at, zone) %></dd>
+  <dd class="datetime"><%= time_in_zone(challenge.authors_reveal_at, zone) %></dd>
 <% end %>
 
 <dt><%= ts("Signed up") %>:</dt>

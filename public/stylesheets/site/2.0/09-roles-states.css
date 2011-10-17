@@ -5,10 +5,10 @@
 .draft  { border: 2px dashed #aaa; padding:0.643em;
           border-radius:0.5em }
  /*(these states spoof the ".navigation .current" style)*/
-span.unread, .replied, li.claimed
+span.unread, .replied, span.claimed
         { background:#ccc; color:#900; width:auto; font:100 100%/1.286 'Lucida Grande','Lucida Sans Unicode', 'GNU Unifont',sans-serif; height:1.286em; vertical-align:middle; display:inline-block; padding: 0.25em 0.75em; white-space: nowrap; overflow: visible; position: relative; cursor: pointer; text-decoration: none; border: 1px solid #bbb; border-bottom:1px solid #aaa;
           border-radius:0.25em }
-.canonical, li.requested       
+.canonical, li.requested      
         { font-weight: 700 }
 .hidden, body .hidden 	   	    
         { display:none }

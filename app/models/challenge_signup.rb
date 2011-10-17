@@ -230,40 +230,31 @@ class ChallengeSignup < ActiveRecord::Base
       (self.challenge.respond_to?("user_allowed_to_see_signups?") && self.challenge.user_allowed_to_see_signups?(user))
   end
 
-  def get_match_settings
-    if collection && collection.challenge
-      collection.challenge.potential_match_settings
-    else
-      nil
-    end
-  end
-
   def byline
     pseud.byline
   end
 
   # Returns nil if not a match otherwise returns PotentialMatch object
   # self is the request, other is the offer
-  def match(other)
-    settings = get_match_settings
-    return nil unless settings
+  def match(other, settings=nil)
+    no_match_required = settings.nil? || settings.no_match_required?
     potential_match_attributes = {:offer_signup => other, :request_signup => self, :collection => self.collection}
     prompt_matches = []
-    unless settings.no_match_required?
+    unless no_match_required
       self.requests.each do |request|
         other.offers.each do |offer|
-          if (match = request.match(offer))
+          if (match = request.match(offer, settings))
             prompt_matches << match
           end
         end
       end
       return nil if settings.num_required_prompts == ALL && prompt_matches.size != self.requests.size
     end
-    if settings.no_match_required? || prompt_matches.size >= settings.num_required_prompts
+    if no_match_required || prompt_matches.size >= settings.num_required_prompts
       # we have a match
       potential_match_attributes[:num_prompts_matched] = prompt_matches.size
       potential_match = PotentialMatch.new(potential_match_attributes)
-      potential_match.potential_prompt_matches = prompt_matches
+      potential_match.potential_prompt_matches = prompt_matches unless prompt_matches.empty?
       potential_match
     else
       nil

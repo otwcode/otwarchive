@@ -131,7 +131,7 @@ module CommentsHelper
                           commentable.name : 
                           commentable.id
     link_to(
-      "Add Comment",
+      "Comment",
       url_for(:controller => :comments, :action => :add_comment, commentable_id => commentable_value),
       :remote => true) 
   end

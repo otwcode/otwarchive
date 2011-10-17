@@ -68,39 +68,35 @@ class ChallengeClaimsController < ApplicationController
   # ACTIONS
 
   def index
-    if params[:user_id] && (@user = User.find_by_login(params[:user_id]))
+    if params[:collection_id]
+      return unless load_collection 
+      @challenge = @collection.challenge if @collection
+      @claims = @collection.claims.unposted
+      if params[:for_user] || !@challenge.user_allowed_to_see_claims?(current_user)
+        @claims = @claims.where(:claiming_user_id => current_user.id)
+      end
+      if params[:sort] == "date"
+        @claims = @claims.order_by_date
+      else
+        @claims = @claims.order_by_requesting_pseud
+      end
+    elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
+        @claims = @user.request_claims.order_by_date.unposted
         if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
-          @challenge_claims = @user.request_claims.in_collection(@collection).unposted         
-        else
-          @challenge_claims = @user.request_claims.order_by_date
+          @claims = @claims.in_collection(@collection)         
         end
       else
         flash[:error] = ts("You aren't allowed to see that user's claims.")
         redirect_to '/' and return
       end
-    else
-      # do error-checking for the collection case
-      return unless load_collection 
-      @challenge = @collection.challenge if @collection
-      
-      
-      @unposted_claims = @collection.claims.unposted.order_by_requesting_pseud.paginate :page => params[:page], :per_page => 20
-      @posted_claims = @collection.claims.posted.order_by_requesting_pseud.paginate :page => params[:page], :per_page => 20
-      
-      if !@challenge.user_allowed_to_see_claims?(current_user)
-        @user = current_user
-        @challenge_claims = @user.request_claims.in_collection(@collection).unposted
-      end
-
     end
+    @claims = @claims.paginate :page => params[:page], :per_page => 20
   end
   
   def show
-    unless @challenge.user_allowed_to_see_claims?(current_user) || @challenge_claim.claiming_user == current_user
-      flash[:error] = "You aren't allowed to see that claim!"
-      redirect_to "/" and return
-    end
+    # this is here just as a failsafe, this path should not be used
+    redirect_to collection_prompt_path(@collection, @challenge_claim.request_prompt)
   end
   
   def create

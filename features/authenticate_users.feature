@@ -125,7 +125,7 @@ Feature: User Authentication
     When I am on sam's user page
       Then I should see "Log in"
       Then I should not see "Log out"
-      And I should not see "My Preferences"
+      And I should not see "Preferences"
 
   Scenario Outline: Show or hide preferences link
     Given I have no users
@@ -141,8 +141,8 @@ Feature: User Authentication
       | login | user  | action                   |
       | sam   | sam   | not see "Log in"         |
       | sam   | sam   | see "Log out"            |
-      | sam   | sam   | see "My Preferences"     |
+      | sam   | sam   | see "Preferences"     |
       | sam   | dean  | see "Log out"            |
-      | sam   | dean  | not see "My Preferences" |
+      | sam   | dean  | not see "Preferences" |
       | sam   | dean  | not see "Log in"         |
 

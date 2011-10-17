@@ -12,7 +12,7 @@
       <% if @admin_settings.account_creation_enabled? %>
         <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Log in'), login_path %> or <%= link_to ts("Create an Account"), new_user_path %> </p>
       <% elsif @admin_settings.invite_from_queue_enabled? %>
-        <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Get a Code'), invite_requests_path %></p>
+        <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Get an Invite'), invite_requests_path %></p>
       <% else %>
         <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Log in'), login_path %></p>
       <% end %>

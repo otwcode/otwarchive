@@ -100,7 +100,7 @@ Feature: Edit chapters
   When I am logged out
     And I go to epicauthor's works page
     And I follow "New Epic Work"
-    And I follow "View Entire Work"
+    And I follow "Entire Work"
   Then I should see "Chapter 1"
     And I should see "Well, maybe not so epic." within "#chapter-1"
     And I should see "Chapter 2"
@@ -133,7 +133,7 @@ Feature: Edit chapters
   When I am logged out
     And I go to epicauthor's works page
     And I follow "New Epic Work"
-    And I follow "View Entire Work"
+    And I follow "Entire Work"
   Then I should see "Chapter 1"
     And I should see "Well, maybe not so epic." within "#chapter-4"
     And I should see "Chapter 2"

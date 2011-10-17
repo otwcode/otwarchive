@@ -1,4 +1,6 @@
-<ul class="navigation" role="navigation">
+<h2>Editing a Prompt <!--BACK END, POSSIBLE TO PUT PROMPT NUMBER IN?--></h2>
+
+<ul class="navigation actions" role="navigation">
   <% if @prompt.challenge_signup %>
     <li><%= link_to ts('Edit whole signup instead?'), edit_collection_signup_path(@collection, @prompt.challenge_signup) %></li>
   <% end %>

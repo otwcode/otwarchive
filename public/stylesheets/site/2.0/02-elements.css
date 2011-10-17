@@ -57,6 +57,8 @@ small small small small
         { font-size: 100%}
 sub 		{ vertical-align: sub; line-height:0}
 sup 		{ vertical-align:super; line-height:0}
+
+/*http://media.transformativeworks.org/training/front_end_coding/accessible-tables.html*/
 table		{ background: #ddd; border-collapse: collapse; margin:auto; width:100%; clear: right}
 caption	{ height:0; width:0; font-size:0; opacity:0; padding:0; margin:0}
 thead, tfoot

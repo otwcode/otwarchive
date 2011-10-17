@@ -1,10 +1,9 @@
 /*==ACTIONS: buttons!
+http://media.transformativeworks.org/training/front_end_coding/patterns/actions.html
 subtypes:
-.navigation, .subnav, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
-input[type="submit"], button, label.action
-(.pagination is a plugin so inconsistent)
-search is in both interaction and actions (navigation), will probably move all search style to zone-searchbrowse*/
-
+.action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
+input[type="submit"], button
+*/
 .actions * 
         { display:inline}
 ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions
@@ -27,7 +26,7 @@ p.submit, input.submit, dd.submit
         { cursor: text }
 /*subtypes and modes */
 ol.pagination
-        { text-align:center;}
+        { text-align:center; clear:right; margin:0.643em auto}
 .actions a:visited
         { color: #111; }
 .actions a:hover, .actions input:hover
@@ -40,7 +39,7 @@ ol.pagination
         { color:#900; font-weight:900; margin-right:0.375em; padding:0 0.1em 0.15em;
           box-shadow:-1px -1px 2px rgba(0,0,0,0.75); border-radius:0.875em }
 ul#skiplinks, .landmark , .landmark a, .index .heading.landmark
-        { border: 0; font-size: 0; line-height: 0; height: 0; margin: 0; clear:both; color:transparent;
+        { font-size: 0; line-height: 0; height: 0; margin: 0; clear:both; color:transparent;
           opacity:0 }
 .secondary    
         { background: #f4effc; position: absolute; z-index: 99; border:2px solid #bbb; margin: auto; padding:0.375em; overflow:hidden; right:2.5em; 
@@ -48,7 +47,7 @@ ul#skiplinks, .landmark , .landmark a, .index .heading.landmark
 /* CONTEXTS */
 .heading .actions, .heading .action
         { font:100 75%/1.286 'Lucida Grande','Lucida Sans Unicode', 'GNU Unifont',sans-serif; padding: 0.15em 0.375em}
-form dd .actions,dl.stats + h6 + .actions
+dl.stats + h6 + .actions
         { float: left}
 dl.stats + h6 + .actions, li.news .actions 
         { margin:-2em auto 0 }

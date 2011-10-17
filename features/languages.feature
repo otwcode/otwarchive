@@ -15,7 +15,7 @@ Feature: Languages
   Then I should see "Successfully logged in" 
   When I follow "settings"
   # TODO: Then I should be able to add a language in the front end
-  When I follow "Log out"
+  When I log out
   Then I should see "Successfully logged out"
   
   Scenario: post a work in another language
@@ -38,7 +38,7 @@ Feature: Languages
   
   # TODO: French including sedilla, other characters not in the ascii set.
   
-  When I follow "Log out"
+  When I log out
     And I am logged in as "englishuser" with password "password"
     And I post the work "Revenge of the Sith"
   Then I should see "Revenge of the Sith"

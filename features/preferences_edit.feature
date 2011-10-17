@@ -25,10 +25,10 @@ Feature: Edit preferences
   When I follow "editname"
   Then I should see "My Dashboard"
     And I should see "My History"
-    And I should see "My Preferences"
+    And I should see "Preferences"
     And I should see "Profile"
-  When I follow "My Preferences"
-  Then I should see "Update My Preferences"
+  When I follow "Preferences"
+  Then I should see "Update"
     And I should see "Edit My Profile"
     And I should see "Orphan My Works"
   When I follow "Edit My Profile"
@@ -38,7 +38,7 @@ Feature: Edit preferences
   When I follow "Profile"
   Then I should see "Set My Preferences"
   When I follow "Set My Preferences"
-  Then I should see "Update My Preferences"
+  Then I should see "Update"
     And I should see "Edit My Profile"
   When I uncheck "Enable Viewing History"
     And I check "Always view entire work by default"
@@ -52,7 +52,7 @@ Feature: Edit preferences
   When I go to the works page
     And I follow "This has two chapters"
   Then I should see "Secondy chapter"
-  When I follow "Log out"
+  When I log out
     And I go to editname's user page
     And I follow "Profile"
   Then I should see "My email address"
@@ -77,7 +77,7 @@ Feature: Edit preferences
     And I press "Preview"
     And I press "Update"
   Then I should see "Work was successfully updated"
-  When I follow "Log out"
+  When I log out
   When I am logged in as "mywarning2" with password "password"
     And I post the work "This also has warnings and tags" with fandom "Stargate SG-1, Stargate SG-2" with freeform "Scarier"
   When I view the work "This work has warnings and tags"
@@ -149,8 +149,8 @@ Feature: Edit preferences
   # change preference to hide warnings
   When I follow "mywarning2"
   Then I should see "My Dashboard"
-  When I follow "My Preferences"
-  Then I should see "Update My Preferences"
+  When I follow "Preferences"
+  Then I should see "Update"
   When I check "Hide warnings"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
@@ -216,7 +216,7 @@ Feature: Edit preferences
 
   # change preference to hide freeforms
   When I follow "mywarning2"
-    And I follow "My Preferences"
+    And I follow "Preferences"
     And I check "Hide additional tags"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
@@ -283,7 +283,7 @@ Feature: Edit preferences
 
   # change preference to show warnings, keep freeforms hidden
   When I follow "mywarning2"
-    And I follow "My Preferences"
+    And I follow "Preferences"
     And I uncheck "Hide warnings"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"

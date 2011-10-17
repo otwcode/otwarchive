@@ -18,7 +18,7 @@ Feature: Private bookmarks
       And I am logged in as "workauthor" with password "password"
       And I post the locked work "Secret Masterpiece"
       And I post the work "Public Masterpiece"
-    When I follow "Log out"
+    When I log out
       And I am logged in as "bookmarker" with password "password"
       And I view the work "Secret Masterpiece"
       And I follow "Bookmark"
@@ -52,7 +52,7 @@ Feature: Private bookmarks
       
     # Private bookmarks should not be visible when logged out
     
-    When I follow "Log out"
+    When I log out
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Public Masterpiece"
@@ -86,7 +86,7 @@ Feature: Private bookmarks
       
     # Private bookmarks should not be visible even to the author
     
-    When I follow "Log out"
+    When I log out
       And I am logged in as "workauthor" with password "password"
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
@@ -102,7 +102,7 @@ Feature: Private bookmarks
       And I check "bookmark_rec"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
-    When I follow "Log out"
+    When I log out
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should see "Public Masterpiece"

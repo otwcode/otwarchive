@@ -4,16 +4,14 @@
 
 <!--subnav-->
 <%= render :partial => 'admin/admin_nav' %>
-<div class="clear"><!--presentational, phase me out--></div>
 <ul class="navigation actions" role="navigation">
   <li><%= link_to "Add a new section", new_archive_faq_path %></li>
   <li><%= link_to "Reorder FAQs", manage_archive_faqs_path %></li>
 </ul>
-<div class="clear"><!--presentational, phase me out--></div> 
 <!--/subnav-->
 
 <!--main content-->
-<!--FRONT END: TABLEWATCH!!-->
+<!--FRONT END: TABLEWATCH!! SUGGEST DL.INDEX PATTERN-->
 <div class="wrapper">
 	<table summary="This table lists Archive FAQs by title, date posted and date updated, and lets you show, edit, and delete each FAQ.">
 	<caption>Manage Archive FAQs</caption>
