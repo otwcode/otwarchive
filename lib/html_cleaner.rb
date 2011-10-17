@@ -1,6 +1,8 @@
 # note, if you modify this file you have to restart the server or console
 module HtmlCleaner
 
+  XSL = Nokogiri::XSLT(File.open("#{Rails.root.to_s}/lib/html_cleaner.xsl"))
+
   # If we aren't sure that this field hasn't been sanitized since the last sanitizer version, 
   # we sanitize it before we allow it to pass through (and save it if possible).
   def sanitize_field(object, fieldname)
@@ -126,6 +128,16 @@ module HtmlCleaner
     array
   end
 
+
+  def add_paragraphs_to_text(text)
+    doc = XSL.transform(Nokogiri::HTML.parse("<html><body>#{text}</body></html>"))
+    html = doc.children.to_s.gsub(/(\A<html>\s*?<body>)|(<\/body>\s*?<\/html>\Z)/, "")
+    puts html
+    puts "---"
+    return html
+  end
+  
+  
   # tags that we need to reopen if users have them crossing paragraph breaks.
   # bad users, no biscuit :(
   HTML_TAGS_TO_REOPEN = %w(b big cite code del em i s small strike strong sub sup tt u)
@@ -135,7 +147,7 @@ module HtmlCleaner
   # 2. Parse document with Nokogiri and export xhtml to get pretty-printed and
   #    well-formed (not necessarily validating!) xhtml with all tags closed.
   #
-  def add_paragraphs_to_text(text)
+  def add_paragraphs_to_text2(text)
 
     # get rid of spaces and newlines-before/after-paragraphs and linebreaks
     # this enables us to avoid converting newlines into paras/breaks where we already have them

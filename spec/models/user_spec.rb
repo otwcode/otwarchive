@@ -26,7 +26,7 @@ describe User do
     it "should not save user without terms_of_service flag" do
       @user.terms_of_service = ""
       @user.save.should be_false
-      @user.errors[:age_over_13].should_not be_empty
+      @user.errors[:terms_of_service].should_not be_empty
     end
     
     it "should encrypt password" do
