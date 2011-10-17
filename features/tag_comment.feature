@@ -103,23 +103,23 @@ I'd like to comment on a tag'
     When I am logged in as "Enigel" with password "wrangulator"
       And I go to Enigel's user page
       #'
-      And I follow "My Preferences"
+      And I follow "Preferences"
       And I uncheck "Turn off copies of your own comments"
       And I press "Update"
-      And I follow "Log out"
+      And I log out
       
     # fellow wrangler leaves a comment on a wrangler's fandom  
     When I am logged in as "Cesy" with password "wrangulator"
       And I go to Cesy's user page
       #'
-      And I follow "My Preferences"
+      And I follow "Preferences"
       And I check "Turn off copies of your own comments"
       And I press "Update"
       And all emails have been delivered
       And I view the tag "Eroica"
       And I follow "0 comments"
       And I fill in "Comment" with "really clever stuff"
-      And I press "Add Comment"
+      And I press "Comment"
     Then I should see "Comment created"
       And 1 email should be delivered to "enigel@example.org"
       And the email should contain "really clever stuff"
@@ -154,7 +154,7 @@ I'd like to comment on a tag'
       And all emails have been delivered
       And I follow "0 comments"
       And I fill in "Comment" with "really clever stuff"
-      And I press "Add Comment"
+      And I press "Comment"
     Then I should see "Comment created"
       And 1 email should be delivered to "cesy@example.org"
       And 1 email should be delivered to "dizmo@example.org"

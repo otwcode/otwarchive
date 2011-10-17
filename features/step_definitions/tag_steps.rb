@@ -116,14 +116,14 @@ end
 
 When /^I post the comment "([^"]*)" on the tag "([^"]*)"$/ do |comment_text, tag|
   Given "I set up the comment \"#{comment_text}\" on the tag \"#{tag}\""
-  click_button("Add Comment")
+  click_button("Comment")
 end
 
 When /^I post the comment "([^"]*)" on the tag "([^"]*)" via web$/ do |comment_text, tag|
   When %{I view the tag "#{tag}"}
   When %{I follow " comments"}
     And %{I fill in "Comment" with "#{comment_text}"}
-    And %{I press "Add Comment"}
+    And %{I press "Comment"}
   Then %{I should see "Comment created!"}
 end
 

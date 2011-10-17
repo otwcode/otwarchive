@@ -17,7 +17,7 @@ Feature: Create bookmarks
     Then I should see "My Dashboard"
       And I should see "You don't have anything posted under this name yet"
       And I should not see "Revenge of the Sith"
-    When I follow "Log out"
+    When I log out
     Then I should see "logged out"
     When I am logged in as "bookmarkuser2" with password "password"
       And I post the work "Revenge of the Sith"
@@ -38,13 +38,13 @@ Feature: Create bookmarks
       And I press "Create"
     Then I should see "Bookmark was successfully created"
       And I should see "Back to Bookmarks"
-    When I follow "Log out"
+    When I log out
       And I am logged in as "bookmarkuser2" with password "password"
       And I go to the bookmarks page
     Then I should see "Revenge of the Sith"
       And I should see " This is a tag, and another tag"
       And I should see "I liked this story"
-    When I follow "Log out"
+    When I log out
       And I am logged in as "bookmarkuser1" with password "password"
       And I follow "bookmarkuser1"
     Then I should see "My Dashboard"
@@ -76,7 +76,7 @@ Feature: Create bookmarks
     Then I should see "You have saved multiple bookmarks for this item"
     
     # privacy check for the private bookmark '
-    When I follow "Log out"
+    When I log out
       And I am logged in as "bookmarkuser2" with password "password"
       And I go to the bookmarks page
     Then I should not see "I liked this story"
@@ -151,7 +151,7 @@ Feature: Create bookmarks
       And I post the locked work "Mystery"
       And I post the work "Public Masterpiece"
       And I post the work "Publicky"
-    When I follow "Log out"
+    When I log out
       And I am logged in as "bookmarkuser2" with password "password"
       And I view the work "Secret Masterpiece"
       And I follow "Bookmark"
@@ -177,7 +177,7 @@ Feature: Create bookmarks
     Then I should see "Bookmark was successfully created"
     When I go to the bookmarks page
     Then I should see "Secret Masterpiece"
-    When I follow "Log out"
+    When I log out
       And I go to the bookmarks page
     Then I should not see "Secret Masterpiece"
       And I should not see "Mystery"

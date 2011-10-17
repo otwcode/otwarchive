@@ -27,7 +27,7 @@ Feature: Search Tags
       And I should not see "first last"
     When I am on the search tags page
       And I fill in "tag_search" with "first"
-      And I check "canonical?"
+      And I check "canonical"
       And I press "Search tags"
     Then I should see "1 Found"
       And I should see "first last (0)" within ".canonical"

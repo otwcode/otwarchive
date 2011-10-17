@@ -1,13 +1,10 @@
-<!--Descriptive page name, messages and instructions-->
+<% # this page is for administrators only, they cannot navigate to individual user pages %>
 <h2 class="heading"><%= ts("User invite requests") %></h2>
-<p><%= ts("Enter "0" under quantity to deny the request. Clear the box to delay your decision for now.") %></p>
+<p><%= ts("Enter \"0\" under quantity to deny the request. Clear the box to delay your decision for now.") %></p>
+<p class="note"><%= ts("To give a user more invitations without a request, visit their individual invitations page.") %></p>
 <!--/descriptions-->
 <!--subnav-->
-<ul class="navigation actions" role="navigation">
-   <li><%= span_if_current t('.invitations', :default =>"Invitations"), user_invitations_path(@user) %></li>
-   <li><%= span_if_current "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></li>
-  <li><%= span_if_current "Request more", new_user_invite_request_path %></li>
-</ul>
+
 <!--main content-->
 <%= form_tag url_for(:controller => 'user_invite_requests', :action => 'update') do %>
 <table summary="This table shows requests from users for invites, with their given reasons. You can allot invites to individuals under the heading Quantity">
@@ -25,9 +22,9 @@
   <% @user_invite_requests.each do |request| %>
       <tr>
         <td><%= link_to request.user.login, request.user %></td>
-        <td><%=h request.reason %></td>
+        <td><%= request.reason %></td>
         <td><%= text_field_tag "requests[#{request.id}]", request.quantity, :size => 2, :id => "requests[#{request.user.login}]" %></td>
-        <td><%=h request.created_at %>
+        <td><%= request.created_at %>
         <td><%= link_to_previous_invite_requests(request) %></td>
       </tr>
   <% end %>

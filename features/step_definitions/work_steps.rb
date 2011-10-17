@@ -24,7 +24,7 @@ Given /^I view the chaptered work(?: with ([\d]+) comments?)? "([^"]*)"(?: in (f
   end
   And %{I am logged out}
   visit work_url(work)
-  And %{I follow "View Entire Work"} if mode == "full"
+  And %{I follow "Entire Work"} if mode == "full"
 end
 
 Given /^I have a work "([^\"]*)"$/ do |work|

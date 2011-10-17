@@ -4,7 +4,7 @@ Given /^I have an archivist "([^\"]*)"$/ do |name|
   Given %{I have pre-archivist setup for "#{name}"}
   When %{I am logged in as an admin}
     And %{I make "#{name}" an archivist}
-    And %{I follow "Log out"}
+    And %{I log out}
 end
 
 Given /^I have pre-archivist setup for "([^\"]*)"$/ do |name|

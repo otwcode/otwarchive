@@ -342,7 +342,7 @@
                   <div class="scripted">
                       <a href="#" class="smbutton smbutton-big" tabindex="1" onclick="GMI.up(this).previewClick();return GMI.evCancel()"><span class="preview">Preview</span></a>
                       &nbsp;&nbsp;
-                      <a href="#" class="smbutton smbutton-blue smbutton-big" tabindex="1" onclick="GMI.up(this).sendClick();return GMI.evCancel()"><span class="post">Add Comment</span></a>
+                      <a href="#" class="smbutton smbutton-blue smbutton-big" tabindex="1" onclick="GMI.up(this).sendClick();return GMI.evCancel()"><span class="post">Comment</span></a>
                   </div>
                   <div class="unscripted">
                       <input class="post" type="submit" value="Send" tabindex="1">

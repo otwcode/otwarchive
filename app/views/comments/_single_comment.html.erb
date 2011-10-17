@@ -80,7 +80,7 @@
           <%= render :partial => 'comments/comment_form', 
                      :locals => {:comment => Comment.new, 
                                  :commentable => single_comment, 
-                                 :button_name => ts("Add Comment")} %>
+                                 :button_name => ts("Comment")} %>
       <% else %>
         <div id="add_comment_reply_placeholder_<%= single_comment.id %>" style="display: none;">
       <% end %>

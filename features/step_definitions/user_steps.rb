@@ -79,6 +79,10 @@ Given /^I am logged out$/ do
   assert !AdminSession.find
 end
 
+Given /^I log out$/ do
+  Given %{I follow "log out"}
+end
+
 When /^"([^\"]*)" creates the pseud "([^\"]*)"$/ do |username, newpseud|
   visit user_pseuds_path(username)
   click_link("New Pseud")
@@ -97,7 +101,7 @@ When /^"([^\"]*)" creates the default pseud "([^\"]*)"$/ do |username, newpseud|
   click_link("New Pseud")
   fill_in "Name", :with => newpseud
   # TODO: this isn't currently working
-  check "Is default"
+  check "Make this name default"
   click_button "Create"
 end
 

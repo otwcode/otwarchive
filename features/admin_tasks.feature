@@ -115,7 +115,7 @@ Feature: Admin tasks
 
   When I am logged in as "dizmo"
     And I post the work "Storytime"
-    And I follow "Log out"
+    And I log out
     And I view the work "Storytime"
   Then I should see "Download"
 
@@ -132,7 +132,7 @@ Feature: Admin tasks
 
   # Check guest downloading is off
 
-  When I follow "Log out"
+  When I log out
   Then I should see "Successfully logged out"
   When I view the work "Storytime"
     And I follow "MOBI"
@@ -148,7 +148,7 @@ Feature: Admin tasks
 
   # Check tag wrangling is off
 
-  When I follow "Log out"
+  When I log out
   Then I should see "Successfully logged out"
   When I am logged in as "dizmo"
     And I edit the tag "Ianto Jones"
@@ -180,11 +180,11 @@ Feature: Admin tasks
     And I follow "Profile"
   Then I should see "Set My Preferences"
   When I follow "Set My Preferences"
-  Then I should see "Update My Preferences"
+  Then I should see "Update"
   When I check "Turn off admin notification emails"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
-  When I follow "Log out"
+  When I log out
   Then I should see "Successfully logged out"
 
   # admin sends out notice to all users
@@ -229,7 +229,7 @@ Feature: Admin tasks
     And I am logged in as "commenter" with password "password"
     And I view the work "The One Where Neal is Awesome"
     And I fill in "Comment" with "I loved this!"
-    And I press "Add Comment"
+    And I press "Comment"
   Then I should see "Comment created!"
   When I am logged out
 

@@ -38,7 +38,7 @@ Feature: Collection
   Then I should see "collect-y work"
     And I should see "Collections: My Collection Thing"
 
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname2" with password "something"
   When I go to the collections page
   Then I should see "My Collection Thing"
@@ -67,7 +67,7 @@ Feature: Collection
     And I should see "For myname1"
         
   # Now how about creating a subcollection
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
   When I go to the collections page
     And I follow "New Collection"
@@ -78,7 +78,7 @@ Feature: Collection
   Then I should see "Collection was successfully created"
   
   # and posting to that
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname2" with password "something"
   When I go to the collections page
     And I follow "My Collection Thing"

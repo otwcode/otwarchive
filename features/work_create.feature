@@ -10,7 +10,7 @@ Feature: Create Works
 
   Scenario: Creating a new minimally valid work
     Given basic tags
-      And I am logged in as "newbie" with password "password"
+      And I am logged in as "newbie"
     When I go to the new work page
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
@@ -27,7 +27,7 @@ Feature: Create Works
 
   Scenario: Creating a new minimally valid work and posting without preview
     Given basic tags
-      And I am logged in as "newbie" with password "password"
+      And I am logged in as "newbie"
     When I go to the new work page
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
@@ -43,12 +43,8 @@ Feature: Create Works
 
   Scenario: Creating a new minimally valid work when you have more than one pseud
     Given basic tags
-      And I am logged in as "newbie" with password "password"
-      And "newbie" creates the pseud "Pointless Pseud"
-      And I follow "Edit"
-      And I check "Is default"
-      And I press "Update"
-    Then I should see "Pseud was successfully updated."
+      And I am logged in as "newbie"      
+      And "newbie" creates the default pseud "Pointless Pseud"
     When I go to the new work page
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
@@ -168,7 +164,7 @@ Feature: Create Works
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Let's write another story"
       And I should not see "Bad things happen, etc."
-    When I follow "View Entire Work"
+    When I follow "Entire Work"
     Then I should see "Bad things happen, etc."
       And I should see "Let's write another story"
     When I follow "Edit"
