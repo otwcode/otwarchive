@@ -36,6 +36,34 @@ Given /^I have an anonymous collection "([^\"]*)" with name "([^\"]*)"$/ do |tit
   When "I am logged out"
 end
 
+Given /^I have a moderated collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |title, name|
+  When %{I am logged in as "moderator"}
+  if name
+    When %{I set up the collection "#{title}" with name "#{name}"}
+  else
+    When %{I set up the collection "#{title}"}
+  end
+  When %{I check "This collection is moderated"}
+  And %{I submit}
+
+  Then %{I should see "Collection was successfully created."}
+  When "I am logged out"
+end
+
+Given /^I have a closed collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |title, name|
+  When %{I am logged in as "moderator"}
+  if name
+    When %{I set up the collection "#{title}" with name "#{name}"}
+  else
+    When %{I set up the collection "#{title}"}
+  end
+  When %{I check "This collection is closed"}
+  And %{I submit}
+
+  Then %{I should see "Collection was successfully created."}
+  When "I am logged out"
+end
+
 Given /^I have added a co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
   # create the user 
   Given %{I am logged in as "#{name}"}

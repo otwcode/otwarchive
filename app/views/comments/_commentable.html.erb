@@ -1,19 +1,19 @@
 <!-- Gets embedded anywhere we need to list comments on a top-level commentable. We need the local variable "commentable" here. -->
 <div id="feedback" class="feedback" role="complementary">
-	
-  <h3 class="landmark heading">Actions</h3>
-	<ul class="navigation actions" role="navigation">
+
+  <h3 class="landmark heading"><%= ts("Actions") %></h3>
+  <ul class="navigation actions" role="navigation">
     <% if @work || @admin_post %>
-        <li><%= link_to '&#8593; '.html_safe + h(ts('Top')), :anchor => "main" %></li>
+      <li><%= link_to '&#8593; '.html_safe + ts('Top'), :anchor => "main" %></li>
     <% end %>
     <% if @work && @previous_chapter %>
-        <li><%= link_to '&#9664'.html_safe + h(ts('Previous Chapter')), [@work, @previous_chapter] %></li>
+      <li><%= link_to '&#9664'.html_safe + ts('Previous Chapter'), [@work, @previous_chapter] %></li>
     <% end %>
     <% if @work && @next_chapter %>
-        <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
+      <li><%= link_to (ts('Next Chapter') + ' &#8594;').html_safe, [@work, @next_chapter] %></li>
     <% end %>
     <% if @admin_post %>
-        <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
+      <li><%= link_to ts('Back to AO3 News Index'), admin_posts_path %></li>
     <% end %>
     <% if @work && !is_author_of?(@work) %>
       <li>
@@ -25,7 +25,9 @@
       </li>
     <% end %>
     <% if @work && is_author_of?(@work) %>
-      <%= link_to ts("Add To Collections"), "#collection-form", :class => "collection_item_form_placement_open"%>
+      <li>
+        <%= link_to ts("Add To Collections"), "#collection-form", :class => "collection_item_form_placement_open" %>
+      </li>
     <% end %>
     <% if logged_in? && @work %>
       <li>
@@ -38,7 +40,7 @@
     <% end %>
   </ul>
 
-  <h3 class="landmark heading"><a name="comments">Comments</a></h3>
+  <h3 class="landmark heading"><a name="comments"><%= ts("Comments") %></a></h3>
 
   <%= flash_div :comment_error, :comment_notice %>
 
@@ -48,16 +50,15 @@
 
   <div id="add_comment_placeholder">
     <div id="add_comment">
-      <%= render :partial => 'comments/comment_form', :locals => {:comment => Comment.new, :commentable => commentable, :button_name => ts('Comment')}%> 		
+      <%= render 'comments/comment_form', {:comment => Comment.new, :commentable => commentable, :button_name => ts('Comment')} %>     
     </div>
   </div>
 
   <!-- If we have javascript, here is where the comments will be spiffily inserted -->
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
-	<div id="comments_placeholder">
+  <div id="comments_placeholder">
     <% if params[:show_comments] || params[:tag_id] %>
-      <%= render :partial => 'comments/comment_thread', 
-                 :locals => { :depth => 0, :comments => commentable.comments } %>
+      <%= render 'comments/comment_thread', { :depth => 0, :comments => commentable.comments } %>
       </ol><!-- need to tack this on to close thread -->
     <% end %>
   </div>
@@ -68,8 +69,8 @@
         <%= render "collection_items/collection_item_form", :item => @work, :in_page => true %>
       </div>
     <% end %>
-  
- 	  <div id="bookmark_form_placement" class="wrapper toggled">
+
+    <div id="bookmark_form_placement" class="wrapper toggled">
       <% @bookmark ||= bookmark_if_exists(commentable) %>
       <% if @bookmark %>
         <%= render "bookmarks/bookmark_form", :bookmarkable => commentable, :bookmark => @bookmark, :button_name => ts("Edit"), :action => :update, :in_page => true %>

@@ -22,20 +22,20 @@ class CollectionItem < ActiveRecord::Base
     :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
   validates_uniqueness_of :collection_id, :scope => [:item_id, :item_type],
-    :message => t('collection_item.not_unique', :default => "already contains this item.")
+    :message => ts("already contains this item.")
 
   validates_numericality_of :user_approval_status, :allow_blank => true, :only_integer => true
   validates_inclusion_of :user_approval_status, :in => [-1, 0, 1], :allow_blank => true,
-    :message => t('collection_item.invalid_status', :default => "is not a valid approval status.")
+    :message => ts("is not a valid approval status.")
 
   validates_numericality_of :collection_approval_status, :allow_blank => true, :only_integer => true
   validates_inclusion_of :collection_approval_status, :in => [-1, 0, 1], :allow_blank => true,
-    :message => t('collection_item.invalid_status', :default => "is not a valid approval status.")
+    :message => ts("is not a valid approval status.")
 
   validate :collection_is_open, :on => :create
   def collection_is_open
     if self.new_record? && self.collection && self.collection.closed?
-      errors.add_to_base t('collection_preferences.closed', :default => "Collection %{title} is currently closed.", :title => self.collection.title)
+      errors.add_to_base ts("Collection %{title} is currently closed.", :title => self.collection.title)
     end
   end
 

@@ -1,6 +1,7 @@
 class Work < ActiveRecord::Base
 
   include Taggable
+  include Collectible
 
   ########################################################################
   # ASSOCIATIONS
@@ -9,7 +10,7 @@ class Work < ActiveRecord::Base
   has_one :hit_counter, :dependent => :destroy
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
-	has_many :users, :through => :pseuds, :uniq => true
+  has_many :users, :through => :pseuds, :uniq => true
 
   has_many :external_creatorships, :as => :creation, :dependent => :destroy
   has_many :archivists, :through => :external_creatorships
@@ -34,18 +35,9 @@ class Work < ActiveRecord::Base
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
 
-  has_many :collection_items, :as => :item, :dependent => :destroy
-  accepts_nested_attributes_for :collection_items, :allow_destroy => true
-  has_many :approved_collection_items, :class_name => "CollectionItem", :as => :item,
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
-
   has_many :challenge_assignments, :as => :creation
   has_many :challenge_claims, :as => :creation
   accepts_nested_attributes_for :challenge_claims
-
-  has_many :collections, :through => :collection_items
-  has_many :approved_collections, :through => :collection_items, :source => :collection,
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
 
   has_many :filter_taggings, :as => :filterable, :dependent => :destroy
   has_many :filters, :through => :filter_taggings
@@ -308,52 +300,6 @@ class Work < ActiveRecord::Base
     self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.select {|assignment| assignment.offering_user == User.current_user}
   end
 
-  # Set a work's collections based on a list of collection names
-  # Don't delete all existing collections, or else works in closed collections
-  # can't be edited
-  def collection_names=(new_collection_names)
-    names = new_collection_names.split(',').map{ |name| name.strip }
-    to_add = Collection.where(:name => names)
-    (self.collections - to_add).each do |c|
-      self.collections.delete(c)
-    end
-    (to_add - self.collections).each do |c|
-      self.collections << c
-    end
-    (names - to_add.map{ |c| c.name }).each do |name|
-      unless name.blank?
-        self.errors.add(:base, t('collection_invalid', :default => "We couldn't find a collection with the name
-%{name}. Make sure you are using the one-word name, and not the title?", :name => name.strip))
-      end
-    end
-  end
-
-  def add_to_collection(collection)
-    if collection && !self.collections.include?(collection)
-      self.collections << collection
-    end
-  end
-
-  def add_to_collection!(collection)
-    add_to_collection(collection)
-    save
-  end
-
-  def remove_from_collection!(collection)
-    if collection && self.collections.include?(collection)
-      self.collections -= [collection]
-    end
-  end
-
-  def remove_from_collection!(collection)
-    remove_from_collection(collection)
-    save
-  end
-
-  def collection_names
-    self.collections.collect(&:name).join(",")
-  end
-
   def recipients=(recipient_names)
     new_gifts = []
     recipient_names.split(',').each do |name|
@@ -470,11 +416,11 @@ class Work < ActiveRecord::Base
     end
   end
 
-	# Make sure the series restriction level is in line with its works
+  # Make sure the series restriction level is in line with its works
   def adjust_series_restriction
-	  unless self.series.blank?
+    unless self.series.blank?
       self.series.each {|s| s.adjust_restricted }
-		end
+    end
   end
 
   ########################################################################
@@ -562,7 +508,7 @@ class Work < ActiveRecord::Base
   def multipart?
     self.number_of_chapters > 1
   end
-  
+
   after_save :update_complete_status
   def update_complete_status
     self.complete = self.chapters.posted.count == expected_number_of_chapters
@@ -1052,7 +998,7 @@ class Work < ActiveRecord::Base
     elsif !options[:user].nil?
       @works = @works.owned_by(options[:user])
     end
-    
+
     if !options[:selected_tags].blank? || !options[:tag].blank?
       if options[:boolean_type] == 'or'
         @works = @works.with_any_filter_ids(options[:selected_tags])
@@ -1060,7 +1006,7 @@ class Work < ActiveRecord::Base
         @works = @works.with_all_filter_ids(options[:selected_tags])
       end
     end
-    
+
     if options[:language_id]
       @works = @works.by_language(options[:language_id])
     end
@@ -1072,15 +1018,15 @@ class Work < ActiveRecord::Base
     else
       @works = @works.limit(ArchiveConfig.SEARCH_RESULTS_MAX)
     end
-    
+
     if User.current_user.nil? || User.current_user == :false
       @works = @works.unrestricted
     end
-    
+
     if options[:sort_column] == "hit_count"
       @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter)
     end
-    
+
     @works = @works.order(sort_by).posted.unhidden
     # for now, trigger the lazy loading so we don't get an error on @works.size
     @works.compact

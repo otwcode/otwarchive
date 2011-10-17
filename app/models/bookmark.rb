@@ -1,16 +1,16 @@
 class Bookmark < ActiveRecord::Base
+
+  include Collectible
+
   belongs_to :bookmarkable, :polymorphic => true
   belongs_to :pseud
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
-  has_many :collection_items, :as => :item, :dependent => :destroy
-  has_many :collections, :through => :collection_items
-
   attr_protected :notes_sanitizer_version
 
   validates_length_of :notes,
-    :maximum => ArchiveConfig.NOTES_MAX, :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    :maximum => ArchiveConfig.NOTES_MAX, :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
 
   default_scope :order => "bookmarks.id DESC" # id's stand in for creation date
 
