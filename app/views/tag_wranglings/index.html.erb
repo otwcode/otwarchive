@@ -19,6 +19,8 @@
 <h3 class="heading"><%= ts("Mass Wrangle New/Unwrangled Tags") %> 
 <!--BACK END pls for each tag_wranglings_path(:show => "n") then append "by n"--></h3>
 
+<% #BACK END, this page seems to load empty? Can you show some content by default pls %>
+
 
 <% if params[:show] == "character_relationships" %>
 
@@ -26,14 +28,14 @@
   <%= form_tag url_for(:controller => 'tag_wranglings', :action => 'index'), :method => :get do %>
   <fieldset>
     <legend>Choose fandom</legend>
-    <p title="fandom">
-      <%= label_tag :fandom_string, ts("Fandom:") %> 
-      <%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %>
-    </p>
-  </fieldset>
-  <fieldset>
-    <legend>Submit</legend>
-    <p class="submit actions"><%= hidden_field_tag :show, 'character_relationships' %><%= submit_tag "Go" %></p>
+    <dl>
+      <dt title="fandom">
+      <%= label_tag :fandom_string, ts("Fandom:") %><dt> 
+      <dd><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %>
+    </dd>
+    <dt class="landmark">Submit</dt>
+    <dd class="submit actions"><%= hidden_field_tag :show, 'character_relationships' %><%= submit_tag "Go" %></dd>
+  </dl>
   </fieldset>
   <% end %>
 
@@ -62,12 +64,9 @@
       <dt><%= label_tag :fandom_string, ts("Wrangle to Fandom") %></dt>
       <dd title="wrangle to fandom"><%= text_field_tag 'fandom_string', params[:fandom_string], autocomplete_options("fandom", :autocomplete_token_limit => 1) %></dd>
     <% end %>
+    <dt class="landmark">Submit</dt>
+    <dd class="submit"><%= submit_tag "Wrangle" %></dd>
   </dl>
-  </fieldset>
- 
-  <fieldset>
-    <legend>Submit</legend>
-    <p class="submit actions"><%= submit_tag "Wrangle" %></p>
   </fieldset>
 
 

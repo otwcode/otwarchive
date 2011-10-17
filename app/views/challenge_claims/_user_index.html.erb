@@ -1,9 +1,15 @@
-<h2 class="heading">Your Claims<% if @collection %> In <%= link_to(@collection.title, @collection) %><% end %></h2>
-<!--FRONT END: TABLEWATCH!!-->
-<ul class="index">
+<div class="user home">
+  <h2 class="heading">Your Claims<% if @collection %> In <%= link_to(@collection.title, @collection) %><% end %></h2>
 
-  <% @challenge_claims.each do |claim| %>
-    <%= render "challenge_claims/claim_blurb", :claim => claim %>
-  <% end %>
+  <%= will_paginate @claims %>
+
+  <ol class="index">
+
+    <% @claims.each do |claim| %>
+      <%= render "prompts/prompt_blurb", :prompt => claim.request_prompt, :suppress_claims => true, :claim => claim %>
+    <% end %>
   
-</ul>
+  </ol>
+
+  <%= will_paginate @claims %>
+</div>

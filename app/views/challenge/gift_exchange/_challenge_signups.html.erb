@@ -1,6 +1,13 @@
 <h2 class="heading"><%= ts("Signups for %{collection}", :collection => @collection.title) %></h2>
   
 <% @challenge ||= @collection.challenge %>
+<% show_request_url = @challenge.request_restriction.url_allowed %>
+<% show_offer_url = @challenge.offer_restriction.url_allowed %>
+<% show_request_description = @challenge.request_restriction.description_allowed %>
+<% show_offer_description = @challenge.offer_restriction.description_allowed %>
+<% show_request_optional_tags = @challenge.request_restriction.optional_tags_allowed %>
+<% show_offer_optional_tags = @challenge.offer_restriction.optional_tags_allowed %>
+
 
 <% unless @hide_navigation %>
   <ul class="navigation" role="menu">

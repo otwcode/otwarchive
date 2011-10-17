@@ -4,6 +4,9 @@
     <h4 class="heading" title="title">
       <%= prompt.title || ts("Untitled") %>
       <%= ts("by %{person}", :person => prompt.anonymous? ? "Anonymous" : (prompt.pseud ? prompt.pseud.byline : prompt.challenge_signup.pseud.byline)) %>
+      <% unless @collection %>
+        <%= ts("in %{title}", :title => prompt.collection.title) %>
+      <% end %>
     </h4>
 
     <% tag_groups = prompt.tag_groups %>
@@ -41,6 +44,7 @@
     </blockquote>
   <% end %>
 
+<!--review-->
   <% unless prompt.url.blank? %>
     <p>
       <% url_label = prompt.collection.challenge.send("request_url_label") %><%= url_label.blank? ? ts("URL") : url_label %>:
@@ -54,8 +58,8 @@
     <% # if prompt has been claimed list by whom %>
     <% unless prompt.request_claims.unfulfilled.empty? %>
       <div class="claims listbox">
-        <h7 class="heading"><%= ts("Claimed By")%></h7>
-        <ul class="index">
+        <h5 class="heading"><%= ts("Claimed By")%></h5>
+        <ul class="commas index">
           <% if prompt.collection.anonymous? %>
             <%= ts("%{count} anonymous claimants", :count => prompt.request_claims.unfulfilled.count) %>
           <% else %>
@@ -68,7 +72,7 @@
     <% # if prompt has been fulfilled list works %>
     <% unless prompt.unfulfilled? %>
       <div class="works listbox">
-        <h7 class="heading"><%= ts("Fulfilled By")%></h7>
+        <h5 class="heading"><%= ts("Fulfilled By")%></h5>
         <ul class="index">
           <% prompt.request_claims.fulfilled.map(&:creation).each do |creation| %>
             <% if creation.is_a?(Work) %>

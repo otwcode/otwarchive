@@ -24,9 +24,9 @@ user home, collections and challenges home, tag home, admin comms home
         { background: url("/images/skins/iconsets/default/icon_tag.png")}
         
 /*contexts*/
-/*(no filters, drearily specific to override searchbrowse*/
-.dashboard .works-index .index, .dashboard .collections-index .index 
-          { width:100%; float:none}
+/*(no filters)*/
+.dashboard.collections-index .index 
+          { width:100%; }
 /*(with filters)*/
 #inbox-form
         { float:left; width: 75%}

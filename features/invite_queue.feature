@@ -8,16 +8,16 @@ Feature: Invite queue management
   # Changing from null to empty string counts as a change to the banner
   When I am logged out as an admin
   When I am on the homepage
-  Then I should not see "SIGN UP NOW"
-    And I should see "The Archive of Our Own is a fan-created"
+  Then I should not see "Get an Invite"
+    And I should see "Archive of Our Own"
   
   Scenario: Can turn queue on and it displays as on
   
   When I turn on the invitation queue
   When I am logged out as an admin
   When I am on the homepage
-  Then I should see "SIGN UP NOW"
-  When I follow "SIGN UP NOW"
+  Then I should see "Get an Invite"
+  When I follow "Get an Invite"
   Then I should see "Request an invite"
 
   Scenario: Join queue and check status
@@ -34,14 +34,14 @@ Feature: Invite queue management
     When I turn on the invitation queue
     When I am on the homepage
       And all emails have been delivered
-      And I follow "SIGN UP NOW"
+      And I follow "Get an Invite"
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
     Then I should see "You've been added to our queue"
     
     # check your place in the queue - invalid address
     When I am on the homepage
-      And I follow "SIGN UP NOW"
+      And I follow "Get an Invite"
     When I fill in "email" with "testttt@archiveofourown.org"
       And I press "Go"
     Then I should see "Sorry, we couldn't find that address in our queue"
@@ -84,7 +84,7 @@ Feature: Invite queue management
     When I turn on the invitation queue
     When I am on the homepage
       And all emails have been delivered
-      And I follow "SIGN UP NOW"
+      And I follow "Get an Invite"
     When I fill in "invite_request_email" with "test@archiveofourown.org"
       And I press "Add me to the list"
     When the invite_from_queue_at is yesterday
@@ -101,14 +101,14 @@ Feature: Invite queue management
       And I fill in "admin_session_password" with "password"
       And I press "Log in as admin"
     Then I should see "Successfully logged in"
-    When I follow "invitations"
+    When I follow "Invitations"
       And I fill in "invitee_email" with "test@archiveofourown.org"
       And I press "Go"
     Then I should see "Sender queue"
       And I should see "copy and use"
     When I follow "copy and use"
     Then I should see "You are already logged in!"
-    When I follow "Log out"
+    When I log out
     
     # user uses email invite
     Then the email should contain "You've been invited to join our beta!"

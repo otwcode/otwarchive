@@ -3,6 +3,8 @@
 <!--/descriptions-->
 
 <!--subnav -->
+<%= render "user_invitations_navigation" %>
+
 <ul class="navigation actions" role="navigation">
   <li><h4 class="heading"><%= ts("Manage:") %></h4></li>
   <li>
@@ -20,9 +22,6 @@
   <li class="last">
     <%= link_to 'all', manage_user_invitations_path(@user) %>
   </li>
-  <li><%= span_if_current t('.invitations', :default =>"Invitations"), user_invitations_path(@user) %></li>
-   <li><%= span_if_current "Manage invitations", {:controller => :invitations, :action => :manage, :user_id => @user.login} %></li>
-   <li><%= span_if_current "Request more", new_user_invite_request_path %></li>
 </ul>
 
 <!--/subnav-->

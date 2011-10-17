@@ -5,7 +5,7 @@ Forms are normally in definition lists <dt label: dd input>
 with some un/ordered lists, normally of checkbox options <li checkbox:label>
 and some paragraphs, normally forms with a single <p label:input> .
 
-We might develop two MODES: .simple and .verbose, in early draft in sandbox
+We might develop three MODES: .simple .verbose and .dynamic -- .sim and ver in early draft in sandbox
 We also have some jS WIDGETS, which are custom form interactions, like autocomplete 
 and a few variations for INTERACTION TYPES, which are, roughly:
 .post, .login, make .associations, set .preferences, [.search, .filter] => in searchbrowse
@@ -16,7 +16,7 @@ form    { clear:right }
 I've written a load of possible different nests to give a reasonably/broadly consistent view whatever goes in, 
 but it's probably not complete. */
 fieldset, form dl, fieldset dl dl, fieldset fieldset fieldset, fieldset fieldset dl dl, dd.hideme 
-        { background:#ddd; border:2px solid #f3efec; margin:0.643em; padding:0.643em;
+        { display:block; background:#ddd; border:2px solid #f3efec; margin:0.643em; padding:0.643em;
           box-shadow:inset 1px 0 5px #999 }
 fieldset dl, fieldset.actions, fieldset dl fieldset dl
         { background:transparent; border:none; clear:right;
@@ -28,9 +28,9 @@ fieldset dd dl, form .meta dd, fieldset dl fieldset dl, dd fieldset
 /*end nesting */
 legend, input[type="hidden"]
         { height:0; width:0; font-size:0; opacity:0; padding:0; margin:0}
-label   { cursor: pointer; margin-right:0.375em}
+label   { cursor: pointer; margin-right:0.375em; }
 input,textarea   
-        { font-size:100%; width:100%; border:1px solid #bbb; 
+        { font-size:100%; width:100%; border:1px solid #bbb;
           box-shadow: inset 0 1px 2px #ccc }
 textarea{ min-height:12em}
 input:focus, select:focus, textarea:focus
@@ -40,10 +40,10 @@ input[type="radio"] + label, input[type="checkbox"] + label
 select  { vertical-align:text-top; width:100%; min-width:10.5em}
 .datetime select 
         { width:32.5% }
-input[type="radio"], input[type="checkbox"], input[type="file"], p input, p select, h4 select, li select 
-        { width:auto; margin-right:0.375em}
+input[type="radio"], input[type="checkbox"], input[type="file"], input.number, p input, p select, .heading select, li select 
+        { vertical-align:text-top; width:auto; margin-right:0.375em}
 input.number
-        { width: 4em; margin-right:0.375em}
+        { width: 4em;}
 option, .actions option, form code  
         { display:block }
 form p  { clear:right; margin:auto; padding:0.643em }
@@ -95,7 +95,7 @@ form li ul.autocomplete li.input
         { background: #ddd; border: 2px solid #999; cursor:move;
           box-shadow:1px 1px 3px #bbb }
 .ui-draggable form
-        { cursor: move; box-shadow: 0 0 3px #777 }
+        { cursor: move; box-shadow: 0 0 3px #555 }
 
 /* WIDGET: TIMEPICKER (todo, requires ARIA managed focus) */
 .ui-timepicker-div dl dd
@@ -104,7 +104,7 @@ form li ul.autocomplete li.input
         { background:#fff; overflow:hidden; padding:0.643em; font-size:87.5%;
           box-shadow:3px 3px 5px}
  
- /*WIDGET: TOOLTIP (todo, requires graceful degradation testing)
+ /*WIDGET: TOOLTIP (todo, requires graceful degradation testing, can't see any reason for this jS)
 qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 .ui-tooltip,.qtip
         { position:absolute; left:-28000px; top:-28000px; display:none; max-width:22em; min-width:6em; font-size:0.625em; z-index:15000 }
@@ -112,7 +112,7 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
         { position:relative; padding:0.15em 0.25em; background:#FFFFA3; border:1px solid #F1D031; overflow:hidden;
            word-wrap:break-word}
 
-/* WIDGET: IBOX (called by help links*/
+/* WIDGET: IBOX (called by help links todo: REPLACE WITH KBD LIGHTBOX)*/
 #ibox_w { position:absolute; top:0; left:0; z-index:100; width:100%; height:100%; background:#000;
           filter:alpha(opacity=0); opacity:0 }
 #ibox_progress
@@ -122,15 +122,18 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 #ibox_content
         { font-size:0.875em; background:#fff; width:100%; height:100%; margin-bottom:0.25em; position:relative; top:0; left:0; border-bottom:1px solid #ccc}
 
+/*MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */
+div.dynamic
+        { position:absolute; z-index: 500;}
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
-.toggled form dd 
-        { width:99%}
-.toggled form p.footnote
+.toggled form dd, .dynamic form dd 
+        { width:99%;}
+.toggled form p.footnote, .dynamic form p.footnote
         { float:none; margin:auto; padding:0; line-height:0.5}
-.toggled form
-        { padding:0.5em; border:1px solid #ccc;
+.toggled form, .dynamic form
+        { padding:0.5em; border:2px solid #ccc; background:#f4effc;
           box-shadow:1px 2px 5px }
-.toggled form fieldset, .toggled form dl, .secondary .toggled form
+.dynamic form fieldset, .toggled form fieldset, .toggled form dl, .secondary .toggled form
         { border:none; background:transparent; margin:0; padding:0; 
           box-shadow:none }
 

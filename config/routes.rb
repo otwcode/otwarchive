@@ -157,17 +157,20 @@ Otwarchive::Application.routes.draw do
       post :end_banner
     end
     resources :assignments, :controller => "challenge_assignments", :only => [:index] do
+      collection do
+        put :update_multiple
+      end
       member do
         get :default
       end
     end
-    resources :claims, :controller => "challenge_claims" do
-      member do
-        get :default
-      end
-    end
+    resources :claims, :controller => "challenge_claims", :only => [:index]
     resources :bookmarks
-    resources :collection_items, :only => [:index, :update, :destroy]
+    resources :collection_items, :only => [:index, :update, :destroy] do
+      collection do
+        put :update_multiple
+      end
+    end
     resources :collections, :only => [:index]
     resources :comments do
       member do
@@ -321,7 +324,11 @@ Otwarchive::Application.routes.draw do
         get :join
       end
     end
-    resources :items, :controller => "collection_items"
+    resources :items, :controller => "collection_items" do
+      collection do
+        put :update_multiple
+      end
+    end
     resources :signups, :controller => "challenge_signups" do
       collection do
         get :summary
@@ -333,6 +340,7 @@ Otwarchive::Application.routes.draw do
         put :set
         get :purge
         get :send_out
+        put :update_multiple
         put :default_multiple
         get :default_all
       end

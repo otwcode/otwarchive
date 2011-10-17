@@ -28,7 +28,7 @@ Feature: Create Works
     Then I should see "Überraschende Überraschung"
     When I follow "Überraschende Überraschung"
     Then I should see "Dies ist eine Fanfic in Deutsch."
-    When I follow "Log out"
+    When I log out
     Then I should see "Successfully logged out"
     
     # another example in a different language

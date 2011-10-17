@@ -107,14 +107,14 @@ end
 
 When /^I make an admin post$/ do
   visit new_admin_post_path
-  fill_in("Title", :with => "Default Admin Post")
+  fill_in("admin_post_title", :with => "Default Admin Post")
   fill_in("content", :with => "Content of the admin post.")
   click_button("Post")
 end
 
 When /^I make a translation of an admin post$/ do
   visit new_admin_post_path
-  fill_in("Title", :with => "Deutsch Ankuendigung")
+  fill_in("admin_post_title", :with => "Deutsch Ankuendigung")
   fill_in("content", :with => "Deutsch Woerter")
   When %{I select "Deutsch" from "Choose a language"}
     And %{I select "Default Admin Post" from "Is this a translation of another post?"}

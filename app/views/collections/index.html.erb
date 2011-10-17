@@ -46,7 +46,7 @@
 
 <% unless @collections.blank? %>
   <!--pagination here-->
-  <%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+  <%= will_paginate @collections %>
 
   <!--main content-->
   <h3 class="landmark heading">List of Collections</h3>
@@ -62,8 +62,7 @@
 <%= render :partial => 'collections/filters' %>
 <!---/subnav-->
 <% end %> 
-<div class="clear"><!-- presentational--></div>
 
 <% unless @collections.blank? %>
-<%= will_paginate @collections, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+<%= will_paginate @collections %>
 <% end %>

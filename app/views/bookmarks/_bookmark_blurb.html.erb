@@ -1,35 +1,43 @@
 <!-- This partial requires local variable 'bookmark' -->
+<% bookmarkable = bookmark.bookmarkable %>
 <li id="bookmark_<%= "#{bookmark.id}" %>" class="bookmark blurb" role="article">
 
-  <% if bookmark.bookmarkable.blank? %>
+  <% if bookmarkable.blank? %>
     <p class="message"><%= "This has been deleted, sorry!" %></p>
   <% else %>
-    <% bookmark_count = bookmark.bookmarkable.bookmarks.is_public.count %>
+    <% bookmark_count = bookmarkable.bookmarks.is_public.count %>
     <p class="symbols count" title="<%= bookmark_count %> Bookmarks">
       <%= get_symbol_for_bookmark(bookmark) %>
       <span><%=  (bookmark_count < 100) ? bookmark_count : '*' %></span>
     </p>
 
-    <%= render "bookmarks/bookmarkable", :bookmarkable => bookmark.bookmarkable %>   
+    <%= render "bookmarks/bookmarkable", :bookmarkable => bookmarkable %>   
 
     <!--summary-->
-    <% unless bookmark.bookmarkable.summary.blank? || (bookmark.bookmarkable.respond_to?('unrevealed?') && bookmark.bookmarkable.unrevealed?) %>
+    <% unless bookmarkable.summary.blank? || (bookmarkable.respond_to?('unrevealed?') && bookmarkable.unrevealed?) %>
       <h6 class="landmark heading">Summary</h6>
       <blockquote class="userstuff summary" title="summary">
-        <%=raw strip_images(sanitize_field(bookmark.bookmarkable, :summary)) %>
+        <%=raw strip_images(sanitize_field(bookmarkable, :summary)) %>
       </blockquote>
     <% end %>
 
     <!--navigation and actions-->
     <ul class="navigation actions" role="navigation">
       <% if bookmark_count > 1 %>
-        <li><%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, ts('Bookmarked %{count} times', :count=>bookmark_count)) %></li>
+        <li><%= link_to_bookmarkable_bookmarks(bookmarkable, ts('Bookmarked %{count} times', :count=>bookmark_count)) %></li>
       <% else %>
-        <li><%= link_to_bookmarkable_bookmarks(bookmark.bookmarkable, ts('Bookmarked %{count} time', :count=>bookmark_count)) %></li>
+        <li><%= link_to_bookmarkable_bookmarks(bookmarkable, ts('Bookmarked %{count} time', :count=>bookmark_count)) %></li>
       <% end %>
 
+      <% # let the user reading this bookmark save a copy for themselves %>
       <% if logged_in? && !is_author_of?(bookmark) %>
-        <li><%= render "bookmarks/bookmark_blurb_form", :bookmarkable => bookmark.bookmarkable %></li>
+        <li>
+          <% if (current_user_bookmark ||= bookmark_if_exists(bookmarkable)) %>
+            <%= link_to ts("Saved"), edit_bookmark_path(current_user_bookmark), :id => "bookmark_form_trigger_for_#{bookmarkable.id}", :remote => true %>
+          <% else %>
+            <%= link_to ts("Save"), get_new_bookmark_path(bookmarkable), :id => "bookmark_form_trigger_for_#{bookmarkable.id}", :remote => true %>
+          <% end %>
+        </li>
       <% end %>
 
       <% if bookmark_count > 1 %>
@@ -42,7 +50,8 @@
       <% end %>
     </ul>
     <!--/actions-->
-
+    <!-- this div is only used if the user wants to save a copy of the bookmark -->
+    <div class="dynamic" id="bookmark_form_placement_for_<%= bookmarkable.id %>"></div>
   <% end %>
 
   <div class="user module<% if is_author_of?(bookmark) %> own<% end %>">
@@ -79,9 +88,10 @@
     <% end %>
   </div>
 
-  <div id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>"></div>
+  <% # recent bookmarks will be loaded up here if requested %>
+  <div class="dynamic" id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>"></div>
 
-  <% if logged_in_as_admin? && bookmark.bookmarkable.class == ExternalWork %>
-    <%= render 'admin/admin_options', :item => bookmark.bookmarkable %>
+  <% if logged_in_as_admin? && bookmarkable.class == ExternalWork %>
+    <%= render 'admin/admin_options', :item => bookmarkable %>
   <% end %>
 </li>

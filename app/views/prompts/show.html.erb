@@ -1,18 +1,13 @@
-<!-- descriptions BACK END is this really a collection page? Is it in a Home View? where does this show up? HALP-->
-<div id="collection-page" class="collection profile">
-  <!-- /descriptions-->
-  <!--subnavigation, sorting and actions-->
-  <!--/subnav-->
-  <!--main content-->
-  <h3 class="heading"><%= ts("#{@prompt.class.name} by %{person}", :person => @prompt.anonymous? ? "Anonymous" : @challenge_signup.pseud.byline) %></h3>
+<!-- descriptions BACK END is this really a collection page? Is it in a Home View? where does this show up? HALP - have made a guess for now to make it valid-->
+<div id="collection-page" class="collection prompt home">
+<h3 class="heading"><%= ts("#{@prompt.class.name} by %{person}", :person => @prompt.anonymous? ? "Anonymous" : @challenge_signup.pseud.byline) %></h3>
 
-  <div class="collection preface">
+  <!--/subnav-->
+
+  <ul class="index">
     <%= render "prompts/prompt_blurb", :prompt => @prompt %>
-  </div>
+  </ul>
   <!--/content-->
 
-  <!--subnav-->
-    <%= render :partial => "prompt_controls", :locals => {:challenge_signup => @challenge_signup, :prompt => @prompt} %>
-  <!--/subnav-->
 </div>
 

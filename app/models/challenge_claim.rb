@@ -61,7 +61,7 @@ class ChallengeClaim < ActiveRecord::Base
   }
   
   scope :order_by_date, {
-    :order => "created_at DESC"
+    :order => "created_at ASC"
   }
 
   scope :fulfilled, {

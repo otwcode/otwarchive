@@ -46,7 +46,7 @@ end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
   Given "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
-  click_button("Add Comment")
+  click_button("Comment")
 end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest$/ do |comment_text, work|
@@ -54,12 +54,12 @@ When /^I post the comment "([^"]*)" on the work "([^"]*)" as a guest$/ do |comme
   Given "I set up the comment \"#{comment_text}\" on the work \"#{work}\""
   fill_in("Name", :with => "guest")
   fill_in("Email", :with => "guest@foo.com")
-  click_button "Add Comment"
+  click_button "Comment"
 end
 
 When /^I edit a comment$/ do
   When %{I follow "Edit"}
-  fill_in("Comment", :with => "Edited comment")
+  fill_in("comment[content]", :with => "Edited comment")
   click_button "Update"
 end
 
@@ -70,9 +70,9 @@ end
 
 When /^I comment on an admin post$/ do
   When "I go to the admin-posts page"
-    And %{I follow "Add Comment"}
-    And %{I fill in "Comment" with "Excellent, my dear!"}
-    And %{I press "Add Comment"}
+    And %{I follow "Comment"}
+    And %{I fill in "comment[content]" with "Excellent, my dear!"}
+    And %{I press "Comment"}
 end
 
 When /^I compose an invalid comment(?: within "([^"]*)")?$/ do |selector|

@@ -1,32 +1,32 @@
 /*  IE_CONDITION: IE6 */
 
+/*http://media.transformativeworks.org/training/front_end_coding/debugging-ie.html*/
+
 /*emphasis */
 h1, h2, h3, h4, h5, h6, #header .navigation a {font-weight:bold}
 #header .main .current {background:#fff}
-
-/* stacking */
-
-.own {z-index:-30}
-form.filters {z-index:-50}
-.index .user {z-index:20}
-
 /*ie6 links not buttons */
 .actions a:hover {background:#eee; border:0; border-bottom:1px solid}
 #header .actions a {color:#fff; background:#900}
 
+/* stacking */
+.own {z-index:-30}
+form.filters {z-index:-50}
+.index .user {z-index:20}
+
+/*inheritance */
+form dl.meta {width:100%; display:inline}
+form .meta dt { float:left; clear:left; width:25%; padding:0.25em 0.5625em 0 0; border-bottom:1px solid #f3efec }
+form .meta dd { float: left; width:72.5% }
+ 
 /*margin/padding quirks */
 #header #greeting {background:#900}
 #header #greeting ul.navigation { padding:0; top:105px}
 
 /*hL*/
 form.filters {position:relative}
-.index .user, .index .blurb .heading, .actions a, li.blurb, li.comment, #main, .header{zoom:1}
-
-/* Issue 2222 Media fandoms page */
-.fandoms-index .index li, .fandoms-index .index,
-.fandoms-index li, .fandoms-index ul {float: none !important}
-.fandoms-index .index .even {margin-left: 0 !important}
-.fandoms-index .letter h3 .top {display: none !important; float: none !important}
+.index .user, .index .blurb .heading, .actions a, li.blurb, li.comment, #main, .header, ul.media
+{zoom:1}
 
 /*transparency */
 .kudos {background:url("/images/legacy/kudos-legacy.png") top left no-repeat}
@@ -38,7 +38,6 @@ form.filters {position:relative}
 /*min-height */
 #header, .home .primary {height:120px}
 .titles {height:70px }
-.media-index li.category {height: 15em }
 .blurb .header {height:55px}
 .bookmark .picture .header {height:25px}
 textarea {height:12em}
@@ -48,7 +47,7 @@ input,select,option,textarea,legend,label {vertical-align:middle}
 
 /*explicit widths */
 input {width:auto!important}
-input.text, textarea,select,.filters dt  {width:100% !important}
+input.text, textarea,select,.filters dt {width:100% !important}
 #header input, .dashboard .filters dt {width:auto!important}
 
 /*float/clear */
@@ -64,6 +63,16 @@ form .preface {overflow:hidden}
         { clear:none}
 #main.dashboard 
         { width:auto; margin:auto !important}
+        
+/*javascript patch for slow-hiding secondary*/
+.works-show .secondary {top:3em;}
+
+/*calc*/
+.index .listbox .index {position:static; overflow:visible;}
+ul.media, li.medium .index {float:none !important; }
+#inner .media-index ul.media li.medium { height:17.5em; width:auto !important; float:none !important; clear:none; margin:auto !important }
+
+
         
 
 

@@ -1,10 +1,14 @@
 <% # expects "work" %>
 <li class="<% if is_author_of?(work) %>own <% end %>work blurb" id="work_<%= work.id %>" role="article">
 
-  <% if !is_author_of?(work) && (work.unrevealed? || (work.anonymous? && !@over_anon_threshold && @search)) %>
-    <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
-  <% elsif (@user || @pseud) && work.anonymous? && !is_author_of?(work) && !(['gifts', 'readings'].include?(controller.controller_name)) %>
-    <%= render 'works/mystery_blurb', :item => work, :unrevealed => false %>
+  <% is_unrevealed ||= (work.unrevealed? || (work.anonymous? && !@over_anon_threshold && @search)) %>
+  <% is_anonymous ||= (work.anonymous? && (@user || @pseud) && !(['gifts', 'readings'].include?(controller.controller_name))) %>
+  <% if (is_unrevealed || is_anonymous) && !is_author_of?(work) %>
+    <% if is_unrevealed %>
+      <%= render 'works/mystery_blurb', :item => work, :unrevealed => true %>
+    <% elsif is_anonymous %>
+      <%= render 'works/mystery_blurb', :item => work, :unrevealed => false %>
+    <% end %>
   <% else %>
 
     <!--title, author, fandom-->

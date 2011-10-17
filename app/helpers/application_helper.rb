@@ -21,10 +21,10 @@ module ApplicationHelper
     link_to_function(name, remote_function(options), html_options)
   end
   
-  def span_if_current(link_to_default_text, path)
-    translation_name = "layout.header." + link_to_default_text.gsub(/\s+/, "_")
-    link = link_to_unless_current(h(t(translation_name, :default => link_to_default_text)), path)
-    current_page?(path) ? "<span class=\"current\">#{link}</span>".html_safe : link
+  def span_if_current(link_to_default_text, path, condition=nil)
+    is_current = condition.nil? ? current_page?(path) : condition
+    text = ts(link_to_default_text)
+    is_current ? "<span class=\"current\">#{text}</span>".html_safe : link_to(text, path)
   end
   
 #BACK END, can we move this hardcoded image out and replace with

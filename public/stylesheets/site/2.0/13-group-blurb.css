@@ -1,4 +1,5 @@
 /*==GROUP: BLURB
+http://media.transformativeworks.org/training/front_end_coding/blurb.html
 The blurb class is used wherever we show a list of works, collections, bookmarks, etc; each list item is a blurb
 it shows all the tags, stats and other associations we hold on that object, and sometimes it shows short user notes too, like a summary, bookmark notes, or collection description.
 
@@ -14,27 +15,29 @@ Perhaps we can make a wizard for this specific task.
 
 .blurb ul li,.blurb dd ul li, .blurb ul.type  
         { display: inline }
-li.blurb{ position: relative; clear:left; padding: 0.643em 1em; 
+li.blurb{ position: relative; clear:left; padding: 0.643em 1em; overflow:visible;
           box-shadow:inset 1px 1px 3px #ccc; border-radius:0.15em }
 .blurb .module         
         { float:none}
 .blurb .header
-        { min-height:55px; margin-bottom:0.643em}
+        { min-height:55px; margin-bottom:0.375em}
 .blurb .header .heading, .blurb .header ul, .blurb .header p.status        
-        { display: block; background:transparent; margin: 0.375em 5.25em 0 65px }
+        { display:block; background:transparent; margin: 0.375em 5.25em 0 65px }
 .blurb .header img     
         { position: relative; margin: 0 }
 .blurb h4 a:link,.blurb h4 img 
         { color: #900; vertical-align: bottom }
-.blurb .header p.notice
-        { margin: 1.286em 0 0 0}
+.blurb .header p.notice, .blurb ul.series
+        { margin: 0.643em 0 0 0}
+.blurb .heading
+        { display: block;}
 
 /* ==START icon block rules*/
 .blurb ul.required-tags     
         { position: absolute; top: 0; width:60px; margin:0}
 .blurb ul.required-tags li, #main.blurb ul.required-tags li img,.blurb ul.required-tags li a
         { position:static; display: inline; height: 25px; width: 25px; border:none }
-.blurb ul.required-tags li  span.text 
+.blurb ul.required-tags li span.text 
         { display:none }
 .blurb ul.required-tags li span
         { background-repeat:no-repeat; height: 25px; width: 25px; display:block}
@@ -71,10 +74,8 @@ li.blurb{ position: relative; clear:left; padding: 0.643em 1em;
 
 .blurb .datetime 
         { position:absolute; top:0; right:0; margin:0}
-.blurb blockquote,.blurb .series,.blurb form
+.blurb blockquote
         { clear: none; margin: 0.643em auto; text-align: justify }
-.blurb dl.stats
-        { font-size: 0.8575em; text-align: right; margin-top: 0.375em }
 .blurb.own dl.stats
         { padding-left: 11em }
 	
@@ -107,8 +108,6 @@ eg collections, users, skins, instead of the 4-icon list
 .bookmark p.count span	
         { background: url("/images/skins/iconsets/default/category-none.png") top left no-repeat; border: 1px solid #eee; display: block; float: left; height: 25px; line-height: 1.875; margin: 0 2.5px 0 0; text-align: center; width: 25px }
 .bookmark .user 
-        { border:1px solid #ccc; clear:right;}
-.bookmark .user, .bookmark .user .header, .bookmark .user .header .heading	
-        { min-height:0; margin:auto; }
+        { border:1px solid #ccc; clear:right; overflow:hidden}
 
  /*END== */

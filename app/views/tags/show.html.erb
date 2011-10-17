@@ -91,7 +91,7 @@
     <% unless @works.blank? %>
       <div class="work listbox">
       <h3 class="heading"><%= ts('Works which have used it as a tag') %>:</h3>
-        <%= paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+        <!--BACK END, OK TO REMOVE THIS LAQUO ETC?--><%= paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
           <ul class="index">
             <% for work in @works %>
               <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
@@ -104,7 +104,7 @@
     <% unless @bookmarks.blank? %>
     <div class="bookmarks listbox">
     <h3 class="heading"><%= ts('Bookmarks which have used it as a tag') %>:</h3>
-      <%= paginated_section @bookmarks, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
+    <%= paginated_section @bookmarks, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
         <ul class="index">
           <% for bookmark in @bookmarks %>
             <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>

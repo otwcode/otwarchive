@@ -503,7 +503,7 @@ Feature: creating and editing skins
   Given I am logged in as "skinner"
     And I am on my user page
   When I follow "My Skins"
-    And I follow "Log out"
+    And I log out
   Then I should be on the login page
   
   Scenario: Change the header color

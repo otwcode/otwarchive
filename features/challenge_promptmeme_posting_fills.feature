@@ -9,7 +9,7 @@ Feature: Prompt Meme Challenge
     And a fandom exists with name: "GhostSoup", canonical: true
     And I am logged in as "mod1"
     And I set up a basic promptmeme "The Kissing Game"
-    And I follow "Log out"
+    And I log out
   When I am logged in as "myname1"
     And I go to "The Kissing Game" collection's page
     # And the apostrophe stops getting in the way of highlighting in notepad++ '
@@ -19,7 +19,7 @@ Feature: Prompt Meme Challenge
     # there are two forms in this page, can't use I submit
     And I press "Submit"
   Then I should see "Signup was successfully created"
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname2"
     And I go to "The Kissing Game" collection's page
     And I follow "Prompts (1)"

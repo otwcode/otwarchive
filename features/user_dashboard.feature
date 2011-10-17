@@ -31,7 +31,7 @@ Feature: User dashboard
   
   # view user dashboard - when posting a work with the canonical, metatag and synonym should not be seen
   
-  When I follow "Log out"
+  When I log out
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
     
   When I am logged in as "bookmarkuser1" with password "password"
@@ -43,7 +43,7 @@ Feature: User dashboard
     And I should see "You don't have anything posted under this name yet"
     And I should not see "Revenge of the Sith"
     And I should not see "Stargate"
-  When I follow "Log out"
+  When I log out
   Then I should see "logged out"
   When I am logged in as "bookmarkuser2" with password "password"
     And I post the work "Revenge of the Sith"

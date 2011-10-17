@@ -23,14 +23,14 @@ end
 
 When /^I turn on the invitation queue$/ do
   When "I am logged in as an admin"
-  When %{I follow "settings"}
+  When %{I go to the admin-settings page}
       And %{I check "admin_setting_invite_from_queue_enabled"}
       And %{I press "Update"}
 end
 
 When /^I turn off the invitation queue$/ do
   When "I am logged in as an admin"
-  When %{I follow "settings"}
+  When %{I go to the admin-settings page}
       And %{I uncheck "admin_setting_invite_from_queue_enabled"}
       And %{I press "Update"}
 end
@@ -55,7 +55,7 @@ end
 When /^I try to invite a friend from the homepage$/ do
   When %{I am logged in as "user1"}
       And %{I go to the homepage}
-    When %{I follow "INVITE A FRIEND"}
+    When %{I follow "Invite a friend"}
 end
 
 When /^I try to invite a friend from my user page$/ do
@@ -69,12 +69,12 @@ When /^I request some invites$/ do
     When %{I follow "Request more"}
     When %{I fill in "user_invite_request_quantity" with "3"}
       And %{I fill in "user_invite_request_reason" with "I want them for a friend"}
-      And %{I press "Create"}
+      And %{I press "Send Request"}
 end
 
 When /^I view requests as an admin$/ do
   When %{I am logged in as an admin}
-    When %{I follow "invitations"}
+    When %{I follow "Invitations"}
       And %{I follow "Manage requests"}
 end
 

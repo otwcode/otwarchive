@@ -20,7 +20,7 @@ Feature: Subscriptions
   Then I should see "You are now following myname1"
   When I go to my subscriptions page
   Then I should see "Unsubscribe from myname1"
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
     And I post the work "Awesome Story"
   Then 1 email should be delivered to "myname2@foo.com"
@@ -46,7 +46,7 @@ Feature: Subscriptions
     And I press "Subscribe"
     And I follow "Unsubscribe"
   Then I should see "successfully unsubscribed"
-  When I follow "Log out"
+  When I log out
     And I am logged in as "myname1" with password "something"
     And I post the work "Awesome Story 2: The Sequel"
   Then 0 emails should be delivered

@@ -1,7 +1,5 @@
 /*==GROUP: PREFACE 
--title, notes and footnotes, description, collections faq, rules, etc; 
-basically user notes, describing a work, collection, or challenge
-here we style headings and containers, and container contexts
+http://media.transformativeworks.org/training/front_end_coding_docs/patterns/preface.html
 blockquote contents (the user-written notes) are styled in userstuff.css like all other user content
 .preface appears within #workskin on a work page
 */

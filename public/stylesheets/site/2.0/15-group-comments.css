@@ -1,7 +1,9 @@
 /*==GROUP: COMMENTS
+http://media.transformativeworks.org/training/front_end_coding/patterns/comments
+
 Comments are shown in #feedback at the end of a chapter or work, at the end of news posts, and can also be shown on their own page as a threaded list. 
 The comment form generally belongs to the class "post".
-Comments are also shown in user home: inbox and that containing view is styled in zone: home.
+Comments are also shown in user home: inbox and that containing view is styled in zone-home.
 Wrangler discussion boards are not grouped with comments and they only show up in the Tag Zone.
 
 */

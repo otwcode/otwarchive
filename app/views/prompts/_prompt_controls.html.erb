@@ -30,32 +30,30 @@
           :method => :delete %>
     </li>
     <% end %>
-    <% if current_user && collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
-    <% # hides this on a user's 'your signups' page and on a signup show page, since we only want it on the challenge index %>
-      <% @claimed = 0
-         challenge_signup.request_claims.each do |claim|
-            if claim.claiming_user == current_user && claim.request_prompt_id == prompt.id
-              @claimed = 1
-            end
-        end %>
-      <% if @claimed == 1 %>
-      <li class="claimed">
-        <%= link_to ts("Claimed by you"), collection_claim_path(claim.collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %>
-      </li>
+    
+    <% # if this prompt can be claimed let the user unclaim/claim it %>
+    <% if prompt.claimable? %>
+      <% if !logged_in? %>
+        <li><%= ts("Sign in to claim prompts") %></li>
+      <% elsif (claim ||= prompt.claim_by(current_user).first) %>
+        <% # already claimed %>
+        <li><%= link_to ts("Post To Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
+        <li>
+          <%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %>
+        </li>
       <% else %>
-      <li>
-        <% new_claim = ChallengeClaim.new %>
-          <%= form_for [@collection, new_claim], :url => collection_claims_path(@collection) do |claim_form| %>
-              <%= claim_form.hidden_field :collection_id, :value => @collection.id %>
-              <%= claim_form.hidden_field :request_signup_id, :value => challenge_signup.id %>
-              <%= claim_form.hidden_field :request_prompt_id, :value => prompt.id %>
-              <%= claim_form.hidden_field :claiming_user_id, :value => current_user.id %>
-              <%= submit_tag "Claim", :id => "prompt_" + prompt.id.to_s %>
-          <% end %>
-      </li>
+        <li>
+          <% new_claim = ChallengeClaim.new %>
+            <%= form_for [collection, new_claim], :url => collection_claims_path(collection) do |claim_form| %>
+                <%= claim_form.hidden_field :collection_id, :value => collection.id %>
+                <%= claim_form.hidden_field :request_signup_id, :value => challenge_signup.id %>
+                <%= claim_form.hidden_field :request_prompt_id, :value => prompt.id %>
+                <%= claim_form.hidden_field :claiming_user_id, :value => current_user.id %>
+                <%= submit_tag "Claim", :id => "prompt_" + prompt.id.to_s %>
+            <% end %>
+        </li>
       <% end %>
-    <% elsif collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
-      <li><%= ts("Sign in to claim prompts") %></li>
     <% end %>
+    
   </ul>
 <% end %>

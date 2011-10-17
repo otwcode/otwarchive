@@ -20,8 +20,8 @@ Scenario: pseud creation and playing with the default pseud
   Then I should see "Pseud was successfully created."
   When I follow "Edit Pseud"
   Then I should see "Me"
-    And the "Is default" checkbox should not be disabled
-    And the "Is default" checkbox should be checked
+    And the "Make this name default" checkbox should not be disabled
+    And the "Make this name default" checkbox should be checked
   When I follow "Back To Pseuds"
     And I follow "edit_myself"
   Then the "pseud_is_default" checkbox should not be checked
@@ -29,11 +29,11 @@ Scenario: pseud creation and playing with the default pseud
   When I follow "Back To Pseuds"
     And I follow "Me"
     And I follow "Edit Pseud"
-    And I uncheck "Is default"
+    And I uncheck "Make this name default"
     And I press "Update"
   Then I should see "Pseud was successfully updated."
   When I follow "Edit Pseud"
-  Then the "Is default" checkbox should not be checked
+  Then the "Make this name default" checkbox should not be checked
   When I follow "Back To Pseuds"
     And I follow "edit_myself"
   Then the "pseud_is_default" checkbox should be checked

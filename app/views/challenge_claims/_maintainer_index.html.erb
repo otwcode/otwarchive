@@ -1,41 +1,31 @@
 <div class="collection home">
 
-    <h2 class="heading">Claims for <%= @collection.title %></h2>
+  <h2 class="heading">Claims for <%= @collection.title %></h2>
 
-    <% if logged_in? %>
-      <ul class="navigation actions" role="navigation">
-        <li><%= link_to ts("My Claims"), user_claims_path(current_user) %></li>
+  <% if logged_in? %>
+    <ul class="navigation actions" role="navigation">
+      <li><%= link_to ts("My Claims"), user_claims_path(current_user) %></li>
+      <li><%= ts("Sort By") %></li>
+      <li><%= span_if_current ts("Date"), collection_claims_path(@collection, :sort => "date") %></li>
+      <li><%= span_if_current ts("Claimer"), collection_claims_path(@collection), params[:sort].blank? %></li>
     </ul>
   <% end %>
+  
+  <% # we just briefly list all the unposted claims so a mod can clean them up if there are a ton of old ones %>
+  <% unless @claims.empty? %>
+  
+    <div class="unposted claims listbox">
+      <h3 class="heading">Unposted Claims</h3>
+      <%= will_paginate @claims %>
+      <ol class="index">
+        <% @claims.each do |claim| %>
+          <%= render "challenge_claims/unposted_claim_blurb", :claim => claim %>
+        <% end %>
+      </ol>
+      <%= will_paginate @claims %>
+    </div>
+  <% end %>
 
-
-<% # BACK END TODO this is broken, you can't use paginate twice in the same page on two separate sets of data like this, but it's already broken this way on beta so leaving it for now %>
-
-<% unless @unposted_claims.empty? %>
-  <div class="unposted claims listbox">
-    <h3 class="heading">Unposted Claims</h3>
-  <%= will_paginate @unposted_claims -%>
-  <ul class="index">
-    <% @unposted_claims.each do |claim| %>
-      <%= render "challenge_claims/claim_blurb", :claim => claim %>
-    <% end %>
-  </ul>
-  <%= will_paginate @unposted_claims -%>
-</div>
-<% end %>
-
-<% unless @posted_claims.empty? %>
-  <div class="posted claims listbox">
-      <h3 class="heading">Posted Claims</h3>
-  <%= will_paginate @posted_claims -%>
-  <ul class="index">
-    <% @posted_claims.each do |claim| %>
-      <%= render "challenge_claims/claim_blurb", :claim => claim %>
-    <% end %>
-  </ul>
-  <%= will_paginate @posted_claims -%>
-</div>
-<% end %>
 
 </div>
 
