@@ -21,13 +21,15 @@
 
   <% # prompts %>
   <% @work.challenge_claims.each do |claim| %>
-    <p>In response to a prompt by:
-      <% if claim.request_prompt.nil? || claim.request_prompt.anonymous? %>
-      <%= link_to(ts("Anonymous"), collection_claim_path(claim.collection, claim)) %>
-      <% else %>
-      <%= link_to(claim.request_signup.pseud.byline, collection_claim_path(claim.collection, claim)) %>
-      <% end %>
-    </p>
+    <% unless claim.request_prompt.nil? %>
+      <p>In response to a prompt by:
+        <% if claim.request_prompt.anonymous? %>
+          <%= link_to(ts("Anonymous"), collection_prompt_path(claim.collection, claim.request_prompt)) %>
+        <% else %>
+          <%= link_to(claim.request_signup.pseud.byline, collection_prompt_path(claim.collection, claim.request_prompt)) %>
+        <% end %>
+      </p>
+    <% end %>
   <% end %>
 
   <% # inspired-by %>

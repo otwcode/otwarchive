@@ -25,41 +25,52 @@ class CollectionItemsController < ApplicationController
 
     if @collection && @collection.user_is_maintainer?(current_user)
       @collection_items = @collection.collection_items.include_for_works
+      @collection_items = case
+      when params[:approved]
+        @collection_items.approved_by_collection
+      when params[:rejected]
+        @collection_items.rejected_by_collection
+      else
+        @collection_items.unreviewed_by_collection
+      end
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
-      @collection_items = @user.work_collection_items + @user.bookmark_collection_items
+      @collection_items = CollectionItem.for_user(@user).includes(:collection)
+      @collection_items = case
+      when params[:approved]
+        @collection_items.approved_by_user
+      when params[:rejected]
+        @collection_items.rejected_by_user
+      else
+        @collection_items.unreviewed_by_user
+      end
     else
-      flash[:error] = t('collection_items.no_items_found', :default => "We couldn't find any items for you to view.")
-      redirect_to root_path and return
+      flash[:error] = ts("You don't have permission to see that, sorry!")
+      redirect_to collections_path and return
     end
-
-    # @has_received = {}
-    # if @collection && @collection.gift_exchange?
-    #   @gift_recipients = Gift.in_collection(@collection).name_only.collect(&:recipient_name).uniq
-    #   @gift_recipients.each {|recip| @has_received[recip] = true}
+    
+    sort = "created_at DESC"
+    # case params[:sort]
+    # when "item"
+    #   @collection_items = @collection_items.sort_by {|ci| ci.title}
+    # when "collection"
+    #   @collection_items = @collection_items.sort_by {|ci| ci.collection.title}
+    # when "word_count"
+    #   @collection_items = @collection_items.sort_by {|ci| ci.item.respond_to?(:word_count) ? ci.item.word_count : 0 }      
+    # when "creator"
+    #   @collection_items = @collection_items.sort_by {|ci| ci.item_creator_names }
+    # when "member"
+    #   @collection_items = @collection_items.sort_by {|ci| ci.item_creator_pseuds.map {|pseud| @collection.user_is_posting_participant?(pseud.user) ? "Y" : "N"}.join(", ") }      
+    # when "user_approval"
+    #   @collection_items = @collection_items.sort_by {|ci| ci.user_approval_status}
+    # when "collection_approval"
+    #   @collection_items = @collection_items.sort_by {|ci| ci.collection_approval_status}
+    # when "recipient"
+    #   @collection_items = @collection_items.sort_by {|ci| ci.recipients } if @collection.gift_exchange?
+    # when "date"
+    #   @collection_items = @collection_items.sort_by {|ci| ci.item_date}
     # end
 
-    case params[:sort]
-    when "item"
-      @collection_items = @collection_items.sort_by {|ci| ci.title}
-    when "collection"
-      @collection_items = @collection_items.sort_by {|ci| ci.collection.title}
-    when "word_count"
-      @collection_items = @collection_items.sort_by {|ci| ci.item.respond_to?(:word_count) ? ci.item.word_count : 0 }      
-    when "creator"
-      @collection_items = @collection_items.sort_by {|ci| ci.item_creator_names }
-    when "member"
-      @collection_items = @collection_items.sort_by {|ci| ci.item_creator_pseuds.map {|pseud| @collection.user_is_posting_participant?(pseud.user) ? "Y" : "N"}.join(", ") }      
-    when "user_approval"
-      @collection_items = @collection_items.sort_by {|ci| ci.user_approval_status}
-    when "collection_approval"
-      @collection_items = @collection_items.sort_by {|ci| ci.collection_approval_status}
-    when "recipient"
-      @collection_items = @collection_items.sort_by {|ci| ci.recipients } if @collection.gift_exchange?
-    # when "received"
-    #   @collection_items = @collection_items.sort_by {|ci| ci.check_gift_received(@has_received)} if @collection.gift_exchange?
-    when "date"
-      @collection_items = @collection_items.sort_by {|ci| ci.item_date}
-    end
+    @collection_items = @collection_items.order(sort).paginate :page => params[:page], :per_page => 20          
   end
   
   def load_collectible_item
@@ -126,42 +137,34 @@ class CollectionItemsController < ApplicationController
     redirect_to(@item)
   end
   
-  def update
-    @collection_item = CollectionItem.find(params[:collection_item][:id])
-    if params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
-      @collection_item.user_approval_status = params[:collection_item][:user_approval_status]
-      if @collection_item.save
-        flash[:notice] = t('collection_items.updated', :default => "Updated %{item}.", :item => @collection_item.title)
-      else
-        flash[:error] = t('collection_items.update_failed', :default => "We couldn't update %{item}: %{errors}", :item => @collection_item.title, :errors => @collection_item.errors.each {|attrib, msg| msg}.join(", "))
-      end
-      redirect_to user_collection_items_path(@user) and return
-    elsif @collection && @collection.user_is_maintainer?(current_user)
-      # update as allowed -- currently just approval status
-      @collection_item.collection_approval_status = params[:collection_item][:collection_approval_status]
-      @collection_item.anonymous = params[:collection_item][:anonymous]
-      if @collection_item.unrevealed && (params[:collection_item][:unrevealed] == "0")
-        @collection_item.reveal!
-      else
-        @collection_item.unrevealed = params[:collection_item][:unrevealed]
-      end
-      if @collection_item.save
-        flash[:notice] = t('collection_items.updated', :default => "Updated %{item}.", :item => @collection_item.title)
-      else
-        flash[:error] = t('collection_items.update_failed', :default => "We couldn't update %{item}: %{errors}", :item => @collection_item.title, :errors => @collection_item.errors.each {|attrib, msg| msg}.join(", "))
-      end
-      redirect_to collection_items_path(@collection) and return
+  def update_multiple
+    # whoops, not working because it freezes the hash
+    # not_allowed = CollectionItem.where(:id => params[:collection_items].keys)
+    # if params[:user_id] && (@user = User.find_by_login(params[:user_id])) && @user == current_user
+    #   # TODO should rewrite this as query
+    #   not_allowed = not_allowed.reject {|item| @user.is_author_of?(item)}
+    # elsif @collection && @collection.user_is_maintainer?(current_user)
+    #   not_allowed = not_allowed.where("collection_id != ?", @collection.id)
+    # end
+    # unless not_allowed.empty?
+    #   flash[:error] = ts("You are not allowed to modify that!")
+    #   redirect_to root_path and return
+    # end
+    @collection_items = CollectionItem.update(params[:collection_items].keys, params[:collection_items].values).reject { |item| item.errors.empty? }
+    if @collection_items.empty?
+      flash[:notice] = ts("Collection status updated!")
+      redirect_to (@user ? user_collection_items_path(@user) : collection_items_path(@collection))
     else
-      flash[:error] = t('collection_items.update_not_allowed', :default => "You're not allowed to make that change.")
-      redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+      render :action => "index"
     end
   end
+
   
   def destroy
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
     @collection_item.destroy
-    flash[:notice] = t('collection_items.destroyed', :default => "Item completely removed from collection %{title}.", :title => @collection.title)
+    flash[:notice] = ts("Item completely removed from collection %{title}.", :title => @collection.title)
     if @user
       redirect_to user_collection_items_path(@user) and return
     elsif (@collection.user_is_maintainer?(current_user))

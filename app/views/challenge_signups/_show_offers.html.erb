@@ -1,9 +1,13 @@
-<!-- expects local variable "challenge_signup" -->
-<div class="offers listbox">
-  <h3 class="heading">Offers</h3>
-  <ul class="index">
-<% challenge_signup.offers.each_with_index do |offer, index| %>
-  <%= render "prompts/prompt_blurb", :prompt => offer %>
+<% unless challenge_signup.offers.empty? %>  
+
+  <!-- expects local variable "challenge_signup" -->
+  <div class="offers listbox">
+    <h3 class="heading">Offers</h3>
+    <ul class="index">
+  <% challenge_signup.offers.each_with_index do |offer, index| %>
+    <%= render "prompts/prompt_blurb", :prompt => offer %>
+  <% end %>
+  </ul>
+  </div>
+  
 <% end %>
-</ul>
-</div>

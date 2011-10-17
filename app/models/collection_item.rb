@@ -5,9 +5,9 @@ class CollectionItem < ActiveRecord::Base
   REJECTED = -1
 
   LABEL = {}
-  LABEL[NEUTRAL] = t('collection_item.neutral', :default => "Neutral")
-  LABEL[APPROVED] = t('collection_item.approved', :default => "Approved")
-  LABEL[REJECTED] = t('collection_item.rejected', :default => "Rejected")
+  LABEL[NEUTRAL] = ""
+  LABEL[APPROVED] = ts("Approved")
+  LABEL[REJECTED] = ts("Rejected")
 
   APPROVAL_OPTIONS = [ [LABEL[NEUTRAL], NEUTRAL],
                        [LABEL[APPROVED], APPROVED],
@@ -42,6 +42,38 @@ class CollectionItem < ActiveRecord::Base
   scope :include_for_works, :include => [{:work => :pseuds}]
   scope :unrevealed, :conditions => {:unrevealed => true}
   scope :anonymous, :conditions =>  {:anonymous => true}
+  
+  def self.for_user(user=User.current_user)
+    # get ids of user's bookmarks and works
+    bookmark_ids = Bookmark.joins(:pseud).where("pseuds.user_id = ?", user.id).value_of(:id)
+    work_ids = Work.joins(:pseuds).where("pseuds.user_id = ?", user.id).value_of(:id)
+    # now return the relation
+    where("(item_id IN (?) AND item_type = 'Work') OR (item_id IN (?) AND item_type = 'Bookmark')", work_ids, bookmark_ids)
+  end
+
+  def self.approved_by_user
+    where(:user_approval_status => APPROVED)
+  end
+
+  def self.rejected_by_user
+    where(:user_approval_status => REJECTED)
+  end
+
+  def self.unreviewed_by_user
+    where(:user_approval_status => NEUTRAL)
+  end
+  
+  def self.approved_by_collection
+    where(:collection_approval_status => APPROVED)
+  end
+
+  def self.rejected_by_collection
+    where(:collection_approval_status => REJECTED)
+  end
+  
+  def self.unreviewed_by_collection
+    where(:collection_approval_status => NEUTRAL)    
+  end
 
   before_save :set_anonymous_and_unrevealed
   def set_anonymous_and_unrevealed
@@ -85,12 +117,32 @@ class CollectionItem < ActiveRecord::Base
       end
     end
   end
+  
+  after_update :notify_of_status_change
+  def notify_of_status_change
+    if unrevealed_changed?
+      notify_of_reveal
+    end
+    if anonymous_changed?
+      notify_of_author_reveal
+    end
+  end
 
   def check_gift_received(has_received)
     item_creator_pseuds.map {|pseud|
       has_received[pseud.name] ? "Y" :
         (pseud.user.pseuds.collect(&:name).flatten & has_received.keys).empty? ? "N" : "M*"
     }.join(", ")
+  end
+
+  def remove=(value)
+    if value == "1"
+      self.destroy
+    end
+  end
+
+  def remove
+    ""
   end
 
   def title

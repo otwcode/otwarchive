@@ -53,7 +53,7 @@
           </li>
        <% end %>
        <% if @tags[tag_type].length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
-          <li class="navigation" role="button">
+          <li class="navigation actions" role="button">
             <% if params["expand_#{tag_type.downcase.pluralize}"] %>
             <%= link_to "Hide full list", [@user, @author], :id => "expandable-#{tag_type.downcase}-link" %>
             <% else %>

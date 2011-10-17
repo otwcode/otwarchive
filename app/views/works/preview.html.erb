@@ -17,17 +17,17 @@
     <% end %>
     </div>
     <% unless @work.endnotes.blank? %>
-      <div class="preface notes">
+      <div class="preface"><div class="end notes">
           <h3 class="heading"><%=h t('.notes', :default => "Notes:") %></h3>
           <blockquote class="userstuff"><%=raw sanitize_field(@work, :endnotes) %></blockquote>
-       </div>
+       </div></div>
 
     <% end %>
   	<%= render :partial => 'works/work_footer' %>
   </div>
 </div>
 
-<div class="clear"></div>
+<div class="clear"><!--presentational--></div>
 
 <%= form_for(@work) do |f| %>
 

@@ -10,8 +10,8 @@
   <fieldset class="actions">
 	<legend>Mass Edit Options</legend>
 	<ul role="menu">
-    <li><a class="checkall">select all</a></li>
-	<li><a class="checknone">select none</a></li>
+    <li><a class="checkall">Select All</a></li>
+	<li><a class="checknone">Select None</a></li>
 	<li><%= submit_tag ts("Mark Read"), :name => 'read' %></li>
     <li><%= submit_tag ts("Mark Unread"), :name => 'unread' %></li>
     <li><%= submit_tag ts("Delete From Inbox"), :name => 'delete' %></li>
@@ -59,8 +59,8 @@ inbox_comment.feedback_comment), :remote => true %>
   <fieldset class="actions">
 	<legend>Mass Edit Options</legend>
 	<ul role="menu">
-    <li><a class="checkall">select all</a></li>
-	<li><a class="checknone">select none</a></li>
+    <li><a class="checkall">Select All</a></li>
+	<li><a class="checknone">Select None</a></li>
 	<li><%= submit_tag ts("Mark Read"), :name => 'read' %></li>
     <li><%= submit_tag ts("Mark Unread"), :name => 'unread' %></li>
     <li><%= submit_tag ts("Delete From Inbox"), :name => 'delete' %></li>
@@ -69,9 +69,9 @@ inbox_comment.feedback_comment), :remote => true %>
     <!-- coming soon <%= submit_tag t('.mass_reply', :default => 'mass reply') %> -->
   <% end %> <!-- end of inbox form -->
   
-  <!--BACK END URGENT BEFORE COMMIT, this is broken in display but I can't find the styles, it needs position: absolute probably but bookmarks were always broken with that-->
   <!-- we can't open comment forms inside the inbox form, which is why this is down here -->
-  <div id="reply-to-comment" style="display:none;"><!-- this div will contain the reply to comment form --></div> 
+  <!-- this div will contain the reply-to-comment form -->
+  <div id="reply-to-comment" class="dynamic hidden"></div> 
 <% end %>
 
 <!--/content-->

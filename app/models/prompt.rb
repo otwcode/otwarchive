@@ -196,10 +196,8 @@ class Prompt < ActiveRecord::Base
 
   # Returns PotentialPromptMatch object if matches, otherwise nil
   # self is the request, other is the offer
-  def match(other)
-    settings = get_match_settings
-    return nil unless settings
-
+  def match(other, settings=nil)
+    return nil if settings.nil?
     potential_prompt_match_attributes = {:offer => other, :request => self}
     full_request_tag_set = self.optional_tag_set ? self.tag_set + self.optional_tag_set : self.tag_set
     full_offer_tag_set = other.optional_tag_set ? (other.tag_set + other.optional_tag_set) : other.tag_set
@@ -236,14 +234,6 @@ class Prompt < ActiveRecord::Base
   def get_prompt_restriction
     if collection && collection.challenge
       collection.challenge.prompt_restriction
-    else
-      nil
-    end
-  end
-
-  def get_match_settings
-    if collection && collection.challenge
-      collection.challenge.potential_match_settings
     else
       nil
     end
@@ -316,11 +306,23 @@ class Prompt < ActiveRecord::Base
     return list
   end
   
+  def claim_by(user)
+    ChallengeClaim.where(:request_prompt_id => self.id, :claiming_user_id => user.id)
+  end
+  
   # checks if a prompt has been filled in a prompt meme
   def unfulfilled?
     if self.request_claims.empty? || !self.request_claims.fulfilled.exists?
       return true
     end
   end
-
+  
+  # currently only prompt meme prompts can be claimed, and by any number of people
+  def claimable?
+    if self.collection.challenge.is_a?(PromptMeme)
+      true
+    else
+      false
+    end
+  end
 end

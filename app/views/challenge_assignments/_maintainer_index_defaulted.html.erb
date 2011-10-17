@@ -1,60 +1,26 @@
 <% # list assignments which were defaulted-on and which need or have a pinch hitter assigned %>
-
-<% if @assignments.count < 1 %>
-  <p class="note">No defaulted assignments!</p>
-<% else %>
-  <h3 class="heading"><%= ts("Defaulted Assignments") %> <%= link_to_help 'challenge-defaulted-assignments' %></h3>
-<!-- note to self: 
-Recipient"
-Recipient Defaulted?
-Assigned Writer") 
-Current Pinch Hitter
-Manage
-
-ok so we want to say WHO is lacking a fill and assign them a pinch hitter
-secondary information: who dropped out
-<dl class="index">
-<dt>username lacking</dt>
-<dd class="substitute"><text field> <assign button></dd>
-<dd class="defaulter">(username defaulted)</dd>
-</dl>
-
--->
-
-
+<%= form_tag update_multiple_collection_assignments_path(@collection), :method => :put do %>
+  <dl class="index">
     <% @assignments.each do |assignment| %>
-      <% request = assignment.request_signup || assignment.pinch_request_signup %>
-      <% if request %>
-        <%= link_to assignment.request_byline, collection_signup_path(@collection, request) %>
-        <%= ChallengeAssignment.in_collection(@collection).by_offering_user(request.pseud.user).all? {|recip_assignment| recip_assignment.defaulted} ? "Yes" : "No" %>
-        
-        
-          <% if params[:show_covered] %><td><%= assignment.covered_at.nil? ? "No" : "Yes" %></td><% end %>
-          
-          <td><%= assignment.offer_byline %></td>
-          <td><!--this may need titling but what with?-->
-            <% new_assignment = assignment.covered_at ? request.request_assignments.last : ChallengeAssignment.new %>
-            <%= form_for [@collection, new_assignment], :url => collection_assignments_path(@collection) do |assignment_form| %>
-              <%= hidden_field_tag :assignment_to_cover, assignment.id %>
-              <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
-              <%= assignment_form.hidden_field :request_signup_id, :value => request.id %>
-              <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", :autocomplete_token_limit => 1) %>
-          </td>
-          <td>
-              <ul class="navigation actions" role="navigation">
-                <li><%= submit_tag ts("Assign") %></li>
-                <li><%= link_to ts("Undefault"), undefault_collection_assignment_path(@collection, assignment) %></li>
-                <% unless assignment.covered_at.nil? %>
-                  <li><%= link_to ts("Uncover"), uncover_default_collection_assignment_path(@collection, assignment) %></li>
-                <% else %>
-                  <li><%= link_to ts("Covered"), cover_default_collection_assignment_path(@collection, assignment) %></li>
-                <% end %>
-              </ul>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
+      <dt class="assignment">
+        <!-- the recipient and if THEY have defaulted on their own assignment -->
+        <%= link_to assignment.request_byline, collection_signup_path(@collection, assignment.request) %>
+        <% if ChallengeAssignment.in_collection(@collection).by_offering_user(assignment.request.pseud.user).all? {|recip_assignment| recip_assignment.defaulted} %>
+          <span class="defaulter">(<%= ts("Also defaulted") %>)</span>
+        <% end %>
+      </dt>          
+      <dd class="defaulter">
+        defaulted on by <%= assignment.offer_byline %> 
+        <%= label_tag "undefault_#{assignment.id}", :class => "action" do %>            
+          Undefault <%= check_box_tag "undefault_#{assignment.id}" %>
+        <% end %>
+      </dd>
+      <dd class="autocomplete substitute">
+        Pinch Hitter: <%= text_field_tag "cover_#{assignment.id}", nil, autocomplete_options("pseud", :autocomplete_token_limit => 1) %>
+      </dd>
     <% end %>
- </tbody>
-</table>
+  </dl>
+
+  <%= submit_fieldset %>
+
 <% end %>

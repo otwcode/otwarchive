@@ -41,8 +41,8 @@
 </ol>
 <!-- /content-->
 
-<div id="dynamic-bookmark" class="hidden"></div>
+<div id="dynamic-bookmark" class="dynamic hidden"></div>
 
 <!--subnav-->
-	  <%= will_paginate @bookmarks, :previous_label =>  "&laquo; " + ts("Previous"), :next_label => ts("Next") + " &raquo;" %>
+	  <%= will_paginate @bookmarks %>
 <!-- /subnav-->

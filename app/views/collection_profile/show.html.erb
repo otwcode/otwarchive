@@ -12,7 +12,7 @@
       <dt><%= ts("Maintainers:") %></dt>
       <dd>
         <ul class="mods commas">
-          <%= (@collection.all_owners + @collection.all_moderators).map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join(', ').html_safe %>
+          <%= (@collection.all_owners + @collection.all_moderators).map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join("\n").html_safe %>
         </ul>
       </dd>
       <% unless @collection.email.blank? %>

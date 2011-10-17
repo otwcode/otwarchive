@@ -23,7 +23,6 @@ background:purple; color:#555;}
 
 /*DEVELOPMENT ONLY. DO NOT DEPLOY */
 #debug {display:none;}
-.blurb ul.required-tags:active, .blurb ul.required-tags a:active {outline:2px dotted red;}
 
 /*LISTBOX in dev
 expand collapse with growing boxes NEEDS JAVASCRIPT as onhover is not desirable

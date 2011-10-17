@@ -64,6 +64,7 @@
   <h3 class="heading"><%= @works.total_entries %> Found <%= link_to_help "work-search-results-help" %></h3>
 
   <h3 class="landmark heading">Works List</h3>
+<!--BACK END, if work.nil do not show this ol at all-->
   <ol class="work index">
     <% @works.each do |work| %>
       <% unless work.nil? %>
@@ -71,8 +72,8 @@
       <% end %>
     <% end %>
   </ol>
-  <div class="clear"><!-- presentational--></div>
-  <%= will_paginate @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+ 
+ <%= will_paginate @works %>
 <% rescue Riddle::ConnectionError %>
    <%= ts("The search engine seems to be down at the moment, try back later!")%>
   <% end %>

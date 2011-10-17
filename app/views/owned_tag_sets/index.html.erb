@@ -35,7 +35,7 @@
 <% if @tag_sets.empty? %>
   <%= ts("No tag sets found.") %>
 <% else %>
-  <%= will_paginate @tag_sets, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+  <%= will_paginate @tag_sets %>
 
 <!--main content-->
   <h3 class="landmark heading">Listing Tag Sets</h3>
@@ -45,8 +45,6 @@
     <% end %>
   </ul>
 
-  <div class="clear"><!-- presentational--></div>
-
-  <%= will_paginate @tag_sets, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+  <%= will_paginate @tag_sets %>
 <% end %>
 </div>

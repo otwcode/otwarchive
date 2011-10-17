@@ -20,19 +20,23 @@ a.cloud6{ color: #720505; font-size: 1.5em; font-weight: 600 }
 a.cloud7{ color: #860202; font-size: 1.875em; font-weight: 700 }
 a.cloud8{ color: #900; font-size: 2.25em; font-weight: 800 }
 
-/* GROUPS: MODULE, WRAPPER, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)*/
+/* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)*/
+.wrapper{ box-shadow: 1px 1px 5px #aaa}
+#outer.wrapper, #inner.wrapper     
+        { box-shadow:none}
 .module, .index, .index .index    
         { position: relative; width:auto} 
 .module, .dashboard .index 
         { float:left; width:100%}
-/*this index pattern is new and might change a lot*/
+
+/*http://media.transformativeworks.org/training/front_end_coding/patterns/pattern-index.html*/
+dl.index{ margin:1.286em 0; background:none; border:none; box-shadow:none}
+dl.index dt
+        { width:auto; float:none; border:none;}
 dl.index dd         
-        { clear:right; margin:0 auto 0.643em 2.5em; overflow:hidden; background: #e8e6ed}
-dl.index dd p, dl.index dd .heading 
+        { width:auto; float:none; clear:right; margin:0 0.25em 0.643em 2.5em; padding:0.375em 0.15em 0; overflow:hidden; background: #e8e6ed}
+dl.index dd p, dl.index dd .heading, dl.index ul 
         { display:inline-block }
-.wrapper{ box-shadow: 1px 1px 5px #aaa}
-#outer.wrapper, #inner.wrapper     
-        { box-shadow:none}
 
 /*TYPES*/
 a.work  { font:100 1.143em/1.125 Georgia,serif; margin:0.5em 0; color:#900 }
@@ -42,14 +46,12 @@ li.relationships
         { background:#eee}
 .series.footnote    
         { font-size:100%; float:none }
-.mods li{ display:inline}
 .kudos  { background:url("/images/skins/iconsets/default/kudos.png") bottom left no-repeat; padding:25px 0 25px 55px; margin:0}
 .icon   { background:url("/images/skins/iconsets/default/icon_user.png") #900 top left no-repeat; height:100px; width:100px; margin:0}
+.mods li, .stats dt, .stats dd
+        { width:auto; min-width:0; display:inline; }
+.stats  { text-align:right;}
 .stats dd 
         { white-space:nowrap; border-right:10px solid transparent }
-dl.language dt
-        { width: 10em }
-dl.language dd	    
-        { margin: -1.3em 0 .7em 11em; border:none }
 
 /*END== */
