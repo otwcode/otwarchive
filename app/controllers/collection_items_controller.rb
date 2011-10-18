@@ -1,9 +1,9 @@
 class CollectionItemsController < ApplicationController
   before_filter :load_collection
-  before_filter :load_item_and_collection, :only => [:update, :destroy]
+  before_filter :load_item_and_collection, :only => [:destroy]
   before_filter :load_collectible_item, :only => [ :new, :create ]
   before_filter :allowed_to_destroy, :only => [:destroy]
-  
+
   cache_sweeper :collection_sweeper
 
   def load_item_and_collection
@@ -14,13 +14,13 @@ class CollectionItemsController < ApplicationController
     end
     not_allowed(@collection) and return unless @collection_item
     @collection = @collection_item.collection
-  end    
+  end
 
-  
+
   def allowed_to_destroy
     @collection_item.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
   end
-  
+
   def index
 
     if @collection && @collection.user_is_maintainer?(current_user)
@@ -72,23 +72,25 @@ class CollectionItemsController < ApplicationController
 
     @collection_items = @collection_items.order(sort).paginate :page => params[:page], :per_page => 20          
   end
-  
+
   def load_collectible_item
-    if params[:work_id] 
+    if params[:work_id]
       @item = Work.find(params[:work_id])
+    elsif params[:bookmark_id]
+      @item = Bookmark.find(params[:bookmark_id])
     end
   end
-  
+
   def new
   end
-  
+
   def create
-    unless params[:collection_names] 
-      flash[:error] = t('collection_items.no_collections', :default => "What collections did you want to add?")
+    unless params[:collection_names]
+      flash[:error] = ts("What collections did you want to add?")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     unless @item
-      flash[:error] = t('collection_items.no_item', :default => "What did you want to add to a collection?")
+      flash[:error] = ts("What did you want to add to a collection?")
       redirect_to(request.env["HTTP_REFERER"] || root_path) and return
     end
     # for each collection name
@@ -101,13 +103,13 @@ class CollectionItemsController < ApplicationController
     params[:collection_names].split(',').map {|name| name.strip}.uniq.each do |collection_name|
       collection = Collection.find_by_name(collection_name)
       if !collection
-        errors << t('collection_items.not_found', :default => "We couldn't find a collection with the name %{name}. Make sure you are using the one-word name, and not the title?", :name => collection_name)
+        errors << ts("We couldn't find a collection with the name %{name}. Make sure you are using the one-word name, and not the title?", :name => collection_name)
       elsif @item.collections.include?(collection)
-        errors << t('collection_items.already_there', :default => "This item has already been submitted to %{collection_title}.", :collection_title => collection.title)
+        errors << ts("This item has already been submitted to %{collection_title}.", :collection_title => collection.title)
       elsif collection.closed?
-        errors << t('collection_items.closed', :default => "%{collection_title} is closed to new submissions.", :collection_title => collection.title)
+        errors << ts("%{collection_title} is closed to new submissions.", :collection_title => collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer(current_user)
-        errors << t('collection_items.not_author_or_maintainer', :default => "Not allowed: either you don't own this item or are not a moderator of %{collection_title}", :collection_title => collection.title)
+        errors << ts("Not allowed: either you don't own this item or are not a moderator of %{collection_title}", :collection_title => collection.title)
       elsif @item.add_to_collection!(collection)
         if @item.approved_collections.include?(collection)
           new_collections << collection
@@ -115,24 +117,26 @@ class CollectionItemsController < ApplicationController
           unapproved_collections << collection
         end
       else
-        errors << t('collection_items.something_else', :default => "Something went wrong trying to add collection %{name}, sorry!", :name => collection_name)
+        errors << ts("Something went wrong trying to add collection %{name}, sorry!", :name => collection_name)
       end
     end
 
     # messages to the user
     unless errors.empty?
-      flash[:error] = t('collection_items.errors', :default => "We couldn't add your submission to the following collections: ") + errors.join("<br />")
+      flash[:error] = ts("We couldn't add your submission to the following collections: ") + errors.join("<br />")
     end
     flash[:notice] = "" unless new_collections.empty? && unapproved_collections.empty?
     unless new_collections.empty?
-      flash[:notice] = t('collection_items.created', :default => "Added to collection(s): %{collections}.", 
+      flash[:notice] = ts("Added to collection(s): %{collections}.",
                             :collections => new_collections.collect(&:title).join(", "))
     end
     unless unapproved_collections.empty?
-      flash[:notice] = "<br />" + t('collection_items.unapproved', 
-        :default => "Your addition will have to be approved before it appears in %{moderated}.", 
+      flash[:notice] += "<br />" + ts("Your addition will have to be approved before it appears in %{moderated}.",
         :moderated => unapproved_collections.collect(&:title).join(", "))
     end
+
+    flash[:notice] = (flash[:notice]).html_safe unless flash[:notice].blank?
+    flash[:error] = (flash[:error]).html_safe unless flash[:error].blank?
 
     redirect_to(@item)
   end
@@ -159,7 +163,6 @@ class CollectionItemsController < ApplicationController
     end
   end
 
-  
   def destroy
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
     @collectible_item = @collection_item.item
