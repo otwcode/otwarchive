@@ -38,14 +38,25 @@ Given /^I have a work "([^\"]*)"$/ do |work|
   When %{I post the work "#{work}"}
 end
 
+Given /^the work with comments setup$/ do
+  Given %{I have a work "Blabla"}
+  And %{I am logged out}
+  n_comments ||= 3
+  n_comments.to_i.times do |i|
+    Given %{I am logged in as a random user}
+    And %{I post the comment "Keep up the good work" on the work "Blabla"}
+    And %{I am logged out}
+  end
+end
+
 Given /^the chaptered work setup$/ do
-  Given %{the chaptered work with 3 chapters "Gimme Comments"}
+  Given %{the chaptered work with 3 chapters "BigBang"}
 end
 
 Given /^the chaptered work with comments setup$/ do
-  Given %{the chaptered work with 3 chapters "Gimme Comments"}
+  Given %{the chaptered work with 3 chapters "BigBang"}
   When "I am logged in as a random user"
-  And %{I view the work "Gimme Comments"}
+  And %{I view the work "BigBang"}
     And %{I post a comment "Woohoo"}
   (2..3).each do |i|
     And %{I view the #{i.to_s}th chapter}
@@ -56,7 +67,7 @@ end
 
 ### WHEN
 
-When /^I view the ([\d]+)(?: st|nd|rd|th) chapter$/ do |chapter_no|
+When /^I view the ([\d]+)(?:st|nd|rd|th) chapter$/ do |chapter_no|
   (chapter_no.to_i - 1).times do |i|
     When %{I follow "Next Chapter"}
   end
@@ -65,7 +76,7 @@ end
 When /^I view the work "([^\"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |work, mode|
   work = Work.find_by_title!(work)
   visit work_url(work)
-  When %{I follow "View Entire Work"} if mode == "full"
+  When %{I follow "Entire Work"} if mode == "full"
   When %{I follow "View chapter by chapter"} if mode == "chapter-by-chapter"
 end
 

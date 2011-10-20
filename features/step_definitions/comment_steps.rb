@@ -41,7 +41,7 @@ end
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
   work = Work.find_by_title!(work)
   visit work_url(work)
-  fill_in("Comment", :with => comment_text)
+  fill_in("comment[content]", :with => comment_text)
 end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
@@ -65,8 +65,8 @@ end
 
 # this step assumes we are on a page with a comment form
 When /^I post a comment "([^"]*)"$/ do |comment_text|
-  fill_in("Comment", :with => comment_text)
-  click_button("Add Comment")
+  fill_in("comment[content]", :with => comment_text)
+  click_button("Comment")
 end
 
 # this step assumes that the reply-to-comment form can be opened
@@ -74,8 +74,8 @@ When /^I reply to a comment with "([^"]*)"$/ do |comment_text|
   When %{I follow "Reply"}
   Then %{I should see the reply to comment form}
   with_scope(".odd") do
-    fill_in("Comment", :with => comment_text)
-    click_button("Add Comment")
+    fill_in("comment[content]", :with => comment_text)
+    click_button("Comment")
   end
 end
 
@@ -103,5 +103,5 @@ Morbi vitae lacus vitae magna volutpat pharetra rhoncus eget nisi. Proin vehicul
 end
 
 Then /^I should see the reply to comment form$/ do
-  Then %{I should see "Comment:" within ".odd"}
+  Then %{I should see "Comment as" within ".odd"}
 end
