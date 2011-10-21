@@ -6,6 +6,15 @@ Arguably filter and search could be styled in interactions but I've put them her
 /* INDEX PAGES (with filters)*/ 
 .works-index .index, .collections-index .index 
         { width:75%; float:left}
+/* FANDOMS INDEX */
+.fandoms-index .letter ul.tags
+        { float:left; width:100%}
+.fandoms-index .letter ul.tags li
+        { float:left; width:48%}
+.fandoms-index .letter ul.tags li.even
+        { margin-left:1%}
+.fandoms-index .letter ul.tags li.odd
+        { clear: left}
 /* INTERACTION: SEARCH */
 .search input[type="text"] 
         { border-top-color:#999; padding:0.15em 0.25em;

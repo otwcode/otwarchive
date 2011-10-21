@@ -12,4 +12,7 @@ h1,h2,h3{word-break:break-all}
 .blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd {width:auto; float:none}
 .blurb dl.tags dd, dl.meta dd {margin-left:1em}
 
-
+.fandoms-index .letter ul.tags, .fandoms-index .collection ul.tags {float:none}
+.fandoms-index .letter ul.tags li {display:block; float:none; margin-right:2%; width:96%}
+.fandoms-index .letter ul.tags li.even {margin-left:0}
+.fandoms-index .letter ul.tags li.odd {clear: both}
