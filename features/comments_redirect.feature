@@ -1,3 +1,4 @@
+@wip @comments
 Feature: Posting a comment should result in a friendly redirect
 
 Scenario: Posting a top level comment on a one-chapter work
