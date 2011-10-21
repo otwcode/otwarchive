@@ -127,14 +127,64 @@ module HtmlCleaner
     end
     array
   end
+  
+  DONT_TOUCH_TAGS = %w(dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul)
 
+  def open_tag(node)
+    attr = ""
+    self_closing = node.children.empty? ? "/" : ""
+    node.attribute_nodes.each { |n| attr += " #{n.name}='#{n.value}'" }
+    return "<#{node.name}#{attr}#{self_closing}>"
+  end
+
+  def close_tag(node)
+    node.children.empty? ? "" : "</#{node.name}>"
+  end
+
+  def traverse_nodes(node, parentpath=nil, out_html=nil)
+    parentpath = parentpath || []
+    out_html = out_html || ""
+
+    p parentpath
+    return [parentpath, out_html + node.to_s] if DONT_TOUCH_TAGS.include?(node.name)
+
+    
+    out_html += open_tag(node) unless node.text?
+
+    out_html += node.text if node.text?
+    # if node.children.empty?
+    #   if node.text? && node.text.include?("\n")
+    #     replacement = Nokogiri::XML::NodeSet.new(newdoc)
+    #     parts = node.text.split("\n")
+    #     parts.each_with_index do |text, i|
+    #       replacement << Nokogiri::XML::Text.new(text, newdoc) unless text.empty?
+    #       replacement << Nokogiri::XML::Node.new("br", newdoc) unless i == parts.size-1
+    #     end
+    #     p node.path
+    #     p newdoc.xpath(node.path)
+    #     newnode = newdoc.xpath(node.path)[0]
+    #     newnode.replace(replacement)
+    #   end
+    #   return
+    # end
+    parentpath << [node.name]
+    node.children.each do |child|
+      parentpath, out_html = traverse_nodes(child, parentpath, out_html)
+    end
+
+    out_html += close_tag(node) unless node.text?
+    parentpath.pop
+    return [parentpath, out_html]
+  end
 
   def add_paragraphs_to_text(text)
-    doc = XSL.transform(Nokogiri::HTML.parse("<html><body>#{text}</body></html>"))
-    html = doc.children.to_s.gsub(/(\A<html>\s*?<body>)|(<\/body>\s*?<\/html>\Z)/, "")
-    puts html
-    puts "---"
-    return html
+    puts "====="
+    puts text
+    doc = Nokogiri::HTML.parse(text)
+    dummy, out_html = traverse_nodes(doc.at_css("body"))
+    out_html =  Nokogiri::HTML.parse(out_html).at_css("body").children.to_xhtml
+    puts out_html
+    return out_html
   end
   
   

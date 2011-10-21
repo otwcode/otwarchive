@@ -40,14 +40,36 @@ describe HtmlCleaner do
   
   describe "add_paragraphs_to_text" do
 
-    it "should not convert linebreaks between p tags" do
-      result = add_paragraphs_to_text("<p>A</p>\n\n<p>B</p>\n\n\n<p>C</p>")
+    it "should not convert linebreaks after p tags" do
+      result = add_paragraphs_to_text("<p>A</p>\n<p>B</p>\n\n<p>C</p>\n\n\n")
       doc = Nokogiri::XML.fragment(result)
-      doc.xpath("./p[1]").children.to_s.strip.should == "A" 
-      doc.xpath("./p[2]").children.to_s.strip.should == "B" 
-      doc.xpath("./p[3]").children.to_s.strip.should == "C"
+      doc.xpath(".//p").size.should == 3
       doc.xpath(".//br").should be_empty
     end
+
+    %w(blockquote center dl div h1 h2 h3 h4 h5 h6 ol p pre table ul).each do |tag|
+      it "should not convert linebreaks after #{tag} tags" do
+        result = add_paragraphs_to_text("<#{tag}>A</#{tag}>\n<#{tag}>B</#{tag}>\n\n<#{tag}>C</#{tag}>\n\n\n")
+        doc = Nokogiri::XML.fragment(result)
+        doc.xpath(".//p").size.should == 1
+        doc.xpath(".//br").should be_empty
+      end
+    end
+    
+    it "should not convert linebreaks after br tags" do
+      result = add_paragraphs_to_text("A<br>B<br>\n\nC<br>\n\n\n")
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath(".//p").size.should == 1
+      doc.xpath(".//br").size.should == 3
+    end    
+
+    it "should not convert linebreaks after hr tags" do
+      result = add_paragraphs_to_text("A<hr>B<hr>\n\nC<hr>\n\n\n")
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath(".//p").size.should == 1
+      doc.xpath(".//br").should be_empty
+    end    
+
 
     ["ol", "ul"].each do |tag|
       it "should not convert linebreaks inside #{tag} lists" do
