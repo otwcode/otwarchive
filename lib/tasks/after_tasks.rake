@@ -183,16 +183,16 @@ namespace :After do
 #  end
 
 
-#  desc "Clear out old epub files"
-#  task(:remove_old_epubs => :environment) do
-#    download_dir =  "#{Rails.public_path}/downloads/"
-#    cmd = %Q{find #{download_dir} -depth -name epub -exec rm -rf {} \\;}
-#    puts cmd
-#    `#{cmd}`
-#    cmd = %Q{find #{download_dir} -name "*.epub" -exec rm {} \\;}
-#    puts cmd
-#    `#{cmd}`
-#  end
+ desc "Clear out old epub files"
+ task(:remove_old_epubs => :environment) do
+   download_dir =  "#{Rails.public_path}/downloads/"
+   cmd = %Q{find #{download_dir} -depth -name epub -exec rm -rf {} \\;}
+   puts cmd
+   `#{cmd}`
+   cmd = %Q{find #{download_dir} -name "*.epub" -exec rm {} \\;}
+   puts cmd
+   `#{cmd}`
+ end
 
 #  desc "update filter taggings since nov 21"
 #  task(:update_filter_taggings => :environment) do
@@ -364,4 +364,4 @@ desc "Run all current migrate tasks"
 #task :After => ['autocomplete:reload_data']
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
 task :After => ['After:convert_tag_sets', 'After:load_site_skins', 'After:convert_existing_skins', 
-                'autocomplete:reload_data']
+                'autocomplete:reload_data', 'After:remove_old_epubs']

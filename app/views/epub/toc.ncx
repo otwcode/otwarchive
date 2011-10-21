@@ -19,9 +19,9 @@
     <% @chapters.size.times do |index| %>
       <navPoint id="chapter<%= index + 1 %>" playOrder="<%= index + 1 %>">
         <navLabel>
-          <text><%= @chapters[index].chapter_title.html_safe %></text>
+          <text><%= @chapters.size > 1? @chapters[index].chapter_title.html_safe : @work.title.html_safe %></text>
         </navLabel>
-        <content src="chapter<%= index + 1%>.xhtml"/>
+        <content src="chapter<%= index + 1%>_1.xhtml"/>
       </navPoint>
     <% end %>
     <navPoint id="afterword" playOrder="<%= @chapters.size + 1%>">
