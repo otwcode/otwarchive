@@ -58,8 +58,11 @@
   <!-- If not, and show_comments is true, here is where the comments will be rendered -->
   <div id="comments_placeholder">
     <% if params[:show_comments] || params[:tag_id] %>
-      <%= render 'comments/comment_thread', { :depth => 0, :comments => commentable.comments } %>
+      <% @comments = commentable.comments.paginate(:page => (params[:page] ? params[:page] : 1), :per_page => ArchiveConfig.ITEMS_PER_PAGE) %>
+      <%= will_paginate @comments %>
+      <%= render 'comments/comment_thread', { :depth => 0, :comments => @comments } %>
       </ol><!-- need to tack this on to close thread -->
+      <%= will_paginate @comments %>
     <% end %>
   </div>
 
