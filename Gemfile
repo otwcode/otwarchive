@@ -14,11 +14,11 @@ gem 'mysql2'
 # Here are all our application-specific gems
 gem 'rack-openid', '>=0.2.1', :require => 'rack/openid'
 
-#gem 'will_paginate', '3.0.pre'
-gem 'will_paginate',
-  :git     => 'git://github.com/huerlisi/will_paginate.git',
-  :branch  => 'rails3',
-  :require => 'will_paginate'
+gem 'will_paginate', '>=3.0.2'
+# gem 'will_paginate',
+  # :git     => 'git://github.com/huerlisi/will_paginate.git',
+  # :branch  => 'rails3',
+  # :require => 'will_paginate'
 
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false

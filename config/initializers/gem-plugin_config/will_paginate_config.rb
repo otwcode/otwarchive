@@ -1,2 +1,2 @@
-# Make will_paginate use our link renderer instead of the default
-WillPaginate::ViewHelpers.pagination_options[:renderer] = 'PaginationListLinkRenderer'
+require 'will_paginate/array'
+WillPaginate.per_page = ArchiveConfig.ITEMS_PER_PAGE

@@ -65,7 +65,7 @@ class CommentsController < ApplicationController
 
   def index
     if !@commentable.nil?
-      @comments = @commentable.comments
+      @comments = @commentable.comments.page(params[:page])
       if @commentable.class == Comment
         # we link to the parent object at the top
         @commentable = @commentable.ultimate_parent
@@ -216,7 +216,7 @@ class CommentsController < ApplicationController
   end
 
   def show_comments
-    @comments = @commentable.comments
+    @comments = @commentable.comments.paginate(:page => params[:page])
     respond_to do |format|
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
