@@ -6,7 +6,7 @@ include CssCleaner
 # <div class="icon"></div>
 # obviously no alt text is necessary in this case
 class Skin < ActiveRecord::Base
-
+  
   TYPE_OPTIONS = [
                    [ts("Site Skin"), "Skin"],
                    [ts("Work Skin"), "WorkSkin"],
@@ -15,11 +15,12 @@ class Skin < ActiveRecord::Base
   MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 480px)']
   IE_CONDITIONS = %w(IE IE5 IE6 IE7 IE8 IE9 IE8_or_lower)
   ROLES = %w(user override)
+  ROLE_NAMES = {"user" => "add on to archive skin", "override" => "replace archive skin entirely"}
   # We don't show some roles to users
   ALL_ROLES = ROLES + %w(admin translator site)
   DEFAULT_ROLE = "user"
   DEFAULT_ROLES_TO_INCLUDE = %w(user override site)
-  DEFAULT_MEDIA = "all"
+  DEFAULT_MEDIA = ["all"]
   
   SKIN_PATH = '/stylesheets/skins/'
   SITE_SKIN_PATH = '/stylesheets/site/'
@@ -27,17 +28,17 @@ class Skin < ActiveRecord::Base
   belongs_to :author, :class_name => 'User'
   has_many :preferences
   
-  serialize :media
+  serialize :media, Array
 
   # a skin can be both parent and child
   has_many :skin_parents, :foreign_key => 'child_skin_id', 
                           :class_name => 'SkinParent',
-                          :dependent => :destroy
-  has_many :parent_skins, :through => :skin_parents, :order => "skin_parents.position ASC"
+                          :dependent => :destroy, :inverse_of => :child_skin
+  has_many :parent_skins, :through => :skin_parents, :order => "skin_parents.position ASC", :inverse_of => :child_skins
   
   has_many :skin_children, :foreign_key => 'parent_skin_id',
-                                  :class_name => 'SkinParent', :dependent => :destroy
-  has_many :child_skins, :through => :skin_children
+                                  :class_name => 'SkinParent', :dependent => :destroy, :inverse_of => :parent_skin
+  has_many :child_skins, :through => :skin_children, :inverse_of => :parent_skins
                           
   accepts_nested_attributes_for :skin_parents, :allow_destroy => true, :reject_if => proc { |attrs| attrs[:position].blank? }
 
@@ -61,15 +62,24 @@ class Skin < ActiveRecord::Base
   validates_length_of :css, :allow_blank => true, :maximum => ArchiveConfig.CONTENT_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.CONTENT_MAX)
     
+  before_validation :clean_media
+  def clean_media
+    # handle bizarro cucumber-only error that prevents media from deserializing correctly when attachments are made
+    if media && media.is_a?(Array) && !media.empty?
+      new_media = media.flatten.compact.collect {|m| m.gsub(/\["(\w+)"\]/, '\1')}
+      self.media = new_media
+    end
+  end
+    
   validate :valid_media
   def valid_media
-    if media && media.any? {|m| !MEDIA.include?(m)}
+    if media && media.is_a?(Array) && media.any? {|m| !MEDIA.include?(m)}
       errors.add(:base, ts("We don't currently support the media type %{media}, sorry! If we should, please let Support know.", :media => media.join(', ')))
     end
   end
 
   validates :ie_condition, :inclusion => {:in => IE_CONDITIONS, :allow_nil => true, :allow_blank => true}
-  validates :role, :inclusion => {:in => ALL_ROLES, :allow_nil => false, :allow_blank => false}
+  validates :role, :inclusion => {:in => ALL_ROLES, :allow_nil => true, :allow_blank => true}
 
   validate :valid_public_preview
   def valid_public_preview
@@ -128,7 +138,18 @@ class Skin < ActiveRecord::Base
   scope :unapproved_skins, where(:public => true, :official => false, :rejected => false)
   scope :rejected_skins, where(:public => true, :official => false, :rejected => true)
   scope :site_skins, where(:type => nil)
-  scope :approved_or_owned_by, lambda {|user| where("(public = 1 AND official = 1) OR author_id = ?", user.id)}
+  
+  def self.cached
+    where(:cached => true)
+  end
+  
+  def self.approved_or_owned_by(user=User.current_user)
+    if user.nil?
+      where(:public => true, :official => true)
+    else
+      where("(public = 1 AND official = 1) OR author_id = ?", user.id)
+    end
+  end
   
   def self.usable
     where(:unusable => false)
@@ -173,7 +194,7 @@ class Skin < ActiveRecord::Base
     file_count = 1
     skin_dir = Skin.skins_dir + skin_dirname
     FileUtils.mkdir skin_dir
-    parent_skins.each do |parent|
+    get_all_parents.each do |parent|
       if parent.get_sheet_role != last_role
         # save to file
         if css_to_cache.present?
@@ -204,7 +225,7 @@ class Skin < ActiveRecord::Base
   end
   
   def get_sheet_role
-    "#{role}_#{media.join('-').gsub(/\s+/, '+')}_#{ie_condition}"
+    "#{get_role}_#{get_media('-').gsub(/\s+/, '+')}_#{ie_condition}"
   end
   
   def parse_sheet_role(role_string)
@@ -221,19 +242,28 @@ class Skin < ActiveRecord::Base
     end
   end
   
-  def get_media
-    (media.nil? || media.empty?) ? DEFAULT_MEDIA : media.join(', ')
+  def get_media(separator=", ")
+    ((media.nil? || media.empty?) ? DEFAULT_MEDIA : media).join(separator)
   end
   
   def get_role
     self.role || DEFAULT_ROLE
   end
   
+  def get_all_parents
+    all_parents = []
+    parent_skins.includes(:parent_skins).each do |parent|
+      all_parents += parent.get_all_parents
+      all_parents << parent
+    end
+    all_parents
+  end
+  
   # This is the main function that actually returns code to be embedded in a page
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
     style = ""
-    if self.role != "override" && self.role != "site"
-      style += AdminSetting.default_skin ? AdminSetting.default_skin.get_style(roles_to_include) : ""
+    if self.get_role != "override" && self.get_role != "site"
+      style += Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : ''
     end
     style += self.get_style_block(roles_to_include)
     style.html_safe
@@ -252,6 +282,36 @@ class Skin < ActiveRecord::Base
     end
   end
 
+  def get_wizard_settings
+    style = ""
+    if self.margin
+      style += "#workskin {margin: auto #{self.margin}%; padding: 0.5em #{self.margin}% 0;}"
+    end
+  
+    if self.background_color || self.foreground_color || self.font || self.base_em
+      style += "body	{
+        #{self.background_color ? "background: #{self.background_color};" : ''}
+        #{self.foreground_color ? "color: #{self.foreground_color};" : ''}        
+        font: #{(self.base_em ? self.base_em : "100")}%/1.125 #{(self.font ? self.font : '')};
+      }"
+    end
+    
+    if self.paragraph_margin
+      style += ".userstuff p {margin-bottom: #{self.paragraph_margin}em;}"
+    end
+
+    if self.headercolor
+      style += "#header .main a, #header .main .current, #header .main input, #header .search input { border-color:transparent }"
+      style += "#header, #header ul.main, #footer {background: #{self.headercolor}; border-color: #{self.headercolor}; box-shadow:none; }"
+    end
+
+    if self.accent_color
+      style += "#header .icon, #dashboard ul, #main dl.meta {background: #{self.accent_color}; border-color:#{self.accent_color}}"
+    end
+    
+    style
+  end
+  
   def get_style_block(roles_to_include)
     block = ""
     if self.cached?
@@ -269,8 +329,10 @@ class Skin < ActiveRecord::Base
           block += get_ie_comment(stylesheet_link(self.filename, get_media))
         elsif css.present?
           block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
+        elsif (wizard_block = get_wizard_settings).present?
+          block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'
         end
-      end      
+      end    
     end
     return block
   end
@@ -385,7 +447,7 @@ class Skin < ActiveRecord::Base
   def self.get_current_site_skin
     current_version = Skin.get_current_version
     if current_version
-      Skin.find_by_title_and_official("Archive #{Skin.get_current_version}", true)
+      Skin.includes(:parent_skins).find_by_title_and_official("Archive #{Skin.get_current_version}", true)
     else
       nil
     end

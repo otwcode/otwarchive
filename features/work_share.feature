@@ -16,7 +16,7 @@ Feature: Share Works
       And I fill in "Work Title" with "All Hell Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
     When I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page

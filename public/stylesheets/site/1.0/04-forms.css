@@ -265,4 +265,12 @@ fieldset.tag_set  {border:1px solid #bbb; padding: 0.5em; margin: 0.5em auto;}
 fieldset.tag_set textarea {width: 90%;}
 fieldset.tag_set ul li {display:inline;}
 
+/* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
+p.character_counter 
+        { font-size:87.5%; text-align:right}
+.character_counter span 
+        { display:inline-block; width: 3.75em}
+.comment .character_counter 
+        { float:left}
+
 

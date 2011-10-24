@@ -35,7 +35,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as a random user
   When I view open challenges
   Then I should see "Battle 12"
-
+  
   Scenario: Past challenge is not in list of open challenges
   
   Given I am logged in as "mod1"
@@ -55,9 +55,9 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I view open challenges
   Then I should not see "Battle 12"
-
+  
   Scenario: Can access settings from profile navigation
-
+  
   Given I have Battle 12 prompt meme fully set up
   When I go to "Battle 12" collection's page
     And I follow "Profile"
@@ -78,7 +78,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as a random user
   When I go to "Battle 12" collection's page
     And I follow "Profile"
-  Then I should see "Signup: CURRENTLY OPEN"
+  Then I should see "Signup: Open"
   
   Scenario: User can see profile descriptions
   
@@ -97,6 +97,7 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   Then I should see "Signup was successfully created"
     And I should see "Prompts (2)"
+    And I should see the whole signup
   
   Scenario: Sign up for a prompt meme and miss out some fields
   
@@ -113,7 +114,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I am on my user page
-  Then I should see "My Signups (1)"
+  Then I should see "Signups (1)"
   
   Scenario: View signups in the dashboard
   
@@ -132,25 +133,15 @@ Feature: Prompt Meme Challenge
   Then I should see "Edit"
     And I should see "Delete"
   
-  Scenario: View individual prompt
-  
-  Given I have Battle 12 prompt meme fully set up
-    And I am logged in as "myname1"
-  When I sign up for Battle 12 with combination A
-  When I view my signup for "Battle 12"
-  Then I should see the whole signup
-  When I follow "Request 1"
-  Then I should just see request 1
-  
   Scenario: Edit individual prompt via signup show
   
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I view my signup for "Battle 12"
-  When I follow "Request 1"
-  When I follow "Edit this prompt"
+  When I follow "Edit prompt"
   Then I should see single prompt editing
+  And I should see "Edit whole signup"
   
   Scenario: Edit individual prompt via signup edit
   
@@ -158,9 +149,9 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I edit my signup for "Battle 12"
-  When I follow "Request 1"
+  When I follow "Edit prompt"
   Then I should not see "Request 2"
-    And I should see "Edit whole signup"
+  And I should see "Edit whole signup"
  
  Scenario: Add one new prompt to existing signup
   
@@ -180,7 +171,7 @@ Feature: Prompt Meme Challenge
   And I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
   When I view prompts for "Battle 12"
-    And I follow "Sort by date"
+    And I follow "Date"
   Then I should see "Something else weird"
   
   Scenario: Sort prompts by fandom doesn't give error page
@@ -191,7 +182,7 @@ Feature: Prompt Meme Challenge
   And I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
   When I view prompts for "Battle 12"
-    And I follow "Sort by fandom"
+    And I follow "↑&nbsp;Fandom"
   Then I should see "Something else weird"
   
   Scenario: Sign up for a prompt meme with no tags
@@ -207,7 +198,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination E
   When I claim a prompt from "Battle 12"
-  When I view claims for "Battle 12"
+  When I view unposted claims for "Battle 12"
   Then I should see "Weird description"
   
   Scenario: Sort by fandom shouldn't show when there aren't any fandoms
@@ -216,7 +207,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination E
   When I view prompts for "Battle 12"
-  Then I should not see "Sort by fandom"
+  Then I should not see "Fandom"
   
   Scenario: Claim a prompt and view claims on main page and user page
   
@@ -294,13 +285,13 @@ Feature: Prompt Meme Challenge
   When I add prompt 4
   Then I should not see "Add another prompt"
     
-  Scenario: Remove prompt button shouldn't show on My Signups
+  Scenario: Remove prompt button shouldn't show on Signups
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I am on my user page
-  When I follow "My Signups"
+  When I follow "Signups"
   Then I should not see "Remove prompt"
   
   Scenario: Mod can't edit signups
@@ -403,7 +394,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am on my user page
-    And I follow "My Claims"
+    And I follow "Claims"
   Then I should see "Fulfilled Story"
     And I should not see "Not yet posted"
   
@@ -416,7 +407,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I fulfill my claim
   When I am on my user page
-  Then I should see "My Claims (1)"
+  Then I should see "Claims (1)"
   
   Scenario: Claim shows as fulfilled to another user
   
@@ -428,7 +419,7 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   When I am logged in as "myname1"
   When I go to "Battle 12" collection's page
-    And I follow "Claims"
+    And I follow "Prompts ("
   Then I should see "Secret!" within "#fulfilled_claims"
     And I should not see "Secret!" within "#unfulfilled_claims"
   When I follow "Prompts ("
@@ -498,32 +489,29 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname4"
   When I go to "Battle 12" collection's page
     And I follow "Prompts (8)"
-    And I follow "Show Claims"
-    And I follow "Show Filled"
-  Then I should not see "Claimed by: myname4"
-    And I should not see "Claimed by: mod1"
-    And I should see "Claimed by: (Anonymous)"
+  Then I should not see "myname4" within ".claims"
+    And I should not see "mod1" within ".claims"
+    And I should see "anonymous claimants" within ".claims"
   
-  Scenario: User cannot delete someone else's claim
+  Scenario: User cannot see unposted claims to delete
   
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I am logged in as "myname1"
-  When I view claims for "Battle 12"
-  Then I should not see "Delete"
+  Then I should not see "Unposted Claims"
   
-  Scenario: User can delete their own claim from the collection claims list
+  Scenario: User can delete their own claim
   
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
-  When I view claims for "Battle 12"
-  When I follow "Delete"
+    And I go to "Battle 12" collection's page
+    And I follow "Your Claims"
+    And I follow "Delete"
   Then I should see "Your claim was deleted."
   When I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should not see "Delete"
+  Then I should not see "Your Claims"
   
   Scenario: User can delete their own claim from the user claims list
   
@@ -531,14 +519,13 @@ Feature: Prompt Meme Challenge
   Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I am on my user page
-    And I follow "My Claims"
+    And I follow "Claims"
   Then I should see "Delete"
   When I follow "Delete"
   Then I should see "Your claim was deleted."
   # confirm claim no longer exists
   When I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should not see "Delete"
+  Then I should not see "Your Claims"
   
   Scenario: Mod or owner can delete a claim from the user claims list
   
@@ -546,7 +533,7 @@ Feature: Prompt Meme Challenge
   Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
   When I am logged in as "mod1"
-    And I view claims for "Battle 12"
+    And I view unposted claims for "Battle 12"
   Then I should see "Delete"
   When I follow "Delete"
   Then I should see "The claim was deleted."
@@ -760,7 +747,7 @@ Feature: Prompt Meme Challenge
   Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
   
-  Scenario: Sign up for several challenges and see My Signups are sorted
+  Scenario: Sign up for several challenges and see Signups are sorted
   
   Given I have Battle 12 prompt meme fully set up
   When I set up a basic promptmeme "Battle 13"
@@ -770,9 +757,8 @@ Feature: Prompt Meme Challenge
   When I sign up for "Battle 13" many-fandom prompt meme
   When I sign up for "Battle 14" many-fandom prompt meme
   When I am on my user page
-    And I follow "My Signups"
+    And I follow "Signups"
   # Then 14 should be the last signup in the table
-  # Then show me the page
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and sees the right boxes ticked
   
@@ -797,7 +783,7 @@ Feature: Prompt Meme Challenge
     And everyone has signed up for Battle 12
   When I am logged in as "myname3"
     And I claim a prompt from "Battle 12"
-    And I follow "Post New"
+    And I follow "post new"
   Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be checked
     And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
   
@@ -860,7 +846,7 @@ Feature: Prompt Meme Challenge
   When I delete the signup by "myname1"
   When I am logged in as "myname1"
   When I go to my signups page
-  Then I should see "My Signups (0)"
+  Then I should see "Signups (0)"
     And I should not see "Battle 12"
 
   Scenario: When maintainer deletes signup, The story stays part of the collection, and no longer has the "In response to a prompt by:" line
@@ -893,7 +879,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Challenge signup was deleted."
   When I am logged in as "myname4"
     And I go to my claims page
-  Then I should see "My Claims (0)"
+  Then I should see "Claims (0)"
   
   Scenario: Delete a prompt, claims should also be deleted
   
@@ -907,7 +893,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Prompt was deleted."
   When I am logged in as "myname4"
     And I go to my claims page
-  Then I should see "My Claims (0)"
+  Then I should see "Claims (0)"
   
   Scenario: Mod can claim a prompt like an ordinary user
   
@@ -946,13 +932,13 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
   When I claim a prompt from "Battle 12"
   When I am on my user page
-  Then I should see "My Claims (1)" 
-  When I follow "My Claims"
+  Then I should see "Claims (1)" 
+  When I follow "Claims"
   Then I should see "Your Claims"
     And I should not see "In Battle 12"
     And I should see "Writing For" within "#claims_table"
     And I should see "myname4" within "#claims_table"
-  When I follow "Post To Fulfill"
+  When I follow "Fulfill"
     And I fill in "Work Title" with "Fulfilled Story-thing"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
@@ -990,7 +976,7 @@ Feature: Prompt Meme Challenge
   When I press "Preview"
     And I press "Post"
   When I am on my user page
-  Then I should see "My Claims (1)"
+  Then I should see "Claims (1)"
   When I go to "Battle 12" collection's page
     And I follow "Claims"
   Then I should see "mod1" within "#fulfilled_claims"
@@ -1122,7 +1108,7 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   When I reveal the "Battle 12" challenge
   When I reveal the authors of the "Battle 12" challenge
-  When I view claims for "Battle 12"
+  When I view unposted claims for "Battle 12"
   Then I should see "(Anonymous)"
     And I should not see "myname4"
   
@@ -1154,7 +1140,7 @@ Feature: Prompt Meme Challenge
   When I reveal the authors of the "Battle 12" challenge
   When I am logged in as "myname2"
   When I am on my user page
-    And I follow "My Claims"
+    And I follow "Claims"
   Then I should not see "myname4"
     And I should see "Anonymous"
     
@@ -1171,7 +1157,7 @@ Feature: Prompt Meme Challenge
   When I reveal the authors of the "Battle 12" challenge
   When I am logged in as "myname2"
   When I am on my user page
-    And I follow "My Claims"
+    And I follow "Claims"
     And I follow "Anonymous"
   Then I should not see "myname4"
     And I should see "Anonymous"
@@ -1226,7 +1212,7 @@ Feature: Prompt Meme Challenge
   When I follow "Prompts ("
   When I press "Claim"
   Then I should see "New claim made"
-  When I follow "Post New"
+  When I follow "post new"
   When I fill in the basic work information for "Existing work"
     And I check "Battle 12 (Anonymous)"
     And I press "Preview"
@@ -1261,7 +1247,7 @@ Feature: Prompt Meme Challenge
     And I follow "Battle 12"
   When I follow "Prompts ("
   When I press "Claim"
-  When I follow "Post New"
+  When I follow "post new"
   When I fill in the basic work information for "Existing work"
     And I check "Battle 12 (Anonymous)"
     And I press "Preview"
@@ -1274,7 +1260,7 @@ Feature: Prompt Meme Challenge
   Then I should see "Existing work"
     And I should find "draft"
   When I am on my user page
-    And I follow "My Drafts"
+    And I follow "Drafts"
     And all emails have been delivered
   Then I should see "Existing work"
     And "Issue 2259" is fixed
@@ -1301,12 +1287,12 @@ Feature: Prompt Meme Challenge
     And I follow "Battle 12"
   When I follow "Prompts ("
   When I press "Claim"
-  When I follow "Post New"
+  When I follow "post new"
   When I fill in the basic work information for "Existing work"
     And I check "Battle 12 (Anonymous)"
     And I press "Preview"
   When I am on my user page
-    And I follow "My Drafts"
+    And I follow "Drafts"
     And all emails have been delivered
   When I follow "Post Draft"
   Then 1 email should be delivered

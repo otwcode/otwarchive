@@ -10,13 +10,13 @@ Given /^mod1 lives in Alaska$/ do
   Then %{I should see "Your preferences were successfully updated."}
 end
 
-Given /^I have a collection "([^\"]*)"$/ do |title|
+Given /^I have (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
   When %{I am logged in as "moderator"}
-  When "I create the collection \"#{title}\""
-  When "I am logged out"
+  When %{I create the collection "#{title}" with name "#{name}"}
+  When %{I am logged out}
 end
 
-Given /^I have a hidden collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
+Given /^I have (?:a|the) hidden collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
   When %{I am logged in as "moderator"}
   When %{I set up the collection "#{title}" with name "#{name}"}
   When %{I check "This collection is unrevealed"}
@@ -26,7 +26,7 @@ Given /^I have a hidden collection "([^\"]*)" with name "([^\"]*)"$/ do |title, 
   When "I am logged out"
 end
 
-Given /^I have an anonymous collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
+Given /^I have (?:an|the) anonymous collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
   When %{I am logged in as "moderator"}
   When %{I set up the collection "#{title}" with name "#{name}"}
   When %{I check "This collection is anonymous"}
@@ -64,7 +64,7 @@ Given /^I have a closed collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |ti
   When "I am logged out"
 end
 
-Given /^I have added a co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
+Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"$/ do |name, title|
   # create the user 
   Given %{I am logged in as "#{name}"}
   Given %{I am logged in as "mod1"}
@@ -80,21 +80,15 @@ end
 
 ### WHEN
 
-When /^I set up the collection "([^\"]*)"$/ do |title|
+When /^I set up (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
   visit new_collection_url
-  fill_in("collection_name", :with => title.gsub(/[^\w]/, '_'))
+  fill_in("collection_name", :with => name.blank? ? title.gsub(/[^\w]/, '_') : name)
   fill_in("collection_title", :with => title)
 end
 
-When /^I set up the collection "([^\"]*)" with name "([^\"]*)"$/ do |title, name|
-  visit new_collection_url
-  fill_in("collection_name", :with => name)
-  fill_in("collection_title", :with => title)
-end
-
-When /^I create the collection "([^\"]*)"$/ do |title|
-  When %{I set up the collection "#{title}"}
-    And %{I submit}
+When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
+  When %{I set up the collection "#{title}" with name "#{name}"}
+  And %{I submit}
   Then %{I should see "Collection was successfully created."}
 end
 

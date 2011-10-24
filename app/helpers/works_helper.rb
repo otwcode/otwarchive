@@ -27,7 +27,7 @@ module WorksHelper
       list.insert(1, [prefix, localize(latest_date)])
     end
     list = list.map {|list_item| content_tag(:dt, list_item.first) + content_tag(:dd, list_item.last.to_s)}.join.html_safe
-    content_tag(:dl, list.to_s).html_safe
+    content_tag(:dl, list.to_s, :class => "stats").html_safe
   end
 
   def show_hit_count?(work)

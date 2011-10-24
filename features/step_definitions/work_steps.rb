@@ -41,8 +41,7 @@ end
 
 When /^I edit the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
-  visit work_url(work)
-  click_link("Edit")
+  visit edit_work_url(work)
 end
 
 When /^I post the chaptered work "([^\"]*)"$/ do |title|
@@ -129,7 +128,6 @@ When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*
 end
 
 When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")(?: with freeform "([^\"]*)")$/ do |title, fandom, freeform|
-  Given "basic tags"
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
   check(DEFAULT_CATEGORY)

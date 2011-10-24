@@ -15,6 +15,13 @@ Given /^I have no challenge assignments$/ do
 end
 
 Given /^I have standard challenge tags set ?up$/ do
+  begin 
+    unless UserSession.find
+      Given %{I am logged in as "mod1"}
+    end
+  rescue
+    Given %{I am logged in as "mod1"}    
+  end  
   Given "I have no tags"
     And "basic tags"
     And %{a canonical fandom "Stargate Atlantis"}
@@ -483,7 +490,7 @@ end
 When /^I add a new prompt to my signup$/ do
   When %{I follow "Add another prompt"}
     And %{I check "Stargate Atlantis"}
-    And %{I fill in "challenge_signup_requests_attributes_2_tag_set_attributes_freeform_tagnames" with "My extra tag"}
+    And %{I fill in the 1st field with id matching "freeform_tagnames" with "My extra tag"}
     And %{I press "Submit"}
 end
 
@@ -500,9 +507,9 @@ When /^I view my signup for "([^\"]*)"$/ do |title|
   When %{I follow "Your Prompts"}
 end
 
-When /^I view claims for "([^\"]*)"$/ do |title|
+When /^I view unposted claims for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
-  When %{I follow "Claims ("}
+  When %{I follow "Unposted Claims ("}
 end
 
 When /^I view prompts for "([^\"]*)"$/ do |title|
@@ -515,9 +522,7 @@ end
 When /^I claim a prompt from "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
     And %{I follow "Prompts ("}
-  Then %{I should see "Claim" within "th"}
-    And %{I should not see "Sign in to claim prompts"}
-  When %{I press "Claim"}
+    And %{I press "Claim"}
 end
 
 When /^I claim two prompts from "([^\"]*)"$/ do |title|
@@ -529,22 +534,17 @@ end
 
 When /^I start to fulfill my claim with "([^\"]*)"$/ do |title|
   When %{I am on my user page}
-  When %{I follow "My Claims ("}
-  When %{I follow "Post To Fulfill"}
+  When %{I follow "Claims ("}
+  When %{I follow "Fulfill"}
     And %{I fill in "Work Title" with "#{title}"}
     And %{I select "Not Rated" from "Rating"}
     And %{I check "No Archive Warnings Apply"}
+    And %{I fill in "Fandom" with "Stargate Atlantis"}
     And %{I fill in "content" with "This is an exciting story about Atlantis"}
 end
 
 When /^I start to fulfill my claim$/ do
-  When %{I am on my user page}
-  When %{I follow "My Claims ("}
-  When %{I follow "Post To Fulfill"}
-    And %{I fill in "Work Title" with "Fulfilled Story"}
-    And %{I select "Not Rated" from "Rating"}
-    And %{I check "No Archive Warnings Apply"}
-    And %{I fill in "content" with "This is an exciting story about Atlantis"}
+  When %{I start to fulfill my claim with "Fulfilled Story"}
 end
 
 When /^I fulfill my claim$/ do
@@ -575,8 +575,8 @@ end
 
 When /^I start to fulfill my assignment$/ do
   When %{I am on my user page}
-  When %{I follow "My Assignments ("}
-  When %{I follow "Post To Fulfill"}
+  When %{I follow "Assignments ("}
+  When %{I follow "Fulfill"}
     And %{I fill in "Work Title" with "Fulfilled Story"}
     And %{I select "Not Rated" from "Rating"}
     And %{I check "No Archive Warnings Apply"}
@@ -655,9 +655,9 @@ end
 
 Then /^I should see Battle 12 descriptions$/ do
   Then %{I should see "Welcome to the meme" within "#intro"}
-  Then %{I should see "Signup: CURRENTLY OPEN"}
+  Then %{I should see "Signup: Open"}
   Then %{I should see "Signup closes:"}
-  Then %{I should see "2011" within ".collection.meta"}
+  Then %{I should see "2011" within ".collection .meta"}
   Then %{I should see "What is this thing?" within "#faq"}
   Then %{I should see "It is a comment fic thing" within "#faq"}
   Then %{I should see "Be nicer to people" within "#rules"}
@@ -683,7 +683,7 @@ end
 
 Then /^signup should be open$/ do
   When %{I follow "Profile"}
-  Then %{I should see "Signup: CURRENTLY OPEN" within ".collection.meta"}
+  Then %{I should see "Signup: Open" within ".collection .meta"}
     And %{I should see "Signup closes:"}
 end
 
@@ -695,7 +695,7 @@ end
 
 Then /^I should see just one timezone$/ do
   When %{I follow "Profile"}
-  Then %{I should see "Signup: CURRENTLY OPEN"}
+  Then %{I should see "Signup: Open"}
   And %{I should not see "EST" within "#main"}
   And %{I should see "AKST" within "#main"}
 end
@@ -703,25 +703,24 @@ end
 Then /^I should see a prompt is claimed$/ do
   # note, prompts are in reverse date order by default
   Then %{I should see "New claim made."}
-    And %{I should see "Claims for Battle 12"}
-    And %{I should see "Post To Fulfill"}
-    And %{I should see "Delete"}
+    And %{I should see "Your Claims In Battle 12"}
+    And %{I should see "Fulfill"}
+    And %{I should see "Drop Claim"}
     
-  # View the claim
+  # Claims in the user page are just the prompts that have been claimed
   When "I am on my user page"
-    And %{I follow "My Claims"}
-    Then %{I should see "Post To Fulfill"}
-    Then %{I should not see "myname" within "#claims_table"}
-    And %{I follow "Anonymous" within "#claims_table"}
-  Then %{I should see "Claimed by Anonymous: Anonymous"}
+    And %{I follow "Claims"}
+  Then %{I should see "Fulfill"}
+    And %{I should see "by Anonymous"}
+    And %{I should not see "myname" within ".index"}
 end
 
 Then /^I should see correct signups for Battle 12$/ do
-  Then %{I should see "myname4" within "td"}
-    And %{I should see "myname3" within "td"}
-    And %{I should not see "myname2" within "td"}
-    And %{I should see "(Anonymous)" within "td"}
-    And %{I should see "myname1" within "td"}
+  Then %{I should see "myname4"}
+    And %{I should see "myname3"}
+    And %{I should not see "myname2"}
+    And %{I should see "(Anonymous)"}
+    And %{I should see "myname1"}
     And %{I should see "Stargate Atlantis"}
     And %{I should see "Stargate SG-1"}
     And %{I should see "Something else weird"}
@@ -731,24 +730,20 @@ end
 
 Then /^claims are hidden$/ do
   When %{I go to "Battle 12" collection's page}
-  #' setting highlighting back
-    And %{I follow "Claims"}
-  Then %{I should see "Unfulfilled Claims"}
+    And %{I follow "Unposted Claims"}
+  Then %{I should see "Unposted Claims"}
     And %{I should see "Fulfilled Claims"}
-    And %{I should see "myname" within "#unfulfilled_claims"}
-    And %{I should see "Secret!" within "#unfulfilled_claims"}
-    And %{I should see "Stargate Atlantis" within "#main"}
+    And %{I should see "myname" within ".claims"}
+    And %{I should see "Secret!" within ".claims"}
+    And %{I should see "Stargate Atlantis"}
 end
 
 Then /^claims are shown$/ do
   When %{I go to "Battle 12" collection's page}
-  #' setting highlighting back
-    And %{I follow "Claims"}
-  Then %{I should see "Unfulfilled Claims"}
-    And %{I should see "Fulfilled Claims"}
-    And %{I should see "myname4" within "#unfulfilled_claims"}
-    And %{I should not see "Secret!" within "#unfulfilled_claims"}
-    And %{I should see "Stargate Atlantis" within "#main"}
+    And %{I follow "Unposted Claims"}
+  Then %{I should see "myname4" within ".claims"}
+    And %{I should not see "Secret!"}
+    And %{I should see "Stargate Atlantis"}
 end
 
 Then /^Battle 12 prompt meme should be correctly created$/ do
@@ -767,8 +762,7 @@ Then /^My Gift Exchange gift exchange should be correctly created$/ do
 end
 
 Then /^My Gift Exchange gift exchange should be fully created$/ do
-  Then %{I should see "Challenge was successfully created"}
-  Then %{I should see "2011" within ".collection.meta"}
+  Then %{I should see a create confirmation message}
   Then "My Gift Exchange collection exists"
 end
 
@@ -798,6 +792,8 @@ Then /^12 should be the last signup in the table$/ do
 end
 
 Then /^I should see the whole signup$/ do
+  page.should have_content("Signup for")
+  page.should have_content("Requests")
   page.should have_content("Request 1")
   page.should have_content("Request 2")
 end
@@ -805,7 +801,7 @@ end
 Then /^I should just see request 1$/ do
   page.should have_content("Request by myname1")
   page.should have_content("Edit whole signup")
-  page.should have_content("Edit this prompt")
+  page.should have_content("Edit prompt")
   page.should have_content("Stargate Atlantis")
   page.should have_content("Alternate Universe - Historical")
   page.should have_no_content("Request 2")

@@ -11,7 +11,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<ul class="pseud index">
+<ul class="index">
   <% @pseuds.each do |pseud| %>
     <%= render :partial => 'pseuds/pseud_blurb', :locals => {:pseud => pseud} %>
   <% end %>  

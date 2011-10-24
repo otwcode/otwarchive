@@ -5,7 +5,7 @@
 <h3 class="heading">Requests</h3>
 <ol class="index">
 <% challenge_signup.requests.each_with_index do |request, index| %>
-  <%= render "prompts/prompt_blurb", :prompt => request %>
+  <%= render "prompts/prompt_blurb", :prompt => request, :index => index %>
 <% end %>
 </ol>
 </div>

@@ -13,7 +13,7 @@ Feature: Import Works from yuletidtreasure
     When I go to the import page
       And I fill in "urls" with "http://yuletidetreasure.org/archive/75/commonplaces.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Sherlock Holmes" within "dd.fandom"
       And I should see "yuletide" within "dd.freeform"
       And I should see "recipient:BetaReject" within "dd.freeform"
@@ -45,7 +45,7 @@ Feature: Import Works from yuletidtreasure
     When I go to the import page
       And I fill in "urls" with "http://yuletidetreasure.org/archive/12/quovadis.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Sherlock Holmes" within "dd.fandom"
       And I should see "yuletide" within "dd.freeform"
       And I should see "recipient:Rosemending" within "dd.freeform"
@@ -77,7 +77,7 @@ Feature: Import Works from yuletidtreasure
     When I go to the import page
       And I fill in "urls" with "http://www.yuletidetreasure.org/archive/33/thebest.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Entourage (tv)" within "dd.fandom"
       And I should see "yuletide" within "dd.freeform"
       And I should see "recipient:shanalle" within "dd.freeform"

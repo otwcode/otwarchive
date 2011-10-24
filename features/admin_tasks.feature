@@ -53,7 +53,7 @@ Feature: Admin tasks
     Then I should see "Some commonly asked questions about the Archive are answered here"
       And I should not see "Some text"
     When I am logged in as an admin
-    When I follow "admin posts"
+    When I follow "Admin Posts"
       And I follow "Archive FAQ" within "#main"
       And I should not see "Some text"
     When I follow "Add a new section"
@@ -68,7 +68,7 @@ Feature: Admin tasks
   Scenario: Edit FAQ
   
   Given I have posted a FAQ
-  When I follow "admin posts"
+  When I follow "Admin Posts"
     And I follow "Archive FAQ" within "#main"
     And I follow "Edit"
     And I fill in "content" with "Number 1 posted FAQ, this is, and Yoda approves."
@@ -96,7 +96,7 @@ Feature: Admin tasks
     # Adding and removing roles
     When I check "user_roles_1"
       And I press "Update"
-    # Then show me the page
+    # Then show me the html
     Then I should see "User was successfully updated"
       And the "user_roles_1" checkbox should be checked
     When I uncheck "user_roles_1"
@@ -122,7 +122,7 @@ Feature: Admin tasks
   # turn off guest downloading
 
   When I am logged in as an admin
-  When I follow "settings"
+  When I follow "Settings"
   Then I should see "Turn off downloading for guests"
     And I should see "Turn off tag wrangling for non-admins"
   When I check "Turn off downloading for guests"
@@ -141,7 +141,7 @@ Feature: Admin tasks
   # Turn off tag wrangling
 
   When I am logged in as an admin
-  When I follow "settings"
+  When I follow "Settings"
     And I check "Turn off tag wrangling for non-admins"
     And I press "Update"
   Then I should see "Archive settings were successfully updated."
@@ -176,25 +176,15 @@ Feature: Admin tasks
   # otherfan turns off notifications
 
   When I am logged in as "otherfan" with password "hatesnotifications"
-    And I am on my user page
-    And I follow "Profile"
-  Then I should see "Set My Preferences"
-  When I follow "Set My Preferences"
-  Then I should see "Update"
-  When I check "Turn off admin notification emails"
+    And I go to my preferences page
+    And I check "Turn off admin emails"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
-  When I log out
-  Then I should see "Successfully logged out"
 
   # admin sends out notice to all users
 
-  When I go to the admin_login page
-    And I fill in "Admin user name" with "Zooey"
-    And I fill in "admin_session_password" with "secret"
-    And I press "Log in as admin"
-  Then I should see "Successfully logged in"
-  When I follow "notices"
+  When I am logged in as an admin
+    And I go to the admin-notices page
     And I fill in "Subject" with "Hey, we did stuff"
     And I fill in "Message" with "And it was awesome"
     And I check "Notify All Users"
@@ -238,33 +228,33 @@ Feature: Admin tasks
   When I am logged in as an admin
   Then I should see "Successfully logged in"
   When I view the work "The One Where Neal is Awesome"
-    And I follow "Read Comments (1)"
+    And I follow "Comments (1)"
   Then I should not see "Mark as spam"
 
   # now mark a comment as spam
   When I post the comment "Would you like a genuine rolex" on the work "The One Where Neal is Awesome" as a guest
     And I am logged in as an admin
     And I view the work "The One Where Neal is Awesome"
-    And I follow "Read Comments (2)"
+    And I follow "Comments (2)"
   Then I should see "rolex"
     And I should see "Spam"
   When I follow "Spam"
   Then I should see "Not Spam"
   When I follow "Hide Comments"
   # TODO: Figure out if this is a defect or not, that it shows 2 instead of 1
-  # Then I should see "Read Comments (1)"
+  # Then I should see "Comments (1)"
 
   # comment should no longer be there
-  When I follow "Read Comments"
+  When I follow "Comments"
   Then I should see "rolex"
     And I should see "Not Spam"
   When I am logged out as an admin
     And I view the work "The One Where Neal is Awesome"
-    And I follow "Read Comments"
+    And I follow "Comments"
   Then I should not see "rolex"
   When I am logged in as "author" with password "password"
     And I view the work "The One Where Neal is Awesome"
-    And I follow "Read Comments"
+    And I follow "Comments"
     Then I should not see "rolex"
 
   Scenario: admin goes to the Support page
@@ -277,7 +267,7 @@ Feature: Admin tasks
   Scenario: Post known issues
   
   When I am logged in as an admin
-    And I follow "admin posts"
+    And I follow "Admin Posts"
     And I follow "Known Issues" within "#main"
     And I follow "make a new known issues post"
     And I fill in "known_issue_title" with "First known problem"

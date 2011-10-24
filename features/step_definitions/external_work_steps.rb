@@ -16,6 +16,6 @@ Given /^I set up an external work$/ do
   fill_in("Author", :with => DEFAULT_EXTERNAL_AUTHOR)
   fill_in("Title", :with => DEFAULT_EXTERNAL_TITLE)
   %{I fill in basic work tags}
-  fill_in("Your Notes", :with => DEFAULT_BOOKMARK_NOTES)
+  fill_in("Notes", :with => DEFAULT_BOOKMARK_NOTES)
   fill_in("Your Tags", :with => DEFAULT_BOOKMARK_TAGS)
 end

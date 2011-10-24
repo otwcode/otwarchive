@@ -40,7 +40,7 @@
   <fieldset id="associations">
     <legend><%= ts('Associations') %></legend>
     <dl>
-      <% if !(@assignments = current_user.offer_assignments.undefaulted.unfulfilled + current_user.pinch_hit_assignments).empty? || !@work.challenge_assignments.empty? %>
+      <% if !(@assignments = ChallengeAssignment.by_offering_user(current_user).undefaulted.unstarted).empty? || !@work.challenge_assignments.empty? %>
         <!-- if the user has open assignments? -->
         <dt class="collection">
           <%= f.label "challenge_assignment_ids[]", ts("Does this fulfill a challenge assignment") %><%= link_to_help "add-work-to-assignment" %>
@@ -51,7 +51,7 @@
                 :checked_method => "challenge_assignments", :name_method => "title" %>
         </dd>
       <% end %>
-      <% if !(@claims = current_user.request_claims.unfulfilled).empty? || !@work.challenge_claims.empty? %>
+      <% if !(@claims = current_user.request_claims.unstarted).empty? || !@work.challenge_claims.empty? %>
         <!-- if the user has open claims? -->
         <dt class="collection">
           <%= f.label "challenge_claim_ids[]", ts("Fulfill a Claim") %> <%= link_to_help "add-work-to-assignment" %>

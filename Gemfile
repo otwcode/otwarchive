@@ -34,11 +34,13 @@ gem 'thinking-sphinx',
   :require => 'thinking_sphinx'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'aws-s3', :require => 'aws/s3'
-# gem 'fastercsv' -- will use this eventually for exporting to excel tsv format
 gem 'mocha'
 gem 'css_parser'
 
 gem 'paperclip', '>=2.3.16'
+
+# for looking up image dimensions quickly
+gem 'fastimage'
 
 gem 'tolk',
   :git => 'git://github.com/ambtus/tolk.git',

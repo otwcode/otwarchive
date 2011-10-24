@@ -3,11 +3,11 @@
   <!-- expects local variable "challenge_signup" -->
   <div class="offers listbox">
     <h3 class="heading">Offers</h3>
-    <ul class="index">
+    <ol class="index">
   <% challenge_signup.offers.each_with_index do |offer, index| %>
-    <%= render "prompts/prompt_blurb", :prompt => offer %>
+    <%= render "prompts/prompt_blurb", :prompt => offer, :index => index %>
   <% end %>
-  </ul>
+  </ol>
   </div>
   
 <% end %>

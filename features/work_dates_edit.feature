@@ -23,7 +23,7 @@ Feature: Edit Works Dates
       And I check "chapters-options-show"
       And I fill in "work_wip_length" with "3"
       And I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Fandom: first fandom"
       And I should see "first chapter content"
       And I should see "Published:2010-04-30"

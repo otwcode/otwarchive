@@ -14,14 +14,14 @@ Feature: Basic collection navigation
   Given basic tags
     And I have a canonical "TV Shows" fandom tag named "New Fandom"
     And a freeform exists with name: "Free", canonical: true
-  When I follow "Post New"
+  When I follow "post new"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "New Fandom"
     And I fill in "Additional Tags" with "Free"
     And I fill in "Work Title" with "Work for my collection"
     And I fill in "content" with "First because I'm the mod"
-    And I fill in "Post to Collections/Challenges" with "my_collection"
+    And I fill in "Post to Collections / Challenges" with "my_collection"
     And I press "Preview"
     And I press "Post"
     And I follow "My Collection"

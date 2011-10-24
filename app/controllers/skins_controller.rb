@@ -1,7 +1,8 @@
 class SkinsController < ApplicationController
 
   before_filter :users_only, :only => [:new, :create, :destroy]
-  before_filter :load_skin, :except => [:index, :new, :create]
+  before_filter :load_skin, :except => [:index, :new, :create, :unset]
+  before_filter :check_title, :only => [:create, :update]
   before_filter :check_ownership_or_admin, :only => [:edit, :update]
   before_filter :check_ownership, :only => [:destroy]
   before_filter :check_visibility, :only => [:show]
@@ -9,6 +10,42 @@ class SkinsController < ApplicationController
 
   cache_sweeper :skin_sweeper
 
+  def load_skin
+    @skin = Skin.find_by_id(params[:id])
+    unless @skin
+      flash[:error] = "Skin not found"
+      redirect_to skins_url and return
+    end
+    @check_ownership_of = @skin
+    @check_visibility_of = @skin
+  end
+
+  def check_editability
+    unless @skin.editable?
+      flash[:error] = ts("Sorry, you don't have permission to edit this skin")
+      redirect_to @skin and return 
+    end
+  end
+  
+  def check_title
+    if params[:skin][:title].match(/archive/i)
+      flash[:error] = ts("You can't use the word 'archive' in your skin title, sorry! (We have to reserve it for official skins.)")
+      render (@skin ? :edit : :new) and return
+    end
+  end
+  
+  def load_archive_parents(skin)
+    if params[:add_site_parents]
+      last_position = skin.skin_parents.collect(&:position).max || 0
+      Skin.get_current_site_skin.get_all_parents.each do |parent_skin|
+        last_position += 1
+        skin.skin_parents.build(:parent_skin => parent_skin, :position => last_position)
+      end
+    end
+  end
+  
+  #### ACTIONS
+  
   def index
     if current_user && current_user.is_a?(User)
       @preference = current_user.preference
@@ -38,8 +75,6 @@ class SkinsController < ApplicationController
   end
 
   def show
-    @skin = Skin.find(params[:id])
-
   end
 
   def new
@@ -52,11 +87,8 @@ class SkinsController < ApplicationController
   end
 
   def create
-    if params[:skin][:title].match(/archive/i)
-      flash[:error] = ts("You can't use the word 'archive' in your skin title, sorry! (We have to reserve it for official skins.)")
-      render :new and return
-    end
     @skin = params[:skin_type] ? params[:skin_type].constantize.new(params[:skin]) : Skin.new(params[:skin])
+    load_archive_parents(@skin) unless @skin.is_a?(WorkSkin)
     @skin.author = current_user
     if @skin.save
       redirect_to @skin
@@ -74,35 +106,40 @@ class SkinsController < ApplicationController
   end
 
   def update
-    if params[:skin][:title].match("/^Archive/")
-      flash[:error] = ts("You can't name your skin starting with 'Archive', sorry!")
-      render :edit and return
-    end
     if @skin.update_attributes(params[:skin])
+      load_archive_parents(@skin)      
       flash[:notice] = "Skin updated."
       redirect_to @skin
     else
       render :action => "edit"
     end
   end
-
-  def load_skin
-    @skin = Skin.find_by_id(params[:id])
-    unless @skin
-      flash[:error] = "Skin not found"
-      redirect_to skins_url and return
-    end
-    @check_ownership_of = @skin
-    @check_visibility_of = @skin
+  
+  def preview
+    flash[:notice] = []
+    flash[:notice] << ts("You are previewing the skin %{title}. This is a randomly chosen page.", :title => @skin.title)
+    flash[:notice] << ts("Go back or click any link to remove the skin.")
+    flash[:notice] << ts("Tip: You can preview any archive page you want by tacking on '?site_skin=[skin_id]' like you can see in the url above.")    
+    tag = FilterCount.where("public_works_count BETWEEN 10 AND 20").order("RAND()").first.filter
+    redirect_to tag_works_path(tag, :site_skin => @skin.id)
   end
 
-  def check_editability
-    unless @skin.editable?
-      flash[:error] = ts("Sorry, you don't have permission to edit this skin")
-      redirect_to @skin and return 
+  def set
+    if @skin.cached?
+      flash[:notice] = ts("The skin %{title} has been set. This will last for your current session.", :title => @skin.title)
+      session[:site_skin] = @skin.id
+    else
+      flash[:error] = ts("Sorry, but only certain skins can be used this way (for performance reasons). Please drop a support request if you'd like %{title} to be added!", :title => @skin.title)
     end
+    redirect_back_or_default @skin
   end
   
+  def unset
+    session[:site_skin] = nil
+    flash[:notice] = ts("You are now using the default Archive skin again!")
+    redirect_back_or_default "/"
+  end
+
   def destroy
     @skin = Skin.find_by_id(params[:id])
     begin

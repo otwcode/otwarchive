@@ -14,7 +14,7 @@ Feature: Import Works from LJ
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.livejournal.com/3562.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Lewis" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
       And I should see "Lewis/Hathaway" within "dd.relationship"
@@ -50,7 +50,7 @@ Feature: Import Works from LJ
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.livejournal.com/3591.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Lewis" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
       And I should see "Lewis/Hathaway" within "dd.relationship"
@@ -85,7 +85,7 @@ Feature: Import Works from LJ
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.livejournal.com/3562.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Importing Test"
     When I press "Edit"
     Then I should see "* Required information"
@@ -110,7 +110,7 @@ Feature: Import Works from LJ
     When I go to the import page
       And I fill in "urls" with "http://community.livejournal.com/rarelitslash/271960.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Poirot - Agatha Christie" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
       And I should see "Published:2010-10-23"
@@ -143,8 +143,8 @@ Feature: Import Works from LJ
     When I go to the import page
       And I fill in "urls" with "http://zooey_glass04.livejournal.com/99054.html"
     When I press "Import"
-    # Then show me the page
-    Then I should see "Preview Work"  
+    # Then show me the html
+    Then I should see "Preview"  
 
   @import_lj_multi_chapter
   Scenario: Creating a new multichapter work from an LJ story
@@ -161,7 +161,7 @@ Feature: Import Works from LJ
          """
       And I choose "import_multiple_chapters"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Lewis" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
       And I should see "Importing Test" within "h2.title"

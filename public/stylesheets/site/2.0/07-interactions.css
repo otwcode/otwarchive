@@ -15,13 +15,13 @@ form    { clear:right }
 /*Guideline: Forms are written by lots of people, and, this is beta, change a LOT. 
 I've written a load of possible different nests to give a reasonably/broadly consistent view whatever goes in, 
 but it's probably not complete. */
-fieldset, form dl, fieldset dl dl, fieldset fieldset fieldset, fieldset fieldset dl dl, dd.hideme 
+fieldset, form dl, fieldset dl dl, fieldset fieldset fieldset, fieldset fieldset dl dl, dd.hideme, form blockquote.userstuff  
         { display:block; background:#ddd; border:2px solid #f3efec; margin:0.643em; padding:0.643em;
           box-shadow:inset 1px 0 5px #999 }
 fieldset dl, fieldset.actions, fieldset dl fieldset dl
         { background:transparent; border:none; clear:right;
           box-shadow:none }
-fieldset fieldset, fieldset dl dl 
+fieldset fieldset, fieldset dl dl, form blockquote.userstuff  
         { background:#f4effc; clear:right}
 fieldset dd dl, form .meta dd, fieldset dl fieldset dl, dd fieldset
         { margin: 0.643em 0}
@@ -41,7 +41,7 @@ select  { vertical-align:text-top; width:100%; min-width:10.5em}
 .datetime select 
         { width:32.5% }
 input[type="radio"], input[type="checkbox"], input[type="file"], input.number, p input, p select, .heading select, li select 
-        { vertical-align:text-top; width:auto; margin-right:0.375em}
+        { width:auto; margin-right:0.375em}
 input.number
         { width: 4em;}
 option, .actions option, form code  
@@ -79,7 +79,7 @@ p.character_counter
         { display: block;	margin: 0.25em 0 0; min-width:10em}
 form li ul.autocomplete li.input
         { border:0}
-.autocomplete ul li:hover, li.selected 
+.autocomplete .dropdown ul li:hover, li.selected 
         { background: url("/images/skins/textures/tile_ao3.png") top left #900; color: #fff }
 .required .autocomplete, .autocomplete .notice
         { color:#222 }

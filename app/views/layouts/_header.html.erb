@@ -10,7 +10,12 @@
 <% if @collection %>
   <!-- custom css for header -->
   <style type="text/css">
-  #header h2, #footer {  background:#7887AF url(<%= @collection.header_image_url || (@collection_parent ? @collection_parent.header_image_url : '') %>);}
+  #header h2, #footer { 
+    background: #616C90 <% if (header_url = @collection.header_image_url || (@collection_parent && @collection_parent.header_image_url)) %>
+      <% height = (size = FastImage.size(header_url, :timeout => 1)) ? size[1].to_s + 'px' : '100%' %>
+      url(<%= header_url %>); height: <%= height %>
+    <% end %>;
+  }
   </style>
 <% end %>
 
@@ -49,7 +54,11 @@
   <% end %>
 
   <% if @collection %>
-    <h2 class="collections"><%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : ts("New Collection")) %></h2>
+    <h2 class="collections">
+      <% unless @collection.header_image_url.present? %>
+        <%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : ts("New Collection")) %>
+      <% end %>
+    </h2>
   <% end %>
 
   <div class="clear"></div>

@@ -11,11 +11,12 @@ $j(document).ready(function() {
     showShowMe();
     handlePopUps();
     generateCharacterCounters();
-    $j('#expandable-link').click(function(){
+    $j('#expandable-link').click(function(e){
+          e.preventDefault();
           expandList();
           return false;
       });
-    $j('#hide-notice-banner').click(function () { $j('#notice-banner').hide(); });
+    $j('#hide-notice-banner').click(function (e) { $j('#notice-banner').hide();   e.preventDefault(); });
     setupTooltips();
 
     // replace all GET delete links with their AJAXified equivalent
@@ -193,12 +194,13 @@ function setupToggled(){
     var open_toggles = $j('.' + node.attr('id') + "_open");
     var close_toggles = $j('.' + node.attr('id') + "_close");
     
-    node.hide();
+    if (!node.hasClass('open')) {node.hide();}
     close_toggles.each(function(){$j(this).hide();});
     open_toggles.each(function(){$j(this).show();});
 
     open_toggles.each(function(){
-      $j(this).click(function(){
+      $j(this).click(function(e){
+        e.preventDefault();
         node.show();
         open_toggles.each(function(){$j(this).hide();});
         close_toggles.each(function(){$j(this).show();});
@@ -206,7 +208,8 @@ function setupToggled(){
     });
     
     close_toggles.each(function(){
-      $j(this).click(function(){
+      $j(this).click(function(e){
+        e.preventDefault();
         node.hide();
         close_toggles.each(function(){$j(this).hide();});
         open_toggles.each(function(){$j(this).show();});

@@ -1,3 +1,5 @@
+<p><%= ts("Hello, %{name}!", :name => @user.login) %></p>
+
 <p>
 <%= ts("A gift story has been posted for you ") %>
 <%= @collection ? "in the #{@collection.title} collection " : "" %>at the Archive of Our Own!

@@ -19,17 +19,22 @@ module Collectible
   # can't be edited
   def collection_names=(new_collection_names)
     names = new_collection_names.split(',').map{ |name| name.strip }
-    to_add = Collection.where(:name => names)
-    (self.collections - to_add).each do |c|
+    new_collections = Collection.where(:name => names)
+    missing = names - new_collections.value_of(:name)
+    to_add = new_collections - self.collections
+    to_remove = self.collections - new_collections
+    to_remove.each do |c|
       self.collections.delete(c)
     end
-    (to_add - self.collections).each do |c|
+    to_add.each do |c|
       self.collections << c
     end
-    (names - to_add.map{ |c| c.name }).each do |name|
-      unless name.blank?
-        self.errors.add(:base, ts("We couldn't find a collection with the name %{name}. Make sure you are using the one-word name, and not the title?", :name => name.strip))
-      end
+    unless missing.blank?
+      error = missing.size == 1 ? 
+        ts("We couldn't find a collection with the name %{name}. ", :name => missing.first) : 
+        ts("We couldn't find the collections named %{names}. ", :names => missing.to_sentence)
+      error += ts("Make sure you are using the one-word name, and not the title?")
+      self.errors.add(:base, error)
     end
   end
 
@@ -56,7 +61,7 @@ module Collectible
   end
 
   def collection_names
-    self.collections.collect(&:name).join(",")
+    @collection_names ? @collection_names : self.collections.collect(&:name).join(",")
   end
 
 end

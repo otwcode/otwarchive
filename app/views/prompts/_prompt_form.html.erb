@@ -71,20 +71,15 @@
     <% end %>
     
     <% if @collection.challenge.respond_to?(:anonymous) %>
-      <% # REFACTOR: Anonymity should not be based on a type of challenge but on whether the specific challenge ALLOWS anonymity or not, 
+      <% # TODO ANONYMITY REFACTOR: Anonymity should not be based on a type of challenge but on whether the specific challenge ALLOWS anonymity or not, 
          # (currently the prompt memes don't allow a mod to specify no anonymity allowed)
          # and should probably be done via an Anonymous user like the Orphan user.  
       %>
-      <dt>
-        <%= form.label :anonymous, ts("Semi-anonymous prompt: ") %>
-        <% if form.object.new_record? %>
-        <% anon = form.object.anonymous %>
-        <% else %>
-          <% anon = form.object.anonymous %>
-        <% end %>
-      </dt>
-      <dd><%= form.check_box :anonymous, :checked => anon %>
-	<p class="footnote">(note, this is not totally secure, and is still guessable in some places)</p></dd>
+      <dt><%= form.label :anonymous, ts("Semi-anonymous prompt: ") %></dt>
+      <dd>
+        <%= form.check_box :anonymous, :checked => form.object.new_record? ? @collection.challenge.anonymous? : form.object.anonymous %>
+	      <p class="footnote">(note, this is not totally secure, and is still guessable in some places)</p>
+	    </dd>
     <% end %>
      
   </dl>

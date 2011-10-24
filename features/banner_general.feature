@@ -88,8 +88,8 @@ Scenario: User can turn off banner in preferences if they don't have Javascript
   When an admin sets a custom banner notice
   When I am logged in as "newname"
     And I go to my preferences page
-  Then I should see "Turn off the general banner notice"
-  When I check "Turn off the general banner notice"
+  Then I should see "Turn off the banner showing on every page."
+  When I check "Turn off the banner showing on every page."
     And I press "Update"
   Then I should not see "Custom notice words"
   

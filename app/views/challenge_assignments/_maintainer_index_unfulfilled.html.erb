@@ -1,50 +1,48 @@
 <% # list assignments which have not yet been fulfilled %>
-<%= form_tag update_multiple_collection_assignments_path(@collection), :method => :put do %>
-  <dl class="index">
-    <% @assignments.each do |assignment| %>
-      <dt class="creator">
-        <!-- the artist and their contact info -->
-        <%= challenge_assignment_byline(assignment) %> <%= challenge_assignment_email(assignment) %>
-      </dt>
-      <dd class="recipient">
+<dl class="index">
+  <% @assignments.each do |assignment| %>
+    <dt class="creator">
+      <!-- the artist and their contact info -->
+      <%= challenge_assignment_byline(assignment) %> <%= challenge_assignment_email(assignment) %>
+      <span class="recipient">
+        for
         <% if assignment.request.nil? %>
           <strong><%= ts("No Recipient!")%></strong>
         <% else %>
           <%= link_to assignment.request_byline, collection_signup_path(@collection, assignment.request) %>
           <%= assignment.pinch_request_signup && assignment.pinch_request_signup == assignment.request ? "* (pinch recipient)" : "" %>
         <% end %>
-      </dd>
-
+      </span>
+    </dt>
+    <dd>
       <% if @collection.moderated? %>
         <% # we might have works posted that haven't yet been approved %>
-        <dd class="work">
-          <% if assignment.creation %>
-            <%= link_to ts("Gift posted on %{published_at}", :published_at => assignment.creation.published_at), assignment.creation %>
-            <% if assignment.creation.respond_to?(:word_count) %>
-              <%= ts("(%{count} words)", :count => assignment.creation.word_count) %>
-            <% end %>            
-          <% else %>
-            Not yet posted
-          <% end %>
-        </dd>
+        <% if assignment.posted? %>
+          <%= link_to ts("Gift posted on %{published_at}", :published_at => assignment.creation.published_at), assignment.creation %>
+          <% if assignment.creation.respond_to?(:word_count) %>
+            <%= ts("(%{count} words)", :count => assignment.creation.word_count) %>
+          <% end %>            
+        <% else %>
+          <%= ts("Not yet posted") %>
+        <% end %>
       <% end %>
-      
+    
       <ul class="actions">
-        <% if !assignment.fulfilled? %>
+        <% if assignment.posted? %>
           <li>
             <%= label_tag "approve_#{assignment.id}" do %>
               <%= ts("Approve") %>
               <%= check_box_tag "approve_#{assignment.id}" %>
             <% end %>
           </li>
-          <li>
-            <%= label_tag "default_#{assignment.id}" do %>
-              <%= ts("Default") %>
-              <%= check_box_tag "default_#{assignment.id}" %>              
-            <% end %>
-          </li>
         <% end %>
+        <li>
+          <%= label_tag "default_#{assignment.id}" do %>
+            <%= ts("Default") %>
+            <%= check_box_tag "default_#{assignment.id}" %>              
+          <% end %>
+        </li>
       </ul>
-    <% end %>
-  </dl>
-<% end %>
+    </dd>
+  <% end %>
+</dl>

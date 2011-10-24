@@ -4,8 +4,8 @@ Feature: Archivist bulk imports
   Scenario: Non-archivist cannot import for others
   
   When I am logged in as a random user
-    And I follow "Import"
-  Then I should not see "Import works for others"
+    And I go to the import page
+  Then I should not see "Import for others ONLY with permission"
   
   Scenario: Make a user an archivist
   
@@ -18,15 +18,15 @@ Feature: Archivist bulk imports
   
   Given I have an archivist "elynross"
     When I am logged in as "elynross"
-      And I follow "Import"
-    Then I should see "Import works for others"
+    And I go to the import page
+    Then I should see "Import for others ONLY with permission"
 
   Scenario: Import a single work as an archivist
   
   Given I have an archivist "elynross"
     When I am logged in as "elynross"
-      And I follow "Import"
-    When I check "Import works for others"
+      And I go to the import page
+    When I check "Import for others ONLY with permission"
       And I fill in "urls" with 
       """
       http://cesy.dreamwidth.org/154770.html
@@ -41,8 +41,8 @@ Feature: Archivist bulk imports
   
   Given I have an archivist "elynross"
     When I am logged in as "elynross"
-      And I follow "Import"
-    When I check "Import works for others"
+      And I go to the import page
+    When I check "Import for others ONLY with permission"
       And I fill in "urls" with 
       """
       http://cesy.dreamwidth.org/154770.html
@@ -59,8 +59,8 @@ Feature: Archivist bulk imports
   
   Given I have an archivist "elynross"
     When I am logged in as "elynross"
-      And I follow "Import"
-    When I check "Import works for others"
+      And I go to the import page
+    When I check "Import for others ONLY with permission"
       And I fill in "urls" with "http://yuletidetreasure.org/archive/84/thatshall.html"
       And I check "Post without previewing"
       And I press "Import"
@@ -74,8 +74,8 @@ Feature: Archivist bulk imports
   
     Given I have an archivist "elynross"
     When I am logged in as "elynross"
-      And I follow "Import"
-    When I check "Import works for others"
+      And I go to the import page
+    When I check "Import for others ONLY with permission"
       And I fill in "urls" with
         """
         http://cesy.dreamwidth.org/154770.html

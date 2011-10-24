@@ -13,7 +13,7 @@ Feature: Import Works from fanfiction.net
     When I go to the import page
       And I fill in "urls" with "http://www.fanfiction.net/s/3129674/1/What_More_Than_Usual_Light"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Firefly" within "dd.fandom"
       And I should see "Mature" within "dd.rating"
       And I should see "Romance" within "dd.freeform"
@@ -43,7 +43,7 @@ Feature: Import Works from fanfiction.net
     When I go to the import page
       And I fill in "urls" with "http://www.fanfiction.net/s/6646765/1/IChing"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Firefly" within "dd.fandom"
       And I should see "Mature" within "dd.rating"
       And I should see "Drama" within "dd.freeform"

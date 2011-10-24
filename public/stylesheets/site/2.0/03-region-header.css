@@ -32,7 +32,7 @@ notice that CSS3 declarations sit on their own line and always come last*/
 
 /*CONTEXT: collections*/
 #header h2 
-        { margin:0; padding:0.25em 120px 0.25em 6.5625em; border-top:1px solid; color:#fff; display:block;
-          text-shadow:-1px 0 1px #aaa; box-shadow: inset 1px 2px 3px #333 }
+        { line-height:1.5; margin:0; padding:0 120px 0 6.5625em; border-top:1px solid; color:#fff; display:block;
+          text-shadow:-1px 0 1px #aaa; }
 
 /*END== */

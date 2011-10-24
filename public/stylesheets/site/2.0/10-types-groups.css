@@ -30,7 +30,7 @@ a.cloud8{ color: #900; font-size: 2.25em; font-weight: 800 }
         { float:left; width:100%}
 
 /*http://media.transformativeworks.org/training/front_end_coding/patterns/pattern-index.html*/
-dl.index{ margin:1.286em 0; background:none; border:none; box-shadow:none}
+dl.index{ margin:0.643em 0; border:none; box-shadow:none}
 dl.index dt
         { width:auto; float:none; border:none;}
 dl.index dd         
@@ -48,10 +48,10 @@ li.relationships
         { font-size:100%; float:none }
 .kudos  { background:url("/images/skins/iconsets/default/kudos.png") bottom left no-repeat; padding:25px 0 25px 55px; margin:0}
 .icon   { background:url("/images/skins/iconsets/default/icon_user.png") #900 top left no-repeat; height:100px; width:100px; margin:0}
-.mods li, .stats dt, .stats dd
-        { width:auto; min-width:0; display:inline; }
-.stats  { text-align:right;}
-.stats dd 
-        { white-space:nowrap; border-right:10px solid transparent }
+.mods li, dl.stats dt, dl.stats dd
+        { background:none; width:auto; min-width:0; display:inline; clear:none; float:none; margin:auto;}
+dl.stats{ text-align:right; background:none; box-shadow:none; }
+dl.stats dd 
+        { white-space:nowrap; border-right:10px solid transparent; padding:auto; }
 
 /*END== */

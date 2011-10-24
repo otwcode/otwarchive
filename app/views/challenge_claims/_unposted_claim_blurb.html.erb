@@ -42,7 +42,7 @@
   <% TagSet::TAG_TYPES.each do |type| %>
     <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
       <ul class="<%= type %> type tags commas" title="<%= type %>">
-        <%= tag_link_list(prompt.tag_set.with_type(type)) %>
+        <%= tag_link_list(prompt.tag_set.with_type(type), link_to_works=true) %>
       </ul>
     <% end %>  
   <% end %>

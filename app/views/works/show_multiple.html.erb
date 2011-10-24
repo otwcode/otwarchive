@@ -8,7 +8,7 @@
         <dt><%= label_tag "work_ids[]", link_to(work.title.html_safe, work_path(work)) %>
         </dt>
           <dd>
-<span title="fandom">(<%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ').html_safe %>)</span>
+<span title="fandom">(<%= work.fandom_tags.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>)</span>
 <!--menu of actions-->
               <ul class="actions" role="menu">
               <li><label class="action" title="select <%= work.title %>"><%= check_box_tag "work_ids[]", work.id %></label></li>

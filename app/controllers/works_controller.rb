@@ -237,10 +237,6 @@ class WorksController < ApplicationController
     if params[:claim_id] && (@challenge_claim = ChallengeClaim.find(params[:claim_id])) && User.find(@challenge_claim.claiming_user_id) == current_user
       @work.challenge_claims << @challenge_claim
       @work.collections << @challenge_claim.collection
-      TagSet::TAG_TYPES.each do |type|
-        tags = @challenge_claim.request_prompt.tag_set.try(:with_type, type)
-        @work.send("#{type.pluralize}=", tags) if tags && tags.empty?
-      end
     else
       @work.collection_names = @collection.name if @collection
     end

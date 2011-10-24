@@ -5,18 +5,9 @@ Feature: Languages
   
   # Admin set up the language
   
-  Given the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
-  When I go to the admin_login page
-    And I fill in "admin_session_login" with "Zooey"
-    And I fill in "admin_session_password" with "secret"
-    And I press "Log in as admin"
-  Then I should see "Successfully logged in" 
-  When I follow "settings"
+  # Given I am logged in as an admin
+  #   And I go to the admin-settings page
   # TODO: Then I should be able to add a language in the front end
-  When I log out
-  Then I should see "Successfully logged out"
   
   Scenario: post a work in another language
   
@@ -56,5 +47,5 @@ Feature: Languages
     
   When I am on the languages page
   Then I should see "English"
-    And I should see the text with tags "<td>English</td>"
-    And I should see the text with tags "<td><a href="/works">1</a></td>"
+    And I should see "English" within "dt"
+    And I should see the text with tags "<a href=\"/works\">1</a>"

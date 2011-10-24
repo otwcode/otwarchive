@@ -1,13 +1,16 @@
 <fieldset>
     <legend>About</legend>
-    <h3 class="heading">About</h3>
+    <h3 class="landmark heading">About</h3>
     <dl>      
       <dt><%= label_tag "skin_type", ts('Type') %> <%= link_to_help "skins-basics" %></dt>
       <% if @skin.type %>
         <% # don't let the user change the skin type after the fact! %>
         <dd><%= @skin.type == 'WorkSkin' ? ts("Work Skin") : ts("Site Skin") %></dd>
       <% else %>      
-        <dd><%= select_tag "skin_type", options_for_select(Skin::TYPE_OPTIONS, params[:skin_type]), :onchange => 'if ($j(this).val() == "WorkSkin") {$j(".verbose").hide();} else {$j(".verbose").show();}' %></dd>
+        <dd>
+          <%= select_tag "skin_type", options_for_select(Skin::TYPE_OPTIONS, params[:skin_type]), 
+            :onchange => 'if ($j(this).val() == "WorkSkin") {$j(".verbose").hide();} else {$j(".verbose").show();}' %>
+        </dd>
       <% end %>
     
       <dt><%= f.label :title, ts('Title') %></dt>
@@ -31,42 +34,62 @@
   </fieldset>
   
   <fieldset class="verbose<%= (@skin.type || params[:skin_type]) == 'WorkSkin' ? ' hidden' : ''%>">
-    <legend>Advanced</legend>
+    <legend>Advanced 
+    <span class="action">
+      <a href="#" class="advanced_skin_open hidden"><%= ts("Show") %> &#8595;</a>
+      <a href="#" class="advanced_skin_close hidden"><%= ts("Hide") %> &#8593;</a>
+    </span>
+    </legend>
 
-    <fieldset>
-      <legend>Conditions <%= link_to_help "skins-conditions" %></legend>
-      <h4 class="heading landmark">Conditions</h4>
-      <dl>
-        <dt><%= f.label :role, ts('Role: ')%></dt>
-        <dd><%= f.select :role, options_for_select(Skin::ROLES, @skin.role || Skin::DEFAULT_ROLE) %></dd>
-        
-        <dt><%= f.label :ie_condition, ts('IE Only: ')%></dt>
-        <dd><%= f.select :ie_condition, options_for_select(Skin::IE_CONDITIONS, @skin.ie_condition), :include_blank => true %></dd>
-        
-        <dt><%= f.label :unusable, ts("Parent Only: ")%></dt>
-        <dd><%= f.check_box :unusable %></dd>
 
-        <dt><%= f.label :media, ts('Media: ')%></dt>
-        <dd>
-          <fieldset class="listbox">
-          <h5 class="heading">Choose @media</h5>
-            <%= checkbox_section(f, :media, Skin::MEDIA, :checked_method => @skin.media || [Skin::DEFAULT_MEDIA], :value_method => "to_s", :name_method => "to_s", :include_blank => false) %>
-          </fieldset>
-        </dd>        
-      </dl>
-    </fieldset>
+    <div id="advanced_skin" class="<%= show_advanced_skin?(@skin) ? 'toggled open' : 'toggled' %>">
+      <fieldset>
+        <legend>Conditions <%= link_to_help "skins-conditions" %></legend>
+        <h4 class="heading landmark">Conditions</h4>
+        <dl>
+          <dt><%= f.label :role, ts('What it does: ')%></dt>
+          <dd>
+            <%= f.select :role, options_for_select(Skin::ROLE_NAMES.invert, @skin.role || Skin::DEFAULT_ROLE), {},
+                :onchange => 'if ($j(this).val() == "override") {$j(".archive_parents").show();} else {$j(".archive_parents").hide();}' %>
+          </dd>
+        
+          <dt><%= f.label :ie_condition, ts('IE Only: ')%></dt>
+          <dd><%= f.select :ie_condition, options_for_select(Skin::IE_CONDITIONS, @skin.ie_condition), :include_blank => true %></dd>
+        
+          <dt><%= f.label :unusable, ts("Parent Only: ")%></dt>
+          <dd><%= f.check_box :unusable %></dd>
+
+          <dt><%= f.label :media, ts('Media: ')%></dt>
+          <dd>
+            <fieldset class="listbox">
+            <h5 class="heading">Choose @media</h5>
+              <%= checkbox_section(f, :media, Skin::MEDIA, :checked_method => @skin.media || Skin::DEFAULT_MEDIA, :value_method => "to_s", :name_method => "to_s", :include_blank => false) %>
+            </fieldset>
+          </dd>        
+        </dl>
+      </fieldset>
     
-    <fieldset>
-      <legend>Parent Skins <%= link_to_help "skins-parents" %></legend>
-      <h4 class="heading landmark">Parent Skins</h4>
-      <% f.object.skin_parents.each_with_index do |parent, index| %>
-        <%= f.fields_for :skin_parents do |parent_form| %>
-          <%= render "skin_parent_fields", :form => parent_form, :index => index %>
+      <fieldset>
+        <legend>Parent Skins <%= link_to_help "skins-parents" %></legend>
+        <h4 class="heading landmark">Parent Skins</h4>
+        <% f.object.skin_parents.each_with_index do |parent, index| %>
+          <%= f.fields_for :skin_parents do |parent_form| %>
+            <%= render "skin_parent_fields", :form => parent_form, :index => index %>
+          <% end %>
         <% end %>
-      <% end %>
 
-      <div class="last_id" style="display:none;"><%= @skin.skin_parents.count %></div>
-      <p class="actions" role="button"><%= link_to_add_section(ts("Add parent skin"), f, :skin_parents, "skin_parent_fields") %></p>
-    </fieldset>
+        <% if f.object.skin_parents.count == 0 %><div class="last_id" style="display:none;">0</div><% end %>
+        <p class="actions" role="button"><%= link_to_add_section(ts("Add parent skin"), f, :skin_parents, "skin_parent_fields") %></p>
+        
+        <div class="archive_parents hideme">
+          <p>
+            <label for="add_site_parents">
+              <%= ts("Load Archive Skin Components: ") %><%= link_to_help "skins-parents" %>
+              <%= check_box_tag "add_site_parents" %>
+            </label>
+          </p>
+        </div>
+      </fieldset>
+    </div>
   </fieldset>
 

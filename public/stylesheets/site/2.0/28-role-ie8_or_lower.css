@@ -51,7 +51,7 @@ dl.index dd p, dl.index dd .heading {display:inline}
 input,select,option,textarea,legend,label,.actions a {vertical-align:baseline}
 
 /*hasLayout */
-#main, div.home, textarea{zoom:1}
+#main, div.home, textarea, li.pseud, .listbox .index{zoom:1}
 
 /*and zoom resets */
 .stats a, .preface a, .meta .series {zoom:normal}
