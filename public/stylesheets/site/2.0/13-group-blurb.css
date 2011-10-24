@@ -16,7 +16,7 @@ Perhaps we can make a wizard for this specific task.
 .blurb ul li,.blurb dd ul li, .blurb ul.type  
         { display: inline }
 li.blurb, .blurb .blurb
-        { display:block; position: relative; clear:left; padding: 0.643em 1em; overflow:hidden;
+        { display:block; position: relative; clear:left; padding: 0.429em 0.75em; overflow:hidden;
           box-shadow:inset 1px 1px 3px #ccc; border-radius:0.15em }
 .blurb .module         
         { float:none}

@@ -289,7 +289,7 @@ class Skin < ActiveRecord::Base
     end
   
     if self.background_color || self.foreground_color || self.font || self.base_em
-      style += "body	{
+      style += "body, #main	{
         #{self.background_color ? "background: #{self.background_color};" : ''}
         #{self.foreground_color ? "color: #{self.foreground_color};" : ''}        
         font: #{(self.base_em ? self.base_em : "100")}%/1.125 #{(self.font ? self.font : '')};

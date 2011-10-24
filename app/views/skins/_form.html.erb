@@ -69,26 +69,28 @@
         </dl>
       </fieldset>
     
-      <fieldset>
+      <fieldset class="listbox">
         <legend>Parent Skins <%= link_to_help "skins-parents" %></legend>
         <h4 class="heading landmark">Parent Skins</h4>
-        <% f.object.skin_parents.each_with_index do |parent, index| %>
-          <%= f.fields_for :skin_parents do |parent_form| %>
-            <%= render "skin_parent_fields", :form => parent_form, :index => index %>
+         <ul class="index">
+         <% f.object.skin_parents.each_with_index do |parent, index| %>
+          <%= f.fields_for :skin_parents, parent do |parent_form| %>
+           <%= render "skin_parent_fields", :form => parent_form, :index => index %>
           <% end %>
         <% end %>
 
-        <% if f.object.skin_parents.count == 0 %><div class="last_id" style="display:none;">0</div><% end %>
-        <p class="actions" role="button"><%= link_to_add_section(ts("Add parent skin"), f, :skin_parents, "skin_parent_fields") %></p>
+        <% if f.object.skin_parents.count == 0 %><li class="last_id" style="display:none;">0</li><% end %>
+        <li class="actions" role="button"><%= link_to_add_section(ts("Add parent skin"), f, :skin_parents, "skin_parent_fields") %></p>
         
-        <div class="archive_parents hideme">
+        <li class="archive_parents<%= (f.object.role == "override") ? '' : ' hideme' %>">
           <p>
             <label for="add_site_parents">
               <%= ts("Load Archive Skin Components: ") %><%= link_to_help "skins-parents" %>
               <%= check_box_tag "add_site_parents" %>
             </label>
           </p>
-        </div>
+        </li>
+      </ul>
       </fieldset>
     </div>
   </fieldset>
