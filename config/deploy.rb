@@ -63,9 +63,6 @@ namespace :extras do
   task :update_revision, {:roles => :backend} do
     run "/static/bin/fix_revision.sh"
   end
-  task :cache_stylesheet, {:roles => :web} do
-    run "cd #{deploy_to}/current/public/stylesheets/; cat system-messages.css site-chrome.css forms.css live_validation.css auto_complete.css > cached_for_screen.css"
-  end
   task :run_after_tasks, {:roles => :backend} do
     run "cd #{release_path}; rake After RAILS_ENV=production"
   end
@@ -147,7 +144,6 @@ after "deploy:migrate", "extras:run_after_tasks"
 
 before "deploy:symlink", "deploy:web:enable_new"
 after "deploy:symlink", "extras:update_revision"
-after "deploy:symlink", "extras:cache_stylesheet"
 
 after "deploy:restart", "extras:update_cron"
 after "deploy:restart", "extras:restart_delayed_jobs"
