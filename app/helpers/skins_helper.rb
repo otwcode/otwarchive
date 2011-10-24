@@ -35,13 +35,14 @@ module SkinsHelper
   end
 
   def show_advanced_skin?(skin)
-    (skin.role != Skin::DEFAULT_ROLE ||
-      skin.media != Skin::DEFAULT_MEDIA ||
-      skin.ie_condition.present? ||
-      skin.unusable? ||
-      !skin.skin_parents.empty?)
+    !skin.new_record? && 
+      (skin.role != Skin::DEFAULT_ROLE ||
+        skin.media != Skin::DEFAULT_MEDIA ||
+        skin.ie_condition.present? ||
+        skin.unusable? ||
+        !skin.skin_parents.empty?)
   end
-    
+
 end
 
 #BACK END, pls regularise this with the other blurbs so we just have <div class="icon"></div> and no image if no image uploaded?
