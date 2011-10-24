@@ -34,14 +34,24 @@ class SkinsController < ApplicationController
     end
   end
   
-  def load_archive_parents(skin)
+  # if we've been asked to load the archive parents, we do so and add them to params
+  def load_archive_parents
     if params[:add_site_parents]
-      last_position = skin.skin_parents.collect(&:position).max || 0
-      Skin.get_current_site_skin.get_all_parents.each do |parent_skin|
-        last_position += 1
-        skin.skin_parents.build(:parent_skin => parent_skin, :position => last_position)
+      archive_parents = Skin.get_current_site_skin.get_all_parents      
+      if @skin && !(@skin.parent_skins.value_of(:id) & archive_parents.collect(&:id)).empty?
+        flash[:error] = ts("You already have some of the archive components as parents, so we couldn't load the others. Please remove the existing components first!")
+        return true
       end
+      params[:skin][:skin_parents_attributes] ||= HashWithIndifferentAccess.new
+      last_position = params[:skin][:skin_parents_attributes].keys.map{|k| k.to_i}.max rescue 0 || 0      
+      Skin.get_current_site_skin.get_all_parents.each do |parent_skin|                
+        last_position += 1
+        new_skin_parent_hash = HashWithIndifferentAccess.new({:position => last_position, :parent_skin_id => parent_skin.id})
+        params[:skin][:skin_parents_attributes].merge!({last_position => new_skin_parent_hash})
+      end
+      return true
     end
+    return false
   end
   
   #### ACTIONS
@@ -87,12 +97,17 @@ class SkinsController < ApplicationController
   end
 
   def create
+    loaded = load_archive_parents unless params[:skin_type] && params[:skin_type] == 'WorkSkin'
     @skin = params[:skin_type] ? params[:skin_type].constantize.new(params[:skin]) : Skin.new(params[:skin])
-    load_archive_parents(@skin) unless @skin.is_a?(WorkSkin)
     @skin.author = current_user
     if @skin.save
-      redirect_to @skin
-      flash[:notice] = "Skin was successfully created"
+      flash[:notice] =  ts("Skin was successfully created.")
+      if loaded
+        flash[:notice] += ts(" We've added all the archive skin components as parents. You probably want to remove some of them now!")
+        redirect_to edit_skin_path(@skin)
+      else
+        redirect_to @skin
+      end
     else
       if params[:wizard]
         render :new_wizard
@@ -106,10 +121,19 @@ class SkinsController < ApplicationController
   end
 
   def update
+    loaded = load_archive_parents
     if @skin.update_attributes(params[:skin])
-      load_archive_parents(@skin)      
-      flash[:notice] = "Skin updated."
-      redirect_to @skin
+      flash[:notice] = ts("Skin was successfully updated.")
+      if loaded
+        if flash[:error].present?
+          flash[:notice] = ts("Any other edits were saved.")
+        else
+          flash[:notice] += ts(" We've added all the archive skin components as parents. You probably want to remove some of them now!")
+        end
+        redirect_to edit_skin_path(@skin)
+      else
+        redirect_to @skin
+      end
     else
       render :action => "edit"
     end
@@ -144,6 +168,7 @@ class SkinsController < ApplicationController
     @skin = Skin.find_by_id(params[:id])
     begin
       @skin.destroy
+      flash[:notice] = ts("The skin was deleted.")
     rescue
       flash[:error] = ts("We couldn't delete that right now, sorry! Please try again later.")
     end

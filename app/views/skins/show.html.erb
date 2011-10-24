@@ -12,8 +12,10 @@
       <dt>Users: </dt><dd><%= @skin.preferences.count %></dd>
       <dt>Role: </dt><dd><%= @skin.role %></dd>
       <dt>Media: </dt><dd><%= @skin.get_media %></dd>
-      <% if @skin.ie_condition.present? %><dt>IE Only: </dt><dd><%= @skin.ie_condition %></dd><% end %>
-      <% if @skin.unusable? %><dt>Parent Skin Only</dt><% end %>
+      <dt>Condition:</dt>
+      <% if @skin.ie_condition.present? %><abbr title="internet explorer">IE</abbr><%= @skin.ie_condition %></dd><% end %>
+      <% if @skin.unusable? %><dd>parent only</dd><% end %>
+      <!--BACK END pls: else <dd>normal</dd> end-->
     </dl>
     	<%= render :partial => "skin_top_navigation" %>
     	<%= skin_preview_display(@skin) %>
@@ -29,7 +31,7 @@
   <% unless @skin.parent_skins.empty? %>
     <div class="parents module">
       <h3 class="heading">Parent Skins</h3>
-      <ul>
+      <ul class="index">
       <% @skin.parent_skins.each do |parent| %>
         <li><%= link_to parent.title, skin_path(parent) %></li>
       <% end %>
