@@ -93,5 +93,5 @@ group :production do
   # Use unicorn as the web server
   gem 'unicorn', :require => false
   gem "memcache-client"
-  gem "hoptoad_notifier", "~> 2.3"
+  gem 'airbrake'
 end

@@ -1,5 +1,5 @@
 require './config/boot'
-require 'hoptoad_notifier/capistrano'
+require 'airbrake/capistrano'
 
 # takes care of the bundle install tasks
 require 'bundler/capistrano'

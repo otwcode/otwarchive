@@ -62,6 +62,9 @@ GEM
       activemodel (= 3.0.4)
       activesupport (= 3.0.4)
     activesupport (3.0.4)
+    airbrake (3.0.4)
+      activesupport
+      builder
     archive-tar-minitar (0.5.2)
     arel (2.0.9)
     aws-s3 (0.6.2)
@@ -117,9 +120,6 @@ GEM
     gherkin (2.3.3)
       json (~> 1.4.6)
     highline (1.6.2)
-    hoptoad_notifier (2.4.7)
-      activesupport
-      builder
     htmlentities (4.2.1)
     i18n (0.5.0)
     jquery-rails (0.2.7)
@@ -264,6 +264,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  airbrake
   authlogic!
   aws-s3
   best_in_place
@@ -278,7 +279,6 @@ DEPENDENCIES
   factory_girl
   fakeweb
   fastimage
-  hoptoad_notifier (~> 2.3)
   htmlentities
   jquery-rails (>= 0.2.6)
   launchy

@@ -11,7 +11,7 @@ end
 # has to be run after ArchiveConfig loaded
 # and only for production
 if Rails.env == 'production'
-  HoptoadNotifier.configure do |config|
+  Airbrake.configure do |config|
     config.api_key = ArchiveConfig.HOPTOAD_KEY
     config.params_filters << ["email", "crypted_password", "salt"]
   end

@@ -8,12 +8,12 @@ module ActionDispatch
       def render_exception_with_template(env, exception)
         body = ErrorsController.action(rescue_responses[exception.class.name]).call(env)
         log_error(exception)
-        notify_hoptoad(exception)
+        notify_airbrake(exception)
         body
       rescue
         render_exception_without_template(env, exception)
       end
-      
+
       alias_method_chain :render_exception, :template if Rails.env == "production"
   end
 end
