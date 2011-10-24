@@ -6,31 +6,32 @@
     <%= challenge_assignment_byline(assignment) %> <%= challenge_assignment_email(assignment) %>
   <% else %>
     <% # we're listing assignments for a user by the recipient %>
+    <%= link_to assignment.collection.title, collection_assignment_path(assignment.collection, assignment) %>
     For <%= link_to assignment.request_byline, collection_assignment_path(assignment.collection, assignment) %>
   <% end %>
 </dt>    
 <dd>
-  <% if @collection %>
+  <% # link to the work %>
+   <% if assignment.creation %>
+     <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation, :class => "work" %>
+   <% end %>
+   
+    <% if @collection %>
     <% # for a mod: list recipient (and check in case there are some people without recipients) %>
     <% if request %>
-      For <%= link_to assignment.request_byline, collection_assignment_path(@collection, assignment) %>
+      for <%= link_to assignment.request_byline, collection_assignment_path(@collection, assignment) %>
       <%= assignment.pinch_request_signup && assignment.pinch_request_signup == request ? "* (pinch recipient)" : "" %>
     <% else %>
       <strong>No Recipient</strong>
     <% end %>
   <% end %>
   
-  <% # link to the work %>
-  <% if assignment.creation %>
-    <%= link_to (assignment.creation.try(:title) || assignment.creation.class.name), assignment.creation %>
-  <% end %>  
-
-  <!--stats-->
+<!--stats-->
   <dl class="stats">
     <dt>Status:</dt>
     <dd>
       <% # status can be: unposted (no creation), unapproved (creation but it hasn't been approved), complete %>
-      <% if !assignment.creation %>
+      <% if !assignment.posted? %>
         <%= ts("Unposted") %>
       <% elsif !assignment.fulfilled? %>
         <strong><%= ts("Unapproved") %><!-- BACK END add approve button for mod --></strong>

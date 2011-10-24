@@ -138,14 +138,20 @@ class PromptsController < ApplicationController
   end
 
   def destroy
-    unless @challenge.signup_open || @collection.user_is_maintainer?(current_user)
+    if !(@challenge.signup_open || @collection.user_is_maintainer?(current_user))
       flash[:error] = ts("You cannot delete a prompt after signups are closed. Please contact a moderator for help.")
     else
-      @prompt.destroy
-      flash[:notice] = ts("Prompt was deleted.")
+      if !@prompt.can_delete?
+        flash[:error] = ts("That would make your signup invalid, sorry! Please edit instead.")
+      else
+        @prompt.destroy
+        flash[:notice] = ts("Prompt was deleted.")
+      end
     end
     if @collection.user_is_maintainer?(current_user) && @collection.challenge_type == "PromptMeme"
       redirect_to collection_requests_path(@collection)
+    elsif @prompt.challenge_signup
+      redirect_to collection_signup_path(@collection, @prompt.challenge_signup)
     elsif @collection.user_is_maintainer?(current_user)
       redirect_to collection_signups_path(@collection)
     else

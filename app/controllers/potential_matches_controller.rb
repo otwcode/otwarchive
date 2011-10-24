@@ -68,7 +68,7 @@ class PotentialMatchesController < ApplicationController
       @assignments_with_no_potential_requests = @assignments_with_no_request.select {|assignment| assignment.offer_signup.offer_potential_matches.empty?}
       
       unless (@assignments_with_no_potential_requests.size > 0)
-        @assignments_with_request_and_offer = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => 20
+        @assignments_with_request_and_offer = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
 
         @assignments_with_no_assigned_requests = @collection.assignments.with_no_request.select {|assignment| assignment.pinch_request_signup.blank?}
       end

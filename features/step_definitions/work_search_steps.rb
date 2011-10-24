@@ -5,25 +5,25 @@
 When /^I search for a complex term from the search box$/ do
   When %{I am on the homepage}
       And %{I fill in "site_search" with "(title,summary): second words: >100"}
-      And %{I press "Search"}
+      And %{I press "search"}
 end
 
 When /^I search for a simple term from the search box$/ do
   When %{I am on the homepage}
       And %{I fill in "site_search" with "first"}
-      And %{I press "Search"}
+      And %{I press "search"}
 end
 
 When /^I search for works containing "([^\"]*)"$/ do |term|
   When %{I am on the homepage}
       And %{I fill in "site_search" with "#{term}"}
-      And %{I press "Search"}
+      And %{I press "search"}
 end
 
 When /^I search for works by mod$/ do
   When %{I am on the homepage}
       And %{I fill in "site_search" with "author: mod"}
-      And %{I press "Search"}
+      And %{I press "search"}
 end
 
 ### THEN

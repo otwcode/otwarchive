@@ -8,7 +8,7 @@ end
 
 When /^an admin sets a custom banner notice$/ do
   Given %{I am logged in as an admin}
-  When %{I follow "settings"}
+  When %{I go to the admin-settings page}
   When %{I fill in "Banner notice" with "Custom notice words"}
     And %{I press "Update"}
     # Changing from null to empty string counts as a change to the banner
@@ -17,7 +17,7 @@ end
 
 When /^an admin sets a custom banner notice with a link$/ do
   Given %{I am logged in as an admin}
-  When %{I follow "settings"}
+  When %{I go to the admin-settings page}
   When %{I fill in "Banner notice" with "Please donate to the <a href=support>OTWtest</a>"}
     And %{I press "Update"}
   Then %{I should see "Setting banner back on for all users. This may take some time"}
@@ -25,7 +25,7 @@ end
 
 When /^an admin sets a different banner notice$/ do
   Given %{I am logged in as an admin}
-  When %{I follow "settings"}
+  When %{I go to the admin-settings page}
   When %{I fill in "Banner notice" with "Other words"}
     And %{I press "Update"}
   Then %{I should see "Setting banner back on for all users. This may take some time"}

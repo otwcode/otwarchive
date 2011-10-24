@@ -193,7 +193,7 @@ NAVIGATION, ACTIONS (BUTTONS)*/
   .blurb .warning-no {background:url("/images/skins/iconsets/legacy/warning-no.png");}
   .blurb .warning-choosenotto {background:url("/images/skins/iconsets/legacy/warning-choosenotto.png");}
   .blurb .external-work {background:url("/images/skins/iconsets/legacy/external-work.png");}
- */end icon image replacement */
+/*end icon image replacement */
 
  .blurb .relationships       { background: #eee; }
  .blurb blockquote, .blurb ul.wranglers, .blurb form
@@ -505,12 +505,12 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
  /*#main ul.navigation .draft-chapter { background: #efd1d1 }*/
  #main ul.navigation .draft-chapter { color: red; }
  
- /* this block has been added to give a reasonable display to this 1.0 style running on new html
+ /* ATTENTION: PLEASE PLEASE UPDATE to 2.0. this block has been added to give a basically reasonable display to this 1.0 style running on new html
  though we earnestly recommend you update to site 2.0 instead */
  .actions li 
         { display:inline;}
  #header h1 span.landmark
-         { height:auto;width:auto;opacity:1;font-size:100%;color:#fff;}
+         { height:auto;width:auto;opacity:1;font-size:100% !important;color:#fff !important;}
  #header p.icon,#header h1 img,.tip
          { display:none;}
  #login .navigation,#header li.search
@@ -523,6 +523,8 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
          { border-bottom:1px solid #000;}
  #header .search span.submit,#header search input
          { display:inline;border:1px solid;border-radius:0;padding:0;margin:0}
+ #header h2
+         { display:block; clear:both; margin:0;}
  #dashboard 
         { width:12em; }
  #dashboard ul 
@@ -536,30 +538,80 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
          { height:50px;width:50px;}
  .skins .blurb blockquote
          { margin-left:65px;}
- /*==LISTBOX*/
- .listbox,fieldset fieldset.listbox
-         { clear:right;background:#ddd;border:2px solid #ccc;padding:0;outline:1px solid #fff;margin:0.643em;overflow:hidden;box-shadow:none;}
- .listbox .heading
-         { display:inline-block;}
- .listbox .landmark.heading,.listbox .tags .listbox,.listbox .lots ul li,.listbox .all ul li
-         { display:block;}
- .listbox .heading,.listbox .heading a:visited
-         { margin:0;color:#222;margin-top:0;padding:0.25em;}
- .listbox .index,.dashboard .listbox .index
-         { width:auto;padding:0.643em;float:none;clear:right;background:#fffef9;box-shadow:inset 1px 1px 3px #bbb;}
- .listbox li.blurb
-         { box-shadow:none;}
- /* modification:MEDIUM*/
- li.listbox.medium
-         { min-height:17.5em;width:45%;float:left;clear:none;margin-right:1.5em;}
- /*CONTEXTS*/
- .fandoms-index li.listbox
-         { width:100%;}
- .commas li.listbox:after
-         { content:none;}
- /*INTERACTION context (show many/more/lots)*/
- .listbox .all
-         { height:auto;}
- .listbox .many ul
-         { overflow:auto;max-height:10em;}
- 
+         /*==GROUP: LISTBOX 
+         http://media.transformativeworks.org/training/front_end_coding/patterns/listbox.html
+         */
+
+         .listbox, fieldset fieldset.listbox
+                 { clear:right; background:#ddd; border:2px solid #ccc; padding:0; outline:1px solid #fff; margin:0.643em auto; overflow:hidden;
+                   box-shadow:none}
+         .listbox .heading
+                 { display: inline-block}
+         .listbox li.blurb, .listbox .landmark.heading, .listbox .tags .listbox, .listbox .lots ul li, .listbox .all ul li     
+                 { display: block}
+         .listbox .heading, .listbox .heading a:visited
+                 { margin:0; color:#222; margin-top:0; padding:0.25em }
+         .listbox .index, .dashboard .listbox .index
+                 { width:auto; padding: 0.643em; float:none; clear:right; background:#fffef9;
+                   box-shadow:inset 1px 1px 3px #bbb}
+         .listbox .index:after
+                 { content:" "; display:block; height:0; font-size:0; clear:both; visibility:hidden; }
+         .commas li.listbox:after
+                 { content:none }
+         .listbox li.blurb 
+                 { box-shadow:none}
+
+         /* mods: alphabet, medium*/
+         .alphabet .listbox li, .media .listbox
+                 { width: 45%; float:left; clear:none; margin-right:1.5em}
+         .media .listbox
+                 { min-height:17.5em;}
+
+         /*Contexts */
+         .review .listbox 
+                 { overflow:visible; position:static}
+
+         /*INTERACTION context (show many/more/lots)*/
+         .listbox .all 
+                 { height: auto}
+         .listbox .many ul 
+                 { overflow: auto; max-height:10em}
+
+          /*END== */
+
+         /*==ZONE: HOME 
+         user home, collections and challenges home, tag home, admin comms home 
+         --this zone always shows a dashboard styled in region-dashboard and its parent is #main.dashboard */
+
+         .home p, .home .header      
+                 { clear:right }
+         .home .header h2
+                 { text-align: right; border-bottom:2px solid; display:block}
+         .home .header .userstuff, .home .header dl.stats
+                 { margin-left: 120px}
+         .admin .header h3
+                 { font-size: 2.143em; text-align:center }
+         .home .primary
+                 { margin: 0 0 0.643em; min-height:100px; float:none }
+
+         /*primary header icons */
+         .primary .icon 
+                 { position:absolute; top:0}
+         .collection .primary .icon
+                 { background: url("/images/skins/iconsets/default/icon_collection.png")}
+         .admin .primary .icon
+                 { background: url("/images/skins/iconsets/default/icon_admin.jpeg")}
+         .tag .primary .icon, .tagset .primary .icon
+                 { background: url("/images/skins/iconsets/default/icon_tag.png")}
+
+/*CONTEXTS */
+.dashboard .meta .clear
+ { clear:none; clear:right}
+.post .meta dd ul li 
+{ display: block }
+.post .meta dd ul li:after
+{ content:none}
+.blurb .heading {display:block;}
+ol.pagination
+        { text-align:center; clear:right; margin:0.643em auto}
+

@@ -6,13 +6,13 @@
 <% if logged_in_as_admin? %>
   <% roles << "admin" %>
 <% end %>
-<!-- % cache("#{@site_skin.id}-site-skin") do % -->
-
-<%= @site_skin.get_style(roles) if @site_skin %>
-
+<% if @site_skin %>
+  <% cache("#{@site_skin.id}-site-skin") do %>
+    <%= @site_skin.get_style(roles) if @site_skin %>
+  <% end %>
+<% end %>
 <!--sandbox for developers	-->
 <%= stylesheet_link_tag 'sandbox' %>
-
 
 <!-- yield :tinymce needs to be before the scriptaculous elements. See http://wiki.moxiecode.com/index.php/TinyMCE:Ruby_on_Rails for more information. -->
 <!-- check to see if this controller/action allow tinymce before we load the gigantor js; see application_helper -->

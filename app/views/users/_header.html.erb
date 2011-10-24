@@ -3,7 +3,6 @@
 	<% 	display_name = @author ? @author.name : @user.login	%>
 	<h2 class="heading"><%= @author ? link_to_unless_current(display_name, user_pseud_path(user, @author)) : link_to_unless_current(display_name, user) %>
 	</h2>
-	<!--pseuds switcher goes here structure: div class pseuds arrow ul id expandable end div. the code is in users/_sidebar and a helper. i will lay it out once it's in . lim-->
 	<p class="icon"><%= icon_display(@user, @author) %></p>
 <!--/descriptions-->
 

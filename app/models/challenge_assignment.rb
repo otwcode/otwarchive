@@ -13,22 +13,6 @@ class ChallengeAssignment < ActiveRecord::Base
 
   scope :for_offer_signup, lambda {|signup| where('offer_signup_id = ?', signup.id)}
 
-  scope :by_offering_user, lambda {|user|
-    select("DISTINCT challenge_assignments.*").
-    joins("INNER JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
-           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id
-           INNER JOIN users ON pseuds.user_id = users.id").
-     where('users.id = ?', user.id)
-   }
-
-  scope :by_requesting_user, lambda {|user|
-    select("DISTINCT challenge_assignments.*").
-    joins("INNER JOIN challenge_signups ON challenge_assignments.request_signup_id = challenge_signups.id
-           INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id
-           INNER JOIN users ON pseuds.user_id = users.id").
-    where('users.id = ?', user.id)
-  }
-
   scope :in_collection, lambda {|collection| where('challenge_assignments.collection_id = ?', collection.id) }
 
   scope :defaulted, where("defaulted_at IS NOT NULL")
@@ -42,15 +26,30 @@ class ChallengeAssignment < ActiveRecord::Base
   scope :with_request, where("request_signup_id IS NOT NULL")
   scope :with_no_request, where("request_signup_id IS NULL")
   scope :with_no_offer, where("offer_signup_id IS NULL")
-  scope :unposted, where("challenge_assignments.creation_id IS NULL")
 
+  # sorting by request/offer
+  
   REQUESTING_PSEUD_JOIN = "INNER JOIN challenge_signups ON (challenge_assignments.request_signup_id = challenge_signups.id
                                                             OR challenge_assignments.pinch_request_signup_id = challenge_signups.id)
                            INNER JOIN pseuds ON challenge_signups.pseud_id = pseuds.id"
 
-  OFFERING_PSEUD_JOIN = "INNER JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
+  OFFERING_PSEUD_JOIN = "LEFT JOIN challenge_signups ON challenge_assignments.offer_signup_id = challenge_signups.id
                          INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id OR challenge_signups.pseud_id = pseuds.id)"
 
+  scope :order_by_requesting_pseud, joins(REQUESTING_PSEUD_JOIN).order("pseuds.name")
+
+  scope :order_by_offering_pseud, joins(OFFERING_PSEUD_JOIN).order("pseuds.name")
+
+
+  # Get all of a user's assignments 
+  scope :by_offering_user, lambda {|user|
+    select("DISTINCT challenge_assignments.*").
+    joins(OFFERING_PSEUD_JOIN).
+    joins("INNER JOIN users ON pseuds.user_id = users.id").
+    where('users.id = ?', user.id)
+  }
+
+  # sorting by fulfilled/posted status
   COLLECTION_ITEMS_JOIN = "INNER JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND
                                                            collection_items.item_id = challenge_assignments.creation_id AND
                                                            collection_items.item_type = challenge_assignments.creation_type)"
@@ -58,20 +57,40 @@ class ChallengeAssignment < ActiveRecord::Base
   COLLECTION_ITEMS_LEFT_JOIN =  "LEFT JOIN collection_items ON (collection_items.collection_id = challenge_assignments.collection_id AND
                                                                 collection_items.item_id = challenge_assignments.creation_id AND
                                                                 collection_items.item_type = challenge_assignments.creation_type)"
-
-  scope :order_by_requesting_pseud, joins(REQUESTING_PSEUD_JOIN).order("pseuds.name")
-
-  scope :order_by_offering_pseud, joins(OFFERING_PSEUD_JOIN).order("pseuds.name")
-
+                                                                
+  WORKS_JOIN = "INNER JOIN works ON works.id = challenge_assignments.creation_id AND challenge_assignments.creation_type = 'Work'"
+  WORKS_LEFT_JOIN = "LEFT JOIN works ON works.id = challenge_assignments.creation_id AND challenge_assignments.creation_type = 'Work'"
+  
   scope :fulfilled,
-    joins(COLLECTION_ITEMS_JOIN).
-    where('challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
+    joins(COLLECTION_ITEMS_JOIN).joins(WORKS_JOIN).
+    where('challenge_assignments.creation_id IS NOT NULL AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = 1',
                     CollectionItem::APPROVED, CollectionItem::APPROVED)
 
-  # has to be a left join to get works that don't have a collection item
+
+  scope :posted, joins(WORKS_JOIN).where("challenge_assignments.creation_id IS NOT NULL AND works.posted = 1")
+
+  # should be faster than unfulfilled scope because no giant left joins
+  def self.unfulfilled_in_collection(collection)
+    fulfilled_ids = ChallengeAssignment.in_collection(collection).fulfilled.value_of(:id)
+    in_collection(collection).where("challenge_assignments.id NOT IN (?)", fulfilled_ids)
+  end
+  
+  # faster than unposted scope because no left join!
+  def self.unposted_in_collection(collection)
+    posted_ids = ChallengeAssignment.in_collection(collection).posted.value_of(:id)
+    in_collection(collection).where("'challenge_assignments.creation_id IS NULL OR challenge_assignments.id NOT IN (?)", posted_ids)
+  end    
+    
+  # has to be a left join to get assignments that don't have a collection item
   scope :unfulfilled,
-    joins(COLLECTION_ITEMS_LEFT_JOIN).
-    where('challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ?', CollectionItem::APPROVED, CollectionItem::APPROVED)
+    joins(COLLECTION_ITEMS_LEFT_JOIN).joins(WORKS_LEFT_JOIN).
+    where('challenge_assignments.creation_id IS NULL OR collection_items.user_approval_status != ? OR collection_items.collection_approval_status != ? OR works.posted = 0', CollectionItem::APPROVED, CollectionItem::APPROVED)
+
+  # ditto
+  scope :unposted, joins(WORKS_LEFT_JOIN).where("challenge_assignments.creation_id IS NULL OR works.posted = 0")
+
+  scope :unstarted, where("challenge_assignments.creation_id IS NULL")
+
 
   before_destroy :clear_assignment
   def clear_assignment
@@ -96,7 +115,11 @@ class ChallengeAssignment < ActiveRecord::Base
   end
 
   def fulfilled?
-    self.creation && (item = get_collection_item) && item.approved?
+    self.posted? && (item = get_collection_item) && item.approved?
+  end
+  
+  def posted?
+    self.creation && (creation.respond_to?(:posted?) ? creation.posted? : true)
   end
 
   def defaulted=(value)
@@ -172,7 +195,6 @@ class ChallengeAssignment < ActiveRecord::Base
   end
 
   def cover(pseud)
-    self.covered_at = Time.now
     new_assignment = self.covered_at ? request.request_assignments.last : ChallengeAssignment.new
     new_assignment.collection = self.collection
     new_assignment.request_signup_id = request.id
@@ -180,6 +202,7 @@ class ChallengeAssignment < ActiveRecord::Base
     new_assignment.sent_at = nil
     new_assignment.save!
     new_assignment.send_out
+    self.covered_at = Time.now
     new_assignment.save && save
   end
 
@@ -245,7 +268,7 @@ class ChallengeAssignment < ActiveRecord::Base
        @request_match_buckets[1] = collection.signups
        @offer_match_buckets[1] = collection.signups
     else    
-      collection.signups.find do |signup|
+      collection.signups.find_each do |signup|
         next if signup.nil?
         request_match_count = signup.request_potential_matches.count
         @request_match_buckets[request_match_count] ||= []

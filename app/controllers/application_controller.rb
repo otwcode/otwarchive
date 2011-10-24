@@ -330,9 +330,21 @@ public
     elsif model.to_s.downcase == 'collection'
       allowed = ['collections.title', 'collections.created_at', 'item_count']
     elsif model.to_s.downcase == 'prompt'
-      allowed = ['id', 'fandom']
+      allowed = %w(fandom created_at prompter)
+    elsif model.to_s.downcase == 'claim'
+      allowed = %w(created_at claimer)
     end
     !param.blank? && allowed.include?(param.to_s.downcase)
+  end
+
+  def set_sort_order
+    # sorting
+    @sort_column = (valid_sort_column(params[:sort_column],"prompt") ? params[:sort_column] : 'id')
+    @sort_direction = (valid_sort_direction(params[:sort_direction]) ? params[:sort_direction] : 'DESC')
+    if !params[:sort_direction].blank? && !valid_sort_direction(params[:sort_direction])
+      params[:sort_direction] = 'DESC'
+    end
+    @sort_order = @sort_column + " " + @sort_direction
   end
 
   def valid_sort_direction(param)

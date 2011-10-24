@@ -41,6 +41,7 @@ form.filters {position:relative}
 .blurb .header {height:55px}
 .bookmark .picture .header {height:25px}
 textarea {height:12em}
+#main li.medium {height:17.5em;}
 
 /*baseline*/
 input,select,option,textarea,legend,label {vertical-align:middle}
@@ -69,8 +70,8 @@ form .preface {overflow:hidden}
 
 /*calc*/
 .index .listbox .index {position:static; overflow:visible;}
-ul.media, li.medium .index {float:none !important; }
-#inner .media-index ul.media li.medium { height:17.5em; width:auto !important; float:none !important; clear:none; margin:auto !important }
+ul.media, li.medium .index, .alphabet .listbox li {float:none !important; }
+#main li.medium, #main .alphabet .index li { width:auto !important; float:none !important; clear:none; margin:auto !important }
 
 
         

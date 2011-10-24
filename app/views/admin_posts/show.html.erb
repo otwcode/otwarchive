@@ -19,14 +19,14 @@
       <h4 class="heading">
         Published: <%= @admin_post.created_at %>  
         <% if logged_in_as_admin? %>
-            <%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), :class => 'navigation' %>
+            <%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), :class => 'action' %>
         <% end %>
       </h4>
     <% if @admin_post.translated_post %>
       <h4 class="heading">Original: <%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></h4>
     <% elsif !@admin_post.translations.empty? %>
       <h4 class="heading">Translations:</h4>
-      <dl class="language">
+      <dl class="language index">
         <% for admin_post in @admin_post.translations %>
           <dt>
             <%= link_to admin_post.language.name, language_admin_posts_path(admin_post.language) %>

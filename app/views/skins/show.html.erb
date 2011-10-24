@@ -5,8 +5,6 @@
     <h2 class="heading">
       <%= @skin.title %> <%= ts("skin by") %> <%= skin_author_link(@skin) %>    
     </h2>
-  	<%= skin_preview_display(@skin) %>
-  	<%= render :partial => "skin_top_navigation" %>
     <blockquote class="userstuff">
       <%= @skin.description.blank? ? ts("(No Description Provided)") : raw(sanitize_field(@skin, :description)) %>
     </blockquote>
@@ -17,6 +15,8 @@
       <% if @skin.ie_condition.present? %><dt>IE Only: </dt><dd><%= @skin.ie_condition %></dd><% end %>
       <% if @skin.unusable? %><dt>Parent Skin Only</dt><% end %>
     </dl>
+    	<%= render :partial => "skin_top_navigation" %>
+    	<%= skin_preview_display(@skin) %>
   </div>
 
   <% unless @skin.css.blank? && @skin.filename.blank? %>

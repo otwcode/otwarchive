@@ -45,7 +45,7 @@ class AdminSetting < ActiveRecord::Base
     self.first ? self.first.guest_downloading_off? : false
   end
   def self.default_skin
-    self.first ? (self.first.default_skin || Skin.get_current_site_skin) : Skin.get_current_site_skin
+    self.first ? (self.first.default_skin_id ? self.first.default_skin : Skin.get_current_site_skin) : Skin.get_current_site_skin
   end
 
   # run once a day from cron

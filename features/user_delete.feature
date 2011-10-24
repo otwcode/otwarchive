@@ -21,7 +21,7 @@ Scenario: Deleting users
   When I follow "Delete My Account"
   Then I should not see "Do you want to orphan or delete your works?"
     And I should see "You have successfully deleted your account."
-    And I should not see "Log out"
+    And I should not see "log out"
     And I should see "Log in"
   When I fill in "User name" with "downthemall"
     And I fill in "Password" with "password"
@@ -43,7 +43,7 @@ Scenario: Deleting users
     And I press "Save"
   Then I should see "You have successfully deleted your account."
     And 1 email should be delivered
-    And I should not see "Log out"
+    And I should not see "log out"
     And I should see "Log in"
   When I fill in "User name" with "otheruser"
     And I fill in "Password" with "password"
@@ -68,7 +68,7 @@ Scenario: Deleting users
     And I press "Save"
   Then I should see "You have successfully deleted your account."
     And 0 emails should be delivered
-    And I should not see "Log out"
+    And I should not see "log out"
     And I should see "Log in"
   When I fill in "User name" with "otheruser"
     And I fill in "Password" with "password"
@@ -95,7 +95,7 @@ Scenario: Deleting users
     And I press "Save"
   Then I should see "You have successfully deleted your account."
     And 0 emails should be delivered
-    And I should not see "Log out"
+    And I should not see "log out"
     And I should see "Log in"
   When I go to the collections page
   Then I should see "fake"

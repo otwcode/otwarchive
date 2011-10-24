@@ -341,7 +341,6 @@ Otwarchive::Application.routes.draw do
         get :purge
         get :send_out
         put :update_multiple
-        put :default_multiple
         get :default_all
       end
       member do
@@ -442,7 +441,15 @@ Otwarchive::Application.routes.draw do
 
   resources :kudos, :only => [:create, :show]
 
-  resources :skins
+  resources :skins do
+    member do
+      get :preview
+      get :set
+    end
+    collection do
+      get :unset
+    end
+  end
   resources :known_issues
   resources :archive_faqs do
     collection do

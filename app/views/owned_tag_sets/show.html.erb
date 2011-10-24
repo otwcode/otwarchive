@@ -31,7 +31,7 @@
           <dt class="stats"><%= ts("Stats:")%></dt>
           <dd class="stats">
             <p>Nominations allowed per person:</p>
-			      <dl>
+			      <dl class="stats">
               <% TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type| %>
                 <dt><%= ts("#{tag_type.pluralize}: ") %></dt>
                 <dd><%= @tag_set.send("#{tag_type}_nomination_limit") %></dd>

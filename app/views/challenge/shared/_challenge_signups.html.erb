@@ -6,7 +6,7 @@
 <h2 class="heading"><%= ts("Signups for %{collection}", :collection => @collection.title) %></h2>  
 <% @challenge ||= @collection.challenge %>
 
-<ul class="navigation" role="menu">
+<ul class="navigation actions" role="menu">
   <li class="action">
     <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv) %>
     <%= link_to_help "csv-download"%>

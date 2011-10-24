@@ -7,9 +7,8 @@
   <li><%= span_if_current ts("Open"), collection_assignments_path(@collection, :unfulfilled => true) %></li>
   <% if @collection.moderated? %>
     <li><%= span_if_current ts("Awaiting Approval"), collection_items_path(@collection) %>
-  <% else %>
-    <li><%= span_if_current ts("Complete"), collection_assignments_path(@collection, :fulfilled => true) %></li>
   <% end %>
+  <li><%= span_if_current ts("Complete"), collection_assignments_path(@collection, :fulfilled => true) %></li>
   <li role="button">
     <%= link_to "Default All Incomplete", default_all_collection_assignments_path(@collection),
                 :confirm => "Are you sure? This will mark all unposted or unapproved assignments in the challenge as defaulting." %>
@@ -23,14 +22,29 @@
   <p class="note">No assignments to review!</p>
 <% else %>
 
-  <% if !(params[:pinch_hit] || params[:unfulfilled] || params[:fulfilled]) %>
-    <%= render "maintainer_index_defaulted" %>
-  <% elsif params[:pinch_hit] %>
-    <%= render "maintainer_index_pinch_hit" %>
-  <% elsif params[:unfulfilled] %>
-    <%= render "maintainer_index_unfulfilled" %>
-  <% elsif params[:fulfilled] %>
+  <%= will_paginate @assignments %>
+
+  <% if params[:fulfilled] %>
     <%= render "maintainer_index_fulfilled" %>
+  <% else %>
+    <%= form_tag update_multiple_collection_assignments_path(@collection), :method => :put do %>
+      <fieldset>
+
+        <% if !(params[:pinch_hit] || params[:unfulfilled] || params[:fulfilled]) %>
+          <%= render "maintainer_index_defaulted" %>
+        <% elsif params[:pinch_hit] %>
+          <legend><%= ts("Pinch Hit Assignments") %></legend>
+          <h3><%=ts("Pinch Hit Assignments") %></h3>
+          <%= render "maintainer_index_unfulfilled" %>
+        <% elsif params[:unfulfilled] %>
+          <legend><%= ts("Open Assignments") %></legend>
+          <h3><%=ts("Open Assignments") %></h3>        
+          <%= render "maintainer_index_unfulfilled" %>
+        <% end %>
+        
+      </fieldset>
+      <%= submit_fieldset %>
+    <% end %>
   <% end %>
 
   <%= will_paginate @assignments %>

@@ -15,7 +15,8 @@ Perhaps we can make a wizard for this specific task.
 
 .blurb ul li,.blurb dd ul li, .blurb ul.type  
         { display: inline }
-li.blurb{ position: relative; clear:left; padding: 0.643em 1em; overflow:visible;
+li.blurb, .blurb .blurb
+        { display:block; position: relative; clear:left; padding: 0.643em 1em; overflow:hidden;
           box-shadow:inset 1px 1px 3px #ccc; border-radius:0.15em }
 .blurb .module         
         { float:none}
@@ -31,6 +32,8 @@ li.blurb{ position: relative; clear:left; padding: 0.643em 1em; overflow:visible
         { margin: 0.643em 0 0 0}
 .blurb .heading
         { display: block;}
+.blurb .blurb .header
+        { display: none;}
 
 /* ==START icon block rules*/
 .blurb ul.required-tags     
@@ -88,7 +91,7 @@ eg collections, users, skins, instead of the 4-icon list
 .picture .header 
         { border-bottom:1px solid #ccc }
 .index .collection .icon
-        { background:url("/images/skins/iconsets/default/icon_collection.png")}
+        { background:url("/images/skins/iconsets/default/icon_collection-s.png")}
 .index .skins .icon
         { background:url("/images/skins/iconsets/default/icon_skins.png")}
 .index .mystery .icon
@@ -96,7 +99,7 @@ eg collections, users, skins, instead of the 4-icon list
 .index .tag .icon, .index .tagset .icon
         { background:url("/images/skins/iconsets/default/icon_tag.png"); background-size:55px}
 
-/*mod: PROMPT */
+/*various little mods*/
 .prompt h6 
         { float:left; min-width:65px; }
 

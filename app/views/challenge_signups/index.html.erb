@@ -9,13 +9,16 @@
 
   <h2 class="heading"><%= ts("Challenge Signups for %{user}", :user => @user.login) %></h2>
 
-<dl class="signup index">
+  <dl class="signup index">
     <% @challenge_signups.each do |challenge_signup| %>
       <dt><%= link_to challenge_signup.collection.title, challenge_signup.collection %><dt>
-      <dd>As <span class="byline"><!-- #BACK END pls give this link class byline and remove span--><%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup) %></span>
-<!--menu of actions-->
-        <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
-        </dd>
+      <dd>
+        As 
+        <%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup), :class => "byline" %>
+        
+        <!--menu of actions-->
+        <%= render "signup_controls", :challenge_signup => challenge_signup %>
+      </dd>
     <% end %>
   </dl>
 

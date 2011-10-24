@@ -1,10 +1,8 @@
 ### GIVEN
 
 Given /^I am editing a pseud$/ do
-  Given %{I am logged in as "myself"}
-    And %{I go to myself's user page}
-    And %{I follow "Pseuds"}
-    And %{I follow "Edit"}
+  Given %{I am logged in as "myname"}
+  visit edit_user_pseud_path(User.current_user, User.current_user.default_pseud)
 end
 
 #' cancelling highlighting

@@ -14,7 +14,11 @@ reading.work} %></ul>
   <% else %>
     <%= t('.most_recent_version', :default => '(Latest version.)') %>
   <% end %>
-  <%= t('.view_count', :default => 'Viewed %{count} times', :count => reading.view_count) %>
+  <% if reading.view_count == 1 %>
+    <%= ts("Viewed once")%>
+  <% else %>
+    <%= ts('Viewed %{count} times', :count => reading.view_count) %>
+  <% end %>
   <% if reading.toread? %><%= t('to_read', :default => '(Flagged to read later.)') %><% end %>
   <% if reading.toskip? %><%= t('to_skip', :default => '(Flagged to skip.)') %><% end %>
   </h3>

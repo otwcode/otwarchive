@@ -10,7 +10,7 @@
     </h4>
 
     <h5 class="heading" title="fandom">
-      <%= external_work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ').html_safe %>
+      <%= external_work.fandom_tags.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
       &nbsp;
     </h5>
     

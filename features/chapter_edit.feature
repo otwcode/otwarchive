@@ -15,13 +15,13 @@ Feature: Edit chapters
   When I am logged in as "epicauthor" with password "password"
   
   # create a basic single-chapter work
-  When I follow "Post New"
+  When I follow "post new"
   Then I should see "Post New Work"
   When I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "New Fandom"
     And I fill in "Work Title" with "New Epic Work"
-    And I fill in "Work text" with "Well, maybe not so epic."
+    And I fill in "content" with "Well, maybe not so epic."
     And I press "Preview"
   Then I should see "Draft was successfully created"
     And I should see "1/1"
@@ -177,12 +177,12 @@ Feature: Edit chapters
     And basic tags
   When I am logged in as "epicauthor"
     And I go to epicauthor's user page
-    And I follow "Post New"
+    And I follow "post new"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "Fandoms" with "New Fandom"
     And I fill in "Work Title" with "New Epic Work"
-    And I fill in "Work text" with "Well, maybe not so epic."
+    And I fill in "content" with "Well, maybe not so epic."
     And I press "Post"
     And I follow "Add Chapter"
     And I follow "Chapter title"

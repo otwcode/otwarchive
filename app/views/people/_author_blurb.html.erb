@@ -1,11 +1,10 @@
-<li class="user picture blurb" role="article">
+<li class="user pseud picture blurb" role="article">
   <div class="header module">
     <h4 class="heading"><%= link_to(author.name, user_pseud_path(author.user, author)) %> 
       <% if (author.name != author.user.login) %>
         (<%= link_to(author.user_name, user_path(author.user)) %>)
       <% end %>
     </h4>
-    <!--BACK END- suggest comma separator instead of pipe-->
     <% unless authored_items(author, @work_counts, @rec_counts).blank? %>
       <h5 class="heading"><%= authored_items(author, @work_counts, @rec_counts) %></h5>
     <% end %>

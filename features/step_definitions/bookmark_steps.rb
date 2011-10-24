@@ -15,7 +15,7 @@ end
 
 When /^I edit the bookmark for "([^\"]*)"$/ do |title|
   When %{I open the bookmarkable work "#{title}"}
-  click_link("Edit/Add Bookmark")
+  click_link("Edit Bookmark")
 end
 
 When /^I open a bookmarkable work$/ do

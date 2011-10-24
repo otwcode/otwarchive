@@ -84,7 +84,7 @@ Scenario: Post a series with a restricted work, then add a draft, then make the 
       And I check "series-options-show"
       And I fill in "work_series_attributes_title" with "Antiholidays"
       And I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Part 1 of the Antiholidays series"
     When I press "Update"
     Then I should see "Work was successfully updated"

@@ -62,14 +62,14 @@ end
 When /^I approve a related work$/ do
   When %{I am logged in as "inspiration"}
     And "I am on my user page"
-  When %{I follow "My Related Works"}
+  When %{I follow "Related Works"}
   When %{I follow "Approve"}
   When %{I press "Yes, link me!"}
 end
 
 When /^I view my related works$/ do
   When "I go to my user page"
-    And %{I follow "My Related Works"}
+    And %{I follow "Related Works"}
 end
 
 ### THEN

@@ -22,7 +22,7 @@
               <% if (type == "Warning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) %>
                 <li id="work_<%= work.id %>_category_<%= type.downcase.pluralize %>"><%= show_hidden_tags_link(work, type.downcase.pluralize) %> </li>
              <% else %>
-               <%= tag_link_list(tags) %>
+               <%= tag_link_list(tags, link_to_works=true) %>
              <% end %>
             </ul>
           </dd>

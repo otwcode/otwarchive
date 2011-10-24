@@ -16,7 +16,7 @@ Feature: Import Works
     Then I should see "Import New Work"
       And I fill in "urls" with "http://cesy.dreamwidth.org"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Welcome"
       And I should not see "A work has already been imported from http://cesy.dreamwidth.org"
       And I should see "No Fandom"
@@ -39,23 +39,24 @@ Feature: Import Works
       And I fill in "Fandoms" with "Idol RPF"
       And I check "M/M"
       And I fill in "Relationships" with "Adam/Kris"
-      And I fill in "Characters" with "Adam, Kris"
+      And I fill in "Characters" with "Adam Lambert, Kris Allen"
       And I fill in "Additional Tags" with "kinkmeme"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Extra Credit"
       And I should see "Explicit"
       And I should see "No Archive Warnings Apply"
       And I should see "Idol RPF"
       And I should see "M/M"
       And I should see "Adam/Kris"
-      And I should see "Adam, Kris"
+      And I should see "Adam Lambert"
+      And I should see "Kris Allen"
       And I should see "kinkmeme"
     When I press "Post"
     Then I should see "Work was successfully posted."
 
   @work_import_multi_tags_backdate
-  Scenario: Importing multiple works with tags and backdating
+  Scenario: Importing multiple works with backdating
     Given basic tags
       And I am logged in as a random user
     When I go to the import page
@@ -65,23 +66,13 @@ Feature: Import Works
         http://www.intimations.org/fanfic/idol/Huddling.html
         http://www.intimations.org/fanfic/idol/Stardust.html
         """
-      And I select "Explicit" from "Rating"
-      And I check "No Archive Warnings Apply"
-      And I fill in "Fandoms" with "Idol RPF"
-      And I fill in "Relationships" with "Adam/Kris"
-      And I fill in "Characters" with "Adam, Kris"
     When I press "Import"
     Then I should see "Imported Works"
       And I should see "We were able to successfully upload"
       And I should see "Huddling"
       And I should see "Stardust"
     When I follow "Huddling"
-    Then I should see "Preview Work"
-      And I should see "Explicit"
-      And I should see "No Archive Warnings Apply"
-      And I should see "Idol RPF"
-      And I should see "Adam/Kris"
-      And I should see "Adam, Kris"
+    Then I should see "Preview"
       And I should see "2010-01-11"
 
 
@@ -94,7 +85,7 @@ Feature: Import Works
     When I go to the import page
       And I fill in "urls" with "http://www.rbreu.de/otwtest/utf8_specified.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
   @work_import_special_characters_auto_latin
@@ -104,7 +95,7 @@ Feature: Import Works
     When I go to the import page
       And I fill in "urls" with "http://www.rbreu.de/otwtest/latin1_specified.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
@@ -116,7 +107,7 @@ Feature: Import Works
       And I fill in "urls" with "http://www.rbreu.de/otwtest/latin1_notspecified.html"
       And I select "ISO-8859-1" from "encoding"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
@@ -128,7 +119,7 @@ Feature: Import Works
       And I fill in "urls" with "http://rbreu.de/otwtest/cp1252.txt"
       And I select "Windows-1252" from "encoding"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "‘He hadn’t known.’"
       And I should see "So—what’s up?"
       And I should see "“Something witty.”"
@@ -141,7 +132,7 @@ Feature: Import Works
       And I fill in "urls" with "http://www.rbreu.de/otwtest/utf8_notspecified.html"
       And I select "UTF-8" from "encoding"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Das Maß aller Dinge" within "h2.title"
       And I should see "Ä Ö Ü é è È É ü ö ä ß ñ"
 
@@ -152,5 +143,5 @@ Feature: Import Works
     When I go to the import page
       And I fill in "urls" with "http://www.the-archive.net/viewstory.php?sid=1910"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "When I get out of here"

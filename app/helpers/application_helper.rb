@@ -219,8 +219,6 @@ module ApplicationHelper
   end  
   
   # Generates sorting links for index pages, with column names and directions
-  # BACK END, revision on this: remove the <span class="landmark"> etc 
-  # instead title the link "sort up" or "sort down" pls
   def sort_link(title, column=nil, options = {})
     condition = options[:unless] if options.has_key?(:unless)
 
@@ -236,8 +234,8 @@ module ApplicationHelper
       else
         direction = options[:desc_default] ? 'DESC' : 'ASC'
       end
-      link_to_unless condition, ((direction == 'ASC' ? '&#8593;<span class="landmark">ascending</span>&#160;' : '&#8595;<span class="landmark">descending</span>&#160;') + title).html_safe, 
-          request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => css_class}
+      link_to_unless condition, ((direction == 'ASC' ? '&#8593;&#160;' : '&#8595;&#160;') + title).html_safe, 
+          request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => css_class, :title => (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
     else
       link_to_unless params[:sort_column].nil?, title, url_for(params.merge :sort_column => nil, :sort_direction => nil)
     end

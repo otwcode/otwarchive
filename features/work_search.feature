@@ -8,7 +8,7 @@ Feature: Search Works
   
   When I am on the homepage
     And I fill in "site_search" with "Tag: harry potter Words: >1000 (Language: Deutsch | Tag: Deutsch)"
-    And I press "Search"
+    And I press "search"
   Then I should see "bad words format (ignored)"
     And I should see "0 Found"
 
@@ -56,11 +56,11 @@ Feature: Search Works
     Then I should see "1 Found"
     When I am on the homepage
       And I fill in "site_search" with "hits: 0-10"
-      And I press "Search"
+      And I press "search"
     Then I should see "4 Found"
     When I am on the homepage
       And I fill in "site_search" with "hits: >10"
-      And I press "Search"
+      And I press "search"
     Then I should see "2 Found"
     When I follow "Advanced search"
     Then I should be on the search page
@@ -69,11 +69,11 @@ Feature: Search Works
     Then I should see "1 Found"
     When I am on the homepage
       And I fill in "site_search" with "words: 50-150"
-      And I press "Search"
+      And I press "search"
     Then I should see "1 Found"
     When I am on the homepage
       And I fill in "site_search" with "words: >100 language:english"
-      And I press "Search"
+      And I press "search"
     Then I should see "2 Found"
     When I follow "Advanced search"
     Then I should be on the search page
@@ -102,13 +102,13 @@ Feature: Search Works
       And I should see "third work"
    When I am on the homepage.
      And I fill in "site_search" with "testuser2"
-     And I press "Search"
+     And I press "search"
    Then I should see "2 Found"
    When I follow "Advanced search"
      Then I should be on the search page
      When I fill in "refine_text" with ""
        And I fill in "refine_author" with "testuser2"
-       And I press "Search"
+       And I press "search"
    # should actually be 5, but it appears to be losing the author bit
    Then I should see "6 Found"
     When I am on the search page

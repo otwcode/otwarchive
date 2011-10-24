@@ -1,1 +1,0 @@
-This folder is where cached skins will be created (one folder per cached skin). None of the folders should be committed themselves!
