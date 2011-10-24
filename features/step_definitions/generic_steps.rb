@@ -11,6 +11,10 @@ Then /^show me the response$/ do
   puts page.body
 end
 
+Then /^show me the html$/ do
+  puts page.body
+end
+
 Then /^show me the main content$/ do
   puts "\n" + find("#main").node.inner_html
 end

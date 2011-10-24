@@ -26,21 +26,21 @@
       </li>
     <% end %>
     <% # The delete link should show up only for the user who actually signed up while signups are open or for the owner or mod %>
-    <% if (challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user))  %>
-    <li>
-      <% unless collection.potential_matches.count == 0 %>
-        <%= link_to ts("Delete"), 
-          collection_signup_path(collection, challenge_signup), 
-          :confirm => ts("Are you sure? Potential matches will need to be regenerated afterwards."), 
-          :method => :delete %>
-      <% else %>
-        <%= link_to ts("Delete"), 
-          collection_signup_path(collection, challenge_signup), 
-          :confirm => ts("Are you sure? All prompts in this signup will be lost."), 
-          :method => :delete %>
+      <% if (challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user))  %>
+      <li>
+        <% unless collection.potential_matches.count == 0 %>
+          <%= link_to ts("Delete"), 
+            collection_signup_path(collection, challenge_signup), 
+            :confirm => ts("Are you sure? Potential matches will need to be regenerated afterwards."), 
+            :method => :delete %>
+        <% else %>
+          <%= link_to ts("Delete"), 
+            collection_signup_path(collection, challenge_signup), 
+            :confirm => ts("Are you sure? All prompts in this signup will be lost."), 
+            :method => :delete %>
+        <% end %>
+      </li>
       <% end %>
-    </li>
-    <% end %>
     <% end %>
     <% if current_user && collection.challenge_type == "PromptMeme" && !@user && controller.action_name != "show" %>
     <% # hides this on a user's 'your signups' page and on a signup show page, since we only want it on the challenge index %>

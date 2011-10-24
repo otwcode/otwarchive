@@ -25,13 +25,13 @@ Feature: Prompt Meme Challenge
     And I follow "Prompts (1)"
     And I press "Claim"
   Then I should see "New claim made"
-    And I follow "Post To Fulfill"
+    And I follow "Fulfill"
   Then I should see "GhostSoup" in the "Fandoms" input
     And I should see "promptcollection" in the "work_collection_names" input
     And the "The Kissing Game (Anonymous) -  - GhostSoup" checkbox should be checked
     And the "work_recipients" field should not contain "myname1"
     And I fill in "Work Title" with "Kinky Story"
-    And I fill in "Work text" with "Story written for your kinks, oh mystery reader!"
+    And I fill in "content" with "Story written for your kinks, oh mystery reader!"
   Given all emails have been delivered
     And I press "Post without preview"
   Then I should see "Kinky Story"

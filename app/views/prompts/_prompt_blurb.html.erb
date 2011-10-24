@@ -1,9 +1,13 @@
-<% # expects "prompt" %>
+<% # expects "prompt", if index is passed will use that in title if none exists, if suppress_claims is true will ignore %>
 <li class="<% if is_author_of?(prompt) %>own <% end %>prompt blurb" role="article">
   <div class="header module">
     <h4 class="heading" title="title">
-      <%= prompt.title || ts("Untitled") %>
-      <%= ts("by %{person}", :person => prompt.anonymous? ? "Anonymous" : (prompt.pseud ? prompt.pseud.byline : prompt.challenge_signup.pseud.byline)) %>
+      <%= prompt.title || ts("#{prompt.class.to_s}%{index}", :index => (index ||= false) ? " #{index+1}" : '') %>
+      <% if prompt.anonymous? %>
+        <%= ts("by Anonymous") %>
+      <% else %>
+        <%= ts("by %{person}", :person => (prompt.pseud ? prompt.pseud.byline : prompt.challenge_signup.pseud.byline)) %>
+      <% end %>
       <% unless @collection %>
         <%= ts("in %{title}", :title => prompt.collection.title) %>
       <% end %>
@@ -13,7 +17,7 @@
 
     <% # eventually we should let mod specify topmost tag type to display -- ie chars and rels for single-fandom meme, freeforms for single-relationship meme  %>
 	  <h5 class="heading" title="fandom">
-      <%= tag_groups['Fandom'].collect{|tag| link_to_tag(tag) }.join(', ').html_safe if tag_groups['Fandom'] %>
+      <%= tag_groups['Fandom'].collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe if tag_groups['Fandom'] %>
 		  &nbsp;
 	  </h5>
 
@@ -52,18 +56,20 @@
     </p>
   <% end %>   
 
-  <%= render "prompts/prompt_controls", :challenge_signup => prompt.challenge_signup, :prompt => prompt %>
+  <% if logged_in? %>
+    <%= render "prompts/prompt_controls", :challenge_signup => prompt.challenge_signup, :prompt => prompt %>
+  <% end %>
   
   <% unless (suppress_claims ||= false) %>  
     <% # if prompt has been claimed list by whom %>
-    <% unless prompt.request_claims.unfulfilled.empty? %>
+    <% unless prompt.unfulfilled_claims.empty? %>
       <div class="claims listbox">
         <h5 class="heading"><%= ts("Claimed By")%></h5>
         <ul class="commas index">
           <% if prompt.collection.anonymous? %>
-            <%= ts("%{count} anonymous claimants", :count => prompt.request_claims.unfulfilled.count) %>
+            <%= ts("%{count} anonymous claimants", :count => prompt.unfulfilled_claims.count) %>
           <% else %>
-            <%= User.for_claims(prompt.request_claims.unfulfilled.value_of(:id)).value_of(:login).map {|user| content_tag(:li, user)}.join("\n").html_safe %>
+            <%= User.for_claims(prompt.unfulfilled_claims.value_of(:id)).value_of(:login).map {|user| content_tag(:li, user)}.join("\n").html_safe %>
           <% end %>
         </ul>
       </div>
@@ -74,7 +80,7 @@
       <div class="works listbox">
         <h5 class="heading"><%= ts("Fulfilled By")%></h5>
         <ul class="index">
-          <% prompt.request_claims.fulfilled.map(&:creation).each do |creation| %>
+          <% prompt.fulfilled_claims.map(&:creation).each do |creation| %>
             <% if creation.is_a?(Work) %>
               <%= render "works/work_blurb", :work => creation %>
             <% end %>

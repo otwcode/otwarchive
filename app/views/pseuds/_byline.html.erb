@@ -1,19 +1,17 @@
 <!-- Co-Author stuff -->
 
-<!-- BACK END: this style="display:none" is throwing errors on the page: an attribute value must be a literal unless it contains only name characters: dt class="byline" style=&quot;display: none;&quot;-->
-  
-  <dt class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' %>>
+<dt class="byline<%= @pseuds.size > 1 ? "" : " hidden" %>">
   <%= label_tag "#{type}_author_attributes_ids_", ts("Author / Pseud(s)") %>
 </dt>
-<dd class="byline" <%= @pseuds.size > 1 ? "" : 'style="display: none;"' %>>
+<dd class="byline<%= @pseuds.size > 1 ? "" : " hidden" %>">
   <%= select_tag "#{type}[author_attributes][ids][]",
       options_from_collection_for_select(@pseuds, :id, :name, @selected_pseuds), :multiple => true %>
 </dd>
 
 <% unless @coauthors.blank? %>
-<%= ('<select name="' + h(type) + '[author_attributes][coauthors][]" multiple="multiple" style="display: none;">').html_safe %>
-  <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>
-</select>
+  <select name="<%= type %>[author_attributes][coauthors][]" multiple="multiple" class="hidden">
+    <%= options_from_collection_for_select(@coauthors, :id, :name, @selected_pseuds) %>
+  </select>
 <% end %>
 
 <% if @coauthors.size > 0 %>

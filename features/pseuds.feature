@@ -4,8 +4,7 @@ Feature: Pseuds
 Scenario: pseud creation and playing with the default pseud
 
   Given I am logged in as "myself" with password "password"
-    And I go to myself's user page
-    And I follow "My Pseuds (1)"
+    And I go to myself's pseuds page
   Then I should see "Default Pseud" within ".navigation"
   When I follow "Edit"
   Then I should see "cannot change your fallback pseud"
@@ -46,13 +45,13 @@ Scenario: Manage pseuds - add, edit
 		| editpseuds    | password   |
     And I am logged in as "editpseuds" with password "password"
   Then I should see "Hi, editpseuds!"
-    And I should see "Log out"
+    And I should see "log out"
   When I follow "editpseuds"
-  Then I should see "My Dashboard"
+  Then I should see "Dashboard"
     And I should see "You don't have anything posted under this name yet"
   When I follow "Profile"
   Then I should see "About editpseuds"
-  When I follow "Manage My Pseuds"
+  When I follow "Manage Pseuds"
   Then I should see "Pseuds for editpseuds"
     And I should see "editpseuds"
   When I follow "New Pseud"
@@ -71,7 +70,7 @@ Scenario: Manage pseuds - add, edit
     And I should see "Default Pseud"
   When I follow "editpseuds"
     And I follow "Profile"
-    And I follow "Manage My Pseuds"
+    And I follow "Manage Pseuds"
   Then I should see "Edit My new name"
   When I follow "edit_my_new_name"
     And I fill in "Description" with "I wanted to add another fancy name"

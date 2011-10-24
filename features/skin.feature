@@ -41,18 +41,9 @@ Feature: creating and editing skins
 
   ########################################################
   ##### Here we check for things that should be allowed by the sanitizer
+  ####
+  ### TODO: this should all be moved to the spec! 
   
-  Scenario: The sanitizer should allow through basic CSS including font-family
-  Given I am logged in as "skinner"
-  When I create the skin "valid skin" with css
-      """  
-      body { background-color: #ffffff;}
-      h1 { font-family: 'Fertigo Pro', Verdana, serif; }
-      """
-  Then I should see "Skin was successfully created"
-    And I should see "background-color: #ffffff;"
-    And I should see "font-family: 'Fertigo Pro', Verdana, serif"
-
   Scenario: The sanitizer should allow through valid CSS shorthand values
   Given I am logged in as "skinner"
   When I create the skin "valid skin" with css
@@ -178,95 +169,6 @@ Feature: creating and editing skins
     And I should see "-webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(82,82,82)), color-stop(1, rgb(125,124,125)));"
     And I should see "scale"
     And I should see "rotate"    
-
-  # model for creating new "should allow" tests
-  # Scenario: The sanitizer should allow through 
-  # Given I am logged in as "skinner"
-  # When I create the skin "valid skin" with css
-  #     """  
-  #     """
-  # Then I should see "Skin was successfully created"
-  #   And I should see ""
-
-  ########################################################
-  ##### Here we check for things that should NOT be allowed by the sanitizer
-
-  Scenario: A user should not be able to enter total garbage CSS
-  Given I am logged in as "skinner"
-    And I set up the skin "Evil Skin"
-  When I fill in "CSS" with "blah blah blah blah alsdfjaslfd lasdjfadf askdjflsa"
-    And I press "Create"
-  Then I should see "We couldn't find any valid CSS rules in that code"
-  When I fill in "CSS" with "blhalkdfasd {ljaflkasjdflasd}"
-    And I press "Create"
-  Then I should see "don't seem to be any rules"
-  When I fill in "CSS" with "blhalkdfasd {ljaflkasjdflasd: }"
-    And I press "Create"
-  Then I should see "There don't seem to be any rules"
-  When I fill in "CSS" with "blhalkdfasd {ljaflkasjdflasd: aklsdfjsdf}"
-    And I press "Create"
-  Then I should see "We don't currently allow the CSS property"
-    And I should see "There don't seem to be any rules"
-
-  Scenario: A user should not be able to use various dangerous things like @font-face and @import.
-  Given I am logged in as "skinner"
-    And I set up the skin "Evil Skin"
-  When I fill in "CSS" with "body {-moz-binding:url('http://ha.ckers.org/xssmoz.xml#xss')}"
-    And I press "Create"
-  Then I should see "We don't currently allow the CSS property -moz-binding"
-  When I fill in "CSS" with "@font-face { font-family: Delicious; src: url('Delicious-Roman.otf');}"
-    And I press "Create"
-  Then I should see "We don't allow the @font-face feature."
-  When I fill in "CSS" with "@import url('http://ha.ckers.org/xss.css');"
-    And I press "Create"
-  Then I should see "We couldn't find any valid CSS rules in that code"
-  When I fill in "CSS" with "body {border: src('http://foo.com/')}"
-  Then I should see "We couldn't find any valid CSS rules in that code."
-
-  Scenario: A user should not be able to use various dangerous values like urls in properties where they are not allowed and evil urls
-  Given I am logged in as "skinner"
-    And I set up the skin "Evil Skin"
-  When I fill in "CSS" with "body {font: url(http://foo.com/bar.png)}"
-    And I press "Create"
-  Then I should see "The font property in body cannot have the value url(http://foo.com/bar.png)"
-  When I fill in "CSS" with "body {behavior: url(xss.htc);}"
-    And I press "Create"
-  Then I should see "The behavior property in body cannot have the value url(xss.htc)"
-  When I fill in "CSS" with "li {background-image: url(javascript:alert('XSS'));}"
-    And I press "Create"
-  Then I should see "The background-image property in li cannot have the value url(javascript:alert('XSS'))"
-  When I fill in "CSS" with "div {width: expression(alert('XSS'));}"
-    And I press "Create"
-  Then I should see "The width property in div cannot have the value expression(alert('XSS'))"
-  When I fill in "CSS" with "div {background-image: url(&#1;javascript:alert('XSS'))}"
-    And I press "Create"
-  Then I should see "The background-image property in div cannot have the value url(javascript:alert('XSS'))"
-  When I fill in "CSS" with "div {background: -webkit-linear-gradient(url(xss.htc))}"
-    And I press "Create"
-  Then I should see "The background property in div cannot have the value -webkit-linear-gradient(url(xss.htc))"
-  When I fill in "CSS" with "div {background: -webkit-linear-gradient(url('xss.htc'))}"
-    And I press "Create"
-  Then I should see "The background property in div cannot have the value -webkit-linear-gradient(url('xss.htc'))"
-  
-  Scenario: A user should only be able to use urls for valid image types and from valid top-level domains
-  Given I am logged in as "skinner"
-    And I set up the skin "Evil Skin"
-  When I fill in "CSS" with "body {background: url(http://foo.com/bar.dsf)}"
-    And I press "Create"
-  Then I should see "The background property in body cannot have the value url(http://foo.com/bar.dsf)"
-  When I fill in "CSS" with "body {background: url(http://foo.htc/bar.png)}"
-    And I press "Create"
-  Then I should see "The background property in body cannot have the value url(http://foo.htc/bar.png)"
-
-  Scenario: If a user tries to get around our rules with quotes we should strip out evil code
-  Given I am logged in as "skinner"
-    And I set up the skin "Evil Skin"
-  When I fill in "CSS" with "div {xss:expr/*XSS*/ession(alert('XSS'))}"
-    And I press "Create"
-  Then I should see "We couldn't find any valid CSS rules in that code"
-    And I should not see "expression"
-    And I should not see "xss:"
-    And I should not see "alert"  
   
   Scenario: A user should be able to select one of their own non-public skins to use in their preferences
   Given I am logged in as "skinner" 
@@ -394,8 +296,7 @@ Feature: creating and editing skins
   Scenario: Users should not be able to edit their public approved skins
   Given the approved public skin "public skin"
     And I am logged in as "skinner" 
-  Then I should see "Hi, skinner!"
-  When I go to "public skin" edit skin page
+    And I go to "public skin" edit skin page
   Then I should see "Sorry, you don't have permission"
   When I follow "My Skins"
   Then I should see "(Approved)"
@@ -420,8 +321,8 @@ Feature: creating and editing skins
   When I am logged in as "skinuser" 
     And I am on skinuser's preferences page
   Then "Default" should be selected within "preference_skin_id"
-    And I should not see "#title {" within "style"
-    And I should not see "text-decoration: blink;" within "style"
+    And I should not see "#title"
+    And I should not see "text-decoration: blink;"
   
   Scenario: Users should be able to create a skin using the wizard
   Given basic skins
@@ -429,12 +330,12 @@ Feature: creating and editing skins
   Then I should see "Default by AO3"
   Given I am logged in as "skinner" 
   When I am on skin's new page
-  Then I should see "CSS" within "dl"
+  Then I should see "CSS" within "form"
   When I follow "Use Wizard Instead?"
   Then I should see "Archive Skin Wizard"
-    And I should not see "CSS" within "dl"
+    And I should not see "CSS" within "form"
   When I follow "Write Custom CSS Instead?"
-  Then I should see "CSS" within "dl"
+  Then I should see "CSS" within "form"
   When I follow "Use Wizard Instead?"
     And I fill in "Title" with "Wide margins"
     And I fill in "Description" with "Layout skin"
@@ -487,7 +388,7 @@ Feature: creating and editing skins
   When I set up the draft "Story With Awesome Skin"
     And I select "Awesome Work Skin" from "work_work_skin_id"
     And I press "Preview"
-  Then I should see "Preview Work"
+  Then I should see "Preview"
     And I should see "color: purple" within "style"
   When I press "Post"
   Then I should see "Story With Awesome Skin"
@@ -495,14 +396,14 @@ Feature: creating and editing skins
     And I should see "Hide Creator's Style"
   When I follow "Hide Creator's Style"
   Then I should see "Story With Awesome Skin"
-    And I should not see "color: purple" within "style"
+    And I should not see "color: purple"
     And I should not see "Hide Creator's Style"
     And I should see "Show Creator's Style"
   
-  Scenario: Log out from my skins page (Issue 2271)  
+  Scenario: log out from my skins page (Issue 2271)  
   Given I am logged in as "skinner"
     And I am on my user page
-  When I follow "My Skins"
+  When I follow "Skins"
     And I log out
   Then I should be on the login page
   
@@ -515,3 +416,4 @@ Feature: creating and editing skins
   Given I am logged in as "skinner"
   When I create a skin to change the accent color
   Then I should see a different accent color on the dashboard and work meta
+

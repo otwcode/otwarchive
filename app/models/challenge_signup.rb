@@ -160,6 +160,17 @@ class ChallengeSignup < ActiveRecord::Base
       end
     end
   end
+  
+  def can_delete?(prompt)
+    prompt_type = prompt.class.to_s.downcase.pluralize
+    current_num_prompts = self.send(prompt_type).count
+    required_num_prompts = self.send("#{prompt_type}_num_required")
+    if current_num_prompts > required_num_prompts
+      true
+    else
+      false
+    end
+  end  
 
   ### Code for generating signup summaries
 

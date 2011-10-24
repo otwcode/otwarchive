@@ -39,7 +39,7 @@ Feature: User dashboard
   When I go to bookmarkuser2's user page
   Then I should see "There are no works or bookmarks under this name yet"
   When I follow "bookmarkuser1"
-  Then I should see "My Dashboard"
+  Then I should see "Dashboard"
     And I should see "You don't have anything posted under this name yet"
     And I should not see "Revenge of the Sith"
     And I should not see "Stargate"

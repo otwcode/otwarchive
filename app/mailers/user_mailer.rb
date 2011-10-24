@@ -2,9 +2,18 @@ class UserMailer < ActionMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
+
+  include AuthlogicHelpersForMailers # otherwise any logged_in? checks in views will choke and die! :)
+  helper_method :current_user
+  helper_method :current_admin
+  helper_method :logged_in?
+  helper_method :logged_in_as_admin?
+
   helper :application
   helper :tags
   helper :works
+  helper :users
+  helper :date
   include HtmlCleaner
 
   default :from => ArchiveConfig.RETURN_ADDRESS
@@ -186,11 +195,11 @@ class UserMailer < ActionMailer::Base
 
   # Emails a recipient to say that a gift has been posted for them
   def recipient_notification(user_id, work_id, collection_id=nil)
-    user = User.find(user_id)
+    @user = User.find(user_id)
     @work = Work.find(work_id)
     @collection = Collection.find(collection_id) if collection_id
     mail(
-      :to => user.email,
+      :to => @user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}]#{@collection ? '[' + @collection.title + ']' : ''} A Gift Story For You #{@collection ? 'From ' + @collection.title : ''}"
     )
   end

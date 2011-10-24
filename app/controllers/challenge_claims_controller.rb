@@ -71,14 +71,18 @@ class ChallengeClaimsController < ApplicationController
     if params[:collection_id]
       return unless load_collection 
       @challenge = @collection.challenge if @collection
-      @claims = @collection.claims.unposted
+      @claims = ChallengeClaim.unposted_in_collection(@collection)
       if params[:for_user] || !@challenge.user_allowed_to_see_claims?(current_user)
         @claims = @claims.where(:claiming_user_id => current_user.id)
       end
-      if params[:sort] == "date"
-        @claims = @claims.order_by_date
+
+      # sorting
+      set_sort_order
+      
+      if params[:sort] == "claimer"
+        @claims = @claims.order_by_offering_pseud(@sort_direction)
       else
-        @claims = @claims.order_by_requesting_pseud
+        @claims = @claims.order(@sort_order)
       end
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
@@ -91,7 +95,7 @@ class ChallengeClaimsController < ApplicationController
         redirect_to '/' and return
       end
     end
-    @claims = @claims.paginate :page => params[:page], :per_page => 20
+    @claims = @claims.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
   end
   
   def show
@@ -107,7 +111,7 @@ class ChallengeClaimsController < ApplicationController
     else
       flash[:error] = "We couldn't save the new claim."
     end
-    redirect_to collection_claims_path(@collection)
+    redirect_to collection_claims_path(@collection, :for_user => true)
   end
   
   def destroy

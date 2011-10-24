@@ -13,7 +13,7 @@
 			<% end %>
 		</h4>
 		<h5 class="heading" title="fandoms">
-      <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag(tag) }.join(', ').html_safe %>
+      <%= series.work_tags.select{|tag| tag.type == "Fandom"}.sort.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
     </h5>
     <%= get_symbols_for(series) %>
 		<p class="datetime"><%= set_format_for_date(series.revised_at) %></p>

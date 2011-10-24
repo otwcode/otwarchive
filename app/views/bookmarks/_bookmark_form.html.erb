@@ -8,8 +8,9 @@
 <div class="post bookmark <% if bookmarkable.class == ExternalWork %>verbose<% end %>" id="bookmark-form">
   <h3 class="landmark heading">Bookmark</h3>
   <% if bookmarkable.class == ExternalWork %><%= render "bookmarks/bookmarklet" %><% end %>
-
-  <%= form_for([bookmarkable, bookmark], :url => {:controller => 'bookmarks', :action => action}) do |f| %>
+  <% bookmark ||= Bookmark.new %>
+  <% bookmarkable ||= bookmark.bookmarkable %>
+  <%= form_for(:bookmark, :url => bookmark_form_path(bookmark, bookmarkable), :html => {:method => bookmark.new_record? ? :post : :put}) do |f| %>
   <fieldset>
     <legend>Bookmark</legend>
     <% in_page ||= false %>

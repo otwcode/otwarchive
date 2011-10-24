@@ -178,10 +178,26 @@ class Prompt < ActiveRecord::Base
     return false if tagcount > 0
     true # everything empty
   end
+  
+  def can_delete?
+    if challenge_signup && !challenge_signup.can_delete?(self)
+      false
+    else
+      true
+    end
+  end
 
   scope :in_collection, lambda {|collection| { :conditions => ["collection.id = ?", collection.id] }}
 
   scope :unused, {:conditions => {:used_up => false}}
+  
+  def unfulfilled_claims
+    self.request_claims.unfulfilled_in_collection(self.collection)
+  end
+  
+  def fulfilled_claims
+    self.request_claims.fulfilled
+  end
 
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,
@@ -250,33 +266,6 @@ class Prompt < ActiveRecord::Base
   # tag groups
   def tag_groups
     self.tag_set ? self.tag_set.tags.group_by { |t| t.type.to_s } : {}
-  end
-
-  # Takes an array of tags and returns a marked-up, comma-separated list
-  def tag_link_list(tags)
-    tags = tags.uniq.compact
-    if !tags.blank? && tags.respond_to?(:collect)
-      last_tag = tags.pop
-      tag_list = tags.collect{|tag| "<li>" + link_to_tag(tag) + ", </li>"}.join
-      tag_list += content_tag(:li, link_to_tag(last_tag))
-      tag_list.html_safe
-    else
-      ""
-    end
-  end
-  
-  # gets the list of tags for this prompt
-  def tag_linked_list
-    list = ""
-    TagSet::TAG_TYPES.each do |type|
-      eval("@show_request_#{type}_tags = (self.collection.challenge.request_restriction.#{type}_num_allowed > 0)")
-      if eval("@show_request_#{type}_tags") 
-          if self && self.tag_set && !self.tag_set.with_type(type).empty?
-              list += " - " + tag_link_list(self.tag_set.with_type(type))
-          end
-      end   
-    end
-    return list
   end
   
   # Takes an array of tags and returns a comma-separated list, without the markup

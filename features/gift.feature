@@ -14,7 +14,7 @@ Feature: Create Gifts
     And I set up the draft "GiftStory1"
     And I fill in "work_recipients" with "myname2"
     And I press "Preview"
-  Then I should see "Preview Work"
+  Then I should see "Preview"
     And I should see "For myname2"
   
   # make sure the recipient sees it

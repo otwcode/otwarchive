@@ -161,9 +161,7 @@ class AutocompleteController < ApplicationController
       else
         query = query.approved_skins
       end
-      results = query.value_of :id, :title
-      Rails.logger.info "results: #{results.to_s}"
-      render_output(results.map {|first,second| {:id => first, :name => second}})
+      render_output(query.value_of(:title))
     end
   end
   

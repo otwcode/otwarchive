@@ -1,0 +1,34 @@
+<% # expects collection_item, form %>
+<!--actions--> 
+<ul class="actions" role="menu">
+  <li class="status action">
+    <% if @user %>
+      <%= form.select(:user_approval_status, CollectionItem::APPROVAL_OPTIONS) %>
+    <% else %>
+      <%= form.select(:collection_approval_status, CollectionItem::APPROVAL_OPTIONS) %>
+    <% end %>
+  </li>
+  <% id = "collection_items_" %>
+  <% if collection_item.collection.unrevealed? %>
+    <li>
+      <label for="collection_items_<%= collection_item.id %>_unrevealed">
+        <%= ts("Unrevealed") %>
+        <%= form.check_box :unrevealed %>
+      </label>
+    </li>
+  <% end %>
+  <% if collection_item.collection.anonymous? %>
+    <li>
+      <label for="collection_items_<%= collection_item.id %>_anonymous">
+        <%= ts("Anonymous") %>
+        <%= form.check_box :anonymous %>
+      </label>
+    </li>
+  <% end %>        
+  <li>
+    <label for="collection_items_<%= collection_item.id %>_remove">
+      <%= ts("Remove") %>
+      <%= form.check_box :remove %>
+    </label>
+  </li>
+</ul>

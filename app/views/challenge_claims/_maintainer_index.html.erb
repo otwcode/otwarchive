@@ -6,8 +6,8 @@
     <ul class="navigation actions" role="navigation">
       <li><%= link_to ts("My Claims"), user_claims_path(current_user) %></li>
       <li><%= ts("Sort By") %></li>
-      <li><%= span_if_current ts("Date"), collection_claims_path(@collection, :sort => "date") %></li>
-      <li><%= span_if_current ts("Claimer"), collection_claims_path(@collection), params[:sort].blank? %></li>
+      <li><%= sort_link ts("Date"), :created_at %></li>
+      <li><%= sort_link ts("Claimer"), :claimer %></li>
     </ul>
   <% end %>
   

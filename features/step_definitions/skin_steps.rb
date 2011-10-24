@@ -36,13 +36,18 @@ Given /^I create the skin "([^"]*)"$/ do |skin_name|
   Given "I create the skin \"#{skin_name}\" with css #{DEFAULT_CSS}"
 end
 
+Given /^I edit the skin "([^"]*)"$/ do |skin_name|
+  skin = Skin.find_by_title(skin_name)
+  visit edit_skin_path(skin)
+end
+
 Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
-  Given "I am logged in as \"skinner\""
-  Given "I set up the skin \"#{skin_name}\" with css \"#{css}\""
-  Given "I attach the file \"test/fixtures/skin_test_preview.png\" to \"skin_icon\""
+  Given %{I am logged in as "skinner"}
+  Given %{I set up the skin "#{skin_name}" with css "#{css}"}
+  attach_file("skin_icon", "test/fixtures/skin_test_preview.png")
   check("skin_public")
   click_button("Create")
-  Then I should see "Skin was successfully created"
+  Then %{I should see "Skin was successfully created"}
 end
 
 Given /^the unapproved public skin "([^"]*)"$/ do |skin_name|

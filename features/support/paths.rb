@@ -55,6 +55,8 @@ module NavigationHelpers
       user_subscriptions_path(:user_id => $1)
     when /^(.*)'s profile page$/i
       user_profile_path(:user_id => $1)
+    when /my pseuds page/
+      user_pseuds_path(User.current_user)
     when /my user page/
       user_path(User.current_user)
     when /my preferences page/
@@ -103,6 +105,8 @@ module NavigationHelpers
       admin_posts_path
     when /^the admin-settings page$/i
       admin_settings_path      
+    when /^the admin-notices page$/i
+      notify_admin_users_path
     when /^the FAQ reorder page$/i
       manage_archive_faqs_path
     when /^the support page$/i

@@ -7,6 +7,19 @@
   <%= yield :footer_js %>
 
   <ul class="navigation actions" role="navigation">
+    <% unless Skin.cached.empty?%>
+      <li>
+        <a href="#" class="skin_chooser_open"><%= ts("Choose Skin") %> &#8595;</a>
+        <a href="#" class="skin_chooser_close"><%= ts("Close") %> &#8593;</a>
+        <ul id="skin_chooser" class="toggled secondary">
+          <li><%= link_to ts("Default"), unset_skins_path %></li>
+          <% Skin.cached.order(:title).each do |s| %>
+            <li><%= link_to s.title, set_skin_path(s) %></li>
+          <% end %>
+        </ul>
+        &#8212; 
+      </li>
+    <% end %>
     <li><%= link_to "Terms of Service", tos_path %></li>
     <li>&#8212; <%= link_to "Site Map", site_map_path %></li>
     <li>&#8212; <%= link_to 'Report Abuse', new_abuse_report_path %></li>

@@ -14,7 +14,7 @@ Feature: Import Works from DW
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.dreamwidth.org/3506.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Lewis" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
       And I should see "Lewis/Hathaway" within "dd.relationship"
@@ -51,7 +51,7 @@ Feature: Import Works from DW
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.dreamwidth.org/3601.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Lewis" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
       And I should see "Lewis/Hathaway" within "dd.relationship"
@@ -86,7 +86,7 @@ Feature: Import Works from DW
     When I go to the import page
       And I fill in "urls" with "http://rebecca2525.dreamwidth.org/3506.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Importing Test"
     When I press "Edit"
     Then I should see "* Required information"
@@ -111,7 +111,7 @@ Feature: Import Works from DW
     When I go to the import page
       And I fill in "urls" with "http://rarelitfic.dreamwidth.org/5572.html"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Poirot - Agatha Christie" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
       And I should see "Published:2010-10-23"
@@ -150,7 +150,7 @@ Feature: Import Works from DW
          """
       And I choose "import_multiple_chapters"
     When I press "Import"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Lewis" within "dd.fandom"
       And I should see "General Audiences" within "dd.rating"
       And I should see "Importing Test" within "h2.title"

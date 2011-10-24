@@ -28,7 +28,7 @@ Feature: Admin posts
     And I go to the admin-posts page
     And I follow "Default Admin Post"
   Given all emails have been delivered    
-  When I follow "Read Comments (1)"
+  When I follow "Comments (1)"
     And I follow "Reply"
     And I fill in "Comment" with "Thank you very much!" within ".odd"
     And I press "Comment" within ".odd"
@@ -85,7 +85,7 @@ Feature: Admin posts
       And I fill in "admin_session_password" with "secret"
       And I press "Log in as admin"
     Then I should see "Successfully logged in"
-    When I follow "admin posts"
+    When I follow "Admin Posts"
       And I follow "Post AO3 News"
       Then I should see "New AO3 News Post"
     When I fill in "admin_post_title" with "Good news, everyone!"
@@ -93,5 +93,5 @@ Feature: Admin posts
       And I fill in "admin_post_tag_list" with "quotes, futurama"
       And I press "Post"
     Then I should see "AdminPost was successfully created."
-      And I should see "toaster" within ".admin-content"
+      And I should see "toaster" within ".admin"
       And I should see "futurama" within ".tags"

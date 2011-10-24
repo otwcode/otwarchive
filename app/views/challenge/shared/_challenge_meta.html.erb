@@ -43,7 +43,7 @@
   <% else %>  
     <% num_to_show = 20 # arbitrary number for how many names to list %>
     <ul>
-      <% @collection.signups.collect(&:pseud).compact.each_with_index do |pseud, index| %>
+      <% @collection.signups.includes(:pseud => :user).collect(&:pseud).compact.each_with_index do |pseud, index| %>
         <% if index == num_to_show %>
           </ul>
           <h5 id="show_signups" style="display:none" class="showme">(See all...)</h5>

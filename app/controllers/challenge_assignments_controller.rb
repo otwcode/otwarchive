@@ -8,7 +8,7 @@ class ChallengeAssignmentsController < ApplicationController
   before_filter :load_challenge, :except => [:index]
   before_filter :check_signup_closed, :except => [:index]
   before_filter :check_assignments_not_sent, :only => [:generate, :set, :send_out]
-  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :default_multiple, :cover_default, :uncover_default, :purge]
+  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :cover_default, :uncover_default, :purge]
 
   before_filter :load_user, :only => [:default]
   before_filter :owner_only, :only => [:default]
@@ -123,15 +123,16 @@ class ChallengeAssignmentsController < ApplicationController
       
       @assignments = case
       when params[:pinch_hit]
-        @collection.assignments.with_pinch_hitter.order_by_requesting_pseud
+        # have to order by requesting pseud because don't have offer signup
+        ChallengeAssignment.unfulfilled_in_collection(@collection).undefaulted.with_pinch_hitter.order_by_offering_pseud
       when params[:fulfilled]
         @collection.assignments.fulfilled.order_by_offering_pseud
       when params[:unfulfilled]
-        @collection.assignments.unfulfilled.order_by_offering_pseud
+        ChallengeAssignment.unfulfilled_in_collection(@collection).undefaulted.order_by_offering_pseud
       else
         @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
       end
-      @assignments = @assignments.paginate :page => params[:page], :per_page => 20
+      @assignments = @assignments.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
     end
   end
 
@@ -172,18 +173,12 @@ class ChallengeAssignmentsController < ApplicationController
     redirect_to collection_path(@collection)
   end
 
-  def default_multiple
-    # update all the assignments
-    ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values)
-    flash[:notice] = "Defaulters updated."
-    redirect_to collection_assignments_path(@collection)
-  end
-  
   def update_multiple
     @errors = []
     params.each_pair do |key, val|
       action, id = key.split(/_/)
-      assignment = ChallengeAssignment.find(id)
+      next unless %w(approve default undefault cover).include?(action)
+      assignment = ChallengeAssignment.where(:id => id).first
       unless assignment
         @errors << ts("Couldn't find assignment with id #{id}!")
         next
@@ -194,11 +189,14 @@ class ChallengeAssignmentsController < ApplicationController
         assignment.default || @errors << ts("We couldn't default the assignment for #{assignment.offer_byline}")
       when "undefault"
         # undefault_[assignment_id] = y/n - if set, undefault
-        assignnment.defaulted_at = nil
+        assignment.defaulted_at = nil
         assignment.save || @errors << ts("We couldn't undefault the assignment covering #{assignment.request_byline}.")
+      when "approve"
+        assignment.get_collection_item.approve_by_collection if assignment.get_collection_item
       when "cover"
         # cover_[assignment_id] = pinch hitter pseud
-        pseud = Pseud.parse_byline(val)
+        next if val.blank? || assignment.pinch_hitter.try(:byline) == val
+        pseud = Pseud.parse_byline(val).first
         if pseud.nil?
           @errors << ts("We couldn't find the user #{val} to assign that to.")
         else
@@ -206,11 +204,18 @@ class ChallengeAssignmentsController < ApplicationController
         end
       end
     end
+    if @errors.empty?
+      flash[:notice] = "Assignment updates complete!"
+      redirect_to collection_assignments_path(@collection)
+    else
+      flash[:error] = @errors
+      redirect_to collection_assignments_path(@collection)
+    end 
   end
 
   def default_all
     # mark all unfulfilled assignments as defaulted
-    unfulfilled_assignments = ChallengeAssignment.in_collection(@collection).unfulfilled.readonly(false)
+    unfulfilled_assignments = ChallengeAssignment.unfulfilled_in_collection(@collection).readonly(false)
     unfulfilled_assignments.update_all :defaulted_at => Time.now
     flash[:notice] = "All unfulfilled assignments marked as defaulting."
     redirect_to collection_assignments_path(@collection)

@@ -49,11 +49,6 @@ module BookmarksHelper
     link_to text, url
   end
   
-  def link_to_new_bookmarkable_bookmark(bookmarkable)
-    id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
-    link_to "Add a new bookmark for this item", {:controller => :bookmarks, :action => :new, id_symbol => bookmarkable}
-  end
-  
   def link_to_user_bookmarkable_bookmarks(bookmarkable)
     id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
     link_to "You have saved multiple bookmarks for this item", {:controller => :bookmarks, :action => :index, id_symbol => bookmarkable, :existing => true}
@@ -97,4 +92,20 @@ module BookmarksHelper
     link_to_help('bookmark-symbols-key', link = image_tag( "#{img}.png", :alt => title_string, :title => title_string))
   end
   
+  def bookmark_form_path(bookmark, bookmarkable)
+    if bookmark && bookmark.new_record? 
+      return "" unless bookmarkable
+      case bookmarkable.class.to_s
+      when "Work"
+        work_bookmarks_path(bookmarkable)
+      when "ExternalWork"
+        bookmarks_path
+      when "Series"
+        series_bookmarks_path(bookmarkable)
+      end
+    elsif bookmark
+      bookmark_path(bookmark)
+    end
+  end
+
 end

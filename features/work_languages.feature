@@ -19,7 +19,7 @@ Feature: Create Works
       And I fill in "content" with "Dies ist eine Fanfic in Deutsch."
       And I select "Deutsch" from "Choose a language"
       And I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page
@@ -42,6 +42,6 @@ Feature: Create Works
       And I fill in "Work Title" with "Ennen päivänlaskua ei voi"
       And I fill in "content" with "A story that is long enough to count"
       And I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."

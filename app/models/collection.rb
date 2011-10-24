@@ -106,14 +106,14 @@ class Collection < ActiveRecord::Base
 
   validate :parent_is_allowed
   def parent_is_allowed
-    if parent && parent == self
-      errors.add(:base, ts("You can't make a collection its own parent."))
-    elsif parent && !parent.user_is_maintainer?(User.current_user)
-      errors.add(:base, ts("You don't have permission to work on a subcollection of %{name}.", :name => parent.name))
+    if parent
+      if parent == self
+        errors.add(:base, ts("You can't make a collection its own parent."))
+      elsif parent_id_changed? && !parent.user_is_maintainer?(User.current_user)
+        errors.add(:base, ts("You have to be a maintainer of %{name} to make a subcollection.", :name => parent.name))
+      end
     end
   end
-
-
 
   validates_presence_of :name, :message => t('collection.no_name', :default => "Please enter a name for your collection.")
   validates_uniqueness_of :name, :case_sensitive => false, :message => t('collection.duplicate_name', :default => 'Sorry, that name is already taken. Try again, please!')

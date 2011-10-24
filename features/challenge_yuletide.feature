@@ -9,13 +9,13 @@ Feature: Collection
 
   Given the following activated users exist
     | login          | password    |
-    | mod1           | something   |
-    | myname1        | something   |
-    | myname2        | something   |
-    | myname3        | something   |
-    | myname4        | something   |
+    | mod1           | password   |
+    | myname1        | password   |
+    | myname2        | password   |
+    | myname3        | password   |
+    | myname4        | password   |
     | pinchhitter    | password    |
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
     And I have Yuletide challenge tags setup
     And I have no challenge assignments
     And I add the fandom "Stargate Atlantis" to the character "John Sheppard"
@@ -81,27 +81,27 @@ Feature: Collection
     And I submit
   Then I should see "Challenge was successfully created"
   When I log out
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
   When I go to the collections page
   Then I should see "Yuletide"
   When I follow "Yuletide"
   Then I should see "Sign Up"
   When I follow "Profile"
   Then I should see "About Yuletide (yule2011)"
-    And I should see "Signup:" within ".collection.meta"
-    And I should see "CURRENTLY OPEN" within ".collection.meta"
-    And I should see "Signup closes:" within ".collection.meta"
-    And I should see "Assignments due:" within ".collection.meta"
-    And I should see "Works revealed:" within ".collection.meta"
-    And I should see "Authors revealed:" within ".collection.meta"
-    And I should see "Signed up:" within ".collection.meta"
-    And I should see "0" within ".collection.meta"
+    And I should see "Signup:" within ".collection .meta"
+    And I should see "Open" within ".collection .meta"
+    And I should see "Signup closes:" within ".collection .meta"
+    And I should see "Assignments due:" within ".collection .meta"
+    And I should see "Works revealed:" within ".collection .meta"
+    And I should see "Authors revealed:" within ".collection .meta"
+    And I should see "Signed up:" within ".collection .meta"
+    And I should see "0" within ".collection .meta"
     And I should see "Welcome to the exchange" within "#intro"
     And I should see "What is this thing?" within "#faq"
     And I should see "It's a gift exchange-y thing" within "#faq"
     And I should see "Be even nicer to people" within "#rules"
   When I follow "Sign Up"
-  Then I should see "General Information"
+  Then I should see "General sign up instructions"
     And I should see "Here are some general tips"
     And I should see "Requests (2 - 3)"
     And I should see "Please request easy things"
@@ -173,25 +173,21 @@ Feature: Collection
     And I press "Submit"
   Then I should see "Signup was successfully created"
     And I should see "Signup for myname1"
-    And I should see "Request 1"
+    And I should see "Requests"
     And I should see "This is my wordy request"
-    And I should see "Request 2"
-    And I should not see "Request 3"
-    And I should see "Offer 1"
-    And I should see "Offer 2"
-    And I should not see "Offer 3"
+    And I should see "Offers"
     And I should see "Edit"
     And I should see "Delete"
 
   # another person signs up
   When I log out
-    And I am logged in as "myname2" with password "something"
+    And I am logged in as "myname2"
   When I go to the collections page
     And I follow "Yuletide"
     And I follow "Profile"
   # before signing up, you can check who else has already signed up
-  Then I should see "Signed up:" within ".collection.meta"
-    And I should see "1" within ".collection.meta"
+  Then I should see "Signed up:" within ".collection .meta"
+    And I should see "1" within ".collection .meta"
   When I follow "Sign Up"
   When I check the 1st checkbox with the value "Starsky & Hutch"
     And I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_character_tagnames" with "John Sheppard"
@@ -211,7 +207,7 @@ Feature: Collection
 
   # and a third person signs up
   When I log out
-    And I am logged in as "myname3" with password "something"
+    And I am logged in as "myname3"
   When I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
@@ -231,7 +227,7 @@ Feature: Collection
 
   # fourth person signs up
   When I log out
-    And I am logged in as "myname4" with password "something"
+    And I am logged in as "myname4"
   When I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
@@ -256,7 +252,7 @@ Feature: Collection
 
   # fifth person signs up
   When I log out
-    And I am logged in as "myname5" with password "something"
+    And I am logged in as "myname5"
   When I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
@@ -277,13 +273,13 @@ Feature: Collection
   When I follow "Signup Summary"
   Then I should see "Signup Summary for Yuletide"
     And I should see "Requested Fandoms"
-    And I should see "Starsky & Hutch [4, 3]"
-    And I should see "Stargate Atlantis [3, 3]"
-    And I should see "Tiny fandom [3, 3]"
+    And I should see "Starsky & Hutch (4, 3)"
+    And I should see "Stargate Atlantis (3, 3)"
+    And I should see "Tiny fandom (3, 3)"
 
   # signup summary changes when another person signs up
   When I log out
-    And I am logged in as "myname6" with password "something"
+    And I am logged in as "myname6"
   When I go to the collections page
     And I follow "Yuletide"
     And I follow "Sign Up"
@@ -300,13 +296,13 @@ Feature: Collection
     And I follow "Signup Summary"
   Then I should see "Signup Summary for Yuletide"
     And I should see "Requested Fandoms"
-    And I should see "Starsky & Hutch [5, 3]"
-    And I should see "Stargate Atlantis [4, 4]"
-    And I should see "Tiny fandom [3, 4]"
+    And I should see "Starsky & Hutch (5, 3)"
+    And I should see "Stargate Atlantis (4, 4)"
+    And I should see "Tiny fandom (3, 4)"
 
   # mod can view signups
   When I log out
-    And I am logged in as "mod1" with password "something"
+    And I am logged in as "mod1"
     And I go to the collections page
     And I follow "Yuletide"
     And I follow "Signups"
@@ -318,13 +314,11 @@ Feature: Collection
     And I should see "myname6" within "#main"
     And I should see "John Sheppard"
     And I should see "Obscure person"
-    And I should not see "http://user.dreamwidth.org/123.html"
-  When I follow "Show URLs"
-  Then I should see "http://user.dreamwidth.org/123.html"
+    And I should see "http://user.dreamwidth.org/123.html"
 
   # mod runs matching
   When I follow "Matching"
-  Then I should see "You cannot generate matches while signup is still open."
+  Then I should see "You can't generate matches while signup is still open."
     And I should not see "Generate Potential Matches"
   When I follow "Challenge Settings"
     And I uncheck "Signup open?"
@@ -333,7 +327,7 @@ Feature: Collection
   When I follow "Matching"
   Then I should see "Matching for Yuletide"
     And I should see "Generate Potential Matches"
-    And I should see "You can shuffle these assignments around as much as you want."
+    And I should see "No potential matches generated yet!"
   When all emails have been delivered
   When I follow "Generate Potential Matches"
   Then I should see "Beginning generation of potential matches. This may take some time, especially if your challenge is large."
@@ -364,12 +358,13 @@ Feature: Collection
   When all emails have been delivered
     And I follow "Send Assignments"
   Then I should see "Assignments are now being sent out"
-    And I should see "No defaulted assignments!"
-    And I should see "Not yet posted"
-    And I should not see "No recipient"
+    And I should see "No assignments to review"
+    And I should see "Defaulted"
+    And I should see "Pinch Hits"
+    And I should see "Open"
+    And I should see "Complete"
     And I should see "Purge Assignments"
-    And I should see "Default All Unposted"
-    And I should see "Show Assigned Pinch Hits"
+    And I should see "Default All Incomplete"
     Given the system processes jobs
       And I wait 3 seconds
     When I reload the page
@@ -379,38 +374,36 @@ Feature: Collection
 
   # first user starts posting
   When I log out
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
     And I go to myname1's user page
     And all emails have been delivered
     #' stop annoying syntax highlighting after apostrophe
-  Then I should see "My Assignments (1)"
-  When I follow "My Assignments"
-  Then I should see "Writing For" within "table"
-    And I should see "myname" within "table"
-    And I should see "Yuletide" within "table"
-    And I should see "Post To Fulfill"
-  When I follow "Post To Fulfill"
+  Then I should see "Assignments (1)"
+  When I follow "Assignments"
+  Then I should see "Yuletide For myname2" within "dl"
+    And I should see "Fulfill"
+  When I follow "Fulfill"
   Then I should see "Post New Work"
-  When I fill in "Work Title" with "Fulfilling Story"
+  When I fill in "Work Title" with "Fulfilling Story 1"
     And I fill in "Fandoms" with "Stargate Atlantis"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I select "myname1" from "work_author_attributes_ids_"
     And I fill in "content" with "This is an exciting story about Atlantis"
   When I press "Preview"
-  Then I should see "Preview Work"
+  Then I should see "Preview"
     And 0 emails should be delivered
 
   # someone looks while it's still a draft
   When I log out
-    And I am logged in as "myname2" with password "something"
+    And I am logged in as "myname2"
     And I go to myname2's user page
     #' stop annoying syntax highlighting after apostrophe
-  Then I should see "My Gifts (0)"
-    And I should not see "My Gifts (1)"
-  When I follow "My Gifts"
+  Then I should see "Gifts (0)"
+    And I should not see "Gifts (1)"
+  When I follow "Gifts"
   Then I should not see "Stargate Atlantis"
-    And I should not see "myname" within "#main ul.gift"
+    And I should not see "myname" within "ul.gift"
   When I go to the collections page
     And I follow "Yuletide"
   Then I should see "Works (0)"
@@ -427,11 +420,11 @@ Feature: Collection
 
   # first user posts the work
   When I log out
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
     And I go to myname1's user page
     #' stop annoying syntax highlighting after apostrophe
-    And I follow "My Drafts"
-  Then I should see "Fulfilling Story"
+    And I follow "Drafts"
+  Then I should see "Fulfilling Story 1"
   When I follow "Edit"
     And I fill in "Fandoms" with "Stargate Atlantis"
     And I press "Preview"
@@ -455,13 +448,13 @@ Feature: Collection
     #' stop annoying syntax highlighting after apostrophe
   Then I should see "Mystery Work"
     And I should see "Yuletide"
-    And I should not see "Fulfilling Story"
+    And I should not see "Fulfilling Story 1"
     And I should not see "Stargate Atlantis"
   When I follow "Works (1)"
   Then I should not see "Stargate Atlantis"
 
   # user edits it to undo fulfilling the assignment
-  # When I am logged in as "myname1" with password "something"
+  # When I am logged in as "myname1"
   #   And I go to myname1's user page
   #   #' stop highlighting
   # Then I should see "Fulfilling Story"
@@ -470,17 +463,16 @@ Feature: Collection
   #   And I fill in "work_collection_names" with ""
   #   And I fill in "work_recipients" with ""
   # When I press "Preview"
-  # Then show me the page
+  # Then show me the html
   # Then I should see "Work was successfully updated"
 
   # post works for all the assignments
-  When I am logged in as "myname2" with password "something"
+  When I am logged in as "myname2"
     And I go to myname2's user page
     #' stop annoying syntax highlighting after apostrophe
-    And I follow "My Assignments"
-  Then I should see "Writing For" within "table"
-  When I follow "Post To Fulfill"
-    And I fill in "Work Title" with "Fulfilled Story"
+    And I follow "Assignments"
+    And I follow "Fulfill"
+    And I fill in "Work Title" with "Fulfilling Story 2"
     And I fill in "Fandoms" with "Stargate Atlantis"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
@@ -492,16 +484,13 @@ Feature: Collection
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
-  When I log out
-  Then I should see "Successfully logged out"
 
-  When I am logged in as "myname3" with password "something"
+  When I am logged in as "myname3"
     And I go to myname3's user page
     #' stop annoying syntax highlighting after apostrophe
-    And I follow "My Assignments"
-  Then I should see "Writing For" within "table"
-  When I follow "Post To Fulfill"
-    And I fill in "Work Title" with "Some Other Story"
+    And I follow "Assignments"
+    And I follow "Fulfill"
+    And I fill in "Work Title" with "Fulfilling Story 3"
     And I fill in "Fandoms" with "Tiny Fandom"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
@@ -513,16 +502,13 @@ Feature: Collection
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
-  When I log out
-  Then I should see "Successfully logged out"
 
-  When I am logged in as "myname4" with password "something"
+  When I am logged in as "myname4"
     And I go to myname4's user page
     #' stop annoying syntax highlighting after apostrophe
-    And I follow "My Assignments"
-  Then I should see "Writing For" within "table"
-  When I follow "Post To Fulfill"
-    And I fill in "Work Title" with "Fulfilled Story"
+    And I follow "Assignments"
+    And I follow "Fulfill"
+    And I fill in "Work Title" with "Fulfilling Story 4"
     And I fill in "Fandoms" with "Starsky & Hutch, Tiny Fandom"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
@@ -534,22 +520,19 @@ Feature: Collection
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
     And I should see "Anonymous"
-  When I log out
-  Then I should see "Successfully logged out"
 
   # user leaves it as a draft
-  When I am logged in as "myname5" with password "something"
+  When I am logged in as "myname5"
     And I go to myname5's user page
     #' stop annoying syntax highlighting after apostrophe
-    And I follow "My Assignments"
-  Then I should see "Writing For" within "table"
-  When I follow "Post To Fulfill"
-    And I fill in "Work Title" with "Fulfilled Story"
+    And I follow "Assignments"
+    And I follow "Fulfill"
+    And I fill in "Work Title" with "Draft Story"
     And I fill in "Fandoms" with "Starsky & Hutch"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
     And I fill in "content" with "Coding late at night is bad for the brain."
-  When I press "Preview"
+    And I press "Preview"
   Then I should not see "Work was successfully posted"
     And I should see "For myname"
     And I should see "Collections:"
@@ -559,58 +542,59 @@ Feature: Collection
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
 
   # TODO: Mod checks for unfulfilled assignments, and gets pinch-hitters to do them.
-  When I am logged in as "mod1" with password "something"
+  When I am logged in as "mod1"
     And I go to the collections page
     And I follow "Yuletide"
     And I follow "Assignments"
-  Then I should see "No defaulted assignments!"
-    And I should see "Not yet posted"
-    # myname5 has not yet posted as it is still a draft
-    And "issue 2116" is fixed
-    # And I should see the text with tags "Not yet posted </td><td></td></tr><tr><td>myname6"
-    # myname6 has not yet posted
-    # TODO: Find a way to check this, or add a label to the line so we can check
-    # other people have posted
-    And I should see "Gift posted on"
-  When I follow "Default All Unposted"
-  Then I should not see "No defaulted assignments!"
-    And I should not see "Not yet posted"
-    And I should see "All unfulfilled assignments marked as defaulting."
-  When I fill in "challenge_assignment_pinch_hitter_byline" with "pinchhitter"
-    # TODO: Figure out why this doesn't work
-    # And I press "Assign"
-  # Then show me the page
+  Then I should see "No assignments to review!"
+  When I follow "Open"
+  Then I should see "myname5" within ".creator"
+    And I should see "myname6" within ".creator"
+  When I follow "Complete"
+  Then I should see "myname1" within "dt"
+    And I should see "myname2" within "dt"
+    And I should see "myname3" within "dt"
+    And I should see "myname4" within "dt"
+    And I should see "Fulfilling Story"
+  When I follow "Default All Incomplete"
+  Then I should see "All unfulfilled assignments marked as defaulting."
+  And I should not see "No assignments to review!"
+  When I fill in the 1st field with id matching "cover" with "pinchhitter"
+    And I submit
+  Then 1 email should be delivered
+    And the email should contain "Your Assignment"
+    And I should see "Assignment updates complete!"
+    And all emails have been delivered    
+  When I follow "Pinch Hits"
+  Then I should see "pinchhitter"
 
   # pinch hitter writes story
-  When I log out
-    And I am logged in as "pinchhitter" with password "something"
+  When I am logged in as "pinchhitter"
     And I go to pinchhitter's user page
-    And I follow "My Assignments"
-    # TODO: fix line just above
-  # Then I should see "Writing For" within "table"
-  # When I follow "Post To Fulfill"
-  #  And I fill in "Work Title" with "Fulfilled Story"
-  #  And I fill in "Fandoms" with "Starsky & Hutch"
-  #  And I select "Not Rated" from "Rating"
-  #  And I check "No Archive Warnings Apply"
-  #  And I fill in "content" with "Coding late at night is bad for the brain."
- # When I press "Preview"
- # And I press "Post"
- # Then I should see "Work was successfully posted"
-  #  And I should see "For myname"
-  #  And I should see "Collections:"
-  #  And I should see "Yuletide" within ".meta"
-  #  And I should see "Anonymous"
-  When I log out
-  Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
-  # Then I should see "Successfully logged out"
+    And I follow "Assignments"
+    And I follow "Fulfill"
+    And I fill in "Work Title" with "Fulfilling Story pinch"
+    And I fill in "Fandoms" with "Starsky & Hutch"
+    And I select "Not Rated" from "Rating"
+    And I check "No Archive Warnings Apply"
+    And I fill in "content" with "Coding late at night is bad for the brain."
+    And I press "Post without preview"
+  Then I should see "Work was successfully posted"
+  
+  When I am logged in as "mod1"
+    And I go to "Yuletide" collection's page
+    And I follow "Assignments"
+    And I follow "Pinch Hits"
+  Then I should not see "pinchhitter"
+  When I follow "Complete"
+  Then I should see "pinchhitter"
+    And I should see "Fulfilling Story pinch"
 
   # mod reveals challenge on Dec 25th
-  When I am logged in as "mod1" with password "something"
+  When I am logged in as "mod1"
     And 0 emails should be delivered
     And all emails have been delivered
-    And I go to the collections page
-    And I follow "Yuletide"
+    And I go to "Yuletide" collection's page
     And I follow "Settings"
     And I uncheck "This collection is unrevealed"
     And I press "Update"
@@ -624,20 +608,20 @@ Feature: Collection
     # TODO: Check this capitalisation with someone, since it seems odd to me
     And the email should contain "in the Yuletide collection at the Archive of Our Own"
     And the email should contain "by an anonymous giver"
-    And the email should not contain "myname1"
-    And the email should not contain "myname2"
-    And the email should not contain "myname3"
-    And the email should not contain "myname4"
-    And the email should not contain "myname5"
-    And the email should not contain "myname6"
+    And the email should not contain "by myname1"
+    And the email should not contain "by myname2"
+    And the email should not contain "by myname3"
+    And the email should not contain "by myname4"
+    And the email should not contain "by myname5"
+    And the email should not contain "by myname6"
 
   # someone views the story they wrote and it is anonymous
-  When I log out
-    And I am logged in as "myname1" with password "something"
-    And I follow "myname1"
-  Then I should see "Fulfilling Story"
+  When I am logged in as "myname1"
+    And I go to myname1's user page
+    #'
+  Then I should see "Fulfilling Story 1"
     And I should see "Anonymous"
-  When I follow "Fulfilling Story"
+  When I follow "Fulfilling Story 1"
   Then I should see "For myname"
     And I should see "Collections:"
     And I should see "Yuletide" within ".meta"
@@ -645,10 +629,10 @@ Feature: Collection
 
   # someone views their gift and it is anonymous
   # Needs everyone to have fulfilled their assignments to be sure of finding a gift
-  When I log out
-    And I am logged in as "myname2" with password "something"
-  When I follow "myname2"
-    And I follow "My Gifts"
+  When I am logged in as "myname2"
+    And I go to myname2's user page
+    #'
+    And I follow "Gifts"
   Then I should see "Anonymous"
     And I should not see "myname1"
     And I should not see "myname3"
@@ -656,8 +640,8 @@ Feature: Collection
     And I should not see "myname5"
     And I should not see "myname6"
     And I should not see "pinchhitter"
-  When I follow "Fulfilling Story"
-  Then I should see the page title "Fulfilling Story - Anonymous - Stargate Atlantis [Example Archive]"
+  When I follow "Fulfilling Story 1"
+  Then I should see the page title "Fulfilling Story 1 - Anonymous - Stargate Atlantis [Example Archive]"
   Then I should see "Anonymous"
     And I should not see "myname1"
     And I should not see "myname3"
@@ -672,12 +656,7 @@ Feature: Collection
   Then I should see "Successfully logged out"
 
   # mod reveals authors on Jan 1st
-  When "issue 1847" is fixed
-  # When I log out
-  When I am logged in as "mod1" with password "something"
-  When I am on the collections page
-    And I log out
-    And I am logged in as "mod1" with password "something"
+  When I am logged in as "mod1"
     And I go to the collections page
     And I follow "Yuletide"
     And I follow "Settings"
@@ -687,23 +666,24 @@ Feature: Collection
 
   # someone can now see their writer: will fail intermittently until pinch hitting is fixed above
   When I log out
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
     And the system processes jobs
-    And I follow "myname1"
-  Then I should see "Fulfilling Story"
+    And I go to myname1's user page
+    #'
+  Then I should see "Fulfilling Story 1"
     And I should not see "Anonymous"
-  When I follow "Fulfilling Story"
+  When I follow "Fulfilling Story 1"
   Then I should not see "Anonymous"
    And I should see "myname" within ".byline"
 
-  When I follow "Post New"
+  When I follow "post new"
   Then I should not see "Does this fulfill a challenge assignment"
   When I log out
-    And I am logged in as "pinchhitter" with password "something"
-    And I follow "Post New"
+    And I am logged in as "pinchhitter"
+    And I follow "post new"
   Then I should not see "Does this fulfill a challenge assignment"
   When I log out
-    And I am logged in as "myname6" with password "something"
-    And I follow "Post New"
+    And I am logged in as "myname6"
+    And I follow "post new"
   Then I should not see "Does this fulfill a challenge assignment"
 

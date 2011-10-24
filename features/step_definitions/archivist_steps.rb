@@ -22,8 +22,8 @@ When /^I make "([^\"]*)" an archivist$/ do |name|
 end
 
 When /^I import the work "([^\"]*)"$/ do |url|
-  When %{I follow "Import"}
-  When %{I check "Import works for others"}
+  When %{I go to the import page}
+  When %{I check "Import for others ONLY with permission"}
     And %{I fill in "urls" with "#{url}"}
     And %{I check "Post without previewing"}
     And %{I press "Import"}

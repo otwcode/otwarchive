@@ -25,14 +25,14 @@ Feature: User Authentication
     And I fill in "User name" with "sam"
     And I fill in "Password" with "secret"
     And I press "Log in"
-    Then I should see "Hi, sam!"
+    Then I should see "Hi, sam"
 
     # password from email should also work
     When I am logged out
     And I fill in "User name" with "sam"
     And I fill in "sam"'s temporary password
     And I press "Log in"
-    Then I should see "Hi, sam!"
+    Then I should see "Hi, sam"
     And I should see "Change My Password"
 
     # and I should be able to change the password
@@ -47,7 +47,7 @@ Feature: User Authentication
     And I fill in "User name" with "sam"
     And I fill in "Password" with "secret"
     And I press "Log in"
-    Then I should not see "Hi, sam!"
+    Then I should not see "Hi, sam"
 
     # generated password should no longer work
     When I am logged out
@@ -55,7 +55,7 @@ Feature: User Authentication
     And I fill in "User name" with "sam"
     And I fill in "sam"'s temporary password
     And I press "Log in"
-    Then I should not see "Hi, sam!"
+    Then I should not see "Hi, sam"
 
     # new password should work
     When I am logged out
@@ -63,7 +63,7 @@ Feature: User Authentication
     And I fill in "User name" with "sam"
     And I fill in "Password" with "newpass"
     And I press "Log in"
-    Then I should see "Hi, sam!"
+    Then I should see "Hi, sam"
 
   Scenario: invalid user
     Given I have loaded the "users" fixture
@@ -78,7 +78,7 @@ Feature: User Authentication
     When I fill in "User name" with "testuser"
     And I fill in "testuser"'s temporary password
     And I press "Log in"
-    Then I should see "Hi, testuser!"
+    Then I should see "Hi, testuser"
     And I should see "Change My Password"
 
     # and I should be able to change the password
@@ -93,7 +93,7 @@ Feature: User Authentication
     And I fill in "User name" with "testuser"
     And I fill in "Password" with "newpas"
     And I press "Log in"
-    Then I should see "Hi, testuser!"
+    Then I should see "Hi, testuser"
 
   Scenario: Wrong username
     Given I have no users
@@ -123,8 +123,8 @@ Feature: User Authentication
     Given I have no users
      And a user exists with login: "sam"
     When I am on sam's user page
-      Then I should see "Log in"
-      Then I should not see "Log out"
+    Then I should see "Log in"
+      And I should not see "log out"
       And I should not see "Preferences"
 
   Scenario Outline: Show or hide preferences link
@@ -140,9 +140,9 @@ Feature: User Authentication
     Examples:
       | login | user  | action                   |
       | sam   | sam   | not see "Log in"         |
-      | sam   | sam   | see "Log out"            |
+      | sam   | sam   | see "log out"            |
       | sam   | sam   | see "Preferences"     |
-      | sam   | dean  | see "Log out"            |
+      | sam   | dean  | see "log out"            |
       | sam   | dean  | not see "Preferences" |
       | sam   | dean  | not see "Log in"         |
 

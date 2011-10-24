@@ -210,8 +210,12 @@ class CollectionItem < ActiveRecord::Base
     notify_of_reveal
   end
 
+  def posted?
+    self.item.respond_to?(:posted?) ? self.item.posted? : true
+  end
+
   def notify_of_reveal
-    unless self.unrevealed?
+    unless self.unrevealed? || !self.posted?
       recipient_pseuds = Pseud.parse_bylines(self.recipients, :assume_matching_login => true)[:pseuds]
       recipient_pseuds.each do |pseud|
         unless pseud.user.preference.recipient_emails_off
@@ -236,7 +240,7 @@ class CollectionItem < ActiveRecord::Base
   # When the authors of anonymous works are revealed, notify users
   # subscribed to those authors
   def notify_of_author_reveal
-    unless self.anonymous?
+    unless self.anonymous? || !self.posted?
       if item_type == "Work"
         subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)",
                                   item.pseuds.map{|p| p.user_id}]).

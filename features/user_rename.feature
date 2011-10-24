@@ -50,7 +50,7 @@ Scenario: Changing my user name with one pseud changes that pseud
     And I press "Change"
   Then I should see "Your user name was changed"
     And I should see "Hi, newusername"
-  When I follow "My Pseuds (1)"
+  When I go to my pseuds page
     Then I should not see "oldusername"
   When I follow "Edit"
   Then I should see "cannot change your fallback pseud"
@@ -72,6 +72,6 @@ Scenario: Changing my user name with two pseuds, one same as new, doesn't change
     And I press "Change"
   Then I should see "Your user name was changed"
     And I should see "Hi, newusername"
-  When I follow "My Pseuds (2)"
+  When I follow "Pseuds (2)"
     Then I should see "Edit oldusername"
     And I should see "Edit newusername"

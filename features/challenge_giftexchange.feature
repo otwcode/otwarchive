@@ -26,7 +26,7 @@ Feature: Gift Exchange Challenge
   When I check "Signup open?"
     And I submit
   Then I should see "Challenge was successfully updated"
-    And I should see "Signup: CURRENTLY OPEN" within ".collection.meta"
+    And I should see "Signup: Open" within ".collection .meta"
     And I should see "Signup closes:"
     
   Scenario: Gift exchange appears in list of open challenges
@@ -77,8 +77,8 @@ Feature: Gift Exchange Challenge
   When I am logged in as "myname1"
   When I sign up for "Awesome Gift Exchange" with combination A
   When I am on my user page
-  Then I should see "My Signups (1)"
-  When I follow "My Signups (1)"
+  Then I should see "Signups (1)"
+  When I follow "Signups (1)"
   Then I should see "Awesome Gift Exchange"
   
   Scenario: Ordinary users cannot see other signups
@@ -116,20 +116,9 @@ Feature: Gift Exchange Challenge
   When I am logged in as "mod1"
     And I go to "Awesome Gift Exchange" collection's page
     And I follow "Matching"
-  Then I should see "You cannot generate matches while signup is still open."
+  Then I should see "You can't generate matches while signup is still open."
     And I should not see "Generate Potential Matches"
     
-  Scenario: Matching has useful instructions
-  Given I am logged in as "mod1"
-    And I have created the gift exchange "Awesome Gift Exchange"
-    And I have opened signup for the gift exchange "Awesome Gift Exchange"
-    And everyone has signed up for the gift exchange "Awesome Gift Exchange"
-  When I close signups for "Awesome Gift Exchange"
-  When I follow "Matching"
-  Then I should see "Matching for Awesome Gift Exchange"
-    And I should see "Generate Potential Matches"
-    And I should see "You can shuffle these assignments around as much as you want."
-  
   Scenario: Matches can be generated
   Given I am logged in as "mod1"
     And I have created the gift exchange "Awesome Gift Exchange"
@@ -221,7 +210,7 @@ Feature: Gift Exchange Challenge
     And I have sent assignments for "Awesome Gift Exchange"
   When I am logged in as "myname1"
     And I go to my user page
-    And I follow "My Assignments"
+    And I follow "Assignments"
   Then I should see "Awesome Gift Exchange"
   
   Scenario: User fulfills their assignment and it shows on their assigments page as fulfilled
@@ -235,7 +224,7 @@ Feature: Gift Exchange Challenge
   When I am logged in as "myname1"
     And I fulfill my assignment
   When I go to my user page
-    And I follow "My Assignments"
+    And I follow "Assignments"
   Then I should see "Awesome Gift Exchange"
     And I should not see "Not yet posted"
     And I should see "Fulfilled Story"

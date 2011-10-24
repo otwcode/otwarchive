@@ -70,7 +70,7 @@ class CollectionItemsController < ApplicationController
     #   @collection_items = @collection_items.sort_by {|ci| ci.item_date}
     # end
 
-    @collection_items = @collection_items.order(sort).paginate :page => params[:page], :per_page => 20          
+    @collection_items = @collection_items.order(sort).paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE          
   end
 
   def load_collectible_item

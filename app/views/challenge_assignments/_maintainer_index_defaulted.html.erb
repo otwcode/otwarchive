@@ -1,26 +1,23 @@
 <% # list assignments which were defaulted-on and which need or have a pinch hitter assigned %>
-<%= form_tag update_multiple_collection_assignments_path(@collection), :method => :put do %>
-  <dl class="index">
-    <% @assignments.each do |assignment| %>
-      <dt class="assignment">
-        <!-- the recipient and if THEY have defaulted on their own assignment -->
-        <%= link_to assignment.request_byline, collection_signup_path(@collection, assignment.request) %>
-        <% if ChallengeAssignment.in_collection(@collection).by_offering_user(assignment.request.pseud.user).all? {|recip_assignment| recip_assignment.defaulted} %>
-          <span class="defaulter">(<%= ts("Also defaulted") %>)</span>
-        <% end %>
-      </dt>          
-      <dd class="defaulter">
-        defaulted on by <%= assignment.offer_byline %> 
-        <%= label_tag "undefault_#{assignment.id}", :class => "action" do %>            
-          Undefault <%= check_box_tag "undefault_#{assignment.id}" %>
-        <% end %>
-      </dd>
-      <dd class="autocomplete substitute">
-        Pinch Hitter: <%= text_field_tag "cover_#{assignment.id}", nil, autocomplete_options("pseud", :autocomplete_token_limit => 1) %>
-      </dd>
-    <% end %>
-  </dl>
+<legend><%= ts("Defaulted Assignments") %></legend>
+<h3><%=ts("Defaulted Assignments") %></h3>
+<dl class="index">
+  <% @assignments.each do |assignment| %>
+    <dt class="assignment">
+      <!-- the recipient and if THEY have defaulted on their own assignment -->
+      <%= link_to assignment.request_byline, collection_signup_path(@collection, assignment.request) %>
+      <% if 
+          ChallengeAssignment.in_collection(@collection).by_offering_user(assignment.request.pseud.user).defaulted.count ==
+            ChallengeAssignment.in_collection(@collection).by_offering_user(assignment.request.pseud.user).count %>
+        <span class="defaulter">(<%= ts("Also defaulted") %>)</span>
+      <% end %>
+    </dt>          
+    <dd>
+     <%= label_tag "undefault_#{assignment.id}", :class => 'action' do %>            
+        Undefault <%= assignment.offer_byline %>  <%= check_box_tag "undefault_#{assignment.id}" %>
+      <% end %>
+       <label class="autocomplete substitute" title="choose pinch hitter">Pinch Hitter: <%= text_field_tag "cover_#{assignment.id}", nil, autocomplete_options("pseud", :autocomplete_token_limit => 1) %></label>
+    </dd>
 
-  <%= submit_fieldset %>
-
-<% end %>
+  <% end %>
+</dl>

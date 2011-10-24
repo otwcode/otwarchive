@@ -1,5 +1,5 @@
 <div id="dashboard" class="<%= @user == current_user ? "own" : "" %>" role="navigation region">
-<h4 class="landmark heading"><%= ts("Preferences")%></h4>
+<h4 class="landmark heading"><%= ts("Choices")%></h4>
 <ul class="navigation actions">
   <li><%= span_if_current ts("Dashboard"), @user %></li>
   <% if @user.pseuds.size > 1 %>

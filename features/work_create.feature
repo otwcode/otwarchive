@@ -19,7 +19,7 @@ Feature: Create Works
       And I fill in "Work Title" with "All Hell Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
     When I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page
@@ -54,7 +54,7 @@ Feature: Create Works
       And I fill in "Work Title" with "All Hell Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
     When I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page
@@ -70,16 +70,13 @@ Feature: Create Works
         | cosomeone      | something   | cosomeone@example.org |
         | giftee         | something   | giftee@example.org    |
         | recipient      | something   | recipient@example.org |
-      And the following collections exist
-        | name        | title        |
-        | collection1 | Collection 1 |
-        | collection2 | Collection 2 |
+      And I have a collection "Collection 1" with name "collection1"
+      And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough" with password "something"
       And all emails have been delivered
     When I go to thorough's user page
       And I follow "Profile"
-    Then I should see "About"
-    When I follow "Manage My Pseuds"
+      And I follow "Manage My Pseuds"
     Then I should see "Pseuds for"
     When I follow "New Pseud"
     Then I should see "New pseud"
@@ -109,15 +106,15 @@ Feature: Create Works
       And I fill in "Characters" with "Sam Winchester, Dean Winchester,"
       And I fill in "Relationships" with "Harry/Ginny"
       And I fill in "Additional Tags" with "An extra tag"
-      And I fill in "Recipient" with "Someone else, recipient"
+      And I fill in "Gift this work to" with "Someone else, recipient"
       And I check "series-options-show"
       And I fill in "work_series_attributes_title" with "My new series"
       And I select "Pseud2" from "work_author_attributes_ids_"
       And I select "Pseud3" from "work_author_attributes_ids_"
       And I fill in "pseud_byline" with "coauthor"
-      And I fill in "work_collection_names" with "collection1, collection2"
+      And I fill in "Post to Collections / Challenges" with "collection1, collection2"
       And I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Draft was successfully created"
     When I press "Post"
     Then I should see "Work was successfully posted."
       And 1 email should be delivered to "coauthor@example.org"
@@ -210,8 +207,7 @@ Feature: Create Works
       And I am logged in as "thorough" with password "something"
     When I go to thorough's user page
       And I follow "Profile"
-    Then I should see "About"
-    When I follow "Manage My Pseuds"
+      And I follow "Manage My Pseuds"
     Then I should see "Pseuds for"
     When I follow "New Pseud"
     Then I should see "New pseud"
@@ -242,8 +238,7 @@ Feature: Create Works
       And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
     Then I should see a save error message
-      And I should see "We couldn't find a collection with the name collection1"
-      And I should see "We couldn't find a collection with the name collection2"
+      And I should see "We couldn't find the collections named collection1 and collection2"
     When I fill in "work_collection_names" with ""
       And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
       And I press "Preview"
@@ -292,7 +287,7 @@ Feature: Create Works
       And I fill in "Work Title" with "All Hell Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
     When I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page

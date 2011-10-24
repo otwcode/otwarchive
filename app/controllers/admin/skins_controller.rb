@@ -73,32 +73,32 @@ class Admin::SkinsController < ApplicationController
     
     # make skins cached
     if !params[:make_cached].blank?
-      notice = 'The following skins were marked for caching: '
+      now_cached_skins = []
       params[:make_cached].each do |id|
         skin = Skin.find_by_id(id.to_i)
         if skin.official? && !skin.is_a?(WorkSkin)
           skin.cache!
-          notice += "#{skin.title}"
+          now_cached_skins << skin.title
         else
           flash[:error] = "Note: only approved public site skins can be cached."
         end
-      end
-      flash[:notice] << notice
+      end      
+      flash[:notice] << ts("The following skins were marked for caching: %{skins}", :skins => now_cached_skins.join(", "))
     end
     
     # make skins uncached
     if !params[:make_uncached].blank?
-      notice = 'The following skins had their caches cleared: '
+      now_uncached_skins = []
       params[:make_cached].each do |id|
         skin = Skin.find_by_id(id.to_i)
         if skin.cached?
           skin.clear_cache!
-          notice += "#{skin.title}"
+          now_uncached_skins << skin.title
         else
           flash[:error] = "Note: only cached skins can be uncached."
         end
       end
-      flash[:notice] << notice
+      flash[:notice] << ts('The following skins had their caches cleared: %{skins}', :skins => now_uncached_skins.join(", "))
     end
     
     # set default

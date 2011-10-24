@@ -22,7 +22,7 @@
       </li>
     <% end %>
     <% # The delete link should show up only for the user who actually signed up while signups are open or for the owner or mod %>
-    <% if (challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user)) %>
+    <% if (challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user)) && prompt.can_delete? %>
     <li>
         <%= link_to ts("Delete"), 
           collection_prompt_path(collection, prompt), 
@@ -37,7 +37,7 @@
         <li><%= ts("Sign in to claim prompts") %></li>
       <% elsif (claim ||= prompt.claim_by(current_user).first) %>
         <% # already claimed %>
-        <li><%= link_to ts("Post To Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
+        <li><%= link_to ts("Fulfill"), new_collection_work_path(collection, :claim_id => claim.id) %></li>
         <li>
           <%= link_to ts("Drop Claim"), collection_claim_path(collection, claim), :confirm => ts('Do you really want to delete this claim?'), :method => :delete %>
         </li>

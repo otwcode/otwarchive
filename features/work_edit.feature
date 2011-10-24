@@ -22,7 +22,7 @@ Feature: Edit Works
     When I fill in "work_freeform" with "new tag"
       And I fill in "content" with "first chapter content"
       And I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
       And I should see "Fandom: first fandom"
       And I should see "Additional Tags: new tag"
       And I should see "first chapter content"

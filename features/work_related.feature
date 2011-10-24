@@ -15,9 +15,9 @@ Scenario: check that remixer can see a remix under related works
   Given I have related works setup
   When I post a related work
   When I go to my user page
-  Then I should see "My Related Works (1)"
-  When I follow "My Related Works"
-  Then I should see "Works remixer's works were inspired by"
+  Then I should see "Related Works (1)"
+  When I follow "Related Works"
+  Then I should see "Works that inspired remixer"
     And I should see "Worldbuilding by inspiration"
     
 Scenario: Author can see a remix under related works
@@ -26,7 +26,7 @@ Scenario: Author can see a remix under related works
   When I post a related work
   When I am logged in as "inspiration"
     And I view my related works
-  Then I should see "Works inspired by inspiration's works"
+  Then I should see "Works inspired by inspiration"
     And I should see "Followup by remixer"
 
 Scenario: Can post a translation and it emails the original author
@@ -42,9 +42,9 @@ Scenario: Translator sees a translation under related works
   Given I have related works setup
   When I post a translation
   When I go to my user page
-  Then I should see "My Related Works (1)"
-  When I follow "My Related Works"
-  Then I should see "Works translator has translated"
+  Then I should see "Related Works (1)"
+  When I follow "Related Works"
+  Then I should see "Works translated by translator"
     And I should see "Worldbuilding by inspiration"
     And I should see "From English to Deutsch"
 
@@ -247,7 +247,7 @@ Scenario: Listing external works as inspirations
   When I fill in "Title" with "Worldbuilding Two"
     And I fill in "Author" with "BNF"
     And I press "Preview"
-  Then I should see "Preview Work"
+  Then I should see "Preview"
   When I press "Update"
   Then I should see "Work was successfully updated"
     And I should see "A translation of Worldbuilding by BNF"
