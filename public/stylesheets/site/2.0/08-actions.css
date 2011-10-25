@@ -24,9 +24,10 @@ p.submit, input.submit, dd.submit
         { text-align:right }
 .actions input.text,.actions input[type="text"]
         { cursor: text }
-/*subtypes and modes */
+/*subtypes and modes 
+test note: this pagination clear may need to just be clear:right*/
 ol.pagination
-        { text-align:center; clear:right; margin:0.643em auto}
+        { text-align:center; clear:both; margin:0.643em auto}
 .actions a:visited
         { color: #111; }
 .actions a:hover, .actions input:hover
@@ -50,7 +51,7 @@ ul#skiplinks, .landmark , .landmark a, .index .heading.landmark
 dl.stats + h6 + .actions
         { float: left}
 dl.stats + h6 + .actions, li.news .actions 
-        { margin:-2em auto 0 }
+        { margin:-1.75em auto 0 }
 .actions .secondary .submit, .nomination .actions
         { float:none}
 .chapter .secondary
