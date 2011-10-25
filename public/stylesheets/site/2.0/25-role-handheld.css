@@ -12,4 +12,4 @@ h1,h2,h3{word-break:break-all}
 .blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox {width:auto; float:none}
 .blurb dl.tags dd, dl.meta dd {margin-left:1em}
 
-
+.alphabet .listbox li {display:block}
