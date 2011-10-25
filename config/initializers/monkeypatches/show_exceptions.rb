@@ -8,7 +8,7 @@ module ActionDispatch
       def render_exception_with_template(env, exception)
         body = ErrorsController.action(rescue_responses[exception.class.name]).call(env)
         log_error(exception)
-        notify_airbrake(exception)
+        Airbrake.notify(exception)
         body
       rescue
         render_exception_without_template(env, exception)
