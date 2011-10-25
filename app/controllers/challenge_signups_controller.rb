@@ -145,8 +145,9 @@ class ChallengeSignupsController < ApplicationController
       elsif params["num_#{prompt_type}"]
         notice += ts("Set up %{num} #{prompt_type.pluralize}. ", :num => num_to_build)
       end
-      num_to_build.times do |i|
-        prompt = @challenge_signup.send(prompt_type)[i] || @challenge_signup.send(prompt_type).build
+      num_existing = @challenge_signup.send(prompt_type).count
+      num_existing.upto(num_to_build-1) do
+        @challenge_signup.send(prompt_type).build
       end
     end
     unless notice.blank?

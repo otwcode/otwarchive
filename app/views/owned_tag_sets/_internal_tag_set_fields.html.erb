@@ -13,7 +13,7 @@
           <h5 class="heading"><%= form.label "#{tag_type}_tagnames_to_add".to_sym, ts("Add:") %></h5>
         <% end %>
         
-        <div title="add tags"><%= form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options("tag_type") %></div>      
+        <div title="add tags"><%= form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options(tag_type) %></div>      
 
     <% else %>
       <% # ratings, categories, warnings %>
