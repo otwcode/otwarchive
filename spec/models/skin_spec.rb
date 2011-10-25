@@ -16,12 +16,6 @@ describe Skin do
       
       "should allow through valid CSS shorthand values" => 
         "body {background:#ffffff url('http://mywebsite.com/img_tree.png') no-repeat right top;}",
-
-      "should allow images in the images directory" =>
-        "body {background:#ffffff url('/images/img_tree.png') no-repeat right top;}",
-
-      "should allow unquoted urls" =>
-        "body {background:#ffffff url(http://mywebsite.com/images/img_tree.png) no-repeat right top;}",
       
       "should allow comments on their own lines" => 
         "/* starting comment */
@@ -83,7 +77,6 @@ describe Skin do
                     	-webkit-transition:text-shadow .7s ease-out, background .7s ease-out;
                     	-webkit-transform: scale(2.1) rotate(-90deg)
         }"
-        
     }.each_pair do |condition, css|
       it condition do 
         @skin.css = css

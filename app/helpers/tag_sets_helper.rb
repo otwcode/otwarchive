@@ -66,7 +66,7 @@ module TagSetsHelper
         title = ts("canonical tag")
       else
         status = "unparented"
-        tooltip = ts("This is a canonical archive tag but not associated with this fandom.")
+        tooltip = ts("This is a canonical archive tag but it isn't associated with a fandom.")
         title = ts("canonical tag without parent")
       end
     when nom.exists

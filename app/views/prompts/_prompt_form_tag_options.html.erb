@@ -41,7 +41,7 @@
           <% # do ratings, warnings, categories as taglists if not already specified %>
           <fieldset class="<%= ts("#{tag_type}") %> listbox">
             <h4 class="heading"><%= ts("#{tag_type.pluralize}") %></h4>
-          <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.all),
+          <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.all.to_a),
                   :checked_method => "#{tag_type}_tagnames", :value_method => "name" %>
           </fieldset>
     

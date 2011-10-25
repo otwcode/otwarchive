@@ -65,8 +65,8 @@ class Skin < ActiveRecord::Base
   before_validation :clean_media
   def clean_media
     # handle bizarro cucumber-only error that prevents media from deserializing correctly when attachments are made
-    if self.media && self.media.is_a?(Array) && !self.media.empty?
-      new_media = self.media.flatten.compact.collect {|m| m.gsub(/\["(\w+)"\]/, '\1')}
+    if media && media.is_a?(Array) && !media.empty?
+      new_media = media.flatten.compact.collect {|m| m.gsub(/\["(\w+)"\]/, '\1')}
       self.media = new_media
     end
   end

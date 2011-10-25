@@ -306,10 +306,10 @@ module ApplicationHelper
     link_to_function(linktext, "add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")", :class => "hidden showme")
   end
 
-  # This is only shown via javascript anyway
+  # see above
   def link_to_remove_section(linktext, form, class_of_section_to_remove="removeme")
     form.hidden_field(:_destroy) + "\n" +
-    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")")
+    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", :class => "hidden showme")
   end
   
   def time_in_zone(time, zone=nil, user=User.current_user)
@@ -430,11 +430,11 @@ module ApplicationHelper
       when options[:checked_method].nil?
         []
       else
-        form.object.send(options[:checked_method])
+        form.object.send(options[:checked_method]) || []
       end
     
     checkboxes = choices.map do |choice|
-      is_checked = options[:checked_method] ? already_checked.include?(choice) : false
+      is_checked = !options[:checked_method] || already_checked.empty? ? false : already_checked.include?(choice)
       display_name = choice.send(options[:name_method]).html_safe
       value = choice.send(options[:value_method])
       checkbox_id = "#{base_id}_#{name_to_id(value)}"

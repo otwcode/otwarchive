@@ -257,6 +257,8 @@ function add_section(link, nested_model_name, content) {
     var new_id = last_id + 1;
     var regexp = new RegExp("new_" + nested_model_name, "g");
     content = content.replace(regexp, new_id)
+    // kludgy: show the hidden remove_section link (we don't want it showing for non-js users)
+    content = content.replace('class="hidden showme"', '');
     $j(link).parent().before(content);
 }
 
