@@ -74,22 +74,25 @@ module BookmarksHelper
     link_to link_text, path
   end
   
-#BACK END, pls can we swap out these img tags for span class="private" hidden/rec/public etc like required-tags?
   def get_symbol_for_bookmark(bookmark)
     if bookmark.private?
       img = "/images/skins/iconsets/default/bookmark-private"
       title_string = "Private Bookmark"
+      css_class = "private"
     elsif bookmark.hidden_by_admin?
       img = "/images/skins/iconsets/default/bookmark-hidden"
       title_string = "Bookmark Hidden by Admin"
+      css_class = "hidden"
     elsif bookmark.rec?
       img = "/images/skins/iconsets/default/bookmark-rec"
       title_string = "Rec"
+      css_class = "rec"
     else
       img = "/images/skins/iconsets/default/bookmark-public"
       title_string = "Public Bookmark"
+      css_class = "public"
     end
-    link_to_help('bookmark-symbols-key', link = image_tag( "#{img}.png", :alt => title_string, :title => title_string))
+    link_to_help('bookmark-symbols-key', link = ("<span class=\"#{css_class}\" title=\"#{title_string}\"><span class=\"text\">" + title_string + "</span></span>").html_safe)
   end
   
   def bookmark_form_path(bookmark, bookmarkable)

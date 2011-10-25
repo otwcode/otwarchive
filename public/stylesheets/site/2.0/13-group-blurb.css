@@ -40,7 +40,7 @@ li.blurb, .blurb .blurb
         { position: absolute; top: 0; width:60px; margin:0}
 .blurb ul.required-tags li, #main.blurb ul.required-tags li img,.blurb ul.required-tags li a
         { position:static; display: inline; height: 25px; width: 25px; border:none }
-.blurb ul.required-tags li span.text 
+.blurb ul.required-tags li span.text, .bookmark .icon span.text
         { display:none }
 .blurb ul.required-tags li span
         { background-repeat:no-repeat; height: 25px; width: 25px; display:block}
@@ -73,6 +73,12 @@ li.blurb, .blurb .blurb
 .blurb .warning-no              {background:url("/images/skins/iconsets/default/warning-no.png")}
 .blurb .warning-choosenotto     {background:url("/images/skins/iconsets/default/warning-choosenotto.png")}
 .blurb .external-work           {background:url("/images/skins/iconsets/default/warning-external-work.png")}
+/*same for bookmark icons*/
+.bookmark .private              {background: url("/images/skins/iconsets/default/bookmark-private.png")}
+.bookmark .hidden               {background: url("/images/skins/iconsets/default/bookmark-hidden.png")}
+.bookmark .public               {background: url("/images/skins/iconsets/default/bookmark-public.png")}
+.bookmark .rec                  {background: url("/images/skins/iconsets/default/bookmark-rec.png")}
+
  /*END icon block rules==*/
 
 .blurb .datetime 
@@ -86,7 +92,7 @@ li.blurb, .blurb .blurb
 use this along with "index" and "blurb" for indices where we have icon pictures,
 eg collections, users, skins, instead of the 4-icon list
 */
-.picture .icon img, .picture .icon 
+.picture .icon img, .picture .icon, .bookmark .icon 
         { position: absolute; top:0; height:55px; width:55px}
 .picture .header 
         { border-bottom:1px solid #ccc }
@@ -106,11 +112,10 @@ eg collections, users, skins, instead of the 4-icon list
 /* mod: BOOKMARK*/
 .bookmark p.count	
         { right:0.5em; position:absolute; z-index:50; width:60px }
-.bookmark .count img,  .bookmark .symbol img
-        { height: 25px; width: 25px }
+.bookmark .count img,  .bookmark .symbol img, .bookmark .icon, .bookmark .icon span
+        { height: 25px; width: 25px; display:block }
 .bookmark p.count span	
         { background: url("/images/skins/iconsets/default/category-none.png") top left no-repeat; border: 1px solid #eee; display: block; float: left; height: 25px; line-height: 1.875; margin: 0 2.5px 0 0; text-align: center; width: 25px }
 .bookmark .user 
         { border:1px solid #ccc; clear:right; overflow:hidden}
-
  /*END== */
