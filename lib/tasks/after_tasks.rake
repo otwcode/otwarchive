@@ -344,7 +344,7 @@ namespace :After do
       next if skin.css.blank? || !skin.parent_skins.empty?
       skin.role = "override"
       if skin.save
-        skin.parent_skins << oldskin
+        skin.skin_parents.build(:position => (skin.parent_skins.count+1), :parent_skin => oldskin)
         skin.save
       else
         puts "Couldn't convert #{skin.title}: #{skin.errors.to_s}"
