@@ -38,7 +38,7 @@ li.blurb, .blurb .blurb
 /* ==START icon block rules*/
 .blurb ul.required-tags     
         { position: absolute; top: 0; width:60px; margin:0}
-.blurb ul.required-tags li, #main.blurb ul.required-tags li img,.blurb ul.required-tags li a
+.blurb ul.required-tags li,.blurb ul.required-tags li a
         { position:static; display: inline; height: 25px; width: 25px; border:none }
 .blurb ul.required-tags li span.text 
         { display:none }

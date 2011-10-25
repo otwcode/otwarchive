@@ -10,7 +10,7 @@ dl.meta { border: 1px solid #ccc; clear: right; padding: 1.286em 0.75em; positio
 .meta dd ul li 			
         { display: inline; margin: auto }
 .meta dd blockquote		
-        { margin: -1em 0 0 0 }
+        { margin: 0 }
 
 /*CONTEXTS */
 .dashboard .meta .clear
