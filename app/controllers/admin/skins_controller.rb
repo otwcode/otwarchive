@@ -89,7 +89,7 @@ class Admin::SkinsController < ApplicationController
     # make skins uncached
     if !params[:make_uncached].blank?
       now_uncached_skins = []
-      params[:make_cached].each do |id|
+      params[:make_uncached].each do |id|
         skin = Skin.find_by_id(id.to_i)
         if skin.cached?
           skin.clear_cache!
