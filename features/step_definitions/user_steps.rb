@@ -115,3 +115,7 @@ end
 Given /^I am a visitor$/ do
   Given %{I am logged out}
 end
+
+Then /^I should get the error message for wrong username or password$/ do
+  Then %{I should see "The password or user name you entered doesn't match our records. Please try again"}
+end

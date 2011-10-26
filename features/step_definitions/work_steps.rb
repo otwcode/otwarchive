@@ -170,31 +170,12 @@ When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]
   click_button("Preview")
 end
 
-When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")?(?: with freeform "([^\"]*)")?$/ do |title, fandom, freeform|
-  Given "basic tags"
-  visit new_work_url
-  Given %{I fill in the basic work information for "#{title}"}
-  check(DEFAULT_CATEGORY)
-  fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
-  fill_in("Additional Tags", :with => freeform.nil? ? DEFAULT_FREEFORM : freeform)
-  click_button("Preview")
-end
-
-When /^the draft "([^\"]*)"(?: with fandom "([^\"]*)")?$/ do |title, fandom|
-  Given "basic tags"
-  visit new_work_url
-  Given %{I fill in the basic work information for "#{title}"}
-  check(DEFAULT_CATEGORY)
-  fill_in("Fandoms", :with => fandom.nil? ? DEFAULT_FANDOM : fandom)
-  click_button("Preview")
-end
-
 When /^the draft "([^\"]*)" in collection "([^\"]*)"$/ do |title, collection|
   Given "basic tags"
   visit new_work_url
-  Given "I fill in the basic work information for \"#{title}\""
-  fill_in("Fandoms", :with => "Naruto")
+  Given %{I fill in the basic work information for "#{title}"}
   check(DEFAULT_CATEGORY)
+  fill_in("Fandoms", :with => "Naruto")
   collection = Collection.find_by_title(collection)
   fill_in("Collections", :with => collection.name)
   click_button("Preview")
@@ -205,11 +186,6 @@ When /^I set up the draft "([^\"]*)"$/ do |title|
   visit new_work_url
   Given %{I fill in the basic work information for "#{title}"}
   check(DEFAULT_CATEGORY)
-end
-
-When /^the draft "([^\"]*)"$/ do |title|
-  Given %{I set up the draft "#{title}"}
-  click_button("Preview")
 end
 
 When /^the purge_old_drafts rake task is run$/ do
