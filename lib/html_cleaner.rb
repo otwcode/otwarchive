@@ -1,6 +1,37 @@
 # note, if you modify this file you have to restart the server or console
 module HtmlCleaner
 
+  # Takes a Nokogiri node or a string/hash pair
+  def open_tag(node, attributes=nil)
+    begin
+      name = node.name
+      attributes = Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]
+      self_closing = node.children.empty? ? "/" : ""
+    rescue NameError
+      name = node
+      attributes ||= {}
+      self_closing = ""
+    end
+    
+    attr = ""
+    attributes.each { |aname, avalue| attr += " #{aname}='#{avalue}'" }
+    return "<#{name}#{attr}#{self_closing}>"
+  end
+
+  # Takes a Nokogiri node or a string
+  def close_tag(node, attributes=nil)
+    begin
+      name = node.name
+      self_closing = node.children.empty?
+    rescue NameError
+      name = node
+      attributes ||= {}
+      self_closing = false
+    end
+    
+    self_closing ? "" : "</#{name}>"
+  end
+
   class TagStack < Array
 
     def inside_paragraph?
@@ -10,10 +41,10 @@ module HtmlCleaner
     def open_paragraph_tags
       result = []
       each do |tags| 
-        next if result == [] && !tags.include?("p")
-        tags.each do |tag|
+        tags.each do |tag, attributes|
+          next if result == [] && tag != "p"
           next if tag == "text" || tag == "myroot"
-          result << "<#{tag}>"
+          result << open_tag(tag, attributes)
         end
       end
       return result
@@ -23,17 +54,17 @@ module HtmlCleaner
       return [] if !inside_paragraph?
       result = []
       reverse.each do |tags| 
-        tags.reverse.each do |tag|
+        tags.reverse.each do |tag, attributes|
           next if tag == "text" || tag == "myroot"
-          result << "</#{tag}>"
+          result << close_tag(tag, attributes)
+          return result if tag == "p"
         end
-        return result if tags.include?("p")
       end
     end
 
     def close_and_pop_last
       result = []
-      pop.reverse.each do |tag|
+      pop.reverse.each do |tag, attributes|
         next if tag == "text" || tag == "myroot"
         result << "</#{tag}>"
       end
@@ -41,7 +72,7 @@ module HtmlCleaner
     end
 
     def add_p
-      self[-1] = self[-1] + ["p"]
+      self[-1] = self[-1] + [["p", {}]]
       return ["<p>"]
     end
   end
@@ -195,17 +226,6 @@ module HtmlCleaner
        hr ol p pre table ul).include?(tag)
   end
 
-  def open_tag(node)
-    attr = ""
-    self_closing = node.children.empty? ? "/" : ""
-    node.attribute_nodes.each { |n| attr += " #{n.name}='#{n.value}'" }
-    return "<#{node.name}#{attr}#{self_closing}>"
-  end
-
-  def close_tag(node)
-    node.children.empty? ? "" : "</#{node.name}>"
-  end
-
   def traverse_nodes(node, stack=nil, out_html=nil)
     stack = stack || TagStack.new
     out_html = out_html || []
@@ -228,7 +248,7 @@ module HtmlCleaner
     if !node.text?
       out_html.concat(stack.add_p) if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
 
-      stack << [node.name]
+      stack << [[node.name, Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]]]
       out_html << open_tag(node)
 
     else
@@ -243,7 +263,7 @@ module HtmlCleaner
       text.rstrip! if no_break_before_after_tag?(next_tag)
 
       out_html.concat(stack.add_p) if !stack.inside_paragraph? && text != ""
-      stack << [node.name]
+      stack << [[node.name, Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]]]
 
       # If we have three newlines, assume user wants a blank line
       text.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
@@ -271,11 +291,8 @@ module HtmlCleaner
   end
 
   def add_paragraphs_to_text(text)
-    puts "==="
-    puts text
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
     out_html = traverse_nodes(doc.at_css("myroot"))[1].join
-    puts out_html
     out_html =  Nokogiri::HTML.parse(out_html).at_css("myroot").children.to_xhtml
     return out_html
   end

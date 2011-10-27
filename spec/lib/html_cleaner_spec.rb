@@ -10,44 +10,49 @@ describe HtmlCleaner do
 
     describe "inside paragraph?" do
       it "should return false" do
-        stack.concat([["div"], ["i"], ["s"]])
+        stack.concat([[["div"], {}], [["i", {}]], [["s"], {}]])
         stack.inside_paragraph?.should be_false
       end
 
       it "should recognise paragraph in combination with i" do
-        stack.concat([["div"], ["p", "i"], ["s"]])
+        stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s"], {}]])
         stack.inside_paragraph?.should be_true
       end
 
       it "should recognise paragraph in combination with i" do
-        stack.concat([["div"], ["i", "p"], ["s"]])
+        stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s"], {}]])
         stack.inside_paragraph?.should be_true
       end
 
       it "should recognise single paragraph" do
-        stack.concat([["div"], ["p"], ["s"]])
+        stack.concat([[["div", {}]], [["p", {}]], [["s", {}]]])
         stack.inside_paragraph?.should be_true
       end
     end
 
     describe "open_paragraph_tags" do
       it "should open tags" do
-        stack.concat([["div"], ["p", "i"], ["s"]])
+        stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s", {}]]])
         stack.open_paragraph_tags.should == ["<p>", "<i>", "<s>"]
       end
       
       it "should open tags" do
-        stack.concat([["div"], ["i", "p"], ["s"]])
-        stack.open_paragraph_tags.should == ["<i>", "<p>", "<s>"]
+        stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s", {}]]])
+        stack.open_paragraph_tags.should == ["<p>", "<s>"]
+      end
+
+      it "should handle attributes" do
+        stack.concat([[["div", {}]], [["p", {}]], [["s", {"color" => "blue"}]]])
+        stack.open_paragraph_tags.should == ["<p>", "<s color='blue'>"]
       end
 
       it "should ignore text nodes" do
-        stack.concat([["div"], ["p", "i"], ["s"], ["text"]])
-        stack.open_paragraph_tags.should == ["<p>", "<i>", "<s>"]
+        stack.concat([[["div", {}]], [["p", {}], ["s", {}]], [["text", {}]]])
+        stack.open_paragraph_tags.should == ["<p>", "<s>"]
       end
       
       it "should return empty array when not inside paragraph" do
-        stack.concat([["div"], ["i"], ["s"]])
+        stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
         stack.open_paragraph_tags.should == []
       end
 
@@ -55,28 +60,36 @@ describe HtmlCleaner do
 
     describe "close_paragraph_tags" do
       it "should close tags" do
-        stack.concat([["div"], ["p", "i"], ["s"]])
+        stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s", {}]]])
         stack.close_paragraph_tags.should == ["</s>", "</i>", "</p>"]
-        stack.concat([["div"], ["i", "p"], ["s"]])
-        stack.close_paragraph_tags.should == ["</s>", "</p>", "</i>"]
+      end
+      
+      it "should close tags" do
+        stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s", {}]]])
+        stack.close_paragraph_tags.should == ["</s>", "</p>"]
+      end
+
+      it "should handle attributes" do
+        stack.concat([[["div", {}]], [["p", {}]], [["s", {"color" => "blue"}]]])
+        stack.close_paragraph_tags.should == ["</s>", "</p>" ]
       end
 
       it "should ignore text nodes" do
-        stack.concat([["div"], ["p", "i"], ["s"], ["text"]])
-        stack.close_paragraph_tags.should == ["</s>", "</i>", "</p>"]
+        stack.concat([[["div", {}]], [["p", {}], ["s", {}]], [["text", {}]]])
+        stack.close_paragraph_tags.should == ["</s>", "</p>"]
       end
 
       it "should return empty array when not inside paragraph" do
-        stack.concat([["div"], ["i"], ["s"]])
+        stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
         stack.close_paragraph_tags.should == []
       end
     end
     
     describe "close_and_pop_last" do
       it "should close tags" do
-        stack.concat([["div"], ["p", "i"]])
+        stack.concat([[["div", {}]], [["p", {}], ["i", {}]]])
         stack.close_and_pop_last.should == ["</i>", "</p>"]
-        stack.should == [["div"]]
+        stack.should == [[["div", {}]]]
       end
     end
 
@@ -308,8 +321,8 @@ describe HtmlCleaner do
       it "should convert double linebreaks inside #{tag} tag" do
         result = add_paragraphs_to_text("<#{tag}>some\n\ntext</#{tag}>")
         doc = Nokogiri::XML.fragment(result)
-        doc.xpath("./#{tag}[1]/p").children.to_s.strip.should == "some" 
-        doc.xpath("./#{tag}[2]/p").children.to_s.strip.should == "text" 
+        doc.xpath("./#{tag}/p[1]").children.to_s.strip.should == "some" 
+        doc.xpath("./#{tag}/p[2]").children.to_s.strip.should == "text" 
       end
     end
 
@@ -324,18 +337,16 @@ describe HtmlCleaner do
     it "should keep attributes of block elements" do
       result = add_paragraphs_to_text("<div class='foo'>some\n\ntext</div>")
       doc = Nokogiri::XML.fragment(result)
-      doc.xpath(".div@class").should == "foo"
-      doc.xpath("./div/p[1]").children.to_s.strip.should == "some" 
-      doc.xpath("./div/p[2]").children.to_s.strip.should == "text" 
+      doc.xpath("./div[@class='foo']/p[1]").children.to_s.strip.should == "some"
+      doc.xpath("./div[@class='foo']/p[2]").children.to_s.strip.should == "text"
     end
 
     it "should keep attributes of inline elements across paragraphs" do
       result = add_paragraphs_to_text("<span class='foo'>some\n\ntext</span>")
       doc = Nokogiri::XML.fragment(result)
-      doc.xpath("./p[1]/span").children.to_s.strip.should == "some" 
-      doc.xpath("./p[1]/span@class").should == "foo" 
-      doc.xpath("./p[2]/span").children.to_s.strip.should == "text" 
-      doc.xpath("./p[2]/span@class").should == "foo" 
+      doc.xpath("./p[1]/span[@class='foo']").children.to_s.strip.should == "some"
+      doc.xpath("./p[2]/span[@class='foo']").children.to_s.strip.should == "text"
+
     end
 
     it "should close unclosed inline tags before double linebreak" do
