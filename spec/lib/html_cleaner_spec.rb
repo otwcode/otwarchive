@@ -4,6 +4,62 @@ require 'nokogiri'
 
 describe HtmlCleaner do
   include HtmlCleaner
+
+  describe "TagStack" do
+    let(:stack) { TagStack.new }
+
+    describe "inside paragraph?" do
+      it "should return false" do
+        stack.concat([["div"], ["i"], ["s"]])
+        stack.inside_paragraph?.should be_false
+      end
+
+      it "should recognise paragraph in combination with i" do
+        stack.concat([["div"], ["p", "i"], ["s"]])
+        stack.inside_paragraph?.should be_true
+      end
+
+      it "should recognise single paragraph" do
+        stack.concat([["div"], ["p"], ["s"]])
+        stack.inside_paragraph?.should be_true
+      end
+    end
+
+    describe "open_paragraph_tags" do
+      it "should open tags" do
+        stack.concat([["div"], ["p", "i"], ["s"]])
+        stack.open_paragraph_tags.should == "<p><i><s>"
+      end
+
+      it "should ignore text nodes" do
+        stack.concat([["div"], ["p", "i"], ["s"], ["text"]])
+        stack.open_paragraph_tags.should == "<p><i><s>"
+      end
+      
+      it "should return empty string when not inside paragraph" do
+        stack.concat([["div"], ["i"], ["s"]])
+        stack.open_paragraph_tags.should == ""
+      end
+
+    end
+
+    describe "close_paragraph_tags" do
+      it "should close tags" do
+        stack.concat([["div"], ["p", "i"], ["s"]])
+        stack.close_paragraph_tags.should == "</s></i></p>"
+      end
+
+      it "should ignore text nodes" do
+        stack.concat([["div"], ["p", "i"], ["s"], ["text"]])
+        stack.close_paragraph_tags.should == "</s></i></p>"
+      end
+
+      it "should return empty string when not inside paragraph" do
+        stack.concat([["div"], ["i"], ["s"]])
+        stack.close_paragraph_tags.should == ""
+      end
+    end
+  end
   
   describe "fix_bad_characters" do
 
@@ -47,11 +103,11 @@ describe HtmlCleaner do
       doc.xpath(".//br").should be_empty
     end
 
-    %w(blockquote center dl div h1 h2 h3 h4 h5 h6 ol p pre table ul).each do |tag|
+    %w(blockquote center dl div h1 h2 h3 h4 h5 h6 ol pre table ul).each do |tag|
       it "should not convert linebreaks after #{tag} tags" do
         result = add_paragraphs_to_text("<#{tag}>A</#{tag}>\n<#{tag}>B</#{tag}>\n\n<#{tag}>C</#{tag}>\n\n\n")
         doc = Nokogiri::XML.fragment(result)
-        doc.xpath(".//p").size.should == 1
+        doc.xpath(".//p").size.should == 0
         doc.xpath(".//br").should be_empty
       end
     end
@@ -66,7 +122,7 @@ describe HtmlCleaner do
     it "should not convert linebreaks after hr tags" do
       result = add_paragraphs_to_text("A<hr>B<hr>\n\nC<hr>\n\n\n")
       doc = Nokogiri::XML.fragment(result)
-      doc.xpath(".//p").size.should == 1
+      doc.xpath(".//p").size.should == 0
       doc.xpath(".//br").should be_empty
     end    
 
@@ -146,7 +202,7 @@ describe HtmlCleaner do
       end
     end
 
-    it "should enclose plain text in p tags" do
+    it "should wrap plain text in p tags" do
       result = add_paragraphs_to_text("some text")
       doc = Nokogiri::XML.fragment(result)
       doc.xpath("./p[1]").children.to_s.strip.should == "some text" 

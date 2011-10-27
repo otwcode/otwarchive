@@ -3,6 +3,38 @@ module HtmlCleaner
 
   XSL = Nokogiri::XSLT(File.open("#{Rails.root.to_s}/lib/html_cleaner.xsl"))
 
+
+  class TagStack < Array
+
+    def inside_paragraph?
+      flatten.include?("p")
+    end
+
+    def open_paragraph_tags
+      result = ""
+      each do |tags| 
+        next if result == "" && !tags.include?("p")
+        tags.each do |tag|
+          next if tag == "text"
+          result += "<#{tag}>"
+        end
+      end
+      return result
+    end
+    
+    def close_paragraph_tags
+      return "" if !inside_paragraph?
+      result = ""
+      reverse.each do |tags| 
+        tags.reverse.each do |tag|
+          next if tag == "text"
+          result += "</#{tag}>"
+        end
+        return result if tags.include?("p")
+      end
+    end
+  end
+
   # If we aren't sure that this field hasn't been sanitized since the last sanitizer version, 
   # we sanitize it before we allow it to pass through (and save it if possible).
   def sanitize_field(object, fieldname)
@@ -127,8 +159,18 @@ module HtmlCleaner
     end
     array
   end
-  
-  DONT_TOUCH_TAGS = %w(dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul)
+
+  # Tags whose content we don't touch:
+  DONT_TOUCH_TAGS = %w(a abbr acronym br dl h1 h2 h3 h4 h5 h6 hr img ol p
+                       pre table ul)
+
+  # Tags that need to go inside p tags:
+  INSIDE_P_TAGS = %w(address b big cite code del dfn em i ins
+                     kbd q s samp small span strike strong sub sup tt u var)
+
+  # Tags after which we don't want to convert linebreaks into br's and p's:
+  NO_LINEBREAKS_AFTER_TAGS = %w(blockquote br center dl div h1 h2 h3 h4 h5 h6
+                                ol p pre table ul)
 
   def open_tag(node)
     attr = ""
@@ -142,48 +184,66 @@ module HtmlCleaner
   end
 
   def traverse_nodes(node, parentpath=nil, out_html=nil)
-    parentpath = parentpath || []
+    parentpath = parentpath || TagStack.new
     out_html = out_html || ""
 
-    p parentpath
+    # Just return node's content if we don't want to touch this kind of tag
     return [parentpath, out_html + node.to_s] if DONT_TOUCH_TAGS.include?(node.name)
 
-    
-    out_html += open_tag(node) unless node.text?
+    if INSIDE_P_TAGS.include?(node.name) && !parentpath.inside_paragraph?
+      out_html += ("<p>")
+      parentpath << ["p", node.name]
+    else
+      parentpath << [node.name]
+    end
 
-    out_html += node.text if node.text?
-    # if node.children.empty?
-    #   if node.text? && node.text.include?("\n")
-    #     replacement = Nokogiri::XML::NodeSet.new(newdoc)
-    #     parts = node.text.split("\n")
-    #     parts.each_with_index do |text, i|
-    #       replacement << Nokogiri::XML::Text.new(text, newdoc) unless text.empty?
-    #       replacement << Nokogiri::XML::Node.new("br", newdoc) unless i == parts.size-1
-    #     end
-    #     p node.path
-    #     p newdoc.xpath(node.path)
-    #     newnode = newdoc.xpath(node.path)[0]
-    #     newnode.replace(replacement)
-    #   end
-    #   return
-    # end
-    parentpath << [node.name]
+    if node.text?
+
+      text = node.text
+
+      # Remove leading linebreaks if we don't want to add additional
+      # linebreaks after the previous tag or before the next tag
+      prev_tag = node.previous_sibling.nil? ? "" : node.previous_sibling.name
+      text.lstrip! if NO_LINEBREAKS_AFTER_TAGS.include? prev_tag
+      next_tag = node.next_sibling.nil? ? "" : node.next_sibling.name
+      text.rstrip! if NO_LINEBREAKS_AFTER_TAGS.include? next_tag
+
+      if !parentpath.inside_paragraph? && text.include?("\n")
+        out_html += ("<p>")
+        parentpath[-1] = parentpath.last + ["p"]
+      end
+
+      # If we have three newlines, assume user wants a blank line
+      text.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
+      
+      # Convert double newlines into single paragraph break
+      text.gsub!(/\n+\s*?\n+/, parentpath.close_paragraph_tags + parentpath.open_paragraph_tags)
+      
+      # Convert single newlines into br tags
+      text.gsub!(/\n/, '<br/>')
+      
+      out_html += text
+    else
+      out_html += open_tag(node)
+    end
+
     node.children.each do |child|
       parentpath, out_html = traverse_nodes(child, parentpath, out_html)
     end
 
     out_html += close_tag(node) unless node.text?
-    parentpath.pop
+    out_html += "</p>" if parentpath.pop.size == 2
     return [parentpath, out_html]
   end
 
   def add_paragraphs_to_text(text)
-    puts "====="
+    puts "==="
     puts text
-    doc = Nokogiri::HTML.parse(text)
-    dummy, out_html = traverse_nodes(doc.at_css("body"))
-    out_html =  Nokogiri::HTML.parse(out_html).at_css("body").children.to_xhtml
+    doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
+    puts doc.to_s
+    out_html = traverse_nodes(doc.at_css("myroot"))[1]
     puts out_html
+    out_html =  Nokogiri::HTML.parse(out_html).at_css("myroot").children.to_xhtml
     return out_html
   end
   
