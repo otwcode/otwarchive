@@ -1,9 +1,6 @@
 # note, if you modify this file you have to restart the server or console
 module HtmlCleaner
 
-  XSL = Nokogiri::XSLT(File.open("#{Rails.root.to_s}/lib/html_cleaner.xsl"))
-
-
   class TagStack < Array
 
     def inside_paragraph?
@@ -161,16 +158,16 @@ module HtmlCleaner
   end
 
   # Tags whose content we don't touch:
-  DONT_TOUCH_TAGS = %w(a abbr acronym br dl h1 h2 h3 h4 h5 h6 hr img ol p
+  DONT_TOUCH_TAGS = %w(a abbr acronym address br dl h1 h2 h3 h4 h5 h6 hr img ol p
                        pre table ul)
 
   # Tags that need to go inside p tags:
-  INSIDE_P_TAGS = %w(address b big cite code del dfn em i ins
+  INSIDE_P_TAGS = %w(a abbr acronym address b big cite code del dfn em i ins
                      kbd q s samp small span strike strong sub sup tt u var)
 
   # Tags after which we don't want to convert linebreaks into br's and p's:
   NO_LINEBREAKS_AFTER_TAGS = %w(blockquote br center dl div h1 h2 h3 h4 h5 h6
-                                ol p pre table ul)
+                                hr ol p pre table ul)
 
   def open_tag(node)
     attr = ""
@@ -183,22 +180,30 @@ module HtmlCleaner
     node.children.empty? ? "" : "</#{node.name}>"
   end
 
-  def traverse_nodes(node, parentpath=nil, out_html=nil)
-    parentpath = parentpath || TagStack.new
+  def traverse_nodes(node, tagstack=nil, out_html=nil)
+    tagstack = tagstack || TagStack.new
     out_html = out_html || ""
 
     # Just return node's content if we don't want to touch this kind of tag
-    return [parentpath, out_html + node.to_s] if DONT_TOUCH_TAGS.include?(node.name)
-
-    if INSIDE_P_TAGS.include?(node.name) && !parentpath.inside_paragraph?
-      out_html += ("<p>")
-      parentpath << ["p", node.name]
-    else
-      parentpath << [node.name]
+    if DONT_TOUCH_TAGS.include?(node.name)
+      if INSIDE_P_TAGS.include?(node.name) && !tagstack.inside_paragraph?
+        return [tagstack, "#{out_html}<p>#{node.to_s}</p>"]
+      else
+        return [tagstack, out_html + node.to_s]
+      end
     end
 
-    if node.text?
+    if !node.text?
+      if INSIDE_P_TAGS.include?(node.name) && !tagstack.inside_paragraph?
+        out_html += ("<p>")
+        tagstack << ["p", node.name]
+      else
+        tagstack << [node.name]
+      end
 
+      out_html += open_tag(node)
+
+    else
       text = node.text
 
       # Remove leading linebreaks if we don't want to add additional
@@ -208,39 +213,38 @@ module HtmlCleaner
       next_tag = node.next_sibling.nil? ? "" : node.next_sibling.name
       text.rstrip! if NO_LINEBREAKS_AFTER_TAGS.include? next_tag
 
-      if !parentpath.inside_paragraph? && text.include?("\n")
+      if !tagstack.inside_paragraph? && text != ""
         out_html += ("<p>")
-        parentpath[-1] = parentpath.last + ["p"]
+        tagstack << ["p", node.name]
+      else
+        tagstack << [node.name]
       end
 
       # If we have three newlines, assume user wants a blank line
       text.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
       
       # Convert double newlines into single paragraph break
-      text.gsub!(/\n+\s*?\n+/, parentpath.close_paragraph_tags + parentpath.open_paragraph_tags)
+      text.gsub!(/\n+\s*?\n+/, tagstack.close_paragraph_tags + tagstack.open_paragraph_tags)
       
       # Convert single newlines into br tags
       text.gsub!(/\n/, '<br/>')
       
       out_html += text
-    else
-      out_html += open_tag(node)
     end
 
     node.children.each do |child|
-      parentpath, out_html = traverse_nodes(child, parentpath, out_html)
+      tagstack, out_html = traverse_nodes(child, tagstack, out_html)
     end
 
     out_html += close_tag(node) unless node.text?
-    out_html += "</p>" if parentpath.pop.size == 2
-    return [parentpath, out_html]
+    out_html += "</p>" if tagstack.pop.size == 2
+    return [tagstack, out_html]
   end
 
   def add_paragraphs_to_text(text)
     puts "==="
     puts text
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
-    puts doc.to_s
     out_html = traverse_nodes(doc.at_css("myroot"))[1]
     puts out_html
     out_html =  Nokogiri::HTML.parse(out_html).at_css("myroot").children.to_xhtml
