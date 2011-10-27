@@ -12,7 +12,7 @@ module HtmlCleaner
       each do |tags| 
         next if result == "" && !tags.include?("p")
         tags.each do |tag|
-          next if tag == "text"
+          next if tag == "text" || tag == "myroot"
           result += "<#{tag}>"
         end
       end
@@ -24,11 +24,20 @@ module HtmlCleaner
       result = ""
       reverse.each do |tags| 
         tags.reverse.each do |tag|
-          next if tag == "text"
+          next if tag == "text" || tag == "myroot"
           result += "</#{tag}>"
         end
         return result if tags.include?("p")
       end
+    end
+
+    def close_last_and_pop
+      result = ""
+      pop.reverse.each do |tag|
+        next if tag == "text" || tag == "myroot"
+        result += "</#{tag}>"
+      end
+      return result
     end
   end
 
@@ -165,6 +174,9 @@ module HtmlCleaner
   INSIDE_P_TAGS = %w(a abbr acronym address b big cite code del dfn em i ins
                      kbd q s samp small span strike strong sub sup tt u var)
 
+  # Tags that can't be inside p tags:
+  OUTSIDE_P_TAGS = %w(dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul)
+
   # Tags after which we don't want to convert linebreaks into br's and p's:
   NO_LINEBREAKS_AFTER_TAGS = %w(blockquote br center dl div h1 h2 h3 h4 h5 h6
                                 hr ol p pre table ul)
@@ -188,9 +200,13 @@ module HtmlCleaner
     if DONT_TOUCH_TAGS.include?(node.name)
       if INSIDE_P_TAGS.include?(node.name) && !tagstack.inside_paragraph?
         return [tagstack, "#{out_html}<p>#{node.to_s}</p>"]
-      else
-        return [tagstack, out_html + node.to_s]
       end
+
+      if OUTSIDE_P_TAGS.include?(node.name) && tagstack.inside_paragraph?
+        return [tagstack, "#{out_html}#{tagstack.close_paragraph_tags}#{node.to_s}#{tagstack.open_paragraph_tags}"]
+      end
+
+      return [tagstack, out_html + node.to_s]
     end
 
     if !node.text?
@@ -215,10 +231,10 @@ module HtmlCleaner
 
       if !tagstack.inside_paragraph? && text != ""
         out_html += ("<p>")
-        tagstack << ["p", node.name]
-      else
-        tagstack << [node.name]
+        tagstack[-1] = tagstack[-1] + ["p"]
       end
+
+      tagstack << [node.name]
 
       # If we have three newlines, assume user wants a blank line
       text.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
@@ -236,8 +252,8 @@ module HtmlCleaner
       tagstack, out_html = traverse_nodes(child, tagstack, out_html)
     end
 
-    out_html += close_tag(node) unless node.text?
-    out_html += "</p>" if tagstack.pop.size == 2
+    out_html += tagstack.close_last_and_pop
+    out_html.gsub!(/<p><\/p>\Z/, "")
     return [tagstack, out_html]
   end
 

@@ -59,6 +59,15 @@ describe HtmlCleaner do
         stack.close_paragraph_tags.should == ""
       end
     end
+    
+    describe "close_last_and_pop" do
+      it "should close tags" do
+        stack.concat([["div"], ["p", "i"]])
+        stack.close_last_and_pop.should == "</i></p>"
+        stack.should == [["div"]]
+      end
+    end
+
   end
   
   describe "fix_bad_characters" do
@@ -68,7 +77,7 @@ describe HtmlCleaner do
     end
 
     it "should not touch normal text with valid unicode chars" do
-      fix_bad_characters("nörmäl’téxt").should == "nörmäl’téxt"
+      fix_bad_characters("„‚nörmäl’—téxt‘“").should == "„‚nörmäl’—téxt‘“"
     end
 
     it "should remove invalid unicode chars" do
@@ -124,7 +133,7 @@ describe HtmlCleaner do
     it "should not convert linebreaks after br tags" do
       result = add_paragraphs_to_text("A<br>B<br>\n\nC<br>\n\n\n")
       doc = Nokogiri::XML.fragment(result)
-      doc.xpath(".//p").size.should == 3
+      doc.xpath(".//p").size.should == 1
       doc.xpath(".//br").size.should == 3
     end    
 
@@ -135,6 +144,14 @@ describe HtmlCleaner do
       doc.xpath(".//br").should be_empty
     end    
 
+    %w(dl h1 h2 h3 h4 h5 h6 ol pre table ul).each do |tag|
+      it "should not wrap #{tag} in p tags" do
+        result = add_paragraphs_to_text("aa <#{tag}>foo</#{tag}> bb")
+        doc = Nokogiri::XML.fragment(result)
+        doc.xpath(".//p").size.should == 2
+        doc.xpath(".//#{tag}").children.to_s.strip.should == "foo"
+      end
+    end
 
     ["ol", "ul"].each do |tag|
       it "should not convert linebreaks inside #{tag} lists" do
@@ -239,6 +256,7 @@ describe HtmlCleaner do
     end
   
     it "should convert double br tags into paragraph break" do
+      pending("Not sure if we need this; would be hard.")
       result = add_paragraphs_to_text("some<br/><br/>text")
       doc = Nokogiri::XML.fragment(result)
       doc.xpath("./p[1]").children.to_s.strip.should == "some" 
@@ -257,25 +275,29 @@ describe HtmlCleaner do
     end
 
     it "should handle nested inline tags spanning double line breaks" do
-      result = add_paragraphs_to_text("<i><b>some\n\ntext</b></i>")
+      result = add_paragraphs_to_text("<i>have <b>some\n\ntext</b> yay</i>")
       doc = Nokogiri::XML.fragment(result)
+      doc.xpath("./p[1]/i").children.to_s.strip.should =~ /\Ahave/
       doc.xpath("./p[1]/i/b").children.to_s.strip.should == "some" 
       doc.xpath("./p[2]/i/b").children.to_s.strip.should == "text"
+      doc.xpath("./p[2]/i").children.to_s.strip.should =~ / yay\Z/
     end
 
     it "should handle nested inline tags spanning double line breaks" do
-      result = add_paragraphs_to_text("<i>some <b>other\n\ntext</b></i>")
+      result = add_paragraphs_to_text("have <em>some\n\ntext</em> yay")
       doc = Nokogiri::XML.fragment(result)
-      doc.xpath("./p[1]/i").children.to_s.strip.should == "some <b>other</b>"
-      doc.xpath("./p[2]/i/b").children.to_s.strip.should == "text"
+      doc.xpath("./p[1]").children.to_s.strip.should =~ /\Ahave/
+      doc.xpath("./p[1]/em").children.to_s.strip.should == "some" 
+      doc.xpath("./p[2]/em").children.to_s.strip.should == "text"
+      doc.xpath("./p[2]").children.to_s.strip.should =~ / yay\Z/
     end
 
     %w(blockquote center div).each do |tag|
       it "should convert double linebreaks inside #{tag} tag" do
         result = add_paragraphs_to_text("<#{tag}>some\n\ntext</#{tag}>")
         doc = Nokogiri::XML.fragment(result)
-        doc.xpath("./#{tag}/p[1]").children.to_s.strip.should == "some" 
-        doc.xpath("./#{tag}/p[2]").children.to_s.strip.should == "text" 
+        doc.xpath("./#{tag}[1]/p").children.to_s.strip.should == "some" 
+        doc.xpath("./#{tag}[2]/p").children.to_s.strip.should == "text" 
       end
     end
 
@@ -294,6 +316,25 @@ describe HtmlCleaner do
       doc.xpath("./p[1]/span@class").should == "foo" 
       doc.xpath("./p[2]/span").children.to_s.strip.should == "text" 
       doc.xpath("./p[2]/span@class").should == "foo" 
+    end
+
+    it "should close unclosed inline tags" do
+      pending("Not sure if we need this; would be hard.")
+      html = """
+      Here is an unclosed <em>em tag.
+    
+      Here is an unclosed <strong>strong tag.
+      """
+      doc = Nokogiri::XML.fragment(add_paragraphs_to_text(html))
+      doc.xpath("./p[1]/em").children.to_s.strip.should == "em tag." 
+      doc.xpath("./p[2]/strong").children.to_s.strip.should == "strong tag." 
+    end
+
+    it "should re-nest mis-nested tags" do
+      pending("Not sure if we need this; would be hard.")
+      html = "some <em><strong>text</em></strong>"
+      doc = Nokogiri::XML.fragment(add_paragraphs_to_text(html))
+      doc.xpath("./p[1]/em/strong").children.to_s.strip.should == "text" 
     end
 
   end  
