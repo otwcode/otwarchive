@@ -8,36 +8,41 @@ module HtmlCleaner
     end
 
     def open_paragraph_tags
-      result = ""
+      result = []
       each do |tags| 
-        next if result == "" && !tags.include?("p")
+        next if result == [] && !tags.include?("p")
         tags.each do |tag|
           next if tag == "text" || tag == "myroot"
-          result += "<#{tag}>"
+          result << "<#{tag}>"
         end
       end
       return result
     end
     
     def close_paragraph_tags
-      return "" if !inside_paragraph?
-      result = ""
+      return [] if !inside_paragraph?
+      result = []
       reverse.each do |tags| 
         tags.reverse.each do |tag|
           next if tag == "text" || tag == "myroot"
-          result += "</#{tag}>"
+          result << "</#{tag}>"
         end
         return result if tags.include?("p")
       end
     end
 
-    def close_last_and_pop
-      result = ""
+    def close_and_pop_last
+      result = []
       pop.reverse.each do |tag|
         next if tag == "text" || tag == "myroot"
-        result += "</#{tag}>"
+        result << "</#{tag}>"
       end
       return result
+    end
+
+    def add_p
+      self[-1] = self[-1] + ["p"]
+      return ["<p>"]
     end
   end
 
@@ -166,20 +171,29 @@ module HtmlCleaner
     array
   end
 
-  # Tags whose content we don't touch:
-  DONT_TOUCH_TAGS = %w(a abbr acronym address br dl h1 h2 h3 h4 h5 h6 hr img ol p
-                       pre table ul)
+  # Tags whose content we don't touch
+  def dont_touch_content_tag?(tag)
+    %w(a abbr acronym address br dl h1 h2 h3 h4 h5 h6 hr img ol p
+       pre table ul).include?(tag)
+  end
 
-  # Tags that need to go inside p tags:
-  INSIDE_P_TAGS = %w(a abbr acronym address b big cite code del dfn em i ins
-                     kbd q s samp small span strike strong sub sup tt u var)
+  # Tags that need to go inside p tags
+  def put_inside_p_tag?(tag)
+    %w(a abbr acronym address b big cite code del dfn em i ins
+       kbd q s samp small span strike strong sub sup tt u var).include?(tag)
+  end
 
-  # Tags that can't be inside p tags:
-  OUTSIDE_P_TAGS = %w(dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul)
+  # Tags that can't be inside p tags
+  def put_outside_p_tag?(tag)
+    %w(dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul).include?(tag)
+  end
 
-  # Tags after which we don't want to convert linebreaks into br's and p's:
-  NO_LINEBREAKS_AFTER_TAGS = %w(blockquote br center dl div h1 h2 h3 h4 h5 h6
-                                hr ol p pre table ul)
+  # Tags before and after which we don't want to convert linebreaks
+  # into br's and p's
+  def no_break_before_after_tag?(tag)
+    %w(blockquote br center dl div h1 h2 h3 h4 h5 h6
+       hr ol p pre table ul).include?(tag)
+  end
 
   def open_tag(node)
     attr = ""
@@ -192,81 +206,75 @@ module HtmlCleaner
     node.children.empty? ? "" : "</#{node.name}>"
   end
 
-  def traverse_nodes(node, tagstack=nil, out_html=nil)
-    tagstack = tagstack || TagStack.new
-    out_html = out_html || ""
+  def traverse_nodes(node, stack=nil, out_html=nil)
+    stack = stack || TagStack.new
+    out_html = out_html || []
 
-    # Just return node's content if we don't want to touch this kind of tag
-    if DONT_TOUCH_TAGS.include?(node.name)
-      if INSIDE_P_TAGS.include?(node.name) && !tagstack.inside_paragraph?
-        return [tagstack, "#{out_html}<p>#{node.to_s}</p>"]
+    # Don't decend into node if we don't want to touch the content of
+    # this kind of tag
+    if dont_touch_content_tag?(node.name)
+      if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
+        return [stack, out_html << "<p>#{node.to_s}</p>"]
       end
 
-      if OUTSIDE_P_TAGS.include?(node.name) && tagstack.inside_paragraph?
-        return [tagstack, "#{out_html}#{tagstack.close_paragraph_tags}#{node.to_s}#{tagstack.open_paragraph_tags}"]
+      if put_outside_p_tag?(node.name) && stack.inside_paragraph?
+        out_html.concat(stack.close_paragraph_tags + [node.to_s] + stack.open_paragraph_tags)
+        return [stack, out_html]
       end
 
-      return [tagstack, out_html + node.to_s]
+      return [stack, out_html << node.to_s]
     end
 
     if !node.text?
-      if INSIDE_P_TAGS.include?(node.name) && !tagstack.inside_paragraph?
-        out_html += ("<p>")
-        tagstack[-1] = tagstack[-1] + ["p"]
-      end
+      out_html.concat(stack.add_p) if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
 
-      tagstack << [node.name]
-      #   out_html += ("<p>")
-      #   tagstack << ["p", node.name]
-      # else
-      #   tagstack << [node.name]
-      # end
-
-      out_html += open_tag(node)
+      stack << [node.name]
+      out_html << open_tag(node)
 
     else
       text = node.text
 
-      # Remove leading linebreaks if we don't want to add additional
-      # linebreaks after the previous tag or before the next tag
+      # Remove leading/trailing linebreaks if we don't want to add
+      # additional linebreaks after the previous tag/before the next
+      # tag
       prev_tag = node.previous_sibling.nil? ? "" : node.previous_sibling.name
-      text.lstrip! if NO_LINEBREAKS_AFTER_TAGS.include? prev_tag
+      text.lstrip! if no_break_before_after_tag?(prev_tag)
       next_tag = node.next_sibling.nil? ? "" : node.next_sibling.name
-      text.rstrip! if NO_LINEBREAKS_AFTER_TAGS.include? next_tag
+      text.rstrip! if no_break_before_after_tag?(next_tag)
 
-      if !tagstack.inside_paragraph? && text != ""
-        out_html += ("<p>")
-        tagstack[-1] = tagstack[-1] + ["p"]
-      end
-
-      tagstack << [node.name]
+      out_html.concat(stack.add_p) if !stack.inside_paragraph? && text != ""
+      stack << [node.name]
 
       # If we have three newlines, assume user wants a blank line
       text.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
       
       # Convert double newlines into single paragraph break
-      text.gsub!(/\n+\s*?\n+/, tagstack.close_paragraph_tags + tagstack.open_paragraph_tags)
+      text.gsub!(/\n+\s*?\n+/, stack.close_paragraph_tags.join + stack.open_paragraph_tags.join)
       
       # Convert single newlines into br tags
       text.gsub!(/\n/, '<br/>')
       
-      out_html += text
+      out_html << text
     end
 
+    # decend into child nodes
     node.children.each do |child|
-      tagstack, out_html = traverse_nodes(child, tagstack, out_html)
+      stack, out_html = traverse_nodes(child, stack, out_html)
     end
 
-    out_html += tagstack.close_last_and_pop
-    out_html.gsub!(/<p><\/p>\Z/, "")
-    return [tagstack, out_html]
+    out_html.concat(stack.close_and_pop_last)
+    
+    # Remove empty p tags we accidentally inserted ourselves. Won't
+    # delete user's empty p tags.
+    out_html.pop(2) if out_html[-2..-1] == ["<p>", "</p>"]
+    return [stack, out_html]
   end
 
   def add_paragraphs_to_text(text)
     puts "==="
     puts text
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
-    out_html = traverse_nodes(doc.at_css("myroot"))[1]
+    out_html = traverse_nodes(doc.at_css("myroot"))[1].join
     puts out_html
     out_html =  Nokogiri::HTML.parse(out_html).at_css("myroot").children.to_xhtml
     return out_html

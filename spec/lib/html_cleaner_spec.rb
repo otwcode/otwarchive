@@ -19,6 +19,11 @@ describe HtmlCleaner do
         stack.inside_paragraph?.should be_true
       end
 
+      it "should recognise paragraph in combination with i" do
+        stack.concat([["div"], ["i", "p"], ["s"]])
+        stack.inside_paragraph?.should be_true
+      end
+
       it "should recognise single paragraph" do
         stack.concat([["div"], ["p"], ["s"]])
         stack.inside_paragraph?.should be_true
@@ -28,17 +33,22 @@ describe HtmlCleaner do
     describe "open_paragraph_tags" do
       it "should open tags" do
         stack.concat([["div"], ["p", "i"], ["s"]])
-        stack.open_paragraph_tags.should == "<p><i><s>"
+        stack.open_paragraph_tags.should == ["<p>", "<i>", "<s>"]
+      end
+      
+      it "should open tags" do
+        stack.concat([["div"], ["i", "p"], ["s"]])
+        stack.open_paragraph_tags.should == ["<i>", "<p>", "<s>"]
       end
 
       it "should ignore text nodes" do
         stack.concat([["div"], ["p", "i"], ["s"], ["text"]])
-        stack.open_paragraph_tags.should == "<p><i><s>"
+        stack.open_paragraph_tags.should == ["<p>", "<i>", "<s>"]
       end
       
-      it "should return empty string when not inside paragraph" do
+      it "should return empty array when not inside paragraph" do
         stack.concat([["div"], ["i"], ["s"]])
-        stack.open_paragraph_tags.should == ""
+        stack.open_paragraph_tags.should == []
       end
 
     end
@@ -46,24 +56,26 @@ describe HtmlCleaner do
     describe "close_paragraph_tags" do
       it "should close tags" do
         stack.concat([["div"], ["p", "i"], ["s"]])
-        stack.close_paragraph_tags.should == "</s></i></p>"
+        stack.close_paragraph_tags.should == ["</s>", "</i>", "</p>"]
+        stack.concat([["div"], ["i", "p"], ["s"]])
+        stack.close_paragraph_tags.should == ["</s>", "</p>", "</i>"]
       end
 
       it "should ignore text nodes" do
         stack.concat([["div"], ["p", "i"], ["s"], ["text"]])
-        stack.close_paragraph_tags.should == "</s></i></p>"
+        stack.close_paragraph_tags.should == ["</s>", "</i>", "</p>"]
       end
 
-      it "should return empty string when not inside paragraph" do
+      it "should return empty array when not inside paragraph" do
         stack.concat([["div"], ["i"], ["s"]])
-        stack.close_paragraph_tags.should == ""
+        stack.close_paragraph_tags.should == []
       end
     end
     
-    describe "close_last_and_pop" do
+    describe "close_and_pop_last" do
       it "should close tags" do
         stack.concat([["div"], ["p", "i"]])
-        stack.close_last_and_pop.should == "</i></p>"
+        stack.close_and_pop_last.should == ["</i>", "</p>"]
         stack.should == [["div"]]
       end
     end
@@ -301,11 +313,12 @@ describe HtmlCleaner do
       end
     end
 
-    it "should wrap text in p after existing p tag" do
-      result = add_paragraphs_to_text("<p>some</p>\n\nnew text")
+    it "should wrap text in p before and after existing p tag" do
+      result = add_paragraphs_to_text("boom\n\n<p>da</p>\n\nyadda")
       doc = Nokogiri::XML.fragment(result)
-      doc.xpath("./p[1]").children.to_s.strip.should == "some" 
-      doc.xpath("./p[2]").children.to_s.strip.should == "new text" 
+      doc.xpath("./p[1]").children.to_s.strip.should == "boom" 
+      doc.xpath("./p[2]").children.to_s.strip.should == "da" 
+      doc.xpath("./p[3]").children.to_s.strip.should == "yadda" 
     end
 
     it "should keep attributes of block elements" do
@@ -325,7 +338,7 @@ describe HtmlCleaner do
       doc.xpath("./p[2]/span@class").should == "foo" 
     end
 
-    it "should close unclosed inline tags" do
+    it "should close unclosed inline tags before double linebreak" do
       pending("Not sure if we need this; would be hard.")
       html = """
       Here is an unclosed <em>em tag.
@@ -338,7 +351,6 @@ describe HtmlCleaner do
     end
 
     it "should re-nest mis-nested tags" do
-      pending("Not sure if we need this; would be hard.")
       html = "some <em><strong>text</em></strong>"
       doc = Nokogiri::XML.fragment(add_paragraphs_to_text(html))
       doc.xpath("./p[1]/em/strong").children.to_s.strip.should == "text" 
@@ -360,6 +372,14 @@ describe HtmlCleaner do
         doc.xpath("./p[1]/#{tag}[2]").children.to_s.strip.should == "ho"
         doc.xpath("./p[1]").children.text.strip.should =~ /hey\s+ho/
       end
+    end
+
+    it "should not remove empty p tags" do
+      result = add_paragraphs_to_text("<p>A</p> <p></p> <p>B</p>")
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath("./p[1]").children.to_s.strip.should == "A" 
+      doc.xpath("./p[2]").children.to_s.strip.should == "" 
+      doc.xpath("./p[3]").children.to_s.strip.should == "B" 
     end
 
   end  
