@@ -41,7 +41,7 @@ end
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
   work = Work.find_by_title!(work)
   visit work_url(work)
-  fill_in("Comment", :with => comment_text)
+  fill_in("comment[content]", :with => comment_text)
 end
 
 When /^I post the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
@@ -61,6 +61,22 @@ When /^I edit a comment$/ do
   When %{I follow "Edit"}
   fill_in("comment[content]", :with => "Edited comment")
   click_button "Update"
+end
+
+# this step assumes we are on a page with a comment form
+When /^I post a comment "([^"]*)"$/ do |comment_text|
+  fill_in("comment[content]", :with => comment_text)
+  click_button("Comment")
+end
+
+# this step assumes that the reply-to-comment form can be opened
+When /^I reply to a comment with "([^"]*)"$/ do |comment_text|
+  When %{I follow "Reply"}
+  Then %{I should see the reply to comment form}
+  with_scope(".odd") do
+    fill_in("comment[content]", :with => comment_text)
+    click_button("Comment")
+  end
 end
 
 When /^I visit the new comment page for the work "([^"]+)"$/ do |work|
@@ -84,4 +100,8 @@ Morbi nec ullamcorper dolor. In luctus vulputate arcu et egestas. Nullam at pret
 Nunc eget dolor ut nisi laoreet scelerisque. Vestibulum condimentum dignissim leo ut luctus. Aliquam sed sem velit. Nulla justo nulla, molestie cursus mollis eget, ullamcorper aliquet mi. Duis et sem elit, quis pretium diam. Nam consectetur ullamcorper velit, varius vulputate dui ultrices sodales. Sed aliquet laoreet tortor, vitae varius enim ornare vel. Nam ornare dapibus aliquam. Proin faucibus tellus eget nibh lacinia in dignissim odio ultricies. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla aliquet pulvinar turpis vitae malesuada. Mauris porttitor erat in urna bibendum luctus. Vestibulum nec mi eros, nec rutrum ligula. Nunc ac nisl eros, ut adipiscing diam. Integer feugiat justo a purus fermentum sollicitudin. Mauris lacinia venenatis commodo. Nam urna libero, viverra in rhoncus vel, ultricies vitae augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Morbi vitae lacus vitae magna volutpat pharetra rhoncus eget nisi. Proin vehicula, felis nec tempor eleifend, dolor ipsum volutpat dolor, et eleifend nibh libero ac turpis. Donec odio est, sodales nec consectetur vehicula, adipiscing sit amet magna. Suspendisse dapibus tincidunt velit sit amet mollis. Curabitur eget blandit li./)
   end
+end
+
+Then /^I should see the reply to comment form$/ do
+  Then %{I should see "Comment as" within ".odd"}
 end
