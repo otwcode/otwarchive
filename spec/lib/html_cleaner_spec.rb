@@ -301,6 +301,13 @@ describe HtmlCleaner do
       end
     end
 
+    it "should wrap text in p after existing p tag" do
+      result = add_paragraphs_to_text("<p>some</p>\n\nnew text")
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath("./p[1]").children.to_s.strip.should == "some" 
+      doc.xpath("./p[2]").children.to_s.strip.should == "new text" 
+    end
+
     it "should keep attributes of block elements" do
       result = add_paragraphs_to_text("<div class='foo'>some\n\ntext</div>")
       doc = Nokogiri::XML.fragment(result)
@@ -335,6 +342,24 @@ describe HtmlCleaner do
       html = "some <em><strong>text</em></strong>"
       doc = Nokogiri::XML.fragment(add_paragraphs_to_text(html))
       doc.xpath("./p[1]/em/strong").children.to_s.strip.should == "text" 
+    end
+
+    it "should handle mixed uppercase/lowecase html tags" do
+      result = add_paragraphs_to_text("<em>mixed</EM> <EM>stuff</em>")
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath("./p[1]/em[1]").children.to_s.strip.should == "mixed" 
+      doc.xpath("./p[1]/em[2]").children.to_s.strip.should == "stuff" 
+    end
+
+    %w(b big cite code del dfn em i ins kbd q s samp
+     small span strike strong sub sup tt u var).each do |tag|
+      it "should wrap consecutive #{tag} inline tags in one paragraph " do
+        result = add_paragraphs_to_text("<#{tag}>hey</#{tag}> <#{tag}>ho</#{tag}>")
+        doc = Nokogiri::XML.fragment(result)
+        doc.xpath("./p[1]/#{tag}[1]").children.to_s.strip.should == "hey" 
+        doc.xpath("./p[1]/#{tag}[2]").children.to_s.strip.should == "ho"
+        doc.xpath("./p[1]").children.text.strip.should =~ /hey\s+ho/
+      end
     end
 
   end  

@@ -212,10 +212,15 @@ module HtmlCleaner
     if !node.text?
       if INSIDE_P_TAGS.include?(node.name) && !tagstack.inside_paragraph?
         out_html += ("<p>")
-        tagstack << ["p", node.name]
-      else
-        tagstack << [node.name]
+        tagstack[-1] = tagstack[-1] + ["p"]
       end
+
+      tagstack << [node.name]
+      #   out_html += ("<p>")
+      #   tagstack << ["p", node.name]
+      # else
+      #   tagstack << [node.name]
+      # end
 
       out_html += open_tag(node)
 
