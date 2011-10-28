@@ -22,7 +22,7 @@ Feature: creating and editing skins
   When I am on skin's new page
     And I fill in "Title" with "my blinking skin"
     And I fill in "CSS" with "#title { text-decoration: blink;}"
-    And I press "Create"
+    And I submit
   Then I should see "Skin was successfully created"
     And I should see "my blinking skin skin by skinner"
     And I should see "text-decoration: blink;"
@@ -39,143 +39,12 @@ Feature: creating and editing skins
   When I am on skin's new page
     Then I should see "Sorry, you don't have permission"
 
-  ########################################################
-  ##### Here we check for things that should be allowed by the sanitizer
-  ####
-  ### TODO: this should all be moved to the spec! 
-  
-  Scenario: The sanitizer should allow through valid CSS shorthand values
-  Given I am logged in as "skinner"
-  When I create the skin "valid skin" with css
-      """  
-      body {background:#ffffff url('http://mywebsite.com/img_tree.png') no-repeat right top;}
-      """
-  Then I should see "Skin was successfully created"
-    And I should see "url('http://mywebsite.com/img_tree.png')"
-    And I should see "no-repeat"
-
-  Scenario: The sanitizer should allow comments on their own lines
-  Given I am logged in as "skinner"
-  When I create the skin "valid skin" with css
-      """  
-      /* starting comment */
-      li {color: green;}
-      /* middle comment */
-      dd {color: blue;}
-      /* end comment */
-      """
-  Then I should see "Skin was successfully created"
-    And I should see "starting comment"
-    And I should see "middle comment"
-    And I should see "end comment"
-    And I should see "color: green"
-    And I should see "color: blue"
-
-  Scenario: The sanitizer should allow through CSS3 properties like border-bottom-right-radius and box-shadow
-  Given I am logged in as "skinner"
-  When I create the skin "CSS3 skin" with css
-      """  
-      .profile .module h3, .media-index li.category h3 { border-left: 4px double #111 !important; border-bottom-right-radius: 0 !important; }
-      li {box-shadow: inset 0 0px 20px 1px #fff, 0px 1px 0 rgba(140,120,50,0.75), 0 6px 0px #1f3053, 0 8px 4px 1px #111}
-      """
-  Then I should see "Skin was successfully created"
-    And I should see "border-bottom-right-radius: 0 !important"
-    And I should see "box-shadow"
-    And I should see "inset 0 0px 20px 1px #fff, 0px 1px 0 rgba(140,120,50,0.75), 0 6px 0px #1f3053, 0 8px 4px 1px #111"
-
-  Scenario: The sanitizer should allow through alphabetic strings as keyword values even if they are not explicitly listed
-  Given I am logged in as "skinner"
-  When I create the skin "valid skin" with css
-      """  
-      #main .navigation input { vertical-align: baseline; }
-      #header .navigation li { text-transform: capitalize; }
-      table { border-collapse: separate !important; }    
-      """
-  Then I should see "Skin was successfully created"
-    And I should see "baseline"
-    And I should see "capitalize"
-    And I should see "separate"
-
-  Scenario: The css sanitizer should allow through valid CSS3 rules using quoted strings as content.
-  Given I am logged in as "skinner"
-  When I create the skin "CSS3 skin with content" with css
-      """  
-      li.characters + li.freeforms:before {content: '||'}
-      li.relationships + li.freeforms:before { content: 'Freeform: '; }
-      li:before {content: url('http://foo.com/bullet.jpg')}
-      """
-  Then I should see "Skin was successfully created"
-    And I should see "content: '||'"
-    And I should see "content: 'Freeform: '"
-    And I should see "content: url('http://foo.com/bullet.jpg')"
-
-
-  Scenario: The sanitizer should allow through properties that are variations on the ones in the shorthand config list
-  Given I am logged in as "skinner"
-  When I create the skin "valid skin" with css
-      """  
-      #main ul.sorting {
-        background: rgba(120,120,120,1) 5%;
-        -moz-border-radius:0.15em !important; 
-        border-color:rgba(86,86,86,0.75) !important; 
-        box-shadow:0 2px 5px rgba(0,0,0,0.5);
-        float:none !important; 
-        text-align:center; 
-      }
-      #main ul.sorting a {
-        border-color:rgba(86,86,86,1) !important; 
-        color:rgba(231,231,231,1); 
-        text-shadow:-1px -1px 0 rgba(0,0,0,0.75)
-      }
-      ul.sorting  a:hover {
-        background: rgba(71,71,71,1) 5% !important; 
-        color:rgba(254,254,254,1);
-      }
-      #main .navigation ul.sorting a:visited{
-        color:rgba(254,254,254,1)
-      }
-      """
-    Then I should see "Skin was successfully created"
-      And I should see "rgba(254,254,254,1)"
-      And I should see "-moz-border-radius"
-
-
-  Scenario: The sanitizer should allow through gradients, scale, skew, translate, rotate
-  Given I am logged in as "skinner"
-  When I create the skin "valid skin" with css
-      """  
-      #main ul.sorting {
-      background:-moz-linear-gradient(bottom, rgba(120,120,120,1) 5%, rgba(94,94,94,1) 50%, rgba(108,108,108,1) 55%, rgba(137,137,137,1) 100%) ;
-      }
-      ul.sorting  a:hover {
-      background:-webkit-linear-gradient(bottom, rgba(71,71,71,1) 5%, rgba(59,59,59,1) 50%, rgba(74,74,74,1) 55%, rgba(91,91,91,1) 100%) !important; 
-      }
-      #main li.blurb:nth-child(2n), #main.works-show .meta, .thread .thread li.comment:nth-child(3n+1) {-moz-transform: rotate(-0.5deg);}
-      #main .foo {-moz-transform:rotate(120deg); -moz-transform:skewx(25deg) translatex(150px);}
-      #menu {
-      	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(82,82,82)), color-stop(1, rgb(125,124,125)));
-                  	-webkit-box-shadow:#000 0 1px 2px;
-                  	-webkit-border-radius:2px;
-                  	-webkit-transition:text-shadow .7s ease-out, background .7s ease-out;
-                  	-webkit-transform: scale(2.1) rotate(-90deg)
-      }
-      """
-  Then I should see "Skin was successfully created"
-    And I should see "-moz-linear-gradient"
-    And I should see "-webkit-linear-gradient"
-    And I should see "rotate(-0.5deg)"
-    And I should see "skewx(25deg)"
-    And I should see "translatex(150px)"
-    And I should see "-webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(82,82,82)), color-stop(1, rgb(125,124,125)));"
-    And I should see "scale"
-    And I should see "rotate"    
-  
   Scenario: A user should be able to select one of their own non-public skins to use in their preferences
   Given I am logged in as "skinner" 
     And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
   When I am on skinner's preferences page
     And I select "my blinking skin" from "preference_skin_id"
-    And I press "Update"
+    And I submit
   Then I should see "Your preferences were successfully updated."
     And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
@@ -194,7 +63,7 @@ Feature: creating and editing skins
   Given I am logged in as "skinner" 
   When I am on skin's new page
     And I fill in "Title" with "Default"
-    And I press "Create"
+    And I submit
   Then I should see "must be unique"
   
   Scenario: Only public skins should be on the main skins page
@@ -211,21 +80,8 @@ Feature: creating and editing skins
     And I follow "My Skins"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting { text-decoration: blink;}"
-    And I press "Update"
-  Then I should see "Skin updated"  
-  
-  Scenario: Public skins should require a preview image
-  Given I am logged in as "skinner" 
-    And I am on skin's new page
-  When I fill in "Title" with "public skin"
-    And I fill in "CSS" with "#title { text-decoration: blink;}"
-    And I fill in "Description" with "Blinky love"
-    And I check "skin_public"
-    And I press "Create"
-  Then I should see "You need to upload a screencap"
-  When I attach the file "test/fixtures/skin_test_preview.png" to "skin_icon"
-    And I press "Create"
-  Then I should see "Skin was successfully created"
+    And I submit
+  Then I should see an update confirmation message  
   
   Scenario: Newly created public skins should not appear on the main skins page until approved and should be
     marked as not-yet-approved
@@ -273,7 +129,7 @@ Feature: creating and editing skins
     And I am logged in as an admin
   When I go to admin's skins page  
     And I check "public skin"
-    And I press "Update"
+    And I submit
   Then I should see "The following skins were approved: public skin"
   When I follow "Approved Skins"
   Then I should see "public skin" within "table#approved"
@@ -287,8 +143,8 @@ Feature: creating and editing skins
   When I follow "Edit"
     And I fill in "CSS" with "#greeting.logged-in { text-decoration: blink;}"
     And I fill in "Description" with "Blinky love (admin modified)"
-    And I press "Update"
-  Then I should see "Skin updated"
+    And I submit
+  Then I should see an update confirmation message
     And I should see "(admin modified)"
     And I should see "#greeting.logged-in"
     And I should not see "#title"
@@ -307,7 +163,7 @@ Feature: creating and editing skins
     And I am logged in as "skinuser" 
     And I am on skinuser's preferences page
   When I select "public skin" from "preference_skin_id"
-    And I press "Update"
+    And I submit
   Then I should see "Your preferences were successfully updated."
     And "public skin" should be selected within "preference_skin_id"
     And I should see "#title {" within "style"
@@ -340,11 +196,11 @@ Feature: creating and editing skins
     And I fill in "Title" with "Wide margins"
     And I fill in "Description" with "Layout skin"
     And I fill in "skin_margin" with "text"
-    And I press "Create"
+    And I submit
   Then I should see a save error message
     And I should see "Margin is not a number"
   When I fill in "skin_margin" with "5"
-    And I press "Create"
+    And I submit
   Then I should see "Skin was successfully created"
     And I should see "Margin5"
   When I follow "Edit"
@@ -355,21 +211,21 @@ Feature: creating and editing skins
     And I fill in "skin_foreground_color" with "red"
     And I fill in "skin_base_em" with "120"
     And I fill in "skin_paragraph_margin" with "5"
-    And I press "Update"
+    And I submit
     # TODO: Think about whether rounding to 4 is actually the right behaviour or not
-  Then I should see "Skin updated"
+  Then I should see an update confirmation message
     And I should see "4"
     And I should not see "4.5"
   When I am on skinner's preferences page
   Then "Default" should be selected within "preference_skin_id"
   When I select "Wide margins" from "preference_skin_id"
-    And I press "Update"
+    And I submit
   Then I should see "Your preferences were successfully updated."
-    And I should see "#chapters {margin: auto 4% 2.5em; padding: 0.5em 4% 0;}" within "style"
+    And I should see "#workskin {margin: auto 4%; padding: 0.5em 4% 0;}" within "style"
     And I should see "background: #ccccff;" within "style"
     And I should see "color: red;" within "style"
     And I should see "font: 120%/1.125 Garamond;" within "style"
-    And I should see "#main .userstuff p {margin-bottom: 5.0em;}" within "style"
+    And I should see ".userstuff p {margin-bottom: 5.0em;}" within "style"
   When I am on skinner's preferences page
   Then "Wide margins" should be selected within "preference_skin_id"
   
@@ -380,7 +236,7 @@ Feature: creating and editing skins
     And I fill in "Title" with "Awesome Work Skin"
     And I fill in "Description" with "Great work skin"
     And I fill in "CSS" with "p {color: purple;}"
-    And I press "Create"
+    And I submit
   Then I should see "Skin was successfully created"
     And I should see "#workskin p"
   When I go to the new work page
@@ -417,3 +273,16 @@ Feature: creating and editing skins
   When I create a skin to change the accent color
   Then I should see a different accent color on the dashboard and work meta
 
+  Scenario: Create a complex replacement skin
+  Given I have loaded site skins
+    And I am logged in as "skinner"
+    And I set up the skin "Complex"
+    And I select "replace archive skin entirely" from "skin_role"
+    And I check "add_site_parents"
+    And I submit
+  Then I should see a create confirmation message
+    Then show me the form
+    And I should see "Archive 2.0"
+  When I check "add_site_parents"
+    And I submit
+  Then I should see errors

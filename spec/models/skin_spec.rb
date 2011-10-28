@@ -110,8 +110,72 @@ describe Skin do
       end
     end
 
-    it "Skin titles should be unique"
-    it "Public skins should require a preview image"
+    it "should have a unique title" do
+      @skin.save.should be_true
+      skin2 = Skin.new(:title => "Test Skin")
+      skin2.save.should_not be_true
+      skin2.errors[:title].should_not be_empty
+    end
+      
+    it "should require a preview image if public" do
+      @skin.css = "body {background: #fff;}"
+      @skin.public = true
+      @skin.save.should_not be_true
+      @skin.errors[:base].should_not be_empty
+      @skin.errors[:base].join(' ').match(/upload a screencap/).should be_true
+    end
+    
+    it "should only allow valid media types" do
+      @skin.media = ["foobar"]
+      @skin.save.should_not be_true
+      @skin.errors[:base].should_not be_empty
+      @skin.media = %w(screen print)
+      @skin.save.should be_true
+      @skin.errors[:base].should be_empty
+    end
+      
+    it "should only allow valid roles" do
+      @skin.role = "foobar"
+      @skin.save.should_not be_true
+      @skin.errors[:role].should_not be_empty
+      @skin.role = "override"
+      @skin.save.should be_true
+      @skin.errors[:role].should be_empty
+    end
+      
+    it "should only allow valid ie-only conditions" do
+      @skin.ie_condition = "foobar"
+      @skin.save.should_not be_true
+      @skin.errors[:ie_condition].should_not be_empty
+      @skin.ie_condition = "IE8_or_lower"
+      @skin.save.should be_true
+      @skin.errors[:ie_condition].should be_empty
+    end    
+  end
+    
+    
+  describe "use" do
+    before(:each) do
+      Skin.load_site_css
+      @css = "body {background: purple;}"
+      @skin = Skin.new(:title => "Test Skin", :css => @css)
+      @skin.save
+      @style = @skin.get_style
+    end
+    
+    it "should have a valid style block" do
+      style_regex = Regexp.new('<style type="text/css" media="all">')
+      @style.match(style_regex).should be_true
+    end
+    
+    it "should include the css" do
+      @style.match(/background: purple;/).should be_true
+    end
+    
+    it "should include links to the default archive skin" do
+      @style.match(/<link rel="stylesheet" type="text\/css"/).should be_true
+    end
+    
   end
     
 end

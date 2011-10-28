@@ -15,7 +15,8 @@
   <fieldset>
     <legend><%= ts('Approval Queue') %></legend>
     <h3 class="heading"><%= ts('Approval Queue') %></h3>
-
+    
+    <div class="wrapper">
     <table id="unapproved" summary="">
       <caption></caption>
       <thead>
@@ -54,6 +55,7 @@
       <% end %>
     </tbody>
     </table>
+    </div>
   </fieldset>
 
   <p class="submit actions"><%= submit_tag "Update" %></p>

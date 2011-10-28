@@ -68,7 +68,6 @@ module Query
       sym = string.to_sym if string == "date"
       query[sym] = query[sym].gsub("&gt;", ">").gsub("&lt;", "<").gsub(/[,.]/, "") if query[sym]
     end
-    Rails.logger.info "Search for: #{query.to_s}"
     return query
   end
 

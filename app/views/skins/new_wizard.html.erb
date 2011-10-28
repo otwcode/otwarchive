@@ -8,9 +8,5 @@
 <h3 class="landmark heading">New Archive Skin Wizard</h3>
 
 <%= form_for @skin do |f| %>
-
-  <%= render :partial => 'wizard_form', :locals => {:f => f} %>
-
-  <%= f.submit ts('Create')  %>
-
+  <%= render 'wizard_form', :f => f %>
 <% end %>

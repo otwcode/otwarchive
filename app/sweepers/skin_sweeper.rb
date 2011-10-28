@@ -14,7 +14,10 @@ class SkinSweeper < ActionController::Caching::Sweeper
     if record.is_a?(WorkSkin)
       expire_fragment("#{record.id}-work-skin")
     elsif record.is_a?(Skin)
-      expire_fragment("#{record.id}-site-skin")
+      expire_fragment("#{record.id}-default-site-skin")
+      expire_fragment("#{record.id}-defaulttranslator-site-skin")
+      expire_fragment("#{record.id}-defaultadmin-site-skin")
+      expire_fragment("#{record.id}-defaulttranslatoradmin-site-skin")
     end      
   end
 
