@@ -53,7 +53,6 @@ class FeedbacksController < ApplicationController
    post_info << "<custom-1407><![CDATA[" + feedback.user_agent + "]]></custom-1407>" unless feedback.user_agent.blank?
    post_info << "<custom-1573><![CDATA[" + ArchiveConfig.REVISION.to_s + "]]></custom-1573>" unless ArchiveConfig.REVISION.blank?
    post_info << "</bug>"
-   Rails.logger.info "**** post_info: #{post_info}"
    return post_info
  end
 

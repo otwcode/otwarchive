@@ -1,16 +1,21 @@
+<% # load and cache site skin %>
 <% set_site_skin %>
 <% roles = Skin::DEFAULT_ROLES_TO_INCLUDE %>
+<% skin_cache_key = "default" %>
 <% if controller && (controller.controller_name == 'translations' || controller.controller_name == 'translation_notes') %>
   <% roles << "translator" %>
+  <% skin_cache_key += "translator" %>
 <% end %>
 <% if logged_in_as_admin? %>
   <% roles << "admin" %>
+  <% skin_cache_key += "admin" %>
 <% end %>
 <% if @site_skin %>
-  <% cache("#{@site_skin.id}-site-skin") do %>
+  <% cache("#{@site_skin.id}-#{skin_cache_key}-site-skin") do %>
     <%= @site_skin.get_style(roles) if @site_skin %>
   <% end %>
 <% end %>
+
 <!--sandbox for developers	-->
 <%= stylesheet_link_tag 'sandbox' %>
 

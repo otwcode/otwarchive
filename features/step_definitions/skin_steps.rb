@@ -24,12 +24,12 @@ end
 
 Given /^I create the skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
   Given "I set up the skin \"#{skin_name}\" with css \"#{css}\""
-  click_button("Create")
+  And %{I submit}
 end
 
 Given /^I create the skin "([^"]*)" with css$/ do |skin_name, css|
   Given "I set up the skin \"#{skin_name}\" with css \"#{css}\""
-  click_button("Create")
+  And %{I submit}
 end
 
 Given /^I create the skin "([^"]*)"$/ do |skin_name|
@@ -46,7 +46,7 @@ Given /^the unapproved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name,
   Given %{I set up the skin "#{skin_name}" with css "#{css}"}
   attach_file("skin_icon", "test/fixtures/skin_test_preview.png")
   check("skin_public")
-  click_button("Create")
+  And %{I submit}
   Then %{I should see "Skin was successfully created"}
 end
 
@@ -58,7 +58,7 @@ Given /^I approve the skin "([^"]*)"$/ do |skin_name|
   Given "I am logged in as an admin"
   visit admin_skins_url
   check("make_official_#{skin_name.gsub(/\s/, '_')}")
-  click_button("Update")
+  And %{I submit}
 end
 
 Given /^I unapprove the skin "([^"]*)"$/ do |skin_name|
@@ -66,7 +66,11 @@ Given /^I unapprove the skin "([^"]*)"$/ do |skin_name|
   visit admin_skins_url
   Given "I follow \"Approved Skins\""
   check("make_unofficial_#{skin_name.gsub(/\s/, '_')}")
-  click_button("Update")
+  And %{I submit}
+end
+
+Given /^I have loaded site skins$/ do
+  Skin.load_site_css
 end
 
 Given /^the approved public skin "([^"]*)" with css "([^"]*)"$/ do |skin_name, css|
@@ -84,7 +88,7 @@ Given /^"([^"]*)" is using the approved public skin "([^"]*)" with css "([^"]*)"
   Given "I am logged in as \"#{login}\""
   Given "I am on #{login}'s preferences page"
   select("#{skin_name}", :from => "preference_skin_id")
-  click_button("Update")
+  And %{I submit}
 end
 
 Given /^"([^"]*)" is using the approved public skin "([^"]*)"$/ do |login, skin_name|
@@ -97,7 +101,7 @@ When /^I change my skin to "([^\"]*)"$/ do |skin_name|
   When "I am on my user page"
     And %{I follow "Preferences"}
     And %{I select "#{skin_name}" from "preference_skin_id"}
-    And %{I press "Update"}
+    And %{I submit}
   Then %{I should see "Your preferences were successfully updated."}
 end
 
@@ -106,7 +110,7 @@ When /^I create a skin to change the header color$/ do
   When %{I follow "Use Wizard Instead?"}
     And %{I fill in "Title" with "Shiny"}
     And %{I fill in "Header color" with "blue"}
-    And %{I press "Create"}
+    And %{I submit}
   Then %{I should see "Skin was successfully created"}
   When %{I press "Use"}
 end
@@ -116,7 +120,7 @@ When /^I create a skin to change the accent color$/ do
   When %{I follow "Use Wizard Instead?"}
     And %{I fill in "Title" with "Shiny"}
     And %{I fill in "Accent color" with "blue"}
-    And %{I press "Create"}
+    And %{I submit}
   Then %{I should see "Skin was successfully created"}
   When %{I press "Use"}
 end
@@ -124,9 +128,9 @@ end
 ### THEN
 
 Then /^I should see a different header color$/ do
-  Then %{I should see "#header {background-image: none; background-color: blue;}" within "style"}
+  Then %{I should see "#header, #header ul.main, #footer {background: blue; border-color: blue; box-shadow:none;}" within "style"}
 end
 
 Then /^I should see a different accent color on the dashboard and work meta$/ do
-  Then %{I should see "#dashboard ul, #main dl.meta {background-color: blue;}" within "style"}
+  Then %{I should see "#header .icon, #dashboard ul, #main dl.meta {background: blue; border-color:blue;}" within "style"}
 end

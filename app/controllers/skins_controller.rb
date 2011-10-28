@@ -43,7 +43,8 @@ class SkinsController < ApplicationController
         return true
       end
       params[:skin][:skin_parents_attributes] ||= HashWithIndifferentAccess.new
-      last_position = params[:skin][:skin_parents_attributes].keys.map{|k| k.to_i}.max rescue 0 || 0      
+      last_position = params[:skin][:skin_parents_attributes].keys.map{|k| k.to_i}.max rescue 0      
+      last_position ||= 0
       Skin.get_current_site_skin.get_all_parents.each do |parent_skin|                
         last_position += 1
         new_skin_parent_hash = HashWithIndifferentAccess.new({:position => last_position, :parent_skin_id => parent_skin.id})

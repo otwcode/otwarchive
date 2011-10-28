@@ -18,6 +18,7 @@ class TagSetSweeper < ActionController::Caching::Sweeper
     # expire the tag_set show page and fragments
     expire_fragment("tag_set_show_#{tag_set.id}")
     TagSet::TAG_TYPES.each {|type| expire_fragment("tag_set_show_#{tag_set.id}_#{type}")}
+    
   end
 
 end

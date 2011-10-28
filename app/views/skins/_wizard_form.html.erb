@@ -42,6 +42,9 @@
     
     <dt><%= f.label :accent_color, ts('Accent color') %></dt>
     <dd><%= f.text_field :accent_color %></dd>
-    </dl>
-<%= hidden_field_tag "wizard", true %>
+  </dl>
+
+    <%= hidden_field_tag "wizard", true %>
 </fieldset>
+
+<%= submit_fieldset(f) %>
