@@ -44,8 +44,6 @@ li.blurb, .blurb .blurb
         { display:none }
 .blurb ul.required-tags li span
         { background-repeat:no-repeat; height: 25px; width: 25px; display:block}
-.blurb ul.recent-bookmarks li 
-        { display: block }
 .blurb .category,.blurb .iswip,.blurb .external-work
         { position: absolute; left: 28px }
 .blurb .category

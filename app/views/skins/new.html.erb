@@ -8,9 +8,5 @@
 <h3 class="landmark heading"><%= ts("New Archive Skin Form") %></h3>
 
 <%= form_for @skin, :html => {:multipart => true} do |f| %>
-
   <%= render 'form', :f => f %>
-
-  <p class="submit actions"><%= f.submit ts('Create')  %></p>
-
 <% end %>

@@ -88,7 +88,7 @@ class Skin < ActiveRecord::Base
     return false
   end
 
-  attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size, :description_sanitizer_version
+  attr_protected :official, :rejected, :admin_note, :icon_file_name, :icon_content_type, :icon_size, :description_sanitizer_version, :cached, :featured, :in_chooser
 
   validates_uniqueness_of :title, :message => ts('must be unique')
 
@@ -141,6 +141,14 @@ class Skin < ActiveRecord::Base
   
   def self.cached
     where(:cached => true)
+  end
+  
+  def self.in_chooser
+    where(:in_chooser => true)
+  end
+  
+  def self.featured
+    where(:featured => true)
   end
   
   def self.approved_or_owned_by(user=User.current_user)
@@ -285,7 +293,7 @@ class Skin < ActiveRecord::Base
   def get_wizard_settings
     style = ""
     if self.margin
-      style += "#workskin {margin: auto #{self.margin}%; padding: 0.5em #{self.margin}% 0;}"
+      style += "#workskin {margin: auto #{self.margin}%; padding: 0.5em #{self.margin}% 0;}\n"
     end
   
     if self.background_color || self.foreground_color || self.font || self.base_em
@@ -293,20 +301,20 @@ class Skin < ActiveRecord::Base
         #{self.background_color ? "background: #{self.background_color};" : ''}
         #{self.foreground_color ? "color: #{self.foreground_color};" : ''}        
         font: #{(self.base_em ? self.base_em : "100")}%/1.125 #{(self.font ? self.font : '')};
-      }"
+      }\n"
     end
     
     if self.paragraph_margin
-      style += ".userstuff p {margin-bottom: #{self.paragraph_margin}em;}"
+      style += ".userstuff p {margin-bottom: #{self.paragraph_margin}em;}\n"
     end
 
     if self.headercolor
-      style += "#header .main a, #header .main .current, #header .main input, #header .search input { border-color:transparent }"
-      style += "#header, #header ul.main, #footer {background: #{self.headercolor}; border-color: #{self.headercolor}; box-shadow:none; }"
+      style += "#header .main a, #header .main .current, #header .main input, #header .search input {border-color:transparent;}\n"
+      style += "#header, #header ul.main, #footer {background: #{self.headercolor}; border-color: #{self.headercolor}; box-shadow:none;}\n"
     end
 
     if self.accent_color
-      style += "#header .icon, #dashboard ul, #main dl.meta {background: #{self.accent_color}; border-color:#{self.accent_color}}"
+      style += "#header .icon, #dashboard ul, #main dl.meta {background: #{self.accent_color}; border-color:#{self.accent_color};}\n"
     end
     
     style
@@ -359,23 +367,6 @@ class Skin < ActiveRecord::Base
     string.scan(/[^\d]+|[\d]+/).collect { |f| f.match(/\d+(\.\d+)?/) ? f.to_f : f }
   end  
 
-  # get the directory name for the skin file
-  def skin_dirname
-    "skin_#{self.id}_#{self.title.gsub(/[^\w]/, '_')}/".downcase
-  end
-    
-  def self.skins_dir
-    Rails.public_path + SKIN_PATH
-  end
-  
-  def self.skin_dir_entries(dir, regex)
-    Dir.entries(dir).select {|f| f.match(regex)}.sort_by {|f| Skin.naturalized(f.to_s)}
-  end
-  
-  def self.site_skins_dir
-    Rails.public_path + SITE_SKIN_PATH
-  end
-  
   def self.load_site_css
     Skin.skin_dir_entries(Skin.site_skins_dir, /^\d+\.\d+$/).each do |version|
       version_dir = Skin.site_skins_dir + version + '/'
@@ -420,6 +411,7 @@ class Skin < ActiveRecord::Base
         # set up the parent relationship of all the skins in this version
         top_skin = Skin.find_by_title_and_official("Archive #{version}", true)
         if top_skin
+          top_skin.clear_cache! if top_skin.cached? 
           top_skin.skin_parents.delete_all
         else
           top_skin = Skin.new(:title => "Archive #{version}", :css => "", :description => "Version #{version} of the default Archive style.", 
@@ -439,6 +431,23 @@ class Skin < ActiveRecord::Base
     end
   end
 
+  # get the directory name for the skin file
+  def skin_dirname
+    "skin_#{self.id}_#{self.title.gsub(/[^\w]/, '_')}/".downcase
+  end
+    
+  def self.skins_dir
+    Rails.public_path + SKIN_PATH
+  end
+  
+  def self.skin_dir_entries(dir, regex)
+    Dir.entries(dir).select {|f| f.match(regex)}.sort_by {|f| Skin.naturalized(f.to_s)}
+  end
+  
+  def self.site_skins_dir
+    Rails.public_path + SITE_SKIN_PATH
+  end
+  
   # Get the most recent version and find the topmost skin
   def self.get_current_version
     Skin.skin_dir_entries(Skin.site_skins_dir, /^\d+\.\d+$/).last

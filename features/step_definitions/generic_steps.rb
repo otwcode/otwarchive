@@ -23,6 +23,10 @@ Then /^show me the errors$/ do
   puts "\n" + find("div.error").node.inner_html
 end
 
+Then /^I should see errors/ do
+  assert find("div.error").node
+end
+
 Then /^show me the form$/ do
   Then %{show me the 1st form}
 end

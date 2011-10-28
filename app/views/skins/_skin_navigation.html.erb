@@ -14,6 +14,10 @@
       </li>
       <li><%= span_if_current ts("Preview"), preview_skin_path(skin) %></li>
     <% end %>
+    
+    <% if skin.cached? %>
+      <li><%= link_to ts("Set For Session"), set_skin_path(skin) %></li>
+    <% end %>
         
     <% if skin.editable? %>
       <li><%= span_if_current ts('Edit'), edit_skin_url(skin) %></li>
