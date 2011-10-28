@@ -12,7 +12,7 @@ module CommentsHelper
     else
       title = link_to(commentable.commentable_name, commentable)
     end
-    h(ts('Reading Comments on ')) + title
+    (ts('Reading Comments on ') + title).html_safe
   end
   
   def last_reply_by(comment)
@@ -21,7 +21,7 @@ module CommentsHelper
       if c.pseud
         link_to c.pseud.name, [c.pseud.user, c.pseud]
       else
-        h(c.name)
+        c.name
       end
     end    
   end
@@ -48,7 +48,7 @@ module CommentsHelper
   def get_commenter_pseud_or_name(comment)
     if comment.pseud_id
       if comment.pseud.nil?
-        'Account Deleted'
+        ts("Account Deleted")
       else
         link_to comment.pseud.byline, [comment.pseud.user, comment.pseud]
       end
@@ -113,44 +113,6 @@ module CommentsHelper
       :remote => true)
   end
   
-  # return the appropriate link to add or cancel adding a new comment (note: ONLY in _commentable.html.erb!)
-  def add_cancel_comment_link(commentable)  
-    if params[:add_comment]
-      cancel_comment_link(commentable)
-    else
-      add_comment_link(commentable)
-    end     
-  end
-  
-  # return html link to add new comment on a commentable object
-  def add_comment_link(commentable)
-    commentable_id = commentable.is_a?(Tag) ? 
-                        :tag_id : 
-                        "#{commentable.class.to_s.underscore}_id".to_sym
-    commentable_value = commentable.is_a?(Tag) ? 
-                          commentable.name : 
-                          commentable.id
-    link_to(
-      "Comment",
-      url_for(:controller => :comments, :action => :add_comment, commentable_id => commentable_value),
-      :remote => true) 
-  end
-      
-  def cancel_comment_link(commentable)
-    commentable_id = commentable.is_a?(Tag) ? 
-                        :tag_id : 
-                        "#{commentable.class.to_s.underscore}_id".to_sym
-    commentable_value = commentable.is_a?(Tag) ? 
-                          commentable.name : 
-                          commentable.id
-    link_to(
-      "Cancel Comment",
-      url_for(:controller => :comments, 
-              :action => :cancel_comment, 
-              commentable_id => commentable_value),
-      :remote => true)
-  end
-      
   #### HELPERS FOR REPLYING TO COMMENTS #####
 
   def add_cancel_comment_reply_link(comment)
@@ -160,17 +122,18 @@ module CommentsHelper
       add_comment_reply_link(comment)
     end     
   end
-  
+
+  # TODO: maybe use chapter instead of work?
   # return link to add new reply to a comment
   def add_comment_reply_link(comment)
     commentable_id = comment.ultimate_parent.is_a?(Tag) ? 
                         :tag_id : 
-                        "#{comment.ultimate_parent.class.to_s.underscore}_id".to_sym
+                        comment.ultimate_parent.class.name.foreign_key.to_sym # :work_id, :admin_post_id etc.
     commentable_value = comment.ultimate_parent.is_a?(Tag) ? 
                           comment.ultimate_parent.name : 
                           comment.ultimate_parent.id
     link_to( 
-      "Reply", 
+      ts("Reply"), 
       url_for(:controller => :comments, 
               :action => :add_comment_reply, 
               :id => comment.id, 
@@ -183,12 +146,12 @@ module CommentsHelper
   def cancel_comment_reply_link(comment)
     commentable_id = comment.ultimate_parent.is_a?(Tag) ? 
                         :tag_id : 
-                        "#{comment.ultimate_parent.class.to_s.underscore}_id".to_sym
+                        comment.ultimate_parent.class.name.foreign_key.to_sym
     commentable_value = comment.ultimate_parent.is_a?(Tag) ? 
                           comment.ultimate_parent.name : 
                           comment.ultimate_parent.id
     link_to( 
-      "Cancel", 
+      ts("Cancel"), 
       url_for(:controller => :comments, 
               :action => :cancel_comment_reply, 
               :id => comment.id, 
@@ -211,7 +174,7 @@ module CommentsHelper
                               commentable.ultimate_parent.name : 
                               commentable.ultimate_parent.id
         link_to( 
-          "Cancel", 
+          ts("Cancel"), 
           url_for(:controller => :comments, 
                   :action => :cancel_comment_reply, 
                   :id => commentable.id, 
@@ -227,7 +190,7 @@ module CommentsHelper
                               commentable.name : 
                               commentable.id        
         link_to(
-          "Cancel", 
+          ts("Cancel"), 
           url_for(:controller => :comments, 
                   :action => :cancel_comment, 
                   commentable_id => commentable_value),
@@ -236,7 +199,7 @@ module CommentsHelper
     else
       # canceling an edit
       link_to(
-        "Cancel", 
+        ts("Cancel"), 
         url_for(:controller => :comments, 
                 :action => :cancel_comment_edit, 
                 :id => (comment.id), 
@@ -247,7 +210,7 @@ module CommentsHelper
     
   # return html link to edit comment
   def edit_comment_link(comment)
-    link_to("Edit", 
+    link_to(ts("Edit"), 
             url_for(:controller => :comments, 
                     :action => :edit, 
                     :id => comment, 
@@ -266,7 +229,7 @@ module CommentsHelper
   # return html link to delete comments
   def delete_comment_link(comment)
     link_to( 
-      "Delete", 
+      ts("Delete"), 
       url_for(:controller => :comments, 
               :action => :delete_comment, 
               :id => comment, 
@@ -277,7 +240,7 @@ module CommentsHelper
   # return link to cancel new reply to a comment
   def cancel_delete_comment_link(comment)
     link_to( 
-      "Cancel", 
+      ts("Cancel"), 
       url_for(:controller => :comments, 
               :action => :cancel_comment_delete, 
               :id => comment, 
@@ -288,9 +251,9 @@ module CommentsHelper
   # return html link to mark/unmark comment as spam
   def tag_comment_as_spam_link(comment)    
     if comment.approved
-      link_to('Spam', reject_comment_path(comment), :method => :put)
+      link_to(ts("Spam"), reject_comment_path(comment), :method => :put)
     else
-      link_to('Not Spam', approve_comment_path(comment), :method => :put)
+      link_to(ts("Not Spam"), approve_comment_path(comment), :method => :put)
     end
   end
 

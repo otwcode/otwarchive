@@ -17,11 +17,11 @@ class Comment < ActiveRecord::Base
   validates_presence_of :content
   validates_length_of :content,
     :maximum => ArchiveConfig.COMMENT_MAX,
-    :too_long => t('invalid_content_length', :default => "must be less than %{count} letters long.", :count => ArchiveConfig.COMMENT_MAX)
+    :too_long => ts("must be less than %{count} characters long.", :count => ArchiveConfig.COMMENT_MAX)
 
   validate :check_for_spam
   def check_for_spam
-    errors.add(:base, t('invalid_spam', :default => "This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
+    errors.add(:base, ts("This comment looks like spam to our system, sorry! Please try again, or create an account to comment.")) unless check_for_spam?
   end
 
   scope :recent, lambda { |*args| {:conditions => ["created_at > ?", (args.first || 1.week.ago.to_date)]} }
