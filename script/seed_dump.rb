@@ -2,11 +2,11 @@
 
 # usage:
 =begin
-RAILS_ENV=production rake db:drop
-RAILS_ENV=production rake db:create
-RAILS_ENV=production rails dbconsole -p < /backup/latest.dump
-RAILS_ENV=production rake db:migrate
-RAILS_ENV=production rake After
+#RAILS_ENV=production rake db:drop
+#RAILS_ENV=production rake db:create
+#RAILS_ENV=production rails dbconsole -p < /backup/latest.dump
+#RAILS_ENV=production rake db:migrate
+#RAILS_ENV=production rake After
 rm -f db/seed/*
 RAILS_ENV=production rails runner script/seed_dump.rb
 =end
@@ -18,17 +18,19 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 SEEDS = [
           "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling",
           "Cesy", "cesytest", "Celandine", "Chandri", "eel",
-          "elz", "erda", "Enigel", "Hope", "Jaetion", "justira", "jetta_e_rus",
-          "lim", "Lisztful", "melange", "mumble", "Rebecca", "RKlyne", "Rustler",
-          "Sidra", "staranise", "Stowaway", "testy", "Tel", "tomatopudding",
-          "xparrot", "zelempa", "zoemathemata", "Zooey_Glass", "zlabya",
+          "elz", "erda", "Enigel", "Hope", "Jaetion", "jennyst", "justira", 
+          "jetta_e_rus", "lim", "Lisztful", "melange", "mumble", "Rebecca", 
+          "RKlyne", "Rustler", "Sidra", "staranise", "Stowaway", "testy", 
+          "Tel", "tomatopudding", "velocitygrass", "xparrot", "zelempa", 
+          "zoemathemata", "Zooey_Glass", "zlabya",
 ]
 
 # seeds who want their email address preserved for testing
 EMAIL = [ "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
           "admin-kielix", "admin-shalott", "admin-sidra",
           "astolat", "aworldinside", "bingeling", "cesy", "cesytest", "elz",
-          "Enigel", "mumble", "Sidra", "testy", "xparrot", "Zooey_Glass" ]
+          "Enigel", "mumble", "Sidra", "testy", "velocitygrass", "xparrot", 
+          "Zooey_Glass" ]
 
 # a bunch of bigger collections (>250 works)
 # probably would be scooped up anyway, but just in case
@@ -378,6 +380,10 @@ def collection_associations(items)
     if c
       write_model(c)
       write_model(c.request_restriction)
+      write_model(c.prompt_restriction) if c.prompt_restriction
+      if collection.challenge_type == "GiftExchange"
+        write_model(c.offer_restriction) if c.offer_restriction
+      end
     end
 
   end

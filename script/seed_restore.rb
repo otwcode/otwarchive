@@ -2,7 +2,10 @@
 
 # usage:
 =begin
-RAILS_ENV=production rake db:schema:dump
+#RAILS_ENV=production rake db:schema:dump
+#rake db:schema:load
+rake db:drop
+rake db:create
 rake db:schema:load
 rails runner script/seed_restore.rb
 rake Tag:reset_filters
