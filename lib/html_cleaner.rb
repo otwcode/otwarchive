@@ -252,7 +252,7 @@ module HtmlCleaner
       out_html << open_tag(node)
 
     else
-      text = node.text
+      text = node.to_s
 
       # Remove leading/trailing linebreaks if we don't want to add
       # additional linebreaks after the previous tag/before the next

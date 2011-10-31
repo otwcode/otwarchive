@@ -385,7 +385,7 @@ describe HtmlCleaner do
       end
     end
 
-    it "should not remove empty p tags" do
+    it "should not remove user's empty p tags" do
       result = add_paragraphs_to_text("<p>A</p> <p></p> <p>B</p>")
       doc = Nokogiri::XML.fragment(result)
       doc.xpath("./p[1]").children.to_s.strip.should == "A" 
@@ -393,6 +393,14 @@ describe HtmlCleaner do
       doc.xpath("./p[3]").children.to_s.strip.should == "B" 
     end
 
-  end  
+    %w(&gt; &lt; &amp;).each do |entity|
+      it "should handle #{entity}" do
+        result = add_paragraphs_to_text("#{entity}")
+        p result
+        doc = Nokogiri::XML.fragment(result)
+        doc.xpath("./p[1]").children.to_s.strip.should == "#{entity}" 
+      end
+    end
 
+  end  
 end
