@@ -142,16 +142,6 @@ Feature: Prompt Meme Challenge
   When I follow "Edit prompt"
   Then I should see single prompt editing
   And I should see "Edit whole signup"
-  
-  Scenario: Edit individual prompt via signup edit
-  
-  Given I have Battle 12 prompt meme fully set up
-    And I am logged in as "myname1"
-  When I sign up for Battle 12 with combination A
-  When I edit my signup for "Battle 12"
-  When I follow "Edit prompt"
-  Then I should not see "Request 2"
-  And I should see "Edit whole signup"
  
  Scenario: Add one new prompt to existing signup
   
@@ -159,7 +149,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
     And I add a new prompt to my signup
-  Then I should see "Prompt was successfully updated"
+  Then I should see "Prompt was successfully added"
     And I should see "Request 3"
     And I should see "My extra tag"
   
