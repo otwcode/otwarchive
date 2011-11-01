@@ -197,6 +197,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination E
   When I view prompts for "Battle 12"
+  # TODO: We need to check the display for fandomless memes
   Then I should not see "Fandom"
   
   Scenario: Claim a prompt and view claims on main page and user page
@@ -256,7 +257,7 @@ Feature: Prompt Meme Challenge
     And I should see "Signup for myname1"
   When I edit my signup for "Battle 12"
   Then I should see "othername"
-  When I select "othername" from "Name:"
+  When I select "othername" from "challenge_signup_pseud_id"
     # two forms in this page, must specify which button to press
     And I press "Update" 
   Then I should see "Signup was successfully updated"
@@ -294,14 +295,14 @@ Feature: Prompt Meme Challenge
   Then I should see "You can't edit someone else's signup"
   
   Scenario: Mod deletes a signup that doesn't fit the challenge rules
-  
+
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I am logged in as "mod1"
-  When I delete the signup by "myname1"
-  Then I should see "Challenge signup was deleted."
-  #  And "myname1" should be emailed
+  When I start to delete the signup by "myname1"
+  Then I should see "myname1"
+    And I should not see a link "myname1"
   
   Scenario: Mod deletes a prompt that doesn't fit the challenge rules
   
@@ -321,15 +322,24 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
   When I am logged in as "mod1"
-  When I edit the prompt by "myname1"
+  When I edit the first prompt
   Then I should not see "Submit a Prompt for Battle 12"
-    And I should see "You can't edit someone else's signup!"
+    And I should see "You can't edit someone else's prompt"
+
+  Scenario: User can't delete prompt if they don't have enough
+
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination C
+  When I delete the prompt by "myname1"
+  Then I should see "That would make your signup invalid, sorry! Please edit instead."
   
   Scenario: User deletes one prompt
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
+    And I add a new prompt to my signup for a prompt meme
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted"
   
