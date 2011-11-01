@@ -294,7 +294,7 @@ Feature: Prompt Meme Challenge
   When I edit the signup by "myname1"
   Then I should see "You can't edit someone else's signup"
   
-  Scenario: Mod deletes a signup that doesn't fit the challenge rules
+  Scenario: Mod can't delete whole signups
 
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -805,15 +805,16 @@ Feature: Prompt Meme Challenge
   Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
     And I should see "Battle 12"
 
-  Scenario: As a co-moderator I can delete whole signups
+  Scenario: As a co-moderator I can't delete whole signups
 
   Given I have Battle 12 prompt meme fully set up
   Given I have added a co-moderator "mod2" to collection "Battle 12"
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I am logged in as "mod2"
-  When I delete the signup by "myname1"
-  Then I should see "Challenge signup was deleted."
+  When I start to delete the signup by "myname1"
+  Then I should see "myname1"
+    And I should not see a link "myname1"
   
   Scenario: As a co-moderator I can delete prompts
 
@@ -825,34 +826,29 @@ Feature: Prompt Meme Challenge
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted."
   
-  Scenario: When maintainer deletes signup, its prompts disappear from the collection
+  Scenario: When user deletes signup, its prompts disappear from the collection
 
   Given I have Battle 12 prompt meme fully set up
-  Given I have added a co-moderator "mod2" to collection "Battle 12"
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I am logged in as "mod2"
-  When I delete the signup by "myname1"
+  When I delete my signup for "Battle 12"
   When I view prompts for "Battle 12"
   Then I should not see "myname1"
 
-  Scenario: When maintainer deletes signup, as a prompter the signup disappears from my dashboard
+  Scenario: When user deletes signup, as a prompter the signup disappears from my dashboard
   
   Given I have Battle 12 prompt meme fully set up
-  Given I have added a co-moderator "mod2" to collection "Battle 12"
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
-  When I am logged in as "mod2"
-  When I delete the signup by "myname1"
-  When I am logged in as "myname1"
+  When I delete my signup for "Battle 12"
   When I go to my signups page
   Then I should see "Signups (0)"
     And I should not see "Battle 12"
 
-  Scenario: When maintainer deletes signup, The story stays part of the collection, and no longer has the "In response to a prompt by:" line
+  Scenario: When user deletes signup, The story stays part of the collection, and no longer has the "In response to a prompt by:" line
   # TODO
 
-  Scenario: When maintainer deletes signup, As the story author I can edit the story normally
+  Scenario: When user deletes signup, As the story author I can edit the story normally
   # TODO
   
   Scenario: Delete a challenge, user can still access my signups page
