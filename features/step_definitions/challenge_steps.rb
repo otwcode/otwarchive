@@ -719,7 +719,7 @@ Then /^I should see correct signups for Battle 12$/ do
   Then %{I should see "myname4"}
     And %{I should see "myname3"}
     And %{I should not see "myname2"}
-    And %{I should see "(Anonymous)"}
+    And %{I should see "by Anonymous"}
     And %{I should see "myname1"}
     And %{I should see "Stargate Atlantis"}
     And %{I should see "Stargate SG-1"}
