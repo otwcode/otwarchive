@@ -14,13 +14,13 @@ notice that CSS3 declarations sit on their own line and always come last*/
         { margin-left:120px; background:#ddd; border:2px solid #fff; padding:0.375em;
           box-shadow:inset 1px 0 5px #555 }
 #header ul.main 
-        { float:none; margin: auto; background:#900 url(/images/skins/textures/tile_ao3.png); border-bottom:2px solid #700; padding:0.25em 120px;
+        { float:none; margin: auto; background:#900 url(/images/skins/textures/tiles/red-ao3.png); border-bottom:2px solid #700; padding:0.25em 120px;
           box-shadow:inset 0 -5px 10px rgba(0,0,0,0.5)}
 #header .main a, #header .main .current, #header .main input, #header .search input
         { border-color:#a00; border-bottom-color:#400 }
 #header .search input[type="text"]
         { border-color:#300}
-#header #greeting img, #header h1 a, #header fieldset, #header form, #header p
+#header h1 a, #header fieldset, #header form, #header p
         { background:none; color:#900; font-size:100%; border:0; padding:0; margin: 0;
           box-shadow:none }
 #greeting .icon 

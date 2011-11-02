@@ -16,8 +16,7 @@
 
 <p><%= ts("You may also want to check out our") %> <%= link_to ts("Known Issues"), known_issues_path %>.</p>
 
-<div class="post feedback"> <!--BACK END, ideally this would be a class of form-->
-<%= form_for(@feedback) do |f| %>
+<%= form_for(@feedback, :html => {:class => "post feedback"}) do |f| %>
   <fieldset>
   <legend><%= ts('Describe Your Feedback') %></legend>
   <dl>
@@ -56,5 +55,4 @@
     <p class="submit actions"><%= f.submit ts("Send feedback") %></p>
   </fieldset>
 <% end %>
-</div>
 </div>

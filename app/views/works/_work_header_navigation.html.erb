@@ -50,6 +50,7 @@
   <% if current_user.is_a?(User) %>
     <% @bookmark ||= bookmark_if_exists(@work) %>
     <li><%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
+    <li><%= link_to ts("Cancel Bookmark"), "#", :class => "bookmark_form_placement_close" %></li>
 
     <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
       <li><%= marktoread_link(@work) %></li>

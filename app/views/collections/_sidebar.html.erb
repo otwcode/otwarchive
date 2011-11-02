@@ -1,5 +1,4 @@
 <div id="dashboard" role="navigation region">
-<!--BACK END FRONT END this needs chunking up along pattern of user dash-->
   <h3 class="landmark heading">Dashboard</h3>
   <ul class="navigation actions">
     <li><%= span_if_current ts("Dashboard"), @collection %></li>
@@ -43,7 +42,6 @@
     <li><%= span_if_current ts("Tags"), collection_tags_path(@collection) %></li>
   </ul>  
 
-  <!--BACK END, this heading  and ul need to be logicked out-->
   <% if @collection.user_is_maintainer?(current_user)%>
     <h4 class="landmark heading">Choices</h4>
     <ul class="navigation actions">

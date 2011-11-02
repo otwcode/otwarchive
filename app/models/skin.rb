@@ -2,9 +2,6 @@ require 'fileutils'
 include HtmlCleaner
 include CssCleaner
 
-# BACK END, instead of this hardcoded default image can we have
-# <div class="icon"></div>
-# obviously no alt text is necessary in this case
 class Skin < ActiveRecord::Base
   
   TYPE_OPTIONS = [

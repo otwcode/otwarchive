@@ -9,9 +9,7 @@ class PasswordsController < ApplicationController
   def create
     @user = User.find_by_login(params[:login]) || User.find_by_email(params[:login])
     if @user.nil?
-      flash[:login] = '<br /><br /><div class="flash notice">'.html_safe +
-                      t('try_again', :default => "We couldn't find an account with that email address or username. Please try again?") +
-                      "</div>".html_safe
+      flash[:notice] = ts("We couldn't find an account with that email address or username. Please try again?")
       render :action => "new"
     else
       @user.reset_user_password

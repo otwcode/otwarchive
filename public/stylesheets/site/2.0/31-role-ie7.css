@@ -1,11 +1,9 @@
 /* IE_CONDITION: IE7 */
 
 /*http://media.transformativeworks.org/training/front_end_coding/debugging-ie.html*/
-
-/*ISSUE 1384 content warning required-tag positioning */
-.blurb .required-tags li .warnings
-        {  margin:28px 28px 0 -30px}
-        
+/*transparency*/
+ul#skiplinks, .landmark , .landmark a, .index .heading.landmark
+        { color:#f4effc}
 /*min-width*/
 .dashboard form.filters {min-width:8em}
 
