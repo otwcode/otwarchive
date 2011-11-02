@@ -50,7 +50,7 @@ class Sanitize
 
       # otherwise, only let through alphanumeric class names with a 
       # dash/underscore.
-      {:attr_whitelist => ['class']} if classval =~ /[a-zA-Z][\w\-]+/
+      {:attr_whitelist => ['class']} if classval =~ /^[a-zA-Z][\w\-]+$/
     end
 
     # taken directly from rgrove's docs

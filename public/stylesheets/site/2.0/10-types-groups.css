@@ -52,6 +52,6 @@ li.relationships
         { background:none; width:auto; min-width:0; display:inline; clear:none; float:none; margin:auto;}
 dl.stats{ text-align:right; background:none; box-shadow:none; }
 dl.stats dd 
-        { white-space:nowrap; border-right:10px solid transparent; padding:auto; }
+        { white-space:nowrap; padding-right:0.5em; }
 
 /*END== */

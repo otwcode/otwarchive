@@ -130,7 +130,7 @@ Feature: creating and editing skins
   When I go to admin's skins page  
     And I check "public skin"
     And I submit
-  Then I should see "The following skins were approved: public skin"
+  Then I should see "The following skins were updated: public skin"
   When I follow "Approved Skins"
   Then I should see "public skin" within "table#approved"
   
@@ -172,7 +172,7 @@ Feature: creating and editing skins
   Scenario: Admins should be able to unapprove public skins, which should also remove them from preferences
   Given "skinuser" is using the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And I unapprove the skin "public skin"
-  Then I should see "The following skins were unapproved and removed from preferences: public skin"
+  Then I should see "The following skins were updated: public skin"
     And I should see "public skin" within "table#unapproved"
   When I am logged in as "skinuser" 
     And I am on skinuser's preferences page
@@ -281,8 +281,7 @@ Feature: creating and editing skins
     And I check "add_site_parents"
     And I submit
   Then I should see a create confirmation message
-    Then show me the form
-    And I should see "Archive 2.0"
-  When I check "add_site_parents"
-    And I submit
-  Then I should see errors
+  # Then show me the form
+  # When I check "add_site_parents"
+  #   And I submit
+  # Then I should see errors

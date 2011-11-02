@@ -3,7 +3,7 @@
         { width: 12em; float: left; padding: 0 0.5625em }
 #dashboard a,#dashboard span
         { color: #111; display: block; white-space:normal; height:auto; line-height:2; padding: 0 0.5625em; border: none; background:transparent;
-          word-wrap:break-word }
+          word-wrap:break-word; box-shadow:none;}
 #dashboard a:hover 
         { background:#ddd; color:#900 }
 #dashboard ul.navigation, #dashboard ul 
@@ -11,11 +11,9 @@
 #dashboard .current 
         { background:#ccc }
 #dashboard .secondary
-        { left:2.5em; right:auto }
+        { right:auto }
 #dashboard.own 
         { background:transparent; border-top:15px solid #900; border-bottom:15px solid #900;
           border-radius:0.25em}
-#dashboard.own ul.navigation li span.current:before 
-        { content:"My " }
 
 /*END== */

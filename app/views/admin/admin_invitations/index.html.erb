@@ -10,8 +10,10 @@
 <%= form_tag :controller => 'admin/admin_invitations', :action => :create do %>
   <fieldset class="simple">
 	<h3 class="heading">Send to email</h3>
-    <p>Send an invite code to the following email address: <!--BACK END: please put this title on the text_field instead--><span title="invite by email"><%= text_field_tag "invitation[invitee_email]", @invitation.try(:invitee_email) || "" %></span>
-  <span class="submit actions"><%= submit_tag ts('Invite user')  %></span></p>
+  <p>Send an invite code to the following email address: 
+    <%= text_field_tag "invitation[invitee_email]", (@invitation.try(:invitee_email) || ""), :title => ts("invite by email") %>
+    <span class="submit actions"><%= submit_tag ts('Invite user')  %></span>
+  </p>
 </fieldset>
 <% end %>
   

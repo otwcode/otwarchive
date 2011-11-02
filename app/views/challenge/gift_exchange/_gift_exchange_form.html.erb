@@ -13,8 +13,7 @@
 
 <!--main content-->
 <h3 class="landmark heading">Gift Exchange Settings</h3>
-<div class="verbose create challenge"><!--BACK END, please put these classes on this form instead-->
-<%= form_for([@collection, @challenge], :url => collection_gift_exchange_path(@collection)) do |f| %>
+<%= form_for([@collection, @challenge], :url => collection_gift_exchange_path(@collection), :html => {:class => "verbose create challenge"}) do |f| %>
   <%= error_messages_for @challenge %>
   <%= render "challenge/shared/challenge_form_schedule", :f => f %>
 
@@ -54,4 +53,3 @@
 <!--subnav-->
 <%= render "challenge/shared/challenge_form_delete" %>
 <!--/subnav-->
-</div>

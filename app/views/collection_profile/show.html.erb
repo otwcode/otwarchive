@@ -1,10 +1,10 @@
 <div class="collection home profile">
   <%= render :partial => 'collections/header', :locals => {:collection => @collection} %>
 
-<!--BACK END please just 
-<h3 class="heading">About <span class="byline">#{@collection.name}</span></h3>
--->
-<h3 class="heading"><%= ts("About %{name}", :name => @collection.title +  ((@collection.title != @collection.name) ? " (#{@collection.name})" : "")) %></h3>
+  <h3 class="heading">
+    <%= ts("About") %>
+    <span class="byline"><%= @collection.title + ((@collection.title != @collection.name) ? " (#{@collection.name})" : "") %></span>
+  </h3>
   <div class="wrapper">
     <dl class="meta">
       <dt><%= ts("Active since: ") %>

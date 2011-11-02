@@ -1,10 +1,12 @@
+<!--REVIEW: trying out articles on these fieldsets to see if that's a better chunker, but may revert after testing. Have also tossed in landmark headings on top level groups-->
 <div id="work-form" class="verbose post work">
 <%= form_for(@work) do |f| %>
 
   <p class="required notice"><%= ts('* Required information') %></p>
   <%= render :partial => 'work_tags_form', :locals => {:include_blank => false} %>
-  <fieldset class="preface">
+  <fieldset class="preface" role="article">
     <legend><%= 'Preface' %></legend>
+    <h3 class="landmark heading"><%= 'Preface' %></h3>
     <dl>
       <dt class="title">
         <%= f.label :title, ts("Work Title *"), :class => "required" %>
@@ -37,8 +39,9 @@
     </dl>
   </fieldset>
  
-  <fieldset id="associations">
+  <fieldset id="associations" role="article">
     <legend><%= ts('Associations') %></legend>
+    <h3 class="landmark heading"><%= 'Associations' %></h3>
     <dl>
       <% if !(@assignments = ChallengeAssignment.by_offering_user(current_user).undefaulted.unstarted).empty? || !@work.challenge_assignments.empty? %>
         <!-- if the user has open assignments? -->
@@ -228,8 +231,8 @@
   </fieldset>
  
   <% if @chapters %>
-    <fieldset class="text">
-      <legend><%= 'Work' %></legend>
+    <fieldset role="article">
+      <legend><%= 'Skins' %></legend>
       <!--BACK END, halp, please move this out as it is clearly not work text-->
 		<dl class="skin">
 		<dt><%= f.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
@@ -239,9 +242,9 @@
     </fieldset>
   <% else %>
     <!-- Work text field (chapter_attributes_content) -->
-    <fieldset class="work text">
+    <fieldset class="work text" role="article">
       <legend class="required"><%= 'Work Text *' %></legend>
-  		<p id="toggleText">
+  		<p id="toggleText" role="menu">
         <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
         <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
         <span class="rtf-html-switch actions">
@@ -272,6 +275,7 @@
 
    		<% use_tinymce %>
       <div class="rtf-html-field">
+     	<h4 class="landmark heading"><%= 'Work Text *' %></h4>
      	<%= c.text_area :content, :value => @chapter.content, :class => "mce-editor observe_textlength", :id => "content" %>
 <%= live_validation_for_field('content',
           :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN,
