@@ -219,3 +219,13 @@ Then /^I should find a checkbox "([^\"]*)"$/ do |name|
   field = find_field(name)
   field['checked'].respond_to? :should
 end
+
+Then /^I should see a link "([^\"]*)"$/ do |name|
+  text = name + "</a>"
+  page.body.should =~ /#{text}/m
+end
+
+Then /^I should not see a link "([^\"]*)"$/ do |name|
+  text = name + "</a>"
+  page.body.should_not =~ /#{text}/m
+end

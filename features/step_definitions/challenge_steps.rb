@@ -494,6 +494,12 @@ When /^I add a new prompt to my signup$/ do
     And %{I press "Submit"}
 end
 
+When /^I add a new prompt to my signup for a prompt meme$/ do
+  When %{I follow "Add another prompt"}
+    And %{I check "Stargate Atlantis"}
+    And %{I press "Submit"}
+end
+
 When /^I edit the signup by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
@@ -615,17 +621,21 @@ When /^I delete my prompt in "([^\"]*)"$/ do |title|
   When %{I follow "Delete"}
 end
 
-When /^I delete the signup by "([^\"]*)"$/ do |participant|
+When /^I start to delete the signup by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
-  When %{I follow "#{participant}"}
-  When %{I follow "Delete"}
 end
 
 When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
   When %{I follow "Delete"}
+end
+
+When /^I edit the first prompt$/ do
+  visit collection_path(Collection.find_by_title("Battle 12"))
+  When %{I follow "Prompts ("}
+  When %{I follow "Edit prompt"}
 end
 
 When /^I edit the prompt by "([^\"]*)"$/ do |participant|
@@ -719,7 +729,7 @@ Then /^I should see correct signups for Battle 12$/ do
   Then %{I should see "myname4"}
     And %{I should see "myname3"}
     And %{I should not see "myname2"}
-    And %{I should see "(Anonymous)"}
+    And %{I should see "by Anonymous"}
     And %{I should see "myname1"}
     And %{I should see "Stargate Atlantis"}
     And %{I should see "Stargate SG-1"}
