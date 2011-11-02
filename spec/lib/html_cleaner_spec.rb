@@ -281,7 +281,6 @@ describe HtmlCleaner do
     end
   
     it "should convert double br tags into paragraph break" do
-      pending("Not sure if we need this; would be hard.")
       result = add_paragraphs_to_text("some<br/><br/>text")
       doc = Nokogiri::XML.fragment(result)
       doc.xpath("./p[1]").children.to_s.strip.should == "some" 
@@ -350,7 +349,6 @@ describe HtmlCleaner do
     end
 
     it "should close unclosed inline tags before double linebreak" do
-      pending("Not sure if we need this; would be hard.")
       html = """
       Here is an unclosed <em>em tag.
     
@@ -396,10 +394,19 @@ describe HtmlCleaner do
     %w(&gt; &lt; &amp;).each do |entity|
       it "should handle #{entity}" do
         result = add_paragraphs_to_text("#{entity}")
-        p result
         doc = Nokogiri::XML.fragment(result)
         doc.xpath("./p[1]").children.to_s.strip.should == "#{entity}" 
       end
+    end
+
+    it "should not add empty p tags when opening p tags are missing" do
+      result = add_paragraphs_to_text("A</p><p>B</p><p>C</p>")
+      puts result
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath("./p").size.should == 3
+      doc.xpath("./p[1]").children.to_s.strip.should == "A" 
+      doc.xpath("./p[2]").children.to_s.strip.should == "B" 
+      doc.xpath("./p[3]").children.to_s.strip.should == "C" 
     end
 
   end  
