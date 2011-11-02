@@ -6,14 +6,14 @@
     <%= f.label :password, ts("Password:") %>
     <%= f.password_field :password, :class => 'text', :size => nil %>
   </p>
-  <p class="footnote">
-    <span class="action">
+  <!--BACK END: could pos have this as label action like in tagsets?-->
+  <p><span class="action">
 	<%= f.check_box :remember_me %>
     <%= f.label 'remember_me', ts("Remember me") %>
-	</span>
-    <span class="navigation actions" role="navigation"><%= link_to ts("forgot password?"), new_password_path, :class => "navigation" %></span>
-  </p>
+  <span></p>
   <p class="submit actions">
     <%= f.submit ts("Log in") %>
   </p>
+    
+  <p class="footnote actions"><%= link_to ts("forgot password?"), new_password_path %></p>
 <% end %>

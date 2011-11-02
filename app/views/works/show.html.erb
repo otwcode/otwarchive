@@ -28,8 +28,7 @@
 <!--/descriptions-->
 
 <!--chapter content-->
-    <div id="chapters" class="userstuff" role="article">
-    <h3 class="landmark" id="work"><%= ts("Work Text:") %></h3>
+    <div id="chapters" role="article">
       <% if @chapters && @chapters.size > 1 %>
         <% for chapter in @chapters %>
           <% if chapter.posted? || is_author_of?(chapter) %>
@@ -37,6 +36,7 @@
           <% end %>
         <% end %>
       <% else %>
+        <h3 class="landmark heading" id="work"><%= ts("Work Text:") %></h3>
         <% cache("#{@chapter.cache_key}-show-content") do %>
           <%=raw sanitize_field(@chapter, :content) %>
         <% end %><!-- end cache -->

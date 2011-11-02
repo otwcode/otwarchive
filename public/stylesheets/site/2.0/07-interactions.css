@@ -80,7 +80,7 @@ p.character_counter
 form li ul.autocomplete li.input
         { border:0}
 .autocomplete .dropdown ul li:hover, li.selected 
-        { background: url("/images/skins/textures/tile_ao3.png") top left #900; color: #fff }
+        { background: url("/images/skins/textures/tiles/red-ao3.png") top left #900; color: #fff }
 .required .autocomplete, .autocomplete .notice
         { color:#222 }
 .autocomplete .notice
@@ -124,7 +124,7 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 
 /*MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */
 div.dynamic
-        { position:absolute; z-index: 500;}
+        { background:#f4effc; position:absolute; z-index: 500;}
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
 .toggled form dd, .dynamic form dd 
         { width:99%;}

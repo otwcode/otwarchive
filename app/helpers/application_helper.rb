@@ -20,27 +20,23 @@ module ApplicationHelper
     
     link_to_function(name, remote_function(options), html_options)
   end
-  
+
+  # This is used to make the current page we're on (determined by the path or by the specified condition) is a span with class "current" 
   def span_if_current(link_to_default_text, path, condition=nil)
     is_current = condition.nil? ? current_page?(path) : condition
     text = ts(link_to_default_text)
     is_current ? "<span class=\"current\">#{text}</span>".html_safe : link_to(text, path)
   end
   
-#BACK END, can we move this hardcoded image out and replace with
-#<a href="" title="subscribe to feed" class="rss"><span>Subscribe with RSS</span></a>
-
   def link_to_rss(link_to_feed)
-    link_to (ts("Subscribe with RSS ") + image_tag("/images/skins/iconsets/default/rss.png", :size => "14x14", :alt => "")).html_safe , link_to_feed, :class => "rss"
+    link_to content_tag(:span, ts("Subscribe with RSS")), link_to_feed, :title => "subscribe to feed", :class => "rss"
   end
   
-#BACK END, suggest 3 levels: 
-#1: default showing just the link to help
-#2: text: plain text with limited html and link to help
-#3 text: plain text and limited html, link to help, list of allowed html
-
-  def allowed_html_instructions(show_list = false)
-    h(ts("Plain text with limited html")) + 
+  #1: default shows just the link to help
+  #2: show_text = true: shows "plain text with limited html" and link to help
+  #3 show_list = true: plain text and limited html, link to help, list of allowed html
+  def allowed_html_instructions(show_list = false, show_text=true)
+    (show_text ? h(ts("Plain text with limited html")) : ''.html_safe) + 
     link_to_help("html-help") + (show_list ? 
     "<code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
       col, colgroup, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
@@ -199,13 +195,6 @@ module ApplicationHelper
       end
     }.join.html_safe
   end
-
-  # Gets an error for a given field if it exists. BACK END pls explain this to lim
-  def flash_field(fieldname)
-    if flash[fieldname]
-      content_tag(:span, h(flash[fieldname]), :class => "fielderror").html_safe
-    end
-  end
   
   # For setting the current locale
   def locales_menu    
@@ -263,13 +252,11 @@ module ApplicationHelper
     params.reject{|k,v| k == name}
   end
 
-  #BACK END note: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
+  # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max) 
-    generated_html = "<p class=\"character_counter\">".html_safe
-    generated_html += ("<span id=\"#{field_id}_counter\" data-maxlength=\"" + max.to_s + "\">" + max.to_s + "</span>").html_safe
-    generated_html += " ".html_safe + (ts('characters left'))
-    generated_html += "</p>".html_safe
-    return generated_html
+    max = max.to_s
+    span = content_tag(:span, max, :id => "#{field_id}_counter", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => max)
+    content_tag(:p, span + h(ts(' characters left')), :class => "character_counter")
   end
   
   # Sets up expand/contract/shuffle buttons for any list whose id is passed in

@@ -28,15 +28,15 @@
 <% if params[:show] && params[:show] !~ /suggested/ %>
   <h3 class="heading">Add new <%= params[:show] %></h3>
   <%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
-    <p title="add new">
+    <div title="add new">
       <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{params[:show].singularize}") %>
       <%= hidden_field_tag :show, params[:show] %>
       <%= hidden_field_tag :sort_column, params[:sort_column] %>
       <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
       <%= hidden_field_tag :page, params[:page] %>
       <%= hidden_field_tag :status, params[:status] %>
-      <%= f.submit 'Wrangle' %>
-    </p>
+      <span class="submit actions"><%= f.submit 'Wrangle' %></span>
+    </div>
   <% end %>
 <% end %>
 

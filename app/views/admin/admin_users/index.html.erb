@@ -5,8 +5,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<!--BACK END, give this form the class  and role "search?"-->
-<%= form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get do %>
+<%= form_tag url_for(:controller => "admin/admin_users", :action => "index"), :method => :get, :class => "search", :role => "search" do %>
 <p class="note"><%= ts("Search for a user by username, pseud or email, or search by role") %></p>
 <dl>
     <dt><%= label_tag "query", ts("Name or email") %></dt>

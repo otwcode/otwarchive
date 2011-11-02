@@ -19,7 +19,8 @@
   </style>
 <% end %>
 
-<div id="header"<% if @collection %> class="collection"<% end %> role="banner">
+<div id="header"<% if @collection %> class="collection"<% end %>>
+  <!--NOTE: have removed role="banner" for now due to user feedback-->
   <div id="login">
     <% if logged_in? || logged_in_as_admin? %>
       <%= render 'user_sessions/greeting' %>
@@ -33,7 +34,7 @@
   </div>
 
   <h1 class="heading">
-    <%= link_to image_tag('/images/ao3_logos/logo-stroke.png', :alt => "#{ArchiveConfig.APP_NAME} (BETA)"), root_path %> 
+    <%= link_to image_tag('/images/ao3_logos/logo-stroke.png', :alt => "#{ArchiveConfig.ALT_LOGO}"), root_path %> 
     <span class="landmark"><%= "#{ArchiveConfig.APP_NAME} (BETA)" %></span>
   </h1>
 

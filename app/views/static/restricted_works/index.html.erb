@@ -2,10 +2,10 @@
   <!--Descriptive page name, messages and instructions-->
   <h2 class="heading">Restricted Works</h2>
 
-  <ul class="work index">
+  <ul class="index">
     <% for work in @works %>
       <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
-      <li class="blurb">
+      <li class="work blurb" role="article">
         <div class="header module">
           <h4 class="heading" title="title">
       	    <%= link_to work.title.html_safe, {:controller => "yuletide2010", :action => :restricted_work, :id => "#{work.id}-#{work.title.parameterize}"} %>

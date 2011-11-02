@@ -22,25 +22,26 @@ module UsersHelper
   
   # Determine which icon to show on user pages
   def standard_icon(user=nil, pseud=nil)
-    if pseud
+    if pseud && pseud.icon
       pseud.icon.url(:standard)
-    elsif user && user.default_pseud
+    elsif user && user.default_pseud.icon
       user.default_pseud.icon.url(:standard)
     else
-      "/images/skins/iconsets/default/icon_user.png"
+      "/images/skins/iconsets/default/icon_transparent.gif"
     end
   end
-# BACK END if the icon is just a default and has no meaning please don't give it an alt
-# there's no obvious need (to front end, obv prob back end reason) to print a default icon at all? 
+  
+  # no alt text if there isn't specific alt text
   def icon_display(user=nil, pseud=nil)
     path = user ? (pseud ? user_pseud_path(pseud.user, pseud) : user_path(user)) : nil
     pseud ||= user.default_pseud if user
-    alt_text = pseud.try(:icon_alt_text) || pseud.try(:byline) || ts("")
+    icon = standard_icon(user, pseud)
+    alt_text = pseud.try(:icon_alt_text) || nil
 
     if path
-      link_to image_tag(standard_icon(user, pseud), :alt => alt_text, :class => "icon"), path
+      link_to image_tag(icon, :alt => alt_text, :class => "icon"), path
     else
-      image_tag(standard_icon(user, pseud), :alt => alt_text, :class => "icon")
+      image_tag(icon, :class => "icon")
     end
   end
   

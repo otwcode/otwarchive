@@ -37,15 +37,18 @@ class SkinsController < ApplicationController
   # if we've been asked to load the archive parents, we do so and add them to params
   def load_archive_parents
     if params[:add_site_parents]
-      archive_parents = Skin.get_current_site_skin.get_all_parents      
-      if @skin && !(@skin.parent_skins.value_of(:id) & archive_parents.collect(&:id)).empty?
-        flash[:error] = ts("You already have some of the archive components as parents, so we couldn't load the others. Please remove the existing components first!")
+      params[:skin][:skin_parents_attributes] ||= HashWithIndifferentAccess.new
+      archive_parents = Skin.get_current_site_skin.get_all_parents
+      skin_parents = params[:skin][:skin_parents_attributes].values.map {|v| v[:id].to_i}
+      skin_parents += @skin.get_all_parents.collect(&:id) if @skin
+      #puts "!!!!!!!!!!! skin parents: #{skin_parents.to_s}, archive parents: #{archive_parents.collect(&:id).to_s}"
+      if !(skin_parents & archive_parents.collect(&:id)).empty?
+        flash[:error] = ts("You already have some of the archive components as parents, so we couldn't load the others. Please remove the existing components first if you really want to do this!")
         return true
       end
-      params[:skin][:skin_parents_attributes] ||= HashWithIndifferentAccess.new
       last_position = params[:skin][:skin_parents_attributes].keys.map{|k| k.to_i}.max rescue 0      
       last_position ||= 0
-      Skin.get_current_site_skin.get_all_parents.each do |parent_skin|                
+      archive_parents.each do |parent_skin|                
         last_position += 1
         new_skin_parent_hash = HashWithIndifferentAccess.new({:position => last_position, :parent_skin_id => parent_skin.id})
         params[:skin][:skin_parents_attributes].merge!({last_position => new_skin_parent_hash})
