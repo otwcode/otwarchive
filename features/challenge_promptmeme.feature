@@ -123,7 +123,24 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
   When I am on my signups page
   Then I should see "Battle 12"
-  
+
+  Scenario: Prompt count shows on profile
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I go to "Battle 12" collection's page
+  Then I should see "Total prompts: 2"
+    And I should see "Claimed prompts: 0"
+
+  Scenario: Prompt count shows on collections index
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+  When I go to the collections page
+  Then I should see "Prompts 2"
+
   Scenario: Signups in the dashboard have correct controls
   
   Given I have Battle 12 prompt meme fully set up
@@ -207,6 +224,16 @@ Feature: Prompt Meme Challenge
   And I am logged in as "myname4"
   And I claim a prompt from "Battle 12"
   Then I should see a prompt is claimed
+
+  Scenario: Claim count shows on profile
+
+  Given I have Battle 12 prompt meme fully set up
+    And I am logged in as "myname1"
+  When I sign up for Battle 12 with combination A
+    And I claim a prompt from "Battle 12"
+  When I go to "Battle 12" collection's page
+  Then I should see "Total prompts: 2"
+    And I should see "Claimed prompts: 1"
   
   Scenario: Mod can view signups
   
