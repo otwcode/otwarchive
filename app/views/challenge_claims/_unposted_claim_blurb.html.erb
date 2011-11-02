@@ -46,14 +46,7 @@
       </ul>
     <% end %>  
   <% end %>
-  
-  <% unless prompt.description.blank? %>
-    <h6 class="landmark heading">Summary</h6>
-    <blockquote class="userstuff summary" title="prompt">
-      <%=raw sanitize_field(prompt, :description) %>
-    </blockquote>
-  <% end %>
-    
+
   <!--actions-->
   <ul class="actions" role="menu">
     <% if @collection.user_is_maintainer?(current_user) %>
