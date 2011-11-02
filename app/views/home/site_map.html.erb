@@ -36,12 +36,12 @@
 		<% if current_user.preference.history_enabled? %>
 		<li><%= link_to t('.my_history', :default =>"My History"), user_readings_path(current_user) %></li>
 		<% end %>
-		<li>My Subscriptions - coming soon</li>
+		<li><%= link_to t('.my_subscriptions', :default =>"My Subscriptions"), user_subscriptions_path(current_user) %></li>
 		<li><%= link_to t('.set_preferences', :default => "Set My Preferences"), user_preferences_path(current_user) %>
 	</ul>
 	<h3 class="heading">Change your account settings</h3>
 	<ul>
-    <li><a href="">Edit My Profile</a></li>
+    <li><%= link_to t('.edit_user_profile', :default =>"Edit My Profile"), edit_user_path(current_user) %></li>
     <li><%= link_to t('.my_profile', :default => "My Profile"), user_profile_path(current_user) %></li>
     <li><%= link_to t('.manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(current_user) %></li>
     <li><%= link_to t('.delete_account', :default => "Delete My Account"), @user, :confirm => t('.deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
