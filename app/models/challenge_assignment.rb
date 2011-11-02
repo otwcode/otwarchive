@@ -72,13 +72,13 @@ class ChallengeAssignment < ActiveRecord::Base
   # should be faster than unfulfilled scope because no giant left joins
   def self.unfulfilled_in_collection(collection)
     fulfilled_ids = ChallengeAssignment.in_collection(collection).fulfilled.value_of(:id)
-    in_collection(collection).where("challenge_assignments.id NOT IN (?)", fulfilled_ids)
+    fulfilled_ids.empty? ? in_collection(collection) : in_collection(collection).where("challenge_assignments.id NOT IN (?)", fulfilled_ids)
   end
   
   # faster than unposted scope because no left join!
   def self.unposted_in_collection(collection)
     posted_ids = ChallengeAssignment.in_collection(collection).posted.value_of(:id)
-    in_collection(collection).where("'challenge_assignments.creation_id IS NULL OR challenge_assignments.id NOT IN (?)", posted_ids)
+    posted_ids.empty? ? in_collection(collection) : in_collection(collection).where("'challenge_assignments.creation_id IS NULL OR challenge_assignments.id NOT IN (?)", posted_ids)
   end    
     
   # has to be a left join to get assignments that don't have a collection item

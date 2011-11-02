@@ -4,7 +4,7 @@
   <p>
     <%= ts("We were able to successfully upload the following works.") %>
   </p>
-  <ul>
+  <ul class="index">
     <% for work in @works %>
       <% if work.posted? %>
         <li><%= link_to(work.title.html_safe, work_path(work)) %></li>

@@ -29,7 +29,7 @@
             by <%= skin.byline %>
           </span>
         </h4>
-		<% if @user %>
+		    <% if @user %>
           <% if skin.official? %> 
             <p class="status approved">(Approved)</p>
           <% elsif skin.rejected? %>
@@ -39,7 +39,7 @@
           <% end %>
         <% end %>
         <div class="icon"><%= skin_preview_display(skin) %></div>
-		<p class="datetime"><%= set_format_for_date(skin.created_at) %></p>
+		    <p class="datetime"><%= set_format_for_date(skin.created_at) %></p>
       </div>
       
       <!--summary/descriptions-->

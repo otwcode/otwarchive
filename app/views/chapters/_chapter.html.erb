@@ -51,7 +51,7 @@
   <!--main content-->
   <div id="module" class="userstuff" role="article">
     <% unless @downloading %>
-  	  <h3 class="landmark heading">Chapter Text</h3>	
+  	  <h3 class="landmark heading" id="work">Chapter Text</h3>	
     <% end %>
     <%=raw sanitize_field(chapter, :content) %>
   </div>

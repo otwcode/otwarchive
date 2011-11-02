@@ -12,8 +12,7 @@ class AdminPostsController < ApplicationController
       end
     end
     @admin_posts ||= AdminPost
-    if params[:language_id]
-      @language = Language.find_by_short(params[:language_id])
+    if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
       @admin_posts = @admin_posts.where(:language_id => @language.id)
       @tags = AdminPostTag.where(:language_id => @language.id).order(:name)
     else

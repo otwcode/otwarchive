@@ -159,21 +159,17 @@ module TagsHelper
   end
 
   # Returns a nested list of meta tags 
-  # BACK END, SEMI URGENT this is completely invalid - cannot have ul as child of ul, only of li
-
   def meta_tag_tree(tag)
     meta_ul = ""
     unless tag.direct_meta_tags.empty?
-      meta_ul << "<ul class='tags tree index'>"
       tag.direct_meta_tags.each do |meta|
-        meta_ul << "<li>" + link_to_tag(meta) + "</li>"
+        meta_ul += content_tag(:li, link_to_tag(meta))
         unless meta.direct_meta_tags.empty?
-          meta_ul << meta_tag_tree(meta)
+          meta_ul += content_tag(:li, meta_tag_tree(meta))
         end
       end
-      meta_ul << "</ul>"
     end
-    meta_ul.html_safe
+    content_tag(:ul, meta_ul)
   end
 
   # Returns a nested list of sub tags

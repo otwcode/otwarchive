@@ -2,11 +2,11 @@
 <%= form_for([@work, chapter]) do |f| %>
 
 <fieldset id="chapter-ordering">
-  <legend><%= ts("Naming, Ordering and Date") %></legend>
+  <legend><%= ts("Name, Order and Date") %></legend>
+  <h4 class="landmark heading"><%= ts("Name, Order and Date") %></h4>
   <dl>
-    <dt><%= f.label :title, ts("Chapter title") %></dt>
-    <dd><p><%= f.text_field :title, :class => "observe_textlength", :live => true %>
-    <%= link_to_help "chapter-title" %></p>
+    <dt><%= f.label :title, ts("Chapter title") %> <%= link_to_help "chapter-title" %></dt>
+    <dd><%= f.text_field :title, :class => "observe_textlength", :live => true %>
     <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
     </dd>
   
@@ -16,20 +16,19 @@
     <%= f.text_field :wip_length, :class => "number" %> 
     </p></dd>
     <dt id="managePublicationDate">
-    <%= f.label :published_at, ts("Chapter publication date") %></dt>
-    <dd><p><%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => @work.default_date, :order => [:day, :month, :year] %>
-    <%= link_to_help "backdating-help" %>
-    </p></dd>
+    <%= f.label :published_at, ts("Chapter publication date") %>  <%= link_to_help "backdating-help" %></dt>
+    <dd class="datetime"><%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => @work.default_date, :order => [:day, :month, :year] %> </dd>
   </dl>
 </fieldset>
 
 <fieldset>
   <legend><%= ts("Chapter Preface") %></legend>
-    <dl class="preface">      
+    <h4 class="landmark heading"><%= ts("Preface") %></h4>
+     <dl>      
 
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'chapter'} %>
 
-      <dt class="summary"><%= f.label :summary, ts("Chapter summary (max %{max} characters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %></dt>
+      <dt class="summary"><%= f.label :summary, ts("Chapter summary") %></dt>
       <dd class="summary">
         <%= f.text_area :summary, :rows => 4, :cols => 60, :live => true, :class => "observe_textlength" %>
         <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) %>
@@ -40,19 +39,37 @@
     </dl>
 </fieldset>
 
-<fieldset>
-  <legend><%= ts("Chapter Text") %></legend>
-   <p class="label">
-    <%= f.label :content, ts("Chapter text"), :class => "required" %></p>
-  <div id="toggleText">
-  <p id="plainTextNotes" style="display: block"><%= allowed_html_instructions %></p>
-  <p id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>
-  </div>
-  <% use_tinymce %>
-  <p class="rtf-html-switch">
-    <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%=h 'Rich text' %></a></span>
-    <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%=h 'HTML' %></a></span>
-  </p>
+<fieldset class="text">
+  <legend> <%= f.label :content, ts("Chapter text"), :class => "required" %></legend>
+   <h4 class="landmark heading"><%= ts("Chapter Text") %></h4>
+   <div id="toggleText">
+ 		<p id="toggleText" role="menu">
+       <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
+       <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
+       <span class="rtf-html-switch actions">
+         <span><a id="richTextLink" href="#"><%= ts('Rich text') %></a></span>
+         <span><a id="plainTextLink" style="display:none;" href="#"><%= ts('HTML') %></a></span>
+         <%= content_for :footer_js do %>
+           <%= javascript_tag do %>
+             $j(document).ready(function(){
+               $j("#richTextLink").click(function(event){
+                 addEditor('content');
+                 $j(this).toggle();
+                 $j('#plainTextLink').toggle();
+                 event.preventDefault();
+               });
+             
+               $j('#plainTextLink').click(function(event){
+                 removeEditor('content');
+                 $j(this).toggle();
+                 $j('#richTextLink').toggle();
+                 event.preventDefault();
+               });
+             })            
+           <% end %>
+         <% end %>
+ 	    </span>
+	    </p>
   
   <div class="rtf-html-field">
     <%= f.text_area :content, :class => "mce-editor", :id => "content", :class => "observe_textlength" %>

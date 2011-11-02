@@ -27,8 +27,8 @@
   <dl>
     <% f.object.class::PROMPT_TYPES.each do |prompt_types| %>
       <% prompt_type = prompt_types.singularize %>
-      <dt><!--BACK END, if pos please capitalize {prompt_types}-->
-      <%= ts("In #{prompt_types} change") %></dt>
+      <dt>
+      <%= ts("In #{prompt_types.capitalize} change") %></dt>
       <dd>
         <fieldset>
           <dt><%= f.label "#{prompt_type}_url_label".to_sym, ts("\"Prompt URL\" to") %>:</dt>

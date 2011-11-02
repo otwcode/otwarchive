@@ -1,5 +1,5 @@
 <!-- this partial requires collection; @challenges_count, @works_count, @bookmarks_count must be set -->
-<li class="<% if collection.user_is_owner?(current_user) %>own<% end %> collection picture blurb">
+<li class="<% if collection.user_is_owner?(current_user) %>own<% end %> collection picture blurb" role="article">
   <% cache("collection-blurb-#{collection.id}") do %>
  		<div class="header module">
 			<h4 class="heading" title="name">
