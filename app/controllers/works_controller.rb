@@ -608,7 +608,7 @@ protected
     # collect the errors neatly, matching each error to the failed url
     unless failed_urls.empty?
       error_msgs = 0.upto(failed_urls.length).map {|index| "<dt>#{failed_urls[index]}</dt><dd>#{errors[index]}</dd>"}.join("\n")
-      flash[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
+      flash.now[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
     end
 
     # if EVERYTHING failed, boo. :( Go back to the import form.
@@ -645,12 +645,12 @@ public
     @work = Work.find(params[:id])
     unless @user.is_author_of?(@work)
       flash[:error] = ts("You can only post your own works.")
-      redirect_to current_user
+      redirect_to current_user and return
     end
 
     if @work.posted
       flash[:error] = ts("That work is already posted. Do you want to edit it instead?")
-      redirect_to edit_user_work_path(@user, @work)
+      redirect_to edit_user_work_path(@user, @work) and return
     end
 
     @work.posted = true
@@ -658,7 +658,7 @@ public
     # @work.update_minor_version
     unless @work.valid? && @work.save
       flash[:error] = ts("There were problems posting your work.")
-      redirect_to edit_user_work_path(@user, @work)
+      redirect_to edit_user_work_path(@user, @work) and return
     end
 
     flash[:notice] = ts("Your work was successfully posted.")
