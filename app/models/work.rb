@@ -12,9 +12,9 @@ class Work < ActiveRecord::Base
   has_many :pseuds, :through => :creatorships
   has_many :users, :through => :pseuds, :uniq => true
 
-  has_many :external_creatorships, :as => :creation, :dependent => :destroy
+  has_many :external_creatorships, :as => :creation, :dependent => :destroy, :inverse_of => :creation
   has_many :archivists, :through => :external_creatorships
-  has_many :external_author_names, :through => :external_creatorships
+  has_many :external_author_names, :through => :external_creatorships, :inverse_of => :works
   has_many :external_authors, :through => :external_author_names, :uniq => true
 
   has_many :chapters, :dependent => :destroy

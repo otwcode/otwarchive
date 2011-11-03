@@ -281,7 +281,6 @@ Feature: creating and editing skins
     And I check "add_site_parents"
     And I submit
   Then I should see a create confirmation message
-  # Then show me the form
-  # When I check "add_site_parents"
-  #   And I submit
-  # Then I should see errors
+  When I check "add_site_parents"
+    And I submit
+  Then I should see errors

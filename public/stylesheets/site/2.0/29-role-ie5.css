@@ -4,7 +4,7 @@
 
 /*emphasis */
 h1, h2, h3, h4, h5, h6, #header .navigation a {font-weight:bold}
-#header .main .current {background:#fff}
+#header .primary .current {background:#fff}
 
 /* stacking */
 .own {z-index:-30}

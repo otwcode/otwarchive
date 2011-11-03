@@ -5,15 +5,22 @@ namespace :massimport do
   ##### HELPERS
 
   # send invitations to external authors for a given set of works
-  def send_external_invites(works, archivist)
-    # TESTING ohhh this is not ok, must fix before actually running
-    @external_authors = works.collect(&:external_authors).flatten.uniq
-    if !@external_authors.empty?
-      @external_authors.each do |external_author|
-        external_author.find_or_invite(archivist)
-      end
+  def send_external_invites(work_ids, archivist)
+    @external_authors = ExternalAuthor.select("DISTINCT external_authors.*").joins(:external_creatorships).where("creation_id IN (?) AND creation_type = 'Work'", work_ids)
+    @external_authors.each do |external_author|
+      external_author.find_or_invite(archivist)
     end
   end  
+  
+  # add to a collection and approve the item
+  def collection_approve(work, collection)
+    work.collection_items.each do |ci|
+      next unless ci.collection == collection
+      ci.update_attribute(:collection_approval_status, CollectionItem::APPROVED)
+      ci.update_attribute(:user_approval_status, CollectionItem::APPROVED)
+      ci.save
+    end
+  end
 
   # This loads up the story metadata from an ARCHIVE_DB.pl file and puts it into work params
   #
@@ -33,8 +40,8 @@ namespace :massimport do
     work_params = HashWithIndifferentAccess.new
     @storyparser = StoryParser.new
     
-    File.read(filename, :encoding => 'UTF-8').split(/\n/).each do |line|
-      next unless line.present?
+    File.read(filename, :encoding => 'ISO-8859-1').split(/\n/).each do |line|
+      next if line.blank? || line.match(/^#/)
       case
       when line.match(/(\d+) =\> \{/)
         work_params = HashWithIndifferentAccess.new
@@ -56,7 +63,7 @@ namespace :massimport do
   def load_automated_archive_stories(db, base_dir, parse_method)
     db.each do |work_params|
       storyfile = base_dir + "archive/" + work_params[:location] + '.' + work_params[:filetype]
-      story = File.read(storyfile) rescue ""
+      story = File.read(storyfile, :encoding => 'ISO-8859-1') rescue ""
       work_params[:chapter_attributes] = {:content => self.send(parse_method, story)}
     end
     db
@@ -159,16 +166,17 @@ namespace :massimport do
     options = {
       :do_not_set_current_author => true,
       :archivist => @archivist,
+      :importing_for_others => true,
       :post_without_preview => true,
       :encoding => "iso-8859-1"
     }
 
-    works = []
+    work_ids = []
     errors = []
     
     @db.each do |work_params|
       begin
-        # TESTING
+        # FOR TESTING REMOVE BEFORE ACTUAL RUN!
         work_params[:email] = 'shalott+yuletidetesting@gmail.com'
       
         # get the author
@@ -180,51 +188,68 @@ namespace :massimport do
         # clean out any attributes we want to use for processing but that aren't part of AO3 work attributes
         location = work_params.delete(:location)
         filetype = work_params.delete(:filetype)
-      
-        # actually create the work and set it up
-        work = @storyparser.set_work_attributes(Work.new(work_params), "http://yuletidetreasure.org/archive/#{location}.#{filetype}", 
-                                        options.merge(:external_author_name => external_author_name))
+        url = "http://yuletidetreasure.org/archive/#{location}.#{filetype}"
+        
+        # get the collection
+        
+        # check to see if it's already imported
+        work = Work.find_by_imported_from_url(url)
+        if work
+          c = Collection.find_by_name(work_params[:collection_names])
+          work.collections << c unless work.collections.include?(c)
+          puts "Added existing work #{work.title} to #{c.title}"
+          next
+        end      
+
+        # otherwise create the work and set it up
+        work = @storyparser.set_work_attributes(Work.new(work_params), url, 
+                              options.merge(:external_author_name => external_author_name,
+                                            :imported_from_url => url))
     
         if work && work.valid?
-          puts "Yay work: #{work.title} by #{work.external_author_names.map {|ean| ean.to_s}.join}"
-          unless @first_seen
-            puts "WHOLE THING: #{work.to_yaml}"
-            @first_seen = true
-          end
-          # work.chapters.each {|chap| chap.save}
-          # add comments
+          puts "Loaded work: #{work.external_creatorships.first}"
+          work.chapters.each {|chap| chap.save}
+          work.save
+
           # get the comments
+          comment_count = 0
           get_comments_from_yuletide(BASE_DIR, location).each do |comment|
-            comment_object = Comment.new(:commentable_type => 'Work', :commentable_id => work, :name => comment[:name], :email => "yuletidecommenter@gmail.com", :content => comment[:content])
-            if comment_object.valid?
-              puts "Yay comment by #{comment.name}"
+            comment_object = Comment.new(:commentable_type => 'Chapter', :commentable_id => work.chapters.last.id, :name => comment[:name], :email => "yuletidecommenter@gmail.com", :content => comment[:content])
+            if comment_object.save
+              comment_count += 1
             end
           end
+          puts "Loaded #{comment_count} comments"
         
-          works << work
+          work_ids << work.id
         else
           errors << "Problem with #{work_params[:title]}: " + work.errors.full_messages.join(', ')
         end
       rescue Exception => e
-        errors << "We ran into a problem on #{work_params[:title]}: " + e.message
+        errors << "We ran into a problem on #{work_params[:title]}: " + e.message + e.backtrace.join("\n")
       end
     end
 
     puts errors.join("\n")
-    # send_external_invites(works, @archivist)
+    send_external_invites(work_ids, @archivist)
   end
 
   ### YULETIDE-SPECIFIC HELPERS
 
   def get_comments_from_yuletide(base_dir, location)
-    commentfile = File.read(base_dir + "archive/" + location + '_cmt.html') rescue ""
+    commentfile = File.read(base_dir + "archive/" + location + '_cmt.html', :encoding => 'ISO-8859-1') rescue ""
     commentdoc = Nokogiri::HTML.parse(commentfile) rescue ""
     comments = []
     commentdoc.css('.form table.form tr').each do |row|
       name = row.css('td')[0].inner_text.match(/From: (.*)\n?Date/) ? $1 : "Unknown Commenter"
+      name.gsub(/ \(.*\@.*\)/, '') # strip emails
       text = row.css('td')[1].inner_text
       next unless text
-      comments << {:name => name, :content => text}
+      # encode to UTF-8
+      comment = HashWithIndifferentAccess.new({
+                  :name => name.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => ""), 
+                  :content => text.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "")})
+      comments << comment
     end
     comments
   end

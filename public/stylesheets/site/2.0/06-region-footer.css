@@ -1,4 +1,6 @@
-/*==REGION: FOOTER is #4 of the 4 regions shown on every page */
+/*==REGION: FOOTER is #4 of the 4 regions shown on every page 
+http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+*/
 #footer { background:#900 url("/images/skins/textures/tiles/red-ao3.png"); clear:both; border-top:2px solid; position:relative; min-height:150px }
 #footer ul
         { border:0; clear: both; color: #fff; font-size: 0.75em; margin: 1.5em 0; padding: 1em; text-align: center; float:none }
@@ -10,5 +12,9 @@
           box-shadow:none }
 #footer p.beta
         { background:url("/images/beta-flag.png") top right no-repeat; height:150px; width:100px; position:absolute; top:0; right:0; padding:0; margin:0}
-        
+#footer .secondary 
+        { margin: auto; right: auto;
+          box-shadow: inset 2px 2px 2px #111;}
+#footer .secondary li a 
+        {  color: #900;}       
 /*END== */

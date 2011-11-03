@@ -66,13 +66,13 @@ class ExternalAuthorsController < ApplicationController
     token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
     @invitation = Invitation.find_by_token(token)
     unless @invitation
-      flash[:error] = t('external_author.no_invitation', :default => "You need an invitation to do that.")
+      flash[:error] = ts("You need an invitation to do that.")
       redirect_to root_path and return
     end
       
     @external_author = @invitation.external_author
     unless @external_author
-      flash[:error] = t('external_author.no_external_author', :default => "There are no stories to claim on this invitation. Did you want to sign up instead?")
+      flash[:error] = ts("There are no stories to claim on this invitation. Did you want to sign up instead?")
       redirect_to signup_path(@invitation.token) and return
     end
   end
@@ -97,7 +97,10 @@ class ExternalAuthorsController < ApplicationController
     end
     
     flash[:notice] = ""
-    if params[:imported_stories] == "orphan"
+    if params[:imported_stories] == "nothing"
+      flash[:notice] += "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind."
+      redirect_to root_path and return      
+    elsif params[:imported_stories] == "orphan"
       # orphan the works
       @external_author.orphan(params[:remove_pseud])
       flash[:notice] += "Your imported stories have been orphaned. Thank you for leaving them in the archive! "

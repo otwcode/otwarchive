@@ -18,11 +18,11 @@
   <% if @tags_to_associate.empty? %>
     <p><%= ts("No nominated associations to review!") %></p>
   <% else %>
-    <fieldset class="tagset listbox">
+    <fieldset class="tagset listbox group">
       <legend>Approve Nominated Associations</legend>
         <h3 class="heading"><%= ts("Approve Nominated Associations") %></h3>
         <%= check_all_none %>
-        <ul id="nominated_associations_to_add" class="options many index">
+        <ul id="nominated_associations_to_add" class="options many index group">
           <% @tags_to_associate.each do |tag| %>
           <li>
             <% fieldname = "create_association_#{tag.id}_#{tag.parent_tagname}" %>

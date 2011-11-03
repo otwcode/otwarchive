@@ -13,9 +13,9 @@ class CollectionItem < ActiveRecord::Base
                        [LABEL[APPROVED], APPROVED],
                        [LABEL[REJECTED], REJECTED] ]
 
-  belongs_to :collection
-  belongs_to :item, :polymorphic => :true
-  belongs_to :work,  :class_name => "Work", :foreign_key => "item_id"
+  belongs_to :collection, :inverse_of => :collection_items
+  belongs_to :item, :polymorphic => :true, :inverse_of => :collection_items
+  belongs_to :work,  :class_name => "Work", :foreign_key => "item_id", :inverse_of => :collection_items
   belongs_to :bookmark, :class_name => "Bookmark", :foreign_key => "item_id"
 
   has_many :approved_collections, :through => :collection_items, :source => :collection,
@@ -198,6 +198,11 @@ class CollectionItem < ActiveRecord::Base
   end
 
   def approve(user)
+    if user.nil? 
+      # this is being run via rake task eg for importing collections
+      approve_by_user
+      approve_by_collection
+    end
     approve_by_user if user && (user.is_author_of?(item) || (user == User.current_user && item.respond_to?(:pseuds) ? item.pseuds.empty? : item.pseud.nil?) )
     approve_by_collection if user && self.collection.user_is_maintainer?(user)
   end

@@ -4,7 +4,7 @@
 <% unless current_user && current_user.try(:preference).try(:banner_seen) %>
 <% unless @bannertext.nil? || logged_in_as_admin? %>
 <% unless current_user.nil? && session[:hide_banner] %>
-  <div class="flash notice" id="notice-banner">
+  <div class="flash notice group" id="notice-banner">
     <%= @bannertext %>
     <% if current_user.nil? %>
       <p class="submit">

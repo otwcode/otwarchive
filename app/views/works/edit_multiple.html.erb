@@ -9,7 +9,7 @@
 <p class="note">
     Your edits will be applied to <em>all</em> of these stories, <strong>replacing</strong> any existing values for these fields!"
   </p>
-<dl class="index">
+<dl class="index group">
     <% for work in @works %>
       <dt>
           <%= hidden_field_tag "work_ids[]", work.id%>

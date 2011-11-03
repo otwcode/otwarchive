@@ -12,7 +12,7 @@
 <% else %>
   <%= will_paginate(@challenge_signups) %>
 
-  <dl class="index">
+  <dl class="index group">
     <% @challenge_signups.each do |signup| %>
       <dt class="participant" title="user name">
         <%= link_to signup.pseud.name, collection_signup_path(@collection, signup) %>

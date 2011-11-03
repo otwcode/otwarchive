@@ -1,4 +1,5 @@
 /*==REGION: HEADER is #1 of the 4 regions shown on every page 
+http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
 notice that CSS3 declarations sit on their own line and always come last*/
 
 #header li, #header form *, #header input, #header #search>*, #header #search .submit 
@@ -13,10 +14,10 @@ notice that CSS3 declarations sit on their own line and always come last*/
 #header #small_login
         { margin-left:120px; background:#ddd; border:2px solid #fff; padding:0.375em;
           box-shadow:inset 1px 0 5px #555 }
-#header ul.main 
+#header ul.primary 
         { float:none; margin: auto; background:#900 url(/images/skins/textures/tiles/red-ao3.png); border-bottom:2px solid #700; padding:0.25em 120px;
           box-shadow:inset 0 -5px 10px rgba(0,0,0,0.5)}
-#header .main a, #header .main .current, #header .main input, #header .search input
+#header .primary a, #header .primary .current, #header .primary input, #header .search input
         { border-color:#a00; border-bottom-color:#400 }
 #header .search input[type="text"]
         { border-color:#300}

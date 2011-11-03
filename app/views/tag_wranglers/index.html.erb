@@ -24,7 +24,7 @@
 <fieldset>
   <legend>Assign Wranglers to Fandoms</legend>
   <h3 class="heading">Assign Wranglers to Fandoms</h3>
-  <dl class="index">
+  <dl class="index group">
     <% @assignments.group_by(&:name).each do |name, assignments| %>
     <dt><%= link_to name, {:controller => :tags, :action => :edit, :id => assignments.first} %></dt>
       <% wranglers = assignments.collect(&:wrangler).compact %>

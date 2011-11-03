@@ -1,6 +1,9 @@
 <%= render :partial => 'layouts/header' %>
-<div id="main" class="system">
+<div id="inner" class="wrapper">
+  
+  <div id="main" class="system">
   <%= flash_div :error, :caution, :notice %>
+  
   <div class="intro module">
 	<h2 class="heading"><%= ts('hi!') %></h2>
 	<p>We're a <em>fan</em>-created, <em>fan</em>-run, non-profit, non-commercial archive for transformative <em>fan</em>works, like <em>fan</em>fiction and <em>fan</em>art.
@@ -17,7 +20,6 @@
         <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Log in'), login_path %></p>
       <% end %>
     <% end %>
-
   </div>
   
   <div class="latest module">
@@ -36,7 +38,8 @@
           <span><%= @user_count %></span><%= ' ' + ts(" to date") %>
         </li>
       </ul>    
-    </div>
+  </div>
+    
     <% if @admin_post %>
       <div class="news module">
         <h3 class="heading">News</h3>
@@ -46,6 +49,7 @@
         <% end %>
       </div>
     <% end %>
+ 
   </div>
-</div>
+
 </div>

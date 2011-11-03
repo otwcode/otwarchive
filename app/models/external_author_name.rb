@@ -2,8 +2,8 @@ class ExternalAuthorName < ActiveRecord::Base
   NAME_LENGTH_MIN = 1
   NAME_LENGTH_MAX = 100
 
-  belongs_to :external_author
-  has_many :external_creatorships
+  belongs_to :external_author, :inverse_of => :external_author_names
+  has_many :external_creatorships, :inverse_of => :external_author_name
   has_many :works, :through => :external_creatorships, :source => :creation, :source_type => 'Work', :uniq => true  
   
   validates_presence_of :name

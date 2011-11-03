@@ -17,7 +17,7 @@
        listed by fewest offers and most requests
 </p>
 
-<dl class="index">
+<dl class="index group">
   <% summary_tags.each do |tag| %>
     <dt>
       <span class="<%= tag.requests > 0 ? 'requested' : ''%> <%= tag.offers > 0 ? 'offered' : '' %>" title="<%= tag.requests > 0 ? 'requested' : ''%> <%= tag.offers > 0 ? 'offered' : '' %>">

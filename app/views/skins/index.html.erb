@@ -19,9 +19,9 @@
     <% if logged_in? %>Why not try <%= link_to ts('making one'), new_skin_path(:skin_type => params[:work_skins] ? "WorkSkin" : "Skin") %>?<% end %>
   </p>
 <% else %>
-  <ul class="skins index">
+  <ul class="index group">
   <% for skin in @skins %>
-    <li class="skins <% if skin.editable? %>own<% end %> picture blurb">
+    <li class="skins <% if skin.editable? %>own<% end %> picture blurb group">
       <div class="header module">
         <h4 class="heading" title="title">
           <%= link_to h(skin.title), skin %>

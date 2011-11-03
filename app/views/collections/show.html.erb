@@ -3,25 +3,14 @@
   <%= render :partial => "collections/header", :locals => {:collection => @collection} %>
 
   <!--main content-->
-  <% # expects @works, @bookmarks %>
-  
-    <% if @collection.challenge? && @collection.prompt_meme? %>
-    <div class="module">
-    <p>
-  	  <%= ts("Total prompts") + ": " + @collection.prompts.count.to_s %>
-    </p><p>
-      <%= ts("Claimed prompts") + ": " + @collection.prompts.claimed.count.to_s %>
-    </p>
-    </div>
-  	<% end %>
-    
-    <% unless @works.blank? %>
-      <%= render :partial => 'works_module', :locals => {:collection => @collection, :works => @works} %>
-    <% end %>
+  <% # expects @works, @bookmarks %>  
+  <% unless @works.blank? %>
+    <%= render :partial => 'works_module', :locals => {:collection => @collection, :works => @works} %>
+  <% end %>
 
-    <% unless @bookmarks.blank? %>
-      <%= render :partial => 'bookmarks_module', :locals => {:collection => @collection, :bookmarks => @bookmarks} %>
-    <% end %>
+  <% unless @bookmarks.blank? %>
+    <%= render :partial => 'bookmarks_module', :locals => {:collection => @collection, :bookmarks => @bookmarks} %>
+  <% end %>
 
   <% if @works.blank? && @bookmarks.blank? %>
     <p class="alt message">There are no works or bookmarks in this collection yet.</p>

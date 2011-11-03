@@ -19,10 +19,10 @@
 	</fieldset>
 	<fieldset class="comments">
 	<legend>List of Comments</legend>
-	<ol class="comment index">
+	<ol class="comment index group">
     <% for inbox_comment in @inbox_comments %>
       <!-- START of single comment -->
-      <li class="comment <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
+      <li class="comment group <%= inbox_comment.read? ? 'read' : 'unread' %> <%= cycle :odd, :even %>" role="article">
         <h4 class="heading byline"><%= get_commenter_pseud_or_name(inbox_comment.feedback_comment) %> <%= 'on' %> <%= commentable_description_link(inbox_comment.feedback_comment) %> </h4>
         <div class="icon">
           <% if !inbox_comment.feedback_comment.pseud.nil? %>

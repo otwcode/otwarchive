@@ -44,12 +44,12 @@
 
 <% elsif @assignments_with_no_potential_requests.size > 0 %>
 
-  <div class="matching listbox">
+  <div class="matching listbox group">
     <h3 class="heading">No Potential Recipients</h3>
     <p class="navigation actions" role="button"><%= link_to ts("Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></p>
     <p class="caution note"><strong>Warning!</strong> No one has requested anything that matches what these people have offered.</p>
     <p class="note">Everyone needs at least one potential recipient.  Either edit your match settings or edit their signups (or delete them). Then regenerate potential matches to continue.</p>
-    <dl class="index">
+    <dl class="index group">
       <% @assignments_with_no_potential_requests.each do |assignment| %>
         <dt class="byline" title="pseud"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></dd>
         <dd>
@@ -72,14 +72,14 @@
 
     <% # the people with no one to write for - this is the hardest problem to solve %>
     <% if @assignments_with_no_request.size > 0 %>
-      <div class="matching listbox">
+      <div class="matching listbox group">
         <h3 class="heading">Missing Recipients</h3>
       <p class="note">
         These people could not be assigned a recipient. 
         Try shuffling the assigned givers in the
         <a href="#main-assignments">main assignments</a> (the newly matched will disappear from this section after you update), 
         or  manually assign a pinch recipient <%= link_to_help "challenge-pinch-recipient" %></p>
-        <dl class="index">
+        <dl class="index group">
         <% @assignments_with_no_request.each do |assignment| %>
           <%= render :partial => "assignment_with_no_request", :locals => {:assignment => assignment} %>
         <% end %>

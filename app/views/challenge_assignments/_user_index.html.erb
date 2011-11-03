@@ -5,7 +5,7 @@
 <p><%= ts('Looking for prompts you claimed in a prompt meme? Try') %> <%= link_to ts("My Claims"), user_claims_path(@user) %></p>
 <% end %>
 
-<dl class="index">
+<dl class="index group">
   <% @challenge_assignments.each do |assignment| %>
     <%= render "assignment_blurb", :assignment => assignment %>
   <% end %>

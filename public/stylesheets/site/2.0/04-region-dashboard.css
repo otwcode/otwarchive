@@ -1,4 +1,6 @@
-/*==REGION: DASHBOARD is #2 of the 4 regions shown on every page */
+/*==REGION: DASHBOARD is #2 of the 4 regions shown on every page 
+http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+*/
 #dashboard  
         { width: 12em; float: left; padding: 0 0.5625em }
 #dashboard a,#dashboard span
@@ -6,7 +8,7 @@
           word-wrap:break-word; box-shadow:none;}
 #dashboard a:hover 
         { background:#ddd; color:#900 }
-#dashboard ul.navigation, #dashboard ul 
+#dashboard ul 
         { float:none; display:block; padding:1.286em 0; text-align:right; border-top: 2px solid #ddd; position:relative }
 #dashboard .current 
         { background:#ccc }

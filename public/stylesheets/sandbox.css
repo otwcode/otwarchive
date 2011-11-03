@@ -21,19 +21,6 @@ background:purple; color:#555;}
         #header fieldset {margin-bottom:-0.643em} 
 }
 
-/* CSS for footer skin chooser by sarken yay -- NN */
-#footer .secondary {
-    margin: auto;
-    right: auto;
-    font-size: .95em;
-    box-shadow: inset 2px 2px 2px #111;
-}
-#footer .secondary li a {
-    color: #900;
-}
-#footer .secondary li {
-    margin-right: 0.65em;
-}
 
 /*DEVELOPMENT ONLY. DO NOT DEPLOY */
 #debug {display:none;}

@@ -11,7 +11,7 @@
     <!--/subnav-->
   </div>
 <!--main content-->
-<div role="article">
+<div role="article" class="group">
   <div class="header">
     <h3 class="heading">
       <%= @admin_post.title %>
@@ -26,7 +26,7 @@
       <h4 class="heading">Original: <%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></h4>
     <% elsif !@admin_post.translations.empty? %>
       <h4 class="heading">Translations:</h4>
-      <dl class="language index">
+      <dl class="language index group">
         <% for admin_post in @admin_post.translations %>
           <dt>
             <%= link_to admin_post.language.name, language_admin_posts_path(admin_post.language) %>

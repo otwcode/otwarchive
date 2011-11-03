@@ -12,7 +12,7 @@
 <%= paginated_section @people, {:previous_label => '&laquo; Previous'.html_safe, :next_label => 'Next &raquo;'.html_safe} do %>
 
 <h3 class="landmark">Listing People</h3>
-  <ul class="pseud index">
+  <ul class="pseud index group">
     <% for person in @people %>
       <%= render 'author_blurb', :author => person %>
     <% end %>  
