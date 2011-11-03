@@ -12,7 +12,7 @@
 
 <!-- BEGIN section where work skin applies -->
 <div id="workskin">
-  <div class="preface">
+  <div class="preface group">
     <h2 class="title heading">
       <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
       <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>

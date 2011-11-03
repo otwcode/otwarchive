@@ -1,4 +1,6 @@
-/*==REGION: MAIN is #3 of the 4 regions shown on every page */
+/*==REGION: MAIN is #3 of the 4 regions shown on every page 
+http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
+*/
 #main   { font-size: 0.875em; line-height: 1.286; margin: auto; padding: 0 2.5em 3.5em; position: relative; min-height:450px }
 #main.dashboard 
         { margin: auto auto 1em 15em}

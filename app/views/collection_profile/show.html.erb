@@ -6,7 +6,7 @@
     <span class="byline"><%= @collection.title + ((@collection.title != @collection.name) ? " (#{@collection.name})" : "") %></span>
   </h3>
   <div class="wrapper">
-    <dl class="meta">
+    <dl class="meta group">
       <dt><%= ts("Active since: ") %>
       <dd class="datetime"><%= l(@collection.created_at.to_date) %>
       <dt><%= ts("Maintainers:") %></dt>
@@ -34,7 +34,7 @@
 <!--main content-->
 
 <% if show_collection_preface(@collection) %>
-  <div class="preface">
+  <div class="preface group">
     <% if show_collection_section(@collection, "intro") %>
     <div id="intro" class="module">
       <%= render :partial => 'navigation', :locals => {:section => 'intro'} %>

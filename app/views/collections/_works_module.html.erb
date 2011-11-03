@@ -1,4 +1,4 @@
-<div class="works listbox" id="collection-works">
+<div class="works listbox group" id="collection-works">
   <h3 class="heading">
     <% if collection.collection_preference.show_random || params[:show_random] %>
     <%=h t('.collections.random_works', :default => "Random works") %>  
@@ -6,7 +6,7 @@
     <%=h t('.recent_works', :default => "Recent works") %>
     <% end %>
   </h3>
-  <ul class="index">
+  <ul class="index group">
     <% for work in works %>
   	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
       <% end %>

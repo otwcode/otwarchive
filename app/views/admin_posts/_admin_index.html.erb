@@ -8,7 +8,7 @@
 
 <!--main content-->
 <h3 class="heading">Manage News Postings</h3>
-<dl class="news index">
+<dl class="news index group">
   <% @admin_posts.each do |admin_post| %>
   <dt><%= link_to admin_post.title, admin_post %></dt>
     <dd>

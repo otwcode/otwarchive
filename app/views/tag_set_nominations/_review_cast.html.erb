@@ -10,9 +10,9 @@
       <% end %>
       <% # start a new fandom listbox %>
       <% current_fandom = cast_nom.parent_tagname %>
-      <li class="fandom listbox <%= cycle :odd, :even %>">
+      <li class="fandom listbox group <%= cycle :odd, :even %>">
       <h3 class="heading"><%= current_fandom %></h3>
-      <ol class="tags index">
+      <ol class="tags index group">
     <% end %>
     <li>
       <%= render "review_individual_nom", :nom => cast_nom %>

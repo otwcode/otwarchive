@@ -61,7 +61,7 @@
 
         <dt><%= f.label :media, ts('Media: ')%></dt>
         <dd>
-          <fieldset class="listbox">
+          <fieldset class="listbox group">
           <h5 class="heading">Choose @media</h5>
             <%= checkbox_section(f, :media, Skin::MEDIA, :checked_method => @skin.media || Skin::DEFAULT_MEDIA, :value_method => "to_s", :name_method => "to_s", :include_blank => false) %>
           </fieldset>
@@ -69,10 +69,10 @@
       </dl>
     </fieldset>
   
-    <fieldset class="listbox">
+    <fieldset class="listbox group">
       <legend>Parent Skins <%= link_to_help "skins-parents" %></legend>
       <h4 class="heading landmark">Parent Skins</h4>
-       <ul class="index">
+       <ul class="index group">
        <% f.object.skin_parents.each_with_index do |parent, index| %>
         <%= f.fields_for :skin_parents, parent do |parent_form| %>
          <%= render "skin_parent_fields", :form => parent_form, :index => index %>

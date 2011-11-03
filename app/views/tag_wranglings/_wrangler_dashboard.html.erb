@@ -1,4 +1,4 @@
-<div id="dashboard" role="navigation region" class="wrangling">
+<div id="dashboard" role="navigation region" class="tag wrangling region">
   <ul class="navigation actions">
     <% if current_user.is_a?(User) %>
     <li><%= span_if_current('Wrangling Home', tag_wrangler_path(current_user)) %></li>

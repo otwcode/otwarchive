@@ -14,10 +14,10 @@
   <% # we just briefly list all the unposted claims so a mod can clean them up if there are a ton of old ones %>
   <% unless @claims.empty? %>
   
-    <div class="unposted claims listbox">
+    <div class="unposted claims listbox group">
       <h3 class="heading">Unposted Claims</h3>
       <%= will_paginate @claims %>
-      <ol class="index">
+      <ol class="index group">
         <% @claims.each do |claim| %>
           <%= render "challenge_claims/unposted_claim_blurb", :claim => claim %>
         <% end %>

@@ -2,7 +2,7 @@
 <!--BACK END, suggest grouping these by fandom in listboxes?-->
 
 <%= form_tag edit_multiple_user_works_path(@user),  :id => 'edit-multiple-works' do %>
-<dl class="index">
+<dl class="index group">
    <% for work in @works %>
 <!--title-->
         <dt><%= label_tag "work_ids[]", link_to(work.title.html_safe, work_path(work)) %>

@@ -19,7 +19,7 @@
 
   <h3 class="heading"><%= ts("Your Nominations For %{title}", :title => @tag_set.title) %></h3>
   <div class="wrapper">
-    <dl class="meta">
+    <dl class="meta group">
       <dt><%= ts("Created at: ") %></dt>
       <dd class="datetime"><%= l(@tag_set_nomination.created_at.to_date) %></dd>
       <dt><%= ts("Status: ") %></dt>
@@ -38,19 +38,19 @@
 
   <h3 class="heading"><%= ts("Nominated Tags") %> <%= link_to_help "tagset-nominated-tags" %></h3>
 
-  <ol class="index">			
+  <ol class="index group">			
     <% if @limit[:fandom] > 0 && (@limit[:character] > 0 || @limit[:relationship] > 0) %>
       <% # group fandom, char, rel together %>
       <% @tag_set_nomination.fandom_nominations.each do |fandom_nom| %>
-        <li class="fandom listbox <%= cycle :odd, :even %>">
+        <li class="fandom listbox group<%= cycle :odd, :even %>">
           <h4 class="heading"><%= render "show_tag_status", :tag => fandom_nom %>: </h4>
           <% TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type| %>
             <% if @limit[tag_type] > 0 %>
               <h5 class="heading"><%= tag_type.classify.pluralize %></h5>
               <% if fandom_nom.send("#{tag_type}_nominations").count == 0 %>
-                <p class="index"><%= ts("None nominated in this fandom.") %></p>
+                <p class="index group"><%= ts("None nominated in this fandom.") %></p>
               <% else %>
-                <ul class="index">
+                <ul class="index group">
                   <% fandom_nom.send("#{tag_type}_nominations").each do |tag| %>
                     <li><%= render "show_tag_status", :tag => tag %></li>
                   <% end %>

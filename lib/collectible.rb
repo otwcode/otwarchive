@@ -3,7 +3,7 @@ module Collectible
   def self.included(collectible)
     collectible.class_eval do
 
-      has_many :collection_items, :as => :item, :dependent => :destroy
+      has_many :collection_items, :as => :item, :dependent => :destroy, :inverse_of => :item
       accepts_nested_attributes_for :collection_items, :allow_destroy => true
       has_many :approved_collection_items, :class_name => "CollectionItem", :as => :item,
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]

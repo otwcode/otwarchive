@@ -17,7 +17,7 @@
     <% end %>
     </div>
     <% unless @work.endnotes.blank? %>
-      <div class="preface"><div class="end notes">
+      <div class="preface group"><div class="end notes">
           <h3 class="heading"><%=h t('.notes', :default => "Notes:") %></h3>
           <blockquote class="userstuff"><%=raw sanitize_field(@work, :endnotes) %></blockquote>
        </div></div>

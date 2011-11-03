@@ -9,7 +9,7 @@
 <% if @bookmarks %>
   <p><strong><%= @bookmarks.total_entries %> Found</strong><%= link_to_help "bookmark-search-results-help" %></p>
   <h3 class="landmark heading">Bookmarks List</h3>
-  <ol class="bookmark index">
+  <ol class="bookmark index group">
     <% for bookmark in @bookmarks %>
       <% unless bookmark.nil? %>
         <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>

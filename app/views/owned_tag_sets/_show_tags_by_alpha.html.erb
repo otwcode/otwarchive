@@ -15,7 +15,7 @@
       # in a list item
     %>
     <% ranges = %w(0-9 abc def ghi jkl mno pqr st uvw xyz) %>
-    <li class="freeform alphabet tagset index">
+    <li class="freeform alphabet tagset index group">
       <% current_range = 0 %>
       <% current_range_unseen = true %>
       <% tags.by_name_without_articles.value_of(:name).each do |tagname| %>        
@@ -30,12 +30,12 @@
               <span class="range">(<%= ranges[current_range] %>)</span>
               <%= expand_contract_shuffle("list_for_#{tag_type}_#{ranges[current_range]}") %>
             </h3>
-            <ol id="list_for_<%= tag_type %>_<%= ranges[current_range] %>" class="tags index" force_contract="true">
+            <ol id="list_for_<%= tag_type %>_<%= ranges[current_range] %>" class="tags index group" force_contract="true">
         <% elsif current_range_unseen %>
           <% # handling the case where we're seeing a number match - we do it this way so we don't have an empty list of tags to start %>
           <li class="<%= tag_type %> number letter range listbox <%= cycle :odd, :even %>">
             <h3 class="expander_parent heading"><%= expand_contract_shuffle("list_for_#{tag_type}_0") %> <%= ts("#{tag_type.classify.pluralize} (%{letter})", :letter => "0-9") %></h3>
-            <ol id="list_for_<%= tag_type %>_0" class="tags index" force_contract="true">
+            <ol id="list_for_<%= tag_type %>_0" class="tags index group" force_contract="true">
         <% end %>
         <% current_range_unseen = false %>
         <li><%= tagname %></li>

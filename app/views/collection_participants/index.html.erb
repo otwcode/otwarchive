@@ -6,7 +6,7 @@
 <%= render :partial => 'add_participants_form' %>
 
 <!--list members-->
-<dl class="members index">
+<dl class="members index group">
 <% @collection_participants.each do |participant| %>
       <%= render :partial => 'participant_form', :locals => {:participant => participant} %>
     <% end %>
