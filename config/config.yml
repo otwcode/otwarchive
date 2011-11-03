@@ -204,6 +204,8 @@ FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits"]
 FIELDS_ALLOWING_HTML: ["about_me", "banner_text", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes",
   "rules", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
 
+FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
+
 FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
 
 FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]

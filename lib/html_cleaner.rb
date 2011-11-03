@@ -88,9 +88,9 @@ module HtmlCleaner
       # clean out all tags
       value = Sanitize.clean(fix_bad_characters(value))
     end
-    # FIXME
-    # for now, just put ampersands back the way they were
-    value.gsub!(/&amp;/, '&')
+
+    # Plain text fields can't contain &amp; entities:
+    value.gsub!(/&amp;/, '&') unless (ArchiveConfig.FIELDS_ALLOWING_HTML_ENTITIES + ArchiveConfig.FIELDS_ALLOWING_HTML).include?(field.to_s)
     value
   end
 
