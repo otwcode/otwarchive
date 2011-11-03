@@ -3,7 +3,7 @@
 
   <%= will_paginate @claims %>
 
-  <ol class="index">
+  <ol class="index group">
 
     <% @claims.each do |claim| %>
       <%= render "prompts/prompt_blurb", :prompt => claim.request_prompt, :suppress_claims => true, :claim => claim %>

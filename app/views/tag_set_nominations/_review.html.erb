@@ -31,13 +31,13 @@
 
   <% %w(cast fandom character relationship freeform).each do |tag_type| %>
     <% if @nominations[tag_type] && @nominations[tag_type].count > 0 %>
-      <fieldset class="<%= tag_type %> listbox <%= cycle :odd, :even, :name => "top_level" %>">
+      <fieldset class="<%= tag_type %> listbox group <%= cycle :odd, :even, :name => "top_level" %>">
         <% heading = tag_type == "cast" ? ts("Already Approved Fandoms") : ts("#{tag_type.classify.pluralize}")%>
         <legend><%= heading %></legend>
         <h3 class="heading"><%= heading %></h3>
           <%= check_all_none("Reject All", "Reject None", "reject") %>
           <%= check_all_none("Approve All", "Approve None", "approve") %>
-        <ol class="tags index">
+        <ol class="tags index group">
           <% if tag_type == "fandom" %>
             <%= render "review_fandoms", :fandoms => @nominations[:fandom] %>
           <% elsif tag_type == "cast" %>

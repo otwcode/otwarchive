@@ -15,7 +15,7 @@ class TagNomination < ActiveRecord::Base
   validate :type_validity
   def type_validity
     if !tagname.blank? && (tag = Tag.find_by_name(tagname)) && "#{tag.type}Nomination" != self.type
-      errors.add(:base, ts("^The tag %{tagname} is already in the archive but as a #{tag.type} tag.", :tagname => self.tagname))
+      errors.add(:base, ts("^The tag %{tagname} is already in the archive as a #{tag.type} tag. Try being more specific, for instance tacking on the media (TV) or the fandom (Labyrinth) that your nomination belongs to.", :tagname => self.tagname))
     end
   end
 

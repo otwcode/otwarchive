@@ -39,10 +39,10 @@ class SkinsController < ApplicationController
     if params[:add_site_parents]
       params[:skin][:skin_parents_attributes] ||= HashWithIndifferentAccess.new
       archive_parents = Skin.get_current_site_skin.get_all_parents
-      skin_parents = params[:skin][:skin_parents_attributes].values.map {|v| v[:id].to_i}
+      skin_parent_titles = params[:skin][:skin_parents_attributes].values.map {|v| v[:parent_skin_title]}
+      skin_parents = skin_parent_titles.empty? ? [] : Skin.where(:title => skin_parent_titles).value_of(:id) 
       skin_parents += @skin.get_all_parents.collect(&:id) if @skin
-      #puts "!!!!!!!!!!! skin parents: #{skin_parents.to_s}, archive parents: #{archive_parents.collect(&:id).to_s}"
-      if !(skin_parents & archive_parents.collect(&:id)).empty?
+      if !(skin_parents.uniq & archive_parents.collect(&:id)).empty?
         flash[:error] = ts("You already have some of the archive components as parents, so we couldn't load the others. Please remove the existing components first if you really want to do this!")
         return true
       end

@@ -270,8 +270,7 @@ class StoryParser
             # we're not allowed to import works from this address
             raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
           end
-          external_creatorship = ExternalCreatorship.new(:external_author_name => external_author_name, :creation => work, :archivist => (options[:archivist] || User.current_user) )
-          work.external_creatorships << external_creatorship
+          ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
         end
       end
 
@@ -1030,7 +1029,7 @@ class StoryParser
 
     # We clean the text as if it had been submitted as the content of a chapter
     def clean_storytext(storytext)
-        storytext = storytext.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "") unless storytext.encoding.name == "UTF-8"
+      storytext = storytext.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "") unless storytext.encoding.name == "UTF-8"
       return sanitize_value("content", storytext)
     end
 

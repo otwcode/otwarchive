@@ -29,9 +29,9 @@
   <% end %>
 
   <% if @tag.is_a?(Fandom) %>
-  <div class="parent fandom listbox">
+  <div class="parent fandom listbox group">
 	  <h3 class="heading"><%= ts('Parent tags (more general)') %>:</h3>
-    <ul class="tags commas index">
+    <ul class="tags commas index group">
 	  <% (@tag.parents + [@tag.media]).uniq.compact.sort.each do |parent| %>
       <li><%= link_to_tag parent %></li>
     <% end %>
@@ -39,9 +39,9 @@
   </div>
   <% else %>
     <% unless @tag.parents.blank? %>
-    <div class="parent listbox">
+    <div class="parent listbox group">
       <h3 class="heading"><%= ts('Parent tags (more general)') %>:</h3>
-      <ul class="tags commas index"><%= tag_link_list(@tag.parents.sort) %></ul>
+      <ul class="tags commas index group"><%= tag_link_list(@tag.parents.sort) %></ul>
     </div>
     <% end %>
   <% end %>
@@ -54,33 +54,33 @@
   <% end %>
 
   <% unless @tag.mergers.blank? %>
-  <div class="synonym listbox">
+  <div class="synonym listbox group">
     <h3 class="heading"><%= ts('Tags with the same meaning') %>:</h3>
-    <ul class="tags commas index"><%= tag_link_list(@tag.mergers) %></ul>
+    <ul class="tags commas index group"><%= tag_link_list(@tag.mergers) %></ul>
   </div>
   <% end %>
 
   <% unless @tag.direct_meta_tags.blank? %>
-  <div class="meta listbox">
+  <div class="meta listbox group">
     <h3 class="heading"><%= ts('Meta tags') %>:</h3>
     <%= meta_tag_tree(@tag) %>
   </div>
   <% end %>
 
   <% unless @tag.direct_sub_tags.blank? %>
-  <div class="sub listbox">
+  <div class="sub listbox group">
     <h3 class="heading"><%= ts('Sub tags') %>:</h3>
     <%= sub_tag_tree(@tag) %>
   </div>
   <% end %>
 
   <% unless @tag.children.blank? %>
-  <div class="child listbox">
+  <div class="child listbox group">
   <h3 class="heading"><%= ts('Child tags (more specific)') %>:</h3>
   <% @tag.children.uniq.compact.sort.group_by(&:type).each do |type, tags| %>
     <div class="<%= type.to_s.pluralize.downcase %> listbox">
       <h4 class="heading"><%= type.to_s.pluralize %>:</h4>
-    <ul class="tags commas index"><%= tag_link_list(tags) %></ul>
+    <ul class="tags commas index group"><%= tag_link_list(tags) %></ul>
   </div>
   <% end %>
   </div>
@@ -89,10 +89,10 @@
   <% if @works %>
     <p><%= ts("This tag has not been marked common and can't be filtered on (yet).") %></p>  
     <% unless @works.blank? %>
-      <div class="work listbox">
+      <div class="work listbox group">
       <h3 class="heading"><%= ts('Works which have used it as a tag') %>:</h3>
-        <!--BACK END, OK TO REMOVE THIS LAQUO ETC?--><%= paginated_section @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
-          <ul class="index">
+      <%= paginated_section @works do %>
+          <ul class="index group">
             <% for work in @works %>
               <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
             <% end %>
@@ -102,10 +102,10 @@
     <% end %>
 
     <% unless @bookmarks.blank? %>
-    <div class="bookmarks listbox">
+    <div class="bookmark listbox group">
     <h3 class="heading"><%= ts('Bookmarks which have used it as a tag') %>:</h3>
     <%= paginated_section @bookmarks, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} do %>
-        <ul class="index">
+        <ul class="index group">
           <% for bookmark in @bookmarks %>
             <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
           <% end %>

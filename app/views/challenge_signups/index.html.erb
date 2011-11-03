@@ -9,7 +9,7 @@
 
   <h2 class="heading"><%= ts("Challenge Signups for %{user}", :user => @user.login) %></h2>
 
-  <dl class="signup index">
+  <dl class="signup index group">
     <% @challenge_signups.each do |challenge_signup| %>
       <dt><%= link_to challenge_signup.collection.title, challenge_signup.collection %><dt>
       <dd>

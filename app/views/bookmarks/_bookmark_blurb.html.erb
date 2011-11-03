@@ -1,6 +1,6 @@
 <!-- This partial requires local variable 'bookmark' -->
 <% bookmarkable = bookmark.bookmarkable %>
-<li id="bookmark_<%= "#{bookmark.id}" %>" class="bookmark blurb" role="article">
+<li id="bookmark_<%= "#{bookmark.id}" %>" class="bookmark blurb group" role="article">
 
   <% if bookmarkable.blank? %>
     <p class="message"><%= "This has been deleted, sorry!" %></p>
@@ -54,7 +54,7 @@
     <div class="dynamic" id="bookmark_form_placement_for_<%= bookmarkable.id %>"></div>
   <% end %>
 
-  <div class="user module<% if is_author_of?(bookmark) %> own<% end %>">
+  <div class="user module<% if is_author_of?(bookmark) %> own<% end %> group">
     <!--bookmarker, time-->
     <h5 class="byline heading">
       <%= ts("Last bookmarked by ") %>

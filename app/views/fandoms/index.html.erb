@@ -27,14 +27,14 @@
     <% end %>
   </ul>
   <h3 class="landmark heading"><%= ts('Alphabetised List of Fandoms') %></h3>
-<ol class="alphabet fandom index <%= 'collection' if @collection %>">
+<ol class="alphabet fandom index group <%= 'collection' if @collection %>">
     <% @fandoms_by_letter.each_pair do |letter, fandoms| %>
-      <li id='letter-<%= letter %>' class='letter listbox'>
+      <li id='letter-<%= letter %>' class='letter listbox group'>
         <h3 class="heading">
           <%= letter %>
           <span class="action top" title="top"><%= link_to '&#8593;'.html_safe, "#alphabet" %></span>
         </h3>
-        <ul class="tags index">
+        <ul class="tags index group">
           <% for fandom in fandoms %>
           <li class='<%= cycle('odd', 'even', :name => "letter-#{letter}") %>'>
             <%= link_to_tag_works_with_text(fandom, fandom.name) %>

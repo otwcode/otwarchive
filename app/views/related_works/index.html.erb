@@ -59,7 +59,7 @@
  
 <% unless @translations_by_user.blank? %>  
   <h3 class="heading">Works translated by <%= @user.login %></h3>
-  <dl class="own translations index">
+  <dl class="own translations index group">
     <% @translations_by_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
       <dt>
@@ -84,7 +84,7 @@
  
 <% unless @remixes_of_user.blank? %>
   <h3 class="heading">Works inspired by <%= @user.login %></h3>
-<dl class="inspired index">
+<dl class="inspired index group">
     <% @remixes_of_user.each do |related_work| %>
       <% if related_work.parent && related_work.work %>
       <dt class="child">
@@ -109,7 +109,7 @@
   
 <% unless @remixes_by_user.blank? %>
   <h3 class="heading">Works that inspired <%= @user.login %></h3>
-  <dl class="inspired index">
+  <dl class="inspired index group">
     <% @remixes_by_user.each do |related_work| %>
       <% unless related_work.translation? %>
         <% if related_work.parent && related_work.work %>

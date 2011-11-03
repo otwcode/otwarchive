@@ -17,7 +17,7 @@
 <h2 class="heading"><%= t('.external_authors_unclaimed', :default => "External Authors Imported") %></h2>
 <% end %>
 
-<ul class="index">
+<ul class="index group">
   <% @external_authors.each do |external_author| %>
     <li>
       <h4 class="heading">Identity: <%= external_author.external_author_names.collect(&:name).join(", ") %>
@@ -31,7 +31,7 @@
       <% end %>
       
       <h4 class="heading">Works:</h4>
-        <ul class="work index">
+        <ul class="work index group">
         <% external_author.external_creatorships.each do |ext_creatorship| %>
         <li><%= link_to(ext_creatorship.creation.title, work_path(ext_creatorship.creation)) %></li>
         <% end %>

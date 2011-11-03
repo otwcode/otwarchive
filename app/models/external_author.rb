@@ -17,11 +17,15 @@ class ExternalAuthor < ActiveRecord::Base
   has_one :invitation
 
   validates_uniqueness_of :email, :case_sensitive => false, :allow_blank => true,
-    :message => t('email_in_use', :default => 'Sorry, that email address is already being used.')
+    :message => ts('There is already an external author with that email.')
 
   validates :email, :email_veracity => true
 
   after_create :create_default_name
+
+  def external_work_creatorships
+    external_creatorships.where("external_creatorships.creation_type = 'Work'")
+  end
 
   def create_default_name
     @default_name = self.external_author_names.build
@@ -46,7 +50,7 @@ class ExternalAuthor < ActiveRecord::Base
 
     claimed_works = []
     external_author_names.each do |external_author_name|
-      external_author_name.external_creatorships.select {|ec| ec.creation_type == "Work"}.each do |external_creatorship|
+      external_author_name.external_work_creatorships.each do |external_creatorship|
         work = external_creatorship.creation
         # if previously claimed, don't do it again
         unless work.users.include?(claiming_user)
@@ -68,7 +72,7 @@ class ExternalAuthor < ActiveRecord::Base
   def unclaim!
     return false unless self.is_claimed
 
-    self.external_creatorships.select {|ec| ec.creation_type == "Work"}.each do |external_creatorship|
+    self.external_work_creatorships.each do |external_creatorship|
       # remove user, add archivist back
       archivist = external_creatorship.archivist
       work = external_creatorship.creation
@@ -82,7 +86,7 @@ class ExternalAuthor < ActiveRecord::Base
 
   def orphan(remove_pseud)
     external_author_names.each do |external_author_name|
-      external_author_name.external_creatorships.select {|ec| ec.creation_type == "Work"}.each do |external_creatorship|
+      external_author_name.external_work_creatorships.each do |external_creatorship|
         # remove archivist as owner, convert to the pseud
         archivist = external_creatorship.archivist
         work = external_creatorship.creation
@@ -94,7 +98,7 @@ class ExternalAuthor < ActiveRecord::Base
   end
 
   def delete_works
-    self.external_creatorships.select {|ec| ec.creation_type == "Work"}.each do |external_creatorship|
+    self.external_work_creatorships.each do |external_creatorship|
       work = external_creatorship.creation
       work.destroy
     end
@@ -102,7 +106,7 @@ class ExternalAuthor < ActiveRecord::Base
 
   def block_import
     self.do_not_import = true
-
+    save
   end
 
   def notify_user_of_claim(claimed_works)

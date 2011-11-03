@@ -16,6 +16,12 @@ describe Skin do
       
       "should allow through valid CSS shorthand values" => 
         "body {background:#ffffff url('http://mywebsite.com/img_tree.png') no-repeat right top;}",
+
+      "should allow images in the images directory" =>
+        "body {background:#ffffff url('/images/img_tree.png') no-repeat right top;}",
+
+      "should allow unquoted urls" =>
+        "body {background:#ffffff url(http://mywebsite.com/images/img_tree.png) no-repeat right top;}",
       
       "should allow comments on their own lines" => 
         "/* starting comment */

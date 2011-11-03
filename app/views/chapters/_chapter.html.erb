@@ -8,7 +8,7 @@
 
 <% cache("#{chapter.cache_key}-show") do %>
 
-  <div class="chapter preface" role="complementary">
+  <div class="chapter preface group" role="complementary">
     <h3 class="title">
       <% if current_page?(:controller => 'chapters', :action => 'show') %><%= link_to chapter.chapter_header, [chapter.work, chapter] %><% else %><%= chapter.chapter_header %><% end %><% unless chapter.title.blank? %>: <%= chapter.title.html_safe %><% end %>
     </h3>
@@ -49,7 +49,7 @@
   </div>
 
   <!--main content-->
-  <div id="module" class="userstuff" role="article">
+  <div class="userstuff module" role="article">
     <% unless @downloading %>
   	  <h3 class="landmark heading" id="work">Chapter Text</h3>	
     <% end %>
@@ -58,7 +58,7 @@
   <!--/main-->
 
   <% unless chapter.endnotes.blank? %>
-    <div class="chapter preface"><div class="end notes module" id="chapter_<%= chapter.position.to_s %>_endnotes" role="complementary">
+    <div class="chapter preface group"><div class="end notes module" id="chapter_<%= chapter.position.to_s %>_endnotes" role="complementary">
      <h3 class="heading"><%=h ts('Notes:') %></h3>
         <blockquote class="userstuff"><%=raw sanitize_field(chapter, :endnotes) %></blockquote>
     </div></div>

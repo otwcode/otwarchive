@@ -6,7 +6,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<dl class="subscription index">
+<dl class="subscription index group">
 <% @subscriptions.each do |subscription| %>
   <dt>
       <%= link_to(subscription.name, subscription.subscribable) %>

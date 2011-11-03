@@ -8,7 +8,7 @@
 <!--/subnav-->
 
 <!--main content-->
-<li class="comment <%= cycle :odd, :even %>" id="comment_<%= @comment.id %>" role="article">
+<li class="comment group <%= cycle :odd, :even %>" id="comment_<%= @comment.id %>" role="article">
   <%= render :partial => 'comments/comment_form', :locals => {:comment => @comment, :commentable => @comment.commentable, :button_name => ts("Update")}%>
 </li>
 <!--/content-->

@@ -31,7 +31,7 @@
   <% unless @skin.parent_skins.empty? %>
     <div class="parents module">
       <h3 class="heading">Parent Skins</h3>
-      <ul class="index">
+      <ul class="index group">
       <% @skin.parent_skins.each do |parent| %>
         <li><%= link_to parent.title, skin_path(parent) %></li>
       <% end %>
@@ -45,8 +45,8 @@
       <p class="notes">(Can be overridden by custom <abbr title="cascading style sheets">CSS</abbr>)</p>
   
       <div class="wrapper">
-    		<!--REVIEW: is this meta?-->
-    		<dl class="meta">
+    		<!--REVIEW: is this meta? It doesn't match-->
+    		<dl class="meta group">
           <% if @skin.margin %><dt>Margin</dt><dd><%= @skin.margin %><% end %>
           <% unless @skin.font.blank? %><dt>Font</dt><dd><%= @skin.font %><% end %>
           <% unless @skin.background_color.blank? %><dt>Background color</dt><dd><%= @skin.background_color %><% end %>

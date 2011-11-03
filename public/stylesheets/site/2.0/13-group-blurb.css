@@ -18,6 +18,8 @@ Perhaps we can make a wizard for this specific task.
 li.blurb, .blurb .blurb
         { display:block; position: relative; clear:left; padding: 0.429em 0.75em; overflow:visible;
           box-shadow:inset 1px 1px 3px #ccc; border-radius:0.15em }
+li.blurb:after
+        { content:" "; display:block; height:0; font-size:0; clear:both; visibility:hidden; }
 .blurb .module         
         { float:none}
 .blurb .header
