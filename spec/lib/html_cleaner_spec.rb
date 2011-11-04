@@ -95,8 +95,45 @@ describe HtmlCleaner do
 
   end
   
-  describe "fix_bad_characters" do
+  describe "close_unclosed_tag" do
 
+    it "should close tag at end of line" do
+      result = close_unclosed_tag("first <i>line\n second line", "i", 1)
+      result.should == "first <i>line</i>\n second line"
+    end
+
+    %w(br col hr img).each do |tag|
+      it "should not touch self-closing #{tag} tag" do
+        result = close_unclosed_tag("don't <#{tag}> close", tag, 1)
+        result.should == "don't <#{tag}> close"
+      end
+    end
+    
+    it "should close tag before next opening tag" do
+      result = close_unclosed_tag("some <i>more<s>text</s>", "i", 1)
+      result.should == "some <i>more</i><s>text</s>"
+    end
+    
+    it "should close tag before next closing tag" do
+      result = close_unclosed_tag("some <s><i>more text</s>", "i", 1)
+      result.should == "some <s><i>more text</i></s>"
+    end
+    
+    it "should close tag before next closing tag" do
+      result = close_unclosed_tag("some <s><i>more text</s>", "i", 1)
+      result.should == "some <s><i>more text</i></s>"
+    end
+
+    it "should close second opening tag" do
+      result = close_unclosed_tag("some <i>more</i> <i>text", "i", 1)
+      result.should == "some <i>more</i> <i>text</i>"
+    end
+    
+  end
+
+
+  describe "fix_bad_characters" do
+    
     it "should not touch normal text" do
       fix_bad_characters("normal text").should == "normal text"
     end
@@ -353,6 +390,8 @@ describe HtmlCleaner do
       Here is an unclosed <em>em tag.
     
       Here is an unclosed <strong>strong tag.
+
+      Stuff.
       """
       doc = Nokogiri::XML.fragment(add_paragraphs_to_text(html))
       doc.xpath("./p[1]/em").children.to_s.strip.should == "em tag." 
@@ -399,8 +438,8 @@ describe HtmlCleaner do
       end
     end
 
-    it "should not add empty p tags when opening p tags are missing" do
-      result = add_paragraphs_to_text("A</p><p>B</p><p>C</p>")
+    it "should not add empty p tags" do
+      result = add_paragraphs_to_text("A<p>B</p><p>C</p>")
       puts result
       doc = Nokogiri::XML.fragment(result)
       doc.xpath("./p").size.should == 3

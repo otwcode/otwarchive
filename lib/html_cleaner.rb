@@ -208,6 +208,10 @@ module HtmlCleaner
        pre table ul).include?(tag)
   end
 
+  def self_closing_tag?(tag)
+    %w(br col hr img).include?(tag)
+  end
+
   # Tags that need to go inside p tags
   def put_inside_p_tag?(tag)
     %w(a abbr acronym address b big cite code del dfn em i ins
@@ -229,6 +233,8 @@ module HtmlCleaner
   def traverse_nodes(node, stack=nil, out_html=nil)
     stack = stack || TagStack.new
     out_html = out_html || []
+
+    p stack
 
     # Don't decend into node if we don't want to touch the content of
     # this kind of tag
@@ -290,8 +296,34 @@ module HtmlCleaner
     return [stack, out_html]
   end
 
+
+  # Close an unclosed tag at the end of the line or before the next
+  # opening or closing tag
+  def close_unclosed_tag(text, tag, line)
+    return text if self_closing_tag?(tag)
+    line = line.to_i
+    lines = text.lines.to_a
+    pattern = /(^.*<#{tag}\s*.*?>.*?)($|<\/?\w+.*?\/?>)/
+    lines[line-1].gsub!(pattern, "\\1</#{tag}>\\2")
+    return lines.join("")
+  end
+
   def add_paragraphs_to_text(text)
+    puts "====="
+    puts text
+
+    # By default, Nokogiri closes unclosed tags very late, often at
+    # the end of the document. We want runaway tags closed at the end
+    # of the line
+    doc = Nokogiri::XML.parse("<myroot>#{text}</myroot>")
+    doc.errors.each do |error|
+      match = error.message.match(/Premature end of data in tag (\w+) line (\d+)/)
+      text = close_unclosed_tag(text, match[1], match[2]) if match
+    end
+
+    # Adding paragraphs in place of linebreaks
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
+    puts doc.to_s
     out_html = traverse_nodes(doc.at_css("myroot"))[1].join
     out_html =  Nokogiri::HTML.parse(out_html).at_css("myroot").children.to_xhtml
     return out_html
