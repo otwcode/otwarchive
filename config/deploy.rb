@@ -95,6 +95,7 @@ namespace :stage_only do
   task :update_public do
     run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/downloads"
     run "ln -nfs -t #{release_path}/public/ #{deploy_to}/shared/static"
+    run "ln -nfs -t #{release_path}/public/stylesheets/ #{deploy_to}/shared/skins"
   end
   task :update_configs do
     run "ln -nfs -t #{release_path}/config/ #{deploy_to}/shared/config/*"
@@ -118,6 +119,7 @@ namespace :production_only do
   task :update_public, :roles => [:web, :backend] do
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
     run "ln -nfs -t #{release_path}/public/ /static/static"
+    run "ln -nfs -t #{release_path}/public/stylesheets/ /static/skins"
     run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt"
   end
   task :update_configs, :roles => [:app, :backend] do
