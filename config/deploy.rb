@@ -119,7 +119,7 @@ namespace :production_only do
   task :update_public, :roles => [:web, :backend] do
     run "ln -nfs -t #{release_path}/public/ /static/downloads"
     run "ln -nfs -t #{release_path}/public/ /static/static"
-    run "ln -nfs -t #{release_path}/public/stylesheets/ #{deploy_to}/shared/skins"
+    run "ln -nfs -t #{release_path}/public/stylesheets/ /static/skins"
     run "cp #{release_path}/public/robots.public.txt #{release_path}/public/robots.txt"
   end
   task :update_configs, :roles => [:app, :backend] do
