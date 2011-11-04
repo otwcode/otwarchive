@@ -8,9 +8,11 @@ notice that CSS3 declarations sit on their own line and always come last*/
 #header .landmark 
         { clear:none }
 #header h1, #header #greeting 
-        { position:absolute; right:0; top:0; margin:0}
+        { position:absolute; right:0; top:0; margin:0 }
 #header h1
         { left:0; right:auto}
+#header #login
+        { position:relative; z-index:10 }
 #header #small_login
         { margin-left:120px; background:#ddd; border:2px solid #fff; padding:0.375em;
           box-shadow:inset 1px 0 5px #555 }
