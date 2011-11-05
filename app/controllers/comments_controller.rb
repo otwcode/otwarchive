@@ -356,8 +356,7 @@ class CommentsController < ApplicationController
       # display the comment's direct parent (and its associated thread)
       redirect_to(url_for(default_options.merge(options)))
     else
-    # TODO: for chaptered works, redirect to chapter, not ultimate_parent!
-    # comment.parent? or comment.commentable_object?
+      # need to redirect to the specific chapter; redirect_to_all will then retrieve full work view if applicable
       redirect_to_all_comments(comment.parent, options.merge({:show_comments => true, :anchor => "comment_#{comment.id}"}))
     end
   end
