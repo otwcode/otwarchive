@@ -149,7 +149,7 @@ class CommentsController < ApplicationController
                 # so go back to the comments page instead of reloading full work
                 redirect_to comment_path(@comment)
               else
-                redirect_to_comment(@comment, {:view_full_work => params[:view_full_work]})
+                redirect_to_comment(@comment, {:view_full_work => (params[:view_full_work] == "true")})
               end
             end
           end
@@ -372,7 +372,7 @@ class CommentsController < ApplicationController
                   :delete_comment_id => options[:delete_comment_id],
                   :anchor => options[:anchor])
     else
-      if commentable.is_a?(Chapter) && (options[:view_full_work] == true || current_user.try(:preference).try(:view_full_works))
+      if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
         commentable = commentable.work
       end
       redirect_to :controller => commentable.class.to_s.underscore.pluralize,

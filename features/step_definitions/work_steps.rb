@@ -61,9 +61,10 @@ end
 Given /^the chaptered work with comments setup$/ do
   Given %{the chaptered work with 3 chapters "BigBang"}
   When "I am logged in as a random user"
-  And %{I view the work "BigBang"}
+    And %{I view the work "BigBang"}
     And %{I post a comment "Woohoo"}
   (2..3).each do |i|
+    And %{I view the work "BigBang"}
     And %{I view the #{i.to_s}th chapter}
     And %{I post a comment "Woohoo"}
   end
