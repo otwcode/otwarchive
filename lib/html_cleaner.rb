@@ -234,6 +234,7 @@ module HtmlCleaner
     stack = stack || TagStack.new
     out_html = out_html || []
 
+    p node.name
     p stack
 
     # Don't decend into node if we don't want to touch the content of
@@ -244,7 +245,8 @@ module HtmlCleaner
       end
 
       if put_outside_p_tag?(node.name) && stack.inside_paragraph?
-        out_html.concat(stack.close_paragraph_tags + [node.to_s] + stack.open_paragraph_tags)
+        out_html.concat(stack.close_paragraph_tags + [node.to_s])
+        # TODO: remove those tags from stack.
         return [stack, out_html]
       end
 
