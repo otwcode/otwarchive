@@ -139,7 +139,7 @@ class CommentsController < ApplicationController
           respond_to do |format|
             format.html do
               if request.referer.match(/inbox/)
-                redirect_to user_inbox_path(current_user, :filters => param[:filters])
+                redirect_to user_inbox_path(current_user, :filters => params[:filters])
               elsif request.referer.match(/new/)
                 # came here from the new comment page, probably via download link
                 # so go back to the comments page instead of reloading full work

@@ -117,11 +117,11 @@
 
       <dt><%= ts("Sort by date") %></dt>
       <dd>
-        <%= radio_button_tag 'filters[date]', 'DESC', @select_date != 'ASC' %>
+        <%= radio_button_tag 'filters[date]', 'desc', @select_date != 'asc' %>
         <%= label_tag 'filters_date_desc', ts("Newest first") %>
       </dd>
       <dd>
-        <%= radio_button_tag 'filters[date]', 'ASC', @select_date == 'ASC' %>
+        <%= radio_button_tag 'filters[date]', 'asc', @select_date == 'asc' %>
         <%= label_tag 'filters_date_asc', ts("Oldest first") %>
       </dd>
       <dt class="landmark"><%= ts("Submit") %></dt>
