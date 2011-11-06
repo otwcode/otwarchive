@@ -327,11 +327,6 @@ namespace :After do
     end
   end
 
-  desc "Load site skins"
-  task(:load_site_skins => :environment) do
-    Skin.load_site_css
-  end
-
   desc "Convert existing skins to be based off version 1.0"
   task(:convert_existing_skins => :environment) do
     oldskin = Skin.find_by_title_and_official("Archive 1.0", true)
@@ -339,15 +334,21 @@ namespace :After do
       puts "WARNING: couldn't convert skins, version 1.0 skin not found: did you load the site skins?"
       exit
     end
-    puts "NOTE: skins that will not convert are invalid because of missing preview images or old unsanitized code - do we want to disable them?"
     Skin.site_skins.each do |skin|
       next if skin.css.blank? || !skin.parent_skins.empty?
       skin.role = "override"
+      # using this temporarily to flag old skins to disable until we upgrade them -- NN
+      skin.do_not_upgrade = true 
+
       if skin.save
         skin.skin_parents.build(:position => (skin.parent_skins.count+1), :parent_skin => oldskin)
         skin.save
       else
-        puts "Couldn't convert #{skin.title}: #{skin.errors.to_s}"
+        puts "Couldn't convert #{skin.title}: #{skin.errors.to_s} - disabling"
+        if skin.official?
+          skin.update_attribute(:official, false)
+          skin.remove_me_from_preferences
+        end
       end
     end
   end
@@ -363,5 +364,5 @@ desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
 #task :After => ['autocomplete:reload_data']
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
-task :After => ['After:convert_tag_sets', 'After:load_site_skins', 'After:convert_existing_skins', 
+task :After => ['After:convert_tag_sets', 'skins:load_site_skins', 'After:convert_existing_skins', 
                 'autocomplete:reload_data', 'After:remove_old_epubs']
