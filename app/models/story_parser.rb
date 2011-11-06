@@ -706,7 +706,7 @@ class StoryParser
 
           fandom, recip, challenge, year, author = $1, $2, $3, $4, $5
 
-          tags << "recipient:#{recip}"
+          work_params[:recipients] = recip
 
           if challenge=="Yuletide"
             tags << "challenge:Yuletide #{year}"

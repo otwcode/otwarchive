@@ -228,7 +228,7 @@ class UsersController < ApplicationController
       @user = User.find_by_activation_code(params[:id])
       if @user
         if @user.active?
-          flash[:error] = ts("Your account has already been activated.")
+          flash[:error].now = ts("Your account has already been activated.")
           redirect_to @user and return
         end
         @user.activate && UserMailer.activation(@user.id).deliver
@@ -244,7 +244,7 @@ class UsersController < ApplicationController
           external_authors.each do |external_author|
             external_author.claim!(@user)
           end
-          flash[:notice] += ts(" We found some stories already uploaded to the Archive of Our Own that we think belong to you! You can see them either in your works below or in your drafts folder.")
+          flash[:notice] += ts(" We found some works already uploaded to the Archive of Our Own that we think belong to you! You'll see them on your homepage when you've logged in.")
         end
         if @user.identity_url
           redirect_to(login_path(:use_openid => true))
@@ -252,7 +252,7 @@ class UsersController < ApplicationController
           redirect_to(login_path)
         end
       else
-        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact <a href='/support'>support</a> for more help.").html_safe
+        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
         redirect_to ''
       end
     end
