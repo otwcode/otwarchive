@@ -202,6 +202,7 @@ module HtmlCleaner
     array
   end
 
+
   # Tags whose content we don't touch
   def dont_touch_content_tag?(tag)
     %w(a abbr acronym address br dl h1 h2 h3 h4 h5 h6 hr img ol p
@@ -235,7 +236,6 @@ module HtmlCleaner
     out_html = out_html || []
 
     p node.name
-    p stack
 
     # Don't decend into node if we don't want to touch the content of
     # this kind of tag
@@ -245,8 +245,7 @@ module HtmlCleaner
       end
 
       if put_outside_p_tag?(node.name) && stack.inside_paragraph?
-        out_html.concat(stack.close_paragraph_tags + [node.to_s])
-        # TODO: remove those tags from stack.
+        out_html.concat(stack.close_paragraph_tags + [node.to_s] + stack.open_paragraph_tags)
         return [stack, out_html]
       end
 
@@ -291,10 +290,6 @@ module HtmlCleaner
     end
 
     out_html.concat(stack.close_and_pop_last)
-    
-    # Remove empty p tags we accidentally inserted ourselves. Won't
-    # delete user's empty p tags.
-    out_html.pop(2) if out_html[-2..-1] == ["<p>", "</p>"]
     return [stack, out_html]
   end
 
@@ -327,6 +322,9 @@ module HtmlCleaner
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
     puts doc.to_s
     out_html = traverse_nodes(doc.at_css("myroot"))[1].join
+
+    # remove empty paragraphs
+    out_html.gsub!(/<p>\s*?<\/p>/, "")
     out_html =  Nokogiri::HTML.parse(out_html).at_css("myroot").children.to_xhtml
     return out_html
   end
