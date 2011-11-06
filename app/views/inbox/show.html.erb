@@ -44,11 +44,9 @@
             <% end %>
             <li>
               <% if inbox_comment.replied_to? %>
-           <!--BACK END, checkmark means error in several countries, but ts() escapes the entity on the page
-           any ideas?-->
                 <span class="replied" title="<%= ts("replied to") %>"><%= ts("&#10004;").html_safe %></span>
               <% end %>
-              <%= link_to ts("Reply"), reply_user_inbox_path(current_user, :comment_id => inbox_comment.feedback_comment), :remote => true %>
+              <%= link_to ts("Reply"), reply_user_inbox_path(current_user, :comment_id => inbox_comment.feedback_comment, :filters => params[:filters]), :remote => true %>
             </li>
             <li class="action">
               <%= check_box_tag "inbox_comments[]", inbox_comment.id, false, :title => ts("select this comment"), :id => "inbox_comments_#{inbox_comment.id}" %>

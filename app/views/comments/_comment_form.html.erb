@@ -6,10 +6,19 @@
   <%= form_for value_for_comment_form(commentable, comment), :remote => !comment.new_record?, :html => {:id => "comment_for_#{commentable.id}"} do |f| %>
     <fieldset>
       <legend><%= ts("Post Comment") %></legend>
+
+      <% # here come the hacks (hidden fields to transmit various info to the create action) %>
       <% if commentable.is_a?(Tag) %>
         <%= hidden_field_tag :tag_id, commentable.name %>
       <% end %>
-      <%= hidden_field_tag :view_full_work, params[:view_full_work] %>
+      <% if params[:view_full_work] %>
+        <%= hidden_field_tag :view_full_work, params[:view_full_work] %>
+      <% end %>
+      <% if controller.controller_name == "inbox" && params[:filters] %>
+        <%= hidden_field_tag "filters[read]", params[:filters][:read] %>
+        <%= hidden_field_tag "filters[replied_to]", params[:filters][:replied_to] %>
+        <%= hidden_field_tag "filters[date]", params[:filters][:date] %>
+      <% end %>
 
       <% if logged_in? %>
         <% if current_user.pseuds.count > 1 %>
