@@ -33,27 +33,27 @@ describe HtmlCleaner do
     describe "open_paragraph_tags" do
       it "should open tags" do
         stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s", {}]]])
-        stack.open_paragraph_tags.should == ["<p>", "<i>", "<s>"]
+        stack.open_paragraph_tags.should == "<p><i><s>"
       end
       
       it "should open tags" do
         stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s", {}]]])
-        stack.open_paragraph_tags.should == ["<p>", "<s>"]
+        stack.open_paragraph_tags.should == "<p><s>"
       end
 
       it "should handle attributes" do
         stack.concat([[["div", {}]], [["p", {}]], [["s", {"color" => "blue"}]]])
-        stack.open_paragraph_tags.should == ["<p>", "<s color='blue'>"]
+        stack.open_paragraph_tags.should == "<p><s color='blue'>"
       end
 
       it "should ignore text nodes" do
         stack.concat([[["div", {}]], [["p", {}], ["s", {}]], [["text", {}]]])
-        stack.open_paragraph_tags.should == ["<p>", "<s>"]
+        stack.open_paragraph_tags.should == "<p><s>"
       end
       
       it "should return empty array when not inside paragraph" do
         stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
-        stack.open_paragraph_tags.should == []
+        stack.open_paragraph_tags.should == ""
       end
 
     end
@@ -61,34 +61,34 @@ describe HtmlCleaner do
     describe "close_paragraph_tags" do
       it "should close tags" do
         stack.concat([[["div", {}]], [["p", {}], ["i", {}]], [["s", {}]]])
-        stack.close_paragraph_tags.should == ["</s>", "</i>", "</p>"]
+        stack.close_paragraph_tags.should == "</s></i></p>"
       end
       
       it "should close tags" do
         stack.concat([[["div", {}]], [["i", {}], ["p", {}]], [["s", {}]]])
-        stack.close_paragraph_tags.should == ["</s>", "</p>"]
+        stack.close_paragraph_tags.should == "</s></p>"
       end
 
       it "should handle attributes" do
         stack.concat([[["div", {}]], [["p", {}]], [["s", {"color" => "blue"}]]])
-        stack.close_paragraph_tags.should == ["</s>", "</p>" ]
+        stack.close_paragraph_tags.should == "</s></p>"
       end
 
       it "should ignore text nodes" do
         stack.concat([[["div", {}]], [["p", {}], ["s", {}]], [["text", {}]]])
-        stack.close_paragraph_tags.should == ["</s>", "</p>"]
+        stack.close_paragraph_tags.should == "</s></p>"
       end
 
       it "should return empty array when not inside paragraph" do
         stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
-        stack.close_paragraph_tags.should == []
+        stack.close_paragraph_tags.should == ""
       end
     end
     
     describe "close_and_pop_last" do
       it "should close tags" do
         stack.concat([[["div", {}]], [["p", {}], ["i", {}]]])
-        stack.close_and_pop_last.should == ["</i>", "</p>"]
+        stack.close_and_pop_last.should == "</i></p>"
         stack.should == [[["div", {}]]]
       end
     end

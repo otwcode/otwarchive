@@ -39,41 +39,41 @@ module HtmlCleaner
     end
 
     def open_paragraph_tags
-      result = []
+      result = ""
       each do |tags| 
         tags.each do |tag, attributes|
-          next if result == [] && tag != "p"
+          next if result == "" && tag != "p"
           next if tag == "text" || tag == "myroot"
-          result << open_tag(tag, attributes)
+          result += open_tag(tag, attributes)
         end
       end
       return result
     end
     
     def close_paragraph_tags
-      return [] if !inside_paragraph?
-      result = []
+      return "" if !inside_paragraph?
+      result = ""
       reverse.each do |tags| 
         tags.reverse.each do |tag, attributes|
           next if tag == "text" || tag == "myroot"
-          result << close_tag(tag, attributes)
+          result += close_tag(tag, attributes)
           return result if tag == "p"
         end
       end
     end
 
     def close_and_pop_last
-      result = []
+      result = ""
       pop.reverse.each do |tag, attributes|
         next if tag == "text" || tag == "myroot"
-        result << "</#{tag}>"
+        result += "</#{tag}>"
       end
       return result
     end
 
     def add_p
       self[-1] = self[-1] + [["p", {}]]
-      return ["<p>"]
+      return "<p>"
     end
   end
 
@@ -233,7 +233,7 @@ module HtmlCleaner
 
   def traverse_nodes(node, stack=nil, out_html=nil)
     stack = stack || TagStack.new
-    out_html = out_html || []
+    out_html = out_html || ""
 
     p node.name
 
@@ -241,22 +241,22 @@ module HtmlCleaner
     # this kind of tag
     if dont_touch_content_tag?(node.name)
       if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
-        return [stack, out_html << "<p>#{node.to_s}</p>"]
+        return [stack, out_html += "<p>#{node.to_s}</p>"]
       end
 
       if put_outside_p_tag?(node.name) && stack.inside_paragraph?
-        out_html.concat(stack.close_paragraph_tags + [node.to_s] + stack.open_paragraph_tags)
+        out_html += (stack.close_paragraph_tags + node.to_s + stack.open_paragraph_tags)
         return [stack, out_html]
       end
 
-      return [stack, out_html << node.to_s]
+      return [stack, out_html += node.to_s]
     end
 
     if !node.text?
-      out_html.concat(stack.add_p) if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
+      out_html += stack.add_p if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
 
       stack << [[node.name, Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]]]
-      out_html << open_tag(node)
+      out_html += open_tag(node)
 
     else
       text = node.to_s
@@ -269,19 +269,19 @@ module HtmlCleaner
       next_tag = node.next_sibling.nil? ? "" : node.next_sibling.name
       text.rstrip! if no_break_before_after_tag?(next_tag)
 
-      out_html.concat(stack.add_p) if !stack.inside_paragraph? && text != ""
+      out_html += stack.add_p if !stack.inside_paragraph? && text != ""
       stack << [[node.name, Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]]]
 
       # If we have three newlines, assume user wants a blank line
       text.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
       
       # Convert double newlines into single paragraph break
-      text.gsub!(/\n+\s*?\n+/, stack.close_paragraph_tags.join + stack.open_paragraph_tags.join)
+      text.gsub!(/\n+\s*?\n+/, stack.close_paragraph_tags + stack.open_paragraph_tags)
       
       # Convert single newlines into br tags
       text.gsub!(/\n/, '<br/>')
       
-      out_html << text
+      out_html += text
     end
 
     # decend into child nodes
@@ -289,7 +289,7 @@ module HtmlCleaner
       stack, out_html = traverse_nodes(child, stack, out_html)
     end
 
-    out_html.concat(stack.close_and_pop_last)
+    out_html += stack.close_and_pop_last
     return [stack, out_html]
   end
 
@@ -321,7 +321,7 @@ module HtmlCleaner
     # Adding paragraphs in place of linebreaks
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
     puts doc.to_s
-    out_html = traverse_nodes(doc.at_css("myroot"))[1].join
+    out_html = traverse_nodes(doc.at_css("myroot"))[1]
 
     # remove empty paragraphs
     out_html.gsub!(/<p>\s*?<\/p>/, "")
