@@ -614,4 +614,10 @@ p.kudos        {padding: 0.25em 0.25em 0.25em 60px; min-height: 50px; background
 .blurb .heading {display:block;}
 ol.pagination
         { text-align:center; clear:right; margin:0.643em auto}
+        
+        
+        #footer .secondary    
+                { background: #fff; position: absolute; z-index: 99; border:2px solid #bbb; margin: auto; padding:0.375em; overflow:hidden; 
+                  box-shadow:2px 2px 5px #bbb; border-radius:0.15em }
+        #footer .secondary li {font-size:2em; display:block; margin:0.375em auto; text-align:left;}
 

@@ -1,0 +1,265 @@
+/* Skin: Dusted Off */
+/*  Please DO copy and reuse and modify this code any way you like!
+CREDITS
+# code: adapted from 'colour flip combos' by lim @ ao3 and 'Dusty Rose' by sistabro @ ao3
+*/
+
+/*BACKGROUND TO WHITE*/
+body,th,tr:hover,col.name,fieldset fieldset,fieldset dl dl,form blockquote.userstuff,input:focus,select:focus,textarea:focus, .autocomplete div.dropdown ul, #ui-datepicker-div, #ibox_wrapper, #ibox_content, .toggled form, .dynamic form, .secondary, .listbox .index, .dashboard .listbox .index, .nomination dt
+        { background:#fff;}
+#header h2, #footer ul, #footer ul.navigation a, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
+        { color:#fff;}
+tbody tr,thead td, #header #small_login,fieldset,form dl,fieldset dl dl,fieldset fieldset fieldset,fieldset fieldset dl dl,dd.hideme,form blockquote.userstuff,form dt, .actions a:active, .current,a.current, .current a:visited, .search span.tip
+        { border-color:#fff}
+form .notice,form ul.notes
+        { box-shadow:0px 0 3px #fff}
+        
+/* KEY COLOUR TO DUSTY ROSE*/
+#header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
+        { background:#b35b6b;}
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+        { color:#b35b6b;}
+#greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, #header a, #header input, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active 
+        { border-color:#b35b6b !important}
+/* END SKIN */
+
+/* Skin: Zebra Mono */
+/*Please DO copy and reuse and modify this code any way you like!
+CREDITS
+# resources: http://rainny-stock.deviantart.com/art/Zebra-Fur-Texture-Stock-135405132
+# code: adapted from 'colour flip combos' by lim @ ao3
+# dedicated to Zebra @ ao3
+*/
+
+/*BACKGROUND TO WHITE*/
+body,th,tr:hover,col.name,fieldset fieldset,fieldset dl dl,form blockquote.userstuff,input:focus,select:focus,textarea:focus, .autocomplete div.dropdown ul, #ui-datepicker-div, #ibox_wrapper, #ibox_content, .toggled form, .dynamic form, .secondary, .listbox .index, .dashboard .listbox .index, .nomination dt
+        { background:#fff;}
+#header h2, #footer ul, #footer ul.navigation a, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
+        { color:#fff;}
+tbody tr,thead td, #header #small_login,fieldset,form dl,fieldset dl dl,fieldset fieldset fieldset,fieldset fieldset dl dl,dd.hideme,form blockquote.userstuff,form dt, .actions a:active, .current,a.current, .current a:visited, .search span.tip
+        { border-color:#fff}
+form .notice,form ul.notes
+        { box-shadow:0px 0 3px #fff}
+        
+/* KEY COLOUR TO BLACK and FUR (DEFAULT IS STRONG RED)*/
+#header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
+        { background:#000 url('/images/skins/textures/tiles/black-zebra-fur.jpg'); background-size:500px}
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+        { color:#000;}
+#greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, #header a, #header input, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active 
+        { border-color:#000 !important}
+
+/*TURN OFF DEFAULT ICON*/
+.icon   { background:none;}
+
+/* END SKIN */
+
+/* Skin: For The Trees */
+/* Please DO copy and reuse and modify this code any way you like!
+CREDITS
+# code: adapted from 'colour flip combos' by lim @ ao3 and 'Sunny Forest' by enigel @ ao3
+*/
+
+/*BACKGROUND TO WHITE*/
+body,th,tr:hover,col.name,fieldset fieldset,fieldset dl dl,form blockquote.userstuff,input:focus,select:focus,textarea:focus, .autocomplete div.dropdown ul, #ui-datepicker-div, #ibox_wrapper, #ibox_content, .toggled form, .dynamic form, .secondary, .listbox .index, .dashboard .listbox .index, .nomination dt
+        { background:#fff;}
+#header h2, #footer ul, #footer ul.navigation a, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
+        { color:#fff;}
+tbody tr,thead td, #header #small_login,fieldset,form dl,fieldset dl dl,fieldset fieldset fieldset,fieldset fieldset dl dl,dd.hideme,form blockquote.userstuff,form dt, .actions a:active, .current,a.current, .current a:visited, .search span.tip
+        { border-color:#fff}
+form .notice,form ul.notes
+        { box-shadow:0px 0 3px #fff}
+        
+/* KEY COLOUR TO FOREST GREEN*/
+#header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
+        { background:#003D00;}
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+        { color:#003D00;}
+#greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, #header a, #header input, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active 
+        { border-color:#003D00 !important}
+/* END SKIN */
+
+/* Skin: Mono */
+/* Please DO copy and reuse and modify this code any way you like!
+CREDITS
+# code: adapted from 'colour flip combos' by lim @ ao3
+*/
+
+/*BACKGROUND TO WHITE*/
+body,th,tr:hover,col.name,fieldset fieldset,fieldset dl dl,form blockquote.userstuff,input:focus,select:focus,textarea:focus, .autocomplete div.dropdown ul, #ui-datepicker-div, #ibox_wrapper, #ibox_content, .toggled form, .dynamic form, .secondary, .listbox .index, .dashboard .listbox .index, .nomination dt
+        { background:#fff;}
+#header h2, #footer ul, #footer ul.navigation a, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
+        { color:#fff;}
+tbody tr,thead td, #header #small_login,fieldset,form dl,fieldset dl dl,fieldset fieldset fieldset,fieldset fieldset dl dl,dd.hideme,form blockquote.userstuff,form dt, .actions a:active, .current,a.current, .current a:visited, .search span.tip
+        { border-color:#fff}
+form .notice,form ul.notes
+        { box-shadow:0px 0 3px #fff}
+        
+/* KEY COLOUR TO BLACK(DEFAULT IS STRONG RED)*/
+#header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
+        { background:#000 ; background-size:500px}
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+        { color:#000;}
+#greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, #header a, #header input, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active 
+        { border-color:#000 !important}
+/* END SKIN */
+
+/* SKIN: The Blues */
+/*Please DO copy and reuse and modify this code any way you like!
+CREDITS
+# code adapted from 'colour flip combos' by lim @ ao3 and "Medium Blues" by Arduinna @ AO3
+palette of contrasting blocks roughly
+#1: bright #fff 
+#2: light #92C1DB, #04669B, #0286CE
+#3: mid #0286CE, #002B42, #004368
+#4: dark #5090B2, #0369A0, #001521
+#5: darkest #000, #000E16, #00273D
+
+And then a KEY COLOUR
+#K: #609ABA
+*/
+
+/*1*/
+body,th,tr:hover,col.name,fieldset fieldset,fieldset dl dl,form blockquote.userstuff,input:focus,select:focus,textarea:focus, .autocomplete div.dropdown ul, #ui-datepicker-div, #ibox_wrapper, #ibox_content, .toggled form, .dynamic form, .secondary, .listbox .index, .dashboard .listbox .index, .nomination dt
+        { background:#f4effc;}
+#header h2, #footer ul, #footer ul.navigation a, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
+        { color:#f4effc;}
+tbody tr,thead td, #header #small_login,fieldset,form dl,fieldset dl dl,fieldset fieldset fieldset,fieldset fieldset dl dl,dd.hideme,form blockquote.userstuff,form dt, .actions a:active, .current,a.current, .current a:visited, .search span.tip
+        { border-color:#f4effc}
+form .notice,form ul.notes
+        { box-shadow:0px 0 3px #f4effc}
+
+/*2*/
+.actions a, .action, .actions input,input[type="submit"],button, .current, .actions label,li.relationships, .thread .even
+        { background:#92C1DB;}
+a:hover { color:#04669B}
+#login-block,li.blurb,fieldset,form dl, #dashboard ul.navigation, #dashboard ul, #symbols-key dl, .toggled form, .dynamic form,div.comment,li.comment, .comment div.icon, .autocomplete div.dropdown ul, #ibox_wrapper, .bookmark p.count span, .ui-sortable li:hover, .actions a:hover, .actions input:hover, .userstuff blockquote
+        { border-color:#0286CE;}
+fieldset,form dl,fieldset dl dl,fieldset fieldset fieldset,fieldset fieldset dl dl,dd.hideme,form blockquote.userstuff
+        { box-shadow:inset 1px 0 5px #04669B}
+        
+/*3 MID*/
+#dashboard .current, .actions a:active, .current,a.current, .current a:visited,span.unread, .replied,span.claimed,dl.index dd, .own, .draft, .draft .wrapper, .unread, .child, .unwrangled, .unreviewed
+        { background:#0286CE;}
+.actions a, .action, .actions input,input[type="submit"],button, .current, .actions label,a.cloud4, a.cloud5
+        { color:#002B42;}
+a:visited, a.cloud6
+        { color:#004368;}
+        thead,tfoot,tfoot td,th,tr:hover,col.name,input,textarea, #ibox_content, .actions a, .action, .actions input,input[type="submit"],button, .current, .actions label,span.unread, .replied,span.claimed, .system .latest h3, .system div.news h3, .listbox,fieldset fieldset.listbox,dl.meta, .picture .header, .bookmark .user
+        { border-color:#0286CE;}
+input,textarea
+        { box-shadow:inset 0 1px 2px #0286CE}
+li.blurb, .blurb .blurb,.listbox .index, .dashboard .listbox .index
+        { box-shadow:inset 1px 1px 3px #0286CE}
+#header ul.primary
+        { box-shadow:inset 0 -5px 10px rgba(0,0,0,0.5)}
+.autocomplete div.dropdown ul
+        { box-shadow:1px 3px 5px rgba(0,0,0,0.5)}
+
+/*4*/
+table,thead td, #header #small_login, #dashboard a:hover,fieldset,form dl,fieldset dl dl,fieldset fieldset fieldset,fieldset fieldset dl dl,dd.hideme,form blockquote.userstuff, .ui-sortable li:hover, .listbox,fieldset fieldset.listbox, .comment h4.byline, .readings-index h3, .search span.tip, .flash, .notice, .error,.comment_error
+        { background:#5090B2;}
+body, #main.error, #main.slow, #main.maintenance, .required .autocomplete, .autocomplete .notice, .post .required .warnings, .listbox .heading, .listbox .heading a:visited, .userstuff h2, .userstuff caption, .userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link, a.cloud3,#header .search input[type="text"]
+        { color:#001521;}
+.draft  { border-color:#0369A0;}
+.actions a, .action, .actions input,input[type="submit"],button, .current, .actions label,span.unread, .replied,span.claimed
+        { border-bottom-color:#0369A0;}
+.ui-sortable li:hover, .secondary, .wrapper, .ui-draggable form
+        { box-shadow:1px 1px 5px #0369A0}
+#header #small_login
+        { box-shadow:inset 1px 0 5px rgba(0,0,0,0.75)}
+.delete a,span.delete
+        { box-shadow:-1px -1px 2px rgba(0,0,0,0.75);}
+
+/*5*/
+#ibox_w { background:#000;}
+a,a:link,a:visited:hover, #dashboard a, #dashboard span, .autocomplete div.dropdown ul, .actions a:visited, .actions a:active, .current,a.current, .current a:visited,a.tag, .tags a, a.cloud1, a.cloud2
+        { color:#000E16;}
+.userstuff h3, #header .primary a, #header .primary .current, #header .primary input, #header .search input
+        { border-color:#00273D;}
+.actions a:active, .current,a.current, .current a:visited
+        { box-shadow:inset 1px 1px 3px #00273D}
+
+/* KEY COLOUR (DEFAULT IS STRONG RED)*/
+#header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
+        { background:#609ABA}
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+        { color:#609ABA;}
+#greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active 
+        { border-color:#609ABA}
+
+        
+/*TRANSPARENT AND NONNERY*/
+#dashboard a, #dashboard span, #dashboard.own, #footer ul.navigation a,fieldset dl,fieldset.actions,fieldset dl fieldset dl, .dynamic form fieldset, .toggled form fieldset, .toggled form dl, .secondary .toggled form, .dashboard .own, .mods li,dl.stats dt,dl.stats dd,dl.stats, .blurb .header .heading, .blurb .header ul, .blurb .header p.status, .preface h3,fieldset.comments, .userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link
+        { background:transparent;}
+#footer a:hover,fieldset dl,fieldset.actions,fieldset dl fieldset dl, .dynamic form fieldset, .toggled form fieldset, .toggled form dl, .secondary .toggled form, .actions a, .action, .actions input,input[type="submit"],button, .current, .actions label, #outer.wrapper, #inner.wrapper,dl.index,dl.stats, .listbox,fieldset fieldset.listbox, .listbox li.blurb,fieldset.comments,dl.nomination
+        { box-shadow:none}
+h2, .system p#signup, #header h2
+        { text-shadow: none;}
+/* END SKIN */
+
+/* SKIN: Reversi */
+/* Light on dark with blue key, default skin 
+/*Please DO copy and reuse and modify this code any way you like!
+# code adapted from 'colour flip combos' by lim @ ao3*/
+
+/*regions, groups, elements*/
+#outer .region, #ibox_wrapper #ibox_content, .post fieldset fieldset
+        { background:none;}
+body,.group,.group .group,.region,.flash,fieldset,fieldset fieldset ul,textarea,.verbose legend,.notice,ul.notes,input,textarea,table,th,td:hover,tr:hover,.symbol .question:hover, #ibox_wrapper
+        { background:#333;color:#eee;border-color:#222;outline:#111;
+          box-shadow:none}
+.group.listbox,input:focus,textarea:focus,li.relationships,.group.listbox .index,#dashboard a:hover,th,.secondary, .thread .even
+        { background:#2a2a2a;}
+#header ul.primary, #footer, .toggled form
+        { background:url("/images/skins/textures/tiles/black-noise.jpg");}
+#header ul.primary, #footer, #dashboard ul,dl.meta,.group.listbox, #main li.blurb, form blockquote.userstuff, div.comment, li.comment, .toggled form, form dl dt, #inner .module .heading, .bookmark .status span
+        { border-color:#555;}
+.group.listbox,#main li.blurb,.wrapper,.secondary, form blockquote.userstuff, .thread .comment, .toggled form
+        { box-shadow:1px 1px 3px #000}
+#dashboard .current,.actions a:active, #outer .current, a.current,.current a:visited,span.unread,.replied,span.claimed,dl.index dd,.own,.draft,.draft .unread,.child,.unwrangled,.unreviewed
+        { background:#000; border-color:#555 ;box-shadow:-1px -1px 3px #000}
+input,textarea
+        { box-shadow:inset 0 1px 2px #000}
+li.blurb,.blurb .blurb,.listbox .index,.dashboard .listbox .index
+        { box-shadow:inset 1px 1px 3px #000}
+
+/* key colour to blue */
+.autocomplete .dropdown ul li:hover,li.selected,a.tag:hover, .symbol .question
+                { background:#5998D6; color:#111;}
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+                { color:#5998D6;}
+#greeting .icon, #dashboard.own,.error,.comment_error, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active, #header .actions .current 
+                { border-color:#5998D6;}
+/*links and buttons*/
+a,a:link,a.tag,#dashboard a,#dashboard .current, .heading,.group .heading
+        { color:#fff;}
+a:visited,.actions a:visited
+        { color:#999;}
+.actions a,.action,.actions input,input[type="submit"],button,.current,.actions label,#header .actions a,#header input[type="submit"]
+        { background:#555; border-color:#222;color:#eee;
+background:-moz-linear-gradient(top,#555 0%,#232323 100%);
+background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#555),color-stop(100%,#232323));
+background:-webkit-linear-gradient(top,#555 0%,#232323 100%);
+background:-o-linear-gradient(top,#555 0%,#232323 100%);
+background:-ms-linear-gradient(top,#555 0%,#232323 100%);
+background:linear-gradient(top,#555 0%,#232323 100%);
+          text-shadow:none;}
+.actions a:hover,.actions input:hover,#dashboard a:hover
+        { color:#999;border-color:#000;
+          box-shadow:inset 2px 2px 2px #000}
+.actions a:active,.current,a.current,.current a:visited
+        { color:#fff;background:#555; border-color:#fff;
+          box-shadow:inset 1px 1px 3px #333}
+.delete a,span.delete
+        { box-shadow:-1px -1px 2px rgba(255,255,255.25);}
+ul.required-tags, .bookmark .status span, .blurb .icon
+        { opacity:0.9; border:0}
+        
+/*zeroing*/
+#outer .group .heading, .heading
+        { text-shadow:none;color:#fff; background:none}
+fieldset fieldset
+        { box-shadow:none;}
+/* END SKIN */
+
