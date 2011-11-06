@@ -38,7 +38,7 @@
       <% else %>
         <h3 class="landmark heading" id="work"><%= ts("Work Text:") %></h3>
         <% cache("#{@chapter.cache_key}-show-content") do %>
-          <%=raw sanitize_field(@chapter, :content) %>
+          <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
         <% end %><!-- end cache -->
       <% end %>
     </div>
