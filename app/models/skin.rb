@@ -163,6 +163,10 @@ class Skin < ActiveRecord::Base
   def self.sort_by_recent
     order("updated_at DESC")
   end  
+  
+  def self.sort_by_recent_featured
+    order("featured DESC, updated_at DESC")
+  end
 
   def remove_me_from_preferences
     Preference.update_all("skin_id = #{Skin.default.id}", "skin_id = #{self.id}")
@@ -187,6 +191,7 @@ class Skin < ActiveRecord::Base
       ArchiveConfig.APP_SHORT_NAME
     end
   end
+  
 
   # create the minimal number of files we can, containing all the css for this entire skin
   def cache!
@@ -257,7 +262,7 @@ class Skin < ActiveRecord::Base
   
   def get_all_parents
     all_parents = []
-    parent_skins.includes(:parent_skins).each do |parent|
+    parent_skins.each do |parent|
       all_parents += parent.get_all_parents
       all_parents << parent
     end
@@ -427,7 +432,7 @@ class Skin < ActiveRecord::Base
       end
     end
   end
-
+  
   # get the directory name for the skin file
   def skin_dirname
     "skin_#{self.id}_#{self.title.gsub(/[^\w]/, '_')}/".downcase
@@ -453,7 +458,7 @@ class Skin < ActiveRecord::Base
   def self.get_current_site_skin
     current_version = Skin.get_current_version
     if current_version
-      Skin.includes(:parent_skins).find_by_title_and_official("Archive #{Skin.get_current_version}", true)
+      Skin.find_by_title_and_official("Archive #{Skin.get_current_version}", true)
     else
       nil
     end
