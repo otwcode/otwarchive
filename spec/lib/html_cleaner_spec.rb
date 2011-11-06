@@ -51,7 +51,7 @@ describe HtmlCleaner do
         stack.open_paragraph_tags.should == "<p><s>"
       end
       
-      it "should return empty array when not inside paragraph" do
+      it "should return empty string when not inside paragraph" do
         stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
         stack.open_paragraph_tags.should == ""
       end
@@ -79,7 +79,7 @@ describe HtmlCleaner do
         stack.close_paragraph_tags.should == "</s></p>"
       end
 
-      it "should return empty array when not inside paragraph" do
+      it "should return empty string when not inside paragraph" do
         stack.concat([[["div", {}]], [["i", {}]], [["s", {}]]])
         stack.close_paragraph_tags.should == ""
       end
@@ -309,7 +309,7 @@ describe HtmlCleaner do
       doc.xpath("./p[2]").children.to_s.strip.should == "text" 
     end
 
-    it "should convert triple linebreaks into blank line" do
+    it "should convert triple linebreaks into blank paragraph" do
       result = add_paragraphs_to_text("some\n\n\ntext")
       doc = Nokogiri::XML.fragment(result)
       doc.xpath("./p[1]").children.to_s.strip.should == "some" 
@@ -318,10 +318,32 @@ describe HtmlCleaner do
     end
   
     it "should convert double br tags into paragraph break" do
-      result = add_paragraphs_to_text("some<br/><br/>text")
+      result = add_paragraphs_to_text("some<br/>\n<br/>text")
       doc = Nokogiri::XML.fragment(result)
       doc.xpath("./p[1]").children.to_s.strip.should == "some" 
       doc.xpath("./p[2]").children.to_s.strip.should == "text" 
+    end
+
+    it "should convert triple br tags into blank paragraph" do
+      result = add_paragraphs_to_text("some<br/>\n<br/>\n<br/>text")
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath("./p[1]").children.to_s.strip.should == "some" 
+      doc.xpath("./p[2]").children.to_s.strip.should == "&#xA0;" 
+      doc.xpath("./p[3]").children.to_s.strip.should == "text" 
+    end
+
+    it "should not convert double br tags inside p tags" do
+      result = add_paragraphs_to_text("<p>some<br/>\n<br/>text</p>")
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath(".//p").size.should == 1
+      doc.xpath(".//br").size.should == 2
+    end
+
+    it "should not convert triple br tags inside p tags" do
+      result = add_paragraphs_to_text("<p>some<br/>\n<br/>\n<br/>text</p>")
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath(".//p").size.should == 1
+      doc.xpath(".//br").size.should == 3
     end
 
     %w(b big cite code del dfn em i ins kbd q s samp
@@ -432,7 +454,6 @@ describe HtmlCleaner do
 
     it "should not add empty p tags" do
       result = add_paragraphs_to_text("A<p>B</p><p>C</p>")
-      puts result
       doc = Nokogiri::XML.fragment(result)
       doc.xpath("./p").size.should == 3
       doc.xpath("./p[1]").children.to_s.strip.should == "A" 
@@ -442,9 +463,8 @@ describe HtmlCleaner do
 
     it "should not leave p inside i" do
       result = add_paragraphs_to_text("<i><p>foo</p><p>bar</p></i>")
-      puts result
       doc = Nokogiri::XML.fragment(result)
-      doc.xpath("//i/p").should be_empty
+      doc.xpath(".//i/p").should be_empty
     end
 
   end  

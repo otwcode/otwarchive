@@ -235,13 +235,23 @@ module HtmlCleaner
     stack = stack || TagStack.new
     out_html = out_html || ""
 
-    p node.name
-
     # Don't decend into node if we don't want to touch the content of
     # this kind of tag
     if dont_touch_content_tag?(node.name)
+
+      # Convert double and triple br tags into paragraph breaks
+      if node.name == "br" && node.next_sibling && node.previous_sibling.name == "br" && node.previous_sibling.previous_sibling && node.previous_sibling.previous_sibling.name == "br"
+        out_html += (stack.close_paragraph_tags + "<p>&nbsp;</p>" + stack.open_paragraph_tags)
+        return [stack, out_html]
+      elsif node.name == "br" && node.previous_sibling && node.previous_sibling.name == "br"
+        out_html += (stack.close_paragraph_tags + stack.open_paragraph_tags)
+        return [stack, out_html]
+      elsif node.name == "br" && node.next_sibling && node.next_sibling.name == "br"
+        return [stack, out_html]
+      end
+      
       if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
-        return [stack, out_html += "<p>#{node.to_s}</p>"]
+        return [stack, out_html + "<p>#{node.to_s}</p>"]
       end
 
       if put_outside_p_tag?(node.name) && stack.inside_paragraph?
@@ -249,7 +259,7 @@ module HtmlCleaner
         return [stack, out_html]
       end
 
-      return [stack, out_html += node.to_s]
+      return [stack, out_html + node.to_s]
     end
 
     if !node.text?
@@ -306,8 +316,6 @@ module HtmlCleaner
   end
 
   def add_paragraphs_to_text(text)
-    puts "====="
-    puts text
 
     # By default, Nokogiri closes unclosed tags very late, often at
     # the end of the document. We want runaway tags closed at the end
@@ -320,7 +328,6 @@ module HtmlCleaner
 
     # Adding paragraphs in place of linebreaks
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
-    puts doc.to_s
     out_html = traverse_nodes(doc.at_css("myroot"))[1]
 
     # remove empty paragraphs
