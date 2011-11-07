@@ -408,16 +408,16 @@ describe HtmlCleaner do
     end
 
     it "should close unclosed inline tags before double linebreak" do
-      html = """
-      Here is an unclosed <em>em tag.
+      html = """Here is an unclosed <em>em tag.
     
       Here is an unclosed <strong>strong tag.
 
-      Stuff.
-      """
+      Stuff."""
+
       doc = Nokogiri::XML.fragment(add_paragraphs_to_text(html))
       doc.xpath("./p[1]/em").children.to_s.strip.should == "em tag." 
-      doc.xpath("./p[2]/strong").children.to_s.strip.should == "strong tag." 
+      doc.xpath("./p[2]/strong").children.to_s.strip.should == "strong tag."
+      doc.xpath("./p[3]").children.to_s.strip.should == "Stuff."
     end
 
     it "should re-nest mis-nested tags" do
