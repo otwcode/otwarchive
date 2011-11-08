@@ -27,7 +27,7 @@ class KudosController < ApplicationController
       end
     else
       # redirect to what the user was actually reading - chapter or work - when they left kudos
-      redirect_to :controller => params[:commentable_controller], :action => :show, :id => params[:commentable_id], :view_full_work => params[:view_full_work], :anchor => "comments"
+      redirect_to :controller => params[:commentable_controller], :action => :show, :id => params[:commentable_id], :view_full_work => params[:view_full_work], :page => params[:page], :anchor => "comments"
     end
   end
 

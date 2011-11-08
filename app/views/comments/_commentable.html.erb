@@ -25,6 +25,7 @@
             <%= hidden_field_tag :commentable_controller, controller.controller_name %>
             <%= hidden_field_tag :commentable_id, params[:id] %>
             <%= hidden_field_tag :view_full_work, params[:view_full_work] if params[:view_full_work] %>
+            <%= hidden_field_tag :page, params[:page] %>
           <%= kudo_form.submit ts("Kudos ♥") %>
         <% end %>
       </li>

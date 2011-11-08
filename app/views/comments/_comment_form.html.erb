@@ -19,6 +19,9 @@
         <%= hidden_field_tag "filters[replied_to]", params[:filters][:replied_to] %>
         <%= hidden_field_tag "filters[date]", params[:filters][:date] %>
       <% end %>
+      <% if params[:page] %>
+        <%= hidden_field_tag :page, params[:page] %>
+      <% end %>
 
       <% if logged_in? %>
         <% if current_user.pseuds.count > 1 %>

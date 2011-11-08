@@ -139,7 +139,7 @@ class CommentsController < ApplicationController
           respond_to do |format|
             format.html do
               if request.referer.match(/inbox/)
-                redirect_to user_inbox_path(current_user, :filters => params[:filters])
+                redirect_to user_inbox_path(current_user, :filters => params[:filters], :page => params[:page])
               elsif request.referer.match(/new/)
                 # came here from the new comment page, probably via download link
                 # so go back to the comments page instead of reloading full work
@@ -149,7 +149,7 @@ class CommentsController < ApplicationController
                 # so go back to the comments page instead of reloading full work
                 redirect_to comment_path(@comment)
               else
-                redirect_to_comment(@comment, {:view_full_work => (params[:view_full_work] == "true")})
+                redirect_to_comment(@comment, {:view_full_work => (params[:view_full_work] == "true"), :page => params[:page]})
               end
             end
           end

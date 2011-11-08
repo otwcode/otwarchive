@@ -124,7 +124,6 @@ module CommentsHelper
     end
   end
 
-  # TODO: maybe use chapter instead of work?
   # return link to add new reply to a comment
   def add_comment_reply_link(comment)
     commentable_id = comment.ultimate_parent.is_a?(Tag) ?
@@ -140,7 +139,8 @@ module CommentsHelper
               :id => comment.id,
               :comment_id => params[:comment_id],
               commentable_id => commentable_value,
-              :view_full_work => params[:view_full_work]),
+              :view_full_work => params[:view_full_work],
+              :page => params[:page]),
       :remote => true)
   end
 
@@ -159,7 +159,8 @@ module CommentsHelper
               :id => comment.id,
               :comment_id => params[:comment_id],
               commentable_id => commentable_value,
-              :view_full_work => params[:view_full_work]),
+              :view_full_work => params[:view_full_work],
+              :page => params[:page]),
       :remote => true)
   end
 
