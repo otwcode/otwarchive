@@ -43,7 +43,7 @@ Given /^I have a locked work "([^\"]*)"$/ do |work|
     And %{I post the locked work "#{work}"}
 end
 
-Given /^the work with comments setup$/ do
+Given /^the work with(?: (\d+))? comments setup$/ do |n_comments|
   Given %{I have a work "Blabla"}
   And %{I am logged out}
   n_comments ||= 3
