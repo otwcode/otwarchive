@@ -27,7 +27,7 @@
     
     <!-- when claimed -->
     <p class="datetime">
-      Claimed <%= time_in_zone(claim.created_at, (@challenge.time_zone || Time.zone.name)) %>
+      Claimed <%= set_format_for_date(claim.created_at) %>
       <% if @challenge.try(:assignments_due_at).present? %>
         <!--due date-->
         Due <%= time_in_zone(@challenge.assignments_due_at, (@challenge.time_zone || Time.zone.name)) %>

@@ -15,7 +15,8 @@
       to your account and you will have full control over them.
     </p>
     <p class="message">
-      If you already <strong>have</strong> an archive account, log in and reload this page, and we'll assign you the stories. <%= button_to ts("Sign me up and give me my stories! Yay!"), new_user_path(:invitation_token => @invitation.token) %>
+      If you already <strong>have</strong> an archive account, log in and reload this page, and we'll assign you the stories. 
+      <%= button_to ts("Sign me up and give me my stories! Yay!"), new_user_path(:invitation_token => @invitation.token) %>
     </p>
   <% end %>
 </div>
@@ -46,10 +47,12 @@
       <li>
         <%= hidden_field_tag :invitation_token, @invitation.token %>
         <%= radio_button_tag "imported_stories", "orphan" %>
-        <%= label_tag "imported_stories_orphan", ts("Orphan my stories and take my contact information off them.")%></li>
+        <%= label_tag "imported_stories_orphan", ts("Orphan my stories and take my email address off them.")%></li>
         <ul>
-          <li><%= check_box_tag "remove_pseud" %>
-          <%= label_tag "remove_pseud", ts("Also remove my name.") %></li>
+          <li>
+            <%= check_box_tag "remove_pseud" %>
+            <%= label_tag "remove_pseud", ts("Also remove my name.") %>
+          </li>
         </ul>
       </li>
       <li>

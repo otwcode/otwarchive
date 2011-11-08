@@ -8,8 +8,6 @@ class SkinsController < ApplicationController
   before_filter :check_visibility, :only => [:show]
   before_filter :check_editability, :only => [:edit, :update, :destroy]
 
-  cache_sweeper :skin_sweeper
-
   def load_skin
     @skin = Skin.find_by_id(params[:id])
     unless @skin
@@ -79,10 +77,14 @@ class SkinsController < ApplicationController
       end
     else
       if params[:work_skins]
-        @skins = WorkSkin.approved_skins.sort_by_recent
+        @skins = WorkSkin.approved_skins.sort_by_recent_featured
         @title = ts('Public Work Skins')
       else
-        @skins = Skin.approved_skins.usable.site_skins.sort_by_recent
+        if logged_in? 
+          @skins = Skin.approved_skins.usable.site_skins.sort_by_recent_featured
+        else
+          @skins = Skin.approved_skins.usable.site_skins.cached.sort_by_recent_featured
+        end
         @title = ts('Public Skins')
       end
     end

@@ -163,7 +163,7 @@ class TagSetNominationsController < ApplicationController
     more_noms = true if @tag_set.freeform_nominations.count > @nom_limit
     
     if more_noms
-      flash[:notice] = ts("There are too many nominations awaiting review to show at once! After you approve or rejecte some, new ones will appear here.")
+      flash[:notice] = ts("Note: too many nominations to show at once! Additional nominations will appear after you approve or reject some.")
     end
     
     if @tag_set.tag_nominations.unreviewed.empty?
@@ -207,15 +207,22 @@ class TagSetNominationsController < ApplicationController
     
     # OK, now we're going ahead and making piles of db changes! eep! D:
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
-      @tagnames_to_add = @approve[tag_type]
+      # we're adding the approved tags and synonyms
+      @tagnames_to_add = @approve[tag_type] + @synonym[tag_type]
       @tagnames_to_remove = @reject[tag_type]
+      
+      # If we've approved a tag, change any other nominations that have this tag as a synonym to the synonym
+      tagnames_to_change = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).value_of(:tagname).uniq
+      tagnames_to_change.each do |oldname|
+        tagnom = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination", :tagname => oldname).first
+        tagnom.change_tagname!(tagnom.synonym)  
+      end
       
       # do the name changes
       @change[tag_type].each do |oldname, newname|
         tagnom = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination", :tagname => oldname).first
         if tagnom && tagnom.change_tagname!(newname)
           @tagnames_to_add << newname
-          @tagnames_to_remove << oldname
         else
           # ughhhh
           @errors = tagnom.errors.full_messages
@@ -225,24 +232,12 @@ class TagSetNominationsController < ApplicationController
       end
 
       # update the tag set
-      @tag_set.tag_set.send("#{tag_type}_tagnames_to_add=", @tagnames_to_add)
-      @tag_set.tag_set.tagnames_to_remove = @tagnames_to_remove.join(',')        
-      unless @tag_set.save
+      unless @tag_set.add_tagnames(tag_type, @tagnames_to_add) && @tag_set.remove_tagnames(tag_type, @tagnames_to_remove)     
         @errors = @tag_set.errors.full_messages
         flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")
         render :action => "index" and return
       end
       
-      # update the nominations -- approve any where an approved tag was either a synonym or the tag itself
-      TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", @tagnames_to_add).update_all(:approved => true, :rejected => false)
-      TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).update_all(:approved => true, :rejected => false)          
-      TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", @tagnames_to_remove).update_all(:rejected => true, :approved => false)
-      if tag_type == "fandom"
-        # reject children of rejected fandom
-        TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", @tagnames_to_remove).each do |rejected_fandom_nom|
-          rejected_fandom_nom.reject_children
-        end
-      end
       @notice ||= []
       @notice << ts("Successfully added to set: %{approved}", :approved => @tagnames_to_add.join(', ')) unless @tagnames_to_add.empty?
       @notice << ts("Successfully rejected: %{rejected}", :rejected => @tagnames_to_remove.join(', ')) unless @tagnames_to_remove.empty?
@@ -293,6 +288,8 @@ class TagSetNominationsController < ApplicationController
             elsif !tagnom.change_tagname?(val)
               @errors << ts("Invalid name change for #{name} to #{val}: %{msg}", :msg => tagnom.errors.full_messages.join(', '))
               @force_expand[type] = true
+            elsif action == "synonym"
+              @synonym[type] << val
             else
               @change[type] << [name, val]
             end

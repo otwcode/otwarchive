@@ -420,7 +420,7 @@ module ApplicationHelper
         form.object.send(options[:checked_method]) || []
       end
     
-    checkboxes = choices.map do |choice|
+    checkboxes = choices.map do |choice|      
       is_checked = !options[:checked_method] || already_checked.empty? ? false : already_checked.include?(choice)
       display_name = choice.send(options[:name_method]).html_safe
       value = choice.send(options[:value_method])

@@ -50,6 +50,7 @@ li.relationships
         { font-size:100%; float:none }
 .kudos  { background:url("/images/skins/iconsets/default/kudos.png") bottom left no-repeat; padding:25px 0 25px 55px; margin:0}
 .icon   { background:url("/images/skins/iconsets/default/icon_user.png") #900 top left no-repeat; height:100px; width:100px; margin:0}
+.icon a { border:0;}
 .mods li, dl.stats dt, dl.stats dd
         { background:none; width:auto; min-width:0; display:inline; clear:none; float:none; margin:auto;}
 dl.stats{ text-align:right; background:none; box-shadow:none; }

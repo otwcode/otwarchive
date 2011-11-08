@@ -18,12 +18,12 @@
       <!--BACK END pls: else <dd>normal</dd> end-->
     </dl>
     	<%= render :partial => "skin_top_navigation" %>
-    	<%= skin_preview_display(@skin) %>
+    	<p class="icon"><%= skin_preview_display(@skin) %></p>
   </div>
 
   <% unless @skin.css.blank? && @skin.filename.blank? %>
     <div class="css module">
-      <h3 class="heading"><abbr title="cascading style sheets">CSS</abbr</h3>
+      <h3 class="heading"><abbr title="cascading style sheets">CSS</abbr></h3>
       <blockquote><pre><%= @skin.get_css %></pre></blockquote>
     </div>
   <% end %>

@@ -1,15 +1,7 @@
 <div class="tag tagset"><!--this is probably what we should do for each feature, reckon?-->
 	<h2 class="heading"><%= ts("Review Nominations for %{title}", :title => @tag_set.title) %></h2>
 
-<ul class="navigation actions" role="navigation">
-	<% if @tag_set.user_is_owner?(current_user) %>
-    <li><%= link_to ts("Clear Nominations"), destroy_multiple_tag_set_nominations_path(@tag_set),
-      :confirm => ts('Are you certain you want to clear nominations for this tag set? (This will NOT affect the tags already in your set, but it will clear the history of rejected tags and users will be able to nominate again.)'),
-      :method => :post %></li>
-  <% end %>
-  <li><%= link_to ts("Back To %{title}", :title => @tag_set.title), tag_set_path(@tag_set) %></li>
-</ul>
-
+  <%= render "owned_tag_sets/navigation" %>
 
 <ul class="notes">
   <li>Old (several months) nominations are sometimes cleared from the database. Please review

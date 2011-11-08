@@ -10,7 +10,7 @@ class TagSetNomination < ActiveRecord::Base
 
   accepts_nested_attributes_for :fandom_nominations, :character_nominations, :relationship_nominations, :freeform_nominations, {
     :allow_destroy => true,
-    :reject_if => proc { |attrs| attrs[:tagname].blank? }
+    :reject_if => proc { |attrs| attrs[:tagname].blank? && attrs[:id].blank? }
   }
   
   validates_presence_of :owned_tag_set_id
@@ -55,21 +55,6 @@ class TagSetNomination < ActiveRecord::Base
     errors.add(:base, ts("You seem to be trying to nominate %{duplicates} more than once.", :duplicates => duplicates.join(', '))) unless duplicates.empty?
   end
 
-  # # This makes sure no tagnames are nominated for different parents in this tag set
-  # validate :require_unique_tagname_with_parent
-  # def require_unique_tagname_with_parent
-  #   %w(fandom character relationship freeform).each do |nomtype|
-  #     self.send("#{nomtype}_nominations").each do |nom|
-  #       query = TagNomination.for_tag_set(self.owned_tag_set).where(:tagname => nom.tagname).where("parent_tagname != ?", (nom.get_parent_tagname || ''))
-  #       # let people change their own!
-  #       query = query.where("tag_nominations.id != ?", nom.id) if !(nom.new_record?)
-  #       if query.exists?
-  #         errors.add(:base, ts("Someone else has already nominated %{tagname} for this set but in a different fandom. Please be more specific.", :tagname => nom.tagname))
-  #       end
-  #     end
-  #   end
-  # end
-  # 
   # Have NONE of the nominations been reviewed?
   def unreviewed?
     TagSet::TAG_TYPES_INITIALIZABLE.each do |tag_type|
@@ -86,7 +71,6 @@ class TagSetNomination < ActiveRecord::Base
     return true
   end
 
-  
   def count_by_fandom?(tag_type)
     %w(character relationship).include?(tag_type) && self.owned_tag_set.fandom_nomination_limit > 0
   end
@@ -113,10 +97,6 @@ class TagSetNomination < ActiveRecord::Base
     else
        self.send("#{tag_type}_nominations")
     end
-  end
-  
-  def process(tag_set_id)
-    TagSet::TAG_TYPES_INITIALIZABLE.each {|tag_type| self.send("#{tag_type}_nominations").each {|nom| nom.process}}
   end
   
 end
