@@ -18,8 +18,13 @@
     <% if @work && !is_author_of?(@work) %>
       <li>
         <%= form_for Kudo.new do |kudo_form| %>
-          <%= kudo_form.hidden_field :commentable_id, :value => @work.id %>
-          <%= kudo_form.hidden_field :commentable_type, :value => 'Work' %>
+          <%= kudo_form.hidden_field :kudosable_id, :value => @work.id %>
+          <%= kudo_form.hidden_field :kudosable_type, :value => 'Work' %>
+            <% # here come the hacks: need to know whether to redirect to [full] work or chapter %>
+            <% # commentable is whatever the user is reading - chapter or work; kudosable is the object that can have kudos - the work %>
+            <%= hidden_field_tag :commentable_controller, controller.controller_name %>
+            <%= hidden_field_tag :commentable_id, params[:id] %>
+            <%= hidden_field_tag :view_full_work, params[:view_full_work] if params[:view_full_work] %>
           <%= kudo_form.submit ts("Kudos ♥") %>
         <% end %>
       </li>
