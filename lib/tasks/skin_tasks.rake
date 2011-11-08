@@ -68,10 +68,8 @@ namespace :skins do
         title = $1.strip 
         skin.title = title
         if (oldskin = Skin.find_by_title(title)) && oldskin.id != skin.id
-          # temporary while testing!
-          oldskin.destroy
-          # puts "Existing skin with title #{title} - did you mean to replace?"
-          # next
+          puts "Existing skin with title #{title} - did you mean to replace? Skipping."
+          next
         end 
         
         preview_filename = "#{dir}/previews/#{title.gsub(/[^\w\s]+/, '')}.png"
