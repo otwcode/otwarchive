@@ -6,17 +6,22 @@ Feature: Edit Works
 
   Scenario: You can't edit a work unless you're logged in and it's your work
     Given I have loaded the fixtures
+    # I'm not logged in
     When I view the work "First work"
     Then I should not see "Edit"
     Given I am logged in as "testuser" with password "testuser"
+    # This isn't my work
     When I view the work "fourth"
     Then I should not see "Edit"  
     When I am on testuser's works page
+    # These are my works and should all have edit links on the blurbs
     Then I should see "Edit"
       And I follow "First work"
+    # This is my individual work and should have an edit link on the show page
     Then I should see "first fandom" 
-      And I should not see "new tag"
       And I should see "Edit"
+      # make sure this tag isn't on before we add it
+      And I should not see "new tag"
     When I follow "Edit"
     Then I should see "Edit Work"
     When I fill in "work_freeform" with "new tag"

@@ -61,8 +61,16 @@
         <dt><%= preference_form.check_box :closed %></dt>
         <dd><%= preference_form.label :closed, ts("This collection is closed") %></dd>
         <dt><%= preference_form.check_box :unrevealed %></dt>
-        <dd><%= preference_form.label :unrevealed, ts("This collection is unrevealed") %>
-		<p class="footnote">You can also reveal individual works at the <%= link_to ts("Manage Items"), collection_items_path(@collection) %> page</p></dd>
+        <dd>
+          <%= preference_form.label :unrevealed, ts("This collection is unrevealed") %>
+          <p class="footnote navigation actions" role="navigation"><%= ts("You can also individually ") %>            
+            <% if @collection.new_record? %>
+              <%= ts("Manage Items") %>
+            <% else %>
+            <%= link_to ts("Manage Items"), collection_items_path(@collection) %>
+		        <% end %>
+		      </p>
+		    </dd>
         <dt><%= preference_form.check_box :anonymous %></dt>
         <dd><%= preference_form.label :anonymous, ts("This collection is anonymous") %></dd>
         <dt><%= preference_form.check_box :show_random %></dt>

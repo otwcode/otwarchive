@@ -38,7 +38,7 @@ class CollectionsController < ApplicationController
   # display challenges that are currently taking signups
   def list_challenges
     @hide_dashboard = true
-    @challenge_collections = (Collection.ge_signups_open.unmoderated.limit(15) + Collection.pm_signups_open.unmoderated.limit(15))    
+    @challenge_collections = (Collection.ge_signups_open.unmoderated.not_closed.limit(15) + Collection.pm_signups_open.unmoderated.not_closed.limit(15))    
   end
 
   def show

@@ -7,6 +7,11 @@ class ChallengeClaim < ActiveRecord::Base
   belongs_to :request_signup, :class_name => "ChallengeSignup"
   belongs_to :request_prompt, :class_name => "Prompt"
   belongs_to :creation, :polymorphic => true
+  
+  # have to override the == operator or else two claims by same user on same user's prompts are equal 
+  def ==(other)
+    super(other) && other.request_prompt_id == self.request_prompt_id
+  end
 
   scope :for_request_signup, lambda {|signup|
     {:conditions => ['request_signup_id = ?', signup.id]}

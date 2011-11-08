@@ -74,6 +74,7 @@ var KEY = {
     UP: 38,
     RIGHT: 39,
     DOWN: 40,
+    DELETE: 46,
     NUMPAD_ENTER: 108,
     COMMA: 188
 };
@@ -168,7 +169,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 case KEY.RIGHT:
                 case KEY.UP:
                 case KEY.DOWN:
-                    if(!first_dropdown_item) {
+                    if(!first_dropdown_item || first_dropdown_item.is(":hidden")) {
                         // There's no dropdown of search results available, we're aiming for the existing tokens
                         if (selected_token) {
                             // save prev and next tokens 
@@ -223,6 +224,7 @@ $.TokenList = function (input, url_or_data, settings) {
                     break;
 
                 case KEY.BACKSPACE:
+                case KEY.DELETE:
                     previous_token = input_token.prev();
 
                     if(!$(this).val().length) {
@@ -247,6 +249,7 @@ $.TokenList = function (input, url_or_data, settings) {
                 case KEY.NUMPAD_ENTER:
                   if(selected_dropdown_item) {
                     add_token($(selected_dropdown_item));
+                    deselect_dropdown_item($(selected_dropdown_item));
                     hide_dropdown();
                     if (event.keyCode === KEY.TAB && settings.tokenLimit && settings.tokenLimit === token_count) {
                         break;
@@ -464,7 +467,7 @@ $.TokenList = function (input, url_or_data, settings) {
         hidden_input.val(token_ids.join(settings.tokenDelimiter));
 
         token_count += 1;
-
+        
         return this_token;
     }
     
@@ -498,7 +501,7 @@ $.TokenList = function (input, url_or_data, settings) {
 
             if(found_existing_token) {
                 select_token(found_existing_token);
-                input_token.insertAfter(found_existing_token);
+                // input_token.insertAfter(found_existing_token);
                 input_box.focus();
                 return;
             }
@@ -752,6 +755,10 @@ $.TokenList = function (input, url_or_data, settings) {
         var query = input_box.val().toLowerCase();
 
         if( (query && query.length) || settings.minChars == 0) {
+            if (selected_dropdown_item) {
+                deselect_dropdown_item($(selected_dropdown_item));            
+            }
+
             if(selected_token) {
                 deselect_token($(selected_token), POSITION.AFTER);
             }

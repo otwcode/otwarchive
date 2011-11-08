@@ -28,6 +28,23 @@ module SkinsHelper
     @site_skin ||= AdminSetting.default_skin
   end
 
+  def get_skin_cache(skin)
+    return "" unless skin
+    roles = []
+    if controller && (controller.controller_name == 'translations' || controller.controller_name == 'translation_notes')
+      roles << "translator"
+    end
+    if logged_in_as_admin?
+      roles << "admin"
+    end
+    skin_cache_key = "site_skin_#{skin.id}_#{skin.updated_at}" 
+    skin_cache_key += "_#{roles.join('_')}" unless roles.empty? 
+    roles += Skin::DEFAULT_ROLES_TO_INCLUDE
+    
+    return [skin_cache_key, roles]
+  end
+    
+
   def show_advanced_skin?(skin)
     !skin.new_record? && 
       (skin.role != Skin::DEFAULT_ROLE ||

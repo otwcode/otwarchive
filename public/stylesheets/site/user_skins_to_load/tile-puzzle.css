@@ -1,0 +1,64 @@
+/*SKIN: Wide Horizon */
+/*Horizontal dash in blocks*/
+#outer #dashboard, #main.dashboard  {
+float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
+#dashboard ul.navigation {float:left; margin:3.5%}
+#dashboard .landmark {
+  clear:none; float:left
+  }
+/* END SKIN */
+
+/*SKIN: Dash Line */
+/*Horizontal dash inline*/
+#outer #dashboard, #main.dashboard  {
+float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
+
+#dashboard ul.navigation, #dashboard ul.navigation li, #dashboard ul.navigation li a, #dashboard ul.navigation li .current 
+{ text-align:left;display:inline; border:0}
+
+#dashboard .landmark {
+  clear:none; float:left
+  }
+/* END SKIN */
+
+/*SKIN: Eyes To The Right */
+/*Right side dash */
+#dashboard {float:right;}
+#outer #main.dashboard 
+        { margin: auto 15em 1em auto}
+#main.dashboard * {clear:left;}
+/* END SKIN */
+
+/*SKIN: Full width filters */
+#inner .filters, #inbox-form, .works-index .index, .collections-index .index
+ {width:100%; max-width:100%;}
+ /* END SKIN */
+
+/*SKIN: Stick It */
+/*sticks the secondary (page specific) navigation to the left and fixes it there-- might be a little buggy it is very late*/
+#main {width: 75%;}
+#main.dashboard { margin-right:16%; width:58%}
+#main ul.actions {position:fixed; background:#ddd; border:2px solid #fff; width:15%; right:0; z-index:3000; box-shadow:1px 1px 3px}
+#main ul.actions li, #main ul.actions a{display:block; }
+
+#main .group ul.actions {position:static; background:none; border:0; width:auto; box-shadow:none}
+#main .group ul.actions li, #main .group ul.actions a {display:inline-block}
+/* END SKIN */
+
+/*SKIN: Mark my words */
+/*Shows all landmarks and lays them out visually */
+#outer .landmark{
+height:auto; width:auto; margin:0.643em auto;
+font-size:100%; opacity:1; color:#000; font-weight:bold; display:block}
+#skiplinks,#inner .blurb .landmark {display: block; margin:1.286em auto;}
+#header {background:#900; 0 }
+#header .landmark { color:#fff;}
+#header ul.primary { background:none; border:0; box-shadow:none}
+#header h1 {position:static; margin-right:120px}
+#header h1 .landmark {display:inline;}
+/* END SKIN */
+
+/* SKIN: Two Point No */
+/* Kills all the rounded corners, box shadows, and text-shadows */
+* {box-shadow:none !important; border-radius:0 !important; text-shadow:none !important;}
+/* END SKIN */

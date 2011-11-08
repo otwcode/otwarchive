@@ -21,11 +21,9 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/listbox.
 .listbox li.blurb 
         { box-shadow:none}
        
-/* mods: alphabet, medium*/
+/* mods: alphabet, medium */
 .alphabet .listbox li, .media .listbox
         { width: 45%; float:left; clear:none; margin-right:1.5em}
-.media .listbox
-        { min-height:17.5em;}
         
 /*Contexts */
 .review .listbox 

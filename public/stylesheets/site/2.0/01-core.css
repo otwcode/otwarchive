@@ -9,7 +9,7 @@ a,a:link{ color:#900; text-decoration:none;}
         { font-size:0; opacity:0 }
 #login-block,li.blurb,fieldset,form dl
         { border:1px solid #ddd; padding:1em; overflow:hidden }
-.blurb li,.actions>*,.stats>*,.meta ul li
-        { list-style:none; display:inline }
+.blurb li,.actions>*,.stats>*,.meta ul li, .actions form
+        { list-style:none; display:inline; padding-left:0.25em }
 
 /*END== */

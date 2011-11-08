@@ -175,7 +175,7 @@ class Series < ActiveRecord::Base
     if self.works.visible.posted.blank?
       self.created_at
     else
-      self.works.visible.collect(&:published_at).compact.uniq.sort.first
+      self.works.visible.value_of(:published_at).compact.uniq.sort.first
     end
   end
   
@@ -183,7 +183,7 @@ class Series < ActiveRecord::Base
     if self.works.visible.posted.blank?
       self.updated_at   
     else
-      self.works.visible.collect(&:revised_at).compact.uniq.sort.last
+      self.works.visible.value_of(:revised_at).compact.uniq.sort.last
     end
   end
 end

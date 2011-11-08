@@ -41,12 +41,12 @@ li.blurb:after
 .blurb ul.required-tags     
         { position: absolute; top: 0; width:60px; margin:0}
 .blurb ul.required-tags li,.blurb ul.required-tags li a
-        { position:static; display: inline; height: 25px; width: 25px; border:none }
+        { position:static; display: inline; padding-left:0; height: 25px; width: 25px; border:none }
 .blurb span.text 
         { height:0; width:0; font-size:0.001em; color:transparent; }
 .blurb ul.required-tags li span
         { background-repeat:no-repeat; height: 25px; width: 25px; display:block}
-.blurb .category,.blurb .iswip,.blurb .external-work
+.blurb .required-tags .category,.blurb .iswip,.blurb .external-work
         { position: absolute; left: 28px }
 .blurb .category
         { top: 0 }
@@ -81,6 +81,8 @@ li.blurb:after
 
 .blurb .datetime 
         { position:absolute; top:0; right:0; margin:0}
+.claim .datetime 
+        { position:static;}
 .blurb blockquote
         { clear: none; margin: 0.643em auto; text-align: justify }
 .blurb.own dl.stats

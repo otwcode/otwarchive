@@ -1,30 +1,20 @@
 <div id="work-form" class="post issue">
   <%= form_for(@known_issue) do |f| %>
     <%= error_messages_for @known_issue %>
-
-    <fieldset>
-      <legend><%= ts("Update Revision Number") %></legend>
-      <p>
-        <%= f.label :title, ts("Beta Revision"), :class => "required" %>
-        <%= f.text_field :title %>
-      </p>
-    </fieldset>
-   
-    <fieldset>
-      <legend><%= ts("Add known issue") %></legend>
-      <h3 class="heading">
-        <%= f.label :content, ts("Post most recent Known Issues content") %>
-      </h3>
-      
-      <div id="toggleText">
-        <p id="plainTextNotes" style="display: block"><%= allowed_html_instructions %></p>
-        <p id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>
-      </div>
+    <dl class="text">
+      <dt><%= f.label :title, ts("Beta Revision"), :class => "required" %></dt>
+        <dd><%= f.text_field :title %></dd>
+      <dt><%= f.label :content, ts("Recent Known Issues") %></dt>
+      <dd>
+        <p id="toggleText">
+          <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
+          <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon  (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
+          <span class="rtf-html-switch actions">
+            <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%= ts('Rich text') %></a></span>
+            <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%= ts('HTML') %></a></span>
+          <span>
+        </p>
       <% use_tinymce %>
-      <p class="rtf-html-switch">
-        <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%= ts("Rich text") %></a></span>
-        <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%= ts("HTML") %></a></span>
-      </p>
 
       <div class="rtf-html-field">
         <%= f.text_area :content, :class => "mce-editor observe_textlength", :id => "content" %>
@@ -36,13 +26,12 @@
         %>
         <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
       </div>
-    </fieldset>
+    </dd>
     
-    <fieldset>
-      <legend><%= ts("Post") %></legend>
-      <p class="submit actions">
+    <dt class="landmark"><%= ts("Post") %></dt>
+      <dd class="submit actions">
         <%= submit_tag ts("Post"), :name => 'post_button' %>
-      </p>
-    </fieldset>
+      </dd>
+    </dl>
   <% end %>
 </div>

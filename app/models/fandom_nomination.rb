@@ -3,10 +3,10 @@ class FandomNomination < TagNomination
   has_one :owned_tag_set, :through => :tag_set_nomination
 
   has_many :character_nominations, :dependent => :destroy, :inverse_of => :fandom_nomination
-  accepts_nested_attributes_for :character_nominations, :allow_destroy => true, :reject_if => proc { |attrs| attrs[:tagname].blank? }
+  accepts_nested_attributes_for :character_nominations, :allow_destroy => true, :reject_if => proc { |attrs| attrs[:tagname].blank? && attrs[:id].blank? }
 
   has_many :relationship_nominations, :dependent => :destroy, :inverse_of => :fandom_nomination
-  accepts_nested_attributes_for :relationship_nominations, :allow_destroy => true, :reject_if => proc { |attrs| attrs[:tagname].blank? }
+  accepts_nested_attributes_for :relationship_nominations, :allow_destroy => true, :reject_if => proc { |attrs| attrs[:tagname].blank? && attrs[:id].blank? }
 
 
   def character_tagnames

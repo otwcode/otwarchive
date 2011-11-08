@@ -4,17 +4,29 @@ require 'action_dispatch/middleware/show_exceptions'
 
 module ActionDispatch
   class ShowExceptions
+    
     private
-      def render_exception_with_template(env, exception)
-        body = ErrorsController.action(rescue_responses[exception.class.name]).call(env)
+      def render_exception(env, exception)
         log_error(exception)
-        Airbrake.notify(exception)
-        body
-      rescue
-        render_exception_without_template(env, exception)
+
+        request = Request.new(env)
+        if @consider_all_requests_local || request.local?
+          rescue_action_locally(request, exception)
+        else          
+          status = status_code(exception)
+          Airbrake.notify(exception) if Rails.env == 'production'
+          begin
+            body = ErrorsController.action(rescue_responses[exception.class.name]).call(env)
+            body
+          rescue
+            rescue_action_in_public(exception)
+          end            
+        end
+      rescue Exception => failsafe_error
+        $stderr.puts "Error during failsafe response: #{failsafe_error}\n #{failsafe_error.backtrace * "\n "}"
+        FAILSAFE_RESPONSE
       end
 
-      alias_method_chain :render_exception, :template if Rails.env == "production"
   end
 end
 

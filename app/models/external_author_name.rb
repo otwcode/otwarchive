@@ -26,5 +26,9 @@ class ExternalAuthorName < ActiveRecord::Base
   def to_s
     self.name + ' <' + self.external_author.email + '>'
   end
+
+  def external_work_creatorships
+    external_creatorships.where("external_creatorships.creation_type = 'Work'")
+  end
   
 end
