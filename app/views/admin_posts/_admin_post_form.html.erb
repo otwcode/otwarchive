@@ -2,10 +2,10 @@
 <div id="work-form" class="post news">
   <%= form_for(@admin_post) do |f| %>
     <%= error_messages_for @admin_post %>
-    <fieldset>
+    <fieldset class="text">
       <legend><%= ts("Post News") %></legend>
-      <p><input type="hidden" name="admin_post[admin_id]" value="<%= current_admin.id %>" /></p>
-      <p><%= f.text_field :title, :title =>"title" %></p>
+      <h4><input type="hidden" name="admin_post[admin_id]" value="<%= current_admin.id %>" />
+      <%= f.text_field :title, :title =>"title" %></h4>
       <!--BACK END, can we DRY up these post forms? There's admin_post_form, archive_faq_form, _chapter_form, known_issues_form, standard form-->
       <p id="toggleText">
         <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
@@ -29,6 +29,7 @@
     </fieldset>
     <fieldset>
       <legend><%= ts("Set Preferences") %></legend>
+      <h3 class="landmark heading">Set Prefs</h3>
       <dl>
         <dt><%= f.label :tag_list, ts("Tags") %></dt>
         <dd><%= f.text_field :tag_list %></dd>
@@ -51,6 +52,7 @@
 
     <fieldset>
       <legend><%= ts('Post') %></legend>
+      <h3 class="landmark heading">Post</h3>
       <p class="submit actions">
         <%= submit_tag ts('Post'), :name => 'post_button' %>
       </p>

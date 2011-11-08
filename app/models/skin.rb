@@ -273,7 +273,7 @@ class Skin < ActiveRecord::Base
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
     style = ""
     if self.get_role != "override" && self.get_role != "site"
-      style += Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : ''
+      style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
     end
     style += self.get_style_block(roles_to_include)
     style.html_safe

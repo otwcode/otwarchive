@@ -272,7 +272,7 @@ p							{ line-height 1.5em; font-size:1em; margin-top: 1.25em; margin-bottom: 1
 set font styles
 */
 body	 					{ font-family:sans-serif;}
-h1,h2,h3,h4,h5,h6,p.end 	{ font-family:sans-serif; font-variant:small-caps; font-weight:100; letter-spacing:0.06em }
+h1,h2,h3,h4,h5,h6,p.end 	{ font-family:sans-serif; font-variant:small-caps; font-weight:100; letter-spacing:0.06em; color:#eee}
 .serif 						{ font-family:serif;}
 .sans						{ font-family:sans-serif;}
 
@@ -310,17 +310,12 @@ em cite, i cite				{ text-decoration:underline; }
 hr							{ border:0; height:1em; margin:auto; font-size:2.5em; text-align:center; }
 hr:after					{ content:"* * *"; }
 
-#inner .region {border:0;}
-/* END SKIN */ 
+#inner .region, body {border:0; background:#0000DD; color:#eee}
 
-/* SKIN: Typeset In My Ways 2.0 */
-/* PARENTS: Blurblings Blurb Drop */
-/*uses the Archive typography and layout, with plain text blurb and a max-width work view*/
-#workskin {max-width:39em; margin:auto}
-#inner {max-width:75%; margin:auto;}
 /* END SKIN */ 
 
 /* SKIN: Typeset In My Ways Landmarks*/
+/* PARENTS: Typeset In My Ways Erasure */
 /* shows the landmarks and styles them for timways. Not supported by IE6*/
 .landmark {font-size:100%; opacity:1;}
 .landmark.heading{background:none; color:#000; border-bottom:3px solid}

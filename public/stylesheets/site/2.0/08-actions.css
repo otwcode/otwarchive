@@ -25,9 +25,9 @@ p.submit, input.submit, dd.submit
 .actions input.text,.actions input[type="text"]
         { cursor: text }
 /*subtypes and modes 
-test note: this pagination clear may need to just be clear:right*/
+test note: this pagination clear needs to be kept an eye on*/
 ol.pagination
-        { text-align:center; clear:both; margin:0.643em auto}
+        { text-align:center; clear:right; margin:0.643em auto}
 .actions a:visited
         { color: #111; }
 .actions a:hover, .actions input:hover

@@ -69,6 +69,30 @@ class OwnedTagSet < ActiveRecord::Base
       errors.add(:base, ts("^You cannot make changes to nomination settings when nominations already exist. Please review and delete existing nominations first."))
     end
   end
+  
+  def add_tagnames(tag_type, tagnames_to_add)
+    self.tag_set.send("#{tag_type}_tagnames_to_add=", tagnames_to_add)
+    return false unless self.save
+
+    # update the nominations -- approve any where an approved tag was either a synonym or the tag itself
+    TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_add).update_all(:approved => true, :rejected => false)
+    true
+  end
+
+  def remove_tagnames(tag_type, tagnames_to_remove)
+    self.tag_set.tagnames_to_remove = tagnames_to_remove.join(',')
+    return false unless self.save
+    TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_remove).update_all(:rejected => true, :approved => false)
+
+    if tag_type == "fandom"
+      # reject children of rejected fandom
+      TagNomination.for_tag_set(self).where(:type => "#{tag_type.classify}Nomination").where("tagname IN (?)", tagnames_to_remove).each do |rejected_fandom_nom|
+        rejected_fandom_nom.reject_children
+      end
+    end
+
+    true
+  end
 
   def self.owned_by(user = User.current_user)
     if user.is_a?(User)
@@ -156,12 +180,12 @@ class OwnedTagSet < ActiveRecord::Base
   
   # we can use redis to speed this up since tagset data is loaded there for autocomplete
   def already_in_set?(tagname)
-    true unless $redis.zscore("autocomplete_tagset_#{tag_set.id}", tagname).nil?
+    tags_in_set.where("tags.name = ?", tagname).exists?
   end
 
   # returns an array of arrays [id, name]
   def tags_in_set
-    $redis.zrange("autocomplete_tagset_#{tag_set.id}", 0, -1).map {|redis_tag| Tag.parse_autocomplete_value(redis_tag)}
+    Tag.joins(:set_taggings).where("set_taggings.tag_set_id = ?", self.tag_set.id)
   end
 
   def already_nominated?(tagname)

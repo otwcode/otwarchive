@@ -29,7 +29,7 @@ float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
 #main.dashboard * {clear:left;}
 /* END SKIN */
 
-/*SKIN: 100% width filters */
+/*SKIN: Full width filters */
 #inner .filters, #inbox-form, .works-index .index, .collections-index .index
  {width:100%; max-width:100%;}
  /* END SKIN */
@@ -52,9 +52,13 @@ height:auto; width:auto; margin:0.643em auto;
 font-size:100%; opacity:1; color:#000; font-weight:bold; display:block}
 #skiplinks,#inner .blurb .landmark {display: block; margin:1.286em auto;}
 #header {background:#900; 0 }
-#header .landmark { 
-background:!important; color:#fff;}
+#header .landmark { color:#fff;}
 #header ul.primary { background:none; border:0; box-shadow:none}
 #header h1 {position:static; margin-right:120px}
 #header h1 .landmark {display:inline;}
+/* END SKIN */
+
+/* SKIN: Two Point No */
+/* Kills all the rounded corners, box shadows, and text-shadows */
+* {box-shadow:none !important; border-radius:0 !important; text-shadow:none !important;}
 /* END SKIN */

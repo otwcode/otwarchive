@@ -2,7 +2,9 @@
 http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
 */
 #dashboard  
-        { width: 12em; float: left; padding: 0 0.5625em }
+        { width: 12em; float: left; padding: 0.5em }
+#dashboard li
+        { padding:0 ;}
 #dashboard a,#dashboard span
         { color: #111; display: block; white-space:normal; height:auto; line-height:2; padding: 0 0.5625em; border: none; background:transparent;
           word-wrap:break-word; box-shadow:none;}

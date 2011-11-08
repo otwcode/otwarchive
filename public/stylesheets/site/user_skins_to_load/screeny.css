@@ -15,7 +15,7 @@ ul#skiplinks,
 }
 /* END SKIN */
 
-/* SKIN: Oppression! /*
+/* SKIN: Oppression! */
 /*completely suppresses landmark headings, leaving only WAI-ARIA landmarks and ordinary headings*/
 .landmark {
   display: none !important;

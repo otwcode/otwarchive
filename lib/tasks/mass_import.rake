@@ -312,7 +312,8 @@ namespace :massimport do
     val_mapping = HashWithIndifferentAccess.new({
       :rating_string => :convert_rating,
       :collection_names => :get_collection_names,
-      :revised_at => :convert_revised_at
+      :revised_at => :convert_revised_at,
+      :summary => :clean_storytext
     })
     
     automated_archive_rescue(:archivist => archivist, :base_url => base_url, :author_email => author_email, 
@@ -323,7 +324,7 @@ namespace :massimport do
   
   ### SSA
   desc "Import the Smallville Slash Archive"
-  task(:smallville_slash => :environment) do
+  task(:ssa => :environment) do
     base_url = "http://smallville.slashdom.net/archive/"
     
     archive_file = "ssa_abbrev.pl"
@@ -331,6 +332,12 @@ namespace :massimport do
     author_email = "shalott+ssatesting@gmail.com"
     
     archivist = "ssa_archivist"
+    
+    c = Collection.find_by_name("Smallville_Slash_Archive")
+    unless c
+      puts "Please create the Smallville_Slash_Archive collection first!"
+      exit
+    end
     
     # specify which attributes to keep from the db - will have to delete any that are not valid work attributes
     attrs_to_keep = %w(author category date email rating pairing summary title location filetype)
@@ -347,11 +354,12 @@ namespace :massimport do
     # run some attributes through storyparser cleanup routines
     val_mapping = HashWithIndifferentAccess.new({
       :rating_string => :convert_rating,
-      :revised_at => :convert_revised_at
+      :revised_at => :convert_revised_at,
+      :summary => :clean_storytext
     })
     
     values_to_set = HashWithIndifferentAccess.new({
-      :collection_names => "Smallville_Slash_Archive",
+      :collection_names => c.name,
       :fandom_string => "Smallville"
     });
     
@@ -361,24 +369,119 @@ namespace :massimport do
       :archive_file => archive_file, :story_parse_method => :parse_content_from_ssa_file, :load_comments => false)
   end  
   
+  desc "Import the Due South Archive"
+  task(:dsa => :environment) do
+    base_url = "http://www.squidge.org/dsa/archive"
+    archive_file = "dsa_abbrev.pl"
+    author_email = "shalott+dsatest@gmail.com"
+    archivist = "dsa_archivist"
+    c = Collection.find_by_name("dsa")
+    unless c
+      puts "Please create the dsa collection first!"
+      exit
+    end
+    
+    attrs_to_keep = %w(author category date email rating pairing summary title location filetype)
+
+    # change some attribute names
+    # author name and email are already in :author, :email (required for parsing the author)
+    attr_mapping = HashWithIndifferentAccess.new({
+      :rating => :rating_string,
+      :date => :revised_at,
+      :pairing => :relationship_string,
+      :category => :freeform_string,
+      :warnings => :warning_strings
+    })
+
+    # run some attributes through storyparser cleanup routines
+    val_mapping = HashWithIndifferentAccess.new({
+      :rating_string => :convert_rating,
+      :revised_at => :convert_revised_at,
+      :summary => :clean_storytext
+    })
+    
+    values_to_set = HashWithIndifferentAccess.new({
+      :collection_names => c.name,
+      :fandom_string => "due South"
+    });
+    
+    automated_archive_rescue(:archivist => archivist, :base_url => base_url, :author_email => author_email, 
+      :attrs_to_keep => attrs_to_keep, :attr_mapping => attr_mapping, :val_mapping => val_mapping,
+      :values_to_set => values_to_set,
+      :archive_file => archive_file, :story_parse_method => :parse_content_from_dsa_file, :load_comments => false)
+    
+    
+    
+  end
+  
 
   ### ARCHIVE-SPECIFIC HELPERS
   
+  def parse_content_from_dsa_file(work_params, story)
+    # warnings includes both category and warning info
+    warning_strings = ""; category_string = "";
+    work_params.delete(:warning_strings).split(/,\s*/).each do |warning|
+      case warning
+      when "rape/nc"
+        warning_strings += "Rape/Non-Con,"
+      when "death story"
+        warning_strings += "Major Character Death,"
+      when "violence"
+        warning_strings += "Graphic Depictions Of Violence,"
+      when "m/m", "slash"
+        category_string += "M/M,"
+      when "m/f", "het"
+        category_string += "M/F,"
+      when "f/f"
+        category_string += "F/F,"
+      when "gen"
+        category_string += "Gen,"
+      end
+    end
+  
+    work_params[:warning_strings] = warning_strings.chop unless warning_strings.blank?
+    work_params[:category_string] = category_string.chop unless category_string.blank?
+    
+    @doc = Nokogiri::HTML.parse(story) rescue ""
+    content_table = (@doc/"table[@class='content']/tr/td[2]")
+    content = ""
+    unless content_table
+      content = (@doc/"body").inner_html
+    else
+      centers = content_table.css("center")
+      unless centers[0].css("p")[0].nil?
+        work_params[:notes] = centers[0].css("p")[0].inner_html
+      end
+      centers[0].remove
+      # trying to remove comment links at the bottom
+      if !centers[-1].nil? && centers[-1].to_html.match(/<!-- COMMENTLINK START -->/)
+        centers[-1].remove
+      end
+      content = content_table.inner_html      
+    end
+    
+    work_params[:chapter_attributes] = HashWithIndifferentAccess.new({:content => content})    
+    work_params
+  end
+  
   # SSA has very basic story files
   def parse_content_from_ssa_file(work_params, story)
+    # SSA has notes embedded in the file
+    if story.match(/Notes: (.*)$/)
+      work_params[:notes] = $1
+      story.gsub!(/Notes: (.*)$/, '')
+    end
+
+    # strip old archive links from bottom
+    story.gsub!(/<hr>\s*<center>.*?<\/center>\s*<\/body>\s*<\/html>\s*$/im, '')
+    
     @doc = Nokogiri::HTML.parse(story) rescue ""
     content = (@doc/"body").inner_html
     @storyparser ||= StoryParser.new
     content = @storyparser.clean_storytext(content)
     content.gsub!(/<a href="\//, '<a href="http://smallville.slashdom.net/')
-    content.gsub!(/<hr>\s*<center>[.\n]*?<\/center>\s*$/i, '')
   
-    work_params[:chapter_attributes] = HashWithIndifferentAccess.new({:content => content})
-    
-    # SSA has notes embedded in the file
-    if work_params[:chapter_attributes][:content].match(/Notes: (.*)$/)
-      work_params[:notes] = $1
-    end
+    work_params[:chapter_attributes] = HashWithIndifferentAccess.new({:content => content})    
     work_params
   end
   

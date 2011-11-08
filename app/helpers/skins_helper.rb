@@ -24,18 +24,6 @@ module SkinsHelper
     end
     if logged_in? && current_user.preference
       @site_skin ||= current_user.preference.skin
-      # temporary until skins fixed
-      if @site_skin && @site_skin.do_not_upgrade == true
-        @site_skin = AdminSetting.default_skin
-        current_user.preference.skin = AdminSetting.default_skin
-        current_user.preference.save
-        flash.now[:notice] = "Hey, we've got a new look! To make sure that you don't run into unexpected issues, 
-          we've disabled your current skin since it was done on top of our old design. We're 
-          working to upgrade the existing skins so you'll be able to go back to your old one in
-          a couple of weeks, but in the meantime, please give our new design
-          a whirl, try out some of the many exciting new skins we now have available, and send us
-          your feedback!"
-      end        
     end
     @site_skin ||= AdminSetting.default_skin
   end

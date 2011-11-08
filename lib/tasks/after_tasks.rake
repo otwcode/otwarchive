@@ -337,9 +337,6 @@ namespace :After do
     Skin.site_skins.each do |skin|
       next if skin.css.blank? || !skin.parent_skins.empty?
       skin.role = "override"
-      # using this temporarily to flag old skins to disable until we upgrade them -- NN
-      skin.do_not_upgrade = true 
-
       if skin.save
         skin.skin_parents.build(:position => (skin.parent_skins.count+1), :parent_skin => oldskin)
         skin.save
@@ -352,7 +349,7 @@ namespace :After do
       end
     end
   end
-  
+
 end # this is the end that you have to put new tasks above
 
 ##################
@@ -364,5 +361,5 @@ desc "Run all current migrate tasks"
 #task :After => ['After:fix_default_pseuds', 'After:remove_owner_kudos']
 #task :After => ['autocomplete:reload_data']
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
-task :After => ['After:convert_tag_sets', 'skins:load_site_skins', 'After:convert_existing_skins', 
+task :After => ['After:convert_tag_sets', 'skins:load_site_skins', 'skins:disable_all', 'After:convert_existing_skins', 
                 'autocomplete:reload_data', 'After:remove_old_epubs']

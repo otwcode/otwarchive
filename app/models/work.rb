@@ -322,7 +322,7 @@ class Work < ActiveRecord::Base
   ########################################################################
 
   def visible(current_user=User.current_user)
-    if current_user == :false || !current_user
+    if current_user.nil? || current_user == :false
       return self if self.posted unless self.restricted || self.hidden_by_admin
     elsif self.posted && !self.hidden_by_admin
       return self
@@ -882,7 +882,7 @@ class Work < ActiveRecord::Base
   # otherwise, we use a join to get userids and then get all posted works that are either unhidden OR belong to this user.
   # Note: in that last case we have to use select("DISTINCT works.") because of cases where the same user appears twice
   # on a work.
-  def self.visible_to_user(user)
+  def self.visible_to_user(user=User.current_user)
     case user.class.to_s
     when 'Admin'
       visible_to_admin

@@ -6,12 +6,13 @@ class TagNomination < ActiveRecord::Base
 
   validates_length_of :tagname,
     :maximum => ArchiveConfig.TAG_MAX,
-    :message => "of tag is too long -- try using less than #{ArchiveConfig.TAG_MAX} characters."
+    :minimum => 1,
+    :message => ts("^Tag nominations must be between 1 and #{ArchiveConfig.TAG_MAX} characters.")
   validates_format_of :tagname,
     :if => "!tagname.blank?",
     :with => /\A[^,*<>^{}=`\\%]+\z/,
-    :message => 'of a tag can not include the following restricted characters: , ^ * < > { } = ` \\ %'
-  
+    :message => ts("^Tag nominations can't include the following restricted characters: , ^ * < > { } = ` \\ %")
+
   validate :type_validity
   def type_validity
     if !tagname.blank? && (tag = Tag.find_by_name(tagname)) && "#{tag.type}Nomination" != self.type
@@ -21,11 +22,10 @@ class TagNomination < ActiveRecord::Base
 
   validate :not_already_reviewed, :on => :update
   def not_already_reviewed
-    if tagname_changed? && (tagname != tagname_was) && (self.approved || self.rejected) 
+    if tagname_changed? && (self.approved || self.rejected) && (tagname != tagname_was)  && !tagname_was.blank? 
       errors.add(:base, ts("^You cannot change %{tagname_was} to %{tagname} because that nomination has already been reviewed.", :tagname_was => self.tagname_was, :tagname => self.tagname))
       tagname = self.tagname_was
     end
-    false
   end
   
   # This makes sure no tagnames are nominated for different parents in this tag set
@@ -35,7 +35,7 @@ class TagNomination < ActiveRecord::Base
     # let people change their own!
     query = query.where("tag_nominations.id != ?", self.id) if !(self.new_record?)
     if query.exists?
-      errors.add(:base, ts("^Someone else has already nominated %{tagname} for this set but in a different fandom. Please be more specific.", :tagname => self.tagname))
+      errors.add(:base, ts("^Someone else has already nominated the tag %{tagname} for this set but in a different fandom. Try being more specific, for instance tacking on the fandom (Labyrinth) that your nomination belongs to.", :tagname => self.tagname))
     end
   end
 
@@ -79,13 +79,19 @@ class TagNomination < ActiveRecord::Base
   # show it to them again.
   before_save :set_approval_status
   def set_approval_status
+    debugger
+    return true if reviewed?
     set_noms = tag_set_nomination
     set_noms = fandom_nomination.tag_set_nomination if !set_noms && from_fandom_nomination    
     self.rejected = set_noms.owned_tag_set.already_rejected?(tagname) || false
     if self.rejected
       self.approved = false
+    elsif synonym && set_noms.owned_tag_set.already_in_set?(synonym)
+      self.tagname = synonym
+      self.synonym = nil
+      self.approved = true
     else
-      self.approved = set_noms.owned_tag_set.already_in_set?(tagname) || (synonym && set_noms.owned_tag_set.already_in_set?(synonym)) || false
+      self.approved = set_noms.owned_tag_set.already_in_set?(tagname) || false
     end
     true
   end
@@ -154,6 +160,13 @@ class TagNomination < ActiveRecord::Base
   
   def reviewed?
     approved || rejected
+  end
+
+  def approve!
+    self.approved = true
+    self.rejected = false
+    self.owned_tag_set.tag_set.send("#{self.class.to_s.gsub(/Nomination/,'').downcase}_tagnames_to_add=", self.tagname)
+    self.owned_tag_set.tag_set.save
   end
 
   def times_nominated(tag_set)

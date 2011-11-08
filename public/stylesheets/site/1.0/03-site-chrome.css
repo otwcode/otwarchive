@@ -616,8 +616,17 @@ ol.pagination
         { text-align:center; clear:right; margin:0.643em auto}
         
         
-        #footer .secondary    
-                { background: #fff; position: absolute; z-index: 99; border:2px solid #bbb; margin: auto; padding:0.375em; overflow:hidden; 
-                  box-shadow:2px 2px 5px #bbb; border-radius:0.15em }
-        #footer .secondary li {font-size:2em; display:block; margin:0.375em auto; text-align:left;}
+/*secondary */
+secondary    
+        { background: #fffef9; position: absolute; z-index: 99; border:2px solid #bbb; margin: auto; padding:0.375em; overflow:hidden; right:2.5em; 
+          box-shadow:2px 2px 5px #bbb; border-radius:0.15em }
+/* CONTEXTS */
+.actions .secondary .submit, .nomination .actions
+        { float:none}
+.chapter .secondary
+        { top:2.5em} 
+#footer .secondary li {font-size:2em; display:block; margin:0.375em auto; text-align:left;}
+#footer .secondary, #dashboard .secondary
+        { right:auto }
+
 
