@@ -965,6 +965,11 @@ class Work < ActiveRecord::Base
     where('collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
           [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
   }
+  
+  def self.in_series(series)
+    joins(:series).
+    where("series.id = ?", series.id)
+  end
 
   scope :for_recipient, lambda {|recipient|
     select("DISTINCT works.*").

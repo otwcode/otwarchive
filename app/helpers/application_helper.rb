@@ -259,6 +259,13 @@ module ApplicationHelper
     content_tag(:p, span + h(ts(' characters left')), :class => "character_counter")
   end
   
+  def expand_contract_all(target="index")
+    expand_all = content_tag(:a, ts("Expand All"), :href=>"#")
+    contract_all = content_tag(:a, ts("Contract All"), :href=>"#")
+    content_tag(:span, expand_all, :class => "action expand_all hidden showme", "target_class" => target) + 
+      content_tag(:span, contract_all, :class => "action contract_all hidden showme", "target_class" => target)
+  end
+  
   # Sets up expand/contract/shuffle buttons for any list whose id is passed in
   # See the jquery code in application.js
   # Note that these start hidden because if javascript is not available, we

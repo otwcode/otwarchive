@@ -61,7 +61,8 @@
           <% @fandom_tag_id = tag_field_id if tag_type == 'fandom' %>
 
           <% if restriction.has_tags?(tag_type) # tags are specified in the tag set %>
-            <% if restriction.tags(tag_type).count <= ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
+            <% if restriction.tags(tag_type).count <= 3 %>
+              <% # ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
         
               <% # save the field id to pass for autocompleting based on fandoms tickyed instead of autocomplete %>
               <% @fandom_tag_id += "_checkboxes" if tag_type == 'fandom' %>
@@ -81,7 +82,7 @@
               <p class="navigation actions" role="button">
                 <% # TODO: would be nice to improve this for the case of multiple tag sets, currently it links to just an index of all the tag sets for this challenge %>
                 <%= link_to( ts("(See %{taglist_size} options)", :taglist_size => restriction.tags(tag_type).count), 
-                          tag_sets_path(:restriction => restriction.id, :tag_type => tag_type), :target => "_blank", :class => "toggle") %>
+                          show_options_tag_sets_path(:restriction => restriction.id, :tag_type => tag_type), :target => "_blank", :class => "toggle") %>
               </p>
             <% end %>
           <% else # no specified tags so let's just go with standard autocomplete %>

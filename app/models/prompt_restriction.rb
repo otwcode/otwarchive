@@ -101,7 +101,7 @@ class PromptRestriction < ActiveRecord::Base
 
   # Efficiently get ids of all tagsets thanks to Valium
   def owned_tag_set_ids
-    OwnedSetTagging.where(:set_taggable_type => self.class.name, :set_taggable_id => self.id).value_of :tag_set_id
+    OwnedSetTagging.where(:set_taggable_type => self.class.name, :set_taggable_id => self.id).value_of(:owned_tag_set_id)
   end
   
   def tag_set_ids

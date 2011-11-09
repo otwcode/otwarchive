@@ -1,5 +1,5 @@
 /* SKIN: Snow */
-/* Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 makes everything that is very light lavender pure white. To remove all backgrounds load 'Get The Backers'*/
 body,th,tr:hover,col.name,fieldset fieldset,fieldset dl dl,form blockquote.userstuff,input:focus,select:focus,textarea:focus, .autocomplete div.dropdown ul, #ui-datepicker-div, #ibox_wrapper, #ibox_content, .toggled form, .dynamic form, .secondary, .listbox .index, .dashboard .listbox .index, .nomination dt
         { background:#fff;}
@@ -12,18 +12,19 @@ form .notice,form ul.notes
 /* END SKIN */
 
 /* SKIN: Get the Backers */
-/* Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 makes the group backgrounds white. To override the header colours add on 'Trouble O'Head' */
 .region, .group, .header, fieldset, fieldset fieldset, fieldset fieldset fieldset, table, th, .heading, .notice, ul.notes, .flash {background:transparent !important}
 body, .dynamic, .toggled, .secondary, .dropdown, .verbose legend {background:white !important;}
 /* END SKIN */
 
 /* SKIN: Dusted Off */
-/* PARENTS: Snow */
-/*  Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 CREDITS
 # code: adapted from 'colour flip combos' by lim @ ao3 and 'Dusty Rose' by sistabro @ ao3
 */
+/* PARENTS: Snow */
+
 /* KEY COLOUR TO DUSTY ROSE*/
 #header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
         { background:#b35b6b;}
@@ -34,16 +35,18 @@ CREDITS
 /* END SKIN */
 
 /* SKIN: Zebra Mono */
-/* PARENTS: Snow */
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 CREDITS
 # resources: http://rainny-stock.deviantart.com/art/Zebra-Fur-Texture-Stock-135405132
 # code: adapted from 'colour flip combos' by lim @ ao3
 # dedicated to Zebra @ ao3
 */
+/* PARENTS: Snow */
 /* KEY COLOUR TO BLACK and FUR (DEFAULT IS STRONG RED)*/
 #header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
         { background:#000 url('/images/skins/textures/tiles/black-zebra-fur.jpg'); background-size:500px}
+#footer ul 
+        { background:#000;}
 #header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
         { color:#000;}
 #outer #header #greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active, #header .primary a, #header .primary .current, #header .primary input, #header .search input
@@ -51,14 +54,16 @@ CREDITS
 
 /*TURN OFF DEFAULT ICON*/
 .icon   { background:none;}
+
 /* END SKIN */
 
 /* SKIN: For The Trees */
-/* PARENTS: Snow */
-/* Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 CREDITS
 # code: adapted from 'colour flip combos' by lim @ ao3 and 'Sunny Forest' by enigel @ ao3
 */
+/* PARENTS: Snow */
+
 /* KEY COLOUR TO FOREST GREEN*/
 #header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
         { background:#003D00;}
@@ -69,11 +74,12 @@ CREDITS
 /* END SKIN */
 
 /* SKIN: Mono */
-/* PARENTS: Get The Backers, Snow */
-/* Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 CREDITS
 # code: adapted from 'colour flip combos' by lim @ ao3
 */
+/* PARENTS: Get The Backers, Snow */
+
 /* KEY COLOUR TO BLACK (DEFAULT IS STRONG RED)*/
 #header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
         { background:#000 ; background-size:500px}
@@ -84,10 +90,11 @@ CREDITS
 /* END SKIN */
 
 /* SKIN: The Blues */
-/* PARENTS: Snow */
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 CREDITS
-# code adapted from 'colour flip combos' by lim @ ao3 and "Medium Blues" by Arduinna @ AO3
+# code adapted from 'colour flip combos' by lim @ ao3 and "Medium Blues" by Arduinna @ AO3*/
+/* PARENTS: Snow */
+
 /*2*/
 .actions a, .action, .actions input,input[type="submit"],button, .current, .actions label,li.relationships, .thread .even
         { background:#92C1DB;}
@@ -157,8 +164,8 @@ h2, .system p#signup, #header h2
 /* END SKIN */
 
 /* SKIN: Reversi */
-/* Light on dark with blue key, default skin 
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Light on dark with blue key, default skin 
+ Please DO copy and reuse and modify this code any way you like!
 # code adapted from 'colour flip combos' by lim @ ao3*/
 
 /*regions, groups, elements*/
@@ -222,9 +229,9 @@ fieldset fieldset
 /* END SKIN */
 
 /* SKIN: Slim Shaded */
-/* PARENTS: Snow */
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 instructions: this just makes a slimmer, texty header, with a shaded strip, snow body, and lowercase buttons*/
+/* PARENTS: Snow */
 
 #header {min-height:0}
 #header a , #header fieldset, #header ul.primary, #header ul.primary .current 
@@ -243,7 +250,7 @@ h1 a img {height:50px; border:0}
 /* END SKIN */
 
 /* SKIN: Nonnery */
-/* Chain Snow, Key Colour, and Nonnery for faster colour flipping */
+/* DESCRIPTION: Chain Snow, Key Colour, and Nonnery for faster colour flipping */
 /*TRANSPARENT AND NONNERY*/
 #dashboard a, #dashboard span, #dashboard.own, #footer ul.navigation a,fieldset dl,fieldset.actions,fieldset dl fieldset dl, .dynamic form fieldset, .toggled form fieldset, .toggled form dl, .secondary .toggled form, .dashboard .own, .mods li,dl.stats dt,dl.stats dd,dl.stats, .blurb .header .heading, .blurb .header ul, .blurb .header p.status, .preface h3,fieldset.comments, .userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link
         { background:transparent;}

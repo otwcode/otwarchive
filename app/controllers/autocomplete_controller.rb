@@ -62,7 +62,7 @@ class AutocompleteController < ApplicationController
   # :in_any - set to false if only want tags in ALL specified sets
   # :term - the search term
   def tags_in_sets
-    results = OwnedTagSet.autocomplete_lookup(params)
+    results = TagSet.autocomplete_lookup(params)
     render_output(results.map {|r| Tag.name_from_autocomplete(r)})
   end
   

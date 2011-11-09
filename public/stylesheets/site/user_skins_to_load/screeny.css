@@ -1,5 +1,5 @@
-/* SKIN: Exposure!*/
-/*Exposes every heading, title, and name with the "landmark" class to the readers that can't read them*/
+/* SKIN: The Screeny Exposure!*/
+/* DESCRIPTION: Exposes every heading, title, and name with the "landmark" class to the readers that can't read them*/
 ul#skiplinks,
 .landmark,
 #outer .landmark,
@@ -15,25 +15,25 @@ ul#skiplinks,
 }
 /* END SKIN */
 
-/* SKIN: Oppression! */
-/*completely suppresses landmark headings, leaving only WAI-ARIA landmarks and ordinary headings*/
+/* SKIN: The Screeny Oppression! */
+/* DESCRIPTION: completely suppresses landmark headings, leaving only WAI-ARIA landmarks and ordinary headings*/
 .landmark {
   display: none !important;
 }
 /* END SKIN */
 
-/* SKIN: Drop It */
-/*drops all archive parents except core
+/* SKIN: The Screeny Drop It */
+/* DESCRIPTION: drops all archive parents except core*/
 /* PARENTS: 1 */ 
 /* END SKIN */
 
-/* SKIN: She's Got Form */
-/*drops all archive parents except core and interactions.*/
+/* SKIN: The Screeny She's Got Form */
+/* DESCRIPTION: drops all archive parents except core and interactions (forms).*/
 /* PARENTS: 1, 7 */ 
 /* END SKIN */
 
-/* SKIN: Shut It */
-/*Any component you don't care to read, add to the beginning of this code, or remove ones you do want. Remember to separate with a comma! */
+/* SKIN: The Screeny Shut It */
+/* DESCRIPTION: Any component you don't care to read, add to the beginning of this code, or remove ones you do want. Remember to separate with a comma! */
 #footer,
 .filters,
 blockquote.userstuff,

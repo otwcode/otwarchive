@@ -18,8 +18,8 @@ class CastNomination < TagNomination
   end
 
   def get_parent_tagname
-    self.parent_tagname.present? ? self.parent_tagname : (
-      self.fandom_nomination ? self.fandom_nomination.tagname : 
+    self.fandom_nomination ? self.fandom_nomination.tagname : (
+      self.parent_tagname.present? ? self.parent_tagname : 
         Tag.find_by_name(self.tagname).try(:parents).try(:first).try(:name))
   end
 

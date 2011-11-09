@@ -5,6 +5,8 @@
       <% list_id = "list_for_media_#{media.gsub(/[^\w]/, '_')}" %>
       (<%= @tag_hash[:fandom][media].size %>)
       <%= expand_contract_shuffle(list_id) %>
+      <!-- FRONT END is this ok? -->      
+      <%= expand_contract_all("listbox") %>
     </h3>
     <ol id="<%= list_id %>" class="tags index group commas">
       <% unless @tag_hash[:character] || @tag_hash[:relationship] %>

@@ -1,5 +1,5 @@
 /* SKIN: Blurblings Shipper */
-/* emphasises the relationship tags */
+/* DESCRIPTION: emphasises the relationship tags */
 li.blurb .relationships {
   font-weight: bold;
   font-style:oblique;
@@ -8,7 +8,7 @@ li.blurb .relationships {
 /* END SKIN */
 
 /* SKIN: Blurblings Faint Warning */
-/* de-emphasises the warning tags */
+/* DESCRIPTION:  de-emphasises the warning tags */
 li.blurb .warnings strong {font-weight:normal;}
 /* END SKIN */
 
@@ -49,12 +49,12 @@ li.blurb .stats {display:none;}
 /* END SKIN */
 
 /* SKIN: Blurblings chain example*/
+/* DESCRIPTION:  Just demonstrating how you can chain blurblings together*/
 /* PARENTS: Blurblings Faint Warning, Blurblings Shipper, Blurblings Hide summary */
-/* Just demonstrating how you can chain blurblings together*/
 /* END SKIN */
 
 /* SKIN: Blurblings Hide nearly everything */
-/* on every blurb except the title, author, fandom*/
+/*  DESCRIPTION: on every blurb except the title, author, fandom*/
 li.blurb p, .index li.blurb ul, li.blurb ol, li.blurb blockquote, li.blurb dl, li.blurb .user, li.blurb .icon {
 display: none
 }
@@ -101,7 +101,7 @@ float: right;
 
 
 /* SKIN: Blurblings Landmarks*/
-/* Show the blurb landmark headings*/
+/* DESCRIPTION: Show the blurb landmark headings*/
 #main li.blurb .landmark {
 height:auto;
 width:auto;
@@ -115,13 +115,13 @@ font-weight:bold;
 /* END SKIN */
 
 /* SKIN: Blurblings Blurb Drop */
+/* DESCRIPTION: drops the blurb group entirely to make a plain text blurb */
 /* PARENTS: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 */ 
-/* drops the blurb group entirely to make a plain text blurb */
 /* END SKIN */
 
 /* SKIN: Typeset In My Ways */
+/* DESCRIPTION: uses the Archive typography and layout, with plain text blurb and a limited width work view*/
 /* PARENTS: Blurblings Blurb Drop */
-/*uses the Archive typography and layout, with plain text blurb and a limited width work view*/
 #workskin {max-width:39em; margin:auto}
 #inner {max-width:75%; margin:auto;}
 /* END SKIN */ 
