@@ -47,7 +47,7 @@ Scenario: User can turn off banner using X button
   When an admin sets a custom banner notice
   When I am logged in as "newname"
   When I am on my user page
-  When I follow "Close-flash" within "#notice-banner .submit"
+  When I follow "x" within "#notice-banner .submit"
   #Cucumber apparently doesn't like Javascript
   #Then I should not see "Custom notice words"
 
@@ -79,7 +79,7 @@ Scenario: logged out user hides banner using X
   When an admin sets a custom banner notice
   When I am logged out
   When I am on the works page
-  When I follow "Close-flash" within "#notice-banner .submit"
+  When I follow "x" within "#notice-banner .submit"
   #Cucumber apparently doesn't like Javascript
   #Then I should not see "Custom notice words"
   
