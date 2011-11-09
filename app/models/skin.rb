@@ -203,9 +203,9 @@ class Skin < ActiveRecord::Base
     last_role = ""
     file_count = 1
     skin_dir = Skin.skins_dir + skin_dirname
-    FileUtils.mkdir skin_dir
-    get_all_parents.each do |parent|
-      if parent.get_sheet_role != last_role
+    FileUtils.mkdir_p skin_dir
+    (get_all_parents + [self]).each do |next_skin|
+      if next_skin.get_sheet_role != last_role
         # save to file
         if css_to_cache.present?
           cache_filename = skin_dir + "#{file_count}_#{last_role}.css"
@@ -213,9 +213,9 @@ class Skin < ActiveRecord::Base
           File.open(cache_filename, 'w') {|f| f.write(css_to_cache)}
           css_to_cache = ""
         end
-        last_role = parent.get_sheet_role
+        last_role = next_skin.get_sheet_role
       end
-      css_to_cache += parent.get_css
+      css_to_cache += next_skin.get_css
     end
     # TODO this repetition is all wrong but my brain is fried
     if css_to_cache.present?
@@ -273,7 +273,7 @@ class Skin < ActiveRecord::Base
   def get_style(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)
     style = ""
     if self.get_role != "override" && self.get_role != "site"
-      style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
+      style += AdminSetting.default_skin != Skin.default ? AdminSetting.default_skin.get_style(roles_to_include) : (Skin.get_current_site_skin ? Skin.get_current_site_skin.get_style(roles_to_include) : '')
     end
     style += self.get_style_block(roles_to_include)
     style.html_safe
