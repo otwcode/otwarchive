@@ -1,6 +1,6 @@
 /* SKIN: Typeset In My Ways Erasure*/
+/* DESCRIPTION: drops all archive parents except core and loads a simple typographical style.*/
 /* PARENTS: 1*/
-/* drops all archive parents except core and loads a simple typographical style.*/
 /*
 set block elements' margins and padding to zero
 */
@@ -204,13 +204,13 @@ li.blurb {
 
 /* SKIN: Typeset In My Ways Sans*/
 /* PARENTS: Typeset In My Ways Erasure */
-/* simple all sans serif text*/
+/* DESCRIPTION: simple all sans serif text*/
 * {font-family:sans-serif !important;}
 /* END SKIN */ 
 
 /* SKIN: Typeset In My Ways Serif*/
 /* PARENTS: Typeset In My Ways Erasure */
-/* simple all serif text*/
+/* DESCRIPTION: simple all serif text*/
 * {font-family:serif !important;}
 /* END SKIN */ 
 
@@ -230,7 +230,7 @@ body, .verbose legend, #inner .region, .autocomplete{color:#ddd;background:#222;
 
 /* SKIN: Typeset In My Ways Terminal */
 /* PARENTS: Typeset In My Ways Erasure */
-/* simple console/terminal style */
+/* DESCRIPTION: simple console/terminal style */
 body,#inner .region, .autocomplete, hr, h1, h2, h3, h4, h5, h6, .heading,#login-block,li.blurb,fieldset,form dl, blockquote {
   font-family: monospace;
   background:#000; color:#0f0; 
@@ -252,7 +252,7 @@ a:visited {
 
 /* SKIN: Typeset In My Ways Scully */
 /* PARENTS: Typeset In My Ways Erasure */
-/*Word Perfect style*/
+/* DESCRIPTION: Word Perfect style*/
 /*
 typographical styles, wordperfect - white on blue, 2007
 */
@@ -316,14 +316,14 @@ hr:after					{ content:"* * *"; }
 
 /* SKIN: Typeset In My Ways Landmarks*/
 /* PARENTS: Typeset In My Ways Erasure */
-/* shows the landmarks and styles them for timways. Not supported by IE6*/
+/* DESCRIPTION: shows the landmarks and styles them for timways. Not fully supported by IE6*/
 .landmark {font-size:100%; opacity:1;}
 .landmark.heading{background:none; color:#000; border-bottom:3px solid}
 /* END SKIN */
 
 /* SKIN: Typeset In My Ways Textura*/
 /* PARENTS: Typeset In My Ways Erasure */
-/*omg background image, CSS3 transparency*/
+/* DESCRIPTION: omg background image, CSS3 transparency*/
 body{background:url("/images/skins/textures/tiles/black-denim.jpg");}
 #outer {background:rgba(255,255,255,0.35)}
 /* END SKIN */

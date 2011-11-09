@@ -82,7 +82,17 @@ describe Skin do
                     	-webkit-border-radius:2px;
                     	-webkit-transition:text-shadow .7s ease-out, background .7s ease-out;
                     	-webkit-transform: scale(2.1) rotate(-90deg)
-        }"
+        }",
+        
+        "should allow multiple valid values for a single property" =>
+        "#outer .actions a:hover,symbol .question:hover,.actions input:hover,#outer input[type=\"submit\"]:hover,button:hover,.actions label:hover
+                { background:#ddd; 
+                background:-webkit-linear-gradient(top,#fafafa,#ddd); 
+                background:-moz-linear-gradient(top,#fafafa,#ddd); 
+                background:-ms-linear-gradient(top,#fafafa,#ddd); 
+                background:-o-linear-gradient(top,#fafafa,#ddd); 
+                background:linear-gradient(top,#fafafa,#ddd);
+                color:#555 }"
     }.each_pair do |condition, css|
       it condition do 
         @skin.css = css

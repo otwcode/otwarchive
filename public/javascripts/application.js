@@ -128,6 +128,22 @@ jQuery(function($){
     });
   });
   
+  $('.expand_all').each(function(){
+      target = "." + $(this).attr('target_class');
+     $(this).click(function(event) {
+        $(this).closest(target).find(".expand").click();
+        event.preventDefault();
+     }); 
+  });
+  
+  $('.contract_all').each(function(){
+     target = "." + $(this).attr('target_class');
+     $(this).click(function(event) {
+        $(this).closest(target).find(".contract").click();
+        event.preventDefault();
+     }); 
+  });
+  
 });
 
 // check all or none within the parent fieldset, optionally with a string to match on the name field of the checkboxes

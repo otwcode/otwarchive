@@ -1,5 +1,5 @@
 /*SKIN: Wide Horizon */
-/*Horizontal dash in blocks*/
+/* DESCRIPTION:  Horizontal dash in blocks*/
 #outer #dashboard, #main.dashboard  {
 float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
 #dashboard ul.navigation {float:left; margin:3.5%}
@@ -9,7 +9,7 @@ float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
 /* END SKIN */
 
 /*SKIN: Dash Line */
-/*Horizontal dash inline*/
+/* DESCRIPTION: Horizontal dash inline*/
 #outer #dashboard, #main.dashboard  {
 float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
 
@@ -22,7 +22,7 @@ float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
 /* END SKIN */
 
 /*SKIN: Eyes To The Right */
-/*Right side dash */
+/* DESCRIPTION: Right side dash */
 #dashboard {float:right;}
 #outer #main.dashboard 
         { margin: auto 15em 1em auto}
@@ -35,7 +35,7 @@ float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
  /* END SKIN */
 
 /*SKIN: Stick It */
-/*sticks the secondary (page specific) navigation to the left and fixes it there-- might be a little buggy it is very late*/
+/* DESCRIPTION: sticks the secondary (page specific) navigation to the left and fixes it there-- might be a little buggy it is very late*/
 #main {width: 75%;}
 #main.dashboard { margin-right:16%; width:58%}
 #main ul.actions {position:fixed; background:#ddd; border:2px solid #fff; width:15%; right:0; z-index:3000; box-shadow:1px 1px 3px}
@@ -46,7 +46,7 @@ float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
 /* END SKIN */
 
 /*SKIN: Mark my words */
-/*Shows all landmarks and lays them out visually */
+/* DESCRIPTION: Shows all landmarks and lays them out visually */
 #outer .landmark{
 height:auto; width:auto; margin:0.643em auto;
 font-size:100%; opacity:1; color:#000; font-weight:bold; display:block}
@@ -59,6 +59,6 @@ font-size:100%; opacity:1; color:#000; font-weight:bold; display:block}
 /* END SKIN */
 
 /* SKIN: Two Point No */
-/* Kills all the rounded corners, box shadows, and text-shadows */
+/* DESCRIPTION: Kills all the rounded corners, box shadows, and text-shadows */
 * {box-shadow:none !important; border-radius:0 !important; text-shadow:none !important;}
 /* END SKIN */

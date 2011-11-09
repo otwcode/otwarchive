@@ -81,6 +81,9 @@ Otwarchive::Application.routes.draw do
       get :batch_load
       put :do_batch_load
     end
+    collection do
+      get :show_options
+    end
   end
   resources :tag_nominations, :only => [:update]
 

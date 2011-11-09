@@ -1,6 +1,6 @@
 /* SKIN: Don't Care A Button */
-/* Please DO copy and reuse and modify this code any way you like!
-#takes off button styling to leave plain text */
+/* DESCRIPTION: takes off button styling to leave plain text */
+/* Please DO copy and reuse and modify this code any way you like! */
 .actions a,.actions a:visited,.action, input[type="submit"], button, .current, .actions label
 { background: none; border:0; padding:0.25em;
 border-radius:0; box-shadow:none;
@@ -36,8 +36,8 @@ box-shadow: 0 5px 8px rgba(255, 150, 150, 0.5), 0 -8px 12px 0 #900 inset, 0 -8px
 /* END SKIN */
 
 /* SKIN: Massive Buttons */
-/* Please DO copy and reuse and modify this code any way you like!
-These are really big and bold. You might want to take off the box shadow */
+/* DESCRIPTION: These are really big and bold. You might want to take off the box shadow */
+/* Please DO copy and reuse and modify this code any way you like!  */
 .actions a,.actions a:visited,.action, .actions input, input[type="submit"], button, .current, .actions label, .actions a:hover
 {color:#2a2a2a;font-size:130%; margin: 0.15em; border:2px solid #777;
 box-shadow:2px 2px 2px; }
@@ -45,7 +45,14 @@ box-shadow:2px 2px 2px; }
 /* END SKIN */
 
 /* SKIN: Scribble Buttons */
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: scribbly pencil background and marker font. Please DO copy and reuse and modify this code any way you like!
+CREDITS-
+# links to free, open font downloads: [ Trash Hand by Luce Averous @ http://www.luce.averous.com/]
+or alt GoodDog: http://www.fontsquirrel.com/fonts/GoodDog 
+# instructions: this component is useful for paper/notebook layouts like Desk Job
+*/
+
+/* Please DO copy and reuse and modify this code any way you like!
 CREDITS:
 # links to free, open font downloads: [ Trash Hand by Luce Averous @ http://www.luce.averous.com/]
 or alt GoodDog: http://www.fontsquirrel.com/fonts/GoodDog 
@@ -62,7 +69,7 @@ color:#222
 
 /* SKIN: Dusted Buttons */
 /* PARENTS: Dusted Off */
-/*  Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 CREDITS
 # code: adapted from 'colour flip combos' by lim @ ao3 and 'Dusty Rose' by sistabro @ ao3
 # and http://www.andrewgreig.com/2010/05/styling-pretty-buttons-with-css3/ 

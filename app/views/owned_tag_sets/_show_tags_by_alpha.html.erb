@@ -4,44 +4,6 @@
   <% if tags.count <= ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
     <%= render "show_tags_in_single_list", :tag_type => tag_type %>
   <% else %>
-    <% 
-      # too many tags to throw at the user!
-      # this gets a little tricky: here's what this code does
-      # every time we see a new letter at the start of a tagname, we want to start a new heading + inner ol
-      # we only want one heading for 0-9
-      # we start with that one, but we might not see any tags with a number, so we only display 
-      #   the heading if we actually see one 
-      # once we've opened a new heading and inner ol if we're going to, we just show the tagname
-      # in a list item
-    %>
-    <% ranges = %w(0-9 abc def ghi jkl mno pqr st uvw xyz) %>
-    <li class="freeform alphabet tagset index group">
-      <% current_range = 0 %>
-      <% current_range_unseen = true %>
-      <% tags.by_name_without_articles.value_of(:name).each do |tagname| %>        
-        <% if !(tagname.match /^(the|an|a)?\s*[#{ranges[current_range]}]/i) %>
-          <% # close and reopen the inner ol %>
-          <% unless current_range_unseen %></ol></li><% end %>
-          <% first_letter = tagname.gsub(/^(the |an |a )?/i, '')[0,1] %>
-          <% while !(first_letter.match /[#{ranges[current_range]}]/i) do current_range = current_range+1 end %>
-          <li class="<%= tag_type %> letter range listbox <%= cycle :odd, :even %>">
-            <h3 class="expander_parent heading">
-              <%= ts("#{tag_type.classify.pluralize}") %>
-              <span class="range">(<%= ranges[current_range] %>)</span>
-              <%= expand_contract_shuffle("list_for_#{tag_type}_#{ranges[current_range]}") %>
-            </h3>
-            <ol id="list_for_<%= tag_type %>_<%= ranges[current_range] %>" class="tags index group" force_contract="true">
-        <% elsif current_range_unseen %>
-          <% # handling the case where we're seeing a number match - we do it this way so we don't have an empty list of tags to start %>
-          <li class="<%= tag_type %> number letter range listbox <%= cycle :odd, :even %>">
-            <h3 class="expander_parent heading"><%= expand_contract_shuffle("list_for_#{tag_type}_0") %> <%= ts("#{tag_type.classify.pluralize} (%{letter})", :letter => "0-9") %></h3>
-            <ol id="list_for_<%= tag_type %>_0" class="tags index group" force_contract="true">
-        <% end %>
-        <% current_range_unseen = false %>
-        <li><%= tagname %></li>
-      <% end %>
-      <% # close the last ol/li %>
-      </ol></li>
-    </li>
+    <% render "show_tags_alpha_listbox", :tagname_list => tags.by_name_without_articles.value_of(:name), :tag_type => tag_type %>
   <% end %>
 <% end %>

@@ -1,9 +1,10 @@
 /* SKIN: Chained Buttons */
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
  CSS3 Buttons you can chain in to your own design
 CREDITS: http://www.red-team-design.com/just-another-awesome-css3-buttons */
 #outer .actions a,#outer #footer .actions a, #greeting .actions a,.symbol .question,.actions input,input[type="submit"],button,#outer .current,.actions label
-        { white-space:nowrap; text-align:left; height:auto; background:#ccc; 
+        { white-space:nowrap; text-align:left; height:auto; 
+        background:#ccc; 
         background:-webkit-linear-gradient(top,#eee,#ccc); 
         background:-moz-linear-gradient(top,#eee,#ccc); 
         background:-ms-linear-gradient(top,#eee,#ccc); 
@@ -18,7 +19,8 @@ CREDITS: http://www.red-team-design.com/just-another-awesome-css3-buttons */
         background:-moz-linear-gradient(top,#fafafa,#ddd); 
         background:-ms-linear-gradient(top,#fafafa,#ddd); 
         background:-o-linear-gradient(top,#fafafa,#ddd); 
-        background:linear-gradient(top,#fafafa,#ddd); }
+        background:linear-gradient(top,#fafafa,#ddd);
+        color:#555 }
 .actions a:active,#outer .current
         { position:relative; top:1px;
         background:rgba(0,0,0,0.15); box-shadow:0 0 4px 2px rgba(0,0,0,.4) inset; }
@@ -40,9 +42,10 @@ input[type="submit"]
 /* END SKIN */
 
 /* SKIN: Chained Head */
-/* PARENTS: Trouble O'Head */
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
  CSS3 animation you can chain in to your own design*/
+/* PARENTS: Trouble O'Head */
+
 #greeting .icon 
         { height:50px; width:50px; border-bottom:0}
 #greeting ul 
@@ -59,7 +62,7 @@ div#greeting:hover ul
 /* END SKIN */
 
 /* SKIN: Chained Groups */
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
  CSS3 group transparency palette you can chain in to your own design*/
 .group, .flash, .notice, table,#footer
         { background:transparent;}
@@ -106,7 +109,7 @@ blockquote.userstuff:after
 /* END SKIN */
 
 /* SKIN: Chained Icons */
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
  CSS3 icon styling you can chain in to your own design*/
 #greeting .icon 
         { border-bottom:0}
@@ -118,7 +121,7 @@ blockquote.userstuff:after
 /* END SKIN */
 
 /* SKIN: Chained Key */
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 # CSS3 colour font background key you can chain in to your own design
 # links to free, open font downloads:
  http://www.fontsquirrel.com/fonts/Mido by Eva Grinder
@@ -134,6 +137,6 @@ body, .heading
 /* END SKIN */
 
 /* SKIN: Chained Melody */
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like! Chaining all the components together to make a complete theme*/
 /* PARENTS: Chained Buttons, Chained Head, Chained Groups, Chained Quotes, Chained Icons, Chained Key */
-/*Please DO copy and reuse and modify this code any way you like! Chaining all the components together to make a complete theme*/
 /* END SKIN */

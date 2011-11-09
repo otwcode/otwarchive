@@ -16,7 +16,7 @@ class TagNomination < ActiveRecord::Base
   validate :type_validity
   def type_validity
     if !tagname.blank? && (tag = Tag.find_by_name(tagname)) && "#{tag.type}Nomination" != self.type
-      errors.add(:base, ts("^The tag %{tagname} is already in the archive as a #{tag.type} tag. Try being more specific, for instance tacking on the media (TV) or the fandom (Labyrinth) that your nomination belongs to.", :tagname => self.tagname))
+      errors.add(:base, ts("^The tag %{tagname} is already in the archive as a #{tag.type} tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom.", :tagname => self.tagname))
     end
   end
 
@@ -35,7 +35,8 @@ class TagNomination < ActiveRecord::Base
     # let people change their own!
     query = query.where("tag_nominations.id != ?", self.id) if !(self.new_record?)
     if query.exists?
-      errors.add(:base, ts("^Someone else has already nominated the tag %{tagname} for this set but in a different fandom. Try being more specific, for instance tacking on the fandom (Labyrinth) that your nomination belongs to.", :tagname => self.tagname))
+      other_parent = query.value_of(:parent_tagname).uniq.join(", ") # should only be one but just in case
+      errors.add(:base, ts("^Someone else has already nominated the tag %{tagname} for this set but in fandom %{other_parent}. (All nominations have to be unique for the approval process to work.) Try making your nomination more specific, for instance tacking on (%{fandom}).", :tagname => self.tagname, :other_parent => other_parent, :fandom => self.get_parent_tagname || 'Fandom'))
     end
   end
 
@@ -79,7 +80,6 @@ class TagNomination < ActiveRecord::Base
   # show it to them again.
   before_save :set_approval_status
   def set_approval_status
-    debugger
     return true if reviewed?
     set_noms = tag_set_nomination
     set_noms = fandom_nomination.tag_set_nomination if !set_noms && from_fandom_nomination    
@@ -144,6 +144,7 @@ class TagNomination < ActiveRecord::Base
     if change_tagname?(new_tagname)
       # name change is ok - we use update_all because we assume our status is being updated up a level
       TagNomination.for_tag_set(owned_tag_set).where(:tagname => old_tagname).update_all(:tagname => new_tagname)
+      TagNomination.for_tag_set(owned_tag_set).where(:parent_tagname => old_tagname).update_all(:parent_tagname => new_tagname)      
       return true
     end
     return false

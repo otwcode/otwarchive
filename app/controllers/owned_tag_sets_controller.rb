@@ -1,9 +1,9 @@
 class OwnedTagSetsController < ApplicationController
   cache_sweeper :tag_set_sweeper
 
-  before_filter :load_tag_set, :except => [ :index, :new, :create ]
+  before_filter :load_tag_set, :except => [ :index, :new, :create, :show_options ]
   before_filter :users_only, :only => [ :new, :create, :nominate ]
-  before_filter :moderators_only, :except => [ :index, :new, :create, :show ]
+  before_filter :moderators_only, :except => [ :index, :new, :create, :show, :show_options ]
   before_filter :owners_only, :only => [ :destroy ]
   
   def load_tag_set
@@ -48,6 +48,18 @@ class OwnedTagSetsController < ApplicationController
       end
     end
     @tag_sets = @tag_sets.paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
+  end
+  
+  def show_options
+    @restriction = PromptRestriction.find(params[:restriction])
+    unless @restriction
+      flash[:error] = ts("Which tag set did you want to look at?")
+      redirect_to tag_sets_path and return
+    end
+    @tag_sets = OwnedTagSet.in_prompt_restriction(@restriction)
+    @tag_set_ids = @tag_sets.value_of(:tag_set_id)
+    @tag_type = params[:tag_type] && TagSet::TAG_TYPES.include?(params[:tag_type]) ? params[:tag_type] : "fandom"
+    @tags = @tag_type.classify.constantize.joins(:set_taggings).where("set_taggings.tag_set_id IN (?)", @tag_set_ids).by_name_without_articles
   end
   
   def show
