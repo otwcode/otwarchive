@@ -1,6 +1,6 @@
 /* SKIN: Exploded Worker */
 /* PARENTS: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 */
-/* Advanced parenting reference parent--explodes the archive 2.0 cascade into all its component parents, 
+/* DESCRIPTION: Advanced parenting reference parent--explodes the archive 2.0 cascade into all its component parents, 
 so you can live edit the CSS in tabs with a plugin like Firefox Web Developer. 
 ONLY use this for reference because it will SLOW DOWN your page load. 
 You may also find it useful to have this open in a tab-- 
@@ -9,7 +9,7 @@ media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
 /* END SKIN */
 
 /* SKIN: Colour Flip Combos */
-/*Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 # instructions: colour flip
 This is a finer tuned colour changing guide sheet for writing skins with. 
 You will probably find it easier to read if you copy it out to a text editor and compress the formatting.
@@ -106,9 +106,10 @@ h2, .system p#signup, #header h2
 /* END SKIN */
 
 /*SKIN: Trouble O'Head */
-/* Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 takes off the red background and red button borders on the header navigation. This is dead useful to just parent in when you don't want to drop the whole Archive header style.
 To remove all buttons styling add 'Don't Care A Button'*/
+
 #header ul.primary 
         { background:none; border:0; box-shadow:none;}
 #header ul.primary a, #header ul.primary input, #header ul.primary .search input[type="text"], #header ul.primary .current 
@@ -116,10 +117,11 @@ To remove all buttons styling add 'Don't Care A Button'*/
 /* END SKIN */
 
 /* SKIN: Key Colour*/
-/*  Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
 CREDITS
 # code: adapted from 'colour flip combos' by lim @ ao3 note to admins, THIS IS THE REF SKIN TO UPDATE
 */
+
 #header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
         { background:#900;}
 #header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
@@ -127,3 +129,10 @@ CREDITS
 #greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, #header a, #header input, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active 
         { border-color:#900 !important}
 /* END SKIN */
+
+/* SKIN: Region Drop */
+/* PARENT_ONLY */ 
+/* PARENTS: 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 */
+/* DESCRIPTION: This is an advanced parenting parent for replacer layouts. It drops header, dash, footer, and main from AO3 default. In most cases you're better off overriding instead. Check out Trouble O'Head for fast header overrides and the Tile Puzzle series to move the dashboard around with overrides.*/
+/* END SKIN */
+

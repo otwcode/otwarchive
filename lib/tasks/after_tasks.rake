@@ -362,4 +362,4 @@ desc "Run all current migrate tasks"
 #task :After => ['autocomplete:reload_data']
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
 task :After => ['After:convert_tag_sets', 'skins:load_site_skins', 'skins:disable_all', 'After:convert_existing_skins', 
-                'autocomplete:reload_data', 'After:remove_old_epubs']
+                'autocomplete:reload_tagset_data', 'After:remove_old_epubs']

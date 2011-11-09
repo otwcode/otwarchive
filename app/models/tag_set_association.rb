@@ -88,11 +88,11 @@ class TagSetAssociation < ActiveRecord::Base
       
   def add_to_autocomplete(score = nil)
     score ||= autocomplete_score
-    $redis.zadd("autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.id}_#{parent_tag.name.downcase}", score, autocomplete_value)
+    $redis.zadd("autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.tag_set_id}_#{parent_tag.name.downcase}", score, autocomplete_value)
   end
 
   def remove_from_autocomplete
-    $redis.zrem("autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.id}_#{parent_tag.name.downcase}", autocomplete_value)
+    $redis.zrem("autocomplete_association_#{tag.type.downcase}_#{owned_tag_set.tag_set_id}_#{parent_tag.name.downcase}", autocomplete_value)
   end
     
   # returns tags that have been associated with a given fandom OR wrangled

@@ -33,14 +33,16 @@ namespace :skins do
         puts "Couldn't find parent #{parent_name} to add, skipping"
         next
       end
-      p = skin.skin_parents.build(:parent_skin => parent_skin, :position => parent_position)
-      if !p.valid? && p.errors.full_messages.join(" ").match(/unless replacing/)
+      if (parent_skin.role == "site" || parent_skin.role == "override") && skin.role != "override"
         skin.role = "override"
         skin.save or puts "Problem updating skin #{skin.title} to be replacement skin: #{skin.errors.full_messages.join(', ')}"
-      else
-        p.save or puts "Skipping skin parent #{parent_name}: #{p.errors.full_messages.join(', ')}"
+        next
+      end      
+      p = skin.skin_parents.build(:parent_skin => parent_skin, :position => parent_position)
+      unless p.save
+        puts "Skipping skin parent #{parent_name}: #{p.errors.full_messages.join(', ')}"
+        parent_position += 1
       end
-      parent_position += 1
     end    
   end
   
@@ -89,6 +91,13 @@ namespace :skins do
       skin.official = true
       skin.do_not_upgrade = false
       skin.author = author unless skin.author
+      
+      if skin_content.match(/DESCRIPTION:\s*(.*)\s*\*\//)
+        description = $1
+      end
+      if skin_content.match(/PARENT_ONLY/)
+        skin.unusable = true
+      end
 
       # make sure we have valid skin now
       if skin.save

@@ -394,6 +394,10 @@ $.TokenList = function (input, url_or_data, settings) {
             if ($(id_to_get).size() === 0) {id_to_get = '#' + kv[1];}
             // this will work on both checkboxes and on text fields
             $(id_to_get).each(function(index, node){
+                if ($(node).hasClass("autocomplete")) {
+                    // we need to expire when the autocomplete field changes
+                    node = $(node).prev().find("input").first();
+                }
                 $(node).change(function(event){
                     cache.clear_data();                    
                 });
@@ -524,6 +528,9 @@ $.TokenList = function (input, url_or_data, settings) {
         if($.isFunction(callback)) {
             callback.call(hidden_input,li_data);
         }
+        
+        // trigger our onchange event
+        input_box.change();
     }
         
 
@@ -626,6 +633,9 @@ $.TokenList = function (input, url_or_data, settings) {
         if($.isFunction(callback)) {
             callback.call(hidden_input,token_data);
         }
+        
+        // trigger our onchange event
+        input_box.change();        
     }
 
     // Hide and clear the results dropdown

@@ -1,5 +1,5 @@
 /* SKIN: Simply Twilling */
-/*
+/* DESCRIPTION: 
 Please DO copy and reuse and modify this code any way you like!
 CREDITS:  images: [ http://www.fuzzimo.com/free-seamless-denim-jeans-textures/]
 # instructions: 
@@ -53,12 +53,13 @@ opacity:1; color:rgba(255,255,255,0.5); text-shadow:-1px 0 0 #000}
 
 /* SKIN: Threw Twill Out */
 /* PARENTS: Simply Twilling */
+/* DESCRIPTION: example of overriding background for different look */
 #outer  { background:url("/images/skins/textures/tiles/black-metal-grid.jpg");}
 /* END SKIN*/
 
 /* SKIN: The Hustings */
 /* PARENTS: Slim Shaded */
-/*
+/* DESCRIPTION: 
 Please DO copy and reuse and modify this code any way you like!
 CREDITS:  images: [ fuzzimo!]
 links to free, open font downloads: 
@@ -106,7 +107,7 @@ color:rgba(0,0,0,0.75); text-shadow:-1px 1px 2px rgba(255,255,255,0.3); }
 /* END SKIN */
 
 /* SKIN: Panda Madness */
-/*Panda Madness
+/* DESCRIPTION: this is pink and round and it, it has pandas on it
 Please DO copy and reuse and modify this code any way you like!
 CREDITS:images: [ Pandas by Evan Eckard @ http://www.dinpattern.com/2011/05/17/panda-madness/]
 #         resources: [ example texture name by etc @ etc ]
