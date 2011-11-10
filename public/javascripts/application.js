@@ -284,17 +284,18 @@ function toggleFormField(element_id) {
     if (ticky.is(':checked')) { $j('#' + element_id).removeClass('hidden'); }
     else { 
         $j('#' + element_id).addClass('hidden');
-        if (element_id == 'chapters-options') {
-            var item = document.getElementById('work_wip_length');
-            if (item.value == 1) {item.value = '?';}
-            else {item.value = 1;}
-        }
-        else {
+        if (element_id != 'chapters-options') {
             $j('#' + element_id).find(':input[type!="hidden"]').each(function(index, d) {
                 if ($j(d).attr('type') == "checkbox") {$j(d).attr('checked', false);}
                 else {$j(d).val('');}
             });
         }
+    }
+    // We want to check this whether the ticky is checked or not
+    if (element_id == 'chapters-options') {
+        var item = document.getElementById('work_wip_length');
+        if (item.value == 1 || item.value == '1') {item.value = '?';}
+        else {item.value = 1;}
     }
 }
 
