@@ -10,7 +10,7 @@ Feature: Admin tasks
       And I fill in "user_session_login" with "Zooey"
       And I fill in "user_session_password" with "secret"
       And I press "Log in"
-    Then I should see "We couldn't find that user name in our database. Please try again"
+    Then I should see "The password or user name you entered doesn't match our records"
     
   Scenario: Ordinary user cannot log in as admin
   
