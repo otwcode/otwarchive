@@ -259,11 +259,11 @@ module ApplicationHelper
     content_tag(:p, span + h(ts(' characters left')), :class => "character_counter")
   end
   
+  # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc) 
   def expand_contract_all(target="index")
-    expand_all = content_tag(:a, ts("Expand All"), :href=>"#")
-    contract_all = content_tag(:a, ts("Contract All"), :href=>"#")
-    content_tag(:span, expand_all, :class => "action expand_all hidden showme", "target_class" => target) + 
-      content_tag(:span, contract_all, :class => "action contract_all hidden showme", "target_class" => target)
+    expand_all = content_tag(:a, ts("Expand All"), :href=>"#", :class => "expand_all", "target_class" => target, :role => "button")
+    contract_all = content_tag(:a, ts("Contract All"), :href=>"#", :class => "contract_all", "target_class" => target, :role => "button")
+    content_tag(:span, expand_all + contract_all, :class => "actions hidden showme", :role => "menu")
   end
   
   # Sets up expand/contract/shuffle buttons for any list whose id is passed in
@@ -271,9 +271,9 @@ module ApplicationHelper
   # Note that these start hidden because if javascript is not available, we
   # don't want to show the user the buttons at all.
   def expand_contract_shuffle(list_id, shuffle=true)
-    ('<span class="action expand hidden" title="expand" action_target="#' + list_id + '"><a href="#">&#8595;</a></span>
-    <span class="action contract hidden" title="contract" action_target="#' + list_id + '"><a href="#">&#8593;</a></span>').html_safe +
-    (shuffle ? ('<span class="action shuffle hidden" title="shuffle" action_target="#' + list_id + '"><a href="#">&#8646;</a></span>') : '').html_safe
+    ('<span class="action expand hidden" title="expand" action_target="#' + list_id + '"><a href="#" role="button">&#8595;</a></span>
+    <span class="action contract hidden" title="contract" action_target="#' + list_id + '"><a href="#" role="button">&#8593;</a></span>').html_safe +
+    (shuffle ? ('<span class="action shuffle hidden" title="shuffle" action_target="#' + list_id + '"><a href="#" role="button">&#8646;</a></span>') : '').html_safe
   end
   
   # returns the default autocomplete attributes, all of which can be overridden
@@ -406,6 +406,7 @@ module ApplicationHelper
     options = {
       :checked_method => nil, 
       :name_method => "name", 
+      :name_helper_method => nil, # alternative: pass a helper method that gets passed the choice
       :value_method => "id", 
       :disabled => false,
       :include_toggle => true,
@@ -429,7 +430,12 @@ module ApplicationHelper
     
     checkboxes = choices.map do |choice|      
       is_checked = !options[:checked_method] || already_checked.empty? ? false : already_checked.include?(choice)
-      display_name = choice.send(options[:name_method]).html_safe
+      display_name = case
+        when options[:name_helper_method]
+          eval("#{options[:name_helper_method]}(choice)")
+        else
+          choice.send(options[:name_method]).html_safe
+        end
       value = choice.send(options[:value_method])
       checkbox_id = "#{base_id}_#{name_to_id(value)}"
       checkbox = check_box_tag(field_name, value, is_checked, opts.merge({:id => checkbox_id}))

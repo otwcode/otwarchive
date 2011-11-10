@@ -13,6 +13,7 @@ a.tag {padding-left: 0.25em;}
 html body #header form #small_login {width: 99% !important}
 .blurb .stats dd, #comment_form p { position:static}
 .works-show .module {border:0}
+
 /*inheritance?*/
 #header .icon {position:absolute; right:0}
 #header #greeting ul.navigation {position:absolute; top:106px; right:0; width:110px; padding:0.25em 0 0}
@@ -58,4 +59,7 @@ input,select,option,textarea,legend,label,.actions a {vertical-align:baseline}
 
 /*transparency*/
 .blurb ul.required-tags li span.text {display:none;}
+
+/*DIAGNOSIS*/
+
 

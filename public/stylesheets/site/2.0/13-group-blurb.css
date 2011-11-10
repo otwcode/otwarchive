@@ -93,17 +93,17 @@ use this along with "index" and "blurb" for indices where we have icon pictures,
 eg collections, users, skins, instead of the 4-icon list
 */
 .picture .icon img, .picture .icon 
-        { position: absolute; top:0; height:55px; width:55px}
+        { position: absolute; top:0; height:55px; width:55px; background-size:55px}
 .picture .header 
         { border-bottom:1px solid #ccc }
 .index .collection .icon
         { background:url("/images/skins/iconsets/default/icon_collection-s.png")}
 .index .skins .icon
-        { background:url("/images/skins/iconsets/default/icon_skins.png"); background-size:55px}
+        { background:url("/images/skins/iconsets/default/icon_skins.png"); }
 .index .mystery .icon
         { background:url("/images/skins/iconsets/default/icon_mystery.png")}
 .index .tag .icon, .index .tagset .icon
-        { background:url("/images/skins/iconsets/default/icon_tag.png"); background-size:55px}
+        { background:url("/images/skins/iconsets/default/icon_tag.png");}
 
 /*various little mods*/
 .prompt h6 
@@ -112,6 +112,8 @@ eg collections, users, skins, instead of the 4-icon list
 /* mod: BOOKMARK*/
 .bookmark .status	
         { right:0.5em; position:absolute; z-index:50; width:60px }
+.bookmark .status.icon
+        { left:-50px; top:0}
 .bookmark .status span	
         { border: 1px solid #eee; display: block; float: left; height: 25px; line-height: 1.875; margin: 0 2.5px 0 0; text-align: center; width: 25px }
 .bookmark .user 

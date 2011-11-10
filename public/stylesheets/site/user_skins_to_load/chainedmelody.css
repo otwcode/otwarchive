@@ -2,25 +2,14 @@
 /* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
  CSS3 Buttons you can chain in to your own design
 CREDITS: http://www.red-team-design.com/just-another-awesome-css3-buttons */
+/*note to intrepid skinsers: there is an external bug in our CSS parser plugin meaning we can't use gradients or multiple background instances, which is obviously excessively vexing. Until the developer fixes this, I'm working around by inheriting the AO3 button gradient and tinting it with diffused, partially transparent box shadows. See Dusted Buttons for a colour example. Anyway, this is why these buttons don't have fallback backgrounds or iterated backgrounds - the parser just eats them!*/
 #outer .actions a,#outer #footer .actions a, #greeting .actions a,.symbol .question,.actions input,input[type="submit"],button,#outer .current,.actions label
         { white-space:nowrap; text-align:left; height:auto; 
-        background:#ccc; 
-        background:-webkit-linear-gradient(top,#eee,#ccc); 
-        background:-moz-linear-gradient(top,#eee,#ccc); 
-        background:-ms-linear-gradient(top,#eee,#ccc); 
-        background:-o-linear-gradient(top,#eee,#ccc); 
-        background:linear-gradient(top,#eee,#ccc); 
-        border:1px solid #777; padding:0 1.5em; margin:0.5em 0.25em; font-weight:bold; font-size:0.875em; line-height:1.75em; font-family: Helvetica,Arial; color:#333; 
+        border:1px solid #777; padding:0 1.5em; margin:0.5em 0.25em; font-weight:bold; font-size:0.875em; line-height:1.75em; font-family: Helvetica,Arial, sans-serif; color:#333; 
         text-shadow:0 1px 0 rgba(255,255,255,.8); border-radius:.2em; box-shadow:0 0 1px 1px rgba(255,255,255,.8) inset,0 1px 0 rgba(0,0,0,.3); }
 
 #outer .actions a:hover,symbol .question:hover,.actions input:hover,#outer input[type="submit"]:hover,button:hover,.actions label:hover
-        { background:#ddd; 
-        background:-webkit-linear-gradient(top,#fafafa,#ddd); 
-        background:-moz-linear-gradient(top,#fafafa,#ddd); 
-        background:-ms-linear-gradient(top,#fafafa,#ddd); 
-        background:-o-linear-gradient(top,#fafafa,#ddd); 
-        background:linear-gradient(top,#fafafa,#ddd);
-        color:#555 }
+        { color:#555;   box-shadow:inset -5px -10px 10px rgba(0,0,0,0.2); }
 .actions a:active,#outer .current
         { position:relative; top:1px;
         background:rgba(0,0,0,0.15); box-shadow:0 0 4px 2px rgba(0,0,0,.4) inset; }
@@ -47,9 +36,9 @@ input[type="submit"]
 /* PARENTS: Trouble O'Head */
 
 #greeting .icon 
-        { height:50px; width:50px; border-bottom:0}
+        { height:50px; width:50px; background-size:50px; border-bottom:0}
 #greeting ul 
-        { margin-top:-100px; right:50px; text-align:right;font-size:smaller; width:50px;position:absolute; -moz-transition:all 0.4s ease-in;}
+        { margin-top:-100px; right:50px; text-align:right;font-size:smaller; width:50px;position:absolute; -moz-transition:all 0.8s ease-in;}
 div#greeting:hover ul
         { margin-top:0 }
 #header { min-height:0; margin-bottom:0; }

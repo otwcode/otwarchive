@@ -165,6 +165,8 @@ module WorksHelper
   def download_url_for_work(work, format)
     url_for ("/downloads/#{work.download_authors}/#{work.id}/#{work.download_title}.#{format}").gsub(' ', '%20')
   end
+    
+  
 end
 
 

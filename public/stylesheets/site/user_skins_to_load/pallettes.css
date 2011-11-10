@@ -233,20 +233,30 @@ fieldset fieldset
 instructions: this just makes a slimmer, texty header, with a shaded strip, snow body, and lowercase buttons*/
 /* PARENTS: Snow */
 
-#header {min-height:0}
+#header { min-height:0}
 #header a , #header fieldset, #header ul.primary, #header ul.primary .current 
-{border:0; background:0; }
-#greeting {width:50px; padding:2px; float:right; background:#fff; z-index:50; border:2px solid #900; box-shadow:0 0 3px #444}
-#greeting p.icon img {margin:0; padding:0;top:0}
-#greeting li {display:block; margin:0; color:#eee}
-#header h1 {background:#900; height:10px; position:static}
-h1 a img {height:50px; border:0}
-#greeting .icon {height:50px; width:50px;}
-#header .landmark {clear:none;}
-#header ul.primary{background:rgba(0,0,0,0.65); border-bottom:1px solid rgba(0,0,0,0.75)} 
-#header ul.primary, #header ul.primary .current, ul.primary.actions a, #header ul.primary .current {color:#eee; }
-#header ul.primary .current, #header .search input{background:rgba(0,0,0,0.25); color:#eee; box-shadow:inset 0 0 3px #222; border-color:#222 }
-.actions, .actions input {text-transform:lowercase;}
+        { border:0; background:0; }
+#greeting 
+        { width:50px; padding:2px; float:right; background:#fff; z-index:50; border:2px solid #900; box-shadow:0 0 3px #444}
+#greeting p.icon img 
+        { margin:0; padding:0;top:0}
+#greeting li 
+        { display:block; margin:0; color:#eee}
+#header h1 
+        { background:#900; height:10px; position:static}
+h1 a img{ height:50px; border:0}
+#greeting .icon 
+        { height:50px; width:50px;}
+#header .landmark 
+        { clear:none;}
+#header ul.primary
+        { background:rgba(0,0,0,0.65); border-bottom:1px solid rgba(0,0,0,0.75)} 
+#header ul.primary, #header ul.primary .current, ul.primary.actions a, #header ul.primary .current 
+        { color:#eee; }
+#header ul.primary .current, #header .search input
+        { background:rgba(0,0,0,0.25); color:#eee; box-shadow:inset 0 0 3px #222; border-color:#222 }
+.actions, .actions input 
+        { text-transform:lowercase;}
 /* END SKIN */
 
 /* SKIN: Nonnery */

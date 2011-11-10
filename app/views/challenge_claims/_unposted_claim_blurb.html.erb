@@ -38,15 +38,8 @@
   </div>
   
   <!--prompt tags -->
-  <h6 class="landmark heading">Tags</h6>
-  <% TagSet::TAG_TYPES.each do |type| %>
-    <% if prompt && prompt.tag_set && !prompt.tag_set.with_type(type).empty? %>
-      <ul class="<%= type %> type tags commas" title="<%= type %>">
-        <%= tag_link_list(prompt.tag_set.with_type(type), link_to_works=true) %>
-      </ul>
-    <% end %>  
-  <% end %>
-
+  <%= prompt_tags(prompt) %>
+  
   <!--actions-->
   <ul class="actions" role="menu">
     <% if @collection.user_is_maintainer?(current_user) %>

@@ -208,6 +208,9 @@ module CssCleaner
     # or a valid img url
     return value if value.match(URL_FUNCTION_REGEX)
     
+    # or "none"
+    return value if value == "none"
+    
     return ""
   end
 
