@@ -37,23 +37,15 @@ Scenario: pseud creation and playing with the default pseud
     And I follow "edit_myself"
   Then the "pseud_is_default" checkbox should be checked
     And the "pseud_is_default" checkbox should be disabled
-		
+
 Scenario: Manage pseuds - add, edit
 
-  Given the following activated user exists
-    | login         | password   |
-		| editpseuds    | password   |
-    And I am logged in as "editpseuds" with password "password"
-  Then I should see "Hi, editpseuds!"
-    And I should see "log out"
-  When I follow "editpseuds"
-  Then I should see "Dashboard"
-    And I should see "You don't have anything posted under this name yet"
+  Given I am logged in as "editpseuds"
+  When I go to editpseuds's user page
+    Then I should see "You don't have anything posted under this name yet"
   When I follow "Profile"
-  Then I should see "About editpseuds"
-  When I follow "Manage Pseuds"
+    And I follow "Manage My Pseuds"
   Then I should see "Pseuds for editpseuds"
-    And I should see "editpseuds"
   When I follow "New Pseud"
   Then I should see "New pseud"
   When I fill in "Name" with "My new name"
@@ -70,7 +62,7 @@ Scenario: Manage pseuds - add, edit
     And I should see "Default Pseud"
   When I follow "editpseuds"
     And I follow "Profile"
-    And I follow "Manage Pseuds"
+    And I follow "Manage My Pseuds"
   Then I should see "Edit My new name"
   When I follow "edit_my_new_name"
     And I fill in "Description" with "I wanted to add another fancy name"
