@@ -202,7 +202,7 @@ class ChaptersController < ApplicationController
       redirect_to [:edit, @work, @chapter]
     else
       @chapter.posted = true
-      if @chapter.save
+      if @chapter.save && @work.save
         post_chapter
         redirect_to(@work)
       else
