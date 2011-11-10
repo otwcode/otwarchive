@@ -48,7 +48,7 @@
     <%= render "kudos/kudos", :kudos => @work.kudos.with_pseud.group("pseud_id").order("created_at DESC"), :guest_kudos_count => @work.kudos.by_guest.count(:ip_address, :distinct => true) %>
   <% end %>
 
-  <div id="add_comment_placeholder">
+  <div id="add_comment_placeholder" title="top level comment">
     <div id="add_comment">
       <%= render 'comments/comment_form', {:comment => Comment.new, :commentable => commentable, :button_name => ts('Comment')} %>     
     </div>
