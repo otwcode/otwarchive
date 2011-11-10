@@ -126,3 +126,51 @@ font-weight:bold;
 #inner {max-width:75%; margin:auto;}
 /* END SKIN */ 
 
+
+/* SKIN: Incommodious */
+/* DESCRIPTION: takes off all the commas */
+/* We add commas in lists of tags, mostly, which are displayed inline, but you can turn them off if you find them odious. */
+.commas li:after
+        { content:none }
+/* END SKIN */
+
+/* SKIN: Branch Line */
+/* REPLACE: 431 */
+/* PARENTS: Incommodious */
+/* DESCRIPTION: Breaks warnings, relationships, characters, and freeform tags into separate groups. by Branch @ao3 */
+ul.tags {
+  padding-top: .5em;
+}
+
+ul.tags li.warnings,
+ul.tags li.relationships,
+ul.tags li.characters,
+ul.tags li.freeforms {
+  float: left !important;
+}
+
+li.warnings + li.relationships,
+li.relationships + li.characters,
+li.characters + li.freeforms,
+li.warnings + li.characters,
+li.warnings + li.freeforms,
+li.relationships + li.freeforms {
+  clear: left;
+}
+
+ul.tags li.relationships {
+  font-style: italic !important;
+}
+
+ul.tags li {
+  padding-left: .5em;
+  line-height: 1 !important;
+}
+
+a.tags,
+.tags a {
+  line-height: 1;
+}
+
+/* END SKIN */
+

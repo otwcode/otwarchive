@@ -1,4 +1,10 @@
 namespace :skins do
+
+  def ask(message)
+    print message
+    STDIN.gets.chomp.strip
+  end
+
   desc "Load site skins"
   task(:load_site_skins => :environment) do
     Skin.load_site_css
@@ -20,12 +26,16 @@ namespace :skins do
   def set_parents(skin, parent_names)
     # clear existing ones
     skin.skin_parents.delete_all
+    Skin.reset_column_information
 
     parent_position = 1
     parents = parent_names.split(/,\s?/).map {|pn| pn.strip}
     parents.each do |parent_name|
       if parent_name.match(/^(\d+)$/)
         parent_skin = Skin.where("title LIKE 'Archive 2.0: (#{parent_name})%'").first
+      elsif parent_name.blank?
+        puts "Empty parent name for #{skin.title}"
+        next
       else
         parent_skin = Skin.where(:title => parent_name).first
       end
@@ -48,6 +58,8 @@ namespace :skins do
   
   desc "Load user skins"
   task(:load_user_skins => :environment) do
+    replace = ask("Replace existing skins with same titles? (y/n) ") == "y"
+    
     dir = Skin.site_skins_dir + 'user_skins_to_load'
     default_preview_filename = "#{dir}/previews/default_preview.png"
     user_skin_files = Dir.entries(dir).select {|f| f.match(/css$/)}
@@ -68,12 +80,16 @@ namespace :skins do
       # set the title and preview
       if skin_content.match(/SKIN:\s*(.*)\s*\*\//)
         title = $1.strip 
-        skin.title = title
         if (oldskin = Skin.find_by_title(title)) && oldskin.id != skin.id
-          puts "Existing skin with title #{title} - did you mean to replace? Skipping."
-          next
+          if replace
+            skin = oldskin
+          else
+            puts "Existing skin with title #{title} - did you mean to replace? Skipping."
+            next
+          end
         end 
-        
+
+        skin.title = title
         preview_filename = "#{dir}/previews/#{title.gsub(/[^\w\s]+/, '')}.png"
         unless File.exists?(preview_filename)
           puts "No preview filename #{preview_filename} found for #{title}"
@@ -92,8 +108,8 @@ namespace :skins do
       skin.do_not_upgrade = false
       skin.author = author unless skin.author
       
-      if skin_content.match(/DESCRIPTION:\s*(.*)\s*\*\//)
-        description = $1
+      if skin_content.match(/DESCRIPTION:\s*(.*?)\*\//m)
+        skin.description = $1
       end
       if skin_content.match(/PARENT_ONLY/)
         skin.unusable = true

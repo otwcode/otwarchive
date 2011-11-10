@@ -160,7 +160,7 @@ module TagsHelper
 
   # Returns a nested list of meta tags 
   def meta_tag_tree(tag)
-    meta_ul = ""
+    meta_ul = "".html_safe
     unless tag.direct_meta_tags.empty?
       tag.direct_meta_tags.each do |meta|
         meta_ul += content_tag(:li, link_to_tag(meta))

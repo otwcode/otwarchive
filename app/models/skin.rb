@@ -337,7 +337,7 @@ class Skin < ActiveRecord::Base
       if roles_to_include.include?(get_role)
         if self.filename.present?
           block += get_ie_comment(stylesheet_link(self.filename, get_media))
-        elsif css.present?
+        elsif self.css.present?
           block += get_ie_comment('<style type="text/css" media="' + get_media + '">' + self.css + '</style>')
         elsif (wizard_block = get_wizard_settings).present?
           block += '<style type="text/css" media="' + get_media + '">' + wizard_block + '</style>'

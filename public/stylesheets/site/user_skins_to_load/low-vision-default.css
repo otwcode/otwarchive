@@ -46,12 +46,14 @@ textarea, pre
         { float:none;}
 #header h1 img,#header .tip  
         { visibility:hidden;}
+#header h1 
+        { position:static;}
 #header h1 .landmark  
         { opacity:1; line-height:1; font-size:100%;height:auto; width:auto; color:#000;}
 #greeting p {float:right;}
 
 /*KEY COLOUR, change this to broadly change the livery (not very accurate, but check out colour flip combos for finer control)*/
-#header, #footer,  .actions a:hover  
+#header, #header ul.primary, #footer,  .actions a:hover  
         { background: #900; color:#eee}
         
 /* END SKIN */
