@@ -43,7 +43,7 @@ ul#skiplinks, .landmark , .landmark a, .index .heading.landmark
         { font-size: 0; line-height: 0; height: 0; margin: 0; clear:both; color:transparent;
           opacity:0 }
 .secondary    
-        { background: #f4effc; position: absolute; z-index: 99; border:2px solid #bbb; margin: auto; padding:0.375em; overflow:hidden; right:2.5em; 
+        { background: #fefefe; position: absolute; z-index: 99; border:2px solid #bbb; margin: auto; padding:0.375em; overflow:hidden; right:2.5em; 
           box-shadow:2px 2px 5px #bbb; border-radius:0.15em }
 /* CONTEXTS */
 .heading .actions, .heading .action, .heading span.actions

@@ -12,7 +12,7 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/listbox.
 .listbox .heading, .listbox .heading a:visited
         { margin:0; color:#222; margin-top:0; padding:0.25em }
 .listbox .index, .dashboard .listbox .index
-        { width:auto; padding: 0.643em; float:none; clear:right; background:#f4effc;
+        { width:auto; padding: 0.643em; float:none; clear:right; background:#fefefe;
           box-shadow:inset 1px 1px 3px #bbb}
 .listbox .index:after
         { content:" "; display:block; height:0; font-size:0; clear:both; visibility:hidden; }

@@ -22,7 +22,7 @@ fieldset dl, fieldset.actions, fieldset dl fieldset dl
         { background:transparent; border:none; clear:right;
           box-shadow:none }
 fieldset fieldset, fieldset dl dl, form blockquote.userstuff  
-        { background:#f4effc; clear:right}
+        { background:#fefefe; clear:right}
 fieldset dd dl, form .meta dd, fieldset dl fieldset dl, dd fieldset
         { margin: 0.643em 0}
 /*end nesting */
@@ -124,14 +124,14 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 
 /*MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */
 div.dynamic
-        { background:#f4effc; position:absolute; z-index: 500;}
+        { background:#fefefe; position:absolute; z-index: 500;}
 /* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
 .toggled form dd, .dynamic form dd 
         { width:99%;}
 .toggled form p.footnote, .dynamic form p.footnote
         { float:none; margin:auto; padding:0; line-height:0.5}
 .toggled form, .dynamic form
-        { padding:0.5em; border:2px solid #ccc; background:#f4effc;
+        { padding:0.5em; border:2px solid #ccc; background:#fefefe;
           box-shadow:1px 2px 5px }
 .dynamic form fieldset, .toggled form fieldset, .toggled form dl, .secondary .toggled form
         { border:none; background:transparent; margin:0; padding:0; 

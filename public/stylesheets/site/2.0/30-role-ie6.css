@@ -53,7 +53,7 @@ form.filters
 #outer .landmark 
         { color:#900;}
 #inner .landmark 
-        { color:#f4effc }
+        { color:#fefefe }
 
 /*min-height */
 #header, .home .primary 
@@ -90,7 +90,7 @@ form .preface dd
 #dashboard  
         { width:auto; float:none; margin:1.5em; padding: 0 0.5625em; overflow:hidden }
 #dashboard ul.navigation, #dashboard ul 
-        { background:#f4effc; width:8.5em; height:12em; padding:0.5em; margin:0.25em; float:left; text-align:justify; border: 2px solid #ddd }
+        { background:#fefefe; width:8.5em; height:12em; padding:0.5em; margin:0.25em; float:left; text-align:justify; border: 2px solid #ddd }
 #dashboard .landmark 
         { clear:none}
 #main.dashboard 
