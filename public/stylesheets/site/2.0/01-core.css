@@ -1,6 +1,6 @@
 /*==CORE:basic functional layout
 http://media.transformativeworks.org/training/front_end_coding/css-shorthand.html */
-body    { background:#f4effc; color:#2a2a2a; font:100%/1.125 "Lucida Grande",Verdana,Helvetica,sans-serif; margin:0; padding:0}
+body    { background:#f2f3f6; color:#2a2a2a; font:100%/1.125 "Lucida Grande",Verdana,Helvetica,sans-serif; margin:0; padding:0}
 .heading{ font-family:Georgia,serif }
 a,a:link{ color:#900; text-decoration:none;}
 #header,#footer,#main,#dashboard

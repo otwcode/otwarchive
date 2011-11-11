@@ -5,10 +5,10 @@
   <%= flash_div :error, :caution, :notice %>
   
   <div class="intro module">
-	<h2 class="heading"><%= ts('hi!') %></h2>
-	<p>We're a <em>fan</em>-created, <em>fan</em>-run, non-profit, non-commercial archive for transformative <em>fan</em>works, like <em>fan</em>fiction and <em>fan</em>art.
-					</p>
-					<p>We're the <%= link_to t('.archive_faq', :default => "Archive of Our Own"), archive_faqs_path %>, but you can call us <%= link_to ts('AO3'), works_path %></p>
+  <h2 class="heading"><%= ts('hi!') %></h2>
+  <p><%= ts('Welcome to the Archive of Our Own!') %></p>
+  <p><%= ts("We're a fan-created, fan-run, non-profit, non-commercial archive for transformative fanworks, like fanfiction, fanart, and fanvids.") %></p>
+  <p><%= ts('While the site is in beta, you can get an invitation from another user or from our automated invite queue. All fans and fanworks are welcome!') %></p>
     <% if logged_in? %>
       <p id="signup" class="navigation actions" role="navigation"><%= link_to ts('Invite a friend'), user_invitations_path(current_user) %></p> 
     <% else %>

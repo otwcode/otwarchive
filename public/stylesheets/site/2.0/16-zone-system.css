@@ -10,8 +10,6 @@ SUBSECTIONS:
         { font:1.5em Georgia,serif; margin:0 auto 2.5em; max-width:39em; float:none; overflow:hidden }
 .system .module h2
         { font:bold oblique 2.5em Georgia,serif; margin-bottom:-0.25em }
-.system .intro p
-        { text-indent:2.5em }
 .system .intro a, .system .intro em
         { font:bold oblique 100% Georgia,serif }
 .system p#signup
