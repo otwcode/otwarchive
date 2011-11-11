@@ -43,8 +43,6 @@ Feature: User dashboard
     And I should see "You don't have anything posted under this name yet"
     And I should not see "Revenge of the Sith"
     And I should not see "Stargate"
-  When I log out
-  Then I should see "logged out"
   When I am logged in as "bookmarkuser2" with password "password"
     And I post the work "Revenge of the Sith"
   When I go to the bookmarks page
