@@ -24,6 +24,7 @@ class PromptRestriction < ActiveRecord::Base
   def update_allowed_values
     self.url_allowed = true if url_required
     self.description_allowed = true if description_required
+    self.title_allowed = true if title_required
 
     TagSet::TAG_TYPES.each do |tag_type|
       required = eval("#{tag_type}_num_required") || eval("self.#{tag_type}_num_required") || 0

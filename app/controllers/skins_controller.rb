@@ -128,7 +128,8 @@ class SkinsController < ApplicationController
 
   def update
     loaded = load_archive_parents
-    if @skin.update_attributes(params[:skin])
+    if @skin.update_attributes(params[:skin])      
+      @skin.cache! if @skin.cached?
       flash[:notice] = ts("Skin was successfully updated.")
       if loaded
         if flash[:error].present?

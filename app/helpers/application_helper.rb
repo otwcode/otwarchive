@@ -263,7 +263,7 @@ module ApplicationHelper
   def expand_contract_all(target="index")
     expand_all = content_tag(:a, ts("Expand All"), :href=>"#", :class => "expand_all", "target_class" => target, :role => "button")
     contract_all = content_tag(:a, ts("Contract All"), :href=>"#", :class => "contract_all", "target_class" => target, :role => "button")
-    content_tag(:span, expand_all + contract_all, :class => "actions hidden showme", :role => "menu")
+    content_tag(:span, expand_all + "\n".html_safe + contract_all, :class => "actions hidden showme", :role => "menu")
   end
   
   # Sets up expand/contract/shuffle buttons for any list whose id is passed in

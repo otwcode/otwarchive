@@ -21,28 +21,10 @@ background:purple; color:#555;}
         #header fieldset {margin-bottom:-0.643em} 
 }
 
-
-/*DEVELOPMENT ONLY. DO NOT DEPLOY */
-#debug {display:none;}
-
-/*LISTBOX in dev
-expand collapse with growing boxes NEEDS JAVASCRIPT as onhover is not desirable
-drafting adding class "expanded" onclick? 
-Is this a variant of show many show more or shall i put it in roles/states
-note: this does not reflow content, is reflow desirable?*/
-
-li.collapsed { height:2em; min-height:0; 
--webkit-transition: all 1s ease-in-out;
-  -moz-transition: all 1s ease-in-out;
-  -o-transition: all 1s ease-in-out;
-  -ms-transition: all 1s ease-in-out;}
-li.expanded{ width:100%;height:auto;position:absolute;z-index:500;
-  -webkit-transform: scale(1.02);
-  -moz-transform: scale(1.02);
-  -o-transform: scale(1.02);
-  -ms-transform: scale(1.02);
-   box-shadow:1px 1px 3px #555;}
-
+/* TEMP FIX Issue 2652 -- don't integrate this*/
+span.delete a {
+        margin:0 0.2em;border:0; padding:0; line-height:0.5; box-shadow:none
+}
 
 /* INTERACTIONS MODE: VERBOSE
 forms with more than three fieldsets 
@@ -53,8 +35,6 @@ but I suggest simple and verbose views, with simple as default and verbose as ch
 experimental, developing here, (may combine with .toggled rules)
 drafting: form.simple {background:#ddd; float:none; display:table; margin:0.643em auto; padding:0.643em}*/
 .simple span.actions { float:none;}
-
-
 
 /*Some helpful notes
 0.875em/1.286 line height = 14px with 18px leading
