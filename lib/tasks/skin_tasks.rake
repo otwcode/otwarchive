@@ -143,7 +143,7 @@ namespace :skins do
   end
   
   desc "Unapprove all existing skins"
-  task(:disable_all => :environment) do
+  task(:unapprove_all => :environment) do
     default_id = Skin.default.id
     Skin.where("id != ?", default_id).update_all(:official => false)
   end
