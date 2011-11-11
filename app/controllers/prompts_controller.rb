@@ -3,7 +3,7 @@ class PromptsController < ApplicationController
   before_filter :users_only
   before_filter :load_collection, :except => [:index]
   before_filter :load_challenge, :except => [:index]
-  before_filter :load_signup, :except => [:index, :destroy]
+  before_filter :load_signup, :except => [:index, :destroy, :show]
   # before_filter :promptmeme_only, :except => [:index, :new]
   before_filter :load_prompt_from_id, :only => [:show, :edit, :update, :destroy]
   before_filter :allowed_to_destroy, :only => [:destroy]
