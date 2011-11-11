@@ -36,7 +36,8 @@ float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
  /* END SKIN */
 
 /*SKIN: Stick It */
-/* DESCRIPTION: sticks the secondary (page specific) navigation to the left and fixes it there-- might be a little buggy it is very late*/
+/* DESCRIPTION: 
+Sticks the secondary (page specific) navigation to the left and fixes it there-- might be a little buggy it is very late*/
 #main {width: 75%;}
 #main.dashboard { margin-right:16%; width:58%}
 #main ul.actions {position:fixed; background:#ddd; border:2px solid #fff; width:15%; right:0; z-index:3000; box-shadow:1px 1px 3px; text-align: left}
@@ -47,7 +48,8 @@ float:none;width:auto; max-width:100%; margin:1%; padding:0;clear:both;}
 /* END SKIN */
 
 /*SKIN: Mark my words */
-/* DESCRIPTION: Shows all landmarks and lays them out visually */
+/* DESCRIPTION: 
+Shows all landmarks and lays them out visually */
 #outer .landmark{
 height:auto; width:auto; margin:0.643em auto;
 font-size:100%; opacity:1; color:#000; font-weight:bold; display:block}
@@ -60,12 +62,15 @@ font-size:100%; opacity:1; color:#000; font-weight:bold; display:block}
 /* END SKIN */
 
 /* SKIN: Two Point No */
-/* DESCRIPTION: Kills all the rounded corners, box shadows, and text-shadows */
+/* DESCRIPTION: 
+Kills all the rounded corners, box shadows, and text-shadows */
 * {box-shadow:none !important; border-radius:0 !important; text-shadow:none !important;}
 /* END SKIN */
 
 /* SKIN: Look and Read */
-/* DESCRIPTION: Chain in this to hide the AO3 logo and show the Archive Of Our Own header text*/
+/* DESCRIPTION: 
+Chain in this to hide the AO3 logo and show 
+the Archive Of Our Own header text*/
 #header h1 img 
         { display:none;}
 #header h1 
@@ -77,7 +82,9 @@ font-size:100%; opacity:1; color:#000; font-weight:bold; display:block}
 /* END SKIN*/
 
 /* SKIN: Imago */
-/* DESCRIPTION: Chain in this to hide your own icon in the header and show a greeting instead*/
+/* DESCRIPTION: 
+Chain in this to hide your own icon in the header 
+and show a greeting instead*/
 #greeting 
         { width:14em;}
 #greeting p.icon img

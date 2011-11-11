@@ -6,9 +6,11 @@ CREDITS:  images: [ http://www.fuzzimo.com/free-seamless-denim-jeans-textures/]
 
 this CSS3 skin is "add-on" and really simple. 
 It demonstrates how you can use the #outer and #inner .wrappers
-to layer semi-transparent white and black over a single image to build a complete skin
+to layer semi-transparent white and black over a single image 
+to build a complete skin
 Swap the first background image to change the whole look.
-Or load this as a parent and override the image in the skins form, see the skin "Threw Twill Out" for an example
+Or load this as a parent and override the image in the skins form, 
+see the skin "Threw Twill Out" for an example
 */
 /*note to intrepid skinsers: there is an external bug in our CSS parser plugin meaning we can't use gradients or multiple background instances, which is obviously excessively vexing. See "Dusted Buttons" for a workaround using diffused, partially transparent box shadows. Anyway, this is why there are no fallback backgrounds or iterated backgrounds - the parser just eats them!*/
 /*apply background*/

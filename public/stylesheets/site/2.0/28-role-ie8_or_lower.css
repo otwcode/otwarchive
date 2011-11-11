@@ -6,7 +6,7 @@ test note: these files could certainly be reduced but I have no IE to test with*
 
 /* emphasis */
 .navigation a:hover, .submit a:hover, .action a:hover {background:#bbb}
-span.replied. span.unreviewed, .actions a, .action {font-family: "Arial Unicode MS"}
+span.replied. span.unreviewed, .actions a, .action {font-family: "Arial Unicode MS", "Lucida Grande Unicode", Arial, sans-serif;}
 a.tag {padding-left: 0.25em;}
 
 /* pathing and inheritance*/

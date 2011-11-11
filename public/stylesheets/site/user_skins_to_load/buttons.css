@@ -44,19 +44,16 @@ box-shadow:2px 2px 2px; }
 /* END SKIN */
 
 /* SKIN: Scribble Buttons */
-/* DESCRIPTION: scribbly pencil background and marker font. Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: 
+Scribbly pencil background and marker font. 
+Please DO copy and reuse and modify this code any way you like!
 CREDITS-
 # links to free, open font downloads: [ Trash Hand by Luce Averous @ http://www.luce.averous.com/]
 or alt GoodDog: http://www.fontsquirrel.com/fonts/GoodDog 
-# instructions: this component is useful for paper/notebook layouts like Desk Job
+# instructions: 
+This component is useful for paper/notebook layouts like Desk Job
 */
 
-/* Please DO copy and reuse and modify this code any way you like!
-CREDITS:
-# links to free, open font downloads: [ Trash Hand by Luce Averous @ http://www.luce.averous.com/]
-or alt GoodDog: http://www.fontsquirrel.com/fonts/GoodDog 
-# instructions: this component is useful for paper/notebook layouts like Desk Job
-*/
 #header .primary a, #header input[type="submit"], .actions a,.actions a, .action, input[type="submit"], button, .current, #dashboard .current, .actions label 
         { background: url("/images/skins/textures/tiles/black-scribble-x.png")  repeat-x;background-size: 40px;
           border:0; text-shadow:-1px 0px 0 #eee; font-size: larger; font-family:"TrashHand", "GoodDog", "Lucida Handwriting", cursive; color:#222 }
@@ -64,15 +61,22 @@ or alt GoodDog: http://www.fontsquirrel.com/fonts/GoodDog
 
 /* SKIN: Dusted Buttons */
 /* PARENTS: Dusted Off */
-/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: 
+Please DO copy and reuse and modify this code any way you like!
 CREDITS
 # code: adapted from 'colour flip combos' by lim @ ao3 and 'Dusty Rose' by sistabro @ ao3
 # and http://www.andrewgreig.com/2010/05/styling-pretty-buttons-with-css3/ 
 */
-/*note to intrepid skinsers: there is an external bug in our CSS parser plugin meaning we can't use gradients (or actually multiple background instances),
+/*note to intrepid skinsers: 
+there is an external bug in our CSS parser plugin meaning 
+we can't use gradients (or actually multiple background instances),
 which is obviously excessively vexing. 
-Until the developer fixes this, I'm working around by inheriting the AO3 button gradient and tinting it with diffused, partially transparent box shadows. 
-Anyway, this is why these buttons don't have fallback backgrounds or iterated backgrounds - the parser just eats them!*/
+Until the developer fixes this, I'm working around by 
+inheriting the AO3 button gradient and tinting it 
+with diffused, partially transparent box shadows. 
+Anyway, this is why these buttons don't have 
+fallback backgrounds or iterated backgrounds 
+- the parser just eats them!*/
 .actions a,.actions a:visited,.action, .actions input, input[type="submit"], button, .current, .actions label 
         { font-family:Arial, sans-serif; text-transform:uppercase; letter-spacing:0.06em; color:#fff !important; border-radius:0.5em; box-shadow: 0 1px 3px rgba(0,0,0,0.2), inset 5px 3px 20px rgba(207,77,105,0.75), inset 10px 10px 20px rgba(207,129,149,0.5), inset -10px -10px 20px rgba(207,129,149,0.5); text-shadow: -1px -1px 0 rgba(0,0,0,0.35); }
 
