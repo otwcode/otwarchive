@@ -47,7 +47,7 @@ ul#skiplinks, .landmark , .landmark a, .index .heading.landmark
           box-shadow:2px 2px 5px #bbb; border-radius:0.15em }
 /* CONTEXTS */
 .heading .actions, .heading .action, .heading span.actions
-        { height:auto; font:100 75%/1.286 'Lucida Grande','Lucida Sans Unicode', 'GNU Unifont',sans-serif; padding: 0.15em 0.375em}
+        { height:auto; font:100 75%/1.286 'Lucida Grande','Lucida Sans Unicode','Arial Unicode MS', 'GNU Unifont',sans-serif; padding: 0.15em 0.375em}
 dl.stats + h6 + .actions
         { float: left}
 dl.stats + h6 + .actions, li.news .actions 

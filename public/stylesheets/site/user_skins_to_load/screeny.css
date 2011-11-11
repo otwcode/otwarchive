@@ -1,5 +1,7 @@
 /* SKIN: The Screeny Exposure!*/
-/* DESCRIPTION: Exposes every heading, title, and name with the "landmark" class to the readers that can't read them*/
+/* DESCRIPTION: 
+Exposes every heading, title, and name with the "landmark" class 
+to the readers that can't read them*/
 ul#skiplinks,
 .landmark,
 #outer .landmark,
@@ -16,7 +18,9 @@ ul#skiplinks,
 /* END SKIN */
 
 /* SKIN: The Screeny Oppression! */
-/* DESCRIPTION: completely suppresses landmark headings, leaving only WAI-ARIA landmarks and ordinary headings*/
+/* DESCRIPTION: 
+Completely suppresses landmark headings, 
+leaving only WAI-ARIA landmarks and ordinary headings*/
 .landmark {
   display: none !important;
 }
@@ -28,12 +32,17 @@ ul#skiplinks,
 /* END SKIN */
 
 /* SKIN: The Screeny She's Got Form */
-/* DESCRIPTION: drops all archive parents except core and interactions (forms).*/
+/* DESCRIPTION: 
+Drops all archive parents except core and interactions (forms).*/
 /* PARENTS: 1, 7 */ 
 /* END SKIN */
 
 /* SKIN: The Screeny Shut It */
-/* DESCRIPTION: Any component you don't care to read, add to the beginning of this code, or remove ones you do want. Remember to separate with a comma! */
+/* DESCRIPTION: 
+Any component you don't care to read, 
+add to the beginning of this code, 
+or remove ones you do want. 
+Remember to separate with a comma! */
 #footer,
 .filters,
 blockquote.userstuff,

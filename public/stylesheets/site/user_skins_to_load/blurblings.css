@@ -49,12 +49,14 @@ li.blurb .stats {display:none;}
 /* END SKIN */
 
 /* SKIN: Blurblings chain example*/
-/* DESCRIPTION:  Just demonstrating how you can chain blurblings together*/
+/* DESCRIPTION:  
+Just demonstrating how you can chain blurblings together*/
 /* PARENTS: Blurblings Faint Warning, Blurblings Shipper, Blurblings Hide summary */
 /* END SKIN */
 
 /* SKIN: Blurblings Hide nearly everything */
-/*  DESCRIPTION: on every blurb except the title, author, fandom*/
+/*  DESCRIPTION: 
+On every blurb except the title, author, fandom*/
 li.blurb p, .index li.blurb ul, li.blurb ol, li.blurb blockquote, li.blurb dl, li.blurb .user, li.blurb .icon {
 display: none
 }
@@ -101,7 +103,8 @@ float: right;
 
 
 /* SKIN: Blurblings Landmarks*/
-/* DESCRIPTION: Show the blurb landmark headings*/
+/* DESCRIPTION: 
+Show the blurb landmark headings*/
 #main li.blurb .landmark {
 height:auto;
 width:auto;
@@ -115,12 +118,15 @@ font-weight:bold;
 /* END SKIN */
 
 /* SKIN: Blurblings Blurb Drop */
-/* DESCRIPTION: drops the blurb group entirely to make a plain text blurb */
+/* DESCRIPTION: 
+Drops the blurb group entirely to make a plain text blurb */
 /* PARENTS: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 */ 
 /* END SKIN */
 
 /* SKIN: Typeset In My Ways */
-/* DESCRIPTION: uses the Archive typography and layout, with plain text blurb and a limited width work view*/
+/* DESCRIPTION: 
+Uses the Archive typography and layout, 
+with plain text blurb and a limited width work view*/
 /* PARENTS: Blurblings Blurb Drop */
 #workskin {max-width:39em; margin:auto}
 #inner {max-width:75%; margin:auto;}
@@ -129,7 +135,9 @@ font-weight:bold;
 
 /* SKIN: Incommodious */
 /* DESCRIPTION: takes off all the commas */
-/* We add commas in lists of tags, mostly, which are displayed inline, but you can turn them off if you find them odious. */
+/* We add commas in lists of tags, mostly, 
+which are displayed inline, but you can turn them off 
+if you find them odious. */
 .commas li:after
         { content:none }
 /* END SKIN */
@@ -137,7 +145,9 @@ font-weight:bold;
 /* SKIN: Branch Line */
 /* REPLACE: 431 */
 /* PARENTS: Incommodious */
-/* DESCRIPTION: Breaks warnings, relationships, characters, and freeform tags into separate groups. by Branch @ao3 */
+/* DESCRIPTION: 
+Breaks warnings, relationships, characters, and freeform tags 
+into separate groups. by Branch @ao3 */
 .blurb .relationships {
   font-style: italic;
   background:none;
@@ -208,6 +218,8 @@ li.relationships + li.freeforms:before {
 
 /* SKIN: Plain Text */
 /* REPLACE: 2 */
+/* DESCRIPTION: T
+his is the old 'Plain Text' style with enforced serif font and no icons. */
 /* PARENTS: Blurblings Blurb Drop */
 * {font-family:serif !important;}
 /* END SKIN*/

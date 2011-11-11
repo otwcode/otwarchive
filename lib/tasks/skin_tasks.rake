@@ -103,7 +103,7 @@ namespace :skins do
         preview_filename = "#{dir}/previews/#{title.gsub(/[^\w\s]+/, '')}.png"
         unless File.exists?(preview_filename)
           puts "No preview filename #{preview_filename} found for #{title}"
-          preview_filename = default_preview_filename
+          preview_filename = "#{dir}/previews/default_preview.png"
         end
         File.open(preview_filename, 'rb') {|preview_file| skin.icon = preview_file}
       else

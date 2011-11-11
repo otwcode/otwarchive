@@ -1,5 +1,6 @@
 /* SKIN: Typeset In My Ways Erasure*/
-/* DESCRIPTION: drops all archive parents except core and loads a simple typographical style.*/
+/* DESCRIPTION: 
+Drops all archive parents except core and loads a simple typographical style.*/
 /* PARENTS: 1*/
 /*
 set block elements' margins and padding to zero
@@ -316,7 +317,8 @@ hr:after					{ content:"* * *"; }
 
 /* SKIN: Typeset In My Ways Landmarks*/
 /* PARENTS: Typeset In My Ways Erasure */
-/* DESCRIPTION: shows the landmarks and styles them for timways. Not fully supported by IE6*/
+/* DESCRIPTION: shows the landmarks and styles them for timways. 
+Not fully supported by IE6*/
 .landmark {font-size:100%; opacity:1;}
 .landmark.heading{background:none; color:#000; border-bottom:3px solid}
 /* END SKIN */
