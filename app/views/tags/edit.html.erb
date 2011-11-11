@@ -93,8 +93,8 @@
           <% for tag in tag_list %>
             <li>
               <%= link_to_edit_tag(tag) %>
-              <span class="delete">
-                <%= link_to 'X', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
+              <span class="delete action" title="delete" role="button">
+                <%= link_to 'x', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
               </span>
             </li>
           <% end %>
@@ -123,8 +123,9 @@
             <% for tag in tag_list %>
               <li>
                 <%= link_to_edit_tag(tag) %>
-                <span class="delete">
-                  <%= link_to 'X', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
+                <!--BACK END could pos put this title and role on t'link-->
+                <span class="delete action" title="delete" role="button">
+                  <%= link_to 'x', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
                 </span>
               </li>
             <% end %>

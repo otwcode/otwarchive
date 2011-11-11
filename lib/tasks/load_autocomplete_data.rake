@@ -80,6 +80,8 @@ namespace :autocomplete do
     # we only load tagsets used in challenge settings, not ones used in
     # individual signups
     OwnedTagSet.includes(:tag_set => :tags).find_each do |owned_tag_set|
+      # this is just a check to save from the seed db missing tag sets
+      next if owned_tag_set.tag_set.nil?
       owned_tag_set.tag_set.add_to_autocomplete
     end
   end

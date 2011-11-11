@@ -17,7 +17,7 @@ class Work < ActiveRecord::Base
   has_many :external_author_names, :through => :external_creatorships, :inverse_of => :works
   has_many :external_authors, :through => :external_author_names, :uniq => true
 
-  has_many :chapters, :dependent => :destroy
+  has_many :chapters
   validates_associated :chapters
 
   has_many :serial_works, :dependent => :destroy
@@ -181,10 +181,16 @@ class Work < ActiveRecord::Base
   before_update :validate_tags
   after_update :adjust_series_restriction
 
+  after_destroy :destroy_chapters_in_reverse
+  def destroy_chapters_in_reverse
+    self.chapters.order("position DESC").map(&:destroy)
+  end
+
   def self.purge_old_drafts
-    drafts = Work.find(:all, :conditions => ['works.posted = ? AND works.created_at < ?', false, 1.week.ago])
-    drafts.map(&:destroy)
-    drafts.size
+    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.week.ago).value_of(:id)
+    Chapter.where(:work_id => draft_ids).order("position DESC").map(&:destroy)
+    Work.where(:id => draft_ids).map(&:destroy)
+    draft_ids.size
   end
 
   # SECTION IN PROGRESS -- CONSIDERING MOVE OF WORK CODE INTO HERE

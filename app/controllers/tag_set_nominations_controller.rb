@@ -19,7 +19,7 @@ class TagSetNominationsController < ApplicationController
       redirect_to user_tag_set_nominations_path(@user) and return
     end
     unless current_user.is_author_of?(@tag_set_nomination) || @tag_set.user_is_moderator?(current_user)
-      flash[:notice] = ts("You can only see your own nominations.")
+      flash[:notice] = ts("You can only see your own nominations or nominations for a set you moderate.")
       redirect_to tag_set_path(@tag_set) and return
     end
   end
@@ -141,12 +141,14 @@ class TagSetNominationsController < ApplicationController
     set_limit
     @nom_limit = 30
     @nominations = HashWithIndifferentAccess.new
+    @nominations_count = HashWithIndifferentAccess.new
     more_noms = false
 
     if @limit[:fandom] > 0
       # all char and rel tags happen under fandom noms
-      @nominations[:fandom] = base_nom_query("fandom").order(:tagname)
-      more_noms = true if @tag_set.fandom_nominations.unreviewed.count > @nom_limit
+      @nominations_count[:fandom] = @tag_set.fandom_nominations.unreviewed.count
+      more_noms = true if  @nominations_count[:fandom] > @nom_limit
+      @nominations[:fandom] = more_noms ? base_nom_query("fandom").order("RAND()") : base_nom_query("fandom").order(:tagname)
       if (@limit[:character] > 0 || @limit[:relationship] > 0) 
         @nominations[:cast] = base_nom_query(%w(character relationship)).
           join_fandom_nomination.
@@ -154,16 +156,26 @@ class TagSetNominationsController < ApplicationController
           order(:parent_tagname, :type, :tagname)
       end
     else
-      # if there are no fandoms we're going to assume this is a one or few fandom tagset
-      @nominations[:character] = base_nom_query("character").order(:parent_tagname, :tagname) if @limit[:character] > 0
-      @nominations[:relationship] = base_nom_query("relationship").order(:parent_tagname, :tagname) if @limit[:relationship] > 0
-      more_noms = true if (@tag_set.character_nominations.count > @nom_limit || @tag_set.relationship_nominations.count > @nom_limit)
+      # if there are no fandoms we're going to assume this is a one or few fandom tagset    
+      @nominations_count[:character] = @tag_set.character_nominations.unreviewed.count
+      @nominations_count[:relationship] = @tag_set.relationship_nominations.unreviewed.count
+      more_noms = true if (@tag_set.character_nominations.unreviewed.count > @nom_limit || @tag_set.relationship_nominations.unreviewed.count > @nom_limit)
+      @nominations[:character] = base_nom_query("character") if @limit[:character] > 0
+      @nominations[:relationship] = base_nom_query("relationship") if @limit[:relationship] > 0
+      if more_noms
+        parent_tagnames = TagNomination.for_tag_set(@tag_set).unreviewed.order("RAND()").limit(100).value_of(:parent_tagname).uniq.first(30)
+        @nominations[:character] = @nominations[:character].where(:parent_tagname => parent_tagnames) if @limit[:character] > 0
+        @nominations[:relationship] = @nominations[:relationship].where(:parent_tagname => parent_tagnames) if @limit[:relationship] > 0        
+      end
+      @nominations[:character] = @nominations[:character].order(:parent_tagname, :tagname) if @limit[:character] > 0
+      @nominations[:relationship] = @nominations[:relationship].order(:parent_tagname, :tagname) if @limit[:relationship] > 0
     end
-    @nominations[:freeform] = base_nom_query("freeform").order(:tagname) if @limit[:freeform] > 0
-    more_noms = true if @tag_set.freeform_nominations.count > @nom_limit
+    @nominations_count[:freeform] =  @tag_set.freeform_nominations.unreviewed.count
+    more_noms = true if @nominations_count[:freeform] > @nom_limit
+    @nominations[:freeform] = (more_noms ? base_nom_query("freeform").order("RAND()") : base_nom_query("freeform").order(:tagname)) if @limit[:freeform] > 0
     
     if more_noms
-      flash[:notice] = ts("Note: too many nominations to show at once! Additional nominations will appear after you approve or reject some.")
+      flash[:notice] = ts("There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some.")
     end
     
     if @tag_set.tag_nominations.unreviewed.empty?

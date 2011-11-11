@@ -138,6 +138,10 @@ font-weight:bold;
 /* REPLACE: 431 */
 /* PARENTS: Incommodious */
 /* DESCRIPTION: Breaks warnings, relationships, characters, and freeform tags into separate groups. by Branch @ao3 */
+.blurb .relationships {
+  font-style: italic;
+  background:none;
+}
 ul.tags {
   padding-top: .5em;
 }
@@ -158,18 +162,46 @@ li.relationships + li.freeforms {
   clear: left;
 }
 
-ul.tags li.relationships {
-  font-style: italic !important;
+ul.tags li.warnings:first-child:before {
+  content: "Archive Warnings: ";
+  color: #111;
+  font-weight: bold;
 }
 
-ul.tags li {
-  padding-left: .5em;
-  line-height: 1 !important;
+li.warnings + li.relationships:before {
+  content: "Relationships: ";
+  color: #111;
+  font-weight: bold;
 }
 
-a.tags,
-.tags a {
-  line-height: 1;
+li.relationships + li.characters:before {
+  content: "Characters: ";
+  color: #111;
+  font-weight: bold;
+}
+
+li.characters + li.freeforms:before {
+  content: "Freeform: ";
+  color: #111;
+  font-weight: bold;
+}
+
+li.warnings + li.characters:before {
+  content: "Characters: ";
+  color: #111;
+  font-weight: bold;
+}
+
+li.warnings + li.freeforms:before {
+  content: "Freeform: ";
+  color: #111;
+  font-weight: bold;
+}
+
+li.relationships + li.freeforms:before {
+  content: "Freeform: ";
+  color: #111;
+  font-weight: bold;
 }
 
 /* END SKIN */

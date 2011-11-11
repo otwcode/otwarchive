@@ -167,6 +167,9 @@ h2, .system p#signup, #header h2
 /* DESCRIPTION: Light on dark with blue key, default skin 
  Please DO copy and reuse and modify this code any way you like!
 # code adapted from 'colour flip combos' by lim @ ao3*/
+/*note to intrepid skinsers: there is an external bug in our CSS parser plugin meaning we can't use gradients (or actually multiple background instances),
+which is obviously excessively vexing. 
+Until the developer fixes this, I'm working around by inheriting the AO3 button gradient and tinting it with diffused, positioned box shadows. Anyway, this is why these buttons don't have iterated backgrounds - the parser just eats them!*/
 
 /*regions, groups, elements*/
 #outer .region, #ibox_wrapper #ibox_content, .post fieldset fieldset
@@ -202,14 +205,7 @@ a,a:link,a.tag,#dashboard a,#dashboard .current, .heading,.group .heading
 a:visited,.actions a:visited
         { color:#999;}
 .actions a,.action,.actions input,input[type="submit"],button,.current,.actions label,#header .actions a,#header input[type="submit"]
-        { background:#555; border-color:#222;color:#eee;
-background:-moz-linear-gradient(top,#555 0%,#232323 100%);
-background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#555),color-stop(100%,#232323));
-background:-webkit-linear-gradient(top,#555 0%,#232323 100%);
-background:-o-linear-gradient(top,#555 0%,#232323 100%);
-background:-ms-linear-gradient(top,#555 0%,#232323 100%);
-background:linear-gradient(top,#555 0%,#232323 100%);
-          text-shadow:none;}
+        { background:#555; border-color:#222;color:#eee; box-shadow: inset 0 -8px 4px #232323, inset 0 8px 7px #555;  text-shadow:none;}
 .actions a:hover,.actions input:hover,#dashboard a:hover
         { color:#999;border-color:#000;
           box-shadow:inset 2px 2px 2px #000}

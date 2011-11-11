@@ -25,8 +25,7 @@ namespace :skins do
   
   def set_parents(skin, parent_names)
     # clear existing ones
-    skin.skin_parents.delete_all
-    Skin.reset_column_information
+    SkinParent.where(:child_skin_id => skin.id).delete_all
 
     parent_position = 1
     parents = parent_names.split(/,\s?/).map {|pn| pn.strip}
@@ -49,9 +48,10 @@ namespace :skins do
         next
       end      
       p = skin.skin_parents.build(:parent_skin => parent_skin, :position => parent_position)
-      unless p.save
-        puts "Skipping skin parent #{parent_name}: #{p.errors.full_messages.join(', ')}"
+      if p.save
         parent_position += 1
+      else
+        puts "Skipping skin parent #{parent_name}: #{p.errors.full_messages.join(', ')}"
       end
     end    
   end
@@ -105,7 +105,6 @@ namespace :skins do
       skin.css = skin_content
       skin.public = true
       skin.official = true
-      skin.do_not_upgrade = false
       skin.author = author unless skin.author
       
       if skin_content.match(/DESCRIPTION:\s*(.*?)\*\//m)
@@ -141,6 +140,12 @@ namespace :skins do
   task(:disable_all => :environment) do
     default_id = Skin.default.id
     Preference.update_all(:skin_id => default_id)
+  end
+  
+  desc "Unapprove all existing skins"
+  task(:disable_all => :environment) do
+    default_id = Skin.default.id
+    Skin.where("id != ?", default_id).update_all(:official => false)
   end
   
 end

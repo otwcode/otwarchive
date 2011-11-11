@@ -92,8 +92,6 @@ li.blurb:after
 use this along with "index" and "blurb" for indices where we have icon pictures,
 eg collections, users, skins, instead of the 4-icon list
 */
-.picture .icon img, .picture .icon 
-        { position: absolute; top:0; height:55px; width:55px; background-size:55px}
 .picture .header 
         { border-bottom:1px solid #ccc }
 .index .collection .icon
@@ -104,6 +102,8 @@ eg collections, users, skins, instead of the 4-icon list
         { background:url("/images/skins/iconsets/default/icon_mystery.png")}
 .index .tag .icon, .index .tagset .icon
         { background:url("/images/skins/iconsets/default/icon_tag.png");}
+.picture .icon img, .index .picture .icon 
+        { position: absolute; top:0; height:55px; width:55px; background-size:55px}
 
 /*various little mods*/
 .prompt h6 
