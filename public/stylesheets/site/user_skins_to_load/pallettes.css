@@ -1,6 +1,8 @@
 /* SKIN: Snow */
-/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
-makes everything that is very light lavender pure white. To remove all backgrounds load 'Get The Backers'*/
+/* DESCRIPTION: 
+Please DO copy and reuse and modify this code any way you like!
+makes everything that is very light lavender pure white. 
+To remove all backgrounds load 'Get The Backers'*/
 body,th,tr:hover,col.name,fieldset fieldset,fieldset dl dl,form blockquote.userstuff,input:focus,select:focus,textarea:focus, .autocomplete div.dropdown ul, #ui-datepicker-div, #ibox_wrapper, #ibox_content, .toggled form, .dynamic form, .secondary, .listbox .index, .dashboard .listbox .index, .nomination dt
         { background:#fff;}
 #header h2, #footer ul, #footer ul.navigation a, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
@@ -12,14 +14,17 @@ form .notice,form ul.notes
 /* END SKIN */
 
 /* SKIN: Get the Backers */
-/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
-makes the group backgrounds white. To override the header colours add on 'Trouble O'Head' */
+/* DESCRIPTION: 
+Please DO copy and reuse and modify this code any way you like!
+makes the group backgrounds white. 
+To override the header colours add on 'Trouble O'Head' */
 .region, .group, .header, fieldset, fieldset fieldset, fieldset fieldset fieldset, table, th, .heading, .notice, ul.notes, .flash {background:transparent !important}
-body, .dynamic, .toggled, .secondary, .dropdown, .verbose legend {background:white !important;}
+body, .dynamic, .toggled, .secondary, .dropdown, #main .verbose legend {background:white !important;}
 /* END SKIN */
 
 /* SKIN: Dusted Off */
-/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: 
+Please DO copy and reuse and modify this code any way you like!
 CREDITS
 # code: adapted from 'colour flip combos' by lim @ ao3 and 'Dusty Rose' by sistabro @ ao3
 */
@@ -28,7 +33,7 @@ CREDITS
 /* KEY COLOUR TO DUSTY ROSE*/
 #header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
         { background:#b35b6b;}
-#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8,  #footer .secondary li a
         { color:#b35b6b;}
 #outer #header #greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active, #header .primary a, #header .primary .current, #header .primary input, #header .search input
       { border-color:#b35b6b !important}
@@ -47,7 +52,7 @@ CREDITS
         { background:#000 url('/images/skins/textures/tiles/black-zebra-fur.jpg'); background-size:500px}
 #footer ul 
         { background:#000;}
-#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8,  #footer .secondary li a
         { color:#000;}
 #outer #header #greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active, #header .primary a, #header .primary .current, #header .primary input, #header .search input
         { border-color:#000 !important}
@@ -58,16 +63,18 @@ CREDITS
 /* END SKIN */
 
 /* SKIN: For The Trees */
-/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: 
+Please DO copy and reuse and modify this code any way you like!
 CREDITS
-# code: adapted from 'colour flip combos' by lim @ ao3 and 'Sunny Forest' by enigel @ ao3
+# code: adapted from 'colour flip combos' by lim @ ao3 and 
+'Sunny Forest' by enigel @ ao3
 */
 /* PARENTS: Snow */
 
 /* KEY COLOUR TO FOREST GREEN*/
 #header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
         { background:#003D00;}
-#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8,  #footer .secondary li a
         { color:#003D00;}
 #outer #header #greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active, #header .primary a, #header .primary .current, #header .primary input, #header .search input
         { border-color:#003D00 !important}
@@ -83,16 +90,18 @@ CREDITS
 /* KEY COLOUR TO BLACK (DEFAULT IS STRONG RED)*/
 #header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
         { background:#000 ; background-size:500px}
-#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8, #footer .secondary li a
         { color:#000;}
 #outer #header #greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active, #header .primary a, #header .primary .current, #header .primary input, #header .search input
         { border-color:#000 !important}
 /* END SKIN */
 
 /* SKIN: The Blues */
-/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
+/* DESCRIPTION: 
+Please DO copy and reuse and modify this code any way you like!
 CREDITS
-# code adapted from 'colour flip combos' by lim @ ao3 and "Medium Blues" by Arduinna @ AO3*/
+# code adapted from 'colour flip combos' by 
+lim @ ao3 and "Medium Blues" by Arduinna @ AO3*/
 /* PARENTS: Snow */
 
 /*2*/
@@ -149,7 +158,7 @@ a,a:link,a:visited:hover, #dashboard a, #dashboard span, .autocomplete div.dropd
 /* KEY COLOUR (DEFAULT IS STRONG RED)*/
 #header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
         { background:#21217C}
-#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8, #footer .secondary li a
         { color:#21217C;}
 #outer #header #greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active, #header .primary a, #header .primary .current, #header .primary input, #header .search input
         { border-color:#21217C}
@@ -164,7 +173,8 @@ h2, .system p#signup, #header h2
 /* END SKIN */
 
 /* SKIN: Reversi */
-/* DESCRIPTION: Light on dark with blue key, default skin 
+/* DESCRIPTION: 
+Light on dark with blue key, default skin 
  Please DO copy and reuse and modify this code any way you like!
 # code adapted from 'colour flip combos' by lim @ ao3*/
 /*note to intrepid skinsers: there is an external bug in our CSS parser plugin meaning we can't use gradients (or actually multiple background instances),
@@ -174,7 +184,7 @@ Until the developer fixes this, I'm working around by inheriting the AO3 button 
 /*regions, groups, elements*/
 #outer .region, #ibox_wrapper #ibox_content, .post fieldset fieldset
         { background:none;}
-body,.group,.group .group,.region,.flash,fieldset,fieldset fieldset ul,textarea,.verbose legend,.notice,ul.notes,input,textarea,table,th,td:hover,tr:hover,.symbol .question:hover, #ibox_wrapper
+body,.group,.group .group,.region,.flash,fieldset,fieldset fieldset ul,form dl, textarea,#main .verbose legend,.verbose fieldset,.notice,ul.notes,input,textarea,table,th,td:hover,tr:hover,.symbol .question:hover, #ibox_wrapper
         { background:#333;color:#eee;border-color:#222;outline:#111;
           box-shadow:none}
 .group.listbox,input:focus,textarea:focus,li.relationships,.group.listbox .index,#dashboard a:hover,th,.secondary, .thread .even
@@ -195,7 +205,7 @@ li.blurb,.blurb .blurb,.listbox .index,.dashboard .listbox .index
 /* key colour to blue */
 .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover, .symbol .question
                 { background:#5998D6; color:#111;}
-#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8, #footer .actions .secondary a
                 { color:#5998D6;}
 #greeting .icon, #dashboard.own,.error,.comment_error, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active, #header .actions .current 
                 { border-color:#5998D6;}
@@ -225,8 +235,10 @@ fieldset fieldset
 /* END SKIN */
 
 /* SKIN: Slim Shaded */
-/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
-instructions: this just makes a slimmer, texty header, with a shaded strip, snow body, and lowercase buttons*/
+/* DESCRIPTION: 
+Please DO copy and reuse and modify this code any way you like!
+instructions: this just makes a slimmer, texty header, 
+with a shaded strip, snow body, and lowercase buttons*/
 /* PARENTS: Snow */
 
 #header { min-height:0}
@@ -270,7 +282,7 @@ h2, .system p#signup, #header h2
 /* PARENTS: Snow */
 #header ul.primary, #footer, .autocomplete .dropdown ul li:hover,li.selected,a.tag:hover
         { background:#4295BC;}
-#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8
+#header #greeting img, #header h1 a, #header fieldset, #header form, #header p, #dashboard a:hover, .actions a:hover, .actions input:hover, .delete a, span.delete, span.unread, .replied, span.claimed, .draggable, .droppable, span.requested, a.work, .blurb h4 a:link, .blurb h4 img, .system .latest h3, .system div.news h3, .required, .error, a.cloud7, a.cloud8, #footer .actions .secondary a, #footer .secondary li a
         { color:#347391;}
 #outer #header #greeting .icon, #dashboard.own,.error,.comment_error,#header ul.primary, .LV_invalid,.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active, #header .primary a, #header .primary .current, #header .primary input, #header .search input
         { border-color:#347391 !important}

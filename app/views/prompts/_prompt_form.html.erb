@@ -33,7 +33,7 @@
   
     <dl>
       <% if restriction.title_allowed %>
-        <dt<%= restriction.title_required ? ' class="required"' : '' %>>
+        <dt class="<%= restriction.title_required ? 'required' : '' %>">
           <%= form.label :title, ts("Title: ") %>
         </dt>
         <dd><%= form.text_field :title %></dd>
@@ -43,7 +43,7 @@
       <%= render "prompts/prompt_form_tag_options", :form => form, :restriction => restriction %>
     
       <% if restriction.url_allowed %>
-        <dt<%= restriction.url_required ? ' class="required"' : '' %>>
+        <dt class="<%= restriction.url_required ? 'required' : '' %>">
           <% url_label = @challenge.send("#{prompt_type}_url_label") %>
           <%= form.label :url , (url_label.blank? ? ts("Prompt URL: ") : url_label) %>
         </dt>
@@ -51,7 +51,7 @@
       <% end %>
 
       <% if restriction.description_allowed  %>
-        <dt<%= restriction.description_required ? ' class="required"' : '' %>>
+        <dt class="<%= restriction.description_required ? 'required' : '' %>">
           <% desc_label = @challenge.send("#{prompt_type}_description_label") %>
           <%= form.label :description, (desc_label.blank? ? ts("Description: ") : desc_label) %>
         </dt>

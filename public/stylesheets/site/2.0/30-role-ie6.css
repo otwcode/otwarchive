@@ -108,6 +108,14 @@ ul.media, li.medium .index, .alphabet .listbox li
 #main li.medium, #main .alphabet .index li 
         { width:auto !important; float:none !important; clear:none; margin:auto !important }
 
+        /*font fallbacks for icons*/
+        span.replied. span.unreviewed, .actions a, .action, .symbol 
+                {font-family:'Arial Unicode MS','Lucida Grande Unicode', Arial, sans-serif;}
+
+                /*hL clearfixes
+                test note: these were put in last minute so might need redoing
+                http://www.stuffandnonsense.co.uk/archives/clearing_floats_without_structural_markup_in_ie7.html*/
+                .group {zoom:1;}
 
         
 

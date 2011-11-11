@@ -61,8 +61,7 @@
           <% @fandom_tag_id = tag_field_id if tag_type == 'fandom' %>
 
           <% if restriction.has_tags?(tag_type) # tags are specified in the tag set %>
-            <% if restriction.tags(tag_type).count <= 3 %>
-              <% # ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
+            <% if restriction.tags(tag_type).count <= ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
         
               <% # save the field id to pass for autocompleting based on fandoms tickyed instead of autocomplete %>
               <% @fandom_tag_id += "_checkboxes" if tag_type == 'fandom' %>

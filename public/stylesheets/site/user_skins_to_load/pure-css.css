@@ -1,7 +1,9 @@
 /* SKIN: Head Buoy*/
 /* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
-# Pure CSS3 skin, slides the header up out of sight and slides down on hover 
-Webkit (like Chrome or Safari) or Gecko (like Firefox) browsers only right now, but have added in all the alts 
+# Pure CSS3 skin, slides the header up out of sight 
+and slides down on hover 
+Webkit (like Chrome or Safari) or Gecko (like Firefox) 
+browsers only right now, but have added in all the alts 
 for the future*/ 
 #header 
         { margin-top:-7.75em; 
@@ -41,9 +43,12 @@ for the future*/
 /*END SKIN */
 
 /* SKIN: Sliders*/
-/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
-# Pure CSS3 skin, slides the meta header off a work and slides out on hover. 
-Webkit (like Chrome or Safari) or Gecko (like Firefox) browsers only right now, but have added in all the alts 
+/* DESCRIPTION: 
+Please DO copy and reuse and modify this code any way you like!
+# Pure CSS3 skin, slides the meta header off a work and 
+slides out on hover. 
+Webkit (like Chrome or Safari) or Gecko (like Firefox) 
+browsers only right now, but have added in all the alts 
 for the future*/
 .works-show .wrapper 
         { box-shadow:none; width:100%; margin:0; position:absolute}
@@ -65,8 +70,11 @@ for the future*/
 /*END SKIN */
 
 /* SKIN: The Bubbler */
-/* DESCRIPTION: Please DO copy and reuse and modify this code any way you like!
-# CSS3 skin that bubbles everything. It's really flexible and only uses greyscale toning, so it can mash with your own pallette. V useful - try it! */
+/* DESCRIPTION: 
+Please DO copy and reuse and modify this code any way you like!
+# CSS3 skin that bubbles everything. 
+It's really flexible and only uses greyscale toning, so 
+it can mash with your own pallette. V useful - try it! */
 .blurb .module, .listbox .blurb, .icon a 
         { border:0;}
 li.blurb, fieldset, .flash, .listbox, .comment, li.comment, .meta

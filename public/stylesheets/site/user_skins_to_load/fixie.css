@@ -1,7 +1,11 @@
 /* SKIN: Fixie Fix*/
  /* PARENT_ONLY */
  /* PARENTS: 1,2,7,8,9,10,11,12,13,14,15,17,18,19,20,21,22 */
-/* DESCRIPTION: this fixes the header, dashboard, and footer to the viewport and scrolls the main content. It has a min-width of 480px. This is intended as a quick fix (sorry) that you can parent in to your own skin: it's "parent only". 
+/* DESCRIPTION: 
+This fixes the header, dashboard, and footer to the viewport 
+and scrolls the main content. 
+It has a min-width of 480px. 
+This is intended as a quick fix (sorry) that you can parent in to your own skin: it's "parent only". 
 # The complete layout is called Fixie.  
 # Please DO copy and reuse and modify this code any way you like!
 */
@@ -75,7 +79,8 @@ ul.required-tags span, .bookmark .status span
 /* END SKIN*/
 
 /* SKIN: Fixie Buttons */
-/* DESCRIPTION: The buttons from the Fixie layout, broken out into a component so you can use them in another skin.
+/* DESCRIPTION: T
+he buttons from the Fixie layout, broken out into a component so you can use them in another skin.
 Please DO copy and reuse and modify this code any way you like!
 CREDITS:
 # links to free, open font downloads: 
@@ -102,7 +107,8 @@ http://www.fontsquirrel.com/fonts/cabinsketch by Pablo Impallari
 
 /* SKIN: Fixie Groups*/
 /* DESCRIPTION:
-These are the swooshy boxes and fonts from the Fixie layout. Please DO copy and reuse and modify this code any way you like!
+These are the swooshy boxes and fonts from the Fixie layout. 
+Please DO copy and reuse and modify this code any way you like!
 CREDITS:
 # links to free, open font downloads: 
 http://www.fontsquirrel.com/fonts/Mido by Eva Grinder
@@ -134,7 +140,11 @@ body, .userstuff
 
 /* SKIN: Fixie */
 /* PARENTS: Fixie Fix, Fixie Buttons, Fixie Icons, Fixie Groups*/
-/* DESCRIPTION: fixed regions with scrolling body layout. Not supported in IE7 or lower. Better for wider screens but you can easily chain in 'Full Width Filters' to use on iPhone or similar. 
+/* DESCRIPTION: 
+Fixed regions with scrolling body layout. 
+Not supported in IE7 or lower. 
+Better for wider screens but you can easily chain in 'Full Width Filters' 
+to use on iPhone or similar. 
 CREDITS:
 # links to free, open font downloads: 
 http://www.fontsquirrel.com/fonts/Mido by Eva Grinder

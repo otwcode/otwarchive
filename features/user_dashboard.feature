@@ -38,7 +38,7 @@ Feature: User dashboard
   Then I should see "Hi, bookmarkuser1!"
   When I go to bookmarkuser2's user page
   Then I should see "There are no works or bookmarks under this name yet"
-  When I follow "bookmarkuser1"
+  When I go to bookmarkuser1's user page
   Then I should see "Dashboard"
     And I should see "You don't have anything posted under this name yet"
     And I should not see "Revenge of the Sith"
@@ -49,7 +49,7 @@ Feature: User dashboard
     And I post the work "Revenge of the Sith"
   When I go to the bookmarks page
   Then I should not see "Revenge of the Sith"
-  When I follow "bookmarkuser2"
+  When I go to bookmarkuser2's user page
   Then I should see "Stargate"
     And I should see "SG-1" within "#user-fandoms"
     And I should not see "Stargate Franchise"
@@ -62,7 +62,7 @@ Feature: User dashboard
     And I press "Preview"
     And I press "Update"
   Then I should see "Work was successfully updated"
-  When I follow "bookmarkuser2"
+  When I go to bookmarkuser2's user page
   Then I should see "Stargate"
     And I should see "SG-1" within "#user-fandoms"
     And I should not see "Stargate Franchise"
