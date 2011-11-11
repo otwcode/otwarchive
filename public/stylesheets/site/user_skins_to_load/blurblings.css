@@ -206,3 +206,9 @@ li.relationships + li.freeforms:before {
 
 /* END SKIN */
 
+/* SKIN: Plain Text */
+/* REPLACE: 2 */
+/* PARENTS: Blurblings Blurb Drop */
+* {font-family:serif !important;}
+/* END SKIN*/
+

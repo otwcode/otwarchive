@@ -64,5 +64,5 @@ dl#symbols-key dd
 #symbols-key dl dt img, #bookmark-symbols-key dt img, #symbols-key dl dt, #bookmark-symbols-key dt 
        { height: 25px; width: 25px }
 #symbols-key dl dd, #bookmark-symbols-key dd 
-        { margin: -1.2525em auto auto 35px }
+        { margin: -25px auto 20px 35px }
 /*END== */

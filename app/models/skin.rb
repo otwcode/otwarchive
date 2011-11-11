@@ -399,19 +399,29 @@ class Skin < ActiveRecord::Base
           end
           
           full_title = "Archive #{version}: (#{position}) #{title}"
-          skin = Skin.find_by_title_and_official(full_title, true)
+          skin = Skin.find_by_title(full_title)
           if skin.nil?
-            skin = Skin.new(:title => full_title, :filename => filename, :description => description, :public => true,
-                            :media => skin_media, :role => skin_role, :ie_condition => skin_ie, :unusable => true)
-            File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
-            skin.official = true
-            skin.save!
+            skin = Skin.new
           end
+          
+          # update the attributes
+          skin.title ||= full_title
+          skin.filename = filename
+          skin.description = description
+          skin.public = true
+          skin.media = skin_media
+          skin.role = skin_role
+          skin.ie_condition = skin_ie
+          skin.unusable = true
+          skin.official = true
+          File.open(version_dir + 'preview.png', 'rb') {|preview_file| skin.icon = preview_file}
+          skin.save!
+
           skins << skin
         end
         
         # set up the parent relationship of all the skins in this version
-        top_skin = Skin.find_by_title_and_official("Archive #{version}", true)
+        top_skin = Skin.find_by_title("Archive #{version}")
         if top_skin
           top_skin.clear_cache! if top_skin.cached? 
           top_skin.skin_parents.delete_all

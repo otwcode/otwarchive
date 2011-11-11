@@ -20,14 +20,14 @@ class SkinParent < ActiveRecord::Base
     if parent_skin == child_skin
       errors.add(:base, ts("^You can't make a skin its own parent!"))
     end
-    if child_skin.parent_skins.value_of(:id).include?(parent_skin.id)
-      errors.add(:base, ts("^%{parent_title} is already a parent of %{child_title}!", :child_title => child_skin.title, :parent_title => parent_skin.title))
+    if child_skin.parent_skins.include?(parent_skin)
+      errors.add(:base, ts("^%{parent_title} is already a parent of %{child_title}", :child_title => child_skin.title, :parent_title => parent_skin.title))
     end
     if parent_skin.get_all_parents.include?(child_skin)
-      errors.add(:base, ts("^%{child_title} is one of the ancestors of %{parent_title}!", :child_title => child_skin.title, :parent_title => parent_skin.title))
+      errors.add(:base, ts("^%{child_title} is one of the ancestors of %{parent_title}", :child_title => child_skin.title, :parent_title => parent_skin.title))
     end
     if child_skin.get_all_parents.include?(parent_skin)
-      errors.add(:base, ts("^%{parent_title} is one of the ancestors of %{child_title}!", :child_title => child_skin.title, :parent_title => parent_skin.title))      
+      errors.add(:base, ts("^%{parent_title} is one of the ancestors of %{child_title}", :child_title => child_skin.title, :parent_title => parent_skin.title))      
     end
   end
    

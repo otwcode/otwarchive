@@ -5,11 +5,6 @@ namespace :skins do
     STDIN.gets.chomp.strip
   end
 
-  desc "Load site skins"
-  task(:load_site_skins => :environment) do
-    Skin.load_site_css
-  end
-
   def replace_or_new(skin_content)
     skin = Skin.new
     if skin_content.match(/REPLACE:\s*(\d+)/)
@@ -56,10 +51,7 @@ namespace :skins do
     end    
   end
   
-  desc "Load user skins"
-  task(:load_user_skins => :environment) do
-    replace = ask("Replace existing skins with same titles? (y/n) ") == "y"
-    
+  def get_user_skins
     dir = Skin.site_skins_dir + 'user_skins_to_load'
     default_preview_filename = "#{dir}/previews/default_preview.png"
     user_skin_files = Dir.entries(dir).select {|f| f.match(/css$/)}
@@ -68,9 +60,28 @@ namespace :skins do
       skins << File.read("#{dir}/#{skin_file}").split(/\/\*\s*END SKIN\s*\*\//)
     end
     skins.flatten!
+  end
+    
+  desc "Purge user skins parents"
+  task(:purge_user_skins_parents => :environment) do
+    get_user_skins.each do |skin_content|
+      skin = replace_or_new(skin_content)
+      if skin.new_record? && skin_content.match(/SKIN:\s*(.*)\s*\*\//)
+        skin = Skin.find_by_title($1.strip)
+      end
+      skin.skin_parents.delete_all
+    end
+  end
+  
+  desc "Load user skins"
+  task(:load_user_skins => :environment) do
+    replace = ask("Replace existing skins with same titles? (y/n) ") == "y"
+    Rake::Task['skins:purge_user_skins_parents'].invoke if replace
     
     author = User.find_by_login("lim")
+    dir = Skin.site_skins_dir + 'user_skins_to_load'
     
+    skins = get_user_skins
     skins.each do |skin_content|
       next if skin_content.blank?
 
@@ -88,7 +99,6 @@ namespace :skins do
             next
           end
         end 
-
         skin.title = title
         preview_filename = "#{dir}/previews/#{title.gsub(/[^\w\s]+/, '')}.png"
         unless File.exists?(preview_filename)
@@ -108,7 +118,7 @@ namespace :skins do
       skin.author = author unless skin.author
       
       if skin_content.match(/DESCRIPTION:\s*(.*?)\*\//m)
-        skin.description = $1
+        skin.description = "<pre>#{$1}</pre>"
       end
       if skin_content.match(/PARENT_ONLY/)
         skin.unusable = true
@@ -135,14 +145,19 @@ namespace :skins do
     end
     
   end
+
+  desc "Load site skins"
+  task(:load_site_skins => :environment) do
+    Skin.load_site_css
+  end
   
-  desc "Disable all existing skins"
+  desc "Remove all existing skins from preferences"
   task(:disable_all => :environment) do
     default_id = Skin.default.id
     Preference.update_all(:skin_id => default_id)
   end
   
-  desc "Unapprove all existing skins"
+  desc "Unapprove all existing official skins"
   task(:unapprove_all => :environment) do
     default_id = Skin.default.id
     Skin.where("id != ?", default_id).update_all(:official => false)
