@@ -1,28 +1,32 @@
 /* MEDIA: only screen and (max-width: 480px), handheld ENDMEDIA (need ENDMEDIA because the media has more than one word)
 linearise content, suppress large images, suppress custom fonts and other large downloads
-pasted in the Slim Shaded skin temporarily to try to fix for iphone--needs test*/
+pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*/
 
 #header {min-height:0}
 #header a , #header fieldset, #header ul.primary, #header ul.primary .current 
 {border:0; background:0; }
-#greeting {width:50px; padding:2px; float:right; background:#fff; z-index:50; border:2px solid #900; box-shadow:0 0 3px #444}
+#greeting {width:25px; padding:2px; float:right; background:#fff; z-index:50; border:2px solid #900; box-shadow:0 0 3px #444}
 #greeting p.icon img {margin:0; padding:0;top:0}
 #greeting li {display:block; margin:0; color:#eee}
+
 #header h1 {background:#900; height:10px; position:static}
-h1 a img {height:50px; border:0}
-#greeting .icon {height:50px; width:50px;}
+h1 a img {height:25px; border:0}
+#greeting .icon {height:25px; width:25px;}
+
 #header .landmark {clear:none;}
-#header ul.primary{background:#333; border-bottom:1px solid #777} 
-#header ul.primary, #header ul.primary .current, ul.primary.actions a, #header ul.primary .current {color:#eee; }
+#header ul.primary{background:#333; border-bottom:1px solid #777; padding:5px 25px 5px 75px} 
+#header ul.primary, #header ul.primary .current, ul.primary.actions a, #header ul.primary .current {color:#eee; padding: 0.15em}
 #header ul.primary .current, #header .search input{background:#888; color:#eee; box-shadow:inset 0 0 3px #222; border-color:#222 }
+
 .actions, .actions input {text-transform:lowercase;}
+
 #dashboard {width:20%; min-width:10em}
 #main.dashboard {float:left; margin:auto; width:75%}
 #main.dashboard .index, .dashboard form.filters {width:100%}
 
 h1,h2,h3{word-break:break-all}
 
-.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox {width:auto; float:none}
+.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox, #home .news, #home .latest {width:auto; float:none}
 .blurb dl.tags dd, dl.meta dd {margin-left:1em}
 
 .alphabet .listbox li {display:block}

@@ -6,8 +6,8 @@ class TagNomination < ActiveRecord::Base
 
   validates_length_of :tagname,
     :maximum => ArchiveConfig.TAG_MAX,
-    :minimum => 1,
     :message => ts("^Tag nominations must be between 1 and #{ArchiveConfig.TAG_MAX} characters.")
+
   validates_format_of :tagname,
     :if => "!tagname.blank?",
     :with => /\A[^,*<>^{}=`\\%]+\z/,
@@ -27,7 +27,7 @@ class TagNomination < ActiveRecord::Base
       tagname = self.tagname_was
     end
   end
-  
+
   # This makes sure no tagnames are nominated for different parents in this tag set
   validate :require_unique_tagname_with_parent
   def require_unique_tagname_with_parent
@@ -37,6 +37,13 @@ class TagNomination < ActiveRecord::Base
     if query.exists?
       other_parent = query.value_of(:parent_tagname).uniq.join(", ") # should only be one but just in case
       errors.add(:base, ts("^Someone else has already nominated the tag %{tagname} for this set but in fandom %{other_parent}. (All nominations have to be unique for the approval process to work.) Try making your nomination more specific, for instance tacking on (%{fandom}).", :tagname => self.tagname, :other_parent => other_parent, :fandom => self.get_parent_tagname || 'Fandom'))
+    end
+  end
+  
+  after_save :destroy_if_blank
+  def destroy_if_blank
+    if tagname.blank?
+      self.destroy
     end
   end
 

@@ -173,7 +173,7 @@ class Skin < ActiveRecord::Base
   end
 
   def editable?
-    if self.filename.present? || self.cached?
+    if self.filename.present?
       return false
     elsif self.official && self.public
       return true if User.current_user.is_a? Admin

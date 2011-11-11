@@ -326,17 +326,12 @@ class Tag < ActiveRecord::Base
     end      
   end
   
-  # gives you: tags.parent_names each {|tag| [tag.parent_name, tag.child_names]} - parent  child,child,child,child... 
+  # gives you [parent_name, child_name], [parent_name, child_name], ...  
   def self.parent_names(parent_type = 'fandom')
     joins(:parents).where("parents_tags.type = ?", parent_type.capitalize).
-    by_name_without_articles("parents_tags.name").
-    group('parents_tags.name').
-    select("parents_tags.name as parent_name, 
-      group_concat(distinct tags.name order by case when lower(substring(tags.name from 1 for 4)) = 'the ' then substring(tags.name from 5)
-              when lower(substring(tags.name from 1 for 2)) = 'a ' then substring(tags.name from 3)
-              when lower(substring(tags.name from 1 for 3)) = 'an ' then substring(tags.name from 4)
-              else tags.name
-              end) as child_names")
+    select("parents_tags.name as parent_name, tags.name as child_name").
+    by_name_without_articles("parent_name").
+    by_name_without_articles("child_name")
   end
   
   # Because this can be called by a gigantor tag set and all we need are names not objects,
@@ -346,7 +341,7 @@ class Tag < ActiveRecord::Base
   def self.names_by_parent(child_relation, parent_type = 'fandom')
     hash = {}
     results = ActiveRecord::Base.connection.execute(child_relation.parent_names(parent_type).to_sql)
-    results.each {|row| hash[row.first] = row.second.split(',')}
+    results.each {|row| hash[row.first] ||= Array.new; hash[row.first] << row.second}
     hash
   end
 

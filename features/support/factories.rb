@@ -69,27 +69,25 @@ Factory.define :work do |f|
   end
 end
 
-Factory.define :collection_participant do |f|
-  f.association :pseud
-  f.association :collection
-  f.participant_role = "Owner"
-end
-
-Factory.define :collection_preference do |f|
-  f.association :collection
-end
-
-Factory.define :collection_profile do |f|
-  f.association :collection
-end
-
-Factory.define :collection do |f|
-  f.sequence(:name) = {|n| "basic_collection_#{n}"}
-  f.sequence(:title) = {|n| "Basic Collection #{n}"}
-  
-  f.after_build do |collection|
-    collection.collection_participants = [Factory.build()]
-  f.association :user
-  f.association :collection_preference
-  f.association :collection_profile
-end
+# Factory.define :collection_participant do |f|
+#   f.association :pseud
+#   f.association :collection
+#   f.participant_role = "Owner"
+# end
+# 
+# Factory.define :collection_preference do |f|
+#   f.association :collection
+# end
+# 
+# Factory.define :collection_profile do |f|
+#   f.association :collection
+# end
+# 
+# Factory.define :collection do |f|
+#   f.sequence(:name) = {|n| "basic_collection_#{n}"}
+#   f.sequence(:title) = {|n| "Basic Collection #{n}"}
+#   
+#   f.association :user
+#   f.association :collection_preference
+#   f.association :collection_profile
+# end

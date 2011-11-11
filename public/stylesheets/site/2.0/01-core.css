@@ -1,12 +1,14 @@
 /*==CORE:basic functional layout
 http://media.transformativeworks.org/training/front_end_coding/css-shorthand.html */
-body    { background:#f2f3f6; color:#2a2a2a; font:100%/1.125 "Lucida Grande",Verdana,Helvetica,sans-serif; margin:0; padding:0}
+body, .toggled form, .dynamic form, .secondary, .dropdown
+        { background:#f2f3f6; color:#2a2a2a; font:100%/1.125 'Lucida Grande','Lucida Sans Unicode','GNU Unifont',Verdana,Helvetica,sans-serif; margin:0; padding:0}
 .heading{ font-family:Georgia,serif }
 a,a:link{ color:#900; text-decoration:none;}
 #header,#footer,#main,#dashboard
         { padding:1em 3em}
 .landmark
         { font-size:0; opacity:0 }
+.hidden { display: none; }
 #login-block,li.blurb,fieldset,form dl
         { border:1px solid #ddd; padding:1em; overflow:hidden }
 .blurb li,.actions>*,.stats>*,.meta ul li, .actions form

@@ -62,9 +62,9 @@ class TagSetAssociationsController < ApplicationController
     associated_tag_ids = TagSetAssociation.where(:owned_tag_set_id => @tag_set.id).value_of :tag_id    
     @tags_to_associate = @tags_to_associate.where("tags.id NOT IN (?)", associated_tag_ids) unless associated_tag_ids.empty?
           
-    # now get out just the tags and nominated parent tagnames in order of # nominations
+    # now get out just the tags and nominated parent tagnames 
     @tags_to_associate = @tags_to_associate.select("DISTINCT tags.id, tags.name, tag_nominations.parent_tagname").
-      order("tags.name ASC")
+      order("tag_nominations.parent_tagname ASC, tags.name ASC")
       
   end
 
