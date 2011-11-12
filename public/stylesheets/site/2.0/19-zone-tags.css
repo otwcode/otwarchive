@@ -16,7 +16,7 @@ so they might change their pattern a lot before 1.0*/
 
 dl.nomination {border:0; margin: 0; padding:0; box-shadow:none; }
 .nomination dt, .nomination dd {float:none; display:inline-block; margin:0; padding:0; width:auto}
-.nomination dt {background:#fefefe;width:50%;}
+.nomination dt {background:#fff;width:50%;}
 .nomination dd.autocomplete ul, .nomination dd.autocomplete li {margin-bottom:-0.375em}
 dd.autocomplete li.input{margin:0;padding:0 }
 

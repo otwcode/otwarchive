@@ -3,7 +3,7 @@
 /*http://media.transformativeworks.org/training/front_end_coding/debugging-ie.html*/
 /*transparency*/
 ul#skiplinks, .landmark , .landmark a, .index .heading.landmark
-        { color:#fefefe}
+        { color:#fff}
 /*min-width*/
 .dashboard form.filters {min-width:8em}
 
