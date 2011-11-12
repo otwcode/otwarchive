@@ -27,8 +27,8 @@ Feature: Private bookmarks
       And I press "Create"
     Then I should see "Bookmark was successfully created"
       And I should see the "title" text "Restricted"
-      And I should not see the "title" text "Rec"
-      And I should see the "title" text "Private Bookmark"
+      And I should not see "Rec"
+      And I should see "Private Bookmark"
       And I should see "0"
     When I view the work "Public Masterpiece"
       And I follow "Bookmark"
@@ -37,8 +37,8 @@ Feature: Private bookmarks
       And I press "Create"
     Then I should see "Bookmark was successfully created"
       And I should not see the "title" text "Restricted"
-      And I should not see the "title" text "Rec"
-      And I should see the "title" text "Private Bookmark"
+      And I should not see "Rec"
+      And I should see "Private Bookmark"
       And I should see "0"
     
     # Private bookmarks should not show on the main bookmark page, but should show on your own bookmark page
