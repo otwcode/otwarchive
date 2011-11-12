@@ -23,7 +23,13 @@
     </h4>
 
     <% tag_groups = bookmarkable.tag_groups %>
-    <h5 class="heading" title="fandom"><%= tag_groups['Fandom'].collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ').html_safe %></h5>    
+    <h5 class="heading" title="fandom">
+    <% if tag_groups['Fandom'] %>
+      <%= tag_groups['Fandom'].collect{|tag| link_to(tag.name, link_to_tag_bookmarks(tag)) }.join(', ').html_safe %>
+    <% else %>
+      <%= ts('No Fandom') %>
+    <% end %>
+    </h5>
     <%= get_symbols_for(bookmarkable, tag_groups) %>
 
   </div>
