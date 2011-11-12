@@ -1,5 +1,5 @@
 class SkinParent < ActiveRecord::Base
-  belongs_to :child_skin, :class_name => "Skin", :inverse_of => :skin_parents
+  belongs_to :child_skin, :class_name => "Skin", :inverse_of => :skin_parents, :touch => true
   belongs_to :parent_skin, :class_name => "Skin", :inverse_of => :skin_children
 
   validates :position, 

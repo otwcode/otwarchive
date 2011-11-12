@@ -13,7 +13,7 @@ class FandomsController < ApplicationController
     elsif params[:medium_id]
       if @medium = Media.find_by_name(params[:medium_id])
         if @medium == Media.uncategorized
-          @fandoms = @medium.fandoms.by_name
+          @fandoms = @medium.fandoms.in_use.by_name
         else
           @fandoms = @medium.fandoms.canonical.by_name.with_count
         end      

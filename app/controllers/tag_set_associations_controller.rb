@@ -1,9 +1,10 @@
 class TagSetAssociationsController < ApplicationController
+  cache_sweeper :tag_set_sweeper
 
   before_filter :load_tag_set
   before_filter :users_only
   before_filter :moderators_only
-  
+
   def load_tag_set
     @tag_set = OwnedTagSet.find(params[:tag_set_id])
     unless @tag_set
@@ -31,7 +32,7 @@ class TagSetAssociationsController < ApplicationController
         
         assoc = @tag_set.tag_set_associations.build(:tag_id => tag_id, :parent_tagname => parent_tagname, :create_association => true)
         unless assoc.save
-          @errors << assoc.errors.full_messages
+          @errors += assoc.errors.full_messages
         end
       end
     end

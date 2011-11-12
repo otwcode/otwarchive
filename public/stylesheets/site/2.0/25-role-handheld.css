@@ -2,33 +2,75 @@
 linearise content, suppress large images, suppress custom fonts and other large downloads
 pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*/
 
+#outer {font-size:12px;}
+
+/*header */
 #header {min-height:0}
 #header a , #header fieldset, #header ul.primary, #header ul.primary .current 
 {border:0; background:0; }
-#greeting {width:25px; padding:2px; float:right; background:#fff; z-index:50; border:2px solid #900; box-shadow:0 0 3px #444}
-#greeting p.icon img {margin:0; padding:0;top:0}
-#greeting li {display:block; margin:0; color:#eee}
+#greeting {width:45px; padding:2px; float:right; background:#fff; z-index:50; border:2px solid #900; box-shadow:0 0 3px #444}
+#greeting p.icon img {margin:0; padding:0;top:0; position:static}
+#greeting li {display:block; margin:0; text-align:right}
+#greeting li a {padding:0;}
 
 #header h1 {background:#900; height:10px; position:static}
 h1 a img {height:25px; border:0}
-#greeting .icon {height:25px; width:25px;}
+#greeting .icon {height:45px; width:45px; }
+
+#header #login a {background:#eee;}
 
 #header .landmark {clear:none;}
-#header ul.primary{background:#333; border-bottom:1px solid #777; padding:5px 25px 5px 75px} 
+#header.region ul.primary{background:#333; border-bottom:1px solid #777; padding:5px 45px 5px 25px} 
 #header ul.primary, #header ul.primary .current, ul.primary.actions a, #header ul.primary .current {color:#eee; padding: 0.15em}
 #header ul.primary .current, #header .search input{background:#888; color:#eee; box-shadow:inset 0 0 3px #222; border-color:#222 }
 
-.actions, .actions input {text-transform:lowercase;}
+#header h2.collections {padding:1%; margin:0}
 
-#dashboard {width:20%; min-width:10em}
-#main.dashboard {float:left; margin:auto; width:75%}
-#main.dashboard .index, .dashboard form.filters {width:100%}
+/*regions */
 
+#main.dashboard {float:none; margin:auto; width:auto; padding:0}
+#dashboard, #main.dashboard .index, .dashboard form.filters, #main .filters, .works-index .index,.collections-index .index, #inner form dd, #inner form dt {width:100%; max-width:100%; min-width:0; float:none}
+
+#footer {background:#900}
+
+/*types and groups*/
 h1,h2,h3{word-break:break-all}
 
-.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox, #home .news, #home .latest {width:auto; float:none}
+.actions, .actions input {text-transform:lowercase;}
+#main .actions a {border:0; background:none; padding:0.06em; margin:auto; font-weight:bold; text-decoration:underline}
+
+.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox, #home .news, #home .latest 
+{width:auto; float:none}
 .blurb dl.tags dd, dl.meta dd {margin-left:1em}
+#main li.blurb .stats {padding:0;}
 
 .alphabet .listbox li {display:block}
 
-#footer {background:#900}
+dl.stats + h6 + .actions
+       { margin: auto }
+
+/*SKIN: Dash Line */
+/* DESCRIPTION: Horizontal dash inline*/
+#outer #dashboard,
+#main.dashboard {
+ float: none;
+ width: auto;
+ max-width: 100%;
+ margin: 1%;
+ padding: 0;
+ clear: both;
+}
+
+#dashboard ul.navigation,
+#dashboard ul.navigation li,
+#dashboard ul.navigation li a,
+#dashboard ul.navigation li .current {
+ text-align: left;
+ display: inline;
+ border: 0;
+}
+
+#dashboard .landmark {
+ clear: none;
+ float: left;
+}
