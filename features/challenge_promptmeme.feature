@@ -549,6 +549,9 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
   Then I should not see "Your Claims"
   
+  Scenario: User can't delete another user's claim
+  # TODO
+  
   Scenario: User can delete their own claim from the user claims list
   
   Given I have Battle 12 prompt meme fully set up
