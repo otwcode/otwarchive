@@ -55,4 +55,9 @@
 
 /*expected behaviours, exceptioning*/
 
+
+/* WORK MARGINS */
+#workskin {max-width:72em; margin:auto; font-size: 1.08em;}
+
+
 /*END== */
