@@ -168,6 +168,10 @@ class SkinsController < ApplicationController
   
   def unset
     session[:site_skin] = nil
+    if logged_in? && current_user.preference
+      current_user.preference.skin = Skin.default
+      current_user.preference.save
+    end    
     flash[:notice] = ts("You are now using the default Archive skin again!")
     redirect_back_or_default "/"
   end

@@ -26,8 +26,8 @@ class FandomNomination < TagNomination
   
   after_save :update_child_parent_tagnames, :if => "tagname_changed?"
   def update_child_parent_tagnames
-    character_nominations.each {|char| char.parent_tagname = self.tagname; char.save}
-    relationship_nominations.each {|rel| rel.parent_tagname = self.tagname; rel.save}
+    self.character_nominations.readonly(false).each {|char| char.parent_tagname = self.tagname; char.save}
+    self.relationship_nominations.readonly(false).each {|rel| rel.parent_tagname = self.tagname; rel.save}
     true
   end
   

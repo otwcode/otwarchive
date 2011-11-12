@@ -9,6 +9,7 @@ class Skin < ActiveRecord::Base
                    [ts("Work Skin"), "WorkSkin"],
                  ]
     
+  # any media types that are not a single alphanumeric word have to be specially handled in get_media_for_filename/parse_media_from_filename
   MEDIA = %w(all screen handheld speech print braille embossed projection tty tv) + ['only screen and (max-width: 480px)']
   IE_CONDITIONS = %w(IE IE5 IE6 IE7 IE8 IE9 IE8_or_lower)
   ROLES = %w(user override)
@@ -235,12 +236,28 @@ class Skin < ActiveRecord::Base
   end
   
   def get_sheet_role
-    "#{get_role}_#{get_media('-').gsub(/\s+/, '+')}_#{ie_condition}"
+    "#{get_role}_#{get_media_for_filename}_#{ie_condition}"
+  end
+  
+  # have to handle any media types that aren't a single alphanumeric word here
+  def get_media_for_filename
+    ((media.nil? || media.empty?) ? DEFAULT_MEDIA : media).map {|m|
+      case 
+      when m.match(/max-width/)
+        "maxwidth"
+      else
+        m
+      end
+    }.join('.')
+  end
+  
+  def parse_media_from_filename(media_string)
+    media_string.gsub(/maxwidth/, 'only screen and (max-width: 480px)').gsub('.', ', ')
   end
   
   def parse_sheet_role(role_string)
     (sheet_role, sheet_media, sheet_ie_condition) = role_string.split('_')
-    sheet_media = sheet_media.gsub('+', ' ').gsub('-', ', ')
+    sheet_media = parse_media_from_filename(sheet_media)    
     [sheet_role, sheet_media, sheet_ie_condition]
   end
   
@@ -294,28 +311,33 @@ class Skin < ActiveRecord::Base
 
   def get_wizard_settings
     style = ""
-    if self.margin
+    if self.margin.present?
       style += "#workskin {margin: auto #{self.margin}%; padding: 0.5em #{self.margin}% 0;}\n"
     end
   
-    if self.background_color || self.foreground_color || self.font || self.base_em
+    if self.background_color.present? || self.foreground_color.present? || self.font.present? || self.base_em.present?
       style += "body, #main	{
-        #{self.background_color ? "background: #{self.background_color};" : ''}
-        #{self.foreground_color ? "color: #{self.foreground_color};" : ''}        
-        font: #{(self.base_em ? self.base_em : "100")}%/1.125 #{(self.font ? self.font : '')};
-      }\n"
+        #{self.background_color.present? ? "background: #{self.background_color};" : ''}
+        #{self.foreground_color.present? ? "color: #{self.foreground_color};" : ''}"
+      if self.base_em.present?
+        style += "font-size: #{self.base_em}%; line-height:1.125;"
+      end
+      if self.font.present?
+        style += "\nfont-family: #{font};"
+      end
+      style += "}\n"
     end
     
-    if self.paragraph_margin
+    if self.paragraph_margin.present?
       style += ".userstuff p {margin-bottom: #{self.paragraph_margin}em;}\n"
     end
 
-    if self.headercolor
+    if self.headercolor.present?
       style += "#header .main a, #header .main .current, #header .main input, #header .search input {border-color:transparent;}\n"
       style += "#header, #header ul.main, #footer {background: #{self.headercolor}; border-color: #{self.headercolor}; box-shadow:none;}\n"
     end
 
-    if self.accent_color
+    if self.accent_color.present?
       style += "#header .icon, #dashboard ul, #main dl.meta {background: #{self.accent_color}; border-color:#{self.accent_color};}\n"
     end
     
