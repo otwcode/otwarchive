@@ -22,7 +22,8 @@ class TagNomination < ActiveRecord::Base
 
   validate :not_already_reviewed, :on => :update
   def not_already_reviewed
-    unless (User.current_user && User.current_user.is_a?(User) && owned_tag_set.user_is_moderator?(User.current_user))
+    # allow mods and the archive code to update
+    unless (!User.current_user || (User.current_user && User.current_user.is_a?(User) && owned_tag_set.user_is_moderator?(User.current_user)))
       if tagname_changed? && (self.approved || self.rejected) && (tagname != tagname_was)  && !tagname_was.blank? 
         errors.add(:base, ts("^You cannot change %{tagname_was} to %{tagname} because that nomination has already been reviewed.", :tagname_was => self.tagname_was, :tagname => self.tagname))
         tagname = self.tagname_was
@@ -89,7 +90,6 @@ class TagNomination < ActiveRecord::Base
   # show it to them again.
   before_save :set_approval_status
   def set_approval_status
-    return true if reviewed?
     set_noms = tag_set_nomination
     set_noms = fandom_nomination.tag_set_nomination if !set_noms && from_fandom_nomination    
     self.rejected = set_noms.owned_tag_set.already_rejected?(tagname) || false
@@ -147,18 +147,13 @@ class TagNomination < ActiveRecord::Base
   end
 
   # If the mod is changing our name, change all other noms in this set as well
-  # NOTE: YOU CAN ONLY USE THIS IF YOU SUBSEQUENTLY MANUALLY UPDATE THE STATUS OF ALL THE TAG NOMS
-  def change_tagname!(new_tagname)
-    old_tagname = self.tagname
-    if change_tagname?(new_tagname)
-      # name change is ok - we use update_all because we assume our status is being updated up a level
-      TagNomination.for_tag_set(owned_tag_set).where(:tagname => old_tagname).each do |tagnom|
-        tagnom.tagname = new_tagname
-        tagnom.save or return false
-      end
-      return true
+  def self.change_tagname!(owned_tag_set_to_change, old_tagname, new_tagname)
+    TagNomination.for_tag_set(owned_tag_set_to_change).where(:tagname => old_tagname).readonly(false).each do |tagnom|
+      tagnom.tagname = new_tagname
+      Rails.logger.info "Tagnom: #{tagnom.tagname} #{tagnom.valid?}"
+      tagnom.save or return false
     end
-    return false
+    return true
   end
   
   # here so we can override it in char/relationship noms

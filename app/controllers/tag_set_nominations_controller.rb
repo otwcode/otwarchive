@@ -226,19 +226,22 @@ class TagSetNominationsController < ApplicationController
       # If we've approved a tag, change any other nominations that have this tag as a synonym to the synonym
       tagnames_to_change = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination").where("synonym IN (?)", @tagnames_to_add).value_of(:tagname).uniq
       tagnames_to_change.each do |oldname|
-        tagnom = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination", :tagname => oldname).first
-        tagnom.change_tagname!(tagnom.synonym)  
+        synonym = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination", :tagname => oldname).value_of(:synonym).first
+        unless TagNomination.change_tagname!(@tag_set, oldname, synonym)
+          flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
+            :oldname => oldname, :newname => synonym)
+          render :action => "index" and return           
+        end
       end
       
       # do the name changes
       @change[tag_type].each do |oldname, newname|
-        tagnom = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination", :tagname => oldname).first
-        if tagnom && tagnom.change_tagname!(newname)
+        if TagNomination.change_tagname!(@tag_set, oldname, newname)
           @tagnames_to_add << newname
         else
           # ughhhh
-          @errors = tagnom.errors.full_messages
-          flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")
+          flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
+            :oldname => oldname, :newname => newname)
           render :action => "index" and return           
         end
       end
