@@ -31,7 +31,9 @@ class TagSetAssociationsController < ApplicationController
         parent_tagname = $2
         
         assoc = @tag_set.tag_set_associations.build(:tag_id => tag_id, :parent_tagname => parent_tagname, :create_association => true)
-        unless assoc.save
+        if assoc.valid?
+          assoc.save
+        else
           @errors += assoc.errors.full_messages
         end
       end
