@@ -93,7 +93,9 @@ When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |ti
 end
 
 When /^I sort by fandom$/ do
-  When "I follow \"Sort by fandom\""
+  within(:xpath, "//li[a[contains(@title,'sort')]]") do
+    When %{I follow "Fandom"}
+  end
 end
 
 When /^I reveal works for "([^\"]*)"$/ do |title|

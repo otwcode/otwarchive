@@ -52,11 +52,11 @@ Feature: Prompt Meme Challenge
   # filter by fandom
   When I go to "Battle 12" collection's page
     And I follow "Prompts ("
-  Then I should see "Stargate Atlantis" within "table"
-    And I should see "Stargate SG-1" within "table"
+  Then I should see "Stargate Atlantis" within ".prompt .heading"
+    And I should see "Stargate SG-1" within ".prompt .heading"
   When I sort by fandom
-  Then I should see "Stargate Atlantis" within "table"
-    And I should not see "Stargate SG-1" within "table"
+  Then I should see "Stargate Atlantis" within ".prompt .heading"
+    And I should not see "Stargate SG-1" within ".prompt .heading"
   When I sort by fandom
-  Then I should see "Stargate Atlantis" within "table"
-    And I should see "Stargate SG-1" within "table"
+  Then I should see "Stargate Atlantis" within ".prompt .heading"
+    And I should see "Stargate SG-1" within ".prompt .heading"
