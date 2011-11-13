@@ -24,31 +24,30 @@ Feature: Edit preferences
   Then I should not see "Secondy chapter"
   When I follow "editname"
   Then I should see "Dashboard"
-    And I should see "My History"
+    And I should see "History"
     And I should see "Preferences"
     And I should see "Profile"
   When I follow "Preferences"
-  Then I should see "Update"
-    And I should see "Edit My Profile"
+  Then I should see "Set My Preferences"
     And I should see "Orphan My Works"
   When I follow "Edit My Profile"
   Then I should see "Password"
-  When I follow "editname"
-  Then I should see "Dashboard"
-  When I follow "Profile"
+  # TODO: figure out why pseud switcher doesn't show up in cukes
+  # When I follow "editname" within "#pseud_switcher"
+  When I follow "Dashboard"
+    And I follow "Profile"
   Then I should see "Set My Preferences"
   When I follow "Set My Preferences"
-  Then I should see "Update"
-    And I should see "Edit My Profile"
+  Then I should see "Edit My Profile"
   When I uncheck "Turn on Viewing History"
-    And I check "Always view entire work by default"
+    And I check "Show the whole work by default."
     And I check "Show my email address to other people."
     And I check "Show my date of birth to other people."
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
-  When I follow "editname"
-  Then I should see "Dashboard"
-    And I should not see "My History"
+  # When I follow "editname"
+  When I follow "Dashboard"
+  Then I should not see "History"
   When I go to the works page
     And I follow "This has two chapters"
   Then I should see "Secondy chapter"
@@ -145,13 +144,10 @@ Feature: Edit preferences
     And I should see "Scary tag"
     And I should not see "Scarier"
     And I should not see "Show additional tags"
-
   # change preference to hide warnings
-  When I follow "mywarning2"
-  Then I should see "Dashboard"
-  When I follow "Preferences"
-  Then I should see "Update"
-  When I check "Hide warnings"
+ When I go to mywarning2's user page
+    And I follow "Preferences"
+    And I check "Hide warnings"
     And I press "Update"
   Then I should see "Your preferences were successfully updated"
 
@@ -215,7 +211,7 @@ Feature: Edit preferences
     And I should not see "Show additional tags"
 
   # change preference to hide freeforms
-  When I follow "mywarning2"
+  When I go to mywarning2's user page
     And I follow "Preferences"
     And I check "Hide additional tags"
     And I press "Update"
@@ -282,7 +278,7 @@ Feature: Edit preferences
     And I should see "Show additional tags"
 
   # change preference to show warnings, keep freeforms hidden
-  When I follow "mywarning2"
+  When I go to mywarning2's user page
     And I follow "Preferences"
     And I uncheck "Hide warnings"
     And I press "Update"

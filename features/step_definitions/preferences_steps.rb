@@ -21,3 +21,9 @@ When /^I set my preferences to turn off notification emails for kudos$/ do
   user.preference.kudos_emails_off = true
   user.preference.save
 end
+
+When /^I set my preferences to hide warnings$/ do
+  user = User.current_user
+  user.preference.hide_warnings = true
+  user.preference.save
+end

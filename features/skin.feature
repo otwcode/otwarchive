@@ -1,12 +1,12 @@
 @skins
 Feature: creating and editing skins
-  
+
   Scenario: A user's initial skin should be set to default
   Given basic skins
     And I am logged in as "skinner"
   When I am on skinner's preferences page
   Then "Default" should be selected within "preference_skin_id"
-  
+
   Scenario: A user should be able to choose a different public skin in their preferences
   Given basic skins
     And the approved public skin "public skin" with css "#title { text-decoration: blink;}"
@@ -15,7 +15,7 @@ Feature: creating and editing skins
   When I am on skinner's preferences page
   Then "public skin" should be selected within "preference_skin_id"
     And I should see "text-decoration: blink;" within "style"
-  
+
   Scenario: A user should be able to create a skin with CSS
   Given basic skins
     And I am logged in as "skinner"
@@ -34,13 +34,13 @@ Feature: creating and editing skins
     And I should not find "Stop Using"
     And I should not see "(Approved)"
     And I should not see "(Not yet reviewed)"
-  
+
   Scenario: A logged-out user should not be able to create skins.
   When I am on skin's new page
     Then I should see "Sorry, you don't have permission"
 
   Scenario: A user should be able to select one of their own non-public skins to use in their preferences
-  Given I am logged in as "skinner" 
+  Given I am logged in as "skinner"
     And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
   When I am on skinner's preferences page
     And I select "my blinking skin" from "preference_skin_id"
@@ -48,9 +48,9 @@ Feature: creating and editing skins
   Then I should see "Your preferences were successfully updated."
     And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
-  
+
   Scenario: A user should be able to select one of their own non-public skins to use in their My Skins page
-  Given I am logged in as "skinner" 
+  Given I am logged in as "skinner"
     And I create the skin "my blinking skin" with css "#title { text-decoration: blink;}"
   When I follow "My Skins"
   Then I should see "my blinking skin"
@@ -58,34 +58,34 @@ Feature: creating and editing skins
   When I press "Use"
   Then I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
-    
+
   Scenario: Skin titles should be unique
-  Given I am logged in as "skinner" 
+  Given I am logged in as "skinner"
   When I am on skin's new page
     And I fill in "Title" with "Default"
     And I submit
   Then I should see "must be unique"
-  
+
   Scenario: Only public skins should be on the main skins page
   Given basic skins
-    And I am logged in as "skinner" 
+    And I am logged in as "skinner"
     And I create the skin "my skin"
   When I am on the skins page
   Then I should not see "my skin"
     And I should see "Default"
-    
+
   Scenario: The user who creates a skin should be able to edit it
-  Given I am logged in as "skinner" 
+  Given I am logged in as "skinner"
     And I create the skin "my skin"
     And I follow "My Skins"
   When I follow "Edit"
     And I fill in "CSS" with "#greeting { text-decoration: blink;}"
     And I submit
-  Then I should see an update confirmation message  
-  
+  Then I should see an update confirmation message
+
   Scenario: Newly created public skins should not appear on the main skins page until approved and should be
     marked as not-yet-approved
-  Given I am logged in as "skinner" 
+  Given I am logged in as "skinner"
     And the unapproved public skin "public skin"
   When I am on the skins page
     Then I should not see "public skin"
@@ -93,7 +93,7 @@ Feature: creating and editing skins
   Then I should see "public skin"
     And I should see "(Not yet reviewed)"
     And I should not see "(Approved)"
-    
+
   Scenario: Public skins should not be viewable by users until approved
   Given the unapproved public skin "public skin"
     And I am logged out
@@ -103,18 +103,18 @@ Feature: creating and editing skins
     Then I should see "Sorry, you don't have permission"
   When I go to admin's skins page
     Then I should see "I'm sorry, only an admin can"
-  
+
   Scenario: Users should not be able to see the admin skins page
-  Given I am logged in as "skinner" 
+  Given I am logged in as "skinner"
   When I go to admin's skins page
   Then I should see "I'm sorry, only an admin can look at that area"
-  
+
   Scenario: Admins should be able to see public skins in the admin skins page
   Given the unapproved public skin "public skin"
     And I am logged in as an admin
-  When I go to admin's skins page  
+  When I go to admin's skins page
   Then I should see "public skin" within "table#unapproved"
-  
+
   Scenario: Admins should not be able to edit unapproved skins
   Given the unapproved public skin "public skin"
     And I am logged in as an admin
@@ -123,17 +123,17 @@ Feature: creating and editing skins
     And I should not find "Delete"
   When I go to "public skin" edit skin page
   Then I should see "Sorry, you don't have permission"
-    
+
   Scenario: Admins should be able to approve public skins
   Given the unapproved public skin "public skin"
     And I am logged in as an admin
-  When I go to admin's skins page  
+  When I go to admin's skins page
     And I check "public skin"
     And I submit
   Then I should see "The following skins were updated: public skin"
   When I follow "Approved Skins"
   Then I should see "public skin" within "table#approved"
-  
+
   Scenario: Admins should be able to edit but not delete public approved skins
   Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And I am logged in as an admin
@@ -148,19 +148,19 @@ Feature: creating and editing skins
     And I should see "(admin modified)"
     And I should see "#greeting.logged-in"
     And I should not see "#title"
-  
+
   Scenario: Users should not be able to edit their public approved skins
   Given the approved public skin "public skin"
-    And I am logged in as "skinner" 
+    And I am logged in as "skinner"
     And I go to "public skin" edit skin page
   Then I should see "Sorry, you don't have permission"
   When I follow "My Skins"
   Then I should see "(Approved)"
     And I should not see "Edit"
-  
+
   Scenario: Users should be able to use public approved skins created by others
   Given the approved public skin "public skin" with css "#title { text-decoration: blink;}"
-    And I am logged in as "skinuser" 
+    And I am logged in as "skinuser"
     And I am on skinuser's preferences page
   When I select "public skin" from "preference_skin_id"
     And I submit
@@ -168,23 +168,21 @@ Feature: creating and editing skins
     And "public skin" should be selected within "preference_skin_id"
     And I should see "#title {" within "style"
     And I should see "text-decoration: blink;" within "style"
-    
+
   Scenario: Admins should be able to unapprove public skins, which should also remove them from preferences
   Given "skinuser" is using the approved public skin "public skin" with css "#title { text-decoration: blink;}"
     And I unapprove the skin "public skin"
   Then I should see "The following skins were updated: public skin"
     And I should see "public skin" within "table#unapproved"
-  When I am logged in as "skinuser" 
+  When I am logged in as "skinuser"
     And I am on skinuser's preferences page
   Then "Default" should be selected within "preference_skin_id"
     And I should not see "#title"
     And I should not see "text-decoration: blink;"
-  
+
   Scenario: Users should be able to create a skin using the wizard
   Given basic skins
-  When I am on the skins page
-  Then I should see "Default by AO3"
-  Given I am logged in as "skinner" 
+    And I am logged in as "skinner"
   When I am on skin's new page
   Then I should see "CSS" within "form"
   When I follow "Use Wizard Instead?"
@@ -228,9 +226,9 @@ Feature: creating and editing skins
     And I should see ".userstuff p {margin-bottom: 5.0em;}" within "style"
   When I am on skinner's preferences page
   Then "Wide margins" should be selected within "preference_skin_id"
-  
+
   Scenario: Users should be able to create and use a work skin
-  Given I am logged in as "skinner" 
+  Given I am logged in as "skinner"
   When I am on skin's new page
     And I select "Work Skin" from "skin_type"
     And I fill in "Title" with "Awesome Work Skin"
@@ -255,19 +253,19 @@ Feature: creating and editing skins
     And I should not see "color: purple"
     And I should not see "Hide Creator's Style"
     And I should see "Show Creator's Style"
-  
-  Scenario: log out from my skins page (Issue 2271)  
+
+  Scenario: log out from my skins page (Issue 2271)
   Given I am logged in as "skinner"
     And I am on my user page
   When I follow "Skins"
     And I log out
   Then I should be on the login page
-  
+
   Scenario: Change the header color
   Given I am logged in as "skinner"
   When I create a skin to change the header color
   Then I should see a different header color
-  
+
   Scenario: Change the accent color
   Given I am logged in as "skinner"
   When I create a skin to change the accent color

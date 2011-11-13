@@ -35,7 +35,12 @@ end
 
 Given /^I have a work "([^\"]*)"$/ do |work|
   When "I am logged in as a random user"
-  When %{I post the work "#{work}"}
+    And %{I post the work "#{work}"}
+end
+
+Given /^I have a locked work "([^\"]*)"$/ do |work|
+  When "I am logged in as a random user"
+    And %{I post the locked work "#{work}"}
 end
 
 Given /^the work with comments setup$/ do
@@ -206,7 +211,6 @@ When /^I post the locked work "([^\"]*)"$/ do |title|
   end
   visit preview_work_url(work)
   click_button("Post")
-  Then "I should see \"Work was successfully posted.\""
 end
 
 When /^the locked draft "([^\"]*)"$/ do |title|
@@ -215,7 +219,6 @@ When /^the locked draft "([^\"]*)"$/ do |title|
   Given %{I fill in the basic work information for "#{title}"}
   check("work_restricted")
   click_button("Preview")
-  Then %{I should see "Draft was successfully created."}
 end
 
 When /^I list the work "([^\"]*)" as inspiration$/ do |title|

@@ -88,7 +88,6 @@ Feature: Tag wrangling
     When I follow "Wranglers"
     Then I should see "Tag Wrangling Assignments"
       And I should see "Stargate SG-1"
-      And I should not see "dizmo" within ".wranglers"
       
     # assign wrangler to a fandom
     When I fill in "tag_fandom_string" with "Stargate SG-1"
@@ -97,7 +96,7 @@ Feature: Tag wrangling
     Then I should see "Stargate SG-1"
     When I follow "Wranglers"
     Then I should see "Stargate SG-1"
-      And I should see "dizmo" within ".wranglers"
+      And I should see "dizmo" within "ul.wranglers"
     When I follow "Mass Wrangling"
       And I follow "Characters by fandom (2)"
     Then I should see "Daniel Jackson"
