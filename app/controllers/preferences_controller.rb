@@ -24,6 +24,10 @@ class PreferencesController < ApplicationController
     
     if @user.preference.save
       flash[:notice] = ts('Your preferences were successfully updated.')
+      if @user.preference.skin_id.changed?
+        # unset site skin if user changed their skin
+        session[:site_skin] = nil
+      end
       redirect_back_or_default(user_preferences_path(@user))
     else
       flash[:error] = ts('Sorry, something went wrong. Please try that again.')
