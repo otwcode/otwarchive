@@ -21,13 +21,14 @@ class PreferencesController < ApplicationController
     @preference = @user.preference
     @user.preference.attributes = params[:preference]
     @available_skins = (current_user.skins.site_skins + Skin.approved_skins.site_skins).uniq
+
+    if params[:preference][:skin_id].present?
+      # unset session skin if user changed their skin
+      session[:site_skin] = nil
+    end
     
     if @user.preference.save
       flash[:notice] = ts('Your preferences were successfully updated.')
-      if @user.preference.skin_id.changed?
-        # unset site skin if user changed their skin
-        session[:site_skin] = nil
-      end
       redirect_back_or_default(user_preferences_path(@user))
     else
       flash[:error] = ts('Sorry, something went wrong. Please try that again.')
