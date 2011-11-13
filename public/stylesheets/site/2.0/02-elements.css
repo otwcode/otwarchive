@@ -65,12 +65,12 @@ thead, tfoot
         { border-bottom:2px solid #bbb; padding: 0.643em; vertical-align:top}
 tfoot td{ border-top:1px solid #bbb}
 td th		{ padding-right: 1em}
-tbody tr{ border-bottom: 1px solid #f4effc}
+tbody tr{ border-bottom: 1px solid #fff}
 td			{ padding:0.25em; vertical-align: top}
 th      { text-align: left}
-thead td{ background: #ddd; border-bottom: 1px solid #f4effc}
+thead td{ background: #ddd; border-bottom: 1px solid #fff}
 th, tr:hover, col.name 
-        { background:#f4effc; border:1px solid #bbb; padding:0.15em 0.5em 0.25em; vertical-align:top}
+        { background:#fff; border:1px solid #bbb; padding:0.15em 0.5em 0.25em; vertical-align:top}
 th a, th a:visited, th a:link
         { text-decoration: none; border:0}
 tbody tr th            
