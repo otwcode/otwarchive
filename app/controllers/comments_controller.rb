@@ -92,18 +92,21 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
-      case @commentable.class.name
-        when /Work/
-          @name = @commentable.title
-        when /Chapter/
-          @name = @commentable.work.title
-        when /Tag/
-          @name = @commentable.name
-        when /AdminPost/
-          @name = @commentable.title
-        when /Comment/
-          @name = ts("Previous Comment")
-      end
+      @name = 
+        case @commentable.class.name
+          when /Work/
+            @commentable.title
+          when /Chapter/
+            @commentable.work.title
+          when /Tag/
+            @commentable.name
+          when /AdminPost/
+            @commentable.title
+          when /Comment/
+            ts("Previous Comment")
+          else
+            @commentable.class.name
+        end
     end
   end
 
