@@ -489,6 +489,7 @@ Otwarchive::Application.routes.draw do
   match 'delete_confirmation' => 'users#delete_confirmation'
   match 'activate/:id' => 'users#activate', :as => 'activate'
   match 'devmode' => 'devmode#index'
+  match 'donate' => 'home#donate'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
