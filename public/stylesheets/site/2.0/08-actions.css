@@ -27,7 +27,7 @@ p.submit, input.submit, dd.submit
 /*subtypes and modes 
 test note: this pagination clear needs to be kept an eye on*/
 ol.pagination
-        { text-align:center; clear:both; margin:0.643em auto}
+        { text-align:center; clear:right; margin:0.643em auto}
 .actions a:visited
         { color: #111; }
 .actions a:hover, .actions input:hover
@@ -62,6 +62,8 @@ dl.stats + h6 + .actions, li.news .actions
         { clear: none}
 .actions a.symbol, .action a 
         { border:0; background:none;padding:0 0 0.15em 0}
+.works-index ol.pagination
+        { clear: both; }
 
 /*END== */
         
