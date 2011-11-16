@@ -6,6 +6,8 @@ Arguably filter and search could be styled in interactions but I've put them her
 /* INDEX PAGES (with filters)*/ 
 .works-index .index, .collections-index .index 
         { width:75%; float:left}
+.works-index ol.pagination
+        { clear: both; }        
 .media-index .listbox
         { min-height:17.5em;}
 /* INTERACTION: SEARCH */

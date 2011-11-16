@@ -62,8 +62,6 @@ dl.stats + h6 + .actions, li.news .actions
         { clear: none}
 .actions a.symbol, .action a 
         { border:0; background:none;padding:0 0 0.15em 0}
-.works-index ol.pagination
-        { clear: both; }
 
 /*END== */
         
