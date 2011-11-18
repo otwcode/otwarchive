@@ -222,7 +222,6 @@ Feature: creating and editing skins
     And I should see "#workskin {margin: auto 4%; padding: 0.5em 4% 0;}" within "style"
     And I should see "background: #ccccff;" within "style"
     And I should see "color: red;" within "style"
-    # And show me the response
     And I should see "font-family: Garamond;" within "style"
     And I should see "font-size: 120%;" within "style"
     And I should see "line-height:1.125;" within "style"
