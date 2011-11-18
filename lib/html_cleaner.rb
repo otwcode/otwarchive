@@ -209,6 +209,7 @@ module HtmlCleaner
        pre table ul).include?(tag)
   end
 
+  # Tags that don't contain content
   def self_closing_tag?(tag)
     %w(br col hr img).include?(tag)
   end
@@ -231,6 +232,12 @@ module HtmlCleaner
        hr ol p pre table ul).include?(tag)
   end
 
+  # Traverse a Nokogiri document tree recursively in order to insert
+  # linebreaks. Since the resulting document is going to have a
+  # different document structure (we're adding p tags at various
+  # levels!) we can't edit the document in place. Instead, we're
+  # creating a string with the resulting html and keep track of the
+  # changed path to the current element via a stack.
   def traverse_nodes(node, stack=nil, out_html=nil)
     stack = stack || TagStack.new
     out_html = out_html || ""
@@ -305,14 +312,15 @@ module HtmlCleaner
   end
 
 
-  # Close an unclosed tag at the end of the line or before the next
-  # opening or closing tag
-  def close_unclosed_tag(text, tag, line)
+  # Close an unclosed tag within the given text in the line at
+  # line_number, or before the next opening or closing tag if that
+  # comes first
+  def close_unclosed_tag(text, tag, line_number)
     return text if self_closing_tag?(tag)
-    line = line.to_i
+    line_number = line_number.to_i
     lines = text.lines.to_a
     pattern = /(^.*<#{tag}\s*.*?>.*?)($|<\/?\w+.*?\/?>)/
-    lines[line-1].gsub!(pattern, "\\1</#{tag}>\\2")
+    lines[line_number-1].gsub!(pattern, "\\1</#{tag}>\\2")
     return lines.join("")
   end
 
@@ -321,7 +329,6 @@ module HtmlCleaner
     # By default, Nokogiri closes unclosed tags very late, often at
     # the end of the document. We want runaway tags closed at the end
     # of the line
-
     doc = Nokogiri::XML.parse("<myroot>#{text}</myroot>")
     doc.errors.each do |error|
       match = error.message.match(/Premature end of data in tag (\w+) line (\d+)/)
@@ -335,86 +342,13 @@ module HtmlCleaner
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
     out_html = traverse_nodes(doc.at_css("myroot"))[1]
 
-    # remove empty paragraphs
+    # Temove empty paragraphs
     out_html.gsub!(/<p>\s*?<\/p>/, "")
     out_html =  Nokogiri::HTML.parse(out_html).at_css("myroot").children.to_xhtml
     return out_html
   end
   
   
-  # tags that we need to reopen if users have them crossing paragraph breaks.
-  # bad users, no biscuit :(
-  HTML_TAGS_TO_REOPEN = %w(b big cite code del em i s small strike strong sub sup tt u)
-
-  # Simplified parser/formatter steps:
-  # 1. Convert newlines into paragraph/break tags based on some simple rules
-  # 2. Parse document with Nokogiri and export xhtml to get pretty-printed and
-  #    well-formed (not necessarily validating!) xhtml with all tags closed.
-  #
-  def add_paragraphs_to_text2(text)
-
-    # get rid of spaces and newlines-before/after-paragraphs and linebreaks
-    # this enables us to avoid converting newlines into paras/breaks where we already have them
-    source = text.gsub(/\s*(<p[^>]*>)\s*/, '\1')   # replace all whitespace before/after <p>
-    source.gsub!(/\s*(<\/p>)\s*/, '\1')            # replace all whitespace before/after </p>
-    source.gsub!(/\s*(<br\s*?\/?>)\s*/, '<br />')  # replace all whitespace before/after <br>  
-
-    # do we have a paragraph to start and end
-    source = '<p>' + source unless source.match(/^<p/)
-    source = source + "</p>" unless source.match(/<\/p>$/)
-    
-    # If we have three newlines, assume user wants a blank line
-    source.gsub!(/\n\s*?\n\s*?\n/, "\n\n&nbsp;\n\n")
-
-    # Convert double newlines into single paragraph break
-    source.gsub!(/\n+\s*?\n+/, '</p><p>')
-
-    # Convert single newlines into br tags
-    source.gsub!(/\n/, '<br />')
-    
-    # convert double br tags into p tags
-    source.gsub!(/<br\s*?\/?>\s*<br\s*?\/?>/, '</p><p>')
-    
-    # if we have closed inline tags that cross a <p> tag, reopen them 
-    # at the start of each paragraph before the end
-    HTML_TAGS_TO_REOPEN.each do |tag|      
-      source.gsub!(/(<#{tag}>)(.*?)(<\/#{tag}>)/) { $1 + reopen_tags($2, tag) + $3 }
-    end
-    
-    # reopen paragraph tags that cross a <div> tag
-    source.gsub!(/(<p[^>]*>)(.*?)(<\/p>)/) { $1 + reopen_tags($2, "p", "div") + $3 }
-    
-    # swap order of paragraphs around divs
-    source.gsub!(/(<p[^>]*>)(<div[^>]*>)/, '\2\1')
-
-    # Parse in Nokogiri
-    parsed = Nokogiri::HTML.parse(source)
-    parsed.encoding = 'UTF-8'
-    
-    # Get out the nice well-formed XHTML
-    source = parsed.css("body").to_xhtml
-    
-    # trash empty paragraphs and leading spaces
-    source.gsub!(/\s*<p[^>]*>\s*<\/p>\s*/, "")
-    source.gsub!(/^\s*/, '')
-    
-    # get rid of the newlines-before/after-paragraphs inserted by to_xhtml,
-    # so that when this is loaded up by strip_html_breaks in textarea fields,
-    # 
-    source.gsub!(/\s*(<p[^>]*>)\s*/, '\1')
-    source.gsub!(/\s*(<\/p>)\s*/, '\1')
-    
-    # trash the body tag
-    source.gsub!(/<\/?body>\s*/, '')
-    
-    # return the text
-    source
-  end
-  
-  def reopen_tags(string, tag_to_reopen, outer_tag = "p")
-    return string.gsub(/(<\/#{outer_tag}><#{outer_tag}[^>]*?>)/, "</#{tag_to_reopen}>" + '\1' + "<#{tag_to_reopen}>")
-  end    
-
   ### STRIPPING FOR DISPLAY ONLY
   # Regexps for stripping particular tags and attributes for display.
   # These assume they are running on well-formed XHTML, which we can do
