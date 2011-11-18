@@ -515,6 +515,7 @@ end
 
 When /^I view unposted claims for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
+  # And %{show me the main content}
   When %{I follow "Unposted Claims ("}
 end
 
@@ -629,6 +630,7 @@ end
 When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
+  # Then %{show me the main content}
   When %{I follow "Delete"}
 end
 
