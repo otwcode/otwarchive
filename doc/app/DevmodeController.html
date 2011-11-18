@@ -1,0 +1,2151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Class: DevmodeController</title>
+
+	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+
+	<script src="./js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="class">
+
+	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="./index.html">Home</a>
+          <a href="./index.html#classes">Classes</a>
+          <a href="./index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="./app/controllers/devmode_controller_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="app/controllers/devmode_controller.rb">app/controllers/devmode_controller.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+			<div id="parent-class-section" class="section">
+				<h3 class="section-header">Parent</h3>
+				
+				<p class="link"><a href="ApplicationController.html">ApplicationController</a></p>
+				
+			</div>
+			
+
+			<!-- Namespace Contents -->
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#method-i-_get_view_paths">#_get_view_paths</a></li>
+					
+					<li><a href="#method-i-backtrace_view">#backtrace_view</a></li>
+					
+					<li><a href="#method-i-comment_work">#comment_work</a></li>
+					
+					<li><a href="#method-i-comment_works">#comment_works</a></li>
+					
+					<li><a href="#method-i-create_work">#create_work</a></li>
+					
+					<li><a href="#method-i-development_only">#development_only</a></li>
+					
+					<li><a href="#method-i-get_controller_dir">#get_controller_dir</a></li>
+					
+					<li><a href="#method-i-get_links_to">#get_links_to</a></li>
+					
+					<li><a href="#method-i-get_view_dir">#get_view_dir</a></li>
+					
+					<li><a href="#method-i-get_view_paths">#get_view_paths</a></li>
+					
+					<li><a href="#method-i-index">#index</a></li>
+					
+					<li><a href="#method-i-inspect_view">#inspect_view</a></li>
+					
+					<li><a href="#method-i-list_controllers">#list_controllers</a></li>
+					
+					<li><a href="#method-i-list_views">#list_views</a></li>
+					
+					<li><a href="#method-i-load_erb">#load_erb</a></li>
+					
+					<li><a href="#method-i-process_dir">#process_dir</a></li>
+					
+					<li><a href="#method-i-process_file">#process_file</a></li>
+					
+					<li><a href="#method-i-profile_logs">#profile_logs</a></li>
+					
+					<li><a href="#method-i-random_chapter">#random_chapter</a></li>
+					
+					<li><a href="#method-i-random_sentence">#random_sentence</a></li>
+					
+					<li><a href="#method-i-seedusers">#seedusers</a></li>
+					
+					<li><a href="#method-i-seedworks">#seedworks</a></li>
+					
+					<li><a href="#method-i-unregister_imports">#unregister_imports</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="./images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="./Static.html">Static</a></li>
+				
+					<li><a href="./Static/BaseController.html">Static::BaseController</a></li>
+				
+					<li><a href="./Static/CollectionsController.html">Static::CollectionsController</a></li>
+				
+					<li><a href="./Static/FandomsController.html">Static::FandomsController</a></li>
+				
+					<li><a href="./Static/MediaController.html">Static::MediaController</a></li>
+				
+					<li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
+				
+					<li><a href="./Static/WorksController.html">Static::WorksController</a></li>
+				
+					<li><a href="./Admin.html">Admin</a></li>
+				
+					<li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
+				
+					<li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
+				
+					<li><a href="./Admin/SettingsController.html">Admin::SettingsController</a></li>
+				
+					<li><a href="./Admin/SkinsController.html">Admin::SkinsController</a></li>
+				
+					<li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
+				
+					<li><a href="./ActionController.html">ActionController</a></li>
+				
+					<li><a href="./ActionController/Routing.html">ActionController::Routing</a></li>
+				
+					<li><a href="./ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
+				
+					<li><a href="./Challenge.html">Challenge</a></li>
+				
+					<li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
+				
+					<li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
+				
+					<li><a href="./ActiveRecord.html">ActiveRecord</a></li>
+				
+					<li><a href="./AutocompleteSource.html">AutocompleteSource</a></li>
+				
+					<li><a href="./AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
+				
+					<li><a href="./ChallengeCore.html">ChallengeCore</a></li>
+				
+					<li><a href="./ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
+				
+					<li><a href="./StoryParser.html">StoryParser</a></li>
+				
+					<li><a href="./StoryParser/Error.html">StoryParser::Error</a></li>
+				
+					<li><a href="./XhtmlSplitter.html">XhtmlSplitter</a></li>
+				
+					<li><a href="./XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
+				
+					<li><a href="./AbuseReport.html">AbuseReport</a></li>
+				
+					<li><a href="./AbuseReportsController.html">AbuseReportsController</a></li>
+				
+					<li><a href="./AdminMailer.html">AdminMailer</a></li>
+				
+					<li><a href="./AdminPost.html">AdminPost</a></li>
+				
+					<li><a href="./AdminPostTag.html">AdminPostTag</a></li>
+				
+					<li><a href="./AdminPostTagging.html">AdminPostTagging</a></li>
+				
+					<li><a href="./AdminPostsController.html">AdminPostsController</a></li>
+				
+					<li><a href="./AdminSession.html">AdminSession</a></li>
+				
+					<li><a href="./AdminSessionsController.html">AdminSessionsController</a></li>
+				
+					<li><a href="./AdminSetting.html">AdminSetting</a></li>
+				
+					<li><a href="./AdminsController.html">AdminsController</a></li>
+				
+					<li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
+				
+					<li><a href="./AlphabetHelper.html">AlphabetHelper</a></li>
+				
+					<li><a href="./ApplicationController.html">ApplicationController</a></li>
+				
+					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
+				
+					<li><a href="./ArchiveFaq.html">ArchiveFaq</a></li>
+				
+					<li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a></li>
+				
+					<li><a href="./AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
+				
+					<li><a href="./AutocompleteController.html">AutocompleteController</a></li>
+				
+					<li><a href="./Banned.html">Banned</a></li>
+				
+					<li><a href="./Bookmark.html">Bookmark</a></li>
+				
+					<li><a href="./BookmarksController.html">BookmarksController</a></li>
+				
+					<li><a href="./BookmarksHelper.html">BookmarksHelper</a></li>
+				
+					<li><a href="./CacheHelper.html">CacheHelper</a></li>
+				
+					<li><a href="./CastNomination.html">CastNomination</a></li>
+				
+					<li><a href="./Category.html">Category</a></li>
+				
+					<li><a href="./ChallengeAssignment.html">ChallengeAssignment</a></li>
+				
+					<li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
+				
+					<li><a href="./ChallengeClaim.html">ChallengeClaim</a></li>
+				
+					<li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a></li>
+				
+					<li><a href="./ChallengeHelper.html">ChallengeHelper</a></li>
+				
+					<li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a></li>
+				
+					<li><a href="./ChallengeSignup.html">ChallengeSignup</a></li>
+				
+					<li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
+				
+					<li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
+				
+					<li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a></li>
+				
+					<li><a href="./ChallengeSweeper.html">ChallengeSweeper</a></li>
+				
+					<li><a href="./ChallengesController.html">ChallengesController</a></li>
+				
+					<li><a href="./Chapter.html">Chapter</a></li>
+				
+					<li><a href="./ChapterSweeper.html">ChapterSweeper</a></li>
+				
+					<li><a href="./ChaptersController.html">ChaptersController</a></li>
+				
+					<li><a href="./ChaptersHelper.html">ChaptersHelper</a></li>
+				
+					<li><a href="./Character.html">Character</a></li>
+				
+					<li><a href="./CharacterNomination.html">CharacterNomination</a></li>
+				
+					<li><a href="./Collectible.html">Collectible</a></li>
+				
+					<li><a href="./Collection.html">Collection</a></li>
+				
+					<li><a href="./CollectionItem.html">CollectionItem</a></li>
+				
+					<li><a href="./CollectionItemsController.html">CollectionItemsController</a></li>
+				
+					<li><a href="./CollectionObserver.html">CollectionObserver</a></li>
+				
+					<li><a href="./CollectionParticipant.html">CollectionParticipant</a></li>
+				
+					<li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a></li>
+				
+					<li><a href="./CollectionPreference.html">CollectionPreference</a></li>
+				
+					<li><a href="./CollectionProfile.html">CollectionProfile</a></li>
+				
+					<li><a href="./CollectionProfileController.html">CollectionProfileController</a></li>
+				
+					<li><a href="./CollectionSweeper.html">CollectionSweeper</a></li>
+				
+					<li><a href="./CollectionsController.html">CollectionsController</a></li>
+				
+					<li><a href="./CollectionsHelper.html">CollectionsHelper</a></li>
+				
+					<li><a href="./Comment.html">Comment</a></li>
+				
+					<li><a href="./CommentMailer.html">CommentMailer</a></li>
+				
+					<li><a href="./CommentObserver.html">CommentObserver</a></li>
+				
+					<li><a href="./CommentSweeper.html">CommentSweeper</a></li>
+				
+					<li><a href="./CommentsController.html">CommentsController</a></li>
+				
+					<li><a href="./CommentsHelper.html">CommentsHelper</a></li>
+				
+					<li><a href="./CommonTagging.html">CommonTagging</a></li>
+				
+					<li><a href="./CreationObserver.html">CreationObserver</a></li>
+				
+					<li><a href="./Creatorship.html">Creatorship</a></li>
+				
+					<li><a href="./CssCleaner.html">CssCleaner</a></li>
+				
+					<li><a href="./DateHelper.html">DateHelper</a></li>
+				
+					<li><a href="./DevmodeController.html">DevmodeController</a></li>
+				
+					<li><a href="./DownloadsController.html">DownloadsController</a></li>
+				
+					<li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a></li>
+				
+					<li><a href="./ErrorsController.html">ErrorsController</a></li>
+				
+					<li><a href="./ExternalAuthor.html">ExternalAuthor</a></li>
+				
+					<li><a href="./ExternalAuthorName.html">ExternalAuthorName</a></li>
+				
+					<li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a></li>
+				
+					<li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
+				
+					<li><a href="./ExternalCreatorship.html">ExternalCreatorship</a></li>
+				
+					<li><a href="./ExternalWork.html">ExternalWork</a></li>
+				
+					<li><a href="./ExternalWorksController.html">ExternalWorksController</a></li>
+				
+					<li><a href="./Fandom.html">Fandom</a></li>
+				
+					<li><a href="./FandomNomination.html">FandomNomination</a></li>
+				
+					<li><a href="./FandomsController.html">FandomsController</a></li>
+				
+					<li><a href="./FeedSweeper.html">FeedSweeper</a></li>
+				
+					<li><a href="./Feedback.html">Feedback</a></li>
+				
+					<li><a href="./FeedbacksController.html">FeedbacksController</a></li>
+				
+					<li><a href="./FilterCount.html">FilterCount</a></li>
+				
+					<li><a href="./FilterTagging.html">FilterTagging</a></li>
+				
+					<li><a href="./FindRandom.html">FindRandom</a></li>
+				
+					<li><a href="./Freeform.html">Freeform</a></li>
+				
+					<li><a href="./FreeformNomination.html">FreeformNomination</a></li>
+				
+					<li><a href="./Gift.html">Gift</a></li>
+				
+					<li><a href="./GiftExchange.html">GiftExchange</a></li>
+				
+					<li><a href="./GiftsController.html">GiftsController</a></li>
+				
+					<li><a href="./HitCounter.html">HitCounter</a></li>
+				
+					<li><a href="./HomeController.html">HomeController</a></li>
+				
+					<li><a href="./HomeHelper.html">HomeHelper</a></li>
+				
+					<li><a href="./HtmlCleaner.html">HtmlCleaner</a></li>
+				
+					<li><a href="./InboxComment.html">InboxComment</a></li>
+				
+					<li><a href="./InboxController.html">InboxController</a></li>
+				
+					<li><a href="./InboxHelper.html">InboxHelper</a></li>
+				
+					<li><a href="./Invitation.html">Invitation</a></li>
+				
+					<li><a href="./InvitationsController.html">InvitationsController</a></li>
+				
+					<li><a href="./InvitationsHelper.html">InvitationsHelper</a></li>
+				
+					<li><a href="./InviteRequest.html">InviteRequest</a></li>
+				
+					<li><a href="./InviteRequestsController.html">InviteRequestsController</a></li>
+				
+					<li><a href="./KnownIssue.html">KnownIssue</a></li>
+				
+					<li><a href="./KnownIssuesController.html">KnownIssuesController</a></li>
+				
+					<li><a href="./Kudo.html">Kudo</a></li>
+				
+					<li><a href="./KudoMailer.html">KudoMailer</a></li>
+				
+					<li><a href="./KudoObserver.html">KudoObserver</a></li>
+				
+					<li><a href="./KudosController.html">KudosController</a></li>
+				
+					<li><a href="./Language.html">Language</a></li>
+				
+					<li><a href="./LanguagesController.html">LanguagesController</a></li>
+				
+					<li><a href="./Locale.html">Locale</a></li>
+				
+					<li><a href="./LocalesController.html">LocalesController</a></li>
+				
+					<li><a href="./LogItem.html">LogItem</a></li>
+				
+					<li><a href="./Media.html">Media</a></li>
+				
+					<li><a href="./MediaController.html">MediaController</a></li>
+				
+					<li><a href="./MetaTagging.html">MetaTagging</a></li>
+				
+					<li><a href="./Offer.html">Offer</a></li>
+				
+					<li><a href="./OrphansController.html">OrphansController</a></li>
+				
+					<li><a href="./OrphansHelper.html">OrphansHelper</a></li>
+				
+					<li><a href="./OwnedSetTagging.html">OwnedSetTagging</a></li>
+				
+					<li><a href="./OwnedTagSet.html">OwnedTagSet</a></li>
+				
+					<li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a></li>
+				
+					<li><a href="./PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
+				
+					<li><a href="./PasswordsController.html">PasswordsController</a></li>
+				
+					<li><a href="./People.html">People</a></li>
+				
+					<li><a href="./PeopleController.html">PeopleController</a></li>
+				
+					<li><a href="./PotentialMatch.html">PotentialMatch</a></li>
+				
+					<li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a></li>
+				
+					<li><a href="./PotentialMatchesController.html">PotentialMatchesController</a></li>
+				
+					<li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a></li>
+				
+					<li><a href="./Preference.html">Preference</a></li>
+				
+					<li><a href="./PreferencesController.html">PreferencesController</a></li>
+				
+					<li><a href="./Profile.html">Profile</a></li>
+				
+					<li><a href="./ProfileController.html">ProfileController</a></li>
+				
+					<li><a href="./Prompt.html">Prompt</a></li>
+				
+					<li><a href="./PromptMeme.html">PromptMeme</a></li>
+				
+					<li><a href="./PromptRestriction.html">PromptRestriction</a></li>
+				
+					<li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
+				
+					<li><a href="./PromptsController.html">PromptsController</a></li>
+				
+					<li><a href="./Pseud.html">Pseud</a></li>
+				
+					<li><a href="./PseudSweeper.html">PseudSweeper</a></li>
+				
+					<li><a href="./PseudsController.html">PseudsController</a></li>
+				
+					<li><a href="./PseudsHelper.html">PseudsHelper</a></li>
+				
+					<li><a href="./Query.html">Query</a></li>
+				
+					<li><a href="./Rating.html">Rating</a></li>
+				
+					<li><a href="./Rawk.html">Rawk</a></li>
+				
+					<li><a href="./Reading.html">Reading</a></li>
+				
+					<li><a href="./ReadingsController.html">ReadingsController</a></li>
+				
+					<li><a href="./RedirectController.html">RedirectController</a></li>
+				
+					<li><a href="./RedisTestSetup.html">RedisTestSetup</a></li>
+				
+					<li><a href="./RelatedWork.html">RelatedWork</a></li>
+				
+					<li><a href="./RelatedWorksController.html">RelatedWorksController</a></li>
+				
+					<li><a href="./Relationship.html">Relationship</a></li>
+				
+					<li><a href="./RelationshipNomination.html">RelationshipNomination</a></li>
+				
+					<li><a href="./Request.html">Request</a></li>
+				
+					<li><a href="./Role.html">Role</a></li>
+				
+					<li><a href="./RolesUser.html">RolesUser</a></li>
+				
+					<li><a href="./SearchController.html">SearchController</a></li>
+				
+					<li><a href="./SearchHelper.html">SearchHelper</a></li>
+				
+					<li><a href="./SerialWork.html">SerialWork</a></li>
+				
+					<li><a href="./SerialWorksController.html">SerialWorksController</a></li>
+				
+					<li><a href="./Series.html">Series</a></li>
+				
+					<li><a href="./SeriesController.html">SeriesController</a></li>
+				
+					<li><a href="./SeriesHelper.html">SeriesHelper</a></li>
+				
+					<li><a href="./SetTagging.html">SetTagging</a></li>
+				
+					<li><a href="./Skin.html">Skin</a></li>
+				
+					<li><a href="./SkinParent.html">SkinParent</a></li>
+				
+					<li><a href="./SkinsController.html">SkinsController</a></li>
+				
+					<li><a href="./SkinsHelper.html">SkinsHelper</a></li>
+				
+					<li><a href="./SortableList.html">SortableList</a></li>
+				
+					<li><a href="./Stat.html">Stat</a></li>
+				
+					<li><a href="./StatHash.html">StatHash</a></li>
+				
+					<li><a href="./StaticSweeper.html">StaticSweeper</a></li>
+				
+					<li><a href="./StatsController.html">StatsController</a></li>
+				
+					<li><a href="./StatsHelper.html">StatsHelper</a></li>
+				
+					<li><a href="./Subscription.html">Subscription</a></li>
+				
+					<li><a href="./SubscriptionsController.html">SubscriptionsController</a></li>
+				
+					<li><a href="./Tag.html">Tag</a></li>
+				
+					<li><a href="./TagNomination.html">TagNomination</a></li>
+				
+					<li><a href="./TagNominationsController.html">TagNominationsController</a></li>
+				
+					<li><a href="./TagSet.html">TagSet</a></li>
+				
+					<li><a href="./TagSetAssociation.html">TagSetAssociation</a></li>
+				
+					<li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a></li>
+				
+					<li><a href="./TagSetNomination.html">TagSetNomination</a></li>
+				
+					<li><a href="./TagSetNominationsController.html">TagSetNominationsController</a></li>
+				
+					<li><a href="./TagSetOwnership.html">TagSetOwnership</a></li>
+				
+					<li><a href="./TagSetSweeper.html">TagSetSweeper</a></li>
+				
+					<li><a href="./TagSetsHelper.html">TagSetsHelper</a></li>
+				
+					<li><a href="./TagSweeper.html">TagSweeper</a></li>
+				
+					<li><a href="./TagWranglersController.html">TagWranglersController</a></li>
+				
+					<li><a href="./TagWranglingsController.html">TagWranglingsController</a></li>
+				
+					<li><a href="./Taggable.html">Taggable</a></li>
+				
+					<li><a href="./Tagging.html">Tagging</a></li>
+				
+					<li><a href="./TagsController.html">TagsController</a></li>
+				
+					<li><a href="./TagsHelper.html">TagsHelper</a></li>
+				
+					<li><a href="./TranslationGenerator.html">TranslationGenerator</a></li>
+				
+					<li><a href="./TranslationHelper.html">TranslationHelper</a></li>
+				
+					<li><a href="./TranslationNote.html">TranslationNote</a></li>
+				
+					<li><a href="./TranslationNotesController.html">TranslationNotesController</a></li>
+				
+					<li><a href="./TranslationsController.html">TranslationsController</a></li>
+				
+					<li><a href="./TranslatorsController.html">TranslatorsController</a></li>
+				
+					<li><a href="./UrlActiveValidator.html">UrlActiveValidator</a></li>
+				
+					<li><a href="./UrlFormatValidator.html">UrlFormatValidator</a></li>
+				
+					<li><a href="./UrlHelpers.html">UrlHelpers</a></li>
+				
+					<li><a href="./User.html">User</a></li>
+				
+					<li><a href="./UserInviteRequest.html">UserInviteRequest</a></li>
+				
+					<li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a></li>
+				
+					<li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
+				
+					<li><a href="./UserMailer.html">UserMailer</a></li>
+				
+					<li><a href="./UserSession.html">UserSession</a></li>
+				
+					<li><a href="./UserSessionsController.html">UserSessionsController</a></li>
+				
+					<li><a href="./UsersController.html">UsersController</a></li>
+				
+					<li><a href="./UsersHelper.html">UsersHelper</a></li>
+				
+					<li><a href="./ValidationHelper.html">ValidationHelper</a></li>
+				
+					<li><a href="./Warning.html">Warning</a></li>
+				
+					<li><a href="./WeightedRandom.html">WeightedRandom</a></li>
+				
+					<li><a href="./Work.html">Work</a></li>
+				
+					<li><a href="./WorkObserver.html">WorkObserver</a></li>
+				
+					<li><a href="./WorkSkin.html">WorkSkin</a></li>
+				
+					<li><a href="./WorkSweeper.html">WorkSweeper</a></li>
+				
+					<li><a href="./WorksController.html">WorksController</a></li>
+				
+					<li><a href="./WorksHelper.html">WorksHelper</a></li>
+				
+					<li><a href="./WranglingAssignment.html">WranglingAssignment</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="class">DevmodeController</h1>
+
+		<div id="description">
+			
+		</div>
+
+		<!-- Constants -->
+		
+
+		<!-- Attributes -->
+		
+
+		<!-- Methods -->
+		
+		<div id="public-instance-method-details" class="method-section section">
+			<h3 class="section-header">Public Instance Methods</h3>
+
+		
+			<div id="-get-view-paths-method" class="method-detail ">
+				<a name="method-i-_get_view_paths"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">_get_view_paths</span><span
+						class="method-args">(controller, view, stack)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="-get-view-paths-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 101</span>
+101:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">_get_view_paths</span>(<span class="ruby-identifier">controller</span>, <span class="ruby-identifier">view</span>, <span class="ruby-identifier">stack</span>)
+102:     <span class="ruby-identifier">label</span> = <span class="ruby-node">&quot;#{controller}/#{view}&quot;</span>
+103:     <span class="ruby-keyword kw">return</span> [[<span class="ruby-node">&quot;*** Recurses to #{label}&quot;</span>]] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">label</span>
+104:     <span class="ruby-identifier">sub_stack</span> = <span class="ruby-identifier">stack</span> <span class="ruby-operator">+</span> [<span class="ruby-identifier">label</span>]
+105:     <span class="ruby-comment cmt"># Load the appropriate erb file</span>
+106:     <span class="ruby-identifier">erb_data</span> = <span class="ruby-identifier">load_erb</span> <span class="ruby-identifier">controller</span>, <span class="ruby-identifier">view</span>
+107:     <span class="ruby-comment cmt"># Scan for ':partial' and '.replace_html'</span>
+108:     <span class="ruby-identifier">partials</span> = []
+109:     <span class="ruby-identifier">erb_data</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/&lt;%[=-]?((?:[^%]|%[^&gt;])*?(?:\:partial|\.replace_html)(?:[^%]|%[^&gt;])*)%&gt;/</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span>
+110:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">'unexpected length: '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">inspect</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">!=</span> <span class="ruby-value">1</span>
+111:       <span class="ruby-identifier">block</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/:partial *=&gt; *['&quot;]([a-zA-Z\/_]*)[&quot;']/</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+112:         <span class="ruby-identifier">raise</span> <span class="ruby-value str">'unexpected length: '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">inspect</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">!=</span> <span class="ruby-value">1</span>
+113:         <span class="ruby-identifier">partials</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">name</span>[<span class="ruby-value">0</span>]
+114:       <span class="ruby-keyword kw">end</span>
+115:     <span class="ruby-keyword kw">end</span>
+116:     <span class="ruby-comment cmt"># Now take the names of the partial references, and look them up</span>
+117:     <span class="ruby-identifier">link_paths</span> = []
+118:     <span class="ruby-identifier">partials</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+119:       <span class="ruby-identifier">l</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'/'</span>)
+120:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+121:         <span class="ruby-identifier">part_controller</span> = <span class="ruby-identifier">controller</span>
+122:         <span class="ruby-identifier">part_view</span> = <span class="ruby-identifier">l</span>[<span class="ruby-value">0</span>]
+123:       <span class="ruby-keyword kw">else</span>
+124:         <span class="ruby-identifier">part_controller</span> = <span class="ruby-identifier">l</span>[<span class="ruby-value">0</span>]
+125:         <span class="ruby-identifier">part_view</span> = <span class="ruby-identifier">l</span>[<span class="ruby-value">1</span>]
+126:       <span class="ruby-keyword kw">end</span>
+127:       <span class="ruby-identifier">part_view</span> = <span class="ruby-value str">'_'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">part_view</span>
+128:       <span class="ruby-identifier">link_paths</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">_get_view_paths</span>(<span class="ruby-identifier">part_controller</span>, <span class="ruby-identifier">part_view</span>, <span class="ruby-identifier">sub_stack</span>)
+129:     <span class="ruby-keyword kw">end</span>
+130:     <span class="ruby-comment cmt"># Next, we format these into a list of paths, and return</span>
+131:     <span class="ruby-keyword kw">return</span> [[<span class="ruby-identifier">label</span>]] <span class="ruby-operator">+</span> <span class="ruby-identifier">link_paths</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">label</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">path</span>}
+132:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="backtrace-view-method" class="method-detail ">
+				<a name="method-i-backtrace_view"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">backtrace_view</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="backtrace-view-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 204</span>
+204:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">backtrace_view</span>
+205:     <span class="ruby-ivar">@links</span> = []
+206:     <span class="ruby-identifier">view</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:viewname</span>]
+207:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">view</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">view</span>.<span class="ruby-identifier">blank?</span>
+208:       <span class="ruby-ivar">@errors</span> = <span class="ruby-value str">&quot;No view name provided. Go through devmode menus&quot;</span>
+209:       <span class="ruby-identifier">render</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">return</span>
+210:     <span class="ruby-keyword kw">end</span>
+211:     <span class="ruby-ivar">@viewname</span> = <span class="ruby-identifier">view</span>
+212:     <span class="ruby-ivar">@links</span> = <span class="ruby-identifier">get_links_to</span> <span class="ruby-identifier">view</span>
+213:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="comment-work-method" class="method-detail ">
+				<a name="method-i-comment_work"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">comment_work</span><span
+						class="method-args">(work, comments, subcomment_chance, comment_length)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Assists seedworks
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="comment-work-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 439</span>
+439:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">comment_work</span>(<span class="ruby-identifier">work</span>, <span class="ruby-identifier">comments</span>, <span class="ruby-identifier">subcomment_chance</span>, <span class="ruby-identifier">comment_length</span>)
+440:     <span class="ruby-comment cmt"># not implemented yet</span>
+441:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="comment-works-method" class="method-detail ">
+				<a name="method-i-comment_works"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">comment_works</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="comment-works-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 427</span>
+427:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">comment_works</span>
+428:     <span class="ruby-comment cmt"># GET params</span>
+429:     <span class="ruby-ivar">@params</span> = {
+430:       <span class="ruby-comment cmt">#</span>
+431:     }
+432:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:create</span>]
+433:       <span class="ruby-comment cmt"># POST</span>
+434:       <span class="ruby-comment cmt"># do the actual creation</span>
+435:     <span class="ruby-keyword kw">end</span>
+436:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="create-work-method" class="method-detail ">
+				<a name="method-i-create_work"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">create_work</span><span
+						class="method-args">(name, authors, ratings, warnings, characters, relationships, fandoms, chapter_count, chapter_char_count)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Assists seedworks
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="create-work-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 360</span>
+360:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_work</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">authors</span>, <span class="ruby-identifier">ratings</span>, <span class="ruby-identifier">warnings</span>, <span class="ruby-identifier">characters</span>, <span class="ruby-identifier">relationships</span>, <span class="ruby-identifier">fandoms</span>, <span class="ruby-identifier">chapter_count</span>, <span class="ruby-identifier">chapter_char_count</span>)
+361:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Provide fandoms&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fandoms</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">fandoms</span>.<span class="ruby-identifier">empty?</span>
+362:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Provide chapter count&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">chapter_count</span>.<span class="ruby-identifier">nil?</span>
+363:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Provide chapter char count&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">chapter_char_count</span>.<span class="ruby-identifier">nil?</span>
+364:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Provide authors&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">authors</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">authors</span>.<span class="ruby-identifier">empty?</span>
+365:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Non unique fandoms&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fandoms</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">sort</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">fandoms</span>.<span class="ruby-identifier">sort</span>
+366:     <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Non unique characters #{characters.map(&amp;:to_str).inspect}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">characters</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">sort</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">characters</span>.<span class="ruby-identifier">sort</span>
+367: 
+368:     <span class="ruby-comment cmt"># Provide a function to generate new chapters. Keeps them all different</span>
+369:     <span class="ruby-identifier">new_chapter</span> = <span class="ruby-identifier">lambda</span> {<span class="ruby-node">&quot;#{WORK_CREATOR_VERSION} #{random_chapter chapter_char_count}&quot;</span>}
+370: 
+371:     <span class="ruby-identifier">notes</span> = <span class="ruby-identifier">new_chapter</span>.<span class="ruby-identifier">call</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">500</span>]
+372:     <span class="ruby-identifier">end_notes</span> = <span class="ruby-identifier">new_chapter</span>.<span class="ruby-identifier">call</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">500</span>]
+373:     <span class="ruby-identifier">summary</span> = <span class="ruby-identifier">new_chapter</span>.<span class="ruby-identifier">call</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">1250</span>]
+374: 
+375:     <span class="ruby-comment cmt"># Taggings:</span>
+376:     <span class="ruby-comment cmt"># # rating</span>
+377:     <span class="ruby-comment cmt"># # warning</span>
+378:     <span class="ruby-comment cmt"># # fandoms</span>
+379:     <span class="ruby-comment cmt"># # category</span>
+380:     <span class="ruby-comment cmt"># # relationships</span>
+381:     <span class="ruby-comment cmt"># # characters</span>
+382:     <span class="ruby-comment cmt"># # freeform</span>
+383: 
+384:     <span class="ruby-identifier">chapters</span> = []
+385:     <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">c_idx</span> <span class="ruby-keyword kw">in</span> (<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-identifier">chapter_count</span>)
+386:       <span class="ruby-identifier">title</span> = <span class="ruby-identifier">new_chapter</span>.<span class="ruby-identifier">call</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">255</span>]
+387:       <span class="ruby-comment cmt"># title =</span>
+388:       <span class="ruby-identifier">position</span> = <span class="ruby-identifier">c_idx</span>
+389:       <span class="ruby-identifier">content</span> = <span class="ruby-identifier">new_chapter</span>.<span class="ruby-identifier">call</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">500000</span>]
+390:       <span class="ruby-comment cmt"># Authorship + pseuds</span>
+391:       <span class="ruby-identifier">chapter</span> = <span class="ruby-constant">Chapter</span>.<span class="ruby-identifier">new</span>(
+392:         <span class="ruby-value">:authors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">authors</span>,
+393:         <span class="ruby-value">:content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">content</span>,
+394:         <span class="ruby-value">:position</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">position</span>,
+395:         <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">title</span>,
+396:         <span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>
+397:       )
+398:       <span class="ruby-identifier">chapter</span>.<span class="ruby-identifier">set_word_count</span>
+399:       <span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">chapter</span>
+400:     <span class="ruby-keyword kw">end</span>
+401: 
+402:     <span class="ruby-identifier">work_params</span> = {
+403:       <span class="ruby-value">:collection_ids</span> =<span class="ruby-operator">&gt;</span> [],
+404:       <span class="ruby-value">:wip_length</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">chapter_count</span>,
+405:       <span class="ruby-value">:series</span> =<span class="ruby-operator">&gt;</span> [],
+406:       <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-value">255</span>],
+407:       <span class="ruby-value">:chapters</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">chapters</span>,
+408:       <span class="ruby-value">:authors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">authors</span>,
+409:       <span class="ruby-value">:summary</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">summary</span>,
+410:       <span class="ruby-value">:fandoms</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">fandoms</span>,
+411:       <span class="ruby-value">:ratings</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ratings</span>,
+412:       <span class="ruby-value">:characters</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">characters</span>,
+413:       <span class="ruby-value">:relationships</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">relationships</span>,
+414:       <span class="ruby-value">:warnings</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">warnings</span>,
+415:       <span class="ruby-value">:notes</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">notes</span>,
+416:       <span class="ruby-value">:endnotes</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">end_notes</span>,
+417: <span class="ruby-comment cmt">#      :parent_url =&gt; nil,</span>
+418:       <span class="ruby-value">:restricted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>,
+419:       <span class="ruby-value">:ratings</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ratings</span>,
+420:       <span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>
+421:     }
+422:     <span class="ruby-identifier">work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">work_params</span>)
+423:     <span class="ruby-identifier">work</span>.<span class="ruby-identifier">set_word_count</span>
+424:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">work</span>
+425:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="development-only-method" class="method-detail ">
+				<a name="method-i-development_only"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">development_only</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="development-only-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 7</span>
+ 7:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">development_only</span>
+ 8:     <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;development&quot;</span>
+ 9:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-value str">&quot;For development only&quot;</span>
+10:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
+11:     <span class="ruby-keyword kw">end</span>
+12:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-controller-dir-method" class="method-detail ">
+				<a name="method-i-get_controller_dir"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_controller_dir</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-controller-dir-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 215</span>
+215:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_controller_dir</span>
+216:     <span class="ruby-keyword kw">return</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>))
+217:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-links-to-method" class="method-detail ">
+				<a name="method-i-get_links_to"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_links_to</span><span
+						class="method-args">(view)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-links-to-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 163</span>
+163:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_links_to</span>(<span class="ruby-identifier">view</span>)
+164:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">view</span>.<span class="ruby-identifier">include?</span> <span class="ruby-value str">'/'</span>
+165:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Need to know view controller'</span>
+166:     <span class="ruby-keyword kw">end</span>
+167:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_dir</span>(<span class="ruby-identifier">dirname</span>, <span class="ruby-identifier">links</span>, <span class="ruby-identifier">view</span>, <span class="ruby-identifier">stack</span>)
+168:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;recurse #{dirname}, #{stack.inspect}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">dirname</span>
+169:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;stack #{stack.inspect}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">20</span>
+170:       <span class="ruby-identifier">substack</span> = <span class="ruby-identifier">stack</span> <span class="ruby-operator">+</span> [<span class="ruby-identifier">dirname</span>]
+171:       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">dirname</span>
+172:         <span class="ruby-identifier">filename</span> = <span class="ruby-identifier">dirname</span>
+173:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">filename</span>.<span class="ruby-identifier">end_with?</span> <span class="ruby-value str">&quot;.html.erb&quot;</span>
+174:         <span class="ruby-identifier">process_file</span> <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">links</span>, <span class="ruby-identifier">view</span>
+175:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span> <span class="ruby-identifier">dirname</span>
+176:         <span class="ruby-identifier">dir</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">dirname</span>)
+177:         <span class="ruby-identifier">dir</span>.<span class="ruby-identifier">entries</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+178:           <span class="ruby-identifier">process_dir</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">dirname</span>, <span class="ruby-identifier">name</span>), <span class="ruby-identifier">links</span>, <span class="ruby-identifier">view</span>, <span class="ruby-identifier">substack</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">'.'</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">'..'</span>
+179:         <span class="ruby-keyword kw">end</span>
+180:       <span class="ruby-keyword kw">end</span>
+181:     <span class="ruby-keyword kw">end</span>
+182:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_file</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">links</span>, <span class="ruby-identifier">view</span>)
+183:       <span class="ruby-identifier">search_view</span> = <span class="ruby-identifier">view</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-value str">'/_'</span>, <span class="ruby-value str">'/'</span>)
+184:       <span class="ruby-identifier">main_view_controller</span>, <span class="ruby-identifier">main_view</span> = <span class="ruby-identifier">view</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'/'</span>)
+185:       <span class="ruby-identifier">view_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-value str">'rb'</span>)
+186:       <span class="ruby-identifier">dirname</span>, <span class="ruby-identifier">view_name</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">split</span>(<span class="ruby-identifier">filename</span>)
+187:       <span class="ruby-identifier">view_name</span> = <span class="ruby-identifier">view_name</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span>(<span class="ruby-identifier">view_name</span>.<span class="ruby-identifier">length</span><span class="ruby-operator">-</span>(<span class="ruby-value str">'.html.erb'</span>.<span class="ruby-identifier">length</span>))]
+188:       <span class="ruby-identifier">view_search_name</span> = <span class="ruby-identifier">view_name</span>
+189:       <span class="ruby-identifier">view_search_name</span> = <span class="ruby-identifier">view_search_name</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-identifier">view_search_name</span>.<span class="ruby-identifier">length</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">view_search_name</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-value str">&quot;_&quot;</span>
+190:       <span class="ruby-identifier">controller</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">split</span>(<span class="ruby-identifier">dirname</span>)[<span class="ruby-value">1</span>]
+191:       <span class="ruby-identifier">erb_data</span> = <span class="ruby-identifier">view_file</span>.<span class="ruby-identifier">read</span>
+192:       <span class="ruby-identifier">view_file</span>.<span class="ruby-identifier">close</span>
+193:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">erb_data</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/'#{search_view}'/</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">erb_data</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/&quot;#{search_view}&quot;/</span> <span class="ruby-keyword kw">or</span>
+194:         (<span class="ruby-identifier">main_view_controller</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">controller</span> <span class="ruby-keyword kw">and</span>
+195:         (<span class="ruby-identifier">erb_data</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/'#{view_search_name}'/</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">erb_data</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/&quot;#{view_search_name}&quot;/</span>))
+196:         <span class="ruby-identifier">links</span>.<span class="ruby-identifier">push</span> [<span class="ruby-identifier">controller</span>, <span class="ruby-identifier">view_name</span>]
+197:       <span class="ruby-keyword kw">end</span>
+198:     <span class="ruby-keyword kw">end</span>
+199:     <span class="ruby-identifier">links</span> = []
+200:     <span class="ruby-identifier">process_dir</span> <span class="ruby-identifier">get_view_dir</span>, <span class="ruby-identifier">links</span>, <span class="ruby-identifier">view</span>, []
+201:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">links</span>
+202:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-view-dir-method" class="method-detail ">
+				<a name="method-i-get_view_dir"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_view_dir</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-view-dir-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 219</span>
+219:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_view_dir</span>
+220:     <span class="ruby-keyword kw">return</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'views'</span>)
+221:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-view-paths-method" class="method-detail ">
+				<a name="method-i-get_view_paths"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_view_paths</span><span
+						class="method-args">(controller, view)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-view-paths-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 96</span>
+96:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_view_paths</span>(<span class="ruby-identifier">controller</span>, <span class="ruby-identifier">view</span>)
+97:     <span class="ruby-identifier">lst</span> = <span class="ruby-identifier">_get_view_paths</span>(<span class="ruby-identifier">controller</span>, <span class="ruby-identifier">view</span>, <span class="ruby-identifier">stack</span>=[])
+98:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">lst</span>
+99:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="index-method" class="method-detail ">
+				<a name="method-i-index"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">index</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="index-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 14</span>
+14:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index</span>
+15:     <span class="ruby-identifier">render</span> 
+16:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="inspect-view-method" class="method-detail ">
+				<a name="method-i-inspect_view"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">inspect_view</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+GET <a href="DevmodeController.html#method-i-inspect_view">inspect_view</a>
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="inspect-view-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 145</span>
+145:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect_view</span>
+146:     <span class="ruby-identifier">controller</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:controller_name</span>]
+147:     <span class="ruby-identifier">view</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:view_name</span>]
+148:     <span class="ruby-ivar">@paths</span> = []
+149:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">controller</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">view</span>
+150:       <span class="ruby-comment cmt"># Test controller input format - accept DevmodeController or devmode</span>
+151:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">end_with?</span> <span class="ruby-value str">'Controller'</span>
+152:         <span class="ruby-comment cmt"># It's a class name - change it:</span>
+153:         <span class="ruby-identifier">controller</span> = <span class="ruby-identifier">controller</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">controller</span>.<span class="ruby-identifier">length</span><span class="ruby-operator">-</span><span class="ruby-value">10</span>]
+154:         <span class="ruby-identifier">controller</span> = <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[A-Z]/</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-value str">'_'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">downcase</span>}
+155:         <span class="ruby-identifier">controller</span> = <span class="ruby-identifier">controller</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-identifier">controller</span>.<span class="ruby-identifier">length</span>]
+156:       <span class="ruby-keyword kw">end</span>
+157:       <span class="ruby-comment cmt"># get paths, and display</span>
+158:       <span class="ruby-identifier">paths</span> = <span class="ruby-identifier">get_view_paths</span>(<span class="ruby-identifier">controller</span>, <span class="ruby-identifier">view</span>)
+159:       <span class="ruby-ivar">@paths</span> = <span class="ruby-identifier">paths</span>
+160:     <span class="ruby-keyword kw">end</span>
+161:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="list-controllers-method" class="method-detail ">
+				<a name="method-i-list_controllers"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">list_controllers</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+GET /devmode/
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="list-controllers-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 224</span>
+224:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list_controllers</span>
+225:     <span class="ruby-comment cmt"># This magic global method allows us to inspect every object in memory!</span>
+226: <span class="ruby-comment cmt">#    controller_names = ActionController::Routing.possible_controllers</span>
+227:     <span class="ruby-identifier">controllers_list</span> = []
+228:     <span class="ruby-identifier">controller_dir</span> = <span class="ruby-identifier">get_controller_dir</span>
+229:     <span class="ruby-identifier">view_dir</span> = <span class="ruby-identifier">get_view_dir</span>
+230:     <span class="ruby-identifier">all</span> = []
+231:     <span class="ruby-identifier">controller_info</span> = []
+232:     <span class="ruby-identifier">controller_dir</span>.<span class="ruby-identifier">entries</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+233:       <span class="ruby-identifier">path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">controller_dir</span>.<span class="ruby-identifier">path</span>, <span class="ruby-identifier">name</span>)
+234:       <span class="ruby-comment cmt"># Skip non-files</span>
+235:       <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">path</span>
+236:       <span class="ruby-comment cmt"># Skip non-controller files</span>
+237:       <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">name</span>.<span class="ruby-identifier">end_with?</span> <span class="ruby-value str">'_controller.rb'</span>
+238:       <span class="ruby-identifier">raise</span> <span class="ruby-value str">'nilname'</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span>
+239:       <span class="ruby-identifier">controller</span> = <span class="ruby-identifier">name</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">name</span>.<span class="ruby-identifier">length</span><span class="ruby-operator">-</span><span class="ruby-value">14</span>]
+240:       <span class="ruby-comment cmt"># Save this for use in the view path prefix later.</span>
+241:       <span class="ruby-identifier">underscored_path</span> = <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">dup</span>
+242:       <span class="ruby-identifier">raise</span> <span class="ruby-identifier">name</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">underscored_path</span>.<span class="ruby-identifier">nil?</span>
+243:       <span class="ruby-comment cmt"># We require the file's contents to be loaded.</span>
+244:       <span class="ruby-identifier">require</span> <span class="ruby-identifier">path</span>
+245:       <span class="ruby-identifier">controller</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">controller</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">0</span>].<span class="ruby-identifier">upcase</span>
+246:       <span class="ruby-identifier">controller</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">'Controller'</span>
+247:       <span class="ruby-comment cmt"># Need to CamelCase the name at '_' marks</span>
+248:       <span class="ruby-identifier">name_part_list</span> = <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'_'</span>)
+249:       <span class="ruby-identifier">controller</span> = <span class="ruby-identifier">name_part_list</span>.<span class="ruby-identifier">shift</span>
+250:       <span class="ruby-keyword kw">while</span> <span class="ruby-operator">!</span><span class="ruby-identifier">name_part_list</span>.<span class="ruby-identifier">empty?</span>
+251:         <span class="ruby-identifier">name_part</span> = <span class="ruby-identifier">name_part_list</span>.<span class="ruby-identifier">shift</span>
+252:         <span class="ruby-comment cmt"># First letter upper case</span>
+253:         <span class="ruby-identifier">name_part</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">name_part</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">0</span>].<span class="ruby-identifier">upcase</span>
+254:         <span class="ruby-identifier">controller</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">name_part</span>
+255:       <span class="ruby-keyword kw">end</span>
+256:       <span class="ruby-comment cmt"># camel case done</span>
+257:       <span class="ruby-comment cmt"># This trick will </span>
+258:       <span class="ruby-keyword kw">begin</span>
+259:         <span class="ruby-identifier">controller_obj</span> = <span class="ruby-identifier">eval</span> <span class="ruby-identifier">controller</span>
+260:       <span class="ruby-keyword kw">rescue</span>
+261:         <span class="ruby-identifier">controller_info</span>.<span class="ruby-identifier">push</span> [
+262:           <span class="ruby-identifier">controller</span>,
+263:           <span class="ruby-value str">'Could not evaluate'</span>
+264:         ]
+265:       <span class="ruby-keyword kw">end</span>
+266:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">controller_obj</span>.<span class="ruby-identifier">nil?</span>
+267:         <span class="ruby-identifier">controller_info</span>.<span class="ruby-identifier">push</span> [
+268:           <span class="ruby-identifier">controller</span>, 
+269:           <span class="ruby-node">&quot;Expected #{controller} class in #{name}&quot;</span>
+270:         ]
+271:       <span class="ruby-keyword kw">else</span>
+272:         <span class="ruby-identifier">controllers_list</span>.<span class="ruby-identifier">push</span> [<span class="ruby-identifier">controller_obj</span>, <span class="ruby-identifier">underscored_path</span>]
+273:       <span class="ruby-keyword kw">end</span>
+274:     <span class="ruby-keyword kw">end</span>
+275:     <span class="ruby-identifier">controllers_list</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">controller</span>, <span class="ruby-identifier">dirname</span><span class="ruby-operator">|</span>
+276:       <span class="ruby-identifier">info</span> = []
+277:       <span class="ruby-identifier">info</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">name</span>
+278:       <span class="ruby-identifier">raise</span> <span class="ruby-identifier">controllers_list</span>.<span class="ruby-identifier">inspect</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dirname</span>.<span class="ruby-identifier">nil?</span>
+279:       <span class="ruby-identifier">controller_view_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">view_dir</span>, <span class="ruby-identifier">dirname</span>)
+280:       <span class="ruby-identifier">controller_view_dir</span> = <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">controller_view_dir</span>
+281:       <span class="ruby-identifier">view_methods</span> = []
+282:       <span class="ruby-identifier">other_methods</span> = []
+283:       <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">instance_methods</span>(<span class="ruby-keyword kw">false</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+284:         <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">controller_view_dir</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">and</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">controller_view_dir</span>).<span class="ruby-identifier">include?</span> <span class="ruby-node">&quot;#{name}.html.erb&quot;</span>
+285:           <span class="ruby-identifier">view_methods</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">name</span>
+286:         <span class="ruby-keyword kw">else</span>
+287:           <span class="ruby-identifier">other_methods</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">name</span>
+288:         <span class="ruby-keyword kw">end</span>
+289:       <span class="ruby-keyword kw">end</span>
+290:       <span class="ruby-identifier">info</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">view_methods</span>
+291:       <span class="ruby-identifier">info</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">other_methods</span>.<span class="ruby-identifier">inspect</span>
+292:       <span class="ruby-identifier">controller_info</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">info</span>
+293:     <span class="ruby-keyword kw">end</span>
+294:     <span class="ruby-identifier">controller_info</span>.<span class="ruby-identifier">sort!</span>
+295:     <span class="ruby-ivar">@controllers</span> =  <span class="ruby-identifier">controller_info</span>
+296:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="list-views-method" class="method-detail ">
+				<a name="method-i-list_views"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">list_views</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+GET <a href="DevmodeController.html#method-i-list_views">list_views</a>
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="list-views-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 50</span>
+50:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list_views</span>
+51:     <span class="ruby-identifier">view_list</span> = []
+52:     <span class="ruby-identifier">view_dir</span> = <span class="ruby-identifier">get_view_dir</span>
+53:     <span class="ruby-identifier">all</span> = []
+54:     <span class="ruby-identifier">view_info</span> = []
+55:     <span class="ruby-identifier">view_dir</span>.<span class="ruby-identifier">entries</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+56:       <span class="ruby-identifier">path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">view_dir</span>.<span class="ruby-identifier">path</span>, <span class="ruby-identifier">name</span>)
+57:       <span class="ruby-comment cmt"># Skip non-files</span>
+58:       <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">path</span>
+59:       <span class="ruby-comment cmt"># Skip non-controller files</span>
+60:       <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">name</span>.<span class="ruby-identifier">end_with?</span> <span class="ruby-value str">'.html.erb'</span>
+61:       <span class="ruby-identifier">view</span> = <span class="ruby-identifier">name</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">name</span>.<span class="ruby-identifier">length</span><span class="ruby-operator">-</span><span class="ruby-value">9</span>]
+62:       <span class="ruby-identifier">require</span> <span class="ruby-identifier">path</span>
+63:       <span class="ruby-identifier">view</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">view</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">0</span>].<span class="ruby-identifier">upcase</span>
+64:       <span class="ruby-identifier">view</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">'Controller'</span>
+65:       <span class="ruby-comment cmt"># Need to CamelCase the name at '_' marks</span>
+66:       <span class="ruby-identifier">name_part_list</span> = <span class="ruby-identifier">view</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'_'</span>)
+67:       <span class="ruby-identifier">view</span> = <span class="ruby-identifier">name_part_list</span>.<span class="ruby-identifier">shift</span>
+68:       <span class="ruby-keyword kw">while</span> <span class="ruby-operator">!</span><span class="ruby-identifier">name_part_list</span>.<span class="ruby-identifier">empty?</span>
+69:         <span class="ruby-identifier">name_part</span> = <span class="ruby-identifier">name_part_list</span>.<span class="ruby-identifier">pop</span>
+70:         <span class="ruby-comment cmt"># First letter upper case</span>
+71:         <span class="ruby-identifier">name_part</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">name_part</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">0</span>].<span class="ruby-identifier">upcase</span>
+72:         <span class="ruby-identifier">view</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">name_part</span>
+73:       <span class="ruby-keyword kw">end</span>
+74:       <span class="ruby-comment cmt"># camel case done</span>
+75:       <span class="ruby-keyword kw">begin</span>
+76:         <span class="ruby-identifier">view_obj</span> = <span class="ruby-identifier">eval</span> <span class="ruby-identifier">view</span>
+77:       <span class="ruby-keyword kw">rescue</span>
+78:         <span class="ruby-identifier">view_info</span>.<span class="ruby-identifier">push</span> [
+79:           <span class="ruby-identifier">view</span>,
+80:           <span class="ruby-value str">'Could not evaluate'</span>
+81:         ]
+82:       <span class="ruby-keyword kw">end</span>
+83:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">controller_obj</span>.<span class="ruby-identifier">nil?</span>
+84:         <span class="ruby-identifier">view_info</span>.<span class="ruby-identifier">push</span> [
+85:           <span class="ruby-identifier">view</span>, 
+86:           <span class="ruby-node">&quot;Expected #{view} class in #{name}&quot;</span>
+87:         ]
+88:       <span class="ruby-keyword kw">else</span>
+89:         <span class="ruby-identifier">view_list</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">view_obj</span>
+90:       <span class="ruby-keyword kw">end</span>
+91:     <span class="ruby-keyword kw">end</span>
+92:     <span class="ruby-comment cmt"># Process the view files for display.</span>
+93:     <span class="ruby-identifier">raise</span> <span class="ruby-identifier">view_list</span>.<span class="ruby-identifier">inspect</span>
+94:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="load-erb-method" class="method-detail ">
+				<a name="method-i-load_erb"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">load_erb</span><span
+						class="method-args">(controller, view)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="load-erb-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 134</span>
+134:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_erb</span>(<span class="ruby-identifier">controller</span>, <span class="ruby-identifier">view</span>)
+135:     <span class="ruby-identifier">view_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">get_view_dir</span>, <span class="ruby-identifier">controller</span>)
+136:     <span class="ruby-identifier">erb_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">view_dir</span>, <span class="ruby-identifier">view</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'.html.erb'</span>)
+137:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">'view template not found: '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">controller</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">view</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">erb_path</span>
+138:     <span class="ruby-identifier">erb_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">erb_path</span>, <span class="ruby-value str">'rb'</span>)
+139:     <span class="ruby-identifier">data</span> = <span class="ruby-identifier">erb_file</span>.<span class="ruby-identifier">read</span>
+140:     <span class="ruby-identifier">erb_file</span>.<span class="ruby-identifier">close</span>
+141:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">data</span>
+142:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="process-dir-method" class="method-detail ">
+				<a name="method-i-process_dir"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">process_dir</span><span
+						class="method-args">(dirname, links, view, stack)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="process-dir-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 167</span>
+167:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_dir</span>(<span class="ruby-identifier">dirname</span>, <span class="ruby-identifier">links</span>, <span class="ruby-identifier">view</span>, <span class="ruby-identifier">stack</span>)
+168:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;recurse #{dirname}, #{stack.inspect}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">dirname</span>
+169:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;stack #{stack.inspect}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">20</span>
+170:       <span class="ruby-identifier">substack</span> = <span class="ruby-identifier">stack</span> <span class="ruby-operator">+</span> [<span class="ruby-identifier">dirname</span>]
+171:       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">dirname</span>
+172:         <span class="ruby-identifier">filename</span> = <span class="ruby-identifier">dirname</span>
+173:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">filename</span>.<span class="ruby-identifier">end_with?</span> <span class="ruby-value str">&quot;.html.erb&quot;</span>
+174:         <span class="ruby-identifier">process_file</span> <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">links</span>, <span class="ruby-identifier">view</span>
+175:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span> <span class="ruby-identifier">dirname</span>
+176:         <span class="ruby-identifier">dir</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">dirname</span>)
+177:         <span class="ruby-identifier">dir</span>.<span class="ruby-identifier">entries</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+178:           <span class="ruby-identifier">process_dir</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">dirname</span>, <span class="ruby-identifier">name</span>), <span class="ruby-identifier">links</span>, <span class="ruby-identifier">view</span>, <span class="ruby-identifier">substack</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">'.'</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">'..'</span>
+179:         <span class="ruby-keyword kw">end</span>
+180:       <span class="ruby-keyword kw">end</span>
+181:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="process-file-method" class="method-detail ">
+				<a name="method-i-process_file"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">process_file</span><span
+						class="method-args">(filename, links, view)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="process-file-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 182</span>
+182:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process_file</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">links</span>, <span class="ruby-identifier">view</span>)
+183:       <span class="ruby-identifier">search_view</span> = <span class="ruby-identifier">view</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-value str">'/_'</span>, <span class="ruby-value str">'/'</span>)
+184:       <span class="ruby-identifier">main_view_controller</span>, <span class="ruby-identifier">main_view</span> = <span class="ruby-identifier">view</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'/'</span>)
+185:       <span class="ruby-identifier">view_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-value str">'rb'</span>)
+186:       <span class="ruby-identifier">dirname</span>, <span class="ruby-identifier">view_name</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">split</span>(<span class="ruby-identifier">filename</span>)
+187:       <span class="ruby-identifier">view_name</span> = <span class="ruby-identifier">view_name</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span>(<span class="ruby-identifier">view_name</span>.<span class="ruby-identifier">length</span><span class="ruby-operator">-</span>(<span class="ruby-value str">'.html.erb'</span>.<span class="ruby-identifier">length</span>))]
+188:       <span class="ruby-identifier">view_search_name</span> = <span class="ruby-identifier">view_name</span>
+189:       <span class="ruby-identifier">view_search_name</span> = <span class="ruby-identifier">view_search_name</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-identifier">view_search_name</span>.<span class="ruby-identifier">length</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">view_search_name</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-value str">&quot;_&quot;</span>
+190:       <span class="ruby-identifier">controller</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">split</span>(<span class="ruby-identifier">dirname</span>)[<span class="ruby-value">1</span>]
+191:       <span class="ruby-identifier">erb_data</span> = <span class="ruby-identifier">view_file</span>.<span class="ruby-identifier">read</span>
+192:       <span class="ruby-identifier">view_file</span>.<span class="ruby-identifier">close</span>
+193:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">erb_data</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/'#{search_view}'/</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">erb_data</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/&quot;#{search_view}&quot;/</span> <span class="ruby-keyword kw">or</span>
+194:         (<span class="ruby-identifier">main_view_controller</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">controller</span> <span class="ruby-keyword kw">and</span>
+195:         (<span class="ruby-identifier">erb_data</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/'#{view_search_name}'/</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">erb_data</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/&quot;#{view_search_name}&quot;/</span>))
+196:         <span class="ruby-identifier">links</span>.<span class="ruby-identifier">push</span> [<span class="ruby-identifier">controller</span>, <span class="ruby-identifier">view_name</span>]
+197:       <span class="ruby-keyword kw">end</span>
+198:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="profile-logs-method" class="method-detail ">
+				<a name="method-i-profile_logs"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">profile_logs</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="profile-logs-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 30</span>
+30:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">profile_logs</span>
+31:     <span class="ruby-identifier">path</span> = <span class="ruby-constant">ApplicationController</span>.<span class="ruby-identifier">profiler_logging_path</span>
+32:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:logname</span>]
+33:       <span class="ruby-comment cmt"># If fetching a specific log, just return the html in the log file.</span>
+34:       <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:logname</span>]), <span class="ruby-value str">'rb'</span>)
+35:       <span class="ruby-identifier">render</span> <span class="ruby-value">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">read</span>()
+36:       <span class="ruby-identifier">f</span>.<span class="ruby-identifier">close</span>()
+37:       <span class="ruby-keyword kw">return</span>
+38:     <span class="ruby-keyword kw">end</span>
+39:     <span class="ruby-comment cmt"># If not fetching a log, return a list of log entries.</span>
+40:     <span class="ruby-identifier">paths</span> = []
+41:     <span class="ruby-identifier">raise</span> [<span class="ruby-value str">&quot;bad dir&quot;</span>, <span class="ruby-identifier">path</span>].<span class="ruby-identifier">inspect</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">path</span>)
+42:     <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">path</span>).<span class="ruby-identifier">entries</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+43:       <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">end_with?</span> <span class="ruby-value str">'.html'</span>
+44:       <span class="ruby-identifier">paths</span>.<span class="ruby-identifier">push</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">name</span>)
+45:     <span class="ruby-keyword kw">end</span>
+46:     <span class="ruby-ivar">@paths</span> = <span class="ruby-identifier">paths</span>
+47:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="random-chapter-method" class="method-detail ">
+				<a name="method-i-random_chapter"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">random_chapter</span><span
+						class="method-args">(characters, fuzziness=50)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="random-chapter-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 443</span>
+443:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">random_chapter</span>(<span class="ruby-identifier">characters</span>, <span class="ruby-identifier">fuzziness</span>=<span class="ruby-value">50</span>)
+444:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Provide characters count!&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">characters</span>.<span class="ruby-identifier">nil?</span>
+445:     <span class="ruby-identifier">paragraphs</span> = []
+446:     <span class="ruby-identifier">count</span> = <span class="ruby-value">0</span>
+447:     <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">characters</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">fuzziness</span>
+448:       <span class="ruby-identifier">new_paragraph</span> = <span class="ruby-constant">Faker</span><span class="ruby-operator">::</span><span class="ruby-constant">Lorem</span>.<span class="ruby-identifier">paragraph</span>(<span class="ruby-identifier">rand</span>(<span class="ruby-value">4</span>) <span class="ruby-operator">+</span> <span class="ruby-value">6</span>)
+449:       <span class="ruby-identifier">count</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">new_paragraph</span>.<span class="ruby-identifier">length</span>
+450:       <span class="ruby-identifier">paragraphs</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">new_paragraph</span>
+451:     <span class="ruby-keyword kw">end</span>
+452:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">paragraphs</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;&lt;br/&gt;&quot;</span>)
+453:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="random-sentence-method" class="method-detail ">
+				<a name="method-i-random_sentence"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">random_sentence</span><span
+						class="method-args">(characters, fuzziness=4)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="random-sentence-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 455</span>
+455:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">random_sentence</span>(<span class="ruby-identifier">characters</span>, <span class="ruby-identifier">fuzziness</span>=<span class="ruby-value">4</span>)
+456:     <span class="ruby-identifier">words</span> = []
+457:     <span class="ruby-identifier">count</span> = <span class="ruby-value">0</span>
+458:     <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">&lt;</span> [<span class="ruby-identifier">characters</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">fuzziness</span>, <span class="ruby-value">1</span>].<span class="ruby-identifier">max</span>
+459:       <span class="ruby-identifier">new_word</span> = <span class="ruby-constant">Faker</span><span class="ruby-operator">::</span><span class="ruby-constant">Lorem</span>.<span class="ruby-identifier">words</span>(<span class="ruby-value">1</span>)
+460:       <span class="ruby-identifier">count</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">new_word</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
+461:       <span class="ruby-identifier">words</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">new_word</span>
+462:     <span class="ruby-keyword kw">end</span>
+463:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">words</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; &quot;</span>)
+464:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="seedusers-method" class="method-detail ">
+				<a name="method-i-seedusers"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">seedusers</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+GET+POST /devmode/seedusers
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="seedusers-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 299</span>
+299:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">seedusers</span>
+300:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:seed</span>]
+301:       <span class="ruby-comment cmt"># POST</span>
+302:       <span class="ruby-identifier">errors</span> = []
+303: 
+304:       <span class="ruby-identifier">start</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_start</span>].<span class="ruby-identifier">to_i</span>
+305:       <span class="ruby-identifier">count</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_count</span>].<span class="ruby-identifier">to_i</span>
+306:       <span class="ruby-identifier">end_no</span> = <span class="ruby-identifier">start</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>
+307: 
+308:       <span class="ruby-identifier">user_name</span> = <span class="ruby-identifier">lambda</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_prefix</span>], <span class="ruby-identifier">i</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;&quot;</span>)}
+309: 
+310:       <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">i</span> <span class="ruby-keyword kw">in</span> (<span class="ruby-identifier">start</span><span class="ruby-operator">..</span><span class="ruby-identifier">end_no</span>)
+311:         <span class="ruby-identifier">email</span> = [<span class="ruby-identifier">params</span>[<span class="ruby-value">:email_prefix</span>], <span class="ruby-identifier">i</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:email_suffix</span>]].<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;&quot;</span>)
+312:         <span class="ruby-identifier">login</span> = <span class="ruby-identifier">user_name</span>.<span class="ruby-identifier">call</span> <span class="ruby-identifier">i</span>
+313: 
+314:         <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">new</span>(
+315:           <span class="ruby-value">:login</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">login</span>,
+316:           <span class="ruby-value">:email</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">email</span>,
+317:           <span class="ruby-value">:password</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>],
+318:           <span class="ruby-value">:password_confirmation</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:password</span>],
+319:           <span class="ruby-value">:age_over_13</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;1&quot;</span>,
+320:           <span class="ruby-value">:terms_of_service</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;1&quot;</span>
+321:         )
+322:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">save</span>
+323:           <span class="ruby-comment cmt"># Activation doesn't seem to work in a single save. We now need to </span>
+324:           <span class="ruby-comment cmt"># activate, and save again.</span>
+325:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:prevalidate</span>]
+326:             <span class="ruby-identifier">user</span>.<span class="ruby-identifier">activated_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+327:             <span class="ruby-identifier">user</span>.<span class="ruby-identifier">activation_code</span> = <span class="ruby-keyword kw">nil</span>
+328:             <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">save</span>
+329:               <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> [<span class="ruby-identifier">login</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span>
+330:             <span class="ruby-keyword kw">end</span>
+331:           <span class="ruby-keyword kw">end</span>
+332:         <span class="ruby-keyword kw">else</span>
+333:           <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> [<span class="ruby-identifier">login</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span>
+334:         <span class="ruby-keyword kw">end</span>
+335:       <span class="ruby-keyword kw">end</span>
+336: 
+337:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">empty?</span>
+338:         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-node">&quot;Seeding successful from '#{user_name.call start}' to '#{user_name.call end_no}'&quot;</span>
+339:         <span class="ruby-identifier">redirect_to</span> <span class="ruby-value str">&quot;/devmode&quot;</span>
+340:       <span class="ruby-keyword kw">else</span>
+341:         <span class="ruby-ivar">@errors</span> = <span class="ruby-value str">&quot;Errors: &lt;ul&gt;&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-value str">&quot;&lt;li&gt;&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;&lt;/li&gt;&lt;li&gt;&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;&lt;/li&gt;&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;&lt;/ul&gt;&lt;br /&gt;&lt;ul&gt;&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;&lt;/ul&gt;&quot;</span>
+342:         <span class="ruby-ivar">@params</span> = <span class="ruby-identifier">params</span>
+343:         <span class="ruby-ivar">@params</span>.<span class="ruby-identifier">delete</span> <span class="ruby-value str">&quot;seed&quot;</span>
+344:       <span class="ruby-keyword kw">end</span>
+345:     <span class="ruby-keyword kw">end</span>
+346: 
+347:     <span class="ruby-comment cmt"># GET default response</span>
+348:     <span class="ruby-ivar">@params</span> = [
+349:       [<span class="ruby-value">:prevalidate</span>, [<span class="ruby-value">:checkbox</span>, <span class="ruby-value str">'&quot; checked=&quot;checked'</span>]],
+350:       [<span class="ruby-value">:user_start</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">&quot;1&quot;</span>]],
+351:       [<span class="ruby-value">:user_count</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">&quot;100&quot;</span>]],
+352:       [<span class="ruby-value">:user_prefix</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'testuser'</span>]],
+353:       [<span class="ruby-value">:password</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">&quot;password&quot;</span>]],
+354:       [<span class="ruby-value">:email_prefix</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">&quot;user&quot;</span>]],
+355:       [<span class="ruby-value">:email_suffix</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">&quot;.mail@somedomain.com&quot;</span>]],
+356:     ]
+357:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="seedworks-method" class="method-detail ">
+				<a name="method-i-seedworks"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">seedworks</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="seedworks-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 466</span>
+466:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">seedworks</span>
+467:     <span class="ruby-comment cmt"># GET default response</span>
+468:     <span class="ruby-identifier">max_errors</span> = <span class="ruby-value">1</span>
+469: 
+470:     <span class="ruby-comment cmt"># This array is rendered in rows by the view. Each element is either:</span>
+471:     <span class="ruby-comment cmt">#  * A heading: [:Title, nil]</span>
+472:     <span class="ruby-comment cmt">#  * An &lt;input&gt;: [:name, [:type, 'default', 'description...']]</span>
+473:     <span class="ruby-comment cmt">#</span>
+474:     <span class="ruby-ivar">@params</span> = [
+475:       [<span class="ruby-value">:Works</span>, <span class="ruby-keyword kw">nil</span>],
+476:       [<span class="ruby-value">:work_count</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">&quot;10&quot;</span>, <span class="ruby-value str">&quot;This many works will be added. Don't try more than about 20 over the web.&quot;</span>]],
+477:       [<span class="ruby-value">:author_prefix</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">&quot;author_&quot;</span>, <span class="ruby-value str">&quot;Only users with this name prefix will authors of new works.&quot;</span>]],
+478:       [<span class="ruby-value">:num_authors_two_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'1'</span>, <span class="ruby-value str">&quot;Weighting on work by 2 authors&quot;</span>]],
+479:       [<span class="ruby-value">:num_authors_one_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'30'</span>, <span class="ruby-value str">&quot;Weighting on work by 1 author only&quot;</span>]],
+480: 
+481:       [<span class="ruby-value">:Content</span>, <span class="ruby-keyword kw">nil</span>],
+482:       [<span class="ruby-value">:chapter_count_long_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'1'</span>, <span class="ruby-value str">&quot;Weighting on 11-60 chapters&quot;</span>]],
+483:       [<span class="ruby-value">:chapter_count_med_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'2'</span>, <span class="ruby-value str">&quot;Weighting on 2-10 chapters&quot;</span>]],
+484:       [<span class="ruby-value">:chapter_count_short_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'30'</span>, <span class="ruby-value str">&quot;Weighting on 1 chapter&quot;</span>]],
+485:       [<span class="ruby-value">:chapter_long_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'1'</span>, <span class="ruby-value str">&quot;Weighting on chapter length being over 450000 characters&quot;</span>]],
+486:       [<span class="ruby-value">:chapter_med_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'2'</span>, <span class="ruby-value str">&quot;Weighting on chapter length being over 2001-100000 characters&quot;</span>]],
+487:       [<span class="ruby-value">:chapter_short_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'10'</span>, <span class="ruby-value str">&quot;Weighting on chapter length being under 2000 characters&quot;</span>]],
+488:       [<span class="ruby-value">:work_name_long_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'1'</span>, <span class="ruby-value str">&quot;Weighting on work name length being over 301 characters&quot;</span>]],
+489:       [<span class="ruby-value">:work_name_med_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'2'</span>, <span class="ruby-value str">&quot;Weighting on work name length being over 51-300 characters&quot;</span>]],
+490:       [<span class="ruby-value">:work_name_short_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'10'</span>, <span class="ruby-value str">&quot;Weighting on work name length being under 50 characters&quot;</span>]],
+491: 
+492:       [<span class="ruby-value">:&quot;Comments - (Not implemented yet)&quot;</span>, <span class="ruby-keyword kw">nil</span>],
+493:       [<span class="ruby-value">:comment_only_by_user_prefix</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-value str">&quot;Only users with this prefix to their login will be adding comments&quot;</span>]],
+494:       [<span class="ruby-value">:comment_on_comment_chance</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">&quot;0.5&quot;</span>, <span class="ruby-value str">&quot;Probability of a new comment having a further comment added to it.&quot;</span>]],
+495:       [<span class="ruby-value">:chapter_count_med_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'1'</span>, <span class="ruby-value str">&quot;Weighting on full paragraph comment&quot;</span>]],
+496:       [<span class="ruby-value">:chapter_count_short_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'20'</span>, <span class="ruby-value str">&quot;Weighting on one line comment&quot;</span>]],
+497: 
+498:       [<span class="ruby-value">:Fandoms</span>, <span class="ruby-keyword kw">nil</span>],
+499:       [<span class="ruby-value">:in_fandoms</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-value str">&quot;If not set, random fandoms will be assigned. If set, use a comma separated list, and fandoms will be taken from this list.&quot;</span>]],
+500:       [<span class="ruby-value">:max_new_fandoms</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'5'</span>, <span class="ruby-value str">'When creating fandoms is allowed, at most this many new fandoms will be created.'</span>]],
+501:       [<span class="ruby-value">:fandoms_count_med_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'2'</span>, <span class="ruby-value str">&quot;Weighting on work of 2 fandoms&quot;</span>]],
+502:       [<span class="ruby-value">:fandoms_count_short_weight</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'30'</span>, <span class="ruby-value str">&quot;Weighting on work of 1 fandom only&quot;</span>]],
+503: 
+504:       [<span class="ruby-value">:Tags</span>, <span class="ruby-keyword kw">nil</span>],
+505:       [<span class="ruby-value">:max_new_characters</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'5'</span>, <span class="ruby-value str">'At most this many new characters will be created'</span>]],
+506:       [<span class="ruby-value">:max_new_relationships</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value str">'5'</span>, <span class="ruby-value str">'At most this many new relationships will be created'</span>]]
+507:     ] <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@params</span>
+508: 
+509:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value str">'seed'</span>]
+510:       <span class="ruby-comment cmt"># POST</span>
+511: 
+512:       <span class="ruby-comment cmt"># First, get some data in order before we start creating works.</span>
+513:       <span class="ruby-identifier">errors</span> = []
+514:       <span class="ruby-identifier">new_works</span> = []
+515: 
+516:       <span class="ruby-comment cmt"># Verify params</span>
+517:       <span class="ruby-identifier">chapter_count</span> = <span class="ruby-constant">WeightedRandom</span>.<span class="ruby-identifier">from_params</span>(<span class="ruby-identifier">params</span>, <span class="ruby-value str">&quot;chapter_count&quot;</span>, {
+518:         <span class="ruby-value str">'long'</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-value">11</span><span class="ruby-operator">..</span><span class="ruby-value">60</span>),
+519:         <span class="ruby-value str">'med'</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-value">2</span><span class="ruby-operator">..</span><span class="ruby-value">10</span>),
+520:         <span class="ruby-value str">'short'</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">1</span>),
+521:       })
+522:       <span class="ruby-identifier">chapter_length</span> = <span class="ruby-constant">WeightedRandom</span>.<span class="ruby-identifier">from_params</span>(<span class="ruby-identifier">params</span>, <span class="ruby-value str">&quot;chapter&quot;</span>, {
+523:         <span class="ruby-value str">'long'</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-value">100001</span><span class="ruby-operator">..</span><span class="ruby-value">450000</span>),
+524:         <span class="ruby-value str">'med'</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-value">2001</span><span class="ruby-operator">..</span><span class="ruby-value">100000</span>),
+525:         <span class="ruby-value str">'short'</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-value">800</span><span class="ruby-operator">..</span><span class="ruby-value">2000</span>),
+526:       })
+527:       <span class="ruby-identifier">work_name_length</span> = <span class="ruby-constant">WeightedRandom</span>.<span class="ruby-identifier">from_params</span>(<span class="ruby-identifier">params</span>, <span class="ruby-value str">&quot;work_name&quot;</span>, {
+528:         <span class="ruby-value str">'long'</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-value">301</span><span class="ruby-operator">..</span><span class="ruby-value">500</span>),
+529:         <span class="ruby-value str">'med'</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-value">51</span><span class="ruby-operator">..</span><span class="ruby-value">300</span>),
+530:         <span class="ruby-value str">'short'</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">50</span>),
+531:       })
+532:       <span class="ruby-identifier">fandoms_count</span> = <span class="ruby-constant">WeightedRandom</span>.<span class="ruby-identifier">from_params</span>(<span class="ruby-identifier">params</span>, <span class="ruby-value str">&quot;fandoms_count&quot;</span>, {
+533:         <span class="ruby-value str">'long'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span>,
+534:         <span class="ruby-value str">'med'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>,
+535:         <span class="ruby-value str">'short'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,
+536:       })
+537:       <span class="ruby-identifier">authors_count</span> = <span class="ruby-constant">WeightedRandom</span>.<span class="ruby-identifier">from_params</span>(<span class="ruby-identifier">params</span>, <span class="ruby-value str">&quot;num_authors&quot;</span>, {
+538:         <span class="ruby-value str">'two'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">2</span>,
+539:         <span class="ruby-value str">'one'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,
+540:       })
+541: 
+542:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value str">'work_count'</span>]
+543:         <span class="ruby-identifier">work_count</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value str">'work_count'</span>].<span class="ruby-identifier">to_i</span>
+544:       <span class="ruby-keyword kw">else</span>
+545:         <span class="ruby-identifier">errors</span> = <span class="ruby-value str">'Must set work count'</span>
+546:       <span class="ruby-keyword kw">end</span>
+547:       <span class="ruby-identifier">work_count</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value str">'work_count'</span>].<span class="ruby-identifier">to_i</span>
+548: 
+549:       <span class="ruby-comment cmt"># Fandoms.</span>
+550:       <span class="ruby-identifier">fandom_list</span> = []
+551:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value str">'in_fandoms'</span>]
+552:         <span class="ruby-identifier">params</span>[<span class="ruby-value str">'in_fandoms'</span>].<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;,&quot;</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fandom_name</span><span class="ruby-operator">|</span>
+553:           <span class="ruby-identifier">fandom_name</span>.<span class="ruby-identifier">strip!</span>
+554:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fandom_name</span>
+555:             <span class="ruby-identifier">fandom</span> = <span class="ruby-constant">Fandom</span>.<span class="ruby-identifier">get_by_name</span>(<span class="ruby-identifier">fandom_name</span>)
+556:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fandom</span>
+557:               <span class="ruby-identifier">fandom_list</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">fandom</span>
+558:             <span class="ruby-keyword kw">else</span>
+559:               <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> <span class="ruby-node">&quot;Fandom '#{h fandom_name}' not found&quot;</span>
+560:             <span class="ruby-keyword kw">end</span> 
+561:           <span class="ruby-keyword kw">end</span>
+562:         <span class="ruby-keyword kw">end</span>
+563:       <span class="ruby-keyword kw">end</span>
+564:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fandom_list</span>.<span class="ruby-identifier">empty?</span>
+565:         <span class="ruby-identifier">all_fandoms</span> = <span class="ruby-constant">Fandom</span>.<span class="ruby-identifier">all</span>
+566:       <span class="ruby-keyword kw">end</span>
+567:       <span class="ruby-identifier">all_fandoms</span> <span class="ruby-operator">+=</span> [<span class="ruby-keyword kw">nil</span>] * <span class="ruby-identifier">params</span>[<span class="ruby-value str">'max_new_fandoms'</span>].<span class="ruby-identifier">to_i</span>
+568:       <span class="ruby-identifier">new_fandom_func</span> = <span class="ruby-identifier">lambda</span> {
+569:         <span class="ruby-identifier">new_name</span> = <span class="ruby-identifier">random_sentence</span>(<span class="ruby-value">8</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">rand</span>(<span class="ruby-value">4</span>) * <span class="ruby-identifier">rand</span>(<span class="ruby-value">4</span>)))
+570:         <span class="ruby-constant">Fandom</span>.<span class="ruby-identifier">new</span>(
+571:           <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">new_name</span>
+572:         )
+573:       }
+574: 
+575:       <span class="ruby-identifier">all_categories</span> = []
+576:       <span class="ruby-identifier">all_warnings</span> = <span class="ruby-constant">Warning</span>.<span class="ruby-identifier">all</span>
+577:       <span class="ruby-identifier">all_ratings</span> = <span class="ruby-constant">Rating</span>.<span class="ruby-identifier">all</span>
+578:       <span class="ruby-identifier">all_characters</span> = <span class="ruby-constant">Character</span>.<span class="ruby-identifier">all</span>
+579:       <span class="ruby-identifier">all_characters</span> <span class="ruby-operator">+=</span> [<span class="ruby-keyword kw">nil</span>] * <span class="ruby-identifier">params</span>[<span class="ruby-value str">'max_new_characters'</span>].<span class="ruby-identifier">to_i</span>
+580:       <span class="ruby-identifier">new_character_func</span> = <span class="ruby-identifier">lambda</span> {
+581:         <span class="ruby-identifier">new_name</span> = <span class="ruby-identifier">random_sentence</span>(<span class="ruby-value">4</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">rand</span>(<span class="ruby-value">12</span>))
+582:          <span class="ruby-constant">Character</span>.<span class="ruby-identifier">find_or_create_by_name</span>(
+583:           <span class="ruby-identifier">new_name</span>
+584:         )
+585:       }
+586:       <span class="ruby-identifier">all_relationships</span> = <span class="ruby-constant">Relationship</span>.<span class="ruby-identifier">all</span>
+587:       <span class="ruby-identifier">all_relationships</span> <span class="ruby-operator">+=</span> [<span class="ruby-keyword kw">nil</span>] * <span class="ruby-identifier">params</span>[<span class="ruby-value str">'max_new_relationships'</span>].<span class="ruby-identifier">to_i</span>
+588:       <span class="ruby-identifier">new_relationship_func</span> = <span class="ruby-identifier">lambda</span> {
+589:         <span class="ruby-identifier">new_name</span> = [<span class="ruby-identifier">random_sentence</span>(<span class="ruby-value">4</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">rand</span>(<span class="ruby-value">12</span>)), <span class="ruby-identifier">random_sentence</span>(<span class="ruby-value">4</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">rand</span>(<span class="ruby-value">12</span>))].<span class="ruby-identifier">join</span>(<span class="ruby-value str">'/'</span>)
+590:         <span class="ruby-constant">Relationship</span>.<span class="ruby-identifier">new</span>(
+591:           <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">new_name</span>
+592:         )
+593:       }
+594: 
+595:       <span class="ruby-identifier">all_authors</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">all</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">login</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value str">&quot;author_prefix&quot;</span>]}
+596: 
+597:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">all_authors</span>.<span class="ruby-identifier">nil?</span>
+598:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> <span class="ruby-value str">&quot;Author selection failed&quot;</span>
+599:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">all_authors</span>.<span class="ruby-identifier">empty?</span>
+600:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> <span class="ruby-value str">&quot;No authors found.&quot;</span>
+601:       <span class="ruby-keyword kw">end</span>
+602: 
+603:       <span class="ruby-comment cmt"># All data gathered</span>
+604: 
+605:       <span class="ruby-comment cmt"># We'll need to pick or create fandoms, characters, tags, etc, so use a Proc</span>
+606:       <span class="ruby-identifier">pick_or_create</span> = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">list</span>, <span class="ruby-identifier">create_func</span><span class="ruby-operator">|</span>
+607:         <span class="ruby-identifier">item</span> = <span class="ruby-identifier">list</span>.<span class="ruby-identifier">choice</span>
+608:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">nil?</span>
+609:           <span class="ruby-identifier">item</span> = <span class="ruby-identifier">create_func</span>.<span class="ruby-identifier">call</span>
+610:           <span class="ruby-comment cmt"># Put the new item into the list</span>
+611:           <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">list</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">item</span>
+612:             <span class="ruby-identifier">nil_pos</span> = <span class="ruby-identifier">list</span>.<span class="ruby-identifier">index</span> <span class="ruby-keyword kw">nil</span>
+613:             <span class="ruby-identifier">list</span>[<span class="ruby-identifier">nil_pos</span><span class="ruby-operator">..</span><span class="ruby-identifier">nil_pos</span>] = <span class="ruby-identifier">item</span>
+614:           <span class="ruby-keyword kw">end</span>
+615:         <span class="ruby-keyword kw">end</span>
+616:         <span class="ruby-identifier">item</span>
+617:       <span class="ruby-keyword kw">end</span>
+618: 
+619:       <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-node">&quot;Starting to create #{work_count} works&quot;</span>)
+620: 
+621:       <span class="ruby-comment cmt"># Now the loop to create works. We just go round, picking/creating random</span>
+622:       <span class="ruby-comment cmt"># data according to the conditions and data above.</span>
+623:       <span class="ruby-comment cmt"># There's a condition written at the end of this loop to skip it if</span>
+624:       <span class="ruby-comment cmt"># we've encountered errors already.</span>
+625:       <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">work_idx</span> <span class="ruby-keyword kw">in</span> (<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-identifier">work_count</span>)
+626:         <span class="ruby-comment cmt"># Create work</span>
+627:         <span class="ruby-identifier">work_name</span> = <span class="ruby-identifier">lambda</span> <span class="ruby-keyword kw">do</span>
+628:           <span class="ruby-identifier">len</span> = <span class="ruby-identifier">work_name_length</span>.<span class="ruby-identifier">choice</span>
+629:           <span class="ruby-identifier">random_sentence</span>(<span class="ruby-identifier">len</span>)
+630:         <span class="ruby-keyword kw">end</span>
+631: 
+632:         <span class="ruby-identifier">num_fandoms</span> = <span class="ruby-identifier">fandoms_count</span>.<span class="ruby-identifier">choice</span>
+633: 
+634:         <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">fandom_list</span>.<span class="ruby-identifier">empty?</span>
+635:           <span class="ruby-identifier">fandoms</span> = <span class="ruby-identifier">fandom_list</span>
+636:         <span class="ruby-keyword kw">else</span>
+637:           <span class="ruby-identifier">fandoms</span> = []
+638:           <span class="ruby-comment cmt"># Randomly choose fandoms</span>
+639:           <span class="ruby-identifier">num_fandoms</span>.<span class="ruby-identifier">times</span> {<span class="ruby-identifier">fandoms</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">pick_or_create</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">all_fandoms</span>, <span class="ruby-identifier">new_fandom_func</span>)}
+640:         <span class="ruby-keyword kw">end</span>
+641: 
+642:         <span class="ruby-identifier">warnings</span> = [<span class="ruby-identifier">all_warnings</span>.<span class="ruby-identifier">choice</span>]
+643:         <span class="ruby-identifier">ratings</span> = [<span class="ruby-identifier">all_ratings</span>.<span class="ruby-identifier">choice</span>]
+644:         <span class="ruby-identifier">num_characters</span> = <span class="ruby-value">2</span>
+645:         <span class="ruby-identifier">num_relationships</span> = <span class="ruby-value">1</span>
+646: 
+647:         <span class="ruby-comment cmt"># parameterise later</span>
+648:         <span class="ruby-identifier">characters</span> = []
+649:         <span class="ruby-identifier">num_characters</span>.<span class="ruby-identifier">times</span> {<span class="ruby-identifier">characters</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">pick_or_create</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">all_characters</span>, <span class="ruby-identifier">new_character_func</span>)}
+650:         <span class="ruby-identifier">relationships</span> = []
+651:         <span class="ruby-identifier">num_relationships</span>.<span class="ruby-identifier">times</span> {<span class="ruby-identifier">relationships</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">pick_or_create</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">all_relationships</span>, <span class="ruby-identifier">new_relationship_func</span>)}
+652: 
+653:         <span class="ruby-comment cmt"># Select some random authors</span>
+654:         <span class="ruby-identifier">authors</span> = []
+655:         <span class="ruby-identifier">num_authors</span> = <span class="ruby-identifier">authors_count</span>.<span class="ruby-identifier">choice</span>
+656:         <span class="ruby-identifier">num_authors</span>.<span class="ruby-identifier">times</span> {<span class="ruby-identifier">authors</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">all_authors</span>.<span class="ruby-identifier">choice</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">choice</span>}
+657: 
+658:         <span class="ruby-keyword kw">begin</span>
+659:           <span class="ruby-identifier">work</span> = <span class="ruby-identifier">create_work</span>(<span class="ruby-identifier">work_name</span>.<span class="ruby-identifier">call</span>, <span class="ruby-identifier">authors</span>, <span class="ruby-identifier">ratings</span>, <span class="ruby-identifier">warnings</span>, <span class="ruby-identifier">characters</span>, <span class="ruby-identifier">relationships</span>, <span class="ruby-identifier">fandoms</span>, <span class="ruby-identifier">chapter_count</span>.<span class="ruby-identifier">choice</span>, <span class="ruby-identifier">chapter_length</span>.<span class="ruby-identifier">choice</span>)
+660:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>
+661:           <span class="ruby-comment cmt"># I include the backtrace because this is a development server tool.</span>
+662:           <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> <span class="ruby-node">&quot;EXCEPTION OCURRED '#{ex.message}':&lt;br/&gt;#{ex.backtrace}&quot;</span>
+663:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">msg</span>
+664:           <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">msg</span>
+665:         <span class="ruby-keyword kw">end</span>
+666: 
+667:         <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">chapter</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">chapters</span>
+668:           <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">chapter</span>.<span class="ruby-identifier">save</span>
+669:             <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">chapter</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">full_messages</span>
+670:             <span class="ruby-keyword kw">break</span>
+671:           <span class="ruby-keyword kw">end</span>
+672:         <span class="ruby-keyword kw">end</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">nil?</span>
+673: 
+674:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">nil?</span>
+675:           <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> <span class="ruby-value str">&quot;No work created&quot;</span>
+676:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">word_count</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+677:           <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> <span class="ruby-value str">&quot;No words in work&quot;</span>
+678:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">save</span>
+679:           <span class="ruby-identifier">new_works</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">work</span>
+680:         <span class="ruby-keyword kw">else</span>
+681:           <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">new_works</span>.<span class="ruby-identifier">empty?</span>
+682:             <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> <span class="ruby-node">&quot;After #{new_works.length} works&quot;</span>
+683:           <span class="ruby-keyword kw">end</span>
+684:           <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">push</span> <span class="ruby-node">&quot;Save failed: #{work.errors.full_messages}, #{work}; #{characters.collect(&amp;:name)}&quot;</span>
+685:         <span class="ruby-keyword kw">end</span>
+686:         <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-identifier">max_errors</span>
+687: 
+688:         <span class="ruby-comment cmt"># Add comments to work</span>
+689: 
+690:       <span class="ruby-keyword kw">end</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">empty?</span>
+691: 
+692:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">empty?</span>
+693:         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-value str">&quot;Seeding successful&quot;</span>
+694:         <span class="ruby-identifier">redirect_to</span> <span class="ruby-value str">&quot;/devmode&quot;</span>
+695:       <span class="ruby-keyword kw">else</span>
+696:         <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-node">&quot;Error creating #{work_count} works. #{errors.join '\n'}&quot;</span>)
+697:         <span class="ruby-keyword kw">begin</span>
+698:           <span class="ruby-ivar">@errors</span> = <span class="ruby-value str">&quot;Errors: &lt;ul&gt;&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">?</span> (<span class="ruby-value str">&quot;&lt;li&gt;&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value str">&quot;join&quot;</span>)<span class="ruby-operator">?</span><span class="ruby-identifier">x</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;&lt;/li&gt;&lt;li&gt;&quot;</span>)<span class="ruby-operator">:</span><span class="ruby-identifier">x</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;&lt;/li&gt;&quot;</span>)<span class="ruby-operator">:</span><span class="ruby-value str">''</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;&lt;/ul&gt;&lt;br /&gt;&lt;ul&gt;&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;&lt;/ul&gt;&quot;</span>
+699:         <span class="ruby-keyword kw">rescue</span>
+700:           <span class="ruby-ivar">@errors</span> = <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">inspect</span>
+701:         <span class="ruby-keyword kw">end</span>
+702:         <span class="ruby-comment cmt"># Copy input parameters back to the form defining arrays</span>
+703:         <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">name</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">params</span>.<span class="ruby-identifier">keys</span>
+704:           <span class="ruby-comment cmt"># convert to a symbol for equality tests</span>
+705:           <span class="ruby-identifier">name_sym</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>
+706:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">entry</span> = <span class="ruby-ivar">@params</span>.<span class="ruby-identifier">detect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">name_sym</span>}
+707:             <span class="ruby-identifier">entry</span>[<span class="ruby-value">1</span>][<span class="ruby-value">1</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">name</span>]
+708:             <span class="ruby-comment cmt"># A html hack for checkboxes. (I know, but it's a developer tool)</span>
+709:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">entry</span>[<span class="ruby-value">1</span>][<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">:checkbox</span>
+710:               <span class="ruby-identifier">entry</span>[<span class="ruby-value">1</span>][<span class="ruby-value">1</span>] = <span class="ruby-value str">'&quot; checked=&quot;checked'</span>
+711:             <span class="ruby-keyword kw">end</span>
+712:           <span class="ruby-keyword kw">end</span>
+713:         <span class="ruby-keyword kw">end</span>
+714:         <span class="ruby-ivar">@params</span>.<span class="ruby-identifier">delete</span> <span class="ruby-value str">&quot;seed&quot;</span>
+715:       <span class="ruby-keyword kw">end</span>
+716:     <span class="ruby-keyword kw">end</span>
+717:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="unregister-imports-method" class="method-detail ">
+				<a name="method-i-unregister_imports"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">unregister_imports</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="unregister-imports-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/devmode_controller.rb, line 18</span>
+18:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unregister_imports</span>
+19:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:okgo</span>]
+20:       <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">work</span> <span class="ruby-keyword kw">in</span> <span class="ruby-constant">Work</span>.<span class="ruby-identifier">all</span>
+21:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">imported_from_url</span>
+22:           <span class="ruby-identifier">work</span>.<span class="ruby-identifier">imported_from_url</span> = <span class="ruby-keyword kw">nil</span>
+23:           <span class="ruby-identifier">work</span>.<span class="ruby-identifier">save</span> <span class="ruby-keyword kw">false</span>
+24:         <span class="ruby-keyword kw">end</span>
+25:       <span class="ruby-keyword kw">end</span>
+26:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:info</span>] = <span class="ruby-value str">'Successfully cleared URL associations'</span>
+27:     <span class="ruby-keyword kw">end</span>
+28:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+

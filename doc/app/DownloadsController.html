@@ -1,0 +1,1265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Class: DownloadsController</title>
+
+	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+
+	<script src="./js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="class">
+
+	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="./index.html">Home</a>
+          <a href="./index.html#classes">Classes</a>
+          <a href="./index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="./app/controllers/downloads_controller_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="app/controllers/downloads_controller.rb">app/controllers/downloads_controller.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+			<div id="parent-class-section" class="section">
+				<h3 class="section-header">Parent</h3>
+				
+				<p class="link"><a href="ApplicationController.html">ApplicationController</a></p>
+				
+			</div>
+			
+
+			<!-- Namespace Contents -->
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#method-i-check_for_file">#check_for_file</a></li>
+					
+					<li><a href="#method-i-create_epub_files">#create_epub_files</a></li>
+					
+					<li><a href="#method-i-create_mobi_html">#create_mobi_html</a></li>
+					
+					<li><a href="#method-i-create_work_html">#create_work_html</a></li>
+					
+					<li><a href="#method-i-download_epub">#download_epub</a></li>
+					
+					<li><a href="#method-i-download_html">#download_html</a></li>
+					
+					<li><a href="#method-i-download_mobi">#download_mobi</a></li>
+					
+					<li><a href="#method-i-download_pdf">#download_pdf</a></li>
+					
+					<li><a href="#method-i-guest_downloading_off">#guest_downloading_off</a></li>
+					
+					<li><a href="#method-i-render_mobi_html">#render_mobi_html</a></li>
+					
+					<li><a href="#method-i-render_xhtml">#render_xhtml</a></li>
+					
+					<li><a href="#method-i-show">#show</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+			<div id="includes-section" class="section">
+				<h3 class="section-header">Included Modules</h3>
+				<ul class="link-list">
+				
+				
+					<li><a class="include" href="XhtmlSplitter.html">XhtmlSplitter</a></li>
+				
+				
+				</ul>
+			</div>
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="./images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="./Static.html">Static</a></li>
+				
+					<li><a href="./Static/BaseController.html">Static::BaseController</a></li>
+				
+					<li><a href="./Static/CollectionsController.html">Static::CollectionsController</a></li>
+				
+					<li><a href="./Static/FandomsController.html">Static::FandomsController</a></li>
+				
+					<li><a href="./Static/MediaController.html">Static::MediaController</a></li>
+				
+					<li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
+				
+					<li><a href="./Static/WorksController.html">Static::WorksController</a></li>
+				
+					<li><a href="./Admin.html">Admin</a></li>
+				
+					<li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
+				
+					<li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
+				
+					<li><a href="./Admin/SettingsController.html">Admin::SettingsController</a></li>
+				
+					<li><a href="./Admin/SkinsController.html">Admin::SkinsController</a></li>
+				
+					<li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
+				
+					<li><a href="./ActionController.html">ActionController</a></li>
+				
+					<li><a href="./ActionController/Routing.html">ActionController::Routing</a></li>
+				
+					<li><a href="./ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
+				
+					<li><a href="./Challenge.html">Challenge</a></li>
+				
+					<li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
+				
+					<li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
+				
+					<li><a href="./ActiveRecord.html">ActiveRecord</a></li>
+				
+					<li><a href="./AutocompleteSource.html">AutocompleteSource</a></li>
+				
+					<li><a href="./AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
+				
+					<li><a href="./ChallengeCore.html">ChallengeCore</a></li>
+				
+					<li><a href="./ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
+				
+					<li><a href="./StoryParser.html">StoryParser</a></li>
+				
+					<li><a href="./StoryParser/Error.html">StoryParser::Error</a></li>
+				
+					<li><a href="./XhtmlSplitter.html">XhtmlSplitter</a></li>
+				
+					<li><a href="./XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
+				
+					<li><a href="./AbuseReport.html">AbuseReport</a></li>
+				
+					<li><a href="./AbuseReportsController.html">AbuseReportsController</a></li>
+				
+					<li><a href="./AdminMailer.html">AdminMailer</a></li>
+				
+					<li><a href="./AdminPost.html">AdminPost</a></li>
+				
+					<li><a href="./AdminPostTag.html">AdminPostTag</a></li>
+				
+					<li><a href="./AdminPostTagging.html">AdminPostTagging</a></li>
+				
+					<li><a href="./AdminPostsController.html">AdminPostsController</a></li>
+				
+					<li><a href="./AdminSession.html">AdminSession</a></li>
+				
+					<li><a href="./AdminSessionsController.html">AdminSessionsController</a></li>
+				
+					<li><a href="./AdminSetting.html">AdminSetting</a></li>
+				
+					<li><a href="./AdminsController.html">AdminsController</a></li>
+				
+					<li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
+				
+					<li><a href="./AlphabetHelper.html">AlphabetHelper</a></li>
+				
+					<li><a href="./ApplicationController.html">ApplicationController</a></li>
+				
+					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
+				
+					<li><a href="./ArchiveFaq.html">ArchiveFaq</a></li>
+				
+					<li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a></li>
+				
+					<li><a href="./AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
+				
+					<li><a href="./AutocompleteController.html">AutocompleteController</a></li>
+				
+					<li><a href="./Banned.html">Banned</a></li>
+				
+					<li><a href="./Bookmark.html">Bookmark</a></li>
+				
+					<li><a href="./BookmarksController.html">BookmarksController</a></li>
+				
+					<li><a href="./BookmarksHelper.html">BookmarksHelper</a></li>
+				
+					<li><a href="./CacheHelper.html">CacheHelper</a></li>
+				
+					<li><a href="./CastNomination.html">CastNomination</a></li>
+				
+					<li><a href="./Category.html">Category</a></li>
+				
+					<li><a href="./ChallengeAssignment.html">ChallengeAssignment</a></li>
+				
+					<li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
+				
+					<li><a href="./ChallengeClaim.html">ChallengeClaim</a></li>
+				
+					<li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a></li>
+				
+					<li><a href="./ChallengeHelper.html">ChallengeHelper</a></li>
+				
+					<li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a></li>
+				
+					<li><a href="./ChallengeSignup.html">ChallengeSignup</a></li>
+				
+					<li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
+				
+					<li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
+				
+					<li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a></li>
+				
+					<li><a href="./ChallengeSweeper.html">ChallengeSweeper</a></li>
+				
+					<li><a href="./ChallengesController.html">ChallengesController</a></li>
+				
+					<li><a href="./Chapter.html">Chapter</a></li>
+				
+					<li><a href="./ChapterSweeper.html">ChapterSweeper</a></li>
+				
+					<li><a href="./ChaptersController.html">ChaptersController</a></li>
+				
+					<li><a href="./ChaptersHelper.html">ChaptersHelper</a></li>
+				
+					<li><a href="./Character.html">Character</a></li>
+				
+					<li><a href="./CharacterNomination.html">CharacterNomination</a></li>
+				
+					<li><a href="./Collectible.html">Collectible</a></li>
+				
+					<li><a href="./Collection.html">Collection</a></li>
+				
+					<li><a href="./CollectionItem.html">CollectionItem</a></li>
+				
+					<li><a href="./CollectionItemsController.html">CollectionItemsController</a></li>
+				
+					<li><a href="./CollectionObserver.html">CollectionObserver</a></li>
+				
+					<li><a href="./CollectionParticipant.html">CollectionParticipant</a></li>
+				
+					<li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a></li>
+				
+					<li><a href="./CollectionPreference.html">CollectionPreference</a></li>
+				
+					<li><a href="./CollectionProfile.html">CollectionProfile</a></li>
+				
+					<li><a href="./CollectionProfileController.html">CollectionProfileController</a></li>
+				
+					<li><a href="./CollectionSweeper.html">CollectionSweeper</a></li>
+				
+					<li><a href="./CollectionsController.html">CollectionsController</a></li>
+				
+					<li><a href="./CollectionsHelper.html">CollectionsHelper</a></li>
+				
+					<li><a href="./Comment.html">Comment</a></li>
+				
+					<li><a href="./CommentMailer.html">CommentMailer</a></li>
+				
+					<li><a href="./CommentObserver.html">CommentObserver</a></li>
+				
+					<li><a href="./CommentSweeper.html">CommentSweeper</a></li>
+				
+					<li><a href="./CommentsController.html">CommentsController</a></li>
+				
+					<li><a href="./CommentsHelper.html">CommentsHelper</a></li>
+				
+					<li><a href="./CommonTagging.html">CommonTagging</a></li>
+				
+					<li><a href="./CreationObserver.html">CreationObserver</a></li>
+				
+					<li><a href="./Creatorship.html">Creatorship</a></li>
+				
+					<li><a href="./CssCleaner.html">CssCleaner</a></li>
+				
+					<li><a href="./DateHelper.html">DateHelper</a></li>
+				
+					<li><a href="./DevmodeController.html">DevmodeController</a></li>
+				
+					<li><a href="./DownloadsController.html">DownloadsController</a></li>
+				
+					<li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a></li>
+				
+					<li><a href="./ErrorsController.html">ErrorsController</a></li>
+				
+					<li><a href="./ExternalAuthor.html">ExternalAuthor</a></li>
+				
+					<li><a href="./ExternalAuthorName.html">ExternalAuthorName</a></li>
+				
+					<li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a></li>
+				
+					<li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
+				
+					<li><a href="./ExternalCreatorship.html">ExternalCreatorship</a></li>
+				
+					<li><a href="./ExternalWork.html">ExternalWork</a></li>
+				
+					<li><a href="./ExternalWorksController.html">ExternalWorksController</a></li>
+				
+					<li><a href="./Fandom.html">Fandom</a></li>
+				
+					<li><a href="./FandomNomination.html">FandomNomination</a></li>
+				
+					<li><a href="./FandomsController.html">FandomsController</a></li>
+				
+					<li><a href="./FeedSweeper.html">FeedSweeper</a></li>
+				
+					<li><a href="./Feedback.html">Feedback</a></li>
+				
+					<li><a href="./FeedbacksController.html">FeedbacksController</a></li>
+				
+					<li><a href="./FilterCount.html">FilterCount</a></li>
+				
+					<li><a href="./FilterTagging.html">FilterTagging</a></li>
+				
+					<li><a href="./FindRandom.html">FindRandom</a></li>
+				
+					<li><a href="./Freeform.html">Freeform</a></li>
+				
+					<li><a href="./FreeformNomination.html">FreeformNomination</a></li>
+				
+					<li><a href="./Gift.html">Gift</a></li>
+				
+					<li><a href="./GiftExchange.html">GiftExchange</a></li>
+				
+					<li><a href="./GiftsController.html">GiftsController</a></li>
+				
+					<li><a href="./HitCounter.html">HitCounter</a></li>
+				
+					<li><a href="./HomeController.html">HomeController</a></li>
+				
+					<li><a href="./HomeHelper.html">HomeHelper</a></li>
+				
+					<li><a href="./HtmlCleaner.html">HtmlCleaner</a></li>
+				
+					<li><a href="./InboxComment.html">InboxComment</a></li>
+				
+					<li><a href="./InboxController.html">InboxController</a></li>
+				
+					<li><a href="./InboxHelper.html">InboxHelper</a></li>
+				
+					<li><a href="./Invitation.html">Invitation</a></li>
+				
+					<li><a href="./InvitationsController.html">InvitationsController</a></li>
+				
+					<li><a href="./InvitationsHelper.html">InvitationsHelper</a></li>
+				
+					<li><a href="./InviteRequest.html">InviteRequest</a></li>
+				
+					<li><a href="./InviteRequestsController.html">InviteRequestsController</a></li>
+				
+					<li><a href="./KnownIssue.html">KnownIssue</a></li>
+				
+					<li><a href="./KnownIssuesController.html">KnownIssuesController</a></li>
+				
+					<li><a href="./Kudo.html">Kudo</a></li>
+				
+					<li><a href="./KudoMailer.html">KudoMailer</a></li>
+				
+					<li><a href="./KudoObserver.html">KudoObserver</a></li>
+				
+					<li><a href="./KudosController.html">KudosController</a></li>
+				
+					<li><a href="./Language.html">Language</a></li>
+				
+					<li><a href="./LanguagesController.html">LanguagesController</a></li>
+				
+					<li><a href="./Locale.html">Locale</a></li>
+				
+					<li><a href="./LocalesController.html">LocalesController</a></li>
+				
+					<li><a href="./LogItem.html">LogItem</a></li>
+				
+					<li><a href="./Media.html">Media</a></li>
+				
+					<li><a href="./MediaController.html">MediaController</a></li>
+				
+					<li><a href="./MetaTagging.html">MetaTagging</a></li>
+				
+					<li><a href="./Offer.html">Offer</a></li>
+				
+					<li><a href="./OrphansController.html">OrphansController</a></li>
+				
+					<li><a href="./OrphansHelper.html">OrphansHelper</a></li>
+				
+					<li><a href="./OwnedSetTagging.html">OwnedSetTagging</a></li>
+				
+					<li><a href="./OwnedTagSet.html">OwnedTagSet</a></li>
+				
+					<li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a></li>
+				
+					<li><a href="./PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
+				
+					<li><a href="./PasswordsController.html">PasswordsController</a></li>
+				
+					<li><a href="./People.html">People</a></li>
+				
+					<li><a href="./PeopleController.html">PeopleController</a></li>
+				
+					<li><a href="./PotentialMatch.html">PotentialMatch</a></li>
+				
+					<li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a></li>
+				
+					<li><a href="./PotentialMatchesController.html">PotentialMatchesController</a></li>
+				
+					<li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a></li>
+				
+					<li><a href="./Preference.html">Preference</a></li>
+				
+					<li><a href="./PreferencesController.html">PreferencesController</a></li>
+				
+					<li><a href="./Profile.html">Profile</a></li>
+				
+					<li><a href="./ProfileController.html">ProfileController</a></li>
+				
+					<li><a href="./Prompt.html">Prompt</a></li>
+				
+					<li><a href="./PromptMeme.html">PromptMeme</a></li>
+				
+					<li><a href="./PromptRestriction.html">PromptRestriction</a></li>
+				
+					<li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
+				
+					<li><a href="./PromptsController.html">PromptsController</a></li>
+				
+					<li><a href="./Pseud.html">Pseud</a></li>
+				
+					<li><a href="./PseudSweeper.html">PseudSweeper</a></li>
+				
+					<li><a href="./PseudsController.html">PseudsController</a></li>
+				
+					<li><a href="./PseudsHelper.html">PseudsHelper</a></li>
+				
+					<li><a href="./Query.html">Query</a></li>
+				
+					<li><a href="./Rating.html">Rating</a></li>
+				
+					<li><a href="./Rawk.html">Rawk</a></li>
+				
+					<li><a href="./Reading.html">Reading</a></li>
+				
+					<li><a href="./ReadingsController.html">ReadingsController</a></li>
+				
+					<li><a href="./RedirectController.html">RedirectController</a></li>
+				
+					<li><a href="./RedisTestSetup.html">RedisTestSetup</a></li>
+				
+					<li><a href="./RelatedWork.html">RelatedWork</a></li>
+				
+					<li><a href="./RelatedWorksController.html">RelatedWorksController</a></li>
+				
+					<li><a href="./Relationship.html">Relationship</a></li>
+				
+					<li><a href="./RelationshipNomination.html">RelationshipNomination</a></li>
+				
+					<li><a href="./Request.html">Request</a></li>
+				
+					<li><a href="./Role.html">Role</a></li>
+				
+					<li><a href="./RolesUser.html">RolesUser</a></li>
+				
+					<li><a href="./SearchController.html">SearchController</a></li>
+				
+					<li><a href="./SearchHelper.html">SearchHelper</a></li>
+				
+					<li><a href="./SerialWork.html">SerialWork</a></li>
+				
+					<li><a href="./SerialWorksController.html">SerialWorksController</a></li>
+				
+					<li><a href="./Series.html">Series</a></li>
+				
+					<li><a href="./SeriesController.html">SeriesController</a></li>
+				
+					<li><a href="./SeriesHelper.html">SeriesHelper</a></li>
+				
+					<li><a href="./SetTagging.html">SetTagging</a></li>
+				
+					<li><a href="./Skin.html">Skin</a></li>
+				
+					<li><a href="./SkinParent.html">SkinParent</a></li>
+				
+					<li><a href="./SkinsController.html">SkinsController</a></li>
+				
+					<li><a href="./SkinsHelper.html">SkinsHelper</a></li>
+				
+					<li><a href="./SortableList.html">SortableList</a></li>
+				
+					<li><a href="./Stat.html">Stat</a></li>
+				
+					<li><a href="./StatHash.html">StatHash</a></li>
+				
+					<li><a href="./StaticSweeper.html">StaticSweeper</a></li>
+				
+					<li><a href="./StatsController.html">StatsController</a></li>
+				
+					<li><a href="./StatsHelper.html">StatsHelper</a></li>
+				
+					<li><a href="./Subscription.html">Subscription</a></li>
+				
+					<li><a href="./SubscriptionsController.html">SubscriptionsController</a></li>
+				
+					<li><a href="./Tag.html">Tag</a></li>
+				
+					<li><a href="./TagNomination.html">TagNomination</a></li>
+				
+					<li><a href="./TagNominationsController.html">TagNominationsController</a></li>
+				
+					<li><a href="./TagSet.html">TagSet</a></li>
+				
+					<li><a href="./TagSetAssociation.html">TagSetAssociation</a></li>
+				
+					<li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a></li>
+				
+					<li><a href="./TagSetNomination.html">TagSetNomination</a></li>
+				
+					<li><a href="./TagSetNominationsController.html">TagSetNominationsController</a></li>
+				
+					<li><a href="./TagSetOwnership.html">TagSetOwnership</a></li>
+				
+					<li><a href="./TagSetSweeper.html">TagSetSweeper</a></li>
+				
+					<li><a href="./TagSetsHelper.html">TagSetsHelper</a></li>
+				
+					<li><a href="./TagSweeper.html">TagSweeper</a></li>
+				
+					<li><a href="./TagWranglersController.html">TagWranglersController</a></li>
+				
+					<li><a href="./TagWranglingsController.html">TagWranglingsController</a></li>
+				
+					<li><a href="./Taggable.html">Taggable</a></li>
+				
+					<li><a href="./Tagging.html">Tagging</a></li>
+				
+					<li><a href="./TagsController.html">TagsController</a></li>
+				
+					<li><a href="./TagsHelper.html">TagsHelper</a></li>
+				
+					<li><a href="./TranslationGenerator.html">TranslationGenerator</a></li>
+				
+					<li><a href="./TranslationHelper.html">TranslationHelper</a></li>
+				
+					<li><a href="./TranslationNote.html">TranslationNote</a></li>
+				
+					<li><a href="./TranslationNotesController.html">TranslationNotesController</a></li>
+				
+					<li><a href="./TranslationsController.html">TranslationsController</a></li>
+				
+					<li><a href="./TranslatorsController.html">TranslatorsController</a></li>
+				
+					<li><a href="./UrlActiveValidator.html">UrlActiveValidator</a></li>
+				
+					<li><a href="./UrlFormatValidator.html">UrlFormatValidator</a></li>
+				
+					<li><a href="./UrlHelpers.html">UrlHelpers</a></li>
+				
+					<li><a href="./User.html">User</a></li>
+				
+					<li><a href="./UserInviteRequest.html">UserInviteRequest</a></li>
+				
+					<li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a></li>
+				
+					<li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
+				
+					<li><a href="./UserMailer.html">UserMailer</a></li>
+				
+					<li><a href="./UserSession.html">UserSession</a></li>
+				
+					<li><a href="./UserSessionsController.html">UserSessionsController</a></li>
+				
+					<li><a href="./UsersController.html">UsersController</a></li>
+				
+					<li><a href="./UsersHelper.html">UsersHelper</a></li>
+				
+					<li><a href="./ValidationHelper.html">ValidationHelper</a></li>
+				
+					<li><a href="./Warning.html">Warning</a></li>
+				
+					<li><a href="./WeightedRandom.html">WeightedRandom</a></li>
+				
+					<li><a href="./Work.html">Work</a></li>
+				
+					<li><a href="./WorkObserver.html">WorkObserver</a></li>
+				
+					<li><a href="./WorkSkin.html">WorkSkin</a></li>
+				
+					<li><a href="./WorkSweeper.html">WorkSweeper</a></li>
+				
+					<li><a href="./WorksController.html">WorksController</a></li>
+				
+					<li><a href="./WorksHelper.html">WorksHelper</a></li>
+				
+					<li><a href="./WranglingAssignment.html">WranglingAssignment</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="class">DownloadsController</h1>
+
+		<div id="description">
+			
+		</div>
+
+		<!-- Constants -->
+		
+
+		<!-- Attributes -->
+		
+
+		<!-- Methods -->
+		
+		<div id="public-instance-method-details" class="method-section section">
+			<h3 class="section-header">Public Instance Methods</h3>
+
+		
+			<div id="show-method" class="method-detail ">
+				<a name="method-i-show"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">show</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+named route: download_path Note: only :id and :format need to be correct,
+the other two are derived and are there for nginx&#8217;s benefit GET
+/downloads/:download_authors/:id/:download_title.:format
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="show-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 19</span>
+19:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>
+20:     <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+21:     <span class="ruby-ivar">@check_visibility_of</span> = <span class="ruby-ivar">@work</span>
+22:     
+23:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">unrevealed?</span>
+24:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;Sorry, you can't download an unrevealed work&quot;</span>)
+25:       <span class="ruby-identifier">redirect_back_or_default</span> <span class="ruby-identifier">works_path</span>
+26:     <span class="ruby-keyword kw">end</span>
+27: 
+28:     <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Work basename: #{@work.download_basename}&quot;</span>
+29:     <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">download_dir</span>
+30:     <span class="ruby-ivar">@chapters</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">order</span>(<span class="ruby-value str">'position ASC'</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
+31: 
+32:     <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+33:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> {<span class="ruby-identifier">download_html</span>}
+34:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">pdf</span> {<span class="ruby-identifier">download_pdf</span>}
+35:       <span class="ruby-comment cmt"># mobipocket for kindle</span>
+36:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">mobi</span> {<span class="ruby-identifier">download_mobi</span>}
+37:       <span class="ruby-comment cmt"># epub for ibooks</span>
+38:       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">epub</span> {<span class="ruby-identifier">download_epub</span>}
+39:     <span class="ruby-keyword kw">end</span>
+40:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+		</div>
+	
+		<div id="protected-instance-method-details" class="method-section section">
+			<h3 class="section-header">Protected Instance Methods</h3>
+
+		
+			<div id="check-for-file-method" class="method-detail ">
+				<a name="method-i-check_for_file"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">check_for_file</span><span
+						class="method-args">(format)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="check-for-file-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 111</span>
+111:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_for_file</span>(<span class="ruby-identifier">format</span>)
+112:     <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-node">&quot;#{@work.download_basename}.#{format}&quot;</span>)
+113:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-value str">'We were not able to render this work. Please try another format'</span>)
+114:       <span class="ruby-identifier">redirect_back_or_default</span> <span class="ruby-identifier">work_path</span>(<span class="ruby-ivar">@work</span>) <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">return</span>
+115:     <span class="ruby-keyword kw">end</span>
+116:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="create-epub-files-method" class="method-detail ">
+				<a name="method-i-create_epub_files"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">create_epub_files</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="create-epub-files-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 161</span>
+161:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_epub_files</span>
+162:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-node">&quot;#{@work.download_basename}.epub&quot;</span>)
+163:   <span class="ruby-comment cmt"># Manually building an epub file here</span>
+164:   <span class="ruby-comment cmt"># See http://www.jedisaber.com/eBooks/tutorial.asp for details</span>
+165:     <span class="ruby-identifier">epubdir</span> = <span class="ruby-node">&quot;#{@work.download_dir}/epub&quot;</span>
+166:     <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-identifier">epubdir</span>
+167: 
+168:     <span class="ruby-comment cmt"># copy mimetype and container files which don't need processing</span>
+169:     <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-node">&quot;#{Rails.root}/app/views/epub/mimetype&quot;</span>, <span class="ruby-identifier">epubdir</span>)
+170:     <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-node">&quot;#{epubdir}/META-INF&quot;</span>
+171:     <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-node">&quot;#{Rails.root}/app/views/epub/container.xml&quot;</span>, <span class="ruby-node">&quot;#{epubdir}/META-INF&quot;</span>)
+172: 
+173:     <span class="ruby-comment cmt"># write the OEBPS content files</span>
+174:     <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-node">&quot;#{epubdir}/OEBPS&quot;</span>
+175:     <span class="ruby-identifier">preface</span> = <span class="ruby-identifier">render_to_string</span>(<span class="ruby-value">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;downloads/_download_preface.html&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'barebones.html'</span>)
+176:     <span class="ruby-identifier">render_xhtml</span>(<span class="ruby-identifier">preface</span>, <span class="ruby-value str">&quot;preface&quot;</span>)
+177: 
+178:     <span class="ruby-ivar">@parts</span> = []
+179:     <span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">chapter</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
+180:       <span class="ruby-ivar">@chapter</span> = <span class="ruby-identifier">chapter</span>
+181:       
+182:       <span class="ruby-comment cmt"># split chapters into multiple parts if they are too big</span>
+183:       <span class="ruby-ivar">@parts</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">split_xhtml</span>(<span class="ruby-identifier">sanitize_field</span>(<span class="ruby-ivar">@chapter</span>, <span class="ruby-value">:content</span>))
+184:       <span class="ruby-ivar">@parts</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">part</span>, <span class="ruby-identifier">partindex</span><span class="ruby-operator">|</span>
+185:         <span class="ruby-ivar">@content</span> = <span class="ruby-identifier">part</span>
+186:         <span class="ruby-comment cmt"># we only need the chapter meta/endnotes info if it's a</span>
+187:         <span class="ruby-comment cmt"># multichaptered work and if we are displaying the first/last</span>
+188:         <span class="ruby-comment cmt"># part of a chapter</span>
+189:         <span class="ruby-ivar">@meta</span> = <span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">partindex</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+190:         <span class="ruby-ivar">@endnotes</span> = <span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">partindex</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@parts</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">size</span>
+191:         <span class="ruby-identifier">html</span> = <span class="ruby-identifier">render_to_string</span>(<span class="ruby-value">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;downloads/_download_chapter.html&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;barebones.html&quot;</span>)
+192:         <span class="ruby-identifier">render_xhtml</span>(<span class="ruby-identifier">html</span>, <span class="ruby-node">&quot;chapter#{index + 1}_#{partindex + 1}&quot;</span>)
+193:       <span class="ruby-keyword kw">end</span>
+194:     <span class="ruby-keyword kw">end</span>
+195: 
+196:     <span class="ruby-identifier">afterword</span> = <span class="ruby-identifier">render_to_string</span>(<span class="ruby-value">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;downloads/_download_afterword.html&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'barebones.html'</span>)
+197:     <span class="ruby-identifier">render_xhtml</span>(<span class="ruby-identifier">afterword</span>, <span class="ruby-value str">&quot;afterword&quot;</span>)
+198: 
+199:     <span class="ruby-comment cmt"># write the OEBPS navigation files</span>
+200:     <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{epubdir}/OEBPS/toc.ncx&quot;</span>, <span class="ruby-value str">'w'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">render_to_string</span>(<span class="ruby-value">:file</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{Rails.root}/app/views/epub/toc.ncx&quot;</span>))}
+201:     <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{epubdir}/OEBPS/content.opf&quot;</span>, <span class="ruby-value str">'w'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">render_to_string</span>(<span class="ruby-value">:file</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{Rails.root}/app/views/epub/content.opf&quot;</span>))}
+202: 
+203: 
+204:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="create-mobi-html-method" class="method-detail ">
+				<a name="method-i-create_mobi_html"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">create_mobi_html</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="create-mobi-html-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 131</span>
+131:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_mobi_html</span>
+132:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-node">&quot;#{@work.download_basename}.mobi&quot;</span>)
+133:     <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-node">&quot;#{@work.download_dir}/mobi&quot;</span>
+134: 
+135:     <span class="ruby-comment cmt"># the preface contains meta tag information, the title/author, work summary and work notes</span>
+136:     <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;Preface&quot;</span>)
+137:     <span class="ruby-identifier">render_mobi_html</span>(<span class="ruby-value str">&quot;_download_preface&quot;</span>, <span class="ruby-value str">&quot;preface&quot;</span>)
+138: 
+139:     <span class="ruby-comment cmt"># each chapter may have its own byline, notes and endnotes</span>
+140:     <span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">chapter</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
+141:        <span class="ruby-ivar">@chapter</span> = <span class="ruby-identifier">chapter</span>
+142:        <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">chapter</span>.<span class="ruby-identifier">chapter_title</span>
+143:        <span class="ruby-identifier">render_mobi_html</span>(<span class="ruby-value str">&quot;_download_chapter&quot;</span>, <span class="ruby-node">&quot;chapter#{index+1}&quot;</span>)
+144:     <span class="ruby-keyword kw">end</span>
+145: 
+146:     <span class="ruby-comment cmt"># the afterword contains the works end notes, any related works, and a link back to comment</span>
+147:      <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;Afterword&quot;</span>)
+148:      <span class="ruby-identifier">render_mobi_html</span>(<span class="ruby-value str">&quot;_download_afterword&quot;</span>, <span class="ruby-value str">&quot;afterword&quot;</span>)
+149: 
+150:     <span class="ruby-identifier">chapter_file_names</span> = <span class="ruby-value">1</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">size</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;mobi/chapter#{i}.html&quot;</span>}
+151:     [<span class="ruby-value str">&quot;mobi/preface.html&quot;</span>, <span class="ruby-identifier">chapter_file_names</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' '</span>), <span class="ruby-value str">&quot;mobi/afterword.html&quot;</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">' '</span>)
+152:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="create-work-html-method" class="method-detail ">
+				<a name="method-i-create_work_html"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">create_work_html</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="create-work-html-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 118</span>
+118:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_work_html</span>
+119:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-node">&quot;#{@work.download_basename}.html&quot;</span>)
+120: 
+121:     <span class="ruby-comment cmt"># set up instance variables needed by template</span>
+122:     <span class="ruby-ivar">@page_title</span> = [<span class="ruby-ivar">@work</span>.<span class="ruby-identifier">download_title</span>, <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">download_authors</span>, <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">download_fandoms</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; - &quot;</span>)
+123: 
+124:     <span class="ruby-comment cmt"># render template</span>
+125:     <span class="ruby-identifier">html</span> = <span class="ruby-identifier">render_to_string</span>(<span class="ruby-value">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;downloads/show.html&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'barebones.html'</span>)
+126: 
+127:     <span class="ruby-comment cmt"># write to file</span>
+128:     <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{@work.download_basename}.html&quot;</span>, <span class="ruby-value str">'w'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">html</span>)}
+129:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="download-epub-method" class="method-detail ">
+				<a name="method-i-download_epub"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">download_epub</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="download-epub-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 97</span>
+ 97:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">download_epub</span>
+ 98:     <span class="ruby-identifier">create_epub_files</span>
+ 99: 
+100:     <span class="ruby-comment cmt"># stuff contents of epub directory into a zip file named with .epub extension</span>
+101:     <span class="ruby-comment cmt"># note: we have to zip this up in this particular order because &quot;mimetype&quot; must be the first item in the zipfile</span>
+102:     <span class="ruby-identifier">cmd</span> = <span class="ruby-node">%{cd &quot;#{@work.download_dir}/epub&quot;; zip &quot;#{@work.download_basename}.epub&quot; mimetype; zip -r &quot;#{@work.download_basename}.epub&quot; META-INF OEBPS}</span>
+103:     <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-identifier">cmd</span>
+104:    <span class="ruby-node">`#{cmd} 2&gt; /dev/null`</span>
+105: 
+106:     <span class="ruby-comment cmt"># send the file</span>
+107:     <span class="ruby-identifier">check_for_file</span>(<span class="ruby-value str">&quot;epub&quot;</span>)
+108:     <span class="ruby-identifier">send_file</span>(<span class="ruby-node">&quot;#{@work.download_basename}.epub&quot;</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;application/epub&quot;</span>)
+109:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="download-html-method" class="method-detail ">
+				<a name="method-i-download_html"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">download_html</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="download-html-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 44</span>
+44:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">download_html</span>
+45:     <span class="ruby-identifier">create_work_html</span>
+46: 
+47:     <span class="ruby-comment cmt"># send as HTML</span>
+48:     <span class="ruby-identifier">send_file</span>(<span class="ruby-node">&quot;#{@work.download_basename}.html&quot;</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;text/html&quot;</span>)
+49:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="download-mobi-method" class="method-detail ">
+				<a name="method-i-download_mobi"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">download_mobi</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="download-mobi-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 66</span>
+66:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">download_mobi</span>
+67:      <span class="ruby-identifier">cmd_pre</span> = <span class="ruby-node">%{cd &quot;#{@work.download_dir}&quot;; html2mobi }</span>
+68:      <span class="ruby-comment cmt"># double quotes in title need to be escaped</span>
+69:      <span class="ruby-identifier">title</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&quot;/</span>, <span class="ruby-value str">'\&quot;'</span>)
+70:      <span class="ruby-identifier">cmd_post</span> = <span class="ruby-node">%{ --mobifile &quot;#{@work.download_title}.mobi&quot; --title &quot;#{title}&quot; --author &quot;#{@work.display_authors}&quot; }</span>
+71: 
+72:     <span class="ruby-comment cmt"># if only one chapter can use same file as html and pdf versions</span>
+73:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+74:       <span class="ruby-identifier">create_work_html</span>
+75: 
+76:       <span class="ruby-comment cmt"># except mobi requires latin1 encoding</span>
+77:       <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-node">&quot;#{@work.download_dir}/mobi.html&quot;</span>)
+78:         <span class="ruby-identifier">html</span> = <span class="ruby-constant">Iconv</span>.<span class="ruby-identifier">conv</span>(<span class="ruby-value str">&quot;LATIN1//TRANSLIT//IGNORE&quot;</span>, <span class="ruby-value str">&quot;UTF8&quot;</span>,
+79:                  <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-node">&quot;#{@work.download_basename}.html&quot;</span>)).<span class="ruby-identifier">force_encoding</span>(<span class="ruby-value str">&quot;ISO-8859-1&quot;</span>)
+80:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{@work.download_dir}/mobi.html&quot;</span>, <span class="ruby-value str">'w'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">html</span>)}
+81:       <span class="ruby-keyword kw">end</span>
+82: 
+83:       <span class="ruby-comment cmt"># convert latin html to mobi</span>
+84:       <span class="ruby-identifier">cmd</span> = <span class="ruby-identifier">cmd_pre</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;mobi.html&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">cmd_post</span>
+85:     <span class="ruby-keyword kw">else</span>
+86:       <span class="ruby-comment cmt"># more than one chapter</span>
+87:       <span class="ruby-comment cmt"># create a table of contents out of separate chapter files</span>
+88:       <span class="ruby-identifier">mobi_files</span> = <span class="ruby-identifier">create_mobi_html</span>
+89:       <span class="ruby-identifier">cmd</span> = <span class="ruby-identifier">cmd_pre</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">mobi_files</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; --gentoc&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">cmd_post</span>
+90:     <span class="ruby-keyword kw">end</span>
+91:     <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-identifier">cmd</span>
+92:     <span class="ruby-node">`#{cmd} 2&gt; /dev/null`</span>
+93:     <span class="ruby-identifier">check_for_file</span>(<span class="ruby-value str">&quot;mobi&quot;</span>)
+94:     <span class="ruby-identifier">send_file</span>(<span class="ruby-node">&quot;#{@work.download_basename}.mobi&quot;</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;application/mobi&quot;</span>)
+95:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="download-pdf-method" class="method-detail ">
+				<a name="method-i-download_pdf"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">download_pdf</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="download-pdf-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 51</span>
+51:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">download_pdf</span>
+52:     <span class="ruby-identifier">create_work_html</span>
+53: 
+54:     <span class="ruby-comment cmt"># convert to PDF</span>
+55:     <span class="ruby-comment cmt"># double quotes in title need to be escaped</span>
+56:     <span class="ruby-identifier">title</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&quot;/</span>, <span class="ruby-value str">'\&quot;'</span>)
+57:     <span class="ruby-identifier">cmd</span> = <span class="ruby-node">%{cd &quot;#{@work.download_dir}&quot;; wkhtmltopdf --encoding utf-8 --title &quot;#{title}&quot; &quot;#{@work.download_title}.html&quot; &quot;#{@work.download_title}.pdf&quot;}</span>
+58:     <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-identifier">cmd</span>
+59:     <span class="ruby-node">`#{cmd} 2&gt; /dev/null`</span>
+60: 
+61:     <span class="ruby-comment cmt"># send as PDF</span>
+62:     <span class="ruby-identifier">check_for_file</span>(<span class="ruby-value str">&quot;pdf&quot;</span>)
+63:     <span class="ruby-identifier">send_file</span>(<span class="ruby-node">&quot;#{@work.download_basename}.pdf&quot;</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;application/pdf&quot;</span>)
+64:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="guest-downloading-off-method" class="method-detail ">
+				<a name="method-i-guest_downloading_off"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">guest_downloading_off</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="guest-downloading-off-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 212</span>
+212:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">guest_downloading_off</span>
+213:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@admin_settings</span>.<span class="ruby-identifier">guest_downloading_off?</span>
+214:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">login_path</span>(<span class="ruby-value">:high_load</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
+215:     <span class="ruby-keyword kw">end</span>
+216:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="render-mobi-html-method" class="method-detail ">
+				<a name="method-i-render_mobi_html"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">render_mobi_html</span><span
+						class="method-args">(template, basename)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="render-mobi-html-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 154</span>
+154:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render_mobi_html</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">basename</span>)
+155:     <span class="ruby-ivar">@mobi</span> = <span class="ruby-keyword kw">true</span>
+156:     <span class="ruby-identifier">html</span> = <span class="ruby-identifier">render_to_string</span>(<span class="ruby-value">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;downloads/#{template}.html&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'barebones.html'</span>)
+157:     <span class="ruby-identifier">html</span> = <span class="ruby-constant">Iconv</span>.<span class="ruby-identifier">conv</span>(<span class="ruby-value str">&quot;ASCII//TRANSLIT//IGNORE&quot;</span>, <span class="ruby-value str">&quot;UTF8&quot;</span>, <span class="ruby-identifier">html</span>)
+158:     <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{@work.download_dir}/mobi/#{basename}.html&quot;</span>, <span class="ruby-value str">'w'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">html</span>)}
+159:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="render-xhtml-method" class="method-detail ">
+				<a name="method-i-render_xhtml"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">render_xhtml</span><span
+						class="method-args">(html, filename)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="render-xhtml-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/controllers/downloads_controller.rb, line 206</span>
+206:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render_xhtml</span>(<span class="ruby-identifier">html</span>, <span class="ruby-identifier">filename</span>)
+207:     <span class="ruby-identifier">doc</span> = <span class="ruby-constant">Nokogiri</span><span class="ruby-operator">::</span><span class="ruby-constant">XML</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">html</span>)
+208:     <span class="ruby-identifier">xhtml</span> = <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">children</span>.<span class="ruby-identifier">to_xhtml</span>
+209:     <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{@work.download_dir}/epub/OEBPS/#{filename}.xhtml&quot;</span>, <span class="ruby-value str">'w'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">xhtml</span>)}
+210:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+

@@ -1,0 +1,2520 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Class: Skin</title>
+
+	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+
+	<script src="./js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="class">
+
+	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="./index.html">Home</a>
+          <a href="./index.html#classes">Classes</a>
+          <a href="./index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="./app/models/skin_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="app/models/skin.rb">app/models/skin.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+			<div id="parent-class-section" class="section">
+				<h3 class="section-header">Parent</h3>
+				
+				<p class="link">ActiveRecord::Base</p>
+				
+			</div>
+			
+
+			<!-- Namespace Contents -->
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#method-c-approved_or_owned_by">::approved_or_owned_by</a></li>
+					
+					<li><a href="#method-c-cached">::cached</a></li>
+					
+					<li><a href="#method-c-create_default">::create_default</a></li>
+					
+					<li><a href="#method-c-default">::default</a></li>
+					
+					<li><a href="#method-c-featured">::featured</a></li>
+					
+					<li><a href="#method-c-get_current_site_skin">::get_current_site_skin</a></li>
+					
+					<li><a href="#method-c-get_current_version">::get_current_version</a></li>
+					
+					<li><a href="#method-c-in_chooser">::in_chooser</a></li>
+					
+					<li><a href="#method-c-load_site_css">::load_site_css</a></li>
+					
+					<li><a href="#method-c-naturalized">::naturalized</a></li>
+					
+					<li><a href="#method-c-site_skins_dir">::site_skins_dir</a></li>
+					
+					<li><a href="#method-c-skin_dir_entries">::skin_dir_entries</a></li>
+					
+					<li><a href="#method-c-skins_dir">::skins_dir</a></li>
+					
+					<li><a href="#method-c-sort_by_recent">::sort_by_recent</a></li>
+					
+					<li><a href="#method-c-sort_by_recent_featured">::sort_by_recent_featured</a></li>
+					
+					<li><a href="#method-c-usable">::usable</a></li>
+					
+					<li><a href="#method-i-byline">#byline</a></li>
+					
+					<li><a href="#method-i-cache%21">#cache!</a></li>
+					
+					<li><a href="#method-i-clean_css">#clean_css</a></li>
+					
+					<li><a href="#method-i-clean_media">#clean_media</a></li>
+					
+					<li><a href="#method-i-clear_cache%21">#clear_cache!</a></li>
+					
+					<li><a href="#method-i-editable%3F">#editable?</a></li>
+					
+					<li><a href="#method-i-get_all_parents">#get_all_parents</a></li>
+					
+					<li><a href="#method-i-get_cached_style">#get_cached_style</a></li>
+					
+					<li><a href="#method-i-get_css">#get_css</a></li>
+					
+					<li><a href="#method-i-get_ie_comment">#get_ie_comment</a></li>
+					
+					<li><a href="#method-i-get_media">#get_media</a></li>
+					
+					<li><a href="#method-i-get_media_for_filename">#get_media_for_filename</a></li>
+					
+					<li><a href="#method-i-get_role">#get_role</a></li>
+					
+					<li><a href="#method-i-get_sheet_role">#get_sheet_role</a></li>
+					
+					<li><a href="#method-i-get_style">#get_style</a></li>
+					
+					<li><a href="#method-i-get_style_block">#get_style_block</a></li>
+					
+					<li><a href="#method-i-get_wizard_settings">#get_wizard_settings</a></li>
+					
+					<li><a href="#method-i-parse_media_from_filename">#parse_media_from_filename</a></li>
+					
+					<li><a href="#method-i-parse_sheet_role">#parse_sheet_role</a></li>
+					
+					<li><a href="#method-i-remove_me_from_preferences">#remove_me_from_preferences</a></li>
+					
+					<li><a href="#method-i-skin_dirname">#skin_dirname</a></li>
+					
+					<li><a href="#method-i-stylesheet_link">#stylesheet_link</a></li>
+					
+					<li><a href="#method-i-valid_colors">#valid_colors</a></li>
+					
+					<li><a href="#method-i-valid_font">#valid_font</a></li>
+					
+					<li><a href="#method-i-valid_media">#valid_media</a></li>
+					
+					<li><a href="#method-i-valid_public_preview">#valid_public_preview</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="./images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="./Static.html">Static</a></li>
+				
+					<li><a href="./Static/BaseController.html">Static::BaseController</a></li>
+				
+					<li><a href="./Static/CollectionsController.html">Static::CollectionsController</a></li>
+				
+					<li><a href="./Static/FandomsController.html">Static::FandomsController</a></li>
+				
+					<li><a href="./Static/MediaController.html">Static::MediaController</a></li>
+				
+					<li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
+				
+					<li><a href="./Static/WorksController.html">Static::WorksController</a></li>
+				
+					<li><a href="./Admin.html">Admin</a></li>
+				
+					<li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
+				
+					<li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
+				
+					<li><a href="./Admin/SettingsController.html">Admin::SettingsController</a></li>
+				
+					<li><a href="./Admin/SkinsController.html">Admin::SkinsController</a></li>
+				
+					<li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
+				
+					<li><a href="./ActionController.html">ActionController</a></li>
+				
+					<li><a href="./ActionController/Routing.html">ActionController::Routing</a></li>
+				
+					<li><a href="./ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
+				
+					<li><a href="./Challenge.html">Challenge</a></li>
+				
+					<li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
+				
+					<li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
+				
+					<li><a href="./ActiveRecord.html">ActiveRecord</a></li>
+				
+					<li><a href="./AutocompleteSource.html">AutocompleteSource</a></li>
+				
+					<li><a href="./AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
+				
+					<li><a href="./ChallengeCore.html">ChallengeCore</a></li>
+				
+					<li><a href="./ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
+				
+					<li><a href="./StoryParser.html">StoryParser</a></li>
+				
+					<li><a href="./StoryParser/Error.html">StoryParser::Error</a></li>
+				
+					<li><a href="./XhtmlSplitter.html">XhtmlSplitter</a></li>
+				
+					<li><a href="./XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
+				
+					<li><a href="./AbuseReport.html">AbuseReport</a></li>
+				
+					<li><a href="./AbuseReportsController.html">AbuseReportsController</a></li>
+				
+					<li><a href="./AdminMailer.html">AdminMailer</a></li>
+				
+					<li><a href="./AdminPost.html">AdminPost</a></li>
+				
+					<li><a href="./AdminPostTag.html">AdminPostTag</a></li>
+				
+					<li><a href="./AdminPostTagging.html">AdminPostTagging</a></li>
+				
+					<li><a href="./AdminPostsController.html">AdminPostsController</a></li>
+				
+					<li><a href="./AdminSession.html">AdminSession</a></li>
+				
+					<li><a href="./AdminSessionsController.html">AdminSessionsController</a></li>
+				
+					<li><a href="./AdminSetting.html">AdminSetting</a></li>
+				
+					<li><a href="./AdminsController.html">AdminsController</a></li>
+				
+					<li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
+				
+					<li><a href="./AlphabetHelper.html">AlphabetHelper</a></li>
+				
+					<li><a href="./ApplicationController.html">ApplicationController</a></li>
+				
+					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
+				
+					<li><a href="./ArchiveFaq.html">ArchiveFaq</a></li>
+				
+					<li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a></li>
+				
+					<li><a href="./AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
+				
+					<li><a href="./AutocompleteController.html">AutocompleteController</a></li>
+				
+					<li><a href="./Banned.html">Banned</a></li>
+				
+					<li><a href="./Bookmark.html">Bookmark</a></li>
+				
+					<li><a href="./BookmarksController.html">BookmarksController</a></li>
+				
+					<li><a href="./BookmarksHelper.html">BookmarksHelper</a></li>
+				
+					<li><a href="./CacheHelper.html">CacheHelper</a></li>
+				
+					<li><a href="./CastNomination.html">CastNomination</a></li>
+				
+					<li><a href="./Category.html">Category</a></li>
+				
+					<li><a href="./ChallengeAssignment.html">ChallengeAssignment</a></li>
+				
+					<li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
+				
+					<li><a href="./ChallengeClaim.html">ChallengeClaim</a></li>
+				
+					<li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a></li>
+				
+					<li><a href="./ChallengeHelper.html">ChallengeHelper</a></li>
+				
+					<li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a></li>
+				
+					<li><a href="./ChallengeSignup.html">ChallengeSignup</a></li>
+				
+					<li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
+				
+					<li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
+				
+					<li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a></li>
+				
+					<li><a href="./ChallengeSweeper.html">ChallengeSweeper</a></li>
+				
+					<li><a href="./ChallengesController.html">ChallengesController</a></li>
+				
+					<li><a href="./Chapter.html">Chapter</a></li>
+				
+					<li><a href="./ChapterSweeper.html">ChapterSweeper</a></li>
+				
+					<li><a href="./ChaptersController.html">ChaptersController</a></li>
+				
+					<li><a href="./ChaptersHelper.html">ChaptersHelper</a></li>
+				
+					<li><a href="./Character.html">Character</a></li>
+				
+					<li><a href="./CharacterNomination.html">CharacterNomination</a></li>
+				
+					<li><a href="./Collectible.html">Collectible</a></li>
+				
+					<li><a href="./Collection.html">Collection</a></li>
+				
+					<li><a href="./CollectionItem.html">CollectionItem</a></li>
+				
+					<li><a href="./CollectionItemsController.html">CollectionItemsController</a></li>
+				
+					<li><a href="./CollectionObserver.html">CollectionObserver</a></li>
+				
+					<li><a href="./CollectionParticipant.html">CollectionParticipant</a></li>
+				
+					<li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a></li>
+				
+					<li><a href="./CollectionPreference.html">CollectionPreference</a></li>
+				
+					<li><a href="./CollectionProfile.html">CollectionProfile</a></li>
+				
+					<li><a href="./CollectionProfileController.html">CollectionProfileController</a></li>
+				
+					<li><a href="./CollectionSweeper.html">CollectionSweeper</a></li>
+				
+					<li><a href="./CollectionsController.html">CollectionsController</a></li>
+				
+					<li><a href="./CollectionsHelper.html">CollectionsHelper</a></li>
+				
+					<li><a href="./Comment.html">Comment</a></li>
+				
+					<li><a href="./CommentMailer.html">CommentMailer</a></li>
+				
+					<li><a href="./CommentObserver.html">CommentObserver</a></li>
+				
+					<li><a href="./CommentSweeper.html">CommentSweeper</a></li>
+				
+					<li><a href="./CommentsController.html">CommentsController</a></li>
+				
+					<li><a href="./CommentsHelper.html">CommentsHelper</a></li>
+				
+					<li><a href="./CommonTagging.html">CommonTagging</a></li>
+				
+					<li><a href="./CreationObserver.html">CreationObserver</a></li>
+				
+					<li><a href="./Creatorship.html">Creatorship</a></li>
+				
+					<li><a href="./CssCleaner.html">CssCleaner</a></li>
+				
+					<li><a href="./DateHelper.html">DateHelper</a></li>
+				
+					<li><a href="./DevmodeController.html">DevmodeController</a></li>
+				
+					<li><a href="./DownloadsController.html">DownloadsController</a></li>
+				
+					<li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a></li>
+				
+					<li><a href="./ErrorsController.html">ErrorsController</a></li>
+				
+					<li><a href="./ExternalAuthor.html">ExternalAuthor</a></li>
+				
+					<li><a href="./ExternalAuthorName.html">ExternalAuthorName</a></li>
+				
+					<li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a></li>
+				
+					<li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
+				
+					<li><a href="./ExternalCreatorship.html">ExternalCreatorship</a></li>
+				
+					<li><a href="./ExternalWork.html">ExternalWork</a></li>
+				
+					<li><a href="./ExternalWorksController.html">ExternalWorksController</a></li>
+				
+					<li><a href="./Fandom.html">Fandom</a></li>
+				
+					<li><a href="./FandomNomination.html">FandomNomination</a></li>
+				
+					<li><a href="./FandomsController.html">FandomsController</a></li>
+				
+					<li><a href="./FeedSweeper.html">FeedSweeper</a></li>
+				
+					<li><a href="./Feedback.html">Feedback</a></li>
+				
+					<li><a href="./FeedbacksController.html">FeedbacksController</a></li>
+				
+					<li><a href="./FilterCount.html">FilterCount</a></li>
+				
+					<li><a href="./FilterTagging.html">FilterTagging</a></li>
+				
+					<li><a href="./FindRandom.html">FindRandom</a></li>
+				
+					<li><a href="./Freeform.html">Freeform</a></li>
+				
+					<li><a href="./FreeformNomination.html">FreeformNomination</a></li>
+				
+					<li><a href="./Gift.html">Gift</a></li>
+				
+					<li><a href="./GiftExchange.html">GiftExchange</a></li>
+				
+					<li><a href="./GiftsController.html">GiftsController</a></li>
+				
+					<li><a href="./HitCounter.html">HitCounter</a></li>
+				
+					<li><a href="./HomeController.html">HomeController</a></li>
+				
+					<li><a href="./HomeHelper.html">HomeHelper</a></li>
+				
+					<li><a href="./HtmlCleaner.html">HtmlCleaner</a></li>
+				
+					<li><a href="./InboxComment.html">InboxComment</a></li>
+				
+					<li><a href="./InboxController.html">InboxController</a></li>
+				
+					<li><a href="./InboxHelper.html">InboxHelper</a></li>
+				
+					<li><a href="./Invitation.html">Invitation</a></li>
+				
+					<li><a href="./InvitationsController.html">InvitationsController</a></li>
+				
+					<li><a href="./InvitationsHelper.html">InvitationsHelper</a></li>
+				
+					<li><a href="./InviteRequest.html">InviteRequest</a></li>
+				
+					<li><a href="./InviteRequestsController.html">InviteRequestsController</a></li>
+				
+					<li><a href="./KnownIssue.html">KnownIssue</a></li>
+				
+					<li><a href="./KnownIssuesController.html">KnownIssuesController</a></li>
+				
+					<li><a href="./Kudo.html">Kudo</a></li>
+				
+					<li><a href="./KudoMailer.html">KudoMailer</a></li>
+				
+					<li><a href="./KudoObserver.html">KudoObserver</a></li>
+				
+					<li><a href="./KudosController.html">KudosController</a></li>
+				
+					<li><a href="./Language.html">Language</a></li>
+				
+					<li><a href="./LanguagesController.html">LanguagesController</a></li>
+				
+					<li><a href="./Locale.html">Locale</a></li>
+				
+					<li><a href="./LocalesController.html">LocalesController</a></li>
+				
+					<li><a href="./LogItem.html">LogItem</a></li>
+				
+					<li><a href="./Media.html">Media</a></li>
+				
+					<li><a href="./MediaController.html">MediaController</a></li>
+				
+					<li><a href="./MetaTagging.html">MetaTagging</a></li>
+				
+					<li><a href="./Offer.html">Offer</a></li>
+				
+					<li><a href="./OrphansController.html">OrphansController</a></li>
+				
+					<li><a href="./OrphansHelper.html">OrphansHelper</a></li>
+				
+					<li><a href="./OwnedSetTagging.html">OwnedSetTagging</a></li>
+				
+					<li><a href="./OwnedTagSet.html">OwnedTagSet</a></li>
+				
+					<li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a></li>
+				
+					<li><a href="./PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
+				
+					<li><a href="./PasswordsController.html">PasswordsController</a></li>
+				
+					<li><a href="./People.html">People</a></li>
+				
+					<li><a href="./PeopleController.html">PeopleController</a></li>
+				
+					<li><a href="./PotentialMatch.html">PotentialMatch</a></li>
+				
+					<li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a></li>
+				
+					<li><a href="./PotentialMatchesController.html">PotentialMatchesController</a></li>
+				
+					<li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a></li>
+				
+					<li><a href="./Preference.html">Preference</a></li>
+				
+					<li><a href="./PreferencesController.html">PreferencesController</a></li>
+				
+					<li><a href="./Profile.html">Profile</a></li>
+				
+					<li><a href="./ProfileController.html">ProfileController</a></li>
+				
+					<li><a href="./Prompt.html">Prompt</a></li>
+				
+					<li><a href="./PromptMeme.html">PromptMeme</a></li>
+				
+					<li><a href="./PromptRestriction.html">PromptRestriction</a></li>
+				
+					<li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
+				
+					<li><a href="./PromptsController.html">PromptsController</a></li>
+				
+					<li><a href="./Pseud.html">Pseud</a></li>
+				
+					<li><a href="./PseudSweeper.html">PseudSweeper</a></li>
+				
+					<li><a href="./PseudsController.html">PseudsController</a></li>
+				
+					<li><a href="./PseudsHelper.html">PseudsHelper</a></li>
+				
+					<li><a href="./Query.html">Query</a></li>
+				
+					<li><a href="./Rating.html">Rating</a></li>
+				
+					<li><a href="./Rawk.html">Rawk</a></li>
+				
+					<li><a href="./Reading.html">Reading</a></li>
+				
+					<li><a href="./ReadingsController.html">ReadingsController</a></li>
+				
+					<li><a href="./RedirectController.html">RedirectController</a></li>
+				
+					<li><a href="./RedisTestSetup.html">RedisTestSetup</a></li>
+				
+					<li><a href="./RelatedWork.html">RelatedWork</a></li>
+				
+					<li><a href="./RelatedWorksController.html">RelatedWorksController</a></li>
+				
+					<li><a href="./Relationship.html">Relationship</a></li>
+				
+					<li><a href="./RelationshipNomination.html">RelationshipNomination</a></li>
+				
+					<li><a href="./Request.html">Request</a></li>
+				
+					<li><a href="./Role.html">Role</a></li>
+				
+					<li><a href="./RolesUser.html">RolesUser</a></li>
+				
+					<li><a href="./SearchController.html">SearchController</a></li>
+				
+					<li><a href="./SearchHelper.html">SearchHelper</a></li>
+				
+					<li><a href="./SerialWork.html">SerialWork</a></li>
+				
+					<li><a href="./SerialWorksController.html">SerialWorksController</a></li>
+				
+					<li><a href="./Series.html">Series</a></li>
+				
+					<li><a href="./SeriesController.html">SeriesController</a></li>
+				
+					<li><a href="./SeriesHelper.html">SeriesHelper</a></li>
+				
+					<li><a href="./SetTagging.html">SetTagging</a></li>
+				
+					<li><a href="./Skin.html">Skin</a></li>
+				
+					<li><a href="./SkinParent.html">SkinParent</a></li>
+				
+					<li><a href="./SkinsController.html">SkinsController</a></li>
+				
+					<li><a href="./SkinsHelper.html">SkinsHelper</a></li>
+				
+					<li><a href="./SortableList.html">SortableList</a></li>
+				
+					<li><a href="./Stat.html">Stat</a></li>
+				
+					<li><a href="./StatHash.html">StatHash</a></li>
+				
+					<li><a href="./StaticSweeper.html">StaticSweeper</a></li>
+				
+					<li><a href="./StatsController.html">StatsController</a></li>
+				
+					<li><a href="./StatsHelper.html">StatsHelper</a></li>
+				
+					<li><a href="./Subscription.html">Subscription</a></li>
+				
+					<li><a href="./SubscriptionsController.html">SubscriptionsController</a></li>
+				
+					<li><a href="./Tag.html">Tag</a></li>
+				
+					<li><a href="./TagNomination.html">TagNomination</a></li>
+				
+					<li><a href="./TagNominationsController.html">TagNominationsController</a></li>
+				
+					<li><a href="./TagSet.html">TagSet</a></li>
+				
+					<li><a href="./TagSetAssociation.html">TagSetAssociation</a></li>
+				
+					<li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a></li>
+				
+					<li><a href="./TagSetNomination.html">TagSetNomination</a></li>
+				
+					<li><a href="./TagSetNominationsController.html">TagSetNominationsController</a></li>
+				
+					<li><a href="./TagSetOwnership.html">TagSetOwnership</a></li>
+				
+					<li><a href="./TagSetSweeper.html">TagSetSweeper</a></li>
+				
+					<li><a href="./TagSetsHelper.html">TagSetsHelper</a></li>
+				
+					<li><a href="./TagSweeper.html">TagSweeper</a></li>
+				
+					<li><a href="./TagWranglersController.html">TagWranglersController</a></li>
+				
+					<li><a href="./TagWranglingsController.html">TagWranglingsController</a></li>
+				
+					<li><a href="./Taggable.html">Taggable</a></li>
+				
+					<li><a href="./Tagging.html">Tagging</a></li>
+				
+					<li><a href="./TagsController.html">TagsController</a></li>
+				
+					<li><a href="./TagsHelper.html">TagsHelper</a></li>
+				
+					<li><a href="./TranslationGenerator.html">TranslationGenerator</a></li>
+				
+					<li><a href="./TranslationHelper.html">TranslationHelper</a></li>
+				
+					<li><a href="./TranslationNote.html">TranslationNote</a></li>
+				
+					<li><a href="./TranslationNotesController.html">TranslationNotesController</a></li>
+				
+					<li><a href="./TranslationsController.html">TranslationsController</a></li>
+				
+					<li><a href="./TranslatorsController.html">TranslatorsController</a></li>
+				
+					<li><a href="./UrlActiveValidator.html">UrlActiveValidator</a></li>
+				
+					<li><a href="./UrlFormatValidator.html">UrlFormatValidator</a></li>
+				
+					<li><a href="./UrlHelpers.html">UrlHelpers</a></li>
+				
+					<li><a href="./User.html">User</a></li>
+				
+					<li><a href="./UserInviteRequest.html">UserInviteRequest</a></li>
+				
+					<li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a></li>
+				
+					<li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
+				
+					<li><a href="./UserMailer.html">UserMailer</a></li>
+				
+					<li><a href="./UserSession.html">UserSession</a></li>
+				
+					<li><a href="./UserSessionsController.html">UserSessionsController</a></li>
+				
+					<li><a href="./UsersController.html">UsersController</a></li>
+				
+					<li><a href="./UsersHelper.html">UsersHelper</a></li>
+				
+					<li><a href="./ValidationHelper.html">ValidationHelper</a></li>
+				
+					<li><a href="./Warning.html">Warning</a></li>
+				
+					<li><a href="./WeightedRandom.html">WeightedRandom</a></li>
+				
+					<li><a href="./Work.html">Work</a></li>
+				
+					<li><a href="./WorkObserver.html">WorkObserver</a></li>
+				
+					<li><a href="./WorkSkin.html">WorkSkin</a></li>
+				
+					<li><a href="./WorkSweeper.html">WorkSweeper</a></li>
+				
+					<li><a href="./WorksController.html">WorksController</a></li>
+				
+					<li><a href="./WorksHelper.html">WorksHelper</a></li>
+				
+					<li><a href="./WranglingAssignment.html">WranglingAssignment</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="class">Skin</h1>
+
+		<div id="description">
+			
+		</div>
+
+		<!-- Constants -->
+		
+		<div id="constants-list" class="section">
+			<h3 class="section-header">Constants</h3>
+			<dl>
+			
+				<dt><a name="TYPE_OPTIONS">TYPE_OPTIONS</a></dt>
+				
+				<dd class="description"></dd>
+				
+			
+				<dt><a name="MEDIA">MEDIA</a></dt>
+				
+				<dd class="description"><p>
+any media types that are not a single alphanumeric word have to be
+specially handled in get_media_for_filename/parse_media_from_filename
+</p></dd>
+				
+			
+				<dt><a name="IE_CONDITIONS">IE_CONDITIONS</a></dt>
+				
+				<dd class="description"></dd>
+				
+			
+				<dt><a name="ROLES">ROLES</a></dt>
+				
+				<dd class="description"></dd>
+				
+			
+				<dt><a name="ROLE_NAMES">ROLE_NAMES</a></dt>
+				
+				<dd class="description"></dd>
+				
+			
+				<dt><a name="ALL_ROLES">ALL_ROLES</a></dt>
+				
+				<dd class="description"><p>
+We don&#8217;t show some roles to users
+</p></dd>
+				
+			
+				<dt><a name="DEFAULT_ROLE">DEFAULT_ROLE</a></dt>
+				
+				<dd class="description"></dd>
+				
+			
+				<dt><a name="DEFAULT_ROLES_TO_INCLUDE">DEFAULT_ROLES_TO_INCLUDE</a></dt>
+				
+				<dd class="description"></dd>
+				
+			
+				<dt><a name="DEFAULT_MEDIA">DEFAULT_MEDIA</a></dt>
+				
+				<dd class="description"></dd>
+				
+			
+				<dt><a name="SKIN_PATH">SKIN_PATH</a></dt>
+				
+				<dd class="description"></dd>
+				
+			
+				<dt><a name="SITE_SKIN_PATH">SITE_SKIN_PATH</a></dt>
+				
+				<dd class="description"></dd>
+				
+			
+			</dl>
+		</div>
+		
+
+		<!-- Attributes -->
+		
+
+		<!-- Methods -->
+		
+		<div id="public-class-method-details" class="method-section section">
+			<h3 class="section-header">Public Class Methods</h3>
+
+		
+			<div id="approved-or-owned-by-method" class="method-detail ">
+				<a name="method-c-approved_or_owned_by"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">approved_or_owned_by</span><span
+						class="method-args">(user=User.current_user)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="approved-or-owned-by-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 152</span>
+152:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">approved_or_owned_by</span>(<span class="ruby-identifier">user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
+153:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">nil?</span>
+154:       <span class="ruby-identifier">where</span>(<span class="ruby-value">:public</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>, <span class="ruby-value">:official</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
+155:     <span class="ruby-keyword kw">else</span>
+156:       <span class="ruby-identifier">where</span>(<span class="ruby-value str">&quot;(public = 1 AND official = 1) OR author_id = ?&quot;</span>, <span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>)
+157:     <span class="ruby-keyword kw">end</span>
+158:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="cached-method" class="method-detail ">
+				<a name="method-c-cached"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">cached</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="cached-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 140</span>
+140:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">cached</span>
+141:     <span class="ruby-identifier">where</span>(<span class="ruby-value">:cached</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
+142:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="create-default-method" class="method-detail ">
+				<a name="method-c-create_default"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">create_default</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="create-default-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 503</span>
+503:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">create_default</span>
+504:     <span class="ruby-identifier">skin</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">find_or_create_by_title_and_official</span>(<span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;Default&quot;</span>, <span class="ruby-value">:css</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-value">:public</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>, <span class="ruby-value">:role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;user&quot;</span>)
+505:     <span class="ruby-identifier">current_version</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">get_current_version</span>
+506:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_version</span>
+507:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins_dir</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">current_version</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/preview.png'</span>, <span class="ruby-value str">'rb'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">preview_file</span><span class="ruby-operator">|</span> <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">icon</span> = <span class="ruby-identifier">preview_file</span>}
+508:     <span class="ruby-keyword kw">else</span>
+509:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins_dir</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/preview.png'</span>, <span class="ruby-value str">'rb'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">preview_file</span><span class="ruby-operator">|</span> <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">icon</span> = <span class="ruby-identifier">preview_file</span>}
+510:     <span class="ruby-keyword kw">end</span>
+511:     <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">official</span> = <span class="ruby-keyword kw">true</span>
+512:     <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">save!</span>
+513:     <span class="ruby-identifier">skin</span>
+514:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="default-method" class="method-detail ">
+				<a name="method-c-default"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">default</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="default-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 499</span>
+499:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">default</span>
+500:     <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">find_by_title_and_official</span>(<span class="ruby-value str">&quot;Default&quot;</span>, <span class="ruby-keyword kw">true</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">create_default</span>
+501:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="featured-method" class="method-detail ">
+				<a name="method-c-featured"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">featured</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="featured-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 148</span>
+148:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">featured</span>
+149:     <span class="ruby-identifier">where</span>(<span class="ruby-value">:featured</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
+150:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-current-site-skin-method" class="method-detail ">
+				<a name="method-c-get_current_site_skin"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_current_site_skin</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-current-site-skin-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 490</span>
+490:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_current_site_skin</span>
+491:     <span class="ruby-identifier">current_version</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">get_current_version</span>
+492:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_version</span>
+493:       <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">find_by_title_and_official</span>(<span class="ruby-node">&quot;Archive #{Skin.get_current_version}&quot;</span>, <span class="ruby-keyword kw">true</span>)
+494:     <span class="ruby-keyword kw">else</span>
+495:       <span class="ruby-keyword kw">nil</span>
+496:     <span class="ruby-keyword kw">end</span>
+497:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-current-version-method" class="method-detail ">
+				<a name="method-c-get_current_version"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_current_version</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Get the most recent version and find the topmost skin
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="get-current-version-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 486</span>
+486:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_current_version</span>
+487:     <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins_dir</span>, <span class="ruby-regexp re">/^\d+\.\d+$/</span>).<span class="ruby-identifier">last</span>
+488:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="in-chooser-method" class="method-detail ">
+				<a name="method-c-in_chooser"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">in_chooser</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="in-chooser-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 144</span>
+144:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">in_chooser</span>
+145:     <span class="ruby-identifier">where</span>(<span class="ruby-value">:in_chooser</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
+146:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="load-site-css-method" class="method-detail ">
+				<a name="method-c-load_site_css"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">load_site_css</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="load-site-css-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 394</span>
+394:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_site_css</span>
+395:     <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins_dir</span>, <span class="ruby-regexp re">/^\d+\.\d+$/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">version</span><span class="ruby-operator">|</span>
+396:       <span class="ruby-identifier">version_dir</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins_dir</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">version</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/'</span>
+397:       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">version_dir</span>)
+398:         <span class="ruby-comment cmt"># let's load up the file</span>
+399:         <span class="ruby-identifier">skins</span> = []
+400:         <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-identifier">version_dir</span>, <span class="ruby-regexp re">/^(\d+)-(.*)\.css/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">skin_file</span><span class="ruby-operator">|</span>
+401:           <span class="ruby-identifier">filename</span> = <span class="ruby-constant">SITE_SKIN_PATH</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">version</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">skin_file</span>
+402:           <span class="ruby-identifier">skin_file</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/^(\d+)-(.*)\.css/</span>)
+403:           <span class="ruby-identifier">position</span> = <span class="ruby-node">$1</span>.<span class="ruby-identifier">to_i</span>
+404:           <span class="ruby-identifier">title</span> = <span class="ruby-node">$2</span>
+405:           <span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/(\-|\_)/</span>, <span class="ruby-value str">' '</span>)
+406:           <span class="ruby-identifier">description</span> = <span class="ruby-node">&quot;Version #{version} of the #{title} component (#{position}) of the default archive site design.&quot;</span>
+407:           <span class="ruby-identifier">firstline</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">version_dir</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">skin_file</span>, &amp;<span class="ruby-value">:readline</span>)
+408:           <span class="ruby-identifier">skin_role</span> = <span class="ruby-value str">&quot;site&quot;</span>
+409:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/ROLE: (\w+)/</span>)
+410:             <span class="ruby-identifier">skin_role</span> = <span class="ruby-node">$1</span>
+411:           <span class="ruby-keyword kw">end</span>
+412:           <span class="ruby-identifier">skin_media</span> = [<span class="ruby-value str">&quot;screen&quot;</span>]
+413:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/MEDIA: (.*?) ENDMEDIA/</span>)
+414:             <span class="ruby-identifier">skin_media</span> = <span class="ruby-node">$1</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/,\s?/</span>)
+415:           <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/MEDIA: (\w+)/</span>)
+416:             <span class="ruby-identifier">skin_media</span> = [<span class="ruby-node">$1</span>]
+417:           <span class="ruby-keyword kw">end</span>
+418:           <span class="ruby-identifier">skin_ie</span> = <span class="ruby-value str">&quot;&quot;</span>
+419:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/IE_CONDITION: (\w+)/</span>)
+420:             <span class="ruby-identifier">skin_ie</span> = <span class="ruby-node">$1</span>
+421:           <span class="ruby-keyword kw">end</span>
+422:           
+423:           <span class="ruby-identifier">full_title</span> = <span class="ruby-node">&quot;Archive #{version}: (#{position}) #{title}&quot;</span>
+424:           <span class="ruby-identifier">skin</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">find_by_title</span>(<span class="ruby-identifier">full_title</span>)
+425:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">nil?</span>
+426:             <span class="ruby-identifier">skin</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">new</span>
+427:           <span class="ruby-keyword kw">end</span>
+428:           
+429:           <span class="ruby-comment cmt"># update the attributes</span>
+430:           <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">title</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">full_title</span>
+431:           <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">filename</span> = <span class="ruby-identifier">filename</span>
+432:           <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">description</span> = <span class="ruby-identifier">description</span>
+433:           <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">public</span> = <span class="ruby-keyword kw">true</span>
+434:           <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">media</span> = <span class="ruby-identifier">skin_media</span>
+435:           <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">role</span> = <span class="ruby-identifier">skin_role</span>
+436:           <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">ie_condition</span> = <span class="ruby-identifier">skin_ie</span>
+437:           <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">unusable</span> = <span class="ruby-keyword kw">true</span>
+438:           <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">official</span> = <span class="ruby-keyword kw">true</span>
+439:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">version_dir</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'preview.png'</span>, <span class="ruby-value str">'rb'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">preview_file</span><span class="ruby-operator">|</span> <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">icon</span> = <span class="ruby-identifier">preview_file</span>}
+440:           <span class="ruby-identifier">skin</span>.<span class="ruby-identifier">save!</span>
+441: 
+442:           <span class="ruby-identifier">skins</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">skin</span>
+443:         <span class="ruby-keyword kw">end</span>
+444:         
+445:         <span class="ruby-comment cmt"># set up the parent relationship of all the skins in this version</span>
+446:         <span class="ruby-identifier">top_skin</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">find_by_title</span>(<span class="ruby-node">&quot;Archive #{version}&quot;</span>)
+447:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">top_skin</span>
+448:           <span class="ruby-identifier">top_skin</span>.<span class="ruby-identifier">clear_cache!</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">top_skin</span>.<span class="ruby-identifier">cached?</span> 
+449:           <span class="ruby-identifier">top_skin</span>.<span class="ruby-identifier">skin_parents</span>.<span class="ruby-identifier">delete_all</span>
+450:         <span class="ruby-keyword kw">else</span>
+451:           <span class="ruby-identifier">top_skin</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;Archive #{version}&quot;</span>, <span class="ruby-value">:css</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-value">:description</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;Version #{version} of the default Archive style.&quot;</span>, 
+452:                               <span class="ruby-value">:public</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>, <span class="ruby-value">:role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;site&quot;</span>, <span class="ruby-value">:media</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value str">&quot;screen&quot;</span>])
+453:         <span class="ruby-keyword kw">end</span>
+454:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">version_dir</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'preview.png'</span>, <span class="ruby-value str">'rb'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">preview_file</span><span class="ruby-operator">|</span> <span class="ruby-identifier">top_skin</span>.<span class="ruby-identifier">icon</span> = <span class="ruby-identifier">preview_file</span>}
+455:         <span class="ruby-identifier">top_skin</span>.<span class="ruby-identifier">official</span> = <span class="ruby-keyword kw">true</span>
+456:         <span class="ruby-identifier">top_skin</span>.<span class="ruby-identifier">save!</span>
+457:         <span class="ruby-identifier">skins</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">skin</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
+458:           <span class="ruby-identifier">skin_parent</span> = <span class="ruby-identifier">top_skin</span>.<span class="ruby-identifier">skin_parents</span>.<span class="ruby-identifier">build</span>(<span class="ruby-value">:child_skin</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">top_skin</span>, <span class="ruby-value">:parent_skin</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">skin</span>, <span class="ruby-value">:position</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">index</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)
+459:           <span class="ruby-identifier">skin_parent</span>.<span class="ruby-identifier">save!</span>
+460:         <span class="ruby-keyword kw">end</span>
+461:         <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>.<span class="ruby-identifier">production?</span>
+462:           <span class="ruby-identifier">top_skin</span>.<span class="ruby-identifier">cache!</span>
+463:         <span class="ruby-keyword kw">end</span>
+464:       <span class="ruby-keyword kw">end</span>
+465:     <span class="ruby-keyword kw">end</span>
+466:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="naturalized-method" class="method-detail ">
+				<a name="method-c-naturalized"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">naturalized</span><span
+						class="method-args">(string)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="naturalized-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 390</span>
+390:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">naturalized</span>(<span class="ruby-identifier">string</span>)
+391:     <span class="ruby-identifier">string</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/[^\d]+|[\d]+/</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/\d+(\.\d+)?/</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">f</span> }
+392:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="site-skins-dir-method" class="method-detail ">
+				<a name="method-c-site_skins_dir"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">site_skins_dir</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="site-skins-dir-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 481</span>
+481:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">site_skins_dir</span>
+482:     <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">public_path</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SITE_SKIN_PATH</span>
+483:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="skin-dir-entries-method" class="method-detail ">
+				<a name="method-c-skin_dir_entries"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">skin_dir_entries</span><span
+						class="method-args">(dir, regex)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="skin-dir-entries-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 477</span>
+477:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-identifier">regex</span>)
+478:     <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">entries</span>(<span class="ruby-identifier">dir</span>).<span class="ruby-identifier">select</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">regex</span>)}.<span class="ruby-identifier">sort_by</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">naturalized</span>(<span class="ruby-identifier">f</span>.<span class="ruby-identifier">to_s</span>)}
+479:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="skins-dir-method" class="method-detail ">
+				<a name="method-c-skins_dir"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">skins_dir</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="skins-dir-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 473</span>
+473:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">skins_dir</span>
+474:     <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">public_path</span> <span class="ruby-operator">+</span> <span class="ruby-constant">SKIN_PATH</span>
+475:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="sort-by-recent-method" class="method-detail ">
+				<a name="method-c-sort_by_recent"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">sort_by_recent</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="sort-by-recent-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 164</span>
+164:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">sort_by_recent</span>
+165:     <span class="ruby-identifier">order</span>(<span class="ruby-value str">&quot;updated_at DESC&quot;</span>)
+166:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="sort-by-recent-featured-method" class="method-detail ">
+				<a name="method-c-sort_by_recent_featured"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">sort_by_recent_featured</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="sort-by-recent-featured-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 168</span>
+168:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">sort_by_recent_featured</span>
+169:     <span class="ruby-identifier">order</span>(<span class="ruby-value str">&quot;featured DESC, updated_at DESC&quot;</span>)
+170:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="usable-method" class="method-detail ">
+				<a name="method-c-usable"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">usable</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="usable-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 160</span>
+160:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">usable</span>
+161:     <span class="ruby-identifier">where</span>(<span class="ruby-value">:unusable</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>)
+162:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+		</div>
+	
+		<div id="public-instance-method-details" class="method-section section">
+			<h3 class="section-header">Public Instance Methods</h3>
+
+		
+			<div id="byline-method" class="method-detail ">
+				<a name="method-i-byline"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">byline</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="byline-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 188</span>
+188:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">byline</span>
+189:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">author</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">User</span>
+190:       <span class="ruby-identifier">author</span>.<span class="ruby-identifier">login</span>
+191:     <span class="ruby-keyword kw">else</span>
+192:       <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">APP_SHORT_NAME</span>
+193:     <span class="ruby-keyword kw">end</span>
+194:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="cache--method" class="method-detail ">
+				<a name="method-i-cache%21"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">cache!</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+create the minimal number of files we can, containing all the css for this
+entire skin
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="cache--source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 198</span>
+198:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cache!</span>
+199:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">clear_cache!</span>
+200:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">public</span> = <span class="ruby-keyword kw">true</span>
+201:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">official</span> = <span class="ruby-keyword kw">true</span>
+202:     <span class="ruby-identifier">save!</span>
+203:     <span class="ruby-identifier">css_to_cache</span> = <span class="ruby-value str">&quot;&quot;</span>
+204:     <span class="ruby-identifier">last_role</span> = <span class="ruby-value str">&quot;&quot;</span>
+205:     <span class="ruby-identifier">file_count</span> = <span class="ruby-value">1</span>
+206:     <span class="ruby-identifier">skin_dir</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skins_dir</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">skin_dirname</span>
+207:     <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-identifier">skin_dir</span>
+208:     (<span class="ruby-identifier">get_all_parents</span> <span class="ruby-operator">+</span> [<span class="ruby-keyword kw">self</span>]).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">next_skin</span><span class="ruby-operator">|</span>
+209:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">next_skin</span>.<span class="ruby-identifier">get_sheet_role</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">last_role</span>
+210:         <span class="ruby-comment cmt"># save to file</span>
+211:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">css_to_cache</span>.<span class="ruby-identifier">present?</span>
+212:           <span class="ruby-identifier">cache_filename</span> = <span class="ruby-identifier">skin_dir</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;#{file_count}_#{last_role}.css&quot;</span>
+213:           <span class="ruby-identifier">file_count</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
+214:           <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">cache_filename</span>, <span class="ruby-value str">'w'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">css_to_cache</span>)}
+215:           <span class="ruby-identifier">css_to_cache</span> = <span class="ruby-value str">&quot;&quot;</span>
+216:         <span class="ruby-keyword kw">end</span>
+217:         <span class="ruby-identifier">last_role</span> = <span class="ruby-identifier">next_skin</span>.<span class="ruby-identifier">get_sheet_role</span>
+218:       <span class="ruby-keyword kw">end</span>
+219:       <span class="ruby-identifier">css_to_cache</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">next_skin</span>.<span class="ruby-identifier">get_css</span>
+220:     <span class="ruby-keyword kw">end</span>
+221:     <span class="ruby-comment cmt"># TODO this repetition is all wrong but my brain is fried</span>
+222:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">css_to_cache</span>.<span class="ruby-identifier">present?</span>
+223:       <span class="ruby-identifier">cache_filename</span> = <span class="ruby-identifier">skin_dir</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;#{file_count}_#{last_role}.css&quot;</span>
+224:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">cache_filename</span>, <span class="ruby-value str">'w'</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">css_to_cache</span>)}
+225:       <span class="ruby-identifier">css_to_cache</span> = <span class="ruby-value str">&quot;&quot;</span>
+226:     <span class="ruby-keyword kw">end</span>
+227:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">cached</span> = <span class="ruby-keyword kw">true</span>
+228:     <span class="ruby-identifier">save!</span>
+229:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="clean-css-method" class="method-detail ">
+				<a name="method-i-clean_css"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">clean_css</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="clean-css-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 117</span>
+117:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clean_css</span>
+118:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">css</span>.<span class="ruby-identifier">blank?</span>
+119:     <span class="ruby-identifier">scanner</span> = <span class="ruby-constant">StringScanner</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">css</span>)
+120:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-regexp re">/\/\*/</span>)
+121:       <span class="ruby-comment cmt"># no comments, clean the whole thing</span>
+122:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">css</span> = <span class="ruby-identifier">clean_css_code</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">css</span>)
+123:     <span class="ruby-keyword kw">else</span>
+124:       <span class="ruby-identifier">clean_code</span> = []
+125:       <span class="ruby-keyword kw">while</span> (<span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-regexp re">/\/\*/</span>))
+126:         <span class="ruby-identifier">clean_code</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">clean</span> = <span class="ruby-identifier">clean_css_code</span>(<span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">scan_until</span>(<span class="ruby-regexp re">/\/\*/</span>).<span class="ruby-identifier">chomp</span>(<span class="ruby-value str">'/*'</span>)))
+127:         <span class="ruby-identifier">clean_code</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'/*'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">scan_until</span>(<span class="ruby-regexp re">/\*\//</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-regexp re">/\*\//</span>)
+128:       <span class="ruby-keyword kw">end</span>
+129:       <span class="ruby-identifier">clean_code</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">clean</span> = <span class="ruby-identifier">clean_css_code</span>(<span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">rest</span>))
+130:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">css</span> = <span class="ruby-identifier">clean_code</span>.<span class="ruby-identifier">delete_if</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">code_block</span><span class="ruby-operator">|</span> <span class="ruby-identifier">code_block</span>.<span class="ruby-identifier">blank?</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+131:     <span class="ruby-keyword kw">end</span>
+132:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="clean-media-method" class="method-detail ">
+				<a name="method-i-clean_media"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">clean_media</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="clean-media-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/skin.rb, line 64</span>
+64:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clean_media</span>
+65:     <span class="ruby-comment cmt"># handle bizarro cucumber-only error that prevents media from deserializing correctly when attachments are made</span>
+66:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">media</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">media</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">media</span>.<span class="ruby-identifier">empty?</span>
+67:       <span class="ruby-identifier">new_media</span> = <span class="ruby-identifier">media</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\[&quot;(\w+)&quot;\]/</span>, <span class="ruby-value str">'\1'</span>)}
+68:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">media</span> = <span class="ruby-identifier">new_media</span>
+69:     <span class="ruby-keyword kw">end</span>
+70:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="clear-cache--method" class="method-detail ">
+				<a name="method-i-clear_cache%21"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">clear_cache!</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="clear-cache--source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 231</span>
+231:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear_cache!</span>
+232:     <span class="ruby-identifier">skin_dir</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skins_dir</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">skin_dirname</span>
+233:     <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span> <span class="ruby-identifier">skin_dir</span> <span class="ruby-comment cmt"># clear out old if exists    </span>
+234:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">cached</span> = <span class="ruby-keyword kw">false</span>
+235:     <span class="ruby-identifier">save!</span>
+236:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="editable--method" class="method-detail ">
+				<a name="method-i-editable%3F"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">editable?</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="editable--source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 176</span>
+176:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">editable?</span>
+177:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">filename</span>.<span class="ruby-identifier">present?</span>
+178:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
+179:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">official</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">public</span>
+180:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Admin</span>
+181:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">author</span> <span class="ruby-operator">==</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>
+182:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
+183:     <span class="ruby-keyword kw">else</span>
+184:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
+185:     <span class="ruby-keyword kw">end</span>
+186:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-all-parents-method" class="method-detail ">
+				<a name="method-i-get_all_parents"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_all_parents</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-all-parents-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 280</span>
+280:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_all_parents</span>
+281:     <span class="ruby-identifier">all_parents</span> = []
+282:     <span class="ruby-identifier">parent_skins</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">parent</span><span class="ruby-operator">|</span>
+283:       <span class="ruby-identifier">all_parents</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">get_all_parents</span>
+284:       <span class="ruby-identifier">all_parents</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">parent</span>
+285:     <span class="ruby-keyword kw">end</span>
+286:     <span class="ruby-identifier">all_parents</span>
+287:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-cached-style-method" class="method-detail ">
+				<a name="method-i-get_cached_style"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_cached_style</span><span
+						class="method-args">(roles_to_include)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-cached-style-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 372</span>
+372:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_cached_style</span>(<span class="ruby-identifier">roles_to_include</span>)
+373:     <span class="ruby-identifier">block</span> = <span class="ruby-value str">&quot;&quot;</span>
+374:     <span class="ruby-identifier">self_skin_dir</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skins_dir</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">skin_dirname</span>
+375:     <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-identifier">self_skin_dir</span>, <span class="ruby-regexp re">/^\d+_(.*)\.css$/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sub_file</span><span class="ruby-operator">|</span>
+376:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sub_file</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/^\d+_(.*)\.css$/</span>)
+377:         (<span class="ruby-identifier">sheet_role</span>, <span class="ruby-identifier">sheet_media</span>, <span class="ruby-identifier">sheet_ie_condition</span>) = <span class="ruby-identifier">parse_sheet_role</span>(<span class="ruby-node">$1</span>)
+378:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">roles_to_include</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">sheet_role</span>)
+379:           <span class="ruby-identifier">block</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">get_ie_comment</span>(<span class="ruby-identifier">stylesheet_link</span>(<span class="ruby-constant">SKIN_PATH</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">skin_dirname</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">sub_file</span>, <span class="ruby-identifier">sheet_media</span>), <span class="ruby-identifier">sheet_ie_condition</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span>
+380:         <span class="ruby-keyword kw">end</span>
+381:       <span class="ruby-keyword kw">end</span>
+382:     <span class="ruby-keyword kw">end</span>
+383:     <span class="ruby-identifier">block</span>    
+384:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-css-method" class="method-detail ">
+				<a name="method-i-get_css"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_css</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-css-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 264</span>
+264:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_css</span>
+265:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">filename</span>
+266:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-constant">Rails</span>.<span class="ruby-identifier">public_path</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">filename</span>)
+267:     <span class="ruby-keyword kw">else</span>
+268:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">css</span>
+269:     <span class="ruby-keyword kw">end</span>
+270:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-ie-comment-method" class="method-detail ">
+				<a name="method-i-get_ie_comment"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_ie_comment</span><span
+						class="method-args">(style, ie_condition = self.ie_condition)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-ie-comment-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 299</span>
+299:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_ie_comment</span>(<span class="ruby-identifier">style</span>, <span class="ruby-identifier">ie_condition</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">ie_condition</span>)
+300:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">present?</span>
+301:       <span class="ruby-identifier">ie_comment</span>= <span class="ruby-value str">&quot;&lt;!--[if &quot;</span>
+302:       <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;lte &quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/or_lower/</span>)
+303:       <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;gte &quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/or_higher/</span>)
+304:       <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;IE&quot;</span>
+305:       <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; #{$1}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/IE(\d)/</span>)
+306:       <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;]&gt;&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">style</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;&lt;![endif]--&gt;&quot;</span>
+307:     <span class="ruby-keyword kw">else</span>
+308:       <span class="ruby-identifier">style</span>
+309:     <span class="ruby-keyword kw">end</span>
+310:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-media-method" class="method-detail ">
+				<a name="method-i-get_media"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_media</span><span
+						class="method-args">(separator=", ")</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-media-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 272</span>
+272:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_media</span>(<span class="ruby-identifier">separator</span>=<span class="ruby-value str">&quot;, &quot;</span>)
+273:     ((<span class="ruby-identifier">media</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">media</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">DEFAULT_MEDIA</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">media</span>).<span class="ruby-identifier">join</span>(<span class="ruby-identifier">separator</span>)
+274:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-media-for-filename-method" class="method-detail ">
+				<a name="method-i-get_media_for_filename"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_media_for_filename</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+have to handle any media types that aren&#8217;t a single alphanumeric word
+here
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="get-media-for-filename-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 243</span>
+243:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_media_for_filename</span>
+244:     ((<span class="ruby-identifier">media</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">media</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">DEFAULT_MEDIA</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">media</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span>
+245:       <span class="ruby-keyword kw">case</span> 
+246:       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/max-width/</span>)
+247:         <span class="ruby-value str">&quot;maxwidth&quot;</span>
+248:       <span class="ruby-keyword kw">else</span>
+249:         <span class="ruby-identifier">m</span>
+250:       <span class="ruby-keyword kw">end</span>
+251:     }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>)
+252:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-role-method" class="method-detail ">
+				<a name="method-i-get_role"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_role</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-role-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 276</span>
+276:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_role</span>
+277:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">role</span> <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_ROLE</span>
+278:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-sheet-role-method" class="method-detail ">
+				<a name="method-i-get_sheet_role"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_sheet_role</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-sheet-role-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 238</span>
+238:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_sheet_role</span>
+239:     <span class="ruby-node">&quot;#{get_role}_#{get_media_for_filename}_#{ie_condition}&quot;</span>
+240:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-style-method" class="method-detail ">
+				<a name="method-i-get_style"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_style</span><span
+						class="method-args">(roles_to_include = DEFAULT_ROLES_TO_INCLUDE)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+This is the main function that actually returns code to be embedded in a
+page
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="get-style-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 290</span>
+290:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_style</span>(<span class="ruby-identifier">roles_to_include</span> = <span class="ruby-constant">DEFAULT_ROLES_TO_INCLUDE</span>)
+291:     <span class="ruby-identifier">style</span> = <span class="ruby-value str">&quot;&quot;</span>
+292:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_role</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">&quot;override&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_role</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">&quot;site&quot;</span>
+293:       <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">default_skin</span> <span class="ruby-operator">!=</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">default</span> <span class="ruby-operator">?</span> <span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">default_skin</span>.<span class="ruby-identifier">get_style</span>(<span class="ruby-identifier">roles_to_include</span>) <span class="ruby-operator">:</span> (<span class="ruby-constant">Skin</span>.<span class="ruby-identifier">get_current_site_skin</span> <span class="ruby-operator">?</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">get_current_site_skin</span>.<span class="ruby-identifier">get_style</span>(<span class="ruby-identifier">roles_to_include</span>) <span class="ruby-operator">:</span> <span class="ruby-value str">''</span>)
+294:     <span class="ruby-keyword kw">end</span>
+295:     <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_style_block</span>(<span class="ruby-identifier">roles_to_include</span>)
+296:     <span class="ruby-identifier">style</span>.<span class="ruby-identifier">html_safe</span>
+297:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-style-block-method" class="method-detail ">
+				<a name="method-i-get_style_block"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_style_block</span><span
+						class="method-args">(roles_to_include)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-style-block-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 347</span>
+347:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_style_block</span>(<span class="ruby-identifier">roles_to_include</span>)
+348:     <span class="ruby-identifier">block</span> = <span class="ruby-value str">&quot;&quot;</span>
+349:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">cached?</span>
+350:       <span class="ruby-comment cmt"># cached skin in a directory</span>
+351:       <span class="ruby-identifier">block</span> = <span class="ruby-identifier">get_cached_style</span>(<span class="ruby-identifier">roles_to_include</span>)
+352:     <span class="ruby-keyword kw">else</span>
+353:       <span class="ruby-comment cmt"># recursively get parents</span>
+354:       <span class="ruby-identifier">parent_skins</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">parent</span><span class="ruby-operator">|</span>
+355:         <span class="ruby-identifier">block</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">get_style_block</span>(<span class="ruby-identifier">roles_to_include</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span>
+356:       <span class="ruby-keyword kw">end</span>
+357:       
+358:       <span class="ruby-comment cmt"># finally get this skin</span>
+359:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">roles_to_include</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">get_role</span>)
+360:         <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">filename</span>.<span class="ruby-identifier">present?</span>
+361:           <span class="ruby-identifier">block</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">get_ie_comment</span>(<span class="ruby-identifier">stylesheet_link</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">get_media</span>))
+362:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">css</span>.<span class="ruby-identifier">present?</span>
+363:           <span class="ruby-identifier">block</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">get_ie_comment</span>(<span class="ruby-value str">'&lt;style type=&quot;text/css&quot; media=&quot;'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">get_media</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'&quot;&gt;'</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">css</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'&lt;/style&gt;'</span>)
+364:         <span class="ruby-keyword kw">elsif</span> (<span class="ruby-identifier">wizard_block</span> = <span class="ruby-identifier">get_wizard_settings</span>).<span class="ruby-identifier">present?</span>
+365:           <span class="ruby-identifier">block</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">'&lt;style type=&quot;text/css&quot; media=&quot;'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">get_media</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'&quot;&gt;'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">wizard_block</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'&lt;/style&gt;'</span>
+366:         <span class="ruby-keyword kw">end</span>
+367:       <span class="ruby-keyword kw">end</span>    
+368:     <span class="ruby-keyword kw">end</span>
+369:     <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">block</span>
+370:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-wizard-settings-method" class="method-detail ">
+				<a name="method-i-get_wizard_settings"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_wizard_settings</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-wizard-settings-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 312</span>
+312:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_wizard_settings</span>
+313:     <span class="ruby-identifier">style</span> = <span class="ruby-value str">&quot;&quot;</span>
+314:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">margin</span>.<span class="ruby-identifier">present?</span>
+315:       <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#workskin {margin: auto #{self.margin}%; padding: 0.5em #{self.margin}% 0;}\n&quot;</span>
+316:     <span class="ruby-keyword kw">end</span>
+317:   
+318:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">background_color</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">foreground_color</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">font</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">base_em</span>.<span class="ruby-identifier">present?</span>
+319:       <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;body, #main     {
+320:         #{self.background_color.present? ? &quot;background: #{self.background_color};&quot; : ''}
+321:         #{self.foreground_color.present? ? &quot;color: #{self.foreground_color};&quot; : ''}&quot;</span>
+322:       <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">base_em</span>.<span class="ruby-identifier">present?</span>
+323:         <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;font-size: #{self.base_em}%; line-height:1.125;&quot;</span>
+324:       <span class="ruby-keyword kw">end</span>
+325:       <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">font</span>.<span class="ruby-identifier">present?</span>
+326:         <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;\nfont-family: #{font};&quot;</span>
+327:       <span class="ruby-keyword kw">end</span>
+328:       <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;}\n&quot;</span>
+329:     <span class="ruby-keyword kw">end</span>
+330:     
+331:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">paragraph_margin</span>.<span class="ruby-identifier">present?</span>
+332:       <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;.userstuff p {margin-bottom: #{self.paragraph_margin}em;}\n&quot;</span>
+333:     <span class="ruby-keyword kw">end</span>
+334: 
+335:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">headercolor</span>.<span class="ruby-identifier">present?</span>
+336:       <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#header .main a, #header .main .current, #header .main input, #header .search input {border-color:transparent;}\n&quot;</span>
+337:       <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#header, #header ul.main, #footer {background: #{self.headercolor}; border-color: #{self.headercolor}; box-shadow:none;}\n&quot;</span>
+338:     <span class="ruby-keyword kw">end</span>
+339: 
+340:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">accent_color</span>.<span class="ruby-identifier">present?</span>
+341:       <span class="ruby-identifier">style</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#header .icon, #dashboard ul, #main dl.meta {background: #{self.accent_color}; border-color:#{self.accent_color};}\n&quot;</span>
+342:     <span class="ruby-keyword kw">end</span>
+343:     
+344:     <span class="ruby-identifier">style</span>
+345:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="parse-media-from-filename-method" class="method-detail ">
+				<a name="method-i-parse_media_from_filename"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">parse_media_from_filename</span><span
+						class="method-args">(media_string)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="parse-media-from-filename-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 254</span>
+254:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_media_from_filename</span>(<span class="ruby-identifier">media_string</span>)
+255:     <span class="ruby-identifier">media_string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/maxwidth/</span>, <span class="ruby-value str">'only screen and (max-width: 480px)'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-value str">'.'</span>, <span class="ruby-value str">', '</span>)
+256:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="parse-sheet-role-method" class="method-detail ">
+				<a name="method-i-parse_sheet_role"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">parse_sheet_role</span><span
+						class="method-args">(role_string)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="parse-sheet-role-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 258</span>
+258:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_sheet_role</span>(<span class="ruby-identifier">role_string</span>)
+259:     (<span class="ruby-identifier">sheet_role</span>, <span class="ruby-identifier">sheet_media</span>, <span class="ruby-identifier">sheet_ie_condition</span>) = <span class="ruby-identifier">role_string</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'_'</span>)
+260:     <span class="ruby-identifier">sheet_media</span> = <span class="ruby-identifier">parse_media_from_filename</span>(<span class="ruby-identifier">sheet_media</span>)    
+261:     [<span class="ruby-identifier">sheet_role</span>, <span class="ruby-identifier">sheet_media</span>, <span class="ruby-identifier">sheet_ie_condition</span>]
+262:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="remove-me-from-preferences-method" class="method-detail ">
+				<a name="method-i-remove_me_from_preferences"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">remove_me_from_preferences</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="remove-me-from-preferences-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 172</span>
+172:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_me_from_preferences</span>
+173:     <span class="ruby-constant">Preference</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;skin_id = #{Skin.default.id}&quot;</span>, <span class="ruby-node">&quot;skin_id = #{self.id}&quot;</span>)
+174:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="skin-dirname-method" class="method-detail ">
+				<a name="method-i-skin_dirname"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">skin_dirname</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+get the directory name for the skin file
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="skin-dirname-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 469</span>
+469:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">skin_dirname</span>
+470:     <span class="ruby-node">&quot;skin_#{self.id}_#{self.title.gsub(/[^\w]/, '_')}/&quot;</span>.<span class="ruby-identifier">downcase</span>
+471:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="stylesheet-link-method" class="method-detail ">
+				<a name="method-i-stylesheet_link"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">stylesheet_link</span><span
+						class="method-args">(file, media)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="stylesheet-link-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 386</span>
+386:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stylesheet_link</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">media</span>)
+387:     <span class="ruby-value str">'&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; media=&quot;'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">media</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'&quot; href=&quot;'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">file</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'&quot;&gt;'</span>
+388:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="valid-colors-method" class="method-detail ">
+				<a name="method-i-valid_colors"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">valid_colors</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="valid-colors-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 105</span>
+105:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_colors</span>
+106: 
+107:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">background_color</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">sanitize_css_value</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">background_color</span>).<span class="ruby-identifier">blank?</span>
+108:       <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:background_color</span>, <span class="ruby-value str">&quot;uses a color that is not allowed.&quot;</span>)
+109:     <span class="ruby-keyword kw">end</span>
+110: 
+111:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">foreground_color</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">sanitize_css_value</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">foreground_color</span>).<span class="ruby-identifier">blank?</span>
+112:       <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:foreground_color</span>, <span class="ruby-value str">&quot;uses a color that is not allowed.&quot;</span>)
+113:     <span class="ruby-keyword kw">end</span>
+114:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="valid-font-method" class="method-detail ">
+				<a name="method-i-valid_font"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">valid_font</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="valid-font-source">
+<pre>
+     <span class="ruby-comment cmt"># File app/models/skin.rb, line 95</span>
+ 95:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_font</span>
+ 96:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">font</span>.<span class="ruby-identifier">blank?</span>
+ 97:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">font</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">','</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">subfont</span><span class="ruby-operator">|</span>
+ 98:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sanitize_css_font</span>(<span class="ruby-identifier">subfont</span>).<span class="ruby-identifier">blank?</span>
+ 99:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:font</span>, <span class="ruby-node">&quot;cannot use #{subfont}.&quot;</span>)
+100:       <span class="ruby-keyword kw">end</span>
+101:     <span class="ruby-keyword kw">end</span>
+102:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="valid-media-method" class="method-detail ">
+				<a name="method-i-valid_media"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">valid_media</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="valid-media-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/skin.rb, line 73</span>
+73:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_media</span>
+74:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">media</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">media</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">media</span>.<span class="ruby-identifier">any?</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-operator">!</span><span class="ruby-constant">MEDIA</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">m</span>)}
+75:       <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;We don't currently support the media type %{media}, sorry! If we should, please let Support know.&quot;</span>, <span class="ruby-value">:media</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">media</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">', '</span>)))
+76:     <span class="ruby-keyword kw">end</span>
+77:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="valid-public-preview-method" class="method-detail ">
+				<a name="method-i-valid_public_preview"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">valid_public_preview</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="valid-public-preview-source">
+<pre>
+    <span class="ruby-comment cmt"># File app/models/skin.rb, line 83</span>
+83:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_public_preview</span>
+84:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">official?</span> <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">public?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">icon_file_name</span>)
+85:     <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;You need to upload a screencap if you want to share your skin.&quot;</span>))
+86:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
+87:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+

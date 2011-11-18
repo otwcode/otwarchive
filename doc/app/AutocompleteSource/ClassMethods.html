@@ -1,0 +1,1368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Module: AutocompleteSource::ClassMethods</title>
+
+	<link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+	<script src="../js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="module">
+
+	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="../lib/autocomplete_source_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/autocomplete_source.rb">lib/autocomplete_source.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+
+			<!-- Namespace Contents -->
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#method-i-autocomplete_cache_key">#autocomplete_cache_key</a></li>
+					
+					<li><a href="#method-i-autocomplete_completion_key">#autocomplete_completion_key</a></li>
+					
+					<li><a href="#method-i-autocomplete_lookup">#autocomplete_lookup</a></li>
+					
+					<li><a href="#method-i-autocomplete_phrase_split">#autocomplete_phrase_split</a></li>
+					
+					<li><a href="#method-i-autocomplete_pieces">#autocomplete_pieces</a></li>
+					
+					<li><a href="#method-i-autocomplete_score_key">#autocomplete_score_key</a></li>
+					
+					<li><a href="#method-i-autocomplete_word_completions">#autocomplete_word_completions</a></li>
+					
+					<li><a href="#method-i-fullname_from_autocomplete">#fullname_from_autocomplete</a></li>
+					
+					<li><a href="#method-i-get_search_regex">#get_search_regex</a></li>
+					
+					<li><a href="#method-i-get_search_terms">#get_search_terms</a></li>
+					
+					<li><a href="#method-i-get_word">#get_word</a></li>
+					
+					<li><a href="#method-i-id_from_autocomplete">#id_from_autocomplete</a></li>
+					
+					<li><a href="#method-i-is_complete_word%3F">#is_complete_word?</a></li>
+					
+					<li><a href="#method-i-name_from_autocomplete">#name_from_autocomplete</a></li>
+					
+					<li><a href="#method-i-parse_autocomplete_value">#parse_autocomplete_value</a></li>
+					
+					<li><a href="#method-i-title_from_autocomplete">#title_from_autocomplete</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="../doc/README_FOR_APP.html">README_FOR_APP</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="../images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="../Static.html">Static</a></li>
+				
+					<li><a href="../Static/BaseController.html">Static::BaseController</a></li>
+				
+					<li><a href="../Static/CollectionsController.html">Static::CollectionsController</a></li>
+				
+					<li><a href="../Static/FandomsController.html">Static::FandomsController</a></li>
+				
+					<li><a href="../Static/MediaController.html">Static::MediaController</a></li>
+				
+					<li><a href="../Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
+				
+					<li><a href="../Static/WorksController.html">Static::WorksController</a></li>
+				
+					<li><a href="../Admin.html">Admin</a></li>
+				
+					<li><a href="../Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
+				
+					<li><a href="../Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
+				
+					<li><a href="../Admin/SettingsController.html">Admin::SettingsController</a></li>
+				
+					<li><a href="../Admin/SkinsController.html">Admin::SkinsController</a></li>
+				
+					<li><a href="../Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
+				
+					<li><a href="../ActionController.html">ActionController</a></li>
+				
+					<li><a href="../ActionController/Routing.html">ActionController::Routing</a></li>
+				
+					<li><a href="../ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
+				
+					<li><a href="../Challenge.html">Challenge</a></li>
+				
+					<li><a href="../Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
+				
+					<li><a href="../Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
+				
+					<li><a href="../ActiveRecord.html">ActiveRecord</a></li>
+				
+					<li><a href="../AutocompleteSource.html">AutocompleteSource</a></li>
+				
+					<li><a href="../AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
+				
+					<li><a href="../ChallengeCore.html">ChallengeCore</a></li>
+				
+					<li><a href="../ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
+				
+					<li><a href="../StoryParser.html">StoryParser</a></li>
+				
+					<li><a href="../StoryParser/Error.html">StoryParser::Error</a></li>
+				
+					<li><a href="../XhtmlSplitter.html">XhtmlSplitter</a></li>
+				
+					<li><a href="../XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
+				
+					<li><a href="../AbuseReport.html">AbuseReport</a></li>
+				
+					<li><a href="../AbuseReportsController.html">AbuseReportsController</a></li>
+				
+					<li><a href="../AdminMailer.html">AdminMailer</a></li>
+				
+					<li><a href="../AdminPost.html">AdminPost</a></li>
+				
+					<li><a href="../AdminPostTag.html">AdminPostTag</a></li>
+				
+					<li><a href="../AdminPostTagging.html">AdminPostTagging</a></li>
+				
+					<li><a href="../AdminPostsController.html">AdminPostsController</a></li>
+				
+					<li><a href="../AdminSession.html">AdminSession</a></li>
+				
+					<li><a href="../AdminSessionsController.html">AdminSessionsController</a></li>
+				
+					<li><a href="../AdminSetting.html">AdminSetting</a></li>
+				
+					<li><a href="../AdminsController.html">AdminsController</a></li>
+				
+					<li><a href="../AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
+				
+					<li><a href="../AlphabetHelper.html">AlphabetHelper</a></li>
+				
+					<li><a href="../ApplicationController.html">ApplicationController</a></li>
+				
+					<li><a href="../ApplicationHelper.html">ApplicationHelper</a></li>
+				
+					<li><a href="../ArchiveFaq.html">ArchiveFaq</a></li>
+				
+					<li><a href="../ArchiveFaqsController.html">ArchiveFaqsController</a></li>
+				
+					<li><a href="../AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
+				
+					<li><a href="../AutocompleteController.html">AutocompleteController</a></li>
+				
+					<li><a href="../Banned.html">Banned</a></li>
+				
+					<li><a href="../Bookmark.html">Bookmark</a></li>
+				
+					<li><a href="../BookmarksController.html">BookmarksController</a></li>
+				
+					<li><a href="../BookmarksHelper.html">BookmarksHelper</a></li>
+				
+					<li><a href="../CacheHelper.html">CacheHelper</a></li>
+				
+					<li><a href="../CastNomination.html">CastNomination</a></li>
+				
+					<li><a href="../Category.html">Category</a></li>
+				
+					<li><a href="../ChallengeAssignment.html">ChallengeAssignment</a></li>
+				
+					<li><a href="../ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
+				
+					<li><a href="../ChallengeClaim.html">ChallengeClaim</a></li>
+				
+					<li><a href="../ChallengeClaimsController.html">ChallengeClaimsController</a></li>
+				
+					<li><a href="../ChallengeHelper.html">ChallengeHelper</a></li>
+				
+					<li><a href="../ChallengeRequestsController.html">ChallengeRequestsController</a></li>
+				
+					<li><a href="../ChallengeSignup.html">ChallengeSignup</a></li>
+				
+					<li><a href="../ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
+				
+					<li><a href="../ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
+				
+					<li><a href="../ChallengeSignupsController.html">ChallengeSignupsController</a></li>
+				
+					<li><a href="../ChallengeSweeper.html">ChallengeSweeper</a></li>
+				
+					<li><a href="../ChallengesController.html">ChallengesController</a></li>
+				
+					<li><a href="../Chapter.html">Chapter</a></li>
+				
+					<li><a href="../ChapterSweeper.html">ChapterSweeper</a></li>
+				
+					<li><a href="../ChaptersController.html">ChaptersController</a></li>
+				
+					<li><a href="../ChaptersHelper.html">ChaptersHelper</a></li>
+				
+					<li><a href="../Character.html">Character</a></li>
+				
+					<li><a href="../CharacterNomination.html">CharacterNomination</a></li>
+				
+					<li><a href="../Collectible.html">Collectible</a></li>
+				
+					<li><a href="../Collection.html">Collection</a></li>
+				
+					<li><a href="../CollectionItem.html">CollectionItem</a></li>
+				
+					<li><a href="../CollectionItemsController.html">CollectionItemsController</a></li>
+				
+					<li><a href="../CollectionObserver.html">CollectionObserver</a></li>
+				
+					<li><a href="../CollectionParticipant.html">CollectionParticipant</a></li>
+				
+					<li><a href="../CollectionParticipantsController.html">CollectionParticipantsController</a></li>
+				
+					<li><a href="../CollectionPreference.html">CollectionPreference</a></li>
+				
+					<li><a href="../CollectionProfile.html">CollectionProfile</a></li>
+				
+					<li><a href="../CollectionProfileController.html">CollectionProfileController</a></li>
+				
+					<li><a href="../CollectionSweeper.html">CollectionSweeper</a></li>
+				
+					<li><a href="../CollectionsController.html">CollectionsController</a></li>
+				
+					<li><a href="../CollectionsHelper.html">CollectionsHelper</a></li>
+				
+					<li><a href="../Comment.html">Comment</a></li>
+				
+					<li><a href="../CommentMailer.html">CommentMailer</a></li>
+				
+					<li><a href="../CommentObserver.html">CommentObserver</a></li>
+				
+					<li><a href="../CommentSweeper.html">CommentSweeper</a></li>
+				
+					<li><a href="../CommentsController.html">CommentsController</a></li>
+				
+					<li><a href="../CommentsHelper.html">CommentsHelper</a></li>
+				
+					<li><a href="../CommonTagging.html">CommonTagging</a></li>
+				
+					<li><a href="../CreationObserver.html">CreationObserver</a></li>
+				
+					<li><a href="../Creatorship.html">Creatorship</a></li>
+				
+					<li><a href="../CssCleaner.html">CssCleaner</a></li>
+				
+					<li><a href="../DateHelper.html">DateHelper</a></li>
+				
+					<li><a href="../DevmodeController.html">DevmodeController</a></li>
+				
+					<li><a href="../DownloadsController.html">DownloadsController</a></li>
+				
+					<li><a href="../EmailVeracityValidator.html">EmailVeracityValidator</a></li>
+				
+					<li><a href="../ErrorsController.html">ErrorsController</a></li>
+				
+					<li><a href="../ExternalAuthor.html">ExternalAuthor</a></li>
+				
+					<li><a href="../ExternalAuthorName.html">ExternalAuthorName</a></li>
+				
+					<li><a href="../ExternalAuthorsController.html">ExternalAuthorsController</a></li>
+				
+					<li><a href="../ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
+				
+					<li><a href="../ExternalCreatorship.html">ExternalCreatorship</a></li>
+				
+					<li><a href="../ExternalWork.html">ExternalWork</a></li>
+				
+					<li><a href="../ExternalWorksController.html">ExternalWorksController</a></li>
+				
+					<li><a href="../Fandom.html">Fandom</a></li>
+				
+					<li><a href="../FandomNomination.html">FandomNomination</a></li>
+				
+					<li><a href="../FandomsController.html">FandomsController</a></li>
+				
+					<li><a href="../FeedSweeper.html">FeedSweeper</a></li>
+				
+					<li><a href="../Feedback.html">Feedback</a></li>
+				
+					<li><a href="../FeedbacksController.html">FeedbacksController</a></li>
+				
+					<li><a href="../FilterCount.html">FilterCount</a></li>
+				
+					<li><a href="../FilterTagging.html">FilterTagging</a></li>
+				
+					<li><a href="../FindRandom.html">FindRandom</a></li>
+				
+					<li><a href="../Freeform.html">Freeform</a></li>
+				
+					<li><a href="../FreeformNomination.html">FreeformNomination</a></li>
+				
+					<li><a href="../Gift.html">Gift</a></li>
+				
+					<li><a href="../GiftExchange.html">GiftExchange</a></li>
+				
+					<li><a href="../GiftsController.html">GiftsController</a></li>
+				
+					<li><a href="../HitCounter.html">HitCounter</a></li>
+				
+					<li><a href="../HomeController.html">HomeController</a></li>
+				
+					<li><a href="../HomeHelper.html">HomeHelper</a></li>
+				
+					<li><a href="../HtmlCleaner.html">HtmlCleaner</a></li>
+				
+					<li><a href="../InboxComment.html">InboxComment</a></li>
+				
+					<li><a href="../InboxController.html">InboxController</a></li>
+				
+					<li><a href="../InboxHelper.html">InboxHelper</a></li>
+				
+					<li><a href="../Invitation.html">Invitation</a></li>
+				
+					<li><a href="../InvitationsController.html">InvitationsController</a></li>
+				
+					<li><a href="../InvitationsHelper.html">InvitationsHelper</a></li>
+				
+					<li><a href="../InviteRequest.html">InviteRequest</a></li>
+				
+					<li><a href="../InviteRequestsController.html">InviteRequestsController</a></li>
+				
+					<li><a href="../KnownIssue.html">KnownIssue</a></li>
+				
+					<li><a href="../KnownIssuesController.html">KnownIssuesController</a></li>
+				
+					<li><a href="../Kudo.html">Kudo</a></li>
+				
+					<li><a href="../KudoMailer.html">KudoMailer</a></li>
+				
+					<li><a href="../KudoObserver.html">KudoObserver</a></li>
+				
+					<li><a href="../KudosController.html">KudosController</a></li>
+				
+					<li><a href="../Language.html">Language</a></li>
+				
+					<li><a href="../LanguagesController.html">LanguagesController</a></li>
+				
+					<li><a href="../Locale.html">Locale</a></li>
+				
+					<li><a href="../LocalesController.html">LocalesController</a></li>
+				
+					<li><a href="../LogItem.html">LogItem</a></li>
+				
+					<li><a href="../Media.html">Media</a></li>
+				
+					<li><a href="../MediaController.html">MediaController</a></li>
+				
+					<li><a href="../MetaTagging.html">MetaTagging</a></li>
+				
+					<li><a href="../Offer.html">Offer</a></li>
+				
+					<li><a href="../OrphansController.html">OrphansController</a></li>
+				
+					<li><a href="../OrphansHelper.html">OrphansHelper</a></li>
+				
+					<li><a href="../OwnedSetTagging.html">OwnedSetTagging</a></li>
+				
+					<li><a href="../OwnedTagSet.html">OwnedTagSet</a></li>
+				
+					<li><a href="../OwnedTagSetsController.html">OwnedTagSetsController</a></li>
+				
+					<li><a href="../PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
+				
+					<li><a href="../PasswordsController.html">PasswordsController</a></li>
+				
+					<li><a href="../People.html">People</a></li>
+				
+					<li><a href="../PeopleController.html">PeopleController</a></li>
+				
+					<li><a href="../PotentialMatch.html">PotentialMatch</a></li>
+				
+					<li><a href="../PotentialMatchSettings.html">PotentialMatchSettings</a></li>
+				
+					<li><a href="../PotentialMatchesController.html">PotentialMatchesController</a></li>
+				
+					<li><a href="../PotentialPromptMatch.html">PotentialPromptMatch</a></li>
+				
+					<li><a href="../Preference.html">Preference</a></li>
+				
+					<li><a href="../PreferencesController.html">PreferencesController</a></li>
+				
+					<li><a href="../Profile.html">Profile</a></li>
+				
+					<li><a href="../ProfileController.html">ProfileController</a></li>
+				
+					<li><a href="../Prompt.html">Prompt</a></li>
+				
+					<li><a href="../PromptMeme.html">PromptMeme</a></li>
+				
+					<li><a href="../PromptRestriction.html">PromptRestriction</a></li>
+				
+					<li><a href="../PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
+				
+					<li><a href="../PromptsController.html">PromptsController</a></li>
+				
+					<li><a href="../Pseud.html">Pseud</a></li>
+				
+					<li><a href="../PseudSweeper.html">PseudSweeper</a></li>
+				
+					<li><a href="../PseudsController.html">PseudsController</a></li>
+				
+					<li><a href="../PseudsHelper.html">PseudsHelper</a></li>
+				
+					<li><a href="../Query.html">Query</a></li>
+				
+					<li><a href="../Rating.html">Rating</a></li>
+				
+					<li><a href="../Rawk.html">Rawk</a></li>
+				
+					<li><a href="../Reading.html">Reading</a></li>
+				
+					<li><a href="../ReadingsController.html">ReadingsController</a></li>
+				
+					<li><a href="../RedirectController.html">RedirectController</a></li>
+				
+					<li><a href="../RedisTestSetup.html">RedisTestSetup</a></li>
+				
+					<li><a href="../RelatedWork.html">RelatedWork</a></li>
+				
+					<li><a href="../RelatedWorksController.html">RelatedWorksController</a></li>
+				
+					<li><a href="../Relationship.html">Relationship</a></li>
+				
+					<li><a href="../RelationshipNomination.html">RelationshipNomination</a></li>
+				
+					<li><a href="../Request.html">Request</a></li>
+				
+					<li><a href="../Role.html">Role</a></li>
+				
+					<li><a href="../RolesUser.html">RolesUser</a></li>
+				
+					<li><a href="../SearchController.html">SearchController</a></li>
+				
+					<li><a href="../SearchHelper.html">SearchHelper</a></li>
+				
+					<li><a href="../SerialWork.html">SerialWork</a></li>
+				
+					<li><a href="../SerialWorksController.html">SerialWorksController</a></li>
+				
+					<li><a href="../Series.html">Series</a></li>
+				
+					<li><a href="../SeriesController.html">SeriesController</a></li>
+				
+					<li><a href="../SeriesHelper.html">SeriesHelper</a></li>
+				
+					<li><a href="../SetTagging.html">SetTagging</a></li>
+				
+					<li><a href="../Skin.html">Skin</a></li>
+				
+					<li><a href="../SkinParent.html">SkinParent</a></li>
+				
+					<li><a href="../SkinsController.html">SkinsController</a></li>
+				
+					<li><a href="../SkinsHelper.html">SkinsHelper</a></li>
+				
+					<li><a href="../SortableList.html">SortableList</a></li>
+				
+					<li><a href="../Stat.html">Stat</a></li>
+				
+					<li><a href="../StatHash.html">StatHash</a></li>
+				
+					<li><a href="../StaticSweeper.html">StaticSweeper</a></li>
+				
+					<li><a href="../StatsController.html">StatsController</a></li>
+				
+					<li><a href="../StatsHelper.html">StatsHelper</a></li>
+				
+					<li><a href="../Subscription.html">Subscription</a></li>
+				
+					<li><a href="../SubscriptionsController.html">SubscriptionsController</a></li>
+				
+					<li><a href="../Tag.html">Tag</a></li>
+				
+					<li><a href="../TagNomination.html">TagNomination</a></li>
+				
+					<li><a href="../TagNominationsController.html">TagNominationsController</a></li>
+				
+					<li><a href="../TagSet.html">TagSet</a></li>
+				
+					<li><a href="../TagSetAssociation.html">TagSetAssociation</a></li>
+				
+					<li><a href="../TagSetAssociationsController.html">TagSetAssociationsController</a></li>
+				
+					<li><a href="../TagSetNomination.html">TagSetNomination</a></li>
+				
+					<li><a href="../TagSetNominationsController.html">TagSetNominationsController</a></li>
+				
+					<li><a href="../TagSetOwnership.html">TagSetOwnership</a></li>
+				
+					<li><a href="../TagSetSweeper.html">TagSetSweeper</a></li>
+				
+					<li><a href="../TagSetsHelper.html">TagSetsHelper</a></li>
+				
+					<li><a href="../TagSweeper.html">TagSweeper</a></li>
+				
+					<li><a href="../TagWranglersController.html">TagWranglersController</a></li>
+				
+					<li><a href="../TagWranglingsController.html">TagWranglingsController</a></li>
+				
+					<li><a href="../Taggable.html">Taggable</a></li>
+				
+					<li><a href="../Tagging.html">Tagging</a></li>
+				
+					<li><a href="../TagsController.html">TagsController</a></li>
+				
+					<li><a href="../TagsHelper.html">TagsHelper</a></li>
+				
+					<li><a href="../TranslationGenerator.html">TranslationGenerator</a></li>
+				
+					<li><a href="../TranslationHelper.html">TranslationHelper</a></li>
+				
+					<li><a href="../TranslationNote.html">TranslationNote</a></li>
+				
+					<li><a href="../TranslationNotesController.html">TranslationNotesController</a></li>
+				
+					<li><a href="../TranslationsController.html">TranslationsController</a></li>
+				
+					<li><a href="../TranslatorsController.html">TranslatorsController</a></li>
+				
+					<li><a href="../UrlActiveValidator.html">UrlActiveValidator</a></li>
+				
+					<li><a href="../UrlFormatValidator.html">UrlFormatValidator</a></li>
+				
+					<li><a href="../UrlHelpers.html">UrlHelpers</a></li>
+				
+					<li><a href="../User.html">User</a></li>
+				
+					<li><a href="../UserInviteRequest.html">UserInviteRequest</a></li>
+				
+					<li><a href="../UserInviteRequestsController.html">UserInviteRequestsController</a></li>
+				
+					<li><a href="../UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
+				
+					<li><a href="../UserMailer.html">UserMailer</a></li>
+				
+					<li><a href="../UserSession.html">UserSession</a></li>
+				
+					<li><a href="../UserSessionsController.html">UserSessionsController</a></li>
+				
+					<li><a href="../UsersController.html">UsersController</a></li>
+				
+					<li><a href="../UsersHelper.html">UsersHelper</a></li>
+				
+					<li><a href="../ValidationHelper.html">ValidationHelper</a></li>
+				
+					<li><a href="../Warning.html">Warning</a></li>
+				
+					<li><a href="../WeightedRandom.html">WeightedRandom</a></li>
+				
+					<li><a href="../Work.html">Work</a></li>
+				
+					<li><a href="../WorkObserver.html">WorkObserver</a></li>
+				
+					<li><a href="../WorkSkin.html">WorkSkin</a></li>
+				
+					<li><a href="../WorkSweeper.html">WorkSweeper</a></li>
+				
+					<li><a href="../WorksController.html">WorksController</a></li>
+				
+					<li><a href="../WorksHelper.html">WorksHelper</a></li>
+				
+					<li><a href="../WranglingAssignment.html">WranglingAssignment</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="module">AutocompleteSource::ClassMethods</h1>
+
+		<div id="description">
+			
+		</div>
+
+		<!-- Constants -->
+		
+
+		<!-- Attributes -->
+		
+
+		<!-- Methods -->
+		
+		<div id="public-instance-method-details" class="method-section section">
+			<h3 class="section-header">Public Instance Methods</h3>
+
+		
+			<div id="autocomplete-cache-key-method" class="method-detail ">
+				<a name="method-i-autocomplete_cache_key"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">autocomplete_cache_key</span><span
+						class="method-args">(autocomplete_prefix, search_param)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="autocomplete-cache-key-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 212</span>
+212:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autocomplete_cache_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>, <span class="ruby-identifier">search_param</span>)
+213:       <span class="ruby-identifier">autocomplete_prefix</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">AUTOCOMPLETE_CACHE_KEY</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">search_param</span>
+214:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="autocomplete-completion-key-method" class="method-detail ">
+				<a name="method-i-autocomplete_completion_key"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">autocomplete_completion_key</span><span
+						class="method-args">(autocomplete_prefix)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="autocomplete-completion-key-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 208</span>
+208:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autocomplete_completion_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>)
+209:       <span class="ruby-identifier">autocomplete_prefix</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">AUTOCOMPLETE_COMPLETION_KEY</span>
+210:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="autocomplete-lookup-method" class="method-detail ">
+				<a name="method-i-autocomplete_lookup"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">autocomplete_lookup</span><span
+						class="method-args">(options = {})</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="autocomplete-lookup-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 103</span>
+103:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-identifier">options</span> = {})
+104:       <span class="ruby-identifier">options</span>.<span class="ruby-identifier">reverse_merge!</span>({<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-value">:sort</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;down&quot;</span>})
+105:       <span class="ruby-identifier">search_param</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:search_param</span>]
+106:       <span class="ruby-identifier">autocomplete_prefix</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:autocomplete_prefix</span>]
+107:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">exists</span>(<span class="ruby-identifier">autocomplete_cache_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>, <span class="ruby-identifier">search_param</span>))
+108:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrange</span>(<span class="ruby-identifier">autocomplete_cache_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>, <span class="ruby-identifier">search_param</span>), <span class="ruby-value">0</span>, <span class="ruby-value">1</span>)
+109:       <span class="ruby-keyword kw">end</span>
+110:       
+111:       <span class="ruby-comment cmt"># we assume that if the user is typing in a phrase, any words they have</span>
+112:       <span class="ruby-comment cmt"># entered are the exact word they want, so we only get the prefixes for</span>
+113:       <span class="ruby-comment cmt"># the very last word they have entered so far</span>
+114:       <span class="ruby-identifier">search_pieces</span> = <span class="ruby-identifier">autocomplete_phrase_split</span>(<span class="ruby-identifier">search_param</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span> <span class="ruby-identifier">w</span> <span class="ruby-operator">+</span> <span class="ruby-constant">AUTOCOMPLETE_WORD_TERMINATOR</span>}
+115:       
+116:       <span class="ruby-comment cmt"># for each complete word, we look up the phrases in that word's set</span>
+117:       <span class="ruby-comment cmt"># along with their scores and add up the scores</span>
+118:       <span class="ruby-identifier">scored_results</span> = {}
+119:       <span class="ruby-identifier">count</span> = {}
+120:       <span class="ruby-identifier">exact</span> = {}
+121:       <span class="ruby-identifier">search_regex</span> = <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">search_param</span>), <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">IGNORECASE</span>)
+122: 
+123:       <span class="ruby-identifier">search_pieces</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">search_piece</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
+124:         <span class="ruby-identifier">lastpiece</span> = <span class="ruby-keyword kw">false</span>
+125:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">index</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">search_pieces</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>
+126:           <span class="ruby-identifier">lastpiece</span> = <span class="ruby-keyword kw">true</span>
+127:           <span class="ruby-identifier">search_piece</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-node">/#{Tag::AUTOCOMPLETE_WORD_TERMINATOR}$/</span>, <span class="ruby-value str">''</span>)
+128:           
+129:           <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">search_pieces</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">search_piece</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+130:         <span class="ruby-keyword kw">end</span>
+131: 
+132:         <span class="ruby-comment cmt"># Get all the complete words which could match this search term</span>
+133:         <span class="ruby-identifier">completions</span> = <span class="ruby-identifier">autocomplete_word_completions</span>(<span class="ruby-identifier">search_piece</span>, <span class="ruby-identifier">autocomplete_prefix</span>)
+134:         
+135:         <span class="ruby-identifier">completions</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">word</span><span class="ruby-operator">|</span>
+136:           <span class="ruby-comment cmt"># O(logN + M) where M is number of items returned -- we could speed up even more by putting in a limit </span>
+137:           <span class="ruby-identifier">phrases_with_scores</span> = []
+138:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lastpiece</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">search_piece</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">3</span>
+139:             <span class="ruby-comment cmt"># use a limit</span>
+140:             <span class="ruby-identifier">phrases_with_scores</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrevrangebyscore</span>(<span class="ruby-identifier">autocomplete_score_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>, <span class="ruby-identifier">word</span>), <span class="ruby-value str">'inf'</span>, <span class="ruby-value">0</span>, <span class="ruby-value">:withscores</span>, <span class="ruby-value">:limit</span>, <span class="ruby-value">0</span>, <span class="ruby-value">50</span>)
+141:           <span class="ruby-keyword kw">else</span>
+142:             <span class="ruby-identifier">phrases_with_scores</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrevrangebyscore</span>(<span class="ruby-identifier">autocomplete_score_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>, <span class="ruby-identifier">word</span>), <span class="ruby-value str">'inf'</span>, <span class="ruby-value">0</span>, <span class="ruby-value">:withscores</span>)
+143:           <span class="ruby-keyword kw">end</span>
+144:           
+145:           <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">phrases_with_scores</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-keyword kw">do</span> 
+146:             <span class="ruby-identifier">phrase</span> = <span class="ruby-identifier">phrases_with_scores</span>.<span class="ruby-identifier">shift</span>
+147:             <span class="ruby-identifier">score</span> = <span class="ruby-identifier">phrases_with_scores</span>.<span class="ruby-identifier">shift</span>
+148:           
+149:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:constraint_sets</span>]
+150:               <span class="ruby-comment cmt"># phrases must be in these sets or else no go</span>
+151:               <span class="ruby-comment cmt"># O(logN) complexity</span>
+152:               <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:constraint_sets</span>].<span class="ruby-identifier">all</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">set</span><span class="ruby-operator">|</span> <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrank</span>(<span class="ruby-identifier">set</span>, <span class="ruby-identifier">phrase</span>)}
+153:             <span class="ruby-keyword kw">end</span>
+154:           
+155:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">count</span>[<span class="ruby-identifier">phrase</span>]
+156:               <span class="ruby-comment cmt"># if we've already seen this phrase, increase the score</span>
+157:               <span class="ruby-identifier">scored_results</span>[<span class="ruby-identifier">phrase</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">score</span>.<span class="ruby-identifier">to_i</span>
+158:               <span class="ruby-identifier">count</span>[<span class="ruby-identifier">phrase</span>] <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+159:             <span class="ruby-keyword kw">else</span>
+160:               <span class="ruby-comment cmt"># initialize the score and check if it exactly matches our regexp</span>
+161:               <span class="ruby-identifier">scored_results</span>[<span class="ruby-identifier">phrase</span>] = <span class="ruby-identifier">score</span>.<span class="ruby-identifier">to_i</span>
+162:               <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lastpiece</span>
+163:                 <span class="ruby-comment cmt"># don't count if it only matches the last search piece</span>
+164:                 <span class="ruby-identifier">count</span>[<span class="ruby-identifier">phrase</span>] = <span class="ruby-value">0</span>
+165:               <span class="ruby-keyword kw">else</span>
+166:                 <span class="ruby-identifier">count</span>[<span class="ruby-identifier">phrase</span>] = <span class="ruby-value">1</span>
+167:               <span class="ruby-keyword kw">end</span>
+168:               <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">phrase</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">search_regex</span>)
+169:                 <span class="ruby-identifier">exact</span>[<span class="ruby-identifier">phrase</span>] = <span class="ruby-keyword kw">true</span>
+170:               <span class="ruby-keyword kw">else</span>
+171:                 <span class="ruby-identifier">exact</span>[<span class="ruby-identifier">phrase</span>] = <span class="ruby-keyword kw">false</span>
+172:               <span class="ruby-keyword kw">end</span>                
+173:             <span class="ruby-keyword kw">end</span>
+174:           <span class="ruby-keyword kw">end</span>
+175:         <span class="ruby-keyword kw">end</span>
+176:       <span class="ruby-keyword kw">end</span>
+177: 
+178:       <span class="ruby-comment cmt"># final sort is O(NlogN) but N is only the number of complete phrase results which should be relatively small</span>
+179:       <span class="ruby-identifier">results</span> = <span class="ruby-identifier">scored_results</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">sort</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k1</span>, <span class="ruby-identifier">k2</span><span class="ruby-operator">|</span> 
+180:         <span class="ruby-identifier">exact</span>[<span class="ruby-identifier">k1</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">exact</span>[<span class="ruby-identifier">k2</span>] <span class="ruby-operator">?</span> <span class="ruby-value">1</span> <span class="ruby-operator">:</span> (<span class="ruby-identifier">exact</span>[<span class="ruby-identifier">k2</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">exact</span>[<span class="ruby-identifier">k1</span>] <span class="ruby-operator">?</span> <span class="ruby-value">1</span> <span class="ruby-operator">:</span>
+181:           <span class="ruby-identifier">count</span>[<span class="ruby-identifier">k1</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">count</span>[<span class="ruby-identifier">k2</span>] <span class="ruby-operator">?</span> <span class="ruby-value">1</span> <span class="ruby-operator">:</span> (<span class="ruby-identifier">count</span>[<span class="ruby-identifier">k2</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">count</span>[<span class="ruby-identifier">k1</span>] <span class="ruby-operator">?</span> <span class="ruby-value">1</span> <span class="ruby-operator">:</span>
+182:             <span class="ruby-identifier">scored_results</span>[<span class="ruby-identifier">options</span>[<span class="ruby-value">:sort</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;down&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">k2</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">k1</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">scored_results</span>[<span class="ruby-identifier">options</span>[<span class="ruby-value">:sort</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;down&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">k1</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">k2</span>].<span class="ruby-identifier">to_i</span>))
+183:       <span class="ruby-keyword kw">end</span>
+184:       <span class="ruby-identifier">limit</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:limit</span>] <span class="ruby-operator">||</span> <span class="ruby-value">15</span>
+185:       
+186:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">search_param</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">2</span>
+187:         <span class="ruby-comment cmt"># cache the result for really quick response when only 1-2 letters entered</span>
+188:         <span class="ruby-comment cmt"># adds only a little bit to memory and saves doing a lot of processing of many phrases</span>
+189:         <span class="ruby-identifier">results</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">limit</span>].<span class="ruby-identifier">each_with_index</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">res</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span> <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zadd</span>(<span class="ruby-identifier">autocomplete_cache_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>, <span class="ruby-identifier">search_param</span>), <span class="ruby-identifier">index</span>, <span class="ruby-identifier">res</span>)}
+190:         <span class="ruby-comment cmt"># expire every 24 hours so new entries get added if appropriate</span>
+191:         <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">expire</span>(<span class="ruby-identifier">autocomplete_cache_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>, <span class="ruby-identifier">search_param</span>), <span class="ruby-value">24</span>*<span class="ruby-value">60</span>*<span class="ruby-value">60</span>)
+192:       <span class="ruby-keyword kw">end</span>      
+193:       <span class="ruby-identifier">results</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">limit</span>]
+194:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="autocomplete-phrase-split-method" class="method-detail ">
+				<a name="method-i-autocomplete_phrase_split"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">autocomplete_phrase_split</span><span
+						class="method-args">(string)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="autocomplete-phrase-split-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 216</span>
+216:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autocomplete_phrase_split</span>(<span class="ruby-identifier">string</span>)
+217:         <span class="ruby-comment cmt"># split into words</span>
+218:         <span class="ruby-identifier">string</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/(?:\s+|\&amp;|\/)/</span>) <span class="ruby-comment cmt"># split on spaces, slash, ampersand</span>
+219:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="autocomplete-pieces-method" class="method-detail ">
+				<a name="method-i-autocomplete_pieces"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">autocomplete_pieces</span><span
+						class="method-args">(string)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="autocomplete-pieces-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 221</span>
+221:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autocomplete_pieces</span>(<span class="ruby-identifier">string</span>)
+222:       <span class="ruby-comment cmt"># prefixes for autocomplete </span>
+223:       <span class="ruby-identifier">prefixes</span> = []
+224: 
+225:       <span class="ruby-identifier">words</span> = <span class="ruby-identifier">autocomplete_phrase_split</span>(<span class="ruby-identifier">string</span>)
+226: 
+227:       <span class="ruby-identifier">words</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">word</span><span class="ruby-operator">|</span>
+228:         <span class="ruby-identifier">prefixes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">word</span> <span class="ruby-operator">+</span> <span class="ruby-constant">AUTOCOMPLETE_WORD_TERMINATOR</span>
+229:         <span class="ruby-identifier">word</span>.<span class="ruby-identifier">length</span>.<span class="ruby-identifier">downto</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">last_index</span><span class="ruby-operator">|</span>
+230:           <span class="ruby-identifier">prefixes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">word</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">last_index</span>)
+231:         <span class="ruby-keyword kw">end</span>
+232:       <span class="ruby-keyword kw">end</span>
+233: 
+234:       <span class="ruby-identifier">prefixes</span>
+235:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="autocomplete-score-key-method" class="method-detail ">
+				<a name="method-i-autocomplete_score_key"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">autocomplete_score_key</span><span
+						class="method-args">(autocomplete_prefix, word)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="autocomplete-score-key-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 204</span>
+204:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autocomplete_score_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>, <span class="ruby-identifier">word</span>)
+205:       <span class="ruby-identifier">autocomplete_prefix</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">AUTOCOMPLETE_SCORE_KEY</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">get_word</span>(<span class="ruby-identifier">word</span>)
+206:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="autocomplete-word-completions-method" class="method-detail ">
+				<a name="method-i-autocomplete_word_completions"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">autocomplete_word_completions</span><span
+						class="method-args">(word_piece, autocomplete_prefix)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+overall time complexity: O(log N)
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="autocomplete-word-completions-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 238</span>
+238:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autocomplete_word_completions</span>(<span class="ruby-identifier">word_piece</span>, <span class="ruby-identifier">autocomplete_prefix</span>)
+239:       <span class="ruby-identifier">get_exact</span> = <span class="ruby-identifier">is_complete_word?</span>(<span class="ruby-identifier">word_piece</span>)
+240: 
+241:       <span class="ruby-comment cmt"># the rank of the word piece tells us where to start looking </span>
+242:       <span class="ruby-comment cmt"># in the completion set for possible completions</span>
+243:       <span class="ruby-comment cmt"># O(logN) N = number of things in the completion set (ie all the possible prefixes for all the words)</span>
+244:       <span class="ruby-identifier">start_position</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrank</span>(<span class="ruby-identifier">autocomplete_completion_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>), <span class="ruby-identifier">word_piece</span>)
+245:       <span class="ruby-keyword kw">return</span> [] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">start_position</span>
+246:       
+247:       <span class="ruby-identifier">results</span> = []
+248:       <span class="ruby-comment cmt"># start from that position and go for the specified range length</span>
+249:       <span class="ruby-comment cmt"># O(logN + M) M is the range length, so reduces to logN</span>
+250:       <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">zrange</span>(<span class="ruby-identifier">autocomplete_completion_key</span>(<span class="ruby-identifier">autocomplete_prefix</span>), <span class="ruby-identifier">start_position</span>, <span class="ruby-identifier">start_position</span> <span class="ruby-operator">+</span> <span class="ruby-constant">AUTOCOMPLETE_RANGE_LENGTH</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">entry</span><span class="ruby-operator">|</span>
+251:         <span class="ruby-identifier">minlen</span> = [<span class="ruby-identifier">entry</span>.<span class="ruby-identifier">length</span>, <span class="ruby-identifier">word_piece</span>.<span class="ruby-identifier">length</span>].<span class="ruby-identifier">min</span>
+252:         <span class="ruby-comment cmt"># if the entry stops matching the prefix then we've passed out of</span>
+253:         <span class="ruby-comment cmt"># the completions that could belong to this word -- return</span>
+254:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">results</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">entry</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">minlen</span>) <span class="ruby-operator">!=</span> <span class="ruby-identifier">word_piece</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">minlen</span>)
+255:       
+256:         <span class="ruby-comment cmt"># otherwise if we've hit a complete word add it to the results</span>
+257:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">is_complete_word?</span>(<span class="ruby-identifier">entry</span>)
+258:           <span class="ruby-identifier">results</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">entry</span>
+259:           <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">results</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">get_exact</span>
+260:         <span class="ruby-keyword kw">end</span>
+261:       <span class="ruby-keyword kw">end</span>
+262:       
+263:       <span class="ruby-identifier">results</span>
+264:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="fullname-from-autocomplete-method" class="method-detail ">
+				<a name="method-i-fullname_from_autocomplete"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">fullname_from_autocomplete</span><span
+						class="method-args">(current_autocomplete_value)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="fullname-from-autocomplete-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 87</span>
+87:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fullname_from_autocomplete</span>(<span class="ruby-identifier">current_autocomplete_value</span>)
+88:       <span class="ruby-identifier">current_autocomplete_value</span>.<span class="ruby-identifier">split</span>(<span class="ruby-constant">AUTOCOMPLETE_DELIMITER</span>, <span class="ruby-value">2</span>)[<span class="ruby-value">1</span>]
+89:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-search-regex-method" class="method-detail ">
+				<a name="method-i-get_search_regex"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_search_regex</span><span
+						class="method-args">(search_param)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+returns a properly escaped and case-insensitive regexp for a more manual
+search
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="get-search-regex-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 72</span>
+72:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_search_regex</span>(<span class="ruby-identifier">search_param</span>)
+73:       <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">search_param</span>), <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">IGNORECASE</span>)      
+74:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-search-terms-method" class="method-detail ">
+				<a name="method-i-get_search_terms"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_search_terms</span><span
+						class="method-args">(search_term)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+takes either an array or string of search terms (typically extra values
+passed in through live params, like fandom) and returns an array of
+stripped and lowercase words for actual searching or use in keys
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="get-search-terms-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 78</span>
+78:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_search_terms</span>(<span class="ruby-identifier">search_term</span>)      
+79:       <span class="ruby-identifier">terms</span> = <span class="ruby-identifier">search_term</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">search_term</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">term</span><span class="ruby-operator">|</span> <span class="ruby-identifier">term</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">','</span>)}.<span class="ruby-identifier">flatten</span> <span class="ruby-operator">:</span> (<span class="ruby-identifier">search_term</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> [] <span class="ruby-operator">:</span> <span class="ruby-identifier">search_term</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">','</span>))
+80:       <span class="ruby-identifier">terms</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">term</span><span class="ruby-operator">|</span> <span class="ruby-identifier">term</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">downcase</span>}
+81:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="get-word-method" class="method-detail ">
+				<a name="method-i-get_word"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">get_word</span><span
+						class="method-args">(word_piece)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="get-word-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 200</span>
+200:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_word</span>(<span class="ruby-identifier">word_piece</span>)
+201:       <span class="ruby-identifier">word_piece</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/#{AUTOCOMPLETE_WORD_TERMINATOR}$/</span>, <span class="ruby-value str">''</span>)
+202:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="id-from-autocomplete-method" class="method-detail ">
+				<a name="method-i-id_from_autocomplete"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">id_from_autocomplete</span><span
+						class="method-args">(current_autocomplete_value)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="id-from-autocomplete-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 91</span>
+91:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">id_from_autocomplete</span>(<span class="ruby-identifier">current_autocomplete_value</span>)
+92:       <span class="ruby-identifier">parse_autocomplete_value</span>(<span class="ruby-identifier">current_autocomplete_value</span>)[<span class="ruby-value">0</span>]
+93:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="is-complete-word--method" class="method-detail ">
+				<a name="method-i-is_complete_word%3F"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">is_complete_word?</span><span
+						class="method-args">(word_piece)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="is-complete-word--source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 196</span>
+196:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_complete_word?</span>(<span class="ruby-identifier">word_piece</span>)
+197:       <span class="ruby-identifier">word_piece</span>.<span class="ruby-identifier">match</span>(<span class="ruby-node">/#{AUTOCOMPLETE_WORD_TERMINATOR}$/</span>)
+198:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="name-from-autocomplete-method" class="method-detail ">
+				<a name="method-i-name_from_autocomplete"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">name_from_autocomplete</span><span
+						class="method-args">(current_autocomplete_value)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="name-from-autocomplete-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 95</span>
+95:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">name_from_autocomplete</span>(<span class="ruby-identifier">current_autocomplete_value</span>)
+96:       <span class="ruby-identifier">parse_autocomplete_value</span>(<span class="ruby-identifier">current_autocomplete_value</span>)[<span class="ruby-value">1</span>]
+97:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="parse-autocomplete-value-method" class="method-detail ">
+				<a name="method-i-parse_autocomplete_value"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">parse_autocomplete_value</span><span
+						class="method-args">(current_autocomplete_value)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="parse-autocomplete-value-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 83</span>
+83:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_autocomplete_value</span>(<span class="ruby-identifier">current_autocomplete_value</span>)
+84:       <span class="ruby-identifier">current_autocomplete_value</span>.<span class="ruby-identifier">split</span>(<span class="ruby-constant">AUTOCOMPLETE_DELIMITER</span>, <span class="ruby-value">3</span>)
+85:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+			<div id="title-from-autocomplete-method" class="method-detail ">
+				<a name="method-i-title_from_autocomplete"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">title_from_autocomplete</span><span
+						class="method-args">(current_autocomplete_value)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					
+					
+
+					
+					<div class="method-source-code"
+						id="title-from-autocomplete-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/autocomplete_source.rb, line 99</span>
+ 99:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">title_from_autocomplete</span>(<span class="ruby-identifier">current_autocomplete_value</span>)
+100:       <span class="ruby-identifier">parse_autocomplete_value</span>(<span class="ruby-identifier">current_autocomplete_value</span>)[<span class="ruby-value">2</span>]
+101:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+
