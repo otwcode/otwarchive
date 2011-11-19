@@ -130,6 +130,8 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I go to "Battle 12" collection's page
+  # TODO: there is no more prompt count at all?
+  # Then show me the main content
   Then I should see "Total prompts: 2"
     And I should see "Claimed prompts: 0"
 
@@ -139,7 +141,7 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I go to the collections page
-  Then I should see "Prompts 2"
+  Then I should see "Prompts: 2"
 
   Scenario: Signups in the dashboard have correct controls
   
@@ -189,7 +191,7 @@ Feature: Prompt Meme Challenge
   And I am logged in as "myname2"
   When I sign up for Battle 12 with combination B
   When I view prompts for "Battle 12"
-    And I follow "↑&nbsp;Fandom"
+    And I sort by fandom
   Then I should see "Something else weird"
   
   Scenario: Sign up for a prompt meme with no tags
@@ -205,6 +207,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination E
   When I claim a prompt from "Battle 12"
+  # TODO: there is no link to unposted claims anymore?
   When I view unposted claims for "Battle 12"
   Then I should see "Weird description"
   
@@ -212,10 +215,11 @@ Feature: Prompt Meme Challenge
   
   Given I have no-column prompt meme fully set up
   When I am logged in as "myname1"
-  When I sign up for Battle 12 with combination E
-  When I view prompts for "Battle 12"
+    And I sign up for Battle 12 with combination E
+    And I view prompts for "Battle 12"
   # TODO: We need to check the display for fandomless memes
-  Then I should not see "Fandom"
+  Then I should not see "sort"
+
   
   Scenario: Claim a prompt and view claims on main page and user page
   
@@ -233,6 +237,7 @@ Feature: Prompt Meme Challenge
   When I sign up for Battle 12 with combination A
     And I claim a prompt from "Battle 12"
   When I go to "Battle 12" collection's page
+  # TODO: have these been removed by design or by accident? and could we have them back?
   Then I should see "Total prompts: 2"
     And I should see "Claimed prompts: 1"
   
@@ -337,13 +342,14 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
   When I am logged in as "mod1"
+  # TODO: mods can't delete prompts anymore?
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted"
     And I should see "Prompts for Battle 12"
     And I should not see "Signups for Battle 12"
   #  And "myname1" should be emailed
   
-  Scenario: Mod cannot edit someone else's prompt
+  Scenario: Mod cannot edit someone else's prompt TODO: hinkiness going on
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
@@ -351,6 +357,7 @@ Feature: Prompt Meme Challenge
   When I am logged in as "mod1"
   When I edit the first prompt
   Then I should not see "Submit a Prompt for Battle 12"
+    # And show me the main content
     And I should see "You can't edit someone else's prompt"
 
   Scenario: User can't delete prompt if they don't have enough
