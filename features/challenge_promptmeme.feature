@@ -549,11 +549,27 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
   Then I should not see "Your Claims"
   
+  Scenario: User can drop a claim from the prompts page
+  
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I claim a prompt from "Battle 12"
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts"
+  Then I should see "Drop Claim"
+
   Scenario: User can't delete another user's claim
-  # TODO
-  
+
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I claim a prompt from "Battle 12"
+  When I am logged in as "otheruser"
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts"
+  Then I should not see "Drop Claim"
+
   Scenario: User can delete their own claim from the user claims list
-  
+
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
@@ -565,7 +581,7 @@ Feature: Prompt Meme Challenge
   # confirm claim no longer exists
   When I go to "Battle 12" collection's page
   Then I should not see "Your Claims"
-  
+
   Scenario: Mod or owner can delete a claim from the user claims list
   
   Given I have Battle 12 prompt meme fully set up
