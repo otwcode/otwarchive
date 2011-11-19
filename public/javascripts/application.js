@@ -6,7 +6,7 @@ $j(document).ready(function() {
     // visualizeTables();
     // initSelect('languages_menu');
     setupToggled();
-    if ($j('#work-form')) { hideFormFields(); };     
+    if ($j('#work-form')) { hideFormFields(); };
     hideHideMe();
     showShowMe();
     handlePopUps();
@@ -16,14 +16,17 @@ $j(document).ready(function() {
           expandList();
           return false;
       });
-    $j('#hide-notice-banner').click(function (e) { $j('#notice-banner').hide();   e.preventDefault(); });
+    $j('#hide-notice-banner').click(function (e) { 
+      $j('#notice-banner').hide();
+      e.preventDefault(); 
+    });
     setupTooltips();
 
     // replace all GET delete links with their AJAXified equivalent
     $j('a[href$="/confirm_delete"]').each(function(){
         this.href = this.href.replace(/\/confirm_delete$/, "");
         $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
-      });
+    });
 });
 
 function visualizeTables() {
@@ -83,12 +86,12 @@ jQuery(function($){
     list = $($(this).attr('action_target'));
     if (!list.attr('force_expand') || list.children().size() > 25 || list.attr('force_contract')) {
       list.hide();
-      $(this).show();      
+      $(this).show();
     } else {
       // show the shuffle and contract button only
       $(this).nextAll(".shuffle").show();
       $(this).next(".contract").show();
-    }    
+    }
     
     // set up click event to expand the list 
     $(this).click(function(event){
@@ -161,7 +164,7 @@ jQuery(function($){
         if (checkboxes.length == 0) { checkboxes = $(this).closest("fieldset").next().find(':checkbox'); }
       }
       checkboxes.attr('checked', true);
-      event.preventDefault();   
+      event.preventDefault();
     });
   });
   
@@ -176,7 +179,7 @@ jQuery(function($){
         if (checkboxes.length == 0) { checkboxes = $(this).closest("fieldset").next().find(':checkbox'); }
       }
       checkboxes.attr('checked', false);
-      event.preventDefault();      
+      event.preventDefault();
     });
   });
 });
@@ -275,7 +278,7 @@ function add_section(link, nested_model_name, content) {
     var last_id = parseInt($j(link).parent().siblings('.last_id').last().html());
     var new_id = last_id + 1;
     var regexp = new RegExp("new_" + nested_model_name, "g");
-    content = content.replace(regexp, new_id)
+    content = content.replace(regexp, new_id);
     // kludgy: show the hidden remove_section link (we don't want it showing for non-js users)
     content = content.replace('class="hidden showme"', '');
     $j(link).parent().before(content);
@@ -284,7 +287,9 @@ function add_section(link, nested_model_name, content) {
 // An attempt to replace the various work form toggle methods with a more generic one
 function toggleFormField(element_id) {
     var ticky = $j('#' + element_id + '-show');
-    if (ticky.is(':checked')) { $j('#' + element_id).removeClass('hidden'); }
+    if (ticky.is(':checked')) { 
+      $j('#' + element_id).removeClass('hidden'); 
+    }
     else { 
         $j('#' + element_id).addClass('hidden');
         if (element_id != 'chapters-options') {
@@ -306,7 +311,7 @@ function showOptions(idToCheck, idToShow) {
     var checkbox = document.getElementById(idToCheck);
     var areaToShow = document.getElementById(idToShow);
     if (checkbox.checked) {
-        Element.toggle(idToShow)
+        Element.toggle(idToShow);
     }
 }
 
@@ -333,7 +338,7 @@ function updateCharacterCounter(counter) {
     var maxlength = $j(input_id + '_counter').attr('data-maxlength');
     var input_value = $j(input_id).val();
     input_value = (input_value.replace(/\r\n/g,'\n')).replace(/\r|\n/g,'\r\n'); 
-    var remaining_characters = maxlength - input_value.length
+    var remaining_characters = maxlength - input_value.length;
     $j(input_id + '_counter').html(remaining_characters);
     $j(input_id + '_counter').attr("aria-valuenow", remaining_characters);
 }
@@ -353,5 +358,5 @@ function setupTooltips() {
           content: $j(this).attr('tooltip'),
           position: {corner: {target: 'topMiddle'}}
        });
-    });    
+    });
 }
