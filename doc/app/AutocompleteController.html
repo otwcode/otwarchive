@@ -1,1595 +1,1296 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+
+<html>
 <head>
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-	<title>Class: AutocompleteController</title>
+<title>Class: AutocompleteController</title>
 
-	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
-	<script src="./js/jquery.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/thickbox-compressed.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/quicksearch.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/darkfish.js" type="text/javascript"
-		charset="utf-8"></script>
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
 
-</head>
-<body class="class">
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
 
-	<div id="metadata">
-		<div id="home-metadata">
-			<div id="home-section" class="section">
-        <h3 class="section-header">
-          <a href="./index.html">Home</a>
-          <a href="./index.html#classes">Classes</a>
-          <a href="./index.html#methods">Methods</a>
-        </h3>
-			</div>
-		</div>
 
-		<div id="file-metadata">
-			<div id="file-list-section" class="section">
-				<h3 class="section-header">In Files</h3>
-				<div class="section-body">
-					<ul>
-					
-						<li><a href="./app/controllers/autocomplete_controller_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="app/controllers/autocomplete_controller.rb">app/controllers/autocomplete_controller.rb</a></li>
-					
-					</ul>
-				</div>
-			</div>
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
 
-			
-		</div>
 
-		<div id="class-metadata">
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
 
-			<!-- Parent Class -->
-			
-			<div id="parent-class-section" class="section">
-				<h3 class="section-header">Parent</h3>
-				
-				<p class="link"><a href="ApplicationController.html">ApplicationController</a></p>
-				
-			</div>
-			
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
 
-			<!-- Namespace Contents -->
-			
 
-			<!-- Method Quickref -->
-			
-			<div id="method-list-section" class="section">
-				<h3 class="section-header">Methods</h3>
-				<ul class="link-list">
-					
-					<li><a href="#method-i-associated_tags">#associated_tags</a></li>
-					
-					<li><a href="#method-i-challenge_participants">#challenge_participants</a></li>
-					
-					<li><a href="#method-i-character">#character</a></li>
-					
-					<li><a href="#method-i-character_in_fandom">#character_in_fandom</a></li>
-					
-					<li><a href="#method-i-collection_fullname">#collection_fullname</a></li>
-					
-					<li><a href="#method-i-collection_parent_name">#collection_parent_name</a></li>
-					
-					<li><a href="#method-i-encoding">#encoding</a></li>
-					
-					<li><a href="#method-i-external_work">#external_work</a></li>
-					
-					<li><a href="#method-i-fandom">#fandom</a></li>
-					
-					<li><a href="#method-i-freeform">#freeform</a></li>
-					
-					<li><a href="#method-i-nominated_parents">#nominated_parents</a></li>
-					
-					<li><a href="#method-i-noncanonical_tag">#noncanonical_tag</a></li>
-					
-					<li><a href="#method-i-open_collection_names">#open_collection_names</a></li>
-					
-					<li><a href="#method-i-owned_tag_sets">#owned_tag_sets</a></li>
-					
-					<li><a href="#method-i-pseud">#pseud</a></li>
-					
-					<li><a href="#method-i-relationship">#relationship</a></li>
-					
-					<li><a href="#method-i-relationship_in_fandom">#relationship_in_fandom</a></li>
-					
-					<li><a href="#method-i-render_output">#render_output</a></li>
-					
-					<li><a href="#method-i-site_skins">#site_skins</a></li>
-					
-					<li><a href="#method-i-tag">#tag</a></li>
-					
-					<li><a href="#method-i-tag_in_fandom">#tag_in_fandom</a></li>
-					
-					<li><a href="#method-i-tag_in_fandom_output">#tag_in_fandom_output</a></li>
-					
-					<li><a href="#method-i-tag_output">#tag_output</a></li>
-					
-					<li><a href="#method-i-tags_in_sets">#tags_in_sets</a></li>
-					
-				</ul>
-			</div>
-			
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/controllers/autocomplete_controller.rb
+  </ul>
+</nav>
 
-			<!-- Included Modules -->
-			
-		</div>
+    
+  </div>
 
-		<div id="project-metadata">
-			
-			
-			<div id="fileindex-section" class="section project-section">
-				<h3 class="section-header">Files</h3>
-				<ul>
-				
-					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
-				
-				</ul>
-			</div>
-			
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link"><a href="ApplicationController.html">ApplicationController</a>
+  
+</nav>
 
-			<div id="classindex-section" class="section project-section">
-				<h3 class="section-header">Class Index
-					<span class="search-toggle"><img src="./images/find.png"
-						height="16" width="16" alt="[+]"
-						title="show/hide quicksearch" /></span></h3>
-				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
-				<fieldset>
-					<legend>Quicksearch</legend>
-					<input type="text" name="quicksearch" value=""
-						class="quicksearch-field" />
-				</fieldset>
-				</form>
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
 
-				<ul class="link-list">
-				
-					<li><a href="./Static.html">Static</a></li>
-				
-					<li><a href="./Static/BaseController.html">Static::BaseController</a></li>
-				
-					<li><a href="./Static/CollectionsController.html">Static::CollectionsController</a></li>
-				
-					<li><a href="./Static/FandomsController.html">Static::FandomsController</a></li>
-				
-					<li><a href="./Static/MediaController.html">Static::MediaController</a></li>
-				
-					<li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
-				
-					<li><a href="./Static/WorksController.html">Static::WorksController</a></li>
-				
-					<li><a href="./Admin.html">Admin</a></li>
-				
-					<li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
-				
-					<li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
-				
-					<li><a href="./Admin/SettingsController.html">Admin::SettingsController</a></li>
-				
-					<li><a href="./Admin/SkinsController.html">Admin::SkinsController</a></li>
-				
-					<li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
-				
-					<li><a href="./ActionController.html">ActionController</a></li>
-				
-					<li><a href="./ActionController/Routing.html">ActionController::Routing</a></li>
-				
-					<li><a href="./ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
-				
-					<li><a href="./Challenge.html">Challenge</a></li>
-				
-					<li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
-				
-					<li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
-				
-					<li><a href="./ActiveRecord.html">ActiveRecord</a></li>
-				
-					<li><a href="./AutocompleteSource.html">AutocompleteSource</a></li>
-				
-					<li><a href="./AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
-				
-					<li><a href="./ChallengeCore.html">ChallengeCore</a></li>
-				
-					<li><a href="./ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
-				
-					<li><a href="./StoryParser.html">StoryParser</a></li>
-				
-					<li><a href="./StoryParser/Error.html">StoryParser::Error</a></li>
-				
-					<li><a href="./XhtmlSplitter.html">XhtmlSplitter</a></li>
-				
-					<li><a href="./XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
-				
-					<li><a href="./AbuseReport.html">AbuseReport</a></li>
-				
-					<li><a href="./AbuseReportsController.html">AbuseReportsController</a></li>
-				
-					<li><a href="./AdminMailer.html">AdminMailer</a></li>
-				
-					<li><a href="./AdminPost.html">AdminPost</a></li>
-				
-					<li><a href="./AdminPostTag.html">AdminPostTag</a></li>
-				
-					<li><a href="./AdminPostTagging.html">AdminPostTagging</a></li>
-				
-					<li><a href="./AdminPostsController.html">AdminPostsController</a></li>
-				
-					<li><a href="./AdminSession.html">AdminSession</a></li>
-				
-					<li><a href="./AdminSessionsController.html">AdminSessionsController</a></li>
-				
-					<li><a href="./AdminSetting.html">AdminSetting</a></li>
-				
-					<li><a href="./AdminsController.html">AdminsController</a></li>
-				
-					<li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
-				
-					<li><a href="./AlphabetHelper.html">AlphabetHelper</a></li>
-				
-					<li><a href="./ApplicationController.html">ApplicationController</a></li>
-				
-					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
-				
-					<li><a href="./ArchiveFaq.html">ArchiveFaq</a></li>
-				
-					<li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a></li>
-				
-					<li><a href="./AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
-				
-					<li><a href="./AutocompleteController.html">AutocompleteController</a></li>
-				
-					<li><a href="./Banned.html">Banned</a></li>
-				
-					<li><a href="./Bookmark.html">Bookmark</a></li>
-				
-					<li><a href="./BookmarksController.html">BookmarksController</a></li>
-				
-					<li><a href="./BookmarksHelper.html">BookmarksHelper</a></li>
-				
-					<li><a href="./CacheHelper.html">CacheHelper</a></li>
-				
-					<li><a href="./CastNomination.html">CastNomination</a></li>
-				
-					<li><a href="./Category.html">Category</a></li>
-				
-					<li><a href="./ChallengeAssignment.html">ChallengeAssignment</a></li>
-				
-					<li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
-				
-					<li><a href="./ChallengeClaim.html">ChallengeClaim</a></li>
-				
-					<li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a></li>
-				
-					<li><a href="./ChallengeHelper.html">ChallengeHelper</a></li>
-				
-					<li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a></li>
-				
-					<li><a href="./ChallengeSignup.html">ChallengeSignup</a></li>
-				
-					<li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
-				
-					<li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
-				
-					<li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a></li>
-				
-					<li><a href="./ChallengeSweeper.html">ChallengeSweeper</a></li>
-				
-					<li><a href="./ChallengesController.html">ChallengesController</a></li>
-				
-					<li><a href="./Chapter.html">Chapter</a></li>
-				
-					<li><a href="./ChapterSweeper.html">ChapterSweeper</a></li>
-				
-					<li><a href="./ChaptersController.html">ChaptersController</a></li>
-				
-					<li><a href="./ChaptersHelper.html">ChaptersHelper</a></li>
-				
-					<li><a href="./Character.html">Character</a></li>
-				
-					<li><a href="./CharacterNomination.html">CharacterNomination</a></li>
-				
-					<li><a href="./Collectible.html">Collectible</a></li>
-				
-					<li><a href="./Collection.html">Collection</a></li>
-				
-					<li><a href="./CollectionItem.html">CollectionItem</a></li>
-				
-					<li><a href="./CollectionItemsController.html">CollectionItemsController</a></li>
-				
-					<li><a href="./CollectionObserver.html">CollectionObserver</a></li>
-				
-					<li><a href="./CollectionParticipant.html">CollectionParticipant</a></li>
-				
-					<li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a></li>
-				
-					<li><a href="./CollectionPreference.html">CollectionPreference</a></li>
-				
-					<li><a href="./CollectionProfile.html">CollectionProfile</a></li>
-				
-					<li><a href="./CollectionProfileController.html">CollectionProfileController</a></li>
-				
-					<li><a href="./CollectionSweeper.html">CollectionSweeper</a></li>
-				
-					<li><a href="./CollectionsController.html">CollectionsController</a></li>
-				
-					<li><a href="./CollectionsHelper.html">CollectionsHelper</a></li>
-				
-					<li><a href="./Comment.html">Comment</a></li>
-				
-					<li><a href="./CommentMailer.html">CommentMailer</a></li>
-				
-					<li><a href="./CommentObserver.html">CommentObserver</a></li>
-				
-					<li><a href="./CommentSweeper.html">CommentSweeper</a></li>
-				
-					<li><a href="./CommentsController.html">CommentsController</a></li>
-				
-					<li><a href="./CommentsHelper.html">CommentsHelper</a></li>
-				
-					<li><a href="./CommonTagging.html">CommonTagging</a></li>
-				
-					<li><a href="./CreationObserver.html">CreationObserver</a></li>
-				
-					<li><a href="./Creatorship.html">Creatorship</a></li>
-				
-					<li><a href="./CssCleaner.html">CssCleaner</a></li>
-				
-					<li><a href="./DateHelper.html">DateHelper</a></li>
-				
-					<li><a href="./DevmodeController.html">DevmodeController</a></li>
-				
-					<li><a href="./DownloadsController.html">DownloadsController</a></li>
-				
-					<li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a></li>
-				
-					<li><a href="./ErrorsController.html">ErrorsController</a></li>
-				
-					<li><a href="./ExternalAuthor.html">ExternalAuthor</a></li>
-				
-					<li><a href="./ExternalAuthorName.html">ExternalAuthorName</a></li>
-				
-					<li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a></li>
-				
-					<li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
-				
-					<li><a href="./ExternalCreatorship.html">ExternalCreatorship</a></li>
-				
-					<li><a href="./ExternalWork.html">ExternalWork</a></li>
-				
-					<li><a href="./ExternalWorksController.html">ExternalWorksController</a></li>
-				
-					<li><a href="./Fandom.html">Fandom</a></li>
-				
-					<li><a href="./FandomNomination.html">FandomNomination</a></li>
-				
-					<li><a href="./FandomsController.html">FandomsController</a></li>
-				
-					<li><a href="./FeedSweeper.html">FeedSweeper</a></li>
-				
-					<li><a href="./Feedback.html">Feedback</a></li>
-				
-					<li><a href="./FeedbacksController.html">FeedbacksController</a></li>
-				
-					<li><a href="./FilterCount.html">FilterCount</a></li>
-				
-					<li><a href="./FilterTagging.html">FilterTagging</a></li>
-				
-					<li><a href="./FindRandom.html">FindRandom</a></li>
-				
-					<li><a href="./Freeform.html">Freeform</a></li>
-				
-					<li><a href="./FreeformNomination.html">FreeformNomination</a></li>
-				
-					<li><a href="./Gift.html">Gift</a></li>
-				
-					<li><a href="./GiftExchange.html">GiftExchange</a></li>
-				
-					<li><a href="./GiftsController.html">GiftsController</a></li>
-				
-					<li><a href="./HitCounter.html">HitCounter</a></li>
-				
-					<li><a href="./HomeController.html">HomeController</a></li>
-				
-					<li><a href="./HomeHelper.html">HomeHelper</a></li>
-				
-					<li><a href="./HtmlCleaner.html">HtmlCleaner</a></li>
-				
-					<li><a href="./InboxComment.html">InboxComment</a></li>
-				
-					<li><a href="./InboxController.html">InboxController</a></li>
-				
-					<li><a href="./InboxHelper.html">InboxHelper</a></li>
-				
-					<li><a href="./Invitation.html">Invitation</a></li>
-				
-					<li><a href="./InvitationsController.html">InvitationsController</a></li>
-				
-					<li><a href="./InvitationsHelper.html">InvitationsHelper</a></li>
-				
-					<li><a href="./InviteRequest.html">InviteRequest</a></li>
-				
-					<li><a href="./InviteRequestsController.html">InviteRequestsController</a></li>
-				
-					<li><a href="./KnownIssue.html">KnownIssue</a></li>
-				
-					<li><a href="./KnownIssuesController.html">KnownIssuesController</a></li>
-				
-					<li><a href="./Kudo.html">Kudo</a></li>
-				
-					<li><a href="./KudoMailer.html">KudoMailer</a></li>
-				
-					<li><a href="./KudoObserver.html">KudoObserver</a></li>
-				
-					<li><a href="./KudosController.html">KudosController</a></li>
-				
-					<li><a href="./Language.html">Language</a></li>
-				
-					<li><a href="./LanguagesController.html">LanguagesController</a></li>
-				
-					<li><a href="./Locale.html">Locale</a></li>
-				
-					<li><a href="./LocalesController.html">LocalesController</a></li>
-				
-					<li><a href="./LogItem.html">LogItem</a></li>
-				
-					<li><a href="./Media.html">Media</a></li>
-				
-					<li><a href="./MediaController.html">MediaController</a></li>
-				
-					<li><a href="./MetaTagging.html">MetaTagging</a></li>
-				
-					<li><a href="./Offer.html">Offer</a></li>
-				
-					<li><a href="./OrphansController.html">OrphansController</a></li>
-				
-					<li><a href="./OrphansHelper.html">OrphansHelper</a></li>
-				
-					<li><a href="./OwnedSetTagging.html">OwnedSetTagging</a></li>
-				
-					<li><a href="./OwnedTagSet.html">OwnedTagSet</a></li>
-				
-					<li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a></li>
-				
-					<li><a href="./PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
-				
-					<li><a href="./PasswordsController.html">PasswordsController</a></li>
-				
-					<li><a href="./People.html">People</a></li>
-				
-					<li><a href="./PeopleController.html">PeopleController</a></li>
-				
-					<li><a href="./PotentialMatch.html">PotentialMatch</a></li>
-				
-					<li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a></li>
-				
-					<li><a href="./PotentialMatchesController.html">PotentialMatchesController</a></li>
-				
-					<li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a></li>
-				
-					<li><a href="./Preference.html">Preference</a></li>
-				
-					<li><a href="./PreferencesController.html">PreferencesController</a></li>
-				
-					<li><a href="./Profile.html">Profile</a></li>
-				
-					<li><a href="./ProfileController.html">ProfileController</a></li>
-				
-					<li><a href="./Prompt.html">Prompt</a></li>
-				
-					<li><a href="./PromptMeme.html">PromptMeme</a></li>
-				
-					<li><a href="./PromptRestriction.html">PromptRestriction</a></li>
-				
-					<li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
-				
-					<li><a href="./PromptsController.html">PromptsController</a></li>
-				
-					<li><a href="./Pseud.html">Pseud</a></li>
-				
-					<li><a href="./PseudSweeper.html">PseudSweeper</a></li>
-				
-					<li><a href="./PseudsController.html">PseudsController</a></li>
-				
-					<li><a href="./PseudsHelper.html">PseudsHelper</a></li>
-				
-					<li><a href="./Query.html">Query</a></li>
-				
-					<li><a href="./Rating.html">Rating</a></li>
-				
-					<li><a href="./Rawk.html">Rawk</a></li>
-				
-					<li><a href="./Reading.html">Reading</a></li>
-				
-					<li><a href="./ReadingsController.html">ReadingsController</a></li>
-				
-					<li><a href="./RedirectController.html">RedirectController</a></li>
-				
-					<li><a href="./RedisTestSetup.html">RedisTestSetup</a></li>
-				
-					<li><a href="./RelatedWork.html">RelatedWork</a></li>
-				
-					<li><a href="./RelatedWorksController.html">RelatedWorksController</a></li>
-				
-					<li><a href="./Relationship.html">Relationship</a></li>
-				
-					<li><a href="./RelationshipNomination.html">RelationshipNomination</a></li>
-				
-					<li><a href="./Request.html">Request</a></li>
-				
-					<li><a href="./Role.html">Role</a></li>
-				
-					<li><a href="./RolesUser.html">RolesUser</a></li>
-				
-					<li><a href="./SearchController.html">SearchController</a></li>
-				
-					<li><a href="./SearchHelper.html">SearchHelper</a></li>
-				
-					<li><a href="./SerialWork.html">SerialWork</a></li>
-				
-					<li><a href="./SerialWorksController.html">SerialWorksController</a></li>
-				
-					<li><a href="./Series.html">Series</a></li>
-				
-					<li><a href="./SeriesController.html">SeriesController</a></li>
-				
-					<li><a href="./SeriesHelper.html">SeriesHelper</a></li>
-				
-					<li><a href="./SetTagging.html">SetTagging</a></li>
-				
-					<li><a href="./Skin.html">Skin</a></li>
-				
-					<li><a href="./SkinParent.html">SkinParent</a></li>
-				
-					<li><a href="./SkinsController.html">SkinsController</a></li>
-				
-					<li><a href="./SkinsHelper.html">SkinsHelper</a></li>
-				
-					<li><a href="./SortableList.html">SortableList</a></li>
-				
-					<li><a href="./Stat.html">Stat</a></li>
-				
-					<li><a href="./StatHash.html">StatHash</a></li>
-				
-					<li><a href="./StaticSweeper.html">StaticSweeper</a></li>
-				
-					<li><a href="./StatsController.html">StatsController</a></li>
-				
-					<li><a href="./StatsHelper.html">StatsHelper</a></li>
-				
-					<li><a href="./Subscription.html">Subscription</a></li>
-				
-					<li><a href="./SubscriptionsController.html">SubscriptionsController</a></li>
-				
-					<li><a href="./Tag.html">Tag</a></li>
-				
-					<li><a href="./TagNomination.html">TagNomination</a></li>
-				
-					<li><a href="./TagNominationsController.html">TagNominationsController</a></li>
-				
-					<li><a href="./TagSet.html">TagSet</a></li>
-				
-					<li><a href="./TagSetAssociation.html">TagSetAssociation</a></li>
-				
-					<li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a></li>
-				
-					<li><a href="./TagSetNomination.html">TagSetNomination</a></li>
-				
-					<li><a href="./TagSetNominationsController.html">TagSetNominationsController</a></li>
-				
-					<li><a href="./TagSetOwnership.html">TagSetOwnership</a></li>
-				
-					<li><a href="./TagSetSweeper.html">TagSetSweeper</a></li>
-				
-					<li><a href="./TagSetsHelper.html">TagSetsHelper</a></li>
-				
-					<li><a href="./TagSweeper.html">TagSweeper</a></li>
-				
-					<li><a href="./TagWranglersController.html">TagWranglersController</a></li>
-				
-					<li><a href="./TagWranglingsController.html">TagWranglingsController</a></li>
-				
-					<li><a href="./Taggable.html">Taggable</a></li>
-				
-					<li><a href="./Tagging.html">Tagging</a></li>
-				
-					<li><a href="./TagsController.html">TagsController</a></li>
-				
-					<li><a href="./TagsHelper.html">TagsHelper</a></li>
-				
-					<li><a href="./TranslationGenerator.html">TranslationGenerator</a></li>
-				
-					<li><a href="./TranslationHelper.html">TranslationHelper</a></li>
-				
-					<li><a href="./TranslationNote.html">TranslationNote</a></li>
-				
-					<li><a href="./TranslationNotesController.html">TranslationNotesController</a></li>
-				
-					<li><a href="./TranslationsController.html">TranslationsController</a></li>
-				
-					<li><a href="./TranslatorsController.html">TranslatorsController</a></li>
-				
-					<li><a href="./UrlActiveValidator.html">UrlActiveValidator</a></li>
-				
-					<li><a href="./UrlFormatValidator.html">UrlFormatValidator</a></li>
-				
-					<li><a href="./UrlHelpers.html">UrlHelpers</a></li>
-				
-					<li><a href="./User.html">User</a></li>
-				
-					<li><a href="./UserInviteRequest.html">UserInviteRequest</a></li>
-				
-					<li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a></li>
-				
-					<li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
-				
-					<li><a href="./UserMailer.html">UserMailer</a></li>
-				
-					<li><a href="./UserSession.html">UserSession</a></li>
-				
-					<li><a href="./UserSessionsController.html">UserSessionsController</a></li>
-				
-					<li><a href="./UsersController.html">UsersController</a></li>
-				
-					<li><a href="./UsersHelper.html">UsersHelper</a></li>
-				
-					<li><a href="./ValidationHelper.html">ValidationHelper</a></li>
-				
-					<li><a href="./Warning.html">Warning</a></li>
-				
-					<li><a href="./WeightedRandom.html">WeightedRandom</a></li>
-				
-					<li><a href="./Work.html">Work</a></li>
-				
-					<li><a href="./WorkObserver.html">WorkObserver</a></li>
-				
-					<li><a href="./WorkSkin.html">WorkSkin</a></li>
-				
-					<li><a href="./WorkSweeper.html">WorkSweeper</a></li>
-				
-					<li><a href="./WorksController.html">WorksController</a></li>
-				
-					<li><a href="./WorksHelper.html">WorksHelper</a></li>
-				
-					<li><a href="./WranglingAssignment.html">WranglingAssignment</a></li>
-				
-				</ul>
-				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
-			</div>
+  <ul class="link-list">
+    
+    <li><a href="#method-i-associated_tags">#associated_tags</a>
+    
+    <li><a href="#method-i-challenge_participants">#challenge_participants</a>
+    
+    <li><a href="#method-i-character">#character</a>
+    
+    <li><a href="#method-i-character_in_fandom">#character_in_fandom</a>
+    
+    <li><a href="#method-i-collection_fullname">#collection_fullname</a>
+    
+    <li><a href="#method-i-collection_parent_name">#collection_parent_name</a>
+    
+    <li><a href="#method-i-encoding">#encoding</a>
+    
+    <li><a href="#method-i-external_work">#external_work</a>
+    
+    <li><a href="#method-i-fandom">#fandom</a>
+    
+    <li><a href="#method-i-freeform">#freeform</a>
+    
+    <li><a href="#method-i-nominated_parents">#nominated_parents</a>
+    
+    <li><a href="#method-i-noncanonical_tag">#noncanonical_tag</a>
+    
+    <li><a href="#method-i-open_collection_names">#open_collection_names</a>
+    
+    <li><a href="#method-i-owned_tag_sets">#owned_tag_sets</a>
+    
+    <li><a href="#method-i-pseud">#pseud</a>
+    
+    <li><a href="#method-i-relationship">#relationship</a>
+    
+    <li><a href="#method-i-relationship_in_fandom">#relationship_in_fandom</a>
+    
+    <li><a href="#method-i-site_skins">#site_skins</a>
+    
+    <li><a href="#method-i-tag">#tag</a>
+    
+    <li><a href="#method-i-tag_in_fandom">#tag_in_fandom</a>
+    
+    <li><a href="#method-i-tags_in_sets">#tags_in_sets</a>
+    
+  </ul>
+</nav>
 
-			
-		</div>
-	</div>
+  </div>
 
-	<div id="documentation">
-		<h1 class="class">AutocompleteController</h1>
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
 
-		<div id="description">
-			
-		</div>
+  <ul>
+  
+    <li class="file"><a href="./app/mailers/README.html">README</a>
+  
+    <li class="file"><a href="./app/views/epub/mimetype.html">mimetype</a>
+  
+  </ul>
+</nav>
 
-		<!-- Constants -->
-		
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
 
-		<!-- Attributes -->
-		
+  <ul class="link-list">
+  
+    <li><a href="./Static.html">Static</a>
+  
+    <li><a href="./Static/BaseController.html">Static::BaseController</a>
+  
+    <li><a href="./Static/CollectionsController.html">Static::CollectionsController</a>
+  
+    <li><a href="./Static/FandomsController.html">Static::FandomsController</a>
+  
+    <li><a href="./Static/MediaController.html">Static::MediaController</a>
+  
+    <li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a>
+  
+    <li><a href="./Static/WorksController.html">Static::WorksController</a>
+  
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
+    <li><a href="./Challenge.html">Challenge</a>
+  
+    <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
+  
+    <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./StoryParser.html">StoryParser</a>
+  
+    <li><a href="./StoryParser/Error.html">StoryParser::Error</a>
+  
+    <li><a href="./AbuseReport.html">AbuseReport</a>
+  
+    <li><a href="./AbuseReportsController.html">AbuseReportsController</a>
+  
+    <li><a href="./AdminMailer.html">AdminMailer</a>
+  
+    <li><a href="./AdminPost.html">AdminPost</a>
+  
+    <li><a href="./AdminPostTag.html">AdminPostTag</a>
+  
+    <li><a href="./AdminPostTagging.html">AdminPostTagging</a>
+  
+    <li><a href="./AdminPostsController.html">AdminPostsController</a>
+  
+    <li><a href="./AdminSession.html">AdminSession</a>
+  
+    <li><a href="./AdminSessionsController.html">AdminSessionsController</a>
+  
+    <li><a href="./AdminSetting.html">AdminSetting</a>
+  
+    <li><a href="./AdminsController.html">AdminsController</a>
+  
+    <li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a>
+  
+    <li><a href="./AlphabetHelper.html">AlphabetHelper</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./ArchiveFaq.html">ArchiveFaq</a>
+  
+    <li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a>
+  
+    <li><a href="./AutocompleteController.html">AutocompleteController</a>
+  
+    <li><a href="./Banned.html">Banned</a>
+  
+    <li><a href="./Bookmark.html">Bookmark</a>
+  
+    <li><a href="./BookmarksController.html">BookmarksController</a>
+  
+    <li><a href="./BookmarksHelper.html">BookmarksHelper</a>
+  
+    <li><a href="./CacheHelper.html">CacheHelper</a>
+  
+    <li><a href="./CastNomination.html">CastNomination</a>
+  
+    <li><a href="./Category.html">Category</a>
+  
+    <li><a href="./ChallengeAssignment.html">ChallengeAssignment</a>
+  
+    <li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a>
+  
+    <li><a href="./ChallengeClaim.html">ChallengeClaim</a>
+  
+    <li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a>
+  
+    <li><a href="./ChallengeHelper.html">ChallengeHelper</a>
+  
+    <li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a>
+  
+    <li><a href="./ChallengeSignup.html">ChallengeSignup</a>
+  
+    <li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a>
+  
+    <li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a>
+  
+    <li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a>
+  
+    <li><a href="./ChallengeSweeper.html">ChallengeSweeper</a>
+  
+    <li><a href="./ChallengesController.html">ChallengesController</a>
+  
+    <li><a href="./Chapter.html">Chapter</a>
+  
+    <li><a href="./ChapterSweeper.html">ChapterSweeper</a>
+  
+    <li><a href="./ChaptersController.html">ChaptersController</a>
+  
+    <li><a href="./ChaptersHelper.html">ChaptersHelper</a>
+  
+    <li><a href="./Character.html">Character</a>
+  
+    <li><a href="./CharacterNomination.html">CharacterNomination</a>
+  
+    <li><a href="./Collection.html">Collection</a>
+  
+    <li><a href="./CollectionItem.html">CollectionItem</a>
+  
+    <li><a href="./CollectionItemsController.html">CollectionItemsController</a>
+  
+    <li><a href="./CollectionObserver.html">CollectionObserver</a>
+  
+    <li><a href="./CollectionParticipant.html">CollectionParticipant</a>
+  
+    <li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a>
+  
+    <li><a href="./CollectionPreference.html">CollectionPreference</a>
+  
+    <li><a href="./CollectionProfile.html">CollectionProfile</a>
+  
+    <li><a href="./CollectionProfileController.html">CollectionProfileController</a>
+  
+    <li><a href="./CollectionSweeper.html">CollectionSweeper</a>
+  
+    <li><a href="./CollectionsController.html">CollectionsController</a>
+  
+    <li><a href="./CollectionsHelper.html">CollectionsHelper</a>
+  
+    <li><a href="./Comment.html">Comment</a>
+  
+    <li><a href="./CommentMailer.html">CommentMailer</a>
+  
+    <li><a href="./CommentObserver.html">CommentObserver</a>
+  
+    <li><a href="./CommentSweeper.html">CommentSweeper</a>
+  
+    <li><a href="./CommentsController.html">CommentsController</a>
+  
+    <li><a href="./CommentsHelper.html">CommentsHelper</a>
+  
+    <li><a href="./CommonTagging.html">CommonTagging</a>
+  
+    <li><a href="./CreationObserver.html">CreationObserver</a>
+  
+    <li><a href="./Creatorship.html">Creatorship</a>
+  
+    <li><a href="./DateHelper.html">DateHelper</a>
+  
+    <li><a href="./DevmodeController.html">DevmodeController</a>
+  
+    <li><a href="./DownloadsController.html">DownloadsController</a>
+  
+    <li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a>
+  
+    <li><a href="./ErrorsController.html">ErrorsController</a>
+  
+    <li><a href="./ExternalAuthor.html">ExternalAuthor</a>
+  
+    <li><a href="./ExternalAuthorName.html">ExternalAuthorName</a>
+  
+    <li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a>
+  
+    <li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a>
+  
+    <li><a href="./ExternalCreatorship.html">ExternalCreatorship</a>
+  
+    <li><a href="./ExternalWork.html">ExternalWork</a>
+  
+    <li><a href="./ExternalWorksController.html">ExternalWorksController</a>
+  
+    <li><a href="./Fandom.html">Fandom</a>
+  
+    <li><a href="./FandomNomination.html">FandomNomination</a>
+  
+    <li><a href="./FandomsController.html">FandomsController</a>
+  
+    <li><a href="./FeedSweeper.html">FeedSweeper</a>
+  
+    <li><a href="./Feedback.html">Feedback</a>
+  
+    <li><a href="./FeedbacksController.html">FeedbacksController</a>
+  
+    <li><a href="./FilterCount.html">FilterCount</a>
+  
+    <li><a href="./FilterTagging.html">FilterTagging</a>
+  
+    <li><a href="./Freeform.html">Freeform</a>
+  
+    <li><a href="./FreeformNomination.html">FreeformNomination</a>
+  
+    <li><a href="./Gift.html">Gift</a>
+  
+    <li><a href="./GiftExchange.html">GiftExchange</a>
+  
+    <li><a href="./GiftsController.html">GiftsController</a>
+  
+    <li><a href="./HitCounter.html">HitCounter</a>
+  
+    <li><a href="./HomeController.html">HomeController</a>
+  
+    <li><a href="./HomeHelper.html">HomeHelper</a>
+  
+    <li><a href="./InboxComment.html">InboxComment</a>
+  
+    <li><a href="./InboxController.html">InboxController</a>
+  
+    <li><a href="./InboxHelper.html">InboxHelper</a>
+  
+    <li><a href="./Invitation.html">Invitation</a>
+  
+    <li><a href="./InvitationsController.html">InvitationsController</a>
+  
+    <li><a href="./InvitationsHelper.html">InvitationsHelper</a>
+  
+    <li><a href="./InviteRequest.html">InviteRequest</a>
+  
+    <li><a href="./InviteRequestsController.html">InviteRequestsController</a>
+  
+    <li><a href="./KnownIssue.html">KnownIssue</a>
+  
+    <li><a href="./KnownIssuesController.html">KnownIssuesController</a>
+  
+    <li><a href="./Kudo.html">Kudo</a>
+  
+    <li><a href="./KudoMailer.html">KudoMailer</a>
+  
+    <li><a href="./KudoObserver.html">KudoObserver</a>
+  
+    <li><a href="./KudosController.html">KudosController</a>
+  
+    <li><a href="./Language.html">Language</a>
+  
+    <li><a href="./LanguagesController.html">LanguagesController</a>
+  
+    <li><a href="./Locale.html">Locale</a>
+  
+    <li><a href="./LocalesController.html">LocalesController</a>
+  
+    <li><a href="./LogItem.html">LogItem</a>
+  
+    <li><a href="./Media.html">Media</a>
+  
+    <li><a href="./MediaController.html">MediaController</a>
+  
+    <li><a href="./MetaTagging.html">MetaTagging</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Offer.html">Offer</a>
+  
+    <li><a href="./OrphansController.html">OrphansController</a>
+  
+    <li><a href="./OrphansHelper.html">OrphansHelper</a>
+  
+    <li><a href="./OwnedSetTagging.html">OwnedSetTagging</a>
+  
+    <li><a href="./OwnedTagSet.html">OwnedTagSet</a>
+  
+    <li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./People.html">People</a>
+  
+    <li><a href="./PeopleController.html">PeopleController</a>
+  
+    <li><a href="./PotentialMatch.html">PotentialMatch</a>
+  
+    <li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a>
+  
+    <li><a href="./PotentialMatchesController.html">PotentialMatchesController</a>
+  
+    <li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a>
+  
+    <li><a href="./Preference.html">Preference</a>
+  
+    <li><a href="./PreferencesController.html">PreferencesController</a>
+  
+    <li><a href="./Profile.html">Profile</a>
+  
+    <li><a href="./ProfileController.html">ProfileController</a>
+  
+    <li><a href="./Prompt.html">Prompt</a>
+  
+    <li><a href="./PromptMeme.html">PromptMeme</a>
+  
+    <li><a href="./PromptRestriction.html">PromptRestriction</a>
+  
+    <li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a>
+  
+    <li><a href="./PromptsController.html">PromptsController</a>
+  
+    <li><a href="./Pseud.html">Pseud</a>
+  
+    <li><a href="./PseudSweeper.html">PseudSweeper</a>
+  
+    <li><a href="./PseudsController.html">PseudsController</a>
+  
+    <li><a href="./PseudsHelper.html">PseudsHelper</a>
+  
+    <li><a href="./Rating.html">Rating</a>
+  
+    <li><a href="./Reading.html">Reading</a>
+  
+    <li><a href="./ReadingsController.html">ReadingsController</a>
+  
+    <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RelatedWork.html">RelatedWork</a>
+  
+    <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
+  
+    <li><a href="./Relationship.html">Relationship</a>
+  
+    <li><a href="./RelationshipNomination.html">RelationshipNomination</a>
+  
+    <li><a href="./Request.html">Request</a>
+  
+    <li><a href="./Role.html">Role</a>
+  
+    <li><a href="./RolesUser.html">RolesUser</a>
+  
+    <li><a href="./SearchController.html">SearchController</a>
+  
+    <li><a href="./SearchHelper.html">SearchHelper</a>
+  
+    <li><a href="./SerialWork.html">SerialWork</a>
+  
+    <li><a href="./SerialWorksController.html">SerialWorksController</a>
+  
+    <li><a href="./Series.html">Series</a>
+  
+    <li><a href="./SeriesController.html">SeriesController</a>
+  
+    <li><a href="./SeriesHelper.html">SeriesHelper</a>
+  
+    <li><a href="./SetTagging.html">SetTagging</a>
+  
+    <li><a href="./Skin.html">Skin</a>
+  
+    <li><a href="./SkinParent.html">SkinParent</a>
+  
+    <li><a href="./SkinsController.html">SkinsController</a>
+  
+    <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StaticSweeper.html">StaticSweeper</a>
+  
+    <li><a href="./StatsController.html">StatsController</a>
+  
+    <li><a href="./StatsHelper.html">StatsHelper</a>
+  
+    <li><a href="./Subscription.html">Subscription</a>
+  
+    <li><a href="./SubscriptionsController.html">SubscriptionsController</a>
+  
+    <li><a href="./Tag.html">Tag</a>
+  
+    <li><a href="./TagNomination.html">TagNomination</a>
+  
+    <li><a href="./TagNominationsController.html">TagNominationsController</a>
+  
+    <li><a href="./TagSet.html">TagSet</a>
+  
+    <li><a href="./TagSetAssociation.html">TagSetAssociation</a>
+  
+    <li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a>
+  
+    <li><a href="./TagSetNomination.html">TagSetNomination</a>
+  
+    <li><a href="./TagSetNominationsController.html">TagSetNominationsController</a>
+  
+    <li><a href="./TagSetOwnership.html">TagSetOwnership</a>
+  
+    <li><a href="./TagSetSweeper.html">TagSetSweeper</a>
+  
+    <li><a href="./TagSetsHelper.html">TagSetsHelper</a>
+  
+    <li><a href="./TagSweeper.html">TagSweeper</a>
+  
+    <li><a href="./TagWranglersController.html">TagWranglersController</a>
+  
+    <li><a href="./TagWranglingsController.html">TagWranglingsController</a>
+  
+    <li><a href="./Tagging.html">Tagging</a>
+  
+    <li><a href="./TagsController.html">TagsController</a>
+  
+    <li><a href="./TagsHelper.html">TagsHelper</a>
+  
+    <li><a href="./TranslationHelper.html">TranslationHelper</a>
+  
+    <li><a href="./TranslationNote.html">TranslationNote</a>
+  
+    <li><a href="./TranslationNotesController.html">TranslationNotesController</a>
+  
+    <li><a href="./TranslationsController.html">TranslationsController</a>
+  
+    <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
+  
+    <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
+  
+    <li><a href="./User.html">User</a>
+  
+    <li><a href="./UserInviteRequest.html">UserInviteRequest</a>
+  
+    <li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a>
+  
+    <li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a>
+  
+    <li><a href="./UserMailer.html">UserMailer</a>
+  
+    <li><a href="./UserSession.html">UserSession</a>
+  
+    <li><a href="./UserSessionsController.html">UserSessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+    <li><a href="./UsersHelper.html">UsersHelper</a>
+  
+    <li><a href="./ValidationHelper.html">ValidationHelper</a>
+  
+    <li><a href="./Warning.html">Warning</a>
+  
+    <li><a href="./WeightedRandom.html">WeightedRandom</a>
+  
+    <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkObserver.html">WorkObserver</a>
+  
+    <li><a href="./WorkSkin.html">WorkSkin</a>
+  
+    <li><a href="./WorkSweeper.html">WorkSweeper</a>
+  
+    <li><a href="./WorksController.html">WorksController</a>
+  
+    <li><a href="./WorksHelper.html">WorksHelper</a>
+  
+    <li><a href="./WranglingAssignment.html">WranglingAssignment</a>
+  
+  </ul>
+</nav>
 
-		<!-- Methods -->
-		
-		<div id="public-instance-method-details" class="method-section section">
-			<h3 class="section-header">Public Instance Methods</h3>
+  </div>
+</nav>
 
-		
-			<div id="associated-tags-method" class="method-detail ">
-				<a name="method-i-associated_tags"></a>
+<div id="documentation">
+  <h1 class="class">class AutocompleteController</h1>
 
-				<div class="method-heading">
-				
-					<span class="method-name">associated_tags</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+  <div id="description" class="description">
+    
+  </div><!-- description -->
 
-				<div class="method-description">
-					
-					<p>
-expects the following params:  :fandom - fandom name(s) as an array or a
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-associated_tags" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">associated_tags</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>expects the following params:  :fandom - fandom name(s) as an array or a
 comma-separated string :tag_set - tag set id(s) as an array or a
-comma-separated string :tag_type - tag type as a string unless
-&#8220;all&#8221; desired :include_wrangled - set to false if you only want
-tags from the set associations and NOT tags wrangled into the fandom
-:fallback - set to false to NOT do  :term - the search term
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="associated-tags-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 76</span>
-76:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">associated_tags</span>
-77:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:fandom</span>].<span class="ruby-identifier">blank?</span> 
-78:       <span class="ruby-identifier">render_output</span>([<span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;Please select a fandom first!&quot;</span>)])
-79:     <span class="ruby-keyword kw">else</span>
-80:       <span class="ruby-identifier">results</span> = <span class="ruby-constant">TagSetAssociation</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-identifier">params</span>)
-81:       <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">results</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">name_from_autocomplete</span>(<span class="ruby-identifier">r</span>)})
-82:     <span class="ruby-keyword kw">end</span>
-83:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="challenge-participants-method" class="method-detail ">
-				<a name="method-i-challenge_participants"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">challenge_participants</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-people signed up for a challenge
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="challenge-participants-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 138</span>
-138:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">challenge_participants</span>
-139:     <span class="ruby-identifier">search_param</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]
-140:     <span class="ruby-identifier">collection_id</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>]
-141:     <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>).<span class="ruby-identifier">order</span>(<span class="ruby-value">:name</span>).<span class="ruby-identifier">joins</span>(<span class="ruby-value">:challenge_signups</span>)
-142:                     .<span class="ruby-identifier">where</span>([<span class="ruby-value str">&quot;pseuds.name LIKE ? AND challenge_signups.collection_id = ?&quot;</span>, 
-143:                             <span class="ruby-value str">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">search_param</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'%'</span>, <span class="ruby-identifier">collection_id</span>]).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:byline</span>))
-144:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="character-method" class="method-detail ">
-				<a name="method-i-character"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">character</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="character-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 38</span>
-38:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">character</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value str">&quot;character&quot;</span>); <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="character-in-fandom-method" class="method-detail ">
-				<a name="method-i-character_in_fandom"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">character_in_fandom</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="character-in-fandom-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 50</span>
-50:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">character_in_fandom</span>; <span class="ruby-identifier">tag_in_fandom_output</span>(<span class="ruby-identifier">params</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-value">:tag_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;character&quot;</span>})); <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="collection-fullname-method" class="method-detail ">
-				<a name="method-i-collection_fullname"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">collection_fullname</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-look up collections ranked by number of items they contain
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="collection-fullname-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 106</span>
-106:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">collection_fullname</span>
-107:     <span class="ruby-identifier">results</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;autocomplete_collection_all&quot;</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span> <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">fullname_from_autocomplete</span>(<span class="ruby-identifier">res</span>)}
-108:     <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">results</span>)
-109:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="collection-parent-name-method" class="method-detail ">
-				<a name="method-i-collection_parent_name"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">collection_parent_name</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-For creating collections, autocomplete the name of a parent collection
-owned by the user only
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="collection-parent-name-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 122</span>
-122:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">collection_parent_name</span>
-123:     <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">maintained_collections</span>.<span class="ruby-identifier">top_level</span>.<span class="ruby-identifier">with_name_like</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]).<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:name</span>).<span class="ruby-identifier">sort</span>)
-124:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="encoding-method" class="method-detail ">
-				<a name="method-i-encoding"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">encoding</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-encodings for importing
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="encoding-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 132</span>
-132:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">encoding</span>
-133:     <span class="ruby-identifier">encodings</span> = <span class="ruby-constant">Encoding</span>.<span class="ruby-identifier">name_list</span>.<span class="ruby-identifier">select</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">match</span>(<span class="ruby-node">/#{params[:term]}/</span>)}
-134:     <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">encodings</span>)
-135:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="external-work-method" class="method-detail ">
-				<a name="method-i-external_work"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">external_work</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-for looking up existing urls for external works to avoid duplication 
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="external-work-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 127</span>
-127:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">external_work</span>
-128:     <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">ExternalWork</span>.<span class="ruby-identifier">where</span>([<span class="ruby-value str">&quot;url LIKE ?&quot;</span>, <span class="ruby-value str">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">'%'</span>]).<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>).<span class="ruby-identifier">order</span>(<span class="ruby-value">:url</span>).<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:url</span>))    
-129:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="fandom-method" class="method-detail ">
-				<a name="method-i-fandom"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">fandom</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="fandom-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 37</span>
-37:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fandom</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value str">&quot;fandom&quot;</span>); <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="freeform-method" class="method-detail ">
-				<a name="method-i-freeform"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">freeform</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="freeform-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 40</span>
-40:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">freeform</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value str">&quot;freeform&quot;</span>); <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="nominated-parents-method" class="method-detail ">
-				<a name="method-i-nominated_parents"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">nominated_parents</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Nominated parents
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="nominated-parents-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 99</span>
- 99:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nominated_parents</span>
-100:     <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-constant">OwnedTagSet</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_set_id</span>])).<span class="ruby-identifier">nominated_parents</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tagname</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]))
-101:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="noncanonical-tag-method" class="method-detail ">
-				<a name="method-i-noncanonical_tag"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">noncanonical_tag</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-NONCANONICAL TAGS
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="noncanonical-tag-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 86</span>
-86:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">noncanonical_tag</span>
-87:     <span class="ruby-identifier">search_param</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]
-88:     <span class="ruby-identifier">tag_class</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:type</span>].<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span>
-89:     <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">tag_class</span>.<span class="ruby-identifier">by_popularity</span>
-90:                       .<span class="ruby-identifier">where</span>([<span class="ruby-value str">&quot;canonical = 0 AND name LIKE ?&quot;</span>,
-91:                               <span class="ruby-value str">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">search_param</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'%'</span>]).<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>))
-92:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="open-collection-names-method" class="method-detail ">
-				<a name="method-i-open_collection_names"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">open_collection_names</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-return collection names
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="open-collection-names-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 113</span>
-113:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_collection_names</span>
-114:     <span class="ruby-comment cmt"># in this case we want different ids from names so we can display the title but only put in the name</span>
-115:     <span class="ruby-identifier">results</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;autocomplete_collection_open&quot;</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> 
-116:       {<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">name_from_autocomplete</span>(<span class="ruby-identifier">str</span>), <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">title_from_autocomplete</span>(<span class="ruby-identifier">str</span>)}
-117:     <span class="ruby-keyword kw">end</span>
-118:     <span class="ruby-identifier">respond_with</span>(<span class="ruby-identifier">results</span>)
-119:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="owned-tag-sets-method" class="method-detail ">
-				<a name="method-i-owned_tag_sets"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">owned_tag_sets</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-owned tag sets that are usable by all
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="owned-tag-sets-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 147</span>
-147:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">owned_tag_sets</span>
-148:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>].<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-149:       <span class="ruby-identifier">search_param</span> = <span class="ruby-value str">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">'%'</span>
-150:       <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">OwnedTagSet</span>.<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>).<span class="ruby-identifier">order</span>(<span class="ruby-value">:title</span>).<span class="ruby-identifier">usable</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value str">&quot;owned_tag_sets.title LIKE ?&quot;</span>, <span class="ruby-identifier">search_param</span>).<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:title</span>))
-151:     <span class="ruby-keyword kw">end</span>
-152:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="pseud-method" class="method-detail ">
-				<a name="method-i-pseud"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">pseud</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-PSEUDS
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="pseud-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 25</span>
-25:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pseud</span>
-26:     <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;autocomplete_pseud&quot;</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span> <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">fullname_from_autocomplete</span>(<span class="ruby-identifier">res</span>)})
-27:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="relationship-method" class="method-detail ">
-				<a name="method-i-relationship"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">relationship</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="relationship-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 39</span>
-39:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">relationship</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value str">&quot;relationship&quot;</span>); <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="relationship-in-fandom-method" class="method-detail ">
-				<a name="method-i-relationship_in_fandom"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">relationship_in_fandom</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="relationship-in-fandom-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 51</span>
-51:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">relationship_in_fandom</span>; <span class="ruby-identifier">tag_in_fandom_output</span>(<span class="ruby-identifier">params</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-value">:tag_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;relationship&quot;</span>})); <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="site-skins-method" class="method-detail ">
-				<a name="method-i-site_skins"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">site_skins</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-skins for parenting
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="site-skins-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 155</span>
-155:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">site_skins</span>
-156:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>].<span class="ruby-identifier">present?</span>
-157:       <span class="ruby-identifier">search_param</span> = <span class="ruby-value str">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">'%'</span>
-158:       <span class="ruby-identifier">query</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value str">&quot;title LIKE ?&quot;</span>, <span class="ruby-identifier">search_param</span>).<span class="ruby-identifier">limit</span>(<span class="ruby-value">15</span>).<span class="ruby-identifier">sort_by_recent</span>
-159:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">logged_in?</span>
-160:         <span class="ruby-identifier">query</span> = <span class="ruby-identifier">query</span>.<span class="ruby-identifier">approved_or_owned_by</span>(<span class="ruby-identifier">current_user</span>)
-161:       <span class="ruby-keyword kw">else</span>
-162:         <span class="ruby-identifier">query</span> = <span class="ruby-identifier">query</span>.<span class="ruby-identifier">approved_skins</span>
-163:       <span class="ruby-keyword kw">end</span>
-164:       <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">query</span>.<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:title</span>))
-165:     <span class="ruby-keyword kw">end</span>
-166:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="tag-method" class="method-detail ">
-				<a name="method-i-tag"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">tag</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-these are all basically duplicates but make our calls to autocomplete more
-readable
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="tag-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 36</span>
-36:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tag</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:type</span>]); <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="tag-in-fandom-method" class="method-detail ">
-				<a name="method-i-tag_in_fandom"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">tag_in_fandom</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="tag-in-fandom-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 49</span>
-49:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tag_in_fandom</span>; <span class="ruby-identifier">tag_in_fandom_output</span>(<span class="ruby-identifier">params</span>); <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="tags-in-sets-method" class="method-detail ">
-				<a name="method-i-tags_in_sets"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">tags_in_sets</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-expects the following params:  :tag_set - tag set ids comma-separated
-:tag_type - tag type as a string unless &#8220;all&#8221; desired :in_any -
-set to false if only want tags in ALL specified sets :term - the search
-term
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="tags-in-sets-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 64</span>
-64:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tags_in_sets</span>
-65:     <span class="ruby-identifier">results</span> = <span class="ruby-constant">TagSet</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-identifier">params</span>)
-66:     <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">results</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">name_from_autocomplete</span>(<span class="ruby-identifier">r</span>)})
-67:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="private-instance-method-details" class="method-section section">
-			<h3 class="section-header">Private Instance Methods</h3>
-
-		
-			<div id="render-output-method" class="method-detail ">
-				<a name="method-i-render_output"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">render_output</span><span
-						class="method-args">(result_strings)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="render-output-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 170</span>
-170:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">result_strings</span>)
-171:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">result_strings</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
-172:       <span class="ruby-identifier">respond_with</span>(<span class="ruby-identifier">result_strings</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> {<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">str</span>, <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">str</span>}})
-173:     <span class="ruby-keyword kw">else</span>
-174:       <span class="ruby-identifier">respond_with</span>(<span class="ruby-identifier">result_strings</span>)
-175:     <span class="ruby-keyword kw">end</span>
-176:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="tag-in-fandom-output-method" class="method-detail ">
-				<a name="method-i-tag_in_fandom_output"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">tag_in_fandom_output</span><span
-						class="method-args">(params)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-TAGS IN FANDOMS
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="tag-in-fandom-output-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 45</span>
-45:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tag_in_fandom_output</span>(<span class="ruby-identifier">params</span>)
-46:       <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">Tag</span>.<span class="ruby-identifier">autocomplete_fandom_lookup</span>(<span class="ruby-identifier">params</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">name_from_autocomplete</span>(<span class="ruby-identifier">r</span>)})
-47:     <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="tag-output-method" class="method-detail ">
-				<a name="method-i-tag_output"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">tag_output</span><span
-						class="method-args">(search_param, tag_type)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-TAGS  
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="tag-output-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/autocomplete_controller.rb, line 31</span>
-31:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">search_param</span>, <span class="ruby-identifier">tag_type</span>)
-32:       <span class="ruby-identifier">render_output</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">search_param</span>, <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;autocomplete_tag_#{tag_type}&quot;</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">name_from_autocomplete</span>(<span class="ruby-identifier">r</span>)}
-33:     <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-
-	</div>
-
-
-	<div id="rdoc-debugging-section-dump" class="debugging-section">
-	
-		<p>Disabled; run with --debug to generate this.</p>
-	
-	</div>
-
-	<div id="validator-badges">
-		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
-		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
-			Rdoc Generator</a> 1.1.6</small>.</p>
-	</div>
-
-</body>
-</html>
+comma-separated string :tag_type - tag type as a string unless “all”
+desired :include_wrangled - set to false if you only want tags from the set
+associations and NOT tags wrangled into the fandom :fallback - set to false
+to NOT do  :term - the search term</p>
+          
+
+          
+          <div class="method-source-code" id="associated_tags-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 76</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">associated_tags</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:fandom</span>].<span class="ruby-identifier">blank?</span> 
+    <span class="ruby-identifier">render_output</span>([<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please select a fandom first!&quot;</span>)])
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">results</span> = <span class="ruby-constant">TagSetAssociation</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-identifier">params</span>)
+    <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">results</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">name_from_autocomplete</span>(<span class="ruby-identifier">r</span>)})
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- associated_tags-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- associated_tags-method -->
+
+    
+      <div id="method-i-challenge_participants" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">challenge_participants</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>people signed up for a challenge</p>
+          
+
+          
+          <div class="method-source-code" id="challenge_participants-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 138</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">challenge_participants</span>
+  <span class="ruby-identifier">search_param</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]
+  <span class="ruby-identifier">collection_id</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>]
+  <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>).<span class="ruby-identifier">order</span>(<span class="ruby-value">:name</span>).<span class="ruby-identifier">joins</span>(<span class="ruby-value">:challenge_signups</span>)
+                  .<span class="ruby-identifier">where</span>([<span class="ruby-string">&quot;pseuds.name LIKE ? AND challenge_signups.collection_id = ?&quot;</span>, 
+                          <span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">search_param</span> <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>, <span class="ruby-identifier">collection_id</span>]).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:byline</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- challenge_participants-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- challenge_participants-method -->
+
+    
+      <div id="method-i-character" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">character</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="character-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">character</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-string">&quot;character&quot;</span>); <span class="ruby-keyword">end</span></pre>
+          </div><!-- character-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- character-method -->
+
+    
+      <div id="method-i-character_in_fandom" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">character_in_fandom</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="character_in_fandom-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 50</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">character_in_fandom</span>; <span class="ruby-identifier">tag_in_fandom_output</span>(<span class="ruby-identifier">params</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-value">:tag_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;character&quot;</span>})); <span class="ruby-keyword">end</span></pre>
+          </div><!-- character_in_fandom-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- character_in_fandom-method -->
+
+    
+      <div id="method-i-collection_fullname" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">collection_fullname</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>look up collections ranked by number of items they contain</p>
+          
+
+          
+          <div class="method-source-code" id="collection_fullname-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 106</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">collection_fullname</span>
+  <span class="ruby-identifier">results</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;autocomplete_collection_all&quot;</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span> <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">fullname_from_autocomplete</span>(<span class="ruby-identifier">res</span>)}
+  <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">results</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- collection_fullname-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- collection_fullname-method -->
+
+    
+      <div id="method-i-collection_parent_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">collection_parent_name</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>For creating collections, autocomplete the name of a parent collection
+owned by the user only</p>
+          
+
+          
+          <div class="method-source-code" id="collection_parent_name-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 122</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">collection_parent_name</span>
+  <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">maintained_collections</span>.<span class="ruby-identifier">top_level</span>.<span class="ruby-identifier">with_name_like</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]).<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:name</span>).<span class="ruby-identifier">sort</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- collection_parent_name-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- collection_parent_name-method -->
+
+    
+      <div id="method-i-encoding" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">encoding</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>encodings for importing</p>
+          
+
+          
+          <div class="method-source-code" id="encoding-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 132</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">encoding</span>
+  <span class="ruby-identifier">encodings</span> = <span class="ruby-constant">Encoding</span>.<span class="ruby-identifier">name_list</span>.<span class="ruby-identifier">select</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">match</span>(<span class="ruby-node">/#{params[:term]}/</span>)}
+  <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">encodings</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- encoding-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- encoding-method -->
+
+    
+      <div id="method-i-external_work" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">external_work</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>for looking up existing urls for external works to avoid duplication</p>
+          
+
+          
+          <div class="method-source-code" id="external_work-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 127</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">external_work</span>
+  <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">ExternalWork</span>.<span class="ruby-identifier">where</span>([<span class="ruby-string">&quot;url LIKE ?&quot;</span>, <span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>] <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>]).<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>).<span class="ruby-identifier">order</span>(<span class="ruby-value">:url</span>).<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:url</span>))    
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- external_work-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- external_work-method -->
+
+    
+      <div id="method-i-fandom" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">fandom</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="fandom-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 37</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">fandom</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-string">&quot;fandom&quot;</span>); <span class="ruby-keyword">end</span></pre>
+          </div><!-- fandom-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- fandom-method -->
+
+    
+      <div id="method-i-freeform" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">freeform</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="freeform-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">freeform</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-string">&quot;freeform&quot;</span>); <span class="ruby-keyword">end</span></pre>
+          </div><!-- freeform-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- freeform-method -->
+
+    
+      <div id="method-i-nominated_parents" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">nominated_parents</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Nominated parents</p>
+          
+
+          
+          <div class="method-source-code" id="nominated_parents-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 99</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">nominated_parents</span>
+  <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-constant">OwnedTagSet</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_set_id</span>])).<span class="ruby-identifier">nominated_parents</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tagname</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]))
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- nominated_parents-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- nominated_parents-method -->
+
+    
+      <div id="method-i-noncanonical_tag" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">noncanonical_tag</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>NONCANONICAL TAGS</p>
+          
+
+          
+          <div class="method-source-code" id="noncanonical_tag-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 86</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">noncanonical_tag</span>
+  <span class="ruby-identifier">search_param</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]
+  <span class="ruby-identifier">tag_class</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:type</span>].<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span>
+  <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">tag_class</span>.<span class="ruby-identifier">by_popularity</span>
+                    .<span class="ruby-identifier">where</span>([<span class="ruby-string">&quot;canonical = 0 AND name LIKE ?&quot;</span>,
+                            <span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">search_param</span> <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>]).<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- noncanonical_tag-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- noncanonical_tag-method -->
+
+    
+      <div id="method-i-open_collection_names" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">open_collection_names</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>return collection names</p>
+          
+
+          
+          <div class="method-source-code" id="open_collection_names-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 113</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">open_collection_names</span>
+  <span class="ruby-comment"># in this case we want different ids from names so we can display the title but only put in the name</span>
+  <span class="ruby-identifier">results</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;autocomplete_collection_open&quot;</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> 
+    {<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">name_from_autocomplete</span>(<span class="ruby-identifier">str</span>), <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">title_from_autocomplete</span>(<span class="ruby-identifier">str</span>)}
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">respond_with</span>(<span class="ruby-identifier">results</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- open_collection_names-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- open_collection_names-method -->
+
+    
+      <div id="method-i-owned_tag_sets" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">owned_tag_sets</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>owned tag sets that are usable by all</p>
+          
+
+          
+          <div class="method-source-code" id="owned_tag_sets-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 147</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">owned_tag_sets</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>].<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">search_param</span> = <span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>] <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>
+    <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">OwnedTagSet</span>.<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>).<span class="ruby-identifier">order</span>(<span class="ruby-value">:title</span>).<span class="ruby-identifier">usable</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;owned_tag_sets.title LIKE ?&quot;</span>, <span class="ruby-identifier">search_param</span>).<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:title</span>))
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- owned_tag_sets-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- owned_tag_sets-method -->
+
+    
+      <div id="method-i-pseud" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">pseud</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>PSEUDS</p>
+          
+
+          
+          <div class="method-source-code" id="pseud-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 25</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">pseud</span>
+  <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;autocomplete_pseud&quot;</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span> <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">fullname_from_autocomplete</span>(<span class="ruby-identifier">res</span>)})
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- pseud-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- pseud-method -->
+
+    
+      <div id="method-i-relationship" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">relationship</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="relationship-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">relationship</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-string">&quot;relationship&quot;</span>); <span class="ruby-keyword">end</span></pre>
+          </div><!-- relationship-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- relationship-method -->
+
+    
+      <div id="method-i-relationship_in_fandom" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">relationship_in_fandom</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="relationship_in_fandom-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 51</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">relationship_in_fandom</span>; <span class="ruby-identifier">tag_in_fandom_output</span>(<span class="ruby-identifier">params</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-value">:tag_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;relationship&quot;</span>})); <span class="ruby-keyword">end</span></pre>
+          </div><!-- relationship_in_fandom-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- relationship_in_fandom-method -->
+
+    
+      <div id="method-i-site_skins" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">site_skins</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>skins for parenting</p>
+          
+
+          
+          <div class="method-source-code" id="site_skins-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 155</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">site_skins</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>].<span class="ruby-identifier">present?</span>
+    <span class="ruby-identifier">search_param</span> = <span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>] <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>
+    <span class="ruby-identifier">query</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;title LIKE ?&quot;</span>, <span class="ruby-identifier">search_param</span>).<span class="ruby-identifier">limit</span>(<span class="ruby-value">15</span>).<span class="ruby-identifier">sort_by_recent</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in?</span>
+      <span class="ruby-identifier">query</span> = <span class="ruby-identifier">query</span>.<span class="ruby-identifier">approved_or_owned_by</span>(<span class="ruby-identifier">current_user</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">query</span> = <span class="ruby-identifier">query</span>.<span class="ruby-identifier">approved_skins</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">query</span>.<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:title</span>))
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- site_skins-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- site_skins-method -->
+
+    
+      <div id="method-i-tag" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">tag</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>these are all basically duplicates but make our calls to autocomplete more
+readable</p>
+          
+
+          
+          <div class="method-source-code" id="tag-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 36</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:type</span>]); <span class="ruby-keyword">end</span></pre>
+          </div><!-- tag-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- tag-method -->
+
+    
+      <div id="method-i-tag_in_fandom" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">tag_in_fandom</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="tag_in_fandom-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_in_fandom</span>; <span class="ruby-identifier">tag_in_fandom_output</span>(<span class="ruby-identifier">params</span>); <span class="ruby-keyword">end</span></pre>
+          </div><!-- tag_in_fandom-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- tag_in_fandom-method -->
+
+    
+      <div id="method-i-tags_in_sets" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">tags_in_sets</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>expects the following params:  :tag_set - tag set ids comma-separated
+:tag_type - tag type as a string unless “all” desired :in_any - set to
+false if only want tags in ALL specified sets :term - the search term</p>
+          
+
+          
+          <div class="method-source-code" id="tags_in_sets-source">
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 64</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">tags_in_sets</span>
+  <span class="ruby-identifier">results</span> = <span class="ruby-constant">TagSet</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-identifier">params</span>)
+  <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">results</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">name_from_autocomplete</span>(<span class="ruby-identifier">r</span>)})
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- tags_in_sets-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- tags_in_sets-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
 

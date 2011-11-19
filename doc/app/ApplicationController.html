@@ -1,2222 +1,1937 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+
+<html>
 <head>
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-	<title>Class: ApplicationController</title>
+<title>Class: ApplicationController</title>
 
-	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
-	<script src="./js/jquery.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/thickbox-compressed.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/quicksearch.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/darkfish.js" type="text/javascript"
-		charset="utf-8"></script>
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
 
-</head>
-<body class="class">
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
 
-	<div id="metadata">
-		<div id="home-metadata">
-			<div id="home-section" class="section">
-        <h3 class="section-header">
-          <a href="./index.html">Home</a>
-          <a href="./index.html#classes">Classes</a>
-          <a href="./index.html#methods">Methods</a>
-        </h3>
-			</div>
-		</div>
 
-		<div id="file-metadata">
-			<div id="file-list-section" class="section">
-				<h3 class="section-header">In Files</h3>
-				<div class="section-body">
-					<ul>
-					
-						<li><a href="./app/controllers/application_controller_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="app/controllers/application_controller.rb">app/controllers/application_controller.rb</a></li>
-					
-					</ul>
-				</div>
-			</div>
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
 
-			
-		</div>
 
-		<div id="class-metadata">
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
 
-			<!-- Parent Class -->
-			
-			<div id="parent-class-section" class="section">
-				<h3 class="section-header">Parent</h3>
-				
-				<p class="link">ActionController::Base</p>
-				
-			</div>
-			
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
 
-			<!-- Namespace Contents -->
-			
 
-			<!-- Method Quickref -->
-			
-			<div id="method-list-section" class="section">
-				<h3 class="section-header">Methods</h3>
-				<ul class="link-list">
-					
-					<li><a href="#method-i-access_denied">#access_denied</a></li>
-					
-					<li><a href="#method-i-admin_logout_required">#admin_logout_required</a></li>
-					
-					<li><a href="#method-i-admin_only">#admin_only</a></li>
-					
-					<li><a href="#method-i-admin_only_access_denied">#admin_only_access_denied</a></li>
-					
-					<li><a href="#method-i-check_ownership">#check_ownership</a></li>
-					
-					<li><a href="#method-i-check_ownership_or_admin">#check_ownership_or_admin</a></li>
-					
-					<li><a href="#method-i-check_permission_to_wrangle">#check_permission_to_wrangle</a></li>
-					
-					<li><a href="#method-i-check_user_status">#check_user_status</a></li>
-					
-					<li><a href="#method-i-check_visibility">#check_visibility</a></li>
-					
-					<li><a href="#method-i-collection_maintainers_only">#collection_maintainers_only</a></li>
-					
-					<li><a href="#method-i-collection_owners_only">#collection_owners_only</a></li>
-					
-					<li><a href="#method-i-convert_date">#convert_date</a></li>
-					
-					<li><a href="#method-i-current_admin">#current_admin</a></li>
-					
-					<li><a href="#method-i-current_admin_session">#current_admin_session</a></li>
-					
-					<li><a href="#method-i-current_user">#current_user</a></li>
-					
-					<li><a href="#method-i-current_user_owns%3F">#current_user_owns?</a></li>
-					
-					<li><a href="#method-i-current_user_session">#current_user_session</a></li>
-					
-					<li><a href="#method-i-fetch_admin_settings">#fetch_admin_settings</a></li>
-					
-					<li><a href="#method-i-get_page_title">#get_page_title</a></li>
-					
-					<li><a href="#method-i-hide_banner">#hide_banner</a></li>
-					
-					<li><a href="#method-i-is_admin%3F">#is_admin?</a></li>
-					
-					<li><a href="#method-i-is_registered_user%3F">#is_registered_user?</a></li>
-					
-					<li><a href="#method-i-load_collection">#load_collection</a></li>
-					
-					<li><a href="#method-i-load_locales">#load_locales</a></li>
-					
-					<li><a href="#method-i-logged_in%3F">#logged_in?</a></li>
-					
-					<li><a href="#method-i-logged_in_as_admin%3F">#logged_in_as_admin?</a></li>
-					
-					<li><a href="#method-i-not_allowed">#not_allowed</a></li>
-					
-					<li><a href="#method-i-redirect_back_or_default">#redirect_back_or_default</a></li>
-					
-					<li><a href="#method-i-see_adult%3F">#see_adult?</a></li>
-					
-					<li><a href="#method-i-set_current_user">#set_current_user</a></li>
-					
-					<li><a href="#method-i-set_preferred_locale">#set_preferred_locale</a></li>
-					
-					<li><a href="#method-i-set_redirects">#set_redirects</a></li>
-					
-					<li><a href="#method-i-set_sort_order">#set_sort_order</a></li>
-					
-					<li><a href="#method-i-store_location">#store_location</a></li>
-					
-					<li><a href="#method-i-user_logout_required">#user_logout_required</a></li>
-					
-					<li><a href="#method-i-users_only">#users_only</a></li>
-					
-					<li><a href="#method-i-valid_sort_column">#valid_sort_column</a></li>
-					
-					<li><a href="#method-i-valid_sort_direction">#valid_sort_direction</a></li>
-					
-				</ul>
-			</div>
-			
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/controllers/application_controller.rb
+  </ul>
+</nav>
 
-			<!-- Included Modules -->
-			
-			<div id="includes-section" class="section">
-				<h3 class="section-header">Included Modules</h3>
-				<ul class="link-list">
-				
-				
-					<li><a class="include" href="HtmlCleaner.html">HtmlCleaner</a></li>
-				
-				
-				</ul>
-			</div>
-			
-		</div>
+    
+  </div>
 
-		<div id="project-metadata">
-			
-			
-			<div id="fileindex-section" class="section project-section">
-				<h3 class="section-header">Files</h3>
-				<ul>
-				
-					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
-				
-				</ul>
-			</div>
-			
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">ActionController::Base
+  
+</nav>
 
-			<div id="classindex-section" class="section project-section">
-				<h3 class="section-header">Class Index
-					<span class="search-toggle"><img src="./images/find.png"
-						height="16" width="16" alt="[+]"
-						title="show/hide quicksearch" /></span></h3>
-				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
-				<fieldset>
-					<legend>Quicksearch</legend>
-					<input type="text" name="quicksearch" value=""
-						class="quicksearch-field" />
-				</fieldset>
-				</form>
+    <!-- Included Modules -->
+<nav id="includes-section" class="section">
+  <h3 class="section-header">Included Modules</h3>
 
-				<ul class="link-list">
-				
-					<li><a href="./Static.html">Static</a></li>
-				
-					<li><a href="./Static/BaseController.html">Static::BaseController</a></li>
-				
-					<li><a href="./Static/CollectionsController.html">Static::CollectionsController</a></li>
-				
-					<li><a href="./Static/FandomsController.html">Static::FandomsController</a></li>
-				
-					<li><a href="./Static/MediaController.html">Static::MediaController</a></li>
-				
-					<li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
-				
-					<li><a href="./Static/WorksController.html">Static::WorksController</a></li>
-				
-					<li><a href="./Admin.html">Admin</a></li>
-				
-					<li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
-				
-					<li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
-				
-					<li><a href="./Admin/SettingsController.html">Admin::SettingsController</a></li>
-				
-					<li><a href="./Admin/SkinsController.html">Admin::SkinsController</a></li>
-				
-					<li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
-				
-					<li><a href="./ActionController.html">ActionController</a></li>
-				
-					<li><a href="./ActionController/Routing.html">ActionController::Routing</a></li>
-				
-					<li><a href="./ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
-				
-					<li><a href="./Challenge.html">Challenge</a></li>
-				
-					<li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
-				
-					<li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
-				
-					<li><a href="./ActiveRecord.html">ActiveRecord</a></li>
-				
-					<li><a href="./AutocompleteSource.html">AutocompleteSource</a></li>
-				
-					<li><a href="./AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
-				
-					<li><a href="./ChallengeCore.html">ChallengeCore</a></li>
-				
-					<li><a href="./ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
-				
-					<li><a href="./StoryParser.html">StoryParser</a></li>
-				
-					<li><a href="./StoryParser/Error.html">StoryParser::Error</a></li>
-				
-					<li><a href="./XhtmlSplitter.html">XhtmlSplitter</a></li>
-				
-					<li><a href="./XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
-				
-					<li><a href="./AbuseReport.html">AbuseReport</a></li>
-				
-					<li><a href="./AbuseReportsController.html">AbuseReportsController</a></li>
-				
-					<li><a href="./AdminMailer.html">AdminMailer</a></li>
-				
-					<li><a href="./AdminPost.html">AdminPost</a></li>
-				
-					<li><a href="./AdminPostTag.html">AdminPostTag</a></li>
-				
-					<li><a href="./AdminPostTagging.html">AdminPostTagging</a></li>
-				
-					<li><a href="./AdminPostsController.html">AdminPostsController</a></li>
-				
-					<li><a href="./AdminSession.html">AdminSession</a></li>
-				
-					<li><a href="./AdminSessionsController.html">AdminSessionsController</a></li>
-				
-					<li><a href="./AdminSetting.html">AdminSetting</a></li>
-				
-					<li><a href="./AdminsController.html">AdminsController</a></li>
-				
-					<li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
-				
-					<li><a href="./AlphabetHelper.html">AlphabetHelper</a></li>
-				
-					<li><a href="./ApplicationController.html">ApplicationController</a></li>
-				
-					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
-				
-					<li><a href="./ArchiveFaq.html">ArchiveFaq</a></li>
-				
-					<li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a></li>
-				
-					<li><a href="./AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
-				
-					<li><a href="./AutocompleteController.html">AutocompleteController</a></li>
-				
-					<li><a href="./Banned.html">Banned</a></li>
-				
-					<li><a href="./Bookmark.html">Bookmark</a></li>
-				
-					<li><a href="./BookmarksController.html">BookmarksController</a></li>
-				
-					<li><a href="./BookmarksHelper.html">BookmarksHelper</a></li>
-				
-					<li><a href="./CacheHelper.html">CacheHelper</a></li>
-				
-					<li><a href="./CastNomination.html">CastNomination</a></li>
-				
-					<li><a href="./Category.html">Category</a></li>
-				
-					<li><a href="./ChallengeAssignment.html">ChallengeAssignment</a></li>
-				
-					<li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
-				
-					<li><a href="./ChallengeClaim.html">ChallengeClaim</a></li>
-				
-					<li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a></li>
-				
-					<li><a href="./ChallengeHelper.html">ChallengeHelper</a></li>
-				
-					<li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a></li>
-				
-					<li><a href="./ChallengeSignup.html">ChallengeSignup</a></li>
-				
-					<li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
-				
-					<li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
-				
-					<li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a></li>
-				
-					<li><a href="./ChallengeSweeper.html">ChallengeSweeper</a></li>
-				
-					<li><a href="./ChallengesController.html">ChallengesController</a></li>
-				
-					<li><a href="./Chapter.html">Chapter</a></li>
-				
-					<li><a href="./ChapterSweeper.html">ChapterSweeper</a></li>
-				
-					<li><a href="./ChaptersController.html">ChaptersController</a></li>
-				
-					<li><a href="./ChaptersHelper.html">ChaptersHelper</a></li>
-				
-					<li><a href="./Character.html">Character</a></li>
-				
-					<li><a href="./CharacterNomination.html">CharacterNomination</a></li>
-				
-					<li><a href="./Collectible.html">Collectible</a></li>
-				
-					<li><a href="./Collection.html">Collection</a></li>
-				
-					<li><a href="./CollectionItem.html">CollectionItem</a></li>
-				
-					<li><a href="./CollectionItemsController.html">CollectionItemsController</a></li>
-				
-					<li><a href="./CollectionObserver.html">CollectionObserver</a></li>
-				
-					<li><a href="./CollectionParticipant.html">CollectionParticipant</a></li>
-				
-					<li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a></li>
-				
-					<li><a href="./CollectionPreference.html">CollectionPreference</a></li>
-				
-					<li><a href="./CollectionProfile.html">CollectionProfile</a></li>
-				
-					<li><a href="./CollectionProfileController.html">CollectionProfileController</a></li>
-				
-					<li><a href="./CollectionSweeper.html">CollectionSweeper</a></li>
-				
-					<li><a href="./CollectionsController.html">CollectionsController</a></li>
-				
-					<li><a href="./CollectionsHelper.html">CollectionsHelper</a></li>
-				
-					<li><a href="./Comment.html">Comment</a></li>
-				
-					<li><a href="./CommentMailer.html">CommentMailer</a></li>
-				
-					<li><a href="./CommentObserver.html">CommentObserver</a></li>
-				
-					<li><a href="./CommentSweeper.html">CommentSweeper</a></li>
-				
-					<li><a href="./CommentsController.html">CommentsController</a></li>
-				
-					<li><a href="./CommentsHelper.html">CommentsHelper</a></li>
-				
-					<li><a href="./CommonTagging.html">CommonTagging</a></li>
-				
-					<li><a href="./CreationObserver.html">CreationObserver</a></li>
-				
-					<li><a href="./Creatorship.html">Creatorship</a></li>
-				
-					<li><a href="./CssCleaner.html">CssCleaner</a></li>
-				
-					<li><a href="./DateHelper.html">DateHelper</a></li>
-				
-					<li><a href="./DevmodeController.html">DevmodeController</a></li>
-				
-					<li><a href="./DownloadsController.html">DownloadsController</a></li>
-				
-					<li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a></li>
-				
-					<li><a href="./ErrorsController.html">ErrorsController</a></li>
-				
-					<li><a href="./ExternalAuthor.html">ExternalAuthor</a></li>
-				
-					<li><a href="./ExternalAuthorName.html">ExternalAuthorName</a></li>
-				
-					<li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a></li>
-				
-					<li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
-				
-					<li><a href="./ExternalCreatorship.html">ExternalCreatorship</a></li>
-				
-					<li><a href="./ExternalWork.html">ExternalWork</a></li>
-				
-					<li><a href="./ExternalWorksController.html">ExternalWorksController</a></li>
-				
-					<li><a href="./Fandom.html">Fandom</a></li>
-				
-					<li><a href="./FandomNomination.html">FandomNomination</a></li>
-				
-					<li><a href="./FandomsController.html">FandomsController</a></li>
-				
-					<li><a href="./FeedSweeper.html">FeedSweeper</a></li>
-				
-					<li><a href="./Feedback.html">Feedback</a></li>
-				
-					<li><a href="./FeedbacksController.html">FeedbacksController</a></li>
-				
-					<li><a href="./FilterCount.html">FilterCount</a></li>
-				
-					<li><a href="./FilterTagging.html">FilterTagging</a></li>
-				
-					<li><a href="./FindRandom.html">FindRandom</a></li>
-				
-					<li><a href="./Freeform.html">Freeform</a></li>
-				
-					<li><a href="./FreeformNomination.html">FreeformNomination</a></li>
-				
-					<li><a href="./Gift.html">Gift</a></li>
-				
-					<li><a href="./GiftExchange.html">GiftExchange</a></li>
-				
-					<li><a href="./GiftsController.html">GiftsController</a></li>
-				
-					<li><a href="./HitCounter.html">HitCounter</a></li>
-				
-					<li><a href="./HomeController.html">HomeController</a></li>
-				
-					<li><a href="./HomeHelper.html">HomeHelper</a></li>
-				
-					<li><a href="./HtmlCleaner.html">HtmlCleaner</a></li>
-				
-					<li><a href="./InboxComment.html">InboxComment</a></li>
-				
-					<li><a href="./InboxController.html">InboxController</a></li>
-				
-					<li><a href="./InboxHelper.html">InboxHelper</a></li>
-				
-					<li><a href="./Invitation.html">Invitation</a></li>
-				
-					<li><a href="./InvitationsController.html">InvitationsController</a></li>
-				
-					<li><a href="./InvitationsHelper.html">InvitationsHelper</a></li>
-				
-					<li><a href="./InviteRequest.html">InviteRequest</a></li>
-				
-					<li><a href="./InviteRequestsController.html">InviteRequestsController</a></li>
-				
-					<li><a href="./KnownIssue.html">KnownIssue</a></li>
-				
-					<li><a href="./KnownIssuesController.html">KnownIssuesController</a></li>
-				
-					<li><a href="./Kudo.html">Kudo</a></li>
-				
-					<li><a href="./KudoMailer.html">KudoMailer</a></li>
-				
-					<li><a href="./KudoObserver.html">KudoObserver</a></li>
-				
-					<li><a href="./KudosController.html">KudosController</a></li>
-				
-					<li><a href="./Language.html">Language</a></li>
-				
-					<li><a href="./LanguagesController.html">LanguagesController</a></li>
-				
-					<li><a href="./Locale.html">Locale</a></li>
-				
-					<li><a href="./LocalesController.html">LocalesController</a></li>
-				
-					<li><a href="./LogItem.html">LogItem</a></li>
-				
-					<li><a href="./Media.html">Media</a></li>
-				
-					<li><a href="./MediaController.html">MediaController</a></li>
-				
-					<li><a href="./MetaTagging.html">MetaTagging</a></li>
-				
-					<li><a href="./Offer.html">Offer</a></li>
-				
-					<li><a href="./OrphansController.html">OrphansController</a></li>
-				
-					<li><a href="./OrphansHelper.html">OrphansHelper</a></li>
-				
-					<li><a href="./OwnedSetTagging.html">OwnedSetTagging</a></li>
-				
-					<li><a href="./OwnedTagSet.html">OwnedTagSet</a></li>
-				
-					<li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a></li>
-				
-					<li><a href="./PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
-				
-					<li><a href="./PasswordsController.html">PasswordsController</a></li>
-				
-					<li><a href="./People.html">People</a></li>
-				
-					<li><a href="./PeopleController.html">PeopleController</a></li>
-				
-					<li><a href="./PotentialMatch.html">PotentialMatch</a></li>
-				
-					<li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a></li>
-				
-					<li><a href="./PotentialMatchesController.html">PotentialMatchesController</a></li>
-				
-					<li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a></li>
-				
-					<li><a href="./Preference.html">Preference</a></li>
-				
-					<li><a href="./PreferencesController.html">PreferencesController</a></li>
-				
-					<li><a href="./Profile.html">Profile</a></li>
-				
-					<li><a href="./ProfileController.html">ProfileController</a></li>
-				
-					<li><a href="./Prompt.html">Prompt</a></li>
-				
-					<li><a href="./PromptMeme.html">PromptMeme</a></li>
-				
-					<li><a href="./PromptRestriction.html">PromptRestriction</a></li>
-				
-					<li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
-				
-					<li><a href="./PromptsController.html">PromptsController</a></li>
-				
-					<li><a href="./Pseud.html">Pseud</a></li>
-				
-					<li><a href="./PseudSweeper.html">PseudSweeper</a></li>
-				
-					<li><a href="./PseudsController.html">PseudsController</a></li>
-				
-					<li><a href="./PseudsHelper.html">PseudsHelper</a></li>
-				
-					<li><a href="./Query.html">Query</a></li>
-				
-					<li><a href="./Rating.html">Rating</a></li>
-				
-					<li><a href="./Rawk.html">Rawk</a></li>
-				
-					<li><a href="./Reading.html">Reading</a></li>
-				
-					<li><a href="./ReadingsController.html">ReadingsController</a></li>
-				
-					<li><a href="./RedirectController.html">RedirectController</a></li>
-				
-					<li><a href="./RedisTestSetup.html">RedisTestSetup</a></li>
-				
-					<li><a href="./RelatedWork.html">RelatedWork</a></li>
-				
-					<li><a href="./RelatedWorksController.html">RelatedWorksController</a></li>
-				
-					<li><a href="./Relationship.html">Relationship</a></li>
-				
-					<li><a href="./RelationshipNomination.html">RelationshipNomination</a></li>
-				
-					<li><a href="./Request.html">Request</a></li>
-				
-					<li><a href="./Role.html">Role</a></li>
-				
-					<li><a href="./RolesUser.html">RolesUser</a></li>
-				
-					<li><a href="./SearchController.html">SearchController</a></li>
-				
-					<li><a href="./SearchHelper.html">SearchHelper</a></li>
-				
-					<li><a href="./SerialWork.html">SerialWork</a></li>
-				
-					<li><a href="./SerialWorksController.html">SerialWorksController</a></li>
-				
-					<li><a href="./Series.html">Series</a></li>
-				
-					<li><a href="./SeriesController.html">SeriesController</a></li>
-				
-					<li><a href="./SeriesHelper.html">SeriesHelper</a></li>
-				
-					<li><a href="./SetTagging.html">SetTagging</a></li>
-				
-					<li><a href="./Skin.html">Skin</a></li>
-				
-					<li><a href="./SkinParent.html">SkinParent</a></li>
-				
-					<li><a href="./SkinsController.html">SkinsController</a></li>
-				
-					<li><a href="./SkinsHelper.html">SkinsHelper</a></li>
-				
-					<li><a href="./SortableList.html">SortableList</a></li>
-				
-					<li><a href="./Stat.html">Stat</a></li>
-				
-					<li><a href="./StatHash.html">StatHash</a></li>
-				
-					<li><a href="./StaticSweeper.html">StaticSweeper</a></li>
-				
-					<li><a href="./StatsController.html">StatsController</a></li>
-				
-					<li><a href="./StatsHelper.html">StatsHelper</a></li>
-				
-					<li><a href="./Subscription.html">Subscription</a></li>
-				
-					<li><a href="./SubscriptionsController.html">SubscriptionsController</a></li>
-				
-					<li><a href="./Tag.html">Tag</a></li>
-				
-					<li><a href="./TagNomination.html">TagNomination</a></li>
-				
-					<li><a href="./TagNominationsController.html">TagNominationsController</a></li>
-				
-					<li><a href="./TagSet.html">TagSet</a></li>
-				
-					<li><a href="./TagSetAssociation.html">TagSetAssociation</a></li>
-				
-					<li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a></li>
-				
-					<li><a href="./TagSetNomination.html">TagSetNomination</a></li>
-				
-					<li><a href="./TagSetNominationsController.html">TagSetNominationsController</a></li>
-				
-					<li><a href="./TagSetOwnership.html">TagSetOwnership</a></li>
-				
-					<li><a href="./TagSetSweeper.html">TagSetSweeper</a></li>
-				
-					<li><a href="./TagSetsHelper.html">TagSetsHelper</a></li>
-				
-					<li><a href="./TagSweeper.html">TagSweeper</a></li>
-				
-					<li><a href="./TagWranglersController.html">TagWranglersController</a></li>
-				
-					<li><a href="./TagWranglingsController.html">TagWranglingsController</a></li>
-				
-					<li><a href="./Taggable.html">Taggable</a></li>
-				
-					<li><a href="./Tagging.html">Tagging</a></li>
-				
-					<li><a href="./TagsController.html">TagsController</a></li>
-				
-					<li><a href="./TagsHelper.html">TagsHelper</a></li>
-				
-					<li><a href="./TranslationGenerator.html">TranslationGenerator</a></li>
-				
-					<li><a href="./TranslationHelper.html">TranslationHelper</a></li>
-				
-					<li><a href="./TranslationNote.html">TranslationNote</a></li>
-				
-					<li><a href="./TranslationNotesController.html">TranslationNotesController</a></li>
-				
-					<li><a href="./TranslationsController.html">TranslationsController</a></li>
-				
-					<li><a href="./TranslatorsController.html">TranslatorsController</a></li>
-				
-					<li><a href="./UrlActiveValidator.html">UrlActiveValidator</a></li>
-				
-					<li><a href="./UrlFormatValidator.html">UrlFormatValidator</a></li>
-				
-					<li><a href="./UrlHelpers.html">UrlHelpers</a></li>
-				
-					<li><a href="./User.html">User</a></li>
-				
-					<li><a href="./UserInviteRequest.html">UserInviteRequest</a></li>
-				
-					<li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a></li>
-				
-					<li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
-				
-					<li><a href="./UserMailer.html">UserMailer</a></li>
-				
-					<li><a href="./UserSession.html">UserSession</a></li>
-				
-					<li><a href="./UserSessionsController.html">UserSessionsController</a></li>
-				
-					<li><a href="./UsersController.html">UsersController</a></li>
-				
-					<li><a href="./UsersHelper.html">UsersHelper</a></li>
-				
-					<li><a href="./ValidationHelper.html">ValidationHelper</a></li>
-				
-					<li><a href="./Warning.html">Warning</a></li>
-				
-					<li><a href="./WeightedRandom.html">WeightedRandom</a></li>
-				
-					<li><a href="./Work.html">Work</a></li>
-				
-					<li><a href="./WorkObserver.html">WorkObserver</a></li>
-				
-					<li><a href="./WorkSkin.html">WorkSkin</a></li>
-				
-					<li><a href="./WorkSweeper.html">WorkSweeper</a></li>
-				
-					<li><a href="./WorksController.html">WorksController</a></li>
-				
-					<li><a href="./WorksHelper.html">WorksHelper</a></li>
-				
-					<li><a href="./WranglingAssignment.html">WranglingAssignment</a></li>
-				
-				</ul>
-				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
-			</div>
+  <ul class="link-list">
+  
+  
+    <li><span class="include">HtmlCleaner</span>
+  
+  
+  </ul>
+</nav>
 
-			
-		</div>
-	</div>
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
 
-	<div id="documentation">
-		<h1 class="class">ApplicationController</h1>
+  <ul class="link-list">
+    
+    <li><a href="#method-i-access_denied">#access_denied</a>
+    
+    <li><a href="#method-i-admin_logout_required">#admin_logout_required</a>
+    
+    <li><a href="#method-i-admin_only">#admin_only</a>
+    
+    <li><a href="#method-i-admin_only_access_denied">#admin_only_access_denied</a>
+    
+    <li><a href="#method-i-check_ownership">#check_ownership</a>
+    
+    <li><a href="#method-i-check_ownership_or_admin">#check_ownership_or_admin</a>
+    
+    <li><a href="#method-i-check_permission_to_wrangle">#check_permission_to_wrangle</a>
+    
+    <li><a href="#method-i-check_user_status">#check_user_status</a>
+    
+    <li><a href="#method-i-check_visibility">#check_visibility</a>
+    
+    <li><a href="#method-i-collection_maintainers_only">#collection_maintainers_only</a>
+    
+    <li><a href="#method-i-collection_owners_only">#collection_owners_only</a>
+    
+    <li><a href="#method-i-current_admin">#current_admin</a>
+    
+    <li><a href="#method-i-current_admin_session">#current_admin_session</a>
+    
+    <li><a href="#method-i-current_user">#current_user</a>
+    
+    <li><a href="#method-i-current_user_owns-3F">#current_user_owns?</a>
+    
+    <li><a href="#method-i-current_user_session">#current_user_session</a>
+    
+    <li><a href="#method-i-fetch_admin_settings">#fetch_admin_settings</a>
+    
+    <li><a href="#method-i-get_page_title">#get_page_title</a>
+    
+    <li><a href="#method-i-hide_banner">#hide_banner</a>
+    
+    <li><a href="#method-i-is_admin-3F">#is_admin?</a>
+    
+    <li><a href="#method-i-is_registered_user-3F">#is_registered_user?</a>
+    
+    <li><a href="#method-i-load_collection">#load_collection</a>
+    
+    <li><a href="#method-i-load_locales">#load_locales</a>
+    
+    <li><a href="#method-i-logged_in-3F">#logged_in?</a>
+    
+    <li><a href="#method-i-logged_in_as_admin-3F">#logged_in_as_admin?</a>
+    
+    <li><a href="#method-i-not_allowed">#not_allowed</a>
+    
+    <li><a href="#method-i-redirect_back_or_default">#redirect_back_or_default</a>
+    
+    <li><a href="#method-i-see_adult-3F">#see_adult?</a>
+    
+    <li><a href="#method-i-set_current_user">#set_current_user</a>
+    
+    <li><a href="#method-i-set_preferred_locale">#set_preferred_locale</a>
+    
+    <li><a href="#method-i-set_redirects">#set_redirects</a>
+    
+    <li><a href="#method-i-set_sort_order">#set_sort_order</a>
+    
+    <li><a href="#method-i-store_location">#store_location</a>
+    
+    <li><a href="#method-i-user_logout_required">#user_logout_required</a>
+    
+    <li><a href="#method-i-users_only">#users_only</a>
+    
+    <li><a href="#method-i-valid_sort_column">#valid_sort_column</a>
+    
+    <li><a href="#method-i-valid_sort_direction">#valid_sort_direction</a>
+    
+  </ul>
+</nav>
 
-		<div id="description">
-			
-		</div>
+  </div>
 
-		<!-- Constants -->
-		
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
 
-		<!-- Attributes -->
-		
+  <ul>
+  
+    <li class="file"><a href="./app/mailers/README.html">README</a>
+  
+    <li class="file"><a href="./app/views/epub/mimetype.html">mimetype</a>
+  
+  </ul>
+</nav>
 
-		<!-- Methods -->
-		
-		<div id="public-instance-method-details" class="method-section section">
-			<h3 class="section-header">Public Instance Methods</h3>
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
 
-		
-			<div id="access-denied-method" class="method-detail ">
-				<a name="method-i-access_denied"></a>
+  <ul class="link-list">
+  
+    <li><a href="./Static.html">Static</a>
+  
+    <li><a href="./Static/BaseController.html">Static::BaseController</a>
+  
+    <li><a href="./Static/CollectionsController.html">Static::CollectionsController</a>
+  
+    <li><a href="./Static/FandomsController.html">Static::FandomsController</a>
+  
+    <li><a href="./Static/MediaController.html">Static::MediaController</a>
+  
+    <li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a>
+  
+    <li><a href="./Static/WorksController.html">Static::WorksController</a>
+  
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
+    <li><a href="./Challenge.html">Challenge</a>
+  
+    <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
+  
+    <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./StoryParser.html">StoryParser</a>
+  
+    <li><a href="./StoryParser/Error.html">StoryParser::Error</a>
+  
+    <li><a href="./AbuseReport.html">AbuseReport</a>
+  
+    <li><a href="./AbuseReportsController.html">AbuseReportsController</a>
+  
+    <li><a href="./AdminMailer.html">AdminMailer</a>
+  
+    <li><a href="./AdminPost.html">AdminPost</a>
+  
+    <li><a href="./AdminPostTag.html">AdminPostTag</a>
+  
+    <li><a href="./AdminPostTagging.html">AdminPostTagging</a>
+  
+    <li><a href="./AdminPostsController.html">AdminPostsController</a>
+  
+    <li><a href="./AdminSession.html">AdminSession</a>
+  
+    <li><a href="./AdminSessionsController.html">AdminSessionsController</a>
+  
+    <li><a href="./AdminSetting.html">AdminSetting</a>
+  
+    <li><a href="./AdminsController.html">AdminsController</a>
+  
+    <li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a>
+  
+    <li><a href="./AlphabetHelper.html">AlphabetHelper</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./ArchiveFaq.html">ArchiveFaq</a>
+  
+    <li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a>
+  
+    <li><a href="./AutocompleteController.html">AutocompleteController</a>
+  
+    <li><a href="./Banned.html">Banned</a>
+  
+    <li><a href="./Bookmark.html">Bookmark</a>
+  
+    <li><a href="./BookmarksController.html">BookmarksController</a>
+  
+    <li><a href="./BookmarksHelper.html">BookmarksHelper</a>
+  
+    <li><a href="./CacheHelper.html">CacheHelper</a>
+  
+    <li><a href="./CastNomination.html">CastNomination</a>
+  
+    <li><a href="./Category.html">Category</a>
+  
+    <li><a href="./ChallengeAssignment.html">ChallengeAssignment</a>
+  
+    <li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a>
+  
+    <li><a href="./ChallengeClaim.html">ChallengeClaim</a>
+  
+    <li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a>
+  
+    <li><a href="./ChallengeHelper.html">ChallengeHelper</a>
+  
+    <li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a>
+  
+    <li><a href="./ChallengeSignup.html">ChallengeSignup</a>
+  
+    <li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a>
+  
+    <li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a>
+  
+    <li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a>
+  
+    <li><a href="./ChallengeSweeper.html">ChallengeSweeper</a>
+  
+    <li><a href="./ChallengesController.html">ChallengesController</a>
+  
+    <li><a href="./Chapter.html">Chapter</a>
+  
+    <li><a href="./ChapterSweeper.html">ChapterSweeper</a>
+  
+    <li><a href="./ChaptersController.html">ChaptersController</a>
+  
+    <li><a href="./ChaptersHelper.html">ChaptersHelper</a>
+  
+    <li><a href="./Character.html">Character</a>
+  
+    <li><a href="./CharacterNomination.html">CharacterNomination</a>
+  
+    <li><a href="./Collection.html">Collection</a>
+  
+    <li><a href="./CollectionItem.html">CollectionItem</a>
+  
+    <li><a href="./CollectionItemsController.html">CollectionItemsController</a>
+  
+    <li><a href="./CollectionObserver.html">CollectionObserver</a>
+  
+    <li><a href="./CollectionParticipant.html">CollectionParticipant</a>
+  
+    <li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a>
+  
+    <li><a href="./CollectionPreference.html">CollectionPreference</a>
+  
+    <li><a href="./CollectionProfile.html">CollectionProfile</a>
+  
+    <li><a href="./CollectionProfileController.html">CollectionProfileController</a>
+  
+    <li><a href="./CollectionSweeper.html">CollectionSweeper</a>
+  
+    <li><a href="./CollectionsController.html">CollectionsController</a>
+  
+    <li><a href="./CollectionsHelper.html">CollectionsHelper</a>
+  
+    <li><a href="./Comment.html">Comment</a>
+  
+    <li><a href="./CommentMailer.html">CommentMailer</a>
+  
+    <li><a href="./CommentObserver.html">CommentObserver</a>
+  
+    <li><a href="./CommentSweeper.html">CommentSweeper</a>
+  
+    <li><a href="./CommentsController.html">CommentsController</a>
+  
+    <li><a href="./CommentsHelper.html">CommentsHelper</a>
+  
+    <li><a href="./CommonTagging.html">CommonTagging</a>
+  
+    <li><a href="./CreationObserver.html">CreationObserver</a>
+  
+    <li><a href="./Creatorship.html">Creatorship</a>
+  
+    <li><a href="./DateHelper.html">DateHelper</a>
+  
+    <li><a href="./DevmodeController.html">DevmodeController</a>
+  
+    <li><a href="./DownloadsController.html">DownloadsController</a>
+  
+    <li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a>
+  
+    <li><a href="./ErrorsController.html">ErrorsController</a>
+  
+    <li><a href="./ExternalAuthor.html">ExternalAuthor</a>
+  
+    <li><a href="./ExternalAuthorName.html">ExternalAuthorName</a>
+  
+    <li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a>
+  
+    <li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a>
+  
+    <li><a href="./ExternalCreatorship.html">ExternalCreatorship</a>
+  
+    <li><a href="./ExternalWork.html">ExternalWork</a>
+  
+    <li><a href="./ExternalWorksController.html">ExternalWorksController</a>
+  
+    <li><a href="./Fandom.html">Fandom</a>
+  
+    <li><a href="./FandomNomination.html">FandomNomination</a>
+  
+    <li><a href="./FandomsController.html">FandomsController</a>
+  
+    <li><a href="./FeedSweeper.html">FeedSweeper</a>
+  
+    <li><a href="./Feedback.html">Feedback</a>
+  
+    <li><a href="./FeedbacksController.html">FeedbacksController</a>
+  
+    <li><a href="./FilterCount.html">FilterCount</a>
+  
+    <li><a href="./FilterTagging.html">FilterTagging</a>
+  
+    <li><a href="./Freeform.html">Freeform</a>
+  
+    <li><a href="./FreeformNomination.html">FreeformNomination</a>
+  
+    <li><a href="./Gift.html">Gift</a>
+  
+    <li><a href="./GiftExchange.html">GiftExchange</a>
+  
+    <li><a href="./GiftsController.html">GiftsController</a>
+  
+    <li><a href="./HitCounter.html">HitCounter</a>
+  
+    <li><a href="./HomeController.html">HomeController</a>
+  
+    <li><a href="./HomeHelper.html">HomeHelper</a>
+  
+    <li><a href="./InboxComment.html">InboxComment</a>
+  
+    <li><a href="./InboxController.html">InboxController</a>
+  
+    <li><a href="./InboxHelper.html">InboxHelper</a>
+  
+    <li><a href="./Invitation.html">Invitation</a>
+  
+    <li><a href="./InvitationsController.html">InvitationsController</a>
+  
+    <li><a href="./InvitationsHelper.html">InvitationsHelper</a>
+  
+    <li><a href="./InviteRequest.html">InviteRequest</a>
+  
+    <li><a href="./InviteRequestsController.html">InviteRequestsController</a>
+  
+    <li><a href="./KnownIssue.html">KnownIssue</a>
+  
+    <li><a href="./KnownIssuesController.html">KnownIssuesController</a>
+  
+    <li><a href="./Kudo.html">Kudo</a>
+  
+    <li><a href="./KudoMailer.html">KudoMailer</a>
+  
+    <li><a href="./KudoObserver.html">KudoObserver</a>
+  
+    <li><a href="./KudosController.html">KudosController</a>
+  
+    <li><a href="./Language.html">Language</a>
+  
+    <li><a href="./LanguagesController.html">LanguagesController</a>
+  
+    <li><a href="./Locale.html">Locale</a>
+  
+    <li><a href="./LocalesController.html">LocalesController</a>
+  
+    <li><a href="./LogItem.html">LogItem</a>
+  
+    <li><a href="./Media.html">Media</a>
+  
+    <li><a href="./MediaController.html">MediaController</a>
+  
+    <li><a href="./MetaTagging.html">MetaTagging</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Offer.html">Offer</a>
+  
+    <li><a href="./OrphansController.html">OrphansController</a>
+  
+    <li><a href="./OrphansHelper.html">OrphansHelper</a>
+  
+    <li><a href="./OwnedSetTagging.html">OwnedSetTagging</a>
+  
+    <li><a href="./OwnedTagSet.html">OwnedTagSet</a>
+  
+    <li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./People.html">People</a>
+  
+    <li><a href="./PeopleController.html">PeopleController</a>
+  
+    <li><a href="./PotentialMatch.html">PotentialMatch</a>
+  
+    <li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a>
+  
+    <li><a href="./PotentialMatchesController.html">PotentialMatchesController</a>
+  
+    <li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a>
+  
+    <li><a href="./Preference.html">Preference</a>
+  
+    <li><a href="./PreferencesController.html">PreferencesController</a>
+  
+    <li><a href="./Profile.html">Profile</a>
+  
+    <li><a href="./ProfileController.html">ProfileController</a>
+  
+    <li><a href="./Prompt.html">Prompt</a>
+  
+    <li><a href="./PromptMeme.html">PromptMeme</a>
+  
+    <li><a href="./PromptRestriction.html">PromptRestriction</a>
+  
+    <li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a>
+  
+    <li><a href="./PromptsController.html">PromptsController</a>
+  
+    <li><a href="./Pseud.html">Pseud</a>
+  
+    <li><a href="./PseudSweeper.html">PseudSweeper</a>
+  
+    <li><a href="./PseudsController.html">PseudsController</a>
+  
+    <li><a href="./PseudsHelper.html">PseudsHelper</a>
+  
+    <li><a href="./Rating.html">Rating</a>
+  
+    <li><a href="./Reading.html">Reading</a>
+  
+    <li><a href="./ReadingsController.html">ReadingsController</a>
+  
+    <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RelatedWork.html">RelatedWork</a>
+  
+    <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
+  
+    <li><a href="./Relationship.html">Relationship</a>
+  
+    <li><a href="./RelationshipNomination.html">RelationshipNomination</a>
+  
+    <li><a href="./Request.html">Request</a>
+  
+    <li><a href="./Role.html">Role</a>
+  
+    <li><a href="./RolesUser.html">RolesUser</a>
+  
+    <li><a href="./SearchController.html">SearchController</a>
+  
+    <li><a href="./SearchHelper.html">SearchHelper</a>
+  
+    <li><a href="./SerialWork.html">SerialWork</a>
+  
+    <li><a href="./SerialWorksController.html">SerialWorksController</a>
+  
+    <li><a href="./Series.html">Series</a>
+  
+    <li><a href="./SeriesController.html">SeriesController</a>
+  
+    <li><a href="./SeriesHelper.html">SeriesHelper</a>
+  
+    <li><a href="./SetTagging.html">SetTagging</a>
+  
+    <li><a href="./Skin.html">Skin</a>
+  
+    <li><a href="./SkinParent.html">SkinParent</a>
+  
+    <li><a href="./SkinsController.html">SkinsController</a>
+  
+    <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StaticSweeper.html">StaticSweeper</a>
+  
+    <li><a href="./StatsController.html">StatsController</a>
+  
+    <li><a href="./StatsHelper.html">StatsHelper</a>
+  
+    <li><a href="./Subscription.html">Subscription</a>
+  
+    <li><a href="./SubscriptionsController.html">SubscriptionsController</a>
+  
+    <li><a href="./Tag.html">Tag</a>
+  
+    <li><a href="./TagNomination.html">TagNomination</a>
+  
+    <li><a href="./TagNominationsController.html">TagNominationsController</a>
+  
+    <li><a href="./TagSet.html">TagSet</a>
+  
+    <li><a href="./TagSetAssociation.html">TagSetAssociation</a>
+  
+    <li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a>
+  
+    <li><a href="./TagSetNomination.html">TagSetNomination</a>
+  
+    <li><a href="./TagSetNominationsController.html">TagSetNominationsController</a>
+  
+    <li><a href="./TagSetOwnership.html">TagSetOwnership</a>
+  
+    <li><a href="./TagSetSweeper.html">TagSetSweeper</a>
+  
+    <li><a href="./TagSetsHelper.html">TagSetsHelper</a>
+  
+    <li><a href="./TagSweeper.html">TagSweeper</a>
+  
+    <li><a href="./TagWranglersController.html">TagWranglersController</a>
+  
+    <li><a href="./TagWranglingsController.html">TagWranglingsController</a>
+  
+    <li><a href="./Tagging.html">Tagging</a>
+  
+    <li><a href="./TagsController.html">TagsController</a>
+  
+    <li><a href="./TagsHelper.html">TagsHelper</a>
+  
+    <li><a href="./TranslationHelper.html">TranslationHelper</a>
+  
+    <li><a href="./TranslationNote.html">TranslationNote</a>
+  
+    <li><a href="./TranslationNotesController.html">TranslationNotesController</a>
+  
+    <li><a href="./TranslationsController.html">TranslationsController</a>
+  
+    <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
+  
+    <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
+  
+    <li><a href="./User.html">User</a>
+  
+    <li><a href="./UserInviteRequest.html">UserInviteRequest</a>
+  
+    <li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a>
+  
+    <li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a>
+  
+    <li><a href="./UserMailer.html">UserMailer</a>
+  
+    <li><a href="./UserSession.html">UserSession</a>
+  
+    <li><a href="./UserSessionsController.html">UserSessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+    <li><a href="./UsersHelper.html">UsersHelper</a>
+  
+    <li><a href="./ValidationHelper.html">ValidationHelper</a>
+  
+    <li><a href="./Warning.html">Warning</a>
+  
+    <li><a href="./WeightedRandom.html">WeightedRandom</a>
+  
+    <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkObserver.html">WorkObserver</a>
+  
+    <li><a href="./WorkSkin.html">WorkSkin</a>
+  
+    <li><a href="./WorkSweeper.html">WorkSweeper</a>
+  
+    <li><a href="./WorksController.html">WorksController</a>
+  
+    <li><a href="./WorksHelper.html">WorksHelper</a>
+  
+    <li><a href="./WranglingAssignment.html">WranglingAssignment</a>
+  
+  </ul>
+</nav>
 
-				<div class="method-heading">
-				
-					<span class="method-name">access_denied</span><span
-						class="method-args">(options ={})</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+  </div>
+</nav>
 
-				<div class="method-description">
-					
-					<p>
-Redirect as appropriate when an access request fails.
-</p>
-<p>
-The default action is to redirect to the login screen.
-</p>
-<p>
-Override this method in your controllers if you want to have special
+<div id="documentation">
+  <h1 class="class">class ApplicationController</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-access_denied" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">access_denied</span><span
+            class="method-args">(options ={})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Redirect as appropriate when an access request fails.</p>
+
+<p>The default action is to redirect to the login screen.</p>
+
+<p>Override this method in your controllers if you want to have special
 behavior in case the user is not authorized to access the requested action.
-For example, a popup window might simply close itself.
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="access-denied-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 110</span>
-110:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">access_denied</span>(<span class="ruby-identifier">options</span> ={})
-111:     <span class="ruby-identifier">store_location</span>
-112:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">logged_in?</span>
-113:       <span class="ruby-identifier">destination</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:redirect</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">user_path</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:redirect</span>]
-114:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span> <span class="ruby-value str">&quot;Sorry, you don't have permission to access the page you were trying to reach.&quot;</span>
-115:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">destination</span>
-116:     <span class="ruby-keyword kw">else</span>
-117:       <span class="ruby-identifier">destination</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:redirect</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">new_user_session_path</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:redirect</span>]
-118:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span> <span class="ruby-value str">&quot;Sorry, you don't have permission to access the page you were trying to reach. Please log in.&quot;</span>
-119:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">destination</span>
-120:     <span class="ruby-keyword kw">end</span>
-121:     <span class="ruby-keyword kw">false</span>
-122:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="admin-logout-required-method" class="method-detail ">
-				<a name="method-i-admin_logout_required"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">admin_logout_required</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Prevents admin from logging in as users
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="admin-logout-required-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 139</span>
-139:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">admin_logout_required</span>
-140:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">logged_in_as_admin?</span>
-141:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-value str">'Please log out of your admin account first!'</span>
-142:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
-143:     <span class="ruby-keyword kw">end</span>
-144:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="admin-only-method" class="method-detail ">
-				<a name="method-i-admin_only"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">admin_only</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Filter method - keeps users out of admin areas
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="admin-only-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 93</span>
-93:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">admin_only</span>
-94:     <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">admin_only_access_denied</span>
-95:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="admin-only-access-denied-method" class="method-detail ">
-				<a name="method-i-admin_only_access_denied"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">admin_only_access_denied</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="admin-only-access-denied-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 124</span>
-124:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">admin_only_access_denied</span>
-125:     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;I'm sorry, only an admin can look at that area.&quot;</span>)
-126:     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
-127:     <span class="ruby-keyword kw">false</span>
-128:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="collection-maintainers-only-method" class="method-detail ">
-				<a name="method-i-collection_maintainers_only"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">collection_maintainers_only</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="collection-maintainers-only-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 166</span>
-166:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">collection_maintainers_only</span>
-167:     <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_maintainer?</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
-168:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="collection-owners-only-method" class="method-detail ">
-				<a name="method-i-collection_owners_only"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">collection_owners_only</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="collection-owners-only-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 170</span>
-170:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">collection_owners_only</span>
-171:     <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_owner?</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
-172:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="fetch-admin-settings-method" class="method-detail ">
-				<a name="method-i-fetch_admin_settings"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">fetch_admin_settings</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="fetch-admin-settings-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 50</span>
-50:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fetch_admin_settings</span>
-51:     <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>.<span class="ruby-identifier">development?</span>
-52:       <span class="ruby-ivar">@admin_settings</span> = <span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">first</span>
-53:       <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@admin_settings</span>.<span class="ruby-identifier">banner_text</span>.<span class="ruby-identifier">blank?</span>
-54:         <span class="ruby-ivar">@bannertext</span> = <span class="ruby-identifier">sanitize_field</span>(<span class="ruby-ivar">@admin_settings</span>, <span class="ruby-value">:banner_text</span>).<span class="ruby-identifier">html_safe</span>
-55:       <span class="ruby-keyword kw">end</span>
-56:     <span class="ruby-keyword kw">else</span>
-57:       <span class="ruby-ivar">@admin_settings</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value str">&quot;admin_settings&quot;</span>){<span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">first</span>}
-58:       <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@admin_settings</span>.<span class="ruby-identifier">banner_text</span>.<span class="ruby-identifier">blank?</span>
-59:         <span class="ruby-ivar">@bannertext</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value str">&quot;banner_text&quot;</span>){<span class="ruby-identifier">sanitize_field</span>(<span class="ruby-ivar">@admin_settings</span>, <span class="ruby-value">:banner_text</span>).<span class="ruby-identifier">html_safe</span>}
-60:       <span class="ruby-keyword kw">end</span>
-61:     <span class="ruby-keyword kw">end</span>
-62:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="get-page-title-method" class="method-detail ">
-				<a name="method-i-get_page_title"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">get_page_title</span><span
-						class="method-args">(fandom, author, title, options = {})</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="get-page-title-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 182</span>
-182:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_page_title</span>(<span class="ruby-identifier">fandom</span>, <span class="ruby-identifier">author</span>, <span class="ruby-identifier">title</span>, <span class="ruby-identifier">options</span> = {})
-183:     <span class="ruby-comment cmt"># truncate any piece that is over 15 chars long to the nearest word</span>
-184:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:truncate</span>]
-185:       <span class="ruby-identifier">fandom</span> = <span class="ruby-identifier">fandom</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'...'</span>}
-186:       <span class="ruby-identifier">author</span> = <span class="ruby-identifier">author</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'...'</span>}
-187:       <span class="ruby-identifier">title</span> = <span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'...'</span>}
-188:     <span class="ruby-keyword kw">end</span>
-189: 
-190:     <span class="ruby-ivar">@page_title</span> = <span class="ruby-value str">&quot;&quot;</span>
-191:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:work_title_format</span>).<span class="ruby-identifier">blank?</span>
-192:       <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">work_title_format</span>
-193:       <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/FANDOM/</span>, <span class="ruby-identifier">fandom</span>)
-194:       <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/AUTHOR/</span>, <span class="ruby-identifier">author</span>)
-195:       <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/TITLE/</span>, <span class="ruby-identifier">title</span>)
-196:     <span class="ruby-keyword kw">else</span>
-197:       <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">title</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">author</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">fandom</span>
-198:     <span class="ruby-keyword kw">end</span>
-199: 
-200:     <span class="ruby-ivar">@page_title</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; [#{ArchiveConfig.APP_NAME}]&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:omit_archive_name</span>]
-201:     <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">html_safe</span>
-202:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="hide-banner-method" class="method-detail ">
-				<a name="method-i-hide_banner"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">hide_banner</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="hide-banner-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 148</span>
-148:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hide_banner</span>
-149:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:hide_banner</span>]
-150:       <span class="ruby-identifier">session</span>[<span class="ruby-value">:hide_banner</span>] = <span class="ruby-keyword kw">true</span>
-151:     <span class="ruby-keyword kw">end</span>
-152:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="is-admin--method" class="method-detail ">
-				<a name="method-i-is_admin%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">is_admin?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="is-admin--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 246</span>
-246:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_admin?</span>
-247:     <span class="ruby-identifier">logged_in_as_admin?</span>
-248:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="is-registered-user--method" class="method-detail ">
-				<a name="method-i-is_registered_user%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">is_registered_user?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="is-registered-user--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 242</span>
-242:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_registered_user?</span>
-243:     <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">logged_in_as_admin?</span>
-244:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="load-collection-method" class="method-detail ">
-				<a name="method-i-load_collection"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">load_collection</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="load-collection-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 162</span>
-162:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_collection</span>
-163:     <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>]) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>]
-164:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="not-allowed-method" class="method-detail ">
-				<a name="method-i-not_allowed"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">not_allowed</span><span
-						class="method-args">(fallback=nil)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="not-allowed-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 174</span>
-174:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">not_allowed</span>(<span class="ruby-identifier">fallback</span>=<span class="ruby-keyword kw">nil</span>)
-175:     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;Sorry, you're not allowed to do that.&quot;</span>)
-176:     <span class="ruby-identifier">redirect_to</span> (<span class="ruby-identifier">fallback</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-value str">'/'</span>
-177:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="redirect-back-or-default-method" class="method-detail ">
-				<a name="method-i-redirect_back_or_default"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">redirect_back_or_default</span><span
-						class="method-args">(default = root_path)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Redirect to the URI stored by the most recent <a
-href="ApplicationController.html#method-i-store_location">store_location</a>
-call or to the passed default.
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="redirect-back-or-default-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 79</span>
-79:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">default</span> = <span class="ruby-identifier">root_path</span>)
-80:     <span class="ruby-identifier">back</span> = <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>]
-81:     <span class="ruby-identifier">session</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:return_to</span>)
-82:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">back</span>
-83:       <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Returning to #{back}&quot;</span>
-84:       <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] = <span class="ruby-value str">&quot;redirected&quot;</span>
-85:       <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">back</span>) <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">return</span>
-86:     <span class="ruby-keyword kw">else</span>
-87:       <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Returning to default (#{default})&quot;</span>
-88:       <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">default</span>) <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">return</span>
-89:     <span class="ruby-keyword kw">end</span>
-90:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="see-adult--method" class="method-detail ">
-				<a name="method-i-see_adult%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">see_adult?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="see-adult--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 250</span>
-250:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">see_adult?</span>
-251:     <span class="ruby-identifier">params</span>[<span class="ruby-value">:anchor</span>] = <span class="ruby-value str">&quot;comments&quot;</span> <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">params</span>[<span class="ruby-value">:show_comments</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:anchor</span>].<span class="ruby-identifier">blank?</span>)
-252:     <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Added anchor #{params[:anchor]}&quot;</span>
-253:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:adult</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">logged_in_as_admin?</span>
-254:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">current_user</span>
-255:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-ivar">@work</span>)
-256:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">adult</span>
-257:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
-258:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="set-current-user-method" class="method-detail ">
-				<a name="method-i-set_current_user"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">set_current_user</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="set-current-user-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 157</span>
-157:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_current_user</span>
-158:     <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span> = <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">current_admin</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">current_user</span>
-159:     <span class="ruby-ivar">@current_user</span> = <span class="ruby-identifier">current_user</span>
-160:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="set-redirects-method" class="method-detail ">
-				<a name="method-i-set_redirects"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">set_redirects</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="set-redirects-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 237</span>
-237:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_redirects</span>
-238:     <span class="ruby-ivar">@logged_in_redirect</span> = <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>)
-239:     <span class="ruby-ivar">@logged_out_redirect</span> = <span class="ruby-identifier">url_for</span>({<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'session'</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'new'</span>})
-240:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="set-sort-order-method" class="method-detail ">
-				<a name="method-i-set_sort_order"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">set_sort_order</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="set-sort-order-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 340</span>
-340:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_sort_order</span>
-341:     <span class="ruby-comment cmt"># sorting</span>
-342:     <span class="ruby-ivar">@sort_column</span> = (<span class="ruby-identifier">valid_sort_column</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>],<span class="ruby-value str">&quot;prompt&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] <span class="ruby-operator">:</span> <span class="ruby-value str">'id'</span>)
-343:     <span class="ruby-ivar">@sort_direction</span> = (<span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] <span class="ruby-operator">:</span> <span class="ruby-value str">'DESC'</span>)
-344:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>])
-345:       <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] = <span class="ruby-value str">'DESC'</span>
-346:     <span class="ruby-keyword kw">end</span>
-347:     <span class="ruby-ivar">@sort_order</span> = <span class="ruby-ivar">@sort_column</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@sort_direction</span>
-348:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="store-location-method" class="method-detail ">
-				<a name="method-i-store_location"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">store_location</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="store-location-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 67</span>
-67:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_location</span>
-68:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;redirected&quot;</span>
-69:       <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-value str">&quot;Return to back would cause infinite loop&quot;</span>
-70:       <span class="ruby-identifier">session</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:return_to</span>)
-71:     <span class="ruby-keyword kw">else</span>
-72:       <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">fullpath</span>
-73:       <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Return to: #{session[:return_to]}&quot;</span>
-74:     <span class="ruby-keyword kw">end</span>
-75:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="user-logout-required-method" class="method-detail ">
-				<a name="method-i-user_logout_required"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">user_logout_required</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Filter method - prevents users from logging in as admin
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="user-logout-required-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 131</span>
-131:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">user_logout_required</span>
-132:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">logged_in?</span>
-133:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-value str">'Please log out of your user account first!'</span>
-134:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
-135:     <span class="ruby-keyword kw">end</span>
-136:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="users-only-method" class="method-detail ">
-				<a name="method-i-users_only"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">users_only</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Filter method to prevent admin users from accessing certain actions
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="users-only-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 98</span>
- 98:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">users_only</span>
- 99:     <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
-100:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="valid-sort-column-method" class="method-detail ">
-				<a name="method-i-valid_sort_column"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">valid_sort_column</span><span
-						class="method-args">(param, model='work')</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="valid-sort-column-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 324</span>
-324:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_sort_column</span>(<span class="ruby-identifier">param</span>, <span class="ruby-identifier">model</span>=<span class="ruby-value str">'work'</span>)
-325:     <span class="ruby-identifier">allowed</span> = []
-326:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'work'</span>
-327:       <span class="ruby-identifier">allowed</span> = [<span class="ruby-value str">'author'</span>, <span class="ruby-value str">'title'</span>, <span class="ruby-value str">'date'</span>, <span class="ruby-value str">'created_at'</span>, <span class="ruby-value str">'word_count'</span>, <span class="ruby-value str">'hit_count'</span>]
-328:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'tag'</span>
-329:       <span class="ruby-identifier">allowed</span> = [<span class="ruby-value str">'name'</span>, <span class="ruby-value str">'created_at'</span>, <span class="ruby-value str">'suggested_fandoms'</span>, <span class="ruby-value str">'taggings_count'</span>]
-330:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'collection'</span>
-331:       <span class="ruby-identifier">allowed</span> = [<span class="ruby-value str">'collections.title'</span>, <span class="ruby-value str">'collections.created_at'</span>, <span class="ruby-value str">'item_count'</span>]
-332:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'prompt'</span>
-333:       <span class="ruby-identifier">allowed</span> = <span class="ruby-node">%(fandom created_at prompter)</span>
-334:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'claim'</span>
-335:       <span class="ruby-identifier">allowed</span> = <span class="ruby-node">%(created_at claimer)</span>
-336:     <span class="ruby-keyword kw">end</span>
-337:     <span class="ruby-operator">!</span><span class="ruby-identifier">param</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">allowed</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">param</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>)
-338:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="valid-sort-direction-method" class="method-detail ">
-				<a name="method-i-valid_sort_direction"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">valid_sort_direction</span><span
-						class="method-args">(param)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="valid-sort-direction-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 350</span>
-350:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">param</span>)
-351:     <span class="ruby-operator">!</span><span class="ruby-identifier">param</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> [<span class="ruby-value str">'asc'</span>, <span class="ruby-value str">'desc'</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">param</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>)
-352:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="protected-instance-method-details" class="method-section section">
-			<h3 class="section-header">Protected Instance Methods</h3>
-
-		
-			<div id="check-ownership-method" class="method-detail ">
-				<a name="method-i-check_ownership"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">check_ownership</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Make sure a specific object belongs to the current user and that they have
-permission to view, edit or delete it
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="check-ownership-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 281</span>
-281:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_ownership</span>
-282:         <span class="ruby-identifier">access_denied</span>(<span class="ruby-value">:redirect</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@check_ownership_of</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@check_ownership_of</span>)
-283:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="check-ownership-or-admin-method" class="method-detail ">
-				<a name="method-i-check_ownership_or_admin"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">check_ownership_or_admin</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="check-ownership-or-admin-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 284</span>
-284:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_ownership_or_admin</span>
-285:      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">logged_in_as_admin?</span>
-286:      <span class="ruby-identifier">access_denied</span>(<span class="ruby-value">:redirect</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@check_ownership_of</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@check_ownership_of</span>)
-287:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="check-permission-to-wrangle-method" class="method-detail ">
-				<a name="method-i-check_permission_to_wrangle"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">check_permission_to_wrangle</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Make sure user is allowed to access tag wrangling pages
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="check-permission-to-wrangle-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 306</span>
-306:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_permission_to_wrangle</span>
-307:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@admin_settings</span>.<span class="ruby-identifier">tag_wrangling_off?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">logged_in_as_admin?</span>
-308:       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-value str">&quot;Wrangling is disabled at the moment. Please check back later.&quot;</span>
-309:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
-310:     <span class="ruby-keyword kw">else</span>
-311:       <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">permit?</span>(<span class="ruby-value str">&quot;tag_wrangler&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
-312:     <span class="ruby-keyword kw">end</span>
-313:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="check-user-status-method" class="method-detail ">
-				<a name="method-i-check_user_status"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">check_user_status</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Prevents banned and suspended users from adding/editing content
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="check-user-status-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 263</span>
-263:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_user_status</span>
-264:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">suspended?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">banned?</span>)
-265:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">suspended?</span>
-266:         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-value str">'suspension_notice'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.&quot;</span>)
-267:      <span class="ruby-keyword kw">else</span>
-268:         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-value str">'ban_notice'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.&quot;</span>)
-269:      <span class="ruby-keyword kw">end</span>
-270:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">current_user</span>
-271:     <span class="ruby-keyword kw">end</span>
-272:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="check-visibility-method" class="method-detail ">
-				<a name="method-i-check_visibility"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">check_visibility</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Make sure the user is allowed to see a specific page includes a special
+For example, a popup window might simply close itself.</p>
+          
+
+          
+          <div class="method-source-code" id="access_denied-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 110</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">access_denied</span>(<span class="ruby-identifier">options</span> ={})
+  <span class="ruby-identifier">store_location</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in?</span>
+    <span class="ruby-identifier">destination</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:redirect</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">user_path</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:redirect</span>]
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span> <span class="ruby-string">&quot;Sorry, you don't have permission to access the page you were trying to reach.&quot;</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">destination</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">destination</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:redirect</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">new_user_session_path</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:redirect</span>]
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span> <span class="ruby-string">&quot;Sorry, you don't have permission to access the page you were trying to reach. Please log in.&quot;</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">destination</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- access_denied-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- access_denied-method -->
+
+    
+      <div id="method-i-admin_logout_required" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">admin_logout_required</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Prevents admin from logging in as users</p>
+          
+
+          
+          <div class="method-source-code" id="admin_logout_required-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 139</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">admin_logout_required</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in_as_admin?</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Please log out of your admin account first!'</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- admin_logout_required-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- admin_logout_required-method -->
+
+    
+      <div id="method-i-admin_only" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">admin_only</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Filter method - keeps users out of admin areas</p>
+          
+
+          
+          <div class="method-source-code" id="admin_only-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 93</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">admin_only</span>
+  <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">admin_only_access_denied</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- admin_only-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- admin_only-method -->
+
+    
+      <div id="method-i-admin_only_access_denied" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">admin_only_access_denied</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="admin_only_access_denied-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 124</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">admin_only_access_denied</span>
+  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;I'm sorry, only an admin can look at that area.&quot;</span>)
+  <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
+  <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- admin_only_access_denied-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- admin_only_access_denied-method -->
+
+    
+      <div id="method-i-collection_maintainers_only" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">collection_maintainers_only</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="collection_maintainers_only-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 166</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">collection_maintainers_only</span>
+  <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_maintainer?</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- collection_maintainers_only-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- collection_maintainers_only-method -->
+
+    
+      <div id="method-i-collection_owners_only" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">collection_owners_only</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="collection_owners_only-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 170</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">collection_owners_only</span>
+  <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_owner?</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- collection_owners_only-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- collection_owners_only-method -->
+
+    
+      <div id="method-i-fetch_admin_settings" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">fetch_admin_settings</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="fetch_admin_settings-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 50</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">fetch_admin_settings</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>.<span class="ruby-identifier">development?</span>
+    <span class="ruby-ivar">@admin_settings</span> = <span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">first</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@admin_settings</span>.<span class="ruby-identifier">banner_text</span>.<span class="ruby-identifier">blank?</span>
+      <span class="ruby-ivar">@bannertext</span> = <span class="ruby-identifier">sanitize_field</span>(<span class="ruby-ivar">@admin_settings</span>, <span class="ruby-value">:banner_text</span>).<span class="ruby-identifier">html_safe</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@admin_settings</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-string">&quot;admin_settings&quot;</span>){<span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">first</span>}
+    <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@admin_settings</span>.<span class="ruby-identifier">banner_text</span>.<span class="ruby-identifier">blank?</span>
+      <span class="ruby-ivar">@bannertext</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-string">&quot;banner_text&quot;</span>){<span class="ruby-identifier">sanitize_field</span>(<span class="ruby-ivar">@admin_settings</span>, <span class="ruby-value">:banner_text</span>).<span class="ruby-identifier">html_safe</span>}
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- fetch_admin_settings-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- fetch_admin_settings-method -->
+
+    
+      <div id="method-i-get_page_title" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_page_title</span><span
+            class="method-args">(fandom, author, title, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_page_title-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 182</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_page_title</span>(<span class="ruby-identifier">fandom</span>, <span class="ruby-identifier">author</span>, <span class="ruby-identifier">title</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-comment"># truncate any piece that is over 15 chars long to the nearest word</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:truncate</span>]
+    <span class="ruby-identifier">fandom</span> = <span class="ruby-identifier">fandom</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-string">'...'</span>}
+    <span class="ruby-identifier">author</span> = <span class="ruby-identifier">author</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-string">'...'</span>}
+    <span class="ruby-identifier">title</span> = <span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-string">'...'</span>}
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@page_title</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:work_title_format</span>).<span class="ruby-identifier">blank?</span>
+    <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">work_title_format</span>
+    <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/FANDOM/</span>, <span class="ruby-identifier">fandom</span>)
+    <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/AUTHOR/</span>, <span class="ruby-identifier">author</span>)
+    <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/TITLE/</span>, <span class="ruby-identifier">title</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">title</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">author</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">fandom</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@page_title</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; [#{ArchiveConfig.APP_NAME}]&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:omit_archive_name</span>]
+  <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">html_safe</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_page_title-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_page_title-method -->
+
+    
+      <div id="method-i-hide_banner" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">hide_banner</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="hide_banner-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 148</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">hide_banner</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:hide_banner</span>]
+    <span class="ruby-identifier">session</span>[<span class="ruby-value">:hide_banner</span>] = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- hide_banner-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- hide_banner-method -->
+
+    
+      <div id="method-i-is_admin-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">is_admin?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="is_admin-3F-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 246</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_admin?</span>
+  <span class="ruby-identifier">logged_in_as_admin?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- is_admin-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- is_admin-3F-method -->
+
+    
+      <div id="method-i-is_registered_user-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">is_registered_user?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="is_registered_user-3F-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 242</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_registered_user?</span>
+  <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">logged_in_as_admin?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- is_registered_user-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- is_registered_user-3F-method -->
+
+    
+      <div id="method-i-load_collection" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">load_collection</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="load_collection-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 162</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">load_collection</span>
+  <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- load_collection-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- load_collection-method -->
+
+    
+      <div id="method-i-not_allowed" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">not_allowed</span><span
+            class="method-args">(fallback=nil)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="not_allowed-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 174</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">not_allowed</span>(<span class="ruby-identifier">fallback</span>=<span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, you're not allowed to do that.&quot;</span>)
+  <span class="ruby-identifier">redirect_to</span> (<span class="ruby-identifier">fallback</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- not_allowed-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- not_allowed-method -->
+
+    
+      <div id="method-i-redirect_back_or_default" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">redirect_back_or_default</span><span
+            class="method-args">(default = root_path)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Redirect to the URI stored by the most recent <a
+href="ApplicationController.html#method-i-store_location">#store_location</a>
+call or to the passed default.</p>
+          
+
+          
+          <div class="method-source-code" id="redirect_back_or_default-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 79</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">redirect_back_or_default</span>(<span class="ruby-identifier">default</span> = <span class="ruby-identifier">root_path</span>)
+  <span class="ruby-identifier">back</span> = <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>]
+  <span class="ruby-identifier">session</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:return_to</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">back</span>
+    <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Returning to #{back}&quot;</span>
+    <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] = <span class="ruby-string">&quot;redirected&quot;</span>
+    <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">back</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Returning to default (#{default})&quot;</span>
+    <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">default</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- redirect_back_or_default-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- redirect_back_or_default-method -->
+
+    
+      <div id="method-i-see_adult-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">see_adult?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="see_adult-3F-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 250</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">see_adult?</span>
+  <span class="ruby-identifier">params</span>[<span class="ruby-value">:anchor</span>] = <span class="ruby-string">&quot;comments&quot;</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">params</span>[<span class="ruby-value">:show_comments</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:anchor</span>].<span class="ruby-identifier">blank?</span>)
+  <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Added anchor #{params[:anchor]}&quot;</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:adult</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">logged_in_as_admin?</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-ivar">@work</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">adult</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- see_adult-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- see_adult-3F-method -->
+
+    
+      <div id="method-i-set_current_user" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_current_user</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_current_user-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 157</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_current_user</span>
+  <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span> = <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">current_admin</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">current_user</span>
+  <span class="ruby-ivar">@current_user</span> = <span class="ruby-identifier">current_user</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_current_user-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_current_user-method -->
+
+    
+      <div id="method-i-set_redirects" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_redirects</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_redirects-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 237</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_redirects</span>
+  <span class="ruby-ivar">@logged_in_redirect</span> = <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>)
+  <span class="ruby-ivar">@logged_out_redirect</span> = <span class="ruby-identifier">url_for</span>({<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'session'</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'new'</span>})
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_redirects-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_redirects-method -->
+
+    
+      <div id="method-i-set_sort_order" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_sort_order</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_sort_order-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 340</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_sort_order</span>
+  <span class="ruby-comment"># sorting</span>
+  <span class="ruby-ivar">@sort_column</span> = (<span class="ruby-identifier">valid_sort_column</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>],<span class="ruby-string">&quot;prompt&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] <span class="ruby-operator">:</span> <span class="ruby-string">'id'</span>)
+  <span class="ruby-ivar">@sort_direction</span> = (<span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] <span class="ruby-operator">:</span> <span class="ruby-string">'DESC'</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>])
+    <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] = <span class="ruby-string">'DESC'</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@sort_order</span> = <span class="ruby-ivar">@sort_column</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@sort_direction</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_sort_order-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_sort_order-method -->
+
+    
+      <div id="method-i-store_location" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">store_location</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="store_location-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 67</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">store_location</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;redirected&quot;</span>
+    <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-string">&quot;Return to back would cause infinite loop&quot;</span>
+    <span class="ruby-identifier">session</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:return_to</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">fullpath</span>
+    <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Return to: #{session[:return_to]}&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- store_location-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- store_location-method -->
+
+    
+      <div id="method-i-user_logout_required" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">user_logout_required</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Filter method - prevents users from logging in as admin</p>
+          
+
+          
+          <div class="method-source-code" id="user_logout_required-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 131</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">user_logout_required</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in?</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Please log out of your user account first!'</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- user_logout_required-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- user_logout_required-method -->
+
+    
+      <div id="method-i-users_only" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">users_only</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Filter method to prevent admin users from accessing certain actions</p>
+          
+
+          
+          <div class="method-source-code" id="users_only-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 98</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">users_only</span>
+  <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- users_only-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- users_only-method -->
+
+    
+      <div id="method-i-valid_sort_column" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">valid_sort_column</span><span
+            class="method-args">(param, model='work')</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="valid_sort_column-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 324</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">valid_sort_column</span>(<span class="ruby-identifier">param</span>, <span class="ruby-identifier">model</span>=<span class="ruby-string">'work'</span>)
+  <span class="ruby-identifier">allowed</span> = []
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-string">'work'</span>
+    <span class="ruby-identifier">allowed</span> = [<span class="ruby-string">'author'</span>, <span class="ruby-string">'title'</span>, <span class="ruby-string">'date'</span>, <span class="ruby-string">'created_at'</span>, <span class="ruby-string">'word_count'</span>, <span class="ruby-string">'hit_count'</span>]
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-string">'tag'</span>
+    <span class="ruby-identifier">allowed</span> = [<span class="ruby-string">'name'</span>, <span class="ruby-string">'created_at'</span>, <span class="ruby-string">'suggested_fandoms'</span>, <span class="ruby-string">'taggings_count'</span>]
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-string">'collection'</span>
+    <span class="ruby-identifier">allowed</span> = [<span class="ruby-string">'collections.title'</span>, <span class="ruby-string">'collections.created_at'</span>, <span class="ruby-string">'item_count'</span>]
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-string">'prompt'</span>
+    <span class="ruby-identifier">allowed</span> = <span class="ruby-node">%w(fandom created_at prompter)</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-string">'claim'</span>
+    <span class="ruby-identifier">allowed</span> = <span class="ruby-node">%w(created_at claimer)</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-operator">!</span><span class="ruby-identifier">param</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">allowed</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">param</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- valid_sort_column-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- valid_sort_column-method -->
+
+    
+      <div id="method-i-valid_sort_direction" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">valid_sort_direction</span><span
+            class="method-args">(param)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="valid_sort_direction-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 350</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">param</span>)
+  <span class="ruby-operator">!</span><span class="ruby-identifier">param</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> [<span class="ruby-string">'asc'</span>, <span class="ruby-string">'desc'</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">param</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- valid_sort_direction-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- valid_sort_direction-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+     <section id="protected-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Protected Instance Methods</h3>
+
+    
+      <div id="method-i-check_ownership" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">check_ownership</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Make sure a specific object belongs to the current user and that they have
+permission to view, edit or delete it</p>
+          
+
+          
+          <div class="method-source-code" id="check_ownership-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 281</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">check_ownership</span>
+      <span class="ruby-identifier">access_denied</span>(<span class="ruby-value">:redirect</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@check_ownership_of</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@check_ownership_of</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- check_ownership-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- check_ownership-method -->
+
+    
+      <div id="method-i-check_ownership_or_admin" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">check_ownership_or_admin</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="check_ownership_or_admin-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 284</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">check_ownership_or_admin</span>
+   <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in_as_admin?</span>
+   <span class="ruby-identifier">access_denied</span>(<span class="ruby-value">:redirect</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@check_ownership_of</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@check_ownership_of</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- check_ownership_or_admin-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- check_ownership_or_admin-method -->
+
+    
+      <div id="method-i-check_permission_to_wrangle" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">check_permission_to_wrangle</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Make sure user is allowed to access tag wrangling pages</p>
+          
+
+          
+          <div class="method-source-code" id="check_permission_to_wrangle-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 306</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">check_permission_to_wrangle</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@admin_settings</span>.<span class="ruby-identifier">tag_wrangling_off?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">logged_in_as_admin?</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Wrangling is disabled at the moment. Please check back later.&quot;</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">permit?</span>(<span class="ruby-string">&quot;tag_wrangler&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- check_permission_to_wrangle-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- check_permission_to_wrangle-method -->
+
+    
+      <div id="method-i-check_user_status" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">check_user_status</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Prevents banned and suspended users from adding/editing content</p>
+          
+
+          
+          <div class="method-source-code" id="check_user_status-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 263</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">check_user_status</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">suspended?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">banned?</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">suspended?</span>
+      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'suspension_notice'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Your account has been suspended. You may not add or edit content until your suspension has been resolved. Please contact us for more information.&quot;</span>)
+   <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'ban_notice'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Your account has been banned. You are not permitted to add or edit archive content. Please contact us for more information.&quot;</span>)
+   <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">current_user</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- check_user_status-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- check_user_status-method -->
+
+    
+      <div id="method-i-check_visibility" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">check_visibility</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Make sure the user is allowed to see a specific page includes a special
 case for restricted works and series, since we want to encourage people to
-sign up to read them
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="check-visibility-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 291</span>
-291:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_visibility</span>
-292:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:restricted</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">restricted</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
-293:       <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">login_path</span>(<span class="ruby-value">:restricted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-294:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Skin</span>
-295:       <span class="ruby-identifier">access_denied</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@check_visibility_of</span>) <span class="ruby-operator">||</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">official?</span>
-296:     <span class="ruby-keyword kw">else</span>
-297:       <span class="ruby-identifier">is_hidden</span> = (<span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:visible</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">visible</span>) <span class="ruby-operator">||</span> 
-298:                   (<span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:visible?</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">visible?</span>) <span class="ruby-operator">||</span> 
-299:                   (<span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:hidden_by_admin?</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">hidden_by_admin?</span>)
-300:       <span class="ruby-identifier">can_view_hidden</span> = <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@check_visibility_of</span>)
-301:       <span class="ruby-identifier">access_denied</span> <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">is_hidden</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">can_view_hidden</span>)
-302:     <span class="ruby-keyword kw">end</span>
-303:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="current-admin-method" class="method-detail ">
-				<a name="method-i-current_admin"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">current_admin</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="current-admin-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 35</span>
-35:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_admin</span>
-36:     <span class="ruby-ivar">@current_admin</span> = <span class="ruby-identifier">current_admin_session</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_admin_session</span>.<span class="ruby-identifier">record</span>
-37:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="current-admin-session-method" class="method-detail ">
-				<a name="method-i-current_admin_session"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">current_admin_session</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="current-admin-session-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 30</span>
-30:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_admin_session</span>
-31:     <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@current_admin_session</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">defined?</span>(<span class="ruby-ivar">@current_admin_session</span>)
-32:     <span class="ruby-ivar">@current_admin_session</span> = <span class="ruby-constant">AdminSession</span>.<span class="ruby-identifier">find</span>
-33:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="current-user-method" class="method-detail ">
-				<a name="method-i-current_user"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">current_user</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="current-user-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 23</span>
-23:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_user</span>
-24:     <span class="ruby-ivar">@current_user</span> = <span class="ruby-identifier">current_user_session</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user_session</span>.<span class="ruby-identifier">record</span>
-25:     <span class="ruby-comment cmt"># if Rails.env.development? &amp;&amp; params[:force_current_user].present?</span>
-26:     <span class="ruby-comment cmt">#   @current_user = User.find_by_login(params[:force_current_user])</span>
-27:     <span class="ruby-comment cmt"># end</span>
-28:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="current-user-owns--method" class="method-detail ">
-				<a name="method-i-current_user_owns%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">current_user_owns?</span><span
-						class="method-args">(item)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Does the current user own a specific object?
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="current-user-owns--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 275</span>
-275:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-identifier">item</span>)
-276:         <span class="ruby-operator">!</span><span class="ruby-identifier">item</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">item</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">item</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-identifier">item</span>))
-277:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="current-user-session-method" class="method-detail ">
-				<a name="method-i-current_user_session"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">current_user_session</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="current-user-session-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 18</span>
-18:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_user_session</span>
-19:     <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@current_user_session</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">defined?</span>(<span class="ruby-ivar">@current_user_session</span>)
-20:     <span class="ruby-ivar">@current_user_session</span> = <span class="ruby-constant">UserSession</span>.<span class="ruby-identifier">find</span>
-21:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="load-locales-method" class="method-detail ">
-				<a name="method-i-load_locales"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">load_locales</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-I18n.backend = I18nDB::Backend::DBBased.new I18n.record_missing_keys =
-false # if you want to record missing translations
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="load-locales-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 214</span>
-214:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_locales</span>
-215:     <span class="ruby-ivar">@loaded_locales</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Locale</span>.<span class="ruby-identifier">order</span>(<span class="ruby-value">:iso</span>)
-216:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="logged-in--method" class="method-detail ">
-				<a name="method-i-logged_in%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">logged_in?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="logged-in--source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 39</span>
-39:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logged_in?</span>
-40:     <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">false</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">true</span>
-41:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="logged-in-as-admin--method" class="method-detail ">
-				<a name="method-i-logged_in_as_admin%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">logged_in_as_admin?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="logged-in-as-admin--source">
-<pre>
-    <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 43</span>
-43:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logged_in_as_admin?</span>
-44:     <span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">false</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">true</span>
-45:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="set-preferred-locale-method" class="method-detail ">
-				<a name="method-i-set_preferred_locale"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">set_preferred_locale</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Sets the locale
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="set-preferred-locale-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 219</span>
-219:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_preferred_locale</span>
-220:     <span class="ruby-comment cmt"># Loading the current locale</span>
-221:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:locale</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@loaded_locales</span>.<span class="ruby-identifier">detect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">loc</span><span class="ruby-operator">|</span> <span class="ruby-identifier">loc</span>.<span class="ruby-identifier">iso</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:locale</span>]}
-222:       <span class="ruby-identifier">set_locale</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:locale</span>].<span class="ruby-identifier">to_sym</span>
-223:     <span class="ruby-keyword kw">else</span>
-224:       <span class="ruby-identifier">set_locale</span> <span class="ruby-constant">Locale</span>.<span class="ruby-identifier">find_main_cached</span>.<span class="ruby-identifier">iso</span>.<span class="ruby-identifier">to_sym</span>
-225:     <span class="ruby-keyword kw">end</span>
-226:     <span class="ruby-ivar">@current_locale</span> = <span class="ruby-constant">Locale</span>.<span class="ruby-identifier">find_by_iso</span>(<span class="ruby-constant">I18n</span>.<span class="ruby-identifier">locale</span>.<span class="ruby-identifier">to_s</span>)
-227:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="private-instance-method-details" class="method-section section">
-			<h3 class="section-header">Private Instance Methods</h3>
-
-		
-			<div id="convert-date-method" class="method-detail ">
-				<a name="method-i-convert_date"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">convert_date</span><span
-						class="method-args">(hash, date_symbol_or_string)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-With thanks from here: <a
-href="http://blog.springenwerk.com/2008/05/set-date-attribute-from-dateselect.html">blog.springenwerk.com/2008/05/set-date-attribute-from-dateselect.html</a>
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="convert-date-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/controllers/application_controller.rb, line 317</span>
-317:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">convert_date</span>(<span class="ruby-identifier">hash</span>, <span class="ruby-identifier">date_symbol_or_string</span>)
-318:     <span class="ruby-identifier">attribute</span> = <span class="ruby-identifier">date_symbol_or_string</span>.<span class="ruby-identifier">to_s</span>
-319:     <span class="ruby-keyword kw">return</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">hash</span>[<span class="ruby-identifier">attribute</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'(1i)'</span>].<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">attribute</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'(2i)'</span>].<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">attribute</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'(3i)'</span>].<span class="ruby-identifier">to_i</span>)
-320:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-
-	</div>
-
-
-	<div id="rdoc-debugging-section-dump" class="debugging-section">
-	
-		<p>Disabled; run with --debug to generate this.</p>
-	
-	</div>
-
-	<div id="validator-badges">
-		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
-		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
-			Rdoc Generator</a> 1.1.6</small>.</p>
-	</div>
-
-</body>
-</html>
+sign up to read them</p>
+          
+
+          
+          <div class="method-source-code" id="check_visibility-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 291</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">check_visibility</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:restricted</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">restricted</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">login_path</span>(<span class="ruby-value">:restricted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+  <span class="ruby-keyword">elsif</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Skin</span>
+    <span class="ruby-identifier">access_denied</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@check_visibility_of</span>) <span class="ruby-operator">||</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">official?</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">is_hidden</span> = (<span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:visible</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">visible</span>) <span class="ruby-operator">||</span> 
+                (<span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:visible?</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">visible?</span>) <span class="ruby-operator">||</span> 
+                (<span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:hidden_by_admin?</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">hidden_by_admin?</span>)
+    <span class="ruby-identifier">can_view_hidden</span> = <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@check_visibility_of</span>)
+    <span class="ruby-identifier">access_denied</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">is_hidden</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">can_view_hidden</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- check_visibility-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- check_visibility-method -->
+
+    
+      <div id="method-i-current_admin" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">current_admin</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="current_admin-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 35</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">current_admin</span>
+  <span class="ruby-ivar">@current_admin</span> = <span class="ruby-identifier">current_admin_session</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_admin_session</span>.<span class="ruby-identifier">record</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- current_admin-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- current_admin-method -->
+
+    
+      <div id="method-i-current_admin_session" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">current_admin_session</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="current_admin_session-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 30</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">current_admin_session</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@current_admin_session</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@current_admin_session</span>)
+  <span class="ruby-ivar">@current_admin_session</span> = <span class="ruby-constant">AdminSession</span>.<span class="ruby-identifier">find</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- current_admin_session-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- current_admin_session-method -->
+
+    
+      <div id="method-i-current_user" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">current_user</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="current_user-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">current_user</span>
+  <span class="ruby-ivar">@current_user</span> = <span class="ruby-identifier">current_user_session</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user_session</span>.<span class="ruby-identifier">record</span>
+  <span class="ruby-comment"># if Rails.env.development? &amp;&amp; params[:force_current_user].present?</span>
+  <span class="ruby-comment">#   @current_user = User.find_by_login(params[:force_current_user])</span>
+  <span class="ruby-comment"># end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- current_user-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- current_user-method -->
+
+    
+      <div id="method-i-current_user_owns-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">current_user_owns?</span><span
+            class="method-args">(item)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Does the current user own a specific object?</p>
+          
+
+          
+          <div class="method-source-code" id="current_user_owns-3F-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 275</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-identifier">item</span>)
+      <span class="ruby-operator">!</span><span class="ruby-identifier">item</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">item</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">item</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-identifier">item</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- current_user_owns-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- current_user_owns-3F-method -->
+
+    
+      <div id="method-i-current_user_session" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">current_user_session</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="current_user_session-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 18</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">current_user_session</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@current_user_session</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@current_user_session</span>)
+  <span class="ruby-ivar">@current_user_session</span> = <span class="ruby-constant">UserSession</span>.<span class="ruby-identifier">find</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- current_user_session-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- current_user_session-method -->
+
+    
+      <div id="method-i-load_locales" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">load_locales</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>I18n.backend = I18nDB::Backend::DBBased.new I18n.record_missing_keys =
+false # if you want to record missing translations</p>
+          
+
+          
+          <div class="method-source-code" id="load_locales-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 214</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">load_locales</span>
+  <span class="ruby-ivar">@loaded_locales</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Locale</span>.<span class="ruby-identifier">order</span>(<span class="ruby-value">:iso</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- load_locales-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- load_locales-method -->
+
+    
+      <div id="method-i-logged_in-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">logged_in?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="logged_in-3F-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">logged_in?</span>
+  <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">false</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- logged_in-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- logged_in-3F-method -->
+
+    
+      <div id="method-i-logged_in_as_admin-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">logged_in_as_admin?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="logged_in_as_admin-3F-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 43</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">logged_in_as_admin?</span>
+  <span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">false</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- logged_in_as_admin-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- logged_in_as_admin-3F-method -->
+
+    
+      <div id="method-i-set_preferred_locale" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_preferred_locale</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Sets the locale</p>
+          
+
+          
+          <div class="method-source-code" id="set_preferred_locale-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 219</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_preferred_locale</span>
+  <span class="ruby-comment"># Loading the current locale</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:locale</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@loaded_locales</span>.<span class="ruby-identifier">detect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">loc</span><span class="ruby-operator">|</span> <span class="ruby-identifier">loc</span>.<span class="ruby-identifier">iso</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:locale</span>]}
+    <span class="ruby-identifier">set_locale</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:locale</span>].<span class="ruby-identifier">to_sym</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">set_locale</span> <span class="ruby-constant">Locale</span>.<span class="ruby-identifier">find_main_cached</span>.<span class="ruby-identifier">iso</span>.<span class="ruby-identifier">to_sym</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@current_locale</span> = <span class="ruby-constant">Locale</span>.<span class="ruby-identifier">find_by_iso</span>(<span class="ruby-constant">I18n</span>.<span class="ruby-identifier">locale</span>.<span class="ruby-identifier">to_s</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_preferred_locale-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_preferred_locale-method -->
+
+    
+    </section><!-- protected-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
 

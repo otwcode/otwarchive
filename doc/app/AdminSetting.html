@@ -1,1376 +1,1117 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+
+<html>
 <head>
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-
-	<title>Class: AdminSetting</title>
-
-	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
-
-	<script src="./js/jquery.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/thickbox-compressed.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/quicksearch.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/darkfish.js" type="text/javascript"
-		charset="utf-8"></script>
-
-</head>
-<body class="class">
-
-	<div id="metadata">
-		<div id="home-metadata">
-			<div id="home-section" class="section">
-        <h3 class="section-header">
-          <a href="./index.html">Home</a>
-          <a href="./index.html#classes">Classes</a>
-          <a href="./index.html#methods">Methods</a>
-        </h3>
-			</div>
-		</div>
-
-		<div id="file-metadata">
-			<div id="file-list-section" class="section">
-				<h3 class="section-header">In Files</h3>
-				<div class="section-body">
-					<ul>
-					
-						<li><a href="./app/models/admin_setting_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="app/models/admin_setting.rb">app/models/admin_setting.rb</a></li>
-					
-					</ul>
-				</div>
-			</div>
-
-			
-		</div>
-
-		<div id="class-metadata">
-
-			<!-- Parent Class -->
-			
-			<div id="parent-class-section" class="section">
-				<h3 class="section-header">Parent</h3>
-				
-				<p class="link">ActiveRecord::Base</p>
-				
-			</div>
-			
-
-			<!-- Namespace Contents -->
-			
-
-			<!-- Method Quickref -->
-			
-			<div id="method-list-section" class="section">
-				<h3 class="section-header">Methods</h3>
-				<ul class="link-list">
-					
-					<li><a href="#method-c-account_creation_enabled%3F">::account_creation_enabled?</a></li>
-					
-					<li><a href="#method-c-banner_on%21">::banner_on!</a></li>
-					
-					<li><a href="#method-c-cache_expiration">::cache_expiration</a></li>
-					
-					<li><a href="#method-c-check_queue">::check_queue</a></li>
-					
-					<li><a href="#method-c-days_to_purge_unactivated">::days_to_purge_unactivated</a></li>
-					
-					<li><a href="#method-c-default_skin">::default_skin</a></li>
-					
-					<li><a href="#method-c-delayed_banner_on">::delayed_banner_on</a></li>
-					
-					<li><a href="#method-c-enable_test_caching%3F">::enable_test_caching?</a></li>
-					
-					<li><a href="#method-c-guest_downloading_off%3F">::guest_downloading_off?</a></li>
-					
-					<li><a href="#method-c-invite_from_queue_at">::invite_from_queue_at</a></li>
-					
-					<li><a href="#method-c-invite_from_queue_enabled%3F">::invite_from_queue_enabled?</a></li>
-					
-					<li><a href="#method-c-invite_from_queue_frequency">::invite_from_queue_frequency</a></li>
-					
-					<li><a href="#method-c-invite_from_queue_number">::invite_from_queue_number</a></li>
-					
-					<li><a href="#method-c-perform">::perform</a></li>
-					
-					<li><a href="#method-c-suspend_filter_counts%3F">::suspend_filter_counts?</a></li>
-					
-					<li><a href="#method-c-tag_wrangling_off%3F">::tag_wrangling_off?</a></li>
-					
-					<li><a href="#method-i-check_filter_status">#check_filter_status</a></li>
-					
-					<li><a href="#method-i-expire_cached_settings">#expire_cached_settings</a></li>
-					
-					<li><a href="#method-i-update_invite_date">#update_invite_date</a></li>
-					
-				</ul>
-			</div>
-			
-
-			<!-- Included Modules -->
-			
-		</div>
-
-		<div id="project-metadata">
-			
-			
-			<div id="fileindex-section" class="section project-section">
-				<h3 class="section-header">Files</h3>
-				<ul>
-				
-					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
-				
-				</ul>
-			</div>
-			
-
-			<div id="classindex-section" class="section project-section">
-				<h3 class="section-header">Class Index
-					<span class="search-toggle"><img src="./images/find.png"
-						height="16" width="16" alt="[+]"
-						title="show/hide quicksearch" /></span></h3>
-				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
-				<fieldset>
-					<legend>Quicksearch</legend>
-					<input type="text" name="quicksearch" value=""
-						class="quicksearch-field" />
-				</fieldset>
-				</form>
-
-				<ul class="link-list">
-				
-					<li><a href="./Static.html">Static</a></li>
-				
-					<li><a href="./Static/BaseController.html">Static::BaseController</a></li>
-				
-					<li><a href="./Static/CollectionsController.html">Static::CollectionsController</a></li>
-				
-					<li><a href="./Static/FandomsController.html">Static::FandomsController</a></li>
-				
-					<li><a href="./Static/MediaController.html">Static::MediaController</a></li>
-				
-					<li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
-				
-					<li><a href="./Static/WorksController.html">Static::WorksController</a></li>
-				
-					<li><a href="./Admin.html">Admin</a></li>
-				
-					<li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
-				
-					<li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
-				
-					<li><a href="./Admin/SettingsController.html">Admin::SettingsController</a></li>
-				
-					<li><a href="./Admin/SkinsController.html">Admin::SkinsController</a></li>
-				
-					<li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
-				
-					<li><a href="./ActionController.html">ActionController</a></li>
-				
-					<li><a href="./ActionController/Routing.html">ActionController::Routing</a></li>
-				
-					<li><a href="./ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
-				
-					<li><a href="./Challenge.html">Challenge</a></li>
-				
-					<li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
-				
-					<li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
-				
-					<li><a href="./ActiveRecord.html">ActiveRecord</a></li>
-				
-					<li><a href="./AutocompleteSource.html">AutocompleteSource</a></li>
-				
-					<li><a href="./AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
-				
-					<li><a href="./ChallengeCore.html">ChallengeCore</a></li>
-				
-					<li><a href="./ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
-				
-					<li><a href="./StoryParser.html">StoryParser</a></li>
-				
-					<li><a href="./StoryParser/Error.html">StoryParser::Error</a></li>
-				
-					<li><a href="./XhtmlSplitter.html">XhtmlSplitter</a></li>
-				
-					<li><a href="./XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
-				
-					<li><a href="./AbuseReport.html">AbuseReport</a></li>
-				
-					<li><a href="./AbuseReportsController.html">AbuseReportsController</a></li>
-				
-					<li><a href="./AdminMailer.html">AdminMailer</a></li>
-				
-					<li><a href="./AdminPost.html">AdminPost</a></li>
-				
-					<li><a href="./AdminPostTag.html">AdminPostTag</a></li>
-				
-					<li><a href="./AdminPostTagging.html">AdminPostTagging</a></li>
-				
-					<li><a href="./AdminPostsController.html">AdminPostsController</a></li>
-				
-					<li><a href="./AdminSession.html">AdminSession</a></li>
-				
-					<li><a href="./AdminSessionsController.html">AdminSessionsController</a></li>
-				
-					<li><a href="./AdminSetting.html">AdminSetting</a></li>
-				
-					<li><a href="./AdminsController.html">AdminsController</a></li>
-				
-					<li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
-				
-					<li><a href="./AlphabetHelper.html">AlphabetHelper</a></li>
-				
-					<li><a href="./ApplicationController.html">ApplicationController</a></li>
-				
-					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
-				
-					<li><a href="./ArchiveFaq.html">ArchiveFaq</a></li>
-				
-					<li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a></li>
-				
-					<li><a href="./AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
-				
-					<li><a href="./AutocompleteController.html">AutocompleteController</a></li>
-				
-					<li><a href="./Banned.html">Banned</a></li>
-				
-					<li><a href="./Bookmark.html">Bookmark</a></li>
-				
-					<li><a href="./BookmarksController.html">BookmarksController</a></li>
-				
-					<li><a href="./BookmarksHelper.html">BookmarksHelper</a></li>
-				
-					<li><a href="./CacheHelper.html">CacheHelper</a></li>
-				
-					<li><a href="./CastNomination.html">CastNomination</a></li>
-				
-					<li><a href="./Category.html">Category</a></li>
-				
-					<li><a href="./ChallengeAssignment.html">ChallengeAssignment</a></li>
-				
-					<li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
-				
-					<li><a href="./ChallengeClaim.html">ChallengeClaim</a></li>
-				
-					<li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a></li>
-				
-					<li><a href="./ChallengeHelper.html">ChallengeHelper</a></li>
-				
-					<li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a></li>
-				
-					<li><a href="./ChallengeSignup.html">ChallengeSignup</a></li>
-				
-					<li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
-				
-					<li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
-				
-					<li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a></li>
-				
-					<li><a href="./ChallengeSweeper.html">ChallengeSweeper</a></li>
-				
-					<li><a href="./ChallengesController.html">ChallengesController</a></li>
-				
-					<li><a href="./Chapter.html">Chapter</a></li>
-				
-					<li><a href="./ChapterSweeper.html">ChapterSweeper</a></li>
-				
-					<li><a href="./ChaptersController.html">ChaptersController</a></li>
-				
-					<li><a href="./ChaptersHelper.html">ChaptersHelper</a></li>
-				
-					<li><a href="./Character.html">Character</a></li>
-				
-					<li><a href="./CharacterNomination.html">CharacterNomination</a></li>
-				
-					<li><a href="./Collectible.html">Collectible</a></li>
-				
-					<li><a href="./Collection.html">Collection</a></li>
-				
-					<li><a href="./CollectionItem.html">CollectionItem</a></li>
-				
-					<li><a href="./CollectionItemsController.html">CollectionItemsController</a></li>
-				
-					<li><a href="./CollectionObserver.html">CollectionObserver</a></li>
-				
-					<li><a href="./CollectionParticipant.html">CollectionParticipant</a></li>
-				
-					<li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a></li>
-				
-					<li><a href="./CollectionPreference.html">CollectionPreference</a></li>
-				
-					<li><a href="./CollectionProfile.html">CollectionProfile</a></li>
-				
-					<li><a href="./CollectionProfileController.html">CollectionProfileController</a></li>
-				
-					<li><a href="./CollectionSweeper.html">CollectionSweeper</a></li>
-				
-					<li><a href="./CollectionsController.html">CollectionsController</a></li>
-				
-					<li><a href="./CollectionsHelper.html">CollectionsHelper</a></li>
-				
-					<li><a href="./Comment.html">Comment</a></li>
-				
-					<li><a href="./CommentMailer.html">CommentMailer</a></li>
-				
-					<li><a href="./CommentObserver.html">CommentObserver</a></li>
-				
-					<li><a href="./CommentSweeper.html">CommentSweeper</a></li>
-				
-					<li><a href="./CommentsController.html">CommentsController</a></li>
-				
-					<li><a href="./CommentsHelper.html">CommentsHelper</a></li>
-				
-					<li><a href="./CommonTagging.html">CommonTagging</a></li>
-				
-					<li><a href="./CreationObserver.html">CreationObserver</a></li>
-				
-					<li><a href="./Creatorship.html">Creatorship</a></li>
-				
-					<li><a href="./CssCleaner.html">CssCleaner</a></li>
-				
-					<li><a href="./DateHelper.html">DateHelper</a></li>
-				
-					<li><a href="./DevmodeController.html">DevmodeController</a></li>
-				
-					<li><a href="./DownloadsController.html">DownloadsController</a></li>
-				
-					<li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a></li>
-				
-					<li><a href="./ErrorsController.html">ErrorsController</a></li>
-				
-					<li><a href="./ExternalAuthor.html">ExternalAuthor</a></li>
-				
-					<li><a href="./ExternalAuthorName.html">ExternalAuthorName</a></li>
-				
-					<li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a></li>
-				
-					<li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
-				
-					<li><a href="./ExternalCreatorship.html">ExternalCreatorship</a></li>
-				
-					<li><a href="./ExternalWork.html">ExternalWork</a></li>
-				
-					<li><a href="./ExternalWorksController.html">ExternalWorksController</a></li>
-				
-					<li><a href="./Fandom.html">Fandom</a></li>
-				
-					<li><a href="./FandomNomination.html">FandomNomination</a></li>
-				
-					<li><a href="./FandomsController.html">FandomsController</a></li>
-				
-					<li><a href="./FeedSweeper.html">FeedSweeper</a></li>
-				
-					<li><a href="./Feedback.html">Feedback</a></li>
-				
-					<li><a href="./FeedbacksController.html">FeedbacksController</a></li>
-				
-					<li><a href="./FilterCount.html">FilterCount</a></li>
-				
-					<li><a href="./FilterTagging.html">FilterTagging</a></li>
-				
-					<li><a href="./FindRandom.html">FindRandom</a></li>
-				
-					<li><a href="./Freeform.html">Freeform</a></li>
-				
-					<li><a href="./FreeformNomination.html">FreeformNomination</a></li>
-				
-					<li><a href="./Gift.html">Gift</a></li>
-				
-					<li><a href="./GiftExchange.html">GiftExchange</a></li>
-				
-					<li><a href="./GiftsController.html">GiftsController</a></li>
-				
-					<li><a href="./HitCounter.html">HitCounter</a></li>
-				
-					<li><a href="./HomeController.html">HomeController</a></li>
-				
-					<li><a href="./HomeHelper.html">HomeHelper</a></li>
-				
-					<li><a href="./HtmlCleaner.html">HtmlCleaner</a></li>
-				
-					<li><a href="./InboxComment.html">InboxComment</a></li>
-				
-					<li><a href="./InboxController.html">InboxController</a></li>
-				
-					<li><a href="./InboxHelper.html">InboxHelper</a></li>
-				
-					<li><a href="./Invitation.html">Invitation</a></li>
-				
-					<li><a href="./InvitationsController.html">InvitationsController</a></li>
-				
-					<li><a href="./InvitationsHelper.html">InvitationsHelper</a></li>
-				
-					<li><a href="./InviteRequest.html">InviteRequest</a></li>
-				
-					<li><a href="./InviteRequestsController.html">InviteRequestsController</a></li>
-				
-					<li><a href="./KnownIssue.html">KnownIssue</a></li>
-				
-					<li><a href="./KnownIssuesController.html">KnownIssuesController</a></li>
-				
-					<li><a href="./Kudo.html">Kudo</a></li>
-				
-					<li><a href="./KudoMailer.html">KudoMailer</a></li>
-				
-					<li><a href="./KudoObserver.html">KudoObserver</a></li>
-				
-					<li><a href="./KudosController.html">KudosController</a></li>
-				
-					<li><a href="./Language.html">Language</a></li>
-				
-					<li><a href="./LanguagesController.html">LanguagesController</a></li>
-				
-					<li><a href="./Locale.html">Locale</a></li>
-				
-					<li><a href="./LocalesController.html">LocalesController</a></li>
-				
-					<li><a href="./LogItem.html">LogItem</a></li>
-				
-					<li><a href="./Media.html">Media</a></li>
-				
-					<li><a href="./MediaController.html">MediaController</a></li>
-				
-					<li><a href="./MetaTagging.html">MetaTagging</a></li>
-				
-					<li><a href="./Offer.html">Offer</a></li>
-				
-					<li><a href="./OrphansController.html">OrphansController</a></li>
-				
-					<li><a href="./OrphansHelper.html">OrphansHelper</a></li>
-				
-					<li><a href="./OwnedSetTagging.html">OwnedSetTagging</a></li>
-				
-					<li><a href="./OwnedTagSet.html">OwnedTagSet</a></li>
-				
-					<li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a></li>
-				
-					<li><a href="./PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
-				
-					<li><a href="./PasswordsController.html">PasswordsController</a></li>
-				
-					<li><a href="./People.html">People</a></li>
-				
-					<li><a href="./PeopleController.html">PeopleController</a></li>
-				
-					<li><a href="./PotentialMatch.html">PotentialMatch</a></li>
-				
-					<li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a></li>
-				
-					<li><a href="./PotentialMatchesController.html">PotentialMatchesController</a></li>
-				
-					<li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a></li>
-				
-					<li><a href="./Preference.html">Preference</a></li>
-				
-					<li><a href="./PreferencesController.html">PreferencesController</a></li>
-				
-					<li><a href="./Profile.html">Profile</a></li>
-				
-					<li><a href="./ProfileController.html">ProfileController</a></li>
-				
-					<li><a href="./Prompt.html">Prompt</a></li>
-				
-					<li><a href="./PromptMeme.html">PromptMeme</a></li>
-				
-					<li><a href="./PromptRestriction.html">PromptRestriction</a></li>
-				
-					<li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
-				
-					<li><a href="./PromptsController.html">PromptsController</a></li>
-				
-					<li><a href="./Pseud.html">Pseud</a></li>
-				
-					<li><a href="./PseudSweeper.html">PseudSweeper</a></li>
-				
-					<li><a href="./PseudsController.html">PseudsController</a></li>
-				
-					<li><a href="./PseudsHelper.html">PseudsHelper</a></li>
-				
-					<li><a href="./Query.html">Query</a></li>
-				
-					<li><a href="./Rating.html">Rating</a></li>
-				
-					<li><a href="./Rawk.html">Rawk</a></li>
-				
-					<li><a href="./Reading.html">Reading</a></li>
-				
-					<li><a href="./ReadingsController.html">ReadingsController</a></li>
-				
-					<li><a href="./RedirectController.html">RedirectController</a></li>
-				
-					<li><a href="./RedisTestSetup.html">RedisTestSetup</a></li>
-				
-					<li><a href="./RelatedWork.html">RelatedWork</a></li>
-				
-					<li><a href="./RelatedWorksController.html">RelatedWorksController</a></li>
-				
-					<li><a href="./Relationship.html">Relationship</a></li>
-				
-					<li><a href="./RelationshipNomination.html">RelationshipNomination</a></li>
-				
-					<li><a href="./Request.html">Request</a></li>
-				
-					<li><a href="./Role.html">Role</a></li>
-				
-					<li><a href="./RolesUser.html">RolesUser</a></li>
-				
-					<li><a href="./SearchController.html">SearchController</a></li>
-				
-					<li><a href="./SearchHelper.html">SearchHelper</a></li>
-				
-					<li><a href="./SerialWork.html">SerialWork</a></li>
-				
-					<li><a href="./SerialWorksController.html">SerialWorksController</a></li>
-				
-					<li><a href="./Series.html">Series</a></li>
-				
-					<li><a href="./SeriesController.html">SeriesController</a></li>
-				
-					<li><a href="./SeriesHelper.html">SeriesHelper</a></li>
-				
-					<li><a href="./SetTagging.html">SetTagging</a></li>
-				
-					<li><a href="./Skin.html">Skin</a></li>
-				
-					<li><a href="./SkinParent.html">SkinParent</a></li>
-				
-					<li><a href="./SkinsController.html">SkinsController</a></li>
-				
-					<li><a href="./SkinsHelper.html">SkinsHelper</a></li>
-				
-					<li><a href="./SortableList.html">SortableList</a></li>
-				
-					<li><a href="./Stat.html">Stat</a></li>
-				
-					<li><a href="./StatHash.html">StatHash</a></li>
-				
-					<li><a href="./StaticSweeper.html">StaticSweeper</a></li>
-				
-					<li><a href="./StatsController.html">StatsController</a></li>
-				
-					<li><a href="./StatsHelper.html">StatsHelper</a></li>
-				
-					<li><a href="./Subscription.html">Subscription</a></li>
-				
-					<li><a href="./SubscriptionsController.html">SubscriptionsController</a></li>
-				
-					<li><a href="./Tag.html">Tag</a></li>
-				
-					<li><a href="./TagNomination.html">TagNomination</a></li>
-				
-					<li><a href="./TagNominationsController.html">TagNominationsController</a></li>
-				
-					<li><a href="./TagSet.html">TagSet</a></li>
-				
-					<li><a href="./TagSetAssociation.html">TagSetAssociation</a></li>
-				
-					<li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a></li>
-				
-					<li><a href="./TagSetNomination.html">TagSetNomination</a></li>
-				
-					<li><a href="./TagSetNominationsController.html">TagSetNominationsController</a></li>
-				
-					<li><a href="./TagSetOwnership.html">TagSetOwnership</a></li>
-				
-					<li><a href="./TagSetSweeper.html">TagSetSweeper</a></li>
-				
-					<li><a href="./TagSetsHelper.html">TagSetsHelper</a></li>
-				
-					<li><a href="./TagSweeper.html">TagSweeper</a></li>
-				
-					<li><a href="./TagWranglersController.html">TagWranglersController</a></li>
-				
-					<li><a href="./TagWranglingsController.html">TagWranglingsController</a></li>
-				
-					<li><a href="./Taggable.html">Taggable</a></li>
-				
-					<li><a href="./Tagging.html">Tagging</a></li>
-				
-					<li><a href="./TagsController.html">TagsController</a></li>
-				
-					<li><a href="./TagsHelper.html">TagsHelper</a></li>
-				
-					<li><a href="./TranslationGenerator.html">TranslationGenerator</a></li>
-				
-					<li><a href="./TranslationHelper.html">TranslationHelper</a></li>
-				
-					<li><a href="./TranslationNote.html">TranslationNote</a></li>
-				
-					<li><a href="./TranslationNotesController.html">TranslationNotesController</a></li>
-				
-					<li><a href="./TranslationsController.html">TranslationsController</a></li>
-				
-					<li><a href="./TranslatorsController.html">TranslatorsController</a></li>
-				
-					<li><a href="./UrlActiveValidator.html">UrlActiveValidator</a></li>
-				
-					<li><a href="./UrlFormatValidator.html">UrlFormatValidator</a></li>
-				
-					<li><a href="./UrlHelpers.html">UrlHelpers</a></li>
-				
-					<li><a href="./User.html">User</a></li>
-				
-					<li><a href="./UserInviteRequest.html">UserInviteRequest</a></li>
-				
-					<li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a></li>
-				
-					<li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
-				
-					<li><a href="./UserMailer.html">UserMailer</a></li>
-				
-					<li><a href="./UserSession.html">UserSession</a></li>
-				
-					<li><a href="./UserSessionsController.html">UserSessionsController</a></li>
-				
-					<li><a href="./UsersController.html">UsersController</a></li>
-				
-					<li><a href="./UsersHelper.html">UsersHelper</a></li>
-				
-					<li><a href="./ValidationHelper.html">ValidationHelper</a></li>
-				
-					<li><a href="./Warning.html">Warning</a></li>
-				
-					<li><a href="./WeightedRandom.html">WeightedRandom</a></li>
-				
-					<li><a href="./Work.html">Work</a></li>
-				
-					<li><a href="./WorkObserver.html">WorkObserver</a></li>
-				
-					<li><a href="./WorkSkin.html">WorkSkin</a></li>
-				
-					<li><a href="./WorkSweeper.html">WorkSweeper</a></li>
-				
-					<li><a href="./WorksController.html">WorksController</a></li>
-				
-					<li><a href="./WorksHelper.html">WorksHelper</a></li>
-				
-					<li><a href="./WranglingAssignment.html">WranglingAssignment</a></li>
-				
-				</ul>
-				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
-			</div>
-
-			
-		</div>
-	</div>
-
-	<div id="documentation">
-		<h1 class="class">AdminSetting</h1>
-
-		<div id="description">
-			
-		</div>
-
-		<!-- Constants -->
-		
-
-		<!-- Attributes -->
-		
-
-		<!-- Methods -->
-		
-		<div id="public-class-method-details" class="method-section section">
-			<h3 class="section-header">Public Class Methods</h3>
-
-		
-			<div id="account-creation-enabled--method" class="method-detail ">
-				<a name="method-c-account_creation_enabled%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">account_creation_enabled?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="account-creation-enabled--source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 26</span>
-26:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">account_creation_enabled?</span>
-27:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">account_creation_enabled?</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACCOUNT_CREATION_ENABLED</span>
-28:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="banner-on--method" class="method-detail ">
-				<a name="method-c-banner_on%21"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">banner_on!</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-update admin banner setting for all users when banner notice is changed
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="banner-on--source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 69</span>
-69:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">banner_on!</span>
-70:     <span class="ruby-constant">Resque</span>.<span class="ruby-identifier">enqueue</span>(<span class="ruby-constant">AdminSetting</span>, <span class="ruby-value">:delayed_banner_on</span>)
-71:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="cache-expiration-method" class="method-detail ">
-				<a name="method-c-cache_expiration"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">cache_expiration</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="cache-expiration-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 38</span>
-38:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">cache_expiration</span>
-39:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">cache_expiration</span> <span class="ruby-operator">:</span> <span class="ruby-value">10</span>
-40:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="check-queue-method" class="method-detail ">
-				<a name="method-c-check_queue"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">check_queue</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-run once a day from cron
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="check-queue-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 52</span>
-52:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">check_queue</span>
-53:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invite_from_queue_enabled?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-54:       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invite_from_queue_at</span>.<span class="ruby-identifier">to_date</span>
-55:         <span class="ruby-identifier">new_date</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invite_from_queue_frequency</span>.<span class="ruby-identifier">days</span>
-56:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:invite_from_queue_at</span>, <span class="ruby-identifier">new_date</span>)
-57:         <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">invite</span>
-58:       <span class="ruby-keyword kw">end</span>
-59:     <span class="ruby-keyword kw">end</span>
-60:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="days-to-purge-unactivated-method" class="method-detail ">
-				<a name="method-c-days_to_purge_unactivated"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">days_to_purge_unactivated</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="days-to-purge-unactivated-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 29</span>
-29:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">days_to_purge_unactivated</span>
-30:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">days_to_purge_unactivated</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">DAYS_TO_PURGE_UNACTIVATED</span>
-31:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="default-skin-method" class="method-detail ">
-				<a name="method-c-default_skin"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">default_skin</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="default-skin-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 47</span>
-47:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">default_skin</span>
-48:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">default_skin_id</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">default_skin</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">default</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">default</span>
-49:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="delayed-banner-on-method" class="method-detail ">
-				<a name="method-c-delayed_banner_on"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">delayed_banner_on</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="delayed-banner-on-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 73</span>
-73:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">delayed_banner_on</span>
-74:     <span class="ruby-constant">Preference</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-value str">&quot;banner_seen = false&quot;</span>)
-75:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="enable-test-caching--method" class="method-detail ">
-				<a name="method-c-enable_test_caching%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">enable_test_caching?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="enable-test-caching--source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 35</span>
-35:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">enable_test_caching?</span>
-36:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">enable_test_caching?</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span>
-37:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="guest-downloading-off--method" class="method-detail ">
-				<a name="method-c-guest_downloading_off%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">guest_downloading_off?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="guest-downloading-off--source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 44</span>
-44:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">guest_downloading_off?</span>
-45:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">guest_downloading_off?</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span>
-46:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="invite-from-queue-at-method" class="method-detail ">
-				<a name="method-c-invite_from_queue_at"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">invite_from_queue_at</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="invite-from-queue-at-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 17</span>
-17:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invite_from_queue_at</span>
-18:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">invite_from_queue_at</span>
-19:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="invite-from-queue-enabled--method" class="method-detail ">
-				<a name="method-c-invite_from_queue_enabled%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">invite_from_queue_enabled?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="invite-from-queue-enabled--source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 14</span>
-14:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invite_from_queue_enabled?</span>
-15:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">invite_from_queue_enabled?</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">INVITE_FROM_QUEUE_ENABLED</span>
-16:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="invite-from-queue-frequency-method" class="method-detail ">
-				<a name="method-c-invite_from_queue_frequency"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">invite_from_queue_frequency</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="invite-from-queue-frequency-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 23</span>
-23:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invite_from_queue_frequency</span>
-24:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">invite_from_queue_frequency</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">INVITE_FROM_QUEUE_FREQUENCY</span>
-25:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="invite-from-queue-number-method" class="method-detail ">
-				<a name="method-c-invite_from_queue_number"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">invite_from_queue_number</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="invite-from-queue-number-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 20</span>
-20:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invite_from_queue_number</span>
-21:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">invite_from_queue_number</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">INVITE_FROM_QUEUE_NUMBER</span>
-22:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="perform-method" class="method-detail ">
-				<a name="method-c-perform"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">perform</span><span
-						class="method-args">(method, *args)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-This will be called by a worker when a job needs to be processed
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="perform-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 64</span>
-64:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">perform</span>(<span class="ruby-identifier">method</span>, *<span class="ruby-identifier">args</span>)
-65:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">method</span>, *<span class="ruby-identifier">args</span>)
-66:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="suspend-filter-counts--method" class="method-detail ">
-				<a name="method-c-suspend_filter_counts%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">suspend_filter_counts?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="suspend-filter-counts--source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 32</span>
-32:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">suspend_filter_counts?</span>
-33:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">suspend_filter_counts?</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span>
-34:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="tag-wrangling-off--method" class="method-detail ">
-				<a name="method-c-tag_wrangling_off%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">tag_wrangling_off?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="tag-wrangling-off--source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 41</span>
-41:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tag_wrangling_off?</span>
-42:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">tag_wrangling_off?</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span>
-43:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="private-instance-method-details" class="method-section section">
-			<h3 class="section-header">Private Instance Methods</h3>
-
-		
-			<div id="check-filter-status-method" class="method-detail ">
-				<a name="method-i-check_filter_status"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">check_filter_status</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="check-filter-status-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 86</span>
-86:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_filter_status</span>
-87:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">suspend_filter_counts_changed?</span>
-88:       <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">suspend_filter_counts?</span>
-89:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">suspend_filter_counts_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
-90:       <span class="ruby-keyword kw">else</span>
-91:         <span class="ruby-comment cmt">#FilterTagging.update_filter_counts_since(self.suspend_filter_counts_at)</span>
-92:       <span class="ruby-keyword kw">end</span>
-93:     <span class="ruby-keyword kw">end</span>
-94:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="expire-cached-settings-method" class="method-detail ">
-				<a name="method-i-expire_cached_settings"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">expire_cached_settings</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="expire-cached-settings-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 79</span>
-79:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">expire_cached_settings</span>
-80:     <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>.<span class="ruby-identifier">production?</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>.<span class="ruby-identifier">test?</span>
-81:       <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value str">&quot;admin_settings&quot;</span>)
-82:       <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value str">&quot;banner_text&quot;</span>)
-83:     <span class="ruby-keyword kw">end</span>
-84:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="update-invite-date-method" class="method-detail ">
-				<a name="method-i-update_invite_date"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">update_invite_date</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="update-invite-date-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/admin_setting.rb, line 96</span>
- 96:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_invite_date</span>
- 97:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invite_from_queue_frequency_changed?</span>
- 98:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invite_from_queue_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invite_from_queue_frequency</span>.<span class="ruby-identifier">days</span>
- 99:     <span class="ruby-keyword kw">end</span>
-100:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-
-	</div>
-
-
-	<div id="rdoc-debugging-section-dump" class="debugging-section">
-	
-		<p>Disabled; run with --debug to generate this.</p>
-	
-	</div>
-
-	<div id="validator-badges">
-		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
-		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
-			Rdoc Generator</a> 1.1.6</small>.</p>
-	</div>
-
-</body>
-</html>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: AdminSetting</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/models/admin_setting.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">ActiveRecord::Base
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-account_creation_enabled-3F">::account_creation_enabled?</a>
+    
+    <li><a href="#method-c-banner_on-21">::banner_on!</a>
+    
+    <li><a href="#method-c-cache_expiration">::cache_expiration</a>
+    
+    <li><a href="#method-c-check_queue">::check_queue</a>
+    
+    <li><a href="#method-c-days_to_purge_unactivated">::days_to_purge_unactivated</a>
+    
+    <li><a href="#method-c-default_skin">::default_skin</a>
+    
+    <li><a href="#method-c-delayed_banner_on">::delayed_banner_on</a>
+    
+    <li><a href="#method-c-enable_test_caching-3F">::enable_test_caching?</a>
+    
+    <li><a href="#method-c-guest_downloading_off-3F">::guest_downloading_off?</a>
+    
+    <li><a href="#method-c-invite_from_queue_at">::invite_from_queue_at</a>
+    
+    <li><a href="#method-c-invite_from_queue_enabled-3F">::invite_from_queue_enabled?</a>
+    
+    <li><a href="#method-c-invite_from_queue_frequency">::invite_from_queue_frequency</a>
+    
+    <li><a href="#method-c-invite_from_queue_number">::invite_from_queue_number</a>
+    
+    <li><a href="#method-c-perform">::perform</a>
+    
+    <li><a href="#method-c-suspend_filter_counts-3F">::suspend_filter_counts?</a>
+    
+    <li><a href="#method-c-tag_wrangling_off-3F">::tag_wrangling_off?</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./app/mailers/README.html">README</a>
+  
+    <li class="file"><a href="./app/views/epub/mimetype.html">mimetype</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Static.html">Static</a>
+  
+    <li><a href="./Static/BaseController.html">Static::BaseController</a>
+  
+    <li><a href="./Static/CollectionsController.html">Static::CollectionsController</a>
+  
+    <li><a href="./Static/FandomsController.html">Static::FandomsController</a>
+  
+    <li><a href="./Static/MediaController.html">Static::MediaController</a>
+  
+    <li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a>
+  
+    <li><a href="./Static/WorksController.html">Static::WorksController</a>
+  
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
+    <li><a href="./Challenge.html">Challenge</a>
+  
+    <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
+  
+    <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./StoryParser.html">StoryParser</a>
+  
+    <li><a href="./StoryParser/Error.html">StoryParser::Error</a>
+  
+    <li><a href="./AbuseReport.html">AbuseReport</a>
+  
+    <li><a href="./AbuseReportsController.html">AbuseReportsController</a>
+  
+    <li><a href="./AdminMailer.html">AdminMailer</a>
+  
+    <li><a href="./AdminPost.html">AdminPost</a>
+  
+    <li><a href="./AdminPostTag.html">AdminPostTag</a>
+  
+    <li><a href="./AdminPostTagging.html">AdminPostTagging</a>
+  
+    <li><a href="./AdminPostsController.html">AdminPostsController</a>
+  
+    <li><a href="./AdminSession.html">AdminSession</a>
+  
+    <li><a href="./AdminSessionsController.html">AdminSessionsController</a>
+  
+    <li><a href="./AdminSetting.html">AdminSetting</a>
+  
+    <li><a href="./AdminsController.html">AdminsController</a>
+  
+    <li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a>
+  
+    <li><a href="./AlphabetHelper.html">AlphabetHelper</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./ArchiveFaq.html">ArchiveFaq</a>
+  
+    <li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a>
+  
+    <li><a href="./AutocompleteController.html">AutocompleteController</a>
+  
+    <li><a href="./Banned.html">Banned</a>
+  
+    <li><a href="./Bookmark.html">Bookmark</a>
+  
+    <li><a href="./BookmarksController.html">BookmarksController</a>
+  
+    <li><a href="./BookmarksHelper.html">BookmarksHelper</a>
+  
+    <li><a href="./CacheHelper.html">CacheHelper</a>
+  
+    <li><a href="./CastNomination.html">CastNomination</a>
+  
+    <li><a href="./Category.html">Category</a>
+  
+    <li><a href="./ChallengeAssignment.html">ChallengeAssignment</a>
+  
+    <li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a>
+  
+    <li><a href="./ChallengeClaim.html">ChallengeClaim</a>
+  
+    <li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a>
+  
+    <li><a href="./ChallengeHelper.html">ChallengeHelper</a>
+  
+    <li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a>
+  
+    <li><a href="./ChallengeSignup.html">ChallengeSignup</a>
+  
+    <li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a>
+  
+    <li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a>
+  
+    <li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a>
+  
+    <li><a href="./ChallengeSweeper.html">ChallengeSweeper</a>
+  
+    <li><a href="./ChallengesController.html">ChallengesController</a>
+  
+    <li><a href="./Chapter.html">Chapter</a>
+  
+    <li><a href="./ChapterSweeper.html">ChapterSweeper</a>
+  
+    <li><a href="./ChaptersController.html">ChaptersController</a>
+  
+    <li><a href="./ChaptersHelper.html">ChaptersHelper</a>
+  
+    <li><a href="./Character.html">Character</a>
+  
+    <li><a href="./CharacterNomination.html">CharacterNomination</a>
+  
+    <li><a href="./Collection.html">Collection</a>
+  
+    <li><a href="./CollectionItem.html">CollectionItem</a>
+  
+    <li><a href="./CollectionItemsController.html">CollectionItemsController</a>
+  
+    <li><a href="./CollectionObserver.html">CollectionObserver</a>
+  
+    <li><a href="./CollectionParticipant.html">CollectionParticipant</a>
+  
+    <li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a>
+  
+    <li><a href="./CollectionPreference.html">CollectionPreference</a>
+  
+    <li><a href="./CollectionProfile.html">CollectionProfile</a>
+  
+    <li><a href="./CollectionProfileController.html">CollectionProfileController</a>
+  
+    <li><a href="./CollectionSweeper.html">CollectionSweeper</a>
+  
+    <li><a href="./CollectionsController.html">CollectionsController</a>
+  
+    <li><a href="./CollectionsHelper.html">CollectionsHelper</a>
+  
+    <li><a href="./Comment.html">Comment</a>
+  
+    <li><a href="./CommentMailer.html">CommentMailer</a>
+  
+    <li><a href="./CommentObserver.html">CommentObserver</a>
+  
+    <li><a href="./CommentSweeper.html">CommentSweeper</a>
+  
+    <li><a href="./CommentsController.html">CommentsController</a>
+  
+    <li><a href="./CommentsHelper.html">CommentsHelper</a>
+  
+    <li><a href="./CommonTagging.html">CommonTagging</a>
+  
+    <li><a href="./CreationObserver.html">CreationObserver</a>
+  
+    <li><a href="./Creatorship.html">Creatorship</a>
+  
+    <li><a href="./DateHelper.html">DateHelper</a>
+  
+    <li><a href="./DevmodeController.html">DevmodeController</a>
+  
+    <li><a href="./DownloadsController.html">DownloadsController</a>
+  
+    <li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a>
+  
+    <li><a href="./ErrorsController.html">ErrorsController</a>
+  
+    <li><a href="./ExternalAuthor.html">ExternalAuthor</a>
+  
+    <li><a href="./ExternalAuthorName.html">ExternalAuthorName</a>
+  
+    <li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a>
+  
+    <li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a>
+  
+    <li><a href="./ExternalCreatorship.html">ExternalCreatorship</a>
+  
+    <li><a href="./ExternalWork.html">ExternalWork</a>
+  
+    <li><a href="./ExternalWorksController.html">ExternalWorksController</a>
+  
+    <li><a href="./Fandom.html">Fandom</a>
+  
+    <li><a href="./FandomNomination.html">FandomNomination</a>
+  
+    <li><a href="./FandomsController.html">FandomsController</a>
+  
+    <li><a href="./FeedSweeper.html">FeedSweeper</a>
+  
+    <li><a href="./Feedback.html">Feedback</a>
+  
+    <li><a href="./FeedbacksController.html">FeedbacksController</a>
+  
+    <li><a href="./FilterCount.html">FilterCount</a>
+  
+    <li><a href="./FilterTagging.html">FilterTagging</a>
+  
+    <li><a href="./Freeform.html">Freeform</a>
+  
+    <li><a href="./FreeformNomination.html">FreeformNomination</a>
+  
+    <li><a href="./Gift.html">Gift</a>
+  
+    <li><a href="./GiftExchange.html">GiftExchange</a>
+  
+    <li><a href="./GiftsController.html">GiftsController</a>
+  
+    <li><a href="./HitCounter.html">HitCounter</a>
+  
+    <li><a href="./HomeController.html">HomeController</a>
+  
+    <li><a href="./HomeHelper.html">HomeHelper</a>
+  
+    <li><a href="./InboxComment.html">InboxComment</a>
+  
+    <li><a href="./InboxController.html">InboxController</a>
+  
+    <li><a href="./InboxHelper.html">InboxHelper</a>
+  
+    <li><a href="./Invitation.html">Invitation</a>
+  
+    <li><a href="./InvitationsController.html">InvitationsController</a>
+  
+    <li><a href="./InvitationsHelper.html">InvitationsHelper</a>
+  
+    <li><a href="./InviteRequest.html">InviteRequest</a>
+  
+    <li><a href="./InviteRequestsController.html">InviteRequestsController</a>
+  
+    <li><a href="./KnownIssue.html">KnownIssue</a>
+  
+    <li><a href="./KnownIssuesController.html">KnownIssuesController</a>
+  
+    <li><a href="./Kudo.html">Kudo</a>
+  
+    <li><a href="./KudoMailer.html">KudoMailer</a>
+  
+    <li><a href="./KudoObserver.html">KudoObserver</a>
+  
+    <li><a href="./KudosController.html">KudosController</a>
+  
+    <li><a href="./Language.html">Language</a>
+  
+    <li><a href="./LanguagesController.html">LanguagesController</a>
+  
+    <li><a href="./Locale.html">Locale</a>
+  
+    <li><a href="./LocalesController.html">LocalesController</a>
+  
+    <li><a href="./LogItem.html">LogItem</a>
+  
+    <li><a href="./Media.html">Media</a>
+  
+    <li><a href="./MediaController.html">MediaController</a>
+  
+    <li><a href="./MetaTagging.html">MetaTagging</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Offer.html">Offer</a>
+  
+    <li><a href="./OrphansController.html">OrphansController</a>
+  
+    <li><a href="./OrphansHelper.html">OrphansHelper</a>
+  
+    <li><a href="./OwnedSetTagging.html">OwnedSetTagging</a>
+  
+    <li><a href="./OwnedTagSet.html">OwnedTagSet</a>
+  
+    <li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./People.html">People</a>
+  
+    <li><a href="./PeopleController.html">PeopleController</a>
+  
+    <li><a href="./PotentialMatch.html">PotentialMatch</a>
+  
+    <li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a>
+  
+    <li><a href="./PotentialMatchesController.html">PotentialMatchesController</a>
+  
+    <li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a>
+  
+    <li><a href="./Preference.html">Preference</a>
+  
+    <li><a href="./PreferencesController.html">PreferencesController</a>
+  
+    <li><a href="./Profile.html">Profile</a>
+  
+    <li><a href="./ProfileController.html">ProfileController</a>
+  
+    <li><a href="./Prompt.html">Prompt</a>
+  
+    <li><a href="./PromptMeme.html">PromptMeme</a>
+  
+    <li><a href="./PromptRestriction.html">PromptRestriction</a>
+  
+    <li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a>
+  
+    <li><a href="./PromptsController.html">PromptsController</a>
+  
+    <li><a href="./Pseud.html">Pseud</a>
+  
+    <li><a href="./PseudSweeper.html">PseudSweeper</a>
+  
+    <li><a href="./PseudsController.html">PseudsController</a>
+  
+    <li><a href="./PseudsHelper.html">PseudsHelper</a>
+  
+    <li><a href="./Rating.html">Rating</a>
+  
+    <li><a href="./Reading.html">Reading</a>
+  
+    <li><a href="./ReadingsController.html">ReadingsController</a>
+  
+    <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RelatedWork.html">RelatedWork</a>
+  
+    <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
+  
+    <li><a href="./Relationship.html">Relationship</a>
+  
+    <li><a href="./RelationshipNomination.html">RelationshipNomination</a>
+  
+    <li><a href="./Request.html">Request</a>
+  
+    <li><a href="./Role.html">Role</a>
+  
+    <li><a href="./RolesUser.html">RolesUser</a>
+  
+    <li><a href="./SearchController.html">SearchController</a>
+  
+    <li><a href="./SearchHelper.html">SearchHelper</a>
+  
+    <li><a href="./SerialWork.html">SerialWork</a>
+  
+    <li><a href="./SerialWorksController.html">SerialWorksController</a>
+  
+    <li><a href="./Series.html">Series</a>
+  
+    <li><a href="./SeriesController.html">SeriesController</a>
+  
+    <li><a href="./SeriesHelper.html">SeriesHelper</a>
+  
+    <li><a href="./SetTagging.html">SetTagging</a>
+  
+    <li><a href="./Skin.html">Skin</a>
+  
+    <li><a href="./SkinParent.html">SkinParent</a>
+  
+    <li><a href="./SkinsController.html">SkinsController</a>
+  
+    <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StaticSweeper.html">StaticSweeper</a>
+  
+    <li><a href="./StatsController.html">StatsController</a>
+  
+    <li><a href="./StatsHelper.html">StatsHelper</a>
+  
+    <li><a href="./Subscription.html">Subscription</a>
+  
+    <li><a href="./SubscriptionsController.html">SubscriptionsController</a>
+  
+    <li><a href="./Tag.html">Tag</a>
+  
+    <li><a href="./TagNomination.html">TagNomination</a>
+  
+    <li><a href="./TagNominationsController.html">TagNominationsController</a>
+  
+    <li><a href="./TagSet.html">TagSet</a>
+  
+    <li><a href="./TagSetAssociation.html">TagSetAssociation</a>
+  
+    <li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a>
+  
+    <li><a href="./TagSetNomination.html">TagSetNomination</a>
+  
+    <li><a href="./TagSetNominationsController.html">TagSetNominationsController</a>
+  
+    <li><a href="./TagSetOwnership.html">TagSetOwnership</a>
+  
+    <li><a href="./TagSetSweeper.html">TagSetSweeper</a>
+  
+    <li><a href="./TagSetsHelper.html">TagSetsHelper</a>
+  
+    <li><a href="./TagSweeper.html">TagSweeper</a>
+  
+    <li><a href="./TagWranglersController.html">TagWranglersController</a>
+  
+    <li><a href="./TagWranglingsController.html">TagWranglingsController</a>
+  
+    <li><a href="./Tagging.html">Tagging</a>
+  
+    <li><a href="./TagsController.html">TagsController</a>
+  
+    <li><a href="./TagsHelper.html">TagsHelper</a>
+  
+    <li><a href="./TranslationHelper.html">TranslationHelper</a>
+  
+    <li><a href="./TranslationNote.html">TranslationNote</a>
+  
+    <li><a href="./TranslationNotesController.html">TranslationNotesController</a>
+  
+    <li><a href="./TranslationsController.html">TranslationsController</a>
+  
+    <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
+  
+    <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
+  
+    <li><a href="./User.html">User</a>
+  
+    <li><a href="./UserInviteRequest.html">UserInviteRequest</a>
+  
+    <li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a>
+  
+    <li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a>
+  
+    <li><a href="./UserMailer.html">UserMailer</a>
+  
+    <li><a href="./UserSession.html">UserSession</a>
+  
+    <li><a href="./UserSessionsController.html">UserSessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+    <li><a href="./UsersHelper.html">UsersHelper</a>
+  
+    <li><a href="./ValidationHelper.html">ValidationHelper</a>
+  
+    <li><a href="./Warning.html">Warning</a>
+  
+    <li><a href="./WeightedRandom.html">WeightedRandom</a>
+  
+    <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkObserver.html">WorkObserver</a>
+  
+    <li><a href="./WorkSkin.html">WorkSkin</a>
+  
+    <li><a href="./WorkSweeper.html">WorkSweeper</a>
+  
+    <li><a href="./WorksController.html">WorksController</a>
+  
+    <li><a href="./WorksHelper.html">WorksHelper</a>
+  
+    <li><a href="./WranglingAssignment.html">WranglingAssignment</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class AdminSetting</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-account_creation_enabled-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">account_creation_enabled?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="account_creation_enabled-3F-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">account_creation_enabled?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">account_creation_enabled?</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACCOUNT_CREATION_ENABLED</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- account_creation_enabled-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- account_creation_enabled-3F-method -->
+
+    
+      <div id="method-c-banner_on-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">banner_on!</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>update admin banner setting for all users when banner notice is changed</p>
+          
+
+          
+          <div class="method-source-code" id="banner_on-21-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 69</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">banner_on!</span>
+  <span class="ruby-constant">Resque</span>.<span class="ruby-identifier">enqueue</span>(<span class="ruby-constant">AdminSetting</span>, <span class="ruby-value">:delayed_banner_on</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- banner_on-21-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- banner_on-21-method -->
+
+    
+      <div id="method-c-cache_expiration" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cache_expiration</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="cache_expiration-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">cache_expiration</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">cache_expiration</span> <span class="ruby-operator">:</span> <span class="ruby-value">10</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- cache_expiration-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- cache_expiration-method -->
+
+    
+      <div id="method-c-check_queue" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">check_queue</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>run once a day from cron</p>
+          
+
+          
+          <div class="method-source-code" id="check_queue-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 52</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">check_queue</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invite_from_queue_enabled?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invite_from_queue_at</span>.<span class="ruby-identifier">to_date</span>
+      <span class="ruby-identifier">new_date</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invite_from_queue_frequency</span>.<span class="ruby-identifier">days</span>
+      <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:invite_from_queue_at</span>, <span class="ruby-identifier">new_date</span>)
+      <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">invite</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- check_queue-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- check_queue-method -->
+
+    
+      <div id="method-c-days_to_purge_unactivated" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">days_to_purge_unactivated</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="days_to_purge_unactivated-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 29</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">days_to_purge_unactivated</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">days_to_purge_unactivated</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">DAYS_TO_PURGE_UNACTIVATED</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- days_to_purge_unactivated-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- days_to_purge_unactivated-method -->
+
+    
+      <div id="method-c-default_skin" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">default_skin</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="default_skin-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">default_skin</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">default_skin_id</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">default_skin</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">default</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">default</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- default_skin-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- default_skin-method -->
+
+    
+      <div id="method-c-delayed_banner_on" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delayed_banner_on</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="delayed_banner_on-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 73</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">delayed_banner_on</span>
+  <span class="ruby-constant">Preference</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-string">&quot;banner_seen = false&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- delayed_banner_on-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- delayed_banner_on-method -->
+
+    
+      <div id="method-c-enable_test_caching-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">enable_test_caching?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="enable_test_caching-3F-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 35</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">enable_test_caching?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">enable_test_caching?</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- enable_test_caching-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- enable_test_caching-3F-method -->
+
+    
+      <div id="method-c-guest_downloading_off-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">guest_downloading_off?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="guest_downloading_off-3F-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">guest_downloading_off?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">guest_downloading_off?</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- guest_downloading_off-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- guest_downloading_off-3F-method -->
+
+    
+      <div id="method-c-invite_from_queue_at" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">invite_from_queue_at</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="invite_from_queue_at-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 17</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invite_from_queue_at</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">invite_from_queue_at</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- invite_from_queue_at-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- invite_from_queue_at-method -->
+
+    
+      <div id="method-c-invite_from_queue_enabled-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">invite_from_queue_enabled?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="invite_from_queue_enabled-3F-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 14</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invite_from_queue_enabled?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">invite_from_queue_enabled?</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">INVITE_FROM_QUEUE_ENABLED</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- invite_from_queue_enabled-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- invite_from_queue_enabled-3F-method -->
+
+    
+      <div id="method-c-invite_from_queue_frequency" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">invite_from_queue_frequency</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="invite_from_queue_frequency-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invite_from_queue_frequency</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">invite_from_queue_frequency</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">INVITE_FROM_QUEUE_FREQUENCY</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- invite_from_queue_frequency-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- invite_from_queue_frequency-method -->
+
+    
+      <div id="method-c-invite_from_queue_number" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">invite_from_queue_number</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="invite_from_queue_number-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invite_from_queue_number</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">invite_from_queue_number</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">INVITE_FROM_QUEUE_NUMBER</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- invite_from_queue_number-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- invite_from_queue_number-method -->
+
+    
+      <div id="method-c-perform" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">perform</span><span
+            class="method-args">(method, *args)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This will be called by a worker when a job needs to be processed</p>
+          
+
+          
+          <div class="method-source-code" id="perform-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 64</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">perform</span>(<span class="ruby-identifier">method</span>, *<span class="ruby-identifier">args</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">method</span>, *<span class="ruby-identifier">args</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- perform-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- perform-method -->
+
+    
+      <div id="method-c-suspend_filter_counts-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">suspend_filter_counts?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="suspend_filter_counts-3F-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 32</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">suspend_filter_counts?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">suspend_filter_counts?</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- suspend_filter_counts-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- suspend_filter_counts-3F-method -->
+
+    
+      <div id="method-c-tag_wrangling_off-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">tag_wrangling_off?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="tag_wrangling_off-3F-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 41</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tag_wrangling_off?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">tag_wrangling_off?</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- tag_wrangling_off-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- tag_wrangling_off-3F-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
 

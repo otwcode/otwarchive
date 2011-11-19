@@ -1,1689 +1,1512 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+
+<html>
 <head>
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-	<title>Module: CommentsHelper</title>
+<title>Module: CommentsHelper</title>
 
-	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
-	<script src="./js/jquery.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/thickbox-compressed.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/quicksearch.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/darkfish.js" type="text/javascript"
-		charset="utf-8"></script>
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
 
-</head>
-<body class="module">
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
 
-	<div id="metadata">
-		<div id="home-metadata">
-			<div id="home-section" class="section">
-        <h3 class="section-header">
-          <a href="./index.html">Home</a>
-          <a href="./index.html#classes">Classes</a>
-          <a href="./index.html#methods">Methods</a>
-        </h3>
-			</div>
-		</div>
 
-		<div id="file-metadata">
-			<div id="file-list-section" class="section">
-				<h3 class="section-header">In Files</h3>
-				<div class="section-body">
-					<ul>
-					
-						<li><a href="./app/helpers/comments_helper_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="app/helpers/comments_helper.rb">app/helpers/comments_helper.rb</a></li>
-					
-					</ul>
-				</div>
-			</div>
+<body id="top" class="module">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
 
-			
-		</div>
 
-		<div id="class-metadata">
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
 
-			<!-- Parent Class -->
-			
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
 
-			<!-- Namespace Contents -->
-			
 
-			<!-- Method Quickref -->
-			
-			<div id="method-list-section" class="section">
-				<h3 class="section-header">Methods</h3>
-				<ul class="link-list">
-					
-					<li><a href="#method-i-add_cancel_comment_link">#add_cancel_comment_link</a></li>
-					
-					<li><a href="#method-i-add_cancel_comment_reply_link">#add_cancel_comment_reply_link</a></li>
-					
-					<li><a href="#method-i-add_comment_link">#add_comment_link</a></li>
-					
-					<li><a href="#method-i-add_comment_reply_link">#add_comment_reply_link</a></li>
-					
-					<li><a href="#method-i-cancel_comment_button">#cancel_comment_button</a></li>
-					
-					<li><a href="#method-i-cancel_comment_link">#cancel_comment_link</a></li>
-					
-					<li><a href="#method-i-cancel_comment_reply_link">#cancel_comment_reply_link</a></li>
-					
-					<li><a href="#method-i-cancel_delete_comment_link">#cancel_delete_comment_link</a></li>
-					
-					<li><a href="#method-i-delete_comment_link">#delete_comment_link</a></li>
-					
-					<li><a href="#method-i-do_cancel_delete_comment_link">#do_cancel_delete_comment_link</a></li>
-					
-					<li><a href="#method-i-edit_comment_link">#edit_comment_link</a></li>
-					
-					<li><a href="#method-i-fallback_url_for_comment">#fallback_url_for_comment</a></li>
-					
-					<li><a href="#method-i-fallback_url_for_top_level">#fallback_url_for_top_level</a></li>
-					
-					<li><a href="#method-i-get_commenter_pseud_or_name">#get_commenter_pseud_or_name</a></li>
-					
-					<li><a href="#method-i-hide_comments_link">#hide_comments_link</a></li>
-					
-					<li><a href="#method-i-last_reply_by">#last_reply_by</a></li>
-					
-					<li><a href="#method-i-link_to_comment_ultimate_parent">#link_to_comment_ultimate_parent</a></li>
-					
-					<li><a href="#method-i-show_comments_link">#show_comments_link</a></li>
-					
-					<li><a href="#method-i-show_hide_comments_link">#show_hide_comments_link</a></li>
-					
-					<li><a href="#method-i-tag_comment_as_spam_link">#tag_comment_as_spam_link</a></li>
-					
-					<li><a href="#method-i-title_for_comment_page">#title_for_comment_page</a></li>
-					
-					<li><a href="#method-i-value_for_comment_form">#value_for_comment_form</a></li>
-					
-				</ul>
-			</div>
-			
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/helpers/comments_helper.rb
+  </ul>
+</nav>
 
-			<!-- Included Modules -->
-			
-		</div>
+    
+  </div>
 
-		<div id="project-metadata">
-			
-			
-			<div id="fileindex-section" class="section project-section">
-				<h3 class="section-header">Files</h3>
-				<ul>
-				
-					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
-				
-				</ul>
-			</div>
-			
+  <div id="class-metadata">
+    
+    
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
 
-			<div id="classindex-section" class="section project-section">
-				<h3 class="section-header">Class Index
-					<span class="search-toggle"><img src="./images/find.png"
-						height="16" width="16" alt="[+]"
-						title="show/hide quicksearch" /></span></h3>
-				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
-				<fieldset>
-					<legend>Quicksearch</legend>
-					<input type="text" name="quicksearch" value=""
-						class="quicksearch-field" />
-				</fieldset>
-				</form>
+  <ul class="link-list">
+    
+    <li><a href="#method-i-add_cancel_comment_link">#add_cancel_comment_link</a>
+    
+    <li><a href="#method-i-add_cancel_comment_reply_link">#add_cancel_comment_reply_link</a>
+    
+    <li><a href="#method-i-add_comment_link">#add_comment_link</a>
+    
+    <li><a href="#method-i-add_comment_reply_link">#add_comment_reply_link</a>
+    
+    <li><a href="#method-i-cancel_comment_button">#cancel_comment_button</a>
+    
+    <li><a href="#method-i-cancel_comment_link">#cancel_comment_link</a>
+    
+    <li><a href="#method-i-cancel_comment_reply_link">#cancel_comment_reply_link</a>
+    
+    <li><a href="#method-i-cancel_delete_comment_link">#cancel_delete_comment_link</a>
+    
+    <li><a href="#method-i-delete_comment_link">#delete_comment_link</a>
+    
+    <li><a href="#method-i-do_cancel_delete_comment_link">#do_cancel_delete_comment_link</a>
+    
+    <li><a href="#method-i-edit_comment_link">#edit_comment_link</a>
+    
+    <li><a href="#method-i-fallback_url_for_comment">#fallback_url_for_comment</a>
+    
+    <li><a href="#method-i-fallback_url_for_top_level">#fallback_url_for_top_level</a>
+    
+    <li><a href="#method-i-get_commenter_pseud_or_name">#get_commenter_pseud_or_name</a>
+    
+    <li><a href="#method-i-hide_comments_link">#hide_comments_link</a>
+    
+    <li><a href="#method-i-last_reply_by">#last_reply_by</a>
+    
+    <li><a href="#method-i-link_to_comment_ultimate_parent">#link_to_comment_ultimate_parent</a>
+    
+    <li><a href="#method-i-show_comments_link">#show_comments_link</a>
+    
+    <li><a href="#method-i-show_hide_comments_link">#show_hide_comments_link</a>
+    
+    <li><a href="#method-i-tag_comment_as_spam_link">#tag_comment_as_spam_link</a>
+    
+    <li><a href="#method-i-title_for_comment_page">#title_for_comment_page</a>
+    
+    <li><a href="#method-i-value_for_comment_form">#value_for_comment_form</a>
+    
+  </ul>
+</nav>
 
-				<ul class="link-list">
-				
-					<li><a href="./Static.html">Static</a></li>
-				
-					<li><a href="./Static/BaseController.html">Static::BaseController</a></li>
-				
-					<li><a href="./Static/CollectionsController.html">Static::CollectionsController</a></li>
-				
-					<li><a href="./Static/FandomsController.html">Static::FandomsController</a></li>
-				
-					<li><a href="./Static/MediaController.html">Static::MediaController</a></li>
-				
-					<li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
-				
-					<li><a href="./Static/WorksController.html">Static::WorksController</a></li>
-				
-					<li><a href="./Admin.html">Admin</a></li>
-				
-					<li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
-				
-					<li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
-				
-					<li><a href="./Admin/SettingsController.html">Admin::SettingsController</a></li>
-				
-					<li><a href="./Admin/SkinsController.html">Admin::SkinsController</a></li>
-				
-					<li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
-				
-					<li><a href="./ActionController.html">ActionController</a></li>
-				
-					<li><a href="./ActionController/Routing.html">ActionController::Routing</a></li>
-				
-					<li><a href="./ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
-				
-					<li><a href="./Challenge.html">Challenge</a></li>
-				
-					<li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
-				
-					<li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
-				
-					<li><a href="./ActiveRecord.html">ActiveRecord</a></li>
-				
-					<li><a href="./AutocompleteSource.html">AutocompleteSource</a></li>
-				
-					<li><a href="./AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
-				
-					<li><a href="./ChallengeCore.html">ChallengeCore</a></li>
-				
-					<li><a href="./ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
-				
-					<li><a href="./StoryParser.html">StoryParser</a></li>
-				
-					<li><a href="./StoryParser/Error.html">StoryParser::Error</a></li>
-				
-					<li><a href="./XhtmlSplitter.html">XhtmlSplitter</a></li>
-				
-					<li><a href="./XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
-				
-					<li><a href="./AbuseReport.html">AbuseReport</a></li>
-				
-					<li><a href="./AbuseReportsController.html">AbuseReportsController</a></li>
-				
-					<li><a href="./AdminMailer.html">AdminMailer</a></li>
-				
-					<li><a href="./AdminPost.html">AdminPost</a></li>
-				
-					<li><a href="./AdminPostTag.html">AdminPostTag</a></li>
-				
-					<li><a href="./AdminPostTagging.html">AdminPostTagging</a></li>
-				
-					<li><a href="./AdminPostsController.html">AdminPostsController</a></li>
-				
-					<li><a href="./AdminSession.html">AdminSession</a></li>
-				
-					<li><a href="./AdminSessionsController.html">AdminSessionsController</a></li>
-				
-					<li><a href="./AdminSetting.html">AdminSetting</a></li>
-				
-					<li><a href="./AdminsController.html">AdminsController</a></li>
-				
-					<li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
-				
-					<li><a href="./AlphabetHelper.html">AlphabetHelper</a></li>
-				
-					<li><a href="./ApplicationController.html">ApplicationController</a></li>
-				
-					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
-				
-					<li><a href="./ArchiveFaq.html">ArchiveFaq</a></li>
-				
-					<li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a></li>
-				
-					<li><a href="./AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
-				
-					<li><a href="./AutocompleteController.html">AutocompleteController</a></li>
-				
-					<li><a href="./Banned.html">Banned</a></li>
-				
-					<li><a href="./Bookmark.html">Bookmark</a></li>
-				
-					<li><a href="./BookmarksController.html">BookmarksController</a></li>
-				
-					<li><a href="./BookmarksHelper.html">BookmarksHelper</a></li>
-				
-					<li><a href="./CacheHelper.html">CacheHelper</a></li>
-				
-					<li><a href="./CastNomination.html">CastNomination</a></li>
-				
-					<li><a href="./Category.html">Category</a></li>
-				
-					<li><a href="./ChallengeAssignment.html">ChallengeAssignment</a></li>
-				
-					<li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
-				
-					<li><a href="./ChallengeClaim.html">ChallengeClaim</a></li>
-				
-					<li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a></li>
-				
-					<li><a href="./ChallengeHelper.html">ChallengeHelper</a></li>
-				
-					<li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a></li>
-				
-					<li><a href="./ChallengeSignup.html">ChallengeSignup</a></li>
-				
-					<li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
-				
-					<li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
-				
-					<li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a></li>
-				
-					<li><a href="./ChallengeSweeper.html">ChallengeSweeper</a></li>
-				
-					<li><a href="./ChallengesController.html">ChallengesController</a></li>
-				
-					<li><a href="./Chapter.html">Chapter</a></li>
-				
-					<li><a href="./ChapterSweeper.html">ChapterSweeper</a></li>
-				
-					<li><a href="./ChaptersController.html">ChaptersController</a></li>
-				
-					<li><a href="./ChaptersHelper.html">ChaptersHelper</a></li>
-				
-					<li><a href="./Character.html">Character</a></li>
-				
-					<li><a href="./CharacterNomination.html">CharacterNomination</a></li>
-				
-					<li><a href="./Collectible.html">Collectible</a></li>
-				
-					<li><a href="./Collection.html">Collection</a></li>
-				
-					<li><a href="./CollectionItem.html">CollectionItem</a></li>
-				
-					<li><a href="./CollectionItemsController.html">CollectionItemsController</a></li>
-				
-					<li><a href="./CollectionObserver.html">CollectionObserver</a></li>
-				
-					<li><a href="./CollectionParticipant.html">CollectionParticipant</a></li>
-				
-					<li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a></li>
-				
-					<li><a href="./CollectionPreference.html">CollectionPreference</a></li>
-				
-					<li><a href="./CollectionProfile.html">CollectionProfile</a></li>
-				
-					<li><a href="./CollectionProfileController.html">CollectionProfileController</a></li>
-				
-					<li><a href="./CollectionSweeper.html">CollectionSweeper</a></li>
-				
-					<li><a href="./CollectionsController.html">CollectionsController</a></li>
-				
-					<li><a href="./CollectionsHelper.html">CollectionsHelper</a></li>
-				
-					<li><a href="./Comment.html">Comment</a></li>
-				
-					<li><a href="./CommentMailer.html">CommentMailer</a></li>
-				
-					<li><a href="./CommentObserver.html">CommentObserver</a></li>
-				
-					<li><a href="./CommentSweeper.html">CommentSweeper</a></li>
-				
-					<li><a href="./CommentsController.html">CommentsController</a></li>
-				
-					<li><a href="./CommentsHelper.html">CommentsHelper</a></li>
-				
-					<li><a href="./CommonTagging.html">CommonTagging</a></li>
-				
-					<li><a href="./CreationObserver.html">CreationObserver</a></li>
-				
-					<li><a href="./Creatorship.html">Creatorship</a></li>
-				
-					<li><a href="./CssCleaner.html">CssCleaner</a></li>
-				
-					<li><a href="./DateHelper.html">DateHelper</a></li>
-				
-					<li><a href="./DevmodeController.html">DevmodeController</a></li>
-				
-					<li><a href="./DownloadsController.html">DownloadsController</a></li>
-				
-					<li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a></li>
-				
-					<li><a href="./ErrorsController.html">ErrorsController</a></li>
-				
-					<li><a href="./ExternalAuthor.html">ExternalAuthor</a></li>
-				
-					<li><a href="./ExternalAuthorName.html">ExternalAuthorName</a></li>
-				
-					<li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a></li>
-				
-					<li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
-				
-					<li><a href="./ExternalCreatorship.html">ExternalCreatorship</a></li>
-				
-					<li><a href="./ExternalWork.html">ExternalWork</a></li>
-				
-					<li><a href="./ExternalWorksController.html">ExternalWorksController</a></li>
-				
-					<li><a href="./Fandom.html">Fandom</a></li>
-				
-					<li><a href="./FandomNomination.html">FandomNomination</a></li>
-				
-					<li><a href="./FandomsController.html">FandomsController</a></li>
-				
-					<li><a href="./FeedSweeper.html">FeedSweeper</a></li>
-				
-					<li><a href="./Feedback.html">Feedback</a></li>
-				
-					<li><a href="./FeedbacksController.html">FeedbacksController</a></li>
-				
-					<li><a href="./FilterCount.html">FilterCount</a></li>
-				
-					<li><a href="./FilterTagging.html">FilterTagging</a></li>
-				
-					<li><a href="./FindRandom.html">FindRandom</a></li>
-				
-					<li><a href="./Freeform.html">Freeform</a></li>
-				
-					<li><a href="./FreeformNomination.html">FreeformNomination</a></li>
-				
-					<li><a href="./Gift.html">Gift</a></li>
-				
-					<li><a href="./GiftExchange.html">GiftExchange</a></li>
-				
-					<li><a href="./GiftsController.html">GiftsController</a></li>
-				
-					<li><a href="./HitCounter.html">HitCounter</a></li>
-				
-					<li><a href="./HomeController.html">HomeController</a></li>
-				
-					<li><a href="./HomeHelper.html">HomeHelper</a></li>
-				
-					<li><a href="./HtmlCleaner.html">HtmlCleaner</a></li>
-				
-					<li><a href="./InboxComment.html">InboxComment</a></li>
-				
-					<li><a href="./InboxController.html">InboxController</a></li>
-				
-					<li><a href="./InboxHelper.html">InboxHelper</a></li>
-				
-					<li><a href="./Invitation.html">Invitation</a></li>
-				
-					<li><a href="./InvitationsController.html">InvitationsController</a></li>
-				
-					<li><a href="./InvitationsHelper.html">InvitationsHelper</a></li>
-				
-					<li><a href="./InviteRequest.html">InviteRequest</a></li>
-				
-					<li><a href="./InviteRequestsController.html">InviteRequestsController</a></li>
-				
-					<li><a href="./KnownIssue.html">KnownIssue</a></li>
-				
-					<li><a href="./KnownIssuesController.html">KnownIssuesController</a></li>
-				
-					<li><a href="./Kudo.html">Kudo</a></li>
-				
-					<li><a href="./KudoMailer.html">KudoMailer</a></li>
-				
-					<li><a href="./KudoObserver.html">KudoObserver</a></li>
-				
-					<li><a href="./KudosController.html">KudosController</a></li>
-				
-					<li><a href="./Language.html">Language</a></li>
-				
-					<li><a href="./LanguagesController.html">LanguagesController</a></li>
-				
-					<li><a href="./Locale.html">Locale</a></li>
-				
-					<li><a href="./LocalesController.html">LocalesController</a></li>
-				
-					<li><a href="./LogItem.html">LogItem</a></li>
-				
-					<li><a href="./Media.html">Media</a></li>
-				
-					<li><a href="./MediaController.html">MediaController</a></li>
-				
-					<li><a href="./MetaTagging.html">MetaTagging</a></li>
-				
-					<li><a href="./Offer.html">Offer</a></li>
-				
-					<li><a href="./OrphansController.html">OrphansController</a></li>
-				
-					<li><a href="./OrphansHelper.html">OrphansHelper</a></li>
-				
-					<li><a href="./OwnedSetTagging.html">OwnedSetTagging</a></li>
-				
-					<li><a href="./OwnedTagSet.html">OwnedTagSet</a></li>
-				
-					<li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a></li>
-				
-					<li><a href="./PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
-				
-					<li><a href="./PasswordsController.html">PasswordsController</a></li>
-				
-					<li><a href="./People.html">People</a></li>
-				
-					<li><a href="./PeopleController.html">PeopleController</a></li>
-				
-					<li><a href="./PotentialMatch.html">PotentialMatch</a></li>
-				
-					<li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a></li>
-				
-					<li><a href="./PotentialMatchesController.html">PotentialMatchesController</a></li>
-				
-					<li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a></li>
-				
-					<li><a href="./Preference.html">Preference</a></li>
-				
-					<li><a href="./PreferencesController.html">PreferencesController</a></li>
-				
-					<li><a href="./Profile.html">Profile</a></li>
-				
-					<li><a href="./ProfileController.html">ProfileController</a></li>
-				
-					<li><a href="./Prompt.html">Prompt</a></li>
-				
-					<li><a href="./PromptMeme.html">PromptMeme</a></li>
-				
-					<li><a href="./PromptRestriction.html">PromptRestriction</a></li>
-				
-					<li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
-				
-					<li><a href="./PromptsController.html">PromptsController</a></li>
-				
-					<li><a href="./Pseud.html">Pseud</a></li>
-				
-					<li><a href="./PseudSweeper.html">PseudSweeper</a></li>
-				
-					<li><a href="./PseudsController.html">PseudsController</a></li>
-				
-					<li><a href="./PseudsHelper.html">PseudsHelper</a></li>
-				
-					<li><a href="./Query.html">Query</a></li>
-				
-					<li><a href="./Rating.html">Rating</a></li>
-				
-					<li><a href="./Rawk.html">Rawk</a></li>
-				
-					<li><a href="./Reading.html">Reading</a></li>
-				
-					<li><a href="./ReadingsController.html">ReadingsController</a></li>
-				
-					<li><a href="./RedirectController.html">RedirectController</a></li>
-				
-					<li><a href="./RedisTestSetup.html">RedisTestSetup</a></li>
-				
-					<li><a href="./RelatedWork.html">RelatedWork</a></li>
-				
-					<li><a href="./RelatedWorksController.html">RelatedWorksController</a></li>
-				
-					<li><a href="./Relationship.html">Relationship</a></li>
-				
-					<li><a href="./RelationshipNomination.html">RelationshipNomination</a></li>
-				
-					<li><a href="./Request.html">Request</a></li>
-				
-					<li><a href="./Role.html">Role</a></li>
-				
-					<li><a href="./RolesUser.html">RolesUser</a></li>
-				
-					<li><a href="./SearchController.html">SearchController</a></li>
-				
-					<li><a href="./SearchHelper.html">SearchHelper</a></li>
-				
-					<li><a href="./SerialWork.html">SerialWork</a></li>
-				
-					<li><a href="./SerialWorksController.html">SerialWorksController</a></li>
-				
-					<li><a href="./Series.html">Series</a></li>
-				
-					<li><a href="./SeriesController.html">SeriesController</a></li>
-				
-					<li><a href="./SeriesHelper.html">SeriesHelper</a></li>
-				
-					<li><a href="./SetTagging.html">SetTagging</a></li>
-				
-					<li><a href="./Skin.html">Skin</a></li>
-				
-					<li><a href="./SkinParent.html">SkinParent</a></li>
-				
-					<li><a href="./SkinsController.html">SkinsController</a></li>
-				
-					<li><a href="./SkinsHelper.html">SkinsHelper</a></li>
-				
-					<li><a href="./SortableList.html">SortableList</a></li>
-				
-					<li><a href="./Stat.html">Stat</a></li>
-				
-					<li><a href="./StatHash.html">StatHash</a></li>
-				
-					<li><a href="./StaticSweeper.html">StaticSweeper</a></li>
-				
-					<li><a href="./StatsController.html">StatsController</a></li>
-				
-					<li><a href="./StatsHelper.html">StatsHelper</a></li>
-				
-					<li><a href="./Subscription.html">Subscription</a></li>
-				
-					<li><a href="./SubscriptionsController.html">SubscriptionsController</a></li>
-				
-					<li><a href="./Tag.html">Tag</a></li>
-				
-					<li><a href="./TagNomination.html">TagNomination</a></li>
-				
-					<li><a href="./TagNominationsController.html">TagNominationsController</a></li>
-				
-					<li><a href="./TagSet.html">TagSet</a></li>
-				
-					<li><a href="./TagSetAssociation.html">TagSetAssociation</a></li>
-				
-					<li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a></li>
-				
-					<li><a href="./TagSetNomination.html">TagSetNomination</a></li>
-				
-					<li><a href="./TagSetNominationsController.html">TagSetNominationsController</a></li>
-				
-					<li><a href="./TagSetOwnership.html">TagSetOwnership</a></li>
-				
-					<li><a href="./TagSetSweeper.html">TagSetSweeper</a></li>
-				
-					<li><a href="./TagSetsHelper.html">TagSetsHelper</a></li>
-				
-					<li><a href="./TagSweeper.html">TagSweeper</a></li>
-				
-					<li><a href="./TagWranglersController.html">TagWranglersController</a></li>
-				
-					<li><a href="./TagWranglingsController.html">TagWranglingsController</a></li>
-				
-					<li><a href="./Taggable.html">Taggable</a></li>
-				
-					<li><a href="./Tagging.html">Tagging</a></li>
-				
-					<li><a href="./TagsController.html">TagsController</a></li>
-				
-					<li><a href="./TagsHelper.html">TagsHelper</a></li>
-				
-					<li><a href="./TranslationGenerator.html">TranslationGenerator</a></li>
-				
-					<li><a href="./TranslationHelper.html">TranslationHelper</a></li>
-				
-					<li><a href="./TranslationNote.html">TranslationNote</a></li>
-				
-					<li><a href="./TranslationNotesController.html">TranslationNotesController</a></li>
-				
-					<li><a href="./TranslationsController.html">TranslationsController</a></li>
-				
-					<li><a href="./TranslatorsController.html">TranslatorsController</a></li>
-				
-					<li><a href="./UrlActiveValidator.html">UrlActiveValidator</a></li>
-				
-					<li><a href="./UrlFormatValidator.html">UrlFormatValidator</a></li>
-				
-					<li><a href="./UrlHelpers.html">UrlHelpers</a></li>
-				
-					<li><a href="./User.html">User</a></li>
-				
-					<li><a href="./UserInviteRequest.html">UserInviteRequest</a></li>
-				
-					<li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a></li>
-				
-					<li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
-				
-					<li><a href="./UserMailer.html">UserMailer</a></li>
-				
-					<li><a href="./UserSession.html">UserSession</a></li>
-				
-					<li><a href="./UserSessionsController.html">UserSessionsController</a></li>
-				
-					<li><a href="./UsersController.html">UsersController</a></li>
-				
-					<li><a href="./UsersHelper.html">UsersHelper</a></li>
-				
-					<li><a href="./ValidationHelper.html">ValidationHelper</a></li>
-				
-					<li><a href="./Warning.html">Warning</a></li>
-				
-					<li><a href="./WeightedRandom.html">WeightedRandom</a></li>
-				
-					<li><a href="./Work.html">Work</a></li>
-				
-					<li><a href="./WorkObserver.html">WorkObserver</a></li>
-				
-					<li><a href="./WorkSkin.html">WorkSkin</a></li>
-				
-					<li><a href="./WorkSweeper.html">WorkSweeper</a></li>
-				
-					<li><a href="./WorksController.html">WorksController</a></li>
-				
-					<li><a href="./WorksHelper.html">WorksHelper</a></li>
-				
-					<li><a href="./WranglingAssignment.html">WranglingAssignment</a></li>
-				
-				</ul>
-				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
-			</div>
+  </div>
 
-			
-		</div>
-	</div>
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
 
-	<div id="documentation">
-		<h1 class="module">CommentsHelper</h1>
+  <ul>
+  
+    <li class="file"><a href="./app/mailers/README.html">README</a>
+  
+    <li class="file"><a href="./app/views/epub/mimetype.html">mimetype</a>
+  
+  </ul>
+</nav>
 
-		<div id="description">
-			
-		</div>
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
 
-		<!-- Constants -->
-		
+  <ul class="link-list">
+  
+    <li><a href="./Static.html">Static</a>
+  
+    <li><a href="./Static/BaseController.html">Static::BaseController</a>
+  
+    <li><a href="./Static/CollectionsController.html">Static::CollectionsController</a>
+  
+    <li><a href="./Static/FandomsController.html">Static::FandomsController</a>
+  
+    <li><a href="./Static/MediaController.html">Static::MediaController</a>
+  
+    <li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a>
+  
+    <li><a href="./Static/WorksController.html">Static::WorksController</a>
+  
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
+    <li><a href="./Challenge.html">Challenge</a>
+  
+    <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
+  
+    <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./StoryParser.html">StoryParser</a>
+  
+    <li><a href="./StoryParser/Error.html">StoryParser::Error</a>
+  
+    <li><a href="./AbuseReport.html">AbuseReport</a>
+  
+    <li><a href="./AbuseReportsController.html">AbuseReportsController</a>
+  
+    <li><a href="./AdminMailer.html">AdminMailer</a>
+  
+    <li><a href="./AdminPost.html">AdminPost</a>
+  
+    <li><a href="./AdminPostTag.html">AdminPostTag</a>
+  
+    <li><a href="./AdminPostTagging.html">AdminPostTagging</a>
+  
+    <li><a href="./AdminPostsController.html">AdminPostsController</a>
+  
+    <li><a href="./AdminSession.html">AdminSession</a>
+  
+    <li><a href="./AdminSessionsController.html">AdminSessionsController</a>
+  
+    <li><a href="./AdminSetting.html">AdminSetting</a>
+  
+    <li><a href="./AdminsController.html">AdminsController</a>
+  
+    <li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a>
+  
+    <li><a href="./AlphabetHelper.html">AlphabetHelper</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./ArchiveFaq.html">ArchiveFaq</a>
+  
+    <li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a>
+  
+    <li><a href="./AutocompleteController.html">AutocompleteController</a>
+  
+    <li><a href="./Banned.html">Banned</a>
+  
+    <li><a href="./Bookmark.html">Bookmark</a>
+  
+    <li><a href="./BookmarksController.html">BookmarksController</a>
+  
+    <li><a href="./BookmarksHelper.html">BookmarksHelper</a>
+  
+    <li><a href="./CacheHelper.html">CacheHelper</a>
+  
+    <li><a href="./CastNomination.html">CastNomination</a>
+  
+    <li><a href="./Category.html">Category</a>
+  
+    <li><a href="./ChallengeAssignment.html">ChallengeAssignment</a>
+  
+    <li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a>
+  
+    <li><a href="./ChallengeClaim.html">ChallengeClaim</a>
+  
+    <li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a>
+  
+    <li><a href="./ChallengeHelper.html">ChallengeHelper</a>
+  
+    <li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a>
+  
+    <li><a href="./ChallengeSignup.html">ChallengeSignup</a>
+  
+    <li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a>
+  
+    <li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a>
+  
+    <li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a>
+  
+    <li><a href="./ChallengeSweeper.html">ChallengeSweeper</a>
+  
+    <li><a href="./ChallengesController.html">ChallengesController</a>
+  
+    <li><a href="./Chapter.html">Chapter</a>
+  
+    <li><a href="./ChapterSweeper.html">ChapterSweeper</a>
+  
+    <li><a href="./ChaptersController.html">ChaptersController</a>
+  
+    <li><a href="./ChaptersHelper.html">ChaptersHelper</a>
+  
+    <li><a href="./Character.html">Character</a>
+  
+    <li><a href="./CharacterNomination.html">CharacterNomination</a>
+  
+    <li><a href="./Collection.html">Collection</a>
+  
+    <li><a href="./CollectionItem.html">CollectionItem</a>
+  
+    <li><a href="./CollectionItemsController.html">CollectionItemsController</a>
+  
+    <li><a href="./CollectionObserver.html">CollectionObserver</a>
+  
+    <li><a href="./CollectionParticipant.html">CollectionParticipant</a>
+  
+    <li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a>
+  
+    <li><a href="./CollectionPreference.html">CollectionPreference</a>
+  
+    <li><a href="./CollectionProfile.html">CollectionProfile</a>
+  
+    <li><a href="./CollectionProfileController.html">CollectionProfileController</a>
+  
+    <li><a href="./CollectionSweeper.html">CollectionSweeper</a>
+  
+    <li><a href="./CollectionsController.html">CollectionsController</a>
+  
+    <li><a href="./CollectionsHelper.html">CollectionsHelper</a>
+  
+    <li><a href="./Comment.html">Comment</a>
+  
+    <li><a href="./CommentMailer.html">CommentMailer</a>
+  
+    <li><a href="./CommentObserver.html">CommentObserver</a>
+  
+    <li><a href="./CommentSweeper.html">CommentSweeper</a>
+  
+    <li><a href="./CommentsController.html">CommentsController</a>
+  
+    <li><a href="./CommentsHelper.html">CommentsHelper</a>
+  
+    <li><a href="./CommonTagging.html">CommonTagging</a>
+  
+    <li><a href="./CreationObserver.html">CreationObserver</a>
+  
+    <li><a href="./Creatorship.html">Creatorship</a>
+  
+    <li><a href="./DateHelper.html">DateHelper</a>
+  
+    <li><a href="./DevmodeController.html">DevmodeController</a>
+  
+    <li><a href="./DownloadsController.html">DownloadsController</a>
+  
+    <li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a>
+  
+    <li><a href="./ErrorsController.html">ErrorsController</a>
+  
+    <li><a href="./ExternalAuthor.html">ExternalAuthor</a>
+  
+    <li><a href="./ExternalAuthorName.html">ExternalAuthorName</a>
+  
+    <li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a>
+  
+    <li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a>
+  
+    <li><a href="./ExternalCreatorship.html">ExternalCreatorship</a>
+  
+    <li><a href="./ExternalWork.html">ExternalWork</a>
+  
+    <li><a href="./ExternalWorksController.html">ExternalWorksController</a>
+  
+    <li><a href="./Fandom.html">Fandom</a>
+  
+    <li><a href="./FandomNomination.html">FandomNomination</a>
+  
+    <li><a href="./FandomsController.html">FandomsController</a>
+  
+    <li><a href="./FeedSweeper.html">FeedSweeper</a>
+  
+    <li><a href="./Feedback.html">Feedback</a>
+  
+    <li><a href="./FeedbacksController.html">FeedbacksController</a>
+  
+    <li><a href="./FilterCount.html">FilterCount</a>
+  
+    <li><a href="./FilterTagging.html">FilterTagging</a>
+  
+    <li><a href="./Freeform.html">Freeform</a>
+  
+    <li><a href="./FreeformNomination.html">FreeformNomination</a>
+  
+    <li><a href="./Gift.html">Gift</a>
+  
+    <li><a href="./GiftExchange.html">GiftExchange</a>
+  
+    <li><a href="./GiftsController.html">GiftsController</a>
+  
+    <li><a href="./HitCounter.html">HitCounter</a>
+  
+    <li><a href="./HomeController.html">HomeController</a>
+  
+    <li><a href="./HomeHelper.html">HomeHelper</a>
+  
+    <li><a href="./InboxComment.html">InboxComment</a>
+  
+    <li><a href="./InboxController.html">InboxController</a>
+  
+    <li><a href="./InboxHelper.html">InboxHelper</a>
+  
+    <li><a href="./Invitation.html">Invitation</a>
+  
+    <li><a href="./InvitationsController.html">InvitationsController</a>
+  
+    <li><a href="./InvitationsHelper.html">InvitationsHelper</a>
+  
+    <li><a href="./InviteRequest.html">InviteRequest</a>
+  
+    <li><a href="./InviteRequestsController.html">InviteRequestsController</a>
+  
+    <li><a href="./KnownIssue.html">KnownIssue</a>
+  
+    <li><a href="./KnownIssuesController.html">KnownIssuesController</a>
+  
+    <li><a href="./Kudo.html">Kudo</a>
+  
+    <li><a href="./KudoMailer.html">KudoMailer</a>
+  
+    <li><a href="./KudoObserver.html">KudoObserver</a>
+  
+    <li><a href="./KudosController.html">KudosController</a>
+  
+    <li><a href="./Language.html">Language</a>
+  
+    <li><a href="./LanguagesController.html">LanguagesController</a>
+  
+    <li><a href="./Locale.html">Locale</a>
+  
+    <li><a href="./LocalesController.html">LocalesController</a>
+  
+    <li><a href="./LogItem.html">LogItem</a>
+  
+    <li><a href="./Media.html">Media</a>
+  
+    <li><a href="./MediaController.html">MediaController</a>
+  
+    <li><a href="./MetaTagging.html">MetaTagging</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Offer.html">Offer</a>
+  
+    <li><a href="./OrphansController.html">OrphansController</a>
+  
+    <li><a href="./OrphansHelper.html">OrphansHelper</a>
+  
+    <li><a href="./OwnedSetTagging.html">OwnedSetTagging</a>
+  
+    <li><a href="./OwnedTagSet.html">OwnedTagSet</a>
+  
+    <li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./People.html">People</a>
+  
+    <li><a href="./PeopleController.html">PeopleController</a>
+  
+    <li><a href="./PotentialMatch.html">PotentialMatch</a>
+  
+    <li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a>
+  
+    <li><a href="./PotentialMatchesController.html">PotentialMatchesController</a>
+  
+    <li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a>
+  
+    <li><a href="./Preference.html">Preference</a>
+  
+    <li><a href="./PreferencesController.html">PreferencesController</a>
+  
+    <li><a href="./Profile.html">Profile</a>
+  
+    <li><a href="./ProfileController.html">ProfileController</a>
+  
+    <li><a href="./Prompt.html">Prompt</a>
+  
+    <li><a href="./PromptMeme.html">PromptMeme</a>
+  
+    <li><a href="./PromptRestriction.html">PromptRestriction</a>
+  
+    <li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a>
+  
+    <li><a href="./PromptsController.html">PromptsController</a>
+  
+    <li><a href="./Pseud.html">Pseud</a>
+  
+    <li><a href="./PseudSweeper.html">PseudSweeper</a>
+  
+    <li><a href="./PseudsController.html">PseudsController</a>
+  
+    <li><a href="./PseudsHelper.html">PseudsHelper</a>
+  
+    <li><a href="./Rating.html">Rating</a>
+  
+    <li><a href="./Reading.html">Reading</a>
+  
+    <li><a href="./ReadingsController.html">ReadingsController</a>
+  
+    <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RelatedWork.html">RelatedWork</a>
+  
+    <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
+  
+    <li><a href="./Relationship.html">Relationship</a>
+  
+    <li><a href="./RelationshipNomination.html">RelationshipNomination</a>
+  
+    <li><a href="./Request.html">Request</a>
+  
+    <li><a href="./Role.html">Role</a>
+  
+    <li><a href="./RolesUser.html">RolesUser</a>
+  
+    <li><a href="./SearchController.html">SearchController</a>
+  
+    <li><a href="./SearchHelper.html">SearchHelper</a>
+  
+    <li><a href="./SerialWork.html">SerialWork</a>
+  
+    <li><a href="./SerialWorksController.html">SerialWorksController</a>
+  
+    <li><a href="./Series.html">Series</a>
+  
+    <li><a href="./SeriesController.html">SeriesController</a>
+  
+    <li><a href="./SeriesHelper.html">SeriesHelper</a>
+  
+    <li><a href="./SetTagging.html">SetTagging</a>
+  
+    <li><a href="./Skin.html">Skin</a>
+  
+    <li><a href="./SkinParent.html">SkinParent</a>
+  
+    <li><a href="./SkinsController.html">SkinsController</a>
+  
+    <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StaticSweeper.html">StaticSweeper</a>
+  
+    <li><a href="./StatsController.html">StatsController</a>
+  
+    <li><a href="./StatsHelper.html">StatsHelper</a>
+  
+    <li><a href="./Subscription.html">Subscription</a>
+  
+    <li><a href="./SubscriptionsController.html">SubscriptionsController</a>
+  
+    <li><a href="./Tag.html">Tag</a>
+  
+    <li><a href="./TagNomination.html">TagNomination</a>
+  
+    <li><a href="./TagNominationsController.html">TagNominationsController</a>
+  
+    <li><a href="./TagSet.html">TagSet</a>
+  
+    <li><a href="./TagSetAssociation.html">TagSetAssociation</a>
+  
+    <li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a>
+  
+    <li><a href="./TagSetNomination.html">TagSetNomination</a>
+  
+    <li><a href="./TagSetNominationsController.html">TagSetNominationsController</a>
+  
+    <li><a href="./TagSetOwnership.html">TagSetOwnership</a>
+  
+    <li><a href="./TagSetSweeper.html">TagSetSweeper</a>
+  
+    <li><a href="./TagSetsHelper.html">TagSetsHelper</a>
+  
+    <li><a href="./TagSweeper.html">TagSweeper</a>
+  
+    <li><a href="./TagWranglersController.html">TagWranglersController</a>
+  
+    <li><a href="./TagWranglingsController.html">TagWranglingsController</a>
+  
+    <li><a href="./Tagging.html">Tagging</a>
+  
+    <li><a href="./TagsController.html">TagsController</a>
+  
+    <li><a href="./TagsHelper.html">TagsHelper</a>
+  
+    <li><a href="./TranslationHelper.html">TranslationHelper</a>
+  
+    <li><a href="./TranslationNote.html">TranslationNote</a>
+  
+    <li><a href="./TranslationNotesController.html">TranslationNotesController</a>
+  
+    <li><a href="./TranslationsController.html">TranslationsController</a>
+  
+    <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
+  
+    <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
+  
+    <li><a href="./User.html">User</a>
+  
+    <li><a href="./UserInviteRequest.html">UserInviteRequest</a>
+  
+    <li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a>
+  
+    <li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a>
+  
+    <li><a href="./UserMailer.html">UserMailer</a>
+  
+    <li><a href="./UserSession.html">UserSession</a>
+  
+    <li><a href="./UserSessionsController.html">UserSessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+    <li><a href="./UsersHelper.html">UsersHelper</a>
+  
+    <li><a href="./ValidationHelper.html">ValidationHelper</a>
+  
+    <li><a href="./Warning.html">Warning</a>
+  
+    <li><a href="./WeightedRandom.html">WeightedRandom</a>
+  
+    <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkObserver.html">WorkObserver</a>
+  
+    <li><a href="./WorkSkin.html">WorkSkin</a>
+  
+    <li><a href="./WorkSweeper.html">WorkSweeper</a>
+  
+    <li><a href="./WorksController.html">WorksController</a>
+  
+    <li><a href="./WorksHelper.html">WorksHelper</a>
+  
+    <li><a href="./WranglingAssignment.html">WranglingAssignment</a>
+  
+  </ul>
+</nav>
 
-		<!-- Attributes -->
-		
+  </div>
+</nav>
 
-		<!-- Methods -->
-		
-		<div id="public-instance-method-details" class="method-section section">
-			<h3 class="section-header">Public Instance Methods</h3>
+<div id="documentation">
+  <h1 class="module">module CommentsHelper</h1>
 
-		
-			<div id="add-cancel-comment-link-method" class="method-detail ">
-				<a name="method-i-add_cancel_comment_link"></a>
+  <div id="description" class="description">
+    
+  </div><!-- description -->
 
-				<div class="method-heading">
-				
-					<span class="method-name">add_cancel_comment_link</span><span
-						class="method-args">(commentable)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
 
-				<div class="method-description">
-					
-					<p>
-return the appropriate link to add or cancel adding a new comment (note:
-ONLY in _commentable.html.erb!)
-</p>
-					
+    
 
-					
-					<div class="method-source-code"
-						id="add-cancel-comment-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 117</span>
-117:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_cancel_comment_link</span>(<span class="ruby-identifier">commentable</span>)  
-118:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:add_comment</span>]
-119:       <span class="ruby-identifier">cancel_comment_link</span>(<span class="ruby-identifier">commentable</span>)
-120:     <span class="ruby-keyword kw">else</span>
-121:       <span class="ruby-identifier">add_comment_link</span>(<span class="ruby-identifier">commentable</span>)
-122:     <span class="ruby-keyword kw">end</span>     
-123:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
+    
 
-				
+    
 
-				
-			</div>
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
 
-		
-			<div id="add-cancel-comment-reply-link-method" class="method-detail ">
-				<a name="method-i-add_cancel_comment_reply_link"></a>
+    
+      <div id="method-i-add_cancel_comment_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_cancel_comment_link</span><span
+            class="method-args">(commentable)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-				<div class="method-heading">
-				
-					<span class="method-name">add_cancel_comment_reply_link</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+        <div class="method-description">
+          
+          <p>return the appropriate link to add or cancel adding a new comment (note:
+ONLY in _commentable.html.erb!)</p>
+          
 
-				<div class="method-description">
-					
-					<p>
-HELPERS FOR REPLYING TO COMMENTS #####
-</p>
-					
+          
+          <div class="method-source-code" id="add_cancel_comment_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 117</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_cancel_comment_link</span>(<span class="ruby-identifier">commentable</span>)  
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:add_comment</span>]
+    <span class="ruby-identifier">cancel_comment_link</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">add_comment_link</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-keyword">end</span>     
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- add_cancel_comment_link-source -->
+          
+        </div>
 
-					
-					<div class="method-source-code"
-						id="add-cancel-comment-reply-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 156</span>
-156:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_cancel_comment_reply_link</span>(<span class="ruby-identifier">comment</span>)
-157:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:add_comment_reply_id</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:add_comment_reply_id</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>
-158:       <span class="ruby-identifier">cancel_comment_reply_link</span>(<span class="ruby-identifier">comment</span>)
-159:     <span class="ruby-keyword kw">else</span>
-160:       <span class="ruby-identifier">add_comment_reply_link</span>(<span class="ruby-identifier">comment</span>)
-161:     <span class="ruby-keyword kw">end</span>     
-162:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
+        
 
-				
+        
+      </div><!-- add_cancel_comment_link-method -->
 
-				
-			</div>
+    
+      <div id="method-i-add_cancel_comment_reply_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_cancel_comment_reply_link</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-		
-			<div id="add-comment-link-method" class="method-detail ">
-				<a name="method-i-add_comment_link"></a>
+        <div class="method-description">
+          
+          <p>HELPERS FOR REPLYING TO COMMENTS #####</p>
+          
 
-				<div class="method-heading">
-				
-					<span class="method-name">add_comment_link</span><span
-						class="method-args">(commentable)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+          
+          <div class="method-source-code" id="add_cancel_comment_reply_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 156</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_cancel_comment_reply_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:add_comment_reply_id</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:add_comment_reply_id</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>
+    <span class="ruby-identifier">cancel_comment_reply_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">add_comment_reply_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-keyword">end</span>     
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- add_cancel_comment_reply_link-source -->
+          
+        </div>
 
-				<div class="method-description">
-					
-					<p>
-return html link to add new comment on a commentable object
-</p>
-					
+        
 
-					
-					<div class="method-source-code"
-						id="add-comment-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 126</span>
-126:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_comment_link</span>(<span class="ruby-identifier">commentable</span>)
-127:     <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-128:                         <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
-129:                         <span class="ruby-node">&quot;#{commentable.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
-130:     <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-131:                           <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
-132:                           <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>
-133:     <span class="ruby-identifier">link_to</span>(
-134:       <span class="ruby-value str">&quot;Comment&quot;</span>,
-135:       <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:add_comment</span>, <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
-136:       <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>) 
-137:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
+        
+      </div><!-- add_cancel_comment_reply_link-method -->
 
-				
+    
+      <div id="method-i-add_comment_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_comment_link</span><span
+            class="method-args">(commentable)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-				
-			</div>
+        <div class="method-description">
+          
+          <p>return html link to add new comment on a commentable object</p>
+          
 
-		
-			<div id="add-comment-reply-link-method" class="method-detail ">
-				<a name="method-i-add_comment_reply_link"></a>
+          
+          <div class="method-source-code" id="add_comment_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 126</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_comment_link</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                      <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
+                      <span class="ruby-node">&quot;#{commentable.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
+  <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                        <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
+                        <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>
+  <span class="ruby-identifier">link_to</span>(
+    <span class="ruby-string">&quot;Comment&quot;</span>,
+    <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:add_comment</span>, <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
+    <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>) 
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- add_comment_link-source -->
+          
+        </div>
 
-				<div class="method-heading">
-				
-					<span class="method-name">add_comment_reply_link</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+        
 
-				<div class="method-description">
-					
-					<p>
-return link to add new reply to a comment
-</p>
-					
+        
+      </div><!-- add_comment_link-method -->
 
-					
-					<div class="method-source-code"
-						id="add-comment-reply-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 165</span>
-165:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_comment_reply_link</span>(<span class="ruby-identifier">comment</span>)
-166:     <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-167:                         <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
-168:                         <span class="ruby-node">&quot;#{comment.ultimate_parent.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
-169:     <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-170:                           <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
-171:                           <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">id</span>
-172:     <span class="ruby-identifier">link_to</span>( 
-173:       <span class="ruby-value str">&quot;Reply&quot;</span>, 
-174:       <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-175:               <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:add_comment_reply</span>, 
-176:               <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>, 
-177:               <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>], 
-178:               <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
-179:       <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-180:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
+    
+      <div id="method-i-add_comment_reply_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_comment_reply_link</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-				
+        <div class="method-description">
+          
+          <p>return link to add new reply to a comment</p>
+          
 
-				
-			</div>
+          
+          <div class="method-source-code" id="add_comment_reply_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 165</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_comment_reply_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                      <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
+                      <span class="ruby-node">&quot;#{comment.ultimate_parent.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
+  <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                        <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
+                        <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">id</span>
+  <span class="ruby-identifier">link_to</span>( 
+    <span class="ruby-string">&quot;Reply&quot;</span>, 
+    <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+            <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:add_comment_reply</span>, 
+            <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>, 
+            <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>], 
+            <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
+    <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- add_comment_reply_link-source -->
+          
+        </div>
 
-		
-			<div id="cancel-comment-button-method" class="method-detail ">
-				<a name="method-i-cancel_comment_button"></a>
+        
 
-				<div class="method-heading">
-				
-					<span class="method-name">cancel_comment_button</span><span
-						class="method-args">(comment, commentable)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+        
+      </div><!-- add_comment_reply_link-method -->
 
-				<div class="method-description">
-					
-					<p>
-TO DO: create fallbacks to support non-JavaScript requests! return button
+    
+      <div id="method-i-cancel_comment_button" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cancel_comment_button</span><span
+            class="method-args">(comment, commentable)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>TO DO: create fallbacks to support non-JavaScript requests! return button
 to cancel adding a comment. kind of ugly because we want it to work for the
-comment form no matter where it appears, but oh well
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="cancel-comment-button-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 203</span>
-203:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cancel_comment_button</span>(<span class="ruby-identifier">comment</span>, <span class="ruby-identifier">commentable</span>)
-204:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">new_record?</span>
-205:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">class</span>
-206:         <span class="ruby-comment cmt"># canceling a reply to a comment</span>
-207:         <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-208:                             <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
-209:                             <span class="ruby-node">&quot;#{commentable.ultimate_parent.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
-210:         <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-211:                               <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
-212:                               <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">id</span>
-213:         <span class="ruby-identifier">link_to</span>( 
-214:           <span class="ruby-value str">&quot;Cancel&quot;</span>, 
-215:           <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-216:                   <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment_reply</span>, 
-217:                   <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>, 
-218:                   <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>], 
-219:                   <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
-220:           <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>) 
-221:        <span class="ruby-keyword kw">else</span>
-222:         <span class="ruby-comment cmt"># canceling a reply to a different commentable thingy</span>
-223:         <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-224:                             <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
-225:                             <span class="ruby-node">&quot;#{commentable.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
-226:         <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-227:                               <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
-228:                               <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>        
-229:         <span class="ruby-identifier">link_to</span>(
-230:           <span class="ruby-value str">&quot;Cancel&quot;</span>, 
-231:           <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-232:                   <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment</span>, 
-233:                   <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
-234:           <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-235:       <span class="ruby-keyword kw">end</span>
-236:     <span class="ruby-keyword kw">else</span>
-237:       <span class="ruby-comment cmt"># canceling an edit</span>
-238:       <span class="ruby-identifier">link_to</span>(
-239:         <span class="ruby-value str">&quot;Cancel&quot;</span>, 
-240:         <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-241:                 <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment_edit</span>, 
-242:                 <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>), 
-243:                 <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>]),
-244:         <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-245:     <span class="ruby-keyword kw">end</span>
-246:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="cancel-comment-link-method" class="method-detail ">
-				<a name="method-i-cancel_comment_link"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">cancel_comment_link</span><span
-						class="method-args">(commentable)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="cancel-comment-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 139</span>
-139:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cancel_comment_link</span>(<span class="ruby-identifier">commentable</span>)
-140:     <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-141:                         <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
-142:                         <span class="ruby-node">&quot;#{commentable.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
-143:     <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-144:                           <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
-145:                           <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>
-146:     <span class="ruby-identifier">link_to</span>(
-147:       <span class="ruby-value str">&quot;Cancel Comment&quot;</span>,
-148:       <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-149:               <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment</span>, 
-150:               <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
-151:       <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-152:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="cancel-comment-reply-link-method" class="method-detail ">
-				<a name="method-i-cancel_comment_reply_link"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">cancel_comment_reply_link</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-return link to cancel new reply to a comment
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="cancel-comment-reply-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 183</span>
-183:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cancel_comment_reply_link</span>(<span class="ruby-identifier">comment</span>)
-184:     <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-185:                         <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
-186:                         <span class="ruby-node">&quot;#{comment.ultimate_parent.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
-187:     <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-188:                           <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
-189:                           <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">id</span>
-190:     <span class="ruby-identifier">link_to</span>( 
-191:       <span class="ruby-value str">&quot;Cancel&quot;</span>, 
-192:       <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-193:               <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment_reply</span>, 
-194:               <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>, 
-195:               <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>], 
-196:               <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>), 
-197:       <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-198:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="cancel-delete-comment-link-method" class="method-detail ">
-				<a name="method-i-cancel_delete_comment_link"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">cancel_delete_comment_link</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-return link to cancel new reply to a comment
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="cancel-delete-comment-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 278</span>
-278:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cancel_delete_comment_link</span>(<span class="ruby-identifier">comment</span>)
-279:     <span class="ruby-identifier">link_to</span>( 
-280:       <span class="ruby-value str">&quot;Cancel&quot;</span>, 
-281:       <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-282:               <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment_delete</span>, 
-283:               <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>, 
-284:               <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>]), 
-285:       <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-286:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="delete-comment-link-method" class="method-detail ">
-				<a name="method-i-delete_comment_link"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">delete_comment_link</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-return html link to delete comments
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="delete-comment-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 267</span>
-267:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_comment_link</span>(<span class="ruby-identifier">comment</span>)
-268:     <span class="ruby-identifier">link_to</span>( 
-269:       <span class="ruby-value str">&quot;Delete&quot;</span>, 
-270:       <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-271:               <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:delete_comment</span>, 
-272:               <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>, 
-273:               <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>]), 
-274:       <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-275:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="do-cancel-delete-comment-link-method" class="method-detail ">
-				<a name="method-i-do_cancel_delete_comment_link"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">do_cancel_delete_comment_link</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="do-cancel-delete-comment-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 258</span>
-258:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">do_cancel_delete_comment_link</span>(<span class="ruby-identifier">comment</span>)
-259:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:delete_comment_id</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:delete_comment_id</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>
-260:       <span class="ruby-identifier">cancel_delete_comment_link</span>(<span class="ruby-identifier">comment</span>)
-261:     <span class="ruby-keyword kw">else</span>
-262:       <span class="ruby-identifier">delete_comment_link</span>(<span class="ruby-identifier">comment</span>)
-263:     <span class="ruby-keyword kw">end</span>
-264:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="edit-comment-link-method" class="method-detail ">
-				<a name="method-i-edit_comment_link"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">edit_comment_link</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-return html link to edit comment
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="edit-comment-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 249</span>
-249:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">edit_comment_link</span>(<span class="ruby-identifier">comment</span>)
-250:     <span class="ruby-identifier">link_to</span>(<span class="ruby-value str">&quot;Edit&quot;</span>, 
-251:             <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-252:                     <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:edit</span>, 
-253:                     <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>, 
-254:                     <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>]),
-255:             <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-256:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="fallback-url-for-comment-method" class="method-detail ">
-				<a name="method-i-fallback_url_for_comment"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">fallback_url_for_comment</span><span
-						class="method-args">(comment, options = {})</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="fallback-url-for-comment-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 317</span>
-317:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fallback_url_for_comment</span>(<span class="ruby-identifier">comment</span>, <span class="ruby-identifier">options</span> = {})
-318:     <span class="ruby-identifier">default_options</span> = {<span class="ruby-value">:anchor</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;comment_#{comment.id}&quot;</span>}
-319:     <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:action</span>] = <span class="ruby-value str">&quot;show&quot;</span>
-320:     <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:show_comments</span>] = <span class="ruby-keyword kw">true</span>
-321:     <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:id</span>] = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
-322:     
-323:     <span class="ruby-identifier">options</span> = <span class="ruby-identifier">default_options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
-324:     
-325:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@thread_view</span> <span class="ruby-comment cmt"># hopefully means we're on a Thread page</span>
-326:       <span class="ruby-identifier">options</span>[<span class="ruby-value">:id</span>] = <span class="ruby-ivar">@thread_root</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@thread_root</span>
-327:       <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>)
-328:     <span class="ruby-keyword kw">else</span> <span class="ruby-comment cmt"># Top Level Commentable</span>
-329:       <span class="ruby-identifier">fallback_url_for_top_level</span>(<span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>, <span class="ruby-identifier">options</span>)
-330:     <span class="ruby-keyword kw">end</span>
-331:     
-332:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="fallback-url-for-top-level-method" class="method-detail ">
-				<a name="method-i-fallback_url_for_top_level"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">fallback_url_for_top_level</span><span
-						class="method-args">(commentable, options = {})</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-non-JavaScript fallbacks for great justice!
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="fallback-url-for-top-level-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 299</span>
-299:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fallback_url_for_top_level</span>(<span class="ruby-identifier">commentable</span>, <span class="ruby-identifier">options</span> = {})    
-300:     <span class="ruby-identifier">default_options</span> = {<span class="ruby-value">:anchor</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;comments&quot;</span>}
-301:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
-302:       <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:controller</span>] = <span class="ruby-value">:comments</span>
-303:       <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:action</span>] = <span class="ruby-value">:index</span>
-304:       <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:tag_id</span>] = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span>      
-305:     <span class="ruby-keyword kw">else</span>
-306:       <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:controller</span>] = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">pluralize</span>
-307:       <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:action</span>] = <span class="ruby-value str">&quot;show&quot;</span>
-308:       <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:id</span>] = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>
-309:     <span class="ruby-keyword kw">end</span>
-310:     <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:add_comment</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-value">:add_comment</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:add_comment</span>]
-311:     <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:show_comments</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-value">:show_comments</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:show_comments</span>]
-312:     
-313:     <span class="ruby-identifier">options</span> = <span class="ruby-identifier">default_options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
-314:     <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>)
-315:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="get-commenter-pseud-or-name-method" class="method-detail ">
-				<a name="method-i-get_commenter_pseud_or_name"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">get_commenter_pseud_or_name</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-return pseudname or name for comment
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="get-commenter-pseud-or-name-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 48</span>
-48:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_commenter_pseud_or_name</span>(<span class="ruby-identifier">comment</span>)
-49:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">pseud_id</span>
-50:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">nil?</span>
-51:         <span class="ruby-value str">'Account Deleted'</span>
-52:       <span class="ruby-keyword kw">else</span>
-53:         <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">byline</span>, [<span class="ruby-identifier">comment</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">user</span>, <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">pseud</span>]
-54:       <span class="ruby-keyword kw">end</span>
-55:     <span class="ruby-keyword kw">else</span>
-56:       <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">name</span>
-57:     <span class="ruby-keyword kw">end</span>
-58:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="hide-comments-link-method" class="method-detail ">
-				<a name="method-i-hide_comments_link"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">hide_comments_link</span><span
-						class="method-args">(commentable)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="hide-comments-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 101</span>
-101:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hide_comments_link</span>(<span class="ruby-identifier">commentable</span>)
-102:     <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-103:                         <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
-104:                         <span class="ruby-node">&quot;#{commentable.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
-105:     <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-106:                           <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
-107:                           <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>
-108:     <span class="ruby-identifier">link_to</span>(
-109:       <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;Hide Comments (%{comment_count})&quot;</span>, <span class="ruby-value">:comment_count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">count_visible_comments</span>.<span class="ruby-identifier">to_s</span>), 
-110:       <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-111:               <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:hide_comments</span>, 
-112:               <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
-113:       <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-114:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="last-reply-by-method" class="method-detail ">
-				<a name="method-i-last_reply_by"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">last_reply_by</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="last-reply-by-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 18</span>
-18:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">last_reply_by</span>(<span class="ruby-identifier">comment</span>)
-19:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">count_all_comments</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-20:       <span class="ruby-identifier">c</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:first</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:thread</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>}, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'created_at DESC'</span>)
-21:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">pseud</span>
-22:         <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">name</span>, [<span class="ruby-identifier">c</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">user</span>, <span class="ruby-identifier">c</span>.<span class="ruby-identifier">pseud</span>]
-23:       <span class="ruby-keyword kw">else</span>
-24:         <span class="ruby-identifier">h</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">name</span>)
-25:       <span class="ruby-keyword kw">end</span>
-26:     <span class="ruby-keyword kw">end</span>    
-27:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="link-to-comment-ultimate-parent-method" class="method-detail ">
-				<a name="method-i-link_to_comment_ultimate_parent"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">link_to_comment_ultimate_parent</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="link-to-comment-ultimate-parent-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 29</span>
-29:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_to_comment_ultimate_parent</span>(<span class="ruby-identifier">comment</span>)
-30:     <span class="ruby-identifier">ultimate</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>
-31:     <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">ultimate</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span> 
-32:       <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'Work'</span> <span class="ruby-keyword kw">then</span> 
-33:         <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">ultimate</span>.<span class="ruby-identifier">title</span>, <span class="ruby-identifier">ultimate</span>
-34:       <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'Pseud'</span> <span class="ruby-keyword kw">then</span>
-35:         <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">ultimate</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">ultimate</span>
-36:       <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'AdminPost'</span> <span class="ruby-keyword kw">then</span> 
-37:           <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">ultimate</span>.<span class="ruby-identifier">title</span>, <span class="ruby-identifier">ultimate</span>
-38:       <span class="ruby-keyword kw">else</span>
-39:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ultimate</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
-40:           <span class="ruby-identifier">link_to_tag</span>(<span class="ruby-identifier">ultimate</span>)
-41:         <span class="ruby-keyword kw">else</span>
-42:           <span class="ruby-identifier">link_to</span> <span class="ruby-value str">'Something Interesting'</span>, <span class="ruby-identifier">ultimate</span>
-43:         <span class="ruby-keyword kw">end</span>
-44:     <span class="ruby-keyword kw">end</span>
-45:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="show-comments-link-method" class="method-detail ">
-				<a name="method-i-show_comments_link"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">show_comments_link</span><span
-						class="method-args">(commentable)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="show-comments-link-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 83</span>
-83:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show_comments_link</span>(<span class="ruby-identifier">commentable</span>)
-84:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">count_visible_comments</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-85:       <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-86:                           <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
-87:                           <span class="ruby-node">&quot;#{commentable.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
-88:       <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
-89:                             <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
-90:                             <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>
-91:       <span class="ruby-identifier">link_to</span>(
-92:           <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;Comments (%{comment_count})&quot;</span>, <span class="ruby-value">:comment_count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">count_visible_comments</span>.<span class="ruby-identifier">to_s</span>),
-93:           <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
-94:                   <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:show_comments</span>, 
-95:                   <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>,
-96:                   <span class="ruby-value">:view_full_work</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:view_full_work</span>]), 
-97:           <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-98:     <span class="ruby-keyword kw">end</span>
-99:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="show-hide-comments-link-method" class="method-detail ">
-				<a name="method-i-show_hide_comments_link"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">show_hide_comments_link</span><span
-						class="method-args">(commentable)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-return link to show or hide comments
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="show-hide-comments-link-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 75</span>
-75:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show_hide_comments_link</span>(<span class="ruby-identifier">commentable</span>)
-76:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:show_comments</span>]
-77:       <span class="ruby-identifier">hide_comments_link</span>(<span class="ruby-identifier">commentable</span>)
-78:     <span class="ruby-keyword kw">else</span>
-79:       <span class="ruby-identifier">show_comments_link</span>(<span class="ruby-identifier">commentable</span>)
-80:     <span class="ruby-keyword kw">end</span> 
-81:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="tag-comment-as-spam-link-method" class="method-detail ">
-				<a name="method-i-tag_comment_as_spam_link"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">tag_comment_as_spam_link</span><span
-						class="method-args">(comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-return html link to mark/unmark comment as spam
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="tag-comment-as-spam-link-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 289</span>
-289:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tag_comment_as_spam_link</span>(<span class="ruby-identifier">comment</span>)    
-290:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">approved</span>
-291:       <span class="ruby-identifier">link_to</span>(<span class="ruby-value str">'Spam'</span>, <span class="ruby-identifier">reject_comment_path</span>(<span class="ruby-identifier">comment</span>), <span class="ruby-value">:method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:put</span>)
-292:     <span class="ruby-keyword kw">else</span>
-293:       <span class="ruby-identifier">link_to</span>(<span class="ruby-value str">'Not Spam'</span>, <span class="ruby-identifier">approve_comment_path</span>(<span class="ruby-identifier">comment</span>), <span class="ruby-value">:method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:put</span>)
-294:     <span class="ruby-keyword kw">end</span>
-295:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="title-for-comment-page-method" class="method-detail ">
-				<a name="method-i-title_for_comment_page"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">title_for_comment_page</span><span
-						class="method-args">(commentable)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="title-for-comment-page-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 7</span>
- 7:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">title_for_comment_page</span>(<span class="ruby-identifier">commentable</span>)
- 8:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">commentable_name</span>.<span class="ruby-identifier">blank?</span>
- 9:       <span class="ruby-identifier">title</span> = <span class="ruby-value str">&quot;&quot;</span>
-10:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
-11:       <span class="ruby-identifier">title</span> = <span class="ruby-identifier">link_to_tag</span>(<span class="ruby-identifier">commentable</span>)
-12:     <span class="ruby-keyword kw">else</span>
-13:       <span class="ruby-identifier">title</span> = <span class="ruby-identifier">link_to</span>(<span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">commentable_name</span>, <span class="ruby-identifier">commentable</span>)
-14:     <span class="ruby-keyword kw">end</span>
-15:     <span class="ruby-identifier">h</span>(<span class="ruby-identifier">ts</span>(<span class="ruby-value str">'Reading Comments on '</span>)) <span class="ruby-operator">+</span> <span class="ruby-identifier">title</span>
-16:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="value-for-comment-form-method" class="method-detail ">
-				<a name="method-i-value_for_comment_form"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">value_for_comment_form</span><span
-						class="method-args">(commentable, comment)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="value-for-comment-form-source">
-<pre>
-   <span class="ruby-comment cmt"># File app/helpers/comments_helper.rb, line 3</span>
-3:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value_for_comment_form</span>(<span class="ruby-identifier">commentable</span>, <span class="ruby-identifier">comment</span>)
-4:     <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">comment</span> <span class="ruby-operator">:</span> [<span class="ruby-identifier">commentable</span>, <span class="ruby-identifier">comment</span>]
-5:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-
-	</div>
-
-
-	<div id="rdoc-debugging-section-dump" class="debugging-section">
-	
-		<p>Disabled; run with --debug to generate this.</p>
-	
-	</div>
-
-	<div id="validator-badges">
-		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
-		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
-			Rdoc Generator</a> 1.1.6</small>.</p>
-	</div>
-
-</body>
-</html>
+comment form no matter where it appears, but oh well</p>
+          
+
+          
+          <div class="method-source-code" id="cancel_comment_button-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 203</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_comment_button</span>(<span class="ruby-identifier">comment</span>, <span class="ruby-identifier">commentable</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">new_record?</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">class</span>
+      <span class="ruby-comment"># canceling a reply to a comment</span>
+      <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                          <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
+                          <span class="ruby-node">&quot;#{commentable.ultimate_parent.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
+      <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                            <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
+                            <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">id</span>
+      <span class="ruby-identifier">link_to</span>( 
+        <span class="ruby-string">&quot;Cancel&quot;</span>, 
+        <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+                <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment_reply</span>, 
+                <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>, 
+                <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>], 
+                <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
+        <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>) 
+     <span class="ruby-keyword">else</span>
+      <span class="ruby-comment"># canceling a reply to a different commentable thingy</span>
+      <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                          <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
+                          <span class="ruby-node">&quot;#{commentable.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
+      <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                            <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
+                            <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>        
+      <span class="ruby-identifier">link_to</span>(
+        <span class="ruby-string">&quot;Cancel&quot;</span>, 
+        <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+                <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment</span>, 
+                <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
+        <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-comment"># canceling an edit</span>
+    <span class="ruby-identifier">link_to</span>(
+      <span class="ruby-string">&quot;Cancel&quot;</span>, 
+      <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+              <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment_edit</span>, 
+              <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>), 
+              <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>]),
+      <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- cancel_comment_button-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- cancel_comment_button-method -->
+
+    
+      <div id="method-i-cancel_comment_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cancel_comment_link</span><span
+            class="method-args">(commentable)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="cancel_comment_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 139</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_comment_link</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                      <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
+                      <span class="ruby-node">&quot;#{commentable.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
+  <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                        <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
+                        <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>
+  <span class="ruby-identifier">link_to</span>(
+    <span class="ruby-string">&quot;Cancel Comment&quot;</span>,
+    <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+            <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment</span>, 
+            <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
+    <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- cancel_comment_link-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- cancel_comment_link-method -->
+
+    
+      <div id="method-i-cancel_comment_reply_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cancel_comment_reply_link</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>return link to cancel new reply to a comment</p>
+          
+
+          
+          <div class="method-source-code" id="cancel_comment_reply_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 183</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_comment_reply_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                      <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
+                      <span class="ruby-node">&quot;#{comment.ultimate_parent.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
+  <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                        <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
+                        <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">id</span>
+  <span class="ruby-identifier">link_to</span>( 
+    <span class="ruby-string">&quot;Cancel&quot;</span>, 
+    <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+            <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment_reply</span>, 
+            <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>, 
+            <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>], 
+            <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>), 
+    <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- cancel_comment_reply_link-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- cancel_comment_reply_link-method -->
+
+    
+      <div id="method-i-cancel_delete_comment_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cancel_delete_comment_link</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>return link to cancel new reply to a comment</p>
+          
+
+          
+          <div class="method-source-code" id="cancel_delete_comment_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 278</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_delete_comment_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-identifier">link_to</span>( 
+    <span class="ruby-string">&quot;Cancel&quot;</span>, 
+    <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+            <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:cancel_comment_delete</span>, 
+            <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>, 
+            <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>]), 
+    <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- cancel_delete_comment_link-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- cancel_delete_comment_link-method -->
+
+    
+      <div id="method-i-delete_comment_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delete_comment_link</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>return html link to delete comments</p>
+          
+
+          
+          <div class="method-source-code" id="delete_comment_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 267</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_comment_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-identifier">link_to</span>( 
+    <span class="ruby-string">&quot;Delete&quot;</span>, 
+    <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+            <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:delete_comment</span>, 
+            <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>, 
+            <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>]), 
+    <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- delete_comment_link-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- delete_comment_link-method -->
+
+    
+      <div id="method-i-do_cancel_delete_comment_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">do_cancel_delete_comment_link</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="do_cancel_delete_comment_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 258</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">do_cancel_delete_comment_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:delete_comment_id</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:delete_comment_id</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>
+    <span class="ruby-identifier">cancel_delete_comment_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">delete_comment_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- do_cancel_delete_comment_link-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- do_cancel_delete_comment_link-method -->
+
+    
+      <div id="method-i-edit_comment_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">edit_comment_link</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>return html link to edit comment</p>
+          
+
+          
+          <div class="method-source-code" id="edit_comment_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 249</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">edit_comment_link</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-identifier">link_to</span>(<span class="ruby-string">&quot;Edit&quot;</span>, 
+          <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+                  <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:edit</span>, 
+                  <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>, 
+                  <span class="ruby-value">:comment_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:comment_id</span>]),
+          <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- edit_comment_link-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- edit_comment_link-method -->
+
+    
+      <div id="method-i-fallback_url_for_comment" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">fallback_url_for_comment</span><span
+            class="method-args">(comment, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="fallback_url_for_comment-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 317</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">fallback_url_for_comment</span>(<span class="ruby-identifier">comment</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">default_options</span> = {<span class="ruby-value">:anchor</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;comment_#{comment.id}&quot;</span>}
+  <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:action</span>] = <span class="ruby-string">&quot;show&quot;</span>
+  <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:show_comments</span>] = <span class="ruby-keyword">true</span>
+  <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:id</span>] = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
+  
+  <span class="ruby-identifier">options</span> = <span class="ruby-identifier">default_options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@thread_view</span> <span class="ruby-comment"># hopefully means we're on a Thread page</span>
+    <span class="ruby-identifier">options</span>[<span class="ruby-value">:id</span>] = <span class="ruby-ivar">@thread_root</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@thread_root</span>
+    <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>)
+  <span class="ruby-keyword">else</span> <span class="ruby-comment"># Top Level Commentable</span>
+    <span class="ruby-identifier">fallback_url_for_top_level</span>(<span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>, <span class="ruby-identifier">options</span>)
+  <span class="ruby-keyword">end</span>
+  
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- fallback_url_for_comment-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- fallback_url_for_comment-method -->
+
+    
+      <div id="method-i-fallback_url_for_top_level" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">fallback_url_for_top_level</span><span
+            class="method-args">(commentable, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>non-JavaScript fallbacks for great justice!</p>
+          
+
+          
+          <div class="method-source-code" id="fallback_url_for_top_level-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 299</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">fallback_url_for_top_level</span>(<span class="ruby-identifier">commentable</span>, <span class="ruby-identifier">options</span> = {})    
+  <span class="ruby-identifier">default_options</span> = {<span class="ruby-value">:anchor</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;comments&quot;</span>}
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
+    <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:controller</span>] = <span class="ruby-value">:comments</span>
+    <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:action</span>] = <span class="ruby-value">:index</span>
+    <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:tag_id</span>] = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span>      
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:controller</span>] = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">pluralize</span>
+    <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:action</span>] = <span class="ruby-string">&quot;show&quot;</span>
+    <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:id</span>] = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:add_comment</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-value">:add_comment</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:add_comment</span>]
+  <span class="ruby-identifier">default_options</span>[<span class="ruby-value">:show_comments</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-value">:show_comments</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:show_comments</span>]
+  
+  <span class="ruby-identifier">options</span> = <span class="ruby-identifier">default_options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
+  <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- fallback_url_for_top_level-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- fallback_url_for_top_level-method -->
+
+    
+      <div id="method-i-get_commenter_pseud_or_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_commenter_pseud_or_name</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>return pseudname or name for comment</p>
+          
+
+          
+          <div class="method-source-code" id="get_commenter_pseud_or_name-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 48</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_commenter_pseud_or_name</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">pseud_id</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">nil?</span>
+      <span class="ruby-string">'Account Deleted'</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">byline</span>, [<span class="ruby-identifier">comment</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">user</span>, <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">pseud</span>]
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">name</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_commenter_pseud_or_name-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_commenter_pseud_or_name-method -->
+
+    
+      <div id="method-i-hide_comments_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">hide_comments_link</span><span
+            class="method-args">(commentable)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="hide_comments_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 101</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">hide_comments_link</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                      <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
+                      <span class="ruby-node">&quot;#{commentable.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
+  <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                        <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
+                        <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>
+  <span class="ruby-identifier">link_to</span>(
+    <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Hide Comments (%{comment_count})&quot;</span>, <span class="ruby-value">:comment_count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">count_visible_comments</span>.<span class="ruby-identifier">to_s</span>), 
+    <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+            <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:hide_comments</span>, 
+            <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>),
+    <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- hide_comments_link-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- hide_comments_link-method -->
+
+    
+      <div id="method-i-last_reply_by" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">last_reply_by</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="last_reply_by-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 18</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">last_reply_by</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">count_all_comments</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">c</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:first</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:thread</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">id</span>}, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'created_at DESC'</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">pseud</span>
+      <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">name</span>, [<span class="ruby-identifier">c</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">user</span>, <span class="ruby-identifier">c</span>.<span class="ruby-identifier">pseud</span>]
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">h</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">name</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>    
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- last_reply_by-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- last_reply_by-method -->
+
+    
+      <div id="method-i-link_to_comment_ultimate_parent" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">link_to_comment_ultimate_parent</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="link_to_comment_ultimate_parent-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 29</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">link_to_comment_ultimate_parent</span>(<span class="ruby-identifier">comment</span>)
+  <span class="ruby-identifier">ultimate</span> = <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">ultimate_parent</span>
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">ultimate</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span> 
+    <span class="ruby-keyword">when</span> <span class="ruby-string">'Work'</span> <span class="ruby-keyword">then</span> 
+      <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">ultimate</span>.<span class="ruby-identifier">title</span>, <span class="ruby-identifier">ultimate</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-string">'Pseud'</span> <span class="ruby-keyword">then</span>
+      <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">ultimate</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">ultimate</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-string">'AdminPost'</span> <span class="ruby-keyword">then</span> 
+        <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">ultimate</span>.<span class="ruby-identifier">title</span>, <span class="ruby-identifier">ultimate</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">ultimate</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
+        <span class="ruby-identifier">link_to_tag</span>(<span class="ruby-identifier">ultimate</span>)
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">link_to</span> <span class="ruby-string">'Something Interesting'</span>, <span class="ruby-identifier">ultimate</span>
+      <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- link_to_comment_ultimate_parent-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- link_to_comment_ultimate_parent-method -->
+
+    
+      <div id="method-i-show_comments_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">show_comments_link</span><span
+            class="method-args">(commentable)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="show_comments_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 83</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">show_comments_link</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">count_visible_comments</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">commentable_id</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                        <span class="ruby-value">:tag_id</span> <span class="ruby-operator">:</span> 
+                        <span class="ruby-node">&quot;#{commentable.class.to_s.underscore}_id&quot;</span>.<span class="ruby-identifier">to_sym</span>
+    <span class="ruby-identifier">commentable_value</span> = <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> 
+                          <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> 
+                          <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">id</span>
+    <span class="ruby-identifier">link_to</span>(
+        <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Comments (%{comment_count})&quot;</span>, <span class="ruby-value">:comment_count</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">count_visible_comments</span>.<span class="ruby-identifier">to_s</span>),
+        <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:comments</span>, 
+                <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:show_comments</span>, 
+                <span class="ruby-identifier">commentable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">commentable_value</span>,
+                <span class="ruby-value">:view_full_work</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:view_full_work</span>]), 
+        <span class="ruby-value">:remote</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- show_comments_link-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- show_comments_link-method -->
+
+    
+      <div id="method-i-show_hide_comments_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">show_hide_comments_link</span><span
+            class="method-args">(commentable)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>return link to show or hide comments</p>
+          
+
+          
+          <div class="method-source-code" id="show_hide_comments_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 75</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">show_hide_comments_link</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:show_comments</span>]
+    <span class="ruby-identifier">hide_comments_link</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">show_comments_link</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-keyword">end</span> 
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- show_hide_comments_link-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- show_hide_comments_link-method -->
+
+    
+      <div id="method-i-tag_comment_as_spam_link" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">tag_comment_as_spam_link</span><span
+            class="method-args">(comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>return html link to mark/unmark comment as spam</p>
+          
+
+          
+          <div class="method-source-code" id="tag_comment_as_spam_link-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 289</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_comment_as_spam_link</span>(<span class="ruby-identifier">comment</span>)    
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">comment</span>.<span class="ruby-identifier">approved</span>
+    <span class="ruby-identifier">link_to</span>(<span class="ruby-string">'Spam'</span>, <span class="ruby-identifier">reject_comment_path</span>(<span class="ruby-identifier">comment</span>), <span class="ruby-value">:method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:put</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">link_to</span>(<span class="ruby-string">'Not Spam'</span>, <span class="ruby-identifier">approve_comment_path</span>(<span class="ruby-identifier">comment</span>), <span class="ruby-value">:method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:put</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- tag_comment_as_spam_link-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- tag_comment_as_spam_link-method -->
+
+    
+      <div id="method-i-title_for_comment_page" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">title_for_comment_page</span><span
+            class="method-args">(commentable)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="title_for_comment_page-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 7</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">title_for_comment_page</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">commentable_name</span>.<span class="ruby-identifier">blank?</span>
+    <span class="ruby-identifier">title</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
+    <span class="ruby-identifier">title</span> = <span class="ruby-identifier">link_to_tag</span>(<span class="ruby-identifier">commentable</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">title</span> = <span class="ruby-identifier">link_to</span>(<span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">commentable_name</span>, <span class="ruby-identifier">commentable</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">h</span>(<span class="ruby-identifier">ts</span>(<span class="ruby-string">'Reading Comments on '</span>)) <span class="ruby-operator">+</span> <span class="ruby-identifier">title</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- title_for_comment_page-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- title_for_comment_page-method -->
+
+    
+      <div id="method-i-value_for_comment_form" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">value_for_comment_form</span><span
+            class="method-args">(commentable, comment)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="value_for_comment_form-source">
+            <pre><span class="ruby-comment"># File app/helpers/comments_helper.rb, line 3</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">value_for_comment_form</span>(<span class="ruby-identifier">commentable</span>, <span class="ruby-identifier">comment</span>)
+  <span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">comment</span> <span class="ruby-operator">:</span> [<span class="ruby-identifier">commentable</span>, <span class="ruby-identifier">comment</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- value_for_comment_form-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- value_for_comment_form-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
 

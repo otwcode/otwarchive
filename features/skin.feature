@@ -222,7 +222,9 @@ Feature: creating and editing skins
     And I should see "#workskin {margin: auto 4%; padding: 0.5em 4% 0;}" within "style"
     And I should see "background: #ccccff;" within "style"
     And I should see "color: red;" within "style"
-    And I should see "font: 120%/1.125 Garamond;" within "style"
+    And I should see "font-family: Garamond;" within "style"
+    And I should see "font-size: 120%;" within "style"
+    And I should see "line-height:1.125;" within "style"
     And I should see ".userstuff p {margin-bottom: 5.0em;}" within "style"
   When I am on skinner's preferences page
   Then "Wide margins" should be selected within "preference_skin_id"
