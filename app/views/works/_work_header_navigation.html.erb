@@ -11,14 +11,14 @@
 
   <% # chapter navigation %>
   <% if @previous_chapter || @next_chapter %>
-    <li><%= link_to ts("Entire Work"), work_path(@work, :view_full_work => 'true') %></li>
+    <li class="link-chapter"><%= link_to ts("Entire Work"), work_path(@work, :view_full_work => 'true') %></li>
 
     <% if @previous_chapter %>
-      <li><%= link_to '&#8592; '.html_safe + ts("Previous Chapter"), [@work, @previous_chapter] %></li>
+      <li class="link-chapter"><%= link_to '&#8592; '.html_safe + ts("Previous Chapter"), [@work, @previous_chapter] %></li>
     <% end %>
     
     <% if @next_chapter %>
-      <li><%= link_to (ts("Next Chapter") + " &#8594;").html_safe, [@work, @next_chapter] %></li>
+      <li class="link-chapter"><%= link_to (ts("Next Chapter") + " &#8594;").html_safe, [@work, @next_chapter] %></li>
     <% end %>
     
     <li class="chapter" aria-haspopup="true">
@@ -42,18 +42,18 @@
       </ul>
     </li>
   <% elsif @chapters %>
-    <li><%= link_to ts("View chapter by chapter"), [@work, @chapter] %></li>
+    <li class="link-chapter"><%= link_to ts("View chapter by chapter"), [@work, @chapter] %></li>
   <% end %>
 
 
   <% # for users, bookmark and mark to read later %>
   <% if current_user.is_a?(User) %>
     <% @bookmark ||= bookmark_if_exists(@work) %>
-    <li><%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
+    <li class="link-bookmark"><%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
     <li><%= link_to ts("Cancel Bookmark"), "#", :class => "bookmark_form_placement_close" %></li>
 
     <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
-      <li><%= marktoread_link(@work) %></li>
+      <li class="link-marktoread"><%= marktoread_link(@work) %></li>
     <% end %>
   <% end %>
 
@@ -61,7 +61,7 @@
 
 <!-- allow user to disable style on work if it has been customized -->
   <% if @work.work_skin %>
-    <li>
+    <li class="link-workskin">
       <% if Preference.disable_work_skin?(params[:style]) %>
         <%= link_to(ts("Show Creator's Style"),
           params[:view_full_work] == 'true' ? url_for(:style => 'creator', :view_full_work => 'true') : url_for(:style => 'creator')) %>
@@ -72,7 +72,7 @@
     </li>
   <% end %>
 
-  <li>
+  <li class="link-share">
     <%= link_to_ibox ts("Share"), :for => "#share" %>
     <div id="share" style="display: none;">
       <p><%= ts("Copy and paste to link back to this work: (CTRL/CMD-A will select all)") -%></p>
@@ -91,7 +91,7 @@
     </div>
   </li>
 
-  <li aria-haspopup="true">
+  <li class="link-download" aria-haspopup="true">
     <a title="Download" class="downloads_open open"><%= ts("Download") %> &#8595;</a>
     <a title="Download Close" class="downloads_close close hidden"><%= ts("Download") %> &#8595;</a>
     <ul id="downloads" class="toggled secondary">
