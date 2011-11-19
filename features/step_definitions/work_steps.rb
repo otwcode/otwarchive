@@ -43,7 +43,7 @@ Given /^I have a locked work "([^\"]*)"$/ do |work|
     And %{I post the locked work "#{work}"}
 end
 
-Given /^the work with comments setup$/ do
+Given /^the work with(?: (\d+))? comments setup$/ do |n_comments|
   Given %{I have a work "Blabla"}
   And %{I am logged out}
   n_comments ||= 3
@@ -61,9 +61,10 @@ end
 Given /^the chaptered work with comments setup$/ do
   Given %{the chaptered work with 3 chapters "BigBang"}
   When "I am logged in as a random user"
-  And %{I view the work "BigBang"}
+    And %{I view the work "BigBang"}
     And %{I post a comment "Woohoo"}
   (2..3).each do |i|
+    And %{I view the work "BigBang"}
     And %{I view the #{i.to_s}th chapter}
     And %{I post a comment "Woohoo"}
   end

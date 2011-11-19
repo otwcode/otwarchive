@@ -1,5 +1,5 @@
 class AdminPostsController < ApplicationController
-  
+
   before_filter :admin_only, :except => [:index, :show]
   
   # GET /admin_posts
@@ -19,9 +19,9 @@ class AdminPostsController < ApplicationController
       @admin_posts = @admin_posts.non_translated
       @tags = AdminPostTag.order(:name)
     end
-    @admin_posts = @admin_posts.order('created_at DESC').paginate(:page => params[:page], :per_page => 8)
+    @admin_posts = @admin_posts.order('created_at DESC').page(params[:page])
   end
-  
+
   # GET /admin_posts/1
   # GET /admin_posts/1.xml
   def show
@@ -61,7 +61,7 @@ class AdminPostsController < ApplicationController
 
     respond_to do |format|
       if @admin_post.save
-        flash[:notice] = 'AdminPost was successfully created.'
+        flash[:notice] = ts("Admin Post was successfully created.")
         format.html { redirect_to(@admin_post) }
         format.xml  { render :xml => @admin_post, :status => :created, :location => @admin_post }
       else
@@ -78,7 +78,7 @@ class AdminPostsController < ApplicationController
 
     respond_to do |format|
       if @admin_post.update_attributes(params[:admin_post])
-        flash[:notice] = 'AdminPost was successfully updated.'
+        flash[:notice] = ts("Admin Post was successfully updated.")
         format.html { redirect_to(@admin_post) }
         format.xml  { head :ok }
       else
