@@ -27,7 +27,7 @@ p.submit, input.submit, dd.submit
 /*subtypes and modes 
 test note: this pagination clear needs to be kept an eye on*/
 ol.pagination
-        { text-align:center; clear:both; margin:0.643em auto}
+        { text-align:center; clear:right; margin:0.643em auto}
 .actions a:visited
         { color: #111; }
 .actions a:hover, .actions input:hover
