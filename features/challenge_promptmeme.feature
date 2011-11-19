@@ -429,7 +429,8 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   When I am on my user page
     And I follow "Claims"
-  Then I should see "Fulfilled Story" # TODO: should I? It's not there at all
+  Then I should see "Fulfilled Story"
+   # TODO: should I? It's not there at all
     And I should not see "Not yet posted"
   
   Scenario: Claims count should be correct, shows fulfilled claims as well
