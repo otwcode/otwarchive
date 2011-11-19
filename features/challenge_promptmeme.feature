@@ -1346,7 +1346,7 @@ Feature: Prompt Meme Challenge
   Scenario: Fulfill a claim from an existing work
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up for Battle 12
+    And everyone has signed up for Battle 12
   When I close signups for "Battle 12"
   When I reveal the "Battle 12" challenge
   When I reveal the authors of the "Battle 12" challenge
@@ -1387,11 +1387,11 @@ Feature: Prompt Meme Challenge
     And I follow "Download (CSV)"
   Then I should get a file with ending and type csv
 
-  Scenario: Download prompt CSV from requests page # was the feature removed? why?
+  Scenario: Can't download prompt CSV from requests page
+  # it's aimed at users, not mods
   
-  Given I am logged in as "mod1"
-    And I have standard challenge tags setup
-    And I create Battle 12 promptmeme
+  Given I have Battle 12 prompt meme fully set up
+    And everyone has signed up for Battle 12
+    And I am logged in as "mod1"
   When I go to the "Battle 12" requests page
-    And I follow "Download (CSV)"
-  Then I should get a file with ending and type csv
+  Then I should not see "Download (CSV)"
