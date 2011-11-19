@@ -17,13 +17,6 @@ GIT
       riddle (>= 1.2.1)
 
 GIT
-  remote: git://github.com/huerlisi/will_paginate.git
-  revision: 05fbcb82299a449fc37fb9198346703740cb39cd
-  branch: rails3
-  specs:
-    will_paginate (3.0.pre3)
-
-GIT
   remote: git://github.com/odorcicd/authlogic.git
   revision: a087ad0cba3c165ba22fcf176c28b6f7517931e8
   branch: rails3
@@ -256,6 +249,7 @@ GEM
     whenever (0.6.2)
       aaronh-chronic (>= 0.3.9)
       activesupport (>= 2.3.4)
+    will_paginate (3.0.2)
     xml-simple (1.0.12)
     ya2yaml (0.30)
     yard (0.6.1)
@@ -306,4 +300,4 @@ DEPENDENCIES
   valium
   vcr
   whenever (~> 0.6.2)
-  will_paginate!
+  will_paginate (>= 3.0.2)

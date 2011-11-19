@@ -1,3 +1,4 @@
+@comments
 Feature: Commenting on admin posts
   As a user
   I want to comment on admin posts
