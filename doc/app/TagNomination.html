@@ -1,1494 +1,1337 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+
+<html>
 <head>
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-
-	<title>Class: TagNomination</title>
-
-	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
-
-	<script src="./js/jquery.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/thickbox-compressed.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/quicksearch.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/darkfish.js" type="text/javascript"
-		charset="utf-8"></script>
-
-</head>
-<body class="class">
-
-	<div id="metadata">
-		<div id="home-metadata">
-			<div id="home-section" class="section">
-        <h3 class="section-header">
-          <a href="./index.html">Home</a>
-          <a href="./index.html#classes">Classes</a>
-          <a href="./index.html#methods">Methods</a>
-        </h3>
-			</div>
-		</div>
-
-		<div id="file-metadata">
-			<div id="file-list-section" class="section">
-				<h3 class="section-header">In Files</h3>
-				<div class="section-body">
-					<ul>
-					
-						<li><a href="./app/models/tag_nomination_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="app/models/tag_nomination.rb">app/models/tag_nomination.rb</a></li>
-					
-					</ul>
-				</div>
-			</div>
-
-			
-		</div>
-
-		<div id="class-metadata">
-
-			<!-- Parent Class -->
-			
-			<div id="parent-class-section" class="section">
-				<h3 class="section-header">Parent</h3>
-				
-				<p class="link">ActiveRecord::Base</p>
-				
-			</div>
-			
-
-			<!-- Namespace Contents -->
-			
-
-			<!-- Method Quickref -->
-			
-			<div id="method-list-section" class="section">
-				<h3 class="section-header">Methods</h3>
-				<ul class="link-list">
-					
-					<li><a href="#method-c-change_tagname%21">::change_tagname!</a></li>
-					
-					<li><a href="#method-c-for_tag_set">::for_tag_set</a></li>
-					
-					<li><a href="#method-c-join_fandom_nomination">::join_fandom_nomination</a></li>
-					
-					<li><a href="#method-c-names_with_count">::names_with_count</a></li>
-					
-					<li><a href="#method-c-nominated_parents">::nominated_parents</a></li>
-					
-					<li><a href="#method-c-unreviewed">::unreviewed</a></li>
-					
-					<li><a href="#method-i-approve%21">#approve!</a></li>
-					
-					<li><a href="#method-i-change_tagname%3F">#change_tagname?</a></li>
-					
-					<li><a href="#method-i-destroy_if_blank">#destroy_if_blank</a></li>
-					
-					<li><a href="#method-i-get_owned_tag_set">#get_owned_tag_set</a></li>
-					
-					<li><a href="#method-i-get_parent_tagname">#get_parent_tagname</a></li>
-					
-					<li><a href="#method-i-not_already_reviewed">#not_already_reviewed</a></li>
-					
-					<li><a href="#method-i-require_unique_tagname_with_parent">#require_unique_tagname_with_parent</a></li>
-					
-					<li><a href="#method-i-reviewed%3F">#reviewed?</a></li>
-					
-					<li><a href="#method-i-set_approval_status">#set_approval_status</a></li>
-					
-					<li><a href="#method-i-set_parented">#set_parented</a></li>
-					
-					<li><a href="#method-i-set_tag_status">#set_tag_status</a></li>
-					
-					<li><a href="#method-i-times_nominated">#times_nominated</a></li>
-					
-					<li><a href="#method-i-type_validity">#type_validity</a></li>
-					
-					<li><a href="#method-i-unreviewed%3F">#unreviewed?</a></li>
-					
-				</ul>
-			</div>
-			
-
-			<!-- Included Modules -->
-			
-		</div>
-
-		<div id="project-metadata">
-			
-			
-			<div id="fileindex-section" class="section project-section">
-				<h3 class="section-header">Files</h3>
-				<ul>
-				
-					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
-				
-				</ul>
-			</div>
-			
-
-			<div id="classindex-section" class="section project-section">
-				<h3 class="section-header">Class Index
-					<span class="search-toggle"><img src="./images/find.png"
-						height="16" width="16" alt="[+]"
-						title="show/hide quicksearch" /></span></h3>
-				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
-				<fieldset>
-					<legend>Quicksearch</legend>
-					<input type="text" name="quicksearch" value=""
-						class="quicksearch-field" />
-				</fieldset>
-				</form>
-
-				<ul class="link-list">
-				
-					<li><a href="./Static.html">Static</a></li>
-				
-					<li><a href="./Static/BaseController.html">Static::BaseController</a></li>
-				
-					<li><a href="./Static/CollectionsController.html">Static::CollectionsController</a></li>
-				
-					<li><a href="./Static/FandomsController.html">Static::FandomsController</a></li>
-				
-					<li><a href="./Static/MediaController.html">Static::MediaController</a></li>
-				
-					<li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
-				
-					<li><a href="./Static/WorksController.html">Static::WorksController</a></li>
-				
-					<li><a href="./Admin.html">Admin</a></li>
-				
-					<li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
-				
-					<li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
-				
-					<li><a href="./Admin/SettingsController.html">Admin::SettingsController</a></li>
-				
-					<li><a href="./Admin/SkinsController.html">Admin::SkinsController</a></li>
-				
-					<li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
-				
-					<li><a href="./ActionController.html">ActionController</a></li>
-				
-					<li><a href="./ActionController/Routing.html">ActionController::Routing</a></li>
-				
-					<li><a href="./ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
-				
-					<li><a href="./Challenge.html">Challenge</a></li>
-				
-					<li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
-				
-					<li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
-				
-					<li><a href="./ActiveRecord.html">ActiveRecord</a></li>
-				
-					<li><a href="./AutocompleteSource.html">AutocompleteSource</a></li>
-				
-					<li><a href="./AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
-				
-					<li><a href="./ChallengeCore.html">ChallengeCore</a></li>
-				
-					<li><a href="./ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
-				
-					<li><a href="./StoryParser.html">StoryParser</a></li>
-				
-					<li><a href="./StoryParser/Error.html">StoryParser::Error</a></li>
-				
-					<li><a href="./XhtmlSplitter.html">XhtmlSplitter</a></li>
-				
-					<li><a href="./XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
-				
-					<li><a href="./AbuseReport.html">AbuseReport</a></li>
-				
-					<li><a href="./AbuseReportsController.html">AbuseReportsController</a></li>
-				
-					<li><a href="./AdminMailer.html">AdminMailer</a></li>
-				
-					<li><a href="./AdminPost.html">AdminPost</a></li>
-				
-					<li><a href="./AdminPostTag.html">AdminPostTag</a></li>
-				
-					<li><a href="./AdminPostTagging.html">AdminPostTagging</a></li>
-				
-					<li><a href="./AdminPostsController.html">AdminPostsController</a></li>
-				
-					<li><a href="./AdminSession.html">AdminSession</a></li>
-				
-					<li><a href="./AdminSessionsController.html">AdminSessionsController</a></li>
-				
-					<li><a href="./AdminSetting.html">AdminSetting</a></li>
-				
-					<li><a href="./AdminsController.html">AdminsController</a></li>
-				
-					<li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
-				
-					<li><a href="./AlphabetHelper.html">AlphabetHelper</a></li>
-				
-					<li><a href="./ApplicationController.html">ApplicationController</a></li>
-				
-					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
-				
-					<li><a href="./ArchiveFaq.html">ArchiveFaq</a></li>
-				
-					<li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a></li>
-				
-					<li><a href="./AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
-				
-					<li><a href="./AutocompleteController.html">AutocompleteController</a></li>
-				
-					<li><a href="./Banned.html">Banned</a></li>
-				
-					<li><a href="./Bookmark.html">Bookmark</a></li>
-				
-					<li><a href="./BookmarksController.html">BookmarksController</a></li>
-				
-					<li><a href="./BookmarksHelper.html">BookmarksHelper</a></li>
-				
-					<li><a href="./CacheHelper.html">CacheHelper</a></li>
-				
-					<li><a href="./CastNomination.html">CastNomination</a></li>
-				
-					<li><a href="./Category.html">Category</a></li>
-				
-					<li><a href="./ChallengeAssignment.html">ChallengeAssignment</a></li>
-				
-					<li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
-				
-					<li><a href="./ChallengeClaim.html">ChallengeClaim</a></li>
-				
-					<li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a></li>
-				
-					<li><a href="./ChallengeHelper.html">ChallengeHelper</a></li>
-				
-					<li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a></li>
-				
-					<li><a href="./ChallengeSignup.html">ChallengeSignup</a></li>
-				
-					<li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
-				
-					<li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
-				
-					<li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a></li>
-				
-					<li><a href="./ChallengeSweeper.html">ChallengeSweeper</a></li>
-				
-					<li><a href="./ChallengesController.html">ChallengesController</a></li>
-				
-					<li><a href="./Chapter.html">Chapter</a></li>
-				
-					<li><a href="./ChapterSweeper.html">ChapterSweeper</a></li>
-				
-					<li><a href="./ChaptersController.html">ChaptersController</a></li>
-				
-					<li><a href="./ChaptersHelper.html">ChaptersHelper</a></li>
-				
-					<li><a href="./Character.html">Character</a></li>
-				
-					<li><a href="./CharacterNomination.html">CharacterNomination</a></li>
-				
-					<li><a href="./Collectible.html">Collectible</a></li>
-				
-					<li><a href="./Collection.html">Collection</a></li>
-				
-					<li><a href="./CollectionItem.html">CollectionItem</a></li>
-				
-					<li><a href="./CollectionItemsController.html">CollectionItemsController</a></li>
-				
-					<li><a href="./CollectionObserver.html">CollectionObserver</a></li>
-				
-					<li><a href="./CollectionParticipant.html">CollectionParticipant</a></li>
-				
-					<li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a></li>
-				
-					<li><a href="./CollectionPreference.html">CollectionPreference</a></li>
-				
-					<li><a href="./CollectionProfile.html">CollectionProfile</a></li>
-				
-					<li><a href="./CollectionProfileController.html">CollectionProfileController</a></li>
-				
-					<li><a href="./CollectionSweeper.html">CollectionSweeper</a></li>
-				
-					<li><a href="./CollectionsController.html">CollectionsController</a></li>
-				
-					<li><a href="./CollectionsHelper.html">CollectionsHelper</a></li>
-				
-					<li><a href="./Comment.html">Comment</a></li>
-				
-					<li><a href="./CommentMailer.html">CommentMailer</a></li>
-				
-					<li><a href="./CommentObserver.html">CommentObserver</a></li>
-				
-					<li><a href="./CommentSweeper.html">CommentSweeper</a></li>
-				
-					<li><a href="./CommentsController.html">CommentsController</a></li>
-				
-					<li><a href="./CommentsHelper.html">CommentsHelper</a></li>
-				
-					<li><a href="./CommonTagging.html">CommonTagging</a></li>
-				
-					<li><a href="./CreationObserver.html">CreationObserver</a></li>
-				
-					<li><a href="./Creatorship.html">Creatorship</a></li>
-				
-					<li><a href="./CssCleaner.html">CssCleaner</a></li>
-				
-					<li><a href="./DateHelper.html">DateHelper</a></li>
-				
-					<li><a href="./DevmodeController.html">DevmodeController</a></li>
-				
-					<li><a href="./DownloadsController.html">DownloadsController</a></li>
-				
-					<li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a></li>
-				
-					<li><a href="./ErrorsController.html">ErrorsController</a></li>
-				
-					<li><a href="./ExternalAuthor.html">ExternalAuthor</a></li>
-				
-					<li><a href="./ExternalAuthorName.html">ExternalAuthorName</a></li>
-				
-					<li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a></li>
-				
-					<li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
-				
-					<li><a href="./ExternalCreatorship.html">ExternalCreatorship</a></li>
-				
-					<li><a href="./ExternalWork.html">ExternalWork</a></li>
-				
-					<li><a href="./ExternalWorksController.html">ExternalWorksController</a></li>
-				
-					<li><a href="./Fandom.html">Fandom</a></li>
-				
-					<li><a href="./FandomNomination.html">FandomNomination</a></li>
-				
-					<li><a href="./FandomsController.html">FandomsController</a></li>
-				
-					<li><a href="./FeedSweeper.html">FeedSweeper</a></li>
-				
-					<li><a href="./Feedback.html">Feedback</a></li>
-				
-					<li><a href="./FeedbacksController.html">FeedbacksController</a></li>
-				
-					<li><a href="./FilterCount.html">FilterCount</a></li>
-				
-					<li><a href="./FilterTagging.html">FilterTagging</a></li>
-				
-					<li><a href="./FindRandom.html">FindRandom</a></li>
-				
-					<li><a href="./Freeform.html">Freeform</a></li>
-				
-					<li><a href="./FreeformNomination.html">FreeformNomination</a></li>
-				
-					<li><a href="./Gift.html">Gift</a></li>
-				
-					<li><a href="./GiftExchange.html">GiftExchange</a></li>
-				
-					<li><a href="./GiftsController.html">GiftsController</a></li>
-				
-					<li><a href="./HitCounter.html">HitCounter</a></li>
-				
-					<li><a href="./HomeController.html">HomeController</a></li>
-				
-					<li><a href="./HomeHelper.html">HomeHelper</a></li>
-				
-					<li><a href="./HtmlCleaner.html">HtmlCleaner</a></li>
-				
-					<li><a href="./InboxComment.html">InboxComment</a></li>
-				
-					<li><a href="./InboxController.html">InboxController</a></li>
-				
-					<li><a href="./InboxHelper.html">InboxHelper</a></li>
-				
-					<li><a href="./Invitation.html">Invitation</a></li>
-				
-					<li><a href="./InvitationsController.html">InvitationsController</a></li>
-				
-					<li><a href="./InvitationsHelper.html">InvitationsHelper</a></li>
-				
-					<li><a href="./InviteRequest.html">InviteRequest</a></li>
-				
-					<li><a href="./InviteRequestsController.html">InviteRequestsController</a></li>
-				
-					<li><a href="./KnownIssue.html">KnownIssue</a></li>
-				
-					<li><a href="./KnownIssuesController.html">KnownIssuesController</a></li>
-				
-					<li><a href="./Kudo.html">Kudo</a></li>
-				
-					<li><a href="./KudoMailer.html">KudoMailer</a></li>
-				
-					<li><a href="./KudoObserver.html">KudoObserver</a></li>
-				
-					<li><a href="./KudosController.html">KudosController</a></li>
-				
-					<li><a href="./Language.html">Language</a></li>
-				
-					<li><a href="./LanguagesController.html">LanguagesController</a></li>
-				
-					<li><a href="./Locale.html">Locale</a></li>
-				
-					<li><a href="./LocalesController.html">LocalesController</a></li>
-				
-					<li><a href="./LogItem.html">LogItem</a></li>
-				
-					<li><a href="./Media.html">Media</a></li>
-				
-					<li><a href="./MediaController.html">MediaController</a></li>
-				
-					<li><a href="./MetaTagging.html">MetaTagging</a></li>
-				
-					<li><a href="./Offer.html">Offer</a></li>
-				
-					<li><a href="./OrphansController.html">OrphansController</a></li>
-				
-					<li><a href="./OrphansHelper.html">OrphansHelper</a></li>
-				
-					<li><a href="./OwnedSetTagging.html">OwnedSetTagging</a></li>
-				
-					<li><a href="./OwnedTagSet.html">OwnedTagSet</a></li>
-				
-					<li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a></li>
-				
-					<li><a href="./PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
-				
-					<li><a href="./PasswordsController.html">PasswordsController</a></li>
-				
-					<li><a href="./People.html">People</a></li>
-				
-					<li><a href="./PeopleController.html">PeopleController</a></li>
-				
-					<li><a href="./PotentialMatch.html">PotentialMatch</a></li>
-				
-					<li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a></li>
-				
-					<li><a href="./PotentialMatchesController.html">PotentialMatchesController</a></li>
-				
-					<li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a></li>
-				
-					<li><a href="./Preference.html">Preference</a></li>
-				
-					<li><a href="./PreferencesController.html">PreferencesController</a></li>
-				
-					<li><a href="./Profile.html">Profile</a></li>
-				
-					<li><a href="./ProfileController.html">ProfileController</a></li>
-				
-					<li><a href="./Prompt.html">Prompt</a></li>
-				
-					<li><a href="./PromptMeme.html">PromptMeme</a></li>
-				
-					<li><a href="./PromptRestriction.html">PromptRestriction</a></li>
-				
-					<li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
-				
-					<li><a href="./PromptsController.html">PromptsController</a></li>
-				
-					<li><a href="./Pseud.html">Pseud</a></li>
-				
-					<li><a href="./PseudSweeper.html">PseudSweeper</a></li>
-				
-					<li><a href="./PseudsController.html">PseudsController</a></li>
-				
-					<li><a href="./PseudsHelper.html">PseudsHelper</a></li>
-				
-					<li><a href="./Query.html">Query</a></li>
-				
-					<li><a href="./Rating.html">Rating</a></li>
-				
-					<li><a href="./Rawk.html">Rawk</a></li>
-				
-					<li><a href="./Reading.html">Reading</a></li>
-				
-					<li><a href="./ReadingsController.html">ReadingsController</a></li>
-				
-					<li><a href="./RedirectController.html">RedirectController</a></li>
-				
-					<li><a href="./RedisTestSetup.html">RedisTestSetup</a></li>
-				
-					<li><a href="./RelatedWork.html">RelatedWork</a></li>
-				
-					<li><a href="./RelatedWorksController.html">RelatedWorksController</a></li>
-				
-					<li><a href="./Relationship.html">Relationship</a></li>
-				
-					<li><a href="./RelationshipNomination.html">RelationshipNomination</a></li>
-				
-					<li><a href="./Request.html">Request</a></li>
-				
-					<li><a href="./Role.html">Role</a></li>
-				
-					<li><a href="./RolesUser.html">RolesUser</a></li>
-				
-					<li><a href="./SearchController.html">SearchController</a></li>
-				
-					<li><a href="./SearchHelper.html">SearchHelper</a></li>
-				
-					<li><a href="./SerialWork.html">SerialWork</a></li>
-				
-					<li><a href="./SerialWorksController.html">SerialWorksController</a></li>
-				
-					<li><a href="./Series.html">Series</a></li>
-				
-					<li><a href="./SeriesController.html">SeriesController</a></li>
-				
-					<li><a href="./SeriesHelper.html">SeriesHelper</a></li>
-				
-					<li><a href="./SetTagging.html">SetTagging</a></li>
-				
-					<li><a href="./Skin.html">Skin</a></li>
-				
-					<li><a href="./SkinParent.html">SkinParent</a></li>
-				
-					<li><a href="./SkinsController.html">SkinsController</a></li>
-				
-					<li><a href="./SkinsHelper.html">SkinsHelper</a></li>
-				
-					<li><a href="./SortableList.html">SortableList</a></li>
-				
-					<li><a href="./Stat.html">Stat</a></li>
-				
-					<li><a href="./StatHash.html">StatHash</a></li>
-				
-					<li><a href="./StaticSweeper.html">StaticSweeper</a></li>
-				
-					<li><a href="./StatsController.html">StatsController</a></li>
-				
-					<li><a href="./StatsHelper.html">StatsHelper</a></li>
-				
-					<li><a href="./Subscription.html">Subscription</a></li>
-				
-					<li><a href="./SubscriptionsController.html">SubscriptionsController</a></li>
-				
-					<li><a href="./Tag.html">Tag</a></li>
-				
-					<li><a href="./TagNomination.html">TagNomination</a></li>
-				
-					<li><a href="./TagNominationsController.html">TagNominationsController</a></li>
-				
-					<li><a href="./TagSet.html">TagSet</a></li>
-				
-					<li><a href="./TagSetAssociation.html">TagSetAssociation</a></li>
-				
-					<li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a></li>
-				
-					<li><a href="./TagSetNomination.html">TagSetNomination</a></li>
-				
-					<li><a href="./TagSetNominationsController.html">TagSetNominationsController</a></li>
-				
-					<li><a href="./TagSetOwnership.html">TagSetOwnership</a></li>
-				
-					<li><a href="./TagSetSweeper.html">TagSetSweeper</a></li>
-				
-					<li><a href="./TagSetsHelper.html">TagSetsHelper</a></li>
-				
-					<li><a href="./TagSweeper.html">TagSweeper</a></li>
-				
-					<li><a href="./TagWranglersController.html">TagWranglersController</a></li>
-				
-					<li><a href="./TagWranglingsController.html">TagWranglingsController</a></li>
-				
-					<li><a href="./Taggable.html">Taggable</a></li>
-				
-					<li><a href="./Tagging.html">Tagging</a></li>
-				
-					<li><a href="./TagsController.html">TagsController</a></li>
-				
-					<li><a href="./TagsHelper.html">TagsHelper</a></li>
-				
-					<li><a href="./TranslationGenerator.html">TranslationGenerator</a></li>
-				
-					<li><a href="./TranslationHelper.html">TranslationHelper</a></li>
-				
-					<li><a href="./TranslationNote.html">TranslationNote</a></li>
-				
-					<li><a href="./TranslationNotesController.html">TranslationNotesController</a></li>
-				
-					<li><a href="./TranslationsController.html">TranslationsController</a></li>
-				
-					<li><a href="./TranslatorsController.html">TranslatorsController</a></li>
-				
-					<li><a href="./UrlActiveValidator.html">UrlActiveValidator</a></li>
-				
-					<li><a href="./UrlFormatValidator.html">UrlFormatValidator</a></li>
-				
-					<li><a href="./UrlHelpers.html">UrlHelpers</a></li>
-				
-					<li><a href="./User.html">User</a></li>
-				
-					<li><a href="./UserInviteRequest.html">UserInviteRequest</a></li>
-				
-					<li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a></li>
-				
-					<li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
-				
-					<li><a href="./UserMailer.html">UserMailer</a></li>
-				
-					<li><a href="./UserSession.html">UserSession</a></li>
-				
-					<li><a href="./UserSessionsController.html">UserSessionsController</a></li>
-				
-					<li><a href="./UsersController.html">UsersController</a></li>
-				
-					<li><a href="./UsersHelper.html">UsersHelper</a></li>
-				
-					<li><a href="./ValidationHelper.html">ValidationHelper</a></li>
-				
-					<li><a href="./Warning.html">Warning</a></li>
-				
-					<li><a href="./WeightedRandom.html">WeightedRandom</a></li>
-				
-					<li><a href="./Work.html">Work</a></li>
-				
-					<li><a href="./WorkObserver.html">WorkObserver</a></li>
-				
-					<li><a href="./WorkSkin.html">WorkSkin</a></li>
-				
-					<li><a href="./WorkSweeper.html">WorkSweeper</a></li>
-				
-					<li><a href="./WorksController.html">WorksController</a></li>
-				
-					<li><a href="./WorksHelper.html">WorksHelper</a></li>
-				
-					<li><a href="./WranglingAssignment.html">WranglingAssignment</a></li>
-				
-				</ul>
-				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
-			</div>
-
-			
-		</div>
-	</div>
-
-	<div id="documentation">
-		<h1 class="class">TagNomination</h1>
-
-		<div id="description">
-			
-		</div>
-
-		<!-- Constants -->
-		
-
-		<!-- Attributes -->
-		
-		<div id="attribute-method-details" class="method-section section">
-			<h3 class="section-header">Attributes</h3>
-
-			
-			<div id="from-fandom-nomination-attribute-method" class="method-detail">
-				<a name="from_fandom_nomination"></a>
-				
-				<a name="from_fandom_nomination="></a>
-				
-				<div class="method-heading attribute-method-heading">
-					<span class="method-name">from_fandom_nomination</span><span
-						class="attribute-access-type">[RW]</span>
-				</div>
-
-				<div class="method-description">
-				
-				
-				
-				</div>
-			</div>
-			
-		</div>
-		
-
-		<!-- Methods -->
-		
-		<div id="public-class-method-details" class="method-section section">
-			<h3 class="section-header">Public Class Methods</h3>
-
-		
-			<div id="change-tagname--method" class="method-detail ">
-				<a name="method-c-change_tagname%21"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">change_tagname!</span><span
-						class="method-args">(owned_tag_set_to_change, old_tagname, new_tagname)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-If the mod is changing our name, change all other noms in this set as well
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="change-tagname--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 150</span>
-150:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">change_tagname!</span>(<span class="ruby-identifier">owned_tag_set_to_change</span>, <span class="ruby-identifier">old_tagname</span>, <span class="ruby-identifier">new_tagname</span>)
-151:     <span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-identifier">owned_tag_set_to_change</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">old_tagname</span>).<span class="ruby-identifier">readonly</span>(<span class="ruby-keyword kw">false</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tagnom</span><span class="ruby-operator">|</span>
-152:       <span class="ruby-identifier">tagnom</span>.<span class="ruby-identifier">tagname</span> = <span class="ruby-identifier">new_tagname</span>
-153:       <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;Tagnom: #{tagnom.tagname} #{tagnom.valid?}&quot;</span>
-154:       <span class="ruby-identifier">tagnom</span>.<span class="ruby-identifier">save</span> <span class="ruby-keyword kw">or</span> <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
-155:     <span class="ruby-keyword kw">end</span>
-156:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
-157:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="for-tag-set-method" class="method-detail ">
-				<a name="method-c-for_tag_set"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">for_tag_set</span><span
-						class="method-args">(tag_set)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="for-tag-set-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 108</span>
-108:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-identifier">tag_set</span>)
-109:     <span class="ruby-identifier">joins</span>(<span class="ruby-value">:tag_set_nomination</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:owned_tag_set</span>).
-110:     <span class="ruby-identifier">where</span>(<span class="ruby-value str">&quot;owned_tag_sets.id = ?&quot;</span>, <span class="ruby-identifier">tag_set</span>.<span class="ruby-identifier">id</span>)
-111:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="join-fandom-nomination-method" class="method-detail ">
-				<a name="method-c-join_fandom_nomination"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">join_fandom_nomination</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-We need this manual join in order to do a query over multiple types of tags
-(ie, via TagNomination.where(:type => &#8230;))
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="join-fandom-nomination-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 133</span>
-133:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">join_fandom_nomination</span>
-134:     <span class="ruby-identifier">joins</span>(<span class="ruby-value str">&quot;INNER JOIN tag_nominations fandom_nominations_tag_nominations ON 
-135:       fandom_nominations_tag_nominations.id = tag_nominations.fandom_nomination_id AND 
-136:       fandom_nominations_tag_nominations.type = 'FandomNomination'&quot;</span>)
-137:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="names-with-count-method" class="method-detail ">
-				<a name="method-c-names_with_count"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">names_with_count</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="names-with-count-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 113</span>
-113:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">names_with_count</span>
-114:     <span class="ruby-identifier">select</span>(<span class="ruby-value str">&quot;tagname, count(*) as count&quot;</span>).<span class="ruby-identifier">group</span>(<span class="ruby-value str">&quot;tagname&quot;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-value str">&quot;tagname&quot;</span>)
-115:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="nominated-parents-method" class="method-detail ">
-				<a name="method-c-nominated_parents"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">nominated_parents</span><span
-						class="method-args">(child_tagname, parent_search_term="")</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-returns an array of all the parent tagnames for the given tag  can be
-chained with other queries but must come at the end
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="nominated-parents-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 123</span>
-123:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">nominated_parents</span>(<span class="ruby-identifier">child_tagname</span>, <span class="ruby-identifier">parent_search_term</span>=<span class="ruby-value str">&quot;&quot;</span>)
-124:     <span class="ruby-identifier">parents</span> = <span class="ruby-identifier">where</span>(<span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">child_tagname</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value str">&quot;parent_tagname != ''&quot;</span>)
-125:     <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">parent_search_term</span>.<span class="ruby-identifier">blank?</span>
-126:       <span class="ruby-identifier">parents</span> = <span class="ruby-identifier">parents</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value str">&quot;parent_tagname LIKE ?&quot;</span>, <span class="ruby-node">&quot;%#{parent_search_term}%&quot;</span>)
-127:     <span class="ruby-keyword kw">end</span>
-128:     <span class="ruby-identifier">parents</span>.<span class="ruby-identifier">group</span>(<span class="ruby-value str">&quot;parent_tagname&quot;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-value str">&quot;count_id DESC&quot;</span>).<span class="ruby-identifier">count</span>(<span class="ruby-value str">'id'</span>).<span class="ruby-identifier">keys</span>
-129:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="unreviewed-method" class="method-detail ">
-				<a name="method-c-unreviewed"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">unreviewed</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="unreviewed-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 117</span>
-117:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">unreviewed</span>
-118:     <span class="ruby-identifier">where</span>(<span class="ruby-value">:approved</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:rejected</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>)
-119:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="public-instance-method-details" class="method-section section">
-			<h3 class="section-header">Public Instance Methods</h3>
-
-		
-			<div id="approve--method" class="method-detail ">
-				<a name="method-i-approve%21"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">approve!</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="approve--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 172</span>
-172:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">approve!</span>
-173:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">approved</span> = <span class="ruby-keyword kw">true</span>
-174:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rejected</span> = <span class="ruby-keyword kw">false</span>
-175:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">tag_set</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{self.class.to_s.gsub(/Nomination/,'').downcase}_tagnames_to_add=&quot;</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname</span>)
-176:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">tag_set</span>.<span class="ruby-identifier">save</span>
-177:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="change-tagname--method" class="method-detail ">
-				<a name="method-i-change_tagname%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">change_tagname?</span><span
-						class="method-args">(new_tagname)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Can we change the name to this new name?
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="change-tagname--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 140</span>
-140:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">change_tagname?</span>(<span class="ruby-identifier">new_tagname</span>)
-141:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname</span> = <span class="ruby-identifier">new_tagname</span>
-142:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">valid?</span>
-143:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
-144:     <span class="ruby-keyword kw">else</span>
-145:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
-146:     <span class="ruby-keyword kw">end</span>
-147:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="destroy-if-blank-method" class="method-detail ">
-				<a name="method-i-destroy_if_blank"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">destroy_if_blank</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="destroy-if-blank-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 47</span>
-47:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy_if_blank</span>
-48:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tagname</span>.<span class="ruby-identifier">blank?</span>
-49:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">destroy</span>
-50:     <span class="ruby-keyword kw">end</span>
-51:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="get-owned-tag-set-method" class="method-detail ">
-				<a name="method-i-get_owned_tag_set"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">get_owned_tag_set</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="get-owned-tag-set-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 53</span>
-53:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_owned_tag_set</span>
-54:     <span class="ruby-ivar">@tag_set</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tag_set_nomination</span>.<span class="ruby-identifier">owned_tag_set</span>
-55:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="get-parent-tagname-method" class="method-detail ">
-				<a name="method-i-get_parent_tagname"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">get_parent_tagname</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-here so we can override it in char/relationship noms
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="get-parent-tagname-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 160</span>
-160:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_parent_tagname</span>
-161:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parent_tagname</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parent_tagname</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
-162:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="not-already-reviewed-method" class="method-detail ">
-				<a name="method-i-not_already_reviewed"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">not_already_reviewed</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="not-already-reviewed-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 24</span>
-24:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">not_already_reviewed</span>
-25:     <span class="ruby-comment cmt"># allow mods and the archive code to update</span>
-26:     <span class="ruby-keyword kw">unless</span> (<span class="ruby-operator">!</span><span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span> <span class="ruby-operator">||</span> (<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">user_is_moderator?</span>(<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)))
-27:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tagname_changed?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">approved</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rejected</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">tagname</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">tagname_was</span>)  <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">tagname_was</span>.<span class="ruby-identifier">blank?</span> 
-28:         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;^You cannot change %{tagname_was} to %{tagname} because that nomination has already been reviewed.&quot;</span>, <span class="ruby-value">:tagname_was</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname_was</span>, <span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname</span>))
-29:         <span class="ruby-identifier">tagname</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname_was</span>
-30:       <span class="ruby-keyword kw">end</span>
-31:     <span class="ruby-keyword kw">end</span>
-32:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="require-unique-tagname-with-parent-method" class="method-detail ">
-				<a name="method-i-require_unique_tagname_with_parent"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">require_unique_tagname_with_parent</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="require-unique-tagname-with-parent-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 36</span>
-36:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require_unique_tagname_with_parent</span>
-37:     <span class="ruby-identifier">query</span> = <span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-identifier">get_owned_tag_set</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value str">&quot;parent_tagname != ?&quot;</span>, (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_parent_tagname</span> <span class="ruby-operator">||</span> <span class="ruby-value str">''</span>))
-38:     <span class="ruby-comment cmt"># let people change their own!</span>
-39:     <span class="ruby-identifier">query</span> = <span class="ruby-identifier">query</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value str">&quot;tag_nominations.id != ?&quot;</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new_record?</span>)
-40:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">query</span>.<span class="ruby-identifier">exists?</span>
-41:       <span class="ruby-identifier">other_parent</span> = <span class="ruby-identifier">query</span>.<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:parent_tagname</span>).<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;, &quot;</span>) <span class="ruby-comment cmt"># should only be one but just in case</span>
-42:       <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-value str">&quot;^Someone else has already nominated the tag %{tagname} for this set but in fandom %{other_parent}. (All nominations have to be unique for the approval process to work.) Try making your nomination more specific, for instance tacking on (%{fandom}).&quot;</span>, <span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname</span>, <span class="ruby-value">:other_parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">other_parent</span>, <span class="ruby-value">:fandom</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_parent_tagname</span> <span class="ruby-operator">||</span> <span class="ruby-value str">'Fandom'</span>))
-43:     <span class="ruby-keyword kw">end</span>
-44:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="reviewed--method" class="method-detail ">
-				<a name="method-i-reviewed%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">reviewed?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="reviewed--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 168</span>
-168:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reviewed?</span>
-169:     <span class="ruby-identifier">approved</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">rejected</span>
-170:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="set-approval-status-method" class="method-detail ">
-				<a name="method-i-set_approval_status"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">set_approval_status</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="set-approval-status-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 92</span>
- 92:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_approval_status</span>
- 93:     <span class="ruby-identifier">set_noms</span> = <span class="ruby-identifier">tag_set_nomination</span>
- 94:     <span class="ruby-identifier">set_noms</span> = <span class="ruby-identifier">fandom_nomination</span>.<span class="ruby-identifier">tag_set_nomination</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">set_noms</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">from_fandom_nomination</span>    
- 95:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rejected</span> = <span class="ruby-identifier">set_noms</span>.<span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">already_rejected?</span>(<span class="ruby-identifier">tagname</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword kw">false</span>
- 96:     <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rejected</span>
- 97:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">approved</span> = <span class="ruby-keyword kw">false</span>
- 98:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">synonym</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">set_noms</span>.<span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">already_in_set?</span>(<span class="ruby-identifier">synonym</span>)
- 99:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname</span> = <span class="ruby-identifier">synonym</span>
-100:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">synonym</span> = <span class="ruby-keyword kw">nil</span>
-101:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">approved</span> = <span class="ruby-keyword kw">true</span>
-102:     <span class="ruby-keyword kw">else</span>
-103:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">approved</span> = <span class="ruby-identifier">set_noms</span>.<span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">already_in_set?</span>(<span class="ruby-identifier">tagname</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword kw">false</span>
-104:     <span class="ruby-keyword kw">end</span>
-105:     <span class="ruby-keyword kw">true</span>
-106:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="set-parented-method" class="method-detail ">
-				<a name="method-i-set_parented"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">set_parented</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="set-parented-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 73</span>
-73:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_parented</span>    
-74:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;FreeformNomination&quot;</span>
-75:       <span class="ruby-comment cmt"># skip freeforms</span>
-76:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parented</span> = <span class="ruby-keyword kw">true</span>
-77:     <span class="ruby-keyword kw">elsif</span> (<span class="ruby-identifier">tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">tagname</span>)) <span class="ruby-operator">&amp;&amp;</span> 
-78:       ((<span class="ruby-operator">!</span><span class="ruby-identifier">tag</span>.<span class="ruby-identifier">parents</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">get_parent_tagname</span>.<span class="ruby-identifier">blank?</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">parents</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">get_parent_tagname</span>))
-79:       <span class="ruby-comment cmt"># if this is an existing tag and has matching parents, or no parent specified and it already has one </span>
-80:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parented</span> = <span class="ruby-keyword kw">true</span>
-81:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parent_tagname</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">get_parent_tagname</span>
-82:     <span class="ruby-keyword kw">else</span>
-83:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parented</span> = <span class="ruby-keyword kw">false</span>
-84:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parent_tagname</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">get_parent_tagname</span> 
-85:     <span class="ruby-keyword kw">end</span>   
-86:     <span class="ruby-keyword kw">true</span>
-87:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="set-tag-status-method" class="method-detail ">
-				<a name="method-i-set_tag_status"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">set_tag_status</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="set-tag-status-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 58</span>
-58:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_tag_status</span>
-59:     <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">tagname</span>))
-60:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">exists</span> = <span class="ruby-keyword kw">true</span>
-61:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">name</span>
-62:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">canonical</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">canonical</span>
-63:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">synonym</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">merger</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">merger</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
-64:     <span class="ruby-keyword kw">else</span>
-65:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">exists</span> = <span class="ruby-keyword kw">false</span>
-66:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">canonical</span> = <span class="ruby-keyword kw">false</span>
-67:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">synonym</span> = <span class="ruby-keyword kw">nil</span>
-68:     <span class="ruby-keyword kw">end</span>
-69:     <span class="ruby-keyword kw">true</span>
-70:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="times-nominated-method" class="method-detail ">
-				<a name="method-i-times_nominated"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">times_nominated</span><span
-						class="method-args">(tag_set)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="times-nominated-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 179</span>
-179:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">times_nominated</span>(<span class="ruby-identifier">tag_set</span>)
-180:     <span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-identifier">tag_set</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname</span>).<span class="ruby-identifier">count</span>
-181:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="type-validity-method" class="method-detail ">
-				<a name="method-i-type_validity"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">type_validity</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="type-validity-source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 17</span>
-17:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">type_validity</span>
-18:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">tagname</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">tagname</span>)) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-node">&quot;#{tag.type}Nomination&quot;</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">type</span>
-19:       <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;^The tag %{tagname} is already in the archive as a #{tag.type} tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom.&quot;</span>, <span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tagname</span>))
-20:     <span class="ruby-keyword kw">end</span>
-21:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="unreviewed--method" class="method-detail ">
-				<a name="method-i-unreviewed%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">unreviewed?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="unreviewed--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/tag_nomination.rb, line 164</span>
-164:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unreviewed?</span>
-165:     <span class="ruby-operator">!</span><span class="ruby-identifier">approved</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">rejected</span>
-166:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-
-	</div>
-
-
-	<div id="rdoc-debugging-section-dump" class="debugging-section">
-	
-		<p>Disabled; run with --debug to generate this.</p>
-	
-	</div>
-
-	<div id="validator-badges">
-		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
-		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
-			Rdoc Generator</a> 1.1.6</small>.</p>
-	</div>
-
-</body>
-</html>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: TagNomination</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/models/tag_nomination.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">ActiveRecord::Base
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-change_tagname-21">::change_tagname!</a>
+    
+    <li><a href="#method-c-for_tag_set">::for_tag_set</a>
+    
+    <li><a href="#method-c-join_fandom_nomination">::join_fandom_nomination</a>
+    
+    <li><a href="#method-c-names_with_count">::names_with_count</a>
+    
+    <li><a href="#method-c-nominated_parents">::nominated_parents</a>
+    
+    <li><a href="#method-c-unreviewed">::unreviewed</a>
+    
+    <li><a href="#method-i-approve-21">#approve!</a>
+    
+    <li><a href="#method-i-change_tagname-3F">#change_tagname?</a>
+    
+    <li><a href="#method-i-destroy_if_blank">#destroy_if_blank</a>
+    
+    <li><a href="#method-i-get_owned_tag_set">#get_owned_tag_set</a>
+    
+    <li><a href="#method-i-get_parent_tagname">#get_parent_tagname</a>
+    
+    <li><a href="#method-i-not_already_reviewed">#not_already_reviewed</a>
+    
+    <li><a href="#method-i-require_unique_tagname_with_parent">#require_unique_tagname_with_parent</a>
+    
+    <li><a href="#method-i-reviewed-3F">#reviewed?</a>
+    
+    <li><a href="#method-i-set_approval_status">#set_approval_status</a>
+    
+    <li><a href="#method-i-set_parented">#set_parented</a>
+    
+    <li><a href="#method-i-set_tag_status">#set_tag_status</a>
+    
+    <li><a href="#method-i-times_nominated">#times_nominated</a>
+    
+    <li><a href="#method-i-type_validity">#type_validity</a>
+    
+    <li><a href="#method-i-unreviewed-3F">#unreviewed?</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./app/mailers/README.html">README</a>
+  
+    <li class="file"><a href="./app/views/epub/mimetype.html">mimetype</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Static.html">Static</a>
+  
+    <li><a href="./Static/BaseController.html">Static::BaseController</a>
+  
+    <li><a href="./Static/CollectionsController.html">Static::CollectionsController</a>
+  
+    <li><a href="./Static/FandomsController.html">Static::FandomsController</a>
+  
+    <li><a href="./Static/MediaController.html">Static::MediaController</a>
+  
+    <li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a>
+  
+    <li><a href="./Static/WorksController.html">Static::WorksController</a>
+  
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
+    <li><a href="./Challenge.html">Challenge</a>
+  
+    <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
+  
+    <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./StoryParser.html">StoryParser</a>
+  
+    <li><a href="./StoryParser/Error.html">StoryParser::Error</a>
+  
+    <li><a href="./AbuseReport.html">AbuseReport</a>
+  
+    <li><a href="./AbuseReportsController.html">AbuseReportsController</a>
+  
+    <li><a href="./AdminMailer.html">AdminMailer</a>
+  
+    <li><a href="./AdminPost.html">AdminPost</a>
+  
+    <li><a href="./AdminPostTag.html">AdminPostTag</a>
+  
+    <li><a href="./AdminPostTagging.html">AdminPostTagging</a>
+  
+    <li><a href="./AdminPostsController.html">AdminPostsController</a>
+  
+    <li><a href="./AdminSession.html">AdminSession</a>
+  
+    <li><a href="./AdminSessionsController.html">AdminSessionsController</a>
+  
+    <li><a href="./AdminSetting.html">AdminSetting</a>
+  
+    <li><a href="./AdminsController.html">AdminsController</a>
+  
+    <li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a>
+  
+    <li><a href="./AlphabetHelper.html">AlphabetHelper</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./ArchiveFaq.html">ArchiveFaq</a>
+  
+    <li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a>
+  
+    <li><a href="./AutocompleteController.html">AutocompleteController</a>
+  
+    <li><a href="./Banned.html">Banned</a>
+  
+    <li><a href="./Bookmark.html">Bookmark</a>
+  
+    <li><a href="./BookmarksController.html">BookmarksController</a>
+  
+    <li><a href="./BookmarksHelper.html">BookmarksHelper</a>
+  
+    <li><a href="./CacheHelper.html">CacheHelper</a>
+  
+    <li><a href="./CastNomination.html">CastNomination</a>
+  
+    <li><a href="./Category.html">Category</a>
+  
+    <li><a href="./ChallengeAssignment.html">ChallengeAssignment</a>
+  
+    <li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a>
+  
+    <li><a href="./ChallengeClaim.html">ChallengeClaim</a>
+  
+    <li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a>
+  
+    <li><a href="./ChallengeHelper.html">ChallengeHelper</a>
+  
+    <li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a>
+  
+    <li><a href="./ChallengeSignup.html">ChallengeSignup</a>
+  
+    <li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a>
+  
+    <li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a>
+  
+    <li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a>
+  
+    <li><a href="./ChallengeSweeper.html">ChallengeSweeper</a>
+  
+    <li><a href="./ChallengesController.html">ChallengesController</a>
+  
+    <li><a href="./Chapter.html">Chapter</a>
+  
+    <li><a href="./ChapterSweeper.html">ChapterSweeper</a>
+  
+    <li><a href="./ChaptersController.html">ChaptersController</a>
+  
+    <li><a href="./ChaptersHelper.html">ChaptersHelper</a>
+  
+    <li><a href="./Character.html">Character</a>
+  
+    <li><a href="./CharacterNomination.html">CharacterNomination</a>
+  
+    <li><a href="./Collection.html">Collection</a>
+  
+    <li><a href="./CollectionItem.html">CollectionItem</a>
+  
+    <li><a href="./CollectionItemsController.html">CollectionItemsController</a>
+  
+    <li><a href="./CollectionObserver.html">CollectionObserver</a>
+  
+    <li><a href="./CollectionParticipant.html">CollectionParticipant</a>
+  
+    <li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a>
+  
+    <li><a href="./CollectionPreference.html">CollectionPreference</a>
+  
+    <li><a href="./CollectionProfile.html">CollectionProfile</a>
+  
+    <li><a href="./CollectionProfileController.html">CollectionProfileController</a>
+  
+    <li><a href="./CollectionSweeper.html">CollectionSweeper</a>
+  
+    <li><a href="./CollectionsController.html">CollectionsController</a>
+  
+    <li><a href="./CollectionsHelper.html">CollectionsHelper</a>
+  
+    <li><a href="./Comment.html">Comment</a>
+  
+    <li><a href="./CommentMailer.html">CommentMailer</a>
+  
+    <li><a href="./CommentObserver.html">CommentObserver</a>
+  
+    <li><a href="./CommentSweeper.html">CommentSweeper</a>
+  
+    <li><a href="./CommentsController.html">CommentsController</a>
+  
+    <li><a href="./CommentsHelper.html">CommentsHelper</a>
+  
+    <li><a href="./CommonTagging.html">CommonTagging</a>
+  
+    <li><a href="./CreationObserver.html">CreationObserver</a>
+  
+    <li><a href="./Creatorship.html">Creatorship</a>
+  
+    <li><a href="./DateHelper.html">DateHelper</a>
+  
+    <li><a href="./DevmodeController.html">DevmodeController</a>
+  
+    <li><a href="./DownloadsController.html">DownloadsController</a>
+  
+    <li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a>
+  
+    <li><a href="./ErrorsController.html">ErrorsController</a>
+  
+    <li><a href="./ExternalAuthor.html">ExternalAuthor</a>
+  
+    <li><a href="./ExternalAuthorName.html">ExternalAuthorName</a>
+  
+    <li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a>
+  
+    <li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a>
+  
+    <li><a href="./ExternalCreatorship.html">ExternalCreatorship</a>
+  
+    <li><a href="./ExternalWork.html">ExternalWork</a>
+  
+    <li><a href="./ExternalWorksController.html">ExternalWorksController</a>
+  
+    <li><a href="./Fandom.html">Fandom</a>
+  
+    <li><a href="./FandomNomination.html">FandomNomination</a>
+  
+    <li><a href="./FandomsController.html">FandomsController</a>
+  
+    <li><a href="./FeedSweeper.html">FeedSweeper</a>
+  
+    <li><a href="./Feedback.html">Feedback</a>
+  
+    <li><a href="./FeedbacksController.html">FeedbacksController</a>
+  
+    <li><a href="./FilterCount.html">FilterCount</a>
+  
+    <li><a href="./FilterTagging.html">FilterTagging</a>
+  
+    <li><a href="./Freeform.html">Freeform</a>
+  
+    <li><a href="./FreeformNomination.html">FreeformNomination</a>
+  
+    <li><a href="./Gift.html">Gift</a>
+  
+    <li><a href="./GiftExchange.html">GiftExchange</a>
+  
+    <li><a href="./GiftsController.html">GiftsController</a>
+  
+    <li><a href="./HitCounter.html">HitCounter</a>
+  
+    <li><a href="./HomeController.html">HomeController</a>
+  
+    <li><a href="./HomeHelper.html">HomeHelper</a>
+  
+    <li><a href="./InboxComment.html">InboxComment</a>
+  
+    <li><a href="./InboxController.html">InboxController</a>
+  
+    <li><a href="./InboxHelper.html">InboxHelper</a>
+  
+    <li><a href="./Invitation.html">Invitation</a>
+  
+    <li><a href="./InvitationsController.html">InvitationsController</a>
+  
+    <li><a href="./InvitationsHelper.html">InvitationsHelper</a>
+  
+    <li><a href="./InviteRequest.html">InviteRequest</a>
+  
+    <li><a href="./InviteRequestsController.html">InviteRequestsController</a>
+  
+    <li><a href="./KnownIssue.html">KnownIssue</a>
+  
+    <li><a href="./KnownIssuesController.html">KnownIssuesController</a>
+  
+    <li><a href="./Kudo.html">Kudo</a>
+  
+    <li><a href="./KudoMailer.html">KudoMailer</a>
+  
+    <li><a href="./KudoObserver.html">KudoObserver</a>
+  
+    <li><a href="./KudosController.html">KudosController</a>
+  
+    <li><a href="./Language.html">Language</a>
+  
+    <li><a href="./LanguagesController.html">LanguagesController</a>
+  
+    <li><a href="./Locale.html">Locale</a>
+  
+    <li><a href="./LocalesController.html">LocalesController</a>
+  
+    <li><a href="./LogItem.html">LogItem</a>
+  
+    <li><a href="./Media.html">Media</a>
+  
+    <li><a href="./MediaController.html">MediaController</a>
+  
+    <li><a href="./MetaTagging.html">MetaTagging</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Offer.html">Offer</a>
+  
+    <li><a href="./OrphansController.html">OrphansController</a>
+  
+    <li><a href="./OrphansHelper.html">OrphansHelper</a>
+  
+    <li><a href="./OwnedSetTagging.html">OwnedSetTagging</a>
+  
+    <li><a href="./OwnedTagSet.html">OwnedTagSet</a>
+  
+    <li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./People.html">People</a>
+  
+    <li><a href="./PeopleController.html">PeopleController</a>
+  
+    <li><a href="./PotentialMatch.html">PotentialMatch</a>
+  
+    <li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a>
+  
+    <li><a href="./PotentialMatchesController.html">PotentialMatchesController</a>
+  
+    <li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a>
+  
+    <li><a href="./Preference.html">Preference</a>
+  
+    <li><a href="./PreferencesController.html">PreferencesController</a>
+  
+    <li><a href="./Profile.html">Profile</a>
+  
+    <li><a href="./ProfileController.html">ProfileController</a>
+  
+    <li><a href="./Prompt.html">Prompt</a>
+  
+    <li><a href="./PromptMeme.html">PromptMeme</a>
+  
+    <li><a href="./PromptRestriction.html">PromptRestriction</a>
+  
+    <li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a>
+  
+    <li><a href="./PromptsController.html">PromptsController</a>
+  
+    <li><a href="./Pseud.html">Pseud</a>
+  
+    <li><a href="./PseudSweeper.html">PseudSweeper</a>
+  
+    <li><a href="./PseudsController.html">PseudsController</a>
+  
+    <li><a href="./PseudsHelper.html">PseudsHelper</a>
+  
+    <li><a href="./Rating.html">Rating</a>
+  
+    <li><a href="./Reading.html">Reading</a>
+  
+    <li><a href="./ReadingsController.html">ReadingsController</a>
+  
+    <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RelatedWork.html">RelatedWork</a>
+  
+    <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
+  
+    <li><a href="./Relationship.html">Relationship</a>
+  
+    <li><a href="./RelationshipNomination.html">RelationshipNomination</a>
+  
+    <li><a href="./Request.html">Request</a>
+  
+    <li><a href="./Role.html">Role</a>
+  
+    <li><a href="./RolesUser.html">RolesUser</a>
+  
+    <li><a href="./SearchController.html">SearchController</a>
+  
+    <li><a href="./SearchHelper.html">SearchHelper</a>
+  
+    <li><a href="./SerialWork.html">SerialWork</a>
+  
+    <li><a href="./SerialWorksController.html">SerialWorksController</a>
+  
+    <li><a href="./Series.html">Series</a>
+  
+    <li><a href="./SeriesController.html">SeriesController</a>
+  
+    <li><a href="./SeriesHelper.html">SeriesHelper</a>
+  
+    <li><a href="./SetTagging.html">SetTagging</a>
+  
+    <li><a href="./Skin.html">Skin</a>
+  
+    <li><a href="./SkinParent.html">SkinParent</a>
+  
+    <li><a href="./SkinsController.html">SkinsController</a>
+  
+    <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StaticSweeper.html">StaticSweeper</a>
+  
+    <li><a href="./StatsController.html">StatsController</a>
+  
+    <li><a href="./StatsHelper.html">StatsHelper</a>
+  
+    <li><a href="./Subscription.html">Subscription</a>
+  
+    <li><a href="./SubscriptionsController.html">SubscriptionsController</a>
+  
+    <li><a href="./Tag.html">Tag</a>
+  
+    <li><a href="./TagNomination.html">TagNomination</a>
+  
+    <li><a href="./TagNominationsController.html">TagNominationsController</a>
+  
+    <li><a href="./TagSet.html">TagSet</a>
+  
+    <li><a href="./TagSetAssociation.html">TagSetAssociation</a>
+  
+    <li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a>
+  
+    <li><a href="./TagSetNomination.html">TagSetNomination</a>
+  
+    <li><a href="./TagSetNominationsController.html">TagSetNominationsController</a>
+  
+    <li><a href="./TagSetOwnership.html">TagSetOwnership</a>
+  
+    <li><a href="./TagSetSweeper.html">TagSetSweeper</a>
+  
+    <li><a href="./TagSetsHelper.html">TagSetsHelper</a>
+  
+    <li><a href="./TagSweeper.html">TagSweeper</a>
+  
+    <li><a href="./TagWranglersController.html">TagWranglersController</a>
+  
+    <li><a href="./TagWranglingsController.html">TagWranglingsController</a>
+  
+    <li><a href="./Tagging.html">Tagging</a>
+  
+    <li><a href="./TagsController.html">TagsController</a>
+  
+    <li><a href="./TagsHelper.html">TagsHelper</a>
+  
+    <li><a href="./TranslationHelper.html">TranslationHelper</a>
+  
+    <li><a href="./TranslationNote.html">TranslationNote</a>
+  
+    <li><a href="./TranslationNotesController.html">TranslationNotesController</a>
+  
+    <li><a href="./TranslationsController.html">TranslationsController</a>
+  
+    <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
+  
+    <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
+  
+    <li><a href="./User.html">User</a>
+  
+    <li><a href="./UserInviteRequest.html">UserInviteRequest</a>
+  
+    <li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a>
+  
+    <li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a>
+  
+    <li><a href="./UserMailer.html">UserMailer</a>
+  
+    <li><a href="./UserSession.html">UserSession</a>
+  
+    <li><a href="./UserSessionsController.html">UserSessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+    <li><a href="./UsersHelper.html">UsersHelper</a>
+  
+    <li><a href="./ValidationHelper.html">ValidationHelper</a>
+  
+    <li><a href="./Warning.html">Warning</a>
+  
+    <li><a href="./WeightedRandom.html">WeightedRandom</a>
+  
+    <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkObserver.html">WorkObserver</a>
+  
+    <li><a href="./WorkSkin.html">WorkSkin</a>
+  
+    <li><a href="./WorkSweeper.html">WorkSweeper</a>
+  
+    <li><a href="./WorksController.html">WorksController</a>
+  
+    <li><a href="./WorksHelper.html">WorksHelper</a>
+  
+    <li><a href="./WranglingAssignment.html">WranglingAssignment</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class TagNomination</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+    <!-- Attributes -->
+    <section id="attribute-method-details" class="method-section section">
+      <h3 class="section-header">Attributes</h3>
+
+      
+      <div id="attribute-i-from_fandom_nomination" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">from_fandom_nomination</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section><!-- attribute-method-details -->
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-change_tagname-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">change_tagname!</span><span
+            class="method-args">(owned_tag_set_to_change, old_tagname, new_tagname)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>If the mod is changing our name, change all other noms in this set as well</p>
+          
+
+          
+          <div class="method-source-code" id="change_tagname-21-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 150</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">change_tagname!</span>(<span class="ruby-identifier">owned_tag_set_to_change</span>, <span class="ruby-identifier">old_tagname</span>, <span class="ruby-identifier">new_tagname</span>)
+  <span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-identifier">owned_tag_set_to_change</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">old_tagname</span>).<span class="ruby-identifier">readonly</span>(<span class="ruby-keyword">false</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tagnom</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">tagnom</span>.<span class="ruby-identifier">tagname</span> = <span class="ruby-identifier">new_tagname</span>
+    <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;Tagnom: #{tagnom.tagname} #{tagnom.valid?}&quot;</span>
+    <span class="ruby-identifier">tagnom</span>.<span class="ruby-identifier">save</span> <span class="ruby-keyword">or</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- change_tagname-21-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- change_tagname-21-method -->
+
+    
+      <div id="method-c-for_tag_set" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">for_tag_set</span><span
+            class="method-args">(tag_set)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="for_tag_set-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 108</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-identifier">tag_set</span>)
+  <span class="ruby-identifier">joins</span>(<span class="ruby-value">:tag_set_nomination</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:owned_tag_set</span>).
+  <span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;owned_tag_sets.id = ?&quot;</span>, <span class="ruby-identifier">tag_set</span>.<span class="ruby-identifier">id</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- for_tag_set-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- for_tag_set-method -->
+
+    
+      <div id="method-c-join_fandom_nomination" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">join_fandom_nomination</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>We need this manual join in order to do a query over multiple types of tags
+(ie, via TagNomination.where(:type =&gt; …))</p>
+          
+
+          
+          <div class="method-source-code" id="join_fandom_nomination-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 133</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">join_fandom_nomination</span>
+  <span class="ruby-identifier">joins</span>(<span class="ruby-string">&quot;INNER JOIN tag_nominations fandom_nominations_tag_nominations ON 
+    fandom_nominations_tag_nominations.id = tag_nominations.fandom_nomination_id AND 
+    fandom_nominations_tag_nominations.type = 'FandomNomination'&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- join_fandom_nomination-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- join_fandom_nomination-method -->
+
+    
+      <div id="method-c-names_with_count" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">names_with_count</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="names_with_count-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 113</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">names_with_count</span>
+  <span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;tagname, count(*) as count&quot;</span>).<span class="ruby-identifier">group</span>(<span class="ruby-string">&quot;tagname&quot;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;tagname&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- names_with_count-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- names_with_count-method -->
+
+    
+      <div id="method-c-nominated_parents" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">nominated_parents</span><span
+            class="method-args">(child_tagname, parent_search_term="")</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>returns an array of all the parent tagnames for the given tag  can be
+chained with other queries but must come at the end</p>
+          
+
+          
+          <div class="method-source-code" id="nominated_parents-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 123</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">nominated_parents</span>(<span class="ruby-identifier">child_tagname</span>, <span class="ruby-identifier">parent_search_term</span>=<span class="ruby-string">&quot;&quot;</span>)
+  <span class="ruby-identifier">parents</span> = <span class="ruby-identifier">where</span>(<span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">child_tagname</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;parent_tagname != ''&quot;</span>)
+  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">parent_search_term</span>.<span class="ruby-identifier">blank?</span>
+    <span class="ruby-identifier">parents</span> = <span class="ruby-identifier">parents</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;parent_tagname LIKE ?&quot;</span>, <span class="ruby-node">&quot;%#{parent_search_term}%&quot;</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">parents</span>.<span class="ruby-identifier">group</span>(<span class="ruby-string">&quot;parent_tagname&quot;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;count_id DESC&quot;</span>).<span class="ruby-identifier">count</span>(<span class="ruby-string">'id'</span>).<span class="ruby-identifier">keys</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- nominated_parents-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- nominated_parents-method -->
+
+    
+      <div id="method-c-unreviewed" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unreviewed</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="unreviewed-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 117</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">unreviewed</span>
+  <span class="ruby-identifier">where</span>(<span class="ruby-value">:approved</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:rejected</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- unreviewed-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- unreviewed-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-approve-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">approve!</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="approve-21-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 172</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">approve!</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">approved</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">rejected</span> = <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">tag_set</span>.<span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{self.class.to_s.gsub(/Nomination/,'').downcase}_tagnames_to_add=&quot;</span>, <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">tag_set</span>.<span class="ruby-identifier">save</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- approve-21-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- approve-21-method -->
+
+    
+      <div id="method-i-change_tagname-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">change_tagname?</span><span
+            class="method-args">(new_tagname)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Can we change the name to this new name?</p>
+          
+
+          
+          <div class="method-source-code" id="change_tagname-3F-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 140</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">change_tagname?</span>(<span class="ruby-identifier">new_tagname</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span> = <span class="ruby-identifier">new_tagname</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">valid?</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- change_tagname-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- change_tagname-3F-method -->
+
+    
+      <div id="method-i-destroy_if_blank" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">destroy_if_blank</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="destroy_if_blank-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy_if_blank</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">tagname</span>.<span class="ruby-identifier">blank?</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">destroy</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- destroy_if_blank-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- destroy_if_blank-method -->
+
+    
+      <div id="method-i-get_owned_tag_set" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_owned_tag_set</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_owned_tag_set-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 53</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_owned_tag_set</span>
+  <span class="ruby-ivar">@tag_set</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tag_set_nomination</span>.<span class="ruby-identifier">owned_tag_set</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_owned_tag_set-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_owned_tag_set-method -->
+
+    
+      <div id="method-i-get_parent_tagname" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_parent_tagname</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>here so we can override it in char/relationship noms</p>
+          
+
+          
+          <div class="method-source-code" id="get_parent_tagname-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 160</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_parent_tagname</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parent_tagname</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parent_tagname</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_parent_tagname-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_parent_tagname-method -->
+
+    
+      <div id="method-i-not_already_reviewed" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">not_already_reviewed</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="not_already_reviewed-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 24</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">not_already_reviewed</span>
+  <span class="ruby-comment"># allow mods and the archive code to update</span>
+  <span class="ruby-keyword">unless</span> (<span class="ruby-operator">!</span><span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span> <span class="ruby-operator">||</span> (<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">user_is_moderator?</span>(<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)))
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">tagname_changed?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">approved</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">rejected</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">tagname</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">tagname_was</span>)  <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">tagname_was</span>.<span class="ruby-identifier">blank?</span> 
+      <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;^You cannot change %{tagname_was} to %{tagname} because that nomination has already been reviewed.&quot;</span>, <span class="ruby-value">:tagname_was</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname_was</span>, <span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span>))
+      <span class="ruby-identifier">tagname</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname_was</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- not_already_reviewed-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- not_already_reviewed-method -->
+
+    
+      <div id="method-i-require_unique_tagname_with_parent" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">require_unique_tagname_with_parent</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="require_unique_tagname_with_parent-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 36</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">require_unique_tagname_with_parent</span>
+  <span class="ruby-identifier">query</span> = <span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-identifier">get_owned_tag_set</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;parent_tagname != ?&quot;</span>, (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">get_parent_tagname</span> <span class="ruby-operator">||</span> <span class="ruby-string">''</span>))
+  <span class="ruby-comment"># let people change their own!</span>
+  <span class="ruby-identifier">query</span> = <span class="ruby-identifier">query</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;tag_nominations.id != ?&quot;</span>, <span class="ruby-keyword">self</span>.<span class="ruby-identifier">id</span>) <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_record?</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">query</span>.<span class="ruby-identifier">exists?</span>
+    <span class="ruby-identifier">other_parent</span> = <span class="ruby-identifier">query</span>.<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:parent_tagname</span>).<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>) <span class="ruby-comment"># should only be one but just in case</span>
+    <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;^Someone else has already nominated the tag %{tagname} for this set but in fandom %{other_parent}. (All nominations have to be unique for the approval process to work.) Try making your nomination more specific, for instance tacking on (%{fandom}).&quot;</span>, <span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span>, <span class="ruby-value">:other_parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">other_parent</span>, <span class="ruby-value">:fandom</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">get_parent_tagname</span> <span class="ruby-operator">||</span> <span class="ruby-string">'Fandom'</span>))
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- require_unique_tagname_with_parent-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- require_unique_tagname_with_parent-method -->
+
+    
+      <div id="method-i-reviewed-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">reviewed?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="reviewed-3F-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 168</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">reviewed?</span>
+  <span class="ruby-identifier">approved</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">rejected</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- reviewed-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- reviewed-3F-method -->
+
+    
+      <div id="method-i-set_approval_status" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_approval_status</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_approval_status-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 92</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_approval_status</span>
+  <span class="ruby-identifier">set_noms</span> = <span class="ruby-identifier">tag_set_nomination</span>
+  <span class="ruby-identifier">set_noms</span> = <span class="ruby-identifier">fandom_nomination</span>.<span class="ruby-identifier">tag_set_nomination</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">set_noms</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">from_fandom_nomination</span>    
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">rejected</span> = <span class="ruby-identifier">set_noms</span>.<span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">already_rejected?</span>(<span class="ruby-identifier">tagname</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">rejected</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">approved</span> = <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">synonym</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">set_noms</span>.<span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">already_in_set?</span>(<span class="ruby-identifier">synonym</span>)
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span> = <span class="ruby-identifier">synonym</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">synonym</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">approved</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">approved</span> = <span class="ruby-identifier">set_noms</span>.<span class="ruby-identifier">owned_tag_set</span>.<span class="ruby-identifier">already_in_set?</span>(<span class="ruby-identifier">tagname</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_approval_status-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_approval_status-method -->
+
+    
+      <div id="method-i-set_parented" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_parented</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_parented-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 73</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_parented</span>    
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;FreeformNomination&quot;</span>
+    <span class="ruby-comment"># skip freeforms</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parented</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">elsif</span> (<span class="ruby-identifier">tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">tagname</span>)) <span class="ruby-operator">&amp;&amp;</span> 
+    ((<span class="ruby-operator">!</span><span class="ruby-identifier">tag</span>.<span class="ruby-identifier">parents</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">get_parent_tagname</span>.<span class="ruby-identifier">blank?</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">parents</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">get_parent_tagname</span>))
+    <span class="ruby-comment"># if this is an existing tag and has matching parents, or no parent specified and it already has one </span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parented</span> = <span class="ruby-keyword">true</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parent_tagname</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">get_parent_tagname</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parented</span> = <span class="ruby-keyword">false</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parent_tagname</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">get_parent_tagname</span> 
+  <span class="ruby-keyword">end</span>   
+  <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_parented-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_parented-method -->
+
+    
+      <div id="method-i-set_tag_status" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_tag_status</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_tag_status-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 58</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_tag_status</span>
+  <span class="ruby-keyword">if</span> (<span class="ruby-identifier">tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">tagname</span>))
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">exists</span> = <span class="ruby-keyword">true</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">name</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">canonical</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">canonical</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">synonym</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">merger</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">merger</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">exists</span> = <span class="ruby-keyword">false</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">canonical</span> = <span class="ruby-keyword">false</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">synonym</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_tag_status-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_tag_status-method -->
+
+    
+      <div id="method-i-times_nominated" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">times_nominated</span><span
+            class="method-args">(tag_set)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="times_nominated-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 179</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">times_nominated</span>(<span class="ruby-identifier">tag_set</span>)
+  <span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-identifier">tag_set</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span>).<span class="ruby-identifier">count</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- times_nominated-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- times_nominated-method -->
+
+    
+      <div id="method-i-type_validity" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">type_validity</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="type_validity-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 17</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">type_validity</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">tagname</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">tagname</span>)) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-node">&quot;#{tag.type}Nomination&quot;</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">type</span>
+    <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-node">&quot;^The tag %{tagname} is already in the archive as a #{tag.type} tag. (All tags have to be unique.) Try being more specific, for instance tacking on the medium or the fandom.&quot;</span>, <span class="ruby-value">:tagname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tagname</span>))
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- type_validity-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- type_validity-method -->
+
+    
+      <div id="method-i-unreviewed-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unreviewed?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="unreviewed-3F-source">
+            <pre><span class="ruby-comment"># File app/models/tag_nomination.rb, line 164</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unreviewed?</span>
+  <span class="ruby-operator">!</span><span class="ruby-identifier">approved</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">rejected</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- unreviewed-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- unreviewed-3F-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
 

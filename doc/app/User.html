@@ -1,2380 +1,1971 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+
+<html>
 <head>
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-
-	<title>Class: User</title>
-
-	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
-
-	<script src="./js/jquery.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/thickbox-compressed.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/quicksearch.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/darkfish.js" type="text/javascript"
-		charset="utf-8"></script>
-
-</head>
-<body class="class">
-
-	<div id="metadata">
-		<div id="home-metadata">
-			<div id="home-section" class="section">
-        <h3 class="section-header">
-          <a href="./index.html">Home</a>
-          <a href="./index.html#classes">Classes</a>
-          <a href="./index.html#methods">Methods</a>
-        </h3>
-			</div>
-		</div>
-
-		<div id="file-metadata">
-			<div id="file-list-section" class="section">
-				<h3 class="section-header">In Files</h3>
-				<div class="section-body">
-					<ul>
-					
-						<li><a href="./app/models/user_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="app/models/user.rb">app/models/user.rb</a></li>
-					
-					</ul>
-				</div>
-			</div>
-
-			
-		</div>
-
-		<div id="class-metadata">
-
-			<!-- Parent Class -->
-			
-			<div id="parent-class-section" class="section">
-				<h3 class="section-header">Parent</h3>
-				
-				<p class="link">ActiveRecord::Base</p>
-				
-			</div>
-			
-
-			<!-- Namespace Contents -->
-			
-
-			<!-- Method Quickref -->
-			
-			<div id="method-list-section" class="section">
-				<h3 class="section-header">Methods</h3>
-				<ul class="link-list">
-					
-					<li><a href="#method-c-fetch_orphan_account">::fetch_orphan_account</a></li>
-					
-					<li><a href="#method-c-for_claims">::for_claims</a></li>
-					
-					<li><a href="#method-c-orphan_account">::orphan_account</a></li>
-					
-					<li><a href="#method-i-activate">#activate</a></li>
-					
-					<li><a href="#method-i-active%3F">#active?</a></li>
-					
-					<li><a href="#method-i-admin_update">#admin_update</a></li>
-					
-					<li><a href="#method-i-archivist">#archivist</a></li>
-					
-					<li><a href="#method-i-archivist%3D">#archivist=</a></li>
-					
-					<li><a href="#method-i-coauthored_works">#coauthored_works</a></li>
-					
-					<li><a href="#method-i-coauthors">#coauthors</a></li>
-					
-					<li><a href="#method-i-create_default_associateds">#create_default_associateds</a></li>
-					
-					<li><a href="#method-i-create_log_item">#create_log_item</a></li>
-					
-					<li><a href="#method-i-default_pseud">#default_pseud</a></li>
-					
-					<li><a href="#method-i-first_save%3F">#first_save?</a></li>
-					
-					<li><a href="#method-i-generate_password">#generate_password</a></li>
-					
-					<li><a href="#method-i-has_no_credentials%3F">#has_no_credentials?</a></li>
-					
-					<li><a href="#method-i-is_archivist%3F">#is_archivist?</a></li>
-					
-					<li><a href="#method-i-is_author_of%3F">#is_author_of?</a></li>
-					
-					<li><a href="#method-i-is_sole_author_of%3F">#is_sole_author_of?</a></li>
-					
-					<li><a href="#method-i-is_tag_wrangler%3F">#is_tag_wrangler?</a></li>
-					
-					<li><a href="#method-i-is_translation_admin%3F">#is_translation_admin?</a></li>
-					
-					<li><a href="#method-i-log_change_if_login_was_edited">#log_change_if_login_was_edited</a></li>
-					
-					<li><a href="#method-i-mark_invitation_redeemed">#mark_invitation_redeemed</a></li>
-					
-					<li><a href="#method-i-most_popular_tags">#most_popular_tags</a></li>
-					
-					<li><a href="#method-i-read_inbox_comments">#read_inbox_comments</a></li>
-					
-					<li><a href="#method-i-remove_from_queue">#remove_from_queue</a></li>
-					
-					<li><a href="#method-i-remove_pseud_from_kudos">#remove_pseud_from_kudos</a></li>
-					
-					<li><a href="#method-i-reset_user_password">#reset_user_password</a></li>
-					
-					<li><a href="#method-i-set_roles">#set_roles</a></li>
-					
-					<li><a href="#method-i-sole_authored_works">#sole_authored_works</a></li>
-					
-					<li><a href="#method-i-tag_wrangler">#tag_wrangler</a></li>
-					
-					<li><a href="#method-i-tag_wrangler%3D">#tag_wrangler=</a></li>
-					
-					<li><a href="#method-i-to_param">#to_param</a></li>
-					
-					<li><a href="#method-i-translation_admin">#translation_admin</a></li>
-					
-					<li><a href="#method-i-translation_admin%3D">#translation_admin=</a></li>
-					
-					<li><a href="#method-i-unposted_work">#unposted_work</a></li>
-					
-					<li><a href="#method-i-unposted_works">#unposted_works</a></li>
-					
-					<li><a href="#method-i-unread_inbox_comments">#unread_inbox_comments</a></li>
-					
-					<li><a href="#method-i-unread_inbox_comments_count">#unread_inbox_comments_count</a></li>
-					
-					<li><a href="#method-i-visible_work_count">#visible_work_count</a></li>
-					
-					<li><a href="#method-i-wipeout_unposted_works">#wipeout_unposted_works</a></li>
-					
-				</ul>
-			</div>
-			
-
-			<!-- Included Modules -->
-			
-		</div>
-
-		<div id="project-metadata">
-			
-			
-			<div id="fileindex-section" class="section project-section">
-				<h3 class="section-header">Files</h3>
-				<ul>
-				
-					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
-				
-				</ul>
-			</div>
-			
-
-			<div id="classindex-section" class="section project-section">
-				<h3 class="section-header">Class Index
-					<span class="search-toggle"><img src="./images/find.png"
-						height="16" width="16" alt="[+]"
-						title="show/hide quicksearch" /></span></h3>
-				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
-				<fieldset>
-					<legend>Quicksearch</legend>
-					<input type="text" name="quicksearch" value=""
-						class="quicksearch-field" />
-				</fieldset>
-				</form>
-
-				<ul class="link-list">
-				
-					<li><a href="./Static.html">Static</a></li>
-				
-					<li><a href="./Static/BaseController.html">Static::BaseController</a></li>
-				
-					<li><a href="./Static/CollectionsController.html">Static::CollectionsController</a></li>
-				
-					<li><a href="./Static/FandomsController.html">Static::FandomsController</a></li>
-				
-					<li><a href="./Static/MediaController.html">Static::MediaController</a></li>
-				
-					<li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
-				
-					<li><a href="./Static/WorksController.html">Static::WorksController</a></li>
-				
-					<li><a href="./Admin.html">Admin</a></li>
-				
-					<li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
-				
-					<li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
-				
-					<li><a href="./Admin/SettingsController.html">Admin::SettingsController</a></li>
-				
-					<li><a href="./Admin/SkinsController.html">Admin::SkinsController</a></li>
-				
-					<li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
-				
-					<li><a href="./ActionController.html">ActionController</a></li>
-				
-					<li><a href="./ActionController/Routing.html">ActionController::Routing</a></li>
-				
-					<li><a href="./ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
-				
-					<li><a href="./Challenge.html">Challenge</a></li>
-				
-					<li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
-				
-					<li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
-				
-					<li><a href="./ActiveRecord.html">ActiveRecord</a></li>
-				
-					<li><a href="./AutocompleteSource.html">AutocompleteSource</a></li>
-				
-					<li><a href="./AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
-				
-					<li><a href="./ChallengeCore.html">ChallengeCore</a></li>
-				
-					<li><a href="./ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
-				
-					<li><a href="./StoryParser.html">StoryParser</a></li>
-				
-					<li><a href="./StoryParser/Error.html">StoryParser::Error</a></li>
-				
-					<li><a href="./XhtmlSplitter.html">XhtmlSplitter</a></li>
-				
-					<li><a href="./XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
-				
-					<li><a href="./AbuseReport.html">AbuseReport</a></li>
-				
-					<li><a href="./AbuseReportsController.html">AbuseReportsController</a></li>
-				
-					<li><a href="./AdminMailer.html">AdminMailer</a></li>
-				
-					<li><a href="./AdminPost.html">AdminPost</a></li>
-				
-					<li><a href="./AdminPostTag.html">AdminPostTag</a></li>
-				
-					<li><a href="./AdminPostTagging.html">AdminPostTagging</a></li>
-				
-					<li><a href="./AdminPostsController.html">AdminPostsController</a></li>
-				
-					<li><a href="./AdminSession.html">AdminSession</a></li>
-				
-					<li><a href="./AdminSessionsController.html">AdminSessionsController</a></li>
-				
-					<li><a href="./AdminSetting.html">AdminSetting</a></li>
-				
-					<li><a href="./AdminsController.html">AdminsController</a></li>
-				
-					<li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
-				
-					<li><a href="./AlphabetHelper.html">AlphabetHelper</a></li>
-				
-					<li><a href="./ApplicationController.html">ApplicationController</a></li>
-				
-					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
-				
-					<li><a href="./ArchiveFaq.html">ArchiveFaq</a></li>
-				
-					<li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a></li>
-				
-					<li><a href="./AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
-				
-					<li><a href="./AutocompleteController.html">AutocompleteController</a></li>
-				
-					<li><a href="./Banned.html">Banned</a></li>
-				
-					<li><a href="./Bookmark.html">Bookmark</a></li>
-				
-					<li><a href="./BookmarksController.html">BookmarksController</a></li>
-				
-					<li><a href="./BookmarksHelper.html">BookmarksHelper</a></li>
-				
-					<li><a href="./CacheHelper.html">CacheHelper</a></li>
-				
-					<li><a href="./CastNomination.html">CastNomination</a></li>
-				
-					<li><a href="./Category.html">Category</a></li>
-				
-					<li><a href="./ChallengeAssignment.html">ChallengeAssignment</a></li>
-				
-					<li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
-				
-					<li><a href="./ChallengeClaim.html">ChallengeClaim</a></li>
-				
-					<li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a></li>
-				
-					<li><a href="./ChallengeHelper.html">ChallengeHelper</a></li>
-				
-					<li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a></li>
-				
-					<li><a href="./ChallengeSignup.html">ChallengeSignup</a></li>
-				
-					<li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
-				
-					<li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
-				
-					<li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a></li>
-				
-					<li><a href="./ChallengeSweeper.html">ChallengeSweeper</a></li>
-				
-					<li><a href="./ChallengesController.html">ChallengesController</a></li>
-				
-					<li><a href="./Chapter.html">Chapter</a></li>
-				
-					<li><a href="./ChapterSweeper.html">ChapterSweeper</a></li>
-				
-					<li><a href="./ChaptersController.html">ChaptersController</a></li>
-				
-					<li><a href="./ChaptersHelper.html">ChaptersHelper</a></li>
-				
-					<li><a href="./Character.html">Character</a></li>
-				
-					<li><a href="./CharacterNomination.html">CharacterNomination</a></li>
-				
-					<li><a href="./Collectible.html">Collectible</a></li>
-				
-					<li><a href="./Collection.html">Collection</a></li>
-				
-					<li><a href="./CollectionItem.html">CollectionItem</a></li>
-				
-					<li><a href="./CollectionItemsController.html">CollectionItemsController</a></li>
-				
-					<li><a href="./CollectionObserver.html">CollectionObserver</a></li>
-				
-					<li><a href="./CollectionParticipant.html">CollectionParticipant</a></li>
-				
-					<li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a></li>
-				
-					<li><a href="./CollectionPreference.html">CollectionPreference</a></li>
-				
-					<li><a href="./CollectionProfile.html">CollectionProfile</a></li>
-				
-					<li><a href="./CollectionProfileController.html">CollectionProfileController</a></li>
-				
-					<li><a href="./CollectionSweeper.html">CollectionSweeper</a></li>
-				
-					<li><a href="./CollectionsController.html">CollectionsController</a></li>
-				
-					<li><a href="./CollectionsHelper.html">CollectionsHelper</a></li>
-				
-					<li><a href="./Comment.html">Comment</a></li>
-				
-					<li><a href="./CommentMailer.html">CommentMailer</a></li>
-				
-					<li><a href="./CommentObserver.html">CommentObserver</a></li>
-				
-					<li><a href="./CommentSweeper.html">CommentSweeper</a></li>
-				
-					<li><a href="./CommentsController.html">CommentsController</a></li>
-				
-					<li><a href="./CommentsHelper.html">CommentsHelper</a></li>
-				
-					<li><a href="./CommonTagging.html">CommonTagging</a></li>
-				
-					<li><a href="./CreationObserver.html">CreationObserver</a></li>
-				
-					<li><a href="./Creatorship.html">Creatorship</a></li>
-				
-					<li><a href="./CssCleaner.html">CssCleaner</a></li>
-				
-					<li><a href="./DateHelper.html">DateHelper</a></li>
-				
-					<li><a href="./DevmodeController.html">DevmodeController</a></li>
-				
-					<li><a href="./DownloadsController.html">DownloadsController</a></li>
-				
-					<li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a></li>
-				
-					<li><a href="./ErrorsController.html">ErrorsController</a></li>
-				
-					<li><a href="./ExternalAuthor.html">ExternalAuthor</a></li>
-				
-					<li><a href="./ExternalAuthorName.html">ExternalAuthorName</a></li>
-				
-					<li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a></li>
-				
-					<li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
-				
-					<li><a href="./ExternalCreatorship.html">ExternalCreatorship</a></li>
-				
-					<li><a href="./ExternalWork.html">ExternalWork</a></li>
-				
-					<li><a href="./ExternalWorksController.html">ExternalWorksController</a></li>
-				
-					<li><a href="./Fandom.html">Fandom</a></li>
-				
-					<li><a href="./FandomNomination.html">FandomNomination</a></li>
-				
-					<li><a href="./FandomsController.html">FandomsController</a></li>
-				
-					<li><a href="./FeedSweeper.html">FeedSweeper</a></li>
-				
-					<li><a href="./Feedback.html">Feedback</a></li>
-				
-					<li><a href="./FeedbacksController.html">FeedbacksController</a></li>
-				
-					<li><a href="./FilterCount.html">FilterCount</a></li>
-				
-					<li><a href="./FilterTagging.html">FilterTagging</a></li>
-				
-					<li><a href="./FindRandom.html">FindRandom</a></li>
-				
-					<li><a href="./Freeform.html">Freeform</a></li>
-				
-					<li><a href="./FreeformNomination.html">FreeformNomination</a></li>
-				
-					<li><a href="./Gift.html">Gift</a></li>
-				
-					<li><a href="./GiftExchange.html">GiftExchange</a></li>
-				
-					<li><a href="./GiftsController.html">GiftsController</a></li>
-				
-					<li><a href="./HitCounter.html">HitCounter</a></li>
-				
-					<li><a href="./HomeController.html">HomeController</a></li>
-				
-					<li><a href="./HomeHelper.html">HomeHelper</a></li>
-				
-					<li><a href="./HtmlCleaner.html">HtmlCleaner</a></li>
-				
-					<li><a href="./InboxComment.html">InboxComment</a></li>
-				
-					<li><a href="./InboxController.html">InboxController</a></li>
-				
-					<li><a href="./InboxHelper.html">InboxHelper</a></li>
-				
-					<li><a href="./Invitation.html">Invitation</a></li>
-				
-					<li><a href="./InvitationsController.html">InvitationsController</a></li>
-				
-					<li><a href="./InvitationsHelper.html">InvitationsHelper</a></li>
-				
-					<li><a href="./InviteRequest.html">InviteRequest</a></li>
-				
-					<li><a href="./InviteRequestsController.html">InviteRequestsController</a></li>
-				
-					<li><a href="./KnownIssue.html">KnownIssue</a></li>
-				
-					<li><a href="./KnownIssuesController.html">KnownIssuesController</a></li>
-				
-					<li><a href="./Kudo.html">Kudo</a></li>
-				
-					<li><a href="./KudoMailer.html">KudoMailer</a></li>
-				
-					<li><a href="./KudoObserver.html">KudoObserver</a></li>
-				
-					<li><a href="./KudosController.html">KudosController</a></li>
-				
-					<li><a href="./Language.html">Language</a></li>
-				
-					<li><a href="./LanguagesController.html">LanguagesController</a></li>
-				
-					<li><a href="./Locale.html">Locale</a></li>
-				
-					<li><a href="./LocalesController.html">LocalesController</a></li>
-				
-					<li><a href="./LogItem.html">LogItem</a></li>
-				
-					<li><a href="./Media.html">Media</a></li>
-				
-					<li><a href="./MediaController.html">MediaController</a></li>
-				
-					<li><a href="./MetaTagging.html">MetaTagging</a></li>
-				
-					<li><a href="./Offer.html">Offer</a></li>
-				
-					<li><a href="./OrphansController.html">OrphansController</a></li>
-				
-					<li><a href="./OrphansHelper.html">OrphansHelper</a></li>
-				
-					<li><a href="./OwnedSetTagging.html">OwnedSetTagging</a></li>
-				
-					<li><a href="./OwnedTagSet.html">OwnedTagSet</a></li>
-				
-					<li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a></li>
-				
-					<li><a href="./PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
-				
-					<li><a href="./PasswordsController.html">PasswordsController</a></li>
-				
-					<li><a href="./People.html">People</a></li>
-				
-					<li><a href="./PeopleController.html">PeopleController</a></li>
-				
-					<li><a href="./PotentialMatch.html">PotentialMatch</a></li>
-				
-					<li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a></li>
-				
-					<li><a href="./PotentialMatchesController.html">PotentialMatchesController</a></li>
-				
-					<li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a></li>
-				
-					<li><a href="./Preference.html">Preference</a></li>
-				
-					<li><a href="./PreferencesController.html">PreferencesController</a></li>
-				
-					<li><a href="./Profile.html">Profile</a></li>
-				
-					<li><a href="./ProfileController.html">ProfileController</a></li>
-				
-					<li><a href="./Prompt.html">Prompt</a></li>
-				
-					<li><a href="./PromptMeme.html">PromptMeme</a></li>
-				
-					<li><a href="./PromptRestriction.html">PromptRestriction</a></li>
-				
-					<li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
-				
-					<li><a href="./PromptsController.html">PromptsController</a></li>
-				
-					<li><a href="./Pseud.html">Pseud</a></li>
-				
-					<li><a href="./PseudSweeper.html">PseudSweeper</a></li>
-				
-					<li><a href="./PseudsController.html">PseudsController</a></li>
-				
-					<li><a href="./PseudsHelper.html">PseudsHelper</a></li>
-				
-					<li><a href="./Query.html">Query</a></li>
-				
-					<li><a href="./Rating.html">Rating</a></li>
-				
-					<li><a href="./Rawk.html">Rawk</a></li>
-				
-					<li><a href="./Reading.html">Reading</a></li>
-				
-					<li><a href="./ReadingsController.html">ReadingsController</a></li>
-				
-					<li><a href="./RedirectController.html">RedirectController</a></li>
-				
-					<li><a href="./RedisTestSetup.html">RedisTestSetup</a></li>
-				
-					<li><a href="./RelatedWork.html">RelatedWork</a></li>
-				
-					<li><a href="./RelatedWorksController.html">RelatedWorksController</a></li>
-				
-					<li><a href="./Relationship.html">Relationship</a></li>
-				
-					<li><a href="./RelationshipNomination.html">RelationshipNomination</a></li>
-				
-					<li><a href="./Request.html">Request</a></li>
-				
-					<li><a href="./Role.html">Role</a></li>
-				
-					<li><a href="./RolesUser.html">RolesUser</a></li>
-				
-					<li><a href="./SearchController.html">SearchController</a></li>
-				
-					<li><a href="./SearchHelper.html">SearchHelper</a></li>
-				
-					<li><a href="./SerialWork.html">SerialWork</a></li>
-				
-					<li><a href="./SerialWorksController.html">SerialWorksController</a></li>
-				
-					<li><a href="./Series.html">Series</a></li>
-				
-					<li><a href="./SeriesController.html">SeriesController</a></li>
-				
-					<li><a href="./SeriesHelper.html">SeriesHelper</a></li>
-				
-					<li><a href="./SetTagging.html">SetTagging</a></li>
-				
-					<li><a href="./Skin.html">Skin</a></li>
-				
-					<li><a href="./SkinParent.html">SkinParent</a></li>
-				
-					<li><a href="./SkinsController.html">SkinsController</a></li>
-				
-					<li><a href="./SkinsHelper.html">SkinsHelper</a></li>
-				
-					<li><a href="./SortableList.html">SortableList</a></li>
-				
-					<li><a href="./Stat.html">Stat</a></li>
-				
-					<li><a href="./StatHash.html">StatHash</a></li>
-				
-					<li><a href="./StaticSweeper.html">StaticSweeper</a></li>
-				
-					<li><a href="./StatsController.html">StatsController</a></li>
-				
-					<li><a href="./StatsHelper.html">StatsHelper</a></li>
-				
-					<li><a href="./Subscription.html">Subscription</a></li>
-				
-					<li><a href="./SubscriptionsController.html">SubscriptionsController</a></li>
-				
-					<li><a href="./Tag.html">Tag</a></li>
-				
-					<li><a href="./TagNomination.html">TagNomination</a></li>
-				
-					<li><a href="./TagNominationsController.html">TagNominationsController</a></li>
-				
-					<li><a href="./TagSet.html">TagSet</a></li>
-				
-					<li><a href="./TagSetAssociation.html">TagSetAssociation</a></li>
-				
-					<li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a></li>
-				
-					<li><a href="./TagSetNomination.html">TagSetNomination</a></li>
-				
-					<li><a href="./TagSetNominationsController.html">TagSetNominationsController</a></li>
-				
-					<li><a href="./TagSetOwnership.html">TagSetOwnership</a></li>
-				
-					<li><a href="./TagSetSweeper.html">TagSetSweeper</a></li>
-				
-					<li><a href="./TagSetsHelper.html">TagSetsHelper</a></li>
-				
-					<li><a href="./TagSweeper.html">TagSweeper</a></li>
-				
-					<li><a href="./TagWranglersController.html">TagWranglersController</a></li>
-				
-					<li><a href="./TagWranglingsController.html">TagWranglingsController</a></li>
-				
-					<li><a href="./Taggable.html">Taggable</a></li>
-				
-					<li><a href="./Tagging.html">Tagging</a></li>
-				
-					<li><a href="./TagsController.html">TagsController</a></li>
-				
-					<li><a href="./TagsHelper.html">TagsHelper</a></li>
-				
-					<li><a href="./TranslationGenerator.html">TranslationGenerator</a></li>
-				
-					<li><a href="./TranslationHelper.html">TranslationHelper</a></li>
-				
-					<li><a href="./TranslationNote.html">TranslationNote</a></li>
-				
-					<li><a href="./TranslationNotesController.html">TranslationNotesController</a></li>
-				
-					<li><a href="./TranslationsController.html">TranslationsController</a></li>
-				
-					<li><a href="./TranslatorsController.html">TranslatorsController</a></li>
-				
-					<li><a href="./UrlActiveValidator.html">UrlActiveValidator</a></li>
-				
-					<li><a href="./UrlFormatValidator.html">UrlFormatValidator</a></li>
-				
-					<li><a href="./UrlHelpers.html">UrlHelpers</a></li>
-				
-					<li><a href="./User.html">User</a></li>
-				
-					<li><a href="./UserInviteRequest.html">UserInviteRequest</a></li>
-				
-					<li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a></li>
-				
-					<li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
-				
-					<li><a href="./UserMailer.html">UserMailer</a></li>
-				
-					<li><a href="./UserSession.html">UserSession</a></li>
-				
-					<li><a href="./UserSessionsController.html">UserSessionsController</a></li>
-				
-					<li><a href="./UsersController.html">UsersController</a></li>
-				
-					<li><a href="./UsersHelper.html">UsersHelper</a></li>
-				
-					<li><a href="./ValidationHelper.html">ValidationHelper</a></li>
-				
-					<li><a href="./Warning.html">Warning</a></li>
-				
-					<li><a href="./WeightedRandom.html">WeightedRandom</a></li>
-				
-					<li><a href="./Work.html">Work</a></li>
-				
-					<li><a href="./WorkObserver.html">WorkObserver</a></li>
-				
-					<li><a href="./WorkSkin.html">WorkSkin</a></li>
-				
-					<li><a href="./WorkSweeper.html">WorkSweeper</a></li>
-				
-					<li><a href="./WorksController.html">WorksController</a></li>
-				
-					<li><a href="./WorksHelper.html">WorksHelper</a></li>
-				
-					<li><a href="./WranglingAssignment.html">WranglingAssignment</a></li>
-				
-				</ul>
-				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
-			</div>
-
-			
-		</div>
-	</div>
-
-	<div id="documentation">
-		<h1 class="class">User</h1>
-
-		<div id="description">
-			
-		</div>
-
-		<!-- Constants -->
-		
-		<div id="constants-list" class="section">
-			<h3 class="section-header">Constants</h3>
-			<dl>
-			
-				<dt><a name="LOGIN_LENGTH_MIN">LOGIN_LENGTH_MIN</a></dt>
-				
-				<dd class="description"><pre>
-  used to be in acts_as_authentable
-</pre>
-<p>
-used in app/views/users/new.html.erb TODO move to ArchiveConfig
-</p></dd>
-				
-			
-				<dt><a name="LOGIN_LENGTH_MAX">LOGIN_LENGTH_MAX</a></dt>
-				
-				<dd class="description"></dd>
-				
-			
-				<dt><a name="PASSWORD_LENGTH_MIN">PASSWORD_LENGTH_MIN</a></dt>
-				
-				<dd class="description"></dd>
-				
-			
-				<dt><a name="PASSWORD_LENGTH_MAX">PASSWORD_LENGTH_MAX</a></dt>
-				
-				<dd class="description"></dd>
-				
-			
-			</dl>
-		</div>
-		
-
-		<!-- Attributes -->
-		
-		<div id="attribute-method-details" class="method-section section">
-			<h3 class="section-header">Attributes</h3>
-
-			
-			<div id="invitation-token-attribute-method" class="method-detail">
-				<a name="invitation_token"></a>
-				
-				<a name="invitation_token="></a>
-				
-				<div class="method-heading attribute-method-heading">
-					<span class="method-name">invitation_token</span><span
-						class="attribute-access-type">[RW]</span>
-				</div>
-
-				<div class="method-description">
-				
-				
-				
-				</div>
-			</div>
-			
-			<div id="age-over--attribute-method" class="method-detail">
-				<a name="age_over_13"></a>
-				
-				<a name="age_over_13="></a>
-				
-				<div class="method-heading attribute-method-heading">
-					<span class="method-name">age_over_13</span><span
-						class="attribute-access-type">[RW]</span>
-				</div>
-
-				<div class="method-description">
-				
-				<p>
-Virtual attribute for age check and terms of service
-</p>
-				
-				</div>
-			</div>
-			
-			<div id="terms-of-service-attribute-method" class="method-detail">
-				<a name="terms_of_service"></a>
-				
-				<a name="terms_of_service="></a>
-				
-				<div class="method-heading attribute-method-heading">
-					<span class="method-name">terms_of_service</span><span
-						class="attribute-access-type">[RW]</span>
-				</div>
-
-				<div class="method-description">
-				
-				
-				
-				</div>
-			</div>
-			
-		</div>
-		
-
-		<!-- Methods -->
-		
-		<div id="public-class-method-details" class="method-section section">
-			<h3 class="section-header">Public Class Methods</h3>
-
-		
-			<div id="for-claims-method" class="method-detail ">
-				<a name="method-c-for_claims"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">for_claims</span><span
-						class="method-args">(claims_ids)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="for-claims-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 190</span>
-190:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">for_claims</span>(<span class="ruby-identifier">claims_ids</span>)    
-191:     <span class="ruby-identifier">joins</span>(<span class="ruby-value">:request_claims</span>).
-192:     <span class="ruby-identifier">where</span>(<span class="ruby-value str">&quot;challenge_claims.id IN (?)&quot;</span>, <span class="ruby-identifier">claims_ids</span>)
-193:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="orphan-account-method" class="method-detail ">
-				<a name="method-c-orphan_account"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">orphan_account</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Gets the user account for authored objects if orphaning is enabled
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="orphan-account-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 281</span>
-281:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">orphan_account</span>
-282:     <span class="ruby-constant">User</span>.<span class="ruby-identifier">fetch_orphan_account</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ORPHANING_ALLOWED</span>
-283:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="private-class-method-details" class="method-section section">
-			<h3 class="section-header">Private Class Methods</h3>
-
-		
-			<div id="fetch-orphan-account-method" class="method-detail ">
-				<a name="method-c-fetch_orphan_account"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">fetch_orphan_account</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Create and/or return a user account for holding orphaned works
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="fetch-orphan-account-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 430</span>
-430:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fetch_orphan_account</span>
-431:     <span class="ruby-identifier">orphan_account</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_or_create_by_login</span>(<span class="ruby-value str">&quot;orphan_account&quot;</span>)
-432:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">orphan_account</span>.<span class="ruby-identifier">new_record?</span>
-433:       <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">fatal</span> <span class="ruby-value str">&quot;You must have a User with the login 'orphan_account'. Please create one.&quot;</span>
-434:     <span class="ruby-keyword kw">end</span>
-435:     <span class="ruby-identifier">orphan_account</span>
-436:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="public-instance-method-details" class="method-section section">
-			<h3 class="section-header">Public Instance Methods</h3>
-
-		
-			<div id="activate-method" class="method-detail ">
-				<a name="method-i-activate"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">activate</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="activate-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 214</span>
-214:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">activate</span>
-215:     <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">active?</span>
-216:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:activated_at</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">utc</span>)
-217:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="active--method" class="method-detail ">
-				<a name="method-i-active%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">active?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-AUTHENTICATION AND PASSWORDS
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="active--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 196</span>
-196:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">active?</span>
-197:     <span class="ruby-operator">!</span><span class="ruby-identifier">activated_at</span>.<span class="ruby-identifier">nil?</span>
-198:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="admin-update-method" class="method-detail ">
-				<a name="method-i-admin_update"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">admin_update</span><span
-						class="method-args">(attributes)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Allow admins to set roles and change email
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="admin-update-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 286</span>
-286:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">admin_update</span>(<span class="ruby-identifier">attributes</span>)
-287:     <span class="ruby-keyword kw">if</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Admin</span>)
-288:       <span class="ruby-identifier">success</span> = <span class="ruby-keyword kw">true</span>
-289:       <span class="ruby-identifier">success</span> = <span class="ruby-identifier">set_roles</span>(<span class="ruby-identifier">attributes</span>[<span class="ruby-value">:roles</span>])
-290:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">success</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:email</span>]
-291:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">email</span> = <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:email</span>]
-292:         <span class="ruby-identifier">success</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">save</span>(<span class="ruby-value">:validate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>)
-293:       <span class="ruby-keyword kw">end</span>
-294:       <span class="ruby-identifier">success</span>
-295:     <span class="ruby-keyword kw">end</span>
-296:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="archivist-method" class="method-detail ">
-				<a name="method-i-archivist"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">archivist</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Is this user an authorized archivist?
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="archivist-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 340</span>
-340:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">archivist</span>
-341:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_archivist?</span>
-342:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="archivist--method" class="method-detail ">
-				<a name="method-i-archivist%3D"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">archivist=</span><span
-						class="method-args">(should_be_archivist)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Set archivist role for this user and log change
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="archivist--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 349</span>
-349:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">archivist=</span>(<span class="ruby-identifier">should_be_archivist</span>)
-350:     <span class="ruby-identifier">set_role</span>(<span class="ruby-value str">'archivist'</span>, <span class="ruby-identifier">should_be_archivist</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'1'</span>)
-351:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="coauthored-works-method" class="method-detail ">
-				<a name="method-i-coauthored_works"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">coauthored_works</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Returns array of the user&#8217;s co-authored works
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="coauthored-works-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 398</span>
-398:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">coauthored_works</span>
-399:     <span class="ruby-ivar">@coauthored_works</span> = []
-400:     <span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'posted = 1'</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span>
-401:       <span class="ruby-keyword kw">unless</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_sole_author_of?</span>(<span class="ruby-identifier">w</span>)
-402:         <span class="ruby-ivar">@coauthored_works</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">w</span>
-403:       <span class="ruby-keyword kw">end</span>
-404:     <span class="ruby-keyword kw">end</span>
-405:     <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@coauthored_works</span>
-406:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="coauthors-method" class="method-detail ">
-				<a name="method-i-coauthors"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">coauthors</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Returns an array (of pseuds) of this user&#8217;s co-authors
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="coauthors-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 233</span>
-233:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">coauthors</span>
-234:      <span class="ruby-identifier">works</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:pseuds</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">pseuds</span>
-235:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="create-default-associateds-method" class="method-detail ">
-				<a name="method-i-create_default_associateds"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">create_default_associateds</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="create-default-associateds-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 219</span>
-219:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_default_associateds</span>
-220:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">login</span>, <span class="ruby-value">:is_default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-221:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">profile</span> = <span class="ruby-constant">Profile</span>.<span class="ruby-identifier">new</span>
-222:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">preference</span> = <span class="ruby-constant">Preference</span>.<span class="ruby-identifier">new</span>
-223:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="create-log-item-method" class="method-detail ">
-				<a name="method-i-create_log_item"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">create_log_item</span><span
-						class="method-args">(options = {})</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Creates log item tracking changes to user
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="create-log-item-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 354</span>
-354:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_log_item</span>(<span class="ruby-identifier">options</span> = {})
-355:     <span class="ruby-identifier">options</span>.<span class="ruby-identifier">reverse_merge!</span> <span class="ruby-value">:note</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'System Generated'</span>, <span class="ruby-value">:user_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>
-356:     <span class="ruby-constant">LogItem</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">options</span>)
-357:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="default-pseud-method" class="method-detail ">
-				<a name="method-i-default_pseud"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">default_pseud</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Retrieve the current default pseud
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="default-pseud-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 256</span>
-256:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_pseud</span>
-257:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:is_default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>).<span class="ruby-identifier">first</span>
-258:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="generate-password-method" class="method-detail ">
-				<a name="method-i-generate_password"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">generate_password</span><span
-						class="method-args">(length=8)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="generate-password-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 200</span>
-200:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate_password</span>(<span class="ruby-identifier">length</span>=<span class="ruby-value">8</span>)
-201:     <span class="ruby-identifier">chars</span> = <span class="ruby-value str">'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789'</span>
-202:     <span class="ruby-identifier">password</span> = <span class="ruby-value str">''</span>
-203:     <span class="ruby-identifier">length</span>.<span class="ruby-identifier">downto</span>(<span class="ruby-value">1</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">password</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">chars</span>[<span class="ruby-identifier">rand</span>(<span class="ruby-identifier">chars</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)] }
-204:     <span class="ruby-identifier">password</span>
-205:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="has-no-credentials--method" class="method-detail ">
-				<a name="method-i-has_no_credentials%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">has_no_credentials?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="has-no-credentials--source">
-<pre>
-    <span class="ruby-comment cmt"># File app/models/user.rb, line 38</span>
-38:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_no_credentials?</span>
-39:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">crypted_password</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">identity_url</span>.<span class="ruby-identifier">blank?</span>
-40:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="is-archivist--method" class="method-detail ">
-				<a name="method-i-is_archivist%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">is_archivist?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="is-archivist--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 344</span>
-344:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_archivist?</span>
-345:     <span class="ruby-identifier">has_role?</span>(<span class="ruby-value">:archivist</span>)
-346:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="is-author-of--method" class="method-detail ">
-				<a name="method-i-is_author_of%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">is_author_of?</span><span
-						class="method-args">(item)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Checks authorship of any sort of object
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="is-author-of--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 261</span>
-261:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_author_of?</span>(<span class="ruby-identifier">item</span>)
-262:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:user</span>)
-263:       <span class="ruby-keyword kw">self</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">user</span>
-264:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:pseud</span>)
-265:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">item</span>.<span class="ruby-identifier">pseud</span>)
-266:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:pseuds</span>)
-267:       <span class="ruby-operator">!</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">pseuds</span> &amp; <span class="ruby-identifier">item</span>.<span class="ruby-identifier">pseuds</span>).<span class="ruby-identifier">empty?</span>
-268:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:author</span>)
-269:       <span class="ruby-keyword kw">self</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">author</span>
-270:     <span class="ruby-keyword kw">else</span>
-271:       <span class="ruby-keyword kw">false</span>
-272:     <span class="ruby-keyword kw">end</span>
-273:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="is-sole-author-of--method" class="method-detail ">
-				<a name="method-i-is_sole_author_of%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">is_sole_author_of?</span><span
-						class="method-args">(item)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Returns true if user is the sole author of a work Should also be true if
-the user has used more than one of their pseuds on a work
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="is-sole-author-of--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 381</span>
-381:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_sole_author_of?</span>(<span class="ruby-identifier">item</span>)
-382:    <span class="ruby-identifier">other_pseuds</span> = <span class="ruby-identifier">item</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>) <span class="ruby-operator">-</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">pseuds</span>
-383:    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-identifier">item</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">other_pseuds</span>.<span class="ruby-identifier">blank?</span>
-384:  <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="is-tag-wrangler--method" class="method-detail ">
-				<a name="method-i-is_tag_wrangler%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">is_tag_wrangler?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="is-tag-wrangler--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 330</span>
-330:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_tag_wrangler?</span>
-331:     <span class="ruby-identifier">has_role?</span>(<span class="ruby-value">:tag_wrangler</span>)
-332:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="is-translation-admin--method" class="method-detail ">
-				<a name="method-i-is_translation_admin%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">is_translation_admin?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="is-translation-admin--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 316</span>
-316:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_translation_admin?</span>
-317:     <span class="ruby-identifier">has_role?</span>(<span class="ruby-value">:translation_admin</span>)
-318:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="mark-invitation-redeemed-method" class="method-detail ">
-				<a name="method-i-mark_invitation_redeemed"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">mark_invitation_redeemed</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-If a new user was invited, update the invitation
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="mark-invitation-redeemed-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 411</span>
-411:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mark_invitation_redeemed</span>
-412:     <span class="ruby-keyword kw">unless</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invitation_token</span>.<span class="ruby-identifier">blank?</span>
-413:       <span class="ruby-identifier">invitation</span> = <span class="ruby-constant">Invitation</span>.<span class="ruby-identifier">find_by_token</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">invitation_token</span>)
-414:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">invitation</span>
-415:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:invitation_id</span>, <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">id</span>)
-416:         <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">mark_as_redeemed</span>(<span class="ruby-keyword kw">self</span>)
-417:       <span class="ruby-keyword kw">end</span>
-418:     <span class="ruby-keyword kw">end</span>
-419:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="most-popular-tags-method" class="method-detail ">
-				<a name="method-i-most_popular_tags"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">most_popular_tags</span><span
-						class="method-args">(options = {})</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Options can include :categories and :limit
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="most-popular-tags-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 360</span>
-360:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">most_popular_tags</span>(<span class="ruby-identifier">options</span> = {})
-361:     <span class="ruby-identifier">all_tags</span> = []
-362:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:categories</span>].<span class="ruby-identifier">blank?</span>
-363:       <span class="ruby-identifier">all_tags</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tags</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">bookmark_tags</span>
-364:     <span class="ruby-keyword kw">else</span>
-365:       <span class="ruby-identifier">type_tags</span> = []
-366:       <span class="ruby-identifier">options</span>[<span class="ruby-value">:categories</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">type_name</span><span class="ruby-operator">|</span>
-367:         <span class="ruby-identifier">type_tags</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">type_name</span>.<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">all</span>
-368:       <span class="ruby-keyword kw">end</span>
-369:       <span class="ruby-identifier">all_tags</span> = [<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">tags</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">bookmark_tags</span>].<span class="ruby-identifier">flatten</span> &amp; <span class="ruby-identifier">type_tags</span>.<span class="ruby-identifier">flatten</span>
-370:     <span class="ruby-keyword kw">end</span>
-371:     <span class="ruby-identifier">tags_with_count</span> = {}
-372:     <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span>
-373:       <span class="ruby-identifier">tags_with_count</span>[<span class="ruby-identifier">tag</span>] = <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">tag</span>}.<span class="ruby-identifier">size</span>
-374:     <span class="ruby-keyword kw">end</span>
-375:     <span class="ruby-identifier">all_tags</span> = <span class="ruby-identifier">tags_with_count</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span>,<span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">y</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">last</span> }
-376:     <span class="ruby-identifier">popular_tags</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:limit</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">pair</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pair</span>.<span class="ruby-identifier">first</span>} <span class="ruby-operator">:</span> <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">pair</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pair</span>.<span class="ruby-identifier">first</span>}[<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:limit</span>]<span class="ruby-operator">-</span><span class="ruby-value">1</span>)]
-377:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="read-inbox-comments-method" class="method-detail ">
-				<a name="method-i-read_inbox_comments"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">read_inbox_comments</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="read-inbox-comments-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 148</span>
-148:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_inbox_comments</span>
-149:     <span class="ruby-identifier">inbox_comments</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:read</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>})
-150:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="remove-from-queue-method" class="method-detail ">
-				<a name="method-i-remove_from_queue"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">remove_from_queue</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Existing users should be removed from the invitations queue
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="remove-from-queue-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 422</span>
-422:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_from_queue</span>
-423:     <span class="ruby-identifier">invite_request</span> = <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">find_by_email</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">email</span>)
-424:     <span class="ruby-identifier">invite_request</span>.<span class="ruby-identifier">destroy</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">invite_request</span>
-425:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="remove-pseud-from-kudos-method" class="method-detail ">
-				<a name="method-i-remove_pseud_from_kudos"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">remove_pseud_from_kudos</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="remove-pseud-from-kudos-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 144</span>
-144:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_pseud_from_kudos</span>
-145:     <span class="ruby-constant">Kudo</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-value str">&quot;pseud_id = NULL&quot;</span>, <span class="ruby-node">&quot;pseud_id IN (#{self.pseuds.collect(&amp;:id).join(',')})&quot;</span>)
-146:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="reset-user-password-method" class="method-detail ">
-				<a name="method-i-reset_user_password"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">reset_user_password</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-use update_all to force the update even if the user is invalid
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="reset-user-password-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 208</span>
-208:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset_user_password</span>
-209:     <span class="ruby-identifier">temp_password</span> = <span class="ruby-identifier">generate_password</span>(<span class="ruby-value">20</span>)
-210:     <span class="ruby-constant">User</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;activation_code = '#{temp_password}', recently_reset = 1, updated_at = '#{Time.now}'&quot;</span>, <span class="ruby-node">&quot;id = #{self.id}&quot;</span>)
-211:     <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">reset_password</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">temp_password</span>).<span class="ruby-identifier">deliver</span>
-212:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="sole-authored-works-method" class="method-detail ">
-				<a name="method-i-sole_authored_works"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">sole_authored_works</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Returns array of works where the user is the sole author
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="sole-authored-works-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 387</span>
-387:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sole_authored_works</span>
-388:     <span class="ruby-ivar">@sole_authored_works</span> = []
-389:     <span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'posted = 1'</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span>
-390:       <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_sole_author_of?</span>(<span class="ruby-identifier">w</span>)
-391:         <span class="ruby-ivar">@sole_authored_works</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">w</span>
-392:       <span class="ruby-keyword kw">end</span>
-393:     <span class="ruby-keyword kw">end</span>
-394:     <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@sole_authored_works</span>
-395:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="tag-wrangler-method" class="method-detail ">
-				<a name="method-i-tag_wrangler"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">tag_wrangler</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Is this user an authorized tag wrangler?
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="tag-wrangler-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 326</span>
-326:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tag_wrangler</span>
-327:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_tag_wrangler?</span>
-328:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="tag-wrangler--method" class="method-detail ">
-				<a name="method-i-tag_wrangler%3D"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">tag_wrangler=</span><span
-						class="method-args">(should_be_tag_wrangler)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Set tag wrangler role for this user and log change
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="tag-wrangler--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 335</span>
-335:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tag_wrangler=</span>(<span class="ruby-identifier">should_be_tag_wrangler</span>)
-336:     <span class="ruby-identifier">set_role</span>(<span class="ruby-value str">'tag_wrangler'</span>, <span class="ruby-identifier">should_be_tag_wrangler</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'1'</span>)
-337:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="to-param-method" class="method-detail ">
-				<a name="method-i-to_param"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">to_param</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="to-param-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 185</span>
-185:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_param</span>
-186:     <span class="ruby-identifier">login</span>
-187:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="translation-admin-method" class="method-detail ">
-				<a name="method-i-translation_admin"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">translation_admin</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Is this user an authorized translation admin?
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="translation-admin-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 312</span>
-312:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">translation_admin</span>
-313:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_translation_admin?</span>
-314:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="translation-admin--method" class="method-detail ">
-				<a name="method-i-translation_admin%3D"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">translation_admin=</span><span
-						class="method-args">(should_be_translation_admin)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Set translator role for this user and log change
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="translation-admin--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 321</span>
-321:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">translation_admin=</span>(<span class="ruby-identifier">should_be_translation_admin</span>)
-322:     <span class="ruby-identifier">set_role</span>(<span class="ruby-value str">'translation_admin'</span>, <span class="ruby-identifier">should_be_translation_admin</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'1'</span>)
-323:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="unposted-work-method" class="method-detail ">
-				<a name="method-i-unposted_work"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">unposted_work</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Gets the user&#8217;s most recent unposted work
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="unposted-work-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 238</span>
-238:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unposted_work</span>
-239:     <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@unposted_work</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@unposted_work</span>
-240:     <span class="ruby-ivar">@unposted_work</span> = <span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:first</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>}, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'works.created_at DESC'</span>)
-241:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="unposted-works-method" class="method-detail ">
-				<a name="method-i-unposted_works"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">unposted_works</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="unposted-works-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 243</span>
-243:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unposted_works</span>
-244:     <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@unposted_works</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@unposted_works</span>
-245:     <span class="ruby-ivar">@unposted_works</span> = <span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>}, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'works.created_at DESC'</span>)
-246:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="unread-inbox-comments-method" class="method-detail ">
-				<a name="method-i-unread_inbox_comments"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">unread_inbox_comments</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="unread-inbox-comments-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 151</span>
-151:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unread_inbox_comments</span>
-152:     <span class="ruby-identifier">inbox_comments</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:read</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>})
-153:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="unread-inbox-comments-count-method" class="method-detail ">
-				<a name="method-i-unread_inbox_comments_count"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">unread_inbox_comments_count</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="unread-inbox-comments-count-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 154</span>
-154:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unread_inbox_comments_count</span>
-155:     <span class="ruby-identifier">inbox_comments</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:read</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>})
-156:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="visible-work-count-method" class="method-detail ">
-				<a name="method-i-visible_work_count"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">visible_work_count</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Gets the number of works by this user that the current user can see
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="visible-work-count-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 276</span>
-276:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">visible_work_count</span>
-277:     <span class="ruby-constant">Work</span>.<span class="ruby-identifier">owned_by</span>(<span class="ruby-keyword kw">self</span>).<span class="ruby-identifier">visible_to_user</span>(<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>).<span class="ruby-identifier">count</span>(<span class="ruby-value">:id</span>, <span class="ruby-value">:distinct</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>)
-278:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="wipeout-unposted-works-method" class="method-detail ">
-				<a name="method-i-wipeout_unposted_works"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">wipeout_unposted_works</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-removes ALL unposted works
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="wipeout-unposted-works-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 249</span>
-249:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">wipeout_unposted_works</span>
-250:     <span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>}).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span>
-251:       <span class="ruby-identifier">w</span>.<span class="ruby-identifier">destroy</span>
-252:     <span class="ruby-keyword kw">end</span>
-253:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="protected-instance-method-details" class="method-section section">
-			<h3 class="section-header">Protected Instance Methods</h3>
-
-		
-			<div id="first-save--method" class="method-detail ">
-				<a name="method-i-first_save%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">first_save?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="first-save--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 226</span>
-226:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">first_save?</span>
-227:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new_record?</span>
-228:     <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="private-instance-method-details" class="method-section section">
-			<h3 class="section-header">Private Instance Methods</h3>
-
-		
-			<div id="log-change-if-login-was-edited-method" class="method-detail ">
-				<a name="method-i-log_change_if_login_was_edited"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">log_change_if_login_was_edited</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="log-change-if-login-was-edited-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 438</span>
-438:    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_change_if_login_was_edited</span>
-439:      <span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_RENAME</span>, <span class="ruby-value">:note</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;Old Username: #{login_was}; New Username: #{login}&quot;</span>}) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">login_changed?</span>
-440:    <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="set-roles-method" class="method-detail ">
-				<a name="method-i-set_roles"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">set_roles</span><span
-						class="method-args">(role_list)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Set the roles for this user
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="set-roles-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/user.rb, line 301</span>
-301:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_roles</span>(<span class="ruby-identifier">role_list</span>)
-302:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">role_list</span>
-303:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">roles</span> = <span class="ruby-constant">Role</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">role_list</span>)
-304:     <span class="ruby-keyword kw">else</span>
-305:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">roles</span> = []
-306:     <span class="ruby-keyword kw">end</span>
-307:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-
-	</div>
-
-
-	<div id="rdoc-debugging-section-dump" class="debugging-section">
-	
-		<p>Disabled; run with --debug to generate this.</p>
-	
-	</div>
-
-	<div id="validator-badges">
-		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
-		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
-			Rdoc Generator</a> 1.1.6</small>.</p>
-	</div>
-
-</body>
-</html>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: User</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/models/user.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">ActiveRecord::Base
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-for_claims">::for_claims</a>
+    
+    <li><a href="#method-c-orphan_account">::orphan_account</a>
+    
+    <li><a href="#method-i-activate">#activate</a>
+    
+    <li><a href="#method-i-active-3F">#active?</a>
+    
+    <li><a href="#method-i-admin_update">#admin_update</a>
+    
+    <li><a href="#method-i-archivist">#archivist</a>
+    
+    <li><a href="#method-i-archivist-3D">#archivist=</a>
+    
+    <li><a href="#method-i-coauthored_works">#coauthored_works</a>
+    
+    <li><a href="#method-i-coauthors">#coauthors</a>
+    
+    <li><a href="#method-i-create_default_associateds">#create_default_associateds</a>
+    
+    <li><a href="#method-i-create_log_item">#create_log_item</a>
+    
+    <li><a href="#method-i-default_pseud">#default_pseud</a>
+    
+    <li><a href="#method-i-first_save-3F">#first_save?</a>
+    
+    <li><a href="#method-i-generate_password">#generate_password</a>
+    
+    <li><a href="#method-i-has_no_credentials-3F">#has_no_credentials?</a>
+    
+    <li><a href="#method-i-is_archivist-3F">#is_archivist?</a>
+    
+    <li><a href="#method-i-is_author_of-3F">#is_author_of?</a>
+    
+    <li><a href="#method-i-is_sole_author_of-3F">#is_sole_author_of?</a>
+    
+    <li><a href="#method-i-is_tag_wrangler-3F">#is_tag_wrangler?</a>
+    
+    <li><a href="#method-i-is_translation_admin-3F">#is_translation_admin?</a>
+    
+    <li><a href="#method-i-mark_invitation_redeemed">#mark_invitation_redeemed</a>
+    
+    <li><a href="#method-i-most_popular_tags">#most_popular_tags</a>
+    
+    <li><a href="#method-i-read_inbox_comments">#read_inbox_comments</a>
+    
+    <li><a href="#method-i-remove_from_queue">#remove_from_queue</a>
+    
+    <li><a href="#method-i-remove_pseud_from_kudos">#remove_pseud_from_kudos</a>
+    
+    <li><a href="#method-i-reset_user_password">#reset_user_password</a>
+    
+    <li><a href="#method-i-sole_authored_works">#sole_authored_works</a>
+    
+    <li><a href="#method-i-tag_wrangler">#tag_wrangler</a>
+    
+    <li><a href="#method-i-tag_wrangler-3D">#tag_wrangler=</a>
+    
+    <li><a href="#method-i-to_param">#to_param</a>
+    
+    <li><a href="#method-i-translation_admin">#translation_admin</a>
+    
+    <li><a href="#method-i-translation_admin-3D">#translation_admin=</a>
+    
+    <li><a href="#method-i-unposted_work">#unposted_work</a>
+    
+    <li><a href="#method-i-unposted_works">#unposted_works</a>
+    
+    <li><a href="#method-i-unread_inbox_comments">#unread_inbox_comments</a>
+    
+    <li><a href="#method-i-unread_inbox_comments_count">#unread_inbox_comments_count</a>
+    
+    <li><a href="#method-i-visible_work_count">#visible_work_count</a>
+    
+    <li><a href="#method-i-wipeout_unposted_works">#wipeout_unposted_works</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./app/mailers/README.html">README</a>
+  
+    <li class="file"><a href="./app/views/epub/mimetype.html">mimetype</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Static.html">Static</a>
+  
+    <li><a href="./Static/BaseController.html">Static::BaseController</a>
+  
+    <li><a href="./Static/CollectionsController.html">Static::CollectionsController</a>
+  
+    <li><a href="./Static/FandomsController.html">Static::FandomsController</a>
+  
+    <li><a href="./Static/MediaController.html">Static::MediaController</a>
+  
+    <li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a>
+  
+    <li><a href="./Static/WorksController.html">Static::WorksController</a>
+  
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
+    <li><a href="./Challenge.html">Challenge</a>
+  
+    <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
+  
+    <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./StoryParser.html">StoryParser</a>
+  
+    <li><a href="./StoryParser/Error.html">StoryParser::Error</a>
+  
+    <li><a href="./AbuseReport.html">AbuseReport</a>
+  
+    <li><a href="./AbuseReportsController.html">AbuseReportsController</a>
+  
+    <li><a href="./AdminMailer.html">AdminMailer</a>
+  
+    <li><a href="./AdminPost.html">AdminPost</a>
+  
+    <li><a href="./AdminPostTag.html">AdminPostTag</a>
+  
+    <li><a href="./AdminPostTagging.html">AdminPostTagging</a>
+  
+    <li><a href="./AdminPostsController.html">AdminPostsController</a>
+  
+    <li><a href="./AdminSession.html">AdminSession</a>
+  
+    <li><a href="./AdminSessionsController.html">AdminSessionsController</a>
+  
+    <li><a href="./AdminSetting.html">AdminSetting</a>
+  
+    <li><a href="./AdminsController.html">AdminsController</a>
+  
+    <li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a>
+  
+    <li><a href="./AlphabetHelper.html">AlphabetHelper</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./ArchiveFaq.html">ArchiveFaq</a>
+  
+    <li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a>
+  
+    <li><a href="./AutocompleteController.html">AutocompleteController</a>
+  
+    <li><a href="./Banned.html">Banned</a>
+  
+    <li><a href="./Bookmark.html">Bookmark</a>
+  
+    <li><a href="./BookmarksController.html">BookmarksController</a>
+  
+    <li><a href="./BookmarksHelper.html">BookmarksHelper</a>
+  
+    <li><a href="./CacheHelper.html">CacheHelper</a>
+  
+    <li><a href="./CastNomination.html">CastNomination</a>
+  
+    <li><a href="./Category.html">Category</a>
+  
+    <li><a href="./ChallengeAssignment.html">ChallengeAssignment</a>
+  
+    <li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a>
+  
+    <li><a href="./ChallengeClaim.html">ChallengeClaim</a>
+  
+    <li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a>
+  
+    <li><a href="./ChallengeHelper.html">ChallengeHelper</a>
+  
+    <li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a>
+  
+    <li><a href="./ChallengeSignup.html">ChallengeSignup</a>
+  
+    <li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a>
+  
+    <li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a>
+  
+    <li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a>
+  
+    <li><a href="./ChallengeSweeper.html">ChallengeSweeper</a>
+  
+    <li><a href="./ChallengesController.html">ChallengesController</a>
+  
+    <li><a href="./Chapter.html">Chapter</a>
+  
+    <li><a href="./ChapterSweeper.html">ChapterSweeper</a>
+  
+    <li><a href="./ChaptersController.html">ChaptersController</a>
+  
+    <li><a href="./ChaptersHelper.html">ChaptersHelper</a>
+  
+    <li><a href="./Character.html">Character</a>
+  
+    <li><a href="./CharacterNomination.html">CharacterNomination</a>
+  
+    <li><a href="./Collection.html">Collection</a>
+  
+    <li><a href="./CollectionItem.html">CollectionItem</a>
+  
+    <li><a href="./CollectionItemsController.html">CollectionItemsController</a>
+  
+    <li><a href="./CollectionObserver.html">CollectionObserver</a>
+  
+    <li><a href="./CollectionParticipant.html">CollectionParticipant</a>
+  
+    <li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a>
+  
+    <li><a href="./CollectionPreference.html">CollectionPreference</a>
+  
+    <li><a href="./CollectionProfile.html">CollectionProfile</a>
+  
+    <li><a href="./CollectionProfileController.html">CollectionProfileController</a>
+  
+    <li><a href="./CollectionSweeper.html">CollectionSweeper</a>
+  
+    <li><a href="./CollectionsController.html">CollectionsController</a>
+  
+    <li><a href="./CollectionsHelper.html">CollectionsHelper</a>
+  
+    <li><a href="./Comment.html">Comment</a>
+  
+    <li><a href="./CommentMailer.html">CommentMailer</a>
+  
+    <li><a href="./CommentObserver.html">CommentObserver</a>
+  
+    <li><a href="./CommentSweeper.html">CommentSweeper</a>
+  
+    <li><a href="./CommentsController.html">CommentsController</a>
+  
+    <li><a href="./CommentsHelper.html">CommentsHelper</a>
+  
+    <li><a href="./CommonTagging.html">CommonTagging</a>
+  
+    <li><a href="./CreationObserver.html">CreationObserver</a>
+  
+    <li><a href="./Creatorship.html">Creatorship</a>
+  
+    <li><a href="./DateHelper.html">DateHelper</a>
+  
+    <li><a href="./DevmodeController.html">DevmodeController</a>
+  
+    <li><a href="./DownloadsController.html">DownloadsController</a>
+  
+    <li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a>
+  
+    <li><a href="./ErrorsController.html">ErrorsController</a>
+  
+    <li><a href="./ExternalAuthor.html">ExternalAuthor</a>
+  
+    <li><a href="./ExternalAuthorName.html">ExternalAuthorName</a>
+  
+    <li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a>
+  
+    <li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a>
+  
+    <li><a href="./ExternalCreatorship.html">ExternalCreatorship</a>
+  
+    <li><a href="./ExternalWork.html">ExternalWork</a>
+  
+    <li><a href="./ExternalWorksController.html">ExternalWorksController</a>
+  
+    <li><a href="./Fandom.html">Fandom</a>
+  
+    <li><a href="./FandomNomination.html">FandomNomination</a>
+  
+    <li><a href="./FandomsController.html">FandomsController</a>
+  
+    <li><a href="./FeedSweeper.html">FeedSweeper</a>
+  
+    <li><a href="./Feedback.html">Feedback</a>
+  
+    <li><a href="./FeedbacksController.html">FeedbacksController</a>
+  
+    <li><a href="./FilterCount.html">FilterCount</a>
+  
+    <li><a href="./FilterTagging.html">FilterTagging</a>
+  
+    <li><a href="./Freeform.html">Freeform</a>
+  
+    <li><a href="./FreeformNomination.html">FreeformNomination</a>
+  
+    <li><a href="./Gift.html">Gift</a>
+  
+    <li><a href="./GiftExchange.html">GiftExchange</a>
+  
+    <li><a href="./GiftsController.html">GiftsController</a>
+  
+    <li><a href="./HitCounter.html">HitCounter</a>
+  
+    <li><a href="./HomeController.html">HomeController</a>
+  
+    <li><a href="./HomeHelper.html">HomeHelper</a>
+  
+    <li><a href="./InboxComment.html">InboxComment</a>
+  
+    <li><a href="./InboxController.html">InboxController</a>
+  
+    <li><a href="./InboxHelper.html">InboxHelper</a>
+  
+    <li><a href="./Invitation.html">Invitation</a>
+  
+    <li><a href="./InvitationsController.html">InvitationsController</a>
+  
+    <li><a href="./InvitationsHelper.html">InvitationsHelper</a>
+  
+    <li><a href="./InviteRequest.html">InviteRequest</a>
+  
+    <li><a href="./InviteRequestsController.html">InviteRequestsController</a>
+  
+    <li><a href="./KnownIssue.html">KnownIssue</a>
+  
+    <li><a href="./KnownIssuesController.html">KnownIssuesController</a>
+  
+    <li><a href="./Kudo.html">Kudo</a>
+  
+    <li><a href="./KudoMailer.html">KudoMailer</a>
+  
+    <li><a href="./KudoObserver.html">KudoObserver</a>
+  
+    <li><a href="./KudosController.html">KudosController</a>
+  
+    <li><a href="./Language.html">Language</a>
+  
+    <li><a href="./LanguagesController.html">LanguagesController</a>
+  
+    <li><a href="./Locale.html">Locale</a>
+  
+    <li><a href="./LocalesController.html">LocalesController</a>
+  
+    <li><a href="./LogItem.html">LogItem</a>
+  
+    <li><a href="./Media.html">Media</a>
+  
+    <li><a href="./MediaController.html">MediaController</a>
+  
+    <li><a href="./MetaTagging.html">MetaTagging</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Offer.html">Offer</a>
+  
+    <li><a href="./OrphansController.html">OrphansController</a>
+  
+    <li><a href="./OrphansHelper.html">OrphansHelper</a>
+  
+    <li><a href="./OwnedSetTagging.html">OwnedSetTagging</a>
+  
+    <li><a href="./OwnedTagSet.html">OwnedTagSet</a>
+  
+    <li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./People.html">People</a>
+  
+    <li><a href="./PeopleController.html">PeopleController</a>
+  
+    <li><a href="./PotentialMatch.html">PotentialMatch</a>
+  
+    <li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a>
+  
+    <li><a href="./PotentialMatchesController.html">PotentialMatchesController</a>
+  
+    <li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a>
+  
+    <li><a href="./Preference.html">Preference</a>
+  
+    <li><a href="./PreferencesController.html">PreferencesController</a>
+  
+    <li><a href="./Profile.html">Profile</a>
+  
+    <li><a href="./ProfileController.html">ProfileController</a>
+  
+    <li><a href="./Prompt.html">Prompt</a>
+  
+    <li><a href="./PromptMeme.html">PromptMeme</a>
+  
+    <li><a href="./PromptRestriction.html">PromptRestriction</a>
+  
+    <li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a>
+  
+    <li><a href="./PromptsController.html">PromptsController</a>
+  
+    <li><a href="./Pseud.html">Pseud</a>
+  
+    <li><a href="./PseudSweeper.html">PseudSweeper</a>
+  
+    <li><a href="./PseudsController.html">PseudsController</a>
+  
+    <li><a href="./PseudsHelper.html">PseudsHelper</a>
+  
+    <li><a href="./Rating.html">Rating</a>
+  
+    <li><a href="./Reading.html">Reading</a>
+  
+    <li><a href="./ReadingsController.html">ReadingsController</a>
+  
+    <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RelatedWork.html">RelatedWork</a>
+  
+    <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
+  
+    <li><a href="./Relationship.html">Relationship</a>
+  
+    <li><a href="./RelationshipNomination.html">RelationshipNomination</a>
+  
+    <li><a href="./Request.html">Request</a>
+  
+    <li><a href="./Role.html">Role</a>
+  
+    <li><a href="./RolesUser.html">RolesUser</a>
+  
+    <li><a href="./SearchController.html">SearchController</a>
+  
+    <li><a href="./SearchHelper.html">SearchHelper</a>
+  
+    <li><a href="./SerialWork.html">SerialWork</a>
+  
+    <li><a href="./SerialWorksController.html">SerialWorksController</a>
+  
+    <li><a href="./Series.html">Series</a>
+  
+    <li><a href="./SeriesController.html">SeriesController</a>
+  
+    <li><a href="./SeriesHelper.html">SeriesHelper</a>
+  
+    <li><a href="./SetTagging.html">SetTagging</a>
+  
+    <li><a href="./Skin.html">Skin</a>
+  
+    <li><a href="./SkinParent.html">SkinParent</a>
+  
+    <li><a href="./SkinsController.html">SkinsController</a>
+  
+    <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StaticSweeper.html">StaticSweeper</a>
+  
+    <li><a href="./StatsController.html">StatsController</a>
+  
+    <li><a href="./StatsHelper.html">StatsHelper</a>
+  
+    <li><a href="./Subscription.html">Subscription</a>
+  
+    <li><a href="./SubscriptionsController.html">SubscriptionsController</a>
+  
+    <li><a href="./Tag.html">Tag</a>
+  
+    <li><a href="./TagNomination.html">TagNomination</a>
+  
+    <li><a href="./TagNominationsController.html">TagNominationsController</a>
+  
+    <li><a href="./TagSet.html">TagSet</a>
+  
+    <li><a href="./TagSetAssociation.html">TagSetAssociation</a>
+  
+    <li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a>
+  
+    <li><a href="./TagSetNomination.html">TagSetNomination</a>
+  
+    <li><a href="./TagSetNominationsController.html">TagSetNominationsController</a>
+  
+    <li><a href="./TagSetOwnership.html">TagSetOwnership</a>
+  
+    <li><a href="./TagSetSweeper.html">TagSetSweeper</a>
+  
+    <li><a href="./TagSetsHelper.html">TagSetsHelper</a>
+  
+    <li><a href="./TagSweeper.html">TagSweeper</a>
+  
+    <li><a href="./TagWranglersController.html">TagWranglersController</a>
+  
+    <li><a href="./TagWranglingsController.html">TagWranglingsController</a>
+  
+    <li><a href="./Tagging.html">Tagging</a>
+  
+    <li><a href="./TagsController.html">TagsController</a>
+  
+    <li><a href="./TagsHelper.html">TagsHelper</a>
+  
+    <li><a href="./TranslationHelper.html">TranslationHelper</a>
+  
+    <li><a href="./TranslationNote.html">TranslationNote</a>
+  
+    <li><a href="./TranslationNotesController.html">TranslationNotesController</a>
+  
+    <li><a href="./TranslationsController.html">TranslationsController</a>
+  
+    <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
+  
+    <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
+  
+    <li><a href="./User.html">User</a>
+  
+    <li><a href="./UserInviteRequest.html">UserInviteRequest</a>
+  
+    <li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a>
+  
+    <li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a>
+  
+    <li><a href="./UserMailer.html">UserMailer</a>
+  
+    <li><a href="./UserSession.html">UserSession</a>
+  
+    <li><a href="./UserSessionsController.html">UserSessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+    <li><a href="./UsersHelper.html">UsersHelper</a>
+  
+    <li><a href="./ValidationHelper.html">ValidationHelper</a>
+  
+    <li><a href="./Warning.html">Warning</a>
+  
+    <li><a href="./WeightedRandom.html">WeightedRandom</a>
+  
+    <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkObserver.html">WorkObserver</a>
+  
+    <li><a href="./WorkSkin.html">WorkSkin</a>
+  
+    <li><a href="./WorkSweeper.html">WorkSweeper</a>
+  
+    <li><a href="./WorksController.html">WorksController</a>
+  
+    <li><a href="./WorksHelper.html">WorksHelper</a>
+  
+    <li><a href="./WranglingAssignment.html">WranglingAssignment</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class User</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+    <!-- Constants -->
+    <section id="constants-list" class="section">
+      <h3 class="section-header">Constants</h3>
+      <dl>
+      
+        <dt id="LOGIN_LENGTH_MAX">LOGIN_LENGTH_MAX
+        
+        <dd class="description">
+        
+      
+        <dt id="LOGIN_LENGTH_MIN">LOGIN_LENGTH_MIN
+        
+        <dd class="description"><pre>used to be in acts_as_authentable</pre>
+
+<p>used in app/views/users/new.html.erb TODO move to ArchiveConfig</p>
+        
+      
+        <dt id="PASSWORD_LENGTH_MAX">PASSWORD_LENGTH_MAX
+        
+        <dd class="description">
+        
+      
+        <dt id="PASSWORD_LENGTH_MIN">PASSWORD_LENGTH_MIN
+        
+        <dd class="description">
+        
+      
+      </dl>
+    </section>
+    
+
+    
+    <!-- Attributes -->
+    <section id="attribute-method-details" class="method-section section">
+      <h3 class="section-header">Attributes</h3>
+
+      
+      <div id="attribute-i-age_over_13" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">age_over_13</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>Virtual attribute for age check and terms of service</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-invitation_token" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">invitation_token</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-terms_of_service" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">terms_of_service</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section><!-- attribute-method-details -->
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-for_claims" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">for_claims</span><span
+            class="method-args">(claims_ids)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="for_claims-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 190</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">for_claims</span>(<span class="ruby-identifier">claims_ids</span>)    
+  <span class="ruby-identifier">joins</span>(<span class="ruby-value">:request_claims</span>).
+  <span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;challenge_claims.id IN (?)&quot;</span>, <span class="ruby-identifier">claims_ids</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- for_claims-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- for_claims-method -->
+
+    
+      <div id="method-c-orphan_account" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">orphan_account</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the user account for authored objects if orphaning is enabled</p>
+          
+
+          
+          <div class="method-source-code" id="orphan_account-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 281</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">orphan_account</span>
+  <span class="ruby-constant">User</span>.<span class="ruby-identifier">fetch_orphan_account</span> <span class="ruby-keyword">if</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ORPHANING_ALLOWED</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- orphan_account-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- orphan_account-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-activate" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">activate</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="activate-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 214</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">activate</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">active?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:activated_at</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">utc</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- activate-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- activate-method -->
+
+    
+      <div id="method-i-active-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">active?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>AUTHENTICATION AND PASSWORDS</p>
+          
+
+          
+          <div class="method-source-code" id="active-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 196</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">active?</span>
+  <span class="ruby-operator">!</span><span class="ruby-identifier">activated_at</span>.<span class="ruby-identifier">nil?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- active-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- active-3F-method -->
+
+    
+      <div id="method-i-admin_update" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">admin_update</span><span
+            class="method-args">(attributes)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Allow admins to set roles and change email</p>
+          
+
+          
+          <div class="method-source-code" id="admin_update-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 286</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">admin_update</span>(<span class="ruby-identifier">attributes</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Admin</span>)
+    <span class="ruby-identifier">success</span> = <span class="ruby-keyword">true</span>
+    <span class="ruby-identifier">success</span> = <span class="ruby-identifier">set_roles</span>(<span class="ruby-identifier">attributes</span>[<span class="ruby-value">:roles</span>])
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">success</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:email</span>]
+      <span class="ruby-keyword">self</span>.<span class="ruby-identifier">email</span> = <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:email</span>]
+      <span class="ruby-identifier">success</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">save</span>(<span class="ruby-value">:validate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">success</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- admin_update-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- admin_update-method -->
+
+    
+      <div id="method-i-archivist" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">archivist</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Is this user an authorized archivist?</p>
+          
+
+          
+          <div class="method-source-code" id="archivist-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 340</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">archivist</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_archivist?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- archivist-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- archivist-method -->
+
+    
+      <div id="method-i-archivist-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">archivist=</span><span
+            class="method-args">(should_be_archivist)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Set archivist role for this user and log change</p>
+          
+
+          
+          <div class="method-source-code" id="archivist-3D-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 349</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">archivist=</span>(<span class="ruby-identifier">should_be_archivist</span>)
+  <span class="ruby-identifier">set_role</span>(<span class="ruby-string">'archivist'</span>, <span class="ruby-identifier">should_be_archivist</span> <span class="ruby-operator">==</span> <span class="ruby-string">'1'</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- archivist-3D-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- archivist-3D-method -->
+
+    
+      <div id="method-i-coauthored_works" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">coauthored_works</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns array of the user’s co-authored works</p>
+          
+
+          
+          <div class="method-source-code" id="coauthored_works-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 398</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">coauthored_works</span>
+  <span class="ruby-ivar">@coauthored_works</span> = []
+  <span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'posted = 1'</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_sole_author_of?</span>(<span class="ruby-identifier">w</span>)
+      <span class="ruby-ivar">@coauthored_works</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">w</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@coauthored_works</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- coauthored_works-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- coauthored_works-method -->
+
+    
+      <div id="method-i-coauthors" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">coauthors</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns an array (of pseuds) of this user’s co-authors</p>
+          
+
+          
+          <div class="method-source-code" id="coauthors-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 233</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">coauthors</span>
+   <span class="ruby-identifier">works</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:pseuds</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">pseuds</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- coauthors-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- coauthors-method -->
+
+    
+      <div id="method-i-create_default_associateds" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_default_associateds</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="create_default_associateds-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 219</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_default_associateds</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">login</span>, <span class="ruby-value">:is_default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">profile</span> = <span class="ruby-constant">Profile</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">preference</span> = <span class="ruby-constant">Preference</span>.<span class="ruby-identifier">new</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_default_associateds-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_default_associateds-method -->
+
+    
+      <div id="method-i-create_log_item" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create_log_item</span><span
+            class="method-args">(options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Creates log item tracking changes to user</p>
+          
+
+          
+          <div class="method-source-code" id="create_log_item-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 354</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create_log_item</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">options</span>.<span class="ruby-identifier">reverse_merge!</span> <span class="ruby-value">:note</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'System Generated'</span>, <span class="ruby-value">:user_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">id</span>
+  <span class="ruby-constant">LogItem</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">options</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- create_log_item-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- create_log_item-method -->
+
+    
+      <div id="method-i-default_pseud" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">default_pseud</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Retrieve the current default pseud</p>
+          
+
+          
+          <div class="method-source-code" id="default_pseud-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 256</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">default_pseud</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:is_default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>).<span class="ruby-identifier">first</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- default_pseud-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- default_pseud-method -->
+
+    
+      <div id="method-i-generate_password" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">generate_password</span><span
+            class="method-args">(length=8)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="generate_password-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 200</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_password</span>(<span class="ruby-identifier">length</span>=<span class="ruby-value">8</span>)
+  <span class="ruby-identifier">chars</span> = <span class="ruby-string">'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789'</span>
+  <span class="ruby-identifier">password</span> = <span class="ruby-string">''</span>
+  <span class="ruby-identifier">length</span>.<span class="ruby-identifier">downto</span>(<span class="ruby-value">1</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">password</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">chars</span>[<span class="ruby-identifier">rand</span>(<span class="ruby-identifier">chars</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)] }
+  <span class="ruby-identifier">password</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- generate_password-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- generate_password-method -->
+
+    
+      <div id="method-i-has_no_credentials-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">has_no_credentials?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="has_no_credentials-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">has_no_credentials?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">crypted_password</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">identity_url</span>.<span class="ruby-identifier">blank?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- has_no_credentials-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- has_no_credentials-3F-method -->
+
+    
+      <div id="method-i-is_archivist-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">is_archivist?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="is_archivist-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 344</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_archivist?</span>
+  <span class="ruby-identifier">has_role?</span>(<span class="ruby-value">:archivist</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- is_archivist-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- is_archivist-3F-method -->
+
+    
+      <div id="method-i-is_author_of-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">is_author_of?</span><span
+            class="method-args">(item)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Checks authorship of any sort of object</p>
+          
+
+          
+          <div class="method-source-code" id="is_author_of-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 261</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_author_of?</span>(<span class="ruby-identifier">item</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:user</span>)
+    <span class="ruby-keyword">self</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">user</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:pseud</span>)
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">item</span>.<span class="ruby-identifier">pseud</span>)
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:pseuds</span>)
+    <span class="ruby-operator">!</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span> &amp; <span class="ruby-identifier">item</span>.<span class="ruby-identifier">pseuds</span>).<span class="ruby-identifier">empty?</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:author</span>)
+    <span class="ruby-keyword">self</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">author</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- is_author_of-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- is_author_of-3F-method -->
+
+    
+      <div id="method-i-is_sole_author_of-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">is_sole_author_of?</span><span
+            class="method-args">(item)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns true if user is the sole author of a work Should also be true if
+the user has used more than one of their pseuds on a work</p>
+          
+
+          
+          <div class="method-source-code" id="is_sole_author_of-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 381</span>
+ <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_sole_author_of?</span>(<span class="ruby-identifier">item</span>)
+  <span class="ruby-identifier">other_pseuds</span> = <span class="ruby-identifier">item</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>) <span class="ruby-operator">-</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-identifier">item</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">other_pseuds</span>.<span class="ruby-identifier">blank?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- is_sole_author_of-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- is_sole_author_of-3F-method -->
+
+    
+      <div id="method-i-is_tag_wrangler-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">is_tag_wrangler?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="is_tag_wrangler-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 330</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_tag_wrangler?</span>
+  <span class="ruby-identifier">has_role?</span>(<span class="ruby-value">:tag_wrangler</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- is_tag_wrangler-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- is_tag_wrangler-3F-method -->
+
+    
+      <div id="method-i-is_translation_admin-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">is_translation_admin?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="is_translation_admin-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 316</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_translation_admin?</span>
+  <span class="ruby-identifier">has_role?</span>(<span class="ruby-value">:translation_admin</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- is_translation_admin-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- is_translation_admin-3F-method -->
+
+    
+      <div id="method-i-mark_invitation_redeemed" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">mark_invitation_redeemed</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>If a new user was invited, update the invitation</p>
+          
+
+          
+          <div class="method-source-code" id="mark_invitation_redeemed-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 411</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">mark_invitation_redeemed</span>
+  <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invitation_token</span>.<span class="ruby-identifier">blank?</span>
+    <span class="ruby-identifier">invitation</span> = <span class="ruby-constant">Invitation</span>.<span class="ruby-identifier">find_by_token</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">invitation_token</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">invitation</span>
+      <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:invitation_id</span>, <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">id</span>)
+      <span class="ruby-identifier">invitation</span>.<span class="ruby-identifier">mark_as_redeemed</span>(<span class="ruby-keyword">self</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- mark_invitation_redeemed-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- mark_invitation_redeemed-method -->
+
+    
+      <div id="method-i-most_popular_tags" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">most_popular_tags</span><span
+            class="method-args">(options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Options can include :categories and :limit</p>
+          
+
+          
+          <div class="method-source-code" id="most_popular_tags-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 360</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">most_popular_tags</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">all_tags</span> = []
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:categories</span>].<span class="ruby-identifier">blank?</span>
+    <span class="ruby-identifier">all_tags</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tags</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">bookmark_tags</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">type_tags</span> = []
+    <span class="ruby-identifier">options</span>[<span class="ruby-value">:categories</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">type_name</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">type_tags</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">type_name</span>.<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">all</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">all_tags</span> = [<span class="ruby-keyword">self</span>.<span class="ruby-identifier">tags</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">bookmark_tags</span>].<span class="ruby-identifier">flatten</span> &amp; <span class="ruby-identifier">type_tags</span>.<span class="ruby-identifier">flatten</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">tags_with_count</span> = {}
+  <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">tags_with_count</span>[<span class="ruby-identifier">tag</span>] = <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">tag</span>}.<span class="ruby-identifier">size</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">all_tags</span> = <span class="ruby-identifier">tags_with_count</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span>,<span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">y</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">last</span> }
+  <span class="ruby-identifier">popular_tags</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:limit</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">pair</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pair</span>.<span class="ruby-identifier">first</span>} <span class="ruby-operator">:</span> <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">pair</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pair</span>.<span class="ruby-identifier">first</span>}[<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:limit</span>]<span class="ruby-operator">-</span><span class="ruby-value">1</span>)]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- most_popular_tags-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- most_popular_tags-method -->
+
+    
+      <div id="method-i-read_inbox_comments" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">read_inbox_comments</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="read_inbox_comments-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 148</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">read_inbox_comments</span>
+  <span class="ruby-identifier">inbox_comments</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:read</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>})
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- read_inbox_comments-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- read_inbox_comments-method -->
+
+    
+      <div id="method-i-remove_from_queue" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">remove_from_queue</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Existing users should be removed from the invitations queue</p>
+          
+
+          
+          <div class="method-source-code" id="remove_from_queue-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 422</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_from_queue</span>
+  <span class="ruby-identifier">invite_request</span> = <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">find_by_email</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">email</span>)
+  <span class="ruby-identifier">invite_request</span>.<span class="ruby-identifier">destroy</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">invite_request</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- remove_from_queue-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- remove_from_queue-method -->
+
+    
+      <div id="method-i-remove_pseud_from_kudos" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">remove_pseud_from_kudos</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="remove_pseud_from_kudos-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 144</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_pseud_from_kudos</span>
+  <span class="ruby-constant">Kudo</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-string">&quot;pseud_id = NULL&quot;</span>, <span class="ruby-node">&quot;pseud_id IN (#{self.pseuds.collect(&amp;:id).join(',')})&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- remove_pseud_from_kudos-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- remove_pseud_from_kudos-method -->
+
+    
+      <div id="method-i-reset_user_password" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">reset_user_password</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>use update_all to force the update even if the user is invalid</p>
+          
+
+          
+          <div class="method-source-code" id="reset_user_password-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 208</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">reset_user_password</span>
+  <span class="ruby-identifier">temp_password</span> = <span class="ruby-identifier">generate_password</span>(<span class="ruby-value">20</span>)
+  <span class="ruby-constant">User</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;activation_code = '#{temp_password}', recently_reset = 1, updated_at = '#{Time.now}'&quot;</span>, <span class="ruby-node">&quot;id = #{self.id}&quot;</span>)
+  <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">reset_password</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">temp_password</span>).<span class="ruby-identifier">deliver</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- reset_user_password-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- reset_user_password-method -->
+
+    
+      <div id="method-i-sole_authored_works" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">sole_authored_works</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns array of works where the user is the sole author</p>
+          
+
+          
+          <div class="method-source-code" id="sole_authored_works-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 387</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sole_authored_works</span>
+  <span class="ruby-ivar">@sole_authored_works</span> = []
+  <span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'posted = 1'</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_sole_author_of?</span>(<span class="ruby-identifier">w</span>)
+      <span class="ruby-ivar">@sole_authored_works</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">w</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@sole_authored_works</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- sole_authored_works-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- sole_authored_works-method -->
+
+    
+      <div id="method-i-tag_wrangler" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">tag_wrangler</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Is this user an authorized tag wrangler?</p>
+          
+
+          
+          <div class="method-source-code" id="tag_wrangler-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 326</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_wrangler</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_tag_wrangler?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- tag_wrangler-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- tag_wrangler-method -->
+
+    
+      <div id="method-i-tag_wrangler-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">tag_wrangler=</span><span
+            class="method-args">(should_be_tag_wrangler)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Set tag wrangler role for this user and log change</p>
+          
+
+          
+          <div class="method-source-code" id="tag_wrangler-3D-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 335</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_wrangler=</span>(<span class="ruby-identifier">should_be_tag_wrangler</span>)
+  <span class="ruby-identifier">set_role</span>(<span class="ruby-string">'tag_wrangler'</span>, <span class="ruby-identifier">should_be_tag_wrangler</span> <span class="ruby-operator">==</span> <span class="ruby-string">'1'</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- tag_wrangler-3D-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- tag_wrangler-3D-method -->
+
+    
+      <div id="method-i-to_param" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">to_param</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="to_param-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 185</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_param</span>
+  <span class="ruby-identifier">login</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- to_param-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- to_param-method -->
+
+    
+      <div id="method-i-translation_admin" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">translation_admin</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Is this user an authorized translation admin?</p>
+          
+
+          
+          <div class="method-source-code" id="translation_admin-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 312</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">translation_admin</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_translation_admin?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- translation_admin-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- translation_admin-method -->
+
+    
+      <div id="method-i-translation_admin-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">translation_admin=</span><span
+            class="method-args">(should_be_translation_admin)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Set translator role for this user and log change</p>
+          
+
+          
+          <div class="method-source-code" id="translation_admin-3D-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 321</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">translation_admin=</span>(<span class="ruby-identifier">should_be_translation_admin</span>)
+  <span class="ruby-identifier">set_role</span>(<span class="ruby-string">'translation_admin'</span>, <span class="ruby-identifier">should_be_translation_admin</span> <span class="ruby-operator">==</span> <span class="ruby-string">'1'</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- translation_admin-3D-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- translation_admin-3D-method -->
+
+    
+      <div id="method-i-unposted_work" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unposted_work</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the user’s most recent unposted work</p>
+          
+
+          
+          <div class="method-source-code" id="unposted_work-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 238</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unposted_work</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@unposted_work</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@unposted_work</span>
+  <span class="ruby-ivar">@unposted_work</span> = <span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:first</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>}, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'works.created_at DESC'</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- unposted_work-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- unposted_work-method -->
+
+    
+      <div id="method-i-unposted_works" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unposted_works</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="unposted_works-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 243</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unposted_works</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@unposted_works</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@unposted_works</span>
+  <span class="ruby-ivar">@unposted_works</span> = <span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>}, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'works.created_at DESC'</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- unposted_works-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- unposted_works-method -->
+
+    
+      <div id="method-i-unread_inbox_comments" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unread_inbox_comments</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="unread_inbox_comments-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 151</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unread_inbox_comments</span>
+  <span class="ruby-identifier">inbox_comments</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:read</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>})
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- unread_inbox_comments-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- unread_inbox_comments-method -->
+
+    
+      <div id="method-i-unread_inbox_comments_count" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unread_inbox_comments_count</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="unread_inbox_comments_count-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 154</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unread_inbox_comments_count</span>
+  <span class="ruby-identifier">inbox_comments</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:read</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>})
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- unread_inbox_comments_count-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- unread_inbox_comments_count-method -->
+
+    
+      <div id="method-i-visible_work_count" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">visible_work_count</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Gets the number of works by this user that the current user can see</p>
+          
+
+          
+          <div class="method-source-code" id="visible_work_count-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 276</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">visible_work_count</span>
+  <span class="ruby-constant">Work</span>.<span class="ruby-identifier">owned_by</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">visible_to_user</span>(<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>).<span class="ruby-identifier">count</span>(<span class="ruby-value">:id</span>, <span class="ruby-value">:distinct</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- visible_work_count-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- visible_work_count-method -->
+
+    
+      <div id="method-i-wipeout_unposted_works" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">wipeout_unposted_works</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>removes ALL unposted works</p>
+          
+
+          
+          <div class="method-source-code" id="wipeout_unposted_works-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 249</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">wipeout_unposted_works</span>
+  <span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>}).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">w</span>.<span class="ruby-identifier">destroy</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- wipeout_unposted_works-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- wipeout_unposted_works-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+     <section id="protected-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Protected Instance Methods</h3>
+
+    
+      <div id="method-i-first_save-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">first_save?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="first_save-3F-source">
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 226</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">first_save?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_record?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- first_save-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- first_save-3F-method -->
+
+    
+    </section><!-- protected-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
 

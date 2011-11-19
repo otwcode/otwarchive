@@ -1,1829 +1,1633 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+
+<html>
 <head>
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-
-	<title>Class: Pseud</title>
-
-	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
-
-	<script src="./js/jquery.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/thickbox-compressed.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/quicksearch.js" type="text/javascript"
-		charset="utf-8"></script>
-	<script src="./js/darkfish.js" type="text/javascript"
-		charset="utf-8"></script>
-
-</head>
-<body class="class">
-
-	<div id="metadata">
-		<div id="home-metadata">
-			<div id="home-section" class="section">
-        <h3 class="section-header">
-          <a href="./index.html">Home</a>
-          <a href="./index.html#classes">Classes</a>
-          <a href="./index.html#methods">Methods</a>
-        </h3>
-			</div>
-		</div>
-
-		<div id="file-metadata">
-			<div id="file-list-section" class="section">
-				<h3 class="section-header">In Files</h3>
-				<div class="section-body">
-					<ul>
-					
-						<li><a href="./app/models/pseud_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="app/models/pseud.rb">app/models/pseud.rb</a></li>
-					
-					</ul>
-				</div>
-			</div>
-
-			
-		</div>
-
-		<div id="class-metadata">
-
-			<!-- Parent Class -->
-			
-			<div id="parent-class-section" class="section">
-				<h3 class="section-header">Parent</h3>
-				
-				<p class="link">ActiveRecord::Base</p>
-				
-			</div>
-			
-
-			<!-- Namespace Contents -->
-			
-
-			<!-- Method Quickref -->
-			
-			<div id="method-list-section" class="section">
-				<h3 class="section-header">Methods</h3>
-				<ul class="link-list">
-					
-					<li><a href="#method-c-not_orphaned">::not_orphaned</a></li>
-					
-					<li><a href="#method-c-parse_byline">::parse_byline</a></li>
-					
-					<li><a href="#method-c-parse_bylines">::parse_bylines</a></li>
-					
-					<li><a href="#method-c-rec_counts_for_pseuds">::rec_counts_for_pseuds</a></li>
-					
-					<li><a href="#method-c-work_counts_for_pseuds">::work_counts_for_pseuds</a></li>
-					
-					<li><a href="#method-i-%3C%3D%3E">#<=></a></li>
-					
-					<li><a href="#method-i-autocomplete_prefixes">#autocomplete_prefixes</a></li>
-					
-					<li><a href="#method-i-autocomplete_value">#autocomplete_value</a></li>
-					
-					<li><a href="#method-i-byline">#byline</a></li>
-					
-					<li><a href="#method-i-change_bookmarks_ownership">#change_bookmarks_ownership</a></li>
-					
-					<li><a href="#method-i-change_challenge_participation">#change_challenge_participation</a></li>
-					
-					<li><a href="#method-i-change_collections_membership">#change_collections_membership</a></li>
-					
-					<li><a href="#method-i-change_gift_recipients">#change_gift_recipients</a></li>
-					
-					<li><a href="#method-i-change_membership">#change_membership</a></li>
-					
-					<li><a href="#method-i-change_ownership">#change_ownership</a></li>
-					
-					<li><a href="#method-i-check_default_pseud">#check_default_pseud</a></li>
-					
-					<li><a href="#method-i-clear_icon">#clear_icon</a></li>
-					
-					<li><a href="#method-i-creations">#creations</a></li>
-					
-					<li><a href="#method-i-delete_icon">#delete_icon</a></li>
-					
-					<li><a href="#method-i-delete_icon%3D">#delete_icon=</a></li>
-					
-					<li><a href="#method-i-delete_icon%3F">#delete_icon?</a></li>
-					
-					<li><a href="#method-i-most_popular_tags">#most_popular_tags</a></li>
-					
-					<li><a href="#method-i-replace_me_with_default">#replace_me_with_default</a></li>
-					
-					<li><a href="#method-i-to_param">#to_param</a></li>
-					
-					<li><a href="#method-i-unposted_works">#unposted_works</a></li>
-					
-					<li><a href="#method-i-user_name">#user_name</a></li>
-					
-					<li><a href="#method-i-visible_recs_count">#visible_recs_count</a></li>
-					
-					<li><a href="#method-i-visible_works_count">#visible_works_count</a></li>
-					
-				</ul>
-			</div>
-			
-
-			<!-- Included Modules -->
-			
-			<div id="includes-section" class="section">
-				<h3 class="section-header">Included Modules</h3>
-				<ul class="link-list">
-				
-				
-					<li><a class="include" href="AutocompleteSource.html">AutocompleteSource</a></li>
-				
-				
-				</ul>
-			</div>
-			
-		</div>
-
-		<div id="project-metadata">
-			
-			
-			<div id="fileindex-section" class="section project-section">
-				<h3 class="section-header">Files</h3>
-				<ul>
-				
-					<li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a></li>
-				
-				</ul>
-			</div>
-			
-
-			<div id="classindex-section" class="section project-section">
-				<h3 class="section-header">Class Index
-					<span class="search-toggle"><img src="./images/find.png"
-						height="16" width="16" alt="[+]"
-						title="show/hide quicksearch" /></span></h3>
-				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
-				<fieldset>
-					<legend>Quicksearch</legend>
-					<input type="text" name="quicksearch" value=""
-						class="quicksearch-field" />
-				</fieldset>
-				</form>
-
-				<ul class="link-list">
-				
-					<li><a href="./Static.html">Static</a></li>
-				
-					<li><a href="./Static/BaseController.html">Static::BaseController</a></li>
-				
-					<li><a href="./Static/CollectionsController.html">Static::CollectionsController</a></li>
-				
-					<li><a href="./Static/FandomsController.html">Static::FandomsController</a></li>
-				
-					<li><a href="./Static/MediaController.html">Static::MediaController</a></li>
-				
-					<li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a></li>
-				
-					<li><a href="./Static/WorksController.html">Static::WorksController</a></li>
-				
-					<li><a href="./Admin.html">Admin</a></li>
-				
-					<li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a></li>
-				
-					<li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a></li>
-				
-					<li><a href="./Admin/SettingsController.html">Admin::SettingsController</a></li>
-				
-					<li><a href="./Admin/SkinsController.html">Admin::SkinsController</a></li>
-				
-					<li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a></li>
-				
-					<li><a href="./ActionController.html">ActionController</a></li>
-				
-					<li><a href="./ActionController/Routing.html">ActionController::Routing</a></li>
-				
-					<li><a href="./ActionController/Routing/RouteSet.html">ActionController::Routing::RouteSet</a></li>
-				
-					<li><a href="./Challenge.html">Challenge</a></li>
-				
-					<li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a></li>
-				
-					<li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a></li>
-				
-					<li><a href="./ActiveRecord.html">ActiveRecord</a></li>
-				
-					<li><a href="./AutocompleteSource.html">AutocompleteSource</a></li>
-				
-					<li><a href="./AutocompleteSource/ClassMethods.html">AutocompleteSource::ClassMethods</a></li>
-				
-					<li><a href="./ChallengeCore.html">ChallengeCore</a></li>
-				
-					<li><a href="./ChallengeCore/ClassMethods.html">ChallengeCore::ClassMethods</a></li>
-				
-					<li><a href="./StoryParser.html">StoryParser</a></li>
-				
-					<li><a href="./StoryParser/Error.html">StoryParser::Error</a></li>
-				
-					<li><a href="./XhtmlSplitter.html">XhtmlSplitter</a></li>
-				
-					<li><a href="./XhtmlSplitter/Error.html">XhtmlSplitter::Error</a></li>
-				
-					<li><a href="./AbuseReport.html">AbuseReport</a></li>
-				
-					<li><a href="./AbuseReportsController.html">AbuseReportsController</a></li>
-				
-					<li><a href="./AdminMailer.html">AdminMailer</a></li>
-				
-					<li><a href="./AdminPost.html">AdminPost</a></li>
-				
-					<li><a href="./AdminPostTag.html">AdminPostTag</a></li>
-				
-					<li><a href="./AdminPostTagging.html">AdminPostTagging</a></li>
-				
-					<li><a href="./AdminPostsController.html">AdminPostsController</a></li>
-				
-					<li><a href="./AdminSession.html">AdminSession</a></li>
-				
-					<li><a href="./AdminSessionsController.html">AdminSessionsController</a></li>
-				
-					<li><a href="./AdminSetting.html">AdminSetting</a></li>
-				
-					<li><a href="./AdminsController.html">AdminsController</a></li>
-				
-					<li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a></li>
-				
-					<li><a href="./AlphabetHelper.html">AlphabetHelper</a></li>
-				
-					<li><a href="./ApplicationController.html">ApplicationController</a></li>
-				
-					<li><a href="./ApplicationHelper.html">ApplicationHelper</a></li>
-				
-					<li><a href="./ArchiveFaq.html">ArchiveFaq</a></li>
-				
-					<li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a></li>
-				
-					<li><a href="./AuthlogicHelpersForMailers.html">AuthlogicHelpersForMailers</a></li>
-				
-					<li><a href="./AutocompleteController.html">AutocompleteController</a></li>
-				
-					<li><a href="./Banned.html">Banned</a></li>
-				
-					<li><a href="./Bookmark.html">Bookmark</a></li>
-				
-					<li><a href="./BookmarksController.html">BookmarksController</a></li>
-				
-					<li><a href="./BookmarksHelper.html">BookmarksHelper</a></li>
-				
-					<li><a href="./CacheHelper.html">CacheHelper</a></li>
-				
-					<li><a href="./CastNomination.html">CastNomination</a></li>
-				
-					<li><a href="./Category.html">Category</a></li>
-				
-					<li><a href="./ChallengeAssignment.html">ChallengeAssignment</a></li>
-				
-					<li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a></li>
-				
-					<li><a href="./ChallengeClaim.html">ChallengeClaim</a></li>
-				
-					<li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a></li>
-				
-					<li><a href="./ChallengeHelper.html">ChallengeHelper</a></li>
-				
-					<li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a></li>
-				
-					<li><a href="./ChallengeSignup.html">ChallengeSignup</a></li>
-				
-					<li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a></li>
-				
-					<li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a></li>
-				
-					<li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a></li>
-				
-					<li><a href="./ChallengeSweeper.html">ChallengeSweeper</a></li>
-				
-					<li><a href="./ChallengesController.html">ChallengesController</a></li>
-				
-					<li><a href="./Chapter.html">Chapter</a></li>
-				
-					<li><a href="./ChapterSweeper.html">ChapterSweeper</a></li>
-				
-					<li><a href="./ChaptersController.html">ChaptersController</a></li>
-				
-					<li><a href="./ChaptersHelper.html">ChaptersHelper</a></li>
-				
-					<li><a href="./Character.html">Character</a></li>
-				
-					<li><a href="./CharacterNomination.html">CharacterNomination</a></li>
-				
-					<li><a href="./Collectible.html">Collectible</a></li>
-				
-					<li><a href="./Collection.html">Collection</a></li>
-				
-					<li><a href="./CollectionItem.html">CollectionItem</a></li>
-				
-					<li><a href="./CollectionItemsController.html">CollectionItemsController</a></li>
-				
-					<li><a href="./CollectionObserver.html">CollectionObserver</a></li>
-				
-					<li><a href="./CollectionParticipant.html">CollectionParticipant</a></li>
-				
-					<li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a></li>
-				
-					<li><a href="./CollectionPreference.html">CollectionPreference</a></li>
-				
-					<li><a href="./CollectionProfile.html">CollectionProfile</a></li>
-				
-					<li><a href="./CollectionProfileController.html">CollectionProfileController</a></li>
-				
-					<li><a href="./CollectionSweeper.html">CollectionSweeper</a></li>
-				
-					<li><a href="./CollectionsController.html">CollectionsController</a></li>
-				
-					<li><a href="./CollectionsHelper.html">CollectionsHelper</a></li>
-				
-					<li><a href="./Comment.html">Comment</a></li>
-				
-					<li><a href="./CommentMailer.html">CommentMailer</a></li>
-				
-					<li><a href="./CommentObserver.html">CommentObserver</a></li>
-				
-					<li><a href="./CommentSweeper.html">CommentSweeper</a></li>
-				
-					<li><a href="./CommentsController.html">CommentsController</a></li>
-				
-					<li><a href="./CommentsHelper.html">CommentsHelper</a></li>
-				
-					<li><a href="./CommonTagging.html">CommonTagging</a></li>
-				
-					<li><a href="./CreationObserver.html">CreationObserver</a></li>
-				
-					<li><a href="./Creatorship.html">Creatorship</a></li>
-				
-					<li><a href="./CssCleaner.html">CssCleaner</a></li>
-				
-					<li><a href="./DateHelper.html">DateHelper</a></li>
-				
-					<li><a href="./DevmodeController.html">DevmodeController</a></li>
-				
-					<li><a href="./DownloadsController.html">DownloadsController</a></li>
-				
-					<li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a></li>
-				
-					<li><a href="./ErrorsController.html">ErrorsController</a></li>
-				
-					<li><a href="./ExternalAuthor.html">ExternalAuthor</a></li>
-				
-					<li><a href="./ExternalAuthorName.html">ExternalAuthorName</a></li>
-				
-					<li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a></li>
-				
-					<li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a></li>
-				
-					<li><a href="./ExternalCreatorship.html">ExternalCreatorship</a></li>
-				
-					<li><a href="./ExternalWork.html">ExternalWork</a></li>
-				
-					<li><a href="./ExternalWorksController.html">ExternalWorksController</a></li>
-				
-					<li><a href="./Fandom.html">Fandom</a></li>
-				
-					<li><a href="./FandomNomination.html">FandomNomination</a></li>
-				
-					<li><a href="./FandomsController.html">FandomsController</a></li>
-				
-					<li><a href="./FeedSweeper.html">FeedSweeper</a></li>
-				
-					<li><a href="./Feedback.html">Feedback</a></li>
-				
-					<li><a href="./FeedbacksController.html">FeedbacksController</a></li>
-				
-					<li><a href="./FilterCount.html">FilterCount</a></li>
-				
-					<li><a href="./FilterTagging.html">FilterTagging</a></li>
-				
-					<li><a href="./FindRandom.html">FindRandom</a></li>
-				
-					<li><a href="./Freeform.html">Freeform</a></li>
-				
-					<li><a href="./FreeformNomination.html">FreeformNomination</a></li>
-				
-					<li><a href="./Gift.html">Gift</a></li>
-				
-					<li><a href="./GiftExchange.html">GiftExchange</a></li>
-				
-					<li><a href="./GiftsController.html">GiftsController</a></li>
-				
-					<li><a href="./HitCounter.html">HitCounter</a></li>
-				
-					<li><a href="./HomeController.html">HomeController</a></li>
-				
-					<li><a href="./HomeHelper.html">HomeHelper</a></li>
-				
-					<li><a href="./HtmlCleaner.html">HtmlCleaner</a></li>
-				
-					<li><a href="./InboxComment.html">InboxComment</a></li>
-				
-					<li><a href="./InboxController.html">InboxController</a></li>
-				
-					<li><a href="./InboxHelper.html">InboxHelper</a></li>
-				
-					<li><a href="./Invitation.html">Invitation</a></li>
-				
-					<li><a href="./InvitationsController.html">InvitationsController</a></li>
-				
-					<li><a href="./InvitationsHelper.html">InvitationsHelper</a></li>
-				
-					<li><a href="./InviteRequest.html">InviteRequest</a></li>
-				
-					<li><a href="./InviteRequestsController.html">InviteRequestsController</a></li>
-				
-					<li><a href="./KnownIssue.html">KnownIssue</a></li>
-				
-					<li><a href="./KnownIssuesController.html">KnownIssuesController</a></li>
-				
-					<li><a href="./Kudo.html">Kudo</a></li>
-				
-					<li><a href="./KudoMailer.html">KudoMailer</a></li>
-				
-					<li><a href="./KudoObserver.html">KudoObserver</a></li>
-				
-					<li><a href="./KudosController.html">KudosController</a></li>
-				
-					<li><a href="./Language.html">Language</a></li>
-				
-					<li><a href="./LanguagesController.html">LanguagesController</a></li>
-				
-					<li><a href="./Locale.html">Locale</a></li>
-				
-					<li><a href="./LocalesController.html">LocalesController</a></li>
-				
-					<li><a href="./LogItem.html">LogItem</a></li>
-				
-					<li><a href="./Media.html">Media</a></li>
-				
-					<li><a href="./MediaController.html">MediaController</a></li>
-				
-					<li><a href="./MetaTagging.html">MetaTagging</a></li>
-				
-					<li><a href="./Offer.html">Offer</a></li>
-				
-					<li><a href="./OrphansController.html">OrphansController</a></li>
-				
-					<li><a href="./OrphansHelper.html">OrphansHelper</a></li>
-				
-					<li><a href="./OwnedSetTagging.html">OwnedSetTagging</a></li>
-				
-					<li><a href="./OwnedTagSet.html">OwnedTagSet</a></li>
-				
-					<li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a></li>
-				
-					<li><a href="./PaginationListLinkRenderer.html">PaginationListLinkRenderer</a></li>
-				
-					<li><a href="./PasswordsController.html">PasswordsController</a></li>
-				
-					<li><a href="./People.html">People</a></li>
-				
-					<li><a href="./PeopleController.html">PeopleController</a></li>
-				
-					<li><a href="./PotentialMatch.html">PotentialMatch</a></li>
-				
-					<li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a></li>
-				
-					<li><a href="./PotentialMatchesController.html">PotentialMatchesController</a></li>
-				
-					<li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a></li>
-				
-					<li><a href="./Preference.html">Preference</a></li>
-				
-					<li><a href="./PreferencesController.html">PreferencesController</a></li>
-				
-					<li><a href="./Profile.html">Profile</a></li>
-				
-					<li><a href="./ProfileController.html">ProfileController</a></li>
-				
-					<li><a href="./Prompt.html">Prompt</a></li>
-				
-					<li><a href="./PromptMeme.html">PromptMeme</a></li>
-				
-					<li><a href="./PromptRestriction.html">PromptRestriction</a></li>
-				
-					<li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a></li>
-				
-					<li><a href="./PromptsController.html">PromptsController</a></li>
-				
-					<li><a href="./Pseud.html">Pseud</a></li>
-				
-					<li><a href="./PseudSweeper.html">PseudSweeper</a></li>
-				
-					<li><a href="./PseudsController.html">PseudsController</a></li>
-				
-					<li><a href="./PseudsHelper.html">PseudsHelper</a></li>
-				
-					<li><a href="./Query.html">Query</a></li>
-				
-					<li><a href="./Rating.html">Rating</a></li>
-				
-					<li><a href="./Rawk.html">Rawk</a></li>
-				
-					<li><a href="./Reading.html">Reading</a></li>
-				
-					<li><a href="./ReadingsController.html">ReadingsController</a></li>
-				
-					<li><a href="./RedirectController.html">RedirectController</a></li>
-				
-					<li><a href="./RedisTestSetup.html">RedisTestSetup</a></li>
-				
-					<li><a href="./RelatedWork.html">RelatedWork</a></li>
-				
-					<li><a href="./RelatedWorksController.html">RelatedWorksController</a></li>
-				
-					<li><a href="./Relationship.html">Relationship</a></li>
-				
-					<li><a href="./RelationshipNomination.html">RelationshipNomination</a></li>
-				
-					<li><a href="./Request.html">Request</a></li>
-				
-					<li><a href="./Role.html">Role</a></li>
-				
-					<li><a href="./RolesUser.html">RolesUser</a></li>
-				
-					<li><a href="./SearchController.html">SearchController</a></li>
-				
-					<li><a href="./SearchHelper.html">SearchHelper</a></li>
-				
-					<li><a href="./SerialWork.html">SerialWork</a></li>
-				
-					<li><a href="./SerialWorksController.html">SerialWorksController</a></li>
-				
-					<li><a href="./Series.html">Series</a></li>
-				
-					<li><a href="./SeriesController.html">SeriesController</a></li>
-				
-					<li><a href="./SeriesHelper.html">SeriesHelper</a></li>
-				
-					<li><a href="./SetTagging.html">SetTagging</a></li>
-				
-					<li><a href="./Skin.html">Skin</a></li>
-				
-					<li><a href="./SkinParent.html">SkinParent</a></li>
-				
-					<li><a href="./SkinsController.html">SkinsController</a></li>
-				
-					<li><a href="./SkinsHelper.html">SkinsHelper</a></li>
-				
-					<li><a href="./SortableList.html">SortableList</a></li>
-				
-					<li><a href="./Stat.html">Stat</a></li>
-				
-					<li><a href="./StatHash.html">StatHash</a></li>
-				
-					<li><a href="./StaticSweeper.html">StaticSweeper</a></li>
-				
-					<li><a href="./StatsController.html">StatsController</a></li>
-				
-					<li><a href="./StatsHelper.html">StatsHelper</a></li>
-				
-					<li><a href="./Subscription.html">Subscription</a></li>
-				
-					<li><a href="./SubscriptionsController.html">SubscriptionsController</a></li>
-				
-					<li><a href="./Tag.html">Tag</a></li>
-				
-					<li><a href="./TagNomination.html">TagNomination</a></li>
-				
-					<li><a href="./TagNominationsController.html">TagNominationsController</a></li>
-				
-					<li><a href="./TagSet.html">TagSet</a></li>
-				
-					<li><a href="./TagSetAssociation.html">TagSetAssociation</a></li>
-				
-					<li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a></li>
-				
-					<li><a href="./TagSetNomination.html">TagSetNomination</a></li>
-				
-					<li><a href="./TagSetNominationsController.html">TagSetNominationsController</a></li>
-				
-					<li><a href="./TagSetOwnership.html">TagSetOwnership</a></li>
-				
-					<li><a href="./TagSetSweeper.html">TagSetSweeper</a></li>
-				
-					<li><a href="./TagSetsHelper.html">TagSetsHelper</a></li>
-				
-					<li><a href="./TagSweeper.html">TagSweeper</a></li>
-				
-					<li><a href="./TagWranglersController.html">TagWranglersController</a></li>
-				
-					<li><a href="./TagWranglingsController.html">TagWranglingsController</a></li>
-				
-					<li><a href="./Taggable.html">Taggable</a></li>
-				
-					<li><a href="./Tagging.html">Tagging</a></li>
-				
-					<li><a href="./TagsController.html">TagsController</a></li>
-				
-					<li><a href="./TagsHelper.html">TagsHelper</a></li>
-				
-					<li><a href="./TranslationGenerator.html">TranslationGenerator</a></li>
-				
-					<li><a href="./TranslationHelper.html">TranslationHelper</a></li>
-				
-					<li><a href="./TranslationNote.html">TranslationNote</a></li>
-				
-					<li><a href="./TranslationNotesController.html">TranslationNotesController</a></li>
-				
-					<li><a href="./TranslationsController.html">TranslationsController</a></li>
-				
-					<li><a href="./TranslatorsController.html">TranslatorsController</a></li>
-				
-					<li><a href="./UrlActiveValidator.html">UrlActiveValidator</a></li>
-				
-					<li><a href="./UrlFormatValidator.html">UrlFormatValidator</a></li>
-				
-					<li><a href="./UrlHelpers.html">UrlHelpers</a></li>
-				
-					<li><a href="./User.html">User</a></li>
-				
-					<li><a href="./UserInviteRequest.html">UserInviteRequest</a></li>
-				
-					<li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a></li>
-				
-					<li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a></li>
-				
-					<li><a href="./UserMailer.html">UserMailer</a></li>
-				
-					<li><a href="./UserSession.html">UserSession</a></li>
-				
-					<li><a href="./UserSessionsController.html">UserSessionsController</a></li>
-				
-					<li><a href="./UsersController.html">UsersController</a></li>
-				
-					<li><a href="./UsersHelper.html">UsersHelper</a></li>
-				
-					<li><a href="./ValidationHelper.html">ValidationHelper</a></li>
-				
-					<li><a href="./Warning.html">Warning</a></li>
-				
-					<li><a href="./WeightedRandom.html">WeightedRandom</a></li>
-				
-					<li><a href="./Work.html">Work</a></li>
-				
-					<li><a href="./WorkObserver.html">WorkObserver</a></li>
-				
-					<li><a href="./WorkSkin.html">WorkSkin</a></li>
-				
-					<li><a href="./WorkSweeper.html">WorkSweeper</a></li>
-				
-					<li><a href="./WorksController.html">WorksController</a></li>
-				
-					<li><a href="./WorksHelper.html">WorksHelper</a></li>
-				
-					<li><a href="./WranglingAssignment.html">WranglingAssignment</a></li>
-				
-				</ul>
-				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
-			</div>
-
-			
-		</div>
-	</div>
-
-	<div id="documentation">
-		<h1 class="class">Pseud</h1>
-
-		<div id="description">
-			
-		</div>
-
-		<!-- Constants -->
-		
-		<div id="constants-list" class="section">
-			<h3 class="section-header">Constants</h3>
-			<dl>
-			
-				<dt><a name="NAME_LENGTH_MIN">NAME_LENGTH_MIN</a></dt>
-				
-				<dd class="description"></dd>
-				
-			
-				<dt><a name="NAME_LENGTH_MAX">NAME_LENGTH_MAX</a></dt>
-				
-				<dd class="description"></dd>
-				
-			
-				<dt><a name="DESCRIPTION_MAX">DESCRIPTION_MAX</a></dt>
-				
-				<dd class="description"></dd>
-				
-			
-			</dl>
-		</div>
-		
-
-		<!-- Attributes -->
-		
-
-		<!-- Methods -->
-		
-		<div id="public-class-method-details" class="method-section section">
-			<h3 class="section-header">Public Class Methods</h3>
-
-		
-			<div id="not-orphaned-method" class="method-detail ">
-				<a name="method-c-not_orphaned"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">not_orphaned</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="not-orphaned-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 116</span>
-116:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">not_orphaned</span>
-117:     <span class="ruby-identifier">where</span>(<span class="ruby-value str">&quot;user_id != ?&quot;</span>, <span class="ruby-constant">User</span>.<span class="ruby-identifier">orphan_account</span>)
-118:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="parse-byline-method" class="method-detail ">
-				<a name="method-c-parse_byline"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">parse_byline</span><span
-						class="method-args">(byline, options = {})</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Parse a string of the &#8220;pseud.name (user.login)&#8221; format into a
-pseud
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="parse-byline-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 241</span>
-241:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse_byline</span>(<span class="ruby-identifier">byline</span>, <span class="ruby-identifier">options</span> = {})
-242:     <span class="ruby-identifier">pseud_name</span> = <span class="ruby-value str">&quot;&quot;</span>
-243:     <span class="ruby-identifier">user_login</span> = <span class="ruby-value str">&quot;&quot;</span>
-244:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">byline</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">&quot;(&quot;</span>)
-245:       <span class="ruby-identifier">pseud_name</span>, <span class="ruby-identifier">user_login</span> = <span class="ruby-identifier">byline</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'('</span>, <span class="ruby-value">2</span>)
-246:       <span class="ruby-identifier">pseud_name</span> = <span class="ruby-identifier">pseud_name</span>.<span class="ruby-identifier">strip</span>
-247:       <span class="ruby-identifier">user_login</span> = <span class="ruby-identifier">user_login</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">chop</span>
-248:       <span class="ruby-identifier">conditions</span> = [<span class="ruby-value str">'users.login = ? AND pseuds.name = ?'</span>, <span class="ruby-identifier">user_login</span>, <span class="ruby-identifier">pseud_name</span>]
-249:     <span class="ruby-keyword kw">else</span>
-250:       <span class="ruby-identifier">pseud_name</span> = <span class="ruby-identifier">byline</span>.<span class="ruby-identifier">strip</span>
-251:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:assume_matching_login</span>]
-252:         <span class="ruby-identifier">conditions</span> = [<span class="ruby-value str">'users.login = ? AND pseuds.name = ?'</span>, <span class="ruby-identifier">pseud_name</span>, <span class="ruby-identifier">pseud_name</span>]
-253:       <span class="ruby-keyword kw">else</span>
-254:         <span class="ruby-identifier">conditions</span> = [<span class="ruby-value str">'pseuds.name = ?'</span>, <span class="ruby-identifier">pseud_name</span>]
-255:       <span class="ruby-keyword kw">end</span>
-256:     <span class="ruby-keyword kw">end</span>
-257:     <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">conditions</span>)
-258:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="parse-bylines-method" class="method-detail ">
-				<a name="method-c-parse_bylines"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">parse_bylines</span><span
-						class="method-args">(list, options = {})</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Takes a comma-separated list of bylines Returns a hash containing an array
-of pseuds and an array of bylines that couldn&#8217;t be found
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="parse-bylines-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 262</span>
-262:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse_bylines</span>(<span class="ruby-identifier">list</span>, <span class="ruby-identifier">options</span> = {})
-263:     <span class="ruby-identifier">valid_pseuds</span>, <span class="ruby-identifier">ambiguous_pseuds</span>, <span class="ruby-identifier">failures</span> = [], {}, []
-264:     <span class="ruby-identifier">bylines</span> = <span class="ruby-identifier">list</span>.<span class="ruby-identifier">split</span> <span class="ruby-value str">&quot;,&quot;</span>
-265:     <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">byline</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">bylines</span>
-266:       <span class="ruby-identifier">pseuds</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">parse_byline</span>(<span class="ruby-identifier">byline</span>, <span class="ruby-identifier">options</span>)
-267:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
-268:         <span class="ruby-identifier">valid_pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">first</span>
-269:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
-270:         <span class="ruby-identifier">ambiguous_pseuds</span>[<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">pseuds</span>
-271:       <span class="ruby-keyword kw">else</span>
-272:         <span class="ruby-identifier">failures</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">byline</span>.<span class="ruby-identifier">strip</span>
-273:       <span class="ruby-keyword kw">end</span>
-274:     <span class="ruby-keyword kw">end</span>
-275:     {<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">valid_pseuds</span>, <span class="ruby-value">:ambiguous_pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ambiguous_pseuds</span>, <span class="ruby-value">:invalid_pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">failures</span>}
-276:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="rec-counts-for-pseuds-method" class="method-detail ">
-				<a name="method-c-rec_counts_for_pseuds"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">rec_counts_for_pseuds</span><span
-						class="method-args">(pseuds)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="rec-counts-for-pseuds-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 176</span>
-176:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rec_counts_for_pseuds</span>(<span class="ruby-identifier">pseuds</span>)
-177:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">blank?</span>
-178:       {}
-179:     <span class="ruby-keyword kw">else</span>
-180:       <span class="ruby-identifier">pseuds_with_counts</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">public_rec_count_for</span>(<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>))
-181:       <span class="ruby-identifier">count_hash</span> = {}
-182:       <span class="ruby-identifier">pseuds_with_counts</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">count_hash</span>[<span class="ruby-identifier">p</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">p</span>.<span class="ruby-identifier">rec_count</span>.<span class="ruby-identifier">to_i</span>}
-183:       <span class="ruby-identifier">count_hash</span>
-184:     <span class="ruby-keyword kw">end</span>
-185:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="work-counts-for-pseuds-method" class="method-detail ">
-				<a name="method-c-work_counts_for_pseuds"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">work_counts_for_pseuds</span><span
-						class="method-args">(pseuds)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="work-counts-for-pseuds-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 187</span>
-187:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">work_counts_for_pseuds</span>(<span class="ruby-identifier">pseuds</span>)
-188:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">blank?</span>
-189:       {}
-190:     <span class="ruby-keyword kw">else</span>
-191:       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
-192:         <span class="ruby-identifier">pseuds_with_counts</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">public_work_count_for</span>(<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>))
-193:       <span class="ruby-keyword kw">else</span>
-194:         <span class="ruby-identifier">pseuds_with_counts</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">posted_work_count_for</span>(<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>))
-195:       <span class="ruby-keyword kw">end</span>
-196:       <span class="ruby-identifier">count_hash</span> = {}
-197:       <span class="ruby-identifier">pseuds_with_counts</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">count_hash</span>[<span class="ruby-identifier">p</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">p</span>.<span class="ruby-identifier">work_count</span>.<span class="ruby-identifier">to_i</span>}
-198:       <span class="ruby-identifier">count_hash</span>
-199:     <span class="ruby-keyword kw">end</span>
-200:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="public-instance-method-details" class="method-section section">
-			<h3 class="section-header">Public Instance Methods</h3>
-
-		
-			<div id="--method" class="method-detail ">
-				<a name="method-i-%3C%3D%3E"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">&lt;=&gt;</span><span
-						class="method-args">(other)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Enigel Dec 12 08: added sort method sorting by pseud name or by login name
-in case of equality
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 122</span>
-122:   <span class="ruby-keyword kw">def</span> <span class="ruby-operator">&lt;=&gt;</span>(<span class="ruby-identifier">other</span>)
-123:     (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-operator">?</span> (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">user_name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">user_name</span>.<span class="ruby-identifier">downcase</span>) <span class="ruby-operator">:</span> (<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span>)
-124:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="autocomplete-prefixes-method" class="method-detail ">
-				<a name="method-i-autocomplete_prefixes"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">autocomplete_prefixes</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="autocomplete-prefixes-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 281</span>
-281:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autocomplete_prefixes</span>
-282:     [ <span class="ruby-value str">&quot;autocomplete_pseud&quot;</span> ]
-283:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="autocomplete-value-method" class="method-detail ">
-				<a name="method-i-autocomplete_value"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">autocomplete_value</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="autocomplete-value-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 285</span>
-285:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">autocomplete_value</span>
-286:     <span class="ruby-node">&quot;#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}&quot;</span>
-287:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="byline-method" class="method-detail ">
-				<a name="method-i-byline"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">byline</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Produces a byline that indicates the user&#8217;s name if pseud is not
-unique
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="byline-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 236</span>
-236:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">byline</span>
-237:     (<span class="ruby-identifier">name</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">user_name</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot; (&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">user_name</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;)&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>
-238:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="change-bookmarks-ownership-method" class="method-detail ">
-				<a name="method-i-change_bookmarks_ownership"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">change_bookmarks_ownership</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="change-bookmarks-ownership-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 346</span>
-346:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">change_bookmarks_ownership</span>
-347:     <span class="ruby-constant">Bookmark</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>)
-348:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="change-challenge-participation-method" class="method-detail ">
-				<a name="method-i-change_challenge_participation"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">change_challenge_participation</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="change-challenge-participation-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 336</span>
-336:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">change_challenge_participation</span>
-337:     <span class="ruby-constant">ChallengeSignup</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>)
-338:     <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pinch_hitter_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pinch_hitter_id = #{self.id}&quot;</span>)
-339:     <span class="ruby-keyword kw">return</span>
-340:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="change-collections-membership-method" class="method-detail ">
-				<a name="method-i-change_collections_membership"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">change_collections_membership</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="change-collections-membership-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 350</span>
-350:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">change_collections_membership</span>
-351:     <span class="ruby-constant">CollectionParticipant</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>)
-352:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="change-gift-recipients-method" class="method-detail ">
-				<a name="method-i-change_gift_recipients"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">change_gift_recipients</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="change-gift-recipients-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 342</span>
-342:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">change_gift_recipients</span>
-343:     <span class="ruby-constant">Gift</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>)
-344:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="change-membership-method" class="method-detail ">
-				<a name="method-i-change_membership"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">change_membership</span><span
-						class="method-args">(collection, new_pseud)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="change-membership-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 329</span>
-329:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">change_membership</span>(<span class="ruby-identifier">collection</span>, <span class="ruby-identifier">new_pseud</span>)
-330:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">collection_participants</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-identifier">collection</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">cparticipant</span><span class="ruby-operator">|</span>
-331:       <span class="ruby-identifier">cparticipant</span>.<span class="ruby-identifier">pseud</span> = <span class="ruby-identifier">new_pseud</span>
-332:       <span class="ruby-identifier">cparticipant</span>.<span class="ruby-identifier">save</span>
-333:     <span class="ruby-keyword kw">end</span>
-334:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="change-ownership-method" class="method-detail ">
-				<a name="method-i-change_ownership"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">change_ownership</span><span
-						class="method-args">(creation, pseud, options={})</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Change the ownership of a creation from one pseud to another Options:
-skip_series &#8212; if you begin by changing ownership of the series, you
-don&#8217;t want to go back up again and get stuck in a loop
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="change-ownership-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 308</span>
-308:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">creation</span>, <span class="ruby-identifier">pseud</span>, <span class="ruby-identifier">options</span>={})
-309:     <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-keyword kw">self</span>)
-310:     <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">pseud</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>
-311:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Work</span>)
-312:       <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">chapter</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">chapter</span>, <span class="ruby-identifier">pseud</span>)}
-313:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:skip_series</span>]
-314:         <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">series</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">series</span>
-315:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">series</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">series</span>.<span class="ruby-identifier">works</span> <span class="ruby-operator">-</span> [<span class="ruby-identifier">creation</span>]).<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:pseuds</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-keyword kw">self</span>)
-316:             <span class="ruby-identifier">series</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">pseud</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span>
-317:           <span class="ruby-keyword kw">else</span>
-318:             <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">series</span>, <span class="ruby-identifier">pseud</span>)
-319:           <span class="ruby-keyword kw">end</span>
-320:         <span class="ruby-keyword kw">end</span>
-321:       <span class="ruby-keyword kw">end</span>
-322:       <span class="ruby-identifier">comment_ids</span> = <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">find_all_comments</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;,&quot;</span>)
-323:       <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = '#{self.id}' AND id IN (#{comment_ids})&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">comment_ids</span>.<span class="ruby-identifier">blank?</span>
-324:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Series</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:skip_series</span>]
-325:       <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">work</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">work</span>, <span class="ruby-identifier">pseud</span>)}
-326:     <span class="ruby-keyword kw">end</span>
-327:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="check-default-pseud-method" class="method-detail ">
-				<a name="method-i-check_default_pseud"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">check_default_pseud</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="check-default-pseud-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 354</span>
-354:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_default_pseud</span>
-355:     <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_default?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">to_enum</span>.<span class="ruby-identifier">find</span>(&amp;<span class="ruby-value">:is_default?</span>) <span class="ruby-operator">==</span> <span class="ruby-keyword kw">nil</span>
-356:       <span class="ruby-identifier">default_pseud</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">ps</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ps</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">user_name</span>.<span class="ruby-identifier">downcase</span>}.<span class="ruby-identifier">first</span>
-357:       <span class="ruby-identifier">default_pseud</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:is_default</span>, <span class="ruby-keyword kw">true</span>)
-358:     <span class="ruby-keyword kw">end</span>
-359:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="clear-icon-method" class="method-detail ">
-				<a name="method-i-clear_icon"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">clear_icon</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="clear-icon-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 371</span>
-371:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear_icon</span>
-372:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">icon</span> = <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">delete_icon?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">icon</span>.<span class="ruby-identifier">dirty?</span>
-373:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="creations-method" class="method-detail ">
-				<a name="method-i-creations"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">creations</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-END AUTOCOMPLETE
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="creations-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 291</span>
-291:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">creations</span>
-292:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">works</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">chapters</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">series</span>
-293:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="delete-icon-method" class="method-detail ">
-				<a name="method-i-delete_icon"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">delete_icon</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-					<div class="method-source-code"
-						id="delete-icon-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 366</span>
-366:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_icon</span>
-367:     <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-ivar">@delete_icon</span>
-368:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-				<div class="aliases">
-					Also aliased as: <a href="Pseud.html#method-i-delete_icon%3F">delete_icon?</a>
-				</div>
-				
-
-				
-			</div>
-
-		
-			<div id="delete-icon--method" class="method-detail ">
-				<a name="method-i-delete_icon%3D"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">delete_icon=</span><span
-						class="method-args">(value)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Delete current icon (thus reverting to archive default icon)
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="delete-icon--source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 362</span>
-362:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_icon=</span>(<span class="ruby-identifier">value</span>)
-363:     <span class="ruby-ivar">@delete_icon</span> = <span class="ruby-operator">!</span><span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_i</span>.<span class="ruby-identifier">zero?</span>
-364:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-			<div id="delete-icon--method" class="method-detail method-alias">
-				<a name="method-i-delete_icon%3F"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">delete_icon?</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					
-					
-
-					
-				</div>
-
-				
-
-				
-				<div class="aliases">
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: Pseud</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/models/pseud.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">ActiveRecord::Base
+  
+</nav>
+
+    <!-- Included Modules -->
+<nav id="includes-section" class="section">
+  <h3 class="section-header">Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><span class="include">AutocompleteSource</span>
+  
+  
+  </ul>
+</nav>
+
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-not_orphaned">::not_orphaned</a>
+    
+    <li><a href="#method-c-parse_byline">::parse_byline</a>
+    
+    <li><a href="#method-c-parse_bylines">::parse_bylines</a>
+    
+    <li><a href="#method-c-rec_counts_for_pseuds">::rec_counts_for_pseuds</a>
+    
+    <li><a href="#method-c-work_counts_for_pseuds">::work_counts_for_pseuds</a>
+    
+    <li><a href="#method-i-3C-3D-3E">#&lt;=&gt;</a>
+    
+    <li><a href="#method-i-autocomplete_prefixes">#autocomplete_prefixes</a>
+    
+    <li><a href="#method-i-autocomplete_value">#autocomplete_value</a>
+    
+    <li><a href="#method-i-byline">#byline</a>
+    
+    <li><a href="#method-i-change_bookmarks_ownership">#change_bookmarks_ownership</a>
+    
+    <li><a href="#method-i-change_challenge_participation">#change_challenge_participation</a>
+    
+    <li><a href="#method-i-change_collections_membership">#change_collections_membership</a>
+    
+    <li><a href="#method-i-change_gift_recipients">#change_gift_recipients</a>
+    
+    <li><a href="#method-i-change_membership">#change_membership</a>
+    
+    <li><a href="#method-i-change_ownership">#change_ownership</a>
+    
+    <li><a href="#method-i-check_default_pseud">#check_default_pseud</a>
+    
+    <li><a href="#method-i-clear_icon">#clear_icon</a>
+    
+    <li><a href="#method-i-creations">#creations</a>
+    
+    <li><a href="#method-i-delete_icon">#delete_icon</a>
+    
+    <li><a href="#method-i-delete_icon-3D">#delete_icon=</a>
+    
+    <li><a href="#method-i-delete_icon-3F">#delete_icon?</a>
+    
+    <li><a href="#method-i-most_popular_tags">#most_popular_tags</a>
+    
+    <li><a href="#method-i-replace_me_with_default">#replace_me_with_default</a>
+    
+    <li><a href="#method-i-to_param">#to_param</a>
+    
+    <li><a href="#method-i-unposted_works">#unposted_works</a>
+    
+    <li><a href="#method-i-user_name">#user_name</a>
+    
+    <li><a href="#method-i-visible_recs_count">#visible_recs_count</a>
+    
+    <li><a href="#method-i-visible_works_count">#visible_works_count</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./app/mailers/README.html">README</a>
+  
+    <li class="file"><a href="./app/views/epub/mimetype.html">mimetype</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Static.html">Static</a>
+  
+    <li><a href="./Static/BaseController.html">Static::BaseController</a>
+  
+    <li><a href="./Static/CollectionsController.html">Static::CollectionsController</a>
+  
+    <li><a href="./Static/FandomsController.html">Static::FandomsController</a>
+  
+    <li><a href="./Static/MediaController.html">Static::MediaController</a>
+  
+    <li><a href="./Static/RestrictedWorksController.html">Static::RestrictedWorksController</a>
+  
+    <li><a href="./Static/WorksController.html">Static::WorksController</a>
+  
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
+    <li><a href="./Challenge.html">Challenge</a>
+  
+    <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
+  
+    <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./StoryParser.html">StoryParser</a>
+  
+    <li><a href="./StoryParser/Error.html">StoryParser::Error</a>
+  
+    <li><a href="./AbuseReport.html">AbuseReport</a>
+  
+    <li><a href="./AbuseReportsController.html">AbuseReportsController</a>
+  
+    <li><a href="./AdminMailer.html">AdminMailer</a>
+  
+    <li><a href="./AdminPost.html">AdminPost</a>
+  
+    <li><a href="./AdminPostTag.html">AdminPostTag</a>
+  
+    <li><a href="./AdminPostTagging.html">AdminPostTagging</a>
+  
+    <li><a href="./AdminPostsController.html">AdminPostsController</a>
+  
+    <li><a href="./AdminSession.html">AdminSession</a>
+  
+    <li><a href="./AdminSessionsController.html">AdminSessionsController</a>
+  
+    <li><a href="./AdminSetting.html">AdminSetting</a>
+  
+    <li><a href="./AdminsController.html">AdminsController</a>
+  
+    <li><a href="./AdvancedSearchHelper.html">AdvancedSearchHelper</a>
+  
+    <li><a href="./AlphabetHelper.html">AlphabetHelper</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./ArchiveFaq.html">ArchiveFaq</a>
+  
+    <li><a href="./ArchiveFaqsController.html">ArchiveFaqsController</a>
+  
+    <li><a href="./AutocompleteController.html">AutocompleteController</a>
+  
+    <li><a href="./Banned.html">Banned</a>
+  
+    <li><a href="./Bookmark.html">Bookmark</a>
+  
+    <li><a href="./BookmarksController.html">BookmarksController</a>
+  
+    <li><a href="./BookmarksHelper.html">BookmarksHelper</a>
+  
+    <li><a href="./CacheHelper.html">CacheHelper</a>
+  
+    <li><a href="./CastNomination.html">CastNomination</a>
+  
+    <li><a href="./Category.html">Category</a>
+  
+    <li><a href="./ChallengeAssignment.html">ChallengeAssignment</a>
+  
+    <li><a href="./ChallengeAssignmentsController.html">ChallengeAssignmentsController</a>
+  
+    <li><a href="./ChallengeClaim.html">ChallengeClaim</a>
+  
+    <li><a href="./ChallengeClaimsController.html">ChallengeClaimsController</a>
+  
+    <li><a href="./ChallengeHelper.html">ChallengeHelper</a>
+  
+    <li><a href="./ChallengeRequestsController.html">ChallengeRequestsController</a>
+  
+    <li><a href="./ChallengeSignup.html">ChallengeSignup</a>
+  
+    <li><a href="./ChallengeSignupObserver.html">ChallengeSignupObserver</a>
+  
+    <li><a href="./ChallengeSignupSweeper.html">ChallengeSignupSweeper</a>
+  
+    <li><a href="./ChallengeSignupsController.html">ChallengeSignupsController</a>
+  
+    <li><a href="./ChallengeSweeper.html">ChallengeSweeper</a>
+  
+    <li><a href="./ChallengesController.html">ChallengesController</a>
+  
+    <li><a href="./Chapter.html">Chapter</a>
+  
+    <li><a href="./ChapterSweeper.html">ChapterSweeper</a>
+  
+    <li><a href="./ChaptersController.html">ChaptersController</a>
+  
+    <li><a href="./ChaptersHelper.html">ChaptersHelper</a>
+  
+    <li><a href="./Character.html">Character</a>
+  
+    <li><a href="./CharacterNomination.html">CharacterNomination</a>
+  
+    <li><a href="./Collection.html">Collection</a>
+  
+    <li><a href="./CollectionItem.html">CollectionItem</a>
+  
+    <li><a href="./CollectionItemsController.html">CollectionItemsController</a>
+  
+    <li><a href="./CollectionObserver.html">CollectionObserver</a>
+  
+    <li><a href="./CollectionParticipant.html">CollectionParticipant</a>
+  
+    <li><a href="./CollectionParticipantsController.html">CollectionParticipantsController</a>
+  
+    <li><a href="./CollectionPreference.html">CollectionPreference</a>
+  
+    <li><a href="./CollectionProfile.html">CollectionProfile</a>
+  
+    <li><a href="./CollectionProfileController.html">CollectionProfileController</a>
+  
+    <li><a href="./CollectionSweeper.html">CollectionSweeper</a>
+  
+    <li><a href="./CollectionsController.html">CollectionsController</a>
+  
+    <li><a href="./CollectionsHelper.html">CollectionsHelper</a>
+  
+    <li><a href="./Comment.html">Comment</a>
+  
+    <li><a href="./CommentMailer.html">CommentMailer</a>
+  
+    <li><a href="./CommentObserver.html">CommentObserver</a>
+  
+    <li><a href="./CommentSweeper.html">CommentSweeper</a>
+  
+    <li><a href="./CommentsController.html">CommentsController</a>
+  
+    <li><a href="./CommentsHelper.html">CommentsHelper</a>
+  
+    <li><a href="./CommonTagging.html">CommonTagging</a>
+  
+    <li><a href="./CreationObserver.html">CreationObserver</a>
+  
+    <li><a href="./Creatorship.html">Creatorship</a>
+  
+    <li><a href="./DateHelper.html">DateHelper</a>
+  
+    <li><a href="./DevmodeController.html">DevmodeController</a>
+  
+    <li><a href="./DownloadsController.html">DownloadsController</a>
+  
+    <li><a href="./EmailVeracityValidator.html">EmailVeracityValidator</a>
+  
+    <li><a href="./ErrorsController.html">ErrorsController</a>
+  
+    <li><a href="./ExternalAuthor.html">ExternalAuthor</a>
+  
+    <li><a href="./ExternalAuthorName.html">ExternalAuthorName</a>
+  
+    <li><a href="./ExternalAuthorsController.html">ExternalAuthorsController</a>
+  
+    <li><a href="./ExternalAuthorsHelper.html">ExternalAuthorsHelper</a>
+  
+    <li><a href="./ExternalCreatorship.html">ExternalCreatorship</a>
+  
+    <li><a href="./ExternalWork.html">ExternalWork</a>
+  
+    <li><a href="./ExternalWorksController.html">ExternalWorksController</a>
+  
+    <li><a href="./Fandom.html">Fandom</a>
+  
+    <li><a href="./FandomNomination.html">FandomNomination</a>
+  
+    <li><a href="./FandomsController.html">FandomsController</a>
+  
+    <li><a href="./FeedSweeper.html">FeedSweeper</a>
+  
+    <li><a href="./Feedback.html">Feedback</a>
+  
+    <li><a href="./FeedbacksController.html">FeedbacksController</a>
+  
+    <li><a href="./FilterCount.html">FilterCount</a>
+  
+    <li><a href="./FilterTagging.html">FilterTagging</a>
+  
+    <li><a href="./Freeform.html">Freeform</a>
+  
+    <li><a href="./FreeformNomination.html">FreeformNomination</a>
+  
+    <li><a href="./Gift.html">Gift</a>
+  
+    <li><a href="./GiftExchange.html">GiftExchange</a>
+  
+    <li><a href="./GiftsController.html">GiftsController</a>
+  
+    <li><a href="./HitCounter.html">HitCounter</a>
+  
+    <li><a href="./HomeController.html">HomeController</a>
+  
+    <li><a href="./HomeHelper.html">HomeHelper</a>
+  
+    <li><a href="./InboxComment.html">InboxComment</a>
+  
+    <li><a href="./InboxController.html">InboxController</a>
+  
+    <li><a href="./InboxHelper.html">InboxHelper</a>
+  
+    <li><a href="./Invitation.html">Invitation</a>
+  
+    <li><a href="./InvitationsController.html">InvitationsController</a>
+  
+    <li><a href="./InvitationsHelper.html">InvitationsHelper</a>
+  
+    <li><a href="./InviteRequest.html">InviteRequest</a>
+  
+    <li><a href="./InviteRequestsController.html">InviteRequestsController</a>
+  
+    <li><a href="./KnownIssue.html">KnownIssue</a>
+  
+    <li><a href="./KnownIssuesController.html">KnownIssuesController</a>
+  
+    <li><a href="./Kudo.html">Kudo</a>
+  
+    <li><a href="./KudoMailer.html">KudoMailer</a>
+  
+    <li><a href="./KudoObserver.html">KudoObserver</a>
+  
+    <li><a href="./KudosController.html">KudosController</a>
+  
+    <li><a href="./Language.html">Language</a>
+  
+    <li><a href="./LanguagesController.html">LanguagesController</a>
+  
+    <li><a href="./Locale.html">Locale</a>
+  
+    <li><a href="./LocalesController.html">LocalesController</a>
+  
+    <li><a href="./LogItem.html">LogItem</a>
+  
+    <li><a href="./Media.html">Media</a>
+  
+    <li><a href="./MediaController.html">MediaController</a>
+  
+    <li><a href="./MetaTagging.html">MetaTagging</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Offer.html">Offer</a>
+  
+    <li><a href="./OrphansController.html">OrphansController</a>
+  
+    <li><a href="./OrphansHelper.html">OrphansHelper</a>
+  
+    <li><a href="./OwnedSetTagging.html">OwnedSetTagging</a>
+  
+    <li><a href="./OwnedTagSet.html">OwnedTagSet</a>
+  
+    <li><a href="./OwnedTagSetsController.html">OwnedTagSetsController</a>
+  
+    <li><a href="./PasswordsController.html">PasswordsController</a>
+  
+    <li><a href="./People.html">People</a>
+  
+    <li><a href="./PeopleController.html">PeopleController</a>
+  
+    <li><a href="./PotentialMatch.html">PotentialMatch</a>
+  
+    <li><a href="./PotentialMatchSettings.html">PotentialMatchSettings</a>
+  
+    <li><a href="./PotentialMatchesController.html">PotentialMatchesController</a>
+  
+    <li><a href="./PotentialPromptMatch.html">PotentialPromptMatch</a>
+  
+    <li><a href="./Preference.html">Preference</a>
+  
+    <li><a href="./PreferencesController.html">PreferencesController</a>
+  
+    <li><a href="./Profile.html">Profile</a>
+  
+    <li><a href="./ProfileController.html">ProfileController</a>
+  
+    <li><a href="./Prompt.html">Prompt</a>
+  
+    <li><a href="./PromptMeme.html">PromptMeme</a>
+  
+    <li><a href="./PromptRestriction.html">PromptRestriction</a>
+  
+    <li><a href="./PromptRestrictionsHelper.html">PromptRestrictionsHelper</a>
+  
+    <li><a href="./PromptsController.html">PromptsController</a>
+  
+    <li><a href="./Pseud.html">Pseud</a>
+  
+    <li><a href="./PseudSweeper.html">PseudSweeper</a>
+  
+    <li><a href="./PseudsController.html">PseudsController</a>
+  
+    <li><a href="./PseudsHelper.html">PseudsHelper</a>
+  
+    <li><a href="./Rating.html">Rating</a>
+  
+    <li><a href="./Reading.html">Reading</a>
+  
+    <li><a href="./ReadingsController.html">ReadingsController</a>
+  
+    <li><a href="./RedirectController.html">RedirectController</a>
+  
+    <li><a href="./RelatedWork.html">RelatedWork</a>
+  
+    <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
+  
+    <li><a href="./Relationship.html">Relationship</a>
+  
+    <li><a href="./RelationshipNomination.html">RelationshipNomination</a>
+  
+    <li><a href="./Request.html">Request</a>
+  
+    <li><a href="./Role.html">Role</a>
+  
+    <li><a href="./RolesUser.html">RolesUser</a>
+  
+    <li><a href="./SearchController.html">SearchController</a>
+  
+    <li><a href="./SearchHelper.html">SearchHelper</a>
+  
+    <li><a href="./SerialWork.html">SerialWork</a>
+  
+    <li><a href="./SerialWorksController.html">SerialWorksController</a>
+  
+    <li><a href="./Series.html">Series</a>
+  
+    <li><a href="./SeriesController.html">SeriesController</a>
+  
+    <li><a href="./SeriesHelper.html">SeriesHelper</a>
+  
+    <li><a href="./SetTagging.html">SetTagging</a>
+  
+    <li><a href="./Skin.html">Skin</a>
+  
+    <li><a href="./SkinParent.html">SkinParent</a>
+  
+    <li><a href="./SkinsController.html">SkinsController</a>
+  
+    <li><a href="./SkinsHelper.html">SkinsHelper</a>
+  
+    <li><a href="./StaticSweeper.html">StaticSweeper</a>
+  
+    <li><a href="./StatsController.html">StatsController</a>
+  
+    <li><a href="./StatsHelper.html">StatsHelper</a>
+  
+    <li><a href="./Subscription.html">Subscription</a>
+  
+    <li><a href="./SubscriptionsController.html">SubscriptionsController</a>
+  
+    <li><a href="./Tag.html">Tag</a>
+  
+    <li><a href="./TagNomination.html">TagNomination</a>
+  
+    <li><a href="./TagNominationsController.html">TagNominationsController</a>
+  
+    <li><a href="./TagSet.html">TagSet</a>
+  
+    <li><a href="./TagSetAssociation.html">TagSetAssociation</a>
+  
+    <li><a href="./TagSetAssociationsController.html">TagSetAssociationsController</a>
+  
+    <li><a href="./TagSetNomination.html">TagSetNomination</a>
+  
+    <li><a href="./TagSetNominationsController.html">TagSetNominationsController</a>
+  
+    <li><a href="./TagSetOwnership.html">TagSetOwnership</a>
+  
+    <li><a href="./TagSetSweeper.html">TagSetSweeper</a>
+  
+    <li><a href="./TagSetsHelper.html">TagSetsHelper</a>
+  
+    <li><a href="./TagSweeper.html">TagSweeper</a>
+  
+    <li><a href="./TagWranglersController.html">TagWranglersController</a>
+  
+    <li><a href="./TagWranglingsController.html">TagWranglingsController</a>
+  
+    <li><a href="./Tagging.html">Tagging</a>
+  
+    <li><a href="./TagsController.html">TagsController</a>
+  
+    <li><a href="./TagsHelper.html">TagsHelper</a>
+  
+    <li><a href="./TranslationHelper.html">TranslationHelper</a>
+  
+    <li><a href="./TranslationNote.html">TranslationNote</a>
+  
+    <li><a href="./TranslationNotesController.html">TranslationNotesController</a>
+  
+    <li><a href="./TranslationsController.html">TranslationsController</a>
+  
+    <li><a href="./TranslatorsController.html">TranslatorsController</a>
+  
+    <li><a href="./UrlActiveValidator.html">UrlActiveValidator</a>
+  
+    <li><a href="./UrlFormatValidator.html">UrlFormatValidator</a>
+  
+    <li><a href="./User.html">User</a>
+  
+    <li><a href="./UserInviteRequest.html">UserInviteRequest</a>
+  
+    <li><a href="./UserInviteRequestsController.html">UserInviteRequestsController</a>
+  
+    <li><a href="./UserInviteRequestsHelper.html">UserInviteRequestsHelper</a>
+  
+    <li><a href="./UserMailer.html">UserMailer</a>
+  
+    <li><a href="./UserSession.html">UserSession</a>
+  
+    <li><a href="./UserSessionsController.html">UserSessionsController</a>
+  
+    <li><a href="./UsersController.html">UsersController</a>
+  
+    <li><a href="./UsersHelper.html">UsersHelper</a>
+  
+    <li><a href="./ValidationHelper.html">ValidationHelper</a>
+  
+    <li><a href="./Warning.html">Warning</a>
+  
+    <li><a href="./WeightedRandom.html">WeightedRandom</a>
+  
+    <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkObserver.html">WorkObserver</a>
+  
+    <li><a href="./WorkSkin.html">WorkSkin</a>
+  
+    <li><a href="./WorkSweeper.html">WorkSweeper</a>
+  
+    <li><a href="./WorksController.html">WorksController</a>
+  
+    <li><a href="./WorksHelper.html">WorksHelper</a>
+  
+    <li><a href="./WranglingAssignment.html">WranglingAssignment</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class Pseud</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+    <!-- Constants -->
+    <section id="constants-list" class="section">
+      <h3 class="section-header">Constants</h3>
+      <dl>
+      
+        <dt id="DESCRIPTION_MAX">DESCRIPTION_MAX
+        
+        <dd class="description">
+        
+      
+        <dt id="NAME_LENGTH_MAX">NAME_LENGTH_MAX
+        
+        <dd class="description">
+        
+      
+        <dt id="NAME_LENGTH_MIN">NAME_LENGTH_MIN
+        
+        <dd class="description">
+        
+      
+      </dl>
+    </section>
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-not_orphaned" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">not_orphaned</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="not_orphaned-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 116</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">not_orphaned</span>
+  <span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;user_id != ?&quot;</span>, <span class="ruby-constant">User</span>.<span class="ruby-identifier">orphan_account</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- not_orphaned-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- not_orphaned-method -->
+
+    
+      <div id="method-c-parse_byline" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse_byline</span><span
+            class="method-args">(byline, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Parse a string of the “pseud.name (user.login)” format into a pseud</p>
+          
+
+          
+          <div class="method-source-code" id="parse_byline-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 241</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parse_byline</span>(<span class="ruby-identifier">byline</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">pseud_name</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-identifier">user_login</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">byline</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;(&quot;</span>)
+    <span class="ruby-identifier">pseud_name</span>, <span class="ruby-identifier">user_login</span> = <span class="ruby-identifier">byline</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">'('</span>, <span class="ruby-value">2</span>)
+    <span class="ruby-identifier">pseud_name</span> = <span class="ruby-identifier">pseud_name</span>.<span class="ruby-identifier">strip</span>
+    <span class="ruby-identifier">user_login</span> = <span class="ruby-identifier">user_login</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">chop</span>
+    <span class="ruby-identifier">conditions</span> = [<span class="ruby-string">'users.login = ? AND pseuds.name = ?'</span>, <span class="ruby-identifier">user_login</span>, <span class="ruby-identifier">pseud_name</span>]
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">pseud_name</span> = <span class="ruby-identifier">byline</span>.<span class="ruby-identifier">strip</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:assume_matching_login</span>]
+      <span class="ruby-identifier">conditions</span> = [<span class="ruby-string">'users.login = ? AND pseuds.name = ?'</span>, <span class="ruby-identifier">pseud_name</span>, <span class="ruby-identifier">pseud_name</span>]
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">conditions</span> = [<span class="ruby-string">'pseuds.name = ?'</span>, <span class="ruby-identifier">pseud_name</span>]
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">conditions</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- parse_byline-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- parse_byline-method -->
+
+    
+      <div id="method-c-parse_bylines" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse_bylines</span><span
+            class="method-args">(list, options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Takes a comma-separated list of bylines Returns a hash containing an array
+of pseuds and an array of bylines that couldn’t be found</p>
+          
+
+          
+          <div class="method-source-code" id="parse_bylines-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 262</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parse_bylines</span>(<span class="ruby-identifier">list</span>, <span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">valid_pseuds</span>, <span class="ruby-identifier">ambiguous_pseuds</span>, <span class="ruby-identifier">failures</span> = [], {}, []
+  <span class="ruby-identifier">bylines</span> = <span class="ruby-identifier">list</span>.<span class="ruby-identifier">split</span> <span class="ruby-string">&quot;,&quot;</span>
+  <span class="ruby-keyword">for</span> <span class="ruby-identifier">byline</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">bylines</span>
+    <span class="ruby-identifier">pseuds</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">parse_byline</span>(<span class="ruby-identifier">byline</span>, <span class="ruby-identifier">options</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+      <span class="ruby-identifier">valid_pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">first</span>
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
+      <span class="ruby-identifier">ambiguous_pseuds</span>[<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">pseuds</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">failures</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">byline</span>.<span class="ruby-identifier">strip</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  {<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">valid_pseuds</span>, <span class="ruby-value">:ambiguous_pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ambiguous_pseuds</span>, <span class="ruby-value">:invalid_pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">failures</span>}
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- parse_bylines-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- parse_bylines-method -->
+
+    
+      <div id="method-c-rec_counts_for_pseuds" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">rec_counts_for_pseuds</span><span
+            class="method-args">(pseuds)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="rec_counts_for_pseuds-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 176</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">rec_counts_for_pseuds</span>(<span class="ruby-identifier">pseuds</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">blank?</span>
+    {}
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">pseuds_with_counts</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">public_rec_count_for</span>(<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>))
+    <span class="ruby-identifier">count_hash</span> = {}
+    <span class="ruby-identifier">pseuds_with_counts</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">count_hash</span>[<span class="ruby-identifier">p</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">p</span>.<span class="ruby-identifier">rec_count</span>.<span class="ruby-identifier">to_i</span>}
+    <span class="ruby-identifier">count_hash</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- rec_counts_for_pseuds-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- rec_counts_for_pseuds-method -->
+
+    
+      <div id="method-c-work_counts_for_pseuds" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">work_counts_for_pseuds</span><span
+            class="method-args">(pseuds)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="work_counts_for_pseuds-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 187</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">work_counts_for_pseuds</span>(<span class="ruby-identifier">pseuds</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">blank?</span>
+    {}
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
+      <span class="ruby-identifier">pseuds_with_counts</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">public_work_count_for</span>(<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>))
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">pseuds_with_counts</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">posted_work_count_for</span>(<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>))
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">count_hash</span> = {}
+    <span class="ruby-identifier">pseuds_with_counts</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">count_hash</span>[<span class="ruby-identifier">p</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">p</span>.<span class="ruby-identifier">work_count</span>.<span class="ruby-identifier">to_i</span>}
+    <span class="ruby-identifier">count_hash</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- work_counts_for_pseuds-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- work_counts_for_pseuds-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-3C-3D-3E" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">&lt;=&gt;</span><span
+            class="method-args">(other)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Enigel Dec 12 08: added sort method sorting by pseud name or by login name
+in case of equality</p>
+          
+
+          
+          <div class="method-source-code" id="3C-3D-3E-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 122</span>
+<span class="ruby-keyword">def</span> <span class="ruby-operator">&lt;=&gt;</span>(<span class="ruby-identifier">other</span>)
+  (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-operator">?</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">user_name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">user_name</span>.<span class="ruby-identifier">downcase</span>) <span class="ruby-operator">:</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- 3C-3D-3E-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- 3C-3D-3E-method -->
+
+    
+      <div id="method-i-autocomplete_prefixes" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">autocomplete_prefixes</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="autocomplete_prefixes-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 281</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">autocomplete_prefixes</span>
+  [ <span class="ruby-string">&quot;autocomplete_pseud&quot;</span> ]
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- autocomplete_prefixes-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- autocomplete_prefixes-method -->
+
+    
+      <div id="method-i-autocomplete_value" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">autocomplete_value</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="autocomplete_value-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 285</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">autocomplete_value</span>
+  <span class="ruby-node">&quot;#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- autocomplete_value-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- autocomplete_value-method -->
+
+    
+      <div id="method-i-byline" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">byline</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Produces a byline that indicates the user’s name if pseud is not unique</p>
+          
+
+          
+          <div class="method-source-code" id="byline-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 236</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">byline</span>
+  (<span class="ruby-identifier">name</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">user_name</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; (&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">user_name</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;)&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- byline-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- byline-method -->
+
+    
+      <div id="method-i-change_bookmarks_ownership" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">change_bookmarks_ownership</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="change_bookmarks_ownership-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 346</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">change_bookmarks_ownership</span>
+  <span class="ruby-constant">Bookmark</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- change_bookmarks_ownership-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- change_bookmarks_ownership-method -->
+
+    
+      <div id="method-i-change_challenge_participation" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">change_challenge_participation</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="change_challenge_participation-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 336</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">change_challenge_participation</span>
+  <span class="ruby-constant">ChallengeSignup</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>)
+  <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pinch_hitter_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pinch_hitter_id = #{self.id}&quot;</span>)
+  <span class="ruby-keyword">return</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- change_challenge_participation-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- change_challenge_participation-method -->
+
+    
+      <div id="method-i-change_collections_membership" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">change_collections_membership</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="change_collections_membership-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 350</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">change_collections_membership</span>
+  <span class="ruby-constant">CollectionParticipant</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- change_collections_membership-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- change_collections_membership-method -->
+
+    
+      <div id="method-i-change_gift_recipients" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">change_gift_recipients</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="change_gift_recipients-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 342</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">change_gift_recipients</span>
+  <span class="ruby-constant">Gift</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- change_gift_recipients-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- change_gift_recipients-method -->
+
+    
+      <div id="method-i-change_membership" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">change_membership</span><span
+            class="method-args">(collection, new_pseud)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="change_membership-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 329</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">change_membership</span>(<span class="ruby-identifier">collection</span>, <span class="ruby-identifier">new_pseud</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">collection_participants</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-identifier">collection</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">cparticipant</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">cparticipant</span>.<span class="ruby-identifier">pseud</span> = <span class="ruby-identifier">new_pseud</span>
+    <span class="ruby-identifier">cparticipant</span>.<span class="ruby-identifier">save</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- change_membership-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- change_membership-method -->
+
+    
+      <div id="method-i-change_ownership" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">change_ownership</span><span
+            class="method-args">(creation, pseud, options={})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Change the ownership of a creation from one pseud to another Options:
+skip_series – if you begin by changing ownership of the series, you don’t
+want to go back up again and get stuck in a loop</p>
+          
+
+          
+          <div class="method-source-code" id="change_ownership-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 308</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">creation</span>, <span class="ruby-identifier">pseud</span>, <span class="ruby-identifier">options</span>={})
+  <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-keyword">self</span>)
+  <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">pseud</span> <span class="ruby-keyword">rescue</span> <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Work</span>)
+    <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">chapter</span><span class="ruby-operator">|</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">chapter</span>, <span class="ruby-identifier">pseud</span>)}
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:skip_series</span>]
+      <span class="ruby-keyword">for</span> <span class="ruby-identifier">series</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">series</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">series</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">series</span>.<span class="ruby-identifier">works</span> <span class="ruby-operator">-</span> [<span class="ruby-identifier">creation</span>]).<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:pseuds</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-keyword">self</span>)
+          <span class="ruby-identifier">series</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">pseud</span> <span class="ruby-keyword">rescue</span> <span class="ruby-keyword">nil</span>
+        <span class="ruby-keyword">else</span>
+          <span class="ruby-keyword">self</span>.<span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">series</span>, <span class="ruby-identifier">pseud</span>)
+        <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">comment_ids</span> = <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">find_all_comments</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)
+    <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = '#{self.id}' AND id IN (#{comment_ids})&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">comment_ids</span>.<span class="ruby-identifier">blank?</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Series</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:skip_series</span>]
+    <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">work</span><span class="ruby-operator">|</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">work</span>, <span class="ruby-identifier">pseud</span>)}
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- change_ownership-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- change_ownership-method -->
+
+    
+      <div id="method-i-check_default_pseud" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">check_default_pseud</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="check_default_pseud-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 354</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">check_default_pseud</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_default?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">to_enum</span>.<span class="ruby-identifier">find</span>(&amp;<span class="ruby-value">:is_default?</span>) <span class="ruby-operator">==</span> <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">default_pseud</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">ps</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ps</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">user_name</span>.<span class="ruby-identifier">downcase</span>}.<span class="ruby-identifier">first</span>
+    <span class="ruby-identifier">default_pseud</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:is_default</span>, <span class="ruby-keyword">true</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- check_default_pseud-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- check_default_pseud-method -->
+
+    
+      <div id="method-i-clear_icon" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">clear_icon</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="clear_icon-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 371</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">clear_icon</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">icon</span> = <span class="ruby-keyword">nil</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">delete_icon?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">icon</span>.<span class="ruby-identifier">dirty?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- clear_icon-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- clear_icon-method -->
+
+    
+      <div id="method-i-creations" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">creations</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>END AUTOCOMPLETE</p>
+          
+
+          
+          <div class="method-source-code" id="creations-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 291</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">creations</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">series</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- creations-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- creations-method -->
+
+    
+      <div id="method-i-delete_icon" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delete_icon</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="delete_icon-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 366</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_icon</span>
+  <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-ivar">@delete_icon</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- delete_icon-source -->
+          
+        </div>
+
+        
+        <div class="aliases">
+          Also aliased as: <a href="Pseud.html#method-i-delete_icon-3F">delete_icon?</a>
+        </div>
+        
+
+        
+      </div><!-- delete_icon-method -->
+
+    
+      <div id="method-i-delete_icon-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delete_icon=</span><span
+            class="method-args">(value)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Delete current icon (thus reverting to archive default icon)</p>
+          
+
+          
+          <div class="method-source-code" id="delete_icon-3D-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 362</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_icon=</span>(<span class="ruby-identifier">value</span>)
+  <span class="ruby-ivar">@delete_icon</span> = <span class="ruby-operator">!</span><span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_i</span>.<span class="ruby-identifier">zero?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- delete_icon-3D-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- delete_icon-3D-method -->
+
+    
+      <div id="method-i-delete_icon-3F" class="method-detail method-alias">
+        
+        <div class="method-heading">
+          <span class="method-name">delete_icon?</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+        </div>
+
+        
+
+        
+        <div class="aliases">
           Alias for: <a href="Pseud.html#method-i-delete_icon">delete_icon</a>
-				</div>
-				
-			</div>
+        </div>
+        
+      </div><!-- delete_icon-3F-method -->
 
-		
-			<div id="most-popular-tags-method" class="method-detail ">
-				<a name="method-i-most_popular_tags"></a>
+    
+      <div id="method-i-most_popular_tags" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">most_popular_tags</span><span
+            class="method-args">(options = {})</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-				<div class="method-heading">
-				
-					<span class="method-name">most_popular_tags</span><span
-						class="method-args">(options = {})</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Options can include :categories and :limit Gets all the canonical tags used
+        <div class="method-description">
+          
+          <p>Options can include :categories and :limit Gets all the canonical tags used
 by a given pseud (limited to certain types if type options are provided),
 then sorts them according to the number of times this pseud has used them,
 then returns an array of [tag, count] arrays, limited by size if a limit is
-provided FIXME: I&#8217;m also counting tags on works that aren&#8217;t
-visible to the current user (drafts, restricted works)
-</p>
-					
+provided FIXME: I’m also counting tags on works that aren’t visible to the
+current user (drafts, restricted works)</p>
+          
 
-					
-					<div class="method-source-code"
-						id="most-popular-tags-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 208</span>
-208:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">most_popular_tags</span>(<span class="ruby-identifier">options</span> = {})
-209:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">all_tags</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">by_pseud</span>(<span class="ruby-keyword kw">self</span>).<span class="ruby-identifier">by_type</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:categories</span>]).<span class="ruby-identifier">canonical</span>
-210:       <span class="ruby-identifier">tags_with_count</span> = {}
-211:       <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span>
-212:         <span class="ruby-identifier">tags_with_count</span>[<span class="ruby-identifier">tag</span>] = <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">tag</span>}.<span class="ruby-identifier">size</span>
-213:       <span class="ruby-keyword kw">end</span>
-214:       <span class="ruby-identifier">all_tags</span> = <span class="ruby-identifier">tags_with_count</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span>,<span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">y</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">last</span> }
-215:       <span class="ruby-identifier">options</span>[<span class="ruby-value">:limit</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">all_tags</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">all_tags</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:limit</span>]<span class="ruby-operator">-</span><span class="ruby-value">1</span>)]
-216:     <span class="ruby-keyword kw">end</span>
-217:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
+          
+          <div class="method-source-code" id="most_popular_tags-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 208</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">most_popular_tags</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">all_tags</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">by_pseud</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">by_type</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:categories</span>]).<span class="ruby-identifier">canonical</span>
+    <span class="ruby-identifier">tags_with_count</span> = {}
+    <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">tags_with_count</span>[<span class="ruby-identifier">tag</span>] = <span class="ruby-identifier">all_tags</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">tag</span>}.<span class="ruby-identifier">size</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">all_tags</span> = <span class="ruby-identifier">tags_with_count</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span>,<span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">y</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">last</span> }
+    <span class="ruby-identifier">options</span>[<span class="ruby-value">:limit</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">all_tags</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">all_tags</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:limit</span>]<span class="ruby-operator">-</span><span class="ruby-value">1</span>)]
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- most_popular_tags-source -->
+          
+        </div>
 
-				
+        
 
-				
-			</div>
+        
+      </div><!-- most_popular_tags-method -->
 
-		
-			<div id="replace-me-with-default-method" class="method-detail ">
-				<a name="method-i-replace_me_with_default"></a>
+    
+      <div id="method-i-replace_me_with_default" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">replace_me_with_default</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-				<div class="method-heading">
-				
-					<span class="method-name">replace_me_with_default</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+        <div class="method-description">
+          
+          
+          
 
-				<div class="method-description">
-					
-					
-					
+          
+          <div class="method-source-code" id="replace_me_with_default-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 295</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">replace_me_with_default</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">creations</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">creation</span><span class="ruby-operator">|</span> <span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">creation</span>, <span class="ruby-keyword">self</span>.<span class="ruby-identifier">user</span>.<span class="ruby-identifier">default_pseud</span>) }
+  <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">blank?</span>
+  <span class="ruby-constant">Kudo</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">kudos</span>.<span class="ruby-identifier">blank?</span>
+  <span class="ruby-identifier">change_collections_membership</span>
+  <span class="ruby-identifier">change_gift_recipients</span>
+  <span class="ruby-identifier">change_challenge_participation</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">destroy</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- replace_me_with_default-source -->
+          
+        </div>
 
-					
-					<div class="method-source-code"
-						id="replace-me-with-default-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 295</span>
-295:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">replace_me_with_default</span>
-296:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">creations</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">creation</span><span class="ruby-operator">|</span> <span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">creation</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">user</span>.<span class="ruby-identifier">default_pseud</span>) }
-297:     <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">blank?</span>
-298:     <span class="ruby-constant">Kudo</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;pseud_id = #{self.user.default_pseud.id}&quot;</span>, <span class="ruby-node">&quot;pseud_id = #{self.id}&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">kudos</span>.<span class="ruby-identifier">blank?</span>
-299:     <span class="ruby-identifier">change_collections_membership</span>
-300:     <span class="ruby-identifier">change_gift_recipients</span>
-301:     <span class="ruby-identifier">change_challenge_participation</span>
-302:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">destroy</span>
-303:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
+        
 
-				
+        
+      </div><!-- replace_me_with_default-method -->
 
-				
-			</div>
+    
+      <div id="method-i-to_param" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">to_param</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-		
-			<div id="to-param-method" class="method-detail ">
-				<a name="method-i-to_param"></a>
+        <div class="method-description">
+          
+          
+          
 
-				<div class="method-heading">
-				
-					<span class="method-name">to_param</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+          
+          <div class="method-source-code" id="to_param-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 131</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_param</span>
+  <span class="ruby-identifier">name</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- to_param-source -->
+          
+        </div>
 
-				<div class="method-description">
-					
-					
-					
+        
 
-					
-					<div class="method-source-code"
-						id="to-param-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 131</span>
-131:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_param</span>
-132:     <span class="ruby-identifier">name</span>
-133:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
+        
+      </div><!-- to_param-method -->
 
-				
+    
+      <div id="method-i-unposted_works" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unposted_works</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-				
-			</div>
+        <div class="method-description">
+          
+          
+          
 
-		
-			<div id="unposted-works-method" class="method-detail ">
-				<a name="method-i-unposted_works"></a>
+          
+          <div class="method-source-code" id="unposted_works-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 219</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unposted_works</span>
+  <span class="ruby-ivar">@unposted_works</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>}, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'works.created_at DESC'</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- unposted_works-source -->
+          
+        </div>
 
-				<div class="method-heading">
-				
-					<span class="method-name">unposted_works</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+        
 
-				<div class="method-description">
-					
-					
-					
+        
+      </div><!-- unposted_works-method -->
 
-					
-					<div class="method-source-code"
-						id="unposted-works-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 219</span>
-219:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unposted_works</span>
-220:     <span class="ruby-ivar">@unposted_works</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>}, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'works.created_at DESC'</span>)
-221:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
+    
+      <div id="method-i-user_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">user_name</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-				
+        <div class="method-description">
+          
+          <p>For use with the work and chapter forms</p>
+          
 
-				
-			</div>
+          
+          <div class="method-source-code" id="user_name-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 127</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">user_name</span>
+   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">user</span>.<span class="ruby-identifier">login</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- user_name-source -->
+          
+        </div>
 
-		
-			<div id="user-name-method" class="method-detail ">
-				<a name="method-i-user_name"></a>
+        
 
-				<div class="method-heading">
-				
-					<span class="method-name">user_name</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+        
+      </div><!-- user_name-method -->
 
-				<div class="method-description">
-					
-					<p>
-For use with the work and chapter forms
-</p>
-					
+    
+      <div id="method-i-visible_recs_count" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">visible_recs_count</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-					
-					<div class="method-source-code"
-						id="user-name-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 127</span>
-127:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">user_name</span>
-128:      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">user</span>.<span class="ruby-identifier">login</span>
-129:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
+        <div class="method-description">
+          
+          <p>Gets the number of recs by this user</p>
+          
 
-				
+          
+          <div class="method-source-code" id="visible_recs_count-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 145</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">visible_recs_count</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">recs</span>.<span class="ruby-identifier">is_public</span>.<span class="ruby-identifier">size</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- visible_recs_count-source -->
+          
+        </div>
 
-				
-			</div>
+        
 
-		
-			<div id="visible-recs-count-method" class="method-detail ">
-				<a name="method-i-visible_recs_count"></a>
+        
+      </div><!-- visible_recs_count-method -->
 
-				<div class="method-heading">
-				
-					<span class="method-name">visible_recs_count</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
+    
+      <div id="method-i-visible_works_count" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">visible_works_count</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
 
-				<div class="method-description">
-					
-					<p>
-Gets the number of recs by this user
-</p>
-					
+        <div class="method-description">
+          
+          <p>Gets the number of works by this user that the current user can see</p>
+          
 
-					
-					<div class="method-source-code"
-						id="visible-recs-count-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 145</span>
-145:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">visible_recs_count</span>
-146:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">recs</span>.<span class="ruby-identifier">is_public</span>.<span class="ruby-identifier">size</span>
-147:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
+          
+          <div class="method-source-code" id="visible_works_count-source">
+            <pre><span class="ruby-comment"># File app/models/pseud.rb, line 136</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">visible_works_count</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">unhidden</span>.<span class="ruby-identifier">unrestricted</span>.<span class="ruby-identifier">count</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">unhidden</span>.<span class="ruby-identifier">count</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- visible_works_count-source -->
+          
+        </div>
 
-				
+        
 
-				
-			</div>
+        
+      </div><!-- visible_works_count-method -->
 
-		
-			<div id="visible-works-count-method" class="method-detail ">
-				<a name="method-i-visible_works_count"></a>
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
 
-				<div class="method-heading">
-				
-					<span class="method-name">visible_works_count</span><span
-						class="method-args">()</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-Gets the number of works by this user that the current user can see
-</p>
-					
-
-					
-					<div class="method-source-code"
-						id="visible-works-count-source">
-<pre>
-     <span class="ruby-comment cmt"># File app/models/pseud.rb, line 136</span>
-136:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">visible_works_count</span>
-137:     <span class="ruby-keyword kw">if</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
-138:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">unhidden</span>.<span class="ruby-identifier">unrestricted</span>.<span class="ruby-identifier">count</span>
-139:     <span class="ruby-keyword kw">else</span>
-140:       <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">unhidden</span>.<span class="ruby-identifier">count</span>
-141:     <span class="ruby-keyword kw">end</span>
-142:   <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-
-				
-			</div>
-
-		
-		</div>
-	
-
-	</div>
+</div><!-- documentation -->
 
 
-	<div id="rdoc-debugging-section-dump" class="debugging-section">
-	
-		<p>Disabled; run with --debug to generate this.</p>
-	
-	</div>
-
-	<div id="validator-badges">
-		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
-		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
-			Rdoc Generator</a> 1.1.6</small>.</p>
-	</div>
-
-</body>
-</html>
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
 
