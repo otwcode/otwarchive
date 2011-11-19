@@ -2,15 +2,19 @@
 
 # usage:
 =begin
-#RAILS_ENV=production rake db:schema:dump
-#rake db:schema:load
-rake db:drop
-rake db:create
-rake db:schema:load
-rails runner script/seed_restore.rb
-rake Tag:reset_filters
-rake Tag:reset_filter_counts
-rails runner script/create_admin.rb
+git fetch
+git fetch --tags
+git reset --hard `git tag | tail -1`
+RAILS_ENV=production bundle exec rake db:schema:dump
+bundle exec rake db:drop
+bundle exec rake db:create
+bundle exec rake db:schema:load
+bundle exec rails runner script/seed_restore.rb
+bundle exec rake Tag:reset_filters
+bundle exec rake Tag:reset_filter_counts
+bundle exec rake skins:load_site_skins
+bundle exec rails runner script/create_admin.rb
+# mysqldump seed_development > ~/seed.dump 
 =end
 
 BACKUPDIR = Rails.root.to_s + '/db/seed'
