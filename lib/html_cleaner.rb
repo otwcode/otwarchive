@@ -243,7 +243,7 @@ module HtmlCleaner
     out_html = out_html || ""
 
     # Convert double and triple br tags into paragraph breaks
-    if node.name == "br" && node.next_sibling && node.previous_sibling.name == "br" && node.previous_sibling.previous_sibling && node.previous_sibling.previous_sibling.name == "br"
+    if node.name == "br" && node.previous_sibling && node.previous_sibling.name == "br" && node.previous_sibling.previous_sibling && node.previous_sibling.previous_sibling.name == "br"
       out_html += (stack.close_paragraph_tags + "<p>&nbsp;</p>" + stack.open_paragraph_tags)
       return [stack, out_html]
     end
