@@ -7,7 +7,18 @@
 # <li><a href="">1</a></li>
 # <li><span class="current" title="current">2</span><li>
 # </ol>
-class PaginationListLinkRenderer < WillPaginate::ViewHelpers::LinkRenderer
+
+class PaginationListLinkRenderer < WillPaginate::ActionView::LinkRenderer
+
+  def to_html
+    html = pagination.map do |item|
+      item.is_a?(Fixnum) ?
+        page_number(item, @options[:remote]) :
+        send(item)
+    end.join(@options[:link_separator])
+
+    @options[:container] ? html_container(html) : html
+  end
 
   protected
 
@@ -15,9 +26,9 @@ class PaginationListLinkRenderer < WillPaginate::ViewHelpers::LinkRenderer
       tag(:li, "…", :class => "gap")
     end
 
-    def page_number(page)
+    def page_number(page, remote = nil)
       unless page == current_page
-        tag(:li, link(page, page, :rel => rel_value(page)))
+        tag(:li, link(page, page, {:rel => rel_value(page)}.merge(:"data-remote" => remote)))
       else
         tag(:li, tag(:span, page, :class => "current"))
       end
@@ -25,26 +36,25 @@ class PaginationListLinkRenderer < WillPaginate::ViewHelpers::LinkRenderer
 
     def previous_page
       num = @collection.current_page > 1 && @collection.current_page - 1
-      previous_or_next_page(num, @options[:previous_label], 'previous')
-    end
-    
-    def next_page
-      num = @collection.current_page < @collection.total_pages && @collection.current_page + 1
-      previous_or_next_page(num, @options[:next_label], 'next')
+      previous_or_next_page(num, @options[:previous_label], 'previous', @options[:remote])
     end
 
-    def previous_or_next_page(page, text, classname)
+    def next_page
+      num = @collection.current_page < @collection.total_pages && @collection.current_page + 1
+      previous_or_next_page(num, @options[:next_label], 'next', @options[:remote])
+    end
+
+    def previous_or_next_page(page, text, classname, remote = nil)
       if page
-        tag(:li, link(text, page), :class => classname, :title => classname)
+        tag(:li, link(text, page, {:"data-remote" => remote}), :class => classname, :title => classname)
       else
         tag(:li, text, :class => classname + ' disabled', :title => classname)
       end
     end
 
     def html_container(html)
-      tag(:h4, "Pages Navigation", :class => "landmark heading") + 
+      tag(:h4, "Pages Navigation", :class => "landmark heading") +
         tag(:ol, html, container_attributes.merge(:class => "navigation pagination actions", :role => "navigation", :title => "pagination"))
     end
 
 end
-

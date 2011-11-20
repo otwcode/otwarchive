@@ -608,7 +608,7 @@
 
           
           <div class="method-source-code" id="commentable_name-source">
-            <pre><span class="ruby-comment"># File app/models/admin_post.rb, line 30</span>
+            <pre><span class="ruby-comment"># File app/models/admin_post.rb, line 33</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">commentable_name</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title</span>
 <span class="ruby-keyword">end</span></pre>
@@ -638,7 +638,7 @@
 
           
           <div class="method-source-code" id="commentable_owners-source">
-            <pre><span class="ruby-comment"># File app/models/admin_post.rb, line 33</span>
+            <pre><span class="ruby-comment"># File app/models/admin_post.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">commentable_owners</span>
   <span class="ruby-keyword">begin</span>
       [<span class="ruby-constant">Admin</span>.<span class="ruby-identifier">find</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">admin_id</span>)]
@@ -672,7 +672,7 @@
 
           
           <div class="method-source-code" id="tag_list-source">
-            <pre><span class="ruby-comment"># File app/models/admin_post.rb, line 41</span>
+            <pre><span class="ruby-comment"># File app/models/admin_post.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_list</span>
   <span class="ruby-identifier">tags</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">name</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -702,7 +702,7 @@
 
           
           <div class="method-source-code" id="tag_list-3D-source">
-            <pre><span class="ruby-comment"># File app/models/admin_post.rb, line 45</span>
+            <pre><span class="ruby-comment"># File app/models/admin_post.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_list=</span>(<span class="ruby-identifier">list</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">tags</span> = <span class="ruby-identifier">list</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot;,&quot;</span>).<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> 
     <span class="ruby-constant">AdminPostTag</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">strip</span>, <span class="ruby-value">:language_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">language_id</span>, <span class="ruby-value">:post</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>)

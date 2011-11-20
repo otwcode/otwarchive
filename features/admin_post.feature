@@ -1,11 +1,11 @@
-@admin
+@admin @comments
 Feature: Admin posts
 
   Scenario: Make an admin post
   
   Given I am logged in as an admin
   When I make an admin post
-  Then I should see "AdminPost was successfully created."
+  Then I should see "Admin Post was successfully created."
   
   Scenario: Receive comment notifications for comments posted to an admin post
   
@@ -92,6 +92,6 @@ Feature: Admin posts
       And I fill in "content" with "I've taught the toaster to feel love."
       And I fill in "admin_post_tag_list" with "quotes, futurama"
       And I press "Post"
-    Then I should see "AdminPost was successfully created."
+    Then I should see "Admin Post was successfully created."
       And I should see "toaster" within ".admin"
       And I should see "futurama" within ".tags"

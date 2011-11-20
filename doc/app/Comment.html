@@ -762,7 +762,7 @@
           <div class="method-source-code" id="check_for_spam-source">
             <pre><span class="ruby-comment"># File app/models/comment.rb, line 23</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_for_spam</span>
-  <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">t</span>(<span class="ruby-string">'invalid_spam'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This comment looks like spam to our system, sorry! Please try again, or create an account to comment.&quot;</span>)) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_for_spam?</span>
+  <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;This comment looks like spam to our system, sorry! Please try again, or create an account to comment.&quot;</span>)) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">check_for_spam?</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- check_for_spam-source -->
           

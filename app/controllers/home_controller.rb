@@ -18,6 +18,11 @@ class HomeController < ApplicationController
     render :action => "site_map", :layout => "application"
   end
   
+  # donate
+  def donate
+    render :action => "donate", :layout => "application"
+  end
+  
   def first_login_help
     render :action => "first_login_help", :layout => false
   end

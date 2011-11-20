@@ -47,13 +47,13 @@ Feature: Leave kudos
  # Then I should see "You can't leave kudos for yourself. :)"
 
   Scenario: kudos on a multi-chapter work
-  When I am logged in as "myname1" with password "something"
+  When I am logged in as "myname1"
     And I post the chaptered work "Epic Saga"
     And I follow "Add Chapter"
     And I fill in "content" with "third chapter is a draft"
     And I press "Preview"
     And I log out
-  When I am logged in as "myname3" with password "something"
+  When I am logged in as "myname3"
     And I view the work "Epic Saga"
     And I press "Kudos ♥"
   Then I should see "myname3 left kudos on this work!"
@@ -62,7 +62,7 @@ Feature: Leave kudos
   When I follow "Entire Work"
   Then I should see "myname3 left kudos on this work!"
   When I log out
-    And I am logged in as "myname1" with password "something"
+    And I am logged in as "myname1"
     And I view the work "Epic Saga"
   Then I should see "myname3 left kudos on this work!"
   When I follow "Next Chapter"
@@ -71,7 +71,7 @@ Feature: Leave kudos
   Then I should not see "myname3 left kudos on this work!"
   When I follow "Entire Work"
   Then I should see "myname3 left kudos on this work!"
-  
+
   Scenario: deleting pseud and user after creating kudos should orphan them
 
   When I am logged in as "myname3" with password "something"
@@ -90,4 +90,21 @@ Feature: Leave kudos
     And "issue 2198" is fixed
   # Then I should see "a guest left kudos on this work!"
 
+  Scenario: redirection when kudosing on a middle chapter, with default preferences
 
+  Given the chaptered work setup
+    And I am logged in as a random user
+  When I view the work "BigBang"
+    And I view the 2nd chapter
+    And I press "Kudos ♥"
+  Then I should see "Chapter 2" within ".title"
+    And I should not see "Chapter 1" within ".title"
+
+  Scenario: redirection when kudosing on a middle chapter, with default preferences but in temporary view full mode
+
+  Given the chaptered work setup
+    And I am logged in as a random user
+  When I view the work "BigBang" in full mode
+    And I press "Kudos ♥"
+  Then I should see "Chapter 2" within ".title"
+    And I should see "Chapter 3" within ".title"

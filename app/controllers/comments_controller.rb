@@ -65,7 +65,7 @@ class CommentsController < ApplicationController
 
   def index
     if !@commentable.nil?
-      @comments = @commentable.comments
+      @comments = @commentable.comments.page(params[:page])
       if @commentable.class == Comment
         # we link to the parent object at the top
         @commentable = @commentable.ultimate_parent
@@ -92,18 +92,21 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
-      case @commentable.class.name
-      when /Work/
-        @name = @commentable.title
-      when /Chapter/
-        @name = @commentable.work.title
-      when /Tag/
-        @name = @commentable.name
-      when /AdminPost/
-        @name = @commentable.title
-      when /Comment/
-        @name = "Previous Comment"
-      end
+      @name = 
+        case @commentable.class.name
+          when /Work/
+            @commentable.title
+          when /Chapter/
+            @commentable.work.title
+          when /Tag/
+            @commentable.name
+          when /AdminPost/
+            @commentable.title
+          when /Comment/
+            ts("Previous Comment")
+          else
+            @commentable.class.name
+        end
     end
   end
 
@@ -139,7 +142,7 @@ class CommentsController < ApplicationController
           respond_to do |format|
             format.html do
               if request.referer.match(/inbox/)
-                redirect_to user_inbox_path(current_user)
+                redirect_to user_inbox_path(current_user, :filters => params[:filters], :page => params[:page])
               elsif request.referer.match(/new/)
                 # came here from the new comment page, probably via download link
                 # so go back to the comments page instead of reloading full work
@@ -149,7 +152,7 @@ class CommentsController < ApplicationController
                 # so go back to the comments page instead of reloading full work
                 redirect_to comment_path(@comment)
               else
-                redirect_to_comment(@comment)
+                redirect_to_comment(@comment, {:view_full_work => (params[:view_full_work] == "true"), :page => params[:page]})
               end
             end
           end
@@ -216,7 +219,7 @@ class CommentsController < ApplicationController
   end
 
   def show_comments
-    @comments = @commentable.comments
+    @comments = @commentable.comments.paginate(:page => params[:page])
     respond_to do |format|
       format.html do
         # if non-ajax it could mean sudden javascript failure OR being redirected from login
@@ -225,6 +228,7 @@ class CommentsController < ApplicationController
         options[:add_comment] = params[:add_comment] if params[:add_comment]
         options[:add_comment_reply_id] = params[:add_comment_reply_id] if params[:add_comment_reply_id]
         options[:view_full_work] = params[:view_full_work] if params[:view_full_work]
+        options[:page] = params[:page]
         redirect_to_all_comments(@commentable, options)
       end
       format.js
@@ -260,6 +264,8 @@ class CommentsController < ApplicationController
         options = {:show_comments => true}
         options[:controller] = @commentable.class.to_s.underscore.pluralize
         options[:anchor] = "comment_#{params[:id]}"
+        options[:page] = params[:page]
+        options[:view_full_work] = params[:view_full_work]
         if @thread_view
           options[:id] = @thread_root
           options[:add_comment_reply_id] = params[:id]
@@ -353,7 +359,8 @@ class CommentsController < ApplicationController
       # display the comment's direct parent (and its associated thread)
       redirect_to(url_for(default_options.merge(options)))
     else
-      redirect_to_all_comments(comment.ultimate_parent, options.merge({:show_comments => true, :anchor => "comment_#{comment.id}"}))
+      # need to redirect to the specific chapter; redirect_to_all will then retrieve full work view if applicable
+      redirect_to_all_comments(comment.parent, options.merge({:show_comments => true, :anchor => "comment_#{comment.id}"}))
     end
   end
 
@@ -362,20 +369,24 @@ class CommentsController < ApplicationController
     options = default_options.merge(options)
     if commentable.is_a?(Tag)
       redirect_to comments_path(:tag_id => commentable.name,
-      :add_comment => options[:add_comment],
-      :add_comment_reply_id => options[:add_comment_reply_id],
-      :delete_comment_id => options[:delete_comment_id],
-      :anchor => options[:anchor])
+                  :add_comment => options[:add_comment],
+                  :add_comment_reply_id => options[:add_comment_reply_id],
+                  :delete_comment_id => options[:delete_comment_id],
+                  :anchor => options[:anchor])
     else
+      if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
+        commentable = commentable.work
+      end
       redirect_to :controller => commentable.class.to_s.underscore.pluralize,
-      :action => :show,
-      :id => commentable.id,
-      :show_comments => options[:show_comments],
-      :add_comment => options[:add_comment],
-      :add_comment_reply_id => options[:add_comment_reply_id],
-      :delete_comment_id => options[:delete_comment_id],
-      :view_full_work => options[:view_full_work],
-      :anchor => options[:anchor]
+                  :action => :show,
+                  :id => commentable.id,
+                  :show_comments => options[:show_comments],
+                  :add_comment => options[:add_comment],
+                  :add_comment_reply_id => options[:add_comment_reply_id],
+                  :delete_comment_id => options[:delete_comment_id],
+                  :view_full_work => options[:view_full_work],
+                  :anchor => options[:anchor],
+                  :page => options[:page]
     end
   end
 end

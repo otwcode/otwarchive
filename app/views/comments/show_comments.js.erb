@@ -1,7 +1,9 @@
 /* replace the "Comments" link with "Hide Comments" */
 $j("#show_comments_link").html("<%= escape_javascript(hide_comments_link(@commentable)) %>");
 /* load up the comments in their placeholder div */
-$j("#comments_placeholder").html("<%= escape_javascript(render :partial => "comments/comment_thread", :locals => {:comments => @comments, :depth => 0}) %>");
+$j("#comments_placeholder").html("<%= escape_javascript(will_paginate(@comments, {:remote => true})) %>");
+$j("#comments_placeholder").append("<%= escape_javascript(render "comments/comment_thread", {:comments => @comments, :depth => 0}) %>");
 $j("#comments_placeholder").append("</ol>");
+$j("#comments_placeholder").append("<%= escape_javascript(will_paginate(@comments, {:remote => true})) %>");
 /* roll down the comments */
 $j("#comments_placeholder").slideDown();
