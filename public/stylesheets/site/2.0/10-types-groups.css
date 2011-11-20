@@ -50,7 +50,7 @@ li.relationships
         { background:#eee}
 .series.footnote    
         { font-size:100%; float:none }
-.kudos  { background:url("/images/skins/iconsets/default/kudos.png") bottom left no-repeat; padding:25px 0 25px 55px; margin:0}
+.kudos  { background:url("/images/skins/iconsets/default/kudos.png") no-repeat left center; padding: 0.5em 0.5em 0.5em 60px; margin: 2em 0; min-height: 50px;}
 .icon   { background:url("/images/skins/iconsets/default/icon_user.png") #900 top left no-repeat; height:100px; width:100px; margin:0}
 .icon a { border:0;}
 .mods li, dl.stats dt, dl.stats dd
