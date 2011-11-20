@@ -6,18 +6,25 @@
   <h4 class="landmark heading"><%= ts("Name, Order and Date") %></h4>
   <dl>
     <dt><%= f.label :title, ts("Chapter title") %> <%= link_to_help "chapter-title" %></dt>
-    <dd><%= f.text_field :title, :class => "observe_textlength", :live => true %>
-    <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
+    <dd>
+      <%= f.text_field :title, :class => "observe_textlength" %>
+      <%= live_validation_for_field('chapter_title', :presence => false, :maximum_length => ArchiveConfig.TITLE_MAX) %>
+      <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
     </dd>
   
     <dt><%= f.label :position, ts("Chapter number") %></dt>
-    <dd><p><%= f.text_field :position, :class => "number" %> 
-    <%= f.label :wip_length, ts("of"), :title => ts("of total chapters") %> 
-    <%= f.text_field :wip_length, :class => "number" %> 
-    </p></dd>
+    <dd>
+      <p>
+        <%= f.text_field :position, :class => "number" %> 
+        <%= f.label :wip_length, ts("of"), :title => ts("of total chapters") %> 
+        <%= f.text_field :wip_length, :class => "number" %> 
+      </p>
+    </dd>
     <dt id="managePublicationDate">
     <%= f.label :published_at, ts("Chapter publication date") %>  <%= link_to_help "backdating-help" %></dt>
-    <dd class="datetime"><%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => @work.default_date, :order => [:day, :month, :year] %> </dd>
+    <dd class="datetime">
+      <%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => @work.default_date, :order => [:day, :month, :year] %>
+    </dd>
   </dl>
 </fieldset>
 
@@ -30,7 +37,8 @@
 
       <dt class="summary"><%= f.label :summary, ts("Chapter summary") %></dt>
       <dd class="summary">
-        <%= f.text_area :summary, :rows => 4, :cols => 60, :live => true, :class => "observe_textlength" %>
+        <%= f.text_area :summary, :rows => 4, :cols => 60, :class => "observe_textlength" %>
+        <%= live_validation_for_field('chapter_summary', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
         <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) %>
       </dd>
       
@@ -45,7 +53,9 @@
    <div id="toggleText">
  		<p id="toggleText" role="menu">
        <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
-       <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
+       <span id="richTextNotes" style="display: none">
+        <%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %>
+      </span>
        <span class="rtf-html-switch actions">
          <span><a id="richTextLink" href="#"><%= ts('Rich text') %></a></span>
          <span><a id="plainTextLink" style="display:none;" href="#"><%= ts('HTML') %></a></span>
@@ -73,8 +83,9 @@
   
   <div class="rtf-html-field">
     <%= f.text_area :content, :class => "mce-editor", :id => "content", :class => "observe_textlength" %>
-        <%= live_validation_for_field('content', 
-          :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
+    <%= live_validation_for_field('content', 
+          :maximum_length => ArchiveConfig.CONTENT_MAX, 
+          :minimum_length => ArchiveConfig.CONTENT_MIN, 
           :tooLongMessage => ts("We salute your ambition! But sadly the content must be less than %{max} characters long. (Maybe you want to create a multi-chaptered work?)", :max => ArchiveConfig.CONTENT_MAX.to_s),
           :tooShortMessage => ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.", :min => ArchiveConfig.CONTENT_MIN.to_s),
           :failureMessage => ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.", :min => ArchiveConfig.CONTENT_MIN.to_s))
