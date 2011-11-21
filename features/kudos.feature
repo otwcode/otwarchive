@@ -5,22 +5,23 @@ Feature: Leave kudos
 
   Background:
   Given the following activated users exist
-    | login          | password    | email           |
-    | myname1        | something   | myname1@foo.com |
-    | myname2        | something   | myname2@foo.com |
-    | myname3        | something   | myname3@foo.com |
-    And I am logged in as "myname1" with password "something"
+    | login          | email           |
+    | myname1        | myname1@foo.com |
+    | myname2        | myname2@foo.com |
+    | myname3        | myname3@foo.com |
+    And I am logged in as "myname1"
     And I post the work "Awesome Story"
     And I log out
 
 
   Scenario: post kudos
 
-  When I am logged in as "myname2" with password "something"
+  When I am logged in as "myname2"
     And all emails have been delivered
     And I view the work "Awesome Story"
-  Then I should not see "left kudos on this work!"
+  Then I should not see "left kudos on this work"
   When I press "Kudos ♥"
+  # Note: this step cannot be put into the steps file because of the heart character
   Then I should see "myname2 left kudos on this work!"
     And 1 email should be delivered to "myname1@foo.com"
     And the email should contain "myname2"
@@ -56,29 +57,17 @@ Feature: Leave kudos
     And I follow "Add Chapter"
     And I fill in "content" with "third chapter is a draft"
     And I press "Preview"
-    And I log out
   When I am logged in as "myname3"
     And I view the work "Epic Saga"
     And I press "Kudos ♥"
-  Then I should see "myname3 left kudos on this work!"
-  When I follow "Next Chapter"
-  Then I should see "myname3 left kudos on this work!"
-  When I follow "Entire Work"
-  Then I should see "myname3 left kudos on this work!"
-  When I log out
-    And I am logged in as "myname1"
+  Then I should see kudos on every chapter
+  When I am logged in as "myname1"
     And I view the work "Epic Saga"
-  Then I should see "myname3 left kudos on this work!"
-  When I follow "Next Chapter"
-  Then I should see "myname3 left kudos on this work!"
-  When I follow "Next Chapter"
-  Then I should not see "myname3 left kudos on this work!"
-  When I follow "Entire Work"
-  Then I should see "myname3 left kudos on this work!"
+  Then I should see kudos on every chapter but the draft
 
   Scenario: deleting pseud and user after creating kudos should orphan them
 
-  When I am logged in as "myname3" with password "something"
+  When I am logged in as "myname3"
     And "myname3" creates the default pseud "foobar"
     And I view the work "Awesome Story"
     And I press "Kudos ♥"
