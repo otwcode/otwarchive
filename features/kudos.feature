@@ -19,7 +19,7 @@ Feature: Leave kudos
   When I am logged in as "myname2" with password "something"
     And all emails have been delivered
     And I view the work "Awesome Story"
-  Then I should not see "left kudos on this work."
+  Then I should not see "left kudos on this work!"
   When I press "Kudos ♥"
   Then I should see "myname2 left kudos on this work!"
     And 1 email should be delivered to "myname1@foo.com"
