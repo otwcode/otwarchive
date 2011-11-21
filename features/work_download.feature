@@ -180,3 +180,9 @@ Feature: Download a work
   When I go to the work page with title à ø something
   When I follow "PDF"
 
+Scenario: Download chaptered works as HTML
+
+  Given the chaptered work "Bazinga"
+  When I view the work "Bazinga"
+    And I follow "HTML"
+  Then I should see "Chapter 2"
