@@ -108,6 +108,13 @@ describe HtmlCleaner do
         result.should == "don't <#{tag}> close"
       end
     end
+
+    %w(col colgroup dl h1 h2 h3 h4 h5 h6 hr ol p pre table ul).each do |tag|
+      it "should not touch #{tag} tags that don't go inside p tags" do
+        result = close_unclosed_tag("don't <#{tag}> close", tag, 1)
+        result.should == "don't <#{tag}> close"
+      end
+    end
     
     it "should close tag before next opening tag" do
       result = close_unclosed_tag("some <i>more<s>text</s>", "i", 1)
@@ -236,8 +243,8 @@ describe HtmlCleaner do
       html = """
       <table>
         <tr>
-          <td>A</td>
-          <td>B</td>
+          <th>A</th>
+          <th>B</th>
         </tr>
         <tr>
           <td>C</td>
@@ -248,8 +255,8 @@ describe HtmlCleaner do
       
       result = add_paragraphs_to_text(html)
       doc = Nokogiri::XML.fragment(result)
-      doc.xpath("./table/tr[1]/td[1]").children.to_s.strip.should == "A" 
-      doc.xpath("./table/tr[1]/td[2]").children.to_s.strip.should == "B" 
+      doc.xpath("./table/tr[1]/th[1]").children.to_s.strip.should == "A" 
+      doc.xpath("./table/tr[1]/th[2]").children.to_s.strip.should == "B" 
       doc.xpath("./table/tr[2]/td[1]").children.to_s.strip.should == "C" 
       doc.xpath("./table/tr[2]/td[2]").children.to_s.strip.should == "D" 
       doc.xpath(".//br").should be_empty
@@ -465,6 +472,38 @@ describe HtmlCleaner do
       result = add_paragraphs_to_text("<i><p>foo</p><p>bar</p></i>")
       doc = Nokogiri::XML.fragment(result)
       doc.xpath(".//i/p").should be_empty
+    end
+
+    it "should deal with br tags at the beginning" do
+      result = add_paragraphs_to_text("<br/></br>text")
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath(".//p").children.to_s.strip.should == "text" 
+    end
+
+
+    it "should handle table tags that don't need closing" do
+      html = """
+      <table> 
+        <colgroup align=\"left\"><col width=\"20\"></colgroup>
+        <colgroup align=\"right\">
+        <tr> 
+          <th>A</th> 
+          <th>B</th> 
+        </tr> 
+        <tr> 
+          <td>C</td>
+          <td>D</td>
+        </tr>
+      </table>
+     """
+      result = add_paragraphs_to_text(html)
+      doc = Nokogiri::XML.fragment(result)
+      doc.xpath("./table/colgroup[@align='left']/col[@width='20']").size.should == 1
+      doc.xpath("./table/colgroup[@align='right']").size.should == 1
+      doc.xpath("./table/tr[1]/th[1]").children.to_s.strip.should == "A" 
+      doc.xpath("./table/tr[1]/th[2]").children.to_s.strip.should == "B" 
+      doc.xpath("./table/tr[2]/td[1]").children.to_s.strip.should == "C" 
+      doc.xpath("./table/tr[2]/td[2]").children.to_s.strip.should == "D" 
     end
 
   end  

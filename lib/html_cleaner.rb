@@ -317,6 +317,7 @@ module HtmlCleaner
   # comes first
   def close_unclosed_tag(text, tag, line_number)
     return text if self_closing_tag?(tag)
+    return text unless put_inside_p_tag?(tag)
     line_number = line_number.to_i
     lines = text.lines.to_a
     pattern = /(^.*<#{tag}\s*.*?>.*?)($|<\/?\w+.*?\/?>)/
@@ -325,11 +326,12 @@ module HtmlCleaner
   end
 
   def add_paragraphs_to_text(text)
-
+    puts "======"
     # By default, Nokogiri closes unclosed tags very late, often at
     # the end of the document. We want runaway tags closed at the end
     # of the line
     doc = Nokogiri::XML.parse("<myroot>#{text}</myroot>")
+    puts doc
     doc.errors.each do |error|
       match = error.message.match(/Premature end of data in tag (\w+) line (\d+)/)
       text = close_unclosed_tag(text, match[1], match[2]) if match
@@ -338,10 +340,11 @@ module HtmlCleaner
       text = close_unclosed_tag(text, match[1], match[2]) if match
     end
 
+    puts text
     # Adding paragraphs in place of linebreaks
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
     out_html = traverse_nodes(doc.at_css("myroot"))[1]
-
+    puts out_html
     # Temove empty paragraphs
     out_html.gsub!(/<p>\s*?<\/p>/, "")
     out_html =  Nokogiri::HTML.parse(out_html).at_css("myroot").children.to_xhtml
