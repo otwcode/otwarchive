@@ -14,13 +14,13 @@ class ReadingsController < ApplicationController
     if params[:show] == 'to-read'
       @readings = @readings.where(:toread => true)
     end
-    @readings = @readings.paginate(:all, :order => "last_viewed DESC", :page => params[:page])
+    @readings = @readings.order("last_viewed DESC").page(params[:page])
   end
 
   def destroy
     @reading = @user.readings.find(params[:id])
     @reading.destroy
-    flash[:notice] = t('story_deleted', :default => 'Work deleted from your history.')
+    flash[:notice] = ts("Work deleted from your history.")
     redirect_to user_readings_url(current_user)
   end
 
@@ -29,10 +29,10 @@ class ReadingsController < ApplicationController
        begin
          reading.destroy
        rescue
-         @errors << t('destroy_multiple.deletion_failed', :default => "There were problems deleting your history.")
+         @errors << ts("There were problems deleting your history.")
        end
      end
-    flash[:notice] = t('history_deleted', :default => 'Your history is now cleared.')
+    flash[:notice] = ts("Your history is now cleared.")
     redirect_to user_readings_url(current_user)
   end
 
@@ -41,7 +41,7 @@ class ReadingsController < ApplicationController
   # checks if user has history enabled and redirects to preferences if not, so they can potentially change it
   def check_history_enabled
     unless current_user.preference.history_enabled?
-      flash[:notice] = t('reading_disabled', :default => "You have reading history disabled in your preferences. Change it below if you'd like us to keep track of it.")
+      flash[:notice] = ts("You have reading history disabled in your preferences. Change it below if you'd like us to keep track of it.")
       redirect_to user_preferences_path(current_user)
     end
   end
