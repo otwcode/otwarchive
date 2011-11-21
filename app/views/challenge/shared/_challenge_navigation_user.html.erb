@@ -1,6 +1,6 @@
 <!-- added to the navigation controls for the collection. enclose items in list elements. @collection is defined here but @challenge may not be.  -->
 <% collection ||= @collection %>
-<% if collection.challenge.signup_open %>
+<% if collection.challenge && collection.challenge.signup_open %>
   <% if logged_in? %>
     <% if (@challenge_signup = ChallengeSignup.in_collection(collection).by_user(current_user).first) %>
       <li><%= link_to ts("Edit Signup"), edit_collection_signup_path(collection, @challenge_signup) %></li>
