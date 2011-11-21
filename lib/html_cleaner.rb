@@ -38,12 +38,16 @@ module HtmlCleaner
       flatten.include?("p")
     end
 
+    def ignore_tag?(tag)
+      ["text", "myroot", "#cdata-section"].include?(tag)
+    end
+
     def open_paragraph_tags
       result = ""
       each do |tags| 
         tags.each do |tag, attributes|
           next if result == "" && tag != "p"
-          next if tag == "text" || tag == "myroot"
+          next if ignore_tag?(tag)
           result += open_tag(tag, attributes)
         end
       end
@@ -55,7 +59,7 @@ module HtmlCleaner
       result = ""
       reverse.each do |tags| 
         tags.reverse.each do |tag, attributes|
-          next if tag == "text" || tag == "myroot"
+          next if ignore_tag?(tag)
           result += close_tag(tag, attributes)
           return result if tag == "p"
         end
@@ -65,7 +69,7 @@ module HtmlCleaner
     def close_and_pop_last
       result = ""
       pop.reverse.each do |tag, attributes|
-        next if tag == "text" || tag == "myroot"
+        next if ignore_tag?(tag)
         result += "</#{tag}>"
       end
       return result
@@ -161,6 +165,7 @@ module HtmlCleaner
       end   
       value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(value)), 
                              Sanitize::Config::ARCHIVE.merge(:transformers => transformers))
+      value = Nokogiri::HTML.fragment(value).to_xhtml
     else
       # clean out all tags
       value = Sanitize.clean(fix_bad_characters(value))
@@ -217,7 +222,8 @@ module HtmlCleaner
   # Tags that need to go inside p tags
   def put_inside_p_tag?(tag)
     %w(a abbr acronym address b big cite code del dfn em i ins
-       kbd q s samp small span strike strong sub sup tt u var).include?(tag)
+       kbd q s script samp small span strike strong style sub
+       sup tt u var).include?(tag)
   end
 
   # Tags that can't be inside p tags
@@ -270,7 +276,7 @@ module HtmlCleaner
       return [stack, out_html + node.to_s]
     end
 
-    if !node.text?
+    if !node.text? && !node.cdata?
       out_html += stack.add_p if put_inside_p_tag?(node.name) && !stack.inside_paragraph?
 
       stack << [[node.name, Hash[*(node.attribute_nodes.map { |n| [n.name, n.value] }.flatten)]]]
@@ -326,12 +332,10 @@ module HtmlCleaner
   end
 
   def add_paragraphs_to_text(text)
-    puts "======"
     # By default, Nokogiri closes unclosed tags very late, often at
     # the end of the document. We want runaway tags closed at the end
     # of the line
     doc = Nokogiri::XML.parse("<myroot>#{text}</myroot>")
-    puts doc
     doc.errors.each do |error|
       match = error.message.match(/Premature end of data in tag (\w+) line (\d+)/)
       text = close_unclosed_tag(text, match[1], match[2]) if match
@@ -340,17 +344,15 @@ module HtmlCleaner
       text = close_unclosed_tag(text, match[1], match[2]) if match
     end
 
-    puts text
     # Adding paragraphs in place of linebreaks
     doc = Nokogiri::HTML.fragment("<myroot>#{text}</myroot>")
     out_html = traverse_nodes(doc.at_css("myroot"))[1]
-    puts out_html
-    # Temove empty paragraphs
+    # Remove empty paragraphs
     out_html.gsub!(/<p>\s*?<\/p>/, "")
-    out_html =  Nokogiri::HTML.parse(out_html).at_css("myroot").children.to_xhtml
-    return out_html
+    out_html.gsub!(/(\A<myroot>)|(<\/myroot>\Z)/, "")
+    out_html
   end
-  
+
   
   ### STRIPPING FOR DISPLAY ONLY
   # Regexps for stripping particular tags and attributes for display.
