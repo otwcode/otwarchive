@@ -156,7 +156,8 @@ Feature: Sanitizing HTML
   Then I should see "Preview"
     And I should see "CDATA"
     And I should not find "SCRIPT"
-    And I should see "alert(/XSS/.source)"
+#    And show me the main content
+    And I should not see "alert("
   When I press "Edit"
     And I fill in "content" with `\";alert('XSS');//`
     And I press "Preview"

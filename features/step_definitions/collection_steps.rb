@@ -7,7 +7,6 @@ Given /^mod1 lives in Alaska$/ do
   #'
   When %{I select "(GMT-09:00) Alaska" from "preference_time_zone"}
     And %{I press "Update"}
-  Then %{I should see "Your preferences were successfully updated."}
 end
 
 Given /^I have (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
@@ -22,7 +21,6 @@ Given /^I have (?:a|the) hidden collection "([^\"]*)" with name "([^\"]*)"$/ do 
   When %{I check "This collection is unrevealed"}
   And %{I submit}
 
-  Then %{I should see "Collection was successfully created."}
   When "I am logged out"
 end
 
@@ -32,7 +30,6 @@ Given /^I have (?:an|the) anonymous collection "([^\"]*)" with name "([^\"]*)"$/
   When %{I check "This collection is anonymous"}
   And %{I submit}
 
-  Then %{I should see "Collection was successfully created."}
   When "I am logged out"
 end
 
@@ -46,7 +43,6 @@ Given /^I have a moderated collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do 
   When %{I check "This collection is moderated"}
   And %{I submit}
 
-  Then %{I should see "Collection was successfully created."}
   When "I am logged out"
 end
 
@@ -60,7 +56,6 @@ Given /^I have a closed collection "([^\"]*)"(?: with name "([^\"]*)")?$/ do |ti
   When %{I check "This collection is closed"}
   And %{I submit}
 
-  Then %{I should see "Collection was successfully created."}
   When "I am logged out"
 end
 
@@ -89,7 +84,6 @@ end
 When /^I create (?:a|the) collection "([^"]*)"(?: with name "([^"]*)")?$/ do |title, name|
   When %{I set up the collection "#{title}" with name "#{name}"}
   And %{I submit}
-  Then %{I should see "Collection was successfully created."}
 end
 
 When /^I sort by fandom$/ do

@@ -26,9 +26,10 @@ Feature: Prompt Meme Challenge
     And I press "Claim"
   Then I should see "New claim made"
     And I follow "Fulfill"
-  Then I should see "GhostSoup" in the "Fandoms" input
+  # Then I should see "GhostSoup" in the "Fandoms" input # feature was removed
+    And I fill in "Fandoms" with "GhostSoup"
     And I should see "promptcollection" in the "work_collection_names" input
-    And the "The Kissing Game (Anonymous) -  - GhostSoup" checkbox should be checked
+    And the "Untitled Prompt in The Kissing Game (Anonymous)" checkbox should be checked
     And the "work_recipients" field should not contain "myname1"
     And I fill in "Work Title" with "Kinky Story"
     And I fill in "content" with "Story written for your kinks, oh mystery reader!"
