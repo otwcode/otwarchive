@@ -31,7 +31,7 @@ li.blurb:after
 .blurb h4 a:link,.blurb h4 img 
         { color: #900; vertical-align: bottom }
 .blurb .header p.notice, .blurb ul.series
-        { margin: 0.643em 0 0 0}
+        { margin: 0.875em 0 0 0}
 .blurb .heading
         { display: block;}
 .item .blurb .header
