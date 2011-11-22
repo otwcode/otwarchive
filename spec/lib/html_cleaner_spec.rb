@@ -139,6 +139,249 @@ describe HtmlCleaner do
   end
 
 
+  describe "sanitize_value" do
+
+    describe ":content" do
+
+      it "should keep html" do
+        value = "<em>hello</em> <blockquote>world</blockquote>"
+        result = sanitize_value(:content, value)
+        doc = Nokogiri::HTML.fragment(result)
+        doc.xpath(".//em").children.to_s.strip.should == "hello"
+        doc.xpath(".//blockquote").children.to_s.strip.should == "world"
+      end
+
+      ["'';!--\"<XSS>=&{()}",
+       '<XSS STYLE="behavior: url(xss.htc);">'
+      ].each do |value|
+        it "should strip xss tags: #{value}" do
+          result = sanitize_value(:content, value)
+          result.should_not =~ /xss/i
+        end
+      end
+
+      ["<SCRIPT SRC=http://ha.ckers.org/xss.js></SCRIPT>",
+       '<<SCRIPT>alert("XSS");//<</SCRIPT>',
+       "<SCRIPT SRC=http://ha.ckers.org/xss.js?<B>",
+       "<SCRIPT SRC=//ha.ckers.org/.j>",
+       "<SCRIPT>alert(/XSS/.source)</SCRIPT>",
+       '</TITLE><SCRIPT>alert("XSS");</SCRIPT>',
+       '<SCRIPT SRC="http://ha.ckers.org/xss.jpg"></SCRIPT>'
+      ].each do |value|
+        it "should strip script tags: #{value}" do
+          result = sanitize_value(:content, value)
+          result.should_not =~ /script/i
+          result.should_not =~ /ha.ckers.org/
+        end
+      end
+
+      ["\\\";alert('XSS');//",
+       "xss:expr/*blah*/ession(alert('XSS'))",
+       "xss:expression(alert('XSS'))"
+       ].each do |value|
+        it "should keep text: #{value}" do
+          result = sanitize_value(:content, value)
+          result.should =~ /alert\('XSS'\)/
+        end
+      end
+
+      it "should strip iframe tags" do
+        value = "<iframe src=http://ha.ckers.org/scriptlet.html <"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /iframe/i
+          result.should_not =~ /ha.ckers.org/
+      end
+
+      ["<IMG SRC=\"javascript:alert('XSS');\">",
+       "<IMG SRC=JaVaScRiPt:alert('XSS')>",
+       "<IMG SRC=javascript:alert(String.fromCharCode(88,83,83))>",
+       "<IMG SRC=&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#39;&#41;>",
+       "<IMG SRC=&#0000106&#0000097&#0000118&#0000097&#0000115&#0000099&#0000114&#0000105&#0000112&#0000116&#0000058&#0000097&#0000108&#0000101&#0000114&#0000116&#0000040&#0000039&#0000088&#0000083&#0000083&#0000039&#0000041>",
+       "<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>",
+       "<IMG SRC=\" &#14;  javascript:alert('XSS');\">",
+       "<IMG SRC=\"javascript:alert('XSS')\"",
+       "<INPUT TYPE=\"IMAGE\" SRC=\"javascript:alert('XSS');\">"
+      ].each do |value|
+        
+        it "should strip javascript in img src attribute: #{value[0..40]}" do
+          result = sanitize_value(:content, value)
+          result.should_not =~ /xss/i
+          result.should_not =~ /javascript/i
+        end
+      end
+
+      ["<IMG SRC=\"jav	ascript:alert('XSS');\">",
+       "<IMG SRC=\"jav&#x09;ascript:alert('XSS');\">",
+       "<IMG SRC=\"jav&#x0A;ascript:alert('XSS');\">",
+       "<IMG SRC=\"jav&#x0D;ascript:alert('XSS');\">",
+      ].each do |value|
+        it "should strip javascript in img src attribute: #{value[0..40]}" do
+          result = sanitize_value(:content, value)
+          result.should_not =~ /javascript/i
+          result.should =~ /jav%/i
+        end
+      end
+       
+      ['<META HTTP-EQUIV="Link" Content="<http://ha.ckers.org/xss.css>; REL=stylesheet">',
+       "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0;url=javascript:alert('XSS');\">",
+       '<META HTTP-EQUIV="refresh" CONTENT="0;url=data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K">',
+       "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0; URL=http://;URL=javascript:alert('XSS');\">",
+       "<META HTTP-EQUIV=\"Set-Cookie\" Content=\"USERID=&lt;SCRIPT&gt;alert('XSS')&lt;/SCRIPT&gt;\">"
+      ].each do |value|
+        it "should strip xss in meta tags: #{value[0..40]}" do
+          result = sanitize_value(:content, value)
+          result.should_not =~ /javascript/i
+          result.should_not =~ /xss/i
+        end
+      end
+       
+      it "should strip xss inside tags" do
+        value = '<IMG """><SCRIPT>alert("XSS")</SCRIPT>">'
+        result = sanitize_value(:content, value)
+        result.should_not =~ /script/i
+      end
+
+      it "should strip script/xss tags" do
+        value = '<SCRIPT/XSS SRC="http://ha.ckers.org/xss.js"></SCRIPT>'
+        result = sanitize_value(:content, value)
+        result.should_not =~ /script/i
+        result.should_not =~ /xss/i
+        result.should_not =~ /ha.ckers.org/
+      end
+      
+      it "should strip script/src tags" do
+        value = '<SCRIPT/SRC="http://ha.ckers.org/xss.js"></SCRIPT>'
+        result = sanitize_value(:content, value)
+        result.should_not =~ /script/i
+        result.should_not =~ /xss/i
+        result.should_not =~ /ha.ckers.org/
+      end
+
+      it "should strip xss in body background" do
+        value = "<BODY BACKGROUND=\"javascript:alert('XSS')\">"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /xss/i
+      end
+      
+      ["<BODY ONLOAD=alert('XSS')>",
+       '<BODY onload!#$%&()*~+-_.,:;?@[/|\]^`=alert("XSS")>',
+      ].each do |value|
+        it "should strip xss in body onload: #{value}" do
+          result = sanitize_value(:content, value)
+          result.should_not =~ /xss/i
+          result.should_not =~ /onload/i
+        end
+      end
+
+      it "should strip style tag" do
+        value = "<STYLE>@import'http://ha.ckers.org/xss.css';</STYLE>"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /style/i
+      end
+
+      it "should handle lone @imports" do
+        value = "@import'http://ha.ckers.org/xss.css';"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /style/i
+        result.should =~ /@import/i
+      end
+
+      it "should handle lone borked @imports" do
+        value = "@im\port'\ja\vasc\ript:alert(\"XSS\")';"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /style/i
+        result.should =~ /@im\port/i
+      end
+
+      it "should strip javascript from img dynsrc" do
+        value = "<IMG DYNSRC=\"javascript:alert('XSS')\">"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /javascript/i
+        result.should_not =~ /xss/i
+      end
+
+      it "should strip javascript from img lowsrc" do
+        value = "<IMG DYNSRC=\"javascript:alert('XSS')\">"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /javascript/i
+        result.should_not =~ /xss/i
+      end
+
+      it "should strip javascript from bgsound src" do
+        value = "<BGSOUND SRC=\"javascript:alert('XSS');\">"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /javascript/i
+        result.should_not =~ /xss/i
+      end
+
+      it "should strip javascript from br size" do
+        value = "<BR SIZE=\"&{alert('XSS')}\">"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /xss/i
+      end
+
+      it "should strip javascript from link href" do
+        value = "<LINK REL=\"stylesheet\" HREF=\"javascript:alert('XSS');\">"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /javascript/i
+        result.should_not =~ /xss/i
+      end
+
+      it "should strip xss from link href" do
+        value = '<LINK REL="stylesheet" HREF="http://ha.ckers.org/xss.css">'
+        result = sanitize_value(:content, value)
+        result.should_not =~ /ha.ckers.org/i
+        result.should_not =~ /xss/i
+      end
+
+      it "should strip namespace tags" do
+        value = '<HTML xmlns:xss><?import namespace="xss" implementation="http://ha.ckers.org/xss.htc"><xss:xss>Blah</xss:xss></HTML>'
+        result = sanitize_value(:content, value)
+        result.should_not =~ /xss/i
+        result.should_not =~ /ha.ckers.org/i
+        result.should =~ /Blah/
+      end
+
+      it "should strip javascript in style=background-image" do
+        value = "<span style=background-image:url(\"javascript:alert('XSS')\");>Text</span>"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /xss/i
+        result.should_not =~ /javascript/i
+      end
+
+      it "should strip script tags" do
+        value = "';alert(String.fromCharCode(88,83,83))//\\';alert(String.fromCharCode(88,83,83))//\";alert(String.fromCharCode(88,83,83))//\\\";alert(String.fromCharCode(88,83,83))//--></SCRIPT>\">'><SCRIPT>alert(String.fromCharCode(88,83,83))</SCRIPT>"
+        result = sanitize_value(:content, value)
+        result.should_not =~ /xss/i
+        result.should_not =~ /javascript/i
+      end
+
+      ["<!--#exec cmd=\"/bin/echo '<SCR'\"-->",
+       "<!--#exec cmd=\"/bin/echo 'IPT SRC=http://ha.ckers.org/xss.js></SCRIPT>'\"-->"
+      ].each do |value|
+        it "should strip #exec: #{value[0..40]}" do
+          result = sanitize_value(:content, value)
+          result.should == ""
+        end
+      end
+
+      
+      # TODO: Ones with all types of quote marks:
+      # "<IMG SRC=`javascript:alert("RSnake says, 'XSS'")`>"
+
+
+      it "should escape ampersands" do
+        result = sanitize_value(:content, "& &amp;")
+        result.should =~ /&amp; &amp;/
+      end
+    
+    end
+
+    # TODO: other fields 
+
+  end
+  
+
   describe "fix_bad_characters" do
     
     it "should not touch normal text" do
