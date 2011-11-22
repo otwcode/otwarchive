@@ -24,7 +24,8 @@
     <li>&#8212; <%= link_to "Site Map", site_map_path %></li>
     <li>&#8212; <%= link_to 'Report Abuse', new_abuse_report_path %></li>
     <li>&#8212; <%= link_to 'Support and Feedback', new_feedback_report_path %></li>
-    <li>&#8212; <%= link_to 'Archive FAQ', archive_faqs_path %></li>
+    <li>&#8212; <%= link_to 'Donate', donate_path %></li>
+    <li>&#8212; <%= link_to 'FAQ', archive_faqs_path %></li>
     <li>&#8212; <%= link_to 'Known Issues', known_issues_path %></li>
     <% if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) %>
       <li>&#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path %></li>
