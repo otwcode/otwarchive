@@ -75,7 +75,7 @@ module PiwikAnalytics
 
     def self.enabled?(format)
       #raise PiwikAnalytics::PiwikAnalyticsConfigurationError if id_site.blank? || url.blank?
-      environments.include?(Rails.env) && formats.include?(format.to_sym)
+      environments.include?(Rails.env) && format.respond_to?(:to_sym) && formats.include?(format.to_sym)
     end
   end
 end
