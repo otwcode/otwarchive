@@ -17,27 +17,31 @@ class Challenge::PromptMemeController < ChallengesController
     end
   end
 
+  # page to view profile
   def show
   end
 
+  # form to create a new prompt meme challenge. submit button calls create
   def new
     if (@collection.challenge)
-      flash[:notice] = t('prompt_meme.already_challenge', :default => "There is already a challenge set up for this collection.")
+      flash[:notice] = ts("There is already a challenge set up for this collection.")
       redirect_to edit_collection_prompt_meme_path(@collection)
     else
       @challenge = PromptMeme.new
     end
   end
 
+  # page for updating settings. submit button calls update
   def edit
   end
 
+  # creating the prompt meme challenge when you hit submit
   def create
     @challenge = PromptMeme.new(params[:prompt_meme])
     if @challenge.save
       @collection.challenge = @challenge
       @collection.save
-      flash[:notice] = 'Challenge was successfully created.'
+      flash[:notice] = ts('Challenge was successfully created.')
       
       # see if we initialized the tag set
       if initializing_tag_sets?
@@ -49,6 +53,7 @@ class Challenge::PromptMemeController < ChallengesController
     end
   end
 
+  # updating settings when you hit submit on the edit page
   def update
     if @challenge.update_attributes(params[:prompt_meme])
       flash[:notice] = 'Challenge was successfully updated.'
@@ -74,6 +79,7 @@ class Challenge::PromptMemeController < ChallengesController
   end
   
   private
+  # creating automatic list of most popular or least popular tags on the archive
   def initializing_tag_sets?
     # uuughly :P but check params to see if we're initializing 
     !params[:prompt_meme][:request_restriction_attributes].keys.
