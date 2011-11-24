@@ -48,6 +48,13 @@ h1,h2,h3{word-break:break-all}
 
 dl.stats + h6 + .actions
        { margin: auto }
+       
+/*zone: home*/
+#inbox-form {
+clear: both;
+float: none; 
+width: auto;
+}
 
 /*SKIN: Dash Line */
 /* DESCRIPTION: Horizontal dash inline*/
