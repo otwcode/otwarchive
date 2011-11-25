@@ -1272,7 +1272,7 @@ Feature: Prompt Meme Challenge
   Scenario: work left in draft so claim is not yet totally fulfilled
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up for Battle 12
+  Given an anon has signed up for Battle 12
   When I close signups for "Battle 12"
   When I reveal the "Battle 12" challenge
   Given all emails have been delivered
@@ -1282,7 +1282,15 @@ Feature: Prompt Meme Challenge
   When I start to fulfill my claim
     And I press "Preview"
   When I go to the "Battle 12" requests page
-  Then I should see "myname4" within "#fulfilled_claims"
+  Then I should see "Claimed By"
+    And I should not see "Fulfilled By"
+  When I am logged in as "mod1"
+    And I go to "Battle 12" collection's page
+    And I follow "Unposted Claims"
+  Then I should see "myname4"
+  When I am logged in as "myname4"
+    And I go to my claims page
+    # should show the draft in some way, though design has changed a bit
     And I should see "Response posted on"
     And I should see "Not yet approved"
   When I follow "Response posted on"
@@ -1291,7 +1299,7 @@ Feature: Prompt Meme Challenge
   When I am on my user page
     And I follow "Drafts"
     And all emails have been delivered
-  Then I should see "Existing work"
+  Then I should see "Fulfilled Story"
     And "Issue 2259" is fixed
     
   Scenario: When draft is posted, claim is fulfilled
