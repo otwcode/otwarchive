@@ -79,6 +79,7 @@ class ArchiveFaqsController < ApplicationController
     end
   end
   
+  # reorder FAQs
   def update_positions
     if params[:archive_faqs]
       @archive_faqs = ArchiveFaq.reorder(params[:archive_faqs])       
