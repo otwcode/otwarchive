@@ -1186,16 +1186,17 @@ Feature: Prompt Meme Challenge
   When I close signups for "Battle 12"
   When I am logged in as "myname2"
   When I claim a prompt from "Battle 12"
-  When I fulfill my claim
   When I reveal the "Battle 12" challenge
   When I reveal the authors of the "Battle 12" challenge
   When I am logged in as "myname2"
   When I am on my user page
     And I follow "Claims"
+    # note that user Claims page currently only shows unfulfilled claims
   Then I should not see "myname4"
     And I should see "Anonymous"
     
   Scenario: Check that anon prompts are still anon on claims show after challenge is revealed
+  # note that only mod can see claims show now - users don't get linked to it
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname4"
@@ -1203,12 +1204,11 @@ Feature: Prompt Meme Challenge
   When I close signups for "Battle 12"
   When I am logged in as "myname2"
   When I claim a prompt from "Battle 12"
-  When I fulfill my claim
   When I reveal the "Battle 12" challenge
   When I reveal the authors of the "Battle 12" challenge
-  When I am logged in as "myname2"
-  When I am on my user page
-    And I follow "Claims"
+  When I am logged in as "mod1"
+  When I am on "Battle 12" collection's page
+    And I follow "Unposted Claims"
     And I follow "Anonymous"
   Then I should not see "myname4"
     And I should see "Anonymous"
@@ -1216,7 +1216,7 @@ Feature: Prompt Meme Challenge
   Scenario: check that anon prompts are still anon on the fulfilling work
   # TODO
   
-  Scenario: Fulfilled claims show as fulfilled
+  Scenario: Fulfilled claims show as fulfilled to another user
   
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
@@ -1234,11 +1234,9 @@ Feature: Prompt Meme Challenge
   When I press "Claim"
   Then I should see "New claim made."
   When I am logged in as "myname4"
-    And I go to the collections page
-    And I follow "Battle 12"
-    And I follow "Claims"
-  Then I should see "mod1" within "#fulfilled_claims"
-    And I should see "myname4" within "#fulfilled_claims"
+    And I go to the "Battle 12" requests page
+  Then I should see "mod1" within ".prompt .works"
+    And I should see "myname4" within ".prompt .works"
     
   Scenario: Make another claim and then fulfill from the post new form
   
