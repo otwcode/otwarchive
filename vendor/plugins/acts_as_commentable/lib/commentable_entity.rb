@@ -63,6 +63,32 @@ module CommentableEntity
     end
   end
 
+  def commentable_path
+    if (self.class.name == "tag")
+      return comments_path(:tag_id => self.name,
+                  :add_comment => options[:add_comment],
+                  :add_comment_reply_id => options[:add_comment_reply_id],
+                  :delete_comment_id => options[:delete_comment_id],
+                  :anchor => options[:anchor])
+    else
+      if (self.commentable_class == "chapter") && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
+        commentable = self.work
+      else
+        commentable = self
+      end
+      return path_for(:controller => commentable.class.to_s.underscore.pluralize,
+                  :action => :show,
+                  :id => commentable.id,
+                  :show_comments => options[:show_comments],
+                  :add_comment => options[:add_comment],
+                  :add_comment_reply_id => options[:add_comment_reply_id],
+                  :delete_comment_id => options[:delete_comment_id],
+                  :view_full_work => options[:view_full_work],
+                  :anchor => options[:anchor],
+                  :page => options[:page])
+    end
+  end
+
   def commentable_owners
     begin
       self.pseuds.map {|p| p.user}.uniq
