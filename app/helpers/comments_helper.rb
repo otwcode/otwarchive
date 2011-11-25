@@ -1,13 +1,14 @@
 module CommentsHelper
 
   def value_for_comment_form(commentable, comment)
-    commentable.is_a?(Tag) ? comment : [commentable, comment]
+    commentable.commentable_class == "tag" ? comment : [commentable, comment]
   end
 
   def title_for_comment_page(commentable)
     if commentable.commentable_name.blank?
       title = ""
-    elsif commentable.is_a?(Tag)
+    elsif commentable.commentable_class == "tag"
+    # why doesn't the ordinary link_to work in this case?
       title = link_to_tag(commentable)
     else
       title = link_to(commentable.commentable_name, commentable)
@@ -35,12 +36,10 @@ module CommentsHelper
         link_to ultimate.name, ultimate
       when 'AdminPost' then
           link_to ultimate.title, ultimate
-      else
-        if ultimate.is_a?(Tag)
+      when 'Tag' then
           link_to_tag(ultimate)
-        else
+      else
           link_to 'Something Interesting', ultimate
-        end
     end
   end
 
