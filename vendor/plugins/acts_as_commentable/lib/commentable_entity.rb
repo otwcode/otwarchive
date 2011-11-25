@@ -28,15 +28,38 @@ module CommentableEntity
   # returns number of visible (not deleted) comments
   def count_visible_comments
     self.total_comments.count(:all, :conditions => {:hidden_by_admin => false, :is_deleted => false})
-  end  
+  end
 
   # Return the name of this commentable object
   # Should be overridden in the implementing class if necessary
+  # title of the work, name of the tag, etc.
   def commentable_name
     begin
-      self.title
+      case self.class.name
+          when /Work/
+            self.title
+          when /Chapter/
+            self.work.title
+          when /Tag/
+            self.name
+          when /AdminPost/
+            self.title
+          when /Comment/
+            ts("Previous Comment")
+          else
+            self.class.name
+      end
     rescue
       ""
+    end
+  end
+
+  # type of thing you're commenting on
+  def commentable_class
+    if self.is_a?(Tag)
+      return "tag"
+    else
+      return self.class.name.to_s.underscore
     end
   end
 
