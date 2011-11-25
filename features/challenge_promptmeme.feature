@@ -1375,22 +1375,21 @@ Feature: Prompt Meme Challenge
     And I press "Preview"
   Then I should find "draft"
     And I should see "In response to a prompt by:"
-    # TODO: Figure this out
+    # TODO: Figure out why this isn't showing - it works fine when testing manually
   #  And I should see "Collections:"
    # And I should see "Battle 12"
   When I press "Update"
   Then I should see "Work was successfully updated"
     And I should not find "draft"
     And I should see "In response to a prompt by:"
-  #TODO: Figure this one out, too
-  #Then I should see "Collections:"
-  #  And I should see "Battle 12"
+  Then I should see "Collections:"
+    And I should see "Battle 12"
     
   # work not left in draft so claim is fulfilled
   When I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should see "myname1" within "#fulfilled_claims"
-    And I should see "Response posted on"
+    And I follow "Prompts"
+  Then I should see "myname1" within ".prompt .works"
+    And I should see "Fulfilled By"
 
   Scenario: Download prompt CSV from signups page
   
