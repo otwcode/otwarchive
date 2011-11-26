@@ -692,7 +692,7 @@ application.</p>
             <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 246</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">allow_tinymce?</span>(<span class="ruby-identifier">controller</span>)
   <span class="ruby-node">%w(admin_posts archive_faqs known_issues chapters works)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">controller</span>.<span class="ruby-identifier">controller_name</span>) <span class="ruby-operator">&amp;&amp;</span>
-    <span class="ruby-node">%w(new edit update)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">controller</span>.<span class="ruby-identifier">action_name</span>)
+    <span class="ruby-node">%w(new create edit update)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">controller</span>.<span class="ruby-identifier">action_name</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- allow_tinymce-3F-source -->
           

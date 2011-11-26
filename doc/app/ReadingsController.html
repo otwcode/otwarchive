@@ -616,10 +616,10 @@
      <span class="ruby-keyword">begin</span>
        <span class="ruby-identifier">reading</span>.<span class="ruby-identifier">destroy</span>
      <span class="ruby-keyword">rescue</span>
-       <span class="ruby-ivar">@errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">t</span>(<span class="ruby-string">'destroy_multiple.deletion_failed'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;There were problems deleting your history.&quot;</span>)
+       <span class="ruby-ivar">@errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There were problems deleting your history.&quot;</span>)
      <span class="ruby-keyword">end</span>
    <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'history_deleted'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Your history is now cleared.'</span>)
+  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your history is now cleared.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_readings_url</span>(<span class="ruby-identifier">current_user</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- clear-source -->
@@ -652,7 +652,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@reading</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">readings</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-ivar">@reading</span>.<span class="ruby-identifier">destroy</span>
-  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'story_deleted'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Work deleted from your history.'</span>)
+  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Work deleted from your history.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_readings_url</span>(<span class="ruby-identifier">current_user</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- destroy-source -->
@@ -687,7 +687,7 @@
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:show</span>] <span class="ruby-operator">==</span> <span class="ruby-string">'to-read'</span>
     <span class="ruby-ivar">@readings</span> = <span class="ruby-ivar">@readings</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:toread</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
   <span class="ruby-keyword">end</span>
-  <span class="ruby-ivar">@readings</span> = <span class="ruby-ivar">@readings</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;last_viewed DESC&quot;</span>, <span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
+  <span class="ruby-ivar">@readings</span> = <span class="ruby-ivar">@readings</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;last_viewed DESC&quot;</span>).<span class="ruby-identifier">page</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
 <span class="ruby-keyword">end</span></pre>
           </div><!-- index-source -->
           
@@ -756,7 +756,7 @@ they can potentially change it</p>
             <pre><span class="ruby-comment"># File app/controllers/readings_controller.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_history_enabled</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">history_enabled?</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'reading_disabled'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;You have reading history disabled in your preferences. Change it below if you'd like us to keep track of it.&quot;</span>)
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You have reading history disabled in your preferences. Change it below if you'd like us to keep track of it.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_preferences_path</span>(<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
