@@ -30,9 +30,6 @@ describe Work do
       @work.errors[:title].should_not be_empty
     end
     
-    it "should not save work without warning" do
-    end
-    
   end
     
 end
