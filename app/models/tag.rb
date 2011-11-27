@@ -32,6 +32,13 @@ class Tag < ActiveRecord::Base
       end
     end
   end
+  def commentable_path
+    comments_path(:tag_id => self.name,
+                  :add_comment => options[:add_comment],
+                  :add_comment_reply_id => options[:add_comment_reply_id],
+                  :delete_comment_id => options[:delete_comment_id],
+                  :anchor => options[:anchor])
+  end
 
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'
   belongs_to :merger, :class_name => 'Tag'
