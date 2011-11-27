@@ -8,7 +8,7 @@ module CommentsHelper
     if commentable.commentable_name.blank?
       title = ""
     elsif commentable.commentable_class == "tag"
-    # why doesn't the ordinary link_to work in this case?
+    # ordinary link_to won't work in this case as tags are special
       title = link_to_tag(commentable)
     else
       title = link_to(commentable.commentable_name, commentable)
