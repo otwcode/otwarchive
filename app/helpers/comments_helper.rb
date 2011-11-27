@@ -37,7 +37,7 @@ module CommentsHelper
       when 'AdminPost' then
           link_to ultimate.title, ultimate
       else
-        if ultimate.is_a?(Tag) then
+        if ultimate.is_a?(Tag)
           link_to_tag(ultimate)
         else
           link_to 'Something Interesting', ultimate
