@@ -4,32 +4,14 @@ Feature: Tag wrangling: assigning wranglers, using the filters on the Wranglers 
   Scenario: Log in as a tag wrangler and see wrangler pages.
         View new tags in your fandoms
     Given I have loaded the fixtures
-      And the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
-      And the following activated user exists
-      | login       | password      |
-      | dizmo       | wrangulator   |
-      And the following activated tag wrangler exists
+      And the following activated tag wranglers exist
       | login       | password      |
       | Enigel      | wrangulator   |
+      | dizmo       | wrangulator   |
       And I have loaded the "roles" fixture
-      
-    # admin making a user into a tag wrangler
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "Zooey"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-      And I fill in "query" with "dizmo"
-      And I press "Find"
-    Then I should see "dizmo" within "#admin_users_table"
-    When I check "user_roles_1"
-      And I press "Update"
-    Then I should see "User was successfully updated"
-    When I log out
-    
+
     # accessing tag wrangling pages
-      And I am logged in as "dizmo" with password "wrangulator"
+    When I am logged in as "dizmo" with password "wrangulator"
       And I follow "Tag Wrangling"
     Then I should see "Wrangling Home"
       And I should not see "first fandom"
