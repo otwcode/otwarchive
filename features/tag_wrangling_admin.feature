@@ -6,10 +6,10 @@ Feature: Tag wrangling
     Given I am logged in as an admin
       And a fandom exists with name: "Amelie", canonical: false
     When I edit the tag "Amelie"
-      And I fill in "Synonym of" with "Amélie"
+      And I fill in "Synonym of" with "AmÃ©lie"
       And I press "Save changes"
-    Then I should see "Amélie is considered the same as Amelie by the database"
+    Then I should see "AmÃ©lie is considered the same as Amelie by the database"
       And I should not see "Tag was successfully updated."
-    When I fill in "Name" with "Amélie"
+    When I fill in "Name" with "AmÃ©lie"
       And I press "Save changes"
-    Then show me the main content
+    Then I should see "Tag was updated"
