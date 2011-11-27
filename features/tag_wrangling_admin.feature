@@ -13,3 +13,5 @@ Feature: Tag wrangling
     When I fill in "Name" with "Amélie"
       And I press "Save changes"
     Then I should see "Tag was updated"
+      And I should see "Amélie"
+      And I should not see "Amelie"

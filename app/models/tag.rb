@@ -89,8 +89,11 @@ class Tag < ActiveRecord::Base
   before_validation :check_synonym
   def check_synonym
     if !self.new_record? && self.name_changed?
-      # ordinary wranglers can change case but not anything else in name
-      unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase)
+      # ordinary wranglers can change case, accents, full stops, etc. but not the actual letters in the name
+      # admins can change tags with no restriction
+      # alternative version, saving here just in case - doesn't allow changing full stops etc. but is not as neat
+      # (self.name.chars.normalize(:kd).gsub(/[^\x00-\x7F]/n,'').downcase.to_s == self.name_was.chars.normalize(:kd).gsub(/[^\x00-\x7F]/n,'').downcase.to_s)
+      unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase) || (self.name.parameterize == self.name_was.parameterize)
         self.errors.add(:name, "can only be changed by an admin.")
       end
     end
