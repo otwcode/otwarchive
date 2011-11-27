@@ -429,13 +429,13 @@ module ApplicationHelper
       end
     
     checkboxes = choices.map do |choice|      
-      is_checked = !options[:checked_method] || already_checked.empty? ? false : already_checked.include?(choice)
       display_name = case
         when options[:name_helper_method]
           eval("#{options[:name_helper_method]}(choice)")
         else
           choice.send(options[:name_method]).html_safe
         end
+      is_checked = !options[:checked_method] || already_checked.empty? ? false : already_checked.include?(display_name)
       value = choice.send(options[:value_method])
       checkbox_id = "#{base_id}_#{name_to_id(value)}"
       checkbox = check_box_tag(field_name, value, is_checked, opts.merge({:id => checkbox_id}))
