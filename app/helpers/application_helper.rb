@@ -429,7 +429,7 @@ module ApplicationHelper
       end
     
     checkboxes = choices.map do |choice|      
-      is_checked = !options[:checked_method] || already_checked.empty? ? false : already_checked.include?(choice)
+      is_checked = !options[:checked_method] || already_checked.empty? ? false : already_checked.include?(choice.name)
       display_name = case
         when options[:name_helper_method]
           eval("#{options[:name_helper_method]}(choice)")
