@@ -3,9 +3,9 @@ Feature: Tag Wrangling - special cases
 
 Scenario: Create a new tag that differs from an existing tag by accents or other markers
   Given the following activated tag wrangler exists
-    | login          | password    |
-    | wranglerette   | something   |
-    And I am logged in as "wranglerette" with password "something"
+    | login          |
+    | wranglerette   |
+    And I am logged in as "wranglerette"
     And a fandom exists with name: "Amelie", canonical: false
     And a character exists with name: "Romania", canonical: true
   When I edit the tag "Amelie"
