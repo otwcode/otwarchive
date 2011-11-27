@@ -89,6 +89,7 @@ class Tag < ActiveRecord::Base
   before_validation :check_synonym
   def check_synonym
     if !self.new_record? && self.name_changed?
+      # ordinary wranglers can change case but not anything else in name
       unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase)
         self.errors.add(:name, "can only be changed by an admin.")
       end

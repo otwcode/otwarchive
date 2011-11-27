@@ -1,7 +1,8 @@
 @tags @tag_wrangling
 Feature: Tag Wrangling - special cases
 
-Scenario: Create a new tag that differs from an existing tag by accents or other markers
+  Scenario: Create a new tag that differs from an existing tag by accents or other markers
+
   Given the following activated tag wrangler exists
     | login          |
     | wranglerette   |
@@ -24,15 +25,31 @@ Scenario: Create a new tag that differs from an existing tag by accents or other
   Then I should see "Tag was successfully created."
     But I should see "România - Freeform"
 
+  Scenario: Change capitalisation of a tag
+
+  Given the following activated tag wrangler exists
+    | login          |
+    | wranglerette   |
+    And I am logged in as "wranglerette"
+    And a fandom exists with name: "amelie", canonical: false
+  When I edit the tag "amelie"
+    And I fill in "Synonym of" with "Amelie"
+    And I press "Save changes"
+  Then I should see "Amelie is considered the same as amelie by the database"
+    And I should not see "Tag was successfully updated."
+  When I fill in "Name" with "Amelie"
+    And I press "Save changes"
+  Then I should see "Tag was updated"
+
   Scenario: Tags with non-standard characters in them - question mark and period
   
   Given basic tags
     And the following activated tag wrangler exists
-      | login           | password   |
-      | workauthor      | password   |
+      | login           |
+      | workauthor      |
     And a character exists with name: "Evan ?", canonical: true
     And a character exists with name: "James T. Kirk", canonical: true
-  When I am logged in as "workauthor" with password "password"
+  When I am logged in as "workauthor"
   When I post the work "Epic sci-fi"
     And I follow "Edit"
     And I fill in "Characters" with "Evan ?, James T. Kirk"
