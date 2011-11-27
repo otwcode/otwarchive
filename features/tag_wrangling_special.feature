@@ -25,6 +25,18 @@ Feature: Tag Wrangling - special cases
   Then I should see "Tag was successfully created."
     But I should see "România - Freeform"
 
+  Scenario: Create a new tag that differs by more than just accents - user cannot change name
+
+  Given the following activated tag wrangler exists
+    | login          |
+    | wranglerette   |
+    And I am logged in as "wranglerette"
+    And a fandom exists with name: "Amelie", canonical: false
+  When I edit the tag "Amelie"
+  When I fill in "Name" with "Amelia"
+    And I press "Save changes"
+  Then I should see "Name can only be changed by an admin."
+
   Scenario: Change capitalisation of a tag
 
   Given the following activated tag wrangler exists
