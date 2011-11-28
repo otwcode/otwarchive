@@ -26,7 +26,7 @@ describe Tag do
     @tag.errors[:name].join.should =~ /restricted characters/
   end
 
-  context "when checking for synonym" do
+  context "when checking for synonym/name change" do
 
     context "when logged in as a regular user" do
 
@@ -55,7 +55,7 @@ describe Tag do
       end
 
       it "should be careful with the ß" do
-        @tag.name = "Weiss Kreuz"
+        @tag.name = "Wei Kreuz"
         @tag.save
 
         @tag.name = "Weiß Kreuz"
@@ -64,16 +64,15 @@ describe Tag do
         @tag.save.should be_true
       end
 
-      # uncomment the commented lines and edit as appropriate after deciding on the feature
-      it "should (not?) ignore punctuation" #do
-        # @tag.name = "Snatch."
-        # @tag.save
+      it "should not ignore punctuation" do
+        @tag.name = "Snatch."
+        @tag.save
 
-        # @tag.name = "Snatch"
-        # @tag.check_synonym
-        # @tag.errors.should_not be_empty
-        # @tag.save.should be_false
-      # end
+        @tag.name = "Snatch"
+        @tag.check_synonym
+        @tag.errors.should_not be_empty
+        @tag.save.should be_false
+      end
 
       it "should not ignore whitespace" do
         @tag.name = "JohnSheppard"
@@ -91,7 +90,15 @@ describe Tag do
         User.current_user = Factory.create(:admin)
       end
 
-      it "should allow any change"
+      it "should allow any change" do
+        @tag.name = "yuletide.ssé"
+        @tag.save
+
+        @tag.name = "Yuletide ße something"
+        @tag.check_synonym
+        @tag.errors.should be_empty
+        @tag.save.should be_true
+      end
 
     end
 
