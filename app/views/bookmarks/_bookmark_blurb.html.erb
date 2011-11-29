@@ -64,7 +64,7 @@
 
     <!--tags-->
     <% unless bookmark.tag_string.blank? %>
-      <h6 class="landmark heading">Tags</h6>
+      <h6 class="landmark heading"><%= ts("Tags") %></h6>
       <ul class="tags commas">
         <% bookmark.tags.each do |tag| %>
           <li><%= link_to(tag.name, link_to_tag_bookmarks(tag), :class => 'tag') %></li>
@@ -74,10 +74,19 @@
 
     <!--notes-->
     <% unless bookmark.notes.blank? %>
-      <h6 class="landmark heading">Notes</h6>
+      <h6 class="landmark heading"><%= ts("Notes") %></h6>
       <blockquote class="userstuff notes" title="notes">
         <%=raw sanitize_field(bookmark, :notes) %>
       </blockquote>
+    <% end %>
+
+    <% unless bookmark.collections.blank? %>
+      <h6 class="landmark heading"><%= ts("Collections") %></h6>
+      <ul class="meta commas">
+        <% bookmark.collections.each do |coll|%>
+          <li><%= link_to coll.title, collection_path(coll) %></li>
+        <% end %>
+      </ul>
     <% end %>
 
     <!--navigation and actions-->
