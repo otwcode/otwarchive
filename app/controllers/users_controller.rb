@@ -6,6 +6,23 @@ class UsersController < ApplicationController
   before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_email, :change_openid]
   before_filter :check_account_creation_status, :only => [:new, :create]
 
+  # This is meant to rescue from race conditions that sometimes occur on user creation
+  # The unique index on login (database level) prevents the duplicate user from being created,
+  # but ideally we can still send the user the activation code and show them the confirmation page
+  rescue_from ActiveRecord::RecordNotUnique do |exception|
+    # ensure we actually have a duplicate user situation
+    if exception.message =~ /Mysql2?::Error: Duplicate entry/i &&
+      @user && User.count(:conditions => {:login => @user.login}) > 0 &&
+      # and that we can find the original, valid user record
+      (@user = User.find_by_login(@user.login))
+        notify_and_show_confirmation_screen
+    else
+      # re-raise the exception and make it catchable by Rails and Airbrake
+      # (see http://www.simonecarletti.com/blog/2009/11/re-raise-a-ruby-exception-in-a-rails-rescue_from-statement/)
+      rescue_action_without_handler(exception)
+    end
+  end
+
   def load_user
     @user = User.find_by_login(params[:id])
     @check_ownership_of = @user
@@ -208,16 +225,21 @@ class UsersController < ApplicationController
           @user.identity_url = OpenID.normalize_url(openid_url)
         end
       end
-      if @user.save
-        UserMailer.signup_notification(@user.id).deliver
-        flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
-                            :activation_url => activate_path(@user.activation_code)) if Rails.env.development?
-        render "confirmation"
+      validate = (params[:validate].to_s != "false") # validate by default, unless specifically instructed not to
+      if @user.save(:validate => validate)
+        notify_and_show_confirmation_screen
       else
         params[:use_openid] = true unless openid_url.blank?
         render :action => "new"
       end
     end
+  end
+
+  def notify_and_show_confirmation_screen
+    UserMailer.signup_notification(@user.id).deliver
+    flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
+                        :activation_url => activate_path(@user.activation_code)).html_safe if Rails.env.development?
+    render "confirmation"
   end
 
   def activate
