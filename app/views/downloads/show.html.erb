@@ -1,13 +1,13 @@
-<%= render :partial => 'download_preface.html' %>
+<%= render 'download_preface.html' %>
 
 <div id="chapters" class="userstuff">
   <% if @chapters.size > 1 %>
     <% for chapter in @chapters %>
-      <%= render :partial => 'download_chapter.html', :locals => {:chapter => chapter} %>
+      <%= render 'download_chapter.html', :chapter => chapter %>
     <% end %>
   <% else %>
     <%=raw sanitize_field(@chapters.first, :content) %>
   <% end %>
 </div>
 
-<%= render :partial => 'download_afterword.html' %>
+<%= render 'download_afterword.html' %>

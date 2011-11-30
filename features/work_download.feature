@@ -7,7 +7,7 @@ Feature: Download a work
   Scenario: Download an ordinary work
   
   Given basic tags
-    And I am logged in as "myname" with password "something"
+    And I am logged in as "myname"
   When I go to the new work page
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with "Tittle with doubble letters"
@@ -29,7 +29,7 @@ Feature: Download a work
   Scenario: Download works with funky titles doesn't bomb
 
   Given basic tags
-    And I am logged in as "myname" with password "something"
+    And I am logged in as "myname"
   When I go to the new work page
     And I fill in "Fandoms" with "No Fandom"
     And I fill in "Work Title" with
@@ -102,10 +102,7 @@ Feature: Download a work
 
   Scenario: disable guest download
 
-  Given the following activated user exists
-    |login|password|
-    |user |secret  |
-    And I am logged in as "author" with password "writersrule"
+  Given I am logged in as "author"
     And I post the work "NaNoWriMo"
     And I am logged out
   When I view the work "NaNoWriMo"
@@ -119,40 +116,35 @@ Feature: Download a work
   When I view the work "NaNoWriMo"
     And I follow "PDF"
   Then I should see "Due to current high load"
-  When I fill in "User" with "user"
-    And I fill in "Password" with "secret"
-    And I press "Log in"
-  Then I should see "NaNoWriMo"
-    And I should see "Comments"
+  When I am logged in as a random user
+    And I view the work "NaNoWriMo"
+  Then I should see "Comments"
   When I follow "MOBI"
   Then I should not see "Due to current high load"
 
  Scenario: download chaptered works doesn't bomb
  
-  Given /the following activated user exists
-    |login|password|
-    |user |secret  |
-  And I am logged in as "author" with password "writersrule"
-  And I post the chaptered work "Epic Novel"
-  And I am logged out
-  And guest downloading is on
-  And I am logged out as an admin
+  Given I am logged in as "author"
+    And I post the chaptered work "Epic Novel"
+    And I am logged out
+    And guest downloading is on
+    And I am logged out as an admin
   When I view the work "Epic Novel"
   And I follow "HTML"
   Then I should see "Epic Novel"
     And I should see "Another Chapter"
     And I should not see "Comments"
   When I view the work "Epic Novel"
-  And I follow "PDF"
+    And I follow "PDF"
   When I view the work "Epic Novel"
-  And I follow "MOBI"
+    And I follow "MOBI"
   When I view the work "Epic Novel"
-  And I follow "EPUB"
+    And I follow "EPUB"
 
   Scenario: issue 1957
 
   Given basic tags
-    And I am logged in as "myname" with password "something"
+    And I am logged in as "myname"
 
   When I go to the new work page
     And I fill in "Fandoms" with "No Fandom"
@@ -180,3 +172,9 @@ Feature: Download a work
   When I go to the work page with title à ø something
   When I follow "PDF"
 
+Scenario: Download chaptered works as HTML
+
+  Given the chaptered work "Bazinga"
+  When I view the work "Bazinga"
+    And I follow "HTML"
+  Then I should see "Chapter 2"
