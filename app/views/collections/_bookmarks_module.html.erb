@@ -1,14 +1,14 @@
 <div class="bookmarks module group" id="collection-bookmarks">
   <h3 class="heading">
     <% if collection.collection_preference.show_random || params[:show_random] %>
-    <%= ts("Random bookmarks") %>  
+      <%= ts("Random bookmarks") %>  
     <% else %>  
-    <%= ts("Recent bookmarks") %>
+      <%= ts("Recent bookmarks") %>
     <% end %>
   </h3>
   <ul class="index group">
-  <% for bookmark in bookmarks %>
-    <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
-  <% end %>
+    <% for bookmark in bookmarks %>
+      <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
+    <% end %>
   </ul>
 </div>
