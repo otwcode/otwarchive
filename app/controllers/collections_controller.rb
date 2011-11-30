@@ -43,7 +43,7 @@ class CollectionsController < ApplicationController
 
   def show
     unless @collection
-  	  flash[:error] = t('collection_not_found', :default => "Sorry, we couldn't find the collection you were looking for.")
+  	  flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
       redirect_to collections_path and return
     end
     
