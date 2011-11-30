@@ -52,5 +52,5 @@ Feature: Collectible items
     Then I should see "Added"
     When I follow "Various Penguins"
     # When I go to "Various Penguins" collection's page
-    Then I should see "Bookmarks (1)"
+    Then I should see "Bookmarks (1)" within "#dashboard"
       And I should see "Tundra penguins"
