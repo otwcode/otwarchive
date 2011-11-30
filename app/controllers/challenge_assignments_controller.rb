@@ -123,8 +123,8 @@ class ChallengeAssignmentsController < ApplicationController
       
       @assignments = case
       when params[:pinch_hit]
-        # have to order by requesting pseud because don't have offer signup
-        ChallengeAssignment.unfulfilled_in_collection(@collection).undefaulted.with_pinch_hitter.order_by_offering_pseud
+        # order by pinch hitter name
+        ChallengeAssignment.unfulfilled_in_collection(@collection).undefaulted.with_pinch_hitter.joins("INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id)").order("pseuds.name")
       when params[:fulfilled]
         @collection.assignments.fulfilled.order_by_offering_pseud
       when params[:unfulfilled]
@@ -132,7 +132,7 @@ class ChallengeAssignmentsController < ApplicationController
       else
         @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
       end
-      @assignments = @assignments.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
+      @assignments = @assignments.page(params[:page])
     end
   end
 
