@@ -81,7 +81,7 @@
     <% end %>
 
     <% unless bookmark.collections.blank? %>
-      <h6 class="landmark heading"><%= ts("Collections") %></h6>
+      <h6 class="heading"><%= ts("Collections") %></h6>
       <ul class="meta commas">
         <% bookmark.collections.each do |coll|%>
           <li><%= link_to coll.title, collection_path(coll) %></li>
