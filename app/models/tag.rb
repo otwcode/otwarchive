@@ -687,6 +687,16 @@ class Tag < ActiveRecord::Base
   def has_child?(tag)
     self.child_taggings.where(:common_tag_id => tag.id).count > 0
   end
+
+  def associations_to_remove; []; end
+  def associations_to_remove=(taglist)
+    taglist.reject {|tid| tid.blank?}.each do |tag_id|
+      tag_to_remove = Tag.find(tag_id)
+      if tag_to_remove
+        self.remove_association(tag_to_remove)
+      end
+    end
+  end
   
   # Determine how two tags are related and divorce them from each other
   def remove_association(tag)

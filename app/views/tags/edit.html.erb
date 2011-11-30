@@ -84,23 +84,22 @@
         <% end %>
         </dd>
       <% end %>
-      <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
+      <dt><%= tag_category_name(tag_type) %></dt>
       <dd title="<%= tag_category_name(tag_type) %>">
-        <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type.downcase == 'metatag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
-        <% if @parents[tag_type] %>
-          <% @parents[tag_type].in_groups(2, false) do |tag_list| %>
-          <ul class="tags commas">
-          <% for tag in tag_list %>
-            <li>
-              <%= link_to_edit_tag(tag) %>
-              <span class="delete action" title="delete" role="button">
-                <%= link_to 'x', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
-              </span>
-            </li>
+        <fieldset class="tags listbox">
+          <% if @parents[tag_type].any? %>
+            <h4 class="heading"><%= ts("Check to remove: ") %></h4>
+            <%= check_all_none %>
+            <%= checkbox_section(f, "associations_to_remove", @parents[tag_type], :name_helper_method => "tag_with_link_to_edit", 
+              :field_id => "parent_#{tag_type}_associations_to_remove") %>
+            <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
+          <% else %>
+            <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
           <% end %>
-          </ul>
-          <% end %>
-        <% end %>
+          <div title="add tags">
+            <%= f.text_field tag_type.underscore + '_string', autocomplete_options("tag?type=#{(tag_type.downcase == 'metatag' ? @tag.type.downcase : tag_type.downcase)}", :class => 'tags autocomplete') %>
+          </div>
+        </fieldset>
       </dd>
     <% end %>
   </dl>
@@ -112,29 +111,24 @@
     <p class="navigation actions" role="navigation"><%= link_to 'wrangle all child tags', {:controller => :tags, :action => :wrangle, :id => @tag} %></p>
     <dl>
       <% @tag.child_types.each do |tag_type| %>
-        <dt><%= f.label tag_type.underscore + '_string', tag_category_name(tag_type) %></dt>
+        <dt><%= tag_category_name(tag_type) %></dt>
         <dd>
-          <%= f.text_field tag_type.underscore + '_string', 
-										autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}", 
-																					:class => 'tags autocomplete') %><br />
-          <% if @children[tag_type] %>
-            <% @children[tag_type][0..19].in_groups(2, false) do |tag_list| %>
-            <ul class="tags commas">
-            <% for tag in tag_list %>
-              <li>
-                <%= link_to_edit_tag(tag) %>
-                <!--BACK END could pos put this title and role on t'link-->
-                <span class="delete action" title="delete" role="button">
-                  <%= link_to 'x', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %>
-                </span>
-              </li>
+          <fieldset class="tags listbox">
+            <% if @children[tag_type].any? %>
+              <h4 class="heading"><%= ts("Check to remove: ") %></h4>
+              <%= check_all_none %>
+              <%= checkbox_section(f, "associations_to_remove", @children[tag_type], :name_helper_method => "tag_with_link_to_edit",
+                    :field_id => "child_#{tag_type}_associations_to_remove") %>
+              <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
+            <% else %>
+              <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
             <% end %>
-            </ul>
-            <% end %>
-            <% if @children[tag_type].length > 20 %>
-            <p class="navigation actions" role="navigation"><%= link_to "See all (#{@tag.send(tag_type.underscore.pluralize).count})", {:controller => :tags, :action => :wrangle, :id => @tag, :show => tag_type.underscore.pluralize} %></p>
-            <% end %>
-          <% end %>
+            <div title="add tags">
+              <%= f.text_field tag_type.underscore + '_string', 
+  							  autocomplete_options("#{tag_type == 'Merger' ? ('noncanonical_tag?type=' + @tag.type.downcase) : (tag_type == 'SubTag' ? @tag.type.downcase : tag_type.downcase)}", 
+  								:class => 'tags autocomplete') %>
+            </div>
+          </fieldset>
         </dd>
       <% end %>
     </dl>
