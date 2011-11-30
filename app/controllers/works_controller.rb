@@ -4,10 +4,10 @@ class WorksController < ApplicationController
 
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
-  before_filter :users_only, :only => [ :new, :create, :import, :import_multiple, :drafts, :preview, :show_multiple ]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :show_multiple, :edit_multiple ]
-  before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :confirm_delete, :destroy, :preview, :edit_tags, :update_tags ]
-  before_filter :check_ownership, :only => [ :edit, :update, :confirm_delete, :destroy, :preview ]
+  before_filter :users_only, :except => [ :index, :show, :navigate ]
+  before_filter :check_user_status, :except => [ :index, :show, :navigate ]
+  before_filter :load_work, :except => [ :new, :create, :index, :show_multiple, :edit_multiple, :update_multiple ]
+  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :import_multiple ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
