@@ -225,8 +225,7 @@ class UsersController < ApplicationController
           @user.identity_url = OpenID.normalize_url(openid_url)
         end
       end
-      validate = (params[:validate].to_s != "false") # validate by default, unless specifically instructed not to
-      if @user.save(:validate => validate)
+      if @user.save
         notify_and_show_confirmation_screen
       else
         params[:use_openid] = true unless openid_url.blank?
