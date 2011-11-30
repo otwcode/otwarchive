@@ -138,14 +138,14 @@ protected
 
     # each chapter may have its own byline, notes and endnotes
     @chapters.each_with_index do |chapter, index|
-       @chapter = chapter
-       @page_title = chapter.chapter_title
-       render_mobi_html("_download_chapter", "chapter#{index+1}")
+      @chapter = chapter
+      @page_title = chapter.chapter_title
+      render_mobi_html("_download_chapter", "chapter#{index+1}")
     end
 
     # the afterword contains the works end notes, any related works, and a link back to comment
-     @page_title = ts("Afterword")
-     render_mobi_html("_download_afterword", "afterword")
+    @page_title = ts("Afterword")
+    render_mobi_html("_download_afterword", "afterword")
 
     chapter_file_names = 1.upto(@chapters.size).map {|i| "mobi/chapter#{i}.html"}
     ["mobi/preface.html", chapter_file_names.join(' '), "mobi/afterword.html"].join(' ')
@@ -186,8 +186,8 @@ protected
         # we only need the chapter meta/endnotes info if it's a
         # multichaptered work and if we are displaying the first/last
         # part of a chapter
-        @meta = @chapters.size > 1 && partindex == 0
-        @endnotes = @chapters.size > 1 && partindex == @parts[-1].size
+        @suppress_chapter_meta = @chapters.size == 1 || partindex > 0
+        @suppress_chapter_endnotes = @chapters.size == 1 || partindex < @parts[-1].size
         html = render_to_string(:template => "downloads/_download_chapter.html", :layout => "barebones.html")
         render_xhtml(html, "chapter#{index + 1}_#{partindex + 1}")
       end
