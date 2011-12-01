@@ -121,14 +121,15 @@ class ChallengeAssignmentsController < ApplicationController
       signup_open and return unless !@challenge.signup_open
       access_denied and return unless @challenge.user_allowed_to_see_assignments?(current_user)
       
+      # we temporarily are ordering by requesting pseud to avoid left join
       @assignments = case
       when params[:pinch_hit]
         # order by pinch hitter name
         ChallengeAssignment.unfulfilled_in_collection(@collection).undefaulted.with_pinch_hitter.joins("INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id)").order("pseuds.name")
       when params[:fulfilled]
-        @collection.assignments.fulfilled.order_by_offering_pseud
+        @collection.assignments.fulfilled.order_by_requesting_pseud
       when params[:unfulfilled]
-        ChallengeAssignment.unfulfilled_in_collection(@collection).undefaulted.order_by_offering_pseud
+        ChallengeAssignment.unfulfilled_in_collection(@collection).undefaulted.order_by_requesting_pseud
       else
         @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
       end
