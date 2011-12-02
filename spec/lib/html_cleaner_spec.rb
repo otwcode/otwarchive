@@ -676,15 +676,9 @@ describe HtmlCleaner do
     end
 
     it "should close unclosed tag withing other tag" do
-<<<<<<< HEAD
       pending "Opened bug report with Nokogiri"
       html = "<strong><em>unclosed</strong>"
       doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
-=======
-      html = "<strong><em>unclosed</strong>"
-      doc = Nokogiri::HTML.fragment(add_paragraphs_to_text(html))
-      puts doc.to_s
->>>>>>> small changes
       doc.xpath("./p/strong/em").children.to_s.strip.should == "unclosed"
     end
 
