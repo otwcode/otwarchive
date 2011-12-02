@@ -90,8 +90,19 @@
           <% if @parents[tag_type].any? %>
             <h4 class="heading"><%= ts("Check to remove: ") %></h4>
             <%= check_all_none %>
-            <%= checkbox_section(f, "associations_to_remove", @parents[tag_type], :name_helper_method => "tag_with_link_to_edit", 
-              :field_id => "parent_#{tag_type}_associations_to_remove") %>
+            <% id = "parent_#{tag_type}_associations_to_remove" %>
+            <% name = field_name(f, :associations_to_remove) %>
+            <ul class="tags">
+              <% @parents[tag_type].each do |tag| %>
+                <li>
+                  <%= link_to_edit_tag(tag) %>
+                  <label for="<%= id + "_#{tag.id}" %>" class="action" title="remove <%= tag.name %>">
+                    <span class="remove">x</span>
+                    <%= check_box_tag name, tag.name, tag.associations_to_remove.include?(tag.name), :id => id + "_#{tag.id}" %>
+                  </label>
+                </li>
+              <% end %>
+            </ul>
             <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
           <% else %>
             <h4 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add %{catname}:", :catname => tag_category_name(tag_type)) %></h4>
@@ -117,7 +128,7 @@
             <% if @children[tag_type].any? %>
               <h4 class="heading"><%= ts("Check to remove: ") %></h4>
               <%= check_all_none %>
-              <%= checkbox_section(f, "associations_to_remove", @children[tag_type], :name_helper_method => "tag_with_link_to_edit",
+              <%= checkbox_section(f, "associations_to_remove", @children[tag_type], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
                     :field_id => "child_#{tag_type}_associations_to_remove") %>
               <h5 class="heading"><%= f.label tag_type.underscore + '_string', ts("Add:") %></h5>
             <% else %>

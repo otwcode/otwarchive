@@ -412,6 +412,7 @@ module ApplicationHelper
       :checked_method => nil, 
       :name_method => "name", 
       :name_helper_method => nil, # alternative: pass a helper method that gets passed the choice
+      :extra_info_method => nil, # helper method that gets passed the choice, for any extra information that gets attached to the label
       :value_method => "id", 
       :disabled => false,
       :include_toggle => true,
@@ -446,6 +447,9 @@ module ApplicationHelper
       checkbox = check_box_tag(field_name, value, is_checked, opts.merge({:id => checkbox_id}))
       checkbox_and_label = label_tag checkbox_id, :class => "action" do 
         options[:checkbox_side] == "left" ? checkbox + display_name : display_name + checkbox
+      end
+      if options[:extra_info_method]
+        checkbox_and_label = eval("#{options[:extra_info_method]}(choice)") + checkbox_and_label
       end
       content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
     end.join("\n").html_safe
