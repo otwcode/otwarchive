@@ -66,11 +66,7 @@ class AdminSetting < ActiveRecord::Base
   end
   
   # update admin banner setting for all users when banner notice is changed
-  def self.banner_on!
-    Resque.enqueue(AdminSetting, :delayed_banner_on)
-  end
-  
-  def self.delayed_banner_on
+  def self.banner_on
     Preference.update_all("banner_seen = false")
   end
 
