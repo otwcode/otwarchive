@@ -2,8 +2,8 @@ class UsersController < ApplicationController
   cache_sweeper :pseud_sweeper
 
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_email, :change_openid, :browse]
-  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :end_banner, :change_username, :change_password, :change_email, :change_openid]
+  before_filter :load_user, :except => [:activate, :create, :delete_confirmation, :index, :new]
+  before_filter :check_ownership, :except => [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]  
   before_filter :check_account_creation_status, :only => [:new, :create]
 
   # This is meant to rescue from race conditions that sometimes occur on user creation
