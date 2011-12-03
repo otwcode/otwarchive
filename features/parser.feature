@@ -11,7 +11,7 @@ Feature: Parsing HTML
     """
     This is paragraph 1.
 
-    This is paragraph 2.    
+    This is paragraph 2.
     """
     And I press "Preview"
   Then I should see "Preview"
@@ -34,6 +34,6 @@ Feature: Parsing HTML
     """
     And I press "Preview"
   Then I should see "Preview"
-    And I should see the text with tags "<p>A paragraph</p><a>Another paragraph.</p>" 
+    And I should see the text with tags "<p>A paragraph</p><p>Another paragraph.</p>" 
 
 
