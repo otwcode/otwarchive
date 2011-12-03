@@ -117,6 +117,12 @@ Given /^everyone has signed up for Battle 12$/ do
   When %{I sign up for Battle 12 with combination C}
 end
 
+Given /^an anon has signed up for Battle 12$/ do
+  # both anon
+  When %{I am logged in as "myname2"}
+  When %{I sign up for Battle 12 with combination B}
+end
+
 Given /^everyone has signed up for the gift exchange "([^\"]*)"$/ do |challengename|
   When %{I am logged in as "myname1"}
   When %{I sign up for "#{challengename}" with combination A}
