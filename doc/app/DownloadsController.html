@@ -755,8 +755,8 @@ the other two are derived and are there for nginx’s benefit GET
       <span class="ruby-comment"># we only need the chapter meta/endnotes info if it's a</span>
       <span class="ruby-comment"># multichaptered work and if we are displaying the first/last</span>
       <span class="ruby-comment"># part of a chapter</span>
-      <span class="ruby-ivar">@meta</span> = <span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">partindex</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
-      <span class="ruby-ivar">@endnotes</span> = <span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">partindex</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@parts</span>[<span class="ruby-value">-1</span>].<span class="ruby-identifier">size</span>
+      <span class="ruby-ivar">@suppress_chapter_meta</span> = <span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">partindex</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+      <span class="ruby-ivar">@suppress_chapter_endnotes</span> = <span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">partindex</span> <span class="ruby-operator">&lt;</span> <span class="ruby-ivar">@parts</span>[<span class="ruby-value">-1</span>].<span class="ruby-identifier">size</span>
       <span class="ruby-identifier">html</span> = <span class="ruby-identifier">render_to_string</span>(<span class="ruby-value">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;downloads/_download_chapter.html&quot;</span>, <span class="ruby-value">:layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;barebones.html&quot;</span>)
       <span class="ruby-identifier">render_xhtml</span>(<span class="ruby-identifier">html</span>, <span class="ruby-node">&quot;chapter#{index + 1}_#{partindex + 1}&quot;</span>)
     <span class="ruby-keyword">end</span>
@@ -808,14 +808,14 @@ the other two are derived and are there for nginx’s benefit GET
 
   <span class="ruby-comment"># each chapter may have its own byline, notes and endnotes</span>
   <span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">chapter</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
-     <span class="ruby-ivar">@chapter</span> = <span class="ruby-identifier">chapter</span>
-     <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">chapter</span>.<span class="ruby-identifier">chapter_title</span>
-     <span class="ruby-identifier">render_mobi_html</span>(<span class="ruby-string">&quot;_download_chapter&quot;</span>, <span class="ruby-node">&quot;chapter#{index+1}&quot;</span>)
+    <span class="ruby-ivar">@chapter</span> = <span class="ruby-identifier">chapter</span>
+    <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">chapter</span>.<span class="ruby-identifier">chapter_title</span>
+    <span class="ruby-identifier">render_mobi_html</span>(<span class="ruby-string">&quot;_download_chapter&quot;</span>, <span class="ruby-node">&quot;chapter#{index+1}&quot;</span>)
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-comment"># the afterword contains the works end notes, any related works, and a link back to comment</span>
-   <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Afterword&quot;</span>)
-   <span class="ruby-identifier">render_mobi_html</span>(<span class="ruby-string">&quot;_download_afterword&quot;</span>, <span class="ruby-string">&quot;afterword&quot;</span>)
+  <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Afterword&quot;</span>)
+  <span class="ruby-identifier">render_mobi_html</span>(<span class="ruby-string">&quot;_download_afterword&quot;</span>, <span class="ruby-string">&quot;afterword&quot;</span>)
 
   <span class="ruby-identifier">chapter_file_names</span> = <span class="ruby-value">1</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-ivar">@chapters</span>.<span class="ruby-identifier">size</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;mobi/chapter#{i}.html&quot;</span>}
   [<span class="ruby-string">&quot;mobi/preface.html&quot;</span>, <span class="ruby-identifier">chapter_file_names</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">' '</span>), <span class="ruby-string">&quot;mobi/afterword.html&quot;</span>].<span class="ruby-identifier">join</span>(<span class="ruby-string">' '</span>)
