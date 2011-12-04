@@ -549,8 +549,27 @@ Feature: Prompt Meme Challenge
   When I go to "Battle 12" collection's page
   Then I should not see "Your Claims"
   
-  Scenario: User can delete their own claim from the user claims list
+  Scenario: User can drop a claim from the prompts page
   
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I claim a prompt from "Battle 12"
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts"
+  Then I should see "Drop Claim"
+
+  Scenario: User can't delete another user's claim
+
+  Given I have Battle 12 prompt meme fully set up
+  Given everyone has signed up for Battle 12
+  When I claim a prompt from "Battle 12"
+  When I am logged in as "otheruser"
+    And I go to "Battle 12" collection's page
+    And I follow "Prompts"
+  Then I should not see "Drop Claim"
+
+  Scenario: User can delete their own claim from the user claims list
+
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
   When I claim a prompt from "Battle 12"
@@ -562,7 +581,7 @@ Feature: Prompt Meme Challenge
   # confirm claim no longer exists
   When I go to "Battle 12" collection's page
   Then I should not see "Your Claims"
-  
+
   Scenario: Mod or owner can delete a claim from the user claims list
   
   Given I have Battle 12 prompt meme fully set up
@@ -1167,16 +1186,17 @@ Feature: Prompt Meme Challenge
   When I close signups for "Battle 12"
   When I am logged in as "myname2"
   When I claim a prompt from "Battle 12"
-  When I fulfill my claim
   When I reveal the "Battle 12" challenge
   When I reveal the authors of the "Battle 12" challenge
   When I am logged in as "myname2"
   When I am on my user page
     And I follow "Claims"
+    # note that user Claims page currently only shows unfulfilled claims
   Then I should not see "myname4"
     And I should see "Anonymous"
     
   Scenario: Check that anon prompts are still anon on claims show after challenge is revealed
+  # note that only mod can see claims show now - users don't get linked to it
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname4"
@@ -1184,12 +1204,11 @@ Feature: Prompt Meme Challenge
   When I close signups for "Battle 12"
   When I am logged in as "myname2"
   When I claim a prompt from "Battle 12"
-  When I fulfill my claim
   When I reveal the "Battle 12" challenge
   When I reveal the authors of the "Battle 12" challenge
-  When I am logged in as "myname2"
-  When I am on my user page
-    And I follow "Claims"
+  When I am logged in as "mod1"
+  When I am on "Battle 12" collection's page
+    And I follow "Unposted Claims"
     And I follow "Anonymous"
   Then I should not see "myname4"
     And I should see "Anonymous"
@@ -1197,7 +1216,7 @@ Feature: Prompt Meme Challenge
   Scenario: check that anon prompts are still anon on the fulfilling work
   # TODO
   
-  Scenario: Fulfilled claims show as fulfilled
+  Scenario: Fulfilled claims show as fulfilled to another user
   
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
@@ -1215,22 +1234,15 @@ Feature: Prompt Meme Challenge
   When I press "Claim"
   Then I should see "New claim made."
   When I am logged in as "myname4"
-    And I go to the collections page
-    And I follow "Battle 12"
-    And I follow "Claims"
-  Then I should see "mod1" within "#fulfilled_claims"
-    And I should see "myname4" within "#fulfilled_claims"
+    And I go to the "Battle 12" requests page
+  Then I should see "mod1" within ".prompt .works"
+    And I should see "myname4" within ".prompt .works"
     
   Scenario: Make another claim and then fulfill from the post new form
   
   Given I have Battle 12 prompt meme fully set up
   Given everyone has signed up for Battle 12
-  When I am logged in as "myname4"
-  When I claim a prompt from "Battle 12"
   When I close signups for "Battle 12"
-  When I am logged in as "myname4"
-  When I fulfill my claim
-  When mod fulfills claim
   When I reveal the "Battle 12" challenge
   Given all emails have been delivered
   When I reveal the authors of the "Battle 12" challenge
@@ -1246,10 +1258,10 @@ Feature: Prompt Meme Challenge
   Then I should see "New claim made"
   When I follow "post new"
   When I fill in the basic work information for "Existing work"
-    And I check "Battle 12 (Anonymous)"
+    And I check "Battle 12 (myname4)"
     And I press "Preview"
   Then I should see "Draft was successfully created"
-    And I should see "In response to a prompt by: Anonymous"
+    And I should see "In response to a prompt by: myname4"
     And 0 emails should be delivered
     # TODO: Figure this out
   #  And I should see "Collections:"
@@ -1260,32 +1272,25 @@ Feature: Prompt Meme Challenge
   Scenario: work left in draft so claim is not yet totally fulfilled
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up for Battle 12
-  When I am logged in as "myname4"
-  When I claim a prompt from "Battle 12"
+  Given an anon has signed up for Battle 12
   When I close signups for "Battle 12"
-  When I am logged in as "myname4"
-  When I fulfill my claim
-  When mod fulfills claim
   When I reveal the "Battle 12" challenge
   Given all emails have been delivered
   When I reveal the authors of the "Battle 12" challenge
-  When I go to "Battle 12" collection's page
-    And I follow "Prompts (8)"
-  When I press "Claim"
-  Then I should see "New claim made."
   When I am logged in as "myname4"
-    And I go to the collections page
-    And I follow "Battle 12"
-  When I follow "Prompts ("
-  When I press "Claim"
-  When I follow "post new"
-  When I fill in the basic work information for "Existing work"
-    And I check "Battle 12 (Anonymous)"
+  When I claim a prompt from "Battle 12"
+  When I start to fulfill my claim
     And I press "Preview"
-  When I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should see "myname4" within "#fulfilled_claims"
+  When I go to the "Battle 12" requests page
+  Then I should see "Claimed By"
+    And I should not see "Fulfilled By"
+  When I am logged in as "mod1"
+    And I go to "Battle 12" collection's page
+    And I follow "Unposted Claims"
+  Then I should see "myname4"
+  When I am logged in as "myname4"
+    And I go to my claims page
+    # should show the draft in some way, though design has changed a bit
     And I should see "Response posted on"
     And I should see "Not yet approved"
   When I follow "Response posted on"
@@ -1294,34 +1299,25 @@ Feature: Prompt Meme Challenge
   When I am on my user page
     And I follow "Drafts"
     And all emails have been delivered
-  Then I should see "Existing work"
+  Then I should see "Fulfilled Story"
     And "Issue 2259" is fixed
     
   Scenario: When draft is posted, claim is fulfilled
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up for Battle 12
+  When I am logged in as "myname2"
+    And I sign up for Battle 12 with combination B
   When I am logged in as "myname4"
-  When I claim a prompt from "Battle 12"
+    And I claim a prompt from "Battle 12"
   When I close signups for "Battle 12"
-  When I am logged in as "myname4"
-  When I fulfill my claim
-  When mod fulfills claim
   When I reveal the "Battle 12" challenge
-  Given all emails have been delivered
   When I reveal the authors of the "Battle 12" challenge
-  When I go to "Battle 12" collection's page
-    And I follow "Prompts (8)"
-  When I press "Claim"
-  Then I should see "New claim made."
   When I am logged in as "myname4"
-    And I go to the collections page
-    And I follow "Battle 12"
-  When I follow "Prompts ("
+    And I go to the "Battle 12" requests page
   When I press "Claim"
   When I follow "post new"
-  When I fill in the basic work information for "Existing work"
-    And I check "Battle 12 (Anonymous)"
+    And I fill in the basic work information for "Existing work"
+    And I check "Untitled Prompt in Battle 12 (Anonymous)"
     And I press "Preview"
   When I am on my user page
     And I follow "Drafts"
@@ -1331,19 +1327,19 @@ Feature: Prompt Meme Challenge
   Then I should see "Your work was successfully posted"
     And I should see "In response to a prompt by: Anonymous"
   When I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should see "myname4" within "#fulfilled_claims"
-    And I should see "Response posted on"
+    And I follow "Prompts"
+  Then I should see "myname4" within ".prompt .works"
+    And I should see "Fulfilled By"
     # TODO: Figure this out
   #  And I should not see "Not yet approved"
-  When I follow "Response posted on"
+  When I follow "Existing work"
   Then I should see "Existing work"
     And I should not find "draft"
   
-  Scenario: Fulfill a claim from an existing work
+  Scenario: Fulfill a claim by editing an existing work
   
   Given I have Battle 12 prompt meme fully set up
-  Given everyone has signed up for Battle 12
+    And everyone has signed up for Battle 12
   When I close signups for "Battle 12"
   When I reveal the "Battle 12" challenge
   When I reveal the authors of the "Battle 12" challenge
@@ -1358,22 +1354,21 @@ Feature: Prompt Meme Challenge
     And I press "Preview"
   Then I should find "draft"
     And I should see "In response to a prompt by:"
-    # TODO: Figure this out
+    # TODO: Figure out why this isn't showing - it works fine when testing manually
   #  And I should see "Collections:"
    # And I should see "Battle 12"
   When I press "Update"
   Then I should see "Work was successfully updated"
     And I should not find "draft"
     And I should see "In response to a prompt by:"
-  #TODO: Figure this one out, too
-  #Then I should see "Collections:"
-  #  And I should see "Battle 12"
+  Then I should see "Collections:"
+    And I should see "Battle 12"
     
-  # work not left in draft so claim is fulfilled
+  # claim is fulfilled on collection page
   When I go to "Battle 12" collection's page
-    And I follow "Claims"
-  Then I should see "myname1" within "#fulfilled_claims"
-    And I should see "Response posted on"
+    And I follow "Prompts"
+  Then I should see "myname1" within ".prompt .works"
+    And I should see "Fulfilled By"
 
   Scenario: Download prompt CSV from signups page
   
@@ -1384,11 +1379,11 @@ Feature: Prompt Meme Challenge
     And I follow "Download (CSV)"
   Then I should get a file with ending and type csv
 
-  Scenario: Download prompt CSV from requests page # was the feature removed? why?
+  Scenario: Can't download prompt CSV from requests page
+  # it's aimed at users, not mods
   
-  Given I am logged in as "mod1"
-    And I have standard challenge tags setup
-    And I create Battle 12 promptmeme
+  Given I have Battle 12 prompt meme fully set up
+    And everyone has signed up for Battle 12
+    And I am logged in as "mod1"
   When I go to the "Battle 12" requests page
-    And I follow "Download (CSV)"
-  Then I should get a file with ending and type csv
+  Then I should not see "Download (CSV)"
