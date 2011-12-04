@@ -1,12 +1,12 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%=h "Create Account" %></h2>
+<h2 class="heading"><%= ts("Create Account") %></h2>
 <% if @user.errors.any? %>
   <div id="errorExplanationNone">
      <h4 class="heading"><%= ts("Oops, there's some problems with the stuff you told us.") %></h4>
      <ul>
-       <% @user.errors.full_messages.each do |msg| %>
-       <li><%= msg %></li>
-       <% end %>
+        <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
      </ul>
   </div>
 <% end %>
@@ -14,29 +14,47 @@
 
 <!--main content-->
 <!-- TODO add ajax -->
-<%= form_for @user do |f| %>
+<%= form_for @user, :html => {:id => "user_registration_form"} do |f| %>
   <%= hidden_field_tag :invitation_token, @user.invitation_token %>
  
   <% if params[:use_openid] && ArchiveConfig.USE_OPENID %>
-    <p class="actions" role="navigation"><%= link_to ts('Sign up using Password'), new_user_path(:invitation_token => @user.invitation_token) %></p>
+    <p class="actions" role="navigation">
+      <%= link_to ts('Sign up using Password'), new_user_path(:invitation_token => @user.invitation_token) %>
+    </p>
     <%= render :partial => "openid", :locals => {:f => f} %>
-  <%- else %>
+  <% else %>
+
     <% if ArchiveConfig.USE_OPENID %>
-      <p class="actions" role="navigation"><%= link_to ts('Sign up using OpenID'), new_user_path(:use_openid => true, :invitation_token => @user.invitation_token) %></p>
+      <p class="actions" role="navigation">
+        <%= link_to ts('Sign up using OpenID'), new_user_path(:use_openid => true, :invitation_token => @user.invitation_token) %>
+      </p>
     <% end %>
-    
-    <fieldset><legend>User Details</legend>
-    <%= render :partial => "passwd", :locals => {:f => f} %>
+
+    <fieldset>
+      <legend><%= ts("User Details") %></legend>
+      <%= render :partial => "passwd", :locals => {:f => f} %>
+    </fieldset>
   <% end %>
+  
+  <fieldset>
+    <legend><%= ts("Legal Agreements") %></legend>
+    <%= render :partial => "legal", :locals => {:f => f} %>
   </fieldset>
-  <fieldset><legend>Legal Agreements</legend>
-  <%= render :partial => "legal", :locals => {:f => f} %>
-  </fieldset>
-  <fieldset><legend>Submit</legend>
-  <p class="submit cancel actions">
-    <input type="submit" name="cancel_create_account" value="Cancel" />
-    <%= submit_tag 'Create Account' %>
-  </p>
+
+  <fieldset>
+    <legend><%= ts("Submit") %></legend>
+    <p class="submit cancel actions">
+      <input type="submit" name="cancel_create_account" value="Cancel" />
+      <%= submit_tag ts('Create Account') %>
+    </p>
   </fieldset>
 <% end %>
 <!--/content-->
+
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j(document).ready(function(){
+        $j('#user_registration_form').preventDoubleSubmit();
+     })
+  <% end %>
+<% end %>
