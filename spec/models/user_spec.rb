@@ -54,6 +54,21 @@ describe User do
       @user.errors[:login].should_not be_empty
     end
 
+    it "should prevent duplicate logins even when Rails validation misses it" do
+      @user.save
+
+      @duplicate = User.new
+      @duplicate.login = @user.login
+      @duplicate.age_over_13 = "1"
+      @duplicate.terms_of_service = "1"
+      @duplicate.email = @user.email
+      @duplicate.password = "password"
+      lambda do
+        # pass ':validate => false' to 'save' in order to skip the validations, to simulate race conditions
+        @duplicate.save(:validate => false)
+      end.should raise_error(ActiveRecord::RecordNotUnique)
+    end
+
     it "should not save user when email exists already" do
       user2 = Factory.create(:user)
       @user.email = user2.email
