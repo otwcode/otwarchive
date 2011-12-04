@@ -16,7 +16,7 @@
     <% end %>
 
   	<% if @collection.challenge # add custom navigation for the specific challenge if there is one %>
-  	  <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_navigation_user" %>
+  	  <%= render "challenge/#{challenge_class_name(@collection)}/challenge_navigation_user" %>
   	<% end %>
 
     <% unless @collection.user_is_owner?(current_user) %>
@@ -25,7 +25,7 @@
           :confirm => ts('Are you certain you want to leave this collection?'), 
           :method => :delete %></li>
       <% elsif logged_in? && @collection.moderated? %>
-        <li><%= link_to 'Join', join_collection_participants_path(@collection) %></li>
+        <li><%= link_to ts("Join"), join_collection_participants_path(@collection) %></li>
       <% end %>
     <% end %>
 
@@ -36,5 +36,7 @@
   </ul>
   <!--/subnav-->
   <blockquote class="userstuff"><%=raw sanitize_field(@collection, :description) %></blockquote>
+  <p class="type">
+    (<%= collection.closed? ? ts("Closed") : ts("Open") %>, <%= collection.moderated? ? ts("Moderated") : ts("Unmoderated") %><%= collection.unrevealed? ? ts(", Unrevealed") : "" %><%= collection.anonymous? ? ts(", Anonymous") : "" %><%= collection.gift_exchange? ? ts(", Gift Exchange Challenge") : "" %><%= collection.prompt_meme? ? ts(", Prompt Meme Challenge") : "" %>)
+  </p>
 </div>
-

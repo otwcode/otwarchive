@@ -57,9 +57,11 @@ class Collection < ActiveRecord::Base
   has_many :works, :through => :collection_items, :source => :item, :source_type => 'Work'
   has_many :approved_works, :through => :collection_items, :source => :item, :source_type => 'Work',
     :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ? AND works.posted = true', CollectionItem::APPROVED, CollectionItem::APPROVED]
+
   has_many :bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark'
   has_many :approved_bookmarks, :through => :collection_items, :source => :item, :source_type => 'Bookmark',
     :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  
   has_many :fandoms, :through => :approved_works, :uniq => true
   has_many :filters, :through => :approved_works, :uniq => true
 
