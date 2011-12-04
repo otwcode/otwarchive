@@ -4,7 +4,7 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
 #footer { background:#900 url("/images/skins/textures/tiles/red-ao3.png"); clear:both; border-top:2px solid; position:relative; min-height:150px }
 #footer ul
         { border:0; clear: both; color: #fff; font-size: 0.75em; margin: 1.5em 0; padding: 1em; text-align: center; float:none }
-#footer ul.navigation a   
+#footer a   
         { background:transparent; color: #fff; border: 0; font-weight: 400; margin: auto; padding: 0
           box-shadow:none; }
 #footer a:hover
@@ -15,6 +15,9 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
 #footer .secondary 
         { margin: auto; right: auto;
           box-shadow: inset 2px 2px 2px #111;}
-#footer .secondary li a 
-        {  color: #900;}       
+#footer .secondary a 
+        {  color: #900;} 
+#footer .secondary a:hover {
+background: transparent;
+}
 /*END== */
