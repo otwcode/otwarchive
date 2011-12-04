@@ -40,6 +40,11 @@
     <%= f.text_field :icon_alt_text, :class => "observe_textlength" %>
     <%= generate_countdown_html("pseud_icon_alt_text", ArchiveConfig.ICON_ALT_MAX) %>
   </dd>
+  <dt><%= f.label :icon_comment_text, ts("Icon comment text") %> <%= link_to_help('pseud-icon-comment') %></dt>
+  <dd>
+    <%= f.text_field :icon_comment_text, :class => "observe_textlength" %>
+  </dd>
+  <dd>
 
  <dt class="landmark">Submit</dt>
  <dd class="submit actions">  <%= f.submit button_text %></dd>
