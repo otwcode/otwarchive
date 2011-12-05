@@ -351,6 +351,8 @@ When /^I sign up for Battle 12 with combination C$/ do
     And %{I check the 1st checkbox with the value "Stargate Atlantis"}
     And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird, Alternate Universe - Historical"}
+    And %{I fill in the 1st field with id matching "title" with "weird SGA history AU"}
+    And %{I fill in the 2nd field with id matching "title" with "canon SGA love"}
     click_button "Submit"
   Then %{I should see "Signup was successfully created"}
     And %{I should see "Stargate Atlantis"}
