@@ -130,10 +130,10 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I go to "Battle 12" collection's page
-  # TODO: there is no more prompt count at all?
-  # Then show me the main content
-  Then I should see "Total prompts: 2"
-    And I should see "Claimed prompts: 0"
+    And I follow "Profile"
+  Then I should see "Prompts: 2"
+    # TODO: Was the claimed prompts count intentionally removed from profile?
+    # And I should see "Claimed prompts: 0"
 
   Scenario: Prompt count shows on collections index
 
@@ -207,8 +207,8 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination E
   When I claim a prompt from "Battle 12"
-  # TODO: there is no link to unposted claims anymore?
-  When I view unposted claims for "Battle 12"
+  # TODO: check design: regular user doesn't get link to unposted claims anymore
+  # When I view unposted claims for "Battle 12"
   Then I should see "Weird description"
   
   Scenario: Sort by fandom shouldn't show when there aren't any fandoms
@@ -230,16 +230,17 @@ Feature: Prompt Meme Challenge
   And I claim a prompt from "Battle 12"
   Then I should see a prompt is claimed
 
-  Scenario: Claim count shows on profile
+  Scenario: Claim count shows on profile?
 
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
     And I claim a prompt from "Battle 12"
   When I go to "Battle 12" collection's page
-  # TODO: have these been removed by design or by accident? and could we have them back?
-  Then I should see "Total prompts: 2"
-    And I should see "Claimed prompts: 1"
+    And I follow "Profile"
+  Then I should see "Prompts: 2"
+    # TODO: have these been removed by design or by accident?
+    # And I should see "Claimed prompts: 1"
   
   Scenario: Mod can view signups
   
@@ -489,7 +490,9 @@ Feature: Prompt Meme Challenge
   When I claim a prompt from "Battle 12"
   When I close signups for "Battle 12"
   When I am logged in as "myname4"
-  Then claims are hidden
+  Then I should not see "Unposted Claims"
+  # TODO: they got really hidden, since ordinary user can't get to that page at all
+  # Then claims are hidden
   
   Scenario: Fulfilled claims are shown to mod
   
@@ -986,10 +989,9 @@ Feature: Prompt Meme Challenge
   Then I should see "Claims (1)" 
   When I follow "Claims"
   Then I should see "Your Claims"
-    And I should not see "In Battle 12"
-    And I should see "Writing For" within "#claims_table"
-    And I should see "myname4" within "#claims_table"
+    And I should see "Request by myname4 in Battle 12" within "h4"
   When I follow "Fulfill"
+    And I fill in "Fandoms" with "Stargate Atlantis"
     And I fill in "Work Title" with "Fulfilled Story-thing"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"

@@ -521,7 +521,7 @@ end
 
 When /^I view unposted claims for "([^\"]*)"$/ do |title|
   visit collection_path(Collection.find_by_title(title))
-  # And %{show me the main content}
+  # When %{show me the sidebar}
   When %{I follow "Unposted Claims ("}
 end
 
