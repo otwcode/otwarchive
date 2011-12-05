@@ -669,16 +669,18 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
     And I post the work "Existing Story"
     And I edit the work "Existing Story"
-    And I check "Battle 12 (Anonymous) -  - Stargate Atlantis"
+    And I check "random SGA love in Battle 12 (Anonymous)"
     And I press "Post without preview"
   Then I should see "Battle 12"
   When I follow "Anonymous"
-  Then I should see "Mystery work"
+  # TODO: *should* I (myname4) see "Mystery work"?
+  Then I should see "Existing Story"
     And I should not see "Not fulfilled yet"
   When I reveal works for "Battle 12"
   When I view the work "Existing Story"
     And I follow "Anonymous"
-  Then I should see "Response posted on"
+  Then I should see "Fulfilled By"
+    And I should see "Existing Story by Anonymous"
     
   Scenario: User edits existing work in another collection to fulfill claim
   
@@ -690,7 +692,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
     And I post the work "Existing Story" in the collection "Othercoll"
     And I edit the work "Existing Story"
-    And I check "Battle 12 (Anonymous) -  - Stargate Atlantis"
+    And I check "random SGA love in Battle 12 (Anonymous)"
     And I press "Post without preview"
   Then I should see "Battle 12"
     And I should see "Othercoll"

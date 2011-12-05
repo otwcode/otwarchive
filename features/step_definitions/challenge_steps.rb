@@ -207,6 +207,7 @@ When /^I fill in Battle 12 challenge options$/ do
     And %{I fill in "Signup closes" with "2016-09-20 12:40AM"}
     And %{I select "(GMT-05:00) Eastern Time (US & Canada)" from "Time zone"}
     And %{I fill in "prompt_meme_requests_num_allowed" with "3"}
+    check("prompt_meme_request_restriction_attributes_title_allowed")
     And %{I submit}
 end
 
@@ -338,6 +339,8 @@ When /^I sign up for Battle 12 with combination B$/ do
     And %{I check the 1st checkbox with id matching "anonymous"}
     And %{I check the 2nd checkbox with id matching "anonymous"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Alternate Universe - High School, Something else weird"}
+    And %{I fill in the 1st field with id matching "title" with "High School AU SG1"}
+    And %{I fill in the 2nd field with id matching "title" with "random SGA love"}
     click_button "Submit"
 end
 
