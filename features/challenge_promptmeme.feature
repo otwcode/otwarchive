@@ -776,15 +776,15 @@ Feature: Prompt Meme Challenge
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
-  When I sign up for Battle 12 with combination F
-  # 1st prompt SG1 anon, 2nd prompt SGA non-anon
+  When I sign up for Battle 12
+  # 1st prompt anon, 2nd prompt non-anon
   When I am logged in as "myname1"
     And I claim a prompt from "Battle 12"
     And I claim a prompt from "Battle 12"
     And I view prompts for "Battle 12"
   When I start to fulfill my claim
-  # the SGA prompt will already by checked
-    And I check "SG1 love in Battle 12 (Anonymous)"
+  # the anon prompt will already by checked
+    And I check "crack in Battle 12 (myname2)"
     And I press "Preview"
     And I press "Post"
   When I view the work "Fulfilled Story"

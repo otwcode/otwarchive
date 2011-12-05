@@ -372,16 +372,6 @@ When /^I sign up for Battle 12 with combination E$/ do
     And "I press \"Submit\""
 end
 
-When /^I sign up for Battle 12 with combination F$/ do
-  When %{I start signing up for Battle 12}
-    And %{I check the 1st checkbox with the value "Stargate SG-1"}
-    And %{I check the 2nd checkbox with the value "Stargate Atlantis"}
-    And %{I check the 1st checkbox with id matching "anonymous"}
-    And %{I fill in the 1st field with id matching "title" with "SG1 love"}
-    And %{I fill in the 2nd field with id matching "title" with "SGA love"}
-    click_button "Submit"
-end
-
 When /^I sign up for "([^\"]*)" fixed-fandom prompt meme$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
