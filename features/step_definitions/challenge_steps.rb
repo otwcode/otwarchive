@@ -248,6 +248,7 @@ end
 When /^I fill in single-prompt challenge options$/ do
   When %{I fill in "prompt_meme_requests_num_required" with "1"}
     And %{I check "Signup open?"}
+    check("prompt_meme_request_restriction_attributes_title_allowed")
     And %{I submit}
 end
 
@@ -320,6 +321,7 @@ When /^I sign up for Battle 12$/ do
     And %{I check the 2nd checkbox with the value "Stargate SG-1"}
     And %{I check the 2nd checkbox with id matching "anonymous"}
     And %{I fill in the 1st field with id matching "freeform_tagnames" with "Something else weird"}
+    And %{I fill in the 1st field with id matching "title" with "crack"}
     # We have to use explicit button names because there are two forms on this page - the form to expand prompts
     click_button "Submit"
 end
@@ -433,6 +435,7 @@ When /^I sign up for "([^\"]*)" with combination SGA$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
     And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate Atlantis"}
+    fill_in("challenge_signup_requests_attributes_0_title", :with => "SGA love")
     click_button "Submit"
 end
 
@@ -440,6 +443,7 @@ When /^I sign up for "([^\"]*)" with combination SG-1$/ do |title|
   visit collection_path(Collection.find_by_title(title))
   When %{I follow "Sign Up"}
     And %{I fill in "challenge_signup_requests_attributes_0_tag_set_attributes_fandom_tagnames" with "Stargate SG-1"}
+    fill_in("challenge_signup_requests_attributes_0_title", :with => "SG1 love")
     click_button "Submit"
 end
 

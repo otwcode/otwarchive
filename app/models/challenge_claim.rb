@@ -111,14 +111,14 @@ class ChallengeClaim < ActiveRecord::Base
   end
   
   def title
-    if self.request_prompt.title
+    if !self.request_prompt.title.blank?
       title = request_prompt.title
     else
-      title = "Untitled Prompt"
+      title = ts("Untitled Prompt")
     end
-    title += " in #{self.collection.title}"
+    title += " " + ts("in") + " #{self.collection.title}"
     if self.request_prompt.anonymous?
-      title += " (Anonymous)"
+      title += " " + ts("(Anonymous)")
     else
       title += " (#{self.request_byline})"
     end

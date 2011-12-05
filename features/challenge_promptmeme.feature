@@ -707,14 +707,14 @@ Feature: Prompt Meme Challenge
     And I claim two prompts from "Battle 12"
     And I view prompts for "Battle 12"
   # all prompts have been claimed - check it worked
-  Then I should not see "Claim" within "tbody"
-  # SG-1 as claims are in reverse date order
+  # TODO: find a better way to check that it worked, since 'Drop Claim' includes the word 'Claim', and there is no table anymore, so no tbody
+  # Then I should not see "Claim" within "tbody"
+  # TODO: check that they are not intermittent anymore
   When I start to fulfill my claim
-  Then I should find a checkbox "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird"
-    And I should find a checkbox "Battle 12 (Anonymous) -  - Stargate Atlantis"
-  # Commenting out intermittent failures
-  #Then the "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird" checkbox should be checked
-  #Then the "Battle 12 (Anonymous) -  - Stargate Atlantis" checkbox should not be checked
+  Then I should find a checkbox "High School AU SG1 in Battle 12 (Anonymous)"
+    And I should find a checkbox "random SGA love in Battle 12 (Anonymous)"
+    And the "High School AU SG1 in Battle 12 (Anonymous)" checkbox should not be checked
+    And the "random SGA love in Battle 12 (Anonymous)" checkbox should be checked
   
   Scenario: Claim two prompts by different people in one challenge
   
@@ -726,31 +726,27 @@ Feature: Prompt Meme Challenge
   When I am logged in as "writer"
     And I claim two prompts from "Battle 12"
   When I start to fulfill my claim
-  Then I should find a checkbox "Battle 12 (sg1fan) -  - Stargate SG-1"
-    And I should find a checkbox "Battle 12 (sgafan) -  - Stargate Atlantis"
-  # Commenting out intermittent failures
-  #Then the "Battle 12 (sgafan) -  - Stargate Atlantis" checkbox should be checked
-  #Then the "Battle 12 (sg1fan) -  - Stargate SG-1" checkbox should not be checked
+  Then I should find a checkbox "SG1 love in Battle 12 (sg1fan)"
+    And I should find a checkbox "SGA love in Battle 12 (sgafan)"
+  # TODO: check that they are not intermittent anymore
+    And the "SGA love in Battle 12 (sgafan)" checkbox should not be checked
+    And the "SG1 love in Battle 12 (sg1fan)" checkbox should be checked
   
   Scenario: Claim two prompts by the same person in one challenge, one is anon
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
   When I sign up for Battle 12
-  # 1st prompt "something else weird", 2nd prompt anon
+  # 1st prompt "something else weird" and titled "crack", 2nd prompt anon
   When I am logged in as "myname1"
     And I claim two prompts from "Battle 12"
     And I view prompts for "Battle 12"
-  # all prompts have been claimed - check it worked
-  Then I should not see "Claim" within "tbody"
   # anon as claims are in reverse date order
   When I start to fulfill my claim
-  Then I should find a checkbox "Battle 12 (Anonymous) -  - Stargate SG-1"
-    And I should find a checkbox "Battle 12 (myname2) -  - Stargate SG-1 - Something else weird"
-  # Commenting out intermittent failures
-  #Then the "Battle 12 (Anonymous) -  - Stargate SG-1" checkbox should be checked
-  # Always checked according to one test
-  #Then the "Battle 12 (myname2) -  - Stargate SG-1 - Something else weird" checkbox should not be checked
+  Then I should find a checkbox "Untitled Prompt in Battle 12 (Anonymous)"
+    And I should find a checkbox "crack in Battle 12 (myname2)"
+    And the "Untitled Prompt in Battle 12 (Anonymous)" checkbox should be checked
+    And the "crack in Battle 12 (myname2)" checkbox should not be checked
   
   Scenario: User claims two prompts in one challenge and fulfills one of them
   
