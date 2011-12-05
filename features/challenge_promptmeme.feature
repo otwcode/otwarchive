@@ -759,46 +759,38 @@ Feature: Prompt Meme Challenge
     # SGA as it's in reverse order
     And I claim a prompt from "Battle 12"
     # SG-1
-  # SG-1 as claims are in reverse date order
+  # SGA seems to be the first consistently
   When I start to fulfill my claim
-  Then the "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird" checkbox should be checked
-  # this next line shouldn't be needed - there's still a bug somewhere
-  When I uncheck "Battle 12 (Anonymous) -  - Stargate Atlantis"
-  Then the "Battle 12 (Anonymous) -  - Stargate Atlantis" checkbox should not be checked
+  Then the "High School AU SG1 in Battle 12 (Anonymous)" checkbox should not be checked
+    And the "random SGA love in Battle 12 (Anonymous)" checkbox should be checked
   When I press "Preview"
-  # Commenting out intermittent failure related to options_select issue
-  #Then I should not see "Stargate Atlantis"
-  #  And I should see "Stargate SG-1"
-  #  And I should see "Something else weird"
-  #When I press "Post"
-  #When I view the work "Fulfilled Story"
-  #Then I should not see "Stargate Atlantis"
-  #  And I should see "Stargate SG-1"
-  #  And I should see "Something else weird"
-  #When I follow "Anonymous" within "p"
-  #Then I should not see "Stargate Atlantis"
-  #  And I should see "Stargate SG-1"
+    And I press "Post"
+  When I view the work "Fulfilled Story"
+  # these steps were used to check that the autofilled tags from the prompt were used
+  # tags are not autofilled anymore
+  Then I should see "Stargate Atlantis"
+  When I follow "Anonymous" within "p"
+  Then I should see "Stargate Atlantis"
   
   Scenario: User claims two prompts in one challenge and fufills both of them at once
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
-  When I sign up for Battle 12 with combination B
-  # 1st prompt SG-1, 2nd prompt SGA
+  When I sign up for Battle 12 with combination F
+  # 1st prompt SG1 anon, 2nd prompt SGA non-anon
   When I am logged in as "myname1"
     And I claim a prompt from "Battle 12"
-    # SGA as it's in reverse order
     And I claim a prompt from "Battle 12"
-    # SG-1
     And I view prompts for "Battle 12"
   When I start to fulfill my claim
-    And I check "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird"
+  # the SGA prompt will already by checked
+    And I check "SG1 love in Battle 12 (Anonymous)"
     And I press "Preview"
     And I press "Post"
   When I view the work "Fulfilled Story"
-  # TODO: fix the broken bit
-  #Then I should see "Stargate Atlantis"
-  #  And I should see "Stargate SG-1"
+  # fandoms are not filled in automatically anymore, so we check that both prompts are marked as filled by having one anon and one non-anon
+  Then I should see "In response to a prompt by: Anonymous"
+    And I should see "In response to a prompt by: myname2"
   
   Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
