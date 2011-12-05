@@ -1,4 +1,5 @@
 <!-- note to FRONT END: this form is crap and is going to be tossed and redone! don't bother fixing for now. -NN -->
+<!-- note to BACK END: FIXME, says the form; it currently ends within the dt, so the cuke to add a moderator fails, even though the browser somehow figures it out -->
 <% if participant %>
 <dt id="participant_<%= participant.id %>">
   <%= form_for(participant, :as => :collection_participant, :url => {:controller => "collection_participants", :action => "update"}) do |form| %>

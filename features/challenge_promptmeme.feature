@@ -848,14 +848,16 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I start to fulfill my claim
   When I check "My Gift Exchange (myname2)"
-    And I uncheck "Battle 12 (myname4) -  - Stargate Atlantis"
+    And I uncheck "canon SGA love in Battle 12 (myname4)"
     And I press "Post without preview"
+  # TODO: so this *is* desired behaviour, that the user can't change their mind?
   Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
     And I should see "Battle 12"
 
   Scenario: As a co-moderator I can't delete whole signups
 
   Given I have Battle 12 prompt meme fully set up
+  # TODO: fix the form in the partial collection_participants/participant_form
   Given I have added a co-moderator "mod2" to collection "Battle 12"
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
@@ -867,6 +869,7 @@ Feature: Prompt Meme Challenge
   Scenario: As a co-moderator I can delete prompts
 
   Given I have Battle 12 prompt meme fully set up
+  # TODO: fix the form in the partial collection_participants/participant_form
   Given I have added a co-moderator "mod2" to collection "Battle 12"
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
