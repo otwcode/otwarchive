@@ -80,7 +80,7 @@ class BookmarksController < ApplicationController
 
       # Do not aggregate bookmarks on these pages
       if params[:collection_id] && @collection
-        @bookmarks = Bookmarks.in_collection(@collection)
+        @bookmarks = Bookmark.in_collection(@collection)
       else
         @bookmarks= owner.bookmarks
       end
