@@ -7,7 +7,7 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
 #footer a   
         { background:transparent; color: #fff; border: 0; font-weight: 400; margin: auto; padding: 0
           box-shadow:none; }
-#footer a:hover
+#footer a:hover, #footer a:focus
         { background:#500;
           box-shadow:none }
 #footer p.beta
@@ -17,7 +17,7 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
           box-shadow: inset 2px 2px 2px #111;}
 #footer .secondary a 
         {  color: #900;} 
-#footer .secondary a:hover {
+#footer .secondary a:hover, #footer .secondary a:focus {
 background: transparent;
 }
 /*END== */
