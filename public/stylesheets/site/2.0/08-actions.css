@@ -30,7 +30,7 @@ ol.pagination
         { text-align:center; clear:right; margin:0.643em auto}
 .actions a:visited
         { color: #111; }
-.actions a:hover, .actions input:hover
+.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus
         { color:#900; border-top:1px solid #999; border-left:1px solid #999; 
           box-shadow:inset 2px 2px 2px #bbb  }
 .actions a:active, .current,a.current, .current a:visited

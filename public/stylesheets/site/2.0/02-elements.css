@@ -13,6 +13,8 @@ a:hover { color: #999}
 a:active, a:focus
         { outline:1px dotted}
 a img   { border: 0}
+a:focus img
+        { outline:1px dotted}
 
 h1, h2, h3, h4, h5, h6, .heading	
         { font-family: Georgia, serif; font-weight: 400}
