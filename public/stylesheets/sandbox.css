@@ -22,7 +22,7 @@ background:purple; color:#555;}
 }
 
 /* TEMP FIX Issue 2652 -- don't integrate this*/
-span.delete a {
+span.remove a {
         margin:0 0.2em;border:0; padding:0; line-height:0.5; box-shadow:none
 }
 
