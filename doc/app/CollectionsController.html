@@ -618,7 +618,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 75</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 76</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:collection</span>])
@@ -670,7 +670,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 128</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 129</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -704,7 +704,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 72</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 73</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- edit-source -->
@@ -844,7 +844,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 64</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 65</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">new</span>
@@ -881,18 +881,19 @@
             <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@collection</span>
-        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'collection_not_found'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Sorry, we couldn't find the collection you were looking for.&quot;</span>)
+        <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, we couldn't find the collection you were looking for.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collections_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">collection_preference</span>.<span class="ruby-identifier">show_random?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:show_random</span>]
     <span class="ruby-comment"># show a random selection of works/bookmarks</span>
     <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">visible</span>.<span class="ruby-identifier">random_order</span>.<span class="ruby-identifier">limit</span>(<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD</span>)
-    <span class="ruby-identifier">visible_bookmarks</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">bookmarks</span>.<span class="ruby-identifier">visible</span>(<span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'RAND()'</span>)
+    <span class="ruby-identifier">visible_bookmarks</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">approved_bookmarks</span>.<span class="ruby-identifier">visible</span>(<span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'RAND()'</span>).<span class="ruby-identifier">limit</span>(<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD</span> * <span class="ruby-value">2</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-comment"># show recent</span>
     <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">visible</span>.<span class="ruby-identifier">ordered_by_date_desc</span>.<span class="ruby-identifier">limit</span>(<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD</span>)
-    <span class="ruby-identifier">visible_bookmarks</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">bookmarks</span>.<span class="ruby-identifier">visible</span>(<span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'bookmarks.created_at DESC'</span>)
+    <span class="ruby-comment"># visible_bookmarks = @collection.approved_bookmarks.visible(:order =&gt; 'bookmarks.created_at DESC')</span>
+    <span class="ruby-identifier">visible_bookmarks</span> = <span class="ruby-constant">Bookmark</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">visible</span>(<span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'bookmarks.created_at DESC'</span>).<span class="ruby-identifier">limit</span>(<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD</span> * <span class="ruby-value">2</span>)
   <span class="ruby-keyword">end</span>
   <span class="ruby-comment"># Having the number of items as a limit was finding the limited number of items, then visible ones within them</span>
   <span class="ruby-ivar">@bookmarks</span> = <span class="ruby-identifier">visible_bookmarks</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD</span>]
@@ -924,7 +925,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 101</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 102</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:collection</span>])
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Collection was successfully updated.'</span>

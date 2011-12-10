@@ -754,7 +754,7 @@
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">skin_id</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@skin</span>.<span class="ruby-identifier">id</span>
     <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-string">&quot;skin_id&quot;</span>, <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">default</span>.<span class="ruby-identifier">id</span>)
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">skins_url</span>(<span class="ruby-value">:q</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;mine&quot;</span>))
+  <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_skins_path</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">skins_path</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- destroy-source -->
           

@@ -882,7 +882,7 @@ it is the order in which they appear in the tag wrangling interface</p>
 
           
           <div class="method-source-code" id="add_missing_filter_taggings-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 482</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 484</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">add_missing_filter_taggings</span>
   <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_each</span>(<span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;taggings_count != 0 AND (canonical = 1 OR merger_id IS NOT NULL)&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">filter</span>
@@ -919,7 +919,7 @@ it is the order in which they appear in the tag wrangling interface</p>
 
           
           <div class="method-source-code" id="autocomplete_fandom_lookup-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 398</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 400</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">autocomplete_fandom_lookup</span>(<span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">options</span>.<span class="ruby-identifier">reverse_merge!</span>({<span class="ruby-value">:term</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-value">:tag_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;character&quot;</span>, <span class="ruby-value">:fandom</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-value">:fallback</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>})
   <span class="ruby-identifier">search_param</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:term</span>]
@@ -971,7 +971,7 @@ it is the order in which they appear in the tag wrangling interface</p>
 
           
           <div class="method-source-code" id="by_name_without_articles-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 312</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 314</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">by_name_without_articles</span>(<span class="ruby-identifier">fieldname</span> = <span class="ruby-string">&quot;name&quot;</span>)
   <span class="ruby-identifier">fieldname</span> = <span class="ruby-string">&quot;name&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">fieldname</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^([\w]+\.)?[\w]+$/</span>)
   <span class="ruby-identifier">order</span>(<span class="ruby-node">&quot;case when lower(substring(#{fieldname} from 1 for 4)) = 'the ' then substring(#{fieldname} from 5)
@@ -1006,7 +1006,7 @@ it is the order in which they appear in the tag wrangling interface</p>
 
           
           <div class="method-source-code" id="create_canonical-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 450</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 452</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">create_canonical</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">adult</span>=<span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">tag</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_or_create_by_name</span>(<span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;how did this happen?&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">tag</span>
@@ -1041,7 +1041,7 @@ it is the order in which they appear in the tag wrangling interface</p>
 
           
           <div class="method-source-code" id="find_by_name-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 429</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 431</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">string</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">string</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>
   <span class="ruby-identifier">string</span> = <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">'*s*'</span>, <span class="ruby-string">'/'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">'*a*'</span>, <span class="ruby-string">'&amp;'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">'*d*'</span>, <span class="ruby-string">'.'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">'*q*'</span>, <span class="ruby-string">'?'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">'*h*'</span>, <span class="ruby-string">'#'</span>)
@@ -1074,7 +1074,7 @@ them</p>
 
           
           <div class="method-source-code" id="find_or_create_by_name-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 436</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 438</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_or_create_by_name</span>(<span class="ruby-identifier">new_name</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">new_name</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">new_name</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
     <span class="ruby-identifier">new_name</span>.<span class="ruby-identifier">squish!</span>
@@ -1114,7 +1114,7 @@ them</p>
 
           
           <div class="method-source-code" id="in_prompt_restriction-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 303</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 305</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">in_prompt_restriction</span>(<span class="ruby-identifier">restriction</span>)
   <span class="ruby-identifier">joins</span>(<span class="ruby-string">&quot;INNER JOIN set_taggings ON set_taggings.tag_id = tags.id
          INNER JOIN tag_sets ON tag_sets.id = set_taggings.tag_set_id
@@ -1149,7 +1149,7 @@ them</p>
 
           
           <div class="method-source-code" id="in_tag_set-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 321</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 323</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">in_tag_set</span>(<span class="ruby-identifier">tag_set</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag_set</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">OwnedTagSet</span>)
     <span class="ruby-identifier">joins</span>(<span class="ruby-value">:set_taggings</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;set_taggings.tag_set_id = ?&quot;</span>, <span class="ruby-identifier">tag_set</span>.<span class="ruby-identifier">tag_set_id</span>)
@@ -1187,7 +1187,7 @@ href="Tag.html#method-c-parent_names">::parent_names</a> above  returns a
 
           
           <div class="method-source-code" id="names_by_parent-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 341</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 343</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">names_by_parent</span>(<span class="ruby-identifier">child_relation</span>, <span class="ruby-identifier">parent_type</span> = <span class="ruby-string">'fandom'</span>)
   <span class="ruby-identifier">hash</span> = {}
   <span class="ruby-identifier">results</span> = <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">connection</span>.<span class="ruby-identifier">execute</span>(<span class="ruby-identifier">child_relation</span>.<span class="ruby-identifier">parent_names</span>(<span class="ruby-identifier">parent_type</span>).<span class="ruby-identifier">to_sql</span>)
@@ -1220,7 +1220,7 @@ href="Tag.html#method-c-parent_names">::parent_names</a> above  returns a
 
           
           <div class="method-source-code" id="parent_names-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 330</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 332</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parent_names</span>(<span class="ruby-identifier">parent_type</span> = <span class="ruby-string">'fandom'</span>)
   <span class="ruby-identifier">joins</span>(<span class="ruby-value">:parents</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;parents_tags.type = ?&quot;</span>, <span class="ruby-identifier">parent_type</span>.<span class="ruby-identifier">capitalize</span>).
   <span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;parents_tags.name as parent_name, tags.name as child_name&quot;</span>).
@@ -1253,7 +1253,7 @@ href="Tag.html#method-c-parent_names">::parent_names</a> above  returns a
 
           
           <div class="method-source-code" id="parse_autocomplete_value-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 388</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 390</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parse_autocomplete_value</span>(<span class="ruby-identifier">current_autocomplete_value</span>)
   <span class="ruby-identifier">current_autocomplete_value</span>.<span class="ruby-identifier">split</span>(<span class="ruby-constant">AUTOCOMPLETE_DELIMITER</span>, <span class="ruby-value">2</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1284,7 +1284,7 @@ list of tag names</p>
 
           
           <div class="method-source-code" id="string-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 350</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 352</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">string</span>
   <span class="ruby-identifier">all</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">name</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">DELIMITER_FOR_OUTPUT</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1314,7 +1314,7 @@ list of tag names</p>
 
           
           <div class="method-source-code" id="with_popularity_relative_to_average-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 279</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 281</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">with_popularity_relative_to_average</span>(<span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">options</span>.<span class="ruby-identifier">reverse_merge!</span>({<span class="ruby-value">:factor</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>, <span class="ruby-value">:include_meta</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>, <span class="ruby-value">:greater_than</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>, <span class="ruby-value">:names_only</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>})
   <span class="ruby-identifier">comparison</span> = <span class="ruby-string">&quot;&lt;&quot;</span>
@@ -1370,7 +1370,7 @@ list of tag names</p>
 
           
           <div class="method-source-code" id="3C-3D-3E-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 475</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 477</span>
 <span class="ruby-keyword">def</span> <span class="ruby-operator">&lt;=&gt;</span>(<span class="ruby-identifier">another_tag</span>)
   <span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">another_tag</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1401,7 +1401,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="add_association-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 679</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 681</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_association</span>(<span class="ruby-identifier">tag</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parents</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span> <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">has_parent?</span>(<span class="ruby-identifier">tag</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1431,7 +1431,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="add_filter_taggings-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 557</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 559</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_filter_taggings</span>
   <span class="ruby-identifier">filter_tag</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">filter</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">filter_tag</span>  <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">filter_tag</span>.<span class="ruby-identifier">new_record?</span>
@@ -1484,7 +1484,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="add_parent_string-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 756</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 758</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_parent_string</span>(<span class="ruby-identifier">tag_string</span>)
   <span class="ruby-identifier">names</span> = <span class="ruby-identifier">tag_string</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:squish</span>)
   <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
@@ -1518,7 +1518,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="add_to_autocomplete-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 369</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 371</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_to_autocomplete</span>(<span class="ruby-identifier">score</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">score</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">autocomplete_score</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Character</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Relationship</span>)
@@ -1554,7 +1554,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="autocomplete_prefixes-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 364</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 366</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">autocomplete_prefixes</span>
   <span class="ruby-identifier">prefixes</span> = [ <span class="ruby-node">&quot;autocomplete_tag_#{type.downcase}&quot;</span>, <span class="ruby-string">&quot;autocomplete_tag_all&quot;</span> ]
   <span class="ruby-identifier">prefixes</span>
@@ -1585,7 +1585,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="autocomplete_score-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 393</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 395</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">autocomplete_score</span>
   <span class="ruby-identifier">taggings_count</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1615,7 +1615,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="banned-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 669</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 671</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">banned</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Banned</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1645,7 +1645,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="character_string-3D-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 766</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 768</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">character_string=</span>(<span class="ruby-identifier">tag_string</span>); <span class="ruby-keyword">self</span>.<span class="ruby-identifier">add_parent_string</span>(<span class="ruby-identifier">tag_string</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- character_string-3D-source -->
           
@@ -1673,7 +1673,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="check_canonical-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 742</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 744</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_canonical</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">canonical_changed?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">canonical?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">mergers</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-value">:merger_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">merger_id</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">id</span> }
@@ -1714,7 +1714,9 @@ inherited tag models</p>
             <pre><span class="ruby-comment"># File app/models/tag.rb, line 90</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_synonym</span>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_record?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name_changed?</span>
-    <span class="ruby-keyword">unless</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Admin</span>) <span class="ruby-operator">||</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name_was</span>.<span class="ruby-identifier">downcase</span>)
+    <span class="ruby-comment"># ordinary wranglers can change case and accents but not punctuation or the actual letters in the name</span>
+    <span class="ruby-comment"># admins can change tags with no restriction</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Admin</span>) <span class="ruby-operator">||</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name_was</span>.<span class="ruby-identifier">downcase</span>) <span class="ruby-operator">||</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">mb_chars</span>.<span class="ruby-identifier">normalize</span>(<span class="ruby-value">:kd</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[^\x00-\x7F]/</span>,<span class="ruby-string">''</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name_was</span>.<span class="ruby-identifier">mb_chars</span>.<span class="ruby-identifier">normalize</span>(<span class="ruby-value">:kd</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[^\x00-\x7F]/</span>,<span class="ruby-string">''</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_s</span>)
       <span class="ruby-keyword">self</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:name</span>, <span class="ruby-string">&quot;can only be changed by an admin.&quot;</span>)
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
@@ -1756,7 +1758,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="child_types-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 464</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 466</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">child_types</span>
   []
 <span class="ruby-keyword">end</span></pre>
@@ -1854,7 +1856,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="fandom_string-3D-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 764</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 766</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">fandom_string=</span>(<span class="ruby-identifier">tag_string</span>); <span class="ruby-keyword">self</span>.<span class="ruby-identifier">add_parent_string</span>(<span class="ruby-identifier">tag_string</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- fandom_string-3D-source -->
           
@@ -1882,7 +1884,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="filter-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 512</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 514</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">filter</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">canonical?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span> <span class="ruby-operator">:</span> ((<span class="ruby-keyword">self</span>.<span class="ruby-identifier">merger</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">merger</span>.<span class="ruby-identifier">canonical?</span>) <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">merger</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1912,7 +1914,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="freeform_string-3D-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 768</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 770</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">freeform_string=</span>(<span class="ruby-identifier">tag_string</span>); <span class="ruby-keyword">self</span>.<span class="ruby-identifier">add_parent_string</span>(<span class="ruby-identifier">tag_string</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- freeform_string-3D-source -->
           
@@ -1940,7 +1942,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="has_child-3F-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 687</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 689</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">has_child?</span>(<span class="ruby-identifier">tag</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">child_taggings</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:common_tag_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1970,7 +1972,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="has_parent-3F-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 683</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 685</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">has_parent?</span>(<span class="ruby-identifier">tag</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">common_taggings</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:filterable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2000,7 +2002,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="indirect_bookmarks-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 854</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 856</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">indirect_bookmarks</span>(<span class="ruby-identifier">rec</span>=<span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">cond</span> = <span class="ruby-identifier">rec</span> <span class="ruby-operator">?</span> {<span class="ruby-value">:rec</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, <span class="ruby-value">:private</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>, <span class="ruby-value">:hidden_by_admin</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>} <span class="ruby-operator">:</span> {<span class="ruby-value">:private</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>, <span class="ruby-value">:hidden_by_admin</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>}
   <span class="ruby-identifier">work_bookmarks</span> = <span class="ruby-constant">Bookmark</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:bookmarkable_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">work_ids</span>, <span class="ruby-value">:bookmarkable_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Work'</span>}.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">cond</span>))
@@ -2034,7 +2036,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="media_string-3D-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 765</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 767</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">media_string=</span>(<span class="ruby-identifier">tag_string</span>); <span class="ruby-keyword">self</span>.<span class="ruby-identifier">add_parent_string</span>(<span class="ruby-identifier">tag_string</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- media_string-3D-source -->
           
@@ -2062,7 +2064,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="merger_string-3D-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 837</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 839</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">merger_string=</span>(<span class="ruby-identifier">tag_string</span>)
   <span class="ruby-identifier">names</span> = <span class="ruby-identifier">tag_string</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:squish</span>)
   <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
@@ -2105,7 +2107,7 @@ inherited tag models</p>
 
           
           <div class="method-source-code" id="meta_tag_string-3D-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 769</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 771</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">meta_tag_string=</span>(<span class="ruby-identifier">tag_string</span>)
   <span class="ruby-identifier">names</span> = <span class="ruby-identifier">tag_string</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:squish</span>)
   <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
@@ -2146,7 +2148,7 @@ child; fandom: parent, character: child)</p>
 
           
           <div class="method-source-code" id="parent_types-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 461</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 463</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parent_types</span>
   []
 <span class="ruby-keyword">end</span></pre>
@@ -2176,7 +2178,7 @@ child; fandom: parent, character: child)</p>
 
           
           <div class="method-source-code" id="relationship_string-3D-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 767</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 769</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">relationship_string=</span>(<span class="ruby-identifier">tag_string</span>); <span class="ruby-keyword">self</span>.<span class="ruby-identifier">add_parent_string</span>(<span class="ruby-identifier">tag_string</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- relationship_string-3D-source -->
           
@@ -2204,7 +2206,7 @@ child; fandom: parent, character: child)</p>
 
           
           <div class="method-source-code" id="remove_association-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 692</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 694</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_association</span>(<span class="ruby-identifier">tag</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>
     <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">mergers</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">tag</span>)
@@ -2250,7 +2252,7 @@ remove filter_taggings from it with due regard for potential duplication
 
           
           <div class="method-source-code" id="remove_filter_taggings-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 587</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 589</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_filter_taggings</span>(<span class="ruby-identifier">old_filter</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">old_filter</span>
     <span class="ruby-comment"># An old merger of a tag needs to be removed</span>
@@ -2316,7 +2318,7 @@ remove filter_taggings from it with due regard for potential duplication
 
           
           <div class="method-source-code" id="remove_from_autocomplete-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 379</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 381</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_from_autocomplete</span>
   <span class="ruby-keyword">super</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Character</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Relationship</span>)
@@ -2354,7 +2356,7 @@ different sub tag of the meta tag or one of its synonyms</p>
 
           
           <div class="method-source-code" id="remove_meta_filters-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 713</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 715</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_meta_filters</span>(<span class="ruby-identifier">meta_tag</span>)
   <span class="ruby-comment"># remove meta tag from this tag's sub tags</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">sub_tags</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">sub</span><span class="ruby-operator">|</span> <span class="ruby-identifier">sub</span>.<span class="ruby-identifier">meta_tags</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">meta_tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">sub</span>.<span class="ruby-identifier">meta_tags</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">meta_tag</span>)}
@@ -2403,7 +2405,7 @@ different sub tag of the meta tag or one of its synonyms</p>
 
           
           <div class="method-source-code" id="remove_sub_filters-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 736</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 738</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_sub_filters</span>(<span class="ruby-identifier">sub_tag</span>)
   <span class="ruby-identifier">sub_tag</span>.<span class="ruby-identifier">remove_meta_filters</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -2433,7 +2435,7 @@ different sub tag of the meta tag or one of its synonyms</p>
 
           
           <div class="method-source-code" id="reset_filter_count-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 627</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 629</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">reset_filter_count</span>
   <span class="ruby-identifier">admin_settings</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-string">&quot;admin_settings&quot;</span>){<span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">first</span>}
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">admin_settings</span>.<span class="ruby-identifier">suspend_filter_counts?</span>
@@ -2481,7 +2483,7 @@ different sub tag of the meta tag or one of its synonyms</p>
 
           
           <div class="method-source-code" id="set_last_wrangler-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 115</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 117</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_last_wrangler</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">last_wrangler</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>
@@ -2513,7 +2515,7 @@ different sub tag of the meta tag or one of its synonyms</p>
 
           
           <div class="method-source-code" id="squish_name-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 110</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 112</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">squish_name</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">squish</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2543,7 +2545,7 @@ different sub tag of the meta tag or one of its synonyms</p>
 
           
           <div class="method-source-code" id="sub_tag_string-3D-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 782</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 784</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sub_tag_string=</span>(<span class="ruby-identifier">tag_string</span>)
   <span class="ruby-identifier">names</span> = <span class="ruby-identifier">tag_string</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:squish</span>)
   <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
@@ -2582,7 +2584,7 @@ different sub tag of the meta tag or one of its synonyms</p>
 
           
           <div class="method-source-code" id="syn_string-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 795</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 797</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">syn_string</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">merger</span>.<span class="ruby-identifier">name</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">merger</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2612,7 +2614,7 @@ different sub tag of the meta tag or one of its synonyms</p>
 
           
           <div class="method-source-code" id="syn_string-3D-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 799</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 801</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">syn_string=</span>(<span class="ruby-identifier">tag_string</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag_string</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">merger_id</span> = <span class="ruby-keyword">nil</span>
@@ -2676,7 +2678,7 @@ different sub tag of the meta tag or one of its synonyms</p>
 
           
           <div class="method-source-code" id="synonyms-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 673</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 675</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">synonyms</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">canonical?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">mergers</span> <span class="ruby-operator">:</span> [<span class="ruby-keyword">self</span>.<span class="ruby-identifier">merger</span>] <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">merger</span>.<span class="ruby-identifier">mergers</span> <span class="ruby-operator">-</span> [<span class="ruby-keyword">self</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -2706,7 +2708,7 @@ different sub tag of the meta tag or one of its synonyms</p>
 
           
           <div class="method-source-code" id="to_param-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 355</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 357</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">to_param</span>
   <span class="ruby-comment"># can't find a tag with a name that hasn't been saved yet</span>
   <span class="ruby-identifier">saved_name</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name_changed?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name_was</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">name</span>
@@ -2739,7 +2741,7 @@ the subclass)</p>
 
           
           <div class="method-source-code" id="unwrangled-3F-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 470</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 472</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">unwrangled?</span>
   <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">canonical</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">merger_id</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">mergers</span>.<span class="ruby-identifier">empty?</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2771,7 +2773,7 @@ filter_taggings as appropriate</p>
 
           
           <div class="method-source-code" id="update_filters_for_canonical_change-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 522</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 524</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_filters_for_canonical_change</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">canonical_changed?</span>
     <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">canonical?</span>
@@ -2812,7 +2814,7 @@ rid of the old filter_taggings as appropriate</p>
 
           
           <div class="method-source-code" id="update_filters_for_merger_change-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 538</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 540</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_filters_for_merger_change</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">merger_id_changed?</span>
     <span class="ruby-comment"># setting the merger_id doesn't update the merger so we do it here</span>
@@ -2856,7 +2858,7 @@ rid of the old filter_taggings as appropriate</p>
 
           
           <div class="method-source-code" id="update_wrangler-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 120</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 122</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_wrangler</span>(<span class="ruby-identifier">tag</span>)
   <span class="ruby-keyword">unless</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-value">:last_wrangler</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
@@ -2888,7 +2890,7 @@ rid of the old filter_taggings as appropriate</p>
 
           
           <div class="method-source-code" id="visible_bookmarks_count-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 657</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 659</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visible_bookmarks_count</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">bookmarks</span>.<span class="ruby-identifier">is_public</span>.<span class="ruby-identifier">count</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2918,7 +2920,7 @@ rid of the old filter_taggings as appropriate</p>
 
           
           <div class="method-source-code" id="visible_external_works_count-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 661</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 663</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visible_external_works_count</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">external_works</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:hidden_by_admin</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>})
 <span class="ruby-keyword">end</span></pre>
@@ -2948,7 +2950,7 @@ rid of the old filter_taggings as appropriate</p>
 
           
           <div class="method-source-code" id="visible_taggables_count-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 665</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 667</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visible_taggables_count</span>
   <span class="ruby-identifier">visible_works_count</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">visible_bookmarks_count</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">visible_external_works_count</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2978,7 +2980,7 @@ rid of the old filter_taggings as appropriate</p>
 
           
           <div class="method-source-code" id="visible_works_count-source">
-            <pre><span class="ruby-comment"># File app/models/tag.rb, line 653</span>
+            <pre><span class="ruby-comment"># File app/models/tag.rb, line 655</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visible_works_count</span>
   <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">unhidden</span>.<span class="ruby-identifier">unrestricted</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">unhidden</span>.<span class="ruby-identifier">count</span>
 <span class="ruby-keyword">end</span></pre>
