@@ -87,7 +87,7 @@ class TagsController < ApplicationController
       @tag = @tag.merger
     end
     # Temp for testing
-    if @tag.name == "F/F"
+    if @tag.is_a?(Fandom) || @tag.name == "F/F"
       if @tag.canonical?
         @works = @tag.filtered_works.visible_to_all.order("created_at DESC").limit(25)
       else
