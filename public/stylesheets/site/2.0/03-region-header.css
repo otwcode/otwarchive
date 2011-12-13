@@ -27,7 +27,7 @@ notice that CSS3 declarations sit on their own line and always come last*/
         { background:none; color:#900; font-size:100%; border:0; padding:0; margin: 0;
           box-shadow:none }
 #header h1 a:focus img
-        { outline:none }
+        { outline:none } 
 #greeting .icon 
         { float:right; padding:0; margin:0 0 -0.429em 0; border-bottom:5px solid #900}
 #greeting 
