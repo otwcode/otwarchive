@@ -126,6 +126,10 @@ class Collection < ActiveRecord::Base
   validates_format_of :name,
     :message => t('collection.name_invalid', :default => 'must begin and end with a letter or number; it may also contain underscores but no other characters.'),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
+  validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
+  validates_length_of :icon_comment_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_COMMENT_MAX,
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_COMMENT_MAX)
 
   validates :email, :email_veracity => {:allow_blank => true}
 
