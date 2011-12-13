@@ -17,6 +17,7 @@ describe "home/index.html.erb" do
       before do
         view.stub(:logged_in?).and_return(true)
         view.stub(:logged_in_as_admin?).and_return(false)
+        @current_user = Factory.create(:user)
         render
       end
       
