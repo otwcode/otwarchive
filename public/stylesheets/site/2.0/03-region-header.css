@@ -21,13 +21,16 @@ notice that CSS3 declarations sit on their own line and always come last*/
           box-shadow:inset 0 -5px 10px rgba(0,0,0,0.5)}
 #header .primary a, #header .primary .current, #header .primary input, #header .search input
         { border-color:#a00; border-bottom-color:#400 }
+#header .primary a:focus, #header .primary input:focus
+        { outline:#fff dotted 1px }
 #header .search input[type="text"]
         { border-color:#300}
 #header h1 a, #header fieldset, #header form, #header p
         { background:none; color:#900; font-size:100%; border:0; padding:0; margin: 0;
           box-shadow:none }
-#header h1 a:focus img
-        { outline:none } 
+#header h1 a:focus
+        { outline:none }
+#header h1 a:focus img { outline-color: #bbb }
 #greeting .icon 
         { float:right; padding:0; margin:0 0 -0.429em 0; border-bottom:5px solid #900}
 #greeting 
