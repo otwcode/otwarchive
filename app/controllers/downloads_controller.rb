@@ -103,7 +103,7 @@ protected
     # note: we have to zip this up in this particular order because
     # "mimetype" must be the first item in the zipfile and mustn't be
     # compressed
-    cmd = %Q{cd "#{@work.download_dir}/epub"; zip -9 "#{@work.download_basename}.epub" mimetype; zip -9 -r "#{@work.download_basename}.epub" META-INF OEBPS}
+    cmd = %Q{cd "#{@work.download_dir}/epub"; zip -0 "#{@work.download_basename}.epub" mimetype; zip -r "#{@work.download_basename}.epub" META-INF OEBPS}
     Rails.logger.debug cmd
    `#{cmd} 2> /dev/null`
 
