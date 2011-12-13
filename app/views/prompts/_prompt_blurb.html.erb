@@ -2,7 +2,11 @@
 <li class="<% if is_author_of?(prompt) %>own <% end %>prompt blurb group" role="article">
   <div class="header module">
     <h4 class="heading" title="title">
-      <%= prompt.title || ts("#{prompt.class.to_s}%{index}", :index => (index ||= false) ? " #{index+1}" : '') %>
+      <% if !prompt.title.blank? %>
+        <%= prompt.title %>
+      <% else %>
+        <%= ts("#{prompt.class.to_s}%{index}", :index => (index ||= false) ? " #{index+1}" : '') %>
+      <% end %>
       <% if prompt.anonymous? %>
         <%= ts("by Anonymous") %>
       <% else %>

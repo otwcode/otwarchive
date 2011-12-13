@@ -69,6 +69,7 @@ Given /^I have added (?:a|the) co\-moderator "([^\"]*)" to collection "([^\"]*)"
     And %{I press "Submit"}
 
   When %{I select "Moderator" from "#{name}_role"}
+  # TODO: fix the form, it is malformed right now
   click_button("#{name}_submit")
   Then %{I should see "Updated #{name}"}
 end
