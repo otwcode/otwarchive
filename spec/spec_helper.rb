@@ -6,11 +6,11 @@ require 'rspec/rails'
 require 'factory_girl'
 require 'database_cleaner'
 require 'email_spec'
+require 'authlogic/test_case'
 
 DatabaseCleaner.start
 
 DatabaseCleaner.clean
-
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -83,6 +83,11 @@ RSpec.configure do |config|
   #       # Equivalent to being in spec/controllers
   #     end
   config.infer_spec_type_from_file_location!
+
+  config.include Authlogic::TestCase, :type => :view
+  config.before(:all, :type => :view) { activate_authlogic }
+  config.include Authlogic::TestCase, :type => :controller
+  config.before(:all, :type => :controller) { activate_authlogic }
 end
 
 def get_message_part (mail, content_type)
