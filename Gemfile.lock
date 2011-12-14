@@ -246,6 +246,10 @@ GEM
     vcr (1.6.0)
     vegas (0.1.8)
       rack (>= 1.0.0)
+    webrat (0.7.3)
+      nokogiri (>= 1.2.0)
+      rack (>= 1.0)
+      rack-test (>= 0.5.3)
     whenever (0.6.2)
       aaronh-chronic (>= 0.3.9)
       activesupport (>= 2.3.4)
@@ -299,5 +303,6 @@ DEPENDENCIES
   unicorn
   valium
   vcr
+  webrat
   whenever (~> 0.6.2)
   will_paginate (>= 3.0.2)
