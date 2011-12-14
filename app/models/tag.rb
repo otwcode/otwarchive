@@ -559,7 +559,9 @@ class Tag < ActiveRecord::Base
   def add_filter_taggings
     filter_tag = self.filter
     if filter_tag  && !filter_tag.new_record?
-      Work.with_any_tags([self, filter_tag].uniq).each do |work|
+      # we collect tags for resetting count so that it's only done once after we've added all filters to works
+      tags_that_need_filter_count_reset = []
+      self.works.each do |work|
         if work.filters.include?(filter_tag)
           # If the work filters already included the filter tag (e.g. because the
           # new filter tag is a meta tag of an existing tag) we make sure to set
@@ -569,16 +571,19 @@ class Tag < ActiveRecord::Base
           ft.update_attribute(:inherited, false)
         else
           work.filters << filter_tag
-          filter_tag.reset_filter_count
+          tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
         end
         unless filter_tag.meta_tags.empty?
           filter_tag.meta_tags.each do |m|
             unless work.filters.include?(m)
               work.filter_taggings.create!(:inherited => true, :filter_id => m.id)
-              m.reset_filter_count
+              tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
             end
           end
         end
+      end
+      tags_that_need_filter_count_reset.each do |tag_to_reset|
+        tag_to_reset.reset_filter_count
       end
     end
   end
