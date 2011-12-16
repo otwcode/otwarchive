@@ -17,7 +17,7 @@ describe "home/index.html.erb" do
       before do
         view.stub(:logged_in?).and_return(true)
         view.stub(:logged_in_as_admin?).and_return(false)
-        @current_user = Factory.create(:user)
+        current_user = Factory.create(:user)
         render
       end
       
@@ -36,7 +36,9 @@ describe "home/index.html.erb" do
         render
       end
       
-      it "should display news posts"
+      it "should display news posts" do
+        rendered.should contain "News"
+      end
       
   end
 
