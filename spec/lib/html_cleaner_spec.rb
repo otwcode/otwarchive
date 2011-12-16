@@ -156,6 +156,38 @@ describe HtmlCleaner do
         doc.xpath(".//blockquote").children.to_s.strip.should == "world"
       end
 
+      it "should allow classes with letters, numbers and hyphens" do
+        result = sanitize_value(:content, '<p class="f-5">foobar</p>')
+        doc = Nokogiri::HTML.fragment(result)
+        doc.xpath("./p[@class='f-5']").children.to_s.strip.should == "foobar"
+      end
+
+      it "should allow not allow classes starting with numbers" do
+        result = sanitize_value(:content, '<p class="8ball">foobar</p>')
+        result.should_not =~ /8ball/
+        result = sanitize_value(:content, '<p class="magic 8ball">foobar</p>')
+        result.should_not =~ /8ball/
+      end
+
+      it "should allow not allow classes starting with hyphens" do
+        result = sanitize_value(:content, '<p class="-dash">foobar</p>')
+        result.should_not =~ /-dash/
+        result = sanitize_value(:content, '<p class="rainbow -dash">foobar</p>')
+        result.should_not =~ /-dash/
+      end
+
+      it "should allow not allow classes with special characters" do
+        result = sanitize_value(:content, '<p class="foo@bar">foobar</p>')
+        result.should_not =~ /foo@bar/
+      end
+
+      it "should allow two classes" do
+        result = sanitize_value(:content, '<p class="foo bar">foobar</p>')
+        doc = Nokogiri::HTML.fragment(result)
+        doc.xpath("./p[contains(@class, 'foo')]").children.to_s.strip.should == "foobar"
+        doc.xpath("./p[contains(@class, 'bar')]").children.to_s.strip.should == "foobar"
+      end
+
       ["'';!--\"<XSS>=&{()}",
        '<XSS STYLE="behavior: url(xss.htc);">'
       ].each do |value|
@@ -659,7 +691,13 @@ describe HtmlCleaner do
       doc = Nokogiri::HTML.fragment(result)
       doc.xpath("./p[1]/span[@class='foo']").children.to_s.strip.should == "some"
       doc.xpath("./p[2]/span[@class='foo']").children.to_s.strip.should == "text"
+    end
 
+    it "should handle two classes" do
+      result = add_paragraphs_to_text('<p class="foo bar">foobar</p>')
+      doc = Nokogiri::HTML.fragment(result)
+      doc.xpath("./p[contains(@class, 'foo')]").children.to_s.strip.should == "foobar"
+      doc.xpath("./p[contains(@class, 'bar')]").children.to_s.strip.should == "foobar"
     end
 
     it "should close unclosed inline tags before double linebreak" do
