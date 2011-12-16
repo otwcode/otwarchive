@@ -86,8 +86,6 @@ RSpec.configure do |config|
 
   config.include Authlogic::TestCase, :type => :view
   config.before(:all, :type => :view) { activate_authlogic }
-  config.include Authlogic::TestCase, :type => :controller
-  config.before(:all, :type => :controller) { activate_authlogic }
 end
 
 def get_message_part (mail, content_type)
