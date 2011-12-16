@@ -17,11 +17,11 @@ class Challenge::PromptMemeController < ChallengesController
     end
   end
 
-  # page to view profile
+  # is actually a blank page - should it be redirected to collection profile?
   def show
   end
 
-  # form to create a new prompt meme challenge. submit button calls create
+  # The new form for prompt memes is actually the challenge settings page because challenges are always created in the context of a collection.
   def new
     if (@collection.challenge)
       flash[:notice] = ts("There is already a challenge set up for this collection.")
@@ -31,11 +31,9 @@ class Challenge::PromptMemeController < ChallengesController
     end
   end
 
-  # page for updating settings. submit button calls update
   def edit
   end
 
-  # creating the prompt meme challenge when you hit submit
   def create
     @challenge = PromptMeme.new(params[:prompt_meme])
     if @challenge.save
@@ -53,7 +51,6 @@ class Challenge::PromptMemeController < ChallengesController
     end
   end
 
-  # updating settings when you hit submit on the edit page
   def update
     if @challenge.update_attributes(params[:prompt_meme])
       flash[:notice] = 'Challenge was successfully updated.'
