@@ -737,7 +737,7 @@
     <span class="ruby-ivar">@tag</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">merger</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-comment"># Temp for testing</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;F/F&quot;</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Fandom</span>) <span class="ruby-operator">||</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;F/F&quot;</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">canonical?</span>
       <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@tag</span>.<span class="ruby-identifier">filtered_works</span>.<span class="ruby-identifier">visible_to_all</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;created_at DESC&quot;</span>).<span class="ruby-identifier">limit</span>(<span class="ruby-value">25</span>)
     <span class="ruby-keyword">else</span>
