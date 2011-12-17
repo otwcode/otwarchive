@@ -18,7 +18,7 @@ a, a:link, #header ul ul li a:link{color:#900;}
 
 #main {padding:0 2.5em;}
 h3,h4,h5,h6,p {line-height:1; margin:0.375em 0;}
-ul {margin:0 0.15em; text-indent:0; padding:0 }
+ul, ol {list-style: none; margin:0 0.15em; text-indent:0; padding:0 }
 li {margin: 0.643em 0;}
 
 ul li, .blurb li,.navigation>*,.stats>*,.meta ul li {list-style: none;display: inline;}
@@ -26,6 +26,6 @@ blockquote.summary {background:#eee; padding:0.25em; border:1px solid #ddd}
 li.blurb {margin:auto; border-top:1px solid #ccc;}
 .blurb dl.stats { background: #eee; font-size: 0.8575em; text-align: right; padding: 0 0.375em 0.375em; margin: 1.286em auto 0; }
 
-.letter h3 {background: #ddd;}
+h3.heading {background: #ddd; padding: 0.25em;}
 .letter ul.index li {width: 45%; float: left; clear: none; margin-right: 1.5em;}
 .letter ul.index:after {content: " "; display: block; height: 0; font-size: 0; clear: both; visibility: hidden;}
