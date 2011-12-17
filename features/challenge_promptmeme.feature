@@ -130,10 +130,10 @@ Feature: Prompt Meme Challenge
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
   When I go to "Battle 12" collection's page
-  # TODO: there is no more prompt count at all?
-  # Then show me the main content
-  Then I should see "Total prompts: 2"
-    And I should see "Claimed prompts: 0"
+    And I follow "Profile"
+  Then I should see "Prompts: 2"
+    # TODO: Was the claimed prompts count intentionally removed from profile?
+    # And I should see "Claimed prompts: 0"
 
   Scenario: Prompt count shows on collections index
 
@@ -207,8 +207,8 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination E
   When I claim a prompt from "Battle 12"
-  # TODO: there is no link to unposted claims anymore?
-  When I view unposted claims for "Battle 12"
+  # TODO: check design: regular user doesn't get link to unposted claims anymore
+  # When I view unposted claims for "Battle 12"
   Then I should see "Weird description"
   
   Scenario: Sort by fandom shouldn't show when there aren't any fandoms
@@ -230,16 +230,17 @@ Feature: Prompt Meme Challenge
   And I claim a prompt from "Battle 12"
   Then I should see a prompt is claimed
 
-  Scenario: Claim count shows on profile
+  Scenario: Claim count shows on profile?
 
   Given I have Battle 12 prompt meme fully set up
     And I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
     And I claim a prompt from "Battle 12"
   When I go to "Battle 12" collection's page
-  # TODO: have these been removed by design or by accident? and could we have them back?
-  Then I should see "Total prompts: 2"
-    And I should see "Claimed prompts: 1"
+    And I follow "Profile"
+  Then I should see "Prompts: 2"
+    # TODO: have these been removed by design or by accident?
+    # And I should see "Claimed prompts: 1"
   
   Scenario: Mod can view signups
   
@@ -489,7 +490,9 @@ Feature: Prompt Meme Challenge
   When I claim a prompt from "Battle 12"
   When I close signups for "Battle 12"
   When I am logged in as "myname4"
-  Then claims are hidden
+  Then I should not see "Unposted Claims"
+  # TODO: they got really hidden, since ordinary user can't get to that page at all
+  # Then claims are hidden
   
   Scenario: Fulfilled claims are shown to mod
   
@@ -666,16 +669,18 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
     And I post the work "Existing Story"
     And I edit the work "Existing Story"
-    And I check "Battle 12 (Anonymous) -  - Stargate Atlantis"
+    And I check "random SGA love in Battle 12 (Anonymous)"
     And I press "Post without preview"
   Then I should see "Battle 12"
   When I follow "Anonymous"
-  Then I should see "Mystery work"
+  # TODO: *should* I (myname4) see "Mystery work"?
+  Then I should see "Existing Story"
     And I should not see "Not fulfilled yet"
   When I reveal works for "Battle 12"
   When I view the work "Existing Story"
     And I follow "Anonymous"
-  Then I should see "Response posted on"
+  Then I should see "Fulfilled By"
+    And I should see "Existing Story by Anonymous"
     
   Scenario: User edits existing work in another collection to fulfill claim
   
@@ -687,7 +692,7 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
     And I post the work "Existing Story" in the collection "Othercoll"
     And I edit the work "Existing Story"
-    And I check "Battle 12 (Anonymous) -  - Stargate Atlantis"
+    And I check "random SGA love in Battle 12 (Anonymous)"
     And I press "Post without preview"
   Then I should see "Battle 12"
     And I should see "Othercoll"
@@ -702,14 +707,14 @@ Feature: Prompt Meme Challenge
     And I claim two prompts from "Battle 12"
     And I view prompts for "Battle 12"
   # all prompts have been claimed - check it worked
-  Then I should not see "Claim" within "tbody"
-  # SG-1 as claims are in reverse date order
+  # TODO: find a better way to check that it worked, since 'Drop Claim' includes the word 'Claim', and there is no table anymore, so no tbody
+  # Then I should not see "Claim" within "tbody"
+  # TODO: check that they are not intermittent anymore
   When I start to fulfill my claim
-  Then I should find a checkbox "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird"
-    And I should find a checkbox "Battle 12 (Anonymous) -  - Stargate Atlantis"
-  # Commenting out intermittent failures
-  #Then the "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird" checkbox should be checked
-  #Then the "Battle 12 (Anonymous) -  - Stargate Atlantis" checkbox should not be checked
+  Then I should find a checkbox "High School AU SG1 in Battle 12 (Anonymous)"
+    And I should find a checkbox "random SGA love in Battle 12 (Anonymous)"
+    And the "High School AU SG1 in Battle 12 (Anonymous)" checkbox should not be checked
+    And the "random SGA love in Battle 12 (Anonymous)" checkbox should be checked
   
   Scenario: Claim two prompts by different people in one challenge
   
@@ -721,31 +726,27 @@ Feature: Prompt Meme Challenge
   When I am logged in as "writer"
     And I claim two prompts from "Battle 12"
   When I start to fulfill my claim
-  Then I should find a checkbox "Battle 12 (sg1fan) -  - Stargate SG-1"
-    And I should find a checkbox "Battle 12 (sgafan) -  - Stargate Atlantis"
-  # Commenting out intermittent failures
-  #Then the "Battle 12 (sgafan) -  - Stargate Atlantis" checkbox should be checked
-  #Then the "Battle 12 (sg1fan) -  - Stargate SG-1" checkbox should not be checked
+  Then I should find a checkbox "SG1 love in Battle 12 (sg1fan)"
+    And I should find a checkbox "SGA love in Battle 12 (sgafan)"
+  # TODO: check that they are not intermittent anymore
+    And the "SGA love in Battle 12 (sgafan)" checkbox should not be checked
+    And the "SG1 love in Battle 12 (sg1fan)" checkbox should be checked
   
   Scenario: Claim two prompts by the same person in one challenge, one is anon
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
   When I sign up for Battle 12
-  # 1st prompt "something else weird", 2nd prompt anon
+  # 1st prompt "something else weird" and titled "crack", 2nd prompt anon
   When I am logged in as "myname1"
     And I claim two prompts from "Battle 12"
     And I view prompts for "Battle 12"
-  # all prompts have been claimed - check it worked
-  Then I should not see "Claim" within "tbody"
   # anon as claims are in reverse date order
   When I start to fulfill my claim
-  Then I should find a checkbox "Battle 12 (Anonymous) -  - Stargate SG-1"
-    And I should find a checkbox "Battle 12 (myname2) -  - Stargate SG-1 - Something else weird"
-  # Commenting out intermittent failures
-  #Then the "Battle 12 (Anonymous) -  - Stargate SG-1" checkbox should be checked
-  # Always checked according to one test
-  #Then the "Battle 12 (myname2) -  - Stargate SG-1 - Something else weird" checkbox should not be checked
+  Then I should find a checkbox "Untitled Prompt in Battle 12 (Anonymous)"
+    And I should find a checkbox "crack in Battle 12 (myname2)"
+    And the "Untitled Prompt in Battle 12 (Anonymous)" checkbox should be checked
+    And the "crack in Battle 12 (myname2)" checkbox should not be checked
   
   Scenario: User claims two prompts in one challenge and fulfills one of them
   
@@ -758,46 +759,38 @@ Feature: Prompt Meme Challenge
     # SGA as it's in reverse order
     And I claim a prompt from "Battle 12"
     # SG-1
-  # SG-1 as claims are in reverse date order
+  # SGA seems to be the first consistently
   When I start to fulfill my claim
-  Then the "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird" checkbox should be checked
-  # this next line shouldn't be needed - there's still a bug somewhere
-  When I uncheck "Battle 12 (Anonymous) -  - Stargate Atlantis"
-  Then the "Battle 12 (Anonymous) -  - Stargate Atlantis" checkbox should not be checked
+  Then the "High School AU SG1 in Battle 12 (Anonymous)" checkbox should not be checked
+    And the "random SGA love in Battle 12 (Anonymous)" checkbox should be checked
   When I press "Preview"
-  # Commenting out intermittent failure related to options_select issue
-  #Then I should not see "Stargate Atlantis"
-  #  And I should see "Stargate SG-1"
-  #  And I should see "Something else weird"
-  #When I press "Post"
-  #When I view the work "Fulfilled Story"
-  #Then I should not see "Stargate Atlantis"
-  #  And I should see "Stargate SG-1"
-  #  And I should see "Something else weird"
-  #When I follow "Anonymous" within "p"
-  #Then I should not see "Stargate Atlantis"
-  #  And I should see "Stargate SG-1"
+    And I press "Post"
+  When I view the work "Fulfilled Story"
+  # these steps were used to check that the autofilled tags from the prompt were used
+  # tags are not autofilled anymore
+  Then I should see "Stargate Atlantis"
+  When I follow "Anonymous" within "p"
+  Then I should see "Stargate Atlantis"
   
   Scenario: User claims two prompts in one challenge and fufills both of them at once
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname2"
-  When I sign up for Battle 12 with combination B
-  # 1st prompt SG-1, 2nd prompt SGA
+  When I sign up for Battle 12
+  # 1st prompt anon, 2nd prompt non-anon
   When I am logged in as "myname1"
     And I claim a prompt from "Battle 12"
-    # SGA as it's in reverse order
     And I claim a prompt from "Battle 12"
-    # SG-1
     And I view prompts for "Battle 12"
   When I start to fulfill my claim
-    And I check "Battle 12 (Anonymous) -  - Stargate SG-1 - Alternate Universe - High School, Something else weird"
+  # the anon prompt will already by checked
+    And I check "crack in Battle 12 (myname2)"
     And I press "Preview"
     And I press "Post"
   When I view the work "Fulfilled Story"
-  # TODO: fix the broken bit
-  #Then I should see "Stargate Atlantis"
-  #  And I should see "Stargate SG-1"
+  # fandoms are not filled in automatically anymore, so we check that both prompts are marked as filled by having one anon and one non-anon
+  Then I should see "In response to a prompt by: Anonymous"
+    And I should see "In response to a prompt by: myname2"
   
   Scenario: User claims two prompts in different challenges and fulfills both of them at once
   # TODO
@@ -827,9 +820,9 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname3"
     And I claim a prompt from "Battle 12"
   When I start to fulfill my claim
-  Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should be checked
+  Then the "canon SGA love in Battle 12 (myname4)" checkbox should be checked
     And the "My Gift Exchange (myname2)" checkbox should not be checked
-    And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
+    And the "canon SGA love in Battle 12 (myname4)" checkbox should not be disabled
     And the "My Gift Exchange (myname2)" checkbox should not be disabled
     
   Scenario: User posts to fulfill direct from Post New
@@ -839,8 +832,8 @@ Feature: Prompt Meme Challenge
   When I am logged in as "myname3"
     And I claim a prompt from "Battle 12"
     And I follow "post new"
-  Then the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be checked
-    And the "Battle 12 (myname4) -  - Stargate Atlantis" checkbox should not be disabled
+  Then the "canon SGA love in Battle 12 (myname4)" checkbox should not be checked
+    And the "canon SGA love in Battle 12 (myname4)" checkbox should not be disabled
   
   Scenario: User is participating in a prompt meme and a gift exchange at once, clicks "Post to fulfill" on the prompt meme and then changes their mind and fulfills the gift exchange instead
   
@@ -855,14 +848,16 @@ Feature: Prompt Meme Challenge
     And I claim a prompt from "Battle 12"
   When I start to fulfill my claim
   When I check "My Gift Exchange (myname2)"
-    And I uncheck "Battle 12 (myname4) -  - Stargate Atlantis"
+    And I uncheck "canon SGA love in Battle 12 (myname4)"
     And I press "Post without preview"
+  # TODO: so this *is* desired behaviour, that the user can't change their mind?
   Then I should not see "This work is part of an ongoing challenge and will be revealed soon! You can find details here: My Gift Exchange"
     And I should see "Battle 12"
 
   Scenario: As a co-moderator I can't delete whole signups
 
   Given I have Battle 12 prompt meme fully set up
+  # TODO: fix the form in the partial collection_participants/participant_form
   Given I have added a co-moderator "mod2" to collection "Battle 12"
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
@@ -874,6 +869,7 @@ Feature: Prompt Meme Challenge
   Scenario: As a co-moderator I can delete prompts
 
   Given I have Battle 12 prompt meme fully set up
+  # TODO: fix the form in the partial collection_participants/participant_form
   Given I have added a co-moderator "mod2" to collection "Battle 12"
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination A
@@ -986,10 +982,9 @@ Feature: Prompt Meme Challenge
   Then I should see "Claims (1)" 
   When I follow "Claims"
   Then I should see "Your Claims"
-    And I should not see "In Battle 12"
-    And I should see "Writing For" within "#claims_table"
-    And I should see "myname4" within "#claims_table"
+    And I should see "Request by myname4 in Battle 12" within "h4"
   When I follow "Fulfill"
+    And I fill in "Fandoms" with "Stargate Atlantis"
     And I fill in "Work Title" with "Fulfilled Story-thing"
     And I select "Not Rated" from "Rating"
     And I check "No Archive Warnings Apply"
