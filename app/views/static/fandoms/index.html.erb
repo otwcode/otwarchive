@@ -12,19 +12,21 @@
 
   <!--main content-->
   <% if @fandoms_by_letter && !@fandoms_by_letter.empty? %>
-    <ul class="alphabet">
+    <h3 class="landmark heading"><%= ts('Alphabet Navigation') %></h3>
+    <ul class="alphabet navigation actions" id="alphabet" role="navigation">
       <% for letter in @fandoms_by_letter.keys %>
         <li><%= link_to letter, "#letter-#{letter}" %></li>
       <% end %>
     </ul>
-    <ul class="letters shadowed <%= 'collection' if @collection %>">
+    <h3 class="landmark heading"><%= ts('Alphabetized List of Fandoms') %></h3>
+    <ol class="alphabet fandom index group <%= 'collection' if @collection %>">
       <% @fandoms_by_letter.each_pair do |letter, fandoms| %>
-        <li id='letter-<%= letter %>' class='letter'>
-          <h3 class="shadowed">
+        <li id='letter-<%= letter %>' class='letter listbox group'>
+          <h3 class="heading">
             <%= letter %>
-            <span class="top"><%= link_to "top", "#main" %></span>
+            <span class="action top"><%= link_to "top", "#main" %></span>
           </h3>
-          <ul class="fandom index">
+          <ul class="tags index group">
             <% for fandom in fandoms %>
             <li class='<%= cycle('odd', 'even', :name => "letter-#{letter}") %>'>
               <%= link_to(fandom.name, static_collection_fandom_path(@collection, fandom)) %>
@@ -36,9 +38,9 @@
           </ul>
         </li>
       <% end %>
-    </ul>
+    </ol>
   <% else %>
-    <h3 class="heading"><%= ts("No fandoms found") %></h3>
+    <h3 class="no_fandoms"><%= ts("No fandoms found") %></h3>
   <% end %>
   <!--/content-->
 </div>
