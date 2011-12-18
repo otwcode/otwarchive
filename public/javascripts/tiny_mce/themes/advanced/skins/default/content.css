@@ -75,7 +75,7 @@ h1		{ font-family:Cambria, Constantia, Palatino, Georgia, serif; text-align:cent
 h2		{ font-size: 1.5em; line-height: 1; color:#333; font-variant:normal; text-align:left; text-transform:none; margin:1.5em 0;}
 h3		{ font-size: 1.125em; line-height: 1; margin: 1em 0; font-weight:500; padding: 0.125em; border-bottom:0.25em double #333; }
 h5		{ font-weight:600; font-size: 1em; line-height: 1.1286; margin:0.643em 0;}
-h6		{ font-size: 0.975em; border-bottom:1px solid; ine-height: 1.5; margin: 1.5em 0;}
+h6		{ font-size: 0.975em; border-bottom:1px solid; line-height: 1.5; margin: 1.5em 0;}
 h3 a, h3 a:link, h3 a:visited
 		{ font-weight:500; border-bottom:0; text-decoration: none; } 
 
