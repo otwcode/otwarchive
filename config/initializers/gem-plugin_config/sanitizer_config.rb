@@ -44,13 +44,15 @@ class Sanitize
     ALLOW_USER_CLASSES = lambda do |env|
       node      = env[:node]
       classval  = node['class']
-      
+
       # if we don't have a class attribute, away we go
       return nil unless !classval.blank?
 
       # otherwise, only let through alphanumeric class names with a 
-      # dash/underscore.
-      {:attr_whitelist => ['class']} if classval =~ /^[a-zA-Z][\w\-]+$/
+      # dash/underscore; allow multiple classes
+      classes = classval.split(" ")
+      classes.each { |cls| return nil unless cls =~ /^[a-zA-Z][\w\-]+$/ }
+      {:attr_whitelist => ['class']}
     end
 
     # taken directly from rgrove's docs
