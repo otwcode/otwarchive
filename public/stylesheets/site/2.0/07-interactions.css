@@ -90,14 +90,17 @@ form li ul.autocomplete li.input
 
 /* WIDGET: SORTABLE LIST (note: hope to merge with .sortable and .draggable etc)*/
 .ui-sortable li 
-        { border: 2px solid transparent; box-shadow:1px 1px 3px transparent}
+        { border: 2px solid transparent; float: left; width: 100%; clear: right;
+          box-shadow:1px 1px 3px transparent }
 .ui-sortable li:hover 
         { background: #ddd; border: 2px solid #999; cursor:move;
           box-shadow:1px 1px 3px #bbb }
 .ui-sortable input
-        { width: auto; }
+        { margin: 0.429em 0 0.25em 0.25em; width: auto; }
 .ui-sortable .heading
         { display: inline-block; }
+.ui-sortable ul.actions li 
+        { float: none; }
 .ui-draggable form
         { cursor: move; box-shadow: 0 0 3px #555 }
 
