@@ -169,7 +169,7 @@ module TagsHelper
         end
       end
     end
-    content_tag(:ul, meta_ul)
+    content_tag(:ul, meta_ul, :class => 'tags tree index')
   end
 
   # Returns a nested list of sub tags
