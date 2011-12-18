@@ -120,6 +120,7 @@ module WorksHelper
   public
   # get a nicely formatted bit of text for pasting into other services
   # title (# words) by authors
+  # Chapters: 
   # Fandom:
   # Rating:
   # Warnings:
@@ -133,6 +134,7 @@ module WorksHelper
                                     link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe
     end
 
+    chapters_text = ts("Chapters: ") + work.chapter_total_display
     fandom_text = add_label_for_embed(ts("Fandom: "), work.fandoms.map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe)
     rating_text = add_label_for_embed(ts("Rating: "), work.ratings.map {|rating| rating.name}.join(', '))
     category_text = add_label_for_embed(ts("Category: "), work.categories.map {|cat| cat.name}.join(', '))
@@ -142,7 +144,7 @@ module WorksHelper
     summary_text = add_label_for_embed(ts("Summary: "), sanitize_field(work, :summary))
 
     # we deliberately don't html_safe this because we want it escaped
-    [title_link + ts(" by ") + profile_link, fandom_text, rating_text, warning_text, relationship_text, char_text, summary_text].compact.join("\n")
+    [title_link + ts(" by ") + profile_link, chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, summary_text].compact.join("\n")
   end
 
   # convert a bookmark into a nicely formatted chunk of text
