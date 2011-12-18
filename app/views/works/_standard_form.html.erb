@@ -3,10 +3,10 @@
 <%= form_for(@work) do |f| %>
 
   <p class="required notice"><%= ts('* Required information') %></p>
-  <%= render :partial => 'work_tags_form', :locals => {:include_blank => false} %>
+  <%= render 'work_tags_form', :include_blank => false %>
   <fieldset class="preface" role="article">
-    <legend><%= 'Preface' %></legend>
-    <h3 class="landmark heading"><%= 'Preface' %></h3>
+    <legend><%= ts('Preface') %></legend>
+    <h3 class="landmark heading"><%= ts('Preface') %></h3>
     <dl>
       <dt class="title">
         <%= f.label :title, ts("Work Title *"), :class => "required" %>
@@ -15,13 +15,13 @@
         <%= f.text_field :title, :class => "observe_textlength text" %>
         <%= live_validation_for_field('work_title',
               :maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN,
-              :failureMessage => 'We need a title! (At least ' + ArchiveConfig.TITLE_MIN.to_s + ' characters long, please.)')
+              :failureMessage => ts("We need a title! (At least %{min_length} characters long, please.)", :min_length => ArchiveConfig.TITLE_MIN.to_s)
         %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
  
       <!-- Add coauthors-->
-      <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'work'} %>
+      <%= render 'pseuds/byline', :form => f, :type => 'work' %>
  
  
       <dt class="summary">
@@ -41,7 +41,7 @@
  
   <fieldset id="associations" role="article">
     <legend><%= ts('Associations') %></legend>
-    <h3 class="landmark heading"><%= 'Associations' %></h3>
+    <h3 class="landmark heading"><%= ts('Associations') %></h3>
     <dl>
       <% if !(@assignments = ChallengeAssignment.by_offering_user(current_user).undefaulted.unstarted).empty? || !@work.challenge_assignments.empty? %>
         <!-- if the user has open assignments? -->
@@ -83,8 +83,8 @@
  
       <!-- Inspiration / remix -->
       <dt class="parent">
-       	<%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :class => "toggle_formfield" %>
- 		  </dt>
+        <%= check_box_tag "parent-options-show", "1", check_parent_box(@work), :class => "toggle_formfield" %>
+      </dt>
       <dd class="parent">
         <%= label_tag 'parent-options-show', ts("This work is a remix, a translation, or was inspired by another work") %> 
  
@@ -116,21 +116,21 @@
           <% end %>
  
           <% unless @work.parent_work_relationships.blank? %>
-            <dt><%= 'Current parent works' %></dt>
+            <dt><%= ts('Current parent works') %></dt>
             <% for related_work in @work.parent_work_relationships %>
               <% if related_work.parent %>
               <dd>
                 <ul class="navigation actions" role="navigation">
                   <li><%= link_to related_work.parent.title, related_work.parent %></li>
-                  <li><%= link_to 'Remove', related_work, :confirm => 'Are you sure you want to delete the connection to this work?', :method => :delete %></li>
+                  <li><%= link_to ts('Remove'), related_work, :confirm => ts('Are you sure you want to delete the connection to this work?'), :method => :delete %></li>
                 </ul>
               </dd>
               <% end %>
             <% end %>
           <% end %>
-        </dl>
-      </fieldset>
-  	</dd>
+          </dl>
+        </fieldset>
+      </dd>
  
       <!-- Series checkbox (storyseriescheck) -->
       <!-- Checking this box causes the "manage series" dropdown to appear; unchecking it causes it to disappear. -->
@@ -141,32 +141,32 @@
         <%= label_tag 'series-options-show', ts("This work is part of a series") %> 
         <%= link_to_help "choosing-series" %>
       
-      <!-- Toggles on with series checkbox -->
-      <fieldset id="series-options">
-        <dl>
-        <%= fields_for "work[series_attributes]" do |s| %>
-          <dt><%= s.label 'id', 'Choose one of your existing series:' %></dt>
-          <dd>
-            <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
-          </dd>
-          <dt><%= s.label :title, "Or create and use a new one:" %></dt>
-          <dd><%= s.text_field :title %></dd>
-        <% end %>
-
-        <% unless @serial_works.blank? %>
-          <dt><%= 'Current Series' %></dt>
-          <% for serial in @serial_works %>
+        <!-- Toggles on with series checkbox -->
+        <fieldset id="series-options">
+          <dl>
+          <%= fields_for "work[series_attributes]" do |s| %>
+            <dt><%= s.label 'id', ts('Choose one of your existing series:') %></dt>
             <dd>
-              <ul class="navigation actions" role="navigation">
-                <li><%= link_to serial.series.title, serial.series %></li>
-                <li><%= link_to 'Remove', serial_work_path(serial), :method => :delete %></li>
-                <li><%= link_to 'Delete', serial.series, :confirm => ts('Are you sure?'), :method => :delete %></li>
-              </ul>
+              <%= s.collection_select(:id, @series, :id, :title, {:prompt => true}) %>
             </dd>
+            <dt><%= s.label :title, "Or create and use a new one:" %></dt>
+            <dd><%= s.text_field :title %></dd>
           <% end %>
-        <% end %>
-        </dl>
-	</fieldset>
+
+          <% unless @serial_works.blank? %>
+            <dt><%= ts('Current Series') %></dt>
+            <% for serial in @serial_works %>
+              <dd>
+                <ul class="navigation actions" role="navigation">
+                  <li><%= link_to serial.series.title, serial.series %></li>
+                  <li><%= link_to ts('Remove'), serial_work_path(serial), :method => :delete %></li>
+                  <li><%= link_to ts('Delete'), serial.series, :confirm => ts('Are you sure?'), :method => :delete %></li>
+                </ul>
+              </dd>
+            <% end %>
+          <% end %>
+          </dl>
+        </fieldset>
       </dd>
 
     <%= fields_for "work[chapter_attributes]", @chapter do |c| %>
@@ -178,33 +178,33 @@
       <dd class="chaptered wip">
         <%= label_tag "chapters-options-show", ts("This work has multiple chapters") %>
       
-      <fieldset id="chapters-options">
-        <dl>
-          <dt><%= 'Chapter 1 of' %></dt>
-          <dd><%= f.text_field :wip_length, :class => "number" %></dd>
-          <dt><%= 'Chapter Title:' %></dt>
-          <dd><%= c.text_field :title, :class => "number", :value => @chapter.title %></dd>
-        </dl>
-	</fieldset>
+        <fieldset id="chapters-options">
+          <dl>
+            <dt><%= ts('Chapter 1 of') %></dt>
+            <dd><%= f.text_field :wip_length, :class => "number" %></dd>
+            <dt><%= ts('Chapter Title:') %></dt>
+            <dd><%= c.text_field :title, :class => "number", :value => @chapter.title %></dd>
+          </dl>
+        </fieldset>
       </dd>
  
-<!--backdate-->
+      <!--backdate-->
       <dt class="backdate">
         <%= check_box_tag "backdate-options-show", "1", check_backdate_box(@work, @chapter), :class => "toggle_formfield" %> 
       </dt>
       <dd class="backdate">
         <%= label_tag "backdate-options-show", ts("Set a different publication date") %> <%= link_to_help "backdating-help" %>
 
-      <fieldset id="backdate-options" class="optional">
-        <dl>
-          <dt><%= label_tag "published_at", ts("Set publication date") %></dt>
-  			<dd id="managePublicationDate" class="datetime" title="set date">
-            <!--BACK END, this select box does not seem to be acquiring the label published_at -->
-<%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %></dd>
-          <dt><%= f.check_box :backdate %></dt>
-          <dd><%= f.label :backdate, ts("Set this publication date for the entire work") %></dd>
-        </dl>
-	</fieldset>
+        <fieldset id="backdate-options" class="optional">
+          <dl>
+            <dt><%= label_tag "published_at", ts("Set publication date") %></dt>
+            <dd id="managePublicationDate" class="datetime" title="set date">
+              <!--BACK END, this select box does not seem to be acquiring the label published_at -->
+              <%= c.date_select("published_at", :start_year => Date.today.year, :end_year => 1950, :default => Date.today, :value => @chapter.published_at, :order => [:day, :month, :year]) %></dd>
+            <dt><%= f.check_box :backdate %></dt>
+            <dd><%= f.label :backdate, ts("Set this publication date for the entire work") %></dd>
+          </dl>
+        </fieldset>
       </dd>
  
       <!-- Privacy dropdown (storyprivacy) -->
@@ -223,80 +223,79 @@
           <%= options_from_collection_for_select(Language.all(:order => :short), :id, :name, @work.language_id || Language.default.id) %>
         </select>
       </dd>
- 	<dt class="skin"><%= f.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
-      	<dd class="skin"><%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
+      <dt class="skin"><%= f.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
+      <dd class="skin"><%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
         <p class="navigation actions" role="navigation"><%= link_to ts('Public work skins'), skins_path(:work_skins => true) %></p></dd>
     </dl>
  
   </fieldset>
  
-  <% if @chapters %>
-    <fieldset role="article">
-      <legend><%= 'Skins' %></legend>
-      <!--BACK END, halp, please move this out as it is clearly not work text-->
-		<dl class="skin">
-		<dt><%= f.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
-      	<dd><%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
-        <p class="navigation actions" role="navigation"><%= link_to ts('Public work skins'), skins_path(:work_skins => true) %></p></dd>
-      </dl>
-    </fieldset>
-  <% else %>
-    <!-- Work text field (chapter_attributes_content) -->
-    <fieldset class="work text" role="article">
-      <legend class="required"><%= 'Work Text *' %></legend>
-  		<p id="toggleText" role="menu">
-        <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
-        <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
-        <span class="rtf-html-switch actions">
-          <span><a id="richTextLink" href="#"><%= ts('Rich text') %></a></span>
-          <span><a id="plainTextLink" style="display:none;" href="#"><%= ts('HTML') %></a></span>
-          <%= content_for :footer_js do %>
-            <%= javascript_tag do %>
-              $j(document).ready(function(){
-                $j("#richTextLink").click(function(event){
-                  addEditor('content');
-                  $j(this).toggle();
-                  $j('#plainTextLink').toggle();
-                  event.preventDefault();
-                });
-              
-                $j('#plainTextLink').click(function(event){
-                  removeEditor('content');
-                  $j(this).toggle();
-                  $j('#richTextLink').toggle();
-                  event.preventDefault();
-                });
-              })            
-            <% end %>
-          <% end %>
-  	    </span>
-	    </p>
+      <% if @chapters %>
+        <fieldset role="article">
+          <legend><%= ts('Skins') %></legend>
+          <!--BACK END, halp, please move this out as it is clearly not work text-->
+          <dl class="skin">
+            <dt><%= f.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
+            <dd><%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
+            <p class="navigation actions" role="navigation"><%= link_to ts('Public work skins'), skins_path(:work_skins => true) %></p></dd>
+          </dl>
+        </fieldset>
+      <% else %>
+        <!-- Work text field (chapter_attributes_content) -->
+        <fieldset class="work text" role="article">
+          <legend class="required"><%= ts('Work Text *') %></legend>
+          <p id="toggleText" role="menu">
+            <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
+            <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
+            <span class="rtf-html-switch actions">
+              <span><a id="richTextLink" href="#"><%= ts('Rich text') %></a></span>
+              <span><a id="plainTextLink" style="display:none;" href="#"><%= ts('HTML') %></a></span>
+              <%= content_for :footer_js do %>
+                <%= javascript_tag do %>
+                  $j(document).ready(function(){
+                    $j("#richTextLink").click(function(event){
+                      addEditor('content');
+                      $j(this).toggle();
+                      $j('#plainTextLink').toggle();
+                      event.preventDefault();
+                    });
+                  
+                    $j('#plainTextLink').click(function(event){
+                      removeEditor('content');
+                      $j(this).toggle();
+                      $j('#richTextLink').toggle();
+                      event.preventDefault();
+                    });
+                  })            
+                <% end %>
+              <% end %>
+            </span>
+          </p>
 
+          <% use_tinymce %>
+          <div class="rtf-html-field">
+            <h4 class="landmark heading"><%= ts('Work Text *') %></h4>
+            <%= c.text_area :content, :value => @chapter.content, :class => "mce-editor observe_textlength", :id => "content" %>
+            <%= live_validation_for_field('content',
+              :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN,
+              :tooLongMessage => ts('We salute your ambition! But sadly the content must be less than %{max} characters long. (Maybe you want to create a multi-chaptered work?)', :max => ArchiveConfig.CONTENT_MAX.to_s),
+              :tooShortMessage => ts('Brevity is the soul of wit, but your content does have to be at least %{min} characters long.', :min => ArchiveConfig.CONTENT_MIN.to_s),
+              :failureMessage => ts('Brevity is the soul of wit, but your content does have to be at least %{min} characters long.', :min => ArchiveConfig.CONTENT_MIN.to_s))
+            %>
 
-   		<% use_tinymce %>
-      <div class="rtf-html-field">
-     	<h4 class="landmark heading"><%= 'Work Text *' %></h4>
-     	<%= c.text_area :content, :value => @chapter.content, :class => "mce-editor observe_textlength", :id => "content" %>
-<%= live_validation_for_field('content',
-          :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN,
-          :tooLongMessage => ts('We salute your ambition! But sadly the content must be less than %{max} characters long. (Maybe you want to create a multi-chaptered work?)', :max => ArchiveConfig.CONTENT_MAX.to_s),
-          :tooShortMessage => ts('Brevity is the soul of wit, but your content does have to be at least %{min} characters long.', :min => ArchiveConfig.CONTENT_MIN.to_s),
-          :failureMessage => ts('Brevity is the soul of wit, but your content does have to be at least %{min} characters long.', :min => ArchiveConfig.CONTENT_MIN.to_s))
-      %>
+            <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
+          </div>
+        </fieldset>
+      <% end %>
 
-<%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
-      </div>
-    </fieldset>
-  <% end %>
- 
-  <% end %> <!-- end of fields for chapters -->
+    <% end %> <!-- end of fields for chapters -->
  
   <fieldset class="create">
-    <legend><%= 'Post' %></legend>
+    <legend><%= ts('Post') %></legend>
     <p class="submit cancel actions">
-      <%= submit_tag 'Preview', :name => 'preview_button' %>
-      <%= submit_tag 'Post without preview' %>
-      <%= submit_tag 'Cancel', :name => 'cancel_button' %>
+      <%= submit_tag ts('Preview'), :name => 'preview_button' %>
+      <%= submit_tag ts('Post without preview') %>
+      <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
     </p>
   </fieldset>
 <% end %> <!-- end of form_for -->
