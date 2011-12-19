@@ -15,7 +15,7 @@
         <%= f.text_field :title, :class => "observe_textlength text" %>
         <%= live_validation_for_field('work_title',
               :maximum_length => ArchiveConfig.TITLE_MAX, :minimum_length => ArchiveConfig.TITLE_MIN,
-              :failureMessage => ts("We need a title! (At least %{min_length} characters long, please.)", :min_length => ArchiveConfig.TITLE_MIN.to_s)
+              :failureMessage => ts("We need a title! (At least %{min_length} characters long, please.)", :min_length => ArchiveConfig.TITLE_MIN.to_s))
         %>
         <%= generate_countdown_html("work_title", ArchiveConfig.TITLE_MAX) %>
       </dd>
