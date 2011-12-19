@@ -165,6 +165,29 @@ module WorksHelper
   def download_url_for_work(work, format)
     url_for ("/downloads/#{work.download_authors}/#{work.id}/#{work.download_title}.#{format}").gsub(' ', '%20')
   end
+  
+  # Generates a list of a work's tags and details for use in feeds
+  def feed_summary(work)
+    tags = work.tags.group_by(&:type)
+    %w(Fandom Rating Warning Category Character Relationship Freeform).each do |type|
+      tags[type] ||= []
+    end
+    fandoms = tags['Fandom'].map{ |t| link_to_tag_works(t) }.join(', ')
+    rating_and_warnings = (tags['Rating'] + tags['Warning'] + tags['Category']).map{ |t| link_to_tag_works(t) }.join(', ')
+    other_tags = (tags['Character'] + tags['Relationship'] + tags['Freeform']).map{ |t| link_to_tag_works(t) }.join(', ')
+    text = work.summary
+    text << "<ul>"
+    text << "<li>Author: #{byline(work, :visibility => 'public')}</li>"
+    text << "<li>Fandom: #{fandoms}</li>"
+    text << "<li>Rating, warnings, and categories: #{rating_and_warnings}</li>"
+    text << "<li>Characters, relationships, and other tags: #{other_tags}</li>"
+    text << "<li>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</li>"
+    unless work.series.count == 0
+      text << "<li>Series: #{series_list_for_feeds(work)}</li>"
+    end
+    text << "</ul>"
+    text
+  end
     
   
 end
