@@ -4,6 +4,16 @@ class Subscription < ActiveRecord::Base
   
   validates_presence_of :user
   
+  # Get the subscriptions associated with this work
+  # currently: users subscribed to work, users subscribed to creator of work
+  scope :for_work, lambda {|work|
+    where(["(subscribable_id = ? AND subscribable_type = 'Work') 
+            OR (subscribable_type = 'User' AND subscribable_id IN (?))",
+            work.id, 
+            work.pseuds.value_of(:user_id)]).
+    group(:user_id)
+  }
+  
   # The name of the object to which the user is subscribed
   def name
     if subscribable.respond_to?(:login)

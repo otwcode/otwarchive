@@ -90,6 +90,18 @@
       <% end %>
     </div>
   </li>
+  
+  <li class="subscribe">
+    <% if @subscription && @subscription.new_record? %>
+      <%= form_for [current_user, @subscription] do |f| %>
+        <%= f.hidden_field :subscribable_id, :value => @work.id %>
+        <%= f.hidden_field :subscribable_type, :value => @work.class.to_s %>
+        <%= f.submit "Subscribe" %>
+      <% end %>
+    <% elsif @subscription %>
+      <%= link_to "Unsubscribe", user_subscription_path(current_user, @subscription), :method => :delete %>
+    <% end %>
+  </li>
 
   <li class="download" aria-haspopup="true">
     <a title="Download" class="downloads_open open"><%= ts("Download") %> &#8595;</a>
