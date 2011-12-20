@@ -67,7 +67,7 @@ class ChaptersController < ApplicationController
       
       if current_user.respond_to?(:subscriptions)
         @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
-                                                         :subscribable_type => 'User').first ||
+                                                         :subscribable_type => 'Work').first ||
                         current_user.subscriptions.build
       end
 

@@ -8,7 +8,7 @@ class Subscription < ActiveRecord::Base
   # currently: users subscribed to work, users subscribed to creator of work
   scope :for_work, lambda {|work|
     where(["(subscribable_id = ? AND subscribable_type = 'Work') 
-            OR (subscribable_type = 'User' AND subscribable_id IN (?))",
+            OR (subscribable_id IN (?) AND subscribable_type = 'User')",
             work.id, 
             work.pseuds.value_of(:user_id)]).
     group(:user_id)
