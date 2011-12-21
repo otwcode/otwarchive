@@ -58,11 +58,7 @@ class CreationObserver < ActiveRecord::Observer
   def notify_subscribers(creation)
     work = creation.respond_to?(:work) ? creation.work : creation
     if work && !work.unrevealed? && !work.anonymous?
-      #Group subscriptions by user id so that you only get one notice per update
-      subs = Subscription.where(["subscribable_type = 'User' AND subscribable_id IN (?)",
-                                work.pseuds.map{|a| a.user_id}]).
-                          group(:user_id)
-      subs.each do |subscription|
+      Subscription.for_work(work).each do |subscription|
         UserMailer.subscription_notification(subscription.user.id, subscription.id, creation.id, creation.class.name).deliver
       end
     end
