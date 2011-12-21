@@ -8,7 +8,7 @@
   <li><%= link_to t('.people.Reccers', :default => "Reccers"), person_path(@character, :show => "reccers") %></li>
 </ul>
 
-<div title="alphabetical pagination actions">
+<div class="alphabetical pagination actions">
   <h5 class="landmark heading">By Letter</h5>
   <%= people_paginated_section(@what) %></div> 
 <%= paginated_section @people do %>
