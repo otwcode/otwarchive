@@ -18,9 +18,11 @@ class Tag < ActiveRecord::Base
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
   acts_as_commentable
+  
   def commentable_name
     self.name
   end
+  
   def commentable_owners
     if self.is_a?(Fandom)
       self.wranglers
@@ -32,6 +34,11 @@ class Tag < ActiveRecord::Base
       end
     end
   end
+  
+  def commentable_class
+    return "tag"
+  end
+  
   def commentable_path
     comments_path(:tag_id => self.name,
                   :add_comment => options[:add_comment],

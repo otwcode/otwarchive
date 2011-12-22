@@ -43,11 +43,7 @@ module CommentableEntity
 
   # type of thing you're commenting on
   def commentable_class
-    if self.is_a?(Tag)
-      return "tag"
-    else
-      return self.class.name.to_s.underscore
-    end
+    return self.class.name.to_s.underscore
   end
 
   # Return the path to this commentable object
