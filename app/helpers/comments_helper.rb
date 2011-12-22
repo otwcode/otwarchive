@@ -7,11 +7,8 @@ module CommentsHelper
   def title_for_comment_page(commentable)
     if commentable.commentable_name.blank?
       title = ""
-    elsif commentable.commentable_class == "tag"
-    # ordinary link_to won't work in this case as tags are special
-      title = link_to_tag(commentable)
     else
-      title = link_to(commentable.commentable_name, commentable)
+      title = commentable.commentable_link
     end
     (ts('Reading Comments on ') + title).html_safe
   end

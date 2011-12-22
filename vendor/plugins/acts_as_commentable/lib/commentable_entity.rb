@@ -41,9 +41,16 @@ module CommentableEntity
     end
   end
 
-  # type of thing you're commenting on
+  # Return the type of thing you're commenting on
+  # Should be overridden in the implementing class if necessary
   def commentable_class
     return self.class.name.to_s.underscore
+  end
+  
+  # Return a properly formatted link to the thing you're commenting on
+  # Should be overridden in the implementing class if necessary
+  def commentable_link
+    link_to(commentable.commentable_name, commentable)
   end
 
   # Return the path to this commentable object

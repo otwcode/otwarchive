@@ -39,6 +39,11 @@ class Tag < ActiveRecord::Base
     return "tag"
   end
   
+  def commentable_link
+    # ordinary link_to won't work in this case as tags are special
+    link_to_tag(self)
+  end
+
   def commentable_path
     comments_path(:tag_id => self.name,
                   :add_comment => options[:add_comment],
