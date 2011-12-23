@@ -553,19 +553,8 @@ class StoryParser
       # in LJ "light" format, the story contents are in the second div
       # inside the body.
       body = @doc.css("body")
-      content_divs = body.css("div")
-
-      unless content_divs[1].nil?
-        # the LJ metadata (mood, location, current music, tags) is in the first
-        # table inside the div. No metadata means no table. Get rid of it:
-        tables = content_divs[1].css("table")
-        if !tables[0].nil? && tables[0].to_html.match(/(Current location:)|(Current mood:)|(Current music:)|(Entry tags:)/)
-          tables[0].remove
-        end
-        storytext = content_divs[1].inner_html
-      else
-        storytext = body.inner_html
-      end
+      storytext = body.css("div.b-singlepost-body").inner_html
+      storytext = body.inner_html if storytext.empty?
 
       # cleanup the text
       # storytext.gsub!(/<br\s*\/?>/i, "\n") # replace the breaks with newlines
@@ -576,10 +565,9 @@ class StoryParser
       work_params[:title].gsub! /^[^:]+: /, ""
       work_params.merge!(scan_text_for_meta(storytext))
 
-      font_blocks = @doc.xpath('//font')
-      unless font_blocks.empty?
-        date = font_blocks.first.inner_text
-        work_params[:revised_at] = convert_revised_at(date)
+      date = @doc.css("span.b-singlepost-author-date")
+      unless date.empty?
+        work_params[:revised_at] = convert_revised_at(date.first.inner_text)
       end
 
       return work_params
