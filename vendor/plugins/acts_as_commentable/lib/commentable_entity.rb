@@ -46,7 +46,7 @@ module CommentableEntity
   def commentable_class
     return self.class.name.to_s.underscore
   end
-  
+
   # Return a properly formatted link to the thing you're commenting on
   # Should be overridden in the implementing class if necessary
   def commentable_link
