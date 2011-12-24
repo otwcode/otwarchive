@@ -1123,14 +1123,14 @@ user’s prompts are equal</p>
           <div class="method-source-code" id="title-source">
             <pre><span class="ruby-comment"># File app/models/challenge_claim.rb, line 113</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">title</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">request_prompt</span>.<span class="ruby-identifier">title</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">request_prompt</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">title</span> = <span class="ruby-identifier">request_prompt</span>.<span class="ruby-identifier">title</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">title</span> = <span class="ruby-string">&quot;Untitled Prompt&quot;</span>
+    <span class="ruby-identifier">title</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Untitled Prompt&quot;</span>)
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">title</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; in #{self.collection.title}&quot;</span>
+  <span class="ruby-identifier">title</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot; &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;in&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-node">&quot; #{self.collection.title}&quot;</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">request_prompt</span>.<span class="ruby-identifier">anonymous?</span>
-    <span class="ruby-identifier">title</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot; (Anonymous)&quot;</span>
+    <span class="ruby-identifier">title</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot; &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;(Anonymous)&quot;</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">title</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; (#{self.request_byline})&quot;</span>
   <span class="ruby-keyword">end</span>

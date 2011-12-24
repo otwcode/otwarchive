@@ -614,13 +614,13 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 35</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 37</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@challenge</span> = <span class="ruby-constant">PromptMeme</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:prompt_meme</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">save</span>
     <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">challenge</span> = <span class="ruby-ivar">@challenge</span>
     <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">save</span>
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Challenge was successfully created.'</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Challenge was successfully created.'</span>)
     
     <span class="ruby-comment"># see if we initialized the tag set</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">initializing_tag_sets?</span>
@@ -657,7 +657,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 70</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 72</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Challenge settings were deleted.'</span>
@@ -689,7 +689,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 32</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 34</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- edit-source -->
@@ -713,15 +713,16 @@
 
         <div class="method-description">
           
-          
+          <p>The new form for prompt memes is actually the challenge settings page
+because challenges are always created in the context of a collection.</p>
           
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 23</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 25</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-keyword">if</span> (<span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">challenge</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'prompt_meme.already_challenge'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;There is already a challenge set up for this collection.&quot;</span>)
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There is already a challenge set up for this collection.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_collection_prompt_meme_path</span>(<span class="ruby-ivar">@collection</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@challenge</span> = <span class="ruby-constant">PromptMeme</span>.<span class="ruby-identifier">new</span>
@@ -782,12 +783,12 @@
 
         <div class="method-description">
           
-          
+          <p>is actually a blank page - should it be redirected to collection profile?</p>
           
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 20</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 21</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- show-source -->
@@ -816,7 +817,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 52</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge/prompt_meme_controller.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:prompt_meme</span>])
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Challenge was successfully updated.'</span>

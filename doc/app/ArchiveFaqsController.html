@@ -659,7 +659,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/archive_faqs_controller.rb, line 100</span>
+            <pre><span class="ruby-comment"># File app/controllers/archive_faqs_controller.rb, line 101</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@archive_faq</span> = <span class="ruby-constant">ArchiveFaq</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-ivar">@archive_faq</span>.<span class="ruby-identifier">destroy</span>
@@ -896,12 +896,12 @@
 
         <div class="method-description">
           
-          
+          <p>reorder FAQs</p>
           
 
           
           <div class="method-source-code" id="update_positions-source">
-            <pre><span class="ruby-comment"># File app/controllers/archive_faqs_controller.rb, line 82</span>
+            <pre><span class="ruby-comment"># File app/controllers/archive_faqs_controller.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_positions</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:archive_faqs</span>]
     <span class="ruby-ivar">@archive_faqs</span> = <span class="ruby-constant">ArchiveFaq</span>.<span class="ruby-identifier">reorder</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:archive_faqs</span>])       
