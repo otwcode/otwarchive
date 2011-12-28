@@ -167,6 +167,34 @@ module WorksHelper
   def download_url_for_work(work, format)
     url_for ("/downloads/#{work.download_authors}/#{work.id}/#{work.download_title}.#{format}").gsub(' ', '%20')
   end
+  
+  # Generates a list of a work's tags and details for use in feeds
+  def feed_summary(work)
+    tags = work.tags.group_by(&:type)
+    text = "<p>by #{byline(work, :visibility => 'public')}</p>"
+    text << work.summary
+    text << "<p>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</p>"
+    unless work.series.count == 0
+      text << "<p>Series: #{series_list_for_feeds(work)}</p>"
+    end
+    # Create list of tags
+    text << "<ul>"
+    %w(Fandom Rating Warning Category Character Relationship Freeform).each do |type|
+      if tags[type]
+        label = case type
+        when 'Freeform'
+          'Additional Tags'
+        when 'Rating'
+          'Rating'
+        else
+          type.pluralize
+        end
+        text << "<li>#{label}: #{tags[type].map{ |t| link_to_tag_works(t) }.join(', ')}</li>"
+      end
+    end
+    text << "</ul>"
+    text
+  end
     
   
 end
