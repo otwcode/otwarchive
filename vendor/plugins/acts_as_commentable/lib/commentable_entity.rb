@@ -55,7 +55,7 @@ module CommentableEntity
 
   # Return the path to this commentable object
   # Should be overridden in the implementing class if necessary
-  def commentable_path
+  def commentable_path(options)
     path_for(:controller => commentable.class.to_s.underscore.pluralize,
                   :action => :show,
                   :id => commentable.id,

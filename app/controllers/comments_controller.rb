@@ -355,6 +355,6 @@ class CommentsController < ApplicationController
   def redirect_to_all_comments(commentable, options = {})
     default_options = {:anchor => "comments"}
     options = default_options.merge(options)
-    redirect_to commentable.commentable_path
+    redirect_to commentable.commentable_path(options)
   end
 end
