@@ -50,15 +50,15 @@ module CommentableEntity
   # Return a properly formatted link to the thing you're commenting on
   # Should be overridden in the implementing class if necessary
   def commentable_link
-    link_to(commentable.commentable_name, commentable)
+    link_to(self.commentable_name, self)
   end
 
   # Return the path to this commentable object
   # Should be overridden in the implementing class if necessary
   def commentable_path(options)
-    path_for(:controller => commentable.class.to_s.underscore.pluralize,
+    path_for(:controller => self.class.to_s.underscore.pluralize,
                   :action => :show,
-                  :id => commentable.id,
+                  :id => self.id,
                   :show_comments => options[:show_comments],
                   :add_comment => options[:add_comment],
                   :add_comment_reply_id => options[:add_comment_reply_id],

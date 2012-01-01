@@ -199,7 +199,7 @@ class Chapter < ActiveRecord::Base
   end
 
   def commentable_path(options)
-    if (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
+    if (options[:view_full_work] || User.current_user.try(:preference).try(:view_full_works))
         commentable = self.work
     else
         commentable = self
