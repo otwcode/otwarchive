@@ -15,27 +15,6 @@ Given /^I have the receive no comment notifications setup$/ do
   user.preference.save
 end
 
-# THEN
-
-Then /^I should see Posted today$/ do
-  today = Date.today.to_s(:date_for_comment_test)
-  Given "I should see \"Posted #{today}\""
-end
-
-Then /^I should see Posted nowish$/ do
-  nowish = Time.zone.now.strftime('%a %d %b %Y %I:%M%p')
-  Given "I should see \"Posted #{nowish}\""
-end
-
-Then /^I should see Last Edited nowish$/ do
-  nowish = Time.zone.now.strftime('%a %d %b %Y %I:%M%p')
-  Given "I should see \"Last Edited #{nowish}\""
-end
-
-Then /^I should see the comment form$/ do
-  Then %{I should see "New comment on"}
-end
-
 # WHEN
 
 When /^I set up the comment "([^"]*)" on the work "([^"]*)"$/ do |comment_text, work|
@@ -100,6 +79,27 @@ Morbi nec ullamcorper dolor. In luctus vulputate arcu et egestas. Nullam at pret
 Nunc eget dolor ut nisi laoreet scelerisque. Vestibulum condimentum dignissim leo ut luctus. Aliquam sed sem velit. Nulla justo nulla, molestie cursus mollis eget, ullamcorper aliquet mi. Duis et sem elit, quis pretium diam. Nam consectetur ullamcorper velit, varius vulputate dui ultrices sodales. Sed aliquet laoreet tortor, vitae varius enim ornare vel. Nam ornare dapibus aliquam. Proin faucibus tellus eget nibh lacinia in dignissim odio ultricies. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla aliquet pulvinar turpis vitae malesuada. Mauris porttitor erat in urna bibendum luctus. Vestibulum nec mi eros, nec rutrum ligula. Nunc ac nisl eros, ut adipiscing diam. Integer feugiat justo a purus fermentum sollicitudin. Mauris lacinia venenatis commodo. Nam urna libero, viverra in rhoncus vel, ultricies vitae augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Morbi vitae lacus vitae magna volutpat pharetra rhoncus eget nisi. Proin vehicula, felis nec tempor eleifend, dolor ipsum volutpat dolor, et eleifend nibh libero ac turpis. Donec odio est, sodales nec consectetur vehicula, adipiscing sit amet magna. Suspendisse dapibus tincidunt velit sit amet mollis. Curabitur eget blandit li./)
   end
+end
+
+# THEN
+
+Then /^I should see Posted today$/ do
+  today = Date.today.to_s(:date_for_comment_test)
+  Given "I should see \"Posted #{today}\""
+end
+
+Then /^I should see Posted nowish$/ do
+  nowish = Time.zone.now.strftime('%a %d %b %Y %I:%M%p')
+  Given "I should see \"Posted #{nowish}\""
+end
+
+Then /^I should see Last Edited nowish$/ do
+  nowish = Time.zone.now.strftime('%a %d %b %Y %I:%M%p')
+  Given "I should see \"Last Edited #{nowish}\""
+end
+
+Then /^I should see the comment form$/ do
+  Then %{I should see "New comment on"}
 end
 
 Then /^I should see the reply to comment form$/ do
