@@ -90,7 +90,7 @@ form li ul.autocomplete li.input
 
 /* WIDGET: SORTABLE LIST (note: hope to merge with .sortable and .draggable etc)*/
 .ui-sortable li 
-        { border: 2px solid transparent; float: left; width: 100%; clear: right;
+        { border: 2px solid transparent; float: left; width: 100%; clear: both;
           box-shadow:1px 1px 3px transparent }
 .ui-sortable li:hover 
         { background: #ddd; border: 2px solid #999; cursor:move;
