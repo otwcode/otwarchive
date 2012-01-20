@@ -12,21 +12,21 @@
 need to see some realdata to know, suspect inbox-->
 <div class="wrapper">
 	<table id="abuse_report_table" summary="">
-		<caption><%=h ts("Detailed abuse report") %></caption>
+		<caption><%=ts("Detailed abuse report") %></caption>
 		<tr>
-			<th scope="row"><%=h ts("From") %></th>
+			<th scope="row"><%=ts("From") %></th>
 			<td><%= @abuse_report.email.blank? ? ts("Anonymous") : mail_to(@abuse_report.email) %></td>
 		</tr>
 		<tr>
-			<th scope="row"><%=h ts("Regarding") %></th>
+			<th scope="row"><%=ts("Regarding") %></th>
 			<td><%= link_to @abuse_report.url, @abuse_report.url %></td>
 		</tr>
 		<tr>
-			<th scope="row"><%=h ts("Reported") %></th>
+			<th scope="row"><%=ts("Reported") %></th>
 			<td><%= time_ago_in_words @abuse_report.created_at %></td>
 		</tr>
 		<tr>
-			<th scope="row"><%=h ts("Statement") %></th>
+			<th scope="row"><%=ts("Statement") %></th>
 			<td class="userstuff"><%=raw sanitize_field(@abuse_report, :comment) %></td>
 		</tr>
 	</table>

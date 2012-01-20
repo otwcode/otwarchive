@@ -1,12 +1,12 @@
-<h2 class="heading"><%=h ts("Here's some user feedback on the archive!") %></h2>
+<h2 class="heading"><%=ts("Here's some user feedback on the archive!") %></h2>
 
 <%= ArchiveConfig.REVISION.blank? ? "" : "<p>" + ts("Archive revision: (rev. %{revision})", :revision => ArchiveConfig.REVISION) + "</p>" %>
 
-<h3 class="heading"><%=h ts("Feedback:") %></h3>
+<h3 class="heading"><%=ts("Feedback") %>:</h3>
 
 <%=raw @summary %>
 <%=raw @comment %>
 
-<p><%=h ts("Sent at:") %>&nbsp;<%= Time.now.to_s(:time_for_mailers) %></p>
+<p><%=ts("Sent at") %>: &nbsp;<%= Time.now.to_s(:time_for_mailers) %></p>
 
 
