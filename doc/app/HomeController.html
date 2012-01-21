@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>Class: HomeController</title>
+<title>class HomeController - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -745,7 +745,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">site_pages</span>    
   <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">application</span>.<span class="ruby-identifier">reload_routes!</span>
   <span class="ruby-identifier">page_routes</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">application</span>.<span class="ruby-identifier">routes</span>.<span class="ruby-identifier">routes</span>.<span class="ruby-identifier">select</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">route</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">route</span>.<span class="ruby-identifier">verb</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;GET&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">route</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">route</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^edit/</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">route</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">match</span>(<span class="ruby-string">&quot;translat&quot;</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">route</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">match</span>(<span class="ruby-string">&quot;external_author&quot;</span>)
+    <span class="ruby-identifier">route</span>.<span class="ruby-identifier">verb</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;GET&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">route</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">route</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^edit/</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">route</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">match</span>(<span class="ruby-string">&quot;translat&quot;</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">route</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">match</span>(<span class="ruby-string">&quot;external_author&quot;</span>)
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-ivar">@paths</span> = []
@@ -754,7 +754,7 @@
 
   <span class="ruby-identifier">page_routes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">path</span> = <span class="ruby-identifier">r</span>.<span class="ruby-identifier">path</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">'('</span>).<span class="ruby-identifier">first</span>
-    <span class="ruby-keyword">while</span> (<span class="ruby-identifier">path</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/:([^\/]+)_id\//</span>)) <span class="ruby-keyword">do</span>
+    <span class="ruby-keyword">while</span> (<span class="ruby-identifier">path</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r:([^\/]+)_id\//</span>)) <span class="ruby-keyword">do</span>
       <span class="ruby-identifier">id</span> = <span class="ruby-identifier">get_id</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">current_user</span>, <span class="ruby-node">$1</span>.<span class="ruby-identifier">singularize</span>)
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span>
         <span class="ruby-identifier">path</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-node">&quot;:#{$1}_id&quot;</span>, <span class="ruby-node">&quot;#{id}&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span>
@@ -765,7 +765,7 @@
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
 
-    <span class="ruby-keyword">if</span> (<span class="ruby-identifier">path</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/\/([^\/]+)\/:id/</span>))
+    <span class="ruby-keyword">if</span> (<span class="ruby-identifier">path</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r\/([^\/]+)\/:id/</span>))
       <span class="ruby-identifier">id</span> = <span class="ruby-identifier">get_id</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">current_user</span>, <span class="ruby-node">$1</span>.<span class="ruby-identifier">singularize</span>)
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span>
         <span class="ruby-identifier">path</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-string">&quot;:id&quot;</span>, <span class="ruby-node">&quot;#{id}&quot;</span>)
@@ -952,7 +952,7 @@ fallback is just using the first object of a given class</p>
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 

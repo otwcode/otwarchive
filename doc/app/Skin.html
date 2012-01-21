@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>Class: Skin</title>
+<title>class Skin - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -948,7 +948,7 @@ specially handled in get_media_for_filename/parse_media_from_filename</p>
           <div class="method-source-code" id="get_current_version-source">
             <pre><span class="ruby-comment"># File app/models/skin.rb, line 486</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">get_current_version</span>
-  <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins_dir</span>, <span class="ruby-regexp">/^\d+\.\d+$/</span>).<span class="ruby-identifier">last</span>
+  <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins_dir</span>, <span class="ruby-regexp">%r^\d+\.\d+$/</span>).<span class="ruby-identifier">last</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- get_current_version-source -->
           
@@ -1008,31 +1008,31 @@ specially handled in get_media_for_filename/parse_media_from_filename</p>
           <div class="method-source-code" id="load_site_css-source">
             <pre><span class="ruby-comment"># File app/models/skin.rb, line 394</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_site_css</span>
-  <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins_dir</span>, <span class="ruby-regexp">/^\d+\.\d+$/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">version</span><span class="ruby-operator">|</span>
+  <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins_dir</span>, <span class="ruby-regexp">%r^\d+\.\d+$/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">version</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">version_dir</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">site_skins_dir</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">version</span> <span class="ruby-operator">+</span> <span class="ruby-string">'/'</span>
     <span class="ruby-keyword">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">version_dir</span>)
       <span class="ruby-comment"># let's load up the file</span>
       <span class="ruby-identifier">skins</span> = []
-      <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-identifier">version_dir</span>, <span class="ruby-regexp">/^(\d+)-(.*)\.css/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">skin_file</span><span class="ruby-operator">|</span>
+      <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-identifier">version_dir</span>, <span class="ruby-regexp">%r^(\d+)-(.*)\.css/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">skin_file</span><span class="ruby-operator">|</span>
         <span class="ruby-identifier">filename</span> = <span class="ruby-constant">SITE_SKIN_PATH</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">version</span> <span class="ruby-operator">+</span> <span class="ruby-string">'/'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">skin_file</span>
-        <span class="ruby-identifier">skin_file</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d+)-(.*)\.css/</span>)
+        <span class="ruby-identifier">skin_file</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^(\d+)-(.*)\.css/</span>)
         <span class="ruby-identifier">position</span> = <span class="ruby-node">$1</span>.<span class="ruby-identifier">to_i</span>
         <span class="ruby-identifier">title</span> = <span class="ruby-node">$2</span>
-        <span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/(\-|\_)/</span>, <span class="ruby-string">' '</span>)
+        <span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">%r(\-|\_)/</span>, <span class="ruby-string">' '</span>)
         <span class="ruby-identifier">description</span> = <span class="ruby-node">&quot;Version #{version} of the #{title} component (#{position}) of the default archive site design.&quot;</span>
         <span class="ruby-identifier">firstline</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">version_dir</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">skin_file</span>, &amp;<span class="ruby-value">:readline</span>)
         <span class="ruby-identifier">skin_role</span> = <span class="ruby-string">&quot;site&quot;</span>
-        <span class="ruby-keyword">if</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/ROLE: (\w+)/</span>)
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rROLE: (\w+)/</span>)
           <span class="ruby-identifier">skin_role</span> = <span class="ruby-node">$1</span>
         <span class="ruby-keyword">end</span>
         <span class="ruby-identifier">skin_media</span> = [<span class="ruby-string">&quot;screen&quot;</span>]
-        <span class="ruby-keyword">if</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/MEDIA: (.*?) ENDMEDIA/</span>)
-          <span class="ruby-identifier">skin_media</span> = <span class="ruby-node">$1</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/,\s?/</span>)
-        <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/MEDIA: (\w+)/</span>)
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rMEDIA: (.*?) ENDMEDIA/</span>)
+          <span class="ruby-identifier">skin_media</span> = <span class="ruby-node">$1</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">%r,\s?/</span>)
+        <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rMEDIA: (\w+)/</span>)
           <span class="ruby-identifier">skin_media</span> = [<span class="ruby-node">$1</span>]
         <span class="ruby-keyword">end</span>
         <span class="ruby-identifier">skin_ie</span> = <span class="ruby-string">&quot;&quot;</span>
-        <span class="ruby-keyword">if</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/IE_CONDITION: (\w+)/</span>)
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">firstline</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rIE_CONDITION: (\w+)/</span>)
           <span class="ruby-identifier">skin_ie</span> = <span class="ruby-node">$1</span>
         <span class="ruby-keyword">end</span>
         
@@ -1108,7 +1108,7 @@ specially handled in get_media_for_filename/parse_media_from_filename</p>
           <div class="method-source-code" id="naturalized-source">
             <pre><span class="ruby-comment"># File app/models/skin.rb, line 390</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">naturalized</span>(<span class="ruby-identifier">string</span>)
-  <span class="ruby-identifier">string</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp">/[^\d]+|[\d]+/</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/\d+(\.\d+)?/</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">f</span> }
+  <span class="ruby-identifier">string</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp">%r[^\d]+|[\d]+/</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r\d+(\.\d+)?/</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">f</span> }
 <span class="ruby-keyword">end</span></pre>
           </div><!-- naturalized-source -->
           
@@ -1420,14 +1420,14 @@ entire skin</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clean_css</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">css</span>.<span class="ruby-identifier">blank?</span>
   <span class="ruby-identifier">scanner</span> = <span class="ruby-constant">StringScanner</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">css</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-regexp">/\/\*/</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-regexp">%r\/\*/</span>)
     <span class="ruby-comment"># no comments, clean the whole thing</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">css</span> = <span class="ruby-identifier">clean_css_code</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">css</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">clean_code</span> = []
-    <span class="ruby-keyword">while</span> (<span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-regexp">/\/\*/</span>))
-      <span class="ruby-identifier">clean_code</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">clean</span> = <span class="ruby-identifier">clean_css_code</span>(<span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">scan_until</span>(<span class="ruby-regexp">/\/\*/</span>).<span class="ruby-identifier">chomp</span>(<span class="ruby-string">'/*'</span>)))
-      <span class="ruby-identifier">clean_code</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">'/*'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">scan_until</span>(<span class="ruby-regexp">/\*\//</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-regexp">/\*\//</span>)
+    <span class="ruby-keyword">while</span> (<span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-regexp">%r\/\*/</span>))
+      <span class="ruby-identifier">clean_code</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">clean</span> = <span class="ruby-identifier">clean_css_code</span>(<span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">scan_until</span>(<span class="ruby-regexp">%r\/\*/</span>).<span class="ruby-identifier">chomp</span>(<span class="ruby-string">'/*'</span>)))
+      <span class="ruby-identifier">clean_code</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">'/*'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">scan_until</span>(<span class="ruby-regexp">%r\*\//</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-regexp">%r\*\//</span>)
     <span class="ruby-keyword">end</span>
     <span class="ruby-identifier">clean_code</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">clean</span> = <span class="ruby-identifier">clean_css_code</span>(<span class="ruby-identifier">scanner</span>.<span class="ruby-identifier">rest</span>))
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">css</span> = <span class="ruby-identifier">clean_code</span>.<span class="ruby-identifier">delete_if</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">code_block</span><span class="ruby-operator">|</span> <span class="ruby-identifier">code_block</span>.<span class="ruby-identifier">blank?</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)
@@ -1463,7 +1463,7 @@ entire skin</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clean_media</span>
   <span class="ruby-comment"># handle bizarro cucumber-only error that prevents media from deserializing correctly when attachments are made</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">media</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">media</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">media</span>.<span class="ruby-identifier">empty?</span>
-    <span class="ruby-identifier">new_media</span> = <span class="ruby-identifier">media</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/\[&quot;(\w+)&quot;\]/</span>, <span class="ruby-string">'\1'</span>)}
+    <span class="ruby-identifier">new_media</span> = <span class="ruby-identifier">media</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r\[&quot;(\w+)&quot;\]/</span>, <span class="ruby-string">'\1'</span>)}
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">media</span> = <span class="ruby-identifier">new_media</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1603,8 +1603,8 @@ entire skin</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_cached_style</span>(<span class="ruby-identifier">roles_to_include</span>)
   <span class="ruby-identifier">block</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-identifier">self_skin_dir</span> = <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skins_dir</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">skin_dirname</span>
-  <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-identifier">self_skin_dir</span>, <span class="ruby-regexp">/^\d+_(.*)\.css$/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sub_file</span><span class="ruby-operator">|</span>
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">sub_file</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d+_(.*)\.css$/</span>)
+  <span class="ruby-constant">Skin</span>.<span class="ruby-identifier">skin_dir_entries</span>(<span class="ruby-identifier">self_skin_dir</span>, <span class="ruby-regexp">%r^\d+_(.*)\.css$/</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sub_file</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">sub_file</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^\d+_(.*)\.css$/</span>)
       (<span class="ruby-identifier">sheet_role</span>, <span class="ruby-identifier">sheet_media</span>, <span class="ruby-identifier">sheet_ie_condition</span>) = <span class="ruby-identifier">parse_sheet_role</span>(<span class="ruby-node">$1</span>)
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">roles_to_include</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">sheet_role</span>)
         <span class="ruby-identifier">block</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">get_ie_comment</span>(<span class="ruby-identifier">stylesheet_link</span>(<span class="ruby-constant">SKIN_PATH</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">skin_dirname</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">sub_file</span>, <span class="ruby-identifier">sheet_media</span>), <span class="ruby-identifier">sheet_ie_condition</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n&quot;</span>
@@ -1677,10 +1677,10 @@ entire skin</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_ie_comment</span>(<span class="ruby-identifier">style</span>, <span class="ruby-identifier">ie_condition</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">ie_condition</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">present?</span>
     <span class="ruby-identifier">ie_comment</span>= <span class="ruby-string">&quot;&lt;!--[if &quot;</span>
-    <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;lte &quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/or_lower/</span>)
-    <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;gte &quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/or_higher/</span>)
+    <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;lte &quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%ror_lower/</span>)
+    <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;gte &quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%ror_higher/</span>)
     <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;IE&quot;</span>
-    <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; #{$1}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/IE(\d)/</span>)
+    <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; #{$1}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ie_condition</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rIE(\d)/</span>)
     <span class="ruby-identifier">ie_comment</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot;]&gt;&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">style</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;&lt;![endif]--&gt;&quot;</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">style</span>
@@ -1746,7 +1746,7 @@ entire skin</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_media_for_filename</span>
   ((<span class="ruby-identifier">media</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">media</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">DEFAULT_MEDIA</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">media</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">case</span> 
-    <span class="ruby-keyword">when</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/max-width/</span>)
+    <span class="ruby-keyword">when</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rmax-width/</span>)
       <span class="ruby-string">&quot;maxwidth&quot;</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">m</span>
@@ -1989,7 +1989,7 @@ page</p>
           <div class="method-source-code" id="parse_media_from_filename-source">
             <pre><span class="ruby-comment"># File app/models/skin.rb, line 254</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_media_from_filename</span>(<span class="ruby-identifier">media_string</span>)
-  <span class="ruby-identifier">media_string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/maxwidth/</span>, <span class="ruby-string">'only screen and (max-width: 480px)'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">'.'</span>, <span class="ruby-string">', '</span>)
+  <span class="ruby-identifier">media_string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%rmaxwidth/</span>, <span class="ruby-string">'only screen and (max-width: 480px)'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-string">'.'</span>, <span class="ruby-string">', '</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- parse_media_from_filename-source -->
           
@@ -2268,7 +2268,7 @@ page</p>
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 

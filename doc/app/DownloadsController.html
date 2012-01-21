@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>Class: DownloadsController</title>
+<title>class DownloadsController - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -897,7 +897,7 @@ the other two are derived and are there for nginx’s benefit GET
   <span class="ruby-comment"># compressed</span>
   <span class="ruby-identifier">cmd</span> = <span class="ruby-node">%Q{cd &quot;#{@work.download_dir}/epub&quot;; zip -0 &quot;#{@work.download_basename}.epub&quot; mimetype; zip -r &quot;#{@work.download_basename}.epub&quot; META-INF OEBPS}</span>
   <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-identifier">cmd</span>
- <span class="ruby-node">`#{cmd} 2&gt; /dev/null`</span>
+ <span class="ruby-node">%x#{cmd} 2&gt; /dev/null`</span>
 
   <span class="ruby-comment"># send the file</span>
   <span class="ruby-identifier">check_for_file</span>(<span class="ruby-string">&quot;epub&quot;</span>)
@@ -966,7 +966,7 @@ the other two are derived and are there for nginx’s benefit GET
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_mobi</span>
    <span class="ruby-identifier">cmd_pre</span> = <span class="ruby-node">%Q{cd &quot;#{@work.download_dir}&quot;; html2mobi }</span>
    <span class="ruby-comment"># double quotes in title need to be escaped</span>
-   <span class="ruby-identifier">title</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/&quot;/</span>, <span class="ruby-string">'\&quot;'</span>)
+   <span class="ruby-identifier">title</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r&quot;/</span>, <span class="ruby-string">'\&quot;'</span>)
    <span class="ruby-identifier">cmd_post</span> = <span class="ruby-node">%Q{ --mobifile &quot;#{@work.download_title}.mobi&quot; --title &quot;#{title}&quot; --author &quot;#{@work.display_authors}&quot; }</span>
 
   <span class="ruby-comment"># if only one chapter can use same file as html and pdf versions</span>
@@ -989,7 +989,7 @@ the other two are derived and are there for nginx’s benefit GET
     <span class="ruby-identifier">cmd</span> = <span class="ruby-identifier">cmd_pre</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">mobi_files</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; --gentoc&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">cmd_post</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-identifier">cmd</span>
-  <span class="ruby-node">`#{cmd} 2&gt; /dev/null`</span>
+  <span class="ruby-node">%x#{cmd} 2&gt; /dev/null`</span>
   <span class="ruby-identifier">check_for_file</span>(<span class="ruby-string">&quot;mobi&quot;</span>)
   <span class="ruby-identifier">send_file</span>(<span class="ruby-node">&quot;#{@work.download_basename}.mobi&quot;</span>, <span class="ruby-value">:type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;application/mobi&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1025,10 +1025,10 @@ the other two are derived and are there for nginx’s benefit GET
 
   <span class="ruby-comment"># convert to PDF</span>
   <span class="ruby-comment"># double quotes in title need to be escaped</span>
-  <span class="ruby-identifier">title</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/&quot;/</span>, <span class="ruby-string">'\&quot;'</span>)
+  <span class="ruby-identifier">title</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r&quot;/</span>, <span class="ruby-string">'\&quot;'</span>)
   <span class="ruby-identifier">cmd</span> = <span class="ruby-node">%Q{cd &quot;#{@work.download_dir}&quot;; wkhtmltopdf --encoding utf-8 --title &quot;#{title}&quot; &quot;#{@work.download_title}.html&quot; &quot;#{@work.download_title}.pdf&quot;}</span>
   <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-identifier">cmd</span>
-  <span class="ruby-node">`#{cmd} 2&gt; /dev/null`</span>
+  <span class="ruby-node">%x#{cmd} 2&gt; /dev/null`</span>
 
   <span class="ruby-comment"># send as PDF</span>
   <span class="ruby-identifier">check_for_file</span>(<span class="ruby-string">&quot;pdf&quot;</span>)
@@ -1150,7 +1150,7 @@ the other two are derived and are there for nginx’s benefit GET
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 

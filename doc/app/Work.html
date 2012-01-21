@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>Class: Work</title>
+<title>class Work - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -2046,8 +2046,8 @@ hide their existence from other users</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_authors</span>
   <span class="ruby-identifier">string</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">anonymous?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Anonymous&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">'-'</span>)
   <span class="ruby-identifier">string</span> = <span class="ruby-constant">Iconv</span>.<span class="ruby-identifier">conv</span>(<span class="ruby-string">&quot;ASCII//TRANSLIT//IGNORE&quot;</span>, <span class="ruby-string">&quot;UTF8&quot;</span>, <span class="ruby-identifier">string</span>)
-  <span class="ruby-identifier">string</span> = <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[^[\w _-]]+/</span>, <span class="ruby-string">''</span>)
-  <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^(.{24}[\w.]*).*/</span>) {<span class="ruby-node">$1</span>}
+  <span class="ruby-identifier">string</span> = <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r[^[\w _-]]+/</span>, <span class="ruby-string">''</span>)
+  <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^(.{24}[\w.]*).*/</span>) {<span class="ruby-node">$1</span>}
 <span class="ruby-keyword">end</span></pre>
           </div><!-- download_authors-source -->
           
@@ -2139,7 +2139,7 @@ hide their existence from other users</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_fandoms</span>
   <span class="ruby-identifier">string</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">fandoms</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Multifandom&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">fandoms</span>.<span class="ruby-identifier">string</span>
   <span class="ruby-identifier">string</span> = <span class="ruby-constant">Iconv</span>.<span class="ruby-identifier">conv</span>(<span class="ruby-string">&quot;ASCII//TRANSLIT//IGNORE&quot;</span>, <span class="ruby-string">&quot;UTF8&quot;</span>, <span class="ruby-identifier">string</span>)
-  <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[^[\w _-]]+/</span>, <span class="ruby-string">''</span>)
+  <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r[^[\w _-]]+/</span>, <span class="ruby-string">''</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- download_fandoms-source -->
           
@@ -2170,9 +2170,9 @@ hide their existence from other users</p>
             <pre><span class="ruby-comment"># File app/models/work.rb, line 609</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_title</span>
   <span class="ruby-identifier">string</span> = <span class="ruby-constant">Iconv</span>.<span class="ruby-identifier">conv</span>(<span class="ruby-string">&quot;ASCII//TRANSLIT//IGNORE&quot;</span>, <span class="ruby-string">&quot;UTF8&quot;</span>, <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title</span>)
-  <span class="ruby-identifier">string</span> = <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[^[\w _-]]+/</span>, <span class="ruby-string">''</span>)
+  <span class="ruby-identifier">string</span> = <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r[^[\w _-]]+/</span>, <span class="ruby-string">''</span>)
   <span class="ruby-identifier">string</span> = <span class="ruby-string">&quot;Work by &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">download_authors</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">string</span>.<span class="ruby-identifier">blank?</span>
-  <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/ +/</span>, <span class="ruby-string">&quot; &quot;</span>).<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^(.{24}[\w.]*).*/</span>) {<span class="ruby-node">$1</span>}
+  <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r +/</span>, <span class="ruby-string">&quot; &quot;</span>).<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^(.{24}[\w.]*).*/</span>) {<span class="ruby-node">$1</span>}
 <span class="ruby-keyword">end</span></pre>
           </div><!-- download_title-source -->
           
@@ -2613,7 +2613,7 @@ number of chapters indicated by user</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parent_attributes=</span>(<span class="ruby-identifier">attributes</span>)
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:url</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:url</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">APP_URL</span>)
-      <span class="ruby-keyword">if</span> <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:url</span>].<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/\/works\/(\d+)/</span>)
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:url</span>].<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r\/works\/(\d+)/</span>)
         <span class="ruby-keyword">begin</span>
           <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_parent</span> = {<span class="ruby-value">:parent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-node">$1</span>), <span class="ruby-value">:translation</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:translation</span>]}
         <span class="ruby-keyword">rescue</span>
@@ -3281,7 +3281,7 @@ than one synonymous tags</p>
           <div class="method-source-code" id="sorted_authors-source">
             <pre><span class="ruby-comment"># File app/models/work.rb, line 1076</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sorted_authors</span>
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">authors</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,  &quot;</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^[\+-=_\?!'&quot;\.\/]/</span>, <span class="ruby-string">''</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">authors</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,  &quot;</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^[\+-=_\?!'&quot;\.\/]/</span>, <span class="ruby-string">''</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- sorted_authors-source -->
           
@@ -3311,7 +3311,7 @@ than one synonymous tags</p>
           <div class="method-source-code" id="sorted_pseuds-source">
             <pre><span class="ruby-comment"># File app/models/work.rb, line 1080</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sorted_pseuds</span>
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,  &quot;</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^[\+-=_\?!'&quot;\.\/]/</span>, <span class="ruby-string">''</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,  &quot;</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^[\+-=_\?!'&quot;\.\/]/</span>, <span class="ruby-string">''</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- sorted_pseuds-source -->
           
@@ -3341,10 +3341,10 @@ than one synonymous tags</p>
           <div class="method-source-code" id="sorted_title-source">
             <pre><span class="ruby-comment"># File app/models/work.rb, line 1084</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sorted_title</span>
-  <span class="ruby-identifier">sorted_title</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^[&quot;'\.\/]/</span>, <span class="ruby-string">''</span>)
-  <span class="ruby-identifier">sorted_title</span> = <span class="ruby-identifier">sorted_title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^(an?) (.*)/</span>, <span class="ruby-string">'\2, \1'</span>)
-  <span class="ruby-identifier">sorted_title</span> = <span class="ruby-identifier">sorted_title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^the (.*)/</span>, <span class="ruby-string">'\1, the'</span>)
-  <span class="ruby-identifier">sorted_title</span> = <span class="ruby-identifier">sorted_title</span>.<span class="ruby-identifier">rjust</span>(<span class="ruby-value">5</span>, <span class="ruby-string">&quot;0&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">sorted_title</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d/</span>)
+  <span class="ruby-identifier">sorted_title</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^[&quot;'\.\/]/</span>, <span class="ruby-string">''</span>)
+  <span class="ruby-identifier">sorted_title</span> = <span class="ruby-identifier">sorted_title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^(an?) (.*)/</span>, <span class="ruby-string">'\2, \1'</span>)
+  <span class="ruby-identifier">sorted_title</span> = <span class="ruby-identifier">sorted_title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^the (.*)/</span>, <span class="ruby-string">'\1, the'</span>)
+  <span class="ruby-identifier">sorted_title</span> = <span class="ruby-identifier">sorted_title</span>.<span class="ruby-identifier">rjust</span>(<span class="ruby-value">5</span>, <span class="ruby-string">&quot;0&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">sorted_title</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^\d/</span>)
   <span class="ruby-identifier">sorted_title</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- sorted_title-source -->
@@ -3790,7 +3790,7 @@ to 0</p>
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 

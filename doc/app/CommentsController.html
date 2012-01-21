@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>Class: CommentsController</title>
+<title>class CommentsController - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -1033,13 +1033,13 @@ owned comments!</p>
         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:comment_notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Comment created!'</span>)
         <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
           <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-keyword">do</span>
-            <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/inbox/</span>)
+            <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rinbox/</span>)
               <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_inbox_path</span>(<span class="ruby-identifier">current_user</span>, <span class="ruby-value">:filters</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:filters</span>], <span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
-            <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/new/</span>)
+            <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rnew/</span>)
               <span class="ruby-comment"># came here from the new comment page, probably via download link</span>
               <span class="ruby-comment"># so go back to the comments page instead of reloading full work</span>
               <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">comment_path</span>(<span class="ruby-ivar">@comment</span>)
-            <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/static/</span>)
+            <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rstatic/</span>)
               <span class="ruby-comment"># came here from a static page</span>
               <span class="ruby-comment"># so go back to the comments page instead of reloading full work</span>
               <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">comment_path</span>(<span class="ruby-ivar">@comment</span>)
@@ -1367,15 +1367,15 @@ owned comments!</p>
     <span class="ruby-ivar">@controller_name</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:controller_name</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:controller_name</span>]
     <span class="ruby-ivar">@name</span> = 
       <span class="ruby-keyword">case</span> <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>
-        <span class="ruby-keyword">when</span> <span class="ruby-regexp">/Work/</span>
+        <span class="ruby-keyword">when</span> <span class="ruby-regexp">%rWork/</span>
           <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">title</span>
-        <span class="ruby-keyword">when</span> <span class="ruby-regexp">/Chapter/</span>
+        <span class="ruby-keyword">when</span> <span class="ruby-regexp">%rChapter/</span>
           <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">work</span>.<span class="ruby-identifier">title</span>
-        <span class="ruby-keyword">when</span> <span class="ruby-regexp">/Tag/</span>
+        <span class="ruby-keyword">when</span> <span class="ruby-regexp">%rTag/</span>
           <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">name</span>
-        <span class="ruby-keyword">when</span> <span class="ruby-regexp">/AdminPost/</span>
+        <span class="ruby-keyword">when</span> <span class="ruby-regexp">%rAdminPost/</span>
           <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">title</span>
-        <span class="ruby-keyword">when</span> <span class="ruby-regexp">/Comment/</span>
+        <span class="ruby-keyword">when</span> <span class="ruby-regexp">%rComment/</span>
           <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Previous Comment&quot;</span>)
         <span class="ruby-keyword">else</span>
           <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>
@@ -1659,7 +1659,7 @@ necessary to display it</p>
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 
