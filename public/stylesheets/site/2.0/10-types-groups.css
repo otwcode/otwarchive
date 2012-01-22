@@ -43,6 +43,7 @@ dl.index dd p, dl.index dd .heading, dl.index ul
         { display:inline-block }
 
 /*TYPES*/
+a.rss span  { background:url("/images/feed-icon-14x14.png") no-repeat; padding-left: 16px;}
 a.work  { font:100 1.143em/1.125 Georgia,serif; margin:0.5em 0; color:#900 }
 .warning, .warnings,span.byline, a.user        
         { font-weight:bold}
