@@ -5,7 +5,7 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
 /*TYPE: TAGS */
 a.tag, .tags a
         { color: #111; line-height:1.5; text-decoration:none; padding: 0 0.125em; border-bottom:1px dotted}
-a.tag:hover	
+a.tag:hover, .listbox .heading a.tag:visited:hover	
         { background: #900; color: #fff }
 .tags li{ display:inline}
 .filters .tags li, .review .tags
