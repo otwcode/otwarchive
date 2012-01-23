@@ -29,6 +29,7 @@ span.offered.requested
 
 /* CONTEXTS */
 .dashboard .own
-        { background:transparent}
+        { background:transparent;
+          opacity: 1.0; }
 
 /*END== */
