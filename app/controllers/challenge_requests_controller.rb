@@ -15,7 +15,7 @@ class ChallengeRequestsController < ApplicationController
   end
 
   def index
-    @show_request_fandom_tags = @collection.prompts.joins(:tag_set => :tags).where("tags.type = 'Fandom'").exists?
+    @show_request_fandom_tags = (@collection.challenge.request_restriction.allowed("fandom") > 0 || @collection.challenge.prompt_restriction.allowed("fandom") > 0)
     
     # sorting
     set_sort_order
