@@ -5,7 +5,7 @@
 <p class="navigation actions" role="navigation"><%= link_to "People Search (Alpha)", search_people_path %></p> 
 <!--subnav-->
 
- <div title="alphabetical pagination actions"><%= alpha_paginated_section @pseuds_alphabet %></div>
+ <div class="alphabetical pagination navigation actions" role="navigation"><%= alpha_paginated_section @pseuds_alphabet %></div>
   <%= paginated_section @authors do %>
   <!--/subnav-->
  
@@ -19,12 +19,13 @@
   <!--/content-->
   
 <!--subnav-->
-<div class="alphabetical pagination navigation" role="navigation">
+<div class="alphabetical pagination navigation actions" role="navigation">
   <h3 class="landmark heading">Next Page Navigation</h3>
 <%= alpha_paginated_section @pseuds_alphabet %>
+</div>
 
 <% else %>
-  <div class="pagination" role="navigation">
+  <div class="alphabetical pagination navigation actions" role="navigation">
   <% for character in @navigation %>
     <a href="<%= person_path(character) %>"><%= character.char %></a>
   <% end %>
