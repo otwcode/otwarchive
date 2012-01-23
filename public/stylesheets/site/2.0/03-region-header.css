@@ -7,6 +7,8 @@ notice that CSS3 declarations sit on their own line and always come last*/
 #header { padding:0; margin:0 0 1em 0; position:relative; font-size:0.875em; min-height:120px }
 #header .landmark 
         { clear:none }
+#header a:focus img 
+        { outline: #bbb double 3px; }
 #header h1, #header #greeting 
         { position:absolute; right:0; top:0; margin:0 }
 #header h1
@@ -30,7 +32,6 @@ notice that CSS3 declarations sit on their own line and always come last*/
           box-shadow:none }
 #header h1 a:focus
         { outline:none }
-#header h1 a:focus img { outline-color: #bbb }
 #greeting .icon 
         { float:right; padding:0; margin:0 0 -0.429em 0; border-bottom:5px solid #900}
 #greeting 
