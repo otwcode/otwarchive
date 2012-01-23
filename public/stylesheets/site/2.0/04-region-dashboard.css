@@ -18,6 +18,6 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
         { right:auto }
 #dashboard.own 
         { background:transparent; border-top:15px solid #900; border-bottom:15px solid #900;
-          border-radius:0.25em}
+          opacity: 1.0; border-radius:0.25em}
 
 /*END== */
