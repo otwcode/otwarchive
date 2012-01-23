@@ -30,7 +30,7 @@
 <fieldset>
   <legend>CSS</legend>
   <h3 class="heading"><%= f.label :css, ts('CSS') %> <%= link_to_help "skins-creating" %></h3>
-    <p><%= f.text_area :css, :cols => 70 %></p>        
+    <p><%= f.text_area :css, :cols => 70, :class => "large" %></p>        
 </fieldset>
   
 <fieldset class="verbose<%= (@skin.type || params[:skin_type]) == 'WorkSkin' ? ' hidden' : ''%>">
