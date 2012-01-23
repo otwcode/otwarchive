@@ -17,4 +17,4 @@ span.replied. span.unreviewed, .actions a, .action, .symbol
 /*hL clearfixes
 test note: these were put in last minute so might need redoing
 http://www.stuffandnonsense.co.uk/archives/clearing_floats_without_structural_markup_in_ie7.html*/
-.group {zoom:1;}
+.group, .ui-sortable {zoom:1;}
