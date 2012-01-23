@@ -1,16 +1,14 @@
 module CommentsHelper
 
   def value_for_comment_form(commentable, comment)
-    commentable.is_a?(Tag) ? comment : [commentable, comment]
+    commentable.commentable_class == "tag" ? comment : [commentable, comment]
   end
 
   def title_for_comment_page(commentable)
     if commentable.commentable_name.blank?
       title = ""
-    elsif commentable.is_a?(Tag)
-      title = link_to_tag(commentable)
     else
-      title = link_to(commentable.commentable_name, commentable)
+      title = commentable.commentable_link
     end
     (ts('Reading Comments on ') + title).html_safe
   end

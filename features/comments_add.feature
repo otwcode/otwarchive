@@ -11,6 +11,12 @@ Scenario: Comment links from downloads and static pages
     And I visit the new comment page for the work "Generic Work"
   Then I should see the comment form
 
+  Scenario: Comment when logged out
+
+  Given I have a work "test work"
+  When I post the comment "Blah" on the work "test work" as a guest
+  Then I should see "Comment created!"
+
 Scenario: When logged in I can comment on a work
   Given I have no works or comments
   When I am logged in as "author"

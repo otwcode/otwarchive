@@ -18,9 +18,11 @@ class Tag < ActiveRecord::Base
   USER_DEFINED = ['Fandom', 'Character', 'Relationship', 'Freeform']
 
   acts_as_commentable
+  
   def commentable_name
     self.name
   end
+  
   def commentable_owners
     if self.is_a?(Fandom)
       self.wranglers
@@ -31,6 +33,23 @@ class Tag < ActiveRecord::Base
         []
       end
     end
+  end
+  
+  def commentable_class
+    return "tag"
+  end
+  
+  def commentable_link
+    # ordinary link_to won't work in this case as tags are special
+    link_to_tag(self)
+  end
+
+  def commentable_path
+    comments_path(:tag_id => self.name,
+                  :add_comment => options[:add_comment],
+                  :add_comment_reply_id => options[:add_comment_reply_id],
+                  :delete_comment_id => options[:delete_comment_id],
+                  :anchor => options[:anchor])
   end
 
   has_many :mergers, :foreign_key => 'merger_id', :class_name => 'Tag'

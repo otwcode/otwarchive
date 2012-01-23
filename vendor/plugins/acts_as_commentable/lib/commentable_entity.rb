@@ -28,10 +28,11 @@ module CommentableEntity
   # returns number of visible (not deleted) comments
   def count_visible_comments
     self.total_comments.count(:all, :conditions => {:hidden_by_admin => false, :is_deleted => false})
-  end  
+  end
 
   # Return the name of this commentable object
   # Should be overridden in the implementing class if necessary
+  # title of the work, name of the tag, etc.
   def commentable_name
     begin
       self.title
@@ -40,6 +41,35 @@ module CommentableEntity
     end
   end
 
+  # Return the type of thing you're commenting on
+  # Should be overridden in the implementing class if necessary
+  def commentable_class
+    return self.class.name.to_s.underscore
+  end
+
+  # Return a properly formatted link to the thing you're commenting on
+  # Should be overridden in the implementing class if necessary
+  def commentable_link
+    link_to(self.commentable_name, self)
+  end
+
+  # Return the path to this commentable object
+  # Should be overridden in the implementing class if necessary
+  def commentable_path(options)
+    path_for(:controller => self.class.to_s.underscore.pluralize,
+                  :action => :show,
+                  :id => self.id,
+                  :show_comments => options[:show_comments],
+                  :add_comment => options[:add_comment],
+                  :add_comment_reply_id => options[:add_comment_reply_id],
+                  :delete_comment_id => options[:delete_comment_id],
+                  :view_full_work => options[:view_full_work],
+                  :anchor => options[:anchor],
+                  :page => options[:page])
+  end
+
+  # Return the name of this commentable object
+  # Should be overridden in the implementing class if necessary
   def commentable_owners
     begin
       self.pseuds.map {|p| p.user}.uniq

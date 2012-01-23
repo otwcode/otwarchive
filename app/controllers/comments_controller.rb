@@ -21,8 +21,10 @@ class CommentsController < ApplicationController
     @check_visibility_of = @comment
   end
 
+  # only tag wranglers and admins can see tag comments
   def check_tag_wrangler_access
-    if @commentable.is_a?(Tag)
+    self.load_commentable
+    if @commentable.commentable_class == "tag"
       logged_in_as_admin? || permit?("tag_wrangler") || access_denied
     end
   end
@@ -92,21 +94,7 @@ class CommentsController < ApplicationController
     else
       @comment = Comment.new
       @controller_name = params[:controller_name] if params[:controller_name]
-      @name = 
-        case @commentable.class.name
-          when /Work/
-            @commentable.title
-          when /Chapter/
-            @commentable.work.title
-          when /Tag/
-            @commentable.name
-          when /AdminPost/
-            @commentable.title
-          when /Comment/
-            ts("Previous Comment")
-          else
-            @commentable.class.name
-        end
+      @name = @commentable.commentable_name
     end
   end
 
@@ -340,7 +328,7 @@ class CommentsController < ApplicationController
   # if necessary to display it
   def redirect_to_comment(comment, options = {})
     if comment.depth > ArchiveConfig.COMMENT_THREAD_MAX_DEPTH
-      if comment.ultimate_parent.is_a?(Tag)
+      if comment.ultimate_parent.commentable_class == "tag"
         default_options = {
            :controller => :comments,
            :action => :show,
@@ -367,26 +355,6 @@ class CommentsController < ApplicationController
   def redirect_to_all_comments(commentable, options = {})
     default_options = {:anchor => "comments"}
     options = default_options.merge(options)
-    if commentable.is_a?(Tag)
-      redirect_to comments_path(:tag_id => commentable.name,
-                  :add_comment => options[:add_comment],
-                  :add_comment_reply_id => options[:add_comment_reply_id],
-                  :delete_comment_id => options[:delete_comment_id],
-                  :anchor => options[:anchor])
-    else
-      if commentable.is_a?(Chapter) && (options[:view_full_work] || current_user.try(:preference).try(:view_full_works))
-        commentable = commentable.work
-      end
-      redirect_to :controller => commentable.class.to_s.underscore.pluralize,
-                  :action => :show,
-                  :id => commentable.id,
-                  :show_comments => options[:show_comments],
-                  :add_comment => options[:add_comment],
-                  :add_comment_reply_id => options[:add_comment_reply_id],
-                  :delete_comment_id => options[:delete_comment_id],
-                  :view_full_work => options[:view_full_work],
-                  :anchor => options[:anchor],
-                  :page => options[:page]
-    end
+    redirect_to commentable.commentable_path(options)
   end
 end

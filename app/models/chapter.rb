@@ -197,6 +197,24 @@ class Chapter < ActiveRecord::Base
   def commentable_name
     self.work.title
   end
+
+  def commentable_path(options)
+    if (options[:view_full_work] || User.current_user.try(:preference).try(:view_full_works))
+        commentable = self.work
+    else
+        commentable = self
+    end
+    return path_for(:controller => commentable.class.to_s.underscore.pluralize,
+                  :action => :show,
+                  :id => commentable.id,
+                  :show_comments => options[:show_comments],
+                  :add_comment => options[:add_comment],
+                  :add_comment_reply_id => options[:add_comment_reply_id],
+                  :delete_comment_id => options[:delete_comment_id],
+                  :view_full_work => options[:view_full_work],
+                  :anchor => options[:anchor],
+                  :page => options[:page])
+  end
   
    # private
    # 
