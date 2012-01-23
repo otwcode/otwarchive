@@ -26,7 +26,7 @@ p.submit, input.submit, dd.submit
         { cursor: text }
 /*subtypes and modes 
 test note: this pagination clear needs to be kept an eye on*/
-ol.pagination
+ol.pagination, div.pagination
         { text-align:center; clear:right; margin:0.643em auto}
 .actions a:visited
         { color: #111; }
