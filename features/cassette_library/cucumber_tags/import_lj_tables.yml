@@ -13,222 +13,183 @@
       server: 
       - GoatProxy 1.0
       date: 
-      - Sun, 05 Jun 2011 23:08:46 GMT
+      - Fri, 23 Dec 2011 22:14:49 GMT
       content-type: 
       - text/html; charset=utf-8
+      transfer-encoding: 
+      - chunked
+      connection: 
+      - keep-alive
       x-aws-id: 
-      - ws13
-      etag: 
-      - "\"338eae842faa5f9901a796e21ad2574b\""
+      - ws16
+      cache-control: 
+      - private, proxy-revalidate
+      vary: 
+      - Accept-Encoding
       content-language: 
-      - en
-      content-length: 
-      - "17405"
+      - ""
       x-varnish: 
-      - 1290165898 1290143049
+      - 1334673514 1334575154
       age: 
-      - "222"
-      x-debug: 
-      - USen (null) (null)
+      - "929"
       x-vws-id: 
-      - bil1-varn16
+      - bil1-varn02
+      etag: 
+      - GgZz"c34e8b760bd19da61a3118d62735bba1"
       x-gateway: 
-      - bil1-swlb03
-    body: |+
-      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-      <html xmlns="http://www.w3.org/1999/xhtml">
-      <head>
-      <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=EmulateIE9" />
-      <link rel="home" title="Home" href="http://www.livejournal.com/" />
-      <link rel="contents" title="Site Map" href="http://www.livejournal.com/site/" />
-      <link rel="help" title="Technical Support" href="http://www.livejournal.com/support/" />
-      
-      <link rel="shortcut icon" type="image/x-icon" href="http://l-stat.livejournal.com/img/userinfo.ico">
-          <link rel="icon" type="image/gif" href="http://l-stat.livejournal.com/img/userinfo.gif">
-      
-      <style>
-          #Comments q { padding-left: 2.5em; font-style: italic; }
-      </style>
-      <title>rebecca2525: [TEST][FIC] IMPORTING TEST 2</title>
-      
-      
-                  <script type="text/javascript">
-                      Site = window.Site || {};
-                      Site.ml_text = {};
-                      (function(){
-                          var p = {"remote_is_maintainer":0,"remoteUser":null,"remoteJournalBase":null,"statprefix":"http://l-stat.livejournal.com","ctx_popup":1,"siteroot":"http://www.livejournal.com","media_embed_enabled":1,"inbox_update_poll":0,"has_remote":0,"currentEntryRecommendations":0,"server_time":1307315103,"remote_is_suspended":0,"imgprefix":"http://l-stat.livejournal.com/img","esn_async":1,"remote_can_track_threads":null,"currentJournal":"rebecca2525","currentEntry":"http://rebecca2525.livejournal.com/3591.html","currentJournalBase":"http://rebecca2525.livejournal.com"}, i;
-                          for (i in p) Site[i] = p[i];
-                      })();
-                 </script>
-              <link rel="stylesheet" type="text/css" href="http://l-stat.livejournal.com/??lj_base.css,esn.css,contextualhover.css,share.css,lj_base-app.css,lynx/layout.css?v=1307036717" />
-      <!--[if IE]><link rel="stylesheet" type="text/css" href="http://l-stat.livejournal.com/??ie.css?v=1307036717" /><![endif]-->
-      <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="http://l-stat.livejournal.com/??interstitial_banner_us.css?v=1263499801" /><![endif]-->
-      <script type="text/javascript" src="http://l-stat.livejournal.com/js/??jquery.js,jquery_fn.js,basic.js,livejournal.js,esn.js,ippu.js,lj_ippu.js,ljwidget.js,ljwidget_ippu.js,journal.js,hourglass.js,livejournal-local.js,thread_expander.js,thread_expander.ex.js,quickreply.js,md5.js?v=1305152005"></script>
-      <script type="text/javascript" src="http://l-stat.livejournal.com/js/??jquery/jquery.ui.core.min.js,jquery/jquery.ui.widget.min.js,jquery/jquery.lj.bubble.js,contextualhover.js,share.js?v=1305232065"></script>
-      <script type="text/javascript">
-      LJShare.init({"ml":{"close":"Close","title":"Share"},"services":{"stumbleupon":{"bindLink":"http://www.livejournal.com/redirect/SHARING_stumbleupon?url=http%3A%2F%2Fwww.stumbleupon.com%2Fsubmit%3Furl%3D{url}","title":"StumbleUpon"},"moimir":{"bindLink":"http://www.livejournal.com/redirect/SHARING_moimir?url=http%3A%2F%2Fconnect.mail.ru%2Fshare%3Furl%3D{url}","title":"Moi mir"},"twitter":{"bindLink":"http://www.livejournal.com/redirect/SHARING_twitter?url=http%3A%2F%2Ftwitter.com%2Fshare%3Furl%3D{url}%26text%3D{title}","title":"Twitter"},"digg":{"bindLink":"http://www.livejournal.com/redirect/SHARING_digg?url=http%3A%2F%2Fdigg.com%2Fsubmit%3Furl%3D{url}","title":"Digg"},"email":{"bindLink":"http://www.livejournal.com/redirect/SHARING_email?url=http%3A%2F%2Fapi.addthis.com%2Foexchange%2F0.8%2Fforward%2Femail%2Foffer%3Fusername%3Dinternal%26url%3D{url}%26title%3D{title}","title":"E-mail"},"livejournal":{"bindLink":"http://www.livejournal.com/redirect/SHARING_livejournal?url=http%3A%2F%2Fwww.livejournal.com%2Fupdate.bml%3Frepost%3D{url}","title":"LiveJournal"},"vkontakte":{"bindLink":"http://www.livejournal.com/redirect/SHARING_vkontakte?url=http%3A%2F%2Fvkontakte.ru%2Fshare.php%3Furl%3D{url}","title":"Vkontakte"},"facebook":{"bindLink":"http://www.livejournal.com/redirect/SHARING_facebook?url=http%3A%2F%2Fwww.facebook.com%2Fsharer.php%3Fu%3D{url}","title":"Facebook"},"odnoklassniki":{"bindLink":"http://www.livejournal.com/redirect/SHARING_odnoklassniki?url=http%3A%2F%2Fwww.odnoklassniki.ru%2Fdk%3Fst.cmd%3DaddShare%26st.s%3D1%26st._surl%3D{url}","title":"Odnoklassniki"},"tumblr":{"bindLink":"http://www.livejournal.com/redirect/SHARING_tumblr?url=http%3A%2F%2Fwww.tumblr.com%2Fshare%3Fv%3D3%26u%3D{url}","title":"Tumblr"}},"links":["livejournal","facebook","twitter","digg","tumblr","stumbleupon","email"]})</script>
-      <script type="text/javascript" src="http://userapi.com/js/api/openapi.js?31"></script><script type="text/javascript">VK.init({apiId: 2244371, onlyWidgets: true});</script>
-      
-              <meta name="title" value="[TEST][FIC] IMPORTING TEST 2"/>
-              <meta name="description" value="Title: Importing Test Fandom: Lewis Pairing: Lewis/Hathaway Rating: PG Warnings: None Summary: Something I made for testing purposes. Note: Yes, this is really only for testing. :) My location: localhost My mood: curious My music: Bach My tags: testing My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. This entry was originally posted at http://rebecca2525.dreamwidth.org/3601.h tml . Please comment there using OpenID."/>
-          <link href='http://www.livejournal.com/go.bml?journal=rebecca2525&amp;itemid=3591&amp;dir=prev' rel='Previous' />
-      <link href='http://www.livejournal.com/go.bml?journal=rebecca2525&amp;itemid=3591&amp;dir=next' rel='Next' />
-      
-          
-      
-      </head>
-      
-      <body class='scheme-lynx logged-out' >
-      <div id="fb-root"></div><script src="http://connect.facebook.net/en_US/all.js#appId=214181831945836&amp;xfbml=1"></script><script type="text/javascript" src="http://apis.google.com/js/plusone.js">{lang: 'en'}</script>
-      
-      
-      <p><table><tr valign='middle'><td><img src='http://l-userpic.livejournal.com/97605406/2903240' width='100' height='100' align='absmiddle' hspace='3' title='rebecca2525' alt=''></td><td>rebecca2525 (<span class='ljuser ljuser-name_' lj:user='rebecca2525' style='white-space:nowrap'><a href='http://rebecca2525.livejournal.com/profile'><img src='http://l-stat.livejournal.com/img/userinfo.gif?v=3' alt='[info]' width='17' height='17' style='vertical-align: bottom; border: 0; padding-right: 1px;'/></a><a href='http://rebecca2525.livejournal.com/'><b>rebecca2525</b></a></span>) wrote,<br /><font size='-1'>@ <a href="http://rebecca2525.livejournal.com/2000/">2000</a>-<a href="http://rebecca2525.livejournal.com/2000/01/">01</a>-<a href="http://rebecca2525.livejournal.com/2000/01/10/">10</a> 15:28:00</font></td></tr></table><blockquote>
-      <hr />
-      <table><tr><td valign='middle'><a href="http://www.livejournal.com/go.bml?journal=rebecca2525&amp;itemid=3591&amp;dir=prev"><img src="http://l-stat.livejournal.com/img/btn_prev.gif?v=1" width="24" height="24" alt="Previous Entry" title="Previous Entry" border='0' align="absmiddle" /></a>&nbsp;&nbsp;<a href="http://www.livejournal.com/tools/memadd.bml?journal=rebecca2525&amp;itemid=3591"><img src="http://l-stat.livejournal.com/img/memadd.gif?v=1" width="24" height="24" alt="Add to memories!" title="Add to memories!" border='0' align="absmiddle" /></a>&nbsp;&nbsp;<a href="#"><img src="http://l-stat.livejournal.com/img/btn_share.gif?v=1" width="24" height="24" alt="Share" title="Share" border='0' align="absmiddle" /></a><script type="text/javascript">LJShare.link({"url":"http://rebecca2525.livejournal.com/3591.html","title":"[TEST][FIC] IMPORTING TEST 2","description":"Title: Importing Test Fandom: Lewis Pairing: Lewis/Hathaway Rating: PG Warnings: None Summary: Something I made for testing purposes. Note: Yes, this is really only for testing. :) My location: localhost My mood: curious My music: Bach My tags: testing My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. This entry was originally posted at http://rebecca2525.dreamwidth.org/3601.h tml . Please comment there using OpenID."});</script>&nbsp;&nbsp;<a href="http://www.livejournal.com/go.bml?journal=rebecca2525&amp;itemid=3591&amp;dir=next"><img src="http://l-stat.livejournal.com/img/btn_next.gif?v=1" width="24" height="24" alt="Next Entry" title="Next Entry" border='0' align="absmiddle" /></a></td></tr></table>
-      <hr />
-      </blockquote>
-      <div style='margin-left: 30px'><font face='Arial,Helvetica' size='+1'><i><b>[TEST][FIC] IMPORTING TEST 2</b></i></font><br />
-      Title: Importing Test<br />Fandom: Lewis<br />Pairing: Lewis/Hathaway<br />Rating: PG<br />Warnings: None<br />Summary: Something I made for testing purposes. <br />Note: Yes, this is really only for testing. :)<br /><br /><table border="0">
-      <tr>
-      <td align="right"><b>My location:</b></td>
-      <td><a href="http://maps.google.com/maps?q=localhost" rel="nofollow">localhost</a></td>
-      </tr>
-      <tr>
-      <td align="right"><b>My mood:</b></td>
-      <td><br /><img src="http://l-stat.livejournal.com/img/mood/neko/kaokitty/curious.gif" align="absmiddle" width="40" height="40" vspace="1" alt=""> curious</td>
-      </tr>
-      <tr>
-      <td align="right"><b>My music:</b></td>
-      <td>Bach</td>
-      </tr>
-      <tr>
-      <td align="right"><b>My tags:</b></td>
-      <td><a href="http://rebecca2525.livejournal.com/tag/testing">testing</a></td>
-      </tr>
-      </table><br /><br /><br />My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph.<br /><br />My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph.<br /><br /><span style="font-size: smaller;">This entry was originally posted at <a href="http://rebecca2525.dreamwidth.org/3601.html" rel="nofollow">http://rebecca2525.dreamwidth.org/3601.h<wbr />tml</a>. Please comment there using OpenID.</span></div><br style='clear: both' /><hr width='100%' size='2' align='center' />            
-                  <SCRIPT TYPE="text/javascript" LANGUAGE="JavaScript">
-                  <!-- Hide from old browsers
-      
-              // ********* ATTENTION *********
-              // Adv code wrapped in function below!
-                  function fullscreenAShow()
-                  {
-                      // ********* CODE START *********
-                  // Cache-busting and pageid values
-                  if (!pageNum) var pageNum = Math.round(Math.random() * 10000000000);
-                  document.write('<SCR');
-                  document.write('IPT LANGUAGE="JavaScript" SRC="http://ad.doubleclick.net/adj/lj.servicepages/fullscreenadsbml;'
-                      + 'a=1;r=0;w=1;wg=2;wa=31;ra=31;rg=2;jid=2903240;c=jo;pt=jo;pc=c0;a=3;scn=yes;vert=01;' + 'a=1;r=0;w=0;c=se;pt=se' + ';dcopt=ist;fs=1;sz=1x1,pos=r;tile=1;ord=' + pageNum + '?" TYPE="text/javascript">');
-                  document.write('</SCR');
-                  document.write('IPT>');
-                      // ********* CODE FINISH *********
-                  }
-                  
-                  
-                  var fullscreenAName = 'ljfsads_client',
-                      fullscreenACook = document.cookie.split(';'),
-                      fullscreenAAllow = true,
-                      fullscreenADomain = Site.siteroot,
-                      fullscreenARef = document.referrer;
-                  
-                  fullscreenADomain = fullscreenADomain.split('.');
-                  fullscreenADomain.shift();
-                  fullscreenADomain = fullscreenADomain.join('.');
-                  
-                  for(var i = 0, l = fullscreenACook.length; i < l; i++) if(fullscreenACook[i].indexOf(fullscreenAName) > -1) fullscreenAAllow = false;
-                  
-                  if(fullscreenAAllow && fullscreenARef.indexOf(fullscreenADomain) > -1 && !document.location.pathname.match(/(\/shop\/|login\.bml|create\.bml)/))
-                  {
-                      fullscreenAShow();
-                      var expires = new Date();
-                      expires.setTime(expires.getTime() + (1 * 5 * 60 * 60 * 1000));
-                      expires = '; expires=' + expires.toUTCString();
-                      document.cookie = [fullscreenAName, '=1', expires, '; path=/', '; domain=.', fullscreenADomain].join('');
-                  }
-                  
-                  // End Hide -->
-                  </SCRIPT>
-                  <NOSCRIPT>
-                      <A rel="nofollow" HREF="http://ad.doubleclick.net/jump/lj.servicepages/fullscreenadsbml;dcopt=ist;fs=1;tile=1;ord=8934157304?" target="_blank">
-                      <img src="http://ad.doubleclick.net/ad/lj.servicepages/fullscreenadsbml;dcopt=ist;fs=1;sz=1x1;tile=1;ord=8934157304?"
-                        width="" height="" border="0" alt=""></A>
-                  </NOSCRIPT>
-              
-                  <!--[if IE]><script type="text/javascript">
-                  if (liverailads1 = $('adContainer')) {
-                      window.liverailads_insert = document.body.lastChild;
-                      liverailads2 = document.getElementById('takeoverDiv');
-                      ;(function(t){ t.insertAdjacentHTML('beforeBegin','<iframe id="takeoverFrame" src="about:blank" style="position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);opacity:0;padding:0;margin:0;border:0;width:100%;height:400px;background:#fff;z-index:1499;top:0"></iframe>') }
-                      )(liverailads_insert);
-                      document.body.insertBefore(liverailads2, liverailads_insert);
-                  }
-                  function onLiveRailAdEnd() {
-                      document.getElementById('takeoverFrame').style.display = 'none';
-                  }
-                  </script><![endif]-->
-                  <script type="text/javascript">
-                      $('lr-close-btn') && ($('lr-close-btn').onclick = function()
-                      {
-                          var liverailObject = $('liverailSWF');
-                          if (liverailObject && liverailObject.destroy) {
-                              try{liverailObject.destroy();}catch(e){}
-                          }
-                          // innerHTML for IE
-                          jQuery('#adContainer, #takeoverDiv').remove();
-                      });
-                  </script>
-                      <SCRIPT TYPE="text/javascript" LANGUAGE="JavaScript">
-                      <!-- Hide from old browsers
-                      // Cache-busting and pageid values
-                      if (!pageNum) var pageNum = Math.round(Math.random() * 10000000000);
-                      document.write('<SCR');
-                      document.write('IPT LANGUAGE="JavaScript" SRC="http://ad.doubleclick.net/adj/lj.ugc.entry/;'
-                          + 'a=1;r=0;w=1;wg=2;wa=31;ra=31;rg=2;jid=2903240;c=jo;pt=jo;pc=c0;a=3;scn=yes;vert=01;' + 'sz=728x90;pos=r;tile=1;ord=' + pageNum + '?" TYPE="text/javascript">');
-                      document.write('</SCR');
-                      document.write('IPT>');
-                      // End Hide -->
-                      </SCRIPT>
-                      <NOSCRIPT>
-                          <A rel="nofollow" HREF="http://ad.doubleclick.net/jump/lj.ugc.entry/;sz=728x90;tile=1;ord=1179656770?" target="_blank">
-                          <img src="http://ad.doubleclick.net/ad/lj.ugc.entry/;sz=728x90;tile=1;ord=1179656770?"
-                            width="728" height="90" border="0" alt=""></A>
-                      </NOSCRIPT>
-      <hr width='100%' size='2' align='center' /><div id='Comments'><a name='comments'></a><form style='display: inline' method='post' action='http://www.livejournal.com/talkmulti.bml' name='multiform' onsubmit='return multiformSubmit(this, {no_action: "You have not selected one of the actions",no_comments: "You have not selected any comments",conf_delete: "Are you sure you wish to delete the selected comments?"})'><p class='lesstop' align='center'><b>(<a href='http://rebecca2525.livejournal.com/3591.html?mode=reply&format=light'>Post a new comment</a>)</b></p><input type='hidden' name="ditemid" value="3591" /><input type='hidden' name="journal" value="rebecca2525" /></form></div>
-      
-      
-      <hr style="clear:both;" />
-      
-      <p>[ <a href='http://www.livejournal.com/'>Home</a> | <a href='http://www.livejournal.com/login.bml'>Login</a>/<a href='http://www.livejournal.com/logout.bml'>Logout</a> | <a href='http://www.livejournal.com/site/search.bml'>Search</a> | <a href='http://www.livejournal.com/manage/settings/index2.bml?cat=account '>Account</a> | <a href='http://www.livejournal.com/site/'>Site Map</a> ]</p>
-      
-      
-      <div id='hello-world' style='text-align: left; font-size:0; line-height:0; height:0; overflow:hidden;'><script src="http://cdn.media6degrees.com/static/lj6387.js" type="text/javascript"></script>
-      <script type="text/javascript"> var DR_id = 1111; </script>
-      <script src="http://l-stat.livejournal.com/js/pagestats/DR_v4u3.js?v=1" type="text/javascript"></script>
-          <!-- Begin comScore Tag -->
-      <script>
-          document.write(unescape("%3Cscript src='" + (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js' %3E%3C/script%3E"));
-      </script>
-      
-      <script>
-        COMSCORE.beacon({
-          c1:2,
-          c2:7602110,
-          c3:"",
-          c4:"",
-          c5:"",
-          c6:"",
-          c15:""
-        });
-      </script>
-      <noscript>
-        <img src="http://b.scorecardresearch.com/p?c1=2&c2=7602110&c3=&c4=&c5=&c6=&c15=&cj=1" />
-      </noscript>
-      <!-- End comScore Tag -->
-      </div>
-      
-      
-      
-      </body>
-      </html>
-      
+      - bil1-swlb05
+      x-beta: 
+      - http://varnish
+    body: "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\
+      <html xmlns=\"http://www.w3.org/1999/xhtml\">\n\
+      <head>\n\
+      <meta http-equiv=\"X-UA-Compatible\" content=\"IE=EmulateIE7; IE=EmulateIE9\" />\n\
+      <link rel=\"home\" title=\"Home\" href=\"http://www.livejournal.com/\" />\n\
+      <link rel=\"contents\" title=\"Site Map\" href=\"http://www.livejournal.com/site/\" />\n\
+      <link rel=\"help\" title=\"Technical Support\" href=\"http://www.livejournal.com/support/\" />\n\n\n\n\n\n\
+      <style>\n    #Comments q { padding-left: 2.5em; font-style: italic; }\n\
+      </style>\n\n\
+      <title>rebecca2525: [TEST][FIC] IMPORTING TEST 2</title>\n\n\n            <script type=\"text/javascript\">\n                Site = window.Site || {};\n                Site.ml_text = {\"talk.editcomment\":\"Save comment\",\"talk.answer\":\"Reply\",\"talk.replytothis\":\"Reply\",\"talk.postcomment\":\"Add a comment\"};\n                (function(){\n                    var p = {\"remote_is_maintainer\":0,\"remoteUser\":null,\"remoteJournalBase\":null,\"statprefix\":\"http://l-stat.livejournal.com\",\"ctx_popup\":1,\"siteroot\":\"http://www.livejournal.com\",\"media_embed_enabled\":1,\"inbox_update_poll\":0,\"has_remote\":0,\"currentEntryRecommendations\":0,\"server_time\":1324677560,\"remote_is_suspended\":0,\"imgprefix\":\"http://l-stat.livejournal.com/img\",\"esn_async\":1,\"remote_can_track_threads\":null,\"currentJournal\":\"rebecca2525\",\"currentEntry\":\"http://rebecca2525.livejournal.com/3591.html\",\"currentJournalBase\":\"http://rebecca2525.livejournal.com\"}, i;\n                    for (i in p) Site[i] = p[i];\n                })();\n                Site.current_journal = {\"url_profile\":\"http://rebecca2525.livejournal.com/profile\",\"userid\":\"2903240\",\"is_comm\":\"\",\"is_syndicated\":\"\",\"userpic_h\":100,\"is_person\":\"1\",\"display_username\":\"rebecca2525\",\"url_journal\":\"http://rebecca2525.livejournal.com\",\"is_identity\":\"\",\"is_shared\":\"\",\"display_name\":\"rebecca2525\",\"username\":\"rebecca2525\",\"userpic_w\":100,\"can_receive_vgifts\":1,\"url_allpics\":\"http://www.livejournal.com/allpics.bml?user=rebecca2525\",\"ljuser_tag\":\"<span class='ljuser ljuser-name_' lj:user='rebecca2525' style='white-space:nowrap'><a href='http://rebecca2525.livejournal.com/profile'><img src='http://l-stat.livejournal.com/img/userinfo.gif?v=88.3' alt='[info]' width='16' height='16' style='vertical-align: bottom; border: 0; padding-right: 1px;'/></a><a href='http://rebecca2525.livejournal.com/'><b>rebecca2525</b></a></span>\",\"url_message\":\"http://www.livejournal.com/inbox/compose.bml?user=rebecca2525\",\"url_userpic\":\"http://l-userpic.livejournal.com/97605406/2903240\"};\n           </script>\n        <link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??lj_base.css,esn.css,contextualhover.css,commentmanage.css,share.css,lj_base-app.css,lynx/layout.css?v=1324670318\" />\n\
+      <!--[if lte IE 7]><link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??interstitial_banner_us.css?v=1324670318\" /><![endif]-->\n\
+      <!--[if lte IE 8]><link rel=\"stylesheet\" type=\"text/css\" href=\"http://l-stat.livejournal.com/??ie.css?v=1324670318\" /><![endif]-->\n\
+      <script type=\"text/javascript\" src=\"http://l-stat.livejournal.com/js/??jquery.js,jquery_fn.js,basic.js,livejournal.js,esn.js,ippu.js,lj_ippu.js,ljwidget.js,ljwidget_ippu.js,journal.js,hourglass.js,livejournal-local.js,quickreply.js,md5.js,pagescroller.js?v=1324670318\"></script>\n\
+      <script type=\"text/javascript\" src=\"http://l-stat.livejournal.com/js/??jquery/jquery.ui.core.min.js,jquery/jquery.ui.widget.min.js,jquery/jquery.tmpl.min.js,jquery/jquery.lj.basicWidget.js,jquery/jquery.lj.bubble.js,contextualhover.js,jquery/jquery.storage.js,jquery/jquery.hotkeys.js,jquery/jquery.comments.js,jquery/jquery.lj.commentator.js,jquery/jquery.lj.commentsPager.js,jquery/jquery.lj.comments.js,jquery/jquery.lj.commentsOperations.js,jquery/jquery.lj.commentsMassActions.js,jquery/jquery.easing.js,jquery/jquery.lj.authtype.js,jquery/jquery.lj.userpicker.js,jquery/jquery.lj.commentsFormToolbar.js,jquery/jquery.lj.commentform.js,share.js,ie9pinned.js,jquery/jquery.vkloader.js?v=1324670318\"></script>\n\
+      <!--[if IE]><script type=\"text/javascript\" src=\"http://l-stat.livejournal.com/js/??jquery/jquery.ie6multipleclass.min.js?v=1324670318\"></script><![endif]-->\n\
+      <script type=\"text/javascript\">\r\n\
+      LJShare.init({\"ml\":{\"close\":\"Close\",\"title\":\"Share\"},\"services\":{\"stumbleupon\":{\"bindLink\":\"http://www.livejournal.com/redirect/SHARING_stumbleupon?url=http%3A%2F%2Fwww.stumbleupon.com%2Fsubmit%3Furl%3D{url}\",\"title\":\"StumbleUpon\"},\"moimir\":{\"bindLink\":\"http://www.livejournal.com/redirect/SHARING_moimir?url=http%3A%2F%2Fconnect.mail.ru%2Fshare%3Furl%3D{url}\",\"title\":\"Moi mir\"},\"twitter\":{\"bindLink\":\"http://www.livejournal.com/redirect/SHARING_twitter?url=http%3A%2F%2Ftwitter.com%2Fshare%3Furl%3D{url}%26text%3D{title}\",\"title\":\"Twitter\"},\"digg\":{\"bindLink\":\"http://www.livejournal.com/redirect/SHARING_digg?url=http%3A%2F%2Fdigg.com%2Fsubmit%3Furl%3D{url}\",\"title\":\"Digg\"},\"email\":{\"bindLink\":\"http://www.livejournal.com/redirect/SHARING_email?url=http%3A%2F%2Fapi.addthis.com%2Foexchange%2F0.8%2Fforward%2Femail%2Foffer%3Fusername%3Dinternal%26url%3D{url}%26title%3D{title}\",\"title\":\"E-mail\"},\"livejournal\":{\"bindLink\":\"http://www.livejournal.com/redirect/SHARING_livejournal?url=http%3A%2F%2Fwww.livejournal.com%2Fupdate.bml%3Frepost_type%3Dc%26repost%3D{url}\",\"title\":\"LiveJournal\"},\"vkontakte\":{\"bindLink\":\"http://www.livejournal.com/redirect/SHARING_vkontakte?url=http%3A%2F%2Fvkontakte.ru%2Fshare.php%3Furl%3D{url}\",\"title\":\"Vkontakte\"},\"facebook\":{\"bindLink\":\"http://www.livejournal.com/redirect/SHARING_facebook?url=http%3A%2F%2Fwww.facebook.com%2Fsharer.php%3Fu%3D{url}\",\"title\":\"Facebook\"},\"odnoklassniki\":{\"bindLink\":\"http://www.livejournal.com/redirect/SHARING_odnoklassniki?url=http%3A%2F%2Fwww.odnoklassniki.ru%2Fdk%3Fst.cmd%3DaddShare%26st.s%3D1%26st._surl%3D{url}\",\"title\":\"Odnoklassniki\"},\"tumblr\":{\"bindLink\":\"http://www.livejournal.com/redirect/SHARING_tumblr?url=http%3A%2F%2Fwww.tumblr.com%2Fshare%3Fv%3D3%26u%3D{url}\",\"title\":\"Tumblr\"}},\"links\":[\"livejournal\",\"facebook\",\"twitter\",\"digg\",\"tumblr\",\"stumbleupon\",\"email\"]})</script>\r\n\
+      <script type=\"text/javascript\">if (jQuery.VK) { jQuery.VK.init({apiId: 2244371, onlyWidgets: true})} </script> \n\
+      <meta property=\"og:title\" name=\"title\" content=\"[TEST][FIC] IMPORTING TEST 2\" />\n\
+      <meta property=\"og:description\" name=\"description\" content=\"Title: Importing Test Fandom: Lewis Pairing: Lewis/Hathaway Rating: PG Warnings: None Summary: Something I made for testing purposes. Note: Yes, this is really only for testing. :) My location: localhost My mood: curious My music: Bach My tags: testing My first paragraph. My first paragraph. My \xE2\x80\xA6\" />\n\
+      <meta property=\"og:image\" content=\"http://l-userpic.livejournal.com/97605406/2903240\" />\n\
+      <link href='http://www.livejournal.com/go.bml?journal=rebecca2525&amp;itemid=3591&amp;dir=prev' rel='Previous' />\n\
+      <link href='http://www.livejournal.com/go.bml?journal=rebecca2525&amp;itemid=3591&amp;dir=next' rel='Next' />\n\n\n\n\
+      </head>\n\n\
+      <body class='scheme-lynx logged-out'  >\n\
+      <script type=\"text/javascript\">LiveJournal.injectScript('http://apis.google.com/js/plusone.js',{text:\"{lang: 'en'}\"});</script><div id=\"fb-root\"></div>\n        <script type=\"text/javascript\">\n          window.fbAsyncInit = function() {\n            FB.init({appId: '214181831945836', xfbml: true});\n          };\n\n          LiveJournal.injectScript(document.location.protocol + '//connect.facebook.net/en_US/all.js', null, document.getElementById('fb-root'))\n        </script>\n    <script type=\"text/javascript\">LiveJournal.injectScript('http://platform.twitter.com/widgets.js');</script>\n\n\n\
+      <div class=\"b-singlepost\">\n    \n        <div>\n            <table class=\"b-singlepost-author\">\n                <tr valign='top'>\n                    <td class=\"b-singlepost-author-userpic\"><img src='http://l-userpic.livejournal.com/97605406/2903240' width='100' height='100' align='absmiddle' hspace='3' title='rebecca2525' alt=''></td>\n                    <td class=\"b-singlepost-author-userinfo\">rebecca2525 (<span class='ljuser ljuser-name_' lj:user='rebecca2525' style='white-space:nowrap'><a href='http://rebecca2525.livejournal.com/profile'><img src='http://l-stat.livejournal.com/img/userinfo.gif?v=88.3' alt='[info]' width='16' height='16' style='vertical-align: bottom; border: 0; padding-right: 1px;'/></a><a href='http://rebecca2525.livejournal.com/'><b>rebecca2525</b></a></span>) wrote,<br/><span class=\"b-singlepost-author-date\"><a href=\"http://rebecca2525.livejournal.com/2000/\">2000</a>-<a href=\"http://rebecca2525.livejournal.com/2000/01/\">01</a>-<a href=\"http://rebecca2525.livejournal.com/2000/01/10/\">10</a> 15:28:00</span></td>\n                </tr>\n            </table>\n        </div>\n\n        <blockquote>\n\
+      <hr />\n\
+      <table><tr><td valign='middle'><a href=\"http://www.livejournal.com/go.bml?journal=rebecca2525&amp;itemid=3591&amp;dir=prev\"><img src=\"http://l-stat.livejournal.com/img/btn_prev.gif?v=1\" width=\"24\" height=\"24\" alt=\"Previous Entry\" title=\"Previous Entry\" border='0' align=\"absmiddle\" /></a>&nbsp;&nbsp;<a href=\"http://www.livejournal.com/tools/memadd.bml?journal=rebecca2525&amp;itemid=3591\"><img src=\"http://l-stat.livejournal.com/img/memadd.gif?v=1\" width=\"24\" height=\"24\" alt=\"Add to memories!\" title=\"Add to memories!\" border='0' align=\"absmiddle\" /></a>&nbsp;&nbsp;<a href=\"#\"><img src=\"http://l-stat.livejournal.com/img/btn_share.gif?v=1\" width=\"24\" height=\"24\" alt=\"Share\" title=\"Share\" border='0' align=\"absmiddle\" /></a><script type=\"text/javascript\">LJShare.link({\"url\":\"http://rebecca2525.livejournal.com/3591.html\",\"title\":\"[TEST][FIC] IMPORTING TEST 2\",\"description\":\"Title: Importing Test Fandom: Lewis Pairing: Lewis/Hathaway Rating: PG Warnings: None Summary: Something I made for testing purposes. Note: Yes, this is really only for testing. :) My location: localhost My mood: curious My music: Bach My tags: testing My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. This entry was originally posted at http://rebecca2525.dreamwidth.org/3601.h tml . Please comment there using OpenID.\"});</script>&nbsp;&nbsp;<a href=\"http://www.livejournal.com/go.bml?journal=rebecca2525&amp;itemid=3591&amp;dir=next\"><img src=\"http://l-stat.livejournal.com/img/btn_next.gif?v=1\" width=\"24\" height=\"24\" alt=\"Next Entry\" title=\"Next Entry\" border='0' align=\"absmiddle\" /></a></td></tr></table>\n\
+      <hr />\n\
+      </blockquote>\n\n\n        \n\n        \n\n        \n    \n\n    <div>\n        \n            \n\n            \n\n            \n                <h1 class=\"b-singlepost-title\">\n                    \n                    \n                        [TEST][FIC] IMPORTING TEST 2\n                    \n                </h1>\n            \n            \n            <div class=\"b-singlepost-body\">\n                Title: Importing Test<br />Fandom: Lewis<br />Pairing: Lewis/Hathaway<br />Rating: PG<br />Warnings: None<br />Summary: Something I made for testing purposes. <br />Note: Yes, this is really only for testing. :)<br /><br /><table border=\"0\">\n\
+      <tr>\n\
+      <td align=\"right\"><b>My location:</b></td>\n\
+      <td><a href=\"http://maps.google.com/maps?q=localhost\" rel=\"nofollow\">localhost</a></td>\n\
+      </tr>\n\
+      <tr>\n\
+      <td align=\"right\"><b>My mood:</b></td>\n\
+      <td><br /><img src=\"http://l-stat.livejournal.com/img/mood/neko/kaokitty/curious.gif\" align=\"absmiddle\" width=\"40\" height=\"40\" vspace=\"1\" alt=\"\"> curious</td>\n\
+      </tr>\n\
+      <tr>\n\
+      <td align=\"right\"><b>My music:</b></td>\n\
+      <td>Bach</td>\n\
+      </tr>\n\
+      <tr>\n\
+      <td align=\"right\"><b>My tags:</b></td>\n\
+      <td><a href=\"http://rebecca2525.livejournal.com/tag/testing\">testing</a></td>\n\
+      </tr>\n\
+      </table><br /><br /><br />My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph. My first paragraph.<br /><br />My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph. My second paragraph.<br /><br /><span style=\"font-size: smaller;\">This entry was originally posted at <a href=\"http://rebecca2525.dreamwidth.org/3601.html\" rel=\"nofollow\">http://rebecca2525.dreamwidth.org/3601.h<wbr />tml</a>. Please comment there using OpenID.</span>\n            </div>\n            \n            \n        \n    </div>\n\n    <br style='clear: both' />\n\n\n    \n    <div id=\"comments\" class=\"b-grove ljtimes-disabled b-grove-3comments\" data-authtoken=\"c0:1324674000:3560:86400:hFW6uunga5-0-:aaca15f1b962bb9783acaed4a3a1ee50\">\n        <div class=\"b-tree-preloader\"><span class=\"b-tree-preloader-inner\">Loading...</span></div>\n        \n\
+      <!-- Pager starts here -->\n\n\
+      <div class=\"b-xylem b-xylem-first\">\n    <ul class=\"b-xylem-cells\">\n\n            \n                <li class=\"b-xylem-cell b-xylem-cell-add\">\n                    \n                    <a class=\"b-addcomment\" href=\"http://rebecca2525.livejournal.com/3591.html?mode=reply#add_comment\"><span class=\"b-addcomment-inner\"><i class=\"b-addcomment-icon\"></i>Post a new comment</span></a>\n                    \n\n                    <div class=\"b-watering b-watering-trueauth-anonymous\n\
+      b-watering-realauth-anonymous\n\
+      b-watering-authtype-anonymous\n\n\n\n\n\
+      b-watering-user-notafriend\n\n\n\n\n\n\n\n\n\n\n\n \">\n                        <form action=\"http://www.livejournal.com/talkpost_do.bml\" method=\"post\" id=\"postform\">\n    <div class=\"b-watering-wrapper\">\n    <!-- Journal and entry -->\n    <input type='hidden' name=\"journal\" value=\"rebecca2525\" />\n    <input type='hidden' name=\"itemid\" value=\"3591\" />\n    <!-- Auth and login tokens -->\n    <input type='hidden' name=\"response\" value=\"\" />\n    <input type='hidden' name=\"lj_form_auth\" value=\"c0:1324674000:3560:86400:hFW6uunga5-0-:aaca15f1b962bb9783acaed4a3a1ee50\" id=\"lj_form_auth\" />\n    <input type='hidden' name=\"chrp1\" value=\"3591-2903240-1324674000-hBORVpmihI0izRKQvcvy-7ffc48fc099f5256ba1d00c536267f39\" />\n    <input type='hidden' name=\"chal\" value=\"c0:1324674000:3560:900:syeEbS7NmvmnTXmmTUZ3:3ef353c838e809ad193429d2d4be19ca\" />\n    <!-- User -->\n    <input type='hidden' name=\"cookieuser\" value=\"\" />\n    <!-- Reply and edit parameters -->\n    <input type='hidden' name=\"replyto\" value=\"0\" id=\"replyto\" />\n    <input type='hidden' name=\"parenttalkid\" value=\"0\" id=\"parenttalkid\" />\n    <input type='hidden' name=\"editid\" value=\"0\" />\n    <!-- Misc -->\n    <input type='hidden' name=\"json\" value=\"0\" />\n    <input type='hidden' name=\"talkpost_do\" value=\"0\" />\n    <input type='hidden' name=\"subject\" />\n\n    <div class=\"b-watering-errorbox\">\n        <h4 class=\"b-watering-errorbox-head\">Error</h4>\n\n        <p class=\"b-watering-error b-watering-error-ajax\"></p>\n\n        \n\n        \n        \n\n        \n\n        \n\n        \n\n        \n\n        \n\n        \n        \n    </div>\n    \n    <div class=\"b-watering-aside\">\n        <div class=\"b-watering-userpic b-watering-userpic-anonymous\">\n            <a href=\"javascript:void(0);\" class=\"b-watering-userpic-current\" style=\"background-image: url(\n            \n                    http://l-stat.livejournal.com/img/userpics/userpic-anonymous.png?v=15821\n            \n            );\" tabindex=\"30\">&nbsp;</a>\n            \n        </div>\n        <div class=\"b-watering-help\">\n            <a href=\"http://www.livejournal.com/support/faqbrowse.bml?faqid=46\" class=\"b-watering-help-link\" target=\"_blank\"><i class=\"b-watering-help-icon\"></i>Help</a>\n        </div>\n    </div>\n    <div class=\"b-watering-fields\">\n    <div class=\"b-watering-inner\">\n        <div class=\"b-watering-user\">\n            <div class=\"b-watering-user-login\">\n                <ul class=\"b-watering-user-login-items\">\n                    \n                        \n                            <li class=\"b-watering-user-login-item b-watering-user-login-user\">\n                                <input name=\"usertype\" value=\"user\"  id=\"user\"\n                                    class=\"b-watering-user-login-checkbox\"\n                                    type=\"radio\">\n                                <i class=\"b-watering-user-login-pic\"></i>\n                            \n                                <span class=\"b-watering-user-login-details\">\n                                    <input placeholder=\"Username\" name=\"userpost\" type=\"text\" tabindex=\"25\" autocomplete=\"off\" class=\"auth-input\">\n                                    <input placeholder=\"Password\" name=\"password\" type=\"password\" tabindex=\"25\" autocomplete=\"off\" class=\"auth-input\">\n                                </span>\n                            \n                            </li>\n                        \n                    \n                        \n                            <li class=\"b-watering-user-login-item b-watering-user-login-facebook\">\n                                <input name=\"usertype\" value=\"facebook\"  id=\"facebook\"\n                                    class=\"b-watering-user-login-checkbox\"\n                                    type=\"radio\">\n                                <i class=\"b-watering-user-login-pic\"></i>\n                            \n                                \n                                    <span class=\"b-watering-user-login-details\">\n                                        \n                                            We will log you in after post\n                                        \n                                    </span>\n                                \n                            \n                            </li>\n                        \n                    \n                        \n                            <li class=\"b-watering-user-login-item b-watering-user-login-twitter\">\n                                <input name=\"usertype\" value=\"twitter\"  id=\"twitter\"\n                                    class=\"b-watering-user-login-checkbox\"\n                                    type=\"radio\">\n                                <i class=\"b-watering-user-login-pic\"></i>\n                            \n                                \n                                    <span class=\"b-watering-user-login-details\">\n                                        \n                                            We will log you in after post\n                                        \n                                    </span>\n                                \n                            \n                            </li>\n                        \n                    \n                        \n                            <li class=\"b-watering-user-login-item b-watering-user-login-openid\">\n                                <input name=\"usertype\" value=\"openid\"  id=\"openid\"\n                                    class=\"b-watering-user-login-checkbox\"\n                                    type=\"radio\">\n                                <i class=\"b-watering-user-login-pic\"></i>\n                            \n                                \n                                    <span class=\"b-watering-user-login-details\">\n                                        \n                                            <input id=\"openid\" name=\"openid:url\" placeholder=\"openid\" type=\"text\"  tabindex=\"25\" autocomplete=\"off\" class=\"auth-input\">\n                                        \n                                    </span>\n                                \n                            \n                            </li>\n                        \n                    \n                        \n                            <li class=\"b-watering-user-login-item b-watering-user-login-google\">\n                                <input name=\"usertype\" value=\"google\"  id=\"google\"\n                                    class=\"b-watering-user-login-checkbox\"\n                                    type=\"radio\">\n                                <i class=\"b-watering-user-login-pic\"></i>\n                            \n                                \n                                    <span class=\"b-watering-user-login-details\">\n                                        \n                                            We will log you in after post\n                                        \n                                    </span>\n                                \n                            \n                            </li>\n                        \n                    \n                        \n                            <li class=\"b-watering-user-login-item b-watering-user-login-mailru\">\n                                <input name=\"usertype\" value=\"mailru\"  id=\"mailru\"\n                                    class=\"b-watering-user-login-checkbox\"\n                                    type=\"radio\">\n                                <i class=\"b-watering-user-login-pic\"></i>\n                            \n                                \n                                    <span class=\"b-watering-user-login-details\">\n                                        \n                                            We will log you in after post\n                                        \n                                    </span>\n                                \n                            \n                            </li>\n                        \n                    \n                        \n                            <li class=\"b-watering-user-login-item b-watering-user-login-vkontakte\">\n                                <input name=\"usertype\" value=\"vkontakte\"  id=\"vkontakte\"\n                                    class=\"b-watering-user-login-checkbox\"\n                                    type=\"radio\">\n                                <i class=\"b-watering-user-login-pic\"></i>\n                            \n                                \n                                    <span class=\"b-watering-user-login-details\">\n                                        \n                                            We will log you in after post\n                                        \n                                    </span>\n                                \n                            \n                            </li>\n                        \n                    \n                        \n                            <li class=\"b-watering-user-login-item b-watering-user-login-anonymous\">\n                                <input name=\"usertype\" value=\"anonymous\" checked id=\"anonymous\"\n                                    class=\"b-watering-user-login-checkbox\"\n                                    type=\"radio\">\n                                <i class=\"b-watering-user-login-pic\"></i>\n                            \n                                \n                                    <span class=\"b-watering-user-login-details\">\n                                        \n                                            Anonymously\n                                        \n                                    </span>\n                                \n                            \n                            </li>\n                        \n                    \n                </ul>\n            </div>\n            <div class=\"b-watering-user-options\">\n                \n                <a href=\"javascript:void(0);\" class=\"b-watering-user-change b-pseudo\" tabindex=\"10\">switch</a>\n                <div class=\"b-watering-user-services\">\n                    <ul class=\"b-watering-user-services-items\">\n                        \n                        <li class=\"b-watering-user-services-item b-watering-user-services-user\">\n                            <a href=\"#user\" tabindex=\"20\">\n                                \n                                    <i class=\"b-watering-user-services-pic\"></i>\n                                \n                                <span class=\"b-watering-user-services-name\">\n                                \n                                    LiveJournal\n                                \n                                </span>\n                            </a>\n                        </li>\n                        \n                        <li class=\"b-watering-user-services-item b-watering-user-services-facebook\">\n                            <a href=\"#facebook\" tabindex=\"20\">\n                                \n                                    <i class=\"b-watering-user-services-pic\"></i>\n                                \n                                <span class=\"b-watering-user-services-name\">\n                                \n                                    Facebook\n                                \n                                </span>\n                            </a>\n                        </li>\n                        \n                        <li class=\"b-watering-user-services-item b-watering-user-services-twitter\">\n                            <a href=\"#twitter\" tabindex=\"20\">\n                                \n                                    <i class=\"b-watering-user-services-pic\"></i>\n                                \n                                <span class=\"b-watering-user-services-name\">\n                                \n                                    Twitter\n                                \n                                </span>\n                            </a>\n                        </li>\n                        \n                        <li class=\"b-watering-user-services-item b-watering-user-services-openid\">\n                            <a href=\"#openid\" tabindex=\"20\">\n                                \n                                    <i class=\"b-watering-user-services-pic\"></i>\n                                \n                                <span class=\"b-watering-user-services-name\">\n                                \n                                    OpenId\n                                \n                                </span>\n                            </a>\n                        </li>\n                        \n                        <li class=\"b-watering-user-services-item b-watering-user-services-google\">\n                            <a href=\"#google\" tabindex=\"20\">\n                                \n                                    <i class=\"b-watering-user-services-pic\"></i>\n                                \n                                <span class=\"b-watering-user-services-name\">\n                                \n                                    Google\n                                \n                                </span>\n                            </a>\n                        </li>\n                        \n                        <li class=\"b-watering-user-services-item b-watering-user-services-mailru\">\n                            <a href=\"#mailru\" tabindex=\"20\">\n                                \n                                    <i class=\"b-watering-user-services-pic\"></i>\n                                \n                                <span class=\"b-watering-user-services-name\">\n                                \n                                    MailRu\n                                \n                                </span>\n                            </a>\n                        </li>\n                        \n                        <li class=\"b-watering-user-services-item b-watering-user-services-vkontakte\">\n                            <a href=\"#vkontakte\" tabindex=\"20\">\n                                \n                                    <i class=\"b-watering-user-services-pic\"></i>\n                                \n                                <span class=\"b-watering-user-services-name\">\n                                \n                                    Vkontakte\n                                \n                                </span>\n                            </a>\n                        </li>\n                        \n                        <li class=\"b-watering-user-services-item b-watering-user-services-anonymous\">\n                            <a href=\"#anonymous\" tabindex=\"20\">\n                                \n                                    <i class=\"b-watering-user-services-pic\"></i>\n                                \n                                <span class=\"b-watering-user-services-name\">\n                                \n                                    Anonymously\n                                \n                                </span>\n                            </a>\n                        </li>\n                        \n                    </ul>\n                </div>\n                \n            </div>\n        </div>\n        <div class=\"b-watering-comment\">\n            <div class=\"b-watering-bar\">\n                <ul class=\"b-watering-buttons b-watering-buttons-firstsection\">\n                \n                    \n                    <li class=\"b-watering-buttons-item\">\n                        <a href=\"javascript:void(0);\" class=\"b-watering-button b-watering-button-link\" title=\"Insert Link\" tabindex=\"40\">\n                            <i class=\"b-watering-button-pic\"></i>\n                            <span class=\"b-watering-button-title b-pseudo\">Insert Link</span>\n                        </a>\n                    </li>\n                    \n                \n                    \n                \n                    \n                \n                    \n                \n                </ul>\n\n                <ul class=\"b-watering-buttons\">\n                \n                    \n                \n                    \n                    <li class=\"b-watering-buttons-item\">\n                        <a href=\"javascript:void(0);\" class=\"b-watering-button b-watering-button-photo\" title=\"Insert Photo\" tabindex=\"40\">\n                            <i class=\"b-watering-button-pic\"></i>\n                            <span class=\"b-watering-button-title b-pseudo\">Insert Photo</span>\n                        </a>\n                    </li>\n                    \n                \n                    \n                    <li class=\"b-watering-buttons-item\">\n                        <a href=\"javascript:void(0);\" class=\"b-watering-button b-watering-button-video\" title=\"Insert Video\" tabindex=\"40\">\n                            <i class=\"b-watering-button-pic\"></i>\n                            <span class=\"b-watering-button-title b-pseudo\">Insert Video</span>\n                        </a>\n                    </li>\n                    \n                \n                    \n                \n                </ul>\n\n                <ul class=\"b-watering-buttons b-watering-buttons-aside\">\n                \n                    \n                \n                    \n                \n                    \n                \n                    \n                    <li class=\"b-watering-buttons-item\">\n                        <a href=\"javascript:void(0);\" class=\"b-watering-button b-watering-button-spell\" title=\"Spell check\" tabindex=\"40\">\n                            <i class=\"b-watering-button-pic\"></i>\n                            <span class=\"b-watering-button-title b-pseudo\">Spell check</span>\n                        </a>\n                    </li>\n                    \n                \n                </ul>\n            </div>\n            <textarea name=\"body\" id=\"body\" cols=\"60\" rows=\"10\" class=\"b-watering-textarea\" tabindex=\"50\"></textarea>\n        </div>\n        <div class=\"b-watering-msgbox\">\n            \n                \n\n                \n            \n\n            \n        </div>\n\n        \n\n        <div class=\"b-watering-captchabox b-watering-captchabox-active\" id=\"captcha-container\">\n            \n                <script type=\"text/javascript\">\n\
+      //<![CDATA[\n\
+      var RecaptchaOptions = {\"lang\":\"en_LJ\",\"theme\":\"clean\"};\n\
+      //]]>\n\
+      </script>\n\
+      <script src=\"http://www.google.com/recaptcha/api/challenge?k=6LegWAEAAAAAANJcmtbLTuHlG7AbDzLPxvimCw_Z\" type=\"text/javascript\"></script>\n\
+      <noscript><iframe frameborder=\"0\" height=\"300\" src=\"http://www.google.com/recaptcha/api/noscript?k=6LegWAEAAAAAANJcmtbLTuHlG7AbDzLPxvimCw_Z\" width=\"500\"></iframe><textarea cols=\"40\" name=\"recaptcha_challenge_field\" rows=\"3\"></textarea><input name=\"recaptcha_response_field\" type=\"hidden\" value=\"manual_challenge\" /></noscript>\n\n            \n        </div>\n\n        <div class=\"b-watering-submit\">\n            <div class=\"b-ljbutton b-ljbutton-submit\">\n                <button type=\"submit\" name=\"submitpost\" tabindex=\"80\">Post a new comment</button>\n            </div>\n        </div>\n    </div>\n    </div>\n    </div>\n    \n    <script id=\"tmpl-watering-link\" type=\"text/html\">\n        <i class=\"b-watering-bubble-bg\"></i>\n        <div class=\"b-watering-bubble-link\">\n            <label for=\"watering-link-url\">Link</label>\n            <input type=\"text\" id=\"watering-link-url\" size=\"50\" value=\"\" class=\"b-watering-bubble-input\">\n            <div class=\"b-ljbutton b-ljbutton-submit b-ljbutton-disabled\"><button name=\"submitpost\" type=\"button\" disabled=\"disabled\">Insert</button></div>\n        </div>\n    </script>\n    <script id=\"tmpl-watering-photo\" type=\"text/html\">\n        <i class=\"b-watering-bubble-bg\"></i>\n        <div class=\"b-watering-bubble-photo\">\n            <div class=\"b-watering-bubble-photo-pic\">\n                <span class=\"b-watering-bubble-photo-inner\"><img src=\"http://l-stat.livejournal.com/img/spacer.gif?v=13339\" alt=\"\" class=\"b-watering-bubble-photo-preview\"></span>\n            </div>\n            <div class=\"b-watering-bubble-photo-fields\">\n                <label for=\"watering-bubble-photo-url\">Photo</label><br>\n                <input type=\"text\" id=\"watering-photo-url\" size=\"50\" value=\"\" class=\"b-watering-bubble-input\"><br>\n                <span class=\"b-watering-bubble-hint\">Hint <span class=\"b-pseudo b-watering-bubble-example\">http://pics.livejournal.com/igrick/pic/000r1edq</span></span>\n            </div>\n            <div class=\"b-watering-bubble-photo-button\">\n                <div class=\"b-ljbutton b-ljbutton-submit b-ljbutton-disabled\"><button name=\"submitpost\" type=\"button\" disabled=\"disabled\">Insert</button></div>\n            </div>\n        </div>\n    </script>\n    <script id=\"tmpl-watering-video\" type=\"text/html\">\n        <i class=\"b-watering-bubble-bg\"></i>\n        <div class=\"b-watering-bubble-video\">\n            <div class=\"b-watering-bubble-video-fields\">\n                <label for=\"watering-bubble-video-url\">Video</label><br>\n                <input type=\"text\" id=\"watering-video-url\" size=\"50\" value=\"\" class=\"b-watering-bubble-input\"><br>\n                <span class=\"b-watering-bubble-hint\">Hint <span class=\"b-pseudo b-watering-bubble-example\">http://www.youtube.com/watch?v=-LMebrVm-uU</span></span>\n            </div>\n            <div class=\"b-watering-bubble-video-button\">\n                <div class=\"b-ljbutton b-ljbutton-submit b-ljbutton-disabled\"><button name=\"submitpost\" type=\"button\" disabled=\"disabled\">Insert</button></div>\n            </div>\n        </div>\n    </script>\n\
+      </form>\n\n\
+      <i class=\"b-watering-close\"></i>\n\
+      <i class=\"b-watering-arrows\">\n\
+      <i class=\"b-watering-arrow-border\"></i>\n    <i class=\"b-watering-arrow\"></i>\n\
+      </i>\n\n\
+      <script>\n    jQuery('.b-watering')\n    .commentator({\n        publicKey: '6LegWAEAAAAAANJcmtbLTuHlG7AbDzLPxvimCw_Z',\n        captchaContainerId: 'captcha-container',\n        selectors: {\n            errorBlock: '.b-watering-error-ajax',\n\n            blockingErrorBlocks: '.b-watering-error',\n            preloaderElem: '.b-watering-preload',\n            submitControl: '.b-ljbutton-submit',\n\n            captchaBox: '.b-watering-captchabox'\n        },\n        classNames: {\n            captchaActive: 'b-watering-captchabox-active',\n            replyPage: 'b-watering-replypage'\n        }\n    })\n    .commentform()\n    .userpicker()\n    //the authtype widget should go last, because it passes information about current\n    //authorization to other widgets\n    .authtype({\n        forceStartupCaptcha: !!(Number('1')),\n        classNames: {\n            expanded: 'b-watering-user-options-show',\n            startAuthTypePrefix: 'b-watering-trueauth-',\n            captchaForAnonymous: 'b-watering-captcha-anon',\n            captchaForNonFriends: 'b-watering-captcha-nonfriend',\n            notfriend: 'b-watering-user-notafriend',\n            captchaForAll: 'b-watering-captcha-all',\n            authTypePrefix: 'b-watering-authtype-'\n        },\n\n        selectors: {\n            activeSelectItem: 'a[href=#{authType}]',\n            selectControl: '.b-watering-user-options',\n            authTypesControls: '.b-watering-user-services-item a',\n            authTypeRadios: '.b-watering-user-login-{authType} .b-watering-user-login-checkbox'\n        }\n    });\n\
+      </script>\n\n                    </div>\n                </li>\n            \n\n                <li class=\"b-xylem-cell b-xylem-cell-amount\">\n            \n                \n                <span class=\"\">0 comments</span>\n                \n            \n        </li>\n\n        \n\n    </ul>\n    \n\
+      </div>\n\n\
+      <!-- Pager ends here-->\n\n\n        \n            \n\n            <div class=\"b-tree b-tree-root\">\n    \n\
+      </div>\n\
+      <script>jQuery('.b-grove').comments();</script>\n\n\n            \n\
+      <!-- Pager starts here -->\n\n\
+      <div class=\"b-xylem\">\n    <ul class=\"b-xylem-cells\">\n\n                \n                    <li class=\"b-xylem-cell b-xylem-cell-add\">\n                        <a class=\"b-addcomment\" href=\"http://rebecca2525.livejournal.com/3591.html?mode=reply\"><span class=\"b-addcomment-inner\"><i class=\"b-addcomment-icon\"></i>Post a new comment</span></a>\n                    </li>\n                \n\n                    <li class=\"b-xylem-cell b-xylem-cell-amount\">\n            \n                \n                <span class=\"\">0 comments</span>\n                \n            \n        </li>\n\n        \n\n    </ul>\n    \n\
+      </div>\n\n\
+      <!-- Pager ends here-->\n\n        \n            <script>jQuery('.b-grove').commentsOperations();</script>\n            \n        \n    </div>\n    \n\
+      </div>\n\n\n\n\
+      <hr style=\"clear:both;\" />\n\n\
+      <p>\n    [\n\n    <a href='http://www.livejournal.com/'>Home</a> |\n\n    \n\n    <a href='http://www.livejournal.com/login.bml'>Login</a> /\n    <a href='http://www.livejournal.com/logout.bml'>Logout</a> |\n\n    <a href='http://www.livejournal.com/site/search.bml'>Search</a> |\n    <a href='http://www.livejournal.com/manage/settings/?cat=account'>Account</a> |\n    <a href='http://www.livejournal.com/site/'>Site Map</a>\n\n    ]\n\
+      </p>\n\n\n\n\n\
+      <div id='hello-world' style='text-align: left; font-size:0; line-height:0; height:0; overflow:hidden;'>\n\
+      <!-- SiteCatalyst Code\n    Copyright 1997-2006 Omniture, Inc.  More info available at http://www.omniture.com \n\
+      -->\n\
+      <script type=\"text/javascript\">\n\
+      var s_account = 'sixapartlivejournal';\n\
+      var shouldShowOmniture = false;\n\
+      LiveJournal.checkLjUniq();\n\
+      if (Cookie(\"ljuniq\") && /pgstats1/.test(Cookie(\"ljuniq\"))) {\n    // load Omniture script and run code for 5% of all users\n    document.write('<scr' + 'ipt type=\"text/javascript\" src=\"http://www.livejournal.com/js/pagestats/s_code.js\"></scr' + 'ipt>');\n    shouldShowOmniture = true;\n\
+      }\n\
+      </script>\n\n\
+      <script type=\"text/javascript\">\n\
+      if (window.s && shouldShowOmniture) {\n\
+      s.products=';bml.talkread.ebox-dblclick-728x90;;;event6=1';\n\
+      s.eVar15=\"rebecca2525.livejournal.com\";\n\
+      s.events=s.apl(s.events,'event1',',',2);\n\
+      s.events=\"event6\";\n\
+      s.pageName=\"entry\";\n\
+      s.prop11=\"en_LJ\";\n\
+      s.prop12=\"personal\";\n\
+      s.eVar24=\"personal\";\n\
+      s.prop13=\"basic\";\n\
+      s.prop14=\"nonCyr\";\n\
+      s.prop16=\"1\";\n\
+      s.prop17=\"\";\n\
+      s.prop19=\"lastn\";\n\
+      s.prop2=\"0\";\n\
+      s.eVar17=\"0\";\n\
+      s.prop3=\"1\";\n\
+      s.prop4=\"http://rebecca2525.livejournal.com\";\n\
+      s.prop41=\"\";\n\
+      s.prop42=\"\";\n\
+      s.prop43=\"\";\n\
+      s.prop6=\"Scheme.lynx\";\n\
+      s.prop7=\"zero\";\n\
+      s.prop9=\"\";\n    /* Copy props to eVars */\n    if(s.prop3&&!s.eVar3) s.eVar3=s.prop3;\n    if(s.prop4&&!s.eVar4) s.eVar4=s.prop4;\n    if(s.prop6&&!s.eVar6) s.eVar6=s.prop6;\n    if(s.prop7&&!s.eVar7) s.eVar7=s.prop7;\n    if(s.prop11&&!s.eVar11) s.eVar11=s.prop11;\n    if(s.prop12&&!s.eVar12) s.eVar12=s.prop12;\n    if(s.prop13&&!s.eVar13) s.eVar13=s.prop13;\n    if(s.prop16&&!s.eVar16) s.eVar16=s.prop16;\n    if(s.prop17&&!s.eVar17) s.eVar17=s.prop17;\n    if(s.prop18&&!s.eVar18) s.eVar18=s.prop18;\n    s.prop47='S1';\n\
+      /************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/\n\
+      var s_code=s.t();if(s_code)document.write(s_code);\n\
+      }\n\
+      </script>\n\
+      <!-- End SiteCatalyst Code -->\n\n\n\
+      <script type=\"text/javascript\">\n\n  var _gaq = _gaq || [];\n  _gaq.push(['_setAccount', 'UA-24823174-1']);\n  _gaq.push(['_setDomainName', '.livejournal.com']);\n  _gaq.push(['_trackPageview']);\n  _gaq.push(['_trackPageLoadTime']);\n\n  (function() {\n    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n  })();\n\n\
+      </script>\n\n\
+      <!-- Begin comScore Tag -->\n\
+      <script>\n    document.write(unescape(\"%3Cscript src='\" + (document.location.protocol == \"https:\" ? \"https://sb\" : \"http://b\") + \".scorecardresearch.com/beacon.js' %3E%3C/script%3E\"));\n\
+      </script>\n\n\
+      <script>\n  COMSCORE.beacon({\n    c1:2,\n    c2:7602110,\n    c3:\"\",\n    c4:\"\",\n    c5:\"\",\n    c6:\"\",\n    c15:\"\"\n  });\n\
+      </script>\n\
+      <noscript>\n  <img src=\"http://b.scorecardresearch.com/p?c1=2&c2=7602110&c3=&c4=&c5=&c6=&c15=&cj=1\" />\n\
+      </noscript>\n\
+      <!-- End comScore Tag -->\n\
+      <!-- Quantcast Tag -->\n\
+      <script type=\"text/javascript\">\n\
+      var _qevents = _qevents || [];\n\n\
+      (function() {\n\
+      var elem = document.createElement('script');\n\
+      elem.src = (document.location.protocol == \"https:\" ? \"https://secure\" : \"http://edge\") + \".quantserve.com/quant.js\";\n\
+      elem.async = true;\n\
+      elem.type = \"text/javascript\";\n\
+      var scpt = document.getElementsByTagName('script')[0];\n\
+      scpt.parentNode.insertBefore(elem, scpt);\n\
+      })();\n\n\
+      _qevents.push({\n\
+      qacct:\"p-2945K0QbJw0BA\"\n\
+      });\n\
+      </script>\n\n\
+      <noscript>\n\
+      <div style=\"display:none;\">\n\
+      <img src=\"//pixel.quantserve.com/pixel/p-2945K0QbJw0BA.gif\" border=\"0\" height=\"1\" width=\"1\" alt=\"Quantcast\"/>\n\
+      </div>\n\
+      </noscript>\n\
+      <!-- End Quantcast tag -->\n\
+      </div>\n\n\n\n\
+      </body>\n\
+      </html>\n\n\n"
     http_version: "1.1"
