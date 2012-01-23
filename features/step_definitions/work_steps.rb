@@ -86,6 +86,11 @@ When /^I view the work "([^\"]*)"(?: in (full|chapter-by-chapter) mode)?$/ do |w
   When %{I follow "View chapter by chapter"} if mode == "chapter-by-chapter"
 end
 
+When /^I view the work "([^\"]*)" with comments$/ do |work|
+  work = Work.find_by_title!(work)
+  visit work_url(work, :anchor => "comments", :show_comments => true)
+end
+
 When /^I edit the work "([^\"]*)"$/ do |work|
   work = Work.find_by_title!(work)
   visit edit_work_url(work)

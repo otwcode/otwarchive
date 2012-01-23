@@ -102,6 +102,11 @@ Morbi vitae lacus vitae magna volutpat pharetra rhoncus eget nisi. Proin vehicul
   end
 end
 
+When /^I delete the comment$/ do
+  When %{I follow "Delete" within ".odd"}
+    And %{I follow "Yes, delete!"}
+end
+
 Then /^I should see the reply to comment form$/ do
   Then %{I should see "Comment as" within ".odd"}
 end
