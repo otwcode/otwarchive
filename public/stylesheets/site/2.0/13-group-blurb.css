@@ -114,7 +114,7 @@ eg collections, users, skins, instead of the 4-icon list
 .index .collection .icon
         { background: url("/images/imageset.png") -55px -525px; }
 .index .skins .icon
-        { background: url("/images/imageset.png") -110px -525px; }
+        { background: url("/images/imageset.png") 0px -580px; }
 .index .pseud .icon
         { background: url("/images/imageset.png") 0px -525px; }
 .index .mystery .icon

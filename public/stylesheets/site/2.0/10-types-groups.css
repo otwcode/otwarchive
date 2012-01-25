@@ -51,7 +51,7 @@ li.relationships
         { background:#eee}
 .series.footnote    
         { font-size:100%; float:none }
-.kudos  { background: url("/images/imageset.png") no-repeat -100px -325px; padding: 0.5em 0.5em 0.5em 60px; margin: 2em 0; min-height: 50px;}
+.kudos  { background: url("/images/imageset.png") no-repeat -110px -580px; padding: 0.5em 0.5em 0.5em 60px; margin: 2em 0; min-height: 50px;}
 .icon   { background: #900 url("/images/imageset.png") no-repeat 0px -75px; height:100px; width:100px; margin:0}
 .icon a { border:0;}
 .mods li, dl.stats dt, dl.stats dd
