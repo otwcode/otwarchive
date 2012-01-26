@@ -126,7 +126,6 @@ group :test do
   # Code coverage
   gem 'simplecov', :require => false
   gem 'email_spec'
-  gem 'webrat'
 end
 
 group :test, :development do

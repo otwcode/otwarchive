@@ -355,12 +355,9 @@ GEM
     webmock (1.8.11)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
-    webrat (0.7.3)
-      nokogiri (>= 1.2.0)
-      rack (>= 1.0)
-      rack-test (>= 0.5.3)
 	webrobots (0.1.1)
     whenever (0.6.8)
+    whenever (0.6.2)
       aaronh-chronic (>= 0.3.9)
       activesupport (>= 2.3.4)
     whiny_validation (0.1.1)
@@ -444,7 +441,6 @@ DEPENDENCIES
   valium
   vcr (~> 2.5.0)
   webmock (~> 1.8.8)
-  webrat
   whenever (~> 0.6.2)
   whiny_validation
   will_paginate (>= 3.0.2)
