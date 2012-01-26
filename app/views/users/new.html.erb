@@ -24,12 +24,6 @@
     <%= render :partial => "openid", :locals => {:f => f} %>
   <% else %>
 
-    <% if ArchiveConfig.USE_OPENID %>
-      <p class="actions" role="navigation">
-        <%= link_to ts('Sign up using OpenID'), new_user_path(:use_openid => true, :invitation_token => @user.invitation_token) %>
-      </p>
-    <% end %>
-
     <fieldset>
       <legend><%= ts("User Details") %></legend>
       <%= render :partial => "passwd", :locals => {:f => f} %>
