@@ -25,9 +25,11 @@ describe "home/index.html.erb" do
       end
 
      it "should not display invite links" do
-        render
-        rendered.should_not contain "Invite a friend"
-        rendered.should_not contain "Get an Invite"
+				render
+				# See http://stackoverflow.com/questions/4706370/rspec-view-testing-with-capybara-and-rails3/4773050#4773050# for why
+				page = Capybara::Node::Simple.new( rendered )
+        page.should_not have_content "Invite a friend"
+        page.should_not have_content "Get an Invite"
       end
 
       it "should not display news when there are no admin posts" do
@@ -52,16 +54,20 @@ describe "home/index.html.erb" do
       @admin_settings = mock(Object)
       @admin_settings.stub(:account_creation_enabled?).and_return(false)
       @admin_settings.stub(:invite_from_queue_enabled?).and_return(true)
-      render
-      rendered.should contain 'Get an Invite'
+			render
+			# See http://stackoverflow.com/questions/4706370/rspec-view-testing-with-capybara-and-rails3/4773050#4773050# for why
+			page = Capybara::Node::Simple.new( rendered )
+      page.should have_content 'Get an Invite'
     end
 
     it "should display create acount link when account creation enabled" do
       @admin_settings = mock(Object)
       @admin_settings.stub(:account_creation_enabled?).and_return(true)
       @admin_settings.stub(:invite_from_queue_enabled?).and_return(false)
-      render
-      rendered.should contain 'Log in or Create an Account'
+			render
+			# See http://stackoverflow.com/questions/4706370/rspec-view-testing-with-capybara-and-rails3/4773050#4773050# for why
+			page = Capybara::Node::Simple.new( rendered )
+      page.should have_content 'Log in or Create an Account'
     end
     
   end # not logged in
@@ -81,7 +87,10 @@ describe "home/index.html.erb" do
     end
       
     it "should display invites link" do
-      rendered.should contain "Invite a friend"
+      render
+			# See http://stackoverflow.com/questions/4706370/rspec-view-testing-with-capybara-and-rails3/4773050#4773050# for why
+			page = Capybara::Node::Simple.new( rendered )
+			page.should have_content "Invite a friend"
     end
       
   end # logged in as regular user
