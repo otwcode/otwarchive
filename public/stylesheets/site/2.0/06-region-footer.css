@@ -11,7 +11,7 @@ http://media.transformativeworks.org/training/front_end_coding/patterns/supertyp
         { background:#500;
           box-shadow:none }
 #footer p.beta
-        { background:url("/images/beta-flag.png") top right no-repeat; height:150px; width:100px; position:absolute; top:0; right:0; padding:0; margin:0}
+        { background:url("/images/imageset.png") 0 -375px no-repeat; height:150px; width:100px; position:absolute; top:0; right:0; padding:0; margin:0}
 #footer .secondary 
         { margin: auto; right: auto;
           box-shadow: inset 2px 2px 2px #111;}
