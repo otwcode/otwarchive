@@ -4,9 +4,19 @@
 overflow:scroll;} */
 
 /* bookmarks index has funny float issues */
-.bookmarks-index .blurb {position: relative;}
-.bookmark p.count {float: none; position: absolute; right: 0;}
 
-#main.admin_posts-index .module { float:none; } /* float issues on admin posts index */
+.bookmarks-index .blurb {
+  position: relative;
+}
+
+.bookmark p.count {
+  float: none; 
+  position: absolute; 
+  right: 0;
+}
+
+#main.admin_posts-index .module { 
+  float:none;
+} /* float issues on admin posts index */
 
 

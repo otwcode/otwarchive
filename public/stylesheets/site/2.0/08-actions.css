@@ -4,64 +4,155 @@ subtypes:
 .action, .navigation, .sorting, .submit, .cancel, .close, .delete, .pagination, .current, .landmark, #skiplinks
 input[type="submit"], button
 */
-.actions * 
-        { display:inline}
-ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions
-        { padding:0.429em 0.25em 0.25em 0; float:right; text-align:center }
-.actions a, .action, .actions input, input[type="submit"], button, .current, .actions label
-        { background:#eee; color:#444; width:auto; font-size:100%; line-height:1.286; height:1.286em; vertical-align:middle; display:inline-block; padding: 0.25em 0.75em; white-space: nowrap; overflow: visible; position: relative; cursor: pointer; text-decoration: none; border: 1px solid #bbb; border-bottom:1px solid #aaa;
-          background:-moz-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-          background:-webkit-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-          background:-o-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-          background:-ms-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-          background:linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
-          border-radius:0.25em; box-shadow:none }
-label.action
-        { padding: 0.15em 0.375em}
-input[type="submit"] 
-        { height:1.929em }
-p.submit, input.submit, dd.submit 
-        { text-align:right }
-.actions input.text,.actions input[type="text"]
-        { cursor: text }
+
+.actions * {
+  display: inline
+}
+
+ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
+  padding: 0.429em 0.25em 0.25em 0;
+  float: right;
+  text-align: center;
+}
+
+.actions a, .action, .actions input, input[type="submit"], button, .current, .actions label {
+  background: #eee;
+  color: #444;
+  width: auto;
+  font-size: 100%;
+  line-height: 1.286;
+  height: 1.286em;
+  vertical-align: middle;
+  display: inline-block;
+  padding: 0.25em 0.75em;
+  white-space: nowrap;
+  overflow: visible;
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid #bbb;
+  border-bottom: 1px solid #aaa;
+    background: -moz-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background: -webkit-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background: -o-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background: -ms-linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    background: linear-gradient(#fff 2%,#ddd 95%, #bbb 100%);
+    border-radius: 0.25em;
+    box-shadow: none;
+}
+
+label.action {
+  padding: 0.15em 0.375em;
+}
+
+input[type="submit"] {
+  height: 1.929em;
+}
+
+p.submit, input.submit, dd.submit {
+  text-align: right;
+}
+
+.actions input.text, .actions input[type="text"] {
+  cursor: text;
+}
+
 /*subtypes and modes 
 test note: this pagination clear needs to be kept an eye on*/
-ol.pagination, div.pagination
-        { text-align:center; clear:right; margin:0.643em auto}
-.actions a:visited
-        { color: #111; }
-.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus
-        { color:#900; border-top:1px solid #999; border-left:1px solid #999; 
-          box-shadow:inset 2px 2px 2px #bbb  }
-.actions a:active, .current,a.current, .current a:visited
-        { color:#111; background:#ccc; border-color:#fff;
-          box-shadow:inset 1px 1px 3px #333}
-.delete a, span.delete
-        { color:#900; font-weight:900; margin-right:0.375em; padding:0 0.1em 0.15em; cursor: pointer;
-          box-shadow:-1px -1px 2px rgba(0,0,0,0.75); border-radius:0.875em }
-ul#skiplinks, .landmark , .landmark a, .index .heading.landmark
-        { font-size: 0; line-height: 0; height: 0; margin: 0; clear:both; color:transparent;
-          opacity:0 }
-.secondary    
-        { background: #fff; position: absolute; z-index: 99; border:2px solid #bbb; margin: auto; padding:0.375em; overflow:hidden; right:2.5em; 
-          box-shadow:2px 2px 5px #bbb; border-radius:0.15em }
+
+ol.pagination, div.pagination {
+  text-align: center;
+  clear: right;
+  margin: 0.643em auto;
+}
+
+.actions a:visited {
+  color: #111;
+}
+
+.actions a:hover, .actions input:hover, .actions a:focus, .actions input:focus {
+  color: #900;
+  border-top: 1px solid #999;
+  border-left: 1px solid #999;
+    box-shadow: inset 2px 2px 2px #bbb;
+}
+
+.actions a:active, .current, a.current, .current a:visited {
+  color: #111;
+  background: #ccc;
+  border-color: #fff;
+    box-shadow: inset 1px 1px 3px #333;
+}
+
+.delete a, span.delete {
+  color: #900;
+  font-weight: 900;
+  margin-right: 0.375em;
+  padding: 0 0.1em 0.15em;
+  cursor: pointer;
+    box-shadow: -1px -1px 2px rgba(0,0,0,0.75);
+    border-radius: 0.875em;
+}
+
+ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
+  font-size: 0;
+  line-height: 0;
+  height: 0;
+  margin: 0;
+  clear: both;
+  color: transparent;
+    opacity: 0;
+}
+
+.secondary {
+  background: #fff;
+  position: absolute;
+  z-index: 99;
+  border: 2px solid #bbb;
+  margin: auto;
+  padding: 0.375em;
+  overflow: hidden;
+  right: 2.5em;
+    box-shadow: 2px 2px 5px #bbb;
+    border-radius: 0.15em;
+}
+
 /* CONTEXTS */
-.heading .actions, .heading .action, .heading span.actions
-        { height:auto; font:100 75%/1.286 'Lucida Grande','Lucida Sans Unicode','Arial Unicode MS', 'GNU Unifont',sans-serif; padding: 0.15em 0.375em}
-dl.stats + h6 + .actions
-        { float: left}
-dl.stats + h6 + .actions, li.news .actions 
-        { margin:-1.75em auto 0 }
-.actions .secondary .submit, .nomination .actions
-        { float:none}
-.chapter .secondary
-        { top:2.5em}
-.dashboard .landmark 
-        { clear:right }
-.actions .landmark
-        { clear: none}
-.actions a.symbol, .action a 
-        { border:0; background:none;padding:0 0 0.15em 0}
+
+.heading .actions, .heading .action, .heading span.actions {
+  height: auto;
+  font: 100 75%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'Arial Unicode MS', 'GNU Unifont',sans-serif;
+  padding: 0.15em 0.375em;
+}
+
+dl.stats + h6 + .actions {
+  float: left;
+}
+
+dl.stats + h6 + .actions, li.news .actions {
+  margin: -1.75em auto 0;
+}
+
+.actions .secondary .submit, .nomination .actions {
+  float: none;
+}
+
+.chapter .secondary {
+  top: 2.5em;
+}
+
+.dashboard .landmark {
+  clear: right;
+}
+
+.actions .landmark {
+  clear: none;
+}
+
+.actions a.symbol, .action a {
+  border: 0;
+  background: none;
+  padding: 0 0 0.15em 0;
+}
 
 /*END== */
-        

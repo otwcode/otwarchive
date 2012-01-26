@@ -1,61 +1,74 @@
 /* MEDIA: speech */
- 
+
 .landmark {
-opacity:1; height:auto; width:auto; font-size:100%; line-height: 0; color:black;
+    opacity: 1;
+  height: auto;
+  width: auto;
+  font-size: 100%;
+  line-height: 0;
+  color: black;
 }
+
 a.tag {
-speak: no-punctuation
+  speak: no-punctuation;
 }
+
 em {
-voice-stress: moderate;
+  voice-stress: moderate;
 }
+
 strong, .warnings, .caution {
-voice-stress: strong;
+  voice-stress: strong;
 }
+
 cite {
-voice-rate: 95%;
+  voice-rate: 95%;
 }
+
 acronym {
-speak: spell-out;
+  speak: spell-out;
 }
+
 abbr {
-content: attr(title);
+  content: attr(title);
 }
+
 code, kbd, tt {
-voice-rate: 95%;
+  voice-rate: 95%;
 }
 
 .userstuff {
-speak-numeral: continuous;
+  speak-numeral: continuous;
 }
 
 .meta {
-voice-rate: 110%;
+  voice-rate: 110%;
 }
 
 .blurb {
-voice-rate: 105%;
+  voice-rate: 105%;
 }
 
 .userstuff h1, .userstuff h2.title {
-voice-rate: 90%;
-pause: 5ms 10ms;
+  voice-rate: 90%;
+  pause: 5ms 10ms;
 }
 
 .chapter {
-	pause: 10ms 10ms;
+  pause: 10ms 10ms;
 }
 
 .userstuff dt {
-voice-balance: leftwards;
+  voice-balance: leftwards;
 }
+
 .userstuff dd {
-voice-balance: rightwards;
+  voice-balance: rightwards;
 }
 
 .navigation {
-voice-stress: moderate;
-speak: no-punctuation;
+  voice-stress: moderate;
+  speak: no-punctuation;
 }
 
 /*SAY-INSTEAD DRAFTS 
@@ -63,6 +76,3 @@ speak: no-punctuation;
 [recs] say-instead: "wrecks";
 acronym[ToS] say-instead: "toss"; 
 [TOSd] say*/
-
-
-
