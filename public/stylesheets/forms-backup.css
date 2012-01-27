@@ -32,7 +32,7 @@ form p {
   clear: both;
 }
 
-/*form dl { position:relative; }_NO__DOTCOMMA__AFTER__*/
+/*form dl { position:relative; }*/
 
 form dt {
   float: left;
@@ -211,7 +211,7 @@ img#openid {
 }
 
 #main.session #signin form p.openid {
-  margin-top: 2em
+  margin-top: 2em;
 }
 
 #main.users-new form dt {
@@ -551,7 +551,7 @@ img#openid {
 } /* Enigel 03-2010 */
 
 #work-form .byline input[type="checkbox"] {
-  margin: 0 0.5em 0 0
+  margin: 0 0.5em 0 0;
 }
 
 #co-authors-options dl.coauthors, #co-authors-options dl dt, #co-authors-options dl dd {
@@ -561,7 +561,7 @@ img#openid {
 }
 
 #co-authors-options dl dt, #co-authors-options dl dd {
-  margin-top: 0.5em
+  margin-top: 0.5em;
 }
 
 #work-form dl.notes {
@@ -784,7 +784,7 @@ form.filters dt {
 }
 
 .filters dd {
-  padding: 0
+  padding: 0;
 }
 
 .filters dt:hover {
