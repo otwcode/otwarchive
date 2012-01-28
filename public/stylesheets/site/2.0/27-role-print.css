@@ -54,7 +54,7 @@ a:after {
 }
 
 a[href^="/"]:after {
-  content: " (http://archiveofourown.org" attr(href) ") "
+  content: " (http://archiveofourown.org" attr(href) ") ";
 }
 
 .meta a:link:after, .meta a:visited:after, .blurb a:link:after, .blurb a:link:visited, .byline a:link:after, .byline a:visited:after {

@@ -19,7 +19,7 @@ a, a:link {
 }
 
 #header, #footer, #main, #dashboard {
-  padding: 1em 3em
+  padding: 1em 3em;
 }
 
 .landmark {
@@ -28,7 +28,7 @@ a, a:link {
 }
 
 .hidden {
-  display: none
+  display: none;
 }
 
 #login-block, li.blurb, fieldset, form dl {

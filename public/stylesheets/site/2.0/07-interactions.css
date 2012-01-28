@@ -90,7 +90,7 @@ select {
 }
 
 .datetime select {
-  width: 32.5%
+  width: 32.5%;
 }
 
 input[type="radio"], input[type="checkbox"], input[type="file"], input.number, p input, p select, .heading select, li select {
@@ -196,7 +196,7 @@ form li ul.autocomplete li.input {
 }
 
 .required .autocomplete, .autocomplete .notice {
-  color: #222
+  color: #222;
 }
 
 .autocomplete .notice {

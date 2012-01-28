@@ -6,7 +6,7 @@ input[type="submit"], button
 */
 
 .actions * {
-  display: inline
+  display: inline;
 }
 
 ul.actions, p.actions, li.actions, span.actions, fieldset.actions, dd.actions {
