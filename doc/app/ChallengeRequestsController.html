@@ -643,7 +643,7 @@
           <div class="method-source-code" id="index-source">
             <pre><span class="ruby-comment"># File app/controllers/challenge_requests_controller.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
-  <span class="ruby-ivar">@show_request_fandom_tags</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">prompts</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:tag_set</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:tags</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;tags.type = 'Fandom'&quot;</span>).<span class="ruby-identifier">exists?</span>
+  <span class="ruby-ivar">@show_request_fandom_tags</span> = (<span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">challenge</span>.<span class="ruby-identifier">request_restriction</span>.<span class="ruby-identifier">allowed</span>(<span class="ruby-string">&quot;fandom&quot;</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">challenge</span>.<span class="ruby-identifier">prompt_restriction</span>.<span class="ruby-identifier">allowed</span>(<span class="ruby-string">&quot;fandom&quot;</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)
   
   <span class="ruby-comment"># sorting</span>
   <span class="ruby-identifier">set_sort_order</span>
