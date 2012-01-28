@@ -551,7 +551,7 @@ img#openid {
 } /* Enigel 03-2010 */
 
 #work-form .byline input[type="checkbox"] {
-  margin: 0 0.5em 0 0
+  margin: 0 0.5em 0 0;
 }
 
 #co-authors-options dl.coauthors, #co-authors-options dl dt, #co-authors-options dl dd {

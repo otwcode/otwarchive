@@ -244,7 +244,7 @@ thead, tfoot {
 }
 
 tfoot td {
-  border-top: 1px solid #aaa
+  border-top: 1px solid #aaa;
 }
 
 td th {

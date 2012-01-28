@@ -1009,11 +1009,11 @@ li.comment h4 {
 }
 
 .comment .even, .thread .even {
-  background: #eee
+  background: #eee;
 }
 
 .comment .odd, .thread .odd {
-  background: #f6f0f0
+  background: #f6f0f0;
 }
 
 .thread .thread {
@@ -1061,7 +1061,7 @@ p.series {
 }
 
 #main.session h1 span span {
-  font-size: 0.5625em
+  font-size: 0.5625em;
 }
 
 #main.session h2, #main.session h2, #main.passwords-new h2 {
@@ -1098,7 +1098,7 @@ p.series {
 }
 
 .readings-index li.blurb {
-  border: 0
+  border: 0;
 }
 
 /* DASHBOARD: INBOX */
@@ -1317,7 +1317,7 @@ p.series {
 }
 
 .fandoms-unassigned .filters #media_id {
-  width: 100%
+  width: 100%;
 }
 
 /* PEOPLE INDEX, PSEUDS-INDEX */
@@ -1833,7 +1833,7 @@ dl.translations {
 /*INTERACTION context (show many/more/lots)*/
 
 .listbox .all {
-  height: auto
+  height: auto;
 }
 
 .listbox .many ul {
