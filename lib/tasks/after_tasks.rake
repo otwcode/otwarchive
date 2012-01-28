@@ -352,7 +352,17 @@ namespace :After do
 
   #### Add your new tasks here
 
+  require 'nokogiri'
+  
+  desc "Esacape ampersands in work titles"
+  task(:escape_ampersands => :environment) do
+    Work.where("title LIKE '%&%'").each do |work|
+      work.title = Nokogiri::HTML.fragment(work.title).to_s
+      work.save
+    end
+  end
 
+  
 end # this is the end that you have to put new tasks above
 
 ##################
@@ -366,4 +376,4 @@ desc "Run all current migrate tasks"
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
 # task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all', 'skins:load_site_skins', 'After:convert_existing_skins', 
 #                 'skins:load_user_skins', 'After:remove_old_epubs']
-task :After => []
+task :After => ['After:escape_ampersands']

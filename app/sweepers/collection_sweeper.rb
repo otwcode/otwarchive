@@ -6,13 +6,13 @@ class CollectionSweeper < ActionController::Caching::Sweeper
   end
 
   def before_update(record)
-    if record.is_a?(Collection) && record.changed.include?(:name)
+    if record.is_a?(Collection) && (record.changed.include?(:name) || record.changed.include?(:title))
       record.remove_from_autocomplete
     end
   end
 
   def after_update(record)
-    if record.is_a?(Collection) && record.changed.include?(:name)
+    if record.is_a?(Collection) && (record.changed.include?(:name) || record.changed.include?(:title))
       record.add_to_autocomplete
     end
   end

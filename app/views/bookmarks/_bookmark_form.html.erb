@@ -6,13 +6,13 @@
 %>
 
 <div class="post bookmark <% if bookmarkable.class == ExternalWork %>verbose<% end %>" id="bookmark-form">
-  <h3 class="landmark heading">Bookmark</h3>
+  <h3 class="landmark heading"><%= ts("Bookmark") %></h3>
   <% if bookmarkable.class == ExternalWork %><%= render "bookmarks/bookmarklet" %><% end %>
   <% bookmark ||= Bookmark.new %>
   <% bookmarkable ||= bookmark.bookmarkable %>
   <%= form_for(:bookmark, :url => bookmark_form_path(bookmark, bookmarkable), :html => {:method => bookmark.new_record? ? :post : :put}) do |f| %>
   <fieldset>
-    <legend>Bookmark</legend>
+    <legend><%= ts("Bookmark") %></legend>
     <% in_page ||= false %>
     <% dynamic ||= false %>
     <% if in_page %>
@@ -60,7 +60,7 @@
       <% end %>
 
       <fieldset>
-        <legend>Write Comments</legend>
+        <legend><%= ts("Write Comments") %></legend>
         <dl>
           <dt class="landmark"><%= f.label :notes, ts("Notes") %></dt>
           <dd>
@@ -76,11 +76,16 @@
               <%= ts("Comma separated, %{max} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
             </p>
           </dd>
+
+          <dt><%= f.label :collection_names, ts("Add to Collections") %></dt>
+          <dd>
+            <%= f.text_field :collection_names, autocomplete_options('open_collection_names', :size => (in_page ? 60 : 80)) %>
+          </dd>
         </dl>
       </fieldset>
 
       <fieldset>
-        <legend>Choose type and post</legend>
+        <legend><%= ts("Choose type and post") %></legend>
         <p> 
           <%= f.check_box :private %> <%= f.label :private, ts("Private bookmark?") %>
           <%= f.check_box :rec %> <%= f.label :rec, ts("Rec?") %>
@@ -88,7 +93,7 @@
         <p class="submit actions">
           <%= f.submit(button_name) %>
           <% unless in_page %>
-          <%= link_to ts("Back to My Bookmarks"), user_bookmarks_path(current_user) %>
+            <%= link_to ts("Back to My Bookmarks"), user_bookmarks_path(current_user) %>
           <% end %>
         </p>
       </fieldset>

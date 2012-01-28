@@ -7,16 +7,16 @@ class User < ActiveRecord::Base
   LOGIN_LENGTH_MAX = 40
 
   validates_length_of :login, :within => LOGIN_LENGTH_MIN..LOGIN_LENGTH_MAX,
-    :too_short => "is too short (minimum is #{LOGIN_LENGTH_MIN} characters)",
-    :too_long => "is too long (maximum is #{LOGIN_LENGTH_MAX} characters)"
+    :too_short => ts("is too short (minimum is %{min_login} characters)", :min_login => LOGIN_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max_login} characters)", :max_login => LOGIN_LENGTH_MAX)
 
   PASSWORD_LENGTH_MIN = 6
   PASSWORD_LENGTH_MAX = 40
 
   # allow nil so can save existing users
   validates_length_of :password, :within => PASSWORD_LENGTH_MIN..PASSWORD_LENGTH_MAX, :allow_nil => true,
-    :too_short => "is too short (minimum is #{PASSWORD_LENGTH_MIN} characters)",
-    :too_long => "is too long (maximum is #{PASSWORD_LENGTH_MAX} characters)"
+    :too_short => ts("is too short (minimum is %{min_pwd} characters)", :min_pwd => PASSWORD_LENGTH_MIN),
+    :too_long => ts("is too long (maximum is %{max_pwd} characters)", :max_pwd => PASSWORD_LENGTH_MAX)
 
 ####
 
@@ -161,9 +161,10 @@ class User < ActiveRecord::Base
   scope :out_of_invites, :conditions => {:out_of_invites => true}
 
   validates_format_of :login,
-    :message => t('login_invalid', :default => 'must begin and end with a letter or number; it may also contain underscores but no other characters.'),
+    :message => ts("must begin and end with a letter or number; it may also contain underscores but no other characters."),
     :with => /\A[A-Za-z0-9]\w*[A-Za-z0-9]\Z/
-  #validates_uniqueness_of :login, :message => ('login_already_used', :default => 'must be unique')
+  # done by authlogic
+  # validates_uniqueness_of :login, :message => ('login_already_used', :default => 'must be unique')
 
   validates :email, :email_veracity => true
 
@@ -174,12 +175,12 @@ class User < ActiveRecord::Base
 
   validates_acceptance_of :terms_of_service,
                          :allow_nil => false,
-                         :message => t('must_accept_tos', :default => 'Sorry, you need to accept the Terms of Service in order to sign up.'),
+                         :message => ts('Sorry, you need to accept the Terms of Service in order to sign up.'),
                          :if => :first_save?
 
   validates_acceptance_of  :age_over_13,
                           :allow_nil => false,
-                          :message => t('must_be_over_13', :default => 'Sorry, you have to be over 13!'),
+                          :message => ts('Sorry, you have to be over 13!'),
                           :if => :first_save?
 
   def to_param

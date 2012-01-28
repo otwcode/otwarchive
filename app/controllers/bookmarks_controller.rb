@@ -67,7 +67,7 @@ class BookmarksController < ApplicationController
     elsif params[:tag_id]
       owner ||= Tag.find_by_name(params[:tag_id])
     elsif @collection
-      owner ||= @collection
+      owner ||= @collection # insufficient to filter out unapproved bookmarks, see below
     else
       owner ||= @bookmarkable
     end
@@ -77,12 +77,18 @@ class BookmarksController < ApplicationController
         # otherwise the user gets a 500 error
         raise ActiveRecord::RecordNotFound
       end
+
       # Do not aggregate bookmarks on these pages
-      if params[:recs_only]
-        @bookmarks = owner.bookmarks.recs
+      if params[:collection_id] && @collection
+        @bookmarks = Bookmark.in_collection(@collection)
       else
-        @bookmarks = owner.bookmarks
+        @bookmarks= owner.bookmarks
       end
+
+      if params[:recs_only]
+        @bookmarks = @bookmarks.recs
+      end
+
       if @user && @user == current_user
         # can see all own bookmarks
       elsif logged_in_as_admin?
@@ -137,7 +143,7 @@ class BookmarksController < ApplicationController
       end
       @bookmarks = @bookmarks.sort_by{|b| - b.id}
     end
-    @bookmarks = @bookmarks.compact.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+    @bookmarks = @bookmarks.compact.paginate(:page => params[:page])
   end
   
   # GET    /:locale/bookmark/:id

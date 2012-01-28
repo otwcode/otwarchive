@@ -87,7 +87,7 @@ class TagsController < ApplicationController
       @tag = @tag.merger
     end
     # Temp for testing
-    if @tag.name == "F/F"
+    if @tag.is_a?(Fandom) || @tag.name == "F/F"
       if @tag.canonical?
         @works = @tag.filtered_works.visible_to_all.order("created_at DESC").limit(25)
       else
@@ -175,7 +175,7 @@ class TagsController < ApplicationController
   def edit
     @tag = Tag.find_by_name(params[:id])
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-      flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
+      flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
     unless @tag

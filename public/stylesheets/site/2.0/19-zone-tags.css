@@ -4,7 +4,7 @@ individual tags are shown in many contexts across the site and are styled in typ
 tags also have various states in roles-states.css (arguably a nomination is an embyronic tag)/
 
 /*TAGS SHOW */
-ul.tree { display: block }
+ul.tree, ul.tree li { display: block }
 .tag_wranglers-index #tag_wranglers 
         { width:75%; float:left}
         

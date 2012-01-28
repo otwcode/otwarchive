@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>Class: ApplicationController</title>
+<title>class ApplicationController - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -931,17 +931,17 @@ For example, a popup window might simply close itself.</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_page_title</span>(<span class="ruby-identifier">fandom</span>, <span class="ruby-identifier">author</span>, <span class="ruby-identifier">title</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-comment"># truncate any piece that is over 15 chars long to the nearest word</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:truncate</span>]
-    <span class="ruby-identifier">fandom</span> = <span class="ruby-identifier">fandom</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-string">'...'</span>}
-    <span class="ruby-identifier">author</span> = <span class="ruby-identifier">author</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-string">'...'</span>}
-    <span class="ruby-identifier">title</span> = <span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-string">'...'</span>}
+    <span class="ruby-identifier">fandom</span> = <span class="ruby-identifier">fandom</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-string">'...'</span>}
+    <span class="ruby-identifier">author</span> = <span class="ruby-identifier">author</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-string">'...'</span>}
+    <span class="ruby-identifier">title</span> = <span class="ruby-identifier">title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^(.{15}[\w.]*)(.*)/</span>) {<span class="ruby-node">$2</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-node">$1</span> <span class="ruby-operator">:</span> <span class="ruby-node">$1</span> <span class="ruby-operator">+</span> <span class="ruby-string">'...'</span>}
   <span class="ruby-keyword">end</span>
 
   <span class="ruby-ivar">@page_title</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:work_title_format</span>).<span class="ruby-identifier">blank?</span>
     <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">work_title_format</span>
-    <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/FANDOM/</span>, <span class="ruby-identifier">fandom</span>)
-    <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/AUTHOR/</span>, <span class="ruby-identifier">author</span>)
-    <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/TITLE/</span>, <span class="ruby-identifier">title</span>)
+    <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">%rFANDOM/</span>, <span class="ruby-identifier">fandom</span>)
+    <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">%rAUTHOR/</span>, <span class="ruby-identifier">author</span>)
+    <span class="ruby-ivar">@page_title</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">%rTITLE/</span>, <span class="ruby-identifier">title</span>)
   <span class="ruby-keyword">else</span>
     <span class="ruby-ivar">@page_title</span> = <span class="ruby-identifier">title</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">author</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot; - &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">fandom</span>
   <span class="ruby-keyword">end</span>
@@ -1931,7 +1931,7 @@ false # if you want to record missing translations</p>
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 

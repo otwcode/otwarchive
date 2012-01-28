@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>Class: ChallengeAssignmentsController</title>
+<title>class ChallengeAssignmentsController - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -836,7 +836,7 @@
 
           
           <div class="method-source-code" id="cover_default-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 241</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 242</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">cover_default</span>
   <span class="ruby-ivar">@challenge_assignment</span>.<span class="ruby-identifier">covered_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
   <span class="ruby-ivar">@challenge_assignment</span>.<span class="ruby-identifier">save</span>
@@ -869,7 +869,7 @@
 
           
           <div class="method-source-code" id="default-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 224</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 225</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">default</span>
   <span class="ruby-ivar">@challenge_assignment</span>.<span class="ruby-identifier">defaulted_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
   <span class="ruby-ivar">@challenge_assignment</span>.<span class="ruby-identifier">save</span>
@@ -905,7 +905,7 @@
 
           
           <div class="method-source-code" id="default_all-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 216</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 217</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">default_all</span>
   <span class="ruby-comment"># mark all unfulfilled assignments as defaulted</span>
   <span class="ruby-identifier">unfulfilled_assignments</span> = <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">unfulfilled_in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">readonly</span>(<span class="ruby-keyword">false</span>)
@@ -939,7 +939,7 @@
 
           
           <div class="method-source-code" id="generate-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 146</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 147</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">generate</span>
   <span class="ruby-comment"># regenerate assignments using the current potential matches</span>
   <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">generate</span>(<span class="ruby-ivar">@collection</span>)
@@ -992,18 +992,19 @@
     <span class="ruby-identifier">signup_open</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">signup_open</span>
     <span class="ruby-identifier">access_denied</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">user_allowed_to_see_assignments?</span>(<span class="ruby-identifier">current_user</span>)
     
+    <span class="ruby-comment"># we temporarily are ordering by requesting pseud to avoid left join</span>
     <span class="ruby-ivar">@assignments</span> = <span class="ruby-keyword">case</span>
     <span class="ruby-keyword">when</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pinch_hit</span>]
-      <span class="ruby-comment"># have to order by requesting pseud because don't have offer signup</span>
-      <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">unfulfilled_in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">undefaulted</span>.<span class="ruby-identifier">with_pinch_hitter</span>.<span class="ruby-identifier">order_by_offering_pseud</span>
+      <span class="ruby-comment"># order by pinch hitter name</span>
+      <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">unfulfilled_in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">undefaulted</span>.<span class="ruby-identifier">with_pinch_hitter</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-string">&quot;INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id)&quot;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;pseuds.name&quot;</span>)
     <span class="ruby-keyword">when</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:fulfilled</span>]
-      <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">assignments</span>.<span class="ruby-identifier">fulfilled</span>.<span class="ruby-identifier">order_by_offering_pseud</span>
+      <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">assignments</span>.<span class="ruby-identifier">fulfilled</span>.<span class="ruby-identifier">order_by_requesting_pseud</span>
     <span class="ruby-keyword">when</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:unfulfilled</span>]
-      <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">unfulfilled_in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">undefaulted</span>.<span class="ruby-identifier">order_by_offering_pseud</span>
+      <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">unfulfilled_in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">undefaulted</span>.<span class="ruby-identifier">order_by_requesting_pseud</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">assignments</span>.<span class="ruby-identifier">defaulted</span>.<span class="ruby-identifier">uncovered</span>.<span class="ruby-identifier">order_by_requesting_pseud</span>
     <span class="ruby-keyword">end</span>
-    <span class="ruby-ivar">@assignments</span> = <span class="ruby-ivar">@assignments</span>.<span class="ruby-identifier">paginate</span> <span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ITEMS_PER_PAGE</span>
+    <span class="ruby-ivar">@assignments</span> = <span class="ruby-ivar">@assignments</span>.<span class="ruby-identifier">page</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- index-source -->
@@ -1262,7 +1263,7 @@
 
           
           <div class="method-source-code" id="purge-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 168</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 169</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">purge</span>
   <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">clear!</span>(<span class="ruby-ivar">@collection</span>)
   <span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">assignments_sent_at</span> = <span class="ruby-keyword">nil</span>
@@ -1296,7 +1297,7 @@
 
           
           <div class="method-source-code" id="send_out-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 153</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 154</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_out</span>
   <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">send_out</span>(<span class="ruby-ivar">@collection</span>)
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">&quot;Assignments are now being sent out.&quot;</span>
@@ -1328,7 +1329,7 @@
 
           
           <div class="method-source-code" id="set-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 159</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 160</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set</span>
   <span class="ruby-comment"># update all the assignments</span>
   <span class="ruby-comment"># see http://asciicasts.com/episodes/198-edit-multiple-individually</span>
@@ -1363,7 +1364,7 @@
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 139</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 140</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">user_allowed_to_see_assignments?</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">||</span> <span class="ruby-ivar">@challenge_assignment</span>.<span class="ruby-identifier">offering_pseud</span>.<span class="ruby-identifier">user</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">current_user</span>
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;You aren't allowed to see that assignment!&quot;</span>
@@ -1428,7 +1429,7 @@
 
           
           <div class="method-source-code" id="uncover_default-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 248</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 249</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">uncover_default</span>
   <span class="ruby-ivar">@challenge_assignment</span>.<span class="ruby-identifier">covered_at</span> = <span class="ruby-keyword">nil</span>
   <span class="ruby-ivar">@challenge_assignment</span>.<span class="ruby-identifier">save</span>
@@ -1461,7 +1462,7 @@
 
           
           <div class="method-source-code" id="undefault-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 234</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 235</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">undefault</span>
   <span class="ruby-ivar">@challenge_assignment</span>.<span class="ruby-identifier">defaulted_at</span> = <span class="ruby-keyword">nil</span>
   <span class="ruby-ivar">@challenge_assignment</span>.<span class="ruby-identifier">save</span>
@@ -1494,11 +1495,11 @@
 
           
           <div class="method-source-code" id="update_multiple-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 176</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_assignments_controller.rb, line 177</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_multiple</span>
   <span class="ruby-ivar">@errors</span> = []
   <span class="ruby-identifier">params</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">action</span>, <span class="ruby-identifier">id</span> = <span class="ruby-identifier">key</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/_/</span>)
+    <span class="ruby-identifier">action</span>, <span class="ruby-identifier">id</span> = <span class="ruby-identifier">key</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">%r_/</span>)
     <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-node">%w(approve default undefault cover)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">action</span>)
     <span class="ruby-identifier">assignment</span> = <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span>).<span class="ruby-identifier">first</span>
     <span class="ruby-keyword">unless</span> <span class="ruby-identifier">assignment</span>
@@ -1553,7 +1554,7 @@
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 

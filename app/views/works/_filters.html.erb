@@ -1,35 +1,35 @@
 <%= form_tag( @collection ? collection_works_path(@collection) : works_path, :class => 'filters', :method => :get, :id => 'work_filters') do %>
-  <h3 class="landmark heading">Filters</h3>
-	<%= field_set_tag h(ts('Filter results:')) + link_to_help("filters") do %>
+  <h3 class="landmark heading"><%= ts("Filters") %></h3>
+	<%= field_set_tag (ts('Filter results:') + link_to_help("filters")).html_safe do %>
     <dl class="filters" role="menu">
-    <% unless @filters.blank? %>
-      <% Tag::FILTERS.each do |type| %>
-        <% unless @filters[type].blank? %>
-          <dt>        
-            <span class="tag_category_<%= type %>_open hidden"><%= image_tag 'arrow-right.gif', :alt => "" %></span>
-            <span class="tag_category_<%= type %>_close hidden"><%= image_tag 'arrow-down.gif', :alt => ""%></span>              
-            <%= type.constantize::NAME %> 
-          </dt>
-          <dd id="tag_category_<%= type %>" class="tags toggled">
-            <ul>              
-              <% @filters[type].each do |tag_info| %>
-                <li>
-                  <% if (type == "Rating") && @filters[type].length > 1 %>
-                    <%= radio_button_tag "selected_tags[#{type.downcase}][]", tag_info[:id], @selected_tags.include?(tag_info[:id]), 
-                    :id => "selected_tags_" + type.downcase + '_' + tag_info[:id] %>
-                    <%= label_tag "selected_tags_#{type.downcase}_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
-                  <% else %>
-                    <%= check_box_tag "selected_tags[tags][]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_tags_#{tag_info[:id]}" %>
-        				    <% if (type == "Warning") %>
-        				      <%= label_tag "selected_tags_tags_#{tag_info[:id]}", label_for_filter(type, tag_info) %>  
-        				    <% else %>
-                      <%= label_tag "selected_tags_tags_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
-                    <% end %>
-                  <% end %> 
-                </li>
-              <% end %> 
-           </ul>
-          </dd>
+      <% unless @filters.blank? %>
+        <% Tag::FILTERS.each do |type| %>
+          <% unless @filters[type].blank? %>
+            <dt>        
+              <span class="tag_category_<%= type %>_open hidden"><%= image_tag 'arrow-right.gif', :alt => "" %></span>
+              <span class="tag_category_<%= type %>_close hidden"><%= image_tag 'arrow-down.gif', :alt => "" %></span>              
+              <%= type.constantize::NAME %> 
+            </dt>
+            <dd id="tag_category_<%= type %>" class="tags toggled">
+              <ul>              
+                <% @filters[type].each do |tag_info| %>
+                  <li>
+                    <% if (type == "Rating") && @filters[type].length > 1 %>
+                      <%= radio_button_tag "selected_tags[#{type.downcase}][]", tag_info[:id], @selected_tags.include?(tag_info[:id]), 
+                      :id => "selected_tags_" + type.downcase + '_' + tag_info[:id] %>
+                      <%= label_tag "selected_tags_#{type.downcase}_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
+                    <% else %>
+                      <%= check_box_tag "selected_tags[tags][]", tag_info[:id], @selected_tags.include?(tag_info[:id]), :id => "selected_tags_tags_#{tag_info[:id]}" %>
+          				    <% if (type == "Warning") %>
+          				      <%= label_tag "selected_tags_tags_#{tag_info[:id]}", label_for_filter(type, tag_info) %>  
+          				    <% else %>
+                        <%= label_tag "selected_tags_tags_#{tag_info[:id]}", "#{tag_info[:name]} (#{tag_info[:count]})" %>  
+                      <% end %>
+                    <% end %> 
+                  </li>
+                <% end %> 
+              </ul>
+            </dd>
           <% end %>
         <% end %>         
       <% end %>
@@ -37,16 +37,16 @@
       <dd><%= select_tag :language_id, ('<option></option>' + options_from_collection_for_select(Language.default_order, :short, :name, params[:language_id])).html_safe %></dd>
       <dt><%= ts("Status") %></dt>
       <dd><%= check_box_tag 'complete', '1', params[:complete] == '1' %><%= label_tag 'complete', "Complete only" %></dd>
-      <dt>Filter by:</dt>
+      <dt><%= ts("Filter by") %>:</dt>
       <dd>
         <%= radio_button_tag "boolean_type", 'and', params[:boolean_type] != 'or' %>
-        <%= label_tag "boolean_type_and", "and (works with all of these tags)" %><br />  
+        <%= label_tag "boolean_type_and", ts("and (works with all of these tags)") %><br />  
         <%= radio_button_tag "boolean_type", 'or', params[:boolean_type] == 'or' %>
-        <%= label_tag "boolean_type_or", "or (works with any of these tags)" %>      
+        <%= label_tag "boolean_type_or", ts("or (works with any of these tags)") %>      
       </dd>
-    <dt class="landmark">Submit</dt>
-	 <dd class="submit actions"><%= submit_tag ts('Filter Works') %></dd>
-</dl>
+      <dt class="landmark"><%= ts("Submit") %></dt>
+      <dd class="submit actions"><%= submit_tag ts('Filter Works') %></dd>
+    </dl>
     <div>
       <%= hidden_field_tag("tag_id", @tag.name) if @tag %>
       <%= hidden_field_tag("query", @query) if @query %>
@@ -54,5 +54,5 @@
       <%= hidden_field_tag("pseud_id", @author.name) if @author %>
       <%= hidden_field_tag("user_id", @user.login) if @user %>
     </div>
-<% end %>
+  <% end %>
 <% end %>

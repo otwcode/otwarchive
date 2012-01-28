@@ -60,7 +60,7 @@ module AlphabetHelper
       unless character.char == active_letter
         block << " " + link
       else
-        block << ' <span class="current">' + link + '</span>'
+        block << ' <span class="current">' + character.char + '</span>'
       end
     end
 

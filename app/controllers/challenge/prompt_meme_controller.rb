@@ -17,12 +17,14 @@ class Challenge::PromptMemeController < ChallengesController
     end
   end
 
+  # is actually a blank page - should it be redirected to collection profile?
   def show
   end
 
+  # The new form for prompt memes is actually the challenge settings page because challenges are always created in the context of a collection.
   def new
     if (@collection.challenge)
-      flash[:notice] = t('prompt_meme.already_challenge', :default => "There is already a challenge set up for this collection.")
+      flash[:notice] = ts("There is already a challenge set up for this collection.")
       redirect_to edit_collection_prompt_meme_path(@collection)
     else
       @challenge = PromptMeme.new
@@ -37,7 +39,7 @@ class Challenge::PromptMemeController < ChallengesController
     if @challenge.save
       @collection.challenge = @challenge
       @collection.save
-      flash[:notice] = 'Challenge was successfully created.'
+      flash[:notice] = ts('Challenge was successfully created.')
       
       # see if we initialized the tag set
       if initializing_tag_sets?
@@ -74,6 +76,7 @@ class Challenge::PromptMemeController < ChallengesController
   end
   
   private
+  # creating automatic list of most popular or least popular tags on the archive
   def initializing_tag_sets?
     # uuughly :P but check params to see if we're initializing 
     !params[:prompt_meme][:request_restriction_attributes].keys.

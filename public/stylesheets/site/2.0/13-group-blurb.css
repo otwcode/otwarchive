@@ -45,7 +45,7 @@ li.blurb:after
 .blurb span.text 
         { height:0; width:0; font-size:0.001em; color:transparent; }
 .blurb ul.required-tags li span
-        { background-repeat:no-repeat; height: 25px; width: 25px; display:block}
+        { background-repeat: no-repeat; height: 25px; width: 25px; display:block}
 .blurb .required-tags .category,.blurb .iswip,.blurb .external-work
         { position: absolute; left: 28px }
 .blurb .category
@@ -55,27 +55,44 @@ li.blurb:after
 .blurb .rating,.blurb .required-tags .warnings
         { margin:0 0 3px }
 /*icon image replacement*/
-.blurb .rating-general-audience {background:url("/images/skins/iconsets/default/rating-general-audience.png")}
-.blurb .rating-explicit         {background:url("/images/skins/iconsets/default/rating-explicit.png")}
-.blurb .rating-mature           {background:url("/images/skins/iconsets/default/rating-mature.png")}
-.blurb .rating-notrated         {background:url("/images/skins/iconsets/default/rating-notrated.png")}
-.blurb .rating-teen             {background:url("/images/skins/iconsets/default/rating-teen.png")}
-.blurb .category-femslash       {background:url("/images/skins/iconsets/default/category-femslash.png")}
-.blurb .category-gen            {background:url("/images/skins/iconsets/default/category-gen.png")}
-.blurb .category-slash          {background:url("/images/skins/iconsets/default/category-slash.png")}
-.blurb .category-het            {background:url("/images/skins/iconsets/default/category-het.png")}
-.blurb .category-multi          {background:url("/images/skins/iconsets/default/category-multi.png")}
-.blurb .category-other          {background:url("/images/skins/iconsets/default/category-other.png")}
-.blurb .category-none           {background:url("/images/skins/iconsets/default/category-none.png")}
-.blurb .complete-no             {background:url("/images/skins/iconsets/default/complete-no.png")}
-.blurb .complete-yes            {background:url("/images/skins/iconsets/default/complete-yes.png")}
-.blurb .warning-yes             {background:url("/images/skins/iconsets/default/warning-yes.png")}
-.blurb .warning-no              {background:url("/images/skins/iconsets/default/warning-no.png")}
-.blurb .warning-choosenotto     {background:url("/images/skins/iconsets/default/warning-choosenotto.png")}
-.blurb .external-work           {background:url("/images/skins/iconsets/default/warning-external-work.png")}
-.blurb .public                  {background:url("/images/skins/iconsets/default/bookmark-public.png")}
-.blurb .rec                     {background:url("/images/skins/iconsets/default/bookmark-rec.png")}
-.blurb .count                   {background:url("/images/skins/iconsets/default/category-none.png")}
+.blurb .rating-general-audience 
+        { background: url("/images/imageset.png") -75px -25px; }
+.blurb .rating-explicit
+        { background: url("/images/imageset.png") -50px -25px; }
+.blurb .rating-mature
+        { background: url("/images/imageset.png") -75px -25px; }
+.blurb .rating-notrated, .blurb .category-none, .blurb .warning-no, .blurb .count  
+        { background: url("/images/imageset.png") -150px 0px; }
+.blurb .rating-teen
+        { background: url("/images/imageset.png") 0px -25px; }
+.blurb .category-femslash
+        { background: url("/images/imageset.png") -25px 0px; }
+.blurb .category-gen
+        { background: url("/images/imageset.png") -50px 0px; }
+.blurb .category-slash
+        { background: url("/images/imageset.png") 0px 0px; }
+.blurb .category-het
+        { background: url("/images/imageset.png") -75px 0px; }
+.blurb .category-multi
+        { background: url("/images/imageset.png") -100px -0px; }
+.blurb .category-other
+        { background: url("/images/imageset.png") -125px 0px; }
+.blurb .complete-no
+        { background: url("/images/imageset.png") -150px -25px; }
+.blurb .complete-yes
+        { background: url("/images/imageset.png") -175px -25px; }
+.blurb .warning-yes
+        { background: url("/images/imageset.png") -150px -25px; }
+.blurb .warning-choosenotto
+        { background: url("/images/imageset.png") -125px -25px; }
+.blurb .external-work
+        { background: url("/images/imageset.png") -75px -50px; }
+.blurb .private .text
+        { background: url("/images/imageset.png") -175px -50px; }
+.blurb .public
+        { background: url("/images/imageset.png") -125px -50px; }
+.blurb .rec
+        { background: url("/images/imageset.png") -100px -50px; }
 
  /*END icon block rules==*/
 
@@ -95,15 +112,17 @@ eg collections, users, skins, instead of the 4-icon list
 .picture .header 
         { border-bottom:1px solid #ccc }
 .index .collection .icon
-        { background:url("/images/skins/iconsets/default/icon_collection-s.png")}
+        { background: url("/images/imageset.png") -55px -525px; }
 .index .skins .icon
-        { background:url("/images/skins/iconsets/default/icon_skins.png"); }
+        { background: url("/images/imageset.png") 0px -580px; }
+.index .pseud .icon
+        { background: url("/images/imageset.png") 0px -525px; }
 .index .mystery .icon
-        { background:url("/images/skins/iconsets/default/icon_mystery.png")}
+        { background: url("/images/imageset.png") 0px -75px; }
 .index .tag .icon, .index .tagset .icon
-        { background:url("/images/skins/iconsets/default/icon_tag.png");}
+        { background: url("/images/imageset.png") 0px -275px; }
 .picture .icon img, .index .picture .icon 
-        { position: absolute; top:0; height:55px; width:55px; background-size:55px}
+        { position: absolute; top:0; height:55px; width:55px; background-repeat: no-repeat; }
 
 /*various little mods*/
 .prompt h6 

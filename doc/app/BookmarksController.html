@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>Class: BookmarksController</title>
+<title>class BookmarksController - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -624,7 +624,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 179</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 185</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@bookmark</span> = <span class="ruby-constant">Bookmark</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:bookmark</span>])
   <span class="ruby-ivar">@bookmarkable</span> = <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">bookmarkable</span> 
@@ -665,7 +665,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 208</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 214</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Bookmark was successfully deleted.&quot;</span>)
@@ -697,7 +697,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 165</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 171</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-ivar">@bookmarkable</span> = <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">bookmarkable</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -738,7 +738,7 @@ same function</p>
 
           
           <div class="method-source-code" id="fetch_recent-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 217</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 223</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">fetch_recent</span>
   <span class="ruby-ivar">@bookmarkable</span> = <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">bookmarkable</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -777,7 +777,7 @@ same function</p>
 
           
           <div class="method-source-code" id="hide_recent-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 229</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 235</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">hide_recent</span>
   <span class="ruby-ivar">@bookmarkable</span> = <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">bookmarkable</span>
 <span class="ruby-keyword">end</span></pre>
@@ -830,7 +830,7 @@ performance killer</p>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_id</span>]
     <span class="ruby-identifier">owner</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_id</span>])
   <span class="ruby-keyword">elsif</span> <span class="ruby-ivar">@collection</span>
-    <span class="ruby-identifier">owner</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@collection</span>
+    <span class="ruby-identifier">owner</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@collection</span> <span class="ruby-comment"># insufficient to filter out unapproved bookmarks, see below</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">owner</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@bookmarkable</span>
   <span class="ruby-keyword">end</span>
@@ -840,12 +840,18 @@ performance killer</p>
       <span class="ruby-comment"># otherwise the user gets a 500 error</span>
       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">RecordNotFound</span>
     <span class="ruby-keyword">end</span>
+
     <span class="ruby-comment"># Do not aggregate bookmarks on these pages</span>
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:recs_only</span>]
-      <span class="ruby-ivar">@bookmarks</span> = <span class="ruby-identifier">owner</span>.<span class="ruby-identifier">bookmarks</span>.<span class="ruby-identifier">recs</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span>
+      <span class="ruby-ivar">@bookmarks</span> = <span class="ruby-constant">Bookmark</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-ivar">@collection</span>)
     <span class="ruby-keyword">else</span>
-      <span class="ruby-ivar">@bookmarks</span> = <span class="ruby-identifier">owner</span>.<span class="ruby-identifier">bookmarks</span>
+      <span class="ruby-ivar">@bookmarks</span>= <span class="ruby-identifier">owner</span>.<span class="ruby-identifier">bookmarks</span>
     <span class="ruby-keyword">end</span>
+
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:recs_only</span>]
+      <span class="ruby-ivar">@bookmarks</span> = <span class="ruby-ivar">@bookmarks</span>.<span class="ruby-identifier">recs</span>
+    <span class="ruby-keyword">end</span>
+
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@user</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">current_user</span>
       <span class="ruby-comment"># can see all own bookmarks</span>
     <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">logged_in_as_admin?</span>
@@ -900,7 +906,7 @@ performance killer</p>
     <span class="ruby-keyword">end</span>
     <span class="ruby-ivar">@bookmarks</span> = <span class="ruby-ivar">@bookmarks</span>.<span class="ruby-identifier">sort_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">id</span>}
   <span class="ruby-keyword">end</span>
-  <span class="ruby-ivar">@bookmarks</span> = <span class="ruby-ivar">@bookmarks</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ITEMS_PER_PAGE</span>)
+  <span class="ruby-ivar">@bookmarks</span> = <span class="ruby-ivar">@bookmarks</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
 <span class="ruby-keyword">end</span></pre>
           </div><!-- index-source -->
           
@@ -998,7 +1004,7 @@ performance killer</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 152</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 158</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@bookmark</span> = <span class="ruby-constant">Bookmark</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -1078,7 +1084,7 @@ GET    /:locale/works/:work_id/bookmark/:id GET
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 147</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 153</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- show-source -->
@@ -1107,7 +1113,7 @@ GET    /:locale/works/:work_id/bookmark/:id GET
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 196</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 202</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:bookmark</span>])
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Bookmark was successfully updated.&quot;</span>)
@@ -1136,7 +1142,7 @@ GET    /:locale/works/:work_id/bookmark/:id GET
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 

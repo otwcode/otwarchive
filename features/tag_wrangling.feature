@@ -1,30 +1,19 @@
 @users @tag_wrangling
 Feature: Tag wrangling
 
-  Scenario: Log in as a tag wrangler and see wrangler pages.
-        Make a new fandom canonical and wrangle it to a medium.
-        Make a new character canonical and wrangle them to a fandom.
-        Make a new synonym of a character and check that the fandom transfers.
-    Given I have no users
-      And I have no tags
-      And basic tags
-      And the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
+  Scenario: Admin can create a tag wrangler using the interface
+
+    Given the following admin exists
+      | login       |
+      | Zooey       |
       And the following activated user exists
-      | login       | password      |
-      | dizmo       | wrangulator   |
-      And a media exists with name: "TV Shows", canonical: true
+      | login       |
+      | dizmo       |
       And I have loaded the "roles" fixture
-    When I am logged in as "dizmo" with password "wrangulator"
+    When I am logged in as "dizmo"
     Then I should not see "Tag Wrangling"
-    When I log out
-      And I go to the admin_login page
-      And I fill in "admin_session_login" with "Zooey"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-    Then I should see "Successfully logged in"
-    When I fill in "query" with "dizmo"
+    When I am logged in as an admin
+      And I fill in "query" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
     
@@ -32,11 +21,25 @@ Feature: Tag wrangling
     When I check "user_roles_1"
       And I press "Update"
     Then I should see "User was successfully updated"
-    When I log out
     
     # accessing wrangling pages
-      And I am logged in as "dizmo" with password "wrangulator"
-    Then I should see "Hi, dizmo!"
+    When I am logged in as "dizmo"
+      And I follow "Tag Wrangling"
+    Then I should see "Wrangling Home"
+
+  Scenario: Log in as a tag wrangler and see wrangler pages.
+        Make a new fandom canonical and wrangle it to a medium.
+        Make a new character canonical and wrangle them to a fandom.
+        Make a new synonym of a character and check that the fandom transfers.
+    Given I have no users
+      And I have no tags
+      And basic tags
+      And I have loaded the "roles" fixture
+      And the following activated tag wrangler exists
+      | login       |
+      | dizmo       |
+      And a media exists with name: "TV Shows", canonical: true
+    When I am logged in as "dizmo"
     When I follow "Tag Wrangling"
     Then I should see "Wrangling Home"
       And I should not see "Stargate SG-1"

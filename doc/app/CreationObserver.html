@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>Class: CreationObserver</title>
+<title>class CreationObserver - RDoc Documentation</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -734,7 +734,7 @@
 
           
           <div class="method-source-code" id="notify_parents-source">
-            <pre><span class="ruby-comment"># File app/models/creation_observer.rb, line 79</span>
+            <pre><span class="ruby-comment"># File app/models/creation_observer.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify_parents</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">work</span>.<span class="ruby-identifier">parent_work_relationships</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">work</span>.<span class="ruby-identifier">unrevealed?</span>
     <span class="ruby-identifier">work</span>.<span class="ruby-identifier">parent_work_relationships</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">relationship</span><span class="ruby-operator">|</span> <span class="ruby-identifier">relationship</span>.<span class="ruby-identifier">notify_parent_owners</span>}
@@ -766,7 +766,7 @@
 
           
           <div class="method-source-code" id="notify_prompters-source">
-            <pre><span class="ruby-comment"># File app/models/creation_observer.rb, line 72</span>
+            <pre><span class="ruby-comment"># File app/models/creation_observer.rb, line 68</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify_prompters</span>(<span class="ruby-identifier">work</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">work</span>.<span class="ruby-identifier">challenge_claims</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">work</span>.<span class="ruby-identifier">unrevealed?</span>
     <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">prompter_notification</span>(<span class="ruby-identifier">work</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver</span>
@@ -837,11 +837,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify_subscribers</span>(<span class="ruby-identifier">creation</span>)
   <span class="ruby-identifier">work</span> = <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:work</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">work</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">creation</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">work</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">work</span>.<span class="ruby-identifier">unrevealed?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">work</span>.<span class="ruby-identifier">anonymous?</span>
-    <span class="ruby-comment">#Group subscriptions by user id so that you only get one notice per update</span>
-    <span class="ruby-identifier">subs</span> = <span class="ruby-constant">Subscription</span>.<span class="ruby-identifier">where</span>([<span class="ruby-string">&quot;subscribable_type = 'User' AND subscribable_id IN (?)&quot;</span>,
-                              <span class="ruby-identifier">work</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">user_id</span>}]).
-                        <span class="ruby-identifier">group</span>(<span class="ruby-value">:user_id</span>)
-    <span class="ruby-identifier">subs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">subscription</span><span class="ruby-operator">|</span>
+    <span class="ruby-constant">Subscription</span>.<span class="ruby-identifier">for_work</span>(<span class="ruby-identifier">work</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">subscription</span><span class="ruby-operator">|</span>
       <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">subscription_notification</span>(<span class="ruby-identifier">subscription</span>.<span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">subscription</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>).<span class="ruby-identifier">deliver</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
@@ -872,7 +868,7 @@
 
           
           <div class="method-source-code" id="save_creatorships-source">
-            <pre><span class="ruby-comment"># File app/models/creation_observer.rb, line 86</span>
+            <pre><span class="ruby-comment"># File app/models/creation_observer.rb, line 82</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">save_creatorships</span>(<span class="ruby-identifier">creation</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Bad creation...&quot;</span>
@@ -917,7 +913,7 @@
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 

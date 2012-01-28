@@ -120,6 +120,7 @@ module WorksHelper
   public
   # get a nicely formatted bit of text for pasting into other services
   # title (# words) by authors
+  # Chapters: 
   # Fandom:
   # Rating:
   # Warnings:
@@ -133,6 +134,7 @@ module WorksHelper
                                     link_to(content_tag(:strong, pseud.name), user_url(pseud.user))}.join(', ').html_safe
     end
 
+    chapters_text = ts("Chapters: ") + work.chapter_total_display
     fandom_text = add_label_for_embed(ts("Fandom: "), work.fandoms.map {|fandom| link_to fandom.name, tag_url(fandom)}.join(', ').html_safe)
     rating_text = add_label_for_embed(ts("Rating: "), work.ratings.map {|rating| rating.name}.join(', '))
     category_text = add_label_for_embed(ts("Category: "), work.categories.map {|cat| cat.name}.join(', '))
@@ -142,7 +144,7 @@ module WorksHelper
     summary_text = add_label_for_embed(ts("Summary: "), sanitize_field(work, :summary))
 
     # we deliberately don't html_safe this because we want it escaped
-    [title_link + ts(" by ") + profile_link, fandom_text, rating_text, warning_text, relationship_text, char_text, summary_text].compact.join("\n")
+    [title_link + ts(" by ") + profile_link, chapters_text, fandom_text, rating_text, warning_text, relationship_text, char_text, summary_text].compact.join("\n")
   end
 
   # convert a bookmark into a nicely formatted chunk of text
@@ -164,6 +166,34 @@ module WorksHelper
 
   def download_url_for_work(work, format)
     url_for ("/downloads/#{work.download_authors}/#{work.id}/#{work.download_title}.#{format}").gsub(' ', '%20')
+  end
+  
+  # Generates a list of a work's tags and details for use in feeds
+  def feed_summary(work)
+    tags = work.tags.group_by(&:type)
+    text = "<p>by #{byline(work, :visibility => 'public')}</p>"
+    text << work.summary
+    text << "<p>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</p>"
+    unless work.series.count == 0
+      text << "<p>Series: #{series_list_for_feeds(work)}</p>"
+    end
+    # Create list of tags
+    text << "<ul>"
+    %w(Fandom Rating Warning Category Character Relationship Freeform).each do |type|
+      if tags[type]
+        label = case type
+        when 'Freeform'
+          'Additional Tags'
+        when 'Rating'
+          'Rating'
+        else
+          type.pluralize
+        end
+        text << "<li>#{label}: #{tags[type].map{ |t| link_to_tag_works(t) }.join(', ')}</li>"
+      end
+    end
+    text << "</ul>"
+    text
   end
     
   

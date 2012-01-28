@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111013010307) do
+ActiveRecord::Schema.define(:version => 20111027173425) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -21,6 +21,20 @@ ActiveRecord::Schema.define(:version => 20111013010307) do
     t.string   "ip_address"
     t.string   "category"
     t.integer  "comment_sanitizer_version", :limit => 2, :default => 0, :null => false
+  end
+
+  create_table "admin_post_taggings", :force => true do |t|
+    t.integer  "admin_post_tag_id"
+    t.integer  "admin_post_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "admin_post_tags", :force => true do |t|
+    t.string   "name"
+    t.integer  "language_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "admin_posts", :force => true do |t|
@@ -34,6 +48,7 @@ ActiveRecord::Schema.define(:version => 20111013010307) do
     t.integer  "language_id"
   end
 
+  add_index "admin_posts", ["created_at"], :name => "index_admin_posts_on_created_at"
   add_index "admin_posts", ["translated_post_id"], :name => "index_admin_posts_on_post_id"
 
   create_table "admin_settings", :force => true do |t|
@@ -802,6 +817,8 @@ ActiveRecord::Schema.define(:version => 20111013010307) do
     t.boolean  "anonymous",                                  :default => false, :null => false
   end
 
+  add_index "prompts", ["collection_id"], :name => "index_prompts_on_collection_id"
+
   create_table "pseuds", :force => true do |t|
     t.integer  "user_id"
     t.string   "name",                                                          :null => false
@@ -944,6 +961,8 @@ ActiveRecord::Schema.define(:version => 20111013010307) do
     t.boolean  "do_not_upgrade",                             :default => false, :null => false
     t.boolean  "cached",                                     :default => false, :null => false
     t.boolean  "unusable",                                   :default => false, :null => false
+    t.boolean  "featured",                                   :default => false, :null => false
+    t.boolean  "in_chooser",                                 :default => false, :null => false
   end
 
   add_index "skins", ["author_id"], :name => "index_skins_on_author_id"
@@ -1124,14 +1143,15 @@ ActiveRecord::Schema.define(:version => 20111013010307) do
     t.datetime "activated_at"
     t.string   "crypted_password"
     t.string   "salt"
-    t.string   "identity_url",      :limit => 191
-    t.boolean  "recently_reset",                   :default => false, :null => false
-    t.boolean  "suspended",                        :default => false, :null => false
-    t.boolean  "banned",                           :default => false, :null => false
+    t.string   "identity_url",       :limit => 191
+    t.boolean  "recently_reset",                    :default => false, :null => false
+    t.boolean  "suspended",                         :default => false, :null => false
+    t.boolean  "banned",                            :default => false, :null => false
     t.integer  "invitation_id"
     t.datetime "suspended_until"
-    t.boolean  "out_of_invites",                   :default => true,  :null => false
-    t.string   "persistence_token",                                   :null => false
+    t.boolean  "out_of_invites",                    :default => true,  :null => false
+    t.string   "persistence_token",                                    :null => false
+    t.integer  "failed_login_count"
   end
 
   add_index "users", ["activation_code"], :name => "index_users_on_activation_code"
@@ -1169,12 +1189,11 @@ ActiveRecord::Schema.define(:version => 20111013010307) do
     t.integer  "work_skin_id"
   end
 
+  add_index "works", ["complete", "posted", "hidden_by_admin"], :name => "complete_works"
   add_index "works", ["delta"], :name => "index_works_on_delta"
-  add_index "works", ["hidden_by_admin"], :name => "index_works_on_hidden_by_admin"
   add_index "works", ["imported_from_url"], :name => "index_works_on_imported_from_url"
   add_index "works", ["language_id"], :name => "index_works_on_language_id"
-  add_index "works", ["posted"], :name => "index_works_on_posted"
-  add_index "works", ["restricted"], :name => "index_works_on_restricted"
+  add_index "works", ["restricted", "posted", "hidden_by_admin"], :name => "visible_works"
   add_index "works", ["revised_at"], :name => "index_works_on_revised_at"
 
   create_table "wrangling_assignments", :force => true do |t|
