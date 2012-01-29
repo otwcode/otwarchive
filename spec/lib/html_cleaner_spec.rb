@@ -140,7 +140,6 @@ describe HtmlCleaner do
       result = close_unclosed_tag("<code><i>text", "strong", 1)
       result.should == "<code><i>text"
     end
-    
   end
 
 
@@ -156,6 +155,11 @@ describe HtmlCleaner do
         doc.xpath(".//blockquote").children.to_s.strip.should == "world"
       end
 
+      it "should keep valid unicode chars as is" do
+        result = sanitize_value(:content, "„‚nörmäl’—téxt‘“")
+        result.should =~ /„‚nörmäl’—téxt‘“/
+      end
+      
       it "should allow classes with letters, numbers and hyphens" do
         result = sanitize_value(:content, '<p class="f-5">foobar</p>')
         doc = Nokogiri::HTML.fragment(result)
@@ -186,6 +190,30 @@ describe HtmlCleaner do
         doc = Nokogiri::HTML.fragment(result)
         doc.xpath("./p[contains(@class, 'foo')]").children.to_s.strip.should == "foobar"
         doc.xpath("./p[contains(@class, 'bar')]").children.to_s.strip.should == "foobar"
+      end
+
+      it "should allow youtube embeds" do
+        html = '<iframe width="560" height="315" src="http://www.youtube.com/embed/123" frameborder="0"></iframe>'
+        result = sanitize_value(:content, html)
+        result.should == html
+      end
+
+      it "should not allow iframes with unknown source" do
+        html = '<iframe src="http://www.evil.org"></iframe>'
+        result = sanitize_value(:content, html)
+        result.should be_empty
+      end
+
+      it "should allow google player embeds" do
+        html = '<embed type="application/x-shockwave-flash" flashvars="audioUrl=http://dl.dropbox.com/u/123/foo.mp3" src="http://www.google.com/reader/ui/123-audio-player.swf" width="400" height="27" allowscriptaccess="never" allownetworking="internal"></embed>'
+        result = sanitize_value(:content, html)
+        result.should == html
+      end
+
+      it "should not allow embeds with unknown source" do
+        html = '<embed src="http://www.evil.org"></embed>'
+        result = sanitize_value(:content, html)
+        result.should be_empty
       end
 
       ["'';!--\"<XSS>=&{()}",
@@ -237,25 +265,17 @@ describe HtmlCleaner do
        "<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>",
        "<IMG SRC=\" &#14;  javascript:alert('XSS');\">",
        "<IMG SRC=\"javascript:alert('XSS')\"",
-       "<INPUT TYPE=\"IMAGE\" SRC=\"javascript:alert('XSS');\">"
+       "<INPUT TYPE=\"IMAGE\" SRC=\"javascript:alert('XSS');\">",
+       "<IMG SRC=\"jav	ascript:alert('XSS');\">",
+       "<IMG SRC=\"jav&#x09;ascript:alert('XSS');\">",
+       "<IMG SRC=\"jav&#x0A;ascript:alert('XSS');\">",
+       "<IMG SRC=\"jav&#x0D;ascript:alert('XSS');\">",
       ].each do |value|
         
         it "should strip javascript in img src attribute: #{value[0..40]}" do
           result = sanitize_value(:content, value)
           result.should_not =~ /xss/i
           result.should_not =~ /javascript/i
-        end
-      end
-
-      ["<IMG SRC=\"jav	ascript:alert('XSS');\">",
-       "<IMG SRC=\"jav&#x09;ascript:alert('XSS');\">",
-       "<IMG SRC=\"jav&#x0A;ascript:alert('XSS');\">",
-       "<IMG SRC=\"jav&#x0D;ascript:alert('XSS');\">",
-      ].each do |value|
-        it "should strip javascript in img src attribute: #{value[0..40]}" do
-          result = sanitize_value(:content, value)
-          result.should_not =~ /javascript/i
-          result.should =~ /jav%/i
         end
       end
        

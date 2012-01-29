@@ -165,7 +165,9 @@ module HtmlCleaner
       end   
       value = Sanitize.clean(add_paragraphs_to_text(fix_bad_characters(value)), 
                              Sanitize::Config::ARCHIVE.merge(:transformers => transformers))
-      value = Nokogiri::HTML.fragment(value).to_xhtml
+      doc = Nokogiri::HTML::Document.new
+      doc.encoding = "UTF-8"
+      value = doc.fragment(value).to_xhtml
     else
       # clean out all tags
       value = Sanitize.clean(fix_bad_characters(value))
