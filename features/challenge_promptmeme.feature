@@ -336,19 +336,28 @@ Feature: Prompt Meme Challenge
   When I start to delete the signup by "myname1"
   Then I should see "myname1"
     And I should not see a link "myname1"
+
+	Scenario: Can't delete a prompt if you already have the minimum number
+
+  Given I have Battle 12 prompt meme fully set up
+  When I am logged in as "myname1"
+  When I sign up for Battle 12 with combination C
+  When I am logged in as "mod1"
+	When I view prompts for "Battle 12"
+	Then I should not see "Delete"
   
   Scenario: Mod deletes a prompt that doesn't fit the challenge rules
   
   Given I have Battle 12 prompt meme fully set up
   When I am logged in as "myname1"
   When I sign up for Battle 12 with combination C
+	When I add a new prompt to my signup for a prompt meme
   When I am logged in as "mod1"
-  # TODO: mods can't delete prompts anymore?
   When I delete the prompt by "myname1"
   Then I should see "Prompt was deleted"
     And I should see "Prompts for Battle 12"
     And I should not see "Signups for Battle 12"
-  #  And "myname1" should be emailed
+  #  TODO: And "myname1" should be emailed
   
   Scenario: Mod cannot edit someone else's prompt TODO: hinkiness going on
   
