@@ -27,6 +27,12 @@ span.delete a {
 }
 
 
+/* fix for scrolling checkboxes */
+.many p.actions { float: none; text-align: right; }
+.tags .options .tag { margin-right: 0.643em; }
+.concise li { width: 45%; float:left; clear:none; margin-right:1.5em}
+.concise label.action { float: left; }
+
 /* INTERACTIONS MODE: VERBOSE
 forms with more than three fieldsets 
 (01/09/11 all forms show nearly all options at the moment, some nested fieldsets hidden with .hideme

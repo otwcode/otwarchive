@@ -417,7 +417,8 @@ module ApplicationHelper
       :disabled => false,
       :include_toggle => true,
       :checkbox_side => "left",
-      :include_blank => true
+      :include_blank => true,
+      :concise => false # specify concise to invoke alternate formatting for skimmable lists (two-column in default layout)
     }.merge(options)
     
     field_name = options[:field_name] || field_name(form, attribute)
@@ -449,7 +450,7 @@ module ApplicationHelper
         options[:checkbox_side] == "left" ? checkbox + display_name : display_name + checkbox
       end
       if options[:extra_info_method]
-        checkbox_and_label = eval("#{options[:extra_info_method]}(choice)") + checkbox_and_label
+        checkbox_and_label = options[:checkbox_side] == "left" ? checkbox_and_label + eval("#{options[:extra_info_method]}(choice)") : eval("#{options[:extra_info_method]}(choice)") + checkbox_and_label
       end
       content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
     end.join("\n").html_safe
@@ -460,10 +461,10 @@ module ApplicationHelper
 
     # if there are only a few choices, don't show the scrolling and the toggle
     size = choices.size
-    css_class = checkbox_section_css_class(size)
+    css_class = checkbox_section_css_class(size, options[:concise])
     top_toggle = "".html_safe
     bottom_toggle = "".html_safe
-    if options[:include_toggle] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
+    if options[:include_toggle] && !options[:concise] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
       top_toggle = checkbox_section_toggle(checkboxes_id, size)
       bottom_toggle = checkbox_section_toggle(checkboxes_id, size, :no_show => true, :no_js => true)
     end
@@ -472,14 +473,16 @@ module ApplicationHelper
     return content_tag(:div, top_toggle + checkboxes_ul + bottom_toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id, :class => css_class)
   end
   
-  def checkbox_section_css_class(size)
+  def checkbox_section_css_class(size, concise=false)
     css_class = "options index"
-    if size > ArchiveConfig.OPTIONS_TO_SHOW
-      css_class += " many"
+    
+    if concise
+      css_class += " concise lots" if size > ArchiveConfig.OPTIONS_TO_SHOW
+    else
+      css_class += " many" if size > ArchiveConfig.OPTIONS_TO_SHOW
+      css_class += " lots" if size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
     end
-    if size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
-      css_class += " lots"
-    end
+    
     css_class
   end
   

@@ -69,7 +69,7 @@ module TagsHelper
 
   # the label on checkboxes to remove tag associations
   def remove_tag_association_label(tag)
-    "x".html_safe
+    "".html_safe
   end
 
   # Adds the "tag" classname to links (for tag links)
