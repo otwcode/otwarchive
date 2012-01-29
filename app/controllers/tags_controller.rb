@@ -2,7 +2,7 @@ class TagsController < ApplicationController
   before_filter :load_collection
   before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :search, :feed ]
   before_filter :check_permission_to_wrangle, :except => [ :show, :index, :show_hidden, :search, :feed ]
-  before_filter :load_tag, :only => [:show, :edit, :update, :wrangle, :mass_update, :remove_association]
+  before_filter :load_tag, :only => [:show, :edit, :update, :wrangle, :mass_update]
 
   caches_page :feed
 
@@ -180,9 +180,6 @@ class TagsController < ApplicationController
       flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
-    unless @tag
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
-    end
     @counts = {}
     @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works']
     @counts['Works'] = @tag.visible_works_count
@@ -228,15 +225,6 @@ class TagsController < ApplicationController
       @children['Merger'] = @tag.mergers.by_name
       render :edit
     end
-  end
-
-  def remove_association
-    if params[:to_remove]
-      tag_to_remove = Tag.find_by_name(params[:to_remove])
-      @tag.remove_association(tag_to_remove)
-    end
-    flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
-    redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
   end
 
   def wrangle
