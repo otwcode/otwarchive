@@ -6,31 +6,67 @@ The comment form generally belongs to the class "post".
 Comments are also shown in user home: inbox and that containing view is styled in zone-home.
 Wrangler discussion boards are not grouped with comments and they only show up in the Tag Zone.
 test note: have put clearfixes on listbox, blurb and comments here, to allow for dynamic content and for skins robustness, but it's an eleventh hour change and needs testing in ie7*/
-#feedback 
-        { margin:0 2.5em auto}
-div.comment,li.comment 
-        { position: relative; border:1px solid #ddd; overflow:visible}
-.comment:after
-        { content:" "; display:block; height:0; font-size:0; clear:both; visibility:hidden; }
-.comment div.icon
-        { float: left; margin:-1.5625em 0.5625em 0.5625em 0; border-bottom:5px solid #ddd}
-.comment h4.byline 
-        { background:#ddd; padding:0.25em 0.25em 0.25em 108px;margin:0 auto -.25em}
-.comment p
-        { clear:none}
-.comment ul 
-        { margin-top:-1.286em}
-.thread .thread 
-        { margin-left: 3em }
-.thread .even 
-        { background: #eee; margin:0 } 
 
-fieldset.comments, .comment blockquote.userstuff 
-        { background:transparent; border:none; 
-          box-shadow:none }
-.comment fieldset  
-        { margin:0 }
-.comment .datetime 
-        { margin:0 11em 0 1.286em}
+#feedback {
+  margin: 0 2.5em auto;
+}
+
+div.comment, li.comment {
+  position: relative;
+  border: 1px solid #ddd;
+  overflow: visible;
+}
+
+.comment:after {
+  content: " ";
+  display: block;
+  height: 0;
+  font-size: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.comment div.icon {
+  float: left;
+  margin: -1.5625em 0.5625em 0.5625em 0;
+  border-bottom: 5px solid #ddd;
+}
+
+.comment h4.byline {
+  background: #ddd;
+  padding: 0.25em 0.25em 0.25em 108px;
+  margin: 0 auto -0.25em;
+}
+
+.comment p {
+  clear: none;
+}
+
+.comment ul {
+  margin-top: -1.286em;
+}
+
+.thread .thread {
+  margin-left: 3em;
+}
+
+.thread .even {
+  background: #eee;
+  margin: 0;
+}
+
+fieldset.comments, .comment blockquote.userstuff {
+  background: transparent;
+  border: none;
+    box-shadow: none;
+}
+
+.comment fieldset {
+  margin: 0;
+}
+
+.comment .datetime {
+  margin: 0 11em 0 1.286em;
+}
 
 /*END== */

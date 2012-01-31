@@ -1,66 +1,150 @@
 /* ==USERSTUFF: displaying content inputted by a user into a textarea.*/
-.userstuff p 
-        { margin:1.286em auto; padding:0; line-height:1.5}
-               
+
+.userstuff p {
+  margin: 1.286em auto;
+  padding: 0;
+  line-height: 1.5;
+}
+
 /*lists */
-.userstuff dl
-        { margin:1.5em 0; border: 0 }
-.userstuff dl dl
-        { width:90%; margin:auto}
-.userstuff dt
-        { display:block; font-weight:bold}
-.userstuff dd	
-        { display:block; line-height:1.5; margin:1.25em auto 1.25em 3em }
-.userstuff dd p	
-        { margin:0; padding:0 }
-.userstuff ul
-        { margin:1.125em auto; padding:0 1em }
-.userstuff li, .userstuff ol ul li
-        { font-weight:normal; display:list-item; list-style-type:disc; margin:0.75em 0 0.75em 1.75em}
-.userstuff ol
-        { margin:0.75em auto; padding:0 1.5em }
-.userstuff ol li
-        { list-style-type:decimal; margin:0.75em 0 0.75em 1.75em }
-.userstuff ol li ol li	
-        { list-style-type: lower-alpha}
-.userstuff ol li ol li ol li	
-        { list-style-type: lower-roman}
+
+.userstuff dl {
+  margin: 1.5em 0;
+  border: 0;
+}
+
+.userstuff dl dl {
+  width: 90%;
+  margin: auto;
+}
+
+.userstuff dt {
+  display: block;
+  font-weight: bold;
+}
+
+.userstuff dd {
+  display: block;
+  line-height: 1.5;
+  margin: 1.25em auto 1.25em 3em;
+}
+
+.userstuff dd p {
+  margin: 0;
+  padding: 0;
+}
+
+.userstuff ul {
+  margin: 1.125em auto;
+  padding: 0 1em;
+}
+
+.userstuff li, .userstuff ol ul li {
+  font-weight: normal;
+  display: list-item;
+  list-style-type: disc;
+  margin: 0.75em 0 0.75em 1.75em;
+}
+
+.userstuff ol {
+  margin: 0.75em auto;
+  padding: 0 1.5em;
+}
+
+.userstuff ol li {
+  list-style-type: decimal;
+  margin: 0.75em 0 0.75em 1.75em;
+}
+
+.userstuff ol li ol li {
+  list-style-type: lower-alpha;
+}
+
+.userstuff ol li ol li ol li {
+  list-style-type: lower-roman;
+}
 
 /* headings */
-.userstuff h1		
-        { text-align:center }
-.userstuff h2		
-        { color:#333; font-variant:normal; text-align:left; margin:1.5em 0; display:block}
-.userstuff h3	
-        { font-weight:500; padding: 0.125em; border-bottom:0.25em double #333 }
-.userstuff h5
-        { font-weight:600; font-size: 1em}
-.userstuff h6
-        { font-size: 0.975em; border-bottom:1px solid }
-.userstuff h3 a, .userstuff h3 a:link, .userstuff h3 a:visited
-        { font-weight:500; border-bottom:0; text-decoration: none } 
+
+.userstuff h1 {
+  text-align: center;
+}
+
+.userstuff h2 {
+  color: #333;
+  font-variant: normal;
+  text-align: left;
+  margin: 1.5em 0;
+  display: block;
+}
+
+.userstuff h3 {
+  font-weight: 500;
+  padding: 0.125em;
+  border-bottom: 0.25em double #333;
+}
+
+.userstuff h5 {
+  font-weight: 600;
+  font-size: 1em;
+}
+
+.userstuff h6 {
+  font-size: 0.975em;
+  border-bottom: 1px solid;
+}
+
+.userstuff h3 a, .userstuff h3 a:link, .userstuff h3 a:visited {
+  font-weight: 500;
+  border-bottom: 0;
+  text-decoration: none;
+}
+
 /*tables */
-.userstuff caption
-        { height:auto; font-size:1em; color:#222 }
-.userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link 
-        { background:transparent; color:#222; border: none }
+
+.userstuff caption {
+  height: auto;
+  font-size: 1em;
+  color: #222;
+}
+
+.userstuff table, .userstuff td, .userstuff col, .userstuff tr, .userstuff thead, .userstuff tfoot, .userstuff tbody, .userstuff th, .userstuff thead td, .userstuff th a, .userstuff th a:link {
+  background: transparent;
+  color: #222;
+  border: none;
+}
 
 /* quotes and stresses */
-.userstuff blockquote	
-        { margin:auto auto auto 1.5em; padding:0.75em; border-left:2px solid #999 }
-.userstuff blockquote blockquote	
-        { padding:0.25em; border:0 }
-.userstuff hr		
-        { width:33%; margin:0.875em auto 1.2525em auto; border:1px solid }
+
+.userstuff blockquote {
+  margin: auto auto auto 1.5em;
+  padding: 0.75em;
+  border-left: 2px solid #999;
+}
+
+.userstuff blockquote blockquote {
+  padding: 0.25em;
+  border: 0;
+}
+
+.userstuff hr {
+  width: 33%;
+  margin: 0.875em auto 1.2525em auto;
+  border: 1px solid;
+}
 
 /*expected behaviours, exceptioning*/
 
-
 /* WORK MARGINS */
-#workskin {max-width:72em; margin:auto; font-size: 1.08em;}
+
+#workskin {
+  max-width: 72em;
+  margin: auto;
+  font-size: 1.08em;
+}
 
 #workskin .module {
   float: none;
-  }
+}
 
 /*END== */
