@@ -81,6 +81,7 @@ FEEDBACK_SUMMARY_MAX: 100
 INFO_MAX: 100000
 FAQ_MAX: 200000
 ICON_ALT_MAX: 50
+ICON_COMMENT_MAX: 50
 
 # max number of tags of each type allowed in challenge prompts (requests/offers)
 # increasing this number can lead to slower automated matching
