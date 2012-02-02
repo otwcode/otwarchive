@@ -9,7 +9,7 @@
   <ul id="sortable_chapter_list" class="sortable">
     <% for chapter in @chapters %>
       <li id="chapter_<%= chapter.id %>" class='chapter-position-list'>
-        <%= text_field_tag 'chapters[]', nil, :size => 3, :maxlength => 3, :class => 'chapter-position-field', :id => 'chapters_' + chapter.position.to_s %>
+        <%= text_field_tag 'chapters[]', nil, :size => 3, :maxlength => 3, :class => 'number chapter-position-field', :id => 'chapters_' + chapter.position.to_s %>
         <span id='position-for-<%= chapter.id %>'><%= chapter.position %></span>. 
         <%= chapter.chapter_title.html_safe %>
         <ul class='chapter-control navigation actions' role="menu">
