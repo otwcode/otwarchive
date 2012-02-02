@@ -5,13 +5,7 @@
   <ul role="navigation" class="navigation actions" role="navigation">
     <li class="search"><%= render 'tags/search_form' %></li>
     <% if logged_in? %><li><%= link_to ts("Tag Sets"), tag_sets_path %></li><% end %>
-    <li>
-      <% if params[:show] == "random" %>
-        <%= link_to ts('Most Popular'), tags_path %>
-      <% else %>
-        <%= span_if_current ts('Most Popular'), tags_path %>
-      <% end %>
-    </li>
+    <li><%= span_if_current(ts('Most Popular'), tags_path, params[:show].blank?) %></li>
     <li><%= span_if_current ts('Random'), tags_path(:show => "random") %></li>
   </ul>
 <% end %>
