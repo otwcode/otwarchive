@@ -1,49 +1,123 @@
 /*==REGION: HEADER is #1 of the 4 regions shown on every page 
 http://media.transformativeworks.org/training/front_end_coding/patterns/supertypes.html
-notice that CSS3 declarations sit on their own line and always come last*/
+notice that CSS3 declarations sit are indented twice (four spaces) and always come last*/
 
-#header li, #header form *, #header input, #header #search>*, #header #search .submit 
-				{ display: inline; float:none }
-#header { padding:0; margin:0 0 1em 0; position:relative; font-size:0.875em; min-height:120px }
-#header .landmark 
-        { clear:none }
-#header a:focus img 
-        { outline: #bbb double 3px; }
-#header h1, #header #greeting 
-        { position:absolute; right:0; top:0; margin:0 }
-#header h1
-        { left:0; right:auto}
-#header #login
-        { position:relative; z-index:10 }
-#header #small_login
-        { margin-left:120px; background:#ddd; border:2px solid #fff; padding:0.375em;
-          box-shadow:inset 1px 0 5px #555 }
-#header ul.primary 
-        { float:none; margin: auto; background:#900 url(/images/skins/textures/tiles/red-ao3.png); border-bottom:2px solid #700; padding:0.25em 120px;
-          box-shadow:inset 0 -5px 10px rgba(0,0,0,0.5)}
-#header .primary a, #header .primary .current, #header .primary input, #header .search input
-        { border-color:#a00; border-bottom-color:#400 }
-#header .primary a:focus, #header .primary input:focus
-        { outline:#fff dotted 1px }
-#header .search input[type="text"]
-        { border-color:#300}
-#header h1 a, #header fieldset, #header form, #header p
-        { background:none; color:#900; font-size:100%; border:0; padding:0; margin: 0;
-          box-shadow:none }
-#header h1 a:focus
-        { outline:none }
-#greeting .icon 
-        { float:right; padding:0; margin:0 0 -0.429em 0; border-bottom:5px solid #900}
-#greeting 
-        { right:0; position:absolute; width:120px; font-size:0.75em}
-#greeting .navigation a 
-        { padding:0.15em }
-#greeting img.icon 
-        { position:absolute; top:0; right:0 }
+#header li, #header form *, #header input, #header #search>*, #header #search .submit {
+  display: inline;
+  float: none;
+}
+
+#header {
+  padding: 0;
+  margin: 0 0 1em 0;
+  position: relative;
+  font-size: 0.875em;
+  min-height: 120px;
+}
+
+#header .landmark {
+  clear: none;
+}
+
+#header a:focus img {
+  outline: #bbb double 3px;
+}
+
+#header h1, #header #greeting {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0;
+}
+
+#header h1 {
+  left: 0;
+  right: auto;
+}
+
+#header #login {
+  position: relative;
+  z-index: 10;
+}
+
+#header #small_login {
+  margin-left: 120px;
+  background: #ddd;
+  border: 2px solid #fff;
+  padding: 0.375em;
+    box-shadow: inset 1px 0 5px #555;
+}
+
+#header ul.primary {
+  float: none;
+  margin: auto;
+  background: #900 url(/images/skins/textures/tiles/red-ao3.png);
+  border-bottom: 2px solid #700;
+  padding: 0.25em 120px;
+    box-shadow: inset 0 -5px 10px rgba(0,0,0,0.5);
+}
+
+#header .primary a, #header .primary .current, #header .primary input, #header .search input {
+  border-color: #a00;
+  border-bottom-color: #400;
+}
+
+#header .primary a:focus, #header .primary input:focus {
+  outline: #fff dotted 1px;
+}
+
+#header .search input[type="text"] {
+  border-color: #300;
+}
+
+#header h1 a, #header fieldset, #header form, #header p {
+  background: none;
+  color: #900;
+  font-size: 100%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+    box-shadow: none;
+}
+
+#header h1 a:focus {
+  outline: none;
+}
+
+#greeting .icon {
+  float: right;
+  padding: 0;
+  margin: 0 0 -0.429em 0;
+  border-bottom: 5px solid #900;
+}
+
+#greeting {
+  right: 0;
+  position: absolute;
+  width: 120px;
+  font-size: 0.75em;
+}
+
+#greeting .navigation a {
+  padding: 0.15em;
+}
+
+#greeting img.icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 
 /*CONTEXT: collections*/
-#header h2 
-        { line-height:1.5; margin:0; padding:0 120px 0 6.5625em; border-top:1px solid; color:#fff; display:block;
-          text-shadow:-1px 0 1px #aaa; }
+
+#header h2 {
+  line-height: 1.5;
+  margin: 0;
+  padding: 0 120px 0 6.5625em;
+  border-top: 1px solid;
+  color: #fff;
+  display: block;
+    text-shadow: -1px 0 1px #aaa;
+}
 
 /*END== */
