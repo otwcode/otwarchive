@@ -17,25 +17,46 @@ background:purple; color:#555;}
 */
 
 /*OPERA 11 HEADER SEARCH TEMP FIX*/
-@media not screen and (1) {
-        #header fieldset {margin-bottom:-0.643em} 
+
+@media not screen and (1) { 
+    #header fieldset {
+      margin-bottom: -0.643em
+    }
 }
 
 /* TEMP FIX Issue 2652 -- don't integrate this*/
-span.delete a {
-        margin:0 0.2em;border:0; padding:0; line-height:0.5; box-shadow:none
-}
 
+span.delete a {
+  margin: 0 0.2em;
+  border: 0;
+  padding: 0;
+  line-height: 0.5;
+    box-shadow: none;
+}
 
 /* INTERACTIONS MODE: VERBOSE
 forms with more than three fieldsets 
 (01/09/11 all forms show nearly all options at the moment, some nested fieldsets hidden with .hideme
 but I suggest simple and verbose views, with simple as default and verbose as child of simple, especially for .post (work, bookmark, challenge etc)*/
-.verbose legend { height:auto; width:auto; font-size:100%; background:#fff;border:2px solid #ddd; padding:0.5em; box-shadow:1px 2px 3px #999; opacity:1}
+
+.verbose legend {
+  height: auto;
+  width: auto;
+  font-size: 100%;
+  background: #fff;
+  border: 2px solid #ddd;
+  padding: 0.5em;
+    box-shadow: 1px 2px 3px #999;
+    opacity: 1;
+}
+
 /* MODE: SIMPLE, 3 or fewer
 experimental, developing here, (may combine with .toggled rules)
 drafting: form.simple {background:#ddd; float:none; display:table; margin:0.643em auto; padding:0.643em}*/
-.simple span.actions { float:none;}
+
+.simple span.actions {
+  float: none
+}
 
 /*Some helpful notes
 0.875em/1.286 line height = 14px with 18px leading

@@ -22,7 +22,7 @@ gem 'will_paginate', '>=3.0.2'
 
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
-gem 'nokogiri'
+gem 'nokogiri', '>=1.4.2'
 gem 'mechanize'
 gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'

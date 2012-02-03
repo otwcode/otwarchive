@@ -5,64 +5,139 @@ System messages use the following colours:
 * error => red: mistake, go back and fix this problem, action needed before you can proceed
 */
 
-.important 
-        { font-weight:900 }
-.required, .error 
-        { color:#900 }
-.footnote 
-        { font-size: 0.75em; float:right}
-.datetime 
-        { font-family:monospace }
+.important {
+  font-weight: 900;
+}
 
-.flash,div.error 
-        { margin:0.643em auto; padding:0.25em 0.375em;
-          border-radius:0.25em }
-.notice, .comment_notice, ul.notes, .caution, .error, .comment_error
-        { background:#d1e1ef; border:1px solid #c2d2df; margin:0.643em auto; padding:0.25em 0.375em; clear:right;
-           box-shadow:inset 1px 1px 2px; border-radius:0.25em}
-.caution{ background:#ffe34e; color:#000; border-color:#d89e36}
-.error,.comment_error
-        { background:#efd1d1; border-color: #900;
-          box-shadow: 1px 1px 2px}
-.notes  { clear:right}
-form .notice, form ul.notes
-        { box-shadow:0px 0 3px #fff}
-ul.notes, .error ul	 
-        { position:static; margin:auto 0.643em; padding:0.25em 2.5em  }
-ul.notes li,.error ul li
-        { list-style-type:disc; padding-left:1.5em }
-span.error
-        { display: inline-block}
+.required, .error {
+  color: #900;
+}
 
-        
+.footnote {
+  font-size: 0.75em;
+  float: right;
+}
+
+.datetime {
+  font-family: monospace;
+}
+
+.flash, div.error {
+  margin: 0.643em auto;
+  padding: 0.25em 0.375em;
+    border-radius: 0.25em;
+}
+
+.notice, .comment_notice, ul.notes, .caution, .error, .comment_error {
+  background: #d1e1ef;
+  border: 1px solid #c2d2df;
+  margin: 0.643em auto;
+  padding: 0.25em 0.375em;
+  clear: right;
+    box-shadow: inset 1px 1px 2px;
+    border-radius: 0.25em;
+}
+
+.caution {
+  background: #ffe34e;
+  color: #000;
+  border-color: #d89e36;
+}
+
+.error, .comment_error {
+  background: #efd1d1;
+  border-color: #900;
+    box-shadow: 1px 1px 2px;
+}
+
+.notes {
+  clear: right;
+}
+
+form .notice, form ul.notes {
+    box-shadow: 0px 0 3px #fff;
+}
+
+ul.notes, .error ul {
+  position: static;
+  margin: auto 0.643em;
+  padding: 0.25em 2.5em;
+}
+
+ul.notes li, .error ul li {
+  list-style-type: disc;
+  padding-left: 1.5em;
+}
+
+span.error {
+  display: inline-block;
+}
+
 /* SYMBOLS (mostly help button, arguably an action but hey ho); 
 IN REVIEW: this block is very old (2008), a bit wonky and has an unexpected effect on blurb that needs detangling so it might change a lot*/
-span.symbol 
-        { color:#2a547c; font-family:Georgia,serif; border:1px solid; vertical-align: super;
-          border-radius:0.75em }
-span.symbol span 
-        { padding:0.425em }
-.symbols a,.symbol a 
-        { text-decoration:none; border:none }
-.question a:hover
-        { background:#2a547c; border-color: #d1e1ef; color:#fff; cursor: help}
-span.question 
-        { background:#d1e1ef; border-color: #2a547c;
-          box-shadow:-1px -1px 2px rgba(0,0,0,0.25) }
-a.question
-        { border:0; font-weight: bold}
-.heading a.question
-        { font-size:0.75em}
+
+span.symbol {
+  color: #2a547c;
+  font-family: Georgia, serif;
+  border: 1px solid;
+  vertical-align: super;
+    border-radius: 0.75em;
+}
+
+span.symbol span {
+  padding: 0.425em;
+}
+
+.symbols a, .symbol a {
+  text-decoration: none;
+  border: none;
+}
+
+.question a:hover {
+  background: #2a547c;
+  border-color: #d1e1ef;
+  color: #fff;
+  cursor: help;
+}
+
+span.question {
+  background: #d1e1ef;
+  border-color: #2a547c;
+    box-shadow: -1px -1px 2px rgba(0,0,0,0.25);
+}
+
+a.question {
+  border: 0;
+  font-weight: bold;
+}
+
+.heading a.question {
+  font-size: 0.75em;
+}
 
 /*SYMBOLS KEY (help content) */
-dl#symbols-key dt 
-        { width: 100px }
-dl#symbols-key dd 
-        { margin: -55px auto auto 100px }
-#symbols-key dl 
-        { border: 1px solid #ddd; margin-bottom: 1.286em; padding: 0.15em }
-#symbols-key dl dt img, #bookmark-symbols-key dt img, #symbols-key dl dt, #bookmark-symbols-key dt 
-       { height: 25px; width: 25px }
-#symbols-key dl dd, #bookmark-symbols-key dd 
-        { margin: -25px auto 20px 35px }
+
+dl#symbols-key dt {
+  width: 100px;
+}
+
+dl#symbols-key dd {
+  margin: -55px auto auto 100px;
+}
+
+#symbols-key dl {
+  border: 1px solid #ddd;
+  margin-bottom: 1.286em;
+  padding: 0.15em;
+}
+
+#symbols-key dl dt img, #bookmark-symbols-key dt img, #symbols-key dl dt, #bookmark-symbols-key dt {
+  height: 25px;
+  width: 25px;
+}
+
+#symbols-key dl dd, #bookmark-symbols-key dd {
+  margin: -25px auto 20px 35px;
+}
+
 /*END== */
