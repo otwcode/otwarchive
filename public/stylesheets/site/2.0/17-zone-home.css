@@ -2,39 +2,74 @@
 user home, collections and challenges home, tag home, admin comms home 
 --this zone always shows a dashboard styled in region-dashboard and its parent is #main.dashboard */
 
-.home p, .home .header      
-        { clear:right }
-.home .header h2
-        { text-align: right; border-bottom:2px solid; display:block}
-.home .header .userstuff, .home .header dl.stats
-        { margin-left: 120px}
-.admin .header h3
-        { font-size: 2.143em; text-align:center }
-.home .primary
-        { margin: 0 0 0.643em; min-height:100px }
-        
+.home p, .home .header {
+  clear: right;
+}
+
+.home .header h2 {
+  text-align: right;
+  border-bottom: 2px solid;
+  display: block;
+}
+
+.home .header .userstuff, .home .header dl.stats {
+  margin-left: 120px;
+}
+
+.admin .header h3 {
+  font-size: 2.143em;
+  text-align: center;
+}
+
+.home .primary {
+  margin: 0 0 0.643em;
+  min-height: 100px;
+}
+
 /*primary header icons */
-.primary .icon 
-        { position:absolute; top:0}
-.collection .primary .icon
-        { background: url("/images/imageset.png") 100px -175px; }
-.skins .primary .icon
-        { background: url("/images/imageset.png") 0px -175px; }
-.admin .primary .icon
-        { background: url("/images/imageset.png") 100px -75px; }
-.tag .primary .icon, .tagset .primary .icon
-        { background: url("/images/imageset.png") 0px -275px; }
-        
+
+.primary .icon {
+  position: absolute;
+  top: 0;
+}
+
+.collection .primary .icon {
+  background: url("/images/imageset.png") 100px -175px;
+}
+
+.skins .primary .icon {
+  background: url("/images/imageset.png") 0px -175px;
+}
+
+.admin .primary .icon {
+  background: url("/images/imageset.png") 100px -75px;
+}
+
+.tag .primary .icon, .tagset .primary .icon {
+  background: url("/images/imageset.png") 0px -275px;
+}
+
 /*contexts*/
+
 /*(no filters)*/
-.dashboard.collections-index .index 
-          { width:100%; }
+
+.dashboard.collections-index .index {
+  width: 100%;
+}
+
 /*(with filters)*/
-#inbox-form
-        { float:left; width: 75%}
+
+#inbox-form {
+  float: left;
+  width: 75%;
+}
 
 /*HISTORY note:listbox? generalise this irregular structure*/
-.readings-index h3 
-        { background:#ddd; margin:-0.5em 0 -0.25em 0; padding:0.25em}
+
+.readings-index h3 {
+  background: #ddd;
+  margin: -0.5em 0 -0.25em 0;
+  padding: 0.25em;
+}
 
 /*END== */
