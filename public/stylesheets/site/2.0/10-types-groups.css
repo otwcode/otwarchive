@@ -195,6 +195,7 @@ li.relationships {
 dl.stats {
   text-align: right;
   background: none;
+  margin-top: 0.643em;
     box-shadow: none;
 }
 
