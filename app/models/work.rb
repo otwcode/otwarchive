@@ -229,6 +229,34 @@ class Work < ActiveRecord::Base
   # AUTHORSHIP
   ########################################################################
 
+  # NOTE:
+  # pseuds_to_add/remove can only be used after a work exists 
+  def pseuds_to_add=(pseud_names)
+    pseud_names.split(',').reject {|name| name.blank?}.map {|name| name.strip}.each do |name|
+      possible_pseuds = Pseud.parse_byline(name)
+      if possible_pseuds.size > 1
+        possible_pseuds = Pseud.parse_byline(name, :assume_matching_login => true)
+      end
+      p = possible_pseuds.first
+      errors.add(:base, ts("We couldn't find the pseud {{name}}.", :name => name)) and return if p.nil?
+      self.pseuds << p unless self.pseuds.include?(p)
+    end
+  end
+  
+  def pseuds_to_remove=(pseud_ids)
+    pseud_ids.reject {|id| id.blank?}.map {|id| id.strip}.each do |id|
+      p = Pseud.find(id)
+      if p && self.pseuds.include?(p)
+        # don't remove all authors from a work
+        if (self.pseuds - [p]).size > 0
+          self.pseuds -= [p]
+        end
+      end
+    end
+  end
+  
+  def pseuds_to_add; nil; end
+  def pseuds_to_remove; nil; end
 
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
@@ -341,6 +369,12 @@ class Work < ActiveRecord::Base
     self.visible(user) == self
   end
 
+  def unrestricted=(setting)
+    if setting
+      self.restricted = !setting
+    end
+  end
+  def unrestricted; !self.restricted; end
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet

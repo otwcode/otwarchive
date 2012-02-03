@@ -79,8 +79,8 @@ class PromptRestriction < ActiveRecord::Base
     tag_set_titles.split(',').reject {|title| title.blank?}.each do |title|
       title.strip!
       ots = OwnedTagSet.find_by_title(title)
-      errors.add(:base, ts("We couldn't find the tag set {{title}}.", :title => h(title))) and return if ots.nil?
-      errors.add(:base, ts("The tag set {{title}} is not available for public use.", :title => h(title))) and return if (!ots.usable && !ots.user_is_moderator?(User.current_user))
+      errors.add(:base, ts("We couldn't find the tag set {{title}}.", :title => title)) and return if ots.nil?
+      errors.add(:base, ts("The tag set {{title}} is not available for public use.", :title => title)) and return if (!ots.usable && !ots.user_is_moderator?(User.current_user))
       unless self.owned_tag_sets.include?(ots)
         self.owned_tag_sets << ots
       end

@@ -13,6 +13,29 @@ module Collectible
         :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
     end
   end
+  
+  def collections_to_add=(collection_names)
+    names = collection_names.split(',').reject {|name| name.blank?}.map { |name| name.strip }.each do |name|
+      c = Collection.find_by_name(name)
+      errors.add(:base, ts("We couldn't find the collection {{name}}.", :name => name)) and return if c.nil?
+      errors.add(:base, ts("The collection {{name}} is not currently open.", :name => name)) and return if (c.closed? && !c.user_is_maintainer?(User.current_user))
+      unless self.collections.include?(c)
+        self.collections << c
+      end
+    end
+  end
+  
+  def collections_to_remove=(collection_ids)
+    collection_ids.reject {|id| id.blank?}.map {|id| id.strip}.each do |id|
+      c = Collection.find(id) || nil
+      if c && self.collections.include?(c)
+        self.collections -= [c]
+      end
+    end
+  end 
+  
+  def collections_to_add; nil; end
+  def collections_to_remove; nil; end
 
   # Set an item's collections based on a list of collection names
   # Don't delete all existing collections, or else items in closed collections

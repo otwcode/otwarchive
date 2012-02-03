@@ -30,8 +30,7 @@
 <% if params[:tag_id] || (@user && @user == current_user) %>
 <ul class="user navigation actions" role="navigation">
   <% if @user && @user == current_user %>
-    <li id="edit_multiple">
-      <%= link_to t('.edit_multiple_link', :default => 'Edit Multiple Works'), show_multiple_user_works_path(@user) %></li>
+    <li id="edit_multiple"><%= link_to t('.edit_multiple_link', :default => 'Edit Multiple Works'), show_multiple_user_works_path(@user) %></li>
   <% end %>
   <% if params[:tag_id] %>
     <%= taggable_list(params[:tag_id], "works") %>
@@ -58,13 +57,12 @@
 
 <!--main content-->
 <h3 class="landmark heading">Listing Works</h3>
- <ol class="work index group">
-    <% for work in @works %>
-      <% if work %>
-      <%= render :partial => 'work_blurb', :locals => {:work => work} %>
-      <% end %>
-    <% end %>
-  </ol>
+<ol class="work index group">
+  <% for work in @works %>
+    <% if work %><%= render 'work_blurb', :work => work %><% end %>
+  <% end %>
+</ol>
+  
 <!--/content-->
 
 <!--filters subnav-->

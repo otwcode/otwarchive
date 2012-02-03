@@ -16,8 +16,8 @@
 <% end %>
 
 <div class="user home">
-  <%= render :partial => "users/header", :locals => {:user => @user} %>
-  <%= render :partial => "users/contents" %>
+  <%= render "users/header", :user => @user %>
+  <%= render "users/contents" %>
 </div> 
 
 <%= content_for :footer_js do %>
