@@ -139,6 +139,26 @@ dl.index dd p, dl.index dd .heading, dl.index ul {
 }
 
 /*TYPES*/
+<<<<<<< HEAD
+a.rss span  { background: url("/images/imageset.png") no-repeat -150px -275px; padding-left: 16px;}
+a.work  { font:100 1.143em/1.125 Georgia,serif; margin:0.5em 0; color:#900 }
+.warning, .warnings,span.byline, a.user        
+        { font-weight:bold}
+li.relationships    
+        { background:#eee}
+.series.footnote    
+        { font-size:100%; float:none }
+.kudos  { background: url("/images/imageset.png") no-repeat -110px -580px; padding: 0.5em 0.5em 0.5em 60px; margin: 2em 0; min-height: 50px;}
+.icon   { background: #900 url("/images/imageset.png") no-repeat 0px -75px; height:100px; width:100px; margin:0}
+.icon a { border:0;}
+.mods li, dl.stats dt, dl.stats dd
+        { background:none; width:auto; min-width:0; display:inline; clear:none; float:none; margin:auto;}
+dl.stats{ text-align:right; background:none; margin-top:0.643em; box-shadow:none; }
+dl.stats dd 
+        { white-space:nowrap; padding-right:0.5em; }
+
+/*END== */
+=======
 
 a.rss span {
   background: url("/images/imageset.png") no-repeat -150px -275px;
@@ -195,6 +215,7 @@ li.relationships {
 dl.stats {
   text-align: right;
   background: none;
+  margin-top: .643em;
     box-shadow: none;
 }
 
@@ -204,3 +225,4 @@ dl.stats dd {
 }
 
 /*END== */
+>>>>>>> upstream/master
