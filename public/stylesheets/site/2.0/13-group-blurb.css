@@ -125,11 +125,11 @@ li.blurb:after {
 /*icon image replacement*/
 
 .blurb .rating-general-audience {
-  background: url("/images/imageset.png") -75px -25px;
+  background: url("/images/imageset.png") -50px -25px;
 }
 
 .blurb .rating-explicit {
-  background: url("/images/imageset.png") -50px -25px;
+  background: url("/images/imageset.png") -25px -25px;
 }
 
 .blurb .rating-mature {
