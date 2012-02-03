@@ -645,7 +645,6 @@ end
 When /^I delete the prompt by "([^\"]*)"$/ do |participant|
   visit collection_path(Collection.find_by_title("Battle 12"))
   When %{I follow "Prompts ("}
-  # Then %{show me the main content}
   When %{I follow "Delete"}
 end
 
@@ -684,7 +683,7 @@ Then /^I should see Battle 12 descriptions$/ do
   Then %{I should see "Welcome to the meme" within "#intro"}
   Then %{I should see "Signup: Open"}
   Then %{I should see "Signup closes:"}
-  Then %{I should see "2011" within ".collection .meta"}
+  Then %{I should see "2012" within ".collection .meta"}
   Then %{I should see "What is this thing?" within "#faq"}
   Then %{I should see "It is a comment fic thing" within "#faq"}
   Then %{I should see "Be nicer to people" within "#rules"}

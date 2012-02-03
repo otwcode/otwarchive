@@ -31,7 +31,11 @@ class PromptsController < ApplicationController
   
   def load_signup
     @challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first
-    no_signup and return unless @challenge_signup
+		# if maintainer is editing someone else's prompt but maintainer has not signed up
+		if (@collection.user_is_maintainer?(current_user) && params[:action] == "edit" && (Prompt.find(params[:id]).user != current_user))
+			@test = true
+		end
+    no_signup and return unless (@challenge_signup || @test)
   end
   
   def no_signup
