@@ -6,7 +6,6 @@
         <% if @tag_set.with_type(tag_type).empty? %>
           <h4 class="heading"><%= form.label "#{tag_type}_tagnames_to_add".to_sym, ts("Add #{tag_type.classify.pluralize}:") %></h5>
         <% else %>
-          <% add_label =  %>
           <h4 class="heading"><%= form.label "#{tag_type}_tags_to_remove".to_sym, ts("#{tag_type.classify.pluralize}") %></h4>
           <%= check_all_none %>
           <%= checkbox_section(form, "#{tag_type}_tags_to_remove", @tag_set.with_type(tag_type).by_name_without_articles) %>

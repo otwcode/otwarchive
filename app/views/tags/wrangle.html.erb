@@ -26,18 +26,20 @@
 <% end %>
 
 <% if params[:show] && params[:show] !~ /suggested/ %>
-  <h3 class="heading">Add new <%= params[:show] %></h3>
-  <%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
-    <div title="add new">
-      <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{params[:show].singularize}") %>
-      <%= hidden_field_tag :show, params[:show] %>
-      <%= hidden_field_tag :sort_column, params[:sort_column] %>
-      <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
-      <%= hidden_field_tag :page, params[:page] %>
-      <%= hidden_field_tag :status, params[:status] %>
-      <span class="submit actions"><%= f.submit 'Wrangle' %></span>
-    </div>
-  <% end %>
+  <fieldset>
+    <h3 class="heading">Add new <%= params[:show] %></h3>
+    <%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
+      <div title="add new">
+        <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{params[:show].singularize}") %>
+        <%= hidden_field_tag :show, params[:show] %>
+        <%= hidden_field_tag :sort_column, params[:sort_column] %>
+        <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
+        <%= hidden_field_tag :page, params[:page] %>
+        <%= hidden_field_tag :status, params[:status] %>
+        <span class="submit actions"><%= f.submit 'Wrangle' %></span>
+      </div>
+    <% end %>
+  </fieldset>
 <% end %>
 
 <% if params[:show] %>
@@ -119,11 +121,16 @@
         <td>
           <ul class="actions" role="menu">
             <% unless params[:status] == "unwrangled" %>
-            <li><%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %></li>
+              <li>
+                <label for="remove_associated_<%= tag.id %>">
+                  <%= ts("remove") %>
+                  <%= check_box_tag "remove_associated[]", tag.id, false, :id => "remove_associated_#{tag.id}" %>
+                </label>
+              </li>
             <% end %>
-            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li>
-            <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li>
-            <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>
+            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag}, :target => "_blank" %></li>
+            <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag}, :target => "_blank" %></li>
+            <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag}, :target => "_blank" %></li>
           </ul>
         </td>
       </tr>
