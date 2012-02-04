@@ -50,11 +50,16 @@ every 1.day, :at => '7:40 am' do
 end
 
 # Move hit counts from redis to database
-every 1.hour do
+every 10.minutes do
   rake "work:update_hit_counters"
 end
 
 # Move readings from redis to database
-every 1.hour do
+every 10.minutes do
   rake "readings:to_database"
+end
+
+# Rerun redis jobs
+every 10.minutes do
+  rake "resque:run_failures"
 end
