@@ -68,6 +68,7 @@ module TagsHelper
   end
 
   # the label on checkboxes to remove tag associations
+  # currently blank per wrangler request, can be changed to different label as desired
   def remove_tag_association_label(tag)
     "".html_safe
   end
