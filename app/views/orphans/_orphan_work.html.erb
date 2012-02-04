@@ -23,9 +23,7 @@
   <%= render 'orphans/choose_pseud' %>
   
   <p>
-    <% works.value_of(:id).each do |work_id| %>
-      <%= hidden_field_tag 'work_ids[]', work_id %>
-    <% end %>
+    <% works.each_with_index do |work, index| %><%= hidden_field_tag "work_ids[]", work.id, :id => "work_ids_#{index}" %><% end %>
   </p>
   
   <p class="submit actions"><%= submit_tag ts("Yes, I'm sure") %></p>

@@ -110,7 +110,7 @@ class CollectionItemsController < ApplicationController
         errors << ts("%{collection_title} is closed to new submissions.", :collection_title => collection.title)
       elsif !current_user.is_author_of?(@item) && !collection.user_is_maintainer(current_user)
         errors << ts("Not allowed: either you don't own this item or are not a moderator of %{collection_title}", :collection_title => collection.title)
-      elsif @item.add_to_collection!(collection)
+      elsif @item.add_to_collection(collection) && @item.save
         if @item.approved_collections.include?(collection)
           new_collections << collection
         else

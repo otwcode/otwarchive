@@ -15,29 +15,32 @@
 <% end %>
 
 <% if @too_many %>
-  <p><%= t('.search_too_broad', :default => "The Archive is currently unable to return more than %{search_max} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
+  <p><%= ts("The Archive is currently unable to return more than %{search_max} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
 <% end %>
 <!-- /end descriptions-->
 
 <div class="navigation actions module">
-<!--Subnavigation, sorting and actions.-->
-<h3 class="landmark heading">Navigation, Sorting and Actions</h3>
-<!--gift search subnav-->
-<% if @collection && @collection.gift_exchange? %>
-  <%= render :partial => 'gifts/gift_search' %>
-<% end %>
-<!--user role subnav-->
-<% if params[:tag_id] || (@user && @user == current_user) %>
-<ul class="user navigation actions" role="navigation">
-  <% if @user && @user == current_user %>
-    <li id="edit_multiple"><%= link_to t('.edit_multiple_link', :default => 'Edit Multiple Works'), show_multiple_user_works_path(@user) %></li>
+
+  <!--Subnavigation, sorting and actions.-->
+  <h3 class="landmark heading">Navigation, Sorting and Actions</h3>
+  <!--gift search subnav-->
+  <% if @collection && @collection.gift_exchange? %>
+    <%= render :partial => 'gifts/gift_search' %>
   <% end %>
-  <% if params[:tag_id] %>
-    <%= taggable_list(params[:tag_id], "works") %>
+
+  <!--user role subnav-->
+  <% if params[:tag_id] || (@user && @user == current_user) %>
+    <ul class="user navigation actions" role="navigation">
+      <% if @user && @user == current_user %>
+        <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
+      <% end %>
+      <% if params[:tag_id] %>
+        <%= taggable_list(params[:tag_id], "works") %>
+      <% end %>
+    </ul>
   <% end %>
-</ul>
-<% end %>
-<!--sorting subnav-->
+
+  <!--sorting subnav-->
   <ul class="sorting actions" role="menu">
     <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
     <% unless @query.blank? %>
@@ -52,6 +55,7 @@
       <li><%= sort_link ts('Hits'), :hit_count, {:desc_default => true} %></li>
     <% end %>
   </ul>
+  
 </div>
 <!---/subnav-->
 

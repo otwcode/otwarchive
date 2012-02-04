@@ -1,11 +1,6 @@
-<!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Editing Multiple Works") %></h2>
-<!--/descriptions-->
-
-<!--subnav-->
-<!--/subnav-->
-
 <!--main content-->
+<h2 class="heading"><%= ts("Editing Multiple Works") %></h2>
+<%= render "users/header_navigation" %>
 
 <p class="caution">
   Your edits will be applied to <strong>all</strong> of the following works:
@@ -29,35 +24,10 @@
     <legend>Associations</legend>
     <h3 class="landmark">Associations</h3>
     <dl>
-      <!-- change pseud -->
-      <% pseuds = @works.collect(&:pseuds).flatten.uniq %>
-      <% unless pseuds.size == 1 %>
-        <dt><%= form.label :pseuds_to_remove, ts("Current Pseuds/Coauthors") %></dt>
-        <dd>
-          <fieldset class="listbox">
-            <h4 class="heading">Check to remove</h4>
-            <%= checkbox_section(form, :pseuds_to_remove, pseuds) %>
-          </fieldset>
-        </dd>
-      <% end %>      
-      <dt><%= form.label :pseuds_to_add, ts("Add Pseuds/Coauthors") %></dt>
-      <dd><%= form.text_field :pseuds_to_add, autocomplete_options("pseud") %></dd>
+      <%= render "works/work_form_pseuds", :form => form, :works => @works %>
 
-      <!-- collections -->
-      <% unless (collections = @works.collect(&:collections).flatten.uniq).empty? %>
-        <dt><%= form.label :collections_to_remove, ts("Current Collections") %></dt>
-        <dd>
-          <fieldset class="listbox">
-            <h4 class="heading">Check to remove</h4>
-            <%= checkbox_section(form, :collections_to_remove, collections, :name_method => "title") %>
-          </fieldset>
-        </dd>
-      <% end %>
-        
-      <dt><%= form.label :collections_to_add, ts("Add To Collections") %></dt>
-      <dd title="add to collection">
-        <%= form.text_field :collections_to_add, autocomplete_options("open_collection_names") %>
-      </dd>
+      <%= render "works/work_form_collections", :form => form, :works => @works %>
+
     </dl>
   </fieldset>
   
@@ -79,7 +49,7 @@
  
       <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
       <dd>
-        <%= form.collection_select :work_language_id, Language.all(:order => :short), :id, :name, {:include_blank => true} %>
+        <%= form.collection_select :language_id, Language.all(:order => :short), :id, :name, {:include_blank => true} %>
       </dd>
 
       <dt><%= form.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
@@ -99,4 +69,4 @@
 
 <% end %>
 <!--/content-->
-
+</div>

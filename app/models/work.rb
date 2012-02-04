@@ -2,6 +2,7 @@ class Work < ActiveRecord::Base
 
   include Taggable
   include Collectible
+  include Pseudable
 
   ########################################################################
   # ASSOCIATIONS
@@ -370,8 +371,8 @@ class Work < ActiveRecord::Base
   end
 
   def unrestricted=(setting)
-    if setting
-      self.restricted = !setting
+    if setting == "1"
+      self.restricted = false
     end
   end
   def unrestricted; !self.restricted; end
