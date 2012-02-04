@@ -82,7 +82,7 @@
 	    </p>
   
   <div class="rtf-html-field">
-    <%= f.text_area :content, :class => "mce-editor", :id => "content", :class => "observe_textlength" %>
+    <%= f.text_area :content, :class => "mce-editor", :id => "content", :class => "observe_textlength large" %>
     <%= live_validation_for_field('content', 
           :maximum_length => ArchiveConfig.CONTENT_MAX, 
           :minimum_length => ArchiveConfig.CONTENT_MIN, 
