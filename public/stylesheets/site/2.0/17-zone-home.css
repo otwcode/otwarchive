@@ -64,6 +64,10 @@ user home, collections and challenges home, tag home, admin comms home
   width: 75%;
 }
 
+.dashboard form.filters + h4.landmark {
+  clear: left;
+}
+
 /*HISTORY note:listbox? generalise this irregular structure*/
 
 .readings-index h3 {

@@ -71,8 +71,6 @@
     <!-- coming soon <%= submit_tag ts("mass reply") %> -->
   <% end %> <!-- end of inbox form -->
 
-  <%= will_paginate @inbox_comments %>
-
   <!-- we can't open comment forms inside the inbox form, which is why this is down here -->
   <!-- this div will contain the reply-to-comment form -->
   <div id="reply-to-comment" class="dynamic hidden"></div> 
@@ -128,3 +126,5 @@
   <% end %>
 <% end %>
 <!--/subnav-->
+
+<%= will_paginate @inbox_comments %>
