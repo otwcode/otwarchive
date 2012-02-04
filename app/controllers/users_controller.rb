@@ -279,16 +279,12 @@ class UsersController < ApplicationController
     end
   end
 
-  # PUT /users/1
-  # PUT /users/1.xml
   def update
     @user.profile.update_attributes(params[:profile_attributes])
-  if @user.profile.save
-    flash[:notice] = ts("Your profile has been successfully updated")
-    render :edit and return
-  else
-    render :edit and return
-  end
+    if @user.profile.save
+      flash[:notice] = ts("Your profile has been successfully updated")
+    end
+    redirect_to edit_user_path(@user)
   end
   
   def change_email
@@ -298,19 +294,19 @@ class UsersController < ApplicationController
       if !reauthenticate
         render :change_email and return
       else
-    @old_email = @user.email
-    @user.email = params[:new_email]
-    @new_email = params[:new_email]
-    if @user.save
-      flash[:notice] = ts("Your email has been successfully updated")
-      UserMailer.change_email(@user.id, @old_email, @new_email).deliver
-      @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
-    else
-      render :change_email and return
+        @old_email = @user.email
+        @user.email = params[:new_email]
+        @new_email = params[:new_email]
+        if @user.save
+          flash[:notice] = ts("Your email has been successfully updated")
+          UserMailer.change_email(@user.id, @old_email, @new_email).deliver
+          @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
+        else
+          render :change_email and return
+        end
+      end
     end
-    end
-    end
-  render :change_email and return
+    render :change_email and return
   end
 
   # DELETE /users/1
