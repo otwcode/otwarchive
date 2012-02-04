@@ -12,31 +12,25 @@ pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*
   min-height: 0;
 }
 
-#header a, #header fieldset, #header ul.primary, #header ul.primary .current {
-  border: 0;
-  background: 0;
-}
-
 #greeting {
   width: 45px;
-  padding: 2px;
   float: right;
-  background: #fff;
   z-index: 50;
-  border: 2px solid #900;
-    box-shadow: 0 0 3px #444;
 }
 
 #greeting p.icon img {
-  margin: 0;
+  border: none;
   padding: 0;
   top: 0;
-  position: static;
+}
+
+#greeting ul {
+  padding: 0;
 }
 
 #greeting li {
   display: block;
-  margin: 0;
+  margin: 0 0 .25em 0;
   text-align: right;
 }
 
@@ -44,46 +38,23 @@ pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*
   padding: 0;
 }
 
-#header h1 {
-  background: #900;
-  height: 10px;
-  position: static;
-}
-
 h1 a img {
-  height: 25px;
+  width: 30px;
   border: 0;
 }
 
 #greeting .icon {
-  height: 45px;
-  width: 45px;
-}
-
-#header #login a {
-  background: #eee;
+  height: 35px;
+  width: 35px;
+  border: none;
 }
 
 #header .landmark {
   clear: none;
 }
 
-#header.region ul.primary {
-  background: #333;
-  border-bottom: 1px solid #777;
-  padding: 5px 45px 5px 25px;
-}
-
-#header ul.primary, #header ul.primary .current, ul.primary.actions a, #header ul.primary .current {
-  color: #eee;
-  padding: 0.15em;
-}
-
-#header ul.primary .current, #header .search input {
-  background: #888;
-  color: #eee;
-    box-shadow: inset 0 0 3px #222;
-  border-color: #222;
+#header ul.primary {
+  padding: 0.25em 35px;
 }
 
 #header h2.collections {
@@ -122,12 +93,7 @@ h1, h2, h3 {
 }
 
 #main .actions a {
-  border: 0;
-  background: none;
-  padding: 0.06em;
   margin: auto;
-  font-weight: bold;
-  text-decoration: underline;
 }
 
 .blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox, #home .news, #home .latest {
