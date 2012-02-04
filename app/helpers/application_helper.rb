@@ -363,19 +363,20 @@ module ApplicationHelper
   
   
   # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
-  def checkbox_section_toggle(checkboxes_id, checkboxes_size)
+  def checkbox_section_toggle(checkboxes_id, checkboxes_size, options = {})
     toggle_show = content_tag(:a, ts("Show all %{checkboxes_size} checkboxes", :checkboxes_size => checkboxes_size), 
-                              :class => "toggle #{checkboxes_id}_show")
+                              :class => "toggle #{checkboxes_id}_show") + "\n".html_safe
 
     toggle_hide = content_tag(:a, ts("Collapse checkboxes"), :style => "display: none;",
-                              :class => "toggle #{checkboxes_id}_hide", :href => "##{checkboxes_id}")
+                              :class => "toggle #{checkboxes_id}_hide", :href => "##{checkboxes_id}") +
+                              "\n".html_safe
     
     css_class = checkbox_section_css_class(checkboxes_size)
  
     javascript_bits = content_for(:footer_js) {
       javascript_tag("$j(document).ready(function(){\n" +
         "$j('.#{checkboxes_id}_show').click(function() {\n" +
-          "$j('##{checkboxes_id}').attr('class', 'module options all');\n" + 
+          "$j('##{checkboxes_id}').attr('class', 'options index all');\n" + 
           "$j('.#{checkboxes_id}_hide').show();\n" +
           "$j('.#{checkboxes_id}_show').hide();\n" +
         "});" + "\n" + 
@@ -386,7 +387,11 @@ module ApplicationHelper
         "});\n" +
       "})")
     }
-    toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide + "\n".html_safe + javascript_bits, :class => "actions")
+
+    toggle = content_tag(:p, 
+      (options[:no_show] ? "".html_safe : toggle_show) + 
+      toggle_hide + 
+      (options[:no_js] ? "".html_safe : javascript_bits), :class => "actions")
   end
   
   # FRONT END: is this and the toggle now formatted properly? (NB in the signup form this is currently displaying to the left of the inline checkboxes) I suspect this is a listbox
@@ -407,11 +412,13 @@ module ApplicationHelper
       :checked_method => nil, 
       :name_method => "name", 
       :name_helper_method => nil, # alternative: pass a helper method that gets passed the choice
+      :extra_info_method => nil, # helper method that gets passed the choice, for any extra information that gets attached to the label
       :value_method => "id", 
       :disabled => false,
       :include_toggle => true,
       :checkbox_side => "left",
-      :include_blank => true
+      :include_blank => true,
+      :concise => false # specify concise to invoke alternate formatting for skimmable lists (two-column in default layout)
     }.merge(options)
     
     field_name = options[:field_name] || field_name(form, attribute)
@@ -442,6 +449,9 @@ module ApplicationHelper
       checkbox_and_label = label_tag checkbox_id, :class => "action" do 
         options[:checkbox_side] == "left" ? checkbox + display_name : display_name + checkbox
       end
+      if options[:extra_info_method]
+        checkbox_and_label = options[:checkbox_side] == "left" ? checkbox_and_label + eval("#{options[:extra_info_method]}(choice)") : eval("#{options[:extra_info_method]}(choice)") + checkbox_and_label
+      end
       content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
     end.join("\n").html_safe
     checkboxes_ul = content_tag(:ul, checkboxes)
@@ -451,24 +461,28 @@ module ApplicationHelper
 
     # if there are only a few choices, don't show the scrolling and the toggle
     size = choices.size
-    css_class = checkbox_section_css_class(size)
-    toggle = "".html_safe
-    if options[:include_toggle] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
-      toggle = checkbox_section_toggle(checkboxes_id, size)
+    css_class = checkbox_section_css_class(size, options[:concise])
+    top_toggle = "".html_safe
+    bottom_toggle = "".html_safe
+    if options[:include_toggle] && !options[:concise] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
+      top_toggle = checkbox_section_toggle(checkboxes_id, size)
+      bottom_toggle = checkbox_section_toggle(checkboxes_id, size, :no_show => true, :no_js => true)
     end
       
     # We wrap the whole thing in a div module with the classes
-    return content_tag(:div, toggle + checkboxes_ul + toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id, :class => css_class)
+    return content_tag(:div, top_toggle + checkboxes_ul + bottom_toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id, :class => css_class)
   end
   
-  def checkbox_section_css_class(size)
+  def checkbox_section_css_class(size, concise=false)
     css_class = "options index"
-    if size > ArchiveConfig.OPTIONS_TO_SHOW
-      css_class += " many"
+    
+    if concise
+      css_class += " concise lots" if size > ArchiveConfig.OPTIONS_TO_SHOW
+    else
+      css_class += " many" if size > ArchiveConfig.OPTIONS_TO_SHOW
+      css_class += " lots" if size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
     end
-    if size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
-      css_class += " lots"
-    end
+    
     css_class
   end
   

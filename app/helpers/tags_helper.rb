@@ -57,9 +57,20 @@ module TagsHelper
   def link_to_edit_tag(tag, options = {})
     link_to_with_tag_class(edit_tag_path(tag), tag.name, options)
   end
+  
+  def tag_with_link_to_edit(tag, options = {})
+    options.reverse_merge!({:target => "_blank"})
+    content_tag(:span, tag.name, :class=>"tag") + " ".html_safe + link_to_with_tag_class(edit_tag_path(tag), "(<span class=\"edit\">edit</span> &#x2710;)".html_safe, options)
+  end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
     link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) : tag_works_url(tag), link_text, options)
+  end
+
+  # the label on checkboxes to remove tag associations
+  # currently blank per wrangler request, can be changed to different label as desired
+  def remove_tag_association_label(tag)
+    "".html_safe
   end
 
   # Adds the "tag" classname to links (for tag links)

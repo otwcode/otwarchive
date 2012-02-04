@@ -15,9 +15,9 @@
 <!--/descriptions-->
 
 <!--Subnavigation, sorting and actions-->
-    <ul class="navigation actions" role="navigation">
-    <li class="search" role="search">
-      <%= form_tag tag_sets_path, :class => "simple search", :method => :get do |form| %>
+<ul class="navigation actions" role="navigation">
+  <li class="search" role="search">
+    <%= form_tag tag_sets_path, :class => "simple search", :method => :get do |form| %>
       <fieldset>
 	      <!--BACK END pls :title => "search" the following text field instead of this p-->
 	      <p title="search">
@@ -26,9 +26,9 @@
       </fieldset>
     <% end %>
   </li>
-<% if logged_in? %>
-    	<li><%= link_to ts("New Tag Set"), new_tag_set_path %></li>
-    	<li><%= link_to ts("Tags"), tags_path %></li>
+  <% if logged_in? %>
+  	<li><%= link_to ts("New Tag Set"), new_tag_set_path %></li>
+  	<li><%= link_to ts("Tags"), tags_path %></li>
   <% end %>
 </ul>
 
