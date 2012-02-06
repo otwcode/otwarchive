@@ -51,6 +51,10 @@ user home, collections and challenges home, tag home, admin comms home
 
 /*contexts*/
 
+.profile .primary {
+  float: none;
+}
+
 /*(no filters)*/
 
 .dashboard.collections-index .index {
