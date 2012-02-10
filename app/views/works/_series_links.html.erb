@@ -1,5 +1,10 @@
 <!--subnav, backwards and forwards, ideally incorporated with chapter control in top subnav-->
-<p class="series footnote">
-        <%= show_series_data(@work) %>
-</p>
+<div id="series" class="series module">
+  <h4 class="heading"><%= ts('Series this work belongs to:') %></h4>
+  <ul>
+    <% series_data_for_work(@work).each do |series_info| %>
+      <li><%= series_info %></li>
+    <% end %>
+  </ul>
+</div>
 <!--/subnav-->
