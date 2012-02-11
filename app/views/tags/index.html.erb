@@ -12,10 +12,10 @@
 
 <% unless @collection %>
   <h3 class="landmark heading">
-    <% if params[:show] == "popular" %>
-      <%= ts('Browse Popular Tags')%>
-    <% else %>
+    <% if params[:show] == "random" %>
       <%= ts('Browse Random Tags')%>
+    <% else %>
+      <%= ts('Browse Popular Tags')%>
     <% end %>
   </h3>
 <% end %>
