@@ -72,6 +72,10 @@
     
     <li><a href="#method-c-build_from_taggings">::build_from_taggings</a>
     
+    <li><a href="#method-c-find">::find</a>
+    
+    <li><a href="#method-c-find_by_id">::find_by_id</a>
+    
     <li><a href="#method-c-remove_invalid">::remove_invalid</a>
     
     <li><a href="#method-c-update_filter_counts_since">::update_filter_counts_since</a>
@@ -613,17 +617,17 @@ filterable = thing that’s been tagged.</p>
 
           
           <div class="method-source-code" id="build_from_taggings-source">
-            <pre><span class="ruby-comment"># File app/models/filter_tagging.rb, line 34</span>
+            <pre><span class="ruby-comment"># File app/models/filter_tagging.rb, line 41</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">build_from_taggings</span>
   <span class="ruby-constant">Tagging</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:taggable_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Work'</span>}).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tagging</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">print</span> <span class="ruby-string">&quot;.&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">tagging</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">modulo</span>(<span class="ruby-value">10</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span>; <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">flush</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">tagging</span>.<span class="ruby-identifier">tagger</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tagging</span>.<span class="ruby-identifier">taggable</span>
       <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">tagging</span>.<span class="ruby-identifier">tagger</span>.<span class="ruby-identifier">canonical?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">tagging</span>.<span class="ruby-identifier">tagger</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">tagging</span>.<span class="ruby-identifier">tagger</span>.<span class="ruby-identifier">merger</span>
-      <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">canonical?</span> 
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">canonical?</span>
         <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">filter_taggings</span>.<span class="ruby-identifier">create!</span>(<span class="ruby-value">:filterable</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">tagging</span>.<span class="ruby-identifier">taggable</span>)
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">end</span> 
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- build_from_taggings-source -->
           
@@ -633,6 +637,66 @@ filterable = thing that’s been tagged.</p>
 
         
       </div><!-- build_from_taggings-method -->
+
+    
+      <div id="method-c-find" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find</span><span
+            class="method-args">(*args)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="find-source">
+            <pre><span class="ruby-comment"># File app/models/filter_tagging.rb, line 10</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find</span>(*<span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- find-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- find-method -->
+
+    
+      <div id="method-c-find_by_id" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_by_id</span><span
+            class="method-args">(id)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="find_by_id-source">
+            <pre><span class="ruby-comment"># File app/models/filter_tagging.rb, line 13</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_by_id</span>(<span class="ruby-identifier">id</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;id is not guaranteed to be unique. please install composite_primary_keys gem and set the primary key to id,filter_id&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- find_by_id-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- find_by_id-method -->
 
     
       <div id="method-c-remove_invalid" class="method-detail ">
@@ -651,18 +715,18 @@ filterable = thing that’s been tagged.</p>
 
           
           <div class="method-source-code" id="remove_invalid-source">
-            <pre><span class="ruby-comment"># File app/models/filter_tagging.rb, line 18</span>
+            <pre><span class="ruby-comment"># File app/models/filter_tagging.rb, line 25</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">remove_invalid</span>
   <span class="ruby-identifier">i</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">count</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">filter_tagging</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">begin</span>
       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Checking #{i}&quot;</span>
       <span class="ruby-keyword">unless</span> <span class="ruby-identifier">filter_tagging</span>.<span class="ruby-identifier">should_exist?</span>
-        <span class="ruby-identifier">filter_tagging</span>.<span class="ruby-identifier">destroy</span>       
+        <span class="ruby-identifier">filter_tagging</span>.<span class="ruby-identifier">destroy</span>
       <span class="ruby-keyword">end</span>
       <span class="ruby-identifier">i</span> = <span class="ruby-identifier">i</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>
     <span class="ruby-keyword">rescue</span>
-      <span class="ruby-node">&quot;Problem with filter tagging #{filter_tagging.id}&quot;</span>
+      <span class="ruby-node">&quot;Problem with filter tagging id:#{filter_tagging.id} filter_id:#{filter_tagging.filter_id}&quot;</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -692,17 +756,17 @@ filterable = thing that’s been tagged.</p>
 
           
           <div class="method-source-code" id="update_filter_counts_since-source">
-            <pre><span class="ruby-comment"># File app/models/filter_tagging.rb, line 46</span>
+            <pre><span class="ruby-comment"># File app/models/filter_tagging.rb, line 53</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_filter_counts_since</span>(<span class="ruby-identifier">date</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">date</span>
-    <span class="ruby-identifier">filters</span> = <span class="ruby-constant">FilterTagging</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:filter</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">&quot;created_at &gt; ?&quot;</span>, <span class="ruby-identifier">date</span>]).<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:filter</span>).<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">uniq</span>
+    <span class="ruby-identifier">filters</span> = <span class="ruby-constant">FilterTagging</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:filter</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;created_at &gt; ?&quot;</span>, <span class="ruby-identifier">date</span>).<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:filter</span>).<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">uniq</span>
     <span class="ruby-identifier">count</span> = <span class="ruby-identifier">filters</span>.<span class="ruby-identifier">length</span>
     <span class="ruby-identifier">filters</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">filter</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
-      <span class="ruby-keyword">begin</span> 
+      <span class="ruby-keyword">begin</span>
         <span class="ruby-identifier">filter</span>.<span class="ruby-identifier">reset_filter_count</span>
         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Updating filter #{i + 1} of #{count} - #{filter.name}&quot;</span>
       <span class="ruby-keyword">rescue</span>
-        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Did not update filter #{i + 1} of #{count} - #{filter.name}&quot;</span>         
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Did not update filter #{i + 1} of #{count} - #{filter.name}&quot;</span>
       <span class="ruby-keyword">end</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">else</span>
@@ -741,7 +805,7 @@ filterable = thing that’s been tagged.</p>
 
           
           <div class="method-source-code" id="should_exist-3F-source">
-            <pre><span class="ruby-comment"># File app/models/filter_tagging.rb, line 11</span>
+            <pre><span class="ruby-comment"># File app/models/filter_tagging.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">should_exist?</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span> <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">filter</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">filter</span>.<span class="ruby-identifier">canonical?</span>
   <span class="ruby-identifier">tags</span> = [<span class="ruby-keyword">self</span>.<span class="ruby-identifier">filter</span>] <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">filter</span>.<span class="ruby-identifier">mergers</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">filter</span>.<span class="ruby-identifier">meta_tags</span>
