@@ -867,7 +867,7 @@ in preview_mode, unless they’re empty</p>
 
           
           <div class="method-source-code" id="check_all_none-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 475</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 489</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_all_none</span>(<span class="ruby-identifier">all_text</span>=<span class="ruby-string">&quot;All&quot;</span>, <span class="ruby-identifier">none_text</span>=<span class="ruby-string">&quot;None&quot;</span>, <span class="ruby-identifier">name_filter</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">filter_attrib</span> = (<span class="ruby-identifier">name_filter</span> <span class="ruby-operator">?</span> <span class="ruby-node">&quot; checkbox_name_filter=\&quot;#{name_filter}\&quot;&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">''</span>)    
   (<span class="ruby-string">'&lt;ul class=&quot;actions&quot;&gt;
@@ -918,17 +918,19 @@ that can be run to get the value of each individual option</p>
 
           
           <div class="method-source-code" id="checkbox_section-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 405</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 410</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">checkbox_section</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">attribute</span>, <span class="ruby-identifier">choices</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">options</span> = {
     <span class="ruby-value">:checked_method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>, 
     <span class="ruby-value">:name_method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;name&quot;</span>, 
     <span class="ruby-value">:name_helper_method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>, <span class="ruby-comment"># alternative: pass a helper method that gets passed the choice</span>
+    <span class="ruby-value">:extra_info_method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>, <span class="ruby-comment"># helper method that gets passed the choice, for any extra information that gets attached to the label</span>
     <span class="ruby-value">:value_method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;id&quot;</span>, 
     <span class="ruby-value">:disabled</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>,
     <span class="ruby-value">:include_toggle</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,
     <span class="ruby-value">:checkbox_side</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;left&quot;</span>,
-    <span class="ruby-value">:include_blank</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+    <span class="ruby-value">:include_blank</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,
+    <span class="ruby-value">:concise</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span> <span class="ruby-comment"># specify concise to invoke alternate formatting for skimmable lists (two-column in default layout)</span>
   }.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
   
   <span class="ruby-identifier">field_name</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:field_name</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">field_name</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">attribute</span>)
@@ -959,6 +961,9 @@ that can be run to get the value of each individual option</p>
     <span class="ruby-identifier">checkbox_and_label</span> = <span class="ruby-identifier">label_tag</span> <span class="ruby-identifier">checkbox_id</span>, <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;action&quot;</span> <span class="ruby-keyword">do</span> 
       <span class="ruby-identifier">options</span>[<span class="ruby-value">:checkbox_side</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;left&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">checkbox</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">display_name</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">display_name</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">checkbox</span>
     <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:extra_info_method</span>]
+      <span class="ruby-identifier">checkbox_and_label</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:checkbox_side</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;left&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">checkbox_and_label</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;#{options[:extra_info_method]}(choice)&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;#{options[:extra_info_method]}(choice)&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">checkbox_and_label</span>
+    <span class="ruby-keyword">end</span>
     <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:li</span>, <span class="ruby-identifier">checkbox_and_label</span>, <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">cycle</span>(<span class="ruby-string">&quot;odd&quot;</span>, <span class="ruby-string">&quot;even&quot;</span>, <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;tigerstriping&quot;</span>))
   <span class="ruby-keyword">end</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>).<span class="ruby-identifier">html_safe</span>
   <span class="ruby-identifier">checkboxes_ul</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:ul</span>, <span class="ruby-identifier">checkboxes</span>)
@@ -968,14 +973,16 @@ that can be run to get the value of each individual option</p>
 
   <span class="ruby-comment"># if there are only a few choices, don't show the scrolling and the toggle</span>
   <span class="ruby-identifier">size</span> = <span class="ruby-identifier">choices</span>.<span class="ruby-identifier">size</span>
-  <span class="ruby-identifier">css_class</span> = <span class="ruby-identifier">checkbox_section_css_class</span>(<span class="ruby-identifier">size</span>)
-  <span class="ruby-identifier">toggle</span> = <span class="ruby-string">&quot;&quot;</span>.<span class="ruby-identifier">html_safe</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:include_toggle</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> (<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">OPTIONS_TO_SHOW</span> * <span class="ruby-value">6</span>)
-    <span class="ruby-identifier">toggle</span> = <span class="ruby-identifier">checkbox_section_toggle</span>(<span class="ruby-identifier">checkboxes_id</span>, <span class="ruby-identifier">size</span>)
+  <span class="ruby-identifier">css_class</span> = <span class="ruby-identifier">checkbox_section_css_class</span>(<span class="ruby-identifier">size</span>, <span class="ruby-identifier">options</span>[<span class="ruby-value">:concise</span>])
+  <span class="ruby-identifier">top_toggle</span> = <span class="ruby-string">&quot;&quot;</span>.<span class="ruby-identifier">html_safe</span>
+  <span class="ruby-identifier">bottom_toggle</span> = <span class="ruby-string">&quot;&quot;</span>.<span class="ruby-identifier">html_safe</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:include_toggle</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-value">:concise</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> (<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">OPTIONS_TO_SHOW</span> * <span class="ruby-value">6</span>)
+    <span class="ruby-identifier">top_toggle</span> = <span class="ruby-identifier">checkbox_section_toggle</span>(<span class="ruby-identifier">checkboxes_id</span>, <span class="ruby-identifier">size</span>)
+    <span class="ruby-identifier">bottom_toggle</span> = <span class="ruby-identifier">checkbox_section_toggle</span>(<span class="ruby-identifier">checkboxes_id</span>, <span class="ruby-identifier">size</span>, <span class="ruby-value">:no_show</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, <span class="ruby-value">:no_js</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
   <span class="ruby-keyword">end</span>
     
   <span class="ruby-comment"># We wrap the whole thing in a div module with the classes</span>
-  <span class="ruby-keyword">return</span> <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:div</span>, <span class="ruby-identifier">toggle</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">checkboxes_ul</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">toggle</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">options</span>[<span class="ruby-value">:include_blank</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">hidden_field_tag</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-string">&quot; &quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-string">''</span>.<span class="ruby-identifier">html_safe</span>), <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">checkboxes_id</span>, <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">css_class</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:div</span>, <span class="ruby-identifier">top_toggle</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">checkboxes_ul</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">bottom_toggle</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">options</span>[<span class="ruby-value">:include_blank</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">hidden_field_tag</span>(<span class="ruby-identifier">field_name</span>, <span class="ruby-string">&quot; &quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-string">''</span>.<span class="ruby-identifier">html_safe</span>), <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">checkboxes_id</span>, <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">css_class</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- checkbox_section-source -->
           
@@ -991,7 +998,7 @@ that can be run to get the value of each individual option</p>
         
         <div class="method-heading">
           <span class="method-name">checkbox_section_css_class</span><span
-            class="method-args">(size)</span>
+            class="method-args">(size, concise=false)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -1003,15 +1010,17 @@ that can be run to get the value of each individual option</p>
 
           
           <div class="method-source-code" id="checkbox_section_css_class-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 464</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">checkbox_section_css_class</span>(<span class="ruby-identifier">size</span>)
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 476</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">checkbox_section_css_class</span>(<span class="ruby-identifier">size</span>, <span class="ruby-identifier">concise</span>=<span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">css_class</span> = <span class="ruby-string">&quot;options index&quot;</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">OPTIONS_TO_SHOW</span>
-    <span class="ruby-identifier">css_class</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot; many&quot;</span>
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">concise</span>
+    <span class="ruby-identifier">css_class</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot; concise lots&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">OPTIONS_TO_SHOW</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">css_class</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot; many&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">OPTIONS_TO_SHOW</span>
+    <span class="ruby-identifier">css_class</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot; lots&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> (<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">OPTIONS_TO_SHOW</span> * <span class="ruby-value">6</span>)
   <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> (<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">OPTIONS_TO_SHOW</span> * <span class="ruby-value">6</span>)
-    <span class="ruby-identifier">css_class</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot; lots&quot;</span>
-  <span class="ruby-keyword">end</span>
+  
   <span class="ruby-identifier">css_class</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- checkbox_section_css_class-source -->
@@ -1028,7 +1037,7 @@ that can be run to get the value of each individual option</p>
         
         <div class="method-heading">
           <span class="method-name">checkbox_section_toggle</span><span
-            class="method-args">(checkboxes_id, checkboxes_size)</span>
+            class="method-args">(checkboxes_id, checkboxes_size, options = {})</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
@@ -1042,19 +1051,20 @@ of the checkboxes</p>
           
           <div class="method-source-code" id="checkbox_section_toggle-source">
             <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 366</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">checkbox_section_toggle</span>(<span class="ruby-identifier">checkboxes_id</span>, <span class="ruby-identifier">checkboxes_size</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">checkbox_section_toggle</span>(<span class="ruby-identifier">checkboxes_id</span>, <span class="ruby-identifier">checkboxes_size</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">toggle_show</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:a</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Show all %{checkboxes_size} checkboxes&quot;</span>, <span class="ruby-value">:checkboxes_size</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">checkboxes_size</span>), 
-                            <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;toggle #{checkboxes_id}_show&quot;</span>)
+                            <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;toggle #{checkboxes_id}_show&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n&quot;</span>.<span class="ruby-identifier">html_safe</span>
 
   <span class="ruby-identifier">toggle_hide</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:a</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Collapse checkboxes&quot;</span>), <span class="ruby-value">:style</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;display: none;&quot;</span>,
-                            <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;toggle #{checkboxes_id}_hide&quot;</span>, <span class="ruby-value">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;##{checkboxes_id}&quot;</span>)
+                            <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;toggle #{checkboxes_id}_hide&quot;</span>, <span class="ruby-value">:href</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;##{checkboxes_id}&quot;</span>) <span class="ruby-operator">+</span>
+                            <span class="ruby-string">&quot;\n&quot;</span>.<span class="ruby-identifier">html_safe</span>
   
   <span class="ruby-identifier">css_class</span> = <span class="ruby-identifier">checkbox_section_css_class</span>(<span class="ruby-identifier">checkboxes_size</span>)
  
   <span class="ruby-identifier">javascript_bits</span> = <span class="ruby-identifier">content_for</span>(<span class="ruby-value">:footer_js</span>) {
     <span class="ruby-identifier">javascript_tag</span>(<span class="ruby-string">&quot;$j(document).ready(function(){\n&quot;</span> <span class="ruby-operator">+</span>
       <span class="ruby-node">&quot;$j('.#{checkboxes_id}_show').click(function() {\n&quot;</span> <span class="ruby-operator">+</span>
-        <span class="ruby-node">&quot;$j('##{checkboxes_id}').attr('class', 'module options all');\n&quot;</span> <span class="ruby-operator">+</span> 
+        <span class="ruby-node">&quot;$j('##{checkboxes_id}').attr('class', 'options index all');\n&quot;</span> <span class="ruby-operator">+</span> 
         <span class="ruby-node">&quot;$j('.#{checkboxes_id}_hide').show();\n&quot;</span> <span class="ruby-operator">+</span>
         <span class="ruby-node">&quot;$j('.#{checkboxes_id}_show').hide();\n&quot;</span> <span class="ruby-operator">+</span>
       <span class="ruby-string">&quot;});&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n&quot;</span> <span class="ruby-operator">+</span> 
@@ -1065,7 +1075,11 @@ of the checkboxes</p>
       <span class="ruby-string">&quot;});\n&quot;</span> <span class="ruby-operator">+</span>
     <span class="ruby-string">&quot;})&quot;</span>)
   }
-  <span class="ruby-identifier">toggle</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:p</span>, <span class="ruby-identifier">toggle_show</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n&quot;</span>.<span class="ruby-identifier">html_safe</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">toggle_hide</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n&quot;</span>.<span class="ruby-identifier">html_safe</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">javascript_bits</span>, <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;actions&quot;</span>)
+
+  <span class="ruby-identifier">toggle</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:p</span>, 
+    (<span class="ruby-identifier">options</span>[<span class="ruby-value">:no_show</span>] <span class="ruby-operator">?</span> <span class="ruby-string">&quot;&quot;</span>.<span class="ruby-identifier">html_safe</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">toggle_show</span>) <span class="ruby-operator">+</span> 
+    <span class="ruby-identifier">toggle_hide</span> <span class="ruby-operator">+</span> 
+    (<span class="ruby-identifier">options</span>[<span class="ruby-value">:no_js</span>] <span class="ruby-operator">?</span> <span class="ruby-string">&quot;&quot;</span>.<span class="ruby-identifier">html_safe</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">javascript_bits</span>), <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;actions&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- checkbox_section_toggle-source -->
           
@@ -2028,7 +2042,7 @@ by the specified condition) is a span with class “current”</p>
 
           
           <div class="method-source-code" id="submit_button-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 484</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 498</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">submit_button</span>(<span class="ruby-identifier">form</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">button_text</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">button_text</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">form</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">form</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">form</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">new_record?</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Submit&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Update&quot;</span>)
   <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:p</span>, (<span class="ruby-identifier">form</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">submit_tag</span>(<span class="ruby-identifier">button_text</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">form</span>.<span class="ruby-identifier">submit</span>(<span class="ruby-identifier">button_text</span>)), <span class="ruby-value">:class</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;submit&quot;</span>)
@@ -2059,7 +2073,7 @@ by the specified condition) is a span with class “current”</p>
 
           
           <div class="method-source-code" id="submit_fieldset-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 489</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 503</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">submit_fieldset</span>(<span class="ruby-identifier">form</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">button_text</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:fieldset</span>, <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:legend</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Actions&quot;</span>)) <span class="ruby-operator">+</span> <span class="ruby-identifier">submit_button</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">button_text</span>))
 <span class="ruby-keyword">end</span></pre>
