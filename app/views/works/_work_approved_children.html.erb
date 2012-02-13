@@ -1,0 +1,16 @@
+<!-- footer for work -->
+
+<div id="children" class="children module">
+  <h4 class="heading"><%= ts('Works inspired by this one:') %></h4>
+  <ul>
+  <% for related_work in @work.approved_related_works %>
+    <li>
+      <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %>
+      <% if related_work.translation %>
+        <%= ts('(translation into %{language})', :language => related_work.work.language.name) %>
+      <% end %>
+    </li>
+  <% end %>
+  </ul>
+</div>
+<!-- end of footer for work -->
