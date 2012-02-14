@@ -21,18 +21,23 @@
   <div id="chapters">
     <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
   </div>
-  <% if !@work.endnotes.blank? && @chapter == @work.last_chapter %>
-    <%= render :partial => 'works/work_endnotes' %>
-  <% end %>
-<!-- END work skin -->
-    <!-- Series links -->
+  
+  <!--afterword-->
+  <div class="afterword preface group" role="complementary">  
+    <% if !@work.endnotes.blank? && @chapter == @work.last_chapter %>
+      <%= render :partial => 'works/work_endnotes' %>
+    <% end %>
     <% unless @preview_mode || @work.series.blank? || @chapter != @work.last_chapter%>
-      <%= render :partial => 'works/series_links' %>
+      <%= render :partial => 'works/work_series_links' %>
+    <% end %>
+    <% unless @work.approved_children.blank? %>
+      <%= render :partial => 'works/work_approved_children' %>
     <% end %>
   </div>
-
-  <%= render :partial => 'works/work_footer' %>
-
+  <!--/afterword-->
+  
+  </div>
+  <!-- END work skin -->
 </div>
 <!-- END work -->
 

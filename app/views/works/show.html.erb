@@ -44,24 +44,22 @@
     </div>
 <!--/chapter-->
     
-<!--afterword-->
+    <!--afterword-->
     <div class="afterword preface group" role="complementary">
       <% unless @work.endnotes.blank? %>
         <%= render :partial => 'works/work_endnotes' %>
       <% end %>
-
-<!--subnav-->
       <% unless @work.series.blank? %>
         <%= render :partial => 'works/work_series_links' %>
       <% end %>
       <% unless @work.approved_children.blank? %>
         <%= render :partial => 'works/work_approved_children' %>
       <% end %>
-<!--/subnav-->
     </div>
-<!--/afterword-->
+    <!--/afterword-->
+  
   </div>
-<!-- END work skin -->
+  <!-- END work skin -->
 <!-- END work -->
 
 <!-- BEGIN comment section -->
