@@ -87,7 +87,7 @@
       <dt><%= tag_category_name(tag_type) %></dt>
       <dd title="<%= tag_category_name(tag_type) %>">
         <fieldset class="tags listbox">
-          <% if @parents[tag_type].any? %>
+          <% if @parents[tag_type].present? %>
             <h4 class="heading"><%= ts("Check to remove: ") %></h4>
             <%= check_all_none %>
             <%= checkbox_section(f, "associations_to_remove", @parents[tag_type], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
@@ -114,7 +114,7 @@
         <dt><%= tag_category_name(tag_type) %></dt>
         <dd>
           <fieldset class="tags listbox">
-            <% if @children[tag_type].any? %>
+            <% if @children[tag_type].present? %>
               <h4 class="heading"><%= ts("Check to remove: ") %></h4>
               <%= check_all_none %>
               <%= checkbox_section(f, "associations_to_remove", @children[tag_type][0..19], :name_helper_method => "remove_tag_association_label", :extra_info_method => "link_to_edit_tag",
