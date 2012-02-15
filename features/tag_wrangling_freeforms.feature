@@ -70,9 +70,9 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   Then I should see "No Fandom"
     And I should see "Pirate AU"
     And the "tag_canonical" checkbox should be disabled
-  When I fill in "Synonyms" with "Arrr"
+  When I fill in "tag_merger_string" with "Arrr"
   Then I should find "Arrr-verse" within ".autocomplete"
-  When I fill in "Synonyms" with "Arrr-verse"
+  When I fill in "tag_merger_string" with "Arrr-verse"
     And I press "Save changes"
   Then I should see "Tag was updated"
     And I should see "Arrr-verse"
@@ -84,7 +84,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I fill in "MetaTags" with "Alternate Universe"
     And I press "Save changes"
   Then I should see "Tag was updated"
-    But I should not see "Alternate Universe" within "ul.tags"
+    But I should not see "Alternate Universe" within ".tags"
   When I follow "New Tag"
     And I fill in "Name" with "Alternate Universe"
     And I check "tag_canonical"
@@ -99,7 +99,7 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
     And I should see "No Fandom"
     And the "tag_canonical" checkbox should be checked
   When I follow "Alternate Universe Pirates"
-  Then I should see "Alternate Universe" within "ul.tags"
+  Then I should see "Alternate Universe" within ".tags"
   When I edit the tag "Alternate Universe Space Pirates"
     And I fill in "MetaTags" with "Alternate Universe P"
     And I should find "Alternate Universe Pirates" within ".autocomplete"
@@ -137,3 +137,4 @@ Scenario: freeforms wrangling - syns, mergers, autocompletes, metatags
   When I fill in "Synonym of" with "No Fandom"
     And I press "Save changes"
   Then I should see "No Fandom is a fandom. Synonyms must belong to the same category."
+

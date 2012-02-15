@@ -82,7 +82,7 @@ Feature: Tag wrangling
     When I follow "Edit" within ".header"
     Then I should see "Edit Stargate SG-1 Tag"
     When I check "tag_canonical"
-      And I fill in "Medias" with "TV Shows"
+      And I fill in "tag_media_string" with "TV Shows"
       And I press "Save changes"
     Then I should see "Tag was updated"
     When I follow "Tag Wrangling"

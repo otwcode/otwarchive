@@ -40,11 +40,11 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I fill in "Synonym of" with "Hoban Washburne/Zoe Washburne"
     And I press "Save changes"
   Then I should see "Tag was updated"
-    And I should see "Hoban Washburne" within "ul.tags"
-    And I should see "Zoe Washburne" within "ul.tags"
+    And I should see "Hoban Washburne" within ".tags"
+    And I should see "Zoe Washburne" within ".tags"
   When I follow "Hoban Washburne/Zoe Washburne"
-  Then I should see "Hoban Washburne" within "ul.tags"
-    And I should see "Zoe Washburne" within "ul.tags"
+  Then I should see "Hoban Washburne" within ".tags"
+    And I should see "Zoe Washburne" within ".tags"
     And I should see "Make tag non-canonical and unhook all associations"
     And I should see "Wash/Zoe"
     And the "tag_canonical" checkbox should be checked
@@ -59,8 +59,8 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   Then I should see "Make tag non-canonical and unhook all associations"
     And I should see "Wash/Zoe"
     And I should see "Hoban Washburne/Zoe Washburne"
-    And I should see "Hoban Washburne" within "ul.tags"
-    And I should see "Zoe Washburne" within "ul.tags"
+    And I should see "Hoban Washburne" within ".tags"
+    And I should see "Zoe Washburne" within ".tags"
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should be disabled
   
@@ -93,21 +93,21 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
   
   # adding a non-canonical synonym to a canonical, fandom should be copied
   When I follow "Jack Harkness/Ianto Jones"
-  Then I should see "Jack Harkness" within "ul.tags"
-    And I should see "Ianto Jones" within "ul.tags"
+  Then I should see "Jack Harkness" within ".tags"
+    And I should see "Ianto Jones" within ".tags"
     And I should see "Torchwood"
     And I should see "Jack/Ianto"
     And the "tag_canonical" checkbox should be disabled
-  When I fill in "Synonyms" with "Jant"
+  When I fill in "tag_merger_string" with "Jant"
   Then I should find "Janto" within ".autocomplete"
-  When I fill in "Synonyms" with "Janto"
+  When I fill in "tag_merger_string" with "Janto"
     And I press "Save changes"
   Then I should see "Tag was updated"
     And I should see "Janto"
   When I follow "Janto"
   Then I should see "Torchwood"
-    But I should not see "Jack Harkness" within "ul.tags"
-    And I should not see "Ianto Jones" within "ul.tags"
+    But I should not see "Jack Harkness" within ".tags"
+    And I should not see "Ianto Jones" within ".tags"
   
   # metatags and subtags, transference thereof to a new canonical
   When I follow "Jack Harkness/Ianto Jones"
@@ -150,7 +150,7 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I should see "Jack Harkness/Male Character"
     And I should see "Janto"
     And I should see "Jack/Ianto"
-    And I should see "Jack Harkness/Ianto Jones" within "ul.tags"
+    And I should see "Jack Harkness/Ianto Jones" within ".tags"
     
   # trying to syn a non-canonical to another non-canonical
   When I follow "New Tag"
@@ -262,15 +262,15 @@ Scenario: relationship wrangling - syns, mergers, characters, autocompletes
     And I fill in "Characters" with "Testing McTestypants, Testing McTestySkirt"
     And I press "Save changes"
   Then I should see "Tag was updated"
-    And I should see "Testing McTestypants" within "ul.tags"
-    And I should see "Testing McTestySkirt" within "ul.tags"
-    And I should see "Up with Testing" within "ul.tags"
-    And I should see "Coding" within "ul.tags"
+    And I should see "Testing McTestypants" within ".tags"
+    And I should see "Testing McTestySkirt" within ".tags"
+    And I should see "Up with Testing" within ".tags"
+    And I should see "Coding" within ".tags"
   When I follow "Testing McTestypants/Testing McTestySkirt"
-  Then I should see "Testing McTestypants" within "ul.tags"
-    And I should see "Testing McTestySkirt" within "ul.tags"
-    And I should see "Up with Testing" within "ul.tags"
-    And I should see "Coding" within "ul.tags"
+  Then I should see "Testing McTestypants" within ".tags"
+    And I should see "Testing McTestySkirt" within ".tags"
+    And I should see "Up with Testing" within ".tags"
+    And I should see "Coding" within ".tags"
     And I should see "Testypants/Testyskirt"
     And the "tag_canonical" checkbox should be checked
     And the "tag_canonical" checkbox should be disabled

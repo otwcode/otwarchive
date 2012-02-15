@@ -96,9 +96,9 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I follow "First Doctor"
   Then I should see "Doctor Who"
     And the "tag_canonical" checkbox should be disabled
-  When I fill in "Synonyms" with "One"
+  When I fill in "tag_merger_string" with "One"
   Then I should find "One" within ".autocomplete"
-  When I fill in "Synonyms" with "One"
+  When I fill in "tag_merger_string" with "One"
     And I fill in "Relationships" with "First Doctor/TARDIS"
     And I press "Save changes"
   Then I should see "Tag was updated"
@@ -106,7 +106,7 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I should see "First Doctor/TARDIS"
   When I follow "One"
   Then I should see "Doctor Who"
-    But I should not see "First Doctor/TARDIS" within "ul.tags"
+    But I should not see "First Doctor/TARDIS" within ".tags"
   
   # metatags and subtags, transference thereof to a new canonical
   When I follow "First Doctor"
@@ -147,10 +147,10 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
     And I should not see "The Doctor (DW)"
   When I follow "First Doctor (DW)"
   Then I should see "John Smith"
-    And I should see "First Doctor" within "ul.tags"
+    And I should see "First Doctor" within ".tags"
     And I should see "The Doctor (1st)"
     And I should see "1st Doctor"
-    And I should see "One" within "ul.tags"
+    And I should see "One" within ".tags"
     And I should see "The Doctor (DW)"
     
   # trying to syn a non-canonical to another non-canonical
@@ -170,3 +170,4 @@ Scenario: character wrangling - syns, mergers, characters, autocompletes
   When I fill in "Synonym of" with "Doctor Who"
     And I press "Save changes"
   Then I should see "Doctor Who is a fandom. Synonyms must belong to the same category."
+
