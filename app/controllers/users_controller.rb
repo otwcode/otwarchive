@@ -249,7 +249,7 @@ class UsersController < ApplicationController
       @user = User.find_by_activation_code(params[:id])
       if @user
         if @user.active?
-          flash[:error].now = ts("Your account has already been activated.")
+          flash.now[:error] = ts("Your account has already been activated.")
           redirect_to @user and return
         end
         @user.activate && UserMailer.activation(@user.id).deliver
