@@ -42,7 +42,7 @@
           <fieldset class="<%= ts("#{tag_type}") %> listbox">
             <h4 class="heading"><%= ts("#{tag_type.pluralize}") %></h4>
             <%= checkbox_section tag_set_form, "#{tag_type}_tagnames", 
-              (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.all).map {|t| t.name},
+              (restriction.has_tags?(tag_type) ? restriction.tags(tag_type) : tag_type.classify.constantize.canonical).map {|t| t.name},
               :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s" %>
           </fieldset>
     
