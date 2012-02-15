@@ -43,18 +43,23 @@
       <% end %>
     </div>
 <!--/chapter-->
-    <% unless @work.endnotes.blank? %>
-      <%= render :partial => 'works/work_endnotes' %>
-    <% end %>
+    
+    <!--afterword-->
+    <div class="afterword preface group" role="complementary">
+      <% unless @work.endnotes.blank? %>
+        <%= render :partial => 'works/work_endnotes' %>
+      <% end %>
+      <% unless @work.series.blank? %>
+        <%= render :partial => 'works/work_series_links' %>
+      <% end %>
+      <% unless @work.approved_children.blank? %>
+        <%= render :partial => 'works/work_approved_children' %>
+      <% end %>
+    </div>
+    <!--/afterword-->
+  
   </div>
-<!-- END work skin -->
-
-<!--subnav-->
-    <% unless @work.series.blank? %>
-      <%= render :partial => 'works/series_links' %>
-    <% end %>
-    <%= render :partial => 'works/work_footer' %>
-<!--/subnav-->
+  <!-- END work skin -->
 <!-- END work -->
 
 <!-- BEGIN comment section -->
