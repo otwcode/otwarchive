@@ -44,6 +44,7 @@
     </div>
 <!--/chapter-->
     
+    <% if !@work.endnotes.blank? || !@work.series.blank? || !@work.approved_children.blank? %>
     <!--afterword-->
     <div class="afterword preface group" role="complementary">
       <% unless @work.endnotes.blank? %>
@@ -57,6 +58,7 @@
       <% end %>
     </div>
     <!--/afterword-->
+    <% end %>
   
   </div>
   <!-- END work skin -->
