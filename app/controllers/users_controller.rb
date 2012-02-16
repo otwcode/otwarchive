@@ -283,8 +283,10 @@ class UsersController < ApplicationController
     @user.profile.update_attributes(params[:profile_attributes])
     if @user.profile.save
       flash[:notice] = ts("Your profile has been successfully updated")
+      redirect_to edit_user_path(@user)
+    else
+      render :edit
     end
-    redirect_to edit_user_path(@user)
   end
   
   def change_email
