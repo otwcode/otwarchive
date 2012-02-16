@@ -1,7 +1,7 @@
 <% if logged_in? %>
   <div id="greeting">
     <p class="icon">
-      <span class="landmark">Hi, <%= current_user.login %>!</span>
+      <span class="landmark">Hi, <%= link_to current_user.login, user_path(current_user) %>!</span>
     <%= icon_display(current_user) %>
     </p>
     <ul class="navigation actions" role="navigation">
