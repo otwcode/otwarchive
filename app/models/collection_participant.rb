@@ -9,6 +9,7 @@ class CollectionParticipant < ActiveRecord::Base
   MODERATOR = PARTICIPANT_ROLES[2]
   MEMBER = PARTICIPANT_ROLES[3]
   INVITED = PARTICIPANT_ROLES[4]
+  MAINTAINER_ROLES = [PARTICIPANT_ROLES[1], PARTICIPANT_ROLES[2]]
   PARTICIPANT_ROLE_OPTIONS = [ [t('collection_participant.none', :default => "None"), NONE],
                          [t('collection_participant.none', :default => "Invited"), INVITED],
                          [t('collection_participant.member', :default => "Member"), MEMBER],

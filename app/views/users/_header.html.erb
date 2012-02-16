@@ -1,34 +1,13 @@
 <!--Descriptive page name, messages and instructions-->
 <div class="primary header module">
 	<% 	display_name = @author ? @author.name : @user.login	%>
-	<h2 class="heading"><%= @author ? link_to_unless_current(display_name, user_pseud_path(user, @author)) : link_to_unless_current(display_name, user) %>
+	<h2 class="heading">
+	  <%= @author ? link_to_unless_current(display_name, user_pseud_path(@user, @author)) : link_to_unless_current(display_name, @user) %>
 	</h2>
 	<p class="icon"><%= icon_display(@user, @author) %></p>
 <!--/descriptions-->
 
-<!--subnav-->
-  <ul class="navigation actions" role="navigation">
-    <li><%= span_if_current ts("Profile"), user_profile_path(user) %></li>
-    <% if @user == current_user %>
-      <li><%= link_to ts("Post New"), new_work_path %></li>
-    <% end %>
-    <% unless @user == current_user %>  
-      <li><%= link_to_help "coming-soon", ts("Bookmark") %></li>
-    <% end %>
-    <% if @subscription && @subscription.new_record? %>
-      <li>
-        <%= form_for [current_user, @subscription] do |f| %>
-          <%= f.hidden_field :subscribable_id, :value => @user.id %>
-          <%= f.hidden_field :subscribable_type, :value => @user.class.to_s %>
-          <%= f.submit "Subscribe" %>
-        <% end %>
-      </li>
-    <% elsif @subscription %>
-      <li><%= link_to "Unsubscribe", user_subscription_path(current_user, @subscription), :method => :delete %></li>
-    <% end %>
-    <% if @user == current_user  %>
-      <li><%= span_if_current ts("Invitations"), user_invitations_path(user) %></li>
-    <% end %>  
-  </ul>
+  <%= render "users/header_navigation" %>
+
 </div>
 <!--/subnav-->

@@ -1,35 +1,72 @@
-<!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= ts("Editing Multiple Works") %></h2>
-<!--/descriptions-->
-
-<!--subnav-->
-<!--/subnav-->
-
 <!--main content-->
-<p class="note">
-    Your edits will be applied to <em>all</em> of these stories, <strong>replacing</strong> any existing values for these fields!"
-  </p>
-<dl class="index group">
-    <% for work in @works %>
-      <dt>
-          <%= hidden_field_tag "work_ids[]", work.id%>
-          <%= link_to work.title.html_safe, work %>
-          <span title="fandom">(<%= work.fandoms.collect {|tag| link_to_tag_works(tag) }.join(', ').html_safe %>)</span>
-        </dt>
-        <dd>
-        <!--BACK END, please <ul class="tags commas"><li>tag</li></ul> ? possibly blurb_tag_block?-->
-        <%= %w(warnings characters relationships freeforms categories ratings).collect {|type| work.send("#{type}")}.flatten.collect {|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
-      </dd>
-    <% end %>
-</dl>
+<h2 class="heading"><%= ts("Editing Multiple Works") %></h2>
+<%= render "users/header_navigation" %>
+
+<p class="caution">
+  Your edits will be applied to <strong>all</strong> of the following works:
+</p>
+
+<%= render "works/work_abbreviated_list", :works => @works %>
 
 <%= form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %> 
-  <p class="required message"><%= ts("* Required information") %></p>
+  <p class="required message">
+    <%= ts("* Required information") %>
+    <% @works.each do |work| %>
+      <%= hidden_field_tag "work_ids[]", work.id %>
+    <% end %>
+  </p>
 
-  <div id="work-form" class="edit work post"><%= render 'work_tags_form', :include_blank => true %></div>
+  <div id="work-form" class="edit work post">
+    <%= render 'work_form_tags', :include_blank => true %>
+  </div>
+  
+  <fieldset>
+    <legend>Associations</legend>
+    <h3 class="landmark">Associations</h3>
+    <dl>
+      <%= render "works/work_form_pseuds", :form => form, :works => @works %>
 
+      <%= render "works/work_form_collections", :form => form, :works => @works %>
+
+    </dl>
+  </fieldset>
+  
+  <fieldset>
+    <legend>Settings</legend>
+    <h3 class="landmark">Settings</h3>
+    <dl>
+      <dt><%= ts("Visibility") %> <%= link_to_help "registered-users" %></dt>
+      <dd>
+        <label for="work_restricted">
+          <%= ts("Only show to registered users") %>
+          <%= form.check_box :restricted %>
+        </label>
+        <label for="work_unrestricted">
+          <%= ts("Show to all") %>
+          <%= form.check_box :unrestricted %>
+        </label>
+      </dd>
+ 
+      <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
+      <dd>
+        <%= form.collection_select :language_id, Language.all(:order => :short), :id, :name, {:include_blank => true} %>
+      </dd>
+
+      <dt><%= form.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
+      <dd>
+        <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, 
+            {:include_blank => true} %>
+      </dd>
+    </dl>
+  </fieldset>
+  
+  <p class="caution">
+    Your edits will <strong>replace</strong> the existing values!
+    (If you leave a field blank it will remain unchanged.)
+  </p>
+  
   <p class="submit actions"><%= submit_tag ts("Update All Stories"), :confirm => ts("Are you sure? Remember this will replace all existing values!") %></p>
 
 <% end %>
 <!--/content-->
-
+</div>

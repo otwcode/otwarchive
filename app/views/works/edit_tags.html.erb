@@ -8,7 +8,7 @@
 <%= form_for(@work, :html => {:name => "storyForm"}, :url => { :action => "update_tags" }) do |f| %> 
 
 <!--main content-->					
-<%= render :partial => 'work_tags_form', :locals => {:include_blank => false} %>
+<%= render :partial => 'work_form_tags', :locals => {:include_blank => false} %>
 <!--/content--> 
 
   <fieldset>
