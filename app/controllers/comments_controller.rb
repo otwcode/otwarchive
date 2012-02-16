@@ -22,7 +22,7 @@ class CommentsController < ApplicationController
   end
 
   def check_tag_wrangler_access
-    if @commentable.is_a?(Tag)
+    if @commentable.is_a?(Tag) || (@comment && @comment.commentable.is_a?(Tag))
       logged_in_as_admin? || permit?("tag_wrangler") || access_denied
     end
   end
