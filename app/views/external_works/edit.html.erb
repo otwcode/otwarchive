@@ -27,7 +27,7 @@
       </dl>
     </fieldset>
 
-    <%= render :partial => 'works/work_tags_form', :locals => {:work => @external_work, :include_blank => false} %>
+    <%= render 'works/work_form_tags', :work => @external_work, :include_blank => false %>
     <p class="submit actions"><%= f.submit %></p>
   <% end %>
 </div>

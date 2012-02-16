@@ -3,7 +3,7 @@
 <%= form_for(@work) do |f| %>
 
   <p class="required notice"><%= ts('* Required information') %></p>
-  <%= render 'work_tags_form', :include_blank => false %>
+  <%= render 'work_form_tags', :include_blank => false %>
   <fieldset class="preface" role="article">
     <legend><%= ts('Preface') %></legend>
     <h3 class="landmark heading"><%= ts('Preface') %></h3>

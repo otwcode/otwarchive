@@ -1,0 +1,27 @@
+<% # expects @user to be set %>
+<!--subnav-->
+<ul class="navigation actions" role="navigation">
+  <li><%= span_if_current ts("Profile"), user_profile_path(@user) %></li>
+  <% if @user == current_user %>
+    <li><%= link_to ts("Post New"), new_work_path %></li>
+    <li><%= span_if_current ts("Edit Works"), (path = show_multiple_user_works_path(@user)), 
+              current_page?(path) && params[:work_ids].blank? %></li>      
+  <% end %>
+  <% unless @user == current_user %>  
+    <li><%= link_to_help "coming-soon", ts("Bookmark") %></li>
+  <% end %>
+  <% if @subscription && @subscription.new_record? %>
+    <li>
+      <%= form_for [current_user, @subscription] do |f| %>
+        <%= f.hidden_field :subscribable_id, :value => @user.id %>
+        <%= f.hidden_field :subscribable_type, :value => @user.class.to_s %>
+        <%= f.submit "Subscribe" %>
+      <% end %>
+    </li>
+  <% elsif @subscription %>
+    <li><%= link_to "Unsubscribe", user_subscription_path(current_user, @subscription), :method => :delete %></li>
+  <% end %>
+  <% if @user == current_user  %>
+    <li><%= span_if_current ts("Invitations"), user_invitations_path(@user) %></li>
+  <% end %>  
+</ul>

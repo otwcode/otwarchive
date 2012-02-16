@@ -55,7 +55,8 @@ class WorksUpdateControllerTest < ActionController::TestCase
         @collection = create_collection
         @work = create_work(:authors => [@user.default_pseud])
         @work.add_default_tags
-        @work.add_to_collection!(@collection)
+        @work.add_to_collection(@collection)
+        @work.save
         put :update, :locale => 'en', :id => @work.id, :preview_button => "Preview", :work => {"chapter_attributes"=>@chapter_attribs, 
                 "author_attributes"=>@author_attribs, "title"=>@title, "fandom_string"=>@fandom, 
                 "rating_string"=>@rating, "warning_strings"=>@warning, "wip_length"=>"1", 
