@@ -61,6 +61,8 @@ class Pseud < ActiveRecord::Base
     :too_long => ts("must be less than %{max} characters long.", :max => DESCRIPTION_MAX)
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
+  validates_length_of :icon_comment_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_COMMENT_MAX,
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_COMMENT_MAX)
 
   after_update :check_default_pseud
 

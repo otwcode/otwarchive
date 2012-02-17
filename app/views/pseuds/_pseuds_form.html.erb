@@ -43,6 +43,7 @@
   <dt><%= f.label :icon_comment_text, ts("Icon comment text") %> <%= link_to_help('pseud-icon-comment') %></dt>
   <dd>
     <%= f.text_field :icon_comment_text, :class => "observe_textlength" %>
+    <%= generate_countdown_html("pseud_icon_comment_text", ArchiveConfig.ICON_COMMENT_MAX) %>
   </dd>
   <dd>
 
