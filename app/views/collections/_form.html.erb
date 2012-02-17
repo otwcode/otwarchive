@@ -43,6 +43,19 @@
         <%= collection_form.text_field :header_image_url %>
     	  <p class="footnote">JPG, GIF, PNG</p>
       </dd>
+      
+    <dt><%= collection_form.label :icon_alt_text, ts("Icon alt text:") %> <%= link_to_help "icon-alt-text" %></dt>
+    <dd>
+      <%= collection_form.text_field :icon_alt_text, :class => "observe_textlength" %>
+      <%= generate_countdown_html("collection_icon_alt_text", ArchiveConfig.ICON_ALT_MAX) %>
+    </dd>
+    
+    <dt><%= collection_form.label :icon_comment_text, ts("Icon comment text:") %> <%= link_to_help "pseud-icon-comment" %></dt>
+    <dd>
+      <%= collection_form.text_field :icon_comment_text, :class => "observe_textlength" %>
+      <%= generate_countdown_html("collection_icon_comment_text", ArchiveConfig.ICON_ALT_MAX) %>
+    </dd>
+      
       <dt><%= collection_form.label :description, ts("Brief Description") %>:</dt>
       <dd>
         <%= collection_form.text_area :description, :rows => 4, :cols => 60, :class => "description-field observe_textlength" %>
