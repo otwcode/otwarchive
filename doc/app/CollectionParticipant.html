@@ -603,6 +603,11 @@
         <dd class="description">
         
       
+        <dt id="MAINTAINER_ROLES">MAINTAINER_ROLES
+        
+        <dd class="description">
+        
+      
         <dt id="MEMBER">MEMBER
         
         <dd class="description">
@@ -661,7 +666,7 @@
 
           
           <div class="method-source-code" id="approve_membership-21-source">
-            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 44</span>
+            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 45</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">approve_membership!</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">participant_role</span> = <span class="ruby-constant">MEMBER</span>
   <span class="ruby-identifier">save</span>
@@ -692,7 +697,7 @@
 
           
           <div class="method-source-code" id="is_invited-3F-source">
-            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 41</span>
+            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_invited?</span> ; <span class="ruby-keyword">self</span>.<span class="ruby-identifier">participant_role</span> <span class="ruby-operator">==</span> <span class="ruby-constant">INVITED</span> ; <span class="ruby-keyword">end</span></pre>
           </div><!-- is_invited-3F-source -->
           
@@ -720,7 +725,7 @@
 
           
           <div class="method-source-code" id="is_maintainer-3F-source">
-            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 39</span>
+            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_maintainer?</span> ; <span class="ruby-identifier">is_owner?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">is_moderator?</span> ; <span class="ruby-keyword">end</span></pre>
           </div><!-- is_maintainer-3F-source -->
           
@@ -748,7 +753,7 @@
 
           
           <div class="method-source-code" id="is_member-3F-source">
-            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 40</span>
+            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 41</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_member?</span> ; <span class="ruby-keyword">self</span>.<span class="ruby-identifier">participant_role</span> <span class="ruby-operator">==</span> <span class="ruby-constant">MEMBER</span> ; <span class="ruby-keyword">end</span></pre>
           </div><!-- is_member-3F-source -->
           
@@ -776,7 +781,7 @@
 
           
           <div class="method-source-code" id="is_moderator-3F-source">
-            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 38</span>
+            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_moderator?</span> ; <span class="ruby-keyword">self</span>.<span class="ruby-identifier">participant_role</span> <span class="ruby-operator">==</span> <span class="ruby-constant">MODERATOR</span> ; <span class="ruby-keyword">end</span></pre>
           </div><!-- is_moderator-3F-source -->
           
@@ -804,7 +809,7 @@
 
           
           <div class="method-source-code" id="is_none-3F-source">
-            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 42</span>
+            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 43</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_none?</span> ; <span class="ruby-keyword">self</span>.<span class="ruby-identifier">participant_role</span> <span class="ruby-operator">==</span> <span class="ruby-constant">NONE</span> ; <span class="ruby-keyword">end</span></pre>
           </div><!-- is_none-3F-source -->
           
@@ -832,7 +837,7 @@
 
           
           <div class="method-source-code" id="is_owner-3F-source">
-            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 37</span>
+            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 38</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_owner?</span> ; <span class="ruby-keyword">self</span>.<span class="ruby-identifier">participant_role</span> <span class="ruby-operator">==</span> <span class="ruby-constant">OWNER</span> ; <span class="ruby-keyword">end</span></pre>
           </div><!-- is_owner-3F-source -->
           
@@ -860,7 +865,7 @@
 
           
           <div class="method-source-code" id="user_allowed_to_destroy-3F-source">
-            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 49</span>
+            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 50</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">user_allowed_to_destroy?</span>(<span class="ruby-identifier">user</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">collection</span>.<span class="ruby-identifier">user_is_maintainer?</span>(<span class="ruby-identifier">user</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">user</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">user</span>
 <span class="ruby-keyword">end</span></pre>
@@ -890,7 +895,7 @@
 
           
           <div class="method-source-code" id="user_allowed_to_promote-3F-source">
-            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 53</span>
+            <pre><span class="ruby-comment"># File app/models/collection_participant.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">user_allowed_to_promote?</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">role</span>)
   (<span class="ruby-identifier">role</span> <span class="ruby-operator">==</span> <span class="ruby-constant">MEMBER</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">role</span> <span class="ruby-operator">==</span> <span class="ruby-constant">NONE</span>) <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">collection</span>.<span class="ruby-identifier">user_is_maintainer?</span>(<span class="ruby-identifier">user</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">collection</span>.<span class="ruby-identifier">user_is_owner?</span>(<span class="ruby-identifier">user</span>)
 <span class="ruby-keyword">end</span></pre>
