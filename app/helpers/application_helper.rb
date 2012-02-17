@@ -308,12 +308,7 @@ module ApplicationHelper
   
   def time_in_zone(time, zone=nil, user=User.current_user)
     return ts("(no time specified)") if time.blank?
-    
-    unless zone
-    if user && user.is_a?(User) && user.preference.time_zone 
-    then zone = user.preference.time_zone : Time.zone.name 
-    end  
-        
+    zone = ((user && user.is_a?(User) && user.preference.time_zone) ? user.preference.time_zone : Time.zone.name) unless zone
     time_in_zone = time.in_time_zone(zone)
     time_in_zone_string = time_in_zone.strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> 
                                                  <abbr class="month" title="%B">%b</abbr> <span class="year">%Y</span> 
