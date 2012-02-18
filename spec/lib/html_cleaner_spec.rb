@@ -188,8 +188,7 @@ describe HtmlCleaner do
       it "should allow two classes" do
         result = sanitize_value(:content, '<p class="foo bar">foobar</p>')
         doc = Nokogiri::HTML.fragment(result)
-        doc.xpath("./p[contains(@class, 'foo')]").children.to_s.strip.should == "foobar"
-        doc.xpath("./p[contains(@class, 'bar')]").children.to_s.strip.should == "foobar"
+        doc.xpath("./p[contains(@class, 'foo bar')]").children.to_s.strip.should == "foobar"
       end
 
       it "should allow youtube embeds" do
