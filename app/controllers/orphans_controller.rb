@@ -23,7 +23,7 @@ class OrphansController < ApplicationController
       @orphans = [series]            
     elsif params[:pseud_id]
       @pseuds = [Pseud.find(params[:pseud_id])]
-      @orphans = pseuds.first.works
+      @orphans = @pseuds.first.works
     else 
       @pseuds = current_user.pseuds
       @orphans = current_user.works      
