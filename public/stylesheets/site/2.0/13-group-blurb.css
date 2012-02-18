@@ -249,7 +249,7 @@ eg collections, users, skins, instead of the 4-icon list
 }
 
 .index .tag .icon, .index .tagset .icon {
-  background: url("/images/imageset.png") -100px -275px;
+  background: url("/images/imageset.png") -55px -580px;
 }
 
 .picture .icon img, .index .picture .icon {
