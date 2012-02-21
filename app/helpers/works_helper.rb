@@ -195,6 +195,16 @@ module WorksHelper
     text << "</ul>"
     text
   end
+
+  # Returns true or false to determine whether the work notes module should disply
+  def show_work_notes?(work)
+    work.notes.present? ||
+    work.endnotes.present? ||
+    work.recipients.present? ||
+    work.challenge_claims.present? ||
+    work.parent_work_relationships.present? ||
+    work.approved_related_works.present?
+  end
     
   
 end

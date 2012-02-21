@@ -33,7 +33,9 @@
         </div>
       <% end %>
 
-      <%= render "works/work_header_notes" %>
+      <% if show_work_notes?(@work) %>
+        <%= render "works/work_header_notes" %>
+      <% end %>
 
     <% end %>
   </div>
