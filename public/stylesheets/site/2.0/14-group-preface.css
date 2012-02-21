@@ -13,7 +13,7 @@ div.preface {
 div.preface .module {
   float: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0.643em;
   width: auto;
 }
 
@@ -47,17 +47,20 @@ div.preface .title, div.preface .byline, div.preface .byline a {
   border: 0;
 }
 
-div.preface .notes, div.preface .summary, div.prefact .series, div.preface .children {
+div.preface .notes, div.preface .summary, div.preface .series, div.preface .children {
   min-height: 5em;
 }
 
 div.afterword {
   margin-bottom: 2.5em;
-  border-bottom: 1px dotted;
 }
 
 div.afterword .series ul, div.afterword .children ul {
-  padding: 0.643em 0.643em 0;
+  padding: 0 0.643em;
+}
+
+div.afterword .series h3, div.afterword .children h3 {
+  border-bottom: none;
 }
 
 /*END== */
