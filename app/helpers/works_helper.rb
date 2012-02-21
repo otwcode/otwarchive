@@ -196,7 +196,7 @@ module WorksHelper
     text
   end
 
-  # Returns true or false to determine whether the work notes module should disply
+  # Returns true or false to determine whether the work notes module should display
   def show_work_notes?(work)
     work.notes.present? ||
     work.endnotes.present? ||
