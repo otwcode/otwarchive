@@ -74,7 +74,11 @@
     
     <li><a href="#method-i-confirm_delete">#confirm_delete</a>
     
+    <li><a href="#method-i-confirm_delete_multiple">#confirm_delete_multiple</a>
+    
     <li><a href="#method-i-create">#create</a>
+    
+    <li><a href="#method-i-delete_multiple">#delete_multiple</a>
     
     <li><a href="#method-i-destroy">#destroy</a>
     
@@ -675,6 +679,37 @@
       </div><!-- confirm_delete-method -->
 
     
+      <div id="method-i-confirm_delete_multiple" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">confirm_delete_multiple</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="confirm_delete_multiple-source">
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 702</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">confirm_delete_multiple</span>
+  <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
+  <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;distinct works.*&quot;</span>).<span class="ruby-identifier">joins</span>(<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;users.id = ?&quot;</span>, <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>])
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- confirm_delete_multiple-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- confirm_delete_multiple-method -->
+
+    
       <div id="method-i-create" class="method-detail ">
         
         <div class="method-heading">
@@ -740,6 +775,44 @@
 
         
       </div><!-- create-method -->
+
+    
+      <div id="method-i-delete_multiple" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delete_multiple</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="delete_multiple-source">
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 707</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_multiple</span>
+  <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
+  <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;users.id = ?&quot;</span>, <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>]).<span class="ruby-identifier">readonly</span>(<span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">titles</span> = <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:title</span>)
+  <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span> <span class="ruby-node">&quot;!&amp;!&amp;!&amp;!&amp;&amp;! GOT HERE #{titles}&quot;</span>
+  <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">work</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">work</span>.<span class="ruby-identifier">destroy</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your works %{titles} were deleted.&quot;</span>, <span class="ruby-value">:titles</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">titles</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>))
+  <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">show_multiple_user_works_path</span>(<span class="ruby-ivar">@user</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- delete_multiple-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- delete_multiple-method -->
 
     
       <div id="method-i-destroy" class="method-detail ">
@@ -890,11 +963,16 @@
 
           
           <div class="method-source-code" id="edit_multiple-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 689</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 691</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit_multiple</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:commit</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Orphan&quot;</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">new_orphan_path</span>(<span class="ruby-value">:work_ids</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>]) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
-  <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>]) &amp; <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">works</span>
-
+  <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;distinct works.*&quot;</span>).<span class="ruby-identifier">joins</span>(<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;users.id = ?&quot;</span>, <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:commit</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;Delete&quot;</span>
+    <span class="ruby-identifier">render</span> <span class="ruby-string">&quot;confirm_delete_multiple&quot;</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- edit_multiple-source -->
           
@@ -1175,7 +1253,7 @@
 
           
           <div class="method-source-code" id="marktoread-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 712</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 741</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">marktoread</span>
   <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-constant">Reading</span>.<span class="ruby-identifier">mark_to_read_later</span>(<span class="ruby-ivar">@work</span>, <span class="ruby-identifier">current_user</span>)
@@ -1521,14 +1599,16 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show_multiple</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>]
-    <span class="ruby-ivar">@author</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>])
-    <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@author</span>.<span class="ruby-identifier">works</span>
+    <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:pseuds</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:pseud_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>])
   <span class="ruby-keyword">else</span>
-    <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">works</span>
+    <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;users.id = ?&quot;</span>, <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>)
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>]
-    <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@works</span> &amp; <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>])
+    <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>])
   <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@works_by_fandom</span> = <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:taggings</span>).
+    <span class="ruby-identifier">joins</span>(<span class="ruby-string">&quot;inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'&quot;</span>).
+    <span class="ruby-identifier">select</span>(<span class="ruby-string">&quot;distinct tags.name as fandom, works.id as id, works.title as title&quot;</span>).<span class="ruby-identifier">group_by</span>(&amp;<span class="ruby-value">:fandom</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- show_multiple-source -->
           
@@ -1690,21 +1770,26 @@
 
           
           <div class="method-source-code" id="update_multiple-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 695</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 719</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_multiple</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">current_user</span>
-  <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>]) &amp; <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">works</span>
+  <span class="ruby-ivar">@works</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;users.id = ?&quot;</span>, <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>]).<span class="ruby-identifier">readonly</span>(<span class="ruby-keyword">false</span>)
   <span class="ruby-ivar">@errors</span> = []
+  <span class="ruby-comment"># to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes</span>
+  <span class="ruby-identifier">work_params</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>].<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">value</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;0&quot;</span>}
   <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">work</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># actual stuff will happen here shortly</span>
-    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">update_attributes!</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:work</span>].<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">blank?</span>})
+    <span class="ruby-comment"># now we can just update each work independently, woo!</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">work_params</span>)
       <span class="ruby-ivar">@errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The work %{title} could not be edited: %{error}&quot;</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">title</span>, <span class="ruby-value">:error</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">work</span>.<span class="ruby-identifier">errors_on</span>.<span class="ruby-identifier">to_s</span>)
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@errors</span>.<span class="ruby-identifier">empty?</span>
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;There were problems editing some works: %{errors}&quot;</span>, <span class="ruby-value">:errors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@errors</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;, &quot;</span>))
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_multiple_user_works_path</span>(<span class="ruby-ivar">@user</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your edits were put through! Please check over the works to make sure everything is right.&quot;</span>)
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">show_multiple_user_works_path</span>(<span class="ruby-ivar">@user</span>, <span class="ruby-value">:work_ids</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@works</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>))
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">show_multiple_user_works_path</span>(<span class="ruby-ivar">@user</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- update_multiple-source -->
           
@@ -1818,7 +1903,7 @@
 
           
           <div class="method-source-code" id="cancel_posting_and_redirect-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 822</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 851</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel_posting_and_redirect</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@work</span> <span class="ruby-keyword">and</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">posted</span>
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;The work was not updated.&quot;</span>)
@@ -1964,7 +2049,7 @@
 
           
           <div class="method-source-code" id="load_pseuds-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 721</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 750</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_pseuds</span>
   <span class="ruby-ivar">@allpseuds</span> = (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">+</span> (<span class="ruby-ivar">@work</span>.<span class="ruby-identifier">authors</span> <span class="ruby-operator">||=</span> []) <span class="ruby-operator">+</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">pseuds</span>).<span class="ruby-identifier">uniq</span>
   <span class="ruby-ivar">@pseuds</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span>
@@ -1998,7 +2083,7 @@
 
           
           <div class="method-source-code" id="load_work-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 729</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 758</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_work</span>
   <span class="ruby-ivar">@work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find_by_id</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">nil?</span>
@@ -2075,7 +2160,7 @@
 
           
           <div class="method-source-code" id="set_author_attributes-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 778</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 807</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_author_attributes</span>
   <span class="ruby-comment"># if we don't have author_attributes[:ids], which shouldn't be allowed to happen</span>
   <span class="ruby-comment"># (this can happen if a user with multiple pseuds decides to unselect *all* of them)</span>
@@ -2127,7 +2212,7 @@
 
           
           <div class="method-source-code" id="set_instance_variables-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 743</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 772</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_instance_variables</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>] <span class="ruby-comment"># edit, update, preview, manage_chapters</span>
     <span class="ruby-ivar">@work</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -2187,7 +2272,7 @@
 
           
           <div class="method-source-code" id="set_instance_variables_tags-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 804</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 833</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_instance_variables_tags</span>
   <span class="ruby-keyword">begin</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>] <span class="ruby-comment"># edit_tags, update_tags, preview_tags</span>
@@ -2232,7 +2317,7 @@ markup</p>
 
           
           <div class="method-source-code" id="tag_list-source">
-            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 833</span>
+            <pre><span class="ruby-comment"># File app/controllers/works_controller.rb, line 862</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_list</span>(<span class="ruby-identifier">tags</span>)
   <span class="ruby-identifier">tags</span> = <span class="ruby-identifier">tags</span>.<span class="ruby-identifier">uniq</span>.<span class="ruby-identifier">compact</span>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">tags</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tags</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:collect</span>)

@@ -51,9 +51,9 @@ class Sanitize
       # let through alphanumeric class names with a dash/underscore;
       # allow multiple classes
       classes = classval.split(" ")
-      newclasses = ""
-      classes.each { |cls| newclasses << cls if cls =~ /^[a-zA-Z][\w\-]+$/ }
-      node['class'] = newclasses
+      newclasses = []
+      classes.each { |cls| newclasses << [cls] if cls =~ /^[a-zA-Z][\w\-]+$/ }
+      node['class'] = newclasses.join(" ")
     end
 
     # taken directly from rgrove's docs

@@ -70,6 +70,8 @@
 
   <ul class="link-list">
     
+    <li><a href="#method-i-author_name">#author_name</a>
+    
     <li><a href="#method-i-claimed-3F">#claimed?</a>
     
     <li><a href="#method-i-external_author">#external_author</a>
@@ -592,6 +594,36 @@
       <h3 class="section-header">Public Instance Methods</h3>
 
     
+      <div id="method-i-author_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">author_name</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="author_name-source">
+            <pre><span class="ruby-comment"># File app/models/external_creatorship.rb, line 22</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">author_name</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">external_author_name</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:name</span>) <span class="ruby-operator">||</span> <span class="ruby-string">&quot;&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- author_name-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- author_name-method -->
+
+    
       <div id="method-i-claimed-3F" class="method-detail ">
         
         <div class="method-heading">
@@ -610,7 +642,7 @@
           <div class="method-source-code" id="claimed-3F-source">
             <pre><span class="ruby-comment"># File app/models/external_creatorship.rb, line 14</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">claimed?</span>
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">external_author_name</span>.<span class="ruby-identifier">external_author</span>.<span class="ruby-identifier">claimed?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">external_author_name</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:external_author</span>).<span class="ruby-identifier">try</span>(<span class="ruby-value">:claimed?</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- claimed-3F-source -->
           
@@ -640,7 +672,7 @@
           <div class="method-source-code" id="external_author-source">
             <pre><span class="ruby-comment"># File app/models/external_creatorship.rb, line 10</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">external_author</span>
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">external_author_name</span>.<span class="ruby-identifier">external_author</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">external_author_name</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:external_author</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- external_author-source -->
           
@@ -670,7 +702,7 @@
           <div class="method-source-code" id="external_author-3D-source">
             <pre><span class="ruby-comment"># File app/models/external_creatorship.rb, line 6</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">external_author=</span>(<span class="ruby-identifier">external_author</span>)
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">external_author_name</span> = <span class="ruby-identifier">external_author</span>.<span class="ruby-identifier">default_name</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">external_author_name</span> = <span class="ruby-identifier">external_author</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:default_name</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- external_author-3D-source -->
           

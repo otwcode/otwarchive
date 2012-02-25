@@ -3,7 +3,7 @@
 <%= form_for(@work) do |f| %>
 
   <p class="required notice"><%= ts('* Required information') %></p>
-  <%= render 'work_tags_form', :include_blank => false %>
+  <%= render 'work_form_tags', :include_blank => false %>
   <fieldset class="preface" role="article">
     <legend><%= ts('Preface') %></legend>
     <h3 class="landmark heading"><%= ts('Preface') %></h3>
@@ -183,7 +183,7 @@
             <dt><%= ts('Chapter 1 of') %></dt>
             <dd><%= f.text_field :wip_length, :class => "number" %></dd>
             <dt><%= ts('Chapter Title:') %></dt>
-            <dd><%= c.text_field :title, :class => "number", :value => @chapter.title %></dd>
+            <dd><%= c.text_field :title, :value => @chapter.title %></dd>
           </dl>
         </fieldset>
       </dd>

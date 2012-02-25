@@ -647,7 +647,7 @@ to NOT do  :term - the search term</p>
 
           
           <div class="method-source-code" id="associated_tags-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 76</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 82</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">associated_tags</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:fandom</span>].<span class="ruby-identifier">blank?</span> 
     <span class="ruby-identifier">render_output</span>([<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please select a fandom first!&quot;</span>)])
@@ -682,7 +682,7 @@ to NOT do  :term - the search term</p>
 
           
           <div class="method-source-code" id="challenge_participants-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 138</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 144</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">challenge_participants</span>
   <span class="ruby-identifier">search_param</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]
   <span class="ruby-identifier">collection_id</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>]
@@ -716,7 +716,7 @@ to NOT do  :term - the search term</p>
 
           
           <div class="method-source-code" id="character-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 38</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">character</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-string">&quot;character&quot;</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- character-source -->
           
@@ -744,7 +744,7 @@ to NOT do  :term - the search term</p>
 
           
           <div class="method-source-code" id="character_in_fandom-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 50</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 56</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">character_in_fandom</span>; <span class="ruby-identifier">tag_in_fandom_output</span>(<span class="ruby-identifier">params</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-value">:tag_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;character&quot;</span>})); <span class="ruby-keyword">end</span></pre>
           </div><!-- character_in_fandom-source -->
           
@@ -772,7 +772,7 @@ to NOT do  :term - the search term</p>
 
           
           <div class="method-source-code" id="collection_fullname-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 106</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 112</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">collection_fullname</span>
   <span class="ruby-identifier">results</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;autocomplete_collection_all&quot;</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span> <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">fullname_from_autocomplete</span>(<span class="ruby-identifier">res</span>)}
   <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">results</span>)
@@ -804,7 +804,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="collection_parent_name-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 122</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 128</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">collection_parent_name</span>
   <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">maintained_collections</span>.<span class="ruby-identifier">top_level</span>.<span class="ruby-identifier">with_name_like</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]).<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:name</span>).<span class="ruby-identifier">sort</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -834,7 +834,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="encoding-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 132</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 138</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">encoding</span>
   <span class="ruby-identifier">encodings</span> = <span class="ruby-constant">Encoding</span>.<span class="ruby-identifier">name_list</span>.<span class="ruby-identifier">select</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">match</span>(<span class="ruby-node">%r#{params[:term]}/</span>)}
   <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">encodings</span>)
@@ -865,7 +865,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="external_work-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 127</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 133</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">external_work</span>
   <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">ExternalWork</span>.<span class="ruby-identifier">where</span>([<span class="ruby-string">&quot;url LIKE ?&quot;</span>, <span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>] <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>]).<span class="ruby-identifier">limit</span>(<span class="ruby-value">10</span>).<span class="ruby-identifier">order</span>(<span class="ruby-value">:url</span>).<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:url</span>))    
 <span class="ruby-keyword">end</span></pre>
@@ -895,7 +895,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="fandom-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 37</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 43</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">fandom</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-string">&quot;fandom&quot;</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- fandom-source -->
           
@@ -923,7 +923,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="freeform-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 40</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 46</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">freeform</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-string">&quot;freeform&quot;</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- freeform-source -->
           
@@ -951,7 +951,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="nominated_parents-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 99</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 105</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">nominated_parents</span>
   <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">TagNomination</span>.<span class="ruby-identifier">for_tag_set</span>(<span class="ruby-constant">OwnedTagSet</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_set_id</span>])).<span class="ruby-identifier">nominated_parents</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tagname</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]))
 <span class="ruby-keyword">end</span></pre>
@@ -981,7 +981,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="noncanonical_tag-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 86</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 92</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">noncanonical_tag</span>
   <span class="ruby-identifier">search_param</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>]
   <span class="ruby-identifier">tag_class</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:type</span>].<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span>
@@ -1015,7 +1015,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="open_collection_names-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 113</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 119</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">open_collection_names</span>
   <span class="ruby-comment"># in this case we want different ids from names so we can display the title but only put in the name</span>
   <span class="ruby-identifier">results</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;autocomplete_collection_open&quot;</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> 
@@ -1049,7 +1049,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="owned_tag_sets-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 147</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 153</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">owned_tag_sets</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>].<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
     <span class="ruby-identifier">search_param</span> = <span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>] <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>
@@ -1084,7 +1084,13 @@ owned by the user only</p>
           <div class="method-source-code" id="pseud-source">
             <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 25</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">pseud</span>
-  <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;autocomplete_pseud&quot;</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span> <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">fullname_from_autocomplete</span>(<span class="ruby-identifier">res</span>)})
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>].<span class="ruby-identifier">blank?</span>
+    <span class="ruby-comment"># get the user's own pseuds</span>
+    <span class="ruby-identifier">set_current_user</span>
+    <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:byline</span>))
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">render_output</span>(<span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-value">:search_param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-value">:autocomplete_prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;autocomplete_pseud&quot;</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span> <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">fullname_from_autocomplete</span>(<span class="ruby-identifier">res</span>)})
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- pseud-source -->
           
@@ -1112,7 +1118,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="relationship-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 39</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 45</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">relationship</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-string">&quot;relationship&quot;</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- relationship-source -->
           
@@ -1140,7 +1146,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="relationship_in_fandom-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 51</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 57</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">relationship_in_fandom</span>; <span class="ruby-identifier">tag_in_fandom_output</span>(<span class="ruby-identifier">params</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-value">:tag_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;relationship&quot;</span>})); <span class="ruby-keyword">end</span></pre>
           </div><!-- relationship_in_fandom-source -->
           
@@ -1168,7 +1174,7 @@ owned by the user only</p>
 
           
           <div class="method-source-code" id="site_skins-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 155</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 161</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">site_skins</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>].<span class="ruby-identifier">present?</span>
     <span class="ruby-identifier">search_param</span> = <span class="ruby-string">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>] <span class="ruby-operator">+</span> <span class="ruby-string">'%'</span>
@@ -1208,7 +1214,7 @@ readable</p>
 
           
           <div class="method-source-code" id="tag-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 36</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:type</span>]); <span class="ruby-keyword">end</span></pre>
           </div><!-- tag-source -->
           
@@ -1236,7 +1242,7 @@ readable</p>
 
           
           <div class="method-source-code" id="tag_in_fandom-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 49</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 55</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_in_fandom</span>; <span class="ruby-identifier">tag_in_fandom_output</span>(<span class="ruby-identifier">params</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- tag_in_fandom-source -->
           
@@ -1266,7 +1272,7 @@ false if only want tags in ALL specified sets :term - the search term</p>
 
           
           <div class="method-source-code" id="tags_in_sets-source">
-            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 64</span>
+            <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 70</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tags_in_sets</span>
   <span class="ruby-identifier">results</span> = <span class="ruby-constant">TagSet</span>.<span class="ruby-identifier">autocomplete_lookup</span>(<span class="ruby-identifier">params</span>)
   <span class="ruby-identifier">render_output</span>(<span class="ruby-identifier">results</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">name_from_autocomplete</span>(<span class="ruby-identifier">r</span>)})

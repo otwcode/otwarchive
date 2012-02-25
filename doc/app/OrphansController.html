@@ -74,6 +74,8 @@
     
     <li><a href="#method-i-index">#index</a>
     
+    <li><a href="#method-i-load_orphans">#load_orphans</a>
+    
     <li><a href="#method-i-new">#new</a>
     
   </ul>
@@ -606,30 +608,16 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/orphans_controller.rb, line 22</span>
+            <pre><span class="ruby-comment"># File app/controllers/orphans_controller.rb, line 43</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-identifier">new_orphans</span> = {}
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_id</span>]
-    <span class="ruby-identifier">work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:work_id</span>])
-    <span class="ruby-identifier">pseuds</span> = (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span> &amp; <span class="ruby-identifier">work</span>.<span class="ruby-identifier">pseuds</span>)
-    <span class="ruby-identifier">orphans</span> = [<span class="ruby-identifier">work</span>]
-  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:series_id</span>]
-    <span class="ruby-identifier">series</span> = <span class="ruby-constant">Series</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:series_id</span>])
-    <span class="ruby-identifier">pseuds</span> = (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span> &amp; <span class="ruby-identifier">series</span>.<span class="ruby-identifier">pseuds</span>)
-    <span class="ruby-identifier">orphans</span> = [<span class="ruby-identifier">series</span>]            
-  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>]
-    <span class="ruby-identifier">pseuds</span> = [<span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>])]
-    <span class="ruby-identifier">orphans</span> = <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">works</span>
-  <span class="ruby-keyword">else</span> 
-    <span class="ruby-identifier">pseuds</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span>
-    <span class="ruby-identifier">orphans</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">works</span>      
-  <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">use_default</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:use_default</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;true&quot;</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">Creatorship</span>.<span class="ruby-identifier">orphan</span>(<span class="ruby-identifier">pseuds</span>, <span class="ruby-identifier">orphans</span>, <span class="ruby-identifier">use_default</span>)
-    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'success'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Orphaning was successful.'</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@pseuds</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">Creatorship</span>.<span class="ruby-identifier">orphan</span>(<span class="ruby-ivar">@pseuds</span>, <span class="ruby-ivar">@orphans</span>, <span class="ruby-identifier">use_default</span>)
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">'Orphaning was successful.'</span>)
     <span class="ruby-identifier">redirect_to</span>(<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">render</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:new</span> 
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You don't seem to have permission to orphan this.&quot;</span>)
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
   <span class="ruby-keyword">end</span> 
 <span class="ruby-keyword">end</span></pre>
           </div><!-- create-source -->
@@ -658,7 +646,7 @@
 
           
           <div class="method-source-code" id="index-source">
-            <pre><span class="ruby-comment"># File app/controllers/orphans_controller.rb, line 5</span>
+            <pre><span class="ruby-comment"># File app/controllers/orphans_controller.rb, line 7</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">orphan_account</span>
   <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">works</span>
@@ -671,6 +659,59 @@
 
         
       </div><!-- index-method -->
+
+    
+      <div id="method-i-load_orphans" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">load_orphans</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="load_orphans-source">
+            <pre><span class="ruby-comment"># File app/controllers/orphans_controller.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">load_orphans</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_id</span>]
+    <span class="ruby-identifier">work</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:work_id</span>])
+    <span class="ruby-ivar">@pseuds</span> = (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span> &amp; <span class="ruby-identifier">work</span>.<span class="ruby-identifier">pseuds</span>)
+    <span class="ruby-ivar">@orphans</span> = [<span class="ruby-identifier">work</span>]
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>]
+    <span class="ruby-ivar">@orphans</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:pseuds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;users.id = ?&quot;</span>, <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">where</span>(<span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_ids</span>])
+    <span class="ruby-ivar">@pseuds</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span> &amp; (<span class="ruby-ivar">@orphans</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:pseuds</span>).<span class="ruby-identifier">flatten</span>)
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:series_id</span>]
+    <span class="ruby-identifier">series</span> = <span class="ruby-constant">Series</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:series_id</span>])
+    <span class="ruby-ivar">@pseuds</span> = (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span> &amp; <span class="ruby-identifier">series</span>.<span class="ruby-identifier">pseuds</span>)
+    <span class="ruby-ivar">@orphans</span> = [<span class="ruby-identifier">series</span>]            
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>]
+    <span class="ruby-ivar">@pseuds</span> = [<span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>])]
+    <span class="ruby-ivar">@orphans</span> = <span class="ruby-ivar">@pseuds</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">works</span>
+  <span class="ruby-keyword">else</span> 
+    <span class="ruby-ivar">@pseuds</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span>
+    <span class="ruby-ivar">@orphans</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">works</span>      
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@pseuds</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You don't have permission to orphan that!&quot;</span>)
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
+    <span class="ruby-keyword">false</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- load_orphans-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- load_orphans-method -->
 
     
       <div id="method-i-new" class="method-detail ">
@@ -689,17 +730,8 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/orphans_controller.rb, line 10</span>
+            <pre><span class="ruby-comment"># File app/controllers/orphans_controller.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
-  <span class="ruby-ivar">@to_be_orphaned</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:work_id</span>]
-                      <span class="ruby-constant">Work</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:work_id</span>])
-                    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:series_id</span>]
-                      <span class="ruby-constant">Series</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:series_id</span>])
-                    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>]
-                      <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>])
-                    <span class="ruby-keyword">else</span>
-                      <span class="ruby-identifier">current_user</span>      
-                    <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- new-source -->
           

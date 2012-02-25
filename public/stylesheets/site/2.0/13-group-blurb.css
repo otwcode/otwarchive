@@ -169,7 +169,7 @@ li.blurb:after {
 }
 
 .blurb .complete-no {
-  background: url("/images/imageset.png") -150px -25px;
+  background: url("/images/imageset.png") -100px -25px;
 }
 
 .blurb .complete-yes {
@@ -245,11 +245,11 @@ eg collections, users, skins, instead of the 4-icon list
 }
 
 .index .mystery .icon {
-  background: url("/images/imageset.png") 0px -75px;
+  background: url("/images/imageset.png") -110px -525px;
 }
 
 .index .tag .icon, .index .tagset .icon {
-  background: url("/images/imageset.png") 0px -275px;
+  background: url("/images/imageset.png") -55px -580px;
 }
 
 .picture .icon img, .index .picture .icon {

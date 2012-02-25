@@ -211,7 +211,8 @@ form li ul.autocomplete li.input {
 /* WIDGET: SORTABLE LIST (note: hope to merge with .sortable and .draggable etc)*/
 
 .ui-sortable li {
-  border: 2px solid transparent;
+  background: #eee;
+  border: 2px solid #ddd;
   float: left;
   width: 100%;
   clear: both;
@@ -235,6 +236,8 @@ form li ul.autocomplete li.input {
 
 .ui-sortable ul.actions li {
   float: none;
+  background: transparent;
+  border: none;
 }
 
 .ui-draggable form {
