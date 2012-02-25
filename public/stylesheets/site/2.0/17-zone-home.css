@@ -61,6 +61,10 @@ user home, collections and challenges home, tag home, admin comms home
   width: 100%;
 }
 
+#dynamic-bookmark + h4.landmark {
+  clear: both;
+}
+
 /*(with filters)*/
 
 #inbox-form {
