@@ -981,7 +981,7 @@ owned comments!</p>
           <div class="method-source-code" id="check_tag_wrangler_access-source">
             <pre><span class="ruby-comment"># File app/controllers/comments_controller.rb, line 24</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_tag_wrangler_access</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">||</span> (<span class="ruby-ivar">@comment</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@comment</span>.<span class="ruby-identifier">commentable</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>))
     <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">permit?</span>(<span class="ruby-string">&quot;tag_wrangler&quot;</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>

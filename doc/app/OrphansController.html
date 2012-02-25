@@ -692,7 +692,7 @@
     <span class="ruby-ivar">@orphans</span> = [<span class="ruby-identifier">series</span>]            
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>]
     <span class="ruby-ivar">@pseuds</span> = [<span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>])]
-    <span class="ruby-ivar">@orphans</span> = <span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">works</span>
+    <span class="ruby-ivar">@orphans</span> = <span class="ruby-ivar">@pseuds</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">works</span>
   <span class="ruby-keyword">else</span> 
     <span class="ruby-ivar">@pseuds</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">pseuds</span>
     <span class="ruby-ivar">@orphans</span> = <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">works</span>      
