@@ -211,7 +211,8 @@ class Admin::AdminUsersController < ApplicationController
 
   def send_activation
     @user = User.find_by_login(params[:id])
-    UserMailer.signup_notification(@user.id).deliver
+    # send synchronously to avoid getting caught in mail queue
+    UserMailer.signup_notification(@user.id).deliver! 
     flash[:notice] = t('activation_sent', :default => "Activation email sent")
     redirect_to :action => :show
   end
