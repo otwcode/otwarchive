@@ -3,7 +3,7 @@
   <ul id="sortable_archive_faq_list">
     <% for archive_faq in @archive_faqs %>
       <li id="archive_faq_<%= archive_faq.id %>" class="archive_faq-position-list">
-        <%= text_field_tag "archive_faqs[]", nil, :size => 3, :maxlength => 3, :id => "archive_faqs_#{archive_faq.id}" %>
+        <%= text_field_tag "archive_faqs[]", nil, :size => 3, :maxlength => 3, :id => "archive_faqs_#{archive_faq.id}", :class => "number" %>
         <span id='position-for-<%= archive_faq.id %>'><%= archive_faq.position %></span>. 
         <h3 class="heading"><%=h archive_faq.title %></h3>
       </li>
