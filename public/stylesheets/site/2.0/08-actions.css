@@ -125,6 +125,10 @@ ul#skiplinks, .landmark, .landmark a, .index .heading.landmark {
   padding: 0.15em 0.375em;
 }
 
+th .actions, td .actions {
+  float: none;
+}
+
 dl.stats + h6 + .actions {
   float: left;
 }
