@@ -282,26 +282,36 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 /* WIDGET: IBOX (called by help links todo: REPLACE WITH KBD LIGHTBOX)*/
 
 #ibox_w {
-  position: absolute;
+  position: fixed;
   top: 0;
+  right: 0;
+  bottom: 0;
   left: 0;
   z-index: 100;
   width: 100%;
   height: 100%;
   background: #000;
-    filter: alpha(opacity=0);
     opacity: 0;
+    filter: Alpha(Opacity=60); /* IE7 and under */
+    -ms-filter: Alpha(Opacity=60); /* IE8 */
+}
+
+#ibox_w, #ibox_wrapper {
+  transition:           opacity 400ms ease-out;
+    -moz-transition:    opacity 400ms ease-out;
+    -webkit-transition: opacity 400ms ease-out;
+    -o-transition:      opacity 400ms ease-out;
 }
 
 #ibox_progress {
   margin: 0;
   padding: 0;
-  position: absolute;
+  position: fixed;
   z-index: 105;
 }
 
 #ibox_wrapper {
-  position: absolute;
+  position: fixed;
   z-index: 1000;
   padding: 0.643em 0.643em 2.5em;
   border: 10px solid #eee;
@@ -311,13 +321,28 @@ qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
 #ibox_content {
   font-size: 0.875em;
   background: #fff;
-  width: 100%;
-  height: 100%;
-  margin-bottom: 0.25em;
-  position: relative;
+  width: 100%; width: inherit;
+  height: 100%; height: inherit;
+  overflow: auto;
+  margin-bottom: 2px;
+  padding: 4px 0 0 8px;
+  position: absolute;
   top: 0;
+  right: 0;
+  bottom: 30px;
   left: 0;
   border-bottom: 1px solid #ccc;
+}
+
+#ibox_close {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+#ibox_footer {
+  position: absolute;
+  bottom:8px;
 }
 
 /*MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */

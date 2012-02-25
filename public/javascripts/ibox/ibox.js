@@ -3,369 +3,478 @@ For more info & download: http://www.ibegin.com/blog/p_ibox.html
 Created for iBegin.com - local search done right
 MIT Licensed Style
 *********************************************************/
-var indicator_img_path = "/images/indicator.gif";
-var indicator_img_html = "<img name=\"ibox_indicator\" src=\""+indicator_img_path+"\" alt=\"Loading...\" style=\"width:128px;height:128px;\"/>"; // don't remove the name
+var indicator_img_path = "/images/indicator.gif",
+    indicator_img_html = "<img name=\"ibox_indicator\" src=\""+indicator_img_path+"\" alt=\"Loading...\" style=\"width:128px;height:128px;\"/>", // don't remove the name
+    ibAttr = "rel",     // our attribute identifier for our iBox elements
+    imgPreloader = new Image(), // create an preloader object
+    loadCancelled = false,
+    shown = false, // whether the lightbox is currently visible
+    scrollBarW, // width of browser's vertical scrollbar
+    arrowKeyDown = false, // used for enabling keyboard scrolling for Opera
+    scrollTimer; // used for enabling keyboard scrolling for Opera
 
-var opacity_level = 5; // how transparent our overlay bg is
-var ibAttr = "rel"; 	// our attribute identifier for our iBox elements
-	
-
-var imgPreloader = new Image(); // create an preloader object
 function init_ibox() {
-	var elem_wrapper = "ibox";
-	
-	createIbox(document.getElementsByTagName("body")[0]); //create our ibox
+    // no iboxes for dead browsers
+    /*@cc_on
+    @if (@_jscript_version < 5.7)
+        return;
+    @end
+    @*/
 
-	//	elements here start the look up from the start non <a> tags
-	//var docRoot = (document.all) ? document.all : document.getElementsByTagName("*");
-	
-	// Or make sure we only check <a> tags
-	var docRoot = document.getElementsByTagName("a");
+    createIbox(document.getElementsByTagName("body")[0]); //create our ibox
 
-	var e;
-	for (var i = 0; i < docRoot.length - 1; i++) {
-			e = docRoot[i];
-			if(e.getAttribute(ibAttr)) {
-				var t = e.getAttribute(ibAttr);
-				if ((t.indexOf("ibox") != -1)  ||  t.toLowerCase() == "ibox") { // check if this element is an iBox element
-						e.onclick = function() { // rather assign an onclick event
-							var t = this.getAttribute(ibAttr);
-							var params = parseQuery(t.substr(5,999));
-							var url = this.href;
-							if(this.target != "") {url = this.target} 
-	
-							var title = this.title;
+    //    elements here start the look up from the start non <a> tags
+    //var docRoot = (document.all) ? document.all : document.getElementsByTagName("*");
+    
+    // Or make sure we only check <a> tags
+    var docRoot = document.getElementsByTagName("a");
 
-							if(showIbox(url,title,params)) {
-								showBG();
-								window.onscroll = maintPos;
-								window.onresize = maintPos;
-							}
-							return false;
-						}; 
-						
-				}
-			}
+    var e;
+    for (var i = 0; i < docRoot.length - 1; i++) {
+        e = docRoot[i];
+        if(e.getAttribute(ibAttr)) {
+            var t = e.getAttribute(ibAttr);
+            if ((t.indexOf("ibox") != -1)  ||  t.toLowerCase() == "ibox") { // check if this element is an iBox element
+                e.onclick = function() { // rather assign an onclick event
+                    var t = this.getAttribute(ibAttr),
+                        params = parseQuery(t.substr(5,999)),
+                        url = this.href;
+                        
+                    if(this.target != "") {url = this.target} 
+
+                    var title = this.title;
+
+                    if(showIbox(url,title,params)) {
+                        showBG();
+                    }
+                    return false;
+                };
+            }
+        }
      }
+    
+    // listen for ESC key to close ibox
+    addEvent(document.body, "keyup", function(e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        if (e.keyCode == 27 && 
+            target.tagName != "SELECT" &&
+            shown) {
+                hideIbox();
+                hideIndicator();
+                loadCancelled = true;
+            }
+    });
+    
+    // listen for clicks on ibox bg to close ibox
+    addEvent(getElem("ibox_w"), "click", function () {
+        if (shown) {
+            hideIbox();
+            hideIndicator();
+            loadCancelled = true;
+        }    
+    });
 }
 
 showBG = function() {
-	var box_w = getElem('ibox_w');
-	
-
-	box_w.style.opacity = 0;
-	box_w.style.filter = 'alpha(opacity=0)';
-	setBGOpacity = setOpacity;
-	for (var i=0;i<=opacity_level;i++) {setTimeout("setIboxOpacity('ibox_w',"+i+")",1*i);} // from quirksmode.org
-	
-		
-	box_w.style.display = "";
-	var pagesize = new getPageSize();
-	var scrollPos = new getScrollPos();
-	var ua = navigator.userAgent;
-	
-	if(ua.indexOf("MSIE ") != -1) {box_w.style.width = pagesize.width+'px';} 
-	/*else {box_w.style.width = pagesize.width-20+'px';}*/ // scrollbars removed! Hurray!
-	box_w.style.height = pagesize.height+scrollPos.scrollY+'px';
-
+    var box_w = getElem('ibox_w');    
+    box_w.style.visibility = "";
+    box_w.style.opacity = "0.6";
 }
 
 hideBG = function() {
-	var box_w = getElem('ibox_w');
-	box_w.style.display = "none";
-
+    var box_w = getElem('ibox_w');
+    setTimeout(function() { box_w.style.opacity = "0"; }, 0); // Firefox seems to need a delay
+    setTimeout(function() { box_w.style.visibility = "hidden"; }, 400); // time should match transition-duration
 }
 
-var loadCancelled = false;
 showIndicator = function() {
-	var ibox_p = getElem('ibox_progress');
-	ibox_p.style.display = "";
-	posToCenter(ibox_p);
-	ibox_p.onclick = function() {hideIbox();hideIndicator();loadCancelled = true;}
+    var ibox_p = getElem('ibox_progress');
+    ibox_p.style.display = "";
+    posToCenter(ibox_p);
+    ibox_p.onclick = function() {hideIbox();hideIndicator();loadCancelled = true;}
 }
-
 
 hideIndicator = function() {
-	var ibox_p = getElem('ibox_progress');
-	ibox_p.style.display = "none";
-	ibox_p.onclick = null;
+    var ibox_p = getElem('ibox_progress');
+    ibox_p.style.display = "none";
+    ibox_p.onclick = null;
 }
 
 createIbox = function(elem) {
-	// a trick on just creating an ibox wrapper then doing an innerHTML on our root ibox element
-	var strHTML = "<div id=\"ibox_w\" aria-live=\"assertive\" aria-relevant=\"additions removals text\" role=\"dialog\" tabindex=\"-1\" style=\"display:none;\"></div>";
-	strHTML +=	"<div id=\"ibox_progress\" aria-busy=\"true\" style=\"display:none;\">";
-	strHTML +=  indicator_img_html;
-	strHTML +=  "</div>";
-	strHTML +=	"<div id=\"ibox_wrapper\" style=\"display:none\">";
-	strHTML +=	"<div id=\"ibox_content\" aria-busy=\"false\" class=\"userstuff\"></div>";
-	strHTML +=	"<div id=\"ibox_footer_wrapper\"><div id=\"ibox_close\" style=\"float:right;\">";
-	strHTML +=	"<a id=\"ibox_close_a\" href=\"javascript:void(null);\" class=\"action\" role=\"button\">CLOSE</a></div>";
-	strHTML +=  "<div id=\"ibox_footer\">&nbsp;</div></div></div></div>";
+    // a trick on just creating an ibox wrapper then doing an innerHTML on our root ibox element
+    var strHTML = "<div id=\"ibox_w\" aria-live=\"assertive\" aria-relevant=\"additions removals text\" role=\"dialog\" tabindex=\"-1\" style=\"visibility:hidden;\"></div>";
+    strHTML +=    "<div id=\"ibox_progress\" aria-busy=\"true\" style=\"display:none;\">" +indicator_img_html +"</div>";
+    strHTML +=    "<div id=\"ibox_wrapper\" style=\"visibility:hidden;\">";    
+    strHTML +=    "<div id=\"ibox_content\" class=\"userstuff\" aria-busy=\"false\"></div>";
+    strHTML +=    "<div id=\"ibox_footer_wrapper\"><div id=\"ibox_close\">";
+    strHTML +=    "<a id=\"ibox_close_a\" href=\"javascript:void(null);\" class=\"action\" role=\"button\">CLOSE</a></div>";
+    strHTML +=  "<div id=\"ibox_footer\">&nbsp;</div></div>";    
+    strHTML +=  "</div></div>";
 
-	var docBody = document.getElementsByTagName("body")[0];
-	var ibox = document.createElement("div");
-	ibox.setAttribute("id","ibox");
-	ibox.style.display = '';
-	ibox.innerHTML = strHTML;
-	elem.appendChild(ibox);
+    var docBody = document.getElementsByTagName("body")[0];
+    var ibox = document.createElement("div");
+    ibox.setAttribute("id","ibox");
+    ibox.innerHTML = strHTML;
+    elem.appendChild(ibox);
 }
 
-var ibox_w_height = 0;
 showIbox = function(url,title,params) {
-	
-	var ibox = getElem('ibox_wrapper');
-	var ibox_type = 0;
-												
-	// set title here
-	var ibox_footer = getElem('ibox_footer');
-	if(title != "") {ibox_footer.innerHTML = title;} else {ibox_footer.innerHTML = "&nbsp;";}
-	
-	// file checking code borrowed from thickbox
-	var urlString = /\.jpg|\.jpeg|\.png|\.gif|\.html|\.htm|\.php|\.cfm|\.asp|\.aspx|\.jsp|\.jst|\.rb|\.rhtml|\.txt/g;
-	
-	var urlType = url.match(urlString);
+    var ibox = getElem('ibox_wrapper'),
+        ibox_type = 0,
+        ibox_footer = getElem('ibox_footer'),
+        // file checking code borrowed from thickbox
+        urlString = /\.jpg|\.jpeg|\.png|\.gif|\.html|\.htm|\.php|\.cfm|\.asp|\.aspx|\.jsp|\.jst|\.rb|\.rhtml|\.txt/g,
+        urlType = url.match(urlString);
+        
+    loadCancelled = false;
+    
+    // disable scrolling on background page and add a margin to prevent shifting layout
+    if (typeof scrollBarW === "undefined") scrollBarW = getScrollBarWidth();
+    document.body.style.marginRight = scrollBarW +"px";
+    document.body.style.overflowY = "hidden";
+    document.documentElement.style.overflowY = "hidden"; // IE7
+    document.body.height = "100%";
+    
+    // set title here
+    if(title != "") {ibox_footer.innerHTML = title;} else {ibox_footer.innerHTML = "&nbsp;";}
 
-	if(urlType == '.jpg' || urlType == '.jpeg' || urlType == '.png' || urlType == '.gif'){
-		ibox_type = 1;
-	} else if(url.indexOf("#") != -1) {
-		ibox_type = 2;
-	} else if(urlType=='.htm'||urlType=='.html'||urlType=='.php'||
-			 urlType=='.asp'||urlType=='.aspx'||urlType=='.jsp'||
-			 urlType=='.jst'||urlType=='.rb'||urlType=='.txt'||urlType=='.rhtml'||
-			 urlType=='.cfm') {
-		ibox_type = 3;
-	} else {
-		// override our ibox type if forced param exist
-		if(params['type']) {ibox_type = parseInt(params['type']);}
-		else{hideIbox();return false;}
-	}
-	
-	ibox_type = parseInt(ibox_type);
+    if(urlType == '.jpg' || urlType == '.jpeg' || urlType == '.png' || urlType == '.gif'){
+        ibox_type = 1;
+    } else if(url.indexOf("#") != -1) {
+        ibox_type = 2;
+    } else if(urlType=='.htm'||urlType=='.html'||urlType=='.php'||
+             urlType=='.asp'||urlType=='.aspx'||urlType=='.jsp'||
+             urlType=='.jst'||urlType=='.rb'||urlType=='.txt'||urlType=='.rhtml'||
+             urlType=='.cfm') {
+        ibox_type = 3;
+    } else {
+        // override our ibox type if forced param exist
+        if(params['type']) {ibox_type = parseInt(params['type']);}
+        else{hideIbox();return false;}
+    }
+    
+    ibox_type = parseInt(ibox_type);
 
+    switch(ibox_type) {        
+        case 1:
+            showIndicator();            
+            imgPreloader = new Image();            
+            imgPreloader.onload = function(){
+    
+                imgPreloader = resizeImageToScreen(imgPreloader);
+                hideIndicator();
+    
+                var strHTML = "<img name=\"ibox_img\" src=\""+url+"\" style=\"width:"+imgPreloader.width+"px;height:"+imgPreloader.height+"px;border:0;cursor:hand;margin:0;padding:0;position:absolute;\"/>";
+    
+                if(loadCancelled == false) {
+                    
+                    // set width and height
+                    ibox.style.height = imgPreloader.height+'px';
+                    ibox.style.width = imgPreloader.width+'px';
+                    
+                    posToCenter(ibox);
 
-	switch(ibox_type) {
-		
-		case 1:
+                    ibox.style.visibility = "";
+                    ibox.style.opacity = "1";
+                    setIBoxContent(strHTML);
+                }                    
+            }
+            
+            imgPreloader.src = url;
+            
+            break;
+        case 2:            
+            var strHTML = "";
+            
+            var autosize = true;
+            if (params['height']) {
+                ibox.style.height = params['height']+'px';
+                autosize = false;
+            }
+            if (params['width']) {
+                ibox.style.width = params['width']+'px';
+                autosize = false;
+            }
+            posToCenter(ibox, autosize);
+            
+            var elemSrcId = url.substr(url.indexOf("#") + 1,1000);
+            
+            var elemSrc = getElem(elemSrcId);
+            
+            if(elemSrc) {strHTML = elemSrc.innerHTML;}
+        
+            ibox.style.visibility = "";
+            ibox.style.opacity = "1";
+            setIBoxContent(strHTML);
+            
+            break;            
+        case 3:
+            showIndicator();
+            http.open('get',url,true);
 
-			showIndicator();
-			
-			imgPreloader = new Image();
-			
-			imgPreloader.onload = function(){
-	
-				imgPreloader = resizeImageToScreen(imgPreloader);
-				hideIndicator();
-	
-				var strHTML = "<img name=\"ibox_img\" src=\""+url+"\" style=\"width:"+imgPreloader.width+"px;height:"+imgPreloader.height+"px;border:0;cursor:hand;margin:0;padding:0;position:absolute;\"/>";
-	
-				if(loadCancelled == false) {
-					
-					// set width and height
-					ibox.style.height = imgPreloader.height+'px';
-					ibox.style.width = imgPreloader.width+'px';
-				
-					ibox.style.display = "";
-					ibox.style.visibility = "hidden";
-					posToCenter(ibox); 	
-					ibox.style.visibility = "visible";
-
-					setIBoxContent(strHTML);
-				}
-					
-			}
-			
-			loadCancelled = false;
-			imgPreloader.src = url;
-			
-			break;
-
-		case 2:
-			
-			var strHTML = "";
-
-			
-			if(params['height']) {ibox.style.height = params['height']+'px';} 
-			else {ibox.style.height = '75%';}
-			
-			if(params['width']) {ibox.style.width = params['width']+'px';} 
-			else {ibox.style.width = '75%';}
-
-		
-			ibox.style.display = "";
-			ibox.style.visibility = "hidden";
-			posToCenter(ibox); 	
-			ibox.style.visibility = "visible";
-			
-			getElem('ibox_content').style.overflow = "auto";
-			
-			var elemSrcId = url.substr(url.indexOf("#") + 1,1000);
-			
-			var elemSrc = getElem(elemSrcId);
-			
-			if(elemSrc) {strHTML = elemSrc.innerHTML;}
-		
-			setIBoxContent(strHTML);
-			
-			break;
-			
-		case 3:
-			showIndicator();
-			http.open('get',url,true);
-
-			http.onreadystatechange = function() {
-				if(http.readyState == 4){
-					hideIndicator();
-					
-					if(params['height']) {ibox.style.height = params['height']+'px';} 
-					else {ibox.style.height = '75%';}
-					
-					if(params['width']) {ibox.style.width = params['width']+'px';} 
-					else {ibox.style.width = '75%';}
-		
-					ibox.style.display = "";
-					ibox.style.visibility = "hidden";
-					posToCenter(ibox); 	
-					ibox.style.visibility = "visible";
-					getElem('ibox_content').style.overflow = "auto";
-					
-					var response = http.responseText;
-					setIBoxContent(response);
-					
-				}
-			}
-			
-			http.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
-			http.send(null);
-			break;
-		
-		default:
-			
-	 } 
-	 
-	
-	ibox.style.opacity = 0;
-	ibox.style.filter = 'alpha(opacity=0)';	
-	var ibox_op_level = 10;
-	
-	setIboxOpacity = setOpacity;
-	for (var i=0;i<=ibox_op_level;i++) {setTimeout("setIboxOpacity('ibox_wrapper',"+i+")",10*i);}
-
-	if(ibox_type == 2 || ibox_type == 3) {
-		ibox.onclick = null;getElem("ibox_close_a").onclick = function() {hideIbox();}
-	} else {ibox.onclick = hideIbox;getElem("ibox_close_a").onclick = null;}
-
-	return true;
-}
-
-setOpacity = function (elemid,value)	{
-		var e = getElem(elemid);
-		e.style.opacity = value/10;
-		e.style.filter = 'alpha(opacity=' + value*10 + ')';
+            http.onreadystatechange = function() {
+                if (http.readyState == 4 && loadCancelled == false) {
+                    hideIndicator();
+                    
+                    var autosize = true;
+                    if (params['height']) {
+                        ibox.style.height = params['height']+'px';
+                        autosize = false;
+                    }            
+                    if (params['width']) {
+                        ibox.style.width = params['width']+'px';
+                        autosize = false;
+                    }
+                    posToCenter(ibox, autosize);
+                    
+                    ibox.style.visibility = "";
+                    ibox.style.opacity = "1";
+                    var response = http.responseText;
+                    setIBoxContent(response);
+                }
+            }
+            
+            http.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
+            http.send(null);
+            break;        
+    }
+    
+    if(ibox_type == 2 || ibox_type == 3) {
+        ibox.onclick = null;getElem("ibox_close_a").onclick = function() {hideIbox();}
+    } else {ibox.onclick = hideIbox;getElem("ibox_close_a").onclick = null;}
+    
+    // adjust content height for IE7, which cannot inherit height
+    /*@cc_on
+    @if (@_jscript_version == 5.7)
+        var wrapper = new getElementSize(getElem("ibox_wrapper"));
+        getElem("ibox_content").style.height = (wrapper.height - 60) +"px";
+    @end
+    @*/
+    
+    shown = true;
+    return true;
 }
 
 resizeImageToScreen = function(objImg) {
-	
-	var pagesize = new getPageSize();
-	
-	var x = pagesize.width - 100;
-	var y = pagesize.height - 100;
+    var pageSize = new getPageSize();
+    
+    var x = pagesize.width - 100;
+    var y = pagesize.height - 100;
 
-	if(objImg.width > x) { 
-		objImg.height = objImg.height * (x/objImg.width); 
-		objImg.width = x; 
-		if(objImg.height > y) { 
-			objImg.width = objImg.width * (y/objImg.height); 
-			objImg.height = y; 
-		}
-	} 
+    if (objImg.width > x) { 
+        objImg.height = objImg.height * (x/objImg.width); 
+        objImg.width = x; 
+        if(objImg.height > y) { 
+            objImg.width = objImg.width * (y/objImg.height); 
+            objImg.height = y; 
+        }
+    } else if (objImg.height > y) { 
+        objImg.width = objImg.width * (y/objImg.height); 
+        objImg.height = y; 
+        if(objImg.width > x) { 
+            objImg.height = objImg.height * (x/objImg.width); 
+            objImg.width = x;
+        }
+    }
 
-	else if(objImg.height > y) { 
-		objImg.width = objImg.width * (y/objImg.height); 
-		objImg.height = y; 
-		if(objImg.width > x) { 
-			objImg.height = objImg.height * (x/objImg.width); 
-			objImg.width = x;
-		}
-	}
-
-	return objImg;
+    return objImg;
 }
 
-maintPos = function() {
-	
-	var ibox = getElem('ibox_wrapper');
-	var box_w = getElem('ibox_w');
-	var pagesize = new getPageSize();
-	var scrollPos = new getScrollPos();
-	var ua = navigator.userAgent;
+hideIbox = function() {    
+    hideBG();
+    var ibox = getElem('ibox_wrapper');
+    setTimeout(function() { ibox.style.opacity = "0"; }, 0);
+    setTimeout(function() { 
+        ibox.style.visibility = "hidden";
 
-	if(ua.indexOf("MSIE ") != -1) {box_w.style.width = pagesize.width+'px';} 
-	/*else {box_w.style.width = pagesize.width-20+'px';}*/
-
-	if(ua.indexOf("Opera/9") != -1) {box_w.style.height = document.body.scrollHeight+'px';}
-	else {box_w.style.height = pagesize.height+scrollPos.scrollY+'px';}
-	
-	// alternative 1
-	//box_w.style.height = document.body.scrollHeight+50+'px';	
-	
-	posToCenter(ibox);
-	
+        // restore page scrolling and remove right margin
+        document.body.style.overflowY = "";
+        document.documentElement.style.overflowY = "";
+        document.body.style.marginRight = "";
+        clearIboxContent();
+        
+        shown = false;        
+    }, 400);    
 }
 
-hideIbox = function() {
-	hideBG();
-	var ibox = getElem('ibox_wrapper');
-	ibox.style.display = "none";
-
-	clearIboxContent();
-	window.onscroll = null;
+posToCenter = function(elem, autosize) {
+    if (autosize && autosize == true) { // calculate nice margins for larger screens
+        var page = new getPageSize(),
+            marginX,
+            marginY;
+            
+        elem.style.width = "";
+        elem.style.height = "";
+        elem.style.top = "0";
+        elem.style.right = "0";
+        elem.style.bottom = "0";
+        elem.style.left = "0";
+        
+        marginX = page.width - 960;
+        marginX = marginX > 0 ? Math.round(marginX/page.width/2*100) : 6;
+        
+        marginY = page.height - 720;
+        marginY = marginY > 0 ? Math.round(marginY/page.height/4*100) : 4;
+        
+        elem.style.margin = marginY +"% " +marginX +"%";
+    } else { // element has a set size, just center it
+        var emSize = new getElementSize(elem),
+            x = Math.round(emSize.width/2),
+            y = Math.round(emSize.height/2);
+            
+        elem.style.top = "50%";
+        elem.style.marginTop = "-" +y +"px";
+        elem.style.left = "50%";
+        elem.style.marginLeft = "-" +x +"px";
+    }
 }
-
-posToCenter = function(elem) {
-	var scrollPos = new getScrollPos();
-	var pageSize = new getPageSize();
-	var emSize = new getElementSize(elem);
-	var x = Math.round(pageSize.width/2) - (emSize.width /2) + scrollPos.scrollX;
-	var y = Math.round(pageSize.height/2) - (emSize.height /2) + scrollPos.scrollY;	
-	elem.style.left = x+'px';
-	elem.style.top = y+'px';	
-}
-
-getScrollPos = function() {
-	var docElem = document.documentElement;
-	this.scrollX = self.pageXOffset || (docElem&&docElem.scrollLeft) || document.body.scrollLeft;
-	this.scrollY = self.pageYOffset || (docElem&&docElem.scrollTop) || document.body.scrollTop;
-}
-
-getPageSize = function() {
-	var docElem = document.documentElement
-	this.width = self.innerWidth || (docElem&&docElem.clientWidth) || document.body.clientWidth;
-	this.height = self.innerHeight || (docElem&&docElem.clientHeight) || document.body.clientHeight;
-}
-
 getElementSize = function(elem) {
-	this.width = elem.offsetWidth ||  elem.style.pixelWidth;
-	this.height = elem.offsetHeight || elem.style.pixelHeight;
+    this.width = elem.offsetWidth ||  elem.style.pixelWidth;
+    this.height = elem.offsetHeight || elem.style.pixelHeight;
+}
+getPageSize = function() {
+    var docElem = document.documentElement
+    this.width = self.innerWidth || (docElem&&docElem.clientWidth) || document.body.clientWidth;
+    this.height = self.innerHeight || (docElem&&docElem.clientHeight) || document.body.clientHeight;
 }
 
 setIBoxContent = function(str) {
-	clearIboxContent();
-	var e = getElem('ibox_content');
-	e.style.overflow = "auto";
-	e.innerHTML = str;
-	
+    var e = getElem('ibox_content');
+    
+    clearIboxContent();
+    e.innerHTML = str;
+    e.scrollTop = 0;
+    e.tabindex = 0;
+    e.focus();
+    
+    if (window.opera) {
+        document.body.addEventListener("keydown", operaKeyDown, false);
+        document.body.addEventListener("keyup", operaKeyUp, false);
+        e.addEventListener("click", operaClick, false);
+    }    
 }
+
 clearIboxContent = function() {
-	var e = getElem('ibox_content');
-	e.innerHTML = "";
-
+    var e = getElem('ibox_content');
+    e.innerHTML = "";
+    
+    if (window.opera) {
+        document.body.removeEventListener("keydown", operaKeyDown, false);
+        document.body.removeEventListener("keyup", operaKeyUp, false);
+        e.removeEventListener("click", operaClick, false);
+    }
 }
-
 
 getElem = function(elemId) {
-	return document.getElementById(elemId);	
+    return document.getElementById(elemId);    
 }
+
+/********************************************************
+ Keyboard scrolling for Opera, which can't automatically focus() the ibox
+*********************************************************/
+
+function operaKeyDown(e) {
+    clearInterval(scrollTimer);
+    
+    switch (e.keyCode) {
+        case 38: // UP arrow key
+            getElem("ibox_content").scrollTop -= 60;
+            arrowKeyDown = true;
+            scrollTimer = setInterval(timerScrollUp, 50);
+            break;
+        case 40: // DOWN arrow key
+            getElem("ibox_content").scrollTop += 60;
+            arrowKeyDown = true;
+            scrollTimer = setInterval(timerScrollDown, 50);
+            break;
+        case 33: // PAGE UP
+            getElem("ibox_content").scrollTop -= 150;
+            arrowKeyDown = true;
+            scrollTimer = setInterval(timerPageUp, 50);
+            break;
+        case 34: // PAGE DOWN
+            getElem("ibox_content").scrollTop += 150;
+            arrowKeyDown = true;
+            scrollTimer = setInterval(timerPageDown, 50);
+            break;
+        default:
+            arrowKeyDown = false;
+    }
+}
+
+function operaKeyUp(e) {
+    clearInterval(scrollTimer);    
+    if (e.keyCode == 38 ||
+        e.keyCode == 40 ||
+        e.keyCode == 33 ||
+        e.keyCode == 34) {
+        arrowKeyDown = false;  
+    }
+}
+
+function operaClick() {
+    clearInterval(scrollTimer);
+    
+    document.body.removeEventListener("keydown", operaKeyDown, false);
+    document.body.removeEventListener("keyup", operaKeyUp, false);
+    getElem("ibox_content").removeEventListener("click", operaClick, false);
+}
+
+function timerScrollUp() {
+    if (arrowKeyDown)
+        getElem("ibox_content").scrollTop -= 40;
+    else
+        clearInterval(scrollTimer);
+}
+function timerScrollDown() {
+    if (arrowKeyDown)
+        getElem("ibox_content").scrollTop += 40;
+    else
+        clearInterval(scrollTimer);
+}
+function timerPageUp() {
+    if (arrowKeyDown)
+        getElem("ibox_content").scrollTop -= 100;
+    else
+        clearInterval(scrollTimer);
+}
+function timerPageDown() {
+    if (arrowKeyDown)
+        getElem("ibox_content").scrollTop += 100;
+    else
+        clearInterval(scrollTimer);
+}
+
+/********************************************************
+ Get scrollbar width to set page margin
+ http://www.alexandre-gomes.com/?p=115
+*********************************************************/
+function getScrollBarWidth() {
+    var inner = document.createElement('p');
+    inner.style.width = "100%";
+    inner.style.height = "200px";
+
+    var outer = document.createElement('div');
+    outer.style.position = "absolute";
+    outer.style.top = "0px";
+    outer.style.left = "0px";
+    outer.style.visibility = "hidden";
+    outer.style.width = "200px";
+    outer.style.height = "150px";
+    outer.style.overflow = "hidden";
+    outer.appendChild (inner);
+
+    document.body.appendChild (outer);
+    var w1 = inner.offsetWidth;
+    outer.style.overflow = 'scroll';
+    var w2 = inner.offsetWidth;
+    if (w1 == w2) w2 = outer.clientWidth;
+
+    document.body.removeChild (outer);
+
+    return (w1 - w2);
+};
 
 // parseQuery code borrowed from thickbox, Thanks Cody!
 parseQuery = function(query) {
@@ -379,7 +488,6 @@ parseQuery = function(query) {
       var val = unescape( KeyVal[1] );
       val = val.replace(/\+/g, ' ');
       Params[key] = val;
-
    }
    
    return Params;
@@ -390,34 +498,35 @@ parseQuery = function(query) {
  http://ajaxian.com/archives/ajax-on-ie-7-check-native-first
 *********************************************************/
 createRequestObject = function() {
-	var xmlhttp;
-		/*@cc_on
-	@if (@_jscript_version>= 5)
-			try {xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-			} catch (e) {
-					try {xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");}
-					catch (E) {xmlhttp = false;}
-			}
-	@else
-		xmlhttp = false;
-	@end @*/
-	if (!xmlhttp && typeof XMLHttpRequest != "undefined") {
-			try {xmlhttp = new XMLHttpRequest();} catch (e) {xmlhttp = false;}
-	}
-	return xmlhttp;
+    var xmlhttp;
+        /*@cc_on
+    @if (@_jscript_version>= 5)
+            try {xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                    try {xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");}
+                    catch (E) {xmlhttp = false;}
+            }
+    @else
+        xmlhttp = false;
+    @end @*/
+    if (!xmlhttp && typeof XMLHttpRequest != "undefined") {
+            try {xmlhttp = new XMLHttpRequest();} catch (e) {xmlhttp = false;}
+    }
+    return xmlhttp;
 }
 
 var http = createRequestObject();
 
-function addEvent(obj, evType, fn){ 
- if (obj.addEventListener){ 
-   obj.addEventListener(evType, fn, false); 
-   return true; 
- } else if (obj.attachEvent){ 
-   var r = obj.attachEvent("on"+evType, fn); 
-   return r; 
- } else { 
-   return false; 
- } 
+function addEvent(obj, evType, fn) { 
+    if (obj.addEventListener) { 
+        obj.addEventListener(evType, fn, false); 
+        return true; 
+    } else if (obj.attachEvent) { 
+        var r = obj.attachEvent("on"+evType, fn); 
+        return r; 
+    } else { 
+        return false; 
+    } 
 }
+
 addEvent(window, 'load', init_ibox);
