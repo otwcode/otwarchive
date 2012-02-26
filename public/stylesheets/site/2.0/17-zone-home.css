@@ -55,6 +55,10 @@ user home, collections and challenges home, tag home, admin comms home
   float: none;
 }
 
+.home .header .type {
+  margin-left: 120px;
+}
+
 /*(no filters)*/
 
 .dashboard.collections-index .index {
