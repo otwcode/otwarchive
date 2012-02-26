@@ -12,7 +12,7 @@ user home, collections and challenges home, tag home, admin comms home
   display: block;
 }
 
-.home .header .userstuff, .home .header dl.stats {
+.home .header .userstuff, .home .header dl.stats, .home .header .type {
   margin-left: 120px;
 }
 
@@ -53,10 +53,6 @@ user home, collections and challenges home, tag home, admin comms home
 
 .profile .primary {
   float: none;
-}
-
-.home .header .type {
-  margin-left: 120px;
 }
 
 /*(no filters)*/
