@@ -170,3 +170,9 @@ input, select, option, textarea, legend, label, .actions a {
 }
 
 /*DIAGNOSIS*/
+
+/* WIDGET: IBOX (called by help links)*/
+
+#ibox_w {
+  filter: alpha(opacity=60);
+}
