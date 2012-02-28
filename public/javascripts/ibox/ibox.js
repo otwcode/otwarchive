@@ -337,7 +337,7 @@ setIBoxContent = function(str) {
     clearIboxContent();
     e.innerHTML = str;
     e.scrollTop = 0;
-    e.tabindex = 0;
+    e.tabIndex = 0;
     e.focus();
     
     if (window.opera) {
