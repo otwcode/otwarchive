@@ -62,9 +62,10 @@ class Invitation < ActiveRecord::Base
       begin
         if self.external_author
           archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
-          UserMailer.invitation_to_claim(self, archivist).deliver!
+          UserMailer.invitation_to_claim(self, archivist).deliver
         else
-          UserMailer.invitation(self).deliver!
+          # send invitations actively sent by a user synchronously to avoid delays
+          UserMailer.invitation(self).deliver! 
         end
         self.sent_at = Time.now
       rescue Exception => exception

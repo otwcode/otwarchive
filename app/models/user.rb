@@ -209,7 +209,8 @@ class User < ActiveRecord::Base
   def reset_user_password
     temp_password = generate_password(20)
     User.update_all("activation_code = '#{temp_password}', recently_reset = 1, updated_at = '#{Time.now}'", "id = #{self.id}")
-    UserMailer.reset_password(self.id, temp_password).deliver
+    # send synchronously to prevent getting caught in backed-up mail queue
+    UserMailer.reset_password(self.id, temp_password).deliver! 
   end
 
   def activate
