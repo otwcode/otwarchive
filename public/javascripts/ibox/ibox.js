@@ -244,14 +244,6 @@ showIbox = function(url,title,params) {
         ibox.onclick = null;getElem("ibox_close_a").onclick = function() {hideIbox();}
     } else {ibox.onclick = hideIbox;getElem("ibox_close_a").onclick = null;}
     
-    // adjust content height for IE7, which cannot inherit height
-    /*@cc_on
-    @if (@_jscript_version == 5.7)
-        var wrapper = new getElementSize(getElem("ibox_wrapper"));
-        getElem("ibox_content").style.height = (wrapper.height - 60) +"px";
-    @end
-    @*/
-    
     shown = true;
     return true;
 }
