@@ -7,7 +7,7 @@ class WorkObserver < ActiveRecord::Observer
 	  #  unless users.blank?
 	  #    for user in users
 	  #      unless user.preference.edit_emails_off? || user == orphan_account
-	  #        UserMailer.edit_work_notification(user, work).deliver!
+	  #        UserMailer.edit_work_notification(user, work).deliver! 
 	  #      end
 	  #    end
 	  #  end
@@ -21,7 +21,8 @@ class WorkObserver < ActiveRecord::Observer
 	    unless users.blank?
 	      for user in users
 					unless user == orphan_account
-						UserMailer.delete_work_notification(user, work).deliver!
+					  # this has to use the synchronous version because the work is going to be destroyed
+						UserMailer.delete_work_notification(user, work).deliver! 
 					end
 	      end
 	    end

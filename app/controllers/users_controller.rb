@@ -235,7 +235,8 @@ class UsersController < ApplicationController
   end
 
   def notify_and_show_confirmation_screen
-    UserMailer.signup_notification(@user.id).deliver
+    # deliver synchronously to avoid getting caught in backed-up mail queue
+    UserMailer.signup_notification(@user.id).deliver! 
     flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
                         :activation_url => activate_path(@user.activation_code)).html_safe if Rails.env.development?
     render "confirmation"
@@ -252,6 +253,7 @@ class UsersController < ApplicationController
           flash.now[:error] = ts("Your account has already been activated.")
           redirect_to @user and return
         end
+        # this is just a confirmation and it's ok if it gets delayed
         @user.activate && UserMailer.activation(@user.id).deliver
         flash[:notice] = ts("Signup complete! Please log in.")
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
