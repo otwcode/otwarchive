@@ -138,6 +138,10 @@ dl.index dd p, dl.index dd .heading, dl.index ul {
   display: inline-block;
 }
 
+dl.index dd .userstuff p {
+  display: block;
+}
+
 /*TYPES*/
 
 a.rss span {
@@ -202,10 +206,6 @@ dl.stats {
 dl.stats dd {
   white-space: nowrap;
   padding-right: 0.5em;
-}
-
-.series.module, .children.module {
-
 }
 
 /*END== */
