@@ -16,11 +16,10 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="heading"><%= ts("Mass Wrangle New/Unwrangled Tags") %> 
-<!--BACK END pls for each tag_wranglings_path(:show => "n") then append "by n"--></h3>
-
-<% #BACK END, this page seems to load empty? Can you show some content by default pls %>
-
+<!--Eventually, something less redundant will go here-->
+<% unless params[:show].blank? %>
+  <h3 class="heading"><%= ts("Mass Wrangle New/Unwrangled Tags") %></h3>
+<% end %>
 
 <% if params[:show] == "character_relationships" %>
 
