@@ -56,22 +56,9 @@ feedback needed from realuse (is it annoying having the announcement on every ce
   </table>
 </div>
 <% end %>
-<div class="clear"><!--presentational-->
+<div class="clear"><!--presentational--></div>
 
-<div class="navigation module" role="navigation">
-<h3 class="heading">Mass Wrangle New/Unwrangled Tags</h3>
-<ul>
-  <li><%= link_to "Fandoms by media (#{@counts[:fandoms]})", tag_wranglings_path(:show => "fandoms") %></li>
-  <li><%= link_to "Characters by fandom (#{@counts[:characters]})", tag_wranglings_path(:show => "characters") %></li>
-  <li><%= link_to "Relationships by fandom (#{@counts[:relationships]})", tag_wranglings_path(:show => "relationships") %></li>
-  <li><%= link_to "Relationships by character", tag_wranglings_path(:show => "character_relationships") %></li>
-  <li><%= link_to "Freeforms by fandom (#{@counts[:freeforms]})", tag_wranglings_path(:show => "freeforms") %></li>
-</ul>
-</div>
-<div class="search module">
-	<h3 class="heading">Find a Tag</h3>
-<%= render :partial => 'tags/search_form' %>
-</div>
+
 <!--/content-->
 
 <!--subnav-->
