@@ -1,4 +1,7 @@
 class SubscriptionsController < ApplicationController
+  
+  skip_before_filter :store_location, :only => [:create, :destroy]
+  
   before_filter :users_only
   before_filter :load_user
   before_filter :check_ownership
@@ -21,8 +24,11 @@ class SubscriptionsController < ApplicationController
 
     respond_to do |format|
       if @subscription.save
-        format.html { redirect_to(:back, :notice => "You are now following #{@subscription.name}. 
-        If you'd like to stop receiving email updates, you can return to this page and click 'Unsubscribe'.") }
+        format.html {
+          flash[:notice] = ts("You are now following %{name}. If you'd like to stop receiving email updates, you can return to this page and click 'Unsubscribe'.", :name => @subscription.name)
+          # redirect_back_or_default(@subscription.subscribable) # it always returns to subscriptions rather than the subscribable
+          redirect_to(@subscription.subscribable)
+        }
       else
         format.html { render :action => "new" }
       end
@@ -37,7 +43,10 @@ class SubscriptionsController < ApplicationController
     @subscription.destroy
 
     respond_to do |format|
-      format.html { redirect_to(:back, :notice => "You have successfully unsubscribed from #{@subscription.name}.") }
+      format.html {
+        flash[:notice] = ts("You have successfully unsubscribed from %{name}.", :name => @subscription.name)
+        redirect_back_or_default(@subscribable)
+      }
     end
   end
 end
