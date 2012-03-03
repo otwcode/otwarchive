@@ -638,7 +638,7 @@
 
           
           <div class="method-source-code" id="activate-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 244</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 245</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">activate</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your activation key is missing.&quot;</span>)
@@ -650,6 +650,7 @@
         <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Your account has already been activated.&quot;</span>)
         <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@user</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
       <span class="ruby-keyword">end</span>
+      <span class="ruby-comment"># this is just a confirmation and it's ok if it gets delayed</span>
       <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">activate</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">activation</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver</span>
       <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Signup complete! Please log in.&quot;</span>)
       <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">create_log_item</span>( <span class="ruby-identifier">options</span> = {<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ACTION_ACTIVATE</span>})
@@ -702,7 +703,7 @@
 
           
           <div class="method-source-code" id="browse-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 422</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 424</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">browse</span>
   <span class="ruby-ivar">@co_authors</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">order</span>(<span class="ruby-value">:name</span>).<span class="ruby-identifier">coauthor_of</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>)
   <span class="ruby-ivar">@tag_types</span> = <span class="ruby-node">%w(Fandom Character Relationship Freeform)</span>
@@ -740,7 +741,7 @@
 
           
           <div class="method-source-code" id="change_email-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 292</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 294</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">change_email</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:new_email</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">render</span> <span class="ruby-value">:change_email</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
@@ -1053,7 +1054,7 @@
 
           
           <div class="method-source-code" id="delete_confirmation-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 403</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 405</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_confirmation</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- delete_confirmation-source -->
@@ -1082,7 +1083,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 316</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 318</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@works</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">works</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:posted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>})
@@ -1224,7 +1225,7 @@
 
           
           <div class="method-source-code" id="end_banner-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 414</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 416</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">end_banner</span>
   <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:banner_seen</span>, <span class="ruby-keyword">true</span>)
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -1258,7 +1259,7 @@
 
           
           <div class="method-source-code" id="end_first_login-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 406</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 408</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">end_first_login</span>
   <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:first_login</span>, <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -1392,7 +1393,8 @@
           <div class="method-source-code" id="notify_and_show_confirmation_screen-source">
             <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 237</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify_and_show_confirmation_screen</span>
-  <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">signup_notification</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver</span>
+  <span class="ruby-comment"># deliver synchronously to avoid getting caught in backed-up mail queue</span>
+  <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">signup_notification</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver!</span> 
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;During testing you can activate via &lt;a href='%{activation_url}'&gt;your activation url&lt;/a&gt;.&quot;</span>,
                       <span class="ruby-value">:activation_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">activate_path</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">activation_code</span>)).<span class="ruby-identifier">html_safe</span> <span class="ruby-keyword">if</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span>.<span class="ruby-identifier">development?</span>
   <span class="ruby-identifier">render</span> <span class="ruby-string">&quot;confirmation&quot;</span>
@@ -1495,7 +1497,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 282</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 284</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">profile</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:profile_attributes</span>])
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">profile</span>.<span class="ruby-identifier">save</span>

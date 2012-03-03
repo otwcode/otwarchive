@@ -92,6 +92,8 @@
     
     <li><a href="#method-i-show_hit_count-3F">#show_hit_count?</a>
     
+    <li><a href="#method-i-show_work_notes-3F">#show_work_notes?</a>
+    
     <li><a href="#method-i-work_meta_list">#work_meta_list</a>
     
     <li><a href="#method-i-work_parent_value">#work_parent_value</a>
@@ -1115,6 +1117,42 @@ words) by authors Chapters:  Fandom: Rating: Warnings: etc</p>
 
         
       </div><!-- show_hit_count-3F-method -->
+
+    
+      <div id="method-i-show_work_notes-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">show_work_notes?</span><span
+            class="method-args">(work)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns true or false to determine whether the work notes module should
+display</p>
+          
+
+          
+          <div class="method-source-code" id="show_work_notes-3F-source">
+            <pre><span class="ruby-comment"># File app/helpers/works_helper.rb, line 200</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">show_work_notes?</span>(<span class="ruby-identifier">work</span>)
+  <span class="ruby-identifier">work</span>.<span class="ruby-identifier">notes</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span>
+  <span class="ruby-identifier">work</span>.<span class="ruby-identifier">endnotes</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span>
+  <span class="ruby-identifier">work</span>.<span class="ruby-identifier">recipients</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span>
+  <span class="ruby-identifier">work</span>.<span class="ruby-identifier">challenge_claims</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span>
+  <span class="ruby-identifier">work</span>.<span class="ruby-identifier">parent_work_relationships</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">||</span>
+  <span class="ruby-identifier">work</span>.<span class="ruby-identifier">approved_related_works</span>.<span class="ruby-identifier">present?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- show_work_notes-3F-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- show_work_notes-3F-method -->
 
     
       <div id="method-i-work_meta_list" class="method-detail ">

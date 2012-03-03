@@ -605,7 +605,8 @@ deletions or modly deletions</p>
           <div class="method-source-code" id="before_destroy-source">
             <pre><span class="ruby-comment"># File app/models/challenge_signup_observer.rb, line 4</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">before_destroy</span>(<span class="ruby-identifier">challenge_signup</span>)
-              <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">delete_signup_notification</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">challenge_signup</span>).<span class="ruby-identifier">deliver!</span>
+  <span class="ruby-comment"># must be synchronous because signup is being destroyed</span>
+              <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">delete_signup_notification</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">challenge_signup</span>).<span class="ruby-identifier">deliver!</span> 
 <span class="ruby-keyword">end</span></pre>
           </div><!-- before_destroy-source -->
           

@@ -612,7 +612,8 @@
           <span class="ruby-keyword">unless</span> <span class="ruby-identifier">users</span>.<span class="ruby-identifier">blank?</span>
             <span class="ruby-keyword">for</span> <span class="ruby-identifier">user</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">users</span>
                                       <span class="ruby-keyword">unless</span> <span class="ruby-identifier">user</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">orphan_account</span>
-                                              <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">delete_work_notification</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">work</span>).<span class="ruby-identifier">deliver!</span>
+                                        <span class="ruby-comment"># this has to use the synchronous version because the work is going to be destroyed</span>
+                                              <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">delete_work_notification</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">work</span>).<span class="ruby-identifier">deliver!</span> 
                                       <span class="ruby-keyword">end</span>
             <span class="ruby-keyword">end</span>
           <span class="ruby-keyword">end</span>
@@ -651,7 +652,7 @@
         <span class="ruby-comment">#  unless users.blank?</span>
         <span class="ruby-comment">#    for user in users</span>
         <span class="ruby-comment">#      unless user.preference.edit_emails_off? || user == orphan_account</span>
-        <span class="ruby-comment">#        UserMailer.edit_work_notification(user, work).deliver!</span>
+        <span class="ruby-comment">#        UserMailer.edit_work_notification(user, work).deliver! </span>
         <span class="ruby-comment">#      end</span>
         <span class="ruby-comment">#    end</span>
         <span class="ruby-comment">#  end</span>

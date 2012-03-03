@@ -815,7 +815,8 @@
             <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 212</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_activation</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
-  <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">signup_notification</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver</span>
+  <span class="ruby-comment"># send synchronously to avoid getting caught in mail queue</span>
+  <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">signup_notification</span>(<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">deliver!</span> 
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">t</span>(<span class="ruby-string">'activation_sent'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Activation email sent&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:show</span>
 <span class="ruby-keyword">end</span></pre>
