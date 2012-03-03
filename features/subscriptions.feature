@@ -17,7 +17,7 @@ Feature: Subscriptions
     And I press "Subscribe"
   Then I should see "You are now following first_user"
   When I go to my subscriptions page
-  Then I should see "Unsubscribe from first_user"
+  Then I should find "Unsubscribe from first_user"
   When I log out
     And I am logged in as "first_user" with password "something"
     And I post the work "Awesome Story"
@@ -41,7 +41,7 @@ Feature: Subscriptions
   When I am logged in as "second_user" with password "something"
     And I go to first_user's user page
     And I press "Subscribe"
-    And I follow "Unsubscribe"
+    And I press "Unsubscribe"
   Then I should see "successfully unsubscribed"
   When I log out
     And I am logged in as "first_user" with password "something"
@@ -55,7 +55,7 @@ Feature: Subscriptions
     And I press "Subscribe"
   Then I should see "You are now following first_user"
     And I should not see "Fandoms"
-  When I follow "Unsubscribe"
+  When I press "Unsubscribe"
   Then I should see "successfully unsubscribed"
   
   Scenario: subscribe to individual work
