@@ -413,7 +413,7 @@ class Work < ActiveRecord::Base
       # do is update with current time
       if recent_date == Date.today && self.revised_at && self.revised_at.to_date == Date.today
         return self.revised_at
-      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today
+      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today || recent_date.nil?
         self.revised_at = Time.now
       else
         self.revised_at = DateTime::jd(recent_date.jd, 12, 0, 0)
