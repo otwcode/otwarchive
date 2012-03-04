@@ -4,30 +4,9 @@ class Admin::AdminUsersController < ApplicationController
 
   def index
     @roles = Role.assignable.uniq
-    if params[:role]
-      if params[:role] == "0" && params[:query].blank?
-        return flash[:error] = "Please enter a name or email address!"
-      elsif params[:role] == "0"
-        joins = :pseuds
-        conditions = ['pseuds.name LIKE ? OR email = ?', "%#{params[:query]}%", params[:query]]
-      elsif params[:role] == "1"
-        if !params[:query].blank?
-          joins = :pseuds
-          conditions = [('(pseuds.name LIKE ? OR email = ?) AND activated_at IS NULL'), "%#{params[:query]}%", params[:query]]
-        else
-          conditions = ['activated_at IS NULL']
-        end
-      else
-        if !params[:query].blank?
-          joins = [:pseuds, :roles]
-          conditions = ['(pseuds.name LIKE ? OR email = ?) AND roles.name = ?', "%#{params[:query]}%", params[:query], params[:role]]
-        else
-          joins = :roles
-          conditions = ['roles.name = ?', params[:role]]
-        end
-      end
-      @users = User.select('DISTINCT users.*').joins(joins).where(conditions)
-    end
+    @role_values = @roles.map{ |role| [role.name.humanize.titlecase, role.name] }
+    @role = Role.find_by_name(params[:role]) if params[:role]
+    @users = User.search_by_role(@role, params[:query], :inactive => params[:inactive], :page => params[:page])
   end
 
   # GET admin/users/1
