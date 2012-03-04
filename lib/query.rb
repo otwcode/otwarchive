@@ -161,7 +161,8 @@ module Query
           time2 = Query.time_from_string(match.post_match, period)
           time2 .. time1
         else
-          raise "can't determine time range from one number"
+          Query.range_from_string(amount, period)
+          # raise "can't determine time range from one number"
         end
     end
   end
@@ -179,6 +180,30 @@ module Query
         amount.to_i.day.ago
       when /hour/
         amount.to_i.hour.ago
+      else
+        raise "unknown period: " + period
+    end
+  end
+
+  # Generate a range based on one number
+  # Interval is based on period used, ie 1 month ago = range from beginning to end of month
+  def self.range_from_string(amount, period)
+    case period
+      when /year/
+        a = amount.to_i.year.ago.beginning_of_year
+        a..a.end_of_year
+      when /month/
+        a = amount.to_i.month.ago.beginning_of_month
+        a..a.end_of_month
+      when /week/
+        a = amount.to_i.week.ago.beginning_of_week
+        a..a.end_of_week
+      when /day/
+        a = amount.to_i.day.ago.beginning_of_day
+        a..a.end_of_day
+      when /hour/
+        a = amount.to_i.hour.ago.change(:min => 0, :sec => 0, :usec => 0)
+        a..(a + 60.minutes)
       else
         raise "unknown period: " + period
     end
