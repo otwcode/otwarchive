@@ -106,10 +106,17 @@ module WorksHelper
   def marktoread_link(work)
     if current_user
       reading = Reading.find_by_work_id_and_user_id(work.id, current_user.id)
+      unless reading && reading.toread?
+        link_to "Mark for later", marktoread_work_path(work)
+      end
+    end
+  end
+  
+  def markasread_link(work)
+    if current_user
+      reading = Reading.find_by_work_id_and_user_id(work.id, current_user.id)
       if reading && reading.toread?
         link_to "Mark as read", marktoread_work_path(work)
-      else
-        link_to "Mark for later", marktoread_work_path(work)
       end
     end
   end
