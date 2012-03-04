@@ -8,6 +8,7 @@ User-agent:	*
 Disallow:	/works? # cruel but efficient
 Disallow: /autocomplete/
 Disallow: /downloads/
+Disallow: /external_works/
 # disallow indexing of search results
 Disallow: /bookmarks/search?
 Disallow: /people/search?
@@ -17,6 +18,7 @@ Disallow: /works/search?
 User-agent:	Googlebot
 Disallow: /autocomplete/
 Disallow: /downloads/
+Disallow: /external_works/
 # Googlebot is smart and knows pattern matching
 Disallow: /works/*?
 Disallow: /*search?
