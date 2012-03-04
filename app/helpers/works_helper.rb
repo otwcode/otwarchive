@@ -172,7 +172,7 @@ module WorksHelper
   def feed_summary(work)
     tags = work.tags.group_by(&:type)
     text = "<p>by #{byline(work, :visibility => 'public')}</p>"
-    text << work.summary
+    text << work.summary if work.summary
     text << "<p>Words: #{work.word_count}, Chapters: #{work.chapter_total_display}, Language: #{work.language ? work.language.name : 'English'}</p>"
     unless work.series.count == 0
       text << "<p>Series: #{series_list_for_feeds(work)}</p>"
