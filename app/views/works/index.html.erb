@@ -10,7 +10,7 @@
 <% end %>
 </h2>
 
-<% if @tag && (@tag.is_a?(Fandom) || @tag.name == "F/F") %>
+<% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
 <p><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></p>
 <% end %>
 
