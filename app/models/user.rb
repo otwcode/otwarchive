@@ -192,6 +192,23 @@ class User < ActiveRecord::Base
     joins(:request_claims).
     where("challenge_claims.id IN (?)", claims_ids)
   end
+  
+  # Find users with a particular role and/or by name or email
+  # Options: inactive, page
+  def self.search_by_role(role, query, options = {})
+    return if role.blank? && query.blank?
+    users = User.select('DISTINCT users.*').order(:login)
+    if options[:inactive]
+      users = users.where("activated_at IS NULL")
+    end
+    if role.present?
+      users = users.joins(:roles).where("roles.id = ?", role.id)
+    end
+    if query.present?
+      users = users.joins(:pseuds).where("pseuds.name LIKE ? OR email = ?", "%#{query}%", query)
+    end
+    users.paginate(:page => options[:page] || 1)
+  end
 
   ### AUTHENTICATION AND PASSWORDS
   def active?
