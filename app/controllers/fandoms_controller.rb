@@ -29,6 +29,10 @@ class FandomsController < ApplicationController
   
   def show
     @fandom = Fandom.find_by_name(params[:id])
+    if @fandom.nil?
+      flash[:error] = ts("Could not find fandom named %{fandom_name}", :fandom_name => params[:id])
+      redirect_to media_path and return
+    end
     @characters = @fandom.characters.canonical.by_name
   end
   
