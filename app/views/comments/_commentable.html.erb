@@ -41,7 +41,7 @@
         <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
       </li>
     <% end %>
-    <% if logged_in? && @work %>
+    <% if logged_in? && @work && marked_for_later?(@work) %>
       <li>
         <%= markasread_link(@work) %>
       </li>
