@@ -398,7 +398,7 @@ class WorksController < ApplicationController
             @included = 0
           end
         end
-        @work.posted = true
+        @work.posted = true if params[:post_button]
         @work.minor_version = @work.minor_version + 1
         @work.set_challenge_info
         saved = @work.save
