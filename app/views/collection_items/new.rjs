@@ -1,5 +1,0 @@
-page.show 'dynamic-collection_item'
-page.draggable 'dynamic-collection_item'
-page.replace_html 'dynamic-collection_item', :partial => 'collection_items/collection_item_form', :locals => {:item => @item}
-page.insert_html :top, 'dynamic-collection_item', "<p id='close-popup' role='navigation' class='navigation'></p>"
-page.replace_html 'close-popup', link_to_function(t('.close_new_collection_item', :default => 'Close'), update_page {|page| page.hide 'dynamic-collection_item'})

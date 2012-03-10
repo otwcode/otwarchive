@@ -3,43 +3,27 @@ Feature: Delete Works
   Check that everything disappears correctly when deleting a work
 
   Scenario: Deleting a minimally valid work
-    Given basic tags
-      And all emails have been delivered
-      And I am logged in as "newbie" with password "password"
-    When I go to the new work page
-      And I select "Not Rated" from "Rating"
-      And I check "No Archive Warnings Apply"
-      And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "All Hell Breaks Loose"
-      And I fill in "content" with "Bad things happen, etc."
-      And I press "Preview"
-      And I press "Post"
-    Then I should see "Work was successfully posted."
-    When I go to the works page
-    Then I should see "All Hell Breaks Loose"
-    When I follow "All Hell Breaks Loose"
-      And I follow "Delete"
+    Given I am logged in as "newbie"
+      And I post the work "All Hell Breaks Loose"
+    When I delete the work "All Hell Breaks Loose"
     Then I should see "Your work All Hell Breaks Loose was deleted."
-      And 1 email should be delivered
-      # TODO: Figure out why these steps aren't working even though the feature is fine
+      And "newbie" should be emailed
+      # TODO: Figure out why these steps aren't working even though the feature is fine (multipart email?)
       # And the email should contain "All Hell Breaks Loose"
-      #And the email should contain "Your story All Hell Breaks Loose was deleted at your request."
-      #And the email should contain "If you have questions, please contact Support (http://archiveofourown.org/support)."
-      #And the email should contain "Attached is a copy of your work for your reference."
-      #And the email should contain "Bad things happen, etc."
+      # And the email should contain "Your story All Hell Breaks Loose was deleted at your request."
+      # And the email should contain "If you have questions, please contact Support (http://archiveofourown.org/support)."
+      # And the email should contain "Attached is a copy of your work for your reference."
+      # And the email should contain "Bad things happen, etc."
     When I go to the works page
     Then I should not see "All Hell Breaks Loose"
     When I go to newbie's user page
     Then I should not see "All Hell Breaks Loose"
 
+  # TODO: refactor the scenarios below >.<
   Scenario: Deleting minimally valid work when you have more than one pseud
     Given basic tags
-      And I am logged in as "newbie" with password "password"
-      And "newbie" creates the pseud "Pointless Pseud"
-      And I follow "Edit"
-      And I check "Is default"
-      And I press "Update"
-    Then I should see "Pseud was successfully updated."
+      And I am logged in as "newbie"
+      And "newbie" creates the default pseud "Pointless Pseud"
     When I go to the new work page
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
@@ -52,8 +36,7 @@ Feature: Delete Works
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "All Hell Breaks Loose"
-    When I follow "All Hell Breaks Loose"
-      And I follow "Delete"
+    When I delete the work "All Hell Breaks Loose"
     Then I should see "Your work All Hell Breaks Loose was deleted."
       And 1 email should be delivered
     When I go to the works page
@@ -71,35 +54,25 @@ Feature: Delete Works
         | cosomeone      | something   | cosomeone@example.org |
         | giftee         | something   | giftee@example.org    |
         | recipient      | something   | recipient@example.org |
-      And the following collections exist
-        | name        | title        |
-        | collection1 | Collection 1 |
-        | collection2 | Collection 2 |
-      And I am logged in as "thorough" with password "something"
+      And I have a collection "Collection 1" with name "collection1"
+      And I have a collection "Collection 2" with name "collection2"
+      And I am logged in as "thorough"
       And all emails have been delivered
     When I go to thorough's user page
       And I follow "Profile"
-    Then I should see "About"
-    When I follow "Manage My Pseuds"
-    Then I should see "Pseuds for"
-    When I follow "New Pseud"
-    Then I should see "New pseud"
-    When I fill in "Name" with "Pseud2"
+      And I follow "Manage My Pseuds"
+      And I follow "New Pseud"
+      And I fill in "Name" with "Pseud2"
       And I press "Create"
-    Then I should see "Pseud was successfully created."
     When I follow "Back To Pseuds"
       And I follow "New Pseud"
       And I fill in "Name" with "Pseud3"
       And I press "Create"
-    Then I should see "Pseud was successfully created."
     When I go to the new work page
-    Then I should see "Post New Work"
-    When all emails have been delivered
+      And all emails have been delivered
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
-    Then I should see "F/M"
-      And I should see "Gen"
-    When I check "F/M"
+      And I check "F/M"
       And I fill in "Fandoms" with "Supernatural"
       And I fill in "Work Title" with "All Something Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
@@ -109,7 +82,7 @@ Feature: Delete Works
       And I fill in "Summary" with "Have a short summary"
       And I fill in "Characters" with "Sam Winchester, Dean Winchester,"
       And I fill in "Relationships" with "Harry/Ginny"
-      And I fill in "Recipient" with "Someone else, recipient"
+      And I fill in "Gift this work to" with "Someone else, recipient"
       And I check "series-options-show"
       And I fill in "work_series_attributes_title" with "My new series"
       And I select "Pseud2" from "work_author_attributes_ids_"
@@ -117,7 +90,7 @@ Feature: Delete Works
       And I fill in "pseud_byline" with "coauthor"
       And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
       And 1 email should be delivered to "coauthor@example.org"
@@ -154,7 +127,7 @@ Feature: Delete Works
       And I press "Preview"
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Let's write another story"
-    When I follow "Post Chapter"
+    When I press "Post Chapter"
     Then I should see "All Something Breaks Loose"
       And I should see "Chapter 1"
       And I should see "Bad things happen, etc."
@@ -163,7 +136,7 @@ Feature: Delete Works
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Let's write another story"
       And I should not see "Bad things happen, etc."
-    When I follow "View Entire Work"
+    When I follow "Entire Work"
     Then I should see "Bad things happen, etc."
       And I should see "Let's write another story"
     When I follow "Edit"
@@ -174,7 +147,7 @@ Feature: Delete Works
       And I should see "These pseuds are invalid: Does_not_exist"
     When all emails have been delivered
       And I fill in "pseud_byline" with "cosomeone"
-    Then I should find "cosomeone" within ".auto_complete"
+    Then I should find "cosomeone" within ".autocomplete"
     When I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
@@ -190,24 +163,21 @@ Feature: Delete Works
       And I press "Update"
     Then I should see "Work was successfully updated"
       And I should see "For giftee"
-    When I follow "Log out"
-      And I am logged in as "someone_else" with password "something"
+    When I am logged in as "someone_else" with password "something"
       And I view the work "All Something Breaks Loose"
-      And I press "Leave Kudos"
+      And I press "Kudos"
+      # Then show me the main content
       # TODO: Figure out why this isn't working
-    # Then I should see "someone_else left kudos!"
+    Then I should see "someone_else left kudos on this work!"
     When I follow "Bookmark"
       And I press "Create"
     Then I should see "Bookmark was successfully created"
     When I go to the bookmarks page
     Then I should see "All Something Breaks Loose"
-    When I follow "Log out"
-      And I am logged in as "thorough" with password "something"
-    When I go to giftee's user page
+    When I am logged in as "thorough" with password "something"
+      And I go to giftee's user page
     Then I should see "Gifts (1)"
-    When I follow "Gifts (1)"
-      And I follow "All Something Breaks Loose"
-      And I follow "Delete"
+    When I delete the work "All Something Breaks Loose"
     Then I should see "Your work All Something Breaks Loose was deleted."
     When I go to giftee's user page
     Then I should see "Gifts (0)"

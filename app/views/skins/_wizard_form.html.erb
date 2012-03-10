@@ -1,55 +1,58 @@
-<fieldset class="preface profile">
-  <legend>Archive Skin Wizard</legend>
-  <h3>Archive Skin Wizard</h3>
-  <p id="plainTextNotes" style="display: block"><%= allowed_css_instructions %></p>
-
+<fieldset class="post skin wizard">
+  <legend><%= ts("Wizard") %></legend>
   <dl>
-    <dt><%= f.label :title, t('skin_title', :default => 'Title') %></dt>
+    <dt><%= f.label :title, ts('Title') %></dt>
     <dd><%= f.text_field :title %></dd>
 
-    <dt><%= f.label :description, t('skin_description', :default => 'Description') %></dt>
+    <dt><%= f.label :description, ts('Description') %></dt>
     <dd><%= f.text_field :description %></dd>
 
-    <dt>
-      <%= f.label :margin, t('skin_margin', :default => 'Margin width (as percentage of page size)') %>
-      <p><%= t('skin_margin_default', :default => 'default: 3') %></p>
-    </dt>
-    <dd><%= f.text_field :margin %> %</dd>
+    <dt><%= f.label :margin, ts('Margin width (%)') %> <%= link_to_help('skins-wizard-margin') %></dt>
+    <dd><%= f.text_field :margin %></dd>
+
+    <dt><%= f.label :font, ts("Font family") %> <%= link_to_help('skins-wizard-font') %></dt>
+    <dd><%= f.text_field :font %></dd>
   
     <dt>
-      <%= f.label :font, t('font', :default => "Font family (comma-separated)") %>
-      <p><%= t('skin_font_default', :default => 'default: "Lucida Grande",Verdana,Helvetica,Arial,sans-serif')%></p>
-    </dt>
-    <dd>
-      <%= f.text_field :font %>
-    </dd>
-  
-    <dt>
-      <%= f.label :background_color, t('background_color', :default => 'Background color (name or hex code)') %>
-      <p><%= t('background_color_default', :default => 'default: #FFFEF9') %></p>
+      <%= f.label :background_color, ts('Background color (name or hex code)') %> 
+      <%= link_to_help('skins-wizard-background-color') %>
     </dt>
     <dd>
       <%= f.text_field :background_color %>
-      <%= autocomplete_text_field("skin_background_color", :methodname => "css_keyword", :no_comma => true) %>
     </dd>
   
     <dt>
-      <%= f.label :foreground_color, t('foreground_color', :default => 'Foreground color (name or hex code)') %>
-      <p><%=t('foreground_color_default', :default => 'default: #222222') %></p>
+      <%= f.label :foreground_color, t('foreground_color', :default => 'Foreground color (name or hex code)') %> 
+      <%= link_to_help('skins-wizard-forground-color') %>
     </dt>
     <dd>
       <%= f.text_field :foreground_color %>
-      <%= autocomplete_text_field("skin_foreground_color", :methodname => "css_keyword", :no_comma => true) %>
     </dd>
   
     <dt>
-      <%= f.label :base_em, t('font_size_percentage', :default => 'Percent of base font size') %>
-      <p><%=t('font_size_percentage_default', :default => 'default: 100') %></p>
+      <%= f.label :base_em, ts('Percent of base font size (%)') %> 
+      <%= link_to_help('skins-wizard-font-size') %>
     </dt>
-    <dd><%= f.text_field :base_em %> %</dd>
+    <dd><%= f.text_field :base_em %></dd>
     
-    <%= hidden_field_tag "wizard", true %>
+    <dt>
+      <%= f.label :paragraph_margin, ts('Vertical gap between paragraphs') %> 
+      <%= link_to_help('skins-wizard-vertical-gap') %>
+    </dt>
+    <dd><%= f.text_field :paragraph_margin %></dd>
     
+    <dt><%= f.label :headercolor, ts('Header color') %> 
+    <%= link_to_help('skins-wizard-header-color') %>
+    </dt>
+    <dd><%= f.text_field :headercolor %></dd>
+    
+    <dt><%= f.label :accent_color, ts('Accent color') %>
+    <%= link_to_help('skins-wizard-accent-color') %>
+    </dt>
+    <dd><%= f.text_field :accent_color %></dd>
   </dl>
 
+    <%= hidden_field_tag "wizard", true %>
 </fieldset>
+
+<%= submit_fieldset(f) %>

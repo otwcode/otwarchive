@@ -4,16 +4,29 @@
 //things to do when the page loads
 $j(document).ready(function() {
     // visualizeTables();
-    if ($('work-form')) { hideFormFields(); }; 
-    if ($$('form.filters')) { hideFilters(); };
     // initSelect('languages_menu');
-    hideExpandable();
+    setupToggled();
+    if ($j('#work-form')) { hideFormFields(); };
     hideHideMe();
+    showShowMe();
     handlePopUps();
-    $j('#expandable-link').click(function(){
+    generateCharacterCounters();
+    $j('#expandable-link').click(function(e){
+          e.preventDefault();
           expandList();
           return false;
       });
+    $j('#hide-notice-banner').click(function (e) { 
+      $j('#notice-banner').hide();
+      e.preventDefault(); 
+    });
+    setupTooltips();
+
+    // replace all GET delete links with their AJAXified equivalent
+    $j('a[href$="/confirm_delete"]').each(function(){
+        this.href = this.href.replace(/\/confirm_delete$/, "");
+        $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
+    });
 });
 
 function visualizeTables() {
@@ -29,6 +42,205 @@ function ShowExpandable() {
   if (collapsible != null) collapsible.style.display = 'none';
 }
 
+
+///////////////////////////////////////////////////////////////////
+// Autocomplete
+///////////////////////////////////////////////////////////////////
+
+function get_token_input_options(self) {
+  return {
+    searchingText: self.attr('autocomplete_searching_text'),
+    hintText: self.attr('autocomplete_hint_text'),
+    noResultsText: self.attr('autocomplete_no_results_text'),
+    minChars: self.attr('autocomplete_min_chars'),
+    queryParam: "term",
+    preventDuplicates: true,
+    tokenLimit: self.attr('autocomplete_token_limit'),
+    liveParams: self.attr('autocomplete_live_params'),
+    makeSortable: self.attr('autocomplete_sortable')
+  };
+}
+
+// Look for autocomplete_options in application helper and throughout the views to
+// see how to use this!
+jQuery(function($) {
+  $('input.autocomplete').livequery(function(){
+    var self = $(this);
+    var token_input_options = get_token_input_options(self);
+    var method;
+    try {
+        method = $.parseJSON(self.attr('autocomplete_method'));
+    } catch (err) {
+        method = self.attr('autocomplete_method');
+    }
+    self.tokenInput(method, token_input_options);
+  });
+});
+
+///////////////////////////////////////////////////////////////////
+
+// expand, contract, shuffle
+jQuery(function($){
+  $('.expand').each(function(){
+    // start by hiding the list in the page
+    list = $($(this).attr('action_target'));
+    if (!list.attr('force_expand') || list.children().size() > 25 || list.attr('force_contract')) {
+      list.hide();
+      $(this).show();
+    } else {
+      // show the shuffle and contract button only
+      $(this).nextAll(".shuffle").show();
+      $(this).next(".contract").show();
+    }
+    
+    // set up click event to expand the list 
+    $(this).click(function(event){
+      list = $($(this).attr('action_target'));
+      list.show();
+      
+      // show the contract & shuffle buttons and hide us
+      $(this).next(".contract").show();
+      $(this).nextAll(".shuffle").show();
+      $(this).hide();
+      
+      event.preventDefault(); // don't want to actually click the link
+    });
+  });
+  
+  $('.contract').each(function(){
+    $(this).click(function(event){
+      // hide the list when clicked
+      list = $($(this).attr('action_target'));
+      list.hide();
+
+      // show the expand and shuffle buttons and hide us
+      $(this).prev(".expand").show();
+      $(this).nextAll(".shuffle").hide();
+      $(this).hide();
+      
+      event.preventDefault(); // don't want to actually click the link
+    });
+  });
+  
+  $('.shuffle').each(function(){
+    // shuffle the list's children when clicked
+    $(this).click(function(event){
+      list = $($(this).attr('action_target'));
+      list.children().shuffle();
+      event.preventDefault(); // don't want to actually click the link
+    });
+  });
+  
+  $('.expand_all').each(function(){
+      target = "." + $(this).attr('target_class');
+     $(this).click(function(event) {
+        $(this).closest(target).find(".expand").click();
+        event.preventDefault();
+     }); 
+  });
+  
+  $('.contract_all').each(function(){
+     target = "." + $(this).attr('target_class');
+     $(this).click(function(event) {
+        $(this).closest(target).find(".contract").click();
+        event.preventDefault();
+     }); 
+  });
+  
+});
+
+// check all or none within the parent fieldset, optionally with a string to match on the name field of the checkboxes
+// stored in the "checkbox_name_filter" attribute on the all/none links.
+// allow for some flexibility by checking the next fieldset if the checkboxes aren't in this one
+jQuery(function($){
+  $('.check_all').each(function(){
+    $(this).click(function(event){
+      var filter = $(this).attr('checkbox_name_filter');
+      var checkboxes;
+      if (filter) {
+        checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
+      } else {
+        checkboxes = $(this).closest("fieldset").find(':checkbox');
+        if (checkboxes.length == 0) { checkboxes = $(this).closest("fieldset").next().find(':checkbox'); }
+      }
+      checkboxes.attr('checked', true);
+      event.preventDefault();
+    });
+  });
+  
+  $('.check_none').each(function(){
+    $(this).click(function(event){
+      var filter = $(this).attr('checkbox_name_filter');
+      var checkboxes;
+      if (filter) {
+        checkboxes = $(this).closest('fieldset').find('input[name*="' + filter + '"][type="checkbox"]');
+      } else {
+        checkboxes = $(this).closest("fieldset").find(':checkbox');
+        if (checkboxes.length == 0) { checkboxes = $(this).closest("fieldset").next().find(':checkbox'); }
+      }
+      checkboxes.attr('checked', false);
+      event.preventDefault();
+    });
+  });
+});
+
+// Timepicker
+jQuery(function($) {
+  $('.timepicker').datetimepicker({
+    ampm: true,
+    dateFormat: 'yy-mm-dd',
+    timeFormat: 'hh:mmTT',
+    hourGrid: 5,
+    minuteGrid: 10
+  });
+});
+
+
+// Set up open and close toggles for a given object
+// Typical setup (this will leave the toggled item open for users without javascript but hide the controls from them):
+// <a class="foo_open hidden">Open Foo</a>
+// <div id="foo" class="toggled">
+//   foo!
+//   <a class="foo_close hidden">Close</a>
+// </div>
+// 
+// Notes:
+// - The open button CANNOT be inside the toggled div, the close button can be (but doesn't have to be)
+// - You can have multiple open and close buttons for the same div since those are labeled with classes
+// - You don't have to use div and a, those are just examples. anything you put the toggled and _open/_close classes on will work.
+// - If you want the toggled thing not to be visible to users without javascript by default, add the class "hidden" to the toggled item as well
+//   (and you can then add an alternative link for them using <noscript>)
+function setupToggled(){
+  $j('.toggled').each(function(){
+    var node = $j(this);
+    var open_toggles = $j('.' + node.attr('id') + "_open");
+    var close_toggles = $j('.' + node.attr('id') + "_close");
+    
+    if (!node.hasClass('open')) {node.hide();}
+    close_toggles.each(function(){$j(this).hide();});
+    open_toggles.each(function(){$j(this).show();});
+
+    open_toggles.each(function(){
+      $j(this).click(function(e){
+        if ($j(this).attr('href') == '#') {e.preventDefault();}
+        node.show();
+        open_toggles.each(function(){$j(this).hide();});
+        close_toggles.each(function(){$j(this).show();});
+      });
+    });
+    
+    close_toggles.each(function(){
+      $j(this).click(function(e){
+        if ($j(this).attr('href') == '#') {e.preventDefault();}
+        node.hide();
+        close_toggles.each(function(){$j(this).hide();});
+        open_toggles.each(function(){$j(this).show();});
+      });
+    });
+  });  
+}
+
+
 // Hides expandable fields if Javascript is enabled
 function hideExpandable() {
   var expandable = document.getElementById('expandable');
@@ -36,28 +248,26 @@ function hideExpandable() {
 }
 
 function hideHideMe() {
-    nodes = $$('.hideme');
-    nodes.each( function(node) { node.hide(); });
+    $j('.hideme').each(function() { $j(this).hide(); });
+}
+
+function showShowMe() {
+    $j('.showme').each(function() { $j(this).show(); });
 }
 
 function handlePopUps() {
-    document.on("click", "a[data_popup]", function(event, element) {
+    $j("a[data_popup]").click(function(event, element) {
       if (event.stopped) return;
-      window.open($(element).href);
+      window.open($j(element).attr('href'));
       event.stop();
     });    
-}
-
-// used in autocompleters to automatically insert comma
-function addCommaToField(element, item) {
-    element.value = element.value + ', '
 }
 
 // used in nested form fields for deleting a nested resource 
 // see prompt form for example
 function remove_section(link, class_of_section_to_remove) {
-    $(link).previous("input[type=hidden]").value = "1"; // relies on the "_destroy" field being the nearest hidden field
-    $(link).up("." + class_of_section_to_remove).hide();
+    $j(link).siblings(":input[type=hidden]").val("1"); // relies on the "_destroy" field being the nearest hidden field
+    $j(link).closest("." + class_of_section_to_remove).hide();
 }
 
 // used with nested form fields for dynamically stuffing in an extra partial
@@ -65,227 +275,99 @@ function remove_section(link, class_of_section_to_remove) {
 function add_section(link, nested_model_name, content) {
     // get the right new_id which should be in a div with class "last_id" at the bottom of 
     // the nearest section
-    var last_id = parseInt($(link).up().previous('.last_id').innerHTML);
+    var last_id = parseInt($j(link).parent().siblings('.last_id').last().html());
     var new_id = last_id + 1;
     var regexp = new RegExp("new_" + nested_model_name, "g");
-    content = content.replace(regexp, new_id)
-    $(link).up().insert({before: content});
+    content = content.replace(regexp, new_id);
+    // kludgy: show the hidden remove_section link (we don't want it showing for non-js users)
+    content = content.replace('class="hidden showme"', '');
+    $j(link).parent().before(content);
 }
 
 // An attempt to replace the various work form toggle methods with a more generic one
 function toggleFormField(element_id) {
-    var ticky = $(element_id + '-show');
-    if (ticky.checked) { $(element_id).removeClassName('hidden'); }
+    var ticky = $j('#' + element_id + '-show');
+    if (ticky.is(':checked')) { 
+      $j('#' + element_id).removeClass('hidden'); 
+    }
     else { 
-        $(element_id).addClassName('hidden');
-        if (element_id == 'chapters-options') {
-            var item = document.getElementById('work_wip_length');
-            if (item.value == 1) {item.value = '?';}
-            else {item.value = 1;}
-        }
-        else {
-            Element.descendants(element_id).each(function(d) {
-                if (d.type == "checkbox") {d.checked = false}
-                else if (d.type != "hidden" && (d.nodeName == "INPUT" || d.nodeName == "SELECT" || d.nodeName == "TEXTAREA")) {d.value = ''}
+        $j('#' + element_id).addClass('hidden');
+        if (element_id != 'chapters-options') {
+            $j('#' + element_id).find(':input[type!="hidden"]').each(function(index, d) {
+                if ($j(d).attr('type') == "checkbox") {$j(d).attr('checked', false);}
+                else {$j(d).val('');}
             });
         }
     }
-}
-
-// Toggles the notes section of the work form
-function showNotesOptions(modelname) {
-	var worknotesoptions = $('front-notes-options')
-	worknotesoptions.toggle();
-	if (!worknotesoptions.visible()) {
-		$(modelname + '_notes').clear();
-		$('worknoteswarning').hide();
-	}
-	else {
-		$('worknoteswarning').show();
-	}
-}
-
-// Toggles the endnotes section of the work form
-function showEndnotesOptions(modelname) {
-	var worknotesoptions = $('end-notes-options')
-	worknotesoptions.toggle();
-	if (!worknotesoptions.visible()) {
-		$(modelname + '_endnotes').clear();
-		$('workendnoteswarning').hide();
-	}
-	else {
-		$('workendnoteswarning').show();
-	}
+    // We want to check this whether the ticky is checked or not
+    if (element_id == 'chapters-options') {
+        var item = document.getElementById('work_wip_length');
+        if (item.value == 1 || item.value == '1') {item.value = '?';}
+        else {item.value = 1;}
+    }
 }
 
 function showOptions(idToCheck, idToShow) {
     var checkbox = document.getElementById(idToCheck);
     var areaToShow = document.getElementById(idToShow);
     if (checkbox.checked) {
-        Element.toggle(idToShow)
-    }
-}
-
-function selectAllCheckboxes(basefield, count, checked) {
-    var checkbox;
-    for (i=1; i<=count; i++) {
-        checkbox = document.getElementById(basefield + '_' + i);
-        if (checked == 'invert') {
-            checkbox.checked = !checkbox.checked
-        } else {
-            checkbox.checked = checked
-        }
+        Element.toggle(idToShow);
     }
 }
 
 // Hides expandable form field options if Javascript is enabled
 function hideFormFields() {
-    if ($('work-form') != null) {
-        var toHide = ['co-authors-options', 'front-notes-options', 'end-notes-options', 'chapters-options', 'parent-options', 'series-options', 'backdate-options']
-        toHide.each(function(name) {
-            if ($(name)) {
-                if ($(name + '-show').checked == false) { $(name).addClassName('hidden'); }
+    if ($j('#work-form') != null) {
+        var toHide = ['#co-authors-options', '#front-notes-options', '#end-notes-options', '#chapters-options', '#parent-options', '#series-options', '#backdate-options'];
+        $j.each(toHide, function(index, name) {
+            if ($j(name)) {
+                if (!($j(name + '-show').is(':checked'))) { $j(name).addClass('hidden'); }
             }
         });
-        $('work-form').className = $('work-form').className;
+        $j('#work-form').className = $j('#work-form').className;
     }
-}
-
-// TODO: combine and simplify during Javascript review
-// Currently used to expand/show fandoms on the user dashboard
-function expandList() {
-    var hidden_lis = $$('li.hidden');
-    hidden_lis.each(function(li) {
-        li.removeClassName('hidden');
-        li.addClassName('not-hidden');
-    });
-    $j('#expandable-link').text("\< Hide full list");
-    $j('#expandable-link').unbind('click');
-    $j('#expandable-link').click(function(){
-        contractList();
-        return false;
-    });
-}
-
-function contractList() {
-    var hidden_lis = $$('li.not-hidden');
-    hidden_lis.each(function(li) {
-        li.removeClassName('not-hidden');
-        li.addClassName('hidden');  
-    });
-    $j('#expandable-link').text("\> Expand full list");    
-    $j('#expandable-link').unbind('click');
-    $j('#expandable-link').click(function(){
-        expandList();
-        return false;
-    });
-}
-
-
-// Toggles items in filter list
-function toggleFilters(id, blind_duration) {
-    
-	blind_duration = (blind_duration == null ? 0.2 : blind_duration = 0.2)
-    var filter = document.getElementById(id);
-	var filter_open = document.getElementById(id + "_open")
-	var filter_closed = document.getElementById(id + "_closed")
-	if (filter != null) {
-		Effect.toggle(filter, 'blind', {duration: blind_duration});
-		Effect.toggle(filter_open, 'appear', {duration: 0})
-		Effect.toggle(filter_closed, 'appear', {duration: 0})
-	}
-}
-
-// Collapses filter list if Javascript is enabled
-function hideFilters() {
-	var filters = $$('dd.tags');
-	filters.each(function(filter) {
-		var tags = filter.select('input');
-		var selected = false;
-		tags.each(function(tag) {if (tag.checked) selected=true});
-		if (selected != true) {toggleFilters(filter.id, 0);}
-	});	
-}
-
-// Toggles login block
-function toggleLogin(id, blind_duration) {
-	blind_duration = (blind_duration == null ? 0.2 : blind_duration)
-    var signin = document.getElementById(id);
-	var signin_open = document.getElementById(id + "_open")
-	var signin_closed = document.getElementById(id + "_closed")
-	if (signin != null) {
-		Effect.toggle(signin, 'blind', {duration: blind_duration});
-		Effect.toggle(signin_open, 'appear', {duration: 0.0})
-		Effect.toggle(signin_closed, 'appear', {duration: 0.0})
-	}
-}
-
-// Rolls up Login if Javascript is enabled
-function hideLogin() {
-	var signin = $$('#signin');
-	signin.each(function(signin) {
-		var tags = signin.select('input');
-		var selected = false;
-		tags.each(function(tag) {if (tag.checked) selected=true});
-		if (selected != true) {toggleLogin(signin.id, 0.0);}
-	});	
 }
 
 // Hides the extra checkbox fields in prompt form
 function hideField(id) {
-    var id_to_hide =  document.getElementById(id);
-    Effect.toggle(id_to_hide, 'blind', {duration: 0.0});
+  $j('#' + id).toggle();
 }
 
-
-//generic show hide toggler
-
-function ViewToggle(el_selector, show_link_selector, hide_link_selector, effect_duration, start_shown) {
-  this.el = el_selector
-  this.show_el = show_link_selector
-  this.hide_el = hide_link_selector
-  this.options = {
-    duration: effect_duration || 0.2
-  }
-  if (!start_shown) { // this is null == false, if not provided
-    // Call on body DOM loaded event courtesy of jQuery
-    var thisone = this
-    jQuery(function(){thisone.hide()})
-  }
-}
-ViewToggle.prototype = {
-  toggle: function toggle() {
-    var el = $(this.el)
-    if (el) Effect.toggle(el, 'blind', this.options)
-    this._toggle_el(this.show_el)
-    this._toggle_el(this.hide_el)
-  },
-  hide: function hide() {
-    var el = $(this.el)
-    if (el) Effect.BlindUp(el, this.options)
-    this._show_el(this.show_el)
-    this._hide_el(this.hide_el)
-  },
-  show: function show() {
-    var el = $(this.el)
-    if (el) Effect.BlindDown(el, this.options)
-    this._show_el(this.hide_el)
-    this._hide_el(this.show_el)
-  },
-  _hide_el: function(el) {
-    el = $(el)
-    if (el) Effect.Fade(el, {duration:0})
-  },
-  _toggle_el: function(el) {
-    el = $(el)
-    if (el) Effect.toggle(el, 'appear', {duration:0})
-  },
-  _show_el: function(el) {
-    el = $(el)
-    if (el) Effect.Appear(el, {duration:0})
-  }
+function updateCharacterCounter(counter) {
+    var input_id = '#' + $j(counter).attr('id');
+    var maxlength = $j(input_id + '_counter').attr('data-maxlength');
+    var input_value = $j(input_id).val();
+    input_value = (input_value.replace(/\r\n/g,'\n')).replace(/\r|\n/g,'\r\n'); 
+    var remaining_characters = maxlength - input_value.length;
+    $j(input_id + '_counter').html(remaining_characters);
+    $j(input_id + '_counter').attr("aria-valuenow", remaining_characters);
 }
 
-// commented out for now as it is inadvertently disabling sessions view login login_view = new ViewToggle('signin', 'signin_closed', 'signin_open')
-subnav_view = new ViewToggle('subnav');
-flash_view = new ViewToggle('flash');
+function generateCharacterCounters() {
+  $j(".observe_textlength").each(function(){
+      updateCharacterCounter(this);
+  });
+  $j(".observe_textlength").live("keyup keydown mouseup mousedown change", function(){
+      updateCharacterCounter(this);
+  });
+}
+
+function setupTooltips() {
+    $j('span[tooltip]').each(function(){
+       $j(this).qtip({
+          content: $j(this).attr('tooltip'),
+          position: {corner: {target: 'topMiddle'}}
+       });
+    });
+}
+
+// prevent double submission for JS enabled
+jQuery.fn.preventDoubleSubmit = function() {
+  jQuery(this).submit(function() {
+    if (this.beenSubmitted)
+      return false;
+    else
+      this.beenSubmitted = true;
+  });
+};
+

@@ -1,20 +1,18 @@
-<!-- descriptions-->
-<div id="collection-page" class="profile">
-  <!-- /descriptions-->
-  <!--subnavigation, sorting and actions-->
-  <!--/subnav-->
+<div id="collection-page" class="collection challenge home">
   <!--main content-->
-  <h3><%= t('.challenge_signups.view', :default => "Signup for %{person}", :person => @challenge_signup.pseud.byline) %></h3>
+  <h2 class="heading"><%= ts("Signup for %{person}", :person => @challenge_signup.pseud.byline) %></h2>
+  <!--subnav-->
+  <%= render "signup_controls", :challenge_signup => @challenge_signup %>
+  <!--/subnav-->
 
-  <div class="collection preface">
-    <%= render :partial => "show_requests", :locals => {:challenge_signup => @challenge_signup} %>
+  <!--main content-->
 
-    <%= render :partial => "show_offers", :locals => {:challenge_signup => @challenge_signup} %>
-  </div>
+  <%= render "show_requests", :challenge_signup => @challenge_signup %>
+  <%= render "show_offers", :challenge_signup => @challenge_signup %>
+
   <!--/content-->
 
   <!--subnav-->
-    <%= render :partial => "signup_controls", :locals => {:challenge_signup => @challenge_signup} %>
+  <%= render "signup_controls", :challenge_signup => @challenge_signup %>
   <!--/subnav-->
 </div>
-

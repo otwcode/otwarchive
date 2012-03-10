@@ -1,13 +1,13 @@
 <p><%= ts("Dear Collection Maintainers!") %></p>
 
 <p>
-  <%= ts("We have finished generating potential matches for your challenge collection,") %>
+  <%= ts("We have finished generating potential assignments for your challenge collection,") %>
   <%= link_to(@collection.title, collection_url(@collection)) %>.
 </p>
-  
+
 <p>
-  <%= ts("You can see the potential matches and set assignments at:") %> 
-  <%= collection_potential_matches_url(@collection) %>. 
+  <%= ts("You can see the potential matches and set assignments at:") %>
+  <%= collection_potential_matches_url(@collection) %>.
 </p>
 
 <p><%= ts("Sent at:") %> <%= Time.now.to_s(:time_for_mailers) %></p>

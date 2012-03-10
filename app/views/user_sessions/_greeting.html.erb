@@ -1,25 +1,20 @@
 <% if logged_in? %>
-  <p id="greeting">
-      <%=h t('.hi', :default => "Hi,") %> <%= link_to current_user.login, user_path(current_user), :class => 'login' %>!
+  <div id="greeting">
+    <p class="icon">
+      <span class="landmark">Hi, <%= link_to current_user.login, user_path(current_user) %>!</span>
+    <%= icon_display(current_user) %>
     </p>
-  <ul id="login">
-    <li>
-      <%= link_to t('.post_new', :default => "Post New"), new_work_path %>&nbsp;|
-    </li>
-	<li>
-	<%= link_to t('.import', :default => "Import"), new_work_path(:import => true) %>	&nbsp;|
-	</li>
-    <li>
-      <%= link_to t('.log_out', :default => "Log out"), logout_path %>
-    </li>
-  </ul>
+    <ul class="navigation actions" role="navigation">
+	    <li><%= link_to ts("post new"), new_work_path %></li>
+      <li> <%= link_to ts("log out"), logout_path %></li>
+    </ul>
+  </div>
+
 <% elsif logged_in_as_admin? %>
-  <ul id="greeting">
-    <li>
-      <span><%=h t('.admin_hello', :default => "Hello,") %></span>&nbsp;<%= link_to current_admin.login, admin_path(current_admin), :class => 'login login-admin' %>!
-    </li>
-    <li>
-      <%= link_to t('.admin_log_out', :default => "Log out"), admin_logout_path %>
-    </li>
-  </ul>
+  <div id="greeting">
+	  <p class="icon"><%= icon_display(current_user) %></p>
+	  <ul class="navigation actions" role="navigation">
+      <li><span class="current">Admin</span></li>
+      <li><%= link_to ts("log out"), admin_logout_path %></li>
+  </div>
 <% end %>

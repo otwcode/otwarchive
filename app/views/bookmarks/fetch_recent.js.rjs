@@ -1,8 +1,0 @@
-page.replace_html "recent_#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}", :partial => 'bookmarks', :locals => {:recent_bookmarks => @recent_bookmarks, :params => {:show_recent => true}}
-if @bookmark.bookmarkable.bookmarks.size > 5
-  page.insert_html :bottom, "recent_#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}", link_to('View all', eval(@bookmark.bookmarkable.class.to_s.underscore + '_bookmarks_path(@bookmark.bookmarkable)'))
-  page.insert_html :bottom, "recent_#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}", " | "
-end
-page.insert_html :bottom, "recent_#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}", link_to_remote("Hide most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'hide_recent', :id => @bookmark.id }, :method => :get)
-page.replace_html "recent_link_#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}", link_to_remote("Hide most recent bookmarks", :url => {:controller => 'bookmarks', :action => 'hide_recent', :id => @bookmark.id}, :method => :get)
-page["recent_#{@bookmark.bookmarkable_type.underscore}_#{@bookmark.bookmarkable_id}"].visual_effect :scroll_to

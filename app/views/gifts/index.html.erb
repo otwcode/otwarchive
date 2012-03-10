@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>
+<h2 class="heading">
   <%= ts("Gifts for %{recipient}", :recipient => @user ? @user.login : h(@recipient_name)) %>
   <%= @collection ? ts("in %{collection}", :collection => h(@collection.title)) : "" %>
 </h2>
@@ -12,7 +12,7 @@
 <!--subnav-->
 
 <!--main content-->
-<ul class="gift work index">
+<ul class="gift work index group">
   <% for work in @works %>
     <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
   <% end %>

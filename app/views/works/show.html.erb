@@ -1,6 +1,10 @@
 <!--page description, messages-->
+<ul class="landmark skip">
+	<li><a name="top">&nbsp;</a></li>
+	<li><a href="#work">Skip header</a></li>
+</ul>
 <% if @work.unrevealed? %>
-  <p class="message">
+  <p class="notice">
     <%= ts("This work is part of an ongoing challenge and will be revealed soon! You can find details here: ") %>
     <%= @work.collections.unrevealed.collect {|challenge| link_to(challenge.title, collection_path(challenge))}.join(", ").html_safe %>
   </p>
@@ -16,7 +20,6 @@
 <!-- BEGIN revealed -->
 <% if !@work.unrevealed? || logged_in_as_admin? || is_author_of?(@work) || (@work.unrevealed? && can_see_work(@work, current_user)) %>
 <!-- BEGIN work -->
-  <p class="landmark"><a name="top">&nbsp;</a></p>
 <!--work description, metadata, notes and messages-->
   <%= render :partial => 'works/work_header' %>
   <% if logged_in_as_admin? %>
@@ -25,8 +28,7 @@
 <!--/descriptions-->
 
 <!--chapter content-->
-    <div id="chapters" class="userstuff" role="article">
-    <h3 class="landmark">Work Text:</h3>
+    <div id="chapters" role="article">
       <% if @chapters && @chapters.size > 1 %>
         <% for chapter in @chapters %>
           <% if chapter.posted? || is_author_of?(chapter) %>
@@ -34,31 +36,32 @@
           <% end %>
         <% end %>
       <% else %>
+        <h3 class="landmark heading" id="work"><%= ts("Work Text:") %></h3>
         <% cache("#{@chapter.cache_key}-show-content") do %>
-          <%=raw sanitize_field(@chapter, :content) %>
+          <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
         <% end %><!-- end cache -->
       <% end %>
     </div>
 <!--/chapter-->
-    <% unless @work.endnotes.blank? %>
-<!--work endnotes-->
-      <div class="preface" role="complementary">
-        <div id="work_endnotes" class="footnotes">
-          <h3><%= ts("Notes:") %></h3>
-          <blockquote class="userstuff"><%=raw sanitize_field(@work, :endnotes) %></blockquote>
-        </div>
-      </div>
-<!-- /endnotes-->
+    
+    <% if !@work.endnotes.blank? || !@work.series.blank? || !@work.approved_children.blank? %>
+    <!--afterword-->
+    <div class="afterword preface group" role="complementary">
+      <% unless @work.endnotes.blank? %>
+        <%= render :partial => 'works/work_endnotes' %>
+      <% end %>
+      <% unless @work.series.blank? %>
+        <%= render :partial => 'works/work_series_links' %>
+      <% end %>
+      <% unless @work.approved_children.blank? %>
+        <%= render :partial => 'works/work_approved_children' %>
+      <% end %>
+    </div>
+    <!--/afterword-->
     <% end %>
+  
   </div>
-<!-- END work skin -->
-
-<!--subnav-->
-  <% unless @work.series.blank? %>
-    <%= render :partial => 'works/series_links' %>
-  <% end %>
-  <%= render :partial => 'works/work_footer' %>
-<!--/subnav-->
+  <!-- END work skin -->
 <!-- END work -->
 
 <!-- BEGIN comment section -->

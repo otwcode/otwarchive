@@ -1,18 +1,18 @@
 <% if !@collection.challenge.signup_open %>
 
   <% if top && !@collection.potential_matches.empty? %>
-    <ul class="navigation">
+    <ul class="actions" role="menu">
       <li>
         <%= link_to "Send Assignments", send_out_collection_assignments_path(@collection), :confirm => "Are you sure? This will send out the currently saved assignments to all participants!" %>
       </li>
     </ul>
-    <div class="clear"></div>
+
   <% end %>
   
-  <ul class="navigation">
+  <ul class="actions" role="menu">
     <% if @collection.potential_matches.empty? %>
       <li>
-        <% if @settings.no_match_required? %>
+        <% if !@settings || @settings.no_match_required? %>
           <%= link_to ts("Generate Potential Matches"), generate_collection_potential_matches_path(@collection),
                         :confirm => "Your challenge settings don't require any matching. Assignments will be completely random. Is this what you want?" %>
         <% else %>
@@ -29,8 +29,8 @@
   </ul>  
 
   <% if !top && !@collection.potential_matches.empty? %>
-    <div class="clear"></div>
-    <ul class="navigation">
+
+    <ul class="actions" role="menu">
       <li>
         <%= link_to "Send Assignments", send_out_collection_assignments_path(@collection), :confirm => "Are you sure? This will send out the currently saved assignments to all participants!" %>
       </li>

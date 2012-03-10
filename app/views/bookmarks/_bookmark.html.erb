@@ -1,9 +1,0 @@
-<!-- This partial requires local variable 'bookmark' -->
-<li id="bookmark_<%= "#{bookmark.id}" %>" class="bookmark blurb" role="article">
-  <%= render :partial => 'bookmarks/bookmark_full_info', :locals => {:bookmark => bookmark} %>
-
-<div id="recent_<%= "#{bookmark.bookmarkable_type.underscore}_#{bookmark.bookmarkable_id}" %>"></div>
-<% if logged_in_as_admin? && bookmark.bookmarkable.class == ExternalWork %>
-  <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark.bookmarkable} %>
-<% end %>
-</li>

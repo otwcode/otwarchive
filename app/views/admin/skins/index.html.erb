@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>Skin Approval Queue</h2>
+<h2 class="heading"><%= ts('Skin Approval Queue') %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -7,31 +7,37 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark">Manage Skins</h3>
+<h3 class="landmark heading"><%= ts('Manage Skins') %></h3>
 
 <%=  form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :put} do %>
 
   <!-- approval queue -->
   <fieldset>
-    <legend>Approval Queue</legend>
-    <h3>Approval Queue</h3>
-
-    <table id="unapproved">
-      <tr>
-        <th>Skin</th>
-        <th>Type</th>
-        <th>Creator</th>
-        <th>Preview</th>
-        <th>Description</th>
-        <th>Admin Note</th>
-        <th>Approve</th>
-        <th>Reject</th>
+    <legend><%= ts('Approval Queue') %></legend>
+    <h3 class="heading"><%= ts('Approval Queue') %></h3>
+    
+    <div class="wrapper">
+    <table id="unapproved" summary="">
+      <caption></caption>
+      <thead>
+        <tr>
+        <th scope="col">Skin</th>
+        <th scope="col">Type</th>
+        <th scope="col">Creator</th>
+        <th scope="col">Preview</th>
+        <th scope="col">Description</th>
+        <th scope="col">Admin Note</th>
+        <th scope="col">Approve</th>
+        <th scope="col">Reject</th>
       </tr>
+    </thead>
+      <tbody>
       <% @unapproved_skins.each_with_index do |skin, i| %>
         <tr>
-          <td>
-            <%= label_tag "make_official_#{skin.id}", (link_to skin.title, skin_path(skin)) %>
-          </td>
+          <th scope="row">
+            <% skin_name = skin.title.downcase.gsub(/ +/, '_') %>
+            <%= label_tag "make_official_#{skin_name}", (link_to skin.title, skin_path(skin)) %>
+          </th>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
           <td><%= skin_preview_display(skin) %></td>
@@ -40,17 +46,19 @@
           </td>
           <td><%= text_field_tag "skin_admin_note[#{skin.id}]", h(skin.admin_note) %></td>
           <td>
-            <%= check_box_tag "make_official[]", skin.id, false, :id => "make_official_#{skin.id}" %>
+            <%= check_box_tag "make_official[]", skin.id, false, :id => "make_official_#{skin_name}" %>
           </td>
           <td>
-            <%= check_box_tag "make_rejected[]", skin.id, false, :id => "make_rejected_#{skin.id}" %>
+            <%= check_box_tag "make_rejected[]", skin.id, false, :id => "make_rejected_#{skin_name}" %>
           </td>
         </tr>
       <% end %>
+    </tbody>
     </table>
+    </div>
   </fieldset>
 
-  <p class="submit"><%= submit_tag "Update" %></p>
+  <p class="submit actions"><%= submit_tag "Update" %></p>
 
 <% end %>
 

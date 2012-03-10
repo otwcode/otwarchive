@@ -178,6 +178,16 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should contain "([^"]*)"$/ do |
   end
 end
 
+Then /^the field labeled "([^"]*)" should contain "([^"]*)"$/ do |label, value|
+  field = find_field(label)
+  field_value = (field.tag_name == 'textarea') ? field.text : field.value
+  if field_value.respond_to? :should
+    field_value.should =~ /#{value}/
+  else
+    assert_match(/#{value}/, field_value)
+  end
+end  
+
 Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ do |field, selector, value|
   with_scope(selector) do
     field = find_field(field)
@@ -233,6 +243,13 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
     assert_equal expected_params, actual_params
   end
 end
+
+
+Then /^I should get a file with ending and type ([^\"]*)$/ do |type|
+  page.response_headers['Content-Disposition'].should =~ Regexp.new("filename=.*?\.#{type}")
+  page.response_headers['Content-Type'].should =~ Regexp.new("/#{type}")
+end
+
 
 Then /^show me the page$/ do
   save_and_open_page

@@ -1,13 +1,13 @@
 <% cache("#{work.cache_key}-meta-#{hide_warnings?(work) ? 'nowarn' : 'showwarn'}-#{hide_freeform?(work)  ? 'nofreeform' : 'showfreeform'}") do %>
-<h3 class="landmark">Work Header</h3>
+<h3 class="landmark heading">Work Header</h3>
 
 <div class="wrapper">
 
-  <dl class="work meta" role="complementary">
+  <dl class="work meta group" role="complementary">
     <% Tag::VISIBLE.each do |type| %>
       <% tags = work.tag_groups[type] %>
         <% unless tags.blank? %>
-          <dt class="<%= type.downcase %>">
+          <dt class="<%= type.downcase %> tags">
             <% if type == "Warning" %>
               <%= link_to( tags.size == 1 ? type.constantize::NAME : type.constantize::NAME.pluralize, tos_faq_path(:anchor => "tags") ) %>:
             <% elsif type.constantize::NAME == ArchiveConfig.FREEFORM_CATEGORY_NAME %>
@@ -17,12 +17,12 @@
             <% end %>
           </dt>
 
-          <dd class="<%= type.downcase %>">
-            <ul>
+          <dd class="<%= type.downcase %> tags">
+            <ul class="commas">
               <% if (type == "Warning" && hide_warnings?(work)) || (type == "Freeform" && hide_freeform?(work)) %>
                 <li id="work_<%= work.id %>_category_<%= type.downcase.pluralize %>"><%= show_hidden_tags_link(work, type.downcase.pluralize) %> </li>
              <% else %>
-               <%= tag_link_list(tags) %>
+               <%= tag_link_list(tags, link_to_works=true) %>
              <% end %>
             </ul>
           </dd>
@@ -47,13 +47,12 @@
       </dd>
     <% end %>
 
-    <dt class="stats">
-      <%= ts("Stats") %>:
-    </dt>
+    <dt class="stats"><%= ts("Stats") %>:</dt>
     <dd class="stats">
 <% end %><!-- end of cache -->
 
       <%= work_meta_list(@work, @chapter) %>
+      <div class="clear"><!--clear stats--></div>      
     </dd>
   </dl>
 </div>

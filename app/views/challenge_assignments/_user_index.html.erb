@@ -1,49 +1,12 @@
-<h3>Your Assignments<%= @collection ? " In #{link_to(@collection.title, @collection)}" : "" %></h3>
+<!--SUSPECT USER HOME/ COLLECTION HOME and h2-->
+<h3 class="heading">Your Assignments<%= @collection ? " In #{link_to(@collection.title, @collection)}" : "" %></h3>
 
-<table>
-  <tr>
-    <% unless @collection %><th>Challenge</th><% end %>
-    <th>Writing For</th>
-    <th>Due At</th>
-    <th>Work</th>
-    <th>Manage</th>
-  </tr>
+<% unless @collection %>
+<p><%= ts('Looking for prompts you claimed in a prompt meme? Try') %> <%= link_to ts("My Claims"), user_claims_path(@user) %></p>
+<% end %>
 
+<dl class="index group">
   <% @challenge_assignments.each do |assignment| %>
-    <% @request = assignment.request_signup || assignment.pinch_request_signup %>
-    <% @challenge = assignment.collection.challenge %>
-    <tr>
-      <% unless @collection %><td><%= link_to assignment.collection.title, collection_url(assignment.collection) %></td><% end %>
-      <td><%= @request ? link_to(@request.pseud.byline, collection_assignment_path(assignment.collection, assignment)) : "None" %></td>
-      <% if @challenge.respond_to?("assignments_due_at") %>
-        <td><%= time_in_zone(@challenge.assignments_due_at, (@challenge.time_zone || Time.zone.name)) %></td>
-      <% else %>
-        <td>None set</td>
-      <% end %>
-      <td>
-        <% if assignment.creation %>
-          <% if assignment.creation.is_a?(Work) %>
-            <%= link_to assignment.creation.title, work_path(assignment.creation) %>
-          <% end %>
-          <% if !assignment.fulfilled? %>
-            <br/><strong>This work has not yet been approved by the challenge moderators.</strong>
-          <% end %>
-        <% else %>
-          Not yet posted.
-        <% end %>
-      </td>
-      <td>
-        <% unless assignment.fulfilled? %>
-          <ul class="navigation">
-            <li>
-              <%= link_to "Default", default_user_assignment_path(@user, assignment), 
-                  :confirm => "Are you sure? This will mark you as having defaulted and notify the collection maintainer! It cannot be undone." %>
-            </li>
-            <li><%= link_to t('.assignment.post_new', :default => "Post To Fulfill"), new_collection_work_path(assignment.collection, :assignment_id => assignment.id) %></li>
-          </ul>
-        <% end %>
-      </td>
-    </tr>
+    <%= render "assignment_blurb", :assignment => assignment %>
   <% end %>
-  
-</table>
+</dl>

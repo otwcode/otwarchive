@@ -38,13 +38,10 @@ SMTP_DOMAIN: localhost
 #SMTP_PASSWORD:
 #SMTP_AUTHENTICATION: # :plain, :login or :cram_md5
 
-# used to turn off delayed jobs locally for testing --
-# set to true in your local.yml
-NO_DELAYS: false
-
 # Branding
 APP_URL: 'http://www.example.org'
 APP_NAME: 'Example Archive'
+APP_HOST: 'archiveofourown.org'
 APP_SHORT_NAME: 'AO3'
 LOGO: 'logo.png'
 ALT_LOGO: 'AO3 logo - the letters A O 3 combined with arms raised in celebration, symbolizing the joy of fannish creation in the Archive'
@@ -66,6 +63,9 @@ INVITE_FROM_QUEUE_FREQUENCY: 7
 ACCOUNT_CREATION_ENABLED: false
 DAYS_TO_PURGE_UNACTIVATED: 7
 
+# this determines how long we keep processed results like tag set nominations in redis
+DAYS_TO_SAVE_PROCESSED: 56
+
 # validation values -- max/min lengths
 TITLE_MAX: 255
 TITLE_MIN: 1
@@ -81,6 +81,7 @@ FEEDBACK_SUMMARY_MAX: 100
 INFO_MAX: 100000
 FAQ_MAX: 200000
 ICON_ALT_MAX: 50
+ICON_COMMENT_MAX: 50
 
 # max number of tags of each type allowed in challenge prompts (requests/offers)
 # increasing this number can lead to slower automated matching
@@ -88,7 +89,8 @@ PROMPT_TAGS_MAX: 20
 
 # max number of prompts of each type (offer, request) allowed
 PROMPTS_MAX: 10
-
+# max for prompt memes (can be much higher than for gift exchanges, as there is no matching)
+PROMPT_MEME_PROMPTS_MAX: 50
 
 # max number of works/chapters that can be imported
 IMPORT_MAX_WORKS: 25
@@ -153,6 +155,9 @@ FREEFORM_CATEGORY_NAME: 'Additional Tags'
 COMMON_CATEGORY_NAME: 'Common'
 BANNED_CATEGORY_NAME: 'Banned'
 
+# DATE TIME FORMAT see http://ruby-doc.org/core/classes/Time.html#M000392
+DEFAULT_DATETIME_FORMAT: '%Y-%m-%d %I:%M%p'
+
 # SEARCH TIPS
 SEARCH_TIPS: ['tag: arthur/merlin, words: >1000', 'words: 100', 'tag: buffy gen teen "no archive warnings"', 'tag: lex slash (mature|explicit)', '"cerulean orbs"']
 
@@ -171,8 +176,13 @@ ANONYMOUS_THRESHOLD_COUNT: 10
 # SANITIZER VERSION
 SANITIZER_VERSION: 1
 
+# parameters that must be natural integers and their default values
+NONZERO_INTEGER_PARAMETERS:
+  page: 1
+  per_page: 25
+
 # These fields are query fields and are allowed to contain "less than" values
-FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits"]
+FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits", "date"]
 
 
 # Only the following fields are allowed to have HTML. In all others,
@@ -192,8 +202,10 @@ FIELDS_ALLOWING_LESS_THAN: ["query", "words", "kudos", "hits"]
 #
 # This will ensure that the field has been sanitized with the latest version of the sanitizer.
 #
-FIELDS_ALLOWING_HTML: ["about_me", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes",
+FIELDS_ALLOWING_HTML: ["about_me", "banner_text", "comment", "content", "description", "endnotes", "faq", "intro", "note", "notes",
   "rules", "signup_instructions_general", "signup_instructions_offers", "signup_instructions_requests", "summary"]
+
+FIELDS_ALLOWING_HTML_ENTITIES: ["title"]
 
 FIELDS_ALLOWING_VIDEO_EMBEDS: ["content"]
 
@@ -208,49 +220,42 @@ FIELDS_ALLOWING_CSS: ["content", "endnotes", "notes"]
 # - numeric values specified with percentages or cm|em|ex|in|mm|pc|pt|px|%
 # - image files specified with url(http://image.url/blahblah/whatever.(jpg|png|gif))
 #
-# Note: if you put in a shorthand property (eg "background") that automatically lets
-# through all the sub-properties like background-color and background-image.
-#
-SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "-moz-box-shadow", "-webkit-box-shadow", "cue", "font", "layer-background",
-  "layout-grid", "list-style", "margin",
-  "-moz-border", "-moz-outline", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transition", "-moz-transition", "-webkit-transition"]
 
-SUPPORTED_CSS_PROPERTIES: ["-moz-opacity", "-moz-transform", "-moz-user-select", "-replace", "-use-link-source", "-webkit-transform",
-  "accelerator", "azimuth", "background-color", "behavior", "border-bottom-color", "border-collapse", "border-color", "border-left-color",
-  "border-right-color", "border-top-color", "bottom", "caption-side", "clear", "clip", "color", "content", "counter-increment", "counter-reset",
-  "cursor", "direction", "display", "elevation", "empty-cells", "filter", "float", "font", "font-family", "font-size", "font-style", "font-variant",
-  "font-weight", "height", "ime-mode", "include-source", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "marker-offset",
-  "marks", "max-height", "max-width", "min-height", "min-width", "orphans", "overflow", "page", "pause", "pause-after", "pause-before", "pitch",
-  "pitch-range", "play-during", "position", "quotes", "richness", "right", "ruby-align", "ruby-overhang", "ruby-position", "size", "speak",
-  "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "table-layout", "text-align", "text-decoration", "text-indent",
-  "top", "transform", "unicode-bidi", "vertical-align", "visibility", "voice-family", "volume", "white-space", "widows", "width", "word-break",
-  "word-spacing", "word-wrap", "writing-mode", "z-index"]
+# We use this list for properties which can take shorthand values and also have subproperties or variants 
+# (ie, because "border" is in here, we allow through: border-right, border-bottom-left-radius, -moz-border-foo, etc)
+# It is slightly less secure so do NOT put any property in here if you aren't sure all variations on it are okay!
+SUPPORTED_CSS_SHORTHAND_PROPERTIES: ["background", "border", "box-shadow", "column", "cue", "font", "layer-background",
+  "layout-grid", "list-style", "margin", "marker",
+  "opacity", "outline", "overflow", "padding", "page-break", "pause", "scrollbar", "text", "transform", "transition"]
 
-# mostly color names here
-SUPPORTED_CSS_KEYWORDS: ["!important", "absolute", "all", "auto", "bigger", "blink", "block", "bold", "both", "bottom", "center",
-  "collapse", "dashed", "dotted", "ease-in", "hidden", "inline", "italic", "justify", "left", "medium", "no-repeat", "none", "normal",
-  "nowrap", "overline", "pointer", "repeat", "repeat-x", "repeat-y", "right", "scroll", "small-caps", "smaller", "solid", "static", "top",
-  "transparent", "underline", "url",
-  "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond",
-  "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson",
-  "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange",
-  "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkturquoise", "darkviolet", "deeppink",
-  "deepskyblue", "dimgray", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold",
-  "goldenrod", "gray", "green", "greenyellow", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush",
-  "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgrey", "lightgreen", "lightpink",
-  "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen",
-  "magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue",
-  "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy",
-  "oldlace", "olive", "olivedrab", "orange", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred",
-  "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon",
-  "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "snow", "springgreen", "steelblue", "tan",
-  "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"]
+SUPPORTED_CSS_PROPERTIES: ["-moz-user-select", "-replace", "-use-link-source", 
+  "accelerator", "alignment-adjust", "alignment-baseline", "appearance", "azimuth", 
+  "baseline-shift", "behavior", "binding", "bookmark-label", "bookmark-level", "bookmark-target", "bottom", "box-align", "box-direction", 
+  "box-flex", "box-flex-group", "box-lines", "box-orient", "box-pack", "box-sizing", "caption-side", "clear", "clip", "color", "color-profile", 
+  "content", "counter-increment", "counter-reset", "crop", "cue", "cue-after", "cue-before", 
+  "cursor", "direction", "display", "dominant-baseline", "drop-initial-after-adjust", "drop-initial-after-align", "drop-initial-before-adjust", 
+  "drop-initial-before-align", "drop-initial-size", "drop-initial-value", "elevation", "empty-cells", "filter", "fit", "fit-position", "float", 
+  "float-offset", "font", "font-effect", "font-emphasize", "font-emphasize-position", "font-emphasize-style", "font-family", "font-size", "font-size-adjust", 
+  "font-smooth", "font-stretch", "font-style", "font-variant", "font-weight", "grid-columns", "grid-rows", "hanging-punctuation", "height", "hyphenate-after", 
+  "hyphenate-before", "hyphenate-character", "hyphenate-lines", "hyphenate-resource", "hyphens", "icon", "image-orientation", "image-resolution", "ime-mode", 
+  "include-source", "inline-box-align", "layout-flow", "left", "letter-spacing", "line-break", "line-height", "line-stacking", "line-stacking-ruby", 
+  "line-stacking-shift", "line-stacking-strategy", "mark", "mark-after", "mark-before", "marks", "marquee-direction", "marquee-play-count", 
+  "marquee-speed", "marquee-style", "max-height", "max-width", "min-height", "min-width", "move-to", "nav-down", "nav-index", "nav-left", "nav-right", 
+  "nav-up", "opacity", "orphans", "page", 
+  "page-policy", "phonemes", "pitch", "pitch-range", "play-during", "position", "presentation-level", "punctuation-trim", 
+  "quotes", "rendering-intent", "resize", "rest", "rest-after", "rest-before", "richness", "right", "rotation", "rotation-point", "ruby-align", "ruby-overhang", 
+  "ruby-position", "ruby-span", "size", "speak", "speak-header", "speak-numeral", "speak-punctuation", "speech-rate", "stress", "string-set", "tab-side", 
+  "table-layout", "target", "target-name", "target-new", "target-position", "top", "unicode-bibi", "unicode-bidi", 
+  "vertical-align", "visibility", "voice-balance", "voice-duration", "voice-family", "voice-pitch", "voice-pitch-range", "voice-rate", "voice-stress", 
+  "voice-volume", "volume", "white-space", "white-space-collapse", "widows", "width", "word-break", "word-spacing", "word-wrap", "writing-mode", "z-index"]
+
+# we allow through any string that is just a-z plus dashes (no spaces), so the only keywords you need to specify would
+# be ones that have something else or url, if you want to allow url values
+SUPPORTED_CSS_KEYWORDS: ["!important", "url"]
 
 # if you include "url" in the SUPPORTED_CSS_KEYWORDS, only urls pointing to this kind of
 # resource will be allowed
 SUPPORTED_EXTERNAL_URLS: ["jpg", "png", "gif"]
-
-
 
 # variables for Askimet http://akismet.com/
 AKISMET_KEY: '6833ee7298cf'
@@ -292,6 +297,9 @@ USE_DELTA_INDEXING: false
 #PRODUCTION_CACHE: "memory"
 PRODUCTION_CACHE: "memcache"
 
+# how long we cache search results in minutes
+AUTOCOMPLETE_EXPIRATION_TIME: 10
+
 # Turn this off in local.yml to keep the development footer/profiling code from running
 DEVELOPMENT_PROFILING_ENABLED: true
 
@@ -305,4 +313,6 @@ ACTION_UNSUSPEND: 4
 ACTION_BAN: 5
 ACTION_WARN: 6
 ACTION_RENAME: 7
+ACTION_PASSWORD_RESET: 8
+ACTION_NEW_EMAIL: 9
 

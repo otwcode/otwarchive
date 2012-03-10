@@ -1,9 +1,10 @@
-# eventually for exporting to Excel TSV format
-# require 'iconv'
+# For exporting to Excel CSV format
+require 'iconv'
+require 'csv'
 
 class ChallengeSignupsController < ApplicationController
 
-  before_filter :users_only, :except => [:summary, :display_summary]
+  before_filter :users_only, :except => [:summary, :display_summary, :requests_summary]
   before_filter :load_collection, :except => [:index]
   before_filter :load_challenge, :except => [:index]
   before_filter :load_signup_from_id, :only => [:show, :edit, :update, :destroy]
@@ -18,43 +19,37 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def no_challenge
-    flash[:error] = t('challenges.no_challenge', :default => "What challenge did you want to sign up for?")
+    flash[:error] = ts("What challenge did you want to sign up for?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
 
   def check_signup_open
-    signup_closed and return unless (@challenge.signup_open || @collection.user_is_owner?(current_user))
+    signup_closed and return unless (@challenge.signup_open || @collection.user_is_maintainer?(current_user))
   end
 
   def signup_closed
-    flash[:error] = t('challenge_signups.signup_closed', :default => "Signup is currently closed: please contact a moderator for help.")
+    flash[:error] = ts("Signup is currently closed: please contact a moderator for help.")
     redirect_to @collection rescue redirect_to '/'
     false
   end
 
   def signup_owner_only
-    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (!@challenge.signup_open && @collection.user_is_owner?(current_user)))
+    not_signup_owner and return unless (@challenge_signup.pseud.user == current_user || (@collection.challenge_type == "GiftExchange" && !@challenge.signup_open && @collection.user_is_owner?(current_user)))
   end
 
   def maintainer_or_signup_owner_only
-    not_allowed and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
+    not_allowed(@collection) and return unless (@challenge_signup.pseud.user == current_user || @collection.user_is_maintainer?(current_user))
   end
 
   def not_signup_owner
-    flash[:error] = t('challenge_signups.not_owner', :default => "You can't edit someone else's signup!")
+    flash[:error] = ts("You can't edit someone else's signup!")
     redirect_to @collection
     false
   end
 
   def allowed_to_destroy
-    @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed
-  end
-
-  def not_allowed
-    flash[:error] = t('challenge_signups.not_allowed', :default => "Sorry, you're not allowed to do that.")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
+    @challenge_signup.user_allowed_to_destroy?(current_user) || not_allowed(@collection)
   end
 
   def load_signup_from_id
@@ -63,7 +58,7 @@ class ChallengeSignupsController < ApplicationController
   end
 
   def no_signup
-    flash[:error] = t('challenge_signups.no_signup', :default => "What signup did you want to work on?")
+    flash[:error] = ts("What signup did you want to work on?")
     redirect_to collection_path(@collection) rescue redirect_to '/'
     false
   end
@@ -73,10 +68,10 @@ class ChallengeSignupsController < ApplicationController
   def index
     if params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
-        @challenge_signups = @user.challenge_signups
+        @challenge_signups = @user.challenge_signups.order_by_date
         render :action => :index and return
       else
-        flash[:error] = t('challenge_signups.not_allowed_to_see_other', :default => "You aren't allowed to see that user's signups.")
+        flash[:error] = ts("You aren't allowed to see that user's signups.")
         redirect_to '/' and return
       end
     else
@@ -86,21 +81,24 @@ class ChallengeSignupsController < ApplicationController
     end
 
     # using respond_to in order to provide Excel output
-    # see below for export_excel method
+    # see below for export_csv method
     respond_to do |format|
       format.html {
           if @challenge.user_allowed_to_see_signups?(current_user)
-            @challenge_signups = @collection.signups.joins(:pseud).paginate(:page => params[:page], :per_page => 20, :order => "pseuds.name")
-          else
+            @challenge_signups = @collection.signups.joins(:pseud).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE, :order => "pseuds.name")
+          elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
             @challenge_signups = @collection.signups.by_user(current_user)
+          else
+            not_allowed(@collection)
           end
       }
-      format.xls {
-        if @challenge.user_allowed_to_see_signups?(current_user)
-          params[:show_urls] = true
-          params[:show_descriptions] = true
-          @challenge_signups = @collection.signups
-          export_html
+      format.csv {
+        if (@collection.gift_exchange? && @challenge.user_allowed_to_see_signups?(current_user)) || 
+        (@collection.prompt_meme? && @collection.user_is_maintainer?(current_user))
+          export_csv
+        else
+          flash[:error] = ts("You aren't allowed to see the CSV summary.")
+          redirect_to collection_path(@collection) rescue redirect_to '/' and return
         end
       }
     end
@@ -121,12 +119,7 @@ class ChallengeSignupsController < ApplicationController
         FileUtils.touch(ChallengeSignup.summary_file(@collection))
 
         # generate the page
-        if ArchiveConfig.NO_DELAYS
-          ChallengeSignup.generate_summary(@collection)
-        else
-          # start a delayed job to generate the page
-          ChallengeSignup.delay.generate_summary(@collection)
-        end
+        ChallengeSignup.generate_summary(@collection)
       end
     else
       # generate it on the fly
@@ -138,16 +131,43 @@ class ChallengeSignupsController < ApplicationController
   def show
   end
 
+  protected
+  def build_prompts
+    notice = ""
+    @challenge.class::PROMPT_TYPES.each do |prompt_type|      
+      num_to_build = params["num_#{prompt_type}"] ? params["num_#{prompt_type}"].to_i : @challenge.required(prompt_type)
+      if num_to_build < @challenge.required(prompt_type)
+        notice += ts("You must submit at least %{required} #{prompt_type}. ", :required => @challenge.required(prompt_type))
+        num_to_build = @challenge.required(prompt_type)
+      elsif num_to_build > @challenge.allowed(prompt_type)
+        notice += ts("You can only submit up to %{allowed} #{prompt_type}. ", :allowed => @challenge.allowed(prompt_type))
+        num_to_build = @challenge.allowed(prompt_type)
+      elsif params["num_#{prompt_type}"]
+        notice += ts("Set up %{num} #{prompt_type.pluralize}. ", :num => num_to_build)
+      end
+      num_existing = @challenge_signup.send(prompt_type).count
+      num_existing.upto(num_to_build-1) do
+        @challenge_signup.send(prompt_type).build
+      end
+    end
+    unless notice.blank?
+      flash[:notice] = notice
+    end
+  end
+
+  public
   def new
     if (@challenge_signup = ChallengeSignup.in_collection(@collection).by_user(current_user).first)
-      flash[:notice] = t('challenge_signups.already_signed_up', :default => "You are already signed up for this challenge. You can edit your signup below.")
+      flash[:notice] = ts("You are already signed up for this challenge. You can edit your signup below.")
       redirect_to edit_collection_signup_path(@collection, @challenge_signup)
     else
       @challenge_signup = ChallengeSignup.new
+      build_prompts
     end
   end
 
   def edit
+    build_prompts
   end
 
   def create
@@ -174,13 +194,15 @@ class ChallengeSignupsController < ApplicationController
 
   def destroy
     unless @challenge.signup_open || @collection.user_is_maintainer?(current_user)
-      flash[:error] = t('challenge_signups.cannot_delete', :default => "You cannot delete your signup after signups are closed. Please contact a moderator for help.")
+      flash[:error] = ts("You cannot delete your signup after signups are closed. Please contact a moderator for help.")
     else
       @challenge_signup.destroy
-      flash[:notice] = 'Challenge signup was deleted.'
+      flash[:notice] = ts("Challenge signup was deleted.")
     end
-    if @collection.user_is_maintainer?(current_user)
+    if @collection.user_is_maintainer?(current_user) && !@collection.prompt_meme?
       redirect_to collection_signups_path(@collection)
+    elsif @collection.prompt_meme?
+      redirect_to collection_requests_path(@collection)
     else
       redirect_to @collection
     end
@@ -188,24 +210,105 @@ class ChallengeSignupsController < ApplicationController
 
 
 protected
-  # eventually for exporting to excel tsv format
-  # BOM = "\377\376" #Byte Order Mark
-  #
-  # def export_tsv(signups)
-  #   filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.tsv"
-  #   content = signups.collect {|signup| signup.to_tsv}.join("\n")
-  #   content = BOM + Iconv.conv("utf-16le", "utf-8", content)
-  #   send_data content, :filename => filename
-  # end
 
-  # We just export an HTML table, but we give it the xls suffix to have Excel/Open Office recognize it correctly
-  def export_html
-    @page_title = "#{@collection.name} Signups at #{Time.now.strftime('%Y-%m-%d-%H%M')}"
-    @hide_navigation = true
-    filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.xls"
-    content = render_to_string(:template => "challenge_signups/index.html", :layout => 'barebones.html')
-    send_data content, :filename => filename
+  def request_to_array(type, request)
+    any_types = TagSet::TAG_TYPES.select {|type| request && request.send("any_#{type}")}
+    any_types.map! { |type| ts("Any %{type}", :type => type.capitalize) }
+    tags = request.nil? ? [] : request.tag_set.tags.map {|tag| tag.name}
+    rarray = [(tags + any_types).join(", ")]
+            
+    if @challenge.send("#{type}_restriction").optional_tags_allowed
+      rarray << (request.nil? ? "" : request.optional_tag_set.tags.map {|tag| tag.name}.join(", "))
+    end
+            
+    if @challenge.send("#{type}_restriction").description_allowed
+      description = (request.nil? ? "" : sanitize_field(request, :description))
+      # Didn't find a way to get Excel 2007 to accept line breaks
+      # withing a field; not even when the row delimiter is set to
+      # \r\n and linebreaks within the field are only \n. :-(
+      #
+      # Thus stripping linebreaks.
+      rarray << description.gsub(/[\n\r]/, " ")
+    end
+     
+    rarray << (request.nil? ? "" : request.url) if
+      @challenge.send("#{type}_restriction").url_allowed
+
+    return rarray
+  end
+  
+
+  def gift_exchange_to_csv
+    header = ["Pseud", "Email", "Signup URL"]
+
+    ["request", "offer"].each do |type|
+      @challenge.send("#{type.pluralize}_num_allowed").times do |i|
+        header << "#{type.capitalize} #{i+1} Tags"
+        header << "#{type.capitalize} #{i+1} Optional Tags" if
+          @challenge.send("#{type}_restriction").optional_tags_allowed
+        header << "#{type.capitalize} #{i+1} Description" if
+          @challenge.send("#{type}_restriction").description_allowed
+        header << "#{type.capitalize} #{i+1} URL" if
+          @challenge.send("#{type}_restriction").url_allowed
+      end
+    end
+
+    csv_data = CSV.generate(:col_sep => "\t", :encoding => "utf-8") do |csv|
+      csv << header
+      
+      @collection.signups.each do |signup|
+        row = [signup.pseud.name, signup.pseud.user.email,
+               collection_signup_url(@collection, signup)]
+
+        ["request", "offer"].each do |type|
+          @challenge.send("#{type.pluralize}_num_allowed").times do |i|
+            row += request_to_array(type, signup.send(type.pluralize)[i])
+          end
+        end
+        csv << row
+      end
+    end
+
+    return csv_data
   end
 
+  
+  def prompt_meme_to_csv
+    header = ["Pseud", "Email", "Signup URL", "Tags"]
+    header << "Optional Tags" if @challenge.request_restriction.optional_tags_allowed
+    header << "Description" if @challenge.request_restriction.description_allowed
+    header << "URL" if @challenge.request_restriction.url_allowed
 
+    csv_data = CSV.generate(:col_sep => "\t", :encoding => "utf-8") do |csv|
+      csv << header
+      @collection.prompts.where(:type => 'Request').each do |request|
+        if request.anonymous?
+          row = ["(Anonymous)", "", ""]
+        else
+          row = [request.challenge_signup.pseud.name,
+                 request.challenge_signup.pseud.user.email,
+                 collection_signup_url(@collection, request.challenge_signup)]
+        end
+
+        csv << (row + request_to_array("request", request))
+      end
+    end
+
+    return csv_data
+  end
+
+  
+  # Tab-separated CSV with utf-16le encoding (unicode) and byte order
+  # mark. This seems to be the only variant Excel can get
+  # automatically into proper table format. OpenOffice handles it
+  # well, too.
+  def export_csv
+    csv_data = self.send("#{@challenge.class.name.underscore}_to_csv")
+    filename = "#{@collection.name}_signups_#{Time.now.strftime('%Y-%m-%d-%H%M')}.csv"
+
+    byte_order_mark = "\uFEFF"
+    csv_data = Iconv.conv("utf-16le", "utf-8", byte_order_mark + csv_data)
+    send_data(csv_data, :filename => filename, :type => :csv)
+  end
+  
 end

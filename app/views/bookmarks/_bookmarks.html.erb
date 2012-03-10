@@ -1,38 +1,25 @@
+<% # show blurb for whatever is bookmarked if we're looking at a single bookmarked object %>
 <% if params[:work_id] %>
-  <!-- If we're viewing all bookmarks on a work, we want to show the work blurb
-       at the top, and the bookmarker info only (user_view) -->
-  <%= render :partial => 'works/work_blurb', :locals => {:work => @bookmarkable} %>
-  <% for bookmark in @bookmarks %>
-    <%= render :partial => 'bookmarks/bookmark_user_info', :locals => {:bookmark => bookmark} %>
-  <% end %>
-
+  <%= render 'works/work_blurb', :work => @bookmarkable %>
 <% elsif params[:external_work_id] %>
-<!-- If we're viewing all bookmarks on an external work, we want to show the external work blurb
-     at the top, and the bookmarker info only (user_view) -->
-  <%= render :partial => 'external_works/external_work_blurb', :locals => {:bookmarkable => @bookmarkable} %>
-  <% for bookmark in @bookmarks %>
-    <%= render :partial => 'bookmarks/bookmark_user_info', :locals => {:bookmark => bookmark, :params => {:user_view => true}} %>
-  <% end %>
-
+  <%= render 'external_works/blurb', :external_work => @bookmarkable %>
 <% elsif params[:series_id] %>
-<!-- If we're viewing all bookmarks on a series, we want to show the series blurb
-     at the top, and the bookmarker info only (user_view) -->
-  <%= render :partial => 'series/series_blurb', :locals => {:series => @bookmarkable } %>
-  <% for bookmark in @bookmarks %>     
-    <%= render :partial => 'bookmarks/bookmark_user_info', :locals => {:bookmark => bookmark, :params => {:user_view => true}} %>
-  <% end %>
+  <%= render 'series/series_blurb', :series => @bookmarkable %>
+<% end %>
 
-<% elsif params[:show_recent] %>
-<!-- The javascript expanded view that shows more bookmarks for a particular work on an aggregated view -->  
-   <ul class="recent-bookmarks">
-   <% for bookmark in @recent_bookmarks %>
-     <%= render :partial => 'bookmarks/bookmark_user_info', :locals => {:bookmark => bookmark} %>         
-   <% end %>
-   </ul>
+<% if params[:show_recent] %>
+  <% # The javascript expanded view that shows more bookmarks for a particular work on an aggregated view %>  
+  <% # because this isn't rendered inside the index view we need to put a ul around it %>
+  <ul class="recent index group">
+    <% @bookmarks.each do |bookmark| %><%= render 'bookmarks/bookmark_blurb_short', :bookmark => bookmark %><% end %>
+  </ul>
+
+<% elsif @bookmarkable %>
+  <% # show only partial view for each bookmark since the bookmarked object is already shown above %>
+  <% @bookmarks.each do |bookmark| %><%= render 'bookmarks/bookmark_blurb_short', :bookmark => bookmark %><% end %>
 
 <% else %>
-<!-- Standard bookmarks index --> 
-  <% for bookmark in @bookmarks %>
-    <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
-  <% end %>
+  <% # Standard bookmarks index with full blurb %> 
+  <% @bookmarks.each do |bookmark| %><%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %><% end %>
+  
 <% end %>

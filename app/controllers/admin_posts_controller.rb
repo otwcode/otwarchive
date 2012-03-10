@@ -1,19 +1,27 @@
 class AdminPostsController < ApplicationController
-  
+
   before_filter :admin_only, :except => [:index, :show]
   
   # GET /admin_posts
   # GET /admin_posts.xml
   def index
-    if params[:language_id]
-      @language = Language.find_by_short(params[:language_id])
-      @admin_posts = @language.admin_posts
-    else
-      @admin_posts = AdminPost.non_translated
+    if params[:tag]
+      @tag = AdminPostTag.find_by_id(params[:tag])
+      if @tag
+        @admin_posts = @tag.admin_posts
+      end
     end
-    @admin_posts = @admin_posts.order('created_at DESC').paginate(:page => params[:page], :per_page => 8)
+    @admin_posts ||= AdminPost
+    if params[:language_id].present? && (@language = Language.find_by_short(params[:language_id]))
+      @admin_posts = @admin_posts.where(:language_id => @language.id)
+      @tags = AdminPostTag.where(:language_id => @language.id).order(:name)
+    else
+      @admin_posts = @admin_posts.non_translated
+      @tags = AdminPostTag.order(:name)
+    end
+    @admin_posts = @admin_posts.order('created_at DESC').page(params[:page])
   end
-  
+
   # GET /admin_posts/1
   # GET /admin_posts/1.xml
   def show
@@ -53,7 +61,7 @@ class AdminPostsController < ApplicationController
 
     respond_to do |format|
       if @admin_post.save
-        flash[:notice] = 'AdminPost was successfully created.'
+        flash[:notice] = ts("Admin Post was successfully created.")
         format.html { redirect_to(@admin_post) }
         format.xml  { render :xml => @admin_post, :status => :created, :location => @admin_post }
       else
@@ -70,7 +78,7 @@ class AdminPostsController < ApplicationController
 
     respond_to do |format|
       if @admin_post.update_attributes(params[:admin_post])
-        flash[:notice] = 'AdminPost was successfully updated.'
+        flash[:notice] = ts("Admin Post was successfully updated.")
         format.html { redirect_to(@admin_post) }
         format.xml  { head :ok }
       else

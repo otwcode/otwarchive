@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts("New tag") %></h2>
+<h2 class="heading"><%= ts("New tag") %></h2>
 
 <%= error_messages_for :tag %>
 
@@ -26,13 +26,15 @@
       <% else %>
         <% types = Tag::USER_DEFINED %>
       <% end %>
-      <% types.each do |type| %>
-        <%= f.radio_button("type", type) %><%= f.label("type_#{type.downcase}", type) %><br/>
+      <ul>
+		<% types.each do |type| %>
+        <li><%= f.radio_button("type", type) %><%= f.label("type_#{type.downcase}", type) %></li>
+	</ul>
       <% end %>
     </dd>
   </dl>
 
-<p class="submit">
+<p class="submit actions">
 <%= f.submit %></p>
 <% end %>
 <!--/content-->

@@ -34,7 +34,7 @@ module Innerfusion
      rel = options[:size] == :auto ? "ibox&type=#{REQUEST_TYPES[options[:type]]}" : "ibox&width=#{width}&height=#{height}&type=#{REQUEST_TYPES[options[:type]]}"
      
      keys_to_remove = [:for,:size,:type]
-     html_options = {}
+     html_options = {"aria-controls" => "#ibox"}
      options.each {|key,value| html_options.update(key => value) unless keys_to_remove.include?(key)}
      html_options.update(:rel => rel)
      

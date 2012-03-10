@@ -1,0 +1,58 @@
+<div class="notes module" role="complementary">
+  <h3 class="heading"><%= ts("Notes:") %></h3>
+  <% unless @work.recipients.blank? %>
+    <h4 class="heading"><%= ts("For") %> <%= recipients_link(@work) %>.</h4>
+  <% end %>
+
+  <% # inspirations %>
+  <% for related_work in @work.parent_work_relationships %>
+    <% if related_work.parent %>
+      <h4 class="heading">
+        <% if related_work.translation %>
+          <%= ts('A translation of') %>
+        <% else %>
+          <%= ts('Inspired by') %>
+        <% end %>
+        <%= link_to related_work.parent.title.html_safe, related_work.parent %> by <%= byline(related_work.parent) %>.
+      </h4>
+    <% end %>
+  <% end %>
+
+
+  <% # prompts %>
+  <% @work.challenge_claims.each do |claim| %>
+    <% unless claim.request_prompt.nil? %>
+      <p>In response to a prompt by:
+        <% if claim.request_prompt.anonymous? %>
+          <%= link_to(ts("Anonymous"), collection_prompt_path(claim.collection, claim.request_prompt)) %>
+        <% else %>
+          <%= link_to(claim.request_signup.pseud.byline, collection_prompt_path(claim.collection, claim.request_prompt)) %>
+        <% end %>
+      </p>
+    <% end %>
+  <% end %>
+
+  <% # inspired-by %>
+  <% for related_work in @work.approved_related_works %>
+    <% if related_work.translation %>
+      <h4 class="heading">
+        <%= ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
+        <%= link_to related_work.work.title.html_safe, related_work.work %> by <%= byline(related_work.work) %>
+      </h4>
+    <% elsif @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? %>
+      <h4 class="heading"><%= ts("See the end of the work for other works inspired by this one.") %></h4>
+    <% end %>
+  <% end %>
+
+  <% # notes %>
+  <% unless @work.notes.blank? %>
+    <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
+  <% end %>
+
+  <% unless @work.endnotes.blank? %>  
+    <p>
+      (<%= ts("See the end of the work for ") %>
+        <%= link_to (@work.notes.blank? ? ts("notes") : ts("more notes")), get_endnotes_link %>)
+    </p>
+  <% end %>
+</div>

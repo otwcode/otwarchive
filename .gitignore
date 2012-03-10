@@ -1,4 +1,5 @@
-
+.DS_Store
+.bundle
 # /
 /*.tmproj
 /sphinx
@@ -7,6 +8,8 @@
 /capybara-*.html
 /.dropbox
 /.dropbox.attr
+/.rspec
+REVISION
 
 # /config/
 /config/database.yml
@@ -17,6 +20,8 @@
 /config/sphinx.yml
 /config/unicorn.rb
 /config/newrelic.yml
+/config/redis.yml
+/config/redis-cucumber.conf
 
 # /config/environments/
 /config/environments/development.rb
@@ -35,6 +40,7 @@
 /public/system
 /public/downloads
 /public/stylesheets/cached_for_screen.css
+/public/stylesheets/skins
 
 # /public/images/
 /public/images/Thumbs.db
@@ -49,3 +55,9 @@
 /vendor/gems/*
 
 # /vendor/plugins/
+
+# fix for vcr
+features/cassette_library/cucumber_tags/work_import_special_characters_auto_latin.yml
+features/cassette_library/cucumber_tags/work_import_special_characters_man_cp.yml
+features/cassette_library/cucumber_tags/work_import_special_characters_man_latin.yml
+features/cassette_library/cucumber_tags/import_lj_comm.yml

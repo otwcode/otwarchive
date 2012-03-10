@@ -1,11 +1,10 @@
-<li class="comment <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
-	<!--title should be the first element in this list item, not icon. icon goes after name and before comment text-->
-	<h4>
+<li class="comment group <%= cycle :odd, :even %>" id="comment_<%= single_comment.id %>" role="article">
+	<h4 class="heading byline">
 	  <%= h(ts("Posted on ")) + link_to_comment_ultimate_parent(single_comment) + h(ts(" by ")) + get_commenter_pseud_or_name(single_comment) %>
 	</h4>
 	<% unless single_comment.pseud.nil? %>
 		<div class="icon">
-	  <%= standard_icon_display(single_comment.pseud.user, single_comment.pseud) %>
+	  <%= icon_display(single_comment.pseud.user, single_comment.pseud) %>
 		</div>
 	<% end %>
 	<blockquote class="userstuff"><%=raw sanitize_field(single_comment, :content) %></blockquote>

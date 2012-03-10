@@ -1,12 +1,12 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts('Update My Preferences') %></h2>
+<h2 class="heading"><%= ts('Set My Preferences') %></h2>
 <%= error_messages_for :preference %>
 
 <!--/descriptions-->
 
 <!--subnav-->
-<h3 class="landmark">Navigation</h3>
-<ul class="navigation" role="navigation">
+<h3 class="landmark heading">Navigation</h3>
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to ts("Edit My Profile"), edit_user_path(@user) %></li>
 	<li><%= link_to ts('Manage My Pseuds'), user_pseuds_path(@user) %></li>
 	<li><%= link_to ts("Change My User Name"), change_username_user_path(@user) %></li>
@@ -16,66 +16,78 @@
 
 <!--main content-->
 <%= form_for(@preference, :url => { :action => "update", :user_id => @user }) do |f| %>
-  <h4><%= ts("Privacy") %></h4>
+<fieldset>
+	<legend><%= ts("Privacy") %></legend>
+	<h4 class="heading"><%= ts("Privacy") %></h4>
   <ul>
   	<li>
    	  <%= f.check_box :email_visible %>
-   	  <%= f.label :email_visible, ts("Display Email Address") %>
+   	  <%= f.label :email_visible, ts("Show my email address to other people.") %>
    	</li>
 
   	<li>
     	  <%= f.check_box :date_of_birth_visible %>
-    	  <%= f.label :date_of_birth_visible, ts("Display Date of Birth") %>
+    	  <%= f.label :date_of_birth_visible, ts("Show my date of birth to other people.") %>
   	</li>
 
   	<li>
    	  <%= f.check_box :minimize_search_engines %>
-   	  <%= f.label :minimize_search_engines, ts("Minimize Search Engine Visibility") %>
+   	  <%= f.label :minimize_search_engines, ts("Hide my work from search engines when possible.") %>
    	</li>
    	
   	<li>
    	  <%= f.check_box :disable_share_links %>
-   	  <%= f.label :disable_share_links, ts("Disable Share Buttons") %> <%= link_to_help 'disable-share-buttons' %>
+   	  <%= f.label :disable_share_links, ts("Hide the share buttons on my work.") %> <%= link_to_help 'disable-share-buttons' %>
    	</li>
    	
    	
   </ul>
-  
-  <h4><%= ts("Site Display") %></h4>
+  </fieldset>
+  <fieldset>
+	<legend><%= ts("Display") %></legend><h4 class="heading"><%= ts("Display") %></h4>
   <ul>
   	<li>
     	  <%= f.check_box :adult %>
-    	  <%= f.label :adult, ts("Show me adult content without prompting") %>
+    	  <%= f.label :adult, ts("Show me adult content without checking.") %>
   	</li>
 
   	<li>
     	  <%= f.check_box :view_full_works %>
-    	  <%= f.label :view_full_works, ts("Always view entire work by default") %>
+    	  <%= f.label :view_full_works, ts("Show the whole work by default.") %>
   	</li>
 
   	<li>
     	  <%= f.check_box :hide_warnings %>
-    	  <%= f.label :hide_warnings, ts("Hide warnings by default (you will still have the option of revealing them)")  %>
+    	  <%= f.label :hide_warnings, ts("Hide warnings (you can still choose to show them).")  %>
   	</li>
 
   	<li>
   	  <%= f.check_box :hide_freeform %>
-  	  <%= f.label :hide_freeform, ts("Hide freeform tags by default (you will still have the option of revealing them)")  %>
+  	  <%= f.label :hide_freeform, ts("Hide additional tags (you can still choose to show them).")  %>
 	  </li>
 
     <li>
     	<%= f.check_box :disable_work_skins %>
-    	<%= f.label :disable_work_skins, ts("Hide custom styles on works")  %>
+    	<%= f.label :disable_work_skins, ts("Hide other people's work skins.")  %> <%= link_to_help "skins-basics" %>
     </li>
+</ul>
+    <fieldset>
+      <dl>
+      <dt><%= f.label :skin_id, ts("Your site skin")%>:</dt> 
+      <dd><span class="navigation actions"><%= link_to ts('Public skins'), skins_path %></span>
+      <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %></dd>
 
-    <li>
-      <%= f.label :skin_id, ts("Site skin")%>: 
-      <%= f.select :skin_id, @available_skins.collect{|s| [s.title, s.id]} %>
-      (<%= link_to ts('Public skins'), skins_path %>)
-    </li>
-  </ul>
-  
-  <h4><%= ts("Statistics") %></h4>
+      <dt><%= f.label :time_zone, ts("Your time zone: ")%></dt>
+      <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
+
+      <dt><%= f.label :work_title_format, ts("Format your own titles")  %> 	<%= link_to_help "work_title_format" %>:</dt>
+    	<dd><%= f.text_field :work_title_format %></dd>
+    </dl>
+</fieldset>
+</fieldset>
+<fieldset>
+	<legend><%= ts("Statistics") %></legend> 
+  <h4 class="heading"><%= ts("Statistics") %></h4>
   <ul>
     <li>
       <%= f.check_box :hide_all_hit_counts %>
@@ -89,91 +101,88 @@
 
     <li>
       <%= f.check_box :hide_public_hit_count %>
-      <%= f.label :hide_public_hit_count, ts("Don't publicly display hits on my works.") %>
+      <%= f.label :hide_public_hit_count, ts("Don't show other people hits on my works.") %>
     </li>
   </ul>
-  
-  <h4><%= ts("Comments") %></h4>
+</fieldset>
+<fieldset>
+	<legend><%= ts("Comments") %></legend>  
+  <h4 class="heading"><%= ts("Comments") %></h4>
   <ul>
   	<li>
     	  <%= f.check_box :comment_emails_off %>
-    	  <%= f.label :comment_emails_off, ts("Turn off notification emails for comments")  %>
+    	  <%= f.label :comment_emails_off, ts("Turn off emails about comments.")  %>
   	</li>
 
   	<li>
     	  <%= f.check_box :comment_inbox_off %>
-    	  <%= f.label :comment_inbox_off, ts("Turn off notification messages to your Inbox for comments")  %>
+    	  <%= f.label :comment_inbox_off, ts("Turn off messages to your inbox about comments.")  %>
   	</li>
 
   	<li>
     	  <%= f.check_box :comment_copy_to_self_off %>
-    	  <%= f.label :comment_copy_to_self_off, ts("Turn off copies of your own comments")  %>
+    	  <%= f.label :comment_copy_to_self_off, ts("Turn off copies of your own comments.")  %>
   	</li>
 
   	<li>
     	  <%= f.check_box :kudos_emails_off %>
-    	  <%= f.label :kudos_emails_off, ts("Turn off notification emails for kudos")  %>
+    	  <%= f.label :kudos_emails_off, ts("Turn off emails about kudos.")  %>
   	</li>
 
   	<li>
     	  <%= f.check_box :admin_emails_off %>
-    	  <%= f.label :admin_emails_off, ts("Turn off admin notification emails")  %>
+    	  <%= f.label :admin_emails_off, ts("Turn off admin emails.")  %>
   	</li>
   </ul>
-  
-  <h4><%= ts("Collections, Challenges and Gifts") %></h4>
+</fieldset>
+<fieldset>
+	<legend><%= ts("Collections, Challenges and Gifts") %></legend>  
+  <h4 class="heading"><%= ts("Collections, Challenges and Gifts") %></h4>
   <ul>
   	<li>
   	  <%= f.check_box :automatically_approve_collections %>
-  	  <%= f.label :pref, ts("Automatically approve when a moderator adds your work to a collection in the archive.") %>
+  	  <%= f.label :pref, ts("Automatically agree to your work being collected by others in the archive.") %>
   	</li>
 
   	<li>
     	  <%= f.check_box :collection_emails_off %>
-    	  <%= f.label :collection_emails_off, ts("Turn off notification emails from collections.") %>
+    	  <%= f.label :collection_emails_off, ts("Turn off emails from collections.") %>
   	</li>
 
   	<li>
     	  <%= f.check_box :collection_inbox_off %>
-    	  <%= f.label :collection_inbox_off, ts("Turn off Inbox messages from collections.") %>
+    	  <%= f.label :collection_inbox_off, ts("Turn off inbox messages from collections.") %>
   	</li>
 
   	<li>
     	  <%= f.check_box :recipient_emails_off %>
-    	  <%= f.label :recipient_emails_off, ts("Turn off gift work notification emails.") %>
+    	  <%= f.label :recipient_emails_off, ts("Turn off emails about gift works.") %>
   	</li>
   </ul>
-  
-  <h4><%= ts("Misc") %></h4>
-  <ul>
-    <li>
-      <%= f.label :time_zone, ts("Your time zone: ")%>
-      <%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %>
-    </li>
+</fieldset>
 
+<fieldset>
+	<legend><%= ts("Misc") %></legend>
+	  <h4 class="heading"><%= ts("Misc") %></h4>
+  <ul>
   	<li>
   	  <%= f.check_box :history_enabled %>
-  	  <%= f.label :history_enabled, ts("Enable Viewing History") %>
+  	  <%= f.label :history_enabled, ts("Turn on Viewing History.") %>
   	</li>
-
     <li>
     	<%= f.check_box :first_login %>
-    	<%= f.label :first_login, ts("Turn on the first login help banner")  %>
+    	<%= f.label :first_login, ts("Turn the new user help banner back on.")  %>
     </li>
-
     <li>
-      <%= f.label :work_title_format, ts("Format the titles on your works and series")  %>:
-			<%= f.text_field :work_title_format %>
-			<%= link_to_help "work_title_format" %>
+    	<%= f.check_box :banner_seen %>
+    	<%= f.label :banner_seen, ts("Turn off the banner showing on every page.")  %>
     </li>
-  </ul>
+</ul>
+</fieldset>
 
+  <%= submit_fieldset(f) %>
 
-	<p class="submit">
-  	<%= f.submit t('.forms.update', :default => "Update") %>
-	</p>
 <% end %>
-<hr class="clear" />
 <!--/content-->
 
 

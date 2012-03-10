@@ -1,80 +1,79 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
 <!--NOTE FOR BACK END: set this in the controller and just send a @page_heading variable or something to the view-->
-<h2><%= search_header @works, @query, "Work" %>
-  <% if @collection && @most_recent_works %>
-   <%= t('.updated_works_in_collection', :default => "in %{collection_title} updated in the last month", 
-    :collection_title => link_to(@collection.title, @collection)) %>
-  <% elsif @collection %>
-    <%= t('.works_in_collection', :default => "in %{collection_title}", 
-    :collection_title => link_to(@collection.title, @collection)).html_safe %>
-  <% elsif @most_recent_works %>
-    <%= t('.recently_updated', :default => "updated in the last month") %>
+<h2 class="heading"><%= search_header @works, @query, "Work" %>
+  <% if @collection %>
+   <%= ts("in %{collection_title}", :collection_title => link_to(@collection.title, @collection)).html_safe %>
   <% elsif @user %>
-    <%= t('.owned_works', :default => "by %{user_name}", :user_name => @user.login) %>
+    <%= ts("by %{user_name}", :user_name => @user.login) %>
   <% elsif @tag %>
-    <%= t('.works_with_tag', :default => "in %{tag_name}", :tag_name => @tag.name) %>
+    <%= ts("in %{tag_name}", :tag_name => @tag.name) %>
 <% end %>
 </h2>
 
+<% if @tag && (%w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F") %>
+<p><%= link_to_rss feed_tag_path(:id => @tag.id, :format => :atom) %></p>
+<% end %>
+
 <% if @too_many %>
-  <p><%= t('.search_too_broad', :default => "The Archive is currently unable to return more than %{search_max} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
+  <p><%= ts("The Archive is currently unable to return more than %{search_max} results. You can browse through the ones that we found first, or narrow your results by adding some more keywords, like character names or tags.", :search_max => ArchiveConfig.SEARCH_RESULTS_MAX) %></p>
 <% end %>
 <!-- /end descriptions-->
 
-<div class="navigation module">
-<!--Subnavigation, sorting and actions.-->
-<h3 class="landmark">Navigation, Sorting and Actions</h3>
-<!--gift search subnav-->
-<% if @collection && @collection.gift_exchange? %>
-  <%= render :partial => 'gifts/gift_search' %>
-<% end %>
-<!--user role subnav-->
-<% if params[:tag_id] || (@user && @user == current_user) %>
-<ul class="user navigation" role="navigation">
-  <% if @user && @user == current_user %>
-    <li id="edit_multiple">
-      <%= link_to t('.edit_multiple_link', :default => 'Edit Multiple Works'), show_multiple_user_works_path(@user) %></li>
+<div class="navigation actions module">
+
+  <!--Subnavigation, sorting and actions.-->
+  <h3 class="landmark heading">Navigation, Sorting and Actions</h3>
+  <!--gift search subnav-->
+  <% if @collection && @collection.gift_exchange? %>
+    <%= render :partial => 'gifts/gift_search' %>
   <% end %>
-  <% if params[:tag_id] %>
-    <%= taggable_list(params[:tag_id], "works") %>
+
+  <!--user role subnav-->
+  <% if params[:tag_id] || (@user && @user == current_user) %>
+    <ul class="user navigation actions" role="navigation">
+      <% if @user && @user == current_user %>
+        <li id="edit_multiple"><%= link_to ts('Edit Works'), show_multiple_user_works_path(@user) %></li>
+      <% end %>
+      <% if params[:tag_id] %>
+        <%= taggable_list(params[:tag_id], "works") %>
+      <% end %>
+    </ul>
   <% end %>
-</ul>
-<% end %>
-<!--sorting subnav-->
-  <ul class="sorting navigation" role="navigation">
-    <li><h4><%= t('.sort_by', :default => 'Sort By') %></h4></li>
+
+  <!--sorting subnav-->
+  <ul class="sorting actions" role="menu">
+    <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
     <% unless @query.blank? %>
-      <li><%= sort_link t('.sort.relevance', :default => 'Relevance') %></li>
+      <li><%= sort_link ts('Relevance') %></li>
     <% end %>
-    <li><%= sort_link t('.sort.author', :default => 'Author'), :author %></li>
-    <li><%= sort_link t('.sort.title', :default => 'Title'), :title %></li>
-    <li><%= sort_link t('.sort.date', :default => 'Date'), :date, {:sort_default => @query.blank?, :desc_default => true} %></li>
-    <li><%= sort_link t('.sort.word_count', :default => 'Word Count'), :word_count, {:desc_default => true} %></li>
+    <li><%= sort_link ts('Author'), :author %></li>
+    <li><%= sort_link ts('Title'), :title %></li>
+    <li><%= sort_link ts('Date Updated'), :date, {:sort_default => @query.blank?, :desc_default => true} %></li>
+    <li><%= sort_link ts('Date Added'), :created_at, {:desc_default => true} %></li>
+    <li><%= sort_link ts('Word Count'), :word_count, {:desc_default => true} %></li>
     <% unless logged_in? && current_user.preference.try(:hide_all_hit_counts) %>
-      <li><%= sort_link t('.sort.hit_count', :default => 'Hits'), :hit_count, {:desc_default => true} %></li>
+      <li><%= sort_link ts('Hits'), :hit_count, {:desc_default => true} %></li>
     <% end %>
   </ul>
+  
 </div>
 <!---/subnav-->
 
 <!--main content-->
-<h3 class="landmark">Works List</h3>
- <ol class="work index<% if @user && @user == current_user %> works-own<% end %>">
-    <% for work in @works %>
-      <% if work %>
-      <%= render :partial => 'work_blurb', :locals => {:work => work} %>
-      <% end %>
-    <% end %>
-  </ol>
+<h3 class="landmark heading">Listing Works</h3>
+<ol class="work index group">
+  <% for work in @works %>
+    <% if work %><%= render 'work_blurb', :work => work %><% end %>
+  <% end %>
+</ol>
+  
 <!--/content-->
 
 <!--filters subnav-->
-<% if !@filters.blank? %>
 <%= render :partial => 'filters' %>
-<% end %>
 <!---/subnav-->
-<div class="clear"><!-- presentational--></div>
-<%= will_paginate @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+
+<%= will_paginate @works %>
 
 
 

@@ -14,21 +14,21 @@ Feature: Create Works
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
-      And I fill in "Fandoms" with "Die Drei ???"
+      And I fill in "Fandoms" with "Weiß Kreuz"
       And I fill in "Work Title" with "Überraschende Überraschung"
       And I fill in "content" with "Dies ist eine Fanfic in Deutsch."
       And I select "Deutsch" from "Choose a language"
       And I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page
     Then I should see "Überraschende Überraschung"
-    When I follow "Die Drei ???"
+    When I follow "Weiß Kreuz"
     Then I should see "Überraschende Überraschung"
     When I follow "Überraschende Überraschung"
     Then I should see "Dies ist eine Fanfic in Deutsch."
-    When I follow "Log out"
+    When I log out
     Then I should see "Successfully logged out"
     
     # another example in a different language
@@ -42,6 +42,6 @@ Feature: Create Works
       And I fill in "Work Title" with "Ennen päivänlaskua ei voi"
       And I fill in "content" with "A story that is long enough to count"
       And I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."

@@ -10,27 +10,27 @@ class ChaptersController < ApplicationController
 
   cache_sweeper :chapter_sweeper
   cache_sweeper :work_sweeper
-    
+
   # GET /work/:work_id/chapters
   # GET /work/:work_id/chapters.xml
   def index
     # this route is never used
     redirect_to work_path(params[:work_id])
   end
-  
+
   # GET /work/:work_id/chapters/manage
   def manage
     @chapters = @work.chapters_in_order(false).select(&:posted)
   end
-  
+
   # GET /work/:work_id/chapters/:id
   # GET /work/:work_id/chapters/:id.xml
   def show
     if params[:view_adult]
       session[:adult] = true
-    elsif @work.adult? && !see_adult? 
+    elsif @work.adult? && !see_adult?
       render "works/_adult", :layout => "application" and return
-    end  
+    end
 
     if params[:selected_id]
       redirect_to url_for(:controller => :chapters, :action => :show, :work_id => @work.id, :id => params[:selected_id]) and return
@@ -39,7 +39,7 @@ class ChaptersController < ApplicationController
     @chapters = @work.chapters_in_order(false)
     if !logged_in? || !current_user.is_author_of?(@work)
       @chapters = @chapters.select(&:posted)
-    end 
+    end
     if !@chapters.include?(@chapter)
       access_denied
     else
@@ -50,92 +50,104 @@ class ChaptersController < ApplicationController
       end
       @commentable = @work
       @comments = @chapter.comments
-      
-      @page_title = @work.unrevealed? ? t('works.mystery_chapter_title', :default => "Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) : 
-        get_page_title(@work.fandoms.string, 
-          @work.anonymous? ? t('chapters.anonymous', :default => "Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '), 
+
+      @page_title = @work.unrevealed? ? ts("Mystery Work - Chapter %{position}", :position => @chapter.position.to_s) :
+        get_page_title(@work.fandoms.string,
+          @work.anonymous? ? ts("Anonymous") : @work.pseuds.sort.collect(&:byline).join(', '),
           @work.title + " - Chapter " + @chapter.position.to_s)
 
-        if @work.unrevealed?                                               
-          @tweet_text = ts("Mystery Work")
-        else
-          @tweet_text = @work.title + " by " + 
-                        (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " + 
-                        (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
-          @tweet_text = @tweet_text.truncate(95)
-        end
-          
+      if @work.unrevealed?
+        @tweet_text = ts("Mystery Work")
+      else
+        @tweet_text = @work.title + " by " +
+                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " +
+                      (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
+        @tweet_text = @tweet_text.truncate(95)
+      end
+      
+      if current_user.respond_to?(:subscriptions)
+        @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
+                                                         :subscribable_type => 'Work').first ||
+                        current_user.subscriptions.build
+      end
+
       # TEMPORARY hack-like thing to fix the fact that chaptered works weren't hit-counted or added to history at all
       if chapter_position == 0
-        Reading.update_or_create(@work, current_user)
+        Reading.update_or_create(@work, current_user) if current_user
         Rails.logger.debug "Chapter remote addr: #{request.remote_ip}"
         @work.increment_hit_count(request.remote_ip)
       end
-      
+
       respond_to do |format|
         format.html
         format.js
       end
-    end 
+    end
   end
-  
+
   # GET /work/:work_id/chapters/new
   # GET /work/:work_id/chapters/new.xml
-  def new 
+  def new
   end
-  
+
   # GET /work/:work_id/chapters/1/edit
   def edit
     if params["remove"] == "me"
       @chapter.pseuds = @chapter.pseuds - current_user.pseuds
       @chapter.save
-      flash[:notice] = t('removed_as_author', :default => "You have been removed as an author from the chapter")
+      flash[:notice] = ts("You have been removed as an author from the chapter")
      redirect_to @work
     end
   end
-  
+
   # POST /work/:work_id/chapters
   # POST /work/:work_id/chapters.xml
   def create
   	@work.wip_length = params[:chapter][:wip_length]
     load_pseuds
-    
+
     if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
       @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
     elsif params[:edit_button]
       render :new
     elsif params[:cancel_button]
-      redirect_back_or_default('/')    
+      redirect_back_or_default('/')
     else  # :preview or :cancel_coauthor_button
-      @work.major_version = @work.major_version + 1
+       @work.major_version = @work.major_version + 1
       if @chapter.save
         # @work.update_major_version
         if @chapter.published_at > @work.revised_at.to_date || @chapter.published_at == Date.today
           @work.set_revised_at(@chapter.published_at)
         end
-        if @work.save
-          flash[:notice] = t('preview', :default => "This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
+        if params[:post_without_preview_button]
+          @chapter.posted = true
+            if @chapter.save && @work.save
+              post_chapter
+              redirect_to [@work, @chapter]
+            end
+        elsif @work.save
+          flash[:notice] = ts("This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
           redirect_to [:preview, @work, @chapter]
         else
           render :new
         end
       else
-        render :new 
+        render :new
       end
     end
-  end    
-  
+  end
+
   # PUT /work/:work_id/chapters/1
   # PUT /work/:work_id/chapters/1.xml
-  def update   
+  def update
     @chapter.attributes = params[:chapter]
     @work.wip_length = params[:chapter][:wip_length]
     load_pseuds
-    
+
     if !@chapter.invalid_pseuds.blank? || !@chapter.ambiguous_pseuds.blank?
       @chapter.valid? ? (render :partial => 'choose_coauthor', :layout => 'application') : (render :new)
     elsif params[:preview_button] || params[:cancel_coauthor_button]
-      @preview_mode = true # Enigel Jan 31
+      @preview_mode = true
       render :preview_edit
     elsif params[:cancel_button]
       # Not quite working yet - should send the user back to wherever they were before they hit edit
@@ -155,7 +167,7 @@ class ChaptersController < ApplicationController
           end
         end
         if @work.save
-          flash[:notice] = t('successfully_updated', :default => 'Chapter was successfully updated.')
+          flash[:notice] = ts('Chapter was successfully updated.')
           redirect_to [@work, @chapter]
         else
           render :edit
@@ -163,85 +175,85 @@ class ChaptersController < ApplicationController
       else
         render :edit
       end
-    end 
+    end
   end
-  
+
   def update_positions
     if params[:chapters]
       @work = Work.find(params[:work_id])
-      @work.reorder(params[:chapters]) 
-      flash[:notice] = t('order_updated', :default => 'Chapter orders have been successfully updated.')
-      redirect_to(@work)
-    else 
-      params[:sortable_chapter_list].each_with_index do |id, position|
+      @work.reorder(params[:chapters])
+      flash[:notice] = ts("Chapter order has been successfully updated.")
+    elsif params[:chapter]
+      params[:chapter].each_with_index do |id, position|
         Chapter.update(id, :position => position + 1)
         (@chapters ||= []) << Chapter.find(id)
       end
     end
-  end 
-  
+    respond_to do |format|
+      format.html { redirect_to(@work) and return }
+      format.js { render :nothing => true }
+    end
+  end
+
   # GET /chapters/1/preview
   def preview
     @preview_mode = true
   end
-  
+
   # POST /chapters/1/post
   def post
     if params[:cancel_button]
-      redirect_to @work 
+      redirect_to @work
     elsif params[:edit_button]
       redirect_to [:edit, @work, @chapter]
     else
       @chapter.posted = true
-      if @chapter.save
-        if !@work.posted
-          @work.update_attribute(:posted, true)
-        end
-        flash[:notice] = t('successfully_posted', :default => 'Chapter has been posted!')
-       redirect_to(@work)
+      if @chapter.save && @work.save
+        post_chapter
+        redirect_to(@work)
       else
         render :preview
       end
     end
   end
-  
+
   # DELETE /work/:work_id/chapters/1
   # DELETE /work/:work_id/chapters/1.xml
   def destroy
     @chapter = @work.chapters.find(params[:id])
     if @chapter.is_only_chapter?
-      flash[:error] = t('deleting_only_chapter', :default => "You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
+      flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
       redirect_to(edit_work_url(@work))
     else
       if @chapter.destroy
         @work.minor_version = @work.minor_version + 1
         @work.set_revised_at
         @work.save
-        flash[:notice] = t('successfully_deleted', :default => "The chapter was successfully deleted.")
+        flash[:notice] = ts("The chapter was successfully deleted.")
       else
-        flash[:error] = t('delete_failed', :default => "Something went wrong. Please try again.")
+        flash[:error] = ts("Something went wrong. Please try again.")
       end
       redirect_to :controller => 'works', :action => 'show', :id => @work
     end
   end
-  
-  private 
-  
+
+  private
+
   def load_pseuds
-    @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq    
+    @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
     @pseuds = current_user.pseuds
     @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-    to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors 
+    to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
     @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
   end
-  
+
   # fetch work these chapters belong to from db
   def load_work
     @work = params[:work_id] ? Work.find(params[:work_id]) : Chapter.find(params[:id]).work
     @check_ownership_of = @work
-    @check_visibility_of = @work  
+    @check_visibility_of = @work
   end
-  
+
   # Sets values for @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   def set_instance_variables
     # stuff new bylines into author attributes to be parsed by the chapter model
@@ -254,7 +266,7 @@ class ChaptersController < ApplicationController
     if params[:chapter] && params[:chapter][:author_attributes] && params[:chapter][:author_attributes][:coauthors]
       params[:chapter][:author_attributes][:ids].concat(params[:chapter][:author_attributes][:coauthors]).uniq!
     end
-    
+
     if params[:id] # edit, update, preview, post
       @chapter = @work.chapters.find(params[:id])
       @previous_published_at = @chapter.published_at
@@ -267,12 +279,18 @@ class ChaptersController < ApplicationController
       @chapter = @work.chapters.build(:position => @work.number_of_chapters + 1)
     end
 
-    @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq    
+    @allpseuds = (current_user.pseuds + (@work.authors ||= []) + @work.pseuds + (@chapter.authors ||= []) + (@chapter.pseuds ||= [])).uniq
     @pseuds = current_user.pseuds
     @coauthors = @allpseuds.select{ |p| p.user.id != current_user.id}
-    to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors 
+    to_select = @chapter.authors.blank? ? @chapter.pseuds.blank? ? @work.pseuds : @chapter.pseuds : @chapter.authors
     @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
-    
+
   end
-  
+
+  def post_chapter
+    if !@work.posted
+      @work.update_attribute(:posted, true)
+    end
+    flash[:notice] = ts('Chapter has been posted!')
+  end
 end

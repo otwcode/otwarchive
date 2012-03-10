@@ -1,0 +1,405 @@
+/*==INTERACTIONS: global form rules
+(submit button styling is in actions.css with the other buttons)
+General rules for all form elements, and nearly ALL our forms use just these. 
+Forms are normally in definition lists <dt label: dd input>
+with some un/ordered lists, normally of checkbox options <li checkbox:label>
+and some paragraphs, normally forms with a single <p label:input> .
+
+We might develop three MODES: .simple .verbose and .dynamic -- .sim and ver in early draft in sandbox
+We also have some jS WIDGETS, which are custom form interactions, like autocomplete 
+and a few variations for INTERACTION TYPES, which are, roughly:
+.post, .login, make .associations, set .preferences, [.search, .filter] => in searchbrowse
+*/
+
+form {
+  clear: right;
+}
+
+/*Guideline: Forms are written by lots of people, and, this is beta, change a LOT. 
+I've written a load of possible different nests to give a reasonably/broadly consistent view whatever goes in, 
+but it's probably not complete. */
+
+fieldset, form dl, fieldset dl dl, fieldset fieldset fieldset, fieldset fieldset dl dl, dd.hideme, form blockquote.userstuff {
+  display: block;
+  background: #ddd;
+  border: 2px solid #f3efec;
+  margin: 0.643em;
+  padding: 0.643em;
+    box-shadow: inset 1px 0 5px #999;
+}
+
+fieldset dl, fieldset.actions, fieldset dl fieldset dl {
+  background: transparent;
+  border: none;
+  clear: right;
+    box-shadow: none;
+}
+
+fieldset fieldset, fieldset dl dl, form blockquote.userstuff {
+  background: #fff;
+  clear: right;
+}
+
+fieldset dd dl, form .meta dd, fieldset dl fieldset dl, dd fieldset {
+  margin: 0.643em 0;
+}
+
+/*end nesting */
+
+legend, input[type="hidden"] {
+  height: 0;
+  width: 0;
+  font-size: 0;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+}
+
+label {
+  cursor: pointer;
+  margin-right: 0.375em;
+}
+
+input, textarea {
+  font: 100% 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  width: 100%;
+  border: 1px solid #bbb;
+    box-shadow: inset 0 1px 2px #ccc;
+}
+
+textarea {
+  min-height: 12em;
+}
+
+textarea.large {
+  height: 36em;
+}
+
+input:focus, select:focus, textarea:focus {
+  background: #f3efec;
+}
+
+input[type="radio"] + label, input[type="checkbox"] + label {
+  padding-left: 1em;
+}
+
+select {
+  vertical-align: text-top;
+  width: 100%;
+  min-width: 10.5em;
+}
+
+.datetime select {
+  width: 32.5%;
+}
+
+input[type="radio"], input[type="checkbox"], input[type="file"], input.number, p input, p select, .heading select, li select {
+  width: auto;
+  margin-right: 0.375em;
+}
+
+input.number {
+  width: 4em;
+}
+
+option, .actions option, form code {
+  display: block;
+}
+
+form p {
+  clear: right;
+  margin: auto;
+  padding: 0.643em;
+}
+
+form dt {
+  float: left;
+  clear: left;
+  min-width: 10.5em;
+  width: 25%;
+  padding: 0.25em 0.5625em 0 0;
+  border-bottom: 1px solid #f3efec;
+}
+
+form dd {
+  float: left;
+  width: 72.5%;
+}
+
+/*END FORM RULES*/
+
+/* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
+
+p.character_counter {
+  font-size: 87.5%;
+  text-align: right;
+}
+
+.character_counter span {
+  display: inline-block;
+  width: 3.75em;
+}
+
+.comment .character_counter {
+  float: left;
+}
+
+/* WIDGET: LIVE VALIDATION (todo: ARIA live region)*/
+
+.LV_validation_message {
+  font-weight: bold;
+}
+
+.LV_valid {
+  color: #0c0;
+}
+
+.LV_invalid {
+  color: #c00;
+}
+
+.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active {
+  border: 1px solid #c00;
+}
+
+/* WIDGET: AUTO COMPLETE */
+
+.autocomplete div.dropdown ul {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 0.125em;
+  line-height: 1.286;
+  color: #000;
+  display: block;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 1px 3px 5px rgba(0,0,0,0.5);
+}
+
+.autocomplete ul li {
+  padding: 0.125em;
+  margin: 0.25em auto auto;
+}
+
+.autocomplete input, div.dropdown ul li {
+  display: block;
+  margin: 0.25em 0 0;
+  min-width: 10em;
+}
+
+form li ul.autocomplete li.input {
+  border: 0;
+}
+
+.autocomplete .dropdown ul li:hover, li.selected {
+  background: url("/images/skins/textures/tiles/red-ao3.png") top left #900;
+  color: #fff;
+}
+
+.required .autocomplete, .autocomplete .notice {
+  color: #222;
+}
+
+.autocomplete .notice {
+  margin-top: 0 !important;
+}
+
+.autocomplete li.added, .post .meta dd ul li.added {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* WIDGET: SORTABLE LIST (note: hope to merge with .sortable and .draggable etc)*/
+
+.ui-sortable li {
+  background: #eee;
+  border: 2px solid #ddd;
+  float: left;
+  width: 100%;
+  clear: both;
+    box-shadow: 1px 1px 3px transparent;
+}
+
+.ui-sortable li:hover {
+  background: #ddd;
+  border: 2px solid #999;
+  cursor: move;
+    box-shadow: 1px 1px 3px #bbb;
+}
+
+.ui-sortable input {
+  margin: 0.429em 0 0.25em 0.25em;
+}
+
+.ui-sortable .heading {
+  display: inline-block;
+}
+
+.ui-sortable ul.actions li {
+  float: none;
+  background: transparent;
+  border: none;
+}
+
+.ui-draggable form {
+  cursor: move;
+    box-shadow: 0 0 3px #555;
+}
+
+/* WIDGET: TIMEPICKER (todo, requires ARIA managed focus) */
+
+.ui-timepicker-div dl dd {
+  margin: -1.286em 0 0.25em 6em;
+}
+
+#ui-datepicker-div {
+  background: #fff;
+  overflow: hidden;
+  padding: 0.643em;
+  font-size: 87.5%;
+    box-shadow: 3px 3px 5px;
+}
+
+/*WIDGET: TOOLTIP (todo, requires graceful degradation testing, can't see any reason for this jS)
+qTip2 Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com*/
+
+.ui-tooltip, .qtip {
+  position: absolute;
+  left: -28000px;
+  top: -28000px;
+  display: none;
+  max-width: 22em;
+  min-width: 6em;
+  font-size: 0.625em;
+  z-index: 15000;
+}
+
+.ui-tooltip-content {
+  position: relative;
+  padding: 0.15em 0.25em;
+  background: #FFFFA3;
+  border: 1px solid #F1D031;
+  overflow: hidden;
+    word-wrap: break-word;
+}
+
+/* WIDGET: IBOX (called by help links)*/
+
+#ibox_w {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background: #000;
+    opacity: 0;
+}
+
+#ibox_w, #ibox_wrapper {
+    transition: opacity 400ms ease-out;
+    -moz-transition: opacity 400ms ease-out;
+    -webkit-transition: opacity 400ms ease-out;
+    -o-transition: opacity 400ms ease-out;
+}
+
+#ibox_progress {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  z-index: 105;
+}
+
+#ibox_wrapper {
+  position: fixed;
+  z-index: 1000;
+  padding: 0.643em 0.643em 2.571em;
+  border: 10px solid #eee;
+  background: #fff;
+}
+
+#ibox_content {
+  font-size: 0.875em;
+  background: #fff;
+  width: auto;
+  height: auto;
+  overflow: auto;
+  padding: 0.643em;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 2.571em;
+  left: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+#ibox_close {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+#ibox_footer {
+  position: absolute;
+  bottom: 0.643em;
+}
+
+/*MODE: DYNAMIC is in early dev and so currently sharing styles with toggled */
+
+div.dynamic {
+  background: #fff;
+  position: absolute;
+  z-index: 500;
+}
+
+/* WIDGET: TOGGLED FORMS (SHOW/HIDE bookmark and collection - hidden with jS) */
+
+.toggled form dd, .dynamic form dd {
+  width: 99%;
+}
+
+.toggled form p.footnote, .dynamic form p.footnote {
+  float: none;
+  margin: auto;
+  padding: 0;
+  line-height: 0.5;
+}
+
+.toggled form, .dynamic form {
+  padding: 0.5em;
+  border: 2px solid #ccc;
+  background: #fff;
+    box-shadow: 1px 2px 5px;
+}
+
+.dynamic form fieldset, .toggled form fieldset, .toggled form dl, .secondary .toggled form {
+  border: none;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+    box-shadow: none;
+}
+
+/*INTERACTION: LOGIN SIGNUP*/
+
+/*INTERACTION: POST (work, chapter, comment, news, feedback, challenge etc) */
+
+.post .required .warnings {
+  font-weight: normal;
+  color: #2a2a2a;
+}
+
+.post .text textarea {
+  clear: right;
+}
+
+/* CONTEXT: dashboard*/
+
+.dashboard fieldset {
+  clear: right;
+}
+
+.dashboard .filters dt {
+  width: auto;
+}
+
+/*END== */

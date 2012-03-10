@@ -1,10 +1,10 @@
-<h2><%= @language.name %></h2>
+<h2 class="heading"><%= @language.name %></h2>
 
 <p><%= link_to t('.work_count', :default => "%{count} works", :count => @language.work_count), language_works_path(@language) %> in <%= @language.fandom_count %> fandoms</p>
 
 <% unless @works.blank? %>
-  <h3>Most recent works:</h3>
-  <ul class="work index">
+  <h3 class="heading">Most recent works:</h3>
+  <ul class="work index group">
     <% for work in @works %>
   	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
     <% end %>

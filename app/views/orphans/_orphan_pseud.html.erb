@@ -1,7 +1,7 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts('Orphan All Works by') %> <%= pseud.name %></h2>
+<h2 class="heading"><%= ts('Orphan All Works by') %> <%= pseud.name %></h2>
 
-<p>
+<p class="caution">
 <%= ts("Are you sure you want to") %>
 <strong><%= ts("permanently") %></strong>
 <%= ts("remove all identifying information from all the works you've posted to 
@@ -17,6 +17,6 @@ associated series and any feedback replies you may have left?") %>
 <%= form_tag orphans_path do %>
   <%= render :partial => 'orphans/choose_pseud' %>
   <%= hidden_field_tag 'pseud_id', pseud.id %> 
-  <p class="submit"><%= submit_tag ts("Yes, I'm sure") %></p>
+  <p class="submit actions"><%= submit_tag ts("Yes, I'm sure") %></p>
 <% end %>
 <!--/content-->

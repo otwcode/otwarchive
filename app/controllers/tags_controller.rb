@@ -1,7 +1,20 @@
 class TagsController < ApplicationController
   before_filter :load_collection
-  before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :search ]
-  before_filter :check_permission_to_wrangle, :except => [ :show, :index, :show_hidden, :search ]
+  before_filter :check_user_status, :except => [ :show, :index, :show_hidden, :search, :feed ]
+  before_filter :check_permission_to_wrangle, :except => [ :show, :index, :show_hidden, :search, :feed ]
+  before_filter :load_tag, :only => [:show, :edit, :update, :wrangle, :mass_update]
+
+  caches_page :feed
+
+  cache_sweeper :tag_sweeper
+
+  def load_tag
+    @tag = Tag.find_by_name(params[:id])
+    unless @tag && @tag.is_a?(Tag)
+      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
+    end
+  end
+
 
   # GET /tags
   # GET /tags.xml
@@ -35,7 +48,7 @@ class TagsController < ApplicationController
         errors, @tags = Query.search_with_sphinx(Tag, @query, page)
         flash.now[:error] = errors.join(" ") unless errors.blank?
       rescue Riddle::ConnectionError
-        flash.now[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
+        flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
       end
     end
   end
@@ -46,34 +59,50 @@ class TagsController < ApplicationController
   #   2. the tag, the works and the bookmarks using it, if the tag is unwrangled (because we can't redirect them
   #       to the works controller)
   def show
-    @tag = Tag.find_by_name(params[:id])
-    if @tag.is_a? Tag
-      if @tag.is_a?(Banned) && !logged_in_as_admin?
-        flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
-        redirect_to tag_wranglings_path and return
+    if @tag.is_a?(Banned) && !logged_in_as_admin?
+      flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
+      redirect_to tag_wranglings_path and return
+    end
+    # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
+    if !@tag.canonical && !@tag.merger
+      if logged_in? #current_user.is_a?User
+        @works = @tag.works.visible_to_registered_user.paginate(:page => params[:page])
+      elsif logged_in_as_admin?
+        @works= @tag.works.visible_to_owner.paginate(:page => params[:page])
+      else
+        @works = @tag.works.visible_to_all.paginate(:page => params[:page])
       end
-      # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
-      if !@tag.canonical && !@tag.merger
-        if logged_in? #current_user.is_a?User
-          @works = @tag.works.visible_to_registered_user.paginate(:page => params[:page])
-        elsif logged_in_as_admin?
-          @works= @tag.works.visible_to_owner.paginate(:page => params[:page])
-        else
-          @works = @tag.works.visible_to_all.paginate(:page => params[:page])
-        end
-        @bookmarks = @tag.bookmarks.visible.paginate(:page => params[:page])
+      @bookmarks = @tag.bookmarks.visible.paginate(:page => params[:page])
+    end
+    # if regular user or anonymous (not logged in) visitor, AND the tag is wrangled, just give them the goodies
+    if !(logged_in? && current_user.is_tag_wrangler? || logged_in_as_admin?)
+      if @tag.canonical # show works with that tag
+        redirect_to url_for(:controller => :works, :action => :index, :tag_id => @tag) and return
+      elsif @tag.merger # show works with the canonical merger (synonym) of that tag
+        redirect_to url_for(:controller => :works, :action => :index, :tag_id => @tag.merger) and return
       end
-      # if regular user or anonymous (not logged in) visitor, AND the tag is wrangled, just give them the goodies
-      if !(logged_in? && current_user.is_tag_wrangler? || logged_in_as_admin?)
-        if @tag.canonical # show works with that tag
-          redirect_to url_for(:controller => :works, :action => :index, :tag_id => @tag) and return
-        elsif @tag.merger # show works with the canonical merger (synonym) of that tag
-          redirect_to url_for(:controller => :works, :action => :index, :tag_id => @tag.merger) and return
-        end
+    end
+  end
+
+  def feed
+    @tag = Tag.find(params[:id])
+    if !@tag.canonical? && @tag.merger
+      @tag = @tag.merger
+    end
+    # Temp for testing
+    if %w(Fandom Character Relationship).include?(@tag.type.to_s) || @tag.name == "F/F"
+      if @tag.canonical?
+        @works = @tag.filtered_works.visible_to_all.order("created_at DESC").limit(25)
+      else
+        @works = @tag.works.visible_to_all.order("created_at DESC").limit(25)
       end
     else
-      flash[:error] = t('not_found', :default => "Tag not found")
-      redirect_to '/'
+      redirect_to tag_works_path(:tag_id => @tag.to_param)
+    end
+
+    respond_to do |format|
+      format.html
+      format.atom
     end
   end
 
@@ -147,13 +176,9 @@ class TagsController < ApplicationController
   end
 
   def edit
-    @tag = Tag.find_by_name(params[:id])
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-      flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
+      flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
-    end
-    unless @tag
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
     end
     @counts = {}
     @uses = ['Works', 'Drafts', 'Bookmarks', 'Private Bookmarks', 'External Works']
@@ -177,7 +202,6 @@ class TagsController < ApplicationController
   end
 
   def update
-    @tag = Tag.find_by_name(params[:id])
     # update everything except for the synonym,
     # so that the associations are there to move when the synonym is created
     syn_string = params[:tag].delete(:syn_string)
@@ -203,24 +227,7 @@ class TagsController < ApplicationController
     end
   end
 
-  def remove_association
-    @tag = Tag.find_by_name(params[:id])
-    unless @tag
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
-    end
-    if params[:to_remove]
-      tag_to_remove = Tag.find_by_name(params[:to_remove])
-      @tag.remove_association(tag_to_remove)
-    end
-    flash[:notice] = t('successfully_updated', :default => 'Tag was updated.')
-    redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
-  end
-
   def wrangle
-    @tag = Tag.find_by_name(params[:id])
-    unless @tag
-      raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:id]}'"
-    end
     @counts = {}
     @tag.child_types.map{|t| t.underscore.pluralize.to_sym}.each do |tag_type|
       @counts[tag_type] = @tag.send(tag_type).count
@@ -248,9 +255,12 @@ class TagsController < ApplicationController
     params[:page] = '1' if params[:page].blank?
     params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
     params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
+
+    saved = []
+    not_saved = []
+    
+    # make tags canonical
     unless params[:canonicals].blank?
-      saved = []
-      not_saved = []
       params[:canonicals].each do |tag_id|
         tag = Tag.find(tag_id)
         if tag.update_attributes(:canonical => true)
@@ -259,12 +269,23 @@ class TagsController < ApplicationController
           not_saved << tag
         end
       end
-      if not_saved.empty? && !saved.empty?
-        flash[:notice] = "The following tags were successfully updated: #{saved.collect(&:name).join(', ')}"
-      elsif !not_saved.empty?
-        flash[:error] = "The following tags weren't saved: #{not_saved.collect(&:name).join(', ')}"
+    end
+
+    # remove associated tags
+    unless params[:remove_associated].blank?      
+      params[:remove_associated].each do |tag_id|
+        tag_to_remove = Tag.find(tag_id)
+        if tag_to_remove
+          @tag.remove_association(tag_to_remove)
+          saved << tag_to_remove
+        end
       end
     end
+
+    flash[:notice] = "The following tags were successfully updated: #{saved.collect(&:name).join(', ')}" if !saved.empty?
+    flash[:error] = "The following tags weren't saved: #{not_saved.collect(&:name).join(', ')}" if !not_saved.empty?
+
     redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])
   end
+  
 end

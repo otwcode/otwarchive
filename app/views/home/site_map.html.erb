@@ -1,6 +1,7 @@
-<h2><%= t('.site_map', :default => 'Site Map') %></h2>
-<div class="userstuff">
-<h3>Explore</h3>
+<!--BACK END, would love system docs to be classes of main-->
+<h2 class="heading"><%= t('.site_map', :default => 'Site Map') %></h2>
+<div class="system docs">
+<h3 class="heading">Explore</h3>
 	<ul>
 	  <li><%= link_to t('.homepage', :default => "Homepage"), root_path %></li>
 	  <li><%= link_to t('.fandoms', :default => "Fandoms"), media_path %></li>
@@ -12,7 +13,7 @@
 	  <li><%= link_to t('.collections', :default => "Collections and Challenges"), collections_path %></li>
 	</ul>
 	
-<h3>About the Archive of Our Own</h3>
+<h3 class="heading">About the Archive of Our Own</h3>
 	<ul>
 		<li><%= link_to t('.terms_of_service', :default => "Terms of Service"), tos_path %></li>
 		<li><%= link_to t('.archive_faq', :default => "Archive FAQ"), archive_faqs_path %></li>
@@ -22,12 +23,12 @@
 	</ul>
 	
 <% if logged_in? %>
-<h3>Access your account</h3>
+<h3 class="heading">Access your account</h3>
 	<ul>
 		<li><%= link_to t('.my_home', :default => "My Home"), user_path(current_user) %></li>
 		<li><%= link_to t('.post_new', :default => "Post New"), new_work_path %></li>
 		<li><%= link_to t('.my_works', :default => "My Works"), user_works_path(current_user) %></li>
-		<li><%= link_to t('.my_drafts', :default => "My Drafts"), drafts_user_works_path(current_user) %></li>
+		<li><%= link_to t('.my_drafts', :default => "Drafts"), drafts_user_works_path(current_user) %></li>
 		<li><%= link_to t('.my_series', :default => "My Series"), user_series_index_path(current_user) %></li>
 		<li><%= link_to t('.my_bookmarks', :default => "My Bookmarks"), user_bookmarks_path(current_user) %></li>
 		<li><%= link_to t('.my_collections', :default => "My Collections and Challenges"), user_collections_path(current_user) %></li>
@@ -35,22 +36,23 @@
 		<% if current_user.preference.history_enabled? %>
 		<li><%= link_to t('.my_history', :default =>"My History"), user_readings_path(current_user) %></li>
 		<% end %>
-		<li>My Subscriptions - coming soon</li>
+		<li><%= link_to t('.my_subscriptions', :default =>"My Subscriptions"), user_subscriptions_path(current_user) %></li>
 		<li><%= link_to t('.set_preferences', :default => "Set My Preferences"), user_preferences_path(current_user) %>
 	</ul>
-	<h3>Change your account settings</h3>
+	<h3 class="heading">Change your account settings</h3>
 	<ul>
-    <li><a href="">Edit My Profile</a></li>
+    <li><%= link_to t('.edit_user_profile', :default =>"Edit My Profile"), edit_user_path(current_user) %></li>
     <li><%= link_to t('.my_profile', :default => "My Profile"), user_profile_path(current_user) %></li>
     <li><%= link_to t('.manage_pseuds', :default => "Manage My Pseuds"), user_pseuds_path(current_user) %></li>
     <li><%= link_to t('.delete_account', :default => "Delete My Account"), @user, :confirm => t('.deletion_warning', :default => 'This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
 	</ul>
 <% end %>
 	
-<h3>Contact Us</h3>
+<h3 class="heading">Contact Us</h3>
 	<ul>
 		<li><%= link_to t('.support_and_feedback', :default => "Support and Feedback"), new_feedback_report_path %></li>
 		<li><%= link_to t('.report_abuse', :default => "Report Abuse"), new_abuse_report_path %></li>
+    <li><%= link_to t('.donate', :default => "Donations"), donate_path %></li>
 	</ul>
 </div>
 	

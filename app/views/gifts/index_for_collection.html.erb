@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= t('.gifts.gifts_in_collection', :default => "Gifts in %{collection}", :collection => h(@collection.title)) %></h2>
+<h2 class="heading"><%= t('.gifts.gifts_in_collection', :default => "Gifts in %{collection}", :collection => h(@collection.title)) %></h2>
 <!--/descriptions-->
 
 <!--subnavigation, sorting and actions-->
@@ -7,6 +7,7 @@
 <!--/subnav-->
 
 <!--main content-->
+<!--FRONT END: TABLEWATCH!!-->
 <table summary="Lists all the gifts in the collection, who gave and recieved each one, and what the giver received from the larger exchange">
 	<caption>Gifts and givers<caption>
   <thead>
@@ -21,7 +22,7 @@
 <% for gift in @gifts %>
     <tr>
       <td>
-        <%= link_to gift.work.title, 
+        <%= link_to gift.work.title.html_safe, 
                     collection_work_path(@collection, gift.work) %>
       </td>
       <td>
@@ -37,7 +38,7 @@
   <% end %>
 </tbody>
 </table>
-<h4>Note</h4>
+<h4 class="heading">Note</h4>
 <p>
   M* - Manual: This means that this creator has received a story in this collection, but under a different pseudonym. 
   That might happen if the creator used a different pseud to post their story than the one

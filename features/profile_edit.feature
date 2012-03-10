@@ -1,187 +1,96 @@
 @users
 Feature: Edit profile
-  In order to have an archive full of users
+  In order to have a presence on the archive
   As a humble user
-  I want to fill out my profile
+  I want to fill out and edit my profile
 
-  Scenario: View and edit profile - add details, edit details, remove details
-
+Background: 
   Given the following activated user exists
-    | login         | password   |
-    | editname      | password   |
-    | othername     | password   |
-    And I am logged in as "editname" with password "password"
-  Then I should see "Hi, editname!"
-    And I should see "Log out"
-  When I am on othername's user page
-  Then I should see "There are no works or bookmarks under this name yet"
-  When I follow "editname"
-  Then I should see "My Dashboard"
-    And I should see "You don't have anything posted under this name yet"
-    And I should see "Would you like"
-  When I follow "Profile"
-  Then I should see "About editname"
-    And I should not see "Test title thingy"
-    And I should not see "Location"
-    And I should not see "This is some text about me"
-  When I follow "Edit My Profile"
-  Then I should see "Edit My Profile"
-  When I fill in "Title" with "Test title thingy"
-    And I fill in "Location" with "Alpha Centauri"
-    And I fill in "About Me" with "This is some text about me."
-    And I press "Update"
-  Then I should see "Your profile has been successfully updated"
-    And I should see "Alpha Centauri" within ".wrapper"
-    And I should see "This is some text about me." within ".userstuff"
-  When I follow "Edit My Profile"
-    And I fill in "Title" with "Alternative title thingy"
-    And I fill in "Location" with "Beta Centauri"
-    And I fill in "About Me" with "This is some <font color='red'>text</font> about me and my colours."
-    And I press "Update"
-  Then I should see "Your profile has been successfully updated"
-    And I should see "Alternative title thingy"
-    And I should see "Beta Centauri" within ".wrapper"
-    And I should see "This is some text about me and my colours." within ".userstuff"
-  When I follow "Edit My Profile"
-    And I fill in "Title" with ""
-    And I fill in "Location" with ""
-    And I fill in "About Me" with ""
-    And I press "Update"
-  Then I should see "Your profile has been successfully updated"
-    And I should not see "Alternative title thingy"
-    And I should not see "Beta Centauri" within ".wrapper"
-    And I should not see "This is some text about me and my colours."
+	| login    | password   | email  	   |
+	| editname | password   | bar@ao3.org  |	
+  And I am logged in as "editname"
+  And I want to edit my profile
 
-  Scenario: View and edit profile - email address and date of birth
 
-  Given the following activated users exist
-    | login         | password   |
-    | editname2     | password   |
-    | duplicate     | password   |
-    And I am logged in as "editname2" with password "password"
-  When I follow "editname2"
-    And I follow "Profile"
-    And I follow "Edit My Profile"
-  Then I should see "Edit My Profile"
-  When I select "1998" from "profile_attributes[date_of_birth(1i)]"
-    And I select "December" from "profile_attributes[date_of_birth(2i)]"
-    And I select "31" from "profile_attributes[date_of_birth(3i)]"
-    And I press "Update"
-  Then I should not see "Your profile has been successfully updated"
-    And I should see "You must be over 13"
-  When I select "1980" from "profile_attributes[date_of_birth(1i)]"
-    And I press "Update"
-  Then I should see "Your profile has been successfully updated"
-  When I follow "Edit My Profile"
-    And I fill in "Change Email" with "bob.bob.bob"
-    And I press "Update"
-  Then I should see "You must authenticate"
-    When I fill in "Old password" with "password"
-  And I press "Update"
-  Then I should see "Email does not seem to be a valid address"
-  When I fill in "Change Email" with "valid2@archiveofourown.org"
-    And I fill in "Old password" with "passw"
-    And I press "Update"
-  Then I should see "Your old password was incorrect"
-  When I fill in "Old password" with "password"
-    And I press "Update"
-  Then I should see "Your profile has been successfully updated"
-  When I follow "My Preferences"
-    And I check "Display Email Address"
-    And I check "Display Date of Birth"
-    And I press "Update"
-    And I follow "editname2"
-    And I follow "Profile"
-  Then I should see "My email address: valid2@archiveofourown.org"
-    And I should see "My birthday: 1980-12-31"
-  When I follow "Edit My Profile"
-    And I select "March" from "profile_attributes[date_of_birth(2i)]"
-    And I press "Update"
-  Then I should see "Your profile has been successfully updated"
-    And I should see "My birthday: 1980-03-31"
-  When I follow "Log out"
-    And I am logged in as "duplicate" with password "password"
-    And I follow "duplicate"
-    And I follow "Profile"
-    And I follow "Edit My Profile"
-    And I fill in "Change Email" with "valid2@archiveofourown.org"
-    And I fill in "Old password" with "password"
-    And I press "Update"
-  Then I should see "Email has already been taken"
-    And I should not see "Your profile has been successfully updated"
+Scenario: Edit profile - add details  
+	
+  When I fill in the details of my profile
+    Then I should see "Your profile has been successfully updated"
+	And 0 emails should be delivered
+		
+Scenario: Edit profile - change details 
+	
+  When I change the details in my profile
+    Then I should see "Your profile has been successfully updated" 
+	And 0 emails should be delivered
+	
+Scenario:	Edit profile - remove details
 
-  Scenario: View and edit profile - change password
+  When I remove details from my profile
+    Then I should see "Your profile has been successfully updated"
+    And 0 emails should be delivered
+		
+Scenario: Edit profile - changing email address requires reauthenticating
 
-  Given I am logged in as "editname2" with password "password"
-  When I follow "editname2"
-    And I follow "Profile"
-    And I follow "Edit My Profile"
-  And I follow "Change My Password"
-  When I fill in "New Password" with "newpass1"
-    And I fill in "Confirm New Password" with "newpass1"
-    And I fill in "Old password" with "wrong"
-    And I press "Change Password"
-  Then I should see "Your old password was incorrect"
-  When I fill in "New Password" with "newpass1"
-    And I fill in "Confirm New Password" with "newpass2"
-    And I fill in "Old password" with "password"
-    And I press "Change Password"
-  Then I should see "Password doesn't match confirmation"
-  When I fill in "New Password" with "newpass1"
-    And I fill in "Confirm New Password" with "newpass1"
-    And I fill in "Old password" with "password"
-    And I press "Change Password"
-  Then I should see "Your password has been changed"
-  When I follow "Log out"
-    And I fill in "User name" with "editname2"
-    And I fill in "Password" with "password"
-    And I press "Log in"
-  Then I should see "The password you entered doesn't match our records. Please try again or click the 'forgot password' link below."
-  When I am logged in as "editname2" with password "newpass1"
-  Then I should see "Hi, editname2"
+  When I follow "Email"
+  And I fill in "New Email" with "blah"
+  And I fill in "Confirm New Email" with "blah"
+  And I press "Change Email"
+    Then I should see "You must enter your password"
+    And 0 emails should be delivered
+		 
+Scenario: Edit profile - changing email address - entering an invalid email address
+		
+  When I enter an invalid email
+	Then I should see "Email does not seem to be a valid address"
+	And 0 emails should be delivered
+		
+Scenario: Edit profile - changing email address - entering an incorrect password
 
-  Scenario: Manage pseuds - add, edit
+  When I enter an incorrect password
+    Then I should see "Your password was incorrect"
+	And 0 emails should be delivered
 
-  Given the following activated user exists
-    | login         | password   |
-    | editpseuds    | password   |
-    And I am logged in as "editpseuds" with password "password"
-  Then I should see "Hi, editpseuds!"
-    And I should see "Log out"
-  When I follow "editpseuds"
-  Then I should see "My Dashboard"
-    And I should see "You don't have anything posted under this name yet"
-  When I follow "Profile"
-  Then I should see "About editpseuds"
-  When I follow "Manage My Pseuds"
-  Then I should see "Pseuds for editpseuds"
-    And I should see "editpseuds"
-  When I follow "New Pseud"
-  Then I should see "New pseud"
-  When I fill in "Name" with "My new name"
-    And I fill in "Description" with "I wanted to add another name"
-    And I press "Create"
-  Then I should see "Pseud was successfully created."
-    And I should see "My new name"
-    And I should see "You don't have anything posted under this name yet."
-    And I should not see "I wanted to add another name"
-  When I follow "Back To Pseuds"
-  Then I should see "editpseuds (editpseuds)"
-    And I should see "My new name (editpseuds)"
-    And I should see "I wanted to add another name"
-    And I should see "Default Pseud"
-  When I follow "editpseuds"
-    And I follow "Profile"
-    And I follow "Manage My Pseuds"
-  Then I should see "Edit My new name"
-  When I follow "edit_my_new_name"
-    And I fill in "Description" with "I wanted to add another fancy name"
-    And I fill in "Name" with "My new fancy name"
-    And I press "Update"
-  Then I should see "Pseud was successfully updated"
-  When I follow "Back To Pseuds"
-  Then I should see "editpseuds (editpseuds)"
-    And I should see "My new fancy name (editpseuds)"
-    And I should see "I wanted to add another fancy name"
-    And I should not see "My new name (editpseuds)"
-    And I should not see "I wanted to add another name"
+Scenario: Edit profile - Changing email address and viewing 
+
+  When I change my email
+    Then I should see "Your email has been successfully updated"
+	And 1 email should be delivered to "bar@ao3.org"
+	When I change my preferences to display my email address
+	  Then I should see "My email address: valid2@archiveofourown.org"
+
+Scenario: Edit profile -  Changing email address -- can't be the same as another user's
+
+  When I enter a duplicate email
+	Then I should see "Email has already been taken"
+	And 0 emails should be delivered
+		
+Scenario: Edit profile - date of birth - under age
+
+  When I enter a birthdate that shows I am under age 
+    Then I should see "You must be over 13"
+	
+Scenario: Edit profile - entering date of birth and displaying
+
+  When I fill in my date of birth
+    Then I should see "Your profile has been successfully updated"
+    When I change my preferences to display my date of birth
+      Then I should see "My birthday: 1980-11-30"
+	  And 0 emails should be delivered
+		
+Scenario: Edit profile - change password - mistake in typing old password
+
+  When I make a mistake typing my old password
+    Then I should see "Your old password was incorrect"
+	
+Scenario: Edit profile - change password - mistake in typing new password confirmation
+	
+  When I make a typing mistake confirming my new password
+    Then I should see "Password doesn't match confirmation"
+	
+Scenario: Edit profile - change password
+ 
+  When I change my password
+    Then I should see "Your password has been changed"
+	And 0 emails should be delivered
+	

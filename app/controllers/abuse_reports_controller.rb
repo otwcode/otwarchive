@@ -29,11 +29,11 @@ class AbuseReportsController < ApplicationController
           site['/projects/4603/bugs'].post build_post_info(@abuse_report), :content_type => 'application/xml', :accept => 'application/xml'
         end
         # Email bug to feedback email address
-        AdminMailer.abuse_report(@abuse_report.email, @abuse_report.url, @abuse_report.comment).deliver
+        AdminMailer.abuse_report(@abuse_report.id).deliver
         if params[:cc_me]
           # If user requests, and supplies email address, email them a copy of their message
           if !@abuse_report.email.blank?
-            UserMailer.abuse_report(@abuse_report).deliver
+            UserMailer.abuse_report(@abuse_report.id).deliver
           else
             flash[:error] = t('no_email', :default => "Sorry, we can only send you a copy of your abuse report if you enter a valid email address.")
             format.html { render :action => "new" }

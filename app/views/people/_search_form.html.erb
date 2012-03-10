@@ -1,43 +1,40 @@
-<%= form_tag url_for(:controller => 'people', :action => 'search'), :class => 'search', :method => :get do %>
+<%= form_tag url_for(:controller => 'people', :action => 'search'), :class => 'search', :role => 'search', :method => :get do %>
 <fieldset>
   <legend>Search people</legend>
   <dl>
   <dt>
     <label for="people_search"><%= t('.name', :default => 'Name:') %></label>
+ 	<%= link_to_help "people-search-text-help" %>
   </dt>
   <dd>
     <%= text_field_tag "query[name]", @query[:name], :id => 'people_search'  %>
-    <%= link_to_help "people-search-text-help" %>
   </dd>
   <dt>
     <label for="refine_bookmark_count"><%= t('.bookmarks', :default => 'Bookmarks:') %></label>
+	 <%= link_to_help "people-search-numerical-help" %>
   </dt>
   <dd>
     <%= text_field_tag "query[bookmarks]", @query[:bookmarks], :id => 'refine_bookmark_count' %>
-    <%= link_to_help "people-search-numerical-help" %>
   </dd>
   <dt>
     <label for="refine_description"><%= t('.description', :default => 'Description:') %></label>
   </dt>
   <dd>
     <%= text_field_tag "query[description]", @query[:description], :id => 'refine_description' %>
-    <%= link_to_help "people-search-text-help" %>
   </dd>
   <dt>
     <label for="refine_icon_alt_text"><%= t('.icon_alt_text', :default => 'Icon alt text:') %></label>
   </dt>
   <dd>
     <%= text_field_tag "query[icon_alt_text]", @query[:icon_alt_text], :id => 'refine_icon_alt_text' %>
-    <%= link_to_help "people-search-text-help" %>
   </dd>
   <dt>
     <label for="text"><%= t('.text', :default => 'All fields:') %></label>
   </dt>
   <dd>
     <%= text_field_tag "query[text]", @query[:text], :id => 'text' %>
-    <%= link_to_help "people-search-text-help" %>
   </dd>
   </dl>
-  <span class="submit"><%= submit_tag t('.people.search', :default => 'Search people'), :name => nil %></span>
+  <p class="submit actions"><%= submit_tag t('.people.search', :default => 'Search people'), :name => nil %></p>
 </fieldset>
 <% end %>

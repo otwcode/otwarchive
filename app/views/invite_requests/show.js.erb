@@ -1,0 +1,6 @@
+<% if @invite_request %>
+  $j('#invite-status').html("<%= escape_javascript(render :partial => "invite_requests/invite_request", :locals => {:invite_request => @invite_request}) %>");
+<% else %>
+  $j('#invite-status').html("<p>Sorry, we couldn't find that address in our queue. If you signed up and
+you haven't received an invitation, please contact our support team for help.</p>");
+<% end %>

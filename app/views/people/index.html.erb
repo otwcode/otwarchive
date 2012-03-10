@@ -1,27 +1,34 @@
-<!--Descriptive page name, messages and instructions-->
+<!--SEARCHBROWSE Descriptive page name, messages and instructions-->
 <% if @collection %>
-  <h2><%= authors_header @authors %> <%= "in" %> '<%= (params[:letter] && params[:letter].is_a?(String)) ? params[:letter] : @pseuds_alphabet[0] %>' <%= ts("in %{collection}", :collection => @collection.title) %></h2>
-  <h3 class="landmark">Next Page Navigation</h3>
-  <%= alpha_paginated_section @pseuds_alphabet %>
+  <h2 class="heading"><%= authors_header @authors %> <%= "in" %> '<%= (params[:letter] && params[:letter].is_a?(String)) ? params[:letter] : @pseuds_alphabet[0] %>' <%= ts("in %{collection}", :collection => @collection.title) %></h2>
+
+<p class="navigation actions" role="navigation"><%= link_to "People Search (Alpha)", search_people_path %></p> 
+<!--subnav-->
+
+ <div class="alphabetical pagination navigation actions" role="navigation"><%= alpha_paginated_section @pseuds_alphabet %></div>
   <%= paginated_section @authors do %>
   <!--/subnav-->
-  <!--main content-->
-  <ul class="pseud index">
+ 
+<!--main content-->
+  <ol class="index group">
     <% @authors.each do |author| %>
       <%= render 'author_blurb', :author => author %>
     <% end %>
-  </ul>
+  </ol>
   <% end %>
   <!--/content-->
-  <!--subnav-->
-  <%= alpha_paginated_section @pseuds_alphabet %>
+  
+<!--subnav-->
+<div class="alphabetical pagination navigation actions" role="navigation">
+  <h3 class="landmark heading">Next Page Navigation</h3>
+<%= alpha_paginated_section @pseuds_alphabet %>
+</div>
+
 <% else %>
-  <div class="pagination">
+  <div class="alphabetical pagination navigation actions" role="navigation">
   <% for character in @navigation %>
     <a href="<%= person_path(character) %>"><%= character.char %></a>
   <% end %>
   </div>
-  <div>
-  <%= link_to "People Search (Alpha)", search_people_path %>
-  </div>
+  <p class="navigation actions" role="navigation"><%= link_to "People Search (Alpha)", search_people_path %></p>
 <% end %>

@@ -1,18 +1,10 @@
 module TagsHelper
 
-  # Takes an array of tags and returns a marked-up, comma-separated list
-  def tag_link_list(tags)
-    tags = tags.uniq.compact
-    if !tags.blank? && tags.respond_to?(:collect)
-      last_tag = tags.pop
-      tag_list = tags.collect{|tag| "<li>" + link_to_tag(tag) + ", </li>"}.join
-      tag_list += content_tag(:li, link_to_tag(last_tag))
-      tag_list.html_safe
-    else
-      ""
-    end
+  # Takes an array of tags and returns a marked-up, comma-separated list of links to them
+  def tag_link_list(tags, link_to_works=false)
+    tags = tags.uniq.compact.map {|tag| content_tag(:li, link_to_works ? link_to_tag_works(tag) : link_to_tag(tag))}.join.html_safe
   end
-
+  
   def description(tag)
     tag.name + " (" + tag.class.name + ")"
   end
@@ -54,21 +46,31 @@ module TagsHelper
     link_to_tag_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
   end
 
+  def link_to_tag_works(tag, options = {})
+    link_to_tag_works_with_text(tag, tag.is_a?(Warning) ? warning_display_name(tag.name) : tag.name, options)
+  end
+  
   def link_to_tag_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ?
-    {:controller => :tags, :action => :show, :id => tag, :collection_id => @collection} :
-    {:controller => :tags, :action => :show, :id => tag}, link_text, options)
+    link_to_with_tag_class(@collection ? collection_tag_url(@collection, tag) : tag_url(tag), link_text, options)
   end
 
-  # edit_tag_path is behaving badly since around the Rails 2.2.2 upgrade
   def link_to_edit_tag(tag, options = {})
-    link_to_with_tag_class({:controller => :tags, :action => :edit, :id => tag}, tag.name, options)
+    link_to_with_tag_class(edit_tag_path(tag), tag.name, options)
+  end
+  
+  def tag_with_link_to_edit(tag, options = {})
+    options.reverse_merge!({:target => "_blank"})
+    content_tag(:span, tag.name, :class=>"tag") + " ".html_safe + link_to_with_tag_class(edit_tag_path(tag), "(<span class=\"edit\">edit</span> &#x2710;)".html_safe, options)
   end
 
   def link_to_tag_works_with_text(tag, link_text, options = {})
-    link_to_with_tag_class(@collection ?
-    {:controller => :works, :action => :index, :tag_id => tag, :collection_id => @collection} :
-    {:controller => :works, :action => :index, :tag_id => tag}, link_text, options)
+    link_to_with_tag_class(@collection ? collection_tag_works_url(@collection, tag) : tag_works_url(tag), link_text, options)
+  end
+
+  # the label on checkboxes to remove tag associations
+  # currently blank per wrangler request, can be changed to different label as desired
+  def remove_tag_association_label(tag)
+    "".html_safe
   end
 
   # Adds the "tag" classname to links (for tag links)
@@ -108,7 +110,7 @@ module TagsHelper
 
   # Link to show tags if they're currently hidden
   def show_hidden_tags_link(creation, tag_type)
-    text = t('tags_helper.show_tag_type', :default => "Show %{tag_type}", :tag_type => (tag_type == 'freeforms' ? "additional tags" : tag_type))
+    text = ts("Show %{tag_type}", :tag_type => (tag_type == 'freeforms' ? "additional tags" : tag_type))
     url = {:controller => 'tags', :action => 'show_hidden', :creation_type => creation.class.to_s, :creation_id => creation.id, :tag_type => tag_type }
     link_to text, url, :remote => true
   end
@@ -146,8 +148,8 @@ module TagsHelper
     if tag
       span = tag.canonical? ? "<span class='canonical'>" : "<span>"
       span += tag.type + ": " + link_to_tag(tag) + " (#{tag.taggings_count})</span>"
+      span.html_safe
     end
-    span.html_safe
   end
 
   def tag_comment_link(tag)
@@ -162,32 +164,30 @@ module TagsHelper
   end
 
   def show_wrangling_dashboard
-    %w(tag_wranglings tag_wranglers).include?(controller.controller_name) ||
-    (can_wrangle? && controller.controller_name == 'tags') ||
-    (@tag && controller.controller_name == 'comments')
+    can_wrangle? && 
+    (%w(tags tag_wranglings tag_wranglers tag_wrangling_requests).include?(controller.controller_name) ||
+    (@tag && controller.controller_name == 'comments'))
   end
 
-  # Returns a nested list of meta tags
+  # Returns a nested list of meta tags 
   def meta_tag_tree(tag)
-    meta_ul = ""
+    meta_ul = "".html_safe
     unless tag.direct_meta_tags.empty?
-      meta_ul << "<ul class='tags tree'>"
       tag.direct_meta_tags.each do |meta|
-        meta_ul << "<li>" + link_to_tag(meta) + "</li>"
+        meta_ul += content_tag(:li, link_to_tag(meta))
         unless meta.direct_meta_tags.empty?
-          meta_ul << meta_tag_tree(meta)
+          meta_ul += content_tag(:li, meta_tag_tree(meta))
         end
       end
-      meta_ul << "</ul>"
     end
-    meta_ul.html_safe
+    content_tag(:ul, meta_ul, :class => 'tags tree index')
   end
 
   # Returns a nested list of sub tags
   def sub_tag_tree(tag)
     sub_ul = ""
     unless tag.direct_sub_tags.empty?
-      sub_ul << "<ul class='tags tree'>"
+      sub_ul << "<ul class='tags tree index'>"
       tag.direct_sub_tags.each do |sub|
         sub_ul << "<li>" + link_to_tag(sub) + "</li>"
         unless sub.direct_sub_tags.empty?
@@ -204,7 +204,6 @@ module TagsHelper
     item_class = item.class.to_s.underscore
     tag_groups ||= item.tag_groups
     categories = ['Warning', 'Relationship', 'Character', 'Freeform']
-    last_tag = categories.collect { |c| tag_groups[c] }.flatten.compact.last
     tag_block = ""
 
     categories.each do |category|
@@ -213,15 +212,14 @@ module TagsHelper
         if (class_name == "warnings" && hide_warnings?(item)) || (class_name == "freeforms" && hide_freeform?(item))
           open_tags = "<li class='#{class_name}' id='#{item_class}_#{item.id}_category_#{class_name}'><strong>"
           close_tags = "</strong></li>"
-          delimiter = (class_name == 'freeforms' || last_tag.is_a?(Warning)) ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT
-          tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + delimiter + close_tags
+          tag_block <<  open_tags + show_hidden_tags_link(item, class_name) + close_tags
         elsif class_name == "warnings"
           open_tags = "<li class='#{class_name}'><strong>"
           close_tags = "</strong></li>"
-          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
+          link_array = tags.collect{|tag| link_to_tag_works(tag)}
           tag_block <<  open_tags + link_array.join("</strong></li> <li class='#{class_name}'><strong>") + close_tags
         else
-          link_array = tags.collect{|tag| link_to_tag(tag) + (tag == last_tag ? '' : ArchiveConfig.DELIMITER_FOR_OUTPUT) }
+          link_array = tags.collect{|tag| link_to_tag_works(tag)}
           tag_block << "<li class='#{class_name}'>" + link_array.join("</li> <li class='#{class_name}'>") + '</li>'
         end
       end
@@ -254,20 +252,20 @@ module TagsHelper
     categories = tag_groups['Category']
     symbol_block << get_symbol_link(get_category_class(categories), get_title_string(categories, "category"))
 
-    if item.class == Work
-      if item.is_wip
-        symbol_block << get_symbol_link( "complete-no iswip", "Work in Progress" )
-      else
-        symbol_block << get_symbol_link( "complete-yes iswip" , "Complete Work")
-      end
-    elsif item.class == Series
+    if [Work, Series].include?(item.class)
       if item.complete?
-        symbol_block << get_symbol_link( "complete-yes iswip" , "Complete Series")
+        symbol_block << get_symbol_link( "complete-yes iswip" , "Complete #{item.class.to_s}")
       else
-        symbol_block << get_symbol_link( "category-none iswip" , "Series in Progress")
+        symbol_block << get_symbol_link( "complete-no iswip", "#{item.class.to_s} in Progress" )
       end
     elsif item.class == ExternalWork
       symbol_block << get_symbol_link('external-work', "External Work")
+    elsif item.is_a?(Prompt)
+      if item.unfulfilled?
+        symbol_block << get_symbol_link( "complete-no iswip", "#{item.class.to_s} Unfulfilled" )
+      else
+        symbol_block << get_symbol_link("complete-yes iswip", "#{item.class.to_s} Fulfilled" )
+      end
     end
 
     symbol_block << "</ul>" unless symbols_only

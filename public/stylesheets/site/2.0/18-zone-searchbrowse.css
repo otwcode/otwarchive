@@ -1,0 +1,83 @@
+/*==ZONE: SEARCH/BROWSE (currently header linked index pages)
+The search and browse zone is in development and has no parent class yet
+Arguably filter and search could be styled in interactions but I've put them here in case we change those page areas a lot
+.search and .browse may turn out to be separate but interrelated */
+
+/* INDEX PAGES (with filters)*/
+
+.works-index .index, .collections-index .index {
+  width: 75%;
+  float: left;
+}
+
+.works-index ol.pagination, .people-index ol + div.pagination, .index + h4.landmark {
+  clear: both;
+}
+
+.media-index .listbox {
+  min-height: 17.5em;
+}
+
+/* INTERACTION: SEARCH */
+
+.search input[type="text"] {
+  border-top-color: #999;
+  padding: 0.15em 0.25em;
+    border-radius: 1em;
+}
+
+.search p, li.search form p {
+  position: relative;
+}
+
+.search span.tip {
+  background: #ddd;
+  border: 1px solid #fff;
+  padding: 0.15em;
+  position: absolute;
+  left: -999em;
+  font-size: 0.75em;
+}
+
+.search:hover .tip {
+  left: 1em;
+  top: 3.5em;
+}
+
+li.search:hover .tip {
+  left: 1em;
+  top: 2.75em;
+}
+
+li.search fieldset {
+  margin: auto;
+  padding: 0.15em;
+  font-size: 87.5%;
+  overflow: visible;
+}
+
+.search .tags dd.submit {
+  margin: -3em 0.643em 0;
+}
+
+/* INTERACTION: FILTER */
+
+form.filters {
+  width: 22.5%;
+  float: right;
+}
+
+.filters .tags {
+  display: block;
+}
+
+form.filters dl {
+  margin-top: 0.375em;
+  padding: 0;
+}
+
+.filters dd {
+  width: 100%;
+}
+
+/*END== */

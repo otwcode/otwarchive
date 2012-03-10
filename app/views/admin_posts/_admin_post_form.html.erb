@@ -1,60 +1,61 @@
-<div id="work-form">
-	<%= form_for(@admin_post) do |f| %>
-	<%= error_messages_for @admin_post %>
-	
-	<input type="hidden" name="admin_post[admin_id]" value="<%= current_admin.id %>" />
-	<p class="notice required"><%=h '* Required information' %></p>
-	  <p>
-	    <%= f.label :title, t('.form_title', :default => "*Title"), :class => "required" %><br />
-	    <%= f.text_field :title %>
-	  </p>
- <fieldset>
-	<p class="label">
-	<%= f.label :content, t('.form_content', :default => "Post Content") %>
-    </p>
-  <div id="toggleText">
-  <p id="plainTextNotes" style="display: block"><%= allowed_html_instructions %></p>
-  <p id="richTextNotes" style="display: none"><%=h t('.rich_text_notes', :default => "Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>
-  </div>
-  <% use_tinymce %>
-  <p class="rtf-html-switch">
-    <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%=h 'Rich text' %></a></span>
-    <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%=h 'HTML' %></a></span>
-  </p>    
+<p class="required note">All news posts need a title and some content.</p>
+<div id="work-form" class="post news">
+  <%= form_for(@admin_post) do |f| %>
+    <%= error_messages_for @admin_post %>
+    <fieldset class="text">
+      <legend><%= ts("Post News") %></legend>
+      <h4><input type="hidden" name="admin_post[admin_id]" value="<%= current_admin.id %>" />
+      <%= f.text_field :title, :title =>"title" %></h4>
+      <!--BACK END, can we DRY up these post forms? There's admin_post_form, archive_faq_form, _chapter_form, known_issues_form, standard form-->
+      <p id="toggleText">
+        <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
+        <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon  (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
+        <span class="rtf-html-switch actions">
+          <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%= ts('Rich text') %></a></span>
+          <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%= ts('HTML') %></a></span>
+        <span>
+      </p>
+      <% use_tinymce %>
+      <div class="rtf-html-field">
+        <p><%= f.text_area :content, :class => "mce-editor observe_textlength", :id => "content", :title =>"content" %></p>
+        <%= live_validation_for_field('content',
+            :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN,
+            :tooLongMessage => ts("We salute your ambition! But sadly the content must be less than %{max} letters long.", :max => ArchiveConfig.CONTENT_MAX.to_s),
+            :tooShortMessage => ts("Brevity is the soul of wit, but your content does have to be at least %{min} letters long.", :min => ArchiveConfig.CONTENT_MIN.to_s),
+            :failureMessage => ts("You need to post some content here."))
+        %>
+        <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend><%= ts("Set Preferences") %></legend>
+      <h3 class="landmark heading">Set Prefs</h3>
+      <dl>
+        <dt><%= f.label :tag_list, ts("Tags") %></dt>
+        <dd><%= f.text_field :tag_list %></dd>
+        <dt>
+          <%= f.label :language_id, ts("Choose a language") %>
+        </dt>
+        <dd>
+          <select id="admin_post_language_id" name="admin_post[language_id]">
+            <%= options_from_collection_for_select(Language.default_order, :id, :name, @admin_post.language_id || Language.default.id) %>
+          </select>
+        </dd>
+        <dt>
+          <%= f.label :translated_post_id, ts("Is this a translation of another post?") %>
+        </dt>
+        <dd>
+          <%= f.collection_select(:translated_post_id, @translatable_posts, :id, :title, {:prompt => true}) %>
+        </dd>
+      </dl>
+    </fieldset>
 
-	<div class="rtf-html-field">
-		<%= f.text_area :content, :class => "mce-editor", :id => "content" %>
-      	<%= live_validation_for_field('content', 
-  				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
-  				:tooLongMessage => t('.validations.content.too_long', :default => 'We salute your ambition! But sadly the content must be less than %{max} letters long.', :max => ArchiveConfig.CONTENT_MAX.to_s),
-  				:tooShortMessage => t('.validations.content.too_short', :default => 'Brevity is the soul of wit, but your content does have to be at least %{min} letters long.', :min => ArchiveConfig.CONTENT_MIN.to_s),
-  			  :failureMessage => t('.validations.content.failure', :default => 'You need to post some content here.'))
-  		%>
-    <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
-	</div>
-	<dl>
-	  <dt>
-	    <%= f.label :language_id, ts("Choose a language") %>
-	  </dt>
-	  <dd>
-            <select id="admin_post_language_id" name="admin_post[language_id]">
-              <%= options_from_collection_for_select(Language.all(:order => :short), :id, :name, @admin_post.language_id || Language.default.id) %>
-            </select>
-	  </dd>
-	  <dt>
-	    <%= f.label :translated_post_id, ts("Is this a translation of another post?") %>
-	  </dt>
-	  <dd>
-	    <%= f.collection_select(:translated_post_id, @translatable_posts, :id, :title, 
-{:prompt => true}) %>
-	  </dd>	  
-	</dl>
-</fieldset>
-<fieldset>
-<legend><%= t('.form_post', :default => 'Post') %></legend>
-    <p class="submit">
-		<%= submit_tag t('.form_post', :default => 'Post'), :name => 'post_button' %>
-    </p>
-</fieldset>
-	<% end %>
+    <fieldset>
+      <legend><%= ts('Post') %></legend>
+      <h3 class="landmark heading">Post</h3>
+      <p class="submit actions">
+        <%= submit_tag ts('Post'), :name => 'post_button' %>
+      </p>
+    </fieldset>
+  <% end %>
 </div>

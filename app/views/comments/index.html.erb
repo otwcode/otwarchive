@@ -2,8 +2,8 @@
 <% if @commentable.nil? %>
   <!-- the most recent comments -->
   <% cache(logged_in? ? 'latest_comments' : 'latest_comments_public') do %>
-    <h2><%= t('.viewing_last', :default => "Viewing %{count} recent comments", :count => @comments.length) %></h2>
-    <ol class="comment index">
+    <h2 class="heading"><%= t('.viewing_last', :default => "Viewing %{count} recent comments", :count => @comments.length) %></h2>
+    <ol class="comment index group">
       <% for comment in @comments %>
         <% if comment.approved or logged_in? %>
           <%= render :partial => 'comments/single_comment_abbreviated', :locals => {:single_comment => comment} %>
@@ -12,7 +12,7 @@
     </ol>
   <% end %>
 <% else %>
-  <h2><%= title_for_comment_page(@commentable) %></h2> 
+  <h2 class="heading"><%= title_for_comment_page(@commentable) %></h2> 
 <!--/descriptions-->
 
 <!--main content-->

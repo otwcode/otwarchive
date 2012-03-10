@@ -1,32 +1,64 @@
-<%= render :partial => "skin_top_navigation" %>
-
-<div id="skin-page" class="profile module">
+<!--BACK END: this is accessed via the user dashboard so needs the user dashboard view and so therefore a navigation pathway back-->
+<div class="skins home">
   
-  <div class="header module">
-    <h2>
+  <div class="primary header module">
+    <h2 class="heading">
       <%= @skin.title %> <%= ts("skin by") %> <%= skin_author_link(@skin) %>    
     </h2>
     <blockquote class="userstuff">
       <%= @skin.description.blank? ? ts("(No Description Provided)") : raw(sanitize_field(@skin, :description)) %>
     </blockquote>
-    <%= skin_preview_display(@skin) %>
-
-    <h3>CSS</h3>
-    <blockquote><pre><%= @skin.css %></pre></blockquote>
-
-    <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em %>
-      <h3>Wizard Settings</h3>
-      <p class="notes">(can be overridden by custom CSS)</p>
-  
-      <dl>
-        <% if @skin.margin %><dt>Margin</dt><dd><%= @skin.margin %><% end  %>
-        <% unless @skin.font.blank? %><dt>Font</dt><dd><%= @skin.font %><% end  %>
-        <% unless @skin.background_color.blank? %><dt>Background color</dt><dd><%= @skin.background_color %><% end  %>
-        <% unless @skin.foreground_color.blank? %><dt>Foreground color</dt><dd><%= @skin.foreground_color %><% end  %>
-        <% if @skin.base_em %><dt>Relative font size</dt><dd><%= @skin.base_em %><% end  %>
-      </dl>
-    <% end %>
+    <dl class="stats">
+      <dt>Users: </dt><dd><%= @skin.preferences.count %></dd>
+      <dt>Role: </dt><dd><%= @skin.role %></dd>
+      <dt>Media: </dt><dd><%= @skin.get_media %></dd>
+      <dt>Condition:</dt>
+      <% if @skin.ie_condition.present? %><abbr title="internet explorer">IE</abbr><%= @skin.ie_condition %></dd><% end %>
+      <% if @skin.unusable? %><dd>parent only</dd><% end %>
+      <!--BACK END pls: else <dd>normal</dd> end-->
+    </dl>
+    	<%= render :partial => "skin_top_navigation" %>
+    	<p class="icon"><%= skin_preview_display(@skin) %></p>
   </div>
+
+  <% unless @skin.css.blank? && @skin.filename.blank? %>
+    <div class="css module">
+      <h3 class="heading"><abbr title="cascading style sheets">CSS</abbr></h3>
+      <blockquote><pre><%= @skin.get_css %></pre></blockquote>
+    </div>
+  <% end %>
+  
+  <% unless @skin.parent_skins.empty? %>
+    <div class="parents module">
+      <h3 class="heading">Parent Skins</h3>
+      <ul class="index group">
+      <% @skin.parent_skins.each do |parent| %>
+        <li><%= link_to parent.title, skin_path(parent) %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>      
+
+  <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em || @skin.paragraph_margin || !@skin.headercolor.blank? || !@skin.accent_color.blank? %>
+    <div class="wizard module">
+  		<h3 class="heading">Wizard Settings</h3>
+      <p class="notes">(Can be overridden by custom <abbr title="cascading style sheets">CSS</abbr>)</p>
+  
+      <div class="wrapper">
+    		<!--REVIEW: is this meta? It doesn't match-->
+    		<dl class="meta group">
+          <% if @skin.margin %><dt>Margin</dt><dd><%= @skin.margin %><% end %>
+          <% unless @skin.font.blank? %><dt>Font</dt><dd><%= @skin.font %><% end %>
+          <% unless @skin.background_color.blank? %><dt>Background color</dt><dd><%= @skin.background_color %><% end %>
+          <% unless @skin.foreground_color.blank? %><dt>Foreground color</dt><dd><%= @skin.foreground_color %><% end %>
+          <% if @skin.base_em %><dt>Relative font size</dt><dd><%= @skin.base_em %><% end %>
+          <% if @skin.paragraph_margin %><dt>Paragraph margin</dt><dd><%= @skin.paragraph_margin %><% end %>
+          <% unless @skin.headercolor.blank? %><dt>Header color</dt><dd><%= @skin.headercolor %><% end %>
+          <% unless @skin.accent_color.blank? %><dt>Accent color</dt><dd><%= @skin.accent_color %><% end %>
+        </dl>
+  	  </div<>
+    </div>
+  <% end %>
 
   <%= render :partial => "skin_navigation", :locals => {:skin => @skin} %>
 

@@ -9,7 +9,7 @@ class RedirectController < ApplicationController
     @minimal_url.gsub!(/\#.*$/, "")
   end
   
-  def show
+  def do_redirect
     if @original_url.blank?
       flash[:error] = t('redirect.none', :default => "What url did you want to look up?")
     else
@@ -25,7 +25,7 @@ class RedirectController < ApplicationController
   
   def index
     if !@original_url.blank?
-      redirect_to :action => :show, :original_url => @original_url and return
+      redirect_to :action => :do_redirect, :original_url => @original_url and return
     end
   end
   

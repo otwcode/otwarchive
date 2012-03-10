@@ -1,17 +1,20 @@
-<h2>People Search: Alpha</h2>
+<!--SEARCHBROWSE-->
+<h2 class="heading">People Search: Alpha</h2>
 
-<ul class="navigation" role="navigation"><li>
-  <%= link_to(t('.refine_search', :default => "Advanced search"), search_index_path(:query => @query)) %>
+<ul class="navigation actions" role="navigation"><li>
+  <%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %>
 </li></ul>
 
 <%= render :partial => 'people/search_form' %>
 
 <% if @people %>
-  <p><strong><%= @people.total_entries %> Found</strong><%= link_to_help "people-search-results-help" %></p>
-  <h3 class="landmark">People List</h3>
-  <ol class="pseud index">
+  <p><strong><%= @people.total_entries %> Found</strong> <%= link_to_help "people-search-results-help" %></p>
+  <h3 class="landmark heading">People List</h3>
+  <ol class="pseud index group">
     <% for person in @people %>
-      <%= render :partial => 'people/author_blurb', :locals => {:author => person} %>
+      <% unless person.nil? %>
+        <%= render :partial => 'people/author_blurb', :locals => {:author => person} %>
+      <% end %>
     <% end %>
   </ol>
   <%= will_paginate @tags %>

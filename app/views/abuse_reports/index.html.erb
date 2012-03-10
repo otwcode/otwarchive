@@ -1,5 +1,5 @@
 <!--Descriptive page names, messages and instructions-->
-<h2><%=h t('.about', :default => "All Abuse Reports:") %></h2>
+<h2 class="heading"><%=ts("All Abuse Reports") %>:</h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -8,18 +8,18 @@
 <!--main content-->
 <div class="wrapper">
 <table id="abuse_reports_table" summary="">
-<caption><%=h t('.listing', :default => "Listing all the abuse reports made on the archive.") %></caption>
+<caption><%=ts("Listing all the abuse reports made on the archive.") %></caption>
 <colgroup>
 <col class="name" />
 <col />
 </colgroup>
 <thead>
 	<tr>
-	<th scope="col"><%=h t('.id', :default => "ID") %></th>
-	<th scope="col"><%=h t('.from', :default => "From") %></th>
-	<th scope="col"><%=h t('.referring_to', :default => "Referring To") %></th>
-	<th scope="col"><%=h t('.reported', :default => "Reported") %></th>
-	<th scope="col"><%=h t('.show', :default => "Show") %></th>
+	<th scope="col"><%=ts("ID") %></th>
+	<th scope="col"><%=ts("From") %></th>
+	<th scope="col"><%=ts("Referring To") %></th>
+	<th scope="col"><%=ts("Reported") %></th>
+	<th scope="col"><%=ts("Show") %></th>
 </tr>
 </thead>
 <tbody>
@@ -33,5 +33,5 @@
 </div>
 <!--/content-->
 <!--subnav-->
-	  <%= will_paginate @abuse_reports, :previous_label =>  "&laquo; " + t('.pagination.previous', :default => "Previous"), :next_label => t('.pagination.next', :default => "Next") + " &raquo;" %>
+	  <%= will_paginate @abuse_reports %>
 <!--/subnav-->

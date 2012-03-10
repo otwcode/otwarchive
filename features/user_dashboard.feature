@@ -31,25 +31,23 @@ Feature: User dashboard
   
   # view user dashboard - when posting a work with the canonical, metatag and synonym should not be seen
   
-  When I follow "Log out"
+  When I log out
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
     
   When I am logged in as "bookmarkuser1" with password "password"
   Then I should see "Hi, bookmarkuser1!"
   When I go to bookmarkuser2's user page
   Then I should see "There are no works or bookmarks under this name yet"
-  When I follow "bookmarkuser1"
-  Then I should see "My Dashboard"
+  When I go to bookmarkuser1's user page
+  Then I should see "Dashboard"
     And I should see "You don't have anything posted under this name yet"
     And I should not see "Revenge of the Sith"
     And I should not see "Stargate"
-  When I follow "Log out"
-  Then I should see "logged out"
   When I am logged in as "bookmarkuser2" with password "password"
     And I post the work "Revenge of the Sith"
   When I go to the bookmarks page
   Then I should not see "Revenge of the Sith"
-  When I follow "bookmarkuser2"
+  When I go to bookmarkuser2's user page
   Then I should see "Stargate"
     And I should see "SG-1" within "#user-fandoms"
     And I should not see "Stargate Franchise"
@@ -62,7 +60,7 @@ Feature: User dashboard
     And I press "Preview"
     And I press "Update"
   Then I should see "Work was successfully updated"
-  When I follow "bookmarkuser2"
+  When I go to bookmarkuser2's user page
   Then I should see "Stargate"
     And I should see "SG-1" within "#user-fandoms"
     And I should not see "Stargate Franchise"

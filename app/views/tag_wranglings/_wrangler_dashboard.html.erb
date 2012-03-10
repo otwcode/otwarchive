@@ -1,5 +1,5 @@
-<div id="dashboard" role="navigation" class="wrangling">
-  <ul class="navigation" role="navigation">
+<div id="dashboard" role="navigation region" class="tag wrangling region">
+  <ul class="navigation actions">
     <% if current_user.is_a?(User) %>
     <li><%= span_if_current('Wrangling Home', tag_wrangler_path(current_user)) %></li>
     <% end %>
@@ -10,7 +10,9 @@
     <li><%= span_if_current('New Tag', new_tag_path) %></li>
 
     <% if @counts %>
-      <li><hr /></li>
+      </ul>
+
+        <ul class="navigation actions">
       <% if @tag && @uses %>
         <% for key in @uses %>
           <% if key == 'Works' || key == 'Bookmarks' %>
@@ -35,3 +37,4 @@
     <% end %>
   </ul>
 </div>
+

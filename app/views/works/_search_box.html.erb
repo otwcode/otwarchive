@@ -2,7 +2,7 @@
   <fieldset>
 	<legend>Search works</legend>
 	<p><%= text_field_tag "query[text]", nil, :class => 'text', :title => 'site search', :id => 'site_search' %>
-  <%= submit_tag t('.forms.search', :default => 'Search'), :class => 'button', :name => nil %></p>
+	<span class="tip">tip: <%= random_search_tip %></span>
+  <span class="submit actions"><%= submit_tag t('.forms.search', :default => 'search'), :class => 'button', :name => nil %></span></p>
   </fieldset>
-  <!-- <p><strong>tip:</strong> <%= random_search_tip %></p> -->
 <% end %>

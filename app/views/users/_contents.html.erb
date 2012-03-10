@@ -1,89 +1,94 @@
 ﻿<!--main content-->
 <!-- expects @fandoms, @works, @series, @bookmarks -->
   <% unless @fandoms.empty? %>
-  <div class="fandom module" id="user-fandoms">
-    <h3><%= ts("Fandoms") %></h3>
-    <ul class="index">
-      <% @fandoms.each_with_index do |fandom, i| %>
-        <% if !params[:expand_fandoms] && i > (ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD - 1) %>
-          <li class='hidden'>
-        <% else %>
-          <li>
-        <% end %>       
-        <% if fandom.merger %>
-          <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.merger.id]} %> (<%= fandom.work_count %>)
-        <% else %>
-          <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.id]} %> (<%= fandom.work_count %>)
+  <div class="fandom listbox group" id="user-fandoms">
+    <!--NOTE TO BACK END, can this be regularised to one list and make expandable?-->
+    <h3 class="heading"><%= ts("Fandoms") %></h3>
+    <ol class="index group">
+      <% @fandoms.each_with_index do |fandom, i| %>        
+        <% if i == ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
+          </ol>
+          <h4 class="landmark heading"><%= ts("Listing More Fandoms") %></h4>
+          <ol id="fandom_full_list" class="index toggled<%= params[:expand_fandoms] ? '' : ' hidden' %>">
         <% end %>
-        </li>
-     <% end %>
-     <% if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
         <li>
-          <% if params[:expand_fandoms] %>
-          <%= link_to "< Hide full list", [@user, @author], :id => "expandable-link" %>
+          <% if fandom.merger %>
+            <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.merger.id]} %> (<%= fandom.work_count %>)
           <% else %>
-          <%= link_to "> Expand full list", url_for(:expand_fandoms => true), :id => "expandable-link" %>
+            <%= link_to fandom.name, {:controller => :works, :user_id => @user, :pseud_id => @author, :selected_tags => [fandom.id]} %> (<%= fandom.work_count %>)
           <% end %>
         </li>
-      <% end %>
-    </ul>
+     <% end %>
+    </ol>
+    <% if @fandoms.length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
+      <p class="actions">
+        <noscript>  
+          <% if params[:expand_fandoms] %>
+            <%= link_to ts("Hide full list"), [@user, @author] %>
+          <% else %>
+            <%= link_to ts("Expand full list"), url_for(:expand_fandoms => true) %>
+          <% end %>
+        </noscript>
+        <a class="fandom_full_list_open hidden"><%= ts("Expand full list") %></a>
+        <a class="fandom_full_list_close hidden"><%= ts("Hide full list") %></a>
+      </p>
+    <% end %>
   </div>
   <% end %> 
               
   <% unless @works.blank? %>
-  <div class="work module<% if current_user == @user %> works-own<% end %>" id="user-works">
-    <h3><%=h ts("Recent works") %></h3>
-    <ul class="index">
+  <div class="work listbox group" id="user-works">
+    <h3 class="heading"><%= ts("Recent works") %></h3>
+    <ul class="index group">
       <% for work in @works %>
     	  <%= render :partial => 'works/work_blurb', :locals => {:work => work} %>
       <% end %>
     </ul>
     <% if @works.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-      <ul class="navigation"><li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li></ul>
+      <ul class="navigation actions" role="navigation"><li><%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %></li></ul>
     <% end %>
   </div>
   <% end %>
   
   <% unless @series.blank? %>
-  <div class="series module<% if current_user == @user %> works-own<% end %>" id="user-series">
-    <h3><%=h ts("Recent series") %></h3>
-    <ul class="index">
+  <div class="series listbox group" id="user-series">
+    <h3 class="heading"><%= ts("Recent series") %></h3>
+    <ol class="index group">
       <% for series in @series %>
         <%= render :partial => 'series/series_blurb', :locals => {:series => series} %>
       <% end %>
       <% if @author %>
         <% if @author.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-        <ul class="navigation"><li><%= print_pseud_series_link(@author) %></li></ul>
+        <ul class="navigation actions" role="navigation"><li><%= print_pseud_series_link(@author) %></li></ul>
         <% end %>
       <% else %>
         <% if @user.series.count > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-        <ul class="navigation"><li><%= print_series_link(@user) %></li></ul>
+        <ul class="navigation actions" role="navigation"><li><%= print_series_link(@user) %></li></ul>
         <% end %>
       <% end %> 
-    </ul>
-    
-  </div>
+    </ol>
+   </div>
   <% end %>
   
   <% unless @bookmarks.blank? %>
-  <div class="bookmark module" id="user-bookmarks">
-    <h3><%=h ts("Recent bookmarks") %></h3>
-    <ul class="index">
+  <div class="bookmark listbox group" id="user-bookmarks">
+    <h3 class="heading"><%= ts("Recent bookmarks") %></h3>
+    <ol class="index group">
       <% for bookmark in @bookmarks %>
-        <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
+        <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
       <% end %>
       <% unless @user == User.orphan_account %>
         <% if @author %>
           <% if @author.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-            <ul class="navigation"><li><%= print_pseud_bookmarks_link(@author) %></li></ul>
+            <ul class="navigation actions" role="navigation"><li><%= print_pseud_bookmarks_link(@author) %></li></ul>
           <% end %>
         <% else %>
           <% if @user.bookmarks.visible.size > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %>
-            <ul class="navigation"><li><%= print_bookmarks_link(@user) %></li></ul>
+            <ul class="navigation actions" role="navigation"><li><%= print_bookmarks_link(@user) %></li></ul>
           <% end %>
         <% end %> 
       <% end %>
-    </ul>
+    </ol>
   </div>
   <% end %>
 

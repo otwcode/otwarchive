@@ -1,9 +1,3 @@
-<div id="signin">
-  <div id="small_login">
-    <%- if params[:use_openid] -%>
-      <%= render :partial => "user_sessions/openid_small" %>
-    <%- else -%>
-      <%= render :partial => "user_sessions/passwd_small" %>
-    <% end %>
-  </div>
+<div id="small_login" class="simple login toggled">
+<%= render "user_sessions/passwd_small" %>
 </div>

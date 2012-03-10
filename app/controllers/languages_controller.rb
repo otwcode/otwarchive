@@ -6,7 +6,7 @@ class LanguagesController < ApplicationController
   end  
   
   def index
-    @languages = Language.all(:order => :short)
+    @languages = Language.default_order
   end
     
   def show

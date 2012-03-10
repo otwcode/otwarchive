@@ -1,0 +1,87 @@
+<fieldset>
+	<legend>External Work</legend>
+  <dl>
+    <dt><%= ew.label :url, ts("URL") %>:</dt>
+    <dd title="URL">
+      <% if !params[:url_from_external].blank? %>
+        <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1, :value => params[:url_from_external]) %>
+      <% else %>
+        <%= ew.text_field :url, autocomplete_options('external_work', :autocomplete_token_limit => 1) %>
+      <% end %>
+      <%= hidden_field "fetched", "", :id => "fetched" %>
+      <%= content_for :footer_js do %>
+        <%= javascript_tag do %>
+          $j("#bookmark_external_url").blur(function() {
+            $j.ajax({
+              type: "get",
+              data: "external_work_url=" + $j("#bookmark_external_url").val(),
+              dataType: "script",
+              url: "<%= url_for(:controller => "external_works", :action => "fetch") %>"
+            })
+          })
+        <% end %>
+      <% end %>
+    </dd>
+    <dt><%= ew.label :author, ts("Author") %>:</dt>
+    <dd>
+      <%= ew.text_field :author, :class => "observe_textlength" %>
+      <%= generate_countdown_html("bookmark_external_author", ExternalWork::AUTHOR_LENGTH_MAX) %>
+    </dd>
+    <dt><%= ew.label :title, ts("Title") %>:</dt>
+    <dd>
+      <% if !params[:url_from_external].blank? %>
+        <%= ew.text_field :title, :value => params[:title_from_external], :class => "observe_textlength" %>
+      <% else %>
+        <%= ew.text_field :title, :class => "observe_textlength" %>
+      <% end %>
+      <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) %>
+    </dd>
+    <dt>
+      <%= ew.label :summary, ts("Author's Summary") %>
+      <%= ts("(please copy and paste from original work)") %>
+    </dt>
+    <dd>
+      <%= ew.text_area :summary, :rows => 5, :class => "observe_textlength"%>
+      <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) %>
+    </dd>
+  </dl>
+</fieldset>
+<fieldset>
+  <legend>Tag</legend>
+  <p>
+    <%= ts("Author's Tags (comma separated, %{max} characters per tag). Only a fandom is required.", :max => ArchiveConfig.TAG_MAX) %>
+    <%= link_to_help "tagging-help" %>
+  </p>
+  <dl>
+    <dt class="required">
+      <%= ew.label :fandom_string, Fandom::NAME.pluralize %>
+    </dt>
+    <dd title="fandom required">
+      <%= ew.text_field :fandom_string, autocomplete_options('fandom') %>
+    </dd>
+    <dt class="rating">
+      <%= ew.label :rating_string, Rating::NAME %> <%= link_to_help "rating-help" %>
+    </dt>
+    <dd>
+      <%= ew.collection_select(:rating_string, Rating.canonical.by_name, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) %>
+    </dd>
+    <dt>
+      <%= ew.label :category_string, Category::NAME %>
+    </dt>
+    <dd>
+      <%= ew.collection_select(:category_string, Category.canonical.by_name, :name, :name, {:include_blank => true}) %>
+    </dd>
+    <dt>
+      <%= ew.label :relationship_string, Relationship::NAME.pluralize %>
+    </dt>
+    <dd title-"relationship">
+      <%= ew.text_field :relationship_string, autocomplete_options('relationship_in_fandom', :autocomplete_live_params => 'fandom=bookmark_external_fandom_string') %>
+    </dd>
+    <dt>
+      <%= ew.label :character_string, Character::NAME.pluralize %>
+    </dt>
+    <dd title="character">
+      <%= ew.text_field :character_string, autocomplete_options('character_in_fandom', :autocomplete_live_params => 'fandom=bookmark_external_fandom_string') %>
+    </dd>
+  </dl>
+</fieldset>

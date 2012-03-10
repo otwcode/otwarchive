@@ -5,9 +5,9 @@ class ChallengeSignup < ActiveRecord::Base
   belongs_to :pseud
   belongs_to :collection
 
-  has_many :prompts, :dependent => :destroy
-  has_many :requests, :dependent => :destroy
-  has_many :offers, :dependent => :destroy
+  has_many :prompts, :dependent => :destroy, :inverse_of => :challenge_signup
+  has_many :requests, :dependent => :destroy, :inverse_of => :challenge_signup
+  has_many :offers, :dependent => :destroy, :inverse_of => :challenge_signup
 
   has_many :offer_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'offer_signup_id', :dependent => :destroy
   has_many :request_potential_matches, :class_name => "PotentialMatch", :foreign_key => 'request_signup_id', :dependent => :destroy
@@ -15,11 +15,14 @@ class ChallengeSignup < ActiveRecord::Base
   has_many :offer_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'offer_signup_id'
   has_many :request_assignments, :class_name => "ChallengeAssignment", :foreign_key => 'request_signup_id'
 
-  before_destroy :clear_assignments
-  def clear_assignments
+  has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_signup_id'
+
+  before_destroy :clear_assignments_and_claims
+  def clear_assignments_and_claims
     # remove this signup reference from any existing assignments
     offer_assignments.each {|assignment| assignment.offer_signup = nil; assignment.save}
     request_assignments.each {|assignment| assignment.request_signup = nil; assignment.save}
+    request_claims.each {|claim| claim.destroy}
   end
 
   # we reject prompts if they are empty except for associated references
@@ -42,10 +45,14 @@ class ChallengeSignup < ActiveRecord::Base
   scope :pseud_only, select(:pseud_id)
 
   scope :order_by_pseud, joins(:pseud).order("pseuds.name")
+  
+  scope :order_by_date, order("updated_at DESC")
 
   scope :in_collection, lambda {|collection| where('challenge_signups.collection_id = ?', collection.id)}
 
   ### VALIDATION
+
+  validates_presence_of :pseud, :collection
 
   # only one signup per challenge!
   validates_uniqueness_of :pseud_id, :scope => [:collection_id], :message => ts("^You seem to already have signed up for this challenge.")
@@ -61,15 +68,12 @@ class ChallengeSignup < ActiveRecord::Base
         count = eval("@#{prompt_type}") ? eval("@#{prompt_type}.size") : eval("#{prompt_type}.size")
         unless count.between?(required, allowed)
           if allowed == 0
-            errors_to_add << t("challenge_signup.#{prompt_type}_not_allowed",
-              :default => "You cannot submit any #{prompt_type.pluralize} for this challenge.")
+            errors_to_add << ts("You cannot submit any #{prompt_type.pluralize} for this challenge.")
           elsif required == allowed
-            errors_to_add << t("challenge_signup.#{prompt_type}_mismatch",
-              :default => "You must submit exactly %{required} #{required > 1 ? prompt_type.pluralize : prompt_type} for this challenge. You currently have %{count}.",
+            errors_to_add << ts("You must submit exactly %{required} #{required > 1 ? prompt_type.pluralize : prompt_type} for this challenge. You currently have %{count}.",
               :required => required, :count => count)
           else
-            errors_to_add << t("challenge_signup.#{prompt_type}_range_mismatch",
-              :default => "You must submit between %{required} and %{allowed} #{prompt_type.pluralize} to sign up for this challenge. You currently have %{count}.",
+            errors_to_add << ts("You must submit between %{required} and %{allowed} #{prompt_type.pluralize} to sign up for this challenge. You currently have %{count}.",
               :required => required, :allowed => allowed, :count => count)
           end
         end
@@ -86,12 +90,10 @@ class ChallengeSignup < ActiveRecord::Base
   def unique_tags
     if (challenge = collection.challenge)
       errors_to_add = []
-      %w(prompts offers requests).each do |prompt_type|
+      %w(prompts requests).each do |prompt_type|
         restriction = case prompt_type
           when "prompts"
           then challenge.prompt_restriction
-          when "offers"
-          then challenge.offer_restriction
           when "requests"
           then challenge.request_restriction
         end
@@ -114,6 +116,33 @@ class ChallengeSignup < ActiveRecord::Base
           end
         end
       end
+      if self.collection.challenge_type == "GiftExchange"
+      %w(offers).each do |prompt_type|
+        restriction = case prompt_type
+          when "offers"
+          then challenge.offer_restriction
+        end
+
+        if restriction
+          prompts = instance_variable_get("@#{prompt_type}") || self.send("#{prompt_type}")
+          TagSet::TAG_TYPES.each do |tag_type|
+            if restriction.send("require_unique_#{tag_type}")
+              all_tags_used = []
+              prompts.each do |prompt|
+                new_tags = prompt.tag_set.send("#{tag_type}_taglist")
+                unless (all_tags_used & new_tags).empty?
+                  errors_to_add << ts("You have submitted more than one %{prompt_type} with the same %{tag_type} tags. This challenge requires them all to be unique.",
+                                      :prompt_type => prompt_type.singularize, :tag_type => tag_type)
+                  break
+                end
+                all_tags_used += new_tags
+              end
+            end
+          end
+        end
+      end
+      end
+
 
       unless errors_to_add.empty?
         # yuuuuuck :( but so much less ugly than define-method'ing these all
@@ -131,6 +160,17 @@ class ChallengeSignup < ActiveRecord::Base
       end
     end
   end
+  
+  def can_delete?(prompt)
+    prompt_type = prompt.class.to_s.downcase.pluralize
+    current_num_prompts = self.send(prompt_type).count
+    required_num_prompts = self.send("#{prompt_type}_num_required")
+    if current_num_prompts > required_num_prompts
+      true
+    else
+      false
+    end
+  end  
 
   ### Code for generating signup summaries
 
@@ -148,7 +188,15 @@ class ChallengeSignup < ActiveRecord::Base
   end
 
   # Write the summary to a file that will then be displayed
+  # takes about 12 minutes for yuletide2010 on beta, about 25 minutes on stage
   def self.generate_summary(collection)
+    Resque.enqueue(ChallengeSignup, collection.id)
+  end
+  @queue = :collection
+  def self.perform(collection_id)
+    self.generate_summary_in_background(Collection.find(collection_id))
+  end
+  def self.generate_summary_in_background(collection)
     tag_type, summary_tags = ChallengeSignup.generate_summary_tags(collection)
     view = ActionView::Base.new(ActionController::Base.view_paths, {})
     view.class_eval do
@@ -189,15 +237,8 @@ class ChallengeSignup < ActiveRecord::Base
 
   def user_allowed_to_see_signups?(user)
     self.collection.user_is_maintainer?(user) ||
+    self.collection.challenge_type == "PromptMeme" ||
       (self.challenge.respond_to?("user_allowed_to_see_signups?") && self.challenge.user_allowed_to_see_signups?(user))
-  end
-
-  def get_match_settings
-    if collection && collection.challenge
-      collection.challenge.potential_match_settings
-    else
-      nil
-    end
   end
 
   def byline
@@ -206,26 +247,25 @@ class ChallengeSignup < ActiveRecord::Base
 
   # Returns nil if not a match otherwise returns PotentialMatch object
   # self is the request, other is the offer
-  def match(other)
-    settings = get_match_settings
-    return nil unless settings
+  def match(other, settings=nil)
+    no_match_required = settings.nil? || settings.no_match_required?
     potential_match_attributes = {:offer_signup => other, :request_signup => self, :collection => self.collection}
     prompt_matches = []
-    unless settings.no_match_required?
+    unless no_match_required
       self.requests.each do |request|
         other.offers.each do |offer|
-          if (match = request.match(offer))
+          if (match = request.match(offer, settings))
             prompt_matches << match
           end
         end
       end
       return nil if settings.num_required_prompts == ALL && prompt_matches.size != self.requests.size
     end
-    if settings.no_match_required? || prompt_matches.size >= settings.num_required_prompts
+    if no_match_required || prompt_matches.size >= settings.num_required_prompts
       # we have a match
       potential_match_attributes[:num_prompts_matched] = prompt_matches.size
       potential_match = PotentialMatch.new(potential_match_attributes)
-      potential_match.potential_prompt_matches = prompt_matches
+      potential_match.potential_prompt_matches = prompt_matches unless prompt_matches.empty?
       potential_match
     else
       nil

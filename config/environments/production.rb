@@ -13,7 +13,7 @@ Otwarchive::Application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Sendfile"
 
   # For nginx:
-  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
+  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
 
   # If you have no front-end server that supports something like X-Sendfile,
   # just comment this out and Rails will serve the files
@@ -25,10 +25,10 @@ Otwarchive::Application.configure do
   # config.logger = SyslogLogger.new
 
   # Use a different cache store in production
-  config.cache_store = :mem_cache_store
+  config.cache_store = :mem_cache_store, 'mem.ao3.org'
   require 'memcache'
   require 'openid/store/memcache'
-  config.middleware.use 'Rack::OpenID', OpenID::Store::Memcache.new(MemCache.new("localhost"))
+  config.middleware.use 'Rack::OpenID', OpenID::Store::Memcache.new(MemCache.new("mem.ao3.org"))
 
 
   # Disable Rails's static asset server
@@ -58,5 +58,8 @@ Otwarchive::Application.configure do
 #      :sender_address => ArchiveConfig.RETURN_ADDRESS,
 #      :exception_recipients => ArchiveConfig.ERROR_ADDRESS
 #  end
+
+  ThinkingSphinx.remote_sphinx = true
+  ThinkingSphinx.updates_enabled = false
 
 end

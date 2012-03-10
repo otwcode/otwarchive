@@ -1,5 +1,0 @@
-<p class="navigation buttons">
-    <%= button_to_function t('.select_all', :default => "Select All"), "$$('input[type=checkbox]').each(function(box) {box.checked = true})" %>
-    <%= button_to_function t('.deselect_all', :default => "Deselect All"), "$$('input[type=checkbox]').each(function(box) {box.checked = false})" %> 
-    <%= submit_tag t('.edit_checked', :default => "Edit Checked") %>
-  </p>

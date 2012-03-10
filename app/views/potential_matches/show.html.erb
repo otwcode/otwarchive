@@ -1,17 +1,17 @@
+<!--FRONT END REVIEW: where is this h2?-->
 <!-- descriptions-->
-<div id="collection-page" class="profile">
+<div id="collection-page" class="collection home profile">
   <!-- /descriptions-->
   <!--subnavigation, sorting and actions-->
   <!--/subnav-->
   <!--main content-->
-  <h3>
+  <h3 class="heading">
     <%=h t('.potential_match.view', :default => "Potential Match for %{requester}: %{offerer}", 
       :requester => @potential_match.request_signup.pseud.byline, :offerer => @potential_match.offer_signup.pseud.byline) %>
   </h3>
 
-  <div class="collection meta">
-    <h3>Summary</h3>
-    <dl>
+  <div class="wrapper">
+    <dl class="meta">
       <dt>Number of requests matched: </dt>
       <dd><%= @potential_match.num_prompts_matched %></dd>
     
@@ -28,13 +28,11 @@
     </dl>
   </div>
 
-  <div class="collection preface">
-    <h3><%=h t("potential_matches.requests_for", :default => "Requests by %{requester}", :requester => @potential_match.request_signup.pseud.byline) %></h3>
-    <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => @potential_match.request_signup} %>
+
+ <%= render :partial => "challenge_signups/show_requests", :locals => {:challenge_signup => @potential_match.request_signup} %>
     
-    <h3><%=h t("potential_matches.offers_for", :default => "Offers from %{offerer}", :offerer => @potential_match.offer_signup.pseud.byline) %></h3>
-    <%= render :partial => "challenge_signups/show_offers", :locals => {:challenge_signup => @potential_match.offer_signup} %>
-  </div>
+ <%= render :partial => "challenge_signups/show_offers", :locals => {:challenge_signup => @potential_match.offer_signup} %>
+
 
   <!--/content-->
   

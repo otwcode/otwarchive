@@ -1,44 +1,72 @@
-<!--Descriptive page name, messages and instructions-->
-<h2><%=h t('.edit_multiple', :default => "Editing Multiple Works") %></h2>
-<!--/descriptions-->
-
-<!--subnav-->
-<!--/subnav-->
-
 <!--main content-->
-<%= form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %>
-  <h3>Works Edited</h3>
-  <p class="important message">
-    <%= ts "Note that your edits will be applied to <em>all</em> of these stories, <em>replacing</em> any existing values for these fields!" %>
+<h2 class="heading"><%= ts("Editing Multiple Works") %></h2>
+<%= render "users/header_navigation" %>
+
+<p class="caution">
+  Your edits will be applied to <strong>all</strong> of the following works:
+</p>
+
+<%= render "works/work_abbreviated_list", :works => @works %>
+
+<%= form_for :work, :url => update_multiple_user_works_path(@user), :html => { :method => :put } do |form| %> 
+  <p class="required message">
+    <%= ts("* Required information") %>
+    <% @works.each do |work| %>
+      <%= hidden_field_tag "work_ids[]", work.id %>
+    <% end %>
   </p>
 
-  <table summary="lists the works being mass-edited">
-    <caption>Lists the works being mass-edited.</caption>
-    <thead>
-      <tr>
-        <th scope="col">Title</th>
-        <th scope="col">Fandom</th>
-        <th scope="col">Other Tags</th>
-      </tr>
-    </thead>
-    <% for work in @works %>
-      <tr>
-      	<th scope="row">
-          <%= hidden_field_tag "work_ids[]", work.id%>
-          <%= link_to work.title, work %>
-        </th>
-        <td><%= work.fandoms.collect {|tag| link_to_tag(tag) }.join(', ') %></td>
-        <td><%= %w(characters relationships freeforms categories ratings warnings).collect {|type| work.send("#{type}")}.flatten.collect {|tag| link_to_tag(tag) }.join(', ').html_safe %></td>
-      </tr>
-    <% end %>
-  </table>
+  <div id="work-form" class="edit work post">
+    <%= render 'work_form_tags', :include_blank => true %>
+  </div>
+  
+  <fieldset>
+    <legend>Associations</legend>
+    <h3 class="landmark">Associations</h3>
+    <dl>
+      <%= render "works/work_form_pseuds", :form => form, :works => @works %>
 
-  <p class="required message"><%=h t('.required_info', :default => "* Required information") %></p>
+      <%= render "works/work_form_collections", :form => form, :works => @works %>
 
-  <div id="work-form" class="work-form"><%= render :partial => 'work_tags_form', :locals => {:include_blank => true} %></div>
+    </dl>
+  </fieldset>
+  
+  <fieldset>
+    <legend>Settings</legend>
+    <h3 class="landmark">Settings</h3>
+    <dl>
+      <dt><%= ts("Visibility") %> <%= link_to_help "registered-users" %></dt>
+      <dd>
+        <label for="work_restricted">
+          <%= ts("Only show to registered users") %>
+          <%= form.check_box :restricted %>
+        </label>
+        <label for="work_unrestricted">
+          <%= ts("Show to all") %>
+          <%= form.check_box :unrestricted %>
+        </label>
+      </dd>
+ 
+      <dt><%= form.label :language_id, ts("Language") %> <%= link_to_help "languages-help" %></dt>
+      <dd>
+        <%= form.collection_select :language_id, Language.all(:order => :short), :id, :name, {:include_blank => true} %>
+      </dd>
 
-  <p class="submit"><%= submit_tag t('.update_multiple', :default => "Update All Stories"), :confirm => "Are you sure? Remember this will replace all existing values!" %></p>
+      <dt><%= form.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
+      <dd>
+        <%= form.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, 
+            {:include_blank => true} %>
+      </dd>
+    </dl>
+  </fieldset>
+  
+  <p class="caution">
+    Your edits will <strong>replace</strong> the existing values!
+    (If you leave a field blank it will remain unchanged.)
+  </p>
+  
+  <p class="submit actions"><%= submit_tag ts("Update All Stories"), :confirm => ts("Are you sure? Remember this will replace all existing values!") %></p>
 
 <% end %>
 <!--/content-->
-
+</div>

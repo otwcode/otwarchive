@@ -1,61 +1,51 @@
-
-<ul class="navigation">
-  <li>
-    <% if params[:work_skins] %>
-      <%= link_to ts("See Site Skins Instead"), url_for(:work_skins => false) %>
-    <% else %>
-      <%= link_to ts("See Work Skins Instead"), url_for(:work_skins => true) %>
-    <% end %>
-  </li>
-</ul>
-
-<h2><%= @title %></h2>
+<h2 class="heading"><%= @title %></h2>
 
 <p class="notes">
   <% if params[:work_skins] %>
-    A work skin lets you customize the way your stories look for other readers. 
+    With work skins you can customize the way your own works are shown to others. 
   <% else %>
-    A site skin lets you change the way the archive looks in your browser and customize your reading experience.
+    With site skins you can customize <abbr title="Archive Of Our Own">AO3</abbr> for your own browser.
   <% end %>
   <%= link_to_help "skins-basics" %>
 </p>
 
 <%= render :partial => "skin_top_navigation" %>
 
-<h3 class="landmark">List of Skins</h3>
+<h3 class="landmark heading">List of Skins</h3>
 
 <% if @skins.empty? %>
   <p>
     No <%= params[:work_skins] ? "work" : "site" %> skins here yet! 
-    <% if logged_in? %>Why not try and <%= link_to ts('make one'), new_skin_path(:skin_type => params[:work_skins] ? "WorkSkin" : "Skin") %>?<% end %>
+    <% if logged_in? %>Why not try <%= link_to ts('making one'), new_skin_path(:skin_type => params[:work_skins] ? "WorkSkin" : "Skin") %>?<% end %>
   </p>
 <% else %>
-  <ul class="skins picture index">
+  <ul class="index group">
   <% for skin in @skins %>
-    <li class="skins <% if skin.editable? %>own<% end %> picture blurb">
+    <li class="skins <% if skin.editable? %>own<% end %> picture blurb group">
       <div class="header module">
-        <h4 title="title">
+        <h4 class="heading" title="title">
           <%= link_to h(skin.title), skin %>
           <span class="byline">
             by <%= skin.byline %>
-            <% if @user %>
-              <% if skin.official? %> 
-                (Approved)
-              <% elsif skin.rejected? %>
-                (Declined: <%= link_to_help "skins-approval" %> <%= skin.admin_note %>) 
-              <% elsif skin.public? %> 
-                (Not yet reviewed) <%= link_to_help "skins-approval" %>
-              <% end %>
-            <% end %>
           </span>
         </h4>
-
+		    <% if @user %>
+          <% if skin.official? %> 
+            <p class="status approved">(Approved)</p>
+          <% elsif skin.rejected? %>
+            <p class="status declined">(Declined: <%= link_to_help "skins-approval" %> <%= skin.admin_note %>)</p> 
+          <% elsif skin.public? %> 
+            <p class="status unread">(Not yet reviewed) <%= link_to_help "skins-approval" %></p>
+          <% end %>
+        <% end %>
         <div class="icon"><%= skin_preview_display(skin) %></div>
+		    <p class="datetime"><%= set_format_for_date(skin.created_at) %></p>
       </div>
       
       <!--summary/descriptions-->
-      <h6 class="landmark">Description</h6>
+      <h6 class="landmark heading">Description</h6>
       <blockquote class="userstuff summary">
+	<!--BACK END:  please enclose the text "No Description Provided" in <p>-->
         <%=raw skin.description.blank? ? h(ts("(No Description Provided)")) : strip_images(sanitize_field(skin, :description)) %>
       </blockquote>
     

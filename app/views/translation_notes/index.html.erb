@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>Listing translation notes</h2>
+<h2 class="heading">Listing translation notes</h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to 'Back to translations', translations_path %></li>
 	<li><%= link_to 'Add a new note', new_translation_note_path(:namespace => @namespace) %></li>
 </ul>

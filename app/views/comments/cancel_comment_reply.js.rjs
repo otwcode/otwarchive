@@ -1,6 +1,0 @@
-# Unhide the original navigation
-page.toggle "navigation_for_comment_#{@commentable.id}"
-
-# get rid of the comments
-page.visual_effect :blind_up, "add_comment_reply_placeholder_#{@commentable.id}"
-page.delay(1) {page.replace_html "add_comment_reply_placeholder_#{@commentable.id}", "" }

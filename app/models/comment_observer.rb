@@ -1,37 +1,38 @@
 class CommentObserver < ActiveRecord::Observer
-  
+
   # Add new comments to the inbox of the person to whom they're directed
   # Send that user a notification email
   def after_create(comment)
     comment.reload
     # eventually we will set the locale to the user's stored language of choice
-    #Locale.set ArchiveConfig.SUPPORTED_LOCALES[ArchiveConfig.DEFAULT_LOCALE]    
+    #Locale.set ArchiveConfig.SUPPORTED_LOCALES[ArchiveConfig.DEFAULT_LOCALE]
     users = []
-    
+    admins = []
+
     # notify the commenter
     if comment.comment_owner && notify_user_of_own_comments?(comment.comment_owner)
       users << comment.comment_owner
     end
     if notify_user_by_email?(comment.comment_owner) && notify_user_of_own_comments?(comment.comment_owner)
-      CommentMailer.comment_sent_notification(comment).deliver
+      CommentMailer.comment_sent_notification(comment.id).deliver
     end
-    
+
     if comment.reply_comment?
       # send notification to the owner of the original comment if not
       # the commenter
       parent_comment = comment.commentable
-      parent_comment_owner = parent_comment.comment_owner # will be nil if not a user      
-      if (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) || 
-          (parent_comment_owner && (parent_comment_owner != comment.comment_owner)) 
+      parent_comment_owner = parent_comment.comment_owner # will be nil if not a user, including if an admin
+      if (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) ||
+          (parent_comment_owner && (parent_comment_owner != comment.comment_owner))
         if !parent_comment_owner || notify_user_by_email?(parent_comment_owner)
-          CommentMailer.comment_reply_notification(parent_comment, comment).deliver
+          CommentMailer.comment_reply_notification(parent_comment.id, comment.id).deliver
         end
         if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
           add_feedback_to_inbox(parent_comment_owner, comment)
         end
-        if parent_comment_owner              
+        if parent_comment_owner
           users << parent_comment_owner
-        end    
+        end
       end
 
       # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
@@ -42,52 +43,66 @@ class CommentObserver < ActiveRecord::Observer
       end
     end
 
-    # send notification to the owner(s) of the ultimate parent 
-    if users.empty?
-      users = comment.ultimate_parent.commentable_owners
+    # send notification to the owner(s) of the ultimate parent, who can be users or admins
+    if comment.ultimate_parent.is_a?(AdminPost)
+      admins = comment.ultimate_parent.commentable_owners
+      admins.each do |admin|
+        # TODO: comments should be able to belong to an admin officially
+        # right now comment.comment_owner is nil for an admin, and going by email is not reliable
+        # unless admin == comment.comment_owner
+          AdminMailer.comment_notification(admin.id, comment.id).deliver
+        # end
+      end
     else
-      users = comment.ultimate_parent.commentable_owners - users
-    end
-    
-    users.each do |user|
-      unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
-        if notify_user_by_email?(user)
-          CommentMailer.comment_notification(user, comment).deliver
-        end
-        if notify_user_by_inbox?(user)
-          add_feedback_to_inbox(user, comment)
+      # at this point, users contains those who've already been notified
+      if users.empty?
+        users = comment.ultimate_parent.commentable_owners
+      else
+        # replace with the owners of the commentable who haven't already been notified
+        users = comment.ultimate_parent.commentable_owners - users
+      end
+      users.each do |user|
+        unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
+          if notify_user_by_email?(user)
+            CommentMailer.comment_notification(user.id, comment.id).deliver
+          end
+          if notify_user_by_inbox?(user)
+            add_feedback_to_inbox(user, comment)
+          end
         end
       end
     end
+
   end
 
   def after_update(comment)
     if comment.edited_at_changed?
       users = []
-      
+      admins = []
+
       # notify the commenter
       if comment.comment_owner && notify_user_of_own_comments?(comment.comment_owner)
         users << comment.comment_owner
       end
       if notify_user_by_email?(comment.comment_owner) && notify_user_of_own_comments?(comment.comment_owner)
-        CommentMailer.comment_sent_notification(comment).deliver
+        CommentMailer.comment_sent_notification(comment.id).deliver
       end
-      
+
       if comment.reply_comment?
         # send notification to the owner of the original comment if not the commenter
         parent_comment = comment.commentable
-        parent_comment_owner = parent_comment.comment_owner # will be nil if not a user      
-        if (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) || 
-            (parent_comment_owner && (parent_comment_owner != comment.comment_owner)) 
+        parent_comment_owner = parent_comment.comment_owner # will be nil if not a user
+        if (!parent_comment_owner && parent_comment.comment_owner_email && parent_comment.comment_owner_name) ||
+            (parent_comment_owner && (parent_comment_owner != comment.comment_owner))
           if !parent_comment_owner || notify_user_by_email?(parent_comment_owner)
-            CommentMailer.edited_comment_reply_notification(parent_comment, comment).deliver
+            CommentMailer.edited_comment_reply_notification(parent_comment.id, comment.id).deliver
           end
           if parent_comment_owner && notify_user_by_inbox?(parent_comment_owner)
             update_feedback_in_inbox(parent_comment_owner, comment)
           end
-          if parent_comment_owner              
+          if parent_comment_owner
             users << parent_comment_owner
-          end    
+          end
         end
 
         # if I'm replying to a comment you left for me, mark your comment as replied to in my inbox
@@ -98,23 +113,34 @@ class CommentObserver < ActiveRecord::Observer
         end
       end
 
-      # send notification to the owner(s) of the ultimate parent 
-      if users.empty?
-        users = comment.ultimate_parent.commentable_owners
+      # send notification to the owner(s) of the ultimate parent, who can be users or admins
+      if comment.ultimate_parent.is_a?(AdminPost)
+        admins = comment.ultimate_parent.commentable_owners
+        admins.each do |admin|
+          # TODO: comments should be able to belong to an admin officially
+          # unless admin == comment.comment_owner
+          AdminMailer.edited_comment_notification(admin.id, comment.id).deliver
+        end
       else
-        users = comment.ultimate_parent.commentable_owners - users
-      end
-      
-      users.each do |user|
-        unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
-          if notify_user_by_email?(user)
-            CommentMailer.edited_comment_notification(user, comment).deliver
-          end
-          if notify_user_by_inbox?(user)
-            update_feedback_in_inbox(user, comment)
+        # at this point, users contains those who've already been notified
+        if users.empty?
+          users = comment.ultimate_parent.commentable_owners
+        else
+          # replace with the owners of the commentable who haven't already been notified
+          users = comment.ultimate_parent.commentable_owners - users
+        end
+        users.each do |user|
+          unless user == comment.comment_owner && !notify_user_of_own_comments?(user)
+            if notify_user_by_email?(user)
+              CommentMailer.edited_comment_notification(user.id, comment.id).deliver
+            end
+            if notify_user_by_inbox?(user)
+              update_feedback_in_inbox(user, comment)
+            end
           end
         end
       end
+
     end
   end
 
@@ -124,7 +150,7 @@ class CommentObserver < ActiveRecord::Observer
       new_feedback.feedback_comment_id = comment.id
       new_feedback.save
     end
-    
+
     def update_feedback_in_inbox(user, comment)
       if (edited_feedback = user.inbox_comments.find_by_feedback_comment_id(comment.id))
         edited_feedback.update_attribute(:read, false)
@@ -133,7 +159,7 @@ class CommentObserver < ActiveRecord::Observer
       end
     end
 
-    # notify the user unless 
+    # notify the user unless
     # - they aren't a user :> (but notify them it they're an admin)
     # - they are the orphan user
     # - they have preferences set not to be notified
@@ -141,15 +167,15 @@ class CommentObserver < ActiveRecord::Observer
       user.nil? ? false : ( user.is_a?(Admin) ? :true :
         !(user == User.orphan_account || user.preference.comment_emails_off?) )
     end
-    
+
     def notify_user_by_inbox?(user)
       user.nil? || user.is_a?(Admin) ? false :
-        !(user == User.orphan_account || user.preference.comment_inbox_off?)       
+        !(user == User.orphan_account || user.preference.comment_inbox_off?)
     end
-    
+
     def notify_user_of_own_comments?(user)
       user.nil? || user.is_a?(Admin) ? false :
-        !(user == User.orphan_account || user.preference.comment_copy_to_self_off?)       
+        !(user == User.orphan_account || user.preference.comment_copy_to_self_off?)
     end
 
 end

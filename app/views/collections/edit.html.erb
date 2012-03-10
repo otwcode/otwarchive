@@ -1,17 +1,11 @@
 <!--Descriptive page name and system messages, descriptions, and instructions.-->
-<h2><%=h t('.editing_collection', :default => "Editing collection") %></h2>
+<h2 class="heading"><%=h t('.editing_collection', :default => "Editing collection") %></h2>
 <!-- /descriptions-->
 <!--subnavgiation, sorting and actions-->
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark">Edit Collection Form</h3>
+<h3 class="landmark heading">Edit Collection Form</h3>
 <%= render :partial => 'form' %>
 <!--/content-->
 
-<!--subnav-->
-<ul class="navigation" role="navigation">
-	<li><%= link_to 'Show', @collection %></li>
-	<li><%= link_to 'Back', collections_path %></li>
-</ul>
-<!--/subnav-->

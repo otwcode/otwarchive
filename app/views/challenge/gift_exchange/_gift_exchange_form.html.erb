@@ -1,13 +1,10 @@
-<h2><%= ts("Setting Up The %{title} Gift Exchange", :title => @collection.title) %></h2>
+<h2 class="heading"><%= ts("Setting Up The %{title} Gift Exchange", :title => @collection.title) %></h2>
 
-<h3><%=h 'Suggestions' %></h3>
-<ul>
+<h3 class="landmark heading"><%= ts('Notes') %></h3>
+<ul class="notes">
   <li>The more options you allow here, the more complicated your signup form will be.</li>
-  <li>If you can keep to one request and one offer, automated matching will be easier! Keep in mind a single request can include multiple fandoms. Unless you want to do fairly complicated requests, you probably don't need more than one request/offer.</li>
-  <li>If you set the "Required" value higher than the corresponding "Allowed" value, we will 
-	  automatically assume that you want the allowed value to be the same as the required value. You only need to manually
-	  set the "Allowed" number if you want more allowed than required. </li>
-  <li>If you put in specific tag options for a particular type of tag (eg, fandoms), the signup form will make members choose among them with checkboxes. If you don't put in specific tags, members will have an autocomplete form where they can enter only the single canonical tag-wrangled version of the tag. That is, if someone tries to type in "SPN" they won't get an autocomplete result; they would have to enter "Supernatural". This is how you can be sure everyone is using the same word/spelling even without making a specific list.</li>
+  <li>If you keep to one request and one offer, automated matching will be easier! A single request can include multiple fandoms. Unless you want to do fairly complicated requests, you probably don't need more than one request/offer.</li>
+  <li>You only need to set the "Allowed" number if you want more allowed than required. </li>
 </ul>
 
 <!-- /descriptions-->
@@ -15,135 +12,44 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark">Gift Exchange Settings</h3>
-
-<%= form_for([@collection, @challenge], :url => collection_gift_exchange_path(@collection)) do |f| %>
+<h3 class="landmark heading">Gift Exchange Settings</h3>
+<%= form_for([@collection, @challenge], :url => collection_gift_exchange_path(@collection), :html => {:class => "verbose create challenge"}) do |f| %>
   <%= error_messages_for @challenge %>
-  <fieldset class="preface profile">
-    <legend>Schedule</legend>
-    <h3>Schedule</h3>
-    <p class="notes">
-      Note: so that you can make sure your form looks the way you want, you and other maintainers of your collection 
-      will be able to sign up even if signup is closed. Until you mark signup open, however, no one else will 
-      see the sign up form links.
-    </p>
-    <p class="notes">
-      Currently the dates are provided <strong>only for information</strong>. You will need to manually open and close signup.
-      If your collection is set to unrevealed/anonymous, you can set dates for those as well.
-    </p>
-    <dl>
-      <dt><%= f.label :signup_open, ts("Signup open?") %></dt>
-      <dd><%= f.check_box :signup_open %></dd>
-      
-      <dt><%= f.label :time_zone, ts("Time zone")%>:</dt>
-      <dd><%= f.time_zone_select :time_zone, nil, :default => Time.zone.name %></dd>
-        
-      <dt><%= f.label :signups_open_at, ts("Signup opens")%>:</dt>
-      <dd><%= f.datetime_select :signups_open_at, :minute_step => 15, :start_year => (Time.now.year - 1) %></dd>
+  <%= render "challenge/shared/challenge_form_schedule", :f => f %>
 
-      <dt><%= f.label :signups_close_at, ts("Signup closes")%>:</dt>
-      <dd><%= f.datetime_select :signups_close_at, :minute_step => 15, :start_year => (Time.now.year - 1) %></dd>
-
-      <dt><%= f.label :assignments_due_at, ts("Assignments due")%>:</dt>
-      <dd><%= f.datetime_select :assignments_due_at, :minute_step => 15, :start_year => (Time.now.year - 1) %></dd>
-
-      <% if @collection.unrevealed? %>
-        <dt><%= f.label :works_reveal_at, ts("Works revealed")%>:</dt>
-        <dd><%= f.datetime_select :works_reveal_at, :minute_step => 15, :start_year => (Time.now.year - 1) %></dd>
-      <% end %>
-
-      <% if @collection.anonymous? %>
-        <dt><%= f.label :authors_reveal_at, ts("Authors revealed")%>:</dt>
-        <dd><%= f.datetime_select :authors_reveal_at , :minute_step => 15, :start_year => (Time.now.year - 1) %></dd>
-      <% end %>
-    </dl>
-  </fieldset>  
-
-  <fieldset class="preface profile">
+  <fieldset>
   	<legend>Requests and Offers</legend>
-  	<h3>Requests and Offers</h3>
+  	<h3 class="landmark heading">Requests and Offers</h3>
     <dl>
+      <dt><%= f.label :requests_summary_visible, ts("Requests visible?") %>: <%= link_to_help "challenge-requests-summary" %></dt>
+      <dd><%= f.check_box :requests_summary_visible %></dd>
+
       <dt><%= f.label :requests_num_required, ts("Number of requests per signup") %>:</dt>
-      <%= required_and_allowed(f, "requests") %>
+      <%= required_and_allowed(f, "requests", false) %>
 
       <dt><%= f.label :offers_num_required, ts("Number of offers per signup") %>:</dt>
-      <%= required_and_allowed(f, "offers") %>
+      <%= required_and_allowed(f, "offers", false) %>
     </dl>
   </fieldset>
 
   <!-- restrictions for requests -->
-  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => false, :show_tag_options => false} %>
+  <%= render "prompt_restrictions/prompt_restriction_form", :challenge_form => f, :is_offer => false, :show_tag_options => false, :type => "gift_exchange" %>
   
   <!-- restrictions for offers -->
-  <%= render :partial => "prompt_restrictions/prompt_restriction_form", :locals => {:challenge_form => f, :is_offer => true, :show_tag_options => true} %>
+  <%= render "prompt_restrictions/prompt_restriction_form", :challenge_form => f, :is_offer => true, :show_tag_options => true, :type => "gift_exchange" %>
 
   <!-- matching settings -->
-  <%= render :partial => "potential_match_settings/potential_match_settings_form", :locals => {:challenge_form => f} %>
+  <%= render "potential_match_settings/potential_match_settings_form", :challenge_form => f %>
 
-  <fieldset class="preface profile">
-    <legend>Signup Instructions</legend>
-    <h3>Signup Instructions</h3>
-    <p class="note">
-      Enter instructions to explain to your members how you want them to sign up, and change the labels for the fields
-      you are using if appropriate.
-    </p>
-    <p><%= allowed_html_instructions %></p>
-    <dl>
-      <dt><%= f.label :signup_instructions_general, ts("General Signup Instructions") %>:</dt>
-      <dd>
-        <%= f.text_area :signup_instructions_general, :rows => 6, :cols => 60 %>
-        <%= live_validation_for_field(:gift_exchange_signup_instructions_general, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
-        <%= generate_countdown_html("gift_exchange_signup_instructions_general", ArchiveConfig.INFO_MAX) %>        
-      </dd>
+  <!-- instructions from moderator -->
+  <%= render "challenge/shared/challenge_form_instructions", :f => f %>
 
-      <dt><%= f.label :signup_instructions_requests, ts("Request Instructions") %>:</dt>
-      <dd>
-        <%= f.text_area :signup_instructions_requests, :rows => 6, :cols => 60 %>
-        <%= live_validation_for_field(:gift_exchange_signup_instructions_requests, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
-        <%= generate_countdown_html("gift_exchange_signup_instructions_requests", ArchiveConfig.INFO_MAX) %>        
-      </dd>
-      
-      <dt><%= f.label :signup_instructions_offers, ts("Offer Instructions") %>:</dt>
-      <dd>
-        <%= f.text_area :signup_instructions_offers, :rows => 6, :cols => 60 %>
-        <%= live_validation_for_field(:gift_exchange_signup_instructions_offers, :presence => false, :maximum_length => ArchiveConfig.INFO_MAX) %>
-        <%= generate_countdown_html("gift_exchange_signup_instructions_offers", ArchiveConfig.INFO_MAX) %>        
-      </dd>
-
-      <dt><%= f.label :request_url_label, ts("Label to use for Prompt URL in requests") %>:</dt>
-      <dd><%= f.text_field :request_url_label %></dd>
-      
-      <dt><%= f.label :request_description_label, ts("Label to use for Description in requests") %>:</dt>
-      <dd><%= f.text_field :request_description_label %></dd>
-
-      <dt><%= f.label :offer_url_label, ts("Label to use for Prompt URL in offers") %>:</dt>
-      <dd><%= f.text_field :offer_url_label %></dd>
-
-      <dt><%= f.label :offer_description_label, ts("Label to use for Description in offers") %>:</dt>
-      <dd><%= f.text_field :offer_description_label %></dd>
-
-    </dl>
-  </fieldset>
-
-  <fieldset>
-  	<legend><%= ts 'Submit' %></legend> 
-    <p class="submit">
-      <%= f.submit ts('Submit') %>
-    </p>
-  </fieldset>
+  <%= submit_fieldset f %>
 
 <% end %>
 
 <!--/content-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
-  <% if @collection.challenge %>
-    <li><%= link_to ts("Delete Challenge"), eval("collection_#{challenge_class_name(@collection)}_path(@collection)"), 
-      :confirm => ts('Are you certain you want to delete the challenge from this collection? All signups, assignments, and settings will be lost. (Works will remain in the collection.)'),
-      :method => :delete %></li>
-  <% end %>
-  <li><%= link_to 'Back', collection_path(@collection) %></li>
-</ul>
+<%= render "challenge/shared/challenge_form_delete" %>
 <!--/subnav-->
-

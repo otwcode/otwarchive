@@ -1,38 +1,41 @@
 <% @chapter = chapter if defined?(chapter) %>
-<div class="meta">
-  <% unless @mobi %><h2><%= @chapter.chapter_title %></h2><% end %>
-  <% if (!@chapter.pseuds.blank? && (@chapter.pseuds != @work.pseuds)) %>
-    <!-- only display byline if different from the main byline -->
-    <p class="byline"><%= ts('Chapter by') %> <%= byline(@chapter) %></p>
-  <% end %>
 
-  <% unless @chapter.summary.blank? %>
-    <p><%= ts('Chapter Summary') %></p>
-    <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :summary) %></blockquote>
-  <% end %>
-  
-  <% unless @chapter.notes.blank? && @chapter.endnotes.blank? %>
-    <p><%= ts('Chapter Notes') %></p>
-    <% unless @chapter.notes.blank? %>
-      <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :notes) %></blockquote>
+<% unless @suppress_chapter_meta %>
+  <div class="meta group">
+    <% unless @mobi %><h2 class="heading"><%= @chapter.chapter_title.html_safe %></h2><% end %>
+    <% if (!@chapter.pseuds.blank? && (@chapter.pseuds != @work.pseuds)) %>
+      <%# only display byline if different from the main byline %>
+      <p class="byline"><%= ts('Chapter by') %> <%= byline(@chapter) %></p>
     <% end %>
-    <% unless @chapter.endnotes.blank? %>
-      <div class="endnote-link">
-        <%= ts("See the end of the chapter for") %> <% unless @chapter.notes.blank? %><%= ts("more") %><% end %> <%= link_to ts("notes"), "#endnotes#{@chapter.position}" %>
-      </div>
-    <% end %> 
-  <% end %>
-</div>
+
+    <% unless @chapter.summary.blank? %>
+      <p><%= ts('Chapter Summary') %></p>
+      <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :summary) %></blockquote>
+    <% end %>
+  
+    <% unless @chapter.notes.blank? && @chapter.endnotes.blank? %>
+      <p><%= ts('Chapter Notes') %></p>
+      <% unless @chapter.notes.blank? %>
+        <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :notes) %></blockquote>
+      <% end %>
+      <% unless @chapter.endnotes.blank? %>
+        <div class="endnote-link">
+          <%= ts("See the end of the chapter for") %> <% unless @chapter.notes.blank? %><%= ts("more") %><% end %> <%= link_to ts("notes"), "#endnotes#{@chapter.position}" %>
+        </div>
+      <% end %> 
+    <% end %>
+  </div>
+<% end %>
 
 <!--chapter content-->
 <div class="userstuff">
-  <%=raw sanitize_field(@chapter, :content) %>
+  <%=raw (defined?(@content) ? @content : sanitize_field(@chapter, :content)) %>
 </div>
 <!--/chapter content-->
 
-<% unless @chapter.endnotes.blank? %>
+<% unless @suppress_chapter_endnotes || @chapter.endnotes.blank? %>
   <div class="meta" id="endnotes<%= @chapter.position %>">
     <p><%= ts('Chapter End Notes') %></p>
-    <blockquote class="userstuff"><%=raw sanitize_field(@chapter, :endnotes) %></blockquote>
+    <blockquote class="userstuff"><%= raw sanitize_field(@chapter, :endnotes) %></blockquote>
   </div>
 <% end %>

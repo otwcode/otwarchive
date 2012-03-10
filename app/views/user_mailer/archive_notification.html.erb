@@ -1,10 +1,10 @@
-<h3><%=h "Dear Archive Users!" %></h3>
+<h3 class="heading">Dear <%= @user.login %>,</h3>
 
 <%=raw @message %>
 
 <p><%=h "Sent at:" %> <%= Time.now.to_s(:time_for_mailers) %></p>
 
-<p><%=h "Sent by:" %> <%= @admin %></p>
+<p><%=h "Sent by:" %> <%= @admin_login %></p>
 
 
 

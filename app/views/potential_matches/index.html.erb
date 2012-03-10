@@ -1,116 +1,100 @@
-<h2>Matching for <%= @collection.title %></h2>
-<% if !@settings %>
+<h2 class="heading">Matching for <%= @collection.title %></h2>
+<% if @challenge.signup_open %>
   <p class="note">
-    Your challenge doesn't currently have any match settings defined. To set them up, please
-    go to Challenge Settings and enter them in the <strong>Minimum Number To Match</strong> section. 
-    You will then be able to use the archive matching tools to help you create 
-    and send out assignments for all your challenge participants, after signup is over. 
-  </p>
-<% elsif @challenge.signup_open %>
-  <p class="note">
-    You cannot generate matches while signup is still open. After you have closed signup (in Challenge Settings),
+    You can't generate matches while signup is still open. After you have closed signup (in Challenge Settings),
     you will be able to generate potential matches here.
   </p>
 <% elsif @collection.signups.count < 2 %>
   <p class="note">
-    You cannot generate matches without at least two people signed up. :)
+    You need at least two people to sign up before you can make assignments. :)
   </p>
 <% elsif @in_progress %>
 
   <p class="note">
-    The archive is currently generating potential matches for this challenge. This process can take some time,
-    especially for a large challenge! A notification email will be sent to the collection maintainers when
+    The archive is generating potential matches for this challenge. This can take a long time,
+    especially for a large challenge! We'll send an email to the collection maintainers when
     all potential matches have been generated.
   </p>
 
   <p>
-    Currently generating potential matches for: <%= @current_position %>
+    Currently generating potential matches for: <%= @current_position %> (<%= @progress %>%)
   </p>
 
-  <ul class="navigation">
-    <li><%= link_to t("potential_matches.cancel_generate", :default => "Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></li>
-  </ul>
+  <p class="actions" role="button"><%= link_to ts("Cancel Potential Match Generation"), cancel_generate_collection_potential_matches_path(@collection) %></p>
+
+<% elsif @collection.potential_matches.empty? %>
+
+  <%= render "match_navigation", :top => true %>
+
+  <p class="note">
+    No potential matches generated yet!
+  </p>
+
+  <% if !@settings || @settings.no_match_required? %>
+    <p class="note">
+      Your challenge doesn't have any match settings defined, so the matching 
+      will be purely random. 
+      (You can adjust the assignments by hand afterwards, though!)
+      If you want participants matched up on the tags they signed up with, 
+      please update your 
+      <strong><%= link_to ts("challenge match settings"), 
+        eval("edit_collection_#{challenge_class_name(@collection)}_path(@collection, :anchor => 'match_settings')") %></strong>. 
+    </p>
+  <% end %>
 
 <% elsif @assignments_with_no_potential_requests.size > 0 %>
-  <h3>No Potential Recipients</h3>
-  <p class="note">
-    <strong>Warning!</strong> These participants have no potential <strong>recipients</strong>: no one else
-    signed up for the challenge has requested anything that matches what they have offered. 
-  </p>
-  <p class="note">
-    Every participant needs at least one potential recipient, so you will need to either
-    edit your match settings or edit their signups (or delete them). 
-    Then regenerate potential matches to continue. 
-  </p>
 
-  <ul class="navigation">
-    <li><%= link_to t("potential_matches.regenerate", :default => "Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></li>
-  </ul>
-  
-  <table>
-    <thead>
-      <tr>
-        <th scope="col">Pseud</th>
-        <th scope="col">Email</th>
-        <th scope="col">Manage</th>
-      </tr>
-    </thead>
-    
-    <% @assignments_with_no_potential_requests.each do |assignment| %>
-      <tr>
-        <th scope="row"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></th>
-        <td><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></td>
-        <td>
-          <%= link_to "Edit", edit_collection_signup_path(@collection, assignment.offer_signup) %>
-          <%= link_to t('.challenge_signups.delete', :default => "Delete"), 
-                  collection_signup_path(@collection, assignment.offer_signup), :confirm => 'Are you sure?', :method => :delete %>
-              
-        </td>
-      </tr>
-    <% end %>
-  </table>
+  <div class="matching listbox group">
+    <h3 class="heading">No Potential Recipients</h3>
+    <p class="navigation actions" role="button"><%= link_to ts("Regenerate Potential Matches"), generate_collection_potential_matches_path(@collection) %></p>
+    <p class="caution note"><strong>Warning!</strong> No one has requested anything that matches what these people have offered.</p>
+    <p class="note">Everyone needs at least one potential recipient.  Either edit your match settings or edit their signups (or delete them). Then regenerate potential matches to continue.</p>
+    <dl class="index group">
+      <% @assignments_with_no_potential_requests.each do |assignment| %>
+        <dt class="byline" title="pseud"><%= link_to assignment.offer_byline, collection_signup_path(@collection, assignment.offer_signup) %></dd>
+        <dd>
+          <ul class="actions" role="menu">
+          <li title="email"><%= mailto_link assignment.offer_signup.pseud.user,  :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></li>
+          <li><%= link_to "Edit", edit_collection_signup_path(@collection, assignment.offer_signup) %></li>
+          <li role="button"><%= link_to ts("Delete"), 
+                  collection_signup_path(@collection, assignment.offer_signup), :confirm => 'Are you sure?', :method => :delete %></li></ul>
+        </dd>
+      <% end %>
+    </dl>
+  </div>
   
 <% else %>
 
   <!-- list all the requesters with their potential matches -->
   <%= form_tag set_collection_assignments_path, :method => :put do %>
 
-    <%= render :partial => "match_navigation", :locals => {:top => true} %>
-    
-    <div class="clear"></div>
+    <%= render "match_navigation", :top => true %>
 
+    <% # the people with no one to write for - this is the hardest problem to solve %>
     <% if @assignments_with_no_request.size > 0 %>
-      <h3>Missing Recipients</h3>
+      <div class="matching listbox group">
+        <h3 class="heading">Missing Recipients</h3>
       <p class="note">
         These people could not be assigned a recipient. 
-        You may be able to assign a recipient by shuffling the assigned givers below in the
-        main assignments (in which case the giver's line will disappear from this section after you update), 
-        or you can manually assign a pinch recipient (who will then get two gifts instead of one).
-      </p>
-
-      <table summary="lists assignments with no request; you can assign a pinch recipient">
-        <caption>
-          Lists assignments with no recipient.
-        </caption> 
-        <thead>
-          <tr>
-            <th scope="col">Pseud</th>
-            <th scope="col" colspan=3>Pinch Recipient <%= link_to_help "challenge-pinch-recipient" %></th>
-          </tr>
-        </thead>
-
+        Try shuffling the assigned givers in the
+        <a href="#main-assignments">main assignments</a> (the newly matched will disappear from this section after you update), 
+        or  manually assign a pinch recipient <%= link_to_help "challenge-pinch-recipient" %></p>
+        <dl class="index group">
         <% @assignments_with_no_request.each do |assignment| %>
           <%= render :partial => "assignment_with_no_request", :locals => {:assignment => assignment} %>
         <% end %>
-      </table>
+        </dl>
+      </div>    
     <% end %>
 
+    <% # the people with no-one writing for them %>
     <% if @assignments_with_no_offer.size > 0 %>
-      <h3>Missing Givers</h3>
+      <h3 id="missing-givers">Missing Givers</h3>
       <p class="note">
-        These people could not be assigned a giver. You can shuffle the main assignments below to free someone up, or you can assign a pinch hitter. 
-        (Note: the form <em>will</em> allow you to double-assign people, but you will want to make sure they are willing to write two assignments first!)
+        These people could not be assigned a giver. You can shuffle the <a href="#main-assignments">main assignments</a> to free someone up, or you can assign a pinch hitter. 
+        (Note: the form <em>will</em> allow you to double-assign people, but remember to make sure they can write two assignments first!)
       </p>
+      <!--TABLEWATCH!!-->
       <table summary="lists assignments with no giver; you can assign a pinch hitter">
         <caption>Lists assignments with no giver.</caption>
         <thead>
@@ -128,34 +112,38 @@
         <% end %>
       </table>
     <% end %>
-
-    <h3>Main Assignments</h3>
-    <p class="note">
-      You can shuffle these assignments around as much as you want. 
-      Note that circular matches (where A is assigned to B and B is assigned to A)
-      will happen sometimes randomly. 
-    </p>
     
-    <table summary="lists assignments with giver; you can reassign">
-      <caption>Lists assignments with an assigned giver.</caption>
-      <thead>
-        <tr>
-          <th scope="col">Pseud</th>
-          <th scope="col">Giving Gift To</th>
-          <th scope="col">Assigned Giver</th>
-          <th scope="col">Potential Givers <%= link_to_help "challenge-potential-giver" %></th>
-          <th scope="col">Write-In Pinch Hitter <%= link_to_help "challenge-pinch-hitter" %></th>
-        </tr>
-      </thead>
-
-      <% @assignments_with_request_and_offer.each do |assignment| %>
-        <%= render :partial => "assignment_with_request", :locals => {:assignment => assignment} %>
-      <% end %>
-    </table>
     
-    <%= will_paginate @assignments_with_request_and_offer %>
+    <% # the successful assignments %>
+    <% if @assignments_with_request_and_offer.count > 0 %>
+      <h3 id="main-assignments">Main Assignments</h3>
+      <p class="note">
+        You can shuffle these assignments around as much as you want. 
+        Circular matches (where A is assigned to B and B is assigned to A)
+        will happen sometimes randomly. 
+      </p>
+  <!--TABLEWATCH!!-->   
+      <table summary="lists assignments with giver; you can reassign">
+        <caption>Lists assignments with an assigned giver.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Pseud</th>
+            <th scope="col">Giving Gift To</th>
+            <th scope="col">Assigned Giver</th>
+            <th scope="col">Potential Givers <%= link_to_help "challenge-potential-giver" %></th>
+            <th scope="col">Write-In Pinch Hitter <%= link_to_help "challenge-pinch-hitter" %></th>
+          </tr>
+        </thead>
 
-    <%= render :partial => "match_navigation", :locals => {:top => false} %>
+        <% @assignments_with_request_and_offer.each do |assignment| %>
+          <%= render :partial => "assignment_with_request", :locals => {:assignment => assignment} %>
+        <% end %>
+      </table>
+    
+      <%= will_paginate @assignments_with_request_and_offer %>
+    <% end %>
+
+    <%= render "match_navigation", :top => false %>
 
   <% end %>
   

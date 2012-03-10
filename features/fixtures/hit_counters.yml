@@ -1,15 +1,15 @@
 first:
-  work: first
+  work_id: 1
   hit_count: 1001
 second:
-  work: second
+  work_id: 2
   hit_count: 10
 third:
-  work: third
+  work_id: 3
   hit_count: 10000
 fourth:
-  work: fourth
+  work_id: 4
   hit_count: 0
 fifth:
-  work: fifth
+  work_id: 5
   hit_count: 2

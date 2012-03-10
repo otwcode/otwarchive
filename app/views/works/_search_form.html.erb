@@ -6,76 +6,83 @@
   <% end %>
   <dl>
   <dt>
-    <label for="refine_text"><%= ts('Full text') %>:</label>
+    <label for="refine_text"><%= ts('Full text') %>: </label> <%= link_to_help "work-search-text-help" %>
     </dt><dd>
     <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
-    <%= link_to_help "work-search-text-help" %>
+
   </dd>
   <dt>
     <label for="refine_tag"><%= ts('Tag') %>:</label>
     </dt><dd>
     <%= text_field_tag "query[tag]", @query[:tag], :id => 'refine_tag' %>
-    <%= link_to_help "work-search-text-help" %>
+   
   </dd>
   <dt>
-    <label for="refine_title"><%= ts('Title:') %>:</label>
+    <label for="refine_title"><%= ts('Title') %>:</label>
     </dt><dd>
     <%= text_field_tag "query[title]", @query[:title], :id => 'refine_title' %>
-    <%= link_to_help "work-search-text-help" %>
+
   </dd>
   <dt>
     <label for="refine_author"><%= ts('Author') %>:</label>
     </dt><dd>
     <%= text_field_tag "query[author]", @query[:author], :id => 'refine_author' %>
-    <%= link_to_help "work-search-text-help" %>
+
   </dd>
   <dt>
-    <label for="refine_word_count"><%= ts('Words') %>:</label>
+    <label for="refine_word_count"><%= ts('Words') %>: </label> <%= link_to_help "work-search-numerical-help" %>
     </dt><dd>
     <%= text_field_tag "query[words]", @query[:words], :id => 'refine_word_count' %>
-    <%= link_to_help "work-search-numerical-help" %>
+   
   </dd>
   <dt>
     <label for="refine_hit_count"><%= ts('Hits') %>:</label>
     </dt><dd>
     <%= text_field_tag "query[hits]", @query[:hits], :id => 'refine_hit_count' %>
-    <%= link_to_help "work-search-numerical-help" %>
+
   </dd>
   <dt>
     <label for="refine_kudo_count"><%= ts('Kudos') %>:</label>
     </dt><dd>
     <%= text_field_tag "query[kudos]", @query[:kudos], :id => 'refine_kudo_count' %>
-    <%= link_to_help "work-search-numerical-help" %>
+
   </dd>
   <dt>
-    <label for="refine_revised_at"><%= ts('Date') %>:</label>
+    <label for="refine_revised_at"><%= ts('Date') %>:</label>    <%= link_to_help "work-search-date-help" %>
     </dt><dd>
     <%= text_field_tag "query[date]", @query[:date], :id => 'refine_revised_at' %>
-    <%= link_to_help "work-search-date-help" %>
+ 
   </dd>
   <dt>
-    <label for="refine_language"><%= ts('Language') %>:</label>
+    <label for="refine_language"><%= ts('Language') %>:</label> <%= link_to_help "work-search-language-help" %>
     </dt><dd>
     <%= select_tag "query[language]", "<option></option>".html_safe + options_from_collection_for_select(@languages, 'name', 'name', @query[:language].blank? ? @query[:language] : @query[:language].capitalize), :id => 'refine_language' %>
-    <%= link_to_help "work-search-language-help" %>
+    
   </dd>
   <dt>
-    <label for="refine_bookmarked"><%= ts('Bookmarked') %>?</label>
+    <label for="refine_bookmarked"><%= ts('Bookmarked') %>?</label> <%= link_to_help "work-search-bookmark-help" %>
   </dt>
   <dd>
     <%= check_box_tag "query[bookmarked]", false, !@query[:bookmarked].blank?, :id => 'refine_bookmarked' %>
-    <%= link_to_help "work-search-bookmark-help" %>
+ 
   </dd>
   <dt>
     <label for="refine_recced"><%= ts('Recced') %>?</label>
   </dt>
   <dd>
     <%= check_box_tag "query[recced]", false, !@query[:recced].blank?, :id => 'refine_recced' %>
-    <%= link_to_help "work-search-bookmark-help" %>
+
   </dd>
-  </dl>
-  <p class="submit">
-    <%= submit_tag ts('Search works'), :class => 'button', :name => nil %>
-  </p>
+  <dt>
+    <label for="refine_complete"><%= ts('Complete') %>?</label>
+  </dt>
+  <dd>
+    <%= check_box_tag "query[complete]", false, !@query[:complete].blank?, :id => 'refine_complete' %>
+  </dd>
+  <dt class="landmark">Submit</dt>
+	<dd class="submit actions">
+    	<%= submit_tag ts('Search works'), :class => 'button', :name => nil %>
+  </dd>
+</dl>
 </fieldset>
 <% end %>

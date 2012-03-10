@@ -1,4 +1,4 @@
-@works
+@works @search
 @no-txn
 
 Feature: Locking works to archive users only
@@ -28,7 +28,7 @@ Scenario: Posting locked work
       And I should see the "alt" text "(Restricted)" within "h4"
     Given the work indexes are updated
     When I fill in "site_search" with "Awesomeness"
-      And I press "Search"
+      And I press "search"
     Then I should see "1 Found"
       And I should see "fandomer" within "#main"
       
@@ -40,7 +40,7 @@ Scenario: Posting locked work
     When I am on fandomer's works page
     Then I should not see "Awesomeness"
     When I fill in "site_search" with "Awesomeness"
-      And I press "Search"
+      And I press "search"
     Then I should see "0 Found"
       And I should not see "fandomer"
     

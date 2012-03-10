@@ -1,12 +1,12 @@
-<p><%=h t('.intro', :default => "The following archive notice has been sent:") %></p>
+<p><%=h ts("The following archive notice has been sent:") %></p>
 
-<p><%=h t('.subject', :default => "Subject:") %> <%= @subject %></p>
-<p><%=h t('.to_users', :default => "To users:") %> <%= @users %></p>
+<p><%=h ts("Subject:") %> <%= @subject %></p>
+<p><%=h ts("To users:") %> <%= @user_login_string %></p>
 
 <%=raw @message %>
 
-<p><%=h t('.sent_at', :default => "Sent at:") %> <%= Time.now.to_s(:time_for_mailers) %></p>
-<p><%=h t('.sent_by', :default => "Sent by:") %> <%= @admin %></p>
+<p><%=h ts("Sent at:") %> <%= Time.now.to_s(:time_for_mailers) %></p>
+<p><%=h ts("Sent by:") %> <%= @admin_login %></p>
 
 
 

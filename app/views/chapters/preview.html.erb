@@ -1,5 +1,5 @@
 <% if @work.work_skin && !Preference.disable_work_skin?(params[:style]) %>
-  <% cache("#{@work.work_skin.id}-work-skin") do %>
+  <% cache("#{@work.work_skin.id}-#{@work.work_skin.updated_at}-work-skin") do %>
     <%= render "skins/skin_style_block", :skin => @work.work_skin %>
   <% end %><!-- end cache for work skin -->
 <% end %>

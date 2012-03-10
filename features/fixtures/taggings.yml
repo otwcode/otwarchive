@@ -1,39 +1,65 @@
 tagging1:
-  tagger: not (Tag)
-  taggable: first (Work)
+  tagger_id: 1
+  tagger_type: Tag
+  taggable_id: 1
+  taggable_type: Work
 tagging2:
-  tagger: not (Tag)
-  taggable: second (Work)
+  tagger_id: 1
+  tagger_type: Tag
+  taggable_id: 2
+  taggable_type: Work
 tagging3:
-  tagger: not (Tag)
-  taggable: third (Work)
+  tagger_id: 1
+  tagger_type: Tag
+  taggable_id: 3
+  taggable_type: Work
 tagging4:
-  tagger: none (Tag)
-  taggable: first (Work)
+  tagger_id: 2
+  tagger_type: Tag
+  taggable_id: 1
+  taggable_type: Work
 tagging5:
-  tagger: none (Tag)
-  taggable: second (Work)
+  tagger_id: 2
+  tagger_type: Tag
+  taggable_id: 2
+  taggable_type: Work
 tagging6:
-  tagger: none (Tag)
-  taggable: third (Work)
+  tagger_id: 2
+  tagger_type: Tag
+  taggable_id: 3
+  taggable_type: Work
 tagging7:
-  tagger: fandom1 (Tag)
-  taggable: first (Work)
+  tagger_id: 3
+  tagger_type: Tag
+  taggable_id: 1
+  taggable_type: Work
 tagging8:
-  tagger: fandom2 (Tag)
-  taggable: second (Work)
+  tagger_id: 4
+  tagger_type: Tag
+  taggable_id: 2
+  taggable_type: Work
 tagging9:
-  tagger: fandom1 (Tag)
-  taggable: third (Work)
+  tagger_id: 3
+  tagger_type: Tag
+  taggable_id: 3
+  taggable_type: Work
 tagging10:
-  tagger: fandom1 (Tag)
-  taggable: fourth (Work)
+  tagger_id: 3
+  tagger_type: Tag
+  taggable_id: 4
+  taggable_type: Work
 tagging11:
-  tagger: fandom3 (Tag)
-  taggable: fifth (Work)
+  tagger_id: 6
+  tagger_type: Tag
+  taggable_id: 5
+  taggable_type: Work
 tagging12:
-  tagger: classic (Tag)
-  taggable: bookm3 (Bookmark)
+  tagger_id: 5
+  tagger_type: Tag
+  taggable_id: 3
+  taggable_type: Bookmark
 tagging13:
-  tagger: char1a (Tag)
-  taggable: first (Work)
+  tagger_id: 9
+  tagger_type: Tag
+  taggable_id: 1
+  taggable_type: Work

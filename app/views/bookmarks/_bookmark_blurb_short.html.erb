@@ -1,0 +1,35 @@
+<!-- This partial requires local variable 'bookmark' -->
+<li class="user<% if is_author_of?(bookmark) %> own<% end %> blurb group" role="article">
+	<div class="header module">
+  	<h5 class="byline heading">
+      <%= ts("Bookmarked by ") %>
+      <%= link_to(bookmark.pseud.byline, user_pseud_path(bookmark.pseud.user, bookmark.pseud)) %>
+    </h5>
+	   <p class="datetime"><%= set_format_for_date(bookmark.created_at) %></p>
+	   <p class="status icon">
+         <%= get_symbol_for_bookmark(bookmark) %>
+       </p>
+	</div>
+<!--tags-->
+  <% unless bookmark.tag_string.blank? %>
+    <h6 class="landmark heading"><%= ts "Bookmarker's Tags:" %></h6>
+    <ul class="tags commas">
+      <% bookmark.tags.each do |tag| %>
+        <li><%= link_to tag.name, link_to_tag_bookmarks(tag), :class => 'tag' %></li>
+      <% end %>
+    </ul>
+  <% end %>
+<!--summary-->    
+	<% unless bookmark.notes.blank? %>
+    <h6 class="landmark heading">Notes</h6>
+    <blockquote class="userstuff summary" title="notes">
+		<%=raw sanitize_field(bookmark, :notes) %>
+	  </blockquote>
+  <% end %>
+<!--actions-->
+  <% if is_author_of?(bookmark) %>
+      <%= render :partial => 'bookmarks/bookmark_owner_navi', :locals => {:bookmark => bookmark} %>
+  <% elsif logged_in_as_admin? %>
+    <%= render :partial => 'admin/admin_options', :locals => {:item => bookmark} %>
+  <% end %>
+</li>

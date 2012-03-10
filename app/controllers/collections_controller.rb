@@ -21,11 +21,11 @@ class CollectionsController < ApplicationController
       @page_subtitle = ts("created by ") + @user.login
     else
       if params[:user_id]
-        flash[:error].now = ts("We couldn't find a user by that name, sorry.")
+        flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
       elsif params[:collection_id]
-        flash[:error].now = ts("We couldn't find a collection by that name.")
+        flash.now[:error] = ts("We couldn't find a collection by that name.")
       elsif params[:work_id]
-        flash[:error].now = ts("We couldn't find that work.")
+        flash.now[:error] = ts("We couldn't find that work.")
       end
       @sort_and_filter = true
       params[:collection_filters] ||= {}
@@ -39,24 +39,25 @@ class CollectionsController < ApplicationController
   # display challenges that are currently taking signups
   def list_challenges
     @hide_dashboard = true
-    @challenge_collections = Collection.signups_open.limit(25)
+    @challenge_collections = (Collection.ge_signups_open.unmoderated.not_closed.limit(15) + Collection.pm_signups_open.unmoderated.not_closed.limit(15))    
   end
 
   def show
     @page_subtitle = @collection.title
     unless @collection
-  	  flash[:error] = t('collection_not_found', :default => "Sorry, we couldn't find the collection you were looking for.")
+  	  flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
       redirect_to collections_path and return
     end
     
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
       @works = Work.in_collection(@collection).visible.random_order.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-      visible_bookmarks = @collection.bookmarks.visible(:order => 'RAND()')
+      visible_bookmarks = @collection.approved_bookmarks.visible(:order => 'RAND()').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     else
       # show recent
       @works = Work.in_collection(@collection).visible.ordered_by_date_desc.limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
-      visible_bookmarks = @collection.bookmarks.visible(:order => 'bookmarks.created_at DESC')
+      # visible_bookmarks = @collection.approved_bookmarks.visible(:order => 'bookmarks.created_at DESC')
+      visible_bookmarks = Bookmark.in_collection(@collection).visible(:order => 'bookmarks.created_at DESC').limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD * 2)
     end
     # Having the number of items as a limit was finding the limited number of items, then visible ones within them
     @bookmarks = visible_bookmarks[0...ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD]
@@ -95,6 +96,7 @@ class CollectionsController < ApplicationController
         redirect_to(@collection)
       end
     else
+      @challenge_type = params[:challenge_type]
       render :action => "new"
     end
   end

@@ -1,27 +1,26 @@
-<div id="user-page" class="profile">
-  <!--Descriptive page name, messages and instructions-->
-  <div class="header module">
-  	<h2><%= link_to_unless_current(@user.login, @user) %>
+<!--Descriptive page name, messages and instructions-->
+  <div class="primary header module">
+  	<h2 class="heading"><%= link_to_unless_current(@user.login, @user) %>
   	</h2>
   	<p><%= icon_display(@user) %></p>
   <!--/descriptions-->
 
   <!--subnav-->
-    <ul class="navigation" role="navigation">
+    <ul class="sorting actions" role="menu">
       <li><%= link_to "Sort by name", url_for(:sort => "name") %></li>
       <li><%= link_to "Sort by count", url_for(:sort => "count") %></li>
     </ul>
   </div>
   <!--/subnav-->
   
-  <h1>Author Browsing (Alpha)</h1>
+  <h3 class="heading">Author Browsing (Alpha)</h3>
 
   <!--main content-->
 
   <% unless @co_authors.nil? || @co_authors.length == 0 %>
-  <div class="coauthor module" id="user-coauthors">
-    <h3><%=h ts("Co-Authors") %></h3>
-    <ul class="index">
+  <div class="coauthor listbox group" id="user-coauthors">
+    <h3 class="heading"><%=h ts("Co-Authors") %></h3>
+    <ul class="index group">
       <% for pseud in @co_authors %>
         <li>
           <%= link_to pseud.name, [pseud.user, pseud] %>
@@ -34,9 +33,9 @@
 
   <% for tag_type in @tag_types %>
     <% unless @tags[tag_type].blank? %>
-    <div class="#{tag_type.downcase} module" id="user-#{tag_type.downcase.pluralize}">
-      <h3><%=h ts(tag_type.pluralize) %></h3>
-      <ul class="index">
+    <div class="#{tag_type.downcase} listbox group" id="user-#{tag_type.downcase.pluralize}">
+      <h3 class="heading"><%=h ts(tag_type.pluralize) %></h3>
+      <ul class="index group">
         <% @tags[tag_type].each_with_index do |tag, i| %>
           <% if !params["expand_#{tag_type.downcase.pluralize}"] && 
               i > (ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD - 1) %>
@@ -54,11 +53,11 @@
           </li>
        <% end %>
        <% if @tags[tag_type].length > ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD %> 
-          <li>
+          <li class="navigation actions" role="button">
             <% if params["expand_#{tag_type.downcase.pluralize}"] %>
-            <%= link_to "< Hide full list", [@user, @author], :id => "expandable-#{tag_type.downcase}-link" %>
+            <%= link_to "Hide full list", [@user, @author], :id => "expandable-#{tag_type.downcase}-link" %>
             <% else %>
-            <%= link_to "> Expand full list", url_for("expand_#{tag_type.downcase.pluralize}" => true), 
+            <%= link_to "Expand full list", url_for("expand_#{tag_type.downcase.pluralize}" => true), 
                 :id => "expandable-#{tag_type.downcase}-link" %>
             <% end %>
           </li>

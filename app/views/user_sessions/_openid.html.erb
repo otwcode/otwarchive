@@ -2,17 +2,16 @@
 <% @user_session = UserSession.new unless @user_session %>
 <%= form_for @user_session do %>
   <p>
-    <%= link_to_remote ts('Log in using User Name and Password'),
-           {:url => {:controller => :user_sessions, :action => 'passwd'}},
-           :href => login_path %>
+    <%= link_to ts('Log in using User Name and Password'),
+           {:controller => :user_sessions, :action => 'passwd'}, :remote => true %>
   </p>
   <p>
     <%= hidden_field_tag 'use_openid', true %>
     <%= label_tag 'openid_url', 'Log in with OpenID:' %><br />
-    <%= image_tag("openid.png", :alt => ts('The OpenID logo. Represented by a stylised "O" crossding over with a sideways "I".'), :class => 'openid') %> 
+    <%= image_tag("legacy/openid.png", :alt => ts('The OpenID logo. Represented by a stylised "O" crossding over with a sideways "I".'), :class => 'openid') %> 
     <%= text_field_tag "openid_url", @openid_url %>
   </p>
-  <p class="submit">
+  <p class="submit actions">
     <%= submit_tag 'Log in', :class => 'submit' %>
   </p>
 <% end %>

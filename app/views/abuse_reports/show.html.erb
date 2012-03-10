@@ -1,31 +1,32 @@
-<!--Descriptive page name, messages and instructions--><h2><%=h t('.abuse_report', :default => "Abuse Report") %> <%= @abuse_report.id %></h2>
+<!--Descriptive page name, messages and instructions--><h2 class="heading"><%=h t('.abuse_report', :default => "Abuse Report") %> <%= @abuse_report.id %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
-	<li><%= link_to t('.index_link', :default => 'All abuse reports'), abuse_reports_path %></li>
+<ul class="navigation actions" role="navigation">
+	<li><%= link_to ts("All abuse reports"), abuse_reports_path %></li>
 </ul>
 <!--/subnav-->
 
 <!--main content-->
-<!--FRONT END, should this be a table or should it be an inbox?-->
+<!--FRONT END, should this be a table or should it be an inbox?
+need to see some realdata to know, suspect inbox-->
 <div class="wrapper">
 	<table id="abuse_report_table" summary="">
-		<caption><%=h t('.description', :default => "Detailed abuse report") %></caption>
+		<caption><%=ts("Detailed abuse report") %></caption>
 		<tr>
-			<th scope="row"><%=h t('.from', :default => "From") %></th>
-			<td><%= @abuse_report.email.blank? ? t('.abuse_reports.anonymous', :default => '(Anonymous)') : mail_to(@abuse_report.email) %></td>
+			<th scope="row"><%=ts("From") %></th>
+			<td><%= @abuse_report.email.blank? ? ts("Anonymous") : mail_to(@abuse_report.email) %></td>
 		</tr>
 		<tr>
-			<th scope="row"><%=h t('.regarding', :default => "Regarding") %></th>
+			<th scope="row"><%=ts("Regarding") %></th>
 			<td><%= link_to @abuse_report.url, @abuse_report.url %></td>
 		</tr>
 		<tr>
-			<th scope="row"><%=h t('.reported', :default => "Reported") %></th>
+			<th scope="row"><%=ts("Reported") %></th>
 			<td><%= time_ago_in_words @abuse_report.created_at %></td>
 		</tr>
 		<tr>
-			<th scope="row"><%=h t('.statement', :default => "Statement") %></th>
+			<th scope="row"><%=ts("Statement") %></th>
 			<td class="userstuff"><%=raw sanitize_field(@abuse_report, :comment) %></td>
 		</tr>
 	</table>
@@ -33,7 +34,7 @@
 <!--/content-->
 
 <!--subnav-->
-<ul class="navigation" role="navigation">
-	<li><%= link_to t('.index_link', :default => 'All abuse reports'), abuse_reports_path %></li>
+<ul class="navigation actions" role="navigation">
+	<li><%= link_to ts("All abuse reports"), abuse_reports_path %></li>
 </ul>
 <!--/subnav-->

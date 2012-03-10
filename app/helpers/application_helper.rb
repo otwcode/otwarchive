@@ -4,13 +4,13 @@ module ApplicationHelper
   
   include HtmlCleaner
 
-	# Generates class names for the main div in the application layout
-	def classes_for_main
+  # Generates class names for the main div in the application layout
+  def classes_for_main
     class_names = controller.controller_name + '-' + controller.action_name
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
-    class_names += " sidebar" if show_sidebar
+    class_names += " dashboard" if show_sidebar
     class_names
-	end
+  end
 
   # A more gracefully degrading link_to_remote.
   def link_to_remote(name, options = {}, html_options = {})
@@ -20,17 +20,25 @@ module ApplicationHelper
     
     link_to_function(name, remote_function(options), html_options)
   end
-  
-  def span_if_current(link_to_default_text, path)
-    translation_name = "layout.header." + link_to_default_text.gsub(/\s+/, "_")
-    link = link_to_unless_current(h(t(translation_name, :default => link_to_default_text)), path)
-    current_page?(path) ? "<span class=\"current\">#{link}</span>".html_safe : link
+
+  # This is used to make the current page we're on (determined by the path or by the specified condition) is a span with class "current" 
+  def span_if_current(link_to_default_text, path, condition=nil)
+    is_current = condition.nil? ? current_page?(path) : condition
+    text = ts(link_to_default_text)
+    is_current ? "<span class=\"current\">#{text}</span>".html_safe : link_to(text, path)
   end
   
-  def allowed_html_instructions(show_list = true)
-    h(ts("Plain text with limited html")) + 
+  def link_to_rss(link_to_feed)
+    link_to content_tag(:span, ts("Subscribe to the feed")), link_to_feed, :title => "subscribe to feed", :class => "rss"
+  end
+  
+  #1: default shows just the link to help
+  #2: show_text = true: shows "plain text with limited html" and link to help
+  #3 show_list = true: plain text and limited html, link to help, list of allowed html
+  def allowed_html_instructions(show_list = false, show_text=true)
+    (show_text ? h(ts("Plain text with limited html")) : ''.html_safe) + 
     link_to_help("html-help") + (show_list ? 
-    "<br /><code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
+    "<code>a, abbr, acronym, address, [alt], [axis], b, big, blockquote, br, caption, center, cite, [class], code, 
       col, colgroup, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, [height], hr, [href], i, img, 
       ins, kbd, li, [name], ol, p, pre, q, s, samp, small, span, [src], strike, strong, sub, sup, table, tbody, td, 
       tfoot, th, thead, [title], tr, tt, u, ul, var, [width]</code>" : "").html_safe
@@ -57,7 +65,7 @@ module ApplicationHelper
   # and show only the authors when in preview_mode, unless they're empty
   def byline(creation, options={})
     if creation.respond_to?(:anonymous?) && creation.anonymous?
-      anon_byline = h(ts("Anonymous"))
+      anon_byline = ts("Anonymous")
       if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
         anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
         end
@@ -80,25 +88,68 @@ module ApplicationHelper
         external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
         external_creatorships.each do |ec|
           archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
-          archivists[archivist_pseud] = ec.external_author_name.name
+          archivists[archivist_pseud] = ec.author_name
         end
       end
     
       pseuds.collect { |pseud| 
         archivists[pseud].nil? ? 
             pseud_link(pseud) :
-            archivists[pseud] + ts("[archived by") + pseud_link(pseud) + "]"
+            archivists[pseud] + " [" + ts("archived by %{name}", :name => pseud_link(pseud)) + "]"
       }.join(', ').html_safe
     end
   end
 
   def pseud_link(pseud)
     if @downloading
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false))
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud, :only_path => false), :rel => "author")
     else
-      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author")
+      link_to(pseud.byline, user_pseud_path(pseud.user, pseud), :class => "login author", :rel => "author")
     end
   end
+  
+   # A plain text version of the byline, for when we don't want to deliver a linkified version.
+  def text_byline(creation, options={})
+    if creation.respond_to?(:anonymous?) && creation.anonymous?
+      anon_byline = ts("Anonymous")
+      if (logged_in_as_admin? || is_author_of?(creation)) && !options[:visibility] == 'public'
+        anon_byline += " [".html_safe + non_anonymous_byline(creation) + "]".html_safe
+        end
+      return anon_byline
+    end
+    non_anonymous_text_byline(creation)
+  end
+      
+  def non_anonymous_text_byline(creation)
+    if creation.respond_to?(:author)
+      creation.author
+    else
+      pseuds = []
+      pseuds << creation.authors if creation.authors
+      pseuds << creation.pseuds if creation.pseuds && (!@preview_mode || creation.authors.blank?)
+      pseuds = pseuds.flatten.uniq.sort
+    
+      archivists = {}
+      if creation.is_a?(Work)
+        external_creatorships = creation.external_creatorships.select {|ec| !ec.claimed?}
+        external_creatorships.each do |ec|
+          archivist_pseud = pseuds.select {|p| ec.archivist.pseuds.include?(p)}.first
+          archivists[archivist_pseud] = ec.external_author_name.name
+        end
+      end
+    
+      pseuds.collect { |pseud| 
+        archivists[pseud].nil? ? 
+            pseud_text(pseud) :
+            archivists[pseud] + ts("[archived by") + pseud_text(pseud) + "]"
+      }.join(', ').html_safe
+    end
+  end
+
+  def pseud_text(pseud)
+      pseud.byline
+  end
+
 
   # Currently, help files are static. We may eventually want to make these dynamic? 
   def link_to_help(help_entry, link = '<span class="symbol question"><span>?</span></span>'.html_safe)
@@ -111,7 +162,7 @@ module ApplicationHelper
       help_file = "#{ArchiveConfig.HELP_DIRECTORY}/#{help_entry}.html"
     end
     
-    link_to_ibox(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question").html_safe
+    " ".html_safe + link_to_ibox(link, :for => help_file, :title => help_entry.split('-').join(' ').capitalize, :class => "symbol question").html_safe
   end
   
   # Inserts the flash alert messages for flash[:key] wherever 
@@ -127,25 +178,22 @@ module ApplicationHelper
   # The resulting HTML will look like this:
   #       <div class="flash error">OMG ERRORZ AIE</div>
   #
-  # The CSS classes are specified in archive_core.css.
+  # The CSS classes are specified in system-messages.css.
   #
   # You can also have multiple possible flash alerts in a single location with:
-  #       <%= flash_div :error, :warning, :notice %>
+  #       <%= flash_div :error, :caution, :notice %>
   # (These are the three varieties currently defined.) 
   #
   def flash_div *keys
     keys.collect { |key| 
-      if flash[key] 
-        content_tag(:div, h(flash[key]), :class => "flash #{key}") if flash[key] 
+      if flash[key]
+        if flash[key].is_a?(Array)
+          content_tag(:div, content_tag(:ul, flash[key].map {|flash_item| content_tag(:li, h(flash_item))}.join("\n").html_safe), :class => "flash #{key}") 
+        else
+          content_tag(:div, h(flash[key]), :class => "flash #{key}") 
+        end
       end
     }.join.html_safe
-  end
-
-  # Gets an error for a given field if it exists. 
-  def flash_field(fieldname)
-    if flash[fieldname]
-      content_tag(:span, h(flash[fieldname]), :class => "fielderror").html_safe
-    end
   end
   
   # For setting the current locale
@@ -175,8 +223,8 @@ module ApplicationHelper
       else
         direction = options[:desc_default] ? 'DESC' : 'ASC'
       end
-      link_to_unless condition, ((direction == 'ASC' ? '&#8593;<span class="landmark">ascending</span>&#160;' : '&#8595;<span class="landmark">descending</span>&#160;') + title).html_safe, 
-          request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => css_class}
+      link_to_unless condition, ((direction == 'ASC' ? '&#8593;&#160;' : '&#8595;&#160;') + title).html_safe, 
+          request.parameters.merge( {:sort_column => column, :sort_direction => direction} ), {:class => css_class, :title => (direction == 'ASC' ? ts('sort up') : ts('sort down'))}
     else
       link_to_unless params[:sort_column].nil?, title, url_for(params.merge :sort_column => nil, :sort_direction => nil)
     end
@@ -197,82 +245,50 @@ module ApplicationHelper
   # check for pages that allow tiny_mce before loading the massive javascript
   def allow_tinymce?(controller)
     %w(admin_posts archive_faqs known_issues chapters works).include?(controller.controller_name) &&
-      %w(new edit update).include?(controller.action_name)
+      %w(new create edit update).include?(controller.action_name)
   end
 
   def params_without(name)
     params.reject{|k,v| k == name}
   end
 
-  # character counter helpers
-  # countdown should count newlines as "\r\n" combos, regardless of the OS and browsers' whim;
-  # so we count any single "\n"s and "\r"s as "\r\n", which is what they'd end up as in the db anyway
-  def countdown_field(field_id, update_id, max, options = {})
-    function = "value = $F('#{field_id}'); value=(value.replace(/\\r\\n/g,'\\n')).replace(/\\r|\\n/g,'\\r\\n'); $('#{update_id}').innerHTML = (#{max} - value.length);"
-    count_field_tag(field_id, function, options)
-  end
-  
-  def count_field(field_id, update_id, options = {})
-    function = "$('#{update_id}').innerHTML = $F('#{field_id}').length;"
-    count_field_tag(field_id, function, options)
-  end
-  
-  def count_field_tag(field_id, function, options = {})  
-    out = javascript_tag function
-    default_option = {:frequency => 0.25}
-    options = default_option.merge(options)
-    out += observe_field(field_id, options.merge(:function => function))
-    return out
-  end
-  
+  # see: http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow
   def generate_countdown_html(field_id, max) 
-    generated_html = "<p class=\"character_counter\">".html_safe
-    generated_html += "<span id=\"#{field_id}_counter\">?</span>".html_safe
-    generated_html += countdown_field(field_id, field_id + "_counter", max) + " ".html_safe + h(ts('characters left'))
-    generated_html += "</p>".html_safe
-    return generated_html
+    max = max.to_s
+    span = content_tag(:span, max, :id => "#{field_id}_counter", "data-maxlength" => max, "aria-live" => "polite", "aria-valuemax" => max, "aria-valuenow" => max)
+    content_tag(:p, span + h(ts(' characters left')), :class => "character_counter")
   end
   
-  def autocomplete_text_field(fieldname, options={})
-    ("\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
-    '<img src="/images/spinner.gif" alt="Working..." /></span>' +
-    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>").html_safe +
-    javascript_tag("var autocomplete_for_#{fieldname} = new Ajax.Autocompleter('#{fieldname}', 
-                            '#{fieldname}_auto_complete', 
-                            '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
-                            { 
-                              indicator: 'indicator_#{fieldname}',
-                              frequency: #{options[:frequency] ? options[:frequency] : '0.4'},
-                              minChars: #{options[:min_chars] ? options[:min_chars] : '3'},
-                              paramName: '#{fieldname}',
-                              parameters: 'fieldname=#{fieldname}#{options[:extra_params] ? '&' + options[:extra_params] : ''}',
-                              fullSearch: true,
-                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}'
-                              #{options[:no_comma] ? '' : ', afterUpdateElement: addCommaToField'}
-                              #{options[:auto_params] ? ", autoParams: #{options[:auto_params]}" : ''}
-                            });")    
+  # expand/contracts all expand/contract targets inside its nearest parent with the target class (usually index or listbox etc) 
+  def expand_contract_all(target="index")
+    expand_all = content_tag(:a, ts("Expand All"), :href=>"#", :class => "expand_all", "target_class" => target, :role => "button")
+    contract_all = content_tag(:a, ts("Contract All"), :href=>"#", :class => "contract_all", "target_class" => target, :role => "button")
+    content_tag(:span, expand_all + "\n".html_safe + contract_all, :class => "actions hidden showme", :role => "menu")
   end
   
-  # Trying out a way of sending the tag type to the autocomplete
-  # controller so that it can return the right class of results
-  def autocomplete_text_field_with_type(object, fieldname, options={})
-    ("\n<span id=\"indicator_#{fieldname}\" style=\"display:none\">" +
-    '<img src="/images/spinner.gif" alt="Working..." /></span>' +
-    "\n<div class=\"auto_complete\" id=\"#{fieldname}_auto_complete\"></div>").html_safe +
-    javascript_tag("new Ajax.Autocompleter('#{fieldname}', 
-                            '#{fieldname}_auto_complete', 
-                            '/autocomplete/#{options[:methodname].blank? ? fieldname : options[:methodname]}', 
-                            { 
-                              indicator: 'indicator_#{fieldname}',
-                              minChars: 2,
-                              paramName: '#{fieldname}',
-                              parameters: 'fieldname=#{fieldname}&type=#{object.type}',
-                              fullSearch: true,
-                              tokens: '#{ArchiveConfig.DELIMITER_FOR_INPUT}'
-                              #{options[:no_comma] ? '' : ', afterUpdateElement: addCommaToField'}
-                            });")    
+  # Sets up expand/contract/shuffle buttons for any list whose id is passed in
+  # See the jquery code in application.js
+  # Note that these start hidden because if javascript is not available, we
+  # don't want to show the user the buttons at all.
+  def expand_contract_shuffle(list_id, shuffle=true)
+    ('<span class="action expand hidden" title="expand" action_target="#' + list_id + '"><a href="#" role="button">&#8595;</a></span>
+    <span class="action contract hidden" title="contract" action_target="#' + list_id + '"><a href="#" role="button">&#8593;</a></span>').html_safe +
+    (shuffle ? ('<span class="action shuffle hidden" title="shuffle" action_target="#' + list_id + '"><a href="#" role="button">&#8646;</a></span>') : '').html_safe
   end
   
+  # returns the default autocomplete attributes, all of which can be overridden
+  # note: we do this and put the message defaults here so we can use translation on them
+  def autocomplete_options(method, options={})
+    {      
+      :class => "autocomplete",
+      :autocomplete_method => (method.is_a?(Array) ? method.to_json : "/autocomplete/#{method}"),
+      :autocomplete_hint_text => ts("Start typing for suggestions!"),
+      :autocomplete_no_results_text => ts("(No suggestions found)"),
+      :autocomplete_min_chars => 1,
+      :autocomplete_searching_text => ts("Searching...")
+    }.merge(options)
+  end
+
   # see http://asciicasts.com/episodes/197-nested-model-form-part-2
   def link_to_add_section(linktext, form, nested_model_name, partial_to_render, locals = {})
     new_nested_model = form.object.class.reflect_on_association(nested_model_name).klass.new
@@ -281,15 +297,17 @@ module ApplicationHelper
       form.fields_for(nested_model_name, new_nested_model, :child_index => child_index) {|child_form|
         render(:partial => partial_to_render, :locals => {:form => child_form, :index => child_index}.merge(locals))
       }
-    link_to_function(linktext, "add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")")
+    link_to_function(linktext, "add_section(this, \"#{nested_model_name}\", \"#{escape_javascript(rendered_partial_to_add)}\")", :class => "hidden showme")
   end
 
+  # see above
   def link_to_remove_section(linktext, form, class_of_section_to_remove="removeme")
     form.hidden_field(:_destroy) + "\n" +
-    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")")
+    link_to_function(linktext, "remove_section(this, \"#{class_of_section_to_remove}\")", :class => "hidden showme")
   end
   
   def time_in_zone(time, zone=nil, user=User.current_user)
+    return ts("(no time specified)") if time.blank?
     zone = ((user && user.is_a?(User) && user.preference.time_zone) ? user.preference.time_zone : Time.zone.name) unless zone
     time_in_zone = time.in_time_zone(zone)
     time_in_zone_string = time_in_zone.strftime('<abbr class="day" title="%A">%a</abbr> <span class="date">%d</span> 
@@ -313,69 +331,177 @@ module ApplicationHelper
   
   def mailto_link(user, options={})
     "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_NAME}]#{options[:subject]}\" class=\"mailto\">
-      <img src=\"/images/envelope_icon.gif\" alt=\"#{h(user.login)}'s email\">
+      <img src=\"/images/envelope_icon.gif\" alt=\"email #{h(user.login)}\">
     </a>".html_safe
   end
-  
-  # toggle an options (scrollable checkboxes) section of a form to show all of the options
-  def options_toggle(options_id, options_size)
-    toggle_show = content_tag(:a, ts("Show all %{options_size} options", :options_size => options_size), 
-                              :class => "toggle", :id => "#{options_id}_show", 
-                              :onclick => "$('#{options_id}').writeAttribute('class', 'options all');
-                                           $('#{options_id}_hide').show();
-                                           this.hide();")
 
-    toggle_hide = content_tag(:a, ts("Collapse options"), :style => "display: none;",
-                              :class => "toggle", :id => "#{options_id}_hide", 
-                              :onclick => "$('#{options_id}').writeAttribute('class', 'options#{options_size > (ArchiveConfig.OPTIONS_TO_SHOW *   3) ? ' many' : ''}');
-                                           $('#{options_id}_show').show();
-                                           this.hide();")
-
-    toggle = content_tag(:p, toggle_show + "\n".html_safe + toggle_hide)
+  # these two handy methods will take a form object (eg from form_for) and an attribute (eg :title or '_destroy')
+  # and generate the id or name that Rails will output for that object
+  def field_attribute(attribute)
+    attribute.to_s.sub(/\?$/,"")
   end
 
-  # create a scrollable checkboxes section for a form
+  def name_to_id(name)
+    name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
+  end
+  
+  def field_id(form, attribute)
+    name_to_id(field_name(form, attribute))
+  end
+
+  def field_name(form, attribute)
+    "#{form.object_name}[#{field_attribute(attribute)}]"
+  end
+  
+  def nested_field_id(form, nested_object, attribute)
+    name_to_id(nested_field_name(form, nested_object, attribute))
+  end
+  
+  def nested_field_name(form, nested_object, attribute)
+    "#{form.object_name}[#{nested_object.class.table_name}_attributes][#{nested_object.id}][#{field_attribute(attribute)}]"
+  end
+  
+  
+  # toggle an checkboxes (scrollable checkboxes) section of a form to show all of the checkboxes
+  def checkbox_section_toggle(checkboxes_id, checkboxes_size, options = {})
+    toggle_show = content_tag(:a, ts("Show all %{checkboxes_size} checkboxes", :checkboxes_size => checkboxes_size), 
+                              :class => "toggle #{checkboxes_id}_show") + "\n".html_safe
+
+    toggle_hide = content_tag(:a, ts("Collapse checkboxes"), :style => "display: none;",
+                              :class => "toggle #{checkboxes_id}_hide", :href => "##{checkboxes_id}") +
+                              "\n".html_safe
+    
+    css_class = checkbox_section_css_class(checkboxes_size)
+ 
+    javascript_bits = content_for(:footer_js) {
+      javascript_tag("$j(document).ready(function(){\n" +
+        "$j('.#{checkboxes_id}_show').click(function() {\n" +
+          "$j('##{checkboxes_id}').attr('class', 'options index all');\n" + 
+          "$j('.#{checkboxes_id}_hide').show();\n" +
+          "$j('.#{checkboxes_id}_show').hide();\n" +
+        "});" + "\n" + 
+        "$j('.#{checkboxes_id}_hide').click(function() {\n" +
+          "$j('##{checkboxes_id}').attr('class', '#{css_class}');\n" +
+          "$j('.#{checkboxes_id}_show').show();\n" +
+          "$j('.#{checkboxes_id}_hide').hide();\n" +
+        "});\n" +
+      "})")
+    }
+
+    toggle = content_tag(:p, 
+      (options[:no_show] ? "".html_safe : toggle_show) + 
+      toggle_hide + 
+      (options[:no_js] ? "".html_safe : javascript_bits), :class => "actions")
+  end
+  
+  # FRONT END: is this and the toggle now formatted properly? (NB in the signup form this is currently displaying to the left of the inline checkboxes) I suspect this is a listbox
+  #
+  # create a scrollable checkboxes section for a form that can be toggled open/closed
   # form: the form this is being created in
-  # fieldname: the fieldname for the field being filled in by the checkboxes -- eg "work[tagnames][]"
-  # id: the base id for the checkbox fields -- eg "work_tagnames"
-  # options: the array of options (which should be objects of some sort)
-  # options_checked_method: a method that can be run on the object of the form to get back a list 
+  # attribute: the attribute being set 
+  # choices: the array of options (which should be objects of some sort)
+  # checked_method: a method that can be run on the object of the form to get back a list 
   #         of currently-set options
-  # option_name_method: a method that can be run on each individual option to get its pretty name for labelling
+  # name_method: a method that can be run on each individual option to get its pretty name for labelling (typically just "name")
+  # value_method: a value that can be run to get the value of each individual option
+  # 
   #
   # See the prompt_form in challenge signups for example of usage
-  def options_section(form, fieldname, id, options, options_checked_method, option_name_method="name", option_value_method="id")
-    size = options.size
-    options_id = "#{id}_options"
+  def checkbox_section(form, attribute, choices, options = {})
+    options = {
+      :checked_method => nil, 
+      :name_method => "name", 
+      :name_helper_method => nil, # alternative: pass a helper method that gets passed the choice
+      :extra_info_method => nil, # helper method that gets passed the choice, for any extra information that gets attached to the label
+      :value_method => "id", 
+      :disabled => false,
+      :include_toggle => true,
+      :checkbox_side => "left",
+      :include_blank => true,
+      :concise => false # specify concise to invoke alternate formatting for skimmable lists (two-column in default layout)
+    }.merge(options)
     
-    options_checkboxes = options.map do |option|
-      checkbox_id = "#{id}_#{option.id}"
-      checkbox_is_checked = form.object.send(options_checked_method).include?(option)
-      checkbox_name = option.send(option_name_method)
-      checkbox_value = option.send(option_value_method)
-      checkbox_and_label = label_tag checkbox_id do 
-        check_box_tag(fieldname, checkbox_value, checkbox_is_checked, :id => checkbox_id) +
-        checkbox_name
+    field_name = options[:field_name] || field_name(form, attribute)
+    field_name += '[]'
+    base_id = options[:field_id] || field_id(form, attribute)
+    checkboxes_id = "#{base_id}_checkboxes"
+    opts = options[:disabled] ? {:disabled => "true"} : {}
+    already_checked = case 
+      when options[:checked_method].is_a?(Array)
+        options[:checked_method]
+      when options[:checked_method].nil?
+        []
+      else
+        form.object.send(options[:checked_method]) || []
+      end
+    
+    checkboxes = choices.map do |choice|      
+      is_checked = !options[:checked_method] || already_checked.empty? ? false : already_checked.include?(choice)
+      display_name = case
+        when options[:name_helper_method]
+          eval("#{options[:name_helper_method]}(choice)")
+        else
+          choice.send(options[:name_method]).html_safe
+        end
+      value = choice.send(options[:value_method])
+      checkbox_id = "#{base_id}_#{name_to_id(value)}"
+      checkbox = check_box_tag(field_name, value, is_checked, opts.merge({:id => checkbox_id}))
+      checkbox_and_label = label_tag checkbox_id, :class => "action" do 
+        options[:checkbox_side] == "left" ? checkbox + display_name : display_name + checkbox
+      end
+      if options[:extra_info_method]
+        checkbox_and_label = options[:checkbox_side] == "left" ? checkbox_and_label + eval("#{options[:extra_info_method]}(choice)") : eval("#{options[:extra_info_method]}(choice)") + checkbox_and_label
       end
       content_tag(:li, checkbox_and_label, :class => cycle("odd", "even", :name => "tigerstriping"))
     end.join("\n").html_safe
+    checkboxes_ul = content_tag(:ul, checkboxes)
 
     # reset the tiger striping
     reset_cycle("tigerstriping")
 
-    # if there are only a few options, don't show the scrolling and the toggle
-    if size <= ArchiveConfig.OPTIONS_TO_SHOW
-      content_tag(:ul, options_checkboxes, :id => options_id) + hidden_field_tag(fieldname, " ")
-    else
-      # return the toggle, the options in a scrollable field, and a hidden field 
-      # to ensure the results are sent even if the user has unchecked all the options
-      options_toggle(options_id, size) + 
-        "\n".html_safe +
-        content_tag(:ul, options_checkboxes, :id => options_id, 
-                    :class => "options#{size > (ArchiveConfig.OPTIONS_TO_SHOW * 3) ? ' many' : ''}") + 
-        "\n".html_safe +
-        hidden_field_tag(fieldname, " ")
+    # if there are only a few choices, don't show the scrolling and the toggle
+    size = choices.size
+    css_class = checkbox_section_css_class(size, options[:concise])
+    top_toggle = "".html_safe
+    bottom_toggle = "".html_safe
+    if options[:include_toggle] && !options[:concise] && size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
+      top_toggle = checkbox_section_toggle(checkboxes_id, size)
+      bottom_toggle = checkbox_section_toggle(checkboxes_id, size, :no_show => true, :no_js => true)
     end
+      
+    # We wrap the whole thing in a div module with the classes
+    return content_tag(:div, top_toggle + checkboxes_ul + bottom_toggle + (options[:include_blank] ? hidden_field_tag(field_name, " ") : ''.html_safe), :id => checkboxes_id, :class => css_class)
   end
   
+  def checkbox_section_css_class(size, concise=false)
+    css_class = "options index"
+    
+    if concise
+      css_class += " concise lots" if size > ArchiveConfig.OPTIONS_TO_SHOW
+    else
+      css_class += " many" if size > ArchiveConfig.OPTIONS_TO_SHOW
+      css_class += " lots" if size > (ArchiveConfig.OPTIONS_TO_SHOW * 6)
+    end
+    
+    css_class
+  end
+  
+  def check_all_none(all_text="All", none_text="None", name_filter=nil)
+    filter_attrib = (name_filter ? " checkbox_name_filter=\"#{name_filter}\"" : '')    
+    ('<ul class="actions">
+      <li><a href="#" class="check_all"' + 
+      "#{filter_attrib}>#{all_text}</a></li>" +
+      '<li><a href="#" class="check_none"' + 
+      "#{filter_attrib}>#{none_text}</a></li></ul>").html_safe
+  end
+  
+  def submit_button(form=nil, button_text=nil)
+    button_text ||= (form.nil? || form.object.nil? || form.object.new_record?) ? ts("Submit") : ts("Update")
+    content_tag(:p, (form.nil? ? submit_tag(button_text) : form.submit(button_text)), :class=>"submit")
+  end
+    
+  def submit_fieldset(form=nil, button_text=nil)
+    content_tag(:fieldset, content_tag(:legend, ts("Actions")) + submit_button(form, button_text))
+  end
+    
 end # end of ApplicationHelper

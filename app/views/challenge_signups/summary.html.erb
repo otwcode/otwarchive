@@ -5,9 +5,9 @@
   <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_signups_summary", 
              :locals => {:challenge_collection => @collection, :tag_type => @tag_type, :summary_tags => @summary_tags, :generated_live => @generated_live} %>
 <% else %>
-  <h2><%= ts("Signup Summary for %{collection}", :collection => @collection.title) %></h2>
+  <h2 class="heading"><%= ts("Signup Summary for %{collection}", :collection => @collection.title) %></h2>
 
   <p>
-    The summary for this challenge is currently being generated. Please try again in a few minutes.
+    The summary is being generated. Please try again in a few minutes.
   </p>
 <% end %>

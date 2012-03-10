@@ -11,6 +11,8 @@ class BookmarksController < ApplicationController
   def load_bookmarkable
     if params[:work_id]
       @bookmarkable = Work.find(params[:work_id])
+    elsif params[:chapter_id]
+      @bookmarkable = Chapter.find(params[:chapter_id]).try(:work)
     elsif params[:external_work_id]
       @bookmarkable = ExternalWork.find(params[:external_work_id])
     elsif params[:series_id]
@@ -67,7 +69,7 @@ class BookmarksController < ApplicationController
       owner ||= Tag.find_by_name(params[:tag_id])
     elsif @collection
       @page_subtitle = @collection.title
-      owner ||= @collection
+      owner ||= @collection # insufficient to filter out unapproved bookmarks, see below
     else
       owner ||= @bookmarkable
     end
@@ -77,12 +79,18 @@ class BookmarksController < ApplicationController
         # otherwise the user gets a 500 error
         raise ActiveRecord::RecordNotFound
       end
+
       # Do not aggregate bookmarks on these pages
-      if params[:recs_only]
-        @bookmarks = owner.bookmarks.recs
+      if params[:collection_id] && @collection
+        @bookmarks = Bookmark.in_collection(@collection)
       else
-        @bookmarks = owner.bookmarks
+        @bookmarks= owner.bookmarks
       end
+
+      if params[:recs_only]
+        @bookmarks = @bookmarks.recs
+      end
+
       if @user && @user == current_user
         # can see all own bookmarks
       elsif logged_in_as_admin?
@@ -138,7 +146,7 @@ class BookmarksController < ApplicationController
       end
       @bookmarks = @bookmarks.sort_by{|b| - b.id}
     end
-    @bookmarks = @bookmarks.compact.paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+    @bookmarks = @bookmarks.compact.paginate(:page => params[:page])
   end
   
   # GET    /:locale/bookmark/:id
@@ -154,13 +162,25 @@ class BookmarksController < ApplicationController
     @bookmark = Bookmark.new
     respond_to do |format|
       format.html
-      format.js
+      format.js { 
+        @button_name = ts("Create")
+        @action = :create
+        render :action => "bookmark_form_dynamic" 
+      }
     end
   end
 
   # GET /bookmarks/1/edit
   def edit
     @bookmarkable = @bookmark.bookmarkable
+    respond_to do |format|
+      format.html
+      format.js { 
+        @button_name = ts("Update")
+        @action = :update
+        render :action => "bookmark_form_dynamic" 
+      }
+    end    
   end
 
   # POST /bookmarks
@@ -184,7 +204,7 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1.xml
   def update
     if @bookmark.update_attributes(params[:bookmark])
-      flash[:notice] = t('successfully_updated', :default => 'Bookmark was successfully updated.')
+      flash[:notice] = ts("Bookmark was successfully updated.")
       redirect_to(@bookmark) 
     else
       @bookmarkable = @bookmark.bookmarkable
@@ -196,7 +216,7 @@ class BookmarksController < ApplicationController
   # DELETE /bookmarks/1.xml
   def destroy
     @bookmark.destroy
-    flash[:notice] = t('successfully_deleted', :default => 'Bookmark was successfully deleted.')
+    flash[:notice] = ts("Bookmark was successfully deleted.")
     redirect_to user_bookmarks_path(current_user)
   end
 
@@ -207,7 +227,7 @@ class BookmarksController < ApplicationController
     @bookmarkable = @bookmark.bookmarkable
     respond_to do |format|
       format.js {
-        @recent_bookmarks = @bookmarkable.bookmarks.visible(:order => "created_at DESC", :limit => 4, :offset => 1)
+        @bookmarks = @bookmarkable.bookmarks.visible(:order => "created_at DESC").offset(1).limit(4)
       }
       format.html do
         id_symbol = (@bookmarkable.class.to_s.underscore + '_id').to_sym

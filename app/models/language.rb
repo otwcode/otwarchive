@@ -7,6 +7,8 @@ class Language < ActiveRecord::Base
   has_many :locales
   has_many :admin_posts
   
+  scope :default_order, order(:short)
+  
   def to_param
     short
   end

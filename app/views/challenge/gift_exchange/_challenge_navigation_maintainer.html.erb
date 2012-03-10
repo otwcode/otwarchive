@@ -1,6 +1,6 @@
 <% if @collection.challenge.user_allowed_to_see_signups?(current_user) %>
-  <li><%= link_to t('.gift_exchange.manage_signups', :default => "Signups"), collection_signups_path(@collection) %></li>
+  <li role="navigation"><%= link_to ts("Signups"), collection_signups_path(@collection) %></li>
 <% end %>
 <% if @collection.user_is_owner?(current_user) %>
-  <li><%= link_to t('.gift_exchange.challenge_settings', :default => "Challenge Settings"), edit_collection_gift_exchange_path(@collection) %></li>
+  <li role="navigation"><%= link_to ts("Challenge Settings"), edit_collection_gift_exchange_path(@collection) %></li>
 <% end %>

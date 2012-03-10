@@ -79,14 +79,20 @@ class ArchiveFaqsController < ApplicationController
     end
   end
   
+  # reorder FAQs
   def update_positions
     if params[:archive_faqs]
       @archive_faqs = ArchiveFaq.reorder(params[:archive_faqs])       
-      flash[:notice] = t('order_updated', :default => 'Archive FAQs order was successfully updated.')
-      redirect_to(archive_faqs_path)
-    else
-      format.html { render :action => "manage" }
-      format.xml  { render :xml => @archive_faq.errors, :status => :unprocessable_entity }
+      flash[:notice] = ts("Archive FAQs order was successfully updated.")
+    elsif params[:archive_faq]
+      params[:archive_faq].each_with_index do |id, position|
+        ArchiveFaq.update(id, :position => position + 1)
+        (@archive_faqs ||= []) << ArchiveFaq.find(id)
+      end
+    end
+    respond_to do |format|
+      format.html { redirect_to(archive_faqs_path) }
+      format.js { render :nothing => true }
     end
   end
 

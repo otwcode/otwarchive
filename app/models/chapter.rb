@@ -7,7 +7,7 @@ class Chapter < ActiveRecord::Base
   has_many :pseuds, :through => :creatorships
 
   belongs_to :work
-  acts_as_list :scope => 'work_id = #{work_id}'
+  # acts_as_list :scope => 'work_id = #{work_id}'
 
   acts_as_commentable
   has_many :kudos, :as => :commentable
@@ -52,10 +52,37 @@ class Chapter < ActiveRecord::Base
   scope :in_order, {:order => :position}
   scope :posted, :conditions => {:posted => true}
   
-  # There seem to be chapters without works in the tests, hence the if self.work_id
-  after_validation :fix_position
-  def fix_position
-    self.insert_at(position) if self.position_changed? && self.work_id
+  after_save :fix_positions
+  def fix_positions
+    if work
+      positions_changed = false
+      self.position ||= 1
+      chapters = work.chapters.order(:position)
+      if chapters && chapters.length > 1
+        chapters = chapters - [self]
+        chapters.insert(self.position-1, self)
+        chapters.compact.each_with_index do |chapter, i|
+          chapter.position = i+1
+          if chapter.position_changed?
+            Chapter.update_all("position = #{chapter.position}", "id = #{chapter.id}")
+            positions_changed = true
+          end
+        end
+      end
+      # We're caching the chapter positions in the comment blurbs
+      # so we need to expire them
+      if positions_changed
+        work.comments.each{ |c| c.touch }
+      end
+    end
+  end
+  
+  before_destroy :fix_positions_after_destroy
+  def fix_positions_after_destroy
+    if work && position
+      chapters = work.chapters.where(["position > ?", position])
+      chapters.each{|c| c.update_attribute(:position, c.position + 1)}
+    end
   end
 
   # strip leading spaces from title
@@ -115,7 +142,7 @@ class Chapter < ActiveRecord::Base
     # if current user has selected different pseuds
     current_user = User.current_user
     if current_user.is_a? User
-      self.authors_to_remove = current_user.pseuds & (self.authors - selected_pseuds)
+      self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
     end
     self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
     if !attributes[:byline].blank?
@@ -159,7 +186,7 @@ class Chapter < ActiveRecord::Base
           # scan by word boundaries after stripping hyphens and apostrophes
           # so one-word and one's will be counted as one word, not two.
           # -- is replaced by — (emdash) before strip so one--two will count as 2
-          count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "").scan(/[a-zA-Z0-9À-ÿ_]+/).size
+          count += node.inner_text.gsub(/--/, "—").gsub(/['’‘-]/, "").scan(/[[:word:]]+/).size
         end
       end
       self.word_count = count
@@ -170,10 +197,10 @@ class Chapter < ActiveRecord::Base
   def commentable_name
     self.work.title
   end
-
-  private
-
-  def add_to_list_bottom    
-  end
+  
+   # private
+   # 
+   # def add_to_list_bottom    
+   # end
   
 end

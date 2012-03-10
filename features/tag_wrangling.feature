@@ -1,30 +1,19 @@
 @users @tag_wrangling
 Feature: Tag wrangling
 
-  Scenario: Log in as a tag wrangler and see wrangler pages.
-        Make a new fandom canonical and wrangle it to a medium.
-        Make a new character canonical and wrangle them to a fandom.
-        Make a new synonym of a character and check that the fandom transfers.
-    Given I have no users
-      And I have no tags
-      And basic tags
-      And the following admin exists
-      | login       | password |
-      | Zooey       | secret   |
+  Scenario: Admin can create a tag wrangler using the interface
+
+    Given the following admin exists
+      | login       |
+      | Zooey       |
       And the following activated user exists
-      | login       | password      |
-      | dizmo       | wrangulator   |
-      And a media exists with name: "TV Shows", canonical: true
+      | login       |
+      | dizmo       |
       And I have loaded the "roles" fixture
-    When I am logged in as "dizmo" with password "wrangulator"
+    When I am logged in as "dizmo"
     Then I should not see "Tag Wrangling"
-    When I follow "Log out"
-      And I go to the admin_login page
-      And I fill in "admin_session_login" with "Zooey"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-    Then I should see "Successfully logged in"
-    When I fill in "query" with "dizmo"
+    When I am logged in as an admin
+      And I fill in "query" with "dizmo"
       And I press "Find"
     Then I should see "dizmo" within "#admin_users_table"
     
@@ -32,11 +21,25 @@ Feature: Tag wrangling
     When I check "user_roles_1"
       And I press "Update"
     Then I should see "User was successfully updated"
-    When I follow "Log out"
     
     # accessing wrangling pages
-      And I am logged in as "dizmo" with password "wrangulator"
-    Then I should see "Hi, dizmo!"
+    When I am logged in as "dizmo"
+      And I follow "Tag Wrangling"
+    Then I should see "Wrangling Home"
+
+  Scenario: Log in as a tag wrangler and see wrangler pages.
+        Make a new fandom canonical and wrangle it to a medium.
+        Make a new character canonical and wrangle them to a fandom.
+        Make a new synonym of a character and check that the fandom transfers.
+    Given I have no users
+      And I have no tags
+      And basic tags
+      And I have loaded the "roles" fixture
+      And the following activated tag wrangler exists
+      | login       |
+      | dizmo       |
+      And a media exists with name: "TV Shows", canonical: true
+    When I am logged in as "dizmo"
     When I follow "Tag Wrangling"
     Then I should see "Wrangling Home"
       And I should not see "Stargate SG-1"
@@ -58,7 +61,7 @@ Feature: Tag wrangling
       And I fill in "content" with "That could be an amusing crossover."
       And I press "Preview"
       And I press "Post"
-		Then I should see "Work was successfully posted."
+      Then I should see "Work was successfully posted."
     
     # mass wrangling
     When I follow "Tag Wrangling"
@@ -79,7 +82,7 @@ Feature: Tag wrangling
     When I follow "Edit" within ".header"
     Then I should see "Edit Stargate SG-1 Tag"
     When I check "tag_canonical"
-      And I fill in "Medias" with "TV Shows"
+      And I fill in "tag_media_string" with "TV Shows"
       And I press "Save changes"
     Then I should see "Tag was updated"
     When I follow "Tag Wrangling"
@@ -88,7 +91,6 @@ Feature: Tag wrangling
     When I follow "Wranglers"
     Then I should see "Tag Wrangling Assignments"
       And I should see "Stargate SG-1"
-      And I should not see "dizmo" within ".wranglers"
       
     # assign wrangler to a fandom
     When I fill in "tag_fandom_string" with "Stargate SG-1"
@@ -97,7 +99,7 @@ Feature: Tag wrangling
     Then I should see "Stargate SG-1"
     When I follow "Wranglers"
     Then I should see "Stargate SG-1"
-      And I should see "dizmo" within ".wranglers"
+      And I should see "dizmo" within "ul.wranglers"
     When I follow "Mass Wrangling"
       And I follow "Characters by fandom (2)"
     Then I should see "Daniel Jackson"
@@ -184,7 +186,7 @@ Feature: Tag wrangling
       And I press "Save changes"
       And I follow "Rodney McKay/John Sheppard"
     Then I should see "Stargate Atlantis"
-
+  
     # assigning characters to a canonical relationship
     When I fill in "Characters" with "Rodney McKay, John Sheppard"
       And I press "Save changes"
@@ -193,26 +195,23 @@ Feature: Tag wrangling
 
   Scenario: Issue 1701: Sign up for a fandom from the edit fandom page, then from editing a child tag of a fandom
     
-    Given the following activated tag wrangler exists
-      | login  | password    |
-      | Enigel | wrangulate |
-      And a fandom exists with name: "'Allo 'Allo", canonical: true
-      And a fandom exists with name: "From Eroica with Love", canonical: true
-      And a fandom exists with name: "Cabin Pressure", canonical: true
-      And a relationship exists with name: "Dorian/Martin", canonical: false
+    Given a canonical fandom "'Allo 'Allo"
+      And a canonical fandom "From Eroica with Love"
+      And a canonical fandom "Cabin Pressure"
+      And a noncanonical relationship "Dorian/Martin"
     
     # I want to sign up from the edit page of an unassigned fandom
-    When I am logged in as "Enigel" with password "wrangulate"
+    When I am logged in as a tag wrangler
       And I edit the tag "'Allo 'Allo"
     Then I should see "Sign Up"
     When I follow "Sign Up"
     Then I should see "Assign fandoms to yourself"
-      And I should see "'Allo 'Allo" within "#tag_fandom_string"
+      And the autocomplete value should be set to "'Allo 'Allo"
     When I press "Assign"
     Then I should see "Wranglers were successfully assigned"
     When I edit the tag "'Allo 'Allo"
     Then I should not see "Sign Up"
-      And I should see "Enigel" within ".tag_edit"
+      And I should see the tag wrangler listed as an editor of the tag
     
     # I want to sign up from the edit page of a relationship that belongs to two unassigned fandoms
     When I edit the tag "Dorian/Martin"
@@ -221,12 +220,13 @@ Feature: Tag wrangling
       And I press "Save changes"
     Then I should see "Tag was updated"
     When I follow "Sign Up"
-    Then I should see "Cabin Pressure, From Eroica with Love" within "#tag_fandom_string"
+    Then I should see "Cabin Pressure" in the autocomplete
+      And I should see "From Eroica with Love" in the autocomplete
     When I press "Assign"
     Then I should see "Wranglers were successfully assigned"
     When I edit the tag "From Eroica with Love"
     Then I should not see "Sign Up"
-      And I should see "Enigel" within ".tag_edit"
+      And I should see the tag wrangler listed as an editor of the tag
     When I edit the tag "Cabin Pressure"
     Then I should not see "Sign Up"
-      And I should see "Enigel" within ".tag_edit"
+      And I should see the tag wrangler listed as an editor of the tag

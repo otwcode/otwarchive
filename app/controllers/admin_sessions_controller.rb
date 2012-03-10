@@ -19,9 +19,11 @@ class AdminSessionsController < ApplicationController
   end
   
   def destroy
-    @admin_session = AdminSession.find  
-    @admin_session.destroy  
-    flash[:notice] = "Successfully logged out."  
+    admin_session = AdminSession.find
+    if admin_session
+      admin_session.destroy  
+      flash[:notice] = "Successfully logged out as admin."
+    end
     redirect_to root_path
   end
   

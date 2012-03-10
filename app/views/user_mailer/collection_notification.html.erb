@@ -1,9 +1,8 @@
 <p><%= "Dear Collection Maintainers!" %></p>
 
 <p>
-  <%= ts("You have received a message about your collection ") +  
-      link_to(@collection.title, collection_url(@collection))
-      %>:
+  <%= ts("You have received a message about your collection ") %>
+  <%= link_to(@collection.title, collection_url(@collection)) %>:
 </p>
 
 <%=raw @message %>

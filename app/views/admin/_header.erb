@@ -1,25 +1,11 @@
 <!-- navigation tabs for admin users -->
-<h3 class="landmark">Admins' Main Navigation</h3>
-<ul class="admin navigation" role="navigation">
-<li><% if current_page?(admin_users_path) %><span class="current"><% end %>
-  <%= link_to_unless_current ts("users"), admin_users_path %>
-<% if current_page?(admin_users_path) %></span><% end %></li>
-<li><% if current_page?(notify_admin_users_path) %><span class="current"><% end %>
-  <%= link_to_unless_current ts("notices"), notify_admin_users_path %>
-<% if current_page?(notify_admin_users_path) %></span><% end %></li>
-<li><% if current_page?(admin_invitations_path) %><span class="current"><% end %>
-  <%= link_to_unless_current ts("invitations"), admin_invitations_path %>
-<% if current_page?(admin_invitations_path) %></span><% end %></li>
-<li><% if current_page?(abuse_reports_path) %><span class="current"><% end %>
-  <%= link_to_unless_current ts("abuse reports"), abuse_reports_path %>
-<% if current_page?(abuse_reports_path) %></span><% end %></li>
-<li><% if current_page?(admin_posts_path) %><span class="current"><% end %>
-  <%= link_to_unless_current ts("admin posts"), admin_posts_path %>
-<% if current_page?(admin_posts_path) %></span><% end %></li>
-<li><% if current_page?(admin_settings_path) %><span class="current"><% end %>
-  <%= link_to_unless_current ts("settings"), admin_settings_path %>
-<% if current_page?(admin_settings_path) %></span><% end %></li>
-<li><% if current_page?(admin_skins_path) %><span class="current"><% end %>
-  <%= link_to_unless_current ts("skins"), admin_skins_path %>
-<% if current_page?(admin_skins_path) %></span><% end %></li>
+<h3 class="landmark heading">Admins' Main Navigation</h3>
+<ul class="admin navigation actions" role="navigation">
+<li><%= span_if_current("Manage Users", admin_users_path) %></li>
+<li><%= span_if_current("Notifications", notify_admin_users_path) %></li>
+<li><%= span_if_current("Invitations", admin_invitations_path) %></li>
+<li><%= span_if_current("Abuse Reports", abuse_reports_path) %></li>
+<li><%= span_if_current("Admin Posts", admin_posts_path) %></li>
+<li><%= span_if_current("Settings", admin_settings_path) %></li>
+<li><%= span_if_current("Skins", admin_skins_path) %></li>
 </ul>

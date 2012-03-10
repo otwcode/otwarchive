@@ -1,5 +1,13 @@
+<% unless challenge_signup.requests.empty? %>  
+
 <!-- expects local variable "challenge_signup" -->
+<div class="requests listbox group">
+<h3 class="heading">Requests</h3>
+<ol class="index group">
 <% challenge_signup.requests.each_with_index do |request, index| %>
-  <h3><%= ts("Request %{num}", :num => index+1) %></h3>
-  <%= render "challenge_signups/show_prompt", :prompt => request %>
+  <%= render "prompts/prompt_blurb", :prompt => request, :index => index %>
+<% end %>
+</ol>
+</div>
+
 <% end %>

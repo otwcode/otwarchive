@@ -10,7 +10,7 @@ Feature: Create Works
 
   Scenario: Creating a new minimally valid work
     Given basic tags
-      And I am logged in as "newbie" with password "password"
+      And I am logged in as "newbie"
     When I go to the new work page
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
@@ -19,7 +19,7 @@ Feature: Create Works
       And I fill in "Work Title" with "All Hell Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
     When I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page
@@ -27,7 +27,7 @@ Feature: Create Works
 
   Scenario: Creating a new minimally valid work and posting without preview
     Given basic tags
-      And I am logged in as "newbie" with password "password"
+      And I am logged in as "newbie"
     When I go to the new work page
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
@@ -43,12 +43,8 @@ Feature: Create Works
 
   Scenario: Creating a new minimally valid work when you have more than one pseud
     Given basic tags
-      And I am logged in as "newbie" with password "password"
-      And "newbie" creates the pseud "Pointless Pseud"
-      And I follow "Edit"
-      And I check "Is default"
-      And I press "Update"
-    Then I should see "Pseud was successfully updated."
+      And I am logged in as "newbie"      
+      And "newbie" creates the default pseud "Pointless Pseud"
     When I go to the new work page
     Then I should see "Post New Work"
       And I select "Not Rated" from "Rating"
@@ -58,7 +54,7 @@ Feature: Create Works
       And I fill in "Work Title" with "All Hell Breaks Loose"
       And I fill in "content" with "Bad things happen, etc."
     When I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Preview"
     When I press "Post"
     Then I should see "Work was successfully posted."
     When I go to the works page
@@ -74,16 +70,13 @@ Feature: Create Works
         | cosomeone      | something   | cosomeone@example.org |
         | giftee         | something   | giftee@example.org    |
         | recipient      | something   | recipient@example.org |
-      And the following collections exist
-        | name        | title        |
-        | collection1 | Collection 1 |
-        | collection2 | Collection 2 |
+      And I have a collection "Collection 1" with name "collection1"
+      And I have a collection "Collection 2" with name "collection2"
       And I am logged in as "thorough" with password "something"
       And all emails have been delivered
     When I go to thorough's user page
       And I follow "Profile"
-    Then I should see "About"
-    When I follow "Manage My Pseuds"
+      And I follow "Manage My Pseuds"
     Then I should see "Pseuds for"
     When I follow "New Pseud"
     Then I should see "New pseud"
@@ -112,15 +105,16 @@ Feature: Create Works
       And I fill in "Summary" with "Have a short summary"
       And I fill in "Characters" with "Sam Winchester, Dean Winchester,"
       And I fill in "Relationships" with "Harry/Ginny"
-      And I fill in "Recipient" with "Someone else, recipient"
+      And I fill in "Additional Tags" with "An extra tag"
+      And I fill in "Gift this work to" with "Someone else, recipient"
       And I check "series-options-show"
       And I fill in "work_series_attributes_title" with "My new series"
       And I select "Pseud2" from "work_author_attributes_ids_"
       And I select "Pseud3" from "work_author_attributes_ids_"
       And I fill in "pseud_byline" with "coauthor"
-      And I fill in "work_collection_names" with "collection1, collection2"
+      And I fill in "Post to Collections / Challenges" with "collection1, collection2"
       And I press "Preview"
-    Then I should see "Preview Work"
+    Then I should see "Draft was successfully created"
     When I press "Post"
     Then I should see "Work was successfully posted."
       And 1 email should be delivered to "coauthor@example.org"
@@ -139,6 +133,7 @@ Feature: Create Works
       And I should see "Category: F/M"
       And I should see "Characters: Sam Winchester, Dean Winchester"
       And I should see "Relationship: Harry/Ginny"
+      And I should see "Additional Tags: An extra tag"
       And I should see "For Someone else, recipient"
       And I should see "Collections: Collection 1, Collection 2"
       And I should see "Notes"
@@ -157,7 +152,7 @@ Feature: Create Works
       And I press "Preview"
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Let's write another story"
-    When I follow "Post Chapter"
+    When I press "Post Chapter"
     Then I should see "All Something Breaks Loose"
       And I should see "Chapter 1"
       And I should see "Bad things happen, etc."
@@ -166,7 +161,7 @@ Feature: Create Works
     Then I should see "Chapter 2: This is my second chapter"
       And I should see "Let's write another story"
       And I should not see "Bad things happen, etc."
-    When I follow "View Entire Work"
+    When I follow "Entire Work"
     Then I should see "Bad things happen, etc."
       And I should see "Let's write another story"
     When I follow "Edit"
@@ -177,7 +172,7 @@ Feature: Create Works
       And I should see "These pseuds are invalid: Does_not_exist"
     When all emails have been delivered
       And I fill in "pseud_byline" with "cosomeone"
-    Then I should find "cosomeone" within ".auto_complete"
+    Then I should find "cosomeone" within ".autocomplete"
     When I press "Preview"
       And I press "Update"
     Then I should see "Work was successfully updated"
@@ -212,8 +207,7 @@ Feature: Create Works
       And I am logged in as "thorough" with password "something"
     When I go to thorough's user page
       And I follow "Profile"
-    Then I should see "About"
-    When I follow "Manage My Pseuds"
+      And I follow "Manage My Pseuds"
     Then I should see "Pseuds for"
     When I follow "New Pseud"
     Then I should see "New pseud"
@@ -243,16 +237,64 @@ Feature: Create Works
     When I fill in "content" with "Text and some longer text"
       And I fill in "work_collection_names" with "collection1, collection2"
       And I press "Preview"
-    Then I should see "We couldn't save this Work, sorry!"
-      And I should see "We couldn't find a collection with the name collection1"
-      And I should see "We couldn't find a collection with the name collection2"
+    Then I should see a save error message
+      And I should see "We couldn't find the collections named collection1 and collection2"
     When I fill in "work_collection_names" with ""
+      And I fill in "Additional Tags" with "this is a very long tag more than one hundred characters in length how would this normally even be created"
+      And I press "Preview"
+    Then I should see "try using less than 100 characters or using commas to separate your tags"
+    When I fill in "Additional Tags" with "this is a shorter tag"
       And I press "Preview"
     Then I should see "Draft was successfully created"
       And I should see "Chapter"
       And I should see "1/?"
 
-  Scenario: test for integer title
+  Scenario: test for integer title and multiple fandoms
+    Given basic tags
+      And I am logged in
+      And I go to the new work page
+      And I fill in "Fandoms" with "Supernatural, Smallville"
+      And I fill in "Work Title" with "02138"
+      And I fill in "content" with "Bad things happen, etc."
+    When I press "Post without preview"
+    Then I should see "Work was successfully posted."
+      And I should see "Bad things happen, etc."
+      And I should see "Supernatural"
+      And I should see "Smallville"
+      And I should see "02138" within "h2.title"
+
+  Scenario: test for < and > in title
+    Given basic tags
+    When I am logged in as "newbie" with password "password"
+      And I go to the new work page
+      And I fill in "Fandoms" with "Supernatural"
+      And I fill in "Work Title" with "4 > 3 and 2 < 5"
+      And I fill in "content" with "Bad things happen, etc."
+    When I press "Post without preview"
+    Then I should see "Work was successfully posted."
+      And I should see "Bad things happen, etc."
+      And I should see "4 > 3 and 2 < 5" within "h2.title"
+
+  Scenario: Creating a new work when sphinx is down
+    Given remote sphinx is stopped
+      And basic tags
+      And I am logged in as "newbie" with password "password"
+    When I go to the new work page
+    Then I should see "Post New Work"
+      And I select "Not Rated" from "Rating"
+      And I check "No Archive Warnings Apply"
+      And I fill in "Fandoms" with "Supernatural"
+      And I fill in "Work Title" with "All Hell Breaks Loose"
+      And I fill in "content" with "Bad things happen, etc."
+    When I press "Preview"
+    Then I should see "Preview"
+    When I press "Post"
+    Then I should see "Work was successfully posted."
+    When I go to the works page
+    Then I should see "All Hell Breaks Loose"
+    And sphinx is started again
+
+    Scenario: posting a chapter without preview
     Given basic tags
       And I am logged in as "newbie" with password "password"
     When I go to the new work page
@@ -260,11 +302,14 @@ Feature: Create Works
       And I select "Not Rated" from "Rating"
       And I check "No Archive Warnings Apply"
       And I fill in "Fandoms" with "Supernatural"
-      And I fill in "Work Title" with "02138"
-      And I fill in "content" with "Bad things happen, etc."
-    When I press "Post without preview"
-    Then I should see "Work was successfully posted."
-    And I should see "Bad things happen, etc."
-    When I go to the works page
-    Then I should see "02138"
-
+      And I fill in "Work Title" with "All Hell Breaks Loose"
+      And I fill in "content" with "Bad things happen, etc."  
+      And I press "Post without preview"
+    Then I should see "Work was successfully posted"
+    When I follow "Add Chapter"
+      And I fill in "title" with "This is my second chapter"
+      And I fill in "content" with "Let's write another story"
+      And I press "Post without preview"
+    Then I should see "Chapter 2: This is my second chapter"
+      And I should see "Chapter has been posted!"
+      And I should not see "This is a preview"

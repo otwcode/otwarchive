@@ -1,41 +1,27 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h 'AO3 News (includes Release Notes)' %></h2>
+<h2 class="heading"><%= ts("AO3 News (includes Release Notes)") %></h2>
 <!--/descriptions-->
-<!--subnav-->		
+<!--subnav-->
+<%= render 'filters' %>
 <%= render :partial => 'admin/admin_nav' %>
 <!--/subnav-->
 
 <!--main content-->
-<div class="wrapper">
-	<table summary="This table lists News posts by title, date posted and date updated, and lets you show, edit, and delete each post. You can also make a new post.">
-	<caption>Manage News Postings</caption>
-	<colgroup>
-	<col class="name" />
-	<col span="5" />
-	</colgroup>
-	<thead>
-		<tr>
-			<th scope="col"><%=h 'Title' %></th>
-			<th scope="col"><%=h 'Posted' %></th>
-			<th scope="col"><%=h 'Updated' %></th>
-			<th scope="col" colspan="3"><%=h 'Actions' %></th>
-		</tr>
-	</thead>
-	<tbody>	
+<h3 class="heading">Manage News Postings</h3>
+<dl class="news index group">
   <% @admin_posts.each do |admin_post| %>
-    <tr>
-      <td><%= link_to admin_post.title, admin_post %></td>
-      <td><%=h admin_post.created_at %></td>
-      <td><%=h admin_post.updated_at %></td>
-      <td><%= link_to "Show", admin_post %></td>
-      <td><%= link_to "Edit", edit_admin_post_path(admin_post) %></td>
-      <td><%= link_to "Delete", admin_post, :confirm => 'Are you sure?', :method => :delete %></td>
-    </tr>
+  <dt><%= link_to admin_post.title, admin_post %></dt>
+    <dd>
+      <p class="datetime">Created at <%= admin_post.created_at %> and updated at <%= admin_post.updated_at %></p>
+      <ul class="navigation actions">
+	      <li><%= link_to ts("Show"), admin_post %></li>
+			  <li><%= link_to ts("Edit"), edit_admin_post_path(admin_post) %></li>
+    	  <li><%= link_to ts("Delete"), admin_post, :confirm => 'Are you sure?', :method => :delete %></li>
+      </ul>
+	  </dd>
   <% end %> 
-</tbody>
-</table>
-</div>
+</dl>
 <!--/content-->
 <!--subnav-->
-  <%= will_paginate @admin_posts %>			
+  <%= will_paginate @admin_posts %>
 <!--/subnav-->

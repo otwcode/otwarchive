@@ -1,4 +1,4 @@
-<h2><%=h 'What do you want to do with your works?' %></h2>
+<h2 class="heading"><%=h 'What do you want to do with your works?' %></h2>
 
 <%= form_tag(@user, :method => 'delete') do %>
 <% unless @user.coauthors.blank? %>
@@ -58,7 +58,7 @@
 </fieldset>
 <% end %>
 <fieldset>
-<p class="submit cancel">
+<p class="submit cancel actions">
 		<%= submit_tag "Save", :confirm => "Are you sure? This can't be undone!" %> <%= submit_tag 'Cancel', :name => 'cancel_button', :class => 'cancel' %>
 </p>
 </fieldset>

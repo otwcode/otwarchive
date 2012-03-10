@@ -1,9 +1,0 @@
-<% if @tag_type %>
-  <%= cache("tag_set_show_#{@tag_set.id}_#{@tag_type}") do %>
-    <%= render "tag_set_tags" %>
-  <% end %> <!-- end cache -->
-<% else %>
-  <%= cache("tag_set_show_#{@tag_set.id}") do %>
-    <%= render "tag_set_tags" %>
-  <% end %> <!-- end cache -->
-<% end %>

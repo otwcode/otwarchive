@@ -1,21 +1,23 @@
-<!--Descriptive page name, messages and instructions-->
-<h2><%= authors_header @people, @what %> in '<%= @character.char %>'</h2>
+<!--SEARCHBROWSE Descriptive page name, messages and instructions-->
+<h2 class="heading"><%= authors_header @people, @what %> in '<%= @character.char %>'</h2>
 <!--/descriptions-->
-<h3 class="landmark">Filter</h3>
-<ul class="navigation">
+<!-- BACK END PLS span_if_current-->
+<ul class="navigation actions" role="navigation" title="show only">
   <li><%= link_to t('.people.All', :default => "All"), person_path(@character, :show => "all") %></li>
   <li><%= link_to t('.people.Authors', :default => "Authors"), person_path(@character, :show => "authors") %></li>  
   <li><%= link_to t('.people.Reccers', :default => "Reccers"), person_path(@character, :show => "reccers") %></li>
 </ul>
 
-<h3 class="landmark">Next Page Navigation</h3>
-<%= people_paginated_section(@what) %> 
-<div class="pagination">
-<%= paginated_section @people, {:previous_label => '&laquo; Previous'.html_safe, :next_label => 'Next &raquo;'.html_safe} do %>
-  <ul class="pseud index">
+<div class="alphabetical pagination actions">
+  <h5 class="landmark heading">By Letter</h5>
+  <%= people_paginated_section(@what) %></div> 
+<%= paginated_section @people do %>
+
+<h3 class="landmark">Listing People</h3>
+  <ul class="pseud index group">
     <% for person in @people %>
       <%= render 'author_blurb', :author => person %>
     <% end %>  
   </ul>
 <% end %>
-</div>
+

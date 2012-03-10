@@ -1,14 +1,14 @@
 <% @user_session = UserSession.new unless @user_session %>
 <%= form_for @user_session do %>
-  <p>
-    <%= image_tag("openid.png", :alt => '', :class => 'openid', :title => 'Open Id') %>
+	<p>
+    <%= image_tag("legacy/openid.png", :alt => '', :class => 'openid', :title => 'Open Id') %>
     <%= text_field_tag "openid_url", '', :class => 'text' %>
   </p>
   <p class="footnote">
-    <%= link_to_remote 'password login', {:url => {:controller => :user_sessions, :action => 'passwd_small'}},
-        :href => url_for(params.merge :use_openid => false), :class => 'footnote' %>
+    <%= link_to 'password login', {:controller => :user_sessions, :action => 'passwd_small'}, :remote => true,
+         :class => 'footnote' %>
   </p>
-  <p>
-    <%= submit_tag ts("Log in"), :class => 'button' %>
+  <p class="submit actions">
+    <%= submit_tag ts("Log in") %>
   </p>
 <% end %>

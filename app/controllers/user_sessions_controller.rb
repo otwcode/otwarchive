@@ -13,9 +13,9 @@ class UserSessionsController < ApplicationController
     redirect_to "/auth_error.html"
   end
 
-  def new  
+  def new
   end
-  
+
   def create
     if openid = request.env['rack.openid.response']
       @openid_url = openid.display_identifier
@@ -51,7 +51,7 @@ class UserSessionsController < ApplicationController
         message = "Sorry, that doesn't seem to be the correct format for an OpenID URL."
       else
         user = User.find_by_identity_url(@openid_url)
-        if !user 
+        if !user
           message = "Sorry, we couldn't find a user with that OpenID URL"
         else
           response.headers['WWW-Authenticate'] = Rack::OpenID.build_header(:identifier => @openid_url)
@@ -62,42 +62,79 @@ class UserSessionsController < ApplicationController
       flash.now[:error] = message
       render :action => 'new'
     elsif params[:user_session]
-      @user_session = UserSession.new(params[:user_session])  
-      if @user_session.save  
+      @user_session = UserSession.new(params[:user_session])
+      if @user_session.save
         flash[:notice] = ts("Successfully logged in.")
         @current_user = @user_session.record
-        if @current_user.recently_reset? 
-          redirect_to change_password_user_path(@current_user)
-        else
-          redirect_back_or_default(@current_user)
-        end
+        redirect_back_or_default(@current_user)
       else
-        # we don't want to highlight the specific erroring fields.
-        # just give a nice clean error message at the top of the page.
         if params[:user_session][:login] && user = User.find_by_login(params[:user_session][:login])
-          # we have a user 
-          if user.active? 
-            message = ts("The password you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+          # we have a user
+          if user.recently_reset? && params[:user_session][:password] == user.activation_code
+            if user.updated_at > 1.week.ago
+              # we sent out a generated password and they're using it
+              # log them in
+              @current_user = UserSession.create(user, params[:remember_me]).record
+              # and tell them to change their password
+              redirect_to change_password_user_path(@current_user) and return
+            else
+              message = ts("The password you entered has expired. Please click the 'Reset password' link below.")
+            end
+          elsif user.active?
+            if @user_session.being_brute_force_protected? 
+           
+              message = ts("Your account has been locked for 5 minutes due to too many failed login attempts.")
+            else
+              message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+            end
           else
             message = ts("You'll need to activate your account before you can log in. Please check your email or contact support.")
           end
-        else 
-          message = ts("We couldn't find that user name in our database. Please try again.")
-        end      
+        else
+          message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
+        end
         flash.now[:error] = message
-        @user_session = UserSession.new(params[:user_session]) 
+        @user_session = UserSession.new(params[:user_session])
         render :action => 'new'
       end
     end
   end
-  
+
   def destroy
-    @user_session = UserSession.find  
+    @user_session = UserSession.find
     if @user_session
-      @user_session.destroy 
+      @user_session.destroy
       flash[:notice] = ts("Successfully logged out.")
     end
     redirect_back_or_default root_url
   end
-  
+
+  def openid_small
+    respond_to do |format|
+      format.html { redirect_to login_path(:use_openid => true) }
+      format.js 
+    end
+  end
+
+  def passwd_small
+    respond_to do |format|
+      format.html { redirect_to login_path }
+      format.js
+    end
+  end
+
+  def openid
+    respond_to do |format|
+      format.html { redirect_to login_path(:use_openid => true) }
+      format.js 
+    end
+  end
+
+  def passwd
+    respond_to do |format|
+      format.html { redirect_to login_path }
+      format.js
+    end
+  end
+
 end

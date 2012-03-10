@@ -1,16 +1,21 @@
 <!-- note to FRONT END: this form is crap and is going to be tossed and redone! don't bother fixing for now. -NN -->
+<!-- note to BACK END: FIXME, says the form; it currently ends within the dt, so the cuke to add a moderator fails, even though the browser somehow figures it out -->
 <% if participant %>
-<tr id="participant_<%= participant.id %>">
-<%= form_for(:collection_participant, participant, :url => {:controller => "collection_participants", :action => "update"}) do |form| %>
-<th scope="row"><%= link_to participant.pseud.byline, user_path(participant.pseud.user) %><%= form.hidden_field :id %><%= form.hidden_field :collection_id %></th>
-<td><%= form.select(:participant_role, CollectionParticipant::PARTICIPANT_ROLE_OPTIONS) %></td>
-<td class="submit">
-  <%= form.submit t('.forms.update', :default => "Update") %>
+<dt id="participant_<%= participant.id %>">
+  <%= form_for(participant, :as => :collection_participant, :url => {:controller => "collection_participants", :action => "update"}) do |form| %>
+    <span class="byline"><%= link_to participant.pseud.byline, user_path(participant.pseud.user) %><%= form.hidden_field :id %><%= form.hidden_field :collection_id %></span>
+</dt>
+
+<dd>
+  <ul class="actions" role="menu">
+      <li title="select role"><%= form.select(:participant_role, CollectionParticipant::PARTICIPANT_ROLE_OPTIONS, {}, :id => participant.pseud.user.login + "_role") %></li>
+      <li><%= form.submit ts("Update"), :id => participant.pseud.user.login + "_submit" %></li>
   <% end %>
-  <%= button_to t('.participant_remove', :default => "Remove"), collection_participant_path(@collection, participant), 
-    :confirm => t('.participant_confirm_delete', :default => 'Are you certain you want to remove %{participant}?', 
+      <li><%= button_to ts("Remove"), collection_participant_path(@collection, participant), 
+    :confirm => ts('Are you certain you want to remove %{participant}?', 
               :participant => participant.pseud.name), 
               :method => :delete %>
-</td>
-</tr>
+      </li>
+  </ul>
+</dd>
 <% end %>

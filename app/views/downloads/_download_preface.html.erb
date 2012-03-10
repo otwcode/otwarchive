@@ -33,7 +33,7 @@ hide_freeform?(@work)) %>
       <%= ts("Words") %>: <%= @work.word_count %>
     </dd>
   </dl>
-  <h1><%= @work.title %></h1>
+  <h1><%= @work.title.html_safe %></h1>
   <div class="byline"><%= ts("by") %> <%= byline(@work, :visibility => 'public') %></div>
   <% unless @work.summary.blank? %>
     <p><%= ts('Summary') %></p>

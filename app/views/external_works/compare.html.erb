@@ -1,32 +1,32 @@
-<%= form_tag compare_external_works_path, :method => :get do %>
-    <fieldset>
-      <legend>Search for external works</legend>
-      <p>
-        <%= label_tag :external_work_url %>: 
-        <%= text_field_tag :external_work_url, params[:external_work_url] %>
-        <%= autocomplete_text_field "external_work_url", :no_comma => true %>
-        <%= submit_tag t('.forms.search', :default => 'Search') %>
-      </p>
+<h2><%= ts("External Works Search") %></h2>
+
+<%= form_tag compare_external_works_path, :class => 'simple search', :role => 'search', :method => :get do %>
+  <fieldset>
+    <legend>Search for external works</legend>
+    <div>
+      <%= text_field_tag :external_work_url, params[:external_work_url], autocomplete_options("external_work", :autocomplete_token_limit => 1, :title => "External Work URL") %>  
+      <%= submit_tag ts('Search') %>
+    </div>
   </fieldset>
 <% end %>
 
 <% unless @external_works.blank? %>
   <%= form_tag merge_external_works_path, :method => :post do %>
   
-  <ol class="work index">
+  <ol class="work index group">
   <% for external_work in @external_works %>
     <li>
       <%= render :partial => 'external_works/blurb', :locals => {:external_work => external_work} %>
       <dl>
-        <dt>Merge other external works to this one</dt>
+        <dt><label for="merger_id">Merge other external works to this one</label></dt>
         <dd><%= radio_button_tag "merger_id", external_work.id %></dd>
 
-        <dt>Merge this external work to another one</dt>
+        <dt><label for="to_merge[]">Merge this external work to another one</label></dt>
         <dd><%= check_box_tag "to_merge[]", external_work.id %></dd>      
       </dl>
     </li>
   <% end %>
   </ol>
-  <p><%= submit_tag %></p>
+  <p class="submit actions"><%= submit_tag %></p>
   <% end %>
 <% end %>

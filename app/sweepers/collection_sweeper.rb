@@ -1,14 +1,34 @@
 class CollectionSweeper < ActionController::Caching::Sweeper
   observe Collection, CollectionItem, CollectionParticipant, CollectionProfile, Work
   
+  def after_create(record)
+    record.add_to_autocomplete if record.is_a?(Collection)
+  end
+
+  def before_update(record)
+    if record.is_a?(Collection) && (record.changed.include?(:name) || record.changed.include?(:title))
+      record.remove_from_autocomplete
+    end
+  end
+
+  def after_update(record)
+    if record.is_a?(Collection) && (record.changed.include?(:name) || record.changed.include?(:title))
+      record.add_to_autocomplete
+    end
+  end
+
   def after_save(record)
     expire_collection_cache_for(record)
   end
 
+  def before_destroy(record)
+    record.remove_from_autocomplete if record.is_a?(Collection)
+  end
+  
   def after_destroy(record)
     expire_collection_cache_for(record)
   end
-  
+
   private
   # return one or many collections associated with the changed record 
   # converted into an array

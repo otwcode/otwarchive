@@ -3,17 +3,27 @@
   <div class="flash notice" id="first-login-help-banner">
     <p>
       Hi! It looks like you've just logged into the archive for the first time. 
-      <%= link_to_ibox ts("Learn some tips and tricks."), :for => first_login_help_path, :title => "First login help", :size => "600x400" %> 
-      or
-      <%= link_to "Dismiss this message permanently.", end_first_login_user_path(current_user), :method => :post, :remote => true, :class => 'navigation' %>
+      <%= link_to_ibox ts("Learn some tips and tricks"), :for => first_login_help_path, :title => "First login help", :size => "600x400" %> 
+      or dismiss this message permanently.
     </p>
-    <p class="submit">
-      <%= link_to image_tag('close-flash.png'), nil, :onclick => "$('first-login-help-banner').hide()", :remote => true %>
+      <%= form_tag end_first_login_user_path(current_user), :method => :post, :remote => true do %>
+    <p class="submit actions">
+      <%= submit_tag ts("Dismiss permanently") %>
+      <%= link_to "x", nil, :remote => true, :id => "hide-first-login-help", :title => "Hide first login help banner" %>
     </p>
+      <% end %>
   </div>
 <% end %>
 
-<div id="user-page" class="profile">
-  <%= render :partial => "users/header", :locals => {:user => @user} %>
-  <%= render :partial => "users/contents" %>
+<div class="user home">
+  <%= render "users/header" %>
+  <%= render "users/contents" %>
 </div> 
+
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+      $j("#hide-first-login-help").click(function() {
+        $j("#first-login-help-banner").hide();
+      })
+  <% end %>
+<% end %>

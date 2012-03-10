@@ -1,4 +1,4 @@
-
+/*BACK END need to add role="alertdialog" to ibox inner containing element*/ 
 var indicator_img_path="/images/indicator.gif";var indicator_img_html="<img name=\"ibox_indicator\" src=\""+indicator_img_path+"\" alt=\"Loading...\" style=\"width:128px;height:128px;\"/>";var opacity_level=8;var ibAttr="rel";var imgPreloader=new Image();function init_ibox(){var elem_wrapper="ibox";createIbox(document.getElementsByTagName("body")[0]);var docRoot=document.getElementsByTagName("a");var e;for(var i=0;i<docRoot.length-1;i++){e=docRoot[i];if(e.getAttribute(ibAttr)){var t=e.getAttribute(ibAttr);if((t.indexOf("ibox")!=-1)||t.toLowerCase()=="ibox"){e.onclick=function(){var t=this.getAttribute(ibAttr);var params=parseQuery(t.substr(5,999));var url=this.href;if(this.target!=""){url=this.target}
 var title=this.title;if(showIbox(url,title,params)){showBG();window.onscroll=maintPos;window.onresize=maintPos;}
 return false;};}}}}

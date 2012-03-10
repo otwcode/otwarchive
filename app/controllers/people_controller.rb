@@ -11,22 +11,23 @@ class PeopleController < ApplicationController
         errors, @people = Query.search_with_sphinx(Pseud, @query, page)
         flash.now[:error] = errors.join(" ") unless errors.blank?
       rescue Riddle::ConnectionError
-        flash.now[:error] = t('errors.search_engine_down', :default => "The search engine seems to be down at the moment, sorry!")
+        flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
       end
-      @rec_counts = Pseud.rec_counts_for_pseuds(@people)
-      @work_counts = Pseud.work_counts_for_pseuds(@people)
+      # @people could contain nils from sphinx
+      @rec_counts = Pseud.rec_counts_for_pseuds(@people.compact)
+      @work_counts = Pseud.work_counts_for_pseuds(@people.compact)
     end
-  end  
+  end
 
-    
+
   def index
     if @collection
       @pseuds_alphabet = @collection.participants.find(:all, :select => 'name')
       @pseuds_alphabet = @pseuds_alphabet.collect {|pseud| pseud.name.scan(/./mu)[0].upcase}.uniq.sort
-      if params[:letter] && params[:letter].is_a?(String)		
-        letter = params[:letter][0,1]		
-      else		
-	letter = @pseuds_alphabet[0]		
+      if params[:letter] && params[:letter].is_a?(String)
+        letter = params[:letter][0,1]
+      else
+  letter = @pseuds_alphabet[0]
       end
       @authors = @collection.participants.alphabetical.starting_with(letter).paginate(:per_page => (params[:per_page] || ArchiveConfig.ITEMS_PER_PAGE), :page => (params[:page] || 1))
       @rec_counts = Pseud.rec_counts_for_pseuds(@authors)
@@ -34,9 +35,9 @@ class PeopleController < ApplicationController
     else
       @navigation = People.all
     end
-    
-  end 
- 
+
+  end
+
   def show
     @navigation = People.all
     @character = People.find(params[:id])

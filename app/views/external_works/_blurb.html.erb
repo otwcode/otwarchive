@@ -1,53 +1,55 @@
-<li class="work blurb" id="work_<%=h external_work.id %>" role="article">
+<li class="work blurb group" id="work_<%= external_work.id %>" role="article">
 
   <!--title, author, fandom-->
   <div class="header module">
 
-    <h4 title="title">
+    <h4 class="heading" title="title">
       <%= link_to external_work.title, external_work.url %>
-      <%= t('.title_by_author', :default => 'by') %>
+      <%= ts("by") %>
       <%= byline(external_work) %>
     </h4>
 
-    <h5 title="fandom">
-      <%= external_work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ') %>
+    <h5 class="heading" title="fandom">
+      <%= external_work.fandom_tags.collect{|tag| link_to_tag_works(tag) }.join(', ').html_safe %>
       &nbsp;
     </h5>
+    
+    <p class="notice"><%= ts("This work isn't hosted on the Archive so this blurb might not be complete or accurate.") %></p>
 
     <%= get_symbols_for(external_work) %>
     <p class="datetime"><%= set_format_for_date(external_work.created_at) %></p>
   </div>
 
   <!--warnings again, cast, freeform tags-->
-  <h6 class="landmark">Tags</h6>
-  <ul class="tags">
+  <h6 class="landmark heading">Tags</h6>
+  <ul class="tags commas">
     <%= blurb_tag_block(external_work) %>
   </ul>
 
   <!--summary-->	
   <% unless external_work.summary.blank? %>
-  <h6 class="landmark">Summary</h6>
-  <blockquote class="userstuff summary" title="summary">
-    <%=raw strip_images(sanitize_field(external_work, :summary)) %>
-  </blockquote>
+    <h6 class="landmark heading">Summary</h6>
+    <blockquote class="userstuff summary" title="summary">
+      <%=raw strip_images(sanitize_field(external_work, :summary)) %>
+    </blockquote>
   <% end %>
 
   <!--stats-->
   <dl class="stats" title="stats">
     <% if Bookmark.count_visible_bookmarks(external_work) > 0 %>
-    <dt><%=h t('.external_work_bookmarks', :default => 'Bookmarks') + ': '%></dt>
+    <dt><%= ts("Bookmarks") + ": " %></dt>
     <dd><%= link_to_bookmarkable_bookmarks(external_work) %></dd>
     <% end %>
 
-    <dt><%=h t('.related_works_link', :default => 'Related Works') + ': '%></dt>
+    <dt><%= ts("Related Works") + ": "%></dt>
     <dd><%= link_to external_work.related_works.count.to_s, external_work  %></dd>
   </dl>
 
   <% if logged_in_as_admin? %>
-  <h6 class="landmark">Author Actions</h6>
-  <ul class="navigation" role="navigation">
-    <li><%= link_to t('.links.edit', :default => 'Edit'), edit_external_work_path(external_work) %></li>
-  </ul>
+    <h6 class="landmark heading">Author Actions</h6>
+    <ul class="navigation actions" role="navigation">
+      <li><%= link_to ts("Edit"), edit_external_work_path(external_work) %></li>
+    </ul>
   <% end %>
 
 </li>

@@ -4,22 +4,25 @@ class WorksController < ApplicationController
 
   # only registered users and NOT admin should be able to create new works
   before_filter :load_collection
-  before_filter :users_only, :only => [ :new, :create, :import, :import_multiple, :drafts, :preview, :show_multiple ]
-  before_filter :check_user_status, :only => [:new, :create, :edit, :update, :preview, :show_multiple, :edit_multiple ]
-  before_filter :load_work, :only => [ :show, :navigate, :edit, :update, :destroy, :preview, :edit_tags, :update_tags ]
-  before_filter :check_ownership, :only => [ :edit, :update, :destroy, :preview ]
+  before_filter :users_only, :except => [ :index, :show, :navigate, :search ]
+  before_filter :check_user_status, :except => [ :index, :show, :navigate, :search ]
+  before_filter :load_work, :except => [ :new, :create, :import, :index, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :drafts ]
+  # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
+  before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :marktoread, :drafts ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
 
   cache_sweeper :work_sweeper
-  cache_sweeper :collection_sweeper 
+  cache_sweeper :collection_sweeper
   cache_sweeper :static_sweeper
+  cache_sweeper :feed_sweeper
 
   def search
-    @languages = Language.all(:order => :short)
+    @languages = Language.default_order
     @query = {}
+    # to understand this, the code you are looking for is in lib/query.rb
     if params[:query]
       @query = Query.standardize(params[:query])
       begin
@@ -44,7 +47,20 @@ class WorksController < ApplicationController
     @tag = nil
     @selected_tags = []
     @selected_pseuds = []
-    @sort_column = (valid_sort_column(params[:sort_column]) ? params[:sort_column] : 'date')
+    @sort_column = case params[:sort_column]
+      when 'author'
+        'authors_to_sort_on'
+      when 'title'
+        'title_to_sort_on' 
+      when 'word_count'
+        'word_count'
+      when 'hit_count'
+        'hit_count'
+      when 'created_at'
+        'created_at'
+      else
+        'revised_at'
+      end
     @sort_direction = (valid_sort_direction(params[:sort_direction]) ? params[:sort_direction] : 'DESC')
     if !params[:sort_direction].blank? && !valid_sort_direction(params[:sort_direction])
       params[:sort_direction] = 'DESC'
@@ -66,7 +82,6 @@ class WorksController < ApplicationController
       @selected_tags = params[:selected_tags]
     end
 
-    @most_recent_works = (params[:tag_id].blank? && params[:user_id].blank? && params[:language_id].blank? && params[:collection_id].blank?)
     # if we're browsing by a particular tag, just add that
     # tag to the selected_tags list.
     unless params[:tag_id].blank?
@@ -106,26 +121,31 @@ class WorksController < ApplicationController
       end
     end
 
-    @language_id = params[:language_id] ? Language.find_by_short(params[:language_id]) : nil
+    @language = Language.find_by_short(params[:language_id]) if params[:language_id]
     # Workaround for the getting-all-English-works problem
     # TODO: better limits
-    if @language_id && @language_id == Language.default
-      @language_id = nil
+    if @language && @language == Language.default
       @most_recent_works = true
     end
 
     # Now let's build the query
-    @works, @filters, @pseuds = Work.find_with_options(:user => @user, :author => @author, :selected_pseuds => @selected_pseuds,
-                                                    :tag => @tag, :selected_tags => @selected_tags,
+    @works, @filters, @pseuds = Work.find_with_options(:user => @user, 
+                                                    :author => @author, 
+                                                    :selected_pseuds => @selected_pseuds,
+                                                    :tag => @tag, 
+                                                    :selected_tags => @selected_tags,
                                                     :collection => @collection,
-                                                    :language_id => @language_id,
-                                                    :sort_column => @sort_column, :sort_direction => @sort_direction,
-                                                    :page => params[:page], :per_page => params[:per_page],
-                                                    :boolean_type => params[:boolean_type])
+                                                    :language_id => @language,
+                                                    :sort_column => @sort_column, 
+                                                    :sort_direction => @sort_direction,
+                                                    :page => params[:page], 
+                                                    :per_page => params[:per_page],
+                                                    :boolean_type => params[:boolean_type],
+                                                    :complete => params[:complete])
 
 
     # Limit the number of works returned and let users know that it's happening
-    if @most_recent_works && @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
+    if @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX
       flash.now[:notice] = "More than #{ArchiveConfig.SEARCH_RESULTS_MAX} works were returned. The first #{ArchiveConfig.SEARCH_RESULTS_MAX} works
       we found using the current sort and filters are shown."
     end
@@ -185,6 +205,12 @@ class WorksController < ApplicationController
     end
 
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
+    
+    if current_user.respond_to?(:subscriptions)
+      @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
+                                                       :subscribable_type => 'Work').first ||
+                      current_user.subscriptions.build
+    end
 
     @page_title = @work.unrevealed? ? ts("Mystery Work") :
       get_page_title(@work.fandoms.size > 3 ? ts("Multifandom") : @work.fandoms.string,
@@ -193,15 +219,15 @@ class WorksController < ApplicationController
       if @work.unrevealed?
         @tweet_text = ts("Mystery Work")
       else
-        @tweet_text = @work.title + " by " + 
-                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " + 
+        @tweet_text = @work.title + " by " +
+                      (@work.anonymous? ? ts("Anonymous") : @work.pseuds.map(&:name).join(', ')) + " - " +
                       (@work.fandoms.size > 2 ? ts("Multifandom") : @work.fandoms.string)
         @tweet_text = @tweet_text.truncate(95)
       end
     render :show
     Rails.logger.debug "Work remote addr: #{request.remote_ip}"
     @work.increment_hit_count(request.remote_ip)
-    Reading.update_or_create(@work, current_user)
+    Reading.update_or_create(@work, current_user) if current_user
   end
 
   def navigate
@@ -219,6 +245,12 @@ class WorksController < ApplicationController
       @work.challenge_assignments << @challenge_assignment
       @work.collections << @challenge_assignment.collection
       @work.recipients = @challenge_assignment.requesting_pseud.byline
+    else
+      @work.collection_names = @collection.name if @collection
+    end
+    if params[:claim_id] && (@challenge_claim = ChallengeClaim.find(params[:claim_id])) && User.find(@challenge_claim.claiming_user_id) == current_user
+      @work.challenge_claims << @challenge_claim
+      @work.collections << @challenge_claim.collection
     else
       @work.collection_names = @collection.name if @collection
     end
@@ -248,8 +280,8 @@ class WorksController < ApplicationController
         @work.posted = true
         @chapter.posted = true
       end
-      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)  
-      
+      valid = (@work.errors.empty? && @work.invalid_pseuds.blank? && @work.ambiguous_pseuds.blank? && @work.has_required_tags?)
+
       if valid && @work.set_revised_at(@chapter.published_at) && @work.set_challenge_info && @work.save
         #hack for empty chapter authors in cucumber series tests
         @chapter.pseuds = @work.pseuds if @chapter.pseuds.blank?
@@ -360,7 +392,21 @@ class WorksController < ApplicationController
             @work.set_revised_at
           end
         end
-        @work.posted = true
+        if !@work.challenge_claims.empty?
+          @included = 0
+          @work.challenge_claims.each do |claim|
+            @work.collections.each do |collection|
+              if collection == claim.collection
+                @included = 1
+              end
+            end
+            if @included == 0
+              @work.collections << claim.collection
+            end
+            @included = 0
+          end
+        end
+        @work.posted = true if params[:post_button]
         @work.minor_version = @work.minor_version + 1
         @work.set_challenge_info
         saved = @work.save
@@ -457,6 +503,9 @@ class WorksController < ApplicationController
     @preview_mode = true
   end
 
+  def confirm_delete
+  end
+
   # DELETE /works/1
   def destroy
     @work = Work.find(params[:id])
@@ -540,10 +589,10 @@ protected
         @work = storyparser.download_and_parse_chapters_into_story(urls, options)
       end
     rescue Timeout::Error
-      flash[:error] = ts("Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.")
+      flash.now[:error] = ts("Import has timed out. This may be due to connectivity problems with the source site. Please try again in a few minutes, or check Known Issues to see if there are import problems with this site.")
       render :new_import and return
     rescue StoryParser::Error => exception
-      flash[:error] = ts("We couldn't successfully import that work, sorry: %{message}", :message => exception.message)
+      flash.now[:error] = ts("We couldn't successfully import that work, sorry: %{message}", :message => exception.message)
       render :new_import and return
     end
 
@@ -574,7 +623,7 @@ protected
     # collect the errors neatly, matching each error to the failed url
     unless failed_urls.empty?
       error_msgs = 0.upto(failed_urls.length).map {|index| "<dt>#{failed_urls[index]}</dt><dd>#{errors[index]}</dd>"}.join("\n")
-      flash[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
+      flash.now[:error] = "<h3>#{ts('Failed Imports')}</h3><dl>#{error_msgs}</dl>".html_safe
     end
 
     # if EVERYTHING failed, boo. :( Go back to the import form.
@@ -597,7 +646,7 @@ protected
         @external_authors.each do |external_author|
           external_author.find_or_invite(current_user)
         end
-        message = ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
+        message = " " + ts("We have notified the author(s) you imported stories for. If any were missed, you can also add co-authors manually.")
         flash[:notice] ? flash[:notice] += message : flash[:notice] = message
       end
     end
@@ -611,20 +660,20 @@ public
     @work = Work.find(params[:id])
     unless @user.is_author_of?(@work)
       flash[:error] = ts("You can only post your own works.")
-      redirect_to current_user
+      redirect_to current_user and return
     end
 
     if @work.posted
       flash[:error] = ts("That work is already posted. Do you want to edit it instead?")
-      redirect_to edit_user_work_path(@user, @work)
+      redirect_to edit_user_work_path(@user, @work) and return
     end
-    
+
     @work.posted = true
     @work.minor_version = @work.minor_version + 1
     # @work.update_minor_version
     unless @work.valid? && @work.save
       flash[:error] = ts("There were problems posting your work.")
-      redirect_to edit_user_work_path(@user, @work)
+      redirect_to edit_user_work_path(@user, @work) and return
     end
 
     flash[:notice] = ts("Your work was successfully posted.")
@@ -636,36 +685,73 @@ public
   def show_multiple
     @user = current_user
     if params[:pseud_id]
-      @author = @user.pseuds.find_by_name(params[:pseud_id])
-      @works = @author.works
+      @works = Work.joins(:pseuds).where(:pseud_id => params[:pseud_id])
     else
-      @works = @user.works
+      @works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id)
     end
     if params[:work_ids]
-      @works = @works & Work.find(params[:work_ids])
+      @works = @works.where(:id => params[:work_ids])
     end
+    @works_by_fandom = @works.joins(:taggings).
+      joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
+      select("distinct tags.name as fandom, works.id as id, works.title as title").group_by(&:fandom)
   end
 
   def edit_multiple
+    if params[:commit] == "Orphan"
+      redirect_to new_orphan_path(:work_ids => params[:work_ids]) and return
+    end
     @user = current_user
-    @works = Work.find(params[:work_ids]) & @user.works
+    @works = Work.select("distinct works.*").joins(:pseuds => :user).where("users.id = ?", @user.id).where(:id => params[:work_ids])
+    if params[:commit] == "Delete"
+      render "confirm_delete_multiple" and return
+    end
+  end
 
+  def confirm_delete_multiple
+    @user = current_user
+    @works = Work.select("distinct works.*").joins(:pseuds => :user).where("users.id = ?", @user.id).where(:id => params[:work_ids])
+  end
+  
+  def delete_multiple
+    @user = current_user
+    @works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id).where(:id => params[:work_ids]).readonly(false)
+    titles = @works.collect(&:title)
+    Rails.logger.info "!&!&!&!&&! GOT HERE #{titles}"
+    @works.each do |work|
+      work.destroy
+    end
+    flash[:notice] = ts("Your works %{titles} were deleted.", :titles => titles.join(", "))
+    redirect_to show_multiple_user_works_path(@user)
   end
 
   def update_multiple
     @user = current_user
-    @works = Work.find(params[:work_ids]) & @user.works
+    @works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id).where(:id => params[:work_ids]).readonly(false)
     @errors = []
+    # to avoid overwriting, we entirely trash any blank fields and also any unchecked checkboxes
+    work_params = params[:work].reject {|key,value| value.blank? || value == "0"}
     @works.each do |work|
-      # actual stuff will happen here shortly
-      unless work.update_attributes!(params[:work].reject {|key,value| value.blank?})
+      # now we can just update each work independently, woo!
+      unless work.update_attributes(work_params)
         @errors << ts("The work %{title} could not be edited: %{error}", :title => work.title, :error => work.errors_on.to_s)
       end
     end
     unless @errors.empty?
       flash[:error] = ts("There were problems editing some works: %{errors}", :errors => @errors.join(", "))
+      redirect_to edit_multiple_user_works_path(@user)
+    else
+      flash[:notice] = ts("Your edits were put through! Please check over the works to make sure everything is right.")
+      redirect_to show_multiple_user_works_path(@user, :work_ids => @works.collect(&:id))
     end
-    redirect_to show_multiple_user_works_path(@user)
+  end
+
+  # marks a work to read later, or unmarks it if the work is already marked
+  def marktoread
+    @work = Work.find(params[:id])
+    Reading.mark_to_read_later(@work, current_user)
+    flash[:notice] = ts("Your history was updated. It may take a short while to show up.")
+    redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
   protected
@@ -693,39 +779,36 @@ public
   # Sets values for @work, @chapter, @coauthor_results, @pseuds, and @selected_pseuds
   # and @tags[category]
   def set_instance_variables
-    begin
-      if params[:id] # edit, update, preview, manage_chapters
-        @work ||= Work.find(params[:id])
-        @previous_published_at = @work.first_chapter.published_at
-        @previous_backdate_setting = @work.backdate
-        if params[:work]  # editing, save our changes
-          if params[:preview_button] || params[:cancel_button]
-            @work.preview_mode = true
-          else
-            @work.preview_mode = false
-          end
-          @work.attributes = params[:work]
-          @work.save_parents if @work.preview_mode
-        end
-      elsif params[:work] # create
-        @work = Work.new(params[:work])
-      else # new
-        if params[:load_unposted] && current_user.unposted_work
-          @work = current_user.unposted_work
+    if params[:id] # edit, update, preview, manage_chapters
+      @work ||= Work.find(params[:id])
+      @previous_published_at = @work.first_chapter.published_at
+      @previous_backdate_setting = @work.backdate
+      if params[:work]  # editing, save our changes
+        if params[:preview_button] || params[:cancel_button]
+          @work.preview_mode = true
         else
-          @work = Work.new
-          @work.chapters.build
+          @work.preview_mode = false
         end
+        @work.attributes = params[:work]
+        @work.save_parents if @work.preview_mode
       end
-
-      @serial_works = @work.serial_works
-
-      @chapter = @work.first_chapter
-      # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
-      if params[:work] && params[:work][:chapter_attributes]
-        @chapter.attributes = params[:work][:chapter_attributes]
+    elsif params[:work] # create
+      @work = Work.new(params[:work])
+    else # new
+      if params[:load_unposted] && current_user.unposted_work
+        @work = current_user.unposted_work
+      else
+        @work = Work.new
+        @work.chapters.build
       end
-    rescue
+    end
+
+    @serial_works = @work.serial_works
+
+    @chapter = @work.first_chapter
+    # If we're in preview mode, we want to pick up any changes that have been made to the first chapter
+    if params[:work] && params[:work][:chapter_attributes]
+      @chapter.attributes = params[:work][:chapter_attributes]
     end
   end
 
@@ -781,6 +864,19 @@ public
     else
       flash[:notice] = ts("The work was not posted. It will be saved here in your drafts for one week, then cleaned up.")
       redirect_to drafts_user_works_path(current_user)
+    end
+  end
+
+  # Takes an array of tags and returns a comma-separated list, without the markup
+  def tag_list(tags)
+    tags = tags.uniq.compact
+    if !tags.blank? && tags.respond_to?(:collect)
+      last_tag = tags.pop
+      tag_list = tags.collect{|tag|  tag.name + ", "}.join
+      tag_list += last_tag.name
+      tag_list.html_safe
+    else
+      ""
     end
   end
 

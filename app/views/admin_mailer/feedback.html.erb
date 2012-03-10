@@ -1,12 +1,12 @@
-<p><%=h t('.heres_some_feedback', :default => "Here's some user feedback on the archive!") %></p>
+<h2 class="heading"><%=ts("Here's some user feedback on the archive!") %></h2>
 
-<%= ArchiveConfig.REVISION.blank? ? "" : "<p>" + t('.revision', :default => "Archive revision: (rev. %{revision})", :revision => ArchiveConfig.REVISION) + "</p>" %>
+<%= ArchiveConfig.REVISION.blank? ? "" : "<p>" + ts("Archive revision: (rev. %{revision})", :revision => ArchiveConfig.REVISION) + "</p>" %>
 
-<p><%=h t('.feedback', :default => "Feedback:") %></p>
+<h3 class="heading"><%=ts("Feedback") %>:</h3>
 
 <%=raw @summary %>
 <%=raw @comment %>
 
-<p><%=h t('.sent_at', :default => "Sent at:") %>&nbsp;<%= Time.now.to_s(:time_for_mailers) %></p>
+<p><%=ts("Sent at") %>: &nbsp;<%= Time.now.to_s(:time_for_mailers) %></p>
 
 

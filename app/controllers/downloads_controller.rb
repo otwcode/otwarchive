@@ -1,5 +1,7 @@
 class DownloadsController < ApplicationController
 
+  include XhtmlSplitter
+
   skip_before_filter :store_location, :only => :show
   before_filter :guest_downloading_off, :only => :show
   before_filter :check_visibility, :only => :show
@@ -93,16 +95,15 @@ protected
   end
 
   def download_epub
-    # if only one chapter can use same file as html and pdf versions
-    if @chapters.size == 1
-      create_epub_files("single")
-    else
-      create_epub_files
-    end
+    create_epub_files
 
-    # stuff contents of epub directory into a zip file named with .epub extension
-    # note: we have to zip this up in this particular order because "mimetype" must be the first item in the zipfile
-    cmd = %Q{cd "#{@work.download_dir}/epub"; zip "#{@work.download_basename}.epub" mimetype; zip -r "#{@work.download_basename}.epub" META-INF OEBPS}
+    # stuff contents of epub directory into a zip file named with
+    # .epub extension
+    #
+    # note: we have to zip this up in this particular order because
+    # "mimetype" must be the first item in the zipfile and mustn't be
+    # compressed
+    cmd = %Q{cd "#{@work.download_dir}/epub"; zip -0 "#{@work.download_basename}.epub" mimetype; zip -r "#{@work.download_basename}.epub" META-INF OEBPS}
     Rails.logger.debug cmd
    `#{cmd} 2> /dev/null`
 
@@ -141,14 +142,14 @@ protected
 
     # each chapter may have its own byline, notes and endnotes
     @chapters.each_with_index do |chapter, index|
-       @chapter = chapter
-       @page_title = chapter.chapter_title
-       render_mobi_html("_download_chapter", "chapter#{index+1}")
+      @chapter = chapter
+      @page_title = chapter.chapter_title
+      render_mobi_html("_download_chapter", "chapter#{index+1}")
     end
 
     # the afterword contains the works end notes, any related works, and a link back to comment
-     @page_title = ts("Afterword")
-     render_mobi_html("_download_afterword", "afterword")
+    @page_title = ts("Afterword")
+    render_mobi_html("_download_afterword", "afterword")
 
     chapter_file_names = 1.upto(@chapters.size).map {|i| "mobi/chapter#{i}.html"}
     ["mobi/preface.html", chapter_file_names.join(' '), "mobi/afterword.html"].join(' ')
@@ -161,7 +162,7 @@ protected
     File.open("#{@work.download_dir}/mobi/#{basename}.html", 'w') {|f| f.write(html)}
   end
 
-  def create_epub_files(single = "")
+  def create_epub_files
     return if File.exists?("#{@work.download_basename}.epub")
   # Manually building an epub file here
   # See http://www.jedisaber.com/eBooks/tutorial.asp for details
@@ -173,29 +174,37 @@ protected
     FileUtils.mkdir_p "#{epubdir}/META-INF"
     FileUtils.cp("#{Rails.root}/app/views/epub/container.xml", "#{epubdir}/META-INF")
 
-    # write the OEBPS navigation files
-    FileUtils.mkdir_p "#{epubdir}/OEBPS"
-    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx#{single}"))}
-    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf#{single}"))}
-
     # write the OEBPS content files
-    if single == "single"
-      # can use work html, but needs translation into proper xhtml
-      create_work_html
-      render_xhtml(File.read("#{@work.download_basename}.html"), "work")
-    else
-      preface = render_to_string(:template => "downloads/_download_preface.html", :layout => 'barebones.html')
-      render_xhtml(preface, "preface")
+    FileUtils.mkdir_p "#{epubdir}/OEBPS"
+    preface = render_to_string(:template => "downloads/_download_preface.html", :layout => 'barebones.html')
+    render_xhtml(preface, "preface")
 
-      @chapters.each_with_index do |chapter, index|
-        @chapter = chapter
+    @parts = []
+    @chapters.each_with_index do |chapter, index|
+      @chapter = chapter
+      
+      # split chapters into multiple parts if they are too big
+      @parts << split_xhtml(sanitize_field(@chapter, :content))
+      @parts[-1].each_with_index do |part, partindex|
+        @content = part
+        # we only need the chapter meta/endnotes info if it's a
+        # multichaptered work and if we are displaying the first/last
+        # part of a chapter
+        @suppress_chapter_meta = @chapters.size == 1 || partindex > 0
+        @suppress_chapter_endnotes = @chapters.size == 1 || partindex < @parts[-1].size
         html = render_to_string(:template => "downloads/_download_chapter.html", :layout => "barebones.html")
-        render_xhtml(html, "chapter#{index + 1}")
+        render_xhtml(html, "chapter#{index + 1}_#{partindex + 1}")
       end
-
-      afterword = render_to_string(:template => "downloads/_download_afterword.html", :layout => 'barebones.html')
-      render_xhtml(afterword, "afterword")
     end
+
+    afterword = render_to_string(:template => "downloads/_download_afterword.html", :layout => 'barebones.html')
+    render_xhtml(afterword, "afterword")
+
+    # write the OEBPS navigation files
+    File.open("#{epubdir}/OEBPS/toc.ncx", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/toc.ncx"))}
+    File.open("#{epubdir}/OEBPS/content.opf", 'w') {|f| f.write(render_to_string(:file => "#{Rails.root}/app/views/epub/content.opf"))}
+
+
   end
 
   def render_xhtml(html, filename)

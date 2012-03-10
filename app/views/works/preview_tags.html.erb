@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('.works.preview.preview_work_tags', :default => "Preview Work Tags") %></h2>
+<h2 class="heading"><%=h t('.works.preview.preview_work_tags', :default => "Preview Tags") %></h2>
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
@@ -22,7 +22,7 @@
 
   <fieldset>
     <legend><%= t('.post_work', :default => 'Post Work') %></legend>
-    <p class="submit">
+    <p class="submit cancel edit actions">
   	<% if @work.posted? %>
   		<%= submit_tag t('.forms.update', :default => 'Update'), :name => 'update_button' %>
   	<% else %>

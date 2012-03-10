@@ -1,6 +1,6 @@
 first:
-  user: testuser
+  user_id: 1
 second:
-  user: testuser2
+  user_id: 2
 third:
-  user: sad_user_with_no_pseuds
+  user_id: 3

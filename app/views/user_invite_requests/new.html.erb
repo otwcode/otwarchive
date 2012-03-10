@@ -1,24 +1,20 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>Request more invites</h2>
+<h2 class="heading"><%= ts("Request more invites") %></h2>
 <!--/descriptions-->
+
+<!--subnav-->
+<%= render "invitations/user_invitations_navigation" %>
 
 <!--main content-->
 <%= form_for(@user_invite_request) do |f| %>
   <%= error_messages_for @user_invite_request %>
-  <p>
-    <%= f.label "How many invites are you requesting?" %> 
-  </p>
-  <p>
-    <%= f.text_field :quantity, :size => '2' %>
-  </p>
-  <p>
-    <%= f.label "Reason for your request:" %>
-  </p>
-  <p>
-    <%= f.text_area :reason, :size => '50x5' %>
-  </p>
-  <p class="submit">
-    <%= f.submit 'Create' %>
-  </p>
+  <dl>
+    <dt><%= f.label "How many invites would you like?" %></dt> 
+    <dd><%= f.text_field :quantity, :size => '2', :class => 'number' %></dd>
+    <dt><%= f.label "Any special reason you'd like them?" %></dt>
+    <dd><%= f.text_area :reason, :size => '50x5' %></dd>
+    <dt class="landmark">Submit</dt>
+    <dd class="submit actions"><%= f.submit 'Send Request' %></dd>
+  </dl>
 <% end %>
 <!--/content-->

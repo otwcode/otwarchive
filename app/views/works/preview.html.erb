@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('.preview_story', :default => "Preview Work") %></h2>
+<h2 class="heading"><%=h t('.preview_story', :default => "Preview") %></h2>
 <%= error_messages_for :work %>
 <!--/descriptions-->
 
@@ -16,33 +16,43 @@
         <div class="userstuff"><%=raw sanitize_field(@chapter, :content) %></div>
     <% end %>
     </div>
-    <% unless @work.endnotes.blank? %>
-      <div class="preface notes">
-          <h3><%=h t('.notes', :default => "Notes:") %></h3>
-          <blockquote class="userstuff"><%=raw sanitize_field(@work, :endnotes) %></blockquote>
-       </div>
-
+    
+    <% if !@work.endnotes.blank? || !@work.series.blank? || !@work.approved_children.blank? %>
+    <!--afterword-->
+    <div class="afterword preface group" role="complementary">
+      <% unless @work.endnotes.blank? %>
+        <%= render :partial => 'works/work_endnotes' %>
+      <% end %>
+      <% unless @work.series.blank? %>
+        <%= render :partial => 'works/work_series_links' %>
+      <% end %>
+      <% unless @work.approved_children.blank? %>
+        <%= render :partial => 'works/work_approved_children' %>
+      <% end %>
+    </div>
+    <!--/afterword-->
     <% end %>
-  	<%= render :partial => 'works/work_footer' %>
+
   </div>
 </div>
 
-<div class="clear"></div>
+<div class="clear"><!--presentational--></div>
 
 <%= form_for(@work) do |f| %>
 
   <%= render :partial => 'hidden_fields', :locals => {:form => f} %>
 
   <fieldset>
-    <legend><%= t('.post_work', :default => 'Post Work') %></legend>
-    <p class="submit">
-  	<% if @work.posted? %>
-  		<%= submit_tag t('.forms.update', :default => 'Update'), :name => 'update_button' %>
-  	<% else %>
-  		<%= submit_tag t('.forms.post', :default => 'Post'), :name => 'post_button' %>
-  	<% end %>
-      <%= submit_tag t('.forms.edit', :default => 'Edit'), :name => 'edit_button' %>
-      <%= submit_tag t('.forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %> 
+    <legend><%= ts('Post Work') %></legend>
+    <p class="submit cancel edit actions">
+      <% if @work.posted? %>
+        <%= submit_tag ts('Update'), :name => 'update_button' %>
+      <% else %>
+        <%= submit_tag ts('Post'), :name => 'post_button' %>
+        <%= submit_tag ts('Save Without Posting'), :name => 'save_button' %>
+      <% end %>
+      <%= submit_tag ts('Edit'), :name => 'edit_button' %>
+      <%= submit_tag ts('Cancel'), :name => 'cancel_button' %> 
     </p>
   </fieldset>
 

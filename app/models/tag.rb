@@ -70,6 +70,11 @@ class Tag < ActiveRecord::Base
   has_many :approved_collections, :through => :filtered_works
 
   has_many :set_taggings, :dependent => :destroy
+  has_many :tag_sets, :through => :set_taggings
+  has_many :owned_tag_sets, :through => :tag_sets
+  
+  has_many :tag_set_associations, :dependent => :destroy
+  has_many :parent_tag_set_associations, :class_name => 'TagSetAssociation', :foreign_key => 'parent_tag_id', :dependent => :destroy
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -84,7 +89,9 @@ class Tag < ActiveRecord::Base
   before_validation :check_synonym
   def check_synonym
     if !self.new_record? && self.name_changed?
-      unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase)
+      # ordinary wranglers can change case and accents but not punctuation or the actual letters in the name
+      # admins can change tags with no restriction
+      unless User.current_user.is_a?(Admin) || (self.name.downcase == self.name_was.downcase) || (self.name.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u,'').downcase.to_s == self.name_was.mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/u,'').downcase.to_s)
         self.errors.add(:name, "can only be changed by an admin.")
       end
     end
@@ -128,6 +135,7 @@ class Tag < ActiveRecord::Base
   # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
   # what we actually need are the empty rows in the results
   scope :unwrangled, joins("LEFT JOIN `common_taggings` ON common_taggings.common_tag_id = tags.id").where("common_taggings.id IS NULL")
+  scope :in_use, where("canonical = 1 OR taggings_count > 0")
   scope :first_class, joins("LEFT JOIN `meta_taggings` ON meta_taggings.sub_tag_id = tags.id").where("meta_taggings.id IS NULL")
 
   # Tags that have sub tags
@@ -156,12 +164,6 @@ class Tag < ActiveRecord::Base
   scope :by_date, order('created_at DESC')
   scope :visible, where('type in (?)', VISIBLE).by_name
 
-  scope :by_name_without_articles, order("case when lower(substring(name from 1 for 4)) = 'the ' then substring(name from 5)
-                                               when lower(substring(name from 1 for 2)) = 'a ' then substring(name from 3)
-                                               when lower(substring(name from 1 for 3)) = 'an ' then substring(name from 4)
-                                              else name
-                                              end")
-
   scope :by_pseud, lambda {|pseud|
     joins(:works => :pseuds).
     where(:pseuds => {:id => pseud.id})
@@ -172,9 +174,9 @@ class Tag < ActiveRecord::Base
 
   # This will return all tags that have one of the given tags as a parent
   scope :with_parents, lambda {|parents|
-    joins(:common_taggings).where("filterable_id in (?)", parents.collect(&:id))
+    joins(:common_taggings).where("filterable_id in (?)", parents.first.is_a?(Integer) ? parents : (parents.respond_to?(:value_of) ? parents.value_of(:id) : parents.collect(&:id)))
   }
-
+  
   scope :with_no_parents,
     joins("LEFT JOIN common_taggings ON common_taggings.common_tag_id = tags.id").
     where("filterable_id IS NULL")
@@ -276,7 +278,8 @@ class Tag < ActiveRecord::Base
 
 
   # Get tags that are either above or below the average popularity
-  def self.with_popularity_relative_to_average(options = {:factor => 1, :include_meta => false, :greater_than => false, :names_only => false})
+  def self.with_popularity_relative_to_average(options = {})
+    options.reverse_merge!({:factor => 1, :include_meta => false, :greater_than => false, :names_only => false})
     comparison = "<"
     comparison = ">" if options[:greater_than]
 
@@ -298,6 +301,51 @@ class Tag < ActiveRecord::Base
                   order("count ASC")
     end
   end
+  
+  def self.in_prompt_restriction(restriction)
+    joins("INNER JOIN set_taggings ON set_taggings.tag_id = tags.id
+           INNER JOIN tag_sets ON tag_sets.id = set_taggings.tag_set_id
+           INNER JOIN owned_tag_sets ON owned_tag_sets.tag_set_id = tag_sets.id
+           INNER JOIN owned_set_taggings ON owned_set_taggings.owned_tag_set_id = owned_tag_sets.id
+           INNER JOIN prompt_restrictions ON (prompt_restrictions.id = owned_set_taggings.set_taggable_id AND owned_set_taggings.set_taggable_type = 'PromptRestriction')").
+    where("prompt_restrictions.id = ?", restriction.id)           
+  end
+  
+  def self.by_name_without_articles(fieldname = "name")
+    fieldname = "name" unless fieldname.match(/^([\w]+\.)?[\w]+$/)
+    order("case when lower(substring(#{fieldname} from 1 for 4)) = 'the ' then substring(#{fieldname} from 5)
+            when lower(substring(#{fieldname} from 1 for 2)) = 'a ' then substring(#{fieldname} from 3)
+            when lower(substring(#{fieldname} from 1 for 3)) = 'an ' then substring(#{fieldname} from 4)
+            else #{fieldname}
+            end")
+  end
+  
+  def self.in_tag_set(tag_set)
+    if tag_set.is_a?(OwnedTagSet)
+      joins(:set_taggings).where("set_taggings.tag_set_id = ?", tag_set.tag_set_id)
+    else
+      joins(:set_taggings).where("set_taggings.tag_set_id = ?", tag_set.id)
+    end      
+  end
+  
+  # gives you [parent_name, child_name], [parent_name, child_name], ...  
+  def self.parent_names(parent_type = 'fandom')
+    joins(:parents).where("parents_tags.type = ?", parent_type.capitalize).
+    select("parents_tags.name as parent_name, tags.name as child_name").
+    by_name_without_articles("parent_name").
+    by_name_without_articles("child_name")
+  end
+  
+  # Because this can be called by a gigantor tag set and all we need are names not objects,
+  # we do an end-run around ActiveRecord and just get the results straight from the db, but 
+  # we borrow the sql from parent_names above 
+  # returns a hash[parent_name] = child_names
+  def self.names_by_parent(child_relation, parent_type = 'fandom')
+    hash = {}
+    results = ActiveRecord::Base.connection.execute(child_relation.parent_names(parent_type).to_sql)
+    results.each {|row| hash[row.first] ||= Array.new; hash[row.first] << row.second}
+    hash
+  end
 
   # Used for associations, such as work.fandoms.string
   # Yields a comma-separated list of tag names
@@ -311,6 +359,73 @@ class Tag < ActiveRecord::Base
     saved_name = self.name_changed? ? self.name_was : self.name
     saved_name.gsub('/', '*s*').gsub('&', '*a*').gsub('.', '*d*').gsub('?', '*q*').gsub('#', '*h*')
   end
+
+  ## AUTOCOMPLETE
+  # set up autocomplete and override some methods
+  include AutocompleteSource
+  def autocomplete_prefixes
+    prefixes = [ "autocomplete_tag_#{type.downcase}", "autocomplete_tag_all" ]
+    prefixes
+  end
+  
+  def add_to_autocomplete(score = nil)
+    score ||= autocomplete_score
+    if self.is_a?(Character) || self.is_a?(Relationship)
+      parents.each do |parent|
+        $redis.zadd("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", score, autocomplete_value) if parent.is_a?(Fandom)
+      end
+    end
+    super
+  end
+
+  def remove_from_autocomplete
+    super
+    if self.is_a?(Character) || self.is_a?(Relationship)
+      parents.each do |parent|
+        $redis.zrem("autocomplete_fandom_#{parent.name.downcase}_#{type.downcase}", autocomplete_value) if parent.is_a?(Fandom)
+      end
+    end
+  end
+    
+  def self.parse_autocomplete_value(current_autocomplete_value)
+    current_autocomplete_value.split(AUTOCOMPLETE_DELIMITER, 2)
+  end
+  
+
+  def autocomplete_score
+    taggings_count
+  end
+  
+  # look up tags that have been wrangled into a given fandom
+  def self.autocomplete_fandom_lookup(options = {})
+    options.reverse_merge!({:term => "", :tag_type => "character", :fandom => "", :fallback => true})
+    search_param = options[:term]
+    tag_type = options[:tag_type]
+    fandoms = Tag.get_search_terms(options[:fandom])
+      
+    # fandom sets are too small to bother breaking up
+    # we're just getting ALL the tags in the set(s) for the fandom(s) and then manually matching
+    results = []
+    fandoms.each do |single_fandom|
+      if search_param.blank?
+        # just return ALL the characters
+        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1)
+      else
+        search_regex = Tag.get_search_regex(search_param)
+        results += $redis.zrevrange("autocomplete_fandom_#{single_fandom}_#{tag_type}", 0, -1).select {|tag| tag.match(search_regex)}
+      end
+    end
+    if options[:fallback] && results.empty? && search_param.length > 0
+      # do a standard tag lookup instead
+      Tag.autocomplete_lookup(:search_param => search_param, :autocomplete_prefix => "autocomplete_tag_#{tag_type}")
+    else
+      results
+    end
+  end
+  
+  ## END AUTOCOMPLETE
+
+
 
   # Substitute characters that are particularly prone to cause trouble in urls
   def self.find_by_name(string)
@@ -424,6 +539,12 @@ class Tag < ActiveRecord::Base
   # and get rid of the old filter_taggings as appropriate
   def update_filters_for_merger_change
     if self.merger_id_changed?
+      # setting the merger_id doesn't update the merger so we do it here
+      if self.merger_id
+        self.merger = Tag.find_by_id(self.merger_id)
+      else
+        self.merger = nil
+      end
       if self.merger && self.merger.canonical?
         self.add_filter_taggings
       end
@@ -438,17 +559,32 @@ class Tag < ActiveRecord::Base
   def add_filter_taggings
     filter_tag = self.filter
     if filter_tag  && !filter_tag.new_record?
-      Work.with_any_tags([self, filter_tag].uniq).each do |work|
-        work.filters << filter_tag unless work.filters.include?(filter_tag)
+      # we collect tags for resetting count so that it's only done once after we've added all filters to works
+      tags_that_need_filter_count_reset = []
+      self.works.each do |work|
+        if work.filters.include?(filter_tag)
+          # If the work filters already included the filter tag (e.g. because the
+          # new filter tag is a meta tag of an existing tag) we make sure to set
+          # the inheritance to false, since the work is now directly tagged with
+          # the filter or one of its synonyms
+          ft = work.filter_taggings.where(["filter_id = ?", filter_tag.id]).first
+          ft.update_attribute(:inherited, false)
+        else
+          work.filters << filter_tag
+          tags_that_need_filter_count_reset << filter_tag unless tags_that_need_filter_count_reset.include?(filter_tag)
+        end
         unless filter_tag.meta_tags.empty?
           filter_tag.meta_tags.each do |m|
             unless work.filters.include?(m)
               work.filter_taggings.create!(:inherited => true, :filter_id => m.id)
+              tags_that_need_filter_count_reset << m unless tags_that_need_filter_count_reset.include?(m)
             end
           end
         end
       end
-      filter.reset_filter_count
+      tags_that_need_filter_count_reset.each do |tag_to_reset|
+        tag_to_reset.reset_filter_count
+      end
     end
   end
 
@@ -457,25 +593,38 @@ class Tag < ActiveRecord::Base
   # for potential duplication (ie, works tagged with more than one synonymous tag)
   def remove_filter_taggings(old_filter=nil)
     if old_filter
-      potential_duplicate_filters = [old_filter] + old_filter.mergers - [self]
+      # An old merger of a tag needs to be removed
+      # This means we remove the old merger itself and all its meta tags unless they
+      # should remain because of other existing tags of the work (or because they are
+      # also meta tags of the new merger)
       self.works.each do |work|
-        if (work.tags & potential_duplicate_filters).empty?
-          filter_tagging = work.filter_taggings.find_by_filter_id(old_filter.id)
-          filter_tagging.destroy if filter_tagging
-        end
-        unless old_filter.meta_tags.empty?
-          old_filter.meta_tags.each do |meta_tag|
-            other_sub_tags = meta_tag.sub_tags - [old_filter]
-            sub_mergers = other_sub_tags.empty? ? [] : other_sub_tags.collect(&:mergers).flatten.compact
-            if work.filters.include?(meta_tag) && (work.filters & other_sub_tags).empty?
-              unless work.tags.include?(meta_tag) || !(work.tags & meta_tag.mergers).empty? || !(work.tags & sub_mergers).empty?
-                work.filters.delete(meta_tag)
+        filters_to_remove = [old_filter] + old_filter.meta_tags
+        filters_to_remove.each do |filter_to_remove|
+          if work.filters.include?(filter_to_remove)
+            # We collect all sub tags, i.e. the tags that would have the filter_to_remove as
+            # meta. If any of these or its mergers (synonyms) are tags of the work, the
+            # filter_to_remove remains
+            all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
+            sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
+            all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
+            # don't include self because at this point in time (before the save) self
+            # is still in the list of submergers from when it was a synonym to the old filter
+            remaining_tags = work.tags - [self]
+            # instead we add the new merger of self (if there is one) as the relevant one to check
+            remaining_tags += [self.merger] unless self.merger.nil?
+            if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
+              work.filters.delete(filter_to_remove)
+              filter_to_remove.reset_filter_count
+            else # we should keep filter_to_remove, but check if inheritence needs to be updated
+              direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
+              if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
+                ft = work.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
+                ft.update_attribute(:inherited, true)
               end
             end
           end
         end
       end
-      old_filter.reset_filter_count
     else
       self.filter_taggings.destroy_all
       self.reset_filter_count
@@ -483,19 +632,22 @@ class Tag < ActiveRecord::Base
   end
 
   def reset_filter_count
-    current_filter = self.filter
-    # we only need to cache values for user-defined tags
-    # because they're the only ones we access
-    if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
-      attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
-                    :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
-      if current_filter.filter_count
-        unless current_filter.filter_count.update_attributes(attributes)
-          raise "Filter count error for #{current_filter.name}"
-        end
-      else
-        unless current_filter.create_filter_count(attributes)
-          raise "Filter count error for #{current_filter.name}"
+    admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+    unless admin_settings.suspend_filter_counts?
+      current_filter = self.filter
+      # we only need to cache values for user-defined tags
+      # because they're the only ones we access
+      if current_filter && (Tag::USER_DEFINED.include?(current_filter.class.to_s))
+        attributes = {:public_works_count => current_filter.filtered_works.posted.unhidden.unrestricted.count,
+          :unhidden_works_count => current_filter.filtered_works.posted.unhidden.count}
+        if current_filter.filter_count
+          unless current_filter.filter_count.update_attributes(attributes)
+            raise "Filter count error for #{current_filter.name}"
+          end
+        else
+          unless current_filter.create_filter_count(attributes)
+            raise "Filter count error for #{current_filter.name}"
+          end
         end
       end
     end
@@ -532,9 +684,27 @@ class Tag < ActiveRecord::Base
   # Add a common tagging association
   # Offloading most of the logic to the inherited tag models
   def add_association(tag)
-    self.parents << tag unless self.parents.include?(tag)
+    self.parents << tag unless self.has_parent?(tag)
   end
 
+  def has_parent?(tag)
+    self.common_taggings.where(:filterable_id => tag.id).count > 0
+  end
+  
+  def has_child?(tag)
+    self.child_taggings.where(:common_tag_id => tag.id).count > 0
+  end
+
+  def associations_to_remove; @associations_to_remove ? @associations_to_remove : []; end
+  def associations_to_remove=(taglist)
+    taglist.reject {|tid| tid.blank?}.each do |tag_id|
+      tag_to_remove = Tag.find(tag_id)
+      if tag_to_remove
+        self.remove_association(tag_to_remove)
+      end
+    end
+  end
+  
   # Determine how two tags are related and divorce them from each other
   def remove_association(tag)
     if tag.class == self.class

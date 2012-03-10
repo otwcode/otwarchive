@@ -31,15 +31,13 @@ Feature: Pseud dashboard
     And I press "Save changes"
   Then I should see "Tag was updated"
 
-  When I follow "Log out"
+  When I log out
   Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
 
   # set up pseuds
 
   When I am logged in as "myself" with password "password"
-  Then I should see "Hi, myself!"
-  And I go to myself's user page
-    And I follow "My Pseuds (1)"
+    And I go to myself's pseuds page
   Then I should see "Default Pseud" within ".navigation"
   When I follow "New Pseud"
     And I fill in "Name" with "Me"
@@ -51,7 +49,7 @@ Feature: Pseud dashboard
   # view main dashboard - when posting a work with the canonical, metatag and synonym should not be seen
 
   When I follow "myself"
-  Then I should see "My Dashboard"
+  Then I should see "Dashboard"
     And I should see "You don't have anything posted under this name yet"
     And I should not see "Revenge of the Sith"
     And I should not see "Stargate"

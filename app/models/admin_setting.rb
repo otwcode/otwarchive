@@ -6,6 +6,10 @@ class AdminSetting < ActiveRecord::Base
   before_save :update_invite_date
   before_update :check_filter_status
   after_save :expire_cached_settings
+  
+  attr_protected :banner_text_sanitizer_version
+  
+  belongs_to :default_skin, :class_name => 'Skin'
 
   def self.invite_from_queue_enabled?
     self.first ? self.first.invite_from_queue_enabled? : ArchiveConfig.INVITE_FROM_QUEUE_ENABLED
@@ -40,6 +44,9 @@ class AdminSetting < ActiveRecord::Base
   def self.guest_downloading_off?
     self.first ? self.first.guest_downloading_off? : false
   end
+  def self.default_skin
+    self.first ? (self.first.default_skin_id ? self.first.default_skin : Skin.default) : Skin.default
+  end
 
   # run once a day from cron
   def self.check_queue
@@ -51,11 +58,25 @@ class AdminSetting < ActiveRecord::Base
       end
     end
   end
+  
+  @queue = :admin
+  # This will be called by a worker when a job needs to be processed
+  def self.perform(method, *args)
+    self.send(method, *args)
+  end
+  
+  # update admin banner setting for all users when banner notice is changed
+  def self.banner_on
+    Preference.update_all("banner_seen = false")
+  end
 
   private
   
   def expire_cached_settings
-    Rails.cache.delete("admin_settings")
+    if Rails.env.production? || Rails.env.test?
+      Rails.cache.delete("admin_settings")
+      Rails.cache.delete("banner_text")
+    end
   end
 
   def check_filter_status

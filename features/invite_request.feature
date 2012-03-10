@@ -1,67 +1,87 @@
 @admin
 Feature: Invite requests
 
+  Scenario: Can't invite a friend from the homepage if you don't have any invitations
+
+    Given I have invitations set up
+    When I try to invite a friend from the homepage
+    Then I should see "Invite a friend"
+      And I should see "Sorry, you have no unsent invitations right now."
+
+  Scenario: Can't invite a friend from your user page if you don't have any invitations
+
+    Given I have invitations set up
+    When I try to invite a friend from my user page
+    Then I should see "Invite a friend"
+      And I should see "Sorry, you have no unsent invitations right now."
+
   Scenario: Request an invite for a friend
-    Given I have no users
-      And I have an AdminSetting
-      And the following admin exists
-      | login       | password   | email                    |
-      | admin-sam   | password   | test@archiveofourown.org |
-      And the following activated user exists
-      | login  | password |
-      | user1  | password |
-    
-    # user requests invites
-    When I am logged in as "user1" with password "password"
-      And I go to the homepage
-    Then I should see "INVITE A FRIEND"
-    When I follow "INVITE A FRIEND"
-    Then I should see "Invite a friend"
-      And I should see "Sorry, you have no unsent invitations right now."
-    When I go to user1's user page
-      And I follow "Invitations"
-    Then I should see "Invite a friend"
-      And I should see "Sorry, you have no unsent invitations right now."
-    When I follow "Request more"
-    Then I should see "How many invites are you requesting?"
+
+    Given I have invitations set up
+    When I try to invite a friend from my user page
+      And I follow "Request more"
     When I fill in "user_invite_request_quantity" with "3"
       And I fill in "user_invite_request_reason" with "I want them for a friend"
-      And I press "Create"
-    Then I should see "Request was successfully created."
+      And I press "Send Request"
+    Then I should see a create confirmation message
+
+  Scenario: Requests are not instantly granted
+
+    Given I have invitations set up
+    When I request some invites
     When I follow "Invitations"
     Then I should see "Sorry, you have no unsent invitations right now."
-    
-    # admin grants request
-    When I follow "Log out"
-    When I go to the admin_login page
-      And I fill in "admin_session_login" with "admin-sam"
-      And I fill in "admin_session_password" with "password"
-      And I press "Log in as admin"
-    Then I should see "Successfully logged in"
-    When I follow "invitations"
-      And I follow "Manage requests"
+
+  Scenario: Admin sees the request
+
+    Given I have invitations set up
+    When I request some invites
+    When I view requests as an admin
     Then I should see "user1"
       And the "requests[user1]" field should contain "3"
       And I should see "I want them for a friend"
+
+  Scenario: Admin can refuse request
+
+    Given I have invitations set up
+    When I request some invites
+    When I view requests as an admin
+    When I fill in "requests[user1]" with "0"
+      And I press "Update"
+    Then I should see "Requests were successfully updated."
+      And I should not see "user1"
+
+  Scenario: Admin can grant request
+
+    Given I have invitations set up
+    When I request some invites
+    When I view requests as an admin
     When I fill in "requests[user1]" with "2"
       And I press "Update"
     Then I should see "Requests were successfully updated."
-    
-    # user sees them
-    When I follow "Log out"
-    Then I should see "Successfully logged out"
-    When I am logged in as "user1" with password "password"
-      And I go to user1's user page
-      And I follow "Invitations"
+
+  Scenario: User is granted invites
+
+    Given I have invitations set up
+    When I request some invites
+    When an admin grants the request
+    When I try to invite a friend from my user page
     Then I should see "Invite a friend"
       And I should not see "Sorry, you have no unsent invitations right now."
       And I should see "You have 2 open invitations and 0 that have been sent but not yet used."
+
+  Scenario: User can send out invites they have been granted
+
+    Given I have invitations set up
+    When I request some invites
+    When an admin grants the request
+    When I try to invite a friend from my user page
     When all emails have been delivered
       And I fill in "Email address" with "test@archiveofourown.org"
       And I press "Send invite"
     Then 1 email should be delivered to test@archiveofourown.org
       And the email should contain "user1 has invited you to join our beta!"
-    When I follow "Log out"
+    When I log out
     Then I should see "Sorry, you don't have permission to access the page you were trying to reach. Please log in."
     
     # user uses invite

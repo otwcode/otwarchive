@@ -7,7 +7,7 @@ class ChallengeAssignmentTest < ActiveSupport::TestCase
     @num_signups = 6
     challenge_setup(@num_signups) 
   
-    # create potential matches -- can't use PotentialMatch.generate! because it runs 
+    # create potential matches -- can't use PotentialMatch.generate because it runs 
     # assignments automatically 
     @collection.signups.each do |request_signup|
       PotentialMatch.generate_for_signup(@collection, request_signup)
@@ -25,7 +25,7 @@ class ChallengeAssignmentTest < ActiveSupport::TestCase
 
   def test_generation
     initialize_potential_matches
-    ChallengeAssignment.generate!(@collection)
+    ChallengeAssignment.generate(@collection)
     @collection.reload
     assert !@collection.assignments.empty?
     assert_equal @num_signups, @collection.assignments.size

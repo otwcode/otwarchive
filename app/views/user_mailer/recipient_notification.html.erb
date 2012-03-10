@@ -1,10 +1,12 @@
+<p><%= ts("Hello, %{name}!", :name => @user.login) %></p>
+
 <p>
 <%= ts("A gift story has been posted for you ") %>
 <%= @collection ? "in the #{@collection.title} collection " : "" %>at the Archive of Our Own!
 </p>
 
 <p>
-  <%= link_to @work.title, work_url(@work) %> <%= "(#{@work.word_count} words)" %><br />
+  <%= link_to @work.title.html_safe, work_url(@work) %> <%= "(#{@work.word_count} words)" %><br />
   by <%= @work.anonymous? ? "an anonymous giver" : @work.pseuds.collect(&:byline).join(", ") %><br />
   <%= "Fandom: " + @work.fandom_string unless @work.fandom_string.blank? %></br />
   <% unless @work.summary.blank? %>

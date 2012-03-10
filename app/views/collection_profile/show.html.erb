@@ -1,16 +1,18 @@
-<div class="collection profile module">
-  <%= render :partial => 'collections/header', :locals => {:collection => @collection} %>
+<div class="collection home profile">
+  <%= render 'collections/header', :collection => @collection %>
 
-<div class="collection module">
-  <h3><%= ts("About %{name}", :name => @collection.title +  ((@collection.title != @collection.name) ? " (#{@collection.name})" : "")) %></h3>
+  <h3 class="heading">
+    <%= ts("About") %>
+    <span class="byline"><%= @collection.title + ((@collection.title != @collection.name) ? " (#{@collection.name})" : "") %></span>
+  </h3>
   <div class="wrapper">
-    <dl class="collection meta">
+    <dl class="meta group">
       <dt><%= ts("Active since: ") %>
-      <dd><%= l(@collection.created_at.to_date) %>
+      <dd class="datetime"><%= l(@collection.created_at.to_date) %>
       <dt><%= ts("Maintainers:") %></dt>
       <dd>
-        <ul>
-          <%= (@collection.all_owners + @collection.all_moderators).map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join(', ').html_safe %>
+        <ul class="mods commas">
+          <%= (@collection.all_owners + @collection.all_moderators).map {|owner| content_tag(:li, link_to(owner.byline, owner.user))}.join("\n").html_safe %>
         </ul>
       </dd>
       <% unless @collection.email.blank? %>
@@ -20,24 +22,23 @@
 
       <% if @collection.challenge %>
       <!-- challenge information -->
-        <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_meta" %>
+        <%= render "challenge/#{challenge_class_name(@collection)}/challenge_meta" %>
       <!-- end challenge subsection -->
       <% end %>
     </dl>
   </div>
-</div>
+
 
 <% cache("collection-profile-#{@collection.id}") do %>
 
 <!--main content-->
-<hr class="clear"/><!-- FRONT END this is here temporarily until the right fix can be put in -->
 
 <% if show_collection_preface(@collection) %>
-  <div class="collection preface">
+  <div class="preface group">
     <% if show_collection_section(@collection, "intro") %>
     <div id="intro" class="module">
-      <%= render :partial => 'navigation', :locals => {:section => 'intro'} %>
-      <h3><%= ts("Intro:") %></h3>
+      <%= render 'navigation', :section => 'intro' %>
+      <h3 class="heading"><%= ts("Intro:") %></h3>
       <blockquote class="userstuff">
         <%=raw sanitize_field(@collection.collection_profile.intro.blank? ? @collection.parent.collection_profile : @collection.collection_profile, :intro) %>
       </blockquote>
@@ -46,8 +47,8 @@
 
     <% if show_collection_section(@collection, "faq") %>
     <div id="faq" class="module">
-      <%= render :partial => 'navigation', :locals => {:section => 'faq'} %>
-      <h3><%= ts("FAQ:") %></h3>
+      <%= render 'navigation', :section => 'faq' %>
+      <h3 class="heading"><%= ts("FAQ:") %></h3>
       <blockquote class="userstuff">
         <%=raw sanitize_field(@collection.collection_profile.faq.blank? ? @collection.parent.collection_profile : @collection.collection_profile, :faq) %>
       </blockquote>
@@ -56,8 +57,8 @@
 
     <% if show_collection_section(@collection, "rules") %>
       <div id="rules" class="module">
-        <%= render :partial => 'navigation', :locals => {:section => 'rules'} %>
-        <h3><%= ts("Rules:") %></h3>
+        <%= render 'navigation', :section => 'rules' %>
+        <h3 class="heading"><%= ts("Rules:") %></h3>
         <blockquote class="userstuff">
           <%=raw sanitize_field(@collection.collection_profile.rules.blank? ? @collection.parent.collection_profile : @collection.collection_profile, :rules) %>
         </blockquote>
@@ -69,8 +70,8 @@
 <% end %><!-- end of cached profile -->
 
 <% if @collection.user_is_owner?(current_user) || @collection.user_is_maintainer?(current_user) %>
-  <h3 class="landmark">Actions</h3>
-  <ul class="navigation" role="navigation">
+  <h3 class="landmark heading"><%= ts("Actions") %></h3>
+  <ul class="navigation actions" role="menu">
 
     <% if @collection.challenge # add maintainer-specific custom navigation for the challenge %>
       <%= render :partial => "challenge/#{challenge_class_name(@collection)}/challenge_navigation_maintainer" %>

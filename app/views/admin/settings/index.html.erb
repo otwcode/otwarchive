@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts('Archive Settings') %></h2>
+<h2 class="heading"><%= ts('Archive Settings') %></h2>
 <!--/descriptions-->
 
 <!--main content-->
@@ -29,10 +29,12 @@
     <dd><%= f.check_box :enable_test_caching %> </dd>
     <dt><%= f.label :cache_expiration, "How often (in minutes) should we refresh caching:" %></dt>
     <dd><%= f.text_field :cache_expiration, :size => "3" %></dd>
+    <dt><%= f.label :banner_text, "Banner notice:" %></dt>
+    <dd><%= f.text_field :banner_text %></dd>
 
 </dl>
     <p><%= f.hidden_field :last_updated_by, :value => current_admin.id %></p>
-    <p class="submit"><%= f.submit 'Update' %></p>
+    <p class="submit actions"><%= f.submit 'Update' %></p>
 <% end %>
 <hr class="clear" />
   <% if @admin_setting.invite_from_queue_enabled? %>

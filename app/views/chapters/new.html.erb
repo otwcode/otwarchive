@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions--><!--/descriptions-->
-<h2><%=h t('.add_chapter', :default => 'Add chapter') %></h2>
+<h2 class="heading"><%=h t('.add_chapter', :default => 'Add chapter') %></h2>
 <%= error_messages_for :chapter %>
 <!--/descriptions-->
 
@@ -8,7 +8,7 @@
 
 <!--main content-->
 <p class="required"><%=h t('.required', :default => '* Required field') %></p>
-<h3><%=h @work.title %></h3>
+<h3 class="heading"><%=h @work.title.html_safe %></h3>
 
 <%= render :partial => 'chapter_form', :locals => { :chapter => @chapter, :button_text => t('.forms.create', :default => "Create") } %>
 <!--/content-->

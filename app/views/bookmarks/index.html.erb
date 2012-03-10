@@ -1,5 +1,5 @@
-<!--descriptive page name and system messages, descriptions, and instructions.-->
-<h2>
+<!--SEARCHBROWSE descriptive page name and system messages, descriptions, and instructions.-->
+<h2 class="heading">
   <% if @most_recent_bookmarks %>
     <%= ts("Recent") %>
   <% elsif @user %>
@@ -16,11 +16,11 @@
 <!-- /descriptions-->
 
 <!--subnav-->
-<h3 class="landmark">Actions</h3>
-<ul class="navigation" role="navigation">
+<ul class="navigation actions" role="navigation">
   <% if current_user.is_a?(User) %>
     <li><%= link_to ts("Bookmark External Work"), new_external_work_path %></li>
   <% end %>
+  <!--BACK END pls regularise this with other navigation to show both options at all times and span_if_current-->
   <li>
     <% if params[:recs_only] %>
       <%= link_to ts("View All Bookmarks"), url_for(params.merge :recs_only => false) %>
@@ -35,14 +35,14 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark">List of Bookmarks</h3>
+<h3 class="landmark heading">List of Bookmarks</h3>
 <ol class="bookmark index">
-	<%= render :partial => 'bookmarks/bookmarks' %>
+	<%= render 'bookmarks/bookmarks' %>
 </ol>
 <!-- /content-->
 
-<div id="dynamic-bookmark" style="display:none;">	</div>
+<div id="dynamic-bookmark" class="dynamic hidden"></div>
 
 <!--subnav-->
-	  <%= will_paginate @bookmarks, :previous_label =>  "&laquo; " + ts("Previous"), :next_label => ts("Next") + " &raquo;" %>
+	  <%= will_paginate @bookmarks %>
 <!-- /subnav-->

@@ -23,7 +23,7 @@ Feature: Create and Edit Series
       And I should see "Draft was successfully created"
     When I press "Post"
     Then I should see "Work was successfully posted"
-      And I should see "Part 1 of the Ponies series" within "p"
+      And I should see "Part 1 of the Ponies series" within "li"
       And I should see "Part 1 of the Ponies series" within "dd"
     When I view the series "Ponies"
     Then I should see "Sweetie Belle"
@@ -87,8 +87,8 @@ Feature: Create and Edit Series
     When I press "Update"
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
       And I should see "Part 3 of the Many a Pony series" within "dd.series"
-      And I should see "Part 1 of the Black Beauty series" within "p.series"
-      And I should see "Part 3 of the Many a Pony series" within "p.series"
+      And I should see "Part 1 of the Black Beauty series" within "li"
+      And I should see "Part 3 of the Many a Pony series" within "li"
     
   Scenario: Three ways to add a work to a series: a user with more than one pseud
     Given the following activated user exists
@@ -96,11 +96,7 @@ Feature: Create and Edit Series
       | author        | password   |
       And a warning exists with name: "Choose Not To Use Archive Warnings", canonical: true
     When I am logged in as "author" with password "password"
-      And "author" creates the pseud "Pointless Pseud"
-      And I follow "Edit"
-      And I check "Is default"
-      And I press "Update"
-    Then I should see "Pseud was successfully updated."
+      And "author" creates the default pseud "Pointless Pseud"
     When I go to the new work page
       And I select "Not Rated" from "Rating"
       And I check "Choose Not To Use Archive Warnings"
@@ -116,7 +112,7 @@ Feature: Create and Edit Series
     When I press "Post"
     Then I should see "Work was successfully posted"
       And I should see "Pointless Pseud"
-      And I should see "Part 1 of the Ponies series" within "p"
+      And I should see "Part 1 of the Ponies series" within "li"
       And I should see "Part 1 of the Ponies series" within "dd"
     When I view the series "Ponies"
     Then I should see "Sweetie Belle"
@@ -180,8 +176,8 @@ Feature: Create and Edit Series
     When I press "Update"
     Then I should see "Part 1 of the Black Beauty series" within "dd.series"
       And I should see "Part 3 of the Many a Pony series" within "dd.series"
-      And I should see "Part 1 of the Black Beauty series" within "p.series"
-      And I should see "Part 3 of the Many a Pony series" within "p.series"
+      And I should see "Part 1 of the Black Beauty series" within "li"
+      And I should see "Part 3 of the Many a Pony series" within "li"
 
 Scenario: Post without preview
   Given I am logged in as "whoever" with password "whatever"
@@ -190,9 +186,17 @@ Scenario: Post without preview
     And "Issue 2169" is fixed
 # Then I should not see the "title" text "Restricted" within "h2"
 
+Scenario: View user's series index
+
+  Given I am logged in as "whoever" with password "whatever"
+    And I add the work "grumble" to series "polarbears"
+  When I go to whoever's series page
+  Then I should see "whoever's Series"
+    And I should see "polarbears"
+
 Scenario: Series index for maaany series
   Given I am logged in as "whoever" with password "whatever"  
-    And I add the work "grumble" to "31" series "penguins"
+    And I add the work "grumble" to "32" series "penguins"
   When I go to whoever's series page
   Then I should see "penguins30"
   When I follow "Next"

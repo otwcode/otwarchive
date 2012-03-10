@@ -1,119 +1,119 @@
-<div id="work-form">
+<div id="work-form" class="verbose post work chapter">
 <%= form_for([@work, chapter]) do |f| %>
 
 <fieldset id="chapter-ordering">
-	<legend><%= t('.form_naming', :default => 'Naming, Ordering and Date') %></legend>
-	<dl>
-		<dt><%= f.label :title, t('.form_title', :default => 'Chapter title') %></dt>
-		<dd><p><%= f.text_field :title, :class => "storyinputfield", :live => true %>
-    <%= link_to_help "story-title" %></p>
-    <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
+  <legend><%= ts("Name, Order and Date") %></legend>
+  <h4 class="landmark heading"><%= ts("Name, Order and Date") %></h4>
+  <dl>
+    <dt><%= f.label :title, ts("Chapter title") %> <%= link_to_help "chapter-title" %></dt>
+    <dd>
+      <%= f.text_field :title, :class => "observe_textlength" %>
+      <%= live_validation_for_field('chapter_title', :presence => false, :maximum_length => ArchiveConfig.TITLE_MAX) %>
+      <%= generate_countdown_html("chapter_title", ArchiveConfig.TITLE_MAX) %>
     </dd>
-	
-    <dt><%= f.label :position, t('.form_position', :default => 'Chapter number') %></dt>
-		<dd><p><%= f.text_field :position, :class => "number-field" %> 
-		<%= f.label :wip_length, t('.form_x_of_x', :default => 'of'), :title => t('.form_of_total', :default => 'of total chapters') %> 
-		<%= f.text_field :wip_length, :class => "number-field" %> 
-    </p></dd>
+  
+    <dt><%= f.label :position, ts("Chapter number") %></dt>
+    <dd>
+      <p>
+        <%= f.text_field :position, :class => "number" %> 
+        <%= f.label :wip_length, ts("of"), :title => ts("of total chapters") %> 
+        <%= f.text_field :wip_length, :class => "number" %> 
+      </p>
+    </dd>
     <dt id="managePublicationDate">
-  	<%= f.label :published_at, t('.form_date', :default => 'Chapter publication date') %></dt>
-    <dd><p><%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => @work.default_date, :order => [:day, :month, :year] %>
-    <%= link_to_help "backdating-help" %>
-    </p></dd>
+    <%= f.label :published_at, ts("Chapter publication date") %>  <%= link_to_help "backdating-help" %></dt>
+    <dd class="datetime">
+      <%= f.date_select "published_at", :start_year => Date.today.year, :end_year => 1950, :default => @work.default_date, :order => [:day, :month, :year] %>
+    </dd>
   </dl>
 </fieldset>
 
 <fieldset>
-  <legend><%= t('.form_summary_and_notes', :default => 'Chapter Preface') %></legend>
-    <dl class="preface">      
+  <legend><%= ts("Chapter Preface") %></legend>
+    <h4 class="landmark heading"><%= ts("Preface") %></h4>
+     <dl>      
 
       <%= render :partial => 'pseuds/byline', :locals =>{:form => f, :type => 'chapter'} %>
 
-      <dt class="summary"><%= f.label :summary, t('.form_summary', :default => "Chapter summary (max %{max} characters)", :max => ArchiveConfig.SUMMARY_MAX.to_s) %></dt>
+      <dt class="summary"><%= f.label :summary, ts("Chapter summary") %></dt>
       <dd class="summary">
-        <%= f.text_area :summary, :rows => 4, :cols => 60, :live => true %>
+        <%= f.text_area :summary, :rows => 4, :cols => 60, :class => "observe_textlength" %>
+        <%= live_validation_for_field('chapter_summary', :presence => false, :maximum_length => ArchiveConfig.SUMMARY_MAX) %>
         <%= generate_countdown_html("chapter_summary", ArchiveConfig.SUMMARY_MAX) %>
       </dd>
       
-      <dt><%=h t('.add_notes', :default => "Add notes:") %></dt>
-      <dd>
-        <dl class="notes">
-          <dt class="endnotes">
-            <%= check_box_tag "front-notes-options-show", "1", !chapter.notes.blank?, :onclick => "toggleFormField('front-notes-options')" %>
-          </dt>
-          <dd class="endnotes">
-            <%= label_tag 'front-notes-options-show', t('.beginning_notes', :default => "at the beginning") %>
-            <span id="worknoteswarning" class="warning" <% if chapter.notes.blank? %> style="display: none" <% end %>>
-            <%=h t('.worknotes_warning', :default =>"Warning: Unchecking this box will delete any existing beginning note.") %></span>
-          </dd>
-          <dd id="front-notes-options" class="work-endnotes optionalField">
-            <dl>     
-              <dt class="notes">
-                <%= f.label :notes, t('.form_notes', :default => "Chapter notes (max %{max} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %>
-              </dt>
-              <dd class="notes">
-                <%= f.text_area :notes, :rows => 4, :cols => 60, :live => true %>
-                <%= generate_countdown_html("chapter_notes", ArchiveConfig.NOTES_MAX) %>
-              </dd>
-            </dl>
-          </dd>      
-        
-          <dt class="endnotes">
-            <%= check_box_tag "end-notes-options-show", "1", !chapter.endnotes.blank?, :onclick => "toggleFormField('end-notes-options')" %>
-          </dt>
-          <dd class="endnotes">
-            <%= label_tag 'end-notes-options-show', t('.end_notes', :default => "at the end") %>
-            <span id="workendnoteswarning" class="warning" <% if chapter.endnotes.blank? %> style="display: none" <% end %>>
-            <%=h t('.workendnotes_warning', :default =>"Warning: Unchecking this box will delete any existing end note.") %></span>
-          </dd>
-          <dd id="end-notes-options" class="work-endnotes optionalField">
-            <dl>
-              <dt class="notes">
-                <%= f.label :endnotes, t('.form_notes', :default => "Chapter notes (max %{max} characters)", :max => ArchiveConfig.NOTES_MAX.to_s) %>
-              </dt>
-              <dd class="notes">
-                <%= f.text_area :endnotes, :rows => 4, :cols => 60, :live => true %>
-                <%= generate_countdown_html("chapter_endnotes", ArchiveConfig.NOTES_MAX) %>
-              </dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
+      <%= render "works/notes_form", :f => f, :type => 'chapter' %>
+      
     </dl>
 </fieldset>
 
-<fieldset>
-	<legend><%= t('.form_chapter_text', :default => 'Chapter Text') %></legend>
- 	<p class="label">
-    <%= f.label :content, t('.form_content', :default => "Chapter text"), :class => "required" %></p>
-  <div id="toggleText">
-  <p id="plainTextNotes" style="display: block"><%= allowed_html_instructions %></p>
-  <p id="richTextNotes" style="display: none"><%=h t('.rich_text_notes', :default => "Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>
-  </div>
-  <% use_tinymce %>
-  <p class="rtf-html-switch">
-    <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%=h 'Rich text' %></a></span>
-    <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%=h 'HTML' %></a></span>
-  </p>
+<fieldset class="text">
+  <legend> <%= f.label :content, ts("Chapter text"), :class => "required" %></legend>
+   <h4 class="landmark heading"><%= ts("Chapter Text") %></h4>
+   <div id="toggleText">
+ 		<p id="toggleText" role="menu">
+       <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
+       <span id="richTextNotes" style="display: none">
+        <%= ts("Type or paste formatted text. Select the first icon (clipboard with a 'W') to paste documents from Microsoft Word.") %>
+      </span>
+       <span class="rtf-html-switch actions">
+         <span><a id="richTextLink" href="#"><%= ts('Rich text') %></a></span>
+         <span><a id="plainTextLink" style="display:none;" href="#"><%= ts('HTML') %></a></span>
+         <%= content_for :footer_js do %>
+           <%= javascript_tag do %>
+             $j(document).ready(function(){
+               $j("#richTextLink").click(function(event){
+                 addEditor('content');
+                 $j(this).toggle();
+                 $j('#plainTextLink').toggle();
+                 event.preventDefault();
+               });
+             
+               $j('#plainTextLink').click(function(event){
+                 removeEditor('content');
+                 $j(this).toggle();
+                 $j('#richTextLink').toggle();
+                 event.preventDefault();
+               });
+             })            
+           <% end %>
+         <% end %>
+ 	    </span>
+	    </p>
   
-	<div class="rtf-html-field">
-		<%= f.text_area :content, :class => "mce-editor", :id => "content" %>
-      	<%= live_validation_for_field('content', 
-  				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
-  				:tooLongMessage => t('.validations.content.too_long', :default => 'We salute your ambition! But sadly the content must be less than %{max} characters long. (Maybe you want to create a multi-chaptered work?)', :max => ArchiveConfig.CONTENT_MAX.to_s),
-  				:tooShortMessage => t('.validations.content.too_short', :default => 'Brevity is the soul of wit, but your content does have to be at least %{min} characters long.', :min => ArchiveConfig.CONTENT_MIN.to_s),
-  			  :failureMessage => t('.validations.content.too_short', :default => 'Brevity is the soul of wit, but your content does have to be at least %{min} characters long.', :min => ArchiveConfig.CONTENT_MIN.to_s))
-  		%>
+  <div class="rtf-html-field">
+    <%= f.text_area :content, :class => "mce-editor", :id => "content", :class => "observe_textlength large" %>
+    <%= live_validation_for_field('content', 
+          :maximum_length => ArchiveConfig.CONTENT_MAX, 
+          :minimum_length => ArchiveConfig.CONTENT_MIN, 
+          :tooLongMessage => ts("We salute your ambition! But sadly the content must be less than %{max} characters long. (Maybe you want to create a multi-chaptered work?)", :max => ArchiveConfig.CONTENT_MAX.to_s),
+          :tooShortMessage => ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.", :min => ArchiveConfig.CONTENT_MIN.to_s),
+          :failureMessage => ts("Brevity is the soul of wit, but your content does have to be at least %{min} characters long.", :min => ArchiveConfig.CONTENT_MIN.to_s))
+      %>
     <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
-	</div>
+  </div>
 </fieldset>
 
 <fieldset>
-<legend><%= t('.form_post', :default => 'Post Chapter') %></legend>
-    <p class="submit">
-      <%= submit_tag t('.forms.preview', :default => 'Preview'), :name => 'preview_button' %>
-      <%= submit_tag t('.forms.cancel', :default => 'Cancel'), :name => 'cancel_button' %>
+<legend><%= ts("Post Chapter") %></legend>
+    <p class="submit actions">
+      <%= submit_tag ts('Preview'), :name => 'preview_button' %>
+      <%= submit_tag ts('Post without preview'), :name => 'post_without_preview_button' %>
+      <%= submit_tag ts('Cancel'), :name => 'cancel_button' %>
     </p>
 </fieldset>
 <% end %>
 </div>
+
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j(document).ready(function(){
+      $j(".toggle_formfield").click(function() {
+        var targetId = $j(this).attr("id").replace("-show", "");
+        toggleFormField(targetId);
+      });
+    })
+  <% end %>
+  
+  <% use_tinymce %>
+<% end %>

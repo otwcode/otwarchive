@@ -13,7 +13,7 @@ class Prompt < ActiveRecord::Base
   belongs_to :pseud
   has_one :user, :through => :pseud
 
-  belongs_to :challenge_signup
+  belongs_to :challenge_signup, :touch => true, :inverse_of => :prompts
 
   belongs_to :tag_set, :dependent => :destroy
   accepts_nested_attributes_for :tag_set
@@ -22,21 +22,47 @@ class Prompt < ActiveRecord::Base
   belongs_to :optional_tag_set, :class_name => "TagSet", :dependent => :destroy
   accepts_nested_attributes_for :optional_tag_set
   has_many :optional_tags, :through => :optional_tag_set, :source => :tag
+  
+  has_many :request_claims, :class_name => "ChallengeClaim", :foreign_key => 'request_prompt_id'
+  
+  scope :claimed, joins("INNER JOIN challenge_claims on prompts.id = challenge_claims.request_prompt_id")
+
+  before_destroy :clear_claims
+  def clear_claims
+    # remove this prompt reference from any existing assignments
+    request_claims.each {|claim| claim.destroy}
+  end
 
   # VALIDATION
   attr_protected :description_sanitizer_version
 
   validates_presence_of :collection_id
+  
+  validates_presence_of :challenge_signup
+  before_save :set_pseud
+  def set_pseud
+    unless self.pseud
+      self.pseud = self.challenge_signup.pseud
+    end
+    true
+  end
 
   # based on the prompt restriction
   validates_presence_of :url, :if => :url_required?
   validates_presence_of :description, :if => :description_required?
+  validates_presence_of :title, :if => :title_required?
   def url_required?
     (restriction = get_prompt_restriction) && restriction.url_required
   end
   def description_required?
     (restriction = get_prompt_restriction) && restriction.description_required
   end
+  def title_required?
+    (restriction = get_prompt_restriction) && restriction.title_required
+  end
+  validates_length_of :title,
+    :maximum => ArchiveConfig.TITLE_MAX,
+    :too_long=> ts("must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
 
   validates :url, :url_format => {:allow_blank => true} # we validate the presence above, conditionally
 
@@ -88,20 +114,31 @@ class Prompt < ActiveRecord::Base
   end
 
   # make sure that if there is a specified set of allowed tags, the user's choices
-  # are within that set 
+  # are within that set, or otherwise canonical 
   validate :allowed_tags
   def allowed_tags
     restriction = get_prompt_restriction
-    if restriction
+    if restriction && tag_set
       TagSet::TAG_TYPES.each do |tag_type|
         # if we have a specified set of tags of this type, make sure that all the
         # tags in the prompt are in the set.
-        if restriction.has_tags_of_type?(tag_type)
-          disallowed_taglist = tag_set ? (eval("tag_set.#{tag_type}_taglist") - restriction.tag_set.with_type(tag_type.classify)) : []
+        if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom")
+          # skip the check, these will be tested in restricted_tags below
+        elsif restriction.has_tags?(tag_type)
+          disallowed_taglist = tag_set.send("#{tag_type}_taglist") - restriction.tags(tag_type)
           unless disallowed_taglist.empty?
-            errors.add(:base, ts("^These tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
-              :prompt_type => self.class.name,
+            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not allowed in this challenge: %{taglist}",
+              :tag_type => tag_type,
+              :prompt_type => self.class.name.downcase,
               :taglist => disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
+          end
+        else
+          noncanonical_taglist = tag_set.send("#{tag_type}_taglist").reject {|t| t.canonical}
+          unless noncanonical_taglist.empty?
+            errors.add(:base, ts("These %{tag_type} tags in your %{prompt_type} are not canonical and can't be used unless the moderator adds them: %{taglist}",
+              :tag_type => tag_type,
+              :prompt_type => self.class.name.downcase,
+              :taglist => noncanonical_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
         end
       end
@@ -118,9 +155,11 @@ class Prompt < ActiveRecord::Base
         if restriction.send("#{tag_type}_restrict_to_fandom")
           allowed_tags = tag_type.classify.constantize.with_parents(tag_set.fandom_taglist).canonical
           disallowed_taglist = tag_set ? eval("tag_set.#{tag_type}_taglist") - allowed_tags : []
-          unless disallowed_taglist.empty?
-            errors.add(:base, ts("^Your %{prompt_type} has some %{tag_type} tags that are not in the selected fandom(s), %{fandom}: %{taglist} (If this is an error, please let us know via the support form!)",
-                              :prompt_type => self.class.name,
+          # check for tag set associations
+          disallowed_taglist.reject! {|tag| TagSetAssociation.where(:tag_id => tag.id, :parent_tag_id => tag_set.fandom_taglist).exists?}
+          unless disallowed_taglist.empty?            
+            errors.add(:base, ts("^These %{tag_type} tags in your %{prompt_type} are not in the selected fandom(s), %{fandom}: %{taglist} (Your moderator may be able to fix this.)",
+                              :prompt_type => self.class.name.downcase,
                               :tag_type => tag_type, :fandom => tag_set.fandom_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT),
                               :taglist => disallowed_taglist.collect(&:name).join(ArchiveConfig.DELIMITER_FOR_OUTPUT)))
           end
@@ -128,7 +167,7 @@ class Prompt < ActiveRecord::Base
       end
     end
   end
-  
+      
   # make sure we are not blank
   def blank?
     return false if (url || description)
@@ -141,10 +180,26 @@ class Prompt < ActiveRecord::Base
     return false if tagcount > 0
     true # everything empty
   end
+  
+  def can_delete?
+    if challenge_signup && !challenge_signup.can_delete?(self)
+      false
+    else
+      true
+    end
+  end
 
   scope :in_collection, lambda {|collection| { :conditions => ["collection.id = ?", collection.id] }}
 
   scope :unused, {:conditions => {:used_up => false}}
+  
+  def unfulfilled_claims
+    self.request_claims.unfulfilled_in_collection(self.collection)
+  end
+  
+  def fulfilled_claims
+    self.request_claims.fulfilled
+  end
 
   # We want to have all the matching methods defined on
   # TagSet available here, too, without rewriting them,
@@ -159,10 +214,8 @@ class Prompt < ActiveRecord::Base
 
   # Returns PotentialPromptMatch object if matches, otherwise nil
   # self is the request, other is the offer
-  def match(other)
-    settings = get_match_settings
-    return nil unless settings
-
+  def match(other, settings=nil)
+    return nil if settings.nil?
     potential_prompt_match_attributes = {:offer => other, :request => self}
     full_request_tag_set = self.optional_tag_set ? self.tag_set + self.optional_tag_set : self.tag_set
     full_offer_tag_set = other.optional_tag_set ? (other.tag_set + other.optional_tag_set) : other.tag_set
@@ -204,14 +257,6 @@ class Prompt < ActiveRecord::Base
     end
   end
 
-  def get_match_settings
-    if collection && collection.challenge
-      collection.challenge.potential_match_settings
-    else
-      nil
-    end
-  end
-
   def self.reset_positions_in_collection!(collection)
     minpos = collection.prompts.minimum(:position) - 1
     collection.prompts.by_position.each do |prompt|
@@ -220,5 +265,55 @@ class Prompt < ActiveRecord::Base
     end
   end
 
-
+  # tag groups
+  def tag_groups
+    self.tag_set ? self.tag_set.tags.group_by { |t| t.type.to_s } : {}
+  end
+  
+  # Takes an array of tags and returns a comma-separated list, without the markup
+  def tag_list(tags)
+    tags = tags.uniq.compact
+    if !tags.blank? && tags.respond_to?(:collect)
+      last_tag = tags.pop
+      tag_list = tags.collect{|tag|  tag.name + ", "}.join
+      tag_list += last_tag.name
+      tag_list.html_safe
+    else
+      ""
+    end
+  end
+  
+  # gets the list of tags for this prompt
+  def tag_unlinked_list
+    list = ""
+    TagSet::TAG_TYPES.each do |type|
+      eval("@show_request_#{type}_tags = (self.collection.challenge.request_restriction.#{type}_num_allowed > 0)")
+      if eval("@show_request_#{type}_tags") 
+          if self && self.tag_set && !self.tag_set.with_type(type).empty?
+              list += " - " + tag_list(self.tag_set.with_type(type))
+          end
+      end   
+    end
+    return list
+  end
+  
+  def claim_by(user)
+    ChallengeClaim.where(:request_prompt_id => self.id, :claiming_user_id => user.id)
+  end
+  
+  # checks if a prompt has been filled in a prompt meme
+  def unfulfilled?
+    if self.request_claims.empty? || !self.request_claims.fulfilled.exists?
+      return true
+    end
+  end
+  
+  # currently only prompt meme prompts can be claimed, and by any number of people
+  def claimable?
+    if self.collection.challenge.is_a?(PromptMeme)
+      true
+    else
+      false
+    end
+  end
 end

@@ -1,65 +1,66 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('.send_notification', :default => "Send Notification To Users") %></h2>
+<h2 class="heading"><%= ts("Send Notification To Users") %></h2>
 <!--/descriptions-->
 
 <!--main content-->
 <%= form_tag send_notification_admin_users_path, :method => :post do %>
 <fieldset>
-	<legend>Write Notification</legend>
-  	<h3><%= label_tag "subject", ts("Subject") %></h3>
+  <legend><%= ts("Write Notification") %></legend>
+    <h3 class="heading"><%= label_tag "subject", ts("Subject") %></h3>
     <div><%= text_field_tag "subject" %></div>
-	<h3><%= label_tag "content", ts("Message") %></h3>
+  <h3 class="heading"><%= label_tag "content", ts("Message") %></h3>
     <div><%= text_area_tag "content" %></div>
 </fieldset>
 <fieldset>
-	<legend>Notify Groups</legend>
-	<dl>
-    <dt><%= label_tag "notify_all", ts('Notify All Users') %></dt>
-    <dd><%= check_box_tag "notify_all[]", 0, nil, {:id => "notify_all"} %></dd>
+  <legend><%= ts("Notify Groups") %></legend>
+  <ul>
+    <li><%= check_box_tag "notify_all[]", 0, nil, {:id => "notify_all"} %>
+	<%= label_tag "notify_all", ts("Notify All Users") %> </li>
     
-    <% Role.all.collect(&:name).uniq.each do |role_name| %>
-      <dt><%= label_tag "notify_all_#{role_name}", ts("Notify All %{role_name}", :role_name => role_name.humanize.titlecase.pluralize) %></dt>
-      <dd><%= check_box_tag "notify_all[]", role_name, nil, {:id => "notify_all_#{role_name}"} %></dd>
+    <% @roles.each do |role| %>
+      <li><%= check_box_tag "notify_all[]", role.name, nil, {:id => "notify_all_#{role.name}"} %>
+	<%= label_tag "notify_all_#{role.name}", ts("Notify All %{role_name}", :role_name => role.name.humanize.titlecase.pluralize) %></li>
     <% end %>
-	</dl>
+  </ul>
 </fieldset>
 <fieldset>
-	<legend>Send, Or Continue</legend>
-    <p class="submit"><%= submit_tag ts("Send Notification") %></p>
+  <legend><%= ts("Send, Or Continue") %></legend>
+    <p class="submit actions"><%= submit_tag ts("Send Notification") %></p>
 </fieldset>
 <fieldset>
-	<legend>Notify Individuals</legend>
-    <h3><%= ts('Or Select Users To Notify') %></h3>
-	<%= alpha_paginated_section %>
-	<div class="wrapper">
+  <legend><%= ts("Notify Individuals") %></legend>
+    <h3 class="heading"><%= ts("Or Select Users To Notify") %></h3>
+  <%= alpha_paginated_section %>
+  <div class="wrapper">
       <table id="admin_users_table">
-      <caption><%=h ts('Select Users To Notify') %></caption>
+      <caption><%= ts("Select Users To Notify") %></caption>
       <thead>
-		<tr>
-			<th scope="row"><%=h ts("All/None") %></th>
-			<td>
-	          <input type="checkbox" id="select_all" onclick="selectAllCheckboxes('user_ids', <%= @all_users.size %>, this.checked);"></td>
-	</tr>
-	<tr>
-      	<th scope="col"><%=h ts("Username") %></th>
-      	<th scope="col"><%=h ts("Select") %></th>
-      </tr>
-	</thead>
-	<tbody>
-	<% @all_users.each do |user| %>
-      	<tr id="user_<%= user.id %>">
+        <tr>
+          <th scope="row"><%= ts("Select") %></th>
+          <td class="action">
+            <a href="#" class="check_all">All</a>
+            <a href="#" class="check_none">None</a>
+          </td>
+        </tr>
+        <tr>
+          <th scope="col"><%= ts("Username") %></th>
+          <th scope="col"><%= ts("Select") %></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @all_users.each do |user| %>
+        <tr id="user_<%= user.id %>">
           <td><%= label_tag "user_ids_#{user.id}", user.login %></td>
           <td><%= check_box_tag "user_ids[]", user.id, false, :id => "user_ids_#{user.id}", :class => "user_id" %></td>
         </tr> 
       <% end %>
-</tbody>
+      </tbody>
       </table>
   </div>  
-      <%= alpha_paginated_section %>
+  <%= alpha_paginated_section %>
 </fieldset>
 <fieldset>
-	<legend>Send Notification</legend>
-  <p class="submit"><%= submit_tag ts("Send Notification") %></p>
+  <legend><%= ts("Send Notification") %></legend>
+  <p class="submit actions"><%= submit_tag ts("Send Notification") %></p>
 </fieldset>
 <% end %>
-<!--/content-->

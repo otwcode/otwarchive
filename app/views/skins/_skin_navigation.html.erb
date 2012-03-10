@@ -1,7 +1,7 @@
 <% if (logged_in? && !skin.is_a?(WorkSkin)) || skin.editable? %>
-  <ul class="navigation" role="navigation">
-    <li>
-      <% if logged_in? && !skin.is_a?(WorkSkin) %>
+  <ul class="navigation actions" role="menu">
+    <% if logged_in? && !skin.is_a?(WorkSkin) && !skin.unusable? %>
+      <li>
         <%= form_for(current_user.preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| %>
           <% if skin.id == current_user.preference.skin_id %>
             <%= f.hidden_field :skin_id, :value => Skin.default.id %>
@@ -11,10 +11,16 @@
             <%= f.submit ts("Use") %>
           <% end %>
         <% end %>
-      <% end %>
-    </li>
+      </li>
+      <li><%= span_if_current ts("Preview"), preview_skin_path(skin) %></li>
+    <% end %>
+    
+    <% if skin.cached? %>
+      <li><%= link_to ts("Set For Session"), set_skin_path(skin) %></li>
+    <% end %>
+        
     <% if skin.editable? %>
-      <li><%= link_to ts('Edit'), edit_skin_url(skin) %></li>
+      <li><%= span_if_current ts('Edit'), edit_skin_url(skin) %></li>
       <% unless logged_in_as_admin? %>
         <li><%= link_to ts('Delete'), skin, :confirm => ts('Are you sure?'), :method => :delete %></li>
       <% end %>

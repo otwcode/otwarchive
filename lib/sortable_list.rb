@@ -9,6 +9,6 @@ class SortableList < Array
     end
     list -= changed.values
     changed.sort.each {|pair| pair.first > list.length ? list << pair.last : list.insert(pair.first-1, pair.last)}
-    list.each_with_index {|list_item, index| list_item.update_attribute(list_item.position_column, index + 1)}
+    list.each_with_index {|list_item, index| list_item.update_attribute(:position, index + 1)}
   end
 end 

@@ -18,7 +18,7 @@ class CommonTagging < ActiveRecord::Base
   def inherit_parents
     if common_tag.is_a?(Relationship) && filterable.is_a?(Character)
       filterable.fandoms.each do |fandom|
-        common_tag.parents << fandom unless common_tag.parents.include?(fandom)
+        common_tag.add_association(fandom)
       end
     end
   end

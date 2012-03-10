@@ -22,6 +22,9 @@ protected
 
   def current_user
     @current_user = current_user_session && current_user_session.record
+    # if Rails.env.development? && params[:force_current_user].present?
+    #   @current_user = User.find_by_login(params[:force_current_user])
+    # end
   end
 
   def current_admin_session
@@ -44,8 +47,18 @@ protected
 public
 
   before_filter :fetch_admin_settings
-  def fetch_admin_settings    
-    @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+  def fetch_admin_settings
+    if Rails.env.development?
+      @admin_settings = AdminSetting.first
+      unless @admin_settings.banner_text.blank?
+        @bannertext = sanitize_field(@admin_settings, :banner_text).html_safe
+      end
+    else
+      @admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
+      unless @admin_settings.banner_text.blank?
+        @bannertext = Rails.cache.fetch("banner_text"){sanitize_field(@admin_settings, :banner_text).html_safe}
+      end
+    end
   end
 
   # store previous page in session to make redirecting back possible
@@ -129,7 +142,14 @@ public
       redirect_to root_path
     end
   end
-
+  
+  # Hide admin banner via cookies
+  before_filter :hide_banner
+  def hide_banner
+    if params[:hide_banner]
+      session[:hide_banner] = true
+    end
+  end
 
   # Store the current user as a class variable in the User class,
   # so other models can access it with "User.current_user"
@@ -150,6 +170,12 @@ public
   def collection_owners_only
     logged_in? && @collection && @collection.user_is_owner?(current_user) || access_denied
   end
+
+  def not_allowed(fallback=nil)
+    flash[:error] = ts("Sorry, you're not allowed to do that.")
+    redirect_to (fallback || root_path) rescue redirect_to '/'
+  end
+  
 
   @over_anon_threshold = true if @over_anon_threshold.nil?
 
@@ -172,7 +198,7 @@ public
     end
 
     @page_title += " [#{ArchiveConfig.APP_NAME}]" unless options[:omit_archive_name]
-    @page_title
+    @page_title.html_safe
   end
 
   ### GLOBALIZATION ###
@@ -295,39 +321,30 @@ public
 
   public
 
-# No longer works in rails 3 as routing got moved to middleware
-# https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/4444
-# TODO find an alternative, see
-# http://accuser.cc/posts/1-rails-3-0-exception-handling
-# and
-# http://github.com/vidibus/vidibus-routing_error
-#  # with thanks to http://henrik.nyh.se/2008/07/rails-404
-#  def render_optional_error_file(status_code)
-#    case(status_code)
-#      when :not_found then
-#        render :template => "errors/404", :layout => 'application', :status => 404
-#      when :forbidden then
-#        render :template => "errors/403", :layout => 'application', :status => 403
-#      when :unprocessable_entity then
-#        render :template => "errors/422", :layout => 'application', :status => 422
-#      when :internal_server_error then
-#        render :template => "errors/500", :layout => 'application', :status => 500
-#        notify_about_exception(error)
-#      else
-#        super
-#    end
-#  end
-
   def valid_sort_column(param, model='work')
     allowed = []
     if model.to_s.downcase == 'work'
-      allowed = ['author', 'title', 'date', 'word_count', 'hit_count']
+      allowed = ['author', 'title', 'date', 'created_at', 'word_count', 'hit_count']
     elsif model.to_s.downcase == 'tag'
       allowed = ['name', 'created_at', 'suggested_fandoms', 'taggings_count']
     elsif model.to_s.downcase == 'collection'
       allowed = ['collections.title', 'collections.created_at', 'item_count']
+    elsif model.to_s.downcase == 'prompt'
+      allowed = %w(fandom created_at prompter)
+    elsif model.to_s.downcase == 'claim'
+      allowed = %w(created_at claimer)
     end
     !param.blank? && allowed.include?(param.to_s.downcase)
+  end
+
+  def set_sort_order
+    # sorting
+    @sort_column = (valid_sort_column(params[:sort_column],"prompt") ? params[:sort_column] : 'id')
+    @sort_direction = (valid_sort_direction(params[:sort_direction]) ? params[:sort_direction] : 'DESC')
+    if !params[:sort_direction].blank? && !valid_sort_direction(params[:sort_direction])
+      params[:sort_direction] = 'DESC'
+    end
+    @sort_order = @sort_column + " " + @sort_direction
   end
 
   def valid_sort_direction(param)

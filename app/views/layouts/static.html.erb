@@ -26,7 +26,7 @@
     <% end %>
   </title>
 
-  <%= stylesheet_link_tag 'archive_core', 'yuletide', :cache => 'yuletide_cached', :media => 'all' %>
+  <%= stylesheet_link_tag 'static', :media => 'all' %>
   </head>
 
   <body>
@@ -34,30 +34,27 @@
   
   <div id="header">
     <h1>
-      <%= link_to "Archive of Our Own", root_path %> | 
-      <%= link_to @collection.title, static_collection_path(@collection) %>
-    </h1>
-    <ul class="dropdown_nav" id="nav">
-      <li>
-        <%= link_to "Fandoms &raquo;".html_safe, static_collection_fandoms_path(@collection) %>
-        <ul>
-          <li><%= link_to "All Fandoms", static_collection_fandoms_path(@collection) %></li>
+      <%= link_to "Archive of Our Own", root_path %> </h1> 
+      <h2 class="heading"><%= link_to @collection.title, static_collection_path(@collection) %>
+    </h2>
+    <ul class="main navigation actions" role="navigation">
+		<li><%= link_to "Fandoms &raquo;".html_safe, static_collection_fandoms_path(@collection) %>
+		<ul>
+		<li><%= link_to "All Fandoms", static_collection_fandoms_path(@collection) %></li>
           <% for medium in @media %>
           <li>
             <%= link_to medium.name, static_collection_medium_path(@collection, medium) %>
           </li>
           <% end %>
-        </ul>
-      </li>
-      <li>
-        <%= link_to "Locked Works", static_collection_restricted_works_path(@collection) %>
-      </li>
+ 		<li><%= link_to "Locked Works", static_collection_restricted_works_path(@collection) %></li>
+		</ul>
+		</li>
     </ul>
-  </div>
+</div>
 
     <!-- BEGIN main -->
     <div id="main" class="<%= classes_for_main %>" role="main">
-      <%= flash_div :error, :warning, :notice %>
+      <%= flash_div :error, :caution, :notice %>
       <%= yield  %>
       <div class="clear"><!--presentational--></div>
     </div>

@@ -1,11 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
-<h3><%= ts("Forgot your password?") %></h3>
+<h3 class="heading"><%= ts("Forgotten your password?") %></h3>
 <p><%= ts("If you've forgotten your password, we can send you a temporary one.") %> 
 <%= ts("Please tell us the user name or email address you used when you signed up for your Archive account.") %></p>
 <!--/descriptions-->
 
 <!--main content-->
-<%= flash_field(:login) %>	
 <%= form_tag passwords_path do %>
   <p>
   <%= label_tag 'login', ts("Email address <strong>or</strong> user name:".html_safe) %>

@@ -26,20 +26,35 @@
     </td>
     <td>
       <% if @pmatches.size > 0 %>
-        <h5 id="show_potentials_for_<%= request_signup.id %>" 
-            onclick="$('potentials_for_<%= request_signup.id %>').show(); $('hide_potentials_for_<%= request_signup.id %>').show(); this.hide();">(Show <%= @pmatches.size %>)</h5>
+        <h5 id="show_potentials_for_<%= request_signup.id %>">(Show <%= @pmatches.size %>)</h5>
         <div id="potentials_for_<%= request_signup.id %>" class="hideme">
           <%= @pmatches.map {|pm| link_to(pm.offer_signup.byline, collection_potential_match_path(@collection, pm))}.join(", ").html_safe %>
         </div>
-        <h5 style="display: none" id="hide_potentials_for_<%= request_signup.id %>" 
-            onclick="$('potentials_for_<%= request_signup.id %>').hide(); $('show_potentials_for_<%= request_signup.id %>').show(); this.hide();">(Hide)</h5>
+        <h5 style="display: none" id="hide_potentials_for_<%= request_signup.id %>">(Hide)</h5>
       <% else %>
         <strong>No potential matches.</strong>
       <% end %>
     </td>
-    <td>
-      <%= assignment_form.text_field :pinch_hitter_byline, :size => 20 %>
-      <%= autocomplete_text_field("challenge_assignments_#{assignment.id}_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true) %>
+    <td><!--BACK END this td should probably be titled, but what with?-->
+      <%= assignment_form.text_field :pinch_hitter_byline, autocomplete_options("pseud", :autocomplete_token_limit => 1, :size => 20) %>
     </td>
   </tr>
+  
+<%= content_for :footer_js do %>
+  <%= javascript_tag do %>
+    $j(document).ready(function() {
+      $j("#show_potentials_for_<%= request_signup.id %>").click(function() {
+          $j("#potentials_for_<%= request_signup.id %>").show();
+          $j("#hide_potentials_for_<%= request_signup.id %>").show();
+          $j(this).hide();
+      });
+      $j("#hide_potentials_for_<%= request_signup.id %>").click(function() {
+          $j("#potentials_for_<%= request_signup.id %>").hide();
+          $j("#show_potentials_for_<%= request_signup.id %>").show();
+          $j(this).hide();
+      });
+    })
+  <% end %>
 <% end %>
+
+<% end %> <!-- end form -->

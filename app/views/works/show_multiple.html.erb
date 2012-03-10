@@ -1,44 +1,53 @@
-<h2>Edit <%= @author ? print_pseud_works_link(@author) : print_works_link(@user) %> </h2>
+<h2 class="heading">Edit Multiple Works</h2>
+
+<%= render "users/header_navigation" %>
 
 <%= form_tag edit_multiple_user_works_path(@user),  :id => 'edit-multiple-works' do %>
-<table class="work index" summary="This page shows a list of your works. You can select a work, or many works, and then choose to edit, orphan, or delete them. You can post multiple drafts on this page too.">
-    <caption><%=h t('.works.editing multiple', :default => "Editing Multiple Works") %></caption>
-	<thead>
-      	<tr>
-		<td colspan="4"><%= render :partial => 'edit_multiple_controls' %></td>
-		</tr>
-		<tr>
-			<th scope="col"><%=h t('.title', :default =>"Title") %></th>
-      <th scope="col"><%=h t('.fandom', :default =>"Fandom") %></th>
-		  <th scope="col"><%=h t('.Select', :default =>"Select") %></th>
-      <th abbr="options" scope="col"><%=h t('.editing options', :default =>"Editing Options") %></th>
-</tr>
-    </thead>
-    <tbody>
-    <% for work in @works %>
-      <tr>
-        <td><%= label_tag "work_ids[]", link_to(work.title, work_path(work)) %></td>
-        <td><%= work.fandom_tags.collect{|tag| link_to_tag(tag) }.join(', ').html_safe %></td>
-      <td><%= check_box_tag "work_ids[]", work.id %></td>
-        <td class="navigation">
-        <ul class="navigation">
-        <li><%= link_to t('.short_blurb.edit', :default => 'Edit'), edit_work_path(work) %></li>
-        <li><%= link_to t('.short_blurb.orphan_work', :default => 'Orphan'), {:controller => 'orphans', :action => 'new', :work_id => work.id} %></li>
-        <li><%= link_to t('.short_blurb.delete_work', :default => 'Delete'), work, 
-                :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :delete %></li>
-        <% if !work.posted %>
-          <li><%= link_to t('.short_blurb.post', :default => 'Post'), post_draft_work_path(work), :method => :put %></li>
-            <% end %>
-        </ul></td>
-      </tr>
-    <% end %>
-</tbody>
-<tfoot>
-	<tr>
-		<tr>
-		<td colspan="4"><%= render :partial => 'edit_multiple_controls' %></td>
-		</tr>
-	</tr>
-	</tfoot>
-  </table>
+
+  <fieldset>
+    <%= check_all_none %>
+
+    <fieldset>
+      <legend>Actions</legend>
+      <p class="submit">
+        <input type="submit" value="Edit" name="commit">
+        <input type="submit" value="Orphan" name="commit">
+        <input type="submit" value="Delete" name="commit">
+      </p>
+    </fieldset>
+
+    <ul class="index">
+      <% @works_by_fandom.keys.sort.each do |fandom| %>
+        <li>
+          <fieldset class="fandom listbox">
+            <legend>Select <%= fandom %> works</legend>
+            <h5 class="heading">
+              <%= fandom %>
+              <%= check_all_none %>
+            </h5>
+            <ul class="index concise">
+              <% @works_by_fandom[fandom].each do |work| %>
+                <li>
+                  <label class="action" title="select <%= work.title %>"><%= check_box_tag "work_ids[]", work.id %></label>
+                  <%= link_to work.title, work_path(:id => work.id) %>
+                </li>
+              <% end %>
+            </ul>
+          </fieldset>
+        </li>
+      <% end %>
+    </ul>
+  
+    <fieldset>
+      <legend>Actions</legend>
+      <p class="submit">
+        <input type="submit" value="Edit" name="commit">
+        <input type="submit" value="Orphan" name="commit">
+        <input type="submit" value="Delete" name="commit">
+      </p>
+    </fieldset>
+
+  </fieldset>
+
 <% end %>
+

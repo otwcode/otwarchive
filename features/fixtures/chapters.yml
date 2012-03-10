@@ -1,30 +1,36 @@
 chapter1:
+  id: 1
   posted: true
   content: some content for the first work
-  work: first
+  work_id: 1
   published_at: 2010-04-30
 chapter2:
+  id: 2
   posted: true
   content: this work was written a long time ago
   published_at: 2004-04-30
-  work: second
+  work_id: 2
 chapter3:
+  id: 3
   posted: true
-  work: third
+  work_id: 3
   content: This work is in a different language
   published_at: 2009-02-03
 chapter4:
+  id: 4
   posted: true
-  work: third
+  work_id: 3
   content: This is a second chapter
   published_at: 2009-06-30
 chapter5:
+  id: 5
   posted: true
-  work: fourth
+  work_id: 4
   content: This work is by a different user.
   published_at: 2010-04-30
 chapter6:
+  id: 6
   posted: true
-  work: fifth
+  work_id: 5
   content: something something something
   published_at: 2010-06-30

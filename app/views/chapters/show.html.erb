@@ -20,22 +20,26 @@
 
   <div id="chapters">
     <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
-    <% if !@work.endnotes.blank? && @chapter == @work.last_chapter %>
-      <div id="work_endnotes" class="chapter preface footnotes module" role="complementary">
-          <h3><%=h "Notes:" %></h3>
-          <blockquote class="userstuff"><%=raw sanitize_field(@work, :endnotes) %></blockquote>
-      </div>
+  </div>
+  
+  <% if @chapter == @work.last_chapter && (!@work.endnotes.blank? || !@work.series.blank? || !@work.approved_children.blank?) %>
+  <!--afterword-->
+  <div class="afterword preface group" role="complementary">  
+    <% if !@work.endnotes.blank? %>
+      <%= render :partial => 'works/work_endnotes' %>
+    <% end %>
+    <% unless @preview_mode || @work.series.blank? %>
+      <%= render :partial => 'works/work_series_links' %>
+    <% end %>
+    <% unless @work.approved_children.blank? %>
+      <%= render :partial => 'works/work_approved_children' %>
     <% end %>
   </div>
-<!-- END work skin -->
-    <!-- Series links -->
-    <% unless @preview_mode || @work.series.blank? || @chapter != @work.last_chapter%>
-      <%= render :partial => 'works/series_links' %>
-    <% end %>
+  <!--/afterword-->
+  <% end %>
+  
   </div>
-
-  <%= render :partial => 'works/work_footer' %>
-
+  <!-- END work skin -->
 </div>
 <!-- END work -->
 

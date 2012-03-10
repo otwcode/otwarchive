@@ -1,0 +1,52 @@
+/* ROLE: admin
+This shows the archive when logged in as admin, and overrides with admin styles, showing extra secret admin options on normal views*/
+
+#main {
+  margin: auto 3.5em;
+}
+
+#footer {
+  background: #066;
+}
+
+#footer .beta {
+  display: none;
+}
+
+#header ul.admin {
+  text-align: right;
+  float: none;
+  margin: auto;
+  background: #066;
+  border-bottom: 2px solid;
+  padding: 0.25em 120px;
+    box-shadow: inset 0 -5px 10px rgba(0,0,0,0.25);
+}
+
+#admin-options a {
+  color: #900;
+}
+
+div.admin + h3.landmark {
+  clear: none;
+}
+
+.admin .navigation a {
+  border-bottom: 3px solid #066;
+}
+
+/* TABLES AND LISTS */
+
+table, thead td {
+  background: #e0efe9;
+}
+
+#admin_users_table th a:visited {
+  color: #999;
+}
+
+#admin_users_table th a:hover {
+  color: #066;
+}
+
+/*END== */

@@ -1,45 +1,37 @@
-<div id="work-form">
-	<%= form_for(@known_issue) do |f| %>
-  <%= error_messages_for @known_issue %>
+<div id="work-form" class="post issue">
+  <%= form_for(@known_issue) do |f| %>
+    <%= error_messages_for @known_issue %>
+    <dl class="text">
+      <dt><%= f.label :title, ts("Beta Revision"), :class => "required" %></dt>
+        <dd><%= f.text_field :title %></dd>
+      <dt><%= f.label :content, ts("Recent Known Issues") %></dt>
+      <dd>
+        <p id="toggleText">
+          <span id="plainTextNotes" style="display: inline"><%= allowed_html_instructions %></span>
+          <span id="richTextNotes" style="display: none"><%= ts("Type or paste formatted text. Select the first icon  (clipboard with a 'W') to paste documents from Microsoft Word.") %></span>
+          <span class="rtf-html-switch actions">
+            <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%= ts('Rich text') %></a></span>
+            <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%= ts('HTML') %></a></span>
+          <span>
+        </p>
+      <% use_tinymce %>
 
-	<fieldset>
-		<legend>Update Revision Number</legend>
-		    <p><%= f.label :title, t('.form_title', :default => "Beta Revision"), :class => "required" %>
-		    <%= f.text_field :title %>
-		  </p>
-		</fieldset>
- <fieldset>
-	<legend>Add known issue</legend>
-	<h3>
-	<%= f.label :content, t('.form_content', :default => "Post most recent Known Issues content") %>
-    </h3>
-  <div id="toggleText">
-  <p id="plainTextNotes" style="display: block"><%= allowed_html_instructions %></p>
-  <p id="richTextNotes" style="display: none"><%=h t('.rich_text_notes', :default => "Type or paste formatted text. Select the icon to the far left (clipboard with a 'W') to paste documents from Microsoft Word.") %></p>
-  </div>
-  <% use_tinymce %>
-  <p class="rtf-html-switch">
-    <span id="richTextLink" style="display: inline"><a href="javascript:addEditor('content');javascript:toggle();"><%=h 'Rich text' %></a></span>
-    <span id="plainTextLink" style="display: none"><a href="javascript:removeEditor('content');javascript:toggle();"><%=h 'HTML' %></a></span>
-  </p>
-
-	<div class="rtf-html-field">
-		<%= f.text_area :content, :class => "mce-editor", :id => "content" %>
-      	<%= live_validation_for_field('content', 
-  				:maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
-  				:tooLongMessage => t('.validations.content.too_long', :default => 'We salute your ambition! But sadly the content must be less than %{max} letters long.', :max => ArchiveConfig.CONTENT_MAX.to_s),
-  				:tooShortMessage => t('.validations.content.too_short', :default => 'Brevity is the soul of wit, but your content does have to be at least %{min} letters long.', :min => ArchiveConfig.CONTENT_MIN.to_s),
-  			  :failureMessage => t('.validations.content.failure', :default => 'You need to post some content here.'))
-  		%>
-    <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
-	</div>
-	<% end %>
-</fieldset>
-<fieldset>
-<legend><%= t('.form_post', :default => 'Post') %></legend>
-    <p class="submit">
-		<%= submit_tag t('.form_post', :default => 'Post'), :name => 'post_button' %>
-      
-    </p>
-</fieldset>
+      <div class="rtf-html-field">
+        <%= f.text_area :content, :class => "mce-editor observe_textlength", :id => "content" %>
+        <%= live_validation_for_field('content', 
+          :maximum_length => ArchiveConfig.CONTENT_MAX, :minimum_length => ArchiveConfig.CONTENT_MIN, 
+          :tooLongMessage => ts("We salute your ambition! But sadly the content must be less than %{max} letters long.", :max => ArchiveConfig.CONTENT_MAX.to_s),
+          :tooShortMessage => ts("Brevity is the soul of wit, but your content does have to be at least %{min} letters long.", :min => ArchiveConfig.CONTENT_MIN.to_s),
+          :failureMessage => ts("You need to post some content here."))
+        %>
+        <%= generate_countdown_html("content", ArchiveConfig.CONTENT_MAX) %>
+      </div>
+    </dd>
+    
+    <dt class="landmark"><%= ts("Post") %></dt>
+      <dd class="submit actions">
+        <%= submit_tag ts("Post"), :name => 'post_button' %>
+      </dd>
+    </dl>
+  <% end %>
 </div>

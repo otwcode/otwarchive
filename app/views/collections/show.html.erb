@@ -1,16 +1,16 @@
-<div id="collection-page" class="profile">
+<div id="collection-page" class="collection home">
 
   <%= render :partial => "collections/header", :locals => {:collection => @collection} %>
 
   <!--main content-->
-  <!-- expects @works, @bookmarks -->
-    <% unless @works.blank? %>
-      <%= render :partial => 'works_module', :locals => {:collection => @collection, :works => @works} %>
-    <% end %>
+  <% # expects @works, @bookmarks %>  
+  <% unless @works.blank? %>
+    <%= render :partial => 'works_module', :locals => {:collection => @collection, :works => @works} %>
+  <% end %>
 
-    <% unless @bookmarks.blank? %>
-      <%= render :partial => 'bookmarks_module', :locals => {:collection => @collection, :bookmarks => @bookmarks} %>
-    <% end %>
+  <% unless @bookmarks.blank? %>
+    <%= render :partial => 'bookmarks_module', :locals => {:collection => @collection, :bookmarks => @bookmarks} %>
+  <% end %>
 
   <% if @works.blank? && @bookmarks.blank? %>
     <p class="alt message">There are no works or bookmarks in this collection yet.</p>

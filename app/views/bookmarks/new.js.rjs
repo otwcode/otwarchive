@@ -1,6 +1,0 @@
-page.show 'dynamic-bookmark'
-page << "location.hash = '#dynamic-bookmark';"
-page.draggable 'dynamic-bookmark'
-page.replace_html 'dynamic-bookmark', :partial => 'bookmarks/bookmark_form', :locals => {:bookmarkable => @bookmarkable, :bookmark => @bookmark, :button_name => ts("Create"), :action => 'create', :dynamic => true}
-page.insert_html :top, 'dynamic-bookmark', "<p id='close-popup' role='navigation' class='navigation'></p>"
-page.replace_html 'close-popup', link_to_function(t('.close_new_bookmark', :default => 'Close'), update_page {|page| page.hide 'dynamic-bookmark'})

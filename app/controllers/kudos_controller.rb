@@ -2,7 +2,7 @@ class KudosController < ApplicationController
   skip_before_filter :verify_authenticity_token, :only => [:create]
 
   def create
-    @commentable = params[:kudo][:commentable_type] == 'Work' ? Work.find(params[:kudo][:commentable_id]) : Chapter.find(params[:kudo][:commentable_id])
+    @commentable = params[:kudo][:kudosable_type] == 'Work' ? Work.find(params[:kudo][:kudosable_id]) : Chapter.find(params[:kudo][:kudosable_id])
     unless @commentable
       flash[:error] = ts("What did you want to leave kudos on?")
       redirect_to root_path and return
@@ -26,7 +26,8 @@ class KudosController < ApplicationController
         redirect_to :controller => @commentable.class.to_s.underscore.pluralize, :action => :show, :id => @commentable.id, :anchor => "comments"
       end
     else
-      redirect_to :controller => @commentable.class.to_s.underscore.pluralize, :action => :show, :id => @commentable.id, :anchor => "comments"
+      # redirect to what the user was actually reading - chapter or work - when they left kudos
+      redirect_to :controller => params[:commentable_controller], :action => :show, :id => params[:commentable_id], :view_full_work => params[:view_full_work], :page => params[:page], :anchor => "comments"
     end
   end
 

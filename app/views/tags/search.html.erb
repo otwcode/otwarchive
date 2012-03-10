@@ -1,13 +1,15 @@
-<h2>Tag Search: Beta</h2>
+<h2 class="heading"><%= ts('Tag Search: Beta') %></h2>
 
 <%= render :partial => 'tags/search_form' %>
 
 <% if @tags %>
-  <p><strong><%= @tags.total_entries %> Found</strong><%= link_to_help "tag-search-results-help" %></p>
-  <h3 class="landmark">Tags List</h3>
-  <ol class="tag index">
+  <h3 class="heading"><%= @tags.total_entries %> Found <%= link_to_help "tag-search-results-help" %></h3>
+  <h4 class="landmark heading">Listing Tags</h4>
+  <ol class="tag index group">
     <% for tag in @tags %>
-      <li><%= tag_search_result(tag) %></li>
+      <% unless tag.nil? %>
+        <li><%= tag_search_result(tag) %></li>
+      <% end %>
     <% end %>
   </ol>
   <%= will_paginate @tags %>

@@ -5,21 +5,21 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3>Note:</h3>
+<h3 class="heading">Note:</h3>
 <p><%=h @translation_note.note %><p>
 
-<h3>Namespace:</h3>
+<h3 class="heading">Namespace:</h3>
 <p><%=h @translation_note.namespace %></p>
 
-<h3>User:</h3>
+<h3 class="heading">User:</h3>
 <p><%=h @translation_note.user %></p>
 
-<h3>Locale:</h3>
+<h3 class="heading">Locale:</h3>
 <p><%=h @translation_note.locale %></p>
 <!--/content-->
 
 <!--subnav-->
-<ul class="navigation">
+<ul class="navigation actions" role="navigation">
 	<li><%= link_to 'Edit', edit_translation_note_path(@translation_note) %></li>
 	<li><%= link_to 'Back', translation_notes_path %></li>
 </ul>

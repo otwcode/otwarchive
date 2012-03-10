@@ -1,21 +1,22 @@
+<div class="system"><!--BACK END, ideally this would be a class of main-->
 <%= error_messages_for :feedback %>
 
-<h2><%= ts('Support and Feedback') %></h2>
+<h2 class="heading"><%= ts('Support and Feedback') %></h2>
 
-<h3><%= ts("We love to hear from our users! If you'd like to ask for help, make a suggestion, or give us feedback, please use this form.") %></h3>
+<h3 class="heading"><%= ts("We love to hear from our users! If you'd like to ask for help, make a suggestion, or give us feedback, please use this form.") %></h3>
 
-<p class="message"><%= ts("As of 18 November 2010: We're aware the Archive's performance might be slow as we experience heavy traffic. If you're experiencing 502 errors or timeouts then these are related to these issues  - we're working on performance upgrades and on purchasing new servers as we type! Please bear with us and have patience.") %></p>
+<p><%= ts("For live updates on Archive performance, please check out our Twitter feed:") %> <a href="http://twitter.com/ao3_status">@AO3_status</a>.</p>
 
-<p class="message"><%= ts("For live updates on Archive performance, please check out our Twitter feed:") %> <a href="http://twitter.com/ao3_status">@AO3_status</a>.</p>
-
-<p class="message"><%= ts("We're still in our beta phase, so there are lots of improvements and new
-features planned. Please do use this form to let us know about your experience of using the site - good and bad.
+<p><%= ts("We're still in our beta phase, so there are lots of improvements and") %> <a href="http://transformativeworks.org/node/96" title="Archive Roadmap">new features planned</a>. <%= ts("Please do use this form to let us know about your experience of using the site - good and bad.
   If you'd like a reply, make sure you include your email address, but anonymous feedback is welcomed as well.") %></p>
 
-<p class="message"><%= ts("If you're looking for help, you can find answers to many common questions in our") %> <%= link_to ts("FAQ section"), archive_faqs_path %></p> 
-<p class="message"><%= ts("You may also want to check out our") %> <%= link_to ts("Known Issues"), known_issues_path %></p>
+<p><%= ts("When reporting an issue, please remember that more info is always welcome. Let us know what error pages/messages you're seeing. Include links if applicable!") %></p>
 
-<%= form_for(@feedback) do |f| %>
+<p><%= ts("If you're looking for help, you can find answers to many common questions in our") %> <%= link_to ts("FAQ section"), archive_faqs_path %></p> 
+
+<p><%= ts("You may also want to check out our") %> <%= link_to ts("Known Issues"), known_issues_path %>.</p>
+
+<%= form_for(@feedback, :html => {:class => "post feedback"}) do |f| %>
   <fieldset>
   <legend><%= ts('Describe Your Feedback') %></legend>
   <dl>
@@ -32,7 +33,7 @@ features planned. Please do use this form to let us know about your experience o
      </dd>
      <dt><%= f.label :summary, "Brief summary (required):" %></dt>
      <dd>
-       <%= f.text_field :summary, :size => 60 %>
+       <%= f.text_field :summary, :size => 60, :class => "observe_textlength" %>
        <%= generate_countdown_html("feedback_summary", ArchiveConfig.FEEDBACK_SUMMARY_MAX) %>
        <p>
        <%= live_validation_for_field('feedback_summary', :failureMessage => 'Please enter a brief summary of your message') %>
@@ -51,6 +52,7 @@ features planned. Please do use this form to let us know about your experience o
     <legend><%= ts('Send Feedback') %></legend>
     <%= f.hidden_field :user_agent, :value => request.env["HTTP_USER_AGENT"] %>
     <%= f.hidden_field :ip_address, :value => request.remote_ip %>
-    <p class="submit"><%= f.submit ts("Send feedback") %></p>
+    <p class="submit actions"><%= f.submit ts("Send feedback") %></p>
   </fieldset>
 <% end %>
+</div>

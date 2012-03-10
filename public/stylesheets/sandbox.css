@@ -1,0 +1,92 @@
+/*==SANDBOX: All temporary, development, and unreviewed css lives here. 
+Rules will be incorporated into the main cascade by Front End before deploy. 
+If you've just coded up a new feature and put in some layout, put that layout here, 
+with a comment, and the Front End Santa will make your wishes come true. 
+Or if you've put in a fix and you've not yet read the Front End Docs? 
+Put your fix in here.
+Examples:
+
+/*Fix for issue 996 
+.bookmark .header {float:left;}
+
+/*Draft layout for views/shiny/new by astolat. 
+It has to be purple, see wiki, ADT meeting 25
+.shiny-happy-people table {display:table-cell; 
+background:purple; color:#555;}
+
+*/
+
+/*OPERA 11 HEADER SEARCH TEMP FIX*/
+
+@media not screen and (1) { 
+    #header fieldset {
+      margin-bottom: -0.643em
+    }
+}
+
+/* TEMP FIX Issue 2652 -- don't integrate this*/
+
+span.delete a {
+  margin: 0 0.2em;
+  border: 0;
+  padding: 0;
+  line-height: 0.5;
+    box-shadow: none;
+}
+
+/* fix for scrolling checkboxes */
+.many p.actions { 
+    float: none; 
+    text-align: right; 
+}
+.tags .options .tag { 
+    margin-right: 0.643em; 
+}
+.concise li { 
+    width: 45%; 
+    float:left; 
+    clear:none; 
+    margin-right:1.5em
+}
+.concise label.action { 
+    float: left; 
+}
+
+/* TEMP FIX Issue 2904
+this should be revisted upon completeing the review of the reading index's XHTML */
+.history .mystery .icon {
+  position: absolute;
+  top: 0;
+  height: 55px;
+  width: 55px;
+  background-repeat: no-repeat;
+  background: url("/images/imageset.png") -110px -525px;
+}
+
+/* INTERACTIONS MODE: VERBOSE
+forms with more than three fieldsets 
+(01/09/11 all forms show nearly all options at the moment, some nested fieldsets hidden with .hideme
+but I suggest simple and verbose views, with simple as default and verbose as child of simple, especially for .post (work, bookmark, challenge etc)*/
+
+.verbose legend {
+  height: auto;
+  width: auto;
+  font-size: 100%;
+  background: #fff;
+  border: 2px solid #ddd;
+  padding: 0.5em;
+    box-shadow: 1px 2px 3px #999;
+    opacity: 1;
+}
+
+/* MODE: SIMPLE, 3 or fewer
+experimental, developing here, (may combine with .toggled rules)
+drafting: form.simple {background:#ddd; float:none; display:table; margin:0.643em auto; padding:0.643em}*/
+
+.simple span.actions {
+  float: none
+}
+
+/*Some helpful notes
+0.875em/1.286 line height = 14px with 18px leading
+0.643em  = 9px, so {margin: 0.643em auto;} gives you a single blank line between block elements */

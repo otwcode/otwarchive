@@ -1,65 +1,63 @@
 <%= form_tag url_for(:controller => 'bookmarks', :action => 'search'), :class => 'search', :method => :get do %>
 <fieldset>
   <legend>Search bookmarks</legend>
-  <p>
   <dl>
     <dt>
-      <label for="rec">Rec?</label>
+      <label for="rec">Rec</label>  <%= link_to_help "bookmark-search-rec-help" %>
     </dt>
     <dd>    
       <%= check_box_tag 'query[rec]', true, @query[:rec], :id => 'rec'  %>
-      <%= link_to_help "bookmark-search-rec-help" %>
     </dd>
     <dt>
-	    <label for="refine_type"><%= t('.type', :default => 'Type:') %></label>
+	    <label for="refine_type"><%= t('.type', :default => 'Type') %></label> 
+	<%= link_to_help "bookmark-search-type-help" %>
     </dt>
     <dd>
       <%= select_tag 'query[type]', options_for_select(["",  "Work", "Series", "External Work"], @query[:type]) %>
-      <%= link_to_help "bookmark-search-type-help" %>
+      
     </dd>
     <dt>
-	    <label for="refine_tag"><%= t('.tag', :default => 'Tag:') %></label>
+	    <label for="refine_tag"><%= t('.tag', :default => 'Tag') %></label> 
+	 <%= link_to_help "bookmark-search-tag-help" %>
     </dt>
     <dd>
       <%= text_field_tag "query[tag]", @query[:tag], :id => 'refine_tag' %>
-      <%= link_to_help "bookmark-search-tag-help" %>
+     
     </dd>
     <dt>
-  	  <label for="refine_notes"><%= t('.notes', :default => 'Notes:') %></label>
+  	  <label for="refine_notes"><%= t('.notes', :default => 'Notes') %></label> 
+		<%= link_to_help "bookmark-search-text-help" %>
     </dt>
     <dd>
       <%= text_field_tag "query[notes]", @query[:notes], :id => 'refine_notes' %>
-      <%= link_to_help "bookmark-search-text-help" %>
     </dd>
     <dt>
 	    <label for="refine_updated_at">
-	      <%= t('.date_desc', :default => 'Date:') %>
+	      <%= t('.date_desc', :default => 'Date') %>
       </label>
+  	<%= link_to_help "search-date-help" %>
     </dt>
     <dd>
       <%= text_field_tag "query[date]", @query[:date], :id => 'refine_updated_at' %>
-      <%= link_to_help "search-date-help" %>
     </dd>
     <dt>
   	  <label for="refine_bookmarker">
-  	    <%= t('.bookmarker', :default => 'Bookmarker:') %>
+  	    <%= t('.bookmarker', :default => 'Bookmarker') %> <%= link_to_help "bookmark-search-text-help" %>
   	  </label>
     </dt>
     <dd>
       <%= text_field_tag "query[bookmarker]", @query[:bookmarker], :id => 'refine_bookmarker' %>
-      <%= link_to_help "bookmark-search-text-help" %>
     </dd> 
     <dt>
       <label for="text"><%= t('.text', :default => 'All fields:') %></label>
+	<%= link_to_help "bookmark-search-text-help" %>
     </dt>
     <dd>
       <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
-      <%= link_to_help "bookmark-search-text-help" %>
+      
     </dd> 
-  </dl>
-  </p>
-  <span class="submit">
-    <%= submit_tag t('.bookmarks.search', :default => 'Search bookmarks'), :name => nil %>
-  </span>
+	<dt class="landmark">Submit</dt>
+	<dd class="submit actions"><%= submit_tag t('.bookmarks.search', :default => 'Search bookmarks'), :name => nil %></dd>
+</dl>
 </fieldset>
 <% end %>

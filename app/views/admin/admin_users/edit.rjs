@@ -1,1 +1,0 @@
-page.replace_html "user_#{@user.id}", :partial => 'user_form', :locals => {:user => @user}

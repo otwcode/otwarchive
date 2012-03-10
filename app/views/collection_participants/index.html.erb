@@ -1,25 +1,15 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h t('.participants', :default => "Participants in") %> <%= @collection.title %></h2>
+<h2 class="heading"><%= ts("Members of %{title}", :title => @collection.title) %></h2>
 <!--descriptions-->
 
-<table id="collection_participants_table" summary="This table shows the participants in your collection; you can change their roles, remove participants and add new ones">
-<caption><%=h t('.list', :default => "List of participants") %></caption>
-<thead>
-	<tr>
-  <th scope="col"><%=h t('.participant', :default => "Participant") %></th>
-  <th scope="col"><%=h t('.role', :default => "Role") %></th>
-  <th scope="col"><%=h t('.manage', :default => "Manage") %></th>
-</tr>
-</thead>
-<tbody>
-<% @collection_participants.each do |participant| %>
-  <%= render :partial => 'participant_form', :locals => {:participant => participant} %>
-<% end %>
-</tbody>
-<tfoot>
-	<tr>
-		<th scope="col" colspan="3"><%=h t('.add_participants', :default => "Add Participant") %></th>
+<!--add members-->
 <%= render :partial => 'add_participants_form' %>
-</tr>
-</tfoot>
-</table>
+
+<!--list members-->
+<dl class="members index group">
+<% @collection_participants.each do |participant| %>
+      <%= render :partial => 'participant_form', :locals => {:participant => participant} %>
+    <% end %>
+</dl>
+
+

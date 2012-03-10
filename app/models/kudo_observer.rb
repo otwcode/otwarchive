@@ -5,7 +5,7 @@ class KudoObserver < ActiveRecord::Observer
 
     users.each do |user|
       if notify_user_by_email?(user)
-        KudoMailer.kudo_notification(user, kudo).deliver
+        KudoMailer.kudo_notification(user.id, kudo.id).deliver
       end
     end
   end

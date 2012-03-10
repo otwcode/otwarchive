@@ -1,0 +1,26 @@
+<% TagSet::TAG_TYPES.each do |tag_type| %>
+  <fieldset class="tagset listbox">
+    <% unless TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
+      <% # fandoms, chars, relationships, freeforms %>
+
+        <% if @tag_set.with_type(tag_type).empty? %>
+          <h4 class="heading"><%= form.label "#{tag_type}_tagnames_to_add".to_sym, ts("Add #{tag_type.classify.pluralize}:") %></h5>
+        <% else %>
+          <h4 class="heading"><%= form.label "#{tag_type}_tags_to_remove".to_sym, ts("#{tag_type.classify.pluralize}") %></h4>
+          <%= check_all_none %>
+          <%= checkbox_section(form, "#{tag_type}_tags_to_remove", @tag_set.with_type(tag_type).by_name_without_articles) %>
+          <h5 class="heading"><%= form.label "#{tag_type}_tagnames_to_add".to_sym, ts("Add:") %></h5>
+        <% end %>
+        
+        <div title="add tags"><%= form.text_field "#{tag_type}_tagnames_to_add".to_sym, autocomplete_options(tag_type) %></div>      
+
+    <% else %>
+      <% # ratings, categories, warnings %>
+        <h4 class="heading"><%= tag_type.classify.pluralize %></h4>
+        <%= check_all_none %>
+        <%= checkbox_section(form, "#{tag_type}_tagnames", tag_type.classify.constantize.value_of(:name),
+                               :checked_method => "#{tag_type}_tagnames", :value_method => "to_s", :name_method => "to_s",
+                               :checkbox_side => "left") %>
+    <% end %>
+  </fieldset>
+<% end %>

@@ -1,6 +1,6 @@
 <h1><%=h "Translation Interface".t %></h1>
 
-<h2><%=h 'Translating'.t %> <%= link_to "#{@controller_to_translate} &raquo; #{@action_to_translate}", @url_to_translate %></h2>
+<h2 class="heading"><%=h 'Translating'.t %> <%= link_to "#{@controller_to_translate} &raquo; #{@action_to_translate}", @url_to_translate %></h2>
 <%= javascript_include_tag 'translation_status' %>
 <% if Locale.base? %>
   <p>

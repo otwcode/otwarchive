@@ -1,144 +1,51 @@
-<h2>Assignments for <%= @collection.title %></h2>
+<!--SUSPECT THIS OF BEING COLLECTION HOME ZONE-->
+<h2 class="heading">Assignments for <%= @collection.title %> <%= link_to_help 'challenge-assignments' %></h2>
 
-<ul class="navigation">
-  <li>
-    <% if params[:show_covered] %>
-      <%= link_to ts("Show Needed Pinch Hits"), collection_assignments_path(@collection) %>
-    <% else %>
-      <%= link_to ts("Show Assigned Pinch Hits"), collection_assignments_path(@collection, :show_covered => true) %>
-    <% end %>
+<ul class="navigation actions" role="navigation">
+  <li><%= span_if_current ts("Defaulted"), collection_assignments_path(@collection), !(params[:pinch_hit] || params[:unfulfilled] || params[:fulfilled]) %></li>
+  <li><%= span_if_current ts("Pinch Hits"), collection_assignments_path(@collection, :pinch_hit => true)%></li>
+  <li><%= span_if_current ts("Open"), collection_assignments_path(@collection, :unfulfilled => true) %></li>
+  <% if @collection.moderated? %>
+    <li><%= span_if_current ts("Awaiting Approval"), collection_items_path(@collection) %>
+  <% end %>
+  <li><%= span_if_current ts("Complete"), collection_assignments_path(@collection, :fulfilled => true) %></li>
+  <li role="button">
+    <%= link_to "Default All Incomplete", default_all_collection_assignments_path(@collection),
+                :confirm => "Are you sure? This will mark all unposted or unapproved assignments in the challenge as defaulting." %>
+  </li>
+  <li role="button"><%= link_to ts("Purge Assignments"), purge_collection_assignments_path(@collection), 
+          :confirm => ts("This will delete ALL assignments so you can edit and send them over. Please do not do this unless you absolutely must!") %>
   </li>
 </ul>
 
-<% if @collection.assignments.defaulted.count < 1 %>
-  <p class="note">No defaulted assignments!</p>
-<% elsif @collection.assignments.defaulted.uncovered.count < 1 && !params[:show_covered] %>
-  <p class="note">All defaulted assignments are covered!</p>
+<% if @assignments.count < 1 %>
+  <p class="note">No assignments to review!</p>
 <% else %>
-  <h3><%= ts("Defaulted Assignments") %> <%= link_to_help 'challenge-defaulted-assignments' %></h3>
-  <table>
-    <tr>
-      <th><%= ts("Recipient") %></th>
-      <th><%= ts("Recipient Defaulted?") %></th>
-      <% if params[:show_covered] %><th><%= ts("Covered?") %></th><% end %>
-      <th><%= ts("Assigned Writer") %></th>
-      <th><%= ts("Current Pinch Hitter") %></th>
-      <th><%= ts("Manage") %></th>
-    </tr>
-    
-    <% @defaulted_assignments.each do |assignment| %>
-      <% request = assignment.request_signup || assignment.pinch_request_signup %>
-      <% if request %>
-        <tr>
-          <td><%= link_to assignment.request_byline, collection_signup_path(@collection, request) %></td>
-          <td><%= ChallengeAssignment.in_collection(@collection).by_offering_user(request.pseud.user).all? {|recip_assignment| recip_assignment.defaulted} ? "Yes" : "No" %></td>
-          <% if params[:show_covered] %><td><%= assignment.covered_at.nil? ? "No" : "Yes" %></td><% end %>
-          <td><%= assignment.offer_byline %></td>
-          <td>
-            <% new_assignment = assignment.covered_at ? request.request_assignments.last : ChallengeAssignment.new %>
-            <%= form_for [@collection, new_assignment], :url => collection_assignments_path(@collection) do |assignment_form| %>
-              <%= hidden_field_tag :assignment_to_cover, assignment.id %>
-              <%= assignment_form.hidden_field :collection_id, :value => @collection.id %>
-              <%= assignment_form.hidden_field :request_signup_id, :value => request.id %>
-              <%= assignment_form.text_field :pinch_hitter_byline %>
-              <%= autocomplete_text_field "challenge_assignment_pinch_hitter_byline", :methodname => "pseud_byline", :no_comma => true %>
-          </td>
-          <td>
-              <ul class="navigation">
-                <li><%= submit_tag ts("Assign") %></li>
-                <li><%= link_to ts("Undefault"), undefault_collection_assignment_path(@collection, assignment) %></li>
-                <% unless assignment.covered_at.nil? %>
-                  <li><%= link_to ts("Uncover"), uncover_default_collection_assignment_path(@collection, assignment) %></li>
-                <% else %>
-                  <li><%= link_to ts("Covered"), cover_default_collection_assignment_path(@collection, assignment) %></li>
-                <% end %>
-              </ul>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
+
+  <%= will_paginate @assignments %>
+
+  <% if params[:fulfilled] %>
+    <%= render "maintainer_index_fulfilled" %>
+  <% else %>
+    <%= form_tag update_multiple_collection_assignments_path(@collection), :method => :put do %>
+      <fieldset>
+
+        <% if !(params[:pinch_hit] || params[:unfulfilled] || params[:fulfilled]) %>
+          <%= render "maintainer_index_defaulted" %>
+        <% elsif params[:pinch_hit] %>
+          <legend><%= ts("Pinch Hit Assignments") %></legend>
+          <h3><%=ts("Pinch Hit Assignments") %></h3>
+          <%= render "maintainer_index_unfulfilled" %>
+        <% elsif params[:unfulfilled] %>
+          <legend><%= ts("Open Assignments") %></legend>
+          <h3><%=ts("Open Assignments") %></h3>        
+          <%= render "maintainer_index_unfulfilled" %>
+        <% end %>
+        
+      </fieldset>
+      <%= submit_fieldset %>
     <% end %>
-  </table>
+  <% end %>
+
+  <%= will_paginate @assignments %>
 <% end %>
-
-<h3><%= ts("Assignments") %> <%= link_to_help 'challenge-assignments' %></h3>
-
-<%= form_tag default_multiple_collection_assignments_path, :method => :put do %>
-  <ul class="navigation">
-  	<li><%= link_to ts("Manage Items"), collection_items_path(@collection) %></li>
-    <li><%= submit_tag "Save Defaults"%></li>
-    <li>
-      <%= link_to "Default All Unposted", default_all_collection_assignments_path(@collection),
-                  :confirm => "Are you sure? This will mark all unposted or unapproved assignments in the challenge as defaulting." %>
-    </li>
-  </ul>
-  
-  <div class="clear"></div>
-
-  <table>
-    <thead>
-      <tr>
-        <th><%= ts("Pseud") %></th>
-        <th><%= ts("Email") %></th>
-        <th><%= ts("Writing For") %></th>
-        <th><%= ts("Work Info") %></th>
-        <th>
-          <%= ts("Default?") %> 
-          <%= button_to_function ts("All"), "$$('input[type=checkbox]').each(function(box) {box.checked = true})" %>
-          <%= button_to_function ts("None"), "$$('input[type=checkbox]').each(function(box) {box.checked = false})" %>
-        </th>
-      </tr>
-    </thead>
-
-    <% @open_assignments.each do |assignment| %>
-      <tr>
-        <td><%= challenge_assignment_byline(assignment) %></td>
-        <td><%= challenge_assignment_email(assignment) %></td>
-        <td>
-          <% request = assignment.request_signup || assignment.pinch_request_signup %>
-          <% if request %>
-            <%= link_to request.pseud.byline, collection_assignment_path(@collection, assignment) %>
-            <%= assignment.pinch_request_signup && assignment.pinch_request_signup == request ? "* (pinch recipient)" : "" %>
-          <% else %>
-            <strong>No Recipient</strong>
-          <% end %>
-        </td>
-        <td>
-          <% if assignment.creation %>
-            <%= link_to ts("Gift posted on %{published_at}", :published_at => assignment.creation.published_at), assignment.creation %>
-            <% if assignment.creation.respond_to?(:word_count) %>
-              <%= ts("(%{count} words)", :count => assignment.creation.word_count) %>
-            <% end %>
-            <% if !assignment.fulfilled? %>
-              <strong><%= ts("Not yet approved") %></strong>
-            <% end %>
-          <% else %>
-            Not yet posted
-          <% end %>
-        </td>
-        <td>
-          <% unless assignment.fulfilled? %>
-            <%= fields_for "challenge_assignments[]", assignment do |assignment_form| %>
-              <%= assignment_form.check_box :defaulted %>
-            <% end %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-
-  <%= will_paginate @open_assignments %>
-
-  <ul class="navigation">
-    <li><%= link_to ts("Purge Assignments"), purge_collection_assignments_path(@collection), 
-            :confirm => ts("This will delete ALL assignments so you can edit and send them over. Please do not do this unless you absolutely must!") %>
-    </li>
-  	<li><%= link_to ts("Manage Items"), collection_items_path(@collection) %></li>
-    <li><%= submit_tag ts("Save Defaults")%></li>
-    <li>
-      <%= link_to ts("Default All Unposted"), default_all_collection_assignments_path(@collection),
-                  :confirm => ts("Are you sure? This will mark all unposted or unapproved assignments in the challenge as defaulting.") %>
-    </li>
-  </ul>
-
-<% end %>  

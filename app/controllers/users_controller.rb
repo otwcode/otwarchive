@@ -1,9 +1,27 @@
 class UsersController < ApplicationController
+  cache_sweeper :pseud_sweeper
 
   before_filter :check_user_status, :only => [:edit, :update]
-  before_filter :load_user, :only => [:show, :edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid, :browse]
-  before_filter :check_ownership, :only => [:edit, :update, :destroy, :end_first_login, :change_username, :change_password, :change_openid]
+  before_filter :load_user, :except => [:activate, :create, :delete_confirmation, :index, :new]
+  before_filter :check_ownership, :except => [:activate, :browse, :create, :delete_confirmation, :index, :new, :show]  
   before_filter :check_account_creation_status, :only => [:new, :create]
+
+  # This is meant to rescue from race conditions that sometimes occur on user creation
+  # The unique index on login (database level) prevents the duplicate user from being created,
+  # but ideally we can still send the user the activation code and show them the confirmation page
+  rescue_from ActiveRecord::RecordNotUnique do |exception|
+    # ensure we actually have a duplicate user situation
+    if exception.message =~ /Mysql2?::Error: Duplicate entry/i &&
+      @user && User.count(:conditions => {:login => @user.login}) > 0 &&
+      # and that we can find the original, valid user record
+      (@user = User.find_by_login(@user.login))
+        notify_and_show_confirmation_screen
+    else
+      # re-raise the exception and make it catchable by Rails and Airbrake
+      # (see http://www.simonecarletti.com/blog/2009/11/re-raise-a-ruby-exception-in-a-rails-rescue_from-statement/)
+      rescue_action_without_handler(exception)
+    end
+  end
 
   def load_user
     @user = User.find_by_login(params[:id])
@@ -26,7 +44,7 @@ class UsersController < ApplicationController
       if !invitation
         flash[:error] = ts("There was an error with your invitation token, please contact support")
         redirect_to new_feedback_report_path and return
-      elsif invitation.redeemed_at && @invitation.invitee
+      elsif invitation.redeemed_at && invitation.invitee
         flash[:error] = ts("This invitation has already been used to create an account, sorry!")
         redirect_to root_path and return
       end
@@ -56,8 +74,8 @@ class UsersController < ApplicationController
                    group("tags.id").order("work_count DESC") &
                    Work.visible_to_all.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                               INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
       visible_works = @user.works.visible_to_all
       visible_series = @user.series.visible_to_all
       visible_bookmarks = @user.bookmarks.visible_to_all
@@ -68,8 +86,8 @@ class UsersController < ApplicationController
                    group("tags.id").order("work_count DESC") &
                    Work.visible_to_registered_user.revealed &
                    Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-                               INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+    INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
+    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
       visible_works = @user.works.visible_to_registered_user
       visible_series = @user.series.visible_to_registered_user
       visible_bookmarks = @user.bookmarks.visible_to_registered_user
@@ -79,6 +97,12 @@ class UsersController < ApplicationController
     @works = visible_works.order("revised_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @series = visible_series.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
     @bookmarks = visible_bookmarks.order("updated_at DESC").limit(ArchiveConfig.NUMBER_OF_ITEMS_VISIBLE_IN_DASHBOARD)
+
+    if current_user.respond_to?(:subscriptions)
+      @subscription = current_user.subscriptions.where(:subscribable_id => @user.id,
+                                                       :subscribable_type => 'User').first ||
+                      current_user.subscriptions.build
+    end
   end
 
   # GET /users/new
@@ -107,12 +131,14 @@ class UsersController < ApplicationController
       @user.recently_reset = false
       if @user.save
         flash[:notice] = ts("Your password has been changed")
+        @user.create_log_item( options = {:action => ArchiveConfig.ACTION_PASSWORD_RESET})
         redirect_to user_profile_path(@user) and return
       else
         render :change_password and return
       end
     end
   end
+
 
   def change_openid
     if params[:identity_url]
@@ -202,15 +228,20 @@ class UsersController < ApplicationController
         end
       end
       if @user.save
-        UserMailer.signup_notification(@user).deliver
-        flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
-                            :activation_url => activate_path(@user.activation_code)) if Rails.env.development?
-        render "confirmation"
+        notify_and_show_confirmation_screen
       else
         params[:use_openid] = true unless openid_url.blank?
         render :action => "new"
       end
     end
+  end
+
+  def notify_and_show_confirmation_screen
+    # deliver synchronously to avoid getting caught in backed-up mail queue
+    UserMailer.signup_notification(@user.id).deliver! 
+    flash[:notice] = ts("During testing you can activate via <a href='%{activation_url}'>your activation url</a>.",
+                        :activation_url => activate_path(@user.activation_code)).html_safe if Rails.env.development?
+    render "confirmation"
   end
 
   def activate
@@ -221,10 +252,11 @@ class UsersController < ApplicationController
       @user = User.find_by_activation_code(params[:id])
       if @user
         if @user.active?
-          flash[:error] = ts("Your account has already been activated.")
+          flash.now[:error] = ts("Your account has already been activated.")
           redirect_to @user and return
         end
-        @user.activate && UserMailer.activation(@user).deliver
+        # this is just a confirmation and it's ok if it gets delayed
+        @user.activate && UserMailer.activation(@user.id).deliver
         flash[:notice] = ts("Signup complete! Please log in.")
         @user.create_log_item( options = {:action => ArchiveConfig.ACTION_ACTIVATE})
         # assign over any external authors that belong to this user
@@ -237,7 +269,7 @@ class UsersController < ApplicationController
           external_authors.each do |external_author|
             external_author.claim!(@user)
           end
-          flash[:notice] += ts(" We found some stories already uploaded to the Archive of Our Own that we think belong to you! You can see them either in your works below or in your drafts folder.")
+          flash[:notice] += ts(" We found some works already uploaded to the Archive of Our Own that we think belong to you! You'll see them on your homepage when you've logged in.")
         end
         if @user.identity_url
           redirect_to(login_path(:use_openid => true))
@@ -245,36 +277,42 @@ class UsersController < ApplicationController
           redirect_to(login_path)
         end
       else
-        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again.")
+        flash[:error] = ts("Your activation key is invalid. If you didn't activate within 14 days, your account was deleted. Please sign up again, or contact support via the link in our footer for more help.").html_safe
         redirect_to ''
       end
     end
   end
 
-  # PUT /users/1
-  # PUT /users/1.xml
   def update
-    # have to reauthenticate to change email
-    if params[:new_email] != @user.email
-      @user.email = params[:new_email]
-      if !reauthenticate
-        render :edit and return
-      else
-        if @user.save
-          flash[:notice] = ts("Your profile has been successfully updated")
-        else
-          render :edit and return
-        end
-      end
-    end
-    # change profile
     @user.profile.update_attributes(params[:profile_attributes])
     if @user.profile.save
       flash[:notice] = ts("Your profile has been successfully updated")
+      redirect_to edit_user_path(@user)
     else
-      render :edit and return
+      render :edit
     end
-    redirect_to user_profile_path(@user) and return
+  end
+  
+  def change_email
+    if params[:new_email].blank?
+      render :change_email and return
+    else
+      if !reauthenticate
+        render :change_email and return
+      else
+        @old_email = @user.email
+        @user.email = params[:new_email]
+        @new_email = params[:new_email]
+        if @user.save
+          flash[:notice] = ts("Your email has been successfully updated")
+          UserMailer.change_email(@user.id, @old_email, @new_email).deliver
+          @user.create_log_item( options = {:action => ArchiveConfig.ACTION_NEW_EMAIL})
+        else
+          render :change_email and return
+        end
+      end
+    end
+    render :change_email and return
   end
 
   # DELETE /users/1
@@ -371,8 +409,17 @@ class UsersController < ApplicationController
 
   def end_first_login
     @user.preference.update_attribute(:first_login, false)
-    if !(request.xml_http_request?)
-      redirect_to @user
+    respond_to do |format|
+      format.html { redirect_to @user and return }
+      format.js
+    end
+  end
+  
+  def end_banner
+    @user.preference.update_attribute(:banner_seen, true)
+    respond_to do |format|
+      format.html { redirect_to(request.env["HTTP_REFERER"] || root_path) and return }
+      format.js
     end
   end
 
@@ -390,21 +437,28 @@ class UsersController < ApplicationController
 
   private
 
-    def reauthenticate
-      if !params[:password_check].blank?
-        session = UserSession.new(:login => @user.login, :password => params[:password_check])
-        if session.valid?
-          return true
+  def reauthenticate
+    if !params[:password_check].blank?
+      session = UserSession.new(:login => @user.login, :password => params[:password_check])
+      if session.valid?
+        return true
+      else
+        if params[:new_email]
+          flash.now[:error] = ts("Your password was incorrect")
         else
           flash.now[:error] = ts("Your old password was incorrect")
-          @wrong_password = true
-          return false
         end
-      else
-        flash.now[:error] = ts("You must authenticate again first")
         @wrong_password = true
         return false
       end
+    else
+      if params[:new_email]
+        flash.now[:error] = ts("You must enter your password")
+      else
+        flash.now[:error] = ts("You must enter your old password")
+      end
+      @wrong_password = true
+      return false
     end
-
+  end
 end

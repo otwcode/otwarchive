@@ -1,6 +1,8 @@
 class Work < ActiveRecord::Base
 
   include Taggable
+  include Collectible
+  include Pseudable
 
   ########################################################################
   # ASSOCIATIONS
@@ -9,14 +11,14 @@ class Work < ActiveRecord::Base
   has_one :hit_counter, :dependent => :destroy
   has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
-	has_many :users, :through => :pseuds, :uniq => true
+  has_many :users, :through => :pseuds, :uniq => true
 
-  has_many :external_creatorships, :as => :creation, :dependent => :destroy
+  has_many :external_creatorships, :as => :creation, :dependent => :destroy, :inverse_of => :creation
   has_many :archivists, :through => :external_creatorships
-  has_many :external_author_names, :through => :external_creatorships
+  has_many :external_author_names, :through => :external_creatorships, :inverse_of => :works
   has_many :external_authors, :through => :external_author_names, :uniq => true
 
-  has_many :chapters, :dependent => :destroy
+  has_many :chapters
   validates_associated :chapters
 
   has_many :serial_works, :dependent => :destroy
@@ -34,16 +36,9 @@ class Work < ActiveRecord::Base
   has_bookmarks
   has_many :user_tags, :through => :bookmarks, :source => :tags
 
-  has_many :collection_items, :as => :item, :dependent => :destroy
-  accepts_nested_attributes_for :collection_items, :allow_destroy => true
-  has_many :approved_collection_items, :class_name => "CollectionItem", :as => :item,
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
-
   has_many :challenge_assignments, :as => :creation
-
-  has_many :collections, :through => :collection_items
-  has_many :approved_collections, :through => :collection_items, :source => :collection,
-    :conditions => ['collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?', CollectionItem::APPROVED, CollectionItem::APPROVED]
+  has_many :challenge_claims, :as => :creation
+  accepts_nested_attributes_for :challenge_claims
 
   has_many :filter_taggings, :as => :filterable, :dependent => :destroy
   has_many :filters, :through => :filter_taggings
@@ -187,10 +182,16 @@ class Work < ActiveRecord::Base
   before_update :validate_tags
   after_update :adjust_series_restriction
 
+  after_destroy :destroy_chapters_in_reverse
+  def destroy_chapters_in_reverse
+    self.chapters.order("position DESC").map(&:destroy)
+  end
+
   def self.purge_old_drafts
-    drafts = Work.find(:all, :conditions => ['works.posted = ? AND works.created_at < ?', false, 1.week.ago])
-    drafts.map(&:destroy)
-    drafts.size
+    draft_ids = Work.where('works.posted = ? AND works.created_at < ?', false, 1.week.ago).value_of(:id)
+    Chapter.where(:work_id => draft_ids).order("position DESC").map(&:destroy)
+    Work.where(:id => draft_ids).map(&:destroy)
+    draft_ids.size
   end
 
   # SECTION IN PROGRESS -- CONSIDERING MOVE OF WORK CODE INTO HERE
@@ -229,6 +230,34 @@ class Work < ActiveRecord::Base
   # AUTHORSHIP
   ########################################################################
 
+  # NOTE:
+  # pseuds_to_add/remove can only be used after a work exists 
+  def pseuds_to_add=(pseud_names)
+    pseud_names.split(',').reject {|name| name.blank?}.map {|name| name.strip}.each do |name|
+      possible_pseuds = Pseud.parse_byline(name)
+      if possible_pseuds.size > 1
+        possible_pseuds = Pseud.parse_byline(name, :assume_matching_login => true)
+      end
+      p = possible_pseuds.first
+      errors.add(:base, ts("We couldn't find the pseud {{name}}.", :name => name)) and return if p.nil?
+      self.pseuds << p unless self.pseuds.include?(p)
+    end
+  end
+  
+  def pseuds_to_remove=(pseud_ids)
+    pseud_ids.reject {|id| id.blank?}.map {|id| id.strip}.each do |id|
+      p = Pseud.find(id)
+      if p && self.pseuds.include?(p)
+        # don't remove all authors from a work
+        if (self.pseuds - [p]).size > 0
+          self.pseuds -= [p]
+        end
+      end
+    end
+  end
+  
+  def pseuds_to_add; nil; end
+  def pseuds_to_remove; nil; end
 
   # Virtual attribute for pseuds
   def author_attributes=(attributes)
@@ -237,7 +266,7 @@ class Work < ActiveRecord::Base
     # if current user has selected different pseuds
     current_user = User.current_user
     if current_user.is_a? User
-      self.authors_to_remove = current_user.pseuds & (self.authors - selected_pseuds)
+      self.authors_to_remove = current_user.pseuds & (self.pseuds - selected_pseuds)
     end
     self.authors << Pseud.find(attributes[:ambiguous_pseuds]) if attributes[:ambiguous_pseuds]
     if !attributes[:byline].blank?
@@ -285,58 +314,25 @@ class Work < ActiveRecord::Base
     end
   end
 
+  def set_challenge_claim_info
+    # if this is fulfilling a challenge claim, add the collection and recipient
+    challenge_claims.each do |assignment|
+      add_to_collection(claim.collection)
+      self.gifts << Gift.new(:pseud => claim.requesting_pseud) unless (recipients && recipients.include?(claim.request_byline))
+    end
+    save
+  end
+
   def challenge_assignment_ids
     challenge_assignments.map(&:id)
   end
 
+  def challenge_claim_ids
+    challenge_claims.map(&:id)
+  end
+
   def challenge_assignment_ids=(ids)
     self.challenge_assignments = ids.map {|id| id.blank? ? nil : ChallengeAssignment.find(id)}.compact.select {|assignment| assignment.offering_user == User.current_user}
-  end
-
-  # Set a work's collections based on a list of collection names
-  # Don't delete all existing collections, or else works in closed collections
-  # can't be edited
-  def collection_names=(new_collection_names)
-    names = new_collection_names.split(',').map{ |name| name.strip }
-    to_add = Collection.where(:name => names)
-    (self.collections - to_add).each do |c|
-      self.collections.delete(c)
-    end
-    (to_add - self.collections).each do |c|
-      self.collections << c
-    end
-    (names - to_add.map{ |c| c.name }).each do |name|
-      unless name.blank?
-        self.errors.add(:base, t('collection_invalid', :default => "We couldn't find a collection with the name
-%{name}. Make sure you are using the one-word name, and not the title?", :name => name.strip))
-      end
-    end
-  end
-
-  def add_to_collection(collection)
-    if collection && !self.collections.include?(collection)
-      self.collections << collection
-    end
-  end
-
-  def add_to_collection!(collection)
-    add_to_collection(collection)
-    save
-  end
-
-  def remove_from_collection!(collection)
-    if collection && self.collections.include?(collection)
-      self.collections -= [collection]
-    end
-  end
-
-  def remove_from_collection!(collection)
-    remove_from_collection(collection)
-    save
-  end
-
-  def collection_names
-    self.collections.collect(&:name).join(",")
   end
 
   def recipients=(recipient_names)
@@ -361,7 +357,7 @@ class Work < ActiveRecord::Base
   ########################################################################
 
   def visible(current_user=User.current_user)
-    if current_user == :false || !current_user
+    if current_user.nil? || current_user == :false
       return self if self.posted unless self.restricted || self.hidden_by_admin
     elsif self.posted && !self.hidden_by_admin
       return self
@@ -374,6 +370,12 @@ class Work < ActiveRecord::Base
     self.visible(user) == self
   end
 
+  def unrestricted=(setting)
+    if setting == "1"
+      self.restricted = false
+    end
+  end
+  def unrestricted; !self.restricted; end
 
   def unrevealed?(user=User.current_user)
     # eventually here is where we check if it's in a challenge that hasn't been made public yet
@@ -402,7 +404,7 @@ class Work < ActiveRecord::Base
 
   def set_revised_at(date=nil)
     if date # if we pass a date, we want to set it to that (or current datetime if it's today)
-      date == Date.today ? value = Time.now : value = date
+      date == Date.today ? value = Time.now : value = DateTime::jd(date.jd, 12, 0, 0)
       self.revised_at = value
     else # we want to find the most recent @chapter.published_at date
       recent_date = self.chapters.maximum('published_at')
@@ -411,10 +413,10 @@ class Work < ActiveRecord::Base
       # do is update with current time
       if recent_date == Date.today && self.revised_at && self.revised_at.to_date == Date.today
         return self.revised_at
-      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today
+      elsif recent_date == Date.today && self.revised_at && self.revised_at.to_date != Date.today || recent_date.nil?
         self.revised_at = Time.now
       else
-        self.revised_at = recent_date
+        self.revised_at = DateTime::jd(recent_date.jd, 12, 0, 0)
       end
     end
   end
@@ -455,11 +457,11 @@ class Work < ActiveRecord::Base
     end
   end
 
-	# Make sure the series restriction level is in line with its works
+  # Make sure the series restriction level is in line with its works
   def adjust_series_restriction
-	  unless self.series.blank?
+    unless self.series.blank?
       self.series.each {|s| s.adjust_restricted }
-		end
+    end
   end
 
   ########################################################################
@@ -495,21 +497,25 @@ class Work < ActiveRecord::Base
   end
 
   # Change the positions of the chapters in the work
-	def reorder(positions)
-	  SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
-	end
+  def reorder(positions)
+    SortableList.new(self.chapters.posted.in_order).reorder_list(positions)
+    # We're caching the chapter positions in the comment blurbs
+    # so we need to expire them
+    unless self.comments.empty?
+      self.comments.each{ |c| c.touch }
+    end
+  end
 
   # Get the total number of chapters for a work
   def number_of_chapters
-     Chapter.maximum(:position, :conditions => {:work_id => self.id}) || 0
+    self.chapters.count
   end
 
   # Get the total number of posted chapters for a work
   # Issue 1316: total number needs to reflect the actual number of chapters posted
   # rather than the total number of chapters indicated by user
   def number_of_posted_chapters
-    self.chapters.count(:conditions => {:work_id => self.id, :posted => true}) || 0
-     #Chapter.maximum(:position, :conditions => {:work_id => self.id, :posted => true}) || 0
+    self.chapters.posted.count
   end
 
   def chapters_in_order(include_content = true)
@@ -544,9 +550,17 @@ class Work < ActiveRecord::Base
     self.number_of_chapters > 1
   end
 
+  after_save :update_complete_status
+  def update_complete_status
+    self.complete = self.chapters.posted.count == expected_number_of_chapters
+    if self.complete_changed?
+      Work.update_all("complete = #{self.complete}", "id = #{self.id}")
+    end
+  end
+
   # Returns true if a work is not yet complete
   def is_wip
-    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_chapters
+    self.expected_number_of_chapters.nil? || self.expected_number_of_chapters != self.number_of_posted_chapters
   end
 
   # Returns true if a work is complete
@@ -573,16 +587,26 @@ class Work < ActiveRecord::Base
   def create_hit_counter
     counter = self.build_hit_counter
     counter.save
+    $redis.set(self.redis_key(:hit_count), 0)
   end
 
   # save hits
   def increment_hit_count(visitor)
-    counter = self.hit_counter
-    if !counter.last_visitor || counter.last_visitor != visitor
+    if self.last_visitor != visitor
       unless User.current_user.is_a?(User) && User.current_user.is_author_of?(self)
-        counter.update_attributes(:last_visitor => visitor, :hit_count => counter.hit_count + 1)
+        $redis.set(self.redis_key(:hit_count), self.database_hits) unless $redis.get(self.redis_key(:hit_count))
+        $redis.incr(self.redis_key(:hit_count))
+        $redis.set(self.redis_key(:last_visitor), visitor)
+        $redis.sadd("Work:new_hits", self.id)
       end
     end
+    return self.hits
+  end
+
+  # the last visitor is just used to decide whether or not to increment the hit count
+  # so persisting it in the database is not critical
+  def last_visitor
+    $redis.get(self.redis_key(:last_visitor))
   end
 
   # save downloads
@@ -628,8 +652,22 @@ class Work < ActiveRecord::Base
   end
 
   def hits
-    self.hit_counter ? self.hit_counter.hit_count : 0
+    redis_hits = $redis.get(self.redis_key(:hit_count))
+    return self.database_hits unless redis_hits
+    return redis_hits.to_i
   end
+
+  def database_hits
+    db_hits = self.hit_counter ? self.hit_counter.hit_count : 0
+    return db_hits
+  end
+
+  # helper method to generate redis keys
+  # examples: "work:2:hit_count", "work:776:last_visitor"
+  def redis_key(sym)
+    "work:#{self.id}:#{sym}"
+  end
+
 
   #######################################################################
   # TAGGING
@@ -660,34 +698,42 @@ class Work < ActiveRecord::Base
   def add_filter_tagging(tag, meta=false)
     admin_settings = Rails.cache.fetch("admin_settings"){AdminSetting.first}
     filter = tag.canonical? ? tag : tag.merger
-    if filter && !self.filters.include?(filter)
-      if meta
-        self.filter_taggings.create(:filter_id => filter.id, :inherited => true)
-      else
-        self.filters << filter
+    if filter
+      if !self.filters.include?(filter)
+        if meta
+          self.filter_taggings.create(:filter_id => filter.id, :inherited => true)
+        else
+          self.filters << filter
+        end
+        filter.reset_filter_count
+      elsif !meta
+        ft = self.filter_taggings.where(["filter_id = ?", filter.id]).first
+        ft.update_attribute(:inherited, false)
       end
-      filter.reset_filter_count unless admin_settings.suspend_filter_counts?
     end
   end
 
   # Removes filter_tagging relationship unless the work is tagged with more than one synonymous tags
   def remove_filter_tagging(tag)
-    filter = tag.canonical? ? tag : tag.merger
-    if filter && (self.tags & tag.synonyms).empty? && self.filters.include?(filter)
-      self.filters.delete(filter)
-      filter.reset_filter_count
-    end
-    unless filter.nil? || filter.meta_tags.empty?
-      filter.meta_tags.each do |meta_tag|
-        other_sub_tags = meta_tag.sub_tags - [filter]
-        sub_mergers = other_sub_tags.empty? ? [] : other_sub_tags.collect(&:mergers).flatten.compact
-        if self.filters.include?(meta_tag) && (self.filters & other_sub_tags).empty?
-          unless self.tags.include?(meta_tag) || !(self.tags & meta_tag.mergers).empty? || !(self.tags & sub_mergers).empty?
-            self.filters.delete(meta_tag)
+    filter = tag.filter
+    if filter
+      filters_to_remove = [filter] + filter.meta_tags
+      filters_to_remove.each do |filter_to_remove|
+        if self.filters.include?(filter_to_remove)
+          all_sub_tags = filter_to_remove.sub_tags + [filter_to_remove]
+          sub_mergers = all_sub_tags.empty? ? [] : all_sub_tags.collect(&:mergers).flatten.compact
+          all_tags_with_filter_to_remove_as_meta = all_sub_tags + sub_mergers
+          remaining_tags = self.tags - [tag]
+          if (remaining_tags & all_tags_with_filter_to_remove_as_meta).empty? # none of the remaining tags need filter_to_remove
+            self.filters.delete(filter_to_remove)
+            filter_to_remove.reset_filter_count
+          else # we should keep filter_to_remove, but check if inheritence needs to be updated
+            direct_tags_for_filter_to_remove = filter_to_remove.mergers + [filter_to_remove]
+            if (remaining_tags & direct_tags_for_filter_to_remove).empty? # not tagged with filter or mergers directly
+              ft = self.filter_taggings.where(["filter_id = ?", filter_to_remove.id]).first
+              ft.update_attribute(:inherited, true)
+            end
           end
-        elsif self.filters.include?(meta_tag)
-          ft = self.filter_taggings.where(["filter_id = ?", meta_tag.id]).first
-          ft.update_attribute(:inherited, true)
         end
       end
     end
@@ -861,7 +907,7 @@ class Work < ActiveRecord::Base
   scope :all_with_tags, includes(:tags)
 
   scope :giftworks_for_recipient_name, lambda {|name| select("DISTINCT works.*").joins(:gifts).where("recipient_name = ?", name)}
-  
+
   scope :unrevealed, joins(:approved_collection_items) & CollectionItem.unrevealed
 
   # ugh, have to do a left join here
@@ -877,7 +923,7 @@ class Work < ActiveRecord::Base
   # otherwise, we use a join to get userids and then get all posted works that are either unhidden OR belong to this user.
   # Note: in that last case we have to use select("DISTINCT works.") because of cases where the same user appears twice
   # on a work.
-  scope :visible_to_user, lambda {|user|
+  def self.visible_to_user(user=User.current_user)
     case user.class.to_s
     when 'Admin'
       visible_to_admin
@@ -889,10 +935,12 @@ class Work < ActiveRecord::Base
     else
       visible_to_all
     end
-  }
+  end
 
   # Use the current user to determine what works are visible
-  scope :visible, visible_to_user(User.current_user)
+  def self.visible(user=User.current_user)
+    visible_to_user(user)
+  end
 
   # Note: this version will work only on canonical tags (filters)
   scope :with_all_filter_ids, lambda {|tag_ids_to_find|
@@ -958,6 +1006,11 @@ class Work < ActiveRecord::Base
     where('collections.id IN (?) AND collection_items.user_approval_status = ? AND collection_items.collection_approval_status = ?',
           [collection.id] + collection.children.collect(&:id), CollectionItem::APPROVED, CollectionItem::APPROVED)
   }
+  
+  def self.in_series(series)
+    joins(:series).
+    where("series.id = ?", series.id)
+  end
 
   scope :for_recipient, lambda {|recipient|
     select("DISTINCT works.*").
@@ -981,87 +1034,51 @@ class Work < ActiveRecord::Base
 
   # Used for non-search work filtering
   def self.find_with_options(options = {})
-    command = ''
-    tags = (options[:boolean_type] == 'or') ?
-      '.with_any_filter_ids(options[:selected_tags])' :
-      '.with_all_filter_ids(options[:selected_tags])'
-    written = '.written_by_id(options[:selected_pseuds])'
-    written_having = '.written_by_id_having(options[:selected_pseuds])'
-    owned = '.owned_by(options[:user])'
-    collected = '.in_collection(options[:collection])'
-    sort = '.ordered_by_' + options[:sort_column] + '_' + options[:sort_direction].downcase
     page_args = {:page => options[:page] || 1, :per_page => (options[:per_page] || ArchiveConfig.ITEMS_PER_PAGE)}
-    paginate = '.paginate(page_args)'
-    sort_and_paginate = sort + '.paginate(page_args)'
-    recent = (options[:collection] ? '' : '.recent')
+    sort_by = "#{options[:sort_column]} #{options[:sort_direction]}"
 
-    @works = []
     @pseuds = []
     @filters = []
-    owned_works = nil
+    @works = Work
 
-    # 1. individual user
-    # 1.1 individual pseud
-    # 1.1.1 and tags
-    # 1.2 and tags
-    # 2. tags
-    # 3. all
-
-    if !options[:user].nil? && !options[:selected_pseuds].empty? && !options[:selected_tags].empty?
-      # We have an indiv. user, selected pseuds and selected tags
-      owned_works = Work.owned_by(options[:user])
-      command << written + tags
-    elsif !options[:user].nil? && !options[:selected_pseuds].empty?
-      # We have an indiv. user, selected pseuds but no selected tags
-      owned_works = Work.owned_by(options[:user])
-      command << written_having
-    elsif !options[:user].nil? && !options[:selected_tags].empty?
-      # filtered results on a user's works page
-      # no pseuds but a specific user, and selected tags
-      command << owned + tags
+    if !options[:user].nil? && !options[:selected_pseuds].empty?
+      @works = @works.written_by_id(options[:selected_pseuds])
     elsif !options[:user].nil?
-      # a user's default works page
-      command << owned
-      @pseuds = options[:user].pseuds
-    elsif !options[:tag].blank?
-      # works for a specific tag
-      command << tags
-    elsif !options[:selected_tags].blank? && !options[:language_id].blank?
-      # language and selected tags
-      command << tags + '.by_language(options[:language_id])'
-    elsif !options[:selected_tags].blank?
-      # no user but selected tags
-      command << tags + recent
-    elsif !options[:language_id].blank?
-      command << '.by_language(options[:language_id])'
-    else
-      # all visible works
-      command << recent
+      @works = @works.owned_by(options[:user])
     end
 
-    if User.current_user && User.current_user != :false
-      command << '.posted.unhidden'
-    else
-      command << '.posted.unhidden.unrestricted'
+    if !options[:selected_tags].blank? || !options[:tag].blank?
+      if options[:boolean_type] == 'or'
+        @works = @works.with_any_filter_ids(options[:selected_tags])
+      else
+        @works = @works.with_all_filter_ids(options[:selected_tags])
+      end
     end
 
-    # add on collections
-    command << (options[:collection] ? collected : '')
-
-    Rails.logger.debug "Eval: Work#{command + sort}"
+    if options[:language_id]
+      @works = @works.by_language(options[:language_id])
+    end
+    if options[:complete]
+      @works = @works.where(:complete => true)
+    end
     if options[:collection]
-      @works = eval("Work#{command + sort}").find(:all, :select => "works.*, hit_counters.hit_count AS hit_count", :joins => :hit_counter).uniq
+      @works = @works.in_collection(options[:collection])
     else
-      @works = eval("Work#{command + sort}").find(:all, :select => "works.*, hit_counters.hit_count AS hit_count", :joins => :hit_counter, :limit => ArchiveConfig.SEARCH_RESULTS_MAX).uniq
+      @works = @works.limit(ArchiveConfig.SEARCH_RESULTS_MAX)
     end
 
-    # Adds the co-authors of the displayed works to the available list of pseuds to filter on
-    @pseuds = (@pseuds + Pseud.on_works(@works)).uniq if !options[:user].nil?
+    if User.current_user.nil? || User.current_user == :false
+      @works = @works.unrestricted
+    end
 
-    # In order to filter by non-user coauthors, you need to split it up into two queries
-    # and then return the works that overlap (you could do this with a nested query, but
-    # it gets extremely complicated with the named scopes and all the other variables)
-    @works = @works & owned_works if owned_works
+    if options[:sort_column] == "hit_count"
+      @works = @works.select("works.*, hit_counters.hit_count AS hit_count").joins(:hit_counter)
+    end
+
+    @works = @works.order(sort_by).posted.unhidden
+    # for now, trigger the lazy loading so we don't get an error on @works.size
+    @works.compact
+
     if options[:user] || @works.size < ArchiveConfig.ANONYMOUS_THRESHOLD_COUNT
       # strip out works hidden in challenges if on a user's specific page or if there are too few in this listing to conceal
       @works = @works.delete_if {|w| w.unrevealed?}
@@ -1139,6 +1156,7 @@ class Work < ActiveRecord::Base
     has hit_counter.hit_count, :as => 'hit_count'
     has word_count, revised_at
     has posted, restricted, hidden_by_admin
+    has complete
     has bookmarks.rec, :as => 'recced'
     has bookmarks.pseud_id, :as => 'bookmarker'
 

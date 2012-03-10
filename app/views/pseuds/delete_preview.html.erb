@@ -1,4 +1,4 @@
-<h2><%=h 'Pseud deletion' %></h2>
+<h2 class="heading"><%=h 'Pseud deletion' %></h2>
 
 <p>
   When you delete your pseud, any works and series you have written under it will be transferred to 
@@ -21,7 +21,7 @@
     <%= label_tag 'bookmarks_action_transfer_bookmarks', "Transfer these bookmarks to the default pseud" %>
     </p>
 
-    <p class="submit cancel">
+    <p class="submit cancel actions">
 		  <%= submit_tag "Submit", :confirm => "Are you sure? This can't be undone!" %> <%= submit_tag 'Cancel', :name => 'cancel_button', :class => 'cancel' %>
     </p>
   <% end %>

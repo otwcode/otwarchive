@@ -1,4 +1,5 @@
-<!-- prompt restriction_form partial, expects a local variable called "challenge_form" and @challenge, as well as boolean "is_offer"  -->
+<!-- prompt restriction_form partial, expects a local variable called "challenge_form" and @challenge and "type", as well as boolean "is_offer" and "show_tag_options"  
+is verbose-->
 <% if is_offer %>
   <% @challenge.build_offer_restriction unless @challenge.offer_restriction %>
   <% restriction = @challenge.offer_restriction %>
@@ -9,90 +10,75 @@
 
 <%= challenge_form.fields_for(is_offer ? :offer_restriction : :request_restriction) do |prompt_restriction_form| %>
 
-  <fieldset class="preface profile">
+  <fieldset>
 
     <% if is_offer %>
       <!-- skip the notes -->
     	<legend>Offer Settings</legend>
-    	<h3>Offer Settings</h3>
+    	<h3 class-"landmark">Offer Settings</h3>
     	<p class="note">
     	  These settings determine what each separate offer can contain. Note these can be entirely different from the request settings!
     	</p>
     <% else %>
     	<legend>Request Settings</legend>
-    	<h3>Request Settings</h3>
+    	<h3 class-"landmark">Request Settings</h3>
     	<p class="note">
     	  These settings determine what each separate request can contain, and in particular how many different tags of each kind.
-    	  If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.
+    	  <% unless type == "prompt_meme" %>If you plan to use automated matching, keep in mind it will be slower the more tags you allow people to request.<% end %>
     	</p>
+    	<% unless type == "prompt_meme" %><p class="note">
+    	  Checking "Allow Any?" allows users to select "Any" for that field; this means they will match <em>anything</em> put in that field. This option is safer for offers than requests!
+    	</p><% end %>
     	<p class="note">
-    	  If you check "Allow Any?" then users will be able to select "Any" for that field, which means they will match no matter 
-    	  what the person offering has put into that field. Note: this option is generally safer for offers than requests!
-    	</p>
-    	<p class="note">
-    	  If you check "Must Be Unique?" then users will not be allowed to repeat the same value across prompts. That is, if 
-    	  you allow three prompts and specify that fandom must be unique, the user will have to specify completely different fandoms
-    	  for all three prompts -- no overlap allowed. Please explain this in your signup instructions!
+    	  If you allow three prompts and specify that fandom "must be unique", the user will have to choose completely different fandoms
+    	  for all three prompts&#8212;no overlap allowed. Please explain this in your signup instructions!
     	</p> 
     <% end %>
     <dl>
-      <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true)) %>
+      <% if type == "gift_exchange" %>
+        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), true) %>
+      <% else %>
+        <%= prompt_restriction_settings(prompt_restriction_form, (is_offer ? false : true), false) %>
+      <% end %>
     </dl>
   </fieldset>
 
   <% if show_tag_options %>
-    <fieldset class="preface profile">
-      <legend>Tag Options</legend>
-      <h3>Tag Options <%= link_to_help("prompt-restriction-tag-set") %></h3>
-      <% restriction.build_tag_set unless restriction.tag_set %>
-      <%= prompt_restriction_form.fields_for :tag_set_attributes do |tag_set_form| %>
-        <% TagSet::TAG_TYPES.each do |tag_type| %>
-          <fieldset class="tag_set">
-            <legend><%= ts("%{tag_type} Settings", :tag_type => tag_type.classify) %></legend>
-            <h4><%= tag_set_form.label "#{tag_type}_tagnames".to_sym, "#{tag_type.classify}: " %></h4>
-            <p>
-              <!-- 
-                monstrous kludge required by ugly bug in nested_attributes_for, see
-                https://rails.lighthouseapp.com/projects/8994/tickets/2646-validations-not-called-when-model-updating-using-nested-attributes
-              -->
-              <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
-              <% tagnames = restriction.tag_set ? restriction.tag_set.send("#{tag_type}_tagnames") : "" %>
-              <%= tag_set_form.text_area "#{tag_type}_tagnames".to_sym, :value => tagnames,
-                  :rows => (tagnames.size/3 > 10 ? 10 : (tagnames.size/3 < 2 ? 2 : tagnames.size/3)) %>
-              <% tag_fieldname = "#{@challenge.class.name.tableize.singularize}_offer_restriction_attributes_tag_set_attributes_#{tag_type}_tagnames" %>
-              <%= autocomplete_text_field(tag_fieldname, :methodname => "canonical_#{tag_type}_finder") %>
-            </p>
-
-            <% if TagSet::TAG_TYPES_INITIALIZABLE.include?(tag_type) %>
-              <h5><%= ts("Initialize tag list: ") %> <%= link_to_help "challenge-initialize-tags" %></h5>
-              <ul>
-                <li>
-                  <%= prompt_restriction_form.label "#{tag_type}_init_less_than_average", ts("Below the average: ") %>
-                  <%= prompt_restriction_form.check_box "#{tag_type}_init_less_than_average" %>
-                </li>
-                <li>
-                  <%= prompt_restriction_form.label "#{tag_type}_init_greater_than_average", ts("Above the average: ") %>
-                  <%= prompt_restriction_form.check_box "#{tag_type}_init_greater_than_average" %>
-                </li>
-                <li>
-                  <%= prompt_restriction_form.label "#{tag_type}_init_factor", ts("Multiply the average by: ") %>
-                  <%= prompt_restriction_form.select "#{tag_type}_init_factor", options_for_select(%w{ 0.1 0.25 0.5 0.75 1 5 10 15 20 }, "1") %>
-                </li>
-              </ul>
-            <% end %>
-
-            <% if TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) %>
-              <ul>
-                <li>
-                  <%= prompt_restriction_form.label "#{tag_type}_restrict_to_fandom", ts("Restrict to fandom?") %>
-                  <%= prompt_restriction_form.check_box "#{tag_type}_restrict_to_fandom", :checked => restriction.send("#{tag_type}_restrict_to_fandom") %>
-                </li>
-              </ul>
-            <% end %>
+    <fieldset>
+      <legend><%= ts("Tag Options") %></legend>
+      <h3 class-"landmark"><%= ts("Tag Options") %> <%= link_to_help("prompt-restriction-tag-set" + (type == "gift_exchange" ? "" : "-promptmeme")) %> </h3>
+      <p class="note">
+     <%= link_to(ts("Tag sets"), tag_sets_path) %> show what tags can be used in
+        your challenge. You can make your own or use any public tag set. Beware: owners can change the contents of their public tag set without warning.
+      </p> 
+      <dl>
+        <% unless restriction.owned_tag_sets.empty? %>
+          <dt><%= prompt_restriction_form.label :tag_sets_to_remove, ts("Current Tag Sets:") %></dt>
+          <dd>
+            <fieldset class="listbox">
+              <h4 class="heading">Check to remove</h4>
+            <%= checkbox_section(prompt_restriction_form, :tag_sets_to_remove, restriction.owned_tag_sets, :name_method => "title") %>
           </fieldset>
+          </dd>
         <% end %>
-      <% end %>
-      
+        <dt><%= prompt_restriction_form.label :tag_sets_to_add, ts("Tag Sets To Use: ") %></dt>
+        <dd title="tag sets to use"><%= prompt_restriction_form.text_field :tag_sets_to_add, autocomplete_options("owned_tag_sets") %></dd>
+        <% TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.each do |tag_type| %>
+          <dt><%= ts("#{tag_type.classify} Settings") %> <%= link_to_help("prompt-restriction-character-and-relationship") %></dt>
+          <dd>
+            <ul>
+              <li>
+                <%= prompt_restriction_form.check_box "#{tag_type}_restrict_to_fandom", :checked => restriction.send("#{tag_type}_restrict_to_fandom") %>
+              <%= prompt_restriction_form.label "#{tag_type}_restrict_to_fandom", ts("Fandom only?") %>
+              </li>
+              <li>
+                <%= prompt_restriction_form.check_box "#{tag_type}_restrict_to_tag_set", :checked => restriction.send("#{tag_type}_restrict_to_tag_set") %>
+                <%= prompt_restriction_form.label "#{tag_type}_restrict_to_tag_set", ts("Tag set fandom only?") %>
+              </li>
+            </ul>
+          </dd>
+        <% end %>
+      </dl>
     </fieldset>
   <% end %>
 

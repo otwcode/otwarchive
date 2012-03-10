@@ -28,7 +28,7 @@ class TagWranglersController < ApplicationController
         conditions.first << " AND common_taggings.filterable_id = #{@media.id} AND common_taggings.filterable_type = 'Tag'"
       end
     end
-    @assignments = Fandom.find(:all, :select => 'tags.*, users.login AS wrangler', 
+    @assignments = Fandom.in_use.find(:all, :select => 'tags.*, users.login AS wrangler', 
     :joins => joins, :conditions => conditions, :order => :name).paginate(:page => params[:page], :per_page => 50)
   end
 
@@ -37,7 +37,7 @@ class TagWranglersController < ApplicationController
     @fandoms = @wrangler.fandoms.by_name
     @counts = {}
     [Fandom, Character, Relationship, Freeform].each do |klass|
-      @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.count
+      @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.in_use.count
     end
   end
   

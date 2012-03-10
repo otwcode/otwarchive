@@ -1,11 +1,30 @@
 <!--subnav-->
-<h3 class="landmark">Navigation</h3>
-<ul class="navigation" role="navigation">
-	<li><%= span_if_current ts('Public Skins'), skins_path %></li>
+<h3 class="landmark heading">Navigation</h3>
+<ul class="navigation actions" role="navigation">
+	<li>
+    <% if params[:work_skins] %>
+      <%= link_to ts("Site Skins"), url_for(:work_skins => false) %>
+    <% else %>
+      <%= link_to ts("Work Skins"), url_for(:work_skins => true) %>
+    <% end %>
+  </li>
+  <li><%= span_if_current ts('Public Skins'), skins_path %></li>
+  <% if session[:site_skin] %>
+    <li><%= link_to ts("Remove Skin"), unset_skins_path %></li>
+  <% end %>
 	<% if logged_in? %>
+	  <% if current_user.preference.skin_id && session[:site_skin].blank? %>
+	    <li>
+    	  <%= form_for(current_user.preference, :url => {:controller => :preferences, :action => :update, :user_id => current_user}, :method => "put") do |f| %>
+          <%= f.hidden_field :skin_id, :value => Skin.default.id %>
+          <%= f.submit ts("Remove Skin") %>
+        <% end %>
+      </li>
+    <% end %>
+	
     <li><%= span_if_current ts('My Skins'), user_skins_path(current_user) %></li>
     <% unless controller.action_name == "new" %>
-      <li><%= link_to ts('Create New Skin'), new_skin_path %></li>
+      <li><%= link_to ts('Create Skin'), new_skin_path %></li>
     <% end %>
     
     <!-- wizard-to-custom-css switchers for new and edit -->

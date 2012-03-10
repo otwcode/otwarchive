@@ -1,173 +1,44 @@
 <% unless @preview_mode %>
-<!-- BEGIN navigation -->
-<h3 class="landmark">Actions</h3>
-<ul class="navigation" role="navigation">
-  <% if is_author_of?(@work) %>
-    <li><%= link_to ts("Add Chapter"), new_work_chapter_path(@work) %></li>
-    <li><%= link_to ts("Edit"), edit_work_path(@work) %></li>
-    <li><%= link_to ts("Edit Tags"), edit_tags_work_path(@work) %></li>
-    <li><%= link_to ts("Delete"), @work, :confirm => "Are you sure?", :method => :delete %></li>
-  <% end %>
-
-  <% if @previous_chapter || @next_chapter %>
-    <li><%= link_to "View Entire Work", work_path(@work, :view_full_work => 'true') %></li>
-    <% if @previous_chapter %>
-    <li><%= link_to '&#8592; '.html_safe + h(ts("Previous Chapter")), [@work, @previous_chapter] %></li>
-    <% end %>
-    <% if @next_chapter %>
-    <li><%= link_to h(ts('Next Chapter')) + ' &#8594;'.html_safe, [@work, @next_chapter] %></li>
-    <% end %>
-    <li>
-      <%= link_to 'Chapter Index', navigate_work_path(@work), :onclick => "$('chapter-index').toggle();return false" %>
-      <div id="chapter-index" style="display:none">
-        <h4><%= link_to 'View full-page index', navigate_work_path(@work) %></h4>
-        <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
-        <%= select_tag :selected_id, options_from_collection_for_select(@chapters, :id, :abbreviated_display_title, params[:id].to_i) %>
-        <%= submit_tag "Go" %>
-        <% end %>
-      </div>
-    </li>
-  <% elsif @chapters %>
-    <li><%= link_to 'View chapter by chapter', [@work, @chapter] %></li>
-  <% end %>
-
-  <% if current_user.is_a?(User) %>
-    <li><%= bookmark_link(@work) %></li>
-    <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
-      <li><%= marktoread_link(@work) %></li>
-    <% end %>
-  <% end %>
-  <li><%= link_to "Comments", (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
-
-  <!-- allow user to disable style on work if it has been customized -->
-  <% if @work.work_skin %>
-    <li>
-      <% if Preference.disable_work_skin?(params[:style]) %>
-        <%= link_to(ts("Show Creator's Style"),
-                    params[:view_full_work] == 'true' ? url_for(:style => 'creator', :view_full_work => 'true') : url_for(:style => 'creator')) %>
-      <% else %>
-        <%= link_to(ts("Hide Creator's Style"),
-                    params[:view_full_work] == 'true' ? url_for(:style => 'disable', :view_full_work => 'true') : url_for(:style => 'disable')) %>
-      <% end %>
-    </li>
-  <% end %>
-
-  <li>
-    <%= link_to_ibox ts("Share"), :for => "#share" %>
-    <div id="share" style="display: none;">
-      <p><%= ts("Copy and paste to link back to this work: (CTRL/CMD-A will select all)") -%></p>
-      <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
-      <% if @work.users.all? {|u| u.preference.disable_share_links?} %>
-        <p><%= ts("The author of this work has chosen to disable share buttons.") %></p>
-      <% else %>
-        <!-- twitter, tumblr buttons go here -->
-        <p>
-          <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="ao3org" data-text="<%= @tweet_text %>" data-url="<%= work_url(@work) %>">Tweet</a>
-          <% content_for :footer_js do %>
-          <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-          <% end %>
-        </p>
-      <% end %>
-    </div>
-  </li>
-
-  <li>
-    <a onclick="subnav_view.toggle()" title="Download Options"><%= ts("Download") %> &#8595;</a>
-    <ul id="subnav">
-      <li><%= link_to ts("MOBI"), download_url_for_work(@work, "mobi") %></li>
-      <li><%= link_to ts("EPUB"), download_url_for_work(@work, "epub") %></li>
-      <li><%= link_to ts("PDF"), download_url_for_work(@work, "pdf") %></li>
-      <li><%= link_to ts("HTML"), download_url_for_work(@work, "html") %></li>
-      <li><a onclick="subnav_view.toggle()" style='cursor: pointer;' title="Close Download Options">Close</a></li>
-    </ul>
-  </li>
-</ul>
-<!-- END navigation -->
+  <%= render "works/work_header_navigation" %>
 <% end %>
 
 <%= render :partial => 'works/meta', :locals => {:work => @work} %>
 
 <% if @work.work_skin && !Preference.disable_work_skin?(params[:style]) %>
-  <% cache("#{@work.work_skin.id}-work-skin") do %>
+  <% cache("#{@work.work_skin.id}-#{@work.work_skin.updated_at}-work-skin") do %>
     <%= render "skins/skin_style_block", :skin => @work.work_skin %>
   <% end %><!-- end cache for work skin -->
 <% end %>
 
-<!-- BEGIN work skin -->
+<!-- BEGIN section where work skin applies -->
 <div id="workskin">
-<div class="preface">
-  <h2 class="title">
-    <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
-    <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
-    <%= @work.title %>
-  </h2>
-  <h3 class="byline">
-   <%= byline(@work) %>
-  </h3>
+  <div class="preface group">
+    <h2 class="title heading">
+      <% if @work.restricted %><%= image_tag("lockblue.png", :size => "15x15", :alt => "(Restricted)", :title => "Restricted") %><% end %>
+      <% if @work.hidden_by_admin %><%= image_tag("lockred.png", :size => "15x15", :alt => "(Hidden by Admin)", :title => "Hidden by Administrator") %><% end %>
+      <%= @work.title.html_safe %>
+    </h2>
+    <h3 class="byline heading">
+      <%= byline(@work) %>
+    </h3>
 
-  <% if @chapter == @work.first_chapter %>
+    <% if @chapter == @work.first_chapter %>
 
-    <% unless @work.summary.blank? %>
-      <div class="summary module" role="complementary">
-        <h3><%= ts("Summary:") %></h3>
-        <% unless @work.summary.blank? %>
-          <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
-        <% end %>
-      </div>
-    <% end %>
-
-    <% unless @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? && @work.approved_children.blank? %>
-      <% current_page?(:controller => 'chapters', :action => 'show') ?
-            linkpath = chapter_path(@work.last_chapter.id, :anchor => 'work_endnotes') :
-            linkpath = "#work_endnotes"
-      %>
-      <div class="notes module" role="complementary">
-      <h3><%= ts("Notes:") %></h3>
-        <% unless @work.recipients.blank? %>
-          <h4><%= ts("For") %> <%= recipients_link(@work) %>.</h4>
-        <% end %>
-    <% unless @work.parents.blank? %>
-        <% for related_work in @work.parent_work_relationships %>
-        <% if related_work.parent %>
-            <h4>
-            <% if related_work.translation %>
-              <%= ts('A translation of') %>
-            <% else %>
-              <%= ts('Inspired by') %>
-            <% end %>
-            <%= link_to related_work.parent.title, related_work.parent %> by <%= byline(related_work.parent) %>.
-            </h4>
+      <% unless @work.summary.blank? %>
+        <div class="summary module" role="complementary">
+          <h3 class="heading"><%= ts("Summary:") %></h3>
+          <% unless @work.summary.blank? %>
+            <blockquote class="userstuff"><%=raw sanitize_field(@work, :summary) %></blockquote>
           <% end %>
-        <% end %>
-    <% end %>
-    <% unless @work.approved_children.blank? %>
-      <% for related_work in @work.approved_related_works %>
-        <% if related_work.translation %>
-          <h4>
-          <%= ts('Translation into %{language} available: ', :language => related_work.work.language.name) %>
-          <%= link_to related_work.work.title, related_work.work %> by <%= byline(related_work.work) %>
-          </h4>
-        <% else %><% if @work.notes.blank? && @work.endnotes.blank? && @work.parents.blank? && @work.recipients.blank? %>
-          <h4><%= ts("See the end of the work for other works inspired by this one.") %></h4>
-        <% end %><% end %>
+        </div>
       <% end %>
-    <% end %>
-    <% unless @work.notes.blank? && @work.endnotes.blank? %>
-    <% if @work.notes.blank? %>
-        <p>
-        (<%= ts("See the end of the work for ") %> <%= link_to ts("notes"), linkpath %>.)
-        </p>
-    <% else %>
-        <blockquote class="userstuff"><%=raw sanitize_field(@work, :notes) %></blockquote>
-        <% unless @work.endnotes.blank? %>
-          <p>
-          (<%= ts("See the end of the work for ") %> <%= link_to ts("more notes"), linkpath %>.)
-          </p>
-        <% end %>
-    <% end %>
-    <% end %>
-      </div>
-    <% end %>
 
-  <% end %>
-</div>
+      <% if show_work_notes?(@work) %>
+        <%= render "works/work_header_notes" %>
+      <% end %>
+
+    <% end %>
+  </div>
+
+  <% # NOTE: the div id="workskin" is DELIBERATELY not closed in this file! %>
+  

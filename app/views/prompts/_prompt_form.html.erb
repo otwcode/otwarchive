@@ -1,159 +1,100 @@
 <!-- prompt form -->
 <div class="removeme">
-<!-- 
-CODE NOTES: 
-This is meant to be used as a nested form inside other forms, so that multiple prompts can be submitted within a single form. 
-It expects the local variables: 
-"form" for the prompt form 
-"is_offer" depending on if this is a request or offer
-"index" representing which prompt this is, if there are multiple prompts being submitted
+  <% # CODE NOTES: 
+    # This is meant to be used as a nested form inside other forms, so that multiple prompts can be submitted within a single form. 
+    # It is also meant to be used with javascript-based live adding (that is, not with ajax) which means locals will not be re-evaluated when it is added;
+    #   keep this in mind when using the add_section code!
+    # It expects a form being passed in as "form"
+    # If the local variable "index" is passed in, that will represent which prompt this is, if there are multiple prompts being submitted
+    # If the local variable "required" is passed in, this prompt is required
+    # See the challenge_signup form for an example of how this is used. 
+  %>
 
-See the challenge_signup form for an example of how this is used. 
--->
+  <% index ||= 0 %>
+  <% required ||= false %>
+  <% prompt_label = form.object.class.name %>
+  <% prompt_type = prompt_label.downcase %>
+  <% prompt_types = prompt_type.pluralize %>
+  <% restriction = @challenge.send("#{prompt_type}_restriction") %>
 
-<% prompt_type = (form.object.class == Offer ? "offer" : (form.object.class == Request ? "request" : "prompt")) %>
-<% prompt_types = prompt_type.pluralize %>
-<% restriction = @challenge.send("#{prompt_type}_restriction") %>
+  <fieldset class="tagset">
+    <% if index.is_a? String %>
+      <% prompt_label += " #{index}" %>
+    <% else %>
+      <% prompt_label += " #{(index + 1)}" %>
+    <% end %>
 
-<fieldset class="preface profile">
-  <% if index.is_a? String %>
-    <legend><%= "#{prompt_type.capitalize} #{index}" %></legend>
-    <h3><%= "#{prompt_type.capitalize} #{index}" %></h3>
-  <% else %>
-  	<legend><%= "#{prompt_type.capitalize} #{(index + 1)}" %></legend>
-    <h3><%= "#{prompt_type.capitalize} #{(index + 1)}" %></h3>
-  <% end %>
+    <legend><%= prompt_label %></legend>
+    <h3 class="heading"><%= form.object.new_record? ? prompt_label : link_to(prompt_label, collection_prompt_path(@collection, form.object)) %></h3>  
 
-  <p>
-    <%= form.hidden_field :collection_id, :value => @collection.id %>
-  </p>
+    <div>
+      <%= form.hidden_field :collection_id, :value => @collection.id %>
+    </div>
   
-  <dl>
-    <!-- tags section -->
-    <% form.object.build_tag_set unless form.object.tag_set %>
-    <%= form.fields_for :tag_set do |tag_set_form| %>
-      <% TagSet::TAG_TYPES.each do |tag_type| %>
-        <% num_allowed = eval("restriction.#{tag_type}_num_allowed") %>
-        <% num_required = eval("restriction.#{tag_type}_num_required") %>
-        <% @taglist ||= {} %>
-        <% @taglist["#{tag_type}-#{restriction.id}"] ||= restriction.tag_set.tags.with_type(tag_type.classify).by_name_without_articles %>
-        <!-- do ratings, warnings, categories as taglists if not already specified -->
-        <% if @taglist["#{tag_type}-#{restriction.id}"].empty? && TagSet::TAGS_AS_CHECKBOXES.include?(tag_type) %>
-          <% @taglist["#{tag_type}-#{restriction.id}"] = tag_type.classify.constantize.canonical.by_name_without_articles %>
-        <% end %>        
-        <% taglist_size = @taglist["#{tag_type}-#{restriction.id}"].size %>
+    <dl>
+      <% if restriction.title_allowed %>
+        <dt class="<%= restriction.title_required ? 'required' : '' %>">
+          <%= form.label :title, ts("Title: ") %>
+        </dt>
+        <dd><%= form.text_field :title %></dd>
+      <% end %>    
     
-        <% if num_allowed > 0 %>
-          <dt <%= num_required > 0 ? 'class="required"'.html_safe : '' %>>
-            <%= tag_set_form.label tag_type.pluralize.to_sym, ((num_allowed > 1) ? tag_type.pluralize : tag_type).titleize, :class => tag_type %>
-            <%= num_required == num_allowed ? " (#{num_required})" : " (#{num_required} - #{num_allowed})" %>:
+      <!-- tags section -->
+      <%= render "prompts/prompt_form_tag_options", :form => form, :restriction => restriction %>
+    
+      <% if restriction.url_allowed %>
+        <dt class="<%= restriction.url_required ? 'required' : '' %>">
+          <% url_label = @challenge.send("#{prompt_type}_url_label") %>
+          <%= form.label :url , (url_label.blank? ? ts("Prompt URL: ") : url_label) %>
+        </dt>
+        <dd><%= form.text_field :url %></dd>
+      <% end %>
+
+      <% if restriction.description_allowed  %>
+        <dt class="<%= restriction.description_required ? 'required' : '' %>">
+          <% desc_label = @challenge.send("#{prompt_type}_description_label") %>
+          <%= form.label :description, (desc_label.blank? ? ts("Description: ") : desc_label) %>
+        </dt>
+        <dd><%= form.text_area :description, :rows => 6, :cols => 50 %></dd>
+      <% end %>
+    
+      <% if restriction.optional_tags_allowed %>
+        <% form.object.build_optional_tag_set unless form.object.optional_tag_set %>
+        <%= form.fields_for :optional_tag_set_attributes do |optional_tag_set_form| %>
+          <dt>
+            <%= optional_tag_set_form.label :tagnames, ts("Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
           </dt>
           <dd>
-            <% if taglist_size > 0 && taglist_size <= ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
-              <!-- there's a set list of options, so we're using checkboxes -->
-
-              <!-- just to make the form cleaner, save the fieldname and id for this field in locals -->
-              <% tag_fieldname = "challenge_signup[#{prompt_types}_attributes][#{index}][tag_set_attributes][#{tag_type}_tagnames][]" %>
-              <% tag_field_id =  "challenge_signup_#{prompt_types}_attributes_#{index}_#{tag_type}" %>
-
-              <!-- set the list of fieldnames to pass for autocompleting based on fandom -->
-              <% if tag_type == 'fandom' %>
-                <% @fandom_tag_fieldnames = @taglist["#{tag_type}-#{restriction.id}"].map {|tag| "#{tag_field_id}_#{tag.id}"} %>
-              <% end %>
-
-              <!-- create a scrollable checkboxes section to wrap the tags, see application_helper -->
-              <%= options_section(tag_set_form, tag_fieldname, tag_field_id, @taglist["#{tag_type}-#{restriction.id}"], "#{tag_type}_taglist", "name", "name") %>
-
-            <% else %>
-              <% tag_fieldname = "challenge_signup_#{prompt_types}_attributes_#{index}_tag_set_attributes_#{tag_type}_tagnames" %>              
-
-              <!-- save the fieldname to pass for autocompleting based on fandom -->
-              <% @fandom_tag_fieldname = tag_fieldname if tag_type == 'fandom' %>
-
-              <!-- add the autocomplete -->
-              <% if taglist_size > ArchiveConfig.MAX_OPTIONS_TO_SHOW %>
-                <!-- we have set options but too many for tickyboxes -->
-                <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
-                <%= autocomplete_text_field tag_fieldname, :methodname => "tag_finder_restricted_by_tag_set", 
-                                                           :frequency => '1.0',
-                                                           :extra_params => "tag_set_id=#{restriction.tag_set.id}&tag_type=#{tag_type}" %>
-                <p>      
-                  <%= link_to(ts("(See %{taglist_size} options)", :taglist_size => taglist_size), 
-                            tag_set_path(restriction.tag_set, :tag_type => tag_type), 
-                            :class => "toggle", :data_popup => true) %>
-                </p>
-
-              <% elsif TagSet::TAG_TYPES_RESTRICTED_TO_FANDOM.include?(tag_type) && restriction.send("#{tag_type}_restrict_to_fandom") %>
-                <!-- we want a field that will update when the user has chosen a fandom -->
-                <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50, :onclick => "autocomplete_for_#{tag_fieldname}.activate();" %>
-                <%= autocomplete_text_field tag_fieldname, :methodname => "#{tag_type}_finder_restricted_by_fandom", 
-                                                           :auto_params => (@fandom_tag_fieldname ? [@fandom_tag_fieldname] : @fandom_tag_fieldnames),
-                                                           :extra_params => "fandom_fieldname=fandom_tagnames",
-                                                           :frequency => '1.0',
-                                                           :min_chars => '2' %>
-
-              <% else %>
-                <!-- autocomplete from all canonical tags of this type -->
-                <%= tag_set_form.text_field "#{tag_type}_tagnames", :size => 50 %>
-                <%= autocomplete_text_field tag_fieldname, :methodname => "canonical_#{tag_type}_finder", :frequency => 1.0 %>
-              <% end %>
-            <% end %>
-            
-            <% if restriction.send("allow_any_#{tag_type}") %>
-              <p>
-                <%= form.label "any_#{tag_type}", ts("Any?") %> 
-                <%= form.check_box "any_#{tag_type}".to_sym %>
-                <%= link_to_help("challenge-any") %>
-              </p>
-            <% end %>
+            <%= optional_tag_set_form.text_field :tagnames, autocomplete_options("tag") %>
           </dd>
         <% end %>
       <% end %>
-      <p>
-        <!-- 
-          monstrous kludge required by ugly bug in nested_attributes_for, see
-          https://rails.lighthouseapp.com/projects/8994/tickets/2646-validations-not-called-when-model-updating-using-nested-attributes
-        -->
-        <%= tag_set_form.hidden_field :updated_at, :value => Time.now %>
+    
+      <% if @collection.challenge.respond_to?(:anonymous) %>
+        <% # TODO ANONYMITY REFACTOR: Anonymity should not be based on a type of challenge but on whether the specific challenge ALLOWS anonymity or not, 
+           # (currently the prompt memes don't allow a mod to specify no anonymity allowed)
+           # and should probably be done via an Anonymous user like the Orphan user.  
+        %>
+        <dt><%= form.label :anonymous, ts("Semi-anonymous prompt: ") %></dt>
+        <dd>
+          <%= form.check_box :anonymous, :checked => form.object.new_record? ? @collection.challenge.anonymous? : form.object.anonymous %>
+  	      <p class="footnote">(note, this is not totally secure, and is still guessable in some places)</p>
+  	    </dd>
+      <% end %>     
+    </dl>
+
+    <% unless required %>
+      <p class="actions" role="button">
+        <%= link_to_remove_section(ts("Remove?"), form) %>
+        <noscript>
+          <label for="<%= field_id(form, '_destroy') %>">
+            <%= ts("Remove?") %>
+            <%= form.check_box "_destroy" %>
+          </label>
+        </noscript>      
       </p>
     <% end %>
-    
-    <% if restriction.url_allowed %>
-    <dt<%= restriction.url_required ? ' class="required"' : '' %>>
-      <% url_label = @challenge.send("#{prompt_type}_url_label") %>
-      <%= form.label :url , (url_label.blank? ? ts("Prompt URL: ") : url_label) %>
-    </dt>
-    <dd><%= form.text_field :url, :size => 50 %></dd>
-    <% end %>
-
-    <% if restriction.description_allowed  %>
-      <dt<%= restriction.description_required ? ' class="required"' : '' %>>
-        <% desc_label = @challenge.send("#{prompt_type}_description_label") %>
-        <%= form.label :description, (desc_label.blank? ? ts("Description: ") : desc_label) %>
-      </dt>
-      <dd><%= form.text_area :description, :rows => 6, :cols => 50 %></dd>
-    <% end %>
-    
-    <% if restriction.optional_tags_allowed %>
-      <% form.object.build_optional_tag_set unless form.object.optional_tag_set %>
-      <%= form.fields_for :optional_tag_set_attributes do |optional_tag_set_form| %>
-        <dt>
-          <%= optional_tag_set_form.label :tagnames, t("optional_tag_set.tagnames", :default => "Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
-          <p class="note"><%= t('.prompts.comma_separated', :default => "(comma-separated)") %></p>
-        </dt>
-        <dd>
-          <% optional_tag_fieldname =  "challenge_signup_#{prompt_types}_attributes_#{index}_optional_tag_set_attributes_tagnames" %>
-          <%= optional_tag_set_form.text_area :tagnames, :rows => 5, :cols => 50, :value => form.object.optional_tag_set.tagnames %>
-          <%= autocomplete_text_field(optional_tag_fieldname, :methodname => "canonical_tag_finder") %>
-        </dd>
-      <% end %>
-    <% end %>
-     
-  </dl>
-  <% unless required %>
-    <p class="navigation"><%= link_to_remove_section(t('.prompts.delete_prompt', :default => "Remove?"), form) %></p>
-  <% end %>
-</fieldset>
+  </fieldset>
 </div>
 
 <!-- this div is used to hold the last id for adding new prompts via javascript -->

@@ -1,14 +1,14 @@
-<div class="bookmarks module" id="collection-bookmarks">
-  <h3>
+<div class="bookmarks module group" id="collection-bookmarks">
+  <h3 class="heading">
     <% if collection.collection_preference.show_random || params[:show_random] %>
-    <%=h t('.collections.random_bookmarks', :default => "Random bookmarks") %>  
+      <%= ts("Random bookmarks") %>  
     <% else %>  
-    <%=h t('.recent_bookmarks', :default => "Recent bookmarks") %>
+      <%= ts("Recent bookmarks") %>
     <% end %>
   </h3>
-  <ul class="index">
-  <% for bookmark in bookmarks %>
-    <%= render :partial => 'bookmarks/bookmark', :locals => {:bookmark => bookmark} %>
-  <% end %>
+  <ul class="index group">
+    <% for bookmark in bookmarks %>
+      <%= render 'bookmarks/bookmark_blurb', :bookmark => bookmark %>
+    <% end %>
   </ul>
 </div>

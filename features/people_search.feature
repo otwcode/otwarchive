@@ -1,4 +1,4 @@
-@no-txn
+@no-txn @search
 Feature: Search People
   In order to test search
   As a humble coder

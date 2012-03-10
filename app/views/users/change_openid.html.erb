@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>
+<h2 class="heading">
 <% if @user.identity_url %>
   <%= ts("Change My OpenID") %>
 <% else %>
@@ -9,8 +9,8 @@
 <%= error_messages_for :user %>
 <!--/descriptions-->
 
-<!--subnav-->
-<ul class="navigation" role="navigation">
+<!--subnav NOTE TO BACK END, SHOULD THIS BE LIKE THE OTHERS IE CHANGE_USERNAME AND IF SO SHOULD THAT BE A CHANGE USER DATA NAVIGATION PARTIAL?-->
+<ul class="navigation actions" role="navigation">
   <li><%= link_to ts("Edit default pseud and icon"), [:edit, @user, @user.default_pseud] %></li>
   <li><%= link_to ts("Change My User Name"), change_username_user_path(@user) %></li>
   <li>
@@ -34,7 +34,7 @@
         <dt><%= label_tag :identity_url, "New OpenID URL" %></dt>
         <dd><%= text_field_tag :identity_url, @openid_url, :size => 50 %></dd>
       </dl>
-      <p class="submit">
+      <p class="submit actions">
       <% if @user.identity_url %>
         <%= submit_tag "Change OpenID" %>
       <% else %>
@@ -60,5 +60,5 @@
 <% else %>
   <p><%= ts("Sorry, we're not currently allowing Open ID") %></p>
 <% end %>
-<hr class="clear" />
+
 <!--/content-->

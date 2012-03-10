@@ -1,0 +1,74 @@
+/*==ROLES AND STATES 
+http://media.transformativeworks.org/training/front_end_coding/patterns/modifiers.html
+*/
+
+.own, .draft, .draft .wrapper, .unread, .child, .unwrangled, .unreviewed {
+  background: #e8e6ed;
+    opacity: 0.95;
+}
+
+.draft {
+  border: 2px dashed #aaa;
+  padding: 0.643em;
+    border-radius: 0.5em;
+}
+
+/*(these states spoof the ".navigation .current" style)*/
+
+span.unread, .replied, span.claimed {
+  background: #ccc;
+  color: #900;
+  width: auto;
+  font: 100 100%/1.286 'Lucida Grande', 'Lucida Sans Unicode', 'Arial Unicode MS', 'GNU Unifont', sans-serif;
+  height: 1.286em;
+  vertical-align: middle;
+  display: inline-block;
+  padding: 0.25em 0.75em;
+  white-space: nowrap;
+  overflow: visible;
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid #bbb;
+  border-bottom: 1px solid #aaa;
+    border-radius: 0.25em;
+}
+
+.canonical, li.requested {
+  font-weight: 700;
+}
+
+.hidden, body .hidden {
+  display: none;
+}
+
+.draggable, .droppable, span.requested {
+  color: #900;
+}
+
+span.offered, .replied {
+  color: green;
+}
+
+span.offered.requested {
+  color: #daa520;
+}
+
+/*This is a helper for Back End and can be overridden contextually anywhere*/
+
+.commas li:after {
+  content: ", ";
+}
+
+.commas li:last-child:after, .commas li:only-child:after {
+  content: none;
+}
+
+/* CONTEXTS */
+
+.dashboard .own {
+  background: transparent;
+    opacity: 1.0;
+}
+
+/*END== */

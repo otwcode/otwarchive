@@ -6,7 +6,7 @@ the Organization for Transformative Works (http://transformativeworks.org), a no
 organization by and for fans.
 
 The OTW-Archive software is still in development and has not yet been released, but you
-can see it in action on the Archive of Our Own (http://archiveofourown.org), a
+can see it in action on the Archive of Our Own (http://archiveofourown.org, aka AO3), a
 multifandom archive also run by the OTW.
 
 Our ultimate goal is to release OTW-Archive in a form that can be installed and used by
@@ -15,7 +15,8 @@ our broad development plan at the OTW-Archive Roadmap:
 http://transformativeworks.org/projects/archive.
 
 Volunteers are always welcome both for coding and testing! Please contact us at:
-http://transformativeworks.org/contact/volunteers%20and%20recruiting
+http://transformativeworks.org/contact/volunteers%20and%20recruiting for full details, or
+browse the Github pages (https://github.com/otwcode/otwarchive/wiki).
 
 ## Description of Contents
 

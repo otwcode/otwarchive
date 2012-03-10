@@ -1,0 +1,120 @@
+<!-- BEGIN navigation -->
+<h3 class="landmark heading">Actions</h3>
+<ul class="navigation actions work" role="menu">
+  <% if is_author_of?(@work) %>
+    <li class="add"><%= link_to ts("Add Chapter"), new_work_chapter_path(@work) %></li>
+    <li class="edit"><%= link_to ts("Edit"), edit_work_path(@work) %></li>
+    <li class="edit tag"><%= link_to ts("Edit Tags"), edit_tags_work_path(@work) %></li>
+    <li class="del"><%= link_to ts("Delete"), confirm_delete_work_path(@work) %></li>
+  <% end %>
+
+
+  <% # chapter navigation %>
+  <% if @previous_chapter || @next_chapter %>
+    <li class="chapter entire"><%= link_to ts("Entire Work"), work_path(@work, :view_full_work => 'true') %></li>
+
+    <% if @previous_chapter %>
+      <li class="chapter previous"><%= link_to '&#8592; '.html_safe + ts("Previous Chapter"), [@work, @previous_chapter] %></li>
+    <% end %>
+    
+    <% if @next_chapter %>
+      <li class="chapter next"><%= link_to (ts("Next Chapter") + " &#8594;").html_safe, [@work, @next_chapter] %></li>
+    <% end %>
+    
+    <li class="chapter" aria-haspopup="true">
+      <noscript>
+        <%= link_to ts('Chapter Index'), navigate_work_path(@work) %>
+      </noscript>
+      <a class="chapter_index_open open hidden"><%= ts('Chapter Index') %></a>
+      <a class="chapter_index_close close hidden"><%= ts('Chapter Index') %></a>
+      <ul id="chapter_index" class="toggled hidden secondary">
+        <li>
+          <%= form_tag url_for({:controller => :chapters, :action => :show, :work_id => @work}), :method => :get do %>
+            <p>
+              <% options = @chapters.map{|c| [c.abbreviated_display_title.html_safe, c.id] } %>
+              <%= select_tag :selected_id, options_for_select(options, params[:id].to_i) %>
+              <span class="submit actions"><%= submit_tag ts("Go") %></span>
+            </p>
+          <% end %>
+        </li>
+        <li><%= link_to ts("Full-page index"), navigate_work_path(@work) %></li>
+        <li><a class="chapter_index_close close" style="cursor: pointer;" title="Close Chapter Index">X</a></li>
+      </ul>
+    </li>
+  <% elsif @chapters %>
+    <li class="chapter bychapter"><%= link_to ts("View chapter by chapter"), [@work, @chapter] %></li>
+  <% end %>
+
+
+  <% # for users, bookmark and mark to read later %>
+  <% if current_user.is_a?(User) %>
+    <% @bookmark ||= bookmark_if_exists(@work) %>
+    <li class="bookmark"><%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
+    <li><%= link_to ts("Cancel Bookmark"), "#", :class => "bookmark_form_placement_close" %></li>
+
+    <% unless current_user.is_author_of?(@work) || current_user.try(:preference).try(:history_enabled) == false %>
+      <li class="mark"><%= marktoread_link(@work) %></li>
+    <% end %>
+  <% end %>
+
+  <li class="comments"><%= link_to ts("Comments"), (params[:view_full_work] == 'true' ? work_path(@work, :view_full_work => 'true', :show_comments => true, :anchor => 'comments') : url_for(:show_comments => true, :anchor => 'comments')) %></li>
+
+<!-- allow user to disable style on work if it has been customized -->
+  <% if @work.work_skin %>
+    <li class="style">
+      <% if Preference.disable_work_skin?(params[:style]) %>
+        <%= link_to(ts("Show Creator's Style"),
+          params[:view_full_work] == 'true' ? url_for(:style => 'creator', :view_full_work => 'true') : url_for(:style => 'creator')) %>
+      <% else %>
+        <%= link_to(ts("Hide Creator's Style"),
+          params[:view_full_work] == 'true' ? url_for(:style => 'disable', :view_full_work => 'true') : url_for(:style => 'disable')) %>
+      <% end %>
+    </li>
+  <% end %>
+
+  <li class="share">
+    <%= link_to_ibox ts("Share"), :for => "#share" %>
+    <div id="share" style="display: none;">
+      <p><%= ts("Copy and paste to link back to this work: (CTRL/CMD-A will select all)") -%></p>
+      <p><textarea rows="4" cols="50"><%= get_embed_link(@work) %></textarea></p>
+      <% if @work.users.all? {|u| u.preference.disable_share_links?} %>
+        <p><%= ts("The author has chosen to disable share buttons.") %></p>
+      <% else %>
+        <!-- twitter, tumblr buttons go here -->
+        <p>
+          <a href="http://twitter.com/share" class="twitter" data-count="horizontal" data-via="ao3org" data-text="<%= @tweet_text %>" data-url="<%= work_url(@work) %>">Tweet</a>
+          <% content_for :footer_js do %>
+            <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+          <% end %>
+        </p>
+      <% end %>
+    </div>
+  </li>
+  
+  <li class="subscribe">
+    <% if @subscription && @subscription.new_record? %>
+      <%= form_for [current_user, @subscription] do |f| %>
+        <%= f.hidden_field :subscribable_id, :value => @work.id %>
+        <%= f.hidden_field :subscribable_type, :value => @work.class.to_s %>
+        <%= f.submit "Subscribe" %>
+      <% end %>
+    <% elsif @subscription %>
+      <%= form_for [current_user, @subscription], :html => {:method => :delete} do |f| %>
+        <li><%= f.submit ts("Unsubscribe") %></li>
+      <% end %>
+    <% end %>
+  </li>
+
+  <li class="download" aria-haspopup="true">
+    <a title="Download" class="downloads_open open"><%= ts("Download") %> &#8595;</a>
+    <a title="Download Close" class="downloads_close close hidden"><%= ts("Download") %> &#8595;</a>
+    <ul id="downloads" class="toggled secondary">
+      <li><%= link_to ts("MOBI"), download_url_for_work(@work, "mobi") %></li>
+      <li><%= link_to ts("EPUB"), download_url_for_work(@work, "epub") %></li>
+      <li><%= link_to ts("PDF"), download_url_for_work(@work, "pdf") %></li>
+      <li><%= link_to ts("HTML"), download_url_for_work(@work, "html") %></li>
+      <li><a class="downloads_close close hidden" style="cursor: pointer;" title="Close Download Options">X</a></li>
+    </ul>
+  </li>
+</ul>
+<!-- END navigation -->

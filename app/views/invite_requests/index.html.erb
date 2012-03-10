@@ -1,36 +1,38 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>Request an invite</h2>
+<h2 class="heading">Request an invite</h2>
 
 <p>To get a free Archive of Our Own account while we're in beta, you'll need an invitation. There are currently <%= InviteRequest.count %> people on the waiting list.</p>
 <!--/descriptions-->
 
 <!--main content-->
-<h3 class="landmark">Add yourself to the list</h3>
-<%= form_for(@invite_request) do |f| %>
-  <%= error_messages_for @invite_request %>
+<% if @admin_settings.invite_from_queue_enabled? %>
+  <h3 class="landmark heading">Add yourself to the list</h3>
 
-  <p>
-    <%= f.label :email %>
-    <%= f.text_field :email %>
-  </p>
-
-  <p class="submit">
-    <%= f.submit 'Add me to the list' %>
-  </p>
+  <!--BACK END, please move this class "simple" into the form and lose this div-->
+  <%= form_for(@invite_request, :html => {:class => "simple"}) do |f| %>
+    <%= error_messages_for @invite_request %>
+    <fieldset>
+      <p>
+        <%= f.label :email %>
+        <%= f.text_field :email %>
+      <span class="submit actions">
+        <%= f.submit 'Add me to the list' %>
+      <span></p>
+    </fieldset>
+  <% end %>
 <% end %>
 
-<h3>Wondering how long you'll have to wait?</h3>
+<h3 class="heading">Wondering how long you'll have to wait?</h3>
 
-<%= form_tag url_for(:action => :show), {:remote => true, :method => :get} do %>
-
+<%= form_tag url_for(:action => :show), {:remote => true, :method => :get, :class => "simple"} do %>
+<fieldset>
   <p>
     <%= label_tag :email %>
     <%= text_field_tag :email %>
+    <span class="submit actions">
+    <%= submit_tag 'Go' %></span>
   </p>
-
-  <p class="submit">
-    <%= submit_tag 'Go' %>
-  </p>
+</fieldset>
 <% end %>
 
 <div id="invite-status"></div>

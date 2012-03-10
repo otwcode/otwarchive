@@ -1,40 +1,45 @@
+<!-- BEGIN BETA CAVEATS! -->
+<noscript>
+  <p id="javascript-warning">
+    <%= ts("While we've done our best to make the core functionality of this site accessible without javascript, it will work better with it enabled. Please consider turning it on!") %>
+  </p>
+</noscript>
+<!-- END BETA CAVEATS! --> 
+
 <!-- BEGIN header -->
 <% if @collection %>
-<!-- custom css for header -->
-<style type="text/css">
-#header  {  background:#7887AF url(<%= @collection.header_image_url || (@collection_parent ? @collection_parent.header_image_url : '') %>);}
-</style>
+  <!-- custom css for header -->
+  <style type="text/css">
+  #header h2, #footer { 
+    background: #616C90 <% if (header_url = @collection.header_image_url || (@collection_parent && @collection_parent.header_image_url)) %>
+      <% height = (size = FastImage.size(header_url, :timeout => 1)) ? size[1].to_s + 'px' : '100%' %>
+      url(<%= header_url %>); height: <%= height %>
+    <% end %>;
+  }
+  </style>
 <% end %>
 
-<div id="header"<% if @collection %> class="collection"<% end %> role="banner">
-  <% if @collection %>
-    <h1 class="collection"><%= link_to ArchiveConfig.APP_NAME, root_path %> (BETA)</h1>
-  <% end %>
-  <div id="login-block">
-  <% if logged_in? || logged_in_as_admin? %>
-    <%= render :partial => 'user_sessions/greeting' %>
-  <% else %>
-    <ul id="greeting" class="logged-out">
-      <li>
-        <%= render :partial => 'user_sessions/login' %>
-        <span><a id='signin_closed' onclick='toggleLogin("signin")' style='display:none;'><%=h t('.layout.header.sign_in', :default => 'Log in') %></a>
-        <a id='signin_open' onclick='toggleLogin("signin")'><%=h t('.links.cancel', :default => 'Cancel') %></a></span>
-      </li>
-    </ul>
-  <% end %>
-  <%= render :partial => 'works/search_box' %>
-</div>
+<div id="header" class="region<% if @collection %> collection<% end %>">
+  <!--NOTE: have removed role="banner" for now due to user feedback-->
+  <div id="login">
+    <% if logged_in? || logged_in_as_admin? %>
+      <%= render 'user_sessions/greeting' %>
+    <% else %>
+      <%= render 'user_sessions/login' %>
+      <p class="actions" role="menu">
+  			<a class='small_login_open hidden'><%= ts("Log in") %></a> 
+  			<a class='small_login_close hidden'><%= ts("Cancel") %></a>
+  		</p>
+   	<% end %>
+  </div>
 
-<% if @collection %>
-  <h1 class="collections"><%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : t('.layouts.new_collection', :default => "New Collection")) %></h1>
-<% else %>
-  <h1>
-    <%= link_to ArchiveConfig.APP_NAME, root_path %> (BETA)
+  <h1 class="heading">
+    <%= link_to(content_tag(:span, "#{ArchiveConfig.APP_NAME} (BETA)", :class => "landmark") +
+    image_tag('/images/ao3_logos/logo-stroke.png', :alt => "#{ArchiveConfig.ALT_LOGO}"), root_path) %> 
   </h1>
-<% end %>
 
-<h3 class="landmark">Site Navigation</h3>
-  <ul class="navigation" role="navigation">
+  <h3 class="landmark heading">Site Navigation</h3>
+  <ul class="primary navigation actions" role="navigation">
     <li><%= logged_in? ? span_if_current('my home', user_path(current_user)) : span_if_current('home', root_path) %></li>
     <li><%= span_if_current('fandoms', media_path) %></li>
     <li><%= span_if_current('works', works_path) %></li>
@@ -42,13 +47,26 @@
     <li><%= span_if_current('bookmarks', bookmarks_path) %></li>
     <li><%= span_if_current('tags', tags_path) %></li>
     <li><%= span_if_current('collections', collections_path) %></li>
+	<li class="search"><%= render :partial => 'works/search_box' %></li>
   </ul>
 
   <% if logged_in_as_admin? %>
     <%= render :partial => 'admin/header' %>
   <% end %>
+
+  <% if @collection %>
+    <h2 class="collections">
+      <% unless @collection.header_image_url.present? %>
+        <%= @collection.title ? @collection.title : (@collection_parent ? @collection_parent.title : ts("New Collection")) %>
+      <% end %>
+    </h2>
+  <% end %>
+
   <div class="clear"></div>
+
 </div>
+
+<%= render :partial => "layouts/banner" %>
 
 <!-- END header -->
 

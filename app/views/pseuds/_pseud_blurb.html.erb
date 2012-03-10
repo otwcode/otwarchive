@@ -1,37 +1,37 @@
-<li class="user blurb" role="article">
-  <div class="module">
-    <h4><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) %> 
+<li class="user pseud picture blurb group" role="article">
+  <div class="header module">
+    <h4 class="heading"><%= link_to(pseud.name, user_pseud_path(pseud.user, pseud)) %> 
       <% if (pseud.name != pseud.user_name || pseud.user.pseuds.size > 1) %>
         (<%= link_to(pseud.user_name, user_path(pseud.user)) %>)
       <% end %>
     </h4>
     <!--BACK END- suggest comma separator instead of pipe-->
     <% unless authored_items(pseud, @work_counts, @rec_counts).blank? %>
-      <h5><%= authored_items(pseud, @work_counts, @rec_counts) %></h5>
+      <h5 class="heading"><%= authored_items(pseud, @work_counts, @rec_counts) %></h5>
     <% end %>
     <div class="icon">
-      <%= standard_icon_display(@user, pseud) %>
+      <%= icon_display(@user, pseud) %>
     </div>
+	</div>  
     <% unless pseud.description.blank? %>
-      <blockquote class="userstuff">
+      <blockquote class="userstuff" title="bio">
 	<%=raw sanitize_field(pseud, :description) %>
       </blockquote>
     <% end %>
     <!-- most used tags temporarily suppressed until proper bugfix for showing concealed info is in -->
     
     <% if current_user == pseud.user %>
-      <ul class="navigation" role="navigation">
+       <h6 class="landmark heading">User Actions</h6>
+ 	<ul class="navigation actions" role="navigation">
       <li><%= link_to "#{h(ts('Edit'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [:edit, @user, pseud], :id => "edit_#{pseud.name.downcase.gsub(" ", "_")}" %></li>
       <% unless pseud.works.blank? %>
         <li><%= link_to "#{h(ts('Orphan Works'))} <span class=\"landmark\">by #{h pseud.name}</span>".html_safe, {:controller => 'orphans', :action => 'new', :pseud_id => pseud.id} %></li>
       <% end %>
       <% if pseud.is_default? %>
-        <li>Default Pseud</li>
+        <li><span class="current">Default Pseud</span></li>
       <% elsif @user.login != pseud.name %>
         <li><%= link_to "#{h(ts('Delete'))} <span class=\"landmark\"> #{h pseud.name}</span>".html_safe, [@user, pseud], :confirm => ts('Are you sure?'), :id => "delete_#{pseud.name.underscore}", :method => :delete %></li>
       <% end %>
     </ul>
-    <% end %>
-    
-	</div>  	
+    <% end %>	
 </li>

@@ -7,7 +7,7 @@
 <% else %>
 <div>
   <% if !@paths.empty? %>
-  <h3>Paths:</h3>
+  <h3 class="heading">Paths:</h3>
   <ol>
     <% for path in @paths %>
       <li>
@@ -23,7 +23,7 @@
     <% end unless @paths.nil? %>
   </ol>
   <% else %>
-    <h3>No paths to show</h3>
+    <h3 class="heading">No paths to show</h3>
     <p>This is entirely self contained</p>
   <% end %>
 </div>

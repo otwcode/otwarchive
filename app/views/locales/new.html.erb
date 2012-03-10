@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= t('.add_new_locale', :default => 'Add a new locale:') %></h2>
+<h2 class="heading"><%= t('.add_new_locale', :default => 'Add a new locale:') %></h2>
 <%= error_messages_for :locale %>
 <!--/descriptions-->
 
@@ -18,7 +18,7 @@
     <dt><%= f.label :iso, t('.iso', :default => "Iso:") %></dt>
     <dd><%= f.text_field :iso %></dd>
   </dl>
-  <p class="submit"><%= f.submit t('.forms.submit', :default => "Submit") %></p>
+  <p class="submit actions"><%= f.submit t('.forms.submit', :default => "Submit") %></p>
 <% end %>
 <!--/content-->
 

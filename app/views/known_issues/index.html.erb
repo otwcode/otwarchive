@@ -1,20 +1,20 @@
 <!--Descriptive page name, messages and instructions-->
 <% if logged_in_as_admin? %>
-<%= render :partial => "admin_index" %>
+  <%= render :partial => "admin_index" %>
 <% else %>
-<h2><%= t("known_issues", :default => "Known Issues") %></h2>
-<!--/descriptions-->
+  <h2 class="heading"><%= ts("Known Issues") %></h2>
+  <!--/descriptions-->
 
-<!--subnav-->
-<!--/subnav-->
+  <!--subnav-->
+  <!--/subnav-->
 
-<!--main content-->
+  <!--main content-->
 
-<% @known_issues.each do |known_issue| %>
-				<div class="admin userstuff" role="article"><h4>Updated <%=h known_issue.updated_at %></h4>
-	    <%=raw sanitize_field(known_issue, :content) %>
-	</div>
+  <% @known_issues.each do |known_issue| %>
+    <div class="admin userstuff" role="article">
+      <h4 class="heading"><%= ts("Updated") %> <%= known_issue.updated_at %></h4>
+      <%=raw sanitize_field(known_issue, :content) %>
+    </div>
+  <% end %>
+
 <% end %>
-
-<% end %>
-

@@ -1,37 +1,39 @@
-<h3 class="landmark">Filters</h3>
 <%= form_tag collections_url, :method => :get, :class => 'filters' do %>
-  <%= field_set_tag t('.filter_these', :default => 'Filter collections:') do %>
- 		<dl class="filters" role="complementary navigation">
-      <dt><%= label_tag 'collection_filters_title', "Filter by title" %></dt>
-      <dd>
-        <%= text_field_tag 'collection_filters[title]', params[:collection_filters][:title] %>
-        <%= autocomplete_text_field "collection_filters_title", :no_comma => true %>        
+  <h3 class="landmark heading">Filters</h3>
+<%= field_set_tag ts('Filter collections:') do %>
+ 		<dl class="filters" role="menu">
+      <dt><%= label_tag 'collection_filters_title', "Filter by title or name" %></dt>
+      <dd title="by title or name">
+        <%= text_field_tag 'collection_filters[title]', params[:collection_filters][:title], autocomplete_options("collection_fullname", :autocomplete_token_limit => 1) %>
       </dd>
       <dt><%= label_tag 'collection_filters_fandom', "Filter by fandom" %></dt>
-      <dd>
-        <%= text_field_tag 'collection_filters[fandom]', params[:collection_filters][:fandom] %>
-        <%= autocomplete_text_field "collection_filters_fandom", :no_comma => true %>
+      <dd title="by fandom">
+        <%= text_field_tag 'collection_filters[fandom]', params[:collection_filters][:fandom], autocomplete_options("fandom", :autocomplete_token_limit => 1) %>
       </dd>
       <dt>Closed</dt>
       <dd>
-        <%= radio_button_tag "collection_filters[closed]", true, params[:collection_filters][:closed] == "true" %>
-        <%= label_tag "collection_filters_closed_true", "Yes" %>    
-        <%= radio_button_tag "collection_filters[closed]", false, params[:collection_filters][:closed] == "false" %>
-        <%= label_tag "collection_filters_closed_false", "No" %>   
-        <%= radio_button_tag "collection_filters[closed]", '', params[:collection_filters][:closed] == "" %>
-        <%= label_tag "collection_filters_closed_", "Either" %>          
+        <ul>
+        <li><%= radio_button_tag "collection_filters[closed]", true, params[:collection_filters][:closed] == "true" %>
+        <%= label_tag "collection_filters_closed_true", "Yes" %></li>   
+        <li><%= radio_button_tag "collection_filters[closed]", false, params[:collection_filters][:closed] == "false" %>
+        <%= label_tag "collection_filters_closed_false", "No" %></li>   
+        <li><%= radio_button_tag "collection_filters[closed]", '', params[:collection_filters][:closed] == "" %>
+        <%= label_tag "collection_filters_closed_", "Either" %></li>          
+      </ul>
       </dd>
       <dt>Moderated</dt>
       <dd>
-        <%= radio_button_tag "collection_filters[moderated]", true, params[:collection_filters][:moderated] == "true" %>
-        <%= label_tag "collection_filters_moderated_true", "Yes" %>    
-        <%= radio_button_tag "collection_filters[moderated]", false, params[:collection_filters][:moderated] == "false" %>
-        <%= label_tag "collection_filters_moderated_false", "No" %>
-        <%= radio_button_tag "collection_filters[moderated]", '', params[:collection_filters][:moderated] == "" %>
-        <%= label_tag "collection_filters_moderated_", "Either" %>    
+        <ul>
+        <li><%= radio_button_tag "collection_filters[moderated]", true, params[:collection_filters][:moderated] == "true" %>
+        <%= label_tag "collection_filters_moderated_true", "Yes" %></li>    
+        <li><%= radio_button_tag "collection_filters[moderated]", false, params[:collection_filters][:moderated] == "false" %>
+        <%= label_tag "collection_filters_moderated_false", "No" %></li>
+        <li><%= radio_button_tag "collection_filters[moderated]", '', params[:collection_filters][:moderated] == "" %>
+        <%= label_tag "collection_filters_moderated_", "Either" %></li>
+        </ul>   
       </dd>
-    </dl>
-    <div class="clear"><!--purely presentational for IE6; phase me out--></div>
-    <p class="submit"><%= submit_tag "Filter" %></p>
+    <dt class="landmark"><%= ts('Submit') %></dt>
+    <dd class="submit actions"><%= submit_tag "Filter" %></dd>
+  </dl>
   <% end %>
 <% end %>

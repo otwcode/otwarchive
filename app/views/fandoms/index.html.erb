@@ -1,17 +1,18 @@
-<!--Descriptive page name, messages and instructions-->
+<!--SEARCHBROWSE Descriptive page name, messages and instructions-->
 <% if @collection %>
-  <h2><%= link_to(@collection.title, @collection) %> > <%=h ts("Fandoms") %></h2>
+  <h2 class="heading"><%= link_to(@collection.title, @collection) %> > <%= ts("Fandoms") %></h2>
 <% elsif @medium %>
-  <h2><%= link_to ts('Fandoms'), media_path %> > <%=h @medium.name %></h2>
+  <h2 class="heading"><%= link_to ts('Fandoms'), media_path %> > <%= @medium.name %></h2>
 <% else %>
-  <h2><%= link_to ts('Fandoms'), media_path %></h2>
+  <h2 class="heading"><%= link_to ts('Fandoms'), media_path %></h2>
 <% end %>
-
+<p>You can search this page by pressing <kbd>ctrl F</kbd> and typing in what you are looking for.</p>
 <% if @collection %>
 <div class="filters">
+	<h3 class="landmark heading"><%= ts('Filters') %></h3>
   <%= form_tag '', :method => :get do %>
-    <%= select_tag :medium_id, options_for_select(['All Media Types'] + @media.map{|m| m.name}, params[:medium_id]) %>
-    <%= submit_tag "Show" %>
+    <fieldset><p title="Choose media type"><%= select_tag :medium_id, options_for_select(['All Media Types'] + @media.map{|m| m.name}, params[:medium_id]) %>
+    <%= submit_tag "Show" %></p></fieldset>
   <% end %>
 </div>
 <% end %>
@@ -19,19 +20,21 @@
 
 <!--main content-->
 <% if @fandoms_by_letter && !@fandoms_by_letter.empty? %>
-  <ul class="alphabet">
+  <h3 class="landmark heading"><%= ts('Alphabet Navigation') %></h3>
+<ul class="alphabet navigation actions" id="alphabet" role="navigation">
     <% for letter in @fandoms_by_letter.keys %>
       <li><%= link_to letter, "#letter-#{letter}" %></li>
     <% end %>
   </ul>
-  <ul class="letters <%= 'collection' if @collection %>">
+  <h3 class="landmark heading"><%= ts('Alphabetised List of Fandoms') %></h3>
+<ol class="alphabet fandom index group <%= 'collection' if @collection %>">
     <% @fandoms_by_letter.each_pair do |letter, fandoms| %>
-      <li id='letter-<%= letter %>' class='letter'>
-        <h3>
+      <li id='letter-<%= letter %>' class='letter listbox group'>
+        <h3 class="heading">
           <%= letter %>
-          <span class="top"><%= link_to "top", "#skiplinks" %></span>
+          <span class="action top" title="top"><%= link_to '&#8593;'.html_safe, "#alphabet" %></span>
         </h3>
-        <ul class="fandom index">
+        <ul class="tags index group">
           <% for fandom in fandoms %>
           <li class='<%= cycle('odd', 'even', :name => "letter-#{letter}") %>'>
             <%= link_to_tag_works_with_text(fandom, fandom.name) %>
@@ -43,7 +46,7 @@
         </ul>
       </li>
     <% end %>
-  </ul>
+  </ol>
 <% else %>
   <h3 class="no_fandoms"><%= ts("No fandoms found") %></h3>
 <% end %>

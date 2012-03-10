@@ -5,9 +5,11 @@ class Static::CollectionsController < ApplicationController
   def show
     @collection = Collection.find_by_name(params[:id])
     if @collection.nil?
-      redirect_to root_path, :error => "Sorry, we couldn't find that collection."
+      flash[:error] = ts("Sorry, we couldn't find that collection.")
+      redirect_to collections_path
     elsif @collection.unrevealed?
-      redirect_to root_path, :error => "Sorry, this collection isn't revealed yet."      
+      flash[:error] = ts("Sorry, that collection isn't revealed yet.")
+      redirect_to collection_path(@collection)      
     end
     @media = Media.canonical.by_name - [Media.find_by_name(ArchiveConfig.MEDIA_NO_TAG_NAME)]
   end

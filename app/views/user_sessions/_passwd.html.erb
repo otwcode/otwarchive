@@ -1,23 +1,17 @@
 <% @user_session = UserSession.new unless @user_session %>
 <%= form_for @user_session do |f| %>
+  <dl>
+	<dt><%= f.label :login, ts("User name:") %></dt>
+    <dd><%= f.text_field :login %></dd>
+  	<dt><%= f.label :password, ts("Password:")  %></dt>
+    <dd><%= f.password_field :password %></dd>
+  	<dt><%= f.label :remember_me, ts("Remember me")  %></dt>
+	<dd><%= f.check_box :remember_me %></dd>
+	<dt class="landmark">Submit</dt>
+  	<dd class="submit actions"><%= f.submit ts("Log in"), :class => 'submit' %></dd>
+  </dl>
   <p>
-    <%= link_to_remote ts('Log in using OpenID'), 
-           {:url => {:controller => :user_sessions, :action => 'openid'}},
-           :href => login_path(:use_openid => true) %>
-  </p>
-  <p>
-    <%= f.label :login, ts("User name:") %>
-    <%= f.text_field :login %>
-  </p>
-  <p>
-    <%= f.label :password, ts("Password:")  %>
-    <%= f.password_field :password %>
-  </p>
-  <p>
-    <%= f.check_box :remember_me %>
-    <%= f.label :remember_me, ts("Remember me")  %>
-  </p>
-  <p class="submit">
-    <%= f.submit ts("Log in"), :class => 'submit' %>
+    <%= link_to ts('Log in using OpenID'),
+           {:controller => :user_sessions, :action => 'openid'}, :remote => true %>
   </p>
 <% end %>

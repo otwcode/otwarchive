@@ -38,7 +38,7 @@ class StoryParser
 
   # places for which we have a custom parse_story_from_[source] method
   # for getting information out of the downloaded text
-  KNOWN_STORY_PARSERS = %w(deviantart dw lj yuletide ffnet)
+  KNOWN_STORY_PARSERS = %w(deviantart dw lj yuletide ffnet lotrfanfiction twilightarchives)
 
   # places for which we have a custom parse_author_from_[source] method
   # which returns an external_author object including an email address
@@ -50,7 +50,7 @@ class StoryParser
 
   # places for which we have a download_chaptered_from
   # to get a set of chapters all together
-  CHAPTERED_STORY_LOCATIONS = %w(ffnet)
+  CHAPTERED_STORY_LOCATIONS = %w(ffnet efiction)
 
   # regular expressions to match against the URLS
   SOURCE_LJ = '((live|dead|insane)?journal(fen)?\.com)|dreamwidth\.org'
@@ -59,6 +59,9 @@ class StoryParser
   SOURCE_FFNET = 'fanfiction\.net'
   SOURCE_MINOTAUR = '(bigguns|firstdown).slashdom.net'
   SOURCE_DEVIANTART = 'deviantart\.com'
+  SOURCE_LOTRFANFICTION = 'lotrfanfiction\.com'
+  SOURCE_TWILIGHTARCHIVES = 'twilightarchives\.com'
+  SOURCE_EFICTION = 'viewstory\.php'
 
   # time out if we can't download fast enough
   STORY_DOWNLOAD_TIMEOUT = 60
@@ -75,6 +78,7 @@ class StoryParser
       begin
         work = download_and_parse_story(url, options)
         if work && work.save
+          work.chapters.each {|chap| chap.save}
           works << work
         else
           failed_urls << url
@@ -241,7 +245,7 @@ class StoryParser
       return chapter
     end
 
-    def set_work_attributes(work, location, options = {})
+    def set_work_attributes(work, location="", options = {})
       raise Error, "Work could not be downloaded" if work.nil?
       work.imported_from_url = location
       work.expected_number_of_chapters = work.chapters.length
@@ -260,19 +264,18 @@ class StoryParser
 
       # handle importing works for others
       if options[:importing_for_others]
-        external_author_name = parse_author(location)
+        external_author_name = options[:external_author_name] || parse_author(location)
         if external_author_name
           if external_author_name.external_author.do_not_import
             # we're not allowed to import works from this address
             raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
           end
-          external_creatorship = ExternalCreatorship.new(:external_author_name => external_author_name, :creation => work, :archivist => (options[:archivist] || User.current_user) )
-          work.external_creatorships << external_creatorship
+          ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
         end
       end
 
       # lock to registered users if specified or importing for others
-      work.restricted = options[:restricted] || options[:importing_for_others]
+      work.restricted = options[:restricted] || options[:importing_for_others] || false
 
       # set default values for required tags for any works that don't have them
       work.fandom_string = (options[:fandom].blank? ? ArchiveConfig.FANDOM_NO_TAG_NAME : options[:fandom]) if (options[:override_tags] || work.fandoms.empty?)
@@ -289,7 +292,8 @@ class StoryParser
       work.posted = true if options[:post_without_preview]
       work.chapters.each do |chapter|
         chapter.posted = true
-        chapter.save
+        # ack! causing the chapters to exist even if work doesn't get created!
+        # chapter.save
       end
       return work
     end
@@ -387,7 +391,8 @@ class StoryParser
 
     def get_chapter_from_work_params(work_params)
       @chapter = Chapter.new(work_params[:chapter_attributes])
-      chapter_params = work_params.delete_if {|name, param| !@chapter.attribute_names.include?(name.to_s)}
+      # don't override specific chapter params (eg title) with work params  
+      chapter_params = work_params.delete_if {|name, param| !@chapter.attribute_names.include?(name.to_s) || !@chapter.send(name.to_s).blank?}
       @chapter.update_attributes(chapter_params)
       return @chapter
     end
@@ -401,6 +406,9 @@ class StoryParser
         story = eval("download_from_#{source.downcase}(location)")
       end
 
+      # clean up any erroneously included string terminator (Issue 785)
+      story = story.gsub("\000", "")
+      
       #story = fix_bad_characters(story)
       # ^ This eats ALL special characters. I don't think we need it at all
       # so I'm taking it out. If we want it back, it should be the last
@@ -414,6 +422,7 @@ class StoryParser
       url = location
       url.gsub!(/\#(.*)$/, "") # strip off any anchor information
       url.gsub!(/\?(.*)$/, "") # strip off any existing params at the end
+      url.gsub!('_', '-') # convert underscores in usernames to hyphens
       url += "?format=light" # go to light format
       text = download_with_timeout(url)
       if text.match(/adult_check/)
@@ -454,6 +463,31 @@ class StoryParser
       end
       return @chapter_contents
     end
+
+
+    # grab all the chapters of a story from an efiction-based site
+    def download_chaptered_from_efiction(location)
+      @chapter_contents = []
+      if location.match(/^(.*)\/.*viewstory\.php.*sid=(\d+)($|&)/i)
+        site = $1
+        storyid = $2        
+        chapnum = 1
+        Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
+          loop do
+            url = "#{site}/viewstory.php?action=printable&sid=#{storyid}&chapter=#{chapnum}"
+            body = download_with_timeout(url)
+            if body.nil? || chapnum > MAX_CHAPTER_COUNT || body.match(/<div class='chaptertitle'> by <\/div>/) || body.match(/Access denied./) || body.match(/Chapter : /)
+              break
+            end
+            
+            @chapter_contents << body
+            chapnum = chapnum + 1
+          end
+        }
+      end
+      return @chapter_contents
+    end
+
 
     # This is the heavy lifter, invoked by all the story and chapter parsers.
     # It takes a single string containing the raw contents of a story, parses it with
@@ -516,22 +550,11 @@ class StoryParser
     def parse_story_from_lj(story)
       work_params = {:chapter_attributes => {}}
 
-      # in LJ "light" format, the story contents are in the first div
+      # in LJ "light" format, the story contents are in the second div
       # inside the body.
       body = @doc.css("body")
-      content_divs = body.css("div")
-
-      unless content_divs[0].nil?
-        # the LJ metadata (mood, location, current music, tags) is in the first
-        # table inside the div. No metadata means no table. Get rid of it:
-        tables = content_divs[0].css("table")
-        if !tables[0].nil? && tables[0].to_html.match(/(Current location:)|(Current mood:)|(Current music:)|(Entry tags:)/)
-          tables[0].remove
-        end
-        storytext = content_divs[0].inner_html
-      else
-        storytext = body.inner_html
-      end
+      storytext = body.css("div.b-singlepost-body").inner_html
+      storytext = body.inner_html if storytext.empty?
 
       # cleanup the text
       # storytext.gsub!(/<br\s*\/?>/i, "\n") # replace the breaks with newlines
@@ -542,10 +565,9 @@ class StoryParser
       work_params[:title].gsub! /^[^:]+: /, ""
       work_params.merge!(scan_text_for_meta(storytext))
 
-      font_blocks = @doc.xpath('//font')
-      unless font_blocks.empty?
-        date = font_blocks.first.inner_text
-        work_params[:revised_at] = convert_revised_at(date)
+      date = @doc.css("span.b-singlepost-author-date")
+      unless date.empty?
+        work_params[:revised_at] = convert_revised_at(date.first.inner_text)
       end
 
       return work_params
@@ -595,6 +617,7 @@ class StoryParser
       notes = ""
       
       body = @doc.css("body")
+      title = @doc.css("title").inner_html.gsub /on DeviantART$/, ""
 
       # Find the image (original size) if it's art
       image_full = body.css("img#gmi-ResViewSizer_fullimg")
@@ -603,9 +626,18 @@ class StoryParser
       end
 
       # Find the fic text if it's fic
-      text_table = body.css("table.f td.f div.text")
-      unless text_table[0].nil?
-        storytext = text_table[0].inner_html
+      text_table = body.css("table.f td.f div.text")[0]
+      unless text_table.nil?
+        # Try to remove the title:
+        unless text_table.css("h1")[0].nil? && text_table.css("h1")[0].match(title)
+          text_table.css("h1")[0].remove
+        end
+
+        # Try to remove the author:
+        unless text_table.css("small")[0].nil? && text_table.css("small")[0].match(/by ~.*?<a class="u" href=/m)
+          text_table.css("small")[0].remove
+        end
+        storytext = text_table.inner_html
       end
       
       # cleanup the text
@@ -625,9 +657,7 @@ class StoryParser
       work_params[:notes] = notes
         
       work_params.merge!(scan_text_for_meta(notes))
-
-      work_params[:title] = @doc.css("title").inner_html
-      work_params[:title].gsub! /on DeviantART$/, ""
+      work_params[:title] = title
 
       body.css("div.gr-body div.gr div.hh h1 a").each do |node|
         if node["class"] != "u"
@@ -647,7 +677,6 @@ class StoryParser
       return work_params
     end
 
-    
     # Parses a story from the Yuletide archive (an AutomatedArchive)
     def parse_story_from_yuletide(story)
       work_params = {:chapter_attributes => {}}
@@ -665,7 +694,7 @@ class StoryParser
 
           fandom, recip, challenge, year, author = $1, $2, $3, $4, $5
 
-          tags << "recipient:#{recip}"
+          work_params[:recipients] = recip
 
           if challenge=="Yuletide"
             tags << "challenge:Yuletide #{year}"
@@ -734,7 +763,14 @@ class StoryParser
     # Parses a story from fanfiction.net
     def parse_story_from_ffnet(story)
       work_params = {:chapter_attributes => {}}
-      storytext = clean_storytext((@doc/"#storytext").inner_html)
+      # storytext = clean_storytext((@doc/"#storytext").inner_html)
+      storytext = (@doc/"#storytext")
+      #remove share area
+      divs = storytext.css("div div.a2a_kit")
+      if !divs[0].nil?
+        divs[0].remove
+      end
+      storytext = clean_storytext(storytext.inner_html)
 
       work_params[:notes] = ((@doc/"#storytext")/"p").first.try(:inner_html)
 
@@ -744,17 +780,12 @@ class StoryParser
 
       tags = []
       pagetitle = (@doc/"title").inner_html
-      if pagetitle && pagetitle.match(/(.*), an? (.*) fanfic - FanFiction\.Net/)
+      if pagetitle && pagetitle.match(/(.*), an? (.*) fanfic/)
         work_params[:fandom_string] = $2
         work_params[:title] = $1
         if work_params[:title].match(/^(.*) Chapter ([0-9]+): (.*)$/)
-          if ($2 == "1")
-            # first chapter
-            work_params[:title] = $1
-            work_params[:chapter_attributes][:title] = $3
-          else
-            work_params[:title] = $3
-          end
+          work_params[:title] = $1
+          work_params[:chapter_attributes][:title] = $3
         end
       end
       if story.match(/rated:\s*<a.*?>\s*(.*?)<\/a>/i)
@@ -778,12 +809,96 @@ class StoryParser
       return work_params
     end
 
+    def parse_story_from_lotrfanfiction(story)
+      work_params = parse_story_from_modified_efiction(story, "lotrfanfiction")
+      work_params[:fandom_string] = "Lord of the Rings"
+      return work_params      
+    end
+    
+    def parse_story_from_twilightarchives(story)
+      work_params = parse_story_from_modified_efiction(story, "twilightarchives")
+      work_params[:fandom_string] = "Twilight"      
+      return work_params      
+    end
+    
+    def parse_story_from_modified_efiction(story, site = "")
+      work_params = {:chapter_attributes => {}}
+      storytext = @doc.css("div.chapter").inner_html
+      storytext = clean_storytext(storytext)
+      work_params[:chapter_attributes][:content] = storytext
+      
+      work_params[:title] = @doc.css("html body div#pagetitle a").first.inner_text.strip
+      work_params[:chapter_attributes][:title] = @doc.css(".chaptertitle").inner_text.gsub(/ by .*$/, '').strip
+      
+      # harvest data
+      info = @doc.css(".infobox .content").inner_html
+
+      if info.match(/Summary:.*?>(.*?)<br>/m)
+        work_params[:summary] = clean_storytext($1)
+      end      
+
+      infotext = @doc.css(".infobox .content").inner_text      
+
+      # Turn categories, genres, warnings into freeform tags
+      tags = []
+      if infotext.match(/Categories: (.*) Characters:/)
+        tags += $1.split(',').map {|c| c.strip}.uniq unless $1 == "None"
+      end
+      if infotext.match(/Genres: (.*)Warnings/)
+        tags += $1.split(',').map {|c| c.strip}.uniq unless $1 == "None"
+      end
+      if infotext.match(/Warnings: (.*)Challenges/)
+        tags += $1.split(',').map {|c| c.strip}.uniq unless $1 == "None"
+      end
+      work_params[:freeform_string] = clean_tags(tags.join(ArchiveConfig.DELIMITER_FOR_OUTPUT))
+
+      # use last updated date as revised_at date
+      if site == "lotrfanfiction" && infotext.match(/Updated: (\d\d)\/(\d\d)\/(\d\d)/)
+        # need yy/mm/dd to convert
+        work_params[:revised_at] = convert_revised_at("#{$3}/#{$2}/#{$1}") 
+      elsif site == "twilightarchives" && infotext.match(/Updated: (.*)$/)
+        work_params[:revised_at] = convert_revised_at($1)
+      end
+      
+
+      # get characters
+      if infotext.match(/Characters: (.*)Genres:/)
+        work_params[:character_string] = $1.split(',').map {|c| c.strip}.uniq.join(',') unless $1 == "None"
+      end
+
+      # save the readcount
+      readcount = 0
+      if infotext.match(/Read: (\d+)/)
+        readcount = $1
+      end
+      work_params[:notes] = (readcount == 0 ? "" : "<p>This work was imported from another site, where it had been read #{readcount} times.</p>")
+
+      # story notes, chapter notes, end notes
+      @doc.css(".notes").each do |note|
+        if note.inner_html.match(/Story Notes/)
+          work_params[:notes] += note.css('.noteinfo').inner_html
+        elsif note.inner_html.match(/(Chapter|Author\'s) Notes/)
+          work_params[:chapter_attributes][:notes] = note.css('.noteinfo').inner_html
+        elsif note.inner_html.match(/End Notes/)
+          work_params[:chapter_attributes][:endnotes] = note.css('.noteinfo').inner_html
+        end
+      end
+      
+      if infotext.match(/Completed: No/)
+        work_params[:complete] = false
+      else
+        work_params[:complete] = true
+      end
+
+      return work_params
+    end
+    
 
     # Move and/or copy any meta attributes that need to be on the chapter rather
     # than on the work itself
     def shift_chapter_attributes(work_params)
       CHAPTER_ATTRIBUTES_ONLY.each_pair do |work_attrib, chapter_attrib|
-        if work_params[work_attrib]
+        if work_params[work_attrib] && !work_params[:chapter_attributes][chapter_attrib]
           work_params[:chapter_attributes][chapter_attrib] = work_params[work_attrib]
           work_params.delete(work_attrib)
         end
@@ -791,7 +906,7 @@ class StoryParser
 
       # copy any attributes from work to chapter as necessary
       CHAPTER_ATTRIBUTES_ALSO.each_pair do |work_attrib, chapter_attrib|
-        if work_params[work_attrib]
+        if work_params[work_attrib] && !work_params[:chapter_attributes][chapter_attrib]
           work_params[:chapter_attributes][chapter_attrib] = work_params[work_attrib]
         end
       end
@@ -829,6 +944,8 @@ class StoryParser
             value = $2
           end
           value = clean_tags(value) if is_tag[metaname]
+          value = clean_close_html_tags(value)
+          value.strip! # lose leading/trailing whitespace
           begin
             value = eval("convert_#{metaname.to_s.downcase}(value)")
           rescue NameError
@@ -839,14 +956,26 @@ class StoryParser
       return meta
     end
 
-    def download_with_timeout(location)
+    def download_with_timeout(location, limit = 10)
       story = ""
       Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {
         begin
-          response = Net::HTTP.get_response(URI.parse(location))
+          # we do a little cleanup here in case the user hasn't included the 'http://' 
+          # or if they've used capital letters or an underscore in the hostname
+          uri = URI.parse(location)
+          uri = URI.parse('http://' + location) if uri.class.name == "URI::Generic"
+          uri.host.downcase!
+          uri.host.gsub!(/_/, '-')
+          response = Net::HTTP.get_response(uri)
           case response
           when Net::HTTPSuccess
             story = response.body
+          when Net::HTTPRedirection
+            if limit > 0
+              story = download_with_timeout(response['location'], limit - 1) 
+            else
+              nil
+            end
           else
            nil
           end
@@ -859,7 +988,7 @@ class StoryParser
         end
       }
       if story.blank?
-        raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete (for example, not missing 'http://') and try again."
+        raise Error, "We couldn't download anything from #{location}. Please make sure that the URL is correct and complete, and try again."
       end
       story
     end
@@ -881,9 +1010,14 @@ class StoryParser
       nil
     end
 
+    def clean_close_html_tags(value)
+      # if there are any closing html tags at the start of the value let's ditch them
+      value.gsub(/^(\s*<\/[^>]+>)+/, '')
+    end
+
     # We clean the text as if it had been submitted as the content of a chapter
     def clean_storytext(storytext)
-        storytext = storytext.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "") unless storytext.encoding.name == "UTF-8"
+      storytext = storytext.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "") unless storytext.encoding.name == "UTF-8"
       return sanitize_value("content", storytext)
     end
 
@@ -946,14 +1080,32 @@ class StoryParser
       return convert_rating(rating)
     end
 
-    def convert_revised_at(date)
+    def convert_revised_at(date_string)
       begin
-        date = Date.parse(date)
+        date = nil
+        if date_string.match(/^(\d+)$/)
+          # probably seconds since the epoch
+          date = Time.at($1.to_i)
+        end
+        date ||= Date.parse(date_string)
         return '' if date > Date.today
         return date
-      rescue ArgumentError
+      rescue ArgumentError, TypeError
         return ''
       end
+    end
+    
+    # tries to find appropriate existing collections and converts them to comma-separated collection names only
+    def get_collection_names(collection_string)
+      cnames = ""
+      collection_string.split(',').map {|cn| cn.squish}.each do |collection_name|
+        collection = Collection.find_by_name(collection_name) || Collection.find_by_title(collection_name)
+        if collection 
+          cnames += ", " unless cnames.blank?
+          cnames += collection.name
+        end
+      end
+      cnames
     end
 
 end

@@ -1,4 +1,4 @@
-<h2>Your Assignment</h2>
+<h2 class="heading">Your Assignment</h2>
 
 <p>
   You have been assigned the following request in the <%= link_to(h(@collection.title), collection_url(@collection)) %> challenge at the Archive of Our Own!
@@ -24,13 +24,9 @@
 <% end %>
 
 <p>
-  For more information about this challenge and contact information for the moderators, please see the collection profile at:
+  Please note that you should only have received this message if you signed up for this challenge. 
+  For more information about this challenge and contact information for the moderators, please see
   <%= collection_profile_url(@collection) %> 
 </p>
 
-<p>
-  Note: you should only have received this message if you signed up for this challenge. If you did not,
-  please let us know!
-</p>
-  
 <p><%=h "Sent at:" %> <%= Time.now.to_s(:time_for_mailers) %></p>

@@ -1,9 +1,9 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= t('.supported_languages', :default => 'The archive supports the following languages:') %></h2>
+<h2 class="heading"><%= t('.supported_languages', :default => 'The archive supports these languages') %></h2>
 <!--/descriptions-->
 
 <!--subnav, actions-->
-<p>
+<p class="navigation actions" role="navigation">
 <% if current_user.is_a?(User) && current_user.is_translation_admin? %>
   <%= link_to t('.link_to_new', :default => 'Add a new one'), new_language_path %>
 <% else %>
@@ -13,25 +13,27 @@
 <!--/subnav-->
 
 <!--main content-->
-<table id="languages_table">
- 	  <caption><%=h t('.list', :default => "List of all current languages in the archive and the number of works in each") %></caption>
- 	  <tr>
- 	  	<th scope="col"><%=h t('.name', :default => "Name") %></th>
- 	  	<th scope="col"><%=h t('.work_count', :default => "Works") %></th>
- 	  </tr>
+<dl class="language index group">
   <% for language in @languages %>
-  <tr>
+
     <% if language == Language.default %>
-    <td><%= language.name %></td>
-    <td><%= link_to language.works.count, works_path %></td>
+  		<dt><%= language.name %></dt>
+    <dd><%= link_to language.works.count, works_path %> works</dd>
     <% else %>
-    <td><%= link_to language.name, language %></td>
-    <td><%= link_to language.works.count, language_works_path(language) %></td>
+    <dt><%= link_to language.name, language %></dt>
+    <dd><%= link_to language.works.count, language_works_path(language) %> works</dd>
     <% end %>
-  </tr>
+
   <% end %>
-</table>
+</dl>
 <!--main content-->
 
 <!--subnav-->
+<p class="navigation actions" role="navigation">
+<% if current_user.is_a?(User) && current_user.is_translation_admin? %>
+  <%= link_to t('.link_to_new', :default => 'Add a new one'), new_language_path %>
+<% else %>
+  <%= link_to t('.suggest_language', :default => 'Suggest a new one!'), new_feedback_report_path %>
+<% end %>
+</p>
 <!--/subnav-->

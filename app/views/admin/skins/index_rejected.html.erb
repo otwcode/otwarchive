@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2>Manage Rejected Skins</h2>
+<h2 class="heading"><%= ts('Manage Rejected Skins') %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -7,34 +7,38 @@
 <!--/subnav-->
 
 <!--main content-->
-<h3 class="landmark">Manage Skins</h3>
-
 <%=  form_tag url_for(:controller => 'admin/skins', :action => 'update'), {:method => :put} do %>
   <!-- review of rejected skins -->
   <fieldset>
-    <legend>Rejected Skins</legend>
-    <h3>Rejected Skins</h3>
-    <table id="rejected">
-      <tr>
-        <th>Skin</th>
-        <th>Type</th>
-        <th>Creator</th>
-        <th>Admin Note</th>
-        <th>Unreject</th>
+    <legend><%= ts('Rejected Skins') %></legend>
+    <h3 class="heading"><%= ts('Rejected Skins') %></h3>
+    <table id="rejected" summary="">
+      <caption></caption>
+      <thead>
+        <tr>
+        <th scope="col">Skin</th>
+        <th scope="col">Type</th>
+        <th scope="col">Creator</th>
+        <th scope="col">Admin Note</th>
+        <th scope="col">Unreject</th>
       </tr>
+    </thead>
+    <tbody>
       <% @rejected_skins.each_with_index do |skin, i| %>
         <tr>
-          <td><%= link_to skin.title, skin_path(skin) %></td>
+          <th scope="row"><%= link_to skin.title, skin_path(skin) %></td>
           <td><%= skin.type == 'WorkSkin' ? 'Work Skin' : 'Site Skin' %></td>
           <td><%= skin_author_link(skin) %></td>
           <td><%=h skin.admin_note %></td>
-          <td><%= check_box_tag "make_unrejected[]", skin.id, false, :id => "make_unrejected_#{skin.id}" %></td>
+          <% skin_name = skin.title.downcase.gsub(/ +/, '_') %>
+          <td><%= check_box_tag "make_unrejected[]", skin.id, false, :id => "make_unrejected_#{skin_name}" %></td>
         </tr>
       <% end %>
+    </tbody>
     </table>
   </fieldset>
 
-  <p class="submit"><%= submit_tag "Update" %></p>
+  <p class="submit actions"><%= submit_tag "Update" %></p>
 
 <% end %>
 

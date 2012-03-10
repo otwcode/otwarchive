@@ -1,6 +1,7 @@
 <!-- BEGIN admin options -->
-  <h3 class="landmark">Admin Actions</h3>
-  <ul class="admin navigation" role="navigation">
+  <div class="admin">
+	<h3 class="landmark heading">Admin Actions</h3>
+  <ul class="navigation actions" role="menu">
   <% if item.hidden_by_admin? %>
     <li><%= link_to ts('Make Visible'), {:controller=>"admin/user_creations", :action=>"hide", :id=>item, :creation_type => item.class, :hidden=>'false'} %></li>
   <% else %>
@@ -8,4 +9,5 @@
   <% end %>
   <li><%= link_to ts('Delete'), {:controller=>"admin/user_creations", :action=>"destroy", :id=>item, :creation_type => item.class}, :confirm => ts('Are you sure?'), :method => :delete %></li>
   </ul>
+</div>
 <!-- END admin options -->

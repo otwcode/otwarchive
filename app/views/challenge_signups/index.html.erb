@@ -1,6 +1,5 @@
 <% if @collection && @collection.challenge %>
   <!-- signups for a given challenge -->
-  <h2><%= t('.challenge_signups.signups_listing', :default => "Signups for %{collection}", :collection => @collection.title) %></h2>
 
   <!-- render differently based on the challenge -->
   <%= render "challenge/#{challenge_class_name(@collection)}/challenge_signups.html" %>
@@ -8,23 +7,19 @@
 <% elsif @user %>
   <!-- view in user dashboard -->
 
-  <h2><%= t('.challenge_signups.user_signups_listing', :default => "Challenge Signups for %{user}", :user => @user.login) %></h2>
+  <h2 class="heading"><%= ts("Challenge Signups for %{user}", :user => @user.login) %></h2>
 
-  <table>
-    <tr>
-      <th>Pseud</th>
-      <th>Collection</th>
-      <th>Manage</th>
-    </tr>
+  <dl class="signup index group">
     <% @challenge_signups.each do |challenge_signup| %>
-      <tr>
-        <td><%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup) %></td>
-        <td><%= link_to challenge_signup.collection.title, challenge_signup.collection %></td>
-        <td class="navigation">
-          <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
-        </td>
-      </tr>
+      <dt><%= link_to challenge_signup.collection.title, challenge_signup.collection %><dt>
+      <dd>
+        As 
+        <%= link_to challenge_signup.pseud.byline, collection_signup_path(challenge_signup.collection, challenge_signup), :class => "byline" %>
+        
+        <!--menu of actions-->
+        <%= render "signup_controls", :challenge_signup => challenge_signup %>
+      </dd>
     <% end %>
-  </table>
+  </dl>
 
 <% end %>

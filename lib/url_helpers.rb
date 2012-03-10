@@ -4,7 +4,9 @@ require 'uri'
 module UrlHelpers
   # Checks the status of the webpage at the given url
   # To speed things up we ONLY request the head and not the entire page.
+  # Bypass check for fanfiction.net because of ip block
   def url_active?(url, timeout_in_seconds=60)
+    return true if url.match("fanfiction.net")
     Timeout::timeout(timeout_in_seconds) {
       begin
         url = URI.parse(url)

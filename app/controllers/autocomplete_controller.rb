@@ -1,277 +1,186 @@
 class AutocompleteController < ApplicationController
+  respond_to :json
+  
   skip_before_filter :store_location
+  skip_before_filter :set_current_user, :except => [:collection_parent_name, :owned_tag_sets, :site_skins]
+  skip_before_filter :fetch_admin_settings
+  skip_before_filter :set_redirects
+  skip_before_filter :sanitize_params # can we dare!
 
-  def render_output(result_strings, to_highlight="")
-    @results = result_strings
-    render :inline  => @results.length > 0 ? "<%= content_tag(:ul, @results.map {|string| content_tag(:li, string)}.join.html_safe) %>" : ""
-  end
-
-  # works for finding items in any set
-  def set_finder(search_param, set)
-    render_output(set.grep(/#{search_param}/).to_a.sort) unless search_param.blank?
-  end
-
-  # works for any tag class where what you want to return are the names
-  def tag_finder(tag_class, search_param)
-    if search_param
-      tags = get_tags_for_finder(tag_class, search_param)
-      render_output(tags.uniq.map(&:name))
+  #### DO WE NEED THIS AT ALL? IF IT FIRES WITHOUT A TERM AND 500s BECAUSE USER DID SOMETHING WACKY SO WHAT
+  # # If you have an autocomplete that should fire without a term add it here
+  # before_filter :require_term, :except => [:tag_in_fandom, :relationship_in_fandom, :character_in_fandom, :nominated_parents]
+  # 
+  # def require_term
+  #   if params[:term].blank?
+  #     flash[:error] = ts("What were you trying to autocomplete?")
+  #     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
+  #   end
+  # end
+  # 
+  #########################################
+  ############# LOOKUP ACTIONS GO HERE
+  
+  # PSEUDS
+  def pseud
+    if params[:term].blank?
+      # get the user's own pseuds
+      set_current_user
+      render_output(current_user.pseuds.collect(&:byline))
+    else
+      render_output(Pseud.autocomplete_lookup(:search_param => params[:term], :autocomplete_prefix => "autocomplete_pseud").map {|res| Pseud.fullname_from_autocomplete(res)})
     end
   end
   
-  def tag_finder_restricted_by_tag_set
-    search_param = params[params[:fieldname]]
-    tag_type = params[:tag_type]
-    tag_set = TagSet.find(params[:tag_set_id])
-    if tag_set.nil?
-      tag_finder(tag_type.classify, search_param)
-    else
-      tags = tag_set.tags.with_type(tag_type).by_popularity.where("name LIKE ?", search_param + '%').limit(10)
-      tags += tag_set.tags.with_type(tag_type).by_popularity.where("name LIKE ?", '%' + search_param + '%').limit(7)
-      render_output(tags.uniq.map(&:name))
+  ## TAGS  
+  private
+    def tag_output(search_param, tag_type)
+      render_output Tag.autocomplete_lookup(:search_param => search_param, :autocomplete_prefix => "autocomplete_tag_#{tag_type}").map {|r| Tag.name_from_autocomplete(r)}
     end
-  end
+  public  
+  # these are all basically duplicates but make our calls to autocomplete more readable
+  def tag; tag_output(params[:term], params[:type]); end
+  def fandom; tag_output(params[:term], "fandom"); end
+  def character; tag_output(params[:term], "character"); end
+  def relationship; tag_output(params[:term], "relationship"); end
+  def freeform; tag_output(params[:term], "freeform"); end
 
-  # handle relationships specially
-  def relationship_finder(search_param)
-    if search_param && search_param.match(/(\&|\/)/)
-      tag_finder(Relationship, search_param)
-    else
-      tags = get_tags_for_relationship_finder(search_param)
-      render_output(tags.uniq.sort {|a,b| b.taggings_count <=> a.taggings_count}.map(&:name))
+  
+  ## TAGS IN FANDOMS
+  private
+    def tag_in_fandom_output(params)
+      render_output(Tag.autocomplete_fandom_lookup(params).map {|r| Tag.name_from_autocomplete(r)})
     end
-  end
+  public
+  def tag_in_fandom; tag_in_fandom_output(params); end
+  def character_in_fandom; tag_in_fandom_output(params.merge({:tag_type => "character"})); end
+  def relationship_in_fandom; tag_in_fandom_output(params.merge({:tag_type => "relationship"})); end
 
-  def get_tags_for_finder(tag_class, search_param)
-    tags = tag_class.canonical.by_popularity.where("name LIKE ?", search_param + '%').limit(10)
-    tags += tag_class.canonical.by_popularity.where("name LIKE ?", '%' + search_param + '%').limit(7)
-  end
 
-  def get_tags_for_relationship_finder(search_param)
-    tags = Relationship.canonical.by_popularity
-                        .where("name LIKE ? OR name LIKE ? OR name LIKE ?", 
-                                search_param + '%', '%/' + search_param + '%',
-                                '%& ' + search_param + '%').limit(15)
+  ## TAGS IN SETS
+  #
+  # Note that only tagsets in OwnedTagSets are in autocomplete
+  #
+
+  # expects the following params: 
+  # :tag_set - tag set ids comma-separated
+  # :tag_type - tag type as a string unless "all" desired
+  # :in_any - set to false if only want tags in ALL specified sets
+  # :term - the search term
+  def tags_in_sets
+    results = TagSet.autocomplete_lookup(params)
+    render_output(results.map {|r| Tag.name_from_autocomplete(r)})
   end
   
-  # works for any tag class where what you want to return are the names
-  def noncanonical_tag_finder(tag_class, search_param)
-    if search_param
-      render_output(tag_class.by_popularity
+  # expects the following params: 
+  # :fandom - fandom name(s) as an array or a comma-separated string
+  # :tag_set - tag set id(s) as an array or a comma-separated string
+  # :tag_type - tag type as a string unless "all" desired
+  # :include_wrangled - set to false if you only want tags from the set associations and NOT tags wrangled into the fandom
+  # :fallback - set to false to NOT do 
+  # :term - the search term
+  def associated_tags
+    if params[:fandom].blank? 
+      render_output([ts("Please select a fandom first!")])
+    else
+      results = TagSetAssociation.autocomplete_lookup(params)
+      render_output(results.map {|r| Tag.name_from_autocomplete(r)})
+    end
+  end
+  
+  ## NONCANONICAL TAGS
+  def noncanonical_tag
+    search_param = params[:term]
+    tag_class = params[:type].classify.constantize
+    render_output(tag_class.by_popularity
                       .where(["canonical = 0 AND name LIKE ?",
                               '%' + search_param + '%']).limit(10).map(&:name))
-    end
   end
-
-protected
-
-  # somewhere in the params is a potentially deeply nested hash with the given fieldname
-  def get_fandoms_from_params(params, fieldname)
-    hash = params
-    nexthash = nil
-
-    while hash.is_a? Hash
-      hash.keys.each do |key|
-        if key == fieldname
-          # we've found the fandoms
-          fandom_names = hash[key]
-          if fandom_names.is_a? String
-            return [] if fandom_names.blank?
-            return fandom_names.split(',').delete_if {|fname| fname.blank?}.collect {|fname| Fandom.find_by_name(fname.strip)}.compact
-          elsif fandom_names.is_a? Array
-            return fandom_names.collect {|fname| Fandom.find_by_name(fname.strip)}.compact
-          end
-        elsif hash[key].is_a? Hash
-          nexthash = hash[key]
-        end
-      end
-      hash = nexthash
-    end
-    
-    return []
-  end
-
   
-public
+  
+  # more-specific autocompletes should be added below here when they can't be avoided
 
-  # this finder only returns characters that are children of the given fandom
-  def character_finder_restricted_by_fandom
-    search_param = params[params[:fieldname]]
-    fandoms = get_fandoms_from_params(params, params[:fandom_fieldname])
-    message = ""
-    if fandoms.empty?
-      message = ts("- No valid fandoms selected! -")
-      tags = search_param.blank? ? [] : get_tags_for_finder(Character, search_param)
-    elsif search_param.blank?
-      tags = Character.with_parents(fandoms).canonical.by_popularity.limit(10)
-    else
-      tags = Character.with_parents(fandoms).canonical.by_popularity.where("tags.name LIKE ?", '%' + search_param + '%').limit(10)
-    end
-    if !fandoms.empty? && tags.empty?
-      message = ts("- No matching characters found in selected fandoms! -") unless params[:no_alert]
-      tags = get_tags_for_finder(Character, search_param)
-    end
-    results = message.blank? ? [] : [message]
-    results += tags.uniq.map(&:name)
+
+  # Nominated parents
+  def nominated_parents
+    render_output(TagNomination.for_tag_set(OwnedTagSet.find(params[:tag_set_id])).nominated_parents(params[:tagname], params[:term]))
+  end
+
+
+  # look up collections ranked by number of items they contain
+
+  def collection_fullname
+    results = Collection.autocomplete_lookup(:search_param => params[:term], :autocomplete_prefix => "autocomplete_collection_all").map {|res| Collection.fullname_from_autocomplete(res)}
     render_output(results)
   end
 
-  # this finder only returns relationships that are children of the given fandom
-  def relationship_finder_restricted_by_fandom
-    search_param = params[params[:fieldname]]
-    fandoms = get_fandoms_from_params(params, params[:fandom_fieldname])
-    message = ""
-    if fandoms.empty?
-      message = ts("- No valid fandoms selected! -")
-      tags = search_param.blank? ? [] : get_tags_for_relationship_finder(search_param)
-    elsif search_param.blank?
-      tags = Relationship.with_parents(fandoms).canonical.by_popularity.limit(10)
-    else
-      tags = Relationship.with_parents(fandoms).canonical.by_popularity.where("tags.name LIKE ? OR tags.name LIKE ? OR tags.name LIKE ?", 
-                                                                                      search_param + '%', '%/' + search_param + '%',
-                                                                                      '%& ' + search_param + '%').limit(10)
+  # return collection names
+  
+  def open_collection_names
+    # in this case we want different ids from names so we can display the title but only put in the name
+    results = Collection.autocomplete_lookup(:search_param => params[:term], :autocomplete_prefix => "autocomplete_collection_open").map do |str| 
+      {:id => Collection.name_from_autocomplete(str), :name => Collection.title_from_autocomplete(str)}
     end
-    if !fandoms.empty? && tags.empty?
-      message = ts("- No matching relationships found in selected fandoms! -") unless params[:no_alert]
-      tags = get_tags_for_relationship_finder(search_param)
-    end
-    results = message.blank? ? [] : [message]
-    results += tags.uniq.map(&:name)
-    render_output(results)
+    respond_with(results)
   end
   
-  def pseud_finder(search_param)
-    if search_param
-      render_output(Pseud.not_orphaned.order(:name).where(["name LIKE ?", '%' + search_param + '%']).limit(10).map(&:byline))
-    end
-  end
-  
-  def collection_finder(search_param)
-    render_output(Collection.not_closed.with_name_like(search_param).name_only.map(&:name).sort)
+  # For creating collections, autocomplete the name of a parent collection owned by the user only
+  def collection_parent_name
+    render_output(current_user.maintained_collections.top_level.with_name_like(params[:term]).value_of(:name).sort)
   end
 
-  # find people signed up for a challenge
+  # for looking up existing urls for external works to avoid duplication 
+  def external_work
+    render_output(ExternalWork.where(["url LIKE ?", '%' + params[:term] + '%']).limit(10).order(:url).value_of(:url))    
+  end
+  
+  # encodings for importing
+  def encoding
+    encodings = Encoding.name_list.select {|e| e.match(/#{params[:term]}/i)}
+    render_output(encodings)
+  end
+
+  # people signed up for a challenge
   def challenge_participants
-    search_param = params[params[:fieldname]]
+    search_param = params[:term]
     collection_id = params[:collection_id]
     render_output(Pseud.limit(10).order(:name).joins(:challenge_signups)
                     .where(["pseuds.name LIKE ? AND challenge_signups.collection_id = ?", 
                             '%' + search_param + '%', collection_id]).map(&:byline))
   end
-
-  ###### all the field-specific methods go here 
   
-  # pseud-finder methods -- to add a new one, just put the name of the field into the 
-  # %w list
-  %w(work_recipients participants_to_invite pseud_byline).each do |field|
-    define_method("#{field}") do
-      pseud_finder(params[params[:fieldname]])
+  # owned tag sets that are usable by all
+  def owned_tag_sets
+    if params[:term].length > 0
+      search_param = '%' + params[:term] + '%'
+      render_output(OwnedTagSet.limit(10).order(:title).usable.where("owned_tag_sets.title LIKE ?", search_param).collect(&:title))
     end
   end
   
-  # to handle the autocomplete requests for each type from the nested prompt form, using define_method to set up all
-  # the different tag types
-  %w(rating category warning).each do |tag_type| 
-    define_method("canonical_#{tag_type}_finder") do
-      tag_finder("#{tag_type}".classify.constantize, params[params[:fieldname]])
-    end
-  end 
-
-  # generic canonical tag finders
-  %w(canonical_tag_finder tag_string bookmark_tag_string).each do |field|
-    define_method("#{field}") do
-      tag_finder(Tag, params[params[:fieldname]])
-    end
-  end
-
-  # fandom finders
-  %w(canonical_fandom_finder fandom_string work_fandom tag_fandom_string collection_filters_fandom bookmark_external_fandom_string ).each do |field|
-    define_method("#{field}") do
-      tag_finder(Fandom, params[params[:fieldname]])
+  # skins for parenting
+  def site_skins
+    if params[:term].present?
+      search_param = '%' + params[:term] + '%'
+      query = Skin.site_skins.where("title LIKE ?", search_param).limit(15).sort_by_recent
+      if logged_in?
+        query = query.approved_or_owned_by(current_user)
+      else
+        query = query.approved_skins
+      end
+      render_output(query.value_of(:title))
     end
   end
+  
+private
 
-  # relationship finders
-  %w(canonical_relationship_finder work_relationship tag_relationship_string bookmark_external_relationship_string).each do |field|
-    define_method("#{field}") do
-      relationship_finder(params[params[:fieldname]]) 
+  def render_output(result_strings)
+    if result_strings.first.is_a?(String)
+      respond_with(result_strings.map {|str| {:id => str, :name => str}})
+    else
+      respond_with(result_strings)
     end
   end
+  
 
-  # character finders
-  %w(canonical_character_finder character_string work_character tag_character_string bookmark_external_character_string).each do |field|
-    define_method("#{field}") do
-      tag_finder(Character, params[params[:fieldname]])
-    end
-  end
-
-  # freeform finders
-  %w(canonical_freeform_finder work_freeform tag_freeform_string).each do |field|
-    define_method("#{field}") do
-      tag_finder(Freeform, params[params[:fieldname]])
-    end
-  end  
-  
-  # collection name finders
-  %w(collection_names work_collection_names).each do |field|
-    define_method("#{field}") do
-      collection_finder(params[params[:fieldname]])
-    end
-  end
-
-  def collection_parent_name
-    render_output(current_user.maintained_collections.top_level.with_name_like(params[:collection_parent_name]).map(&:name).sort)
-  end
-
-  def collection_filters_title
-    unless params[:collection_filters_title].blank?
-      render_output(Collection.where(["parent_id IS NULL AND title LIKE ?", '%' + params[:collection_filters_title] + '%']).limit(10).order(:title).map(&:title))    
-    end
-  end
-
-  # tag wrangling finders
-  def tag_syn_string
-    tag_finder(params[:type].constantize, params[:tag_syn_string])
-  end
-
-  def tag_merger_string
-    noncanonical_tag_finder(params[:type].constantize, params[:tag_merger_string])
-  end
-  
-  def tag_media_string
-    tag_finder(Media, params[:tag_media_string])
-  end 
-  
-  def tag_meta_tag_string
-    tag_finder(params[:type].constantize, params[:tag_meta_tag_string])
-  end
-  
-  def tag_sub_tag_string
-    tag_finder(params[:type].constantize, params[:tag_sub_tag_string])
-  end
-  
-  def external_work_url
-    unless params[:external_work_url].blank?
-      render_output(ExternalWork.where(["url LIKE ?", '%' + params[:external_work_url] + '%']).limit(10).order(:url).map(&:url))    
-    end    
-  end
-  
-  def bookmark_external_url
-    unless params[:bookmark_external_url].blank?
-      render_output(ExternalWork.where(["url LIKE ?", '%' + params[:bookmark_external_url] + '%']).limit(10).order(:url).map(&:url))    
-    end    
-  end
-  
-  # css finders for skins
-  def css_keyword
-    set_finder(params[params[:fieldname]], HTML::WhiteListSanitizer.allowed_css_keywords)
-  end
-  
-  # encodings for importing
-  def encoding
-    encodings = Encoding.name_list + Encoding.name_list.map {|e| e.downcase}
-    set_finder(params[params[:fieldname]], encodings)              
-  end
-  
 end
 

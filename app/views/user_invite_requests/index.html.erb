@@ -1,8 +1,9 @@
-<!--Descriptive page name, messages and instructions-->
-<h2>User invite requests</h2>
-
-<p>Enter "0" under quantity to deny the request. Clear the box to delay your decision for now.</p>
+<% # this page is for administrators only, they cannot navigate to individual user pages %>
+<h2 class="heading"><%= ts("User invite requests") %></h2>
+<p><%= ts("Enter \"0\" under quantity to deny the request. Clear the box to delay your decision for now.") %></p>
+<p class="note"><%= ts("To give a user more invitations without a request, visit their individual invitations page.") %></p>
 <!--/descriptions-->
+<!--subnav-->
 
 <!--main content-->
 <%= form_tag url_for(:controller => 'user_invite_requests', :action => 'update') do %>
@@ -21,9 +22,9 @@
   <% @user_invite_requests.each do |request| %>
       <tr>
         <td><%= link_to request.user.login, request.user %></td>
-        <td><%=h request.reason %></td>
+        <td><%= request.reason %></td>
         <td><%= text_field_tag "requests[#{request.id}]", request.quantity, :size => 2, :id => "requests[#{request.user.login}]" %></td>
-        <td><%=h request.created_at %>
+        <td><%= request.created_at %>
         <td><%= link_to_previous_invite_requests(request) %></td>
       </tr>
   <% end %>
@@ -31,7 +32,7 @@
   <tfoot>
     <tr>
       <th scope="row" colspan="4">Submit:</th>
-      <td class="submit"><%= submit_tag "Update" %></td>
+      <td class="submit actions"><%= submit_tag "Update" %></td>
     </tr>
   </tfoot>
 </table>

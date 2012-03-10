@@ -1,3 +1,0 @@
-for archive_faq in @archive_faqs
-  page.replace_html "position-for-#{archive_faq.id}", archive_faq.position
-end

@@ -1,14 +1,14 @@
-<div class="user profile module">
-  <%= render :partial => 'users/header', :locals => {:user => @user} %>
+<div class="user home profile">
+  <%= render 'users/header' %>
 
-<div class="user module">
-<h3><%=h ts("About %{name}", :name => @user.login) %></h3>
-<p class="datetime"><%= ts("Member since: %{date}", :date => l(@user.created_at.to_date)) %></p>
-<h4><%=h @user.profile.title %></h4>
+<h3 class="heading"><%=h @user.profile.title %></h3>
+
 <div class="wrapper">
-  <dl class="user meta">
+  <dl class="meta">
     <dt class="pseuds"><%= link_to ts("My pseuds:"), user_pseuds_path(@user) %></dt>
       <dd class="pseuds"><%= print_pseud_list(@user.pseuds) %></dd>
+	<dt><%= ts("I joined on:") %></dt>
+		<dd><%= ts("%{date}", :date => l(@user.created_at.to_date)) %></dd>
     <% if @user.profile.location? %>
     <dt class="location"><%=h ts("I live in:") %></dt>
       <dd><%=h @user.profile.location %></dd>
@@ -23,21 +23,23 @@
     <% end %>
   </dl>
 </div>
-</div>
+
   <% unless @user.profile.about_me.blank? %>
-    <div class="user module">
-      <h3><%=h ts("Bio:") %></h3>
+    <div class="bio module">
+      <h3 class="heading"><%=h ts("Bio") %></h3>
       <blockquote class="userstuff"><%=raw sanitize_field(@user.profile, :about_me) %></blockquote>
     </div>
   <% end %>
   
   <% if logged_in? && current_user == @user %>
-  <h3 class="landmark">Actions</h3>
-<ul class="navigation" role="navigation">
+  <h3 class="landmark heading">Actions</h3>
+  <ul class="navigation actions" role="navigation">
+    <li><%= link_to ts("Edit My Works"), show_multiple_user_works_path(@user) %></li>
     <li><%= link_to ts("Edit My Profile"), edit_user_path(@user) %></li>
     <li><%= link_to ts("Set My Preferences"), user_preferences_path(@user) %></li>
     <li><%= link_to ts("Manage My Pseuds"), user_pseuds_path(@user) %></li>
     <li><%= link_to ts("Delete My Account"), @user, :confirm => ts('This will permanently delete your account and cannot be undone. Are you sure?'), :method => :delete %></li>
   </ul>
   <% end %>
+
 </div>

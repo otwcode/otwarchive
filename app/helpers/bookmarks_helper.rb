@@ -1,54 +1,52 @@
 module BookmarksHelper
   
-  # Generates a draggable, pop-up div which contains the bookmark form 
-  def bookmark_link(bookmarkable, blurb=false)
-    # blurb=true is passed from the bookmark blurb to generate a save/saved link
-    if logged_in?
-      if bookmarkable.class == Chapter
-        bookmarkable = bookmarkable.work
-      end
-      
-      if bookmarkable.class == Work
-        fallback = new_work_bookmark_path(bookmarkable)
-        blurb == true ? text = t('bookmarks_helper.save_bookmark', :default => 'Save') : 
-        text = t('bookmarks_helper.bookmark_link', :default => 'Bookmark') 
-      elsif bookmarkable.class == ExternalWork
-        fallback = new_external_work_bookmark_path(bookmarkable)
-        blurb == true ? text = t('bookmarks_helper.save_bookmark', :default => 'Save') :
-        text = t('bookmarks_helper.add_new_bookmark', :default => 'Add A New Bookmark')
-      elsif bookmarkable.class == Series
-        fallback = new_series_bookmark_path(bookmarkable)
-        blurb == true ? text = t('bookmarks_helper.save_bookmark', :default => 'Save') : text = t('bookmarks_helper.bookmark_series', :default => 'Bookmark Series')
-      end
-      # Check to see if the user has an existing bookmark on this object. Note: on work page we eventually want to change this so an 
-      # existing bookmark is opened for editing but a new bookmark can be created by selecting a different pseud on the form.
-      @existing = Bookmark.find(:all, :conditions => ["bookmarkable_type = ? AND bookmarkable_id = ? AND pseud_id IN (?)", bookmarkable.class.name.to_s, bookmarkable.id, current_user.pseuds.collect(&:id)])
-      if @existing.blank?                                         
-        link_to text, {:url => fallback, :method => :get}, :remote => true, :href => fallback
-      else
-        # eventually we want to add the option here to remove the existing bookmark
-        # Enigel Dec 10 08 - adding an edit link for now
-        if blurb == true 
-          if @existing.many?
-            id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
-            link_to t('bookmarks_helper.saved_bookmarks', :default => 'Saved'), {:controller => :bookmarks, :action => :index, id_symbol => bookmarkable, :existing => true} 
-          else
-            link_to t('bookmarks_helper.saved_bookmark', :default => 'Saved'), bookmark_path(@existing)
-          end
-        else 
-          if @existing.many?
-            link_to t('bookmarks_helper.edit_bookmark', :default => "Edit/Add Bookmark"), edit_bookmark_path(@existing.last, :existing => true)
-          else
-            link_to t('bookmarks_helper.edit_bookmark', :default => "Edit/Add Bookmark"), edit_bookmark_path(@existing.last, :existing => false)
-          end
-        end      
-      end
+  # if the current user has the current object bookmarked return the existing bookmark
+  # since the user may have multiple bookmarks for different pseuds we prioritize by current default pseud if more than one bookmark exists
+  def bookmark_if_exists(bookmarkable)
+    return nil unless logged_in?
+    bookmarkable = bookmarkable.work if bookmarkable.class == Chapter
+    bookmarks = Bookmark.where(:bookmarkable_id => bookmarkable.id, :bookmarkable_type => bookmarkable.class.name.to_s, :pseud_id => current_user.pseuds.collect(&:id))
+    if bookmarks.count > 1
+      bookmarks.where(:pseud_id => current_user.default_pseud.id).first || bookmarks.last
+    else
+      bookmarks.last
+    end
+  end  
+  
+  # returns just a url to the new bookmark form
+  def get_new_bookmark_path(bookmarkable)
+    return case bookmarkable.class.to_s
+    when "Chapter"
+      new_work_bookmark_path(bookmarkable.work)
+    when "Work"    
+      new_work_bookmark_path(bookmarkable)
+    when "ExternalWork"
+      new_external_work_bookmark_path(bookmarkable)
+    when "Series"
+      new_series_bookmark_path(bookmarkable)
     end
   end
   
-  def link_to_new_bookmarkable_bookmark(bookmarkable)
-    id_symbol = (bookmarkable.class.to_s.underscore + '_id').to_sym
-    link_to "Add a new bookmark for this item", {:controller => :bookmarks, :action => :new, id_symbol => bookmarkable}
+  def get_bookmark_link_text(bookmarkable, blurb=false)
+    @bookmark = bookmark_if_exists(bookmarkable)
+    case bookmarkable.class.to_s
+    when blurb == true
+      @bookmark ? ts("Saved") : ts("Save")
+    when "Series"
+      @bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")
+    when "ExternalWork"
+      @bookmark ? ts("Edit Bookmark") : ts("Add A New Bookmark")    
+    else
+      @bookmark ? ts("Edit Bookmark") : ts("Bookmark")      
+    end
+  end
+      
+  # Link to bookmark
+  def bookmark_link(bookmarkable, blurb=false)
+    return "" unless logged_in?
+    url = get_bookmark_path(bookmarkable)
+    text = get_bookmark_link_text(bookmarkable, blurb)
+    link_to text, url
   end
   
   def link_to_user_bookmarkable_bookmarks(bookmarkable)
@@ -76,21 +74,38 @@ module BookmarksHelper
     link_to link_text, path
   end
   
+  # returns the appropriate small single icon for a bookmark -- not hardcoded, these are in css so they are skinnable
   def get_symbol_for_bookmark(bookmark)
     if bookmark.private?
-      img = "bookmark-private"
+      css_class = "private"
       title_string = "Private Bookmark"
     elsif bookmark.hidden_by_admin?
-      img = "bookmark-hidden"
+      css_class = "hidden"
       title_string = "Bookmark Hidden by Admin"
     elsif bookmark.rec?
-      img = "bookmark-rec"
+      css_class = "rec"
       title_string = "Rec"
     else
-      img = "bookmark-public"
+      css_class = "public"
       title_string = "Public Bookmark"
     end
-    link_to_help('bookmark-symbols-key', link = image_tag( "#{img}.png", :alt => title_string, :title => title_string))
+    link_to_help('bookmark-symbols-key', content_tag(:span, content_tag(:span, title_string, :class => "text"), :class => css_class, :title => title_string))
   end
   
+  def bookmark_form_path(bookmark, bookmarkable)
+    if bookmark && bookmark.new_record? 
+      return "" unless bookmarkable
+      case bookmarkable.class.to_s
+      when "Work"
+        work_bookmarks_path(bookmarkable)
+      when "ExternalWork"
+        bookmarks_path
+      when "Series"
+        series_bookmarks_path(bookmarkable)
+      end
+    elsif bookmark
+      bookmark_path(bookmark)
+    end
+  end
+
 end

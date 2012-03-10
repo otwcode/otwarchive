@@ -1,103 +1,40 @@
-<% @challenge ||= @collection.challenge %>
-<% show_request_url = @challenge.request_restriction.url_allowed && params[:show_urls] %>
-<% show_offer_url = @challenge.offer_restriction.url_allowed && params[:show_urls] %>
-<% show_request_description = @challenge.request_restriction.description_allowed && params[:show_descriptions] %>
-<% show_offer_description = @challenge.offer_restriction.description_allowed && params[:show_descriptions] %>
-<% show_request_optional_tags = @challenge.request_restriction.optional_tags_allowed %>
-<% show_offer_optional_tags = @challenge.offer_restriction.optional_tags_allowed %>
+<h2 class="heading"><%= ts("Signups for %{collection}", :collection => @collection.title) %></h2>
+  
+<ul class="navigation" role="menu">
+  <li class="action">
+    <%= link_to ts("Download (CSV)"), collection_signups_path(@collection, :format => :csv) %> 
+    <%= link_to_help "csv-download"%>
+  </li>
+</ul>
+  
+<% if @challenge_signups.empty? %>
+  <p><%= ts("No signups yet!")%></p>
+<% else %>
+  <%= will_paginate(@challenge_signups) %>
 
-<% unless @hide_navigation %>
-  <ul class="navigation">
-    <li><%= link_to t('.gift_exchange.download_excel', :default => "Download (Excel)"), collection_signups_path(@collection, :format => :xls) %></li>
-    <% if show_offer_description || show_request_description %>
-      <li><%= link_to t('.gift_exchange.hide_desc', :default => "Hide Descriptions"), 
-          collection_signups_path(@collection, :show_descriptions => false, :show_urls => params[:show_urls]) %></li>
-    <% elsif !params[:show_descriptions] %>
-      <li><%= link_to t('.gift_exchange.show_desc', :default => "Show Descriptions"), 
-          collection_signups_path(@collection, :show_descriptions => true, :show_urls => params[:show_urls]) %></li>
+  <dl class="index group">
+    <% @challenge_signups.each do |signup| %>
+      <dt class="participant" title="user name">
+        <%= link_to signup.pseud.name, collection_signup_path(@collection, signup) %>
+        <%= mailto_link signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %>
+      </dt>
+      <dd>
+        <%= render "challenge_signups/signup_controls", :challenge_signup => signup %>
+        <ul class="actions" role="menu">
+          <%= link_to h(ts("Requests")) + ' &#8595;'.html_safe, "#", :class => "requests_#{signup.id}_open" %>
+          <%= link_to h(ts("Close Requests")) + ' &#8593;'.html_safe, "#", :class => "requests_#{signup.id}_close" %></li>
+          <%= link_to h(ts("Offers")) + ' &#8595;'.html_safe, "#", :class => "offers_#{signup.id}_open" %>
+          <%= link_to h(ts("Close Offers")) + ' &#8593;'.html_safe, "#", :class => "offers_#{signup.id}_close" %></li>
+        </ul>
+        <div class="toggled" id="<%= "requests_#{signup.id}" %>">
+          <%= render "challenge_signups/show_requests", :challenge_signup => signup %>
+        </div>
+        <div class="toggled" id="<%= "offers_#{signup.id}" %>">
+          <%= render "challenge_signups/show_offers", :challenge_signup => signup %>
+        </div>
+      </dd>
     <% end %>
-    <% if show_offer_url|| show_request_url %>
-      <li><%= link_to t('.gift_exchange.hide_url', :default => "Hide URLs"), 
-          collection_signups_path(@collection, :show_descriptions => params[:show_descriptions], :show_urls => false) %></li>
-    <% elsif !params[:show_urls] %>
-      <li><%= link_to t('.gift_exchange.show_desc', :default => "Show URLs"), 
-          collection_signups_path(@collection, :show_descriptions => params[:show_descriptions], :show_urls => true) %></li>
-    <% end %>
-  </ul>
-<% end %>
-
-<table>
-  <!-- top header row showing requests and offers numbered -->
-  <tr>
-    <% unless @hide_navigation %>
-      <th rowspan=2 abbr="options" scope="col"><%=h t('.editing options', :default =>"Editing Options") %></th>
-    <% end %>
-    <th rowspan=2>Pseud</th>
-    <th rowspan=2>Email</th>
-    <% @challenge.requests_num_allowed.times do |i| %>
-    <th colspan=<%= (1 + (show_request_optional_tags ? 1 : 0) + (show_request_description ? 1 : 0 ) + (show_request_url ? 1 : 0)) %>>
-      <%= ts("Request %{num}", :num => i+1) %>
-    </th>
-    <% end %>
-    <% @challenge.offers_num_allowed.times do |i| %>
-    <th colspan=<%= (1 + (show_offer_optional_tags ? 1 : 0) + (show_offer_description ? 1 : 0 ) + (show_offer_url ? 1 : 0)) %>>
-      <%= ts("Offer %{num}", :num => i+1) %></th>
-    <% end %>
-  </tr>
-
-  <!-- secondary header row showing the tags, description, url -->
-  <tr>
-    <% %w(request offer).each do |prompt_type| %>
-      <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
-        <th>Tags</th>
-        <% if eval("show_#{prompt_type}_optional_tags") %><th>Optional Tags</th><% end %>
-        <% if eval("show_#{prompt_type}_description") %><th>Description</th><% end %>
-        <% if eval("show_#{prompt_type}_url") %><th>URL</th><% end %>
-      <% end %>
-    <% end %>
-  </tr>
-
-  <!-- body of table -->
-  <% @challenge_signups.each do |challenge_signup| %>
-    <tr>
-      <% unless @hide_navigation %>
-        <!-- because rows can be unmanageably long, put nav at start -->
-        <td class="navigation">
-          <%= render :partial => "signup_controls", :locals => {:challenge_signup => challenge_signup} %>
-        </td>
-      <% end %>
-
-      <td><%= link_to challenge_signup.pseud.name, collection_signup_path(@collection, challenge_signup) %></td>
-      <td><%= mailto_link challenge_signup.pseud.user, :subject => "[#{h(@collection.title)}] Message from Collection Maintainer" %></td>
-      <!-- show tags, description, url for all allowed requests and offers: using a lot of evals here to DRY up the code since it's so repetitive -->
-      <% %w(request offer).each do |prompt_type| %>    
-        <% eval("@challenge.#{prompt_type.pluralize}_num_allowed").times do |i| %>
-          <% prompt = eval("challenge_signup.#{prompt_type.pluralize}[i]") %>
-          <td>
-            <% any_types = TagSet::TAG_TYPES.select {|type| prompt && prompt.send("any_#{type}")} %>
-            <%= !prompt || !prompt.tag_set ? "" : 
-                  content_tag(:ul, tag_link_list(prompt.tag_set.tags) + 
-                                    any_types.map {|type| content_tag(:li, h(ts("Any %{type}", :type => type.capitalize))) }.join("\n").html_safe) %>
-          </td>
-          <% if eval("show_#{prompt_type}_optional_tags") %>
-            <td>
-              <% if prompt && prompt.optional_tag_set && !prompt.optional_tag_set.tags.empty? %>
-                <%= content_tag(:ul, tag_link_list(prompt.optional_tag_set.tags)) %>
-              <% end %>
-            </td>
-          <% end %>
-          <% if eval("show_#{prompt_type}_description") %>
-            <td><%= !prompt || prompt.description.blank? ? "" : raw(sanitize_field(prompt, :description)) %></td>
-          <% end %>
-          <% if eval("show_#{prompt_type}_url") %>
-            <td><%= !prompt || prompt.url.blank? ? "" : link_to(prompt.url, prompt.url) %></td>
-          <% end %>
-        <% end %>
-      <% end %>
-    </tr>
-  <% end %>
-</table>
-
-<% unless @hide_navigation %>
-  <%= will_paginate @challenge_signups %>
+  </dl>
+        
+  <%= will_paginate(@challenge_signups) %>
 <% end %>

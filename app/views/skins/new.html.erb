@@ -1,16 +1,12 @@
-
-<h2><%= ts('Create New Archive Skin')  %></h2>
+<!--BACK END: if this is only accessed via the user dashboard it needs the user dashboard view-->
+<h2 class="heading"><%= ts('Create New Archive Skin')  %></h2>
 
 <%= error_messages_for :skin %>
 
 <%= render :partial => "skin_top_navigation" %>
 
-<h3 class="landmark"><%= ts("New Archive Skin Form") %></h3>
+<h3 class="landmark heading"><%= ts("New Archive Skin Form") %></h3>
 
-<%= form_for(@skin, :html => {:multipart => true}) do |f| %>
-
-  <%= render :partial => 'form', :locals => {:f => f} %>
-
-  <%= f.submit ts('Create')  %>
-
+<%= form_for @skin, :html => {:multipart => true} do |f| %>
+  <%= render 'form', :f => f %>
 <% end %>

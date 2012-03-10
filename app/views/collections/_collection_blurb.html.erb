@@ -1,8 +1,8 @@
 <!-- this partial requires collection; @challenges_count, @works_count, @bookmarks_count must be set -->
-<li class="<% if collection.user_is_owner?(current_user) %>own<% end %> collection picture blurb">
+<li class="<% if collection.user_is_owner?(current_user) %>own<% end %> collection picture blurb group" role="article">
   <% cache("collection-blurb-#{collection.id}") do %>
- 		<div class="header module">
-			<h4 title="name">
+ 		<div class="header module group">
+			<h4 class="heading" title="name">
 			<%= link_to collection.title, collection_path(collection) %>
 				<span>(<%= collection.name %>)</span>
 					<%= ts('by') %>
@@ -10,19 +10,20 @@
 			</h4>
 			<!--collections header iconised header image-->
       <div class="icon">
-        <%= image_tag(collection.icon.url(:standard), :size => "100x100", :alt => "icon for #{collection.name}", :class => "icon") %>
+<%# don't alt this icon it's currently only decorative%>
+        <%= image_tag(collection.icon.url(:standard), :size => "100x100", :alt => "", :class => "icon") %>
       </div>
-			<p class="datetime"><!--collection updated at--></p>
+			<p class="datetime" title="updated"><%= set_format_for_date(collection.updated_at) %></p>
 	    <% if collection.all_moderators.length > 0%>
-			  <h6 class="landmark">Mods</h6>
-			  <ul title="moderated by" class="mods">
-			    <%= collection.all_moderators.map {|mod| content_tag(:li, link_to(mod.byline, mod.user))}.join(", ").html_safe %>
+			  <h6 class="landmark heading">Mods</h6>
+			  <ul title="moderated by" class="mods commas">
+			    <%= collection.all_moderators.map {|mod| content_tag(:li, link_to(mod.byline, mod.user))}.join("\n").html_safe %>
 			  </ul>
 	    <% end %>
 		</div>
 
     <!--summary/descriptions-->
-    <h6 class="landmark">Summary</h6>
+    <h6 class="landmark heading">Summary</h6>
     <blockquote class="userstuff summary">
       <%=raw strip_images(sanitize_field(collection, :description)) || "&nbsp;".html_safe %>
       
@@ -32,23 +33,27 @@
     </blockquote>
 
     <p class="type">
-    (<%= collection.closed? ? t('.collections_index.is_closed', :default => "Closed") : t('.collections_index.open', :default => "Open") %>, <%= collection.moderated? ? t('.collections_index.is_moderated', :default => "Moderated") : t('.collections_index.unmoderated', :default => "Unmoderated") %><%= collection.unrevealed? ? t('.collections_index.is_unrevealed', :default => ", Unrevealed") : "" %><%= collection.anonymous? ? t('.collections_index.is_anonymous', :default => ", Anonymous") : "" %><%= collection.challenge ? t('.collections_index.is_challenge', :default => ", Challenge") : "" %>)
+    (<%= collection.closed? ? ts("Closed") : ts("Open") %>, <%= collection.moderated? ? ts("Moderated") : ts("Unmoderated") %><%= collection.unrevealed? ? ts(", Unrevealed") : "" %><%= collection.anonymous? ? ts(", Anonymous") : "" %><%= collection.gift_exchange? ? ts(", Gift Exchange Challenge") : "" %><%= collection.prompt_meme? ? ts(", Prompt Meme Challenge") : "" %>)
     </p>
     
 	  <!--stats-->
 		<dl class="stats" title="stats">
       <% if (@challenges_count = collection.children.count) > 0 %>
-        <dt><%= ts("Challenges/Subcollections") %></dt>
+        <dt><%= ts("Challenges/Subcollections") %>:</dt>
         <dd><%= link_to(@challenges_count, collection_collections_path(collection)) %></dd>
       <% end %>
 			<% if (@works_count = collection.all_approved_works_count) > 0 %>
-			  <dt><%= ts("Fandoms") %></dt>
+			  <dt><%= ts("Fandoms") %>:</dt>
     		<dd><%= link_to(collection.all_fandoms_count, collection_fandoms_path(collection)) %></dd>
     	<% end %>
-		  <dt><%= ts("Works") %></dt>
+      <% if collection.challenge? && collection.prompt_meme? %>
+        <dt><%= ts("Prompts") %>:</dt>
+        <dd><%= link_to(collection.prompts.count.to_s, collection_requests_path(collection)) %></dd>
+      <% end %>
+		  <dt><%= ts("Works") %>:</dt>
   		<dd><%= link_to(@works_count, collection_works_path(collection)) %></dd>
 			<% if (@bookmarks_count = collection.all_approved_bookmarks_count) > 0 %>
-     	  <dt><%= ts("Bookmarks") %></dt>
+     	  <dt><%= ts("Bookmarks") %>:</dt>
 	      <dd><%= link_to(@bookmarks_count, collection_bookmarks_path(collection)) %></dd>
 			<% end %>
 	  </dl>
@@ -56,13 +61,13 @@
   <% end %><!-- end cache -->  
   
   <% if collection.user_is_owner?(current_user) || (collection.challenge && collection.challenge.signup_open && logged_in?) %>
-    <h6 class="landmark">User Actions</h6>
-	  <ul class="navigation" role="navigation">
+    <h6 class="landmark heading"><%= ts("User Actions") %></h6>
+	  <ul class="navigation actions" role="menu">
       <% if collection.user_is_owner?(current_user) %>
-        <li><%= link_to 'Edit', edit_collection_path(collection) %></li>
+        <li><%= link_to ts("Edit"), edit_collection_path(collection) %></li>
       <% end %>
       <% if collection.challenge && collection.challenge.signup_open && logged_in? %>
-        <%= render :partial => "challenge/#{challenge_class_name(collection)}/challenge_navigation_user", :locals => {:collection => collection} %>
+        <%= render "challenge/#{challenge_class_name(collection)}/challenge_navigation_user", :collection => collection %>
       <% end %>
     </ul>
   <% end %>

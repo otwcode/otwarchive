@@ -1,0 +1,150 @@
+/* MEDIA: only screen and (max-width: 480px), handheld ENDMEDIA (need ENDMEDIA because the media has more than one word)
+linearise content, suppress large images, suppress custom fonts and other large downloads
+pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*/
+
+#outer {
+  font-size: 12px;
+}
+
+/*header */
+
+#header {
+  min-height: 0;
+}
+
+#greeting {
+  width: 45px;
+  float: right;
+  z-index: 50;
+}
+
+#greeting p.icon img {
+  border: none;
+  padding: 0;
+  top: 0;
+}
+
+#greeting ul {
+  padding: 0;
+}
+
+#greeting li {
+  display: block;
+  margin: 0 0 .25em 0;
+  text-align: right;
+}
+
+#greeting li a {
+  padding: 0;
+}
+
+h1 a img {
+  width: 30px;
+  border: 0;
+}
+
+#greeting .icon {
+  height: 35px;
+  width: 35px;
+  border: none;
+}
+
+#header .landmark {
+  clear: none;
+}
+
+#header ul.primary {
+  padding: 0.25em 35px;
+}
+
+#header h2.collections {
+  padding: 1%;
+  margin: 0;
+}
+
+/*regions */
+
+#main.dashboard {
+  float: none;
+  margin: auto;
+  width: auto;
+  padding: 0;
+}
+
+#dashboard, #main.dashboard .index, .dashboard form.filters, #main .filters, .works-index .index, .collections-index .index, #inner form dd, #inner form dt {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  float: none;
+}
+
+#footer {
+  background: #900;
+}
+
+/*types and groups*/
+
+h1, h2, h3 {
+    word-break: break-all;
+}
+
+.actions, .actions input {
+  text-transform: lowercase;
+}
+
+#main .actions a {
+  margin: auto;
+}
+
+.blurb dl.tags dt, .blurb dl.tags dd, dl.meta dt, dl.meta dd, .alphabet .listbox li, .media .listbox, #home .news, #home .latest {
+  width: auto;
+  float: none;
+}
+
+.blurb dl.tags dd, dl.meta dd {
+  margin-left: 1em;
+}
+
+#main li.blurb .stats {
+  padding: 0;
+}
+
+.alphabet .listbox li {
+  display: block;
+}
+
+dl.stats + h6 + .actions {
+  margin: auto;
+}
+
+/*zone: home*/
+
+#inbox-form {
+  clear: both;
+  float: none;
+  width: auto;
+}
+
+/*SKIN: Dash Line */
+
+/* DESCRIPTION: Horizontal dash inline*/
+
+#outer #dashboard, #main.dashboard {
+  float: none;
+  width: auto;
+  max-width: 100%;
+  margin: 1%;
+  padding: 0;
+  clear: both;
+}
+
+#dashboard ul.navigation, #dashboard ul.navigation li, #dashboard ul.navigation li a, #dashboard ul.navigation li .current {
+  text-align: left;
+  display: inline;
+  border: 0;
+}
+
+#dashboard .landmark {
+  clear: none;
+  float: left;
+}

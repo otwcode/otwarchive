@@ -1,47 +1,57 @@
+<div class="admin home">
 <!--Descriptive page name, messages and instructions-->
-<h2><%=h 'AO3 News' %></h2>
+  <div class="primary header module">
+    <h2 class="heading"><%= link_to ts("AO3 News"), admin_posts_path %></h2>
 <!--/descriptions-->
-
-<!--subnav-->
-<ul class="navigation" role="navigation">
-	<li><%= link_to t('.admin_posts_link_text', :default => 'Back to AO3 News Index'), admin_posts_path %></li>
-</ul>
-<!--/subnav-->
-
+    <div class="icon"></div>
+    <!--subnav-->
+    <ul class="navigation actions" role="navigation">
+      <li><%= link_to_rss admin_posts_path(:rss) %></li>
+    </ul>
+    <!--/subnav-->
+  </div>
 <!--main content-->
-<div class="admin" role="article">
-	<div class="admin-header">
-		<h3>
-			<%= @admin_post.title %>
-		</h3>
-			<h4>
-				Published: <%= @admin_post.created_at %>  
+<div role="article" class="group">
+  <div class="header">
+    <h3 class="heading">
+      <%= @admin_post.title %>
+    </h3>
+      <h4 class="heading">
+        Published: <%= @admin_post.created_at %>  
         <% if logged_in_as_admin? %>
-				    <%= link_to t('.edit', :default => 'Edit Post', :class => 'navigation'), edit_admin_post_path(@admin_post) %>
-				<% end %>
+            <%= link_to ts("Edit Post"), edit_admin_post_path(@admin_post), :class => 'action' %>
+        <% end %>
       </h4>
     <% if @admin_post.translated_post %>
-      <h4>Original: <%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></h4>
+      <h4 class="heading">Original: <%= link_to @admin_post.translated_post.title, @admin_post.translated_post %></h4>
     <% elsif !@admin_post.translations.empty? %>
-      <h4>Translations:</h4>
-      <dl>
+      <h4 class="heading">Translations:</h4>
+      <dl class="language index group">
         <% for admin_post in @admin_post.translations %>
           <dt>
             <%= link_to admin_post.language.name, language_admin_posts_path(admin_post.language) %>
           </dt>
           <dd>
             <%= link_to admin_post.title, admin_post %>
-          <dd>
+          </dd>
         <% end %>
       </dl>
     <% end %>
   </div>
-  <div class="admin-content userstuff">
-	    <%=raw sanitize_field(@admin_post, :content) %>
+  <div class="userstuff">
+      <%=raw sanitize_field(@admin_post, :content) %>
   </div>
+  <% if @admin_post.tags.length > 0 %>
+  <ul class="tags">
+    <% for tag in @admin_post.tags %>
+      <li><%= link_to tag.name, admin_posts_path(:tag => tag.id) %></li>
+    <% end %>
+  </ul>
+  <% end %>
 </div>
 <!--/content-->
 
 <!-- BEGIN comment section -->
 <%= render :partial => 'comments/commentable', :locals => {:commentable => @admin_post} %>
 <!-- END comment section -->
+</div>

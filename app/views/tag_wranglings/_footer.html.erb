@@ -1,5 +1,5 @@
-<h3 class="landmark">Navigation</h3>
-<ul class="navigation" role="navigation">
+<h3 class="landmark heading">Navigation</h3>
+<ul class="navigation actions" role="navigation">
   <% if current_user.is_a?(User) %>
   <li><%= span_if_current('Wrangling Home', tag_wrangler_path(current_user)) %></li>
   <% end %>

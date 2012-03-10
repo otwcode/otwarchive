@@ -4,36 +4,16 @@ Otwarchive::Application.routes.draw do
 
   match 'downloads/:download_authors/:id/:download_title.:format' => 'downloads#show', :as => 'download'
 
-  #### YULETIDE 2010 ####
+  #### STATIC CACHED COLLECTIONS ####
 
   namespace 'static' do
-    resources :collections do
-      resources :media
-      resources :fandoms
-      resources :works
-      resources :restricted_works
+    resources :collections, :only => [:show] do
+      resources :media, :only => [:show]
+      resources :fandoms, :only => [:index, :show]
+      resources :works, :only => [:show]
+      resources :restricted_works, :only => [:index, :show]
     end
   end
-
-  resources :yuletide2010 do
-    collection do
-      get :fandoms
-      get :anime_fandoms
-      get :book_fandoms
-      get :comic_fandoms
-      get :movie_fandoms
-      get :music_fandoms
-      get :other_fandoms
-      get :rpf_fandoms
-      get :theater_fandoms
-      get :tv_fandoms
-      get :video_game_fandoms
-      get :madness
-      get :restricted_works
-    end
-  end
-  match 'yuletide2010/work/:id' => 'yuletide2010#work', :as => 'yuletide2010_work'
-  match 'yuletide2010/restricted_work/:id' => 'yuletide2010#restricted_work', :as => 'yuletide2010_restricted_work'
 
   #### INVITATIONS ####
 
@@ -71,7 +51,7 @@ Otwarchive::Application.routes.draw do
   resources :tag_wranglers
   resources :tags do
     member do
-      # anything you add here will need a match under globbing at the top
+      get :feed
       get :wrangle
       post :mass_update
       get :remove_association
@@ -85,6 +65,33 @@ Otwarchive::Application.routes.draw do
     resources :comments
 	end
 
+  resources :tag_sets, :controller => 'owned_tag_sets' do 
+    resources :nominations, :controller => 'tag_set_nominations' do
+      collection do
+        put :update_multiple
+        post :destroy_multiple
+      end
+    end
+    resources :associations, :controller => 'tag_set_associations', :only => [:index] do
+      collection do
+        put :update_multiple
+      end
+    end      
+    member do
+      get :batch_load
+      put :do_batch_load
+    end
+    collection do
+      get :show_options
+    end
+  end
+  resources :tag_nominations, :only => [:update]
+
+  resources :tag_wrangling_requests, :only => [:index] do
+    collection do
+      put :update_multiple
+    end
+  end
 
   #### ADMIN ####
   resources :admins
@@ -92,21 +99,20 @@ Otwarchive::Application.routes.draw do
     resources :comments
   end
 
-  resources :admin_sessions
+  resources :admin_sessions, :only => [:new, :create, :destroy]
 
   match '/admin/login' => 'admin_sessions#new'
   match '/admin/logout' => 'admin_sessions#destroy'
 
   namespace :admin do
     resources :settings
-    resources :approve_skins
     resources :skins do
       collection do
         get :index_rejected
         get :index_approved
       end
     end
-    resources :user_creations do
+    resources :user_creations, :only => [:destroy] do
       member do
         get :hide
       end
@@ -130,18 +136,20 @@ Otwarchive::Application.routes.draw do
 
   #### USERS ####
 
-  resources :people do
+  resources :people, :only => [:index, :show] do
     collection do
       get :search
     end
   end
 
-  resources :passwords
+  resources :passwords, :only => [:new, :create]
 
   # When adding new nested resources, please keep them in alphabetical order
   resources :users do
     member do
       get :browse
+      get :change_email
+      post :change_email
       get :change_openid
       post :change_openid
       get :change_password
@@ -149,14 +157,23 @@ Otwarchive::Application.routes.draw do
       get :change_username
       post :change_username
       post :end_first_login
+      post :end_banner
     end
-    resources :assignments, :controller => "challenge_assignments" do
+    resources :assignments, :controller => "challenge_assignments", :only => [:index] do
+      collection do
+        put :update_multiple
+      end
       member do
         get :default
       end
     end
+    resources :claims, :controller => "challenge_claims", :only => [:index]
     resources :bookmarks
-    resources :collection_items, :only => [:index, :update, :destroy]
+    resources :collection_items, :only => [:index, :update, :destroy] do
+      collection do
+        put :update_multiple
+      end
+    end
     resources :collections, :only => [:index]
     resources :comments do
       member do
@@ -182,6 +199,7 @@ Otwarchive::Application.routes.draw do
         get :manage
       end
     end
+    resources :nominations, :controller => "tag_set_nominations", :only => [:index]
     resources :preferences, :only => [:index, :update]
     resource :profile, :only => [:show], :controller => "profile"
     resources :pseuds do
@@ -190,9 +208,6 @@ Otwarchive::Application.routes.draw do
       resources :bookmarks
     end
     resources :readings do
-      member do
-        get :marktoread
-      end
       collection do
         post :clear
       end
@@ -206,12 +221,15 @@ Otwarchive::Application.routes.draw do
     end
     resources :signups, :controller => "challenge_signups", :only => [:index]
     resources :skins, :only => [:index]
+    resources :subscriptions, :only => [:index, :create, :destroy]
+    resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]    
     resources :works do
       collection do
         get :drafts
         get :show_multiple
         post :edit_multiple
         put :update_multiple
+        post :delete_multiple
       end
     end
   end
@@ -233,6 +251,7 @@ Otwarchive::Application.routes.draw do
       get :preview_tags
       put :update_tags
       get :marktoread
+      get :confirm_delete
     end
     resources :bookmarks
     resources :chapters do
@@ -268,6 +287,7 @@ Otwarchive::Application.routes.draw do
     collection do
       get :compare
       post :merge
+      get :fetch
     end
     resources :bookmarks
     resources :related_works
@@ -285,9 +305,7 @@ Otwarchive::Application.routes.draw do
   #### COLLECTIONS ####
 
   resources :gifts
-  resources :prompt_restrictions
   resources :prompts
-  resources :tag_sets, :only => [:show]
   resources :collections do
     collection do
       get :list_challenges
@@ -300,6 +318,7 @@ Otwarchive::Application.routes.draw do
     resources :media
     resources :fandoms
     resources :people
+    resources :prompts
     resources :tags do
       resources :works
     end
@@ -309,19 +328,23 @@ Otwarchive::Application.routes.draw do
         get :join
       end
     end
-    resources :items, :controller => "collection_items"
+    resources :items, :controller => "collection_items" do
+      collection do
+        put :update_multiple
+      end
+    end
     resources :signups, :controller => "challenge_signups" do
       collection do
         get :summary
       end
     end
-    resources :assignments, :controller => "challenge_assignments" do
+    resources :assignments, :controller => "challenge_assignments", :except => [:new, :edit, :update] do
       collection do
         get :generate
         put :set
         get :purge
         get :send_out
-        put :default_multiple
+        put :update_multiple
         get :default_all
       end
       member do
@@ -330,14 +353,22 @@ Otwarchive::Application.routes.draw do
         get :uncover_default
       end
     end
+    resources :claims, :controller => "challenge_claims" do
+      collection do
+        put :set
+        get :purge
+      end
+    end
     resources :potential_matches do
       collection do
         get :generate
         get :cancel_generate
       end
     end
+    resources :requests, :controller => "challenge_requests"
     # challenge types
     resource :gift_exchange, :controller => 'challenge/gift_exchange'
+    resource :prompt_meme, :controller => 'challenge/prompt_meme'
   end
 
   #### I18N ####
@@ -374,7 +405,14 @@ Otwarchive::Application.routes.draw do
 
   #### SESSIONS ####
 
-  resources :user_sessions
+  resources :user_sessions, :only => [:new, :create, :destroy] do
+    collection do
+      get :openid_small
+      get :passwd_small
+      get :openid
+      get :passwd
+    end
+  end
   match 'login' => 'user_sessions#new'
   match 'logout' => 'user_sessions#destroy'
 
@@ -402,11 +440,20 @@ Otwarchive::Application.routes.draw do
     collection do
       get :search
     end
+    resources :collection_items
   end
 
   resources :kudos, :only => [:create, :show]
 
-  resources :skins
+  resources :skins do
+    member do
+      get :preview
+      get :set
+    end
+    collection do
+      get :unset
+    end
+  end
   resources :known_issues
   resources :archive_faqs do
     collection do
@@ -415,12 +462,17 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :redirects
+  resources :redirects, :only => [:index] do
+    collection do
+      get :do_redirect
+    end
+  end
+
   resources :abuse_reports
   resources :external_authors do
     resources :external_author_names
   end
-  resources :orphans do
+  resources :orphans, :only => [:index, :new, :create] do
     collection do
       get :about
     end
@@ -433,10 +485,12 @@ Otwarchive::Application.routes.draw do
   match 'tos' => 'home#tos'
   match 'tos_faq' => 'home#tos_faq'
   match 'site_map' => 'home#site_map'
+  match 'site_pages' => 'home#site_pages'
   match 'first_login_help' => 'home#first_login_help'
   match 'delete_confirmation' => 'users#delete_confirmation'
   match 'activate/:id' => 'users#activate', :as => 'activate'
   match 'devmode' => 'devmode#index'
+  match 'donate' => 'home#donate'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

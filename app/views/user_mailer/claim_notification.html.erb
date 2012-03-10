@@ -1,32 +1,32 @@
-<p>
+<h2 class="heading">
   Hello from the Archive of Our Own!
-</p>
+</h2>
 <p>
   We believe the following stories, which have been uploaded to the Archive by one or more archivists,
   are by you (either because the email matches the one you are using, or because you used an
   invitation sent to the email address of these stories). We've assigned you as the author
-  of these stories. 
+  of these stories.
 </p>
 
 <p>
   <strong>If this is a mistake and these are not your stories, please don't delete them!</strong>
-  Please just let us know and we will whisk them away to wait until someone else comes along to claim 
-  them. :) 
+  Please just let us know and we will whisk them away to wait until someone else comes along to claim
+  them. :)
 </p>
 
 <p>
-  Note: by default, when an archivist backs up an archive to the AO3, all of the stories 
-  are locked to registered users only (to keep them out of Google searches), so your works 
-  will only be readable by logged-in users unless you choose to make them fully visible. 
+  Note: by default, when an archivist backs up an archive to the AO3, all of the stories
+  are locked to registered users only (to keep them out of Google searches), so your works
+  will only be readable by logged-in users unless you choose to make them fully visible.
 </p>
 
 <p>
-  These works were written under the email: <%= @external_author.email %>
+  These works were written under the email: <%= @external_email %>
 </p>
 
 <ul>
   <% @claimed_works.each do |work| %>
-    <li><%= work.title %><br />
+    <li><%= work.title.html_safe %><br />
     <%= link_to work_url(work), work_url(work) %></li>
   <% end %>
 </ul>

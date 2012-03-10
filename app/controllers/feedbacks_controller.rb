@@ -5,7 +5,9 @@ class FeedbacksController < ApplicationController
   # GET /feedbacks/new.xml
   def new
     @feedback = Feedback.new
-    if is_registered_user?
+    if logged_in_as_admin?
+      @feedback.email = current_admin.email
+    elsif is_registered_user?
       @feedback.email = current_user.email
     end
   end
@@ -22,10 +24,10 @@ class FeedbacksController < ApplicationController
           site['/projects/4911/bugs'].post build_post_info(@feedback), :content_type => 'application/xml', :accept => 'application/xml'
         end
         # Email bug to feedback email address
-        AdminMailer.feedback(@feedback).deliver
+        AdminMailer.feedback(@feedback.id).deliver
         # If user supplies email address, email them an auto-response
         if !@feedback.email.blank?
-          UserMailer.feedback(@feedback).deliver
+          UserMailer.feedback(@feedback.id).deliver
         end
         flash[:notice] = t('successfully_sent', :default => 'Your message was sent to the archive team - thank you!')
         format.html { redirect_back_or_default(root_path) }
@@ -50,7 +52,6 @@ class FeedbacksController < ApplicationController
    post_info << "<custom-1407><![CDATA[" + feedback.user_agent + "]]></custom-1407>" unless feedback.user_agent.blank?
    post_info << "<custom-1573><![CDATA[" + ArchiveConfig.REVISION.to_s + "]]></custom-1573>" unless ArchiveConfig.REVISION.blank?
    post_info << "</bug>"
-   Rails.logger.info "**** post_info: #{post_info}"
    return post_info
  end
 

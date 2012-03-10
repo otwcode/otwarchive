@@ -1,62 +1,36 @@
 <!--Descriptive page name, messages and instructions-->
 <% if @user %>
-
-  <h2><%=h t('.items.by_user', :default => "Items by %{login} in Collections", :login => @user.login) %></h2>
+  <h2 class="heading"><%= ts("Items by %{login} in Collections", :login => @user.login) %></h2>
+  <% else %>
+  <h2 class="heading"><%= h(ts("Items in ")) + link_to(@collection.title, @collection) %></h2>
 <!--/descriptions-->
 <!--subnav-->
 <!--/subnav-->
+<% end %>
 
-<!--main content-->
-  <table id="collection_items_table" summary="This table shows the items you have submitted to collections; you can approve or reject or remove them.">
-  <caption><%=h t('.ci_index.list', :default => "List of items in collections by %{user}", :user => @user.login) %></caption>  
+<% base_path = @user ? user_collection_items_path(@user) : collection_items_path(@collection) %>
 
+<ul class="navigation actions" role="navigation">
+  <li><%= span_if_current ts("Awaiting Approval"), base_path, !(params[:rejected] || params[:approved]) %></li>
+  <li><%= span_if_current ts("Rejected"), base_path + "?rejected=true" %></li>
+  <li><%= span_if_current ts("Approved"), base_path + "?approved=true" %></li>
+</ul>
+
+<% if @collection_items.count < 1 %>
+  <p class="note">Nothing to review here!</p>
 <% else %>
 
-  <h2><%= h(ts("Items in ")) + link_to(@collection.title, @collection) %></h2>
-<!--/descriptions-->
-<!--subnav-->
-<!--/subnav-->
-
-<!--main content-->
-  <table id="collection_items_table" summary="This table shows the items in your collection; you can approve or reject or remove them.">
-  <caption><%=h t('.ci_index.list', :default => "List of items in %{collection}", :collection => @collection.title) %></caption>
-
-<% end %>
-
-<thead>
-	<tr>
-  <th scope="col"><%= link_to(t('.ci_index.item', :default => "Item"), controller.request.request_uri.split('?').first + "?sort=item") %></th>
-<% if @user %>  
-  <th scope="col"><%= link_to(t('.ci_index.collection', :default => "Collection"), controller.request.request_uri.split('?').first + "?sort=collection") %></th>
-<% else %>
-  <th scope="col"><%= link_to(t('.ci_index.creator', :default => "Creator"), controller.request.request_uri.split('?').first + "?sort=creator") %></th>
-<% end %>
-  <th scope="col"><%= link_to(t('.ci_index.member', :default => "Member?"), controller.request.request_uri.split('?').first + "?sort=member") %></th>  
-  <th scope="col"><%= link_to(t('.ci_index.approved_by_user', :default => "Creator-Approved"), controller.request.request_uri.split('?').first + "?sort=user_approval") %></th>
-  <th scope="col"><%= link_to(t('.ci_index.approved_by_collection', :default => "Collection-Approved"), 
-                                                                      controller.request.request_uri.split('?').first + "?sort=collection_approval") %></th>
-  <% if !@user && @collection.gift_exchange? %>
-    <th scope="col"><%= link_to(t('.ci_index.recipient', :default => "Recipient"), controller.request.request_uri.split('?').first + "?sort=recipient") %></th>
+  <%= form_tag (@user ? update_multiple_user_collection_items_path(@user) : update_multiple_collection_items_path(@collection)), :method => :put do %>
+    <ul class="index group">
+      <% @collection_items.each do |collection_item| %>
+        <%= render 'item_fields', :collection_item => collection_item %>
+      <% end %>
+    </ul>
+    <%= submit_fieldset %>
   <% end %>
 
-  <% if !@user && @collection.unrevealed? %>
-    <th scope="col"><%= link_to(t('.ci_index.unrevealed', :default => "Unrevealed"), controller.request.request_uri.split('?').first + "?sort=unrevealed") %></th>
+  <% unless @user %>
+    <%= will_paginate @collection_items %>
   <% end %>
-    
-  <% if !@user && @collection.anonymous? %>
-    <th scope="col"><%= link_to(t('.ci_index.anonymous', :default => "Anonymous"), controller.request.request_uri.split('?').first + "?sort=anonymous") %></th>
-  <% end %>
-
-  <th scope="col"><%= link_to(t('.ci_index.word_count', :default => "Word Count"), controller.request.request_uri.split('?').first + "?sort=word_count") %></th>  
-  <th scope="col"><%= link_to(t('.ci_index.date', :default => "Date Last Updated"), controller.request.request_uri.split('?').first + "?sort=date") %></th>  
-  
-  <th scope="col" class="twobutton"><%=h t('.ci_index.manage', :default => "Manage") %></th>
-</tr>
-</thead>
-<tbody>
-<% @collection_items.each do |collection_item| %>
-  <%= render :partial => 'item_form', :locals => {:collection_item => collection_item} %>
 <% end %>
-</tbody>
-</table>
 <!--/content-->

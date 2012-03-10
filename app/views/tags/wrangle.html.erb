@@ -1,10 +1,10 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= ts('Wrangle Tags for') %> <%= link_to_tag(@tag) %></h2>
+<h2 class="heading"><%= ts('Wrangle Tags for') %> <%= link_to_tag(@tag) %></h2>
 <!--/descriptions-->
 <!--subnav-->
-<ul class="navigation">
-<li><%= link_to 'edit tag and parent associations', {:controller => :tags, :action => :edit, :id => @tag} %></li>
-<li><%= tag_comment_link(@tag) %></li>
+<ul class="navigation actions" role="navigation">
+  <li><%= link_to 'edit tag and parent associations', {:controller => :tags, :action => :edit, :id => @tag} %></li>
+  <li><%= tag_comment_link(@tag) %></li>
 </ul>
 <!--/subnav-->
 
@@ -18,7 +18,7 @@
   end
 %>
 <% unless showing_header.blank? %>
-<h3><%= showing_header %></h3>
+<h3 class="heading"><%= showing_header %></h3>
 <% end %>
 
 <% if @tag.is_a?(Fandom) && params[:show] == "relationships" %>
@@ -26,22 +26,25 @@
 <% end %>
 
 <% if params[:show] && params[:show] !~ /suggested/ %>
-  <h3>Add new <%= params[:show] %></h3>
-  <%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
-    <%= f.text_area "#{params[:show].singularize}_string", :size => "100x5" %>
-    <%= autocomplete_text_field_with_type @tag, "tag_#{params[:show].singularize}_string" %>
-    <%= hidden_field_tag :show, params[:show] %>
-    <%= hidden_field_tag :sort_column, params[:sort_column] %>
-    <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
-    <%= hidden_field_tag :page, params[:page] %>
-    <%= hidden_field_tag :status, params[:status] %>
-    <%= f.submit 'Wrangle' %>
-  <% end %>
+  <fieldset>
+    <h3 class="heading">Add new <%= params[:show] %></h3>
+    <%= form_for :tag, @tag, :url => { :action => "update", :id => @tag}, :html => { :method => :put } do |f| %>
+      <div title="add new">
+        <%= f.text_field "#{params[:show].singularize}_string", autocomplete_options("tag?type=#{params[:show].singularize}") %>
+        <%= hidden_field_tag :show, params[:show] %>
+        <%= hidden_field_tag :sort_column, params[:sort_column] %>
+        <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
+        <%= hidden_field_tag :page, params[:page] %>
+        <%= hidden_field_tag :status, params[:status] %>
+        <span class="submit actions"><%= f.submit 'Wrangle' %></span>
+      </div>
+    <% end %>
+  </fieldset>
 <% end %>
 
 <% if params[:show] %>
-  <ul class="navigation">
-    <li>Show: </li>
+  <ul class="navigation actions" role="navigation">
+    <li><h4 class="heading">Show:</h4></li>
     <li><%= link_to 'all', url_for(:show => params[:show], :status => 'all') %></li>
     <li><%= link_to 'canonical', url_for(:show => params[:show], :status => 'canonical') %></li>
     <li><%= link_to 'non-canonical', url_for(:show => params[:show], :status => 'noncanonical') %></li>
@@ -56,80 +59,92 @@
   <%= will_paginate @tags %>
 
   <%= form_tag url_for(:controller => 'tags', :action => 'mass_update'), :method => :post, :id => 'wrangulator' do %>
-    <p class="submit"><%= submit_tag "Wrangle" %></p>
+    <p class="submit actions"><%= submit_tag "Wrangle" %></p>
     <% sort_url_options = {:show => params[:show], :status => params[:status], :sort_column => params[:sort_column]} %>
-    <table>
-      <tr>
-        <th>
-          <%= sort_link t('.sort.tag_name', :default => 'Tag Name'), :name, {:sort_default => true} %>
+    <!--TEST NOTE: titled these cells as on other wrangle tables, to expose to screenreaders that don't support scope
+    need feedback from realuser on whether this is useful or annoying-->
+    <table summary="">
+      <caption></caption>
+      <thead>
+        <tr>
+        <th scope="col">
+          <%= sort_link ts('Tag Name'), :name, {:sort_default => true} %>
         </th>
         <% if params[:show] == "relationships" %>
-        <th>Characters</th>
+        <th scope="col">Characters</th>
         <% end %>
-        <th>Canonical</th>
+        <th scope="col">Canonical</th>
         <% if params[:status] == "canonical" %>
-        <th>Metatag</th>
+        <th scope="col">Metatag</th>
         <% else %>
-        <th>Synonym</th>
+        <th scope="col">Synonym</th>
         <% end %>
-        <th>
-          <%= sort_link t('.sort.created_at', :default => 'Created'), :created_at, {:desc_default => true} %>
+        <th scope="col">
+          <%= sort_link ts('Created'), :created_at, {:desc_default => true} %>
         </th>
-        <th>
-          <%= sort_link t('.sort.taggings_count', :default => 'Taggings Count'), :taggings_count, {:desc_default => true} %>
+        <th scope="col">
+          <%= sort_link ts('Taggings'), :taggings_count, {:desc_default => true} %>
         </th>
         <th scope="col">Manage</th>
       </tr>
+    </thead>
+    <tbody>
       <% for tag in @tags %>
       <tr>
-        <td>
+        <th scope="row" title="tag">
           <%= label_tag "canonicals_#{tag.id}", tag.name %>
-        </td>
+        </th>
 
         <% if params[:show] == "relationships" %>
-        <td>
+        <td title="characters">
           <% unless !tag.canonical? || tag.characters.empty? %>
           <ul><%= tag_link_list(tag.characters) %></ul>
           <% end %>
         </td>
         <% end %>
-        <td>
+        <td title="canonical?">
           <% if tag.canonical? %>
           Yes
           <% else %>
           <%= check_box_tag "canonicals[]", tag.id, tag.canonical?, :id => "canonicals_#{tag.id}" %>
           <% end %>
         </td>
-        <td>
+        <td title="metatag or synonym">
         <% if params[:status] == "canonical" %>
           <% unless tag.direct_meta_tags.blank? %><%= tag_link_list(tag.direct_meta_tags) %><% end %>
         <% else %>
           <% if tag.merger %><%= link_to_tag(tag.merger) %><% end %>
         <% end %>
         </td>
-        <td><%= tag.created_at.to_date %></td>
-        <td><%= tag.taggings_count %></td>
-        <td class="navigation">
-          <ul class="navigation">
+        <td title="created"><%= tag.created_at.to_date %></td>
+        <td title="taggings"><%= tag.taggings_count %></td>
+        <td>
+          <ul class="actions" role="menu">
             <% unless params[:status] == "unwrangled" %>
-            <li><%= link_to 'remove', {:controller => :tags, :action => :remove_association, :id => @tag, :to_remove => tag.name} %></li>
+              <li>
+                <label for="remove_associated_<%= tag.id %>">
+                  <%= ts("remove") %>
+                  <%= check_box_tag "remove_associated[]", tag.id, false, :id => "remove_associated_#{tag.id}" %>
+                </label>
+              </li>
             <% end %>
-            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li>
-            <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li>
-            <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>
+            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag}, :target => "_blank" %></li>
+            <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag}, :target => "_blank" %></li>
+            <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag}, :target => "_blank" %></li>
           </ul>
         </td>
       </tr>
       <% end %>
+    </tbody>
     </table>
-    <p>
+    <div>
     <%= hidden_field_tag :show, params[:show] %>
     <%= hidden_field_tag :sort_column, params[:sort_column] %>
     <%= hidden_field_tag :sort_direction, params[:sort_direction] %>
     <%= hidden_field_tag :page, params[:page] %>
     <%= hidden_field_tag :status, params[:status] %>
-    </p>
-    <p class="submit"><%= submit_tag "Wrangle" %></p>
+    </div>
+    <p class="submit actions"><%= submit_tag "Wrangle" %></p>
   <% end %>
 <!--/content-->
 <!--subnav-->

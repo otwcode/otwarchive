@@ -1,10 +1,6 @@
-<tr>
-<%= form_tag add_collection_participants_path(@collection), :method => :get do %>
-<td><%= label_tag(:participants_to_invite, t('.add_participants', :default => "Add new members: ")) %>
-<%= text_field_tag :participants_to_invite, nil, :size => 60 %>
-<%= autocomplete_text_field("participants_to_invite") %>
-</td>
-<td><!--missing select role dropdown?-->&nbsp;</td>
-	<td><%= submit_tag t('.add_participants_submit', :default => "Submit") %></td>
+<%= form_tag add_collection_participants_path(@collection), :class => "simple", :method => :get do %>
+  <div title="add new members" class="actions">
+  <%= text_field_tag :participants_to_invite, nil, autocomplete_options("pseud", :size => 60) %>
+    <span class="submit"><%= submit_tag ts("Submit") %></span>
+  </div>
 <% end %>
-</tr>

@@ -1,4 +1,5 @@
 first:
+  id: 1
   posted: true
   title: First work
   word_count: 100
@@ -6,7 +7,9 @@ first:
   language: english
   authors_to_sort_on: testuser
   revised_at: 2010-04-30
+  complete: true
 second:
+  id: 2
   posted: true
   title: second work
   word_count: 1000
@@ -14,7 +17,9 @@ second:
   language: english
   authors_to_sort_on: testuser
   revised_at: 2004-04-30
+  complete: true
 third:
+  id: 3
   posted: true
   title: third work
   word_count: 10000
@@ -23,7 +28,9 @@ third:
   authors_to_sort_on: testuser
   revised_at: 2007-07-10
   summary: for the second time
+  complete: true
 fourth:
+  id: 4
   posted: true
   title: fourth
   word_count: 10000
@@ -31,7 +38,9 @@ fourth:
   language: french
   authors_to_sort_on: testuser2
   revised_at: 2010-04-30
+  complete: true
 fifth:
+  id: 5
   posted: true
   title: fifth
   word_count: 1000
@@ -39,3 +48,4 @@ fifth:
   language: english
   authors_to_sort_on: testuser2
   revised_at: 2009-04-30
+  expected_number_of_chapters: 5

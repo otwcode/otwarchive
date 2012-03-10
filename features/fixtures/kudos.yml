@@ -1,10 +1,15 @@
 first:
-  commentable: first (Work)
+  commentable_id: 1
+  commentable_type: Work
 second:
-  commentable: first (Work)
+  commentable_id: 1
+  commentable_type: Work
 third:
-  commentable: first (Work)
+  commentable_id: 1
+  commentable_type: Work
 fourth:
-  commentable: first (Work)
+  commentable_id: 1
+  commentable_type: Work
 fifth:
-  commentable: second (Work)
+  commentable_id: 2
+  commentable_type: Work

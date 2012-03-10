@@ -8,7 +8,7 @@ class ChallengeAssignmentsController < ApplicationController
   before_filter :load_challenge, :except => [:index]
   before_filter :check_signup_closed, :except => [:index]
   before_filter :check_assignments_not_sent, :only => [:generate, :set, :send_out]
-  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :default_multiple, :cover_default, :uncover_default, :purge]
+  before_filter :check_assignments_sent, :only => [:create, :default, :undefault, :cover_default, :uncover_default, :purge]
 
   before_filter :load_user, :only => [:default]
   before_filter :owner_only, :only => [:default]
@@ -50,22 +50,22 @@ class ChallengeAssignmentsController < ApplicationController
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
     no_user and return unless @user
   end
-  
+
   def no_user
     flash[:error] = t("challenge_assignments.no_user", :default => "What user were you trying to work with?")
     redirect_to "/" and return
     false
   end
-  
+
   def owner_only
     unless @user == @challenge_assignment.offering_pseud.user
       flash[:error] = t("challenge_assignments.not_owner", :default => "You aren't the owner of that assignment.")
       redirect_to "/" and return false
     end
-  end      
-  
+  end
+
   def check_signup_closed
-    signup_open and return unless !@challenge.signup_open 
+    signup_open and return unless !@challenge.signup_open
   end
 
   def signup_open
@@ -75,7 +75,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def check_assignments_not_sent
-    assignments_sent and return unless @challenge.assignments_sent_at.nil? 
+    assignments_sent and return unless @challenge.assignments_sent_at.nil?
   end
 
   def assignments_sent
@@ -85,7 +85,7 @@ class ChallengeAssignmentsController < ApplicationController
   end
 
   def check_assignments_sent
-    assignments_not_sent and return unless @challenge.assignments_sent_at 
+    assignments_not_sent and return unless @challenge.assignments_sent_at
   end
 
   def assignments_not_sent
@@ -97,81 +97,66 @@ class ChallengeAssignmentsController < ApplicationController
   def allowed_to_destroy
     @challenge_assignment.user_allowed_to_destroy?(current_user) || not_allowed
   end
-  
-  def not_allowed
-    flash[:error] = t('challenge_signups.not_allowed', :default => "Sorry, you're not allowed to do that.")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
-  end
-  
-  
+
+
+
   # ACTIONS
 
   def index
     if params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
         if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
-          @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted          
+          @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted
         else
           @challenge_assignments = @user.offer_assignments.undefaulted + @user.pinch_hit_assignments.undefaulted
         end
       else
-        flash[:error] = t('challenge_assignments.not_allowed_to_see_other', :default => "You aren't allowed to see that user's assignments.")
+        flash[:error] = ts("You aren't allowed to see that user's assignments.")
         redirect_to '/' and return
       end
     else
       # do error-checking for the collection case
-      return unless load_collection 
+      return unless load_collection
       @challenge = @collection.challenge if @collection
       signup_open and return unless !@challenge.signup_open
-      assignments_not_sent and return unless @challenge.assignments_sent_at
+      access_denied and return unless @challenge.user_allowed_to_see_assignments?(current_user)
       
-      if params[:show_covered]
-        @defaulted_assignments = @collection.assignments.defaulted.order_by_requesting_pseud
+      # we temporarily are ordering by requesting pseud to avoid left join
+      @assignments = case
+      when params[:pinch_hit]
+        # order by pinch hitter name
+        ChallengeAssignment.unfulfilled_in_collection(@collection).undefaulted.with_pinch_hitter.joins("INNER JOIN pseuds ON (challenge_assignments.pinch_hitter_id = pseuds.id)").order("pseuds.name")
+      when params[:fulfilled]
+        @collection.assignments.fulfilled.order_by_requesting_pseud
+      when params[:unfulfilled]
+        ChallengeAssignment.unfulfilled_in_collection(@collection).undefaulted.order_by_requesting_pseud
       else
-        @defaulted_assignments = @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
+        @collection.assignments.defaulted.uncovered.order_by_requesting_pseud
       end
-      
-      @open_assignments = @collection.assignments.undefaulted.order_by_offering_pseud.paginate :page => params[:page], :per_page => 20
-      
-      if !@challenge.user_allowed_to_see_assignments?(current_user)
-        @user = current_user
-        @challenge_assignments = @user.offer_assignments.in_collection(@collection).undefaulted + @user.pinch_hit_assignments.in_collection(@collection).undefaulted
-      end
-
+      @assignments = @assignments.page(params[:page])
     end
   end
-  
+
   def show
     unless @challenge.user_allowed_to_see_assignments?(current_user) || @challenge_assignment.offering_pseud.user == current_user
       flash[:error] = "You aren't allowed to see that assignment!"
       redirect_to "/" and return
     end
   end
-  
+
   def generate
     # regenerate assignments using the current potential matches
-    ChallengeAssignment.generate!(@collection)
+    ChallengeAssignment.generate(@collection)
+    flash[:notice] = ts("Beginning regeneration of assignments. This may take some time, especially if your challenge is large.")
     redirect_to collection_potential_matches_path(@collection)
   end
-  
+
   def send_out
-    # sending the current assignments out
-    @challenge.assignments_sent_at = Time.now
-    @challenge.save
-    
-    # purge the potential matches! we don't want bazillions of them in our db
-    PotentialMatch.clear!(@collection)
-    
-    if ArchiveConfig.NO_DELAYS
-      ChallengeAssignment.send_out!(@collection)
-    else
-      ChallengeAssignment.delay.send_out!(@collection)
-    end
+    ChallengeAssignment.send_out(@collection)
     flash[:notice] = "Assignments are now being sent out."
     redirect_to collection_assignments_path(@collection)
   end
-  
+
   def set
     # update all the assignments
     # see http://asciicasts.com/episodes/198-edit-multiple-individually
@@ -180,23 +165,7 @@ class ChallengeAssignmentsController < ApplicationController
     flash[:notice] = "Assignments updated"
     redirect_to collection_potential_matches_path(@collection)
   end
-  
-  def create
-    # create a new (presumably pinch hit) assignment
-    assignment = ChallengeAssignment.new(params[:challenge_assignment])
-    if assignment.save
-      assignment.send_out!
-      flash[:notice] = "New assignment created and sent."
-    else
-      flash[:error] = "We couldn't save the new assignment."
-    end
-    if params[:assignment_to_cover] && (@old_assignment = ChallengeAssignment.find(params[:assignment_to_cover]))
-      @old_assignment.covered_at = Time.now
-      @old_assignment.save
-    end
-    redirect_to collection_assignments_path(@collection)
-  end
-  
+
   def purge
     ChallengeAssignment.clear!(@collection)
     @challenge.assignments_sent_at = nil
@@ -204,51 +173,84 @@ class ChallengeAssignmentsController < ApplicationController
     flash[:notice] = "Assignments purged!"
     redirect_to collection_path(@collection)
   end
-  
-  def default_multiple
-    # update all the assignments
-    ChallengeAssignment.update(params[:challenge_assignments].keys, params[:challenge_assignments].values)
-    flash[:notice] = "Defaulters updated."
-    redirect_to collection_assignments_path(@collection)
+
+  def update_multiple
+    @errors = []
+    params.each_pair do |key, val|
+      action, id = key.split(/_/)
+      next unless %w(approve default undefault cover).include?(action)
+      assignment = ChallengeAssignment.where(:id => id).first
+      unless assignment
+        @errors << ts("Couldn't find assignment with id #{id}!")
+        next
+      end
+      case action
+      when "default"
+        # default_assignment_id = y/n
+        assignment.default || @errors << ts("We couldn't default the assignment for #{assignment.offer_byline}")
+      when "undefault"
+        # undefault_[assignment_id] = y/n - if set, undefault
+        assignment.defaulted_at = nil
+        assignment.save || @errors << ts("We couldn't undefault the assignment covering #{assignment.request_byline}.")
+      when "approve"
+        assignment.get_collection_item.approve_by_collection if assignment.get_collection_item
+      when "cover"
+        # cover_[assignment_id] = pinch hitter pseud
+        next if val.blank? || assignment.pinch_hitter.try(:byline) == val
+        pseud = Pseud.parse_byline(val).first
+        if pseud.nil?
+          @errors << ts("We couldn't find the user #{val} to assign that to.")
+        else
+          assignment.cover(pseud) || @errors << ts("We couldn't assign #{val} to cover #{assignment.request_byline}.")
+        end
+      end
+    end
+    if @errors.empty?
+      flash[:notice] = "Assignment updates complete!"
+      redirect_to collection_assignments_path(@collection)
+    else
+      flash[:error] = @errors
+      redirect_to collection_assignments_path(@collection)
+    end 
   end
-  
+
   def default_all
     # mark all unfulfilled assignments as defaulted
-    unfulfilled_assignments = ChallengeAssignment.in_collection(@collection).unfulfilled.readonly(false)
+    unfulfilled_assignments = ChallengeAssignment.unfulfilled_in_collection(@collection).readonly(false)
     unfulfilled_assignments.update_all :defaulted_at => Time.now
     flash[:notice] = "All unfulfilled assignments marked as defaulting."
     redirect_to collection_assignments_path(@collection)
   end
-  
+
   def default
     @challenge_assignment.defaulted_at = Time.now
     @challenge_assignment.save
-    @challenge_assignment.collection.notify_maintainers("Challenge default by #{@challenge_assignment.offer_byline}", 
-        "Signed-up participant #{@challenge_assignment.offer_byline} has defaulted on their assignment for #{@challenge_assignment.request_byline}. " + 
+    @challenge_assignment.collection.notify_maintainers("Challenge default by #{@challenge_assignment.offer_byline}",
+        "Signed-up participant #{@challenge_assignment.offer_byline} has defaulted on their assignment for #{@challenge_assignment.request_byline}. " +
         "You may want to assign a pinch hitter on the collection assignments page: #{collection_assignments_url(@challenge_assignment.collection)}")
     flash[:notice] = "We have notified the collection maintainers that you had to default on your assignment."
     redirect_to user_assignments_path(@user)
   end
-  
+
   def undefault
     @challenge_assignment.defaulted_at = nil
     @challenge_assignment.save
     flash[:notice] = "Assignment marked as not-defaulted."
     redirect_to collection_assignments_path(@collection)
   end
-  
+
   def cover_default
     @challenge_assignment.covered_at = Time.now
     @challenge_assignment.save
     flash[:notice] = "Assignment marked as covered. It will not appear in the defaulted list anymore."
     redirect_to collection_assignments_path(@collection)
   end
-  
+
   def uncover_default
     @challenge_assignment.covered_at = nil
     @challenge_assignment.save
     flash[:notice] = "Assignment marked as uncovered. It will appear in the defaulted list until it is covered."
     redirect_to collection_assignments_path(@collection)
   end
-  
+
 end

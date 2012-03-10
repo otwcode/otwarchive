@@ -41,12 +41,6 @@ class PotentialMatchesController < ApplicationController
     false
   end
   
-  def not_allowed
-    flash[:error] = t('potential_match.not_allowed', :default => "Sorry, you're not allowed to do that.")
-    redirect_to collection_path(@collection) rescue redirect_to '/'
-    false
-  end
-
   def check_assignments_not_sent
     assignments_sent and return unless @challenge.assignments_sent_at.nil? 
   end
@@ -74,7 +68,7 @@ class PotentialMatchesController < ApplicationController
       @assignments_with_no_potential_requests = @assignments_with_no_request.select {|assignment| assignment.offer_signup.offer_potential_matches.empty?}
       
       unless (@assignments_with_no_potential_requests.size > 0)
-        @assignments_with_request_and_offer = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => 20
+        @assignments_with_request_and_offer = @collection.assignments.with_request.with_offer.order_by_requesting_pseud.paginate :page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE
 
         @assignments_with_no_assigned_requests = @collection.assignments.with_no_request.select {|assignment| assignment.pinch_request_signup.blank?}
       end
@@ -92,11 +86,7 @@ class PotentialMatchesController < ApplicationController
       
       flash[:notice] = ts("Beginning generation of potential matches. This may take some time, especially if your challenge is large.")
       PotentialMatch.set_up_generating(@collection)
-      if ArchiveConfig.NO_DELAYS
-        PotentialMatch.generate!(@collection)
-      else
-        PotentialMatch.delay.generate!(@collection)
-      end
+      PotentialMatch.generate(@collection)
     end
 
     # redirect to index

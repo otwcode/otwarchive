@@ -8,11 +8,11 @@ class Invitation < ActiveRecord::Base
   validate :recipient_is_not_registered, :on => :create
   def recipient_is_not_registered
     if self.invitee_email && User.find_by_email(self.invitee_email)
-      errors.add :invitee_email, t('already_registered', :default => 'is already being used by an account holder.') 
+      errors.add :invitee_email, t('already_registered', :default => 'is already being used by an account holder.')
       return false
     end
   end
-  
+
   scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
   scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
   scope :redeemed, :conditions => 'redeemed_at IS NOT NULL'
@@ -25,38 +25,38 @@ class Invitation < ActiveRecord::Base
   def self.grant_all(total)
     raise unless total > 0 && total < 20
     User.valid.each do |user|
-      total.times do 
+      total.times do
         user.invitations.create
       end
-      UserMailer.invite_increase_notification(user, total).deliver
+      UserMailer.invite_increase_notification(user.id, total).deliver
     end
     User.out_of_invites.update_all('out_of_invites = 0')
   end
-  
+
   #Create a certain number of invitations for all users who are out of them
   def self.grant_empty(total)
     raise unless total > 0 && total < 20
     User.valid.out_of_invites.each do |user|
-      total.times do 
+      total.times do
         user.invitations.create
       end
-      UserMailer.invite_increase_notification(user, total).deliver
+      UserMailer.invite_increase_notification(user.id, total).deliver
     end
     User.out_of_invites.update_all('out_of_invites = 0')
   end
-  
+
   def mark_as_redeemed(user=nil)
     self.invitee = user
     self.redeemed_at = Time.now
     save
   end
-  
+
   private
-  
+
   def generate_token
     self.token = Digest::SHA1.hexdigest([Time.now, rand].join)
   end
-  
+
   def send_and_set_date
     if self.invitee_email_changed? && !self.invitee_email.blank?
       begin
@@ -64,7 +64,8 @@ class Invitation < ActiveRecord::Base
           archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
           UserMailer.invitation_to_claim(self, archivist).deliver
         else
-          UserMailer.invitation(self).deliver
+          # send invitations actively sent by a user synchronously to avoid delays
+          UserMailer.invitation(self).deliver! 
         end
         self.sent_at = Time.now
       rescue Exception => exception
@@ -72,13 +73,13 @@ class Invitation < ActiveRecord::Base
       end
     end
   end
-  
+
   #Update the user's out_of_invites status
   def adjust_user_invite_status
     if self.creator.respond_to?(:out_of_invites)
       self.creator.out_of_invites = (self.creator.invitations.unredeemed.count < 1)
       self.creator.save(:validate => false)
-    end  
+    end
   end
-  
+
 end

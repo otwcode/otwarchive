@@ -4,41 +4,45 @@
 
 <%= challenge_form.fields_for(:potential_match_settings) do |match_settings_form| %>
 
-  <fieldset class="preface profile">
+  <fieldset id="match_settings">
     <legend>Minimum Number To Match</legend>
-    <h3>Minimum Number To Match</h3>
+    <h3 class="heading">Minimum Number To Match</h3>
     <p class="note">
-      These settings will be used to determine the <em>minimum</em> level of matching required for an offer to
-      be considered a potential match for a request.
+      This means the <em>minimum</em> level of matching needed for an offer to match a request.
       Any matches above the minimum required number will be used to rank the quality of potential matches.
     </p>
 
     <p class="note">
-      <strong>Note</strong>: if you alter these
-      settings after you have already generated the potential matches for your challenge,
-      you will need to regenerate potential matches before your changes are reflected.
+     If you change these
+      settings <em>after</em> you generate potential matches,
+      you will need to <em>regenerate potential matches</em> before your changes show.
     </p>
 
     <dl>
       <dt>
-        <%= match_settings_form.label(:num_required_prompts, t('.num_required_prompts', :default => "Requests: ")) %>
+        <%= match_settings_form.label(:num_required_prompts, ts("Requests: ")) %>
       </dt>
       <dd><%= match_settings_form.select(:num_required_prompts, PotentialMatchSettings::REQUIRED_MATCH_OPTIONS.select {|k,v| k != "0"}, :selected => potential_match_settings.num_required_prompts) %></dd>
 
-      <% %w(fandoms characters relationships freeforms categories ratings warnings).each do |type| %>
-        <dt><%= match_settings_form.label("num_required_#{type}", "#{type.capitalize}:") %></dt>
+      <% TagSet::TAG_TYPES.map {|t| t.pluralize }.each do |type| %>
+        <dt class="<%= type.downcase %>"><%= match_settings_form.label("num_required_#{type}", "#{type.capitalize}:") %></dt>
         <dd><%= match_settings_form.select("num_required_#{type}", PotentialMatchSettings::REQUIRED_MATCH_OPTIONS, :selected => potential_match_settings.send("num_required_#{type}")) %></dd>
       <% end %>
 
       <dt>
-        <%= t("potential_match_settings.optional_tags", :default => "Count optional tags for...") %>
+        <%= ts("Count optional tags for...") %>
         <%= link_to_help("challenge-include-optional-tags") %>
       </dt>
-      <% %w(fandoms characters relationships freeforms categories ratings warnings).each do |type| %>
         <dd>
-          <%= match_settings_form.label("include_optional_#{type}", type.capitalize) %><%= match_settings_form.check_box("include_optional_#{type}", :checked => potential_match_settings.send("include_optional_#{type}")) %>
-        </dd>
+          <fieldset>
+            <ul>
+            <% TagSet::TAG_TYPES.map {|t| t.pluralize }.each do |type| %>
+            <li class="<%= type.downcase %>"><%= match_settings_form.check_box("include_optional_#{type}", :checked => potential_match_settings.send("include_optional_#{type}")) %>
+          <%= match_settings_form.label("include_optional_#{type}", type.capitalize) %></li>
       <% end %>
+      </ul>
+    </fieldset>
+    </dd>
     </dl>
 
   </fieldset>

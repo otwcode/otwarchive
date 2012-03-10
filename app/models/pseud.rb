@@ -8,7 +8,7 @@ class Pseud < ActiveRecord::Base
     :storage => Rails.env.production? ? :s3 : :filesystem,
     :s3_credentials => "#{Rails.root}/config/s3.yml",
     :bucket => Rails.env.production? ? YAML.load_file("#{Rails.root}/config/s3.yml")['bucket'] : "",
-    :default_url => "/images/user_icon.png"
+    :default_url => "/images/skins/iconsets/default/icon_transparent.gif"
 
   validates_attachment_content_type :icon, :content_type => /image\/\S+/, :allow_nil => true
   validates_attachment_size :icon, :less_than => 500.kilobytes, :allow_nil => true
@@ -31,6 +31,8 @@ class Pseud < ActiveRecord::Base
   has_many :series, :through => :creatorships, :source => :creation, :source_type => 'Series'
   has_many :collection_participants, :dependent => :destroy
   has_many :collections, :through => :collection_participants
+  has_many :tag_set_ownerships, :dependent => :destroy
+  has_many :tag_sets, :through => :tag_set_ownerships
   has_many :challenge_signups, :dependent => :destroy
   has_many :gifts
   has_many :gift_works, :through => :gifts, :source => :work
@@ -59,6 +61,8 @@ class Pseud < ActiveRecord::Base
     :too_long => ts("must be less than %{max} characters long.", :max => DESCRIPTION_MAX)
   validates_length_of :icon_alt_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_ALT_MAX,
     :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_ALT_MAX)
+  validates_length_of :icon_comment_text, :allow_blank => true, :maximum => ArchiveConfig.ICON_COMMENT_MAX,
+    :too_long => ts("must be less than %{max} characters long.", :max => ArchiveConfig.ICON_COMMENT_MAX)
 
   after_update :check_default_pseud
 
@@ -111,7 +115,9 @@ class Pseud < ActiveRecord::Base
     includes(:user)
   }
 
-  scope :not_orphaned, where("user_id != ?", User.orphan_account)
+  def self.not_orphaned
+    where("user_id != ?", User.orphan_account)
+  end
 
   # Enigel Dec 12 08: added sort method
   # sorting by pseud name or by login name in case of equality
@@ -270,6 +276,19 @@ class Pseud < ActiveRecord::Base
     end
     {:pseuds => valid_pseuds, :ambiguous_pseuds => ambiguous_pseuds, :invalid_pseuds => failures}
   end
+  
+  ## AUTOCOMPLETE
+  # set up autocomplete and override some methods
+  include AutocompleteSource
+  def autocomplete_prefixes
+    [ "autocomplete_pseud" ]
+  end
+
+  def autocomplete_value
+    "#{id}#{AUTOCOMPLETE_DELIMITER}#{byline}"
+  end
+
+  ## END AUTOCOMPLETE
 
   def creations
     self.works + self.chapters + self.series

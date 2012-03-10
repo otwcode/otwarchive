@@ -1,8 +1,43 @@
-<h2>Work Search: Beta</h2>
+<h2 class="heading"><%= ts('Work Search: Beta') %></h2>
 
-<ul class="navigation" role="navigation"><li>
-  <%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %>
-</li></ul>
+<ul class="navigation actions" role="navigation">
+  <li class="search">
+    <%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'simple search', :method => :get do %>
+    <fieldset>
+      <legend>Search works</legend>
+      <% unless @query %>
+      <% @query ||= {} %>
+      <% end %>
+        <!--BACK END, please title this text field-->
+    	<p><%= link_to_help "work-search-text-help" %> 
+    	<%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
+
+      <%= hidden_field_tag "query[tag]", @query[:tag] %>
+      <%= hidden_field_tag "query[title]", @query[:title] %>
+      <%= hidden_field_tag "query[author]", @query[:author] %>
+      <%= hidden_field_tag "query[words]", @query[:words] %>
+      <%= hidden_field_tag "query[hits]", @query[:hits] %>
+      <%= hidden_field_tag "query[kudos]", @query[:kudos] %>
+      <%= hidden_field_tag "query[date]", @query[:date] %>
+      <%= hidden_field_tag "query[language]", @query[:language] %>
+      <%= hidden_field_tag "query[bookmarked]", @query[:bookmarked] %>
+      <%= hidden_field_tag "query[recced]", @query[:recced] %>
+      <%= hidden_field_tag "query[complete]", @query[:complete] %>
+
+    	<span class="tip"><%= random_search_tip %></span>
+      <span class="submit actions">
+    <% if @query.blank? %>
+        <%= submit_tag ts('Search'), :name => nil %>
+    <% else %>
+        <%= submit_tag ts('Refine search'), :name => nil %>
+    <% end %>
+      </span>
+    </p>
+    </fieldset>
+    <% end %>
+    </li>
+    <li><%= link_to(ts("Advanced search"), search_index_path(:query => @query)) %></li>
+    </ul>
 
 <% unless @query.blank? %>
 <p>
@@ -18,53 +53,27 @@
   <% unless @query[:language].blank? %><%= ts('Language') %>: <%= @query[:language] %> <% end %>
   <% unless @query[:bookmarked].blank? %><%= ts('Bookmarked') %><% end %>
   <% unless @query[:recced].blank? %><%= ts('Recced') %><% end %>
+  <% unless @query[:complete].blank? %><%= ts('Complete') %><% end %>
 <% end %>
 </p>
 
-<%= form_tag url_for(:controller => 'works', :action => 'search'), :class => 'search', :method => :get do %>
-<fieldset>
-  <legend>Search works</legend>
-  <% unless @query %>
-  <% @query ||= {} %>
-  <% end %>
-    <%= text_field_tag "query[text]", @query[:text], :id => 'refine_text' %>
-    <%= link_to_help "work-search-text-help" %> (any field)
 
-  <%= hidden_field_tag "query[tag]", @query[:tag] %>
-  <%= hidden_field_tag "query[title]", @query[:title] %>
-  <%= hidden_field_tag "query[author]", @query[:author] %>
-  <%= hidden_field_tag "query[words]", @query[:words] %>
-  <%= hidden_field_tag "query[hits]", @query[:hits] %>
-  <%= hidden_field_tag "query[kudos]", @query[:kudos] %>
-  <%= hidden_field_tag "query[date]", @query[:date] %>
-  <%= hidden_field_tag "query[language]", @query[:language] %>
-  <%= hidden_field_tag "query[bookmarked]", @query[:bookmarked] %>
-  <%= hidden_field_tag "query[recced]", @query[:recced] %>
-
-  <span class="submit">
-<% if @query.blank? %>
-    <%= submit_tag ts('Search'), :class => 'button', :name => nil %>
-<% else %>
-    <%= submit_tag ts('Refine search'), :class => 'button', :name => nil %>
-<% end %>
-  </span>
-</fieldset>
-<% end %>
 
 <% if @works %>
 <% begin %>
-  <p><strong><%= @works.total_entries %> Found</strong><%= link_to_help "work-search-results-help" %></p>
+  <h3 class="heading"><%= @works.total_entries %> Found <%= link_to_help "work-search-results-help" %></h3>
 
-  <h3 class="landmark">Works List</h3>
-  <ol class="work index">
+  <h3 class="landmark heading">Works List</h3>
+<!--BACK END, if work.nil do not show this ol at all-->
+  <ol class="work index group">
     <% @works.each do |work| %>
       <% unless work.nil? %>
         <%= render :partial => 'work_blurb', :locals => {:work => work} %>
       <% end %>
     <% end %>
   </ol>
-  <div class="clear"><!-- presentational--></div>
-  <%= will_paginate @works, {:previous_label => '&laquo; Previous', :next_label => 'Next &raquo;'} %>
+ 
+ <%= will_paginate @works %>
 <% rescue Riddle::ConnectionError %>
    <%= ts("The search engine seems to be down at the moment, try back later!")%>
   <% end %>

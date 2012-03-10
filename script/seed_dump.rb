@@ -2,11 +2,11 @@
 
 # usage:
 =begin
-RAILS_ENV=production rake db:drop
-RAILS_ENV=production rake db:create
-RAILS_ENV=production rails dbconsole -p < /backup/latest.dump
-RAILS_ENV=production rake db:migrate
-RAILS_ENV=production rake After
+#RAILS_ENV=production rake db:drop
+#RAILS_ENV=production rake db:create
+#RAILS_ENV=production rails dbconsole -p < /backup/latest.dump
+#RAILS_ENV=production rake db:migrate
+#RAILS_ENV=production rake After
 rm -f db/seed/*
 RAILS_ENV=production rails runner script/seed_dump.rb
 =end
@@ -15,32 +15,49 @@ BACKUPDIR = Rails.root.to_s + '/db/seed'
 
 # users who have webdavs or asked to be added
 # or who have problematic works which need testing
-SEEDS = [ "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling"
-          "Cesy", "cesytest", "Celandine", "Chandri", "ealusaid", "eel", 
-          "elz", "erda", "Enigel", "hope", "justira", "lim", "melange",
-          "mumble", "Rebecca", "rklyne", "Rustler", "Sidra", "staranise", "Stowaway", "testy",
-          "tomatopudding", "zelempa", "Zooey_Glass", "zlabya",
+SEEDS = [
+          "Anneli", "astolat", "Atalan", "awils1", "aworldinside", "bingeling",
+          "Cesy", "cesytest", "Celandine", "Chandri", "eel",
+          "elz", "erda", "Enigel", "Hope", "Jaetion", "jennyst", "justira", 
+          "jetta_e_rus", "lim", "Lisztful", "melange", "mumble", "Rebecca", 
+          "RKlyne", "Rustler", "Sidra", "staranise", "Stowaway", "testy", 
+          "Tel", "tomatopudding", "velocitygrass", "xparrot", "zelempa", 
+          "zoemathemata", "Zooey_Glass", "zlabya",
 ]
 
-# Note: every NTH user (randomized) will have all their associated records dumped
-# many more than that users will be in the database, however because of associations
-# This number is also used to limit the number of readings, comments, and feedbacks
-# this number should increase as the archive grows to keep the decimated database a reasonable size
-NTH = 75
+# seeds who want their email address preserved for testing
+EMAIL = [ "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
+          "admin-kielix", "admin-shalott", "admin-sidra",
+          "astolat", "aworldinside", "bingeling", "cesy", "cesytest", "elz",
+          "Enigel", "mumble", "Sidra", "testy", "velocitygrass", "xparrot", 
+          "Zooey_Glass" ]
+
+# a bunch of bigger collections (>250 works)
+# probably would be scooped up anyway, but just in case
+
+COLLECTION_SEEDS = [
+          "yuletide2009", "ladieschoice", "yuletidemadness2009", "female_focus",
+          "crossgen_slash", "PornBattleIX", "Remix2010", "yuletide2010", "fic_promptly",
+          "chromatic_yuletide_2010", "Fandom_Stocking", "yuletidemadness2010", "PornBattleXI",
+          "Remix2011", "PornBattleXII",
+]
+
+# N determines how many users, works, bookmarks, etc. are dumped if they aren't all dumped
+N = 15
 
 # private bookmarks and unpublished works are not selected in a multi-user dump
 MULTI = true
 
-
+## WARNING. haven't tested single user dumps lately. probably doesn't work
 ## to dump just one user uncomment the following and replace the user name
 ## (you can either comment out the previous ones, or just ignore the already initialized warning)
 
 #   SEEDS = [ "Sidra" ]
-#   NTH = 1
+#   N = 1
 #   MULTI = false
 
 ## this will select all their own works, comments, readings and bookmarks,
-## but not the associated works
+## even private ones, but not the associated works
 
 ### end of configuration
 
@@ -91,25 +108,18 @@ end
 # take an instance and cleanse it,
 # then write to a file the sql statement which would re-create it
 def write_model(thing)
+  raise "#{thing} is not a model!!!" if thing.is_a?(Array)
+  raise "#{thing} is not a model!!!" unless thing
   file = thing.class.name.underscore + ".sql"
   # print out something (small) so we know things are happening
   initial = file.first
   print initial; STDOUT.flush
 
-  if thing.is_a? User
-    # you can't get at the user_role table directly, so add those separately
-    File.open("roles_users.sql", 'a') do |f|
-      thing.roles.each do |role|
-        f.write("INSERT INTO roles_users (user_id, role_id) VALUES(#{thing.id}, #{role.id});\n")
-      end
-    end
-  end
-
   # redact email addresses
   if thing.respond_to? :email
-    if thing.respond_to? :login
-      thing.email = "#{thing.login}-seed@ao3.org"
-    else
+    if thing.respond_to? :login  # users and admins
+      thing.email = "#{thing.login}-seed@ao3.org" unless EMAIL.include?(thing.login)
+    else # everything else
       thing.email = "#{thing.class.name}-#{thing.id.to_s}-seed@ao3.org"
     end
   end
@@ -125,260 +135,348 @@ def write_model(thing)
   File.open(file, 'a') {|f| f.write(thing.sql_show_insert) }
 end
 
-### start work  ###
+### start work (I know it's linear instead of object oriented. sue me. or fix it yourself) ###
 
 FileUtils.mkdir_p(BACKUPDIR)
 FileUtils.chdir(BACKUPDIR)
 
-USERS = []
-WORKS = []
-PSEUDS = []
-TAGS = []
+USERS = {}
+COLLECTIONS = {}
+WORKS = {}
+PSEUDS = {}
+TAGS = {}
 
-# the user is the starting point.
+# populate the hashes
 SEEDS.each do |seed|
   user = User.find_by_login(seed)
-  USERS << user
+  raise "seed #{seed} is not a user!!!" unless user.is_a?(User)
+  USERS[user.id] = user
 end
-# random Nth user
-User.find_in_batches(:batch_size => NTH ) {|users| USERS << users.sample } if MULTI
+# add all the tag wranglers
+Role.find_by_name("tag_wrangler").users.each { |u| USERS[u.id] = u }
 
-# return an array of records associated with the users
-# but keep the works, pseuds and tags for later
-def user_associations(users)
-  x = []
-  users.each do |u|
-    puts " collecting #{u.login}'s records"
-    ## PSEUDS will dump the actual user record and the user's preferences
-    ## so they don't need to be dumped here.
-    PSEUDS << u.pseuds
-    x << u.profile unless MULTI   # profile's may have sensitive information that isn't visible
+# add N extra random users
+User.find_in_batches(:batch_size => User.count/N ) do |users|
+  user = users.sample
+  USERS[user.id] = user
+end if MULTI
 
-    TAGS << u.fandoms if u.tag_wrangler
-
-    x << u.skins
-
-    u.readings.find_in_batches(:batch_size => NTH) do |readings|
-      x << readings.last
-      WORKS << readings.last.work if MULTI
-    end
-
-    u.inbox_comments.find_in_batches(:batch_size => NTH) do |batch|
-      inbox_comment = batch.last
-      x << inbox_comment
-      x << inbox_comment.feedback_comment
-      commentable = inbox_comment.feedback_comment.ultimate_parent
-      if MULTI
-        if commentable.is_a?(Work)
-          WORKS << commentable
-        elsif commentable.is_a?(Tag)
-          TAGS << commentable
-        else
-          x << commentable
-        end
-      end
-      PSEUDS << inbox_comment.feedback_comment.pseud
-      commentable = inbox_comment.feedback_comment.ultimate_parent
-      WORKS << commentable if (MULTI && commentable.is_a?(Work))
-    end
-
-    # most of the associations are actually through the pseuds
-    u.pseuds.each do |p|
-      p.comments.find_in_batches(:batch_size => NTH) do |comments|
-        comment = comments.last
-        x << comment
-        if MULTI
-          commentable = comment.ultimate_parent
-          if commentable.is_a?(Work)
-            WORKS << commentable
-          elsif commentable.is_a?(Tag)
-            TAGS << commentable
-          elsif commentable
-            x << commentable
-          end
-        end
-      end
-      p.bookmarks.each do |bookmark|
-        if !bookmark.private? || !MULTI
-          x << bookmark
-          x << bookmark.taggings
-          TAGS << bookmark.tags
-          if MULTI
-            bookmarkable = bookmark.bookmarkable
-            if bookmarkable.is_a?(Work)
-              WORKS << bookmarkable
-            elsif bookmarkable.is_a?(Series)
-              x << bookmarkable
-              bookmarkable.works.each {|w| WORKS << w}
-            elsif bookmarkable.is_a?(ExternalWork)
-              x << bookmarkable
-              x << bookmarkable.taggings
-              TAGS << bookmarkable.tags
-            end
-          end
-        end
-      end
-      x << p.creatorships
-      p.creatorships.map(&:creation).each do |item|
-        if item.is_a?(Work)
-          if item.posted? || !MULTI
-            WORKS << item
-            x << item.related_works
-            item.related_works.each do |parent|
-              if parent.is_a? Work
-                WORKS << parent
-              else
-                x << parent
-              end
-            end
-            x << item.parent_work_relationships
-            item.children.each {|w| WORKS << w}
-          end
-        elsif item.is_a?(Chapter)
-          # chapters get pulled in from works
-        elsif item.is_a?(Series)
-          x << item
-        end
-      end
-      x << p.collections
-      p.collections.each do |c|
-        x << c.collection_profile
-        x << c.collection_preference
-        x << c.collection_participants
-        PSEUDS << c.collection_participants.map(&:pseud)
-      end
-    end
-  end
-  x.flatten.compact.uniq
+# add unwrangled TAGS
+Tag.unwrangled.each do |t|
+  TAGS[t.id] = t
+  # and a few works
+  t.works.limit(5).each {|w| WORKS[w.id] = w}
 end
 
-# For these users only, get all their associated records
-puts ""
-puts "Dumping records for #{USERS.compact.uniq.size} users (minus WORKS, PSEUDS & TAGS)"
-user_associations(USERS.compact.uniq).each {|item| write_model(item)}
+# Start dumping!
 
-## Now deal with WORKS, PSEUDS, and TAGS.
-## WORKS first, because it adds more to PSEUDS and TAGS
-
-# return an array of records associated with the works
-# but keep the pseuds and tags for later
-def work_associations(items)
-  puts " collecting work associations"
-  x = []
-  items.each do |work|
-    print "."; STDOUT.flush
-    next unless (!work.unrevealed? && work.posted?) || !MULTI
-    x << work.taggings
-    TAGS << work.tags
-    x << work.creatorships
-    PSEUDS << work.pseuds
-    x << work
-    x << work.language
-    x << work.hit_counter
-    x << work.gifts
-    PSEUDS << work.gifts.map(&:pseud)
-    x << work.kudos
-    PSEUDS << work.kudos.map(&:pseud)
-    x << work.collection_items
-    x << work.collections
-    work.collections.each do |c|
-      x << c.collection_profile
-      x << c.collection_preference
-      x << c.collection_participants
-      PSEUDS << c.collection_participants.map(&:pseud)
-    end
-    x << work.serial_works
-    x << work.series
-    work.chapters.each do |c|
-      x << c if c.posted? || !MULTI
-      PSEUDS << c.pseuds
-      x << c.comments
-      PSEUDS << c.comments.map(&:pseud)
-      x << c.kudos
-      PSEUDS << c.kudos.map(&:pseud)
-    end
-  end
-  x.flatten.compact.uniq
-end
-
-puts ""
-puts "Dumping records for #{WORKS.compact.uniq.size} works (minus PSEUDS & TAGS)"
-work_associations(WORKS.compact.uniq).each {|item| write_model(item)}
-
-# return an array of records associated with the tags
-def tag_assocations(tags)
-  x = []
-  tags.each do |t|
-    print "."; STDOUT.flush
-    TAGS << t
-    PSEUDS << t.last_wrangler.pseuds if t.last_wrangler.is_a? User
-    TAGS << t.merger
-    x << t.common_taggings
-    TAGS << t.parents
-    x << t.meta_taggings
-    TAGS << t.meta_tags
-  end
-  x.flatten.compact.uniq
-end
-
-original_tags = TAGS.flatten.compact.uniq
-puts ""
-puts "Dumping records for the associations for #{original_tags.size} tags (minus PSEUDS)"
-tag_assocations(original_tags).each {|item| write_model(item)}
-
-new_tags = TAGS.flatten.compact.uniq - original_tags
-puts ""
-puts "Dumping records for the associations for #{new_tags.size} more tags (minus PSEUDS)"
-tag_assocations(new_tags).each {|item| write_model(item)}
-
-more_tags = TAGS.flatten.compact.uniq - original_tags - new_tags
-puts ""
-puts "Dumping records for the associations for #{more_tags.size} more tags (minus PSEUDS)"
-tag_assocations(new_tags).each {|item| write_model(item)}
-
-# stop after three levels of tags, that's enough wrangling for a decimated database
-puts ""
-puts "Dumping records for #{TAGS.flatten.compact.uniq.size} tags"
-TAGS.flatten.compact.uniq.each {|tag| write_model(tag)}
-
-# return an array of records associated with the pseuds
-def pseud_associations(pseuds)
-  puts " collecting pseud associations"
-  x = []
-  pseuds.each do |p|
-    print "."; STDOUT.flush
-    x << p
-    x << p.user
-    x << p.user.preference
-  end
-  x
-end
-
-puts ""
-puts "Dumping records for #{PSEUDS.flatten.compact.uniq.size} pseuds"
-pseud_associations(PSEUDS.flatten.compact.uniq).each {|item| write_model(item)}
-
-
-# dump models not directly associated with users
+# dump models not in the above five classes
 if MULTI
+  # admin posts
+  puts ""
+  puts "Dumping admin posts (collecting PSEUDS)"
+  AdminPost.find_each do |p|
+    write_model(p)
+    p.comments.each { |c| PSEUDS[c.pseud.id] = c.pseud if c.pseud}
+  end
   # roles are associated with users, but we need them all
   puts ""
   puts "Dumping roles"
   Role.find_each {|r| write_model(r)}
   puts ""
-  puts "Dumping all admins and admin settings"
+  puts "Dumping all admins"
   Admin.find_each {|a| write_model(a)}
+  puts ""
+  puts "Dumping admin settings"
   write_model(AdminSetting.first)
+  puts ""
+  puts "Dumping official skins"
   Skin.where(:official => true).each{|s| write_model(s)}
   puts ""
-  puts "Dumping all docs"
-  AdminPost.find_each {|p| write_model(p)}
+  puts "Dumping FAQs"
   ArchiveFaq.find_each {|f| write_model(f)}
+  puts ""
+  puts "Dumping Known Issues"
   KnownIssue.find_each {|ki| write_model(ki)}
   puts ""
-  puts "Dumping every #{NTH} feedback"
-  Feedback.find_in_batches(:batch_size => NTH ) {|b| write_model(b.last)}
+  puts "Dumping every #{N} feedback"
+  Feedback.find_in_batches(:batch_size => N ) {|b| write_model(b.last)}
 end
+
+# dump models from USERS, COLLECTIONS, WORKS, TAGS & PSEUDS
+# each one has a specific method, which is then called with the hash
+
+# return an array of records associated with the users
+# but keep the collections, works, pseuds and tags for later
+def user_associations(users)
+  users.each_value do |u|
+    puts ""
+    puts " #{u.login}'s records"
+
+    ## PSEUDS will dump the actual user record and the user's preferences
+    ## so they don't need to be dumped here.
+    u.pseuds.each { |p| PSEUDS[p.id] = p }
+
+    # the roles are all dumped separately, so just dump the associations here
+    u.roles_users.each { |x| write_model(x) }
+
+    write_model(u.profile) unless MULTI   # profile's may have sensitive information that isn't visible
+
+    if u.is_tag_wrangler?
+      u.fandoms.each { |t| TAGS[t.id] = t }
+      u.wrangling_assignments.each { |x| write_model(x) }
+    end
+
+    u.skins.each { |x| write_model(x) }
+    u.invitations.each { |x| write_model(x) }
+
+    # get some readings to read, and some read
+    u.readings.where(:toread => true).find_in_batches(:batch_size => u.readings.size/N/2 + 1) do |readings|
+      reading = readings.sample
+      write_model(reading)
+      WORKS[reading.work.id] = reading.work if reading.work && MULTI
+    end
+    u.readings.where(:toread => false).find_in_batches(:batch_size => u.readings.size/N/2 + 1) do |readings|
+      reading = readings.sample
+      write_model(reading)
+      WORKS[reading.work.id] = reading.work if reading.work && MULTI
+    end
+
+    # comments need associations
+    u.inbox_comments.find_in_batches(:batch_size => u.inbox_comments.size/N + 1) do |batch|
+      inbox_comment = batch.sample
+      write_model(inbox_comment)
+      write_model(inbox_comment.feedback_comment)
+      commentable = inbox_comment.feedback_comment.ultimate_parent
+      if MULTI
+        if commentable.is_a?(Work)
+          WORKS[commentable.id] = commentable
+        elsif commentable.is_a?(Tag)
+          TAGS[commentable.id] = commentable
+        else
+          write_model(commentable)
+        end
+      end
+      PSEUDS[inbox_comment.feedback_comment.pseud.id] = inbox_comment.feedback_comment.pseud if inbox_comment.feedback_comment.pseud
+      commentable = inbox_comment.feedback_comment.ultimate_parent
+      WORKS[commentable.id] = commentable if (MULTI && commentable.is_a?(Work))
+    end
+
+    u.subscriptions.find_in_batches(:batch_size => u.subscriptions.size/N + 1) do |subscriptions|
+      subscription = subscriptions.sample
+      write_model(subscription)
+      subscription.subscribable.pseuds.each {|p| PSEUDS[p.id] = p } if subscription.subscribable.is_a?(User)
+    end
+
+    # most of the associations are actually through the pseuds
+    u.pseuds.each do |p|
+      p.collections.find_in_batches(:batch_size => p.collections.size/5 + 1) do |collections|
+        collection = collections.sample
+        COLLECTIONS[collection.id] = collection
+        COLLECTIONS[collection.parent.id] = collection.parent if collection.parent
+      end
+      p.comments.find_in_batches(:batch_size => N) do |comments|
+        comment = comments.sample
+        write_model(comment)
+        if MULTI
+          commentable = comment.ultimate_parent
+          if commentable.is_a?(Work)
+            WORKS[commentable.id] = commentable
+          elsif commentable.is_a?(Tag)
+            TAGS[commentable.id] = commentable
+          elsif commentable
+            write_model(commentable)
+          end
+        end
+      end
+      p.bookmarks.find_in_batches(:batch_size => p.bookmarks.size/N + 1) do |bookmarks|
+        bookmark = bookmarks.sample
+        if !bookmark.private? || !MULTI
+          write_model(bookmark)
+          bookmark.taggings.each { |x| write_model(x) }
+          bookmark.tags.each { |t| TAGS[t.id] = t }
+          if MULTI
+            bookmarkable = bookmark.bookmarkable
+            if bookmarkable.is_a?(Work)
+              WORKS[bookmarkable.id] = bookmarkable
+            elsif bookmarkable.is_a?(Series)
+              write_model(bookmarkable)
+              bookmarkable.works.each {|w| WORKS[w.id] = w}
+            elsif bookmarkable.is_a?(ExternalWork)
+              write_model(bookmarkable)
+              bookmarkable.taggings.each { |x| write_model(x) }
+              bookmarkable.tags.each { |t| TAGS[t.id] = t }
+            end
+          end
+        end
+      end
+
+      p.creatorships.where(:creation_type => 'Work').find_in_batches(:batch_size => p.works.size/N + 1) do |creatorships|
+        work = creatorships.sample.creation
+        if work && (work.posted? || !MULTI)
+          WORKS[work.id] = work
+          work.related_works.each { |x| write_model(x) }
+          work.related_works.each { |r| WORKS[r.work.id] = r.work }
+        end
+      end
+    end
+  end
+end
+
+# dump the records associated with the USERS
+puts ""
+puts "Dumping records for #{USERS.size} users (collecting COLLECTIONS, WORKS, PSEUDS & TAGS)"
+user_associations(USERS)
+
+## Now deal with COLLECTIONS, WORKS, PSEUDS, and TAGS
+## COLLECTIONS first because it add more WORKS
+
+if MULTI
+  COLLECTION_SEEDS.each do |seed|
+    collection = Collection.find_by_name(seed)
+    raise "seed #{collection} is not a collection!!!" unless collection.is_a?(Collection)
+    COLLECTIONS[collection.id] = collection
+  end
+end
+
+# return an array of records associated with the collection
+# but keep the works and pseuds for later
+def collection_associations(items)
+  items.each_value do |collection|
+    puts ""
+    puts " #{collection.name}'s records"
+    # dump the collection itself
+    write_model(collection)
+
+    # add related works.
+    # if the work is private or unrevealed it will get culled in the works_associations task
+    if MULTI
+      collection.collection_items.find_in_batches(:batch_size => collection.collection_items.size/N + 1 ) do |items|
+        item = items.sample
+        write_model(item)
+        work = item.work
+        WORKS[work.id] = work
+      end
+    else
+      # dunno if you should really get all the works in your collection, but we don't use the
+      # non-MULTI version right now anyway so it doesn't really matter
+      collection.works.each {|w| WORKS[w.id] = w }
+    end
+
+    # add participants and their related pseuds
+    collection.collection_participants.each {|x| write_model(x)}
+    collection.collection_participants.each {|p| PSEUDS[p.pseud.id] = p.pseud if p.pseud }
+
+    # add the rest of the associations
+    write_model(collection.collection_profile)
+    write_model(collection.collection_preference)
+    collection.prompts.each {|x| write_model(x)}
+    collection.signups.each {|x| write_model(x)}
+    collection.assignments.each {|x| write_model(x)}
+    collection.claims.each {|x| write_model(x)}
+
+    # challenge associations
+    c = collection.challenge
+    if c
+      write_model(c)
+      write_model(c.request_restriction)
+      write_model(c.prompt_restriction) if c.prompt_restriction
+      if collection.challenge_type == "GiftExchange"
+        write_model(c.offer_restriction) if c.offer_restriction
+      end
+    end
+
+  end
+end
+
+# dump the records associated with the COLLECTIONS
+puts ""
+puts "Dumping records for #{COLLECTIONS.size} collections (collecting WORKS & PSEUDS)"
+collection_associations(COLLECTIONS)
+
+## Now deal with WORKS, PSEUDS, and TAGS
+## WORKS next, because it adds more to PSEUDS and TAGS
+
+# return an array of records associated with the works
+# but keep the pseuds and tags for later
+def work_associations(items)
+  items.each_value do |work|
+    next unless (!work.unrevealed? && work.posted?) || !MULTI
+    # dump the work itself
+    puts ""
+    write_model(work)
+
+    # add associations for the work and its chapters (keeping tags and pseuds for later)
+    work.creatorships.each {|x| write_model(x)}
+    work.pseuds.each {|p| PSEUDS[p.id] = p }
+    write_model(work.language) if work.language
+    write_model(work.hit_counter)
+    work.gifts.each {|x| write_model(x)}
+    work.gifts.each {|g| PSEUDS[g.pseud.id] = g.pseud if g.pseud}
+    work.serial_works.each {|x| write_model(x)}
+    work.series.each {|x| write_model(x)}
+
+    work.taggings.each {|x| write_model(x)}
+    work.tags.each { |t| TAGS[t.id] = t }
+    work.kudos.each {|x| write_model(x)}
+    work.kudos.each {|k| PSEUDS[k.pseud.id] = k.pseud if k.pseud}
+
+    work.chapters.each do |c|
+      if c.posted? || !MULTI
+        write_model(c)
+        c.creatorships.each {|x| write_model(x)}
+      end
+      c.pseuds.each {|p| PSEUDS[p.id] = p }
+      c.comments.each {|x| write_model(x)}
+      c.comments.each { |c| PSEUDS[c.pseud.id] = c.pseud if c.pseud }
+      c.kudos.each {|x| write_model(x)}
+      c.kudos.each { |k| PSEUDS[k.pseud.id] = k.pseud if k.pseud}
+    end
+  end
+end
+
+puts ""
+puts "Dumping records for #{WORKS.size} works (collecting PSEUDS & TAGS)"
+work_associations(WORKS)
+
+# return an array of records associated with the tags
+def tag_associations(tags)
+  new_tags = {}
+  tags.each_value do |t|
+    write_model(t)
+    if t.last_wrangler.is_a? User
+      t.last_wrangler.pseuds.each { |p| PSEUDS[p.id] = p }
+    end
+    new_tags[t.merger.id] = t.merger if t.merger && !tags[t.merger.id]
+    t.common_taggings.each {|x| write_model(x)}
+    t.parents.each {|t| new_tags[t.id] = t unless tags[t.id]}
+    t.meta_taggings.each {|x| write_model(x)}
+    t.meta_tags.each {|t| new_tags[t.id] = t unless tags[t.id]}
+    t.comments.each {|x| write_model(x)}
+    t.comments.each { |c| PSEUDS[c.pseud.id] = c.pseud if c.pseud }
+  end
+  new_tags
+end
+
+original_tags = TAGS
+4.times do |i|
+  puts ""
+  puts "#{i}: Dumping records for the associations for #{original_tags.size} tags (collecting PSEUDS and more TAGS)"
+  original_tags = tag_associations(original_tags)
+end
+
+# return an array of records associated with the pseuds
+def pseud_associations(pseuds)
+  pseuds.each_value do |p|
+    write_model(p)
+    write_model(p.user)
+    write_model(p.user.preference)
+  end
+end
+
+puts ""
+puts "Dumping records for #{PSEUDS.size} pseuds"
+pseud_associations(PSEUDS)
 
 puts ""
 puts "Done!"

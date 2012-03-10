@@ -1,26 +1,29 @@
 <!--Descriptive page name, messages and instructions-->
-<h2><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
+<h2 class="heading"><%= logged_in_as_admin? ? (@user.login + "'s") : "Your" %> Invitations</h2>
 <!--/descriptions-->
 
-<!--subnav-->
-<h3 class='landmark'>Navigation</h3>
-<ul class="navigation" role="navigation">
+<!--subnav -->
+<%= render "user_invitations_navigation" %>
+
+<ul class="navigation actions" role="navigation">
+  <li><h4 class="heading"><%= ts("Manage:") %></h4></li>
   <li>
-    <%= link_to_unless_current("unsent (#{@user.invitations.unsent.count.to_s})", 
+    <%= span_if_current("unsent (#{@user.invitations.unsent.count.to_s})", 
       manage_user_invitations_path(@user, :status => :unsent)) %>
   </li>
   <li>
-    <%= link_to_unless_current("sent but not used (#{@user.invitations.unredeemed.count.to_s})", 
+    <%= span_if_current("sent but not used (#{@user.invitations.unredeemed.count.to_s})", 
       manage_user_invitations_path(@user, :status => :unredeemed)) %>
   </li>
   <li>
-    <%= link_to_unless_current("used (#{@user.invitations.redeemed.count.to_s})", 
+    <%= span_if_current("used (#{@user.invitations.redeemed.count.to_s})", 
       manage_user_invitations_path(@user, :status => :redeemed)) %>
   </li>
   <li class="last">
     <%= link_to 'all', manage_user_invitations_path(@user) %>
   </li>
-</ul>  
+</ul>
+
 <!--/subnav-->
 
 <!--main content-->

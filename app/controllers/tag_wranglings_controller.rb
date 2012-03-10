@@ -1,31 +1,33 @@
 class TagWranglingsController < ApplicationController
+  cache_sweeper :tag_sweeper 
+  
   before_filter :check_user_status
 	before_filter :check_permission_to_wrangle
 
   def index
     @counts = {}
     [Fandom, Character, Relationship, Freeform].each do |klass|
-      @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.count
+      @counts[klass.to_s.downcase.pluralize.to_sym] = klass.unwrangled.in_use.count
     end
     unless params[:show].blank?
       params[:sort_column] = 'name' if !valid_sort_column(params[:sort_column], 'tag')
       params[:sort_direction] = 'ASC' if !valid_sort_direction(params[:sort_direction])
       sort = params[:sort_column] + " " + params[:sort_direction] 
       if params[:show] == "fandoms"
-        @media_names = Media.by_name.collect(&:name)
-        @tags = Fandom.unwrangled.find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)       
+        @media_names = Media.by_name.value_of(:name)
+        @tags = Fandom.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)       
       elsif params[:show] == "character_relationships"
         if params[:fandom_string]
           @fandom = Fandom.find_by_name(params[:fandom_string])
           if @fandom && @fandom.canonical?
-            @tags = @fandom.children.by_type("Relationship").canonical.find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
+            @tags = @fandom.children.by_type("Relationship").canonical.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
           else
             flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
           end
         end
       else # by fandom
         klass = params[:show].classify.constantize        
-        @tags = klass.unwrangled.find(:all, :order => sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)               
+        @tags = klass.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)               
       end
     end
   end
@@ -74,7 +76,7 @@ class TagWranglingsController < ApplicationController
   end
   
   def discuss
-    @comments = Comment.find(:all, :conditions => {:commentable_type => 'Tag'}, :order => 'updated_at DESC').paginate(:page => params[:page])
+    @comments = Comment.where(:commentable_type => 'Tag').order('updated_at DESC').paginate(:page => params[:page])
   end
 
 end

@@ -1,137 +1,102 @@
-<div id="bookmark-form">
-<% if bookmark.new_record? && bookmarkable.class != ExternalWork %>
-  <h4><%= ts('Add a new bookmark for') %> <%= bookmarkable.title %></h4>
-<% elsif bookmarkable.class == ExternalWork && !bookmark.new_record? %>
-  <h4><%= ts('Add a new bookmark for an external work') %></h4>
-<% end %>
+<% 
+# This renders the bookmark form based on whatever kind of object we are bookmarking 
+# we need bookmarkable, action (create or update), and bookmark if it exists
+# if in_page is true then we assume that this is embedded within another page (eg the work page)
+# if dynamic is true then this has been rendered via ajax 
+%>
 
-<% if bookmarkable.class == ExternalWork %>
-  <p>You can bookmark external works with the <a href="javascript:(function(){f='<%= ArchiveConfig.APP_URL%>/external_works/new?url_from_external='+encodeURIComponent(window.location.href)+'&title_from_external='+encodeURIComponent(document.title);a=function(){if(!window.open(f,'AO3ExtBk','location=yes,links=no,scrollbars=yes,toolbar=no,width=550,height=550'))location.href=f};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})()" title="Right-click and Bookmark This Link)">AO3 External Bookmarklet</a>. This is a simple bookmarklet that should work in any browser, if you have JavaScript enabled. Just right-click and select Bookmark This Link (or Bookmark Link).</p>
-<% end %>
-
-<%= form_for([bookmarkable, bookmark], :url => {:controller => 'bookmarks', :action => action}) do |f| %>
-<p><label><%= ts("Pseud") %>:</label>
-    <% if current_user.pseuds.count > 1 %>
-      <%= select_tag "bookmark[pseud_id]", options_for_select(current_user.pseuds.map{|pseud| [pseud.name, pseud.id]}, bookmark.pseud ? bookmark.pseud.id : current_user.default_pseud.id) %>
-    <% else %>
-    <%= current_user.default_pseud.name %>
-      <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}" %>
+<div class="post bookmark <% if bookmarkable.class == ExternalWork %>verbose<% end %>" id="bookmark-form">
+  <h3 class="landmark heading"><%= ts("Bookmark") %></h3>
+  <% if bookmarkable.class == ExternalWork %><%= render "bookmarks/bookmarklet" %><% end %>
+  <% bookmark ||= Bookmark.new %>
+  <% bookmarkable ||= bookmark.bookmarkable %>
+  <%= form_for(:bookmark, :url => bookmark_form_path(bookmark, bookmarkable), :html => {:method => bookmark.new_record? ? :post : :put}) do |f| %>
+  <fieldset>
+    <legend><%= ts("Bookmark") %></legend>
+    <% in_page ||= false %>
+    <% dynamic ||= false %>
+    <% if in_page %>
+      <p class="close actions">
+        <% if dynamic %>
+          <a id="bookmark_form_close_for_<%= bookmarkable.id %>" title="cancel"><%= ts("x") %></a>
+        <% else %>
+          <a class="bookmark_form_placement_close" href="#comments" title="cancel"><%= ts("x") %></a>
+        <% end %>        
+      </p>
     <% end %>
-</p>
-<% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
-  <%= fields_for 'bookmark[external]', bookmarkable do |ew| %>
-  <fieldset>
-    <legend>Work Preface</legend>
-  <dl>
-    <dt><%= ew.label :url, ts("URL") %>:</dt>
-    <dd>
-      <% if !params[:url_from_external].blank? %>
-        <%= ew.text_field :url, :value => params[:url_from_external] %>
+
+    <h4 class="heading">
+      <% if current_user.pseuds.count > 1 %>
+        <%= select_tag "bookmark[pseud_id]", 
+          options_for_select(current_user.pseuds.map{|pseud| [pseud.name, pseud.id]}, 
+          bookmark.pseud ? bookmark.pseud.id : current_user.default_pseud.id), :title => "choose pseud" %>
       <% else %>
-        <%= ew.text_field :url %>
+        <span class="byline">
+          <%= current_user.default_pseud.name %>, 
+          <%= f.hidden_field :pseud_id, :value => "#{current_user.default_pseud.id}" %>
+        </span>
       <% end %>
-	    <%= autocomplete_text_field "bookmark_external_url", :no_comma => true %>
-	    <%= observe_field 'bookmark_external_url', :url => {:controller => 'external_works', :action => 'fetch'}, :with => 'external_url', :on => 'blur' %>
-	    <%= hidden_field 'fetched', :value => '' %>
-    </dd>
-    <dt><%= ew.label :author, ts("Author") %>:</dt>
-    <dd>
-      <%= ew.text_field :author %>
-      <%= generate_countdown_html("bookmark_external_author", ExternalWork::AUTHOR_LENGTH_MAX) %>
-    </dd>
-	<dt><%= ew.label :title, ts("Title") %>:</dt>
-		<dd>
-      <% if !params[:url_from_external].blank? %>
-        <%= ew.text_field :title, :value => params[:title_from_external] %>
-      <% else %>
-        <%= ew.text_field :title %>
+      <%= ts(" save a bookmark!") %>
+    </h4>
+    <p class="footnote">(
+      <% if bookmarkable.class != ExternalWork %>
+        <%= ts("The author's summary and tags are added automatically.") %> 
       <% end %>
-      <%= generate_countdown_html("bookmark_external_title", ArchiveConfig.TITLE_MAX) %>
-    </dd>
-	<dt>
-	<%= ew.label :summary, ts("Author's Summary") %>
-	<%= ts("(please copy and paste from original work)") %></dt>
-		<dd>
-      <%= ew.text_area :summary, :rows => 5, :class => "summary-field"%>
-      <%= generate_countdown_html("bookmark_external_summary", ArchiveConfig.SUMMARY_MAX) %>
-    </dd>
-  </dl>
-  </fieldset>
-  <fieldset>
-    <legend>Work Tags</legend>
-    <p><%= ts("Author's Tags (comma separated, %{max} characters per tag). Please note that only fandom is required.", :max => ArchiveConfig.TAG_MAX) %>
-    <%= link_to_help "tagging-help" %></p>
-  <dl>
-    <dt>
-      <%= ew.label :fandom_string, Fandom::NAME.pluralize %>
-    </dt>
-    <dd>
-      <%= ew.text_field :fandom_string %>
-      <%= autocomplete_text_field "bookmark_external_fandom_string" %>
-    </dd>
-    <dt class="rating">
-      <%= ew.label :rating_string, Rating::NAME %><%= link_to_help "rating-help" %>
-    </dt>
-    <dd>
-      <%= ew.collection_select(:rating_string, Rating.canonical.by_name, :name, :name, {:selected => ArchiveConfig.RATING_DEFAULT_TAG_NAME}) %>
-    </dd>
-    <dt>
-      <%= ew.label :category_string, Category::NAME %>
-    </dt>
-    <dd>
-      <%= ew.collection_select(:category_string, Category.canonical.by_name, :name, :name, {:include_blank => true}) %>
-    </dd>
-    <dt>
-      <%= ew.label :relationship_string, Relationship::NAME.pluralize %>
-    </dt>
-    <dd>
-      <%= ew.text_field :relationship_string %>
-      <%= autocomplete_text_field "bookmark_external_relationship_string" %>
-    </dd>
-    <dt>
-      <%= ew.label :character_string, Character::NAME.pluralize %>
-    </dt>
-    <dd>
-      <%= ew.text_field :character_string %>
-      <%= autocomplete_text_field "bookmark_external_character_string" %>
-    </dd>
-  </dl>
-  </fieldset>
-  <% end %>
-<% end %>
-<fieldset>
-  <legend>Bookmark Comments</legend>
-<dl>
-  <dt><%= f.label :notes, ts("Your Notes") %></dt>
-  <dd>
-    <%= allowed_html_instructions %>
-    <%= f.text_area :notes, :rows => 4, :class => "notes-field" %>
-    <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) %>
-  </dd>
-  
-	<dt><%= f.label :tag_string, ts("Your Tags") %></dt>
-	<dd>
-	  <% dynamic ||= false %>
-    <%= f.text_field :tag_string, :size => (dynamic ? 60 : 80) %>
-    <%= autocomplete_text_field "bookmark_tag_string" %>
-    <p class="character_counter">
-      <%= ts("Comma separated, %{max} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
+      <%= allowed_html_instructions(show_list=false) %>)
     </p>
-  </dd>
-</dl>
-</fieldset>
-<% if bookmarkable.class != ExternalWork %>
-  <p><%= ts("Please note that the author's summary and tags will be added automatically.") %>
-<% end %>
-<p> <%= f.check_box :private %> <%= f.label :private, ts("Private bookmark?") %>
-<%= f.check_box :rec %> <%= f.label :rec, ts("Rec?") %></p>
-<%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id if bookmarkable%>
-<%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s if bookmarkable %>
-<!-- BACK END
-please add option CANCEL
-if bookmarks form @ bookmarks/new then CANCEL routes BACK
-if bookmarks form @ dynamic_bookmark then CANCEL function is CLOSE
--->
-<p class="submit"><%= f.submit(button_name) %></p>
-<% end %>
+
+
+      <% # What we're bookmarking %>
+      <% if bookmarkable.class == ExternalWork && bookmarkable.new_record? %>
+        <%= fields_for 'bookmark[external]', bookmarkable do |ew_form| %>
+          <%= render "bookmarks/external_work_fields", :ew => ew_form%>
+        <% end %>
+      <% else %>
+        <% bookmarkable = bookmarkable.work if bookmarkable.class == Chapter %>
+        <div>
+          <%= f.hidden_field :bookmarkable_id, :value => bookmarkable.id if bookmarkable %>
+          <%= f.hidden_field :bookmarkable_type, :value => bookmarkable.class.to_s if bookmarkable %>
+        </div>
+      <% end %>
+
+      <fieldset>
+        <legend><%= ts("Write Comments") %></legend>
+        <dl>
+          <dt class="landmark"><%= f.label :notes, ts("Notes") %></dt>
+          <dd>
+            <%= allowed_html_instructions %>
+            <%= f.text_area :notes, :rows => 4, :class => "observe_textlength" %>
+            <%= generate_countdown_html("bookmark_notes", ArchiveConfig.NOTES_MAX) %>
+          </dd>
+
+          <dt class="landmark"><%= f.label :tag_string, ts("Your Tags") %></dt>
+          <dd title="your tags">
+            <%= f.text_field :tag_string, autocomplete_options('tag?type=all', :size => (in_page ? 60 : 80)) %>
+            <p class="character_counter">
+              <%= ts("Comma separated, %{max} characters per tag", :max => ArchiveConfig.TAG_MAX) %>
+            </p>
+          </dd>
+
+          <dt><%= f.label :collection_names, ts("Add to Collections") %></dt>
+          <dd>
+            <%= f.text_field :collection_names, autocomplete_options('open_collection_names', :size => (in_page ? 60 : 80)) %>
+          </dd>
+        </dl>
+      </fieldset>
+
+      <fieldset>
+        <legend><%= ts("Choose type and post") %></legend>
+        <p> 
+          <%= f.check_box :private %> <%= f.label :private, ts("Private bookmark?") %>
+          <%= f.check_box :rec %> <%= f.label :rec, ts("Rec?") %>
+        </p>
+        <p class="submit actions">
+          <%= f.submit(button_name) %>
+          <% unless in_page %>
+            <%= link_to ts("Back to My Bookmarks"), user_bookmarks_path(current_user) %>
+          <% end %>
+        </p>
+      </fieldset>
+    </fieldset>
+  <% end %>
 </div>

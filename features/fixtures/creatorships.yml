@@ -1,18 +1,24 @@
 work1:
-  pseud: testuser
-  creation: first (Work)
+  pseud_id: 1
+  creation_id: 1
+  creation_type: Work
 chapter1:
-  pseud: testuser
-  creation: chapter1 (Chapter)
+  pseud_id: 1
+  creation_id: 1
+  creation_type: Chapter
 work2:
-  pseud: testuser
-  creation: second (Work)
+  pseud_id: 1
+  creation_id: 2
+  creation_type: Work
 work3:
-  pseud: testuser
-  creation: third (Work)
+  pseud_id: 1
+  creation_id: 3
+  creation_type: Work
 work4:
-  pseud: testuser2
-  creation: fourth (Work)
+  pseud_id: 6
+  creation_id: 4
+  creation_type: Work
 work5:
-  pseud: testuser2
-  creation: fifth (Work)
+  pseud_id: 6
+  creation_id: 5
+  creation_type: Work

@@ -1,45 +1,28 @@
-<table summary="">
-	<caption></caption>
-		<tr>
-    	<th scope="row">Sender</th>
-    <td><%= creator_link(invitation) %></td>
-  </tr>
-  <tr>
-    <th scope="row">Invitation token</th>
-    <td><%= invitation.token %></td>
-  </tr>
-  <tr>
-    <th scope="row">Copy link</th>
-    <td><% unless invitation.redeemed_at %><%= link_to "copy and use", new_user_path(:invitation_token => invitation.token) %><% end %></td>
-  </tr>
-  <tr>
-    <th scope="row">Sent to</th>
+<dl>
+	<dt>Sender</dt>
+    <dd><%= creator_link(invitation) %></dd>
+ 	<dt>Invitation token</dt>
+    <dd><%= invitation.token %></dd>
+ 	<dt>Copy link</dt>
+    <dd><% unless invitation.redeemed_at %><%= link_to "copy and use", new_user_path(:invitation_token => invitation.token) %><% end %></dd>
+ 	<dt>Sent to</dt>
     <% if invitation.redeemed_at %>
-    <td><%= invitation.invitee_email %></td>
+    <dd><%= invitation.invitee_email %></dd>
     <% else %>
-    <td>
+    <dd>
       <%= form_for(invitation) do |f| %>
         <p><label for="invitee_email">Enter an email address:</label> <%= f.text_field :invitee_email %></p>
         <p><%= hidden_field_tag :user_id, @user.try(:login) %></p>
-        <p class="submit"><%= f.submit %></p>
+        <p class="submit actions"><%= f.submit %></p>
       <% end %>
-    </td>
+    </dd>
     <% end %>
-  </tr>
-  <tr>
-    <th scope="row">Redeemed by</th>
-    <td><%= invitee_link(invitation) %></td>
-  </tr>
-  <tr>
-    <th scope="row">Created at</th>
-    <td><%= invitation.created_at %></td>
-  </tr>
-  <tr>
-    <th scope="row">Sent at</th>
-    <td><%= invitation.sent_at %></td>
-  </tr>
-  <tr>
-    <th scope="row">Redeemed at</th>
-    <td><%= invitation.redeemed_at %></td>
-  </tr>
-</table>
+ <dt>Redeemed by</dt>
+    <dd><%= invitee_link(invitation) %></dd>
+ <dt>Created at</dt>
+    <dd><%= invitation.created_at %></dd>
+ <dt>Sent at</dt>
+    <dd><%= invitation.sent_at %></dd>
+ <dt>Redeemed at</dt>
+    <dd><%= invitation.redeemed_at %></dd>
+</dl>

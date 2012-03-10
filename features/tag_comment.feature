@@ -1,33 +1,31 @@
-@tags @tag_wrangling
+@tags @tag_wrangling @comments
 Feature: Comment on tag
 As a tag wrangler
 I'd like to comment on a tag'
 
-  Scenario: Comment on a tag
-    Given I have no users
-      And I have no tags
-      And the following activated tag wranglers exist
-        | login       | password      | email             |
-        | dizmo       | wrangulator   | dizmo@example.org |
-        | Enigel      | wrangulator   | enigel@example.org|
-      And the following admin exists
-        | login       | password      |
-        | Amelia      | secret        |
+  Scenario: Comment on a tag and get taken to right page and see right date
+    Given the following activated tag wranglers exist
+        | login     |
+        | dizmo     |
       And a fandom exists with name: "Stargate Atlantis", canonical: true
-    When I am logged in as "dizmo" with password "wrangulator"
-    Then I should see "Hi, dizmo!"
-    When I follow "Tag Wrangling"
-    Then I should see "Wrangling Home"
+    When I am logged in as "dizmo"
     When I view the tag "Stargate Atlantis"
     Then I should see "0 comments"
-    When I follow "0 comments"
-      And I fill in "Comment" with "Shouldn't this be a metatag with Stargate?"
-      And I press "Add Comment"
-    Then I should see "Comment created!"
-      And I should see "Shouldn't this be a metatag with Stargate?"
+    When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis" via web
+    Then I should see "Shouldn't this be a metatag with Stargate?"
       And I should see Posted nowish
+      
+    Scenario: Edit a comment on a tag
+    
+    Given the following activated tag wranglers exist
+        | login     |
+        | dizmo     |
+      And a fandom exists with name: "Stargate Atlantis", canonical: true
+    When I am logged in as "dizmo"
+    When I post the comment "Shouldn't this be a metatag with Stargate?" on the tag "Stargate Atlantis"
     When I follow "Edit"
     Then the "Comment" field should contain "Shouldn't this be a metatag with Stargate?"
+      And I should see "Cancel"
     When I fill in "Comment" with "Yep, we should have a Stargate franchise metatag."
       And I press "Update"
     Then I should see "Comment was successfully updated."
@@ -37,31 +35,57 @@ I'd like to comment on a tag'
     When I view the tag "Stargate Atlantis"
     Then I should see "1 comment"
     
-    # admin can also comment on tags, issue 1428 '
-    When I follow "Log out"
-      And I go to the admin_login page
-      And I fill in "admin_session_login" with "Amelia"
-      And I fill in "admin_session_password" with "secret"
-      And I press "Log in as admin"
-    Then I should see "Successfully logged in"
-    When I view the tag "Stargate Atlantis"
-    Then I should see "1 comment"
-    When I follow "1 comment"
-      And I fill in "Comment" with "Important policy decision"
-      And I press "Add Comment"
-    Then I should see "Comment created!"
+    Scenario: Multiple comments on a tag increment correctly
+    
+    Given the following activated tag wranglers exist
+        | login     |
+        | dizmo     |
+      And a fandom exists with name: "Stargate Atlantis", canonical: true
+    When I am logged in as "dizmo"
+    When I post the comment "Yep, we should have a Stargate franchise metatag." on the tag "Stargate Atlantis"
+    When I am logged in as an admin
+    When I post the comment "Important policy decision" on the tag "Stargate Atlantis"
     When I view the tag "Stargate Atlantis"
     Then I should see "2 comments"
+      
+  Scenario: Multiple comments on a tag show on discussion page
     
-    When I follow "Log out"
-      And I am logged in as "dizmo" with password "wrangulator"
-    When I follow "Tag Wrangling"
-    Then I should see "Wrangling Home"
-    When I follow "Discussion"
+    Given the following activated tag wranglers exist
+        | login     |
+        | dizmo     |
+        | Enigel    |
+      And a fandom exists with name: "Stargate Atlantis", canonical: true
+    When I am logged in as "Enigel"
+    When I post the comment "Yep, we should have a Stargate franchise metatag." on the tag "Stargate Atlantis"
+    When I am logged in as an admin
+    When I post the comment "Important policy decision" on the tag "Stargate Atlantis"
+    When I am logged in as "dizmo"
+    When I view tag wrangling discussions
     Then I should see "Tag Wrangling Discussion"
       And I should see "Yep, we should have a Stargate franchise metatag."
       And I should see "Important policy decision"
       
+  Scenario: Unedited tag doesn't show on discussion page
+  
+  Given the following activated tag wranglers exist
+        | login     |
+        | dizmo     |
+        | Enigel    |
+      And a fandom exists with name: "Stargate Atlantis", canonical: true
+  When I am logged in as "Enigel"
+  When I view the tag "Stargate Atlantis"
+  When I am logged in as "dizmo"
+  When I view tag wrangling discussions
+  Then I should not see "Stargate Atlantis"
+  
+  Scenario: admin can also comment on tags, issue 1428
+  
+  Given a fandom exists with name: "Stargate Atlantis", canonical: true
+  When I am logged in as an admin
+  When I post the comment "Important policy decision" on the tag "Stargate Atlantis" via web
+  When I view the tag "Stargate Atlantis"
+  Then I should see "1 comment"
+  
   Scenario: Issue 2185: email notifications for tag commenting; TO DO: replies to comments
   
     Given the following activated tag wranglers exist
@@ -79,23 +103,23 @@ I'd like to comment on a tag'
     When I am logged in as "Enigel" with password "wrangulator"
       And I go to Enigel's user page
       #'
-      And I follow "My Preferences"
+      And I follow "Preferences"
       And I uncheck "Turn off copies of your own comments"
       And I press "Update"
-      And I follow "Log out"
+      And I log out
       
     # fellow wrangler leaves a comment on a wrangler's fandom  
     When I am logged in as "Cesy" with password "wrangulator"
       And I go to Cesy's user page
       #'
-      And I follow "My Preferences"
+      And I follow "Preferences"
       And I check "Turn off copies of your own comments"
       And I press "Update"
       And all emails have been delivered
       And I view the tag "Eroica"
       And I follow "0 comments"
       And I fill in "Comment" with "really clever stuff"
-      And I press "Add Comment"
+      And I press "Comment"
     Then I should see "Comment created"
       And 1 email should be delivered to "enigel@example.org"
       And the email should contain "really clever stuff"
@@ -109,28 +133,28 @@ I'd like to comment on a tag'
       And I fill in "Password:" with "wrangulator"
       And I press "Log in"
     # I get redirected to the tag comments page
-    Then I should see "Viewing Comments on Eroica"
+    Then I should see "Reading Comments on Eroica"
       And I should see "really clever stuff"
     When I follow "Read all comments on Eroica" in the email
       And I fill in "User name:" with "Cesy"
       And I fill in "Password:" with "wrangulator"
       And I press "Log in"
     # TODO: This goes to the dashboard instead of a redirect to the tag! Why, why? I mean, why? Why?
-    # Then I should see "Viewing Comments on Eroica"
+    # Then I should see "Reading Comments on Eroica"
       # And I should see "really clever stuff"
     When I follow "Reply to this comment" in the email
       And I fill in "User name:" with "Enigel"
       And I fill in "Password:" with "wrangulator"
       And I press "Log in"
     # TODO: This goes to the dashboard instead of a redirect to the tag!
-    # Then I should see "Viewing Comments on Eroica"
+    # Then I should see "Reading Comments on Eroica"
       # And I should see "really clever stuff"
     
     When I view the tag "Doctor Who"
       And all emails have been delivered
       And I follow "0 comments"
       And I fill in "Comment" with "really clever stuff"
-      And I press "Add Comment"
+      And I press "Comment"
     Then I should see "Comment created"
       And 1 email should be delivered to "cesy@example.org"
       And 1 email should be delivered to "dizmo@example.org"

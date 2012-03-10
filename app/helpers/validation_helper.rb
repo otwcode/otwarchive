@@ -22,14 +22,16 @@ module ValidationHelper
     end
     
     if object && object.errors.any?
-      error_messages = object.errors.full_messages.map {|msg| content_tag(:li, msg.gsub(/^(.+)\^/, '').html_safe)}.join("\n").html_safe
-      message = '<div class="error" id="error">'.html_safe
-      message += content_tag(:h2, h(t('validation.couldnt_save', :default => "We couldn't save this %{objectname}, sorry!", 
-                          :objectname => object.class.name.to_s.gsub(/_/, ' ')))) 
-      message += content_tag(:p, h(t("validation.problems_found", :default => "Here are the problems we found: "))) 
-      message += content_tag(:ul, error_messages) 
-      message += '</div>'.html_safe
+      errors = object.errors.full_messages
+      intro = content_tag(:h4, h(ts("Sorry! We couldn't save this %{objectname} because:", :objectname => object.class.name.to_s.gsub(/_/, ' ')))) 
+      error_messages_formatted(errors, intro)
     end
+  end
+  
+  def error_messages_formatted(errors, intro = "")
+    return unless errors && !errors.empty?
+    error_messages = errors.map {|msg| content_tag(:li, msg.gsub(/^(.+)\^/, '').html_safe)}.join("\n").html_safe
+    content_tag(:div, intro.html_safe + content_tag(:ul, error_messages), :id =>"error", :class=>"error")    
   end
   
   # use to make sure we have consistent name throughout

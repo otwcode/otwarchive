@@ -25,11 +25,16 @@
   </dd>
     
   <dt>Properties</dt>
-  <dd id="css_properties">
-    We also allow the following properties: <br />
+  <dd id="css_shorthand_properties">
+    We allow the following properties including all their variations (and shorthand values): <br />
     <code>
-accelerator, azimuth, background, background-color, behavior, border, border-bottom-color, border-collapse, border-color, border-left-color, border-right-color, border-top-color, bottom, box-shadow, caption-side, clear, clip, color, content, counter-increment, counter-reset, cue, cursor, direction, display, elevation, empty-cells, filter, float, font-family, font-size, font-style, font-variant, font-weight, height, ime-mode, include-source, layer-background, layout-flow, layout-grid, left, letter-spacing, line-break, line-height, list-style, margin, marker-offset, marks, max-height, max-width, min-height, min-width, orphans, outline, overflow, padding, page, page-break, pause, pause-after, pause-before, pitch, pitch-range, play-during, position, quotes, richness, right, ruby-align, ruby-overhang, ruby-position, scrollbar, size, speak, speak-header, speak-numeral, speak-punctuation, speech-rate, stress, table-layout, text, text-align, text-decoration, text-indent, top, transform, transition, unicode-bidi, vertical-align, visibility, voice-family, volume, white-space, widows, width, word-break, word-spacing, word-wrap, writing-mode, z-index,
--moz-border, -moz-box-shadow, -moz-opacity, -moz-outline, -moz-transform, -moz-transition, -moz-user-select, -replace, -use-link-source, -webkit-box-shadow, -webkit-transform, -webkit-transition       
+background, border, box-shadow, column, cue, font, layer-background, layout-grid, list-style, margin, marker, opacity, outline, overflow, padding, page-break, pause, scrollbar, text, transform, transition
+    </code>
+  </dd>
+  <dd id="css_properties">
+    We also allow the following specific properties: <br />
+    <code>
+-moz-user-select, -replace, -use-link-source, accelerator, alignment-adjust, alignment-baseline, appearance, azimuth, baseline-shift, behavior, binding, bookmark-label, bookmark-level, bookmark-target, bottom, box-align, box-direction, box-flex, box-flex-group, box-lines, box-orient, box-pack, box-sizing, caption-side, clear, clip, color, color-profile, content, counter-increment, counter-reset, crop, cue, cue-after, cue-before, cursor, direction, display, dominant-baseline, drop-initial-after-adjust, drop-initial-after-align, drop-initial-before-adjust, drop-initial-before-align, drop-initial-size, drop-initial-value, elevation, empty-cells, filter, fit, fit-position, float, float-offset, font, font-effect, font-emphasize, font-emphasize-position, font-emphasize-style, font-family, font-size, font-size-adjust, font-smooth, font-stretch, font-style, font-variant, font-weight, grid-columns, grid-rows, hanging-punctuation, height, hyphenate-after, hyphenate-before, hyphenate-character, hyphenate-lines, hyphenate-resource, hyphens, icon, image-orientation, image-resolution, ime-mode, include-source, inline-box-align, layout-flow, left, letter-spacing, line-break, line-height, line-stacking, line-stacking-ruby, line-stacking-shift, line-stacking-strategy, mark, mark-after, mark-before, marks, marquee-direction, marquee-play-count, marquee-speed, marquee-style, max-height, max-width, min-height, min-width, move-to, nav-down, nav-index, nav-left, nav-right, nav-up, opacity, orphans, page, page-policy, phonemes, pitch, pitch-range, play-during, position, presentation-level, punctuation-trim, quotes, rendering-intent, resize, rest, rest-after, rest-before, richness, right, rotation, rotation-point, ruby-align, ruby-overhang, ruby-position, ruby-span, size, speak, speak-header, speak-numeral, speak-punctuation, speech-rate, stress, string-set, tab-side, table-layout, target, target-name, target-new, target-position, top, unicode-bibi, unicode-bidi, vertical-align, visibility, voice-balance, voice-duration, voice-family, voice-pitch, voice-pitch-range, voice-rate, voice-stress, voice-volume, volume, white-space, white-space-collapse, widows, width, word-break, word-spacing, word-wrap, writing-mode, z-index
     </code>
   </dd>
 
@@ -41,10 +46,7 @@ accelerator, azimuth, background, background-color, behavior, border, border-bot
 
   <dt>Keywords</dt>
   <dd id="css_keywords">
-    We allow the following keywords: <br />
-    <code>
-!important, absolute, all, auto, bigger, blink, block, bold, both, bottom, center, collapse, dashed, dotted, ease-in, hidden, inline, italic, justify, left, medium, no-repeat, none, normal, nowrap, overline, pointer, repeat, repeat-x, repeat-y, right, scroll, small-caps, smaller, solid, static, top, transparent, underline, url
-    </code>
+    We allow all standard CSS keyword values (eg, <tt>absolute</tt>, <tt>bottom</tt>, <tt>center</tt>, <tt>underline</tt>, etc) 
   </dd>
   
   <dt>Numeric Values</dt>
@@ -63,11 +65,8 @@ accelerator, azimuth, background, background-color, behavior, border, border-bot
   <dd id="css_colors">
     You can specify colors using hex values (eg, #000000 is black in hex) or with rgb or rgba values (eg, rgb(0,0,0) and rgba(0,0,0,0) both give you black). 
     This may be safer since not all browsers will necessarily support all color names. However, color names are more
-    readable and easier to remember, so we allow 
-    <a href="http://www.w3schools.com/css/css_colornames.asp">the set of commonly-supported color names</a>:<br />
-    
-    <code>aliceblue, antiquewhite, aqua, aquamarine, azure, beige, bisque, black, blanchedalmond, blue, blueviolet, brown, burlywood, cadetblue, chartreuse, chocolate, coral, cornflowerblue, cornsilk, crimson, cyan, darkblue, darkcyan, darkgoldenrod, darkgray, darkgreen, darkkhaki, darkmagenta, darkolivegreen, darkorange, darkorchid, darkred, darksalmon, darkseagreen, darkslateblue, darkslategray, darkturquoise, darkviolet, deeppink, deepskyblue, dimgray, dodgerblue, firebrick, floralwhite, forestgreen, fuchsia, gainsboro, ghostwhite, gold, goldenrod, gray, green, greenyellow, honeydew, hotpink, indianred, indigo, ivory, khaki, lavender, lavenderblush, lawngreen, lemonchiffon, lightblue, lightcoral, lightcyan, lightgoldenrodyellow, lightgrey, lightgreen, lightpink, lightsalmon, lightseagreen, lightskyblue, lightslategray, lightsteelblue, lightyellow, lime, limegreen, linen, magenta, maroon, mediumaquamarine, mediumblue, mediumorchid, mediumpurple, mediumseagreen, mediumslateblue, mediumspringgreen, mediumturquoise, mediumvioletred, midnightblue, mintcream, mistyrose, moccasin, navajowhite, navy, oldlace, olive, olivedrab, orange, orangered, orchid, palegoldenrod, palegreen, paleturquoise, palevioletred, papayawhip, peachpuff, peru, pink, plum, powderblue, purple, red, rosybrown, royalblue, saddlebrown, salmon, sandybrown, seagreen, seashell, sienna, silver, skyblue, slateblue, slategray, snow, springgreen, steelblue, tan, teal, thistle, tomato, turquoise, violet, wheat, white, whitesmoke, yellow, yellowgreen</code><br />
-        
+    readable and easier to remember, so we also allow color names. (We suggest you stick to 
+    <a href="http://www.w3schools.com/css/css_colornames.asp">the set of commonly-supported color names</a>.)        
   </dd>
 
   <dt>Scale</dt>

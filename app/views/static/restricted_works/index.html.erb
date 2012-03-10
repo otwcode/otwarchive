@@ -1,26 +1,26 @@
 <div class="works-index">
   <!--Descriptive page name, messages and instructions-->
-  <h2>Restricted Works</h2>
+  <h2 class="heading">Restricted Works</h2>
 
-  <ul>
+  <ul class="index group">
     <% for work in @works %>
       <% tag_groups = work.tags.group_by { |t| t.type.to_s } %>
-      <li class="blurb">
+      <li class="work blurb group" role="article">
         <div class="header module">
-          <h4 title="title">
-      	    <%= link_to work.title, {:controller => "yuletide2010", :action => :restricted_work, :id => "#{work.id}-#{work.title.parameterize}"} %>
+          <h4 class="heading" title="title">
+      	    <%= link_to work.title.html_safe, {:controller => "yuletide2010", :action => :restricted_work, :id => "#{work.id}-#{work.title.parameterize}"} %>
        		  by <%= byline(work) %>
             <% unless work.recipients.blank? %>
             for <%= recipients_link(work) %>
             <% end %>
           </h4>
 
-      	  <h5 title="fandom">
+      	  <h5 class="heading" title="fandom">
             <%= tag_groups['Fandom'].map{|tag| tag.name}.join(', ') %>
       	  </h5>
         </div>
 	  
-      	<h6 class="landmark">Tags</h6>
+      	<h6 class="landmark heading">Tags</h6>
       	<p class="tags">
       	  <% tags = (tag_groups['Rating'] || []) + 
       	            (tag_groups['Warning'] || []) + 
@@ -33,7 +33,7 @@
 
         <!--summary-->	
       	<% unless work.summary.blank? %>
-      		<h6 class="landmark">Summary</h6>
+      		<h6 class="landmark heading">Summary</h6>
       		<blockquote class="userstuff summary" title="summary">
       		  <%=raw strip_images(sanitize_field(work, :summary)) %>
       		</blockquote>
