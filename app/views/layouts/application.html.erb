@@ -21,8 +21,8 @@
       <% else %>
         <%= ArchiveConfig.APP_NAME  %>
         &raquo;
-        <%= controller.action_name=="index" ? "list" : controller.action_name %>
-        <%= controller.action_name=="index" ? controller.controller_name : controller.controller_name.singularize %>
+        <%= controller.action_name=="index" ? "list" : controller.action_name.humanize.downcase %>
+        <%= controller.action_name=="index" ? controller.controller_name.humanize.downcase : controller.controller_name.singularize.humanize.downcase %>
         <% if defined?(@page_subtitle) %>
           &raquo;
           <%= @page_subtitle %>
