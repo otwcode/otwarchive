@@ -41,6 +41,11 @@
         <%= link_to (@bookmark ? ts("Edit Bookmark") : ts("Bookmark")), "#bookmark-form", :class => "bookmark_form_placement_open" %>
       </li>
     <% end %>
+    <% if logged_in? && @work && marked_for_later?(@work) %>
+      <li>
+        <%= markasread_link(@work) %>
+      </li>
+    <% end %>
     <% if commentable.count_visible_comments > 0 && !commentable.is_a?(Tag) %>
         <li id="show_comments_link"><%= show_hide_comments_link(commentable) %></li>
     <% end %>
