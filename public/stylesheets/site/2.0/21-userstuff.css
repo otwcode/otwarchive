@@ -147,4 +147,15 @@
   float: none;
 }
 
+/* FAQ PAGES */
+
+.faq {
+  max-width: 72em;
+  margin: auto;
+}
+
+.faq h3 {
+  margin-top: 3em;
+}
+
 /*END== */
