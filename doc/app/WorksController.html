@@ -1713,7 +1713,7 @@
           <span class="ruby-ivar">@included</span> = <span class="ruby-value">0</span>
         <span class="ruby-keyword">end</span>
       <span class="ruby-keyword">end</span>
-      <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">posted</span> = <span class="ruby-keyword">true</span>
+      <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">posted</span> = <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:post_button</span>]
       <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">minor_version</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">minor_version</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
       <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">set_challenge_info</span>
       <span class="ruby-identifier">saved</span> = <span class="ruby-ivar">@work</span>.<span class="ruby-identifier">save</span>

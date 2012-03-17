@@ -618,7 +618,7 @@
 
           
           <div class="method-source-code" id="activate-source">
-            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 199</span>
+            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 178</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">activate</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">activate</span>
@@ -657,7 +657,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 139</span>
+            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 118</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">destroy</span>
@@ -689,7 +689,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 45</span>
+            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 24</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@user</span>
@@ -725,30 +725,9 @@
             <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 5</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
   <span class="ruby-ivar">@roles</span> = <span class="ruby-constant">Role</span>.<span class="ruby-identifier">assignable</span>.<span class="ruby-identifier">uniq</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>]
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;0&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:query</span>].<span class="ruby-identifier">blank?</span>
-      <span class="ruby-keyword">return</span> <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Please enter a name or email address!&quot;</span>
-    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;0&quot;</span>
-      <span class="ruby-identifier">joins</span> = <span class="ruby-value">:pseuds</span>
-      <span class="ruby-identifier">conditions</span> = [<span class="ruby-string">'pseuds.name LIKE ? OR email = ?'</span>, <span class="ruby-node">&quot;%#{params[:query]}%&quot;</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:query</span>]]
-    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;1&quot;</span>
-      <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:query</span>].<span class="ruby-identifier">blank?</span>
-        <span class="ruby-identifier">joins</span> = <span class="ruby-value">:pseuds</span>
-        <span class="ruby-identifier">conditions</span> = [(<span class="ruby-string">'(pseuds.name LIKE ? OR email = ?) AND activated_at IS NULL'</span>), <span class="ruby-node">&quot;%#{params[:query]}%&quot;</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:query</span>]]
-      <span class="ruby-keyword">else</span>
-        <span class="ruby-identifier">conditions</span> = [<span class="ruby-string">'activated_at IS NULL'</span>]
-      <span class="ruby-keyword">end</span>
-    <span class="ruby-keyword">else</span>
-      <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:query</span>].<span class="ruby-identifier">blank?</span>
-        <span class="ruby-identifier">joins</span> = [<span class="ruby-value">:pseuds</span>, <span class="ruby-value">:roles</span>]
-        <span class="ruby-identifier">conditions</span> = [<span class="ruby-string">'(pseuds.name LIKE ? OR email = ?) AND roles.name = ?'</span>, <span class="ruby-node">&quot;%#{params[:query]}%&quot;</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:query</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>]]
-      <span class="ruby-keyword">else</span>
-        <span class="ruby-identifier">joins</span> = <span class="ruby-value">:roles</span>
-        <span class="ruby-identifier">conditions</span> = [<span class="ruby-string">'roles.name = ?'</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>]]
-      <span class="ruby-keyword">end</span>
-    <span class="ruby-keyword">end</span>
-    <span class="ruby-ivar">@users</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">select</span>(<span class="ruby-string">'DISTINCT users.*'</span>).<span class="ruby-identifier">joins</span>(<span class="ruby-identifier">joins</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">conditions</span>)
-  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@role_values</span> = <span class="ruby-ivar">@roles</span>.<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">role</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">role</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">humanize</span>.<span class="ruby-identifier">titlecase</span>, <span class="ruby-identifier">role</span>.<span class="ruby-identifier">name</span>] }
+  <span class="ruby-ivar">@role</span> = <span class="ruby-constant">Role</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:role</span>]
+  <span class="ruby-ivar">@users</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">search_by_role</span>(<span class="ruby-ivar">@role</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:query</span>], <span class="ruby-value">:inactive</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:inactive</span>], <span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
 <span class="ruby-keyword">end</span></pre>
           </div><!-- index-source -->
           
@@ -776,7 +755,7 @@
 
           
           <div class="method-source-code" id="notify-source">
-            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 145</span>
+            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 124</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:letter</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:letter</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
     <span class="ruby-identifier">letter</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:letter</span>][<span class="ruby-value">0</span>,<span class="ruby-value">1</span>]
@@ -812,7 +791,7 @@
 
           
           <div class="method-source-code" id="send_activation-source">
-            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 212</span>
+            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 191</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_activation</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-comment"># send synchronously to avoid getting caught in mail queue</span>
@@ -846,7 +825,7 @@
 
           
           <div class="method-source-code" id="send_notification-source">
-            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 155</span>
+            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 134</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_notification</span>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">params</span>[<span class="ruby-value">:notify_all</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:notify_all</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;0&quot;</span>)
@@ -916,7 +895,7 @@
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 35</span>
+            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 14</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -951,7 +930,7 @@
 
           
           <div class="method-source-code" id="update_user-source">
-            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 53</span>
+            <pre><span class="ruby-comment"># File app/controllers/admin/admin_users_controller.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_user</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]
     <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
