@@ -402,4 +402,13 @@ div.dynamic {
   width: auto;
 }
 
+/* CONTEXT: secondary */
+
+.secondary form {
+  padding: 0;
+  border: none;
+  background: transparent;
+    box-shadow: none;
+}
+
 /*END== */
