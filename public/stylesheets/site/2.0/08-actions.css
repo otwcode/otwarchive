@@ -141,8 +141,8 @@ dl.stats + h6 + .actions, li.news .actions {
   float: none;
 }
 
-.chapter .secondary {
-  top: 2.5em;
+.chapter .secondary, .download .secondary {
+  top: 3.5em;
 }
 
 .dashboard .landmark {
