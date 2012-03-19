@@ -4,8 +4,8 @@ class GiftsController < ApplicationController
   
   def index
     @user = User.find_by_login(params[:user_id]) if params[:user_id]
-    @page_subtitle = ts("for ") + @user.login
     @recipient_name = params[:recipient]
+    @page_subtitle = ts("for %{name}", :name => (@user ? @user.login : @recipient_name))
     unless @user || @recipient_name
       flash[:error] = ts("Whose gifts did you want to see?")
       redirect_to root_path and return

@@ -58,12 +58,11 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    @page_subtitle = @user.login
-
     if @user.blank?
       flash[:error] = ts("Sorry, could not find this user.")
       redirect_to people_path and return
     end
+    @page_subtitle = @user.login
 
     # very similar to show under pseuds - if you change something here, change it there too
     if current_user.nil?
