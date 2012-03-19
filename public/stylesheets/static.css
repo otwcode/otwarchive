@@ -141,6 +141,22 @@ h3.heading {
   visibility: hidden;
 }
 
+.meta, .meta .tags {
+  float: left;
+  width: 100%;
+}
+
+.meta dt {
+  font-weight: 600;
+  float: left;
+  clear: left;
+}
+
+.meta dd {
+  float: left;
+  margin: 0 0 0.643em 0.375em;
+}
+
 .userstuff p {
   line-height: 1.5;
   margin: 1.286em auto;
