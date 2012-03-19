@@ -12,10 +12,12 @@
       <dt>Users: </dt><dd><%= @skin.preferences.count %></dd>
       <dt>Role: </dt><dd><%= @skin.role %></dd>
       <dt>Media: </dt><dd><%= @skin.get_media %></dd>
-      <dt>Condition:</dt>
-      <% if @skin.ie_condition.present? %><abbr title="internet explorer">IE</abbr><%= @skin.ie_condition %></dd><% end %>
-      <% if @skin.unusable? %><dd>parent only</dd><% end %>
-      <!--BACK END pls: else <dd>normal</dd> end-->
+      <dt>Condition: </dt>
+      <dd>
+        <% unless @skin.ie_condition.present? || @skin.unusable? %>normal<% end %>
+        <% if @skin.ie_condition.present? %><abbr title="Internet Explorer"><%= @skin.ie_condition %></abbr><% end %>
+        <% if @skin.unusable? %>parent only<% end %>
+      </dd>
     </dl>
     	<%= render :partial => "skin_top_navigation" %>
     	<p class="icon"><%= skin_preview_display(@skin) %></p>
