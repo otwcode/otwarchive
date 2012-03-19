@@ -230,17 +230,7 @@
  
   </fieldset>
  
-      <% if @chapters %>
-        <fieldset role="article">
-          <legend><%= ts('Skins') %></legend>
-          <!--BACK END, halp, please move this out as it is clearly not work text-->
-          <dl class="skin">
-            <dt><%= f.label :work_skin_id, ts("Custom Stylesheet") %> <%= link_to_help "work-skins" %></dt>
-            <dd><%= f.collection_select :work_skin_id, WorkSkin.approved_or_owned_by(current_user).order(:title), :id, :title, {:selected => (@work.work_skin ? @work.work_skin.id.to_s : nil), :include_blank => true} %>
-            <p class="navigation actions" role="navigation"><%= link_to ts('Public work skins'), skins_path(:work_skins => true) %></p></dd>
-          </dl>
-        </fieldset>
-      <% else %>
+      <% unless @chapters %>
         <!-- Work text field (chapter_attributes_content) -->
         <fieldset class="work text" role="article">
           <legend class="required"><%= ts('Work Text *') %></legend>
