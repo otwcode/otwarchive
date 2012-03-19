@@ -113,7 +113,7 @@ Feature: Invite queue management
     # user uses email invite
     Then the email should contain "You've been invited to join our beta!"
       And the email should contain "fanart"
-      And the email should contain "fanvids"
+      And the email should contain "podfic"
     
     # user creates account, with error messages
     When I click the first link in the email
