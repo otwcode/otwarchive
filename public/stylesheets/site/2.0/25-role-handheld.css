@@ -148,3 +148,7 @@ dl.stats + h6 + .actions {
   clear: none;
   float: left;
 }
+
+.dashboard .landmark {
+  clear: both;
+}
