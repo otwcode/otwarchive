@@ -1,25 +1,20 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= t("archive_faq", :default => "Archive FAQ") %></h2>
+<h2 class="heading"><%= link_to ts("Archive FAQ"), archive_faqs_path %> > <%= @archive_faq.title %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
-<ul class="navigation actions" role="navigation">
-	<li><%= link_to t('.back_to_archive_faq_text', :default => 'Back to Archive FAQ'), archive_faqs_path %></li>
-</ul>
+
 <!--/subnav-->
 
 <!--main content-->
-<div class="admin" role="article">
-  <div class="header">
-    <h3 class="heading">
-      <%= @archive_faq.title %>
-    </h3>
-    <% if logged_in_as_admin? %>
-      <h4 class="heading">
+<div class="faq admin" role="article">
+  <% if logged_in_as_admin? %>
+    <div class="header">
+      <h3 class="heading">
         Updated: <%=h @archive_faq.updated_at %> | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
-      </h4>
-    <% end %>
-  </div>
+      </h3>
+    </div>
+  <% end %>
   <div class="userstuff">
     <%=raw sanitize_field(@archive_faq, :content) %>
   </div>
