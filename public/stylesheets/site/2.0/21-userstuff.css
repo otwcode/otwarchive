@@ -149,12 +149,12 @@
 
 /* FAQ PAGES */
 
-.faq {
+.faq .userstuff {
   max-width: 72em;
   margin: auto;
 }
 
-.faq h3 {
+.faq .userstuff h3 {
   margin-top: 3em;
 }
 

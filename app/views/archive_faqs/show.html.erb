@@ -1,5 +1,5 @@
 <!--Descriptive page name, messages and instructions-->
-<h2 class="heading"><%= link_to t("archive_faq", :default => "Archive FAQ"), archive_faqs_path %> > <%= @archive_faq.title %></h2>
+<h2 class="heading"><%= link_to ts("Archive FAQ"), archive_faqs_path %> > <%= @archive_faq.title %></h2>
 <!--/descriptions-->
 
 <!--subnav-->
@@ -7,15 +7,15 @@
 <!--/subnav-->
 
 <!--main content-->
-<div class="admin" role="article">
-  <div class="header">
-    <% if logged_in_as_admin? %>
+<div class="faq admin" role="article">
+  <% if logged_in_as_admin? %>
+    <div class="header">
       <h3 class="heading">
         Updated: <%=h @archive_faq.updated_at %> | <%= link_to 'Edit', edit_archive_faq_path(@archive_faq) %>
       </h3>
-    <% end %>
-  </div>
-  <div class="faq userstuff">
+    </div>
+  <% end %>
+  <div class="userstuff">
     <%=raw sanitize_field(@archive_faq, :content) %>
   </div>
 </div>
