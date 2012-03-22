@@ -371,7 +371,7 @@ div.dynamic {
     box-shadow: 1px 2px 5px;
 }
 
-.dynamic form fieldset, .toggled form fieldset, .toggled form dl, .secondary .toggled form {
+.dynamic form fieldset, .toggled form fieldset, .toggled form dl, .secondary .toggled form, .secondary form {
   border: none;
   background: transparent;
   margin: 0;
@@ -400,15 +400,6 @@ div.dynamic {
 
 .dashboard .filters dt {
   width: auto;
-}
-
-/* CONTEXT: secondary */
-
-.secondary form {
-  padding: 0;
-  border: none;
-  background: transparent;
-    box-shadow: none;
 }
 
 /*END== */
