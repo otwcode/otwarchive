@@ -147,14 +147,17 @@ h3.heading {
 }
 
 .meta dt {
-  font-weight: 600;
+  text-align: left;
+  min-width: 10.5em;
+  width: 25%;
   float: left;
   clear: left;
 }
 
 .meta dd {
+  width: 72.5%;
   float: left;
-  margin: 0 0 0.643em 0.375em;
+  margin: 0 0 0.643em;
 }
 
 .userstuff p {
