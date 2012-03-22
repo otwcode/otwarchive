@@ -771,21 +771,27 @@ class Work < ActiveRecord::Base
 
   # Gets all comments for all chapters in the work
   def find_all_comments
-    self.chapters.collect { |c| c.find_all_comments }.flatten
+    Comment.where(
+      :parent_type => 'Chapter', 
+      :parent_id => self.chapters.value_of(:id)
+    )
   end
 
   # Returns number of comments
-  # Hidden and deleted comments are referenced in the view because of the threading system - we don't necessarily need to
+  # Hidden and deleted comments are referenced in the view because of 
+  # the threading system - we don't necessarily need to
   # hide their existence from other users
   def count_all_comments
-    self.chapters.collect { |c| c.count_all_comments }.sum
+    find_all_comments.count
   end
 
   # returns the top-level comments for all chapters in the work
   def comments
-    self.chapters.collect { |c| c.comments }.flatten
+    Comment.where(
+      :commentable_type => 'Chapter', 
+      :commentable_id => self.chapters.value_of(:id)
+    )
   end
-
 
   ########################################################################
   # RELATED WORKS
