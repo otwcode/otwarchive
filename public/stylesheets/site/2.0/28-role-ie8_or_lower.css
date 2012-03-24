@@ -169,6 +169,12 @@ input, select, option, textarea, legend, label, .actions a {
   display: none;
 }
 
+/* commas */
+
+.commas li.last:after {
+  content: none;
+}
+
 /*DIAGNOSIS*/
 
 /* WIDGET: IBOX (called by help links)*/
