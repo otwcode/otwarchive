@@ -65,7 +65,7 @@
             <%= optional_tag_set_form.label :tagnames, ts("Optional Tags: ") %> <%= link_to_help("challenge-optional-tags-user")%>
           </dt>
           <dd>
-            <%= optional_tag_set_form.text_field :tagnames, autocomplete_options("tag") %>
+            <%= optional_tag_set_form.text_field :tagnames, autocomplete_options("tag?type=all") %>
           </dd>
         <% end %>
       <% end %>
