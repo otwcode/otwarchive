@@ -5,10 +5,10 @@
       <% unless @filters.blank? %>
         <% Tag::FILTERS.each do |type| %>
           <% unless @filters[type].blank? %>
-            <dt>        
-              <span class="tag_category_<%= type %>_open hidden"><%= image_tag 'arrow-right.gif', :alt => "" %></span>
-              <span class="tag_category_<%= type %>_close hidden"><%= image_tag 'arrow-down.gif', :alt => "" %></span>              
-              <%= type.constantize::NAME %> 
+            <dt>
+              <noscript><%= type.constantize::NAME %></noscript>
+              <span class="tag_category_<%= type %>_open hidden"><%= image_tag 'arrow-right.gif', :alt => "" %><%= type.constantize::NAME %></span>
+              <span class="tag_category_<%= type %>_close hidden"><%= image_tag 'arrow-down.gif', :alt => "" %><%= type.constantize::NAME %></span>
             </dt>
             <dd id="tag_category_<%= type %>" class="tags toggled">
               <ul>              
