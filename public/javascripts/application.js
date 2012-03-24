@@ -27,6 +27,7 @@ $j(document).ready(function() {
         this.href = this.href.replace(/\/confirm_delete$/, "");
         $j(this).attr("data-method", "delete").attr("data-confirm", "Are you sure? This CANNOT BE UNDONE!");
     });
+    $j('.commas li:last-child').addClass('last');
 });
 
 function visualizeTables() {
