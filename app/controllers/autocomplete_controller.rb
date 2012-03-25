@@ -39,7 +39,7 @@ class AutocompleteController < ApplicationController
     end
   public  
   # these are all basically duplicates but make our calls to autocomplete more readable
-  def tag; tag_output(params[:term], params[:type]); end
+  def tag; tag_output(params[:term], params[:type] || "all"); end
   def fandom; tag_output(params[:term], "fandom"); end
   def character; tag_output(params[:term], "character"); end
   def relationship; tag_output(params[:term], "relationship"); end
