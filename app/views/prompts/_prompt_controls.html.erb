@@ -22,7 +22,8 @@
       </li>
     <% end %>
     <% # The delete link should show up only for the user who actually signed up while signups are open or for the owner or mod %>
-    <% if (challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user)) && prompt.can_delete? %>
+		<% # it will also be hidden if the user already has the minimum number of prompts so can't delete without editing or deleting signup %>
+    <% if ((challenge.signup_open && user == current_user) || (collection.user_is_maintainer?(current_user))) && prompt.can_delete? %>
     <li>
         <%= link_to ts("Delete"), 
           collection_prompt_path(collection, prompt), 
