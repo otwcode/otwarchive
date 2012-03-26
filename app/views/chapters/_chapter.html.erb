@@ -1,7 +1,7 @@
 <!-- This partial requires local variable 'chapter' -->
 <% chapter_id = "chapter-#{chapter.position.to_s}" %>
 <div class="chapter<%= ' draft' unless chapter.posted? %>" id="<%= chapter_id %>">
-  <% unless chapter.posted? %>
+  <% unless chapter.posted? || @preview_mode %>
     <p class="draft-chapter notice"><%= ts("This chapter is a draft and hasn't been posted yet!") %></p>
   <% end %>
 <!-- chapter management -->  
