@@ -70,10 +70,6 @@ ul.notes li, .error ul li {
 }
 
 span.error {
-  display: inline-block;
-}
-
-.comment span.error {
   display: block;
 }
 
