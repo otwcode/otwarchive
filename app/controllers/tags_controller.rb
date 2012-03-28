@@ -60,7 +60,7 @@ class TagsController < ApplicationController
   #       to the works controller)
   def show
     if @tag.is_a?(Banned) && !logged_in_as_admin?
-      flash[:error] = t('errors.log_in_as_admin', :default => "Please log in as admin")
+      flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
     end
     # if tag is NOT wrangled, prepare to show works and bookmarks that are using it
@@ -85,7 +85,13 @@ class TagsController < ApplicationController
   end
 
   def feed
-    @tag = Tag.find(params[:id])
+    begin
+      @tag = Tag.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      flash[:error] = ts("Tag not found!")
+      redirect_back_or_default(tags_path)
+      return
+    end
     if !@tag.canonical? && @tag.merger
       @tag = @tag.merger
     end
@@ -97,7 +103,7 @@ class TagsController < ApplicationController
         @works = @tag.works.visible_to_all.order("created_at DESC").limit(25)
       end
     else
-      redirect_to tag_works_path(:tag_id => @tag.to_param)
+      redirect_to tag_works_path(:tag_id => @tag.to_param) and return
     end
 
     respond_to do |format|
@@ -127,7 +133,7 @@ class TagsController < ApplicationController
     respond_to do |format|
       format.html do
         # This is just a quick fix to avoid script barf if JavaScript is disabled
-        flash[:error] = t('need_javascript', :default => "Sorry, you need to have JavaScript enabled for this.")
+        flash[:error] = ts("Sorry, you need to have JavaScript enabled for this.")
         if request.env["HTTP_REFERER"]
           redirect_to(request.env["HTTP_REFERER"] || root_path)
         else
@@ -157,16 +163,16 @@ class TagsController < ApplicationController
       model = type.classify.constantize rescue nil
       @tag = model.find_or_create_by_name(params[:tag][:name])  if model.is_a? Class
     else
-      flash[:error] = t('please_provide_category', :default => "Please provide a category.")
+      flash[:error] = ts("Please provide a category.")
       @tag = Tag.new(:name => params[:tag][:name])
       render :action => "new" and return
     end
     if @tag && @tag.valid?
       if (@tag.name != params[:tag][:name]) && (@tag.name.downcase == params[:tag][:name].downcase) # only capitalization different
         @tag.update_attribute(:name, params[:tag][:name])  # use the new capitalization
-        flash[:notice] = t('successfully_modified', :default => 'Tag was successfully modified.')
+        flash[:notice] = ts("Tag was successfully modified.")
       else
-        flash[:notice] = t('successfully_created', :default => 'Tag was successfully created.')
+        flash[:notice] = ts("Tag was successfully created.")
       end
       @tag.update_attribute(:canonical, params[:tag][:canonical])
       redirect_to url_for(:controller => "tags", :action => "edit", :id => @tag)
@@ -282,8 +288,8 @@ class TagsController < ApplicationController
       end
     end
 
-    flash[:notice] = "The following tags were successfully updated: #{saved.collect(&:name).join(', ')}" if !saved.empty?
-    flash[:error] = "The following tags weren't saved: #{not_saved.collect(&:name).join(', ')}" if !not_saved.empty?
+    flash[:notice] = ts("The following tags were successfully updated: %{tags_saved}", :tags_saved => saved.collect(&:name).join(', ')) if !saved.empty?
+    flash[:error] = ts("The following tags weren't saved: %{tags_not_saved}", :tags_not_saved => not_saved.collect(&:name).join(', ')) if !not_saved.empty?
 
     redirect_to url_for(:controller => :tags, :action => :wrangle, :id => params[:id], :show => params[:show], :page => params[:page], :sort_column => params[:sort_column], :sort_direction => params[:sort_direction], :status => params[:status])
   end
