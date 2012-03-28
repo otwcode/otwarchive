@@ -7,7 +7,7 @@ class GiftsController < ApplicationController
     @recipient_name = params[:recipient]
     unless @user || @recipient_name
       flash[:error] = ts("Whose gifts did you want to see?")
-      redirect_to root_path and return
+      redirect_to(@collection || root_path) and return
     end
     if @user
       if current_user.nil?
