@@ -128,9 +128,9 @@
                 </label>
               </li>
             <% end %>
-            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag}, :target => "_blank" %></li>
-            <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag}, :target => "_blank" %></li>
-            <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag}, :target => "_blank" %></li>
+            <li><%= link_to 'edit', {:controller => :tags, :action => :edit, :id => tag} %></li>
+            <li><%= link_to 'wrangle', {:controller => :tags, :action => :wrangle, :id => tag} %></li>
+            <li><%= link_to 'works', {:controller => :works, :action => :index, :tag_id => tag} %></li>
           </ul>
         </td>
       </tr>
