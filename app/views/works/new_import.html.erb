@@ -1,13 +1,15 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts("Import New Work") %> <%= link_to_help 'work-import'%></h2>
 <%= error_messages_for :work %>
-	<div class="notice">
-	  <p class="important">
-    <strong><%= ts("Please note!") %></strong>   
-    <%= ts("This doesn't always work. If you have trouble, ") %> 
+<div class="notice">
+  <p class="important">
+    <%= ts("Please note! Imports from fanfiction.net are no longer available because of a block on their end.") %>
+  </p>
+  <p>
+    <%= ts("If you have trouble importing from another site, ") %> 
     <%= link_to ts("please let us know"), new_feedback_report_path %>
     <%= ts("so we can improve this tool!") %>
-  </p> 
+  </p>
   <p>You might find the <a href="http://archiveofourown.org/archive_faqs/9">Import <abbr title="frequently asked questions">FAQ</abbr></a> useful.</p>
 </div>
 
