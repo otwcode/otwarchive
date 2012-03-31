@@ -1215,7 +1215,7 @@ readable</p>
           
           <div class="method-source-code" id="tag-source">
             <pre><span class="ruby-comment"># File app/controllers/autocomplete_controller.rb, line 42</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:type</span>]); <span class="ruby-keyword">end</span></pre>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>; <span class="ruby-identifier">tag_output</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:term</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:type</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&quot;all&quot;</span>); <span class="ruby-keyword">end</span></pre>
           </div><!-- tag-source -->
           
         </div>

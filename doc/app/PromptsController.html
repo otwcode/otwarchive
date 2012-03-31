@@ -640,7 +640,7 @@
 
           
           <div class="method-source-code" id="allowed_to_destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 67</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 69</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">allowed_to_destroy</span>
   <span class="ruby-ivar">@challenge_signup</span>.<span class="ruby-identifier">user_allowed_to_destroy?</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">not_allowed</span>(<span class="ruby-ivar">@collection</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -670,7 +670,7 @@
 
           
           <div class="method-source-code" id="allowed_to_see-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 71</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 73</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">allowed_to_see</span>
   <span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">user_allowed_to_see_prompt?</span>(<span class="ruby-identifier">current_user</span>, <span class="ruby-ivar">@prompt</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">not_allowed</span>(<span class="ruby-ivar">@collection</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -700,7 +700,7 @@
 
           
           <div class="method-source-code" id="check_signup_open-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 43</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 45</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_signup_open</span>
   <span class="ruby-identifier">signup_closed</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> (<span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">signup_open</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_owner?</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">||</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_moderator?</span>(<span class="ruby-identifier">current_user</span>))
 <span class="ruby-keyword">end</span></pre>
@@ -730,7 +730,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 111</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 113</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-identifier">params</span>[<span class="ruby-value">:prompt</span>].<span class="ruby-identifier">merge!</span>({<span class="ruby-value">:challenge_signup_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@challenge_signup</span>.<span class="ruby-identifier">id</span>})
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:prompt_type</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;offer&quot;</span>
@@ -775,7 +775,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 139</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 141</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span>(<span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">signup_open</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_maintainer?</span>(<span class="ruby-identifier">current_user</span>))
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You cannot delete a prompt after signups are closed. Please contact a moderator for help.&quot;</span>)
@@ -823,7 +823,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 107</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 109</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-ivar">@index</span> = <span class="ruby-ivar">@challenge_signup</span>.<span class="ruby-identifier">send</span>(<span class="ruby-ivar">@prompt</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">pluralize</span>).<span class="ruby-identifier">index</span>(<span class="ruby-ivar">@prompt</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -853,7 +853,7 @@
 
           
           <div class="method-source-code" id="index-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 89</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 91</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
   <span class="ruby-comment"># this currently doesn't get called anywhere</span>
   <span class="ruby-comment"># should probably list all the prompts in a given collection (instead of using challenge signup for that)    </span>
@@ -922,7 +922,7 @@ end</pre>
 
           
           <div class="method-source-code" id="load_prompt_from_id-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 75</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 77</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_prompt_from_id</span>
   <span class="ruby-ivar">@prompt</span> = <span class="ruby-constant">Prompt</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-ivar">@challenge_signup</span> = <span class="ruby-ivar">@prompt</span>.<span class="ruby-identifier">challenge_signup</span>
@@ -956,7 +956,9 @@ end</pre>
           <div class="method-source-code" id="load_signup-source">
             <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_signup</span>
-  <span class="ruby-ivar">@challenge_signup</span> = <span class="ruby-constant">ChallengeSignup</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">by_user</span>(<span class="ruby-identifier">current_user</span>).<span class="ruby-identifier">first</span>
+  <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@challenge_signup</span>
+      <span class="ruby-ivar">@challenge_signup</span> = <span class="ruby-constant">ChallengeSignup</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-ivar">@collection</span>).<span class="ruby-identifier">by_user</span>(<span class="ruby-identifier">current_user</span>).<span class="ruby-identifier">first</span>
+  <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">no_signup</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@challenge_signup</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- load_signup-source -->
@@ -985,7 +987,7 @@ end</pre>
 
           
           <div class="method-source-code" id="maintainer_or_signup_owner_only-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 57</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 59</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">maintainer_or_signup_owner_only</span>
   <span class="ruby-identifier">not_allowed</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> (<span class="ruby-ivar">@challenge_signup</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">user</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_maintainer?</span>(<span class="ruby-identifier">current_user</span>))
 <span class="ruby-keyword">end</span></pre>
@@ -1015,7 +1017,7 @@ end</pre>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 97</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 99</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:prompt_type</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;offer&quot;</span>
     <span class="ruby-ivar">@index</span> = <span class="ruby-ivar">@challenge_signup</span>.<span class="ruby-identifier">offers</span>.<span class="ruby-identifier">count</span>
@@ -1083,7 +1085,7 @@ end</pre>
 
           
           <div class="method-source-code" id="no_prompt-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 81</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_prompt</span>
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;What prompt did you want to work on?&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_path</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
@@ -1115,7 +1117,7 @@ end</pre>
 
           
           <div class="method-source-code" id="no_signup-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 37</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">no_signup</span>
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Please submit a basic signup with the required fields first.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">new_collection_signup_path</span>(<span class="ruby-ivar">@collection</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span> 
@@ -1147,7 +1149,7 @@ end</pre>
 
           
           <div class="method-source-code" id="not_signup_owner-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 61</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 63</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">not_signup_owner</span>
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You can't edit someone else's signup!&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@collection</span>
@@ -1179,7 +1181,7 @@ end</pre>
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 94</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 96</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- show-source -->
@@ -1208,7 +1210,7 @@ end</pre>
 
           
           <div class="method-source-code" id="signup_closed-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 47</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 49</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">signup_closed</span>
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Signup is currently closed: please contact a moderator for help.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@collection</span> <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
@@ -1240,7 +1242,7 @@ end</pre>
 
           
           <div class="method-source-code" id="signup_owner_only-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 53</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 55</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">signup_owner_only</span>
   <span class="ruby-identifier">not_signup_owner</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> (<span class="ruby-ivar">@challenge_signup</span>.<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">user</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">||</span> (<span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">challenge_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;GiftExchange&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@challenge</span>.<span class="ruby-identifier">signup_open</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_owner?</span>(<span class="ruby-identifier">current_user</span>)))
 <span class="ruby-keyword">end</span></pre>
@@ -1270,7 +1272,7 @@ end</pre>
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 130</span>
+            <pre><span class="ruby-comment"># File app/controllers/prompts_controller.rb, line 132</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@prompt</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:prompt</span>])
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Prompt was successfully updated.'</span>
