@@ -19,7 +19,7 @@ namespace :work do
   task(:update_hit_counters => :environment) do
     work_ids = $redis.smembers("Work:new_hits").map{|id| id.to_i}
     found_works = []
-    HitCounter.find_each(:conditions => ["work_id IN (?)", work_ids]) do |hit_counter|
+    HitCounter.where("work_id IN (?)", work_ids).find_each do |hit_counter|
       hit_counter.update_from_redis
       $redis.srem("Work:new_hits", hit_counter.work_id)
       found_works << hit_counter.work_id
