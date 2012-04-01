@@ -60,6 +60,7 @@ class BookmarksController < ApplicationController
     if params[:user_id]
       # @user is needed in the sidebar
       owner = @user = User.find_by_login(params[:user_id])
+      @page_subtitle = ts("by ") + @user.login
       if params[:pseud_id] && @user
         # @author is needed in the sidebar
         owner = @author = @user.pseuds.find_by_name(params[:pseud_id])
@@ -67,6 +68,7 @@ class BookmarksController < ApplicationController
     elsif params[:tag_id]
       owner ||= Tag.find_by_name(params[:tag_id])
     elsif @collection
+      @page_subtitle = @collection.title
       owner ||= @collection # insufficient to filter out unapproved bookmarks, see below
     else
       owner ||= @bookmarkable
@@ -126,6 +128,7 @@ class BookmarksController < ApplicationController
         @most_recent_bookmarks = true
         if params[:recs_only]
           bookmarks_grouped = Bookmark.recs.recent.visible_to_user(current_user).group_by(&:bookmarkable)
+          @page_subtitle = ts("recs")
         else
           bookmarks_grouped = Bookmark.recent.visible_to_user(current_user).group_by(&:bookmarkable)
         end

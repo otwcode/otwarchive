@@ -17,6 +17,7 @@ class PseudsController < ApplicationController
       @pseuds = @user.pseuds.find(:all)
       @rec_counts = Pseud.rec_counts_for_pseuds(@pseuds)
       @work_counts = Pseud.work_counts_for_pseuds(@pseuds)
+      @page_subtitle = @user.login
     else
       redirect_to people_path
     end
@@ -29,6 +30,7 @@ class PseudsController < ApplicationController
       redirect_to people_path and return
     end
     @author = @user.pseuds.find_by_name(params[:id])
+    @page_subtitle = @author.name
     unless @author
       flash[:error] = ts("Sorry, could not find this pseud.")
       redirect_to people_path and return
