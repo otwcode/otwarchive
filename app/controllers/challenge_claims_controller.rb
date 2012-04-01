@@ -87,6 +87,9 @@ class ChallengeClaimsController < ApplicationController
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       if current_user == @user
         @claims = @user.request_claims.order_by_date.unposted
+				if params[:posted]
+					@claims = @user.request_claims.order_by_date.posted
+				end
         if params[:collection_id] && (@collection = Collection.find_by_name(params[:collection_id]))
           @claims = @claims.in_collection(@collection)         
         end
