@@ -196,6 +196,10 @@ li.blurb:after {
   background: url("/images/imageset.png") -125px -50px;
 }
 
+.blurb .hidden {
+  background: url("/images/imageset.png") -150px -50px;
+}
+
 .blurb .rec {
   background: url("/images/imageset.png") -100px -50px;
 }
