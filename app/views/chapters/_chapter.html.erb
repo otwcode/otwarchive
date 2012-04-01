@@ -1,6 +1,9 @@
 <!-- This partial requires local variable 'chapter' -->
 <% chapter_id = "chapter-#{chapter.position.to_s}" %>
 <div class="chapter<%= ' draft' unless chapter.posted? %>" id="<%= chapter_id %>">
+  <% unless chapter.posted? || @preview_mode %>
+    <p class="draft-chapter notice"><%= ts("This chapter is a draft and hasn't been posted yet!") %></p>
+  <% end %>
 <!-- chapter management -->  
   <% if is_author_of?(@work) && !@downloading %>
     <%= render :partial => 'chapters/chapter_management', :locals => { :chapter => chapter, :work => @work, :preview_mode => @preview_mode} %>
