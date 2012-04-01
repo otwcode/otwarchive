@@ -1,7 +1,7 @@
 <!--Descriptive page name, messages and instructions-->
 <h2 class="heading"><%= ts("Create Account") %></h2>
 <% if @user.errors.any? %>
-  <div id="errorExplanationNone">
+  <div class="error">
      <h4 class="heading"><%= ts("Oops, there's some problems with the stuff you told us.") %></h4>
      <ul>
         <% @user.errors.full_messages.each do |msg| %>
