@@ -70,7 +70,7 @@ ul.notes li, .error ul li {
 }
 
 span.error {
-  display: inline-block;
+  display: block;
 }
 
 /* SYMBOLS (mostly help button, arguably an action but hey ho); 
