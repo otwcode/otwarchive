@@ -439,6 +439,7 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   When I am on my user page
     And I follow "Claims"
+		And I follow "See previously posted claims instead"
   Then I should see "Fulfilled Story"
    # TODO: should I? It's not there at all
     And I should not see "Not yet posted"

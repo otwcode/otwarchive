@@ -1,13 +1,27 @@
 <div class="user home">
   <h2 class="heading">Your Claims<% if @collection %> In <%= link_to(@collection.title, @collection) %><% end %></h2>
 
+	<% unless params[:for_user] %>
+		<ul class="navigation actions" role="navigation">
+			<% if params[:posted] %>
+        <li id="unposted-link">
+           <%= link_to(ts('See currently unfulfilled claims instead?'), user_claims_path(current_user)) %>
+        </li>
+      <% else %>
+        <li id="posted-link">
+          <%= link_to(ts('See previously posted claims instead?'), user_claims_path(current_user, :posted => true)) %>
+        </li>
+      <% end %>
+		</ul>
+	<% end %>
+
   <%= will_paginate @claims %>
 
   <ol class="index group">
 
-    <% @claims.each do |claim| %>
-      <%= render "prompts/prompt_blurb", :prompt => claim.request_prompt, :suppress_claims => true, :claim => claim %>
-    <% end %>
+		<% @claims.each do |claim| %>
+			<%= render "prompts/prompt_blurb", :prompt => claim.request_prompt, :claim => claim, :suppress_claims => !params[:posted] %>
+		<% end %>
   
   </ol>
 
