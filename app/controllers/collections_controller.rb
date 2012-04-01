@@ -18,6 +18,7 @@ class CollectionsController < ApplicationController
       @collections = @collection.children.by_title.paginate(:page => params[:page])
     elsif params[:user_id] && (@user = User.find_by_login(params[:user_id]))
       @collections = @user.owned_collections.by_title.paginate(:page => params[:page])
+      @page_subtitle = ts("created by ") + @user.login
     else
       if params[:user_id]
         flash.now[:error] = ts("We couldn't find a user by that name, sorry.")
@@ -42,6 +43,7 @@ class CollectionsController < ApplicationController
   end
 
   def show
+    @page_subtitle = @collection.title
     unless @collection
   	  flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
       redirect_to collections_path and return
