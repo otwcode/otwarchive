@@ -1,71 +1,92 @@
-Factory.define :user do |f|  
-  f.sequence(:login) { |n| "testuser#{n}" }   
-  f.password "password"
-  f.age_over_13 '1'
-  f.terms_of_service '1' 
-  f.password_confirmation { |u| u.password }  
-  f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }  
+FactoryGirl.define do
+  factory :user do |f|  
+    f.sequence(:login) { |n| "testuser#{n}" }   
+    f.password "password"
+    f.age_over_13 '1'
+    f.terms_of_service '1' 
+    f.password_confirmation { |u| u.password }  
+    f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
+  end
 end
 
-Factory.define :pseud do |f|  
-  f.name "my test pseud"  
-  f.association :user  
+FactoryGirl.define do
+  factory :pseud do |f|  
+    f.name "my test pseud"  
+    f.association :user  
+  end
 end
 
-Factory.define :admin do |f|  
-  f.sequence(:login) { |n| "testadmin#{n}" }   
-  f.password "password"  
-  f.password_confirmation { |u| u.password }  
-  f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }  
+FactoryGirl.define do
+  factory :admin do |f|  
+    f.sequence(:login) { |n| "testadmin#{n}" }   
+    f.password "password"  
+    f.password_confirmation { |u| u.password }  
+    f.sequence(:email) { |n| "foo#{n}@archiveofourown.org" }
+  end
 end
 
-Factory.define :archive_faq do |f|
-  f.sequence(:title) { |n| "The #{n} FAQ" }
-  f.sequence(:content) { |n| "This is the #{n} FAQ" }
+FactoryGirl.define do
+  factory :archive_faq do |f|
+    f.sequence(:title) { |n| "The #{n} FAQ" }
+    f.sequence(:content) { |n| "This is the #{n} FAQ" }
+  end
 end
 
-Factory.define :tag do |f|
-  f.canonical true
-  f.sequence(:name) { |n| "The #{n} Tag" }
+FactoryGirl.define do
+  factory :tag do |f|
+    f.canonical true
+    f.sequence(:name) { |n| "The #{n} Tag" }
+  end
 end
 
-Factory.define :fandom do |f|
-  f.canonical true
-  f.sequence(:name) { |n| "The #{n} Fandom" }
+FactoryGirl.define do
+  factory :fandom do |f|
+    f.canonical true
+    f.sequence(:name) { |n| "The #{n} Fandom" }
+  end
 end
 
-Factory.define :character do |f|
-  f.canonical true
-  f.sequence(:name) { |n| "Character #{n}" }
+FactoryGirl.define do
+  factory :character do |f|
+    f.canonical true
+    f.sequence(:name) { |n| "Character #{n}" }
+  end
 end
 
-Factory.define :relationship do |f|
-  f.canonical true
-  f.sequence(:name) { |n| "Jane#{n}/John#{n}" }
+FactoryGirl.define do
+  factory :relationship do |f|
+    f.canonical true
+    f.sequence(:name) { |n| "Jane#{n}/John#{n}" }
+  end
 end
 
-Factory.define :freeform do |f|
-  f.canonical true
-  f.sequence(:name) { |n| "Freeform #{n}" }
+FactoryGirl.define do
+  factory :freeform do |f|
+    f.canonical true
+    f.sequence(:name) { |n| "Freeform #{n}" }
+  end
 end
 
 
-
-Factory.define :chapter do |f|
-  f.content "Awesome content!"
-  f.association :work
+FactoryGirl.define do
+  factory :chapter do |f|
+    f.content "Awesome content!"
+    f.association :work
+  end
 end
 
-Factory.define :work do |f|
-  f.title "My title"
+FactoryGirl.define do
+  factory :work do |f|
+    f.title "My title"
 
-  f.after_build do |work|
-    work.chapters = [Factory.build(:chapter, :work => work)] if work.chapters.blank?
-    work.authors = [Factory.build(:pseud)] if work.authors.blank?
-    work.fandoms = [Factory.build(:fandom)] if work.fandoms.blank?
-    work.characters = [Factory.build(:character)] if work.characters.nil?
-    work.relationships = [Factory.build(:relationship)] if work.relationships.nil?
-    work.freeforms = [Factory.build(:freeform)] if work.freeforms.nil?
+    f.after_build do |work|
+      work.chapters = [Factory.build(:chapter, :work => work)] if work.chapters.blank?
+      work.authors = [Factory.build(:pseud)] if work.authors.blank?
+      work.fandoms = [Factory.build(:fandom)] if work.fandoms.blank?
+      work.characters = [Factory.build(:character)] if work.characters.nil?
+      work.relationships = [Factory.build(:relationship)] if work.relationships.nil?
+      work.freeforms = [Factory.build(:freeform)] if work.freeforms.nil?
+    end
   end
 end
 

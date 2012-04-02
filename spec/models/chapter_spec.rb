@@ -6,7 +6,7 @@ describe Chapter do
   describe "save" do
 
     before(:each) do
-      @work = Factory.create(:work)
+      @work = FactoryGirl.create(:work)
       @chapter = Chapter.new(:work => @work, :content => "Cool story, bro!")
     end
     
@@ -17,7 +17,7 @@ describe Chapter do
   end
 
   describe "set_word_count" do
-    let(:chapter) { chapter = Factory.create(:chapter) }
+    let(:chapter) { chapter = FactoryGirl.create(:chapter) }
 
     it "should count plain words delimited with spaces" do
       chapter.content = "one two three four"

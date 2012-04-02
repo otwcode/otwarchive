@@ -21,7 +21,7 @@ Feature: Admin posts
     And I press "Comment"
   Then 1 email should be delivered to "testadmin@example.org"
     And the email should contain "Excellent"
-
+  
   # admin replies to comment of regular user
   Given I am logged out
     And I am logged in as an admin
@@ -93,5 +93,5 @@ Feature: Admin posts
       And I fill in "admin_post_tag_list" with "quotes, futurama"
       And I press "Post"
     Then I should see "Admin Post was successfully created."
-      And I should see "toaster" within ".admin"
+      And I should see "toaster" within ".admin .userstuff"
       And I should see "futurama" within ".tags"

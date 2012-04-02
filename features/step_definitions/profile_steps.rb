@@ -64,7 +64,7 @@ end
 
 
 When /^I enter a duplicate email$/ do
-  user = Factory.create(:user, :login => "testuser2", :password => "password", :email => "foo@ao3.org")
+  user = FactoryGirl.create(:user, :login => "testuser2", :password => "password", :email => "foo@ao3.org")
   user.activate
   click_link("Email")
   fill_in("New Email", :with => "foo@ao3.org")

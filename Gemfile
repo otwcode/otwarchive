@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'bundler', '~>1.0.0'
+gem 'bundler'
 
-gem 'rails', '3.0.4'
+gem 'rails', '3.2.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -15,11 +15,6 @@ gem 'mysql2'
 gem 'rack-openid', '>=0.2.1', :require => 'rack/openid'
 
 gem 'will_paginate', '>=3.0.2'
-# gem 'will_paginate',
-  # :git     => 'git://github.com/huerlisi/will_paginate.git',
-  # :branch  => 'rails3',
-  # :require => 'will_paginate'
-
 gem 'htmlentities'
 gem 'whenever', '~>0.6.2', :require => false
 gem 'nokogiri', '>=1.4.2'
@@ -28,10 +23,7 @@ gem 'sanitize'
 gem 'rest-client', :require => 'rest_client'
 gem 'resque', '>=1.14.0'
 gem 'resque_mailer'
-gem 'thinking-sphinx',
-  :git     => 'git://github.com/freelancing-god/thinking-sphinx.git',
-  :branch  => 'rails3',
-  :require => 'thinking_sphinx'
+gem 'thinking-sphinx'
 #gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'mocha'
@@ -42,15 +34,7 @@ gem 'paperclip', '>=2.3.16'
 # for looking up image dimensions quickly
 gem 'fastimage'
 
-gem 'tolk',
-  :git => 'git://github.com/ambtus/tolk.git',
-  :branch => 'rails3',
-  :require => 'tolk'
-
-gem 'authlogic',
-  :git     => 'git://github.com/odorcicd/authlogic.git',
-  :branch  => 'rails3',
-  :require => 'authlogic'
+gem 'authlogic'
 
 # A highly updated version of the authorization plugin
 gem 'permit_yo'
@@ -75,9 +59,9 @@ group :test do
   gem 'pickle'
   gem 'shoulda'
   gem 'factory_girl'
-  gem 'capybara', '=0.3.9'
+  gem 'capybara'
   gem 'database_cleaner', '>=0.6.0.rc.3'
-  gem 'cucumber-rails'
+  gem 'cucumber-rails', :require => false
   gem 'cucumber', '>=0.9.1'
   gem 'launchy'    # So you can do Then show me the page
   # automatically record http requests and save them to make

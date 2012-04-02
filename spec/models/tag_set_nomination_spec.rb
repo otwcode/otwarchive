@@ -6,7 +6,7 @@ describe TagSetNomination do
   describe "save" do
     
     before(:each) do
-      @user = Factory.create(:user)
+      @user = FactoryGirl.create(:user)
 
       @owned_tag_set = OwnedTagSet.new(:title => "Testing")
       @owned_tag_set.build_tag_set

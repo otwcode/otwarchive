@@ -5,9 +5,9 @@ describe Work do
   describe "save" do
 
     before(:each) do
-      @author = Factory.create(:user)
-      @fandom1 = Factory.create(:fandom)
-      @chapter1 = Factory.create(:chapter)
+      @author = FactoryGirl.create(:user)
+      @fandom1 = FactoryGirl.create(:fandom)
+      @chapter1 = FactoryGirl.create(:chapter)
       
       @work = Work.new(:title => "Title")
       @work.fandoms << @fandom1

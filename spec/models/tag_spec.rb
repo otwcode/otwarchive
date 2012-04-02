@@ -31,7 +31,7 @@ describe Tag do
     context "when logged in as a regular user" do
 
       before do
-        User.current_user = Factory.create(:user)
+        User.current_user = FactoryGirl.create(:user)
       end
 
       it "should ignore capitalisation" do
@@ -87,7 +87,7 @@ describe Tag do
 
     context "when logged in as an admin" do
       before do
-        User.current_user = Factory.create(:admin)
+        User.current_user = FactoryGirl.create(:admin)
       end
 
       it "should allow any change" do

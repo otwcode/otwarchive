@@ -1,3 +1,5 @@
+require 'iconv'
+
 class Work < ActiveRecord::Base
 
   include Taggable
