@@ -6,7 +6,7 @@ module ApplicationHelper
 
   # Generates class names for the main div in the application layout
   def classes_for_main
-    class_names = controller.controller_name + '-' + controller.action_name
+    class_names = controller.controller_name + ' ' + controller.action_name
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
     class_names
