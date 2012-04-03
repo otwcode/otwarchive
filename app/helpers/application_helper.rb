@@ -9,12 +9,11 @@ module ApplicationHelper
     class_names = controller.controller_name + '-' + controller.action_name
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
-      # How do I apply this to show (archive_faqs) and new (feedbacks) and not just index
-      if @known_issues || @feedbacks
+      if @known_issues || @feedback || @abuse_report
         class_names = "support " + controller.controller_name + ' ' + controller.action_name
       end
-      if @archive_faqs
-        class_names = "support faq " + controller.action_name
+      if @archive_faqs || @archive_faq
+        class_names = "faq support " + controller.action_name
       end
     class_names
   end
