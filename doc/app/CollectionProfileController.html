@@ -604,6 +604,7 @@
           <div class="method-source-code" id="show-source">
             <pre><span class="ruby-comment"># File app/controllers/collection_profile_controller.rb, line 5</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
+  <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">title</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@collection</span>
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;What collection did you want to look at?&quot;</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collections_path</span>

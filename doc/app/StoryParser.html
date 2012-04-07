@@ -845,7 +845,7 @@ out of the downloaded text</p>
 
           
           <div class="method-source-code" id="clean_and_split_tags-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1055</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1056</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clean_and_split_tags</span>(<span class="ruby-identifier">tags</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">tags</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r,/</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tags</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r\s/</span>)
     <span class="ruby-identifier">tags</span> = <span class="ruby-identifier">tags</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">%r\s+/</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">','</span>)
@@ -878,7 +878,7 @@ out of the downloaded text</p>
 
           
           <div class="method-source-code" id="clean_close_html_tags-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1013</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1014</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clean_close_html_tags</span>(<span class="ruby-identifier">value</span>)
   <span class="ruby-comment"># if there are any closing html tags at the start of the value let's ditch them</span>
   <span class="ruby-identifier">value</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^(\s*&lt;\/[^&gt;]+&gt;)+/</span>, <span class="ruby-string">''</span>)
@@ -909,7 +909,7 @@ out of the downloaded text</p>
 
           
           <div class="method-source-code" id="clean_storytext-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1019</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1020</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clean_storytext</span>(<span class="ruby-identifier">storytext</span>)
   <span class="ruby-identifier">storytext</span> = <span class="ruby-identifier">storytext</span>.<span class="ruby-identifier">encode</span>(<span class="ruby-string">&quot;UTF-8&quot;</span>, <span class="ruby-value">:invalid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:replace</span>, <span class="ruby-value">:undef</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:replace</span>, <span class="ruby-value">:replace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">storytext</span>.<span class="ruby-identifier">encoding</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;UTF-8&quot;</span>
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">sanitize_value</span>(<span class="ruby-string">&quot;content&quot;</span>, <span class="ruby-identifier">storytext</span>)
@@ -940,7 +940,7 @@ out of the downloaded text</p>
 
           
           <div class="method-source-code" id="clean_tags-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1026</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1027</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clean_tags</span>(<span class="ruby-identifier">tags</span>)
   <span class="ruby-identifier">tags</span> = <span class="ruby-constant">Sanitize</span>.<span class="ruby-identifier">clean</span>(<span class="ruby-identifier">tags</span>) <span class="ruby-comment"># no html allowed in tags</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">tags</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r,/</span>)
@@ -983,7 +983,7 @@ archive.</p>
 
           
           <div class="method-source-code" id="convert_rating-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1064</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1065</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">convert_rating</span>(<span class="ruby-identifier">rating</span>)
   <span class="ruby-identifier">rating</span> = <span class="ruby-identifier">rating</span>.<span class="ruby-identifier">downcase</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">rating</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^(nc-?1[78]|x|ma|explicit)/</span>)
@@ -1024,7 +1024,7 @@ archive.</p>
 
           
           <div class="method-source-code" id="convert_rating_string-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1079</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1080</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">convert_rating_string</span>(<span class="ruby-identifier">rating</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">convert_rating</span>(<span class="ruby-identifier">rating</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1054,7 +1054,7 @@ archive.</p>
 
           
           <div class="method-source-code" id="convert_revised_at-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1083</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1084</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">convert_revised_at</span>(<span class="ruby-identifier">date_string</span>)
   <span class="ruby-keyword">begin</span>
     <span class="ruby-identifier">date</span> = <span class="ruby-keyword">nil</span>
@@ -1238,7 +1238,7 @@ for that site.</p>
 
           
           <div class="method-source-code" id="download_chaptered_from_efiction-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 469</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 470</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_chaptered_from_efiction</span>(<span class="ruby-identifier">location</span>)
   <span class="ruby-ivar">@chapter_contents</span> = []
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">location</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^(.*)\/.*viewstory\.php.*sid=(\d+)($|&amp;)/</span>)
@@ -1288,26 +1288,27 @@ for that site.</p>
           <div class="method-source-code" id="download_chaptered_from_ffnet-source">
             <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 444</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_chaptered_from_ffnet</span>(<span class="ruby-identifier">location</span>)
-  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;We cannot read #{location}. Are you trying to import from the story preview?&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">location</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rstory_preview/</span>)
-  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;The url #{location} is locked.&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">location</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rsecure/</span>)
-  <span class="ruby-ivar">@chapter_contents</span> = []
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">location</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r^(.*fanfiction\.net\/s\/[0-9]+\/)([0-9]+)(\/.*)$/</span>)
-    <span class="ruby-identifier">urlstart</span> = <span class="ruby-node">$1</span>
-    <span class="ruby-identifier">urlend</span> = <span class="ruby-node">$3</span>
-    <span class="ruby-identifier">chapnum</span> = <span class="ruby-value">1</span>
-    <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-identifier">timeout</span>(<span class="ruby-constant">STORY_DOWNLOAD_TIMEOUT</span>) {
-      <span class="ruby-identifier">loop</span> <span class="ruby-keyword">do</span>
-        <span class="ruby-identifier">url</span> = <span class="ruby-node">&quot;#{urlstart}#{chapnum.to_s}#{urlend}&quot;</span>
-        <span class="ruby-identifier">body</span> = <span class="ruby-identifier">download_with_timeout</span>(<span class="ruby-identifier">url</span>)
-        <span class="ruby-keyword">if</span> <span class="ruby-identifier">body</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">chapnum</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">MAX_CHAPTER_COUNT</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">body</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%rFanFiction\.Net Message/</span>)
-          <span class="ruby-keyword">break</span>
-        <span class="ruby-keyword">end</span>
-        <span class="ruby-ivar">@chapter_contents</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">body</span>
-        <span class="ruby-identifier">chapnum</span> = <span class="ruby-identifier">chapnum</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
-      <span class="ruby-keyword">end</span>
-    }
-  <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@chapter_contents</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-string">&quot;Imports from fanfiction.net are no longer available due to a block on their end. :(&quot;</span>
+  <span class="ruby-comment"># raise Error, &quot;We cannot read #{location}. Are you trying to import from the story preview?&quot; if location.match(/story_preview/)</span>
+  <span class="ruby-comment"># raise Error, &quot;The url #{location} is locked.&quot; if location.match(/secure/)</span>
+  <span class="ruby-comment"># @chapter_contents = []</span>
+  <span class="ruby-comment"># if location.match(/^(.*fanfiction\.net\/s\/[0-9]+\/)([0-9]+)(\/.*)$/i)</span>
+  <span class="ruby-comment">#   urlstart = $1</span>
+  <span class="ruby-comment">#   urlend = $3</span>
+  <span class="ruby-comment">#   chapnum = 1</span>
+  <span class="ruby-comment">#   Timeout::timeout(STORY_DOWNLOAD_TIMEOUT) {</span>
+  <span class="ruby-comment">#     loop do</span>
+  <span class="ruby-comment">#       url = &quot;#{urlstart}#{chapnum.to_s}#{urlend}&quot;</span>
+  <span class="ruby-comment">#       body = download_with_timeout(url)</span>
+  <span class="ruby-comment">#       if body.nil? || chapnum &gt; MAX_CHAPTER_COUNT || body.match(/FanFiction\.Net Message/)</span>
+  <span class="ruby-comment">#         break</span>
+  <span class="ruby-comment">#       end</span>
+  <span class="ruby-comment">#       @chapter_contents &lt;&lt; body</span>
+  <span class="ruby-comment">#       chapnum = chapnum + 1</span>
+  <span class="ruby-comment">#     end</span>
+  <span class="ruby-comment">#   }</span>
+  <span class="ruby-comment"># end</span>
+  <span class="ruby-comment"># return @chapter_contents</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- download_chaptered_from_ffnet-source -->
           
@@ -1429,7 +1430,7 @@ for that site.</p>
 
           
           <div class="method-source-code" id="download_with_timeout-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 959</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 960</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_with_timeout</span>(<span class="ruby-identifier">location</span>, <span class="ruby-identifier">limit</span> = <span class="ruby-value">10</span>)
   <span class="ruby-identifier">story</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-identifier">timeout</span>(<span class="ruby-constant">STORY_DOWNLOAD_TIMEOUT</span>) {
@@ -1527,7 +1528,7 @@ comma-separated collection names only</p>
 
           
           <div class="method-source-code" id="get_collection_names-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1099</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1100</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_collection_names</span>(<span class="ruby-identifier">collection_string</span>)
   <span class="ruby-identifier">cnames</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-identifier">collection_string</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">cn</span><span class="ruby-operator">|</span> <span class="ruby-identifier">cn</span>.<span class="ruby-identifier">squish</span>}.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">collection_name</span><span class="ruby-operator">|</span>
@@ -1565,7 +1566,7 @@ comma-separated collection names only</p>
 
           
           <div class="method-source-code" id="get_last_modified-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 996</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 997</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_last_modified</span>(<span class="ruby-identifier">location</span>)
   <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-identifier">timeout</span>(<span class="ruby-constant">STORY_DOWNLOAD_TIMEOUT</span>) {
     <span class="ruby-identifier">resp</span> = <span class="ruby-identifier">open</span>(<span class="ruby-identifier">location</span>)
@@ -1598,7 +1599,7 @@ comma-separated collection names only</p>
 
           
           <div class="method-source-code" id="get_source_if_known-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1003</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1004</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_source_if_known</span>(<span class="ruby-identifier">known_sources</span>, <span class="ruby-identifier">location</span>)
   <span class="ruby-identifier">known_sources</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">source</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">pattern</span> = <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;SOURCE_#{source.upcase}&quot;</span>), <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">IGNORECASE</span>)
@@ -2035,7 +2036,7 @@ upload form results) and returns the final sanitized hash.</p>
 
           
           <div class="method-source-code" id="parse_common-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 506</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 507</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_common</span>(<span class="ruby-identifier">story</span>, <span class="ruby-identifier">location</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">encoding</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">work_params</span> = { <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;UPLOADED WORK&quot;</span>, <span class="ruby-value">:chapter_attributes</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&quot;</span>} }
 
@@ -2109,7 +2110,7 @@ upload form results) and returns the final sanitized hash.</p>
 
           
           <div class="method-source-code" id="parse_story_from_deviantart-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 614</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 615</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_story_from_deviantart</span>(<span class="ruby-identifier">story</span>)
   <span class="ruby-identifier">work_params</span> = {<span class="ruby-value">:chapter_attributes</span> =<span class="ruby-operator">&gt;</span> {}}
   <span class="ruby-identifier">storytext</span> = <span class="ruby-string">&quot;&quot;</span>
@@ -2201,7 +2202,7 @@ upload form results) and returns the final sanitized hash.</p>
 
           
           <div class="method-source-code" id="parse_story_from_dw-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 576</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 577</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_story_from_dw</span>(<span class="ruby-identifier">story</span>)
   <span class="ruby-identifier">work_params</span> = {<span class="ruby-value">:chapter_attributes</span> =<span class="ruby-operator">&gt;</span> {}}
 
@@ -2265,7 +2266,7 @@ upload form results) and returns the final sanitized hash.</p>
 
           
           <div class="method-source-code" id="parse_story_from_ffnet-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 764</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 765</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_story_from_ffnet</span>(<span class="ruby-identifier">story</span>)
   <span class="ruby-identifier">work_params</span> = {<span class="ruby-value">:chapter_attributes</span> =<span class="ruby-operator">&gt;</span> {}}
   <span class="ruby-comment"># storytext = clean_storytext((@doc/&quot;#storytext&quot;).inner_html)</span>
@@ -2342,7 +2343,7 @@ a stripped-down plaintext version.)</p>
 
           
           <div class="method-source-code" id="parse_story_from_lj-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 550</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 551</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_story_from_lj</span>(<span class="ruby-identifier">story</span>)
   <span class="ruby-identifier">work_params</span> = {<span class="ruby-value">:chapter_attributes</span> =<span class="ruby-operator">&gt;</span> {}}
 
@@ -2394,7 +2395,7 @@ a stripped-down plaintext version.)</p>
 
           
           <div class="method-source-code" id="parse_story_from_lotrfanfiction-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 812</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 813</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_story_from_lotrfanfiction</span>(<span class="ruby-identifier">story</span>)
   <span class="ruby-identifier">work_params</span> = <span class="ruby-identifier">parse_story_from_modified_efiction</span>(<span class="ruby-identifier">story</span>, <span class="ruby-string">&quot;lotrfanfiction&quot;</span>)
   <span class="ruby-identifier">work_params</span>[<span class="ruby-value">:fandom_string</span>] = <span class="ruby-string">&quot;Lord of the Rings&quot;</span>
@@ -2426,7 +2427,7 @@ a stripped-down plaintext version.)</p>
 
           
           <div class="method-source-code" id="parse_story_from_modified_efiction-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 824</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 825</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_story_from_modified_efiction</span>(<span class="ruby-identifier">story</span>, <span class="ruby-identifier">site</span> = <span class="ruby-string">&quot;&quot;</span>)
   <span class="ruby-identifier">work_params</span> = {<span class="ruby-value">:chapter_attributes</span> =<span class="ruby-operator">&gt;</span> {}}
   <span class="ruby-identifier">storytext</span> = <span class="ruby-ivar">@doc</span>.<span class="ruby-identifier">css</span>(<span class="ruby-string">&quot;div.chapter&quot;</span>).<span class="ruby-identifier">inner_html</span>
@@ -2524,7 +2525,7 @@ a stripped-down plaintext version.)</p>
 
           
           <div class="method-source-code" id="parse_story_from_twilightarchives-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 818</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 819</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_story_from_twilightarchives</span>(<span class="ruby-identifier">story</span>)
   <span class="ruby-identifier">work_params</span> = <span class="ruby-identifier">parse_story_from_modified_efiction</span>(<span class="ruby-identifier">story</span>, <span class="ruby-string">&quot;twilightarchives&quot;</span>)
   <span class="ruby-identifier">work_params</span>[<span class="ruby-value">:fandom_string</span>] = <span class="ruby-string">&quot;Twilight&quot;</span>      
@@ -2557,7 +2558,7 @@ rules.</p>
 
           
           <div class="method-source-code" id="parse_story_from_unknown-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 523</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 524</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_story_from_unknown</span>(<span class="ruby-identifier">story</span>)
   <span class="ruby-identifier">work_params</span> = {<span class="ruby-value">:chapter_attributes</span> =<span class="ruby-operator">&gt;</span> {}}
   <span class="ruby-identifier">storyhead</span> = <span class="ruby-ivar">@doc</span>.<span class="ruby-identifier">css</span>(<span class="ruby-string">&quot;head&quot;</span>).<span class="ruby-identifier">inner_html</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@doc</span>.<span class="ruby-identifier">css</span>(<span class="ruby-string">&quot;head&quot;</span>)
@@ -2606,7 +2607,7 @@ rules.</p>
 
           
           <div class="method-source-code" id="parse_story_from_yuletide-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 681</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 682</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_story_from_yuletide</span>(<span class="ruby-identifier">story</span>)
   <span class="ruby-identifier">work_params</span> = {<span class="ruby-value">:chapter_attributes</span> =<span class="ruby-operator">&gt;</span> {}}
   <span class="ruby-identifier">tags</span> = [<span class="ruby-string">'yuletide'</span>]
@@ -2715,7 +2716,7 @@ hash of meta values</p>
 
           
           <div class="method-source-code" id="scan_text_for_meta-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 920</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 921</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">scan_text_for_meta</span>(<span class="ruby-identifier">text</span>)
   <span class="ruby-comment"># break up the text with some extra newlines to make matching more likely</span>
   <span class="ruby-comment"># and strip out some tags</span>
@@ -2892,7 +2893,7 @@ than on the work itself</p>
 
           
           <div class="method-source-code" id="shift_chapter_attributes-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 899</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 900</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">shift_chapter_attributes</span>(<span class="ruby-identifier">work_params</span>)
   <span class="ruby-constant">CHAPTER_ATTRIBUTES_ONLY</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">work_attrib</span>, <span class="ruby-identifier">chapter_attrib</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">work_params</span>[<span class="ruby-identifier">work_attrib</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">work_params</span>[<span class="ruby-value">:chapter_attributes</span>][<span class="ruby-identifier">chapter_attrib</span>]
@@ -2936,7 +2937,7 @@ than on the work itself</p>
 
           
           <div class="method-source-code" id="truncate_on_word_boundary-source">
-            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1042</span>
+            <pre><span class="ruby-comment"># File app/models/story_parser.rb, line 1043</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">truncate_on_word_boundary</span>(<span class="ruby-identifier">text</span>, <span class="ruby-identifier">max_length</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">text</span>.<span class="ruby-identifier">blank?</span>
   <span class="ruby-identifier">words</span> = <span class="ruby-identifier">text</span>.<span class="ruby-identifier">split</span>()

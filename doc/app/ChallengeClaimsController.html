@@ -654,7 +654,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_claims_controller.rb, line 106</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_claims_controller.rb, line 109</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-comment"># create a new claim</span>
   <span class="ruby-identifier">claim</span> = <span class="ruby-constant">ChallengeClaim</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:challenge_claim</span>])
@@ -691,7 +691,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_claims_controller.rb, line 117</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_claims_controller.rb, line 120</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@claim</span> = <span class="ruby-constant">ChallengeClaim</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   
@@ -757,6 +757,9 @@
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>] <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>]))
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@user</span>
       <span class="ruby-ivar">@claims</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">request_claims</span>.<span class="ruby-identifier">order_by_date</span>.<span class="ruby-identifier">unposted</span>
+                              <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:posted</span>]
+                                      <span class="ruby-ivar">@claims</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">request_claims</span>.<span class="ruby-identifier">order_by_date</span>.<span class="ruby-identifier">posted</span>
+                              <span class="ruby-keyword">end</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>] <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>]))
         <span class="ruby-ivar">@claims</span> = <span class="ruby-ivar">@claims</span>.<span class="ruby-identifier">in_collection</span>(<span class="ruby-ivar">@collection</span>)         
       <span class="ruby-keyword">end</span>
@@ -1023,7 +1026,7 @@
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/challenge_claims_controller.rb, line 101</span>
+            <pre><span class="ruby-comment"># File app/controllers/challenge_claims_controller.rb, line 104</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-comment"># this is here just as a failsafe, this path should not be used</span>
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collection_prompt_path</span>(<span class="ruby-ivar">@collection</span>, <span class="ruby-ivar">@challenge_claim</span>.<span class="ruby-identifier">request_prompt</span>)

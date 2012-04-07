@@ -606,7 +606,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/feedbacks_controller.rb, line 16</span>
+            <pre><span class="ruby-comment"># File app/controllers/feedbacks_controller.rb, line 15</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@feedback</span> = <span class="ruby-constant">Feedback</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:feedback</span>])
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -661,7 +661,6 @@
             <pre><span class="ruby-comment"># File app/controllers/feedbacks_controller.rb, line 6</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@feedback</span> = <span class="ruby-constant">Feedback</span>.<span class="ruby-identifier">new</span>
-  <span class="ruby-ivar">@page_title</span> = <span class="ruby-string">&quot;Support and Feedback&quot;</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in_as_admin?</span>
     <span class="ruby-ivar">@feedback</span>.<span class="ruby-identifier">email</span> = <span class="ruby-identifier">current_admin</span>.<span class="ruby-identifier">email</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">is_registered_user?</span>
@@ -700,7 +699,7 @@
 
           
           <div class="method-source-code" id="build_post_info-source">
-            <pre><span class="ruby-comment"># File app/controllers/feedbacks_controller.rb, line 45</span>
+            <pre><span class="ruby-comment"># File app/controllers/feedbacks_controller.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">build_post_info</span>(<span class="ruby-identifier">feedback</span>)
   <span class="ruby-identifier">post_info</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-identifier">post_info</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;&lt;bug&gt;&quot;</span>

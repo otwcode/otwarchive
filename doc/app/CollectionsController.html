@@ -618,7 +618,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 76</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 78</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:collection</span>])
@@ -670,7 +670,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 129</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 131</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
@@ -704,7 +704,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 73</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- edit-source -->
@@ -741,6 +741,7 @@
     <span class="ruby-ivar">@collections</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">children</span>.<span class="ruby-identifier">by_title</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>] <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>]))
     <span class="ruby-ivar">@collections</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">owned_collections</span>.<span class="ruby-identifier">by_title</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
+    <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;created by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>]
       <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't find a user by that name, sorry.&quot;</span>)
@@ -783,7 +784,7 @@
 
           
           <div class="method-source-code" id="list_challenges-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 39</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">list_challenges</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@challenge_collections</span> = (<span class="ruby-constant">Collection</span>.<span class="ruby-identifier">ge_signups_open</span>.<span class="ruby-identifier">unmoderated</span>.<span class="ruby-identifier">not_closed</span>.<span class="ruby-identifier">limit</span>(<span class="ruby-value">15</span>) <span class="ruby-operator">+</span> <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">pm_signups_open</span>.<span class="ruby-identifier">unmoderated</span>.<span class="ruby-identifier">not_closed</span>.<span class="ruby-identifier">limit</span>(<span class="ruby-value">15</span>))    
@@ -844,7 +845,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 65</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 67</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@hide_dashboard</span> = <span class="ruby-keyword">true</span>
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">new</span>
@@ -878,8 +879,9 @@
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 44</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 45</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
+  <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">title</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@collection</span>
         <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, we couldn't find the collection you were looking for.&quot;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">collections_path</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
@@ -925,7 +927,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 102</span>
+            <pre><span class="ruby-comment"># File app/controllers/collections_controller.rb, line 104</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:collection</span>])
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Collection was successfully updated.'</span>
