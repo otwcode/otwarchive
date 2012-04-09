@@ -454,7 +454,10 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   When I am on my user page
   # Then show me the sidebar # TODO: it has Claims (0) but why?
-  Then I should see "Claims (1)"
+  Then I should see "Claims (0)"
+  When I follow "Claims"
+    And I follow "See previously posted claims instead"
+  Then I should see "Fulfilled Story"
   
   Scenario: Claim shows as fulfilled to another user
   
@@ -516,6 +519,7 @@ Feature: Prompt Meme Challenge
   When mod fulfills claim
   When I am on "Battle 12" collection's page
   When I follow "Prompts"
+  Then show me the main content
     And I follow "Show Claims"
   Then I should not see "Claimed by: myname4"
     And I should not see "Claimed by: mod1"
