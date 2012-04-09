@@ -519,7 +519,6 @@ Feature: Prompt Meme Challenge
   When mod fulfills claim
   When I am on "Battle 12" collection's page
   When I follow "Prompts"
-  Then show me the main content
     And I follow "Show Claims"
   Then I should not see "Claimed by: myname4"
     And I should not see "Claimed by: mod1"
