@@ -15,6 +15,9 @@ module ApplicationHelper
       if @archive_faqs || @archive_faq
         class_names = "faq support " + controller.action_name
       end
+      if tos_path || donate_path || site_map_path || tos_faq_path
+        class_names = "site"
+      end
     class_names
   end
 
