@@ -34,6 +34,7 @@ class TagWranglersController < ApplicationController
 
   def show
     @wrangler = User.find_by_login(params[:id])
+    @page_subtitle = @wrangler.login
     @fandoms = @wrangler.fandoms.by_name
     @counts = {}
     [Fandom, Character, Relationship, Freeform].each do |klass|
