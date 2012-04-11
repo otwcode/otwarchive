@@ -9,14 +9,14 @@ module ApplicationHelper
     class_names = controller.controller_name + '-' + controller.action_name
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
-      if @known_issues || @feedback || @abuse_report
+      if controller.controller_name == "abuse_reports" || controller.controller_name == "feedbacks" || controller.controller_name == "known_issues"
         class_names = "support " + controller.controller_name + ' ' + controller.action_name
       end
-      if @archive_faqs || @archive_faq
+      if controller.controller_name == "archive_faqs"
         class_names = "faq support " + controller.action_name
       end
-      if tos_path || donate_path || site_map_path || tos_faq_path
-        class_names = "site"
+      if controller.controller_name == "home"
+        class_names = "system docs " + controller.action_name
       end
     class_names
   end
