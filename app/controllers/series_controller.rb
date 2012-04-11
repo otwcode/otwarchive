@@ -25,6 +25,7 @@ class SeriesController < ApplicationController
         unless @author
           raise ActiveRecord::RecordNotFound and return
         end
+        @page_subtitle = ts("by ") + @author.byline
         pseuds = [@author]
       end
     end
