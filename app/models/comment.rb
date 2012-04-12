@@ -112,7 +112,7 @@ class Comment < ActiveRecord::Base
   end
 
   def self.commentable_object(commentable)
-    commentable.kind_of?(Work) ? commentable.last_chapter : commentable
+    commentable.kind_of?(Work) ? commentable.last_posted_chapter : commentable
   end
 
   def find_all_comments

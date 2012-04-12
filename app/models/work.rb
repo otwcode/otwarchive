@@ -532,12 +532,17 @@ class Work < ActiveRecord::Base
 
   # Gets the current first chapter
   def first_chapter
-    self.chapters.find(:first, :order => 'position ASC') || self.chapters.first
+    self.chapters.order('position ASC').first || self.chapters.first
   end
 
   # Gets the current last chapter
   def last_chapter
-    self.chapters.find(:first, :order => 'position DESC')
+    self.chapters.order('position DESC').first
+  end
+  
+  # Gets the current last posted chapter
+  def last_posted_chapter
+    self.chapters.posted.order('position DESC').first
   end
 
   # Returns true if a work has or will have more than one chapter
