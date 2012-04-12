@@ -147,4 +147,10 @@
   float: none;
 }
 
+/* contexts */
+
+#ibox_content .userstuff {
+  margin: auto 3.5em;
+}
+
 /*END== */
