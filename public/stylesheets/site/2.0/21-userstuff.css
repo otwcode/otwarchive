@@ -147,15 +147,10 @@
   float: none;
 }
 
-/* FAQ PAGES */
+/* contexts */
 
-.faq .userstuff {
-  max-width: 72em;
-  margin: auto;
-}
-
-.faq .userstuff h3 {
-  margin-top: 3em;
+#ibox_content .userstuff {
+  margin: auto 3.5em;
 }
 
 /*END== */
