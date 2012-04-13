@@ -454,7 +454,10 @@ Feature: Prompt Meme Challenge
   When I fulfill my claim
   When I am on my user page
   # Then show me the sidebar # TODO: it has Claims (0) but why?
-  Then I should see "Claims (1)"
+  Then I should see "Claims (0)"
+  When I follow "Claims"
+    And I follow "See previously posted claims instead"
+  Then I should see "Fulfilled Story"
   
   Scenario: Claim shows as fulfilled to another user
   
