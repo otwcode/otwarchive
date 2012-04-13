@@ -9,6 +9,15 @@ module ApplicationHelper
     class_names = controller.controller_name + '-' + controller.action_name
     show_sidebar = ((@user || @admin_posts || @collection || show_wrangling_dashboard) && !@hide_dashboard)
     class_names += " dashboard" if show_sidebar
+      if %w(abuse_reports feedbacks known_issues).include?(controller.controller_name)
+        class_names = "system support " + controller.controller_name + ' ' + controller.action_name
+      end
+      if controller.controller_name == "archive_faqs"
+        class_names = "system support faq " + controller.action_name
+      end
+      if controller.controller_name == "home"
+        class_names = "system docs " + controller.action_name
+      end
     class_names
   end
 
