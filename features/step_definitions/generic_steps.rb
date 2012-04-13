@@ -83,26 +83,15 @@ Then /^I should see a save error message$/ do
 end
 
 Then /^I should find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-  with_scope(selector) do
-    page.find(text)
-  end
+  page.find(selector).should have_content(text)
 end
 
 Then /^I should find '([^']*)'(?: within "([^"]*)")?$/ do |text, selector|
-  with_scope(selector) do
-    page.find(text)
-  end
+  page.find(selector).should have_content(text)
 end
 
 Then /^I should not find "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
-  with_scope(selector) do
-    begin
-      wait_until do
-        page.find(text)
-      end
-    rescue Capybara::TimeoutError
-    end
-  end
+  page.find(selector).should_not have_content(text)
 end
 
 Then /^I should see the "(alt|title)" text "([^\"]*)"(?: within "([^"]*)")?$/ do |texttype, text, selector|

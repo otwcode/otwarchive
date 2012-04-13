@@ -50,20 +50,48 @@ class Work < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
   has_many :tags, :through => :taggings, :source => :tagger, :source_type => 'Tag'
 
-  has_many :ratings, :through => :taggings, :source => :tagger, :source_type => 'Rating',
-    :before_remove => :remove_filter_tagging
-  has_many :categories, :through => :taggings, :source => :tagger, :source_type => 'Category',
-    :before_remove => :remove_filter_tagging
-  has_many :warnings, :through => :taggings, :source => :tagger, :source_type => 'Warning',
-    :before_remove => :remove_filter_tagging
-  has_many :fandoms, :through => :taggings, :source => :tagger, :source_type => 'Fandom',
-    :before_remove => :remove_filter_tagging
-  has_many :relationships, :through => :taggings, :source => :tagger, :source_type => 'Relationship',
-    :before_remove => :remove_filter_tagging
-  has_many :characters, :through => :taggings, :source => :tagger, :source_type => 'Character',
-    :before_remove => :remove_filter_tagging
-  has_many :freeforms, :through => :taggings, :source => :tagger, :source_type => 'Freeform',
-    :before_remove => :remove_filter_tagging
+  has_many :ratings, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Rating'"
+  has_many :categories, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Category'"
+  has_many :warnings, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Warning'"
+  has_many :fandoms, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Fandom'"
+  has_many :relationships, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_taggingg,
+    :conditions => "tags.type = 'Relationship'"
+  has_many :characters, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Character'"
+  has_many :freeforms, 
+    :through => :taggings, 
+    :source => :tagger, 
+    :source_type => 'Tag',
+    :before_remove => :remove_filter_tagging,
+    :conditions => "tags.type = 'Freeform'"
 
   acts_as_commentable
   has_many :total_comments, :class_name => 'Comment', :through => :chapters
