@@ -15,6 +15,7 @@ class TagWranglingsController < ApplicationController
       sort = params[:sort_column] + " " + params[:sort_direction] 
       if params[:show] == "fandoms"
         @media_names = Media.by_name.value_of(:name)
+        @page_subtitle = ts("fandoms")
         @tags = Fandom.unwrangled.in_use.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)       
       elsif params[:show] == "character_relationships"
         if params[:fandom_string]

@@ -59,6 +59,7 @@ class TagsController < ApplicationController
   #   2. the tag, the works and the bookmarks using it, if the tag is unwrangled (because we can't redirect them
   #       to the works controller)
   def show
+    @page_subtitle = @tag.name
     if @tag.is_a?(Banned) && !logged_in_as_admin?
       flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
@@ -182,6 +183,7 @@ class TagsController < ApplicationController
   end
 
   def edit
+    @page_subtitle = @tag.name
     if @tag.is_a?(Banned) && !logged_in_as_admin?
       flash[:error] = ts("Please log in as admin")
       redirect_to tag_wranglings_path and return
@@ -234,6 +236,7 @@ class TagsController < ApplicationController
   end
 
   def wrangle
+    @page_subtitle = @tag.name
     @counts = {}
     @tag.child_types.map{|t| t.underscore.pluralize.to_sym}.each do |tag_type|
       @counts[tag_type] = @tag.send(tag_type).count
