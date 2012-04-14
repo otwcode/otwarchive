@@ -158,7 +158,6 @@ del, strike {
 }
 
 dfn, abbr, acronym {
-  font-variant: small-caps;
   cursor: help;
 }
 
