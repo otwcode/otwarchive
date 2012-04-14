@@ -10,8 +10,7 @@
 			</h4>
 			<!--collections header iconised header image-->
       <div class="icon">
-<%# don't alt this icon it's currently only decorative%>
-        <%= image_tag(collection.icon.url(:standard), :size => "100x100", :alt => "", :class => "icon") %>
+        <%= image_tag(collection.icon.url(:standard), :size => "100x100", :alt => collection.icon_alt_text, :class => "icon") %>
       </div>
 			<p class="datetime" title="updated"><%= set_format_for_date(collection.updated_at) %></p>
 	    <% if collection.all_moderators.length > 0%>
