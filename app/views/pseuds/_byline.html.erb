@@ -30,8 +30,7 @@
 </dt>
 <dd class="byline coauthors">
   <%= check_box_tag "co-authors-options-show", "1", nil, :class => "toggle_formfield" %>
-
-<fieldset id="co-authors-options" title="Add Co Authors">
-<%= text_field :pseud, :byline, autocomplete_options("pseud", :size => 50) %>
-</fieldset>
+  <fieldset id="co-authors-options" title="Add Co Authors">
+    <%= text_field :pseud, :byline, autocomplete_options("pseud", :size => 50) %>
+  </fieldset>
 </dd>

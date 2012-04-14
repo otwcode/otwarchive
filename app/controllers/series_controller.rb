@@ -119,6 +119,10 @@ class SeriesController < ApplicationController
       flash[:notice] = ts('Series was successfully updated.')
       redirect_to(@series)
     else
+      @pseuds = current_user.pseuds
+      @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
+      to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
+      @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
       render :action => "edit"
     end
   end
