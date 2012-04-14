@@ -624,7 +624,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 188</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 190</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@bookmark</span> = <span class="ruby-constant">Bookmark</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:bookmark</span>])
   <span class="ruby-ivar">@bookmarkable</span> = <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">bookmarkable</span> 
@@ -665,7 +665,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 217</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 219</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Bookmark was successfully deleted.&quot;</span>)
@@ -697,7 +697,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 174</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 176</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-ivar">@bookmarkable</span> = <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">bookmarkable</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -738,7 +738,7 @@ same function</p>
 
           
           <div class="method-source-code" id="fetch_recent-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 226</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 228</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">fetch_recent</span>
   <span class="ruby-ivar">@bookmarkable</span> = <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">bookmarkable</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -777,7 +777,7 @@ same function</p>
 
           
           <div class="method-source-code" id="hide_recent-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 238</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 240</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">hide_recent</span>
   <span class="ruby-ivar">@bookmarkable</span> = <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">bookmarkable</span>
 <span class="ruby-keyword">end</span></pre>
@@ -827,9 +827,11 @@ performance killer</p>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@user</span>
       <span class="ruby-comment"># @author is needed in the sidebar</span>
       <span class="ruby-identifier">owner</span> = <span class="ruby-ivar">@author</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>])
+      <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@author</span>.<span class="ruby-identifier">byline</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_id</span>]
     <span class="ruby-identifier">owner</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_id</span>])
+    <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">owner</span>.<span class="ruby-identifier">name</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-ivar">@collection</span>
     <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">title</span>
     <span class="ruby-identifier">owner</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@collection</span> <span class="ruby-comment"># insufficient to filter out unapproved bookmarks, see below</span>
@@ -1007,7 +1009,7 @@ performance killer</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 161</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 163</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@bookmark</span> = <span class="ruby-constant">Bookmark</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -1087,7 +1089,7 @@ GET    /:locale/works/:work_id/bookmark/:id GET
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 156</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 158</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- show-source -->
@@ -1116,7 +1118,7 @@ GET    /:locale/works/:work_id/bookmark/:id GET
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 205</span>
+            <pre><span class="ruby-comment"># File app/controllers/bookmarks_controller.rb, line 207</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@bookmark</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:bookmark</span>])
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Bookmark was successfully updated.&quot;</span>)

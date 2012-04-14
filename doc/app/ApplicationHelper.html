@@ -689,7 +689,7 @@ application.</p>
 
           
           <div class="method-source-code" id="allow_tinymce-3F-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 246</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 255</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">allow_tinymce?</span>(<span class="ruby-identifier">controller</span>)
   <span class="ruby-node">%w(admin_posts archive_faqs known_issues chapters works)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">controller</span>.<span class="ruby-identifier">controller_name</span>) <span class="ruby-operator">&amp;&amp;</span>
     <span class="ruby-node">%w(new create edit update)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">controller</span>.<span class="ruby-identifier">action_name</span>)
@@ -720,7 +720,7 @@ application.</p>
 
           
           <div class="method-source-code" id="allowed_css_instructions-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 48</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 57</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">allowed_css_instructions</span>
   <span class="ruby-identifier">h</span>(<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Limited CSS properties and values allowed&quot;</span>)) <span class="ruby-operator">+</span> 
   <span class="ruby-identifier">link_to_help</span>(<span class="ruby-string">&quot;css-help&quot;</span>)
@@ -753,7 +753,7 @@ limited html, link to help, list of allowed html</p>
 
           
           <div class="method-source-code" id="allowed_html_instructions-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 38</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 47</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">allowed_html_instructions</span>(<span class="ruby-identifier">show_list</span> = <span class="ruby-keyword">false</span>, <span class="ruby-identifier">show_text</span>=<span class="ruby-keyword">true</span>)
   (<span class="ruby-identifier">show_text</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">h</span>(<span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Plain text with limited html&quot;</span>)) <span class="ruby-operator">:</span> <span class="ruby-string">''</span>.<span class="ruby-identifier">html_safe</span>) <span class="ruby-operator">+</span> 
   <span class="ruby-identifier">link_to_help</span>(<span class="ruby-string">&quot;html-help&quot;</span>) <span class="ruby-operator">+</span> (<span class="ruby-identifier">show_list</span> <span class="ruby-operator">?</span> 
@@ -790,7 +790,7 @@ translation on them</p>
 
           
           <div class="method-source-code" id="autocomplete_options-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 281</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 290</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">autocomplete_options</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">options</span>={})
   {      
     <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;autocomplete&quot;</span>,
@@ -830,7 +830,7 @@ in preview_mode, unless they’re empty</p>
 
           
           <div class="method-source-code" id="byline-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 66</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">byline</span>(<span class="ruby-identifier">creation</span>, <span class="ruby-identifier">options</span>={})
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:anonymous?</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">anonymous?</span>
     <span class="ruby-identifier">anon_byline</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Anonymous&quot;</span>)
@@ -867,7 +867,7 @@ in preview_mode, unless they’re empty</p>
 
           
           <div class="method-source-code" id="check_all_none-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 489</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 498</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_all_none</span>(<span class="ruby-identifier">all_text</span>=<span class="ruby-string">&quot;All&quot;</span>, <span class="ruby-identifier">none_text</span>=<span class="ruby-string">&quot;None&quot;</span>, <span class="ruby-identifier">name_filter</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">filter_attrib</span> = (<span class="ruby-identifier">name_filter</span> <span class="ruby-operator">?</span> <span class="ruby-node">&quot; checkbox_name_filter=\&quot;#{name_filter}\&quot;&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">''</span>)    
   (<span class="ruby-string">'&lt;ul class=&quot;actions&quot;&gt;
@@ -918,7 +918,7 @@ that can be run to get the value of each individual option</p>
 
           
           <div class="method-source-code" id="checkbox_section-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 410</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 419</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">checkbox_section</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">attribute</span>, <span class="ruby-identifier">choices</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">options</span> = {
     <span class="ruby-value">:checked_method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>, 
@@ -1010,7 +1010,7 @@ that can be run to get the value of each individual option</p>
 
           
           <div class="method-source-code" id="checkbox_section_css_class-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 476</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 485</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">checkbox_section_css_class</span>(<span class="ruby-identifier">size</span>, <span class="ruby-identifier">concise</span>=<span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">css_class</span> = <span class="ruby-string">&quot;options index&quot;</span>
   
@@ -1050,7 +1050,7 @@ of the checkboxes</p>
 
           
           <div class="method-source-code" id="checkbox_section_toggle-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 366</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 375</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">checkbox_section_toggle</span>(<span class="ruby-identifier">checkboxes_id</span>, <span class="ruby-identifier">checkboxes_size</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">toggle_show</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:a</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Show all %{checkboxes_size} checkboxes&quot;</span>, <span class="ruby-value">:checkboxes_size</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">checkboxes_size</span>), 
                             <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;toggle #{checkboxes_id}_show&quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n&quot;</span>.<span class="ruby-identifier">html_safe</span>
@@ -1112,6 +1112,15 @@ of the checkboxes</p>
   <span class="ruby-identifier">class_names</span> = <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">controller_name</span> <span class="ruby-operator">+</span> <span class="ruby-string">'-'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">action_name</span>
   <span class="ruby-identifier">show_sidebar</span> = ((<span class="ruby-ivar">@user</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@admin_posts</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@collection</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">show_wrangling_dashboard</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@hide_dashboard</span>)
   <span class="ruby-identifier">class_names</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&quot; dashboard&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">show_sidebar</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-node">%w(abuse_reports feedbacks known_issues)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">controller</span>.<span class="ruby-identifier">controller_name</span>)
+      <span class="ruby-identifier">class_names</span> = <span class="ruby-string">&quot;system support &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">controller_name</span> <span class="ruby-operator">+</span> <span class="ruby-string">' '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">action_name</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">controller_name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;archive_faqs&quot;</span>
+      <span class="ruby-identifier">class_names</span> = <span class="ruby-string">&quot;system support faq &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">action_name</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">controller_name</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;home&quot;</span>
+      <span class="ruby-identifier">class_names</span> = <span class="ruby-string">&quot;system docs &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">controller</span>.<span class="ruby-identifier">action_name</span>
+    <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">class_names</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- classes_for_main-source -->
@@ -1141,7 +1150,7 @@ the target class (usually index or listbox etc)</p>
 
           
           <div class="method-source-code" id="expand_contract_all-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 263</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 272</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">expand_contract_all</span>(<span class="ruby-identifier">target</span>=<span class="ruby-string">&quot;index&quot;</span>)
   <span class="ruby-identifier">expand_all</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:a</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Expand All&quot;</span>), <span class="ruby-value">:href=</span><span class="ruby-operator">&gt;</span><span class="ruby-node">&quot;#&quot;</span>, <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;expand_all&quot;</span>, <span class="ruby-string">&quot;target_class&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">target</span>, <span class="ruby-value">:role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;button&quot;</span>)
   <span class="ruby-identifier">contract_all</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:a</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Contract All&quot;</span>), <span class="ruby-value">:href=</span><span class="ruby-operator">&gt;</span><span class="ruby-node">&quot;#&quot;</span>, <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;contract_all&quot;</span>, <span class="ruby-string">&quot;target_class&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">target</span>, <span class="ruby-value">:role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;button&quot;</span>)
@@ -1176,7 +1185,7 @@ at all.</p>
 
           
           <div class="method-source-code" id="expand_contract_shuffle-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 273</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 282</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">expand_contract_shuffle</span>(<span class="ruby-identifier">list_id</span>, <span class="ruby-identifier">shuffle</span>=<span class="ruby-keyword">true</span>)
   (<span class="ruby-string">'&lt;span class=&quot;action expand hidden&quot; title=&quot;expand&quot; action_target=&quot;#'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">list_id</span> <span class="ruby-operator">+</span> <span class="ruby-string">'&quot;&gt;&lt;a href=&quot;#&quot; role=&quot;button&quot;&gt;&amp;#8595;&lt;/a&gt;&lt;/span&gt;
   &lt;span class=&quot;action contract hidden&quot; title=&quot;contract&quot; action_target=&quot;#'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">list_id</span> <span class="ruby-operator">+</span> <span class="ruby-string">'&quot;&gt;&lt;a href=&quot;#&quot; role=&quot;button&quot;&gt;&amp;#8593;&lt;/a&gt;&lt;/span&gt;'</span>).<span class="ruby-identifier">html_safe</span> <span class="ruby-operator">+</span>
@@ -1210,7 +1219,7 @@ will output for that object</p>
 
           
           <div class="method-source-code" id="field_attribute-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 340</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 349</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">field_attribute</span>(<span class="ruby-identifier">attribute</span>)
   <span class="ruby-identifier">attribute</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">%r\?$/</span>,<span class="ruby-string">&quot;&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1240,7 +1249,7 @@ will output for that object</p>
 
           
           <div class="method-source-code" id="field_id-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 348</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 357</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">field_id</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">attribute</span>)
   <span class="ruby-identifier">name_to_id</span>(<span class="ruby-identifier">field_name</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">attribute</span>))
 <span class="ruby-keyword">end</span></pre>
@@ -1270,7 +1279,7 @@ will output for that object</p>
 
           
           <div class="method-source-code" id="field_name-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 352</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 361</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">field_name</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">attribute</span>)
   <span class="ruby-node">&quot;#{form.object_name}[#{field_attribute(attribute)}]&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1303,7 +1312,7 @@ href="http://stackoverflow.com/questions/2425690/multiple-remote-form-for-on-the
 
           
           <div class="method-source-code" id="field_with_unique_id-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 56</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 65</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">field_with_unique_id</span>( <span class="ruby-identifier">form</span>, <span class="ruby-identifier">field_type</span>, <span class="ruby-identifier">object</span>, <span class="ruby-identifier">field_name</span> )
     <span class="ruby-identifier">field_id</span> = <span class="ruby-node">&quot;#{object.class.name.downcase}_#{object.id.to_s}_#{field_name.to_s}&quot;</span>
     <span class="ruby-identifier">form</span>.<span class="ruby-identifier">send</span>( <span class="ruby-identifier">field_type</span>, <span class="ruby-identifier">field_name</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">field_id</span> )
@@ -1362,7 +1371,7 @@ wherever</p>
 
           
           <div class="method-source-code" id="flash_div-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 187</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 196</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">flash_div</span> *<span class="ruby-identifier">keys</span>
   <span class="ruby-identifier">keys</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span> 
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">flash</span>[<span class="ruby-identifier">key</span>]
@@ -1401,7 +1410,7 @@ href="http://www.w3.org/TR/wai-aria/states_and_properties#aria-valuenow">www.w3.
 
           
           <div class="method-source-code" id="generate_countdown_html-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 256</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 265</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">generate_countdown_html</span>(<span class="ruby-identifier">field_id</span>, <span class="ruby-identifier">max</span>) 
   <span class="ruby-identifier">max</span> = <span class="ruby-identifier">max</span>.<span class="ruby-identifier">to_s</span>
   <span class="ruby-identifier">span</span> = <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:span</span>, <span class="ruby-identifier">max</span>, <span class="ruby-value">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{field_id}_counter&quot;</span>, <span class="ruby-string">&quot;data-maxlength&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>, <span class="ruby-string">&quot;aria-live&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;polite&quot;</span>, <span class="ruby-string">&quot;aria-valuemax&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>, <span class="ruby-string">&quot;aria-valuenow&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>)
@@ -1434,7 +1443,7 @@ href="http://asciicasts.com/episodes/197-nested-model-form-part-2">asciicasts.co
 
           
           <div class="method-source-code" id="link_to_add_section-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 293</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 302</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">link_to_add_section</span>(<span class="ruby-identifier">linktext</span>, <span class="ruby-identifier">form</span>, <span class="ruby-identifier">nested_model_name</span>, <span class="ruby-identifier">partial_to_render</span>, <span class="ruby-identifier">locals</span> = {})
   <span class="ruby-identifier">new_nested_model</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">reflect_on_association</span>(<span class="ruby-identifier">nested_model_name</span>).<span class="ruby-identifier">klass</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-identifier">child_index</span> = <span class="ruby-node">&quot;new_#{nested_model_name}&quot;</span>
@@ -1471,7 +1480,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="link_to_help-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 155</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 164</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">link_to_help</span>(<span class="ruby-identifier">help_entry</span>, <span class="ruby-identifier">link</span> = <span class="ruby-string">'&lt;span class=&quot;symbol question&quot;&gt;&lt;span&gt;?&lt;/span&gt;&lt;/span&gt;'</span>.<span class="ruby-identifier">html_safe</span>)
   <span class="ruby-identifier">help_file</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-comment">#if Locale.active &amp;&amp; Locale.active.language</span>
@@ -1510,7 +1519,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="link_to_remote-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 16</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 25</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">link_to_remote</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span> = {}, <span class="ruby-identifier">html_options</span> = {})
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">html_options</span>[<span class="ruby-value">:href</span>]
     <span class="ruby-identifier">html_options</span>[<span class="ruby-value">:href</span>] = <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:url</span>])
@@ -1544,7 +1553,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="link_to_remove_section-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 304</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 313</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">link_to_remove_section</span>(<span class="ruby-identifier">linktext</span>, <span class="ruby-identifier">form</span>, <span class="ruby-identifier">class_of_section_to_remove</span>=<span class="ruby-string">&quot;removeme&quot;</span>)
   <span class="ruby-identifier">form</span>.<span class="ruby-identifier">hidden_field</span>(<span class="ruby-value">:_destroy</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n&quot;</span> <span class="ruby-operator">+</span>
   <span class="ruby-identifier">link_to_function</span>(<span class="ruby-identifier">linktext</span>, <span class="ruby-node">&quot;remove_section(this, \&quot;#{class_of_section_to_remove}\&quot;)&quot;</span>, <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;hidden showme&quot;</span>)
@@ -1575,7 +1584,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="link_to_rss-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 31</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">link_to_rss</span>(<span class="ruby-identifier">link_to_feed</span>)
   <span class="ruby-identifier">link_to</span> <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:span</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Subscribe to the feed&quot;</span>)), <span class="ruby-identifier">link_to_feed</span>, <span class="ruby-value">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;subscribe to feed&quot;</span>, <span class="ruby-value">:class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;rss&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1605,7 +1614,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="locales_menu-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 200</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 209</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">locales_menu</span>    
   <span class="ruby-identifier">result</span> = <span class="ruby-string">&quot;&lt;form action=\&quot;&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'set'</span>, <span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'locales'</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\&quot;&gt;\n&quot;</span> 
   <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;&lt;div&gt;&lt;select id=\&quot;accessible_menu\&quot; name=\&quot;locale_id\&quot; &gt;\n&quot;</span>
@@ -1641,7 +1650,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="mailto_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 332</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 341</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">mailto_link</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">options</span>={})
   <span class="ruby-node">&quot;&lt;a href=\&quot;mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_NAME}]#{options[:subject]}\&quot; class=\&quot;mailto\&quot;&gt;
     &lt;img src=\&quot;/images/envelope_icon.gif\&quot; alt=\&quot;email #{h(user.login)}\&quot;&gt;
@@ -1673,7 +1682,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="name_to_id-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 344</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 353</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">name_to_id</span>(<span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r\]\[|[^-a-zA-Z0-9:.]/</span>, <span class="ruby-string">&quot;_&quot;</span>).<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">%r_$/</span>, <span class="ruby-string">&quot;&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1703,7 +1712,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="nested_field_id-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 356</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 365</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">nested_field_id</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">nested_object</span>, <span class="ruby-identifier">attribute</span>)
   <span class="ruby-identifier">name_to_id</span>(<span class="ruby-identifier">nested_field_name</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">nested_object</span>, <span class="ruby-identifier">attribute</span>))
 <span class="ruby-keyword">end</span></pre>
@@ -1733,7 +1742,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="nested_field_name-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 360</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 369</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">nested_field_name</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">nested_object</span>, <span class="ruby-identifier">attribute</span>)
   <span class="ruby-node">&quot;#{form.object_name}[#{nested_object.class.table_name}_attributes][#{nested_object.id}][#{field_attribute(attribute)}]&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1763,7 +1772,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="non_anonymous_byline-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 77</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 86</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">non_anonymous_byline</span>(<span class="ruby-identifier">creation</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:author</span>)
     <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">author</span>
@@ -1815,7 +1824,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="non_anonymous_text_byline-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 123</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 132</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">non_anonymous_text_byline</span>(<span class="ruby-identifier">creation</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:author</span>)
     <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">author</span>
@@ -1867,7 +1876,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="params_without-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 251</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 260</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">params_without</span>(<span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">params</span>.<span class="ruby-identifier">reject</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">name</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -1897,7 +1906,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="pseud_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 103</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 112</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">pseud_link</span>(<span class="ruby-identifier">pseud</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@downloading</span>
     <span class="ruby-identifier">link_to</span>(<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">byline</span>, <span class="ruby-identifier">user_pseud_path</span>(<span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">user</span>, <span class="ruby-identifier">pseud</span>, <span class="ruby-value">:only_path</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>), <span class="ruby-value">:rel</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;author&quot;</span>)
@@ -1931,7 +1940,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="pseud_text-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 149</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 158</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">pseud_text</span>(<span class="ruby-identifier">pseud</span>)
     <span class="ruby-identifier">pseud</span>.<span class="ruby-identifier">byline</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1961,7 +1970,7 @@ dynamic?</p>
 
           
           <div class="method-source-code" id="sort_link-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 211</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 220</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sort_link</span>(<span class="ruby-identifier">title</span>, <span class="ruby-identifier">column</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">condition</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:unless</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:unless</span>)
 
@@ -2010,7 +2019,7 @@ by the specified condition) is a span with class “current”</p>
 
           
           <div class="method-source-code" id="span_if_current-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 25</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 34</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">span_if_current</span>(<span class="ruby-identifier">link_to_default_text</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">condition</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">is_current</span> = <span class="ruby-identifier">condition</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">current_page?</span>(<span class="ruby-identifier">path</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">condition</span>
   <span class="ruby-identifier">text</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-identifier">link_to_default_text</span>)
@@ -2042,7 +2051,7 @@ by the specified condition) is a span with class “current”</p>
 
           
           <div class="method-source-code" id="submit_button-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 498</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 507</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">submit_button</span>(<span class="ruby-identifier">form</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">button_text</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">button_text</span> <span class="ruby-operator">||=</span> (<span class="ruby-identifier">form</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">form</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">form</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">new_record?</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Submit&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Update&quot;</span>)
   <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:p</span>, (<span class="ruby-identifier">form</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">submit_tag</span>(<span class="ruby-identifier">button_text</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">form</span>.<span class="ruby-identifier">submit</span>(<span class="ruby-identifier">button_text</span>)), <span class="ruby-value">:class</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;submit&quot;</span>)
@@ -2073,7 +2082,7 @@ by the specified condition) is a span with class “current”</p>
 
           
           <div class="method-source-code" id="submit_fieldset-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 503</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 512</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">submit_fieldset</span>(<span class="ruby-identifier">form</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">button_text</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:fieldset</span>, <span class="ruby-identifier">content_tag</span>(<span class="ruby-value">:legend</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Actions&quot;</span>)) <span class="ruby-operator">+</span> <span class="ruby-identifier">submit_button</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">button_text</span>))
 <span class="ruby-keyword">end</span></pre>
@@ -2104,7 +2113,7 @@ linkified version.</p>
 
           
           <div class="method-source-code" id="text_byline-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 112</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 121</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">text_byline</span>(<span class="ruby-identifier">creation</span>, <span class="ruby-identifier">options</span>={})
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:anonymous?</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">creation</span>.<span class="ruby-identifier">anonymous?</span>
     <span class="ruby-identifier">anon_byline</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Anonymous&quot;</span>)
@@ -2141,7 +2150,7 @@ linkified version.</p>
 
           
           <div class="method-source-code" id="time_in_zone-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 309</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 318</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">time_in_zone</span>(<span class="ruby-identifier">time</span>, <span class="ruby-identifier">zone</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;(no time specified)&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">time</span>.<span class="ruby-identifier">blank?</span>
   <span class="ruby-identifier">zone</span> = ((<span class="ruby-identifier">user</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">time_zone</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">preference</span>.<span class="ruby-identifier">time_zone</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">zone</span>.<span class="ruby-identifier">name</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">zone</span>
@@ -2190,7 +2199,7 @@ linkified version.</p>
 
           
           <div class="method-source-code" id="use_tinymce-source">
-            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 234</span>
+            <pre><span class="ruby-comment"># File app/helpers/application_helper.rb, line 243</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">use_tinymce</span>
   <span class="ruby-ivar">@content_for_tinymce</span> = <span class="ruby-string">&quot;&quot;</span> 
   <span class="ruby-identifier">content_for</span> <span class="ruby-value">:tinymce</span> <span class="ruby-keyword">do</span>

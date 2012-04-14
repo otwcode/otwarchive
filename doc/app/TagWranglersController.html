@@ -608,7 +608,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/tag_wranglers_controller.rb, line 44</span>
+            <pre><span class="ruby-comment"># File app/controllers/tag_wranglers_controller.rb, line 45</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_fandom_string</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">names</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_fandom_string</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r$/</span>, <span class="ruby-string">','</span>).<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:strip</span>)
@@ -665,7 +665,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/tag_wranglers_controller.rb, line 75</span>
+            <pre><span class="ruby-comment"># File app/controllers/tag_wranglers_controller.rb, line 76</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">wrangler</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-identifier">assignment</span> = <span class="ruby-constant">WranglingAssignment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:first</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value">:user_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">wrangler</span>.<span class="ruby-identifier">id</span>, <span class="ruby-value">:fandom_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:fandom_id</span>]})
@@ -757,6 +757,7 @@
             <pre><span class="ruby-comment"># File app/controllers/tag_wranglers_controller.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@wrangler</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@wrangler</span>.<span class="ruby-identifier">login</span>
   <span class="ruby-ivar">@fandoms</span> = <span class="ruby-ivar">@wrangler</span>.<span class="ruby-identifier">fandoms</span>.<span class="ruby-identifier">by_name</span>
   <span class="ruby-ivar">@counts</span> = {}
   [<span class="ruby-constant">Fandom</span>, <span class="ruby-constant">Character</span>, <span class="ruby-constant">Relationship</span>, <span class="ruby-constant">Freeform</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
