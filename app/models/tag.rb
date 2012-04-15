@@ -137,7 +137,8 @@ class Tag < ActiveRecord::Base
   scope :canonical, where(:canonical => true)
   scope :noncanonical, where(:canonical => false)
   scope :nonsynonymous, noncanonical.where(:merger_id => nil)
-  scope :unfilterable, nonsynonymous
+  scope :unfilterable, nonsynonymous.where(:unwrangleable => false)
+  scope :unwrangleable, where(:unwrangleable => true)
 
   # we need to manually specify a LEFT JOIN instead of just joins(:common_taggings or :meta_taggings) here because
   # what we actually need are the empty rows in the results
