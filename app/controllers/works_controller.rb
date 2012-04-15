@@ -288,7 +288,7 @@ class WorksController < ApplicationController
         if params[:preview_button]
           redirect_to preview_work_path(@work), :notice => ts('Draft was successfully created.')
         else
-          redirect_to work_path(@work), :notice => ts('Work was successfully posted.')
+          redirect_to work_path(@work), :notice => ts('Work was successfully posted. New works may take up to five days to appear in the search and works listings.')
         end
       else
         if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
@@ -413,7 +413,7 @@ class WorksController < ApplicationController
       end
       if saved
         if params[:post_button]
-          flash[:notice] = ts('Work was successfully posted.')
+          flash[:notice] = ts('Work was successfully posted. New works may take up to five days to appear in the search and works listings.')
         elsif params[:update_button]
           flash[:notice] = ts('Work was successfully updated.')
         end
@@ -676,7 +676,7 @@ public
       redirect_to edit_user_work_path(@user, @work) and return
     end
 
-    flash[:notice] = ts("Your work was successfully posted.")
+    flash[:notice] = ts("Work was successfully posted. New works may take up to five days to appear in the search and works listings.")
     redirect_to @work
   end
 
