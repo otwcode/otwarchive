@@ -69,6 +69,10 @@ Factory.define :work do |f|
   end
 end
 
+Factory.define :series do |f|
+  f.sequence(:title) { |n| "Awesome Series #{n}" }
+end
+
 # Factory.define :collection_participant do |f|
 #   f.association :pseud
 #   f.association :collection

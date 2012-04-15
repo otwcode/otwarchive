@@ -4,7 +4,7 @@ class SerialWork < ActiveRecord::Base
   validates_uniqueness_of :work_id, :scope => [:series_id]
   acts_as_list :scope => :series
   
-  before_create :adjust_series_visibility
+  after_create :adjust_series_visibility
   after_destroy :adjust_series_visibility
   after_destroy :delete_empty_series
   
