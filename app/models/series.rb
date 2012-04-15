@@ -31,6 +31,8 @@ class Series < ActiveRecord::Base
     :allow_blank => true, 
     :maximum => ArchiveConfig.NOTES_MAX, 
     :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    
+  after_save :adjust_restricted
 
   attr_accessor :authors
   attr_accessor :authors_to_remove
@@ -104,8 +106,9 @@ class Series < ActiveRecord::Base
 	# if the series includes an unrestricted work, restricted should be false
 	# if the series includes no unrestricted works, restricted should be true
 	def adjust_restricted
-		unless self.restricted == !self.works.collect(&:restricted).include?(false)
-		  self.toggle!(:restricted)
+		unless self.restricted? == !(self.works.where(:restricted => false).count > 0)
+		  self.restricted = !(self.works.where(:restricted => false).count > 0)
+		  self.save(:validate => false)
 		end
 	end
 	
