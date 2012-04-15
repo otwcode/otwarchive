@@ -9,7 +9,7 @@ Feature: Links in ToS
 			
 		# check	you're on the Terms of service page 
 		
-		Then I should see "Terms of Service" within ".home-tos h2"
+		Then I should see "Terms of Service" within ".tos h2"
 			And I should see "While the Archive is in beta, it's important for users to be aware of what that means"
 			
 	  # all commented out lines concerning URLs lack a viable step definition
@@ -54,7 +54,7 @@ Feature: Links in ToS
      
 		# check following an internal link from the table of contents
  
-		When I follow "Privacy Policy" within ".home-tos .toc"
+		When I follow "Privacy Policy" within ".tos .toc"
 		Then I should see "III. Archive Privacy Policy"
 		# TODO: figure out why this isn't working
 		# And the page URL should be "http://www.example.com/tos#privacy"
