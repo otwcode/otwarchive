@@ -7,7 +7,7 @@ class AbuseReport < ActiveRecord::Base
 
   attr_protected :comment_sanitizer_version
   
-  app_url_regex = Regexp.new('^' + ArchiveConfig.APP_URL, true)
+  app_url_regex = Regexp.new('^https?:\/\/(www.)?' + ArchiveConfig.APP_HOST, true)
   validates_format_of :url, :with => app_url_regex, :message => t('invalid_url', :default => 'does not appear to be on this site.')
   
   # id numbers for categories on 16bugs
