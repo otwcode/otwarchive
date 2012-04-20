@@ -618,7 +618,7 @@ class StoryParser
       notes = ""
       
       body = @doc.css("body")
-      title = @doc.css("title").inner_html.gsub /on DeviantART$/, ""
+      title = @doc.css("title").inner_html.gsub /\s*on deviantart$/i, ""
 
       # Find the image (original size) if it's art
       image_full = body.css("img#gmi-ResViewSizer_fullimg")
@@ -626,16 +626,17 @@ class StoryParser
         storytext = "<center><img src=\"#{image_full[0]["src"]}\"></center>"
       end
 
-      # Find the fic text if it's fic
-      text_table = body.css("table.f td.f div.text")[0]
+      # Find the fic text if it's fic (needs the id for disambiguation, the "deviantART loves you" bit in the footer has the same class path)
+      text_table = body.css("#gmi-ResViewContainer table.f td.f div.text")[0]
       unless text_table.nil?
-        # Try to remove the title:
-        unless text_table.css("h1")[0].nil? && text_table.css("h1")[0].match(title)
+        # Try to remove some metadata (title and author) from the work's text, if possible
+        # Try to remove the title: if it exists, and if it's the same as the browser title
+        if text_table.css("h1")[0].present? && title && title.match(text_table.css("h1")[0].text)
           text_table.css("h1")[0].remove
         end
 
-        # Try to remove the author:
-        unless text_table.css("small")[0].nil? && text_table.css("small")[0].match(/by ~.*?<a class="u" href=/m)
+        # Try to remove the author: if it exists, and if it follows a certain pattern
+        if text_table.css("small")[0].present? && text_table.css("small")[0].inner_html.match(/by ~.*?<a class="u" href=/m)
           text_table.css("small")[0].remove
         end
         storytext = text_table.inner_html

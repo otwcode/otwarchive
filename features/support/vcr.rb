@@ -26,8 +26,10 @@ VCR.cucumber_tags do |t|
   t.tags '@work_import_nul_character'
   t.tags '@work_import_errors', :record => :all # need to run this every time bc the url is a bogus one (on purpose, for testing) so it's never properly "recorded"
 
-  t.tags '@import_da'
-  t.tags '@import_da_fic'
+  # need to run this every time for the devart features, because the recorded responses run into an encoding error I don't have time to investigate
+  t.tags '@import_da_title_link', :record => :all
+  # t.tags '@import_da_gallery_link', :record => :all # TODO: uncomment if/when implementing this feature
+  t.tags '@import_da_fic', :record => :all
 
   t.tags '@import_dw'
   t.tags '@import_dw_tables'
