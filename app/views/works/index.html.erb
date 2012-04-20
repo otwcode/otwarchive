@@ -4,7 +4,7 @@
   <% if @collection %>
    <%= ts("in %{collection_title}", :collection_title => link_to(@collection.title, @collection)).html_safe %>
   <% elsif @user %>
-    <%= @author ? ts("by %{author_name}", :author_name => @author.name) : ts("by %{user_name}", :user_name => @user.login) %>
+    <%= @author ? ts("by %{author_byline}", :author_byline => @author.byline) : ts("by %{user_name}", :user_name => @user.login) %>
   <% elsif @tag %>
     <%= ts("in %{tag_name}", :tag_name => @tag.name) %>
 <% end %>
