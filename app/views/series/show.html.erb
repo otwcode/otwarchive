@@ -10,6 +10,11 @@
 <!--subnav-->
 <% if logged_in? %>
 <ul class="navigation actions" role="navigation">
+  <% if @subscription %>
+    <li>
+      <%= render :partial => 'subscriptions/form', :locals => { :subscription => @subscription } %>
+    </li>
+  <% end %>
   <% @bookmark ||= bookmark_if_exists(@series) %>
   <li><%= link_to (@bookmark ? ts("Edit Series Bookmark") : ts("Bookmark Series")), "#bookmark-form", :class => "bookmark_form_placement_open" %></li>
   <% if is_author_of?(@series) %>

@@ -209,7 +209,7 @@ class WorksController < ApplicationController
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
                                                        :subscribable_type => 'Work').first ||
-                      current_user.subscriptions.build
+                      current_user.subscriptions.build(:subscribable => @work)
     end
 
     @page_title = @work.unrevealed? ? ts("Mystery Work") :

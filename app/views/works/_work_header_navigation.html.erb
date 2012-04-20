@@ -91,19 +91,11 @@
     </div>
   </li>
   
-  <li class="subscribe">
-    <% if @subscription && @subscription.new_record? %>
-      <%= form_for [current_user, @subscription] do |f| %>
-        <%= f.hidden_field :subscribable_id, :value => @work.id %>
-        <%= f.hidden_field :subscribable_type, :value => @work.class.to_s %>
-        <%= f.submit "Subscribe" %>
-      <% end %>
-    <% elsif @subscription %>
-      <%= form_for [current_user, @subscription], :html => {:method => :delete} do |f| %>
-        <li><%= f.submit ts("Unsubscribe") %></li>
-      <% end %>
-    <% end %>
-  </li>
+  <% if current_user && @subscription %>
+    <li class="subscribe">
+      <%= render :partial => 'subscriptions/form', :locals => { :subscription => @subscription } %>
+    </li>
+  <% end %>
 
   <li class="download" aria-haspopup="true">
     <a title="Download" class="downloads_open open"><%= ts("Download") %> &#8595;</a>
