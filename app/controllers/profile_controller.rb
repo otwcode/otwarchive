@@ -13,7 +13,7 @@ class ProfileController < ApplicationController
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(:subscribable_id => @user.id,
                                                        :subscribable_type => 'User').first ||
-                      current_user.subscriptions.build
+                      current_user.subscriptions.build(:subscribable => @user)
     end
   end
   

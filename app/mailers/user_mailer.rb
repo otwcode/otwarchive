@@ -58,19 +58,9 @@ class UserMailer < ActionMailer::Base
     user = User.find(user_id)
     @subscription = Subscription.find(subscription_id)
     @creation = creation_class_name.constantize.find(creation_id)
-    if @subscription.subscribable_type == 'User'
-      subject_text = "#{@subscription.name} has posted "
-      if creation_class_name == 'Chapter'
-        subject_text << "Chapter #{@creation.position} of \"#{@creation.work.title}\""
-      elsif creation_class_name == 'Work'
-        subject_text << "\"#{@creation.title}\""
-      end
-    else
-      subject_text = "Subscription Notice for #{@subscription.name}"
-    end
     mail(
       :to => user.email,
-      :subject => "[#{ArchiveConfig.APP_NAME}] #{subject_text}"
+      :subject => "[#{ArchiveConfig.APP_NAME}] #{@subscription.subject_text(@creation)}"
     )
   end
 

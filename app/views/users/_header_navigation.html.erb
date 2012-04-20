@@ -10,18 +10,10 @@
   <% unless @user == current_user %>  
     <li><%= link_to_help "coming-soon", ts("Bookmark") %></li>
   <% end %>
-  <% if @subscription && @subscription.new_record? %>
+  <% if current_user && @subscription %>
     <li>
-      <%= form_for [current_user, @subscription] do |f| %>
-        <%= f.hidden_field :subscribable_id, :value => @user.id %>
-        <%= f.hidden_field :subscribable_type, :value => @user.class.to_s %>
-        <%= f.submit ts("Subscribe") %>
-      <% end %>
+      <%= render :partial => 'subscriptions/form', :locals => { :subscription => @subscription } %>
     </li>
-  <% elsif @subscription %>
-    <%= form_for [current_user, @subscription], :html => {:method => :delete} do |f| %>
-      <li><%= f.submit ts("Unsubscribe") %></li>
-    <% end %>
   <% end %>
   <% if @user == current_user  %>
     <li><%= span_if_current ts("Invitations"), user_invitations_path(@user) %></li>
