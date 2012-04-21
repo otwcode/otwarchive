@@ -630,7 +630,7 @@
             <pre><span class="ruby-comment"># File app/models/fandom.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">unwrangled</span>
   <span class="ruby-identifier">joins</span>(<span class="ruby-value">:common_taggings</span>).
-  <span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'&quot;</span>, <span class="ruby-constant">Media</span>.<span class="ruby-identifier">uncategorized</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:id</span>))
+  <span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;unwrangleable = 0 AND common_taggings.filterable_id = ? AND common_taggings.filterable_type = 'Tag'&quot;</span>, <span class="ruby-constant">Media</span>.<span class="ruby-identifier">uncategorized</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:id</span>))
 <span class="ruby-keyword">end</span></pre>
           </div><!-- unwrangled-source -->
           
