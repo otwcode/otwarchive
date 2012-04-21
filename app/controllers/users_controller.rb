@@ -70,11 +70,11 @@ class UsersController < ApplicationController
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC") &
-                   Work.visible_to_all.revealed &
-                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                   group("tags.id").order("work_count DESC").
+                   merge(Work.visible_to_all.revealed).
+                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id))
       visible_works = @user.works.visible_to_all
       visible_series = @user.series.visible_to_all
       visible_bookmarks = @user.bookmarks.visible_to_all
@@ -82,11 +82,11 @@ class UsersController < ApplicationController
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC") &
-                   Work.visible_to_registered_user.revealed &
-                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                   group("tags.id").order("work_count DESC").
+                   merge(Work.visible_to_registered_user.revealed).
+                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
     INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id
-    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id)
+    INNER JOIN users ON pseuds.user_id = users.id").where("users.id = ?", @user.id))
       visible_works = @user.works.visible_to_registered_user
       visible_series = @user.series.visible_to_registered_user
       visible_bookmarks = @user.bookmarks.visible_to_registered_user
