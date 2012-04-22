@@ -22,7 +22,7 @@ class DownloadsController < ApplicationController
     
     if @work.unrevealed?
       flash[:error] = ts("Sorry, you can't download an unrevealed work")
-      redirect_back_or_default works_path
+      redirect_back_or_default works_path and return
     end
 
     Rails.logger.debug "Work basename: #{@work.download_basename}"
@@ -58,8 +58,11 @@ protected
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
 
-    # send as PDF
-    check_for_file("pdf")
+    # send as PDF, if file exists, or flash error and redirect
+    unless check_for_file("pdf")
+      flash[:error] = ts('We were not able to render this work. Please try another format')
+      redirect_back_or_default work_path(@work) and return
+    end
     send_file("#{@work.download_basename}.pdf", :type => "application/pdf")
   end
 
@@ -90,7 +93,12 @@ protected
     end
     Rails.logger.debug cmd
     `#{cmd} 2> /dev/null`
-    check_for_file("mobi")
+    
+    # send as mobi, if file exists, or flash error and redirect
+    unless check_for_file("mobi")
+      flash[:error] = ts('We were not able to render this work. Please try another format')
+      redirect_back_or_default work_path(@work) and return
+    end
     send_file("#{@work.download_basename}.mobi", :type => "application/mobi")
   end
 
@@ -107,16 +115,17 @@ protected
     Rails.logger.debug cmd
    `#{cmd} 2> /dev/null`
 
-    # send the file
-    check_for_file("epub")
-    send_file("#{@work.download_basename}.epub", :type => "application/epub")
-  end
-
-  def check_for_file(format)
-    unless File.exists?("#{@work.download_basename}.#{format}")
+    # send as epub, if file exists, or flash error and redirect
+    unless check_for_file("epub")
       flash[:error] = ts('We were not able to render this work. Please try another format')
       redirect_back_or_default work_path(@work) and return
     end
+    send_file("#{@work.download_basename}.epub", :type => "application/epub")
+  end
+
+  # redirect and return inside this method would only exit *this* method, not the controller action it was called from
+  def check_for_file(format)
+    File.exists?("#{@work.download_basename}.#{format}")
   end
 
   def create_work_html
