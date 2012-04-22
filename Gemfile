@@ -54,6 +54,8 @@ gem 'best_in_place'
 
 gem 'timeliness'
 
+gem 'acts_as_list'
+
 group :test do
   gem 'rspec-rails', '>=2.5.0'
   gem 'pickle'
