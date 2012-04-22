@@ -42,10 +42,10 @@ class PseudsController < ApplicationController
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC") &
-                   Work.visible_to_all.revealed &
-                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @author.id)
+                   group("tags.id").order("work_count DESC").
+                   merge(Work.visible_to_all.revealed).
+                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @author.id))
       visible_works = @author.works.visible_to_all
       visible_series = @author.series.visible_to_all
       visible_bookmarks = @author.bookmarks.visible_to_all
@@ -53,10 +53,10 @@ class PseudsController < ApplicationController
       @fandoms = Fandom.select("tags.*, count(tags.id) as work_count").
                    joins(:direct_filter_taggings).
                    joins("INNER JOIN works ON filter_taggings.filterable_id = works.id AND filter_taggings.filterable_type = 'Work'").
-                   group("tags.id").order("work_count DESC") &
-                   Work.visible_to_registered_user.revealed &
-                   Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
-                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @author.id)
+                   group("tags.id").order("work_count DESC").
+                   merge(Work.visible_to_registered_user.revealed).
+                   merge(Work.joins("INNER JOIN creatorships ON creatorships.creation_id = works.id AND creatorships.creation_type = 'Work'
+                               INNER JOIN pseuds ON creatorships.pseud_id = pseuds.id").where("pseuds.id = ?", @author.id))
       visible_works = @author.works.visible_to_registered_user
       visible_series = @author.series.visible_to_registered_user
       visible_bookmarks = @author.bookmarks.visible_to_registered_user
@@ -70,25 +70,6 @@ class PseudsController < ApplicationController
       @subscription = current_user.subscriptions.where(:subscribable_id => @user.id, 
                                                        :subscribable_type => 'User').first || 
                       current_user.subscriptions.build
-    end
-  end
-
-  # For use with work/chapter forms
-  def choose_coauthors
-    byline = params[:search].strip
-    if byline.include? "["
-      split = byline.split('[', 2)
-      pseud_name = split.first.strip
-      user_login = split.last.chop
-      @pseuds = where('LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?','%' + user_login + '%',  '%' + pseud_name + '%')
-    else
-      @pseuds = where('LOWER(name) LIKE ?', '%' + byline + '%')
-    end
-    # UGH MAGIC NUMBER WHY 10
-    @pseuds = @pseuds.includes(:user).limit(10)
-    respond_to do |format|
-      format.html
-      format.js
     end
   end
 

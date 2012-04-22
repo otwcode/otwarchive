@@ -16,21 +16,21 @@ class Series < ActiveRecord::Base
   validates_presence_of :title
   validates_length_of :title, 
     :minimum => ArchiveConfig.TITLE_MIN, 
-    :too_short=> t('title_too_short', :default => "must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
+    :too_short=> ts("must be at least %{min} letters long.", :min => ArchiveConfig.TITLE_MIN)
 
   validates_length_of :title, 
     :maximum => ArchiveConfig.TITLE_MAX, 
-    :too_long=> t('title_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
+    :too_long=> ts("must be less than %{max} letters long.", :max => ArchiveConfig.TITLE_MAX)
     
   validates_length_of :summary, 
     :allow_blank => true, 
     :maximum => ArchiveConfig.SUMMARY_MAX, 
-    :too_long => t('summary_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
+    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.SUMMARY_MAX)
     
   validates_length_of :notes, 
     :allow_blank => true, 
     :maximum => ArchiveConfig.NOTES_MAX, 
-    :too_long => t('notes_too_long', :default => "must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
+    :too_long => ts("must be less than %{max} letters long.", :max => ArchiveConfig.NOTES_MAX)
 
   attr_accessor :authors
   attr_accessor :authors_to_remove
@@ -38,12 +38,12 @@ class Series < ActiveRecord::Base
   attr_protected :summary_sanitizer_version
   attr_protected :notes_sanitizer_version
   
-  scope :visible_to_registered_user, {:conditions => {:hidden_by_admin => false}, :order => 'series.updated_at DESC'}
-  scope :visible_to_all, {:conditions => {:hidden_by_admin => false, :restricted => false}, :order => 'series.updated_at DESC'}
+  scope :visible_to_registered_user, where(:hidden_by_admin => false).order('series.updated_at DESC')
+  scope :visible_to_all, where(:hidden_by_admin => false, :restricted => false).order('series.updated_at DESC')
   
-  #TODO: figure out why select distinct gets clobbered
+  #TODO: figure out why select distinct gets clobbered in combination with count
   scope :exclude_anonymous, 
-    select("DISTINCT series.*").
+    # select("DISTINCT series.*").
     joins("INNER JOIN `serial_works` ON (`series`.`id` = `serial_works`.`series_id`) 
            INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`) 
            LEFT JOIN `collection_items` ON `collection_items`.item_id = `works`.id AND `collection_items`.item_type = 'Work'").
