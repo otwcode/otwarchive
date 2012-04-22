@@ -41,9 +41,9 @@ class Series < ActiveRecord::Base
   scope :visible_to_registered_user, where(:hidden_by_admin => false).order('series.updated_at DESC')
   scope :visible_to_all, where(:hidden_by_admin => false, :restricted => false).order('series.updated_at DESC')
   
-  #TODO: figure out why select distinct gets clobbered
+  #TODO: figure out why select distinct gets clobbered in combination with count
   scope :exclude_anonymous, 
-    select("DISTINCT series.*").
+    # select("DISTINCT series.*").
     joins("INNER JOIN `serial_works` ON (`series`.`id` = `serial_works`.`series_id`) 
            INNER JOIN `works` ON (`works`.`id` = `serial_works`.`work_id`) 
            LEFT JOIN `collection_items` ON `collection_items`.item_id = `works`.id AND `collection_items`.item_type = 'Work'").
