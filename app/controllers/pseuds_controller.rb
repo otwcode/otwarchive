@@ -73,25 +73,6 @@ class PseudsController < ApplicationController
     end
   end
 
-  # For use with work/chapter forms
-  def choose_coauthors
-    byline = params[:search].strip
-    if byline.include? "["
-      split = byline.split('[', 2)
-      pseud_name = split.first.strip
-      user_login = split.last.chop
-      @pseuds = where('LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?','%' + user_login + '%',  '%' + pseud_name + '%')
-    else
-      @pseuds = where('LOWER(name) LIKE ?', '%' + byline + '%')
-    end
-    # UGH MAGIC NUMBER WHY 10
-    @pseuds = @pseuds.includes(:user).limit(10)
-    respond_to do |format|
-      format.html
-      format.js
-    end
-  end
-
   # GET /pseuds/new
   # GET /pseuds/new.xml
   def new

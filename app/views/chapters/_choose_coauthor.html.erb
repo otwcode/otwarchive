@@ -1,14 +1,14 @@
-<p><%=h t('.coauthor_verify', :default => 'Please verify the names of your co-authors') %></p>
+<p class="message"><%= ts('Please verify the names of your co-authors') %></p>
 
 <%= form_for([@work, @chapter]) do |f| %>
   
-  <%= render :partial => 'pseuds/coauthor_form', :locals => {:creation => @chapter, :form => f} %>
+  <%= render 'pseuds/coauthor_form', :creation => @chapter, :form => f %>
    
-  <%= render :partial => 'hidden_fields', :locals => {:form => f} %>
+  <%= render 'hidden_fields', :form => f %>
     
-  <p class="submit actions">
-    <%= submit_tag t('.forms.preview', :default => 'Preview'), :name => 'preview_button' %>
-    <%= submit_tag t('.forms.cancel', :default => 'Cancel'), :name => 'cancel_coauthor_button' %> 
+  <p class="submit cancel actions">
+    <%= submit_tag ts('Preview'), :name => 'preview_button' %>
+    <%= submit_tag ts('Cancel'), :name => 'cancel_coauthor_button' %> 
   </p>
 
 <% end %>
