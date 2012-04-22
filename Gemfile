@@ -54,6 +54,8 @@ gem 'best_in_place'
 
 gem 'timeliness'
 
+gem "akismetor", "~> 1.0.0"
+
 gem 'acts_as_list'
 
 group :test do
