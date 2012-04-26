@@ -3,7 +3,8 @@
 <% if reading.work.nil? %>
   <h3 class="heading"><%= ts("(deleted work, last viewed %{date})", :date => set_format_for_date(reading.last_viewed)) %></h3>
 <% else %>
-  <ul><%= render 'works/work_blurb', :work => reading.work %></ul>
+  <ul><%= render :partial => 'reading_blurb', :locals => {:work =>
+reading.work} %></ul>
   <h3 class="heading">
     <span><%= ts("Last viewed:") %></span> <%= set_format_for_date(reading.last_viewed) %>
     <% if reading.major_version_read != reading.work.major_version %>
