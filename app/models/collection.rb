@@ -334,14 +334,10 @@ class Collection < ActiveRecord::Base
   def challenge? ; !self.challenge.nil? ; end
   
   def gift_exchange?
-    if self.challenge_type == "GiftExchange"
-      return true
-    end
+    return self.challenge_type == "GiftExchange"
   end
   def prompt_meme?
-    if self.challenge_type == "PromptMeme"
-      return true
-    end
+    return self.challenge_type == "PromptMeme"
   end
 
   def not_empty?
