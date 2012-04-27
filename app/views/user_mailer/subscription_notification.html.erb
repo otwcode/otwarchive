@@ -7,7 +7,7 @@
   </p>
 <% elsif @creation.is_a?(Work) %>
   <p>
-    <%= @creation.pseuds.map{|p| p.byline}.to_sentence %> posted a new work:
+    <%= @creation.pseuds.map{|p| p.byline}.to_sentence %> posted a <%= @work.backdate ? "backdated" : "new" %> work:
   </p>
 <% end %>
 

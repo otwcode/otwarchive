@@ -1,11 +1,11 @@
 class KudoObserver < ActiveRecord::Observer
 
   def after_create(kudo)
-    users = kudo.commentable.pseuds.map(&:user)
+    users = kudo.commentable.pseuds.map(&:user).uniq
 
     users.each do |user|
       if notify_user_by_email?(user)
-        KudoMailer.kudo_notification(user.id, kudo.id).deliver
+        RedisMailQueue.queue_kudo(user, kudo)
       end
     end
   end

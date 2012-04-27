@@ -49,9 +49,19 @@ every 1.day, :at => '7:40 am' do
   rake "work:purge_old_drafts"
 end
 
+# Send kudos notifications
+every 1.day, :at => '6:10am' do
+  rake "notifications:deliver_kudos"
+end
+
+# Send subscription notifications
+every 1.hour do
+  rake "notifications:deliver_subscriptions"
+end
+
 # Move hit counts from redis to database
 every 10.minutes do
-  rake "work:update_hit_counters"
+  rake "statistics:update_hit_counters"
 end
 
 # Move readings from redis to database

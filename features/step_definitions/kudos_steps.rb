@@ -2,6 +2,11 @@
 
 ### WHEN
 
+When /^I leave kudos on "([^\"]*)"$/ do |work_title|
+  When %{I view the work "#{work_title}"}
+  click_button("kudo_submit")
+end
+
 ### THEN
 
 Then /^I should see kudos on every chapter$/ do

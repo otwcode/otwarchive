@@ -251,7 +251,7 @@ class CollectionItem < ActiveRecord::Base
                                   item.pseuds.map{|p| p.user_id}]).
                             group(:user_id)
         subs.each do |subscription|
-          UserMailer.subscription_notification(subscription.user_id, subscription.id, item.id, item.class.name).deliver
+          RedisMailQueue.queue_subscription(subscription, item)
         end
       end      
     end
