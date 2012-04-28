@@ -14,6 +14,16 @@ Otwarchive::Application.routes.draw do
       resources :restricted_works, :only => [:index, :show]
     end
   end
+  
+  
+  #### OPEN DOORS ####
+  namespace :opendoors do
+    resources :tools, :only => [:index] do
+      collection do 
+        get :url_update
+      end
+    end
+  end
 
   #### INVITATIONS ####
 

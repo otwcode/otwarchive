@@ -30,6 +30,9 @@
     <% if (logged_in_as_admin? || logged_in? && current_user.is_tag_wrangler?) %>
       <li>&#8212; <%= link_to 'Tag Wrangling', tag_wranglings_path %></li>
     <% end %>
+    <% if logged_in? && permit?("opendoors") %>
+      <li>&#8212; <%= link_to 'Open Doors', opendoors_tools_path %></li>
+    <% end %>    
     <% if Rails.env.development? && ArchiveConfig.DEVELOPMENT_PROFILING_ENABLED %>
       <li>&#8212; <%= link_to 'Devmode', devmode_path %></li>
     <% end %>

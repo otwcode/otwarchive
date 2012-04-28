@@ -1,0 +1,36 @@
+<h2><%= ts("Open Doors Tools") %></h2>
+
+<% if @work && @imported_from_url %>
+  <% # we just updated a work %>
+  <p class="important">
+    <%= link_to @imported_from_url, @imported_from_url %>
+    <%= ts("should now redirect to") %> 
+    <%= link_to @work.title, @work %>.
+  </p>
+<% end %>
+
+<%= form_tag url_for(:controller => 'opendoors/tools', :action => 'url_update'), :method => :get do %>
+
+  <fieldset>
+    <legend>Update Redirect URL</legend>
+    <h3><%= ts("Update Redirect URL") %></h3>
+  
+    <dl>
+      <dt>
+        <%= ts("Archive URL") %>
+      </dt>
+      <dd>
+        <%= text_field_tag "work_url" %>
+      </dd>
+      <dt>
+        <%= ts("Imported From")%>
+      </dt>
+      <dd>
+        <%= text_field_tag "imported_from_url" %>
+      </dd>
+    </dl>
+
+    <%= submit_button %>
+  </fieldset>
+<% end %>
+
