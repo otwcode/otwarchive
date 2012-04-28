@@ -18,7 +18,7 @@ class Work < ActiveRecord::Base
   has_many :external_author_names, :through => :external_creatorships, :inverse_of => :works
   has_many :external_authors, :through => :external_author_names, :uniq => true
 
-  has_many :chapters
+  has_many :chapters # we do NOT use dependent => destroy here because we want to destroy chapters in REVERSE order
   validates_associated :chapters
 
   has_many :serial_works, :dependent => :destroy
