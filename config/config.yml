@@ -11,7 +11,6 @@
 SESSION_KEY: '_otwarchive_session'
 SESSION_SECRET: '898f6d0363863ec79d782238cd1c5767636d712cc0d138238bcd5bfc9d2672fb852380050e52c03a0401175d909c09dba48512a119d46b126a84c2dd05716eb5'
 
-
 # email addresses
 RETURN_ADDRESS: 'do-not-reply@example.org'
 SUPPORT_ADDRESS: 'support@example.org'
