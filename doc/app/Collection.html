@@ -767,7 +767,7 @@ account</p>
 
           
           <div class="method-source-code" id="perform-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 364</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 360</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">perform</span>(<span class="ruby-identifier">id</span>, <span class="ruby-identifier">method</span>, *<span class="ruby-identifier">args</span>)
   <span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>).<span class="ruby-identifier">send</span>(<span class="ruby-identifier">method</span>, *<span class="ruby-identifier">args</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -797,7 +797,7 @@ account</p>
 
           
           <div class="method-source-code" id="sorted_and_filtered-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 392</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 388</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">sorted_and_filtered</span>(<span class="ruby-identifier">sort</span>, <span class="ruby-identifier">filters</span>, <span class="ruby-identifier">page</span>)
   <span class="ruby-identifier">pagination_args</span> = {<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">page</span>}
 
@@ -1261,7 +1261,7 @@ method that we want to run later.</p>
 
           
           <div class="method-source-code" id="async-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 370</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 366</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">async</span>(<span class="ruby-identifier">method</span>, *<span class="ruby-identifier">args</span>)
   <span class="ruby-constant">Resque</span>.<span class="ruby-identifier">enqueue</span>(<span class="ruby-constant">Collection</span>, <span class="ruby-identifier">id</span>, <span class="ruby-identifier">method</span>, *<span class="ruby-identifier">args</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1536,7 +1536,7 @@ method that we want to run later.</p>
 
           
           <div class="method-source-code" id="get_maintainers_email-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 351</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 347</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_maintainers_email</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">email</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">email</span>.<span class="ruby-identifier">blank?</span>
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">email</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">parent</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">parent</span>.<span class="ruby-identifier">email</span>.<span class="ruby-identifier">blank?</span>
@@ -1631,9 +1631,7 @@ method that we want to run later.</p>
           <div class="method-source-code" id="gift_exchange-3F-source">
             <pre><span class="ruby-comment"># File app/models/collection.rb, line 336</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">gift_exchange?</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">challenge_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;GiftExchange&quot;</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span>
-  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">challenge_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;GiftExchange&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- gift_exchange-3F-source -->
           
@@ -1812,7 +1810,7 @@ method that we want to run later.</p>
 
           
           <div class="method-source-code" id="not_empty-3F-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 347</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 343</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">not_empty?</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">all_approved_works</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">children</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">all_approved_bookmarks</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1842,7 +1840,7 @@ method that we want to run later.</p>
 
           
           <div class="method-source-code" id="notify_maintainers-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 357</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 353</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">notify_maintainers</span>(<span class="ruby-identifier">subject</span>, <span class="ruby-identifier">message</span>)
   <span class="ruby-comment"># send maintainers a notice via email</span>
   <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">collection_notification</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">subject</span>, <span class="ruby-identifier">message</span>).<span class="ruby-identifier">deliver</span>
@@ -2002,11 +2000,9 @@ method that we want to run later.</p>
 
           
           <div class="method-source-code" id="prompt_meme-3F-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 341</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 339</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">prompt_meme?</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">challenge_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;PromptMeme&quot;</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span>
-  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">challenge_type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;PromptMeme&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- prompt_meme-3F-source -->
           
@@ -2034,7 +2030,7 @@ method that we want to run later.</p>
 
           
           <div class="method-source-code" id="reveal-21-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 374</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 370</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">reveal!</span>
   <span class="ruby-identifier">approved_collection_items</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-string">&quot;unrevealed = 0&quot;</span>)
   <span class="ruby-identifier">async</span>(<span class="ruby-value">:send_reveal_notifications</span>)
@@ -2065,7 +2061,7 @@ method that we want to run later.</p>
 
           
           <div class="method-source-code" id="reveal_authors-21-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 379</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 375</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">reveal_authors!</span>
   <span class="ruby-identifier">approved_collection_items</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-string">&quot;anonymous = 0&quot;</span>)
   <span class="ruby-identifier">async</span>(<span class="ruby-value">:send_author_reveal_notifications</span>)
@@ -2096,7 +2092,7 @@ method that we want to run later.</p>
 
           
           <div class="method-source-code" id="send_author_reveal_notifications-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 388</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 384</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_author_reveal_notifications</span>
   <span class="ruby-identifier">approved_collection_items</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">collection_item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">collection_item</span>.<span class="ruby-identifier">notify_of_author_reveal</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -2126,7 +2122,7 @@ method that we want to run later.</p>
 
           
           <div class="method-source-code" id="send_reveal_notifications-source">
-            <pre><span class="ruby-comment"># File app/models/collection.rb, line 384</span>
+            <pre><span class="ruby-comment"># File app/models/collection.rb, line 380</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">send_reveal_notifications</span>
   <span class="ruby-identifier">approved_collection_items</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">collection_item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">collection_item</span>.<span class="ruby-identifier">notify_of_reveal</span>}
 <span class="ruby-keyword">end</span></pre>
