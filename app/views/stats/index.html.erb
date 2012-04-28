@@ -2,6 +2,18 @@
 
 <%= render "stats/navigation" %>
 
+<ol class="year actions">
+  <% @years.each do |year| %>
+    <li>
+      <% if @current_year == year %>
+        <span class="current"><%= year %></span>
+      <% else %>
+        <%= link_to year, request.parameters.merge({:year => year}) %>
+      <% end %>
+    </li>
+  <% end %>
+</ol>
+
 <h3 class="heading"><%= ts("Totals") %></h3>
 <div class="wrapper">
   <dl class="work meta group" role="complementary">
@@ -18,12 +30,6 @@
 <%= render_chart(@chart, 'stat_chart') %>
 
 <ul class="sorting actions" role="menu">
-  <% if params[:flat_view] %>
-    <li><%= link_to ts("Group By Fandom"), url_for(params.merge :flat_view => false) %></li>
-  <% else %>
-    <li><%= link_to ts("Flat View"), url_for(params.merge :flat_view => true) %></li>
-  <% end %>
-      
   <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
   <li><%= sort_link ts("Date"), "date" %></li>
   <% unless @user.preference.try(:hide_all_hit_counts) %>
@@ -36,6 +42,13 @@
   <li><%= sort_link ts('Word Count'), "word_count", {:desc_default => true} %></li>
 </ul>
 
+<ul class="view actions" role="menu">
+  <% if params[:flat_view] %>
+    <li><%= link_to ts("Group By Fandom"), url_for(params.merge :flat_view => false) %></li>
+  <% else %>
+    <li><%= link_to ts("Flat View"), url_for(params.merge :flat_view => true) %></li>
+  <% end %>
+</ul>
 
 <ul class="statistics index">
   <% @works.keys.sort.each do |fandom| %>
@@ -56,9 +69,6 @@
                 <dl class="stats">
                   <% if (work_subscriber_count = Subscription.where(:subscribable_id => work.id, :subscribable_type => 'Work').count) > 0 %>
                     <dt><%= ts("Subscribers") %></dt><dd><%= work_subscriber_count %></dd>
-                  <% end %>
-                  <% if (series_subscriber_count = Subscription.where(:subscribable_id => work.series.value_of(:id), :subscribable_type => 'Series').count) > 0 %>
-                    <dt><%= ts("Series Subscribers") %></dt><dd><%= series_subscriber_count %></dd>
                   <% end %>
                   <% unless @user.preference.try(:hide_all_hit_counts) %>
                     <dt><%= ts("Hits") %></dt><dd><%= work.hits %></dd>

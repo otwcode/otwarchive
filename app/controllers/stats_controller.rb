@@ -12,12 +12,13 @@ class StatsController < ApplicationController
 
   # gather statistics for the user on all their works
   def index
-    work_query = Work.joins(:pseuds => :user).where("users.id = ?", @user.id).joins(:taggings).
+    user_works = Work.joins(:pseuds => :user).where("users.id = ?", @user.id)
+    work_query = user_works.joins(:taggings).
       joins("inner join tags on taggings.tagger_id = tags.id AND tags.type = 'Fandom'").
       select("distinct tags.name as fandom, 
               works.id as id, 
               works.title as title, 
-              works.created_at as date,
+              works.revised_at as date,
               works.word_count as word_count")
 
     # sort 
@@ -27,20 +28,30 @@ class StatsController < ApplicationController
     params[:sort_column] = @sort
     params[:sort_direction] = @dir
 
+    # gather works and sort by specified count
+    @years = ["All Years"] + user_works.value_of(:revised_at).map {|date| date.year.to_s}.uniq.sort
+    @current_year = @years.include?(params[:year]) ? params[:year] : "All Years"
+    if @current_year != "All Years"
+      start_date = DateTime.parse("01/01/#{@current_year}")
+      end_date = DateTime.parse("31/12/#{@current_year}")
+      work_query = work_query.where("works.revised_at >= ? AND works.revised_at <= ?", start_date, end_date)
+    end
     works = work_query.all.sort_by {|w| @dir == "ASC" ? (eval("w.#{@sort}") || 0) : (0-(eval("w.#{@sort}") || 0))}    
-    
+
+    # group by fandom or flat view
     if params[:flat_view]
       @works = {ts("All Fandoms") => works}
     else
       @works = works.group_by(&:fandom)
     end
     
+    # gather totals for all works
     @totals = {}
     (sort_options - ["date"]).each do |value|
       @totals[value.split(".")[0].to_sym] = works.inject(0) {|result, work| result + (eval("work.#{value}") || 0)} # sum the works
     end
     @totals[:author_subscriptions] = Subscription.where(:subscribable_id => @user.id, :subscribable_type => 'User').count
-    
+
     # graph top 5 works
     @chart_data = GoogleVisualr::DataTable.new    
     @chart_data.new_column('string', 'Title')
