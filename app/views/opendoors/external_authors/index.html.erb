@@ -1,0 +1,44 @@
+<div class="opendoors">
+<!--Descriptive page name and system messages, descriptions, and instructions.-->
+<h2 class="heading">
+  <%= @query ? ts("External Author Identities") : ts("Unclaimed External Author Identities") %>
+</h2>
+<!--/descriptions-->
+
+<%= render "opendoors/tools/tools_navigation" %>
+
+<% if @external_authors.empty? %>
+  <%= ts("No matching authors found.") %>
+<% else %>
+  <%= will_paginate @external_authors %>
+
+<!--main content-->
+  <h3 class="landmark heading"><%= ts("Listing External Authors") %></h3>
+	<dl class="index group">
+    <% @external_authors.each do |external_author| %>
+      <dt>
+        <%= external_author.email %>
+        <% if external_author.claimed? %>
+          <span>(Claimed by <%= link_to external_author.user.login, external_author.user %>)</span>
+        <% end %>
+      </dt>
+      <dd>       
+        <ul class="navigation actions" role="menu">
+          <li><%= link_to ts("Show"), opendoors_external_author_path(external_author) %></li>
+          <li>
+            <%= form_tag forward_opendoors_external_author_path(external_author) do %>
+              <fieldset>
+                <%= label_tag "forward_address", ts("Forward To:") %>
+                <%= text_field_tag "forward_address"%>
+                <%= submit_button %>
+              </fieldset>
+            <% end %> 
+          </li>
+        </ul>
+      </dd>
+    <% end %>
+  </dl>
+
+  <%= will_paginate @external_authors %>
+<% end %>
+</div>

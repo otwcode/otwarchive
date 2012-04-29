@@ -23,6 +23,11 @@ Otwarchive::Application.routes.draw do
         get :url_update
       end
     end
+    resources :external_authors do
+      member do
+        post :forward
+      end
+    end
   end
 
   #### INVITATIONS ####

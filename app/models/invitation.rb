@@ -12,6 +12,9 @@ class Invitation < ActiveRecord::Base
       return false
     end
   end
+  
+  # ensure email is valid
+  validates :email, :email_veracity => true, :allow_blank => true  
 
   scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
   scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
