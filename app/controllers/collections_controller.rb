@@ -43,11 +43,11 @@ class CollectionsController < ApplicationController
   end
 
   def show
-    @page_subtitle = @collection.title
     unless @collection
   	  flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
       redirect_to collections_path and return
     end
+    @page_subtitle = @collection.title
     
     if @collection.collection_preference.show_random? || params[:show_random]
       # show a random selection of works/bookmarks
