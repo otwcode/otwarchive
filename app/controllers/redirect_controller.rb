@@ -31,7 +31,7 @@ class RedirectController < ApplicationController
         end
       end
     end
-    redirect_to :action => :index
+    redirect_to redirect_path
   end 
   
   def index

@@ -477,8 +477,8 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :redirects, :controller => "redirect", :only => [:index] do
-    collection do
+  resource :redirect, :controller => "redirect", :only => [:show] do
+    member do
       get :do_redirect
     end
   end
