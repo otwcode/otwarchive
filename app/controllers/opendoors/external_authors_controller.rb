@@ -12,9 +12,7 @@ class Opendoors::ExternalAuthorsController < ApplicationController
     if params[:query]
       @query = params[:query]
       sql_query = '%' + @query +'%'
-      @external_authors = ExternalAuthor.joins(:external_author_names).
-        where("external_authors.email LIKE ? OR external_author_names.name LIKE ?", sql_query, sql_query).
-        select("distinct external_authors.*")
+      @external_authors = ExternalAuthor.where("external_authors.email LIKE ?", sql_query)
     else
       @external_authors = ExternalAuthor.unclaimed      
     end    
@@ -25,34 +23,48 @@ class Opendoors::ExternalAuthorsController < ApplicationController
   def show
   end
   
-  # create an external author identity and pre-emptively block it
+  def new
+    @external_author = ExternalAuthor.new
+  end
+  
+  # create an external author identity (and pre-emptively block it)
   def create
-    @external_author = ExternalAuthor.new(:email => params[:email], :do_not_import => true)
+    @external_author = ExternalAuthor.new(params[:external_author])
     unless @external_author.save
       flash[:error] = ts("We couldn't save that address.")
     else
-      flash[:notice] = ts("We have saved and blocked the email address #{params[:email]}")
+      flash[:notice] = ts("We have saved and blocked the email address #{@external_author.email}")
     end
     
     redirect_to opendoors_tools_path
   end
   
   def forward
-    @email = params[:email]        
-    @invitation = Invitation.where(:external_author_id => @external_author.id)
+    if @external_author.is_claimed
+      flash[:error] = ts("This external author has already been claimed!")
+      redirect_to opendoors_external_author_path(@external_author) and return
+    end
+
+    # get the invitation
+    @invitation = Invitation.where(:external_author_id => @external_author.id).first
     
-    # if there is no invite we create one
-    unless @invitation      
+    unless @invitation
+      # if there is no invite we create one
       @invitation = Invitation.new(:external_author => @external_author)
     end
     
+    # send the invitation to specified address
+    @email = params[:email]        
     @invitation.invitee_email = @email
     @invitation.creator = User.find_by_login("open_doors") || current_user
     if @invitation.save
-      flash[:notice] = ts("Invitation sent to #{@email}!")
+      flash[:notice] = ts("Claim invitation for #{@external_author.email} has been forwarded to #{@invitation.invitee_email}!")
     else
-      flash[:error] = ts("We couldn't forward to that email address.") + @invitation.errors.full_messages.join(", ")
+      flash[:error] = ts("We couldn't forward the claim for #{@external_author.email} to that email address.") + @invitation.errors.full_messages.join(", ")
     end
+    
+    # redirect to external author listing for that user
+    redirect_to opendoors_external_authors_path(:query => @external_author.email)
   end
   
   

@@ -1,3 +1,10 @@
+<% unless @imported_from_url.blank? %>
+  <p class="important">
+    <%= ts('Test redirect: ') %>
+    <%= link_to @imported_from_url, redirects_path(:original_url => @imported_from_url) %>
+  </p>
+<% end %>
+
 <h2><%= ts("Open Doors Tools") %></h2>
 
 <%= render "opendoors/tools/tools_navigation" %>
@@ -17,14 +24,17 @@
   </fieldset>
 <% end %>
 
-<%= form_tag url_for(:controller => 'opendoors/external_authors', :action => 'create_and_block') do %>
+<% form_for [:opendoors, @external_author] do |f| %>
   <fieldset>
     <legend>Block Email Address</legend>
     <h3><%= ts("Block Email Address") %></h3>
     <dl>
-      <dt><%= ts("Email: ")%></dt>
-      <dd><%= text_field_tag("email") %></dd>
+      <dt><%= f.label :email, ts("Email: ")%></dt>
+      <dd>
+        <%= f.text_field :email %>
+        <%= f.hidden_field :do_not_import, :value => true %>
+      </dd>
     </dl>
-    <%= submit_button %>
+    <%= submit_button(f) %>
   </fieldset>
 <% end %>

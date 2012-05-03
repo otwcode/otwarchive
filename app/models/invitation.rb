@@ -7,14 +7,15 @@ class Invitation < ActiveRecord::Base
 
   validate :recipient_is_not_registered, :on => :create
   def recipient_is_not_registered
-    if self.invitee_email && User.find_by_email(self.invitee_email)
-      errors.add :invitee_email, t('already_registered', :default => 'is already being used by an account holder.')
+    # we allow invitations to be sent to existing users if the purpose is to claim an external author
+    if self.invitee_email && User.find_by_email(self.invitee_email) && !self.external_author
+      errors.add :invitee_email, ts('is already being used by an account holder.')
       return false
     end
   end
   
   # ensure email is valid
-  validates :email, :email_veracity => true, :allow_blank => true  
+  validates :invitee_email, :email_veracity => true, :allow_blank => true  
 
   scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
   scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'

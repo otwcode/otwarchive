@@ -20,7 +20,7 @@ Otwarchive::Application.routes.draw do
   namespace :opendoors do
     resources :tools, :only => [:index] do
       collection do 
-        get :url_update
+        post :url_update
       end
     end
     resources :external_authors do
@@ -477,7 +477,7 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :redirects, :only => [:index] do
+  resources :redirects, :controller => "redirect", :only => [:index] do
     collection do
       get :do_redirect
     end

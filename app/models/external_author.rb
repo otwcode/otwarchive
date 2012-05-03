@@ -38,6 +38,7 @@ class ExternalAuthor < ActiveRecord::Base
   def create_default_name
     @default_name = self.external_author_names.build
     @default_name.name = self.email.to_s
+    self.save
   end
 
   def default_name
