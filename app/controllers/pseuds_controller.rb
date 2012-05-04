@@ -73,25 +73,6 @@ class PseudsController < ApplicationController
     end
   end
 
-  # For use with work/chapter forms
-  def choose_coauthors
-    byline = params[:search].strip
-    if byline.include? "["
-      split = byline.split('[', 2)
-      pseud_name = split.first.strip
-      user_login = split.last.chop
-      @pseuds = where('LOWER(users.login) LIKE ? AND LOWER(name) LIKE ?','%' + user_login + '%',  '%' + pseud_name + '%')
-    else
-      @pseuds = where('LOWER(name) LIKE ?', '%' + byline + '%')
-    end
-    # UGH MAGIC NUMBER WHY 10
-    @pseuds = @pseuds.includes(:user).limit(10)
-    respond_to do |format|
-      format.html
-      format.js
-    end
-  end
-
   # GET /pseuds/new
   # GET /pseuds/new.xml
   def new
@@ -138,7 +119,7 @@ class PseudsController < ApplicationController
         # if setting this one as default, unset the attribute of the current active pseud
         default.update_attribute(:is_default, false)
       end
-      flash[:notice] = t('successfully_updated', :default => 'Pseud was successfully updated.')
+      flash[:notice] = ts('Pseud was successfully updated.')
      redirect_to([@user, @pseud])
     else
       render :action => "edit"
@@ -151,16 +132,16 @@ class PseudsController < ApplicationController
     @hide_dashboard = true
     @pseud = @user.pseuds.find_by_name(params[:id])
     if @pseud.is_default
-      flash[:error] = t('delete_default', :default => "You cannot delete your default pseudonym, sorry!")
+      flash[:error] = ts("You cannot delete your default pseudonym, sorry!")
    elsif @pseud.name == @user.login
-      flash[:error] = t('delete_user_name', :default => "You cannot delete the pseud matching your user name, sorry!")
+      flash[:error] = ts("You cannot delete the pseud matching your user name, sorry!")
    elsif params[:bookmarks_action] == 'transfer_bookmarks'
      @pseud.change_bookmarks_ownership
      @pseud.replace_me_with_default
-     flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
+     flash[:notice] = ts("The pseud was successfully deleted.")
    elsif params[:bookmarks_action] == 'delete_bookmarks' || @pseud.bookmarks.empty?
      @pseud.replace_me_with_default
-     flash[:notice] = t('successfully_deleted', :default => "The pseud was successfully deleted.")
+     flash[:notice] = ts("The pseud was successfully deleted.")
    else
       render 'delete_preview' and return
    end
