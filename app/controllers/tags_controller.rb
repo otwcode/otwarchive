@@ -32,11 +32,6 @@ class TagsController < ApplicationController
         @tags = @tags.popular.canonical.sort
       end
     end
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.js
-    end
   end
 
   def search
