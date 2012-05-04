@@ -34,8 +34,8 @@ class HitCounter < ActiveRecord::Base
     
     # Create hit counters for works that don't have them yet
     (work_ids - found_works).each do |work_id|
-      hit_counter = HitCounter.create(:work_id => work_id, :hit_count => get_stat(:hit_count, hit_counter.work_id))
-      $redis.srem(WORKS_TO_UPDATE_KEY, hit_counter.work_id)
+      hit_counter = HitCounter.create(:work_id => work_id, :hit_count => get_stat(:hit_count, work_id))
+      $redis.srem(WORKS_TO_UPDATE_KEY, work_id)
     end
   end
 
