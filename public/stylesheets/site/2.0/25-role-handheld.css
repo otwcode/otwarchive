@@ -2,6 +2,10 @@
 linearise content, suppress large images, suppress custom fonts and other large downloads
 pasted in the Slim Shaded look temporarily to try to fix for iphone--needs test*/
 
+html {
+  -webkit-text-size-adjust: none;
+}
+
 #outer {
   font-size: 12px;
 }
