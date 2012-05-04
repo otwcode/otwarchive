@@ -30,11 +30,11 @@ class PseudsController < ApplicationController
       redirect_to people_path and return
     end
     @author = @user.pseuds.find_by_name(params[:id])
-    @page_subtitle = @author.name
     unless @author
       flash[:error] = ts("Sorry, could not find this pseud.")
       redirect_to people_path and return
     end
+    @page_subtitle = @author.name
 
     # very similar to show under users - if you change something here, change it there too
     if current_user.nil?
