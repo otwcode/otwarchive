@@ -15,7 +15,7 @@ class DownloadsController < ApplicationController
   # named route: download_path
   # Note: only :id and :format need to be correct,
   # the other two are derived and are there for nginx's benefit
-  # GET /downloads/:download_authors/:id/:download_title.:format
+  # GET /downloads/:download_prefix/:download_authors/:id/:download_title.:format
   def show
     @work = Work.find(params[:id])
     @check_visibility_of = @work

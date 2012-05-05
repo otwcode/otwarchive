@@ -578,9 +578,15 @@ class Work < ActiveRecord::Base
   
   # spread downloads out by first two letters of authorname
   def download_dir
-    dl_authors = self.download_authors    
-    "#{Rails.public_path}/downloads/#{dl_authors[0..1]}/#{dl_authors}/#{self.id}"
+    "#{Rails.public_path}/#{self.download_folder}"
   end
+
+  # split out so we can use this in works_helper
+  def download_folder
+    dl_authors = self.download_authors    
+    "downloads/#{dl_authors[0..1]}/#{dl_authors}/#{self.id}"
+  end
+  
   def download_fandoms
     string = self.fandoms.size > 3 ? ts("Multifandom") : self.fandoms.string
     string = Iconv.conv("ASCII//TRANSLIT//IGNORE", "UTF8", string)

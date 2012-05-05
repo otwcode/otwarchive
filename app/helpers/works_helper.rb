@@ -168,7 +168,7 @@ module WorksHelper
     
 
   def download_url_for_work(work, format)
-    url_for ("/downloads/#{work.download_authors}/#{work.id}/#{work.download_title}.#{format}").gsub(' ', '%20')
+    url_for ("/#{work.download_folder}/#{work.download_title}.#{format}").gsub(' ', '%20')
   end
   
   # Generates a list of a work's tags and details for use in feeds
