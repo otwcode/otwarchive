@@ -22,6 +22,9 @@ class StatsController < ApplicationController
               works.word_count as word_count")
 
     # sort 
+    
+    # NOTE: Because we are going to be eval'ing the @sort variable later we MUST make sure that its content is 
+    # checked against the whitelist of valid options
     sort_options = %w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)
     @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
     @dir = params[:sort_direction] == "ASC" ? "ASC" : "DESC"
@@ -36,6 +39,9 @@ class StatsController < ApplicationController
       end_date = DateTime.parse("31/12/#{@current_year}")
       work_query = work_query.where("works.revised_at >= ? AND works.revised_at <= ?", start_date, end_date)
     end
+    # NOTE: eval is used here instead of send only because you can't send "bookmarks.count" -- avoid eval
+    # wherever possible and be extremely cautious of its security implications (we whitelist the contents of
+    # @sort above, so this should never contain potentially dangerous user input)
     works = work_query.all.sort_by {|w| @dir == "ASC" ? (eval("w.#{@sort}") || 0) : (0-(eval("w.#{@sort}") || 0))}    
 
     # group by fandom or flat view
@@ -48,6 +54,8 @@ class StatsController < ApplicationController
     # gather totals for all works
     @totals = {}
     (sort_options - ["date"]).each do |value|
+      # see explanation above about the eval here
+      # the inject is used to collect the sum in the "result" variable as we iterate over all the works
       @totals[value.split(".")[0].to_sym] = works.inject(0) {|result, work| result + (eval("work.#{value}") || 0)} # sum the works
     end
     @totals[:author_subscriptions] = Subscription.where(:subscribable_id => @user.id, :subscribable_type => 'User').count
@@ -61,6 +69,7 @@ class StatsController < ApplicationController
     @chart_data.new_column('number', chart_col_title)
       
     # Add Rows and Values 
+    # see explanation above about the eval here
     @chart_data.add_rows(works[0..4].map {|w| [w.title, eval("w.#{chart_col}")]})
 
     # image version of bar chart
