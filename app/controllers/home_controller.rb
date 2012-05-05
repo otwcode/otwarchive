@@ -2,6 +2,7 @@ class HomeController < ApplicationController
 
   before_filter :users_only, :only => [:site_pages]
   before_filter :check_permission_to_wrangle, :only => [:site_pages]
+  skip_before_filter :store_location, :only => [:first_login_help]
   
   # terms of service
   def tos
