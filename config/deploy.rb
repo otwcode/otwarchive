@@ -55,6 +55,10 @@ namespace :deploy do
     task :enable_new, :roles => :web do
       run "mv #{release_path}/public/maintenance.html #{release_path}/public/nomaintenance.html 2>/dev/null"
     end
+    desc "Update the web-related whenever tasks"
+    task :update_cron_web, :roles => :web do
+      run "whenever --update-crontab web -f config/schedule_web.rb"
+    end
   end
 end
 
@@ -62,6 +66,9 @@ end
 namespace :extras do
   task :update_revision, {:roles => :backend} do
     run "/static/bin/fix_revision.sh"
+  end
+  task :reload_site_skins, {:roles => :backend} do
+    run "cd #{release_path}; bundle exec rake skins:load_site_skins RAILS_ENV=production"
   end
   task :run_after_tasks, {:roles => :backend} do
     run "cd #{release_path}; rake After RAILS_ENV=production"
@@ -148,5 +155,6 @@ before "deploy:symlink", "deploy:web:enable_new"
 after "deploy:symlink", "extras:update_revision"
 
 after "deploy:restart", "extras:update_cron"
+after "deploy:restart", "deploy:web:update_cron_web"
 after "deploy:restart", "extras:restart_delayed_jobs"
 after "deploy:restart", "deploy:cleanup"
