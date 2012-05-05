@@ -70,6 +70,11 @@ gem 'best_in_place'
 
 gem 'timeliness'
 
+# for generating graphs
+gem "google_visualr", 
+  :git => 'git://github.com/raphaelcm/google_visualr.git',
+  :branch => 'image_charts'
+
 group :test do
   gem 'rspec-rails', '>=2.5.0'
   gem 'pickle'

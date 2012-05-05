@@ -5,20 +5,18 @@ class CreationObserver < ActiveRecord::Observer
   def after_create(creation)
     notify_co_authors(creation)
     return unless !creation.is_a?(Series) && creation.posted?
-    if creation.is_a?(Work)
-      notify_recipients(creation)
-      notify_parents(creation)
-      notify_subscribers(creation)
-      notify_prompters(creation)
-    elsif creation.is_a?(Chapter) && creation.position != 1
-      notify_subscribers(creation)
-    end
+    do_notify(creation)
   end
 
   # Send notifications when a creation is posted from a draft state
   def before_update(creation)
     notify_co_authors(creation)
     return unless !creation.is_a?(Series) && creation.valid? && creation.posted_changed? && creation.posted?
+    do_notify(creation)
+  end
+
+  # send the appropriate notifications
+  def do_notify(creation)
     if creation.is_a?(Work)
       notify_recipients(creation)
       notify_parents(creation)
@@ -59,7 +57,7 @@ class CreationObserver < ActiveRecord::Observer
     work = creation.respond_to?(:work) ? creation.work : creation
     if work && !work.unrevealed? && !work.anonymous?
       Subscription.for_work(work).each do |subscription|
-        UserMailer.subscription_notification(subscription.user.id, subscription.id, creation.id, creation.class.name).deliver
+        RedisMailQueue.queue_subscription(subscription, creation)
       end
     end
   end
