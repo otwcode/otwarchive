@@ -98,6 +98,11 @@ public
   def users_only
     logged_in? || access_denied
   end
+  
+  # Filter method - requires user to have opendoors privs 
+  def opendoors_only
+    (logged_in? && permit?("opendoors")) || access_denied
+  end
 
   # Redirect as appropriate when an access request fails.
   #
