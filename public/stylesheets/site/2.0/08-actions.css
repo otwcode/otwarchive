@@ -60,7 +60,7 @@ p.submit, input.submit, dd.submit {
 /*subtypes and modes 
 test note: this pagination clear needs to be kept an eye on*/
 
-ol.pagination, div.pagination {
+ol.pagination, div.pagination, ol.year {
   text-align: center;
   clear: right;
   margin: 0.643em auto;

@@ -112,6 +112,7 @@ Otwarchive::Application.routes.draw do
         get :index_approved
       end
     end
+    resources :stats, :only => [:index]
     resources :user_creations, :only => [:destroy] do
       member do
         get :hide
@@ -221,6 +222,7 @@ Otwarchive::Application.routes.draw do
     end
     resources :signups, :controller => "challenge_signups", :only => [:index]
     resources :skins, :only => [:index]
+    resources :stats, :only => [:index]
     resources :subscriptions, :only => [:index, :create, :destroy]
     resources :tag_sets, :controller => "owned_tag_sets", :only => [:index]    
     resources :works do
@@ -273,6 +275,7 @@ Otwarchive::Application.routes.draw do
         put :reject
       end
     end
+    resources :links, :controller => "work_links", :only => [:index]          
   end
 
   resources :chapters do
@@ -292,6 +295,7 @@ Otwarchive::Application.routes.draw do
     resources :bookmarks
     resources :related_works
   end
+  
   resources :related_works
   resources :serial_works
   resources :series do

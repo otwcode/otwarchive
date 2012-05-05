@@ -64,6 +64,32 @@ class UserMailer < ActionMailer::Base
     )
   end
 
+  # Sends a batched subscription notification
+  def batch_subscription_notification(subscriber_id, subscriptions)
+    subscriber = User.find(subscriber_id)
+    subscription_hash = JSON.parse(subscriptions)
+    @subscriptions = []
+    @creations = {}
+    subscription_hash.each_pair do |subscription_id, creation_entries|
+      subscription = Subscription.find_by_id(subscription_id)
+      next unless subscription
+      @subscriptions << subscription
+      @creations[subscription.id] ||= []
+      # look up all the creations that have generated updates for this subscription
+      creation_entries.each do |creation_info|
+        creation_type, creation_id = creation_info.split("_")
+        creation = creation_type.constantize.find(creation_id)
+        next unless creation
+        @creations[subscription.id] << creation
+      end
+    end
+    
+    mail(
+      :to => subscriber.email,
+      :subject => "[#{ArchiveConfig.APP_NAME}] Subscription Update"
+    )
+  end
+
   # Emails a user to say they have been given more invitations for their friends
   def invite_increase_notification(user_id, total)
     @user = User.find(user_id)
