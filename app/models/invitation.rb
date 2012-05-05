@@ -7,11 +7,15 @@ class Invitation < ActiveRecord::Base
 
   validate :recipient_is_not_registered, :on => :create
   def recipient_is_not_registered
-    if self.invitee_email && User.find_by_email(self.invitee_email)
-      errors.add :invitee_email, t('already_registered', :default => 'is already being used by an account holder.')
+    # we allow invitations to be sent to existing users if the purpose is to claim an external author
+    if self.invitee_email && User.find_by_email(self.invitee_email) && !self.external_author
+      errors.add :invitee_email, ts('is already being used by an account holder.')
       return false
     end
   end
+  
+  # ensure email is valid
+  validates :invitee_email, :email_veracity => true, :allow_blank => true  
 
   scope :unsent, :conditions => {:invitee_email => nil, :redeemed_at => nil}
   scope :unredeemed, :conditions => 'invitee_email IS NOT NULL and redeemed_at IS NULL'
@@ -62,10 +66,11 @@ class Invitation < ActiveRecord::Base
       begin
         if self.external_author
           archivist = self.external_author.external_creatorships.collect(&:archivist).collect(&:login).uniq.join(", ")
-          UserMailer.invitation_to_claim(self, archivist).deliver
+          # send invite synchronously for now -- this should now work delayed but just to be safe
+          UserMailer.invitation_to_claim(self.id, archivist).deliver!
         else
           # send invitations actively sent by a user synchronously to avoid delays
-          UserMailer.invitation(self).deliver! 
+          UserMailer.invitation(self.id).deliver! 
         end
         self.sent_at = Time.now
       rescue Exception => exception

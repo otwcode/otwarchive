@@ -21,8 +21,8 @@ class UserMailer < ActionMailer::Base
   # Sends an invitation to join the archive
   # Must be sent synchronously as it is rescued
   # TODO refactor to make it asynchronous
-  def invitation(invitation)
-    @invitation = invitation
+  def invitation(invitation_id)
+    @invitation = Invitation.find(invitation_id)
     @user_name = (@invitation.creator.is_a?(User) ? @invitation.creator.login : '')
     mail(
       :to => @invitation.invitee_email,
@@ -31,14 +31,13 @@ class UserMailer < ActionMailer::Base
   end
 
   # Sends an invitation to join the archive and claim stories that have been imported as part of a bulk import
-  # Must be sent synchronously as it is rescued
-  # TODO refactor to make it asynchronous
-  def invitation_to_claim(invitation, archivist_login)
-    @external_author = invitation.external_author
+  def invitation_to_claim(invitation_id, archivist_login)
+    @invitation = Invitation.find(invitation_id)
+    @external_author = @invitation.external_author
     @archivist = archivist_login || "An archivist"
-    @token = invitation.token
+    @token = @invitation.token
     mail(
-      :to => invitation.invitee_email,
+      :to => @invitation.invitee_email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Invitation To Claim Stories"
     )
   end
@@ -47,7 +46,7 @@ class UserMailer < ActionMailer::Base
   def claim_notification(external_author_id, claimed_work_ids)
     external_author = ExternalAuthor.find(external_author_id)
     @external_email = external_author.email
-    @claimed_works = Work.find(claimed_work_ids)
+    @claimed_works = Work.where(:id => claimed_work_ids)
     mail(
       :to => external_author.user.email,
       :subject => "[#{ArchiveConfig.APP_NAME}] Stories Uploaded"

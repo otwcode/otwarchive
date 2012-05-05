@@ -195,8 +195,6 @@ class StoryParser
   def parse_chapters_into_story(location, chapter_contents, options = {})
     work = nil
     chapter_contents.each do |content|
-      # @doc = Nokogiri.parse(content, encoding=options[:encoding])
-
       work_params = parse_common(content, location, options[:encoding])
       if work.nil?
         # create the new work
@@ -263,14 +261,18 @@ class StoryParser
       end
 
       # handle importing works for others
+      # build an external creatorship for each author
       if options[:importing_for_others]
-        external_author_name = options[:external_author_name] || parse_author(location)
-        if external_author_name
-          if external_author_name.external_author.do_not_import
-            # we're not allowed to import works from this address
-            raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
+        external_author_names = options[:external_author_names] || parse_author(location)
+        external_author_names = [external_author_names] if external_author_names.is_a?(ExternalAuthorName)
+        external_author_names.each do |external_author_name|
+          if external_author_name && external_author_name.external_author
+            if external_author_name.external_author.do_not_import
+              # we're not allowed to import works from this address
+              raise Error, "Author #{external_author_name.name} at #{external_author_name.external_author.email} does not allow importing their work to this archive."
+            end
+            ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
           end
-          ec = work.external_creatorships.build(:external_author_name => external_author_name, :archivist => (options[:archivist] || User.current_user))
         end
       end
 
@@ -291,6 +293,11 @@ class StoryParser
 
       work.posted = true if options[:post_without_preview]
       work.chapters.each do |chapter|
+        if chapter.content.length > ArchiveConfig.CONTENT_MAX
+          # TODO: eventually: insert a new chapter
+          chapter.content.truncate(ArchiveConfig.CONTENT_MAX, :omission => "<strong>WARNING: import truncated automatically because chapter was too long! Please add a new chapter for remaining content.</strong>", :separator => "</p>")
+        end
+        
         chapter.posted = true
         # ack! causing the chapters to exist even if work doesn't get created!
         # chapter.save

@@ -14,6 +14,21 @@ Otwarchive::Application.routes.draw do
       resources :restricted_works, :only => [:index, :show]
     end
   end
+  
+  
+  #### OPEN DOORS ####
+  namespace :opendoors do
+    resources :tools, :only => [:index] do
+      collection do 
+        post :url_update
+      end
+    end
+    resources :external_authors do
+      member do
+        post :forward
+      end
+    end
+  end
 
   #### INVITATIONS ####
 
@@ -466,8 +481,8 @@ Otwarchive::Application.routes.draw do
     end
   end
 
-  resources :redirects, :only => [:index] do
-    collection do
+  resource :redirect, :controller => "redirect", :only => [:show] do
+    member do
       get :do_redirect
     end
   end
