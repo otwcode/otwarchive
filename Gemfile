@@ -71,9 +71,7 @@ gem 'best_in_place'
 gem 'timeliness'
 
 # for generating graphs
-gem "google_visualr", 
-  :git => 'git://github.com/raphaelcm/google_visualr.git',
-  :branch => 'image_charts'
+gem "google_visualr", ">= 2.1"
 
 group :test do
   gem 'rspec-rails', '>=2.5.0'
