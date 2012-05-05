@@ -823,15 +823,15 @@ performance killer</p>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>]
     <span class="ruby-comment"># @user is needed in the sidebar</span>
     <span class="ruby-identifier">owner</span> = <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_login</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:user_id</span>])
-    <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span>
+    <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">login</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@user</span>
       <span class="ruby-comment"># @author is needed in the sidebar</span>
       <span class="ruby-identifier">owner</span> = <span class="ruby-ivar">@author</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:pseud_id</span>])
-      <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@author</span>.<span class="ruby-identifier">byline</span>
+      <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;by &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-ivar">@author</span>.<span class="ruby-identifier">byline</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@author</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_id</span>]
     <span class="ruby-identifier">owner</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:tag_id</span>])
-    <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">owner</span>.<span class="ruby-identifier">name</span>
+    <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">owner</span>.<span class="ruby-identifier">name</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">owner</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-ivar">@collection</span>
     <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">title</span>
     <span class="ruby-identifier">owner</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@collection</span> <span class="ruby-comment"># insufficient to filter out unapproved bookmarks, see below</span>
