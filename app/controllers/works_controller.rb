@@ -749,8 +749,16 @@ public
   def marktoread
     @work = Work.find(params[:id])
     Reading.mark_to_read_later(@work, current_user)
-    flash[:notice] = ts("Your #{view_context.link_to('history', user_readings_path(current_user))} was updated. It may take a short while to show up.").html_safe
+    notice = add_link_to_ts(ts("Your history was updated. It may take a short while to show up."), ts("history"), user_readings_path(current_user))
+    flash[:notice] = notice.html_safe
     redirect_to(request.env["HTTP_REFERER"] || root_path)
+  end
+  
+  def add_link_to_ts(message, phrase, link_path)
+    phrase_regexp = Regexp.new(phrase)
+    linked_text = view_context.link_to(phrase, link_path)
+    result = message.gsub(phrase_regexp, linked_text)
+    return result
   end
 
   protected
