@@ -778,6 +778,13 @@ public
     setflash; flash[:notice] = ts("Your #{view_context.link_to('history', read_later_path)} was updated. It may take a short while to show up.").html_safe
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
+  
+  def add_link_to_ts(message, phrase, link_path)
+    phrase_regexp = Regexp.new(phrase)
+    linked_text = view_context.link_to(phrase, link_path)
+    result = message.gsub(phrase_regexp, linked_text)
+    return result
+  end
 
   protected
   
