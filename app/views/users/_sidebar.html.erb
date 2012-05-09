@@ -2,6 +2,7 @@
 <h4 class="landmark heading"><%= ts("Choices")%></h4>
 <ul class="navigation actions">
   <li><%= span_if_current ts("Dashboard"), @user %></li>
+  <li><%= span_if_current ts("Profile"), user_profile_path(@user) %></li>
   <% if @user.pseuds.size > 1 %>
     <li class="pseud" aria-haspopup="true">
       <% pseud_link_text = ((current_page?(@user) ? ts("Pseuds") : (@author ? @author.name : @user.login)) + ' &#8595;').html_safe %>
