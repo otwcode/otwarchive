@@ -102,6 +102,7 @@ class Work < ActiveRecord::Base
   attr_accessor :ambiguous_pseuds
   attr_accessor :new_parent, :url_for_parent
   attr_accessor :should_reset_filters
+  attr_accessor :new_recipients
 
   ########################################################################
   # VALIDATION
@@ -335,13 +336,21 @@ class Work < ActiveRecord::Base
         new_gifts << Gift.new(:recipient => name.strip)
       end
     end
+    set_new_recipients(new_gifts)
     self.gifts = new_gifts
   end
 
   def recipients
     self.gifts.collect(&:recipient).join(",")
   end
-
+  
+  def set_new_recipients(gifts)
+    current_gifts = self.gifts.collect(&:recipient)
+    new_gifts = gifts.collect(&:recipient)
+    diff = new_gifts - current_gifts
+    self.new_recipients = diff.join(",")
+  end
+  
   ########################################################################
   # VISIBILITY
   ########################################################################
