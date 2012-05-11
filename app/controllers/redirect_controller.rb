@@ -34,7 +34,7 @@ class RedirectController < ApplicationController
     redirect_to redirect_path
   end 
   
-  def index
+  def show
     if !@original_url.blank?
       redirect_to :action => :do_redirect, :original_url => @original_url and return
     end

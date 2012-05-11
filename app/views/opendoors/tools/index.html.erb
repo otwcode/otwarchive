@@ -1,7 +1,7 @@
 <% unless @imported_from_url.blank? %>
   <p class="important">
     <%= ts('Test redirect: ') %>
-    <%= link_to @imported_from_url, redirects_path(:original_url => @imported_from_url) %>
+    <%= link_to @imported_from_url, redirect_path(:original_url => @imported_from_url) %>
   </p>
 <% end %>
 
