@@ -1,4 +1,4 @@
-<h2><%= ts("Statistics") %></h2>
+<h2 class="heading"><%= ts("Statistics") %></h2>
 
 <%= render "stats/navigation" %>
 
@@ -52,7 +52,7 @@
 
 <ul class="statistics index">
   <% @works.keys.sort.each do |fandom| %>
-    <li class="fandom listbox">
+    <li class="fandom listbox group">
       <h5 class="heading">
         <%= fandom %>
       </h5>
