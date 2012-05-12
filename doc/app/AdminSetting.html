@@ -96,6 +96,10 @@
     
     <li><a href="#method-c-perform">::perform</a>
     
+    <li><a href="#method-c-set_stats_updated_at">::set_stats_updated_at</a>
+    
+    <li><a href="#method-c-stats_updated_at">::stats_updated_at</a>
+    
     <li><a href="#method-c-suspend_filter_counts-3F">::suspend_filter_counts?</a>
     
     <li><a href="#method-c-tag_wrangling_off-3F">::tag_wrangling_off?</a>
@@ -123,6 +127,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -137,23 +155,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -449,6 +461,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -571,6 +585,10 @@
   
     <li><a href="./Work.html">Work</a>
   
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
+  
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
     <li><a href="./WorkSkin.html">WorkSkin</a>
@@ -660,7 +678,7 @@
 
           
           <div class="method-source-code" id="banner_on-source">
-            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 69</span>
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 72</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">banner_on</span>
   <span class="ruby-constant">Preference</span>.<span class="ruby-identifier">update_all</span>(<span class="ruby-string">&quot;banner_seen = false&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -720,7 +738,7 @@
 
           
           <div class="method-source-code" id="check_queue-source">
-            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 52</span>
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 55</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">check_queue</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invite_from_queue_enabled?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">InviteRequest</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
     <span class="ruby-keyword">if</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">invite_from_queue_at</span>.<span class="ruby-identifier">to_date</span>
@@ -996,7 +1014,7 @@
 
           
           <div class="method-source-code" id="perform-source">
-            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 64</span>
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 67</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">perform</span>(<span class="ruby-identifier">method</span>, *<span class="ruby-identifier">args</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">method</span>, *<span class="ruby-identifier">args</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1008,6 +1026,69 @@
 
         
       </div><!-- perform-method -->
+
+    
+      <div id="method-c-set_stats_updated_at" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_stats_updated_at</span><span
+            class="method-args">(time)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_stats_updated_at-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 76</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">set_stats_updated_at</span>(<span class="ruby-identifier">time</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> 
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">stats_updated_at</span> = <span class="ruby-identifier">time</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">save</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- set_stats_updated_at-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- set_stats_updated_at-method -->
+
+    
+      <div id="method-c-stats_updated_at" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">stats_updated_at</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="stats_updated_at-source">
+            <pre><span class="ruby-comment"># File app/models/admin_setting.rb, line 50</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">stats_updated_at</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">stats_updated_at</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- stats_updated_at-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- stats_updated_at-method -->
 
     
       <div id="method-c-suspend_filter_counts-3F" class="method-detail ">

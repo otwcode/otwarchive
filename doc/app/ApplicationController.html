@@ -134,6 +134,8 @@
     
     <li><a href="#method-i-not_allowed">#not_allowed</a>
     
+    <li><a href="#method-i-opendoors_only">#opendoors_only</a>
+    
     <li><a href="#method-i-redirect_back_or_default">#redirect_back_or_default</a>
     
     <li><a href="#method-i-see_adult-3F">#see_adult?</a>
@@ -179,6 +181,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -193,23 +209,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -505,6 +515,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -627,6 +639,10 @@
   
     <li><a href="./Work.html">Work</a>
   
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
+  
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
     <li><a href="./WorkSkin.html">WorkSkin</a>
@@ -692,7 +708,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="access_denied-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 110</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 115</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">access_denied</span>(<span class="ruby-identifier">options</span> ={})
   <span class="ruby-identifier">store_location</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in?</span>
@@ -732,7 +748,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="admin_logout_required-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 139</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 144</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">admin_logout_required</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in_as_admin?</span>
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Please log out of your admin account first!'</span>
@@ -795,7 +811,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="admin_only_access_denied-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 124</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 129</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">admin_only_access_denied</span>
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;I'm sorry, only an admin can look at that area.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>
@@ -827,7 +843,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="collection_maintainers_only-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 166</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 171</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">collection_maintainers_only</span>
   <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_maintainer?</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
 <span class="ruby-keyword">end</span></pre>
@@ -857,7 +873,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="collection_owners_only-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 170</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 175</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">collection_owners_only</span>
   <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@collection</span>.<span class="ruby-identifier">user_is_owner?</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
 <span class="ruby-keyword">end</span></pre>
@@ -927,7 +943,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="get_page_title-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 182</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 187</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_page_title</span>(<span class="ruby-identifier">fandom</span>, <span class="ruby-identifier">author</span>, <span class="ruby-identifier">title</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-comment"># truncate any piece that is over 15 chars long to the nearest word</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:truncate</span>]
@@ -975,7 +991,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="hide_banner-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 148</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 153</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">hide_banner</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:hide_banner</span>]
     <span class="ruby-identifier">session</span>[<span class="ruby-value">:hide_banner</span>] = <span class="ruby-keyword">true</span>
@@ -1007,7 +1023,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="is_admin-3F-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 246</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 251</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_admin?</span>
   <span class="ruby-identifier">logged_in_as_admin?</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1037,7 +1053,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="is_registered_user-3F-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 242</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 247</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_registered_user?</span>
   <span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">logged_in_as_admin?</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1067,7 +1083,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="load_collection-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 162</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 167</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_collection</span>
   <span class="ruby-ivar">@collection</span> = <span class="ruby-constant">Collection</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:collection_id</span>]
 <span class="ruby-keyword">end</span></pre>
@@ -1097,7 +1113,7 @@ For example, a popup window might simply close itself.</p>
 
           
           <div class="method-source-code" id="not_allowed-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 174</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 179</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">not_allowed</span>(<span class="ruby-identifier">fallback</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Sorry, you're not allowed to do that.&quot;</span>)
   <span class="ruby-identifier">redirect_to</span> (<span class="ruby-identifier">fallback</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">root_path</span>) <span class="ruby-keyword">rescue</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-string">'/'</span>
@@ -1110,6 +1126,36 @@ For example, a popup window might simply close itself.</p>
 
         
       </div><!-- not_allowed-method -->
+
+    
+      <div id="method-i-opendoors_only" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">opendoors_only</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Filter method - requires user to have opendoors privs</p>
+          
+
+          
+          <div class="method-source-code" id="opendoors_only-source">
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 103</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">opendoors_only</span>
+  (<span class="ruby-identifier">logged_in?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">permit?</span>(<span class="ruby-string">&quot;opendoors&quot;</span>)) <span class="ruby-operator">||</span> <span class="ruby-identifier">access_denied</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- opendoors_only-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- opendoors_only-method -->
 
     
       <div id="method-i-redirect_back_or_default" class="method-detail ">
@@ -1169,7 +1215,7 @@ call or to the passed default.</p>
 
           
           <div class="method-source-code" id="see_adult-3F-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 250</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 255</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">see_adult?</span>
   <span class="ruby-identifier">params</span>[<span class="ruby-value">:anchor</span>] = <span class="ruby-string">&quot;comments&quot;</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">params</span>[<span class="ruby-value">:show_comments</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:anchor</span>].<span class="ruby-identifier">blank?</span>)
   <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span> <span class="ruby-node">&quot;Added anchor #{params[:anchor]}&quot;</span>
@@ -1205,7 +1251,7 @@ call or to the passed default.</p>
 
           
           <div class="method-source-code" id="set_current_user-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 157</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 162</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_current_user</span>
   <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span> = <span class="ruby-identifier">logged_in_as_admin?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">current_admin</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">current_user</span>
   <span class="ruby-ivar">@current_user</span> = <span class="ruby-identifier">current_user</span>
@@ -1236,7 +1282,7 @@ call or to the passed default.</p>
 
           
           <div class="method-source-code" id="set_redirects-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 237</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 242</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_redirects</span>
   <span class="ruby-ivar">@logged_in_redirect</span> = <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">current_user</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>)
   <span class="ruby-ivar">@logged_out_redirect</span> = <span class="ruby-identifier">url_for</span>({<span class="ruby-value">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'session'</span>, <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'new'</span>})
@@ -1267,7 +1313,7 @@ call or to the passed default.</p>
 
           
           <div class="method-source-code" id="set_sort_order-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 340</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 345</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_sort_order</span>
   <span class="ruby-comment"># sorting</span>
   <span class="ruby-ivar">@sort_column</span> = (<span class="ruby-identifier">valid_sort_column</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>],<span class="ruby-string">&quot;prompt&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] <span class="ruby-operator">:</span> <span class="ruby-string">'id'</span>)
@@ -1339,7 +1385,7 @@ call or to the passed default.</p>
 
           
           <div class="method-source-code" id="user_logout_required-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 131</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 136</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">user_logout_required</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in?</span>
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:notice</span>] = <span class="ruby-string">'Please log out of your user account first!'</span>
@@ -1402,7 +1448,7 @@ call or to the passed default.</p>
 
           
           <div class="method-source-code" id="valid_sort_column-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 324</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 329</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">valid_sort_column</span>(<span class="ruby-identifier">param</span>, <span class="ruby-identifier">model</span>=<span class="ruby-string">'work'</span>)
   <span class="ruby-identifier">allowed</span> = []
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-string">'work'</span>
@@ -1444,7 +1490,7 @@ call or to the passed default.</p>
 
           
           <div class="method-source-code" id="valid_sort_direction-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 350</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 355</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">valid_sort_direction</span>(<span class="ruby-identifier">param</span>)
   <span class="ruby-operator">!</span><span class="ruby-identifier">param</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">&amp;&amp;</span> [<span class="ruby-string">'asc'</span>, <span class="ruby-string">'desc'</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">param</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1481,7 +1527,7 @@ permission to view, edit or delete it</p>
 
           
           <div class="method-source-code" id="check_ownership-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 281</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 286</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_ownership</span>
       <span class="ruby-identifier">access_denied</span>(<span class="ruby-value">:redirect</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@check_ownership_of</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@check_ownership_of</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1511,7 +1557,7 @@ permission to view, edit or delete it</p>
 
           
           <div class="method-source-code" id="check_ownership_or_admin-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 284</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 289</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_ownership_or_admin</span>
    <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">logged_in_as_admin?</span>
    <span class="ruby-identifier">access_denied</span>(<span class="ruby-value">:redirect</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@check_ownership_of</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-ivar">@check_ownership_of</span>)
@@ -1542,7 +1588,7 @@ permission to view, edit or delete it</p>
 
           
           <div class="method-source-code" id="check_permission_to_wrangle-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 306</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 311</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_permission_to_wrangle</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@admin_settings</span>.<span class="ruby-identifier">tag_wrangling_off?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">logged_in_as_admin?</span>
     <span class="ruby-identifier">flash</span>[<span class="ruby-value">:error</span>] = <span class="ruby-string">&quot;Wrangling is disabled at the moment. Please check back later.&quot;</span>
@@ -1577,7 +1623,7 @@ permission to view, edit or delete it</p>
 
           
           <div class="method-source-code" id="check_user_status-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 263</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 268</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_user_status</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">suspended?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">banned?</span>)
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">suspended?</span>
@@ -1616,7 +1662,7 @@ sign up to read them</p>
 
           
           <div class="method-source-code" id="check_visibility-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 291</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 296</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_visibility</span>
   <span class="ruby-keyword">if</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:restricted</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@check_visibility_of</span>.<span class="ruby-identifier">restricted</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">login_path</span>(<span class="ruby-value">:restricted</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
@@ -1750,7 +1796,7 @@ sign up to read them</p>
 
           
           <div class="method-source-code" id="current_user_owns-3F-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 275</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 280</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">current_user_owns?</span>(<span class="ruby-identifier">item</span>)
       <span class="ruby-operator">!</span><span class="ruby-identifier">item</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">item</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">item</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-identifier">item</span>))
 <span class="ruby-keyword">end</span></pre>
@@ -1812,7 +1858,7 @@ false # if you want to record missing translations</p>
 
           
           <div class="method-source-code" id="load_locales-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 214</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 219</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load_locales</span>
   <span class="ruby-ivar">@loaded_locales</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Locale</span>.<span class="ruby-identifier">order</span>(<span class="ruby-value">:iso</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1902,7 +1948,7 @@ false # if you want to record missing translations</p>
 
           
           <div class="method-source-code" id="set_preferred_locale-source">
-            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 219</span>
+            <pre><span class="ruby-comment"># File app/controllers/application_controller.rb, line 224</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_preferred_locale</span>
   <span class="ruby-comment"># Loading the current locale</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:locale</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@loaded_locales</span>.<span class="ruby-identifier">detect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">loc</span><span class="ruby-operator">|</span> <span class="ruby-identifier">loc</span>.<span class="ruby-identifier">iso</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">session</span>[<span class="ruby-value">:locale</span>]}
