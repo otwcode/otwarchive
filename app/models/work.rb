@@ -574,7 +574,7 @@ class Work < ActiveRecord::Base
     if self.new_record?
       self.word_count = self.chapters.first.set_word_count
     else
-      self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(:work_id => self.id).first.work_word_count
+      self.word_count = Chapter.select("SUM(word_count) AS work_word_count").where(:work_id => self.id, :posted => true).first.work_word_count
     end
   end
 
