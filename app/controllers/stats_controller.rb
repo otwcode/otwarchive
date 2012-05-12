@@ -42,7 +42,7 @@ class StatsController < ApplicationController
     # NOTE: eval is used here instead of send only because you can't send "bookmarks.count" -- avoid eval
     # wherever possible and be extremely cautious of its security implications (we whitelist the contents of
     # @sort above, so this should never contain potentially dangerous user input)
-    works = work_query.all.sort_by {|w| @dir == "ASC" ? (eval("w.#{@sort}") || 0) : (0-(eval("w.#{@sort}") || 0))}    
+    works = work_query.all.sort_by {|w| @dir == "ASC" ? (eval("w.#{@sort}") || 0) : (0 - (eval("w.#{@sort}") || 0).to_i)}    
 
     # group by fandom or flat view
     if params[:flat_view]
