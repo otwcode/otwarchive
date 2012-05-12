@@ -58,7 +58,7 @@
     <dt><%= f.label :syn_string, 'Synonym of' %></dt>
     <dd>
       <%= f.text_field :syn_string, autocomplete_options("tag?type=#{@tag.type.downcase}", :class => 'autocomplete tags', :autocomplete_token_limit => 1) %>
-      <p>Choose an existing tag or add a new tag name here to create a new canonical and associate this tag with it.</p>
+      <p>Choose an existing tag or add a new tag name here to create a new canonical and make this tag its synonym.</p>
       <% if @tag.merger %>
         <p class="navigation actions" role="navigation">Edit <%= link_to_edit_tag(@tag.merger) %></p>
       <% elsif @tag.canonical? %>
