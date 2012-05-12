@@ -9,7 +9,9 @@ class Work < ActiveRecord::Base
   # ASSOCIATIONS
   ########################################################################
 
-  has_many :creatorships, :as => :creation, :dependent => :destroy
+  # creatorships can't have dependent => destroy because we email the
+  # user in a before_destroy callback
+  has_many :creatorships, :as => :creation
   has_many :pseuds, :through => :creatorships
   has_many :users, :through => :pseuds, :uniq => true
 
@@ -197,6 +199,11 @@ class Work < ActiveRecord::Base
   after_destroy :destroy_chapters_in_reverse
   def destroy_chapters_in_reverse
     self.chapters.order("position DESC").map(&:destroy)
+  end
+  
+  after_destroy :clean_up_creatorships
+  def clean_up_creatorships
+    self.creatorships.each{ |c| c.destroy }
   end
 
   def self.purge_old_drafts
