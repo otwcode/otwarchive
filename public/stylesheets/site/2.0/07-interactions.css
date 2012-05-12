@@ -126,6 +126,11 @@ form dd {
   width: 72.5%;
 }
 
+form dd + dd {
+  width: 97.5%;
+  margin-left: 0.5625em;
+}
+
 /*END FORM RULES*/
 
 /* WIDGET: CHARACTER COUNTER (todo: ARIA live region POLITE)*/
