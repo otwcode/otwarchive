@@ -268,7 +268,7 @@ class WorksController < ApplicationController
         end
       else
         if @work.errors.empty? && (!@work.invalid_pseuds.blank? || !@work.ambiguous_pseuds.blank?)
-          render :partial => 'choose_coauthor', :layout => 'application'
+          render :_choose_coauthor
         else
           unless @work.has_required_tags?
             if @work.fandoms.blank?
@@ -393,9 +393,6 @@ class WorksController < ApplicationController
         elsif params[:update_button]
           setflash; flash[:notice] = ts('Work was successfully updated.')
         end
-
-        #bleep += "  AFTER SAVE: author attr: " + params[:work][:author_attributes][:ids].collect {|a| a}.inspect + "  @work.authors: " + @work.authors.collect {|au| au.id}.inspect + "  @work.pseuds: " + @work.pseuds.collect {|ps| ps.id}.inspect
-        #setflash; flash[:notice] = "DEBUG: in UPDATE save:  " + bleep
 
         redirect_to(@work)
       else
