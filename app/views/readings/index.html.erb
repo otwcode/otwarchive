@@ -21,7 +21,9 @@
 
 <!--main content-->
 <% if logged_in? && !current_user.readings.empty? %>
+  <ol class="history index">
     <%= render :partial => 'reading', :collection => @readings %>
+  </ol>
 <% end %>
 <!--/content-->
 
