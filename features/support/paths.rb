@@ -75,8 +75,8 @@ module NavigationHelpers
       new_work_path(:import => 'true')
     when /the work-skins page/
       skins_path(:work_skins => true)
-    when /^(.*)'s skin page/
-      skins_path(:user_id => $1)
+    when /the skins admin page/
+      unapproved_skins_path
     when /^"(.*)" skin page/
       skin_path(Skin.find_by_title($1))
     when /^"(.*)" edit skin page/

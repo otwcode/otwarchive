@@ -316,6 +316,11 @@ public
       logged_in_as_admin? || permit?("tag_wrangler") || access_denied
     end
   end
+  
+  # Make sure user is allowed to access skins admin pages
+  def check_permission_to_skin
+    logged_in_as_admin? || permit?("skins_admin") || access_denied
+  end
 
   private
  # With thanks from here: http://blog.springenwerk.com/2008/05/set-date-attribute-from-dateselect.html

@@ -56,14 +56,37 @@ end
 
 Given /^I approve the skin "([^"]*)"$/ do |skin_name|
   Given "I am logged in as an admin"
-  visit admin_skins_url
+  visit unapproved_skins_url
   check("make_official_#{skin_name.gsub(/\s/, '_')}")
   And %{I submit}
 end
 
 Given /^I unapprove the skin "([^"]*)"$/ do |skin_name|
   Given "I am logged in as an admin"
-  visit admin_skins_url
+  visit unapproved_skins_url
+  Given "I follow \"Approved Skins\""
+  check("make_unofficial_#{skin_name.gsub(/\s/, '_')}")
+  And %{I submit}
+end
+
+Given /^I am logged in as a Skins Admin$/ do
+  Given "I am logged out"
+  skinsadmin = User.find_by_login("skinsadmin")
+  if skinsadmin.blank?
+    skinsadmin = Factory.create(:user, :login => "skinsadmin", :password => "skinsadmin", :email => "skinsadmin@example.org")
+    skinsadmin.skins_admin = '1'
+  end
+  visit login_path
+  fill_in "User name", :with => skinsadmin.login
+  fill_in "Password", :with => skinsadmin.password
+  check "Remember me"
+  click_button "Log in"
+  assert UserSession.find
+end 
+
+Given /^I unapprove the skin "([^"]*)" as a Skins Admin$/ do |skin_name|
+  Given "I am logged in as a Skins Admin"
+  visit unapproved_skins_url
   Given "I follow \"Approved Skins\""
   check("make_unofficial_#{skin_name.gsub(/\s/, '_')}")
   And %{I submit}
@@ -133,4 +156,8 @@ end
 
 Then /^I should see a different accent color on the dashboard and work meta$/ do
   Then %{I should see "#header .icon, #dashboard ul, #main dl.meta {background: blue; border-color:blue;}" within "style"}
+end
+
+Given /^PENDING/ do
+  pending
 end
