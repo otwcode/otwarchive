@@ -20,10 +20,13 @@ Feature: Leave kudos
     And all emails have been delivered
     And I view the work "Awesome Story"
   Then I should not see "left kudos on this work"
-  When I press "Kudos ♥"
   # Note: this step cannot be put into the steps file because of the heart character
+  When I press "Kudos ♥"
   Then I should see "myname2 left kudos on this work!"
-    And 1 email should be delivered to "myname1@foo.com"
+    # make sure no emails go out until notifications are sent
+    And 0 emails should be delivered
+  When kudos are sent
+    Then 1 email should be delivered to "myname1@foo.com"
     And the email should contain "myname2"
     And the email should contain "left kudos"
     And the email should contain "."
@@ -34,6 +37,7 @@ Feature: Leave kudos
     And I should not see "myname2 and myname2 left kudos on this work!"
   When I log out
     And I press "Kudos ♥"
+    And kudos are sent
   Then 1 email should be delivered to "myname1@foo.com"
     And the email should contain "A guest"
     And the email should contain "left kudos"
@@ -101,3 +105,27 @@ Feature: Leave kudos
     And I press "Kudos ♥"
   Then I should see "Chapter 2" within ".title"
     And I should see "Chapter 3" within ".title"
+    
+  Scenario: batched kudos email
+  
+  When I am logged in as "myname1"
+    And I post the work "Another Awesome Story"
+    And all emails have been delivered
+    And the kudos queue is cleared
+    And I am logged in as "myname2"
+    And I leave kudos on "Awesome Story"
+    And I leave kudos on "Another Awesome Story"
+    And I am logged in as "someone_else"
+    And I leave kudos on "Awesome Story"
+    And I leave kudos on "Another Awesome Story"
+    And I am logged out
+    And I leave kudos on "Awesome Story"
+    And I leave kudos on "Another Awesome Story"
+    And kudos are sent
+  Then 1 email should be delivered to "myname1@foo.com"
+    And the email should contain "myname2"
+    And the email should contain "someone_else"
+    And the email should contain "guest"
+    And the email should contain "Awesome Story"
+    And the email should contain "Another Awesome Story"
+    

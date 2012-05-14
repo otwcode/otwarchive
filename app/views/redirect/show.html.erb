@@ -5,11 +5,11 @@
   we will try and look it up.
 </p>
 
-<%= form_tag url_for(:controller => :redirect, :action => :show) do %>
+<%= form_tag redirect_path do %>
 <fieldset>
 	<legend>Find story by URL</legend>
   <p>
-    <%= label_tag "original_url", t('.redirect.original_url', :default => 'Original URL of work:') %> <br />
+    <%= label_tag "original_url", ts('Original URL of work:') %> <br />
     <%= text_field_tag "original_url", "", :size => 70 %>
     <%= submit_tag "Go" %>
   </p>

@@ -88,10 +88,6 @@ h1, h2, h3 {
     word-break: break-all;
 }
 
-.actions, .actions input {
-  text-transform: lowercase;
-}
-
 #main .actions a {
   margin: auto;
 }

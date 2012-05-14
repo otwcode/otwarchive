@@ -99,6 +99,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -113,23 +127,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -425,6 +433,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -547,6 +557,10 @@
   
     <li><a href="./Work.html">Work</a>
   
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
+  
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
     <li><a href="./WorkSkin.html">WorkSkin</a>
@@ -606,7 +620,7 @@
 
           
           <div class="method-source-code" id="discuss-source">
-            <pre><span class="ruby-comment"># File app/controllers/tag_wranglings_controller.rb, line 78</span>
+            <pre><span class="ruby-comment"># File app/controllers/tag_wranglings_controller.rb, line 79</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">discuss</span>
   <span class="ruby-ivar">@comments</span> = <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:commentable_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Tag'</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">'updated_at DESC'</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
 <span class="ruby-keyword">end</span></pre>
@@ -648,6 +662,7 @@
     <span class="ruby-identifier">sort</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] <span class="ruby-operator">+</span> <span class="ruby-string">&quot; &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_direction</span>] 
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:show</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;fandoms&quot;</span>
       <span class="ruby-ivar">@media_names</span> = <span class="ruby-constant">Media</span>.<span class="ruby-identifier">by_name</span>.<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:name</span>)
+      <span class="ruby-ivar">@page_subtitle</span> = <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;fandoms&quot;</span>)
       <span class="ruby-ivar">@tags</span> = <span class="ruby-constant">Fandom</span>.<span class="ruby-identifier">unwrangled</span>.<span class="ruby-identifier">in_use</span>.<span class="ruby-identifier">order</span>(<span class="ruby-identifier">sort</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>], <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ITEMS_PER_PAGE</span>)       
     <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:show</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&quot;character_relationships&quot;</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:fandom_string</span>]
@@ -690,7 +705,7 @@
 
           
           <div class="method-source-code" id="wrangle-source">
-            <pre><span class="ruby-comment"># File app/controllers/tag_wranglings_controller.rb, line 35</span>
+            <pre><span class="ruby-comment"># File app/controllers/tag_wranglings_controller.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">wrangle</span>
   <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>] = <span class="ruby-string">'1'</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>].<span class="ruby-identifier">blank?</span>
   <span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>] = <span class="ruby-string">'name'</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">valid_sort_column</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:sort_column</span>], <span class="ruby-string">'tag'</span>)

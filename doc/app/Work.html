@@ -81,6 +81,10 @@
     <li><span class="include">Pseudable</span>
   
   
+  
+    <li><span class="include">WorkStats</span>
+  
+  
   </ul>
 </nav>
 
@@ -146,8 +150,6 @@
     
     <li><a href="#method-i-create_hit_counter">#create_hit_counter</a>
     
-    <li><a href="#method-i-database_hits">#database_hits</a>
-    
     <li><a href="#method-i-default_date">#default_date</a>
     
     <li><a href="#method-i-destroy_chapters_in_reverse">#destroy_chapters_in_reverse</a>
@@ -162,6 +164,8 @@
     
     <li><a href="#method-i-download_fandoms">#download_fandoms</a>
     
+    <li><a href="#method-i-download_folder">#download_folder</a>
+    
     <li><a href="#method-i-download_title">#download_title</a>
     
     <li><a href="#method-i-ensure_revised_at">#ensure_revised_at</a>
@@ -172,17 +176,13 @@
     
     <li><a href="#method-i-has_required_tags-3F">#has_required_tags?</a>
     
-    <li><a href="#method-i-hits">#hits</a>
-    
-    <li><a href="#method-i-increment_hit_count">#increment_hit_count</a>
-    
     <li><a href="#method-i-is_complete">#is_complete</a>
     
     <li><a href="#method-i-is_wip">#is_wip</a>
     
     <li><a href="#method-i-last_chapter">#last_chapter</a>
     
-    <li><a href="#method-i-last_visitor">#last_visitor</a>
+    <li><a href="#method-i-last_posted_chapter">#last_posted_chapter</a>
     
     <li><a href="#method-i-multipart-3F">#multipart?</a>
     
@@ -196,21 +196,11 @@
     
     <li><a href="#method-i-post_first_chapter">#post_first_chapter</a>
     
-    <li><a href="#method-i-pseuds_to_add">#pseuds_to_add</a>
-    
-    <li><a href="#method-i-pseuds_to_add-3D">#pseuds_to_add=</a>
-    
-    <li><a href="#method-i-pseuds_to_remove">#pseuds_to_remove</a>
-    
-    <li><a href="#method-i-pseuds_to_remove-3D">#pseuds_to_remove=</a>
-    
     <li><a href="#method-i-published_at">#published_at</a>
     
     <li><a href="#method-i-recipients">#recipients</a>
     
     <li><a href="#method-i-recipients-3D">#recipients=</a>
-    
-    <li><a href="#method-i-redis_key">#redis_key</a>
     
     <li><a href="#method-i-remove_author">#remove_author</a>
     
@@ -293,6 +283,20 @@
 
   <ul class="link-list">
   
+    <li><a href="./Admin.html">Admin</a>
+  
+    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
+  
+    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
+  
+    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
+  
+    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
+  
+    <li><a href="./Admin/StatsController.html">Admin::StatsController</a>
+  
+    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
+  
     <li><a href="./Static.html">Static</a>
   
     <li><a href="./Static/BaseController.html">Static::BaseController</a>
@@ -307,23 +311,17 @@
   
     <li><a href="./Static/WorksController.html">Static::WorksController</a>
   
-    <li><a href="./Admin.html">Admin</a>
-  
-    <li><a href="./Admin/AdminInvitationsController.html">Admin::AdminInvitationsController</a>
-  
-    <li><a href="./Admin/AdminUsersController.html">Admin::AdminUsersController</a>
-  
-    <li><a href="./Admin/SettingsController.html">Admin::SettingsController</a>
-  
-    <li><a href="./Admin/SkinsController.html">Admin::SkinsController</a>
-  
-    <li><a href="./Admin/UserCreationsController.html">Admin::UserCreationsController</a>
-  
     <li><a href="./Challenge.html">Challenge</a>
   
     <li><a href="./Challenge/GiftExchangeController.html">Challenge::GiftExchangeController</a>
   
     <li><a href="./Challenge/PromptMemeController.html">Challenge::PromptMemeController</a>
+  
+    <li><a href="./Opendoors.html">Opendoors</a>
+  
+    <li><a href="./Opendoors/ExternalAuthorsController.html">Opendoors::ExternalAuthorsController</a>
+  
+    <li><a href="./Opendoors/ToolsController.html">Opendoors::ToolsController</a>
   
     <li><a href="./StoryParser.html">StoryParser</a>
   
@@ -619,6 +617,8 @@
   
     <li><a href="./RedirectController.html">RedirectController</a>
   
+    <li><a href="./RedisMailQueue.html">RedisMailQueue</a>
+  
     <li><a href="./RelatedWork.html">RelatedWork</a>
   
     <li><a href="./RelatedWorksController.html">RelatedWorksController</a>
@@ -740,6 +740,10 @@
     <li><a href="./WeightedRandom.html">WeightedRandom</a>
   
     <li><a href="./Work.html">Work</a>
+  
+    <li><a href="./WorkLink.html">WorkLink</a>
+  
+    <li><a href="./WorkLinksController.html">WorkLinksController</a>
   
     <li><a href="./WorkObserver.html">WorkObserver</a>
   
@@ -934,7 +938,7 @@ Trek’, :id =&gt; ‘3’, :count =&gt; ‘50’}, …], ‘Character’ =&gt; 
 
           
           <div class="method-source-code" id="build_filters-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 1100</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 1043</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">build_filters</span>(<span class="ruby-identifier">works</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">build_filters_from_tags</span>(<span class="ruby-constant">Tag</span>.<span class="ruby-identifier">filters_with_count</span>(<span class="ruby-identifier">works</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:id</span>)))
 <span class="ruby-keyword">end</span></pre>
@@ -964,7 +968,7 @@ Trek’, :id =&gt; ‘3’, :count =&gt; ‘50’}, …], ‘Character’ =&gt; 
 
           
           <div class="method-source-code" id="build_filters_from_tags-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 1104</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 1047</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">build_filters_from_tags</span>(<span class="ruby-identifier">tags</span>)
   <span class="ruby-identifier">filters</span> = {}
   <span class="ruby-identifier">tags</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span>
@@ -999,7 +1003,7 @@ Trek’, :id =&gt; ‘3’, :count =&gt; ‘50’}, …], ‘Character’ =&gt; 
 
           
           <div class="method-source-code" id="find_with_options-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 1042</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 985</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">find_with_options</span>(<span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">page_args</span> = {<span class="ruby-value">:page</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:page</span>] <span class="ruby-operator">||</span> <span class="ruby-value">1</span>, <span class="ruby-value">:per_page</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">options</span>[<span class="ruby-value">:per_page</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">ITEMS_PER_PAGE</span>)}
   <span class="ruby-identifier">sort_by</span> = <span class="ruby-node">&quot;#{options[:sort_column]} #{options[:sort_direction]}&quot;</span>
@@ -1081,7 +1085,7 @@ Trek’, :id =&gt; ‘3’, :count =&gt; ‘50’}, …], ‘Character’ =&gt; 
 
           
           <div class="method-source-code" id="in_series-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 1016</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 959</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">in_series</span>(<span class="ruby-identifier">series</span>)
   <span class="ruby-identifier">joins</span>(<span class="ruby-value">:series</span>).
   <span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;series.id = ?&quot;</span>, <span class="ruby-identifier">series</span>.<span class="ruby-identifier">id</span>)
@@ -1114,7 +1118,7 @@ category (i.e. no fandom, no characters etc.)</p>
 
           
           <div class="method-source-code" id="no_tags-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 1034</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 977</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">no_tags</span>(<span class="ruby-identifier">tag_category</span>, <span class="ruby-identifier">options</span> = {})
   <span class="ruby-identifier">tags</span> = <span class="ruby-identifier">tag_category</span>.<span class="ruby-identifier">tags</span>
   <span class="ruby-identifier">with_scope</span> <span class="ruby-value">:find</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span> <span class="ruby-keyword">do</span>
@@ -1147,7 +1151,7 @@ category (i.e. no fandom, no characters etc.)</p>
 
           
           <div class="method-source-code" id="purge_old_drafts-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 190</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 202</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">purge_old_drafts</span>
   <span class="ruby-identifier">draft_ids</span> = <span class="ruby-constant">Work</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">'works.posted = ? AND works.created_at &lt; ?'</span>, <span class="ruby-keyword">false</span>, <span class="ruby-value">1</span>.<span class="ruby-identifier">week</span>.<span class="ruby-identifier">ago</span>).<span class="ruby-identifier">value_of</span>(<span class="ruby-value">:id</span>)
   <span class="ruby-constant">Chapter</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:work_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">draft_ids</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;position DESC&quot;</span>).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:destroy</span>)
@@ -1180,7 +1184,7 @@ category (i.e. no fandom, no characters etc.)</p>
 
           
           <div class="method-source-code" id="visible-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 947</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 890</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">visible</span>(<span class="ruby-identifier">user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-identifier">visible_to_user</span>(<span class="ruby-identifier">user</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1216,7 +1220,7 @@ where the same user appears twice on a work.</p>
 
           
           <div class="method-source-code" id="visible_to_user-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 932</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 875</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">visible_to_user</span>(<span class="ruby-identifier">user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">case</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>
   <span class="ruby-keyword">when</span> <span class="ruby-string">'Admin'</span>
@@ -1262,7 +1266,7 @@ where the same user appears twice on a work.</p>
 
           
           <div class="method-source-code" id="3C-3D-3E-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 1134</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 1077</span>
 <span class="ruby-keyword">def</span> <span class="ruby-operator">&lt;=&gt;</span>(<span class="ruby-identifier">another_work</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title_to_sort_on</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">another_work</span>.<span class="ruby-identifier">title_to_sort_on</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1293,7 +1297,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="add_filter_tagging-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 698</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 641</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_filter_tagging</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">meta</span>=<span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">admin_settings</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-string">&quot;admin_settings&quot;</span>){<span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">first</span>}
   <span class="ruby-identifier">filter</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">canonical?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">tag</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">merger</span>
@@ -1337,7 +1341,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="adjust_filter_counts-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 758</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 701</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">adjust_filter_counts</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">should_reset_filters</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">filters</span>.<span class="ruby-identifier">reload</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">filter</span><span class="ruby-operator">|</span> <span class="ruby-identifier">filter</span>.<span class="ruby-identifier">reset_filter_count</span> }
@@ -1370,7 +1374,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="adjust_series_restriction-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 461</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 444</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">adjust_series_restriction</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">series</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">series</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">adjust_restricted</span> }
@@ -1402,7 +1406,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="anonymous-3F-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 385</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 368</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">anonymous?</span>(<span class="ruby-identifier">user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-comment"># here we check if the story is in a currently-anonymous challenge</span>
   <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">approved_collection_items</span>.<span class="ruby-identifier">anonymous</span>.<span class="ruby-identifier">empty?</span>
@@ -1433,7 +1437,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="author_attributes-3D-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 263</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 246</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">author_attributes=</span>(<span class="ruby-identifier">attributes</span>)
   <span class="ruby-identifier">selected_pseuds</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">attributes</span>[<span class="ruby-value">:ids</span>])
   (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">authors</span> <span class="ruby-operator">||=</span> []) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">selected_pseuds</span>
@@ -1478,7 +1482,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="challenge_assignment_ids-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 326</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 309</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">challenge_assignment_ids</span>
   <span class="ruby-identifier">challenge_assignments</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:id</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1508,7 +1512,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="challenge_assignment_ids-3D-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 334</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 317</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">challenge_assignment_ids=</span>(<span class="ruby-identifier">ids</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">challenge_assignments</span> = <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-identifier">id</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span> <span class="ruby-constant">ChallengeAssignment</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>)}.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">select</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">assignment</span><span class="ruby-operator">|</span> <span class="ruby-identifier">assignment</span>.<span class="ruby-identifier">offering_user</span> <span class="ruby-operator">==</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>}
 <span class="ruby-keyword">end</span></pre>
@@ -1538,7 +1542,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="challenge_claim_ids-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 330</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 313</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">challenge_claim_ids</span>
   <span class="ruby-identifier">challenge_claims</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:id</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -1568,7 +1572,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="change_ownership-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 297</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 280</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">change_ownership</span>(<span class="ruby-identifier">old_user</span>, <span class="ruby-identifier">new_user</span>, <span class="ruby-identifier">new_pseud</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;No new user provided, cannot change ownership&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">new_user</span>
   <span class="ruby-identifier">new_pseud</span> = <span class="ruby-identifier">new_user</span>.<span class="ruby-identifier">default_pseud</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">new_pseud</span>.<span class="ruby-identifier">nil?</span>
@@ -1606,7 +1610,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="chapter_attributes-3D-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 484</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 467</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">chapter_attributes=</span>(<span class="ruby-identifier">attributes</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_record?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">build</span>(<span class="ruby-identifier">attributes</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">attributes</span> = <span class="ruby-identifier">attributes</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">posted</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">posted</span>
@@ -1637,7 +1641,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="chapter_total_display-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 572</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 560</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">chapter_total_display</span>
   <span class="ruby-identifier">current</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">posted?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">number_of_posted_chapters</span> <span class="ruby-operator">:</span> <span class="ruby-value">1</span>
   <span class="ruby-identifier">current</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">'/'</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">wip_length</span>.<span class="ruby-identifier">to_s</span>
@@ -1668,7 +1672,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="chaptered-3F-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 544</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 532</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">chaptered?</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">expected_number_of_chapters</span> <span class="ruby-operator">!=</span> <span class="ruby-value">1</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1698,7 +1702,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="chapters_in_order-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 521</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 504</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">chapters_in_order</span>(<span class="ruby-identifier">include_content</span> = <span class="ruby-keyword">true</span>)
   <span class="ruby-comment"># in order</span>
   <span class="ruby-identifier">chapters</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">'position ASC'</span>)
@@ -1736,7 +1740,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="check_filter_counts-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 743</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 686</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_filter_counts</span>
   <span class="ruby-identifier">admin_settings</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">cache</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-string">&quot;admin_settings&quot;</span>){<span class="ruby-constant">AdminSetting</span>.<span class="ruby-identifier">first</span>}
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">should_reset_filters</span> = (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_record?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">visibility_changed?</span>)
@@ -1771,7 +1775,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="check_for_invalid_chapters-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 160</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 172</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_for_invalid_chapters</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">errors</span>[<span class="ruby-value">:chapters</span>].<span class="ruby-identifier">any?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">t</span>(<span class="ruby-string">'chapter_invalid'</span>, <span class="ruby-value">:default</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Please enter your story in the text field below.&quot;</span>))
@@ -1804,7 +1808,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="clean_and_validate_title-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 137</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 149</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">clean_and_validate_title</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">strip</span>
@@ -1842,7 +1846,7 @@ canonical synonym</p>
 
           
           <div class="method-source-code" id="comments-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 789</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 732</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">comments</span>
   <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">where</span>(
     <span class="ruby-value">:commentable_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Chapter'</span>, 
@@ -1877,7 +1881,7 @@ hide their existence from other users</p>
 
           
           <div class="method-source-code" id="count_all_comments-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 784</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 727</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">count_all_comments</span>
   <span class="ruby-identifier">find_all_comments</span>.<span class="ruby-identifier">count</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1907,11 +1911,10 @@ hide their existence from other users</p>
 
           
           <div class="method-source-code" id="create_hit_counter-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 587</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 85</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create_hit_counter</span>
   <span class="ruby-identifier">counter</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">build_hit_counter</span>
   <span class="ruby-identifier">counter</span>.<span class="ruby-identifier">save</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">set</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:hit_count</span>), <span class="ruby-value">0</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- create_hit_counter-source -->
           
@@ -1921,37 +1924,6 @@ hide their existence from other users</p>
 
         
       </div><!-- create_hit_counter-method -->
-
-    
-      <div id="method-i-database_hits" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">database_hits</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="database_hits-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 660</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">database_hits</span>
-  <span class="ruby-identifier">db_hits</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">hit_counter</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">hit_counter</span>.<span class="ruby-identifier">hit_count</span> <span class="ruby-operator">:</span> <span class="ruby-value">0</span>
-  <span class="ruby-keyword">return</span> <span class="ruby-identifier">db_hits</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- database_hits-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- database_hits-method -->
 
     
       <div id="method-i-default_date" class="method-detail ">
@@ -1970,7 +1942,7 @@ hide their existence from other users</p>
 
           
           <div class="method-source-code" id="default_date-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 435</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 418</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">default_date</span>
   <span class="ruby-identifier">backdate</span> = <span class="ruby-identifier">first_chapter</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:published_at</span>) <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">backdate</span>
   <span class="ruby-identifier">backdate</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>
@@ -2001,7 +1973,7 @@ hide their existence from other users</p>
 
           
           <div class="method-source-code" id="destroy_chapters_in_reverse-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 186</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 198</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy_chapters_in_reverse</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;position DESC&quot;</span>).<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:destroy</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -2031,7 +2003,7 @@ hide their existence from other users</p>
 
           
           <div class="method-source-code" id="display_authors-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 634</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 595</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">display_authors</span>
   <span class="ruby-identifier">string</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">anonymous?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Anonymous&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">', '</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -2061,7 +2033,7 @@ hide their existence from other users</p>
 
           
           <div class="method-source-code" id="download_authors-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 638</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 599</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_authors</span>
   <span class="ruby-identifier">string</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">anonymous?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Anonymous&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">'-'</span>)
   <span class="ruby-identifier">string</span> = <span class="ruby-constant">Iconv</span>.<span class="ruby-identifier">conv</span>(<span class="ruby-string">&quot;ASCII//TRANSLIT//IGNORE&quot;</span>, <span class="ruby-string">&quot;UTF8&quot;</span>, <span class="ruby-identifier">string</span>)
@@ -2094,7 +2066,7 @@ hide their existence from other users</p>
 
           
           <div class="method-source-code" id="download_basename-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 650</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 611</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_basename</span>
   <span class="ruby-node">&quot;#{self.download_dir}/#{self.download_title}&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2119,14 +2091,14 @@ hide their existence from other users</p>
 
         <div class="method-description">
           
-          
+          <p>spread downloads out by first two letters of authorname</p>
           
 
           
           <div class="method-source-code" id="download_dir-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 626</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 580</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_dir</span>
-  <span class="ruby-node">&quot;#{Rails.public_path}/downloads/#{self.download_authors}/#{self.id}&quot;</span>
+  <span class="ruby-node">&quot;#{Rails.public_path}/#{self.download_folder}&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- download_dir-source -->
           
@@ -2154,7 +2126,7 @@ hide their existence from other users</p>
 
           
           <div class="method-source-code" id="download_fandoms-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 629</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 590</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_fandoms</span>
   <span class="ruby-identifier">string</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">fandoms</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">3</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;Multifandom&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">fandoms</span>.<span class="ruby-identifier">string</span>
   <span class="ruby-identifier">string</span> = <span class="ruby-constant">Iconv</span>.<span class="ruby-identifier">conv</span>(<span class="ruby-string">&quot;ASCII//TRANSLIT//IGNORE&quot;</span>, <span class="ruby-string">&quot;UTF8&quot;</span>, <span class="ruby-identifier">string</span>)
@@ -2168,6 +2140,37 @@ hide their existence from other users</p>
 
         
       </div><!-- download_fandoms-method -->
+
+    
+      <div id="method-i-download_folder" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">download_folder</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>split out so we can use this in works_helper</p>
+          
+
+          
+          <div class="method-source-code" id="download_folder-source">
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 585</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">download_folder</span>
+  <span class="ruby-identifier">dl_authors</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">download_authors</span>    
+  <span class="ruby-node">&quot;downloads/#{dl_authors[0..1]}/#{dl_authors}/#{self.id}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- download_folder-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- download_folder-method -->
 
     
       <div id="method-i-download_title" class="method-detail ">
@@ -2186,7 +2189,7 @@ hide their existence from other users</p>
 
           
           <div class="method-source-code" id="download_title-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 644</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 605</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">download_title</span>
   <span class="ruby-identifier">string</span> = <span class="ruby-constant">Iconv</span>.<span class="ruby-identifier">conv</span>(<span class="ruby-string">&quot;ASCII//TRANSLIT//IGNORE&quot;</span>, <span class="ruby-string">&quot;UTF8&quot;</span>, <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title</span>)
   <span class="ruby-identifier">string</span> = <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r[^[\w _-]]+/</span>, <span class="ruby-string">''</span>)
@@ -2220,7 +2223,7 @@ href="Work.html#method-i-set_revised_at">#set_revised_at</a></p>
 
           
           <div class="method-source-code" id="ensure_revised_at-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 425</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 408</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">ensure_revised_at</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">revised_at</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">revised_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
@@ -2252,7 +2255,7 @@ href="Work.html#method-i-set_revised_at">#set_revised_at</a></p>
 
           
           <div class="method-source-code" id="find_all_comments-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 773</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 716</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">find_all_comments</span>
   <span class="ruby-constant">Comment</span>.<span class="ruby-identifier">where</span>(
     <span class="ruby-value">:parent_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Chapter'</span>, 
@@ -2285,9 +2288,9 @@ href="Work.html#method-i-set_revised_at">#set_revised_at</a></p>
 
           
           <div class="method-source-code" id="first_chapter-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 534</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 517</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">first_chapter</span>
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:first</span>, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'position ASC'</span>) <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">first</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">'position ASC'</span>).<span class="ruby-identifier">first</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">first</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- first_chapter-source -->
           
@@ -2315,7 +2318,7 @@ href="Work.html#method-i-set_revised_at">#set_revised_at</a></p>
 
           
           <div class="method-source-code" id="has_required_tags-3F-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 686</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 629</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">has_required_tags?</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">fandom_string</span>.<span class="ruby-identifier">blank?</span>
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">warning_string</span>.<span class="ruby-identifier">blank?</span>
@@ -2330,76 +2333,6 @@ href="Work.html#method-i-set_revised_at">#set_revised_at</a></p>
 
         
       </div><!-- has_required_tags-3F-method -->
-
-    
-      <div id="method-i-hits" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">hits</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="hits-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 654</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">hits</span>
-  <span class="ruby-identifier">redis_hits</span> = <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">get</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:hit_count</span>))
-  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">database_hits</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">redis_hits</span>
-  <span class="ruby-keyword">return</span> <span class="ruby-identifier">redis_hits</span>.<span class="ruby-identifier">to_i</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- hits-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- hits-method -->
-
-    
-      <div id="method-i-increment_hit_count" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">increment_hit_count</span><span
-            class="method-args">(visitor)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>save hits</p>
-          
-
-          
-          <div class="method-source-code" id="increment_hit_count-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 594</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">increment_hit_count</span>(<span class="ruby-identifier">visitor</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">last_visitor</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">visitor</span>
-    <span class="ruby-keyword">unless</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">User</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">is_author_of?</span>(<span class="ruby-keyword">self</span>)
-      <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">set</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:hit_count</span>), <span class="ruby-keyword">self</span>.<span class="ruby-identifier">database_hits</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">get</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:hit_count</span>))
-      <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">incr</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:hit_count</span>))
-      <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">set</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:last_visitor</span>), <span class="ruby-identifier">visitor</span>)
-      <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">sadd</span>(<span class="ruby-string">&quot;Work:new_hits&quot;</span>, <span class="ruby-keyword">self</span>.<span class="ruby-identifier">id</span>)
-    <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">hits</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- increment_hit_count-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- increment_hit_count-method -->
 
     
       <div id="method-i-is_complete" class="method-detail ">
@@ -2418,7 +2351,7 @@ href="Work.html#method-i-set_revised_at">#set_revised_at</a></p>
 
           
           <div class="method-source-code" id="is_complete-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 567</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 555</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_complete</span>
   <span class="ruby-keyword">return</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">is_wip</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2448,7 +2381,7 @@ href="Work.html#method-i-set_revised_at">#set_revised_at</a></p>
 
           
           <div class="method-source-code" id="is_wip-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 562</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 550</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_wip</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">expected_number_of_chapters</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">expected_number_of_chapters</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">number_of_posted_chapters</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2478,9 +2411,9 @@ href="Work.html#method-i-set_revised_at">#set_revised_at</a></p>
 
           
           <div class="method-source-code" id="last_chapter-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 539</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 522</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">last_chapter</span>
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">find</span>(<span class="ruby-value">:first</span>, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'position DESC'</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">'position DESC'</span>).<span class="ruby-identifier">first</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- last_chapter-source -->
           
@@ -2492,10 +2425,10 @@ href="Work.html#method-i-set_revised_at">#set_revised_at</a></p>
       </div><!-- last_chapter-method -->
 
     
-      <div id="method-i-last_visitor" class="method-detail ">
+      <div id="method-i-last_posted_chapter" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">last_visitor</span><span
+          <span class="method-name">last_posted_chapter</span><span
             class="method-args">()</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
@@ -2503,24 +2436,23 @@ href="Work.html#method-i-set_revised_at">#set_revised_at</a></p>
 
         <div class="method-description">
           
-          <p>the last visitor is just used to decide whether or not to increment the hit
-count so persisting it in the database is not critical</p>
+          <p>Gets the current last posted chapter</p>
           
 
           
-          <div class="method-source-code" id="last_visitor-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 608</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">last_visitor</span>
-  <span class="ruby-identifier">$redis</span>.<span class="ruby-identifier">get</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">redis_key</span>(<span class="ruby-value">:last_visitor</span>))
+          <div class="method-source-code" id="last_posted_chapter-source">
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 527</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">last_posted_chapter</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">'position DESC'</span>).<span class="ruby-identifier">first</span>
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- last_visitor-source -->
+          </div><!-- last_posted_chapter-source -->
           
         </div>
 
         
 
         
-      </div><!-- last_visitor-method -->
+      </div><!-- last_posted_chapter-method -->
 
     
       <div id="method-i-multipart-3F" class="method-detail ">
@@ -2539,7 +2471,7 @@ count so persisting it in the database is not critical</p>
 
           
           <div class="method-source-code" id="multipart-3F-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 549</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 537</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">multipart?</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">number_of_chapters</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2569,7 +2501,7 @@ count so persisting it in the database is not critical</p>
 
           
           <div class="method-source-code" id="number_of_chapters-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 510</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 493</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">number_of_chapters</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">count</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2601,7 +2533,7 @@ number of chapters indicated by user</p>
 
           
           <div class="method-source-code" id="number_of_posted_chapters-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 517</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 500</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">number_of_posted_chapters</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">count</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2631,7 +2563,7 @@ number of chapters indicated by user</p>
 
           
           <div class="method-source-code" id="parent_attributes-3D-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 808</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 751</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parent_attributes=</span>(<span class="ruby-identifier">attributes</span>)
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:url</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">attributes</span>[<span class="ruby-value">:url</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-constant">ArchiveConfig</span>.<span class="ruby-constant">APP_URL</span>)
@@ -2696,7 +2628,7 @@ a has_many association because it’s polymorphic</p>
 
           
           <div class="method-source-code" id="parents-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 803</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 746</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">parents</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parent_work_relationships</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:parent</span>).<span class="ruby-identifier">compact</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2726,7 +2658,7 @@ a has_many association because it’s polymorphic</p>
 
           
           <div class="method-source-code" id="post_first_chapter-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 477</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 460</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">post_first_chapter</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">posted_changed?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">posted</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">posted</span>
@@ -2740,138 +2672,6 @@ a has_many association because it’s polymorphic</p>
 
         
       </div><!-- post_first_chapter-method -->
-
-    
-      <div id="method-i-pseuds_to_add" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">pseuds_to_add</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="pseuds_to_add-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 259</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">pseuds_to_add</span>; <span class="ruby-keyword">nil</span>; <span class="ruby-keyword">end</span></pre>
-          </div><!-- pseuds_to_add-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- pseuds_to_add-method -->
-
-    
-      <div id="method-i-pseuds_to_add-3D" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">pseuds_to_add=</span><span
-            class="method-args">(pseud_names)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>NOTE: pseuds_to_add/remove can only be used after a work exists</p>
-          
-
-          
-          <div class="method-source-code" id="pseuds_to_add-3D-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 235</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">pseuds_to_add=</span>(<span class="ruby-identifier">pseud_names</span>)
-  <span class="ruby-identifier">pseud_names</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>).<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">blank?</span>}.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">strip</span>}.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">possible_pseuds</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">parse_byline</span>(<span class="ruby-identifier">name</span>)
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">possible_pseuds</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
-      <span class="ruby-identifier">possible_pseuds</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">parse_byline</span>(<span class="ruby-identifier">name</span>, <span class="ruby-value">:assume_matching_login</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>)
-    <span class="ruby-keyword">end</span>
-    <span class="ruby-identifier">p</span> = <span class="ruby-identifier">possible_pseuds</span>.<span class="ruby-identifier">first</span>
-    <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;We couldn't find the pseud {{name}}.&quot;</span>, <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>)) <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">nil?</span>
-    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">p</span> <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">p</span>)
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- pseuds_to_add-3D-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- pseuds_to_add-3D-method -->
-
-    
-      <div id="method-i-pseuds_to_remove" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">pseuds_to_remove</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="pseuds_to_remove-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 260</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">pseuds_to_remove</span>; <span class="ruby-keyword">nil</span>; <span class="ruby-keyword">end</span></pre>
-          </div><!-- pseuds_to_remove-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- pseuds_to_remove-method -->
-
-    
-      <div id="method-i-pseuds_to_remove-3D" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">pseuds_to_remove=</span><span
-            class="method-args">(pseud_ids)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          
-          
-
-          
-          <div class="method-source-code" id="pseuds_to_remove-3D-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 247</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">pseuds_to_remove=</span>(<span class="ruby-identifier">pseud_ids</span>)
-  <span class="ruby-identifier">pseud_ids</span>.<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-identifier">id</span>.<span class="ruby-identifier">blank?</span>}.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-identifier">id</span>.<span class="ruby-identifier">strip</span>}.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">p</span> = <span class="ruby-constant">Pseud</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>)
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">p</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">p</span>)
-      <span class="ruby-comment"># don't remove all authors from a work</span>
-      <span class="ruby-keyword">if</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">-</span> [<span class="ruby-identifier">p</span>]).<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-        <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">-=</span> [<span class="ruby-identifier">p</span>]
-      <span class="ruby-keyword">end</span>
-    <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- pseuds_to_remove-3D-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- pseuds_to_remove-3D-method -->
 
     
       <div id="method-i-published_at" class="method-detail ">
@@ -2890,7 +2690,7 @@ a has_many association because it’s polymorphic</p>
 
           
           <div class="method-source-code" id="published_at-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 431</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 414</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">published_at</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first_chapter</span>.<span class="ruby-identifier">published_at</span>
 <span class="ruby-keyword">end</span></pre>
@@ -2920,7 +2720,7 @@ a has_many association because it’s polymorphic</p>
 
           
           <div class="method-source-code" id="recipients-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 351</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 334</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">recipients</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">gifts</span>.<span class="ruby-identifier">collect</span>(&amp;<span class="ruby-value">:recipient</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -2950,7 +2750,7 @@ a has_many association because it’s polymorphic</p>
 
           
           <div class="method-source-code" id="recipients-3D-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 338</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 321</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">recipients=</span>(<span class="ruby-identifier">recipient_names</span>)
   <span class="ruby-identifier">new_gifts</span> = []
   <span class="ruby-identifier">recipient_names</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">','</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
@@ -2973,37 +2773,6 @@ a has_many association because it’s polymorphic</p>
       </div><!-- recipients-3D-method -->
 
     
-      <div id="method-i-redis_key" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">redis_key</span><span
-            class="method-args">(sym)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>helper method to generate redis keys examples: “work:2:hit_count”,
-“work:776:<a href="Work.html#method-i-last_visitor">#last_visitor</a>”</p>
-          
-
-          
-          <div class="method-source-code" id="redis_key-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 667</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">redis_key</span>(<span class="ruby-identifier">sym</span>)
-  <span class="ruby-node">&quot;work:#{self.id}:#{sym}&quot;</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- redis_key-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- redis_key-method -->
-
-    
       <div id="method-i-remove_author" class="method-detail ">
         
         <div class="method-heading">
@@ -3020,7 +2789,7 @@ a has_many association because it’s polymorphic</p>
 
           
           <div class="method-source-code" id="remove_author-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 282</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 265</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_author</span>(<span class="ruby-identifier">author_to_remove</span>)
   <span class="ruby-identifier">pseuds_with_author_removed</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">author_to_remove</span>.<span class="ruby-identifier">pseuds</span>
   <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&quot;Sorry, we can't remove all authors of a work.&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">pseuds_with_author_removed</span>.<span class="ruby-identifier">empty?</span>
@@ -3061,7 +2830,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="remove_filter_tagging-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 717</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 660</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_filter_tagging</span>(<span class="ruby-identifier">tag</span>)
   <span class="ruby-identifier">filter</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">filter</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">filter</span>
@@ -3112,7 +2881,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="remove_outdated_downloads-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 623</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 575</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">remove_outdated_downloads</span>
   <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">download_dir</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -3142,7 +2911,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="reorder-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 500</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 483</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">reorder</span>(<span class="ruby-identifier">positions</span>)
   <span class="ruby-constant">SortableList</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">in_order</span>).<span class="ruby-identifier">reorder_list</span>(<span class="ruby-identifier">positions</span>)
   <span class="ruby-comment"># We're caching the chapter positions in the comment blurbs</span>
@@ -3177,7 +2946,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="save_chapters-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 472</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 455</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">save_chapters</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">save</span>(<span class="ruby-value">:validate</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -3207,7 +2976,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="save_parents-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 847</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 790</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">save_parents</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_parent</span> <span class="ruby-keyword">and</span> <span class="ruby-operator">!</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">parents</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_parent</span>))
     <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_parent</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_parent</span>[<span class="ruby-value">:parent</span>].<span class="ruby-identifier">blank?</span>
@@ -3244,7 +3013,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="series_attributes-3D-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 445</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 428</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">series_attributes=</span>(<span class="ruby-identifier">attributes</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">attributes</span>[<span class="ruby-value">:id</span>].<span class="ruby-identifier">blank?</span>
     <span class="ruby-identifier">old_series</span> = <span class="ruby-constant">Series</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">attributes</span>[<span class="ruby-value">:id</span>])
@@ -3285,7 +3054,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="set_challenge_claim_info-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 317</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 300</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_challenge_claim_info</span>
   <span class="ruby-comment"># if this is fulfilling a challenge claim, add the collection and recipient</span>
   <span class="ruby-identifier">challenge_claims</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">assignment</span><span class="ruby-operator">|</span>
@@ -3320,7 +3089,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="set_challenge_info-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 309</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 292</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_challenge_info</span>
   <span class="ruby-comment"># if this is fulfilling a challenge, add the collection and recipient</span>
   <span class="ruby-identifier">challenge_assignments</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">assignment</span><span class="ruby-operator">|</span>
@@ -3354,7 +3123,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="set_revised_at-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 405</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 388</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_revised_at</span>(<span class="ruby-identifier">date</span>=<span class="ruby-keyword">nil</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">date</span> <span class="ruby-comment"># if we pass a date, we want to set it to that (or current datetime if it's today)</span>
     <span class="ruby-identifier">date</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">value</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">value</span> = <span class="ruby-constant">DateTime</span><span class="ruby-operator">::</span><span class="ruby-identifier">jd</span>(<span class="ruby-identifier">date</span>.<span class="ruby-identifier">jd</span>, <span class="ruby-value">12</span>, <span class="ruby-value">0</span>, <span class="ruby-value">0</span>)
@@ -3399,7 +3168,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="set_word_count-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 578</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 566</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set_word_count</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">new_record?</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">word_count</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">set_word_count</span>
@@ -3433,7 +3202,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="sorted_authors-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 1117</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 1060</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sorted_authors</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">authors</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,  &quot;</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^[\+-=_\?!'&quot;\.\/]/</span>, <span class="ruby-string">''</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -3463,7 +3232,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="sorted_pseuds-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 1121</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 1064</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sorted_pseuds</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">map</span>(&amp;<span class="ruby-value">:name</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,  &quot;</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^[\+-=_\?!'&quot;\.\/]/</span>, <span class="ruby-string">''</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -3493,7 +3262,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="sorted_title-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 1125</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 1068</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sorted_title</span>
   <span class="ruby-identifier">sorted_title</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">title</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^[&quot;'\.\/]/</span>, <span class="ruby-string">''</span>)
   <span class="ruby-identifier">sorted_title</span> = <span class="ruby-identifier">sorted_title</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">%r^(an?) (.*)/</span>, <span class="ruby-string">'\2, \1'</span>)
@@ -3527,7 +3296,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="tag_groups-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 677</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 620</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_groups</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">placeholder_tags</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">placeholder_tags</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">group_by</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span> }
@@ -3561,7 +3330,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="unrestricted-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 378</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 361</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">unrestricted</span>; <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">restricted</span>; <span class="ruby-keyword">end</span></pre>
           </div><!-- unrestricted-source -->
           
@@ -3589,7 +3358,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="unrestricted-3D-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 373</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 356</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">unrestricted=</span>(<span class="ruby-identifier">setting</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">setting</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;1&quot;</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">restricted</span> = <span class="ruby-keyword">false</span>
@@ -3621,7 +3390,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="unrevealed-3F-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 380</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 363</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">unrevealed?</span>(<span class="ruby-identifier">user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-comment"># eventually here is where we check if it's in a challenge that hasn't been made public yet</span>
   <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">approved_collection_items</span>.<span class="ruby-identifier">unrevealed</span>.<span class="ruby-identifier">empty?</span>
@@ -3652,7 +3421,7 @@ than one synonymous tags</p>
 
           
           <div class="method-source-code" id="update_complete_status-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 554</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 542</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_complete_status</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">complete</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">posted</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">expected_number_of_chapters</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">complete_changed?</span>
@@ -3686,7 +3455,7 @@ to 0</p>
 
           
           <div class="method-source-code" id="update_major_version-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 396</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 379</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_major_version</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_attributes</span>({<span class="ruby-value">:major_version</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">major_version</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>, <span class="ruby-value">:minor_version</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>})
 <span class="ruby-keyword">end</span></pre>
@@ -3716,7 +3485,7 @@ to 0</p>
 
           
           <div class="method-source-code" id="update_minor_version-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 401</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 384</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_minor_version</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:minor_version</span>, <span class="ruby-keyword">self</span>.<span class="ruby-identifier">minor_version</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -3746,7 +3515,7 @@ to 0</p>
 
           
           <div class="method-source-code" id="validate_authors-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 120</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 132</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">validate_authors</span>
   <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">authors</span>.<span class="ruby-identifier">blank?</span>
     <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">pseuds</span>.<span class="ruby-identifier">blank?</span>
@@ -3787,7 +3556,7 @@ to 0</p>
 
           
           <div class="method-source-code" id="validate_published_at-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 149</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 161</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">validate_published_at</span>
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">first_chapter</span>.<span class="ruby-identifier">published_at</span>
     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">first_chapter</span>.<span class="ruby-identifier">published_at</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>
@@ -3822,7 +3591,7 @@ to 0</p>
 
           
           <div class="method-source-code" id="visibility_changed-3F-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 753</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 696</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visibility_changed?</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">posted_changed?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">restricted_changed?</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">hidden_by_admin_changed?</span>
 <span class="ruby-keyword">end</span></pre>
@@ -3852,7 +3621,7 @@ to 0</p>
 
           
           <div class="method-source-code" id="visible-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 359</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 342</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visible</span>(<span class="ruby-identifier">current_user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">current_user</span> <span class="ruby-operator">==</span> <span class="ruby-value">:false</span>
     <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">posted</span> <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">restricted</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">hidden_by_admin</span>
@@ -3888,7 +3657,7 @@ to 0</p>
 
           
           <div class="method-source-code" id="visible-3F-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 369</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 352</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">visible?</span>(<span class="ruby-identifier">user</span>=<span class="ruby-constant">User</span>.<span class="ruby-identifier">current_user</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">visible</span>(<span class="ruby-identifier">user</span>) <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>
 <span class="ruby-keyword">end</span></pre>
@@ -3918,7 +3687,7 @@ to 0</p>
 
           
           <div class="method-source-code" id="wip_length-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 490</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 473</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">wip_length</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">expected_number_of_chapters</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&quot;?&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">expected_number_of_chapters</span>
 <span class="ruby-keyword">end</span></pre>
@@ -3948,7 +3717,7 @@ to 0</p>
 
           
           <div class="method-source-code" id="wip_length-3D-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 494</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 477</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">wip_length=</span>(<span class="ruby-identifier">number</span>)
   <span class="ruby-identifier">number</span> = <span class="ruby-identifier">number</span>.<span class="ruby-identifier">to_i</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">expected_number_of_chapters</span> = (<span class="ruby-identifier">number</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">number</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">chapters</span>.<span class="ruby-identifier">length</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">number</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>
@@ -3979,7 +3748,7 @@ to 0</p>
 
           
           <div class="method-source-code" id="work_skin_allowed-source">
-            <pre><span class="ruby-comment"># File app/models/work.rb, line 73</span>
+            <pre><span class="ruby-comment"># File app/models/work.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">work_skin_allowed</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">users</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">work_skin</span>.<span class="ruby-identifier">author</span>) <span class="ruby-operator">||</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">work_skin</span>.<span class="ruby-identifier">public?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">work_skin</span>.<span class="ruby-identifier">official?</span>)
     <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:base</span>, <span class="ruby-identifier">ts</span>(<span class="ruby-string">&quot;You do not have permission to use that custom work stylesheet.&quot;</span>))

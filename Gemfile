@@ -70,6 +70,9 @@ gem 'best_in_place'
 
 gem 'timeliness'
 
+# for generating graphs
+gem "google_visualr", ">= 2.1"
+
 group :test do
   gem 'rspec-rails', '>=2.5.0'
   gem 'pickle'

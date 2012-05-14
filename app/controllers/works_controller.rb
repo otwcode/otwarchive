@@ -10,6 +10,7 @@ class WorksController < ApplicationController
   # this only works to check ownership of a SINGLE item and only if load_work has happened beforehand
   before_filter :check_ownership, :except => [ :index, :show, :navigate, :new, :create, :import, :show_multiple, :edit_multiple, :update_multiple, :delete_multiple, :search, :marktoread, :drafts ]
   before_filter :check_visibility, :only => [ :show, :navigate ]
+  # NOTE: new and create need set_author_attributes or coauthor assignment will break!
   before_filter :set_author_attributes, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate ]
   before_filter :set_instance_variables, :only => [ :new, :create, :edit, :update, :manage_chapters, :preview, :show, :navigate, :import ]
   before_filter :set_instance_variables_tags, :only => [ :edit_tags, :update_tags, :preview_tags ]
@@ -209,7 +210,7 @@ class WorksController < ApplicationController
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
                                                        :subscribable_type => 'Work').first ||
-                      current_user.subscriptions.build
+                      current_user.subscriptions.build(:subscribable => @work)
     end
 
     @page_title = @work.unrevealed? ? ts("Mystery Work") :
@@ -225,7 +226,6 @@ class WorksController < ApplicationController
         @tweet_text = @tweet_text.truncate(95)
       end
     render :show
-    Rails.logger.debug "Work remote addr: #{request.remote_ip}"
     @work.increment_hit_count(request.remote_ip)
     Reading.update_or_create(@work, current_user) if current_user
   end

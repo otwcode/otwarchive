@@ -60,15 +60,15 @@ class BookmarksController < ApplicationController
     if params[:user_id]
       # @user is needed in the sidebar
       owner = @user = User.find_by_login(params[:user_id])
-      @page_subtitle = ts("by ") + @user.login
+      @page_subtitle = ts("by ") + @user.login if @user
       if params[:pseud_id] && @user
         # @author is needed in the sidebar
         owner = @author = @user.pseuds.find_by_name(params[:pseud_id])
-        @page_subtitle = ts("by ") + @author.byline
+        @page_subtitle = ts("by ") + @author.byline if @author
       end
     elsif params[:tag_id]
       owner ||= Tag.find_by_name(params[:tag_id])
-      @page_subtitle = owner.name
+      @page_subtitle = owner.name if owner
     elsif @collection
       @page_subtitle = @collection.title
       owner ||= @collection # insufficient to filter out unapproved bookmarks, see below

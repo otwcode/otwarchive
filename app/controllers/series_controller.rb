@@ -50,6 +50,11 @@ class SeriesController < ApplicationController
     @serial_works = @series.serial_works.find(:all, :include => :work, :conditions => ['works.posted = ?', true], :order => :position).select{|sw| sw.work.visible(User.current_user)}
     # sets the page title with the data for the series
     @page_title = @series.unrevealed? ? ts("Mystery Series") : get_page_title(@series.allfandoms.collect(&:name).join(', '), @series.anonymous? ? ts("Anonymous") : @series.allpseuds.collect(&:byline).join(', '), @series.title)
+    if current_user.respond_to?(:subscriptions)
+      @subscription = current_user.subscriptions.where(:subscribable_id => @series.id,
+                                                       :subscribable_type => 'Series').first ||
+                      current_user.subscriptions.build(:subscribable => @series)
+    end
   end
 
   # GET /series/new
@@ -119,6 +124,10 @@ class SeriesController < ApplicationController
       flash[:notice] = ts('Series was successfully updated.')
       redirect_to(@series)
     else
+      @pseuds = current_user.pseuds
+      @coauthors = @series.pseuds.select{ |p| p.user.id != current_user.id}
+      to_select = @series.pseuds.blank? ? [current_user.default_pseud] : @series.pseuds
+      @selected_pseuds = to_select.collect {|pseud| pseud.id.to_i }
       render :action => "edit"
     end
   end

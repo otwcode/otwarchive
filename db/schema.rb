@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111123011929) do
+ActiveRecord::Schema.define(:version => 20120415134615) do
 
   create_table "abuse_reports", :force => true do |t|
     t.string   "email"
@@ -271,7 +271,9 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
-    t.integer  "description_sanitizer_version", :limit => 2, :default => 0, :null => false
+    t.integer  "description_sanitizer_version", :limit => 2, :default => 0,  :null => false
+    t.string   "icon_alt_text",                              :default => ""
+    t.string   "icon_comment_text",                          :default => ""
   end
 
   add_index "collections", ["name"], :name => "index_collections_on_name"
@@ -421,7 +423,8 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
   add_index "filter_counts", ["public_works_count"], :name => "index_public_works_count"
   add_index "filter_counts", ["unhidden_works_count"], :name => "index_unhidden_works_count"
 
-  create_table "filter_taggings", :force => true do |t|
+  create_table "filter_taggings", :id => false, :force => true do |t|
+    t.integer  "id",                                                :null => false
     t.integer  "filter_id",       :limit => 8,                      :null => false
     t.integer  "filterable_id",   :limit => 8,                      :null => false
     t.string   "filterable_type", :limit => 100
@@ -1065,6 +1068,7 @@ ActiveRecord::Schema.define(:version => 20111123011929) do
     t.boolean  "delta",                             :default => false
     t.integer  "last_wrangler_id"
     t.string   "last_wrangler_type"
+    t.boolean  "unwrangleable",                     :default => false, :null => false
   end
 
   add_index "tags", ["canonical"], :name => "index_tags_on_canonical"

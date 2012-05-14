@@ -10,6 +10,10 @@
 <% @subscriptions.each do |subscription| %>
   <dt>
     <%= link_to(subscription.name, subscription.subscribable) %>
+    (<%= subscription.subscribable_type %>)
+    <% if %w(Work Series).include?(subscription.subscribable_type) %>
+      <%= ts("by %{names}", :names => byline(subscription.subscribable)).html_safe %>
+    <% end %>
   </dt>
   <dd>
     <%= form_for [current_user, subscription], :html => {:method => :delete} do |f| %>

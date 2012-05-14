@@ -12,12 +12,12 @@ end
 # and only for production
 if Rails.env == 'production'
   Airbrake.configure do |config|
-    config.api_key = ArchiveConfig.HOPTOAD_KEY
+    config.api_key  = ArchiveConfig.ERRBIT_KEY
+    config.host     = ArchiveConfig.ERRBIT_HOST
+    config.port     = 80
+    config.secure   = config.port == 443
     config.params_filters << ["email", "crypted_password", "salt"]
   end
-  PiwikAnalytics::Config.id_site = ArchiveConfig.PIWIK_SITE_NUMBER
-  PiwikAnalytics::Config.url = ArchiveConfig.PIWIK_URL
-  PiwikAnalytics::Config.use_async = ArchiveConfig.PIWIK_USE_ASYNC
 end
 
 
