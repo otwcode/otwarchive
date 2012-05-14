@@ -155,7 +155,7 @@ class ChaptersController < ApplicationController
     elsif params[:edit_button]
       render :edit
     else
-      @chapter.posted = true if params[:post_button]
+      @chapter.posted = true if params[:post_button] || params[:post_without_preview_button]
       @work.minor_version = @work.minor_version + 1
       if @chapter.save
         # @work.update_minor_version
