@@ -169,6 +169,37 @@ Feature: Edit chapters
     Then I should not see "Draft"
     And I should not see "draft"
 
+  # create a draft chapter, preview it, edit it and then post it without preview
+  When I am logged in as "epicauthor" with password "password"
+    And I view the work "New Epic Work"
+    And I follow "Add Chapter"
+    And I fill in "Chapter title" with "6(66) The Number of the Beast"
+    And I fill in "content" with "Even more awesomely epic context"
+    And I press "Preview"
+  Then I should see "This is a preview of what this chapter will look like"
+  When I follow "Revert To Saved"
+    And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
+    And I press "Post without preview"
+    Then I should see "Chapter was successfully updated."
+    And I should not see "This chapter is a draft and hasn't been posted yet!"
+
+  # create a draft chapter, preview it, edit it, preview it again and then post it
+  When I am logged in as "epicauthor" with password "password"
+    And I view the work "New Epic Work"
+    And I follow "Add Chapter"
+    And I fill in "Chapter title" with "6(66) The Number of the Beast"
+    And I fill in "content" with "Even more awesomely epic context"
+    And I press "Preview"
+  Then I should see "This is a preview of what this chapter will look like"
+  When I follow "Revert To Saved"
+    And I fill in "content" with "Even more awesomely epic context. Plus bonus epicness"
+    And I press "Preview"
+  Then I should see "Even more awesomely epic context. Plus bonus epicness"
+  When I press "Post"
+    Then I should see "Chapter was successfully updated."
+    And I should not see "This chapter is a draft and hasn't been posted yet!"
+
+
   Scenario: view chapter title info pop up
     
   Given the following activated user exists
