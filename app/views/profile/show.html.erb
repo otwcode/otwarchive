@@ -17,7 +17,7 @@
     <dt class="birthday"><%=h ts("My birthday:") %></dt>
       <dd class="birthday"><%=l(@user.profile.date_of_birth) unless @user.profile.date_of_birth.blank? %></dd> 
     <% end %>
-    <% if @user.preference.try(:email_visible) %>
+    <% if @user.preference.try(:email_visible) || (!@user.preference.try(:email_visible) && current_user == @user) %>
     <dt class="email"><%=h ts("My email address:") %></dt>
       <dd class="email"><%= mail_to @user.email, nil, :encode => "hex" %></dd>
     <% end %>
