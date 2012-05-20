@@ -41,7 +41,7 @@
     </div>
   <% end %>      
 
-  <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.base_em || @skin.paragraph_margin || !@skin.headercolor.blank? || !@skin.accent_color.blank? %>
+  <% if @skin.margin || !@skin.font.blank? || !@skin.background_color.blank? || !@skin.foreground_color.blank? || @skin.font_size || @skin.paragraph_margin || !@skin.headercolor.blank? || !@skin.accent_color.blank? %>
     <div class="wizard module">
   		<h3 class="heading">Wizard Settings</h3>
       <p class="notes">(Can be overridden by custom <abbr title="cascading style sheets">CSS</abbr>)</p>
@@ -53,7 +53,7 @@
           <% unless @skin.font.blank? %><dt>Font</dt><dd><%= @skin.font %><% end %>
           <% unless @skin.background_color.blank? %><dt>Background color</dt><dd><%= @skin.background_color %><% end %>
           <% unless @skin.foreground_color.blank? %><dt>Foreground color</dt><dd><%= @skin.foreground_color %><% end %>
-          <% if @skin.base_em %><dt>Relative font size</dt><dd><%= @skin.base_em %><% end %>
+          <% if @skin.font_size %><dt>Relative font size</dt><dd><%= @skin.font_size %><% end %>
           <% if @skin.paragraph_margin %><dt>Paragraph margin</dt><dd><%= @skin.paragraph_margin %><% end %>
           <% unless @skin.headercolor.blank? %><dt>Header color</dt><dd><%= @skin.headercolor %><% end %>
           <% unless @skin.accent_color.blank? %><dt>Accent color</dt><dd><%= @skin.accent_color %><% end %>
