@@ -388,7 +388,14 @@ namespace :After do
     end
     
   end
-        
+
+  desc "Clean up orphaned subscriptions"
+  task(:cleanup_orphaned_subscriptions) do
+    Subscription.joins("LEFT JOIN works on subscriptions.subscribable_id = works.id").where("subscriptions.subscribable_type = 'Work' AND works.id IS NULL").each {|sub| sub.destroy}
+    Subscription.joins("LEFT JOIN series on subscriptions.subscribable_id = series.id").where("subscriptions.subscribable_type = 'Series' AND series.id IS NULL").each {|sub| sub.destroy}
+    Subscription.joins("LEFT JOIN users on subscriptions.subscribable_id = users.id").where("subscriptions.subscribable_type = 'User' AND users.id IS NULL").each {|sub| sub.destroy}
+  end
+
 end # this is the end that you have to put new tasks above
 
 ##################
@@ -402,4 +409,4 @@ desc "Run all current migrate tasks"
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
 # task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all', 'skins:load_site_skins', 'After:convert_existing_skins', 
 #                 'skins:load_user_skins', 'After:remove_old_epubs']
-task :After => ['After:update_download_directories']
+task :After => ['After:update_download_directories', 'After:cleanup_orphaned_subscriptions']
