@@ -17,9 +17,13 @@
 <h3 class="heading"><%= ts("Totals") %></h3>
 <div class="wrapper">
   <dl class="work meta group" role="complementary">
-    <% [:author_subscriptions, :hits, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
+    <% [:author_subscriptions, :kudos, :comments, :bookmarks, :subscriptions, :word_count].each do |stat| %>
       <dt><%= stat.to_s.titleize %></dt>
       <dd><%= @totals[stat] %></dd>
+    <% end %>
+    <% unless @user.preference.hide_hit_counts %>
+      <dt><%= "Hits" %></dt>
+      <dd><%= @totals[:hits] %></dd>
     <% end %>
   </dl>
 </div>
@@ -31,8 +35,8 @@
 
 <ul class="sorting actions" role="menu">
   <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
-  <li><%= sort_link ts("Date"), "date" %></li>
-  <% unless @user.preference.try(:hide_all_hit_counts) %>
+  <% unless @user.preference.hide_hit_counts %>
+    <li><%= sort_link ts("Date"), "date" %></li>
     <li><%= sort_link ts('Hits'), "hits", {:desc_default => true} %></li>
   <% end %>
   <li><%= sort_link ts('Kudos'), "kudos.count", {:desc_default => true} %></li>
@@ -70,7 +74,7 @@
                   <% if (work_subscriber_count = Subscription.where(:subscribable_id => work.id, :subscribable_type => 'Work').count) > 0 %>
                     <dt><%= ts("Subscribers") %></dt><dd><%= work_subscriber_count %></dd>
                   <% end %>
-                  <% unless @user.preference.try(:hide_all_hit_counts) %>
+                  <% unless @user.preference.hide_hit_counts %>
                     <dt><%= ts("Hits") %></dt><dd><%= work.hits %></dd>
                   <% end %>
                   <dt><%= ts("Downloads") %></dt><dd><%= work.downloads %></dd>
