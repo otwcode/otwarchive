@@ -1,7 +1,7 @@
 <!--REVIEW: IS THIS AN INDEX, LISTBOX, or MODULE?-->
 <% if reading.work.nil? %>
   <li>
-    <h4 class="heading"><%= ts("(deleted work, last viewed %{date})", :date => set_format_for_date(reading.last_viewed)) %></h4>
+    <h4 class="viewed heading"><%= ts("(deleted work, last viewed %{date})", :date => set_format_for_date(reading.last_viewed)) %></h4>
   </li>
 <% else %>
   <%= render 'readings/reading_blurb', :work => reading.work, :reading => reading %>
