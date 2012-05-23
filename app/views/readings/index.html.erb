@@ -7,13 +7,13 @@
 <ul class="navigation actions" role="navigation">
   <li>
     <% if params[:show] == 'to-read' %>
-      <%= link_to "Show Full History", user_readings_path(@user) %>
+      <%= link_to ts("Show Full History"), user_readings_path(@user) %>
     <% else %>
-      <%= link_to "Show Works You Saved to Read Later", user_readings_path(@user, :show => 'to-read') %>
+      <%= link_to ts("Show Works You Saved to Read Later"), user_readings_path(@user, :show => 'to-read') %>
     <% end %>
   </li>
   <li>
-  <%= link_to t('.clear_history', :default => 'Clear History'), clear_user_readings_path(current_user), :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :post %>
+  <%= link_to ts("Clear History"), clear_user_readings_path(current_user), :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :post %>
   </li>
 </ul>
 <% end %>
@@ -21,7 +21,7 @@
 
 <!--main content-->
 <% if logged_in? && !current_user.readings.empty? %>
-  <ol class="history index">
+  <ol class="reading index">
     <%= render :partial => 'reading', :collection => @readings %>
   </ol>
 <% end %>

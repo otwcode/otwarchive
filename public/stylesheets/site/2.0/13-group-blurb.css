@@ -302,4 +302,10 @@ eg collections, users, skins, instead of the 4-icon list
   overflow: hidden;
 }
 
+/* mod: READING */
+
+.reading .user h4 {
+  background: #ddd;
+}
+
 /*END== */

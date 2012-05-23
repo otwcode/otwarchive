@@ -76,12 +76,4 @@ user home, collections and challenges home, tag home, admin comms home
   clear: left;
 }
 
-/*HISTORY note:listbox? generalise this irregular structure*/
-
-.readings-index h3 {
-  background: #ddd;
-  margin: -0.5em 0 -0.25em 0;
-  padding: 0.25em;
-}
-
 /*END== */
