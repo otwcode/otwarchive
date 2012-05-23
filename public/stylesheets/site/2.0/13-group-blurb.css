@@ -308,4 +308,8 @@ eg collections, users, skins, instead of the 4-icon list
   background: #ddd;
 }
 
+.reading .deleted h4.viewed {
+  background: transparent;
+}
+
 /*END== */
