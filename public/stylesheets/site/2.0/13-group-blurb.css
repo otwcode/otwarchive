@@ -304,7 +304,7 @@ eg collections, users, skins, instead of the 4-icon list
 
 /* mod: READING */
 
-.reading .user h4 {
+.reading h4.viewed {
   background: #ddd;
 }
 

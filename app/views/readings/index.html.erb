@@ -13,7 +13,7 @@
     <% end %>
   </li>
   <li>
-  <%= link_to ts("Clear History"), clear_user_readings_path(current_user), :confirm => t('.links.are_you_sure', :default => 'Are you sure?'), :method => :post %>
+  <%= link_to ts("Clear History"), clear_user_readings_path(current_user), :confirm => ts('Are you sure?'), :method => :post %>
   </li>
 </ul>
 <% end %>

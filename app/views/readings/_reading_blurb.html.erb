@@ -116,7 +116,7 @@
   <% end %>
   
   <div class="user module group">
-    <h4 class="heading">
+    <h4 class="viewed heading">
       <span><%= ts("Last viewed:") %></span> <%= set_format_for_date(reading.last_viewed) %>
       <% if reading.major_version_read != reading.work.major_version %>
         <%= ts('(Update available.)') %>
