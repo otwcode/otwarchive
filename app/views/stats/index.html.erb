@@ -22,7 +22,7 @@
       <dd><%= @totals[stat] %></dd>
     <% end %>
     <% unless @user.preference.hide_hit_counts %>
-      <dt><%= "Hits" %></dt>
+      <dt><%= ts("Hits") %></dt>
       <dd><%= @totals[:hits] %></dd>
     <% end %>
   </dl>
