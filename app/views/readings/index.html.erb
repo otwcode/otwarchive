@@ -23,7 +23,7 @@
 <% if logged_in? && @readings.present? %>
   <ol class="reading index">
     <% @readings.each do |reading| %>
-      <%= render :partial => 'reading_blurb', :locals => {:work => reading.work, :reading => reading} %>
+      <%= render 'reading_blurb', :work => reading.work, :reading => reading %>
     <% end %>
   </ol>
 <% end %>
