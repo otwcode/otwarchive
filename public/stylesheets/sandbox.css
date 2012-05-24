@@ -59,17 +59,6 @@ span.delete a {
 }
 .statistics dt:after {content: ":";}
 
-/* TEMP FIX Issue 2904
-this should be revisted upon completeing the review of the reading index's XHTML */
-/* .history .mystery .icon {
-  position: absolute;
-  top: 0;
-  height: 55px;
-  width: 55px;
-  background-repeat: no-repeat;
-  background: url("/images/imageset.png") -110px -525px;
-}*/
-
 /* INTERACTIONS MODE: VERBOSE
 forms with more than three fieldsets 
 (01/09/11 all forms show nearly all options at the moment, some nested fieldsets hidden with .hideme

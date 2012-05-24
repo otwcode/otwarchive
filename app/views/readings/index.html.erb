@@ -20,9 +20,11 @@
 <!--/subnav-->
 
 <!--main content-->
-<% if logged_in? && !current_user.readings.empty? %>
+<% if logged_in? && @readings.present? %>
   <ol class="reading index">
-    <%= render :partial => 'reading', :collection => @readings %>
+    <% @readings.each do |reading| %>
+      <%= render :partial => 'reading_blurb', :locals => {:work => reading.work, :reading => reading} %>
+    <% end %>
   </ol>
 <% end %>
 <!--/content-->
