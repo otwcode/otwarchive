@@ -81,6 +81,20 @@ a.cloud8 {
   font-weight: 800;
 }
 
+/*GROUP LIST*/
+
+ol.list {
+  margin: 2em auto;
+  text-align: left;
+}
+
+ol.list li {
+  float: left;
+  display: list-item;
+  list-style: decimal inside;
+  width: 40%;
+}
+
 /* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)*/
 
 .wrapper {

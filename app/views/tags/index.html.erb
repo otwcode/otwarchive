@@ -2,13 +2,27 @@
 <h2 class="heading"><%= ts("Tags") %></h2>
 
 <% unless @collection %>
-  <ul role="navigation" class="navigation actions" role="navigation">
+  <ul class="navigation actions" role="navigation">
     <li class="search"><%= render 'tags/search_form' %></li>
     <% if logged_in? %><li><%= link_to ts("Tag Sets"), tag_sets_path %></li><% end %>
     <li><%= span_if_current(ts('Most Popular'), tags_path, params[:show].blank?) %></li>
     <li><%= span_if_current ts('Random'), tags_path(:show => "random") %></li>
   </ul>
 <% end %>
+
+
+<ul class="viewing actions" role="menu">
+  <li><h4 class="heading"><%= ts('View As:') %></h4></li>
+  <% if @collection %>
+    <li><%= span_if_current(ts('Cloud'), collection_tags_path(@collection), params[:view].blank?) %>
+    <li><%= span_if_current ts('List'), collection_tags_path(@collection, :view => 'list') %>
+  <% else %>
+    <li><%= span_if_current(ts('Cloud'),
+      params[:show] == 'random' && params[:view].blank? ? tags_path(:show => 'random') : tags_path, params[:view].blank?) %></li>
+    <li><%= span_if_current(ts('List'), 
+      params[:show] == 'random' ? tags_path(:view => 'list', :show => 'random') : tags_path(:view => 'list')) %></li>
+  <% end %>
+</ul>
 
 <% unless @collection %>
   <h3 class="landmark heading">
@@ -20,11 +34,17 @@
   </h3>
 <% end %>
 
-<% if @tags %>
-  <ul class="tags cloud index group">
-    <!--FRONT END REVIEW: these classes are irregular-->
-    <% tag_cloud @tags, %w(cloud1 cloud2 cloud3 cloud4 cloud5 cloud6 cloud7 cloud8) do |tag, css_class| %>
-      <li><%= link_to_tag_works_with_text(tag, tag.name, :class => css_class.dup) %></li>
+<% if @tags && params[:view] == "list" %>
+  <ol class="tags list index group">
+    <% tag_cloud @tags, %w(cloud1 cloud2 cloud3 cloud4 cloud5 cloud6 cloud7 cloud8) do |tag| %>
+      <li><%= link_to_tag_works_with_text(tag, (tag.name + " (#{tag.taggings_count})")) %></li>
     <% end %>
-  </ul>
+  </ol>
+  <% else @tags %>
+    <ul class="tags cloud index group">
+      <!--FRONT END REVIEW: these classes are irregular-->
+      <% tag_cloud @tags, %w(cloud1 cloud2 cloud3 cloud4 cloud5 cloud6 cloud7 cloud8) do |tag, css_class| %>
+        <li><%= link_to_tag_works_with_text(tag, tag.name, :class => css_class.dup) %></li>
+      <% end %>
+    </ul>
 <% end %>
