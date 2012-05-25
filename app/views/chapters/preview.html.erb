@@ -6,13 +6,13 @@
 
 <div id="chapters">
   <div id="workskin">
-    <%= render :partial => 'chapters/chapter', :locals => { :chapter => @chapter } %>
+    <%= render @chapter %>
   </div>
 </div>
 
 <%= form_for([@work, @chapter]) do |f| %>
 
-  <%= render :partial => 'hidden_fields', :locals => {:form => f} %>
+  <%= render 'hidden_fields', :form => f %>
 
   <p class="submit actions">
     <% if @chapter.posted? %>
