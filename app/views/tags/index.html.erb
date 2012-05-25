@@ -5,11 +5,12 @@
   <ul class="navigation actions" role="navigation">
     <li class="search"><%= render 'tags/search_form' %></li>
     <% if logged_in? %><li><%= link_to ts("Tag Sets"), tag_sets_path %></li><% end %>
-    <li><%= span_if_current(ts('Most Popular'), tags_path, params[:show].blank?) %></li>
-    <li><%= span_if_current ts('Random'), tags_path(:show => "random") %></li>
+    <li><%= span_if_current(ts('Most Popular'), 
+      params[:view] == 'list' ? tags_path(:view => 'list') : tags_path, params[:show].blank?) %></li>
+    <li><%= span_if_current(ts('Random'),
+      params[:view] == 'list' ? tags_path(:show => 'random', :view => 'list') : tags_path(:show => 'random')) %></li>
   </ul>
 <% end %>
-
 
 <ul class="viewing actions" role="menu">
   <li><h4 class="heading"><%= ts('View As:') %></h4></li>
@@ -18,7 +19,7 @@
     <li><%= span_if_current ts('List'), collection_tags_path(@collection, :view => 'list') %>
   <% else %>
     <li><%= span_if_current(ts('Cloud'),
-      params[:show] == 'random' && params[:view].blank? ? tags_path(:show => 'random') : tags_path, params[:view].blank?) %></li>
+      params[:show] == 'random' ? tags_path(:show => 'random') : tags_path, params[:view].blank?) %></li>
     <li><%= span_if_current(ts('List'), 
       params[:show] == 'random' ? tags_path(:view => 'list', :show => 'random') : tags_path(:view => 'list')) %></li>
   <% end %>
