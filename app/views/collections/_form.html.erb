@@ -70,9 +70,9 @@
       <legend>Preferences</legend>
       <dl>
         <dt><%= preference_form.check_box :moderated %></dt>
-        <dd><%= preference_form.label :moderated, ts("This collection is moderated") %> <%= link_to_help "moderated-collection" %></dd>
+        <dd><%= preference_form.label :moderated, ts("This collection is moderated") %> <%= link_to_help "collection-moderated" %></dd>
         <dt><%= preference_form.check_box :closed %></dt>
-        <dd><%= preference_form.label :closed, ts("This collection is closed") %></dd>
+        <dd><%= preference_form.label :closed, ts("This collection is closed") %> <%= link_to_help "collection-closed" %></dd>
         <dt><%= preference_form.check_box :unrevealed %></dt>
         <dd>
           <%= preference_form.label :unrevealed, ts("This collection is unrevealed") %>
