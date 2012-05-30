@@ -25,8 +25,16 @@ class StatsController < ApplicationController
     
     # NOTE: Because we are going to be eval'ing the @sort variable later we MUST make sure that its content is 
     # checked against the whitelist of valid options
-    sort_options = %w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)
-    @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
+    sort_options = ""
+    @sort = ""
+    if current_user.preference.hide_hit_counts
+      sort_options = %w(kudos.count comments.count bookmarks.count subscriptions.count word_count)
+      @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "kudos.count"
+    else
+      sort_options = %w(hits date kudos.count comments.count bookmarks.count subscriptions.count word_count)
+      @sort = sort_options.include?(params[:sort_column]) ? params[:sort_column] : "hits"
+    end
+    
     @dir = params[:sort_direction] == "ASC" ? "ASC" : "DESC"
     params[:sort_column] = @sort
     params[:sort_direction] = @dir
@@ -44,6 +52,11 @@ class StatsController < ApplicationController
     # @sort above, so this should never contain potentially dangerous user input)
     works = work_query.all.sort_by {|w| @dir == "ASC" ? (eval("w.#{@sort}") || 0) : (0 - (eval("w.#{@sort}") || 0).to_i)}    
 
+    # on the off-chance a new user decides to look at their stats and have no works
+    if works.blank?
+      render "no_stats" and return
+    end
+    
     # group by fandom or flat view
     if params[:flat_view]
       @works = {ts("All Fandoms") => works}
