@@ -62,7 +62,7 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   border-bottom-color: #400;
 }
 
-#header .primary a:focus, #header .primary input:focus {
+#header #login a:focus, #header .primary a:focus, #header .primary input:focus {
   outline: #fff dotted 1px;
 }
 
@@ -106,6 +106,10 @@ notice that CSS3 declarations sit are indented twice (four spaces) and always co
   position: absolute;
   top: 0;
   right: 0;
+}
+
+#small_login form {
+  margin-top: 1.286em;
 }
 
 /*CONTEXT: collections*/
