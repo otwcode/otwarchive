@@ -25,6 +25,15 @@ a.tag:hover, .listbox .heading a.tag:visited:hover {
   display: block;
 }
 
+ol.tags {
+  float: left;
+}
+
+ol.tags li {
+  display: list-item;
+  list-style: decimal inside;
+}
+
 /*GROUP CLOUD */
 
 ul.cloud {
@@ -79,17 +88,6 @@ a.cloud8 {
   color: #900;
   font-size: 2.25em;
   font-weight: 800;
-}
-
-/*GROUP LIST*/
-
-ol.tags {
-  float: left;
-}
-
-ol.tags li {
-  display: list-item;
-  list-style: decimal inside;
 }
 
 /* GROUPS: WRAPPER, MODULE, INDEX  (#outer and #inner .wrapper have no style by default, but wrap the regions on every page for your skins convenience)*/
