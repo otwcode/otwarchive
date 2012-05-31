@@ -20,7 +20,11 @@ class TagsController < ApplicationController
   # GET /tags.xml
   def index
     if @collection
-      @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
+      if params[:view] == "list"
+        @tags = Freeform.canonical.for_collections_with_count_as_list([@collection] + @collection.children)
+      else
+        @tags = Freeform.canonical.for_collections_with_count([@collection] + @collection.children)
+      end
     else
       no_fandom = Fandom.find_by_name(ArchiveConfig.FANDOM_NO_TAG_NAME)
       @tags = no_fandom.children.by_type("Freeform").first_class.limit(ArchiveConfig.TAGS_IN_CLOUD)

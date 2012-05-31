@@ -36,14 +36,17 @@
 <% end %>
 
 <% if @tags && params[:view] == "list" %>
-  <ol class="tags list index group">
+  <ol class="tags concise index group">
     <% @tags.each do |tag| %>
       <li>
-        <% if logged_in? || logged_in_as_admin? %>
-          <%= link_to_tag_works_with_text(tag, (tag.name + " (#{tag.filter_count.public_works_count})"))
+        <% if @collection %>
+          <%= link_to_tag_works_with_text(tag, (tag.name + " (#{tag.count})"))
+ %>
+        <% elsif logged_in? || logged_in_as_admin? %>
+          <%= link_to_tag_works_with_text(tag, (tag.name + " (#{tag.filter_count.unhidden_works_count})"))
  %>
         <% else %>
-          <%= link_to_tag_works_with_text(tag, (tag.name + " (#{tag.filter_count.unhidden_works_count})"))
+          <%= link_to_tag_works_with_text(tag, (tag.name + " (#{tag.filter_count.public_works_count})"))
  %>
         <% end %>
       </li>
