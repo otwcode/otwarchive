@@ -41,7 +41,15 @@ class CollectionsController < ApplicationController
     @hide_dashboard = true
     @challenge_collections = (Collection.ge_signups_open.unmoderated.not_closed.limit(15) + Collection.pm_signups_open.unmoderated.not_closed.limit(15))    
   end
-
+  
+  def list_ge_challenges
+    @challenge_collections = Collection.ge_signups_open.unmoderated.not_closed.limit(15) 
+  end
+  
+  def list_pm_challenges
+    @challenge_collections = Collection.pm_signups_open.unmoderated.not_closed.limit(15) 
+  end
+  
   def show
     unless @collection
   	  flash[:error] = ts("Sorry, we couldn't find the collection you were looking for.")
