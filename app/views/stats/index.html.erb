@@ -81,10 +81,11 @@
                   <dt><%= ts("Kudos") %></dt><dd><%= work.kudos.count %></dd>
                   <dt><%= ts("Comments") %></dt><dd><%= work.comments.count %></dd>
                   <dt><%= ts("Bookmarks") %></dt><dd><%= work.bookmarks.count %></dd>
-                  <% # dt ts("Newest Link") /dt dd %>
+                  <% # dt ts("Newest Link") /dt %>
+                    <% # dd %>
                     <% # work.work_links.last.try(:url) || ts("none yet") %> 
                     <% # ( link_to ts("see all"), work_links_path(:work_id => work.id) /a ) %>
-                  </dd>
+                  <% # /dd %>
                 </dl>
               </dd>
             </dl>
