@@ -19,7 +19,7 @@ SEEDS = [
           "Amancham", "Anneli", "astolat", "Atalan", "awils1", "aworldinside", 
           "bingeling", "Cesy", "cesytest", "Celandine", "Chandri", "eel", 
           "elz", "erda", "Enigel", "hele", "Hope", "Jaetion", "jennyst", 
-          "justira", "jetta_e_rus", "lim", "Lisztful", "mumble", "open_doors",
+          "justira", "jetta_e_rus", "Lal", "lim", "Lisztful", "mumble", "open_doors",
           "Rebecca", "RKlyne", "Rustler", "Sidra", "staranise", "Stowaway", 
           "testy", "Tel", "tomatopudding", "velocitygrass", "xparrot", 
           "zelempa", "zoemathemata", "Zooey_Glass", "zlabya", "zz9pzza",
@@ -30,7 +30,7 @@ EMAIL = [
           "admin-amelia", "admin-elz", "admin-emilie", "admin-franny",
           "admin-kielix", "admin-shalott", "admin-sidra",
           "Amancham", "astolat", "aworldinside", "bingeling", "cesy", 
-          "cesytest", "elz", "Enigel", "hele", "mumble", "open_doors",
+          "cesytest", "elz", "Enigel", "hele", "Lal",  "mumble", "open_doors",
           "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass",
 	  "zz9pzza", 
 ]
