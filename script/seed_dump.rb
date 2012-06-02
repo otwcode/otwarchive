@@ -22,7 +22,7 @@ SEEDS = [
           "justira", "jetta_e_rus", "lim", "Lisztful", "mumble", "open_doors",
           "Rebecca", "RKlyne", "Rustler", "Sidra", "staranise", "Stowaway", 
           "testy", "Tel", "tomatopudding", "velocitygrass", "xparrot", 
-          "zelempa", "zoemathemata", "Zooey_Glass", "zlabya",
+          "zelempa", "zoemathemata", "Zooey_Glass", "zlabya", "zz9pzza",
 ]
 
 # seeds who want their email address preserved for testing
@@ -31,7 +31,8 @@ EMAIL = [
           "admin-kielix", "admin-shalott", "admin-sidra",
           "Amancham", "astolat", "aworldinside", "bingeling", "cesy", 
           "cesytest", "elz", "Enigel", "hele", "mumble", "open_doors",
-          "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass" 
+          "Sidra", "testy", "velocitygrass", "xparrot", "Zooey_Glass",
+	  "zz9pzza", 
 ]
 
 # a bunch of bigger collections (>250 works)
