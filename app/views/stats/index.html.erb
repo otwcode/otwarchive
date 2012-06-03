@@ -1,5 +1,6 @@
 <h2 class="heading"><%= ts("Statistics") %></h2>
 
+<h3 class="landmark heading"><%= ts('Navigation and Sorting') %></h3>
 <%= render "stats/navigation" %>
 
 <ol class="year actions">
@@ -33,6 +34,7 @@
 <div id="stat_chart" class="statistics chart"></div>
 <%= render_chart(@chart, 'stat_chart') %>
 
+<h3 class="landmark heading"><%= ts('View Sorting and Actions') %></h3>
 <ul class="sorting actions" role="menu">
   <li><h4 class="heading"><%= ts('Sort By') %></h4></li>
   <% unless @user.preference.hide_hit_counts %>
@@ -54,6 +56,7 @@
   <% end %>
 </ul>
 
+<h3 class="landmark heading"><%= ts('Listing Statistics') %></h3>
 <ul class="statistics index">
   <% @works.keys.sort.each do |fandom| %>
     <li class="fandom listbox group">
