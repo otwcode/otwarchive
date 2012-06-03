@@ -742,6 +742,18 @@ class Work < ActiveRecord::Base
       :commentable_id => self.chapters.value_of(:id)
     )
   end
+  
+  def guest_kudos_count
+    Rails.cache.fetch "works/#{id}/guest_kudos_count", :expires_in => 5.minutes do
+      kudos.by_guest.count
+    end
+  end
+  
+  def all_kudos_count
+    Rails.cache.fetch "works/#{id}/kudos_count", :expires_in => 5.minutes do
+      kudos.count
+    end
+  end
 
   ########################################################################
   # RELATED WORKS

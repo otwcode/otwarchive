@@ -56,7 +56,7 @@
   <%= flash_div :comment_error, :comment_notice %>
 
   <% if @work && (@chapter.blank? || @chapter.posted?) %>
-    <%= render "kudos/kudos", :kudos => @work.kudos.with_pseud.group("pseud_id").order("created_at DESC"), :guest_kudos_count => @work.kudos.by_guest.count(:ip_address, :distinct => true) %>
+    <%= render "kudos/kudos", :kudos => @work.kudos.with_pseud.group("pseud_id").order("created_at DESC"), :guest_kudos_count => @work.guest_kudos_count %>
   <% end %>
 
   <div id="add_comment_placeholder" title="top level comment">
