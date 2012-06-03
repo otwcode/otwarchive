@@ -91,9 +91,9 @@
   			            @collection ? collection_work_path(@collection, work, :anchor => "comments", :show_comments => true) : 
   			                (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :show_comments => true, :view_full_work => 'true') : work_path(work, :anchor => "comments", :show_comments => true)) %></dd>
   		<% end %>
-  		<% if work.kudos.count > 0 %>
+  		<% if work.all_kudos_count > 0 %>
   		  <dt><%= ts('Kudos: ') %></dt>
-  		  <dd><%= link_to (work.kudos.by_guest.count(:ip_address, :distinct => true) + work.kudos.with_pseud.count(:pseud_id, :distinct => true)).to_s, 
+  		  <dd><%= link_to work.all_kudos_count.to_s, 
   		      @collection ? collection_work_path(@collection, work, :anchor => "comments") : 
               (work.chapter_total_display.to_i > 1 ? work_path(work, :anchor => "comments", :view_full_work => 'true') : 
                 work_path(work, :anchor => "comments")) %></dd>
