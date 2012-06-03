@@ -363,38 +363,6 @@ namespace :After do
 
   #### Add your new tasks here
   
-  # Deepen the download tree and reduce the number of folders per directory
-  desc "Update download directories"
-  task(:update_download_directories => :environment) do
-    download_base_dir = "#{Rails.public_path}/downloads"
-    
-    # have to do this in two stages to deal with short pseuds
-    Dir.entries(download_base_dir).each do |download_folder|
-      next if download_folder[0] == "." || download_folder[0..2] == "___"
-      dirname = "#{download_base_dir}/#{download_folder}"
-      next unless File.directory?(dirname)
-      new_dirname = "#{download_base_dir}/___#{download_folder[0..1]}"
-      FileUtils.mkdir_p new_dirname
-      FileUtils.mv(dirname, new_dirname)
-    end
-    
-    Dir.entries(download_base_dir).each do |download_folder|
-      next if download_folder[0] == "."
-      dirname = "#{download_base_dir}/#{download_folder}"
-      next unless File.directory?(dirname)
-      # now get rid of the prefacing underscores
-      new_dirname = "#{download_base_dir}/#{download_folder[3..4]}"
-      FileUtils.mv(dirname, new_dirname)
-    end
-    
-  end
-
-  desc "Clean up orphaned subscriptions"
-  task(:cleanup_orphaned_subscriptions) do
-    Subscription.joins("LEFT JOIN works on subscriptions.subscribable_id = works.id").where("subscriptions.subscribable_type = 'Work' AND works.id IS NULL").each {|sub| sub.destroy}
-    Subscription.joins("LEFT JOIN series on subscriptions.subscribable_id = series.id").where("subscriptions.subscribable_type = 'Series' AND series.id IS NULL").each {|sub| sub.destroy}
-    Subscription.joins("LEFT JOIN users on subscriptions.subscribable_id = users.id").where("subscriptions.subscribable_type = 'User' AND users.id IS NULL").each {|sub| sub.destroy}
-  end
 
 end # this is the end that you have to put new tasks above
 
@@ -409,4 +377,4 @@ desc "Run all current migrate tasks"
 #task :After => ['After:set_complete_status', 'After:invite_external_authors']
 # task :After => ['After:convert_tag_sets', 'autocomplete:reload_tagset_data', 'skins:disable_all', 'skins:unapprove_all', 'skins:load_site_skins', 'After:convert_existing_skins', 
 #                 'skins:load_user_skins', 'After:remove_old_epubs']
-task :After => ['After:cleanup_orphaned_subscriptions']
+task :After => []
