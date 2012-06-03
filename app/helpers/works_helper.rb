@@ -12,8 +12,8 @@ module WorksHelper
       list.concat([[ts('Comments:'), work.count_visible_comments.to_s]])
     end
 
-    if work.kudos.count > 0
-      list.concat([[ts('Kudos:'), (work.kudos.by_guest.count(:ip_address, :distinct => true) + work.kudos.with_pseud.count(:pseud_id, :distinct => true)).to_s]])
+    if work.all_kudos_count > 0
+      list.concat([[ts('Kudos:'), work.all_kudos_count.to_s]])
     end
 
     if (bookmark_count = work.bookmarks.is_public.count) > 0
