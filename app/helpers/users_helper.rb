@@ -27,7 +27,7 @@ module UsersHelper
     elsif user && user.default_pseud && user.default_pseud.icon
       user.default_pseud.icon.url(:standard)
     else
-      "/images/skins/iconsets/default/icon_transparent.gif"
+      "/images/skins/iconsets/default/icon_user.png"
     end
   end
   
