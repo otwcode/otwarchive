@@ -70,6 +70,8 @@ gem 'best_in_place'
 
 gem 'timeliness'
 
+gem 'newrelic_rpm'
+
 # for generating graphs
 gem "google_visualr", ">= 2.1"
 
