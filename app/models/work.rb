@@ -187,11 +187,10 @@ class Work < ActiveRecord::Base
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
-  before_save :set_word_count, :post_first_chapter
+  before_save :post_first_chapter, :set_word_count
 
   after_save :save_chapters, :save_parents
 
-  # before_save :validate_tags # Enigel's feeble attempt
   before_save :check_for_invalid_tags
   before_update :validate_tags
   after_update :adjust_series_restriction
@@ -467,6 +466,7 @@ class Work < ActiveRecord::Base
   def post_first_chapter
     if self.posted_changed?
       self.chapters.first.posted = self.posted
+      self.chapters.first.save
     end
   end
 

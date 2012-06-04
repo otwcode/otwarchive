@@ -190,9 +190,11 @@ class Chapter < ActiveRecord::Base
         end
       end
       self.word_count = count
+    else
+      self.word_count
     end
   end
-    
+
   # Return the name to link comments to for this object
   def commentable_name
     self.work.title
