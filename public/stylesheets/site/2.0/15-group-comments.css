@@ -35,8 +35,6 @@ div.comment, li.comment {
 .comment .icon .visitor {
   background: url("/images/imageset.png") no-repeat 0px -75px;
   display: block;
-  height: 100px;
-  width: 100px;
 }
 
 .comment h4.byline {
