@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.text     "banner_text"
     t.integer  "banner_text_sanitizer_version", :limit => 2, :default => 0,                     :null => false
     t.integer  "default_skin_id"
+    t.datetime "stats_updated_at"
   end
 
   add_index "admin_settings", ["last_updated_by"], :name => "index_admin_settings_on_last_updated_by"
@@ -170,6 +171,7 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.boolean  "assigned_as_offer",   :default => false
   end
 
+  add_index "challenge_signups", ["collection_id"], :name => "index_challenge_signups_on_collection_id"
   add_index "challenge_signups", ["pseud_id"], :name => "signups_on_pseud_id"
 
   create_table "chapters", :force => true do |t|
@@ -829,7 +831,9 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.boolean  "anonymous",                                  :default => false, :null => false
   end
 
+  add_index "prompts", ["challenge_signup_id"], :name => "index_prompts_on_challenge_signup_id"
   add_index "prompts", ["collection_id"], :name => "index_prompts_on_collection_id"
+  add_index "prompts", ["optional_tag_set_id"], :name => "index_prompts_on_optional_tag_set_id"
   add_index "prompts", ["tag_set_id"], :name => "index_prompts_on_tag_set_id"
   add_index "prompts", ["type"], :name => "index_prompts_on_type"
 
@@ -1170,6 +1174,16 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
   add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["identity_url"], :name => "index_users_on_identity_url", :unique => true
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
+
+  create_table "work_links", :force => true do |t|
+    t.integer  "work_id"
+    t.string   "url"
+    t.integer  "count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "work_links", ["work_id", "url"], :name => "work_links_work_id_url", :unique => true
 
   create_table "works", :force => true do |t|
     t.integer  "expected_number_of_chapters",              :default => 1
