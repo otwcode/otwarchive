@@ -19,6 +19,10 @@ class FeedSweeper < ActionController::Caching::Sweeper
   def expire_tag_feeds(work)
     tags = (work.tags + work.filters).uniq
     for tag in tags
+      5.times do |n|
+        expire_fragment "works/tag/#{tag.id}/u/p/#{n+1}"
+        expire_fragment "works/tag/#{tag.id}/v/p/#{n+1}"
+      end
       expire_page :controller => 'tags',
                   :action => 'feed',
                   :id => tag.id,

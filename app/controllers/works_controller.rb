@@ -129,21 +129,34 @@ class WorksController < ApplicationController
       @most_recent_works = true
     end
 
+    
     # Now let's build the query
-    @works, @filters, @pseuds = Work.find_with_options(:user => @user, 
-                                                    :author => @author, 
-                                                    :selected_pseuds => @selected_pseuds,
-                                                    :tag => @tag, 
-                                                    :selected_tags => @selected_tags,
-                                                    :collection => @collection,
-                                                    :language_id => @language,
-                                                    :sort_column => @sort_column, 
-                                                    :sort_direction => @sort_direction,
-                                                    :page => params[:page], 
-                                                    :per_page => params[:per_page],
-                                                    :boolean_type => params[:boolean_type],
-                                                    :complete => params[:complete])
-
+    options = {
+      :user => @user, 
+      :author => @author, 
+      :selected_pseuds => @selected_pseuds,
+      :tag => @tag, 
+      :selected_tags => @selected_tags,
+      :collection => @collection,
+      :language_id => @language,
+      :sort_column => @sort_column, 
+      :sort_direction => @sort_direction,
+      :page => params[:page], 
+      :per_page => params[:per_page],
+      :boolean_type => params[:boolean_type],
+      :complete => params[:complete]
+    }
+    # Add caching for tag pages
+    if @tag.present? && params[:sort_column].blank? && params[:selected_pseuds].blank? && params[:selected_tags].blank? && params[:language_id].blank? && params[:complete].blank? && (params[:page].blank? || params[:page].to_i < 6)
+      status = logged_in? ? "u" : "v"
+      page = params[:page] || 1
+      @works, @filters, @pseuds = Rails.cache.fetch "works/tag/#{@tag.id}/#{status}/p/#{page}" do
+        results = Work.find_with_options(options)
+        results[0..3]
+      end
+    else
+      @works, @filters, @pseuds = Work.find_with_options(options)
+    end
 
     # Limit the number of works returned and let users know that it's happening
     if @works.total_entries >= ArchiveConfig.SEARCH_RESULTS_MAX

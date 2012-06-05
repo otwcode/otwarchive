@@ -1140,5 +1140,13 @@ class Work < ActiveRecord::Base
                                      :summary => 5, :notes => 5,
                                     }
   end
+  
+  def marshal_dump
+    @attributes
+  end
+
+  def marshal_load(attributes)
+    @attributes = attributes
+  end
 
 end
