@@ -23,7 +23,7 @@ class KudosController < ApplicationController
       if @kudo && @kudo.id # saved
         redirect_to kudo_path(@kudo, :url => request.referer)
       else
-        redirect_to :controller => @commentable.class.to_s.underscore.pluralize, :action => :show, :id => @commentable.id, :anchor => "comments"
+        redirect_to :controller => params[:commentable_controller], :action => :show, :id => params[:commentable_id], :anchor => "comments"
       end
     else
       # redirect to what the user was actually reading - chapter or work - when they left kudos
