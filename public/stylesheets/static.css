@@ -17,6 +17,7 @@ body {
   padding: 0;
   margin: 0;
   font: 100%/1.125 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
+  background-color: rgb(221, 221, 221);
 }
 
 a {
