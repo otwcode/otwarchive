@@ -750,7 +750,7 @@ public
   def marktoread
     @work = Work.find(params[:id])
     Reading.mark_to_read_later(@work, current_user)
-    flash[:notice] = ts("Your history was updated. It may take a short while to show up.")
+    flash[:notice] = ts("Your #{view_context.link_to('history', user_readings_path(current_user))} was updated. It may take a short while to show up.").html_safe
     redirect_to(request.env["HTTP_REFERER"] || root_path)
   end
 
