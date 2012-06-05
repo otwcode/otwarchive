@@ -17,11 +17,11 @@ body {
   padding: 0;
   margin: 0;
   font: 100%/1.125 'Lucida Grande', 'Lucida Sans Unicode', 'GNU Unifont', Verdana, Helvetica, sans-serif;
-  background-color: rgb(221, 221, 221);
+  /*background-color: rgb(221, 221, 221);*/
 }
 
 a {
-  color: #900;
+  color: #700;
 }
 
 a:visited {
@@ -49,7 +49,7 @@ a:hover {
 }
 
 a, a:link, #header ul ul li a:link {
-  color: #900;
+  color: #700;
 }
 
 #header ul.navigation ul {
@@ -65,7 +65,7 @@ a, a:link, #header ul ul li a:link {
 }
 
 #header ul ul li a {
-  color: #900;
+  /*color: #900;*/
   padding: 0.5em;
   border: 1px solid #555;
   display: block;
