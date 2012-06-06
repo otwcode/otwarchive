@@ -50,6 +50,10 @@
         <li id="show_comments_link"><%= show_hide_comments_link(commentable) %></li>
     <% end %>
   </ul>
+  
+        <% unless logged_in? %>
+        <p class="caution"><%= ts("Your comment or kudos may take up to 20 minutes to appear on the page.") %></p>
+      <% end %>
 
   <h3 class="landmark heading"><a name="comments"><%= ts("Comments") %></a></h3>
 
