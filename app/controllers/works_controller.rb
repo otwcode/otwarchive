@@ -150,9 +150,10 @@ class WorksController < ApplicationController
     if @tag.present? && params[:sort_column].blank? && params[:selected_pseuds].blank? && params[:selected_tags].blank? && params[:language_id].blank? && params[:complete].blank? && (params[:page].blank? || params[:page].to_i < 6)
       status = logged_in? ? "u" : "v"
       page = params[:page] || 1
-      @works, @filters, @pseuds = Rails.cache.fetch "works/tag/#{@tag.id}/#{status}/p/#{page}" do
+      # This has views/ in it because that's what expire_fragment is looking for
+      @works, @filters, @pseuds = Rails.cache.fetch "views/works/tag/#{@tag.id}/#{status}/p/#{page}" do
         results = Work.find_with_options(options)
-        results[0..3]
+        [results.first.compact, results[1], results.last]
       end
     else
       @works, @filters, @pseuds = Work.find_with_options(options)

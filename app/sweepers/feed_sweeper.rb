@@ -8,8 +8,8 @@ class FeedSweeper < ActionController::Caching::Sweeper
     end
   end
 
-  def before_update(work)
-    if work.posted? && work.posted_changed?
+  def after_update(work)
+    if work.posted? && (work.posted_changed? || work.revised_at_changed?)
       expire_tag_feeds(work)
     end
   end

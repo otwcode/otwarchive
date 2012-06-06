@@ -1141,6 +1141,7 @@ class Work < ActiveRecord::Base
                                     }
   end
   
+  # This is to allow works to be serialized for caching
   def marshal_dump
     @attributes
   end
