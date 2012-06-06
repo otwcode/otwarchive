@@ -206,6 +206,7 @@ class WorksController < ApplicationController
     end
 
     @tag_categories_limited = Tag::VISIBLE - ["Warning"]
+    @kudos = @work.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
     
     if current_user.respond_to?(:subscriptions)
       @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,

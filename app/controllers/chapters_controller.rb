@@ -65,6 +65,8 @@ class ChaptersController < ApplicationController
         @tweet_text = @tweet_text.truncate(95)
       end
       
+      @kudos = @work.kudos.with_pseud.includes(:pseud => :user).order("created_at DESC")
+      
       if current_user.respond_to?(:subscriptions)
         @subscription = current_user.subscriptions.where(:subscribable_id => @work.id,
                                                          :subscribable_type => 'Work').first ||
