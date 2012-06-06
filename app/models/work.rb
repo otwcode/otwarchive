@@ -134,13 +134,13 @@ class Work < ActiveRecord::Base
   def validate_authors
     if self.authors.blank?
       if self.pseuds.blank?
-        errors.add(:base, t('must_have_author', :default => "Work must have at least one author."))
+        errors.add(:base, ts("Work must have at least one author."))
         return false
       else
         self.authors_to_sort_on = self.sorted_pseuds
       end
     elsif !self.invalid_pseuds.blank?
-      errors.add(:base, t('invalid_pseuds', :default => "These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
+      errors.add(:base, ts("These pseuds are invalid: %{pseuds}", :pseuds => self.invalid_pseuds.inspect))
     else
       self.authors_to_sort_on = self.sorted_authors
     end
@@ -164,7 +164,7 @@ class Work < ActiveRecord::Base
     if !self.first_chapter.published_at
       self.first_chapter.published_at = Date.today
     elsif self.first_chapter.published_at > Date.today
-      errors.add(:base, t('no_future_dating', :default => "Publication date can't be in the future."))
+      errors.add(:base, ts("Publication date can't be in the future."))
       return false
     end
   end
@@ -173,7 +173,7 @@ class Work < ActiveRecord::Base
   after_validation :check_for_invalid_chapters
   def check_for_invalid_chapters
     if self.errors[:chapters].any?
-      self.errors.add(:base, t('chapter_invalid', :default => "Please enter your story in the text field below."))
+      self.errors.add(:base, ts("Please enter your story in the text field below."))
       self.errors.delete(:chapters)
     end
   end
@@ -187,11 +187,10 @@ class Work < ActiveRecord::Base
   ########################################################################
   before_save :validate_authors, :clean_and_validate_title, :validate_published_at, :ensure_revised_at
 
-  before_save :set_word_count, :post_first_chapter
+  before_save :post_first_chapter, :set_word_count
 
   after_save :save_chapters, :save_parents
 
-  # before_save :validate_tags # Enigel's feeble attempt
   before_save :check_for_invalid_tags
   before_update :validate_tags
   after_update :adjust_series_restriction
@@ -467,6 +466,7 @@ class Work < ActiveRecord::Base
   def post_first_chapter
     if self.posted_changed?
       self.chapters.first.posted = self.posted
+      self.chapters.first.save
     end
   end
 
