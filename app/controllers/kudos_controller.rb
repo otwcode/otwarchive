@@ -1,5 +1,7 @@
 class KudosController < ApplicationController
   skip_before_filter :verify_authenticity_token, :only => [:create]
+  
+  cache_sweeper :kudos_sweeper
 
   def create
     @commentable = params[:kudo][:kudosable_type] == 'Work' ? Work.find(params[:kudo][:kudosable_id]) : Chapter.find(params[:kudo][:kudosable_id])
