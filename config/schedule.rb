@@ -55,7 +55,7 @@ every 1.day, :at => '6:10am' do
 end
 
 # Send subscription notifications
-every 6.hours do
+every 1.hour do
   rake "notifications:deliver_subscriptions"
 end
 
