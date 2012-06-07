@@ -99,7 +99,7 @@ class BookmarksController < ApplicationController
         @bookmarks = @bookmarks.visible_to_all
       end
     else 
-      flash[:notice] = ts("Bookmark pages are currently being reworked. Apologies for the inconvenience!")
+      flash.now[:notice] = ts("Bookmark pages are currently being reworked. Apologies for the inconvenience!")
       if params[:tag_id]  # tag page
         unless owner
           raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
