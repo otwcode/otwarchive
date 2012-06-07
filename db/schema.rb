@@ -425,8 +425,7 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
   add_index "filter_counts", ["public_works_count"], :name => "index_public_works_count"
   add_index "filter_counts", ["unhidden_works_count"], :name => "index_unhidden_works_count"
 
-  create_table "filter_taggings", :id => false, :force => true do |t|
-    t.integer  "id",                                                :null => false
+  create_table "filter_taggings", :force => true do |t|
     t.integer  "filter_id",       :limit => 8,                      :null => false
     t.integer  "filterable_id",   :limit => 8,                      :null => false
     t.string   "filterable_type", :limit => 100
@@ -434,6 +433,8 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.datetime "updated_at"
     t.boolean  "inherited",                      :default => false, :null => false
   end
+ 
+  execute 'ALTER TABLE filter_taggings DROP PRIMARY KEY, ADD PRIMARY KEY (id,filter_id);'
 
   add_index "filter_taggings", ["filter_id", "filterable_type"], :name => "index_filter_taggings_on_filter_id_and_filterable_type"
   add_index "filter_taggings", ["filterable_id", "filterable_type"], :name => "index_filter_taggings_filterable"
@@ -553,6 +554,7 @@ ActiveRecord::Schema.define(:version => 20120415134615) do
     t.string   "ip_address"
   end
 
+  add_index "kudos", ["commentable_id", "commentable_type", "pseud_id"], :name => "index_kudos_on_commentable_id_and_commentable_type_and_pseud_id"
   add_index "kudos", ["commentable_id", "commentable_type"], :name => "index_kudos_on_commentable_id_and_commentable_type"
   add_index "kudos", ["ip_address"], :name => "index_kudos_on_ip_address"
   add_index "kudos", ["pseud_id"], :name => "index_kudos_on_pseud_id"
