@@ -9,9 +9,9 @@ class PeopleController < ApplicationController
       begin
         page = params[:page] || 1
         errors, @people = Query.search_with_sphinx(Pseud, @query, page)
-        flash.now[:error] = errors.join(" ") unless errors.blank?
+        setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
       rescue Riddle::ConnectionError
-        flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
+        setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
       end
       # @people could contain nils from sphinx
       @rec_counts = Pseud.rec_counts_for_pseuds(@people.compact)

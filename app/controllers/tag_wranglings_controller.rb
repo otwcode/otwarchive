@@ -23,7 +23,7 @@ class TagWranglingsController < ApplicationController
           if @fandom && @fandom.canonical?
             @tags = @fandom.children.by_type("Relationship").canonical.order(sort).paginate(:page => params[:page], :per_page => ArchiveConfig.ITEMS_PER_PAGE)
           else
-            flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
+            setflash; flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
           end
         end
       else # by fandom
@@ -55,10 +55,10 @@ class TagWranglingsController < ApplicationController
       if @character && @character.canonical?
         @tags = Tag.find(params[:selected_tags])
         @tags.each { |tag| tag.add_association(@character) }
-        flash[:notice] = "#{@tags.length} relationships were wrangled to #{params[:character_string]}."
+        setflash; flash[:notice] = "#{@tags.length} relationships were wrangled to #{params[:character_string]}."
         redirect_to tag_wranglings_path(options) and return        
       else
-        flash[:error] = "#{params[:character_string]} is not a canonical character."
+        setflash; flash[:error] = "#{params[:character_string]} is not a canonical character."
         redirect_to tag_wranglings_path(options) and return     
       end
     elsif params[:fandom_string] && !params[:selected_tags].blank?
@@ -68,11 +68,11 @@ class TagWranglingsController < ApplicationController
         @tags = Tag.find(params[:selected_tags])
         @tags.each { |tag| tag.add_association(@fandom) }
       else
-        flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
+        setflash; flash[:error] = "#{params[:fandom_string]} is not a canonical fandom."
         redirect_to tag_wranglings_path(options) and return     
       end
     end
-    flash[:notice] = "Tags were successfully wrangled!"
+    setflash; flash[:notice] = "Tags were successfully wrangled!"
     redirect_to tag_wranglings_path(options)            
   end
   

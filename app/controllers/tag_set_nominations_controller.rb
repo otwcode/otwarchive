@@ -7,7 +7,7 @@ class TagSetNominationsController < ApplicationController
   def load_tag_set
     @tag_set = OwnedTagSet.find(params[:tag_set_id])
     unless @tag_set
-      flash[:notice] = ts("What tag set did you want to nominate for?")
+      setflash; flash[:notice] = ts("What tag set did you want to nominate for?")
       redirect_to tag_sets_path and return
     end
   end
@@ -15,11 +15,11 @@ class TagSetNominationsController < ApplicationController
   def load_nomination
     @tag_set_nomination = TagSetNomination.find(params[:id])
     unless @tag_set_nomination
-      flash[:notice] = ts("Which nominations did you want to work with?")
+      setflash; flash[:notice] = ts("Which nominations did you want to work with?")
       redirect_to user_tag_set_nominations_path(@user) and return
     end
     unless current_user.is_author_of?(@tag_set_nomination) || @tag_set.user_is_moderator?(current_user)
-      flash[:notice] = ts("You can only see your own nominations or nominations for a set you moderate.")
+      setflash; flash[:notice] = ts("You can only see your own nominations or nominations for a set you moderate.")
       redirect_to tag_set_path(@tag_set) and return
     end
   end
@@ -53,7 +53,7 @@ class TagSetNominationsController < ApplicationController
     if params[:user_id]
       @user = User.find_by_login(params[:user_id])
       if @user != current_user
-        flash[:error] = ts("You can only view your own nominations, sorry.")
+        setflash; flash[:error] = ts("You can only view your own nominations, sorry.")
         redirect_to tag_sets_path and return
       else
         @tag_set_nominations = TagSetNomination.owned_by(@user)
@@ -63,11 +63,11 @@ class TagSetNominationsController < ApplicationController
         # reviewing nominations
         setup_for_review
       else
-        flash[:error] = ts("You can't see those nominations, sorry.")
+        setflash; flash[:error] = ts("You can't see those nominations, sorry.")
         redirect_to tag_sets_path and return
       end
     else
-      flash[:error] = ts("What nominations did you want to work with?")
+      setflash; flash[:error] = ts("What nominations did you want to work with?")
       redirect_to tag_sets_path and return
     end
   end
@@ -92,7 +92,7 @@ class TagSetNominationsController < ApplicationController
   def create
     @tag_set_nomination = TagSetNomination.new(params[:tag_set_nomination])
     if @tag_set_nomination.save
-      flash[:notice] = ts('Your nominations were successfully submitted.')
+      setflash; flash[:notice] = ts('Your nominations were successfully submitted.')
       request_noncanonical_info
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
@@ -103,7 +103,7 @@ class TagSetNominationsController < ApplicationController
 
   def update
     if @tag_set_nomination.update_attributes(params[:tag_set_nomination])
-      flash[:notice] = ts("Your nominations were successfully updated.")
+      setflash; flash[:notice] = ts("Your nominations were successfully updated.")
       request_noncanonical_info
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
@@ -122,11 +122,11 @@ class TagSetNominationsController < ApplicationController
 
   def destroy
     unless @tag_set_nomination.unreviewed? || @tag_set.user_is_moderator?(current_user)
-      flash[:error] = ts("You cannot delete nominations after some of them have been reviewed, sorry!")
+      setflash; flash[:error] = ts("You cannot delete nominations after some of them have been reviewed, sorry!")
       redirect_to tag_set_nomination_path(@tag_set, @tag_set_nomination)
     else
       @tag_set_nomination.destroy
-      flash[:notice] = ts("Your nominations were deleted.")
+      setflash; flash[:notice] = ts("Your nominations were deleted.")
       redirect_to tag_set_path(@tag_set)
     end
   end
@@ -175,22 +175,22 @@ class TagSetNominationsController < ApplicationController
     @nominations[:freeform] = (more_noms ? base_nom_query("freeform").order("RAND()") : base_nom_query("freeform").order(:tagname)) if @limit[:freeform] > 0
     
     if more_noms
-      flash[:notice] = ts("There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some.")
+      setflash; flash[:notice] = ts("There are too many nominations to show at once, so here's a randomized selection! Additional nominations will appear after you approve or reject some.")
     end
     
     if @tag_set.tag_nominations.unreviewed.empty?
-      flash[:notice] = ts("No nominations to review!")
+      setflash; flash[:notice] = ts("No nominations to review!")
     end
   end
   
   def destroy_multiple
     unless @tag_set.user_is_owner?(current_user)
-      flash[:error] = ts("You don't have permission to do that.")
+      setflash; flash[:error] = ts("You don't have permission to do that.")
       redirect_to tag_set_path(@tag_set) and return
     end
 
     @tag_set.clear_nominations!
-    flash[:notice] = ts("All nominations for this tag set have been cleared.")
+    setflash; flash[:notice] = ts("All nominations for this tag set have been cleared.")
     redirect_to tag_set_path(@tag_set)
   end
 
@@ -198,7 +198,7 @@ class TagSetNominationsController < ApplicationController
   # we expect params like "character_approve_My Awesome Tag" and "fandom_reject_My Lousy Tag" 
   def update_multiple
     unless @tag_set.user_is_moderator?(current_user)
-      flash[:error] = ts("You don't have permission to do that.")
+      setflash; flash[:error] = ts("You don't have permission to do that.")
       redirect_to tag_set_path(@tag_set) and return
     end
     setup_for_review    
@@ -228,7 +228,7 @@ class TagSetNominationsController < ApplicationController
       tagnames_to_change.each do |oldname|
         synonym = TagNomination.for_tag_set(@tag_set).where(:type => "#{tag_type.classify}Nomination", :tagname => oldname).value_of(:synonym).first
         unless TagNomination.change_tagname!(@tag_set, oldname, synonym)
-          flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
+          setflash; flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
             :oldname => oldname, :newname => synonym)
           render :action => "index" and return           
         end
@@ -240,7 +240,7 @@ class TagSetNominationsController < ApplicationController
           @tagnames_to_add << newname
         else
           # ughhhh
-          flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
+          setflash; flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates, changing %{oldname} to %{newname} -- please check over your tag set closely!",
             :oldname => oldname, :newname => newname)
           render :action => "index" and return           
         end
@@ -249,7 +249,7 @@ class TagSetNominationsController < ApplicationController
       # update the tag set
       unless @tag_set.add_tagnames(tag_type, @tagnames_to_add) && @tag_set.remove_tagnames(tag_type, @tagnames_to_remove)     
         @errors = @tag_set.errors.full_messages
-        flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")
+        setflash; flash[:error] = ts("Oh no! We ran into a problem partway through saving your updates -- please check over your tag set closely!")
         render :action => "index" and return
       end
       
@@ -259,7 +259,7 @@ class TagSetNominationsController < ApplicationController
     end
     
     # If we got here we made it through, YAY
-    flash[:notice] = @notice
+    setflash; flash[:notice] = @notice
     if @tag_set.tag_nominations.unreviewed.empty? 
       flash[:notice] << ts("All nominations reviewed, yay!")
       redirect_to tag_set_path(@tag_set)

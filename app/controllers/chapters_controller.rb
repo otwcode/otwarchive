@@ -97,7 +97,7 @@ class ChaptersController < ApplicationController
     if params["remove"] == "me"
       @chapter.pseuds = @chapter.pseuds - current_user.pseuds
       @chapter.save
-      flash[:notice] = ts("You have been removed as an author from the chapter")
+      setflash; flash[:notice] = ts("You have been removed as an author from the chapter")
      redirect_to @work
     end
   end
@@ -128,7 +128,7 @@ class ChaptersController < ApplicationController
               redirect_to [@work, @chapter]
             end
         elsif @work.save
-          flash[:notice] = ts("This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
+          setflash; flash[:notice] = ts("This is a preview of what this chapter will look like when it's posted to the Archive. You should probably read the whole thing to check for problems before posting.")
           redirect_to [:preview, @work, @chapter]
         else
           render :new
@@ -169,7 +169,7 @@ class ChaptersController < ApplicationController
           end
         end
         if @work.save
-          flash[:notice] = ts('Chapter was successfully updated.')
+          setflash; flash[:notice] = ts('Chapter was successfully updated.')
           redirect_to [@work, @chapter]
         else
           render :edit
@@ -184,7 +184,7 @@ class ChaptersController < ApplicationController
     if params[:chapters]
       @work = Work.find(params[:work_id])
       @work.reorder(params[:chapters])
-      flash[:notice] = ts("Chapter order has been successfully updated.")
+      setflash; flash[:notice] = ts("Chapter order has been successfully updated.")
     elsif params[:chapter]
       params[:chapter].each_with_index do |id, position|
         Chapter.update(id, :position => position + 1)
@@ -224,16 +224,16 @@ class ChaptersController < ApplicationController
   def destroy
     @chapter = @work.chapters.find(params[:id])
     if @chapter.is_only_chapter?
-      flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
+      setflash; flash[:error] = ts("You can't delete the only chapter in your story. If you want to delete the story, choose 'Delete work'.")
       redirect_to(edit_work_url(@work))
     else
       if @chapter.destroy
         @work.minor_version = @work.minor_version + 1
         @work.set_revised_at
         @work.save
-        flash[:notice] = ts("The chapter was successfully deleted.")
+        setflash; flash[:notice] = ts("The chapter was successfully deleted.")
       else
-        flash[:error] = ts("Something went wrong. Please try again.")
+        setflash; flash[:error] = ts("Something went wrong. Please try again.")
       end
       redirect_to :controller => 'works', :action => 'show', :id => @work
     end
@@ -293,6 +293,6 @@ class ChaptersController < ApplicationController
     if !@work.posted
       @work.update_attribute(:posted, true)
     end
-    flash[:notice] = ts('Chapter has been posted!')
+    setflash; flash[:notice] = ts('Chapter has been posted!')
   end
 end

@@ -77,10 +77,10 @@ class SeriesController < ApplicationController
       else
         begin
           @series.remove_author(current_user)
-          flash[:notice] = ts("You have been removed as an author from the series and its works.")
+          setflash; flash[:notice] = ts("You have been removed as an author from the series and its works.")
           redirect_to @series
         rescue Exception => error
-          flash[:error] = error.message
+          setflash; flash[:error] = error.message
           redirect_to @series        
         end
       end
@@ -97,7 +97,7 @@ class SeriesController < ApplicationController
   def create
     @series = Series.new(params[:series])
     if @series.save
-      flash[:notice] = ts('Series was successfully created.')
+      setflash; flash[:notice] = ts('Series was successfully created.')
       redirect_to(@series)
     else
       render :action => "new"
@@ -108,7 +108,7 @@ class SeriesController < ApplicationController
   # PUT /series/1.xml
   def update
     unless params[:series][:author_attributes][:ids]
-      flash[:error] = ts("Sorry, you cannot remove yourself entirely as an author of a series right now.")
+      setflash; flash[:error] = ts("Sorry, you cannot remove yourself entirely as an author of a series right now.")
       redirect_to edit_series_path(@series) and return
     end
     
@@ -121,7 +121,7 @@ class SeriesController < ApplicationController
     end
 
     if @series.update_attributes(params[:series])
-      flash[:notice] = ts('Series was successfully updated.')
+      setflash; flash[:notice] = ts('Series was successfully updated.')
       redirect_to(@series)
     else
       @pseuds = current_user.pseuds
@@ -136,7 +136,7 @@ class SeriesController < ApplicationController
     if params[:serial_works]
       @series = Series.find(params[:id])
       @series.reorder(params[:serial_works])
-      flash[:notice] = ts("Series order has been successfully updated.")
+      setflash; flash[:notice] = ts("Series order has been successfully updated.")
     elsif params[:serial]
       params[:serial].each_with_index do |id, position|
         SerialWork.update(id, :position => position + 1)
@@ -153,10 +153,10 @@ class SeriesController < ApplicationController
   # DELETE /series/1.xml
   def destroy
     if @series.destroy
-      flash[:notice] = ts("Series was successfully deleted.")
+      setflash; flash[:notice] = ts("Series was successfully deleted.")
       redirect_to(current_user)
     else
-      flash[:error] = ts("Sorry, we couldn't delete the series. Please try again.")
+      setflash; flash[:error] = ts("Sorry, we couldn't delete the series. Please try again.")
       redirect_to(@series)
     end
   end

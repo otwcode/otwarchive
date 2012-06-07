@@ -18,13 +18,13 @@ class ExternalAuthorsController < ApplicationController
     elsif logged_in?
       redirect_to user_external_authors_path(current_user) and return
     else
-      flash[:notice] = "You can't see that information."
+      setflash; flash[:notice] = "You can't see that information."
       redirect_to root_path and return
     end
   end
 
   def new
-    flash[:notice] = "Coming soon!"
+    setflash; flash[:notice] = "Coming soon!"
     redirect_to :action => :index
     # @external_author = ExternalAuthor.new
     # @external_author.external_author_names.build
@@ -32,7 +32,7 @@ class ExternalAuthorsController < ApplicationController
 
   def create
     # we need to confirm email addresses before we hand them over
-    flash[:notice] = "Coming soon!"
+    setflash; flash[:notice] = "Coming soon!"
     redirect_to :action => :index
     
     # @external_author = ExternalAuthor.new(params[:external_author])
@@ -42,7 +42,7 @@ class ExternalAuthorsController < ApplicationController
     # end
     # 
     # if @external_author.save
-    #   flash[:notice] = 'ExternalAuthor was successfully created.'
+    #   setflash; flash[:notice] = 'ExternalAuthor was successfully created.'
     #   redirect_to user_external_authors_path(@user)
     # else
     #   render :action => "new"
@@ -50,7 +50,7 @@ class ExternalAuthorsController < ApplicationController
   end
 
   def destroy
-    flash[:notice] = "Coming soon!"
+    setflash; flash[:notice] = "Coming soon!"
     redirect_to :action => :index
     # @external_author = ExternalAuthor.find(params[:id])
     # @external_author.destroy
@@ -66,13 +66,13 @@ class ExternalAuthorsController < ApplicationController
     token = params[:invitation_token] || (params[:user] && params[:user][:invitation_token])
     @invitation = Invitation.find_by_token(token)
     unless @invitation
-      flash[:error] = ts("You need an invitation to do that.")
+      setflash; flash[:error] = ts("You need an invitation to do that.")
       redirect_to root_path and return
     end
       
     @external_author = @invitation.external_author
     unless @external_author
-      flash[:error] = ts("There are no stories to claim on this invitation. Did you want to sign up instead?")
+      setflash; flash[:error] = ts("There are no stories to claim on this invitation. Did you want to sign up instead?")
       redirect_to signup_path(@invitation.token) and return
     end
   end
@@ -84,7 +84,7 @@ class ExternalAuthorsController < ApplicationController
     # go ahead and give the user the works
     @external_author.claim!(current_user)
     @invitation.mark_as_redeemed(current_user) if @invitation
-    flash[:notice] = t('external_author_claimed', :default => "We have added the stories imported under %{email} to your account.", :email => @external_author.email)
+    setflash; flash[:notice] = t('external_author_claimed', :default => "We have added the stories imported under %{email} to your account.", :email => @external_author.email)
     redirect_to user_external_authors_path(current_user)
   end
 
@@ -92,11 +92,11 @@ class ExternalAuthorsController < ApplicationController
     @invitation = Invitation.find_by_token(params[:invitation_token])
     @external_author = ExternalAuthor.find(params[:id])
     unless (@invitation && @invitation.external_author == @external_author) || @external_author.user == current_user
-      flash[:error] = "You don't have permission to do that."
+      setflash; flash[:error] = "You don't have permission to do that."
       redirect_to root_path and return
     end
     
-    flash[:notice] = ""
+    setflash; flash[:notice] = ""
     if params[:imported_stories] == "nothing"
       flash[:notice] += "Okay, we'll leave things the way they are! You can use the email link any time if you change your mind."
       redirect_to root_path and return      
