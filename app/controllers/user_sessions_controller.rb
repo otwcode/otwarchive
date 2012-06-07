@@ -30,7 +30,7 @@ class UserSessionsController < ApplicationController
       when :success
         user = User.where(:identity_url => openid.display_identifier).first
         if user
-          flash[:notice] = ts("Successfully logged in.")
+          setflash; flash[:notice] = ts("Successfully logged in.")
           @current_user = UserSession.create(user, params[:remember_me]).record
           redirect_to(@current_user) and return
         else
@@ -39,7 +39,7 @@ class UserSessionsController < ApplicationController
       else
         message = "Sorry, the OpenID verification process failed"
       end
-      flash.now[:error] = message
+      setflash; flash.now[:error] = message
       params[:use_openid] = true
       render :action => 'new'
     elsif params[:openid_url]
@@ -59,12 +59,12 @@ class UserSessionsController < ApplicationController
           head 401 and return
         end
       end
-      flash.now[:error] = message
+      setflash; flash.now[:error] = message
       render :action => 'new'
     elsif params[:user_session]
       @user_session = UserSession.new(params[:user_session])
       if @user_session.save
-        flash[:notice] = ts("Successfully logged in.")
+        setflash; flash[:notice] = ts("Successfully logged in.")
         @current_user = @user_session.record
         redirect_back_or_default(@current_user)
       else
@@ -93,7 +93,7 @@ class UserSessionsController < ApplicationController
         else
           message = ts("The password or user name you entered doesn't match our records. Please try again or click the 'forgot password' link below.")
         end
-        flash.now[:error] = message
+        setflash; flash.now[:error] = message
         @user_session = UserSession.new(params[:user_session])
         render :action => 'new'
       end
@@ -104,7 +104,7 @@ class UserSessionsController < ApplicationController
     @user_session = UserSession.find
     if @user_session
       @user_session.destroy
-      flash[:notice] = ts("Successfully logged out.")
+      setflash; flash[:notice] = ts("Successfully logged out.")
     end
     redirect_back_or_default root_url
   end

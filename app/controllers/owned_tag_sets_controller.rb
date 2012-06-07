@@ -9,7 +9,7 @@ class OwnedTagSetsController < ApplicationController
   def load_tag_set
     @tag_set = OwnedTagSet.find(params[:id])
     unless @tag_set
-      flash[:notice] = ts("What tag set did you want to look at?")
+      setflash; flash[:notice] = ts("What tag set did you want to look at?")
       redirect_to tag_sets_path and return
     end
   end
@@ -53,7 +53,7 @@ class OwnedTagSetsController < ApplicationController
   def show_options
     @restriction = PromptRestriction.find(params[:restriction])
     unless @restriction
-      flash[:error] = ts("Which tag set did you want to look at?")
+      setflash; flash[:error] = ts("Which tag set did you want to look at?")
       redirect_to tag_sets_path and return
     end
     @tag_sets = OwnedTagSet.in_prompt_restriction(@restriction)
@@ -143,7 +143,7 @@ class OwnedTagSetsController < ApplicationController
     @tag_set = OwnedTagSet.new(params[:owned_tag_set])
     @tag_set.add_owner(current_user.default_pseud)
     if @tag_set.save
-      flash[:notice] = ts('Tag set was successfully created.')
+      setflash; flash[:notice] = ts('Tag set was successfully created.')
       redirect_to tag_set_path(@tag_set)
     else 
       render :action => "new"
@@ -156,7 +156,7 @@ class OwnedTagSetsController < ApplicationController
   
   def update
     if @tag_set.update_attributes(params[:owned_tag_set])
-      flash[:notice] = ts("Tag set was successfully updated.")
+      setflash; flash[:notice] = ts("Tag set was successfully updated.")
       redirect_to tag_set_path(@tag_set)
     else
       get_parent_child_tags
@@ -166,7 +166,7 @@ class OwnedTagSetsController < ApplicationController
 
   def destroy
     @tag_set.destroy
-    flash[:notice] = ts("Tag set was successfully deleted.")
+    setflash; flash[:notice] = ts("Tag set was successfully deleted.")
     redirect_to tag_sets_path
   end
 
@@ -177,15 +177,15 @@ class OwnedTagSetsController < ApplicationController
     if params[:batch_associations]
       failed = @tag_set.load_batch_associations!(params[:batch_associations], :do_relationships => (params[:batch_do_relationship] ? true : false))
       if failed.empty?
-        flash[:notice] = ts("Tags and associations loaded!")
+        setflash; flash[:notice] = ts("Tags and associations loaded!")
         redirect_to tag_set_path(@tag_set) and return      
       else
-        flash.now[:notice] = ts("We couldn't add all the tags and associations you wanted -- the ones left below didn't work. See the help for suggestions!")
+        setflash; flash.now[:notice] = ts("We couldn't add all the tags and associations you wanted -- the ones left below didn't work. See the help for suggestions!")
         @failed_batch_associations = failed.join("\n")
         render :action => :batch_load and return
       end
     else
-      flash[:error] = ts("What did you want to load?")
+      setflash; flash[:error] = ts("What did you want to load?")
       redirect_to :action => :batch_load and return
     end
   end

@@ -14,7 +14,7 @@ class UserInviteRequestsController < ApplicationController
       @user = current_user
       @user_invite_request = @user.user_invite_requests.build
     else
-      flash[:error] = "Please log in."
+      setflash; flash[:error] = "Please log in."
       redirect_to login_path
     end
   end
@@ -26,11 +26,11 @@ class UserInviteRequestsController < ApplicationController
       @user = current_user
       @user_invite_request = @user.user_invite_requests.build(params[:user_invite_request])
     else
-      flash[:error] = "Please log in."
+      setflash; flash[:error] = "Please log in."
       redirect_to login_path
     end
     if @user_invite_request.save
-      flash[:notice] = 'Request was successfully created.'
+      setflash; flash[:notice] = 'Request was successfully created.'
       redirect_to(@user)
     else
       render :action => "new"
@@ -47,7 +47,7 @@ class UserInviteRequestsController < ApplicationController
         request.save!
       end
     end
-    flash[:notice] = 'Requests were successfully updated.'
+    setflash; flash[:notice] = 'Requests were successfully updated.'
     redirect_to user_invite_requests_url
   end
 end

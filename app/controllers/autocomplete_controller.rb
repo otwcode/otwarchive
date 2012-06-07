@@ -13,7 +13,7 @@ class AutocompleteController < ApplicationController
   # 
   # def require_term
   #   if params[:term].blank?
-  #     flash[:error] = ts("What were you trying to autocomplete?")
+  #     setflash; flash[:error] = ts("What were you trying to autocomplete?")
   #     redirect_to(request.env["HTTP_REFERER"] || root_path) and return
   #   end
   # end
