@@ -15,10 +15,13 @@ class KudosController < ApplicationController
       setflash; flash[:comment_error] = ts("You can't leave kudos for yourself. :)")
     else
       ip_address = logged_in? ? nil : request.remote_ip
-      unless (@kudo = Kudo.new(:commentable => @commentable, :pseud => pseud, :ip_address => ip_address)) && @kudo.save
+      if (@kudo = Kudo.new(:commentable => @commentable, :pseud => pseud, :ip_address => ip_address)) && @kudo.save
+        setflash; flash[:comment_notice] = ts("Thank you for leaving kudos!")
+      else
         setflash; flash[:comment_error] = @kudo ? @kudo.errors.full_messages.map {|msg| msg.gsub(/^(.+)\^/, '')}.join(", ") : ts("We couldn't save your kudos, sorry!")
       end
     end
+        
     if request.referer.match(/static/)
       # came here from a static page
       # so go to the kudos page if you can, instead of reloading the full work

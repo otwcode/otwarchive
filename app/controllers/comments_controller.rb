@@ -134,10 +134,10 @@ class CommentsController < ApplicationController
       # First, try saving the comment
       if @comment.save
         if @comment.approved?
-          # save user's name/email if not logged in
+          # save user's name/email if not logged in, truncated in case of something really long and wacky
           if @comment.pseud.nil?
-            session[:comment_name] = @comment.name
-            session[:comment_email] = @comment.email
+            cookies[:comment_name] = @comment.name[0..100]
+            cookies[:comment_email] = @comment.email[0..100]
           end
           setflash; flash[:comment_notice] = ts('Comment created!')
           respond_to do |format|
