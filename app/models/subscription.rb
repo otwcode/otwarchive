@@ -29,14 +29,17 @@ class Subscription < ActiveRecord::Base
   
   def subject_text(creation)
     authors = creation.pseuds.map{ |p| p.byline }.to_sentence
-    if creation.is_a?(Chapter)
-      "#{creation.work.title} by #{authors} has been updated"
-    elsif subscribable_type == 'User'
-      "#{self.name} has posted #{creation.title}"
-    elsif subscribable_type == 'Series'
-      verb = creation.pseuds.length > 1 ? 'have' : 'has'
-      "#{authors} #{verb} updated the '#{self.name}' series"
-    end
+    "#{authors} posted #{creation_name(creation)}"
   end
-  
+
+  def creation_name(creation)
+    if creation.is_a?(Chapter)
+      "#{creation.chapter_title} of #{creation.work.title}"
+    elsif subscribable_type == 'User'
+      creation.title
+    elsif subscribable_type == 'Series'
+      "#{creation.title} in #{self.name} series"
+    end      
+  end
+    
 end

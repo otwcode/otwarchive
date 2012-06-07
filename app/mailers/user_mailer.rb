@@ -64,23 +64,21 @@ class UserMailer < ActionMailer::Base
   end
 
   # Sends a batched subscription notification
-  def batch_subscription_notification(subscriber_id, subscriptions)
-    subscriber = User.find(subscriber_id)
-    subscription_hash = JSON.parse(subscriptions)
-    @subscriptions = []
-    @creations = {}
-    subscription_hash.each_pair do |subscription_id, creation_entries|
-      subscription = Subscription.find_by_id(subscription_id)
-      next unless subscription
-      @subscriptions << subscription
-      @creations[subscription.id] ||= []
-      # look up all the creations that have generated updates for this subscription
-      creation_entries.each do |creation_info|
-        creation_type, creation_id = creation_info.split("_")
-        creation = creation_type.constantize.find(creation_id)
-        next unless creation
-        @creations[subscription.id] << creation
-      end
+  def batch_subscription_notification(subscription_id, entries)
+    @subscription = Subscription.find(subscription_id)
+    creation_entries = JSON.parse(entries)
+    @creations = []
+    # look up all the creations that have generated updates for this subscription
+    creation_entries.each do |creation_info|
+      creation_type, creation_id = creation_info.split("_")
+      creation = creation_type.constantize.find(creation_id)
+      next unless creation
+      @creations << creation
+    end
+    
+    subject = @subscription.subject_text(@creations.first)
+    if @creations.count > 1
+      subject += " and #{@creations.count - 1} more"
     end
     
     mail(

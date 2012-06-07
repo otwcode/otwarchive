@@ -1,26 +1,33 @@
-<% @subscriptions.each do |subscription| %>
-  <p>
-    Your subscription to <%= link_to subscription.name, polymorphic_url(subscription.subscribable) %>:
-  </p>
+<% @seen = {} %>
 
-  <% @creations[subscription.id].each do |creation| %>
+<% @creations.each do |creation| %>
 
-    <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
-    <% if creation.is_a?(Chapter) %>
-      <p>
-        <%= creation.work.pseuds.map{|p| p.byline}.to_sentence %> posted a new chapter of 
-        <%= link_to this_work.title, work_url(this_work) %> at 
-        <%= link_to work_chapter_url(this_work, creation), work_chapter_url(this_work, creation) %>:
-      </p>
-    <% elsif creation.is_a?(Work) %>
-      <p>
-        <%= creation.pseuds.map{|p| p.byline}.to_sentence %> posted a <%= this_work.backdate ? "backdated" : "new" %> work:
-      </p>
+  <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
+  <% if creation.is_a?(Chapter) %>
+    <p>
+      <%= creation.work.pseuds.map{|p| p.byline}.to_sentence %> posted a new chapter of 
+      <%= link_to this_work.title, work_url(this_work) %> at 
+      <%= link_to work_chapter_url(this_work, creation), work_chapter_url(this_work, creation) %>:
+    </p>
+    
+    <% if creation.summary %>
+      <p>Summary: <%= sanitize_field(creation, :summary) %></p>
     <% end %>
 
-    <%= raw simple_format(get_embed_link(this_work)) %>
+  <% elsif creation.is_a?(Work) %>
+
+    <p>
+      <%= creation.pseuds.map{|p| p.byline}.to_sentence %> posted a <%= this_work.backdate ? "backdated" : "new" %> work:
+    </p>
 
   <% end %>
+
+  <% unless @seen[this_work.id] %>
+    <%= raw simple_format(get_embed_link(this_work)) %>
+    <% @seen[this_work.id] = true %>
+  <% end %>
+
 <% end %>
 
-<p>You're receiving this email because of your AO3 subscriptions. Follow the links to unsubscribe if you no longer want to receive updates.</p>
+
+<p>You're receiving this email because of your subscription to <%= link_to @subscription.name, polymorphic_url(@subscription.subscribable) %>. Follow the link to unsubscribe if you no longer want to receive updates.</p>
