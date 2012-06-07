@@ -101,7 +101,7 @@ module LogfileReader
       omit_pattern = ''
       work_id_pattern = Regexp.new('GET /(?:works|chapters)/([0-9]+)/?.*$')
       logfile_requests = []
-      logformat = Regexp.new(ArchiveConfig.DEFAULT_LOGFORMAT)
+      logformat = LOGFORMAT # Regexp.new(ArchiveConfig.DEFAULT_LOGFORMAT)
       
       # only need to check for statistics where we would need to change the request/omit/work_id patterns
       case statistic
@@ -109,7 +109,7 @@ module LogfileReader
         request_pattern = "GET /downloads"
         work_id_pattern = Regexp.new('GET /downloads/[^/]+/(?:[^/]+/)?([0-9]+)/.*$')
         # stats come from multiple logfiles
-        logfile_requests = read_logfile_requests
+        logfile_requests = read_logfile_requests(request_pattern, logformat, omit_pattern, start_date)
         
       when :links
         omit_pattern = ArchiveConfig.APP_HOST
