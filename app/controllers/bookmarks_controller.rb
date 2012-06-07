@@ -33,9 +33,9 @@ class BookmarksController < ApplicationController
       begin
         page = params[:page] || 1
         errors, @bookmarks = Query.search_with_sphinx(Bookmark, @query, page)
-        flash.now[:error] = errors.join(" ") unless errors.blank?
+        setflash; flash.now[:error] = errors.join(" ") unless errors.blank?
       rescue Riddle::ConnectionError
-        flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
+        setflash; flash.now[:error] = ts("The search engine seems to be down at the moment, sorry!")
       end
     end
   end  
@@ -99,7 +99,7 @@ class BookmarksController < ApplicationController
         @bookmarks = @bookmarks.visible_to_all
       end
     else 
-      flash.now[:notice] = ts("Bookmark pages are currently being reworked. Apologies for the inconvenience!")
+      setflash; flash.now[:notice] = ts("Bookmark pages are currently being reworked. Apologies for the inconvenience!")
       if params[:tag_id]  # tag page
         unless owner
           raise ActiveRecord::RecordNotFound, "Couldn't find tag named '#{params[:tag_id]}'"
@@ -170,7 +170,7 @@ class BookmarksController < ApplicationController
        render :new and return
     end
     if @bookmarkable.save && @bookmark.save
-      flash[:notice] = ts('Bookmark was successfully created.')
+      setflash; flash[:notice] = ts('Bookmark was successfully created.')
       redirect_to(@bookmark) and return
     end 
     @bookmarkable.errors.full_messages.each { |msg| @bookmark.errors.add(:base, msg) }
@@ -181,7 +181,7 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1.xml
   def update
     if @bookmark.update_attributes(params[:bookmark])
-      flash[:notice] = ts("Bookmark was successfully updated.")
+      setflash; flash[:notice] = ts("Bookmark was successfully updated.")
       redirect_to(@bookmark) 
     else
       @bookmarkable = @bookmark.bookmarkable
@@ -193,7 +193,7 @@ class BookmarksController < ApplicationController
   # DELETE /bookmarks/1.xml
   def destroy
     @bookmark.destroy
-    flash[:notice] = ts("Bookmark was successfully deleted.")
+    setflash; flash[:notice] = ts("Bookmark was successfully deleted.")
     redirect_to user_bookmarks_path(current_user)
   end
 

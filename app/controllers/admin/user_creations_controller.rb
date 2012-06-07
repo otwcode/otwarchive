@@ -8,7 +8,7 @@ class Admin::UserCreationsController < ApplicationController
     creation = creation_class.find(params[:id])
     creation.hidden_by_admin = (params[:hidden] == "true")
     creation.save(:validate => false)
-    flash[:notice] = creation.hidden_by_admin? ? 
+    setflash; flash[:notice] = creation.hidden_by_admin? ? 
                         t('item_hidden', :default => 'Item has been hidden.') : 
                         t('item_unhidden', :default => 'Item is no longer hidden.')
     if creation_class == Comment 
@@ -24,7 +24,7 @@ class Admin::UserCreationsController < ApplicationController
     creation_class = params[:creation_type].constantize
     creation = creation_class.find(params[:id])
     creation.destroy
-    flash[:notice] = t('item_deleted', :default => 'Item was successfully deleted.')
+    setflash; flash[:notice] = t('item_deleted', :default => 'Item was successfully deleted.')
     if creation_class == Comment 
       redirect_to(creation.ultimate_parent) 
     elsif creation_class == ExternalWork
