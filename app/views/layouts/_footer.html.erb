@@ -7,7 +7,7 @@
   <%= yield :footer_js %>
 
   <ul class="navigation actions" role="navigation">
-    <% unless !logged_in? || Skin.in_chooser.empty?%>
+    <% unless !(logged_in? || logged_in_as_admin?) || Skin.in_chooser.empty?%>
       <li>
         <a href="#" class="skin_chooser_open"><%= ts("Choose Skin") %> &#8595;</a>
         <a href="#" class="skin_chooser_close"><%= ts("Close") %> &#8593;</a>

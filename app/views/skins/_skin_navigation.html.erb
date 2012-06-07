@@ -15,7 +15,7 @@
       <li><%= span_if_current ts("Preview"), preview_skin_path(skin) %></li>
     <% end %>
     
-    <% if skin.cached? %>
+    <% if (logged_in? || logged_in_as_admin?) && skin.cached? %>
       <li><%= link_to ts("Set For Session"), set_skin_path(skin) %></li>
     <% end %>
         
