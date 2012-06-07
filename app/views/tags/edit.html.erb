@@ -18,7 +18,7 @@
       <% if Tag::USER_DEFINED.include?(@tag.class.name) || (@tag[:type] == 'Media' && logged_in_as_admin?) %>
         <%= f.text_field :name, :size => (@tag.name.length + 5) %>
         <% unless logged_in_as_admin? %>
-        <p>Only changes to capitalization are permitted.</p>
+        <p>Only changes to capitalization and diacritic marks are permitted.</p>
         <% end %>
       <% else %>
         <strong><%= @tag.name %></strong>
