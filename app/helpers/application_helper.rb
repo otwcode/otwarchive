@@ -339,7 +339,7 @@ module ApplicationHelper
   end
   
   def mailto_link(user, options={})
-    "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_NAME}]#{options[:subject]}\" class=\"mailto\">
+    "<a href=\"mailto:#{h(user.email)}?subject=[#{ArchiveConfig.APP_SHORT_NAME}]#{options[:subject]}\" class=\"mailto\">
       <img src=\"/images/envelope_icon.gif\" alt=\"email #{h(user.login)}\">
     </a>".html_safe
   end
