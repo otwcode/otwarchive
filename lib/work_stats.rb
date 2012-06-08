@@ -53,7 +53,7 @@ module WorkStats
       add_to_hit_count(1)
       $redis.sadd(WORKS_TO_UPDATE_KEY, get_work_id)
     end
-    $redis.get(key)
+    $redis.get(redis_stat_key(:hit_count))
   end  
 
   # add the given amount to the hit count in redis
