@@ -163,11 +163,7 @@ class CommentsController < ApplicationController
           redirect_back_or_default(root_path)
         end
       else
-        setflash; flash[:comment_error] = ts("There was a problem saving your comment:")
-        msg = @comment.errors.full_messages.map {|msg| "#{msg}"}.join
-        unless msg.blank?
-          flash[:comment_error] += "#{msg}"
-        end
+        setflash
         render :action => "new"
       end
     end
