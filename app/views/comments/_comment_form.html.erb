@@ -67,8 +67,14 @@
 
         <%= content_for :footer_js do %>
           <%= javascript_tag do %>
-            $j("#comment_name_for_<%= commentable.id %>").val($j.cookie('comment_name'));
-            $j("#comment_email_for_<%= commentable.id %>").val($j.cookie('comment_email'));
+            var name_id = "#comment_name_for_<%= commentable.id %>";
+            var email_id = "#comment_email_for_<%= commentable.id %>";
+            if (!$j(name_id).val()) {
+              $j(name_id).val($j.cookie('comment_name'));
+            }
+            if (!$j(email_id).val()) {
+              $j(email_id).val($j.cookie('comment_email'));              
+            }
           <% end %>
         <% end %>
         
