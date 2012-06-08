@@ -77,7 +77,6 @@ module WorkStats
     end
   
     def get_stat(statistic)
-      Rails.logger.debug "IN HERE"
       self.class.get_stat(statistic, get_work_id)
     end
   
