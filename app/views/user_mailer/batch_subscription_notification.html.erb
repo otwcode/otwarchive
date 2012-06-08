@@ -4,14 +4,16 @@
 
   <% this_work = creation.respond_to?(:work) ? creation.work : creation %>
   <% if creation.is_a?(Chapter) %>
+  
     <p>
-      <%= creation.work.pseuds.map{|p| p.byline}.to_sentence %> posted a new chapter of 
+      <%= creation.work.pseuds.map{|p| p.byline}.to_sentence %> posted 
+      <%= link_to @subscription.chapter_name(creation), work_chapter_url(this_work, creation) %> of 
       <%= link_to this_work.title, work_url(this_work) %> at 
-      <%= link_to work_chapter_url(this_work, creation), work_chapter_url(this_work, creation) %>:
+      <%= link_to work_chapter_url(this_work, creation), work_chapter_url(this_work, creation) %>.
     </p>
     
-    <% if creation.summary %>
-      <p>Summary: <%= sanitize_field(creation, :summary) %></p>
+    <% unless creation.summary.blank? %>
+      <p>Chapter Summary:</p> <%= raw sanitize_field(creation, :summary) %>
     <% end %>
 
   <% elsif creation.is_a?(Work) %>

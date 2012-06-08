@@ -34,12 +34,17 @@ class Subscription < ActiveRecord::Base
 
   def creation_name(creation)
     if creation.is_a?(Chapter)
-      "#{creation.chapter_title} of #{creation.work.title}"
+      "#{chapter_name(creation)} of #{creation.work.title}"
     elsif subscribable_type == 'User'
       creation.title
     elsif subscribable_type == 'Series'
       "#{creation.title} in #{self.name} series"
     end      
+  end
+
+  def chapter_name(creation)
+    title = creation.chapter_title
+    title.match(/^Chapter /) ? title : "Chapter #{title}"
   end
     
 end
