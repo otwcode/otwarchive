@@ -28,9 +28,7 @@ class ChaptersController < ApplicationController
   def show
     if params[:view_adult]
       session[:adult] = true
-      cookies[:adult] = 1
-    elsif !(logged_in? || logged_in_as_admin?) || (@work.adult? && !see_adult?)
-      # squid caching: guests see the adult page unless they are using params[:view_adult]
+    elsif @work.adult? && !see_adult?
       render "works/_adult", :layout => "application" and return
     end
 

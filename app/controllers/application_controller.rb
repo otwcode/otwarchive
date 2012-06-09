@@ -57,6 +57,10 @@ protected
   def logged_in_as_admin?
     current_admin.nil? ? false : true
   end
+  
+  def guest?
+    !(logged_in? || logged_in_as_admin?)
+  end
 
 public
 
