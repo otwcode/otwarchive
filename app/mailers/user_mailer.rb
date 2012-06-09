@@ -1,4 +1,4 @@
-class UserMailer < ActionMailer::Base
+class UserMailer < BulletproofMailer::Base
   include Resque::Mailer # see README in this directory
 
   layout 'mailer'
@@ -72,9 +72,16 @@ class UserMailer < ActionMailer::Base
     creation_entries.each do |creation_info|
       creation_type, creation_id = creation_info.split("_")
       creation = creation_type.constantize.find(creation_id)
-      next unless creation
+      next unless creation && creation.try(:posted)
       @creations << creation
     end
+    
+    # die if we haven't got any creations to notify about
+    # see lib/bulletproof_mailer.rb
+    abort_delivery if @creations.empty?
+
+    # make sure we only notify once per creation
+    @creations.uniq!
     
     subject = @subscription.subject_text(@creations.first)
     if @creations.count > 1
