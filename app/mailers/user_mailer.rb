@@ -73,6 +73,7 @@ class UserMailer < BulletproofMailer::Base
       creation_type, creation_id = creation_info.split("_")
       creation = creation_type.constantize.where(:id => creation_id).first
       next unless creation && creation.try(:posted)
+      next if (creation.is_a?(Chapter) && !creation.work.try(:posted))
       @creations << creation
     end
     
